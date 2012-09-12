@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+
+  @(#)package.html	1.60 2007/10/23
+
+  Copyright 2007 MASA.
+
+  This software is the confidential and proprietary information of MASA 
+  ("Confidential Information").  You shall not
+  disclose such Confidential Information and shall use it only in
+  accordance with the terms of the license agreement you entered into
+  with MASA.
+
+  CopyrightVersion 1.0
+
+-->
+</head>
+<body bgcolor="white">
+
+Provides mathematical tools: coordinates, spaces, grids, and trigonometry for 2 and 3 dimensions.
+<p>
+This package offers the {@link Coord2d} and {@link Coord3d} objects that store coordinates and provide
+operators such as add(), sub(), mul(), div(), dist(), cartesian(), and polar(). 
+<p>
+The {@link Vector2d} and {@link Vector3d} provide few vectorial computation such as dot product, 
+vectorial product, scalar product, and distance to a coordinate.
+We here define {@link VectorX}s as objects storing a pair of coordinates,
+although a geometric representation (something like magnitude and direction)
+may be retrieved using {@link VectorX.vector()}.
+<p>
+The {@link Angle3d} and {@link Angle2d} objects provide functions for computing 
+sin(), cos() and angle() for an angle induced by three coordinates.
+<p>
+{@link BoundingBox}es define a rectangular selection into a 2d or 3d world.
+<p>
+Utils is a static class that provides helpers (min([])).
+
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>

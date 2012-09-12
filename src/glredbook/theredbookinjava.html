@@ -1,0 +1,570 @@
+
+  The Red Book Examples using JOGL
+
+This page contains ported C examples from the OpenGL Programming Guide
+(affectionately known among graphics programmers as the "red book").
+They were ported using *javax.media.opengl* extension library. 
+
+ 
+
+Ported by Kiet "AK <mailto:ak.kiet.le@gmail.com>" Le
+
+ 
+
+Last Updated
+<http://ak.kiet.le.googlepages.com/theredbookinjava.html#ulog>: 20070227
+
+Established. 20060329
+
+
+
+About Your OpenGL <http://ak.kiet.le.googlepages.com/glsys.jnlp>
+
+Red Book Site <http://www.opengl-redbook.com/>
+
+Red Book PDF <http://www.gamedev.net/download/redbook.pdf>
+
+** Free Chapter
+
+C Examples <http://www.sgi.com/products/software/opengl/examples/redbook/>
+
+ 
+
+Red Book Online <http://www.rush3d.com/reference/opengl-redbook-1.1/>
+
+Blue Book Online <http://www.rush3d.com/reference/opengl-bluebook-1.0/>
+
+Orange Book Site <http://www.3dshaders.com/>
+
+Extensions Registry <http://oss.sgi.com/projects/ogl-sample/registry/>
+
+OpenGL SDK <http://opengl.org/sdk/>
+
+JOGL Doc Online
+<http://download.java.net/media/jogl/builds/nightly/javadoc_public/>
+
+OpenGL Wiki <http://www.opengl.org/wiki/index.php/Main_Page>
+
+JOGL Wiki <http://wiki.java.net/bin/view/Games/OpenGL-Reference>
+
+ 
+
+glredbook.rar <http://ak.kiet.le.googlepages.com/glredbook.jar>
+glredbook-src.rar <http://ak.kiet.le.googlepages.com/glredbook-src.rar>
+
+ 
+
+New in 5th Ed:
+
+ 
+
+New in 4th Ed:
+
+    * combiner <http://ak.kiet.le.googlepages.com/combiner.jnlp>
+    * cubemap <http://ak.kiet.le.googlepages.com/cubemap.jnlp>
+    * fogcoord.jnlp <http://ak.kiet.le.googlepages.com/fogcoord.jnlp>
+    * mvarray
+    * pointp <http://ak.kiet.le.googlepages.com/pointp.jnlp>
+    * shadowmap <http://ak.kiet.le.googlepages.com/shadowmap.jnlp>
+    * surfpoints
+
+ 
+
+New in 3rd Ed:
+
+    * blendeqn <http://ak.kiet.le.googlepages.com/blendeqn.jnlp>
+    * colormatrix <http://ak.kiet.le.googlepages.com/colormatrix.jnlp>
+    * colortable <http://ak.kiet.le.googlepages.com/colortable.jnlp>
+    * convolution <http://ak.kiet.le.googlepages.com/convolution.jnlp>
+    * histogram <http://ak.kiet.le.googlepages.com/histogram.jnlp>
+    * minmax <http://ak.kiet.le.googlepages.com/minmax.jnlp>
+    * multitex <http://ak.kiet.le.googlepages.com/multitex.jnlp>
+    * readImage
+    * quadric <http://ak.kiet.le.googlepages.com/quadric.jnlp>
+    * texture3d <http://ak.kiet.le.googlepages.com/texture3d.jnlp>
+
+ 
+
+New in 2nd Ed:
+
+    * aaindex
+    * aapoly
+    * aargb <http://ak.kiet.le.googlepages.com/aargb.jnlp>
+    * hello <http://ak.kiet.le.googlepages.com/hello.jnlp>
+    * image <http://ak.kiet.le.googlepages.com/image.jnlp>
+    * polyoff <http://ak.kiet.le.googlepages.com/polyoff.jnlp>
+    * tess <http://ak.kiet.le.googlepages.com/tess.jnlp>
+    * tesswind <http://ak.kiet.le.googlepages.com/tesswind.jnlp>
+    * texbind <http://ak.kiet.le.googlepages.com/texbind.jnlp>
+    * texgen <http://ak.kiet.le.googlepages.com/texgen.jnlp>
+    * texprox <http://ak.kiet.le.googlepages.com/texprox.jnlp>
+    * texsub <http://ak.kiet.le.googlepages.com/texsub.jnlp>
+    * torus <http://ak.kiet.le.googlepages.com/torus.jnlp>
+    * unproject <http://ak.kiet.le.googlepages.com/unproject.jnlp>
+    * varray <http://ak.kiet.le.googlepages.com/varray.jnlp>
+    * wrap <http://ak.kiet.le.googlepages.com/wrap.jnlp>
+
+ 
+
+First Edition:
+
+    * accanti <http://ak.kiet.le.googlepages.com/accanti.jnlp>
+    * accnot <http://ak.kiet.le.googlepages.com/accnot.jnlp>
+    * accpersp <http://ak.kiet.le.googlepages.com/accpersp.jnlp>
+    * accum <http://ak.kiet.le.googlepages.com/accum.jnlp>
+    * aim <http://ak.kiet.le.googlepages.com/aim.jnlp>
+    * alpha <http://ak.kiet.le.googlepages.com/alpha.jnlp>
+    * alpha3D <http://ak.kiet.le.googlepages.com/alpha3D.jnlp>
+    * anti <http://ak.kiet.le.googlepages.com/anti.jnlp>
+    * antiindex
+    * antipindex
+    * antipoint <http://ak.kiet.le.googlepages.com/antipoint.jnlp>
+    * antipoly <http://ak.kiet.le.googlepages.com/antipoly.jnlp>
+    * bezcurve <http://ak.kiet.le.googlepages.com/bezcurve.jnlp>
+    * bezmesh <http://ak.kiet.le.googlepages.com/bezmesh.jnlp>
+    * bezsurf <http://ak.kiet.le.googlepages.com/bezsurf.jnlp>
+    * checker <http://ak.kiet.le.googlepages.com/checker.jnlp>
+    * checker2 <http://ak.kiet.le.googlepages.com/checker2.jnlp>
+    * chess <http://ak.kiet.le.googlepages.com/chess.jnlp>
+    * clip <http://ak.kiet.le.googlepages.com/clip.jnlp>
+    * colormat <http://ak.kiet.le.googlepages.com/colormat.jnlp>
+    * cone <http://ak.kiet.le.googlepages.com/cone.jnlp>
+    * cube <http://ak.kiet.le.googlepages.com/cube.jnlp>
+    * curve <http://ak.kiet.le.googlepages.com/curve.jnlp>
+    * depthcue <http://ak.kiet.le.googlepages.com/depthcue.jnlp>
+    * disk <http://ak.kiet.le.googlepages.com/disk.jnlp>
+    * dof <http://ak.kiet.le.googlepages.com/dof.jnlp>
+    * dofnot <http://ak.kiet.le.googlepages.com/dofnot.jnlp>
+    * double(buf <http://ak.kiet.le.googlepages.com/doublebuf.jnlp>)
+    *
+      drawf <http://ak.kiet.le.googlepages.com/drawf.jnlp>
+    * feedback <http://ak.kiet.le.googlepages.com/feedback.jnlp>
+    * fog <http://ak.kiet.le.googlepages.com/fog.jnlp>
+    * fogindex
+    * font <http://ak.kiet.le.googlepages.com/font.jnlp>
+    * jitter.h
+    * light <http://ak.kiet.le.googlepages.com/light.jnlp>
+    * linelist <http://ak.kiet.le.googlepages.com/linelist.jnlp>
+    * lines <http://ak.kiet.le.googlepages.com/lines.jnlp>
+    * list <http://ak.kiet.le.googlepages.com/list.jnlp>
+    * list2 <http://ak.kiet.le.googlepages.com/list2.jnlp>
+    * maplight <http://ak.kiet.le.googlepages.com/maplight.jnlp>
+    * material <http://ak.kiet.le.googlepages.com/mipmap.jnlp>
+    * mipmap <http://ak.kiet.le.googlepages.com/mipmap.jnlp>
+    * model <http://ak.kiet.le.googlepages.com/model.jnlp>
+    * movelight <http://ak.kiet.le.googlepages.com/movelight.jnlp>
+    * nurbs
+    * pickdepth <http://ak.kiet.le.googlepages.com/pickdepth.jnlp>
+    * pickline <http://ak.kiet.le.googlepages.com/pickline.jnlp>
+    * picksquare <http://ak.kiet.le.googlepages.com/picksquare.jnlp>
+    * plane <http://ak.kiet.le.googlepages.com/plane.jnlp>
+    * planet <http://ak.kiet.le.googlepages.com/planet.jnlp>
+    * planetup <http://ak.kiet.le.googlepages.com/planetup.jnlp>
+    * polys <http://ak.kiet.le.googlepages.com/polys.jnlp>
+    * robot <http://ak.kiet.le.googlepages.com/robot.jnlp>
+    * sccolorlight <http://ak.kiet.le.googlepages.com/sccolorlight.jnlp>
+    * scene <http://ak.kiet.le.googlepages.com/scene.jnlp>
+    * scenebamb <http://ak.kiet.le.googlepages.com/scenebamb.jnlp>
+    * sceneflat <http://ak.kiet.le.googlepages.com/sceneflat.jnlp>
+    * select <http://ak.kiet.le.googlepages.com/select.jnlp>
+    * simple <http://ak.kiet.le.googlepages.com/simple.jnlp>
+    * smooth <http://ak.kiet.le.googlepages.com/smooth.jnlp>
+    * sphere <http://ak.kiet.le.googlepages.com/sphere.jnlp>
+    * stencil <http://ak.kiet.le.googlepages.com/stencil.jnlp>
+    * stroke <http://ak.kiet.le.googlepages.com/stroke.jnlp>
+    * surface
+    * tea <http://ak.kiet.le.googlepages.com/tea.jnlp>
+    * teaambient <http://ak.kiet.le.googlepages.com/teaambient.jnlp>
+    * teapots <http://ak.kiet.le.googlepages.com/teapots.jnlp>
+    * texturesurf <http://ak.kiet.le.googlepages.com/texturesurf.jnlp>
+    * trim
+    * xfontjfont <http://ak.kiet.le.googlepages.com/jfont.jnlp>
+
+Locations of visitors to this page <http://clustrmaps.com/>
+
+ 
+
+
+      Red Book Editions, OpenGL Versions
+
+1. First edition, OpenGL 1.0
+
+2. Second edition, OpenGL 1.1
+
+3. Third edition, OpenGL 1.2/1.2.1 *
+
+4. Fourth edition, OpenGL 1.3/1.4
+
+5. Fift edition, OpenGL 1.5/2.0
+
+ 
+
+Not sure which OpenGL version you have? Quickly check here
+<http://ak.kiet.le.googlepages.com/glsys.jnlp>. It will tell about
+
+    * JOGL Binding info
+    * OpenGL Vendor, Version, Driver info
+    * OpenGL Extensions listing
+
+* This is the edition I own.
+
+
+      Difference Between C and Java Examples
+
+    * No render calls from listeners compare to C examples.
+    * Some data, especially n-dimensional arrays, requires wrapping in
+      another buffer object or a direct buffer.
+    * Swing replaces GLUT's window management API. Also all examples now
+      use *GLJPanel*
+    *
+      All examples file names are preserved in the Java version; except
+      for double.c, which is renamed to doublebuf.java. to resolve name
+      conflict with *double* keyword.
+    *
+      xfont.c, an X Window example, is jfont.java for Java.
+    *
+      All color index and NURBS examples are not ported since
+      javax.media.opengl does not support for them.
+    *
+      All examples are doubly buffered and all quits on *Esc* button.
+    *
+    *
+      All examples quit with shut down hook *runExit()* button.
+
+
+      WebStart OpenGL Examples
+
+I made Java Web Start (JWS) links for all the programs but you may need
+to set your "file type association" so your browser will download and
+deploy programs with JWS file extension (.jnlp). As a convenience, I
+have archived all the JNLP files along with the sources and classes for
+the examples so you don't have to individually download each examples.
+You do need to extract the jnlp folder from that archive to get to the
+individual jnlp file.
+
+
+      1 Intro to OpenGL
+
+Briefs you on the OpenGL graphics system, as an API, what it does, what
+it do not; provides a couple of examples to show the sequence of steps
+for a simple rendition and animation.
+
+simple.jnlp <http://ak.kiet.le.googlepages.com/simple.jnlp>
+
+hello.jnlp <http://ak.kiet.le.googlepages.com/hello.jnlp> 1.1
+
+doublebuf.jnlp <http://ak.kiet.le.googlepages.com/doublebuf.jnlp>
+
+
+      2 State Management and Drawing Geometric Objects
+
+How to draw geometric primitives, the basic of managing states, steps in
+using vertex arrays.
+
+lines.jnlp <http://ak.kiet.le.googlepages.com/lines.jnlp>
+
+polys.jnlp <http://ak.kiet.le.googlepages.com/polys.jnlp>
+
+varray.jnlp <http://ak.kiet.le.googlepages.com/varray.jnlp> 1.1
+
+mvarray.jnlp <http://ak.kiet.le.googlepages.com/mvarray.jnlp> 1.4
+
+
+      3 Viewing
+
+Describes the view and modeling, projection, and viewport
+transformations; working with the matrix stacks, using clipping planes,
+composing transformations, and reverse transformation.
+
+cube.jnlp <http://ak.kiet.le.googlepages.com/cube.jnlp>
+
+model.jnlp <http://ak.kiet.le.googlepages.com/model.jnlp>
+
+clip.jnlp <http://ak.kiet.le.googlepages.com/clip.jnlp>
+
+planet.jnlp <http://ak.kiet.le.googlepages.com/planet.jnlp>
+
+robot.jnlp <http://ak.kiet.le.googlepages.com/robot.jnlp>
+
+unproject.jnlp <http://ak.kiet.le.googlepages.com/unproject.jnlp> 1.1
+
+ 
+
+
+      4 Color
+
+Colors as a 4-tuple RGBA versus color-index, how to draw colored
+objects, how shading affect a multicolor polygon.
+
+smooth.jnlp <http://ak.kiet.le.googlepages.com/smooth.jnlp>
+
+
+      5 Lighting
+
+Describes light models, material colors of objects, how normals affect
+light on an object, directional lighting, multiple lights, moving light
+sources.
+
+light.jnlp <http://ak.kiet.le.googlepages.com/light.jnlp>
+
+movelight.jnlp <http://ak.kiet.le.googlepages.com/movelight.jnlp>
+
+material.jnlp <http://ak.kiet.le.googlepages.com/material.jnlp>
+
+colormat.jnlp <http://ak.kiet.le.googlepages.com/colormat.jnlp>
+
+scene.jnlp <http://ak.kiet.le.googlepages.com/scene.jnlp>
+
+ 
+
+
+      6 Blending, Antialiasing, and Fog
+
+blendeqn.jnlp <http://ak.kiet.le.googlepages.com/blendeqn.jnlp> 1.2
+ARB_imaging
+
+alpha.jnlp <http://ak.kiet.le.googlepages.com/alpha.jnlp>
+
+alpha3D.jnlp <http://ak.kiet.le.googlepages.com/alpha3D.jnlp> 1.1
+
+aargb.jnlp <http://ak.kiet.le.googlepages.com/aargb.jnlp> 1.1
+
+aaindex.jnlp
+
+multisamp.jnlp <http://ak.kiet.le.googlepages.com/multisamp.jnlp> 1.3
+pic
+<http://www.java-tips.org/images/stories/tips/others/jogl/100606/multisamp.png>
+
+
+fog.jnlp <http://ak.kiet.le.googlepages.com/fog.jnlp>
+
+fogindex.jnlp
+
+fogcoord.jnlp <http://ak.kiet.le.googlepages.com/fogcoord.jnlp> 1.4
+
+pointp.jnlp <http://ak.kiet.le.googlepages.com/pointp.jnlp> 1.4
+
+polyoff.jnlp <http://ak.kiet.le.googlepages.com/polyoff.jnlp> 1.1
+
+  
+
+
+      7 Display Lists
+
+Describes use of display lists to increase performance.
+
+torus.jnlp 1.1 <http://ak.kiet.le.googlepages.com/torus.jnlp>
+
+list.jnlp <http://ak.kiet.le.googlepages.com/list.jnlp>
+
+stroke.jnlp <http://ak.kiet.le.googlepages.com/stroke.jnlp>
+
+ 
+
+
+      8 Drawing Pixels, Bitmaps, Fonts, and Images
+
+How to draw 2D datas, its uses as font.
+
+drawf.jnlp <http://ak.kiet.le.googlepages.com/drawf.jnlp>
+
+font.jnlp <http://ak.kiet.le.googlepages.com/font.jnlp>
+
+image.jnlp <http://ak.kiet.le.googlepages.com/image.jnlp> 1.1
+
+colortable.jnlp <http://ak.kiet.le.googlepages.com/colortable.jnlp> 1.2
+ARB_imaging
+
+convolution.jnlp <http://ak.kiet.le.googlepages.com/convolution.jnlp>
+1.2 ARB_imaging
+
+colormatrix.jnlp <http://ak.kiet.le.googlepages.com/colormatrix.jnlp>
+1.2 ARB_imaging
+
+histogram.jnlp <http://ak.kiet.le.googlepages.com/histogram.jnlp> 1.2
+ARB_imaging
+
+minmax.jnlp <http://ak.kiet.le.googlepages.com/minmax.jnlp> 1.2 ARB_imaging
+
+ 
+
+
+      9 Texture Mapping
+
+How to map 1D/2D images to geometric objects for added effect.
+
+checker.jnlp <http://ak.kiet.le.googlepages.com/checker.jnlp>
+
+texsub.jnlp <http://ak.kiet.le.googlepages.com/texsub.jnlp> 1.1
+
+texture3d.jnlp 1.2 <http://ak.kiet.le.googlepages.com/texture3d.jnlp>
+
+mipmap.jnlp <http://ak.kiet.le.googlepages.com/mipmap.jnlp>
+
+texbind.jnlp <http://ak.kiet.le.googlepages.com/texbind.jnlp> 1.1
+
+texgen.jnlp <http://ak.kiet.le.googlepages.com/texgen.jnlp>
+
+cubemap.jnlp <http://ak.kiet.le.googlepages.com/cubemap.jnlp> 1.3
+
+multitex.jnlp <http://ak.kiet.le.googlepages.com/multitex.jnlp> 1.3
+
+combiner.jnlp <http://ak.kiet.le.googlepages.com/combiner.jnlp> 1.3
+
+shadowmap.jnlp <http://ak.kiet.le.googlepages.com/shadowmap.jnlp> 1.4
+
+ 
+
+
+      10 The Framebuffer
+
+Describes the many uses of possible buffers.
+
+stencil.jnlp <http://ak.kiet.le.googlepages.com/stencil.jnlp>
+
+accpersp.jnlp <http://ak.kiet.le.googlepages.com/accpersp.jnlp>
+
+accanti.jnlp <http://ak.kiet.le.googlepages.com/accanti.jnlp>
+
+dofnot.jnlp <http://ak.kiet.le.googlepages.com/dofnot.jnlp>
+
+ 
+
+
+      11 Tesselators and Quadrics
+
+How to use tessellators and quadrics.
+
+tess.jnlp <http://ak.kiet.le.googlepages.com/tess.jnlp> 1.1
+
+tesswind.jnlp <http://ak.kiet.le.googlepages.com/tesswind.jnlp> 1.1
+
+quadric.jnlp <http://ak.kiet.le.googlepages.com/quadric.jnlp> 1.2
+
+ 
+
+
+      12 Evaluators and NURBS
+
+Use of curves and surfaces.
+
+bezcurve.jnlp <http://ak.kiet.le.googlepages.com/bezcurve.jnlp>
+
+bezsurf.jnlp <http://ak.kiet.le.googlepages.com/bezsurf.jnlp>
+
+bezmesh.jnlp <http://ak.kiet.le.googlepages.com/bezmesh.jnlp>
+
+texturesurf.jnlp <http://ak.kiet.le.googlepages.com/texturesurf.jnlp>
+
+surface.jnlp 1.1
+
+surfpoints.jnlp 1.2
+
+trim.jnlp 1.1
+
+ 
+
+
+      13 Selection and Feedback
+
+Describes use of selection to choose object drawn, and use fo feedback
+to collect drawing info GL produces.
+
+select.jnlp <http://ak.kiet.le.googlepages.com/select.jnlp>
+
+picksquare.jnlp <http://ak.kiet.le.googlepages.com/picksquare.jnlp>
+
+pickdepth.jnlp <http://ak.kiet.le.googlepages.com/pickdepth.jnlp>
+
+feedback.jnlp <http://ak.kiet.le.googlepages.com/feedback.jnlp>
+
+ 
+
+
+      14 Now that you know
+
+The book has no examples for this chapter.
+
+Querying and Printing an Error
+
+Is an Extension Available
+
+Is a Function Available
+
+ 
+
+
+      Update Log
+
+<http://ak.kiet.le.googlepages.com/GLCapsTableDemo.jnlp>
+
+20070227. one archive, repackaged
+
+20060629. fixed texture3d, font
+
+20060606. JWS program to get info about your GL
+
+20060429. moved jnlp files to csclub.cs.sjsu.edu
+
+20060420. 4th ed examples
+
+20060419. page edits, links, ads; fix logo problem
+
+20060417. 3rd ed. ARB_imaging examples available
+
+20060415. remove more JSE1.5 code; many fixes
+
+20060411. red book 2nd ed. available; src|jnlp in jar file
+
+ 
+
+Editions:Version
+
+Difference
+<http://ak.kiet.le.googlepages.com/theredbookinjava.html#C2J_GLdiff>
+
+Web Start <http://ak.kiet.le.googlepages.com/theredbookinjava.html#GLJNLP>
+
+Chapter 1 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH01>
+
+Chapter 2 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH02>
+
+Chapter 3 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH03>
+
+Chapter 4 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH04>
+
+Chapter 5 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH05>
+
+Chapter 6 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH06>
+
+Chapter 7 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH07>
+
+Chapter 8 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH08>
+
+Chapter 9 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH09> **
+
+Chapter 10 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH10>
+
+Chapter 11 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH11>
+
+Chapter 12 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH12>
+
+Chapter 13 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH13>
+
+Chapter 14 <http://ak.kiet.le.googlepages.com/theredbookinjava.html#CH14>
+
+Update Log <http://ak.kiet.le.googlepages.com/theredbookinjava.html#ulog>
+
+ 
+
+ 
+
+------------------------------------------------------------------------
+
+Copyright (c) 2006 Kiet Le. Original GL programs copyrighted by SGI. The
+OpenGL logo is a trademark of SGI and it is use here with permission.
+
+You cannot replicate this page without prior written permission.
+
+
+StatCounter - Free Web Tracker and Counter <http://www.statcounter.com>

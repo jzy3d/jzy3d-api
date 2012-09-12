@@ -1,0 +1,55 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+
+  @(#)package.html	1.60 2007/10/23
+
+  Copyright 2007 MASA.
+
+  This software is the confidential and proprietary information of MASA 
+  ("Confidential Information").  You shall not
+  disclose such Confidential Information and shall use it only in
+  accordance with the terms of the license agreement you entered into
+  with MASA.
+
+  CopyrightVersion 1.0
+
+-->
+</head>
+<body bgcolor="white">
+
+Provides interfaces, abstract classes and concrete classes to perform rendering
+of 3d objects into a canvas.
+
+This package defines what is a {@link plot3d.rendering.Drawable}, 
+a {@link plot3d.rendering.Composite}, and
+a {@link plot3d.rendering.Wireframeable}. 
+A simple {@link plot3d.rendering.SceneGraph}, implemented as a
+Composite3d provide a way to render and scale all objects from a single call.
+
+The user defines its SceneGraph and give it to a {@link plot3d.rendering.Scene} that is registered
+by one or more Canvas3d. This registration process silently generates a 
+{@link plot3d.rendering.View} that is attached to the Canvas3d and may be controlled by
+a {@link plot3d.controllers.PolarViewController}.
+<p>
+The View:
+<ul>
+<li>allows setting general color configuration.
+<li>allows defining a scale (squared or proportional).
+<li>handles camera position, perspective and clipping planes.
+<li>provide an axis that is configured through the general color configuration and that consider the Camera position.
+</ul>
+
+The plot3d.rendering package thus provide a simple access to 3d objects,
+and doesn't bother the user with effective GL call strategy, as well as
+AWT event policy.
+<p>
+Concrete ViewControllers are provided by {@link plot3d.controllers}.
+Concrete Drawable, Composite and Wireframeable are provided by
+{@link plot3d.primitives}.
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>
