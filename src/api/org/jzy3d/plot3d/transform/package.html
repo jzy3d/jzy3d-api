@@ -1,0 +1,44 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<html>
+<head>
+<!--
+
+  @(#)package.html	1.60 2007/10/23
+
+  Copyright 2007 MASA.
+
+  This software is the confidential and proprietary information of MASA 
+  ("Confidential Information").  You shall not
+  disclose such Confidential Information and shall use it only in
+  accordance with the terms of the license agreement you entered into
+  with MASA.
+
+  CopyrightVersion 1.0
+
+--> 
+</head>
+<body bgcolor="white">
+
+Provides management of OpenGL ModelView Matrix for objects transformations.
+<br>
+This package introduces {@link Transformer}s that allow computing transformations
+such as {@link Rotate}, {@link Translate}, and {@link Scale}.
+<br>
+A Transformer must be instanciated with its transformation values (either scale,
+translation, or rotation) and provides an {@link execute(GL)} method that a 
+{@link Drawable} calls just before rendering itself with 
+{@link Drawable.draw(GL,GLU,Camera)}.
+<br>
+Complex transformation may be computed by applying a <i>sequence</i> of 
+Transformers with a {@link Transform}. 
+<br>
+Although a Transform may be considered of type Transformer since it provides 
+the execute() method, it does not implement the Transformer interface.
+Indeed, a Transform load the identity matrix before applying the sequence
+of Transformer which is not suitable for a Transformer that is an element
+in a sequence.
+
+<!-- Put @see and @since tags down here. -->
+
+</body>
+</html>

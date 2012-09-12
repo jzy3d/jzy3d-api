@@ -1,0 +1,119 @@
+History of Jzy3d Library
+
+0.8.1: WORK IN PROGRESS
+       -Basic tooltip mecanism & better axe layout configuration
+       -Interactive objects (see IInteractive interface) and 2d projections of 3d models
+       -Lights, and Enlightable objects
+       -Convex hull
+       -Moved general view controls (rotate, zoom, scale) as View methods instead of Controller methods.
+       -Improve access to view general controls (maximized, squared)
+       -Post renderers improved
+       -Delaunay tesselation: to be reviewed
+       -Experimental Bezier and SVM tesselators
+       -Various bugfixes
+       
+       -Rename Drawable to AbstractDrawable, the same for inheriting classes.
+      
+	   TODO
+       -make offscreen rendering work
+	   -black colorbar
+
+0.7.1: Toward offscreen rendering
+	  -The Camera provides modelToScreen for List<Coord3d> and Coord3d[] for faster bulk conversion of 3d to 2d coordinates.
+	  -Chart's canvas is now determined through its constructor using "awt" or "swing". The formerly inline override of initializeCanvas(...) is now forbidden.
+	  -The Chart provides a screenshot() method that returns a BufferedImage which only works for "awt".
+	  -An experimental OffscreenCanvas doesn't work but is intended to allow rendering a BufferedImage without screen display.
+
+
+0.7.0 -Drawable have generic Face, that are PostGraphic that may be rendered into the view.
+      -New Mapper, Tesselator and Grid objects are provided in the builder package
+      -ColorBar moves to a new package: plot2d.primitive
+      -Math package has been reviewed for proper trigonometric results
+      -Math package provides TicToc for profiling tests.
+
+0.6.0:-Added chart package in order to provide a default chart object that embeds all required components.
+       For this purpose, several demonstrations have been added (histogram, surface ploting, dot cloud) in
+       a dedicated package.
+      -Controllers on View have been deleted and replace by controllers on Chart that are able to
+       perform more complex behaviours.
+      -Added Quad as primitive object.
+      -Added Disk as primitive object.
+      -Added Tube as primitive object.
+      -Added Cylinder as a Composite object.
+      -Added experimental TextBitmapDrawable, which is a Drawable that may be added to the scene Graph.
+      -Composite object are more cleanly defined, and able to provide all their element to the Graph, so that
+        rendering may be performed by decomposing into a list of primitive.
+      -The scene Graph provides a basic face ordering algorithm for handling transparency of object polygons.
+      -Added Drawable.isDisplayed & Drawable.setDisplayed
+       
+      -Threading: InterruptedException problem seems to be solved on AWT. At the same time, rendering seems faster.
+       
+      -AxeBox: solved the tick length problem!!
+      -Added ViewIsVertical event
+      -Added "experimental" package.
+      
+      
+0.5.0:-Added the so-called GLJPanel, allowing to have a clean rendering of 3d into Swing. With
+       this new feature, the Swing Canvas is not a heavyweight component anymore.
+      -All primitives now use ArrayList instead of Vector in order to reduce the number synchronized access
+       and improve code efficiency.
+      -Shape objects provides a flag for choosing wether the polygon rendering order will be computed
+       at run time or simply computed one time at init. This optimize drawing Shapes without transparent
+       polygons
+      -Added BufferedPanel interface for a common access to AWT/Swing and Double/Simple buffer objects.
+            
+0.4.3: Added net.masagroup.global.Settings for defining status of hardware acceleration.
+
+0.4.2: Panel has synchronized statements for setData and call to glDrawPixel, so that no concurrent
+       access to the pixel buffer may occur a generate a JVM crash.
+
+0.4.1: ColorMapper may return its ColorMap
+       View.shoot() is no longer synchronized because of deadlocks when a thread and an other controller
+       modify the view settings.
+
+0.4.0:-An early version of the simplified Imaging library, limited to 3d and 2d primitives.
+	   Semicon widgets, events, and associated tests have been moved to SGT.
+	  -The view.shoot method now calls Canvas.display() instead of Canvas.repaint(), so that the
+	   GL thread of the GLCanvas is used, instead of the standard default AWT Event thread. This
+	   allows avoiding heavy bugs of the JVM.
+	  -Utils offers two new methods: abs() and sum()
+	  -Added bridge package for a generic adaptation of awt panels to swt composite
+	  
+
+0.3.0: A final version before spliting Imaging into 2 libraries (Imaging and SGT)
+       Various refactoring, enhancement (mouse controllers for scale/zoom), and
+       new colormaps are available.
+
+0.2.3: Added bridge to swing
+       Move content of demos package into tests package
+       Added colormap grayscale
+	   Added Renderer2d for adding post/pre renderers to the view.
+	   
+0.2.2: Added events package, bridge package for integration into SWT
+	   Introduced Layer for printing 2d java images into the screen and sharing screen with the 3d screen
+	   Added ColorBar to the View
+	   Text provides a renderer that allows getting occupied screen pixels
+
+0.2.1: Get a more structured definition of Camera (absolute coordinates) and View (polar controller).
+       The ViewPointChangedEvent has been introduced in order to inform an external listener that an
+       internal controller has modified the ViewPoint.
+       Handled the View bug which consisted in a position switch for elevation = +/-
+       AxeBox ticks have been corrected to handle the AxeBox scaling bug.
+       Wafer mapping and notch have been replaced by Point instead of Sphere/Cylinder,
+       for solving the wafer scaling bug.
+       Modified ViewMouseController.
+	   Corrected few bugs.
+	   Added utilities for integration into SWT (imaging.semicon.viewers)
+
+0.2.0: Separating library into plot2d and colormaps package in order
+       to share colormaps for the new plot3d package. The demos are provided
+       into a demos package (instead of tests)
+       Added plot3d package
+
+0.1.1: Introduction of a generic Canvas, and two concrete subclasses:
+	   CanvasAWT and CanvasSWT allows using the desired windowing toolkit primitives,
+	   according to the target platform (AWT/Swing or SWT).
+	   A generic Color interface has also been defined in order to consider
+	   generic colors, without specific reference to AWT or SWT.
+       
+0.1.0: Base version for generating OOCMap and WaferMap png files.

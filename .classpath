@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/api"/>
+	<classpathentry kind="src" path="src/bridge"/>
+	<classpathentry kind="src" path="src/glredbook"/>
+	<classpathentry kind="src" path="src/groovy"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry exported="true" kind="lib" path="lib/misc/opencsv-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/misc/org.convexhull.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/misc/swt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/applet-launcher.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-linux-amd64.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-linux-armv7.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-linux-armv7hf.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-linux-i586.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-solaris-amd64.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-solaris-i586.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-windows-i586.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-linux-amd64.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-linux-armv7.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-linux-armv7hf.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-solaris-amd64.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-solaris-i586.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-windows-i586.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all.jar"/>
+	<classpathentry kind="output" path="build/eclipse"/>
+</classpath>
