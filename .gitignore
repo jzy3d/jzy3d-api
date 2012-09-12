@@ -1,6 +1,5 @@
+dist
+build
+doc/javadoc
+.settings
 *.class
-
-# Package Files #
-*.jar
-*.war
-*.ear

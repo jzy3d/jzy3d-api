@@ -1,0 +1,41 @@
+A:active { text-decoration: none; color:#267498; }
+A:visited { text-decoration: none; color:#267498; }
+A:link { text-decoration: none; color:#267498; }
+A:hover { text-decoration: underline; text-decoration: bold; color:#888888; }
+
+/* Page header */
+h1 {
+	color: #ffffff;
+	background-color: #267498;
+}
+
+h2 {
+	/*text-decoration: underline;*/
+}
+
+/* Page body */
+body {
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 12px;
+	color: #333;
+	background-color: white;
+	margin: 40px;
+	text-align: justify;
+}
+
+/* Table header */
+th {
+	font-size: 14px;
+	color: #ffffff;
+	background-color: #267498; 
+}
+
+/* Table content */
+td {
+	font-size: 12px;
+}
+
+code {
+	font-family: "Courier New", Courier, mono;
+	background-color: #EEEEEE;
+}
