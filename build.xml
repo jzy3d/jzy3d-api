@@ -12,13 +12,15 @@
     <property name="dir.dist"        value="dist/"/>
 
 	<property name="lib.name"       value="org.jzy3d"/>
-	<property name="lib.version"    value="0.9a4"/>
+	<property name="lib.version"    value="0.9"/>
 	<property name="lib.path" 	 	value="org/jzy3d/"/>
 	
+	<property name="jogl" 	 	value="jogl2-rc10"/>
+		
     <dirname property="dir.basedir" file="${ant.file}"/>
 
     <path id="compile.classpath">
-        <fileset dir="${dir.lib}/jogl"><include name="*.jar"/></fileset>
+        <fileset dir="${dir.lib}/${jogl}"><include name="*.jar"/></fileset>
         <fileset dir="${dir.lib}/misc"><include name="*.jar"/></fileset>
     </path>
 
@@ -57,7 +59,7 @@
 		</zip>	
 	</target>
 
-
+<!--
 	<target name="zip.groovy">
 		<zip destfile="${dir.dist}/${lib.name}-${lib.version}-groovy.zip" update="false">
 			<fileset dir="${dir.src.groovy}"/>
@@ -69,7 +71,7 @@
 			<fileset dir="${dir.src.jogl}"/>
 		</zip>	
 	</target>
-	
+	-->
 	<target name="zip.redbook">
 		<zip destfile="${dir.dist}/${lib.name}-${lib.version}-redbook.zip" update="false">
 			<fileset dir="${dir.src.redbook}"/>
@@ -78,6 +80,6 @@
 
 	
 
-	<target name="release" depends="clean,jar.api,zip.groovy,zip.dependencies,zip.jogl,zip.redbook">
+	<target name="release" depends="clean,jar.api,zip.dependencies,zip.redbook">
 	</target>
 </project>

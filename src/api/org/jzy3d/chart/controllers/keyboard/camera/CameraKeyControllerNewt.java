@@ -1,33 +1,46 @@
 package org.jzy3d.chart.controllers.keyboard.camera;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+
+import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.KeyListener;
 
 
-public class CameraKeyController extends AbstractCameraController implements KeyListener, ICameraKeyController{
+public class CameraKeyControllerNewt extends AbstractCameraController implements KeyListener, ICameraKeyController{
 		
-	public CameraKeyController(){
+	public CameraKeyControllerNewt(){
 	}
 	
-	public CameraKeyController(Chart chart){
+	public CameraKeyControllerNewt(Chart chart){
 		register(chart);
 	}
 	
 	public void register(Chart chart){
 		super.register(chart);
-		chart.getCanvas().addKeyListener(this);
+
+		ICanvas c = chart.getCanvas();
+		if(c instanceof CanvasNewt){
+			CanvasNewt cnt = (CanvasNewt)c;
+			cnt.getWindow().addKeyListener(this);
+		}
+		else{
+			throw new IllegalArgumentException("Using this camera key controller requires a CanvasNewt. Having: " + c.getClass().getSimpleName());
+		}
 	}
 	
 	public void dispose(){
 		for(Chart c: targets){
-			c.getCanvas().removeKeyListener(this);
+			ICanvas ca = c.getCanvas();
+			if(ca instanceof CanvasNewt){
+				CanvasNewt cnt = (CanvasNewt)ca;
+				cnt.getWindow().removeKeyListener(this);
+			}
 		}
-		
-		super.dispose(); // i.e. target=null
+		super.dispose();
 	}
 	
 	/*********************************************************/

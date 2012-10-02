@@ -1,18 +1,29 @@
 package org.jzy3d.chart.controllers.camera;
 
+import java.awt.event.MouseEvent;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.AbstractController;
 import org.jzy3d.chart.controllers.ControllerType;
+import org.jzy3d.chart.controllers.mouse.MouseUtilities;
+import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
 
 
-public abstract class AbstractCameraController extends AbstractController{
+public abstract class AbstractCameraController extends AbstractController implements ICameraMouseController{
 	public AbstractCameraController() {
         super();
     }
 
     public AbstractCameraController(Chart chart) {
         super(chart);
+    }
+    
+    public void dispose(){
+		if(threadController!=null)
+			threadController.stop();
+    	super.dispose();
     }
 
     public static boolean DEFAULT_UPDATE_VIEW = false;
@@ -66,4 +77,36 @@ public abstract class AbstractCameraController extends AbstractController{
             c.getView().zoomZ(factor, updateView);
         fireControllerEvent(ControllerType.ZOOM, factor);
     }
+    
+
+
+    
+
+	public void addSlaveThreadController(CameraThreadController controller){
+		removeSlaveThreadController();
+		this.threadController = controller;
+	}
+	
+	public void removeSlaveThreadController(){
+		if(threadController!=null){
+			threadController.stop();
+			threadController = null;
+		}
+	}
+	
+	public void stopThreadController(){
+		if(threadController!=null)
+			threadController.stop();
+	}
+	
+	public void startThreadController(){
+		if(threadController!=null){
+			threadController.start();
+		}
+	}
+	
+	protected CameraThreadController threadController;
+	
+	protected Coord2d prevMouse = Coord2d.ORIGIN;
+
 }
