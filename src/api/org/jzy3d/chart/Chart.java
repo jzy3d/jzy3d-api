@@ -3,28 +3,24 @@ package org.jzy3d.chart;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLProfile;
 
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
+import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.camera.IScreenshotKeyController;
+import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.factories.ChartComponentFactory;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.factories.JzyFactories;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Scale;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
-import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
-import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -33,13 +29,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 /** {@link Chart} is a convenient object that gather all components required to render 
  * a 3d scene for plotting.
  * 
- * The chart {@link Quality} enable the following functionalities:
- * 
- *				 
- * 
- * 
  * @author Martin Pernollet
- *
  */
 public class Chart{
     public static Quality DEFAULT_QUALITY = Quality.Intermediate;
@@ -54,56 +44,33 @@ public class Chart{
 	public Chart(String windowingToolkit){
 		this(DEFAULT_QUALITY, windowingToolkit);
 	}
+	public Chart(IChartComponentFactory components, Quality quality){
+		this(components, quality, DEFAULT_WINDOWING_TOOLKIT, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+	}	
+
 	
     public Chart(Quality quality, String windowingToolkit){
-        this(quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+        this(new ChartComponentFactory(), quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
     }
     
-    public Chart(Quality quality, String windowingToolkit, GLCapabilities capabilities){
+    public Chart(IChartComponentFactory factory, Quality quality, String windowingToolkit, GLCapabilities capabilities){
         this.capabilities = capabilities;
-        
+		this.windowingToolkit = windowingToolkit;
+		this.factory = factory;
+		this.quality = quality;
+		
 		// Set up controllers
 		controllers = new ArrayList<AbstractCameraController>(1);
 		
 		// Set up the scene and 3d canvas
-		scene  = initializeScene( quality.isAlphaActivated() );
-		canvas = initializeCanvas(scene, quality, windowingToolkit);	
+		scene  = factory.newScene( quality.isAlphaActivated() );
+		canvas = factory.newCanvas(scene, quality, windowingToolkit, capabilities);
 		
         // Set up the view
         view = canvas.getView();
 		view.setBackgroundColor(Color.WHITE);
 	}
-	
-	protected ICanvas initializeCanvas(Scene scene, Quality quality, String chartType){
-		if("awt".compareTo(chartType)==0)
-			return new CanvasAWT(scene, quality, capabilities);
-		else if("swing".compareTo(chartType)==0)
-			return new CanvasSwing(scene, quality, capabilities);
-        else if("newt".compareTo(chartType)==0)
-            return new CanvasNewt(scene, quality, capabilities);
-		else if(chartType.startsWith("offscreen")){
-            Pattern pattern = Pattern.compile("offscreen,(\\d+),(\\d+)");
-            Matcher matcher = pattern.matcher(chartType);
-            if(matcher.matches()){
-                int width = Integer.parseInt(matcher.group(1));
-                int height = Integer.parseInt(matcher.group(2));
-                return new OffscreenCanvas(scene, quality, GLProfile.getDefault(), width, height);
-            }
-            else
-                return new OffscreenCanvas(scene, quality, GLProfile.getDefault(), 500, 500);
-        }
-		else
-			throw new RuntimeException("unknown chart type:" + chartType);
-	}
-	
-	/**
-	 * Provides a concrete scene. This method shoud be overriden to inject a custom scene,
-	 * which may rely on several views, and could enhance manipulation of scene graph.
-	 */
-	protected ChartScene initializeScene(boolean graphsort){
-		return JzyFactories.scene.getInstance(graphsort);
-	}
-	
+		
 	public void clear(){
 		scene.clear();
 		view.shoot();
@@ -143,6 +110,19 @@ public class Chart{
     }
 	
 	/**************************************************************/
+	
+	public ICameraMouseController addMouseController(){
+		return getFactory().newMouseController(this);
+	}
+
+	public ICameraKeyController addKeyController(){
+		return getFactory().newKeyController(this);
+	}
+
+	public IScreenshotKeyController addScreenshotKeyController(){
+		return getFactory().newScreenshotKeyController(this);
+	}
+
 		
 	/** Add a {@link AbstractCameraController} to this {@link Chart}.
 	 * Warning: the {@link Chart} is not the owner of the controller. Disposing
@@ -221,8 +201,14 @@ public class Chart{
 		view.setAxeBoxDisplayed(status);
 		view.shoot(); 
 	}
-
-	/**************************************************************************************/
+	
+	public IChartComponentFactory getFactory() {
+		return factory;
+	}
+		
+	public String getWindowingToolkit() {
+		return windowingToolkit;
+	}
 	
 	public void setViewPoint(Coord3d viewPoint){
 		view.setViewPoint(viewPoint);
@@ -284,6 +270,12 @@ public class Chart{
 	}
 	
 	/* */
+
+	protected IChartComponentFactory factory;
+	
+	protected Quality quality;
+	protected GLCapabilities capabilities;
+	protected String windowingToolkit;
 	
 	protected ChartScene  scene;
 	protected View        view;
@@ -294,6 +286,4 @@ public class Chart{
 	protected Coord3d	  previousViewPointProfile;	
 	
 	protected ArrayList<AbstractCameraController> controllers;	
-	
-	protected GLCapabilities capabilities;
 }

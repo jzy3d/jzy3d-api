@@ -2,10 +2,12 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.image.BufferedImage;
 
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilitiesImmutable;
 import javax.media.opengl.awt.GLCanvas;
 
-import org.jzy3d.factories.JzyFactories;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -40,20 +42,20 @@ import com.jogamp.opengl.util.Animator;
  * @author Martin Pernollet
  */
 public class CanvasAWT extends GLCanvas implements IScreenCanvas {
-	public CanvasAWT(Scene scene, Quality quality){
-		this(scene, quality, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
-	}
+	public CanvasAWT(IChartComponentFactory factory, Scene scene, Quality quality){
+        this(factory, scene, quality, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+    }
 	
-	public CanvasAWT(Scene scene, Quality quality, GLCapabilitiesImmutable glci){
-	    this(scene, quality, glci, false, false);
+	public CanvasAWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci){
+	    this(factory, scene, quality, glci, false, false);
 	}
 	
 	/** Initialize a {@link CanvasAWT} attached to a {@link Scene}, with a given rendering {@link Quality}.*/
-	public CanvasAWT(Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL){
+	public CanvasAWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL){
 		super(glci);
 		
 		view     = scene.newView(this, quality);
-		renderer = JzyFactories.renderer3d.getInstance(view, traceGL, debugGL);
+		renderer = factory.newRenderer(view, traceGL, debugGL);
 		addGLEventListener(renderer);
 		
         setAutoSwapBufferMode(quality.isAutoSwapBuffer());
@@ -73,6 +75,22 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 				view = null;
             }
           }).start();
+	}
+	
+	public Renderer3d getRenderer(){
+		return renderer;
+	}
+
+	public String getDebugInfo(){
+		GL gl = getView().getCurrentGL();
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("Chosen GLCapabilities: " + getChosenGLCapabilities() + "\n");
+		sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
+		sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
+		sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+		//sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
+		return sb.toString();
 	}
 	
 	/*********************************************************/

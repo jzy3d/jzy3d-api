@@ -12,12 +12,12 @@ import javax.media.opengl.GLContext;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.IViewIsVerticalEventListener;
 import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewIsVerticalEvent;
 import org.jzy3d.events.ViewPointChangedEvent;
-import org.jzy3d.factories.JzyFactories;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -25,6 +25,7 @@ import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
+import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
 import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -70,7 +71,7 @@ public class View {
      * The {@link Quality} allows setting the rendering capabilities that are
      * set one time by the init() method.
      */
-    public View(Scene scene, ICanvas canvas, Quality quality) {
+    public View(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         BoundingBox3d sceneBounds = scene.getGraph().getBounds();
 
         this.viewpoint = DEFAULT_VIEW.clone();
@@ -80,8 +81,8 @@ public class View {
         this.boundmode = ViewBoundMode.AUTO_FIT;
         this.cameraMode = CameraMode.ORTHOGONAL;
 
-        this.axe = JzyFactories.axe.getInstance(sceneBounds, this);
-        this.cam = JzyFactories.camera.getInstance(center);
+        this.axe = factory.newAxe(sceneBounds, this);
+        this.cam = factory.newCamera(center);
         this.scene = scene;
         this.canvas = canvas;
         this.quality = quality;
@@ -97,6 +98,8 @@ public class View {
             this.overlay = new Overlay((CanvasSwing) canvas);
         else if (canvas instanceof CanvasAWT)
             this.overlay = new Overlay((CanvasAWT) canvas);
+        else if (canvas instanceof CanvasNewt)
+            this.overlay = new Overlay(((CanvasNewt) canvas).getWindow());
         else if (canvas instanceof OffscreenCanvas)
             this.overlay = new Overlay(((OffscreenCanvas) canvas).getGlpBuffer());
         else

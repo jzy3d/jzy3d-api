@@ -4,10 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Panel;
 import java.awt.image.BufferedImage;
 
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilitiesImmutable;
 
-import org.jzy3d.factories.JzyFactories;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -20,12 +22,12 @@ import com.jogamp.opengl.util.Animator;
  * Mouse & key listener wont work with it.
  */
 public class CanvasNewt extends Panel implements IScreenCanvas{
-    public CanvasNewt(Scene scene, Quality quality, GLCapabilitiesImmutable glci){
+    public CanvasNewt(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci){
         window = GLWindow.create(glci);
         canvas = new NewtCanvasAWT(window);
         
         view     = scene.newView(this, quality);
-        renderer = JzyFactories.renderer3d.getInstance(view, false, false);
+        renderer = factory.newRenderer(view, false, false);
         
         window.addGLEventListener(renderer);
         
@@ -70,34 +72,66 @@ public class CanvasNewt extends Panel implements IScreenCanvas{
         return window.getAnimator();
     }
     
+    @Override
     public BufferedImage screenshot(){
         renderer.nextDisplayUpdateScreenshot();
         display();
         return renderer.getLastScreenshot();
     }
     
+    @Override
+	public Renderer3d getRenderer(){
+		return renderer;
+	}
+    
+    public String getDebugInfo(){
+		GL gl = getView().getCurrentGL();
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("Chosen GLCapabilities: " + window.getChosenGLCapabilities() + "\n");
+		sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
+		sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
+		sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+		//sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
+		return sb.toString();
+	}
+
+    
     /* */
     
-    /** Provide a reference to the View that renders into this canvas.*/
-    public View getView(){
-        return view;
-    }
+    
 
     /** Provide the actual renderer width for the open gl camera settings, 
      * which is obtained after a resize event.*/
+    @Override
     public int getRendererWidth(){
         return (renderer!=null?renderer.getWidth():0);
     }
     
     /** Provide the actual renderer height for the open gl camera settings, 
      * which is obtained after a resize event.*/
+    @Override
     public int getRendererHeight(){
         return (renderer!=null?renderer.getHeight():0);
     }
-        
-    /* */
     
-    protected View       view;
+    /** Provide a reference to the View that renders into this canvas.*/
+    @Override
+    public View getView(){
+        return view;
+    }
+    
+    public GLWindow getWindow() {
+		return window;
+	}
+
+	public NewtCanvasAWT getCanvas() {
+		return canvas;
+	}
+
+
+
+	protected View       view;
     protected Renderer3d renderer;
     protected Animator   animator;
     
