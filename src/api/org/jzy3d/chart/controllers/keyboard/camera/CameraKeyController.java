@@ -8,7 +8,7 @@ import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.maths.Coord2d;
 
 
-public class CameraKeyController extends AbstractCameraController implements KeyListener{
+public class CameraKeyController extends AbstractCameraController implements KeyListener, ICameraKeyController{
 		
 	public CameraKeyController(){
 	}
@@ -39,9 +39,9 @@ public class CameraKeyController extends AbstractCameraController implements Key
     		float offset = 0.1f;
     		switch(e.getKeyCode()){
     		case KeyEvent.VK_DOWN:
-    			move.y = move.y - offset; rotate( move ); break;
-    		case KeyEvent.VK_UP:
     			move.y = move.y + offset; rotate( move ); break;
+    		case KeyEvent.VK_UP:
+    			move.y = move.y - offset; rotate( move ); break;
     		case KeyEvent.VK_LEFT:
     			move.x = move.x - offset; rotate( move ); break;
     		case KeyEvent.VK_RIGHT:

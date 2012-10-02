@@ -8,6 +8,8 @@ import java.util.List;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import org.jzy3d.chart.factories.ChartComponentFactory;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot2d.rendering.CanvasAWT;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -28,7 +30,11 @@ import org.jzy3d.plot3d.rendering.view.ViewPort;
  */
 public class ChartView extends View {
     public ChartView(Scene scene, ICanvas canvas, Quality quality) {
-        super(scene, canvas, quality);
+    	this(new ChartComponentFactory(), scene, canvas, quality);
+    }
+    
+    public ChartView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+        super(factory, scene, canvas, quality);
 
         // display zones
         zone1 = new Rectangle(0, 0, 0, 0);

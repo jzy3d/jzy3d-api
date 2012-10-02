@@ -9,8 +9,12 @@ import org.jzy3d.chart.Chart;
 
 public class FrameAWT extends java.awt.Frame{
 	public FrameAWT(Chart chart, Rectangle bounds, String title){
+		this(chart, bounds, title, "[Awt]");
+	}
+	
+	public FrameAWT(Chart chart, Rectangle bounds, String title, String message){
 		this.chart = chart;
-		this.setTitle(title + "[AWT]");
+		this.setTitle(title + message);
 		this.add((java.awt.Component)chart.getCanvas());
 		this.pack();
 		this.setBounds(bounds);

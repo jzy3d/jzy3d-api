@@ -33,6 +33,8 @@ public interface ICanvas {
 	/** Returns the renderer's height, i.e. the display height.*/
 	public int getRendererHeight();	
 	
+	public Renderer3d getRenderer();
+	
 	/** Invoked when a user requires the Canvas to be repainted (e.g. a non 3d layer has changed).
 	 */
 	public void forceRepaint();
@@ -56,4 +58,6 @@ public interface ICanvas {
 	
 	public void addKeyListener(KeyListener listener);
 	public void removeKeyListener(KeyListener listener);
+	
+	public String getDebugInfo();
 }

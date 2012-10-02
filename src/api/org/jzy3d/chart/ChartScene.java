@@ -1,11 +1,11 @@
 package org.jzy3d.chart;
 
-import org.jzy3d.factories.JzyFactories;
+import org.jzy3d.chart.factories.ChartComponentFactory;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ordering.BarycentreOrderingStrategy;
-import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
@@ -17,15 +17,17 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin Pernollet
  */
 public class ChartScene extends Scene {
-	public ChartScene(){
+	/*public ChartScene(){
 		nview = 0;
+	}*/
+	public ChartScene(boolean graphsort){
+		this(graphsort, new ChartComponentFactory());
+	}	
+	public ChartScene(boolean graphsort, IChartComponentFactory factory){
+		super(graphsort, factory);
+		this.nview = 0;
 	}
 	
-	public ChartScene(boolean graphsort){
-		super(graphsort);
-		graph = new Graph(this, JzyFactories.ordering.getInstance(), graphsort);
-		nview = 0;
-	}
 	
 	public void clear(){
 		view.setBoundManual(new BoundingBox3d(0,0,0,0,0,0));
@@ -37,7 +39,7 @@ public class ChartScene extends Scene {
 		else
 			nview++;
 		
-		view = initializeChartView(this, canvas, quality);
+		view = factory.newView(this, canvas, quality);
 		views.add(view);
 		return view;
 	}
@@ -45,10 +47,6 @@ public class ChartScene extends Scene {
 	public void clearView(View view){
 		super.clearView(view);
 		nview--;
-	}
-	
-	protected View initializeChartView(Scene scene, ICanvas canvas, Quality quality){
-		return JzyFactories.view.getInstance(scene, canvas, quality);//new ChartView(scene, canvas, quality);
 	}
 	
 	/********************************************************/

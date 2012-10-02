@@ -6,21 +6,23 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLDrawableFactory;
 import javax.media.opengl.GLPbuffer;
 import javax.media.opengl.GLProfile;
 
-import org.jzy3d.factories.JzyFactories;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class OffscreenCanvas implements ICanvas {
-    public OffscreenCanvas(Scene scene, Quality quality, GLProfile profile, int width, int height) {
+    public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLProfile profile, int width, int height) {
         view = scene.newView(this, quality);
-        renderer = JzyFactories.renderer3d.getInstance(view, false, false);
+        renderer = factory.newRenderer(view, false, false);
 
         initGLPBuffer(width, height);
     }
@@ -80,6 +82,23 @@ public class OffscreenCanvas implements ICanvas {
     public int getRendererHeight() {
         return (renderer != null ? renderer.getHeight() : 0);
     }
+    
+    @Override
+	public Renderer3d getRenderer(){
+		return renderer;
+	}
+    
+    public String getDebugInfo(){
+		GL gl = getView().getCurrentGL();
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("Chosen GLCapabilities: " + glpBuffer.getChosenGLCapabilities() + "\n");
+		sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
+		sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
+		sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+		//sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
+		return sb.toString();
+	}
 
     public void removeKeyListener(KeyListener listener) {
         throw new NotImplementedException();

@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -14,16 +15,8 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import org.jzy3d.bridge.awt.FrameAWT;
-import org.jzy3d.bridge.swing.FrameSwing;
-import org.jzy3d.chart.controllers.keyboard.camera.ScreenshotKeyListener;
-import org.jzy3d.chart.controllers.keyboard.camera.ScreenshotKeyListener.IScreenshotEventListener;
-import org.jzy3d.chart.controllers.mouse.camera.CameraMouseController;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.plot3d.primitives.enlightables.AbstractEnlightable;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
-import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.ui.editors.LightEditor;
 import org.jzy3d.ui.editors.MaterialEditor;
 import org.jzy3d.ui.views.ImagePanel;
@@ -31,69 +24,37 @@ import org.jzy3d.ui.views.ImagePanel;
 public class ChartLauncher {
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
     
-    public static CameraMouseController openChart(Chart chart) {
+    public static ICameraMouseController openChart(Chart chart) {
         return openChart(chart, new Rectangle(0, 0, 800, 600), "Jzy3d", true);
     }
 
-    public static CameraMouseController openChart(Chart chart, Rectangle rectangle) {
+    public static ICameraMouseController openChart(Chart chart, Rectangle rectangle) {
         return openChart(chart, rectangle, "Jzy3d", true);
     }
 
-    public static CameraMouseController openChart(Chart chart, String title) {
+    public static ICameraMouseController openChart(Chart chart, String title) {
         return openChart(chart, new Rectangle(0, 0, 800, 600), title, true);
     }
 
-    public static CameraMouseController openChart(Chart chart, Rectangle bounds, String title) {
+    public static ICameraMouseController openChart(Chart chart, Rectangle bounds, String title) {
         return openChart(chart, bounds, title, true);
     }
 
-    public static CameraMouseController openChart(Chart chart, Rectangle bounds, String title, boolean allowSlaveThreadOnDoubleClick) {
+    public static ICameraMouseController openChart(Chart chart, Rectangle bounds, String title, boolean allowSlaveThreadOnDoubleClick) {
         return openChart(chart, bounds, title, allowSlaveThreadOnDoubleClick, false);
     }
 
-    public static CameraMouseController openChart(final Chart chart, Rectangle bounds, final String title, boolean allowSlaveThreadOnDoubleClick, boolean startThreadImmediatly) {
-        CameraMouseController mouse = configureControllers(chart, title, allowSlaveThreadOnDoubleClick, startThreadImmediatly);
+    public static ICameraMouseController openChart(final Chart chart, Rectangle bounds, final String title, boolean allowSlaveThreadOnDoubleClick, boolean startThreadImmediatly) {
+        ICameraMouseController mouse = configureControllers(chart, title, allowSlaveThreadOnDoubleClick, startThreadImmediatly);
         chart.render();
         frame(chart, bounds, title);
         return mouse;
     }
 
-    public static CameraMouseController configureControllers(final Chart chart, final String title, boolean allowSlaveThreadOnDoubleClick, boolean startThreadImmediatly) {
-        // Setup chart controllers and listeners
-        CameraMouseController mouse = new CameraMouseController();
-        /*
-         * mouse.addControllerEventListener(new ControllerEventListener(){
-         * public void controllerEventFired(ControllerEvent e) {
-         * if(e.getType()==ControllerType.ROTATE){
-         * //System.out.println("Mouse[ROTATE]:" + (Coord3d)e.getValue()); } }
-         * });
-         */
-        chart.addController(mouse);
-
-        if (allowSlaveThreadOnDoubleClick) {
-            CameraThreadController thread = new CameraThreadController();
-            mouse.addSlaveThreadController(thread);
-            chart.addController(thread);
-            if (startThreadImmediatly)
-                thread.start();
-        }
-
-        // trigger screenshot on 's' letter
-        ScreenshotKeyListener listener = new ScreenshotKeyListener(chart, SCREENSHOT_FOLDER + title + ".png");
-        listener.addListener(new IScreenshotEventListener() {
-            @Override
-            public void failedScreenshot(String file, Exception e) {
-                System.out.println("Failed to save screenshot:");
-                e.printStackTrace();
-            }
-            
-            @Override
-            public void doneScreenshot(String file) {
-                System.out.println("Screenshot: " + file);
-            }
-        });
-        chart.getCanvas().addKeyListener(listener);
-        return mouse;
+    public static ICameraMouseController configureControllers(final Chart chart, final String title, boolean allowSlaveThreadOnDoubleClick, boolean startThreadImmediatly) {
+        chart.addKeyController();
+        chart.addScreenshotKeyController();
+        return chart.addMouseController();
     }
 
     public static void openStaticChart(Chart chart) {
@@ -173,16 +134,7 @@ public class ChartLauncher {
     }
     
     public static void frame(Chart chart, Rectangle bounds, String title){
-        Object canvas = chart.getCanvas();
-        
-        if(canvas instanceof CanvasAWT)
-            new FrameAWT(chart, bounds, title); // FrameSWT works as well
-        else if(canvas instanceof CanvasNewt)
-            new FrameAWT(chart, bounds, title); // FrameSWT works as well
-        else if(canvas instanceof CanvasSwing)
-            new FrameSwing(chart, bounds, title);
-        else
-            throw new RuntimeException("No default frame could be found for the given Chart canvas: " + canvas.getClass());
+    	chart.getFactory().newFrame(chart, bounds, title);
     }
     
     /* SCREENSHOT */
@@ -191,7 +143,13 @@ public class ChartLauncher {
         File output = new File(filename);
         if (!output.getParentFile().exists())
             output.mkdirs();
-        ImageIO.write(chart.screenshot(), "png", output);
-        System.out.println("Dumped screenshot in: " + filename);
+        BufferedImage i = chart.screenshot();
+        if(i!=null){
+	        ImageIO.write(i, "png", output);
+	        System.out.println("Dumped screenshot in: " + filename);
+        }
+        else{
+        	System.err.println("screenshot not available");
+        }
     }
 }

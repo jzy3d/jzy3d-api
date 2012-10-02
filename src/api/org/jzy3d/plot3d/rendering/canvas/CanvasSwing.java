@@ -2,10 +2,12 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.image.BufferedImage;
 
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilitiesImmutable;
 import javax.media.opengl.awt.GLJPanel;
 
-import org.jzy3d.factories.JzyFactories;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -24,16 +26,16 @@ import com.jogamp.opengl.util.Animator;
  * @author Martin Pernollet
  */
 public class CanvasSwing extends GLJPanel implements IScreenCanvas{
-    public CanvasSwing(Scene scene, Quality quality){
-        this(scene, quality, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+    public CanvasSwing(IChartComponentFactory factory, Scene scene, Quality quality){
+        this(factory, scene, quality, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
     }
     
 	/** Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.*/
-	public CanvasSwing(Scene scene, Quality quality, GLCapabilitiesImmutable glci){
+	public CanvasSwing(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci){
 		super(glci);
 		
 		view     = scene.newView(this, quality);
-		renderer = JzyFactories.renderer3d.getInstance(view, false, false);
+		renderer = factory.newRenderer(view, false, false);
 		addGLEventListener(renderer);
 		
 		// swing specific
@@ -54,6 +56,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas{
 		renderer = null;
 		view = null; 
 	}
+	
 	
 	/*********************************************************/
 
@@ -102,6 +105,23 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas{
 	 * which is obtained after a resize event.*/
 	public int getRendererHeight(){
 		return (renderer!=null?renderer.getHeight():0);
+	}
+	
+	@Override
+	public Renderer3d getRenderer(){
+		return renderer;
+	}
+	
+	public String getDebugInfo(){
+		GL gl = getView().getCurrentGL();
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("Chosen GLCapabilities: " + getChosenGLCapabilities() + "\n");
+		sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
+		sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
+		sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+		//sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
+		return sb.toString();
 	}
 	
 	/* */

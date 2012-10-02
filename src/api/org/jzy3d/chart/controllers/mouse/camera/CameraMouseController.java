@@ -21,11 +21,11 @@ public class CameraMouseController extends AbstractCameraController implements M
 	
 	public CameraMouseController(Chart chart){
 	    register(chart);
+	    addSlaveThreadController(new CameraThreadController(chart));
 	}
 	
 	public void register(Chart chart){
 		super.register(chart);
-		this.prevMouse = Coord2d.ORIGIN; 
 		chart.getCanvas().addMouseListener(this);
 		chart.getCanvas().addMouseMotionListener(this);
 		chart.getCanvas().addMouseWheelListener(this);
@@ -37,28 +37,8 @@ public class CameraMouseController extends AbstractCameraController implements M
 			c.getCanvas().removeMouseMotionListener(this);
 			c.getCanvas().removeMouseWheelListener(this);
 		}
-		
-		if(threadController!=null)
-			threadController.stop();
-		
-		super.dispose(); // i.e. target=null
+		super.dispose();
 	}
-	
-	/*********************************************************/
-	
-	public void addSlaveThreadController(CameraThreadController controller){
-		removeSlaveThreadController();
-		this.threadController = controller;
-	}
-	
-	public void removeSlaveThreadController(){
-		if(threadController!=null){
-			threadController.stop();
-			threadController = null;
-		}
-	}
-		
-	/*********************************************************/
 	
 	/** Handles toggle between mouse rotation/auto rotation: double-click starts the animated
 	 * rotation, while simple click stops it.*/
@@ -70,7 +50,7 @@ public class CameraMouseController extends AbstractCameraController implements M
 		prevMouse.x  = e.getX();
 		prevMouse.y  = e.getY();
 	}
-
+	
     public boolean handleSlaveThread(MouseEvent e) {
         if(MouseUtilities.isDoubleClick(e)){
 			if(threadController!=null){
@@ -82,7 +62,7 @@ public class CameraMouseController extends AbstractCameraController implements M
 			threadController.stop();
 		return false;
     }
-	
+
 	/** Compute shift or rotate*/
 	public void mouseDragged(MouseEvent e) {
 		Coord2d mouse = new Coord2d(e.getX(),e.getY());
@@ -103,9 +83,7 @@ public class CameraMouseController extends AbstractCameraController implements M
 	
 	/** Compute zoom */
 	public void mouseWheelMoved(MouseWheelEvent e) {
-		if(threadController!=null)
-			threadController.stop();
-		
+		stopThreadController();		
 		float factor = 1 + (e.getWheelRotation()/10.0f);
 		zoomZ(factor);
 	}
@@ -117,9 +95,6 @@ public class CameraMouseController extends AbstractCameraController implements M
 	public void mouseMoved(MouseEvent e) {}
 	
 	/*********************************************************/
-	
-	protected Coord2d    prevMouse;
-	protected CameraThreadController threadController;
 	
 	//protected Chart chart;
 }

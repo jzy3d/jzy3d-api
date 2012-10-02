@@ -4,13 +4,14 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.ChartView;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
 public class GraphView extends ChartView {
-	public GraphView(Scene scene, ICanvas canvas, Quality quality) {
-		super(scene, canvas, quality);
+	public GraphView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+		super(factory, scene, canvas, quality);
 	}
 	
 

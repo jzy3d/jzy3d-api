@@ -3,7 +3,8 @@ package org.jzy3d.plot3d.rendering.scene;
 import java.util.List;
 import java.util.Vector;
 
-import org.jzy3d.factories.JzyFactories;
+import org.jzy3d.chart.factories.ChartComponentFactory;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -36,16 +37,21 @@ public class Scene {
 	}
 	
 	public Scene(boolean graphsort){
-		this.graph = new Graph(this, JzyFactories.ordering.getInstance(), graphsort);
-		this.lightSet = new LightSet();
-		this.views = new Vector<View>();		
+		this(false, new ChartComponentFactory());
 	}
 	
+	public Scene(boolean graphsort, IChartComponentFactory factory){
+		this.graph = new Graph(this, factory.newOrderingStrategy(), graphsort);
+		this.lightSet = new LightSet();
+		this.views = new Vector<View>();
+		this.factory = factory;
+	}
+	/*
 	public Scene(Graph graph){
 		this.graph = graph;
 		this.lightSet = new LightSet();
 		this.views = new Vector<View>();		
-	}
+	}*/
 		
 	/** Handles disposing of the Graph as well as all views pointing to this Graph.*/
 	public void dispose(){
@@ -117,7 +123,7 @@ public class Scene {
 	/** Instantiate a View attached to the given Canvas, and return its
 	 * reference.*/
 	public View newView(ICanvas canvas, Quality quality){
-		View view = new View(this, canvas, quality);
+		View view = factory.newView(this, canvas, quality);
 		views.add(view);		
 		return view;
 	}
@@ -139,4 +145,6 @@ public class Scene {
 	protected Vector<View>  views;
 	protected Graph         graph;
 	protected LightSet      lightSet;
+	protected IChartComponentFactory factory;
+
 }

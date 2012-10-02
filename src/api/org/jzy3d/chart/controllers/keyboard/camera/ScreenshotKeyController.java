@@ -10,21 +10,37 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.AbstractController;
 
 /** Saves a screenshot in PNG format once key S is pressed. 
  * 
  */
-public class ScreenshotKeyListener implements KeyListener {
+public class ScreenshotKeyController extends AbstractController implements KeyListener, IScreenshotKeyController {
     protected Chart chart;
     protected String outputFile;
     protected List<IScreenshotEventListener> listeners = new ArrayList<IScreenshotEventListener>(1);
 
     
-    public ScreenshotKeyListener(Chart chart, String outputFile) {
+    public ScreenshotKeyController(Chart chart, String outputFile) {
         super();
+        register(chart);
+
         this.chart = chart;
         this.outputFile = outputFile;
     }
+    
+    public void register(Chart chart){
+		super.register(chart);
+		chart.getCanvas().addKeyListener(this);
+	}
+	
+	public void dispose(){
+		for(Chart c: targets){
+			c.getCanvas().removeKeyListener(this);
+		}
+		
+		super.dispose(); // i.e. target=null
+	}
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -40,8 +56,8 @@ public class ScreenshotKeyListener implements KeyListener {
             break;
         }
     }
-    
-    public void screenshot(Chart chart, String filename) throws IOException {
+    @Override
+	public void screenshot(Chart chart, String filename) throws IOException {
         File output = new File(filename);
         if (!output.getParentFile().exists())
             output.mkdirs();
@@ -62,7 +78,8 @@ public class ScreenshotKeyListener implements KeyListener {
         }
     }
     
-    public void addListener(IScreenshotEventListener listener){
+    @Override
+	public void addListener(IScreenshotEventListener listener){
         listeners.add(listener);
     }
 
@@ -70,11 +87,5 @@ public class ScreenshotKeyListener implements KeyListener {
         for(IScreenshotEventListener listener: listeners){
             listener.failedScreenshot(file, e);
         }
-    }
-
-    
-    public interface IScreenshotEventListener{
-        public void doneScreenshot(String file);
-        public void failedScreenshot(String file, Exception e);
     }
 }
