@@ -1,11 +1,8 @@
 package org.jzy3d.chart.controllers.camera;
 
-import java.awt.event.MouseEvent;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.AbstractController;
 import org.jzy3d.chart.controllers.ControllerType;
-import org.jzy3d.chart.controllers.mouse.MouseUtilities;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
