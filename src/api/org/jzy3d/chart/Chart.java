@@ -9,7 +9,8 @@ import javax.media.opengl.GLCapabilities;
 
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.camera.IScreenshotKeyController;
+import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
+import org.jzy3d.chart.controllers.mouse.camera.CameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
@@ -129,12 +130,12 @@ public class Chart{
 	 * the chart thus just unregisters the controllers, but does not handle
 	 * stopping and disposing controllers.
 	 */
-	public void addController(AbstractCameraController controller){
+	public void addController(CameraMouseController controller){
 		controller.register(this);
 		controllers.add(controller);
 	}
 	
-	public void removeController(AbstractCameraController controller){
+	public void removeController(CameraMouseController controller){
 		controller.unregister(this);
 		controllers.remove(controller);
 	}

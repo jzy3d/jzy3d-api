@@ -24,22 +24,6 @@ public class CameraMouseController extends AbstractCameraController implements M
 	    addSlaveThreadController(new CameraThreadController(chart));
 	}
 	
-	public void register(Chart chart){
-		super.register(chart);
-		chart.getCanvas().addMouseListener(this);
-		chart.getCanvas().addMouseMotionListener(this);
-		chart.getCanvas().addMouseWheelListener(this);
-	}
-	
-	public void dispose(){
-		for(Chart c: targets){
-			c.getCanvas().removeMouseListener(this);
-			c.getCanvas().removeMouseMotionListener(this);
-			c.getCanvas().removeMouseWheelListener(this);
-		}
-		super.dispose();
-	}
-	
 	/** Handles toggle between mouse rotation/auto rotation: double-click starts the animated
 	 * rotation, while simple click stops it.*/
 	public void mousePressed(MouseEvent e) {
@@ -51,19 +35,7 @@ public class CameraMouseController extends AbstractCameraController implements M
 		prevMouse.y  = e.getY();
 	}
 	
-    public boolean handleSlaveThread(MouseEvent e) {
-        if(MouseUtilities.isDoubleClick(e)){
-			if(threadController!=null){
-				threadController.start();
-				return true;
-			}
-		}
-		if(threadController!=null)
-			threadController.stop();
-		return false;
-    }
-
-	/** Compute shift or rotate*/
+    /** Compute shift or rotate*/
 	public void mouseDragged(MouseEvent e) {
 		Coord2d mouse = new Coord2d(e.getX(),e.getY());
 		
@@ -94,7 +66,15 @@ public class CameraMouseController extends AbstractCameraController implements M
 	public void mouseReleased(MouseEvent e) {} 
 	public void mouseMoved(MouseEvent e) {}
 	
-	/*********************************************************/
-	
-	//protected Chart chart;
+	public boolean handleSlaveThread(MouseEvent e) {
+	    if(MouseUtilities.isDoubleClick(e)){
+			if(threadController!=null){
+				threadController.start();
+				return true;
+			}
+		}
+		if(threadController!=null)
+			threadController.stop();
+		return false;
+	}
 }

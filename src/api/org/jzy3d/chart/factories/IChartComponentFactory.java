@@ -7,7 +7,7 @@ import javax.media.opengl.GLCapabilities;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.camera.IScreenshotKeyController;
+import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
