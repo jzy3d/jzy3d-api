@@ -19,7 +19,6 @@ import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.Animator;
 
 /** Experimental Newt canvas. 
- * Mouse & key listener wont work with it.
  */
 public class CanvasNewt extends Panel implements IScreenCanvas{
     public CanvasNewt(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci){

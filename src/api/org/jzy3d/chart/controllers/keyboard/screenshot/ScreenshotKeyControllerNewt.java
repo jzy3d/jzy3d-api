@@ -1,4 +1,4 @@
-package org.jzy3d.chart.controllers.keyboard.camera;
+package org.jzy3d.chart.controllers.keyboard.screenshot;
 
 import java.io.File;
 import java.io.IOException;
