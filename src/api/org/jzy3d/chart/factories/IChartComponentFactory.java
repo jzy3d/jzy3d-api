@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import javax.media.opengl.GLCapabilities;
 
+import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
@@ -33,5 +34,5 @@ public interface IChartComponentFactory {
 	public ICameraMouseController newMouseController(Chart chart);
 	public ICameraKeyController newKeyController(Chart chart);
 	public IScreenshotKeyController newScreenshotKeyController(Chart chart);
-	public void newFrame(Chart chart, Rectangle bounds, String title);
+	public IFrame newFrame(Chart chart, Rectangle bounds, String title);
 }

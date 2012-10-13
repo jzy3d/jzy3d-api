@@ -52,6 +52,7 @@ public class CanvasNewt extends Panel implements IScreenCanvas{
         
         if(renderer!=null)
             renderer.dispose(window);
+        
         renderer = null;
         view = null; 
     }

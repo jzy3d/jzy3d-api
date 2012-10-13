@@ -6,9 +6,10 @@ import java.awt.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 
-public class FrameSWT {
+public class FrameSWT  implements IFrame{
 	public FrameSWT(Chart chart, Rectangle bounds, String title){
 		this.chart = chart;
 		

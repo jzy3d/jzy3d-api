@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
 
+import org.jzy3d.bridge.IFrame;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.Chart;
@@ -167,15 +168,15 @@ public class ChartComponentFactory implements IChartComponentFactory  {
 		return key;
 	}
 	
-	public void newFrame(Chart chart, Rectangle bounds, String title){
+	public IFrame newFrame(Chart chart, Rectangle bounds, String title){
         Object canvas = chart.getCanvas();
         
         if(canvas instanceof CanvasAWT)
-            new FrameAWT(chart, bounds, title); // FrameSWT works as well
+            return new FrameAWT(chart, bounds, title); // FrameSWT works as well
         else if(canvas instanceof CanvasNewt)
-            new FrameAWT(chart, bounds, title, "[Newt]"); // FrameSWT works as well
+        	return new FrameAWT(chart, bounds, title, "[Newt]"); // FrameSWT works as well
         else if(canvas instanceof CanvasSwing)
-            new FrameSwing(chart, bounds, title);
+        	return new FrameSwing(chart, bounds, title);
         else
             throw new RuntimeException("No default frame could be found for the given Chart canvas: " + canvas.getClass());
     }

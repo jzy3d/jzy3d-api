@@ -25,6 +25,11 @@ public class TicToc {
 		return elapsedSecond();
 	}
 	
+	public long rawToc(){
+		stop = System.nanoTime();
+		return stop;
+	}
+	
 	public long elapsedNanosecond(){
 		return stop-start;
 	}
@@ -41,6 +46,17 @@ public class TicToc {
 		return elapsedMilisecond()/1000;
 	}
 	
+	
+
+	public long getStart() {
+		return start;
+	}
+
+	public long getStop() {
+		return stop;
+	}
+
+
 
 	/**********************************************/
 	

@@ -9,11 +9,12 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 
 
 
-public class FrameSwing extends JFrame{
+public class FrameSwing extends JFrame implements IFrame{
 	public FrameSwing(Chart chart, Rectangle bounds, String title){
 		this.chart = chart;
 
