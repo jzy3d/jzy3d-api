@@ -1,0 +1,582 @@
+COMPONENT_RESIZED, size:java.awt.Dimension[width=490,height=470], bounds:java.awt.Rectangle[x=1,y=28,width=490,height=470], since:479
+COMPONENT_RESIZED, size:java.awt.Dimension[width=490,height=470], bounds:java.awt.Rectangle[x=1,y=28,width=490,height=470], since:480
+WINDOW_OPENED, v:java.awt.Dimension[width=492,height=499], since:482
+COMPONENT_MOVED, size:java.awt.Dimension[width=498,height=471], bounds:java.awt.Rectangle[x=1,y=28,width=498,height=471], since:794
+MOUSE_MOVED, x:117, y:58, bt:0, since:799
+COMPONENT_RESIZED, size:java.awt.Dimension[width=498,height=471], bounds:java.awt.Rectangle[x=1,y=28,width=498,height=471], since:865
+MOUSE_MOVED, x:114, y:69, bt:0, since:865
+MOUSE_MOVED, x:111, y:93, bt:0, since:865
+MOUSE_MOVED, x:109, y:105, bt:0, since:865
+MOUSE_MOVED, x:108, y:112, bt:0, since:929
+MOUSE_MOVED, x:107, y:117, bt:0, since:964
+MOUSE_MOVED, x:106, y:120, bt:0, since:1002
+MOUSE_MOVED, x:100, y:133, bt:0, since:1050
+MOUSE_MOVED, x:99, y:133, bt:0, since:1080
+MOUSE_MOVED, x:100, y:130, bt:0, since:1300
+MOUSE_MOVED, x:120, y:104, bt:0, since:1337
+MOUSE_MOVED, x:126, y:98, bt:0, since:1373
+MOUSE_MOVED, x:151, y:78, bt:0, since:1373
+MOUSE_MOVED, x:159, y:72, bt:0, since:1409
+MOUSE_MOVED, x:199, y:53, bt:0, since:1410
+MOUSE_MOVED, x:224, y:45, bt:0, since:1439
+MOUSE_MOVED, x:247, y:39, bt:0, since:1465
+MOUSE_MOVED, x:250, y:36, bt:0, since:1493
+MOUSE_MOVED, x:252, y:35, bt:0, since:1569
+MOUSE_MOVED, x:253, y:36, bt:0, since:1604
+MOUSE_MOVED, x:253, y:37, bt:0, since:1638
+MOUSE_MOVED, x:251, y:41, bt:0, since:1726
+MOUSE_MOVED, x:249, y:42, bt:0, since:1793
+MOUSE_MOVED, x:241, y:41, bt:0, since:1828
+MOUSE_MOVED, x:236, y:39, bt:0, since:1895
+MOUSE_MOVED, x:232, y:38, bt:0, since:1929
+MOUSE_MOVED, x:231, y:37, bt:0, since:1956
+MOUSE_MOVED, x:233, y:37, bt:0, since:2139
+MOUSE_MOVED, x:234, y:38, bt:0, since:2165
+MOUSE_MOVED, x:235, y:39, bt:0, since:2165
+MOUSE_MOVED, x:236, y:39, bt:0, since:2199
+MOUSE_MOVED, x:238, y:40, bt:0, since:2199
+MOUSE_MOVED, x:240, y:40, bt:0, since:2234
+MOUSE_MOVED, x:238, y:40, bt:0, since:2787
+MOUSE_MOVED, x:238, y:41, bt:0, since:2810
+MOUSE_MOVED, x:237, y:41, bt:0, since:2842
+MOUSE_MOVED, x:238, y:41, bt:0, since:3054
+MOUSE_MOVED, x:239, y:41, bt:0, since:3080
+MOUSE_MOVED, x:239, y:39, bt:0, since:3324
+MOUSE_MOVED, x:240, y:39, bt:0, since:3632
+MOUSE_MOVED, x:241, y:39, bt:0, since:3665
+MOUSE_MOVED, x:241, y:40, bt:0, since:3666
+MOUSE_MOVED, x:242, y:40, bt:0, since:3691
+MOUSE_MOVED, x:243, y:40, bt:0, since:3691
+MOUSE_MOVED, x:244, y:40, bt:0, since:3724
+MOUSE_MOVED, x:246, y:41, bt:0, since:3725
+MOUSE_MOVED, x:247, y:41, bt:0, since:3758
+MOUSE_MOVED, x:248, y:41, bt:0, since:3792
+MOUSE_MOVED, x:251, y:41, bt:0, since:3792
+MOUSE_MOVED, x:252, y:41, bt:0, since:3820
+MOUSE_MOVED, x:255, y:41, bt:0, since:3820
+MOUSE_MOVED, x:259, y:41, bt:0, since:3884
+MOUSE_MOVED, x:260, y:41, bt:0, since:3953
+MOUSE_MOVED, x:261, y:41, bt:0, since:4015
+MOUSE_MOVED, x:264, y:43, bt:0, since:4048
+MOUSE_MOVED, x:266, y:44, bt:0, since:4117
+MOUSE_MOVED, x:268, y:45, bt:0, since:4172
+MOUSE_MOVED, x:271, y:45, bt:0, since:4219
+MOUSE_MOVED, x:272, y:45, bt:0, since:4281
+MOUSE_MOVED, x:272, y:44, bt:0, since:4440
+MOUSE_MOVED, x:273, y:42, bt:0, since:4470
+MOUSE_MOVED, x:275, y:39, bt:0, since:4503
+MOUSE_MOVED, x:276, y:39, bt:0, since:4600
+MOUSE_MOVED, x:277, y:39, bt:0, since:4631
+MOUSE_MOVED, x:278, y:39, bt:0, since:4631
+MOUSE_MOVED, x:280, y:39, bt:0, since:4722
+MOUSE_MOVED, x:280, y:41, bt:0, since:4914
+MOUSE_MOVED, x:279, y:44, bt:0, since:4967
+MOUSE_MOVED, x:279, y:43, bt:0, since:5201
+MOUSE_MOVED, x:279, y:41, bt:0, since:5235
+MOUSE_MOVED, x:279, y:39, bt:0, since:5293
+MOUSE_MOVED, x:279, y:38, bt:0, since:5325
+MOUSE_MOVED, x:278, y:38, bt:0, since:5466
+MOUSE_MOVED, x:278, y:39, bt:0, since:5491
+MOUSE_MOVED, x:278, y:40, bt:0, since:5524
+MOUSE_PRESSED, x:278, y:40, bt:16, since:6110
+MOUSE_DRAGGED, x:280, y:40, bt:0, since:6360
+MOUSE_DRAGGED, x:281, y:40, bt:0, since:6393
+MOUSE_RELEASED, x:281, y:40, bt:16, since:6955
+MOUSE_MOVED, x:283, y:38, bt:0, since:7121
+MOUSE_MOVED, x:285, y:38, bt:0, since:7147
+MOUSE_MOVED, x:287, y:38, bt:0, since:7147
+MOUSE_MOVED, x:289, y:38, bt:0, since:7176
+MOUSE_MOVED, x:292, y:38, bt:0, since:7209
+MOUSE_MOVED, x:293, y:38, bt:0, since:7242
+MOUSE_MOVED, x:300, y:38, bt:0, since:7242
+MOUSE_MOVED, x:302, y:38, bt:0, since:7275
+MOUSE_MOVED, x:306, y:38, bt:0, since:7275
+MOUSE_MOVED, x:307, y:38, bt:0, since:7275
+MOUSE_MOVED, x:312, y:38, bt:0, since:7308
+MOUSE_MOVED, x:315, y:38, bt:0, since:7368
+MOUSE_MOVED, x:316, y:38, bt:0, since:7642
+MOUSE_MOVED, x:317, y:39, bt:0, since:7642
+MOUSE_MOVED, x:319, y:40, bt:0, since:7680
+MOUSE_MOVED, x:320, y:40, bt:0, since:7714
+MOUSE_MOVED, x:320, y:41, bt:0, since:7714
+MOUSE_PRESSED, x:320, y:41, bt:16, since:8089
+MOUSE_DRAGGED, x:323, y:41, bt:0, since:8614
+MOUSE_DRAGGED, x:324, y:41, bt:0, since:8680
+MOUSE_DRAGGED, x:324, y:40, bt:0, since:8714
+MOUSE_DRAGGED, x:323, y:40, bt:0, since:9009
+MOUSE_DRAGGED, x:321, y:39, bt:0, since:9072
+MOUSE_DRAGGED, x:319, y:38, bt:0, since:9131
+MOUSE_DRAGGED, x:317, y:38, bt:0, since:9131
+MOUSE_DRAGGED, x:318, y:40, bt:0, since:9496
+MOUSE_DRAGGED, x:318, y:41, bt:0, since:9496
+MOUSE_DRAGGED, x:318, y:42, bt:0, since:9525
+MOUSE_DRAGGED, x:320, y:42, bt:0, since:9795
+MOUSE_DRAGGED, x:321, y:43, bt:0, since:9828
+MOUSE_DRAGGED, x:322, y:43, bt:0, since:9884
+MOUSE_RELEASED, x:322, y:43, bt:16, since:10115
+MOUSE_MOVED, x:323, y:43, bt:0, since:10230
+MOUSE_MOVED, x:325, y:43, bt:0, since:10230
+MOUSE_MOVED, x:325, y:42, bt:0, since:10252
+MOUSE_MOVED, x:327, y:41, bt:0, since:10252
+MOUSE_MOVED, x:328, y:41, bt:0, since:10284
+MOUSE_MOVED, x:329, y:40, bt:0, since:10284
+MOUSE_MOVED, x:334, y:38, bt:0, since:10317
+MOUSE_MOVED, x:335, y:38, bt:0, since:10358
+MOUSE_MOVED, x:343, y:37, bt:0, since:10383
+MOUSE_MOVED, x:347, y:36, bt:0, since:10383
+MOUSE_MOVED, x:348, y:36, bt:0, since:10498
+MOUSE_MOVED, x:350, y:36, bt:0, since:10528
+MOUSE_MOVED, x:351, y:36, bt:0, since:10551
+MOUSE_MOVED, x:352, y:37, bt:0, since:10573
+MOUSE_MOVED, x:354, y:37, bt:0, since:10635
+MOUSE_MOVED, x:355, y:38, bt:0, since:10665
+MOUSE_MOVED, x:356, y:38, bt:0, since:10665
+MOUSE_MOVED, x:356, y:39, bt:0, since:10756
+MOUSE_MOVED, x:357, y:39, bt:0, since:10872
+MOUSE_MOVED, x:358, y:39, bt:0, since:10873
+MOUSE_MOVED, x:359, y:39, bt:0, since:10938
+MOUSE_MOVED, x:360, y:40, bt:0, since:10970
+MOUSE_MOVED, x:359, y:40, bt:0, since:11227
+MOUSE_MOVED, x:359, y:39, bt:0, since:11294
+MOUSE_MOVED, x:358, y:39, bt:0, since:11326
+MOUSE_MOVED, x:357, y:39, bt:0, since:11422
+MOUSE_PRESSED, x:357, y:39, bt:16, since:11555
+MOUSE_DRAGGED, x:357, y:41, bt:0, since:11831
+MOUSE_DRAGGED, x:358, y:42, bt:0, since:11863
+MOUSE_DRAGGED, x:359, y:42, bt:0, since:11967
+MOUSE_DRAGGED, x:360, y:43, bt:0, since:11999
+MOUSE_DRAGGED, x:361, y:43, bt:0, since:12057
+MOUSE_DRAGGED, x:361, y:41, bt:0, since:12349
+MOUSE_DRAGGED, x:361, y:40, bt:0, since:12350
+MOUSE_DRAGGED, x:361, y:39, bt:0, since:12394
+MOUSE_DRAGGED, x:361, y:38, bt:0, since:12394
+MOUSE_DRAGGED, x:361, y:37, bt:0, since:12470
+MOUSE_DRAGGED, x:361, y:36, bt:0, since:12635
+MOUSE_DRAGGED, x:359, y:36, bt:0, since:12668
+MOUSE_DRAGGED, x:358, y:36, bt:0, since:12701
+MOUSE_DRAGGED, x:357, y:36, bt:0, since:12764
+MOUSE_DRAGGED, x:356, y:36, bt:0, since:12876
+MOUSE_DRAGGED, x:356, y:37, bt:0, since:12939
+MOUSE_DRAGGED, x:355, y:38, bt:0, since:12939
+MOUSE_DRAGGED, x:355, y:39, bt:0, since:13043
+MOUSE_DRAGGED, x:355, y:40, bt:0, since:13081
+MOUSE_DRAGGED, x:355, y:41, bt:0, since:13113
+MOUSE_DRAGGED, x:354, y:41, bt:0, since:13162
+MOUSE_RELEASED, x:354, y:41, bt:16, since:13417
+MOUSE_MOVED, x:352, y:46, bt:0, since:13674
+MOUSE_MOVED, x:347, y:51, bt:0, since:13697
+MOUSE_MOVED, x:336, y:61, bt:0, since:13728
+MOUSE_MOVED, x:334, y:63, bt:0, since:13760
+MOUSE_MOVED, x:325, y:70, bt:0, since:13760
+MOUSE_MOVED, x:308, y:83, bt:0, since:13793
+MOUSE_MOVED, x:290, y:98, bt:0, since:13858
+MOUSE_MOVED, x:262, y:131, bt:0, since:13888
+MOUSE_MOVED, x:258, y:137, bt:0, since:13912
+MOUSE_MOVED, x:253, y:148, bt:0, since:13934
+MOUSE_MOVED, x:243, y:170, bt:0, since:13965
+MOUSE_MOVED, x:230, y:197, bt:0, since:13999
+MOUSE_MOVED, x:213, y:225, bt:0, since:13999
+MOUSE_MOVED, x:198, y:249, bt:0, since:14049
+MOUSE_MOVED, x:172, y:282, bt:0, since:14078
+MOUSE_MOVED, x:155, y:305, bt:0, since:14079
+MOUSE_MOVED, x:141, y:321, bt:0, since:14125
+MOUSE_MOVED, x:136, y:325, bt:0, since:14125
+MOUSE_MOVED, x:132, y:334, bt:0, since:14126
+MOUSE_MOVED, x:129, y:338, bt:0, since:14160
+MOUSE_MOVED, x:127, y:344, bt:0, since:14220
+MOUSE_MOVED, x:125, y:350, bt:0, since:14242
+MOUSE_MOVED, x:123, y:366, bt:0, since:14266
+MOUSE_MOVED, x:122, y:370, bt:0, since:14290
+MOUSE_MOVED, x:119, y:382, bt:0, since:14344
+MOUSE_MOVED, x:118, y:384, bt:0, since:14373
+MOUSE_MOVED, x:116, y:390, bt:0, since:14373
+MOUSE_MOVED, x:115, y:392, bt:0, since:14405
+MOUSE_MOVED, x:112, y:401, bt:0, since:14405
+MOUSE_MOVED, x:108, y:411, bt:0, since:14435
+MOUSE_MOVED, x:107, y:413, bt:0, since:14481
+MOUSE_MOVED, x:112, y:406, bt:0, since:14534
+MOUSE_MOVED, x:115, y:403, bt:0, since:14583
+MOUSE_MOVED, x:116, y:409, bt:0, since:14644
+MOUSE_MOVED, x:113, y:415, bt:0, since:14697
+MOUSE_MOVED, x:109, y:424, bt:0, since:14729
+MOUSE_MOVED, x:109, y:425, bt:0, since:14794
+MOUSE_MOVED, x:109, y:426, bt:0, since:14825
+MOUSE_MOVED, x:110, y:426, bt:0, since:14911
+MOUSE_MOVED, x:111, y:427, bt:0, since:14911
+MOUSE_MOVED, x:111, y:428, bt:0, since:14943
+MOUSE_MOVED, x:113, y:429, bt:0, since:14943
+MOUSE_MOVED, x:114, y:429, bt:0, since:14976
+MOUSE_MOVED, x:114, y:430, bt:0, since:15075
+MOUSE_MOVED, x:114, y:431, bt:0, since:15102
+MOUSE_MOVED, x:116, y:432, bt:0, since:15159
+MOUSE_MOVED, x:116, y:433, bt:0, since:15183
+MOUSE_MOVED, x:117, y:433, bt:0, since:15279
+MOUSE_MOVED, x:117, y:434, bt:0, since:15305
+MOUSE_MOVED, x:118, y:434, bt:0, since:15330
+MOUSE_PRESSED, x:118, y:434, bt:16, since:15473
+MOUSE_DRAGGED, x:121, y:435, bt:0, since:15660
+MOUSE_DRAGGED, x:122, y:436, bt:0, since:15717
+MOUSE_DRAGGED, x:123, y:436, bt:0, since:15740
+MOUSE_DRAGGED, x:125, y:436, bt:0, since:15801
+MOUSE_DRAGGED, x:126, y:436, bt:0, since:15897
+MOUSE_DRAGGED, x:127, y:436, bt:0, since:15919
+MOUSE_DRAGGED, x:128, y:436, bt:0, since:15968
+MOUSE_DRAGGED, x:128, y:431, bt:0, since:16085
+MOUSE_DRAGGED, x:128, y:430, bt:0, since:16140
+MOUSE_DRAGGED, x:127, y:428, bt:0, since:16172
+MOUSE_DRAGGED, x:126, y:426, bt:0, since:16204
+MOUSE_DRAGGED, x:125, y:425, bt:0, since:16315
+MOUSE_DRAGGED, x:124, y:425, bt:0, since:16338
+MOUSE_DRAGGED, x:123, y:425, bt:0, since:16369
+MOUSE_DRAGGED, x:122, y:425, bt:0, since:16403
+MOUSE_DRAGGED, x:120, y:426, bt:0, since:16433
+MOUSE_DRAGGED, x:119, y:426, bt:0, since:16490
+MOUSE_DRAGGED, x:118, y:427, bt:0, since:16516
+MOUSE_DRAGGED, x:118, y:428, bt:0, since:16548
+MOUSE_DRAGGED, x:117, y:428, bt:0, since:16634
+MOUSE_DRAGGED, x:117, y:429, bt:0, since:16727
+MOUSE_DRAGGED, x:116, y:431, bt:0, since:16790
+MOUSE_DRAGGED, x:114, y:433, bt:0, since:16824
+MOUSE_DRAGGED, x:113, y:434, bt:0, since:16824
+MOUSE_DRAGGED, x:113, y:435, bt:0, since:16868
+MOUSE_DRAGGED, x:113, y:436, bt:0, since:16868
+MOUSE_DRAGGED, x:113, y:437, bt:0, since:16999
+MOUSE_DRAGGED, x:115, y:438, bt:0, since:17031
+MOUSE_DRAGGED, x:116, y:438, bt:0, since:17089
+MOUSE_DRAGGED, x:118, y:439, bt:0, since:17152
+MOUSE_DRAGGED, x:119, y:439, bt:0, since:17270
+MOUSE_DRAGGED, x:121, y:439, bt:0, since:17326
+MOUSE_DRAGGED, x:122, y:438, bt:0, since:17357
+MOUSE_DRAGGED, x:123, y:438, bt:0, since:17408
+MOUSE_DRAGGED, x:124, y:437, bt:0, since:17438
+MOUSE_DRAGGED, x:124, y:436, bt:0, since:17469
+MOUSE_DRAGGED, x:125, y:435, bt:0, since:17501
+MOUSE_DRAGGED, x:125, y:434, bt:0, since:17532
+MOUSE_DRAGGED, x:125, y:433, bt:0, since:17566
+MOUSE_DRAGGED, x:125, y:431, bt:0, since:17590
+MOUSE_DRAGGED, x:124, y:429, bt:0, since:17591
+MOUSE_DRAGGED, x:123, y:428, bt:0, since:17634
+MOUSE_DRAGGED, x:122, y:428, bt:0, since:17656
+MOUSE_DRAGGED, x:121, y:428, bt:0, since:17766
+MOUSE_DRAGGED, x:119, y:428, bt:0, since:17831
+MOUSE_DRAGGED, x:117, y:429, bt:0, since:17960
+MOUSE_DRAGGED, x:116, y:433, bt:0, since:18188
+MOUSE_DRAGGED, x:116, y:434, bt:0, since:18322
+MOUSE_RELEASED, x:116, y:434, bt:16, since:18539
+MOUSE_MOVED, x:115, y:434, bt:0, since:18634
+MOUSE_MOVED, x:114, y:434, bt:0, since:18666
+MOUSE_MOVED, x:111, y:434, bt:0, since:18667
+MOUSE_MOVED, x:104, y:434, bt:0, since:18701
+MOUSE_MOVED, x:96, y:434, bt:0, since:18734
+MOUSE_MOVED, x:88, y:433, bt:0, since:18763
+MOUSE_MOVED, x:86, y:430, bt:0, since:18808
+MOUSE_MOVED, x:84, y:426, bt:0, since:18835
+MOUSE_MOVED, x:74, y:407, bt:0, since:18861
+MOUSE_MOVED, x:69, y:392, bt:0, since:18861
+MOUSE_MOVED, x:67, y:382, bt:0, since:18892
+MOUSE_MOVED, x:65, y:371, bt:0, since:18893
+MOUSE_MOVED, x:63, y:354, bt:0, since:18931
+MOUSE_MOVED, x:63, y:343, bt:0, since:18931
+MOUSE_MOVED, x:63, y:336, bt:0, since:18963
+MOUSE_MOVED, x:58, y:306, bt:0, since:18963
+MOUSE_MOVED, x:58, y:294, bt:0, since:18995
+MOUSE_MOVED, x:56, y:273, bt:0, since:18996
+MOUSE_MOVED, x:55, y:261, bt:0, since:18996
+MOUSE_MOVED, x:50, y:218, bt:0, since:19031
+MOUSE_MOVED, x:44, y:194, bt:0, since:19080
+MOUSE_MOVED, x:42, y:177, bt:0, since:19112
+MOUSE_MOVED, x:41, y:167, bt:0, since:19146
+MOUSE_MOVED, x:41, y:164, bt:0, since:19193
+MOUSE_MOVED, x:41, y:161, bt:0, since:19224
+MOUSE_MOVED, x:40, y:157, bt:0, since:19256
+MOUSE_MOVED, x:40, y:150, bt:0, since:19283
+MOUSE_MOVED, x:40, y:141, bt:0, since:19315
+MOUSE_MOVED, x:40, y:129, bt:0, since:19347
+MOUSE_MOVED, x:38, y:116, bt:0, since:19376
+MOUSE_MOVED, x:38, y:110, bt:0, since:19403
+MOUSE_MOVED, x:37, y:107, bt:0, since:19435
+MOUSE_MOVED, x:39, y:96, bt:0, since:19612
+MOUSE_MOVED, x:39, y:95, bt:0, since:19644
+MOUSE_MOVED, x:39, y:94, bt:0, since:19645
+MOUSE_MOVED, x:39, y:93, bt:0, since:19676
+MOUSE_MOVED, x:39, y:92, bt:0, since:19736
+MOUSE_MOVED, x:39, y:91, bt:0, since:19736
+MOUSE_MOVED, x:37, y:89, bt:0, since:19795
+MOUSE_MOVED, x:35, y:86, bt:0, since:19890
+MOUSE_MOVED, x:32, y:80, bt:0, since:19922
+MOUSE_MOVED, x:32, y:78, bt:0, since:19985
+MOUSE_MOVED, x:32, y:77, bt:0, since:20017
+MOUSE_MOVED, x:33, y:77, bt:0, since:20156
+MOUSE_MOVED, x:34, y:76, bt:0, since:20157
+MOUSE_MOVED, x:36, y:76, bt:0, since:20318
+MOUSE_MOVED, x:37, y:76, bt:0, since:20434
+MOUSE_PRESSED, x:37, y:76, bt:16, since:20496
+MOUSE_DRAGGED, x:37, y:80, bt:0, since:20655
+MOUSE_DRAGGED, x:38, y:81, bt:0, since:20687
+MOUSE_DRAGGED, x:39, y:83, bt:0, since:20719
+MOUSE_DRAGGED, x:41, y:87, bt:0, since:20751
+MOUSE_DRAGGED, x:42, y:87, bt:0, since:20783
+MOUSE_DRAGGED, x:42, y:88, bt:0, since:20783
+MOUSE_DRAGGED, x:43, y:88, bt:0, since:20815
+MOUSE_DRAGGED, x:44, y:88, bt:0, since:20847
+MOUSE_DRAGGED, x:45, y:88, bt:0, since:20900
+MOUSE_DRAGGED, x:46, y:88, bt:0, since:20962
+MOUSE_DRAGGED, x:45, y:85, bt:0, since:21121
+MOUSE_DRAGGED, x:45, y:84, bt:0, since:21152
+MOUSE_DRAGGED, x:44, y:84, bt:0, since:21153
+MOUSE_DRAGGED, x:44, y:83, bt:0, since:21153
+MOUSE_DRAGGED, x:44, y:82, bt:0, since:21184
+MOUSE_DRAGGED, x:44, y:81, bt:0, since:21249
+MOUSE_DRAGGED, x:44, y:80, bt:0, since:21249
+MOUSE_DRAGGED, x:44, y:79, bt:0, since:21280
+MOUSE_DRAGGED, x:44, y:78, bt:0, since:21312
+MOUSE_DRAGGED, x:44, y:77, bt:0, since:21398
+MOUSE_DRAGGED, x:45, y:76, bt:0, since:21425
+MOUSE_DRAGGED, x:46, y:76, bt:0, since:21425
+MOUSE_DRAGGED, x:44, y:76, bt:0, since:21602
+MOUSE_DRAGGED, x:43, y:76, bt:0, since:21623
+MOUSE_DRAGGED, x:42, y:76, bt:0, since:21646
+MOUSE_DRAGGED, x:41, y:75, bt:0, since:21735
+MOUSE_DRAGGED, x:40, y:75, bt:0, since:21763
+MOUSE_DRAGGED, x:39, y:75, bt:0, since:21880
+MOUSE_DRAGGED, x:38, y:74, bt:0, since:22040
+MOUSE_DRAGGED, x:37, y:75, bt:0, since:22101
+MOUSE_DRAGGED, x:36, y:77, bt:0, since:22101
+MOUSE_DRAGGED, x:35, y:78, bt:0, since:22133
+MOUSE_DRAGGED, x:35, y:79, bt:0, since:22193
+MOUSE_DRAGGED, x:36, y:80, bt:0, since:22302
+MOUSE_DRAGGED, x:38, y:81, bt:0, since:22351
+MOUSE_DRAGGED, x:39, y:82, bt:0, since:22408
+MOUSE_DRAGGED, x:40, y:82, bt:0, since:22408
+MOUSE_DRAGGED, x:42, y:82, bt:0, since:22460
+MOUSE_DRAGGED, x:43, y:81, bt:0, since:22687
+MOUSE_DRAGGED, x:44, y:79, bt:0, since:22719
+MOUSE_DRAGGED, x:44, y:78, bt:0, since:22747
+MOUSE_DRAGGED, x:44, y:77, bt:0, since:22795
+MOUSE_DRAGGED, x:45, y:76, bt:0, since:22882
+MOUSE_DRAGGED, x:44, y:75, bt:0, since:22958
+MOUSE_DRAGGED, x:42, y:74, bt:0, since:23048
+MOUSE_DRAGGED, x:41, y:74, bt:0, since:23075
+MOUSE_DRAGGED, x:40, y:74, bt:0, since:23107
+MOUSE_DRAGGED, x:39, y:74, bt:0, since:23204
+MOUSE_DRAGGED, x:38, y:73, bt:0, since:23282
+MOUSE_DRAGGED, x:37, y:74, bt:0, since:23359
+MOUSE_DRAGGED, x:34, y:77, bt:0, since:23423
+MOUSE_DRAGGED, x:34, y:79, bt:0, since:23456
+MOUSE_DRAGGED, x:34, y:80, bt:0, since:23487
+MOUSE_DRAGGED, x:34, y:81, bt:0, since:23598
+MOUSE_DRAGGED, x:34, y:82, bt:0, since:23682
+MOUSE_DRAGGED, x:34, y:83, bt:0, since:23719
+MOUSE_DRAGGED, x:34, y:84, bt:0, since:23775
+MOUSE_DRAGGED, x:35, y:86, bt:0, since:23827
+MOUSE_DRAGGED, x:36, y:87, bt:0, since:23963
+MOUSE_DRAGGED, x:37, y:87, bt:0, since:24020
+MOUSE_DRAGGED, x:38, y:87, bt:0, since:24020
+MOUSE_DRAGGED, x:40, y:87, bt:0, since:24139
+MOUSE_DRAGGED, x:41, y:87, bt:0, since:24215
+MOUSE_DRAGGED, x:42, y:87, bt:0, since:24342
+MOUSE_DRAGGED, x:43, y:87, bt:0, since:24426
+MOUSE_DRAGGED, x:43, y:86, bt:0, since:24489
+MOUSE_RELEASED, x:43, y:86, bt:16, since:24521
+MOUSE_MOVED, x:43, y:87, bt:0, since:24580
+MOUSE_MOVED, x:43, y:89, bt:0, since:24606
+MOUSE_MOVED, x:43, y:90, bt:0, since:24631
+MOUSE_MOVED, x:43, y:94, bt:0, since:24680
+MOUSE_MOVED, x:42, y:96, bt:0, since:24708
+MOUSE_MOVED, x:42, y:99, bt:0, since:24734
+MOUSE_MOVED, x:45, y:109, bt:0, since:24771
+MOUSE_MOVED, x:50, y:118, bt:0, since:24798
+MOUSE_MOVED, x:72, y:136, bt:0, since:24824
+MOUSE_MOVED, x:151, y:184, bt:0, since:24869
+MOUSE_MOVED, x:191, y:208, bt:0, since:24915
+MOUSE_MOVED, x:213, y:218, bt:0, since:24916
+MOUSE_MOVED, x:222, y:223, bt:0, since:24916
+MOUSE_MOVED, x:259, y:242, bt:0, since:24982
+MOUSE_MOVED, x:260, y:242, bt:0, since:25014
+MOUSE_MOVED, x:262, y:242, bt:0, since:25014
+MOUSE_MOVED, x:271, y:239, bt:0, since:25049
+MOUSE_MOVED, x:292, y:223, bt:0, since:25098
+MOUSE_MOVED, x:304, y:217, bt:0, since:25119
+MOUSE_MOVED, x:325, y:214, bt:0, since:25148
+MOUSE_MOVED, x:337, y:220, bt:0, since:25242
+MOUSE_MOVED, x:342, y:224, bt:0, since:25270
+MOUSE_MOVED, x:346, y:226, bt:0, since:25294
+MOUSE_MOVED, x:347, y:228, bt:0, since:25325
+MOUSE_MOVED, x:347, y:229, bt:0, since:25356
+MOUSE_MOVED, x:347, y:231, bt:0, since:25388
+MOUSE_MOVED, x:347, y:235, bt:0, since:25389
+MOUSE_MOVED, x:347, y:238, bt:0, since:25446
+MOUSE_MOVED, x:347, y:239, bt:0, since:25508
+MOUSE_MOVED, x:348, y:239, bt:0, since:25508
+MOUSE_MOVED, x:350, y:239, bt:0, since:25551
+MOUSE_MOVED, x:351, y:234, bt:0, since:25638
+MOUSE_MOVED, x:351, y:233, bt:0, since:25668
+MOUSE_MOVED, x:352, y:232, bt:0, since:25690
+MOUSE_MOVED, x:354, y:233, bt:0, since:25911
+MOUSE_MOVED, x:355, y:233, bt:0, since:25989
+MOUSE_PRESSED, x:355, y:233, bt:16, since:26202
+MOUSE_DRAGGED, x:356, y:237, bt:0, since:26299
+MOUSE_DRAGGED, x:356, y:238, bt:0, since:26331
+MOUSE_DRAGGED, x:356, y:242, bt:0, since:26331
+MOUSE_DRAGGED, x:356, y:243, bt:0, since:26363
+MOUSE_DRAGGED, x:354, y:247, bt:0, since:26363
+MOUSE_DRAGGED, x:353, y:249, bt:0, since:26423
+MOUSE_DRAGGED, x:353, y:250, bt:0, since:26454
+MOUSE_DRAGGED, x:355, y:250, bt:0, since:26514
+MOUSE_DRAGGED, x:357, y:249, bt:0, since:26626
+MOUSE_DRAGGED, x:357, y:248, bt:0, since:26647
+MOUSE_DRAGGED, x:359, y:247, bt:0, since:26701
+MOUSE_DRAGGED, x:359, y:245, bt:0, since:26769
+MOUSE_DRAGGED, x:359, y:244, bt:0, since:26802
+MOUSE_DRAGGED, x:359, y:242, bt:0, since:26828
+MOUSE_DRAGGED, x:359, y:239, bt:0, since:26850
+MOUSE_DRAGGED, x:359, y:237, bt:0, since:26871
+MOUSE_DRAGGED, x:359, y:233, bt:0, since:26903
+MOUSE_DRAGGED, x:359, y:231, bt:0, since:26931
+MOUSE_DRAGGED, x:361, y:228, bt:0, since:26994
+MOUSE_DRAGGED, x:362, y:228, bt:0, since:27019
+MOUSE_DRAGGED, x:363, y:227, bt:0, since:27097
+MOUSE_DRAGGED, x:362, y:227, bt:0, since:27254
+MOUSE_DRAGGED, x:360, y:227, bt:0, since:27303
+MOUSE_DRAGGED, x:358, y:229, bt:0, since:27303
+MOUSE_DRAGGED, x:357, y:229, bt:0, since:27325
+MOUSE_DRAGGED, x:356, y:230, bt:0, since:27325
+MOUSE_DRAGGED, x:355, y:231, bt:0, since:27356
+MOUSE_DRAGGED, x:355, y:232, bt:0, since:27451
+MOUSE_DRAGGED, x:355, y:233, bt:0, since:27480
+MOUSE_DRAGGED, x:355, y:234, bt:0, since:27502
+MOUSE_DRAGGED, x:356, y:234, bt:0, since:27533
+MOUSE_DRAGGED, x:357, y:235, bt:0, since:27595
+MOUSE_DRAGGED, x:358, y:235, bt:0, since:27595
+MOUSE_DRAGGED, x:359, y:235, bt:0, since:27649
+MOUSE_DRAGGED, x:360, y:236, bt:0, since:27649
+MOUSE_DRAGGED, x:361, y:237, bt:0, since:27731
+MOUSE_DRAGGED, x:362, y:237, bt:0, since:27756
+MOUSE_DRAGGED, x:363, y:237, bt:0, since:27839
+MOUSE_DRAGGED, x:365, y:238, bt:0, since:27899
+MOUSE_DRAGGED, x:364, y:237, bt:0, since:28007
+MOUSE_DRAGGED, x:362, y:237, bt:0, since:28050
+MOUSE_DRAGGED, x:361, y:236, bt:0, since:28072
+MOUSE_DRAGGED, x:361, y:235, bt:0, since:28093
+MOUSE_DRAGGED, x:361, y:233, bt:0, since:28116
+MOUSE_DRAGGED, x:360, y:232, bt:0, since:28163
+MOUSE_DRAGGED, x:359, y:232, bt:0, since:28365
+MOUSE_DRAGGED, x:358, y:232, bt:0, since:28396
+MOUSE_DRAGGED, x:357, y:233, bt:0, since:28396
+MOUSE_DRAGGED, x:356, y:234, bt:0, since:28428
+MOUSE_DRAGGED, x:355, y:234, bt:0, since:28486
+MOUSE_DRAGGED, x:355, y:236, bt:0, since:28649
+MOUSE_DRAGGED, x:355, y:237, bt:0, since:28671
+MOUSE_DRAGGED, x:355, y:238, bt:0, since:28704
+MOUSE_DRAGGED, x:355, y:239, bt:0, since:28735
+MOUSE_DRAGGED, x:355, y:240, bt:0, since:28798
+MOUSE_DRAGGED, x:355, y:241, bt:0, since:28826
+MOUSE_DRAGGED, x:357, y:242, bt:0, since:28855
+MOUSE_DRAGGED, x:359, y:242, bt:0, since:28918
+MOUSE_DRAGGED, x:360, y:242, bt:0, since:29007
+MOUSE_DRAGGED, x:360, y:241, bt:0, since:29038
+MOUSE_DRAGGED, x:360, y:240, bt:0, since:29071
+MOUSE_DRAGGED, x:360, y:238, bt:0, since:29133
+MOUSE_DRAGGED, x:360, y:236, bt:0, since:29159
+MOUSE_DRAGGED, x:360, y:234, bt:0, since:29191
+MOUSE_DRAGGED, x:361, y:230, bt:0, since:29220
+MOUSE_DRAGGED, x:360, y:230, bt:0, since:29466
+MOUSE_DRAGGED, x:360, y:229, bt:0, since:29489
+MOUSE_RELEASED, x:360, y:229, bt:16, since:29614
+MOUSE_MOVED, x:359, y:229, bt:0, since:29739
+MOUSE_MOVED, x:358, y:226, bt:0, since:29792
+MOUSE_MOVED, x:357, y:223, bt:0, since:29826
+MOUSE_MOVED, x:352, y:217, bt:0, since:29857
+MOUSE_MOVED, x:349, y:209, bt:0, since:29889
+MOUSE_MOVED, x:348, y:208, bt:0, since:29916
+MOUSE_MOVED, x:348, y:206, bt:0, since:29916
+MOUSE_MOVED, x:348, y:202, bt:0, since:29979
+MOUSE_MOVED, x:353, y:197, bt:0, since:29979
+MOUSE_MOVED, x:354, y:197, bt:0, since:30027
+MOUSE_MOVED, x:353, y:197, bt:0, since:30070
+MOUSE_MOVED, x:351, y:197, bt:0, since:30070
+MOUSE_MOVED, x:348, y:197, bt:0, since:30101
+MOUSE_MOVED, x:341, y:196, bt:0, since:30101
+KEY_PRESS, code:38, since:30708
+KEY_RELEASE, code:38, since:30795
+KEY_PRESS, code:38, since:30930
+KEY_RELEASE, code:38, since:30999
+KEY_PRESS, code:38, since:31054
+KEY_RELEASE, code:38, since:31584
+KEY_PRESS, code:38, since:31585
+KEY_RELEASE, code:38, since:31585
+KEY_PRESS, code:38, since:31585
+KEY_RELEASE, code:38, since:31615
+KEY_PRESS, code:38, since:31616
+KEY_RELEASE, code:38, since:31647
+KEY_PRESS, code:38, since:31680
+KEY_RELEASE, code:38, since:31680
+KEY_PRESS, code:38, since:31680
+KEY_RELEASE, code:38, since:31744
+KEY_PRESS, code:38, since:31744
+KEY_RELEASE, code:38, since:31744
+KEY_PRESS, code:38, since:31744
+KEY_RELEASE, code:38, since:31802
+KEY_PRESS, code:38, since:31802
+KEY_RELEASE, code:38, since:31834
+KEY_PRESS, code:38, since:31834
+KEY_RELEASE, code:38, since:31866
+KEY_PRESS, code:38, since:31866
+KEY_RELEASE, code:38, since:31898
+KEY_PRESS, code:38, since:31898
+KEY_RELEASE, code:38, since:31929
+KEY_PRESS, code:38, since:31930
+KEY_RELEASE, code:38, since:31964
+KEY_PRESS, code:38, since:31964
+KEY_RELEASE, code:38, since:31964
+KEY_PRESS, code:37, since:32166
+KEY_RELEASE, code:37, since:32650
+KEY_PRESS, code:37, since:32650
+KEY_RELEASE, code:37, since:32681
+KEY_PRESS, code:37, since:32682
+KEY_RELEASE, code:37, since:32714
+KEY_PRESS, code:37, since:32714
+KEY_RELEASE, code:37, since:32746
+KEY_PRESS, code:37, since:32746
+KEY_RELEASE, code:37, since:32777
+KEY_PRESS, code:37, since:32778
+KEY_RELEASE, code:37, since:32810
+KEY_PRESS, code:37, since:32810
+KEY_RELEASE, code:37, since:32842
+KEY_PRESS, code:37, since:32842
+KEY_RELEASE, code:37, since:32945
+KEY_PRESS, code:37, since:32945
+KEY_RELEASE, code:37, since:32945
+KEY_PRESS, code:37, since:32945
+KEY_RELEASE, code:37, since:32945
+KEY_PRESS, code:37, since:32946
+KEY_RELEASE, code:37, since:32946
+MOUSE_MOVED, x:340, y:195, bt:0, since:33370
+MOUSE_MOVED, x:336, y:186, bt:0, since:33402
+MOUSE_MOVED, x:335, y:186, bt:0, since:33508
+MOUSE_MOVED, x:331, y:181, bt:0, since:33560
+MOUSE_MOVED, x:326, y:176, bt:0, since:33586
+MOUSE_MOVED, x:277, y:141, bt:0, since:33587
+MOUSE_MOVED, x:258, y:132, bt:0, since:33611
+MOUSE_MOVED, x:220, y:114, bt:0, since:33611
+MOUSE_MOVED, x:197, y:103, bt:0, since:33642
+MOUSE_MOVED, x:144, y:76, bt:0, since:33642
+MOUSE_MOVED, x:82, y:46, bt:0, since:33675
+MOUSE_MOVED, x:60, y:29, bt:0, since:33698
+MOUSE_MOVED, x:52, y:25, bt:0, since:33729
+MOUSE_MOVED, x:50, y:24, bt:0, since:33729
+MOUSE_MOVED, x:50, y:22, bt:0, since:33761
+MOUSE_MOVED, x:49, y:20, bt:0, since:33761
+MOUSE_MOVED, x:50, y:19, bt:0, since:33785
+MOUSE_MOVED, x:50, y:18, bt:0, since:33807
+MOUSE_MOVED, x:51, y:18, bt:0, since:33807
+MOUSE_MOVED, x:52, y:18, bt:0, since:33834
+MOUSE_MOVED, x:56, y:16, bt:0, since:33834
+MOUSE_MOVED, x:58, y:15, bt:0, since:33858
+MOUSE_MOVED, x:60, y:12, bt:0, since:33858
+MOUSE_MOVED, x:61, y:11, bt:0, since:33884
+MOUSE_MOVED, x:61, y:9, bt:0, since:33884
+MOUSE_MOVED, x:61, y:8, bt:0, since:33915
+MOUSE_MOVED, x:56, y:4, bt:0, since:33949
+MOUSE_MOVED, x:49, y:1, bt:0, since:33975
+WINDOW_CLOSING, v:java.awt.Dimension[width=500,height=500], since:34519

@@ -1,5 +1,9 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL;
@@ -123,6 +127,21 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 		display();
 		return renderer.getLastScreenshot();
 	}
+	
+	public void triggerMouseEvent(MouseEvent e){
+		System.out.println("trigger mouse " + e);
+		processMouseEvent(e);
+		
+	}
+	public void triggerMouseMotionEvent(MouseEvent e){
+		System.out.println("trigger mouse motion " + e);
+		processMouseMotionEvent(e);
+	}
+	public void triggerMouseWheelEvent(MouseWheelEvent e){
+		System.out.println("trigger mouse wheel " + e);
+		processMouseWheelEvent(e);
+	}
+	
 	
 	/*********************************************************/
 	
