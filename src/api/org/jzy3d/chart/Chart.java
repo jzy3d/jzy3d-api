@@ -1,5 +1,6 @@
 package org.jzy3d.chart;
 
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +8,10 @@ import java.util.List;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilities;
 
+import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
-import org.jzy3d.chart.controllers.mouse.camera.CameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
@@ -47,8 +48,7 @@ public class Chart{
 	}
 	public Chart(IChartComponentFactory components, Quality quality){
 		this(components, quality, DEFAULT_WINDOWING_TOOLKIT, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
-	}	
-
+	}
 	
     public Chart(Quality quality, String windowingToolkit){
         this(new ChartComponentFactory(), quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
@@ -71,6 +71,10 @@ public class Chart{
         view = canvas.getView();
 		view.setBackgroundColor(Color.WHITE);
 	}
+    
+    public IFrame display(Rectangle rectangle, String title){
+    	return getFactory().newFrame(this, rectangle, title);
+    }
 		
 	public void clear(){
 		scene.clear();
@@ -130,12 +134,12 @@ public class Chart{
 	 * the chart thus just unregisters the controllers, but does not handle
 	 * stopping and disposing controllers.
 	 */
-	public void addController(CameraMouseController controller){
+	public void addController(AbstractCameraController controller){
 		controller.register(this);
 		controllers.add(controller);
 	}
 	
-	public void removeController(CameraMouseController controller){
+	public void removeController(AbstractCameraController controller){
 		controller.unregister(this);
 		controllers.remove(controller);
 	}

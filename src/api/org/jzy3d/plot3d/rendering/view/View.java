@@ -912,6 +912,9 @@ public class View {
      * drawable is current, and after the OpenGL2 scene has been rendered.
      */
     public void renderOverlay(GL2 gl, ViewPort viewport) {
+    	if(!hasOverlayStuffs())
+    		return;
+    	
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // TODO: don't
                                                               // know why needed
                                                               // to allow
@@ -920,7 +923,7 @@ public class View {
         gl.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
-            Graphics2D g2d = overlay.createGraphics();
+        	Graphics2D g2d = overlay.createGraphics();
             g2d.setBackground(bgOverlay);
             g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
@@ -936,6 +939,10 @@ public class View {
             overlay.drawAll();
             g2d.dispose();
         }
+    }
+    
+    protected boolean hasOverlayStuffs(){
+    	return tooltips.size()>0 || renderers.size()>0;
     }
 
     protected void correctCameraPositionForIncludingTextLabels(GL2 gl, GLU glu, ViewPort viewport) {

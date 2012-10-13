@@ -1,5 +1,6 @@
 package org.jzy3d.chart.controllers.mouse.camera;
 
+import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -11,6 +12,8 @@ import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.MouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 
 
@@ -22,6 +25,28 @@ public class CameraMouseController extends AbstractCameraController implements M
 	public CameraMouseController(Chart chart){
 	    register(chart);
 	    addSlaveThreadController(new CameraThreadController(chart));
+	}
+	
+	public void register(Chart chart){
+		super.register(chart);
+		if(chart.getCanvas() instanceof Component){
+			Component c = (Component)chart.getCanvas();
+			c.addMouseListener(this);
+			c.addMouseMotionListener(this);
+			c.addMouseWheelListener(this);
+		}
+	}
+	
+	public void dispose(){
+		for(Chart chart: targets){
+			if(chart.getCanvas() instanceof Component){
+				Component c = (Component)chart.getCanvas();
+				c.removeMouseListener(this);
+				c.removeMouseMotionListener(this);
+				c.removeMouseWheelListener(this);
+			}
+		}
+		super.dispose();
 	}
 	
 	/** Handles toggle between mouse rotation/auto rotation: double-click starts the animated

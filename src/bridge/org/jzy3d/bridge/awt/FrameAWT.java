@@ -4,10 +4,11 @@ import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 
 
-public class FrameAWT extends java.awt.Frame{
+public class FrameAWT extends java.awt.Frame implements IFrame{
 	public FrameAWT(Chart chart, Rectangle bounds, String title){
 		this(chart, bounds, title, "[Awt]");
 	}
