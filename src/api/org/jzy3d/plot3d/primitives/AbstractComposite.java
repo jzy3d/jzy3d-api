@@ -72,12 +72,16 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
 	/** Delegate rendering iteratively to all Drawable of this composite.*/
 	public void draw(GL2 gl, GLU glu, Camera camera){
+	    mapper.preDraw(this);
+
 		synchronized(components){
 			for(AbstractDrawable c: components){
 				if(c!=null)
 					c.draw(gl, glu, camera);
 			}			
 		}
+		
+		mapper.postDraw(this);
 	}
 		
 	/** Delegate transforming iteratively to all Drawable of this composite 

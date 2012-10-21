@@ -23,7 +23,12 @@ public class ColorbarImageGenerator {
 	}
 	
 	public ColorbarImageGenerator(ColorMapper mapper, ITickProvider provider, ITickRenderer renderer){
-		this(mapper.getColorMap(), mapper.getZMin(), mapper.getZMax(), provider, renderer);
+	    this.mapper = mapper;
+        this.provider = provider;
+        this.renderer = renderer;
+        this.min = mapper.getMin();
+        this.max = mapper.getMax();
+		//this(mapper.getColorMap(), mapper.getMin(), mapper.getMax(), provider, renderer);
 	}
 
     public BufferedImage toImage(int width, int height) {

@@ -54,6 +54,10 @@ public class Chart{
         this(new ChartComponentFactory(), quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
     }
     
+    public Chart(IChartComponentFactory factory, Quality quality, String windowingToolkit){
+        this(factory, quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+    }
+    
     public Chart(IChartComponentFactory factory, Quality quality, String windowingToolkit, GLCapabilities capabilities){
         this.capabilities = capabilities;
 		this.windowingToolkit = windowingToolkit;
@@ -114,7 +118,7 @@ public class Chart{
         render();
     }
 	
-	/**************************************************************/
+	/* */
 	
 	public ICameraMouseController addMouseController(){
 		return getFactory().newMouseController(this);
@@ -126,6 +130,14 @@ public class Chart{
 
 	public IScreenshotKeyController addScreenshotKeyController(){
 		return getFactory().newScreenshotKeyController(this);
+	}
+	
+	public IFrame open(String title, int width, int height){
+		return open(title, new Rectangle(0,0,width,height));
+	}
+
+	public IFrame open(String title, Rectangle rect){
+		return getFactory().newFrame(this, rect, title);
 	}
 
 		

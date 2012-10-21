@@ -31,7 +31,7 @@ public class ColorMapHotCold implements IColorMap {
     }
     
     public Color getColor( IColorMappable colorable, float x, float y, float z ){
-        return getColor( x, y, z, colorable.getZMin(), colorable.getZMax() );        
+        return getColor( x, y, z, colorable.getMin(), colorable.getMax() );        
     }
     
     /**
@@ -62,7 +62,7 @@ public class ColorMapHotCold implements IColorMap {
     
     
     public Color getColor( IColorMappable colorable, float z ){
-        return getColor( 0.0f, 0.0f, z, colorable.getZMin(), colorable.getZMax() );        //To re-use the existing code
+        return getColor( 0.0f, 0.0f, z, colorable.getMin(), colorable.getMax() );        //To re-use the existing code
     }
   
     /*private float creneau_relatif( float value, float center, float topwidth, float bottomwidth ){

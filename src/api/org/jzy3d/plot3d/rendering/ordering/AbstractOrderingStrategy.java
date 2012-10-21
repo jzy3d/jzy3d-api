@@ -7,6 +7,7 @@ import java.util.List;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -20,7 +21,12 @@ import org.jzy3d.plot3d.transform.Transform;
  *
  */
 public abstract class AbstractOrderingStrategy implements Comparator<AbstractDrawable>{
-	public void sort(List<AbstractDrawable> monotypes, Camera cam){
+    /** Returns a score for ranking this drawable among other drawables of the scenegraph. */
+    public abstract double score(AbstractDrawable drawable);
+
+    public abstract double score(Coord3d coord);
+
+    public void sort(List<AbstractDrawable> monotypes, Camera cam){
 		setCamera(cam);
 		Collections.sort(monotypes, this);
 	}
@@ -35,7 +41,7 @@ public abstract class AbstractOrderingStrategy implements Comparator<AbstractDra
 			return -1;//*Math.max((int)Math.abs(dist1-dist2),1);
 	}
 	
-	/*************************************************************/
+	/* */
 
 	public void setAll(GL2 gl, GLU glu, Camera camera, Transform transform){
 		this.gl        = gl;
@@ -76,7 +82,7 @@ public abstract class AbstractOrderingStrategy implements Comparator<AbstractDra
 		this.glu = glu;
 	}
 	
-	/*************************************************************/
+	/* */
 	
 	protected Camera camera;
 	protected Transform transform;
