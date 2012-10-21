@@ -1,0 +1,65 @@
+package org.jzy3d.colors;
+
+import java.util.List;
+
+import org.jzy3d.colors.colormaps.IColorMap;
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Statistics;
+import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
+import org.jzy3d.plot3d.rendering.scene.Graph;
+
+/**
+ * A {@link ColorMapper} able to compute a <i>coordinate</i> color according to its score computed
+ * by the current {@link Graph}'s {@link AbstractOrderingStrategy}.
+ * 
+ * Method {@link preDraw} is overriden to compute each {@link AbstractDrawables} score with the ordering
+ * strategy, so that we have a range.
+ * 
+ * As colormapper may be shared by several components of a single {@link AbstractComposite}, on must provide
+ * an update policy to state which objects are allowed to call the re-initilizer {@link preDraw} method.
+ * 
+ * @author Martin Pernollet
+ *
+ */
+public class OrderingStrategyScoreColorMapper extends ColorMapper{
+    public OrderingStrategyScoreColorMapper(IColorMap colormap, IColorMapperUpdatePolicy policy, Graph sceneGraph, Color factor){
+        super(colormap, factor);
+        this.sceneGraph = sceneGraph;
+        this.policy = policy;
+    }
+    
+    public void preDraw(Object o){
+        super.preDraw(o);
+        if(policy.acceptsPreDraw(o))
+            doPreDraw();
+    }
+
+    private void doPreDraw() {
+        AbstractOrderingStrategy s = sceneGraph.getStrategy();
+        List<AbstractDrawable> drawable = sceneGraph.getDecomposition();      
+
+        double[] scores = new double[drawable.size()];
+        int k = 0;
+        for(AbstractDrawable d: drawable){
+            scores[k++] = s.score(d);
+        }
+        
+        min = (float)Statistics.min(scores);
+        max = (float)Statistics.max(scores);
+    }
+    
+    public Color getColor(Coord3d coord){
+        AbstractOrderingStrategy s = sceneGraph.getStrategy();
+        float score = (float)s.score(coord);
+        
+        Color out = colormap.getColor(this, 0, 0, score);
+        if(factor!=null)
+            out.mul(factor);
+        return out;
+    }
+
+    protected float off;
+    protected Graph sceneGraph;
+    protected IColorMapperUpdatePolicy policy;
+}

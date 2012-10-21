@@ -46,6 +46,8 @@ public class Polygon extends AbstractWireframeable implements ISingleColorable, 
 		// Execute transformation
 		if(transform!=null)
 			transform.execute(gl);
+		
+		mapper.preDraw(this);
 				
 		// Draw content of polygon
 		if(facestatus){
@@ -57,7 +59,7 @@ public class Polygon extends AbstractWireframeable implements ISingleColorable, 
 						
 			for(Point p: points){
 				if(mapper!=null){
-					Color c = mapper.getColor(p.xyz); // TODO: should store result in the point color
+					Color c = mapper.getColor(p.xyz); // TODO: should cache result in the point color
 					gl.glColor4f(c.r, c.g, c.b, c.a);
 				}
 				else{
@@ -89,6 +91,8 @@ public class Polygon extends AbstractWireframeable implements ISingleColorable, 
 			if(polygonOffsetFillEnable)
 			    polygonOffsetFillDisable(gl);
 		}	
+		
+		mapper.postDraw(this);
 	}
 
 	protected void applyPolygonModeLine(GL2 gl) {
