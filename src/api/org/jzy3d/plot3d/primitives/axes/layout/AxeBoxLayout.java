@@ -50,7 +50,7 @@ public class AxeBoxLayout implements IAxeLayout{
 	}
 	
 	@Override
-	public float[] getXTicks(float min, float max) {
+	public double[] getXTicks(double min, double max) {
 		lastXmin = min;
 		lastXmax = max;
 		xTicks = xTickProvider.generateTicks(min, max);
@@ -58,7 +58,7 @@ public class AxeBoxLayout implements IAxeLayout{
 	}
 
 	@Override
-	public float[] getYTicks(float min, float max) {
+	public double[] getYTicks(double min, double max) {
 		lastYmin = min;
 		lastYmax = max;
 		yTicks = yTickProvider.generateTicks(min, max);
@@ -66,7 +66,7 @@ public class AxeBoxLayout implements IAxeLayout{
 	}
 
 	@Override
-	public float[] getZTicks(float min, float max) {
+	public double[] getZTicks(double min, double max) {
 		lastZmin = min;
 		lastZmax = max;
 		zTicks = zTickProvider.generateTicks(min, max);
@@ -97,15 +97,15 @@ public class AxeBoxLayout implements IAxeLayout{
 		zAxeLabel = axeLabel;
 	}
 
-	public float[] getXTicks() {
+	public double[] getXTicks() {
 		return xTicks;
 	}
 
-	public float[] getYTicks() {
+	public double[] getYTicks() {
 		return yTicks;
 	}
 
-	public float[] getZTicks() {
+	public double[] getZTicks() {
 		return zTicks;
 	}
 
@@ -273,9 +273,9 @@ public class AxeBoxLayout implements IAxeLayout{
 	protected boolean yAxeLabelDisplayed;
 	protected boolean zAxeLabelDisplayed;
 
-	protected float  xTicks[];
-	protected float  yTicks[];
-	protected float  zTicks[];
+	protected double  xTicks[];
+	protected double  yTicks[];
+	protected double  zTicks[];
 	
 	protected ITickProvider xTickProvider;
 	protected ITickProvider yTickProvider;
@@ -298,12 +298,12 @@ public class AxeBoxLayout implements IAxeLayout{
 	protected Color   quadColor;
 	protected Color   gridColor;
 	
-	protected float lastXmin = Float.NaN;
-	protected float lastXmax = Float.NaN;
-	protected float lastYmin = Float.NaN;
-	protected float lastYmax = Float.NaN;
-	protected float lastZmin = Float.NaN;
-	protected float lastZmax = Float.NaN;
+	protected double lastXmin = Float.NaN;
+	protected double lastXmax = Float.NaN;
+	protected double lastYmin = Float.NaN;
+	protected double lastYmax = Float.NaN;
+	protected double lastZmin = Float.NaN;
+	protected double lastZmax = Float.NaN;
 	
 	protected Color mainColor;
 }

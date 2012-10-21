@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.ordering;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.View;
 
 
 /** The {@link BarycentreOrderingStrategy} compare two {@link AbstractDrawable}s by computing
@@ -12,6 +13,13 @@ import org.jzy3d.plot3d.rendering.view.Camera;
  * @author Martin Pernollet
  */
 public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
+	public BarycentreOrderingStrategy(){
+	    super();
+	}
+	
+	public BarycentreOrderingStrategy(View view){
+	    this.view = view;
+	}
 	
     /**
      * Operation must be:
@@ -29,11 +37,29 @@ public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
 	
     @Override
     public double score(AbstractDrawable d) {
-        return camera.getDistance(d);
+        if(view!=null)
+            return camera.getDistance(d, view.getLastViewScaling());
+        else
+            return camera.getDistance(d);
     }
     
     @Override
     public double score(Coord3d coord) {
-        return camera.getDistance(coord);
+        if(view!=null)
+            return camera.getDistance(coord, view.getLastViewScaling());
+        else
+            return camera.getDistance(coord);
     }
+    
+    public View getView() {
+        return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
+    }
+
+
+
+    protected View view;
 }

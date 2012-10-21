@@ -30,7 +30,7 @@ public class ColorMapWhiteGreen implements IColorMap {
     	return direction;
     }
     
-    public Color getColor( IColorMappable colorable, float x, float y, float z ){
+    public Color getColor( IColorMappable colorable, double x, double y, double z ){
         return getColor( x, y, z, colorable.getMin(), colorable.getMax() );        
     }
     
@@ -38,9 +38,9 @@ public class ColorMapWhiteGreen implements IColorMap {
      * A helper for getColor( ColorMappable waferview, Point3d pt ) that calls
      * other helper functions
      */
-    private Color getColor( float x, float y, float z, float zMin, float zMax ){
+    private Color getColor( double x, double y, double z, double zMin, double zMax ){
         
-        float rel_value = 0;
+        double rel_value = 0;
         
         if( z < zMin )
             rel_value = 0;
@@ -53,10 +53,10 @@ public class ColorMapWhiteGreen implements IColorMap {
         		rel_value = ( zMax - z ) / ( zMax - zMin );
         }
         
-        return new Color( rel_value, 1.0f, rel_value );
+        return new Color( (float)rel_value, 1.0f, (float)rel_value );
     }
     
-    public Color getColor( IColorMappable colorable, float z ){
+    public Color getColor( IColorMappable colorable, double z ){
         return getColor( 0.0f, 0.0f, z, colorable.getMin(), colorable.getMax() );        //To re-use the existing code
     }
 

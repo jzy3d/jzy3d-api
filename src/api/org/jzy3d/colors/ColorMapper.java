@@ -28,13 +28,13 @@ public class ColorMapper implements IColorMappable{
         this.max     = 1;
     }
 
-    public ColorMapper(IColorMap colormap, float min, float max){
+    public ColorMapper(IColorMap colormap, double min, double max){
 		this.colormap = colormap;
 		this.min     = min;
 		this.max     = max;
 	}
 	
-	public ColorMapper(IColorMap colormap, float min, float max, Color factor){
+	public ColorMapper(IColorMap colormap, double min, double max, Color factor){
 		this.colormap = colormap;
 		this.min     = min;
 		this.max     = max;
@@ -58,7 +58,7 @@ public class ColorMapper implements IColorMappable{
 		return out;
 	}
 
-	public Color getColor(float v){   //To allow the Color to be a variable independent of the coordinates
+	public Color getColor(double v){   //To allow the Color to be a variable independent of the coordinates
 		Color out = colormap.getColor(this, v);
 		
 		if(factor!=null)
@@ -88,25 +88,25 @@ public class ColorMapper implements IColorMappable{
 		return colormap;
 	}
 	
-	public float getMin(){
+	public double getMin(){
 		return min;
 	}
 
-	public float getMax(){
+	public double getMax(){
 		return max;
 	}
 
-	public void setMin(float value){
+	public void setMin(double value){
 		min = value;
 	}
 	
-	public void setMax(float value){
+	public void setMax(double value){
 		max = value;
 	}
 	
 	public void setRange(Range range){
-		min = (float)range.getMin();
-		max = (float)range.getMax();
+		min = (double)range.getMin();
+		max = (double)range.getMax();
 	}
 	
 	public Range getRange(){
@@ -114,8 +114,8 @@ public class ColorMapper implements IColorMappable{
 	}
 	
 	public void setScale(Scale range){
-		min = (float)range.getMin();
-		max = (float)range.getMax();
+		min = (double)range.getMin();
+		max = (double)range.getMax();
 	}
 	
 	public Scale getScale(){
@@ -130,8 +130,8 @@ public class ColorMapper implements IColorMappable{
 	
 	/* */
 		
-	protected float    min;
-	protected float    max;
+	protected double    min;
+	protected double    max;
 	protected IColorMap colormap;
 	protected Color    factor = null;
 }

@@ -4,11 +4,17 @@ package org.jzy3d.tests;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
+import org.jzy3d.chart.controllers.mouse.camera.CameraMouseController;
+import org.jzy3d.chart.controllers.mouse.camera.CameraMouseControllerNewt;
+import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.factories.ChartComponentFactory;
+import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.CompositeColorMapperUpdatePolicy;
@@ -19,7 +25,6 @@ import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewPointChangedEvent;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
-import org.jzy3d.maths.TicToc;
 import org.jzy3d.plot3d.builder.Builder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
@@ -30,6 +35,7 @@ import org.jzy3d.plot3d.primitives.axes.layout.renderers.FixedDecimalTickRendere
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ScientificNotationTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.ColorbarLegend;
+import org.jzy3d.plot3d.rendering.ordering.BarycentreOrderingStrategy;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -47,7 +53,7 @@ import org.jzy3d.plot3d.text.drawable.DrawableTextBillboard;
  *
  */
 public class TestOrderingStrategyScoreWithColor {
-    static double SCALE_FACTOR = 1;
+    static double SCALE_FACTOR = 100;
     
     public static void main(String[] args) throws Exception {
         TestOrderingStrategyScoreWithColor surface = new TestOrderingStrategyScoreWithColor();
@@ -55,13 +61,17 @@ public class TestOrderingStrategyScoreWithColor {
     }
 
     public void BuildAndLaunch() {
-        final Chart chart = new Chart(Quality.Advanced, "newt");
+        IChartComponentFactory factory = getFactory();
+        final Chart chart = new Chart(factory, Quality.Advanced, "newt");
         chart.getAxeLayout().setZTickRenderer(new ScientificNotationTickRenderer(1));
-        chart.getAxeLayout().setZTickRenderer(new FixedDecimalTickRenderer(0));
         chart.getAxeLayout().setYTickRenderer(new FixedDecimalTickRenderer(1));
         chart.getAxeLayout().setXTickRenderer(new FixedDecimalTickRenderer(1));
-
-        genSurface(chart.getView(), chart.getScene().getGraph(), chart.getAxeLayout());
+        
+        // allow camera eye transform according to view scaling
+        BarycentreOrderingStrategy s = (BarycentreOrderingStrategy)chart.getScene().getGraph().getStrategy();
+        s.setView(chart.getView()); // experimental solution: scale camera eye with current view scaling
+        
+        genMapperSurface(chart.getView(), chart.getScene().getGraph(), chart.getAxeLayout());
 
         chart.addRenderer(new Renderer2d(){
             @Override
@@ -69,6 +79,7 @@ public class TestOrderingStrategyScoreWithColor {
                 Graphics2D g2d = (Graphics2D)g;
                 g2d.setColor(java.awt.Color.BLACK);
                 g2d.drawString("eye="+chart.getView().getCamera().getEye(), 20, 20);
+                g2d.drawString("scaling="+chart.getView().getLastViewScaling(), 20, 50);
             }
         });
         
@@ -77,6 +88,33 @@ public class TestOrderingStrategyScoreWithColor {
 
         // chart.getView().setSquared(false);
         ChartLauncher.openChart(chart);
+        
+        //chart.getView().getViewPointL
+    }
+
+    private ChartComponentFactory getFactory() {
+        return new ChartComponentFactory()/*{
+            @Override
+            public ICameraMouseController newMouseController(final Chart chart){
+                ICameraMouseController mouse = null;
+                if(!chart.getWindowingToolkit().equals("newt"))
+                    mouse = new CameraMouseController(chart){
+                        public void mouseDragged(MouseEvent e){
+                            super.mouseDragged(e);
+                            updateColorMapperRange();
+                        }
+                    };
+                else
+                    mouse = new CameraMouseControllerNewt(chart){
+                        public void mouseDragged(com.jogamp.newt.event.MouseEvent e){
+                            super.mouseDragged(e);
+                            updateColorMapperRange();
+                            System.out.println("update");
+                        }
+                };
+                return mouse;
+            }
+        }*/;
     }
 
     public void createPoints(final Chart chart) {
@@ -101,7 +139,7 @@ public class TestOrderingStrategyScoreWithColor {
     /**
      * Build a mapper based surface
      */
-    public Shape genSurface(final View view, final Graph graph, final IAxeLayout layout){
+    public Shape genMapperSurface(final View view, final Graph graph, final IAxeLayout layout){
         Mapper mapper = new Mapper() {
             public double f(double x, double y) {
                 return SCALE_FACTOR * Math.sin(x / 10) * Math.cos(y / 20) * x;
@@ -109,19 +147,19 @@ public class TestOrderingStrategyScoreWithColor {
         };
         Range range = new Range(-150, 150);
         int steps = 50;
-        Shape surface = Builder.buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+        surface = Builder.buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
         return createSurface(surface, view, graph, layout);
     }
     
     /**
      * Build a delaunay based surface
      */
-    public Shape createSurface(final View view, final Graph graph, final IAxeLayout layout){
+    public Shape genDelaunaySurface(final View view, final Graph graph, final IAxeLayout layout){
         List<Coord3d> data = new ArrayList<Coord3d>();
         for (int i = 0; i < _x.length; i++) {
             data.add(new Coord3d(_x[i], _y[i], _z[i]));
         }
-        Shape surface = Builder.buildDelaunay(data);
+        surface = Builder.buildDelaunay(data);
         return createSurface(surface, view, graph, layout);
     }
 
@@ -131,33 +169,40 @@ public class TestOrderingStrategyScoreWithColor {
     public Shape createSurface(final Shape surface, final View view, final Graph graph, final IAxeLayout layout) {
         Color factor = new Color(1, 1, 1, 0.75f);
 
-        final IColorMap colormap = new ColorMapRainbow();
+        colormap = new ColorMapRainbow();
         colormap.setDirection(false);
         
-        final ColorMapper colormapper = new OrderingStrategyScoreColorMapper(colormap, new CompositeColorMapperUpdatePolicy(), graph, factor);
+        colormapper = new OrderingStrategyScoreColorMapper(colormap, new CompositeColorMapperUpdatePolicy(), graph, factor);
         surface.setColorMapper(colormapper);
         surface.setWireframeDisplayed(false);
 
-        final ColorbarLegend colorbar = new ColorbarLegend(surface, layout);
+        colorbar = new ColorbarLegend(surface, layout);
         surface.setLegend(colorbar);
 
         view.addViewPointChangedListener(new IViewPointChangedListener(){
             @Override
             public void viewPointChanged(ViewPointChangedEvent e) {
-                //Coord3d c = graph.getStrategy().getCamera().getEye();
-                //System.out.println("predraw from eye " + c);
-                TicToc t = new TicToc();
-                t.tic();
-                colormapper.preDraw(surface); // update all distance range
-                t.toc();
+                //System.out.println("min:" + colormapper.getMin() + " max:" + colormapper.getMax());
+                //TicToc t = new TicToc();
+                //t.tic();
+                updateColorMapperRange();
+                //t.toc();
             }
         });
         
         graph.add(surface);
-
-
+        
         return surface;
     }
+    
+    public void updateColorMapperRange(){
+        colormapper.preDraw(surface); 
+    }
+    
+    protected IColorMap colormap;
+    protected ColorMapper colormapper;
+    protected ColorbarLegend colorbar;
+    protected Shape surface;
     
     private final double[] _x;
     private final double[] _y;

@@ -5,7 +5,7 @@ public class IntegerTickRenderer implements ITickRenderer{
 	}
 	
 	@Override
-	public String format(float value) {
+	public String format(double value) {
 		return "" + (int)value;
 	}
 }

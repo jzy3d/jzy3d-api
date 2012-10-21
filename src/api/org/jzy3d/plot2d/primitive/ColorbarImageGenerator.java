@@ -56,8 +56,7 @@ public class ColorbarImageGenerator {
 		// Draw colorbar centering in half the Legend text height
 		for(int h=txtSize/2; h<=(height-txtSize/2); h++){
 			// Compute value & color
-			float v = min + (max-min) * ((float)h)/((float)(height-txtSize));
-//			Color c = mapper.getColor(new Coord3d(0,0,v));
+			double v = min + (max-min) * ((float)h)/((float)(height-txtSize));
 			Color c = mapper.getColor(v);  //To allow the Color to be a variable independent of the coordinates
 			
 			// Draw line
@@ -71,12 +70,12 @@ public class ColorbarImageGenerator {
 		
 		// Text annotation
 		if(provider!=null){
-    		float[] ticks = provider.generateTicks(min, max);
-    		float ypos;
+    		double[] ticks = provider.generateTicks(min, max);
+    		int ypos;
     		String txt;
     		for(int t=0; t<ticks.length; t++){
     //			ypos = (int)(height-height*((ticks[t]-min)/(max-min)));
-    			ypos = (int)txtSize+(height-txtSize-(height-txtSize)*((ticks[t]-min)/(max-min))); //Making sure that the first and last tick appear in the colorbar
+    			ypos = (int)(txtSize+(height-txtSize-(height-txtSize)*((ticks[t]-min)/(max-min)))); //Making sure that the first and last tick appear in the colorbar
     			txt = renderer.format(ticks[t]);
     			graphic.drawString(txt, barWidth+1, ypos);
     		}
@@ -115,8 +114,8 @@ public class ColorbarImageGenerator {
 	protected ColorMapper mapper;
 	protected ITickProvider provider;
 	protected ITickRenderer renderer;
-	protected float min;
-	protected float max;
+	protected double min;
+	protected double max;
 	protected boolean hasBackground = false;
 	protected java.awt.Color backgroundColor;
 	protected java.awt.Color foregroundColor = java.awt.Color.BLACK;

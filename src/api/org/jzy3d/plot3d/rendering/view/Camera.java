@@ -409,9 +409,17 @@ public class Camera extends AbstractViewport {
     public double getDistance(AbstractDrawable drawable) {
         return drawable.getBarycentre().distanceSq(getEye());
     }
+    
+    public double getDistance(AbstractDrawable drawable, Coord3d viewScale) {
+        return drawable.getBarycentre().distanceSq(getEye().mul(viewScale));
+    }
 
     public double getDistance(Coord3d coord) {
         return coord.distanceSq(getEye());
+    }
+    
+    public double getDistance(Coord3d coord, Coord3d viewScale) {
+        return coord.distanceSq(getEye().mul(viewScale));
     }
 
     /********************************************************/

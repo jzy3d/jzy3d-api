@@ -416,31 +416,31 @@ public class AxeBox implements IAxe{
 	protected void drawGridOnQuad(GL2 gl, int quad){
 		// Draw X grid along X axis
 		if((quad!=0)&&(quad!=1)){
-			float[] xticks = layout.getXTicks();
+			double[] xticks = layout.getXTicks();
 			for(int t=0; t<xticks.length; t++){
 				gl.glBegin(GL2.GL_LINES);
-					gl.glVertex3f( xticks[t], quady[quad][0], quadz[quad][0]);
-					gl.glVertex3f( xticks[t], quady[quad][2], quadz[quad][2]);
+					gl.glVertex3d( xticks[t], quady[quad][0], quadz[quad][0]);
+					gl.glVertex3d( xticks[t], quady[quad][2], quadz[quad][2]);
 				gl.glEnd();
 			}
 		}
 		// Draw Y grid along Y axis
 		if((quad!=2)&&(quad!=3)){
-			float[] yticks = layout.getYTicks();
+		    double[] yticks = layout.getYTicks();
 			for(int t=0; t<yticks.length; t++){
 				gl.glBegin(GL2.GL_LINES);
-					gl.glVertex3f( quadx[quad][0], yticks[t], quadz[quad][0]);
-					gl.glVertex3f( quadx[quad][2], yticks[t], quadz[quad][2]);
+					gl.glVertex3d( quadx[quad][0], yticks[t], quadz[quad][0]);
+					gl.glVertex3d( quadx[quad][2], yticks[t], quadz[quad][2]);
 				gl.glEnd();
 			}
 		}
 		// Draw Z grid along Z axis
 		if((quad!=4)&&(quad!=5)){
-			float[] zticks = layout.getZTicks();
+		    double[] zticks = layout.getZTicks();
 			for(int t=0; t<zticks.length; t++){
 				gl.glBegin(GL2.GL_LINES);
-					gl.glVertex3f( quadx[quad][0], quady[quad][0], zticks[t]);
-					gl.glVertex3f( quadx[quad][2], quady[quad][2], zticks[t]);
+					gl.glVertex3d( quadx[quad][0], quady[quad][0], zticks[t]);
+					gl.glVertex3d( quadx[quad][2], quady[quad][2], zticks[t]);
 				gl.glEnd();
 			}
 		}
@@ -478,15 +478,15 @@ public class AxeBox implements IAxe{
 		
 		// Computes POSition of ticks lying on the selected axe 
 		// (i.e. 1st point of the tick line)
-		float xpos = normx[quad_0] + normx[quad_1];
-		float ypos = normy[quad_0] + normy[quad_1];
-		float zpos = normz[quad_0] + normz[quad_1];
+		double xpos = normx[quad_0] + normx[quad_1];
+		double ypos = normy[quad_0] + normy[quad_1];
+		double zpos = normz[quad_0] + normz[quad_1];
 		
 		// Variables for storing the position of the LABel position
 		// (2nd point on the tick line)
-		float xlab;
-		float ylab;
-		float zlab;
+		double xlab;
+		double ylab;
+		double zlab;
 
 		// Computes the DIRection of the ticks
 		// assuming initial vector point is the center 
@@ -531,7 +531,7 @@ public class AxeBox implements IAxe{
 		}
 		
 		// Retrieve the selected tick positions
-		float ticks[];
+		double ticks[];
 		if(direction==AXE_X) 
 			ticks = layout.getXTicks();
 		else if(direction==AXE_Y) 
@@ -572,8 +572,8 @@ public class AxeBox implements IAxe{
 			
 			// Draw the tick line
 			gl.glBegin(GL2.GL_LINES);
-				gl.glVertex3f( xpos, ypos, zpos ); 
-				gl.glVertex3f( xlab, ylab, zlab ); 			
+				gl.glVertex3d( xpos, ypos, zpos ); 
+				gl.glVertex3d( xlab, ylab, zlab ); 			
 			gl.glEnd();
 			
 			// Select the alignement of the tick label
