@@ -8,25 +8,25 @@ import java.util.Map;
  * @author Martin Pernollet
  */
 public class TickLabelMap implements ITickRenderer{
-    public void register(float value, String string){
+    public void register(double value, String string){
         tickValues.put(value, string);
     }
     
-    public boolean contains(float value){
+    public boolean contains(double value){
         return tickValues.containsKey(value);
     }
     
-    public Map<Float, String> getMap(){
+    public Map<Double, String> getMap(){
         return tickValues;
     }
     
     @Override
-    public String format(float value) {
+    public String format(double value) {
         if( tickValues.get(value) != null )
             return tickValues.get(value);
         else
             return "";
     }
     
-    protected Map<Float, String> tickValues = new HashMap<Float, String>();    
+    protected Map<Double, String> tickValues = new HashMap<Double, String>();    
 }

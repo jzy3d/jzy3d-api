@@ -26,7 +26,7 @@ public interface IColorMap {
 	 * @param z
 	 * @return a color for the given point.
 	 */
-    Color getColor( IColorMappable colorable, float x, float y, float z );
+    Color getColor( IColorMappable colorable, double x, double y, double z );
 	/**
 	 * 
 	 * @param colorable A @link ColorMappable object.
@@ -34,7 +34,7 @@ public interface IColorMap {
 	 * @return a color for the given point.
 	 */
 
-    Color getColor(IColorMappable colorable, float v);
+    Color getColor(IColorMappable colorable, double v);
    
     /**
      * Indicates if the colormap use the standard or reverted color direction

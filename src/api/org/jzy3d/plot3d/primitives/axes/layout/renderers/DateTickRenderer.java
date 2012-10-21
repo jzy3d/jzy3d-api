@@ -16,7 +16,7 @@ public class DateTickRenderer implements ITickRenderer{
 	}
 	
 	@Override
-	public String format(float value) {
+	public String format(double value) {
 		Date date = Utils.num2dat( (long)value );
 		return Utils.dat2str( date, format );
 	}

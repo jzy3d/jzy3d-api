@@ -30,7 +30,7 @@ public class ColorMapHotCold implements IColorMap {
     	return direction;
     }
     
-    public Color getColor( IColorMappable colorable, float x, float y, float z ){
+    public Color getColor( IColorMappable colorable, double x, double y, double z ){
         return getColor( x, y, z, colorable.getMin(), colorable.getMax() );        
     }
     
@@ -38,9 +38,9 @@ public class ColorMapHotCold implements IColorMap {
      * A helper for getColor( ColorMappable waferview, Point3d pt ) that calls
      * other helper functions
      */
-    private Color getColor( float x, float y, float z, float zMin, float zMax ){
+    private Color getColor( double x, double y, double z, double zMin, double zMax ){
         
-        float rel_value = 0;
+        double rel_value = 0;
         
         if( z < zMin )
             rel_value = 0;
@@ -53,25 +53,25 @@ public class ColorMapHotCold implements IColorMap {
         		rel_value = ( zMax - z ) / ( zMax - zMin );
         }
         
-        float b = (float) colorComponentAbsolute( rel_value, -0.250f, +0.875f, +0.250f, +0.500f );
-        float v = (float) colorComponentAbsolute( rel_value, +0.125f, +0.875f, +0.500f, +0.500f );
-        float r = (float) colorComponentAbsolute( rel_value, +0.125f, +1.250f, +0.500f, +0.750f );
+        float b = (float) colorComponentAbsolute( rel_value, -0.250, +0.875, +0.250, +0.500 );
+        float v = (float) colorComponentAbsolute( rel_value, +0.125, +0.875, +0.500, +0.500 );
+        float r = (float) colorComponentAbsolute( rel_value, +0.125, +1.250, +0.500, +0.750 );
         
         return new Color( r, v, b );
     }
     
     
-    public Color getColor( IColorMappable colorable, float z ){
+    public Color getColor( IColorMappable colorable, double z ){
         return getColor( 0.0f, 0.0f, z, colorable.getMin(), colorable.getMax() );        //To re-use the existing code
     }
   
-    /*private float creneau_relatif( float value, float center, float topwidth, float bottomwidth ){
+    /*private double creneau_relatif( double value, double center, double topwidth, double bottomwidth ){
         return creneau_absolu( value, center-(bottomwidth/2), center+(bottomwidth/2), center-(topwidth/2), center+(topwidth/2) );
     }*/
     
     
-    private float colorComponentAbsolute( float value, float bLeft, float bRight, float tLeft, float tRight ){
-        float output = 0;
+    private double colorComponentAbsolute( double value, double bLeft, double bRight, double tLeft, double tRight ){
+        double output = 0;
         // a gauche ou a droite du creneau
         if( (value < bLeft) || (value >= bRight) ){
             output = 0;

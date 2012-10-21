@@ -11,9 +11,9 @@ public class RegularTickProvider extends AbstractTickProvider implements ITickPr
 	}
 	
 	@Override
-	public float[] generateTicks(float min, float max, int steps) {
-		float[] ticks = new float[steps];
-		float   step  = (max-min)/(steps-1);
+	public double[] generateTicks(double min, double max, int steps) {
+		double[] ticks = new double[steps];
+		double   step  = (max-min)/(steps-1);
 		
 		ticks[0] = min;
 		ticks[steps-1] = max;

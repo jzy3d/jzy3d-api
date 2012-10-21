@@ -13,7 +13,7 @@ public class DefaultDecimalTickRenderer implements ITickRenderer{
 	}
 	
 	@Override
-	public String format(float value) {
+	public String format(double value) {
 		return Utils.num2str('g', value, precision);
 	}
 	
