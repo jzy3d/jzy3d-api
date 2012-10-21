@@ -1,4 +1,6 @@
-jzy3d-api
-=========
+Jzy3d - A Java API for 3d charts
+================================
 
-A Java API for 3d charts
+New BSD License
+
+

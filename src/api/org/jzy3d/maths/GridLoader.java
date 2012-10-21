@@ -629,19 +629,19 @@ public class GridLoader implements IColorMappable{
 	
 	/**********************************************************************/
 	
-	public float getZMin(){
+	public float getMin(){
 		return colorZmin;
 	}
 	
-	public float getZMax(){
+	public float getMax(){
 		return colorZmax;
 	}
 	
-	public void setZMin(float zmin){
+	public void setMin(float zmin){
 		colorZmin = zmin;
 	}
 	
-	public void setZMax(float zmax){
+	public void setMax(float zmax){
 		colorZmax = zmax;
 	}
 		

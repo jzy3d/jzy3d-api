@@ -7,6 +7,7 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.TicToc;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
@@ -67,7 +68,7 @@ public class Graph{
 		scene = null;
 	}
 	
-	/*******************************************************************/
+	/* */
 
 	/** Add a Drawable to the graph and call all views' so that
 	 * they update their bounds according to their mode (automatic or
@@ -150,7 +151,7 @@ public class Graph{
 	            r.mount(gl);
 	}
 	
-	/****************************************************************/
+	/* */
 	
 	/** Decompose all {@link AbstractComposite} objects, and sort the extracted monotype 
 	 * (i.e. non-{@link AbstractComposite} {@link AbstractDrawable}s) in order to render them according
@@ -159,6 +160,8 @@ public class Graph{
 	public void draw(GL2 gl, GLU glu, Camera camera){
 		draw(gl, glu, camera, components, sort);
 	}
+	
+	protected TicToc t = new TicToc();
 	
 	protected synchronized void draw(GL2 gl, GLU glu, Camera camera, List<AbstractDrawable> components, boolean sort){
 	    gl.glMatrixMode(GL2.GL_MODELVIEW);
@@ -172,24 +175,35 @@ public class Graph{
             //}
 		}
 		else{
-		    // Expand all composites into a list of monotypes
-		    ArrayList<AbstractDrawable> monotypes;
-		   // synchronized(components){
-		        monotypes = Decomposition.getDecomposition(components);
-		    //}
-		    
-            // Compute order of monotypes for rendering
-            strategy.sort(monotypes, camera);
     
             // Render sorted monotypes
-                        
+            t.tic();
+		    List<AbstractDrawable> monotypes = getDecomposition();
+	        strategy.sort(monotypes, camera);
+            t.toc();
+            //System.out.println("sort:" + t.elapsedSecond());
+	        
+	        
             //int k = 0;
+            t.tic();
             for(AbstractDrawable d: monotypes){
                 //System.out.println((k++) + "] shortest=" + d.getShortestDistance(camera) + " longest=" + d.getLongestDistance(camera));
                 if(d.isDisplayed())
                     d.draw(gl, glu, camera);
             }
+            t.toc();
+            //System.out.println("draw:" + t.elapsedSecond());
 		}
+	}
+	
+    /** Expand all {@link AbstractComposites} instance into a list of atomic {@link AbstractDrawable} types 
+     * and return all the current Graph primitives decomposition. */
+	public List<AbstractDrawable> getDecomposition(){
+        ArrayList<AbstractDrawable> monotypes;
+       // synchronized(components){
+            monotypes = Decomposition.getDecomposition(components);
+        //}
+        return monotypes;
 	}
 	
 	
@@ -204,7 +218,7 @@ public class Graph{
 	    //}
 	}
 	
-	/*****************************************************************/
+	/* */
 		
 	/** Get the {@link @Drawable} ordering strategy.*/
 	public AbstractOrderingStrategy getStrategy() {
@@ -253,7 +267,7 @@ public class Graph{
 	}
 	
 	
-	/****************************************************************/
+	/* */
 	
 	/** Return the list of available {@link AbstractDrawable}'s {@link Legend}.*/
 	public synchronized List<Legend> getLegends(){
@@ -282,7 +296,7 @@ public class Graph{
 		return k;
 	}
 	
-	/****************************************************************/
+	/* */
 	
 	/** Print out information concerning all Drawable of this composite.*/
 	public synchronized String toString(){
@@ -300,7 +314,7 @@ public class Graph{
 		return output;
 	}
 	
-	/****************************************************************/
+	/* */
 	
 	protected List<AbstractDrawable> components;
 	protected Scene scene;
