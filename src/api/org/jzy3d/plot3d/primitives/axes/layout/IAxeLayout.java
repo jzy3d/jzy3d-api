@@ -59,12 +59,12 @@ public interface IAxeLayout {
 	public void updateYTicks(float min, float max);
 	public void updateZTicks(float min, float max);*/
 	
-	public float[] getXTicks(float min, float max);
-	public float[] getYTicks(float min, float max);
-	public float[] getZTicks(float min, float max);
-	public float[] getXTicks();
-	public float[] getYTicks();
-	public float[] getZTicks();
+	public double[] getXTicks(double min, double max);
+	public double[] getYTicks(double min, double max);
+	public double[] getZTicks(double min, double max);
+	public double[] getXTicks();
+	public double[] getYTicks();
+	public double[] getZTicks();
 	
 	public void setXTickColor(Color color);
 	public void setYTickColor(Color color);

@@ -29,11 +29,11 @@ public class ColorMapGrayscale implements IColorMap{
     	return direction;
     }
 
-    public Color getColor( IColorMappable colorable, float x, float y, float z ){
+    public Color getColor( IColorMappable colorable, double x, double y, double z ){
         return getColor( x, y, z, colorable.getMin(), colorable.getMax() );        
     }
     
-    public Color getColor(  float x, float y, float z, float zMin, float zMax ){
+    public Color getColor(  double x, double y, double z, double zMin, double zMax ){
         
         double rel_value = 0;
         
@@ -51,7 +51,7 @@ public class ColorMapGrayscale implements IColorMap{
         return new Color( r, v, b );
     }
     
-    public Color getColor( IColorMappable colorable, float z ){
+    public Color getColor( IColorMappable colorable, double z ){
         return getColor( 0.0f, 0.0f, z, colorable.getMin(), colorable.getMax() );        //To re-use the existing code
     }
 

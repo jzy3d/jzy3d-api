@@ -16,24 +16,24 @@ public interface IColorMappable {
 	 * Retrieve the lower value boundary for a {@link IColorMap}.
 	 * @return the minimum Z value
 	 */
-	public float getMin();
+	public double getMin();
 
 	/**
 	 * Retrieve the upper value boundary for a {@link IColorMap}.
 	 * @return the maximum Z value
 	 */
-	public float getMax();
+	public double getMax();
 	
 	/**
 	 * Set the lower value boundary for a {@link IColorMap}.
 	 * @param value the minimum Z value
 	 */
-	public void setMin(float value);
+	public void setMin(double value);
 	
 	/**
 	 * Set the upper value boundary for a {@link IColorMap}.
 	 * @param value the maximum Z value
 	 */	
-	public void setMax(float value);
+	public void setMax(double value);
 
 }

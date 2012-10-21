@@ -2,12 +2,12 @@ package org.jzy3d.plot3d.primitives.axes.layout.providers;
 
 
 public class StaticTickProvider extends AbstractTickProvider implements ITickProvider{
-	public StaticTickProvider(float[] values){
+	public StaticTickProvider(double[] values){
 		this.values = values;
 	}
 	
 	@Override
-	public float[] generateTicks(float min, float max, int steps) {
+	public double[] generateTicks(double min, double max, int steps) {
 		return values;
 	}
 	
@@ -16,5 +16,5 @@ public class StaticTickProvider extends AbstractTickProvider implements ITickPro
 		return 0;
 	}
 	
-	protected float[] values;
+	protected double[] values;
 }

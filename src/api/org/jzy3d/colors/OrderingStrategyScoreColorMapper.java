@@ -3,6 +3,7 @@ package org.jzy3d.colors;
 import java.util.List;
 
 import org.jzy3d.colors.colormaps.IColorMap;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Statistics;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
@@ -45,8 +46,13 @@ public class OrderingStrategyScoreColorMapper extends ColorMapper{
             scores[k++] = s.score(d);
         }
         
-        min = (float)Statistics.min(scores);
-        max = (float)Statistics.max(scores);
+        min = Statistics.min(scores);
+        max = Statistics.max(scores);
+        
+        if(min==max){
+            System.err.println(OrderingStrategyScoreColorMapper.class.getSimpleName() + " !! min = max = "+min);
+            //Array.print(scores);
+        }
     }
     
     public Color getColor(Coord3d coord){
