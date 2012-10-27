@@ -64,11 +64,6 @@ public class Renderer3d implements GLEventListener{
 	            canvas.getGL().getContext().setGL( GLPipelineFactory.create("javax.media.opengl.Trace", null, canvas.getGL(), new Object[] { System.err } ) );
 		    
 	        view.init(canvas.getGL().getGL2());
-	        
-	        if(view!=null){
-                view.getScene().getGraph().mountAllGLBindedResources(canvas.getGL().getGL2());
-	            view.setBoundManual(view.getScene().getGraph().getBounds());
-	        }
 		}
 	}
 	/** 

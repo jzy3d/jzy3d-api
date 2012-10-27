@@ -1,18 +1,12 @@
 package org.jzy3d.tests;
 
-//package org.jzy3d.demos;
-
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.chart.controllers.mouse.camera.CameraMouseController;
-import org.jzy3d.chart.controllers.mouse.camera.CameraMouseControllerNewt;
-import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -44,16 +38,19 @@ import org.jzy3d.plot3d.text.drawable.DrawableTextBillboard;
 /**
  * Set surface colors according to each point distance to camera: red is near, blue is far.
  * 
- * Changing scale factor to >> 1 shows an erroneous computation of coordinates distances
- * (+ large variation of distance colorbar is an indicator of sensitivity of distance score to scales).
- * 
- * Fixing that maybe requires to be aware of the status squared/not squared of the view.
+ * Changing scale factor to >> 1 shows an erroneous computation of coordinates distances:
+ * <ul>
+ * <li>nearest surface polygons on a surface bump appear more far (more blue) than some actually 
+ * other more far polygons.
+ * <li>when data has a very large Z range, distance computation becomes very unprecise with points all appearing to min or max distance
+ *</ul>
+ * Moreover, scaling the surface shows that the actual camera eye point is scaled with the surface
+ * and not with the view bounds (axebox).
  * 
  * @author Martin
- *
  */
 public class TestOrderingStrategyScoreWithColor {
-    static double SCALE_FACTOR = 100;
+    static double MAPPER_ZSCALE_FACTOR = 10000;
     
     public static void main(String[] args) throws Exception {
         TestOrderingStrategyScoreWithColor surface = new TestOrderingStrategyScoreWithColor();
@@ -142,7 +139,7 @@ public class TestOrderingStrategyScoreWithColor {
     public Shape genMapperSurface(final View view, final Graph graph, final IAxeLayout layout){
         Mapper mapper = new Mapper() {
             public double f(double x, double y) {
-                return SCALE_FACTOR * Math.sin(x / 10) * Math.cos(y / 20) * x;
+                return MAPPER_ZSCALE_FACTOR * Math.sin(x / 10) * Math.cos(y / 20) * x;
             }
         };
         Range range = new Range(-150, 150);

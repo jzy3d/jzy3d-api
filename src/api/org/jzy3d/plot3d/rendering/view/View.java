@@ -310,7 +310,8 @@ public class View {
     public void lookToBox(BoundingBox3d box) {
         center = box.getCenter();
         axe.setAxe(box);
-        targetBox = box;
+        //targetBox = box;
+        viewbounds = box;
     }
 
     /** Get the {@link AxeBox}'s {@link BoundingBox3d} */
@@ -558,9 +559,9 @@ public class View {
      * will update view bounds to the current bounds.
      */
     public void setBoundManual(BoundingBox3d bounds) {
-        viewbounds = bounds;
+        //viewbounds = bounds;
         boundmode = ViewBoundMode.MANUAL;
-        lookToBox(viewbounds);
+        lookToBox(bounds);
     }
 
     /**
@@ -628,15 +629,36 @@ public class View {
     }
 
     /**
-     * The init function specifies general GL settings that impact the rendering
-     * quality and performance (computation speed).
+     * The init function 
+     * <ul>
+     * <li>specifies general GL settings that impact the rendering quality and performance (computation speed).
+     * <li>enable light management
+     * <li>load all required texture resources
+     * <li>fix the current view bounds to the whole scene graph bounds
+     * </ul>
      * <p/>
-     * The rendering settings are set by the {@link Quality} instance given in
-     * the constructor parameters.
+     * The rendering settings are set by the {@link Quality} given in the constructor parameters.
      */
     public void init(GL2 gl) {
         initQuality(gl);
         initLights(gl);
+        initResources(gl);
+        
+        if(initBounds==null)
+            setBoundManual(getScene().getGraph().getBounds());
+        else
+            setBoundManual(initBounds);
+        //boundmode = ViewBoundMode.AUTO_FIT;
+    }
+    
+    
+
+    public BoundingBox3d getInitBounds() {
+        return initBounds;
+    }
+
+    public void setInitBounds(BoundingBox3d initBounds) {
+        this.initBounds = initBounds;
     }
 
     public void initQuality(GL2 gl) {
@@ -698,6 +720,10 @@ public class View {
         scene.getLightSet().enableLightIfThereAreLights(gl);
     }
 
+    public void initResources(GL2 gl) {
+        getScene().getGraph().mountAllGLBindedResources(gl);
+    }
+
     /** Clear the color and depth buffer. */
     public void clear(GL2 gl) {
         clearColorAndDepth(gl);
@@ -719,6 +745,8 @@ public class View {
         renderOverlay(gl);
         if (dimensionDirty)
             dimensionDirty = false;
+        
+        cam.show(gl, new Transform(new Scale(scaling)), scaling);
     }
 
     public void renderBackground(GL2 gl, GLU glu, float left, float right) {
@@ -766,10 +794,12 @@ public class View {
 
         // -- Compute the bounds for computing cam distance, clipping planes,
         // etc
-        if (targetBox == null)
-            targetBox = new BoundingBox3d(0, 1, 0, 1, 0, 1);
+        //if (targetBox == null)
+        //    targetBox = new BoundingBox3d(0, 1, 0, 1, 0, 1);
+        if(viewbounds == null)
+            viewbounds = new BoundingBox3d(0, 1, 0, 1, 0, 1);
         BoundingBox3d boundsScaled = new BoundingBox3d();
-        boundsScaled.add(targetBox.scale(scaling));
+        boundsScaled.add(viewbounds.scale(scaling));
         if (MAINTAIN_ALL_OBJECTS_IN_VIEW)
             boundsScaled.add(scene.getGraph().getBounds().scale(scaling));
         return boundsScaled;
@@ -1012,7 +1042,7 @@ public class View {
     protected BufferedImage bgImg = null;
     // protected TooltipRenderer tooltipRenderer;
 
-    protected BoundingBox3d targetBox;
+    //protected BoundingBox3d targetBox;
 
     protected Color bgColor = Color.BLACK;
     protected java.awt.Color bgOverlay = new java.awt.Color(0, 0, 0, 0);
@@ -1036,4 +1066,6 @@ public class View {
     protected boolean viewDirty = false;
 
     protected static View current;
+    
+    protected BoundingBox3d initBounds;
 }

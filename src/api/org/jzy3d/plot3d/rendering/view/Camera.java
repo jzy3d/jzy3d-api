@@ -7,11 +7,13 @@ import java.util.Vector;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Grid;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
+import org.jzy3d.plot3d.transform.Transform;
 
 /**
  * A {@link Camera} provides an easy control on the view and target points in a
@@ -338,13 +340,30 @@ public class Camera extends AbstractViewport {
         gl.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, modelview, 0);
         return modelview;
     }
-
-    /******************************************************************/
+    
+    public void show(GL2 gl, Transform transform, Coord3d scaling){
+        if(transform!=null)
+            transform.execute(gl);
+        
+        
+        Coord3d eye = getEye().mul(scaling);
+        
+        gl.glBegin(GL2.GL_POINTS);
+        gl.glPointSize(camWidth);
+        gl.glColor4f(camColor.r, camColor.g, camColor.b, camColor.a);
+        gl.glVertex3f(eye.x, eye.y, eye.z);
+        gl.glEnd();
+    }
+    
+    Color camColor = Color.BLACK;
+    int camWidth = 3;
+    
+    /* */
 
     /**
-     * Sets the projection, and the mapping of 3d environement to 2d screen. The
+     * Sets the projection and the mapping of the 3d model to 2d screen. The
      * projection must be either Camera.PERSPECTIVE or Camera.ORTHOGONAL. <br>
-     * Finally calls the GL2 function glLookAt, according to the stored eye,
+     * shoot() finally calls the GL function glLookAt, according to the stored eye,
      * target, up and scale values. <br>
      * Note that the Camera set by itselft the MatrixMode to model view at the
      * end of a shoot(). <br>
@@ -402,36 +421,74 @@ public class Camera extends AbstractViewport {
     }
 
     /**
-     * Returns distance between drawable barycenter and camera eye
-     * @param drawable
-     * @return
+     * Return the distance between the camera eye and the given drawable's barycenter.
      */
     public double getDistance(AbstractDrawable drawable) {
-        return drawable.getBarycentre().distanceSq(getEye());
+        if(useSquaredDistance)
+            return drawable.getBarycentre().distanceSq(getEye());
+        else
+            return drawable.getBarycentre().distance(getEye());
     }
     
+    /**
+     * Apply scaling before computing distance between the camera eye and the given drawable's barycenter.
+     */
     public double getDistance(AbstractDrawable drawable, Coord3d viewScale) {
-        return drawable.getBarycentre().distanceSq(getEye().mul(viewScale));
+        if(useSquaredDistance)
+            return drawable.getBarycentre().distanceSq(getEye().mul(viewScale));
+        else
+            return drawable.getBarycentre().distance(getEye().mul(viewScale));
     }
-
-    public double getDistance(Coord3d coord) {
-        return coord.distanceSq(getEye());
-    }
-    
-    public double getDistance(Coord3d coord, Coord3d viewScale) {
-        return coord.distanceSq(getEye().mul(viewScale));
-    }
-
-    /********************************************************/
 
     /**
-     * Print out in console information concerning the surface.
+     * Return the distance between the camera eye and the given coordinate.
+     */
+    public double getDistance(Coord3d coord) {
+        if(useSquaredDistance)
+            return coord.distanceSq(getEye());
+        else
+            return coord.distance(getEye());
+    }
+    
+    /**
+     * Apply scaling before computing distance between the camera eye and the given coordinate.
+     */
+    public double getDistance(Coord3d coord, Coord3d viewScale) {
+        if(useSquaredDistance)
+            return coord.distanceSq(getEye().mul(viewScale));
+        else
+            return coord.distance(getEye().mul(viewScale));
+    }
+    
+    public boolean isUseSquaredDistance() {
+        return useSquaredDistance;
+    }
+
+    /** Defines what getDistance(...) will return, either:
+     * <ul>
+     * <li>Squared distance (faster to compute since no Math.sqrt(...) at the end)
+     * <li>Real distance
+     * </ul>
+     * 
+     * Default value is set to true, meaning it use the faster squared distance.
+     */
+    public void setUseSquaredDistance(boolean useSquaredDistance) {
+        this.useSquaredDistance = useSquaredDistance;
+    }
+
+    protected boolean useSquaredDistance = true;
+
+
+    /* */
+
+    /**
+     * Print out in console information concerning the camera.
      */
     public String toString() {
         return toString(eye, target, up);
     }
 
-    private String toString(Coord3d eye, Coord3d target, Coord3d up) {
+    protected String toString(Coord3d eye, Coord3d target, Coord3d up) {
         String output = "(Camera)";
         output += (" lookFrom  = {" + eye.x + ", " + eye.y + ", " + eye.z + "}");
         output += (" lookTo    = {" + target.x + ", " + target.y + ", " + target.z + "}");
@@ -439,7 +496,7 @@ public class Camera extends AbstractViewport {
         return output;
     }
 
-    /******************************************************************/
+    /* */
 
     protected Coord3d eye;
     protected Coord3d target;
