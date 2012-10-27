@@ -4,3 +4,4 @@ doc/javadoc
 .settings
 *.class
 *.log
+*~/

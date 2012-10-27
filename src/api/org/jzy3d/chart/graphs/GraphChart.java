@@ -8,10 +8,6 @@ public class GraphChart extends Chart{
 		super();
 	}
 
-	public GraphChart(Quality quality, String chartType) {
-		super(quality, chartType);
-	}
-
 	public GraphChart(Quality quality) {
 		super(quality);
 	}
@@ -19,6 +15,10 @@ public class GraphChart extends Chart{
 	public GraphChart(String chartType) {
 		super(chartType);
 	}
+	
+	public GraphChart(Quality quality, String windowingToolkit){
+        super(new GraphChartComponentFactory(), quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+    }
 /*
 	protected ChartScene initializeScene(boolean graphsort){
 		return new ChartScene(graphsort){
