@@ -1,5 +1,0 @@
-dist
-build
-doc/javadoc
-.settings
-*.class

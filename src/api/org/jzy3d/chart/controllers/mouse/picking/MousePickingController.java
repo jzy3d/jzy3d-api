@@ -44,6 +44,7 @@ public class MousePickingController<V, E> extends AbstractCameraController
 
 	public void register(Chart chart) {
 		super.register(chart);
+		this.chart = chart;
 		this.prevMouse = Coord2d.ORIGIN;
 		chart.getCanvas().addMouseListener(this);
 		chart.getCanvas().addMouseMotionListener(this);
@@ -99,9 +100,11 @@ public class MousePickingController<V, E> extends AbstractCameraController
 		System.out.println(MousePickingController.class.getSimpleName() + "wheel:" + factor * 100);
 		zoomX(factor);
 		zoomY(factor);
+		chart.getView().shoot();
 	}
 
 	public void mouseMoved(MouseEvent e) {
+	    System.out.println("moved");
 		pick(e);
 	}
 
@@ -148,6 +151,8 @@ public class MousePickingController<V, E> extends AbstractCameraController
 	protected PickingSupport picking;
 	protected GLU glu = new GLU();
 
+	protected Chart chart;
+	
 	protected Coord2d prevMouse;
 	protected CameraThreadController threadController;
 
