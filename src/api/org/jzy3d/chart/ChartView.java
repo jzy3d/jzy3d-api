@@ -32,7 +32,7 @@ public class ChartView extends View {
     public ChartView(Scene scene, ICanvas canvas, Quality quality) {
     	this(new ChartComponentFactory(), scene, canvas, quality);
     }
-    
+
     public ChartView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
 
@@ -68,6 +68,8 @@ public class ChartView extends View {
      * to the scaled scene.
      */
     public void render(GL2 gl, GLU glu) {
+    	fireViewLifecycleWillRender(null);
+
         List<Legend> list = scene.getGraph().getLegends();
         boolean hasMeta = list.size() > 0;
 
@@ -83,13 +85,13 @@ public class ChartView extends View {
 
         ViewPort sceneViewPort = ViewPort.slice(canvas.getRendererWidth(), canvas.getRendererHeight(), 0, screenSeparator);
         ViewPort backgroundViewPort = new ViewPort(canvas.getRendererWidth(), canvas.getRendererHeight());
-        
+
         renderBackground(gl, glu, backgroundViewPort);
     	renderScene(gl, glu, sceneViewPort);
-    	
+
         if (hasMeta)
             renderFaces(gl, glu, screenSeparator, 1.0f);
-        
+
         // fix overlay on top of chart
         //System.out.println(scenePort);
         renderOverlay(gl, cam.getLastViewPort());
