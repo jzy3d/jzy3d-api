@@ -15,8 +15,10 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.IViewIsVerticalEventListener;
+import org.jzy3d.events.IViewLifecycleEventListener;
 import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewIsVerticalEvent;
+import org.jzy3d.events.ViewLifecycleEvent;
 import org.jzy3d.events.ViewPointChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -48,19 +50,19 @@ import com.jogamp.opengl.util.awt.Overlay;
  * to render into. It is the responsability to layout a set of concrete
  * {@link AbstractViewport}s such as the {@Camera} rendering the scene
  * or an {@link ImageViewport} for displaying an image in the same window.
- * 
+ *
  * On can control the {@link Camera} with a {@ViewController}
  * and get notifyed by a {@link IViewPointChangedListener} that the view point
  * has changed. The control is relative to the center of the {@link Scene} and
  * is defined using polar coordinates.
- * 
+ *
  * The {@link View} supports post rendering through the addition of
  * {@link Renderer2d}s whose implementation can define Java2d calls to render on
  * top on OpenGL2.
- * 
+ *
  * Last, the {@link View} offers the ability to get an {@link AxeBox} for
  * embedding the {@link Scene} and getting values along axes.
- * 
+ *
  * @author Martin Pernollet
  */
 public class View {
@@ -92,6 +94,7 @@ public class View {
         this.bgViewport = new ImageViewport();
         this.viewOnTopListeners = new ArrayList<IViewIsVerticalEventListener>();
         this.viewPointChangedListeners = new ArrayList<IViewPointChangedListener>();
+        this.viewLifecycleListeners = new ArrayList<IViewLifecycleEventListener>();
         this.wasOnTopAtLastRendering = false;
 
         if (canvas instanceof CanvasSwing)
@@ -311,6 +314,7 @@ public class View {
         center = box.getCenter();
         axe.setAxe(box);
         //targetBox = box;
+        //System.out.println(box);
         viewbounds = box;
     }
 
@@ -518,6 +522,26 @@ public class View {
             vp.viewPointChanged(e);
     }
 
+    public boolean addViewLifecycleChangedListener(IViewLifecycleEventListener listener) {
+        return viewLifecycleListeners.add(listener);
+    }
+
+    public boolean removeViewLifecycleChangedListener(IViewLifecycleEventListener listener) {
+        return viewLifecycleListeners.remove(listener);
+    }
+
+    protected void fireViewLifecycleHasInit(ViewLifecycleEvent e) {
+        for (IViewLifecycleEventListener vp : viewLifecycleListeners)
+            vp.viewHasInit(e);
+    }
+
+    protected void fireViewLifecycleWillRender(ViewLifecycleEvent e) {
+        for (IViewLifecycleEventListener vp : viewLifecycleListeners)
+            vp.viewWillRender(e);
+    }
+
+    //viewLifecycleListeners
+
     /*******************************************************************/
 
     /**
@@ -570,7 +594,7 @@ public class View {
      * <p/>
      * If the scene bounds are Infinite, NaN or zero, for a given dimension, the
      * scaler will be set to 1 on the given dimension.
-     * 
+     *
      * @return a scaling factor for each dimension.
      */
     protected Coord3d squarify() {
@@ -629,7 +653,7 @@ public class View {
     }
 
     /**
-     * The init function 
+     * The init function
      * <ul>
      * <li>specifies general GL settings that impact the rendering quality and performance (computation speed).
      * <li>enable light management
@@ -643,15 +667,17 @@ public class View {
         initQuality(gl);
         initLights(gl);
         initResources(gl);
-        
+
         if(initBounds==null)
             setBoundManual(getScene().getGraph().getBounds());
         else
             setBoundManual(initBounds);
         //boundmode = ViewBoundMode.AUTO_FIT;
+
+        fireViewLifecycleHasInit(null);
     }
-    
-    
+
+
 
     public BoundingBox3d getInitBounds() {
         return initBounds;
@@ -740,12 +766,14 @@ public class View {
     /**********/
 
     public void render(GL2 gl, GLU glu) {
+    	fireViewLifecycleWillRender(null);
+
         renderBackground(gl, glu, 0f, 1f);
         renderScene(gl, glu);
         renderOverlay(gl);
         if (dimensionDirty)
             dimensionDirty = false;
-        
+
         cam.show(gl, new Transform(new Scale(scaling)), scaling);
     }
 
@@ -921,7 +949,7 @@ public class View {
     /**
      * Renders all provided {@link Tooltip}s and {@link Renderer2d}s on top of
      * the scene.
-     * 
+     *
      * Due to the behaviour of the {@link Overlay} implementation, Java2d
      * geometries must be drawn relative to the {@link Chart}'s
      * {@link IScreenCanvas}, BUT will then be stretched to fit in the
@@ -930,21 +958,21 @@ public class View {
      * Indeed, when View is not maximized (like the default behaviour), the
      * viewport remains square and centered in the canvas, meaning the Overlay
      * won't cover the full canvas area.
-     * 
+     *
      * In other words, the following piece of code draws a border around the
      * {@link View}, and not around the complete chart canvas, although queried
      * to occupy chart canvas dimensions:
-     * 
+     *
      * g2d.drawRect(1, 1, chart.getCanvas().getRendererWidth()-2,
      * chart.getCanvas().getRendererHeight()-2);
-     * 
+     *
      * {@link renderOverlay()} must be called while the OpenGL2 context for the
      * drawable is current, and after the OpenGL2 scene has been rendered.
      */
     public void renderOverlay(GL2 gl, ViewPort viewport) {
     	if(!hasOverlayStuffs())
     		return;
-    	
+
         gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // TODO: don't
                                                               // know why needed
                                                               // to allow
@@ -970,7 +998,7 @@ public class View {
             g2d.dispose();
         }
     }
-    
+
     protected boolean hasOverlayStuffs(){
     	return tooltips.size()>0 || renderers.size()>0;
     }
@@ -1052,6 +1080,7 @@ public class View {
     protected List<Renderer2d> renderers;
     protected List<IViewPointChangedListener> viewPointChangedListeners;
     protected List<IViewIsVerticalEventListener> viewOnTopListeners;
+    protected List<IViewLifecycleEventListener> viewLifecycleListeners;
     protected boolean wasOnTopAtLastRendering;
 
     protected static final float PI_div2 = (float) Math.PI / 2;
@@ -1066,6 +1095,6 @@ public class View {
     protected boolean viewDirty = false;
 
     protected static View current;
-    
+
     protected BoundingBox3d initBounds;
 }
