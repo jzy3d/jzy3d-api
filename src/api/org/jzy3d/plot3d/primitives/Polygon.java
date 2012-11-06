@@ -47,7 +47,8 @@ public class Polygon extends AbstractWireframeable implements ISingleColorable, 
 		if(transform!=null)
 			transform.execute(gl);
 		
-		mapper.preDraw(this);
+		if(mapper!=null)
+            mapper.preDraw(this);
 				
 		// Draw content of polygon
 		if(facestatus){
@@ -92,7 +93,8 @@ public class Polygon extends AbstractWireframeable implements ISingleColorable, 
 			    polygonOffsetFillDisable(gl);
 		}	
 		
-		mapper.postDraw(this);
+		if(mapper!=null)
+            mapper.postDraw(this);
 	}
 
 	protected void applyPolygonModeLine(GL2 gl) {

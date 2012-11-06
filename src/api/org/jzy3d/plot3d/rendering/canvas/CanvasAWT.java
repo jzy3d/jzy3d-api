@@ -74,7 +74,8 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 		new Thread(new Runnable() {
             public void run() {
             	//System.err.println("stopping canvas animator");
-                animator.stop();
+                if(animator!=null)
+                    animator.stop();
 				renderer = null;
 				view = null;
             }
