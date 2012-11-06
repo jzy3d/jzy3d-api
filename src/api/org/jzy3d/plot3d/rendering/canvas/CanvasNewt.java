@@ -47,6 +47,8 @@ public class CanvasNewt extends Panel implements IScreenCanvas{
     
     @Override
     public void dispose(){
+        if(animator!=null)
+            animator.stop();
         window.destroy();
         canvas.destroy();
         
