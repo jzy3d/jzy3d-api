@@ -51,6 +51,8 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas{
 	}
 	
 	public void dispose(){
+	    if(animator!=null)
+            animator.stop();
 	    if(renderer!=null)
 	        renderer.dispose(this);
 		renderer = null;
