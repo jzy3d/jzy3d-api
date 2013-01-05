@@ -2,6 +2,7 @@ package org.jzy3d.replay.recorder;
 
 import java.awt.AWTException;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Insets;
 import java.awt.Robot;
@@ -13,10 +14,11 @@ import java.awt.event.WindowEvent;
 import java.util.Iterator;
 
 import org.jzy3d.replay.recorder.events.IComponentEventLog;
+import org.jzy3d.replay.recorder.events.IComponentEventLog.ComponentEventType;
 import org.jzy3d.replay.recorder.events.IEventLog;
 import org.jzy3d.replay.recorder.events.IKeyEventLog;
-import org.jzy3d.replay.recorder.events.IMouseEventLog;
 import org.jzy3d.replay.recorder.events.IKeyEventLog.KeyEventType;
+import org.jzy3d.replay.recorder.events.IMouseEventLog;
 import org.jzy3d.replay.recorder.events.IMouseEventLog.MouseEventType;
 import org.jzy3d.replay.recorder.events.IWindowEventLog;
 
@@ -157,7 +159,11 @@ public class EventReplay extends Timestamped{
 	}
 
 	public void replay(IComponentEventLog component) {
-		log(component, " not supported");
+	    if(component.getType().equals(ComponentEventType.COMPONENT_RESIZED)){
+	        Dimension size = component.getSize();
+	        frame.setSize(size);
+	    }
+		//log(component, " not supported");
 	}
 	
 	protected void log(IEventLog event){

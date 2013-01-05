@@ -1,5 +1,7 @@
 package org.jzy3d.replay.recorder.events;
 
+import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,8 +49,9 @@ public class EventParser {
 	static Pattern windowOpenedPattern = Pattern.compile("WINDOW_OPENED.*, since:("+num+")");
 	static Pattern windowClosingPattern = Pattern.compile("WINDOW_CLOSING.*, since:("+num+")");
 	static Pattern windowClosedPattern = Pattern.compile("WINDOW_CLOSED.*, since:("+num+")");
-
-	static Pattern componentResizedPattern = Pattern.compile("COMPONENT_RESIZED.*, since:("+num+")");
+	
+    static Pattern componentResizedPattern = Pattern.compile("COMPONENT_RESIZED, size:java.awt.Dimension[width=("+num+"),height=("+num+")], bounds:java.awt.Rectangle[x=("+num+"),y=("+num+"),width=("+num+"),height=("+num+")] since:("+num+")");
+	//static Pattern componentResizedPattern = Pattern.compile("COMPONENT_RESIZED.*, since:("+num+")");
 	static Pattern componentMovedPattern = Pattern.compile("COMPONENT_MOVED.*, since:("+num+")");
 	
 	public IEventLog parse(String event){
@@ -138,7 +141,14 @@ public class EventParser {
 	}
 	
 	protected IComponentEventLog parseComponentEvent(Matcher matcher, ComponentEventType type) {
-		int s = Integer.parseInt(matcher.group(1));
-		return new ComponentEventLog(type, s);
+		int w = Integer.parseInt(matcher.group(1));
+		int h = Integer.parseInt(matcher.group(2));
+		int rx = Integer.parseInt(matcher.group(3));
+        int ry = Integer.parseInt(matcher.group(4));
+        int rw = Integer.parseInt(matcher.group(5));
+        int rh = Integer.parseInt(matcher.group(6));
+        int s = Integer.parseInt(matcher.group(7));
+        
+        return new ComponentEventLog(type, new Dimension(w,h), new Rectangle(rx,ry,rw,rh), s);
 	}
 }
