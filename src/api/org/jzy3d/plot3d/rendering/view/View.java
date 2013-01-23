@@ -34,6 +34,7 @@ import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightSet;
+import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.tooltips.ITooltipRenderer;
 import org.jzy3d.plot3d.rendering.tooltips.Tooltip;
@@ -48,7 +49,7 @@ import com.jogamp.opengl.util.awt.Overlay;
 /**
  * A {@link View} holds a {@link Scene}, a {@link LightSet}, an {@link ICanvas}
  * to render into. It is the responsability to layout a set of concrete
- * {@link AbstractViewport}s such as the {@Camera} rendering the scene
+ * {@link AbstractViewportManager}s such as the {@Camera} rendering the scene
  * or an {@link ImageViewport} for displaying an image in the same window.
  *
  * On can control the {@link Camera} with a {@ViewController}
@@ -88,6 +89,7 @@ public class View {
         this.scene = scene;
         this.canvas = canvas;
         this.quality = quality;
+        this.annotations = new Scene(false);
 
         this.renderers = new ArrayList<Renderer2d>(1);
         this.tooltips = new ArrayList<ITooltipRenderer>();
@@ -108,8 +110,26 @@ public class View {
         else
             throw new RuntimeException("unhandled canvas! " + canvas);
         this.glu = new GLU();
+        
+        this.scene.getGraph().getStrategy().setView(this);
 
         current = this;
+    }
+    
+    public Chart getChart() {
+        return chart;
+    }
+
+    public void setChart(Chart chart) {
+        this.chart = chart;
+    }
+    
+    public boolean isSlave() {
+        return slave;
+    }
+
+    public void setSlave(boolean slave) {
+        this.slave = slave;
     }
 
     public void dispose() {
@@ -317,6 +337,14 @@ public class View {
         //System.out.println(box);
         viewbounds = box;
     }
+    
+    /**
+     * Return the central point of the view scene, that is the last bounding box center
+     * set by {@link lookToBox(BoundingBox3d box)}
+     */
+    public Coord3d getCenter(){
+        return center;
+    }
 
     /** Get the {@link AxeBox}'s {@link BoundingBox3d} */
     public BoundingBox3d getBounds() {
@@ -340,6 +368,8 @@ public class View {
     /**
      * Set the viewpoint using polar coordinates relative to the target (i.e.
      * the center of the scene).
+     * Only X and Y dimensions are required, as the distance to center will be
+     * computed automatically by {@link updateCamera()}.
      */
     public void setViewPoint(Coord3d polar, boolean updateView) {
         viewpoint = polar;
@@ -351,20 +381,30 @@ public class View {
         fireViewPointChangedEvent(new ViewPointChangedEvent(this, polar));
     }
 
+    /** 
+     * Set the viewpoint and query a view update.
+     * @see {@link setViewPoint(Coord3d polar, boolean updateView)}
+     */
     public void setViewPoint(Coord3d polar) {
         setViewPoint(polar, true);
     }
 
-    /** Get the viewpoint. */
+    /** Get the viewpoint. The Z dimension is the one defined by {@link updateCamera()},
+     * which depends on the view scaling.
+     * 
+     * @see {@link setViewPoint(Coord3d polar, boolean updateView)}
+     */
     public Coord3d getViewPoint() {
         return viewpoint;
     }
 
+    /** Return the last used view scaling that was set according to
+     * the {@link setSquared(boolean v)} status.*/
     public Coord3d getLastViewScaling() {
         return scaling;
     }
 
-    /****************************** CONTROLS ANNOTATIONS & GENERAL RENDERING *******************************/
+    /* CONTROLS ANNOTATIONS & GENERAL RENDERING */
 
     public void setAxe(AxeBox ax) {
         axe = ax;
@@ -403,7 +443,7 @@ public class View {
     public void setBackgroundImage(BufferedImage i) {
         bgImg = i;
         bgViewport.setImage(bgImg, bgImg.getWidth(), bgImg.getHeight());
-        bgViewport.setStretchToFill(true);
+        bgViewport.setViewportMode(ViewportMode.STRETCH_TO_FILL);
         // when stretched, applyViewport() is cheaper to compute, and this does
         // not change
         // the picture rendering.
@@ -434,12 +474,11 @@ public class View {
         return cameraMode;
     }
 
-    public void getMaximized() {
-        this.cam.getStretchToFill();
-    }
-
     public void setMaximized(boolean status) {
-        this.cam.setStretchToFill(status);
+        if(status)
+            this.cam.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+        else
+            this.cam.setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
     }
 
     public Scene getScene() {
@@ -478,6 +517,10 @@ public class View {
 
     public ICanvas getCanvas() {
         return canvas;
+    }
+    
+    public Graph getAnnotations(){
+        return annotations.getGraph();
     }
 
     /*************************************************/
@@ -540,9 +583,7 @@ public class View {
             vp.viewWillRender(e);
     }
 
-    //viewLifecycleListeners
-
-    /*******************************************************************/
+    /* */
 
     /**
      * Select between an automatic bounding (that allows fitting the entire
@@ -631,10 +672,10 @@ public class View {
         return new Coord3d(lmax / xLen, lmax / yLen, lmax / zLen);
     }
 
-    /********************************* GL2 **********************************/
+    /* GL */
 
     public GL2 getCurrentGL() {
-        getCurrentContext().makeCurrent(); // TODO: should really do that??
+        getCurrentContext().makeCurrent(); 
         return getCanvasAsGLAutoDrawable().getGL().getGL2();
     }
 
@@ -646,14 +687,13 @@ public class View {
 
     protected GLAutoDrawable getCanvasAsGLAutoDrawable() {
         if (canvas instanceof GLAutoDrawable) {
-            GLAutoDrawable c = ((GLAutoDrawable) canvas);
             return ((GLAutoDrawable) canvas);
         } else
             throw new RuntimeException("Unexpected instance type");
     }
 
     /**
-     * The init function
+     * The initialization function:
      * <ul>
      * <li>specifies general GL settings that impact the rendering quality and performance (computation speed).
      * <li>enable light management
@@ -756,11 +796,15 @@ public class View {
     }
 
     public void clearColorAndDepth(GL2 gl) {
-        gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a); // clear
-                                                                     // with
-                                                                     // background
+        gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a); 
         gl.glClearDepth(1);
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+        
+        if(slave){
+            return;
+        }
+        else{
+            gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+        }
     }
 
     /**********/
@@ -784,7 +828,7 @@ public class View {
         }
     }
 
-    public void renderBackground(GL2 gl, GLU glu, ViewPort viewport) {
+    public void renderBackground(GL2 gl, GLU glu, ViewportConfiguration viewport) {
         if (bgImg != null) {
             bgViewport.setViewPort(viewport);
             bgViewport.render(gl, glu);
@@ -792,18 +836,20 @@ public class View {
     }
 
     public void renderScene(GL2 gl, GLU glu) {
-        renderScene(gl, glu, new ViewPort(canvas.getRendererWidth(), canvas.getRendererHeight()));
+        renderScene(gl, glu, new ViewportConfiguration(canvas.getRendererWidth(), canvas.getRendererHeight()));
     }
 
     public void renderScene(GL2 gl, GLU glu, float left, float right) {
-        renderScene(gl, glu, ViewPort.slice(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right));
+        ViewportConfiguration vc = ViewportBuilder.column(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
+        renderScene(gl, glu, vc);
     }
 
-    public void renderScene(GL2 gl, GLU glu, ViewPort viewport) {
+    public void renderScene(GL2 gl, GLU glu, ViewportConfiguration viewport) {
         updateQuality(gl);
         updateCamera(gl, glu, viewport, computeScaling());
         renderAxeBox(gl, glu);
         renderSceneGraph(gl, glu);
+        renderAnnotations(gl, glu);
     }
 
     public void updateQuality(GL2 gl) {
@@ -833,17 +879,15 @@ public class View {
         return boundsScaled;
     }
 
-    public void updateCamera(GL2 gl, GLU glu, ViewPort viewport, BoundingBox3d boundsScaled) {
+    public void updateCamera(GL2 gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
         updateCamera(gl, glu, viewport, boundsScaled, (float) boundsScaled.getRadius());
     }
 
-    public void updateCamera(GL2 gl, GLU glu, ViewPort viewport, BoundingBox3d boundsScaled, float sceneRadiusScaled) {
+    public void updateCamera(GL2 gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled, float sceneRadiusScaled) {
         Coord3d target = center.mul(scaling);
 
         Coord3d eye;
-        viewpoint.z = sceneRadiusScaled * 2; // maintain a reasonnable distance
-                                             // to the scene for viewing it.
-
+        viewpoint.z = sceneRadiusScaled * factorViewPointDistance; 
         if (viewmode == ViewPositionMode.FREE) {
             eye = viewpoint.cartesian().add(target);
         } else if (viewmode == ViewPositionMode.TOP) {
@@ -890,7 +934,10 @@ public class View {
 
         // Set rendering volume
         if (viewmode == ViewPositionMode.TOP) {
-            cam.setRenderingSphereRadius(Math.max(boundsScaled.getXmax() - boundsScaled.getXmin(), boundsScaled.getYmax() - boundsScaled.getYmin()) / 2);
+            float xdiam = boundsScaled.getXmax() - boundsScaled.getXmin();
+            float ydiam = boundsScaled.getYmax() - boundsScaled.getYmin();
+            float radius = Math.max(xdiam, ydiam) / 2;
+            cam.setRenderingSphereRadius(radius);
             correctCameraPositionForIncludingTextLabels(gl, glu, viewport); // quite
                                                                             // experimental!
         } else {
@@ -932,8 +979,8 @@ public class View {
     public void renderSceneGraph(GL2 gl, GLU glu, boolean light) {
         if (light) {
             scene.getLightSet().apply(gl, scaling);
-            // gl.glEnable(GL2.GL_LIGHTING);
-            // gl.glEnable(GL2.GL_LIGHT0);
+            gl.glEnable(GL2.GL_LIGHTING);
+            gl.glEnable(GL2.GL_LIGHT0);
             // gl.glDisable(GL2.GL_LIGHTING);
         }
 
@@ -943,7 +990,7 @@ public class View {
     }
 
     public void renderOverlay(GL2 gl) {
-        renderOverlay(gl, new ViewPort(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight()));
+        renderOverlay(gl, new ViewportConfiguration(canvas));
     }
 
     /**
@@ -969,7 +1016,7 @@ public class View {
      * {@link renderOverlay()} must be called while the OpenGL2 context for the
      * drawable is current, and after the OpenGL2 scene has been rendered.
      */
-    public void renderOverlay(GL2 gl, ViewPort viewport) {
+    public void renderOverlay(GL2 gl, ViewportConfiguration viewport) {
     	if(!hasOverlayStuffs())
     		return;
 
@@ -998,12 +1045,18 @@ public class View {
             g2d.dispose();
         }
     }
+    
+    public void renderAnnotations(GL2 gl, GLU glu){
+        Transform transform = new Transform(new Scale(scaling));
+        annotations.getGraph().setTransform(transform);
+        annotations.getGraph().draw(gl, glu, null);
+    }
 
     protected boolean hasOverlayStuffs(){
     	return tooltips.size()>0 || renderers.size()>0;
     }
 
-    protected void correctCameraPositionForIncludingTextLabels(GL2 gl, GLU glu, ViewPort viewport) {
+    protected void correctCameraPositionForIncludingTextLabels(GL2 gl, GLU glu, ViewportConfiguration viewport) {
         cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
         axe.draw(gl, glu, cam);
@@ -1025,13 +1078,16 @@ public class View {
         cam.setEye(eye);
     }
 
-    /******************************************************************/
+    /* */
 
     public static View current() {
         return current;
     }
 
-    /******************************************************************/
+    /* */
+
+    /** A view may optionnaly know its parent chart. */
+    protected Chart chart;
 
     protected GLU glu;
 
@@ -1056,6 +1112,8 @@ public class View {
     protected Overlay overlay;
     protected Scene scene;
     protected ICanvas canvas;
+    
+    protected Scene annotations;
 
     protected Coord3d viewpoint;
     protected Coord3d center;
@@ -1097,4 +1155,11 @@ public class View {
     protected static View current;
 
     protected BoundingBox3d initBounds;
+    
+    /** Applies a factor to the default camera distance which is set to the radius of the scene bounds. 
+     * Changing this value also change the camera clipping planes. */
+    protected float factorViewPointDistance = 2;
+    
+    /** A slave view won't clear its color and depth buffer before rendering */
+    protected boolean slave = false;
 }

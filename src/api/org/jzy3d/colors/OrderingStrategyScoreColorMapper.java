@@ -3,10 +3,12 @@ package org.jzy3d.colors;
 import java.util.List;
 
 import org.jzy3d.colors.colormaps.IColorMap;
-import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Statistics;
+import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Point;
+import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 
@@ -40,10 +42,16 @@ public class OrderingStrategyScoreColorMapper extends ColorMapper{
         AbstractOrderingStrategy s = sceneGraph.getStrategy();
         List<AbstractDrawable> drawable = sceneGraph.getDecomposition();      
 
-        double[] scores = new double[drawable.size()];
+        double[] scores = new double[getNumCoordinates(drawable, false)];
         int k = 0;
         for(AbstractDrawable d: drawable){
             scores[k++] = s.score(d);
+            if(d instanceof Polygon){
+                Polygon p = (Polygon)d;
+                for(Point pt: p.getPoints()){
+                    scores[k++] = s.score(pt.getCoord());
+                }
+            }
         }
         
         min = Statistics.min(scores);
@@ -53,6 +61,24 @@ public class OrderingStrategyScoreColorMapper extends ColorMapper{
             System.err.println(OrderingStrategyScoreColorMapper.class.getSimpleName() + " !! min = max = "+min);
             //Array.print(scores);
         }
+        //System.out.println("min="+min+" max="+max);
+    }
+    
+    protected int getNumCoordinates(List<AbstractDrawable> drawables, boolean onlyBaryCenter){
+        if(onlyBaryCenter)
+            return drawables.size();
+        else{
+            int n = drawables.size();
+            
+            for(AbstractDrawable d: drawables){
+                if(d instanceof Polygon){
+                    Polygon p = (Polygon)d;
+                    n+=p.size();
+                }
+            }
+            return n;
+        }
+        
     }
     
     public Color getColor(Coord3d coord){

@@ -74,6 +74,7 @@ public class Chart{
         // Set up the view
         view = canvas.getView();
 		view.setBackgroundColor(Color.WHITE);
+		view.setChart(this);
 	}
     
     public IFrame display(Rectangle rectangle, String title){
@@ -117,6 +118,12 @@ public class Chart{
         getView().project();
         render();
     }
+	
+	public View newView(){
+	    View v = scene.newView(canvas, quality);//factory.newView(scene, canvas, quality);
+	    v.setSlave(true);
+	    return v;
+	}
 	
 	/* */
 	

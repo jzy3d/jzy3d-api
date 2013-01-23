@@ -4,7 +4,7 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.Polygon.PolygonMode;
+import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
 
 /**
  * A composite implementation of a parallelepiped, meaning it can be decomposed

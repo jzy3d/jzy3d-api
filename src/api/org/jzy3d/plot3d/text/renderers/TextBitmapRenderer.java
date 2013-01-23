@@ -43,6 +43,9 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 	public BoundingBox3d drawText(GL2 gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset){
 		gl.glColor3f(color.r, color.g, color.b);
 		
+		if(cam==null)
+		    return null;
+		
 		Coord3d posScreen = cam.modelToScreen(gl, glu, position);
 		
 		//System.out.println(posScreen);

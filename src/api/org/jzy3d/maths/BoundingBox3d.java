@@ -31,7 +31,7 @@ public class BoundingBox3d {
 	
 	public BoundingBox3d(Polygon polygon){
 		reset();
-		for(Point c: polygon.getAll())
+		for(Point c: polygon.getPoints())
 			add( c );
 	}
 		

@@ -37,7 +37,7 @@ public class Scene {
 	}
 	
 	public Scene(boolean graphsort){
-		this(false, new ChartComponentFactory());
+		this(graphsort, new ChartComponentFactory());
 	}
 	
 	public Scene(boolean graphsort, IChartComponentFactory factory){
