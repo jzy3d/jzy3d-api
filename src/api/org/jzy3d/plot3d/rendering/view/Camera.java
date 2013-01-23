@@ -31,7 +31,7 @@ import org.jzy3d.plot3d.transform.Transform;
  * 
  * @author Martin Pernollet
  */
-public class Camera extends AbstractViewport {
+public class Camera extends AbstractViewportManager {
 
     /**
      * Set up a Camera looking at target, with a viewpoint standing at
@@ -46,7 +46,7 @@ public class Camera extends AbstractViewport {
         setViewPort(1, 1, 0, 1);
         setRenderingDepth(0.5f, 100000f);
         setRenderingSphereRadius(1);
-        setStretchToFill(false);
+        setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
     }
 
     /******************************************************************/
@@ -81,11 +81,14 @@ public class Camera extends AbstractViewport {
         return this.up;
     }
 
+    /** Returns true if the camera is 'looking up', 
+     * in other word if the eye's Z value is inferior 
+     * to the target's Z value. */
     public boolean isTiltUp() {
         return eye.z < target.z;
     }
 
-    /******************************************************************/
+    /* */
 
     /**
      * Set the radius of the sphere that will be contained into the rendered
@@ -94,7 +97,6 @@ public class Camera extends AbstractViewport {
      */
     public void setRenderingSphereRadius(float radius) {
         this.radius = radius;
-        // this.far = near + (float)eye.distance(target) + radius;
         this.near = (float) eye.distance(target) - radius * 2;
         this.far = (float) eye.distance(target) + radius * 2;
     }
@@ -392,13 +394,26 @@ public class Camera extends AbstractViewport {
 
     public void doShoot(GL2 gl, GLU glu, CameraMode projection) {
         // Set viewport
-        applyViewPort(gl, glu);
-
+        ViewportConfiguration viewport = applyViewport(gl, glu);
+        
         // Set perspective
         if (projection == CameraMode.PERSPECTIVE) {
+            boolean stretchToFill = ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode());
+            
             glu.gluPerspective(computeFieldOfView(radius * 2, eye.distance(target)), stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1, near, far);
         } else if (projection == CameraMode.ORTHOGONAL) {
-            gl.glOrtho(-radius, +radius, -radius, +radius, near, far);
+            if(ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
+                gl.glOrtho(-radius, +radius , -radius, +radius, near, far);
+            else if(ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
+                gl.glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
+            else if(ViewportMode.SQUARE.equals(viewport.getMode()))
+                gl.glOrtho(-radius, +radius , -radius, +radius, near, far);
+            
+            //gl.glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius / viewport.ratio(), +radius/ viewport.ratio(), near, far);
+            //gl.glOrtho(-radius / viewport.ratio(), +radius / viewport.ratio(), -radius, +radius, near, far);
+            //gl.glOrtho(-radius, +radius, -radius * viewport.ratio(), +radius * viewport.ratio(), near, far);
+            
+            //gl.glOrtho(-radius, +radius, -radius, +radius, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         } else
             throw new RuntimeException("Camera.shoot(): unknown projection mode '" + projection + "'");
 
@@ -435,9 +450,9 @@ public class Camera extends AbstractViewport {
      */
     public double getDistance(AbstractDrawable drawable, Coord3d viewScale) {
         if(useSquaredDistance)
-            return drawable.getBarycentre().distanceSq(getEye().mul(viewScale));
+            return drawable.getBarycentre().distanceSq(getEye().div(viewScale));
         else
-            return drawable.getBarycentre().distance(getEye().mul(viewScale));
+            return drawable.getBarycentre().distance(getEye().div(viewScale));
     }
 
     /**
@@ -455,9 +470,9 @@ public class Camera extends AbstractViewport {
      */
     public double getDistance(Coord3d coord, Coord3d viewScale) {
         if(useSquaredDistance)
-            return coord.distanceSq(getEye().mul(viewScale));
+            return coord.distanceSq(getEye().div(viewScale));
         else
-            return coord.distance(getEye().mul(viewScale));
+            return coord.distance(getEye().div(viewScale));
     }
     
     public boolean isUseSquaredDistance() {
@@ -475,9 +490,6 @@ public class Camera extends AbstractViewport {
     public void setUseSquaredDistance(boolean useSquaredDistance) {
         this.useSquaredDistance = useSquaredDistance;
     }
-
-    protected boolean useSquaredDistance = true;
-
 
     /* */
 
@@ -505,6 +517,9 @@ public class Camera extends AbstractViewport {
     protected float radius;
     protected float near;
     protected float far;
+    
+    protected boolean useSquaredDistance = true;
+
 
     /** The polar default view point, i.e. Coord3d(Math.PI/3,Math.PI/5,500). */
     protected static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 5, 500);

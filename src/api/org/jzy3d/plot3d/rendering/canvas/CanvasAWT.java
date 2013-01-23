@@ -1,7 +1,5 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import java.awt.AWTException;
-import java.awt.Robot;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;

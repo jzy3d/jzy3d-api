@@ -206,8 +206,6 @@ public class Graph{
         return monotypes;
 	}
 
-
-
 	/** Update all interactive {@link AbstractDrawable} projections*/
 	public synchronized void project(GL2 gl, GLU glu, Camera camera){
 	    //synchronized(components){

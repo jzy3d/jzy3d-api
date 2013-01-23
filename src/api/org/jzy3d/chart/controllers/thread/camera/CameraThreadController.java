@@ -3,12 +3,14 @@ package org.jzy3d.chart.controllers.thread.camera;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.plot3d.rendering.view.Camera;
 
 
-/** The ViewAnimatedController provides a Thread for controlling the Camera and make
- * it turn around the view point along its the azimuth dimension.
+/** The {@link CameraThreadController} provides a Thread for controlling 
+ * the {@link Camera} and make it turn around the view point along 
+ * its the azimuth dimension.
+ * 
  * @author Martin Pernollet
- *
  */
 public class CameraThreadController extends AbstractCameraController implements Runnable {
 	
@@ -68,11 +70,11 @@ public class CameraThreadController extends AbstractCameraController implements 
 
 
 
-    /**************************************************************/
+    /* */
 	
-	private Coord2d    move;
+	protected Coord2d    move;
 	
-	private Thread process  = null;
-	private int    sleep    = 1;//1000/25; // nb milisecond wait between two frames
-	private float  step     = 0.0005f;
+	protected Thread process  = null;
+	protected int    sleep    = 1;//1000/25; // nb milisecond wait between two frames
+	protected float  step     = 0.0005f;
 }

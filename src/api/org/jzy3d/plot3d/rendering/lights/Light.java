@@ -8,7 +8,11 @@ import org.jzy3d.maths.Coord3d;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class Light {
-	public Light(int id){
+    public Light(){
+        this(lightCount++, true);
+    }
+
+    public Light(int id){
 		this(id, true);
 	}
 	
@@ -38,7 +42,7 @@ public class Light {
 				gl.glDisable(GL2.GL_LIGHTING);
 		        gl.glColor3f(0.0f, 1.0f, 1.0f);						        
 		        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-		        glut.glutSolidCube(10);
+                glut.glutSolidCube(representationRadius);
 		        gl.glEnable(GL2.GL_LIGHTING);
 			}
 	        
@@ -62,9 +66,15 @@ public class Light {
 		return representationDisplayed;
 	}
 	
-	/*********************************************/
-	
-	public int getId(){
+	public int getRepresentationRadius() {
+        return representationRadius;
+    }
+
+    public void setRepresentationRadius(int representationRadius) {
+        this.representationRadius = representationRadius;
+    }
+
+    public int getId(){
 		return lightId;
 	}
 
@@ -108,7 +118,7 @@ public class Light {
 		this.specularColor = specularColor;
 	}
 
-	/*********************************************/
+	/* */
 	
 	protected int lightId;
 	protected boolean enabled;
@@ -119,6 +129,9 @@ public class Light {
 	protected float positionZero[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	
 	protected boolean representationDisplayed;
-	
+    protected int representationRadius = 10;
+
 	protected static GLUT glut = new GLUT();
+	
+    protected static int lightCount;
 }
