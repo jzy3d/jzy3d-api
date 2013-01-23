@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.plot3d.rendering.lights.Light;
 
 public class LightKeyController implements KeyListener{
     
@@ -18,6 +19,11 @@ public class LightKeyController implements KeyListener{
         this.lightId = lightId;
     }
 
+    public LightKeyController(Chart chart, Light light) {
+        super();
+        this.chart = chart;
+        this.lightId = light.getId();
+    }
 
 
     @Override
