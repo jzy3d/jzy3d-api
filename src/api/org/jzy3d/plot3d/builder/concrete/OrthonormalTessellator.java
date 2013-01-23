@@ -10,6 +10,7 @@ import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.builder.Tessellator;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
@@ -20,6 +21,8 @@ import org.jzy3d.plot3d.primitives.Shape;
  * 
  * On this model, one input coordinate is represented by one {@link Polygon}, for which each point is
  * a mean point between two grid ticks:
+ * <pre>
+ * <code>
  * 
  *  ^                           ^
  *  |                           |
@@ -31,6 +34,8 @@ import org.jzy3d.plot3d.primitives.Shape;
  *  |                           |
  *  |---|---|---|-->            |---|---|---|-->
  *  
+ *  </code>
+ *  </pre>
  *  
  *  In this figure, the representation of a coordinate ("o" on the left) is a polygon
  *  made of mean points ("*" on the right) that require the existence of four surrounding
@@ -61,15 +66,16 @@ public class OrthonormalTessellator extends Tessellator{
 	 * In the following example, the o represent a NaN Z value, meaning that
 	 * there was no (x[i],y[i],z[i]) triplet for representing it correctly:
 	 * <br>
+	 * <pre>
 	 * <code>
-	 * 11111111 y<br>
-	 * 11111111  <br>
-	 * 11o11111  <br>
-	 * 11111111  <br>
-	 * &nbsp;    <br>
-	 * x         <br>
-	 *           <br>
-	 * <code>
+	 * 11111111 y
+	 * 11111111  
+	 * 11o11111  
+	 * 11111111  
+	 * 
+	 * x         
+	 * </code>
+	 * </pre>
 	 * <br> 
 	 * 
 	 * @param x list of x coordinates
@@ -169,16 +175,16 @@ public class OrthonormalTessellator extends Tessellator{
 		
 	/**************************************************************************************/
 	
-	public List<Polygon> getSquarePolygonsOnCoordinates(){
+	public List<AbstractDrawable> getSquarePolygonsOnCoordinates(){
 		return getSquarePolygonsOnCoordinates(null, null);
 	}
 	
-	public List<Polygon> getSquarePolygonsAroundCoordinates(){
+	public List<AbstractDrawable> getSquarePolygonsAroundCoordinates(){
 		return getSquarePolygonsAroundCoordinates(null, null);
 	}
 	
-	public List<Polygon> getSquarePolygonsOnCoordinates(ColorMapper cmap, Color colorFactor){
-		List<Polygon> polygons = new ArrayList<Polygon>();
+	public List<AbstractDrawable> getSquarePolygonsOnCoordinates(ColorMapper cmap, Color colorFactor){
+		List<AbstractDrawable> polygons = new ArrayList<AbstractDrawable>();
 		
 		for(int xi=0; xi<x.length-1; xi++){
 			for(int yi=0; yi<y.length-1; yi++){
@@ -202,17 +208,15 @@ public class OrthonormalTessellator extends Tessellator{
 				}
 				
 				// Store quad
-				Polygon quad = new Polygon();
-				for(int pi=0; pi<p.length; pi++)
-					quad.add(p[pi]);
-				polygons.add(quad);
+				AbstractDrawable quad = newQuad(p);
+                polygons.add(quad);
 			}
 		}	
 		return polygons;
 	}
 	
-	public List<Polygon> getSquarePolygonsAroundCoordinates(ColorMapper cmap, Color colorFactor){
-		List<Polygon> polygons = new ArrayList<Polygon>();
+	public List<AbstractDrawable> getSquarePolygonsAroundCoordinates(ColorMapper cmap, Color colorFactor){
+		List<AbstractDrawable> polygons = new ArrayList<AbstractDrawable>();
 		
 		for(int xi=1; xi<x.length-1; xi++){
 			for(int yi=1; yi<y.length-1; yi++){
@@ -236,9 +240,7 @@ public class OrthonormalTessellator extends Tessellator{
 				}
 				
 				// Store quad
-				Polygon quad = new Polygon();
-				for(int pi=0; pi<p.length; pi++)
-					quad.add(p[pi]);
+				AbstractDrawable quad = newQuad(p);
 				polygons.add(quad);
 			}
 		}	
@@ -280,7 +282,14 @@ public class OrthonormalTessellator extends Tessellator{
 		return !Float.isNaN(p.xyz.z);
 	}
 	
-	/*****************************************************************************************/
+	protected AbstractDrawable newQuad(Point p[]){
+	    Polygon quad = new Polygon();
+        for(int pi=0; pi<p.length; pi++)
+            quad.add(p[pi]);
+        return quad;
+	}
+	
+	/* */
 	
 	protected float x[];
 	protected float y[];

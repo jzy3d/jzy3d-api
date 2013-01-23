@@ -70,7 +70,7 @@ public abstract class AbstractMouseSelector implements MouseListener, MouseMotio
 	 * 
 	 * g2d.drawRect(1, 1, chart.getCanvas().getRendererWidth()-2, chart.getCanvas().getRendererHeight()-2);
 	 * 
-	 * @see {@link AbstractViewport} and {@link Camera}
+	 * @see {@link AbstractViewportManager} and {@link Camera}
 	 */
 	protected abstract void drawSelection(Graphics2D g, int width, int height);
 	

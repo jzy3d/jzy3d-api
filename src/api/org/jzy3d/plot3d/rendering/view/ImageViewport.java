@@ -14,10 +14,10 @@ import org.jzy3d.io.GLImage;
  * 
  * @author Martin Pernollet
  */
-public class ImageViewport extends AbstractViewport{
+public class ImageViewport extends AbstractViewportManager{
 
 	public ImageViewport(){
-		setStretchToFill(false);
+	    setViewportMode(ViewportMode.SQUARE);
 	}
 
 	/** Renders the picture into the window, according to the viewport settings.
@@ -35,7 +35,7 @@ public class ImageViewport extends AbstractViewport{
 		gl.glMatrixMode( GL2.GL_PROJECTION );
 		gl.glPushMatrix();
 		gl.glLoadIdentity();
-		applyViewPort(gl, glu);
+		applyViewport(gl, glu);
 		gl.glOrtho(0, screenWidth, 0, screenHeight, -1, 1);
 		
 		// Zoom and layout

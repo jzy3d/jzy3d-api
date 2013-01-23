@@ -7,6 +7,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
@@ -64,8 +65,8 @@ public class RingTessellator extends OrthonormalTessellator{
 	 * @param ringMax the maximum radius of this ring.
 	 * @param colorFactor a weighting factor for the color returned by the Colormap.
 	 */
-	public List<Polygon> getInterpolatedRingPolygons(){
-		List<Polygon> polygons = new ArrayList<Polygon>();
+	public List<AbstractDrawable> getInterpolatedRingPolygons(){
+		List<AbstractDrawable> polygons = new ArrayList<AbstractDrawable>();
 		
 		boolean[] isIn; 
 

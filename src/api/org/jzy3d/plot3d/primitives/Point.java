@@ -114,15 +114,28 @@ public class Point extends AbstractDrawable implements ISingleColorable{
 		return xyz.distance(camera.getEye());
 	}
 	
-	/**********************************************************************/
-
+	public Point clone(){
+	    Point p = new Point(xyz.clone(), rgb.clone());
+	    p.setWidth(width);
+	    return p;
+	}
 	public String toString(int depth){
 		return (Utils.blanks(depth) + "(Point) coord=" + xyz + ", color=" + rgb);
 	}
 	
-	/**********************************************************************/
 	
-	public Coord3d xyz;
+	/* */
+	
+	public Coord3d getCoord() {
+        return xyz;
+    }
+
+    public void setCoord(Coord3d xyz) {
+        this.xyz = xyz;
+    }
+
+
+    public Coord3d xyz;
 	public Color   rgb;
 	public float   width;
 }

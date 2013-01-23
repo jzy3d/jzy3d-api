@@ -18,6 +18,7 @@ public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
 	}
 	
 	public BarycentreOrderingStrategy(View view){
+	    super();
 	    this.view = view;
 	}
 	
@@ -30,7 +31,7 @@ public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
 	public int compare(AbstractDrawable d1, AbstractDrawable d2) {
 		if(camera == null)
 			throw new RuntimeException("No available camera for computing BarycentreOrderingStrategy");
-		if(d1.equals(d2)) // reflexivity
+		if(d1.equals(d2))
 			return 0;
 		return comparison(score(d1), score(d2));
 	}
@@ -50,16 +51,4 @@ public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
         else
             return camera.getDistance(coord);
     }
-    
-    public View getView() {
-        return view;
-    }
-
-    public void setView(View view) {
-        this.view = view;
-    }
-
-
-
-    protected View view;
 }

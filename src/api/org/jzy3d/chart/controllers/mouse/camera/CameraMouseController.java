@@ -12,8 +12,6 @@ import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.MouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 
 

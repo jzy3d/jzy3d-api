@@ -34,13 +34,11 @@ public class ChartScene extends Scene {
 	}
 	
 	public View newView(ICanvas canvas, Quality quality){
-		if(nview>0)
-			throw new RuntimeException("A view has already been defined for this scene. Can not use several views.");
-		else
+		//if(nview>0)
+		//	throw new RuntimeException("A view has already been defined for this scene. Can not use several views.");
+		//else
 			nview++;
-		
-		view = factory.newView(this, canvas, quality);
-		views.add(view);
+		view = super.newView(canvas, quality);
 		return view;
 	}
 	

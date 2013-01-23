@@ -10,6 +10,7 @@ import javax.media.opengl.glu.GLU;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 
 
@@ -21,6 +22,7 @@ import org.jzy3d.plot3d.transform.Transform;
  *
  */
 public abstract class AbstractOrderingStrategy implements Comparator<AbstractDrawable>{
+    
     /** Returns a score for ranking this drawable among other drawables of the scenegraph. */
     public abstract double score(AbstractDrawable drawable);
 
@@ -82,9 +84,20 @@ public abstract class AbstractOrderingStrategy implements Comparator<AbstractDra
 		this.glu = glu;
 	}
 	
+
+    public View getView() {
+        return view;
+    }
+
+    public void setView(View view) {
+        this.view = view;
+    }
+	
 	/* */
 	
-	protected Camera camera;
+
+    protected View view;
+    protected Camera camera;
 	protected Transform transform;
 	protected GL2 gl;
 	protected GLU glu;
