@@ -979,8 +979,8 @@ public class View {
     public void renderSceneGraph(GL2 gl, GLU glu, boolean light) {
         if (light) {
             scene.getLightSet().apply(gl, scaling);
-            gl.glEnable(GL2.GL_LIGHTING);
-            gl.glEnable(GL2.GL_LIGHT0);
+            //gl.glEnable(GL2.GL_LIGHTING);
+            //gl.glEnable(GL2.GL_LIGHT0);
             // gl.glDisable(GL2.GL_LIGHTING);
         }
 
