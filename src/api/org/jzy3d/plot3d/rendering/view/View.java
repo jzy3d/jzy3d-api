@@ -11,6 +11,7 @@ import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
 import javax.media.opengl.glu.GLU;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -1028,7 +1029,14 @@ public class View {
         gl.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
-        	Graphics2D g2d = overlay.createGraphics();
+            Graphics2D g2d = null;
+            try{
+                g2d = overlay.createGraphics();
+            }
+            catch(Exception e){
+                Logger.getLogger(View.class).error(e,e);
+                return;
+            }
             g2d.setBackground(bgOverlay);
             g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 

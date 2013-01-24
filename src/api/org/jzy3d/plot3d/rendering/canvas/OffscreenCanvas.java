@@ -99,37 +99,21 @@ public class OffscreenCanvas implements ICanvas {
 		//sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
 		return sb.toString();
 	}
-
     public void removeKeyListener(KeyListener listener) {
-        throw new NotImplementedException();
     }
-
     public void removeMouseListener(MouseListener listener) {
-        throw new NotImplementedException();
     }
-
     public void removeMouseMotionListener(MouseMotionListener listener) {
-        throw new NotImplementedException();
     }
-
     public void removeMouseWheelListener(MouseWheelListener listener) {
-        throw new NotImplementedException();
     }
-
     public void addKeyListener(KeyListener listener) {
-        throw new NotImplementedException();
     }
-
     public void addMouseListener(MouseListener listener) {
-        throw new NotImplementedException();
     }
-
     public void addMouseMotionListener(MouseMotionListener listener) {
-        throw new NotImplementedException();
     }
-
     public void addMouseWheelListener(MouseWheelListener listener) {
-        throw new NotImplementedException();
     }
 
     /*********************************************************/

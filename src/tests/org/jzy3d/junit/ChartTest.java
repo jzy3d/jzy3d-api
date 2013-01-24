@@ -8,6 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import junit.framework.TestCase;
+
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 
@@ -19,7 +21,17 @@ import org.jzy3d.chart.Chart;
  * 
  * @author martin
  */
-public class ChartTest {
+public class ChartTest extends TestCase{
+    public static ChartTest tester = new ChartTest();
+    
+    public static void assertSimilar(Chart chart, String testImage){
+        try {
+            tester.execute(chart, testImage);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        assertTrue(testImage, true);
+    }
     /*
      * In Java, a mouse click only registers if the mouse is pressed and
      * released without moving the mouse at all. This is difficult for most
@@ -102,7 +114,7 @@ public class ChartTest {
         } catch (IOException e) {
             fail("IOException: " + e.getMessage());
         } catch (ChartTestFailed e) {
-            screenshot(chart, testImage);
+            screenshot(chart, testImage.replace(".", "#ERROR#."));
             fail("Chart test failed: " + e.getMessage() + " see " + testImage);
         }
     }

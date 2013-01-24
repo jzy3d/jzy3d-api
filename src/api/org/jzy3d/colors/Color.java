@@ -110,7 +110,7 @@ public class Color {
 		return new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
 	}
 	
-	protected static Random rng = new Random();
+	public static Random rng = new Random();
 	
 	/*************************************************************/
 
