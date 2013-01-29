@@ -84,6 +84,8 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 		
 		if(mapper!=null)
             mapper.postDraw(this);
+		
+		doDrawBounds(gl, glu, camera);
 	}
 		
 	/** Delegate transforming iteratively to all Drawable of this composite 
@@ -106,14 +108,27 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 	
 	/** Creates and return a BoundingBox3d that embed all available Drawable bounds.*/
 	public BoundingBox3d getBounds(){
-		BoundingBox3d box = new BoundingBox3d();
+	    updateBounds();
+		return bbox;
+	}
+
+    public void updateBounds() {
+        BoundingBox3d box = new BoundingBox3d();
 		
 		for(AbstractDrawable c: components){
 			if(c!=null && c.getBounds()!=null)
 				box.add(c.getBounds());
 		}
-		return box;
-	}
+		bbox = box;
+    }
+	
+    public void applyGeometryTransform(Transform transform){
+        for(AbstractDrawable c: components){
+            c.applyGeometryTransform(transform);
+        }
+        // updateBounds(); no need, as computed by getBounds()
+    }
+
 	
 	/****************************************************************/
 	

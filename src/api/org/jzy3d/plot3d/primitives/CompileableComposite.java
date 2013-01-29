@@ -15,6 +15,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 /**
  * A {@link CompileableComposite} allows storage and subsequent faster execution of individual 
@@ -78,12 +79,12 @@ public class CompileableComposite extends AbstractWireframeable implements ISing
         dlID = gl.glGenLists(1);
         gl.glNewList(dlID, GL2.GL_COMPILE);
         drawComponents(gl, glu, cam);
+        doDrawBounds(gl, glu, cam);
         gl.glEndList();
     }
     
     protected void execute(GL2 gl, GLU glu, Camera cam){
-    	if(transform!=null)
-        	transform.execute(gl);
+    	doTransform(gl, glu, cam);
         gl.glCallList(dlID);
     }
 
@@ -114,6 +115,28 @@ public class CompileableComposite extends AbstractWireframeable implements ISing
         }
     }
 	
+    public void applyGeometryTransform(Transform transform){
+        for(AbstractDrawable c: components){
+            c.applyGeometryTransform(transform);
+        }
+        // updateBounds(); getBounds() do the work
+    }
+    
+    public BoundingBox3d getBounds(){
+        updateBounds();
+        return bbox;
+    }
+
+    public void updateBounds() {
+        BoundingBox3d box = new BoundingBox3d();
+        
+        for(AbstractDrawable c: components){
+            if(c!=null && c.getBounds()!=null)
+                box.add(c.getBounds());
+        }
+        bbox = box;
+    }
+    
     /****************************************************************/
     
     /** Append a list of Drawables to this composite.*/
@@ -154,19 +177,7 @@ public class CompileableComposite extends AbstractWireframeable implements ISing
         return components.size();
     }
 
-    /*******************************/
-
-    /** Creates and return a BoundingBox3d that embed all available Drawable bounds.*/
-    public BoundingBox3d getBounds() {
-        BoundingBox3d box = new BoundingBox3d();
-
-        for (AbstractDrawable c : components) {
-            if (c != null && c.getBounds() != null) {
-                box.add(c.getBounds());
-            }
-        }
-        return box;
-    }
+    /* */
     
     public void setWireframeColor(Color color) {
         super.setWireframeColor(color);

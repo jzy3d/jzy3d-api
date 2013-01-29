@@ -10,6 +10,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -49,8 +50,7 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable{
 	/********************************************************/
 	
 	public void draw(GL2 gl, GLU glu, Camera cam){
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
 		
 		gl.glTranslatef(position.x,position.y,position.z);
 		
@@ -73,8 +73,18 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable{
 			
 			//gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
 			//gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
-		}		
+		}
+		
+		doDrawBounds(gl, glu, cam);
 	}
+	
+
+    @Override
+    public void applyGeometryTransform(Transform transform) {
+        position.set(transform.compute(position));
+        updateBounds();
+    }
+    
 	
 	/*protected GLUquadric qobj;
 	public void draw2(){	    
@@ -112,6 +122,7 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable{
         return position;       
     }
 
+    @Override
     public void updateBounds(){
         bbox.reset();
         bbox.add(position.x+radius, position.y+radius, position.z+radius);

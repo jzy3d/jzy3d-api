@@ -10,6 +10,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 
 
@@ -46,11 +47,11 @@ public class Tube extends AbstractWireframeable implements ISingleColorable{
 		setColor(color);	
 	}
 		
-	/********************************************************/
+	/* */
 	
 	public void draw(GL2 gl, GLU glu, Camera cam){
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
+	    
 		gl.glTranslatef(x,y,z);
 		
 		gl.glLineWidth(wfwidth);
@@ -76,10 +77,29 @@ public class Tube extends AbstractWireframeable implements ISingleColorable{
 			gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
 			gl.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
 			glu.gluCylinder(qobj, radiusBottom, radiusTop, height, slices, stacks);
-		}		
+		}	
+		
+		doDrawBounds(gl, glu, cam);
 	}
 	
-	/********************************************************/
+	public void applyGeometryTransform(Transform transform){
+        Coord3d c = transform.compute(new Coord3d(x,y, z));
+        x = c.x;
+        y = c.y;
+        z = c.z;
+        updateBounds();
+    }
+	
+	@Override
+    public void updateBounds() {
+        bbox.reset();
+        bbox.add(x+Math.max(radiusBottom, radiusTop), y+Math.max(radiusBottom, radiusTop), z);
+        bbox.add(x-Math.max(radiusBottom, radiusTop), y-Math.max(radiusBottom, radiusTop), z);
+        bbox.add(x+Math.max(radiusBottom, radiusTop), y+Math.max(radiusBottom, radiusTop), z+height);
+        bbox.add(x-Math.max(radiusBottom, radiusTop), y-Math.max(radiusBottom, radiusTop), z+height);
+    }
+	
+	/* */
 	
 	/** Set the {@link Tube} data.
 	 * @param position cylinder position (may be handled diffrently in future version)
@@ -121,12 +141,7 @@ public class Tube extends AbstractWireframeable implements ISingleColorable{
 		this.radiusBottom = radiusBottom;
 		this.radiusTop    = radiusTop;
 		this.height       = height;
-		
-		bbox.reset();
-		bbox.add(x+Math.max(radiusBottom, radiusTop), y+Math.max(radiusBottom, radiusTop), z);
-		bbox.add(x-Math.max(radiusBottom, radiusTop), y-Math.max(radiusBottom, radiusTop), z);
-		bbox.add(x+Math.max(radiusBottom, radiusTop), y+Math.max(radiusBottom, radiusTop), z+height);
-		bbox.add(x-Math.max(radiusBottom, radiusTop), y-Math.max(radiusBottom, radiusTop), z+height);
+		updateBounds();
 	}
 	
 	/** Set the cylinder slicing parameters, i.e. the subtlety of the circle estimation.
@@ -138,7 +153,7 @@ public class Tube extends AbstractWireframeable implements ISingleColorable{
 		this.stacks = horizontalWires;
 	}
 	
-	/********************************************************/
+	/* */
 
 	public void setColor(Color color){
 		this.color = color;
@@ -150,7 +165,7 @@ public class Tube extends AbstractWireframeable implements ISingleColorable{
 		return color;
 	}
 	
-	/********************************************************/
+	/* */
 	
 	private float x;
 	private float y;
@@ -163,4 +178,6 @@ public class Tube extends AbstractWireframeable implements ISingleColorable{
 	private int stacks;	
 	
 	private Color color;
+
+    
 }

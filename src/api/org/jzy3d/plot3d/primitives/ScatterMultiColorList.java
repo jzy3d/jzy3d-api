@@ -14,6 +14,7 @@ import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.colorbars.ColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 
 
@@ -23,12 +24,12 @@ import org.jzy3d.plot3d.rendering.view.Camera;
  * @author Martin Pernollet
  *
  */
-public class MultiColorScatterList extends AbstractDrawable implements IMultiColorable{
-    public MultiColorScatterList(List<Coord3d> coordinates, ColorMapper mapper){
+public class ScatterMultiColorList extends AbstractDrawable implements IMultiColorable{
+    public ScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper){
         this(coordinates, mapper, 1.0f);
     }
     
-    public MultiColorScatterList(List<Coord3d> coordinates, ColorMapper mapper, float width){
+    public ScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, float width){
         bbox = new BoundingBox3d();
         setData(coordinates);
         setWidth(width);
@@ -45,11 +46,10 @@ public class MultiColorScatterList extends AbstractDrawable implements IMultiCol
         setLegendDisplayed(true);
     }
         
-    /**********************************************************************/
+    /* */
     
     public void draw(GL2 gl, GLU glu, Camera cam){
-        if(transform!=null)
-            transform.execute(gl);
+        doTransform(gl, glu, cam);
         
         gl.glPointSize(width);      
         gl.glBegin(GL2.GL_POINTS);
@@ -62,9 +62,27 @@ public class MultiColorScatterList extends AbstractDrawable implements IMultiCol
             }
         }
         gl.glEnd();
+        
+        doDrawBounds(gl, glu, cam);
     }
 
-    /*********************************************************************/
+
+    @Override
+    public void applyGeometryTransform(Transform transform) {
+        for(Coord3d c: coordinates){
+            c.set(transform.compute(c));
+        }
+        updateBounds();
+    }
+    
+    @Override
+    public void updateBounds() {
+        bbox.reset();
+        for(Coord3d c: coordinates)
+            bbox.add(c);
+    }
+    
+    /* */
     
     /** 
      * Set the coordinates of the point.

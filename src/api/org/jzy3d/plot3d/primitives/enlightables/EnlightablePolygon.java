@@ -16,6 +16,7 @@ import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 
 public class EnlightablePolygon extends AbstractEnlightable{
@@ -32,9 +33,7 @@ public class EnlightablePolygon extends AbstractEnlightable{
 	/**********************************************************************/
 		
 	public void draw(GL2 gl, GLU glu, Camera cam){
-		// Execute transformation
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
 		
 		applyMaterial(gl); // TODO: shall we avoid calling this @ each draw?
 		Coord3d norm = Normal.compute(points.get(0).xyz, points.get(1).xyz, points.get(2).xyz);
@@ -90,6 +89,28 @@ public class EnlightablePolygon extends AbstractEnlightable{
 			
 	}
 	
+	public void applyGeometryTransform(Transform transform){
+        for(Point p: points){
+            p.xyz = transform.compute(p.xyz);
+        }
+        updateBounds();
+    }
+
+    
+    public void updateBounds(){
+        bbox.reset();
+        bbox.add(points);
+        // recompute center
+        updateCenter();
+    }
+
+    protected void updateCenter() {
+        center = new Coord3d();
+        for (Point p : points)
+            center = center.add(p.xyz);
+        center = center.div(points.size());
+    }
+	
 	/**********************************************************************/
 	
 	/** Add a point to the polygon.*/
@@ -99,11 +120,7 @@ public class EnlightablePolygon extends AbstractEnlightable{
 		points.add(point);
 		bbox.add(point);
 		
-		// recompute center
-		center = new Coord3d();
-		for(Point p: points)
-			center = center.add(p.xyz);
-		center = center.div(points.size());
+		updateCenter();
 	}
 	
 	//--- experimental code ------

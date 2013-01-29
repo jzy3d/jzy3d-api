@@ -13,6 +13,7 @@ import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.colorbars.ColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 
 
@@ -22,14 +23,14 @@ import org.jzy3d.plot3d.rendering.view.Camera;
  * @author Martin Pernollet
  *
  */
-public class MultiColorScatter extends AbstractDrawable implements IMultiColorable{
-	public MultiColorScatter(Coord3d[] coordinates, Color[] colors, ColorMapper mapper){
+public class ScatterMultiColor extends AbstractDrawable implements IMultiColorable{
+	public ScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper){
         this(coordinates, colors, mapper, 1.0f);
     }
-	public MultiColorScatter(Coord3d[] coordinates, ColorMapper mapper){
+	public ScatterMultiColor(Coord3d[] coordinates, ColorMapper mapper){
         this(coordinates, null, mapper, 1.0f);
     }
-    public MultiColorScatter(Coord3d[] coordinates, Color[] colors, ColorMapper mapper, float width){
+    public ScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper, float width){
         bbox = new BoundingBox3d();
         setData(coordinates);
 		setColors(colors);
@@ -47,11 +48,10 @@ public class MultiColorScatter extends AbstractDrawable implements IMultiColorab
         setLegendDisplayed(true);
     }
         
-    /**********************************************************************/
+    /* */
     
     public void draw(GL2 gl, GLU glu, Camera cam){
-        if(transform!=null)
-            transform.execute(gl);
+        doTransform(gl, glu, cam);
         
         gl.glPointSize(width);      
         gl.glBegin(GL2.GL_POINTS);
@@ -64,9 +64,26 @@ public class MultiColorScatter extends AbstractDrawable implements IMultiColorab
             }
         }
         gl.glEnd();
+        
+        doDrawBounds(gl, glu, cam);
+    }
+    
+    @Override
+    public void applyGeometryTransform(Transform transform) {
+        for(Coord3d c: coordinates){
+            c.set(transform.compute(c));
+        }
+        updateBounds();
+    }
+    
+    @Override
+    public void updateBounds() {
+        bbox.reset();
+        for(Coord3d c: coordinates)
+            bbox.add(c);
     }
 
-    /*********************************************************************/
+    /* */
     
     /** 
      * Set the coordinates of the point.
@@ -105,11 +122,12 @@ public class MultiColorScatter extends AbstractDrawable implements IMultiColorab
         this.width = width;
     }
     
-    /**********************************************************************/
+    /* */
     
     protected Coord3d[] coordinates;
 	protected Color[]   colors;   
 	protected float     width;
     protected ColorMapper mapper;
+    
     
 }
