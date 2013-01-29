@@ -16,15 +16,15 @@ import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
- * A {@link Camera} provides an easy control on the view and target points in a
+ * A {@link Camera} allow to define on the view and target points in a
  * cartesian coordinate system.
  * 
- * The {@link Camera} handles the following services:
+ * The {@link Camera} provides the following services:
  * <ul>
  * <li>allows setting perspective/orthogonal rendering mode through
  * {@link CameraMode}.
  * <li>selects the appropriate clipping planes according to a given target box.
- * <li>ensure the modelview matrix is always available for GL2 calls related to
+ * <li>ensure the <i>modelview</i> matrix is always available for GL2 calls related to
  * anything else than projection.
  * <li>methods to convert screen coordinates into 3d coordinates and vice-versa
  * </ul>
@@ -33,6 +33,12 @@ import org.jzy3d.plot3d.transform.Transform;
  */
 public class Camera extends AbstractViewportManager {
 
+    /** The polar default view point, i.e. Coord3d(Math.PI/3,Math.PI/5,500). */
+    public static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 5, 500);
+    /** Defines if camera distance is real, or only squared (squared distance avoid computing Math.sqrt()
+     * and is thus faster). 
+     * Second mode requires value true */
+    public static final boolean DEFAULT_CAMERA_DISTANCE_MODE = true;
     /**
      * Set up a Camera looking at target, with a viewpoint standing at
      * target+(0,0,100). The top of the camera is set up toward the positive Z
@@ -518,9 +524,5 @@ public class Camera extends AbstractViewportManager {
     protected float near;
     protected float far;
     
-    protected boolean useSquaredDistance = true;
-
-
-    /** The polar default view point, i.e. Coord3d(Math.PI/3,Math.PI/5,500). */
-    protected static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 5, 500);
+    protected boolean useSquaredDistance = DEFAULT_CAMERA_DISTANCE_MODE;
 }

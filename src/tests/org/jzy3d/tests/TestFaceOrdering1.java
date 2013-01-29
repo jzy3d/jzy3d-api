@@ -80,28 +80,7 @@ public class TestFaceOrdering1 {
     }
 
     private ChartComponentFactory getFactory() {
-        return new ChartComponentFactory()/*{
-            @Override
-            public ICameraMouseController newMouseController(final Chart chart){
-                ICameraMouseController mouse = null;
-                if(!chart.getWindowingToolkit().equals("newt"))
-                    mouse = new CameraMouseController(chart){
-                        public void mouseDragged(MouseEvent e){
-                            super.mouseDragged(e);
-                            updateColorMapperRange();
-                        }
-                    };
-                else
-                    mouse = new CameraMouseControllerNewt(chart){
-                        public void mouseDragged(com.jogamp.newt.event.MouseEvent e){
-                            super.mouseDragged(e);
-                            updateColorMapperRange();
-                            System.out.println("update");
-                        }
-                };
-                return mouse;
-            }
-        }*/;
+        return new ChartComponentFactory();
     }
 
     public void createPoints(final Chart chart) {
