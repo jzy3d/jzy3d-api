@@ -109,6 +109,11 @@ public class BoundingBox3d {
 		add(c.x, c.y, c.z);
 	}
 	
+	public void add(List<Point> pts){
+	    for(Point p: pts)
+	        add(p.xyz.x, p.xyz.y, p.xyz.z);
+    }
+	
 	/**
 	 * Add a Point3d to the BoundingBox3d.
 	 * A shortcut for: 

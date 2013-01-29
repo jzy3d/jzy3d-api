@@ -67,7 +67,33 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw{
 	 * @param cam a reference to a shooting Camera.
 	 */
 	public abstract void draw(GL2 gl, GLU glu, Camera cam);
+    public abstract void applyGeometryTransform(Transform transform);
+    public abstract void updateBounds();
+    
+	public void doTransform(GL2 gl, GLU glu, Camera cam){
+	    if(transformBefore!=null){
+            if(transformBefore!=null)
+                transformBefore.execute(gl, true);
+            if(transform!=null)
+                transform.execute(gl, false);
+	    }
+	    else{
+	        if(transform!=null)
+	            transform.execute(gl);
+	    }
+    }
 	
+	protected void doDrawBounds(GL2 gl, GLU glu, Camera cam){
+	    if(isBoundingBoxDisplayed()){
+	        Parallelepiped p = new Parallelepiped(getBounds());
+	        p.setFaceDisplayed(false);
+	        p.setWireframeColor(getBoundingBoxColor());
+	        p.draw(gl, glu, cam);
+	    }
+	}
+	
+	
+
 	protected void call(GL2 gl, Color c){
 		gl.glColor4f( c.r, c.g, c.b, c.a );
 	}
@@ -85,6 +111,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw{
 		c.g = 1 - c.g;
 		c.b = 1 - c.b;
 	}
+	
 	
 	/**
 	 * Set object's transformation that is applied at the
@@ -105,8 +132,16 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw{
 	public Transform getTransform(){
 		return transform;
 	}
+	
+	public Transform getTransformBefore() {
+        return transformBefore;
+    }
 
-	/**
+    public void setTransformBefore(Transform transformBefore) {
+        this.transformBefore = transformBefore;
+    }
+
+    /**
 	 * Return the BoundingBox of this object.
 	 * @return a bounding box
 	 */
@@ -158,7 +193,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw{
 		return getDistance(camera);
 	}
 	
-	/***********************************************************/
+	/* */
 
 	public void setLegend(Legend face){
 		this.legend = face;
@@ -182,9 +217,26 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw{
 		return legendDisplayed;
 	}
 	
-	/***********************************************************/
+	public boolean isBoundingBoxDisplayed() {
+        return boundingBoxDisplayed;
+    }
 
-	public void addDrawableListener(IDrawableListener listener){
+    public void setBoundingBoxDisplayed(boolean boundingBoxDisplayed) {
+        this.boundingBoxDisplayed = boundingBoxDisplayed;
+    }
+
+    public Color getBoundingBoxColor() {
+        return boundingBoxColor;
+    }
+
+    public void setBoundingBoxColor(Color boundingBoxColor) {
+        this.boundingBoxColor = boundingBoxColor;
+    }
+
+    
+    /* */
+
+    public void addDrawableListener(IDrawableListener listener){
 		if(listeners==null)
 			listeners = new ArrayList<IDrawableListener>();
 		listeners.add(listener);
@@ -209,9 +261,8 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw{
 		}
 	}
 	
-	
-	/***********************************************************/
-
+	/* */
+    
 	public String toString(){
 		return toString(0);
 	}
@@ -220,9 +271,10 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw{
 		return Utils.blanks(depth) + "("+this.getClass().getSimpleName()+")";
 	}
 	
-	/***********************************************************/
+	/* */
 	
 	protected Transform transform;
+    protected Transform transformBefore;
 	protected BoundingBox3d bbox;
 	protected Legend legend = null;
 	protected List<IDrawableListener> listeners;
@@ -230,5 +282,6 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw{
 	
 	protected boolean displayed = true;
 	protected boolean legendDisplayed = false;
-	
+	protected boolean boundingBoxDisplayed = false;
+	protected Color boundingBoxColor = Color.BLACK.clone();
 }

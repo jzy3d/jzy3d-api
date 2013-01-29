@@ -38,8 +38,7 @@ public class CameraDistanceAnnotation extends Point{
     @Override
     public void draw(GL2 gl, GLU glu, Camera cam) {
         computeCameraPosition();
-        if(transform!=null)
-            transform.execute(gl);
+        doTransform(gl, glu, cam);
         
         doDrawCamera(gl, glu, cam);
         

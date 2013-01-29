@@ -11,6 +11,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 
 
@@ -44,8 +45,7 @@ public class EnlightableSphere extends AbstractEnlightable implements ISingleCol
 	/********************************************************/
 	
 	public void draw(GL2 gl, GLU glu, Camera cam){
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
 		
 		gl.glTranslatef(x,y,z);
 		
@@ -73,6 +73,15 @@ public class EnlightableSphere extends AbstractEnlightable implements ISingleCol
 		
 		//gl.glDisable(GL2.GL_LIGHT0);
 	}
+	
+	@Override
+    public void applyGeometryTransform(Transform transform) {
+        Coord3d change = transform.compute(new Coord3d(x,y,z));
+        x = change.x;
+        y = change.y;
+        z = change.z;
+        updateBounds();
+    }
 		
 	/**********************************************************************/
 	
@@ -100,10 +109,15 @@ public class EnlightableSphere extends AbstractEnlightable implements ISingleCol
 		this.y = position.y;
 		this.z = position.z;
 		
-		bbox.reset();
-		bbox.add(x+radius, y+radius, z+radius);
-		bbox.add(x-radius, y-radius, z-radius);
+		updateBounds();
 	}
+	
+	@Override
+    public void updateBounds(){
+        bbox.reset();
+        bbox.add(x+radius, y+radius, z+radius);
+        bbox.add(x-radius, y-radius, z-radius);
+    }
 	
 	/** Set the radius of the sphere, and the dimensions of its boundingbox.
 	 * @param radius sphere radius

@@ -12,6 +12,9 @@ import org.jzy3d.maths.Coord3d;
  * @author Martin Pernollet
  */
 public class Translate implements Transformer {
+    protected Translate(){
+        
+    }
 	/**
 	 * Initialize a Translate.
 	 * @param shift translation offset.
