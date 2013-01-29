@@ -29,8 +29,6 @@ public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
      * consistency?: compare(x, y)==0  implies that sgn(compare(x, z))==sgn(compare(y, z))
      */
 	public int compare(AbstractDrawable d1, AbstractDrawable d2) {
-		if(camera == null)
-			throw new RuntimeException("No available camera for computing BarycentreOrderingStrategy");
 		if(d1.equals(d2))
 			return 0;
 		return comparison(score(d1), score(d2));
