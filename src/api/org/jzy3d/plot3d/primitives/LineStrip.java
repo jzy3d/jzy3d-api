@@ -11,6 +11,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 /**
  * Color works as follow:
@@ -49,11 +50,10 @@ public class LineStrip extends AbstractWireframeable {
         add(c2);
     }
 
-    /**********************************************************************/
+    /* */
 
     public void draw(GL2 gl, GLU glu, Camera cam) {
-        if (transform != null)
-            transform.execute(gl);
+        doTransform(gl, glu, cam);
         drawLine(gl);
         drawPoints(gl);
         // gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
@@ -96,6 +96,13 @@ public class LineStrip extends AbstractWireframeable {
     }
 
     /* */
+    
+    public void applyGeometryTransform(Transform transform){
+        for(Point p: points){
+            p.xyz = transform.compute(p.xyz);
+        }
+        updateBounds();
+    }
 
     public void updateBounds() {
         bbox.reset();

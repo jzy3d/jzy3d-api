@@ -10,6 +10,7 @@ import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.transform.Transform;
 
 /**
  * A {@link DrawableTextWrapper} wraps any text rendered by an {@link ITextRenderer}
@@ -31,8 +32,7 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	/*******************************************************************************************/
 	
 	public void draw(GL2 gl, GLU glu, Camera cam){
-	    if(transform!=null)
-            transform.execute(gl);
+	    doTransform(gl, glu, cam);
 	    BoundingBox3d box = renderer.drawText(gl, glu, cam, txt, position, halign, valign, color);
 	    if(box!=null)
 	        bbox = box.scale(new Coord3d(1/10,1/10,1/10));
@@ -103,4 +103,15 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	protected Color   color;
 
 	protected ITextRenderer renderer;
+
+    @Override
+    public void applyGeometryTransform(Transform transform) {
+        position.set(transform.compute(position));
+        updateBounds();
+    }
+
+    @Override
+    public void updateBounds() {
+        // given after drawing
+    }
 }

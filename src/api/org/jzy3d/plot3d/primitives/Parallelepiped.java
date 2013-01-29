@@ -40,7 +40,7 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 		setData(b);	
 	}
 	
-	/**********************************************************************/
+	/* */
 
 	public void draw(GL2 gl, GLU glu, Camera cam){
 		for(Polygon quad: quads)
@@ -53,7 +53,7 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 			quad.setTransform(transform);
 	}
 		
-	/**********************************************************************/
+	/* */
 
 	public void setWireframeColor(Color color){
 	    if(quads!=null)
@@ -105,43 +105,50 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 		quads = new Polygon[6];
 		
 		quads[0] = new Polygon();
-		quads[0].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmax()))); 
-		quads[0].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmin()))); 
-		quads[0].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmin()))); 
-		quads[0].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmax()))); 
+		quads[0].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmax())), false); 
+		quads[0].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmin())), false); 
+		quads[0].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmin())), false); 
+		quads[0].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmax())), false); 
+		quads[0].updateBounds();
 		
 		quads[1] = new Polygon();
-		quads[1].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmax()))); 
-		quads[1].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmin()))); 
-		quads[1].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmin()))); 
-		quads[1].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmax()))); 
-
+		quads[1].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmax())), false); 
+		quads[1].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmin())), false); 
+		quads[1].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmin())), false); 
+		quads[1].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmax())), false); 
+		quads[1].updateBounds();
+		
 		quads[2] = new Polygon();
-		quads[2].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmax()))); 
-		quads[2].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmin()))); 
-		quads[2].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmin()))); 
-		quads[2].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmax()))); 
-
+		quads[2].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmax())), false); 
+		quads[2].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmin())), false); 
+		quads[2].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmin())), false); 
+		quads[2].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmax())), false); 
+		quads[2].updateBounds();
+		
+		
 		quads[3] = new Polygon();
-		quads[3].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmax()))); 
-		quads[3].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmin()))); 
-		quads[3].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmin()))); 
-		quads[3].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmax()))); 
-
+		quads[3].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmax())), false); 
+		quads[3].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmin())), false); 
+		quads[3].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmin())), false); 
+		quads[3].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmax())), false); 
+		quads[3].updateBounds();
+		
 		quads[4] = new Polygon();
-		quads[4].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmax()))); 
-		quads[4].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmax()))); 
-		quads[4].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmax()))); 
-		quads[4].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmax()))); 
-
+		quads[4].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmax())), false); 
+		quads[4].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmax())), false); 
+		quads[4].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmax())), false); 
+		quads[4].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmax())), false); 
+		quads[4].updateBounds();
+		
 		quads[5] = new Polygon();
-		quads[5].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmin()))); 
-		quads[5].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmin()))); 
-		quads[5].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmin()))); 
-		quads[5].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmin()))); 
+		quads[5].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmin(), bbox.getZmin())), false); 
+		quads[5].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmin())), false); 
+		quads[5].add(new Point(new Coord3d(bbox.getXmin(), bbox.getYmax(), bbox.getZmin())), false); 
+		quads[5].add(new Point(new Coord3d(bbox.getXmax(), bbox.getYmax(), bbox.getZmin())), false); 
+		quads[5].updateBounds();
 	}
 	
-	/**********************************************************************/
+	/* */
 
 	public void setColorMapper(ColorMapper mapper){
 		this.mapper = mapper;
@@ -173,9 +180,19 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 	}
 		
 	
-	/**********************************************************************/
+	public void applyGeometryTransform(Transform transform){
+	    for(Polygon quad: quads){
+	        quad.applyGeometryTransform(transform);
+	    }
+    }
+	
+	/* */
 
 	private ColorMapper mapper;
 	private Polygon quads[];
 	private Color color;
+    @Override
+    public void updateBounds() {
+        throw new RuntimeException("not implemented");
+    }
 }
