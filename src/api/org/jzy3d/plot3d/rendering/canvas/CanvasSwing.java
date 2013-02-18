@@ -13,6 +13,7 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.util.Animator;
+import javax.media.opengl.GLDrawable;
 
 
 
@@ -30,12 +31,17 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas{
         this(factory, scene, quality, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
     }
     
-	/** Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.*/
+    	/** Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.*/
 	public CanvasSwing(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci){
+            this(factory, scene, quality, glci, false, false);
+        }
+    
+	/** Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.*/
+	public CanvasSwing(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL){
 		super(glci);
 		
 		view     = scene.newView(this, quality);
-		renderer = factory.newRenderer(view, false, false);
+		renderer = factory.newRenderer(view, traceGL, debugGL);
 		addGLEventListener(renderer);
 		
 		// swing specific
@@ -92,6 +98,11 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas{
 	
 	/* */
 	
+        @Override
+        public GLDrawable getDrawable() {
+                return this;
+        }
+        
 	/** Provide a reference to the View that renders into this canvas.*/
 	public View getView(){
 		return view;

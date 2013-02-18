@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import com.jogamp.newt.opengl.GLWindow;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -8,23 +9,28 @@ import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLDrawable;
 import javax.media.opengl.GLDrawableFactory;
 import javax.media.opengl.GLPbuffer;
 import javax.media.opengl.GLProfile;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
-import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class OffscreenCanvas implements ICanvas {
+    
     public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLProfile profile, int width, int height) {
-        view = scene.newView(this, quality);
-        renderer = factory.newRenderer(view, false, false);
-
+        this(factory, scene, quality, profile, width, height, false, false);
+    }
+    
+    public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLProfile profile, int width, int height, boolean traceGL, boolean debugGL) {
         initGLPBuffer(width, height);
+        view = scene.newView(this, quality);
+        renderer = factory.newRenderer(view, traceGL, debugGL);
     }
 
     protected void initGLPBuffer(int width, int height) {
@@ -38,6 +44,11 @@ public class OffscreenCanvas implements ICanvas {
     }
 
     public GLPbuffer getGlpBuffer() {
+        return glpBuffer;
+    }
+    
+    @Override
+    public GLDrawable getDrawable() {
         return glpBuffer;
     }
 

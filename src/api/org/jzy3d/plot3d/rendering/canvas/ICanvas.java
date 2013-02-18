@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+import javax.media.opengl.GLDrawable;
 
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -26,6 +27,9 @@ import org.jzy3d.plot3d.rendering.view.View;
 public interface ICanvas {
 	/** Returns a reference to the held view.*/
 	public View getView();
+        
+        /** Returns the GLDrawable associated with the canvas */
+        public GLDrawable getDrawable();
 	
 	/** Returns the renderer's width, i.e. the display width.*/
 	public int getRendererWidth();
