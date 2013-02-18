@@ -1,15 +1,19 @@
 package org.jzy3d.chart;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
 
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
@@ -23,9 +27,14 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Scale;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
+import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
+import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -92,6 +101,33 @@ public class Chart {
         view.shoot();
     }
 
+    public void pauseAnimator() {
+        if (canvas != null && canvas instanceof IScreenCanvas) {
+            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
+            if (control != null && control.isAnimating()) {
+                control.pause();
+            }
+        }
+    }
+    
+    public void resumeAnimator() {
+        if (canvas != null && canvas instanceof IScreenCanvas) {
+            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
+            if (control != null && control.isPaused()) {
+                control.resume();
+            }
+        }
+    }
+
+    public void startAnimator() {
+        if (canvas != null && canvas instanceof IScreenCanvas) {
+            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
+            if (control != null && !control.isStarted()) {
+                control.start();
+            }
+        }
+    }
+    
     public void stopAnimator() {
         if (canvas != null && canvas instanceof IScreenCanvas) {
             GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();

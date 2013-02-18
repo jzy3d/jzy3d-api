@@ -16,6 +16,7 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.util.Animator;
+import javax.media.opengl.GLDrawable;
 
 
 
@@ -144,6 +145,11 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	
 	/*********************************************************/
 	
+        @Override
+        public GLDrawable getDrawable() {
+            return this;
+        }
+        
 	/** Provide a reference to the View that renders into this canvas.*/
 	public View getView(){
 		return view;
