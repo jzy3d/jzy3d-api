@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import com.jogamp.newt.opengl.GLWindow;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -9,7 +8,6 @@ import java.awt.image.BufferedImage;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLDrawable;
 import javax.media.opengl.GLDrawableFactory;
@@ -23,15 +21,32 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class OffscreenCanvas implements ICanvas {
     
-    public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLProfile profile, int width, int height) {
-        this(factory, scene, quality, profile, width, height, false, false);
+    public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height) {
+        this(factory, scene, quality, capabilities, width, height, false, false);
     }
     
-    public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLProfile profile, int width, int height, boolean traceGL, boolean debugGL) {
-        initGLPBuffer(width, height);
+    public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
         view = scene.newView(this, quality);
         renderer = factory.newRenderer(view, traceGL, debugGL);
+        initGLPBuffer(capabilities, width, height);
     }
+
+    protected void initGLPBuffer(GLCapabilities capabilities, int width, int height) {
+		GLProfile profile = capabilities.getGLProfile();
+		capabilities.setDoubleBuffered(false);
+        if (!GLDrawableFactory.getFactory(profile).canCreateGLPbuffer(null))
+            throw new RuntimeException("No pbuffer support");
+        GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
+        glpBuffer = factory.createGLPbuffer(null, capabilities, null, width, height, null);
+        glpBuffer.addGLEventListener(renderer);
+    }
+	
+//	public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLProfile profile, int width, int height) {
+//        view = scene.newView(this, quality);
+//        renderer = factory.newRenderer(view, false, false);
+//
+//        initGLPBuffer(width, height);
+//    }
 
     protected void initGLPBuffer(int width, int height) {
         GLCapabilities caps = org.jzy3d.global.Settings.getInstance().getGLCapabilities();
