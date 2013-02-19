@@ -1,6 +1,6 @@
 package org.jzy3d.junit;
 
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import junit.framework.TestCase;
 
 import org.apache.log4j.Logger;
+import org.junit.Test;
 import org.jzy3d.chart.Chart;
 
 /**
@@ -21,7 +21,7 @@ import org.jzy3d.chart.Chart;
  * 
  * @author martin
  */
-public class ChartTest extends TestCase{
+public class ChartTest{
     public static ChartTest tester = new ChartTest();
     
     public static void assertSimilar(Chart chart, String testImage){
@@ -221,6 +221,11 @@ public class ChartTest extends TestCase{
 
     public String getTestCanvasType() {
         return "offscreen, " + WIDTH + ", " + HEIGHT;
+    }
+    
+    @Test
+    public void voidTest() {
+
     }
 
     /* */
