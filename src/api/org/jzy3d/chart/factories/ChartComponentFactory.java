@@ -114,8 +114,8 @@ public class ChartComponentFactory implements IChartComponentFactory  {
 		ICameraMouseController mouse = null;
 		if(!chart.getWindowingToolkit().equals("newt"))
 			mouse = new CameraMouseController(chart);
-//		else
-//			mouse = new CameraMouseControllerNewt(chart);
+		else
+			mouse = new CameraMouseControllerNewt(chart);
         return mouse;
 	}
 	
@@ -125,10 +125,10 @@ public class ChartComponentFactory implements IChartComponentFactory  {
 		String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date()) + ".png";
         IScreenshotKeyController screenshot;
         
-//        if(!chart.getWindowingToolkit().equals("newt"))
+        if(!chart.getWindowingToolkit().equals("newt"))
         	screenshot = new ScreenshotKeyController(chart, file);
-//        else
-//        	screenshot = new ScreenshotKeyControllerNewt(chart, file);
+        else
+        	screenshot = new ScreenshotKeyControllerNewt(chart, file);
         
         
         screenshot.addListener(new IScreenshotEventListener() {
@@ -153,8 +153,8 @@ public class ChartComponentFactory implements IChartComponentFactory  {
 		ICameraKeyController key = null;
 		if(!chart.getWindowingToolkit().equals("newt"))
 			key = new CameraKeyController(chart);
-//		else
-//			key = new CameraKeyControllerNewt(chart);
+		else
+			key = new CameraKeyControllerNewt(chart);
 		return key;
 	}
 	
