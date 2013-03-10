@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.jzy3d.chart.controllers.bridge.keyboard;
 
 import com.jogamp.newt.event.KeyEvent;
