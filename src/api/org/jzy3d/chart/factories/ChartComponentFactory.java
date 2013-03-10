@@ -1,5 +1,6 @@
 package org.jzy3d.chart.factories;
 
+import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -24,6 +25,7 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.ScreenshotKeyControllerNe
 import org.jzy3d.chart.controllers.mouse.camera.CameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.CameraMouseControllerNewt;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.global.Settings;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
@@ -43,6 +45,12 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class ChartComponentFactory implements IChartComponentFactory  {
+    
+    public static enum Toolkit {
+
+        awt, swing, newt, offscreen
+    };
+    
 	/* (non-Javadoc)
 	 * @see org.jzy3d.factories.IChartComponentFactory#newScene(boolean)
 	 */
@@ -98,25 +106,7 @@ public class ChartComponentFactory implements IChartComponentFactory  {
 	 */
 	@Override
 	public ICanvas newCanvas(Scene scene, Quality quality, String chartType, GLCapabilities capabilities){
-		if("awt".compareTo(chartType)==0)
-			return new CanvasAWT(this, scene, quality, capabilities);
-		else if("swing".compareTo(chartType)==0)
-			return new CanvasSwing(this, scene, quality, capabilities);
-        else if("newt".compareTo(chartType)==0)
-            return new CanvasNewt(this, scene, quality, capabilities);
-		else if(chartType.startsWith("offscreen")){
-            Pattern pattern = Pattern.compile("offscreen,(\\d+),(\\d+)");
-            Matcher matcher = pattern.matcher(chartType);
-            if(matcher.matches()){
-                int width = Integer.parseInt(matcher.group(1));
-                int height = Integer.parseInt(matcher.group(2));
-                return new OffscreenCanvas(this, scene, quality, GLProfile.getDefault(), width, height);
-            }
-            else
-                return new OffscreenCanvas(this, scene, quality, GLProfile.getDefault(), 500, 500);
-        }
-		else
-			throw new RuntimeException("unknown chart type:" + chartType);
+		return initializeCanvas(scene, quality, chartType, capabilities, false, false);
 	}
 	
 	@Override
@@ -180,4 +170,43 @@ public class ChartComponentFactory implements IChartComponentFactory  {
         else
             throw new RuntimeException("No default frame could be found for the given Chart canvas: " + canvas.getClass());
     }
+
+        protected Toolkit getToolkit(String windowingToolkit) {
+            if (windowingToolkit.startsWith("offscreen")) {
+                return Toolkit.offscreen;
+            }
+            return Toolkit.valueOf(windowingToolkit);
+        }
+
+        protected Dimension getCanvasDimension(String windowingToolkit) {
+            if (windowingToolkit.startsWith("offscreen")) {
+                Pattern pattern = Pattern.compile("offscreen,(\\d+),(\\d+)");
+                Matcher matcher = pattern.matcher(windowingToolkit);
+                if (matcher.matches()) {
+                    int width = Integer.parseInt(matcher.group(1));
+                    int height = Integer.parseInt(matcher.group(2));
+                    return new Dimension(width, height);
+                } else {
+                    return new Dimension(500, 500);
+                }
+            }
+            return null;
+        }
+
+        protected ICanvas initializeCanvas(Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
+            Toolkit chartType = getToolkit(windowingToolkit);
+            switch (chartType) {
+                case awt:
+                    return new CanvasAWT(this, scene, quality, capabilities, traceGL, debugGL);
+                case swing:
+                    return new CanvasSwing(this, scene, quality, capabilities, traceGL, debugGL);
+                case newt:
+                    return new CanvasNewt(this,scene, quality, capabilities, traceGL, debugGL);
+                case offscreen:
+                    Dimension dimension = getCanvasDimension(windowingToolkit);
+                    return new OffscreenCanvas(this, scene, quality, capabilities, dimension.width, dimension.height, traceGL, debugGL);
+                default:
+                    throw new RuntimeException("unknown chart type:" + chartType);
+            }
+        }
 }
