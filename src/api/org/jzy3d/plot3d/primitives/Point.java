@@ -11,6 +11,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 
 
@@ -58,11 +59,10 @@ public class Point extends AbstractDrawable implements ISingleColorable{
 		setColor(rgb);
 	}
 	
-	/**********************************************************************/
+	/* */
 	
 	public void draw(GL2 gl, GLU glu, Camera cam){
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
 		
 		gl.glPointSize(width);
 		
@@ -71,8 +71,12 @@ public class Point extends AbstractDrawable implements ISingleColorable{
 		gl.glVertex3f(xyz.x, xyz.y, xyz.z);
 		gl.glEnd();
 	}
+	
+	public void applyGeometryTransform(Transform transform){
+        xyz = transform.compute(xyz);
+    }
 
-	/*********************************************************************/
+	/* */
 	
 	/** 
 	 * Set the coordinates of the point.

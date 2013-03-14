@@ -28,8 +28,7 @@ public class Quad extends Polygon{
 	
 	public void draw(GL2 gl, GLU glu, Camera cam){
 		// Execute transformation
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
 				
 		// Draw content of polygon
 		if(facestatus){
@@ -76,6 +75,8 @@ public class Quad extends Polygon{
 		/*Point b = new Point(getBarycentre(), Color.BLUE);
 		b.setWidth(5);
 		b.draw(gl,glu,cam);*/
+		
+		doDrawBounds(gl, glu, cam);
 	}
 	
 	/** Add a point to the polygon.*/

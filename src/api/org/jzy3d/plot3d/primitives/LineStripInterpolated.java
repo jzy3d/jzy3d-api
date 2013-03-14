@@ -8,8 +8,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 
 
-public class InterpolatedLineStrip extends AbstractComposite{
-	public InterpolatedLineStrip(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution){
+public class LineStripInterpolated extends AbstractComposite{
+	public LineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution){
 	    this.controlCoords = controlPoints;
 		this.resolution = resolution;
 		this.interpolatedCoords = interpolator.interpolate(controlPoints, resolution);

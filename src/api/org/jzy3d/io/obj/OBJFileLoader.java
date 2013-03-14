@@ -5,6 +5,7 @@ import java.nio.IntBuffer;
 
 import javax.media.opengl.GL2;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.vbo.DrawableVBO;
@@ -21,13 +22,13 @@ public class OBJFileLoader implements IGLLoader<DrawableVBO>{
 
     @Override
     public void load(GL2 gl, DrawableVBO drawable) {
-        System.err.println("loading OBJ...\n");
         obj = new OBJFile();
+        Logger.getLogger(OBJFileLoader.class).info("loading OBJ file '" + filename + "'");
         obj.loadModelFromFile(filename);
-        System.err.println("compiling mesh...\n");
+        Logger.getLogger(OBJFileLoader.class).info("compiling mesh");
         obj.compileModel();
-        System.err.println(obj.getPositionCount() + " vertices");
-        System.err.println((obj.getIndexCount() / 3) + " triangles");
+        Logger.getLogger(OBJFileLoader.class).info(obj.getPositionCount() + " vertices");
+        Logger.getLogger(OBJFileLoader.class).info((obj.getIndexCount() / 3) + " triangles");
         
         int size = obj.getIndexCount();
         int indexSize = size * Buffers.SIZEOF_INT;

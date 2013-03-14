@@ -10,11 +10,13 @@ import org.jzy3d.bridge.swt.Bridge;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.global.Settings;
+import org.jzy3d.utils.LoggerUtils;
 
 
 public class AnalysisLauncher {	
     /** Opens a demo with mouse/key/thread controllers for viewpoint change. */
 	public static void open(IAnalysis demo) throws Exception{
+	    LoggerUtils.minimal();
 		open(demo, DEFAULT_WINDOW);
 	}
 	

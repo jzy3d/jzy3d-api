@@ -4,14 +4,17 @@ package org.jzy3d.plot3d.primitives.graphs.impl;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.graphs.AbstractDrawableGraph2d;
+import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.transform.Transform;
 
 public class DefaultDrawableGraph2d<V,E>  extends AbstractDrawableGraph2d<V, E>  {
 	public DefaultDrawableGraph2d(){
@@ -71,4 +74,15 @@ public class DefaultDrawableGraph2d<V,E>  extends AbstractDrawableGraph2d<V, E> 
 	        gl.glVertex3f(c2.x, c2.y, Z);
 		gl.glEnd();
 	}
+	
+    @Override
+    public void applyGeometryTransform(Transform transform) {
+        Logger.getLogger(DrawableTexture.class).warn("not implemented");
+    }
+
+    @Override
+    public void updateBounds() { 
+        Logger.getLogger(DrawableTexture.class).warn("not implemented");
+    }
+
 }
