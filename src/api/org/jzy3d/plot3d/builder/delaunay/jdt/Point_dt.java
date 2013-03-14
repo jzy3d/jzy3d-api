@@ -56,11 +56,6 @@ public class Point_dt {
 		return z;
 	};
 
-        /** Returns a jzy3d Coord3d instance */
-        public Coord3d getAsCoord3d() {
-            return new Coord3d((float) x, (float)y, (float)z);
-        }
-
 	double distance2(Point_dt p) {
 		return (p.x - x) * (p.x - x) + (p.y - y) * (p.y - y);
 	}
