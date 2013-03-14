@@ -13,8 +13,6 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.jzy3d.plot3d.builder.delaunay.Triangulation;
-
 
 /**
  * 
@@ -47,8 +45,7 @@ import org.jzy3d.plot3d.builder.delaunay.Triangulation;
  *         written by Klasse f?r Kreise (1996-1997), For the original applet
  *         see: http://www.pi6.fernuni-hagen.de/GeomLab/VoroGlide/ . <br>
  */
-
-public class Delaunay_Triangulation implements Triangulation {
+public class Delaunay_Triangulation {
 
 	// the first and last points (used only for first step construction)
 	private Point_dt firstP;
