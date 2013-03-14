@@ -12,27 +12,27 @@ import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
  * 
  * Supports two kind of sub polygon: culled or simple.
  */
-public class CompositeParallelepiped extends AbstractComposite implements ISingleColorable, IMultiColorable {
+public class ParallelepipedComposite extends AbstractComposite implements ISingleColorable, IMultiColorable {
     public enum PolygonType {
         SIMPLE, CULLED
     }
 
     /** Initialize a parallelepiped. */
-    public CompositeParallelepiped() {
+    public ParallelepipedComposite() {
         this(PolygonType.CULLED);
     }
 
-    public CompositeParallelepiped(PolygonType type) {
+    public ParallelepipedComposite(PolygonType type) {
         super();
         this.type = type;
     }
 
     /** Initialize a parallelepiped. */
-    public CompositeParallelepiped(BoundingBox3d b) {
+    public ParallelepipedComposite(BoundingBox3d b) {
         this(b, PolygonType.CULLED);
     }
 
-    public CompositeParallelepiped(BoundingBox3d b, PolygonType type) {
+    public ParallelepipedComposite(BoundingBox3d b, PolygonType type) {
         super();
         setData(b);
     }

@@ -27,9 +27,7 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 	/**********************************************************************/
 		
 	public void draw(GL2 gl, GLU glu, Camera cam){
-		// Execute transformation
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
 				
 		// Draw content of polygon
 		if(facestatus){
@@ -63,5 +61,7 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 			}
 			gl.glEnd();
 		}	
+		
+		doDrawBounds(gl, glu, cam);
 	}
 }

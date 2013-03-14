@@ -762,19 +762,19 @@ public class View {
         // Make smoothing setting
         if (quality.isSmoothPolygon()) {
             gl.glEnable(GL2.GL_POLYGON_SMOOTH);
-            gl.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL2.GL_FASTEST);
+            gl.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL2.GL_NICEST);
         } else
             gl.glDisable(GL2.GL_POLYGON_SMOOTH);
 
         if (quality.isSmoothLine()) {
             gl.glEnable(GL2.GL_LINE_SMOOTH);
-            gl.glHint(GL2.GL_LINE_SMOOTH_HINT, GL2.GL_FASTEST);
+            gl.glHint(GL2.GL_LINE_SMOOTH_HINT, GL2.GL_NICEST);
         } else
             gl.glDisable(GL2.GL_LINE_SMOOTH);
 
         if (quality.isSmoothPoint()) {
             gl.glEnable(GL2.GL_POINT_SMOOTH);
-            gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_FASTEST);
+            gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
             // gl.glDisable(GL2.GL_BLEND);
             // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
         } else

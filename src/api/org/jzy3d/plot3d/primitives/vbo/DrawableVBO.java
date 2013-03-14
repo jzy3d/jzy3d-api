@@ -10,9 +10,11 @@ import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.common.nio.Buffers;
 
@@ -36,10 +38,10 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource{
     // @see http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
     public void draw(GL2 gl, GLU glu, Camera cam) {
         if(hasMountedOnce){
-            if(transform!=null)
-                transform.execute(gl);
+            doTransform(gl, glu, cam);
             configure(gl);
             doDrawElements(gl);
+            doDrawBounds(gl, glu, cam);
         }
     }
     
@@ -76,6 +78,24 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource{
     
     protected int getGeometry(){
         return GL2.GL_TRIANGLES;
+    }
+    
+    public void applyGeometryTransform(Transform transform){
+        /*Coord3d c = transform.compute(new Coord3d(x,y, z));
+        x = c.x;
+        y = c.y;
+        z = c.z;*/
+        Logger.getLogger(DrawableVBO.class).warn("not implemented");
+    }
+    
+    @Override
+    public void updateBounds() { // requires smart reload
+        Logger.getLogger(DrawableVBO.class).warn("not implemented");
+        /*bbox.reset();
+        bbox.add(x+Math.max(radiusBottom, radiusTop), y+Math.max(radiusBottom, radiusTop), z);
+        bbox.add(x-Math.max(radiusBottom, radiusTop), y-Math.max(radiusBottom, radiusTop), z);
+        bbox.add(x+Math.max(radiusBottom, radiusTop), y+Math.max(radiusBottom, radiusTop), z+height);
+        bbox.add(x-Math.max(radiusBottom, radiusTop), y-Math.max(radiusBottom, radiusTop), z+height);*/
     }
     
     /* IO */

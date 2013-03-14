@@ -12,8 +12,7 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 public class TranslucentQuad extends Quad implements ITranslucent{
 	public void draw(GL2 gl, GLU glu, Camera cam){
 		// Execute transformation
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
 				
 		// Draw content of polygon
 		if(facestatus){
