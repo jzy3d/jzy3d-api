@@ -9,6 +9,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.Transform;
 
 
 
@@ -60,8 +61,7 @@ public class Scatter extends AbstractDrawable implements ISingleColorable{
 	/**********************************************************************/
 	
 	public void draw(GL2 gl, GLU glu, Camera cam){
-		if(transform!=null)
-			transform.execute(gl);
+	    doTransform(gl, glu, cam);
 		
 		gl.glPointSize(width);
 		
@@ -79,7 +79,16 @@ public class Scatter extends AbstractDrawable implements ISingleColorable{
 			}
 		}
 		gl.glEnd();
+		
+		doDrawBounds(gl, glu, cam);
 	}
+	
+	public void applyGeometryTransform(Transform transform){
+        for(Coord3d c: coordinates){
+            c.set(transform.compute(c));
+        }
+        updateBounds();
+    }
 
 	/*********************************************************************/
 	
@@ -90,10 +99,14 @@ public class Scatter extends AbstractDrawable implements ISingleColorable{
 	public void setData(Coord3d[] coordinates){
 		this.coordinates = coordinates;
 		
-		bbox.reset();
+		updateBounds();
+	}
+
+    public void updateBounds() {
+        bbox.reset();
 		for(Coord3d c: coordinates)
 			bbox.add(c);
-	}
+    }
 	
 	public Coord3d[] getData(){
 		return coordinates;
