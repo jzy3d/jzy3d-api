@@ -3,12 +3,10 @@
 	<classpathentry kind="src" path="src/api"/>
 	<classpathentry kind="src" path="src/bridge"/>
 	<classpathentry kind="src" path="src/tests"/>
-	<classpathentry kind="src" path="src/glredbook"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
 	<classpathentry exported="true" kind="lib" path="lib/misc/opencsv-2.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/misc/org.convexhull.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/misc/swt.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/applet-launcher.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/gluegen-rt-natives-linux-amd64.jar"/>
@@ -33,6 +31,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all.jar" sourcepath="/jogl"/>
 	<classpathentry exported="true" kind="lib" path="lib/misc/log4j-1.2.16.jar"/>
-	<classpathentry kind="lib" path="lib/misc/org.jzyio-0.1.jar"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jzy3d-tools-convexhull"/>
 	<classpathentry kind="output" path="build/eclipse"/>
 </classpath>
