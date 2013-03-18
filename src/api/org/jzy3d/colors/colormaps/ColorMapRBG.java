@@ -1,7 +1,6 @@
 package org.jzy3d.colors.colormaps;
 
 import org.jzy3d.colors.Color;
-
 public class ColorMapRBG extends AbstractColorMap implements IColorMap {
     public ColorMapRBG() {
     	super();

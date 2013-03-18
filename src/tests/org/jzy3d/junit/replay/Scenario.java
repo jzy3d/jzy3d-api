@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jzy3d.io.SimpleFile;
 import org.jzy3d.junit.replay.events.EventParser;
 import org.jzy3d.junit.replay.events.IEventLog;
-import org.jzyio.SimpleFile;
 
 public class Scenario {
 	protected List<IEventLog> events;

@@ -14,6 +14,7 @@ import javax.media.opengl.GLCapabilities;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.lights.LightKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
@@ -26,6 +27,7 @@ import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -219,6 +221,21 @@ public class Chart {
 
     public void removeRenderer(Renderer2d renderer2d) {
         view.removeRenderer2d(renderer2d);
+    }
+
+    public Light addLight(Coord3d position) {
+        return addLight(position, Color.BLUE, new Color(0.8f, 0.8f, 0.8f), Color.WHITE, 1);
+    }
+    
+    public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular, int radius) {
+        Light light = new Light();
+        light.setPosition(position);
+        light.setAmbiantColor(ambiant);
+        light.setDiffuseColor(diffuse);
+        light.setSpecularColor(specular);
+        light.setRepresentationRadius(radius);
+        getScene().add(light);
+        return light;
     }
 
     public View getView() {

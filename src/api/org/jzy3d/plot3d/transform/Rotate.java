@@ -8,8 +8,9 @@ import org.jzy3d.plot3d.pipelines.NotImplementedException;
 
 /**
  * Rotate is a {@link Transformer} that stores the angle and rotate values 
- * required to perform the effective OpenGL2 rotation in the 
- * ModelView Matrix.
+ * required to perform the effective OpenGL  rotation in the 
+ * ModelView matrix.
+ * 
  * @author Martin Pernollet
  */
 public class Rotate implements Transformer {
@@ -41,7 +42,21 @@ public class Rotate implements Transformer {
 		return "(Rotate)a=" + angle + " " + rotate;
 	}
 	
-	/**************************************************/
+	public float getAngle() {
+        return angle;
+    }
+
+    public void setAngle(float angle) {
+        this.angle = angle;
+    }
+
+    public Coord3d getRotate() {
+        return rotate;
+    }
+
+    public void setRotate(Coord3d rotate) {
+        this.rotate = rotate;
+    }
 	
 	private float angle;
 	private Coord3d rotate;

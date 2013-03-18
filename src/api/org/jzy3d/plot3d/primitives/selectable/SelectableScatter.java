@@ -26,8 +26,7 @@ public class SelectableScatter extends Scatter implements ISingleColorable, Sele
     }
 
     public void draw(GL2 gl, GLU glu, Camera cam) {
-        if (transform != null)
-            transform.execute(gl);
+        doTransform(gl, glu, cam);
 
         gl.glPointSize(width);
 
