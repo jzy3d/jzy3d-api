@@ -31,6 +31,15 @@ public class LoggerUtils {
         level(Level.ERROR);
     }
     
+    public static void minimalDated() {
+        Logger root = Logger.getRootLogger();
+        //root.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
+        root.addAppender(new ConsoleAppender(new PatternLayout("%-5p [%t][%c][%d{HH:mm:ss}]: %m%n")));
+        level(Level.ERROR);
+    }
+    
+    
+    
     public static void level(Level level){
         Logger root = Logger.getRootLogger();
         Logger pkgLogger = root.getLoggerRepository().getLogger("com.jzy3d");

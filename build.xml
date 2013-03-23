@@ -16,6 +16,9 @@
 	<property name="lib.path" 	 	value="org/jzy3d/"/>
 	
 	<property name="jogl" 	 	value="jogl2-rc10"/>
+    
+    <property name="convexhull"      value="../jzy3d-tools-convexhull"/>
+
 		
     <dirname property="dir.basedir" file="${ant.file}"/>
 
@@ -39,6 +42,9 @@
             <classpath refid="dir.classpath"/>
         	<src path="${dir.src.api}/" />
         	<src path="${dir.src.bridge}/" />
+            
+            <src path="${convexhull}/src/" />
+
         </javac>
     </target>
 	
@@ -59,27 +65,6 @@
 		</zip>	
 	</target>
 
-<!--
-	<target name="zip.groovy">
-		<zip destfile="${dir.dist}/${lib.name}-${lib.version}-groovy.zip" update="false">
-			<fileset dir="${dir.src.groovy}"/>
-		</zip>	
-	</target>
-	
-	<target name="zip.jogl">
-		<zip destfile="${dir.dist}/${lib.name}-${lib.version}-jogl-demos.zip" update="false">
-			<fileset dir="${dir.src.jogl}"/>
-		</zip>	
-	</target>
-	-->
-	<target name="zip.redbook">
-		<zip destfile="${dir.dist}/${lib.name}-${lib.version}-redbook.zip" update="false">
-			<fileset dir="${dir.src.redbook}"/>
-		</zip>	
-	</target>
-
-	
-
-	<target name="release" depends="clean,jar.api,zip.dependencies,zip.redbook">
+	<target name="release" depends="clean,jar.api,zip.dependencies">
 	</target>
 </project>
