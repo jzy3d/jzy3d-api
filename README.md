@@ -5,7 +5,7 @@ Project layout
 --------------
 Source organisation
 - src/api holds the API sources
-- src/bridge holds classes to ease injecting of components from a given windowing toolkit to another one (awt, swing, swt, newt) 
+- src/bridge holds classes to ease injection of components from a given windowing toolkit to another one (awt, swing, swt, newt) 
 - src/tests holds
  - ChartTest, a tool to compare a chart with a previously saved screenshot
  - Replay, a utility to record and validate a sequence of mouse and key interactions results on a chart (work in progress)
@@ -19,10 +19,15 @@ Library dependencies
 - junit
 
 Project dependencies
+These project dependencies are set through eclipse .classpath file.
 - jzy3d-tools-convexhull
 
+Build files
+- build.xml
+- javadoc.xml
 
-Satellite projects depend on Jzy3d
+
+Satellite projects depending on Jzy3d
 --------------
 Satellite projects are extensions of the framework that remain external to the API.
 
