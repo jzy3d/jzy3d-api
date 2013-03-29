@@ -69,6 +69,6 @@ public class AnalysisLauncher {
 	}
 	
 	protected static String DEFAULT_CANVAS_TYPE = "awt";
-	protected static Rectangle DEFAULT_WINDOW = new Rectangle(0,0,600,600);
+	protected static Rectangle DEFAULT_WINDOW = new Rectangle(200,200,600,600);
 }
 
