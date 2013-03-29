@@ -1,8 +1,9 @@
-package org.jzy3d.chart.controllers.bridge.keyboard;
+package org.jzy3d.bridge.newt.controllers.keyboard;
 
 import com.jogamp.newt.event.KeyEvent;
 import java.awt.Component;
-import org.jzy3d.chart.controllers.bridge.AwtToNewtUtilities;
+
+import org.jzy3d.bridge.newt.controllers.AwtToNewtUtilities;
 
 /**
  *

@@ -1,9 +1,10 @@
-package org.jzy3d.chart.controllers.bridge.mouse;
+package org.jzy3d.bridge.newt.controllers.mouse;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import org.jzy3d.chart.controllers.bridge.AwtToNewtUtilities;
+
+import org.jzy3d.bridge.newt.controllers.AwtToNewtUtilities;
 
 /**
  * Provides a bridge implementation to map AWT events to NEWT events for 
