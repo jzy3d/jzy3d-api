@@ -6,6 +6,9 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilitiesImmutable;
+
+import org.jzy3d.bridge.newt.controllers.keyboard.AwtToNewtKeyListener;
+import org.jzy3d.bridge.newt.controllers.mouse.AwtToNewtMouseListener;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -18,8 +21,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import javax.media.opengl.GLDrawable;
-import org.jzy3d.chart.controllers.bridge.keyboard.AwtToNewtKeyListener;
-import org.jzy3d.chart.controllers.bridge.mouse.AwtToNewtMouseListener;
 /** Experimental Newt canvas. 
  */
 public class CanvasNewt extends Panel implements IScreenCanvas {

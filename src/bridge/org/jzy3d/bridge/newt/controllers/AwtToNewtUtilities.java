@@ -1,4 +1,4 @@
-package org.jzy3d.chart.controllers.bridge;
+package org.jzy3d.bridge.newt.controllers;
 
 import com.jogamp.newt.event.KeyEvent;
 
