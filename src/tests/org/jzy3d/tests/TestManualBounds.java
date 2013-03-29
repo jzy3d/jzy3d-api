@@ -6,6 +6,7 @@ import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.analysis.IAnalysis;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.CameraKeyController;
+import org.jzy3d.chart.controllers.mouse.camera.CameraMouseControllerNewt;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -16,6 +17,7 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 public class TestManualBounds extends AbstractAnalysis {
     public static void main(String[] args) throws Exception {
@@ -60,7 +62,7 @@ System.out.println(getCanvasType());
         chart.getScene().getGraph().add(surface);
         chart.addController(new CameraKeyController());
         
-        //chart.getView().setBoundMode(ViewBoundMode.MANUAL);
-        //CameraMouseControllerNewt c = new CameraMouseControllerNewt(chart);
+        chart.getView().setBoundMode(ViewBoundMode.MANUAL);
+        CameraMouseControllerNewt c = new CameraMouseControllerNewt(chart);
     }
 }
