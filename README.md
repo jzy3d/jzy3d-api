@@ -10,6 +10,16 @@ Source organisation
  - ChartTest, a tool to compare a chart with a previously saved screenshot
  - Replay, a utility to record and validate a sequence of mouse and key interactions results on a chart (work in progress)
 
+Build
+- Eclipse: .project & .classpath files
+- Ant: build.xml
+- Maven: pom.xml
+- Javadoc: javadoc.xml
+
+Project dependencies
+These project dependencies are set through eclipse .classpath file, ant build files and maven pom files.
+- jzy3d-tools-convexhull
+
 Library dependencies
 - jogl2
 - jdt (currently copied in API but will be externalized soon)
@@ -17,15 +27,6 @@ Library dependencies
 - swt
 - log4j
 - junit
-
-Project dependencies
-These project dependencies are set through eclipse .classpath file.
-- jzy3d-tools-convexhull
-
-Build files
-- build.xml
-- javadoc.xml
-
 
 Satellite projects depending on Jzy3d
 --------------

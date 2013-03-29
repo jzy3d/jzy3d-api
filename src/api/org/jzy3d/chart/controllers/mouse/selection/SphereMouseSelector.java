@@ -1,6 +1,8 @@
 package org.jzy3d.chart.controllers.mouse.selection;
 
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.util.Deque;
 import java.util.List;
 
 import org.jzy3d.maths.ConvexHull;
@@ -8,9 +10,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.selectable.SelectableSphere;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
-
-import utils.Stack;
-import algorithms.Point2f;
 
 public class SphereMouseSelector extends AbstractMouseSelector {
 	public SphereMouseSelector(SelectableSphere scatter) {
@@ -39,10 +38,10 @@ protected void drawSelection(Graphics2D g2d, int width, int height) {
 	
 	if(projection!=null && sphere.isHighlighted()){
 		hull = ConvexHull.build2d(projection);
-		Point2f prev = hull.pop();
-		Point2f next;
+		Point2D prev = hull.pop();
+		Point2D next;
 		g2d.setColor(java.awt.Color.GREEN);
-        while (!hull.empty()) {
+        while (!hull.isEmpty()) {
 			next = hull.pop();
 			g2d.drawOval((int) prev.getX() - 4, (int) prev.getY() - 4, 8, 8);
 			g2d.drawLine((int) prev.getX(), (int) prev.getY(), (int) next.getX(), (int) next.getY() );
@@ -64,5 +63,5 @@ protected void drawSelection(Graphics2D g2d, int width, int height) {
 	protected int width;
 	protected int height;
 	protected List<Coord3d> projection;
-	protected Stack<Point2f> hull;
+	protected Deque<Point2D> hull;
 }
