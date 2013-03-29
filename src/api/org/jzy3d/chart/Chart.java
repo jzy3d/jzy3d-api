@@ -14,7 +14,6 @@ import javax.media.opengl.GLCapabilities;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.lights.LightKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
@@ -94,6 +93,33 @@ public class Chart {
         view.shoot();
     }
 
+    public void pauseAnimator() {
+        if (canvas != null && canvas instanceof IScreenCanvas) {
+            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
+            if (control != null && control.isAnimating()) {
+                control.pause();
+            }
+        }
+    }
+    
+    public void resumeAnimator() {
+        if (canvas != null && canvas instanceof IScreenCanvas) {
+            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
+            if (control != null && control.isPaused()) {
+                control.resume();
+            }
+        }
+    }
+
+    public void startAnimator() {
+        if (canvas != null && canvas instanceof IScreenCanvas) {
+            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
+            if (control != null && !control.isStarted()) {
+                control.start();
+            }
+        }
+    }
+    
     public void stopAnimator() {
         if (canvas != null && canvas instanceof IScreenCanvas) {
             GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();

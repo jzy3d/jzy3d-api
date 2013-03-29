@@ -27,12 +27,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
-import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
-import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightSet;
 import org.jzy3d.plot3d.rendering.scene.Graph;
@@ -46,6 +42,7 @@ import org.jzy3d.plot3d.transform.Scale;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.util.awt.Overlay;
+import javax.media.opengl.GLDrawable;
 
 /**
  * A {@link View} holds a {@link Scene}, a {@link LightSet}, an {@link ICanvas}
@@ -100,16 +97,7 @@ public class View {
         this.viewLifecycleListeners = new ArrayList<IViewLifecycleEventListener>();
         this.wasOnTopAtLastRendering = false;
 
-        if (canvas instanceof CanvasSwing)
-            this.overlay = new Overlay((CanvasSwing) canvas);
-        else if (canvas instanceof CanvasAWT)
-            this.overlay = new Overlay((CanvasAWT) canvas);
-        else if (canvas instanceof CanvasNewt)
-            this.overlay = new Overlay(((CanvasNewt) canvas).getWindow());
-        else if (canvas instanceof OffscreenCanvas)
-            this.overlay = new Overlay(((OffscreenCanvas) canvas).getGlpBuffer());
-        else
-            throw new RuntimeException("unhandled canvas! " + canvas);
+        this.overlay = new Overlay(canvas.getDrawable());
         this.glu = new GLU();
         
         this.scene.getGraph().getStrategy().setView(this);

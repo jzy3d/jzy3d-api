@@ -15,12 +15,12 @@ import org.jzy3d.plot3d.rendering.legends.colorbars.ColorbarLegend;
 import org.jzy3d.utils.LoggerUtils;
 
 public class SimpleChartTest extends ChartTest{
+   
 	@Test
 	public void test() throws Exception {
 	    LoggerUtils.minimal();
-	    
-		Chart chart = chart(getTestCanvasType());
-		execute(chart);
+               Chart chart = chart(getTestCanvasType());
+               execute(chart);
 	}
 	
 	public static Chart chart(String wt){
