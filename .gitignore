@@ -5,3 +5,4 @@ doc/javadoc
 *.class
 *.log
 *~/
+/target
