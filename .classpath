@@ -31,6 +31,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all.jar" sourcepath="/jogl"/>
 	<classpathentry exported="true" kind="lib" path="lib/misc/log4j-1.2.16.jar"/>
-	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/org.jzy3d-tools-convexhull"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/org.jzy3d-tools-convexhull"/>
 	<classpathentry kind="output" path="build/eclipse"/>
 </classpath>
