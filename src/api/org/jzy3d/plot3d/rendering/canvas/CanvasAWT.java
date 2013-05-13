@@ -19,26 +19,12 @@ import com.jogamp.opengl.util.Animator;
 import javax.media.opengl.GLDrawable;
 
 /**
- * A {@link ICanvas} embed a {@link Renderer3d} for handling GL events, a mouse
- * and keyboard controllers for setting the viewpoint (inheriting
- * {@link ViewPointController}), and a {@link Scene} storing the actual
- * {@link Graph} and {@link View}s.
- * <p>
- * The {@link CanvasAWT} allows getting rid of GL and AWT events by offering a
- * direct registration of a {@link View} from the referenced Scene.
+ * {@link CanvasAWT} is a base implementation that primarily allows to integrate
+ * a Jzy3d chart in an AWT application.
  * 
- * The {@link View} may be retrieved in order to attach it to a ViewController,
- * either one of those held by the current canvas, or an other controller
- * (autonomous, or held by another Canvas).
+ * Relying on JOGL's {@link GLPanel}, this canvas can actually be used in AWT, Swing,
+ * as well as SWT through <code>org.jzy3d.bridge.swt.Bridge.adapt(swt,awt)</code>.
  * 
- * The {@link CanvasAWT} silently adds a {@link Renderer3d} as its
- * GLEventListener and hide its management for the user.
- * <p>
- * 
- * The {@link CanvasAWT} last provide an animator that is explicitely stopped
- * when {@link CanvasAWT} disposes. This offers the alternative of
- * repaint-on-demand-model based on Controllers, and repaint-continuously model
- * based on the Animator.
  * 
  * @author Martin Pernollet
  */
@@ -130,16 +116,16 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	}
 	
 	public void triggerMouseEvent(MouseEvent e){
-		System.out.println("trigger mouse " + e);
+		//System.out.println("trigger mouse " + e);
 		processMouseEvent(e);
 		
 	}
 	public void triggerMouseMotionEvent(MouseEvent e){
-		System.out.println("trigger mouse motion " + e);
+		//System.out.println("trigger mouse motion " + e);
 		processMouseMotionEvent(e);
 	}
 	public void triggerMouseWheelEvent(MouseWheelEvent e){
-		System.out.println("trigger mouse wheel " + e);
+		//System.out.println("trigger mouse wheel " + e);
 		processMouseWheelEvent(e);
 	}
 	
