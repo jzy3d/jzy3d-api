@@ -18,14 +18,18 @@ import javax.media.opengl.GLDrawable;
 
 
 /**
- * A {@link CanvasSwing} owns an OpenGL {@link Renderer3d} 
- * for handling GL events, and link it to the scene's {@link View}.
- * <p>
- * The {@link CanvasSwing} provides an animator that is stopped 
- * when it disposes.
+ * As of version 0.9.1, {@link CanvasSwing} is deprecated as the underlying
+ * extended {@link GLJPanel} has several drawbacks:
+ * <ul>
+ * <li>It is buggy, at least while resizing the panel, and sometime for any rendering
+ * <li>Newt is now the recommended windowing toolkit by JOGL developers
+ * </ul>
+ * It is thus suggested to use {@link CanvasNewt} instead which is obtained
+ * by building a chart with newt parameter: new Chart("newt")
  * 
  * @author Martin Pernollet
  */
+@Deprecated
 public class CanvasSwing extends GLJPanel implements IScreenCanvas{
     public CanvasSwing(IChartComponentFactory factory, Scene scene, Quality quality){
         this(factory, scene, quality, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
