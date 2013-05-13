@@ -34,6 +34,8 @@ public class Color {
 	/** Cyan color. */
 	public static final Color CYAN    = new Color(0.0f, 1.0f, 1.0f);
 	
+	public static final Color[] COLORS = {RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN};
+	
 	/*************************************************************/
 
 	/** Initialize a color with an alpha channel set to 1.*/
@@ -106,9 +108,17 @@ public class Color {
 		return new Color(1 - r, 1 - g, 1 - b);
 	}
 	
+		
 	public static Color random(){
 		return new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
 	}
+	
+	/**
+	 * Returns one of the main color based on id. Use id%(#colors)
+	 */
+	public static Color color(int c){
+        return COLORS[c%COLORS.length];
+    }
 	
 	public static Random rng = new Random();
 	
