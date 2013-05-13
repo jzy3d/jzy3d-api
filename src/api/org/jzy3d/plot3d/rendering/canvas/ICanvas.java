@@ -12,25 +12,22 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 
 /**
- * A {@link ICanvas} holds a {@link Renderer3d} and a {@link View}. It moreover allows
- * adding and removing listeners for handling mouse or key events.
+ * A {@link ICanvas} represent the target component for rendering OpenGL.
  * 
- * In the case a user wants to override a concrete {@link ICanvas} painting policy, 
- * such as introducing layers in a {@link CanvasAWT} or {@link CanvasSwing}, 
- * he must be aware that the canvas may be repainted either by forceRepaint() or
- * by its "original" paint function (that is, the paint function provided by the 
- * Component it extends (GLJpanel, GLCanvas, etc)).
+ * It might be displayed on the screen in a GUI ({@link IScreenCanvas}), 
+ * or simply be an offscreen component able to export an image {@link OffscreenCanvas}.
+ * 
+ * @see {@link IScreenCanvas}
  * 
  * @author Martin Pernollet
- *
  */
 public interface ICanvas {
 	/** Returns a reference to the held view.*/
 	public View getView();
         
-        /** Returns the GLDrawable associated with the canvas */
-        public GLDrawable getDrawable();
-	
+    /** Returns the GLDrawable associated with the canvas */
+    public GLDrawable getDrawable();
+
 	/** Returns the renderer's width, i.e. the display width.*/
 	public int getRendererWidth();
 	
