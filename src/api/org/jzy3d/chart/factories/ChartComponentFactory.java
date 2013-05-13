@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import javax.media.opengl.GLCapabilities;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.bridge.swing.FrameSwing;
@@ -223,6 +224,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
         case awt:
             return new CanvasAWT(this, scene, quality, capabilities, traceGL, debugGL);
         case swing:
+            Logger.getLogger(ChartComponentFactory.class).warn("Swing canvas is deprecated. Use Newt instead");
             return new CanvasSwing(this, scene, quality, capabilities, traceGL, debugGL);
         case newt:
             return new CanvasNewt(this, scene, quality, capabilities, traceGL, debugGL);
