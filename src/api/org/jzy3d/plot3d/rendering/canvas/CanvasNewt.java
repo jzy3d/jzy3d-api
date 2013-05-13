@@ -1,11 +1,17 @@
 package org.jzy3d.plot3d.rendering.canvas;
 import java.awt.BorderLayout;
 import java.awt.Panel;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilitiesImmutable;
+import javax.media.opengl.GLDrawable;
 
 import org.jzy3d.bridge.newt.controllers.keyboard.AwtToNewtKeyListener;
 import org.jzy3d.bridge.newt.controllers.mouse.AwtToNewtMouseListener;
@@ -13,15 +19,18 @@ import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
+
 import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.Animator;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
-import javax.media.opengl.GLDrawable;
-/** Experimental Newt canvas. 
+
+/** 
+ * A Newt canvas wrapped in an AWT {@link Panel}.
+ * 
+ * Newt is supposed to be faster than any other canvas, either for AWT or Swing.
+ * 
+ * If a non AWT panel where required, 
+ * follow the guidelines given in {@link IScreenCanvas} documentation.
  */
 public class CanvasNewt extends Panel implements IScreenCanvas {
     
