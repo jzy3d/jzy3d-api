@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.AbstractController;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
@@ -14,6 +12,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 /** Saves a screenshot in PNG format once key S is pressed. 
  * 
@@ -60,7 +59,7 @@ public class ScreenshotKeyControllerNewt extends AbstractController implements K
         File output = new File(filename);
         if (!output.getParentFile().exists())
             output.mkdirs();
-        ImageIO.write(chart.screenshot(), "png", output);
+    	TextureIO.write(chart.screenshot(), new File(filename));  
     }
     
     @Override

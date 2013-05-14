@@ -1,6 +1,6 @@
 package org.jzy3d.chart;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.factories.ChartComponentFactory;
@@ -39,7 +39,7 @@ public class ChartView extends View {
      * Performs all transformations of eye, target coordinates to adapt the camera settings
      * to the scaled scene.
      */
-    public void render(GL2 gl, GLU glu) {
+    public void render(GL gl, GLU glu) {
     	fireViewLifecycleWillRender(null);
 
     	layout.update(getChart());

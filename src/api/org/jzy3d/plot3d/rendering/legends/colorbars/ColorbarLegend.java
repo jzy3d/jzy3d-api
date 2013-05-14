@@ -1,20 +1,24 @@
 package org.jzy3d.plot3d.rendering.legends.colorbars;
 
-import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.events.DrawableChangedEvent;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot2d.primitive.ColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.Legend;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 
 public class ColorbarLegend extends Legend{
@@ -45,13 +49,13 @@ public class ColorbarLegend extends Legend{
 		this.minimumDimension = new Dimension(ColorbarImageGenerator.MIN_BAR_WIDTH, ColorbarImageGenerator.MIN_BAR_HEIGHT);
 	}
 
-	public void render(GL2 gl, GLU glu){	
+	public void render(GL gl, GLU glu){	
 		//gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT); 
         gl.glEnable(GL2.GL_BLEND);
 		super.render(gl, glu);
 	}
 
-	public Image toImage(int width, int height) {
+	public BufferedImage toImage(int width, int height) {
 		if(parent!=null && parent instanceof IMultiColorable){
 			IMultiColorable mc = ((IMultiColorable)parent);
 			if(mc.getColorMapper() != null){

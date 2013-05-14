@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.transform;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 
 import org.jzy3d.maths.Coord3d;
 
@@ -17,7 +17,7 @@ interface Transformer {
 	 * Execute the effective GL transformation held by this {@link Transformer}.
 	 * @param gl OpenGL context.
 	 */
-	public void execute(GL2 gl);	
+	public void execute(GL gl);	
 	
 	/**
 	 * Apply the transformations to the input coordinates.

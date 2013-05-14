@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.rendering.legends;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import org.jzy3d.chart.ChartView;
@@ -9,6 +9,8 @@ import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.io.FileImage;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.ImageViewport;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 
 
@@ -47,7 +49,7 @@ public abstract class Legend extends ImageViewport implements IDrawableListener{
 
 	/****************************************************************/
 
-	public abstract Image toImage(int width, int height);
+	public abstract BufferedImage toImage(int width, int height);
 
 	public abstract void drawableChanged(DrawableChangedEvent e);
 

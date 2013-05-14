@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 import java.awt.image.BufferedImage;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLPipelineFactory;
@@ -10,7 +10,10 @@ import javax.media.opengl.glu.GLU;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
+import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.awt.Screenshot;
+import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.spi.PNGImage;
 
 
 
@@ -63,7 +66,7 @@ public class Renderer3d implements GLEventListener{
 	        if(traceGL) 
 	            canvas.getGL().getContext().setGL( GLPipelineFactory.create("javax.media.opengl.Trace", null, canvas.getGL(), new Object[] { System.err } ) );
 		    
-	        view.init(canvas.getGL().getGL2());
+	        view.init(canvas.getGL());
 		}
 	}
 	/** 
@@ -72,14 +75,16 @@ public class Renderer3d implements GLEventListener{
 	 */
 	@Override
 	public void display(GLAutoDrawable canvas){
-		GL2 gl = canvas.getGL().getGL2();
+		GL gl = canvas.getGL();
 
 		if(view!=null){
 		    view.clear(gl);
 			view.render(gl, glu);
 
 			if(doScreenshotAtNextDisplay){
-	            image = Screenshot.readToBufferedImage(width, height);
+				GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
+				screenshot.readPixels(gl, true);
+				image = screenshot.getTextureData();				          
 	            doScreenshotAtNextDisplay = false;
 	        }
 		}
@@ -97,7 +102,7 @@ public class Renderer3d implements GLEventListener{
 	        
 	        if(canvas!=null){
 	            //GL gl1 = canvas.getGL();
-    	        GL2 gl = canvas.getGL().getGL2();
+    	        GL gl = canvas.getGL().getGL2();
     			view.clear(gl);
     			view.render(gl, glu);
 	        }
@@ -118,7 +123,7 @@ public class Renderer3d implements GLEventListener{
 		doScreenshotAtNextDisplay = true;
 	}
 	
-	public BufferedImage getLastScreenshot(){
+	public TextureData getLastScreenshot(){
 		return image;
 	}
 	
@@ -142,7 +147,7 @@ public class Renderer3d implements GLEventListener{
 	protected int     	  width     = 0; 
 	protected int     	  height    = 0;
 	protected boolean 	  doScreenshotAtNextDisplay = false;
-	protected BufferedImage image = null;
+	protected TextureData image = null;
 	protected boolean 	  traceGL = false;
 	protected boolean 	  debugGL = false;
 	

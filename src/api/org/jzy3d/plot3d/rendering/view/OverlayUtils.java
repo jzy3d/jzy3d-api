@@ -1,12 +1,12 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.PolygonArray;
+import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Statistics;
 
 

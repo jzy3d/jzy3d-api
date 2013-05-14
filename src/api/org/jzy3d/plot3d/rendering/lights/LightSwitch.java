@@ -1,9 +1,10 @@
 package org.jzy3d.plot3d.rendering.lights;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 public class LightSwitch {
-	public static void enable(GL2 gl, int lightId){
+	public static void enable(GL gl, int lightId){
 		switch(lightId){
 			case 0: gl.glEnable(GL2.GL_LIGHT0); break;
 			case 1: gl.glEnable(GL2.GL_LIGHT1); break;

@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives.graphs.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -53,7 +53,7 @@ public void setGraphModel(IGraph<V,E> graph, PickingSupport picking){
 	/*******************************************************/
 	
 	@Override
-	protected void drawVertices(GL2 gl, GLU glu, Camera cam){
+	protected void drawVertices(GL gl, GLU glu, Camera cam){
 		for(V v: graph.getVertices()){
 			if(highlights.get(v))
 				drawVertexNode(gl, glu, cam, v, layout.get(v), formatter.getHighlightedVertexColor());
@@ -63,7 +63,7 @@ public void setGraphModel(IGraph<V,E> graph, PickingSupport picking){
 	}
 	
 	@Override
-	protected void drawVertexNode(GL2 gl, GLU glu, Camera cam, V v, Coord2d coord, Color color){
+	protected void drawVertexNode(GL gl, GLU glu, Camera cam, V v, Coord2d coord, Color color){
 		PickablePoint pt = vertexObjects.get(v);
 		pt.setData(new Coord3d(coord, Z));
 		pt.setColor(color);

@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.text.renderers.jogl;
 import java.awt.Font;
 import java.awt.geom.Rectangle2D;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -30,7 +30,7 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
 	}
 	
 	@Override
-	public void drawSimpleText(GL2 gl, GLU glu, Camera cam, String s, Coord3d position, Color color) {
+	public void drawSimpleText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Color color) {
 		renderer.begin3DRendering();
 		renderer.draw3D(s, position.x, position.y, position.z, 0.01f);
 		renderer.flush();
@@ -38,7 +38,7 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
 	}
 	
 	@Override
-	public BoundingBox3d drawText(GL2 gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+	public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
 		renderer.begin3DRendering();
 		
 		if(LAYOUT){ // work in progress

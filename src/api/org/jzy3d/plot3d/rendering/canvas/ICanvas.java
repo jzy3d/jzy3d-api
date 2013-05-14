@@ -1,14 +1,16 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
 import javax.media.opengl.GLDrawable;
 
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
+
+import com.jogamp.newt.event.KeyListener;
+import com.jogamp.newt.event.MouseListener;
+import com.jogamp.opengl.util.texture.TextureData;
+//import com.jogamp.newt.event.MouseMotionListener;
+//import com.jogamp.newt.event.MouseWheelListener;
+//import java.awt.image.BufferedImage;
 
 
 /**
@@ -41,7 +43,7 @@ public interface ICanvas {
 	public void forceRepaint();
 	
 	/** Returns an image with the current renderer's size */
-	public BufferedImage screenshot();
+	public TextureData screenshot();
 	
 	/** Performs all required cleanup when destroying a Canvas.*/
 	public void dispose();
@@ -51,11 +53,11 @@ public interface ICanvas {
 	public void addMouseListener(MouseListener listener);
 	public void removeMouseListener(MouseListener listener);
 	
-	public void addMouseWheelListener(MouseWheelListener listener);
-	public void removeMouseWheelListener(MouseWheelListener listener);
-	
-	public void addMouseMotionListener(MouseMotionListener listener);
-	public void removeMouseMotionListener(MouseMotionListener listener);
+//	public void addMouseWheelListener(MouseWheelListener listener);
+//	public void removeMouseWheelListener(MouseWheelListener listener);
+//	
+//	public void addMouseMotionListener(MouseMotionListener listener);
+//	public void removeMouseMotionListener(MouseMotionListener listener);
 	
 	public void addKeyListener(KeyListener listener);
 	public void removeKeyListener(KeyListener listener);

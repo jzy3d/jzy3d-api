@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.axes;
 
 import java.nio.FloatBuffer;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
@@ -37,10 +38,13 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	}
 	
 	@Override
-	public void draw(GL2 gl, GLU glu, Camera camera){
+	public void draw(GL gl, GLU glu, Camera camera){
+		
+		if (!gl.isGL2()) throw new UnsupportedOperationException("OpenGL2 required");
+		
 		// Set scaling
-		gl.glLoadIdentity();
-		gl.glScalef(scale.x, scale.y, scale.z);
+		gl.getGL2().glLoadIdentity();
+		gl.getGL2().glScalef(scale.x, scale.y, scale.z);
 		
 		// Set culling
 		gl.glEnable(GL2.GL_CULL_FACE);
@@ -53,8 +57,8 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 		// Plain part of quad making the surrounding box
 		if( layout.isFaceDisplayed() ){
 			Color quadcolor = layout.getQuadColor();
-			gl.glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
-			gl.glColor4f(quadcolor.r, quadcolor.g, quadcolor.b, quadcolor.a);
+			gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
+			gl.getGL2().glColor4f(quadcolor.r, quadcolor.g, quadcolor.b, quadcolor.a);
 			gl.glLineWidth(1.0f);
 			gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
 			gl.glPolygonOffset(1.0f, 1.0f); // handle stippling
@@ -64,16 +68,16 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 		
 		// Edge part of quads making the surrounding box
 		Color gridcolor = layout.getGridColor();
-		gl.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-		gl.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
+		gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+		gl.getGL2().glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
 		gl.glLineWidth(1);			
 		drawCube(gl, GL2.GL_RENDER);	
 				
 		// Draw grids on non hidden quads
-		gl.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-		gl.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
+		gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+		gl.getGL2().glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
 		gl.glLineWidth(1);
-		gl.glLineStipple(1, (short)0xAAAA);
+		gl.getGL2().glLineStipple(1, (short)0xAAAA);
 		gl.glEnable(GL2.GL_LINE_STIPPLE);		
 		for(int quad=0; quad<6; quad++)
 			if(!quadIsHidden[quad])		
@@ -157,15 +161,15 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	 * Each quad is indexed from 0.0f to 5.0f using glPassThrough,
 	 * and may be traced in feedback mode when mode=GL.GL_FEEDBACK 
 	 */
-	protected void drawCube(GL2 gl, int mode){
+	protected void drawCube(GL gl, int mode){
 		for(int q=0; q<6; q++){
 			if(mode==GL2.GL_FEEDBACK)
-				gl.glPassThrough((float)q);
-			gl.glBegin(GL2.GL_QUADS);
+				gl.getGL2().glPassThrough((float)q);
+			gl.getGL2().glBegin(GL2.GL_QUADS);
 				for(int v=0; v<4; v++){
-					gl.glVertex3f( quadx[q][v], quady[q][v], quadz[q][v]);
+					gl.getGL2().glVertex3f( quadx[q][v], quady[q][v], quadz[q][v]);
 				}
-			gl.glEnd();
+				gl.getGL2().glEnd();
 		}
 	}
 	
@@ -176,16 +180,16 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	 * Render the cube into the feedback buffer, in order to parse feedback
 	 * and determine which quad where displayed or not.
 	 */
-	protected boolean [] getHiddenQuads(GL2 gl){
+	protected boolean [] getHiddenQuads(GL gl){
 		int feedbacklength = 1024;
 		FloatBuffer floatbuffer = Buffers.newDirectFloatBuffer(feedbacklength);
 		float [] feedback = new float[feedbacklength];
 		
 		// Draw the cube into feedback buffer
-		gl.glFeedbackBuffer(feedbacklength, GL2.GL_3D_COLOR, floatbuffer);
-		gl.glRenderMode(GL2.GL_FEEDBACK);
+		gl.getGL2().glFeedbackBuffer(feedbacklength, GL2.GL_3D_COLOR, floatbuffer);
+		gl.getGL2().glRenderMode(GL2.GL_FEEDBACK);
 		drawCube(gl, GL2.GL_FEEDBACK);
-		gl.glRenderMode(GL2.GL_RENDER);
+		gl.getGL2().glRenderMode(GL2.GL_RENDER);
 		
 		// Parse feedback buffer and return hidden quads
 		floatbuffer.get(feedback);

@@ -1,4 +1,5 @@
 package org.jzy3d.plot3d.pipelines;
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 /** This utility allows checking the GL2 error bit after a call to a 
@@ -10,13 +11,13 @@ public class GLErrorReader {
 	
 	/** If an error occured, print it and add an information string 
 	 * at the following line.*/
-	public static void getAndPrintError(GL2 gl, String info){
+	public static void getAndPrintError(GL gl, String info){
 		if(getAndPrintError(gl))
 			System.err.println(info);
 	}
 	
 	/** If an error occured, print it.*/
-	public static boolean getAndPrintError(GL2 gl){
+	public static boolean getAndPrintError(GL gl){
     	int err = gl.glGetError(); 
     	
     	boolean status = true; // assume an error

@@ -4,10 +4,13 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import org.jzy3d.colors.Color;
+import org.jzy3d.colors.ColorAWT;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
+
+import com.jogamp.opengl.util.texture.Texture;
 
 
 /** 
@@ -49,7 +52,7 @@ public class ColorbarImageGenerator {
 		
 		// Draw background
 		if(hasBackground){
-			graphic.setColor(backgroundColor);
+			graphic.setColor(ColorAWT.toAWT(backgroundColor));
 			graphic.fillRect(0, 0, width, height);
 		}
 		
@@ -60,12 +63,12 @@ public class ColorbarImageGenerator {
 			Color c = mapper.getColor(v);  //To allow the Color to be a variable independent of the coordinates
 			
 			// Draw line
-			graphic.setColor(c.awt());
+			graphic.setColor(ColorAWT.toAWT(c));
 			graphic.drawLine(0, height-h, barWidth, height-h);
 		}
 		
 		// Contour of bar
-		graphic.setColor(foregroundColor);
+		graphic.setColor(ColorAWT.toAWT(foregroundColor));
 		graphic.drawRect(0, txtSize/2, barWidth, height-txtSize);
 		
 		// Text annotation
@@ -94,19 +97,19 @@ public class ColorbarImageGenerator {
 	}
 
 	public Color getBackgroundColor() {
-		return new Color(backgroundColor);
+		return backgroundColor;
 	}
 
 	public void setBackgroundColor(Color backgroundColor) {
-		this.backgroundColor = backgroundColor.awt();
+		this.backgroundColor = backgroundColor;
 	}
 	
 	public Color getForegroundColor() {
-		return new Color(foregroundColor);
+		return foregroundColor;
 	}
 
 	public void setForegroundColor(Color foregroundColor) {
-		this.foregroundColor = foregroundColor.awt();
+		this.foregroundColor = foregroundColor;
 	}
 
 	/*********************************************************************/
@@ -117,8 +120,8 @@ public class ColorbarImageGenerator {
 	protected double min;
 	protected double max;
 	protected boolean hasBackground = false;
-	protected java.awt.Color backgroundColor;
-	protected java.awt.Color foregroundColor = java.awt.Color.BLACK;
+	protected Color backgroundColor;
+	protected Color foregroundColor = Color.BLACK;
 	
 	public static final int MIN_BAR_WIDTH  = 100;
 	public static final int MIN_BAR_HEIGHT = 100;
