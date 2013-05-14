@@ -1,6 +1,6 @@
 package org.jzy3d.chart.graphs;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.ChartView;
@@ -15,7 +15,7 @@ public class GraphView extends ChartView {
 	}
 	
 
-	protected void correctCameraPositionForIncludingTextLabels(GL2 gl, GLU glu, float left, float right) {
+	protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, float left, float right) {
         /*cam.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
         cam.shoot(gl, glu, cameraMode);
         axe.draw(gl, glu, cam);

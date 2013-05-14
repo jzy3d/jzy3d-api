@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.text;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -18,17 +18,17 @@ public abstract class AbstractTextRenderer implements ITextRenderer{
 	}
 	
 	@Override
-	public BoundingBox3d drawText(GL2 gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color){
+	public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color){
 		return drawText(gl, glu, cam, s, position, halign, valign, color, defScreenOffset, defSceneOffset);
 	}	
 
 	@Override
-	public BoundingBox3d drawText(GL2 gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset){
+	public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset){
 		return drawText(gl, glu, cam, s, position, halign, valign, color, screenOffset, defSceneOffset);
 	}	
 
 	@Override
-	public BoundingBox3d drawText(GL2 gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord3d sceneOffset){
+	public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord3d sceneOffset){
 		return drawText(gl, glu, cam, s, position, halign, valign, color, defScreenOffset, sceneOffset);
 	}	
 	

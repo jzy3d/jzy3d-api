@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.Chart;
@@ -26,20 +26,20 @@ public class ProjectionUtils {
 		return project(chart.getView().getCurrentGL(), new GLU(), chart.getView().getCamera(), chart.getScene().getGraph());
 	}
 	
-	public static List<PolygonProjection> project(GL2 gl, GLU glu, Camera cam, Graph g){
+	public static List<PolygonProjection> project(GL gl, GLU glu, Camera cam, Graph g){
 		return project(gl, glu, cam, g.getAll());
 	}
 	
-	public static List<PolygonProjection> project(GL2 gl, GLU glu, Camera cam, List<AbstractDrawable> list){
+	public static List<PolygonProjection> project(GL gl, GLU glu, Camera cam, List<AbstractDrawable> list){
 		return project(gl, glu, cam, Decomposition.getDecomposition(list));
 	}
 	
-	public static List<PolygonProjection> project(GL2 gl, GLU glu, Camera cam, AbstractComposite c){
+	public static List<PolygonProjection> project(GL gl, GLU glu, Camera cam, AbstractComposite c){
 		ArrayList<AbstractDrawable> monotypes = Decomposition.getDecomposition(c);
 		return project(gl, glu, cam, monotypes);
 	}
 	
-	public static List<PolygonProjection> project(GL2 gl, GLU glu, Camera cam, ArrayList<AbstractDrawable> monotypes){
+	public static List<PolygonProjection> project(GL gl, GLU glu, Camera cam, ArrayList<AbstractDrawable> monotypes){
 		final TicToc t = new TicToc();
 		String report = "";
 		

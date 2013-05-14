@@ -1,10 +1,7 @@
 package org.jzy3d.plot3d.rendering.view.controllers;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
+import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.MouseListener;
 
 import org.jzy3d.chart.controllers.mouse.MouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
@@ -14,7 +11,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 
 public class ViewMouseController extends ViewCameraController implements
-		MouseListener, MouseMotionListener, MouseWheelListener {
+		MouseListener {
 	public ViewMouseController() {
 		super();
 	}
@@ -28,14 +25,10 @@ public class ViewMouseController extends ViewCameraController implements
 		this.canvas = canvas;
 		this.prevMouse = Coord2d.ORIGIN;
 		canvas.addMouseListener(this);
-		canvas.addMouseMotionListener(this);
-		canvas.addMouseWheelListener(this);
 	}
 
 	public void dispose() {
 		canvas.removeMouseListener(this);
-		canvas.removeMouseMotionListener(this);
-		canvas.removeMouseWheelListener(this);
 
 		if (threadController != null)
 			threadController.stop();
@@ -95,7 +88,7 @@ public class ViewMouseController extends ViewCameraController implements
 	}
 
 	/** Compute zoom */
-	public void mouseWheelMoved(MouseWheelEvent e) {
+	public void mouseWheelMoved(MouseEvent e) {
 		if (threadController != null)
 			threadController.stop();
 
@@ -135,6 +128,7 @@ public class ViewMouseController extends ViewCameraController implements
 	protected IScreenCanvas canvas;
 	protected Coord2d prevMouse;
 	protected CameraThreadController threadController;
+
 
 	// protected Chart chart;
 }

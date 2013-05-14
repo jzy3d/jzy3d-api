@@ -70,6 +70,7 @@ public class ColorMapper implements IColorMappable{
 		return out;
 	}
 
+
 	/* */
 
 	/**
@@ -138,4 +139,5 @@ public class ColorMapper implements IColorMappable{
 	protected double    max;
 	protected IColorMap colormap;
 	protected Color    factor = null;
+
 }

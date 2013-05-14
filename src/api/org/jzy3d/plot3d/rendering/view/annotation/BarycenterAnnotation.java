@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.rendering.view.annotation;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -47,7 +47,7 @@ public class BarycenterAnnotation extends AbstractComposite{
     }
 
     @Override
-    public void draw(GL2 gl, GLU glu, Camera camera) {
+    public void draw(GL gl, GLU glu, Camera camera) {
         bary.xyz = annotated.getBarycentre();
         int k = 0;
         for(LineStrip line: lines){

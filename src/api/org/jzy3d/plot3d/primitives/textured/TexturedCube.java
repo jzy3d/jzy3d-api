@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives.textured;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -84,7 +84,7 @@ public class TexturedCube extends AbstractComposite implements Selectable, ITran
 	}
 	
 	@Override
-	public void project(GL2 gl, GLU glu, Camera cam) {
+	public void project(GL gl, GLU glu, Camera cam) {
 		lastProjection = cam.modelToScreen( gl, glu, getBounds().getVertices() );
 		lastHull = ConvexHull.hull(lastProjection);
 	}

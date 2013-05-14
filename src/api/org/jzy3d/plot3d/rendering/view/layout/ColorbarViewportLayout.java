@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.Chart;
@@ -48,7 +48,7 @@ public class ColorbarViewportLayout implements IViewportLayout{
 
     
     @Override
-    public void render(GL2 gl, GLU glu, Chart chart){
+    public void render(GL gl, GLU glu, Chart chart){
         View view = chart.getView();
         view.renderBackground(gl, glu, backgroundViewPort);
         view.renderScene(gl, glu, sceneViewPort);
@@ -65,7 +65,7 @@ public class ColorbarViewportLayout implements IViewportLayout{
     /**
      * Renders the legend within the screen slice given by the left and right parameters.
      */
-    protected void renderLegends(GL2 gl, GLU glu, float left, float right, List<Legend> data, ICanvas canvas) {
+    protected void renderLegends(GL gl, GLU glu, float left, float right, List<Legend> data, ICanvas canvas) {
         float slice = (right - left) / (float) data.size();
         int k = 0;
         for (Legend layer : data) {

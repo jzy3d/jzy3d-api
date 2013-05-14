@@ -17,8 +17,6 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.junit.replay.events.ComponentEventLog;
@@ -31,6 +29,8 @@ import org.jzy3d.junit.replay.events.KeyEventLog;
 import org.jzy3d.junit.replay.events.MouseEventLog;
 import org.jzy3d.junit.replay.events.WindowEventLog;
 import org.jzy3d.utils.LoggerUtils;
+
+import com.jogamp.opengl.util.texture.TextureIO;
 
 public class EventRecorder extends Timestamped implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, ComponentListener, WindowListener {
     protected Component awt;
@@ -107,7 +107,7 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
         File output = new File(filename);
         if (!output.getParentFile().exists())
             output.mkdirs();
-        ImageIO.write(chart.screenshot(), "png", output);
+        TextureIO.write(chart.screenshot(), output);
         Logger.getLogger(EventRecorder.class).info("screenshot:" + filename);
     }
 

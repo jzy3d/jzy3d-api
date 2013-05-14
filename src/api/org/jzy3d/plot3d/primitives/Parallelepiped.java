@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -42,7 +42,7 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 	
 	/* */
 
-	public void draw(GL2 gl, GLU glu, Camera cam){
+	public void draw(GL gl, GLU glu, Camera cam){
 		for(Polygon quad: quads)
 			quad.draw(gl, glu, cam);	
 	}

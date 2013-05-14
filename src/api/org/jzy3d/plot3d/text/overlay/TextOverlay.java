@@ -9,7 +9,7 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -68,7 +68,7 @@ public class TextOverlay implements Renderer2d{
 	
 	/****************************************************************/
 	
-	public void appendText(GL2 gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color){
+	public void appendText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color){
 		Coord3d posScreen = cam.modelToScreen(gl, glu, position);
 
 		textList.add(new TextDescriptor(s, new Coord2d(posScreen.x, posScreen.y), color, halign, valign));

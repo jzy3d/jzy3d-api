@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -49,7 +49,7 @@ public class TextureGraph2d<V,E>  extends DefaultDrawableGraph2d<V, E> {
 	/***********************/
 	
 	@Override
-	protected void drawVertices(GL2 gl, GLU glu, Camera cam){
+	protected void drawVertices(GL gl, GLU glu, Camera cam){
 		for(V v: graph.getVertices()){
 			if(highlights.get(v))
 				drawVertexNode(gl, glu, cam, v, layout.get(v), formatter.getHighlightedVertexColor());
@@ -59,7 +59,7 @@ public class TextureGraph2d<V,E>  extends DefaultDrawableGraph2d<V, E> {
 	}
 	
 	@Override
-	protected void drawVertexNode(GL2 gl, GLU glu, Camera cam, V v, Coord2d coord, Color color){
+	protected void drawVertexNode(GL gl, GLU glu, Camera cam, V v, Coord2d coord, Color color){
 		PickableTexture t = vertexTextures.get(v);
 		t.setColorFilter(color);
         t.setPlanePosition(coord);

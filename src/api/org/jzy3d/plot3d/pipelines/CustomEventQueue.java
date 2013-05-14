@@ -7,8 +7,8 @@ import java.awt.event.InvocationEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.PaintEvent;
 
-
 /** Utility for debugging event queue related to 3d in AWT.*/
+
 public class CustomEventQueue extends EventQueue {
 	protected void dispatchEvent(AWTEvent event){
 		if(event instanceof PaintEvent)

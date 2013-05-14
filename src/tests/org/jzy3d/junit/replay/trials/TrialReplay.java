@@ -2,11 +2,11 @@ package org.jzy3d.junit.replay.trials;
 
 import java.awt.Component;
 import java.awt.Frame;
-import java.awt.Rectangle;
 
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.junit.replay.EventReplay;
+import org.jzy3d.maths.Rectangle;
 
 public class TrialReplay {
 	public static void main(String[] args) throws Exception {

@@ -1,11 +1,13 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import java.awt.Rectangle;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 /**
  * An {@link AbstractViewportManager} describes an element that occupies the
@@ -90,7 +92,7 @@ abstract class AbstractViewportManager {
      * @param gl
      * @param glu
      */
-    protected ViewportConfiguration applyViewport(GL2 gl, GLU glu) {
+    protected ViewportConfiguration applyViewport(GL gl, GLU glu) {
         // Stretch projection on the whole viewport
         if (ViewportMode.STRETCH_TO_FILL.equals(mode) || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) {
             screenXOffset = screenLeft;
@@ -148,20 +150,25 @@ abstract class AbstractViewportManager {
     }
 
     /** Renders a grid on the defined sub screen. */
-    private void renderSubScreenGrid(GL2 gl, GLU glu) {
+    private void renderSubScreenGrid(GL gl, GLU glu) {
         if (screenWidth <= 0)
             return;
+        
+        if (!gl.isGL2()) {
+        	renderSubScreenGridGLES(gl, glu);
+        	return;
+        }
 
         // Set a 2d projection
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glPushMatrix();
-        gl.glLoadIdentity();
+        gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+        gl.getGL2().glPushMatrix();
+        gl.getGL2().glLoadIdentity();
 
         if (ViewportMode.STRETCH_TO_FILL.equals(mode) || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) {
             int screenXoffset = screenLeft;
             int screenYoffset = 0;
 
-            gl.glViewport(screenXoffset, screenYoffset, screenWidth, screenHeight);
+            gl.getGL2().glViewport(screenXoffset, screenYoffset, screenWidth, screenHeight);
         }
 
         // Set the projection into the largest square area centered in the
@@ -174,14 +181,14 @@ abstract class AbstractViewportManager {
             gl.glViewport(screenXoffset, screenYoffset, dimension, dimension);
         }
 
-        gl.glOrtho(AREA_LEFT, AREA_RIGHT, AREA_DOWN, AREA_TOP, -1, 1);
+        gl.getGL2().glOrtho(AREA_LEFT, AREA_RIGHT, AREA_DOWN, AREA_TOP, -1, 1);
 
         // Set a grid
-        gl.glMatrixMode(GL2.GL_MODELVIEW);
-        gl.glPushMatrix();
-        gl.glLoadIdentity();
-        gl.glColor3f(1f, 0.5f, 0.5f);
-        gl.glLineWidth(1f);
+        gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+        gl.getGL2().glPushMatrix();
+        gl.getGL2().glLoadIdentity();
+        gl.getGL2().glColor3f(1f, 0.5f, 0.5f);
+        gl.getGL2().glLineWidth(1f);
 
         float step;
 
@@ -191,10 +198,10 @@ abstract class AbstractViewportManager {
             if (x == AREA_LEFT)
                 x += OFFSET;
 
-            gl.glBegin(GL2.GL_LINES);
-            gl.glVertex3f(x, AREA_DOWN, 1);
-            gl.glVertex3f(x, AREA_TOP, 1);
-            gl.glEnd();
+            gl.getGL2().glBegin(GL2.GL_LINES);
+            gl.getGL2().glVertex3f(x, AREA_DOWN, 1);
+            gl.getGL2().glVertex3f(x, AREA_TOP, 1);
+            gl.getGL2().glEnd();
         }
 
         step = (AREA_TOP - AREA_DOWN) / (GRID_STEPS + 0);
@@ -203,19 +210,86 @@ abstract class AbstractViewportManager {
             if (y == AREA_TOP)
                 y -= OFFSET;
 
-            gl.glBegin(GL2.GL_LINES);
-            gl.glVertex3f(AREA_LEFT, y, 1);
-            gl.glVertex3f(AREA_RIGHT, y, 1);
-            gl.glEnd();
+            gl.getGL2().glBegin(GL2.GL_LINES);
+            gl.getGL2().glVertex3f(AREA_LEFT, y, 1);
+            gl.getGL2().glVertex3f(AREA_RIGHT, y, 1);
+            gl.getGL2().glEnd();
         }
 
         // Restore matrices
-        gl.glPopMatrix();
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glPopMatrix();
+        gl.getGL2().glPopMatrix();
+        gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+        gl.getGL2().glPopMatrix();
     }
 
-    private static final float AREA_LEFT = -100;
+    private void renderSubScreenGridGLES(GL gl, GLU glu) {
+    	 if (screenWidth <= 0)
+             return;
+
+         // Set a 2d projection
+         GLES2CompatUtils.glMatrixMode(GL2.GL_PROJECTION);
+         GLES2CompatUtils.glPushMatrix();
+         GLES2CompatUtils.glLoadIdentity();
+
+         if (ViewportMode.STRETCH_TO_FILL.equals(mode) || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) {
+             int screenXoffset = screenLeft;
+             int screenYoffset = 0;
+
+             GLES2CompatUtils.glViewport(screenXoffset, screenYoffset, screenWidth, screenHeight);
+         }
+
+         // Set the projection into the largest square area centered in the
+         // window slice
+         else {
+             int dimension = Math.min(screenWidth, screenHeight);
+             int screenXoffset = screenLeft + screenWidth / 2 - dimension / 2;
+             int screenYoffset = screenHeight / 2 - dimension / 2;
+
+             GLES2CompatUtils.glViewport(screenXoffset, screenYoffset, dimension, dimension);
+         }
+
+         GLES2CompatUtils.glOrtho(AREA_LEFT, AREA_RIGHT, AREA_DOWN, AREA_TOP, -1, 1);
+
+         // Set a grid
+         GLES2CompatUtils.glMatrixMode(GL2.GL_MODELVIEW);
+         GLES2CompatUtils.glPushMatrix();
+         GLES2CompatUtils.glLoadIdentity();
+         GLES2CompatUtils.glColor3f(1f, 0.5f, 0.5f);
+         GLES2CompatUtils.glLineWidth(1f);
+
+         float step;
+
+         step = (AREA_RIGHT - AREA_LEFT) / (GRID_STEPS + 0);
+         for (float i = AREA_LEFT; i <= AREA_RIGHT; i += step) {
+             float x = i;
+             if (x == AREA_LEFT)
+                 x += OFFSET;
+
+             GLES2CompatUtils.glBegin(GL2.GL_LINES);
+             GLES2CompatUtils.glVertex3f(x, AREA_DOWN, 1);
+             GLES2CompatUtils.glVertex3f(x, AREA_TOP, 1);
+             GLES2CompatUtils.glEnd();
+         }
+
+         step = (AREA_TOP - AREA_DOWN) / (GRID_STEPS + 0);
+         for (float j = AREA_DOWN; j <= AREA_TOP; j += step) {
+             float y = j;
+             if (y == AREA_TOP)
+                 y -= OFFSET;
+
+             GLES2CompatUtils.glBegin(GL2.GL_LINES);
+             GLES2CompatUtils.glVertex3f(AREA_LEFT, y, 1);
+             GLES2CompatUtils.glVertex3f(AREA_RIGHT, y, 1);
+             GLES2CompatUtils.glEnd();
+         }
+
+         // Restore matrices
+         GLES2CompatUtils.glPopMatrix();
+         GLES2CompatUtils.glMatrixMode(GL2.GL_PROJECTION);
+         GLES2CompatUtils.glPopMatrix();
+	}
+
+	private static final float AREA_LEFT = -100;
     private static final float AREA_RIGHT = +100;
     private static final float AREA_TOP = +100;
     private static final float AREA_DOWN = -100;

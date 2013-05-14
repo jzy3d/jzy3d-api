@@ -19,7 +19,7 @@
 
 package org.jzy3d.plot3d.rendering.view;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
@@ -40,7 +40,7 @@ public class SelectableView extends View{
 
 	/** If chart is rendered for the first time, or rendered because it,
 	 * was resized, we need to update a projection for the CellSelector. */
-	public void render(GL2 gl, GLU glu) {
+	public void render(GL gl, GLU glu) {
 		if( dimensionDirty )
 			wasDirty = true;
 
