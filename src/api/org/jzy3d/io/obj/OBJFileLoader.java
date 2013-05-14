@@ -3,7 +3,7 @@ package org.jzy3d.io.obj;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.io.IGLLoader;
@@ -21,7 +21,7 @@ public class OBJFileLoader implements IGLLoader<DrawableVBO>{
     }
 
     @Override
-    public void load(GL2 gl, DrawableVBO drawable) {
+    public void load(GL gl, DrawableVBO drawable) {
         obj = new OBJFile();
         Logger.getLogger(OBJFileLoader.class).info("loading OBJ file '" + filename + "'");
         obj.loadModelFromFile(filename);

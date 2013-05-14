@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.textures;
 import java.io.File;
 import java.io.IOException;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLException;
 
@@ -22,7 +23,7 @@ public class SharedTexture implements IGLBindedResource{
         this.file = file;
     }
 
-    public Texture getTexture(GL2 gl) {
+    public Texture getTexture(GL gl) {
         if (texture == null)
             mount(gl);
         else { // execute onmount even if we did not mount
@@ -33,7 +34,7 @@ public class SharedTexture implements IGLBindedResource{
     }
 
     /** A GL2 context MUST be current. */
-    public void mount(GL2 gl) {
+    public void mount(GL gl) {
         try {
             load(gl, file);
         } catch (Exception e) {
@@ -51,7 +52,7 @@ public class SharedTexture implements IGLBindedResource{
         return texture!=null;
     }
 
-    protected void load(GL2 gl, String fileName) throws GLException, IOException {
+    protected void load(GL gl, String fileName) throws GLException, IOException {
         texture = TextureIO.newTexture(new File(fileName), false);
         texture.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
         texture.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);

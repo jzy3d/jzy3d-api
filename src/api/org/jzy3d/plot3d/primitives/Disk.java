@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
@@ -9,132 +10,167 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 public class Disk extends AbstractWireframeable implements ISingleColorable {
 
-    /** Initialize a Cylinder at the origin. */
-    public Disk() {
-        super();
-        bbox = new BoundingBox3d();
-        setPosition(Coord3d.ORIGIN);
-        setVolume(0f, 10f);
-        setSlicing(15, 15);
-        setColor(Color.BLACK);
-    }
+	/** Initialize a Cylinder at the origin. */
+	public Disk() {
+		super();
+		bbox = new BoundingBox3d();
+		setPosition(Coord3d.ORIGIN);
+		setVolume(0f, 10f);
+		setSlicing(15, 15);
+		setColor(Color.BLACK);
+	}
 
-    /** Initialize a cylinder with the given parameters. */
-    public Disk(Coord3d position, float radiusInner, float radiusOuter, int slices, int loops, Color color) {
-        super();
-        bbox = new BoundingBox3d();
-        setPosition(position);
-        setVolume(radiusInner, radiusOuter);
-        setSlicing(slices, loops);
-        setColor(color);
-    }
+	/** Initialize a cylinder with the given parameters. */
+	public Disk(Coord3d position, float radiusInner, float radiusOuter,
+			int slices, int loops, Color color) {
+		super();
+		bbox = new BoundingBox3d();
+		setPosition(position);
+		setVolume(radiusInner, radiusOuter);
+		setSlicing(slices, loops);
+		setColor(color);
+	}
 
-    /* */
+	/* */
 
-    public void draw(GL2 gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
-        gl.glTranslatef(x, y, z);
+	public void draw(GL gl, GLU glu, Camera cam) {
+		doTransform(gl, glu, cam);
 
-        gl.glLineWidth(wfwidth);
+		if (gl.isGL2()) {
+			gl.getGL2().glTranslatef(x, y, z);
 
-        // Draw
-        GLUquadric qobj = glu.gluNewQuadric();
+			gl.glLineWidth(wfwidth);
 
-        if (facestatus) {
-            if (wfstatus) {
-                gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
-                gl.glPolygonOffset(1.0f, 1.0f);
-            }
+			// Draw
+			GLUquadric qobj = glu.gluNewQuadric();
 
-            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-            gl.glColor4f(color.r, color.g, color.b, color.a);
-            glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+			if (facestatus) {
+				if (wfstatus) {
+					gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glPolygonOffset(1.0f, 1.0f);
+				}
 
-            if (wfstatus)
-                gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
+				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
 
-        }
-        if (wfstatus) {
-            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-            gl.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-            glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
-        }
+				if (wfstatus)
+					gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
 
-        doDrawBounds(gl, glu, cam);
-    }
+			}
+			if (wfstatus) {
+				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+			}
+		} else {
+			GLES2CompatUtils.glTranslatef(x, y, z);
 
-    /* */
+			gl.glLineWidth(wfwidth);
 
-    public void setData(Coord3d position, float radiusInner, float radiusOuter, int slices, int loops) {
-        setPosition(position);
-        setVolume(radiusInner, radiusOuter);
-        setSlicing(slices, loops);
-    }
+			// Draw
+			GLUquadric qobj = glu.gluNewQuadric();
 
-    public void setPosition(Coord3d position) {
-        this.x = position.x;
-        this.y = position.y;
-        this.z = position.z;
+			if (facestatus) {
+				if (wfstatus) {
+					gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glPolygonOffset(1.0f, 1.0f);
+				}
 
-        updateBounds();
-    }
+				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
+				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
 
-    public void setVolume(float radiusInner, float radiusOuter) {
-        if (radiusOuter < radiusInner)
-            throw new IllegalArgumentException("inner radius must be smaller than outer radius");
+				if (wfstatus)
+					gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
 
-        this.radiusInner = radiusInner;
-        this.radiusOuter = radiusOuter;
+			}
+			if (wfstatus) {
+				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+			}
+		}
 
-        updateBounds();
-    }
+		doDrawBounds(gl, glu, cam);
+	}
 
-    public void updateBounds() {
-        bbox.reset();
-        bbox.add(x + radiusOuter, y + radiusOuter, z);
-        bbox.add(x - radiusOuter, y - radiusOuter, z);
-    }
+	/* */
 
-    public void setSlicing(int verticalWires, int horizontalWires) {
-        this.slices = verticalWires;
-        this.loops = horizontalWires;
-    }
+	public void setData(Coord3d position, float radiusInner, float radiusOuter,
+			int slices, int loops) {
+		setPosition(position);
+		setVolume(radiusInner, radiusOuter);
+		setSlicing(slices, loops);
+	}
 
-    /* */
+	public void setPosition(Coord3d position) {
+		this.x = position.x;
+		this.y = position.y;
+		this.z = position.z;
 
-    public void setColor(Color color) {
-        this.color = color;
+		updateBounds();
+	}
 
-        fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
-    }
+	public void setVolume(float radiusInner, float radiusOuter) {
+		if (radiusOuter < radiusInner)
+			throw new IllegalArgumentException(
+					"inner radius must be smaller than outer radius");
 
-    public Color getColor() {
-        return color;
-    }
-    
-    public void applyGeometryTransform(Transform transform){
-       Coord3d change = transform.compute(new Coord3d(x,y,z));
-       x = change.x;
-       y = change.y;
-       z = change.z;
-       updateBounds();
-    }
+		this.radiusInner = radiusInner;
+		this.radiusOuter = radiusOuter;
 
-    /* */
+		updateBounds();
+	}
 
-    private float x;
-    private float y;
-    private float z;
+	public void updateBounds() {
+		bbox.reset();
+		bbox.add(x + radiusOuter, y + radiusOuter, z);
+		bbox.add(x - radiusOuter, y - radiusOuter, z);
+	}
 
-    private int slices;
-    private int loops;
-    private float radiusInner;
-    private float radiusOuter;
+	public void setSlicing(int verticalWires, int horizontalWires) {
+		this.slices = verticalWires;
+		this.loops = horizontalWires;
+	}
 
-    private Color color;
+	/* */
+
+	public void setColor(Color color) {
+		this.color = color;
+
+		fireDrawableChanged(new DrawableChangedEvent(this,
+				DrawableChangedEvent.FIELD_COLOR));
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public void applyGeometryTransform(Transform transform) {
+		Coord3d change = transform.compute(new Coord3d(x, y, z));
+		x = change.x;
+		y = change.y;
+		z = change.z;
+		updateBounds();
+	}
+
+	/* */
+
+	private float x;
+	private float y;
+	private float z;
+
+	private int slices;
+	private int loops;
+	private float radiusInner;
+	private float radiusOuter;
+
+	private Color color;
 }

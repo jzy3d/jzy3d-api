@@ -1,7 +1,6 @@
 package org.jzy3d.chart.controllers.mouse.picking;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import com.jogamp.newt.event.MouseEvent;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.ControllerType;
@@ -46,7 +45,7 @@ public class MousePickingPan2dController<V,E> extends MousePickingController<V,E
 	}
 	protected boolean done;
 	
-	public void mouseWheelMoved(MouseWheelEvent e) {
+	public void mouseWheelMoved(MouseEvent e) {
 		lastInc = (e.getWheelRotation()/10.0f);
 		factor = factor + lastInc;
 

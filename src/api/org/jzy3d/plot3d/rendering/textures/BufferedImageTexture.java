@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.textures;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLException;
 import javax.media.opengl.GLProfile;
@@ -17,7 +18,7 @@ public class BufferedImageTexture extends SharedTexture {
         this.image = image;
     }
 
-    public Texture getTexture(GL2 gl) {
+    public Texture getTexture(GL gl) {
         if (texture == null)
             mount(gl);
         else { // execute onmount even if we did not mount
@@ -28,7 +29,7 @@ public class BufferedImageTexture extends SharedTexture {
     }
 
     /** A GL2 context MUST be current. */
-    public void mount(GL2 gl) {
+    public void mount(GL gl) {
         try {
             load(gl, image);
         } catch (Exception e) {
@@ -42,7 +43,7 @@ public class BufferedImageTexture extends SharedTexture {
         // halfWidth + " halfHeight=" + halfHeight);
     }
 
-    protected void load(GL2 gl, BufferedImage image) throws GLException, IOException {
+    protected void load(GL gl, BufferedImage image) throws GLException, IOException {
         texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, false); 
         texture.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR); // different from shared texture!
         texture.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);

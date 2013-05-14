@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.primitives.selectable;
 
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.controllers.mouse.selection.AbstractMouseSelector;
@@ -31,7 +31,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin Pernollet
  */
 public interface Selectable {
-	public void project(GL2 gl, GLU glu, Camera cam);
+	public void project(GL gl, GLU glu, Camera cam);
 	public java.awt.Polygon getHull2d();
 	public List<Coord3d> getLastProjection();
 }

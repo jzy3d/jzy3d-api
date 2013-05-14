@@ -1,7 +1,7 @@
 package org.jzy3d.chart.controllers.mouse;
 
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
+import com.jogamp.newt.event.InputEvent;
+import com.jogamp.newt.event.MouseEvent;
 
 public class MouseUtilities {
 	public static boolean isDoubleClick(MouseEvent e){
@@ -9,14 +9,14 @@ public class MouseUtilities {
 	}
 	
 	public static boolean isLeftDown(MouseEvent e){
-    	return (e.getModifiersEx() & InputEvent.BUTTON1_DOWN_MASK) == InputEvent.BUTTON1_DOWN_MASK;
+		return e.isButtonDown(MouseEvent.BUTTON1);
 	}
 
 	public static boolean isRightDown(MouseEvent e){
-		return (e.getModifiersEx() & InputEvent.BUTTON3_DOWN_MASK) == InputEvent.BUTTON3_DOWN_MASK; 
+		return e.isButtonDown(MouseEvent.BUTTON3);
 	}
 	
 	public static boolean isRightClick(MouseEvent e){
-		return (e.getModifiersEx() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK; 
+		return (e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK; 
 	}
 }

@@ -1,7 +1,6 @@
 package org.jzy3d.chart.controllers.mouse.camera;
 
 
-import java.awt.event.MouseWheelEvent;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
@@ -103,9 +102,13 @@ public class CameraMouseControllerNewt extends AbstractCameraController implemen
 	}
 	
 	
+	
 	/** Compute zoom */
-	public void mouseWheelMoved(MouseWheelEvent e) {
+	public void mouseWheelMoved(MouseEvent e) {
+		stopThreadController();
 		
+		float factor = 1 + (e.getWheelRotation()/10.0f);
+		zoomZ(factor);
 	}
 	
 	public void mouseClicked(MouseEvent e) {}  
@@ -114,13 +117,7 @@ public class CameraMouseControllerNewt extends AbstractCameraController implemen
 	public void mouseReleased(MouseEvent e) {} 
 	public void mouseMoved(MouseEvent e) {}
 
-	@Override
-	public void mouseWheelMoved(MouseEvent e) {
-		stopThreadController();
-		
-		float factor = 1 + (e.getWheelRotation()/10.0f);
-		zoomZ(factor);
-	}
+
 	
 	/*********************************************************/
 	

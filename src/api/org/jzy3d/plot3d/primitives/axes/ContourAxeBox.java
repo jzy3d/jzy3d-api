@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -100,7 +100,7 @@ public class ContourAxeBox extends AxeBox {
 	}
 	
 	@Override
-	public void draw(GL2 gl, GLU glu, Camera camera){
+	public void draw(GL gl, GLU glu, Camera camera){
 		super.draw(gl, glu, camera);
 		
 		//gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
@@ -115,7 +115,7 @@ public class ContourAxeBox extends AxeBox {
 		
 	}
 	
-	public void drawMesh(GL2 gl, GLU glu, Camera camera, ContourMesh mesh){
+	public void drawMesh(GL gl, GLU glu, Camera camera, ContourMesh mesh){
 		// draw contour lines
 		for (ContourLevel line: mesh.lines.getContourLevels()) {
 			line.draw(gl, glu, camera);

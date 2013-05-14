@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.selectable;
 import java.awt.Polygon;
 import java.util.List;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
@@ -11,6 +12,7 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.Scatter;
+import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 /**
@@ -20,101 +22,132 @@ import org.jzy3d.plot3d.rendering.view.Camera;
  * @author Martin Pernollet
  * 
  */
-public class SelectableScatter extends Scatter implements ISingleColorable, Selectable {
-    public SelectableScatter(Coord3d[] coordinates, Color[] colors) {
-        super(coordinates, colors);
-    }
+public class SelectableScatter extends Scatter implements ISingleColorable,
+		Selectable {
+	public SelectableScatter(Coord3d[] coordinates, Color[] colors) {
+		super(coordinates, colors);
+	}
 
-    public void draw(GL2 gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+	public void draw(GL gl, GLU glu, Camera cam) {
+		doTransform(gl, glu, cam);
 
-        gl.glPointSize(width);
+		if (gl.isGL2()) {
 
-        gl.glBegin(GL2.GL_POINTS);
-        if (colors == null)
-            gl.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
-        if (coordinates != null) {
-            int k = 0;
-            for (Coord3d c : coordinates) {
-                if (colors != null) {
-                    if (isHighlighted[k]) // Selection coloring goes here
-                        gl.glColor4f(highlightColor.r, highlightColor.g, highlightColor.b, highlightColor.a);
-                    else
-                        gl.glColor4f(colors[k].r, colors[k].g, colors[k].b, colors[k].a);
-                    k++;
-                }
+			gl.getGL2().glPointSize(width);
 
-                gl.glVertex3f(c.x, c.y, c.z);
-            }
-        }
-        gl.glEnd();
-    }
+			gl.getGL2().glBegin(GL2.GL_POINTS);
+			if (colors == null)
+				gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+			if (coordinates != null) {
+				int k = 0;
+				for (Coord3d c : coordinates) {
+					if (colors != null) {
+						if (isHighlighted[k]) // Selection coloring goes here
+							gl.getGL2().glColor4f(highlightColor.r,
+									highlightColor.g, highlightColor.b,
+									highlightColor.a);
+						else
+							gl.getGL2().glColor4f(colors[k].r, colors[k].g,
+									colors[k].b, colors[k].a);
+						k++;
+					}
 
-    @Override
-    public void project(GL2 gl, GLU glu, Camera cam) {
-        projection = cam.modelToScreen(gl, glu, getData());
-    }
+					gl.getGL2().glVertex3f(c.x, c.y, c.z);
+				}
+			}
+			gl.getGL2().glEnd();
+		} else {
+			GLES2CompatUtils.glPointSize(width);
 
-    public Coord3d[] getProjection() {
-        return projection;
-    }
+			gl.getGL2().glBegin(GL2.GL_POINTS);
+			if (colors == null)
+				GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+			if (coordinates != null) {
+				int k = 0;
+				for (Coord3d c : coordinates) {
+					if (colors != null) {
+						if (isHighlighted[k]) // Selection coloring goes here
+							GLES2CompatUtils.glColor4f(highlightColor.r,
+									highlightColor.g, highlightColor.b,
+									highlightColor.a);
+						else
+							GLES2CompatUtils.glColor4f(colors[k].r,
+									colors[k].g, colors[k].b, colors[k].a);
+						k++;
+					}
 
-    public Color getHighlightColor() {
-        return highlightColor;
-    }
+					GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
+				}
+			}
+			GLES2CompatUtils.glEnd();
+		}
+	}
 
-    public void setHighlightColor(Color highlightColor) {
-        this.highlightColor = highlightColor;
-    }
+	@Override
+	public void project(GL gl, GLU glu, Camera cam) {
+		projection = cam.modelToScreen(gl, glu, getData());
+	}
 
-    public void setHighlighted(int id, boolean value) {
-        isHighlighted[id] = value;
-    }
+	public Coord3d[] getProjection() {
+		return projection;
+	}
 
-    public boolean getHighlighted(int id) {
-        return isHighlighted[id];
-    }
+	public Color getHighlightColor() {
+		return highlightColor;
+	}
 
-    public void resetHighlighting() {
-        this.isHighlighted = new boolean[coordinates.length];
-    }
+	public void setHighlightColor(Color highlightColor) {
+		this.highlightColor = highlightColor;
+	}
 
-    /* */
+	public void setHighlighted(int id, boolean value) {
+		isHighlighted[id] = value;
+	}
 
-    /**
-     * Set the coordinates of the point.
-     * 
-     * @param xyz
-     *            point's coordinates
-     */
-    public void setData(Coord3d[] coordinates) {
-        this.coordinates = coordinates;
-        this.isHighlighted = new boolean[coordinates.length];
+	public boolean getHighlighted(int id) {
+		return isHighlighted[id];
+	}
 
-        bbox.reset();
-        for (Coord3d c : coordinates)
-            bbox.add(c);
-    }
+	public void resetHighlighting() {
+		this.isHighlighted = new boolean[coordinates.length];
+	}
 
-    public Coord3d[] getData() {
-        return coordinates;
-    }
+	/* */
 
-    @Override
-    public Polygon getHull2d() {
-        throw new NotImplementedException();
-    }
+	/**
+	 * Set the coordinates of the point.
+	 * 
+	 * @param xyz
+	 *            point's coordinates
+	 */
+	public void setData(Coord3d[] coordinates) {
+		this.coordinates = coordinates;
+		this.isHighlighted = new boolean[coordinates.length];
 
-    @Override
-    public List<Coord3d> getLastProjection() {
-        throw new NotImplementedException();
-    }
+		bbox.reset();
+		for (Coord3d c : coordinates)
+			bbox.add(c);
+	}
 
-    /**********************************************************************/
+	public Coord3d[] getData() {
+		return coordinates;
+	}
 
-    protected boolean[] isHighlighted;
-    protected Color highlightColor = Color.RED.clone();
+	@Override
+	public Polygon getHull2d() {
+		throw new NotImplementedException();
+	}
 
-    protected Coord3d[] projection;
+	@Override
+	public List<Coord3d> getLastProjection() {
+		throw new NotImplementedException();
+	}
+
+	/**********************************************************************/
+
+	protected boolean[] isHighlighted;
+	protected Color highlightColor = Color.RED.clone();
+
+	protected Coord3d[] projection;
 
 }

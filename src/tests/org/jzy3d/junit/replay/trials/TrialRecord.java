@@ -1,12 +1,12 @@
 package org.jzy3d.junit.replay.trials;
 
 import java.awt.Frame;
-import java.awt.Rectangle;
 
 import org.apache.log4j.Level;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.junit.replay.EventRecorder;
+import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.utils.LoggerUtils;
 
