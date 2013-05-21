@@ -395,7 +395,7 @@ public class View {
 
     /* CONTROLS ANNOTATIONS & GENERAL RENDERING */
 
-    public void setAxe(AxeBox ax) {
+    public void setAxe(IAxe ax) {
         axe = ax;
         updateBounds();
     }
@@ -1055,26 +1055,33 @@ public class View {
     	return tooltips.size()>0 || renderers.size()>0;
     }
 
+    /**
+     * Will do something only if current axe is an instance of {@link AxeBox}, as this method
+     * requires the axe to be able to return its bounds.
+     */
     protected void correctCameraPositionForIncludingTextLabels(GL2 gl, GLU glu, ViewportConfiguration viewport) {
-        cam.setViewPort(viewport);
-        cam.shoot(gl, glu, cameraMode);
-        axe.draw(gl, glu, cam);
-        clear(gl);
+        if(axe instanceof AxeBox){
+            AxeBox abox = (AxeBox) axe;
+            
+            cam.setViewPort(viewport);
+            cam.shoot(gl, glu, cameraMode);
+            abox.draw(gl, glu, cam);
+            clear(gl);
 
-        AxeBox abox = (AxeBox) axe;
-        BoundingBox3d newBounds = abox.getWholeBounds().scale(scaling);
+            BoundingBox3d newBounds = abox.getWholeBounds().scale(scaling);
 
-        if (viewmode == ViewPositionMode.TOP) {
-            float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(), newBounds.getYmax() - newBounds.getYmin()) / 2;
-            radius += (radius * STRETCH_RATIO);
-            cam.setRenderingSphereRadius(radius);
-        } else
-            cam.setRenderingSphereRadius((float) newBounds.getRadius());
+            if (viewmode == ViewPositionMode.TOP) {
+                float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(), newBounds.getYmax() - newBounds.getYmin()) / 2;
+                radius += (radius * STRETCH_RATIO);
+                cam.setRenderingSphereRadius(radius);
+            } else
+                cam.setRenderingSphereRadius((float) newBounds.getRadius());
 
-        Coord3d target = newBounds.getCenter();
-        Coord3d eye = viewpoint.cartesian().add(target);
-        cam.setTarget(target);
-        cam.setEye(eye);
+            Coord3d target = newBounds.getCenter();
+            Coord3d eye = viewpoint.cartesian().add(target);
+            cam.setTarget(target);
+            cam.setEye(eye);
+        }
     }
 
     /* */
