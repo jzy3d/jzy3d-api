@@ -27,6 +27,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -42,7 +43,6 @@ import org.jzy3d.plot3d.transform.Scale;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.util.awt.Overlay;
-import javax.media.opengl.GLDrawable;
 
 /**
  * A {@link View} holds a {@link Scene}, a {@link LightSet}, an {@link ICanvas}
@@ -677,9 +677,12 @@ public class View {
     protected GLAutoDrawable getCanvasAsGLAutoDrawable() {
         if (canvas instanceof GLAutoDrawable) {
             return ((GLAutoDrawable) canvas);
+        } else if (canvas instanceof CanvasNewt) {
+            return (GLAutoDrawable) ((CanvasNewt) canvas).getWindow();
         } else
             throw new RuntimeException("Unexpected instance type");
     }
+    
 
     /**
      * The initialization function:

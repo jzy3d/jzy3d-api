@@ -79,7 +79,7 @@ public class Renderer3d implements GLEventListener{
 			view.render(gl, glu);
 
 			if(doScreenshotAtNextDisplay){
-	            image = Screenshot.readToBufferedImage(width, height);
+			    image = Screenshot.readToBufferedImage(width, height);
 	            doScreenshotAtNextDisplay = false;
 	        }
 		}

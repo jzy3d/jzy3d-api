@@ -102,12 +102,6 @@ public class CameraMouseControllerNewt extends AbstractCameraController implemen
     	return (e.getClickCount() > 1);
 	}
 	
-	
-	/** Compute zoom */
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		
-	}
-	
 	public void mouseClicked(MouseEvent e) {}  
 	public void mouseEntered(MouseEvent e) {}
 	public void mouseExited(MouseEvent e) {}
