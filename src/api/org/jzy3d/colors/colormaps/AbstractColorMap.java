@@ -24,7 +24,7 @@ public abstract class AbstractColorMap implements IColorMap{
 
     protected double processRelativeZValue(double z, double zMin, double zMax) {
         double rel_value = 0;
-    
+            
         if (z < zMin) {
             if (direction)
                 rel_value = 0;
