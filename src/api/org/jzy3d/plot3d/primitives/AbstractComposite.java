@@ -68,7 +68,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 		return components.size();
 	}
 	
-	/****************************************************************/
+	/* */
 
 	/** Delegate rendering iteratively to all Drawable of this composite.*/
 	public void draw(GL2 gl, GLU glu, Camera camera){
@@ -100,6 +100,17 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 			}
 		}
 	}
+	
+	public void setTransformBefore(Transform transform){
+        this.transformBefore = transform;
+        
+        synchronized(components){
+            for(AbstractDrawable c: components){
+                if(c!=null)
+                    c.setTransformBefore(transform);
+            }
+        }
+    }
 
 	/** Return the transform that was affected to this composite.*/
 	public Transform getTransform(){
