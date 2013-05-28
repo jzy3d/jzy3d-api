@@ -10,25 +10,21 @@ import javax.media.opengl.glu.GLU;
 import org.jzy3d.io.GLImage;
 
 
-/** A {@link ImageViewport} allows displaying a 2d {@link Image} within an OpenGL2 viewport.
+/** A {@link AWTImageViewport} allows displaying a 2d {@link Image} within an OpenGL2 viewport.
  * 
  * @author Martin Pernollet
  */
-public class ImageViewport extends AbstractViewportManager{
+public class AWTImageViewport extends AbstractViewportManager implements IImageViewport{
 
-	public ImageViewport(){
+	public AWTImageViewport(){
 	    setViewportMode(ViewportMode.SQUARE);
 	}
 
-	/** Renders the picture into the window, according to the viewport settings.
-	 * 
-	 * If the picture is bigger than the viewport, it is simply centered in it,
-	 * otherwise, it is scaled in order to fit into the viewport.
-	 * 
-	 * @param gl
-	 * @param glu
-	 */
-	public void render(GL2 gl, GLU glu){	
+	/* (non-Javadoc)
+     * @see org.jzy3d.plot3d.rendering.view.IImageViewport#render(javax.media.opengl.GL2, javax.media.opengl.glu.GLU)
+     */
+	@Override
+    public void render(GL2 gl, GLU glu){	
 		//gl.glDisable(GL2.GL_LIGHTING);
 		
 		// Set viewport and projection
@@ -77,19 +73,25 @@ public class ImageViewport extends AbstractViewportManager{
 		}
 	}
 	
-	/** Return the image rendered by the {@link ImageViewport}
+	/** Return the image rendered by the {@link AWTImageViewport}
 	 */
 	public Image getImage(){
 		return imageObj;
 	}
 	
-	/** Return the minimum size for this graphic.*/
-	public Dimension getMinimumSize(){
+	/* (non-Javadoc)
+     * @see org.jzy3d.plot3d.rendering.view.IImageViewport#getMinimumSize()
+     */
+	@Override
+    public Dimension getMinimumSize(){
 		return new Dimension(0,0);
 	}
 	
-	/** Return the prefered size for this graphic.*/
-	public Dimension getPreferedSize(){
+	/* (non-Javadoc)
+     * @see org.jzy3d.plot3d.rendering.view.IImageViewport#getPreferedSize()
+     */
+	@Override
+    public Dimension getPreferedSize(){
 		return new Dimension(1,1);
 	}
 	
