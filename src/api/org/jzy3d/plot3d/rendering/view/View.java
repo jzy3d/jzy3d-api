@@ -48,7 +48,7 @@ import com.jogamp.opengl.util.awt.Overlay;
  * A {@link View} holds a {@link Scene}, a {@link LightSet}, an {@link ICanvas}
  * to render into. It is the responsability to layout a set of concrete
  * {@link AbstractViewportManager}s such as the {@Camera} rendering the scene
- * or an {@link ImageViewport} for displaying an image in the same window.
+ * or an {@link AWTImageViewport} for displaying an image in the same window.
  *
  * On can control the {@link Camera} with a {@ViewController}
  * and get notifyed by a {@link IViewPointChangedListener} that the view point
@@ -91,7 +91,7 @@ public class View {
 
         this.renderers = new ArrayList<Renderer2d>(1);
         this.tooltips = new ArrayList<ITooltipRenderer>();
-        this.bgViewport = new ImageViewport();
+        this.bgViewport = new AWTImageViewport();
         this.viewOnTopListeners = new ArrayList<IViewIsVerticalEventListener>();
         this.viewPointChangedListeners = new ArrayList<IViewPointChangedListener>();
         this.viewLifecycleListeners = new ArrayList<IViewLifecycleEventListener>();
@@ -1130,7 +1130,7 @@ public class View {
     protected ViewPositionMode viewmode;
     protected ViewBoundMode boundmode;
 
-    protected ImageViewport bgViewport;
+    protected IImageViewport bgViewport;
     protected BufferedImage bgImg = null;
     // protected TooltipRenderer tooltipRenderer;
 
