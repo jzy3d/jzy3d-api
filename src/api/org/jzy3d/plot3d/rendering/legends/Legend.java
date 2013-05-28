@@ -8,7 +8,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.io.FileImage;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
-import org.jzy3d.plot3d.rendering.view.ImageViewport;
+import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
 
 
 
@@ -32,7 +32,7 @@ import org.jzy3d.plot3d.rendering.view.ImageViewport;
  * 
  * @author Martin Pernollet
  */
-public abstract class Legend extends ImageViewport implements IDrawableListener{
+public abstract class Legend extends AWTImageViewport implements IDrawableListener{
 
 	public Legend(AbstractDrawable parent){
 		this.parent = parent;
