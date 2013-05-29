@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
@@ -14,300 +15,371 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
-public abstract class AbstractGeometry extends AbstractWireframeable implements ISingleColorable, IMultiColorable {
-    public enum PolygonMode {
-        FRONT, BACK, FRONT_AND_BACK
-    }
+public abstract class AbstractGeometry extends AbstractWireframeable implements
+		ISingleColorable, IMultiColorable {
+	public enum PolygonMode {
+		FRONT, BACK, FRONT_AND_BACK
+	}
 
-    /**
-     * Initializes an empty {@link AbstractGeometry} with face status defaulting
-     * to true, and wireframe status defaulting to false.
-     */
-    public AbstractGeometry() {
-        super();
-        points = new ArrayList<Point>(4); // use Vector for synchro, or
-                                          // ArrayList for unsyncro.
-        bbox = new BoundingBox3d();
-        center = new Coord3d();
-        polygonOffsetFillEnable = true;
-        polygonMode = PolygonMode.FRONT_AND_BACK;
-    }
+	/**
+	 * Initializes an empty {@link AbstractGeometry} with face status defaulting
+	 * to true, and wireframe status defaulting to false.
+	 */
+	public AbstractGeometry() {
+		super();
+		points = new ArrayList<Point>(4); // use Vector for synchro, or
+											// ArrayList for unsyncro.
+		bbox = new BoundingBox3d();
+		center = new Coord3d();
+		polygonOffsetFillEnable = true;
+		polygonMode = PolygonMode.FRONT_AND_BACK;
+	}
 
-    /**********************************************************************/
+	/**********************************************************************/
 
-    public void draw(GL2 gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+	public void draw(GL gl, GLU glu, Camera cam) {
+		doTransform(gl, glu, cam);
 
-        if (mapper != null)
-            mapper.preDraw(this);
+		if (mapper != null)
+			mapper.preDraw(this);
 
-        // Draw content of polygon
-        if (facestatus) {
-            applyPolygonModeFill(gl);
-            if (wfstatus && polygonOffsetFillEnable)
-                polygonOffseFillEnable(gl);
-            callPointsForFace(gl);
-            if (wfstatus && polygonOffsetFillEnable)
-                polygonOffsetFillDisable(gl);
-        }
+		// Draw content of polygon
+		if (facestatus) {
+			applyPolygonModeFill(gl);
+			if (wfstatus && polygonOffsetFillEnable)
+				polygonOffseFillEnable(gl);
+			callPointsForFace(gl);
+			if (wfstatus && polygonOffsetFillEnable)
+				polygonOffsetFillDisable(gl);
+		}
 
-        // Draw edge of polygon
-        if (wfstatus) {
-            applyPolygonModeLine(gl);
-            if (polygonOffsetFillEnable)
-                polygonOffseFillEnable(gl);
-            callPointForWireframe(gl);
-            if (polygonOffsetFillEnable)
-                polygonOffsetFillDisable(gl);
-        }
+		// Draw edge of polygon
+		if (wfstatus) {
+			applyPolygonModeLine(gl);
+			if (polygonOffsetFillEnable)
+				polygonOffseFillEnable(gl);
+			callPointForWireframe(gl);
+			if (polygonOffsetFillEnable)
+				polygonOffsetFillDisable(gl);
+		}
 
-        if (mapper != null)
-            mapper.postDraw(this);
-        
-        doDrawBounds(gl, glu, cam);
-    }
+		if (mapper != null)
+			mapper.postDraw(this);
 
-    protected void callPointForWireframe(GL2 gl) {
-        gl.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-        gl.glLineWidth(wfwidth);
+		doDrawBounds(gl, glu, cam);
+	}
 
-        begin(gl);
-        for (Point p : points) {
-            gl.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-        }
-        end(gl);
-    }
+	protected void callPointForWireframe(GL gl) {
+		if (gl.isGL2()) {
+			gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+			gl.glLineWidth(wfwidth);
 
-    protected void callPointsForFace(GL2 gl) {
-        begin(gl);
-        for (Point p : points) {
-            if (mapper != null) {
-                Color c = mapper.getColor(p.xyz); // TODO: should cache result
-                                                  // in the point color
-                gl.glColor4f(c.r, c.g, c.b, c.a);
-            } else {
-                gl.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
-            }
+			begin(gl);
+			for (Point p : points) {
+				gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+			}
+			end(gl);
+		}
+	}
 
-            gl.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-        }
-        end(gl);
-    }
+	protected void callPointsForFace(GL gl) {
+		if (gl.isGL2()) {
+			begin(gl);
+			for (Point p : points) {
+				if (mapper != null) {
+					Color c = mapper.getColor(p.xyz); // TODO: should cache
+														// result
+														// in the point color
+					gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
+				} else {
+					gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+				}
 
-    protected abstract void begin(GL2 gl);
+				gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+			}
+			end(gl);
+		} else {
+			begin(gl);
+			for (Point p : points) {
+				if (mapper != null) {
+					Color c = mapper.getColor(p.xyz); // TODO: should cache
+														// result
+														// in the point color
+					GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
+				} else {
+					GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b,
+							p.rgb.a);
+				}
 
-    protected void end(GL2 gl) {
-        gl.glEnd();
-    }
+				GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+			}
+			end(gl);
+		}
+	}
 
-    protected void applyPolygonModeLine(GL2 gl) {
-        switch (polygonMode) {
-        case FRONT:
-            gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
-            break;
-        case BACK:
-            gl.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-            break;
-        case FRONT_AND_BACK:
-            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-            break;
-        default:
-            break;
-        }
-    }
+	protected abstract void begin(GL gl);
 
-    protected void applyPolygonModeFill(GL2 gl) {
-        switch (polygonMode) {
-        case FRONT:
-            gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
-            break;
-        case BACK:
-            gl.glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
-            break;
-        case FRONT_AND_BACK:
-            gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-            break;
-        default:
-            break;
-        }
-    }
+	protected void end(GL gl) {
+		if (gl.isGL2()) {
+			gl.getGL2().glEnd();
+		} else {
+			GLES2CompatUtils.glEnd();
+		}
+	}
 
-    protected void polygonOffseFillEnable(GL2 gl) {
-        gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
-        gl.glPolygonOffset(1.0f, 1.0f);
-    }
+	protected void applyPolygonModeLine(GL gl) {
+		if (gl.isGL2()) {
+			switch (polygonMode) {
+			case FRONT:
+				gl.getGL2().glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+				break;
+			case BACK:
+				gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+				break;
+			case FRONT_AND_BACK:
+				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				break;
+			default:
+				break;
+			}
+		} else {
+			// glPolygonMode does not exist in opengl es ??
 
-    protected void polygonOffsetFillDisable(GL2 gl) {
-        gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
-    }
+			switch (polygonMode) {
+			case FRONT:
+				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+				break;
+			case BACK:
+				GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+				break;
+			case FRONT_AND_BACK:
+				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
+						GL2.GL_LINE);
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
-    /* DATA */
+	protected void applyPolygonModeFill(GL gl) {
+		if (gl.isGL2()) {
+			switch (polygonMode) {
+			case FRONT:
+				gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2.GL_FILL);
+				break;
+			case BACK:
+				gl.getGL2().glPolygonMode(GL.GL_BACK, GL2.GL_FILL);
+				break;
+			case FRONT_AND_BACK:
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				break;
+			default:
+				break;
+			}
+		} else {
 
-    public void add(Point point) {
-        add(point, true);
-    }
+			// glPolygonMode does not exist in opengl es ??
+			switch (polygonMode) {
+			case FRONT:
+				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
+				break;
+			case BACK:
+				GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
+				break;
+			case FRONT_AND_BACK:
+				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
+						GL2.GL_FILL);
+				break;
+			default:
+				break;
+			}
 
-    /** Add a point to the polygon. */
-    public void add(Point point, boolean updateBounds) {
-        points.add(point);
-        if (updateBounds) {
-            updateBounds();
-        }
-    }
-    
-    public void applyGeometryTransform(Transform transform){
-        for(Point p: points){
-            p.xyz = transform.compute(p.xyz);
-        }
-        updateBounds();
-    }
+		}
+	}
 
-    
-    public void updateBounds(){
-        bbox.reset();
-        bbox.add(getPoints());
+	protected void polygonOffseFillEnable(GL gl) {
+		gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+		gl.glPolygonOffset(1.0f, 1.0f);
+	}
 
-        // recompute center
-        center = new Coord3d();
-        for (Point p : points)
-            center = center.add(p.xyz);
-        center = center.div(points.size());
-    }
+	protected void polygonOffsetFillDisable(GL gl) {
+		gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+	}
 
-    @Override
-    public Coord3d getBarycentre() {
-        return center;
-    }
+	/* DATA */
 
-    public Point get(int p) {
-        return points.get(p);
-    }
+	public void add(Point point) {
+		add(point, true);
+	}
 
-    public List<Point> getPoints() {
-        return points;
-    }
+	/** Add a point to the polygon. */
+	public void add(Point point, boolean updateBounds) {
+		points.add(point);
+		if (updateBounds) {
+			updateBounds();
+		}
+	}
 
-    public int size() {
-        return points.size();
-    }
+	public void applyGeometryTransform(Transform transform) {
+		for (Point p : points) {
+			p.xyz = transform.compute(p.xyz);
+		}
+		updateBounds();
+	}
 
-    /* DISTANCES */
+	public void updateBounds() {
+		bbox.reset();
+		bbox.add(getPoints());
 
-    public double getDistance(Camera camera) {
-        return getBarycentre().distance(camera.getEye());
-    }
+		// recompute center
+		center = new Coord3d();
+		for (Point p : points)
+			center = center.add(p.xyz);
+		center = center.div(points.size());
+	}
 
-    public double getShortestDistance(Camera camera) {
-        double min = Float.MAX_VALUE;
-        double dist = 0;
-        for (Point point : points) {
-            dist = point.getDistance(camera);
-            if (dist < min)
-                min = dist;
-        }
+	@Override
+	public Coord3d getBarycentre() {
+		return center;
+	}
 
-        dist = getBarycentre().distance(camera.getEye());
-        if (dist < min)
-            min = dist;
-        return min;
-    }
+	public Point get(int p) {
+		return points.get(p);
+	}
 
-    public double getLongestDistance(Camera camera) {
-        double max = 0;
-        double dist = 0;
-        for (Point point : points) {
-            dist = point.getDistance(camera);
-            if (dist > max)
-                max = dist;
-        }
-        return max;
-    }
+	public List<Point> getPoints() {
+		return points;
+	}
 
-    /* SETTINGS */
+	public int size() {
+		return points.size();
+	}
 
-    public PolygonMode getPolygonMode() {
-        return polygonMode;
-    }
+	/* DISTANCES */
 
-    /**
-     * A null polygonMode imply no any call to gl.glPolygonMode(...) at
-     * rendering
-     */
-    public void setPolygonMode(PolygonMode polygonMode) {
-        this.polygonMode = polygonMode;
-    }
+	public double getDistance(Camera camera) {
+		return getBarycentre().distance(camera.getEye());
+	}
 
-    public boolean isPolygonOffsetFillEnable() {
-        return polygonOffsetFillEnable;
-    }
+	public double getShortestDistance(Camera camera) {
+		double min = Float.MAX_VALUE;
+		double dist = 0;
+		for (Point point : points) {
+			dist = point.getDistance(camera);
+			if (dist < min)
+				min = dist;
+		}
 
-    /**
-     * Enable offset fill, which let a polygon with a wireframe render cleanly
-     * without weird depth incertainty between face and border.
-     * 
-     * Default value is true.
-     */
-    public void setPolygonOffsetFillEnable(boolean polygonOffsetFillEnable) {
-        this.polygonOffsetFillEnable = polygonOffsetFillEnable;
-    }
+		dist = getBarycentre().distance(camera.getEye());
+		if (dist < min)
+			min = dist;
+		return min;
+	}
 
-    /**
-     * A utility to change polygon offset fill status of a
-     * {@link AbstractComposite} containing {@link AbstractGeometry}s.
-     * 
-     * @param composite
-     * @param polygonOffsetFillEnable
-     *            status
-     */
-    public static void setPolygonOffsetFillEnable(AbstractComposite composite, boolean polygonOffsetFillEnable) {
-        for (AbstractDrawable d : composite.getDrawables()) {
-            if (d instanceof AbstractGeometry) {
-                ((AbstractGeometry) d).setPolygonOffsetFillEnable(polygonOffsetFillEnable);
-            } else if (d instanceof AbstractComposite) {
-                setPolygonOffsetFillEnable(((AbstractComposite) d), polygonOffsetFillEnable);
-            }
-        }
-    }
+	public double getLongestDistance(Camera camera) {
+		double max = 0;
+		double dist = 0;
+		for (Point point : points) {
+			dist = point.getDistance(camera);
+			if (dist > max)
+				max = dist;
+		}
+		return max;
+	}
 
-    /* COLOR */
+	/* SETTINGS */
 
-    public void setColorMapper(ColorMapper mapper) {
-        this.mapper = mapper;
+	public PolygonMode getPolygonMode() {
+		return polygonMode;
+	}
 
-        fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
-    }
+	/**
+	 * A null polygonMode imply no any call to gl.glPolygonMode(...) at
+	 * rendering
+	 */
+	public void setPolygonMode(PolygonMode polygonMode) {
+		this.polygonMode = polygonMode;
+	}
 
-    public ColorMapper getColorMapper() {
-        return mapper;
-    }
+	public boolean isPolygonOffsetFillEnable() {
+		return polygonOffsetFillEnable;
+	}
 
-    public void setColor(Color color) {
-        this.color = color;
+	/**
+	 * Enable offset fill, which let a polygon with a wireframe render cleanly
+	 * without weird depth incertainty between face and border.
+	 * 
+	 * Default value is true.
+	 */
+	public void setPolygonOffsetFillEnable(boolean polygonOffsetFillEnable) {
+		this.polygonOffsetFillEnable = polygonOffsetFillEnable;
+	}
 
-        for (Point p : points)
-            p.setColor(color);
+	/**
+	 * A utility to change polygon offset fill status of a
+	 * {@link AbstractComposite} containing {@link AbstractGeometry}s.
+	 * 
+	 * @param composite
+	 * @param polygonOffsetFillEnable
+	 *            status
+	 */
+	public static void setPolygonOffsetFillEnable(AbstractComposite composite,
+			boolean polygonOffsetFillEnable) {
+		for (AbstractDrawable d : composite.getDrawables()) {
+			if (d instanceof AbstractGeometry) {
+				((AbstractGeometry) d)
+						.setPolygonOffsetFillEnable(polygonOffsetFillEnable);
+			} else if (d instanceof AbstractComposite) {
+				setPolygonOffsetFillEnable(((AbstractComposite) d),
+						polygonOffsetFillEnable);
+			}
+		}
+	}
 
-        fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
-    }
+	/* COLOR */
 
-    public Color getColor() {
-        return color;
-    }
+	public void setColorMapper(ColorMapper mapper) {
+		this.mapper = mapper;
 
-    public String toString(int depth) {
-        return (Utils.blanks(depth) + "(" + this.getClass().getSimpleName() + ") #points:" + points.size());
-    }
+		fireDrawableChanged(new DrawableChangedEvent(this,
+				DrawableChangedEvent.FIELD_COLOR));
+	}
 
-    /* */
+	public ColorMapper getColorMapper() {
+		return mapper;
+	}
 
-    protected PolygonMode polygonMode;
-    protected boolean polygonOffsetFillEnable = true;
+	public void setColor(Color color) {
+		this.color = color;
 
-    protected ColorMapper mapper;
-    protected List<Point> points;
-    protected Color color;
-    protected Coord3d center;
+		for (Point p : points)
+			p.setColor(color);
+
+		fireDrawableChanged(new DrawableChangedEvent(this,
+				DrawableChangedEvent.FIELD_COLOR));
+	}
+
+	public Color getColor() {
+		return color;
+	}
+
+	public String toString(int depth) {
+		return (Utils.blanks(depth) + "(" + this.getClass().getSimpleName()
+				+ ") #points:" + points.size());
+	}
+
+	/* */
+
+	protected PolygonMode polygonMode;
+	protected boolean polygonOffsetFillEnable = true;
+
+	protected ColorMapper mapper;
+	protected List<Point> points;
+	protected Color color;
+	protected Coord3d center;
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
@@ -82,19 +83,22 @@ public class PickingSupport {
 	
 	protected TicToc perf = new TicToc();
 	
-	public void pickObjects(GL2 gl, GLU glu, View view, Graph graph, IntegerCoord2d pickPoint) {
+	public void pickObjects(GL gl, GLU glu, View view, Graph graph, IntegerCoord2d pickPoint) {
 	    perf.tic();
 	    
         int viewport[] = new int[4];
         int selectBuf[] = new int[bufferSize]; // TODO: move @ construction
         IntBuffer selectBuffer = Buffers.newDirectIntBuffer(bufferSize);
         
+        
+        if (!gl.isGL2()) throw new UnsupportedOperationException();
+        
         // Prepare selection data
-        gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);        
-        gl.glSelectBuffer(bufferSize, selectBuffer);        
-        gl.glRenderMode(GL2.GL_SELECT);         
-        gl.glInitNames();
-        gl.glPushName(0); 
+        gl.getGL2().glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);        
+        gl.getGL2().glSelectBuffer(bufferSize, selectBuffer);        
+        gl.getGL2().glRenderMode(GL2.GL_SELECT);         
+        gl.getGL2().glInitNames();
+        gl.getGL2().glPushName(0); 
 
         // Retrieve view settings
         Camera camera = view.getCamera();
@@ -105,16 +109,16 @@ public class PickingSupport {
         double ypick = (double) pickPoint.y;
         
         // Setup projection matrix
-        gl.glMatrixMode(GL2.GL_PROJECTION);
-        gl.glPushMatrix();
+        gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+        gl.getGL2().glPushMatrix();
         {
-	        gl.glLoadIdentity();
+        	gl.getGL2().glLoadIdentity();
 	        // Setup picking matrix, and update view frustrum
 	        glu.gluPickMatrix(xpick, ypick, brushSize, brushSize, viewport, 0);
 	        camera.doShoot(gl, glu, cMode);
 	        
 	        // Draw each pickable element in select buffer
-	        gl.glMatrixMode(GL2.GL_MODELVIEW);
+	        gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
 	        
 	        synchronized(this){
     	        for(Pickable pickable: pickables.values()){
@@ -125,13 +129,13 @@ public class PickingSupport {
     	        }
 	        }
 	        // Back to projection matrix
-	        gl.glMatrixMode(GL2.GL_PROJECTION);
+	        gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
         }
-        gl.glPopMatrix();
+        gl.getGL2().glPopMatrix();
         gl.glFlush();
         
         // Process hits
-        int hits = gl.glRenderMode(GL2.GL_RENDER);
+        int hits = gl.getGL2().glRenderMode(GL2.GL_RENDER);
         selectBuffer.get(selectBuf);
         List<Pickable> picked = processHits(hits, selectBuf);
         
@@ -150,18 +154,18 @@ public class PickingSupport {
 	    return perf.elapsedMilisecond();
 	}
 	
-    protected void setCurrentName(GL2 gl, Pickable pickable){
+    protected void setCurrentName(GL gl, Pickable pickable){
     	if(method==0)
-    		gl.glLoadName(pickable.getPickingId());
+    		gl.getGL2().glLoadName(pickable.getPickingId());
     	else
-    		gl.glPushName(pickable.getPickingId());
+    		gl.getGL2().glPushName(pickable.getPickingId());
     } 
     
-    protected void releaseCurrentName(GL2 gl){
+    protected void releaseCurrentName(GL gl){
     	if(method==0)
     		;
     	else
-    		gl.glPopName();
+    		gl.getGL2().glPopName();
     }
     
     protected static int method = 0;

@@ -1,6 +1,6 @@
 package org.jzy3d.chart;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.factories.ChartComponentFactory;
@@ -8,17 +8,15 @@ import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.legends.Legend;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 
 
 /**
  * A {@link ChartView} allows displaying a 3d scene on the left,
- * and a set of {@link AbstractDrawable}'s {@link Legend} on the right.
+ * and a set of {@link AbstractDrawable}'s {@link AWTLegend} on the right.
  *
  * @author Martin Pernollet
  */
@@ -29,6 +27,7 @@ public class ChartView extends View {
 
     public ChartView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
+        layout = factory.newViewportLayout();
     }
 
     /* */
@@ -39,7 +38,7 @@ public class ChartView extends View {
      * Performs all transformations of eye, target coordinates to adapt the camera settings
      * to the scaled scene.
      */
-    public void render(GL2 gl, GLU glu) {
+    public void render(GL gl, GLU glu) {
     	fireViewLifecycleWillRender(null);
 
     	layout.update(getChart());
@@ -62,6 +61,6 @@ public class ChartView extends View {
     }
 
 
-    protected IViewportLayout layout = new ColorbarViewportLayout();
+    protected IViewportLayout layout;
 }
 

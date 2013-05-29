@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.text;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -31,7 +31,7 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	
 	/*******************************************************************************************/
 	
-	public void draw(GL2 gl, GLU glu, Camera cam){
+	public void draw(GL gl, GLU glu, Camera cam){
 	    doTransform(gl, glu, cam);
 	    BoundingBox3d box = renderer.drawText(gl, glu, cam, txt, position, halign, valign, color);
 	    if(box!=null)

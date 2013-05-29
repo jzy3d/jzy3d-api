@@ -1,12 +1,6 @@
 package org.jzy3d.chart.controllers.mouse.picking;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.Chart;
@@ -20,8 +14,11 @@ import org.jzy3d.picking.PickingSupport;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.MouseListener;
+
 public class MousePickingController<V, E> extends AbstractCameraController
-		implements MouseListener, MouseMotionListener, MouseWheelListener {
+		implements MouseListener {
 	public MousePickingController() {
 		super();
 		picking = new PickingSupport();
@@ -47,15 +44,11 @@ public class MousePickingController<V, E> extends AbstractCameraController
 		this.chart = chart;
 		this.prevMouse = Coord2d.ORIGIN;
 		chart.getCanvas().addMouseListener(this);
-		chart.getCanvas().addMouseMotionListener(this);
-		chart.getCanvas().addMouseWheelListener(this);
 	}
 
 	public void dispose() {
 		for (Chart c : targets) {
 			c.getCanvas().removeMouseListener(this);
-			c.getCanvas().removeMouseMotionListener(this);
-			c.getCanvas().removeMouseWheelListener(this);
 		}
 
 		if (threadController != null)
@@ -92,16 +85,17 @@ public class MousePickingController<V, E> extends AbstractCameraController
 	}
 
 	/** Compute zoom */
-	public void mouseWheelMoved(MouseWheelEvent e) {
+	public void mouseWheelMoved(MouseEvent e) {
 		if (threadController != null)
 			threadController.stop();
 		System.out.println(e.getWheelRotation());
 		float factor = 1 + (e.getWheelRotation() / 10.0f);
 		System.out.println(MousePickingController.class.getSimpleName() + "wheel:" + factor * 100);
 		zoomX(factor);
-		zoomY(factor);
+		zoomY(factor);		
 		chart.getView().shoot();
 	}
+		
 
 	public void mouseMoved(MouseEvent e) {
 	    System.out.println("moved");
@@ -113,6 +107,7 @@ public class MousePickingController<V, E> extends AbstractCameraController
 			return;
 		pick(e);
 	}
+	
 
 	public void pick(MouseEvent e) {
 		int yflip = -e.getY() + targets.get(0).getCanvas().getRendererHeight();
@@ -121,7 +116,7 @@ public class MousePickingController<V, E> extends AbstractCameraController
 		View view = targets.get(0).getView();
 		prevMouse3d = view.projectMouse(e.getX(), yflip);
 
-		GL2 gl = chart().getView().getCurrentGL();
+		GL gl = chart().getView().getCurrentGL();
 		Graph graph = chart().getScene().getGraph();
 
 		// will trigger vertex selection event to those subscribing to
@@ -152,7 +147,7 @@ public class MousePickingController<V, E> extends AbstractCameraController
 	protected GLU glu = new GLU();
 
 	protected Chart chart;
-	
+
 	protected Coord2d prevMouse;
 	protected CameraThreadController threadController;
 

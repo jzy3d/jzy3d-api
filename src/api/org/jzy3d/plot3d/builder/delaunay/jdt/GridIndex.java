@@ -1,7 +1,8 @@
 package org.jzy3d.plot3d.builder.delaunay.jdt;
 
-import java.awt.Point;
 import java.util.Iterator;
+
+import org.jzy3d.maths.Point2D;
 
 /**
  * Created by IntelliJ IDEA.
@@ -161,8 +162,8 @@ public class GridIndex
 	   }
 	   else {
 	    // Find the cell region to be updated
-	    Point minInvalidCell = getCellOf(updatedRegion.getMinPoint());
-	    Point maxInvalidCell = getCellOf(updatedRegion.getMaxPoint());
+	    Point2D minInvalidCell = getCellOf(updatedRegion.getMinPoint());
+	    Point2D maxInvalidCell = getCellOf(updatedRegion.getMaxPoint());
 
 	    // And update it with fresh triangles
 	    Triangle_dt adjacentValidTriangle = findValidTriangle(minInvalidCell);
@@ -198,7 +199,7 @@ public class GridIndex
 	 * @param minInvalidCell    minimum bounding box invalid cell
 	 * @return                           a valid triangle adjacent to the invalid cell
 	 */
-	private Triangle_dt findValidTriangle(Point minInvalidCell)
+	private Triangle_dt findValidTriangle(Point2D minInvalidCell)
 	{
 		// If the invalid cell is the minimal one in the grid we are forced to search the
 		// triangulation for a trinagle at that location
@@ -214,11 +215,11 @@ public class GridIndex
 	 * @param coordinate        world coordinate to locate
 	 * @return                         cell covering the coordinate
 	 */
-	private Point getCellOf(Point_dt coordinate)
+	private Point2D getCellOf(Point_dt coordinate)
 	{
 		int xCell =   (int) ((coordinate.x() - indexRegion.minX()) / x_size);
 		int yCell =   (int) ((coordinate.y() - indexRegion.minY()) / y_size);
-		return new Point(xCell, yCell);
+		return new Point2D(xCell, yCell);
 	}
 
 	/**

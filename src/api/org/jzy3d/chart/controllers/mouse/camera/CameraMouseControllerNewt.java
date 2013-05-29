@@ -1,14 +1,11 @@
 package org.jzy3d.chart.controllers.mouse.camera;
 
 
-import java.awt.event.MouseWheelEvent;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
@@ -27,23 +24,12 @@ public class CameraMouseControllerNewt extends AbstractCameraController implemen
 	
 	public void register(Chart chart){
 		super.register(chart);
-		ICanvas c = chart.getCanvas();
-		if(c instanceof CanvasNewt){
-			CanvasNewt cnt = (CanvasNewt)c;
-			cnt.getWindow().addMouseListener(this);
-		}
-		else{
-			throw new IllegalArgumentException("Using this camera mouse controller requires a CanvasNewt. Having: " + c.getClass().getSimpleName());
-		}
+		chart.getCanvas().addMouseListener(this);
 	}
 	
 	public void dispose(){
 		for(Chart c: targets){
-			ICanvas ca = c.getCanvas();
-			if(ca instanceof CanvasNewt){
-				CanvasNewt cnt = (CanvasNewt)ca;
-				cnt.getWindow().removeMouseListener(this);
-			}
+			c.getCanvas().removeMouseListener(this);
 		}
 		super.dispose();
 	}
@@ -102,13 +88,7 @@ public class CameraMouseControllerNewt extends AbstractCameraController implemen
     	return (e.getClickCount() > 1);
 	}
 	
-	public void mouseClicked(MouseEvent e) {}  
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {} 
-	public void mouseMoved(MouseEvent e) {}
-
-	@Override
+	/** Compute zoom */
 	public void mouseWheelMoved(MouseEvent e) {
 		stopThreadController();
 		
@@ -116,7 +96,9 @@ public class CameraMouseControllerNewt extends AbstractCameraController implemen
 		zoomZ(factor);
 	}
 	
-	/*********************************************************/
-	
-	//protected Chart chart;
+	public void mouseClicked(MouseEvent e) {}  
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {} 
+	public void mouseMoved(MouseEvent e) {}
 }
