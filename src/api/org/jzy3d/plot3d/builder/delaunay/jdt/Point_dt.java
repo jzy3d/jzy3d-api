@@ -2,8 +2,6 @@ package org.jzy3d.plot3d.builder.delaunay.jdt;
 
 import java.util.Comparator;
 
-import org.jzy3d.maths.Coord3d;
-
 
 /**
  * This class represents a 3D point, with some simple geometric methods

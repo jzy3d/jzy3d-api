@@ -10,8 +10,6 @@ import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 
-import com.jogamp.opengl.util.texture.Texture;
-
 
 /** 
  * @author Martin Pernollet

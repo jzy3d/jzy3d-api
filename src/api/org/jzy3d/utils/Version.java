@@ -13,7 +13,7 @@ public class Version {
 		
 		try{
 			System.out.println("Default settings:");
-			System.out.println(org.jzy3d.global.Settings.getInstance());
+			System.out.println(org.jzy3d.chart.Settings.getInstance());
 		}
 		catch(Exception e){
 			

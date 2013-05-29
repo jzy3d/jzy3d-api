@@ -3,15 +3,11 @@ package org.jzy3d.plot3d.rendering.lights;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
-import jogamp.opengl.util.glsl.fixedfunc.FixedFuncImpl;
-import jogamp.opengl.util.glsl.fixedfunc.FixedFuncPipeline;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 import com.jogamp.opengl.util.gl2.GLUT;
-import com.jogamp.opengl.util.glsl.fixedfunc.FixedFuncUtil;
 
 public class Light {
 	public Light() {

@@ -14,6 +14,6 @@ public class ContourChart extends AWTChart{
 		this(DEFAULT_QUALITY, windowingToolkit);
 	}
 	public ContourChart(Quality quality, String windowingToolkit){
-        super(new ContourChartComponentFactory(), quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+        super(new ContourChartComponentFactory(), quality, windowingToolkit, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }
 }

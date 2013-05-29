@@ -25,12 +25,6 @@ import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.tooltips.ITooltipRenderer;
 import org.jzy3d.plot3d.rendering.tooltips.Tooltip;
-import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
-import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
-import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
-import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 import com.jogamp.opengl.util.awt.Overlay;

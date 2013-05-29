@@ -8,6 +8,7 @@ import javax.media.opengl.GL2ES1;
 import com.jogamp.opengl.util.ImmModeSink;
 import com.jogamp.opengl.util.PMVMatrix;
 import com.jogamp.opengl.util.glsl.fixedfunc.FixedFuncUtil;
+import com.jogamp.opengl.util.glsl.fixedfunc.ShaderSelectionMode;
 
 public class GLES2CompatUtils {
 	
@@ -28,13 +29,13 @@ public class GLES2CompatUtils {
 
 		GLES2CompatUtils.gl = gl;
 
-		immModeSink = ImmModeSink.createGLSL(gl, initialElementCount, vComps,
+		immModeSink = ImmModeSink.createGLSL(/*gl, */initialElementCount, vComps,
 				vDataType, cComps, cDataType, nComps, nDataType, tComps,
 				tDataType, glBufferUsage);
 
 		pmvMatrix = new PMVMatrix();
-
-		gl2es1 = FixedFuncUtil.wrapFixedFuncEmul(gl);
+		
+		gl2es1 = FixedFuncUtil.wrapFixedFuncEmul(gl, ShaderSelectionMode.AUTO, pmvMatrix);
 
 	}
 
@@ -240,7 +241,7 @@ public class GLES2CompatUtils {
 
 	public static void glVertex3d(double d, float f, float g) {
 		throw new UnsupportedOperationException();
-		// FIXME ANDROID OPEN GL ES
+		// FIXME ANDROID OPEN7 GL ES
 		// cf http://pandorawiki.org/Porting_to_GLES_from_GL
 	}
 

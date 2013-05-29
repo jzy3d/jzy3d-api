@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 
-import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -144,7 +143,8 @@ public class ChartTest{
     }
 
     public void compare(TextureData i, String filename) throws IOException, ChartTestFailed {
-    	Texture i2 = TextureIO.newTexture(new File(filename), true);
+    	Logger.getLogger(ChartTest.class).info("did NOT compared to " + filename);
+        //Texture i2 = TextureIO.newTexture(new File(filename), true);
         //compare(i, i2);
     }
 

@@ -1,5 +1,8 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilities;
@@ -16,9 +19,9 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 public class OffscreenCanvas implements ICanvas {
-
     public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height) {
         this(factory, scene, quality, capabilities, width, height, false, false);
     }
@@ -39,16 +42,8 @@ public class OffscreenCanvas implements ICanvas {
         glpBuffer.addGLEventListener(renderer);
     }
 
-    // public OffscreenCanvas(IChartComponentFactory factory, Scene scene,
-    // Quality quality, GLProfile profile, int width, int height) {
-    // view = scene.newView(this, quality);
-    // renderer = factory.newRenderer(view, false, false);
-    //
-    // initGLPBuffer(width, height);
-    // }
-
     protected void initGLPBuffer(int width, int height) {
-        GLCapabilities caps = org.jzy3d.global.Settings.getInstance().getGLCapabilities();
+        GLCapabilities caps = org.jzy3d.chart.Settings.getInstance().getGLCapabilities();
         caps.setDoubleBuffered(false);
         if (!GLDrawableFactory.getFactory(caps.getGLProfile()).canCreateGLPbuffer(null))
             throw new RuntimeException("No pbuffer support");
@@ -84,10 +79,16 @@ public class OffscreenCanvas implements ICanvas {
         glpBuffer.display();
         return renderer.getLastScreenshot();
     }
-
-    /*********************************************************/
+    
+    @Override
+    public TextureData screenshot(File file) throws IOException {
+        TextureData screen = screenshot();
+        TextureIO.write(screen, file);
+        return screen;
+    }
 
     /** Provide a reference to the View that renders into this canvas. */
+    @Override
     public View getView() {
         return view;
     }
@@ -96,6 +97,7 @@ public class OffscreenCanvas implements ICanvas {
      * Provide the actual renderer width for the open gl camera settings, which
      * is obtained after a resize event.
      */
+    @Override
     public int getRendererWidth() {
         return (renderer != null ? renderer.getWidth() : 0);
     }
@@ -104,6 +106,7 @@ public class OffscreenCanvas implements ICanvas {
      * Provide the actual renderer height for the open gl camera settings, which
      * is obtained after a resize event.
      */
+    @Override
     public int getRendererHeight() {
         return (renderer != null ? renderer.getHeight() : 0);
     }
@@ -113,6 +116,7 @@ public class OffscreenCanvas implements ICanvas {
         return renderer;
     }
 
+    @Override
     public String getDebugInfo() {
         GL gl = getView().getCurrentGL();
 
@@ -127,37 +131,24 @@ public class OffscreenCanvas implements ICanvas {
 
     @Override
     public void addMouseListener(Object o) {
-
     }
-
     @Override
-    public void addKeyListener(Object o) {
-
-    }
+    public void addKeyListener(Object o) {    }
 
     @Override
     public void addMouseListener(MouseListener listener) {
-
     }
-
     @Override
     public void removeMouseListener(MouseListener listener) {
-
     }
-
     @Override
     public void addKeyListener(KeyListener listener) {
-
     }
-
     @Override
     public void removeKeyListener(KeyListener listener) {
     }
 
-    /*********************************************************/
-
     protected View view;
     protected Renderer3d renderer;
     protected GLPbuffer glpBuffer;
-
 }

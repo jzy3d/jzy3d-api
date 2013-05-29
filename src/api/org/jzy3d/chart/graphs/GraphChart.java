@@ -17,7 +17,7 @@ public class GraphChart extends Chart{
 	}
 	
 	public GraphChart(Quality quality, String windowingToolkit){
-        super(new GraphChartComponentFactory(), quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+        super(new GraphChartComponentFactory(), quality, windowingToolkit, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }
 /*
 	protected ChartScene initializeScene(boolean graphsort){

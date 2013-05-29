@@ -35,14 +35,19 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 public class ChartComponentFactory implements IChartComponentFactory {
+    public static Chart chart(Quality quality, Toolkit toolkit){
+        ChartComponentFactory f = new ChartComponentFactory();
+        return f.newChart(quality, toolkit);
+    }
+    
     /** to be implemented */
     protected ICanvas initializeCanvas(Scene scene, Quality quality, String chartType, GLCapabilities capabilities, boolean b, boolean c){
-        return null;
+        throw new RuntimeException("should be implemented");
     }
 
     @Override
     public Chart newChart(Quality quality, Toolkit toolkit){
-        return new Chart(quality, toolkit.toString());
+        return new Chart(this, quality, toolkit.toString());
     }
 	@Override
 	public ChartScene newScene(boolean sort) {

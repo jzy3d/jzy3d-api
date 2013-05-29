@@ -1,11 +1,11 @@
 package org.jzy3d.chart.controllers.keyboard.camera;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.maths.Coord2d;
+
+import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.KeyListener;
 
 
 public class CameraKeyController extends AbstractCameraController implements KeyListener, ICameraKeyController{

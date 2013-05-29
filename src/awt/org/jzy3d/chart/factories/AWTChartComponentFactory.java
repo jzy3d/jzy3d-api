@@ -11,8 +11,6 @@ import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.ChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
@@ -29,15 +27,39 @@ import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 public class AWTChartComponentFactory extends ChartComponentFactory {
+    public static Chart chart(Quality quality){
+        AWTChartComponentFactory f = new AWTChartComponentFactory();
+        return f.newChart(quality, Toolkit.newt);
+    }
+    public static Chart chart(String toolkit){
+        AWTChartComponentFactory f = new AWTChartComponentFactory();
+        return f.newChart(AWTChart.DEFAULT_QUALITY, toolkit);
+    }
+    
+    public static Chart chart(Quality quality, Toolkit toolkit){
+        AWTChartComponentFactory f = new AWTChartComponentFactory();
+        return f.newChart(quality, toolkit);
+    }
+    
+    public static Chart chart(Quality quality, String toolkit){
+        AWTChartComponentFactory f = new AWTChartComponentFactory();
+        return f.newChart(quality, toolkit);
+    }
+
+    @Override
+    public Chart newChart(Quality quality, Toolkit toolkit){
+        return new AWTChart(this, quality, toolkit.toString());
+    }
+    
+    public Chart newChart(Quality quality, String toolkit){
+        return new AWTChart(this, quality, toolkit.toString());
+    }
+
     @Override
     public IAxe newAxe(BoundingBox3d box, View view) {
         AxeBox axe = new AxeBox(box);
         axe.setView(view);
         return axe;
-    }
-    @Override
-    public Chart newChart(Quality quality, Toolkit toolkit){
-        return new AWTChart(quality, toolkit.toString());
     }
     @Override
     public IViewportLayout newViewportLayout() {

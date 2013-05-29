@@ -11,7 +11,6 @@ import javax.media.opengl.glu.GLU;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot2d.rendering.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTView;

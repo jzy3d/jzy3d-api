@@ -15,11 +15,6 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-tools-convexhull</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-main</artifactId>
 			<version>2.0-rc11</version>
@@ -35,11 +30,6 @@
 			<version>1.2.16</version>
 		</dependency>
 		<dependency>
-			<groupId>org.eclipse.swt</groupId>
-			<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-			<version>4.2.1</version>
-		</dependency>
-		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
 			<version>2.1</version>
@@ -50,7 +40,7 @@
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-
+    </dependencies>
 
 	<build>
 		<testSourceDirectory>src/tests</testSourceDirectory>
@@ -68,6 +58,8 @@
 							<sources>
 								<source>src/api</source>
 								<source>src/bridge</source>
+                                <source>src/awt</source>
+                                <source>src/swing</source>
 							</sources>
 						</configuration>
 					</execution>

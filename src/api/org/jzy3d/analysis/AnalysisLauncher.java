@@ -2,7 +2,7 @@ package org.jzy3d.analysis;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.global.Settings;
+import org.jzy3d.chart.Settings;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.utils.LoggerUtils;
 

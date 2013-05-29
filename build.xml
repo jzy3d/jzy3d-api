@@ -16,10 +16,7 @@
 	<property name="lib.path" 	 	value="org/jzy3d/"/>
 	
 	<property name="jogl" 	 	value="jogl2-rc10"/>
-    
-    <property name="convexhull"      value="../jzy3d-tools-convexhull"/>
-
-		
+    	
     <dirname property="dir.basedir" file="${ant.file}"/>
 
     <path id="compile.classpath">
@@ -42,9 +39,8 @@
             <classpath refid="dir.classpath"/>
         	<src path="${dir.src.api}/" />
         	<src path="${dir.src.bridge}/" />
-            
-            <src path="${convexhull}/src/" />
-
+            <src path="${dir.src}/awt"/>
+            <src path="${dir.src}/swing"/>
         </javac>
     </target>
 	
@@ -56,6 +52,8 @@
             <!-- includes sources for debugging -->
             <fileset dir="${dir.src.api}"    includes="**/*.java"/>
             <fileset dir="${dir.src.bridge}" includes="**/*.java"/>
+            <fileset dir="${dir.src}/awt" includes="**/*.java"/>
+            <fileset dir="${dir.src}/swing" includes="**/*.java"/>
         </jar>
     </target>
 	

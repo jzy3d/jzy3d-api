@@ -2,6 +2,8 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.BorderLayout;
 import java.awt.Panel;
+import java.io.File;
+import java.io.IOException;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -20,6 +22,7 @@ import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * A Newt canvas wrapped in an AWT {@link Panel}.
@@ -44,6 +47,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 		view = scene.newView(this, quality);
 		renderer = factory.newRenderer(view, traceGL, debugGL);
 		window.addGLEventListener(renderer);
+		
 		// swing specific
 		setFocusable(true);
 		requestFocusInWindow();
@@ -57,6 +61,14 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 		add(canvas, BorderLayout.CENTER);
 	}
 
+	public GLWindow getWindow() {
+        return window;
+    }
+
+    public NewtCanvasAWT getCanvas() {
+        return canvas;
+    }
+    
 	@Override
 	public GLDrawable getDrawable() {
 		return window;
@@ -103,12 +115,15 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 		display();
 		return renderer.getLastScreenshot();
 	}
-
+	
 	@Override
-	public Renderer3d getRenderer() {
-		return renderer;
-	}
-
+    public TextureData screenshot(File file) throws IOException {
+        TextureData screen = screenshot();
+        TextureIO.write(screen, file);
+        return screen;
+    }
+	
+	@Override
 	public String getDebugInfo() {
 		GL gl = getView().getCurrentGL();
 
@@ -121,8 +136,8 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 		// sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
 		return sb.toString();
 	}
-
-	/* */
+	
+	    
 
 	/**
 	 * Provide the actual renderer width for the open gl camera settings, which
@@ -141,19 +156,16 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 	public int getRendererHeight() {
 		return (renderer != null ? renderer.getHeight() : 0);
 	}
+	
+	@Override
+    public Renderer3d getRenderer() {
+        return renderer;
+    }
 
 	/** Provide a reference to the View that renders into this canvas. */
 	@Override
 	public View getView() {
 		return view;
-	}
-
-	public GLWindow getWindow() {
-		return window;
-	}
-
-	public NewtCanvasAWT getCanvas() {
-		return canvas;
 	}
 
 	@Override
@@ -192,5 +204,4 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 	protected GLWindow window;
 	protected NewtCanvasAWT canvas;
 	private static final long serialVersionUID = 8578690050666237742L;
-    
 }
