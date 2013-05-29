@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -71,7 +71,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 	/* */
 
 	/** Delegate rendering iteratively to all Drawable of this composite.*/
-	public void draw(GL2 gl, GLU glu, Camera camera){
+	public void draw(GL gl, GLU glu, Camera camera){
 	    if(mapper!=null)
 	        mapper.preDraw(this);
 

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 
 public class TextureFactory {
 	public static void preload(List<String> names){
@@ -17,7 +17,7 @@ public class TextureFactory {
 		map.put(name, new SharedTexture(name));
 	}
 	
-	public static void init(GL2 gl){
+	public static void init(GL gl){
 		for( SharedTexture texture: map.values() )
 			texture.mount(gl);
 	}

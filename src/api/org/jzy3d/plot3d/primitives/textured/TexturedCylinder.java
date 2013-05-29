@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives.textured;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -12,6 +12,7 @@ import org.jzy3d.maths.ConvexHull;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
+import org.jzy3d.maths.Polygon2d;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Point;
@@ -95,13 +96,13 @@ public class TexturedCylinder extends AbstractComposite implements Selectable, I
 	}
 	
 	@Override
-	public void project(GL2 gl, GLU glu, Camera cam) {
+	public void project(GL gl, GLU glu, Camera cam) {
 		lastProjection = cam.modelToScreen( gl, glu, getBounds().getVertices() );
 		lastHull = ConvexHull.hull(lastProjection);
 	}
 	
 	@Override
-	public java.awt.Polygon getHull2d() {
+	public Polygon2d getHull2d() {
 		return lastHull;
 	}
 	
@@ -117,6 +118,6 @@ public class TexturedCylinder extends AbstractComposite implements Selectable, I
 	protected List<TranslucentQuad> quads;
 	
 	protected List<Coord3d> lastProjection;
-	protected java.awt.Polygon lastHull;
+	protected Polygon2d lastHull;
 	protected float alpha;
 }

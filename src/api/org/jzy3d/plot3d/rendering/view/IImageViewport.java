@@ -1,8 +1,8 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import java.awt.Dimension;
+import org.jzy3d.maths.Dimension;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 public interface IImageViewport {
@@ -15,7 +15,7 @@ public interface IImageViewport {
      * @param gl
      * @param glu
      */
-    public abstract void render(GL2 gl, GLU glu);
+    public abstract void render(GL gl, GLU glu);
 
     /** Return the minimum size for this graphic.*/
     public abstract Dimension getMinimumSize();
@@ -24,17 +24,11 @@ public interface IImageViewport {
     public abstract Dimension getPreferedSize();
     
     
-    public void setViewPort(int width, int height) {
-        setViewPort(width, height, 0, 1);
-    }
+    public void setViewPort(int width, int height);
 
-    public ViewportMode getMode() {
-        return mode;
-    }
+    public ViewportMode getMode();
 
-    public void setViewportMode(ViewportMode mode) {
-        this.mode = mode;
-    }
+    public void setViewportMode(ViewportMode mode);
 
     /**
      * Set the view port (size of the renderer).

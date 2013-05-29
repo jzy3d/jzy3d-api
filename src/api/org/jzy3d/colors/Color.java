@@ -124,16 +124,6 @@ public class Color {
 	
 	/*************************************************************/
 
-	public java.awt.Color awt(){
-		return new java.awt.Color(r, g, b, a);
-	}
-	
-	public Color(java.awt.Color c){
-		this.r = c.getRed();
-		this.g = c.getGreen();
-		this.b = c.getBlue();
-		this.a = c.getAlpha();
-	}
 	
 	public float r;
 	public float g;

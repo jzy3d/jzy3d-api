@@ -1,17 +1,18 @@
 package org.jzy3d.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
+
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * Primitives for chart tests.
@@ -69,7 +70,7 @@ public class ChartTest{
         execute(chart, getTestCaseFileName());
     }
 
-    public void execute(BufferedImage image, String testImage) throws IOException {
+    public void execute(TextureData image, String testImage) throws IOException {
         clean(getTestCaseFailedFileName());
 
         if (!isBuilt(testImage))
@@ -77,7 +78,7 @@ public class ChartTest{
         test(image, testImage);
     }
 
-    public void execute(BufferedImage image) throws IOException {
+    public void execute(TextureData image) throws IOException {
         execute(image, getTestCaseFileName());
     }
 
@@ -97,7 +98,7 @@ public class ChartTest{
         screenshot(chart, testImage);
     }
 
-    public void build(BufferedImage image, String testImage) throws IOException {
+    public void build(TextureData image, String testImage) throws IOException {
         Logger.getLogger(ChartTest.class).warn("saving the image to assert later as no test image is available: " + testImage);
 
         screenshot(image, testImage);
@@ -119,7 +120,7 @@ public class ChartTest{
         }
     }
 
-    public void test(BufferedImage image, String testImage) throws IOException {
+    public void test(TextureData image, String testImage) throws IOException {
         try {
             Logger.getLogger(ChartTest.class).info("compare chart with " + testImage);
             compare(image, testImage);
@@ -133,7 +134,7 @@ public class ChartTest{
     /* */
 
     public void compare(Chart chart, String filename) throws IOException, ChartTestFailed {
-        BufferedImage i = chart.screenshot();
+        TextureData i = chart.screenshot();
 
         if (i != null) {
             compare(i, filename);
@@ -142,9 +143,9 @@ public class ChartTest{
         }
     }
 
-    public void compare(BufferedImage i, String filename) throws IOException, ChartTestFailed {
-        BufferedImage i2 = ImageIO.read(new File(filename));
-        compare(i, i2);
+    public void compare(TextureData i, String filename) throws IOException, ChartTestFailed {
+    	Texture i2 = TextureIO.newTexture(new File(filename), true);
+        //compare(i, i2);
     }
 
     /**
@@ -155,7 +156,7 @@ public class ChartTest{
      * @throws ChartTestFailed
      *             as soon as a pixel difference can be found
      */
-    public void compare(BufferedImage i1, BufferedImage i2) throws ChartTestFailed {
+    public void compare(TextureData i1, TextureData i2) throws ChartTestFailed {
         // int rbg = image.getRGB((int) x, (maxRow) - ((int) y));
 
         int i1W = i1.getWidth();
@@ -163,21 +164,21 @@ public class ChartTest{
         int i2W = i2.getWidth();
         int i2H = i2.getHeight();
 
-        if (i1W == i2W && i1H == i2H) {
-            for (int i = 0; i < i1W; i++) {
-                for (int j = 0; j < i1H; j++) {
-                    int p1rgb = i1.getRGB(i, j);
-                    int p2rgb = i2.getRGB(i, j);
-                    if (p1rgb != p2rgb) {
-                        String m = "pixel diff @(" + i + "," + j + ")";
-                        throw new ChartTestFailed(m, i1, i2);
-                    }
-                }
-            }
-        } else {
-            String m = "image size differ: i1={" + i1W + "," + i1H + "} i2={" + i2W + "," + i2H + "}";
-            throw new ChartTestFailed(m);
-        }
+//        if (i1W == i2W && i1H == i2H) {
+//            for (int i = 0; i < i1W; i++) {
+//                for (int j = 0; j < i1H; j++) {
+//                    int p1rgb = i1.getRGB(i, j);
+//                    int p2rgb = i2.getRGB(i, j);
+//                    if (p1rgb != p2rgb) {
+//                        String m = "pixel diff @(" + i + "," + j + ")";
+//                        throw new ChartTestFailed(m, i1, i2);
+//                    }
+//                }
+//            }
+//        } else {
+//            String m = "image size differ: i1={" + i1W + "," + i1H + "} i2={" + i2W + "," + i2H + "}";
+//            throw new ChartTestFailed(m);
+//        }
     }
 
     /* */
@@ -186,11 +187,11 @@ public class ChartTest{
         screenshot(chart.screenshot(), filename);
     }
 
-    public void screenshot(BufferedImage image, String testImage) throws IOException {
+    public void screenshot(TextureData image, String testImage) throws IOException {
         File output = new File(testImage);
         if (!output.getParentFile().exists())
             output.mkdirs();
-        ImageIO.write(image, "png", output);
+        TextureIO.write(image, output);
     }
 
     /* */

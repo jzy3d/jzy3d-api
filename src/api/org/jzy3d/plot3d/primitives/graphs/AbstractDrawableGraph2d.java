@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.graphs;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
@@ -77,7 +78,7 @@ public abstract class AbstractDrawableGraph2d<V, E> extends AbstractDrawable imp
 	/*******************************************************/
 	
 	@Override
-	public void draw(GL2 gl, GLU glu, Camera cam) {
+	public void draw(GL gl, GLU glu, Camera cam) {
 		if(layout==null)
 			throw new RuntimeException("missing vertex mapping");
 		
@@ -95,9 +96,9 @@ public abstract class AbstractDrawableGraph2d<V, E> extends AbstractDrawable imp
 	    	drawVertexLabels(gl, glu, cam);
 	}
 	
-	protected abstract void drawVertices(GL2 gl, GLU glu, Camera cam);
-	protected abstract void drawVertexLabels(GL2 gl, GLU glu, Camera cam);
-	protected abstract void drawEdges(GL2 gl, GLU glu, Camera cam);
+	protected abstract void drawVertices(GL gl, GLU glu, Camera cam);
+	protected abstract void drawVertexLabels(GL gl, GLU glu, Camera cam);
+	protected abstract void drawEdges(GL gl, GLU glu, Camera cam);
 
 	/*******************************************************/
 
