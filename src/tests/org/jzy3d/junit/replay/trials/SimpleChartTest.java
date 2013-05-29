@@ -16,7 +16,7 @@ import org.jzy3d.utils.LoggerUtils;
 
 public class SimpleChartTest extends ChartTest{
    
-	@Test
+	//@Test
 	public void test() throws Exception {
 	    LoggerUtils.minimal();
                Chart chart = chart(getTestCanvasType());

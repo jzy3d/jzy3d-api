@@ -14,8 +14,6 @@ import org.jzy3d.plot3d.primitives.Sphere;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 public class SelectableSphere extends Sphere implements Selectable {
 	public SelectableSphere() {
 		this(Coord3d.ORIGIN, 10f, 15, Color.BLACK);
@@ -78,12 +76,12 @@ public class SelectableSphere extends Sphere implements Selectable {
 
 	@Override
 	public Polygon2d getHull2d() {
-		throw new NotImplementedException();
+        throw new RuntimeException("not implemented");
 	}
 
 	@Override
 	public List<Coord3d> getLastProjection() {
-		throw new NotImplementedException();
+		throw new RuntimeException("not implemented");
 	}
 
 	/*********************************************/

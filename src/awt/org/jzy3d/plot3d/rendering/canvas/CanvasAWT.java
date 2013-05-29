@@ -1,5 +1,8 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilitiesImmutable;
@@ -17,6 +20,7 @@ import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * {@link CanvasAWT} is a base implementation that primarily allows to integrate
@@ -32,7 +36,7 @@ import com.jogamp.opengl.util.texture.TextureData;
 public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	public CanvasAWT(IChartComponentFactory factory, Scene scene,
 			Quality quality) {
-		this(factory, scene, quality, org.jzy3d.global.Settings.getInstance()
+		this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance()
 				.getGLCapabilities());
 	}
 
@@ -74,9 +78,6 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 		}).start();
 	}
 
-	public Renderer3d getRenderer() {
-		return renderer;
-	}
 
 	public String getDebugInfo() {
 		GL gl = getView().getCurrentGL();
@@ -89,9 +90,8 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 		// sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
 		return sb.toString();
 	}
-
-	/*********************************************************/
-
+	
+	@Override
 	public void forceRepaint() {
 		if (true) {
 			// -- Method1 --
@@ -120,7 +120,15 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 			repaint();
 		}
 	}
+	
+	@Override
+    public TextureData screenshot(File file) throws IOException {
+        TextureData screen = screenshot();
+        TextureIO.write(screen, file);
+        return screen;
+    }
 
+	@Override
 	public TextureData screenshot() {
 		renderer.nextDisplayUpdateScreenshot();
 		display();
@@ -157,8 +165,14 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	public GLDrawable getDrawable() {
 		return this;
 	}
+	
+	@Override
+    public Renderer3d getRenderer() {
+        return renderer;
+    }
 
 	/** Provide a reference to the View that renders into this canvas. */
+	@Override
 	public View getView() {
 		return view;
 	}
@@ -167,6 +181,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	 * Provide the actual renderer width for the open gl camera settings, which
 	 * is obtained after a resize event.
 	 */
+	@Override
 	public int getRendererWidth() {
 		return (renderer != null ? renderer.getWidth() : 0);
 	}
@@ -175,6 +190,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	 * Provide the actual renderer height for the open gl camera settings, which
 	 * is obtained after a resize event.
 	 */
+	@Override
 	public int getRendererHeight() {
 		return (renderer != null ? renderer.getHeight() : 0);
 	}
@@ -188,7 +204,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 
 	@Override
 	public void removeMouseListener(MouseListener listener) {
-		// TODO
+
 	}
 
 	@Override
@@ -199,13 +215,11 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 
 	@Override
 	public void removeKeyListener(KeyListener listener) {
-		// TODO
+		removeKeyListener((java.awt.event.KeyListener)listener);
 	}
 
 	protected View view;
 	protected Renderer3d renderer;
 	protected Animator animator;
 	private static final long serialVersionUID = 980088854683562436L;
-
-
 }

@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.transform;
 
 import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
 
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;

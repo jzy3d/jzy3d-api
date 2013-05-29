@@ -1,5 +1,8 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilitiesImmutable;
@@ -17,6 +20,7 @@ import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * As of version 0.9.1, {@link CanvasSwing} is deprecated as the underlying
@@ -35,7 +39,7 @@ import com.jogamp.opengl.util.texture.TextureData;
 public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	public CanvasSwing(IChartComponentFactory factory, Scene scene,
 			Quality quality) {
-		this(factory, scene, quality, org.jzy3d.global.Settings.getInstance()
+		this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance()
 				.getGLCapabilities());
 	}
 
@@ -82,8 +86,6 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 		view = null;
 	}
 
-	/*********************************************************/
-
 	/**
 	 * Force repaint and ensure that GL2 rendering will occur in the GUI thread,
 	 * wherever the caller stands.
@@ -114,6 +116,15 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 		}
 	}
 
+	
+	@Override
+    public TextureData screenshot(File file) throws IOException {
+        TextureData screen = screenshot();
+        TextureIO.write(screen, file);
+        return screen;
+    }
+	
+	@Override
 	public TextureData screenshot() {
 		renderer.nextDisplayUpdateScreenshot();
 		display();
@@ -128,6 +139,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	}
 
 	/** Provide a reference to the View that renders into this canvas. */
+	@Override
 	public View getView() {
 		return view;
 	}
@@ -136,6 +148,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	 * Provide the actual renderer width for the open gl camera settings, which
 	 * is obtained after a resize event.
 	 */
+	@Override
 	public int getRendererWidth() {
 		return (renderer != null ? renderer.getWidth() : 0);
 	}
@@ -144,6 +157,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	 * Provide the actual renderer height for the open gl camera settings, which
 	 * is obtained after a resize event.
 	 */
+	@Override
 	public int getRendererHeight() {
 		return (renderer != null ? renderer.getHeight() : 0);
 	}
@@ -153,6 +167,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 		return renderer;
 	}
 
+	@Override
 	public String getDebugInfo() {
 		GL gl = getView().getCurrentGL();
 

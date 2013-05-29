@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
-import org.jzy3d.global.Settings;
 import org.jzy3d.maths.Rectangle;
 
 import com.jogamp.newt.Screen;

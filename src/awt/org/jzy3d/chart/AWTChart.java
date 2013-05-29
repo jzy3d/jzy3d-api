@@ -14,7 +14,7 @@ public class AWTChart extends Chart {
     }
 
     public AWTChart(Quality quality, String windowingToolkit) {
-        this(new AWTChartComponentFactory(), quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+        this(new AWTChartComponentFactory(), quality, windowingToolkit, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }
 
     

@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.transform;
 
-import org.jzy3d.plot3d.transform.Rotate;
 
 public class Rotator {
     public Rotator(int sleep, final Rotate rotate) {
