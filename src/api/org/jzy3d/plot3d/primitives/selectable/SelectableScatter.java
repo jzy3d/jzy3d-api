@@ -14,8 +14,6 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * A Scatter that supports an "highlighted status" to change selected point
  * color
@@ -136,12 +134,12 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 
 	@Override
 	public Polygon2d getHull2d() {
-		throw new NotImplementedException();
+	    throw new RuntimeException("not implemented");
 	}
 
 	@Override
 	public List<Coord3d> getLastProjection() {
-		throw new NotImplementedException();
+	    throw new RuntimeException("not implemented");
 	}
 
 	/**********************************************************************/

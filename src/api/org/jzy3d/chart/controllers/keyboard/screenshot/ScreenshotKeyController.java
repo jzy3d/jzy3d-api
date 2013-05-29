@@ -1,7 +1,5 @@
 package org.jzy3d.chart.controllers.keyboard.screenshot;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,6 +8,8 @@ import java.util.List;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.AbstractController;
 
+import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.KeyListener;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 /**

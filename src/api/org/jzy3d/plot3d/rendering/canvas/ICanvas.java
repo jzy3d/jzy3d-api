@@ -1,5 +1,8 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.io.File;
+import java.io.IOException;
+
 import javax.media.opengl.GLDrawable;
 
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -8,9 +11,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.texture.TextureData;
-//import com.jogamp.newt.event.MouseMotionListener;
-//import com.jogamp.newt.event.MouseWheelListener;
-//import java.awt.image.BufferedImage;
 
 
 /**
@@ -44,6 +44,7 @@ public interface ICanvas {
 	
 	/** Returns an image with the current renderer's size */
 	public TextureData screenshot();
+    public TextureData screenshot(File file) throws IOException;
 	
 	/** Performs all required cleanup when destroying a Canvas.*/
 	public void dispose();
@@ -65,4 +66,5 @@ public interface ICanvas {
 	public void removeKeyListener(KeyListener listener);
 	
 	public String getDebugInfo();
+
 }

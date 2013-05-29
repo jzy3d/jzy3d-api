@@ -1,9 +1,7 @@
-package org.jzy3d.global;
+package org.jzy3d.chart;
 
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
-
-import jogamp.newt.driver.awt.AWTDisplay;
 
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 

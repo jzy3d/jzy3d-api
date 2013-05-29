@@ -1,12 +1,8 @@
 package org.jzy3d.bridge.newt.controllers.keyboard;
 
-import com.jogamp.newt.Window;
-import com.jogamp.newt.event.KeyEvent;
-import java.awt.Component;
-
 import jogamp.newt.awt.event.AWTNewtEventFactory;
 
-import org.jzy3d.bridge.newt.controllers.AwtToNewtUtilities;
+import com.jogamp.newt.Window;
 
 /**
  *

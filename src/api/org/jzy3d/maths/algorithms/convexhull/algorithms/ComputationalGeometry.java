@@ -1,7 +1,6 @@
 package org.jzy3d.maths.algorithms.convexhull.algorithms;
 
 import org.jzy3d.maths.Coord2d;
-import org.jzy3d.maths.algorithms.convexhull.algorithms.RobustDeterminant;
 
 public class ComputationalGeometry {
 

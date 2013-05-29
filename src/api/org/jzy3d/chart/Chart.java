@@ -29,7 +29,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 import com.jogamp.opengl.util.texture.TextureData;
-import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * {@link Chart} is a convenient object that gather all components required to
@@ -54,15 +53,15 @@ public class Chart {
     }
 
     public Chart(IChartComponentFactory components, Quality quality) {
-        this(components, quality, DEFAULT_WINDOWING_TOOLKIT, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+        this(components, quality, DEFAULT_WINDOWING_TOOLKIT, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }
 
     public Chart(Quality quality, String windowingToolkit) {
-        this(new ChartComponentFactory(), quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+        this(new ChartComponentFactory(), quality, windowingToolkit, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }
 
     public Chart(IChartComponentFactory factory, Quality quality, String windowingToolkit) {
-        this(factory, quality, windowingToolkit, org.jzy3d.global.Settings.getInstance().getGLCapabilities());
+        this(factory, quality, windowingToolkit, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }
 
     public Chart(IChartComponentFactory factory, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
@@ -150,10 +149,8 @@ public class Chart {
     /**
      * Compute screenshot and save to file
      */
-    public TextureData screenshot(String filename) throws IOException {
-        TextureData screen = screenshot();
-        TextureIO.write(screen, new File(filename));
-        return screen;
+    public TextureData screenshot(File file) throws IOException {
+        return canvas.screenshot(file);
     }
 
     public void updateProjectionsAndRender() {
