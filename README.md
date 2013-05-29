@@ -22,9 +22,15 @@ Library dependencies
 - jogl2
 - jdt (currently copied in API but will be externalized soon)
 - opencsv
-- swt
 - log4j
 - junit
+
+Windowing toolkit dependent modules
+-----------------------------------
+- jzy3d-swt
+- jzy3d-awt (coming soon)
+- jzy3d-swing (coming soon)
+
 
 Satellite projects depending on Jzy3d
 --------------
