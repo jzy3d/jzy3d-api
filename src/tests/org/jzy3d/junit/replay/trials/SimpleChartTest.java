@@ -11,7 +11,7 @@ import org.jzy3d.plot3d.builder.Builder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.rendering.legends.colorbars.ColorbarLegend;
+import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.utils.LoggerUtils;
 
 public class SimpleChartTest extends ChartTest{
@@ -46,7 +46,7 @@ public class SimpleChartTest extends ChartTest{
         // Setup a colorbar for the surface object and add it to the scene
         Chart chart = new Chart(wt);
         chart.getScene().getGraph().add(surface);
-        ColorbarLegend cbar = new ColorbarLegend(surface, chart.getView().getAxe().getLayout());
+        AWTColorbarLegend cbar = new AWTColorbarLegend(surface, chart.getView().getAxe().getLayout());
         surface.setLegend(cbar);
         return chart;
 	}

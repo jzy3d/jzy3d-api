@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.Coord3d;
@@ -45,7 +45,7 @@ public abstract class AbstractOrderingStrategy implements Comparator<AbstractDra
 	
 	/* */
 
-	public void setAll(GL2 gl, GLU glu, Camera camera, Transform transform){
+	public void setAll(GL gl, GLU glu, Camera camera, Transform transform){
 		this.gl        = gl;
 		this.glu       = glu;
 		this.camera    = camera;
@@ -68,11 +68,11 @@ public abstract class AbstractOrderingStrategy implements Comparator<AbstractDra
 		this.transform = transform;
 	}
 	
-	public GL2 getGl() {
+	public GL getGl() {
 		return gl;
 	}
 
-	public void setGl(GL2 gl) {
+	public void setGl(GL gl) {
 		this.gl = gl;
 	}
 
@@ -99,7 +99,7 @@ public abstract class AbstractOrderingStrategy implements Comparator<AbstractDra
     protected View view;
     protected Camera camera;
 	protected Transform transform;
-	protected GL2 gl;
+	protected GL gl;
 	protected GLU glu;
 	
 }

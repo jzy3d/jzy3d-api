@@ -1,17 +1,10 @@
 package org.jzy3d.chart.factories;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.media.opengl.GLCapabilities;
 
-import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
-import org.jzy3d.bridge.awt.FrameAWT;
-import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.ChartView;
@@ -27,14 +20,11 @@ import org.jzy3d.chart.controllers.mouse.camera.CameraMouseControllerNewt;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.plot3d.primitives.axes.AxeBox;
+import org.jzy3d.plot3d.primitives.axes.AxeBase;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
-import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.ordering.BarycentreOrderingStrategy;
@@ -42,197 +32,106 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 public class ChartComponentFactory implements IChartComponentFactory {
-
-    public static enum Toolkit {
-
-        awt, swing, newt, offscreen
-    };
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jzy3d.factories.IChartComponentFactory#newScene(boolean)
-     */
-    @Override
-    public ChartScene newScene(boolean sort) {
-        return new ChartScene(sort, this);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.jzy3d.factories.IChartComponentFactory#newView(org.jzy3d.plot3d.rendering
-     * .scene.Scene, org.jzy3d.plot3d.rendering.canvas.ICanvas,
-     * org.jzy3d.plot3d.rendering.canvas.Quality)
-     */
-    @Override
-    public View newView(Scene scene, ICanvas canvas, Quality quality) {
-        return new ChartView(this, scene, canvas, quality);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.jzy3d.factories.IChartComponentFactory#newCamera(org.jzy3d.maths.
-     * Coord3d)
-     */
-    @Override
-    public Camera newCamera(Coord3d center) {
-        return new Camera(center);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jzy3d.factories.IChartComponentFactory#newAxe(org.jzy3d.maths.
-     * BoundingBox3d, org.jzy3d.plot3d.rendering.view.View)
-     */
-    @Override
-    public IAxe newAxe(BoundingBox3d box, View view) {
-        AxeBox axe = new AxeBox(box);
-        axe.setView(view);
-        return axe;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.jzy3d.factories.IChartComponentFactory#newRenderer(org.jzy3d.plot3d
-     * .rendering.view.View, boolean, boolean)
-     */
-    @Override
-    public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
-        return new Renderer3d(view, traceGL, debugGL);
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.jzy3d.factories.IChartComponentFactory#newOrderingStrategy()
-     */
-    @Override
-    public AbstractOrderingStrategy newOrderingStrategy() {
-        return new BarycentreOrderingStrategy();
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.jzy3d.factories.IChartComponentFactory#newCanvas(org.jzy3d.plot3d
-     * .rendering.scene.Scene, org.jzy3d.plot3d.rendering.canvas.Quality,
-     * java.lang.String, javax.media.opengl.GLCapabilities)
-     */
-    @Override
-    public ICanvas newCanvas(Scene scene, Quality quality, String chartType, GLCapabilities capabilities) {
-        return initializeCanvas(scene, quality, chartType, capabilities, false, false);
-    }
-
-    @Override
-    public ICameraMouseController newMouseController(Chart chart) {
-        ICameraMouseController mouse = null;
-        if (!chart.getWindowingToolkit().equals("newt"))
-            mouse = new CameraMouseController(chart);
-        else
-            mouse = new CameraMouseControllerNewt(chart);
-        return mouse;
-    }
-
-    @Override
-    public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
-        // trigger screenshot on 's' letter
-        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date()) + ".png";
-        IScreenshotKeyController screenshot;
-
-        if (!chart.getWindowingToolkit().equals("newt"))
-            screenshot = new ScreenshotKeyController(chart, file);
-        else
-            screenshot = new ScreenshotKeyControllerNewt(chart, file);
-
-        screenshot.addListener(new IScreenshotEventListener() {
-            @Override
-            public void failedScreenshot(String file, Exception e) {
-                System.out.println("Failed to save screenshot:");
-                e.printStackTrace();
-            }
-
-            @Override
-            public void doneScreenshot(String file) {
-                System.out.println("Screenshot: " + file);
-            }
-        });
-        return screenshot;
-    }
-
-    public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-
-    @Override
-    public ICameraKeyController newKeyController(Chart chart) {
-        ICameraKeyController key = null;
-        if (!chart.getWindowingToolkit().equals("newt"))
-            key = new CameraKeyController(chart);
-        else
-            key = new CameraKeyControllerNewt(chart);
-        return key;
-    }
-
-    public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        Object canvas = chart.getCanvas();
-
-        if (canvas instanceof CanvasAWT)
-            return new FrameAWT(chart, bounds, title); // FrameSWT works as well
-        else if (canvas instanceof CanvasNewt)
-            return new FrameAWT(chart, bounds, title, "[Newt]"); // FrameSWT
-                                                                 // works as
-                                                                 // well
-        else if (canvas instanceof CanvasSwing)
-            return new FrameSwing(chart, bounds, title);
-        else
-            throw new RuntimeException("No default frame could be found for the given Chart canvas: " + canvas.getClass());
-    }
-
-    protected Toolkit getToolkit(String windowingToolkit) {
-        if (windowingToolkit.startsWith("offscreen")) {
-            return Toolkit.offscreen;
-        }
-        return Toolkit.valueOf(windowingToolkit);
-    }
-
-    protected Dimension getCanvasDimension(String windowingToolkit) {
-        if (windowingToolkit.startsWith("offscreen")) {
-            Pattern pattern = Pattern.compile("offscreen,(\\d+),(\\d+)");
-            Matcher matcher = pattern.matcher(windowingToolkit);
-            if (matcher.matches()) {
-                int width = Integer.parseInt(matcher.group(1));
-                int height = Integer.parseInt(matcher.group(2));
-                return new Dimension(width, height);
-            } else {
-                return new Dimension(500, 500);
-            }
-        }
+    /** to be implemented */
+    protected ICanvas initializeCanvas(Scene scene, Quality quality, String chartType, GLCapabilities capabilities, boolean b, boolean c){
         return null;
     }
 
-    protected ICanvas initializeCanvas(Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        Toolkit chartType = getToolkit(windowingToolkit);
-        switch (chartType) {
-        case awt:
-            return new CanvasAWT(this, scene, quality, capabilities, traceGL, debugGL);
-        case swing:
-            Logger.getLogger(ChartComponentFactory.class).warn("Swing canvas is deprecated. Use Newt instead");
-            return new CanvasSwing(this, scene, quality, capabilities, traceGL, debugGL);
-        case newt:
-            return new CanvasNewt(this, scene, quality, capabilities, traceGL, debugGL);
-        case offscreen:
-            Dimension dimension = getCanvasDimension(windowingToolkit);
-            return new OffscreenCanvas(this, scene, quality, capabilities, dimension.width, dimension.height, traceGL, debugGL);
-        default:
-            throw new RuntimeException("unknown chart type:" + chartType);
-        }
+    @Override
+    public Chart newChart(Quality quality, Toolkit toolkit){
+        return new Chart(quality, toolkit.toString());
+    }
+	@Override
+	public ChartScene newScene(boolean sort) {
+		return new ChartScene(sort, this);
+	}
+	@Override
+	public View newView(Scene scene, ICanvas canvas, Quality quality) {
+		return new ChartView(this, scene, canvas, quality);
+	}
+	@Override
+	public Camera newCamera(Coord3d center) {
+		return new Camera(center);
+	}
+	@Override
+	public IAxe newAxe(BoundingBox3d box, View view) {
+		AxeBase axe = new AxeBase(box);
+		return axe;
+	}
+	@Override
+	public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
+		return new Renderer3d(view, traceGL, debugGL);
+	}
+	@Override
+	public AbstractOrderingStrategy newOrderingStrategy() {
+		return new BarycentreOrderingStrategy();
+	}
+	@Override
+	public ICanvas newCanvas(Scene scene, Quality quality, String chartType,
+			GLCapabilities capabilities) {
+		return initializeCanvas(scene, quality, chartType, capabilities, false,
+				false);
+	}
+
+    @Override
+	public ICameraMouseController newMouseController(Chart chart) {
+		ICameraMouseController mouse = null;
+		if (!chart.getWindowingToolkit().equals("newt"))
+			mouse = new CameraMouseController(chart);
+		else
+			mouse = new CameraMouseControllerNewt(chart);
+		return mouse;
+	}
+
+	@Override
+	public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
+		// trigger screenshot on 's' letter
+		String file = SCREENSHOT_FOLDER + "capture-"
+				+ Utils.dat2str(new Date()) + ".png";
+		IScreenshotKeyController screenshot;
+
+		if (!chart.getWindowingToolkit().equals("newt"))
+			screenshot = new ScreenshotKeyController(chart, file);
+		else
+			screenshot = new ScreenshotKeyControllerNewt(chart, file);
+
+		screenshot.addListener(new IScreenshotEventListener() {
+			@Override
+			public void failedScreenshot(String file, Exception e) {
+				System.out.println("Failed to save screenshot:");
+				e.printStackTrace();
+			}
+
+			@Override
+			public void doneScreenshot(String file) {
+				System.out.println("Screenshot: " + file);
+			}
+		});
+		return screenshot;
+	}
+
+	public static String SCREENSHOT_FOLDER = "./data/screenshots/";
+
+	@Override
+	public ICameraKeyController newKeyController(Chart chart) {
+		ICameraKeyController key = null;
+		if (!chart.getWindowingToolkit().equals("newt"))
+			key = new CameraKeyController(chart);
+		else
+			key = new CameraKeyControllerNewt(chart);
+		return key;
+	}
+
+	public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
+		throw new RuntimeException(
+					"No implemented exception");
+	}
+
+	@Override
+    public IViewportLayout newViewportLayout() {
+        return null;
     }
 }

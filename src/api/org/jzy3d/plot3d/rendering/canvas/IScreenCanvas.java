@@ -8,7 +8,7 @@ import javax.media.opengl.GLAnimatorControl;
  * implementation allows to render 3d content for a given Windowing toolkit:
  * <ul>
  * <li>{@link CanvasAWT} is a base implementation suitable for AWT, Swing or SWT applications.</li>
- * <li>{@link CanvasNewt} is a new implementation (since 0.9.1) using JOGL's recommended windowing toolkit.</li>
+ * <li>{@link CanvasNewtAwt} is a new implementation (since 0.9.1) using JOGL's recommended windowing toolkit.</li>
  * <li>{@link CanvasSwing} is a deprecated implementation for Swing (since 0.9.1)</li>
  * </ul>
  *  

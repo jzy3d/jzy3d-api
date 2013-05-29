@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src/api"/>
+	<classpathentry kind="src" path="src/awt"/>
+	<classpathentry kind="src" path="src/swt"/>
+	<classpathentry kind="src" path="src/swing"/>
 	<classpathentry kind="src" path="src/bridge"/>
 	<classpathentry kind="src" path="src/tests"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
@@ -31,6 +34,5 @@
 	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all-natives-windows-i586.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/jogl2-rc10/jogl-all.jar" sourcepath="/jogl"/>
 	<classpathentry exported="true" kind="lib" path="lib/misc/log4j-1.2.16.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/org.jzy3d-tools-convexhull"/>
 	<classpathentry kind="output" path="build/eclipse"/>
 </classpath>

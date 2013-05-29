@@ -195,8 +195,6 @@ public class Coord2d {
 		return Math.sqrt( Math.pow(x-c.x,2) + Math.pow(y-c.y,2) );
 	}
 	
-	/**************************************************************/
-	
 	/** Return a string representation of this coordinate.*/
 	public String toString(){
 		return ("x=" + x + " y=" + y);
@@ -211,8 +209,13 @@ public class Coord2d {
 		return array;
 	}
 	
-	/**************************************************************/
-
+	public float getX(){
+	    return x;
+	}
+    public float getY(){
+        return y;
+    }
+	
 	public float x;
 	public float y;
 }

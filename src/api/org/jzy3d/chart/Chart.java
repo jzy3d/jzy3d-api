@@ -1,13 +1,10 @@
 package org.jzy3d.chart;
 
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilities;
 
@@ -20,6 +17,7 @@ import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
@@ -27,9 +25,11 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
+
+import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * {@link Chart} is a convenient object that gather all components required to
@@ -101,7 +101,7 @@ public class Chart {
             }
         }
     }
-    
+
     public void resumeAnimator() {
         if (canvas != null && canvas instanceof IScreenCanvas) {
             GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
@@ -119,7 +119,7 @@ public class Chart {
             }
         }
     }
-    
+
     public void stopAnimator() {
         if (canvas != null && canvas instanceof IScreenCanvas) {
             GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
@@ -143,17 +143,17 @@ public class Chart {
         view.shoot();
     }
 
-    public BufferedImage screenshot() {
+    public TextureData screenshot() {
         return canvas.screenshot();
     }
 
     /**
      * Compute screenshot and save to file
      */
-    public BufferedImage screenshot(String filename) throws IOException {
-        BufferedImage s = screenshot();
-        ImageIO.write(s, "png", new File(filename));
-        return s;
+    public TextureData screenshot(String filename) throws IOException {
+        TextureData screen = screenshot();
+        TextureIO.write(screen, new File(filename));
+        return screen;
     }
 
     public void updateProjectionsAndRender() {
@@ -241,18 +241,10 @@ public class Chart {
         getScene().getGraph().remove(drawable, updateViews);
     }
 
-    public void addRenderer(Renderer2d renderer2d) {
-        view.addRenderer2d(renderer2d);
-    }
-
-    public void removeRenderer(Renderer2d renderer2d) {
-        view.removeRenderer2d(renderer2d);
-    }
-
     public Light addLight(Coord3d position) {
         return addLight(position, Color.BLUE, new Color(0.8f, 0.8f, 0.8f), Color.WHITE, 1);
     }
-    
+
     public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular, int radius) {
         Light light = new Light();
         light.setPosition(position);

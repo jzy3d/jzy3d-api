@@ -1,11 +1,5 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelListener;
-import java.awt.image.BufferedImage;
-
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilities;
@@ -19,12 +13,16 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.newt.event.KeyListener;
+import com.jogamp.newt.event.MouseListener;
+import com.jogamp.opengl.util.texture.TextureData;
+
 public class OffscreenCanvas implements ICanvas {
-    
+
     public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height) {
         this(factory, scene, quality, capabilities, width, height, false, false);
     }
-    
+
     public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
         view = scene.newView(this, quality);
         renderer = factory.newRenderer(view, traceGL, debugGL);
@@ -32,21 +30,22 @@ public class OffscreenCanvas implements ICanvas {
     }
 
     protected void initGLPBuffer(GLCapabilities capabilities, int width, int height) {
-		GLProfile profile = capabilities.getGLProfile();
-		capabilities.setDoubleBuffered(false);
+        GLProfile profile = capabilities.getGLProfile();
+        capabilities.setDoubleBuffered(false);
         if (!GLDrawableFactory.getFactory(profile).canCreateGLPbuffer(null))
             throw new RuntimeException("No pbuffer support");
         GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
         glpBuffer = factory.createGLPbuffer(null, capabilities, null, width, height, null);
         glpBuffer.addGLEventListener(renderer);
     }
-	
-//	public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLProfile profile, int width, int height) {
-//        view = scene.newView(this, quality);
-//        renderer = factory.newRenderer(view, false, false);
-//
-//        initGLPBuffer(width, height);
-//    }
+
+    // public OffscreenCanvas(IChartComponentFactory factory, Scene scene,
+    // Quality quality, GLProfile profile, int width, int height) {
+    // view = scene.newView(this, quality);
+    // renderer = factory.newRenderer(view, false, false);
+    //
+    // initGLPBuffer(width, height);
+    // }
 
     protected void initGLPBuffer(int width, int height) {
         GLCapabilities caps = org.jzy3d.global.Settings.getInstance().getGLCapabilities();
@@ -61,7 +60,7 @@ public class OffscreenCanvas implements ICanvas {
     public GLPbuffer getGlpBuffer() {
         return glpBuffer;
     }
-    
+
     @Override
     public GLDrawable getDrawable() {
         return glpBuffer;
@@ -80,7 +79,7 @@ public class OffscreenCanvas implements ICanvas {
     }
 
     @Override
-    public BufferedImage screenshot() {
+    public TextureData screenshot() {
         renderer.nextDisplayUpdateScreenshot();
         glpBuffer.display();
         return renderer.getLastScreenshot();
@@ -108,38 +107,51 @@ public class OffscreenCanvas implements ICanvas {
     public int getRendererHeight() {
         return (renderer != null ? renderer.getHeight() : 0);
     }
-    
+
     @Override
-	public Renderer3d getRenderer(){
-		return renderer;
-	}
-    
-    public String getDebugInfo(){
-		GL gl = getView().getCurrentGL();
-		
-		StringBuffer sb = new StringBuffer();
-		sb.append("Chosen GLCapabilities: " + glpBuffer.getChosenGLCapabilities() + "\n");
-		sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
-		sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
-		sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
-		//sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
-		return sb.toString();
-	}
-    public void removeKeyListener(KeyListener listener) {
+    public Renderer3d getRenderer() {
+        return renderer;
     }
-    public void removeMouseListener(MouseListener listener) {
+
+    public String getDebugInfo() {
+        GL gl = getView().getCurrentGL();
+
+        StringBuffer sb = new StringBuffer();
+        sb.append("Chosen GLCapabilities: " + glpBuffer.getChosenGLCapabilities() + "\n");
+        sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
+        sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
+        sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+        // sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
+        return sb.toString();
     }
-    public void removeMouseMotionListener(MouseMotionListener listener) {
+
+    @Override
+    public void addMouseListener(Object o) {
+
     }
-    public void removeMouseWheelListener(MouseWheelListener listener) {
+
+    @Override
+    public void addKeyListener(Object o) {
+
     }
-    public void addKeyListener(KeyListener listener) {
-    }
+
+    @Override
     public void addMouseListener(MouseListener listener) {
+
     }
-    public void addMouseMotionListener(MouseMotionListener listener) {
+
+    @Override
+    public void removeMouseListener(MouseListener listener) {
+
     }
-    public void addMouseWheelListener(MouseWheelListener listener) {
+
+    @Override
+    public void addKeyListener(KeyListener listener) {
+
+    }
+
+    @Override
+    public void removeKeyListener(KeyListener listener) {
     }
 
     /*********************************************************/
@@ -147,4 +159,5 @@ public class OffscreenCanvas implements ICanvas {
     protected View view;
     protected Renderer3d renderer;
     protected GLPbuffer glpBuffer;
+
 }

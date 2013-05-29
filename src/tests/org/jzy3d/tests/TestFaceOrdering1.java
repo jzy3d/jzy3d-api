@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.chart.factories.ChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -27,8 +27,9 @@ import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.FixedDecimalTickRenderer;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ScientificNotationTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.legends.colorbars.ColorbarLegend;
+import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.scene.Graph;
+import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.annotation.CameraEyeOverlayAnnotation;
 import org.jzy3d.plot3d.text.drawable.DrawableTextBillboard;
@@ -67,7 +68,7 @@ public class TestFaceOrdering1 {
         //s.setView(chart.getView()); // experimental solution: scale camera eye with current view scaling
         
         genMapperSurface(chart.getView(), chart.getScene().getGraph(), chart.getAxeLayout());
-        chart.getView().addRenderer2d(new CameraEyeOverlayAnnotation(chart.getView()));
+        ((AWTView)chart.getView()).addRenderer2d(new CameraEyeOverlayAnnotation(chart.getView()));
         //chart.getView().getCamera().setUseSquaredDistance(false);
         
         // Points and Textes
@@ -79,8 +80,8 @@ public class TestFaceOrdering1 {
         //chart.getView().getViewPointL
     }
 
-    private ChartComponentFactory getFactory() {
-        return new ChartComponentFactory();
+    private AWTChartComponentFactory getFactory() {
+        return new AWTChartComponentFactory();
     }
 
     public void createPoints(final Chart chart) {
@@ -152,7 +153,7 @@ public class TestFaceOrdering1 {
         surface.setColorMapper(colormapper);
         surface.setWireframeDisplayed(true);
 
-        colorbar = new ColorbarLegend(surface, layout);
+        colorbar = new AWTColorbarLegend(surface, layout);
         surface.setLegend(colorbar);
 
         view.addViewPointChangedListener(new IViewPointChangedListener(){
@@ -177,7 +178,7 @@ public class TestFaceOrdering1 {
     
     protected IColorMap colormap;
     protected ColorMapper colormapper;
-    protected ColorbarLegend colorbar;
+    protected AWTColorbarLegend colorbar;
     protected Shape surface;
     
     private final double[] _x;

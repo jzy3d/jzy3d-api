@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
-import javax.media.opengl.GL2;
+import javax.media.opengl.GL;
 
 /**
  * Defines an objects that uses resources that should be loaded
@@ -12,7 +12,7 @@ import javax.media.opengl.GL2;
  */
 public interface IGLBindedResource {
     /** Mount resources to gl context*/
-    public void mount(GL2 gl);
+    public void mount(GL gl);
     /** Return true if mount(...) has been called at least one time */
     public boolean hasMountedOnce();
 }
