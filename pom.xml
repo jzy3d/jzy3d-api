@@ -4,14 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-api</artifactId>
-	<version>0.9.1</version>
-	<!--<version>0.9.1-SNAPSHOT</version> -->
-	<name>jzy3d-api</name>
+	<name>Jzy3d API</name>
+    <!--<version>0.9.1-SNAPSHOT</version>-->
+    <parent>
+        <groupId>org.jzy3d</groupId>
+        <artifactId>jzy3d-master</artifactId>
+        <version>0.9.1-SNAPSHOT</version>
+    </parent>
+
 	<description>A Java API for 3d charts</description>
-
-	
-
-
 
 	<dependencies>
 		<dependency>
