@@ -1,6 +1,8 @@
 Jzy3d - A Java API for 3d charts
 ================================
 
+This project is part of a <a href="https://github.com/jzy3d/jzy3d-master">multimodule project</a>
+
 Project layout
 --------------
 Source folders organisation:
@@ -24,23 +26,6 @@ Library dependencies
 - opencsv
 - log4j
 - junit
-
-Windowing toolkit dependent modules
------------------------------------
-These modules extends Jzy3d with components dedicated to a windowing toolkit (awt, swt, swing, etc)
-- <a href="https://github.com/jzy3d/jzy3d-swt">jzy3d-swt</a>
-- jzy3d-awt (coming soon)
-- jzy3d-swing (coming soon)
-
-
-Satellite projects depending on Jzy3d
---------------
-Satellite projects are extensions of the framework that remain external to the API.
-
-- <a href="https://github.com/jzy3d/jzy3d-graphs">jzy3d-graphs</a>: extends Gephi toolkit and Jzy3d to allow 3d graph layouts 
-- <a href="https://github.com/jzy3d/jzy3d-depthpeeling">jzy3d-depthpeeling</a>: an extension allowing visually perfect transparency
-- <a href="https://github.com/jzy3d/jzy3d-svm-mapper">jzy3d-svm-mapper</a>:  building tesselated surfaces out of a SVM regression model (also depends on <a href="https://github.com/jzy3d/jzy3d-tools-libsvm">jzy3d-tools-libsvm</a>, a clone of libsvm of utility wrappers and refactors)
-- glredbook
 
 License
 --------------
