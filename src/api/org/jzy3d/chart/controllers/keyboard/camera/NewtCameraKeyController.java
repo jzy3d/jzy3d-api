@@ -8,26 +8,25 @@ import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
 
-public class CameraKeyController extends AbstractCameraController implements KeyListener, ICameraKeyController{
+public class NewtCameraKeyController extends AbstractCameraController implements KeyListener, ICameraKeyController{
 		
-	public CameraKeyController(){
+	public NewtCameraKeyController(){
 	}
 	
-	public CameraKeyController(Chart chart){
+	public NewtCameraKeyController(Chart chart){
 		register(chart);
 	}
 	
 	public void register(Chart chart){
 		super.register(chart);
-		chart.getCanvas().addKeyListener(this);
+		chart.getCanvas().addKeyController(this);
 	}
 	
 	public void dispose(){
 		for(Chart c: targets){
-			c.getCanvas().removeKeyListener(this);
+		    c.getCanvas().removeKeyController(this);
 		}
-		
-		super.dispose(); // i.e. target=null
+		super.dispose();
 	}
 	
 	/*********************************************************/

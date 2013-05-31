@@ -1,4 +1,4 @@
-package org.jzy3d.io;
+package org.jzy3d.plot3d.rendering.image;
 
 import java.awt.Graphics2D;
 import java.awt.Image;

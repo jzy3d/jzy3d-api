@@ -5,7 +5,7 @@ import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
-import org.jzy3d.chart.controllers.mouse.MouseUtilities;
+import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -17,24 +17,24 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 
-public class MousePickingController<V, E> extends AbstractCameraController
+public class NewtMousePickingController<V, E> extends AbstractCameraController
 		implements MouseListener {
-	public MousePickingController() {
+	public NewtMousePickingController() {
 		super();
 		picking = new PickingSupport();
 	}
 
-	public MousePickingController(Chart chart) {
+	public NewtMousePickingController(Chart chart) {
 		super(chart);
 		picking = new PickingSupport();
 	}
 
-	public MousePickingController(Chart chart, int brushSize) {
+	public NewtMousePickingController(Chart chart, int brushSize) {
 		super(chart);
 		picking = new PickingSupport(brushSize);
 	}
 
-	public MousePickingController(Chart chart, int brushSize, int bufferSize) {
+	public NewtMousePickingController(Chart chart, int brushSize, int bufferSize) {
 		super(chart);
 		picking = new PickingSupport(brushSize, bufferSize);
 	}
@@ -43,12 +43,12 @@ public class MousePickingController<V, E> extends AbstractCameraController
 		super.register(chart);
 		this.chart = chart;
 		this.prevMouse = Coord2d.ORIGIN;
-		chart.getCanvas().addMouseListener(this);
+		chart.getCanvas().addMouseController(this);
 	}
 
 	public void dispose() {
 		for (Chart c : targets) {
-			c.getCanvas().removeMouseListener(this);
+			c.getCanvas().removeMouseController(this);
 		}
 
 		if (threadController != null)
@@ -90,7 +90,7 @@ public class MousePickingController<V, E> extends AbstractCameraController
 			threadController.stop();
 		System.out.println(e.getWheelRotation());
 		float factor = 1 + (e.getWheelRotation() / 10.0f);
-		System.out.println(MousePickingController.class.getSimpleName() + "wheel:" + factor * 100);
+		System.out.println(NewtMousePickingController.class.getSimpleName() + "wheel:" + factor * 100);
 		zoomX(factor);
 		zoomY(factor);		
 		chart.getView().shoot();
@@ -126,7 +126,7 @@ public class MousePickingController<V, E> extends AbstractCameraController
 	}
 
 	public boolean handleSlaveThread(MouseEvent e) {
-		if (MouseUtilities.isDoubleClick(e)) {
+		if (NewtMouseUtilities.isDoubleClick(e)) {
 			if (threadController != null) {
 				threadController.start();
 				return true;

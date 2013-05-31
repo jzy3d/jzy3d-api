@@ -1,25 +1,25 @@
 package org.jzy3d.chart.controllers.keyboard.lights;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.lights.Light;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
-
-public class LightKeyController implements KeyListener{
+public class AWTLightKeyController implements KeyListener{
     
-    public LightKeyController(Chart chart) {
+    public AWTLightKeyController(Chart chart) {
         super();
         this.chart = chart;
     }
     
-    public LightKeyController(Chart chart, int lightId) {
+    public AWTLightKeyController(Chart chart, int lightId) {
         super();
         this.chart = chart;
         this.lightId = lightId;
     }
 
-    public LightKeyController(Chart chart, Light light) {
+    public AWTLightKeyController(Chart chart, Light light) {
         super();
         this.chart = chart;
         this.lightId = light.getId();

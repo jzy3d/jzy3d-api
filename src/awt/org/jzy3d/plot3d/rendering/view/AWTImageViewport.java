@@ -8,6 +8,7 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.plot3d.rendering.image.GLImage;
 
 
 /** A {@link AWTImageViewport} allows displaying a 2d {@link Image} within an OpenGL2 viewport.
@@ -54,10 +55,8 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
 	public void setImage(Image image, int width, int height) {
 		if (image != null) {
 			synchronized (image) {
-			
-				
-				//ByteBuffer b = image.
-				// setImage(image, width, height, b);
+			    ByteBuffer b = GLImage.getImageAsGlByteBuffer( image, width, height );
+			    setImage(image, width, height, b);
 			}
 		}
 	}

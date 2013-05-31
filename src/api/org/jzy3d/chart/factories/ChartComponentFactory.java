@@ -8,15 +8,15 @@ import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.ChartView;
-import org.jzy3d.chart.controllers.keyboard.camera.CameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.camera.CameraKeyControllerNewt;
+import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
-import org.jzy3d.chart.controllers.keyboard.screenshot.ScreenshotKeyController;
-import org.jzy3d.chart.controllers.keyboard.screenshot.ScreenshotKeyControllerNewt;
-import org.jzy3d.chart.controllers.mouse.camera.CameraMouseController;
-import org.jzy3d.chart.controllers.mouse.camera.CameraMouseControllerNewt;
+import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
+import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
+import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
+import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -85,9 +85,9 @@ public class ChartComponentFactory implements IChartComponentFactory {
 	public ICameraMouseController newMouseController(Chart chart) {
 		ICameraMouseController mouse = null;
 		if (!chart.getWindowingToolkit().equals("newt"))
-			mouse = new CameraMouseController(chart);
+			mouse = new AWTCameraMouseController(chart);
 		else
-			mouse = new CameraMouseControllerNewt(chart);
+			mouse = new NewtCameraMouseController(chart);
 		return mouse;
 	}
 
@@ -99,9 +99,9 @@ public class ChartComponentFactory implements IChartComponentFactory {
 		IScreenshotKeyController screenshot;
 
 		if (!chart.getWindowingToolkit().equals("newt"))
-			screenshot = new ScreenshotKeyController(chart, file);
+			screenshot = new AWTScreenshotKeyController(chart, file);
 		else
-			screenshot = new ScreenshotKeyControllerNewt(chart, file);
+			screenshot = new NewtScreenshotKeyController(chart, file);
 
 		screenshot.addListener(new IScreenshotEventListener() {
 			@Override
@@ -124,9 +124,9 @@ public class ChartComponentFactory implements IChartComponentFactory {
 	public ICameraKeyController newKeyController(Chart chart) {
 		ICameraKeyController key = null;
 		if (!chart.getWindowingToolkit().equals("newt"))
-			key = new CameraKeyController(chart);
+			key = new AWTCameraKeyController(chart);
 		else
-			key = new CameraKeyControllerNewt(chart);
+			key = new NewtCameraKeyController(chart);
 		return key;
 	}
 

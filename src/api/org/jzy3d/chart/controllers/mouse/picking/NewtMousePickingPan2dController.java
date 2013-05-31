@@ -9,20 +9,20 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.newt.event.MouseEvent;
 
-public class MousePickingPan2dController<V,E> extends MousePickingController<V,E>{
-	public MousePickingPan2dController(){
+public class NewtMousePickingPan2dController<V,E> extends NewtMousePickingController<V,E>{
+	public NewtMousePickingPan2dController(){
 		super();
 	}
 	
-	public MousePickingPan2dController(Chart chart){
+	public NewtMousePickingPan2dController(Chart chart){
 		super(chart);
 	}
 
-	public MousePickingPan2dController(Chart chart, int brushSize){
+	public NewtMousePickingPan2dController(Chart chart, int brushSize){
 		super(chart, brushSize);
 	}
 
-	public MousePickingPan2dController(Chart chart, int brushSize, int bufferSize){
+	public NewtMousePickingPan2dController(Chart chart, int brushSize, int bufferSize){
 		super(chart, brushSize, bufferSize);
 	}
 	

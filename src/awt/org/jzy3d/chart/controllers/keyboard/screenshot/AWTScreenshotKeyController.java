@@ -1,5 +1,7 @@
 package org.jzy3d.chart.controllers.keyboard.screenshot;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -8,22 +10,20 @@ import java.util.List;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.AbstractController;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * Saves a screenshot in PNG format once key S is pressed.
  * 
  */
-public class ScreenshotKeyController extends AbstractController implements
+public class AWTScreenshotKeyController extends AbstractController implements
 		KeyListener, IScreenshotKeyController {
 	protected Chart chart;
 	protected String outputFile;
 	protected List<IScreenshotEventListener> listeners = new ArrayList<IScreenshotEventListener>(
 			1);
 
-	public ScreenshotKeyController(Chart chart, String outputFile) {
+	public AWTScreenshotKeyController(Chart chart, String outputFile) {
 		super();
 		register(chart);
 
@@ -33,12 +33,12 @@ public class ScreenshotKeyController extends AbstractController implements
 
 	public void register(Chart chart) {
 		super.register(chart);
-		chart.getCanvas().addKeyListener(this);
+		chart.getCanvas().addKeyController(this);
 	}
 
 	public void dispose() {
 		for (Chart c : targets) {
-			c.getCanvas().removeKeyListener(this);
+			c.getCanvas().removeKeyController(this);
 		}
 
 		super.dispose(); // i.e. target=null

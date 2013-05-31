@@ -15,13 +15,13 @@ import com.jogamp.opengl.util.texture.TextureIO;
 /** Saves a screenshot in PNG format once key S is pressed. 
  * 
  */
-public class ScreenshotKeyControllerNewt extends AbstractController implements KeyListener, IScreenshotKeyController {
+public class NewtScreenshotKeyController extends AbstractController implements KeyListener, IScreenshotKeyController {
     protected Chart chart;
     protected String outputFile;
     protected List<IScreenshotEventListener> listeners = new ArrayList<IScreenshotEventListener>(1);
 
     
-    public ScreenshotKeyControllerNewt(Chart chart, String outputFile) {
+    public NewtScreenshotKeyController(Chart chart, String outputFile) {
         super();
         register(chart);
         this.chart = chart;
@@ -30,12 +30,12 @@ public class ScreenshotKeyControllerNewt extends AbstractController implements K
     
     public void register(Chart chart){
 		super.register(chart);
-        chart.getCanvas().addKeyListener(this);
+        chart.getCanvas().addKeyController(this);
 	}
 	
 	public void dispose(){
 		for(Chart c: targets){
-		    c.getCanvas().removeKeyListener(this);
+		    c.getCanvas().removeKeyController(this);
 		}
 		
 		super.dispose(); // i.e. target=null
