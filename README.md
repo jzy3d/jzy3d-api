@@ -1,7 +1,7 @@
 Jzy3d - A Java API for 3d charts
 ================================
 
-This project is part of a <a href="https://github.com/jzy3d/jzy3d-master">multimodule project</a>
+This project is part of a <a href="https://github.com/jzy3d/jzy3d-master">multi-modules project</a>
 
 Project layout
 --------------

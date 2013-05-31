@@ -8,8 +8,8 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
 
-public class ScatterMouseSelector extends AbstractMouseSelector {
-	public ScatterMouseSelector(SelectableScatter scatter) {
+public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
+	public AWTScatterMouseSelector(SelectableScatter scatter) {
 		this.scatter = scatter;
 	}
 

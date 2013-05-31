@@ -16,8 +16,8 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 
-public abstract class AbstractMouseSelector implements MouseListener {
-	public AbstractMouseSelector() {
+public abstract class AWTAbstractMouseSelector implements MouseListener {
+	public AWTAbstractMouseSelector() {
 		in = new IntegerCoord2d(-1, -1);
 		last = new IntegerCoord2d(-1, -1);
 		out = new IntegerCoord2d(-1, -1);
@@ -29,7 +29,7 @@ public abstract class AbstractMouseSelector implements MouseListener {
 
 	public void register(Chart chart) {
 		this.chart = chart;
-		this.chart.getCanvas().addMouseListener(this);
+		this.chart.getCanvas().addMouseController(this);
 		final ICanvas c = chart.getCanvas();
 		selectionRenderer = initRenderer2d(c);
 		if(chart.getView() instanceof AWTView)
@@ -38,7 +38,7 @@ public abstract class AbstractMouseSelector implements MouseListener {
 
 	public void unregister() {
 		if (chart != null) {
-			chart.getCanvas().removeMouseListener(this);
+			chart.getCanvas().removeMouseController(this);
 			if(chart.getView() instanceof AWTView)
 			    ((AWTView)this.chart.getView()).removeRenderer2d(selectionRenderer);
 		}

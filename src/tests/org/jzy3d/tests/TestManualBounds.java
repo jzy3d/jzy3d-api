@@ -5,8 +5,8 @@ import org.jzy3d.analysis.AbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.analysis.IAnalysis;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.keyboard.camera.CameraKeyController;
-import org.jzy3d.chart.controllers.mouse.camera.CameraMouseControllerNewt;
+import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
+import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -60,9 +60,9 @@ System.out.println(getCanvasType());
         // Create a chart
         chart = new Chart(Quality.Advanced, getCanvasType());
         chart.getScene().getGraph().add(surface);
-        chart.addController(new CameraKeyController());
+        chart.addController(new AWTCameraKeyController());
         
         chart.getView().setBoundMode(ViewBoundMode.MANUAL);
-        CameraMouseControllerNewt c = new CameraMouseControllerNewt(chart);
+        NewtCameraMouseController c = new NewtCameraMouseController(chart);
     }
 }

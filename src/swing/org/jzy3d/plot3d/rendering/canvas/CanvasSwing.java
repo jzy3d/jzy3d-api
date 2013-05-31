@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -9,15 +11,11 @@ import javax.media.opengl.GLCapabilitiesImmutable;
 import javax.media.opengl.GLDrawable;
 import javax.media.opengl.awt.GLJPanel;
 
-import org.jzy3d.bridge.newt.controllers.keyboard.NewtToAWTKeyListener;
-import org.jzy3d.bridge.newt.controllers.mouse.NewtToAWTMouseListener;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
@@ -180,7 +178,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 		return sb.toString();
 	}
 
-	@Override
+/*	@Override
 	public void addMouseListener(MouseListener listener) {
 		addMouseListener(new NewtToAWTMouseListener(null, listener));
 	}
@@ -200,7 +198,10 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	public void removeKeyListener(KeyListener listener) {
 		// TODO
 	}
-
+*/
+	
+	
+	
 	/* */
 
 	protected View view;
@@ -210,14 +211,22 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	private static final long serialVersionUID = 980088854683562436L;
 
     @Override
-    public void addMouseListener(Object o) {
-        // TODO Auto-generated method stub
-        
+    public void addMouseController(Object o) {
+        addMouseListener((MouseListener)o);
     }
 
     @Override
-    public void addKeyListener(Object o) {
-        // TODO Auto-generated method stub
-        
+    public void addKeyController(Object o) {
+        addKeyListener((KeyListener)o);
+    }
+
+    @Override
+    public void removeMouseController(Object o) {
+        removeMouseListener((MouseListener)o);
+    }
+
+    @Override
+    public void removeKeyController(Object o) {
+        removeKeyListener((KeyListener)o);
     }
 }

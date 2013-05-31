@@ -12,24 +12,24 @@ import com.jogamp.newt.event.MouseListener;
 
 
 
-public class CameraMouseControllerNewt extends AbstractCameraController implements MouseListener{
+public class NewtCameraMouseController extends AbstractCameraController implements MouseListener{
 	
-	public CameraMouseControllerNewt(){
+	public NewtCameraMouseController(){
 	}
 	
-	public CameraMouseControllerNewt(Chart chart){
+	public NewtCameraMouseController(Chart chart){
 	    register(chart);
 		addSlaveThreadController(new CameraThreadController(chart));
 	}
 	
 	public void register(Chart chart){
 		super.register(chart);
-		chart.getCanvas().addMouseListener(this);
+		chart.getCanvas().addMouseController(this);
 	}
 	
 	public void dispose(){
 		for(Chart c: targets){
-			c.getCanvas().removeMouseListener(this);
+			c.getCanvas().removeMouseController(this);
 		}
 		super.dispose();
 	}

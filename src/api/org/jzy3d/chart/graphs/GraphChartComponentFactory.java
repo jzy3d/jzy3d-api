@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
-import org.jzy3d.chart.controllers.mouse.picking.MousePickingController;
+import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.picking.IObjectPickedListener;
 import org.jzy3d.picking.PickingSupport;
@@ -21,7 +21,7 @@ public class GraphChartComponentFactory extends ChartComponentFactory{
     }
     
     public ICameraMouseController newAWTMouseController(final Chart chart){
-        MousePickingController<String,String> mouse = new MousePickingController<String,String>(chart);
+        NewtMousePickingController<String,String> mouse = new NewtMousePickingController<String,String>(chart);
         mouse.getPickingSupport().addObjectPickedListener(new IObjectPickedListener() {
             @Override
             public void objectPicked(List<? extends Object> vertices, PickingSupport picking) {

@@ -11,8 +11,8 @@ import org.jzy3d.plot3d.primitives.selectable.SelectableSphere;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class SphereMouseSelector extends AbstractMouseSelector {
-	public SphereMouseSelector(SelectableSphere scatter) {
+public class AWTSphereMouseSelector extends AWTAbstractMouseSelector {
+	public AWTSphereMouseSelector(SelectableSphere scatter) {
 		this.sphere = scatter;
 	}
 

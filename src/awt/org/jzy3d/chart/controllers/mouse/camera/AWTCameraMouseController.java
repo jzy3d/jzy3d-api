@@ -1,33 +1,37 @@
 package org.jzy3d.chart.controllers.mouse.camera;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
-import org.jzy3d.chart.controllers.mouse.MouseUtilities;
+import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
 
-import com.jogamp.newt.event.MouseEvent;
-import com.jogamp.newt.event.MouseListener;
 
-public class CameraMouseController extends AbstractCameraController implements
-		MouseListener {
+public class AWTCameraMouseController extends AbstractCameraController implements
+		MouseListener, MouseWheelListener, MouseMotionListener {
 
-	public CameraMouseController() {
+	public AWTCameraMouseController() {
 	}
 
-	public CameraMouseController(Chart chart) {
+	public AWTCameraMouseController(Chart chart) {
 		register(chart);
 		addSlaveThreadController(new CameraThreadController(chart));
 	}
 
 	public void register(Chart chart) {
 		super.register(chart);
-		chart.getCanvas().addMouseListener(this);
+		chart.getCanvas().addMouseController(this);
 	}
 
 	public void dispose() {
 		for (Chart chart : targets) {
-			chart.getCanvas().removeMouseListener(this);
+			chart.getCanvas().removeMouseController(this);
 		}
 		super.dispose();
 	}
@@ -36,6 +40,7 @@ public class CameraMouseController extends AbstractCameraController implements
 	 * Handles toggle between mouse rotation/auto rotation: double-click starts
 	 * the animated rotation, while simple click stops it.
 	 */
+	@Override
 	public void mousePressed(MouseEvent e) {
 		//
 		if (handleSlaveThread(e))
@@ -46,16 +51,17 @@ public class CameraMouseController extends AbstractCameraController implements
 	}
 
 	/** Compute shift or rotate */
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		Coord2d mouse = new Coord2d(e.getX(), e.getY());
 
 		// Rotate
-		if (MouseUtilities.isLeftDown(e)) {
+		if (AWTMouseUtilities.isLeftDown(e)) {
 			Coord2d move = mouse.sub(prevMouse).div(100);
 			rotate(move);
 		}
 		// Shift
-		else if (MouseUtilities.isRightDown(e)) {
+		else if (AWTMouseUtilities.isRightDown(e)) {
 			Coord2d move = mouse.sub(prevMouse);
 			if (move.y != 0)
 				shift(move.y / 500);
@@ -64,29 +70,35 @@ public class CameraMouseController extends AbstractCameraController implements
 	}
 
 	/** Compute zoom */
-	public void mouseWheelMoved(MouseEvent e) {
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
 		stopThreadController();
 		float factor = 1 + (e.getWheelRotation() / 10.0f);
 		zoomZ(factor);
 	}
 
+	@Override
 	public void mouseClicked(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseEntered(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e) {
 	}
 
 	public boolean handleSlaveThread(MouseEvent e) {
-		if (MouseUtilities.isDoubleClick(e)) {
+		if (AWTMouseUtilities.isDoubleClick(e)) {
 			if (threadController != null) {
 				threadController.start();
 				return true;
