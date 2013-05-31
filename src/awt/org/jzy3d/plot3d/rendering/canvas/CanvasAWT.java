@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -152,15 +154,33 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	}
 
 	@Override
-    public void addMouseListener(Object o) {
+    public void addMouseController(Object o) {
 	    addMouseListener((java.awt.event.MouseListener)o);
+	    if(o instanceof MouseWheelListener)
+	        addMouseWheelListener((MouseWheelListener)o);
+	    if(o instanceof MouseMotionListener)
+	        addMouseMotionListener((MouseMotionListener)o);
     }
 
     @Override
-    public void addKeyListener(Object o) {
+    public void addKeyController(Object o) {
         addKeyListener((java.awt.event.KeyListener)o);
     }
 
+    @Override
+    public void removeMouseController(Object o) {
+        removeMouseListener((java.awt.event.MouseListener)o);
+        if(o instanceof MouseWheelListener)
+            removeMouseWheelListener((MouseWheelListener)o);
+        if(o instanceof MouseMotionListener)
+            removeMouseMotionListener((MouseMotionListener)o);
+    }
+
+    @Override
+    public void removeKeyController(Object o) {
+        removeKeyListener((java.awt.event.KeyListener)o);
+    }
+    
 	@Override
 	public GLDrawable getDrawable() {
 		return this;
@@ -193,29 +213,6 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	@Override
 	public int getRendererHeight() {
 		return (renderer != null ? renderer.getHeight() : 0);
-	}
-	
-	@Override
-	public void addMouseListener(MouseListener listener) {
-		addMouseListener(new NewtToAWTMouseListener(null, listener));
-		addMouseMotionListener(new NewtToAWTMouseListener(null, listener));
-		addMouseWheelListener(new NewtToAWTMouseListener(null, listener));
-	}
-
-	@Override
-	public void removeMouseListener(MouseListener listener) {
-
-	}
-
-	@Override
-	public void addKeyListener(KeyListener listener) {
-		addKeyListener(new NewtToAWTKeyListener(null, listener));
-
-	}
-
-	@Override
-	public void removeKeyListener(KeyListener listener) {
-		removeKeyListener((java.awt.event.KeyListener)listener);
 	}
 
 	protected View view;

@@ -168,34 +168,38 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 		return view;
 	}
 
-	@Override
+	/* */
+	
 	public synchronized void addKeyListener(KeyListener l) {
-		window.addKeyListener(l);
+	    getWindow().addKeyListener(l);
 	}
-
-	@Override
-	public synchronized void addMouseListener(MouseListener l) {
-		window.addMouseListener(l);
+	public void addMouseListener(MouseListener l) {
+	    getWindow().addMouseListener(l);
 	}
-	
-	@Override
 	public void removeMouseListener(com.jogamp.newt.event.MouseListener l) {
-		window.removeMouseListener(l);
+	    getWindow().removeMouseListener(l);
 	}
-
-	@Override
 	public void removeKeyListener(com.jogamp.newt.event.KeyListener l) {
-		window.removeKeyListener(l);		
+	    getWindow().removeKeyListener(l);		
 	}
 	
 	@Override
-    public void addMouseListener(Object o) {
-        getWindow().addMouseListener((MouseListener) o);
+    public void addMouseController(Object o) {
+        addMouseListener((MouseListener) o);
     }
 
     @Override
-    public void addKeyListener(Object o) {
-        getWindow().addMouseListener((MouseListener) o);
+    public void addKeyController(Object o) {
+        addMouseController((KeyListener) o);
+    }
+    
+    @Override
+    public void removeMouseController(Object o) {
+        removeMouseListener((MouseListener)o);
+    }
+    @Override
+    public void removeKeyController(Object o) {
+        removeKeyListener((KeyListener)o);
     }
 
 	protected View view;

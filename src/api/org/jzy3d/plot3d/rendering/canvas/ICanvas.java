@@ -49,21 +49,23 @@ public interface ICanvas {
 	/** Performs all required cleanup when destroying a Canvas.*/
 	public void dispose();
 	
-	public void addMouseListener(Object o);
-    public void addKeyListener(Object o);	
+	/** A generic interface for mouse listener to remain Windowing toolkit independant. *
+	 Implementation of this method should simply cast the input assuming it will correspond
+	 to canvas-compatible mouse listener. */
+	public void addMouseController(Object o);
+	/** A generic interface for mouse listener to remain Windowing toolkit independant. *
+    Implementation of this method should simply cast the input assuming it will correspond
+    to canvas-compatible mouse listener. */
+    public void addKeyController(Object o);	
+    /** A generic interface for key listener to remain Windowing toolkit independant. *
+    Implementation of this method should simply cast the input assuming it will correspond
+    to canvas-compatible key listener. */
+    public void removeMouseController(Object o);
+    /** A generic interface for key listener to remain Windowing toolkit independant. *
+    Implementation of this method should simply cast the input assuming it will correspond
+    to canvas-compatible key listener. */
+    public void removeKeyController(Object o);
 	/* */
-	
-	public void addMouseListener(MouseListener listener);
-	public void removeMouseListener(MouseListener listener);
-	
-//	public void addMouseWheelListener(MouseWheelListener listener);
-//	public void removeMouseWheelListener(MouseWheelListener listener);
-//	
-//	public void addMouseMotionListener(MouseMotionListener listener);
-//	public void removeMouseMotionListener(MouseMotionListener listener);
-	
-	public void addKeyListener(KeyListener listener);
-	public void removeKeyListener(KeyListener listener);
 	
 	public String getDebugInfo();
 

@@ -130,25 +130,16 @@ public class OffscreenCanvas implements ICanvas {
     }
 
     @Override
-    public void addMouseListener(Object o) {
-    }
+    public void addMouseController(Object o) {}
     @Override
-    public void addKeyListener(Object o) {    }
-
+    public void addKeyController(Object o) {}
     @Override
-    public void addMouseListener(MouseListener listener) {
-    }
+    public void removeMouseController(Object o) {}
     @Override
-    public void removeMouseListener(MouseListener listener) {
-    }
-    @Override
-    public void addKeyListener(KeyListener listener) {
-    }
-    @Override
-    public void removeKeyListener(KeyListener listener) {
-    }
+    public void removeKeyController(Object o) {}
 
     protected View view;
     protected Renderer3d renderer;
     protected GLPbuffer glpBuffer;
+    
 }

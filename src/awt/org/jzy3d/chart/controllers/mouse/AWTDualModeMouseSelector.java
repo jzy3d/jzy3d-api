@@ -1,21 +1,21 @@
 package org.jzy3d.chart.controllers.mouse;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.mouse.camera.CameraMouseController;
-import org.jzy3d.chart.controllers.mouse.selection.AbstractMouseSelector;
+import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
+import org.jzy3d.chart.controllers.mouse.selection.AWTAbstractMouseSelector;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
 
 /**
  * A utility to toggle between
  * <ul>
- * <li>the main default mouse controller {@link CameraMouseController}, used to
+ * <li>the main default mouse controller {@link AWTCameraMouseController}, used to
  * control viewpoint
  * <li>another custom mouse controller, such as a selection mouse utility
  * </ul>
@@ -24,20 +24,20 @@ import com.jogamp.newt.event.KeyListener;
  * 
  * @author Martin Pernollet
  */
-public class DualModeMouseSelector {
-    public DualModeMouseSelector(Chart chart, AbstractMouseSelector alternativeMouse) {
+public class AWTDualModeMouseSelector {
+    public AWTDualModeMouseSelector(Chart chart, AWTAbstractMouseSelector alternativeMouse) {
         build(chart, alternativeMouse);
     }
 
-    public Chart build(final Chart chart, AbstractMouseSelector alternativeMouse) {
+    public Chart build(final Chart chart, AWTAbstractMouseSelector alternativeMouse) {
         this.chart = chart;
         this.mouseSelection = alternativeMouse;
 
         // Create and add controllers
         threadCamera = new CameraThreadController(chart);
-        mouseCamera = new CameraMouseController(chart);
+        mouseCamera = new AWTCameraMouseController(chart);
         mouseCamera.addSlaveThreadController(threadCamera);
-        chart.getCanvas().addKeyListener(buildToggleKeyListener(chart));
+        chart.getCanvas().addKeyController(buildToggleKeyListener(chart));
         releaseCam(); // default mode is selection
 
         message = MESSAGE_SELECTION_MODE;
@@ -111,8 +111,8 @@ public class DualModeMouseSelector {
     protected Renderer2d messageRenderer;
 
     protected CameraThreadController threadCamera;
-    protected CameraMouseController mouseCamera;
-    protected AbstractMouseSelector mouseSelection;
+    protected AWTCameraMouseController mouseCamera;
+    protected AWTAbstractMouseSelector mouseSelection;
 
     protected boolean displayMessage = true;
     protected String message;

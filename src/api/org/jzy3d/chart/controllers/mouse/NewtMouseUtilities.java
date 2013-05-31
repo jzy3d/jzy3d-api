@@ -3,7 +3,7 @@ package org.jzy3d.chart.controllers.mouse;
 import com.jogamp.newt.event.InputEvent;
 import com.jogamp.newt.event.MouseEvent;
 
-public class MouseUtilities {
+public class NewtMouseUtilities {
 	public static boolean isDoubleClick(MouseEvent e){
     	return (e.getClickCount() > 1);
 	}

@@ -5,7 +5,7 @@ import java.util.List;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
-import org.jzy3d.chart.controllers.mouse.selection.AbstractMouseSelector;
+import org.jzy3d.chart.controllers.mouse.selection.AWTAbstractMouseSelector;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
 import org.jzy3d.plot3d.rendering.scene.Graph;
@@ -18,7 +18,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * 
  * The {@link View} provides a mean to update the projection of all {@link Selectable}
  * held by the scene's {@link Graph}. Indeed, interaction sources such as an
- * {@link AbstractMouseSelector} are supposed to call {@link view.project()}
+ * {@link AWTAbstractMouseSelector} are supposed to call {@link view.project()}
  * to query an update of all {@link Selectable} objects' projections.
  * 
  * Projection implementation is rather fast but one should consider projecting only

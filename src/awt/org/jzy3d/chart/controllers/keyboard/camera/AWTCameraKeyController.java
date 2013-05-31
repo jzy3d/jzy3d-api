@@ -1,32 +1,34 @@
 package org.jzy3d.chart.controllers.keyboard.camera;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.maths.Coord2d;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
 
 
-public class CameraKeyControllerNewt extends AbstractCameraController implements KeyListener, ICameraKeyController{
+public class AWTCameraKeyController extends AbstractCameraController implements KeyListener, ICameraKeyController{
 		
-	public CameraKeyControllerNewt(){
+	public AWTCameraKeyController(){
 	}
 	
-	public CameraKeyControllerNewt(Chart chart){
+	public AWTCameraKeyController(Chart chart){
 		register(chart);
 	}
 	
 	public void register(Chart chart){
 		super.register(chart);
-		chart.getCanvas().addKeyListener(this);
+		chart.getCanvas().addKeyController(this);
 	}
 	
 	public void dispose(){
 		for(Chart c: targets){
-		    c.getCanvas().removeKeyListener(this);
+			c.getCanvas().removeKeyController(this);
 		}
-		super.dispose();
+		
+		super.dispose(); // i.e. target=null
 	}
 	
 	/*********************************************************/

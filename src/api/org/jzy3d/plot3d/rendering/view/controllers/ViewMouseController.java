@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.rendering.view.controllers;
 
-import org.jzy3d.chart.controllers.mouse.MouseUtilities;
+import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
+import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -24,11 +25,11 @@ public class ViewMouseController extends ViewCameraController implements
 	public void addMouseSource(IScreenCanvas canvas) {
 		this.canvas = canvas;
 		this.prevMouse = Coord2d.ORIGIN;
-		canvas.addMouseListener(this);
+		canvas.addMouseController(this);
 	}
 
 	public void dispose() {
-		canvas.removeMouseListener(this);
+		canvas.removeMouseController(this);
 
 		if (threadController != null)
 			threadController.stop();
@@ -56,7 +57,7 @@ public class ViewMouseController extends ViewCameraController implements
 	 */
 	public void mousePressed(MouseEvent e) {
 		//
-		if (MouseUtilities.isDoubleClick(e)) {
+		if (NewtMouseUtilities.isDoubleClick(e)) {
 			if (threadController != null) {
 				threadController.start();
 				return;
@@ -74,12 +75,12 @@ public class ViewMouseController extends ViewCameraController implements
 		Coord2d mouse = new Coord2d(e.getX(), e.getY());
 
 		// Rotate
-		if (MouseUtilities.isLeftDown(e)) {
+		if (NewtMouseUtilities.isLeftDown(e)) {
 			Coord2d move = mouse.sub(prevMouse).div(100);
 			rotate(move);
 		}
 		// Shift
-		else if (MouseUtilities.isRightDown(e)) {
+		else if (NewtMouseUtilities.isRightDown(e)) {
 			Coord2d move = mouse.sub(prevMouse);
 			if (move.y != 0)
 				shift(move.y / 500);
