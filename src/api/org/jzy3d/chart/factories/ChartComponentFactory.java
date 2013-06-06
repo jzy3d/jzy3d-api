@@ -4,28 +4,34 @@ import java.util.Date;
 
 import javax.media.opengl.GLCapabilities;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
-import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
-import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
+import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBase;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.canvas.VoidCanvas;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.ordering.BarycentreOrderingStrategy;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -34,21 +40,30 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
+/** This {@link IChartComponentFactory} returns non-displayable charts.
+ * @see AWTChartComponentFactory for a working implementation
+ */
 public class ChartComponentFactory implements IChartComponentFactory {
     public static Chart chart(Quality quality, Toolkit toolkit){
         ChartComponentFactory f = new ChartComponentFactory();
         return f.newChart(quality, toolkit);
     }
     
-    /** to be implemented */
-    protected ICanvas initializeCanvas(Scene scene, Quality quality, String chartType, GLCapabilities capabilities, boolean b, boolean c){
-        throw new RuntimeException("should be implemented");
-    }
-
     @Override
     public Chart newChart(Quality quality, Toolkit toolkit){
-        return new Chart(this, quality, toolkit.toString());
+        return newChart(this, quality, toolkit.toString());
     }
+    
+    @Override
+    public Chart newChart(Quality quality, String toolkit){
+        return newChart(this, quality, toolkit);
+    }
+    
+    @Override
+    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit){
+        return new Chart(factory, quality, toolkit);
+    }
+    
 	@Override
 	public ChartScene newScene(boolean sort) {
 		return new ChartScene(sort, this);
@@ -71,14 +86,18 @@ public class ChartComponentFactory implements IChartComponentFactory {
 		return new Renderer3d(view, traceGL, debugGL);
 	}
 	@Override
+    public Renderer3d newRenderer(View view) {
+        return newRenderer(view, false, false);
+    }
+	@Override
 	public AbstractOrderingStrategy newOrderingStrategy() {
 		return new BarycentreOrderingStrategy();
 	}
+	
 	@Override
 	public ICanvas newCanvas(Scene scene, Quality quality, String chartType,
 			GLCapabilities capabilities) {
-		return initializeCanvas(scene, quality, chartType, capabilities, false,
-				false);
+	    return new VoidCanvas(this, scene, quality);
 	}
 
     @Override

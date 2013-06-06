@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry including="**/*.java" kind="src" output="target/test-classes" path="src/tests"/>
+	<classpathentry kind="src" path="src/swing"/>
 	<classpathentry including="**/*.java" kind="src" path="src/api"/>
 	<classpathentry including="**/*.java" kind="src" path="src/bridge"/>
 	<classpathentry including="**/*.java" kind="src" path="src/awt"/>
-	<classpathentry including="**/*.java" kind="src" path="src/swing"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/jogamp/gluegen/gluegen-rt-main/2.0-rc11/gluegen-rt-main-2.0-rc11.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/jogamp/gluegen/gluegen-rt/2.0-rc11/gluegen-rt-2.0-rc11.jar"/>
