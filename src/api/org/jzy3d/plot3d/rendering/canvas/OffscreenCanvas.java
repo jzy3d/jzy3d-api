@@ -16,11 +16,23 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
+/**
+ * An {@link ICanvas} implementation able to render the chart in an offscreen canvas,
+ * meaning no frame or GUI is needed to get a chart.
+ * 
+ * Subsequently, one will wish to generate chart images by calling:
+ * <pre>
+ * <code>
+ * chart.screenshot();
+ * </code>
+ * </pre>
+ * 
+ * @author Nils Hoffman
+ * @author Martin Pernollet
+ */
 public class OffscreenCanvas implements ICanvas {
     public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height) {
         this(factory, scene, quality, capabilities, width, height, false, false);
