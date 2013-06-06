@@ -45,15 +45,17 @@ import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
  */
 public class TextOverlay implements Renderer2d{
 	public TextOverlay(ICanvas canvas){
-		if(canvas instanceof CanvasAWT)
-			initComponent((Component)canvas);
-		else if(canvas instanceof CanvasSwing)
+		init(canvas);
+	}
+
+    protected void init(ICanvas canvas) {
+        if(canvas instanceof CanvasAWT)
 			initComponent((Component)canvas);
 		else
 			throw new RuntimeException("TextRenderer not implemented for this Canvas implementation");
-	}
+    }
 	
-	private void initComponent(Component c){
+    protected void initComponent(Component c){
 		textList = new ArrayList<TextDescriptor>(50);
 		target   = c;
 		target.addComponentListener(resizeListener);
