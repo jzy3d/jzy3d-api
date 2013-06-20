@@ -190,7 +190,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 
     @Override
     public void addKeyController(Object o) {
-        addMouseController((KeyListener) o);
+        addKeyListener((KeyListener) o);
     }
     
     @Override
