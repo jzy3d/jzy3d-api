@@ -1,6 +1,7 @@
 package org.jzy3d.chart.controllers.mouse.selection;
 
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
 
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.selectable.SelectableScatter;

@@ -2,6 +2,9 @@ package org.jzy3d.chart.controllers.mouse.selection;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Coord3d;
@@ -13,10 +16,8 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.newt.event.MouseEvent;
-import com.jogamp.newt.event.MouseListener;
 
-public abstract class AWTAbstractMouseSelector implements MouseListener {
+public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMotionListener {
 	public AWTAbstractMouseSelector() {
 		in = new IntegerCoord2d(-1, -1);
 		last = new IntegerCoord2d(-1, -1);
@@ -183,24 +184,29 @@ public abstract class AWTAbstractMouseSelector implements MouseListener {
 
 	/*****************************************/
 
+	@Override
 	public void mousePressed(MouseEvent e) {
 		dragging = true;
 		startSelection(e);
 	}
 
-	public void mouseDragged(MouseEvent e) {
-		if (dragging)
-			dragSelection(e);
-		// else
-		// rollOver(e);
-	}
 
+	@Override
 	public void mouseReleased(MouseEvent e) {
 		if (dragging)
 			releaseSelection(e);
 		dragging = false;
 	}
 
+   @Override
+    public void mouseDragged(MouseEvent e) {
+        if (dragging)
+            dragSelection(e);
+        // else
+        // rollOver(e);
+    }
+
+	@Override
 	public void mouseMoved(MouseEvent e) {
 		rollOver(e);
 	}
