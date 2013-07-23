@@ -18,7 +18,7 @@ import org.jzy3d.plot3d.rendering.image.GLImage;
 public class AWTImageViewport extends AbstractViewportManager implements IImageViewport{
 
 	public AWTImageViewport(){
-	    setViewportMode(ViewportMode.SQUARE);
+	    setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
 	}
 	
 	public void render(GL gl, GLU glu) {
