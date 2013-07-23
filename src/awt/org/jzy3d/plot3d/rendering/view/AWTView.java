@@ -29,19 +29,19 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 import com.jogamp.opengl.util.awt.Overlay;
 
-public class AWTView extends ChartView{
+public class AWTView extends ChartView {
     public AWTView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
         this.bgViewport = new AWTImageViewport();
         this.renderers = new ArrayList<Renderer2d>(1);
         this.tooltips = new ArrayList<ITooltipRenderer>();
     }
-    
-    public void dispose(){
+
+    public void dispose() {
         super.dispose();
         renderers.clear();
     }
-    
+
     public void renderAxeBox(GL gl, GLU glu) {
         if (axeBoxDisplayed) {
             if (gl.isGL2()) {
@@ -66,9 +66,8 @@ public class AWTView extends ChartView{
             scene.getLightSet().enableLightIfThereAreLights(gl);
         }
     }
-    
-    protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu,
-            ViewportConfiguration viewport) {
+
+    protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
         cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
         axe.draw(gl, glu, cam);
@@ -78,8 +77,7 @@ public class AWTView extends ChartView{
         BoundingBox3d newBounds = abox.getWholeBounds().scale(scaling);
 
         if (viewmode == ViewPositionMode.TOP) {
-            float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(),
-                    newBounds.getYmax() - newBounds.getYmin()) / 2;
+            float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(), newBounds.getYmax() - newBounds.getYmin()) / 2;
             radius += (radius * STRETCH_RATIO);
             cam.setRenderingSphereRadius(radius);
         } else
@@ -119,7 +117,7 @@ public class AWTView extends ChartView{
             return;
         if (gl.isGL2()) {
             gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // TODO:
-                                                                            // don't
+                                                                           // don't
             // know why
             // needed
             // to allow
@@ -138,8 +136,7 @@ public class AWTView extends ChartView{
                 return;
             }
             g2d.setBackground(bgOverlay);
-            g2d.clearRect(0, 0, canvas.getRendererWidth(),
-                    canvas.getRendererHeight());
+            g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
             // Tooltips
             for (ITooltipRenderer t : tooltips)
@@ -149,17 +146,15 @@ public class AWTView extends ChartView{
             for (Renderer2d renderer : renderers)
                 renderer.paint(g2d);
 
-            overlay.markDirty(0, 0, canvas.getRendererWidth(),
-                    canvas.getRendererHeight());
+            overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
             overlay.drawAll();
             g2d.dispose();
         }
     }
-    
+
     public void renderBackground(GL gl, GLU glu, float left, float right) {
         if (bgImg != null) {
-            bgViewport.setViewPort(canvas.getRendererWidth(),
-                    canvas.getRendererHeight(), left, right);
+            bgViewport.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
             bgViewport.render(gl, glu);
         }
     }
@@ -170,13 +165,11 @@ public class AWTView extends ChartView{
             bgViewport.render(gl, glu);
         }
     }
-    
 
     /** Set a buffered image, or null to desactivate background image */
     public void setBackgroundImage(BufferedImage i) {
         bgImg = i;
-        // FIXME Texture
-        bgViewport.setImage(null, bgImg.getWidth(), bgImg.getHeight());
+        bgViewport.setImage(bgImg, bgImg.getWidth(), bgImg.getHeight());
         bgViewport.setViewportMode(ViewportMode.STRETCH_TO_FILL);
         // when stretched, applyViewport() is cheaper to compute, and this does
         // not change
@@ -187,7 +180,6 @@ public class AWTView extends ChartView{
     public BufferedImage getBackgroundImage() {
         return bgImg;
     }
-    
 
     public void clearTooltips() {
         tooltips.clear();
@@ -214,7 +206,6 @@ public class AWTView extends ChartView{
     public List<ITooltipRenderer> getTooltips() {
         return tooltips;
     }
-    
 
     public void addRenderer2d(Renderer2d renderer) {
         renderers.add(renderer);
@@ -227,11 +218,7 @@ public class AWTView extends ChartView{
     protected boolean hasOverlayStuffs() {
         return tooltips.size() > 0 || renderers.size() > 0;
     }
-    
-    
-    
-    
-    
+
     protected List<ITooltipRenderer> tooltips;
 
     protected List<Renderer2d> renderers;
