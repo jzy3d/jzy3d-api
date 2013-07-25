@@ -5,7 +5,7 @@
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-api</artifactId>
 	<name>Jzy3d API</name>
-    <!--<version>0.9.1-SNAPSHOT</version>-->
+
     <parent>
         <groupId>org.jzy3d</groupId>
         <artifactId>jzy3d-master</artifactId>
@@ -15,6 +15,12 @@
 	<description>A Java API for 3d charts</description>
 
 	<dependencies>
+        <dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-jdt-core</artifactId>
+			<version>0.9.1-SNAPSHOT</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-main</artifactId>
@@ -39,16 +45,15 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
-			<scope>test</scope>
+			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay, i.e. tools to ease non regression tests for interactive features-->
 		</dependency>
 
-    <dependency>
-    <groupId>org.codehaus.sonar</groupId>
-    <artifactId>sonar-maven-plugin</artifactId>
-    <version>3.5.1</version>
-</dependency>
-
-
+        <dependency>
+            <groupId>org.codehaus.sonar</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>3.5.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 	<build>
@@ -74,6 +79,7 @@
 								<source>src/bridge</source>
                                 <source>src/awt</source>
                                 <source>src/swing</source>
+                                <source>src/replay</source>
 							</sources>
 						</configuration>
 					</execution>
