@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry including="**/*.java" kind="src" output="target/test-classes" path="src/tests"/>
-	<classpathentry kind="src" path="src/swing"/>
 	<classpathentry including="**/*.java" kind="src" path="src/api"/>
 	<classpathentry including="**/*.java" kind="src" path="src/bridge"/>
 	<classpathentry including="**/*.java" kind="src" path="src/awt"/>
+	<classpathentry including="**/*.java" kind="src" path="src/swing"/>
+	<classpathentry kind="src" path="src/replay"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/jzy3d/jzy3d-jdt-core/0.9.1-SNAPSHOT/jzy3d-jdt-core-0.9.1-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-io/commons-io/2.3/commons-io-2.3.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/jogamp/gluegen/gluegen-rt-main/2.0-rc11/gluegen-rt-main-2.0-rc11.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/jogamp/gluegen/gluegen-rt/2.0-rc11/gluegen-rt-2.0-rc11.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/org/jogamp/gluegen/gluegen-rt/2.0-rc11/gluegen-rt-2.0-rc11-natives-android-armv6.jar"/>
@@ -33,6 +37,75 @@
 	<classpathentry exported="true" kind="var" path="M2_REPO/log4j/log4j/1.2.16/log4j-1.2.16.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/net/sf/opencsv/opencsv/2.1/opencsv-2.1.jar"/>
 	<classpathentry exported="true" kind="var" path="M2_REPO/junit/junit/4.11/junit-4.11.jar"/>
-	<classpathentry exported="true" kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.3.RC2/hamcrest-core-1.3.RC2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-maven-plugin/3.5.1/sonar-maven-plugin-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/shared/maven-dependency-tree/1.2/maven-dependency-tree-1.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/maven-project/2.0.8/maven-project-2.0.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/maven-settings/2.0.8/maven-settings-2.0.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/maven-model/2.0.8/maven-model-2.0.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/plexus/plexus-utils/1.4.6/plexus-utils-1.4.6.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/plexus/plexus-container-default/1.0-alpha-9-stable-1/plexus-container-default-1.0-alpha-9-stable-1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/maven-profile/2.0.8/maven-profile-2.0.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/maven-artifact-manager/2.0.8/maven-artifact-manager-2.0.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/maven-repository-metadata/2.0.8/maven-repository-metadata-2.0.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/maven-artifact/2.0.8/maven-artifact-2.0.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/wagon/wagon-provider-api/1.0-beta-2/wagon-provider-api-1.0-beta-2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/apache/maven/maven-plugin-registry/2.0.8/maven-plugin-registry-2.0.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-batch/3.5.1/sonar-batch-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-core/3.5.1/sonar-core-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-plugin-api/3.5.1/sonar-plugin-api-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-check-api/3.5.1/sonar-check-api-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-colorizer/3.5.1/sonar-colorizer-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/google/guava/guava/10.0.1/guava-10.0.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/google/code/findbugs/jsr305/1.3.9/jsr305-1.3.9.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-channel/3.5.1/sonar-channel-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.6.2/slf4j-api-1.6.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-duplications/3.5.1/sonar-duplications-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-graph/3.5.1/sonar-graph-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-lang/commons-lang/2.6/commons-lang-2.6.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-squid/3.5.1/sonar-squid-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/picocontainer/picocontainer/2.14.1/picocontainer-2.14.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate-annotations/3.4.0.GA/hibernate-annotations-3.4.0.GA.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/ejb3-persistence/1.0.2.GA/ejb3-persistence-1.0.2.GA.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate-commons-annotations/3.1.0.GA/hibernate-commons-annotations-3.1.0.GA.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/dom4j/dom4j/1.6.1/dom4j-1.6.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/xml-apis/xml-apis/1.3.03/xml-apis-1.3.03.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-configuration/commons-configuration/1.6/commons-configuration-1.6.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-collections/commons-collections/3.1/commons-collections-3.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-digester/commons-digester/1.8/commons-digester-1.8.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-beanutils/commons-beanutils/1.7.0/commons-beanutils-1.7.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-codec/commons-codec/1.4/commons-codec-1.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jfreechart/1.0.9/jfreechart-1.0.9.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/jfree/jcommon/1.0.12/jcommon-1.0.12.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/slf4j/jcl-over-slf4j/1.6.2/jcl-over-slf4j-1.6.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/slf4j/log4j-over-slf4j/1.6.2/log4j-over-slf4j-1.6.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/thoughtworks/xstream/xstream/1.3.1/xstream-1.3.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/xpp3/xpp3/1.1.3.3/xpp3-1.1.3.3.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/woodstox/woodstox-core-lgpl/4.0.4/woodstox-core-lgpl-4.0.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/woodstox/stax2-api/3.0.1/stax2-api-3.0.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/stax/stax-api/1.0.1/stax-api-1.0.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/staxmate/staxmate/2.0.0/staxmate-2.0.0.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/xerces/xercesImpl/2.8.1/xercesImpl-2.8.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/xalan/xalan/2.7.1/xalan-2.7.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/xalan/serializer/2.7.1/serializer-2.7.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/mybatis/mybatis/3.1.1/mybatis-3.1.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-update-center-common/1.5/sonar-update-center-common-1.5.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-home/3.5.1/sonar-home-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate-core/3.3.2.GA/hibernate-core-3.3.2.GA.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/antlr/antlr/2.7.6/antlr-2.7.6.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/hibernate/hibernate-entitymanager/3.4.0.GA/hibernate-entitymanager-3.4.0.GA.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/javassist/javassist/3.4.GA/javassist-3.4.GA.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/geronimo-spec/geronimo-spec-jta/1.0-M1/geronimo-spec-jta-1.0-M1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-dbcp/commons-dbcp/1.3/commons-dbcp-1.3.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/commons-pool/commons-pool/1.5.4/commons-pool-1.5.4.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/plexus/plexus-classworlds/2.2.3/plexus-classworlds-2.2.3.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/googlecode/json-simple/json-simple/1.1.1/json-simple-1.1.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-blueprints-core/2.2.0-java5/sonar-blueprints-core-2.2.0-java5.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/ch/qos/logback/logback-classic/0.9.30/logback-classic-0.9.30.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/ch/qos/logback/logback-core/0.9.30/logback-core-0.9.30.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-deprecated/3.5.1/sonar-deprecated-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/org/codehaus/sonar/sonar-java-api/3.5.1/sonar-java-api-3.5.1.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/google/code/gson/gson/2.2.2/gson-2.2.2.jar"/>
+	<classpathentry exported="true" kind="var" path="M2_REPO/com/h2database/h2/1.3.167/h2-1.3.167.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
