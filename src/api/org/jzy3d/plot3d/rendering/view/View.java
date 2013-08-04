@@ -804,11 +804,7 @@ public class View {
 	}
 
 	public BoundingBox3d computeScaling() {
-		// -- Scale the scene's view -------------------
-		if (squared) // force square scale
-			scaling = squarify();
-		else
-			scaling = Coord3d.IDENTITY.clone();
+	    scaling = computeSceneScaling();
 
 		// -- Compute the bounds for computing cam distance, clipping planes,
 		// etc
@@ -822,6 +818,14 @@ public class View {
 			boundsScaled.add(scene.getGraph().getBounds().scale(scaling));
 		return boundsScaled;
 	}
+
+    public Coord3d computeSceneScaling() {
+        // -- Scale the scene's view -------------------
+		if (squared) // force square scale
+			return squarify();
+		else
+			return Coord3d.IDENTITY.clone();
+    }
 
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled) {

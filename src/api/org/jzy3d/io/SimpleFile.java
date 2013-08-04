@@ -17,12 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SimpleFile {
-    public static void write(String content, String file) throws IOException {
+    public static void write(String content, String file) throws Exception {
         createParentFoldersIfNotExist(file);
         Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
         out.write(content);
         out.close();
     }
+
+    public static void createParentFoldersIfNotExist(String file) {
+        File parent = (new File(file)).getParentFile();
+        if (parent != null && !parent.exists())
+            parent.mkdirs();
+    }
+
 
     public static List<String> read(String filename) throws IOException {
         List<String> output = new ArrayList<String>();
@@ -35,6 +42,7 @@ public class SimpleFile {
             output.add(dis.readLine());
         }
         
+
         fis.close();
         bis.close();
         dis.close();
@@ -54,7 +62,6 @@ public class SimpleFile {
         while (dis.available() != 0) {
             sb.append((new StringBuilder()).append(dis.readLine()).append(newLineString));
         }
-
         fis.close();
         bis.close();
         dis.close();
@@ -76,11 +83,4 @@ public class SimpleFile {
         else
             return f1.lastModified() > f2.lastModified();
     }
-    
-    public static void createParentFoldersIfNotExist(String file) {
-        File parent = (new File(file)).getParentFile();
-        if (parent != null && !parent.exists())
-            parent.mkdirs();
-    }
-
 }
