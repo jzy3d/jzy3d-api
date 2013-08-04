@@ -19,9 +19,9 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
-public class TestManualBounds extends AbstractAnalysis {
+public class PseudoTestManualBounds extends AbstractAnalysis {
     public static void main(String[] args) throws Exception {
-    	IAnalysis d = new TestManualBounds();
+    	IAnalysis d = new PseudoTestManualBounds();
     	d.setCanvasType("newt");
         AnalysisLauncher.open(d);
         
