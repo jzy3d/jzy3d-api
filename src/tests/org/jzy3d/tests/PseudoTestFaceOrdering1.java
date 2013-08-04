@@ -48,11 +48,11 @@ import org.jzy3d.plot3d.text.drawable.DrawableTextBillboard;
  * 
  * @author Martin
  */
-public class TestFaceOrdering1 {
+public class PseudoTestFaceOrdering1 {
     static double MAPPER_ZSCALE_FACTOR = 100;
     
     public static void main(String[] args) throws Exception {
-        TestFaceOrdering1 surface = new TestFaceOrdering1();
+        PseudoTestFaceOrdering1 surface = new PseudoTestFaceOrdering1();
         surface.BuildAndLaunch();
     }
 
@@ -195,7 +195,7 @@ public class TestFaceOrdering1 {
     /**
      * Surface
      */
-    public TestFaceOrdering1() {
+    public PseudoTestFaceOrdering1() {
         _expX = new double[] { -1.0, 1.0, 0.0, 0.0, 0.0 };
         _expY = new double[] { 0.0, 0.0, -1.0, 1.0, 0.0 };
         _expZ = new double[] { 1799635.862225038, 2778958.3605334656, 2308941.6737486282, 2791418.430038142, 2778052.031336538 };

@@ -39,9 +39,17 @@ public class Coord2d {
 	public Coord2d clone(){
 		return new Coord2d(x,y);
 	}
-	
-	/**************************************************************/
-	
+
+	public void set(Coord2d c){
+		this.x = c.x;
+		this.y = c.y;
+	}
+
+	public void set(float x, float y){
+		this.x = x;
+		this.y = y;
+	}
+
 	/** Add a Coord2d to the current one and return the result
 	 * in a new Coord2d.
 	 * @param c2
@@ -58,6 +66,14 @@ public class Coord2d {
 	
 	public void addSelf(float x, float y){
         this.x+=x;
+        this.y+=y;      
+    }
+
+	public void addSelfX(float x){
+        this.x+=x;
+    }
+
+	public void addSelfY(float y){
         this.y+=y;      
     }
 
@@ -194,7 +210,25 @@ public class Coord2d {
 	public double distance(Coord2d c){
 		return Math.sqrt( Math.pow(x-c.x,2) + Math.pow(y-c.y,2) );
 	}
+
+	public double distanceSq(Coord2d c){
+		return Math.pow(x-c.x,2) + Math.pow(y-c.y,2);
+	}
 	
+	/** 
+	 * Returns an interpolated point between the current and given point,
+	 * according to an input ratio in [0;1] that indicates how near to the
+	 * current point the new point will stand. 
+	 * 
+	 * A value of 1 will return a copy of the current point.
+	 */
+	public Coord2d interpolation(Coord2d c, float ratio){
+	    float inv = 1-ratio;
+	    float xx = x*ratio+c.x*inv;
+        float yy = y*ratio+c.y*inv;
+	    return new Coord2d(xx,yy);
+	}
+
 	/** Return a string representation of this coordinate.*/
 	public String toString(){
 		return ("x=" + x + " y=" + y);
