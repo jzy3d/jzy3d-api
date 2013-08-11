@@ -23,10 +23,12 @@ public class PointOrderingStrategy implements Comparator<Coord3d>{
         else{
             double d1 = camera.getEye().distance(o1);
             double d2 = camera.getEye().distance(o2);
-            if(d1<d2)
+            if (d1<d2)
                 return 1;
-            else
+            else if (d2>d1)
                 return -1;
+            else
+                return 0;
         }
     }
 }
