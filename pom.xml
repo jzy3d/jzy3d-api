@@ -48,22 +48,11 @@
 			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay, i.e. tools to ease non regression tests for interactive features-->
 		</dependency>
 
-        <dependency>
-            <groupId>org.codehaus.sonar</groupId>
-            <artifactId>sonar-maven-plugin</artifactId>
-            <version>3.5.1</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
 	<build>
 		<testSourceDirectory>src/tests</testSourceDirectory>
 		<plugins>
-            <plugin>
-              <groupId>org.jacoco</groupId>
-              <artifactId>jacoco-maven-plugin</artifactId>
-              <version>0.6.3.201306030806</version>
-            </plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
