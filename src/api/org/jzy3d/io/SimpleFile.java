@@ -1,8 +1,3 @@
-// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
-// Source File Name:   SimpleFile.java
-
 package org.jzy3d.io;
 
 import java.io.BufferedInputStream;
@@ -30,7 +25,10 @@ public class SimpleFile {
             parent.mkdirs();
     }
 
-
+    public static List<String> readFile(File file) throws IOException {
+    	return read(file.getAbsolutePath());
+    }
+    
     public static List<String> read(String filename) throws IOException {
         List<String> output = new ArrayList<String>();
         File file = new File(filename);
