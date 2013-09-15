@@ -4,6 +4,21 @@ jzy3d-main
 This is a master repository gathering multiple maven modules.
 Other optional extensions can be retrieved either individually, either through <a href="https://github.com/jzy3d/jzy3d-extensions">a git multimodule project</a>.
 
+API and modules
+-----------------------------------
+- <a href="https://github.com/jzy3d/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
+
+Any application will require both <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/api">jzy3d-api</a>. The API has no dependency to AWT, making buildable for Android environement.
+
+Code specific to a target windowing environement (AWT, SWT, Swing) is made available through modules (or sometime source folder separation):
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/awt">jzy3d-awt</a> : provides AWT canvases (source folder separation but part of jzy3d-api build)
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/swing">jzy3d-swing</a> : provides Swing canvases  (source folder separation but jzy3d-api build)
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-swt">jzy3d-swt</a> : provides a wrapper on AWT canvas to embed a chart in a SWT application.
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jdt-core">jzy3d-jdt-core</a> : a clone of JDT, for Java Delaunay Triangulation
+
+The API has optional extensions bundled by a parent module :
+- <a href="https://github.com/jzy3d/jzy3d-extensions">jzy3d-extensions</a> : gather 5 optional modules that may be checkout separately as well
+
 Jzy3d Maven Repository
 -----------------------------------
 - Release versions WILL stand on maven central
@@ -24,26 +39,6 @@ Jzy3d Maven Repository
 &lt;/repositories&gt;
 </code>
 </pre>
-
-
-API and main modules
------------------------------------
-- <a href="https://github.com/jzy3d/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
-
-Code specific to a target windowing environement (AWT, SWT, Swing) is made available through modules.
-Thus, any application will require both <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/api">jzy3d-api</a> and at least one of the below listed:
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/awt">jzy3d-awt</a> : provides AWT canvases (coming soon, for the moment, part of jzy3d-api build)
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/swing">jzy3d-swing</a> : provides Swing canvases  (coming soon, for the moment, part of jzy3d-api build)
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-swt">jzy3d-swt</a> : provides a wrapper on AWT canvas to embed a chart in a SWT application.
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jdt-core">jzy3d-jdt-core</a> : a clone of JDT, for Java Delaunay Triangulation
-
-Extensions
------------------------------------
-The API has optional extensions bundled by their parent module <a href="https://github.com/jzy3d/jzy3d-extensions">jzy3d-extensions</a>.
-
-Configure your project to use Jzy3d from Maven
------------------------------------
-To setup your project to retrieve dependencies from Maven, look at the <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials/pom.xml">tutorial pom file</a>
 
 Building the projects with Maven
 -----------------------------------
