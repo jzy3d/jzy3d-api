@@ -1,4 +1,4 @@
-Copyright (c) 2009-2013, Martin Pernollet
+Copyright (c) 2009-2013, Martin Pernollet and contributors
 All rights reserved. 
 
 Redistribution and use in source and binary forms, with or without
