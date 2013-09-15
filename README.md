@@ -6,9 +6,8 @@ Other optional extensions can be retrieved either individually, either through <
 
 Jzy3d Maven Repository
 -----------------------------------
-Release versions WILL stand on maven central
-Snapshot versions stand on Jzy3d maven repository:
-
+- Release versions WILL stand on maven central
+- Snapshot versions stand on Jzy3d maven repository:
 <pre>
 <code>
 &lt;repositories&gt;
