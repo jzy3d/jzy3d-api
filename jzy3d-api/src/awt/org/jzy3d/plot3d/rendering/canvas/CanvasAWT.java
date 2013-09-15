@@ -11,15 +11,11 @@ import javax.media.opengl.GLCapabilitiesImmutable;
 import javax.media.opengl.GLDrawable;
 import javax.media.opengl.awt.GLCanvas;
 
-import org.jzy3d.bridge.newt.controllers.keyboard.NewtToAWTKeyListener;
-import org.jzy3d.bridge.newt.controllers.mouse.NewtToAWTMouseListener;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
