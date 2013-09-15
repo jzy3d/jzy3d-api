@@ -11,18 +11,18 @@ Snapshot versions stand on Jzy3d maven repository:
 
 <pre>
 <code>
-<repositories>
-  <repository>
-	 <id>jzy3d-snapshots</id>
-	 <name>Jzy3d Snapshots</name>
-	 <url>http://www.jzy3d.org/maven/snapshots</url>
-  </repository>
-  <repository>
-	 <id>jzy3d-releases</id>
-	 <name>Jzy3d Snapshots</name>
-	 <url>http://www.jzy3d.org/maven/releases</url>
-  </repository>
-</repositories>
+&lt;repositories&gt;
+  &lt;repository&gt;
+	 &lt;id&gt;jzy3d-snapshots&lt;/id&gt;
+	 &lt;name&gt;Jzy3d Snapshots&lt;/name&gt;
+	 &lt;url&gt;http://www.jzy3d.org/maven/snapshots&lt;/url&gt;
+  &lt;/repository&gt;
+  &lt;repository&gt;
+	 &lt;id&gt;jzy3d-releases&lt;/id&gt;
+	 &lt;name&gt;Jzy3d Snapshots&lt;/name&gt;
+	 &lt;url&gt;http://www.jzy3d.org/maven/releases&lt;/url&gt;
+  &lt;/repository&gt;
+&lt;/repositories&gt;
 </code>
 </pre>
 
