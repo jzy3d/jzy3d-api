@@ -1,12 +1,11 @@
 jzy3d-main
 ==========
 
-This is a master repository gathering multiple maven modules.
-Other optional extensions can be retrieved either individually, either through <a href="https://github.com/jzy3d/jzy3d-extensions">a git multimodule project</a>.
+This is a main Git repository for Jzy3d providing multiple maven modules.
 
 API and modules
 -----------------------------------
-- <a href="https://github.com/jzy3d/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
 
 Application will require <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/api">jzy3d-api</a> <i>plus</i> classes to address a specific windowing environement (AWT, SWT, Swing). The API itself has no dependency to AWT, making it buildable for Android environement.
 
@@ -16,8 +15,9 @@ Code specific to a target windowing environement is made available through modul
 - <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-swt">jzy3d-swt</a> : provides a wrapper on AWT canvas to embed a chart in a SWT application.
 - <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jdt-core">jzy3d-jdt-core</a> : a clone of JDT, for Java Delaunay Triangulation
 
-The API has optional extensions bundled by a parent module :
-- <a href="https://github.com/jzy3d/jzy3d-extensions">jzy3d-extensions</a> : gather 5 optional modules that may be checkout separately as well
+The API has optional extensions bundled by a parent and several children module stored in separated Git repositories:
+- <a href="https://github.com/jzy3d/jzy3d-extensions">jzy3d-extensions</a> : gather 5 optional modules that may be checkout separately as well (Depth peeling, Graphs, G2D, )
+
 
 Jzy3d Maven Repository
 -----------------------------------
