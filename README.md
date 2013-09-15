@@ -1,19 +1,19 @@
 jzy3d-main
 ==========
 
-This is a master repository gathering multiple modules (main API and recommended dependencies).
+This is a master repository gathering multiple maven modules.
 Other optional extensions can be retrieved either individually, either through <a href="https://github.com/jzy3d/jzy3d-extensions">a git multimodule project</a>.
 
 API and main modules
 -----------------------------------
 - <a href="https://github.com/jzy3d/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
-<a href="https://github.com/jzy3d/jzy3d-api">jzy3d-api</a> is the core library.
-Code that is specific to a target windowing environement (AWT, SWT, Swing) is made available through modules.
+
+Code specific to a target windowing environement (AWT, SWT, Swing) is made available through modules.
 Thus, any application will require both jzy3d-api and at least one of the below listed:
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/src/awt">jzy3d-awt</a> : provides AWT canvases (coming soon, for the moment, part of jzy3d-api build)
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/src/swing">jzy3d-swing</a> : provides Swing canvases  (coming soon, for the moment, part of jzy3d-api build)
-- <a href="https://github.com/jzy3d/jzy3d-swt">jzy3d-swt</a> : provides a wrapper on AWT canvas to embed a chart in a SWT application.
-- <a href="https://github.com/jzy3d/jzy3d-jdt-core">jzy3d-jdt-core</a> : a clone of JDT, for Java Delaunay Triangulation
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/awt">jzy3d-awt</a> : provides AWT canvases (coming soon, for the moment, part of jzy3d-api build)
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/swing">jzy3d-swing</a> : provides Swing canvases  (coming soon, for the moment, part of jzy3d-api build)
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-swt">jzy3d-swt</a> : provides a wrapper on AWT canvas to embed a chart in a SWT application.
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jdt-core">jzy3d-jdt-core</a> : a clone of JDT, for Java Delaunay Triangulation
 
 Extensions
 -----------------------------------
@@ -26,7 +26,7 @@ The API as optional extensions bundled by their parent module <a href="https://g
 
 Configure your project to use Jzy3d from Maven
 -----------------------------------
-To setup your project to retrieve dependencies from Maven, look at the <a href="https://github.com/jzy3d/jzy3d-tutorials/blob/master/pom.xml">tutorial pom file</a>
+To setup your project to retrieve dependencies from Maven, look at the <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials/pom.xml">tutorial pom file</a>
 
 Building the projects with Maven
 -----------------------------------
