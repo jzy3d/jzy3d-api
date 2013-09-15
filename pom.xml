@@ -1,102 +1,71 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
-	<artifactId>jzy3d-api</artifactId>
-	<name>Jzy3d API</name>
+	<artifactId>jzy3d-master</artifactId>
+	<version>0.9.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-    <parent>
-        <groupId>org.jzy3d</groupId>
-        <artifactId>jzy3d-master</artifactId>
-        <version>0.9.1-SNAPSHOT</version>
-    </parent>
+    <name>Jzy3d Master Project</name>
 
-	<description>A Java API for 3d charts</description>
+    <modules>
+        <module>jzy3d-api</module>
+        <module>jzy3d-jdt-core</module>
+        <module>jzy3d-swt</module>
+        <module>jzy3d-tutorials</module>
+    </modules>
 
-	<dependencies>
-        <dependency>
-			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-jdt-core</artifactId>
-			<version>0.9.1-SNAPSHOT</version>
-		</dependency>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-main</artifactId>
-			<version>2.0-rc11</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-main</artifactId>
-			<version>2.0-rc11</version>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.16</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>2.1</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay, i.e. tools to ease non regression tests for interactive features-->
-		</dependency>
+		<version.jzy3d>0.9.1-SNAPSHOT</version.jzy3d>
 
-    </dependencies>
+        <version.java.source>1.6</version.java.source>
+        <version.java.target>1.6</version.java.target>
+		<version.mvn.compiler>3.0</version.mvn.compiler>
+		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
+		<version.mvn.deploy>2.4</version.mvn.deploy>
+		
+		<version.libs.junit>4.10</version.libs.junit>
+		<version.libs.swt>4.2.1</version.libs.swt>
+	</properties>
 
-	<build>
-		<testSourceDirectory>src/tests</testSourceDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>src/api</source>
-								<source>src/bridge</source>
-                                <source>src/awt</source>
-                                <source>src/swing</source>
-                                <source>src/replay</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>org/jzy3d/junit/ChartTest.java</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <distributionManagement>
+      <repository>
+        <id>jzy3d-ftp-maven</id>
+        <name>Jzy3d Maven Folder</name>
+        <url>ftp://www.jzy3d.org/v1/maven/releases</url>
+      </repository>
+      <snapshotRepository>
+        <id>jzy3d-ftp-maven</id>
+        <name>Jzy3d Maven Folder SNAPSHOTS</name>
+        <url>ftp://www.jzy3d.org/v1/maven/snapshots</url>
+      </snapshotRepository>
+    </distributionManagement>
 
-
-	<!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio 
-		\ -DartifactId=jzyio \ -Dversion=0.1 \ -Dpackaging=jar \ -Dfile=./lib/misc/org.jzyio-0.1.jar -->
-
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+					<version>${version.mvn.compiler}</version>
+                    <configuration>
+                        <source>${version.java.source}</source>
+                        <target>${version.java.target}</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <extensions>
+          <extension>
+            <groupId>org.apache.maven.wagon</groupId>
+             <artifactId>wagon-ftp</artifactId>
+             <version>${version.mvn.ftp}</version>
+          </extension>
+        </extensions>
+    </build>
 </project>
