@@ -4,6 +4,29 @@ jzy3d-main
 This is a master repository gathering multiple maven modules.
 Other optional extensions can be retrieved either individually, either through <a href="https://github.com/jzy3d/jzy3d-extensions">a git multimodule project</a>.
 
+Jzy3d Maven Repository
+-----------------------------------
+Release versions WILL stand on maven central
+Snapshot versions stand on Jzy3d maven repository:
+
+<pre>
+<code>
+<repositories>
+  <repository>
+	 <id>jzy3d-snapshots</id>
+	 <name>Jzy3d Snapshots</name>
+	 <url>http://www.jzy3d.org/maven/snapshots</url>
+  </repository>
+  <repository>
+	 <id>jzy3d-releases</id>
+	 <name>Jzy3d Snapshots</name>
+	 <url>http://www.jzy3d.org/maven/releases</url>
+  </repository>
+</repositories>
+</code>
+</pre>
+
+
 API and main modules
 -----------------------------------
 - <a href="https://github.com/jzy3d/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
@@ -17,12 +40,7 @@ Thus, any application will require both <a href="https://github.com/jzy3d/jzy3d-
 
 Extensions
 -----------------------------------
-The API as optional extensions bundled by their parent module <a href="https://github.com/jzy3d/jzy3d-extensions">jzy3d-extensions</a>:
-- <a href="https://github.com/jzy3d/jzy3d-graphs">jzy3d-graphs</a> : extends Gephi toolkit and Jzy3d with <a href="http://www.jzy3d.org/plugins-graphs.php">3d graph layouts and a 3d graph charts</a>. 
-- <a href="https://github.com/jzy3d/jzy3d-depthpeeling">jzy3d-depthpeeling</a> : an extension allowing <a href="http://www.jzy3d.org/plugin-depthpeeling.php">visually perfect transparency</a>
-- <a href="https://github.com/jzy3d/jzy3d-svm-mapper">jzy3d-svm-mapper</a> : building tesselated surfaces out of a SVM regression model (also depends on <a href="https://github.com/jzy3d/jzy3d-tools-libsvm">jzy3d-tools-libsvm</a>, a clone of libsvm of utility wrappers and refactors)
-- <a href="https://github.com/jzy3d/jzy3d-g2d">jzy3d-g2d</a> : a POC showing how to read projected geometries in order to render them with Java2d
-
+The API has optional extensions bundled by their parent module <a href="https://github.com/jzy3d/jzy3d-extensions">jzy3d-extensions</a>.
 
 Configure your project to use Jzy3d from Maven
 -----------------------------------
