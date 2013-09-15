@@ -8,9 +8,9 @@ API and modules
 -----------------------------------
 - <a href="https://github.com/jzy3d/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
 
-Any application will require both <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/api">jzy3d-api</a>. The API has no dependency to AWT, making buildable for Android environement.
+Application will require <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/api">jzy3d-api</a> <i>plus</i> classes to address a specific windowing environement (AWT, SWT, Swing). The API itself has no dependency to AWT, making it buildable for Android environement.
 
-Code specific to a target windowing environement (AWT, SWT, Swing) is made available through modules (or sometime source folder separation):
+Code specific to a target windowing environement is made available through modules (or sometime source folder separation):
 - <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/awt">jzy3d-awt</a> : provides AWT canvases (source folder separation but part of jzy3d-api build)
 - <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/swing">jzy3d-swing</a> : provides Swing canvases  (source folder separation but jzy3d-api build)
 - <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-swt">jzy3d-swt</a> : provides a wrapper on AWT canvas to embed a chart in a SWT application.
