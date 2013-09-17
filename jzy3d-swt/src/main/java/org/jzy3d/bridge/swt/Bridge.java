@@ -78,4 +78,23 @@ public class Bridge {
 			}
 		});
 	}
+
+	public static void adaptIn(Composite embedder, final Component componentAWT) {
+		final Frame frame = SWT_AWT.new_Frame(embedder);
+		frame.add(componentAWT);
+
+		// disposing the frame cleanly
+		embedder.addDisposeListener(new DisposeListener(){
+			public void widgetDisposed(DisposeEvent arg0) {
+				EventQueue.invokeLater(new Runnable () {
+					public void run () {
+						//System.out.println("Bridge is disposing frame containing " + componentAWT.getName() + " - " + componentAWT.getClass());
+						frame.dispose();
+						// the awt component is supposed to be disposed by the user
+					}
+				});
+			}
+		});
+	}
+
 }
