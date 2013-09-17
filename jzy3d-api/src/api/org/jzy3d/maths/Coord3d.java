@@ -336,40 +336,31 @@ public class Coord3d {
     /**************************************************************/
 
     @Override
-    public boolean equals(Object aThat) {
-        // check for self-comparison
-        if (this == aThat)
-            return true;
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(x);
+		result = prime * result + Float.floatToIntBits(y);
+		result = prime * result + Float.floatToIntBits(z);
+		return result;
+	}
 
-        // use instanceof instead of getClass here for two reasons
-        // 1. if need be, it can match any supertype, and not just one class;
-        // 2. it renders an explict check for "that == null" redundant, since
-        // it does the check for null already - "null instanceof [type]" always
-        // returns false. (See Effective Java by Joshua Bloch.)
-        if (!(aThat instanceof Coord3d))
-            return false;
-        // Alternative to the above line :
-        // if ( aThat == null || aThat.getClass() != this.getClass() ) return
-        // false;
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
 
-        // cast to native object is now safe
-        Coord3d that = (Coord3d) aThat;
+		if (!(obj instanceof Coord3d)) return false;
 
-        // now a proper field-by-field evaluation can be made
-        return ((this.x == that.x) && (this.y == that.y) && (this.z == that.z));
-    }
-
-    @Override
-    public int hashCode() {
-        if (fHashCode == 0) {
-            fHashCode = (int) (this.x * 100000000.0f + this.y * 10000.0f + this.z);
-        }
-        return fHashCode;
-    }
+		Coord3d other = (Coord3d) obj;
+		if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x)) return false;
+		if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y)) return false;
+		if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z)) return false;
+		return true;
+	}
 
     /**************************************************************/
 
-    private int fHashCode;
     public float x;
     public float y;
     public float z;
