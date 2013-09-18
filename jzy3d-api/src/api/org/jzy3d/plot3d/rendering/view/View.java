@@ -655,11 +655,15 @@ public class View {
 		initLights(gl);
 		initResources(gl);
 
-		if (initBounds == null)
-			setBoundManual(getScene().getGraph().getBounds());
-		else
-			setBoundManual(initBounds);
-		// boundmode = ViewBoundMode.AUTO_FIT;
+		if(viewbounds == null) {
+			if (initBounds == null)
+				setBoundManual(getScene().getGraph().getBounds());
+			else
+				setBoundManual(initBounds);
+			// boundmode = ViewBoundMode.AUTO_FIT;
+		} else {
+			lookToBox(viewbounds);
+		}
 
 		fireViewLifecycleHasInit(null);
 	}
