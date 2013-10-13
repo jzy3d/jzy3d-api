@@ -59,6 +59,7 @@
 		<version.mvn.compiler>3.0</version.mvn.compiler>
 		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
 		<version.mvn.deploy>2.4</version.mvn.deploy>
+    <version.mvn.javadoc>2.9.1</version.mvn.javadoc>
 		<version.libs.junit>4.10</version.libs.junit>
 		<version.libs.swt>4.2.1</version.libs.swt>
 	</properties>
@@ -82,12 +83,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-  		<version>${version.mvn.compiler}</version>
+  		          <version>${version.mvn.compiler}</version>
                 <configuration>
                     <source>${version.java.source}</source>
                     <target>${version.java.target}</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>${version.mvn.javadoc}</version>
+              <configuration>
+                <stylesheetfile>./jzy3d-api/doc/layout.css</stylesheetfile>
+              </configuration>
+            </plugin>
+
+
         </plugins>
     </pluginManagement>
     <extensions>
