@@ -6,7 +6,7 @@
 
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-master</artifactId>
-	<version>0.9.1-SNAPSHOT</version>
+	<version>0.9.1</version>
   <packaging>pom</packaging>
 
   <name>Jzy3d Master Project</name>
@@ -53,7 +53,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  	<version.jzy3d>0.9.1-SNAPSHOT</version.jzy3d>
+  	<version.jzy3d>0.9.1</version.jzy3d>
     <version.java.source>1.6</version.java.source>
     <version.java.target>1.6</version.java.target>
 		<version.mvn.compiler>3.0</version.mvn.compiler>
