@@ -8,8 +8,6 @@ import javax.media.opengl.GLDrawable;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.util.texture.TextureData;
 
 

@@ -1,13 +1,12 @@
 package org.jzy3d.tests;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 import org.junit.Test;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.ordering.PointOrderingStrategy;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.maths.Coord3d;
 
 public class TestPointOrderingStrategy {
     @Test
