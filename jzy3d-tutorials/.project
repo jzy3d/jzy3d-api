@@ -2,7 +2,10 @@
 <projectDescription>
   <name>jzy3d-tutorials</name>
   <comment>NO_M2ECLIPSE_SUPPORT: Project files created with the maven-eclipse-plugin are not supported in M2Eclipse.</comment>
-  <projects/>
+  <projects>
+    <project>jzy3d-api</project>
+    <project>jzy3d-jdt-core</project>
+  </projects>
   <buildSpec>
     <buildCommand>
       <name>org.eclipse.jdt.core.javabuilder</name>
