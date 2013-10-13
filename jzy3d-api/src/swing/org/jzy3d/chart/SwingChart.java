@@ -3,8 +3,8 @@ package org.jzy3d.chart;
 import javax.media.opengl.GLCapabilities;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
-import org.jzy3d.chart.factories.SwingChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
+import org.jzy3d.chart.factories.SwingChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;

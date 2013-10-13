@@ -4,7 +4,6 @@ import java.util.Date;
 
 import javax.media.opengl.GLCapabilities;
 
-import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
@@ -19,17 +18,13 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyControll
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
-import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBase;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.canvas.VoidCanvas;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;

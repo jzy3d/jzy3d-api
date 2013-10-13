@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.rendering.view.controllers;
 
-import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;

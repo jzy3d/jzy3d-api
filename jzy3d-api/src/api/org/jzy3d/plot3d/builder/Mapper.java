@@ -1,11 +1,42 @@
 package org.jzy3d.plot3d.builder;
 
+import java.util.List;
+
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Point;
+import org.jzy3d.plot3d.primitives.Polygon;
+
 public abstract class Mapper {
 	public abstract double f(double x, double y);
 	
-	/*************************************************************************************/
+	/**
+	 * Update the shape by remapping its polygon points' z coordinate
+	 * according to f(x,y)
+	 */
+	public void remap(AbstractComposite shape){
+		List<AbstractDrawable> polygons = shape.getDrawables();		
+		for(AbstractDrawable d: polygons){
+			remapDrawable(d);
+		}
+	}
+
+	public void remapDrawable(AbstractDrawable d) {
+		if(d instanceof Polygon){
+		    Polygon p = (Polygon) d;				
+			remapPolygon(p);
+		}
+	}
+
+	public void remapPolygon(Polygon p) {
+		for(int i=0; i<p.size(); i++){
+			Point pt = p.get(i);
+			Coord3d c = pt.xyz;
+			c.z = (float) f(c.x, c.y);
+		}
+	}
 	
-	/** Default implementation providing iterative call to {@link f(double x, double y)}.*/
 	public double[] f(double[] x, double[] y){
 		double[] z = new double[x.length];
 		
@@ -14,7 +45,6 @@ public abstract class Mapper {
 		return z;
 	}
 	
-	/** Default implementation providing iterative call to {@link f(double x, double y)}.*/
 	public double[] f(double[][] xy){
 		double[] z = new double[xy.length];
 		
@@ -23,7 +53,6 @@ public abstract class Mapper {
 		return z;
 	}
 
-	/** Default implementation providing iterative call to {@link f(double x, double y)}.*/
 	public float[] fAsFloat(double[] x, double[] y){
 		float[] z = new float[x.length];
 		
@@ -32,7 +61,6 @@ public abstract class Mapper {
 		return z;
 	}
 
-	/** Default implementation providing iterative call to {@link f(double x, double y)}.*/
 	public float[] fAsFloat(float[] x, float[] y){
 		float[] z = new float[x.length];
 		
@@ -41,7 +69,6 @@ public abstract class Mapper {
 		return z;
 	}
 
-	/** Default implementation providing iterative call to {@link f(double x, double y)}.*/
 	public float[] fAsFloat(double[][] xy){
 		float[] z = new float[xy.length];
 		
@@ -50,7 +77,6 @@ public abstract class Mapper {
 		return z;
 	}
 	
-	/** Default implementation providing iterative call to {@link f(double x, double y)}.*/
 	public float[] fAsFloat(float[][] xy){
 		float[] z = new float[xy.length];
 		
