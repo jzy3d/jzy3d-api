@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.rendering.canvas;
 import java.io.File;
 import java.io.IOException;
 
-import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLDrawable;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
