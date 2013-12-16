@@ -49,11 +49,14 @@ public class Angle2d {
 		return v1.dot(v3) / (v1.norm()*v3.norm());
 	}
 	
-	/** Computes the angle*/
+	/** Computes the angle at vertex p2 between vectors p1,p2 and p3,p2. Returns 0 to PI radians.*/
 	public float angle(){
-		Vector2d v1 = new Vector2d(x1, y1, x2, y2);
-		Vector2d v3 = new Vector2d(x3, y3, x2, y2);
-		return (float)Math.acos(v1.dot(v3));
+		double lenP1P3 = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2));
+		double lenP1P2 = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+		double lenP3P2 = Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2));
+		double numerator = Math.pow(lenP1P2, 2) + Math.pow(lenP3P2, 2) - Math.pow(lenP1P3, 2);
+		double denominator = 2 * lenP1P2 * lenP3P2;
+		return (float)Math.acos(numerator / denominator);
 	}
 	
 	/***********************************************************/
