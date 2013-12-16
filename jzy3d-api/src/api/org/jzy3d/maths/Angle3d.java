@@ -60,14 +60,14 @@ public class Angle3d {
 		return v1.dot(v3) / (v1.norm()*v3.norm());
 	}
 	
-	/** Computes an angle between 0 and 2*PI.*/
+	/** Computes the angle at vertex p2 between rays p1,p2 and p3,p2. Returns 0 to PI radians.*/
 	public float angle(){
-		// between 0 and PI:  (float)Math.acos(cos());
-		
-		if(sin()>0)
-			return (float)Math.acos(cos());
-		else
-			return (float)( Math.PI*2-Math.acos(cos()) );
+		double lenP1P3 = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2) + Math.pow(z1 - z3, 2));
+		double lenP1P2 = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 - z2, 2));
+		double lenP3P2 = Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2) + Math.pow(z3 - z2, 2));
+		double numerator = Math.pow(lenP1P2, 2) + Math.pow(lenP3P2, 2) - Math.pow(lenP1P3, 2);
+		double denominator = 2 * lenP1P2 * lenP3P2;
+		return (float)Math.acos(numerator / denominator);
 	}
 	
 	/***********************************************************/
