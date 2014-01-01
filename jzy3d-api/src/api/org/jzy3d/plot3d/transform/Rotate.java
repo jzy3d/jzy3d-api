@@ -38,7 +38,7 @@ public class Rotate implements Transformer {
 	}
 
 	public Coord3d compute(Coord3d input) {
-		throw new RuntimeException("not implemented");
+		return input.rotate(angle, rotate);
 	}
 
 	public String toString() {
