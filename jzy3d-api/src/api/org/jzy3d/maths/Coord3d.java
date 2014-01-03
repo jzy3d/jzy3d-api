@@ -316,6 +316,39 @@ public class Coord3d {
         return x * v.x + y * v.y + z * v.z;
     }
 
+    public final Coord3d cross(Coord3d v) {
+        return new Coord3d(
+                y * v.z - z * v.y,
+                z * v.x - x * v.z,
+                x * v.y - y * v.x
+        );
+    }
+
+    /**
+     * Applies a rotation represented by the AxisAngle
+     * notation using the Rodrigues' rotation formula.
+     * <p/>
+     * math implemented using
+     * http://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
+     *
+     * @param angle angle of rotation about the given axis [rad]
+     * @param axis  unit vector describing an axis of rotation
+     * @return rotated copy of the original vector
+     */
+    public final Coord3d rotate(float angle, Coord3d axis) {
+        float s = (float) Math.sin(angle);
+        float c = (float) Math.cos(angle);
+        Coord3d v = this;
+        Coord3d k = axis.normalizeTo(1f);
+
+        float kdotv = k.dot(v);
+        Coord3d kXv = k.cross(v);
+        return new Coord3d(
+                v.x * c + kXv.x * s + k.x * kdotv * (1 - c),
+                v.y * c + kXv.y * s + k.y * kdotv * (1 - c),
+                v.z * c + kXv.z * s + k.z * kdotv * (1 - c));
+    }
+
     public final Coord3d interpolateTo(Coord3d v, float f) {
         return new Coord3d(x + (v.x - x) * f, y + (v.y - y) * f, z + (v.z - z) * f);
     }
