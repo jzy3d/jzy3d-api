@@ -331,13 +331,14 @@ public class Coord3d {
      * math implemented using
      * http://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
      *
-     * @param angle angle of rotation about the given axis [rad]
+     * @param angleDeg angle of rotation about the given axis [deg]
      * @param axis  unit vector describing an axis of rotation
      * @return rotated copy of the original vector
      */
-    public final Coord3d rotate(float angle, Coord3d axis) {
-        float s = (float) Math.sin(angle);
-        float c = (float) Math.cos(angle);
+    public final Coord3d rotate(float angleDeg, Coord3d axis) {
+        float angleRad = (float) Math.toRadians(angleDeg);
+        float s = (float) Math.sin(angleRad);
+        float c = (float) Math.cos(angleRad);
         Coord3d v = this;
         Coord3d k = axis.normalizeTo(1f);
 

@@ -29,7 +29,7 @@ public class Coord3dTest extends TestCase {
     public void testRotateX() throws Exception {
         Coord3d input = new Coord3d(0, 1, 0);
         Coord3d axis = new Coord3d(1, 0, 0);
-        float angle = (float) Math.PI / 2;
+        float angle = 90f;
         Coord3d expected = new Coord3d(0, 0, 1);
         assertEqualCoord(expected, input.rotate(angle, axis));
     }
@@ -37,7 +37,7 @@ public class Coord3dTest extends TestCase {
     public void testRotateY() throws Exception {
         Coord3d input = new Coord3d(1, 0, 0);
         Coord3d axis = new Coord3d(0, 1, 0);
-        float angle = (float) Math.PI / 2;
+        float angle = 90f;
         Coord3d expected = new Coord3d(0, 0, -1);
         assertEqualCoord(expected, input.rotate(angle, axis));
     }
@@ -45,7 +45,7 @@ public class Coord3dTest extends TestCase {
     public void testRotateZ() throws Exception {
         Coord3d input = new Coord3d(0, 1, 0);
         Coord3d axis = new Coord3d(0, 0, 1);
-        float angle = (float) Math.PI / 2;
+        float angle = 90f;
         Coord3d expected = new Coord3d(-1, 0, 0);
         assertEqualCoord(expected, input.rotate(angle, axis));
     }
