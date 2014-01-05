@@ -86,6 +86,9 @@ public class OBJFile {
                 boolean hasNormals = false;
 
                 while ((line = input.readLine()) != null) {
+                    if(line.isEmpty()){
+                        continue;
+                    }
                     switch (line.charAt(0)) {
                     case '#':
                         break;
