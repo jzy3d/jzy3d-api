@@ -86,6 +86,9 @@ public class OBJFile {
                 boolean hasNormals = false;
 
                 while ((line = input.readLine()) != null) {
+                    if(line.isEmpty()){
+                        continue;
+                    }
                     switch (line.charAt(0)) {
                     case '#':
                         break;
@@ -122,7 +125,14 @@ public class OBJFile {
 
                     case 'f':
                         // face
-                        line = line.substring(line.indexOf(" ") + 2);
+                        line = line.substring(line.indexOf(" ") + 1);
+
+                        // Remove any additional leading whitespace. The whitespace count
+                        // can vary for different programs, i.e., Right Hemisphere produces
+                        // obj files with 2 spaces. Meshlab produces single spaced files.
+                        while(line.startsWith(" ")){
+                            line = line.substring(1);
+                        }
 
                         idx[0][0] = Integer.valueOf(line.substring(0, line.indexOf("//"))).intValue();
                         line = line.substring(line.indexOf("//") + 2);
