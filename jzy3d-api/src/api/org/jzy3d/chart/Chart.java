@@ -1,21 +1,13 @@
 package org.jzy3d.chart;
 
-<<<<<<< HEAD:src/api/org/jzy3d/chart/Chart.java
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-=======
->>>>>>> upstream/master:jzy3d-api/src/api/org/jzy3d/chart/Chart.java
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLProfile;
 
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
@@ -30,12 +22,8 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewt;
-import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
-import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.View;

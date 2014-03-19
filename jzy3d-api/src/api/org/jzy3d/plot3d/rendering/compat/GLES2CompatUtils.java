@@ -1,14 +1,13 @@
 package org.jzy3d.plot3d.rendering.compat;
 
-import java.nio.ByteBuffer;
-
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2ES1;
-
 import com.jogamp.opengl.util.ImmModeSink;
 import com.jogamp.opengl.util.PMVMatrix;
+import com.jogamp.opengl.util.glsl.ShaderState;
 import com.jogamp.opengl.util.glsl.fixedfunc.FixedFuncUtil;
 import com.jogamp.opengl.util.glsl.fixedfunc.ShaderSelectionMode;
+import java.nio.ByteBuffer;
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2ES1;
 
 public class GLES2CompatUtils {
 	
@@ -25,13 +24,13 @@ public class GLES2CompatUtils {
 
 	public static void init(GL gl, int initialElementCount, int vComps,
 			int vDataType, int cComps, int cDataType, int nComps,
-			int nDataType, int tComps, int tDataType, int glBufferUsage) {
+			int nDataType, int tComps, int tDataType, int glBufferUsage, ShaderState shaderState) {
 
 		GLES2CompatUtils.gl = gl;
 
 		immModeSink = ImmModeSink.createGLSL(/*gl, */initialElementCount, vComps,
 				vDataType, cComps, cDataType, nComps, nDataType, tComps,
-				tDataType, glBufferUsage);
+				tDataType, glBufferUsage, shaderState);
 
 		pmvMatrix = new PMVMatrix();
 		

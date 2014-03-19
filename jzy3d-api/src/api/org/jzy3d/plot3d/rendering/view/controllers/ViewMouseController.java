@@ -1,13 +1,12 @@
 package org.jzy3d.plot3d.rendering.view.controllers;
 
+import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.MouseListener;
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.view.View;
-
-import com.jogamp.newt.event.MouseEvent;
-import com.jogamp.newt.event.MouseListener;
 
 
 public class ViewMouseController extends ViewCameraController implements
@@ -92,7 +91,7 @@ public class ViewMouseController extends ViewCameraController implements
 		if (threadController != null)
 			threadController.stop();
 
-		float factor = 1 + (e.getWheelRotation() / 10.0f);
+		float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
 		zoom(factor);
 	}
 
