@@ -3,9 +3,7 @@ build
 doc/javadoc
 target
 .settings
-.DS_Store
+
 
 *.class
-*.log
-*~/
-*~
+
