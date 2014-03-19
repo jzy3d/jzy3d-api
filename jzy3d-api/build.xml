@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jzy3d" default="release">
+    <property name="dir.src"   		 value="src/"/>
+    <property name="dir.src.api"     value="src/api/"/>
+    <property name="dir.src.bridge"  value="src/bridge/"/>
+    <property name="dir.src.redbook" value="src/glredbook/"/>
+    <property name="dir.src.groovy"  value="src/groovy/"/>
+    <property name="dir.src.jogl"    value="src/jogl/"/>
+    <property name="dir.lib"         value="lib/"/>
+    <property name="dir.build"       value="build/ant/"/>
+    <property name="dir.bin"         value="run/"/>
+    <property name="dir.dist"        value="dist/"/>
+
+	<property name="lib.name"       value="org.jzy3d"/>
+	<property name="lib.version"    value="0.9"/>
+	<property name="lib.path" 	 	value="org/jzy3d/"/>
+	
+	<property name="jogl" 	 	value="jogl2-rc10"/>
+    	
+    <dirname property="dir.basedir" file="${ant.file}"/>
+
+    <path id="compile.classpath">
+        <fileset dir="${dir.lib}/${jogl}"><include name="*.jar"/></fileset>
+        <fileset dir="${dir.lib}/misc"><include name="*.jar"/></fileset>
+    </path>
+
+    <path id="dir.classpath">
+        <path refid="compile.classpath"/>
+    </path>
+
+	<target name="clean">
+        <delete dir="${dir.build}"/>
+        <delete dir="${dir.dist}"/>
+    </target>
+
+    <target name="compile.api" description="Compile Jzy3d API and Bridge" depends="clean">
+        <mkdir dir="${dir.build}"/>
+        <javac destdir="${dir.build}" debug="yes" target="1.5">
+            <classpath refid="dir.classpath"/>
+        	<src path="${dir.src.api}/" />
+        	<src path="${dir.src.bridge}/" />
+            <src path="${dir.src}/awt"/>
+            <src path="${dir.src}/swing"/>
+        </javac>
+    </target>
+	
+	<target name="jar.api" description="Export Jzy3d API and Bridge in a jar" depends="compile.api">
+        <echo message="Create a jar containing classes AND sources." />
+        <mkdir dir="${dir.dist}" />        
+        <jar destfile="${dir.dist}/${lib.name}-${lib.version}.jar" >
+            <fileset dir="${dir.build}" includes="${lib.path}/**/*.class"  excludes="${lib.path}/trials/**, ${lib.path}/demos/**"/>
+            <!-- includes sources for debugging -->
+            <fileset dir="${dir.src.api}"    includes="**/*.java"/>
+            <fileset dir="${dir.src.bridge}" includes="**/*.java"/>
+            <fileset dir="${dir.src}/awt" includes="**/*.java"/>
+            <fileset dir="${dir.src}/swing" includes="**/*.java"/>
+        </jar>
+    </target>
+	
+	<target name="zip.dependencies">
+		<zip destfile="${dir.dist}/${lib.name}-${lib.version}-dependencies.zip" update="false">
+			<fileset dir="${dir.lib}"/>
+		</zip>	
+	</target>
+
+	<target name="release" depends="clean,jar.api,zip.dependencies">
+	</target>
+</project>
