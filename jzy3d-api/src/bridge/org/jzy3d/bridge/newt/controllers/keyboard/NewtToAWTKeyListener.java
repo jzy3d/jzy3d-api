@@ -1,8 +1,7 @@
 package org.jzy3d.bridge.newt.controllers.keyboard;
 
-import jogamp.newt.awt.event.AWTNewtEventFactory;
-
 import com.jogamp.newt.Window;
+import jogamp.newt.awt.event.AWTNewtEventFactory;
 
 /**
  *
@@ -32,9 +31,17 @@ public class NewtToAWTKeyListener implements java.awt.event.KeyListener {
 		keyListener.keyReleased(convertEvent(ke));
 	}
 
+	/**
+	 * This method will throw a RuntimeException since 'keyType' is no longer 
+	 * supported in JOGL 2.1.
+	 * @deprecated 
+	 * @param ke
+	 * @throws RuntimeException 
+	 */
+	@Deprecated
 	@Override
-	public void keyTyped(java.awt.event.KeyEvent ke) {
-		keyListener.keyTyped(convertEvent(ke));
+	public void keyTyped(java.awt.event.KeyEvent ke) throws RuntimeException {
+		throw new RuntimeException("'keyTyped' can not be mapped to NEWT's event model. Please use 'keyReleased' instead!");
 	}
 	
 }

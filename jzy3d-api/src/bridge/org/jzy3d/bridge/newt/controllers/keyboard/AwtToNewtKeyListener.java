@@ -33,10 +33,5 @@ public class AwtToNewtKeyListener implements com.jogamp.newt.event.KeyListener {
 	public void keyReleased(KeyEvent ke) {
 		keyListener.keyReleased(convertEvent(ke, java.awt.event.KeyEvent.KEY_RELEASED));
 	}
-
-	@Override
-	public void keyTyped(KeyEvent ke) {
-		keyListener.keyTyped(convertEvent(ke, java.awt.event.KeyEvent.KEY_TYPED));
-	}
 	
 }
