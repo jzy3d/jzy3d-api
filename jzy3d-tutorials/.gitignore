@@ -1,0 +1,7 @@
+dist
+build
+doc/javadoc
+target
+.settings
+
+
