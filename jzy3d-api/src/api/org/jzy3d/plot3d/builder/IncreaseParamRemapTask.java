@@ -8,7 +8,6 @@ public class IncreaseParamRemapTask extends AbstractRemapTask {
 		super(surface, mapper);
 	}
 	
-
 	public void remap() {
 		mapper.setParam(mapper.getParam() + 0.0001);
 		mapper.remap(surface);

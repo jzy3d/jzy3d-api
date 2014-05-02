@@ -20,7 +20,7 @@ import org.jzy3d.plot3d.transform.Transform;
 import com.jogamp.common.nio.Buffers;
 
 /**
- * A {@link DrawableVBO} is able to efficiently large collection of geometries.
+ * A {@link DrawableVBO} is able to efficiently draw a large collection of geometries.
  * 
  * @author Martin Pernollet
  */
