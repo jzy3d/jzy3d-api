@@ -634,7 +634,7 @@ public class View {
 		if (canvas instanceof GLAutoDrawable) {
 			return ((GLAutoDrawable) canvas);
 		} else
-			throw new RuntimeException("Unexpected instance type");
+			throw new RuntimeException("Unexpected instance type : " + canvas.getClass().toString());
 	}
 
 	/**
