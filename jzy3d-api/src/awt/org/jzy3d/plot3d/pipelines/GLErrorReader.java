@@ -1,6 +1,8 @@
 package org.jzy3d.plot3d.pipelines;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2ES1;
+import javax.media.opengl.GL2ES2;
 
 /** This utility allows checking the GL2 error bit after a call to a 
  * GL2 command.
@@ -34,10 +36,10 @@ public class GLErrorReader {
         else if(err==GL2.GL_INVALID_OPERATION){
 	        System.err.println("GL_INVALID_OPERATION : The specified operation is not allowed in the current state. The offending command is ignored, having no side effect other than to set the error flag.");
         }
-        else if(err==GL2.GL_STACK_OVERFLOW){
+        else if(err==GL2ES1.GL_STACK_OVERFLOW || err==GL2ES2.GL_STACK_OVERFLOW){
         	System.err.println("GL_STACK_OVERFLOW: This command would cause a stack overflow. The offending command is ignored, having no side effect other than to set the error flag.");
         }
-        else if(err==GL2.GL_STACK_UNDERFLOW){
+        else if(err==GL2ES1.GL_STACK_UNDERFLOW || err==GL2ES2.GL_STACK_UNDERFLOW){
 	        System.err.println("GL_STACK_UNDERFLOW: This command would cause a stack underflow. The offending command is ignored, having no side effect other than to set the error flag.");
         }
         else if(err==GL2.GL_OUT_OF_MEMORY){
