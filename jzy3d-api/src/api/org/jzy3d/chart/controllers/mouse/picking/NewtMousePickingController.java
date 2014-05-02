@@ -1,8 +1,9 @@
 package org.jzy3d.chart.controllers.mouse.picking;
 
+import com.jogamp.newt.event.MouseEvent;
+import com.jogamp.newt.event.MouseListener;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
@@ -13,9 +14,6 @@ import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.picking.PickingSupport;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.View;
-
-import com.jogamp.newt.event.MouseEvent;
-import com.jogamp.newt.event.MouseListener;
 
 public class NewtMousePickingController<V, E> extends AbstractCameraController
 		implements MouseListener {
@@ -88,8 +86,7 @@ public class NewtMousePickingController<V, E> extends AbstractCameraController
 	public void mouseWheelMoved(MouseEvent e) {
 		if (threadController != null)
 			threadController.stop();
-		System.out.println(e.getWheelRotation());
-		float factor = 1 + (e.getWheelRotation() / 10.0f);
+		float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
 		System.out.println(NewtMousePickingController.class.getSimpleName() + "wheel:" + factor * 100);
 		zoomX(factor);
 		zoomY(factor);		

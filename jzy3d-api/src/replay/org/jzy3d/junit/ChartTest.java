@@ -235,3 +235,4 @@ public class ChartTest{
     protected int WIDTH = 800;
     protected int HEIGHT = 600;
 }
+

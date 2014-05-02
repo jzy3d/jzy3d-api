@@ -1,8 +1,9 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import com.jogamp.opengl.util.texture.TextureData;
+import com.jogamp.opengl.util.texture.TextureIO;
 import java.io.File;
 import java.io.IOException;
-
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilities;
@@ -10,14 +11,10 @@ import javax.media.opengl.GLDrawable;
 import javax.media.opengl.GLDrawableFactory;
 import javax.media.opengl.GLPbuffer;
 import javax.media.opengl.GLProfile;
-
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
-import com.jogamp.opengl.util.texture.TextureData;
-import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * An {@link ICanvas} implementation able to render the chart in an offscreen canvas,
@@ -47,7 +44,7 @@ public class OffscreenCanvas implements ICanvas {
     protected void initGLPBuffer(GLCapabilities capabilities, int width, int height) {
         GLProfile profile = capabilities.getGLProfile();
         capabilities.setDoubleBuffered(false);
-        if (!GLDrawableFactory.getFactory(profile).canCreateGLPbuffer(null))
+        if (!GLDrawableFactory.getFactory(profile).canCreateGLPbuffer(null, profile))
             throw new RuntimeException("No pbuffer support");
         GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
         glpBuffer = factory.createGLPbuffer(null, capabilities, null, width, height, null);
@@ -57,7 +54,7 @@ public class OffscreenCanvas implements ICanvas {
     protected void initGLPBuffer(int width, int height) {
         GLCapabilities caps = org.jzy3d.chart.Settings.getInstance().getGLCapabilities();
         caps.setDoubleBuffered(false);
-        if (!GLDrawableFactory.getFactory(caps.getGLProfile()).canCreateGLPbuffer(null))
+        if (!GLDrawableFactory.getFactory(caps.getGLProfile()).canCreateGLPbuffer(null, caps.getGLProfile()))
             throw new RuntimeException("No pbuffer support");
 
         glpBuffer = GLDrawableFactory.getFactory(caps.getGLProfile()).createGLPbuffer(null, caps, null, width, height, null);
