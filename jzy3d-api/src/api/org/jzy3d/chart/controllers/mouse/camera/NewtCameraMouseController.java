@@ -2,13 +2,13 @@ package org.jzy3d.chart.controllers.mouse.camera;
 
 
 
-import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.camera.AbstractCameraController;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
-import org.jzy3d.maths.Coord2d;
-
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
+import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.camera.AbstractCameraController;
+import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.maths.Coord2d;
 
 
 
@@ -92,7 +92,7 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
 	public void mouseWheelMoved(MouseEvent e) {
 		stopThreadController();
 		
-		float factor = 1 + (e.getWheelRotation()/10.0f);
+		float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
 		zoomZ(factor);
 	}
 	
