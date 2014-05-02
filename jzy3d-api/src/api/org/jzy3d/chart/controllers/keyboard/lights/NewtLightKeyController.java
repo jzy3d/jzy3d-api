@@ -1,10 +1,9 @@
 package org.jzy3d.chart.controllers.keyboard.lights;
 
-import org.jzy3d.chart.Chart;
-import org.jzy3d.plot3d.rendering.lights.Light;
-
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
+import org.jzy3d.chart.Chart;
+import org.jzy3d.plot3d.rendering.lights.Light;
 
 public class NewtLightKeyController implements KeyListener{
     
@@ -42,8 +41,6 @@ public class NewtLightKeyController implements KeyListener{
     }
     @Override
     public void keyReleased(KeyEvent e) {}
-    @Override
-    public void keyTyped(KeyEvent e) {}
     
     protected Chart chart;
     protected int lightId = 0;

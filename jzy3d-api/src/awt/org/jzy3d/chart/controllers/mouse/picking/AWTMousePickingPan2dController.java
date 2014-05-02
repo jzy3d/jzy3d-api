@@ -1,13 +1,13 @@
 package org.jzy3d.chart.controllers.mouse.picking;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
-import com.jogamp.newt.event.MouseEvent;
 
 public class AWTMousePickingPan2dController<V,E> extends AWTMousePickingController<V,E>{
 	public AWTMousePickingPan2dController(){
@@ -28,6 +28,7 @@ public class AWTMousePickingPan2dController<V,E> extends AWTMousePickingControll
 	
 	/****************/
 
+	@Override
 	public void mouseDragged(MouseEvent e) {
 		int yflip = -e.getY() + targets.get(0).getCanvas().getRendererHeight();
 		Coord2d mouse = new Coord2d(e.getX(),yflip);
@@ -45,7 +46,8 @@ public class AWTMousePickingPan2dController<V,E> extends AWTMousePickingControll
 	}
 	protected boolean done;
 	
-	public void mouseWheelMoved(MouseEvent e) {
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
 		lastInc = (e.getWheelRotation()/10.0f);
 		factor = factor + lastInc;
 
