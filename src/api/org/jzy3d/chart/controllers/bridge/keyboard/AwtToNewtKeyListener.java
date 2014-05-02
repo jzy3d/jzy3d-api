@@ -1,10 +1,8 @@
-package org.jzy3d.bridge.newt.controllers.keyboard;
-
-import java.awt.Component;
-
-import org.jzy3d.bridge.newt.controllers.AwtToNewtUtilities;
+package org.jzy3d.chart.controllers.bridge.keyboard;
 
 import com.jogamp.newt.event.KeyEvent;
+import java.awt.Component;
+import org.jzy3d.chart.controllers.bridge.AwtToNewtUtilities;
 
 /**
  *
@@ -32,6 +30,11 @@ public class AwtToNewtKeyListener implements com.jogamp.newt.event.KeyListener {
 	@Override
 	public void keyReleased(KeyEvent ke) {
 		keyListener.keyReleased(convertEvent(ke, java.awt.event.KeyEvent.KEY_RELEASED));
+	}
+
+	@Override
+	public void keyTyped(KeyEvent ke) {
+		keyListener.keyTyped(convertEvent(ke, java.awt.event.KeyEvent.KEY_TYPED));
 	}
 	
 }

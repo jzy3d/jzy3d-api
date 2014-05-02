@@ -1,9 +1,9 @@
-package org.jzy3d.bridge.newt.controllers.mouse;
+package org.jzy3d.chart.controllers.bridge.mouse;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import org.jzy3d.bridge.newt.controllers.AwtToNewtUtilities;
+import org.jzy3d.chart.controllers.bridge.AwtToNewtUtilities;
 
 /**
  * Provides a bridge implementation to map AWT events to NEWT events for 
@@ -31,10 +31,7 @@ public class AwtToNewtMouseListener implements com.jogamp.newt.event.MouseListen
 	}
 
 	protected java.awt.event.MouseWheelEvent convertWheelEvent(com.jogamp.newt.event.MouseEvent event, int id) {
-		//rotation direction needs to be inverted between NEWT and AWT
-		int direction = event.getRotation()[1]>0?-1:1;
-		int units = (int)Math.round(event.getRotation()[1]*event.getRotationScale());
-		return new java.awt.event.MouseWheelEvent(source, id, event.getWhen(), AwtToNewtUtilities.mask(event), event.getX(), event.getY(), event.getClickCount(), false, MouseWheelEvent.WHEEL_UNIT_SCROLL, units, direction);
+		return new java.awt.event.MouseWheelEvent(source, id, event.getWhen(), AwtToNewtUtilities.mask(event), event.getX(), event.getY(), event.getClickCount(), false, MouseWheelEvent.WHEEL_UNIT_SCROLL, 1, event.getWheelRotation());
 	}
 
 	@Override
