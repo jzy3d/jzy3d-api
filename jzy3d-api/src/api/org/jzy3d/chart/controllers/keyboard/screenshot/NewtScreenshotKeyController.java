@@ -1,16 +1,14 @@
 package org.jzy3d.chart.controllers.keyboard.screenshot;
 
+import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.KeyListener;
+import com.jogamp.opengl.util.texture.TextureIO;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.AbstractController;
-
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
-import com.jogamp.opengl.util.texture.TextureIO;
 
 /** Saves a screenshot in PNG format once key S is pressed. 
  * 
@@ -53,10 +51,9 @@ public class NewtScreenshotKeyController extends AbstractController implements K
 	public void addListener(IScreenshotEventListener listener){
         listeners.add(listener);
     }
-
-
+    
     @Override
-    public void keyTyped(KeyEvent e) {
+    public void keyReleased(KeyEvent e) {
         switch (e.getKeyChar()) {
         case 's':
             try {
@@ -68,10 +65,6 @@ public class NewtScreenshotKeyController extends AbstractController implements K
         default:
             break;
         }
-    }
-    
-    @Override
-    public void keyReleased(KeyEvent e) {
     }
 
     @Override
