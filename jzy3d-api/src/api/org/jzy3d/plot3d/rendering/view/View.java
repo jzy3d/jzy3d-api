@@ -598,17 +598,13 @@ public class View {
 		float lmax = Math.max(Math.max(xLen, yLen), zLen);
 
 		if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
-			xLen = 1;// throw new
-						// ArithmeticException("x scale is infinite, nan or 0");
+			xLen = 1;
 		if (Float.isInfinite(yLen) || Float.isNaN(yLen) || yLen == 0)
-			yLen = 1;// throw new
-						// ArithmeticException("y scale is infinite, nan or 0");
+			yLen = 1;
 		if (Float.isInfinite(zLen) || Float.isNaN(zLen) || zLen == 0)
-			zLen = 1;// throw new
-						// ArithmeticException("z scale is infinite, nan or 0");
+			zLen = 1;
 		if (Float.isInfinite(lmax) || Float.isNaN(lmax) || lmax == 0)
-			lmax = 1;// throw new
-						// ArithmeticException("z scale is infinite, nan or 0");
+			lmax = 1;
 
 		// Return a scaler
 		return new Coord3d(lmax / xLen, lmax / yLen, lmax / zLen);
@@ -773,8 +769,15 @@ public class View {
 		cam.show(gl, new Transform(new Scale(scaling)), scaling);
 	}
 
+    /**
+     * To be implemented (see AWTView)
+     */
 	public void renderBackground(GL gl, GLU glu2, float f, float g) {
     }
+	
+	/**
+	 * To be implemented (see AWTView)
+	 */
 	public void renderBackground(GL gl, GLU glu2, ViewportConfiguration backgroundViewPort) {
     }
 
