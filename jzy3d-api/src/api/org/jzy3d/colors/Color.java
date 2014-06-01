@@ -108,6 +108,13 @@ public class Color {
 		return new Color(1 - r, 1 - g, 1 - b);
 	}
 	
+    public Color negativeSelf(){
+        r = 1 - r;
+        g = 1 - g;
+        b = 1 - b;
+        return this;
+    }
+
 		
 	public static Color random(){
 		return new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());

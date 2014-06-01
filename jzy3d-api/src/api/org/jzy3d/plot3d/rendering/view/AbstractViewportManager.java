@@ -130,8 +130,10 @@ abstract class AbstractViewportManager {
      * to {@link applyViewPort}.
      */
     public Rectangle getRectangle() {
-        if (ViewportMode.STRETCH_TO_FILL.equals(mode) || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode))
+        if (ViewportMode.STRETCH_TO_FILL.equals(mode) || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)){
+//            return new Rectangle(screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
             return new Rectangle(screenXOffset, screenYOffset, screenWidth, screenHeight);
+        }
         else {
             return new Rectangle(screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
         }
