@@ -46,7 +46,7 @@ public class AWTChart extends Chart {
         getAWTView().removeRenderer2d(renderer2d);
     }
 
-    protected AWTView getAWTView() {
+    public AWTView getAWTView() {
         return (AWTView) view;
     }
 }
