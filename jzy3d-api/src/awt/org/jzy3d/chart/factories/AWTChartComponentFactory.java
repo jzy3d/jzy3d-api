@@ -1,14 +1,14 @@
 package org.jzy3d.chart.factories;
 
-import java.lang.reflect.Constructor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLCapabilitiesImmutable;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
+import org.jzy3d.bridge.awt.FrameAWT;
+import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.BoundingBox3d;
@@ -16,7 +16,9 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
+import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -115,7 +117,7 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     /* UTILS */
     
     protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
-        try {
+        /*try {
             Class frameClass = Class.forName("org.jzy3d.bridge.awt.FrameSwing");
             IFrame frame = (IFrame) frameClass.newInstance();
             frame.initialize(chart, bounds, title);
@@ -123,11 +125,12 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("newFrameSwing", e);
-        }
+        }*/
+        return new FrameSwing(chart, bounds, title);
     }
 
     protected IFrame newFrameAWT(Chart chart, Rectangle bounds, String title, String message) {
-        try {
+        /*try {
             Class frameClass = Class.forName("org.jzy3d.bridge.awt.FrameAWT");
             IFrame frame = (IFrame) frameClass.newInstance();
             if (message != null) {
@@ -139,7 +142,8 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("newFrameSwing", e);
-        }
+        }*/
+        return new FrameAWT(chart, bounds, title, message);
     }
 
     protected Toolkit getToolkit(String windowingToolkit) {
@@ -165,7 +169,7 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     }
 
     protected ICanvas newCanvasSwing(ChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        Class canvasSwingDefinition;
+        /*Class canvasSwingDefinition;
         Class[] constrArgsClass = new Class[] { IChartComponentFactory.class, Scene.class, Quality.class, GLCapabilitiesImmutable.class, boolean.class, boolean.class };
         Object[] constrArgs = new Object[] { chartComponentFactory, scene, quality, capabilities, traceGL, debugGL };
         Constructor constructor;
@@ -179,11 +183,13 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("newCanvasSwing", e);
-        }
+        }*/
+        return new CanvasSwing(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
+
     }
 
     protected ICanvas newCanvasAWT(ChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        Class canvasAWTDefinition;
+        /*Class canvasAWTDefinition;
         Class[] constrArgsClass = new Class[] { IChartComponentFactory.class, Scene.class, Quality.class, GLCapabilitiesImmutable.class, boolean.class, boolean.class };
         Object[] constrArgs = new Object[] { chartComponentFactory, scene, quality, capabilities, traceGL, debugGL };
         Constructor constructor;
@@ -197,6 +203,7 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("newCanvasAWT", e);
-        }
+        }*/
+        return new CanvasAWT(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
     }
 }
