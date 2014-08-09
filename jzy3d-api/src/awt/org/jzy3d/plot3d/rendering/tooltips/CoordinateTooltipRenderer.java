@@ -64,7 +64,7 @@ public class CoordinateTooltipRenderer implements ITooltipRenderer{
 			String ycontent = yUnit + " = " + target.y;
 			String zcontent = zUnit + " = " + target.z;
 			int maxlength   = Math.max( Math.max(xcontent.length(), ycontent.length()), zcontent.length() );
-			lastBounds = new Rectangle(screenLocation.x-10, screenLocation.y-13, 10 + maxlength * 6, 16*3);
+			lastBounds = new Rectangle(screenLocation.x-10, screenLocation.y-13, 10 + maxlength * 8, 16*3);
 			
 			g2d.setColor(Color.WHITE);
 			g2d.fillRect(lastBounds.x, lastBounds.y, lastBounds.width, lastBounds.height);

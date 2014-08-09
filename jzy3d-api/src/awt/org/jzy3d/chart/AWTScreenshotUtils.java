@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
-public class AwtScreenshotUtils {
+public class AWTScreenshotUtils {
     public BufferedImage toImage(GL2 gl, int w, int h) {
 
         gl.glReadBuffer(GL.GL_FRONT); // or GL.GL_BACK
