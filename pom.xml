@@ -37,7 +37,7 @@
     </license>
   </licenses>
   <scm>
-    <connection>scm:git:git://github.com/jzy3d-api</connection>
+    <connection>scm:git:git://github.com/jzy3d/jzy3d-api</connection>
   </scm>
   <issueManagement>
     <system>Github</system>
@@ -66,14 +66,14 @@
 
   <distributionManagement>
     <repository>
-      <id>jzy3d-ftp-maven</id>
+      <id>jzy3d-ftp</id>
       <name>Jzy3d Maven Folder</name>
-      <url>ftp://www.jzy3d.org/v1/maven/releases</url>
+      <url>ftp://ftp.jzy3d.org/maven/releases</url>
     </repository>
     <snapshotRepository>
-      <id>jzy3d-ftp-maven</id>
+      <id>jzy3d-ftp</id>
       <name>Jzy3d Maven Folder SNAPSHOTS</name>
-      <url>ftp://www.jzy3d.org/v1/maven/snapshots</url>
+      <url>ftp://ftp.jzy3d.org/maven/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 

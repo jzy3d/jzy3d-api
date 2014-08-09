@@ -3,7 +3,7 @@ package org.jzy3d.bridge.newt.controllers.mouse;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import org.jzy3d.bridge.newt.controllers.AwtToNewtUtilities;
+import org.jzy3d.bridge.newt.controllers.AWTToNewtUtilities;
 
 /**
  * Provides a bridge implementation to map AWT events to NEWT events for 
@@ -12,14 +12,14 @@ import org.jzy3d.bridge.newt.controllers.AwtToNewtUtilities;
  * 
  * @author Nils Hoffmann
  */
-public class AwtToNewtMouseListener implements com.jogamp.newt.event.MouseListener {
+public class AWTToNewtMouseListener implements com.jogamp.newt.event.MouseListener {
 
 	private final java.awt.event.MouseListener mouseListener;
 	private final java.awt.event.MouseMotionListener mouseMotionListener;
 	private final java.awt.event.MouseWheelListener mouseWheelListener;
 	private final java.awt.Component source;
 
-	public AwtToNewtMouseListener(Component source, java.awt.event.MouseListener mouseListener, java.awt.event.MouseMotionListener mouseMotionListener, java.awt.event.MouseWheelListener mouseWheelListener) {
+	public AWTToNewtMouseListener(Component source, java.awt.event.MouseListener mouseListener, java.awt.event.MouseMotionListener mouseMotionListener, java.awt.event.MouseWheelListener mouseWheelListener) {
 		this.source = source;
 		this.mouseListener = mouseListener;
 		this.mouseMotionListener = mouseMotionListener;
@@ -27,14 +27,14 @@ public class AwtToNewtMouseListener implements com.jogamp.newt.event.MouseListen
 	}
 
 	protected java.awt.event.MouseEvent convertEvent(com.jogamp.newt.event.MouseEvent event, int id) {
-		return new java.awt.event.MouseEvent(source, id, event.getWhen(), AwtToNewtUtilities.mask(event), event.getX(), event.getY(), event.getClickCount(), false, event.getButton());
+		return new java.awt.event.MouseEvent(source, id, event.getWhen(), AWTToNewtUtilities.mask(event), event.getX(), event.getY(), event.getClickCount(), false, event.getButton());
 	}
 
 	protected java.awt.event.MouseWheelEvent convertWheelEvent(com.jogamp.newt.event.MouseEvent event, int id) {
 		//rotation direction needs to be inverted between NEWT and AWT
 		int direction = event.getRotation()[1]>0?-1:1;
 		int units = (int)Math.round(event.getRotation()[1]*event.getRotationScale());
-		return new java.awt.event.MouseWheelEvent(source, id, event.getWhen(), AwtToNewtUtilities.mask(event), event.getX(), event.getY(), event.getClickCount(), false, MouseWheelEvent.WHEEL_UNIT_SCROLL, units, direction);
+		return new java.awt.event.MouseWheelEvent(source, id, event.getWhen(), AWTToNewtUtilities.mask(event), event.getX(), event.getY(), event.getClickCount(), false, MouseWheelEvent.WHEEL_UNIT_SCROLL, units, direction);
 	}
 
 	@Override

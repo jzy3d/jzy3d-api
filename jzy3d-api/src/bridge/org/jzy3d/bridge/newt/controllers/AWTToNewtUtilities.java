@@ -7,7 +7,7 @@ import com.jogamp.newt.event.KeyEvent;
  *
  * @author Nils Hoffmann
  */
-public class AwtToNewtUtilities {
+public class AWTToNewtUtilities {
 
 	public static int mapKeyCode(KeyEvent event) {
 		return jogamp.newt.awt.event.AWTNewtEventFactory.newtKeyCode2AWTKeyCode(event.getKeyCode());

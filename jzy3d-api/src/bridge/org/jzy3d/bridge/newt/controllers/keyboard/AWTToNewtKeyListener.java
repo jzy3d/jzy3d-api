@@ -2,7 +2,7 @@ package org.jzy3d.bridge.newt.controllers.keyboard;
 
 import java.awt.Component;
 
-import org.jzy3d.bridge.newt.controllers.AwtToNewtUtilities;
+import org.jzy3d.bridge.newt.controllers.AWTToNewtUtilities;
 
 import com.jogamp.newt.event.KeyEvent;
 
@@ -10,18 +10,18 @@ import com.jogamp.newt.event.KeyEvent;
  *
  * @author Nils Hoffmann
  */
-public class AwtToNewtKeyListener implements com.jogamp.newt.event.KeyListener {
+public class AWTToNewtKeyListener implements com.jogamp.newt.event.KeyListener {
 
 	private final java.awt.event.KeyListener keyListener;
 	private final java.awt.Component source;
 
-	public AwtToNewtKeyListener(Component source, java.awt.event.KeyListener keyListener) {
+	public AWTToNewtKeyListener(Component source, java.awt.event.KeyListener keyListener) {
 		this.source = source;
 		this.keyListener = keyListener;
 	}
 
 	protected java.awt.event.KeyEvent convertEvent(KeyEvent event, int eventId) {
-		return new java.awt.event.KeyEvent(source, eventId, event.getWhen(), AwtToNewtUtilities.mask(event), AwtToNewtUtilities.mapKeyCode(event), event.getKeyChar());
+		return new java.awt.event.KeyEvent(source, eventId, event.getWhen(), AWTToNewtUtilities.mask(event), AWTToNewtUtilities.mapKeyCode(event), event.getKeyChar());
 	}
 
 	@Override
