@@ -118,7 +118,7 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     
     protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
         /*try {
-            Class frameClass = Class.forName("org.jzy3d.bridge.awt.FrameSwing");
+            Class frameClass = Class.forName("org.jzy3d.bridge.swing.FrameSwing");
             IFrame frame = (IFrame) frameClass.newInstance();
             frame.initialize(chart, bounds, title);
             return frame;
