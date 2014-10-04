@@ -29,12 +29,12 @@ Jzy3d Maven Repository
   &lt;repository&gt;
 	 &lt;id&gt;jzy3d-snapshots&lt;/id&gt;
 	 &lt;name&gt;Jzy3d Snapshots&lt;/name&gt;
-	 &lt;url&gt;http://maven.jzy3d.org/snapshots&lt;/url&gt;
+	 &lt;url&gt;http://maven.jzy3d.org/snapshots &lt;/url&gt;
   &lt;/repository&gt;
   &lt;repository&gt;
 	 &lt;id&gt;jzy3d-releases&lt;/id&gt;
 	 &lt;name&gt;Jzy3d Snapshots&lt;/name&gt;
-	 &lt;url&gt;http://http://maven.jzy3d.org/releases&lt;/url&gt;
+	 &lt;url&gt;http://http://maven.jzy3d.org/releases &lt;/url&gt;
   &lt;/repository&gt;
 &lt;/repositories&gt;
 </code>
