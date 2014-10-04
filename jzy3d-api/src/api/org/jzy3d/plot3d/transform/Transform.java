@@ -43,7 +43,7 @@ public class Transform {
 			sequence.add(next);
 	}
 
-	/*******************************************************************/
+	/* */
 
 	/**
 	 * Appends a Transformer to the sequence that this Transform must performs.
@@ -64,7 +64,7 @@ public class Transform {
 			sequence.add(next);
 	}
 
-	/***********************************************************/
+	/* */
 
 	/**
 	 * Load the identity matrix and executes the stored sequence of Transformer.
