@@ -109,7 +109,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
 	public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
 		// trigger screenshot on 's' letter
 		String file = SCREENSHOT_FOLDER + "capture-"
-				+ Utils.dat2str(new Date()) + ".png";
+				+ Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
 		IScreenshotKeyController screenshot;
 
 		if (!chart.getWindowingToolkit().equals("newt"))

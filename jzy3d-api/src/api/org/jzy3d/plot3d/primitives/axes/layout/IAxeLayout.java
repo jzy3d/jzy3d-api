@@ -41,6 +41,10 @@ public interface IAxeLayout {
 	public boolean isYTickLabelDisplayed();
 	public boolean isZTickLabelDisplayed();
 	
+    public boolean isTickLineDisplayed();
+    public void setTickLineDisplayed(boolean status);
+
+	
 	public void setXTickProvider(ITickProvider provider);
 	public void setYTickProvider(ITickProvider provider);
 	public void setZTickProvider(ITickProvider provider);
@@ -72,4 +76,5 @@ public interface IAxeLayout {
 	public Color getXTickColor();
 	public Color getYTickColor();
 	public Color getZTickColor();
+	
 }
