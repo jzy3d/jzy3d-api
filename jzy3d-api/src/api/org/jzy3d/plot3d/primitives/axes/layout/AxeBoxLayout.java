@@ -261,10 +261,22 @@ public class AxeBoxLayout implements IAxeLayout{
 	public void setZTickLabelDisplayed(boolean tickLabelDisplayed) {
 		zTickLabelDisplayed = tickLabelDisplayed;
 	}
+	
+	public boolean isTickLineDisplayed() {
+        return tickLineDisplayed;
+    }
+
+    public void setTickLineDisplayed(boolean tickLineDisplayed) {
+        this.tickLineDisplayed = tickLineDisplayed;
+    }
 
 
 
-	/**********************************************************/
+
+
+    /**********************************************************/
+	
+	protected boolean tickLineDisplayed = true;
 	
 	protected String xAxeLabel;
 	protected String yAxeLabel;
