@@ -145,8 +145,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
 	}
 
 	public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-		throw new RuntimeException(
-					"No implemented exception");
+		throw new RuntimeException("No implemented exception");
 	}
 
 	@Override

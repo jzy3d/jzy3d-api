@@ -298,10 +298,10 @@ public class AxeBox implements IAxe {
         BoundingBox3d ticksTxtBounds = new BoundingBox3d();
 
         // Retrieve the quads that intersect and create the selected axe
-        if (direction == AXE_X) {
+        if (isX(direction)) {
             quad_0 = axeXquads[axis][0];
             quad_1 = axeXquads[axis][1];
-        } else if (direction == AXE_Y) {
+        } else if (isY(direction)) {
             quad_0 = axeYquads[axis][0];
             quad_1 = axeYquads[axis][1];
         } else { // (axis==AXE_Z)
@@ -334,12 +334,12 @@ public class AxeBox implements IAxe {
         // Draw the label for axis
         String axeLabel;
         int dist = 1;
-        if (direction == AXE_X) {
+        if (isX(direction)) {
             xlab = center.x;
             ylab = axeLabelDist * (yrange / tickLength) * dist * ydir + ypos;
             zlab = axeLabelDist * (zrange / tickLength) * dist * zdir + zpos;
             axeLabel = layout.getXAxeLabel();
-        } else if (direction == AXE_Y) {
+        } else if (isY(direction)) {
             xlab = axeLabelDist * (xrange / tickLength) * dist * xdir + xpos;
             ylab = center.y;
             zlab = axeLabelDist * (zrange / tickLength) * dist * zdir + zpos;
@@ -351,32 +351,58 @@ public class AxeBox implements IAxe {
             axeLabel = layout.getZAxeLabel();
         }
 
-        if ((direction == AXE_X && layout.isXAxeLabelDisplayed()) || (direction == AXE_Y && layout.isYAxeLabelDisplayed()) || (direction == AXE_Z && layout.isZAxeLabelDisplayed())) {
+        drawAxisLabel(gl, glu, cam, direction, color, ticksTxtBounds, xlab, ylab, zlab, axeLabel);
+        drawAxisTicks(gl, glu, cam, direction, color, hal, val, tickLength, ticksTxtBounds, xpos, ypos, zpos, xdir, ydir, zdir, getAxisTicks(direction));
+        return ticksTxtBounds;
+    }
+
+    public void drawAxisLabel(GL gl, GLU glu, Camera cam, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
+        if (isXDisplayed(direction) || isYDisplayed(direction) || isZDisplayed(direction)) {
             Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
             BoundingBox3d labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
             if (labelBounds != null)
                 ticksTxtBounds.add(labelBounds);
         }
+    }
 
-        // Retrieve the selected tick positions
+    public boolean isZDisplayed(int direction) {
+        return isZ(direction) && layout.isZAxeLabelDisplayed();
+    }
+
+    public boolean isYDisplayed(int direction) {
+        return isY(direction) && layout.isYAxeLabelDisplayed();
+    }
+
+    public boolean isXDisplayed(int direction) {
+        return isX(direction) && layout.isXAxeLabelDisplayed();
+    }
+
+    public boolean isZ(int direction) {
+        return direction == AXE_Z;
+    }
+
+    public boolean isY(int direction) {
+        return direction == AXE_Y;
+    }
+
+    public boolean isX(int direction) {
+        return direction == AXE_X;
+    }
+
+    public double[] getAxisTicks(int direction) {
         double ticks[];
-        if (direction == AXE_X)
+        if (isX(direction))
             ticks = layout.getXTicks();
-        else if (direction == AXE_Y)
+        else if (isY(direction))
             ticks = layout.getYTicks();
         else
             // (axis==AXE_Z)
             ticks = layout.getZTicks();
-
-        // Draw the ticks, labels, and dotted lines iteratively
-        drawAxisTicks(gl, glu, cam, direction, color, hal, val, tickLength, ticksTxtBounds, xpos, ypos, zpos, xdir, ydir, zdir, ticks);
-        return ticksTxtBounds;
+        return ticks;
     }
 
     public void drawAxisTicks(GL gl, GLU glu, Camera cam, int direction, Color color, Halign hal, Valign val, float tickLength, BoundingBox3d ticksTxtBounds, double xpos,
             double ypos, double zpos, float xdir, float ydir, float zdir, double[] ticks) {
-        Halign hAlign;
-        Valign vAlign;
         double xlab;
         double ylab;
         double zlab;
@@ -385,13 +411,13 @@ public class AxeBox implements IAxe {
         for (int t = 0; t < ticks.length; t++) {
             // Shift the tick vector along the selected axis
             // and set the tick length
-            if (direction == AXE_X) {
+            if (isX(direction)) {
                 xpos = ticks[t];
                 xlab = xpos;
                 ylab = (yrange / tickLength) * ydir + ypos;
                 zlab = (zrange / tickLength) * zdir + zpos;
                 tickLabel = layout.getXTickRenderer().format(xpos);
-            } else if (direction == AXE_Y) {
+            } else if (isY(direction)) {
                 ypos = ticks[t];
                 xlab = (xrange / tickLength) * xdir + xpos;
                 ylab = ypos;
@@ -415,27 +441,27 @@ public class AxeBox implements IAxe {
             }
 
             // Select the alignement of the tick label
-            hAlign = layoutHorizontal(cam, hal, tickPosition);
-            vAlign = layoutVertical(direction, val, zdir);
+            Halign hAlign = layoutHorizontal(direction, cam, hal, tickPosition);
+            Valign vAlign = layoutVertical(direction, val, zdir);
 
             // Draw the text label of the current tick
-            drawTickNumericLabel(gl, glu, cam, color, hAlign, vAlign, ticksTxtBounds, tickLabel, tickPosition);
+            drawAxisTickNumericLabel(gl, glu, direction, cam, color, hAlign, vAlign, ticksTxtBounds, tickLabel, tickPosition);
         }
     }
 
-    public void drawTickNumericLabel(GL gl, GLU glu, Camera cam, Color color, Halign hAlign, Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
-        //doTransform(gl);
+    public void drawAxisTickNumericLabel(GL gl, GLU glu, int direction, Camera cam, Color color, Halign hAlign, Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel,
+            Coord3d tickPosition) {
+        // doTransform(gl);
         if (gl.isGL2()) {
             gl.getGL2().glLoadIdentity();
             gl.getGL2().glScalef(scale.x, scale.y, scale.z);
-            //gl.getGL2().glRotatef(90, 1, 0, 1);
+            // gl.getGL2().glRotatef(90, 1, 0, 1);
         } else {
             GLES2CompatUtils.glLoadIdentity();
-            //GLES2CompatUtils.glRotatef((float)Math.PI/2, 1, 0, 1);
+            // GLES2CompatUtils.glRotatef((float)Math.PI/2, 1, 0, 1);
             GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
         }
 
-        
         BoundingBox3d tickBounds = txt.drawText(gl, glu, cam, tickLabel, tickPosition, hAlign, vAlign, color);
         if (tickBounds != null)
             ticksTxtBounds.add(tickBounds);
@@ -444,7 +470,7 @@ public class AxeBox implements IAxe {
     public Valign layoutVertical(int direction, Valign val, float zdir) {
         Valign vAlign;
         if (val == null) {
-            if (direction == AXE_Z)
+            if (isZ(direction))
                 vAlign = Valign.CENTER;
             else {
                 if (zdir > 0)
@@ -457,7 +483,7 @@ public class AxeBox implements IAxe {
         return vAlign;
     }
 
-    public Halign layoutHorizontal(Camera cam, Halign hal, Coord3d tickPosition) {
+    public Halign layoutHorizontal(int direction, Camera cam, Halign hal, Coord3d tickPosition) {
         Halign hAlign;
         if (hal == null)
             hAlign = cam.side(tickPosition) ? Halign.LEFT : Halign.RIGHT;

@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.text.renderers;
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -51,63 +52,39 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
      */
     @Override
     public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
-        if (gl.isGL2()) {
-            gl.getGL2().glColor3f(color.r, color.g, color.b);
-        } else {
-            GLES2CompatUtils.glColor3f(color.r, color.g, color.b);
-        }
-
-        if (cam == null)
-            return null;
-
-        Coord3d posScreen = cam.modelToScreen(gl, glu, position);
-
-        // System.out.println(posScreen);
+        color(gl, color);
 
         // compute a corrected position according to layout
+        Coord3d posScreen = cam.modelToScreen(gl, glu, position);
         float strlen = glut.glutBitmapLength(font, text);
-        float x = 0.0f;
-        float y = 0.0f;
-
-        if (halign == Halign.RIGHT)
-            x = posScreen.x;
-        else if (halign == Halign.CENTER)
-            x = posScreen.x - strlen / 2;
-        else if (halign == Halign.LEFT)
-            x = posScreen.x - strlen;
-
-        if (valign == Valign.TOP)
-            y = posScreen.y;
-        else if (valign == Valign.GROUND)
-            y = posScreen.y;
-        else if (valign == Valign.CENTER)
-            y = posScreen.y - fontHeight / 2;
-        else if (valign == Valign.BOTTOM)
-            y = posScreen.y - fontHeight;
-
+        float x = computeXWithAlign(halign, posScreen, strlen, 0.0f);
+        float y = computeYWithAlign(valign, posScreen, 0.0f);
         Coord3d posScreenShifted = new Coord3d(x + screenOffset.x, y + screenOffset.y, posScreen.z);
+        
         Coord3d posReal;
-
         try {
             posReal = cam.screenToModel(gl, glu, posScreenShifted);
         } catch (RuntimeException e) { 
             // TODO: solve this bug due to a Camera.PERSPECTIVE mode.
-            System.err.println("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
+            Logger.getLogger(TextBitmapRenderer.class).error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
             return new BoundingBox3d();
         }
 
         // Draws actual string
+        glRasterPos(gl, sceneOffset, posReal);
+        glut.glutBitmapString(font, text);
+        return computeTextBounds(gl, glu, cam, posScreenShifted, strlen);
+    }
+
+    public void glRasterPos(GL gl, Coord3d sceneOffset, Coord3d posReal) {
         if (gl.isGL2()) {
             gl.getGL2().glRasterPos3f(posReal.x + sceneOffset.x, posReal.y + sceneOffset.y, posReal.z + sceneOffset.z);
         } else {
             GLES2CompatUtils.glRasterPos3f(posReal.x + sceneOffset.x, posReal.y + sceneOffset.y, posReal.z + sceneOffset.z);
         }
+    }
 
-        //gl.getGL2().glRotatef(90, 0, 0, 1);
-        
-        glut.glutBitmapString(font, text);
-
-        // Compute bounds of text
+    public BoundingBox3d computeTextBounds(GL gl, GLU glu, Camera cam, Coord3d posScreenShifted, float strlen) {
         Coord3d botLeft = new Coord3d();
         Coord3d topRight = new Coord3d();
         botLeft.x = posScreenShifted.x;
@@ -123,7 +100,37 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         return txtBounds;
     }
 
-    /********************************************************************/
+    public void color(GL gl, Color color) {
+        if (gl.isGL2()) {
+            gl.getGL2().glColor3f(color.r, color.g, color.b);
+        } else {
+            GLES2CompatUtils.glColor3f(color.r, color.g, color.b);
+        }
+    }
+
+    public float computeYWithAlign(Valign valign, Coord3d posScreen, float y) {
+        if (valign == Valign.TOP)
+            y = posScreen.y;
+        else if (valign == Valign.GROUND)
+            y = posScreen.y;
+        else if (valign == Valign.CENTER)
+            y = posScreen.y - fontHeight / 2;
+        else if (valign == Valign.BOTTOM)
+            y = posScreen.y - fontHeight;
+        return y;
+    }
+
+    public float computeXWithAlign(Halign halign, Coord3d posScreen, float strlen, float x) {
+        if (halign == Halign.RIGHT)
+            x = posScreen.x;
+        else if (halign == Halign.CENTER)
+            x = posScreen.x - strlen / 2;
+        else if (halign == Halign.LEFT)
+            x = posScreen.x - strlen;
+        return x;
+    }
+
+    /* */
 
     protected static GLUT glut = new GLUT();
     protected int fontHeight;
