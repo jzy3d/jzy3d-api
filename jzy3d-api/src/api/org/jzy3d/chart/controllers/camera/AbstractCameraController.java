@@ -31,7 +31,7 @@ public abstract class AbstractCameraController extends AbstractController implem
     
 	protected void rotate(final Coord2d move, boolean updateView){
 		for(Chart c: targets)
-			c.getView().rotate(move, DEFAULT_UPDATE_VIEW);
+			c.getView().rotate(move, updateView);
 		fireControllerEvent(ControllerType.ROTATE, move);
 	}
 	

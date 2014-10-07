@@ -113,8 +113,7 @@ public class AWTView extends ChartView {
      * drawable is current, and after the OpenGL2 scene has been rendered.
      */
     public void renderOverlay(GL gl, ViewportConfiguration viewport) {
-        if (!hasOverlayStuffs())
-            return;
+        
         if (gl.isGL2()) {
             gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // TODO:
                                                                            // don't
@@ -126,7 +125,8 @@ public class AWTView extends ChartView {
             // Overlay!!!????
         }
         gl.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
-
+        if (!hasOverlayStuffs())
+            return;
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
             Graphics2D g2d = null;
             try {
