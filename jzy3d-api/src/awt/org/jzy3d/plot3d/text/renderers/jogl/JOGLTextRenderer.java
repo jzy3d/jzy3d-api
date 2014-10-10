@@ -39,8 +39,9 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
 	
 	@Override
 	public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
-		renderer.begin3DRendering();
-		
+        //gl.getGL2().glPushMatrix();
+
+        renderer.begin3DRendering();
 		if(LAYOUT){ // work in progress
 			Rectangle2D d = style.getBounds(s, font, renderer.getFontRenderContext());
 			//System.out.println(d);
@@ -54,19 +55,21 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
 			//System.out.println("left3d=" + left2d);
 			System.out.println("right3d=" + right3d);
 			System.out.println("offset3d=" + offset3d);*/
-			renderer.draw3D(s, real.x, real.y, real.z, 0.005f);
+			renderer.draw3D(s, real.x, real.y, real.z, 1);//0.005f);
 		}
 		else{
 			Coord3d real = position.add(sceneOffset);
-			renderer.draw3D(s, real.x, real.y, real.z, 0.005f);
+			renderer.draw3D(s, real.x, real.y, real.z, 1);//0.005f);
 		}
 		renderer.flush();
 		renderer.end3DRendering();
 		
+		//gl.getGL2().glPopMatrix();
+		
 		return null;
 	}
 	
-	protected boolean LAYOUT  = false;	
+	protected boolean LAYOUT  = true;	
 	
 	protected Font font;
 	protected TextRenderer.RenderDelegate style;
