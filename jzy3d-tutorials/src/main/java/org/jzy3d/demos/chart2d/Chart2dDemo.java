@@ -25,10 +25,9 @@ import org.jzy3d.plot3d.primitives.axes.layout.renderers.PitchTickRenderer;
 import org.jzy3d.ui.LookAndFeel;
 
 /**
- * Showing a pair of 2d charts simulating 
+ * Showing a pair of 2d charts to represent pitch and amplitude variation of an audio signal
  * 
- * @author martin
- *
+ * @author Martin Pernollet
  */
 public class Chart2dDemo {
     public static float duration = 15f;
