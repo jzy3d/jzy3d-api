@@ -1,0 +1,140 @@
+package org.jzy3d.demos.chart2d;
+
+import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+import net.miginfocom.swing.MigLayout;
+
+import org.jzy3d.chart.Chart;
+import org.jzy3d.chart2d.Chart2d;
+import org.jzy3d.chart2d.primitives.Serie2d;
+import org.jzy3d.colors.Color;
+import org.jzy3d.plot3d.primitives.SynchronizedLineStrip;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.providers.PitchTickProvider;
+import org.jzy3d.plot3d.primitives.axes.layout.renderers.PitchTickRenderer;
+import org.jzy3d.ui.LookAndFeel;
+
+/**
+ * Showing a pair of 2d charts simulating 
+ * 
+ * @author martin
+ *
+ */
+public class Chart2dDemo {
+    public static float duration = 15f;
+    public static int maxfreq = 880;
+    public static int nOctave = 5;
+    
+    public static void main(String[] args) throws Exception {
+        PitchAmpliControlCharts log = new PitchAmpliControlCharts(duration, maxfreq, nOctave);
+        new TimeChartWindow(log.getCharts());
+        
+        start();
+        
+        while(elapsed()<duration){
+            // Random audio info
+            double pitch = Math.random() * maxfreq;
+            double ampli = Math.random();
+            
+            // Add to time series
+            log.seriePitch.add(elapsed(), pitch);
+            log.serieAmpli.add(elapsed(), ampli);
+            
+            // Wait a bit
+            Thread.sleep(50);
+        }
+    }
+    
+    /** Hold 2 charts, 2 time series, and 2 drawable lines*/
+    public static class PitchAmpliControlCharts  {
+        public Chart2d pitchChart;
+        public Chart2d ampliChart;
+        public Serie2d seriePitch;
+        public Serie2d serieAmpli;
+        public SynchronizedLineStrip pitchLineStrip;
+        public SynchronizedLineStrip amplitudeLineStrip;
+
+        public PitchAmpliControlCharts(float timeMax, int freqMax, int nOctave) {
+            pitchChart = new Chart2d();
+            pitchChart.asTimeChart(timeMax, 0, freqMax, "Time", "Frequency");
+            
+            IAxeLayout axe = pitchChart.getAxeLayout();
+            axe.setYTickProvider(new PitchTickProvider(nOctave));
+            axe.setYTickRenderer(new PitchTickRenderer());
+            
+            seriePitch = pitchChart.getSerie("frequency");
+            seriePitch.setColor(Color.BLUE);
+            pitchLineStrip = (SynchronizedLineStrip) seriePitch.getDrawable();
+
+            ampliChart = new Chart2d();
+            ampliChart.asTimeChart(timeMax, 0, 1f, "Time", "Amplitude");
+            serieAmpli = ampliChart.getSerie("amplitude");
+            serieAmpli.setColor(Color.RED);
+            amplitudeLineStrip = (SynchronizedLineStrip) serieAmpli.getDrawable();
+        }
+
+        public List<Chart> getCharts() {
+            List<Chart> charts = new ArrayList<Chart>();
+            charts.add(pitchChart);
+            charts.add(ampliChart);
+            return charts;
+        }
+    }
+        
+    /** A frame to show a list of charts*/
+    public static class TimeChartWindow extends JFrame {
+        private static final long serialVersionUID = 7519209038396190502L;
+        public TimeChartWindow(List<Chart> charts) throws IOException {
+            LookAndFeel.apply();
+            String lines = "[300px]";
+            String columns = "[500px,grow]";
+            setLayout(new MigLayout("", columns, lines));
+            int k=0;
+            for(Chart c: charts){
+                addChart(c, k++);            
+            }
+            windowExitListener();
+            this.pack();
+            show();
+            setVisible(true);
+        }
+
+        public void addChart(Chart chart, int id){
+            JPanel chartPanel = new JPanel(new BorderLayout());
+            Border b = BorderFactory.createLineBorder(java.awt.Color.black);
+            chartPanel.setBorder(b);
+            chartPanel.add((java.awt.Component) chart.getCanvas(), BorderLayout.CENTER);
+            add(chartPanel, "cell 0 "+id+", grow");
+        }
+        
+        public void windowExitListener() {
+            addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    TimeChartWindow.this.dispose();
+                    System.exit(0);
+                }
+            });
+        }
+    }
+    
+    /** Simple timer */
+    protected static long start;
+
+    public static void start() {
+        start = System.nanoTime();
+    }
+
+    public static double elapsed() {
+        return (double) (System.nanoTime() - start) / 1000000000.0;
+    }
+}
