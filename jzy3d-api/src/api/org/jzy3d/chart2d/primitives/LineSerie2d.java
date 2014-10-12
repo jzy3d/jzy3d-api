@@ -7,10 +7,10 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.SynchronizedLineStrip;
+import org.jzy3d.plot3d.primitives.ConcurrentLineStrip;
 
 public class LineSerie2d implements Serie2d {
-    protected SynchronizedLineStrip line = new SynchronizedLineStrip();
+    protected ConcurrentLineStrip line = new ConcurrentLineStrip();
 
     protected String name;
     
@@ -56,7 +56,7 @@ public class LineSerie2d implements Serie2d {
     }
 
     @Override
-    public SynchronizedLineStrip getDrawable() {
+    public ConcurrentLineStrip getDrawable() {
         return line;
     }
 }

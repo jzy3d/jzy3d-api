@@ -9,6 +9,7 @@ import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.chart2d.primitives.LineSerie2d;
+import org.jzy3d.chart2d.primitives.ScatterSerie2d;
 import org.jzy3d.chart2d.primitives.Serie2d;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
@@ -49,16 +50,26 @@ public class Chart2d extends AWTChart{
         view.setBoundManual(new BoundingBox3d(0, timeMax, ymin, ymax, -1, 1));
     }
     
-    public Serie2d getSerie(String name){
-        Serie2d s = null;
+    public Serie2d getSerie(String name, Serie2d.Type type){
+        Serie2d serie = null;
         if(!series.keySet().contains(name)){
-            s = new LineSerie2d(name);
-            addDrawable(s.getDrawable());
+            serie = newSerie(name, type, serie);
+            addDrawable(serie.getDrawable());
         }
         else{
-            s = series.get(name);
+            serie = series.get(name);
         }
-        return s;
+        return serie;
+    }
+
+    public Serie2d newSerie(String name, Serie2d.Type type, Serie2d serie) {
+        if(Serie2d.Type.LINE.equals(type))
+            serie = new LineSerie2d(name);
+        else if(Serie2d.Type.SCATTER.equals(type))
+            serie = new ScatterSerie2d(name);
+        else
+            throw new IllegalArgumentException("Unsupported serie type " + type);
+        return serie;
     }
     
     /* */

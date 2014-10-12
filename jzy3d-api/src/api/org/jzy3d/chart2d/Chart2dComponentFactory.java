@@ -11,6 +11,9 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class Chart2dComponentFactory extends AWTChartComponentFactory{
+    public Chart2dComponentFactory(){
+        System.out.println("init factory");
+    }
     @Override
     public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit){
         return new Chart2d(factory, quality, toolkit);
