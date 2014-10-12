@@ -19,16 +19,18 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jzy3d.chart.Chart;
 
-public class MultiChartPanel extends JPanel{
+public class MultiChartPanel extends JPanel {
     private static final long serialVersionUID = 7519209038396190502L;
 
-    //protected CameraThreadController currentThreadController;
-    
+    // protected CameraThreadController currentThreadController;
+
     protected JTextField tf;
     protected JTextArea textArea;
     protected JScrollPane textPane;
-    
+
     public static String WT = "awt";
+
+    private int nComponent = 0;
 
     public MultiChartPanel(List<Chart> charts) throws IOException {
         LookAndFeel.apply();
@@ -37,39 +39,41 @@ public class MultiChartPanel extends JPanel{
         String lines = "[300px]";
         String columns = "[500px,grow]";
         setLayout(new MigLayout("", columns, lines));
-        //setBounds(0, 0, 700, 600);
-        //demoList.setMinimumSize(new Dimension(200,200));
-        //textPane.setMinimumSize(new Dimension(700, 50));
-        int k=0;
-        for(Chart c: charts){
-            addChart(c, k++);            
+        // setBounds(0, 0, 700, 600);
+        // demoList.setMinimumSize(new Dimension(200,200));
+        // textPane.setMinimumSize(new Dimension(700, 50));
+        for (Chart c : charts) {
+            addChart(c);
         }
     }
-    
-    public JPanel addChart(Chart chart, int id){
+
+    public JPanel addChart(Chart chart) {
+        return addPanel((java.awt.Component) chart.getCanvas());
+    }
+
+    public JPanel addPanel(java.awt.Component panel) {
         JPanel chartPanel = new JPanel(new BorderLayout());
         Border b = BorderFactory.createLineBorder(Color.black);
         chartPanel.setBorder(b);
-        chartPanel.add((java.awt.Component) chart.getCanvas(), BorderLayout.CENTER);
-        add(chartPanel, "cell 0 "+id+", grow");
+        chartPanel.add(panel, BorderLayout.CENTER);
+        add(chartPanel, "cell 0 " + nComponent++ + ", grow");
         return chartPanel;
     }
-    
-    public JFrame frame(){
+
+    public JFrame frame() {
         return frame(this);
     }
 
-    public static JFrame frame(JPanel panel){
+    public static JFrame frame(JPanel panel) {
         JFrame frame = new JFrame();
         windowExitListener(frame);
         frame.add(panel);
         frame.pack();
         frame.show();
-        frame.setVisible(true); 
+        frame.setVisible(true);
         return frame;
     }
 
-    
     public static void windowExitListener(final JFrame frame) {
         frame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
