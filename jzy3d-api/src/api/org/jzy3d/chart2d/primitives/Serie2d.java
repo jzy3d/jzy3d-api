@@ -17,4 +17,8 @@ public interface Serie2d {
     public Color getColor();
     
     public AbstractDrawable getDrawable();
+    
+    public enum Type{
+        LINE, SCATTER
+    }
 }

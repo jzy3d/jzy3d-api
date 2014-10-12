@@ -47,6 +47,11 @@
 			<version>4.11</version>
 			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay, i.e. tools to ease non regression tests for interactive features-->
 		</dependency>
+        <dependency>
+            <groupId>com.miglayout</groupId>
+            <artifactId>miglayout</artifactId>
+            <version>3.7.4</version>
+        </dependency>
 
     </dependencies>
 

@@ -103,7 +103,6 @@ public class AxeBox2d extends AxeBox {
             try {
                 posReal = cam.screenToModel(gl, glu, posScreenShifted);
             } catch (RuntimeException e) {
-                // TODO: solve this bug due to a Camera.PERSPECTIVE mode.
                 Logger.getLogger(TextBitmapRenderer.class).error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
                 return new BoundingBox3d();
             }

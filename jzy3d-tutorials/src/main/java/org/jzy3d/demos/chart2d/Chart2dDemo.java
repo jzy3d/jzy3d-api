@@ -18,7 +18,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart2d.Chart2d;
 import org.jzy3d.chart2d.primitives.Serie2d;
 import org.jzy3d.colors.Color;
-import org.jzy3d.plot3d.primitives.SynchronizedLineStrip;
+import org.jzy3d.plot3d.primitives.ConcurrentLineStrip;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.providers.PitchTickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.PitchTickRenderer;
@@ -60,8 +60,8 @@ public class Chart2dDemo {
         public Chart2d ampliChart;
         public Serie2d seriePitch;
         public Serie2d serieAmpli;
-        public SynchronizedLineStrip pitchLineStrip;
-        public SynchronizedLineStrip amplitudeLineStrip;
+        public ConcurrentLineStrip pitchLineStrip;
+        public ConcurrentLineStrip amplitudeLineStrip;
 
         public PitchAmpliControlCharts(float timeMax, int freqMax, int nOctave) {
             pitchChart = new Chart2d();
@@ -71,15 +71,15 @@ public class Chart2dDemo {
             axe.setYTickProvider(new PitchTickProvider(nOctave));
             axe.setYTickRenderer(new PitchTickRenderer());
             
-            seriePitch = pitchChart.getSerie("frequency");
+            seriePitch = pitchChart.getSerie("frequency", Serie2d.Type.LINE);
             seriePitch.setColor(Color.BLUE);
-            pitchLineStrip = (SynchronizedLineStrip) seriePitch.getDrawable();
+            pitchLineStrip = (ConcurrentLineStrip) seriePitch.getDrawable();
 
             ampliChart = new Chart2d();
             ampliChart.asTimeChart(timeMax, 0, 1f, "Time", "Amplitude");
-            serieAmpli = ampliChart.getSerie("amplitude");
+            serieAmpli = ampliChart.getSerie("amplitude", Serie2d.Type.LINE);
             serieAmpli.setColor(Color.RED);
-            amplitudeLineStrip = (SynchronizedLineStrip) serieAmpli.getDrawable();
+            amplitudeLineStrip = (ConcurrentLineStrip) serieAmpli.getDrawable();
         }
 
         public List<Chart> getCharts() {
