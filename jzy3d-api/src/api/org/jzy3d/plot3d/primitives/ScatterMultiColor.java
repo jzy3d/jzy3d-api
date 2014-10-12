@@ -20,137 +20,140 @@ import org.jzy3d.plot3d.transform.Transform;
  * @author Martin Pernollet
  * 
  */
-public class ScatterMultiColor extends AbstractDrawable implements
-		IMultiColorable {
-	public ScatterMultiColor(Coord3d[] coordinates, Color[] colors,
-			ColorMapper mapper) {
-		this(coordinates, colors, mapper, 1.0f);
-	}
+public class ScatterMultiColor extends AbstractDrawable implements IMultiColorable {
+    public ScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper) {
+        this(coordinates, colors, mapper, 1.0f);
+    }
 
-	public ScatterMultiColor(Coord3d[] coordinates, ColorMapper mapper) {
-		this(coordinates, null, mapper, 1.0f);
-	}
+    public ScatterMultiColor(Coord3d[] coordinates, ColorMapper mapper) {
+        this(coordinates, null, mapper, 1.0f);
+    }
 
-	public ScatterMultiColor(Coord3d[] coordinates, Color[] colors,
-			ColorMapper mapper, float width) {
-		bbox = new BoundingBox3d();
-		setData(coordinates);
-		setColors(colors);
-		setWidth(width);
-		setColorMapper(mapper);
-	}
+    public ScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper, float width) {
+        bbox = new BoundingBox3d();
+        setData(coordinates);
+        setColors(colors);
+        setWidth(width);
+        setColorMapper(mapper);
+    }
 
-	public void clear() {
-		coordinates = null;
-		bbox.reset();
-	}
+    public void clear() {
+        coordinates = null;
+        bbox.reset();
+    }
 
-	/* */
+    /* */
 
-	public void draw(GL gl, GLU glu, Camera cam) {
-		doTransform(gl, glu, cam);
+    public void draw(GL gl, GLU glu, Camera cam) {
+        doTransform(gl, glu, cam);
 
-		if (gl.isGL2()) {
-			gl.getGL2().glPointSize(width);
-			gl.getGL2().glBegin(GL2.GL_POINTS);
+        if (gl.isGL2()) {
+            drawGL2(gl);
+        } else {
+            drawGLES2();
+        }
 
-			if (coordinates != null) {
-				for (Coord3d coord : coordinates) {
-					Color color = mapper.getColor(coord); // TODO: should store
-															// result in the
-															// point color
-					gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-					gl.getGL2().glVertex3f(coord.x, coord.y, coord.z);
-				}
-			}
-			gl.getGL2().glEnd();
-		} else {
-			GLES2CompatUtils.glPointSize(width);
-			GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+        doDrawBounds(gl, glu, cam);
+    }
 
-			if (coordinates != null) {
-				for (Coord3d coord : coordinates) {
-					Color color = mapper.getColor(coord); // TODO: should store
-															// result in the
-															// point color
-					GLES2CompatUtils.glColor4f(color.r, color.g, color.b,
-							color.a);
-					GLES2CompatUtils.glVertex3f(coord.x, coord.y, coord.z);
-				}
-			}
-			GLES2CompatUtils.glEnd();
-		}
+    public void drawGLES2() {
+        GLES2CompatUtils.glPointSize(width);
+        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
 
-		doDrawBounds(gl, glu, cam);
-	}
+        if (coordinates != null) {
+            for (Coord3d coord : coordinates) {
+                Color color = mapper.getColor(coord); // TODO: should store
+                                                      // result in the
+                                                      // point color
+                GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
+                GLES2CompatUtils.glVertex3f(coord.x, coord.y, coord.z);
+            }
+        }
+        GLES2CompatUtils.glEnd();
+    }
 
-	@Override
-	public void applyGeometryTransform(Transform transform) {
-		for (Coord3d c : coordinates) {
-			c.set(transform.compute(c));
-		}
-		updateBounds();
-	}
+    public void drawGL2(GL gl) {
+        gl.getGL2().glPointSize(width);
+        gl.getGL2().glBegin(GL2.GL_POINTS);
 
-	@Override
-	public void updateBounds() {
-		bbox.reset();
-		for (Coord3d c : coordinates)
-			bbox.add(c);
-	}
+        if (coordinates != null) {
+            for (Coord3d coord : coordinates) {
+                Color color = mapper.getColor(coord); // TODO: should store
+                                                      // result in the
+                                                      // point color
+                gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
+                gl.getGL2().glVertex3f(coord.x, coord.y, coord.z);
+            }
+        }
+        gl.getGL2().glEnd();
+    }
 
-	/* */
+    @Override
+    public void applyGeometryTransform(Transform transform) {
+        for (Coord3d c : coordinates) {
+            c.set(transform.compute(c));
+        }
+        updateBounds();
+    }
 
-	/**
-	 * Set the coordinates of the point.
-	 * 
-	 * @param xyz
-	 *            point's coordinates
-	 */
-	public void setData(Coord3d[] coordinates) {
-		this.coordinates = coordinates;
+    @Override
+    public void updateBounds() {
+        bbox.reset();
+        for (Coord3d c : coordinates)
+            bbox.add(c);
+    }
 
-		bbox.reset();
-		for (Coord3d c : coordinates)
-			bbox.add(c);
-	}
+    /* */
 
-	public Coord3d[] getData() {
-		return coordinates;
-	}
+    /**
+     * Set the coordinates of the point.
+     * 
+     * @param xyz
+     *            point's coordinates
+     */
+    public void setData(Coord3d[] coordinates) {
+        this.coordinates = coordinates;
 
-	public void setColors(Color[] colors) {
-		this.colors = colors;
+        bbox.reset();
+        for (Coord3d c : coordinates)
+            bbox.add(c);
+    }
 
-		fireDrawableChanged(new DrawableChangedEvent(this,
-				DrawableChangedEvent.FIELD_COLOR));
-	}
+    public Coord3d[] getData() {
+        return coordinates;
+    }
 
-	@Override
-	public ColorMapper getColorMapper() {
-		return mapper;
-	}
+    public void setColors(Color[] colors) {
+        this.colors = colors;
 
-	@Override
-	public void setColorMapper(ColorMapper mapper) {
-		this.mapper = mapper;
-	}
+        fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
+    }
 
-	/**
-	 * Set the width of the point.
-	 * 
-	 * @param width
-	 *            point's width
-	 */
-	public void setWidth(float width) {
-		this.width = width;
-	}
+    @Override
+    public ColorMapper getColorMapper() {
+        return mapper;
+    }
 
-	/* */
+    @Override
+    public void setColorMapper(ColorMapper mapper) {
+        this.mapper = mapper;
+    }
 
-	protected Coord3d[] coordinates;
-	protected Color[] colors;
-	protected float width;
-	protected ColorMapper mapper;
+    /**
+     * Set the width of the point.
+     * 
+     * @param width
+     *            point's width
+     */
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    /* */
+
+    protected Coord3d[] coordinates;
+    protected Color[] colors;
+    protected float width;
+    protected ColorMapper mapper;
 
 }
