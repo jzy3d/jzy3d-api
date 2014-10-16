@@ -7,6 +7,7 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalTessellator;
 import org.jzy3d.plot3d.builder.concrete.RingTessellator;
@@ -16,7 +17,11 @@ import org.jzy3d.plot3d.primitives.Shape;
 
 
 public class Builder {
-	public static Shape buildOrthonormal(OrthonormalGrid grid, Mapper mapper) {
+    public static Shape buildOrthonormal(Mapper mapper, Range range, int steps) {
+        return buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    }
+    
+    public static Shape buildOrthonormal(OrthonormalGrid grid, Mapper mapper) {
 		OrthonormalTessellator tesselator = new OrthonormalTessellator();
 		return (Shape) tesselator.build(grid.apply(mapper));
 	}
