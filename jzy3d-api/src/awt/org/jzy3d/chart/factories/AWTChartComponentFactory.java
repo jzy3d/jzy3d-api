@@ -76,25 +76,30 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     public View newView(Scene scene, ICanvas canvas, Quality quality) {
         return new AWTView(this, scene, canvas, quality);
     }
-
+    
+    
+    /** bypass reflection used in super implementation */
     @Override
-    public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        Object canvas = chart.getCanvas();
+    protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
+        return new FrameSwing(chart, bounds, title);
+    }
 
-        // Use reflexion to access AWT dependant classes
-        // They will not be available for Android
+    /** bypass reflection used in super implementation */
+    @Override
+    protected IFrame newFrameAWT(Chart chart, Rectangle bounds, String title, String message) {
+        return new FrameAWT(chart, bounds, title, message);
+    }
 
-        if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasAWT"))
-            return newFrameAWT(chart, bounds, title, null); // FrameSWT works as
-                                                            // well
-        else if (canvas instanceof CanvasNewtAwt)
-            return newFrameAWT(chart, bounds, title, "[Newt]"); // FrameSWT
-                                                                // works as
-                                                                // well
-        else if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasSwing"))
-            return newFrameSwing(chart, bounds, title);
-        else
-            throw new RuntimeException("No default frame could be found for the given Chart canvas: " + canvas.getClass());
+    /** bypass reflection used in super implementation */
+    @Override
+    protected ICanvas newCanvasSwing(ChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
+        return new CanvasSwing(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
+    }
+
+    /** bypass reflection used in super implementation */
+    @Override
+    protected ICanvas newCanvasAWT(ChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
+        return new CanvasAWT(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
     }
 
     @Override
@@ -118,37 +123,7 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         }
     }
 
-    /* UTILS */
-    
-    protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
-        /*try {
-            Class frameClass = Class.forName("org.jzy3d.bridge.swing.FrameSwing");
-            IFrame frame = (IFrame) frameClass.newInstance();
-            frame.initialize(chart, bounds, title);
-            return frame;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("newFrameSwing", e);
-        }*/
-        return new FrameSwing(chart, bounds, title);
-    }
-
-    protected IFrame newFrameAWT(Chart chart, Rectangle bounds, String title, String message) {
-        /*try {
-            Class frameClass = Class.forName("org.jzy3d.bridge.awt.FrameAWT");
-            IFrame frame = (IFrame) frameClass.newInstance();
-            if (message != null) {
-                frame.initialize(chart, bounds, title, message);
-            } else {
-                frame.initialize(chart, bounds, title);
-            }
-            return frame;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("newFrameSwing", e);
-        }*/
-        return new FrameAWT(chart, bounds, title, message);
-    }
+    /* UTILS */   
 
     protected Toolkit getToolkit(String windowingToolkit) {
         if (windowingToolkit.startsWith("offscreen")) {
@@ -170,44 +145,5 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
             }
         }
         return null;
-    }
-
-    protected ICanvas newCanvasSwing(ChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        /*Class canvasSwingDefinition;
-        Class[] constrArgsClass = new Class[] { IChartComponentFactory.class, Scene.class, Quality.class, GLCapabilitiesImmutable.class, boolean.class, boolean.class };
-        Object[] constrArgs = new Object[] { chartComponentFactory, scene, quality, capabilities, traceGL, debugGL };
-        Constructor constructor;
-        ICanvas canvas;
-
-        try {
-            canvasSwingDefinition = Class.forName("org.jzy3d.plot3d.rendering.canvas.CanvasSwing");
-            constructor = canvasSwingDefinition.getConstructor(constrArgsClass);
-
-            return (ICanvas) constructor.newInstance(constrArgs);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("newCanvasSwing", e);
-        }*/
-        return new CanvasSwing(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
-
-    }
-
-    protected ICanvas newCanvasAWT(ChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        /*Class canvasAWTDefinition;
-        Class[] constrArgsClass = new Class[] { IChartComponentFactory.class, Scene.class, Quality.class, GLCapabilitiesImmutable.class, boolean.class, boolean.class };
-        Object[] constrArgs = new Object[] { chartComponentFactory, scene, quality, capabilities, traceGL, debugGL };
-        Constructor constructor;
-        ICanvas canvas;
-
-        try {
-            canvasAWTDefinition = Class.forName("org.jzy3d.plot3d.rendering.canvas.CanvasAWT");
-            constructor = canvasAWTDefinition.getConstructor(constrArgsClass);
-
-            return (ICanvas) constructor.newInstance(constrArgs);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("newCanvasAWT", e);
-        }*/
-        return new CanvasAWT(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
-    }
+    }    
 }
