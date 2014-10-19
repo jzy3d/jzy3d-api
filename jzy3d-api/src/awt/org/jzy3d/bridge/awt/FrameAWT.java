@@ -28,7 +28,12 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
 	
 	public void initialize(Chart chart, Rectangle bounds, String title, String message) {
 		this.chart = chart;
-		this.setTitle(title + message);
+		if(message!=null){
+	        this.setTitle(title + message);		    
+		}
+		else{
+            this.setTitle(title);         
+        }
 		this.add((java.awt.Component) chart.getCanvas());
 		this.pack();
 		this.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
