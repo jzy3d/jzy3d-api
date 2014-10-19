@@ -36,6 +36,12 @@ public class ColorMapper implements IColorMappable{
 		this.max     = max;
 	}
 
+    public ColorMapper(IColorMap colormap, Range range){
+        this.colormap = colormap;
+        this.min     = range.getMin();
+        this.max     = range.getMax();
+    }
+
 	public ColorMapper(IColorMap colormap, double min, double max, Color factor){
 		this.colormap = colormap;
 		this.min     = min;
