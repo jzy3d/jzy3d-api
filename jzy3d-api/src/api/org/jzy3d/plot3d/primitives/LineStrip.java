@@ -170,6 +170,11 @@ public class LineStrip extends AbstractWireframeable {
     public void addAll(LineStrip strip) {
         addAll(strip.getPoints());
     }
+    
+    public void clear(){
+        points.clear();
+        updateBounds();
+    }
 
     public Point get(int p) {
         return points.get(p);

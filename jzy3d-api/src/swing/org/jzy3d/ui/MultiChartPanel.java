@@ -64,10 +64,8 @@ public class MultiChartPanel extends JPanel {
 
         String lines = lineInstruction();
         String columns = columnInstruction();
-        setLayout(new MigLayout("", columns, lines));
-        // setBounds(0, 0, 700, 600);
-        // demoList.setMinimumSize(new Dimension(200,200));
-        // textPane.setMinimumSize(new Dimension(700, 50));
+        setLayout(new MigLayout(insets0(), columns, lines));
+
         for (Chart c : charts) {
             addChart(c);
         }
@@ -105,7 +103,7 @@ public class MultiChartPanel extends JPanel {
         }
 
         String columns = columnInstruction();
-        setLayout(new MigLayout("", columns, lines));
+        setLayout(new MigLayout(insets0(), columns, lines));
         // setBounds(0, 0, 700, 600);
         // demoList.setMinimumSize(new Dimension(200,200));
         // textPane.setMinimumSize(new Dimension(700, 50));
@@ -128,6 +126,15 @@ public class MultiChartPanel extends JPanel {
             }
         }
     }
+    
+    public String insetsDefault() {
+        return "";
+    }
+
+    public String insets0() {
+        return "insets 0 0 0 0";
+    }
+
 
     public String lineInstruction() {
         if (growLine) {
@@ -157,11 +164,11 @@ public class MultiChartPanel extends JPanel {
         if (vertical) {
             int ncol = 0;
             int nlin = nComponent++;
-            return addPanelAt(panel, ncol, nlin);
+            return addPanelAt(panel, nlin, ncol);
         } else {
             int nlin = 0;
             int ncol = nComponent++;
-            return addPanelAt(panel, ncol, nlin);
+            return addPanelAt(panel, nlin, ncol);
         }
     }
 

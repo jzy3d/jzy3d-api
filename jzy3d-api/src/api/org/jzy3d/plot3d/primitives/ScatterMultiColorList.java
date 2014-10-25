@@ -38,8 +38,8 @@ public class ScatterMultiColorList extends AbstractDrawable implements IMultiCol
     }
 
     public void clear() {
-        coordinates = null;
-        bbox.reset();
+        coordinates.clear();
+        updateBounds();
     }
 
     /* */
@@ -113,6 +113,8 @@ public class ScatterMultiColorList extends AbstractDrawable implements IMultiCol
         for (Coord3d c : coordinates)
             bbox.add(c);
     }
+    
+    
 
     public List<Coord3d> getData() {
         return coordinates;
