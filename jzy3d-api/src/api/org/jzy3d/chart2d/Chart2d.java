@@ -26,54 +26,57 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 // 
 // Interface de LineSerie fournie par Chart2d package, using x, y float args
 
-public class Chart2d extends AWTChart{
-    public Chart2d(){
-        this(new Chart2dComponentFactory(), Quality.Intermediate, Toolkit.newt.toString());
-        
+public class Chart2d extends AWTChart {
+    public Chart2d() {
+        this(Toolkit.newt);
+    }
+
+    public Chart2d(Toolkit toolkit) {
+        this(new Chart2dComponentFactory(), Quality.Intermediate, toolkit.toString());
+
         IAxeLayout axe = getAxeLayout();
         axe.setZAxeLabelDisplayed(false);
         axe.setTickLineDisplayed(false);
-        
+
         View view = getView();
         view.setViewPositionMode(ViewPositionMode.TOP);
         view.setSquared(true);
         view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
     }
 
-    public void asTimeChart(float timeMax, float ymin, float ymax, String xlabel, String ylabel){
+    public void asTimeChart(float timeMax, float ymin, float ymax, String xlabel, String ylabel) {
         IAxeLayout axe = getAxeLayout();
         axe.setYAxeLabel(ylabel);
-        axe.setXAxeLabel( xlabel );
-        axe.setXTickRenderer( new ElapsedTimeTickRenderer() );
+        axe.setXAxeLabel(xlabel);
+        axe.setXTickRenderer(new ElapsedTimeTickRenderer());
 
-        View view = getView();    
+        View view = getView();
         view.setBoundManual(new BoundingBox3d(0, timeMax, ymin, ymax, -1, 1));
     }
-    
-    public Serie2d getSerie(String name, Serie2d.Type type){
+
+    public Serie2d getSerie(String name, Serie2d.Type type) {
         Serie2d serie = null;
-        if(!series.keySet().contains(name)){
+        if (!series.keySet().contains(name)) {
             serie = newSerie(name, type, serie);
             addDrawable(serie.getDrawable());
-        }
-        else{
+        } else {
             serie = series.get(name);
         }
         return serie;
     }
 
     public Serie2d newSerie(String name, Serie2d.Type type, Serie2d serie) {
-        if(Serie2d.Type.LINE.equals(type))
+        if (Serie2d.Type.LINE.equals(type))
             serie = new LineSerie2d(name);
-        else if(Serie2d.Type.SCATTER.equals(type))
+        else if (Serie2d.Type.SCATTER.equals(type))
             serie = new ScatterSerie2d(name);
         else
             throw new IllegalArgumentException("Unsupported serie type " + type);
         return serie;
     }
-    
+
     /* */
-    
+
     public Chart2d(IChartComponentFactory factory, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
         super(factory, quality, windowingToolkit, capabilities);
     }
@@ -97,8 +100,8 @@ public class Chart2d extends AWTChart{
     public Chart2d(String windowingToolkit) {
         super(windowingToolkit);
     }
-    
+
     /* */
-    
-    protected Map<String,Serie2d> series = new HashMap<String,Serie2d>();
+
+    protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
 }

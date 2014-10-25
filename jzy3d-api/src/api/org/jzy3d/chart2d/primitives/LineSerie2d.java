@@ -59,5 +59,10 @@ public class LineSerie2d implements Serie2d {
     public ConcurrentLineStrip getDrawable() {
         return line;
     }
+
+    @Override
+    public void clear() {
+        line.clear();
+    }
 }
 
