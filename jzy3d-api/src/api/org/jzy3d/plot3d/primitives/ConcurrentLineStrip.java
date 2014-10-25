@@ -80,6 +80,13 @@ public class ConcurrentLineStrip extends LineStrip {
         bbox.add(point);
     }
 
+    public void clear() {
+        synchronized (points) {
+            points.clear();
+        }
+        updateBounds();
+    }
+
     public Point getLastPoint() {
         synchronized (points) {
             return super.getLastPoint();

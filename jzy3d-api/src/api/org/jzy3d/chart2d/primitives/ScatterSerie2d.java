@@ -93,5 +93,10 @@ public class ScatterSerie2d implements Serie2d {
     public AbstractDrawable getDrawable() {
         return scatter;
     }
+
+    @Override
+    public void clear() {
+        scatter.clear();
+    }
 }
 

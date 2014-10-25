@@ -92,4 +92,11 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
         }
     }
 
+    @Override
+    public void clear() {
+        synchronized (coordinates) {
+            coordinates.clear();
+        }
+        updateBounds();
+    }
 }
