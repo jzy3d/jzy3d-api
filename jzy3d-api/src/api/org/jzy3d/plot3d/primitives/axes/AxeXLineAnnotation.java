@@ -6,10 +6,10 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
-public class AxeXAnnotation implements AxeAnnotation {
+public class AxeXLineAnnotation implements AxeAnnotation {
     protected float value;
     protected Color color = Color.RED;
-    protected int width = 3;
+    protected float width = 3;
 
     @Override
     public void draw(GL gl, AxeBox axe) {
@@ -50,6 +50,22 @@ public class AxeXAnnotation implements AxeAnnotation {
 
     public synchronized void setValue(float value) {
         this.value = value;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
     }
 
 }
