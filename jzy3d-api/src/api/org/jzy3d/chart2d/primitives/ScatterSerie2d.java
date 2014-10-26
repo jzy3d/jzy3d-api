@@ -21,6 +21,27 @@ public class ScatterSerie2d implements Serie2d {
     }
 
     protected ScatterMultiColorList makeDrawable() {
+        ColorMapRedAndGreen g = colormap();
+        ColorMapper m = colormapper(g);
+        ScatterMultiColorList s = new ConcurrentScatterMultiColorList(m);
+        s.setWidth(3);
+        return s;
+    }
+
+    public ColorMapper colormapper(ColorMapRedAndGreen g) {
+        ColorMapper m = new ColorMapper(g, 0, 1){
+            public Color getColor(Coord3d coord){
+                Color out = colormap.getColor(this, coord.x, coord.z, coord.y);
+
+                if(factor!=null)
+                    out.mul(factor);
+                return out;
+            }
+        };
+        return m;
+    }
+
+    public ColorMapRedAndGreen colormap() {
         ColorMapRedAndGreen g = new ColorMapRedAndGreen(){
             public Color getColor(double x, double y, double z, double zMin, double zMax) {
                 double rel_value = processRelativeZValue(z, zMin, zMax);
@@ -37,19 +58,7 @@ public class ScatterSerie2d implements Serie2d {
             }
         };
         g.setDirection(false);
-        ColorMapper m = new ColorMapper(g, 0, 1){
-            public Color getColor(Coord3d coord){
-                Color out = colormap.getColor(this, coord.x, coord.z, coord.y);
-
-                if(factor!=null)
-                    out.mul(factor);
-                return out;
-            }
-        };
-        
-        ScatterMultiColorList s = new ConcurrentScatterMultiColorList(m);
-        s.setWidth(3);
-        return s;
+        return g;
     }
 
     @Override
@@ -66,6 +75,12 @@ public class ScatterSerie2d implements Serie2d {
     public void add(Coord2d c) {
         scatter.add(new Coord3d(c.x, c.y, 0));
     }
+    
+    @Override
+    public void add(Coord2d c, Color color) {
+        scatter.add(new Coord3d(c.x, c.y, 0));
+    }
+
 
     @Override
     public void add(List<Coord2d> c) {
@@ -97,6 +112,11 @@ public class ScatterSerie2d implements Serie2d {
     @Override
     public void clear() {
         scatter.clear();
+    }
+    
+    @Override
+    public void setWidth(int width) {
+        scatter.setWidth(width);   
     }
 }
 
