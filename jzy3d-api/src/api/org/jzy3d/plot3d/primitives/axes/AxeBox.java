@@ -1,5 +1,8 @@
 package org.jzy3d.plot3d.primitives.axes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
@@ -38,6 +41,14 @@ public class AxeBox implements IAxe {
         wholeBounds = new BoundingBox3d();
         init();
     }
+    
+    public List<AxeAnnotation> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(List<AxeAnnotation> annotations) {
+        this.annotations = annotations;
+    }
 
     /**
      * Draws the AxeBox. The camera is used to determine which axis is closest
@@ -55,10 +66,16 @@ public class AxeBox implements IAxe {
         doTransform(gl);
         drawGrid(gl);
 
+        for(AxeAnnotation a: annotations){
+            a.draw(gl, this);
+        }
+
         doTransform(gl);
         drawTicksAndLabels(gl, glu, camera);
 
+
         cullingDisable(gl);
+        
     }
 
     /** reset to identity and apply scaling */
@@ -1071,4 +1088,6 @@ public class AxeBox implements IAxe {
     protected static final int AXE_X = 0;
     protected static final int AXE_Y = 1;
     protected static final int AXE_Z = 2;
+    
+    protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
 }
