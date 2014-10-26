@@ -183,9 +183,9 @@ public class View {
 		if (range <= 0)
 			return;
 
-		double center = (current.getMax() + current.getMin()) / 2;
-		double zmin = center + (current.getMin() - center) * (factor);
-		double zmax = center + (current.getMax() - center) * (factor);
+		float center = (current.getMax() + current.getMin()) / 2;
+		float zmin = center + (current.getMin() - center) * (factor);
+		float zmax = center + (current.getMax() - center) * (factor);
 
 		// set min/max according to bounds
 		org.jzy3d.maths.Scale scale = null;
@@ -210,9 +210,9 @@ public class View {
 		double range = getBounds().getXmax() - getBounds().getXmin();
 		if (range <= 0)
 			return;
-		double center = (getBounds().getXmax() + getBounds().getXmin()) / 2;
-		double min = center + (getBounds().getXmin() - center) * factor;
-		double max = center + (getBounds().getXmax() - center) * factor;
+		float center = (getBounds().getXmax() + getBounds().getXmin()) / 2;
+		float min = center + (getBounds().getXmin() - center) * factor;
+		float max = center + (getBounds().getXmax() - center) * factor;
 
 		org.jzy3d.maths.Scale scale = null;
 		if (min < max)
@@ -240,9 +240,9 @@ public class View {
 		double range = getBounds().getYmax() - getBounds().getYmin();
 		if (range <= 0)
 			return;
-		double center = (getBounds().getYmax() + getBounds().getYmin()) / 2;
-		double min = center + (getBounds().getYmin() - center) * factor;
-		double max = center + (getBounds().getYmax() - center) * factor;
+		float center = (getBounds().getYmax() + getBounds().getYmin()) / 2;
+		float min = center + (getBounds().getYmin() - center) * factor;
+		float max = center + (getBounds().getYmax() - center) * factor;
 
 		org.jzy3d.maths.Scale scale = null;
 		if (min < max)
@@ -270,9 +270,9 @@ public class View {
 		double range = getBounds().getZmax() - getBounds().getZmin();
 		if (range <= 0)
 			return;
-		double center = (getBounds().getZmax() + getBounds().getZmin()) / 2;
-		double min = center + (getBounds().getZmin() - center) * factor;
-		double max = center + (getBounds().getZmax() - center) * factor;
+		float center = (getBounds().getZmax() + getBounds().getZmin()) / 2;
+		float min = center + (getBounds().getZmin() - center) * factor;
+		float max = center + (getBounds().getZmax() - center) * factor;
 
 		org.jzy3d.maths.Scale scale = null;
 		if (min < max)

@@ -2,7 +2,7 @@ package org.jzy3d.maths;
 
 public class Scale {
 	
-	public Scale(double min, double max){
+	public Scale(float min, float max){
 		this.min = min;
 		this.max = max;
 	}
@@ -11,31 +11,31 @@ public class Scale {
 		return new Scale(min, max);
 	}
 
-	public double getMin(){
+	public float getMin(){
 		return min;
 	}
 	
-	public double getMax(){
+	public float getMax(){
 		return max;
 	}
 	
-	public double getRange(){
+	public float getRange(){
 		return max-min;
 	}
 	
-	public void setMin(double min){
+	public void setMin(float min){
 		this.min = min;
 	}
 	
-	public void setMax(double max){
+	public void setMax(float max){
 		this.max = max;
 	}
 	
-	public Scale add(double value){
+	public Scale add(float value){
 		return new Scale(min+value, max+value);
 	}
 	
-	public boolean contains(double value){
+	public boolean contains(float value){
 		if( min<=value && value<=max)
 			return true;
 		else
@@ -56,37 +56,32 @@ public class Scale {
 		return false;
 	}
 
-	
-	/**********************************************/
+	/* */
 	
 	public static Scale widest(Scale scale1, Scale scale2){
-		double min = Math.min(scale1.min, scale2.min);
-		double max = Math.max(scale1.max, scale2.max);
+		float min = Math.min(scale1.min, scale2.min);
+		float max = Math.max(scale1.max, scale2.max);
 		
 		return new Scale(min, max);
 	}
 	
 	public static Scale thinest(Scale scale1, Scale scale2){
-		double min = Math.max(scale1.min, scale2.min);
-		double max = Math.min(scale1.max, scale2.max);
+		float min = Math.max(scale1.min, scale2.min);
+		float max = Math.min(scale1.max, scale2.max);
 		
 		return new Scale(min, max);
 	}
 	
-	public static Scale enlarge(Scale input, double ratio){
-		double offset = (input.getMax()-input.getMin()) * ratio;
+	public static Scale enlarge(Scale input, float ratio){
+		float offset = (input.getMax()-input.getMin()) * ratio;
 		if(offset==0)
     		offset=1;
     	return new Scale(input.getMin()-offset, input.getMax()+offset);
 	}
 	
-	/**********************************************/
-
 	public String toString(){
 		return new String("min="+min+" max="+max);
 	}
 	
-	/**********************************************/
-	
-	protected double min, max;
+	protected float min, max;
 }

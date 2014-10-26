@@ -28,7 +28,7 @@ public class ScaleFinder {
 	 */
 	public static Scale getMinMaxScale(double[] values){
 		if(values.length==0)
-			return new Scale(Double.NaN, Double.NaN);
-		return new Scale(Statistics.min(values), Statistics.max(values));
+			return new Scale(Float.NaN, Float.NaN);
+		return new Scale((float)Statistics.min(values), (float)Statistics.max(values));
 	}
 }
