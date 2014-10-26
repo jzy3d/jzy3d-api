@@ -1,0 +1,77 @@
+package org.jzy3d.plot3d.primitives;
+
+import java.util.List;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2;
+
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+import org.jzy3d.plot3d.transform.Transform;
+
+public class ConcurrentScatterPoint extends ScatterPoint {
+    public ConcurrentScatterPoint() {
+        super();
+    }
+
+    public ConcurrentScatterPoint(List<LightPoint> points, float width) {
+        super(points, width);
+    }
+
+    public void drawGLES2() {
+        GLES2CompatUtils.glPointSize(width);
+        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+
+        if (points != null) {
+            synchronized (points) {
+                for (LightPoint p : points) {
+                    GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                    GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                }
+            }
+        }
+        GLES2CompatUtils.glEnd();
+    }
+
+    public void drawGL2(GL gl) {
+        gl.getGL2().glPointSize(width);
+        gl.getGL2().glBegin(GL2.GL_POINTS);
+
+        if (points != null) {
+            synchronized (points) {
+                for (LightPoint p : points) {
+                    gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                    gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                }
+            }
+        }
+        gl.getGL2().glEnd();
+    }
+
+    @Override
+    public void applyGeometryTransform(Transform transform) {
+        synchronized (points) {
+            for (LightPoint p : points) {
+                Coord3d c = p.xyz;
+                c.set(transform.compute(c));
+            }
+        }
+        updateBounds();
+    }
+
+    public void add(LightPoint point) {
+        synchronized (points) {
+            this.points.add(point);
+        }
+        updateBounds();
+    }
+
+    @Override
+    public void updateBounds() {
+        bbox.reset();
+        synchronized (points) {
+            for (LightPoint c : points)
+                bbox.add(c.xyz);
+        }
+    }
+}
