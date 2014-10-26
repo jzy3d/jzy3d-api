@@ -1,4 +1,4 @@
-package org.jzy3d.chart2d.primitives;
+package org.jzy3d.plot2d.primitives;
 
 import java.util.List;
 

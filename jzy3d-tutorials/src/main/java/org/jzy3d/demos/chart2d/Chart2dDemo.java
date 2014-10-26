@@ -16,8 +16,8 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart2d.Chart2d;
-import org.jzy3d.chart2d.primitives.Serie2d;
 import org.jzy3d.colors.Color;
+import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.ConcurrentLineStrip;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.providers.PitchTickProvider;

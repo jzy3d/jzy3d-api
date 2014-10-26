@@ -10,13 +10,13 @@ import org.jzy3d.plot3d.builder.Mapper;
 
 public class RingGrid extends OrthonormalGrid{
 
-	public RingGrid(double radius, int xysteps){
+	public RingGrid(float radius, int xysteps){
 		this(radius, xysteps, 0);
 	}
 	
-	public RingGrid(double radius, int xysteps, int enlargeSteps){
-		super(new Range(-radius-(enlargeSteps*radius/(double)xysteps), radius+(enlargeSteps*radius/(double)xysteps)), xysteps);
-		sqradius = (radius+(enlargeSteps*radius/(double)xysteps)) * (radius+(enlargeSteps*radius/(double)xysteps));
+	public RingGrid(float radius, int xysteps, int enlargeSteps){
+		super(new Range(-radius-(enlargeSteps*radius/xysteps), radius+(enlargeSteps*radius/xysteps)), xysteps);
+		sqradius = (radius+(enlargeSteps*radius/xysteps)) * (radius+(enlargeSteps*radius/xysteps));
 	}
 	
 	public List<Coord3d> apply(Mapper mapper) {
