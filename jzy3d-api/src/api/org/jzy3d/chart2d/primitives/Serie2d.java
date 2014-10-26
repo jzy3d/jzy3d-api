@@ -11,8 +11,11 @@ public interface Serie2d {
     public void add(float x, float y);
     public void add(double x, double y);
     public void add(Coord2d c);
+    public void add(Coord2d c, Color color);
     public void add(List<Coord2d> c);
     public String getName();
+    
+    public void setWidth(int width);
     
     public void setColor(Color color);
     public Color getColor();
@@ -20,6 +23,6 @@ public interface Serie2d {
     public AbstractDrawable getDrawable();
     
     public enum Type{
-        LINE, SCATTER
+        LINE, SCATTER, SCATTER_POINTS
     }
 }

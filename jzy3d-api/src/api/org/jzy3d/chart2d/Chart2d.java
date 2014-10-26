@@ -9,6 +9,7 @@ import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.chart2d.primitives.LineSerie2d;
+import org.jzy3d.chart2d.primitives.ScatterPointSerie2d;
 import org.jzy3d.chart2d.primitives.ScatterSerie2d;
 import org.jzy3d.chart2d.primitives.Serie2d;
 import org.jzy3d.maths.BoundingBox3d;
@@ -34,6 +35,10 @@ public class Chart2d extends AWTChart {
     public Chart2d(Toolkit toolkit) {
         this(new Chart2dComponentFactory(), Quality.Intermediate, toolkit.toString());
 
+        layout2d();
+    }
+
+    public void layout2d() {
         IAxeLayout axe = getAxeLayout();
         axe.setZAxeLabelDisplayed(false);
         axe.setTickLineDisplayed(false);
@@ -70,6 +75,8 @@ public class Chart2d extends AWTChart {
             serie = new LineSerie2d(name);
         else if (Serie2d.Type.SCATTER.equals(type))
             serie = new ScatterSerie2d(name);
+        else if (Serie2d.Type.SCATTER_POINTS.equals(type))
+            serie = new ScatterPointSerie2d(name);
         else
             throw new IllegalArgumentException("Unsupported serie type " + type);
         return serie;
@@ -83,6 +90,7 @@ public class Chart2d extends AWTChart {
 
     public Chart2d(IChartComponentFactory factory, Quality quality, String windowingToolkit) {
         super(factory, quality, windowingToolkit);
+        layout2d();
     }
 
     public Chart2d(IChartComponentFactory components, Quality quality) {

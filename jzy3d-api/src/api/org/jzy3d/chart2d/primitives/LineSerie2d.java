@@ -5,9 +5,8 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
-import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.ConcurrentLineStrip;
+import org.jzy3d.plot3d.primitives.Point;
 
 public class LineSerie2d implements Serie2d {
     protected ConcurrentLineStrip line = new ConcurrentLineStrip();
@@ -31,6 +30,11 @@ public class LineSerie2d implements Serie2d {
     @Override
     public void add(Coord2d c) {
         line.add(new Point(new Coord3d(c.x, c.y, 0)));
+    }
+
+    @Override
+    public void add(Coord2d c, Color color) {
+        line.add(new Point(new Coord3d(c.x, c.y, 0), color));
     }
 
     @Override
@@ -63,6 +67,11 @@ public class LineSerie2d implements Serie2d {
     @Override
     public void clear() {
         line.clear();
+    }
+
+    @Override
+    public void setWidth(int width) {
+        line.setWireframeWidth(width);   
     }
 }
 
