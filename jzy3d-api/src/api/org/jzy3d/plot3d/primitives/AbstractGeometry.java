@@ -30,8 +30,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
      */
     public AbstractGeometry() {
         super();
-        points = new ArrayList<Point>(4); // use Vector for synchro, or
-                                          // ArrayList for unsyncro.
+        points = new ArrayList<Point>(4); 
         bbox = new BoundingBox3d();
         center = new Coord3d();
         polygonOffsetFillEnable = true;
@@ -79,12 +78,12 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     }
 
     public void callPointsForWireframeGL2(GL gl) {
-        gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+        colorGL2(gl, wfcolor);
         gl.glLineWidth(wfwidth);
 
         begin(gl);
         for (Point p : points) {
-            gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+            vertexGL2(gl, p.xyz);
         }
         end(gl);
     }
@@ -105,15 +104,12 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         begin(gl);
         for (Point p : points) {
             if (mapper != null) {
-                Color c = mapper.getColor(p.xyz); // TODO: should cache
-                                                  // result
-                                                  // in the point color
-                GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
+                Color c = mapper.getColor(p.xyz);
+                colorGLES2(c);
             } else {
-                GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                colorGLES2(p.rgb);
             }
-
-            GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+            vertexGL2(p.xyz);
         }
         end(gl);
     }
@@ -122,20 +118,34 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         begin(gl);
         for (Point p : points) {
             if (mapper != null) {
-                Color c = mapper.getColor(p.xyz); // TODO: should cache
-                                                  // result
-                                                  // in the point color
-                gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
+                Color c = mapper.getColor(p.xyz);
+                colorGL2(gl, c);
             } else {
-                gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                colorGL2(gl, p.rgb);
             }
-
-            gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+            vertexGL2(gl, p.xyz);
         }
         end(gl);
     }
 
     protected abstract void begin(GL gl);
+
+    protected void vertexGL2(GL gl, Coord3d c) {
+        gl.getGL2().glVertex3f(c.x, c.y, c.z);
+    }
+
+    protected void colorGL2(GL gl, Color c) {
+        gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
+    }
+    
+    protected void vertexGL2(Coord3d c) {
+        GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
+    }
+
+    protected void colorGLES2(Color c) {
+        GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
+    }
+
 
     protected void end(GL gl) {
         if (gl.isGL2()) {
@@ -147,70 +157,81 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
     protected void applyPolygonModeLine(GL gl) {
         if (gl.isGL2()) {
-            switch (polygonMode) {
-            case FRONT:
-                gl.getGL2().glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
-                break;
-            case BACK:
-                gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-                break;
-            case FRONT_AND_BACK:
-                gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-                break;
-            default:
-                break;
-            }
+            applyPolygonModeLineGL2(gl);
         } else {
-            // glPolygonMode does not exist in opengl es ??
+            applyPolygonModeLineGLES2();
+        }
+    }
 
-            switch (polygonMode) {
-            case FRONT:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
-                break;
-            case BACK:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-                break;
-            case FRONT_AND_BACK:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-                break;
-            default:
-                break;
-            }
+    protected void applyPolygonModeLineGLES2() {
+        switch (polygonMode) {
+        case FRONT:
+            GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+            break;
+        case BACK:
+            GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+            break;
+        case FRONT_AND_BACK:
+            GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+            break;
+        default:
+            break;
+        }
+    }
+
+    protected void applyPolygonModeLineGL2(GL gl) {
+        switch (polygonMode) {
+        case FRONT:
+            gl.getGL2().glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+            break;
+        case BACK:
+            gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+            break;
+        case FRONT_AND_BACK:
+            gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+            break;
+        default:
+            break;
         }
     }
 
     protected void applyPolygonModeFill(GL gl) {
         if (gl.isGL2()) {
-            switch (polygonMode) {
-            case FRONT:
-                gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2.GL_FILL);
-                break;
-            case BACK:
-                gl.getGL2().glPolygonMode(GL.GL_BACK, GL2.GL_FILL);
-                break;
-            case FRONT_AND_BACK:
-                gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
-                break;
-            default:
-                break;
-            }
+            applyPolygonModeFillGL2(gl);
         } else {
+            applyPolygonModeFillGLES2();
+        }
+    }
 
-            // glPolygonMode does not exist in opengl es ??
-            switch (polygonMode) {
-            case FRONT:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
-                break;
-            case BACK:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
-                break;
-            case FRONT_AND_BACK:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-                break;
-            default:
-                break;
-            }
+    public void applyPolygonModeFillGLES2() {
+        switch (polygonMode) {
+        case FRONT:
+            GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
+            break;
+        case BACK:
+            GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
+            break;
+        case FRONT_AND_BACK:
+            GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+            break;
+        default:
+            break;
+        }
+    }
 
+    public void applyPolygonModeFillGL2(GL gl) {
+        switch (polygonMode) {
+        case FRONT:
+            gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2.GL_FILL);
+            break;
+        case BACK:
+            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2.GL_FILL);
+            break;
+        case FRONT_AND_BACK:
+            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
+            break;
+        default:
+            break;
         }
     }
 
