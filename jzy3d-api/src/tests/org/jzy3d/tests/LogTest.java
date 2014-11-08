@@ -24,16 +24,16 @@ public class LogTest {
 		// Define a function to plot
 		Mapper mapper = new Mapper() {
 		    public double f(double x, double y) {
-		        return 10 * Math.sin(x / 10) * Math.cos(y / 20) * x;
+		        return 10 * Math.sin(x) * Math.cos(y) * x;
 		    }
 		};
 
 		// Define range and precision for the function to plot
-		Range range = new Range(-150, 150);
+		Range range = new Range(-10, 10);
 		int steps = 50;
 
 		// Create a surface drawing that function
-		Shape surface = axeTransformableBuilder.buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper, new LogTransformer(), new LogTransformer(), new LinearTransformer());
+		Shape surface = axeTransformableBuilder.buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper, new LinearTransformer(), new LogTransformer(), new LinearTransformer());
 		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
 		surface.setFaceDisplayed(true);
 		surface.setWireframeDisplayed(false);
