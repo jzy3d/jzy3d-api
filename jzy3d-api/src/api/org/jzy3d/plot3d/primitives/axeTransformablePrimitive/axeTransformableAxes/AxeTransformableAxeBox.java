@@ -44,7 +44,7 @@ public class AxeTransformableAxeBox extends AxeBox {
     }
 
     /** reset to identity and apply scaling */
-    public void doTransform(GL gl) {
+   /* public void doTransform(GL gl) {
         if (gl.isGL2()) {
             gl.getGL2().glLoadIdentity();
             gl.getGL2().glScalef(scale.x, scale.y, scale.z);
@@ -52,7 +52,7 @@ public class AxeTransformableAxeBox extends AxeBox {
             GLES2CompatUtils.glLoadIdentity();
             GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
         }
-    }
+    }*/
 
 
     /**
@@ -67,7 +67,7 @@ public class AxeTransformableAxeBox extends AxeBox {
                     gl.getGL2().glPassThrough((float) q);
                 gl.getGL2().glBegin(GL2.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
-                    Coord3d c3d = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]);
+                    Coord3d c3d = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]); //era qua
                     GlVertexExecutor.Vertex(gl, c3d, transformerX, transformerY, transformerZ);
                 }
                 gl.getGL2().glEnd();
@@ -299,53 +299,7 @@ public class AxeTransformableAxeBox extends AxeBox {
     }
 
 
-    protected static final int PRECISION = 6;
 
-    protected View view;
-
-    // use this text renderer to get occupied volume by text
-    protected ITextRenderer txt = new TextBitmapRenderer();
-
-    protected IAxeLayout layout;
-
-    protected BoundingBox3d boxBounds;
-    protected BoundingBox3d wholeBounds;
-    protected Coord3d center;
-    protected Coord3d scale;
-
-    protected float xrange;
-    protected float yrange;
-    protected float zrange;
-
-    protected float quadx[][];
-    protected float quady[][];
-    protected float quadz[][];
-
-    protected float normx[];
-    protected float normy[];
-    protected float normz[];
-
-    protected float axeXx[][];
-    protected float axeXy[][];
-    protected float axeXz[][];
-    protected float axeYx[][];
-    protected float axeYy[][];
-    protected float axeYz[][];
-    protected float axeZx[][];
-    protected float axeZy[][];
-    protected float axeZz[][];
-
-    protected int axeXquads[][];
-    protected int axeYquads[][];
-    protected int axeZquads[][];
-
-    protected boolean quadIsHidden[];
-
-    protected static final int AXE_X = 0;
-    protected static final int AXE_Y = 1;
-    protected static final int AXE_Z = 2;
-    
-    protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
     protected AxeTransformer transformerX;
     protected AxeTransformer transformerY;
     protected AxeTransformer transformerZ;
