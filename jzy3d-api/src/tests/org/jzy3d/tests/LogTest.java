@@ -29,18 +29,18 @@ public class LogTest {
 		};
 
 		// Define range and precision for the function to plot
-		Range range = new Range(-10, 10);
+		Range range = new Range(-5, 5);
 		int steps = 50;
 
 		// Create a surface drawing that function
-		Shape surface = axeTransformableBuilder.buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper, new LinearTransformer(), new LogTransformer(), new LinearTransformer());
+		Shape surface = axeTransformableBuilder.buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper, new LogTransformer(), new LinearTransformer(), new LinearTransformer());
 		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
 		surface.setFaceDisplayed(true);
 		surface.setWireframeDisplayed(false);
 		surface.setWireframeColor(Color.BLACK);
 
 		// Create a chart and add the surface
-		Chart chart = AxeTransformableAWTChartComponentFactory.chart(Quality.Advanced, new LogTransformer(), new LogTransformer(), new LinearTransformer());
+		Chart chart = AxeTransformableAWTChartComponentFactory.chart(Quality.Advanced, new LogTransformer(), new LinearTransformer(), new LinearTransformer());
 		chart.getScene().getGraph().add(surface);
 		ChartLauncher.openChart(chart);
 	}
