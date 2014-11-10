@@ -44,7 +44,7 @@ public class AxeTransformableAxeBox extends AxeBox {
     }
 
     /** reset to identity and apply scaling */
-   /* public void doTransform(GL gl) {
+    public void doTransform(GL gl) {
         if (gl.isGL2()) {
             gl.getGL2().glLoadIdentity();
             gl.getGL2().glScalef(scale.x, scale.y, scale.z);
@@ -52,7 +52,7 @@ public class AxeTransformableAxeBox extends AxeBox {
             GLES2CompatUtils.glLoadIdentity();
             GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
         }
-    }*/
+    }
 
 
     /**
@@ -209,7 +209,7 @@ public class AxeTransformableAxeBox extends AxeBox {
 
     public void drawAxisLabel(GL gl, GLU glu, Camera cam, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
         if (isXDisplayed(direction) || isYDisplayed(direction) || isZDisplayed(direction)) {
-            Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
+            Coord3d labelPosition = new Coord3d(transformerX.compute((float)xlab), transformerY.compute((float)ylab), transformerZ.compute((float)zlab));
             BoundingBox3d labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
             if (labelBounds != null)
                 ticksTxtBounds.add(labelBounds);
@@ -277,7 +277,7 @@ public class AxeTransformableAxeBox extends AxeBox {
             // GLES2CompatUtils.glRotatef((float)Math.PI/2, 1, 0, 1);
             GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
         }
-
+        tickPosition = new Coord3d(transformerX.compute(tickPosition.x), transformerY.compute(tickPosition.y), transformerZ.compute(tickPosition.z));
         BoundingBox3d tickBounds = txt.drawText(gl, glu, cam, tickLabel, tickPosition, hAlign, vAlign, color);
         if (tickBounds != null)
             ticksTxtBounds.add(tickBounds);

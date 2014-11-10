@@ -3,6 +3,7 @@ package org.jzy3d.chart.factories;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformableAxes.AxeTransformableAxeBox;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformer;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
@@ -53,6 +54,7 @@ public class AxeTransformableAWTChartComponentFactory  extends AWTChartComponent
     @Override
 	public IAxe newAxe(BoundingBox3d box, View view) {
 		AxeTransformableAxeBox axe = new AxeTransformableAxeBox(box,transformerX,transformerY,transformerZ);
+		axe.setScale(new Coord3d(10.0,1.0,1.0));
 		axe.setView(view);
 		return axe;
 	}
