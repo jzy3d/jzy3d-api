@@ -4,15 +4,9 @@ import java.nio.FloatBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
 
-import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
-import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
 
 import com.jogamp.common.nio.Buffers;
 
@@ -21,14 +15,8 @@ import com.jogamp.common.nio.Buffers;
  * It computes hidden faces using the OpenGL feedback buffer, which seems
  * to fail on some hardware (especially Lenovo notepads).
  * 
- * The parent {@link AxeBox} doesn't rely anymore one feedback buffer, and
- * this implementation has been kept in order to provide an example of
- * feedback buffer use.
- * 
- * @see http://code.google.com/p/jzy3d/issues/detail?id=10
  * @author Martin Pernollet
  */
-
 public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	public FeedbackBufferAxeBox(BoundingBox3d bbox){
 		super(bbox);
@@ -37,146 +25,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 		super(bbox, layout);
 	}
 	
-	@Override
-	public void draw(GL gl, GLU glu, Camera camera){
-		
-		if (!gl.isGL2()) throw new UnsupportedOperationException("OpenGL2 required");
-		
-		// Set scaling
-		gl.getGL2().glLoadIdentity();
-		gl.getGL2().glScalef(scale.x, scale.y, scale.z);
-		
-		// Set culling
-		gl.glEnable(GL2.GL_CULL_FACE);
-		gl.glFrontFace(GL2.GL_CCW);
-		gl.glCullFace(GL2.GL_FRONT);
-		
-		// Draw cube in feedback buffer for computing hidden quads
-		quadIsHidden = getHiddenQuads(gl);	
-		
-		// Plain part of quad making the surrounding box
-		if( layout.isFaceDisplayed() ){
-			Color quadcolor = layout.getQuadColor();
-			gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
-			gl.getGL2().glColor4f(quadcolor.r, quadcolor.g, quadcolor.b, quadcolor.a);
-			gl.glLineWidth(1.0f);
-			gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
-			gl.glPolygonOffset(1.0f, 1.0f); // handle stippling
-			drawCube(gl, GL2.GL_RENDER);
-			gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
-		}
-		
-		// Edge part of quads making the surrounding box
-		Color gridcolor = layout.getGridColor();
-		gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-		gl.getGL2().glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
-		gl.glLineWidth(1);			
-		drawCube(gl, GL2.GL_RENDER);	
-				
-		// Draw grids on non hidden quads
-		gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
-		gl.getGL2().glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
-		gl.glLineWidth(1);
-		gl.getGL2().glLineStipple(1, (short)0xAAAA);
-		gl.glEnable(GL2.GL_LINE_STIPPLE);		
-		for(int quad=0; quad<6; quad++)
-			if(!quadIsHidden[quad])		
-				drawGridOnQuad(gl, quad);
-		gl.glDisable(GL2.GL_LINE_STIPPLE);
-		
-		// Draw ticks on the closest axes
-		wholeBounds.reset();
-		wholeBounds.add(boxBounds);
-		
-		//gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
-		
-		// Display x axis ticks
-		if(xrange>0 && layout.isXTickLabelDisplayed()){
-			
-			// If we are on top, we make direct axe placement
-			if( view != null && view.getViewMode().equals(ViewPositionMode.TOP) ){
-				BoundingBox3d bbox = drawTicks(gl, glu, camera, 1, AXE_X, layout.getXTickColor(), Halign.LEFT, Valign.TOP); // setup tick labels for X on the bottom 
-				wholeBounds.add(bbox);
-			}
-			// otherwise computed placement
-			else{
-				int xselect = findClosestXaxe(camera);
-				if(xselect>=0){
-					BoundingBox3d bbox = drawTicks(gl, glu, camera, xselect, AXE_X, layout.getXTickColor());
-					wholeBounds.add(bbox);
-				}
-				else{
-					//System.err.println("no x axe selected: " + Arrays.toString(quadIsHidden));
-					// HACK: handles "on top" view, when all face of cube are drawn, which forbid to select an axe automatically
-					BoundingBox3d bbox = drawTicks(gl, glu, camera, 2, AXE_X, layout.getXTickColor(), Halign.CENTER, Valign.TOP); 
-					wholeBounds.add(bbox);
-				}
-			}
-		}
-		
-		// Display y axis ticks
-		if(yrange>0 && layout.isYTickLabelDisplayed()){
-			if( view != null && view.getViewMode().equals(ViewPositionMode.TOP) ){
-				BoundingBox3d bbox = drawTicks(gl, glu, camera, 2, AXE_Y, layout.getYTickColor(), Halign.LEFT, Valign.GROUND); // setup tick labels for Y on the left 
-				wholeBounds.add(bbox);
-			}
-			else{
-				int yselect = findClosestYaxe(camera);
-				if(yselect>=0){
-					BoundingBox3d bbox = drawTicks(gl, glu, camera, yselect, AXE_Y, layout.getYTickColor());
-					wholeBounds.add(bbox);
-				}
-				else{
-					//System.err.println("no y axe selected: " + Arrays.toString(quadIsHidden));
-					// HACK: handles "on top" view, when all face of cube are drawn, which forbid to select an axe automatically
-					BoundingBox3d bbox = drawTicks(gl, glu, camera, 1, AXE_Y, layout.getYTickColor(), Halign.RIGHT, Valign.GROUND);
-					wholeBounds.add(bbox);
-				}
-			}
-		}
-		
-		// Display z axis ticks
-		if(zrange>0 && layout.isZTickLabelDisplayed()){
-			if( view != null && view.getViewMode().equals(ViewPositionMode.TOP) ){
-				
-			}
-			else{
-				int zselect = findClosestZaxe(camera);
-				if(zselect>=0){
-					BoundingBox3d bbox = drawTicks(gl, glu, camera, zselect, AXE_Z, layout.getZTickColor());
-					wholeBounds.add(bbox);
-				}				
-			}
-		}
-		
-		// Unset culling
-		gl.glDisable(GL2.GL_CULL_FACE);
-	}
-	
-	/******************************************************************/
-	/**                    DRAW AXEBOX ELEMENTS                      **/
-	
 	/**
-	 * Make all GL calls allowing to build a cube with 6 separate quads.
-	 * Each quad is indexed from 0.0f to 5.0f using glPassThrough,
-	 * and may be traced in feedback mode when mode=GL.GL_FEEDBACK 
-	 */
-	protected void drawCube(GL gl, int mode){
-		for(int q=0; q<6; q++){
-			if(mode==GL2.GL_FEEDBACK)
-				gl.getGL2().glPassThrough((float)q);
-			gl.getGL2().glBegin(GL2.GL_QUADS);
-				for(int v=0; v<4; v++){
-					gl.getGL2().glVertex3f( quadx[q][v], quady[q][v], quadz[q][v]);
-				}
-				gl.getGL2().glEnd();
-		}
-	}
-	
-	/******************************************************************/
-    /**                COMPUTATION OF HIDDEN QUADS                   **/
-    
-	/*
 	 * Render the cube into the feedback buffer, in order to parse feedback
 	 * and determine which quad where displayed or not.
 	 */
@@ -326,8 +175,6 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 		return isempty;
 	}
 	
-	/******************************************************************/
-
 	/**
 	 *  Print out parameters of a gl call in 3dColor mode.
 	 */
