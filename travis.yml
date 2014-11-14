@@ -1,3 +1,12 @@
+# THIS IS A DOC, TRAVIS USES .travis.yml file
+# http://docs.travis-ci.com/user/deployment/custom/
+# http://docs.travis-ci.com/user/encrypting-files/
+# http://docs.travis-ci.com/user/build-configuration
+
+# Commands
+# travis encrypt CI_DEPLOY_USERNAME=
+# travis encrypt CI_DEPLOY_PASSWORD=
+
 language: java
 jdk:
 - oraclejdk8
