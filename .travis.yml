@@ -4,7 +4,7 @@ jdk:
 - oraclejdk7
 - openjdk7
 - openjdk6
-after_success: "mvn deploy --settings settings-travis.xml"
+after_success: "mvn deploy --settings settings-travis.xml -X"
 env:
   global:
     #secure: "Lj4s1NEsJT0kmVFJkzdBXMKCEX0kobiPIXg3u0ZYNAt77+DG1SQYd4/l/UFQEHYKv0r2Cbz58iQpxwPzlgOpxbfkrODOC0RxD2mxjkTlz5MfSPG349X+Y+5S0S5zqYklJTcs4rhjtt+YOMp6r8JXiSWFiDWah61JXzwDjHijB3g="
