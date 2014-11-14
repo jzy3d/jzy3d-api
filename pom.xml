@@ -28,7 +28,7 @@
       <name>Juan Barandiaran</name>
     </developer>
   </developers>
-    
+
   <licenses>
     <license>
       <name>The (New) BSD License</name>
@@ -73,7 +73,8 @@
     <snapshotRepository>
       <id>jzy3d-ftp</id>
       <name>Jzy3d Maven Folder SNAPSHOTS</name>
-      <url>ftp://ftp.jzy3d.org/maven/snapshots</url>
+      <!-- <url>ftp://ftp.jzy3d.org/maven/snapshots</url> -->
+      <url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
