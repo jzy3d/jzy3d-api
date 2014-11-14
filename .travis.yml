@@ -7,5 +7,7 @@ jdk:
 after_success: "mvn deploy --settings settings-travis.xml"
 env:
   global:
-    secure: "Lj4s1NEsJT0kmVFJkzdBXMKCEX0kobiPIXg3u0ZYNAt77+DG1SQYd4/l/UFQEHYKv0r2Cbz58iQpxwPzlgOpxbfkrODOC0RxD2mxjkTlz5MfSPG349X+Y+5S0S5zqYklJTcs4rhjtt+YOMp6r8JXiSWFiDWah61JXzwDjHijB3g="
-    secure: "FVvp1Z6IlE/qUmu1lDN2CyeNeFKQbN9kqicxLhhw8SedcC2/04wtj7w4g8ICYLWMkBWHySNSgXXf57zZjk8oibRtvTWZd+MtaB/5tYA+Tdxcj0+IHngbzQQ82aelzZB10Re8L/a4mjorxUtWkTJ1adwb9aArFSYt7wKoHaN4E94="
+    #secure: "Lj4s1NEsJT0kmVFJkzdBXMKCEX0kobiPIXg3u0ZYNAt77+DG1SQYd4/l/UFQEHYKv0r2Cbz58iQpxwPzlgOpxbfkrODOC0RxD2mxjkTlz5MfSPG349X+Y+5S0S5zqYklJTcs4rhjtt+YOMp6r8JXiSWFiDWah61JXzwDjHijB3g="
+    #secure: "FVvp1Z6IlE/qUmu1lDN2CyeNeFKQbN9kqicxLhhw8SedcC2/04wtj7w4g8ICYLWMkBWHySNSgXXf57zZjk8oibRtvTWZd+MtaB/5tYA+Tdxcj0+IHngbzQQ82aelzZB10Re8L/a4mjorxUtWkTJ1adwb9aArFSYt7wKoHaN4E94="
+    secure: "S5grdv+ZJp/IHEDIYhlqv6D5p94L4zDOkbxODqmzYkBnI4Kv6jsZA/Iwdw/YD6ThODwe1/A0MtpHDXfyDHIo0DCiGso4eVyMzIKMgxP0jwgqIA2+hikQdYvSDwKOWzzzvjMRQZRDNFnlp0yji2y81JYkgd9OWrcXZnWi2dWfV8s="
+    secure: "IeL3/rYn3cGzzqGn/3DxKou/dCJttD9jzdzncTkFp+4snRRdOGnvRu0ApOcCXqtQ5YZiaGBW270G+NLxwCnx3XSUKDDmJwsWz5V4QvUEVGYjlyiblXOSY2ZPFGYIRM3WLgIuERM0kQ4Onf4WnZvV12n5vDL+zGAt6E9vmz9Igec="
