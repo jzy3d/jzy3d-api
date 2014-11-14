@@ -4,9 +4,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import org.jzy3d.chart.ChartView;
+import org.jzy3d.colors.Color;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.io.FileImage;
+import org.jzy3d.maths.Dimension;
+import org.jzy3d.plot2d.primitive.AWTImageGenerator;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
 
@@ -37,21 +40,24 @@ import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
  */
 public abstract class AWTLegend extends AWTImageViewport implements IDrawableListener, ILegend {
 
-    public AWTLegend(AbstractDrawable parent) {
-        this.parent = parent;
-        if (parent != null)
-            parent.addDrawableListener(this);
+    public AWTLegend(AbstractDrawable drawable) {
+        this.drawable = drawable;
+        if (drawable != null)
+            drawable.addDrawableListener(this);
+    }
+
+    public AWTLegend(AbstractDrawable drawable, Color foreground, Color background) {
+        this(drawable);
+        this.foreground = foreground;
+        this.background = background;
     }
 
     public void dispose() {
-        if (parent != null)
-            parent.removeDrawableListener(this);
+        if (drawable != null)
+            drawable.removeDrawableListener(this);
     }
 
     public abstract BufferedImage toImage(int width, int height);
-
-    @Override
-    public abstract void drawableChanged(DrawableChangedEvent e);
 
     /**
      * Defines viewport dimensions, and precompute an image if required (i.e. if
@@ -66,6 +72,13 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
         if (imageWidth != imgWidth || imageHeight != height)
             setImage(toImage(imgWidth, height));
     }
+    
+    @Override
+    public void drawableChanged(DrawableChangedEvent e) {
+        if(e.what() == DrawableChangedEvent.FIELD_COLOR)
+            updateImage();
+    }
+
 
     @Override
     public void updateImage() {
@@ -75,6 +88,33 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     public void saveImage(String filename) throws IOException {
         FileImage.savePNG(imageObj, filename);
     }
+    
+    
+    @Override
+    public Dimension getMinimumSize(){
+        return minimumDimension;
+    }
+    
+    public void setMinimumSize(Dimension dimension){
+        minimumDimension = dimension;
+    }
+    
+    public void setGeneratorColors() {
+        if (foreground != null)
+            imageGenerator.setForegroundColor(foreground);
+        else
+            imageGenerator.setForegroundColor(Color.BLACK);
+        if (background != null) {
+            imageGenerator.setBackgroundColor(background);
+            imageGenerator.setHasBackground(true);
+        } else
+            imageGenerator.setHasBackground(false);
+    }
 
-    protected AbstractDrawable parent;
+    
+    protected AbstractDrawable drawable;
+    protected Color foreground;
+    protected Color background;
+    protected Dimension minimumDimension;
+    protected AWTImageGenerator imageGenerator;
 }

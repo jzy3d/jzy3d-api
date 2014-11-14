@@ -7,13 +7,8 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.Dimension;
 
 public interface IColorbarLegend {
-
-    public abstract void render(GL gl, GLU glu);
-
-    public abstract void drawableChanged(DrawableChangedEvent e);
-
-    public abstract Dimension getMinimumSize();
-
-    public abstract void setMinimumSize(Dimension dimension);
-
+    public void render(GL gl, GLU glu);
+    public void drawableChanged(DrawableChangedEvent e);
+    public Dimension getMinimumSize();
+    public void setMinimumSize(Dimension dimension);
 }
