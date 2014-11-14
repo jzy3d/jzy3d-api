@@ -3,6 +3,8 @@ jzy3d-main
 
 This is a main Git repository for Jzy3d providing multiple maven modules.
 
+[![Build Status](https://travis-ci.org/jzy3d/jzy3d-api.svg?branch=master)](https://travis-ci.org/jzy3d/jzy3d-api)
+
 API and modules
 -----------------------------------
 - <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
