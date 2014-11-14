@@ -3,7 +3,10 @@ jzy3d-main
 
 This is a main Git repository for Jzy3d providing multiple maven modules.
 
-[![Build Status](https://travis-ci.org/jzy3d/jzy3d-api.svg?branch=master)](https://travis-ci.org/jzy3d/jzy3d-api)
+Travis build status : [![Build Status](https://travis-ci.org/jzy3d/jzy3d-api.svg?branch=master)](https://travis-ci.org/jzy3d/jzy3d-api)
+
+
+
 
 API and modules
 -----------------------------------
