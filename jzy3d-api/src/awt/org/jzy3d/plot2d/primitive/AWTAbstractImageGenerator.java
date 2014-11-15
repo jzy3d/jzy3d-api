@@ -56,7 +56,7 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator{
 
 
     protected Font font;
-    protected int txtSize;
+    protected int textSize;
 
     protected Color backgroundColor;
     protected Color foregroundColor = Color.BLACK;

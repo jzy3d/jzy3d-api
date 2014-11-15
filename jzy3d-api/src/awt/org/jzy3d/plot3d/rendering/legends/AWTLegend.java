@@ -110,8 +110,33 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
         } else
             imageGenerator.setHasBackground(false);
     }
-
     
+    public Color getForeground() {
+        return foreground;
+    }
+
+    public void setForeground(Color foreground) {
+        this.foreground = foreground;
+    }
+
+    public Color getBackground() {
+        return background;
+    }
+
+    public void setBackground(Color background) {
+        this.background = background;
+    }
+
+    public Dimension getMinimumDimension() {
+        return minimumDimension;
+    }
+
+    public void setMinimumDimension(Dimension minimumDimension) {
+        this.minimumDimension = minimumDimension;
+    }
+
+
+
     protected AbstractDrawable drawable;
     protected Color foreground;
     protected Color background;

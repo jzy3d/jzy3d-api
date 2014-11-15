@@ -60,7 +60,7 @@ abstract class AbstractViewportManager {
      */
     public void setViewPort(int width, int height, float left, float right) {
         if (left >= right)
-            throw new IllegalArgumentException("left must be inferior to right");
+            throw new IllegalArgumentException("left must be inferior to right : " + left + " | " + right);
 
         this.screenWidth = (int) ((right - left) * (float) width);
         this.screenHeight = height;

@@ -30,8 +30,8 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator impleme
         this.renderer = renderer;
         this.min = mapper.getMin();
         this.max = mapper.getMax();
-        this.txtSize = 12;
-        this.font = new java.awt.Font("Arial",0,txtSize);
+        this.textSize = 12;
+        this.font = new java.awt.Font("Arial",0,textSize);
 	}
 
 	@Override
@@ -55,13 +55,13 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator impleme
 
     public void drawBarContour(int height, int barWidth, Graphics2D graphic) {
         graphic.setColor(ColorAWT.toAWT(foregroundColor));
-		graphic.drawRect(0, txtSize/2, barWidth, height-txtSize);
+		graphic.drawRect(0, textSize/2, barWidth, height-textSize);
     }
 
     public void drawBarColors(int height, int barWidth, Graphics2D graphic) {
-        for(int h=txtSize/2; h<=(height-txtSize/2); h++){
+        for(int h=textSize/2; h<=(height-textSize/2); h++){
 			// Compute value & color
-			double v = min + (max-min) * ((float)h)/((float)(height-txtSize));
+			double v = min + (max-min) * ((float)h)/((float)(height-textSize));
 			Color c = mapper.getColor(v);  //To allow the Color to be a variable independent of the coordinates
 			
 			// Draw line
@@ -77,7 +77,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator impleme
     		String txt;
     		for(int t=0; t<ticks.length; t++){
     //			ypos = (int)(height-height*((ticks[t]-min)/(max-min)));
-    			ypos = (int)(txtSize+(height-txtSize-(height-txtSize)*((ticks[t]-min)/(max-min)))); //Making sure that the first and last tick appear in the colorbar
+    			ypos = (int)(textSize+(height-textSize-(height-textSize)*((ticks[t]-min)/(max-min)))); //Making sure that the first and last tick appear in the colorbar
     			txt = renderer.format(ticks[t]);
     			graphic.drawString(txt, barWidth+1, ypos);
     		}
