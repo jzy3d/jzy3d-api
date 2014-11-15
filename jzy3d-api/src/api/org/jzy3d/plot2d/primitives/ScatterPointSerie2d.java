@@ -56,12 +56,12 @@ public class ScatterPointSerie2d implements Serie2d {
     
     @Override
     public void setColor(Color color){
-        //line.setColor(color);
+        defaultColor = color;
     }
     
     @Override
     public Color getColor(){
-        return null;//line.getWireframeColor();
+        return defaultColor;//line.getWireframeColor();
     }
 
     @Override

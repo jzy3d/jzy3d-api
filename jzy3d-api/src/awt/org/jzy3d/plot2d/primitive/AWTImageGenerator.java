@@ -1,5 +1,6 @@
 package org.jzy3d.plot2d.primitive;
 
+import java.awt.Font;
 import java.awt.image.BufferedImage;
 
 import org.jzy3d.colors.Color;
@@ -18,4 +19,9 @@ public interface AWTImageGenerator {
     public Color getForegroundColor();
 
     public void setForegroundColor(Color foregroundColor);
+    
+    public Font getFont() ;
+
+    public void setFont(Font font);
+    
 }

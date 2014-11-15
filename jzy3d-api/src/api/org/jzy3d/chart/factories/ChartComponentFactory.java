@@ -26,14 +26,13 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBase;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
-import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.canvas.VoidCanvas;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.ordering.BarycentreOrderingStrategy;
+import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -69,6 +68,11 @@ public class ChartComponentFactory implements IChartComponentFactory {
     @Override
     public ChartScene newScene(boolean sort) {
         return new ChartScene(sort, this);
+    }
+    
+    @Override
+    public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort){
+        return new Graph(scene, strategy, sort);
     }
 
     @Override
@@ -173,6 +177,11 @@ public class ChartComponentFactory implements IChartComponentFactory {
             return newFrameSwing(chart, bounds, title);
         else
             throw new RuntimeException("No default frame could be found for the given Chart canvas: " + canvas.getClass());
+    }
+    
+    @Override
+    public IFrame newFrame(Chart chart) {
+        return newFrame(chart, new Rectangle(0,0,800,600), "Jzy3d");
     }
 
     @Override
