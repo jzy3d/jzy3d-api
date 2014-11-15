@@ -33,11 +33,22 @@ public class Chart2d extends AWTChart {
     }
 
     public Chart2d(Toolkit toolkit) {
-        this(new Chart2dComponentFactory(), Quality.Intermediate, toolkit.toString());
+        this(new Chart2dComponentFactory(), toolkit);
+    }
 
+    public Chart2d(Chart2dComponentFactory factory, Toolkit toolkit) {
+        this(factory, Quality.Intermediate, toolkit);
+    }
+    public Chart2d(Chart2dComponentFactory factory, Quality quality) {
+        this(factory, quality, Toolkit.newt);
+    }
+
+    public Chart2d(Chart2dComponentFactory factory, Quality quality, Toolkit toolkit) {
+        this(factory, quality, toolkit.toString());
         layout2d();
     }
 
+    
     public void layout2d() {
         IAxeLayout axe = getAxeLayout();
         axe.setZAxeLabelDisplayed(false);
