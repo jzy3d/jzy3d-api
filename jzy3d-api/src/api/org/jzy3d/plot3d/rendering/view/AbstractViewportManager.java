@@ -152,7 +152,7 @@ abstract class AbstractViewportManager {
     }
 
     /** Renders a grid on the defined sub screen. */
-    private void renderSubScreenGrid(GL gl, GLU glu) {
+    protected void renderSubScreenGrid(GL gl, GLU glu) {
         if (screenWidth <= 0)
             return;
         

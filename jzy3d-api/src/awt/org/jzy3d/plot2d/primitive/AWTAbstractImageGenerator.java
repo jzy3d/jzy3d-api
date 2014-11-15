@@ -54,7 +54,15 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator{
         graphic.drawRect(0, 0, width - 1, height-1);
     }
 
+    @Override
+    public Font getFont() {
+        return font;
+    }
 
+    @Override
+    public void setFont(Font font) {
+        this.font = font;
+    }
     protected Font font;
     protected int textSize;
 

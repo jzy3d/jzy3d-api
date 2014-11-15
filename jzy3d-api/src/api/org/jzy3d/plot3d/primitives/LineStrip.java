@@ -90,6 +90,8 @@ public class LineStrip extends AbstractWireframeable {
     public void drawLineGL2(GL gl) {
         gl.getGL2().glBegin(GL.GL_LINE_STRIP);
 
+        gl.getGL2().glLineWidth(wfwidth);
+        
         if (wfcolor == null) {
             for (Point p : points) {
                 gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
