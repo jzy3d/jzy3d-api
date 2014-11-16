@@ -1085,9 +1085,9 @@ public class AxeBox implements IAxe {
 
     protected boolean quadIsHidden[];
 
-    protected static final int AXE_X = 0;
-    protected static final int AXE_Y = 1;
-    protected static final int AXE_Z = 2;
+    public static final int AXE_X = 0;
+    public static final int AXE_Y = 1;
+    public static final int AXE_Z = 2;
     
     protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
 }

@@ -73,23 +73,11 @@ public class Chart2d extends AWTChart {
     public Serie2d getSerie(String name, Serie2d.Type type) {
         Serie2d serie = null;
         if (!series.keySet().contains(name)) {
-            serie = newSerie(name, type, serie);
+            serie = factory.newSerie(name, type);
             addDrawable(serie.getDrawable());
         } else {
             serie = series.get(name);
         }
-        return serie;
-    }
-
-    public Serie2d newSerie(String name, Serie2d.Type type, Serie2d serie) {
-        if (Serie2d.Type.LINE.equals(type))
-            serie = new LineSerie2d(name);
-        else if (Serie2d.Type.SCATTER.equals(type))
-            serie = new ScatterSerie2d(name);
-        else if (Serie2d.Type.SCATTER_POINTS.equals(type))
-            serie = new ScatterPointSerie2d(name);
-        else
-            throw new IllegalArgumentException("Unsupported serie type " + type);
         return serie;
     }
 
