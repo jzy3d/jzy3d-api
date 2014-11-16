@@ -1,5 +1,6 @@
 package org.jzy3d.chart2d;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +16,10 @@ public class SerieManager {
         if (instance == null)
             instance = new SerieManager();
         return instance;
+    }
+    
+    public Collection<Serie2d> getSeries(){
+        return series.values();
     }
 
     public Serie2d getSerie(String name, Serie2d.Type type) {

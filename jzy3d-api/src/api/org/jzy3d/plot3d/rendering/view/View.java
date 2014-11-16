@@ -69,7 +69,7 @@ public class View {
      * set one time by the init() method.
      */
     public View(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        BoundingBox3d sceneBounds = scene.getGraph().getBounds();
+        BoundingBox3d sceneBounds = getSceneGraphBounds(scene);
 
         this.viewpoint = DEFAULT_VIEW.clone();
         this.center = sceneBounds.getCenter();
@@ -143,6 +143,8 @@ public class View {
         getCurrentContext().release();
         return p;
     }
+    
+    
 
     /******************************* GENERAL DISPLAY CONTROLS ***********************************/
 
@@ -533,12 +535,20 @@ public class View {
      */
     public void updateBounds() {
         if (boundmode == ViewBoundMode.AUTO_FIT)
-            lookToBox(scene.getGraph().getBounds()); // set axe and camera
+            lookToBox(getSceneGraphBounds()); // set axe and camera
         else if (boundmode == ViewBoundMode.MANUAL)
             lookToBox(viewbounds); // set axe and camera
         else
             throw new RuntimeException("Unknown bounds");
         shoot();
+    }
+    
+    protected BoundingBox3d getSceneGraphBounds(){
+        return getSceneGraphBounds(scene);
+    }
+
+    protected BoundingBox3d getSceneGraphBounds(Scene scene){
+        return scene.getGraph().getBounds();
     }
 
     /**
@@ -546,7 +556,7 @@ public class View {
      * {@link ViewBoundMode}, and orders a {@link Camera.shoot()}
      */
     public void updateBoundsForceUpdate(boolean refresh) {
-        lookToBox(scene.getGraph().getBounds());
+        lookToBox(getSceneGraphBounds());
         if (refresh)
             shoot();
     }
@@ -762,7 +772,7 @@ public class View {
         BoundingBox3d boundsScaled = new BoundingBox3d();
         boundsScaled.add(viewbounds.scale(scaling));
         if (MAINTAIN_ALL_OBJECTS_IN_VIEW)
-            boundsScaled.add(scene.getGraph().getBounds().scale(scaling));
+            boundsScaled.add(getSceneGraphBounds().scale(scaling));
         return boundsScaled;
     }
 
@@ -786,7 +796,7 @@ public class View {
         // Get the view bounds
         BoundingBox3d bounds;
         if (boundmode == ViewBoundMode.AUTO_FIT)
-            bounds = scene.getGraph().getBounds();
+            bounds = getSceneGraphBounds();
         else if (boundmode == ViewBoundMode.MANUAL)
             bounds = viewbounds;
         else {
