@@ -1,11 +1,12 @@
 language: java
 jdk:
-- oraclejdk8
-- oraclejdk7
 - openjdk7
-- openjdk6
+#- oraclejdk8
+#- oraclejdk7
+#- openjdk6
+
 after_success:
-- echo "<settings><servers><server><id>jzy3d-ftp</id><username>${env.CI_DEPLOY_USERNAME}</username><password>${env.CI_DEPLOY_PASSWORD}</password></server></servers></settings>"  > ~/settings-travis-generated.xml
+- echo "<settings><servers><server><id>jzy3d-ftp</id><username>${env.CI_DEPLOY_USERNAME}</username><password>${CI_DEPLOY_PASSWORD}</password></server></servers></settings>"  > ~/settings-travis-generated.xml
 - mvn deploy --settings ~/settings-travis-generated.xml -X
 env:
   global:
