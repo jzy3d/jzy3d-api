@@ -18,5 +18,5 @@ jdk:
 after_success: "mvn deploy --settings settings-travis.xml"
 env:
   global:
-    secure: "Lj4s1NEsJT0kmVFJkzdBXMKCEX0kobiPIXg3u0ZYNAt77+DG1SQYd4/l/UFQEHYKv0r2Cbz58iQpxwPzlgOpxbfkrODOC0RxD2mxjkTlz5MfSPG349X+Y+5S0S5zqYklJTcs4rhjtt+YOMp6r8JXiSWFiDWah61JXzwDjHijB3g="
     secure: "FVvp1Z6IlE/qUmu1lDN2CyeNeFKQbN9kqicxLhhw8SedcC2/04wtj7w4g8ICYLWMkBWHySNSgXXf57zZjk8oibRtvTWZd+MtaB/5tYA+Tdxcj0+IHngbzQQ82aelzZB10Re8L/a4mjorxUtWkTJ1adwb9aArFSYt7wKoHaN4E94="
+    secure: "Lj4s1NEsJT0kmVFJkzdBXMKCEX0kobiPIXg3u0ZYNAt77+DG1SQYd4/l/UFQEHYKv0r2Cbz58iQpxwPzlgOpxbfkrODOC0RxD2mxjkTlz5MfSPG349X+Y+5S0S5zqYklJTcs4rhjtt+YOMp6r8JXiSWFiDWah61JXzwDjHijB3g="
