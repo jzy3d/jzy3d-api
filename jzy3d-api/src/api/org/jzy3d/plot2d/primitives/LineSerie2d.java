@@ -9,12 +9,13 @@ import org.jzy3d.plot3d.primitives.ConcurrentLineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 
 public class LineSerie2d implements Serie2d {
-    protected ConcurrentLineStrip line = new ConcurrentLineStrip();
+    protected ConcurrentLineStrip line;
 
     protected String name;
     
     public LineSerie2d(String name){
         this.name = name;
+        this.line = new ConcurrentLineStrip();
     }
     
     @Override

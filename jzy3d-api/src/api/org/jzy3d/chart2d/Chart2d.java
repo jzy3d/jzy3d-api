@@ -47,7 +47,6 @@ public class Chart2d extends AWTChart {
         this(factory, quality, toolkit.toString());
         layout2d();
     }
-
     
     public void layout2d() {
         IAxeLayout axe = getAxeLayout();
