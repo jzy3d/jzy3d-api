@@ -24,6 +24,10 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.plot2d.primitives.LineSerie2d;
+import org.jzy3d.plot2d.primitives.ScatterPointSerie2d;
+import org.jzy3d.plot2d.primitives.ScatterSerie2d;
+import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.axes.AxeBase;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
@@ -104,6 +108,18 @@ public class ChartComponentFactory implements IChartComponentFactory {
     @Override
     public AbstractOrderingStrategy newOrderingStrategy() {
         return new BarycentreOrderingStrategy();
+    }
+    
+    @Override
+    public Serie2d newSerie(String name, Serie2d.Type type) {
+        if (Serie2d.Type.LINE.equals(type))
+            return new LineSerie2d(name);
+        else if (Serie2d.Type.SCATTER.equals(type))
+            return new ScatterSerie2d(name);
+        else if (Serie2d.Type.SCATTER_POINTS.equals(type))
+            return new ScatterPointSerie2d(name);
+        else
+            throw new IllegalArgumentException("Unsupported serie type " + type);
     }
 
     @Override

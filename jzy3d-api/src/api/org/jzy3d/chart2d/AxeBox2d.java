@@ -74,7 +74,8 @@ public class AxeBox2d extends AxeBox {
 //            doTransform(gl);
             labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         } else if (isYDisplayed(direction)) {
-            labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            //labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         }
         if (labelBounds != null)
             ticksTxtBounds.add(labelBounds);
@@ -86,6 +87,8 @@ public class AxeBox2d extends AxeBox {
     
     protected RotatedTextBitmapRenderer txtRotation = new RotatedTextBitmapRenderer();
 
+    /* ROTATED TEXT BITMAP RENDERER NOT WORKING PROPERLY */
+    
     public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
         @Override
         public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset,
@@ -107,9 +110,10 @@ public class AxeBox2d extends AxeBox {
                 return new BoundingBox3d();
             }
 
-            // Draws actual string
-            rotateText(gl, posReal);
-
+            // Draws actual string <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            rotateText(gl, posReal); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            // CETTE ROTATION NE MARCHE PAS ET AFFECTE LE BON RENDU QUAND ON UTILISE BOUNDING POLICY!!
+            
             glRasterPos(gl, sceneOffset, Coord3d.ORIGIN);
             glut.glutBitmapString(font, text);
             
