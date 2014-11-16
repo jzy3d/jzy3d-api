@@ -30,8 +30,8 @@ public class LogTest {
 		};
 
 		// Define range and precision for the function to plot
-		Range range = new Range(0, 100);
-		Range range2 = new Range(0,10);
+		Range range = new Range((float)0.1, 100);
+		Range range2 = new Range((float)0.1,10);
 		int steps = 50;
 
 		// Create a surface drawing that function
