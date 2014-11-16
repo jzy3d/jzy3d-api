@@ -6,8 +6,8 @@ jdk:
 #- openjdk6
 
 after_success:
-- echo "<settings><servers><server><id>jzy3d-ftp</id><username>${CI_DEPLOY_USERNAME}</username><password>${env.CI_DEPLOY_PASSWORD}</password></server></servers></settings>"  > ~/settings-travis-generated.xml
-- mvn deploy --settings ~/settings-travis-generated.xml -X
+#- echo "<settings><servers><server><id>jzy3d-ftp</id><username>${CI_DEPLOY_USERNAME}</username><password>${env.CI_DEPLOY_PASSWORD}</password></server></servers></settings>"  > ~/settings-travis-generated.xml
+- mvn deploy --settings settings-travis.xml -X
 env:
   global:
     secure: "FVvp1Z6IlE/qUmu1lDN2CyeNeFKQbN9kqicxLhhw8SedcC2/04wtj7w4g8ICYLWMkBWHySNSgXXf57zZjk8oibRtvTWZd+MtaB/5tYA+Tdxcj0+IHngbzQQ82aelzZB10Re8L/a4mjorxUtWkTJ1adwb9aArFSYt7wKoHaN4E94="
