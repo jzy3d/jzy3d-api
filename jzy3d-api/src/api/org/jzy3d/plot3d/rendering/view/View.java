@@ -595,10 +595,10 @@ public class View {
 		}
 
 		// Compute factors
-		float xLen = (float) (Math.log(bounds.getXmax() - bounds.getXmin()));
+		float xLen = (float) (Math.log(bounds.getXmax() - bounds.getXmin()));   //------------------------apply the transformers to this calculations
 		float yLen = bounds.getYmax() - bounds.getYmin();
 		float zLen = bounds.getZmax() - bounds.getZmin();
-		float lmax = Math.max(Math.max(xLen, yLen), zLen);
+		float lmax = (float) Math.max(Math.max(xLen, yLen), zLen);
 
 		if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
 			xLen = 1;
@@ -840,15 +840,19 @@ public class View {
 
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled) {
+		Coord3d center = boundsScaled.getCenter();
+		center = new Coord3d(Math.log(center.x), center.y, center.z);   //-------------------------------------------------apply the transformer both to the center and to the bounds and then calculate the radius(maybe implement the transformableRadius in the BoundingBox3d)
+		float radius = (float) center.distance(new Coord3d(Math.log(boundsScaled.getXmin()), boundsScaled.getYmin(), boundsScaled.getZmin()));
 		updateCamera(gl, glu, viewport, boundsScaled,
-				(float) boundsScaled.getRadius());
+				/*(float) boundsScaled.getRadius()*/
+				radius);
 	}
 
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled, float sceneRadiusScaled) {
 		//Coord3d scaling2 = new Coord3d(Math.log(scaling.x), scaling.y, scaling.z);
 		Coord3d target = center.mul(scaling);
-		target = new Coord3d(Math.log(target.x), target.y, target.z);
+		target = new Coord3d(Math.log(target.x), target.y, target.z);   //-----------------------------------------------apply transformation to target
 
 		Coord3d eye;
 		viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
