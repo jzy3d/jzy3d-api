@@ -846,7 +846,9 @@ public class View {
 
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled, float sceneRadiusScaled) {
+		//Coord3d scaling2 = new Coord3d(Math.log(scaling.x), scaling.y, scaling.z);
 		Coord3d target = center.mul(scaling);
+		target = new Coord3d(Math.log(target.x), target.y, target.z);
 
 		Coord3d eye;
 		viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
