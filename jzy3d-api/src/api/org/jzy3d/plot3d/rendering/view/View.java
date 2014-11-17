@@ -595,7 +595,7 @@ public class View {
 		}
 
 		// Compute factors
-		float xLen = (float) (Math.log(bounds.getXmax() - bounds.getXmin()));   //------------------------apply the transformers to this calculations
+		float xLen = (float) (Math.log(bounds.getXmax()) - Math.log(bounds.getXmin()));   //------------------------apply the transformers to this calculations
 		float yLen = bounds.getYmax() - bounds.getYmin();
 		float zLen = bounds.getZmax() - bounds.getZmin();
 		float lmax = (float) Math.max(Math.max(xLen, yLen), zLen);
