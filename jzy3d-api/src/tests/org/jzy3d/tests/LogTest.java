@@ -16,6 +16,8 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LinearTransformer;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.view.*;
+import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 
 public class LogTest {
@@ -44,7 +46,6 @@ public class LogTest {
 		// Create a chart and add the surface
 		Chart chart = AxeTransformableAWTChartComponentFactory.chart(Quality.Advanced, new LogTransformer(), new LinearTransformer(), new LinearTransformer());
 		chart.getScene().getGraph().add(surface);
-		//chart.getView().setSquared(false);
 		ChartLauncher.openChart(chart);
 		/*Shape surface = Builder.buildOrthonormal(new OrthonormalGrid(range, steps, range2, steps), mapper);
 		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
