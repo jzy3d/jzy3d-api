@@ -25,37 +25,67 @@ import org.jzy3d.plot3d.primitives.axes.layout.renderers.PitchTickRenderer;
 import org.jzy3d.ui.LookAndFeel;
 
 /**
- * Showing a pair of 2d charts to represent pitch and amplitude variation of an audio signal
+ * Showing a pair of 2d charts to represent pitch and amplitude variation of an
+ * audio signal.
+ * 
+ * When using large number of samples, run program with VM argument : -Xmx1024m
  * 
  * @author Martin Pernollet
  */
 public class Chart2dDemo {
-    public static float duration = 15f;
+    public static float duration = 60f;
+    /** milisecond distance between two generated samples*/
+    public static int interval = 50;
     public static int maxfreq = 880;
     public static int nOctave = 5;
-    
+
     public static void main(String[] args) throws Exception {
         PitchAmpliControlCharts log = new PitchAmpliControlCharts(duration, maxfreq, nOctave);
         new TimeChartWindow(log.getCharts());
-        
-        start();
-        
-        while(elapsed()<duration){
+
+        generateSamplesInTime(log);
+        // generateSamples(log, 500000);
+    }
+
+    public static void generateSamples(PitchAmpliControlCharts log, int n) throws InterruptedException {
+        System.out.println("will generate " + n + " samples");
+
+        for (int i = 0; i < n; i++) {
             // Random audio info
             double pitch = Math.random() * maxfreq;
             double ampli = Math.random();
-            
+
+            // Add to time series
+            log.seriePitch.add(time(n, i), pitch);
+            log.serieAmpli.add(time(n, i), ampli);
+        }
+    }
+
+    public static double time(int n, int i) {
+        return ((double) i / n) * duration;
+    }
+
+    public static void generateSamplesInTime(PitchAmpliControlCharts log) throws InterruptedException {
+        System.out.println("will generate approx. " + duration * 1000 / interval + " samples");
+
+        start();
+
+        while (elapsed() < duration) {
+            // Random audio info
+            double pitch = Math.random() * maxfreq;
+            double ampli = Math.random();
+
             // Add to time series
             log.seriePitch.add(elapsed(), pitch);
             log.serieAmpli.add(elapsed(), ampli);
-            
+
             // Wait a bit
-            Thread.sleep(50);
+            Thread.sleep(interval);
         }
     }
-    
-    /** Hold 2 charts, 2 time series, and 2 drawable lines*/
-    public static class PitchAmpliControlCharts  {
+
+    /** Hold 2 charts, 2 time series, and 2 drawable lines */
+    public static class PitchAmpliControlCharts {
         public Chart2d pitchChart;
         public Chart2d ampliChart;
         public Serie2d seriePitch;
@@ -66,17 +96,17 @@ public class Chart2dDemo {
         public PitchAmpliControlCharts(float timeMax, int freqMax, int nOctave) {
             pitchChart = new Chart2d();
             pitchChart.asTimeChart(timeMax, 0, freqMax, "Time", "Frequency");
-            
+
             IAxeLayout axe = pitchChart.getAxeLayout();
             axe.setYTickProvider(new PitchTickProvider(nOctave));
             axe.setYTickRenderer(new PitchTickRenderer());
-            
+
             seriePitch = pitchChart.getSerie("frequency", Serie2d.Type.LINE);
             seriePitch.setColor(Color.BLUE);
             pitchLineStrip = (ConcurrentLineStrip) seriePitch.getDrawable();
 
             ampliChart = new Chart2d();
-            ampliChart.asTimeChart(timeMax, 0, 1f, "Time", "Amplitude");
+            ampliChart.asTimeChart(timeMax, 0, 1.1f, "Time", "Amplitude");
             serieAmpli = ampliChart.getSerie("amplitude", Serie2d.Type.LINE);
             serieAmpli.setColor(Color.RED);
             amplitudeLineStrip = (ConcurrentLineStrip) serieAmpli.getDrawable();
@@ -89,18 +119,19 @@ public class Chart2dDemo {
             return charts;
         }
     }
-        
-    /** A frame to show a list of charts*/
+
+    /** A frame to show a list of charts */
     public static class TimeChartWindow extends JFrame {
         private static final long serialVersionUID = 7519209038396190502L;
+
         public TimeChartWindow(List<Chart> charts) throws IOException {
             LookAndFeel.apply();
             String lines = "[300px]";
             String columns = "[500px,grow]";
             setLayout(new MigLayout("", columns, lines));
-            int k=0;
-            for(Chart c: charts){
-                addChart(c, k++);            
+            int k = 0;
+            for (Chart c : charts) {
+                addChart(c, k++);
             }
             windowExitListener();
             this.pack();
@@ -108,14 +139,14 @@ public class Chart2dDemo {
             setVisible(true);
         }
 
-        public void addChart(Chart chart, int id){
+        public void addChart(Chart chart, int id) {
             JPanel chartPanel = new JPanel(new BorderLayout());
             Border b = BorderFactory.createLineBorder(java.awt.Color.black);
             chartPanel.setBorder(b);
             chartPanel.add((java.awt.Component) chart.getCanvas(), BorderLayout.CENTER);
-            add(chartPanel, "cell 0 "+id+", grow");
+            add(chartPanel, "cell 0 " + id + ", grow");
         }
-        
+
         public void windowExitListener() {
             addWindowListener(new WindowAdapter() {
                 public void windowClosing(WindowEvent e) {
@@ -125,7 +156,7 @@ public class Chart2dDemo {
             });
         }
     }
-    
+
     /** Simple timer */
     protected static long start;
 
