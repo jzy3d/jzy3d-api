@@ -37,6 +37,7 @@ public interface IChartComponentFactory {
     public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
     public AbstractOrderingStrategy newOrderingStrategy();
     public ICanvas newCanvas(Scene scene, Quality quality, String chartType, GLCapabilities capabilities);
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String chartType, GLCapabilities capabilities);
     public ICameraMouseController newMouseController(Chart chart);
     public ICameraKeyController newKeyController(Chart chart);
     public IScreenshotKeyController newScreenshotKeyController(Chart chart);
@@ -45,6 +46,11 @@ public interface IChartComponentFactory {
     public IViewportLayout newViewportLayout();
 
     public Serie2d newSerie(String name, Serie2d.Type type);
+    
+    /** usefull to override the current factory to call, especially for FactoryOverrider
+     * that must be used as this instead of its wrapped delegate factory
+     */
+    public IChartComponentFactory getFactory();
     
     public static enum Toolkit {
         awt, swing, newt, offscreen
