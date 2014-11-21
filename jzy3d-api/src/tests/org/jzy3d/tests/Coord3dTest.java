@@ -49,6 +49,4 @@ public class Coord3dTest extends TestCase {
         Coord3d expected = new Coord3d(-1, 0, 0);
         assertEqualCoord(expected, input.rotate(angle, axis));
     }
-
-
 }
