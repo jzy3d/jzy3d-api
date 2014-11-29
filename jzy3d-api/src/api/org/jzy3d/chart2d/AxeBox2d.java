@@ -15,7 +15,6 @@ import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
-import org.jzy3d.plot3d.text.renderers.TextBillboardRenderer;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 public class AxeBox2d extends AxeBox {

@@ -1,6 +1,5 @@
 package org.jzy3d.plot2d.primitive;
 
-import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 

@@ -22,13 +22,13 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyControll
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
-import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot2d.primitives.LineSerie2d;
+import org.jzy3d.plot2d.primitives.LineSerie2dSplitted;
 import org.jzy3d.plot2d.primitives.ScatterPointSerie2d;
 import org.jzy3d.plot2d.primitives.ScatterSerie2d;
 import org.jzy3d.plot2d.primitives.Serie2d;
@@ -118,6 +118,8 @@ public class ChartComponentFactory implements IChartComponentFactory {
     public Serie2d newSerie(String name, Serie2d.Type type) {
         if (Serie2d.Type.LINE.equals(type))
             return new LineSerie2d(name);
+        else if (Serie2d.Type.LINE_ON_OFF.equals(type))
+            return new LineSerie2dSplitted(name);
         else if (Serie2d.Type.SCATTER.equals(type))
             return new ScatterSerie2d(name);
         else if (Serie2d.Type.SCATTER_POINTS.equals(type))
