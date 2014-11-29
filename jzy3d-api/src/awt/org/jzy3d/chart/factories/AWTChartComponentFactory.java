@@ -1,9 +1,9 @@
 package org.jzy3d.chart.factories;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.media.opengl.GLCapabilities;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
@@ -123,12 +123,22 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         return new CanvasSwing(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
     }
 
-
-
-    
     @Override
     public IChartComponentFactory getFactory() {
         return this;
+    }
+    
+    public JFrame newFrame(JPanel panel){
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            // ignore failure to set default look en feel;
+        }
+        JFrame frame = new JFrame();
+        frame.add(panel);
+        frame.pack();
+        frame.setVisible(true);
+        return frame;
     }
 
 }

@@ -1,6 +1,7 @@
 package org.jzy3d.tests;
 
 import junit.framework.TestCase;
+
 import org.jzy3d.maths.Coord3d;
 
 /**

@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.builder;
 
-import org.jzy3d.plot3d.builder.Mapper;
 
 /**
  * A base implementation for a {@link Mapper} with a single parameter used while applying f(x,y).

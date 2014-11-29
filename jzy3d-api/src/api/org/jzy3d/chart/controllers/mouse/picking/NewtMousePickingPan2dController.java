@@ -1,6 +1,5 @@
 package org.jzy3d.chart.controllers.mouse.picking;
 
-import com.jogamp.newt.event.MouseEvent;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
@@ -8,6 +7,8 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.View;
+
+import com.jogamp.newt.event.MouseEvent;
 
 public class NewtMousePickingPan2dController<V, E> extends NewtMousePickingController<V, E> {
 
