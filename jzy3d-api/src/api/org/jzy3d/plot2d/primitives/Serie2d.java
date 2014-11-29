@@ -23,6 +23,6 @@ public interface Serie2d {
     public AbstractDrawable getDrawable();
     
     public enum Type{
-        LINE, SCATTER, SCATTER_POINTS
+        LINE, LINE_ON_OFF, SCATTER, SCATTER_POINTS
     }
 }
