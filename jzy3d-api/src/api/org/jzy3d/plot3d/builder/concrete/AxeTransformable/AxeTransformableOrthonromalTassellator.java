@@ -5,29 +5,25 @@ import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformablePolygon;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformer;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 
 public class AxeTransformableOrthonromalTassellator extends
 		OrthonormalTessellator {
 	
-	AxeTransformer transformerX;
-	AxeTransformer transformerY;
-	AxeTransformer transformerZ;
+	AxeTransformerSet transformers;
 	
 	
 	
-	public AxeTransformableOrthonromalTassellator(AxeTransformer transformerX,
-			AxeTransformer transformerY, AxeTransformer transformerZ) {
+	public AxeTransformableOrthonromalTassellator(AxeTransformerSet transformers) {
 		super();
-		this.transformerX = transformerX;
-		this.transformerY = transformerY;
-		this.transformerZ = transformerZ;
+		this.transformers = transformers;
 	}
 
 
 
 	@Override
 	protected AbstractDrawable newQuad(Point p[]){
-	    AxeTransformablePolygon quad = new AxeTransformablePolygon(transformerX,transformerY,transformerZ);
+	    AxeTransformablePolygon quad = new AxeTransformablePolygon(transformers);
         for(int pi=0; pi<p.length; pi++)
             quad.add(p[pi]);
         return quad;
