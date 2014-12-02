@@ -22,6 +22,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -96,6 +97,7 @@ public class View {
 		this.scene.getGraph().getStrategy().setView(this);
 
 		current = this;
+		transformers = new AxeTransformerSet();
 	}
 
 	public Chart getChart() {
@@ -595,9 +597,9 @@ public class View {
 		}
 
 		// Compute factors
-		float xLen = (float) (Math.log(bounds.getXmax()) - Math.log(bounds.getXmin()));   //------------------------apply the transformers to this calculations
-		float yLen = bounds.getYmax() - bounds.getYmin();
-		float zLen = bounds.getZmax() - bounds.getZmin();
+		float xLen = transformers.getX().compute(bounds.getXmax()) - transformers.getX().compute(bounds.getXmin()); 
+		float yLen = transformers.getY().compute(bounds.getYmax()) - transformers.getY().compute(bounds.getYmin());
+		float zLen = transformers.getZ().compute(bounds.getZmax()) - transformers.getZ().compute(bounds.getZmin());
 		float lmax = (float) Math.max(Math.max(xLen, yLen), zLen);
 
 		if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
@@ -841,8 +843,8 @@ public class View {
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled) {
 		Coord3d center = boundsScaled.getCenter();
-		center = new Coord3d(Math.log(center.x), center.y, center.z);   //-------------------------------------------------apply the transformer both to the center and to the bounds and then calculate the radius(maybe implement the transformableRadius in the BoundingBox3d)
-		float radius = (float) center.distance(new Coord3d(Math.log(boundsScaled.getXmin()), boundsScaled.getYmin(), boundsScaled.getZmin()));
+		center = transformers.computePoint(center);   //(maybe implement the transformableRadius in the BoundingBox3d)
+		float radius = (float) center.distance(transformers.computePoint(new Coord3d(boundsScaled.getXmin(), boundsScaled.getYmin(), boundsScaled.getZmin())));
 		updateCamera(gl, glu, viewport, boundsScaled,
 				/*(float) boundsScaled.getRadius()*/
 				radius);
@@ -850,10 +852,9 @@ public class View {
 
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled, float sceneRadiusScaled) {
-		//Coord3d scaling2 = new Coord3d(Math.log(scaling.x), scaling.y, scaling.z);
 		Coord3d target = center.mul(scaling);
-		target = new Coord3d(Math.log(target.x), target.y, target.z);   //-----------------------------------------------apply transformation to target
-
+		target = transformers.computePoint(target);
+		//target = new Coord3d(transformers.getX().compute(target.x), transformers.getY().compute(target.y), target.z);
 		Coord3d eye;
 		viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
 		if (viewmode == ViewPositionMode.FREE) {
@@ -885,6 +886,7 @@ public class View {
 				wasOnTopAtLastRendering = true;
 				fireViewOnTopEvent(true);
 			}
+			
 		} else {
 			// handle up vector
 			up = new Coord3d(0, 0, 1);
@@ -895,7 +897,6 @@ public class View {
 				fireViewOnTopEvent(false);
 			}
 		}
-
 		// -- Apply camera settings ------------------------
 		cam.setTarget(target);
 		cam.setUp(up);
@@ -976,7 +977,19 @@ public class View {
 		return current;
 	}
 
+	
+	
 	/* */
+
+	public AxeTransformerSet getTransformers() {
+		return transformers;
+	}
+
+	public void setTransformers(AxeTransformerSet transformers) {
+		this.transformers = transformers;
+	}
+
+
 
 	/** A view may optionnaly know its parent chart. */
 	protected Chart chart;
@@ -1052,5 +1065,6 @@ public class View {
 	/** A slave view won't clear its color and depth buffer before rendering */
 	protected boolean slave = false;
 
+	protected AxeTransformerSet transformers;
     
 }

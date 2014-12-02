@@ -12,9 +12,11 @@ import org.jzy3d.plot3d.builder.Builder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.axeTransformable.axeTransformableBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
+import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LinearTransformer;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LogTransformer;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LinearAxeTransformer;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LogAxeTransformer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.*;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -26,26 +28,29 @@ public class LogTest {
 		// Define a function to plot
 		Mapper mapper = new Mapper() {
 		    public double f(double x, double y) {
-		        //return (10 * Math.sin(x) * Math.cos(y) * x) / 1000;
-		    	return x+y/2;
+		        double value =  Math.abs((10 * Math.sin(x) * Math.cos(y) * x) / 10) + 10;
+		        return value;
 		    }
 		};
 
 		// Define range and precision for the function to plot
-		Range range = new Range((float)0.1, 100);
-		Range range2 = new Range((float)0.1,10);
-		int steps = 50;
+		Range range = new Range((float)0.1, 1000);
+		Range range2 = new Range((float)0.1,50);
+		int steps = 200;
 
+		AxeTransformerSet transformers = new AxeTransformerSet(new LinearAxeTransformer(), new LogAxeTransformer(), new LinearAxeTransformer());
+		
 		// Create a surface drawing that function
-		Shape surface = axeTransformableBuilder.buildOrthonormal(new OrthonormalGrid(range, steps, range2, steps), mapper, new LogTransformer(), new LinearTransformer(), new LinearTransformer());
+		CompileableComposite surface = axeTransformableBuilder.buildOrthonormalBig(new OrthonormalGrid(range, steps, range2, steps), mapper, transformers);
 		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
 		surface.setFaceDisplayed(true);
 		surface.setWireframeDisplayed(false);
 		surface.setWireframeColor(Color.BLACK);
 
 		// Create a chart and add the surface
-		Chart chart = AxeTransformableAWTChartComponentFactory.chart(Quality.Advanced, new LogTransformer(), new LinearTransformer(), new LinearTransformer());
+		Chart chart = AxeTransformableAWTChartComponentFactory.chart(Quality.Advanced, transformers);
 		chart.getScene().getGraph().add(surface);
+		chart.getView().setTransformers(transformers);
 		ChartLauncher.openChart(chart);
 		/*Shape surface = Builder.buildOrthonormal(new OrthonormalGrid(range, steps, range2, steps), mapper);
 		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
