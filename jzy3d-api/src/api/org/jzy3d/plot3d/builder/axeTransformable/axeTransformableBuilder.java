@@ -9,16 +9,17 @@ import org.jzy3d.plot3d.builder.concrete.AxeTransformable.AxeTransformableOrthon
 import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformer;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 
 public class axeTransformableBuilder extends Builder {
 	
-	public static Shape buildOrthonormal(OrthonormalGrid grid, Mapper mapper, AxeTransformer transformerX, AxeTransformer transformerY, AxeTransformer transformerZ) {
-		AxeTransformableOrthonromalTassellator tesselator = new AxeTransformableOrthonromalTassellator(transformerX,transformerY,transformerZ);
+	public static Shape buildOrthonormal(OrthonormalGrid grid, Mapper mapper, AxeTransformerSet transformers) {
+		AxeTransformableOrthonromalTassellator tesselator = new AxeTransformableOrthonromalTassellator(transformers);
 		return (Shape) tesselator.build(grid.apply(mapper));
 	}
 	
-	public static CompileableComposite buildOrthonormalBig(OrthonormalGrid grid, Mapper mapper, AxeTransformer transformerX, AxeTransformer transformerY, AxeTransformer transformerZ) {
-        Tessellator tesselator = new AxeTransformableOrthonromalTassellator(transformerX,transformerY,transformerZ);
+	public static CompileableComposite buildOrthonormalBig(OrthonormalGrid grid, Mapper mapper, AxeTransformerSet transformers) {
+        Tessellator tesselator = new AxeTransformableOrthonromalTassellator(transformers);
         Shape s1 = (Shape) tesselator.build(grid.apply(mapper));
         return buildComposite(applyStyling(s1));
     }

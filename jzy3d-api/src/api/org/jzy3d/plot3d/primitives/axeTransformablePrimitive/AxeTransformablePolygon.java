@@ -6,14 +6,15 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformer;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 public class AxeTransformablePolygon extends AxeTransformableAbstractGeometry {
 	
 	
 	
-	 public AxeTransformablePolygon(AxeTransformer trsX, AxeTransformer trsY , AxeTransformer trsZ) {
-	        super(trsX,trsY,trsZ);
+	 public AxeTransformablePolygon(AxeTransformerSet transformers) {
+	        super(transformers);
 	   }
 
 	    protected void begin(GL gl) {
