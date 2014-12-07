@@ -83,7 +83,7 @@ public class View {
         this.scene = scene;
         this.canvas = canvas;
         this.quality = quality;
-        this.annotations = new Scene(false);
+        this.annotations = factory.newScene(false);
 
         this.viewOnTopListeners = new ArrayList<IViewIsVerticalEventListener>();
         this.viewPointChangedListeners = new ArrayList<IViewPointChangedListener>();

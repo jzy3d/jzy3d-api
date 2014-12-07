@@ -10,6 +10,7 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.IBoundingPolicy;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
@@ -46,6 +47,9 @@ public interface IChartComponentFactory {
     public IViewportLayout newViewportLayout();
 
     public Serie2d newSerie(String name, Serie2d.Type type);
+    
+    public IBoundingPolicy newBoundingPolicy();
+
     
     /** usefull to override the current factory to call, especially for FactoryOverrider
      * that must be used as this instead of its wrapped delegate factory

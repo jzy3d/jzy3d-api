@@ -25,6 +25,7 @@ import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.maths.IBoundingPolicy;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot2d.primitives.LineSerie2d;
@@ -112,6 +113,11 @@ public class ChartComponentFactory implements IChartComponentFactory {
     @Override
     public AbstractOrderingStrategy newOrderingStrategy() {
         return new BarycentreOrderingStrategy();
+    }
+    
+    @Override
+    public IBoundingPolicy newBoundingPolicy(){
+        return null;
     }
     
     @Override
