@@ -1,5 +1,7 @@
 package org.jzy3d.tests;
 
+import java.util.Random;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
@@ -7,12 +9,14 @@ import org.jzy3d.chart.factories.AxeTransformableAWTChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.Builder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.axeTransformable.axeTransformableBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
+import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LinearAxeTransformer;
@@ -64,5 +68,4 @@ public class LogTest {
 		chart.getScene().getGraph().add(surface);
 		ChartLauncher.openChart(chart);*/
 	}
-
 }
