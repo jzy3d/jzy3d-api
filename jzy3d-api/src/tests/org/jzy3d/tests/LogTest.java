@@ -34,11 +34,11 @@ public class LogTest {
 		};
 
 		// Define range and precision for the function to plot
-		Range range = new Range((float)0.1, 1000);
+		Range range = new Range((float)0.1, 10);
 		Range range2 = new Range((float)0.1,50);
 		int steps = 200;
 
-		AxeTransformerSet transformers = new AxeTransformerSet(new LinearAxeTransformer(), new LogAxeTransformer(), new LinearAxeTransformer());
+		AxeTransformerSet transformers = new AxeTransformerSet(new LogAxeTransformer(), new LinearAxeTransformer(), new LinearAxeTransformer());
 		
 		// Create a surface drawing that function
 		CompileableComposite surface = axeTransformableBuilder.buildOrthonormalBig(new OrthonormalGrid(range, steps, range2, steps), mapper, transformers);
