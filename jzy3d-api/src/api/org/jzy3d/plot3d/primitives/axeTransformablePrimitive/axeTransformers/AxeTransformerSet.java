@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers;
 
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 
 public class AxeTransformerSet {
@@ -54,6 +55,9 @@ public class AxeTransformerSet {
 		return new Coord3d(getX().compute(point.x), getY().compute(point.y), getZ().compute(point.z));
 	}
 	
+	public Coord2d computePoint(Coord2d point) {
+		return new Coord2d(getX().compute(point.x), getY().compute(point.y));
+	}
 	
 	
 	
