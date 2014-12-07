@@ -28,6 +28,7 @@ public class AxeTransformableConcurrentScatterMultiColorList extends
 
     public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, float width, AxeTransformerSet transformers) {
         super(coordinates, mapper, width);
+        this.transformers = transformers;
     }
 
     /* */

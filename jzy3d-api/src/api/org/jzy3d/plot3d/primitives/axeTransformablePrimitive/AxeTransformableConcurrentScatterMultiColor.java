@@ -25,6 +25,7 @@ public class AxeTransformableConcurrentScatterMultiColor extends
 
 	    public AxeTransformableConcurrentScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper, float width, AxeTransformerSet transformers) {
 	        super(coordinates, colors, mapper, width);
+	        this.transformers = transformers;
 	    }
 
 	    public void drawGLES2() {

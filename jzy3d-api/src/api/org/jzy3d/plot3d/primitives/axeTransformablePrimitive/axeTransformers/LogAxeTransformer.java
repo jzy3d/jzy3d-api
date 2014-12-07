@@ -5,7 +5,8 @@ public class LogAxeTransformer implements AxeTransformer{
 
 	@Override
 	public float compute(float value) {
-		return (float) Math.log(value);
+		if(value <= 0) return 0;
+		else return (float) Math.log(value);
 	}
 	
 }
