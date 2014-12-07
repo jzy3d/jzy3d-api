@@ -1,5 +1,6 @@
 package org.jzy3d.tests;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import org.jzy3d.chart.Chart;
@@ -11,13 +12,20 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
+import org.jzy3d.maths.algorithms.interpolation.algorithms.BernsteinInterpolator;
 import org.jzy3d.plot3d.builder.Builder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.axeTransformable.axeTransformableBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
+import org.jzy3d.plot3d.primitives.FlatLine2d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableCylinder;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableFlatLine2d;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableLineStrip;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableLineStripInterpolated;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformablePoint;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LinearAxeTransformer;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LogAxeTransformer;
@@ -45,27 +53,46 @@ public class LogTest {
 		AxeTransformerSet transformers = new AxeTransformerSet(new LogAxeTransformer(), new LinearAxeTransformer(), new LinearAxeTransformer());
 		
 		// Create a surface drawing that function
-		CompileableComposite surface = axeTransformableBuilder.buildOrthonormalBig(new OrthonormalGrid(range, steps, range2, steps), mapper, transformers);
+		/*CompileableComposite surface = axeTransformableBuilder.buildOrthonormalBig(new OrthonormalGrid(range, steps, range2, steps), mapper, transformers);
 		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
 		surface.setFaceDisplayed(true);
 		surface.setWireframeDisplayed(false);
-		surface.setWireframeColor(Color.BLACK);
+		surface.setWireframeColor(Color.BLACK);*/
+		
+		/*AxeTransformableCylinder cyl = new AxeTransformableCylinder(transformers);
+		cyl.setData(new Coord3d(10,10,0), 10, 3, 20, 20, new Color(1, 0, 0));*/
+		
+		/*AxeTransformableFlatLine2d fline = new AxeTransformableFlatLine2d(new float[]{1.f,2.f,5.f}, new float[]{3.f,1.f,0.2f}, 5,transformers);
+		fline.setWireframeColor(new Color(1,1,1));*/
+		
+		/*ArrayList<Coord3d> points = new ArrayList<Coord3d>();
+		points.add(new Coord3d(0,0,0));
+		points.add(new Coord3d(1,1,1));
+		points.add(new Coord3d(3,3,1));
+		
+		AxeTransformableLineStripInterpolated line = new AxeTransformableLineStripInterpolated(new BernsteinInterpolator(), points, 100, transformers);
+		line.setWireframeColor(new Color(1,1,1));*/
+		
+		AxeTransformablePoint point1 = new AxeTransformablePoint(transformers);
+		point1.setData(new Coord3d(1,1,1));
+		point1.setColor(new Color(1, 0, 0));
+		point1.setWidth(10);
+		AxeTransformablePoint point2 = new AxeTransformablePoint(transformers);
+		point2.setData(new Coord3d(2,3,3));
+		point2.setColor(new Color(0,1,0));
+		point2.setWidth(10);
+		AxeTransformablePoint point3 = new AxeTransformablePoint(transformers);
+		point3.setData(new Coord3d(3,4,2));
+		point3.setColor(new Color(0,0,1));
+		point3.setWidth(10);
+				
 
 		// Create a chart and add the surface
-		Chart chart = AxeTransformableAWTChartComponentFactory.chart(Quality.Advanced, transformers);
-		chart.getScene().getGraph().add(surface);
+		Chart chart = AxeTransformableAWTChartComponentFactory.chart(Quality.Advanced, "awt", transformers);
+		chart.getScene().getGraph().add(point1);
+		chart.getScene().getGraph().add(point2);
+		chart.getScene().getGraph().add(point3);
 		chart.getView().setTransformers(transformers);
 		ChartLauncher.openChart(chart);
-		/*Shape surface = Builder.buildOrthonormal(new OrthonormalGrid(range, steps, range2, steps), mapper);
-		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
-		surface.setFaceDisplayed(true);
-		surface.setWireframeDisplayed(false);
-		surface.setWireframeColor(Color.BLACK);
-
-		// Create a chart and add the surface
-		Chart chart = AWTChartComponentFactory.chart(Quality.Advanced);
-		chart.getView().setSquared(false);
-		chart.getScene().getGraph().add(surface);
-		ChartLauncher.openChart(chart);*/
 	}
 }
