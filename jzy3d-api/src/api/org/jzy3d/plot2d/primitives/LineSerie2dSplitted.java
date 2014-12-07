@@ -19,7 +19,7 @@ public class LineSerie2dSplitted extends LineSerie2d implements Serie2d {
         line().add(new Point(new Coord3d(x, y, 0), color));
     }
 
-    protected ConcurrentLineStripSplitted line(){
+    public ConcurrentLineStripSplitted line(){
         return (ConcurrentLineStripSplitted)line;
     }
 }
