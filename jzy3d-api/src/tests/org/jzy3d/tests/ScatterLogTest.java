@@ -38,9 +38,9 @@ public class ScatterLogTest extends AbstractAnalysis{
 	        r.setSeed(0);
 	        
 	        for(int i=0; i<size; i++){
-	            x = r.nextFloat() - 0.5f;
-	            y = r.nextFloat() - 0.5f;
-	            z = r.nextFloat() - 0.5f;
+	            x = r.nextFloat() + 0.1f;
+	            y = r.nextFloat() + 0.1f;
+	            z = r.nextFloat() + 0.1f;
 	            points[i] = new Coord3d(x, y, z);
 	            a = 0.25f;
 	            colors[i] = new Color(x, y, z, a);
