@@ -156,6 +156,7 @@ public class View {
 
 	public void rotate(final Coord2d move, boolean updateView) {
 		Coord3d eye = getViewPoint();
+		//Coord2d moveTrs = transformers.computePoint(move);
 		eye.x -= move.x;
 		eye.y += move.y;
 		setViewPoint(eye, updateView);
@@ -317,7 +318,7 @@ public class View {
 	 * colorbar range.
 	 */
 	public void lookToBox(BoundingBox3d box) {
-		center = box.getCenter();
+		center = box.getTransformedCenter(transformers);
 		axe.setAxe(box);
 		// targetBox = box;
 		// System.out.println(box);
@@ -842,19 +843,13 @@ public class View {
 
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled) {
-		Coord3d center = boundsScaled.getCenter();
-		center = transformers.computePoint(center);   //(maybe implement the transformableRadius in the BoundingBox3d)
-		float radius = (float) center.distance(transformers.computePoint(new Coord3d(boundsScaled.getXmin(), boundsScaled.getYmin(), boundsScaled.getZmin())));
 		updateCamera(gl, glu, viewport, boundsScaled,
-				/*(float) boundsScaled.getRadius()*/
-				radius);
+				(float) boundsScaled.getTransformedRadius(transformers));
 	}
 
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled, float sceneRadiusScaled) {
 		Coord3d target = center.mul(scaling);
-		target = transformers.computePoint(target);
-		//target = new Coord3d(transformers.getX().compute(target.x), transformers.getY().compute(target.y), target.z);
 		Coord3d eye;
 		viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
 		if (viewmode == ViewPositionMode.FREE) {
