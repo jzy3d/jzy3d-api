@@ -8,6 +8,8 @@ public class ColorMapWhiteGreen extends AbstractColorMap implements IColorMap {
     	super();
     }
     
+	
+	
 	/** @inheritDoc */
     public Color getColor( double x, double y, double z, double zMin, double zMax ){
         double rel_value = processRelativeZValue(z, zMin, zMax);

@@ -40,19 +40,19 @@ public class MultiChartPanel extends JPanel {
 
     private int nComponent = 0;
 
-    public MultiChartPanel(List<Chart> charts) throws IOException {
+    public MultiChartPanel(List<Chart> charts)  {
         this(charts, true);
     }
 
-    public MultiChartPanel(List<Chart> charts, boolean vertical) throws IOException {
+    public MultiChartPanel(List<Chart> charts, boolean vertical)  {
         this(charts, vertical, 500, 300);
     }
 
-    public MultiChartPanel(List<Chart> charts, boolean vertical, int width, int height) throws IOException {
+    public MultiChartPanel(List<Chart> charts, boolean vertical, int width, int height)  {
         this(charts, vertical, width, height, true, false);
     }
 
-    public MultiChartPanel(List<Chart> charts, boolean vertical, int width, int height, boolean growCol, boolean growLine) throws IOException {
+    public MultiChartPanel(List<Chart> charts, boolean vertical, int width, int height, boolean growCol, boolean growLine)  {
         LookAndFeel.apply();
 
         // Main layout
