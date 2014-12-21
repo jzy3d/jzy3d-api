@@ -39,14 +39,16 @@ public class NewtMousePickingController<V, E> extends AbstractCameraController
 		picking = new PickingSupport(brushSize, bufferSize);
 	}
 
-	public void register(Chart chart) {
+	@Override
+    public void register(Chart chart) {
 		super.register(chart);
 		this.chart = chart;
 		this.prevMouse = Coord2d.ORIGIN;
 		chart.getCanvas().addMouseController(this);
 	}
 
-	public void dispose() {
+	@Override
+    public void dispose() {
 		for (Chart c : targets) {
 			c.getCanvas().removeMouseController(this);
 		}
@@ -69,23 +71,29 @@ public class NewtMousePickingController<V, E> extends AbstractCameraController
 
 	/****************/
 
-	public void mouseClicked(MouseEvent e) {
+	@Override
+    public void mouseClicked(MouseEvent e) {
 	}
 
-	public void mouseEntered(MouseEvent e) {
+	@Override
+    public void mouseEntered(MouseEvent e) {
 	}
 
-	public void mouseExited(MouseEvent e) {
+	@Override
+    public void mouseExited(MouseEvent e) {
 	}
 
-	public void mouseReleased(MouseEvent e) {
+	@Override
+    public void mouseReleased(MouseEvent e) {
 	}
 
-	public void mouseDragged(MouseEvent e) {
+	@Override
+    public void mouseDragged(MouseEvent e) {
 	}
 
 	/** Compute zoom */
-	public void mouseWheelMoved(MouseEvent e) {
+	@Override
+    public void mouseWheelMoved(MouseEvent e) {
 		if (threadController != null)
 			threadController.stop();
 		float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
@@ -96,12 +104,14 @@ public class NewtMousePickingController<V, E> extends AbstractCameraController
 	}
 		
 
-	public void mouseMoved(MouseEvent e) {
+	@Override
+    public void mouseMoved(MouseEvent e) {
 	    System.out.println("moved");
 		pick(e);
 	}
 
-	public void mousePressed(MouseEvent e) {
+	@Override
+    public void mousePressed(MouseEvent e) {
 		if (handleSlaveThread(e))
 			return;
 		pick(e);

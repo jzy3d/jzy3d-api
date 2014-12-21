@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -36,7 +37,8 @@ public class EnlightablePolygon extends AbstractEnlightable {
 
 	/**********************************************************************/
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 
 		applyMaterial(gl); // TODO: shall we avoid calling this @ each draw?
@@ -48,9 +50,9 @@ public class EnlightablePolygon extends AbstractEnlightable {
 		if (gl.isGL2()) {
 
 			if (facestatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 				if (wfstatus) {
-					gl.getGL2().glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.getGL2().glEnable(GL.GL_POLYGON_OFFSET_FILL);
 					gl.getGL2().glPolygonOffset(1.0f, 1.0f);
 				}
 
@@ -69,14 +71,14 @@ public class EnlightablePolygon extends AbstractEnlightable {
 				}
 				gl.getGL2().glEnd();
 				if (wfstatus)
-					gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 
 			// Draw edge of polygon
 			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 
-				gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+				gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 				gl.glPolygonOffset(1.0f, 1.0f);
 
 				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, 1);// wfcolor.a);
@@ -88,15 +90,15 @@ public class EnlightablePolygon extends AbstractEnlightable {
 					gl.getGL2().glNormal3f(norm.x, norm.y, norm.z);
 				}
 				gl.getGL2().glEnd();
-				gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+				gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 		} else {
 
 			if (facestatus) {
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-						GL2.GL_FILL);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+						GL2GL3.GL_FILL);
 				if (wfstatus) {
-					gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 					gl.glPolygonOffset(1.0f, 1.0f);
 				}
 
@@ -115,15 +117,15 @@ public class EnlightablePolygon extends AbstractEnlightable {
 				}
 				GLES2CompatUtils.glEnd();
 				if (wfstatus)
-					gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 
 			// Draw edge of polygon
 			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-						GL2.GL_LINE);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+						GL2GL3.GL_LINE);
 
-				gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+				gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 				gl.glPolygonOffset(1.0f, 1.0f);
 
 				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
@@ -136,7 +138,7 @@ public class EnlightablePolygon extends AbstractEnlightable {
 					GLES2CompatUtils.glNormal3f(norm.x, norm.y, norm.z);
 				}
 				GLES2CompatUtils.glEnd();
-				gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+				gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 		}
 
@@ -147,14 +149,16 @@ public class EnlightablePolygon extends AbstractEnlightable {
 
 	}
 
-	public void applyGeometryTransform(Transform transform) {
+	@Override
+    public void applyGeometryTransform(Transform transform) {
 		for (Point p : points) {
 			p.xyz = transform.compute(p.xyz);
 		}
 		updateBounds();
 	}
 
-	public void updateBounds() {
+	@Override
+    public void updateBounds() {
 		bbox.reset();
 		bbox.add(points);
 		// recompute center
@@ -246,7 +250,8 @@ public class EnlightablePolygon extends AbstractEnlightable {
 
 	/**********************************************************************/
 
-	public String toString(int depth) {
+	@Override
+    public String toString(int depth) {
 		return (Utils.blanks(depth) + "(EnlightablePolygon) #points:" + points
 				.size());
 	}

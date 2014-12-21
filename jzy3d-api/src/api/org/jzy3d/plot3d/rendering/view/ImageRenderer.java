@@ -41,8 +41,8 @@ public class ImageRenderer {
 
 			synchronized (image) { // we don't want to draw image while it is
 									// being set by setImage
-				gl.getGL2().glDrawPixels(imageWidth, imageHeight, GL2.GL_RGBA,
-						GL2.GL_UNSIGNED_BYTE, image);
+				gl.getGL2().glDrawPixels(imageWidth, imageHeight, GL.GL_RGBA,
+						GL.GL_UNSIGNED_BYTE, image);
 			}
 		} else {
 			GLES2CompatUtils.glPixelZoom(xratio, yratio);
@@ -50,8 +50,8 @@ public class ImageRenderer {
 
 			synchronized (image) { // we don't want to draw image while it is
 									// being set by setImage
-				GLES2CompatUtils.glDrawPixels(imageWidth, imageHeight, GL2.GL_RGBA,
-						GL2.GL_UNSIGNED_BYTE, image);
+				GLES2CompatUtils.glDrawPixels(imageWidth, imageHeight, GL.GL_RGBA,
+						GL.GL_UNSIGNED_BYTE, image);
 			}
 		}
 

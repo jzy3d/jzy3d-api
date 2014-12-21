@@ -46,6 +46,7 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
 
     protected Renderer2d initRenderer2d(final ICanvas c) {
         return new Renderer2d() {
+            @Override
             public void paint(Graphics g) {
                 drawSelection((Graphics2D) g, c.getRendererWidth(), c.getRendererHeight());
                 updateLast();
@@ -203,12 +204,15 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
     public void mouseWheelMoved(MouseEvent e) {
     }
 
+    @Override
     public void mouseEntered(MouseEvent e) {
     }
 
+    @Override
     public void mouseExited(MouseEvent e) {
     }
 
+    @Override
     public void mouseClicked(MouseEvent e) {
     }
 

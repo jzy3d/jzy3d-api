@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -39,6 +40,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
     /* * */
 
+    @Override
     public void draw(GL gl, GLU glu, Camera cam) {
         doTransform(gl, glu, cam);
 
@@ -166,13 +168,13 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     protected void applyPolygonModeLineGLES2() {
         switch (polygonMode) {
         case FRONT:
-            GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
             break;
         case BACK:
-            GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+            GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             break;
         case FRONT_AND_BACK:
-            GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
             break;
         default:
             break;
@@ -182,13 +184,13 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     protected void applyPolygonModeLineGL2(GL gl) {
         switch (polygonMode) {
         case FRONT:
-            gl.getGL2().glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+            gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
             break;
         case BACK:
-            gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             break;
         case FRONT_AND_BACK:
-            gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
             break;
         default:
             break;
@@ -206,13 +208,13 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     public void applyPolygonModeFillGLES2() {
         switch (polygonMode) {
         case FRONT:
-            GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
+            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
             break;
         case BACK:
-            GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
+            GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
             break;
         case FRONT_AND_BACK:
-            GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
             break;
         default:
             break;
@@ -222,13 +224,13 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     public void applyPolygonModeFillGL2(GL gl) {
         switch (polygonMode) {
         case FRONT:
-            gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2.GL_FILL);
+            gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
             break;
         case BACK:
-            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2.GL_FILL);
+            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
             break;
         case FRONT_AND_BACK:
-            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
+            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
             break;
         default:
             break;
@@ -258,6 +260,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         }
     }
 
+    @Override
     public void applyGeometryTransform(Transform transform) {
         for (Point p : points) {
             p.xyz = transform.compute(p.xyz);
@@ -265,6 +268,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         updateBounds();
     }
 
+    @Override
     public void updateBounds() {
         bbox.reset();
         bbox.add(getPoints());
@@ -295,10 +299,12 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
     /* DISTANCES */
 
+    @Override
     public double getDistance(Camera camera) {
         return getBarycentre().distance(camera.getEye());
     }
 
+    @Override
     public double getShortestDistance(Camera camera) {
         double min = Float.MAX_VALUE;
         double dist = 0;
@@ -314,6 +320,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         return min;
     }
 
+    @Override
     public double getLongestDistance(Camera camera) {
         double max = 0;
         double dist = 0;
@@ -373,16 +380,19 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
     /* COLOR */
 
+    @Override
     public void setColorMapper(ColorMapper mapper) {
         this.mapper = mapper;
 
         fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
     }
 
+    @Override
     public ColorMapper getColorMapper() {
         return mapper;
     }
 
+    @Override
     public void setColor(Color color) {
         this.color = color;
 
@@ -392,10 +402,12 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
     }
 
+    @Override
     public Color getColor() {
         return color;
     }
 
+    @Override
     public String toString(int depth) {
         return (Utils.blanks(depth) + "(" + this.getClass().getSimpleName() + ") #points:" + points.size());
     }

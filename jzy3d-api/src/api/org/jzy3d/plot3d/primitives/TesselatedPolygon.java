@@ -30,11 +30,12 @@ public class TesselatedPolygon extends AbstractComposite {
 
 	protected Polygon newTriangle() {
 		return new Polygon() {
-			protected void begin(GL gl) {
+			@Override
+            protected void begin(GL gl) {
 				if (gl.isGL2()) {
-					gl.getGL2().glBegin(GL2.GL_TRIANGLES);
+					gl.getGL2().glBegin(GL.GL_TRIANGLES);
 				} else {
-					GLES2CompatUtils.glBegin(GL2.GL_TRIANGLES);
+					GLES2CompatUtils.glBegin(GL.GL_TRIANGLES);
 				}
 			}
 
@@ -42,7 +43,8 @@ public class TesselatedPolygon extends AbstractComposite {
 			 * Override default to use a line strip to draw wire, so that the
 			 * shared adjacent triangle side is not drawn.
 			 */
-			protected void callPointForWireframe(GL gl) {
+			@Override
+            protected void callPointForWireframe(GL gl) {
 				if (gl.isGL2()) {
 					gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
 							wfcolor.a);
@@ -69,9 +71,9 @@ public class TesselatedPolygon extends AbstractComposite {
 
 			protected void beginWireWithLineStrip(GL gl) {
 				if (gl.isGL2()) {
-					gl.getGL2().glBegin(GL2.GL_LINE_STRIP);
+					gl.getGL2().glBegin(GL.GL_LINE_STRIP);
 				} else {
-					GLES2CompatUtils.glBegin(GL2.GL_LINE_STRIP);
+					GLES2CompatUtils.glBegin(GL.GL_LINE_STRIP);
 				}
 			}
 

@@ -13,7 +13,7 @@ public class DefaultContourColoringPolicy implements IContourColoringPolicy{
 	
 	@Override
 	public int getRGB(double z) {
-		if( z != MapperContourPictureGenerator.NON_CONTOUR ){
+		if( z != AbstractContourGenerator.NON_CONTOUR ){
 			Coord3d coord = new Coord3d(0.0f, 0.0f, z);
 			Color color   = cmapper.getColor(coord);
 			return ColorAWT.toAWT(color).getRGB();					

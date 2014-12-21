@@ -40,7 +40,8 @@ public class SelectableView extends View{
 
 	/** If chart is rendered for the first time, or rendered because it,
 	 * was resized, we need to update a projection for the CellSelector. */
-	public void render(GL gl, GLU glu) {
+	@Override
+    public void render(GL gl, GLU glu) {
 		if( dimensionDirty )
 			wasDirty = true;
 

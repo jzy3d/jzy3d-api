@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2ES1;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.glu.GLU;
 
 import org.apache.log4j.Logger;
@@ -166,7 +168,8 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
 		}
 	}
 
-	public BoundingBox3d getBounds() {
+	@Override
+    public BoundingBox3d getBounds() {
 		return bbox.shift(new Coord3d(planePosition, 0));
 	}
 
@@ -188,7 +191,8 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
 
 	protected Transform textureScale;
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 		if (textureScale != null)
 			textureScale.execute(gl, false);
@@ -205,7 +209,7 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
 		before(gl);
 
 		if (gl.isGL2()) {
-			gl.getGL2().glBegin(GL2.GL_QUADS);
+			gl.getGL2().glBegin(GL2GL3.GL_QUADS);
 
 			if (orientation == PlaneAxis.X) {
 				gl.getGL2().glTexCoord2f(coords.left(), coords.bottom());
@@ -250,7 +254,7 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
 
 			gl.getGL2().glEnd();
 		} else {
-			GLES2CompatUtils.glBegin(GL2.GL_QUADS);
+			GLES2CompatUtils.glBegin(GL2GL3.GL_QUADS);
 
 			if (orientation == PlaneAxis.X) {
 				GLES2CompatUtils.glTexCoord2f(coords.left(),
@@ -313,7 +317,7 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
 		if (gl.isGL2()) {
 			gl.getGL2().glPushMatrix();
 			// gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT,GL2.GL_NICEST);
-			gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+			gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 
 			// gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
 			// gl.glPolygonOffset(1.0f, 1.0f);
@@ -324,23 +328,23 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
 			// gl.glEnable(GL2.GL_ALPHA_TEST);
 			// gl.glAlphaFunc(GL2.GL_GREATER, 0);
 
-			gl.glEnable(GL2.GL_TEXTURE_2D);
-			gl.getGL2().glTexEnvf(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_ENV_MODE,
-					GL2.GL_REPLACE);
+			gl.glEnable(GL.GL_TEXTURE_2D);
+			gl.getGL2().glTexEnvf(GL.GL_TEXTURE_2D, GL2ES1.GL_TEXTURE_ENV_MODE,
+					GL.GL_REPLACE);
 		} else {
 			GLES2CompatUtils.glPushMatrix();
-			GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-					GL2.GL_FILL);
-			gl.glEnable(GL2.GL_TEXTURE_2D);
-			GLES2CompatUtils.glTexEnvf(GL2.GL_TEXTURE_2D,
-					GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);
+			GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+					GL2GL3.GL_FILL);
+			gl.glEnable(GL.GL_TEXTURE_2D);
+			GLES2CompatUtils.glTexEnvf(GL.GL_TEXTURE_2D,
+					GL2ES1.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
 		}
 	}
 
 	protected void after(GL gl) {
-		gl.glDisable(GL2.GL_TEXTURE_2D);
-		gl.getGL2().glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE,
-				GL2.GL_MODULATE);
+		gl.glDisable(GL.GL_TEXTURE_2D);
+		gl.getGL2().glTexEnvi(GL2ES1.GL_TEXTURE_ENV, GL2ES1.GL_TEXTURE_ENV_MODE,
+				GL2ES1.GL_MODULATE);
 		// gl.glDisable(GL2.GL_ALPHA);
 		// gl.glDisable(GL2.GL_BLEND);
 		gl.getGL2().glPopMatrix();

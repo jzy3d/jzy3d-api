@@ -21,7 +21,8 @@ public class CameraThreadController extends AbstractCameraController implements 
 		register(chart);
 	}
 	
-	public void dispose(){
+	@Override
+    public void dispose(){
 		stop();
 		super.dispose();
 	}
@@ -46,7 +47,8 @@ public class CameraThreadController extends AbstractCameraController implements 
 	}
 
 	/** Run the animation.*/
-	public void run() {	
+	@Override
+    public void run() {	
 		move = new Coord2d(step,0);
 
 		while (process!=null) {

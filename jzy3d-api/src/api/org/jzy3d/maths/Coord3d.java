@@ -74,6 +74,7 @@ public class Coord3d {
     }
 
     /** Return a duplicate of this 3d coordinate. */
+    @Override
     public Coord3d clone() {
         return new Coord3d(x, y, z);
     }
@@ -357,6 +358,7 @@ public class Coord3d {
     /**************************************************************/
 
     /** Return a string representation of this coordinate. */
+    @Override
     public String toString() {
         return ("x=" + x + " y=" + y + " z=" + z);
     }

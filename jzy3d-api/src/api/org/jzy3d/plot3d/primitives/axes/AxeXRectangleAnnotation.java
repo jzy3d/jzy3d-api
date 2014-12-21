@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.axes;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
@@ -48,13 +49,13 @@ public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAn
         if (gl.isGL2()) {
             switch (polygonMode) {
             case FRONT:
-                gl.getGL2().glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+                gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
                 break;
             case BACK:
-                gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+                gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
                 break;
             case FRONT_AND_BACK:
-                gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+                gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
                 break;
             default:
                 break;
@@ -64,13 +65,13 @@ public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAn
 
             switch (polygonMode) {
             case FRONT:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+                GLES2CompatUtils.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
                 break;
             case BACK:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+                GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
                 break;
             case FRONT_AND_BACK:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+                GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
                 break;
             default:
                 break;
@@ -82,13 +83,13 @@ public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAn
         if (gl.isGL2()) {
             switch (polygonMode) {
             case FRONT:
-                gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2.GL_FILL);
+                gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
                 break;
             case BACK:
-                gl.getGL2().glPolygonMode(GL.GL_BACK, GL2.GL_FILL);
+                gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
                 break;
             case FRONT_AND_BACK:
-                gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_FILL);
+                gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
                 break;
             default:
                 break;
@@ -98,13 +99,13 @@ public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAn
             // glPolygonMode does not exist in opengl es ??
             switch (polygonMode) {
             case FRONT:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
+                GLES2CompatUtils.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
                 break;
             case BACK:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
+                GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
                 break;
             case FRONT_AND_BACK:
-                GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+                GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
                 break;
             default:
                 break;

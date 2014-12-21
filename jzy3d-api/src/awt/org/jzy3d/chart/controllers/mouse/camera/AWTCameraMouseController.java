@@ -24,12 +24,14 @@ public class AWTCameraMouseController extends AbstractCameraController implement
 		addSlaveThreadController(new CameraThreadController(chart));
 	}
 
-	public void register(Chart chart) {
+	@Override
+    public void register(Chart chart) {
 		super.register(chart);
 		chart.getCanvas().addMouseController(this);
 	}
 
-	public void dispose() {
+	@Override
+    public void dispose() {
 		for (Chart chart : targets) {
 			chart.getCanvas().removeMouseController(this);
 		}

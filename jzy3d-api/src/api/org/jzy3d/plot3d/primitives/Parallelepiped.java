@@ -42,12 +42,14 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 	
 	/* */
 
-	public void draw(GL gl, GLU glu, Camera cam){
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam){
 		for(Polygon quad: quads)
 			quad.draw(gl, glu, cam);	
 	}
 	
-	public void setTransform(Transform transform){
+	@Override
+    public void setTransform(Transform transform){
 		this.transform = transform;
 		for(Polygon quad: quads)
 			quad.setTransform(transform);
@@ -55,43 +57,51 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 		
 	/* */
 
-	public void setWireframeColor(Color color){
+	@Override
+    public void setWireframeColor(Color color){
 	    if(quads!=null)
     		for(Polygon quad: quads)
     			quad.setWireframeColor(color);
 	}
 	
-	public void setWireframeDisplayed(boolean status){
+	@Override
+    public void setWireframeDisplayed(boolean status){
 	    if(quads!=null)
     		for(Polygon quad: quads)
     			quad.setWireframeDisplayed(status);
 	}
 	
-	public void setWireframeWidth(float width){
+	@Override
+    public void setWireframeWidth(float width){
 	    if(quads!=null)
     		for(Polygon quad: quads)
     			quad.setWireframeWidth(width);
 	}
 	
-	public void setFaceDisplayed(boolean status){
+	@Override
+    public void setFaceDisplayed(boolean status){
 	    if(quads!=null)
     		for(Polygon quad: quads)
     			quad.setFaceDisplayed(status);
 	}
 	
-	public Color getWireframeColor(){
+	@Override
+    public Color getWireframeColor(){
 		return quads[0].getWireframeColor();
 	}
 	
-	public boolean getWireframeDisplayed(){
+	@Override
+    public boolean getWireframeDisplayed(){
 		return quads[0].getWireframeDisplayed();
 	}
 	
-	public float getWireframeWidth(){
+	@Override
+    public float getWireframeWidth(){
 		return quads[0].getWireframeWidth();
 	}
 
-	public boolean getFaceDisplayed(){
+	@Override
+    public boolean getFaceDisplayed(){
 		return quads[0].getFaceDisplayed();
 	}
 	
@@ -150,7 +160,8 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 	
 	/* */
 
-	public void setColorMapper(ColorMapper mapper){
+	@Override
+    public void setColorMapper(ColorMapper mapper){
 		this.mapper = mapper;
 		
 		for(Polygon quad:quads){
@@ -158,7 +169,8 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 		}
 	}
 	
-	public ColorMapper getColorMapper(){
+	@Override
+    public ColorMapper getColorMapper(){
 		return mapper;
 	}
 	
@@ -168,19 +180,22 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 		}
 	}*/
 
-	public void setColor(Color color){
+	@Override
+    public void setColor(Color color){
 		this.color = color;
 		
 		for(Polygon quad: quads)
 			quad.setColor(color);
 	}
 	
-	public Color getColor(){
+	@Override
+    public Color getColor(){
 		return color;
 	}
 		
 	
-	public void applyGeometryTransform(Transform transform){
+	@Override
+    public void applyGeometryTransform(Transform transform){
 	    for(Polygon quad: quads){
 	        quad.applyGeometryTransform(transform);
 	    }

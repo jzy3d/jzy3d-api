@@ -14,6 +14,7 @@ import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
 
 public class DelaunayTessellator extends Tessellator{
+    @Override
     public AbstractComposite build(List<Coord3d> coordinates) {
         Shape s = new Shape();
         s.add(computePolygons(coordinates));

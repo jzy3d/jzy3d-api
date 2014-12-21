@@ -134,19 +134,22 @@ public class CompileableComposite extends AbstractWireframeable implements
 		}
 	}
 
-	public void applyGeometryTransform(Transform transform) {
+	@Override
+    public void applyGeometryTransform(Transform transform) {
 		for (AbstractDrawable c : components) {
 			c.applyGeometryTransform(transform);
 		}
 		// updateBounds(); getBounds() do the work
 	}
 
-	public BoundingBox3d getBounds() {
+	@Override
+    public BoundingBox3d getBounds() {
 		updateBounds();
 		return bbox;
 	}
 
-	public void updateBounds() {
+	@Override
+    public void updateBounds() {
 		BoundingBox3d box = new BoundingBox3d();
 
 		for (AbstractDrawable c : components) {
@@ -198,7 +201,8 @@ public class CompileableComposite extends AbstractWireframeable implements
 
 	/* */
 
-	public void setWireframeColor(Color color) {
+	@Override
+    public void setWireframeColor(Color color) {
 		super.setWireframeColor(color);
 
 		if (components != null) {
@@ -211,7 +215,8 @@ public class CompileableComposite extends AbstractWireframeable implements
 		recompile();
 	}
 
-	public void setWireframeDisplayed(boolean status) {
+	@Override
+    public void setWireframeDisplayed(boolean status) {
 		super.setWireframeDisplayed(status);
 
 		if (components != null)
@@ -221,7 +226,8 @@ public class CompileableComposite extends AbstractWireframeable implements
 		recompile();
 	}
 
-	public void setWireframeWidth(float width) {
+	@Override
+    public void setWireframeWidth(float width) {
 		super.setWireframeWidth(width);
 
 		if (components != null)
@@ -231,7 +237,8 @@ public class CompileableComposite extends AbstractWireframeable implements
 		recompile();
 	}
 
-	public void setFaceDisplayed(boolean status) {
+	@Override
+    public void setFaceDisplayed(boolean status) {
 		super.setFaceDisplayed(status);
 
 		if (components != null)
@@ -242,7 +249,8 @@ public class CompileableComposite extends AbstractWireframeable implements
 	}
 
 	/****************************************************************/
-	public void setColorMapper(ColorMapper mapper) {
+	@Override
+    public void setColorMapper(ColorMapper mapper) {
 		this.mapper = mapper;
 
 		if (components != null) {
@@ -262,11 +270,13 @@ public class CompileableComposite extends AbstractWireframeable implements
 
 	}
 
-	public ColorMapper getColorMapper() {
+	@Override
+    public ColorMapper getColorMapper() {
 		return mapper;
 	}
 
-	public void setColor(Color color) {
+	@Override
+    public void setColor(Color color) {
 		this.color = color;
 
 		if (components != null) {
@@ -282,17 +292,20 @@ public class CompileableComposite extends AbstractWireframeable implements
 		recompile();
 	}
 
-	public Color getColor() {
+	@Override
+    public Color getColor() {
 		return color;
 	}
 
 	/****************************************************************/
 	/** Print out information concerning all Drawable of this composite. */
-	public String toString() {
+	@Override
+    public String toString() {
 		return toString(0);
 	}
 
-	public String toString(int depth) {
+	@Override
+    public String toString(int depth) {
 		String output = Utils.blanks(depth) + "(Composite3d) #elements:"
 				+ components.size() + " | isDisplayed=" + isDisplayed();
 

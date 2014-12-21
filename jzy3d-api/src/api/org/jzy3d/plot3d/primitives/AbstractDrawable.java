@@ -64,7 +64,8 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
 	 * @param cam
 	 *            a reference to a shooting Camera.
 	 */
-	public abstract void draw(GL gl, GLU glu, Camera cam);
+	@Override
+    public abstract void draw(GL gl, GLU glu, Camera cam);
 
 	public abstract void applyGeometryTransform(Transform transform);
 
@@ -191,15 +192,18 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
 	}
 
 	/** Return the distance of the object center to the {@link Camera}'s eye. */
-	public double getDistance(Camera camera) {
+	@Override
+    public double getDistance(Camera camera) {
 		return getBarycentre().distance(camera.getEye());
 	}
 
-	public double getShortestDistance(Camera camera) {
+	@Override
+    public double getShortestDistance(Camera camera) {
 		return getDistance(camera);
 	}
 
-	public double getLongestDistance(Camera camera) {
+	@Override
+    public double getLongestDistance(Camera camera) {
 		return getDistance(camera);
 	}
 
@@ -272,7 +276,8 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
 
 	/* */
 
-	public String toString() {
+	@Override
+    public String toString() {
 		return toString(0);
 	}
 

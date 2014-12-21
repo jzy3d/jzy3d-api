@@ -5,8 +5,12 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2ES1;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
+import javax.media.opengl.fixedfunc.GLLightingFunc;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.Chart;
@@ -139,7 +143,7 @@ public class View {
 
     public Coord3d projectMouse(int x, int y) {
         GL gl = getCurrentGL();
-        Coord3d p = cam.screenToModel(gl, glu, new Coord3d((float) x, (float) y, 0));
+        Coord3d p = cam.screenToModel(gl, glu, new Coord3d(x, y, 0));
         getCurrentContext().release();
         return p;
     }
@@ -222,8 +226,8 @@ public class View {
         }
         if (scale != null) {
             BoundingBox3d bounds = getBounds();
-            bounds.setXmin((float) scale.getMin());
-            bounds.setXmax((float) scale.getMax());
+            bounds.setXmin(scale.getMin());
+            bounds.setXmax(scale.getMax());
             setBoundManual(bounds);
             if (updateView)
                 shoot();
@@ -252,8 +256,8 @@ public class View {
         }
         if (scale != null) {
             BoundingBox3d bounds = getBounds();
-            bounds.setYmin((float) scale.getMin());
-            bounds.setYmax((float) scale.getMax());
+            bounds.setYmin(scale.getMin());
+            bounds.setYmax(scale.getMax());
             setBoundManual(bounds);
             if (updateView)
                 shoot();
@@ -282,8 +286,8 @@ public class View {
         }
         if (scale != null) {
             BoundingBox3d bounds = getBounds();
-            bounds.setZmin((float) scale.getMin());
-            bounds.setZmax((float) scale.getMax());
+            bounds.setZmin(scale.getMin());
+            bounds.setZmax(scale.getMax());
             setBoundManual(bounds);
             if (updateView)
                 shoot();
@@ -297,8 +301,8 @@ public class View {
 
     public void setScale(org.jzy3d.maths.Scale scale, boolean notify) {
         BoundingBox3d bounds = getBounds();
-        bounds.setZmin((float) scale.getMin());
-        bounds.setZmax((float) scale.getMax());
+        bounds.setZmin(scale.getMin());
+        bounds.setZmax(scale.getMax());
         setBoundManual(bounds);
         if (notify)
             shoot();
@@ -638,55 +642,55 @@ public class View {
     public void initQuality(GL gl) {
         // Activate Depth buffer
         if (quality.isDepthActivated()) {
-            gl.glEnable(GL2.GL_DEPTH_TEST);
-            gl.glDepthFunc(GL2.GL_LEQUAL);
+            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glDepthFunc(GL.GL_LEQUAL);
         } else
-            gl.glDisable(GL2.GL_DEPTH_TEST);
+            gl.glDisable(GL.GL_DEPTH_TEST);
 
         // Blending
-        gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         // on/off is handled by each viewport (camera or image)
 
         // Activate tranparency
         if (quality.isAlphaActivated()) {
-            gl.glEnable(GL2.GL_ALPHA_TEST);
+            gl.glEnable(GL2ES1.GL_ALPHA_TEST);
             if (quality.isDisableDepthBufferWhenAlpha())
                 /* seams better for transparent polygons since they're sorted */
-                gl.glDisable(GL2.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
+                gl.glDisable(GL.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
 
             // gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
         } else {
-            gl.glDisable(GL2.GL_ALPHA_TEST);
+            gl.glDisable(GL2ES1.GL_ALPHA_TEST);
         }
 
         // Make smooth colors for polygons (interpolate color between points)
         if (gl.isGL2()) {
             if (quality.isSmoothColor())
-                gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
+                gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
             else
-                gl.getGL2().glShadeModel(GL2.GL_FLAT);
+                gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
         }
 
         // Make smoothing setting
         if (quality.isSmoothPolygon()) {
-            gl.glEnable(GL2.GL_POLYGON_SMOOTH);
-            gl.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL2.GL_NICEST);
+            gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
+            gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
         } else
-            gl.glDisable(GL2.GL_POLYGON_SMOOTH);
+            gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
 
         if (quality.isSmoothLine()) {
-            gl.glEnable(GL2.GL_LINE_SMOOTH);
-            gl.glHint(GL2.GL_LINE_SMOOTH_HINT, GL2.GL_NICEST);
+            gl.glEnable(GL.GL_LINE_SMOOTH);
+            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
         } else
-            gl.glDisable(GL2.GL_LINE_SMOOTH);
+            gl.glDisable(GL.GL_LINE_SMOOTH);
 
         if (quality.isSmoothPoint()) {
-            gl.glEnable(GL2.GL_POINT_SMOOTH);
-            gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
+            gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
+            gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
             // gl.glDisable(GL2.GL_BLEND);
             // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
         } else
-            gl.glDisable(GL2.GL_POINT_SMOOTH);
+            gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
     }
 
     public void initLights(GL gl) {
@@ -711,7 +715,7 @@ public class View {
         if (slave) {
             return;
         } else {
-            gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
         }
     }
 
@@ -759,9 +763,9 @@ public class View {
 
     public void updateQuality(GL gl) {
         if (quality.isAlphaActivated())
-            gl.glEnable(GL2.GL_BLEND);
+            gl.glEnable(GL.GL_BLEND);
         else
-            gl.glDisable(GL2.GL_BLEND);
+            gl.glDisable(GL.GL_BLEND);
     }
 
     public BoundingBox3d computeScaledViewBounds() {
@@ -911,9 +915,9 @@ public class View {
 
     public void glModelView(GL gl) {
         if (gl.isGL2()) {
-            gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         } else {
-            GLES2CompatUtils.glMatrixMode(GL2.GL_MODELVIEW);
+            GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         }
     }
 

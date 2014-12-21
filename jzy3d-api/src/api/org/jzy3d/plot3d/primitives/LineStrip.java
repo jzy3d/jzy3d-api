@@ -52,6 +52,7 @@ public class LineStrip extends AbstractWireframeable {
 
     /* */
 
+    @Override
     public void draw(GL gl, GLU glu, Camera cam) {
         doTransform(gl, glu, cam);
         drawLine(gl);
@@ -148,6 +149,7 @@ public class LineStrip extends AbstractWireframeable {
 
     /* */
 
+    @Override
     public void applyGeometryTransform(Transform transform) {
         for (Point p : points) {
             p.xyz = transform.compute(p.xyz);
@@ -155,6 +157,7 @@ public class LineStrip extends AbstractWireframeable {
         updateBounds();
     }
 
+    @Override
     public void updateBounds() {
         bbox.reset();
         for (Point p : points)
@@ -211,10 +214,12 @@ public class LineStrip extends AbstractWireframeable {
         this.showPoints = showPoints;
     }
 
+    @Override
     public double getDistance(Camera camera) {
         return getBarycentre().distance(camera.getEye());
     }
 
+    @Override
     public double getShortestDistance(Camera camera) {
         double min = Float.MAX_VALUE;
         double dist = 0;
@@ -226,6 +231,7 @@ public class LineStrip extends AbstractWireframeable {
         return min;
     }
 
+    @Override
     public double getLongestDistance(Camera camera) {
         double max = 0;
         double dist = 0;
@@ -263,6 +269,7 @@ public class LineStrip extends AbstractWireframeable {
 
     /**********************************************************************/
 
+    @Override
     public String toString(int depth) {
         return (Utils.blanks(depth) + "(LineStrip) #points:" + points.size());
     }

@@ -8,16 +8,19 @@ import org.jzy3d.bridge.BufferedPanel;
 
 public abstract class SimpleBufferedPanelAWT extends Panel implements BufferedPanel{
 	
-	public abstract void draw(Graphics g);
+	@Override
+    public abstract void draw(Graphics g);
 	
 	/**********************************************************************/
 	
-	public void paint(Graphics g){
+	@Override
+    public void paint(Graphics g){
 		super.paint(g);
 		draw(g); 
 	}
 	
-	public void update(Graphics g){
+	@Override
+    public void update(Graphics g){
 		paint(g);
 	}
 

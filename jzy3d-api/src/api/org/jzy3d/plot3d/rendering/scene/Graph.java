@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.BoundingBox3d;
@@ -187,9 +188,9 @@ public class Graph {
 
     public void glMatrixMode(GL gl) {
         if (gl.isGL2()) {
-            gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         } else {
-            GLES2CompatUtils.glMatrixMode(GL2.GL_MODELVIEW);
+            GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         }
     }
 
@@ -333,6 +334,7 @@ public class Graph {
     /* */
 
     /** Print out information concerning all Drawable of this composite. */
+    @Override
     public synchronized String toString() {
         String output = "(Graph) #elements:" + components.size() + ":\n";
 

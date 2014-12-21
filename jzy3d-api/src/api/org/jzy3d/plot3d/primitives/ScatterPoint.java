@@ -42,6 +42,7 @@ public class ScatterPoint extends AbstractDrawable implements ISingleColorable {
 
     /* */
 
+    @Override
     public void draw(GL gl, GLU glu, Camera cam) {
         doTransform(gl, glu, cam);
 
@@ -56,7 +57,7 @@ public class ScatterPoint extends AbstractDrawable implements ISingleColorable {
 
     public void drawGLES2() {
         GLES2CompatUtils.glPointSize(width);
-        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+        GLES2CompatUtils.glBegin(GL.GL_POINTS);
         if (points != null) {
             for (LightPoint p : points) {
                 GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
@@ -68,7 +69,7 @@ public class ScatterPoint extends AbstractDrawable implements ISingleColorable {
 
     public void drawGL2(GL gl) {
         gl.getGL2().glPointSize(width);
-        gl.getGL2().glBegin(GL2.GL_POINTS);
+        gl.getGL2().glBegin(GL.GL_POINTS);
         if (points != null) {
             for (LightPoint p : points) {
                 gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
@@ -78,6 +79,7 @@ public class ScatterPoint extends AbstractDrawable implements ISingleColorable {
         gl.getGL2().glEnd();
     }
 
+    @Override
     public void applyGeometryTransform(Transform transform) {
         for (LightPoint p : points) {
             Coord3d c = p.xyz;
@@ -98,6 +100,7 @@ public class ScatterPoint extends AbstractDrawable implements ISingleColorable {
         updateBounds();
     }
 
+    @Override
     public void updateBounds() {
         bbox.reset();
         for (LightPoint c : points)
@@ -108,9 +111,11 @@ public class ScatterPoint extends AbstractDrawable implements ISingleColorable {
         return points;
     }
 
+    @Override
     public void setColor(Color color) {
     }
 
+    @Override
     public Color getColor() {
         return null;
     }

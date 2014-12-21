@@ -85,6 +85,7 @@ public class Coordinates {
     }
 
     /** Return the array of 3d coordinates. */
+    @Override
     public String toString() {
         String txt = "";
 

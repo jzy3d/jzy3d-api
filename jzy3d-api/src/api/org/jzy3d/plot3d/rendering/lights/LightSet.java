@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2ES1;
+import javax.media.opengl.fixedfunc.GLLightingFunc;
 
 import org.jzy3d.maths.Coord3d;
 
@@ -18,7 +20,7 @@ public class LightSet {
 	}
 
 	public void init(GL gl) {
-		gl.glEnable(GL2.GL_COLOR_MATERIAL);
+		gl.glEnable(GLLightingFunc.GL_COLOR_MATERIAL);
 	}
 
 	public void apply(GL gl, Coord3d scale) {
@@ -39,13 +41,13 @@ public class LightSet {
 	public void enable(GL gl, boolean onlyIfAtLeastOneLight) {
 		if (onlyIfAtLeastOneLight) {
 			if (lights.size() > 0)
-				gl.glEnable(GL2.GL_LIGHTING);
+				gl.glEnable(GLLightingFunc.GL_LIGHTING);
 		} else
-			gl.glEnable(GL2.GL_LIGHTING);
+			gl.glEnable(GLLightingFunc.GL_LIGHTING);
 	}
 
 	public void disable(GL gl) {
-		gl.glDisable(GL2.GL_LIGHTING);
+		gl.glDisable(GLLightingFunc.GL_LIGHTING);
 	}
 
 	public Light get(int id) {
@@ -70,12 +72,12 @@ public class LightSet {
 
 	// http://www.sjbaker.org/steve/omniv/opengl_lighting.html
 	protected void initLight(GL gl) {
-		gl.glEnable(GL2.GL_COLOR_MATERIAL);
-		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GLLightingFunc.GL_COLOR_MATERIAL);
+		gl.glEnable(GLLightingFunc.GL_LIGHTING);
 
 		// Light model
 		if (gl.isGL2()) {
-			gl.getGL2().glLightModeli(GL2.GL_LIGHT_MODEL_TWO_SIDE, GL2.GL_TRUE);
+			gl.getGL2().glLightModeli(GL2ES1.GL_LIGHT_MODEL_TWO_SIDE, GL.GL_TRUE);
 		}
 		// gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
 		// gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_FALSE);

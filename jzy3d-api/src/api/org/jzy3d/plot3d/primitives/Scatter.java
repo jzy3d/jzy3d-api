@@ -60,6 +60,7 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
 
     /* */
 
+    @Override
     public void draw(GL gl, GLU glu, Camera cam) {
         doTransform(gl, glu, cam);
 
@@ -75,7 +76,7 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
     public void drawGLES2() {
         GLES2CompatUtils.glPointSize(width);
 
-        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+        GLES2CompatUtils.glBegin(GL.GL_POINTS);
         if (colors == null)
             GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
         if (coordinates != null) {
@@ -94,7 +95,7 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
     public void drawGL2(GL gl) {
         gl.getGL2().glPointSize(width);
 
-        gl.getGL2().glBegin(GL2.GL_POINTS);
+        gl.getGL2().glBegin(GL.GL_POINTS);
         if (colors == null)
             gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
         if (coordinates != null) {
@@ -110,6 +111,7 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
         gl.getGL2().glEnd();
     }
 
+    @Override
     public void applyGeometryTransform(Transform transform) {
         for (Coord3d c : coordinates) {
             c.set(transform.compute(c));
@@ -131,6 +133,7 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
         updateBounds();
     }
 
+    @Override
     public void updateBounds() {
         bbox.reset();
         for (Coord3d c : coordinates)
@@ -147,12 +150,14 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
         fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
     }
 
+    @Override
     public void setColor(Color color) {
         this.rgb = color;
 
         fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
     }
 
+    @Override
     public Color getColor() {
         return rgb;
     }

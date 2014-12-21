@@ -25,6 +25,7 @@ public class ConcurrentLineStrip extends LineStrip {
         super(c1, c2);
     }
 
+    @Override
     public void drawLine(GL gl) {
         gl.glLineWidth(width);
         // gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
@@ -40,6 +41,7 @@ public class ConcurrentLineStrip extends LineStrip {
         }
     }
 
+    @Override
     public void drawPoints(GL gl) {
         if (showPoints) {
             if (gl.isGL2()) {
@@ -56,6 +58,7 @@ public class ConcurrentLineStrip extends LineStrip {
 
     /* */
 
+    @Override
     public void applyGeometryTransform(Transform transform) {
         synchronized (points) {
             for (Point p : points) {
@@ -65,6 +68,7 @@ public class ConcurrentLineStrip extends LineStrip {
         updateBounds();
     }
 
+    @Override
     public void updateBounds() {
         bbox.reset();
         synchronized (points) {
@@ -73,6 +77,7 @@ public class ConcurrentLineStrip extends LineStrip {
         }
     }
 
+    @Override
     public void add(Point point) {
         synchronized (points) {
             points.add(point);
@@ -80,6 +85,7 @@ public class ConcurrentLineStrip extends LineStrip {
         bbox.add(point);
     }
 
+    @Override
     public void clear() {
         synchronized (points) {
             points.clear();
@@ -87,6 +93,7 @@ public class ConcurrentLineStrip extends LineStrip {
         updateBounds();
     }
 
+    @Override
     public Point getLastPoint() {
         synchronized (points) {
             return super.getLastPoint();

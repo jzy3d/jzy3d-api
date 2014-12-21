@@ -134,9 +134,9 @@ public class OffscreenCanvas implements ICanvas {
 
         StringBuffer sb = new StringBuffer();
         sb.append("Chosen GLCapabilities: " + glpBuffer.getChosenGLCapabilities() + "\n");
-        sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
-        sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
-        sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+        sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
+        sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
+        sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
         // sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
         return sb.toString();
     }
