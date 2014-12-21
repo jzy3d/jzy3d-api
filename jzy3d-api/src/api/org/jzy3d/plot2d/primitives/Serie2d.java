@@ -10,6 +10,8 @@ public interface Serie2d {
     public void clear();
     public void add(float x, float y);
     public void add(double x, double y);
+    public void add(float x, float y, Color color);
+    public void add(double x, double y, Color color);
     public void add(Coord2d c);
     public void add(Coord2d c, Color color);
     public void add(List<Coord2d> c);
