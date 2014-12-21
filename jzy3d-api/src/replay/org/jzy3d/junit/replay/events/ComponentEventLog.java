@@ -47,7 +47,8 @@ public class ComponentEventLog extends AbstractEventLog implements IComponentEve
 		return bounds;
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		if (value != null)
 			return type + ", value:" + value + ", since:" + since;
 		else if (size != null || bounds!=null)

@@ -18,6 +18,7 @@ public class BufferedImageTexture extends SharedTexture {
         this.image = image;
     }
 
+    @Override
     public Texture getTexture(GL gl) {
         if (texture == null)
             mount(gl);
@@ -29,6 +30,7 @@ public class BufferedImageTexture extends SharedTexture {
     }
 
     /** A GL2 context MUST be current. */
+    @Override
     public void mount(GL gl) {
         try {
             load(gl, image);
@@ -45,23 +47,27 @@ public class BufferedImageTexture extends SharedTexture {
 
     protected void load(GL gl, BufferedImage image) throws GLException, IOException {
         texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, false); 
-        texture.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR); // different from shared texture!
-        texture.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR); // different from shared texture!
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
     }
 
     /** returns null*/
+    @Override
     public String getFile() {
         return file;
     }
 
+    @Override
     public TextureCoords getCoords() {
         return coords;
     }
 
+    @Override
     public float getHalfWidth() {
         return halfWidth;
     }
 
+    @Override
     public float getHalfHeight() {
         return halfHeight;
     }

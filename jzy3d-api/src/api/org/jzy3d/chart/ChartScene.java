@@ -33,7 +33,8 @@ public class ChartScene extends Scene {
 		view.setBoundManual(new BoundingBox3d(0,0,0,0,0,0));
 	}
 	
-	public View newView(ICanvas canvas, Quality quality){
+	@Override
+    public View newView(ICanvas canvas, Quality quality){
 		//if(nview>0)
 		//	throw new RuntimeException("A view has already been defined for this scene. Can not use several views.");
 		//else
@@ -42,7 +43,8 @@ public class ChartScene extends Scene {
 		return view;
 	}
 	
-	public void clearView(View view){
+	@Override
+    public void clearView(View view){
 		super.clearView(view);
 		nview--;
 	}

@@ -36,7 +36,8 @@ public class MaterialEditor extends JPanel{
 		final JSlider slider0 = colorControl.getSlider(0);
 		slider0.setValue( (int)color.r * slider0.getMaximum() );
 		slider0.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
+			@Override
+            public void stateChanged(ChangeEvent e) {
 				//System.out.println(slider0.getValue());
 				color.r = getPercent(slider0);
 				System.out.println(color);
@@ -46,7 +47,8 @@ public class MaterialEditor extends JPanel{
 		final JSlider slider1 = colorControl.getSlider(1);
 		slider1.setValue( (int)color.g * slider1.getMaximum() );
 		slider1.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
+			@Override
+            public void stateChanged(ChangeEvent e) {
 				color.g = getPercent(slider1);
 				chart.render();
 			}
@@ -54,7 +56,8 @@ public class MaterialEditor extends JPanel{
 		final JSlider slider2 = colorControl.getSlider(2);
 		slider2.setValue( (int)color.b * slider2.getMaximum() );
 		slider2.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
+			@Override
+            public void stateChanged(ChangeEvent e) {
 				color.b = getPercent(slider2);
 				chart.render();
 			}

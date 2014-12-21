@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.enlightables;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
@@ -42,7 +43,8 @@ public class EnlightableDisk extends AbstractEnlightable implements
 
 	/********************************************************/
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 
 		if (gl.isGL2()) {
@@ -60,21 +62,21 @@ public class EnlightableDisk extends AbstractEnlightable implements
 		if (gl.isGL2()) {
 			if (facestatus) {
 				if (wfstatus) {
-					gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 					gl.glPolygonOffset(1.0f, 1.0f);
 				}
 
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 				gl.getGL2().glNormal3f(norm.x, norm.y, norm.z);
 				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
 				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
 
 				if (wfstatus)
-					gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 
 			}
 			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 				gl.getGL2().glNormal3f(norm.x, norm.y, norm.z);
 				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
 				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
@@ -82,21 +84,21 @@ public class EnlightableDisk extends AbstractEnlightable implements
 		} else {
 			if (facestatus) {
 				if (wfstatus) {
-					gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 					gl.glPolygonOffset(1.0f, 1.0f);
 				}
 
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 				GLES2CompatUtils.glNormal3f(norm.x, norm.y, norm.z);
 				GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
 				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
 
 				if (wfstatus)
-					gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 
 			}
 			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 				GLES2CompatUtils.glNormal3f(norm.x, norm.y, norm.z);
 				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
 				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
@@ -104,7 +106,8 @@ public class EnlightableDisk extends AbstractEnlightable implements
 		}
 	}
 
-	public void applyGeometryTransform(Transform transform) {
+	@Override
+    public void applyGeometryTransform(Transform transform) {
 		Coord3d change = transform.compute(new Coord3d(x, y, z));
 		x = change.x;
 		y = change.y;
@@ -112,7 +115,8 @@ public class EnlightableDisk extends AbstractEnlightable implements
 		updateBounds();
 	}
 
-	public void updateBounds() {
+	@Override
+    public void updateBounds() {
 		bbox.reset();
 		bbox.add(x + radiusOuter, y + radiusOuter, z);
 		bbox.add(x - radiusOuter, y - radiusOuter, z);
@@ -153,14 +157,16 @@ public class EnlightableDisk extends AbstractEnlightable implements
 
 	/********************************************************/
 
-	public void setColor(Color color) {
+	@Override
+    public void setColor(Color color) {
 		this.color = color;
 
 		fireDrawableChanged(new DrawableChangedEvent(this,
 				DrawableChangedEvent.FIELD_COLOR));
 	}
 
-	public Color getColor() {
+	@Override
+    public Color getColor() {
 		return color;
 	}
 

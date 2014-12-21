@@ -54,6 +54,7 @@ public class AWTSphereMouseSelector extends AWTAbstractMouseSelector {
         }
     }
 
+    @Override
     public void clearLastSelection() {
         sphere.setHighlighted(false);
         projection = null;

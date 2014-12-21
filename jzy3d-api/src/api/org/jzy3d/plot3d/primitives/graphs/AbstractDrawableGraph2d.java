@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2ES1;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.Coord2d;
@@ -85,8 +86,8 @@ public abstract class AbstractDrawableGraph2d<V, E> extends AbstractDrawable imp
 		doTransform(gl, glu, cam);
 	    
 		// TODO move to graph view init
-	    gl.glEnable(GL2.GL_POINT_SMOOTH);
-	    gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
+	    gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
+	    gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
 	
 	    if(formatter.areEdgesDisplayed())
 	    	drawEdges(gl, glu, cam);

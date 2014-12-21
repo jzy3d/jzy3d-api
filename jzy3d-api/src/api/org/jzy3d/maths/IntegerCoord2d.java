@@ -11,7 +11,8 @@ public class IntegerCoord2d {
 		this.y = y;
 	}
 	
-	public String toString(){
+	@Override
+    public String toString(){
 		return "(IntegerCoord2d) " + x + "," + y;
 	}
 	

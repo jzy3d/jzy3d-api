@@ -44,6 +44,7 @@ public class ScatterMultiColor extends AbstractDrawable implements IMultiColorab
 
     /* */
 
+    @Override
     public void draw(GL gl, GLU glu, Camera cam) {
         doTransform(gl, glu, cam);
 
@@ -58,7 +59,7 @@ public class ScatterMultiColor extends AbstractDrawable implements IMultiColorab
 
     public void drawGLES2() {
         GLES2CompatUtils.glPointSize(width);
-        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+        GLES2CompatUtils.glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
             for (Coord3d coord : coordinates) {
@@ -74,7 +75,7 @@ public class ScatterMultiColor extends AbstractDrawable implements IMultiColorab
 
     public void drawGL2(GL gl) {
         gl.getGL2().glPointSize(width);
-        gl.getGL2().glBegin(GL2.GL_POINTS);
+        gl.getGL2().glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
             for (Coord3d coord : coordinates) {

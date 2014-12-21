@@ -32,7 +32,8 @@ public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
 			drawRectangle(g2d, in, out);
 	}
 	
-	public void clearLastSelection(){
+	@Override
+    public void clearLastSelection(){
     }
 
 	protected SelectableScatter scatter;

@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -257,9 +258,9 @@ public class Camera extends AbstractViewportManager {
         for (int i = 0; i < len; i++) {
             if (!glu.gluProject(polygon.x[i], polygon.y[i], polygon.z[i], getModelViewAsFloat(gl), 0, getProjectionAsFloat(gl), 0, viewport, 0, screencoord, 0))
                 failedProjection("Could not retrieve model coordinates in screen for point " + i);
-            x[i] = (float) screencoord[0];
-            y[i] = (float) screencoord[1];
-            z[i] = (float) screencoord[2];
+            x[i] = screencoord[0];
+            y[i] = screencoord[1];
+            z[i] = screencoord[2];
         }
         return new PolygonArray(x, y, z);
     }
@@ -304,9 +305,9 @@ public class Camera extends AbstractViewportManager {
                 for (int k = 0; k < len; k++) {
                     if (!glu.gluProject(polygon.x[k], polygon.y[k], polygon.z[k], getModelViewAsFloat(gl), 0, getProjectionAsFloat(gl), 0, viewport, 0, screencoord, 0))
                         failedProjection("Could not retrieve model coordinates in screen for point " + k);
-                    x[k] = (float) screencoord[0];
-                    y[k] = (float) screencoord[1];
-                    z[k] = (float) screencoord[2];
+                    x[k] = screencoord[0];
+                    y[k] = screencoord[1];
+                    z[k] = screencoord[2];
                 }
                 projections[i][j] = new PolygonArray(x, y, z);
             }
@@ -327,7 +328,7 @@ public class Camera extends AbstractViewportManager {
 
     protected int[] getViewPortAsInt(GL gl) {
         int viewport[] = new int[4];
-        gl.glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);
+        gl.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
         return viewport;
     }
 
@@ -335,16 +336,16 @@ public class Camera extends AbstractViewportManager {
         // Consider using single precision (=float ?)
         double projection[] = new double[16];
         if (gl.isGL2()) {
-            gl.getGL2().glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
+            gl.getGL2().glGetDoublev(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
         } else {
-            GLES2CompatUtils.glGetDoublev(GL2.GL_PROJECTION_MATRIX, projection, 0);
+            GLES2CompatUtils.glGetDoublev(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
         }
         return projection;
     }
 
     protected float[] getProjectionAsFloat(GL gl) {
         float projection[] = new float[16];
-        gl.glGetFloatv(GL2.GL_PROJECTION_MATRIX, projection, 0);
+        gl.glGetFloatv(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
         return projection;
     }
 
@@ -353,16 +354,16 @@ public class Camera extends AbstractViewportManager {
         double modelview[] = new double[16];
 
         if (gl.isGL2()) {
-            gl.getGL2().glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelview, 0);
+            gl.getGL2().glGetDoublev(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
         } else {
-            GLES2CompatUtils.glGetDoublev(GL2.GL_MODELVIEW_MATRIX, modelview, 0);
+            GLES2CompatUtils.glGetDoublev(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
         }
         return modelview;
     }
 
     protected float[] getModelViewAsFloat(GL gl) {
         float modelview[] = new float[16];
-        gl.glGetFloatv(GL2.GL_MODELVIEW_MATRIX, modelview, 0);
+        gl.glGetFloatv(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
         return modelview;
     }
 
@@ -373,13 +374,13 @@ public class Camera extends AbstractViewportManager {
         Coord3d eye = getEye().mul(scaling);
 
         if (gl.isGL2()) {
-            gl.getGL2().glBegin(GL2.GL_POINTS);
+            gl.getGL2().glBegin(GL.GL_POINTS);
             gl.getGL2().glPointSize(camWidth);
             gl.getGL2().glColor4f(camColor.r, camColor.g, camColor.b, camColor.a);
             gl.getGL2().glVertex3f(eye.x, eye.y, eye.z);
             gl.getGL2().glEnd();
         } else {
-            gl.getGL2().glBegin(GL2.GL_POINTS);
+            gl.getGL2().glBegin(GL.GL_POINTS);
             gl.getGL2().glPointSize(camWidth);
             gl.getGL2().glColor4f(camColor.r, camColor.g, camColor.b, camColor.a);
             gl.getGL2().glVertex3f(eye.x, eye.y, eye.z);
@@ -416,12 +417,12 @@ public class Camera extends AbstractViewportManager {
 
     public void shoot(GL gl, GLU glu, CameraMode projection, boolean doPushMatrixBeforeShooting) {
         if (gl.isGL2()) {
-            gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
             if (doPushMatrixBeforeShooting)
                 gl.getGL2().glPushMatrix();
             gl.getGL2().glLoadIdentity();
         } else {
-            GLES2CompatUtils.glMatrixMode(GL2.GL_PROJECTION);
+            GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
             if (doPushMatrixBeforeShooting)
                 GLES2CompatUtils.glPushMatrix();
             GLES2CompatUtils.glLoadIdentity();
@@ -553,6 +554,7 @@ public class Camera extends AbstractViewportManager {
     /**
      * Print out in console information concerning the camera.
      */
+    @Override
     public String toString() {
         return toString(eye, target, up);
     }

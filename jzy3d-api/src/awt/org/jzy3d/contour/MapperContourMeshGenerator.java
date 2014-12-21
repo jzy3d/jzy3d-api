@@ -156,7 +156,8 @@ public class MapperContourMeshGenerator extends AbstractContourGenerator impleme
 	 * Calculates the Height of the surface for each point in the XY plane
 	 * 
 	 **/
-	protected void computeHeightMatrix(double matrix[][], int xRes, int yRes) {
+	@Override
+    protected void computeHeightMatrix(double matrix[][], int xRes, int yRes) {
 		double value;
 		minValue = Double.MAX_VALUE;
 		maxValue = -Double.MAX_VALUE;

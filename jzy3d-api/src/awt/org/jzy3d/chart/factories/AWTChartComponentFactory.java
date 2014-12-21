@@ -23,7 +23,9 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
+import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
@@ -72,11 +74,18 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         return new ColorbarViewportLayout();
     }
 
+    /** The AWTView support Java2d defined components (tooltips, background images)*/
     @Override
     public View newView(Scene scene, ICanvas canvas, Quality quality) {
         return new AWTView(getFactory(), scene, canvas, quality);
     }
     
+
+    /** Provide AWT Texture loading for screenshots */
+    @Override
+    public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
+        return new AWTRenderer3d(view, traceGL, debugGL);
+    }
     
     /** bypass reflection used in super implementation */
     @Override

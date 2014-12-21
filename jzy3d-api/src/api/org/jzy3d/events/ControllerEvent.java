@@ -22,7 +22,8 @@ public class ControllerEvent extends EventObject{
 		return value;
 	}
 	
-	public String toString(){
+	@Override
+    public String toString(){
 		return ("ControllerEvent(type,value): " + type + ", " + value);
 	}
 

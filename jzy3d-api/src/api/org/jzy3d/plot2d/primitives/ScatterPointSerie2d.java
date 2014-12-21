@@ -8,7 +8,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterPoint;
 import org.jzy3d.plot3d.primitives.LightPoint;
-import org.jzy3d.plot3d.primitives.Point;
 
 // TODO : create LightPoint that don't hold a bounding box
 public class ScatterPointSerie2d implements Serie2d {

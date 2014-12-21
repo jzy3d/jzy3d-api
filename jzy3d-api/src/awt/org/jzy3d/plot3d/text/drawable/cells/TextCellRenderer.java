@@ -38,7 +38,8 @@ public class TextCellRenderer extends TextImageRenderer{
 		this.textColor = Color.BLACK;
 	}
 	
-	public BufferedImageTexture getImage(float ratio){
+	@Override
+    public BufferedImageTexture getImage(float ratio){
 		IntegerCoord2d c = guessImageDimension(n, font);
 		c.x+=OFFSET_CONSTANT;
 		

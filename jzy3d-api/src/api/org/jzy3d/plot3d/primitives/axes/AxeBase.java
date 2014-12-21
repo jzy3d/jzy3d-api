@@ -49,7 +49,7 @@ public class AxeBase implements IAxe {
 			gl.getGL2().glScalef(scale.x, scale.y, scale.z);
 			gl.getGL2().glLineWidth(2);
 
-			gl.getGL2().glBegin(GL2.GL_LINES);
+			gl.getGL2().glBegin(GL.GL_LINES);
 			gl.getGL2().glColor3f(1.0f, 0.0f, 0.0f); // R
 			gl.getGL2().glVertex3f(bbox.getXmin(), bbox.getYmin(),
 					bbox.getZmin());
@@ -68,7 +68,7 @@ public class AxeBase implements IAxe {
 			GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
 			GLES2CompatUtils.glLineWidth(2);
 
-			GLES2CompatUtils.glBegin(GL2.GL_LINES);
+			GLES2CompatUtils.glBegin(GL.GL_LINES);
 			GLES2CompatUtils.glColor3f(1.0f, 0.0f, 0.0f); // R
 			GLES2CompatUtils.glVertex3f(bbox.getXmin(), bbox.getYmin(),
 					bbox.getZmin());

@@ -6,7 +6,6 @@ import java.util.List;
 import javax.media.opengl.GL;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.transform.Transform;
 
 public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
     // List<Integer> idOn = new ArrayList<Integer>();
@@ -28,6 +27,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
         super(c1, c2);
     }
 
+    @Override
     public void drawLineGL2(GL gl) {
         gl.getGL2().glLineWidth(wfwidth);
 
@@ -123,6 +123,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
         bbox.add(point);
     }
 
+    @Override
     public void add(Point point) {
         synchronized (points) {
             points.add(point);

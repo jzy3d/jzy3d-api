@@ -178,6 +178,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	/**
 	 *  Print out parameters of a gl call in 3dColor mode.
 	 */
+    @Override
     protected int print3DcolorVertex(int size, int count, float[] buffer) {
         int i;
         int id = size - count;
@@ -195,7 +196,8 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	/**
 	 * Print out display status of quads.
 	 */
-	protected void printHiddenQuads(){
+	@Override
+    protected void printHiddenQuads(){
 		for(int t=0; t<quadIsHidden.length; t++)
 			if(quadIsHidden[t])
 				System.out.println("Quad[" + t + "] is not displayed");

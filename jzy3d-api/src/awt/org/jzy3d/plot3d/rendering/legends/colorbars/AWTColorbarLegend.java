@@ -60,10 +60,11 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
 
     @Override
     public void render(GL gl, GLU glu) {
-        gl.glEnable(GL2.GL_BLEND);
+        gl.glEnable(GL.GL_BLEND);
         super.render(gl, glu);
     }
 
+    @Override
     public BufferedImage toImage(int width, int height) {
         if (imageGenerator != null) {
             setGeneratorColors();

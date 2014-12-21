@@ -2,6 +2,7 @@ package org.jzy3d.chart2d;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.apache.log4j.Logger;
@@ -43,11 +44,13 @@ public class AxeBox2d extends AxeBox {
     }
 
     /** Force given X axis to be used for tick placement */
+    @Override
     protected int findClosestXaxe(Camera cam) {
         return 0;
     }
 
     /** Force given Y axis to be used for tick placement */
+    @Override
     protected int findClosestYaxe(Camera cam) {
         return 3;
     }
@@ -124,7 +127,7 @@ public class AxeBox2d extends AxeBox {
         public void rotateText(GL gl, Coord3d posReal) {
             gl.getGL2().glPushMatrix();
             
-            gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
             loadIdentity(gl);
             rotateOf(gl, 90, AXE_Z);
             translateTo(gl, posReal, false);

@@ -34,7 +34,7 @@ public class AWTToNewtMouseListener implements com.jogamp.newt.event.MouseListen
 	protected java.awt.event.MouseWheelEvent convertWheelEvent(com.jogamp.newt.event.MouseEvent event, int id) {
 		//rotation direction needs to be inverted between NEWT and AWT
 		int direction = event.getRotation()[1]>0?-1:1;
-		int units = (int)Math.round(event.getRotation()[1]*event.getRotationScale());
+		int units = Math.round(event.getRotation()[1]*event.getRotationScale());
 		return new java.awt.event.MouseWheelEvent(source, id, event.getWhen(), AWTToNewtUtilities.mask(event), event.getX(), event.getY(), event.getClickCount(), false, MouseWheelEvent.WHEEL_UNIT_SCROLL, units, direction);
 	}
 

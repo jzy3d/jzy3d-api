@@ -25,18 +25,19 @@ public class SelectableSphere extends Sphere implements Selectable {
 		buildAnchors();
 	}
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		super.draw(gl, glu, cam);
 
 		if (gl.isGL2()) {
-			gl.getGL2().glBegin(GL2.GL_POINTS);
+			gl.getGL2().glBegin(GL.GL_POINTS);
 			gl.getGL2().glColor4f(Color.RED.r, Color.RED.g, Color.RED.b,
 					Color.RED.a);
 			for (Coord3d a : anchors)
 				gl.getGL2().glVertex3f(a.x, a.y, a.z);
 			gl.getGL2().glEnd();
 		} else {
-			GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+			GLES2CompatUtils.glBegin(GL.GL_POINTS);
 			GLES2CompatUtils.glColor4f(Color.RED.r, Color.RED.g, Color.RED.b,
 					Color.RED.a);
 			for (Coord3d a : anchors)
@@ -55,12 +56,14 @@ public class SelectableSphere extends Sphere implements Selectable {
 		return projection;
 	}
 
-	public void setPosition(Coord3d position) {
+	@Override
+    public void setPosition(Coord3d position) {
 		super.setPosition(position);
 		buildAnchors();
 	}
 
-	public void setVolume(float radius) {
+	@Override
+    public void setVolume(float radius) {
 		super.setVolume(radius);
 		buildAnchors();
 	}

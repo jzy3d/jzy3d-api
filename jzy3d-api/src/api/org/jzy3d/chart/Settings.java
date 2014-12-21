@@ -76,6 +76,7 @@ public class Settings {
         return screen;
     }
 
+    @Override
     public String toString() {
         return "HardwareAcceleration = " + isHardwareAccelerated() + "\n";
     }

@@ -60,7 +60,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator impleme
     public void drawBarColors(int height, int barWidth, Graphics2D graphic) {
         for(int h=textSize/2; h<=(height-textSize/2); h++){
 			// Compute value & color
-			double v = min + (max-min) * ((float)h)/((float)(height-textSize));
+			double v = min + (max-min) * (h)/(height-textSize);
 			Color c = mapper.getColor(v);  //To allow the Color to be a variable independent of the coordinates
 			
 			// Draw line
