@@ -27,6 +27,11 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
     }
 
     @Override
+    public Chart newChart(Quality quality, String toolkit) {
+        return new Chart2d(getFactory(), quality, toolkit);
+    }
+
+    @Override
     public IAxe newAxe(BoundingBox3d box, View view) {
         AxeBox2d axe = new AxeBox2d(box);
         //axe.setTextRenderer(new TextBitmapRenderer());

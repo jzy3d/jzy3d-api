@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import java.awt.image.BufferedImage;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLProfile;
@@ -21,6 +23,10 @@ public class AWTRenderer3d extends Renderer3d{
         super(view);
     }
 
+    /**
+     * Uses a dedicated {@link AWTGLReadBufferUtil} to read a buffered image.
+     * @see {@link getLastScreenshotImage()} to retrieve the image
+     */
     @Override
     public void display(GLAutoDrawable canvas) {
         GL gl = canvas.getGL();
@@ -33,8 +39,17 @@ public class AWTRenderer3d extends Renderer3d{
                 AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), true);
                 screenshot.readPixels(gl, true);
                 image = screenshot.getTextureData();
+                bufferedImage = screenshot.readPixelsToBufferedImage(gl, true);
+
                 doScreenshotAtNextDisplay = false;
             }
         }
     }
+    
+    public BufferedImage getLastScreenshotImage() {
+        return bufferedImage;
+    }
+    
+    protected BufferedImage bufferedImage;
+
 }
