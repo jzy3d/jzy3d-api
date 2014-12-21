@@ -8,6 +8,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterPoint;
 import org.jzy3d.plot3d.primitives.LightPoint;
+import org.jzy3d.plot3d.primitives.Point;
 
 // TODO : create LightPoint that don't hold a bounding box
 public class ScatterPointSerie2d implements Serie2d {
@@ -44,6 +45,16 @@ public class ScatterPointSerie2d implements Serie2d {
     @Override
     public void add(Coord2d c, Color color) {
         scatter.add(new LightPoint(new Coord3d(c.x, c.y, 0), color));
+    }
+
+    @Override
+    public void add(float x, float y, Color color) {
+        scatter.add(new LightPoint(new Coord3d(x, y, 0), color));
+    }
+
+    @Override
+    public void add(double x, double y, Color color) {
+        scatter.add(new LightPoint(new Coord3d(x, y, 0), color));
     }
 
 

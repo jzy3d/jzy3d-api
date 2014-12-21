@@ -180,6 +180,14 @@ public class MultiChartPanel extends JPanel {
         add(chartPanel, "cell " + ncol + " " + nlin + ", grow");
         return chartPanel;
     }
+    
+    public void ui() {
+        JScrollPane pane = new JScrollPane(this);
+        JPanel parent = new JPanel();
+        parent.add(pane);
+        MultiChartPanel.frame(parent);
+    }
+
 
     public JFrame frame() {
         return frame(this);
@@ -194,6 +202,8 @@ public class MultiChartPanel extends JPanel {
         frame.setVisible(true);
         return frame;
     }
+    
+
 
     public static void windowExitListener(final JFrame frame) {
         frame.addWindowListener(new WindowAdapter() {

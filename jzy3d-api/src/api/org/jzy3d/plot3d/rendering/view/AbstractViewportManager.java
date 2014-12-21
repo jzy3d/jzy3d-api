@@ -19,7 +19,7 @@ import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
  * 
  * @author Martin Pernollet
  */
-abstract class AbstractViewportManager {
+public abstract class AbstractViewportManager {
 
     /**
      * Set the view port (size of the renderer).

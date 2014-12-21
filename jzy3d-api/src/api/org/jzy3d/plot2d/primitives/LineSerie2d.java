@@ -39,6 +39,16 @@ public class LineSerie2d implements Serie2d {
     }
 
     @Override
+    public void add(float x, float y, Color color) {
+        line.add(new Point(new Coord3d(x, y, 0), color));
+    }
+
+    @Override
+    public void add(double x, double y, Color color) {
+        line.add(new Point(new Coord3d(x, y, 0), color));
+    }
+
+    @Override
     public void add(List<Coord2d> c) {
         for(Coord2d c2: c){
             line.add(new Point(new Coord3d(c2.x, c2.y, 0)));
