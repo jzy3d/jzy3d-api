@@ -26,7 +26,8 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
 		initialize(chart, bounds, title, "[Awt]");
 	}
 	
-	public void initialize(Chart chart, Rectangle bounds, String title, String message) {
+	@Override
+    public void initialize(Chart chart, Rectangle bounds, String title, String message) {
 		this.chart = chart;
 		if(message!=null){
 	        this.setTitle(title + message);		    
@@ -40,7 +41,8 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
 		this.setVisible(true);
 
 		this.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
+			@Override
+            public void windowClosing(WindowEvent e) {
 				FrameAWT.this.remove((java.awt.Component) FrameAWT.this.chart
 						.getCanvas());
 				FrameAWT.this.chart.dispose();

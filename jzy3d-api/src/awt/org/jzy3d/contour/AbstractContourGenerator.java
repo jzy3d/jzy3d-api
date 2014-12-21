@@ -117,7 +117,7 @@ public abstract class AbstractContourGenerator {
 	 **/
 	protected void quantizeMatrix(double matrix[][], double min, double max,
 			int n) {
-		double step = (max - min) / (double) n;
+		double step = (max - min) / n;
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[i].length; j++) {
 				matrix[i][j] = step * (int) (matrix[i][j] / step);

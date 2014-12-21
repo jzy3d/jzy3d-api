@@ -2,6 +2,7 @@ package org.jzy3d.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -153,11 +154,16 @@ public class MultiChartPanel extends JPanel {
     }
 
     public JPanel addChart(Chart chart) {
-        return addPanel((java.awt.Component) chart.getCanvas());
+        Component component = (Component) chart.getCanvas();
+        
+        return addPanel(component);
     }
 
     public JPanel addChartAt(Chart chart, int nlin, int ncol) {
-        return addPanelAt((java.awt.Component) chart.getCanvas(), nlin, ncol);
+        Component component = (Component) chart.getCanvas();
+        //TextureData texture = chart.screenshot();
+        //texture.
+        return addPanelAt(component, nlin, ncol);
     }
 
     public JPanel addPanel(java.awt.Component panel) {
@@ -207,6 +213,7 @@ public class MultiChartPanel extends JPanel {
 
     public static void windowExitListener(final JFrame frame) {
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 frame.dispose();
                 System.exit(0);

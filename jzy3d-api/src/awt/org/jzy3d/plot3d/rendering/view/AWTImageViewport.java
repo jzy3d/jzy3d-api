@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.Dimension;
@@ -21,19 +22,20 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
 	    setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
 	}
 	
-	public void render(GL gl, GLU glu) {
+	@Override
+    public void render(GL gl, GLU glu) {
         // gl.glDisable(GL2.GL_LIGHTING);
 
         if (gl.isGL2()) {
             // Set viewport and projection
-            gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
             gl.getGL2().glPushMatrix();
             gl.getGL2().glLoadIdentity();
             applyViewport(gl, glu);
             gl.getGL2().glOrtho(0, screenWidth, 0, screenHeight, -1, 1);
 
             // Zoom and layout
-            gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
             gl.getGL2().glPushMatrix();
             gl.getGL2().glLoadIdentity();
 
@@ -42,7 +44,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
 
             // Restore matrices state
             gl.getGL2().glPopMatrix();
-            gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
             gl.getGL2().glPopMatrix();
         }
 	}
@@ -82,12 +84,14 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
 	
 
 	/** Return the minimum size for this graphic. */
-	public Dimension getMinimumSize() {
+	@Override
+    public Dimension getMinimumSize() {
 		return new Dimension(0, 0);
 	}
 
 	/** Return the prefered size for this graphic. */
-	public Dimension getPreferedSize() {
+	@Override
+    public Dimension getPreferedSize() {
 		return new Dimension(1, 1);
 	}
 

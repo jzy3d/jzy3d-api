@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 
 public class AWTScreenshotUtils {
     public BufferedImage toImage(GL2 gl, int w, int h) {
@@ -13,7 +14,7 @@ public class AWTScreenshotUtils {
         gl.glReadBuffer(GL.GL_FRONT); // or GL.GL_BACK
 
         ByteBuffer glBB = ByteBuffer.allocate(3 * w * h);
-        gl.glReadPixels(0, 0, w, h, GL2.GL_BGR, GL.GL_BYTE, glBB);
+        gl.glReadPixels(0, 0, w, h, GL2GL3.GL_BGR, GL.GL_BYTE, glBB);
 
         BufferedImage bi = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
         int[] bd = ((DataBufferInt) bi.getRaster().getDataBuffer()).getData();

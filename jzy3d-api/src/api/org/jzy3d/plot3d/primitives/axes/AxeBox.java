@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -90,13 +91,13 @@ public class AxeBox implements IAxe {
     }
 
     public void cullingDisable(GL gl) {
-        gl.glDisable(GL2.GL_CULL_FACE);
+        gl.glDisable(GL.GL_CULL_FACE);
     }
 
     public void cullingEnable(GL gl) {
-        gl.glEnable(GL2.GL_CULL_FACE);
-        gl.glFrontFace(GL2.GL_CCW);
-        gl.glCullFace(GL2.GL_FRONT);
+        gl.glEnable(GL.GL_CULL_FACE);
+        gl.glFrontFace(GL.GL_CCW);
+        gl.glCullFace(GL.GL_FRONT);
     }
 
     /* */
@@ -107,17 +108,17 @@ public class AxeBox implements IAxe {
         if (layout.isFaceDisplayed()) {
             Color quadcolor = layout.getQuadColor();
             if (gl.isGL2()) {
-                gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
+                gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
                 gl.getGL2().glColor4f(quadcolor.r, quadcolor.g, quadcolor.b, quadcolor.a);
             } else {
-                GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_FILL);
+                GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
                 GLES2CompatUtils.glColor4f(quadcolor.r, quadcolor.g, quadcolor.b, quadcolor.a);
             }
             gl.glLineWidth(1.0f);
-            gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+            gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
             gl.glPolygonOffset(1.0f, 1.0f); // handle stippling
             drawCube(gl, GL2.GL_RENDER);
-            gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+            gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
         }
     }
 
@@ -125,24 +126,24 @@ public class AxeBox implements IAxe {
         Color gridcolor = layout.getGridColor();
 
         if (gl.isGL2()) {
-            gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             gl.getGL2().glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
             gl.getGL2().glLineWidth(1);
             drawCube(gl, GL2.GL_RENDER);
 
             // Draw grids on non hidden quads
-            gl.getGL2().glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             gl.getGL2().glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
             gl.getGL2().glLineWidth(1);
             gl.getGL2().glLineStipple(1, (short) 0xAAAA);
         } else {
-            GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+            GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             GLES2CompatUtils.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
             gl.glLineWidth(1);
             drawCube(gl, GL2.GL_RENDER);
 
             // Draw grids on non hidden quads
-            GLES2CompatUtils.glPolygonMode(GL2.GL_BACK, GL2.GL_LINE);
+            GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             GLES2CompatUtils.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
             GLES2CompatUtils.glLineWidth(1);
             GLES2CompatUtils.glLineStipple(1, (short) 0xAAAA);
@@ -235,16 +236,16 @@ public class AxeBox implements IAxe {
         for (int q = 0; q < 6; q++) {
             if (gl.isGL2()) {
                 if (mode == GL2.GL_FEEDBACK)
-                    gl.getGL2().glPassThrough((float) q);
-                gl.getGL2().glBegin(GL2.GL_QUADS);
+                    gl.getGL2().glPassThrough(q);
+                gl.getGL2().glBegin(GL2GL3.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
                     gl.getGL2().glVertex3f(quadx[q][v], quady[q][v], quadz[q][v]);
                 }
                 gl.getGL2().glEnd();
             } else {
                 if (mode == GL2.GL_FEEDBACK)
-                    GLES2CompatUtils.glPassThrough((float) q);
-                GLES2CompatUtils.glBegin(GL2.GL_QUADS);
+                    GLES2CompatUtils.glPassThrough(q);
+                GLES2CompatUtils.glBegin(GL2GL3.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
                     GLES2CompatUtils.glVertex3f(quadx[q][v], quady[q][v], quadz[q][v]);
                 }
@@ -263,7 +264,7 @@ public class AxeBox implements IAxe {
             double[] xticks = layout.getXTicks();
             for (int t = 0; t < xticks.length; t++) {
                 if (gl.isGL2()) {
-                    gl.getGL2().glBegin(GL2.GL_LINES);
+                    gl.getGL2().glBegin(GL.GL_LINES);
                     gl.getGL2().glVertex3d(xticks[t], quady[quad][0], quadz[quad][0]);
                     gl.getGL2().glVertex3d(xticks[t], quady[quad][2], quadz[quad][2]);
                     gl.getGL2().glEnd();
@@ -277,7 +278,7 @@ public class AxeBox implements IAxe {
             double[] yticks = layout.getYTicks();
             for (int t = 0; t < yticks.length; t++) {
                 if (gl.isGL2()) {
-                    gl.getGL2().glBegin(GL2.GL_LINES);
+                    gl.getGL2().glBegin(GL.GL_LINES);
                     gl.getGL2().glVertex3d(quadx[quad][0], yticks[t], quadz[quad][0]);
                     gl.getGL2().glVertex3d(quadx[quad][2], yticks[t], quadz[quad][2]);
                     gl.getGL2().glEnd();
@@ -291,7 +292,7 @@ public class AxeBox implements IAxe {
             double[] zticks = layout.getZTicks();
             for (int t = 0; t < zticks.length; t++) {
                 if (gl.isGL2()) {
-                    gl.getGL2().glBegin(GL2.GL_LINES);
+                    gl.getGL2().glBegin(GL.GL_LINES);
                     gl.getGL2().glVertex3d(quadx[quad][0], quady[quad][0], zticks[t]);
                     gl.getGL2().glVertex3d(quadx[quad][2], quady[quad][2], zticks[t]);
                     gl.getGL2().glEnd();
@@ -514,7 +515,7 @@ public class AxeBox implements IAxe {
         gl.getGL2().glLineWidth(1);
 
         // Draw the tick line
-        gl.getGL2().glBegin(GL2.GL_LINES);
+        gl.getGL2().glBegin(GL.GL_LINES);
         gl.getGL2().glVertex3d(xpos, ypos, zpos);
         gl.getGL2().glVertex3d(xlab, ylab, zlab);
         gl.getGL2().glEnd();
@@ -979,6 +980,7 @@ public class AxeBox implements IAxe {
         setScale(new Coord3d(1.0f, 1.0f, 1.0f));
     }
 
+    @Override
     public void dispose() {
     }
 
@@ -1027,6 +1029,7 @@ public class AxeBox implements IAxe {
         return wholeBounds;
     }
 
+    @Override
     public Coord3d getCenter() {
         return center;
     }
@@ -1035,6 +1038,7 @@ public class AxeBox implements IAxe {
      * Set the scaling factor that are applyed on this object before GL2
      * commands.
      */
+    @Override
     public void setScale(Coord3d scale) {
         this.scale = scale;
     }

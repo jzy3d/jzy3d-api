@@ -27,7 +27,8 @@ public class ViewMouseController extends ViewCameraController implements
 		canvas.addMouseController(this);
 	}
 
-	public void dispose() {
+	@Override
+    public void dispose() {
 		canvas.removeMouseController(this);
 
 		if (threadController != null)
@@ -54,7 +55,8 @@ public class ViewMouseController extends ViewCameraController implements
 	 * Handles toggle between mouse rotation/auto rotation: double-click starts
 	 * the animated rotation, while simple click stops it.
 	 */
-	public void mousePressed(MouseEvent e) {
+	@Override
+    public void mousePressed(MouseEvent e) {
 		//
 		if (NewtMouseUtilities.isDoubleClick(e)) {
 			if (threadController != null) {
@@ -70,7 +72,8 @@ public class ViewMouseController extends ViewCameraController implements
 	}
 
 	/** Compute shift or rotate */
-	public void mouseDragged(MouseEvent e) {
+	@Override
+    public void mouseDragged(MouseEvent e) {
 		Coord2d mouse = new Coord2d(e.getX(), e.getY());
 
 		// Rotate
@@ -88,7 +91,8 @@ public class ViewMouseController extends ViewCameraController implements
 	}
 
 	/** Compute zoom */
-	public void mouseWheelMoved(MouseEvent e) {
+	@Override
+    public void mouseWheelMoved(MouseEvent e) {
 		if (threadController != null)
 			threadController.stop();
 
@@ -96,7 +100,8 @@ public class ViewMouseController extends ViewCameraController implements
 		zoom(factor);
 	}
 
-	public void mouseClicked(MouseEvent e) {
+	@Override
+    public void mouseClicked(MouseEvent e) {
 		/*
 		 * if(MouseUtilities.isRightClick(e)){ rightClicked(e); }
 		 */
@@ -111,16 +116,20 @@ public class ViewMouseController extends ViewCameraController implements
 	 * }
 	 */
 
-	public void mouseEntered(MouseEvent e) {
+	@Override
+    public void mouseEntered(MouseEvent e) {
 	}
 
-	public void mouseExited(MouseEvent e) {
+	@Override
+    public void mouseExited(MouseEvent e) {
 	}
 
-	public void mouseReleased(MouseEvent e) {
+	@Override
+    public void mouseReleased(MouseEvent e) {
 	}
 
-	public void mouseMoved(MouseEvent e) {
+	@Override
+    public void mouseMoved(MouseEvent e) {
 	}
 
 	/*********************************************************/

@@ -32,7 +32,7 @@ public class SwingChartComponentFactory extends AWTChartComponentFactory {
 
     public static Chart chart(String toolkit) {
         IChartComponentFactory f = new SwingChartComponentFactory();
-        return f.newChart(SwingChart.DEFAULT_QUALITY, toolkit);
+        return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
     }
 
     public static Chart chart(Quality quality, Toolkit toolkit) {

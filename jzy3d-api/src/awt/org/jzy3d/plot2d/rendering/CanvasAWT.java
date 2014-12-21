@@ -18,12 +18,14 @@ public class CanvasAWT implements Canvas{
 		target = graphic;
 	}
 	
-	public void drawString( int x, int y, String text ){
+	@Override
+    public void drawString( int x, int y, String text ){
 		target.setColor(fgColor);
 		target.drawString(text, x, y);
 	}
 	
-	public void drawRect( Color color, int x, int y, int width, int height, boolean border ){
+	@Override
+    public void drawRect( Color color, int x, int y, int width, int height, boolean border ){
 		if(color!=null){
 			target.setColor(awt(color));
 			target.fillRect(x, y, width, height);
@@ -34,23 +36,27 @@ public class CanvasAWT implements Canvas{
 		}
 	}
 	
-	public void drawRect( Color color, int x, int y, int width, int height ){
+	@Override
+    public void drawRect( Color color, int x, int y, int width, int height ){
 		drawRect( color, x, y, width, height, true );
 	}
 	
-	public void drawDot( Color color, int x, int y ){
+	@Override
+    public void drawDot( Color color, int x, int y ){
 		target.setColor(awt(color));
 		target.fillRect(x-PIXEL_WITH/2, y-PIXEL_WITH/2, PIXEL_WITH, PIXEL_WITH);
 	}
 	
-	public void drawOval( Color color, int x, int y, int width, int height ){
+	@Override
+    public void drawOval( Color color, int x, int y, int width, int height ){
 		target.setColor(awt(color));
 		target.fillOval(x, y, width, height);
 		target.setColor(BLACK);
 		target.drawOval(x, y, width, height);
 	}
 
-	public void drawBackground( Color color, int width, int height ){
+	@Override
+    public void drawBackground( Color color, int width, int height ){
 		bgColor = awt(color);
 		target.setColor(bgColor);
 		target.fillRect(0, 0, width, height);	

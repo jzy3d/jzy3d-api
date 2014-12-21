@@ -66,12 +66,12 @@ public class BoundingBox3d {
     }
 
     public BoundingBox3d(Range xRange, Range yRange, Range zRange) {
-        this.xmin = (float) xRange.getMin();
-        this.xmax = (float) xRange.getMax();
-        this.ymin = (float) yRange.getMin();
-        this.ymax = (float) yRange.getMax();
-        this.zmin = (float) zRange.getMin();
-        this.zmax = (float) zRange.getMax();
+        this.xmin = xRange.getMin();
+        this.xmax = xRange.getMax();
+        this.ymin = yRange.getMin();
+        this.ymax = yRange.getMax();
+        this.zmin = zRange.getMin();
+        this.zmax = zRange.getMax();
     }
 
     /*********************************************************/
@@ -334,6 +334,7 @@ public class BoundingBox3d {
 
     /*********************************************************/
 
+    @Override
     public String toString() {
         return toString(0);
     }
@@ -383,6 +384,7 @@ public class BoundingBox3d {
         return true;
     }
 
+    @Override
     public BoundingBox3d clone(){
         return new BoundingBox3d(xmin, xmax, ymin, ymax, zmin, zmax);
     }

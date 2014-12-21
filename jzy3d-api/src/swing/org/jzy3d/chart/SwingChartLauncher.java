@@ -51,6 +51,7 @@ public class SwingChartLauncher extends ChartLauncher {
         frame.setVisible(true);
         frame.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent event) {
                 System.exit(0);
             }

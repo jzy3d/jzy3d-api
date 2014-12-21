@@ -73,7 +73,7 @@ public class ColorbarViewportLayout implements IViewportLayout{
      * Renders the legend within the screen slice given by the left and right parameters.
      */
     protected void renderLegends(GL gl, GLU glu, float left, float right, List<ILegend> data, ICanvas canvas) {
-        float slice = (right - left) / (float) data.size();
+        float slice = (right - left) / data.size();
         int k = 0;
         for (ILegend layer : data) {
             layer.setViewportMode(ViewportMode.STRETCH_TO_FILL);
@@ -84,6 +84,7 @@ public class ColorbarViewportLayout implements IViewportLayout{
     
     public void showLayout(AWTView view) {
         Renderer2d layoutBorder = new Renderer2d() {
+            @Override
             public void paint(Graphics g) {
                 if (pencil == null)
                     pencil = new CanvasAWT((Graphics2D) g);

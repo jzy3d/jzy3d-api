@@ -31,7 +31,8 @@ public class PickablePoint extends Point implements Pickable{
 		return id;
 	}
 	
-	public String toString(){
+	@Override
+    public String toString(){
 		return "(IPickable) " + id + ": " + super.toString();
 	}
 	

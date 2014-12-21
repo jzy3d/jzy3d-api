@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -51,7 +52,8 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable {
 
 	/********************************************************/
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 
 		if (gl.isGL2()) {
@@ -63,13 +65,13 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable {
 			// qobj = glu.gluNewQuadric();
 
 			if (facestatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
 				// glu.gluSphere(qobj, radius, slices, stacks);
 				glut.glutSolidSphere(radius, slices, stacks);
 			}
 			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 				gl.getGL2().glLineWidth(wfwidth);
 				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
 						wfcolor.a);
@@ -88,16 +90,16 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable {
 			// qobj = glu.gluNewQuadric();
 
 			if (facestatus) {
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-						GL2.GL_FILL);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+						GL2GL3.GL_FILL);
 				GLES2CompatUtils.glColor4f(color.r, color.g, color.b,
 						color.a);
 				// glu.gluSphere(qobj, radius, slices, stacks);
 				glut.glutSolidSphere(radius, slices, stacks);
 			}
 			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-						GL2.GL_LINE);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+						GL2GL3.GL_LINE);
 				GLES2CompatUtils.glLineWidth(wfwidth);
 				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
 						wfcolor.a);
@@ -195,20 +197,23 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable {
 
 	/********************************************************/
 
-	public void setColor(Color color) {
+	@Override
+    public void setColor(Color color) {
 		this.color = color;
 
 		fireDrawableChanged(new DrawableChangedEvent(this,
 				DrawableChangedEvent.FIELD_COLOR));
 	}
 
-	public Color getColor() {
+	@Override
+    public Color getColor() {
 		return color;
 	}
 
 	/********************************************************/
 
-	public String toString(int depth) {
+	@Override
+    public String toString(int depth) {
 		return Utils.blanks(depth) + "(Sphere) x=" + position.x + " y="
 				+ position.y + " z=" + position.z + " r=" + color.r + " g="
 				+ color.g + " b=" + color.b + " a=" + color.a;

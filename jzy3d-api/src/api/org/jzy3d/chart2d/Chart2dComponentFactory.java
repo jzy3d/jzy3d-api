@@ -41,7 +41,7 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
     /* */
     
     public static Chart2d chart() {
-        return (Chart2d)chart(Quality.Intermediate);
+        return chart(Quality.Intermediate);
     }
     public static Chart2d chart(Quality quality) {
         return (Chart2d)f.newChart(quality, Toolkit.newt);

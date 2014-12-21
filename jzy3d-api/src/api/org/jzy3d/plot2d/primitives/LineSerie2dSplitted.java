@@ -15,6 +15,7 @@ public class LineSerie2dSplitted extends LineSerie2d implements Serie2d {
         line().addAndSplit(new Point(new Coord3d(x, y, 0), color));
     }
 
+    @Override
     public void add(float x, float y, Color color) {
         line().add(new Point(new Coord3d(x, y, 0), color));
     }

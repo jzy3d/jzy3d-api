@@ -8,6 +8,7 @@ import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
 
+import com.jogamp.newt.event.InputEvent;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 
@@ -23,12 +24,14 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
 		addSlaveThreadController(new CameraThreadController(chart));
 	}
 	
-	public void register(Chart chart){
+	@Override
+    public void register(Chart chart){
 		super.register(chart);
 		chart.getCanvas().addMouseController(this);
 	}
 	
-	public void dispose(){
+	@Override
+    public void dispose(){
 		for(Chart c: targets){
 			c.getCanvas().removeMouseController(this);
 		}
@@ -37,7 +40,8 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
 	
 	/** Handles toggle between mouse rotation/auto rotation: double-click starts the animated
 	 * rotation, while simple click stops it.*/
-	public void mousePressed(MouseEvent e) {
+	@Override
+    public void mousePressed(MouseEvent e) {
 		// 
 		if(handleSlaveThread(e))
 		    return;
@@ -59,7 +63,8 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
     }
 
 	/** Compute shift or rotate*/
-	public void mouseDragged(MouseEvent e) {
+	@Override
+    public void mouseDragged(MouseEvent e) {
 		Coord2d mouse = new Coord2d(e.getX(),e.getY());
 		// Rotate
 				if(isLeftDown(e)){
@@ -77,11 +82,11 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
 	}
 	
 	public static boolean isLeftDown(MouseEvent e){
-    	return (e.getModifiers() & MouseEvent.BUTTON1_MASK) == MouseEvent.BUTTON1_MASK;
+    	return (e.getModifiers() & InputEvent.BUTTON1_MASK) == InputEvent.BUTTON1_MASK;
 	}
 
 	public static boolean isRightDown(MouseEvent e){
-		return (e.getModifiers() & MouseEvent.BUTTON3_MASK) == MouseEvent.BUTTON3_MASK; 
+		return (e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK; 
 	}
 	
 	public static boolean isDoubleClick(MouseEvent e){
@@ -90,16 +95,22 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
 	}
 	
 	/** Compute zoom */
-	public void mouseWheelMoved(MouseEvent e) {
+	@Override
+    public void mouseWheelMoved(MouseEvent e) {
 		stopThreadController();
 		
 		float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
 		zoomZ(factor);
 	}
 	
-	public void mouseClicked(MouseEvent e) {}  
-	public void mouseEntered(MouseEvent e) {}
-	public void mouseExited(MouseEvent e) {}
-	public void mouseReleased(MouseEvent e) {} 
-	public void mouseMoved(MouseEvent e) {}
+	@Override
+    public void mouseClicked(MouseEvent e) {}  
+	@Override
+    public void mouseEntered(MouseEvent e) {}
+	@Override
+    public void mouseExited(MouseEvent e) {}
+	@Override
+    public void mouseReleased(MouseEvent e) {} 
+	@Override
+    public void mouseMoved(MouseEvent e) {}
 }

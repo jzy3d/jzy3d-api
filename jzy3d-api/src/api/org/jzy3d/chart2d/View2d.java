@@ -12,6 +12,7 @@ public class View2d extends AWTView {
         super(factory, scene, canvas, quality);
     }
 
+    @Override
     public Coord3d computeSceneScaling() {
         return squarify();
     }

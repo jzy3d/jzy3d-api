@@ -39,7 +39,8 @@ public class RotationTextTest extends AbstractAnalysis {
 			t.add(rotate);
 			instance.myComposite.applyGeometryTransform(t);
 			instance.chart.render();
-			Thread.currentThread().sleep(300);
+			Thread.currentThread();
+            Thread.sleep(300);
 			//File f = new File("c:\\temp\\pic_" + i + ".jpg");
 //			try {
 ////				instance.chart.screenshot(f);

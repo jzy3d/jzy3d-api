@@ -7,7 +7,8 @@ public class Scale {
 		this.max = max;
 	}
 	
-	public Scale clone(){
+	@Override
+    public Scale clone(){
 		return new Scale(min, max);
 	}
 
@@ -79,7 +80,8 @@ public class Scale {
     	return new Scale(input.getMin()-offset, input.getMax()+offset);
 	}
 	
-	public String toString(){
+	@Override
+    public String toString(){
 		return new String("min="+min+" max="+max);
 	}
 	

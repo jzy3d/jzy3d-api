@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.view;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.Rectangle;
@@ -62,7 +63,7 @@ public abstract class AbstractViewportManager {
         if (left >= right)
             throw new IllegalArgumentException("left must be inferior to right : " + left + " | " + right);
 
-        this.screenWidth = (int) ((right - left) * (float) width);
+        this.screenWidth = (int) ((right - left) * width);
         this.screenHeight = height;
         this.screenLeft = (int) (left * width);
         this.screenBottom = 0;// screenLeft + screenWidth;
@@ -162,7 +163,7 @@ public abstract class AbstractViewportManager {
         }
 
         // Set a 2d projection
-        gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+        gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
         gl.getGL2().glPushMatrix();
         gl.getGL2().glLoadIdentity();
 
@@ -186,7 +187,7 @@ public abstract class AbstractViewportManager {
         gl.getGL2().glOrtho(AREA_LEFT, AREA_RIGHT, AREA_DOWN, AREA_TOP, -1, 1);
 
         // Set a grid
-        gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+        gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         gl.getGL2().glPushMatrix();
         gl.getGL2().glLoadIdentity();
         gl.getGL2().glColor3f(1f, 0.5f, 0.5f);
@@ -200,7 +201,7 @@ public abstract class AbstractViewportManager {
             if (x == AREA_LEFT)
                 x += OFFSET;
 
-            gl.getGL2().glBegin(GL2.GL_LINES);
+            gl.getGL2().glBegin(GL.GL_LINES);
             gl.getGL2().glVertex3f(x, AREA_DOWN, 1);
             gl.getGL2().glVertex3f(x, AREA_TOP, 1);
             gl.getGL2().glEnd();
@@ -212,7 +213,7 @@ public abstract class AbstractViewportManager {
             if (y == AREA_TOP)
                 y -= OFFSET;
 
-            gl.getGL2().glBegin(GL2.GL_LINES);
+            gl.getGL2().glBegin(GL.GL_LINES);
             gl.getGL2().glVertex3f(AREA_LEFT, y, 1);
             gl.getGL2().glVertex3f(AREA_RIGHT, y, 1);
             gl.getGL2().glEnd();
@@ -220,7 +221,7 @@ public abstract class AbstractViewportManager {
 
         // Restore matrices
         gl.getGL2().glPopMatrix();
-        gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+        gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
         gl.getGL2().glPopMatrix();
     }
 
@@ -229,7 +230,7 @@ public abstract class AbstractViewportManager {
              return;
 
          // Set a 2d projection
-         GLES2CompatUtils.glMatrixMode(GL2.GL_PROJECTION);
+         GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
          GLES2CompatUtils.glPushMatrix();
          GLES2CompatUtils.glLoadIdentity();
 
@@ -253,7 +254,7 @@ public abstract class AbstractViewportManager {
          GLES2CompatUtils.glOrtho(AREA_LEFT, AREA_RIGHT, AREA_DOWN, AREA_TOP, -1, 1);
 
          // Set a grid
-         GLES2CompatUtils.glMatrixMode(GL2.GL_MODELVIEW);
+         GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
          GLES2CompatUtils.glPushMatrix();
          GLES2CompatUtils.glLoadIdentity();
          GLES2CompatUtils.glColor3f(1f, 0.5f, 0.5f);
@@ -267,7 +268,7 @@ public abstract class AbstractViewportManager {
              if (x == AREA_LEFT)
                  x += OFFSET;
 
-             GLES2CompatUtils.glBegin(GL2.GL_LINES);
+             GLES2CompatUtils.glBegin(GL.GL_LINES);
              GLES2CompatUtils.glVertex3f(x, AREA_DOWN, 1);
              GLES2CompatUtils.glVertex3f(x, AREA_TOP, 1);
              GLES2CompatUtils.glEnd();
@@ -279,7 +280,7 @@ public abstract class AbstractViewportManager {
              if (y == AREA_TOP)
                  y -= OFFSET;
 
-             GLES2CompatUtils.glBegin(GL2.GL_LINES);
+             GLES2CompatUtils.glBegin(GL.GL_LINES);
              GLES2CompatUtils.glVertex3f(AREA_LEFT, y, 1);
              GLES2CompatUtils.glVertex3f(AREA_RIGHT, y, 1);
              GLES2CompatUtils.glEnd();
@@ -287,7 +288,7 @@ public abstract class AbstractViewportManager {
 
          // Restore matrices
          GLES2CompatUtils.glPopMatrix();
-         GLES2CompatUtils.glMatrixMode(GL2.GL_PROJECTION);
+         GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
          GLES2CompatUtils.glPopMatrix();
 	}
 

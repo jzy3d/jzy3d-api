@@ -39,6 +39,7 @@ public class ChartView extends View {
      * Performs all transformations of eye, target coordinates to adapt the camera settings
      * to the scaled scene.
      */
+    @Override
     public void render(GL gl, GLU glu) {
     	fireViewLifecycleWillRender(null);
 

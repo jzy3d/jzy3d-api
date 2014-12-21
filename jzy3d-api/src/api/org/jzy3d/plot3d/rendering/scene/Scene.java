@@ -130,7 +130,8 @@ public class Scene {
 	/***************************************************************/
 
 	/**Return the scene {@link Graph} string representation.*/
-	public String toString(){
+	@Override
+    public String toString(){
 		return graph.toString();
 	}
 	

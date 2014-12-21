@@ -23,7 +23,8 @@ public class FrameSwing extends JFrame implements IFrame {
 		initialize(chart, bounds, title);
 	}
 
-	public void initialize(Chart chart, Rectangle bounds, String title) {
+	@Override
+    public void initialize(Chart chart, Rectangle bounds, String title) {
 		this.chart = chart;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -32,7 +33,8 @@ public class FrameSwing extends JFrame implements IFrame {
 		contentPane.setLayout(layout);
 
 		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
+			@Override
+            public void windowClosing(WindowEvent e) {
 				FrameSwing.this
 						.remove((java.awt.Component) FrameSwing.this.chart
 								.getCanvas());

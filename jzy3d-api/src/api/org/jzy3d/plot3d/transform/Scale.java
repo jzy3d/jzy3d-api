@@ -23,7 +23,8 @@ public class Scale implements Transformer {
 		this.scale = scale;
 	}
 
-	public void execute(GL gl) {
+	@Override
+    public void execute(GL gl) {
 		if (gl.isGL2()) {
 			gl.getGL2().glScalef(scale.x, scale.y, scale.z);
 		} else {
@@ -31,11 +32,13 @@ public class Scale implements Transformer {
 		}
 	}
 
-	public Coord3d compute(Coord3d input) {
+	@Override
+    public Coord3d compute(Coord3d input) {
 		return input.mul(scale);
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		return "(Scale)" + scale;
 	}
 

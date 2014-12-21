@@ -43,7 +43,8 @@ public class MouseEventLog extends AbstractEventLog implements IMouseEventLog{
 		return value;
 	}
 	
-	public String toString(){
+	@Override
+    public String toString(){
 		if(coord!=null)
 			return type + ", x:" + coord.x + ", y:" + coord.y + ", bt:" + button + ", since:" + since;
 		else

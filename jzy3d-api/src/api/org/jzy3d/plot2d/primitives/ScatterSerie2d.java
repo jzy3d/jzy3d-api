@@ -10,7 +10,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterMultiColorList;
-import org.jzy3d.plot3d.primitives.LightPoint;
 import org.jzy3d.plot3d.primitives.ScatterMultiColorList;
 
 public class ScatterSerie2d implements Serie2d {
@@ -32,6 +31,7 @@ public class ScatterSerie2d implements Serie2d {
 
     public ColorMapper colormapper(ColorMapRedAndGreen g) {
         ColorMapper m = new ColorMapper(g, 0, 1) {
+            @Override
             public Color getColor(Coord3d coord) {
                 Color out = colormap.getColor(this, coord.x, coord.z, coord.y);
 
@@ -45,6 +45,7 @@ public class ScatterSerie2d implements Serie2d {
 
     public ColorMapRedAndGreen colormap() {
         ColorMapRedAndGreen g = new ColorMapRedAndGreen() {
+            @Override
             public Color getColor(double x, double y, double z, double zMin, double zMax) {
                 double rel_value = processRelativeZValue(z, zMin, zMax);
 

@@ -9,16 +9,19 @@ import org.jzy3d.bridge.BufferedPanel;
 
 public abstract class SimpleBufferedPanelSwing extends JPanel implements BufferedPanel{
 	
-	public abstract void draw(Graphics g);
+	@Override
+    public abstract void draw(Graphics g);
 	
 	/**********************************************************************/
 	
-	public void paintComponent(Graphics g){
+	@Override
+    public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		draw(g); 
 	}
 	
-	public void update(Graphics g){
+	@Override
+    public void update(Graphics g){
 		paintComponent(g);
 	}
 

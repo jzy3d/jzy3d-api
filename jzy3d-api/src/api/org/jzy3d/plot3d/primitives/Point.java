@@ -61,27 +61,29 @@ public class Point extends AbstractDrawable implements ISingleColorable {
 
 	/* */
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 
 		if (gl.isGL2()) {
 			gl.getGL2().glPointSize(width);
 
-			gl.getGL2().glBegin(GL2.GL_POINTS);
+			gl.getGL2().glBegin(GL.GL_POINTS);
 			gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
 			gl.getGL2().glVertex3f(xyz.x, xyz.y, xyz.z);
 			gl.getGL2().glEnd();
 		} else {
 			GLES2CompatUtils.glPointSize(width);
 
-			GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+			GLES2CompatUtils.glBegin(GL.GL_POINTS);
 			GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
 			GLES2CompatUtils.glVertex3f(xyz.x, xyz.y, xyz.z);
 			GLES2CompatUtils.glEnd();
 		}
 	}
 
-	public void applyGeometryTransform(Transform transform) {
+	@Override
+    public void applyGeometryTransform(Transform transform) {
 		xyz = transform.compute(xyz);
 	}
 
@@ -98,19 +100,22 @@ public class Point extends AbstractDrawable implements ISingleColorable {
 		updateBounds();
 	}
 
-	public void updateBounds() {
+	@Override
+    public void updateBounds() {
 		bbox.reset();
 		bbox.add(this);
 	}
 
-	public void setColor(Color color) {
+	@Override
+    public void setColor(Color color) {
 		this.rgb = color;
 
 		fireDrawableChanged(new DrawableChangedEvent(this,
 				DrawableChangedEvent.FIELD_COLOR));
 	}
 
-	public Color getColor() {
+	@Override
+    public Color getColor() {
 		return rgb;
 	}
 
@@ -118,25 +123,30 @@ public class Point extends AbstractDrawable implements ISingleColorable {
 		this.width = width;
 	}
 
-	public double getDistance(Camera camera) {
+	@Override
+    public double getDistance(Camera camera) {
 		return xyz.distance(camera.getEye());
 	}
 
-	public double getShortestDistance(Camera camera) {
+	@Override
+    public double getShortestDistance(Camera camera) {
 		return xyz.distance(camera.getEye());
 	}
 
-	public double getLongestDistance(Camera camera) {
+	@Override
+    public double getLongestDistance(Camera camera) {
 		return xyz.distance(camera.getEye());
 	}
 
-	public Point clone() {
+	@Override
+    public Point clone() {
 		Point p = new Point(xyz.clone(), rgb.clone());
 		p.setWidth(width);
 		return p;
 	}
 
-	public String toString(int depth) {
+	@Override
+    public String toString(int depth) {
 		return (Utils.blanks(depth) + "(Point) coord=" + xyz + ", color=" + rgb);
 	}
 

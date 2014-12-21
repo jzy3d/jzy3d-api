@@ -98,7 +98,8 @@ public class Transform {
 		return output;
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		String txt = "";
 		for (Transformer t : sequence)
 			txt += " * " + t.toString();
