@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,6 +21,9 @@ import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
+import org.jzy3d.ui.views.ImagePanel;
 
 public class MultiChartPanel extends JPanel {
     private static final long serialVersionUID = 7519209038396190502L;
@@ -154,16 +158,32 @@ public class MultiChartPanel extends JPanel {
     }
 
     public JPanel addChart(Chart chart) {
-        Component component = (Component) chart.getCanvas();
+        Component component = getChartAsComponent(chart);
         
         return addPanel(component);
     }
 
     public JPanel addChartAt(Chart chart, int nlin, int ncol) {
-        Component component = (Component) chart.getCanvas();
-        //TextureData texture = chart.screenshot();
-        //texture.
+        Component component;
+        
+        if(chart.getCanvas() instanceof OffscreenCanvas){
+            component = getChartScreenshotAsComponent(chart);    
+        }
+        else
+            component = getChartAsComponent(chart);
         return addPanelAt(component, nlin, ncol);
+    }
+
+    public JPanel getChartScreenshotAsComponent(Chart chart) {
+        chart.screenshot();
+        AWTRenderer3d renderer = (AWTRenderer3d)chart.getCanvas().getRenderer();
+        BufferedImage i = renderer.getLastScreenshotImage();
+        JPanel component = new ImagePanel(i);
+        return component;
+    }
+
+    public Component  getChartAsComponent(Chart chart) {
+        return (Component) chart.getCanvas();
     }
 
     public JPanel addPanel(java.awt.Component panel) {
