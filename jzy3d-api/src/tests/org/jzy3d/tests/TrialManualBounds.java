@@ -43,6 +43,7 @@ public class TrialManualBounds extends AbstractAnalysis {
     public void init() {
         // Define a function to plot
         Mapper mapper = new Mapper() {
+            @Override
             public double f(double x, double y) {
                 return 0;//x * Math.sin(x * y);
             }

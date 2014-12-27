@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.enlightables;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.glu.GLU;
 import javax.media.opengl.glu.GLUquadric;
 
@@ -47,7 +48,8 @@ public class EnlightableSphere extends AbstractEnlightable implements
 
 	/********************************************************/
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 
 		if (gl.isGL2()) {
@@ -68,13 +70,13 @@ public class EnlightableSphere extends AbstractEnlightable implements
 
 		if (gl.isGL2()) {
 			if (facestatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
 				glu.gluSphere(qobj, radius, slices, stacks);
 				// new GLUT().glutSolidSphere(radius, slices, stacks);
 			}
 			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
 						wfcolor.a);
 				// new GLUT().glutSolidSphere(radius, slices, stacks);
@@ -82,8 +84,8 @@ public class EnlightableSphere extends AbstractEnlightable implements
 			}
 		} else {
 			if (facestatus) {
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-						GL2.GL_FILL);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+						GL2GL3.GL_FILL);
 				GLES2CompatUtils.glColor4f(color.r, color.g, color.b,
 						color.a);
 				// FIXME : GLU support on android ??
@@ -91,8 +93,8 @@ public class EnlightableSphere extends AbstractEnlightable implements
 				// new GLUT().glutSolidSphere(radius, slices, stacks);
 			}
 			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-						GL2.GL_LINE);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+						GL2GL3.GL_LINE);
 				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
 						wfcolor.a);
 				// new GLUT().glutSolidSphere(radius, slices, stacks);
@@ -186,20 +188,23 @@ public class EnlightableSphere extends AbstractEnlightable implements
 
 	/********************************************************/
 
-	public void setColor(Color color) {
+	@Override
+    public void setColor(Color color) {
 		this.color = color;
 
 		fireDrawableChanged(new DrawableChangedEvent(this,
 				DrawableChangedEvent.FIELD_COLOR));
 	}
 
-	public Color getColor() {
+	@Override
+    public Color getColor() {
 		return color;
 	}
 
 	/********************************************************/
 
-	public String toString(int depth) {
+	@Override
+    public String toString(int depth) {
 		return Utils.blanks(depth) + "(EnlightableSphere) x=" + x + " y=" + y
 				+ " z=" + z + " r=" + color.r + " g=" + color.g + " b="
 				+ color.b + " a=" + color.a;

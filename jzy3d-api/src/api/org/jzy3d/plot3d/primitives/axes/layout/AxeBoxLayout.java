@@ -73,199 +73,246 @@ public class AxeBoxLayout implements IAxeLayout{
 		return zTicks;
 	}
 	
-	public String getXAxeLabel() {
+	@Override
+    public String getXAxeLabel() {
 		return xAxeLabel;
 	}
 
-	public void setXAxeLabel(String axeLabel) {
+	@Override
+    public void setXAxeLabel(String axeLabel) {
 		xAxeLabel = axeLabel;
 	}
 
-	public String getYAxeLabel() {
+	@Override
+    public String getYAxeLabel() {
 		return yAxeLabel;
 	}
 
-	public void setYAxeLabel(String axeLabel) {
+	@Override
+    public void setYAxeLabel(String axeLabel) {
 		yAxeLabel = axeLabel;
 	}
 
-	public String getZAxeLabel() {
+	@Override
+    public String getZAxeLabel() {
 		return zAxeLabel;
 	}
 
-	public void setZAxeLabel(String axeLabel) {
+	@Override
+    public void setZAxeLabel(String axeLabel) {
 		zAxeLabel = axeLabel;
 	}
 
-	public double[] getXTicks() {
+	@Override
+    public double[] getXTicks() {
 		return xTicks;
 	}
 
-	public double[] getYTicks() {
+	@Override
+    public double[] getYTicks() {
 		return yTicks;
 	}
 
-	public double[] getZTicks() {
+	@Override
+    public double[] getZTicks() {
 		return zTicks;
 	}
 
-	public ITickProvider getXTickProvider() {
+	@Override
+    public ITickProvider getXTickProvider() {
 		return xTickProvider;
 	}
 
-	public void setXTickProvider(ITickProvider tickProvider) {
+	@Override
+    public void setXTickProvider(ITickProvider tickProvider) {
 		xTickProvider = tickProvider;
 		
 		if(lastXmin!=Float.NaN) // update ticks if we can
 			getXTicks(lastXmin, lastXmax);
 	}
 
-	public ITickProvider getYTickProvider() {
+	@Override
+    public ITickProvider getYTickProvider() {
 		return yTickProvider;
 	}
 
-	public void setYTickProvider(ITickProvider tickProvider) {
+	@Override
+    public void setYTickProvider(ITickProvider tickProvider) {
 		yTickProvider = tickProvider;
 		
 		if(lastYmin!=Float.NaN) // update ticks if we can
 			getYTicks(lastYmin, lastYmax);
 	}
 
-	public ITickProvider getZTickProvider() {
+	@Override
+    public ITickProvider getZTickProvider() {
 		return zTickProvider;
 	}
 
-	public void setZTickProvider(ITickProvider tickProvider) {
+	@Override
+    public void setZTickProvider(ITickProvider tickProvider) {
 		zTickProvider = tickProvider;
 		
 		if(lastZmin!=Float.NaN)  // update ticks if we can
 			getZTicks(lastZmin, lastZmax);
 	}
 
-	public ITickRenderer getXTickRenderer() {
+	@Override
+    public ITickRenderer getXTickRenderer() {
 		return xTickRenderer;
 	}
 
-	public void setXTickRenderer(ITickRenderer tickRenderer) {
+	@Override
+    public void setXTickRenderer(ITickRenderer tickRenderer) {
 		xTickRenderer = tickRenderer;
 	}
 
-	public ITickRenderer getYTickRenderer() {
+	@Override
+    public ITickRenderer getYTickRenderer() {
 		return yTickRenderer;
 	}
 
-	public void setYTickRenderer(ITickRenderer tickRenderer) {
+	@Override
+    public void setYTickRenderer(ITickRenderer tickRenderer) {
 		yTickRenderer = tickRenderer;
 	}
 
-	public ITickRenderer getZTickRenderer() {
+	@Override
+    public ITickRenderer getZTickRenderer() {
 		return zTickRenderer;
 	}
 
-	public void setZTickRenderer(ITickRenderer tickRenderer) {
+	@Override
+    public void setZTickRenderer(ITickRenderer tickRenderer) {
 		zTickRenderer = tickRenderer;
 	}
 
-	public Color getXTickColor() {
+	@Override
+    public Color getXTickColor() {
 		return xTickColor;
 	}
 
-	public void setXTickColor(Color tickColor) {
+	@Override
+    public void setXTickColor(Color tickColor) {
 		xTickColor = tickColor;
 	}
 
-	public Color getYTickColor() {
+	@Override
+    public Color getYTickColor() {
 		return yTickColor;
 	}
 
-	public void setYTickColor(Color tickColor) {
+	@Override
+    public void setYTickColor(Color tickColor) {
 		yTickColor = tickColor;
 	}
 
-	public Color getZTickColor() {
+	@Override
+    public Color getZTickColor() {
 		return zTickColor;
 	}
 
-	public void setZTickColor(Color tickColor) {
+	@Override
+    public void setZTickColor(Color tickColor) {
 		zTickColor = tickColor;
 	}
 	
-	public boolean isFaceDisplayed() {
+	@Override
+    public boolean isFaceDisplayed() {
 		return faceDisplayed;
 	}
 
-	public void setFaceDisplayed(boolean faceDisplayed) {
+	@Override
+    public void setFaceDisplayed(boolean faceDisplayed) {
 		this.faceDisplayed = faceDisplayed;
 	}
 	
-	public Color getQuadColor() {
+	@Override
+    public Color getQuadColor() {
 		return quadColor;
 	}
 
-	public void setQuadColor(Color quadColor) {
+	@Override
+    public void setQuadColor(Color quadColor) {
 		this.quadColor = quadColor;
 	}
 
-	public Color getGridColor() {
+	@Override
+    public Color getGridColor() {
 		return gridColor;
 	}
 
-	public void setGridColor(Color gridColor) {
+	@Override
+    public void setGridColor(Color gridColor) {
 		this.gridColor = gridColor;
 	}
 
-	public boolean isXAxeLabelDisplayed() {
+	@Override
+    public boolean isXAxeLabelDisplayed() {
 		return xAxeLabelDisplayed;
 	}
 
-	public void setXAxeLabelDisplayed(boolean axeLabelDisplayed) {
+	@Override
+    public void setXAxeLabelDisplayed(boolean axeLabelDisplayed) {
 		xAxeLabelDisplayed = axeLabelDisplayed;
 	}
 
-	public boolean isYAxeLabelDisplayed() {
+	@Override
+    public boolean isYAxeLabelDisplayed() {
 		return yAxeLabelDisplayed;
 	}
 
-	public void setYAxeLabelDisplayed(boolean axeLabelDisplayed) {
+	@Override
+    public void setYAxeLabelDisplayed(boolean axeLabelDisplayed) {
 		yAxeLabelDisplayed = axeLabelDisplayed;
 	}
 
-	public boolean isZAxeLabelDisplayed() {
+	@Override
+    public boolean isZAxeLabelDisplayed() {
 		return zAxeLabelDisplayed;
 	}
 
-	public void setZAxeLabelDisplayed(boolean axeLabelDisplayed) {
+	@Override
+    public void setZAxeLabelDisplayed(boolean axeLabelDisplayed) {
 		zAxeLabelDisplayed = axeLabelDisplayed;
 	}
 	
-	public boolean isXTickLabelDisplayed() {
+	@Override
+    public boolean isXTickLabelDisplayed() {
 		return xTickLabelDisplayed;
 	}
 
-	public void setXTickLabelDisplayed(boolean tickLabelDisplayed) {
+	@Override
+    public void setXTickLabelDisplayed(boolean tickLabelDisplayed) {
 		xTickLabelDisplayed = tickLabelDisplayed;
 	}
 
-	public boolean isYTickLabelDisplayed() {
+	@Override
+    public boolean isYTickLabelDisplayed() {
 		return yTickLabelDisplayed;
 	}
 
-	public void setYTickLabelDisplayed(boolean tickLabelDisplayed) {
+	@Override
+    public void setYTickLabelDisplayed(boolean tickLabelDisplayed) {
 		yTickLabelDisplayed = tickLabelDisplayed;
 	}
 
-	public boolean isZTickLabelDisplayed() {
+	@Override
+    public boolean isZTickLabelDisplayed() {
 		return zTickLabelDisplayed;
 	}
 
-	public void setZTickLabelDisplayed(boolean tickLabelDisplayed) {
+	@Override
+    public void setZTickLabelDisplayed(boolean tickLabelDisplayed) {
 		zTickLabelDisplayed = tickLabelDisplayed;
 	}
 	
-	public boolean isTickLineDisplayed() {
+	@Override
+    public boolean isTickLineDisplayed() {
         return tickLineDisplayed;
     }
 
+    @Override
     public void setTickLineDisplayed(boolean tickLineDisplayed) {
         this.tickLineDisplayed = tickLineDisplayed;
     }

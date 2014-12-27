@@ -29,6 +29,7 @@ public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
     }
 
 
+    @Override
     public void dispose() {
 		if (txtRenderer != null)
 			txtRenderer.dispose();
@@ -50,7 +51,8 @@ public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
 		txtRenderer = new TextOverlay(canvas);
 	}
 
-	protected BoundingBox3d drawTicks(GL gl, GLU glu, Camera cam, int axis,
+	@Override
+    protected BoundingBox3d drawTicks(GL gl, GLU glu, Camera cam, int axis,
 			int direction, Color color, Halign hal, Valign val) {
 		int quad_0;
 		int quad_1;
@@ -172,7 +174,7 @@ public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
 				gl.getGL2().glLineWidth(1);
 
 				// Draw the tick line
-				gl.getGL2().glBegin(GL2.GL_LINES);
+				gl.getGL2().glBegin(GL.GL_LINES);
 				gl.getGL2().glVertex3d(xpos, ypos, zpos);
 				gl.getGL2().glVertex3d(xlab, ylab, zlab);
 				gl.getGL2().glEnd();

@@ -27,7 +27,8 @@ public class RingTessellator extends OrthonormalTessellator{
 	}
 
 	
-	public AbstractComposite build(float[] x, float[] y, float[] z) {
+	@Override
+    public AbstractComposite build(float[] x, float[] y, float[] z) {
 		setData(x, y, z);
 		Shape s = new Shape();
 		s.add(getInterpolatedRingPolygons());

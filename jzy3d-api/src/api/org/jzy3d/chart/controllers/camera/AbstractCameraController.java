@@ -17,6 +17,7 @@ public abstract class AbstractCameraController extends AbstractController implem
         super(chart);
     }
     
+    @Override
     public void dispose(){
 		if(threadController!=null)
 			threadController.stop();
@@ -79,7 +80,8 @@ public abstract class AbstractCameraController extends AbstractController implem
 
     
 
-	public void addSlaveThreadController(CameraThreadController controller){
+	@Override
+    public void addSlaveThreadController(CameraThreadController controller){
 		removeSlaveThreadController();
 		this.threadController = controller;
 	}

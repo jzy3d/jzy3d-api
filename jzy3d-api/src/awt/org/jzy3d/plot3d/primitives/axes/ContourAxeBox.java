@@ -79,7 +79,8 @@ public class ContourAxeBox extends AxeBox {
 	
 	/****************/
 	
-	protected void setAxeBox(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax){
+	@Override
+    protected void setAxeBox(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax){
 		super.setAxeBox(xmin, xmax, ymin, ymax, zmin, zmax);
 		this.xmin = xmin;
 		this.xmax = xmax;

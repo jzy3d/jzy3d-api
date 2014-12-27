@@ -75,7 +75,8 @@ public class TextOverlay implements Renderer2d{
 		textList.add(new TextDescriptor(s, new Coord2d(posScreen.x, posScreen.y), color, halign, valign));
 	}
 	
-	public void paint(Graphics g){
+	@Override
+    public void paint(Graphics g){
 		int x;
 		int y;
 		
@@ -122,16 +123,20 @@ public class TextOverlay implements Renderer2d{
 	private List<TextDescriptor> textList;
 	
 	private ComponentListener resizeListener = new ComponentListener(){
-		public void componentHidden(ComponentEvent e) {
+		@Override
+        public void componentHidden(ComponentEvent e) {
 		}
-		public void componentMoved(ComponentEvent e) {
+		@Override
+        public void componentMoved(ComponentEvent e) {
 		}
-		public void componentResized(ComponentEvent e) {
+		@Override
+        public void componentResized(ComponentEvent e) {
 			Component obj = (Component)e.getSource();
 			targetWidth  = obj.getWidth();
 			targetHeight = obj.getHeight();
 		}
-		public void componentShown(ComponentEvent e) {
+		@Override
+        public void componentShown(ComponentEvent e) {
 		}
 	};
 	

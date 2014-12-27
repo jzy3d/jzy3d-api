@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.BoundingBox3d;
@@ -128,15 +129,12 @@ public class Graph {
         synchronized (this) {
             output = components.remove(drawable);
         }
-
         BoundingBox3d bbox = getBounds();
-
         for (View view : scene.views) {
             view.lookToBox(bbox);
             if (updateViews)
                 view.shoot();
         }
-
         return output;
     }
 
@@ -180,39 +178,39 @@ public class Graph {
     protected TicToc t = new TicToc();
 
     protected synchronized void draw(GL gl, GLU glu, Camera camera, List<AbstractDrawable> components, boolean sort) {
-        if (gl.isGL2()) {
-            gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
-        } else {
-            GLES2CompatUtils.glMatrixMode(GL2.GL_MODELVIEW);
-        }
-
+        glMatrixMode(gl);
         if (!sort) {
-            // render all items of the graph
-            // synchronized(components){
-            for (AbstractDrawable d : components)
-                if (d.isDisplayed())
-                    d.draw(gl, glu, camera);
-            // }
+            drawSimple(gl, glu, camera, components);
         } else {
+            drawDecomposition(gl, glu, camera);
+        }
+    }
 
-            // Render sorted monotypes
-            t.tic();
-            List<AbstractDrawable> monotypes = getDecomposition();
-            strategy.sort(monotypes, camera);
-            t.toc();
-            // System.out.println("sort:" + t.elapsedSecond());
+    public void glMatrixMode(GL gl) {
+        if (gl.isGL2()) {
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        } else {
+            GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        }
+    }
 
-            // int k = 0;
-            t.tic();
-            for (AbstractDrawable d : monotypes) {
-                // System.out.println((k++) + "] shortest=" +
-                // d.getShortestDistance(camera) + " longest=" +
-                // d.getLongestDistance(camera));
-                if (d.isDisplayed())
-                    d.draw(gl, glu, camera);
-            }
-            t.toc();
-            // System.out.println("draw:" + t.elapsedSecond());
+    public void drawSimple(GL gl, GLU glu, Camera camera, List<AbstractDrawable> components) {
+        // render all items of the graph
+        // synchronized(components){
+        for (AbstractDrawable d : components)
+            if (d.isDisplayed())
+                d.draw(gl, glu, camera);
+        // }
+    }
+
+    public void drawDecomposition(GL gl, GLU glu, Camera camera) {
+        // Render sorted monotypes
+        List<AbstractDrawable> monotypes = getDecomposition();
+        strategy.sort(monotypes, camera);
+
+        for (AbstractDrawable d : monotypes) {
+            if (d.isDisplayed())
+                d.draw(gl, glu, camera);
         }
     }
 
@@ -285,7 +283,12 @@ public class Graph {
             for (AbstractDrawable c : components) {
                 if (c != null && c.getBounds() != null) {
                     // System.out.println(c.getBounds());
-                    box.add(c.getBounds());
+                    BoundingBox3d drawableBounds= c.getBounds();
+                    if(!drawableBounds.isReset()){
+                        box.add(drawableBounds);
+                        //System.out.println("adding bounds : " + drawableBounds);
+                        //System.out.println("got box: " + box);
+                    }                    
                 }
             }
             // }
@@ -331,6 +334,7 @@ public class Graph {
     /* */
 
     /** Print out information concerning all Drawable of this composite. */
+    @Override
     public synchronized String toString() {
         String output = "(Graph) #elements:" + components.size() + ":\n";
 

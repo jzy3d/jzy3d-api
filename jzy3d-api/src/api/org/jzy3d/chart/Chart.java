@@ -83,6 +83,18 @@ public class Chart {
         view.setBackgroundColor(Color.WHITE);
         view.setChart(this);
     }
+    
+    public void black(){
+        getView().setBackgroundColor(Color.BLACK);
+        getAxeLayout().setGridColor(Color.WHITE);
+        getAxeLayout().setMainColor(Color.WHITE);
+    }
+
+    public void white(){
+        getView().setBackgroundColor(Color.WHITE);
+        getAxeLayout().setGridColor(Color.BLACK);
+        getAxeLayout().setMainColor(Color.BLACK);
+    }
 
     public IFrame display(Rectangle rectangle, String title) {
         return getFactory().newFrame(this, rectangle, title);

@@ -23,9 +23,10 @@ public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IM
         super(coordinates, colors, mapper, width);
     }
 
+    @Override
     public void drawGLES2() {
         GLES2CompatUtils.glPointSize(width);
-        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+        GLES2CompatUtils.glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
             synchronized (coordinates) {
@@ -41,9 +42,10 @@ public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IM
         GLES2CompatUtils.glEnd();
     }
 
+    @Override
     public void drawGL2(GL gl) {
         gl.getGL2().glPointSize(width);
-        gl.getGL2().glBegin(GL2.GL_POINTS);
+        gl.getGL2().glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
             synchronized (coordinates) {

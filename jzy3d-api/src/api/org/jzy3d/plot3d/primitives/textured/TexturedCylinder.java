@@ -49,8 +49,8 @@ public class TexturedCylinder extends AbstractComposite implements Selectable, I
 		Coord3d pos = new Coord3d(position.x, position.y, position.z-0.5f);
 		quads = new ArrayList<TranslucentQuad>(slices);
 		for(int i=0; i<slices; i++){
-			float angleBorder1 = (float)i*2*(float)Math.PI/(float)slices;
-			float angleBorder2 = (float)(i+1)*2*(float)Math.PI/(float)slices;
+			float angleBorder1 = (float)i*2*(float)Math.PI/slices;
+			float angleBorder2 = (float)(i+1)*2*(float)Math.PI/slices;
 			
 			Coord2d border1 = new Coord2d(angleBorder1, radius).cartesian();
 			Coord2d border2 = new Coord2d(angleBorder2, radius).cartesian();
@@ -91,7 +91,8 @@ public class TexturedCylinder extends AbstractComposite implements Selectable, I
 		}
 	}
 	
-	public BoundingBox3d getBounds(){
+	@Override
+    public BoundingBox3d getBounds(){
 		return bbox;
 	}
 	

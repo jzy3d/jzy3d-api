@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.primitives.axes.layout.providers;
 
-import org.jzy3d.plot3d.primitives.axes.layout.providers.StaticTickProvider;
 
 /**
  * A tick provider for musical notation.

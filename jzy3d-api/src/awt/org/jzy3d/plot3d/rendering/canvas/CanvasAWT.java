@@ -64,9 +64,11 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 		}
 	}
 
-	public void dispose() {
+	@Override
+    public void dispose() {
 		new Thread(new Runnable() {
-			public void run() {
+			@Override
+            public void run() {
 				// System.err.println("stopping canvas animator");
 				if (animator != null)
 					animator.stop();
@@ -77,14 +79,15 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	}
 
 
-	public String getDebugInfo() {
+	@Override
+    public String getDebugInfo() {
 		GL gl = getView().getCurrentGL();
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("Chosen GLCapabilities: " + getChosenGLCapabilities() + "\n");
-		sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
-		sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
-		sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+		sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
+		sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
+		sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
 		// sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
 		return sb.toString();
 	}

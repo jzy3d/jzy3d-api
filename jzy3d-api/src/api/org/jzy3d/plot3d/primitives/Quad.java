@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.colors.Color;
@@ -28,19 +29,20 @@ public class Quad extends Polygon {
 		super();
 	}
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		// Execute transformation
 		doTransform(gl, glu, cam);
 
 		// Draw content of polygon
 		if (gl.isGL2()) {
 			if (facestatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 				if (wfstatus) {
-					gl.getGL2().glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.getGL2().glEnable(GL.GL_POLYGON_OFFSET_FILL);
 					gl.getGL2().glPolygonOffset(1.0f, 1.0f);
 				}
-				gl.getGL2().glBegin(GL2.GL_QUADS); // <<<
+				gl.getGL2().glBegin(GL2GL3.GL_QUADS); // <<<
 				for (Point p : points) {
 					if (mapper != null) {
 						Color c = mapper.getColor(p.xyz); // TODO: should store
@@ -55,35 +57,35 @@ public class Quad extends Polygon {
 				gl.getGL2().glEnd();
 				
 				if (wfstatus)
-					gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 
 			// Draw edge of polygon
 			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 
-				gl.getGL2().glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+				gl.getGL2().glEnable(GL.GL_POLYGON_OFFSET_FILL);
 				gl.getGL2().glPolygonOffset(1.0f, 1.0f);
 
 				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);// wfcolor.a);
 				gl.getGL2().glLineWidth(wfwidth);
 
-				gl.getGL2().glBegin(GL2.GL_QUADS);
+				gl.getGL2().glBegin(GL2GL3.GL_QUADS);
 				for (Point p : points) {
 					gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 				}
 				gl.getGL2().glEnd();
 
-				gl.getGL2().glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+				gl.getGL2().glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 		} else {
 			if (facestatus) {
-				gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 				if (wfstatus) {
-					gl.getGL2().glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.getGL2().glEnable(GL.GL_POLYGON_OFFSET_FILL);
 					gl.getGL2().glPolygonOffset(1.0f, 1.0f);
 				}
-				gl.getGL2().glBegin(GL2.GL_QUADS); // <<<
+				gl.getGL2().glBegin(GL2GL3.GL_QUADS); // <<<
 				for (Point p : points) {
 					if (mapper != null) {
 						Color c = mapper.getColor(p.xyz); // TODO: should store
@@ -98,26 +100,26 @@ public class Quad extends Polygon {
 				gl.getGL2().glEnd();
 				
 				if (wfstatus)
-					gl.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 
 			// Draw edge of polygon
 			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 
-				GLES2CompatUtils.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+				GLES2CompatUtils.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 				GLES2CompatUtils.glPolygonOffset(1.0f, 1.0f);
 
 				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);// wfcolor.a);
 				GLES2CompatUtils.glLineWidth(wfwidth);
 
-				GLES2CompatUtils.glBegin(GL2.GL_QUADS);
+				GLES2CompatUtils.glBegin(GL2GL3.GL_QUADS);
 				for (Point p : points) {
 					GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 				}
 				GLES2CompatUtils.glEnd();
 
-				GLES2CompatUtils.glDisable(GL2.GL_POLYGON_OFFSET_FILL);
+				GLES2CompatUtils.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 		}
 
@@ -130,7 +132,8 @@ public class Quad extends Polygon {
 	}
 
 	/** Add a point to the polygon. */
-	public void add(Point point) {
+	@Override
+    public void add(Point point) {
 		if (points.size() == 4)
 			throw new RuntimeException(
 					"The Quad allready has 4 points registered");
@@ -138,11 +141,13 @@ public class Quad extends Polygon {
 		super.add(point);
 	}
 
-	public double getDistance(Camera camera) {
+	@Override
+    public double getDistance(Camera camera) {
 		return getBarycentre().distance(camera.getEye());
 	}
 
-	public double getShortestDistance(Camera camera) {
+	@Override
+    public double getShortestDistance(Camera camera) {
 		double min = Float.MAX_VALUE;
 		double dist = 0;
 		for (Point point : points) {
@@ -157,7 +162,8 @@ public class Quad extends Polygon {
 		return min;
 	}
 
-	public double getLongestDistance(Camera camera) {
+	@Override
+    public double getLongestDistance(Camera camera) {
 		double max = 0;
 		double dist = 0;
 		for (Point point : points) {
@@ -168,7 +174,8 @@ public class Quad extends Polygon {
 		return max;
 	}
 
-	public String toString(int depth) {
+	@Override
+    public String toString(int depth) {
 		return Utils.blanks(depth) + "(Quad) #points:" + points.size();
 	}
 }

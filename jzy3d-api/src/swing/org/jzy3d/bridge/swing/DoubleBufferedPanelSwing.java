@@ -11,11 +11,13 @@ import org.jzy3d.bridge.BufferedPanel;
 
 public abstract class DoubleBufferedPanelSwing extends JPanel implements BufferedPanel{
 	
-	public abstract void draw(Graphics g);
+	@Override
+    public abstract void draw(Graphics g);
 	
 	/**********************************************************************/
 	
-	public void paintComponent(Graphics g){
+	@Override
+    public void paintComponent(Graphics g){
 		if(mustInit())
 			initBuffer();
 		if(buffer!=null){
@@ -25,7 +27,8 @@ public abstract class DoubleBufferedPanelSwing extends JPanel implements Buffere
 		}
 	}
 	
-	public void update(Graphics g){
+	@Override
+    public void update(Graphics g){
 		paintComponent(g);
 	}
 	

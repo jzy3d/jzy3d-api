@@ -5,6 +5,8 @@ import java.nio.IntBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
+import javax.media.opengl.fixedfunc.GLPointerFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.apache.log4j.Logger;
@@ -29,14 +31,16 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 		this.loader = loader;
 	}
 
-	public boolean hasMountedOnce() {
+	@Override
+    public boolean hasMountedOnce() {
 		return hasMountedOnce;
 	}
 
 	// element array buffer is an index:
 	// @see
 	// http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		if (hasMountedOnce) {
 			doTransform(gl, glu, cam);
 			configure(gl);
@@ -56,53 +60,54 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 		// gl.glColor4f(1f,0f,1f,0.6f);
 		// gl.glLineWidth(0.00001f);
 		if (gl.isGL2()) {
-			gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
+			gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 		} else {
-			GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-					GL2.GL_FILL);
+			GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+					GL2GL3.GL_FILL);
 		}
 		call(gl, color);
 	}
 
 	protected void doDrawElements(GL gl) {
 		if (gl.isGL2()) {
-			gl.getGL2().glBindBuffer(GL2.GL_ARRAY_BUFFER, arrayName[0]);
-			gl.getGL2().glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+			gl.getGL2().glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
+			gl.getGL2().glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
 
-			gl.getGL2().glVertexPointer(dimensions, GL2.GL_FLOAT, byteOffset, pointer);
-			gl.getGL2().glNormalPointer(GL2.GL_FLOAT, byteOffset, normalOffset);
-			gl.getGL2().glEnableClientState(GL2.GL_VERTEX_ARRAY);
-			gl.getGL2().glEnableClientState(GL2.GL_NORMAL_ARRAY);
+			gl.getGL2().glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
+			gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
+			gl.getGL2().glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+			gl.getGL2().glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
 
-			gl.getGL2().glDrawElements(getGeometry(), size, GL2.GL_UNSIGNED_INT, pointer);
+			gl.getGL2().glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
 
-			gl.getGL2().glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-			gl.getGL2().glBindBuffer(GL2.GL_ARRAY_BUFFER, arrayName[0]);
-			gl.getGL2().glDisableClientState(GL2.GL_VERTEX_ARRAY);
-			gl.getGL2().glDisableClientState(GL2.GL_NORMAL_ARRAY);
+			gl.getGL2().glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+			gl.getGL2().glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
+			gl.getGL2().glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+			gl.getGL2().glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
 		} else {
-			GLES2CompatUtils.glBindBuffer(GL2.GL_ARRAY_BUFFER, arrayName[0]);
-			GLES2CompatUtils.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+			GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
+			GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
 
-			GLES2CompatUtils.glVertexPointer(dimensions, GL2.GL_FLOAT, byteOffset, pointer);
-			GLES2CompatUtils.glNormalPointer(GL2.GL_FLOAT, byteOffset, normalOffset);
-			GLES2CompatUtils.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-			GLES2CompatUtils.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+			GLES2CompatUtils.glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
+			GLES2CompatUtils.glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
+			GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+			GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
 
-			GLES2CompatUtils.glDrawElements(getGeometry(), size, GL2.GL_UNSIGNED_INT, pointer);
+			GLES2CompatUtils.glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
 
-			GLES2CompatUtils.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-			GLES2CompatUtils.glBindBuffer(GL2.GL_ARRAY_BUFFER, arrayName[0]);
-			GLES2CompatUtils.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-			GLES2CompatUtils.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+			GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+			GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
+			GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+			GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
 		}
 	}
 
 	protected int getGeometry() {
-		return GL2.GL_TRIANGLES;
+		return GL.GL_TRIANGLES;
 	}
 
-	public void applyGeometryTransform(Transform transform) {
+	@Override
+    public void applyGeometryTransform(Transform transform) {
 		/*
 		 * Coord3d c = transform.compute(new Coord3d(x,y, z)); x = c.x; y = c.y;
 		 * z = c.z;
@@ -127,7 +132,8 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 
 	/* IO */
 
-	public void mount(GL gl) {
+	@Override
+    public void mount(GL gl) {
 		try {
 			loader.load(gl, this);
 			hasMountedOnce = true;
@@ -172,10 +178,10 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 
 	public void doLoadArrayBuffer(GL gl, int vertexSize, FloatBuffer vertices) {
 		gl.glGenBuffers(1, arrayName, 0);
-		gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, arrayName[0]);
-		gl.glBufferData(GL2.GL_ARRAY_BUFFER, vertexSize, vertices,
-				GL2.GL_STATIC_DRAW);
-		gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, pointer);
+		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
+		gl.glBufferData(GL.GL_ARRAY_BUFFER, vertexSize, vertices,
+				GL.GL_STATIC_DRAW);
+		gl.glBindBuffer(GL.GL_ARRAY_BUFFER, pointer);
 	}
 
 	public void doLoadElementBuffer(GL gl, IntBuffer indices) {
@@ -185,10 +191,10 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 
 	public void doLoadElementBuffer(GL gl, int indexSize, IntBuffer indices) {
 		gl.glGenBuffers(1, elementName, 0);
-		gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-		gl.glBufferData(GL2.GL_ELEMENT_ARRAY_BUFFER, indexSize, indices,
-				GL2.GL_STATIC_DRAW);
-		gl.glBindBuffer(GL2.GL_ELEMENT_ARRAY_BUFFER, pointer);
+		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+		gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, indices,
+				GL.GL_STATIC_DRAW);
+		gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, pointer);
 	}
 
 	public void doSetBoundingBox(BoundingBox3d bounds) {

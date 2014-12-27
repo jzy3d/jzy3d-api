@@ -5,8 +5,12 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2ES1;
+import javax.media.opengl.GL2GL3;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLContext;
+import javax.media.opengl.fixedfunc.GLLightingFunc;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.chart.Chart;
@@ -45,7 +49,6 @@ import com.jogamp.opengl.util.awt.Overlay;
  * {@link AbstractViewportManager}s such as the {@Camera} rendering the
  * scene or an {@link AWTImageViewport} for displaying an image in the same
  * window.
- *
  * On can control the {@link Camera} with a {@ViewController}
  * and get notifyed by a {@link IViewPointChangedListener} that the view point
  * has changed. The control is relative to the center of the {@link Scene} and
@@ -70,7 +73,7 @@ public class View {
      * set one time by the init() method.
      */
     public View(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        BoundingBox3d sceneBounds = scene.getGraph().getBounds();
+        BoundingBox3d sceneBounds = getSceneGraphBounds(scene);
 
         this.viewpoint = DEFAULT_VIEW.clone();
         this.center = sceneBounds.getCenter();
@@ -84,7 +87,7 @@ public class View {
         this.scene = scene;
         this.canvas = canvas;
         this.quality = quality;
-        this.annotations = new Scene(false);
+        this.annotations = factory.newScene(false);
 
         this.viewOnTopListeners = new ArrayList<IViewIsVerticalEventListener>();
         this.viewPointChangedListeners = new ArrayList<IViewPointChangedListener>();
@@ -134,7 +137,6 @@ public class View {
     }
 
     public void project() {
-        // System.out.println("project");
         GL gl = getCurrentGL();
         scene.getGraph().project(gl, glu, cam);
         getCurrentContext().release();
@@ -142,7 +144,7 @@ public class View {
 
     public Coord3d projectMouse(int x, int y) {
         GL gl = getCurrentGL();
-        Coord3d p = cam.screenToModel(gl, glu, new Coord3d((float) x, (float) y, 0));
+        Coord3d p = cam.screenToModel(gl, glu, new Coord3d(x, y, 0));
         getCurrentContext().release();
         return p;
     }
@@ -155,7 +157,6 @@ public class View {
 
     public void rotate(final Coord2d move, boolean updateView) {
         Coord3d eye = getViewPoint();
-        // Coord2d moveTrs = transformers.computePoint(move);
         eye.x -= move.x;
         eye.y += move.y;
         setViewPoint(eye, updateView);
@@ -224,8 +225,8 @@ public class View {
         }
         if (scale != null) {
             BoundingBox3d bounds = getBounds();
-            bounds.setXmin((float) scale.getMin());
-            bounds.setXmax((float) scale.getMax());
+            bounds.setXmin(scale.getMin());
+            bounds.setXmax(scale.getMax());
             setBoundManual(bounds);
             if (updateView)
                 shoot();
@@ -254,8 +255,8 @@ public class View {
         }
         if (scale != null) {
             BoundingBox3d bounds = getBounds();
-            bounds.setYmin((float) scale.getMin());
-            bounds.setYmax((float) scale.getMax());
+            bounds.setYmin(scale.getMin());
+            bounds.setYmax(scale.getMax());
             setBoundManual(bounds);
             if (updateView)
                 shoot();
@@ -284,8 +285,8 @@ public class View {
         }
         if (scale != null) {
             BoundingBox3d bounds = getBounds();
-            bounds.setZmin((float) scale.getMin());
-            bounds.setZmax((float) scale.getMax());
+            bounds.setZmin(scale.getMin());
+            bounds.setZmax(scale.getMax());
             setBoundManual(bounds);
             if (updateView)
                 shoot();
@@ -299,8 +300,8 @@ public class View {
 
     public void setScale(org.jzy3d.maths.Scale scale, boolean notify) {
         BoundingBox3d bounds = getBounds();
-        bounds.setZmin((float) scale.getMin());
-        bounds.setZmax((float) scale.getMax());
+        bounds.setZmin(scale.getMin());
+        bounds.setZmax(scale.getMax());
         setBoundManual(bounds);
         if (notify)
             shoot();
@@ -315,10 +316,10 @@ public class View {
      * colorbar range.
      */
     public void lookToBox(BoundingBox3d box) {
+        if (box.isReset())
+            return;
         center = box.getTransformedCenter(transformers);
         axe.setAxe(box);
-        // targetBox = box;
-        // System.out.println(box);
         viewbounds = box;
     }
 
@@ -537,12 +538,20 @@ public class View {
      */
     public void updateBounds() {
         if (boundmode == ViewBoundMode.AUTO_FIT)
-            lookToBox(scene.getGraph().getBounds()); // set axe and camera
+            lookToBox(getSceneGraphBounds()); // set axe and camera
         else if (boundmode == ViewBoundMode.MANUAL)
             lookToBox(viewbounds); // set axe and camera
         else
             throw new RuntimeException("Unknown bounds");
         shoot();
+    }
+    
+    protected BoundingBox3d getSceneGraphBounds(){
+        return getSceneGraphBounds(scene);
+    }
+
+    protected BoundingBox3d getSceneGraphBounds(Scene scene){
+        return scene.getGraph().getBounds();
     }
 
     /**
@@ -550,7 +559,7 @@ public class View {
      * {@link ViewBoundMode}, and orders a {@link Camera.shoot()}
      */
     public void updateBoundsForceUpdate(boolean refresh) {
-        lookToBox(scene.getGraph().getBounds());
+        lookToBox(getSceneGraphBounds());
         if (refresh)
             shoot();
     }
@@ -668,7 +677,7 @@ public class View {
         this.initBounds = initBounds;
     }
 
-    public void initQuality(GL gl) {
+ /*   public void initQuality(GL gl) {
         // Activate Depth buffer
         if (quality.isDepthActivated()) {
             gl.glEnable(GL2.GL_DEPTH_TEST);
@@ -682,6 +691,7 @@ public class View {
 
         // Activate tranparency
         if (quality.isAlphaActivated()) {
+<<<<<<< HEAD
             gl.glEnable(GL2.GL_ALPHA_TEST);
             if (quality.isDisableDepthBufferWhenAlpha())
                 gl.glDisable(GL2.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
@@ -692,18 +702,35 @@ public class View {
             // gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
         } else {
             gl.glDisable(GL2.GL_ALPHA_TEST);
+=======
+            gl.glEnable(GL2ES1.GL_ALPHA_TEST);
+            if (quality.isDisableDepthBufferWhenAlpha())
+                // seams better for transparent polygons since they're sorted 
+                gl.glDisable(GL.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
+
+            // gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
+        } else {
+            gl.glDisable(GL2ES1.GL_ALPHA_TEST);
+>>>>>>> master
         }
 
         // Make smooth colors for polygons (interpolate color between points)
         if (gl.isGL2()) {
             if (quality.isSmoothColor())
+<<<<<<< HEAD
                 gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
             else
                 gl.getGL2().glShadeModel(GL2.GL_FLAT);
+=======
+                gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
+            else
+                gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+>>>>>>> master
         }
 
         // Make smoothing setting
         if (quality.isSmoothPolygon()) {
+<<<<<<< HEAD
             gl.glEnable(GL2.GL_POLYGON_SMOOTH);
             gl.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL2.GL_NICEST);
         } else
@@ -722,7 +749,82 @@ public class View {
             // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
         } else
             gl.glDisable(GL2.GL_POINT_SMOOTH);
+=======
+            gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
+            gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+            gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
+
+        if (quality.isSmoothLine()) {
+            gl.glEnable(GL.GL_LINE_SMOOTH);
+            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+            gl.glDisable(GL.GL_LINE_SMOOTH);
+
+        if (quality.isSmoothPoint()) {
+            gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
+            gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+            // gl.glDisable(GL2.GL_BLEND);
+            // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
+        } else
+            gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
+>>>>>>> master
+    }*/
+    
+    public void initQuality(GL gl) {
+        // Activate Depth buffer
+        if (quality.isDepthActivated()) {
+            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glDepthFunc(GL.GL_LEQUAL);
+        } else
+            gl.glDisable(GL.GL_DEPTH_TEST);
+
+        // Blending
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        // on/off is handled by each viewport (camera or image)
+
+        // Activate tranparency
+        if (quality.isAlphaActivated()) {
+            gl.glEnable(GL2ES1.GL_ALPHA_TEST);
+            if (quality.isDisableDepthBufferWhenAlpha())
+                /* seams better for transparent polygons since they're sorted */
+                gl.glDisable(GL.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
+
+            // gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
+        } else {
+            gl.glDisable(GL2ES1.GL_ALPHA_TEST);
+        }
+
+        // Make smooth colors for polygons (interpolate color between points)
+        if (gl.isGL2()) {
+            if (quality.isSmoothColor())
+                gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
+            else
+                gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+        }
+
+        // Make smoothing setting
+        if (quality.isSmoothPolygon()) {
+            gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
+            gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+            gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
+
+        if (quality.isSmoothLine()) {
+            gl.glEnable(GL.GL_LINE_SMOOTH);
+            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+            gl.glDisable(GL.GL_LINE_SMOOTH);
+
+        if (quality.isSmoothPoint()) {
+            gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
+            gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+            // gl.glDisable(GL2.GL_BLEND);
+            // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
+        } else
+            gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
     }
+    
 
     public void initLights(GL gl) {
         // Init light
@@ -746,21 +848,19 @@ public class View {
         if (slave) {
             return;
         } else {
-            gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // or use GL2
         }
     }
 
-    /**********/
+    /* */
 
     public void render(GL gl, GLU glu) {
         fireViewLifecycleWillRender(null);
-
         renderBackground(gl, glu, 0f, 1f);
         renderScene(gl, glu);
         renderOverlay(gl);
         if (dimensionDirty)
             dimensionDirty = false;
-
         cam.show(gl, new Transform(new Scale(scaling)), scaling);
     }
 
@@ -787,7 +887,8 @@ public class View {
 
     public void renderScene(GL gl, GLU glu, ViewportConfiguration viewport) {
         updateQuality(gl);
-        updateCamera(gl, glu, viewport, computeScaling());
+        BoundingBox3d scaling = computeScaledViewBounds();
+        updateCamera(gl, glu, viewport, scaling);
         renderAxeBox(gl, glu);
         renderSceneGraph(gl, glu);
         renderAnnotations(gl, glu);
@@ -800,38 +901,48 @@ public class View {
             gl.glDisable(GL2.GL_BLEND);
     }
 
-    public BoundingBox3d computeScaling() {
+    public BoundingBox3d computeScaledViewBounds() {
         scaling = computeSceneScaling();
-
         // -- Compute the bounds for computing cam distance, clipping planes,
-        // etc
-        // if (targetBox == null)
-        // targetBox = new BoundingBox3d(0, 1, 0, 1, 0, 1);
         if (viewbounds == null)
             viewbounds = new BoundingBox3d(0, 1, 0, 1, 0, 1);
         BoundingBox3d boundsScaled = new BoundingBox3d();
         boundsScaled.add(viewbounds.scale(scaling));
         if (MAINTAIN_ALL_OBJECTS_IN_VIEW)
-            boundsScaled.add(scene.getGraph().getBounds().scale(scaling));
+            boundsScaled.add(getSceneGraphBounds().scale(scaling));
         return boundsScaled;
     }
 
     public Coord3d computeSceneScaling() {
-        // -- Scale the scene's view -------------------
-        if (squared) // force square scale
+        if (squared)
             return squarify();
         else
             return Coord3d.IDENTITY.clone();
     }
 
     public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
-        updateCamera(gl, glu, viewport, boundsScaled, (float) boundsScaled.getTransformedRadius(transformers));
+        //before LOG was : (float)bounds.getRadius() * factorViewPointDistance;
+        float sceneRadius = (float) boundsScaled.getTransformedRadius(transformers);
+        updateCamera(gl, glu, viewport, boundsScaled, sceneRadius);
     }
 
-    public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled, float sceneRadiusScaled) {
-        Coord3d target = center.mul(scaling);
+
+    public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled) {
+        viewpoint.z = sceneRadiusScaled  * factorViewPointDistance;
+        cam.setTarget(computeCameraTarget());
+        cam.setUp(computeCameraUpAndTriggerEvents());
+        cam.setEye(computeCameraEye(cam.getTarget()));
+        computeCameraRenderingSphereRadius(gl, glu, viewport, bounds);
+        cam.setViewPort(viewport);
+        cam.shoot(gl, glu, cameraMode);
+    }
+
+    public Coord3d computeCameraTarget() {
+        return center.mul(scaling);
+    }
+
+    public Coord3d computeCameraEye(Coord3d target) {
         Coord3d eye;
-        viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
         if (viewmode == ViewPositionMode.FREE) {
             eye = viewpoint.cartesian().add(target);
         } else if (viewmode == ViewPositionMode.TOP) {
@@ -845,22 +956,20 @@ public class View {
             eye = eye.cartesian().add(target);
         } else
             throw new RuntimeException("Unsupported ViewMode: " + viewmode);
+        return eye;
+    }
 
+    public Coord3d computeCameraUpAndTriggerEvents() {
         Coord3d up;
+
         if (Math.abs(viewpoint.y) == (float) Math.PI / 2) {
-            // handle up vector
-            Coord2d direction = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
-            if (viewpoint.y > 0) // on top
-                up = new Coord3d(-direction.x, -direction.y, 0);
-            else
-                up = new Coord3d(direction.x, direction.y, 0);
+            up = computeCameraUp();
 
             // handle "on-top" events
             if (!wasOnTopAtLastRendering) {
                 wasOnTopAtLastRendering = true;
                 fireViewOnTopEvent(true);
             }
-
         } else {
             // handle up vector
             up = new Coord3d(0, 0, 1);
@@ -871,42 +980,47 @@ public class View {
                 fireViewOnTopEvent(false);
             }
         }
-        // -- Apply camera settings ------------------------
-        cam.setTarget(target);
-        cam.setUp(up);
-        cam.setEye(eye);
+        return up;
+    }
 
-        // Set rendering volume
+    public Coord3d computeCameraUp() {
+        Coord2d direction = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
+        Coord3d up;
+        if (viewpoint.y > 0) // on top
+            up = new Coord3d(-direction.x, -direction.y, 0);
+        else
+            up = new Coord3d(direction.x, direction.y, 0);
+        return up;
+    }
+
+    public void computeCameraRenderingSphereRadius(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds) {
         if (viewmode == ViewPositionMode.TOP) {
-            float xdiam = boundsScaled.getXmax() - boundsScaled.getXmin();
-            float ydiam = boundsScaled.getYmax() - boundsScaled.getYmin();
+            float xdiam = bounds.getXRange().getRange();
+            float ydiam = bounds.getYRange().getRange();
             float radius = Math.max(xdiam, ydiam) / 2;
             cam.setRenderingSphereRadius(radius);
-            correctCameraPositionForIncludingTextLabels(gl, glu, viewport); // quite
-                                                                            // experimental!
+            correctCameraPositionForIncludingTextLabels(gl, glu, viewport); 
         } else {
-            cam.setRenderingSphereRadius(sceneRadiusScaled);
+            cam.setRenderingSphereRadius((float)bounds.getRadius());
         }
-
-        // Setup camera (i.e. projection matrix)
-        // cam.setViewPort(canvas.getRendererWidth(),
-        // canvas.getRendererHeight(), left, right);
-        cam.setViewPort(viewport);
-        cam.shoot(gl, glu, cameraMode);
     }
+
 
     public void renderAxeBox(GL gl, GLU glu) {
         if (axeBoxDisplayed) {
-            if (gl.isGL2()) {
-                gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
-            } else {
-                GLES2CompatUtils.glMatrixMode(GL2.GL_MODELVIEW);
-            }
+            glModelView(gl);
             scene.getLightSet().disable(gl);
-
             axe.setScale(scaling);
             axe.draw(gl, glu, cam);
             scene.getLightSet().enableLightIfThereAreLights(gl);
+        }
+    }
+
+    public void glModelView(GL gl) {
+        if (gl.isGL2()) {
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        } else {
+            GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         }
     }
 
@@ -959,6 +1073,8 @@ public class View {
         this.transformers = transformers;
     }
 
+    /* */
+
     /** A view may optionnaly know its parent chart. */
     protected Chart chart;
 
@@ -966,16 +1082,10 @@ public class View {
 
     public static float STRETCH_RATIO = 0.25f;
 
-    protected boolean MAINTAIN_ALL_OBJECTS_IN_VIEW = false; // force to have all
-                                                            // object maintained
-                                                            // in screen,
-                                                            // meaning axebox
-                                                            // won't always keep
-                                                            // the same size.
-    protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false; // display a magenta
-                                                        // parallelepiped
-                                                        // (debug)
-
+    /** force to have all object maintained in screen, meaning axebox won't always keep the same size. */
+    protected boolean MAINTAIN_ALL_OBJECTS_IN_VIEW = false; 
+    /** display a magenta parallelepiped (debug). */
+    protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false;
     protected boolean axeBoxDisplayed = true;
     protected boolean squared = true;
 
@@ -1032,5 +1142,6 @@ public class View {
     protected boolean slave = false;
 
     protected AxeTransformerSet transformers;
+
 
 }

@@ -11,9 +11,11 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class Chart2dComponentFactory extends AWTChartComponentFactory{
-    public Chart2dComponentFactory(){
-        System.out.println("init factory");
+    @Override
+    public IChartComponentFactory getFactory() {
+        return this;
     }
+    
     @Override
     public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit){
         return new Chart2d(factory, quality, toolkit);
@@ -21,7 +23,12 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
     
     @Override
     public Chart newChart(Quality quality, Toolkit toolkit) {
-        return new Chart2d(this, quality, toolkit.toString());
+        return new Chart2d(getFactory(), quality, toolkit.toString());
+    }
+
+    @Override
+    public Chart newChart(Quality quality, String toolkit) {
+        return new Chart2d(getFactory(), quality, toolkit);
     }
 
     @Override
@@ -29,15 +36,17 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
         AxeBox2d axe = new AxeBox2d(box);
         //axe.setTextRenderer(new TextBitmapRenderer());
         return axe;
-        //return new AxeBox2d(box);
     }
+
     @Override
     public View newView(Scene scene, ICanvas canvas, Quality quality) {
-        return new View2d(this, scene, canvas, quality);
+        return new View2d(getFactory(), scene, canvas, quality);
     }
     
+    /* */
+    
     public static Chart2d chart() {
-        return (Chart2d)chart(Quality.Intermediate);
+        return chart(Quality.Intermediate);
     }
     public static Chart2d chart(Quality quality) {
         return (Chart2d)f.newChart(quality, Toolkit.newt);
