@@ -19,6 +19,15 @@ import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 
 /**
+ * TODO : 
+ * have vertexGL method to override only this in LogAxeBox
+ * methode drawAxis avec plein d'argument devrait avoir un helper pour tous les passer
+ * 
+ * 
+ * Toutes les primitives QUad, Point doivent être des geometries et se basser sur vertexGL
+ * 
+ * 
+ * 
  * The AxeBox displays a box with front face invisible and ticks labels.
  * 
  * @author Martin Pernollet
@@ -34,7 +43,7 @@ public class AxeTransformableAxeBox extends AxeBox {
     }
 
     /** reset to identity and apply scaling */
-    public void doTransform(GL gl) {
+    /*public void doTransform(GL gl) {
         if (gl.isGL2()) {
             gl.getGL2().glLoadIdentity();
             //gl.getGL2().glScalef((float)Math.log(scale.x), scale.y, scale.z);
@@ -43,11 +52,6 @@ public class AxeTransformableAxeBox extends AxeBox {
             GLES2CompatUtils.glLoadIdentity();
             GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
         }
-    }
-    
-    /*protected boolean[] getHiddenQuads(GL gl, Camera cam) {
-        boolean[] status = new boolean[6];
-        return status;
     }*/
     
     /**
@@ -137,34 +141,6 @@ public class AxeTransformableAxeBox extends AxeBox {
             }
         }
     }
-/*
-    public void drawAxisLabel(GL gl, GLU glu, Camera cam, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
-        if (isXDisplayed(direction) || isYDisplayed(direction) || isZDisplayed(direction)) {
-            Coord3d labelPosition = new Coord3d(transformers.getX().compute((float)xlab), transformers.getY().compute((float)ylab), transformers.getZ().compute((float)zlab));
-            BoundingBox3d labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
-            if (labelBounds != null)
-                ticksTxtBounds.add(labelBounds);
-        }
-    }
-    public void drawAxisTickNumericLabel(GL gl, GLU glu, int direction, Camera cam, Color color, Halign hAlign, Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel,
-            Coord3d tickPosition) {
-        //doTransform(gl);
-        tickPosition = transformers.computePoint(tickPosition);
-        BoundingBox3d tickBounds = txt.drawText(gl, glu, cam, tickLabel, tickPosition, hAlign, vAlign, color);
-        if (tickBounds != null)
-            ticksTxtBounds.add(tickBounds);
-    }
-
-    public void drawTickLine(GL gl, Color color, double xpos, double ypos, double zpos, double xlab, double ylab, double zlab) {
-        gl.getGL2().glColor3f(color.r, color.g, color.b);
-        gl.getGL2().glLineWidth(1);
-
-        // Draw the tick line
-        gl.getGL2().glBegin(GL2.GL_LINES);
-        GlVertexExecutor.Vertex(gl, new Coord3d(xpos, ypos, zpos), transformers);
-        GlVertexExecutor.Vertex(gl, new Coord3d(xlab, ylab, zlab), transformers);
-        gl.getGL2().glEnd();
-    }*/
     
     protected BoundingBox3d drawTicks(GL gl, GLU glu, Camera cam, int axis, int direction, Color color, Halign hal, Valign val) {
         int quad_0;
