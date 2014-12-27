@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 
 
 /** A BoundingBox3d stores a couple of maximal and minimal limit on
@@ -166,12 +167,21 @@ public class BoundingBox3d {
 		return new Coord3d((xmin+xmax)/2, (ymin+ymax)/2, (zmin+zmax)/2);
 	}
 	
+	public Coord3d getTransformedCenter(AxeTransformerSet transformers) {
+		return new Coord3d((transformers.getX().compute(xmin) + transformers.getX().compute(xmax)) / 2,
+						   (transformers.getY().compute(ymin) + transformers.getY().compute(ymax)) / 2,
+						   (transformers.getZ().compute(zmin) + transformers.getZ().compute(zmax)) /2);
+	}
 	/** Return the radius of the Sphere containing the Bounding Box, 
 	 * i.e., the distance between the center and the point (xmin, ymin, zmin).
 	 * @return the box radius.
 	 */
 	public double getRadius(){
 		return getCenter().distance(new Coord3d(xmin, ymin, zmin));
+	}
+	
+	public double getTransformedRadius(AxeTransformerSet transformers) {
+		return getTransformedCenter(transformers).distance(transformers.computePoint(new Coord3d(xmin, ymin, zmin)));
 	}
 	
 	/** Return a copy of the current bounding box after scaling.
