@@ -22,6 +22,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
+import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -96,6 +97,7 @@ public class View {
 		this.scene.getGraph().getStrategy().setView(this);
 
 		current = this;
+		transformers = new AxeTransformerSet();
 	}
 
 	public Chart getChart() {
@@ -154,6 +156,7 @@ public class View {
 
 	public void rotate(final Coord2d move, boolean updateView) {
 		Coord3d eye = getViewPoint();
+		//Coord2d moveTrs = transformers.computePoint(move);
 		eye.x -= move.x;
 		eye.y += move.y;
 		setViewPoint(eye, updateView);
@@ -315,7 +318,7 @@ public class View {
 	 * colorbar range.
 	 */
 	public void lookToBox(BoundingBox3d box) {
-		center = box.getCenter();
+		center = box.getTransformedCenter(transformers);
 		axe.setAxe(box);
 		// targetBox = box;
 		// System.out.println(box);
@@ -595,10 +598,10 @@ public class View {
 		}
 
 		// Compute factors
-		float xLen = bounds.getXmax() - bounds.getXmin();
-		float yLen = bounds.getYmax() - bounds.getYmin();
-		float zLen = bounds.getZmax() - bounds.getZmin();
-		float lmax = Math.max(Math.max(xLen, yLen), zLen);
+		float xLen = transformers.getX().compute(bounds.getXmax()) - transformers.getX().compute(bounds.getXmin()); 
+		float yLen = transformers.getY().compute(bounds.getYmax()) - transformers.getY().compute(bounds.getYmin());
+		float zLen = transformers.getZ().compute(bounds.getZmax()) - transformers.getZ().compute(bounds.getZmin());
+		float lmax = (float) Math.max(Math.max(xLen, yLen), zLen);
 
 		if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
 			xLen = 1;
@@ -841,13 +844,12 @@ public class View {
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled) {
 		updateCamera(gl, glu, viewport, boundsScaled,
-				(float) boundsScaled.getRadius());
+				(float) boundsScaled.getTransformedRadius(transformers));
 	}
 
 	public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport,
 			BoundingBox3d boundsScaled, float sceneRadiusScaled) {
 		Coord3d target = center.mul(scaling);
-
 		Coord3d eye;
 		viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
 		if (viewmode == ViewPositionMode.FREE) {
@@ -879,6 +881,7 @@ public class View {
 				wasOnTopAtLastRendering = true;
 				fireViewOnTopEvent(true);
 			}
+			
 		} else {
 			// handle up vector
 			up = new Coord3d(0, 0, 1);
@@ -889,7 +892,6 @@ public class View {
 				fireViewOnTopEvent(false);
 			}
 		}
-
 		// -- Apply camera settings ------------------------
 		cam.setTarget(target);
 		cam.setUp(up);
@@ -970,7 +972,19 @@ public class View {
 		return current;
 	}
 
+	
+	
 	/* */
+
+	public AxeTransformerSet getTransformers() {
+		return transformers;
+	}
+
+	public void setTransformers(AxeTransformerSet transformers) {
+		this.transformers = transformers;
+	}
+
+
 
 	/** A view may optionnaly know its parent chart. */
 	protected Chart chart;
@@ -1046,5 +1060,6 @@ public class View {
 	/** A slave view won't clear its color and depth buffer before rendering */
 	protected boolean slave = false;
 
+	protected AxeTransformerSet transformers;
     
 }
