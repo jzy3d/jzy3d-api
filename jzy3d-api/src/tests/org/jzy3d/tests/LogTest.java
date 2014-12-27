@@ -34,8 +34,8 @@ public class LogTest {
 		Range range = new Range((float)0.1, 10);
 		Range range2 = new Range((float)0.1,50);
 		int steps = 200;
-
-		AxeTransformerSet transformers = new AxeTransformerSet(null, new LogAxeTransformer(), null);
+		
+		AxeTransformerSet transformers = new AxeTransformerSet(null, null, new LogAxeTransformer());
 		
 		// Create a surface drawing that function
 		CompileableComposite surface = axeTransformableBuilder.buildOrthonormalBig(new OrthonormalGrid(range, steps, range2, steps), mapper, transformers);
