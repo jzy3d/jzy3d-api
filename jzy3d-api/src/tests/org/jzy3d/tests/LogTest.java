@@ -1,37 +1,22 @@
 package org.jzy3d.tests;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.chart.factories.AxeTransformableAWTChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
-import org.jzy3d.maths.algorithms.interpolation.algorithms.BernsteinInterpolator;
-import org.jzy3d.plot3d.builder.Builder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.axeTransformable.axeTransformableBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
-import org.jzy3d.plot3d.primitives.FlatLine2d;
-import org.jzy3d.plot3d.primitives.Scatter;
-import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableCylinder;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableFlatLine2d;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableLineStrip;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableLineStripInterpolated;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformablePoint;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LinearAxeTransformer;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LogAxeTransformer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.view.*;
-import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 
 public class LogTest {
@@ -53,11 +38,11 @@ public class LogTest {
 		AxeTransformerSet transformers = new AxeTransformerSet(new LogAxeTransformer(), new LinearAxeTransformer(), new LinearAxeTransformer());
 		
 		// Create a surface drawing that function
-		/*CompileableComposite surface = axeTransformableBuilder.buildOrthonormalBig(new OrthonormalGrid(range, steps, range2, steps), mapper, transformers);
+		CompileableComposite surface = axeTransformableBuilder.buildOrthonormalBig(new OrthonormalGrid(range, steps, range2, steps), mapper, transformers);
 		surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
 		surface.setFaceDisplayed(true);
 		surface.setWireframeDisplayed(false);
-		surface.setWireframeColor(Color.BLACK);*/
+		surface.setWireframeColor(Color.BLACK);
 		
 		/*AxeTransformableCylinder cyl = new AxeTransformableCylinder(transformers);
 		cyl.setData(new Coord3d(10,10,0), 10, 3, 20, 20, new Color(1, 0, 0));*/
@@ -89,9 +74,10 @@ public class LogTest {
 
 		// Create a chart and add the surface
 		Chart chart = AxeTransformableAWTChartComponentFactory.chart(Quality.Advanced, "awt", transformers);
-		chart.getScene().getGraph().add(point1);
-		chart.getScene().getGraph().add(point2);
-		chart.getScene().getGraph().add(point3);
+		chart.addDrawable(point1);
+		chart.addDrawable(point2);
+		chart.addDrawable(point3);
+		chart.addDrawable(surface);
 		chart.getView().setTransformers(transformers);
 		ChartLauncher.openChart(chart);
 	}
