@@ -22,7 +22,8 @@ public class RingExtrapolator extends OrthonormalTessellator{
 		throw new RuntimeException("Forbidden constructor!");
 	}
 	
-	public AbstractComposite build(float[] x, float[] y, float[] z) {
+	@Override
+    public AbstractComposite build(float[] x, float[] y, float[] z) {
 		setData(x, y, z);
 		Shape s = new Shape();
 		s.add(getExtrapolatedRingPolygons());

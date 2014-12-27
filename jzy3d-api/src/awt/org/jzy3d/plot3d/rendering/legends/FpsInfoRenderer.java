@@ -19,6 +19,7 @@ public class FpsInfoRenderer implements Renderer2d{
         ((AWTChart)chart).addRenderer(this);
     }
     
+    @Override
     public void paint(Graphics g) {
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(java.awt.Color.BLACK);

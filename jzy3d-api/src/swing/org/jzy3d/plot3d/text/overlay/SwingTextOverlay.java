@@ -11,7 +11,8 @@ public class SwingTextOverlay extends TextOverlay{
 		super(canvas);
 	}
 	
-	protected void init(ICanvas canvas) {
+	@Override
+    protected void init(ICanvas canvas) {
 	    if(canvas instanceof CanvasSwing)
             initComponent((Component)canvas);
         else

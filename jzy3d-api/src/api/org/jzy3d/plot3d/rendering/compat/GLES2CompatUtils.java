@@ -1,13 +1,15 @@
 package org.jzy3d.plot3d.rendering.compat;
 
+import java.nio.ByteBuffer;
+
+import javax.media.opengl.GL;
+import javax.media.opengl.GL2ES1;
+
 import com.jogamp.opengl.util.ImmModeSink;
 import com.jogamp.opengl.util.PMVMatrix;
 import com.jogamp.opengl.util.glsl.ShaderState;
 import com.jogamp.opengl.util.glsl.fixedfunc.FixedFuncUtil;
 import com.jogamp.opengl.util.glsl.fixedfunc.ShaderSelectionMode;
-import java.nio.ByteBuffer;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2ES1;
 
 public class GLES2CompatUtils {
 	

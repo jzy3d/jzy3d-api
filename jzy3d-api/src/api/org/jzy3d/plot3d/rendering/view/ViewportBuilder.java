@@ -8,7 +8,7 @@ public class ViewportBuilder {
     }
     
     public static ViewportConfiguration column(int width, int height, float left, float right){
-        int w = (int)((right-left)*(float)width);
+        int w = (int)((right-left)*width);
         int h = height;
         int x = (int)(left*width);
         int y = x + w;
@@ -20,8 +20,8 @@ public class ViewportBuilder {
     }
     
     public static ViewportConfiguration cell(int width, int height, float left, float right, float bottom, float top){
-        int w = (int)((right-left)*(float)width);
-        int h = (int)((top-bottom)*(float)height);
+        int w = (int)((right-left)*width);
+        int h = (int)((top-bottom)*height);
         int x = (int)(left*width);
         int y = (int)(bottom*height);
         return new ViewportConfiguration(w, h, x, y);

@@ -282,11 +282,13 @@ MOUSE_MOVED, x:107, y:55, bt:0, since:3899
 	
 	protected void addVerifyingListeners(final Component component){
 		component.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
             public void mouseDragged(MouseEvent e) {
                 System.err.println("ASSERT DRAGGED CALLED ON COMPONENT");
             }
         });
 		component.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseMoved(MouseEvent e) {
                 System.err.println("ASSERT MOVED CALLED ON COMPONENT");
             }
@@ -295,7 +297,8 @@ MOUSE_MOVED, x:107, y:55, bt:0, since:3899
 
 	protected void addFocusListener(final Component component, Frame frame) {
 		frame.addWindowFocusListener(new WindowAdapter() {
-		    public void windowGainedFocus(WindowEvent e) {
+		    @Override
+            public void windowGainedFocus(WindowEvent e) {
 		        component.requestFocusInWindow();
 		    }
 		});

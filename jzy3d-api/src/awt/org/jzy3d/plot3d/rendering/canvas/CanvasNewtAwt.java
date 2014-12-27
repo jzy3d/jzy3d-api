@@ -77,7 +77,8 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 	@Override
 	public void dispose() {
 		new Thread(new Runnable() {
-			public void run() {
+			@Override
+            public void run() {
 				// System.err.println("stopping canvas animator");
 				if (animator != null && animator.isStarted()) {
 					animator.stop();
@@ -130,9 +131,9 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 		StringBuffer sb = new StringBuffer();
 		sb.append("Chosen GLCapabilities: " + window.getChosenGLCapabilities()
 				+ "\n");
-		sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
-		sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
-		sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+		sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
+		sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
+		sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
 		// sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
 		return sb.toString();
 	}

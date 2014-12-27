@@ -52,7 +52,7 @@ public abstract class Mapper {
 		
 		for(int p=0; p<xy.length; p++)
 			for(int d=0; d<xy[0].length; d++)
-				xyd[p][d] = (double)xy[p][d];
+				xyd[p][d] = xy[p][d];
 
 		return getCoordinates(xyd);
 	}
@@ -79,7 +79,7 @@ public abstract class Mapper {
 		double[] xyd = new double[xy.length]; 
 		
 		for(int d=0; d<xy.length; d++)
-			xyd[d] = (double)xy[d];
+			xyd[d] = xy[d];
 
 		return getCoordinates(xyd);
 	}

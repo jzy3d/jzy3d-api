@@ -28,9 +28,10 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
 
     /* */
 
+    @Override
     public void drawGLES2() {
         GLES2CompatUtils.glPointSize(width);
-        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+        GLES2CompatUtils.glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
             synchronized (coordinates) {
@@ -47,9 +48,10 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
         GLES2CompatUtils.glEnd();
     }
 
+    @Override
     public void drawGL2(GL gl) {
         gl.getGL2().glPointSize(width);
-        gl.getGL2().glBegin(GL2.GL_POINTS);
+        gl.getGL2().glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
             synchronized (coordinates) {

@@ -16,6 +16,7 @@ public class TranslateDrawable implements Transformer {
         this.drawable = drawable;
     }
 
+    @Override
     public void execute(GL gl) {
         if (drawable != null) {
             BoundingBox3d bounds = drawable.getBounds();
@@ -38,6 +39,7 @@ public class TranslateDrawable implements Transformer {
         }
     }
 
+    @Override
     public Coord3d compute(Coord3d input) {
         if (drawable != null) {
             BoundingBox3d bounds = drawable.getBounds();
@@ -68,6 +70,7 @@ public class TranslateDrawable implements Transformer {
         this.reverse = reverse;
     }
 
+    @Override
     public String toString() {
         return "(TranslateDrawable)" + drawable;
     }

@@ -19,7 +19,8 @@ public class OrthonormalGrid extends Grid{
 		super(xrange, xsteps, yrange, ysteps);
 	}
 	
-	public List<Coord3d> apply(Mapper mapper) {
+	@Override
+    public List<Coord3d> apply(Mapper mapper) {
         double xstep = xrange.getRange() / (double)(xsteps-1);
         double ystep = yrange.getRange() / (double)(ysteps-1);
        

@@ -24,6 +24,7 @@ public class ColorMapRainbowNoBorder extends AbstractColorMap implements IColorM
     }
     
     /** @inheritDoc */
+    @Override
     public Color getColor( double x, double y, double z, double zMin, double zMax ){
         double rel_value = processRelativeZValue(z, zMin, zMax);
         

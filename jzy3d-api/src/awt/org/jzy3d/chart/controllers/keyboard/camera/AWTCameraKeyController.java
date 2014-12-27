@@ -18,12 +18,14 @@ public class AWTCameraKeyController extends AbstractCameraController implements 
 		register(chart);
 	}
 	
-	public void register(Chart chart){
+	@Override
+    public void register(Chart chart){
 		super.register(chart);
 		chart.getCanvas().addKeyController(this);
 	}
 	
-	public void dispose(){
+	@Override
+    public void dispose(){
 		for(Chart c: targets){
 			c.getCanvas().removeKeyController(this);
 		}
@@ -33,6 +35,7 @@ public class AWTCameraKeyController extends AbstractCameraController implements 
 	
 	/*********************************************************/
 	
+    @Override
     public void keyPressed(KeyEvent e) {
     	// rotation
     	if(!e.isShiftDown()){
@@ -70,9 +73,11 @@ public class AWTCameraKeyController extends AbstractCameraController implements 
     	}
     }
     
+    @Override
     public void keyTyped(KeyEvent e) {
     }
     
+    @Override
     public void keyReleased(KeyEvent e) {
     }
 }

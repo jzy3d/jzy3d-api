@@ -16,7 +16,7 @@ import org.jzy3d.colors.colormaps.ColorMapWhiteGreen;
 import org.jzy3d.colors.colormaps.ColorMapWhiteRed;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.junit.ChartTest;
-import org.jzy3d.plot2d.primitive.ColorbarImageGenerator;
+import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.utils.LoggerUtils;
 
 public class TestColormaps extends ChartTest {
@@ -58,7 +58,7 @@ public class TestColormaps extends ChartTest {
 			boolean direction) throws IOException {
 		colormap.setDirection(direction);
 		ColorMapper mapper = new ColorMapper(colormap, 0, 1);
-		ColorbarImageGenerator g = new ColorbarImageGenerator(mapper, null,
+		AWTColorbarImageGenerator g = new AWTColorbarImageGenerator(mapper, null,
 				null);
 		return g.toImage(20, 300, 19);
 	}

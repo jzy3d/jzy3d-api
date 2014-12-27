@@ -7,6 +7,8 @@ import java.util.List;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.apache.log4j.Logger;
@@ -37,17 +39,19 @@ public class AWTView extends ChartView {
         this.tooltips = new ArrayList<ITooltipRenderer>();
     }
 
+    @Override
     public void dispose() {
         super.dispose();
         renderers.clear();
     }
 
+    @Override
     public void renderAxeBox(GL gl, GLU glu) {
         if (axeBoxDisplayed) {
             if (gl.isGL2()) {
-                gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+                gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
             } else {
-                GLES2CompatUtils.glMatrixMode(GL2.GL_MODELVIEW);
+                GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
             }
             scene.getLightSet().disable(gl);
 
@@ -67,6 +71,7 @@ public class AWTView extends ChartView {
         }
     }
 
+    @Override
     protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
         cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
@@ -112,11 +117,12 @@ public class AWTView extends ChartView {
      * {@link renderOverlay()} must be called while the OpenGL2 context for the
      * drawable is current, and after the OpenGL2 scene has been rendered.
      */
+    @Override
     public void renderOverlay(GL gl, ViewportConfiguration viewport) {
         if (!hasOverlayStuffs())
             return;
         if (gl.isGL2()) {
-            gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL); // TODO:
+            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL); // TODO:
                                                                            // don't
             // know why
             // needed
@@ -152,6 +158,7 @@ public class AWTView extends ChartView {
         }
     }
 
+    @Override
     public void renderBackground(GL gl, GLU glu, float left, float right) {
         if (bgImg != null) {
             bgViewport.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
@@ -159,6 +166,7 @@ public class AWTView extends ChartView {
         }
     }
 
+    @Override
     public void renderBackground(GL gl, GLU glu, ViewportConfiguration viewport) {
         if (bgImg != null) {
             bgViewport.setViewPort(viewport);

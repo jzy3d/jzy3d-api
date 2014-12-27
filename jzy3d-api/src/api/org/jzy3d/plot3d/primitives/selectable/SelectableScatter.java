@@ -27,14 +27,15 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 		super(coordinates, colors);
 	}
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 
 		if (gl.isGL2()) {
 
 			gl.getGL2().glPointSize(width);
 
-			gl.getGL2().glBegin(GL2.GL_POINTS);
+			gl.getGL2().glBegin(GL.GL_POINTS);
 			if (colors == null)
 				gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
 			if (coordinates != null) {
@@ -58,7 +59,7 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 		} else {
 			GLES2CompatUtils.glPointSize(width);
 
-			gl.getGL2().glBegin(GL2.GL_POINTS);
+			gl.getGL2().glBegin(GL.GL_POINTS);
 			if (colors == null)
 				GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
 			if (coordinates != null) {
@@ -119,7 +120,8 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 	 * @param xyz
 	 *            point's coordinates
 	 */
-	public void setData(Coord3d[] coordinates) {
+	@Override
+    public void setData(Coord3d[] coordinates) {
 		this.coordinates = coordinates;
 		this.isHighlighted = new boolean[coordinates.length];
 
@@ -128,7 +130,8 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 			bbox.add(c);
 	}
 
-	public Coord3d[] getData() {
+	@Override
+    public Coord3d[] getData() {
 		return coordinates;
 	}
 

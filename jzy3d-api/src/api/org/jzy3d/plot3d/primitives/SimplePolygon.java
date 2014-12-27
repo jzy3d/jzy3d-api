@@ -28,7 +28,8 @@ public class SimplePolygon extends Polygon implements ISingleColorable,
 
 	/**********************************************************************/
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 
 		if (gl.isGL2()) {

@@ -29,7 +29,8 @@ public class Rotate implements Transformer {
 		this.rotate = rotate;
 	}
 
-	public void execute(GL gl) {
+	@Override
+    public void execute(GL gl) {
 		if (gl.isGL2()) {
 			gl.getGL2().glRotatef(angle, rotate.x, rotate.y, rotate.z);
 		} else {
@@ -37,11 +38,13 @@ public class Rotate implements Transformer {
 		}
 	}
 
-	public Coord3d compute(Coord3d input) {
+	@Override
+    public Coord3d compute(Coord3d input) {
 		return input.rotate(angle, rotate);
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		return "(Rotate)a=" + angle + " " + rotate;
 	}
 

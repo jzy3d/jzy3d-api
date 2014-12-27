@@ -41,17 +41,11 @@ public class Scene {
 	}
 	
 	public Scene(boolean graphsort, IChartComponentFactory factory){
-		this.graph = new Graph(this, factory.newOrderingStrategy(), graphsort);
+		this.graph = factory.newGraph(this, factory.newOrderingStrategy(), graphsort);
 		this.lightSet = new LightSet();
 		this.views = new Vector<View>();
 		this.factory = factory;
 	}
-	/*
-	public Scene(Graph graph){
-		this.graph = graph;
-		this.lightSet = new LightSet();
-		this.views = new Vector<View>();		
-	}*/
 		
 	/** Handles disposing of the Graph as well as all views pointing to this Graph.*/
 	public void dispose(){
@@ -136,7 +130,8 @@ public class Scene {
 	/***************************************************************/
 
 	/**Return the scene {@link Graph} string representation.*/
-	public String toString(){
+	@Override
+    public String toString(){
 		return graph.toString();
 	}
 	

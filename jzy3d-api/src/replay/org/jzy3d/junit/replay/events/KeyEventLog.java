@@ -20,7 +20,8 @@ public class KeyEventLog extends AbstractEventLog implements IKeyEventLog{
 		return keyCode;
 	}
 	
-	public String toString() {
+	@Override
+    public String toString() {
 		return type + ", code:" + keyCode + ", since:" + since;
 	}
 }

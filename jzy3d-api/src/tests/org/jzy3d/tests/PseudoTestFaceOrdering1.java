@@ -108,6 +108,7 @@ public class PseudoTestFaceOrdering1 {
      */
     public Shape genMapperSurface(final View view, final Graph graph, final IAxeLayout layout){
         Mapper mapper = new Mapper() {
+            @Override
             public double f(double x, double y) {
                 return MAPPER_ZSCALE_FACTOR * Math.sin(x / 10) * Math.cos(y / 20) * x;
             }

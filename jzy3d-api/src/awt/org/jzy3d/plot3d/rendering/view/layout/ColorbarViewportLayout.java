@@ -30,7 +30,12 @@ public class ColorbarViewportLayout implements IViewportLayout{
         final ICanvas canvas = chart.getCanvas();
         final List<ILegend> list = scene.getGraph().getLegends();
         
-        // Compute an optimal layout so that we use the minimal area for metadata
+        computeSeparator(canvas, list);
+        sceneViewPort = ViewportBuilder.column(canvas, 0, screenSeparator);
+        backgroundViewPort = new ViewportConfiguration(canvas);
+    }
+
+    public void computeSeparator(final ICanvas canvas, final List<ILegend> list) {
         hasMeta = list.size() > 0;
         if (hasMeta) {
             int minwidth = 0;
@@ -42,11 +47,7 @@ public class ColorbarViewportLayout implements IViewportLayout{
         else{
             screenSeparator = 1.0f;
         }
-        
-        sceneViewPort = ViewportBuilder.column(canvas, 0, screenSeparator);
-        backgroundViewPort = new ViewportConfiguration(canvas);
     }
-
     
     @Override
     public void render(GL gl, GLU glu, Chart chart){
@@ -54,20 +55,25 @@ public class ColorbarViewportLayout implements IViewportLayout{
         view.renderBackground(gl, glu, backgroundViewPort);
         view.renderScene(gl, glu, sceneViewPort);
 
-        Scene scene = chart.getScene();
-        if (hasMeta)
-            renderLegends(gl, glu, screenSeparator, 1.0f, scene.getGraph().getLegends(), chart.getCanvas());
-
+        renderLegends(gl, glu, chart);
         // fix overlay on top of chart
         //System.out.println(scenePort);
         view.renderOverlay(gl, view.getCamera().getLastViewPort());
+    }
+    
+    protected void renderLegends(GL gl, GLU glu, Chart chart){
+        if (hasMeta){
+            Scene scene = chart.getScene();
+
+            renderLegends(gl, glu, screenSeparator, 1.0f, scene.getGraph().getLegends(), chart.getCanvas());
+        }
     }
     
     /**
      * Renders the legend within the screen slice given by the left and right parameters.
      */
     protected void renderLegends(GL gl, GLU glu, float left, float right, List<ILegend> data, ICanvas canvas) {
-        float slice = (right - left) / (float) data.size();
+        float slice = (right - left) / data.size();
         int k = 0;
         for (ILegend layer : data) {
             layer.setViewportMode(ViewportMode.STRETCH_TO_FILL);
@@ -78,25 +84,22 @@ public class ColorbarViewportLayout implements IViewportLayout{
     
     public void showLayout(AWTView view) {
         Renderer2d layoutBorder = new Renderer2d() {
+            @Override
             public void paint(Graphics g) {
                 if (pencil == null)
                     pencil = new CanvasAWT((Graphics2D) g);
-
                 if (zone1.width > 0)
                     pencil.drawRect(null, zone1.x, zone1.y, zone1.width, zone1.height, true);
                 if (zone2.width > 0)
                     pencil.drawRect(null, zone2.x, zone2.y, zone2.width, zone2.height, true);
             }
-
             CanvasAWT pencil = null;
         };
         view.addRenderer2d(layoutBorder);
     }
     
-
-    Rectangle zone1 = new Rectangle(0, 0, 0, 0);
-    Rectangle zone2 = new Rectangle(0, 0, 0, 0);
-
+    protected Rectangle zone1 = new Rectangle(0, 0, 0, 0);
+    protected Rectangle zone2 = new Rectangle(0, 0, 0, 0);
     protected ViewportConfiguration sceneViewPort;
     protected ViewportConfiguration backgroundViewPort;
 }

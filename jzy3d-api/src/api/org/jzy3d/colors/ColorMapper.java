@@ -100,25 +100,29 @@ public class ColorMapper implements IColorMappable {
         return colormap;
     }
 
+    @Override
     public double getMin() {
         return min;
     }
 
+    @Override
     public double getMax() {
         return max;
     }
 
+    @Override
     public void setMin(double value) {
         min = value;
     }
 
+    @Override
     public void setMax(double value) {
         max = value;
     }
 
     public void setRange(Range range) {
-        min = (double) range.getMin();
-        max = (double) range.getMax();
+        min = range.getMin();
+        max = range.getMax();
     }
 
     public Range getRange() {
@@ -136,6 +140,7 @@ public class ColorMapper implements IColorMappable {
 
     /* */
 
+    @Override
     public String toString() {
         return "(ColorMapper)" + colormap + " min:" + min + " max:" + max + " factor:" + factor;
     }

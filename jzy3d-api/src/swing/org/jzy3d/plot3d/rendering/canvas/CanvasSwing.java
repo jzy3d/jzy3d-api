@@ -75,7 +75,8 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 		}
 	}
 
-	public void dispose() {
+	@Override
+    public void dispose() {
 		if (animator != null)
 			animator.stop();
 		if (renderer != null)
@@ -88,7 +89,8 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	 * Force repaint and ensure that GL2 rendering will occur in the GUI thread,
 	 * wherever the caller stands.
 	 */
-	public void forceRepaint() {
+	@Override
+    public void forceRepaint() {
 		if (true) {
 			// -- Method1 --
 			// Display() is required to use the GLCanvas procedure and to ensure
@@ -171,9 +173,9 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("Chosen GLCapabilities: " + getChosenGLCapabilities() + "\n");
-		sb.append("GL_VENDOR: " + gl.glGetString(GL2.GL_VENDOR) + "\n");
-		sb.append("GL_RENDERER: " + gl.glGetString(GL2.GL_RENDERER) + "\n");
-		sb.append("GL_VERSION: " + gl.glGetString(GL2.GL_VERSION) + "\n");
+		sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
+		sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
+		sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
 		// sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
 		return sb.toString();
 	}

@@ -27,10 +27,11 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
 	/*******************************************************/
 
-	protected void drawVertices(GL gl, GLU glu, Camera cam) {
+	@Override
+    protected void drawVertices(GL gl, GLU glu, Camera cam) {
 		if (gl.isGL2()) {
 			gl.getGL2().glPointSize(formatter.getVertexWidth());
-			gl.getGL2().glBegin(GL2.GL_POINTS);
+			gl.getGL2().glBegin(GL.GL_POINTS);
 			for (V v : graph.getVertices()) {
 				if (highlights.get(v))
 					drawVertexNode(gl, glu, cam, v, layout.get(v),
@@ -42,7 +43,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 			gl.getGL2().glEnd();
 		} else {
 			GLES2CompatUtils.glPointSize(formatter.getVertexWidth());
-			GLES2CompatUtils.glBegin(GL2.GL_POINTS);
+			GLES2CompatUtils.glBegin(GL.GL_POINTS);
 			for (V v : graph.getVertices()) {
 				if (highlights.get(v))
 					drawVertexNode(gl, glu, cam, v, layout.get(v),
@@ -55,7 +56,8 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 		}
 	}
 
-	protected void drawVertexLabels(GL gl, GLU glu, Camera cam) {
+	@Override
+    protected void drawVertexLabels(GL gl, GLU glu, Camera cam) {
 		for (V v : graph.getVertices()) {
 			if (highlights.get(v))
 				drawVertexLabel(gl, glu, cam, v, layout.get(v),
@@ -66,7 +68,8 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 		}
 	}
 
-	protected void drawEdges(GL gl, GLU glu, Camera cam) {
+	@Override
+    protected void drawEdges(GL gl, GLU glu, Camera cam) {
 		for (E e : graph.getEdges()) {
 			V v1 = graph.getEdgeStartVertex(e);
 			V v2 = graph.getEdgeStopVertex(e);
@@ -98,13 +101,13 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 	protected void drawEdge(GL gl, GLU glu, Camera cam, E e, Coord2d c1,
 			Coord2d c2, Color color) {
 		if (gl.isGL2()) {
-			gl.getGL2().glBegin(GL2.GL_LINE_STRIP);
+			gl.getGL2().glBegin(GL.GL_LINE_STRIP);
 			gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
 			gl.getGL2().glVertex3f(c1.x, c1.y, Z);
 			gl.getGL2().glVertex3f(c2.x, c2.y, Z);
 			gl.getGL2().glEnd();
 		} else {
-			GLES2CompatUtils.glBegin(GL2.GL_LINE_STRIP);
+			GLES2CompatUtils.glBegin(GL.GL_LINE_STRIP);
 			GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
 			GLES2CompatUtils.glVertex3f(c1.x, c1.y, Z);
 			GLES2CompatUtils.glVertex3f(c2.x, c2.y, Z);

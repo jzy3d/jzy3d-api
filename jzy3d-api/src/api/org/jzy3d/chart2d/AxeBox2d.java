@@ -2,6 +2,7 @@ package org.jzy3d.chart2d;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.apache.log4j.Logger;
@@ -15,7 +16,6 @@ import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
-import org.jzy3d.plot3d.text.renderers.TextBillboardRenderer;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 public class AxeBox2d extends AxeBox {
@@ -44,11 +44,13 @@ public class AxeBox2d extends AxeBox {
     }
 
     /** Force given X axis to be used for tick placement */
+    @Override
     protected int findClosestXaxe(Camera cam) {
         return 0;
     }
 
     /** Force given Y axis to be used for tick placement */
+    @Override
     protected int findClosestYaxe(Camera cam) {
         return 3;
     }
@@ -74,7 +76,8 @@ public class AxeBox2d extends AxeBox {
 //            doTransform(gl);
             labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         } else if (isYDisplayed(direction)) {
-            labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            //labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         }
         if (labelBounds != null)
             ticksTxtBounds.add(labelBounds);
@@ -86,6 +89,8 @@ public class AxeBox2d extends AxeBox {
     
     protected RotatedTextBitmapRenderer txtRotation = new RotatedTextBitmapRenderer();
 
+    /* ROTATED TEXT BITMAP RENDERER NOT WORKING PROPERLY */
+    
     public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
         @Override
         public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset,
@@ -107,9 +112,10 @@ public class AxeBox2d extends AxeBox {
                 return new BoundingBox3d();
             }
 
-            // Draws actual string
-            rotateText(gl, posReal);
-
+            // Draws actual string <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            rotateText(gl, posReal); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            // CETTE ROTATION NE MARCHE PAS ET AFFECTE LE BON RENDU QUAND ON UTILISE BOUNDING POLICY!!
+            
             glRasterPos(gl, sceneOffset, Coord3d.ORIGIN);
             glut.glutBitmapString(font, text);
             
@@ -121,7 +127,7 @@ public class AxeBox2d extends AxeBox {
         public void rotateText(GL gl, Coord3d posReal) {
             gl.getGL2().glPushMatrix();
             
-            gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
             loadIdentity(gl);
             rotateOf(gl, 90, AXE_Z);
             translateTo(gl, posReal, false);

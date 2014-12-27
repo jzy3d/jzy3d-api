@@ -52,8 +52,10 @@ public class AWTDualModeMouseSelector {
 
     public KeyListener buildToggleKeyListener(final Chart chart) {
         return new KeyListener() {
+            @Override
             public void keyPressed(KeyEvent e) {
             }
+            @Override
             public void keyReleased(KeyEvent e) {
                 switch (e.getKeyChar()) {
                 case 'c':
@@ -67,6 +69,7 @@ public class AWTDualModeMouseSelector {
                 chart.render(); // update message display
             }
 
+            @Override
             public void keyTyped(KeyEvent e) {
                 if (!holding) {
                     switch (e.getKeyChar()) {
@@ -88,6 +91,7 @@ public class AWTDualModeMouseSelector {
 
     public Renderer2d buildMessageRenderer() {
         return new Renderer2d() {
+            @Override
             public void paint(Graphics g) {
                 if (displayMessage && message != null) {
                     g.setColor(java.awt.Color.RED);

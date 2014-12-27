@@ -168,7 +168,8 @@ public class BoundingBox2d {
 		
 	/*********************************************************/
 		
-	public String toString(){
+	@Override
+    public String toString(){
 		return toString(0);
 	}
 	

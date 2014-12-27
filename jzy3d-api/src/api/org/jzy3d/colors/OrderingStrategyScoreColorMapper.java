@@ -32,6 +32,7 @@ public class OrderingStrategyScoreColorMapper extends ColorMapper{
         this.policy = policy;
     }
     
+    @Override
     public void preDraw(Object o){
         super.preDraw(o);
         if(policy.acceptsPreDraw(o))
@@ -81,6 +82,7 @@ public class OrderingStrategyScoreColorMapper extends ColorMapper{
         
     }
     
+    @Override
     public Color getColor(Coord3d coord){
         AbstractOrderingStrategy s = sceneGraph.getStrategy();
         float score = (float)s.score(coord);

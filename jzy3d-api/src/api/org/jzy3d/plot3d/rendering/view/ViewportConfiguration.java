@@ -77,6 +77,7 @@ public class ViewportConfiguration {
         this.mode = mode;
     }
 
+    @Override
     public String toString() {
         return "(ViewPort) width=" + width + " height=" + height + " x=" + x + " y=" + y;
     }

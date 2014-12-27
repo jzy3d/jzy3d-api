@@ -1,11 +1,11 @@
 package org.jzy3d.chart.controllers.keyboard.screenshot;
 
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
-
 import java.io.IOException;
 
 import org.jzy3d.chart.Chart;
+
+import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.KeyListener;
 
 /** Saves a screenshot in PNG format once key S is pressed. 
  * 

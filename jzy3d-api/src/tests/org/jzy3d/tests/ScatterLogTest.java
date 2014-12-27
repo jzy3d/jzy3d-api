@@ -27,7 +27,7 @@ public class ScatterLogTest extends AbstractAnalysis{
 			AnalysisLauncher.open(new ScatterLogTest());
 		}
 		
-		AxeTransformerSet transformers = new AxeTransformerSet(null, new LogAxeTransformer(),null);
+		AxeTransformerSet transformers = new AxeTransformerSet(null, null,new LogAxeTransformer());
 		
 		public void init(){
 	        int size = 500000;

@@ -1,6 +1,5 @@
 package org.jzy3d.chart.controllers.mouse.picking;
 
-import com.jogamp.newt.event.MouseEvent;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
@@ -8,6 +7,8 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.View;
+
+import com.jogamp.newt.event.MouseEvent;
 
 public class NewtMousePickingPan2dController<V, E> extends NewtMousePickingController<V, E> {
 
@@ -30,7 +31,8 @@ public class NewtMousePickingPan2dController<V, E> extends NewtMousePickingContr
 	/**
 	 * *************
 	 */
-	public void mouseDragged(MouseEvent e) {
+	@Override
+    public void mouseDragged(MouseEvent e) {
 		int yflip = -e.getY() + targets.get(0).getCanvas().getRendererHeight();
 		Coord2d mouse = new Coord2d(e.getX(), yflip);
 		View view = targets.get(0).getView();
@@ -48,7 +50,8 @@ public class NewtMousePickingPan2dController<V, E> extends NewtMousePickingContr
 	}
 	protected boolean done;
 
-	public void mouseWheelMoved(MouseEvent e) {
+	@Override
+    public void mouseWheelMoved(MouseEvent e) {
 		lastInc = NewtMouseUtilities.convertWheelRotation(e, 0.0f, 10.0f);
 		factor = factor + lastInc;
 

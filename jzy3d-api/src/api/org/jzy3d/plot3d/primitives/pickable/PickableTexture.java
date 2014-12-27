@@ -43,7 +43,8 @@ public class PickableTexture extends DrawableTexture implements Pickable {
 		return id;
 	}
 	
-	public String toString(){
+	@Override
+    public String toString(){
 		return "(IPickable) " + id + ": " + super.toString();
 	}
 	

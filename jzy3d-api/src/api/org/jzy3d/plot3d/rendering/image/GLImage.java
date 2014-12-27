@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.image;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Transparency;
 import java.awt.color.ColorSpace;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
@@ -156,7 +157,7 @@ public class GLImage {
 				DataBuffer.TYPE_BYTE, imgWidth, imgHeight, 4, null);
 		ComponentColorModel colorModel = new ComponentColorModel(ColorSpace
 				.getInstance(ColorSpace.CS_sRGB), new int[] { 8, 8, 8, 8 },
-				true, false, ComponentColorModel.TRANSLUCENT,
+				true, false, Transparency.TRANSLUCENT,
 				DataBuffer.TYPE_BYTE);
 		BufferedImage bufImg = new BufferedImage(colorModel, // color model
 				raster, false, // isRasterPremultiplied
