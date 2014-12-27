@@ -7,14 +7,14 @@ import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformablePol
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformer;
 import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 
-public class AxeTransformableOrthonromalTassellator extends
+public class AxeTransformableOrthonormalTessellator extends
 		OrthonormalTessellator {
 	
 	AxeTransformerSet transformers;
 	
 	
 	
-	public AxeTransformableOrthonromalTassellator(AxeTransformerSet transformers) {
+	public AxeTransformableOrthonormalTessellator(AxeTransformerSet transformers) {
 		super();
 		this.transformers = transformers;
 	}
