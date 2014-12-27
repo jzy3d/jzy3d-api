@@ -4,29 +4,24 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 
 public class AxeTransformerSet {
-    private AxeTransformer x;
-    private AxeTransformer y;
-    private AxeTransformer z;
+    protected AxeTransformer x;
+    protected AxeTransformer y;
+    protected AxeTransformer z;
 
     public AxeTransformerSet(AxeTransformer x, AxeTransformer y, AxeTransformer z) {
-        super();
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this.x = x != null ? x : new LinearAxeTransformer();
+        this.y = y != null ? y : new LinearAxeTransformer();
+        this.z = z != null ? z : new LinearAxeTransformer();
     }
 
     public AxeTransformerSet() {
-        super();
         this.x = new LinearAxeTransformer();
         this.y = new LinearAxeTransformer();
         this.z = new LinearAxeTransformer();
     }
 
     public AxeTransformer getX() {
-        if (x != null)
-            return x;
-        else
-            return new LinearAxeTransformer();
+        return x;
     }
 
     public void setX(AxeTransformer x) {
@@ -34,10 +29,7 @@ public class AxeTransformerSet {
     }
 
     public AxeTransformer getY() {
-        if (y != null)
-            return y;
-        else
-            return new LinearAxeTransformer();
+        return y;
     }
 
     public void setY(AxeTransformer y) {
@@ -45,10 +37,7 @@ public class AxeTransformerSet {
     }
 
     public AxeTransformer getZ() {
-        if (z != null)
-            return z;
-        else
-            return new LinearAxeTransformer();
+        return z;
     }
 
     public void setZ(AxeTransformer z) {
