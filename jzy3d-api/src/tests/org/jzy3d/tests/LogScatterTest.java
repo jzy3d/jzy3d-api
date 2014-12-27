@@ -21,10 +21,10 @@ import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.Log
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 
-public class ScatterLogTest extends AbstractAnalysis{
+public class LogScatterTest extends AbstractAnalysis{
 
 		public static void main(String[] args) throws Exception {
-			AnalysisLauncher.open(new ScatterLogTest());
+			AnalysisLauncher.open(new LogScatterTest());
 		}
 		
 		AxeTransformerSet transformers = new AxeTransformerSet(null, null,new LogAxeTransformer());
