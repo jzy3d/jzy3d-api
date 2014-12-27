@@ -9,6 +9,9 @@ import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 
 
 public class LineStripInterpolated extends AbstractComposite{
+	protected LineStripInterpolated() {  //needed to call the superconstructor in AxeTRansformableLineStripInterpolated
+	}
+	
 	public LineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution){
 	    this.controlCoords = controlPoints;
 		this.resolution = resolution;
