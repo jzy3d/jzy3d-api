@@ -10,7 +10,8 @@ import java.awt.event.PaintEvent;
 /** Utility for debugging event queue related to 3d in AWT.*/
 
 public class CustomEventQueue extends EventQueue {
-	protected void dispatchEvent(AWTEvent event){
+	@Override
+    protected void dispatchEvent(AWTEvent event){
 		if(event instanceof PaintEvent)
 			;//System.out.println("Dispatch [PAINT]: "+event);
 		else if(event instanceof MouseEvent)

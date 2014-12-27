@@ -46,6 +46,16 @@ public class ScatterPointSerie2d implements Serie2d {
         scatter.add(new LightPoint(new Coord3d(c.x, c.y, 0), color));
     }
 
+    @Override
+    public void add(float x, float y, Color color) {
+        scatter.add(new LightPoint(new Coord3d(x, y, 0), color));
+    }
+
+    @Override
+    public void add(double x, double y, Color color) {
+        scatter.add(new LightPoint(new Coord3d(x, y, 0), color));
+    }
+
 
     @Override
     public void add(List<Coord2d> c) {
@@ -56,12 +66,12 @@ public class ScatterPointSerie2d implements Serie2d {
     
     @Override
     public void setColor(Color color){
-        //line.setColor(color);
+        defaultColor = color;
     }
     
     @Override
     public Color getColor(){
-        return null;//line.getWireframeColor();
+        return defaultColor;//line.getWireframeColor();
     }
 
     @Override

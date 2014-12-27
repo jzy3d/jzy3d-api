@@ -42,7 +42,8 @@ public class LightEditor extends JPanel{
 		final JSlider slider0 = colorControl.getSlider(0);
 		slider0.setValue( (int)color.r * slider0.getMaximum() );
 		slider0.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
+			@Override
+            public void stateChanged(ChangeEvent e) {
 				//System.out.println(slider0.getValue());
 				color.r = getPercent(slider0);
 				chart.render();
@@ -51,7 +52,8 @@ public class LightEditor extends JPanel{
 		final JSlider slider1 = colorControl.getSlider(1);
 		slider1.setValue( (int)color.g * slider1.getMaximum() );
 		slider1.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
+			@Override
+            public void stateChanged(ChangeEvent e) {
 				color.g = getPercent(slider1);
 				chart.render();
 			}
@@ -59,7 +61,8 @@ public class LightEditor extends JPanel{
 		final JSlider slider2 = colorControl.getSlider(2);
 		slider2.setValue( (int)color.b * slider2.getMaximum() );
 		slider2.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
+			@Override
+            public void stateChanged(ChangeEvent e) {
 				color.b = getPercent(slider2);
 				chart.render();
 			}
@@ -78,9 +81,10 @@ public class LightEditor extends JPanel{
 		final JSlider slider0 = colorControl.getSlider(0);
 		slider0.setValue( (int)coord.x /** slider0.getMaximum()*/ );
 		slider0.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
+			@Override
+            public void stateChanged(ChangeEvent e) {
 				//System.out.println(slider0.getValue());
-				coord.x = (float)slider0.getValue();
+				coord.x = slider0.getValue();
 				light.setPosition(coord);
 				chart.render();
 			}
@@ -88,8 +92,9 @@ public class LightEditor extends JPanel{
 		final JSlider slider1 = colorControl.getSlider(1);
 		slider1.setValue( (int)coord.y /** slider1.getMaximum()*/ );
 		slider1.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				coord.y = (float)slider1.getValue();
+			@Override
+            public void stateChanged(ChangeEvent e) {
+				coord.y = slider1.getValue();
 				light.setPosition(coord);
 				chart.render();
 			}
@@ -97,8 +102,9 @@ public class LightEditor extends JPanel{
 		final JSlider slider2 = colorControl.getSlider(2);
 		slider2.setValue( (int)coord.z /** slider2.getMaximum()*/ );
 		slider2.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				coord.z = (float)slider2.getValue();
+			@Override
+            public void stateChanged(ChangeEvent e) {
+				coord.z = slider2.getValue();
 				light.setPosition(coord);
 				chart.render();
 			}

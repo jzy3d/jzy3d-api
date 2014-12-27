@@ -20,6 +20,7 @@ public class Polygon extends AbstractGeometry {
         super();
     }
 
+    @Override
     protected void begin(GL gl) {
         if (gl.isGL2()) {
             gl.getGL2().glBegin(GL2.GL_POLYGON);

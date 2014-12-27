@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import org.jzy3d.maths.Coord3d;
@@ -94,7 +95,7 @@ public class PickingSupport {
         if (!gl.isGL2()) throw new UnsupportedOperationException();
         
         // Prepare selection data
-        gl.getGL2().glGetIntegerv(GL2.GL_VIEWPORT, viewport, 0);        
+        gl.getGL2().glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);        
         gl.getGL2().glSelectBuffer(bufferSize, selectBuffer);        
         gl.getGL2().glRenderMode(GL2.GL_SELECT);         
         gl.getGL2().glInitNames();
@@ -105,11 +106,11 @@ public class PickingSupport {
         CameraMode cMode = view.getCameraMode();
         Coord3d viewScaling = view.getLastViewScaling();
         Transform viewTransform = new Transform(new Scale(viewScaling));
-        double xpick = (double) pickPoint.x;
-        double ypick = (double) pickPoint.y;
+        double xpick = pickPoint.x;
+        double ypick = pickPoint.y;
         
         // Setup projection matrix
-        gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+        gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
         gl.getGL2().glPushMatrix();
         {
         	gl.getGL2().glLoadIdentity();
@@ -118,7 +119,7 @@ public class PickingSupport {
 	        camera.doShoot(gl, glu, cMode);
 	        
 	        // Draw each pickable element in select buffer
-	        gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+	        gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 	        
 	        synchronized(this){
     	        for(Pickable pickable: pickables.values()){
@@ -129,7 +130,7 @@ public class PickingSupport {
     	        }
 	        }
 	        // Back to projection matrix
-	        gl.getGL2().glMatrixMode(GL2.GL_PROJECTION);
+	        gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
         }
         gl.getGL2().glPopMatrix();
         gl.glFlush();

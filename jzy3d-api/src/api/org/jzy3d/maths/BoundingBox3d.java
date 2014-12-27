@@ -13,7 +13,6 @@ import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.Axe
  * adding coordinates, Point3d, Polygon3d or an other BoundingBox3d (that is
  * equivalent to computing the union of the current BoundingBox and another
  * one).
- *
  * @author Martin Pernollet
  */
 public class BoundingBox3d {
@@ -67,12 +66,12 @@ public class BoundingBox3d {
     }
 
     public BoundingBox3d(Range xRange, Range yRange, Range zRange) {
-        this.xmin = (float) xRange.getMin();
-        this.xmax = (float) xRange.getMax();
-        this.ymin = (float) yRange.getMin();
-        this.ymax = (float) yRange.getMax();
-        this.zmin = (float) zRange.getMin();
-        this.zmax = (float) zRange.getMax();
+        this.xmin = xRange.getMin();
+        this.xmax = xRange.getMax();
+        this.ymin = yRange.getMin();
+        this.ymax = yRange.getMax();
+        this.zmin = zRange.getMin();
+        this.zmax = zRange.getMax();
     }
 
     /*********************************************************/
@@ -88,6 +87,10 @@ public class BoundingBox3d {
         ymax = -Float.MAX_VALUE;
         zmin = Float.MAX_VALUE;
         zmax = -Float.MAX_VALUE;
+    }
+
+    public boolean isReset() {
+        return xmin == Float.MAX_VALUE && xmax == -Float.MAX_VALUE && ymin == Float.MAX_VALUE && ymax == -Float.MAX_VALUE && zmin == Float.MAX_VALUE && zmax == -Float.MAX_VALUE;
     }
 
     public boolean valid() {
@@ -339,6 +342,7 @@ public class BoundingBox3d {
 
     /*********************************************************/
 
+    @Override
     public String toString() {
         return toString(0);
     }
@@ -388,8 +392,13 @@ public class BoundingBox3d {
         return true;
     }
 
-    /*********************************************************/
-
+    @Override
+    public BoundingBox3d clone(){
+        return new BoundingBox3d(xmin, xmax, ymin, ymax, zmin, zmax);
+    }
+    
+    /* */
+    
     private float xmin;
     private float xmax;
     private float ymin;

@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.enlightables;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.fixedfunc.GLLightingFunc;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.primitives.AbstractWireframeable;
@@ -11,22 +12,22 @@ public abstract class AbstractEnlightable extends AbstractWireframeable {
 
 	protected void applyMaterial(GL gl) {
 		if (gl.isGL2()) {
-			gl.getGL2().glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT,
+			gl.getGL2().glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_AMBIENT,
 					materialAmbiantReflection.toArray(), 0);
-			gl.getGL2().glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE,
+			gl.getGL2().glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_DIFFUSE,
 					materialDiffuseReflection.toArray(), 0);
-			gl.getGL2().glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR,
+			gl.getGL2().glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SPECULAR,
 					materialSpecularReflection.toArray(), 0);
-			gl.getGL2().glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS,
+			gl.getGL2().glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SHININESS,
 					materialShininess, 0);
 		} else {
-			GLES2CompatUtils.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT,
+			GLES2CompatUtils.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_AMBIENT,
 					materialAmbiantReflection.toArray(), 0);
-			GLES2CompatUtils.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE,
+			GLES2CompatUtils.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_DIFFUSE,
 					materialDiffuseReflection.toArray(), 0);
-			GLES2CompatUtils.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR,
+			GLES2CompatUtils.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SPECULAR,
 					materialSpecularReflection.toArray(), 0);
-			GLES2CompatUtils.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS,
+			GLES2CompatUtils.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SHININESS,
 					materialShininess, 0);
 		}
 		// gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_EMISSION,

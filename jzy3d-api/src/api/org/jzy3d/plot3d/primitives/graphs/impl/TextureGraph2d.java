@@ -30,7 +30,8 @@ public class TextureGraph2d<V,E>  extends DefaultDrawableGraph2d<V, E> {
 		labelSceneOffset = new Coord3d(0,-TEX_MAPPING_HEIGHT/2,0);
 	}
 	
-	public void setGraphModel(IGraph<V,E> graph, PickingSupport picking){
+	@Override
+    public void setGraphModel(IGraph<V,E> graph, PickingSupport picking){
 		super.setGraphModel(graph, picking);
 		
 		for(V v: graph.getVertices()){

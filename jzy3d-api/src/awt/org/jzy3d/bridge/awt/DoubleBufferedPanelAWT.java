@@ -10,11 +10,13 @@ import org.jzy3d.bridge.BufferedPanel;
 
 public abstract class DoubleBufferedPanelAWT extends Panel implements BufferedPanel{
 	
-	public abstract void draw(Graphics g);
+	@Override
+    public abstract void draw(Graphics g);
 	
 	/**********************************************************************/
 	
-	public void paint(Graphics g){
+	@Override
+    public void paint(Graphics g){
 		if(mustInit())
 			initBuffer();
 		if(buffer!=null){
@@ -24,7 +26,8 @@ public abstract class DoubleBufferedPanelAWT extends Panel implements BufferedPa
 		}
 	}
 	
-	public void update(Graphics g){
+	@Override
+    public void update(Graphics g){
 		paint(g);
 	}
 	

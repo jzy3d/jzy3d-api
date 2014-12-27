@@ -41,9 +41,9 @@ public double f(double x, double y) {
         return Double.NaN;
     }
     int rbg = image.getRGB((int) x, (maxRow) - ((int) y));
-    float red = (float) ((rbg >> 16) & 0xFF) / 255.0f;
-    float green = (float) ((rbg >> 8) & 0xFF) / 255.0f;
-    float blue = (float) ((rbg) & 0xFF) / 255.0f;
-    return ((double) ((red * 0.3f) + (green * 0.59f) + (blue * 0.11f)));
+    float red = ((rbg >> 16) & 0xFF) / 255.0f;
+    float green = ((rbg >> 8) & 0xFF) / 255.0f;
+    float blue = ((rbg) & 0xFF) / 255.0f;
+    return ((red * 0.3f) + (green * 0.59f) + (blue * 0.11f));
 }
 }

@@ -49,7 +49,7 @@ public class DefaultGraph <V,E> implements IGraph<V,E>{
 	
 	@Override
 	public V getRandomVertex(){
-		int id = (int) (Math.random() * (double)vertices.size());
+		int id = (int) (Math.random() * vertices.size());
 		return getVertex( id );
 	}
 

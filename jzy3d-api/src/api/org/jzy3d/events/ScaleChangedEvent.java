@@ -28,7 +28,8 @@ public class ScaleChangedEvent extends EventObject{
 	
 	/*****************************************************************/
 
-	public String toString(){
+	@Override
+    public String toString(){
 		return new String(getClass()+":id="+scaleId+", scale="+scaling);
 	}
 	

@@ -19,7 +19,8 @@ public class RingGrid extends OrthonormalGrid{
 		sqradius = (radius+(enlargeSteps*radius/xysteps)) * (radius+(enlargeSteps*radius/xysteps));
 	}
 	
-	public List<Coord3d> apply(Mapper mapper) {
+	@Override
+    public List<Coord3d> apply(Mapper mapper) {
 		double xstep = xrange.getRange() / (double)xsteps;
 		double ystep = yrange.getRange() / (double)ysteps;
 		

@@ -30,11 +30,13 @@ public class AbstractScreenshotKeyController extends AbstractController implemen
         this.outputFile = outputFile;
     }
 
+    @Override
     public void register(Chart chart) {
     	super.register(chart);
         chart.getCanvas().addKeyController(this);
     }
 
+    @Override
     public void dispose() {
     	for(Chart c: targets){
     	    c.getCanvas().removeKeyController(this);

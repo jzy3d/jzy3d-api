@@ -91,11 +91,13 @@ public class Color {
 		return hexa;
 	}
 	
-	public String toString(){
+	@Override
+    public String toString(){
 		return new String("(Color) r=" + r + " g=" + g + " b=" + b + " a=" + a);
 	}
 	
-	public Color clone(){
+	@Override
+    public Color clone(){
 		return new Color(r, g, b, a);
 	}
 	

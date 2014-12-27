@@ -22,7 +22,8 @@ public class WindowEventLog extends AbstractEventLog implements IWindowEventLog{
 		return value;
 	}
 
-	public String toString(){
+	@Override
+    public String toString(){
 		if(value!=null)
 			return type + ", v:" + value + ", since:" + since;
 		else

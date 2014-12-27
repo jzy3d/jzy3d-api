@@ -2,6 +2,9 @@ package org.jzy3d.plot3d.rendering.lights;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2GL3;
+import javax.media.opengl.fixedfunc.GLLightingFunc;
+import javax.media.opengl.fixedfunc.GLMatrixFunc;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
@@ -36,7 +39,7 @@ public class Light {
 		if (enabled) {
 
 			if (gl.isGL2()) {
-				gl.getGL2().glMatrixMode(GL2.GL_MODELVIEW);
+				gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 				gl.getGL2().glLoadIdentity();
 
 				gl.getGL2().glTranslatef(position.x * scale.x,
@@ -44,29 +47,29 @@ public class Light {
 
 				// Light position representation (cube)
 				if (representationDisplayed) {
-					gl.glDisable(GL2.GL_LIGHTING);
+					gl.glDisable(GLLightingFunc.GL_LIGHTING);
 					gl.getGL2().glColor3f(0.0f, 1.0f, 1.0f);
-					gl.getGL2().glPolygonMode(GL2.GL_FRONT_AND_BACK,
-							GL2.GL_LINE);
+					gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK,
+							GL2GL3.GL_LINE);
 					glut.glutSolidCube(representationRadius);
-					gl.glEnable(GL2.GL_LIGHTING);
+					gl.glEnable(GLLightingFunc.GL_LIGHTING);
 				}
 
 				// Actual light source setting TODO: check we really need to
 				// define @ each rendering
 				LightSwitch.enable(gl, lightId);
-				gl.getGL2().glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION,
+				gl.getGL2().glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_POSITION,
 						positionZero, 0);
-				gl.getGL2().glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT,
+				gl.getGL2().glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_AMBIENT,
 						ambiantColor.toArray(), 0);
-				gl.getGL2().glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE,
+				gl.getGL2().glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_DIFFUSE,
 						diffuseColor.toArray(), 0);
-				gl.getGL2().glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR,
+				gl.getGL2().glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_SPECULAR,
 						specularColor.toArray(), 0);
 			} else {
 				// OpenGL ES 2
 				
-				GLES2CompatUtils.glMatrixMode(GL2.GL_MODELVIEW);
+				GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 				GLES2CompatUtils.glLoadIdentity();
 
 				GLES2CompatUtils.glTranslatef(position.x * scale.x,
@@ -74,31 +77,31 @@ public class Light {
 
 //				// Light position representation (cube)
 				if (representationDisplayed) {
-					gl.glDisable(GL2.GL_LIGHTING);
+					gl.glDisable(GLLightingFunc.GL_LIGHTING);
 					GLES2CompatUtils.glColor3f(0.0f, 1.0f, 1.0f);
-					GLES2CompatUtils.glPolygonMode(GL2.GL_FRONT_AND_BACK,
-							GL2.GL_LINE);
+					GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
+							GL2GL3.GL_LINE);
 					glut.glutSolidCube(representationRadius);
-					gl.glEnable(GL2.GL_LIGHTING);
+					gl.glEnable(GLLightingFunc.GL_LIGHTING);
 				}
 //
 //				// Actual light source setting TODO: check we really need to
 //				// define @ each rendering
 				LightSwitch.enable(gl, lightId);
 			
-				GLES2CompatUtils.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION,
+				GLES2CompatUtils.glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_POSITION,
 						positionZero, 0);
-				GLES2CompatUtils.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT,
+				GLES2CompatUtils.glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_AMBIENT,
 						ambiantColor.toArray(), 0);
-				GLES2CompatUtils.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE,
+				GLES2CompatUtils.glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_DIFFUSE,
 						diffuseColor.toArray(), 0);
-				GLES2CompatUtils.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR,
+				GLES2CompatUtils.glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_SPECULAR,
 						specularColor.toArray(), 0);
 				
 				
 			}
 		} else
-			gl.glDisable(GL2.GL_LIGHTING);
+			gl.glDisable(GLLightingFunc.GL_LIGHTING);
 	}
 
 	/** Indicates if a square is drawn to show the light position. */

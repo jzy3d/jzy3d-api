@@ -68,6 +68,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
      * Draw a string at the specified position and compute the 3d volume
      * occupied by the string according to the current Camera configuration.
      */
+    @Override
     public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
         glRaster(gl, position, color);
         BillBoardSize dims = printString(gl, s, halign, valign);
@@ -151,7 +152,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
             throw new IllegalArgumentException("Vertical alignement constant unknown: " + valign);
 
         // Draw the bitmaps
-        gl.glPixelStorei(GL2.GL_UNPACK_ALIGNMENT, 1);
+        gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
         int idx;
         for (int c = 0; c < acodes.length; c++) {
             idx = acodes[c] - 32;

@@ -26,7 +26,8 @@ public class Translate implements Transformer {
 		this.shift = shift;
 	}
 
-	public void execute(GL gl) {
+	@Override
+    public void execute(GL gl) {
 		if (gl.isGL2()) {
 			gl.getGL2().glTranslatef(shift.x, shift.y, shift.z);
 		} else {
@@ -34,11 +35,13 @@ public class Translate implements Transformer {
 		}
 	}
 
-	public Coord3d compute(Coord3d input) {
+	@Override
+    public Coord3d compute(Coord3d input) {
 		return input.add(shift);
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		return "(Translate)" + shift;
 	}
 

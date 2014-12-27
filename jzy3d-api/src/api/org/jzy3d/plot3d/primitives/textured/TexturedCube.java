@@ -80,7 +80,8 @@ public class TexturedCube extends AbstractComposite implements Selectable, ITran
 		bbox = new BoundingBox3d(position, width*2);
 	}
 	
-	public BoundingBox3d getBounds(){
+	@Override
+    public BoundingBox3d getBounds(){
 		return bbox;
 	}
 	

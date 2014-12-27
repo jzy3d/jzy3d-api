@@ -34,6 +34,7 @@ public class SharedTexture implements IGLBindedResource{
     }
 
     /** A GL2 context MUST be current. */
+    @Override
     public void mount(GL gl) {
         try {
             load(gl, file);
@@ -48,14 +49,15 @@ public class SharedTexture implements IGLBindedResource{
         // halfWidth + " halfHeight=" + halfHeight);
     }
     
+    @Override
     public boolean hasMountedOnce(){
         return texture!=null;
     }
 
     protected void load(GL gl, String fileName) throws GLException, IOException {
         texture = TextureIO.newTexture(new File(fileName), false);
-        texture.setTexParameteri(gl, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
-        texture.setTexParameteri(gl, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
     }
 
     public String getFile() {

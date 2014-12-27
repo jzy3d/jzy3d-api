@@ -37,6 +37,7 @@ public class SimpleDir
     {
         FileFilter fileFilter = new FileFilter() {
 
+            @Override
             public boolean accept(File file)
             {
                 return !file.isDirectory();
@@ -51,6 +52,7 @@ public class SimpleDir
     {
         FileFilter fileFilter = new FileFilter() {
 
+            @Override
             public boolean accept(File file)
             {
                 return file.isDirectory();
@@ -67,11 +69,11 @@ public class SimpleDir
         if(file.size() == 0)
             return new ArrayList<File>(0);
         if(file.size() == 1)
-            return getAllFiles((File)file.get(0));
+            return getAllFiles(file.get(0));
         List<File> out = new ArrayList<File>();
         File f;
         for(Iterator<File> i$ = file.iterator(); i$.hasNext(); out.addAll(getAllFiles(f)))
-            f = (File)i$.next();
+            f = i$.next();
 
         return out;
     }

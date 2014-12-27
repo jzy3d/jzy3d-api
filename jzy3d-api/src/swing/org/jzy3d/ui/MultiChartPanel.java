@@ -2,8 +2,10 @@ package org.jzy3d.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +21,9 @@ import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
+import org.jzy3d.ui.views.ImagePanel;
 
 public class MultiChartPanel extends JPanel {
     private static final long serialVersionUID = 7519209038396190502L;
@@ -40,19 +45,19 @@ public class MultiChartPanel extends JPanel {
 
     private int nComponent = 0;
 
-    public MultiChartPanel(List<Chart> charts) throws IOException {
+    public MultiChartPanel(List<Chart> charts)  {
         this(charts, true);
     }
 
-    public MultiChartPanel(List<Chart> charts, boolean vertical) throws IOException {
+    public MultiChartPanel(List<Chart> charts, boolean vertical)  {
         this(charts, vertical, 500, 300);
     }
 
-    public MultiChartPanel(List<Chart> charts, boolean vertical, int width, int height) throws IOException {
+    public MultiChartPanel(List<Chart> charts, boolean vertical, int width, int height)  {
         this(charts, vertical, width, height, true, false);
     }
 
-    public MultiChartPanel(List<Chart> charts, boolean vertical, int width, int height, boolean growCol, boolean growLine) throws IOException {
+    public MultiChartPanel(List<Chart> charts, boolean vertical, int width, int height, boolean growCol, boolean growLine)  {
         LookAndFeel.apply();
 
         // Main layout
@@ -153,11 +158,32 @@ public class MultiChartPanel extends JPanel {
     }
 
     public JPanel addChart(Chart chart) {
-        return addPanel((java.awt.Component) chart.getCanvas());
+        Component component = getChartAsComponent(chart);
+        
+        return addPanel(component);
     }
 
     public JPanel addChartAt(Chart chart, int nlin, int ncol) {
-        return addPanelAt((java.awt.Component) chart.getCanvas(), nlin, ncol);
+        Component component;
+        
+        if(chart.getCanvas() instanceof OffscreenCanvas){
+            component = getChartScreenshotAsComponent(chart);    
+        }
+        else
+            component = getChartAsComponent(chart);
+        return addPanelAt(component, nlin, ncol);
+    }
+
+    public JPanel getChartScreenshotAsComponent(Chart chart) {
+        chart.screenshot();
+        AWTRenderer3d renderer = (AWTRenderer3d)chart.getCanvas().getRenderer();
+        BufferedImage i = renderer.getLastScreenshotImage();
+        JPanel component = new ImagePanel(i);
+        return component;
+    }
+
+    public Component  getChartAsComponent(Chart chart) {
+        return (Component) chart.getCanvas();
     }
 
     public JPanel addPanel(java.awt.Component panel) {
@@ -180,6 +206,14 @@ public class MultiChartPanel extends JPanel {
         add(chartPanel, "cell " + ncol + " " + nlin + ", grow");
         return chartPanel;
     }
+    
+    public void ui() {
+        JScrollPane pane = new JScrollPane(this);
+        JPanel parent = new JPanel();
+        parent.add(pane);
+        MultiChartPanel.frame(parent);
+    }
+
 
     public JFrame frame() {
         return frame(this);
@@ -194,9 +228,12 @@ public class MultiChartPanel extends JPanel {
         frame.setVisible(true);
         return frame;
     }
+    
+
 
     public static void windowExitListener(final JFrame frame) {
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 frame.dispose();
                 System.exit(0);

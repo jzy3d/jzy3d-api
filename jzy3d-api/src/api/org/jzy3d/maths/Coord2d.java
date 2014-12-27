@@ -36,7 +36,8 @@ public class Coord2d {
 	}
 	
 	/** Return a duplicate of this 3d coordinate.*/
-	public Coord2d clone(){
+	@Override
+    public Coord2d clone(){
 		return new Coord2d(x,y);
 	}
 
@@ -230,7 +231,8 @@ public class Coord2d {
 	}
 
 	/** Return a string representation of this coordinate.*/
-	public String toString(){
+	@Override
+    public String toString(){
 		return ("x=" + x + " y=" + y);
 	}
 	

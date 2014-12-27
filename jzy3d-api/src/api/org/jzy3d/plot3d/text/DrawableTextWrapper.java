@@ -31,7 +31,8 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	
 	/*******************************************************************************************/
 	
-	public void draw(GL gl, GLU glu, Camera cam){
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam){
 	    doTransform(gl, glu, cam);
 	    BoundingBox3d box = renderer.drawText(gl, glu, cam, txt, position, halign, valign, color);
 	    if(box!=null)
@@ -40,7 +41,8 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	        bbox = null;
 	}
 	
-	public BoundingBox3d getBounds(){
+	@Override
+    public BoundingBox3d getBounds(){
 		return bbox;
 	}
 	
@@ -90,7 +92,8 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	
 	/*******************************************************************************************/
 	
-	public String toString(){
+	@Override
+    public String toString(){
 		return "(TextBitmapDrawable) \""+ txt +"\" at " + position.toString() + " halign=" + halign + " valign=" + valign;
 	}
 	
