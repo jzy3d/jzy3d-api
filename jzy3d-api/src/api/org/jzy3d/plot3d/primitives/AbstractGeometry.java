@@ -130,7 +130,6 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         end(gl);
     }
 
-    protected abstract void begin(GL gl);
 
     protected void vertexGL2(GL gl, Coord3d c) {
         gl.getGL2().glVertex3f(c.x, c.y, c.z);
@@ -148,6 +147,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
     }
 
+    protected abstract void begin(GL gl);
 
     protected void end(GL gl) {
         if (gl.isGL2()) {
