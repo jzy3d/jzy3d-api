@@ -1001,7 +1001,7 @@ public class View {
             cam.setRenderingSphereRadius(radius);
             correctCameraPositionForIncludingTextLabels(gl, glu, viewport); 
         } else {
-            cam.setRenderingSphereRadius((float)bounds.getRadius());
+            cam.setRenderingSphereRadius((float)bounds.getTransformedRadius(transformers));
         }
     }
 
