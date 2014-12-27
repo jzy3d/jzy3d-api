@@ -1141,7 +1141,7 @@ public class View {
     /** A slave view won't clear its color and depth buffer before rendering */
     protected boolean slave = false;
 
-    protected AxeTransformerSet transformers;
+    protected AxeTransformerSet transformers = new AxeTransformerSet();
 
 
 }
