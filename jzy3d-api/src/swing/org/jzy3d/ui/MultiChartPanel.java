@@ -3,6 +3,7 @@ package org.jzy3d.ui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
@@ -130,6 +131,8 @@ public class MultiChartPanel extends JPanel {
                 }
             }
         }
+        
+        //setPreferredSize(new Dimension((charts[0].length + 5)* columnWidthPX, (charts.length + 5) * lineHeightPX));
     }
     
     public String insetsDefault() {
@@ -207,11 +210,11 @@ public class MultiChartPanel extends JPanel {
         return chartPanel;
     }
     
-    public void ui() {
-        JScrollPane pane = new JScrollPane(this);
+    public JFrame ui() {
+        JScrollPane pane = new JScrollPane(this, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         JPanel parent = new JPanel();
         parent.add(pane);
-        MultiChartPanel.frame(parent);
+        return MultiChartPanel.frame(parent);
     }
 
 

@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive;
+package org.jzy3d.plot3d.primitives.log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,18 +10,18 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 public class AxeTransformableLineStrip extends LineStrip {
 	
 
-	 public AxeTransformableLineStrip(AxeTransformerSet transformers) {
+	 public AxeTransformableLineStrip(LogTransformer transformers) {
 	        this(2, transformers);
 	    }
 
-	    public AxeTransformableLineStrip(int n, AxeTransformerSet transformers) {
+	    public AxeTransformableLineStrip(int n, LogTransformer transformers) {
 	    	this.transformers = transformers;
 	        points = new ArrayList<Point>(n);
 	        bbox = new BoundingBox3d();
@@ -30,7 +30,7 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        setWireframeColor(null);
 	    }
 
-	    public AxeTransformableLineStrip(List<Coord3d> coords, AxeTransformerSet transformers) {
+	    public AxeTransformableLineStrip(List<Coord3d> coords, LogTransformer transformers) {
 	        this(transformers);
 	        for (Coord3d c : coords) {
 	            Point p = new Point(c);
@@ -38,7 +38,7 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        }
 	    }
 
-	    public AxeTransformableLineStrip(Point c1, Point c2,AxeTransformerSet transformers) {
+	    public AxeTransformableLineStrip(Point c1, Point c2,LogTransformer transformers) {
 	        this(transformers);
 	        add(c1);
 	        add(c2);
@@ -124,7 +124,7 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        for (Point p : points)
 	            bbox.add(transform.compute(p.xyz));
 	    }
-		AxeTransformerSet transformers;
+		LogTransformer transformers;
 		
 
 }

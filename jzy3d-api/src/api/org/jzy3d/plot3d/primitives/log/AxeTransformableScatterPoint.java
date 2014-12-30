@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive;
+package org.jzy3d.plot3d.primitives.log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,22 +11,22 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.LightPoint;
 import org.jzy3d.plot3d.primitives.ScatterPoint;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 public class AxeTransformableScatterPoint extends ScatterPoint{
 
-	AxeTransformerSet transformers;
+	LogTransformer transformers;
 	
-    public AxeTransformableScatterPoint(AxeTransformerSet transformers) {
+    public AxeTransformableScatterPoint(LogTransformer transformers) {
         bbox = new BoundingBox3d();
         setWidth(1.0f);
         setPoints(new ArrayList<LightPoint>());
         this.transformers = transformers;
     }
 
-    public AxeTransformableScatterPoint(List<LightPoint> points, float width, AxeTransformerSet transformers) {
+    public AxeTransformableScatterPoint(List<LightPoint> points, float width, LogTransformer transformers) {
         bbox = new BoundingBox3d();
         setPoints(points);
         setWidth(width);

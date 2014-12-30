@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive;
+package org.jzy3d.plot3d.primitives.log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,23 +10,23 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterMultiColorList;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 public class AxeTransformableConcurrentScatterMultiColorList extends
 		ConcurrentScatterMultiColorList {
 		
-	AxeTransformerSet transformers;
+	LogTransformer transformers;
 	
-	public AxeTransformableConcurrentScatterMultiColorList(ColorMapper mapper, AxeTransformerSet transformers) {
+	public AxeTransformableConcurrentScatterMultiColorList(ColorMapper mapper, LogTransformer transformers) {
         this(new ArrayList<Coord3d>(), mapper, 1.0f, transformers);
     }
 
-    public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, AxeTransformerSet transformers) {
+    public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, LogTransformer transformers) {
         this(coordinates, mapper, 1.0f, transformers);
     }
 
-    public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, float width, AxeTransformerSet transformers) {
+    public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, float width, LogTransformer transformers) {
         super(coordinates, mapper, width);
         this.transformers = transformers;
     }

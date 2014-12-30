@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive;
+package org.jzy3d.plot3d.primitives.log;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -7,27 +7,27 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 public class AxeTransformableScatter extends Scatter{
-	AxeTransformerSet transformers;
-	 public AxeTransformableScatter(AxeTransformerSet transformers) {
+	LogTransformer transformers;
+	 public AxeTransformableScatter(LogTransformer transformers) {
 	        bbox = new BoundingBox3d();
 	        this.transformers = transformers;
 	        setWidth(1.0f);
 	        setColor(Color.BLACK);
 	    }
 
-	    public AxeTransformableScatter(Coord3d[] coordinates, AxeTransformerSet transformers) {
+	    public AxeTransformableScatter(Coord3d[] coordinates, LogTransformer transformers) {
 	        this(coordinates, Color.BLACK, transformers);
 	    }
 
-	    public AxeTransformableScatter(Coord3d[] coordinates, Color rgb, AxeTransformerSet transformers) {
+	    public AxeTransformableScatter(Coord3d[] coordinates, Color rgb, LogTransformer transformers) {
 	        this(coordinates, rgb, 1.0f, transformers);
 	    }
 
-	    public AxeTransformableScatter(Coord3d[] coordinates, Color rgb, float width, AxeTransformerSet transformers) {
+	    public AxeTransformableScatter(Coord3d[] coordinates, Color rgb, float width, LogTransformer transformers) {
 	        bbox = new BoundingBox3d();
 	        this.transformers = transformers;
 	        setData(coordinates);
@@ -35,11 +35,11 @@ public class AxeTransformableScatter extends Scatter{
 	        setColor(rgb);
 	    }
 
-	    public AxeTransformableScatter(Coord3d[] coordinates, Color[] colors, AxeTransformerSet transformers) {
+	    public AxeTransformableScatter(Coord3d[] coordinates, Color[] colors, LogTransformer transformers) {
 	        this(coordinates, colors, 1.0f, transformers);
 	    }
 
-	    public AxeTransformableScatter(Coord3d[] coordinates, Color[] colors, float width, AxeTransformerSet transformers) {
+	    public AxeTransformableScatter(Coord3d[] coordinates, Color[] colors, float width, LogTransformer transformers) {
 	        bbox = new BoundingBox3d();
 	        this.transformers = transformers;
 	        setData(coordinates);

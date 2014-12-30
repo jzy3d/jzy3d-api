@@ -13,6 +13,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
@@ -46,257 +47,302 @@ import org.jzy3d.plot3d.transform.Transform;
  */
 public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
 
-	/**
-	 * Performs all required operation to cleanup the Drawable.
-	 */
-	public void dispose() {
-		if (listeners != null)
-			listeners.clear();
-	}
+    /**
+     * Performs all required operation to cleanup the Drawable.
+     */
+    public void dispose() {
+        if (listeners != null)
+            listeners.clear();
+    }
 
-	/**
-	 * Call OpenGL2 routines for rendering the object.
-	 * 
-	 * @param gl
-	 *            GL2 context
-	 * @param glu
-	 *            GLU context
-	 * @param cam
-	 *            a reference to a shooting Camera.
-	 */
-	@Override
+    /**
+     * Call OpenGL2 routines for rendering the object.
+     * 
+     * @param gl
+     *            GL2 context
+     * @param glu
+     *            GLU context
+     * @param cam
+     *            a reference to a shooting Camera.
+     */
+    @Override
     public abstract void draw(GL gl, GLU glu, Camera cam);
 
-	public abstract void applyGeometryTransform(Transform transform);
+    public abstract void applyGeometryTransform(Transform transform);
 
-	public abstract void updateBounds();
+    public abstract void updateBounds();
 
-	public void doTransform(GL gl, GLU glu, Camera cam) {
-		if (transformBefore != null) {
-			if (transformBefore != null)
-				transformBefore.execute(gl, true);
-			if (transform != null)
-				transform.execute(gl, false);
-		} else {
-			if (transform != null)
-				transform.execute(gl);
-		}
-	}
+    public void doTransform(GL gl, GLU glu, Camera cam) {
+        if (transformBefore != null) {
+            if (transformBefore != null)
+                transformBefore.execute(gl, true);
+            if (transform != null)
+                transform.execute(gl, false);
+        } else {
+            if (transform != null)
+                transform.execute(gl);
+        }
+    }
 
-	protected void doDrawBounds(GL gl, GLU glu, Camera cam) {
-		if (isBoundingBoxDisplayed()) {
-			Parallelepiped p = new Parallelepiped(getBounds());
-			p.setFaceDisplayed(false);
-			p.setWireframeColor(getBoundingBoxColor());
-			p.draw(gl, glu, cam);
-		}
-	}
+    protected void doDrawBounds(GL gl, GLU glu, Camera cam) {
+        if (isBoundingBoxDisplayed()) {
+            Parallelepiped p = new Parallelepiped(getBounds());
+            p.setFaceDisplayed(false);
+            p.setWireframeColor(getBoundingBoxColor());
+            p.draw(gl, glu, cam);
+        }
+    }
 
-	protected void call(GL gl, Color c) {
-		if (gl.isGL2()) {
-			gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
-		} else {
-			GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
-		}
-	}
+    /**
+     * A helper to call glVerted3f on the input coordinate. For GL2 profile only.
+     * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
+     */
+    protected void vertexGL2(GL gl, Coord3d c) {
+        if (logTransformer != null) {
+            gl.getGL2().glVertex3f(c.x, c.y, c.z);
+        } else {
+            gl.getGL2().glVertex3f(logTransformer.getX().compute(c.x), logTransformer.getY().compute(c.y), logTransformer.getZ().compute(c.z));
+        }
+    }
 
-	protected void call(GL gl, Color c, float alpha) {
-		if (gl.isGL2()) {
-			gl.getGL2().glColor4f(c.r, c.g, c.b, alpha);
-		} else {
-			GLES2CompatUtils.glColor4f(c.r, c.g, c.b, alpha);
-		}
-	}
+    /**
+     * A helper to call glVerted3f on the input coordinate. For GLES2 profile only.
+     * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
+     */
+    protected void vertexGLES2(Coord3d c) {
+        if(logTransformer==null){
+            GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);            
+        }
+        else{
+            GLES2CompatUtils.glVertex3f(logTransformer.getX().compute(c.x), logTransformer.getY().compute(c.y),logTransformer.getZ().compute(c.z));
+        }
+    }
 
-	protected void callWithAlphaFactor(GL gl, Color c, float alpha) {
-		if (gl.isGL2()) {
-			gl.getGL2().glColor4f(c.r, c.g, c.b, c.a * alpha);
-		} else {
-			GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a * alpha);
-		}
-	}
+    /** A helper to call glColor4f on the input color. For GL2 profile only. */
+    protected void colorGL2(GL gl, Color c) {
+        gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
+    }
 
-	protected void negative(Color c) {
-		c.r = 1 - c.r;
-		c.g = 1 - c.g;
-		c.b = 1 - c.b;
-	}
+    /** A helper to call glColor4f on the input color. For GLES2 profile only. */
+    protected void colorGLES2(Color c) {
+        GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
+    }
 
-	/**
-	 * Set object's transformation that is applied at the beginning of a call to
-	 * {@link #draw(GL,GLU,Camera)}.
-	 * 
-	 * @param transform
-	 */
-	public void setTransform(Transform transform) {
-		this.transform = transform;
+    protected void call(GL gl, Color c) {
+        if (gl.isGL2()) {
+            colorGL2(gl, c);
+        } else {
+            colorGLES2(c);
+        }
+    }
 
-		fireDrawableChanged(DrawableChangedEvent.FIELD_TRANSFORM);
-	}
+    protected void call(GL gl, Color c, float alpha) {
+        if (gl.isGL2()) {
+            gl.getGL2().glColor4f(c.r, c.g, c.b, alpha);
+        } else {
+            GLES2CompatUtils.glColor4f(c.r, c.g, c.b, alpha);
+        }
+    }
 
-	/**
-	 * Get object's transformation that is applied at the beginning of a call to
-	 * {@link #draw(GL,GLU,Camera)}.
-	 * 
-	 * @return transform
-	 */
-	public Transform getTransform() {
-		return transform;
-	}
+    protected void callWithAlphaFactor(GL gl, Color c, float alpha) {
+        if (gl.isGL2()) {
+            gl.getGL2().glColor4f(c.r, c.g, c.b, c.a * alpha);
+        } else {
+            GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a * alpha);
+        }
+    }
 
-	public Transform getTransformBefore() {
-		return transformBefore;
-	}
+    protected void negative(Color c) {
+        c.r = 1 - c.r;
+        c.g = 1 - c.g;
+        c.b = 1 - c.b;
+    }
 
-	public void setTransformBefore(Transform transformBefore) {
-		this.transformBefore = transformBefore;
-	}
+    /**
+     * Set object's transformation that is applied at the beginning of a call to
+     * {@link #draw(GL,GLU,Camera)}.
+     * 
+     * @param transform
+     */
+    public void setTransform(Transform transform) {
+        this.transform = transform;
 
-	/**
-	 * Return the BoundingBox of this object.
-	 * 
-	 * @return a bounding box
-	 */
-	public BoundingBox3d getBounds() {
-		return bbox;
-	}
+        fireDrawableChanged(DrawableChangedEvent.FIELD_TRANSFORM);
+    }
 
-	/**
-	 * Return the barycentre of this object, which is computed as the center of
-	 * its bounding box. If the bounding box is not available, the returned
-	 * value is {@link Coord3d.INVALID}
-	 * 
-	 * @return the center of the bounding box, or {@link Coord3d.INVALID}.
-	 */
-	public Coord3d getBarycentre() {
-		if (bbox != null)
-			return bbox.getCenter();
-		else
-			return Coord3d.INVALID.clone();
-	}
+    /**
+     * Get object's transformation that is applied at the beginning of a call to
+     * {@link #draw(GL,GLU,Camera)}.
+     * 
+     * @return transform
+     */
+    public Transform getTransform() {
+        return transform;
+    }
 
-	/**
-	 * Set to true or false the displayed status of this object.
-	 * 
-	 * @param status
-	 */
-	public void setDisplayed(boolean status) {
-		displayed = status;
+    public Transform getTransformBefore() {
+        return transformBefore;
+    }
 
-		fireDrawableChanged(DrawableChangedEvent.FIELD_DISPLAYED);
-	}
+    public void setTransformBefore(Transform transformBefore) {
+        this.transformBefore = transformBefore;
+    }
 
-	/** Return the display status of this object. */
-	public boolean isDisplayed() {
-		return displayed;
-	}
+    /**
+     * Return the BoundingBox of this object.
+     * 
+     * @return a bounding box
+     */
+    public BoundingBox3d getBounds() {
+        return bbox;
+    }
 
-	/** Return the distance of the object center to the {@link Camera}'s eye. */
-	@Override
+    /**
+     * Return the barycentre of this object, which is computed as the center of
+     * its bounding box. If the bounding box is not available, the returned
+     * value is {@link Coord3d.INVALID}
+     * 
+     * @return the center of the bounding box, or {@link Coord3d.INVALID}.
+     */
+    public Coord3d getBarycentre() {
+        if (bbox != null)
+            return bbox.getCenter();
+        else
+            return Coord3d.INVALID.clone();
+    }
+
+    /**
+     * Set to true or false the displayed status of this object.
+     * 
+     * @param status
+     */
+    public void setDisplayed(boolean status) {
+        displayed = status;
+
+        fireDrawableChanged(DrawableChangedEvent.FIELD_DISPLAYED);
+    }
+
+    /** Return the display status of this object. */
+    public boolean isDisplayed() {
+        return displayed;
+    }
+
+    /** Return the distance of the object center to the {@link Camera}'s eye. */
+    @Override
     public double getDistance(Camera camera) {
-		return getBarycentre().distance(camera.getEye());
-	}
+        return getBarycentre().distance(camera.getEye());
+    }
 
-	@Override
+    @Override
     public double getShortestDistance(Camera camera) {
-		return getDistance(camera);
-	}
+        return getDistance(camera);
+    }
 
-	@Override
+    @Override
     public double getLongestDistance(Camera camera) {
-		return getDistance(camera);
-	}
+        return getDistance(camera);
+    }
 
-	/* */
+    /* */
 
-	public void setLegend(ILegend face) {
-		this.legend = face;
-		legendDisplayed = true;
-		fireDrawableChanged(DrawableChangedEvent.FIELD_METADATA);
-	}
+    public void setLegend(ILegend face) {
+        this.legend = face;
+        legendDisplayed = true;
+        fireDrawableChanged(DrawableChangedEvent.FIELD_METADATA);
+    }
 
-	public ILegend getLegend() {
-		return legend;
-	}
+    public ILegend getLegend() {
+        return legend;
+    }
 
-	public boolean hasLegend() {
-		return (legend != null);
-	}
+    public boolean hasLegend() {
+        return (legend != null);
+    }
 
-	public void setLegendDisplayed(boolean status) {
-		legendDisplayed = status;
-	}
+    public void setLegendDisplayed(boolean status) {
+        legendDisplayed = status;
+    }
 
-	public boolean isLegendDisplayed() {
-		return legendDisplayed;
-	}
+    public boolean isLegendDisplayed() {
+        return legendDisplayed;
+    }
 
-	public boolean isBoundingBoxDisplayed() {
-		return boundingBoxDisplayed;
-	}
+    public boolean isBoundingBoxDisplayed() {
+        return boundingBoxDisplayed;
+    }
 
-	public void setBoundingBoxDisplayed(boolean boundingBoxDisplayed) {
-		this.boundingBoxDisplayed = boundingBoxDisplayed;
-	}
+    public void setBoundingBoxDisplayed(boolean boundingBoxDisplayed) {
+        this.boundingBoxDisplayed = boundingBoxDisplayed;
+    }
 
-	public Color getBoundingBoxColor() {
-		return boundingBoxColor;
-	}
+    public Color getBoundingBoxColor() {
+        return boundingBoxColor;
+    }
 
-	public void setBoundingBoxColor(Color boundingBoxColor) {
-		this.boundingBoxColor = boundingBoxColor;
-	}
+    public void setBoundingBoxColor(Color boundingBoxColor) {
+        this.boundingBoxColor = boundingBoxColor;
+    }
+    
+    public LogTransformer getLogTransformer() {
+        return logTransformer;
+    }
 
-	/* */
+    public void setLogTransformer(LogTransformer logTransformer) {
+        this.logTransformer = logTransformer;
+    }
 
-	public void addDrawableListener(IDrawableListener listener) {
-		if (listeners == null)
-			listeners = new ArrayList<IDrawableListener>();
-		listeners.add(listener);
-		hasListeners = true;
-	}
+    /* */
 
-	public void removeDrawableListener(IDrawableListener listener) {
-		listeners.remove(listener);
-	}
+    public void addDrawableListener(IDrawableListener listener) {
+        if (listeners == null)
+            listeners = new ArrayList<IDrawableListener>();
+        listeners.add(listener);
+        hasListeners = true;
+    }
 
-	protected void fireDrawableChanged(int eventType) {
-		if (listeners != null) {
-			fireDrawableChanged(new DrawableChangedEvent(this, eventType));
-		}
-	}
+    public void removeDrawableListener(IDrawableListener listener) {
+        listeners.remove(listener);
+    }
 
-	protected void fireDrawableChanged(DrawableChangedEvent e) {
-		if (listeners != null) {
-			for (IDrawableListener listener : listeners) {
-				listener.drawableChanged(e);
-			}
-		}
-	}
+    protected void fireDrawableChanged(int eventType) {
+        if (listeners != null) {
+            fireDrawableChanged(new DrawableChangedEvent(this, eventType));
+        }
+    }
 
-	/* */
+    protected void fireDrawableChanged(DrawableChangedEvent e) {
+        if (listeners != null) {
+            for (IDrawableListener listener : listeners) {
+                listener.drawableChanged(e);
+            }
+        }
+    }
 
-	@Override
+    /* */
+
+    @Override
     public String toString() {
-		return toString(0);
-	}
+        return toString(0);
+    }
 
-	public String toString(int depth) {
-		return Utils.blanks(depth) + "(" + this.getClass().getSimpleName()
-				+ ")";
-	}
+    public String toString(int depth) {
+        return Utils.blanks(depth) + "(" + this.getClass().getSimpleName() + ")";
+    }
 
-	/* */
+    /* */
 
-	protected Transform transform;
-	protected Transform transformBefore;
-	protected BoundingBox3d bbox;
-	protected ILegend legend = null;
-	protected List<IDrawableListener> listeners;
-	protected boolean hasListeners = true;
+    protected Transform transform;
+    protected Transform transformBefore;
+    protected BoundingBox3d bbox;
+    protected ILegend legend = null;
+    protected List<IDrawableListener> listeners;
+    protected boolean hasListeners = true;
 
-	protected boolean displayed = true;
-	protected boolean legendDisplayed = false;
-	protected boolean boundingBoxDisplayed = false;
-	protected Color boundingBoxColor = Color.BLACK.clone();
+    protected boolean displayed = true;
+    protected boolean legendDisplayed = false;
+    protected boolean boundingBoxDisplayed = false;
+    protected Color boundingBoxColor = Color.BLACK.clone();
+
+    protected LogTransformer logTransformer = null;
+
 }
