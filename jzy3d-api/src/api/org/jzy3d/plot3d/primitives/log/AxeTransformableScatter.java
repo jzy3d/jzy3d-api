@@ -89,6 +89,6 @@ public class AxeTransformableScatter extends Scatter{
 	    public void updateBounds() {
 	        bbox.reset();
 	        for (Coord3d c : coordinates)
-	        	bbox.add(transformers.computePoint(c));
+	        	bbox.add(transformers.compute(c));
 	    }
 }
