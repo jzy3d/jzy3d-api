@@ -10,12 +10,12 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.axes.layout.AxeBoxLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.primitives.log.GlVertexExecutor;
-import org.jzy3d.plot3d.primitives.log.transformers.AxeTransform;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.transform.log.AxeTransform;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 /**
  * TODO : 

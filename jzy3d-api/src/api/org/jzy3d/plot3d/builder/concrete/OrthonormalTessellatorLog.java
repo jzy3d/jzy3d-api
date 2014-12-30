@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.builder.concrete;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.log.AxeTransformablePolygon;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 public class OrthonormalTessellatorLog extends OrthonormalTessellator {
     LogTransformer transformers;

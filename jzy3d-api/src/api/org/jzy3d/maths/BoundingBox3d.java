@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 /**
  * A BoundingBox3d stores a couple of maximal and minimal limit on each

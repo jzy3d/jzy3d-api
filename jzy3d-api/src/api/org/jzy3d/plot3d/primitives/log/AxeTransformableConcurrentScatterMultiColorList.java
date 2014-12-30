@@ -10,8 +10,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterMultiColorList;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 public class AxeTransformableConcurrentScatterMultiColorList extends
 		ConcurrentScatterMultiColorList {

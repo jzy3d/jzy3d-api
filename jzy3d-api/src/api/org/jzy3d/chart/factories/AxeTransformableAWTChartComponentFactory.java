@@ -7,10 +7,10 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.primitives.axes.LogAxeBox;
-import org.jzy3d.plot3d.primitives.log.transformers.AxeTransform;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.transform.log.AxeTransform;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 public class AxeTransformableAWTChartComponentFactory  extends AWTChartComponentFactory{
 	

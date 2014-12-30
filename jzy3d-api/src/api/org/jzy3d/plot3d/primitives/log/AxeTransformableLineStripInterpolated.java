@@ -9,7 +9,7 @@ import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.LineStripInterpolated;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 public class AxeTransformableLineStripInterpolated extends LineStripInterpolated{
 
