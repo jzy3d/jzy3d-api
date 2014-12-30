@@ -14,8 +14,8 @@ import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
-import org.jzy3d.plot3d.transform.log.AxeTransform;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransform;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
  * TODO : 
@@ -32,13 +32,13 @@ import org.jzy3d.plot3d.transform.log.LogTransformer;
  * @author Martin Pernollet
  */
 public class LogAxeBox extends AxeBox {
-    public LogAxeBox(BoundingBox3d bbox,LogTransformer transformers) {
+    public LogAxeBox(BoundingBox3d bbox,SpaceTransformer transformers) {
         this(bbox, new AxeBoxLayout(),transformers);
     }
 
-    public LogAxeBox(BoundingBox3d bbox, IAxeLayout layout, LogTransformer transformers) {
+    public LogAxeBox(BoundingBox3d bbox, IAxeLayout layout, SpaceTransformer transformers) {
         super(bbox,layout);
-        this.transformers = transformers;
+        this.spaceTransformer = transformers;
     }
 
     /** reset to identity and apply scaling */
@@ -70,7 +70,7 @@ public class LogAxeBox extends AxeBox {
                     //System.out.println(c3d.x);
                     //System.out.println(Math.log(c3d.x));
                     
-                    GlVertexExecutor.Vertex(gl, c3d, transformers);
+                    GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                 }
                 gl.getGL2().glEnd();
             } else {
@@ -79,7 +79,7 @@ public class LogAxeBox extends AxeBox {
                 GLES2CompatUtils.glBegin(GL2.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
                     Coord3d c3d = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]);
-                    GlVertexExecutor.Vertex(gl, c3d, transformers);
+                    GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                 }
                 GLES2CompatUtils.glEnd();
             }
@@ -98,9 +98,9 @@ public class LogAxeBox extends AxeBox {
                 if (gl.isGL2()) {
                     gl.getGL2().glBegin(GL2.GL_LINES);
                     Coord3d c3d = new Coord3d(xticks[t], quady[quad][0], quadz[quad][0]);
-                    GlVertexExecutor.Vertex(gl, c3d, transformers);
+                    GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                     c3d = new Coord3d(xticks[t], quady[quad][2], quadz[quad][2]);
-                    GlVertexExecutor.Vertex(gl, c3d, transformers);
+                    GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                     gl.getGL2().glEnd();
                 } else {
                     // FIXME TO BE REWRITTEN ANDROID
@@ -114,9 +114,9 @@ public class LogAxeBox extends AxeBox {
                 if (gl.isGL2()) {
                     gl.getGL2().glBegin(GL2.GL_LINES);
                     Coord3d c3d = new Coord3d(quadx[quad][0], yticks[t], quadz[quad][0]);
-                    GlVertexExecutor.Vertex(gl, c3d, transformers);
+                    GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                     c3d = new Coord3d(quadx[quad][2], yticks[t], quadz[quad][2]);
-                    GlVertexExecutor.Vertex(gl, c3d, transformers);
+                    GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                     gl.getGL2().glEnd();
                 } else {
                     // FIXME TO BE REWRITTEN ANDROID
@@ -130,9 +130,9 @@ public class LogAxeBox extends AxeBox {
                 if (gl.isGL2()) {
                     gl.getGL2().glBegin(GL2.GL_LINES);
                     Coord3d c3d = new Coord3d(quadx[quad][0], quady[quad][0], zticks[t]);
-                    GlVertexExecutor.Vertex(gl, c3d, transformers);
+                    GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                     c3d = new Coord3d(quadx[quad][2], quady[quad][2], zticks[t]);
-                    GlVertexExecutor.Vertex(gl, c3d, transformers);
+                    GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                     gl.getGL2().glEnd();
                 } else {
                     // FIXME TO BE REWRITTEN ANDROID
@@ -162,9 +162,9 @@ public class LogAxeBox extends AxeBox {
 
         // Computes POSition of ticks lying on the selected axe
         // (i.e. 1st point of the tick line)
-        double xpos = transformers.getX().compute(normx[quad_0]) + transformers.getX().compute(normx[quad_1]);
-        double ypos = transformers.getY().compute(normy[quad_0]) + transformers.getY().compute(normy[quad_1]);
-        double zpos = transformers.getZ().compute(normz[quad_0]) + transformers.getZ().compute(normz[quad_1]);
+        double xpos = spaceTransformer.getX().compute(normx[quad_0]) + spaceTransformer.getX().compute(normx[quad_1]);
+        double ypos = spaceTransformer.getY().compute(normy[quad_0]) + spaceTransformer.getY().compute(normy[quad_1]);
+        double zpos = spaceTransformer.getZ().compute(normz[quad_0]) + spaceTransformer.getZ().compute(normz[quad_1]);
 
         // Computes the DIRection of the ticks
         // assuming initial vector point is the center
@@ -218,21 +218,21 @@ public class LogAxeBox extends AxeBox {
             // Shift the tick vector along the selected axis
             // and set the tick length
             if (isX(direction)) {
-                xpos = transformers.getX().compute((float) ticks[t]);
+                xpos = spaceTransformer.getX().compute((float) ticks[t]);
                 xlab = xpos;
-                ylab = Math.signum(tickLength * ydir) * (yrange / transformers.getY().compute(Math.abs(tickLength))) * transformers.getY().compute(Math.abs(ydir)) + ypos;
-                zlab = Math.signum(tickLength * ydir) * (zrange / transformers.getZ().compute(Math.abs(tickLength))) * transformers.getZ().compute(Math.abs(zdir)) + zpos;
+                ylab = Math.signum(tickLength * ydir) * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength))) * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
+                zlab = Math.signum(tickLength * ydir) * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength))) * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
                 tickLabel = layout.getXTickRenderer().format(xpos);
             } else if (isY(direction)) {
-                ypos = transformers.getY().compute((float) ticks[t]);
-                xlab = Math.signum(tickLength * xdir) * (xrange / transformers.getX().compute(Math.abs(tickLength))) * transformers.getX().compute(Math.abs(xdir)) + xpos;
+                ypos = spaceTransformer.getY().compute((float) ticks[t]);
+                xlab = Math.signum(tickLength * xdir) * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength))) * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
                 ylab = ypos;
-                zlab = Math.signum(tickLength * zdir) * (zrange / transformers.getZ().compute(Math.abs(tickLength))) * transformers.getZ().compute(Math.abs(zdir)) + zpos;
+                zlab = Math.signum(tickLength * zdir) * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength))) * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
                 tickLabel = layout.getYTickRenderer().format(ypos);
             } else { // (axis==AXE_Z)
-                zpos = transformers.getZ().compute((float) ticks[t]);
-                xlab = Math.signum(tickLength * xdir) * (xrange / transformers.getX().compute(Math.abs(tickLength))) * transformers.getX().compute(Math.abs(xdir)) + xpos;
-                ylab = Math.signum(tickLength * ydir) * (yrange / transformers.getY().compute(Math.abs(tickLength))) * transformers.getY().compute(Math.abs(ydir)) + ypos;
+                zpos = spaceTransformer.getZ().compute((float) ticks[t]);
+                xlab = Math.signum(tickLength * xdir) * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength))) * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
+                ylab = Math.signum(tickLength * ydir) * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength))) * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
                 zlab = zpos;
                 tickLabel = layout.getZTickRenderer().format(zpos);
             }
@@ -255,5 +255,4 @@ public class LogAxeBox extends AxeBox {
         }
     }
 
-    protected LogTransformer transformers;
 }

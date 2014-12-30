@@ -18,7 +18,7 @@ import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
  * A {@link AbstractDrawable} defines objects that may be rendered into an
@@ -98,10 +98,10 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
      * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
      */
     protected void vertexGL2(GL gl, Coord3d c) {
-        if (logTransformer != null) {
+        if (spaceTransformer == null) {
             gl.getGL2().glVertex3f(c.x, c.y, c.z);
         } else {
-            gl.getGL2().glVertex3f(logTransformer.getX().compute(c.x), logTransformer.getY().compute(c.y), logTransformer.getZ().compute(c.z));
+            gl.getGL2().glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y), spaceTransformer.getZ().compute(c.z));
         }
     }
 
@@ -110,11 +110,11 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
      * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
      */
     protected void vertexGLES2(Coord3d c) {
-        if(logTransformer==null){
+        if(spaceTransformer==null){
             GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);            
         }
         else{
-            GLES2CompatUtils.glVertex3f(logTransformer.getX().compute(c.x), logTransformer.getY().compute(c.y),logTransformer.getZ().compute(c.z));
+            GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y),spaceTransformer.getZ().compute(c.z));
         }
     }
 
@@ -283,12 +283,12 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
         this.boundingBoxColor = boundingBoxColor;
     }
     
-    public LogTransformer getLogTransformer() {
-        return logTransformer;
+    public SpaceTransformer getSpaceTransformer() {
+        return spaceTransformer;
     }
 
-    public void setLogTransformer(LogTransformer logTransformer) {
-        this.logTransformer = logTransformer;
+    public void setSpaceTransformer(SpaceTransformer spaceTransformer) {
+        this.spaceTransformer = spaceTransformer;
     }
 
     /* */
@@ -343,6 +343,6 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
     protected boolean boundingBoxDisplayed = false;
     protected Color boundingBoxColor = Color.BLACK.clone();
 
-    protected LogTransformer logTransformer = null;
+    protected SpaceTransformer spaceTransformer = null;
 
 }

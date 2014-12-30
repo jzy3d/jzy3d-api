@@ -9,11 +9,11 @@ import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.LineStripInterpolated;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformableLineStripInterpolated extends LineStripInterpolated{
 
-	public AxeTransformableLineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution, LogTransformer transformers){
+	public AxeTransformableLineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution, SpaceTransformer transformers){
 	    this.transformers = transformers;
 		this.controlCoords = controlPoints;
 		this.resolution = resolution;
@@ -33,5 +33,5 @@ public class AxeTransformableLineStripInterpolated extends LineStripInterpolated
         return new AxeTransformablePoint(coord, color, width, transformers);
     }
 	
-	LogTransformer transformers;
+	SpaceTransformer transformers;
 }

@@ -10,25 +10,25 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformablePoint extends Point {
 	/** Intialize a point at the origin, with a white color and a width of 1. */
-	public AxeTransformablePoint(LogTransformer transformers) {
+	public AxeTransformablePoint(SpaceTransformer transformers) {
 		this(Coord3d.ORIGIN, Color.WHITE, 1.0f, transformers);
 	}
 
 	/** Intialize a point with a white color and a width of 1. */
-	public AxeTransformablePoint(Coord3d xyz, LogTransformer transformers) {
+	public AxeTransformablePoint(Coord3d xyz, SpaceTransformer transformers) {
 		this(xyz, Color.WHITE, 1.0f, transformers);
 	}
 
 	/** Intialize a point with a width of 1. */
-	public AxeTransformablePoint(Coord3d xyz, Color rgb, LogTransformer transformers) {
+	public AxeTransformablePoint(Coord3d xyz, Color rgb, SpaceTransformer transformers) {
 		this(xyz, rgb, 1.0f, transformers);
 	}
 
-	public AxeTransformablePoint(Coord3d xyz, Color rgb, float width, LogTransformer transformers)  {
+	public AxeTransformablePoint(Coord3d xyz, Color rgb, float width, SpaceTransformer transformers)  {
 		super(xyz,rgb,width);
 		this.transformers = transformers;
 		updateBounds();
@@ -67,7 +67,7 @@ public class AxeTransformablePoint extends Point {
 		}
 	}
 	
-	LogTransformer transformers;
+	SpaceTransformer transformers;
 
 
 }

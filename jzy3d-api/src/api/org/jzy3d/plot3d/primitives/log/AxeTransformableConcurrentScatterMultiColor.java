@@ -8,22 +8,22 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterMultiColor;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformableConcurrentScatterMultiColor extends
 		ConcurrentScatterMultiColor {
 	
-	LogTransformer transformers;
+	SpaceTransformer transformers;
 	
-	  public AxeTransformableConcurrentScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper, LogTransformer transformers) {
+	  public AxeTransformableConcurrentScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper, SpaceTransformer transformers) {
 	        this(coordinates, colors, mapper, 1.0f, transformers);
 	    }
 
-	    public AxeTransformableConcurrentScatterMultiColor(Coord3d[] coordinates, ColorMapper mapper, LogTransformer transformers) {
+	    public AxeTransformableConcurrentScatterMultiColor(Coord3d[] coordinates, ColorMapper mapper, SpaceTransformer transformers) {
 	        this(coordinates, null, mapper, 1.0f, transformers);
 	    }
 
-	    public AxeTransformableConcurrentScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper, float width, LogTransformer transformers) {
+	    public AxeTransformableConcurrentScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper, float width, SpaceTransformer transformers) {
 	        super(coordinates, colors, mapper, width);
 	        this.transformers = transformers;
 	    }
