@@ -16,9 +16,9 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.log.AxeTransformableConcurrentScatterMultiColor;
 import org.jzy3d.plot3d.primitives.log.AxeTransformableConcurrentScatterMultiColorList;
 import org.jzy3d.plot3d.primitives.log.AxeTransformableScatter;
-import org.jzy3d.plot3d.primitives.log.transformers.AxeTransformLog;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.transform.log.AxeTransformLog;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 
 public class LogScatterTest extends AbstractAnalysis{

@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.log.transformers;
+package org.jzy3d.plot3d.transform.log;
 
 /**
  * Specify an axe transform (e.g. for log axes)

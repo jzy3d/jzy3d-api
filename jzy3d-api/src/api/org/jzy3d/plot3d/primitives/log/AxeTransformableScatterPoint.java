@@ -11,9 +11,9 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.LightPoint;
 import org.jzy3d.plot3d.primitives.ScatterPoint;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 public class AxeTransformableScatterPoint extends ScatterPoint{
 

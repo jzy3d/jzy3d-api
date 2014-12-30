@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.log.transformers;
+package org.jzy3d.plot3d.transform.log;
 
 /**
  * Apply log transform if value is greater than 0 (otherwise return 0).
