@@ -195,7 +195,7 @@ public class BoundingBox3d {
     }
 
     public double getTransformedRadius(LogTransformer transformers) {
-        return getTransformedCenter(transformers).distance(transformers.computePoint(new Coord3d(xmin, ymin, zmin)));
+        return getTransformedCenter(transformers).distance(transformers.compute(new Coord3d(xmin, ymin, zmin)));
     }
 
     /**

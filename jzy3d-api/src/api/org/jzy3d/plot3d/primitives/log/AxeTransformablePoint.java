@@ -59,7 +59,7 @@ public class AxeTransformablePoint extends Point {
 	public void updateBounds() {
 		bbox.reset();
 		if(transformers != null) {
-			bbox.add(transformers.computePoint(this.xyz));
+			bbox.add(transformers.compute(this.xyz));
 			System.out.println(this.getClass() + "log");
 		} else {
 			bbox.add(this);

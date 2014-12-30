@@ -3,6 +3,12 @@ package org.jzy3d.plot3d.primitives.log.transformers;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 
+/**
+ * A helper to apply 3 {@link AxeTransform} on each dimension of a {@link Coord3d}.
+ * 
+ * @author 
+ *
+ */
 public class LogTransformer {
     protected AxeTransform x;
     protected AxeTransform y;
@@ -44,12 +50,11 @@ public class LogTransformer {
         this.z = z;
     }
 
-    public Coord3d computePoint(Coord3d point) {
+    public Coord3d compute(Coord3d point) {
         return new Coord3d(getX().compute(point.x), getY().compute(point.y), getZ().compute(point.z));
     }
 
-    public Coord2d computePoint(Coord2d point) {
+    public Coord2d compute(Coord2d point) {
         return new Coord2d(getX().compute(point.x), getY().compute(point.y));
     }
-
 }
