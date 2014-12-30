@@ -13,11 +13,11 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableConcurrentScatterMultiColor;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableConcurrentScatterMultiColorList;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.AxeTransformableScatter;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.LogAxeTransformer;
+import org.jzy3d.plot3d.primitives.log.AxeTransformableConcurrentScatterMultiColor;
+import org.jzy3d.plot3d.primitives.log.AxeTransformableConcurrentScatterMultiColorList;
+import org.jzy3d.plot3d.primitives.log.AxeTransformableScatter;
+import org.jzy3d.plot3d.primitives.log.transformers.AxeTransformLog;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 
@@ -27,7 +27,7 @@ public class LogScatterTest extends AbstractAnalysis{
 			AnalysisLauncher.open(new LogScatterTest());
 		}
 		
-		AxeTransformerSet transformers = new AxeTransformerSet(null, null,new LogAxeTransformer());
+		LogTransformer transformers = new LogTransformer(null, null,new AxeTransformLog());
 		
 		public void init(){
 	        int size = 500000;

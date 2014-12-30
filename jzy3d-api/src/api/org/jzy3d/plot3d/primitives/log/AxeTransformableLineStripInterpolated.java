@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive;
+package org.jzy3d.plot3d.primitives.log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,11 +9,11 @@ import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.LineStripInterpolated;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 
 public class AxeTransformableLineStripInterpolated extends LineStripInterpolated{
 
-	public AxeTransformableLineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution, AxeTransformerSet transformers){
+	public AxeTransformableLineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution, LogTransformer transformers){
 	    this.transformers = transformers;
 		this.controlCoords = controlPoints;
 		this.resolution = resolution;
@@ -33,5 +33,5 @@ public class AxeTransformableLineStripInterpolated extends LineStripInterpolated
         return new AxeTransformablePoint(coord, color, width, transformers);
     }
 	
-	AxeTransformerSet transformers;
+	LogTransformer transformers;
 }

@@ -73,12 +73,14 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         doDrawBounds(gl, glu, cam);
     }
 
+    /** Drawing the point list in wireframe mode if GL2 profile is available */
     protected void callPointForWireframe(GL gl) {
         if (gl.isGL2()) {
             callPointsForWireframeGL2(gl);
         }
     }
 
+    /** Drawing the point list in wireframe mode */
     public void callPointsForWireframeGL2(GL gl) {
         colorGL2(gl, wfcolor);
         gl.glLineWidth(wfwidth);
@@ -90,6 +92,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         end(gl);
     }
 
+    /** Drawing the point list in face mode (polygon content) */
     protected void callPointsForFace(GL gl) {
         if (gl.isGL2()) {
             callPointsForFaceGL2(gl);
@@ -98,10 +101,12 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         }
     }
 
+    /** Drawing the point list in face mode (polygon content) with GLES2 profile */
     public void callPointsForFaceGLES2(GL gl) {
         callPointsForFaceGLES2(gl, points);
     }
 
+    /** Drawing the point list in face mode (polygon content) with GLES2 profile */
     public void callPointsForFaceGLES2(GL gl, List<Point> points) {
         begin(gl);
         for (Point p : points) {
@@ -111,11 +116,12 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
             } else {
                 colorGLES2(p.rgb);
             }
-            vertexGL2(p.xyz);
+            vertexGLES2(p.xyz);
         }
         end(gl);
     }
 
+    /** Drawing the point list in face mode (polygon content) with GL2 profile */
     public void callPointsForFaceGL2(GL gl) {
         begin(gl);
         for (Point p : points) {
@@ -130,22 +136,6 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         end(gl);
     }
 
-
-    protected void vertexGL2(GL gl, Coord3d c) {
-        gl.getGL2().glVertex3f(c.x, c.y, c.z);
-    }
-
-    protected void colorGL2(GL gl, Color c) {
-        gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
-    }
-    
-    protected void vertexGL2(Coord3d c) {
-        GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
-    }
-
-    protected void colorGLES2(Color c) {
-        GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
-    }
 
     protected abstract void begin(GL gl);
 

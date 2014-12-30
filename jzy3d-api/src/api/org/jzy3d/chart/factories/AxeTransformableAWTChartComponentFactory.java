@@ -4,22 +4,22 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformableAxes.AxeTransformableAxeBox;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformer;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.primitives.axes.LogAxeBox;
+import org.jzy3d.plot3d.primitives.log.transformers.AxeTransform;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class AxeTransformableAWTChartComponentFactory  extends AWTChartComponentFactory{
 	
-	AxeTransformerSet transformers;
+	LogTransformer transformers;
 	
 	
 	
 	public AxeTransformableAWTChartComponentFactory(
-			AxeTransformerSet transformers) {
+			LogTransformer transformers) {
 		this.transformers = transformers;
 	}
 
@@ -27,29 +27,29 @@ public class AxeTransformableAWTChartComponentFactory  extends AWTChartComponent
         return chart(Quality.Intermediate);
     }
     
-    public static Chart chart(Quality quality, AxeTransformerSet transformers) {
+    public static Chart chart(Quality quality, LogTransformer transformers) {
     	AxeTransformableAWTChartComponentFactory f = new AxeTransformableAWTChartComponentFactory(transformers);
         return f.newChart(quality, Toolkit.newt);
     }
 
-    public static Chart chart(String toolkit, AxeTransformerSet transformers) {
+    public static Chart chart(String toolkit, LogTransformer transformers) {
     	AxeTransformableAWTChartComponentFactory f = new AxeTransformableAWTChartComponentFactory(transformers);
         return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
     }
 
-    public static Chart chart(Quality quality, Toolkit toolkit, AxeTransformerSet transformers) {
+    public static Chart chart(Quality quality, Toolkit toolkit, LogTransformer transformers) {
     	AxeTransformableAWTChartComponentFactory f = new AxeTransformableAWTChartComponentFactory(transformers);
         return f.newChart(quality, toolkit);
     }
 
-    public static Chart chart(Quality quality, String toolkit, AxeTransformerSet transformers) {
+    public static Chart chart(Quality quality, String toolkit, LogTransformer transformers) {
     	AxeTransformableAWTChartComponentFactory f = new AxeTransformableAWTChartComponentFactory(transformers);
         return f.newChart(quality, toolkit);
     }
 
     @Override
 	public IAxe newAxe(BoundingBox3d box, View view) {
-		AxeTransformableAxeBox axe = new AxeTransformableAxeBox(box,transformers);
+		LogAxeBox axe = new LogAxeBox(box,transformers);
 		axe.setScale(new Coord3d(10.0,1.0,1.0));
 		axe.setView(view);
 		return axe;

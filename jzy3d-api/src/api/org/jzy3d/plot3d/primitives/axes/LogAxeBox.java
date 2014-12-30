@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformableAxes;
+package org.jzy3d.plot3d.primitives.axes;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -7,12 +7,11 @@ import javax.media.opengl.glu.GLU;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.GlVertexExecutor;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformer;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
-import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.layout.AxeBoxLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.log.GlVertexExecutor;
+import org.jzy3d.plot3d.primitives.log.transformers.AxeTransform;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
@@ -32,12 +31,12 @@ import org.jzy3d.plot3d.text.align.Valign;
  * 
  * @author Martin Pernollet
  */
-public class AxeTransformableAxeBox extends AxeBox {
-    public AxeTransformableAxeBox(BoundingBox3d bbox,AxeTransformerSet transformers) {
+public class LogAxeBox extends AxeBox {
+    public LogAxeBox(BoundingBox3d bbox,LogTransformer transformers) {
         this(bbox, new AxeBoxLayout(),transformers);
     }
 
-    public AxeTransformableAxeBox(BoundingBox3d bbox, IAxeLayout layout, AxeTransformerSet transformers) {
+    public LogAxeBox(BoundingBox3d bbox, IAxeLayout layout, LogTransformer transformers) {
         super(bbox,layout);
         this.transformers = transformers;
     }
@@ -256,5 +255,5 @@ public class AxeTransformableAxeBox extends AxeBox {
         }
     }
 
-    protected AxeTransformerSet transformers;
+    protected LogTransformer transformers;
 }
