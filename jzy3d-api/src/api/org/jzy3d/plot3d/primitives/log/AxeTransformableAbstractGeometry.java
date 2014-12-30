@@ -5,20 +5,20 @@ import javax.media.opengl.GL;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractGeometry;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public abstract class AxeTransformableAbstractGeometry extends AbstractGeometry{
 	
-	public AxeTransformableAbstractGeometry(LogTransformer transformers) {
+	public AxeTransformableAbstractGeometry(SpaceTransformer transformers) {
 		super();
-		this.logTransformer = transformers;
+		this.spaceTransformer = transformers;
 	}
 
 	protected void vertexGL2(GL gl, Coord3d c) {
-        GlVertexExecutor.Vertex(gl, c, logTransformer);
+        GlVertexExecutor.Vertex(gl, c, spaceTransformer);
     }
 	
 	protected void vertexGLES2(Coord3d c) {
-		GLES2CompatUtils.glVertex3f(logTransformer.getX().compute(c.x), logTransformer.getY().compute(c.y),logTransformer.getZ().compute(c.z));
+		GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y),spaceTransformer.getZ().compute(c.z));
 	}
 }

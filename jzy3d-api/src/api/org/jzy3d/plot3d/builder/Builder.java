@@ -15,7 +15,7 @@ import org.jzy3d.plot3d.builder.concrete.RingTessellator;
 import org.jzy3d.plot3d.builder.delaunay.DelaunayTessellator;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 
 public class Builder {
@@ -71,12 +71,12 @@ public class Builder {
     
     /* LOG */
     
-    public static Shape buildOrthonormalLog(OrthonormalGrid grid, Mapper mapper, LogTransformer transformers) {
+    public static Shape buildOrthonormalLog(OrthonormalGrid grid, Mapper mapper, SpaceTransformer transformers) {
         OrthonormalTessellatorLog tesselator = new OrthonormalTessellatorLog(transformers);
         return (Shape) tesselator.build(grid.apply(mapper));
     }
     
-    public static CompileableComposite buildOrthonormalBigLog(OrthonormalGrid grid, Mapper mapper, LogTransformer transformers) {
+    public static CompileableComposite buildOrthonormalBigLog(OrthonormalGrid grid, Mapper mapper, SpaceTransformer transformers) {
         Tessellator tesselator = new OrthonormalTessellatorLog(transformers);
         Shape s1 = (Shape) tesselator.build(grid.apply(mapper));
         return buildComposite(applyStyling(s1));

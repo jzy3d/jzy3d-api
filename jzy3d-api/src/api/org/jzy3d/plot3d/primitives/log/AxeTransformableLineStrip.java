@@ -12,16 +12,16 @@ import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformableLineStrip extends LineStrip {
 	
 
-	 public AxeTransformableLineStrip(LogTransformer transformers) {
+	 public AxeTransformableLineStrip(SpaceTransformer transformers) {
 	        this(2, transformers);
 	    }
 
-	    public AxeTransformableLineStrip(int n, LogTransformer transformers) {
+	    public AxeTransformableLineStrip(int n, SpaceTransformer transformers) {
 	    	this.transformers = transformers;
 	        points = new ArrayList<Point>(n);
 	        bbox = new BoundingBox3d();
@@ -30,7 +30,7 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        setWireframeColor(null);
 	    }
 
-	    public AxeTransformableLineStrip(List<Coord3d> coords, LogTransformer transformers) {
+	    public AxeTransformableLineStrip(List<Coord3d> coords, SpaceTransformer transformers) {
 	        this(transformers);
 	        for (Coord3d c : coords) {
 	            Point p = new Point(c);
@@ -38,7 +38,7 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        }
 	    }
 
-	    public AxeTransformableLineStrip(Point c1, Point c2,LogTransformer transformers) {
+	    public AxeTransformableLineStrip(Point c1, Point c2,SpaceTransformer transformers) {
 	        this(transformers);
 	        add(c1);
 	        add(c2);
@@ -124,7 +124,7 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        for (Point p : points)
 	            bbox.add(transform.compute(p.xyz));
 	    }
-		LogTransformer transformers;
+		SpaceTransformer transformers;
 		
 
 }

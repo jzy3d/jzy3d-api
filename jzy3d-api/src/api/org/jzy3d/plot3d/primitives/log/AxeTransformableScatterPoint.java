@@ -13,20 +13,20 @@ import org.jzy3d.plot3d.primitives.LightPoint;
 import org.jzy3d.plot3d.primitives.ScatterPoint;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformableScatterPoint extends ScatterPoint{
 
-	LogTransformer transformers;
+	SpaceTransformer transformers;
 	
-    public AxeTransformableScatterPoint(LogTransformer transformers) {
+    public AxeTransformableScatterPoint(SpaceTransformer transformers) {
         bbox = new BoundingBox3d();
         setWidth(1.0f);
         setPoints(new ArrayList<LightPoint>());
         this.transformers = transformers;
     }
 
-    public AxeTransformableScatterPoint(List<LightPoint> points, float width, LogTransformer transformers) {
+    public AxeTransformableScatterPoint(List<LightPoint> points, float width, SpaceTransformer transformers) {
         bbox = new BoundingBox3d();
         setPoints(points);
         setWidth(width);
