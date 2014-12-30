@@ -10,10 +10,12 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalTessellator;
+import org.jzy3d.plot3d.builder.concrete.OrthonormalTessellatorLog;
 import org.jzy3d.plot3d.builder.concrete.RingTessellator;
 import org.jzy3d.plot3d.builder.delaunay.DelaunayTessellator;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 
 
 public class Builder {
@@ -66,6 +68,20 @@ public class Builder {
         sls.setWireframeColor(s.getWireframeColor());
         return sls;
     }
+    
+    /* LOG */
+    
+    public static Shape buildOrthonormalLog(OrthonormalGrid grid, Mapper mapper, LogTransformer transformers) {
+        OrthonormalTessellatorLog tesselator = new OrthonormalTessellatorLog(transformers);
+        return (Shape) tesselator.build(grid.apply(mapper));
+    }
+    
+    public static CompileableComposite buildOrthonormalBigLog(OrthonormalGrid grid, Mapper mapper, LogTransformer transformers) {
+        Tessellator tesselator = new OrthonormalTessellatorLog(transformers);
+        Shape s1 = (Shape) tesselator.build(grid.apply(mapper));
+        return buildComposite(applyStyling(s1));
+    }
+
     
     protected static IColorMap colorMap = new ColorMapRainbow();
     protected static Color colorFactor = new Color(1, 1, 1, 1f);

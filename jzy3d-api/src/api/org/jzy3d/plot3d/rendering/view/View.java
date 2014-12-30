@@ -26,9 +26,9 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
@@ -100,7 +100,7 @@ public class View {
         this.scene.getGraph().getStrategy().setView(this);
 
         current = this;
-        transformers = new AxeTransformerSet();
+        transformers = new LogTransformer();
     }
 
     public Chart getChart() {
@@ -1065,11 +1065,11 @@ public class View {
 
     /* */
 
-    public AxeTransformerSet getTransformers() {
+    public LogTransformer getTransformers() {
         return transformers;
     }
 
-    public void setTransformers(AxeTransformerSet transformers) {
+    public void setTransformers(LogTransformer transformers) {
         this.transformers = transformers;
     }
 
@@ -1141,7 +1141,7 @@ public class View {
     /** A slave view won't clear its color and depth buffer before rendering */
     protected boolean slave = false;
 
-    protected AxeTransformerSet transformers = new AxeTransformerSet();
+    protected LogTransformer transformers = new LogTransformer();
 
 
 }

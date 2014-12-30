@@ -12,8 +12,9 @@ import com.jogamp.common.nio.Buffers;
 
 /**
  * This {@link AxeBox} implementation was the first to appear in Jzy3d.
- * It computes hidden faces using the OpenGL feedback buffer, which seems
- * to fail on some hardware (especially Lenovo notepads).
+ * It computes hidden faces via method {@link getHiddenQuads} using the 
+ * OpenGL feedback buffer, which seems to fail on some laptop GPU.
+ * (especially Lenovo notepads).
  * 
  * @author Martin Pernollet
  */

@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive;
+package org.jzy3d.plot3d.primitives.log;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
@@ -8,27 +8,27 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 public class AxeTransformablePoint extends Point {
 	/** Intialize a point at the origin, with a white color and a width of 1. */
-	public AxeTransformablePoint(AxeTransformerSet transformers) {
+	public AxeTransformablePoint(LogTransformer transformers) {
 		this(Coord3d.ORIGIN, Color.WHITE, 1.0f, transformers);
 	}
 
 	/** Intialize a point with a white color and a width of 1. */
-	public AxeTransformablePoint(Coord3d xyz, AxeTransformerSet transformers) {
+	public AxeTransformablePoint(Coord3d xyz, LogTransformer transformers) {
 		this(xyz, Color.WHITE, 1.0f, transformers);
 	}
 
 	/** Intialize a point with a width of 1. */
-	public AxeTransformablePoint(Coord3d xyz, Color rgb, AxeTransformerSet transformers) {
+	public AxeTransformablePoint(Coord3d xyz, Color rgb, LogTransformer transformers) {
 		this(xyz, rgb, 1.0f, transformers);
 	}
 
-	public AxeTransformablePoint(Coord3d xyz, Color rgb, float width, AxeTransformerSet transformers)  {
+	public AxeTransformablePoint(Coord3d xyz, Color rgb, float width, LogTransformer transformers)  {
 		super(xyz,rgb,width);
 		this.transformers = transformers;
 		updateBounds();
@@ -67,7 +67,7 @@ public class AxeTransformablePoint extends Point {
 		}
 	}
 	
-	AxeTransformerSet transformers;
+	LogTransformer transformers;
 
 
 }

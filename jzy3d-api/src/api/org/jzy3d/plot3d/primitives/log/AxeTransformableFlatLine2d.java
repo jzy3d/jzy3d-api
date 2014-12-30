@@ -1,20 +1,16 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.jzy3d.plot3d.primitives.log;
 
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.FlatLine2d;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.Quad;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 
 public class AxeTransformableFlatLine2d extends FlatLine2d {
-	public AxeTransformableFlatLine2d(AxeTransformerSet transformers){
+	public AxeTransformableFlatLine2d(LogTransformer transformers){
 		this.transformers = transformers;
 	}
 	
-	public AxeTransformableFlatLine2d(float[] x, float[] y, float depth, AxeTransformerSet transformers){
+	public AxeTransformableFlatLine2d(float[] x, float[] y, float depth, LogTransformer transformers){
 		this.transformers = transformers;
 		setData(x, y, depth);
 	}
@@ -28,5 +24,5 @@ public class AxeTransformableFlatLine2d extends FlatLine2d {
 		return q;
 	}
 	
-	AxeTransformerSet transformers;
+	LogTransformer transformers;
 }

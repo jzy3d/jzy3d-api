@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axeTransformablePrimitive;
+package org.jzy3d.plot3d.primitives.log;
 
 import java.util.List;
 
@@ -8,21 +8,21 @@ import javax.media.opengl.GL2;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterPoint;
 import org.jzy3d.plot3d.primitives.LightPoint;
-import org.jzy3d.plot3d.primitives.axeTransformablePrimitive.axeTransformers.AxeTransformerSet;
+import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 public class AxeTransformableConcuurentScatterPoint extends
 		ConcurrentScatterPoint {
 	
-	AxeTransformerSet transformers;
+	LogTransformer transformers;
 	
 	
-	public AxeTransformableConcuurentScatterPoint(AxeTransformerSet transformers) {
+	public AxeTransformableConcuurentScatterPoint(LogTransformer transformers) {
         super();
         this.transformers = transformers;
     }
 
-    public AxeTransformableConcuurentScatterPoint(List<LightPoint> points, float width, AxeTransformerSet transformers) {
+    public AxeTransformableConcuurentScatterPoint(List<LightPoint> points, float width, LogTransformer transformers) {
         super(points, width);
         this.transformers = transformers;
     }
