@@ -15,7 +15,7 @@ import org.jzy3d.plot3d.builder.concrete.RingTessellator;
 import org.jzy3d.plot3d.builder.delaunay.DelaunayTessellator;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 
 public class Builder {

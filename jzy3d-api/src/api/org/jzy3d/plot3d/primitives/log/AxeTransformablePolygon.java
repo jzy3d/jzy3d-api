@@ -5,9 +5,9 @@ import java.awt.Polygon;
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
-import org.jzy3d.plot3d.primitives.log.transformers.AxeTransform;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+import org.jzy3d.plot3d.transform.log.AxeTransform;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 public class AxeTransformablePolygon extends AxeTransformableAbstractGeometry {
 

@@ -13,9 +13,9 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.log.AxeTransformablePoint;
-import org.jzy3d.plot3d.primitives.log.transformers.AxeTransformLog;
-import org.jzy3d.plot3d.primitives.log.transformers.LogTransformer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.transform.log.AxeTransformLog;
+import org.jzy3d.plot3d.transform.log.LogTransformer;
 
 
 public class LogTest {
