@@ -61,7 +61,7 @@ public class AxeTransformableScatterPoint extends ScatterPoint{
     public void updateBounds() {
         bbox.reset();
         for (LightPoint c : points)
-            bbox.add(transformers.computePoint(c.xyz));
+            bbox.add(transformers.compute(c.xyz));
     }
 
 }
