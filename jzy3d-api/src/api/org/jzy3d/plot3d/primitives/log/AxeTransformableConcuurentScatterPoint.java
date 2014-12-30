@@ -9,20 +9,20 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterPoint;
 import org.jzy3d.plot3d.primitives.LightPoint;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformableConcuurentScatterPoint extends
 		ConcurrentScatterPoint {
 	
-	LogTransformer transformers;
+	SpaceTransformer transformers;
 	
 	
-	public AxeTransformableConcuurentScatterPoint(LogTransformer transformers) {
+	public AxeTransformableConcuurentScatterPoint(SpaceTransformer transformers) {
         super();
         this.transformers = transformers;
     }
 
-    public AxeTransformableConcuurentScatterPoint(List<LightPoint> points, float width, LogTransformer transformers) {
+    public AxeTransformableConcuurentScatterPoint(List<LightPoint> points, float width, SpaceTransformer transformers) {
         super(points, width);
         this.transformers = transformers;
     }

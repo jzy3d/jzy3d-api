@@ -3,14 +3,14 @@ package org.jzy3d.plot3d.primitives.log;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.FlatLine2d;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformableFlatLine2d extends FlatLine2d {
-	public AxeTransformableFlatLine2d(LogTransformer transformers){
+	public AxeTransformableFlatLine2d(SpaceTransformer transformers){
 		this.transformers = transformers;
 	}
 	
-	public AxeTransformableFlatLine2d(float[] x, float[] y, float depth, LogTransformer transformers){
+	public AxeTransformableFlatLine2d(float[] x, float[] y, float depth, SpaceTransformer transformers){
 		this.transformers = transformers;
 		setData(x, y, depth);
 	}
@@ -24,5 +24,5 @@ public class AxeTransformableFlatLine2d extends FlatLine2d {
 		return q;
 	}
 	
-	LogTransformer transformers;
+	SpaceTransformer transformers;
 }

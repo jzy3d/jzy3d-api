@@ -39,7 +39,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.transform.Scale;
 import org.jzy3d.plot3d.transform.Transform;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.util.awt.Overlay;
 
@@ -99,8 +99,8 @@ public class View {
 
         this.scene.getGraph().getStrategy().setView(this);
 
+        this.spaceTransformer = new SpaceTransformer(); // apply no transform
         current = this;
-        transformers = new LogTransformer();
     }
 
     public Chart getChart() {
@@ -318,7 +318,7 @@ public class View {
     public void lookToBox(BoundingBox3d box) {
         if (box.isReset())
             return;
-        center = box.getTransformedCenter(transformers);
+        center = box.getTransformedCenter(spaceTransformer);
         axe.setAxe(box);
         viewbounds = box;
     }
@@ -596,9 +596,9 @@ public class View {
         }
 
         // Compute factors
-        float xLen = transformers.getX().compute(bounds.getXmax()) - transformers.getX().compute(bounds.getXmin());
-        float yLen = transformers.getY().compute(bounds.getYmax()) - transformers.getY().compute(bounds.getYmin());
-        float zLen = transformers.getZ().compute(bounds.getZmax()) - transformers.getZ().compute(bounds.getZmin());
+        float xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
+        float yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
+        float zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());
         float lmax = (float) Math.max(Math.max(xLen, yLen), zLen);
 
         if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
@@ -922,7 +922,7 @@ public class View {
 
     public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
         //before LOG was : (float)bounds.getRadius() * factorViewPointDistance;
-        float sceneRadius = (float) boundsScaled.getTransformedRadius(transformers);
+        float sceneRadius = (float) boundsScaled.getTransformedRadius(spaceTransformer);
         updateCamera(gl, glu, viewport, boundsScaled, sceneRadius);
     }
 
@@ -1001,7 +1001,7 @@ public class View {
             cam.setRenderingSphereRadius(radius);
             correctCameraPositionForIncludingTextLabels(gl, glu, viewport); 
         } else {
-            cam.setRenderingSphereRadius((float)bounds.getTransformedRadius(transformers));
+            cam.setRenderingSphereRadius((float)bounds.getTransformedRadius(spaceTransformer));
         }
     }
 
@@ -1065,12 +1065,12 @@ public class View {
 
     /* */
 
-    public LogTransformer getTransformers() {
-        return transformers;
+    public SpaceTransformer getSpaceTransformer() {
+        return spaceTransformer;
     }
 
-    public void setTransformers(LogTransformer transformers) {
-        this.transformers = transformers;
+    public void setSpaceTransformer(SpaceTransformer transformer) {
+        this.spaceTransformer = transformer;
     }
 
     /* */
@@ -1141,7 +1141,7 @@ public class View {
     /** A slave view won't clear its color and depth buffer before rendering */
     protected boolean slave = false;
 
-    protected LogTransformer transformers = new LogTransformer();
+    protected SpaceTransformer spaceTransformer = new SpaceTransformer();
 
 
 }

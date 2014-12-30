@@ -62,7 +62,7 @@ public class Graph {
         this.scene = scene;
         this.strategy = strategy;
         this.sort = sort;
-        components = new ArrayList<AbstractDrawable>();
+        this.components = new ArrayList<AbstractDrawable>();
         // components = Collections.synchronizedList(new
         // ArrayList<AbstractDrawable>());
     }

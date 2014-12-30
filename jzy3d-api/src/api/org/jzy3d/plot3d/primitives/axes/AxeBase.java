@@ -9,6 +9,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
  * An AxeBase provide a simple 3-segment object which is configured by a
@@ -109,8 +110,21 @@ public class AxeBase implements IAxe {
 	public IAxeLayout getLayout() {
 		return layout;
 	}
+	
+
+    @Override
+    public SpaceTransformer getSpaceTransformer() {
+        return spaceTransformer;
+    }
+
+    @Override
+    public void setSpaceTransformer(SpaceTransformer spaceTransformer) {
+        this.spaceTransformer = spaceTransformer;
+    }
 
 	protected Coord3d scale;
 	protected BoundingBox3d bbox;
 	protected IAxeLayout layout;
+	
+	protected SpaceTransformer spaceTransformer;
 }

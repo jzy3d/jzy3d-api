@@ -4,11 +4,11 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformableQuad extends AxeTransformableAbstractGeometry {
 
-	public AxeTransformableQuad(LogTransformer transformers) {
+	public AxeTransformableQuad(SpaceTransformer transformers) {
 	    super(transformers);
 	}
 

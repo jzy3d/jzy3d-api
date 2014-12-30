@@ -11,22 +11,22 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterMultiColorList;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
-import org.jzy3d.plot3d.transform.log.LogTransformer;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformableConcurrentScatterMultiColorList extends
 		ConcurrentScatterMultiColorList {
 		
-	LogTransformer transformers;
+	SpaceTransformer transformers;
 	
-	public AxeTransformableConcurrentScatterMultiColorList(ColorMapper mapper, LogTransformer transformers) {
+	public AxeTransformableConcurrentScatterMultiColorList(ColorMapper mapper, SpaceTransformer transformers) {
         this(new ArrayList<Coord3d>(), mapper, 1.0f, transformers);
     }
 
-    public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, LogTransformer transformers) {
+    public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, SpaceTransformer transformers) {
         this(coordinates, mapper, 1.0f, transformers);
     }
 
-    public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, float width, LogTransformer transformers) {
+    public AxeTransformableConcurrentScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, float width, SpaceTransformer transformers) {
         super(coordinates, mapper, width);
         this.transformers = transformers;
     }
