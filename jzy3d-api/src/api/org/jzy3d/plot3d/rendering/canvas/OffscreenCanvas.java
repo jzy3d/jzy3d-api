@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLDrawable;
 import javax.media.opengl.GLDrawableFactory;

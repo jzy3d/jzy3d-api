@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;

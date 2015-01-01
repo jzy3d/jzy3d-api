@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives.log;
 import javax.media.opengl.GL;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.transform.space.SpaceTransform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public abstract class GlVertexExecutor {

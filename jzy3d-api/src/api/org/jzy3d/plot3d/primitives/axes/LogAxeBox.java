@@ -14,7 +14,6 @@ import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
-import org.jzy3d.plot3d.transform.space.SpaceTransform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
