@@ -1,12 +1,10 @@
 package org.jzy3d.plot3d.primitives.log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
-import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.LineStripInterpolated;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;

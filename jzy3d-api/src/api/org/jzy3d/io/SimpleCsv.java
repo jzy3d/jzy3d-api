@@ -1,8 +1,3 @@
-// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
-// Jad home page: http://www.kpdus.com/jad.html
-// Decompiler options: packimports(3) 
-// Source File Name:   SimpleCsv.java
-
 package org.jzy3d.io;
 
 import java.io.File;
@@ -14,18 +9,24 @@ import java.util.List;
 
 import au.com.bytecode.opencsv.CSVWriter;
 
-public class SimpleCsv
-{
-
-    public SimpleCsv()
-    {
-    }
-
-    public static void write(List lines, String file, char separator)
-        throws IOException
-    {
+public class SimpleCsv {
+    public static <T> void write(List<T> entities, String file, char separator, ToLine<T> toLine) throws IOException {
         File parent = (new File(file)).getParentFile();
-        if(parent != null && !parent.exists())
+        if (parent != null && !parent.exists())
+            parent.mkdirs();
+        FileWriter fw = new FileWriter(file);
+        CSVWriter writer = new CSVWriter(fw, separator);
+        for (T entity : entities) {
+            writer.writeNext(toLine.toLine(entity));
+        }
+        writer.close();
+    }
+    
+    /* */
+
+    public static void write(List lines, String file, char separator) throws IOException {
+        File parent = (new File(file)).getParentFile();
+        if (parent != null && !parent.exists())
             parent.mkdirs();
         FileWriter fw = new FileWriter(file);
         CSVWriter writer = new CSVWriter(fw, separator);
@@ -33,11 +34,9 @@ public class SimpleCsv
         writer.close();
     }
 
-    public static void writeLines(List lines, String file, char separator)
-        throws IOException
-    {
+    public static void writeLines(List lines, String file, char separator) throws IOException {
         File parent = (new File(file)).getParentFile();
-        if(parent != null && !parent.exists())
+        if (parent != null && !parent.exists())
             parent.mkdirs();
         FileWriter fw = new FileWriter(file);
         CSVWriter writer = new CSVWriter(fw, separator);
@@ -45,13 +44,11 @@ public class SimpleCsv
         writer.close();
     }
 
-    protected static List convert(List lines)
-    {
+    protected static List convert(List lines) {
         List out = new ArrayList(lines.size());
         String content[];
-        for(Iterator i$ = lines.iterator(); i$.hasNext(); out.add(content))
-        {
-            String line = (String)i$.next();
+        for (Iterator i$ = lines.iterator(); i$.hasNext(); out.add(content)) {
+            String line = (String) i$.next();
             content = new String[1];
             content[0] = line;
         }

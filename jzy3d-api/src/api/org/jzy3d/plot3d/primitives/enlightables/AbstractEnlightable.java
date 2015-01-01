@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.enlightables;
 
 import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
 import javax.media.opengl.fixedfunc.GLLightingFunc;
 
 import org.jzy3d.colors.Color;

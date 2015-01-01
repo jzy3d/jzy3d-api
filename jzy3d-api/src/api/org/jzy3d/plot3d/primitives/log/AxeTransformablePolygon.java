@@ -1,12 +1,9 @@
 package org.jzy3d.plot3d.primitives.log;
 
-import java.awt.Polygon;
-
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
-import org.jzy3d.plot3d.transform.space.SpaceTransform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public class AxeTransformablePolygon extends AxeTransformableAbstractGeometry {

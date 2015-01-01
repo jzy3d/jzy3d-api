@@ -4,7 +4,6 @@ import java.awt.Image;
 import java.nio.ByteBuffer;
 
 import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
