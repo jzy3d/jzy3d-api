@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
 import javax.media.opengl.GLAnimatorControl;
 import javax.media.opengl.GLCapabilitiesImmutable;
 import javax.media.opengl.GLDrawable;
