@@ -44,6 +44,16 @@ public class MultiChartPanel extends JPanel {
     public static String WT = "awt";
 
     private int nComponent = 0;
+    
+    public static void ui(String[] headers, Chart[][] charts) throws IOException {
+        MultiChartPanel monitorPanel = new MultiChartPanel(charts, headers, null, false, 100, 100, false, false);
+        monitorPanel.ui();
+    }
+    
+    public static void ui(String[] headers, Chart[][] charts, int width, int height) throws IOException {
+        MultiChartPanel monitorPanel = new MultiChartPanel(charts, headers, null, false, width, height, false, false);
+        monitorPanel.ui();
+    }
 
     public MultiChartPanel(List<Chart> charts)  {
         this(charts, true);
