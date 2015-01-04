@@ -480,6 +480,13 @@ public class Array {
         System.out.println("");
     }
 
+    public static void print(byte input[]) {
+        for (int i = 0; i < input.length; i++) {
+            System.out.print(input[i] + "|");
+        }
+        System.out.println("");
+    }
+
     public static void print(int input[]) {
         for (int i = 0; i < input.length; i++) {
             System.out.print(input[i] + "|");
