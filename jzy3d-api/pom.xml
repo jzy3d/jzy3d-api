@@ -124,8 +124,33 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		
+	<!-- <plugins>
+			<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<executions>
+						<execution>
+							<phase>generate-sources</phase>
+							<goals>
+								<goal>add-source</goal>
+							</goals>
+							<configuration>
+								<sources>
+									<source>src/api</source>
+									<source>src/bridge</source>
+									<source>src/awt</source>
+									<source>src/swing</source>
+									<source>src/replay</source>
+								</sources>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+		</plugins> -->	
 	</build>
-
+	
+			
 
 	<!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio 
 		\ -DartifactId=jzyio \ -Dversion=0.1 \ -Dpackaging=jar \ -Dfile=./lib/misc/org.jzyio-0.1.jar -->
