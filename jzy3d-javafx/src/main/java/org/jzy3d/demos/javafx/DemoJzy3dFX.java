@@ -85,7 +85,8 @@ public class DemoJzy3dFX extends Application {
         Quality quality = Quality.Advanced;
         AWTChart chart = (AWTChart) factory.chart(quality, toolkit);
         chart.getScene().getGraph().add(surface);
-        // let factory bind mouse and keyboard controllers to node
+        
+        // let factory bind mouse and keyboard controllers to JavaFX node
         return chart;
     }
 }
