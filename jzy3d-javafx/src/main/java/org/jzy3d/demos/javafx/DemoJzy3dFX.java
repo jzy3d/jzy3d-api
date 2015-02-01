@@ -6,8 +6,6 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import org.jzy3d.chart.AWTChart;
-import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -26,14 +24,14 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * {@link JavaFXChartFactory} delivers dedicated  {@link JavaFXCameraMouseController}
  * and {@link JavaFXRenderer3d}
  * 
- * Support mouse control
- * Animation (camera rotation with thread) has a bug but used to work 
+ * Support 
+ * Rotation control with left mouse button hold+drag
+ * Scaling scene using mouse wheel 
+ * Animation (camera rotation with thread) 
  * 
  * TODO : 
- * Mouse wheel scale
  * Mouse right click shift
  * Keyboard support (rotate/shift, etc)
- * 
  * 
  * @author Martin Pernollet
  */
@@ -65,6 +63,7 @@ public class DemoJzy3dFX extends Application {
     }
 
     private AWTChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
+        // -------------------------------
         // Define a function to plot
         Mapper mapper = new Mapper() {
             public double f(double x, double y) {
@@ -82,14 +81,15 @@ public class DemoJzy3dFX extends Application {
         surface.setFaceDisplayed(true);
         surface.setWireframeDisplayed(false);
 
+        // -------------------------------
         // Create a chart
         Quality quality = Quality.Advanced;
-        
-        // TODO : call newChart
-        AWTChart chart = (AWTChart) factory.chart(quality, toolkit);
-        chart.getScene().getGraph().add(surface);
+        //quality.setSmoothPolygon(true);
+        //quality.setAnimated(true);
         
         // let factory bind mouse and keyboard controllers to JavaFX node
+        AWTChart chart = (AWTChart) factory.newChart(quality, toolkit);
+        chart.getScene().getGraph().add(surface);
         return chart;
     }
 }
