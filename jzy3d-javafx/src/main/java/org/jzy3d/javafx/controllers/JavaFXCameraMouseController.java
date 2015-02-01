@@ -1,4 +1,4 @@
-package org.jzy3d.javafx;
+package org.jzy3d.javafx.controllers;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -27,7 +27,7 @@ public class JavaFXCameraMouseController extends AbstractCameraController {
         register(node);
         register(chart);
         
-        CameraThreadController threadCam = new CameraThreadController(chart);
+        CameraThreadController threadCam = new JavaFXCameraThreadController(chart);
         threadCam.setStep(0.005f);
         addSlaveThreadController(threadCam);
     }
