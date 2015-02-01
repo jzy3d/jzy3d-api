@@ -9,8 +9,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
 
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
@@ -21,9 +19,7 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyControlle
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
 import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
-import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.javafx.JavaFXRenderer3d.DisplayListener;
 import org.jzy3d.javafx.controllers.JavaFXCameraMouseController;
@@ -33,8 +29,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
-import sun.reflect.ReflectionFactory.GetReflectionFactoryAction;
 
 public class JavaFXChartFactory extends AWTChartComponentFactory {
     
@@ -51,11 +45,18 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
             Image image = SwingFXUtils.toFXImage(i, null);
             return image;
         } else {
-            System.err.println(this.getClass() + " SCREENSHOT NULL");
+            //System.err.println(this.getClass() + " SCREENSHOT NULL");
             return null;
         }
     }
 
+    /**
+     * Return an {@link ImageView} from an {@link AWTChart} expected to render offscreen 
+     * and to use a {@link JavaFXRenderer3d} poping Images when the chart is redrawn.
+     * Any 
+     * @param chart
+     * @return
+     */
     public ImageView bindImageView(AWTChart chart) {
         ImageView imageView = new ImageView();
         imageView.fitHeightProperty();

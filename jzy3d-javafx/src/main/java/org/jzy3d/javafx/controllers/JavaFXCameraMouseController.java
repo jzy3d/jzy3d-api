@@ -4,6 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
@@ -66,6 +67,12 @@ public class JavaFXCameraMouseController extends AbstractCameraController {
                 //console(mouseEvent);
             }
         });
+        
+        node.setOnScroll(new EventHandler<ScrollEvent>() {
+            @Override public void handle(ScrollEvent event) {
+                mouseWheelMoved(event);
+            }
+        });
     }
     
     /* ###################################*/
@@ -96,11 +103,10 @@ public class JavaFXCameraMouseController extends AbstractCameraController {
         prevMouse = mouse;
     }
 
-    protected void mouseWheelMoved(MouseEvent e) {
+    protected void mouseWheelMoved(ScrollEvent e) {
         stopThreadController();
-
-        //float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
-        //zoomZ(factor);
+        float factor = 1 + (float)e.getDeltaY()/150;
+        zoomZ(factor);
     }
 
     public boolean handleSlaveThread(MouseEvent e) {
