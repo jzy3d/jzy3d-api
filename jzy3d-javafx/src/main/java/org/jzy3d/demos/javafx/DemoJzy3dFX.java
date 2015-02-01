@@ -26,7 +26,8 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * {@link JavaFXChartFactory} delivers dedicated  {@link JavaFXCameraMouseController}
  * and {@link JavaFXRenderer3d}
  * 
- * Support mouse control, animation (double click to trigger rotation)
+ * Support mouse control
+ * Animation (camera rotation with thread) has a bug but used to work 
  * 
  * TODO : 
  * Mouse wheel scale
@@ -83,6 +84,8 @@ public class DemoJzy3dFX extends Application {
 
         // Create a chart
         Quality quality = Quality.Advanced;
+        
+        // TODO : call newChart
         AWTChart chart = (AWTChart) factory.chart(quality, toolkit);
         chart.getScene().getGraph().add(surface);
         
