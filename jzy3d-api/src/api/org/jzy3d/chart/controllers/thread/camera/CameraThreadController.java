@@ -49,7 +49,11 @@ public class CameraThreadController extends AbstractCameraController implements 
 	/** Run the animation.*/
 	@Override
     public void run() {	
-		move = new Coord2d(step,0);
+		doRun();
+	}
+
+    protected void doRun() {
+        move = new Coord2d(step,0);
 
 		while (process!=null) {
 			try {
@@ -60,7 +64,7 @@ public class CameraThreadController extends AbstractCameraController implements 
 				process = null;	
 			}
 		}
-	}
+    }
 	
 	public float getStep() {
         return step;
