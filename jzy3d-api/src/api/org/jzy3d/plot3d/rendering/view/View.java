@@ -13,6 +13,7 @@ import javax.media.opengl.fixedfunc.GLLightingFunc;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -159,6 +160,10 @@ public class View {
         Coord3d eye = getViewPoint();
         eye.x -= move.x;
         eye.y += move.y;
+        
+        //Logger.getLogger(this.getClass()).info(eye);
+        //System.out.println(eye);
+        
         setViewPoint(eye, updateView);
         // fireControllerEvent(ControllerType.ROTATE, eye);
     }
@@ -944,18 +949,36 @@ public class View {
     public Coord3d computeCameraEye(Coord3d target) {
         Coord3d eye;
         if (viewmode == ViewPositionMode.FREE) {
-            eye = viewpoint.cartesian().add(target);
+            eye = computeCameraEyeFree(viewpoint, target);
         } else if (viewmode == ViewPositionMode.TOP) {
-            eye = viewpoint;
-            eye.x = -(float) Math.PI / 2; // on x
-            eye.y = (float) Math.PI / 2; // on top
-            eye = eye.cartesian().add(target);
+            eye = computeCameraEyeTop(viewpoint, target);
         } else if (viewmode == ViewPositionMode.PROFILE) {
-            eye = viewpoint;
-            eye.y = 0;
-            eye = eye.cartesian().add(target);
+            eye = computeCameraEyeProfile(viewpoint, target);
         } else
             throw new RuntimeException("Unsupported ViewMode: " + viewmode);
+        return eye;
+    }
+
+    public static Coord3d computeCameraEyeProfile(Coord3d viewpoint, Coord3d target) {
+        Coord3d eye;
+        eye = viewpoint;
+        eye.y = 0;
+        eye = eye.cartesian().add(target);
+        return eye;
+    }
+
+    public static Coord3d computeCameraEyeTop(Coord3d viewpoint, Coord3d target) {
+        Coord3d eye;
+        eye = viewpoint;
+        eye.x = -(float) Math.PI / 2; // on x
+        eye.y = (float) Math.PI / 2; // on top
+        eye = eye.cartesian().add(target);
+        return eye;
+    }
+
+    public static Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
+        Coord3d eye;
+        eye = viewpoint.cartesian().add(target);
         return eye;
     }
 

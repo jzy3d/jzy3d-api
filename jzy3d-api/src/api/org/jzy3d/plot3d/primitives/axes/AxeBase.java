@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.primitives.axes;
 
+import java.util.List;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
@@ -126,4 +128,16 @@ public class AxeBase implements IAxe {
 	protected IAxeLayout layout;
 	
 	protected SpaceTransformer spaceTransformer;
+
+    @Override
+    public List<AxeAnnotation> getAnnotations() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setAnnotations(List<AxeAnnotation> annotations) {
+        // TODO Auto-generated method stub
+        
+    }
 }

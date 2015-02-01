@@ -7,6 +7,7 @@ public class Timer {
     protected long start;
     
     public void start() {
+        System.out.println("timer start");
         start = System.nanoTime();
     }
 
