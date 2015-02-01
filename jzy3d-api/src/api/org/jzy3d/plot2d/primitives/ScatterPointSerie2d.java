@@ -94,6 +94,5 @@ public class ScatterPointSerie2d implements Serie2d {
     public void setWidth(int width) {
         scatter.setWidth(width);   
     }
-
 }
 
