@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.primitives.axes;
 
+import java.util.List;
+
 import javax.media.opengl.GL;
 import javax.media.opengl.glu.GLU;
 
@@ -23,6 +25,8 @@ public interface IAxe {
 	
 	public IAxeLayout getLayout();
 	
+	public List<AxeAnnotation> getAnnotations();
+    public void setAnnotations(List<AxeAnnotation> annotations);
 
     public SpaceTransformer getSpaceTransformer();
     public void setSpaceTransformer(SpaceTransformer spaceTransformer) ;

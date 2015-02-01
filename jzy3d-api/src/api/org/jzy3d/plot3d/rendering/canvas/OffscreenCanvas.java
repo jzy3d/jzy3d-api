@@ -38,17 +38,32 @@ public class OffscreenCanvas implements ICanvas {
     }
 
     public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
-        view = scene.newView(this, quality);
-        renderer = factory.newRenderer(view, traceGL, debugGL);
+        this.view = scene.newView(this, quality);
+        this.renderer = factory.newRenderer(view, traceGL, debugGL);
+        this.capabilities = capabilities;
+        
         initGLPBuffer(capabilities, width, height);
     }
 
-    protected void initGLPBuffer(GLCapabilities capabilities, int width, int height) {
+    /**
+     * Initialize a GLPBuffer with desired capabilities. 
+     * 
+     * Can be called several time to reset buffer dimensions.
+     * 
+     * @param capabilities
+     * @param width
+     * @param height
+     */
+    public void initGLPBuffer(GLCapabilities capabilities, int width, int height) {
         GLProfile profile = capabilities.getGLProfile();
         capabilities.setDoubleBuffered(false);
+        
         if (!GLDrawableFactory.getFactory(profile).canCreateGLPbuffer(null, profile))
             throw new RuntimeException("No pbuffer support");
         GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
+        
+        if(glpBuffer!=null)
+            glpBuffer.removeGLEventListener(renderer);
         glpBuffer = factory.createGLPbuffer(null, capabilities, null, width, height, null);
         glpBuffer.addGLEventListener(renderer);
     }
@@ -56,6 +71,8 @@ public class OffscreenCanvas implements ICanvas {
     protected void initGLPBuffer(int width, int height) {
         GLCapabilities caps = org.jzy3d.chart.Settings.getInstance().getGLCapabilities();
         caps.setDoubleBuffered(false);
+        
+        
         if (!GLDrawableFactory.getFactory(caps.getGLProfile()).canCreateGLPbuffer(null, caps.getGLProfile()))
             throw new RuntimeException("No pbuffer support");
 
@@ -148,9 +165,15 @@ public class OffscreenCanvas implements ICanvas {
     public void removeMouseController(Object o) {}
     @Override
     public void removeKeyController(Object o) {}
+    
+    public GLCapabilities getCapabilities() {
+        return capabilities;
+    }
+
+
 
     protected View view;
     protected Renderer3d renderer;
     protected GLPbuffer glpBuffer;
-    
+    protected GLCapabilities capabilities;
 }
