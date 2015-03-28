@@ -1,5 +1,7 @@
 package org.jzy3d.maths;
 
+import java.io.Serializable;
+
 /**
  * A {@link Coord3d} stores a 3 dimensional coordinate for cartesian or polar
  * mode, and provide few operators.
@@ -11,7 +13,7 @@ package org.jzy3d.maths;
  * @author Martin Pernollet
  * 
  */
-public class Coord3d {
+public class Coord3d implements Serializable{
 
     /** The origin is a Coord3d having value 0 for each dimension. */
     public static final Coord3d ORIGIN = new Coord3d(0.0f, 0.0f, 0.0f);

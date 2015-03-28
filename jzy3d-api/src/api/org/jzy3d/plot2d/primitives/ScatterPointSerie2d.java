@@ -19,6 +19,18 @@ public class ScatterPointSerie2d implements Serie2d {
         this.name = name;
         this.scatter = makeDrawable();
     }
+    
+    public ConcurrentScatterPoint getScatter() {
+        return scatter;
+    }
+
+    public void setScatter(ConcurrentScatterPoint scatter) {
+        this.scatter = scatter;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     protected ConcurrentScatterPoint makeDrawable() {
         ConcurrentScatterPoint s = new ConcurrentScatterPoint();
