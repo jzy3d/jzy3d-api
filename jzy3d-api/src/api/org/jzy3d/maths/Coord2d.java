@@ -1,5 +1,7 @@
 package org.jzy3d.maths;
 
+import java.io.Serializable;
+
 
 /** A {@link Coord2d} stores a 2 dimensional coordinate for cartesian (x,y) or 
  * polar (a,r) mode, and provide operators allowing to add, substract, 
@@ -8,7 +10,7 @@ package org.jzy3d.maths;
  * 
  * @author Martin Pernollet
  */
-public class Coord2d {
+public class Coord2d implements Serializable{
 	
 	/** The origin is a Coord2d having value 0 for each dimension.*/
 	public static final Coord2d ORIGIN = new Coord2d(0.0f, 0.0f);

@@ -53,7 +53,6 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
     /**
      * Return an {@link ImageView} from an {@link AWTChart} expected to render offscreen 
      * and to use a {@link JavaFXRenderer3d} poping Images when the chart is redrawn.
-     * Any 
      * @param chart
      * @return
      */
