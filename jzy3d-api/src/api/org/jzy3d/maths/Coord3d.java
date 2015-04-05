@@ -1,6 +1,8 @@
 package org.jzy3d.maths;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A {@link Coord3d} stores a 3 dimensional coordinate for cartesian or polar
@@ -14,6 +16,23 @@ import java.io.Serializable;
  * 
  */
 public class Coord3d implements Serializable{
+    public static List<Coord3d> list(int size){
+        return new ArrayList<Coord3d>(size);
+    }
+    
+    public static Range getZRange(List<Coord3d> coords) {
+        float min = Float.POSITIVE_INFINITY;
+        float max = Float.NEGATIVE_INFINITY;
+        
+        for(Coord3d c: coords){
+            if(c.z>max)
+                max = c.z;
+            if(c.z<min)
+                min = c.z; 
+        }
+        return new Range(min, max);
+    }
+
 
     /** The origin is a Coord3d having value 0 for each dimension. */
     public static final Coord3d ORIGIN = new Coord3d(0.0f, 0.0f, 0.0f);

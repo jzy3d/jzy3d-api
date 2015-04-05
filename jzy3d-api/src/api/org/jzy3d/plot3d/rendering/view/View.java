@@ -597,14 +597,21 @@ public class View {
         else if (boundmode == ViewBoundMode.MANUAL)
             bounds = viewbounds;
         else {
-            throw new RuntimeException("Unknown bounds");
+            throw new RuntimeException("Unknown bounds mode");
         }
-
+        
         // Compute factors
-        float xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
-        float yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
-        float zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());
-        float lmax = (float) Math.max(Math.max(xLen, yLen), zLen);
+        float xLen = 1;
+        float yLen = 1;
+        float zLen = 1;
+        float lmax = 1;
+        
+       if(bounds!=null){
+            xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
+            yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
+            zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());
+            lmax = (float) Math.max(Math.max(xLen, yLen), zLen);
+        }
 
         if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
             xLen = 1;
