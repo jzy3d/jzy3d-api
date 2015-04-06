@@ -84,6 +84,10 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
             rotator.start();
         return rotator;
     }
+    
+    public Rotator rotator() {
+        return rotator(false);
+    }
 
 
     /*
