@@ -224,8 +224,8 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 
     /* To be called by the VBOBuilder */
 
-    public void setData(GL gl, FloatVBO vbo, BoundingBox3d bounds) {
-        setData(gl.getGL2(), vbo.getIndices(), vbo.getVertices(), bounds, 0);
+    public void setData(GL gl, FloatVBO vbo) {
+        setData(gl.getGL2(), vbo.getIndices(), vbo.getVertices(), vbo.getBounds(), 0);
     }
 
 
@@ -235,8 +235,8 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 
     public void setData(GL2 gl, IntBuffer indices, FloatBuffer vertices, BoundingBox3d bounds, int pointer) {
         doConfigure(pointer, indices.capacity());
-        doLoadArrayBuffer(gl, vertices);
-        doLoadElementBuffer(gl, indices);
+        doLoadArrayFloatBuffer(gl, vertices);
+        doLoadElementIntBuffer(gl, indices);
         doSetBoundingBox(bounds);
     }
 
@@ -255,22 +255,22 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         this.pointer = pointer;
     }
 
-    public void doLoadArrayBuffer(GL gl, FloatBuffer vertices) {
-        doLoadArrayBuffer(gl, vertices.capacity() * Buffers.SIZEOF_FLOAT, vertices);
+    public void doLoadArrayFloatBuffer(GL gl, FloatBuffer vertices) {
+        doLoadArrayFloatBuffer(gl, vertices.capacity() * Buffers.SIZEOF_FLOAT, vertices);
     }
 
-    public void doLoadArrayBuffer(GL gl, int vertexSize, FloatBuffer vertices) {
+    public void doLoadArrayFloatBuffer(GL gl, int vertexSize, FloatBuffer vertices) {
         gl.glGenBuffers(1, arrayName, 0);
         gl.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
         gl.glBufferData(GL.GL_ARRAY_BUFFER, vertexSize, vertices, GL.GL_STATIC_DRAW);
         gl.glBindBuffer(GL.GL_ARRAY_BUFFER, pointer);
     }
 
-    public void doLoadElementBuffer(GL gl, IntBuffer indices) {
-        doLoadElementBuffer(gl, indices.capacity() * Buffers.SIZEOF_INT, indices);
+    public void doLoadElementIntBuffer(GL gl, IntBuffer indices) {
+        doLoadElementIntBuffer(gl, indices.capacity() * Buffers.SIZEOF_INT, indices);
     }
 
-    public void doLoadElementBuffer(GL gl, int indexSize, IntBuffer indices) {
+    public void doLoadElementIntBuffer(GL gl, int indexSize, IntBuffer indices) {
         gl.glGenBuffers(1, elementName, 0);
         gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
         gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, indices, GL.GL_STATIC_DRAW);

@@ -44,8 +44,8 @@ public class OBJFileLoader implements IGLLoader<DrawableVBO>{
         BoundingBox3d bounds = obj.computeBoundingBox();
         
         drawable.doConfigure(pointer, size, byteOffset, normalOffset, dimensions);
-        drawable.doLoadArrayBuffer(gl, vertexSize, vertices);
-        drawable.doLoadElementBuffer(gl, indexSize, indices);
+        drawable.doLoadArrayFloatBuffer(gl, vertexSize, vertices);
+        drawable.doLoadElementIntBuffer(gl, indexSize, indices);
         drawable.doSetBoundingBox(bounds);
     }
 
