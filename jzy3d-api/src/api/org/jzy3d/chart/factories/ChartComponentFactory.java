@@ -78,9 +78,9 @@ public class ChartComponentFactory implements IChartComponentFactory {
     public ChartScene newScene(boolean sort) {
         return new ChartScene(sort, getFactory());
     }
-    
+
     @Override
-    public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort){
+    public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort) {
         return new Graph(scene, strategy, sort);
     }
 
@@ -114,12 +114,12 @@ public class ChartComponentFactory implements IChartComponentFactory {
     public AbstractOrderingStrategy newOrderingStrategy() {
         return new BarycentreOrderingStrategy();
     }
-    
+
     @Override
-    public IBoundingPolicy newBoundingPolicy(){
+    public IBoundingPolicy newBoundingPolicy() {
         return null;
     }
-    
+
     @Override
     public Serie2d newSerie(String name, Serie2d.Type type) {
         if (Serie2d.Type.LINE.equals(type))
@@ -189,7 +189,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
 
     @Override
     public IFrame newFrame(Chart chart) {
-        return newFrame(chart, new Rectangle(0,0,800,600), "Jzy3d");
+        return newFrame(chart, new Rectangle(0, 0, 800, 600), "Jzy3d");
     }
 
     /**
@@ -208,15 +208,19 @@ public class ChartComponentFactory implements IChartComponentFactory {
         // FrameSWT works as well
         else if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasSwing"))
             return newFrameSwing(chart, bounds, title);
-        else
-            throw new RuntimeException("No default frame could be found for the given Chart canvas: " + canvas.getClass());
+        else {
+            String m = "No default frame could be found for the given Chart canvas: " + canvas.getClass();
+            System.err.println(m);
+            return null;
+            // throw new RuntimeException(m);
+        }
     }
 
     @Override
     public ICanvas newCanvas(Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
         return newCanvas(getFactory(), scene, quality, windowingToolkit, capabilities);
     }
-    
+
     @Override
     public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
         return new VoidCanvas(factory, scene, quality);
@@ -287,8 +291,8 @@ public class ChartComponentFactory implements IChartComponentFactory {
             throw new RuntimeException("newCanvasAWT", e);
         }
     }
-    
-    /* UTILS */   
+
+    /* UTILS */
 
     public Toolkit getToolkit(String windowingToolkit) {
         if (windowingToolkit.startsWith("offscreen")) {
@@ -310,7 +314,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
             }
         }
         return null;
-    }  
+    }
 
     @Override
     public IChartComponentFactory getFactory() {
