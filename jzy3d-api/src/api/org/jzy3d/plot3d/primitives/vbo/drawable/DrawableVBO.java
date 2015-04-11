@@ -274,20 +274,9 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     @Override
     public void updateBounds() { // requires smart reload
         Logger.getLogger(DrawableVBO.class).warn("not implemented");
-        /*
-         * bbox.reset(); bbox.add(x+Math.max(radiusBottom, radiusTop),
-         * y+Math.max(radiusBottom, radiusTop), z);
-         * bbox.add(x-Math.max(radiusBottom, radiusTop),
-         * y-Math.max(radiusBottom, radiusTop), z);
-         * bbox.add(x+Math.max(radiusBottom, radiusTop),
-         * y+Math.max(radiusBottom, radiusTop), z+height);
-         * bbox.add(x-Math.max(radiusBottom, radiusTop),
-         * y-Math.max(radiusBottom, radiusTop), z+height);
-         */
     }
 
-    /* To be called by the VBOBuilder */
-
+    /** To be called by the VBOBuilder */
     public void setData(GL gl, FloatVBO vbo) {
         setData(gl.getGL2(), vbo.getIndices(), vbo.getVertices(), vbo.getBounds(), 0);
     }
