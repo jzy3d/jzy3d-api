@@ -48,7 +48,8 @@ import com.jogamp.common.nio.Buffers;
 public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     protected int geometry = GL.GL_TRIANGLES;
     protected float width = 1;
-
+    protected Quality quality = Quality.Nicest;
+    
     protected int colorChannelNumber = 3;
 
     public DrawableVBO(IGLLoader<DrawableVBO> loader) {
@@ -92,84 +93,103 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         this.width = width;
     }
     
-    
-static Quality quality = Quality.Nicest;
+    public Quality getQuality() {
+        return quality;
+    }
+
+    public void setQuality(Quality quality) {
+        this.quality = quality;
+    }
+
     protected void doDrawElements(GL gl) {
         if (gl.isGL2()) {
             doBindGL2(gl);
-
-            gl.getGL2().glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
-            gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
-
-            if (hasColorBuffer) {
-                // int bo = 6 * Buffers.SIZEOF_FLOAT;
-                int p = 3 * Buffers.SIZEOF_FLOAT;
-                gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
-                gl.getGL2().glColorPointer(colorChannelNumber, GL.GL_FLOAT, byteOffset, p);
-            }
-
-            // enable
-            gl.getGL2().glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-            gl.getGL2().glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-
-            //gl.getGL2().glPointSize(width);
-
-//            gl.getGL2().glPointWidth(4);
-            if(geometry==GL.GL_POINTS){
-                gl.getGL2().glPointSize(width);
-            } else if(geometry==GL.GL_LINES){
-                gl.getGL2().glLineWidth(width);
-            }
-            
-            if (quality.isSmoothPolygon()) {
-                gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
-                gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
-            } else
-                gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
-
-            if (quality.isSmoothLine()) {
-                gl.glEnable(GL.GL_LINE_SMOOTH);
-                gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
-            } else
-                gl.glDisable(GL.GL_LINE_SMOOTH);
-
-            if (quality.isSmoothPoint()) {
-                gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
-                gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
-                // gl.glDisable(GL2.GL_BLEND);
-                // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
-            } else
-                gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
-            
-            // draw
-            gl.getGL2().glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
-//gl.getGL2().glDrawElements
-            doBindGL2(gl);
-
-            // disable
-            gl.getGL2().glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-            gl.getGL2().glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-
-            if (hasColorBuffer) {
-                gl.getGL2().glDisableClientState(GL2.GL_COLOR_ARRAY);
-            }
-
+            pointers(gl);
+            color(gl);
+            enable(gl);
+            applyWidth(gl);
+            applyQuality(gl);
+            applyVertices(gl);
+            disable(gl);
+            disableColor(gl);
         } else {
             GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
             GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-
             GLES2CompatUtils.glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
             GLES2CompatUtils.glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
             GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
             GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-
             GLES2CompatUtils.glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
-
             GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
             GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
             GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
             GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
         }
+    }
+
+    private void disableColor(GL gl) {
+        if (hasColorBuffer) {
+            gl.getGL2().glDisableClientState(GL2.GL_COLOR_ARRAY);
+        }
+    }
+
+    private void pointers(GL gl) {
+        gl.getGL2().glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
+        gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
+    }
+
+    private void color(GL gl) {
+        if (hasColorBuffer) {
+            // int bo = 6 * Buffers.SIZEOF_FLOAT;
+            int p = 3 * Buffers.SIZEOF_FLOAT;
+            gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
+            gl.getGL2().glColorPointer(colorChannelNumber, GL.GL_FLOAT, byteOffset, p);
+        }
+    }
+
+    private void enable(GL gl) {
+        gl.getGL2().glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+        gl.getGL2().glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+    }
+
+    private void disable(GL gl) {
+        gl.getGL2().glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+        gl.getGL2().glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+    }
+
+    private void applyVertices(GL gl) {
+        gl.getGL2().glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
+        doBindGL2(gl);
+    }
+
+    private void applyWidth(GL gl) {
+        if(geometry==GL.GL_POINTS){
+            gl.getGL2().glPointSize(width);
+        } else if(geometry==GL.GL_LINES){
+            gl.getGL2().glLineWidth(width);
+        }
+    }
+
+    private void applyQuality(GL gl) {
+        if (quality.isSmoothPolygon()) {
+            gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
+            gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+            gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
+
+        if (quality.isSmoothLine()) {
+            gl.glEnable(GL.GL_LINE_SMOOTH);
+            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+            gl.glDisable(GL.GL_LINE_SMOOTH);
+
+        if (quality.isSmoothPoint()) {
+            gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
+            gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+            // gl.glDisable(GL2.GL_BLEND);
+            // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
+        } else
+            gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
     }
 
     protected void doBindGL2(GL gl) {
@@ -178,7 +198,8 @@ static Quality quality = Quality.Nicest;
     }
     
     /**
-     * rotate around Z axis
+     * Returns a {@link Rotator} that can let the VBO turn around Z axis centered at X=0,Y=0.
+     * Must be started by {@link Rotator.start()} if not started explicitely.
      */
     public Rotator rotator(boolean start) {
         final Rotate r = new Rotate(25, new Coord3d(0, 0, 1));
