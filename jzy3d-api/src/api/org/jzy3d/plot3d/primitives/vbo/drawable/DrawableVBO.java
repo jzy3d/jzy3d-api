@@ -5,6 +5,7 @@ import java.nio.IntBuffer;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
+import javax.media.opengl.GL2ES1;
 import javax.media.opengl.GL2GL3;
 import javax.media.opengl.fixedfunc.GLPointerFunc;
 import javax.media.opengl.glu.GLU;
@@ -17,6 +18,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Rotate;
@@ -45,6 +47,7 @@ import com.jogamp.common.nio.Buffers;
  */
 public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     protected int geometry = GL.GL_TRIANGLES;
+    protected float width = 1;
 
     protected int colorChannelNumber = 3;
 
@@ -63,6 +66,7 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
             loader.load(gl, this);
             hasMountedOnce = true;
         } catch (Exception e) {
+            e.printStackTrace();
             Logger.getLogger(DrawableVBO.class).error(e, e);
         }
     }
@@ -80,6 +84,16 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         }
     }
     
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+    
+    
+static Quality quality = Quality.Nicest;
     protected void doDrawElements(GL gl) {
         if (gl.isGL2()) {
             doBindGL2(gl);
@@ -98,9 +112,38 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
             gl.getGL2().glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
             gl.getGL2().glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
 
+            //gl.getGL2().glPointSize(width);
+
+//            gl.getGL2().glPointWidth(4);
+            if(geometry==GL.GL_POINTS){
+                gl.getGL2().glPointSize(width);
+            } else if(geometry==GL.GL_LINES){
+                gl.getGL2().glLineWidth(width);
+            }
+            
+            if (quality.isSmoothPolygon()) {
+                gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
+                gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
+            } else
+                gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
+
+            if (quality.isSmoothLine()) {
+                gl.glEnable(GL.GL_LINE_SMOOTH);
+                gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+            } else
+                gl.glDisable(GL.GL_LINE_SMOOTH);
+
+            if (quality.isSmoothPoint()) {
+                gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
+                gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+                // gl.glDisable(GL2.GL_BLEND);
+                // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
+            } else
+                gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
+            
             // draw
             gl.getGL2().glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
-
+//gl.getGL2().glDrawElements
             doBindGL2(gl);
 
             // disable

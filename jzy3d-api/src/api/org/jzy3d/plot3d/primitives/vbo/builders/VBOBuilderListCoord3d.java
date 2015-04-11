@@ -36,7 +36,7 @@ public class VBOBuilderListCoord3d extends VBOBuilder implements IGLLoader<Drawa
     // @SuppressWarnings("unchecked")
     public void load(GL gl, DrawableVBO drawable) throws Exception {
         FloatVBO vbo = initFloatVBO(drawable, coloring!=null, coordinates.size());
-        fillBuffersWithCollection(drawable, coordinates, vbo, coloring);
+        fillWithCollection(drawable, coordinates, vbo, coloring);
         drawable.setData(gl, vbo);
         Logger.getLogger(VBOBuilderListCoord3d.class).info("done loading " + coordinates.size() + " coords");
     }
