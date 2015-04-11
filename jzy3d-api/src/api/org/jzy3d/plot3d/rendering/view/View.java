@@ -867,11 +867,15 @@ public class View {
 
     public void render(GL gl, GLU glu) {
         fireViewLifecycleWillRender(null);
+        
+        init(gl);
         renderBackground(gl, glu, 0f, 1f);
         renderScene(gl, glu);
         renderOverlay(gl);
+
         if (dimensionDirty)
             dimensionDirty = false;
+        
         cam.show(gl, new Transform(new Scale(scaling)), scaling);
     }
 
