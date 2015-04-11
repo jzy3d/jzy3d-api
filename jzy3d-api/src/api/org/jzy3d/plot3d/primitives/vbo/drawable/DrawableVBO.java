@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.vbo;
+package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -16,6 +16,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
+import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Rotate;
@@ -56,7 +57,15 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         return hasMountedOnce;
     }
     
-    
+    @Override
+    public void mount(GL gl) {
+        try {
+            loader.load(gl, this);
+            hasMountedOnce = true;
+        } catch (Exception e) {
+            Logger.getLogger(DrawableVBO.class).error(e, e);
+        }
+    }
 
     // element array buffer is an index:
     // @see
@@ -69,6 +78,60 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
             doDrawElements(gl);
             doDrawBounds(gl, glu, cam);
         }
+    }
+    
+    protected void doDrawElements(GL gl) {
+        if (gl.isGL2()) {
+            doBindGL2(gl);
+
+            gl.getGL2().glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
+            gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
+
+            if (hasColorBuffer) {
+                // int bo = 6 * Buffers.SIZEOF_FLOAT;
+                int p = 3 * Buffers.SIZEOF_FLOAT;
+                gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
+                gl.getGL2().glColorPointer(colorChannelNumber, GL.GL_FLOAT, byteOffset, p);
+            }
+
+            // enable
+            gl.getGL2().glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+            gl.getGL2().glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+
+            // draw
+            gl.getGL2().glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
+
+            doBindGL2(gl);
+
+            // disable
+            gl.getGL2().glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+            gl.getGL2().glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+
+            if (hasColorBuffer) {
+                gl.getGL2().glDisableClientState(GL2.GL_COLOR_ARRAY);
+            }
+
+        } else {
+            GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
+            GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+
+            GLES2CompatUtils.glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
+            GLES2CompatUtils.glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
+            GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+            GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+
+            GLES2CompatUtils.glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
+
+            GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+            GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
+            GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+            GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+        }
+    }
+
+    protected void doBindGL2(GL gl) {
+        gl.getGL2().glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
+        gl.getGL2().glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
     }
     
     /**
@@ -120,59 +183,7 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         this.hasColorBuffer = hasColorBuffer;
     }
 
-    protected void doDrawElements(GL gl) {
-        if (gl.isGL2()) {
-            doBindGL2(gl);
-
-            gl.getGL2().glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
-            gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
-
-            if (hasColorBuffer) {
-                // int bo = 6 * Buffers.SIZEOF_FLOAT;
-                int p = 3 * Buffers.SIZEOF_FLOAT;
-                gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
-                gl.getGL2().glColorPointer(colorChannelNumber, GL.GL_FLOAT, byteOffset, p);
-            }
-
-            // enable
-            gl.getGL2().glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-            gl.getGL2().glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-
-            // draw
-            gl.getGL2().glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
-
-            doBindGL2(gl);
-
-            // disable
-            gl.getGL2().glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-            gl.getGL2().glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-
-            if (hasColorBuffer) {
-                gl.getGL2().glDisableClientState(GL2.GL_COLOR_ARRAY);
-            }
-
-        } else {
-            GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
-            GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-
-            GLES2CompatUtils.glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
-            GLES2CompatUtils.glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
-            GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-            GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-
-            GLES2CompatUtils.glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
-
-            GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-            GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
-            GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-            GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-        }
-    }
-
-    private void doBindGL2(GL gl) {
-        gl.getGL2().glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
-        gl.getGL2().glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-    }
+    
 
     public int getGeometry() {
         return geometry;
@@ -211,17 +222,12 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
          */
     }
 
-    /* IO */
+    /* To be called by the VBOBuilder */
 
-    @Override
-    public void mount(GL gl) {
-        try {
-            loader.load(gl, this);
-            hasMountedOnce = true;
-        } catch (Exception e) {
-            Logger.getLogger(DrawableVBO.class).error(e, e);
-        }
+    public void setData(GL gl, FloatVBO vbo, BoundingBox3d bounds) {
+        setData(gl.getGL2(), vbo.getIndices(), vbo.getVertices(), bounds, 0);
     }
+
 
     public void setData(GL gl, IntBuffer indices, FloatBuffer vertices, BoundingBox3d bounds) {
         setData(gl.getGL2(), indices, vertices, bounds, 0);
