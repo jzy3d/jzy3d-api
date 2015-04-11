@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.vbo;
+package org.jzy3d.plot3d.primitives.vbo.builders;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -13,7 +13,8 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.vbo.DrawableVBO;
+import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
+import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
 /**
  * A simple loader loading an existing collection of coordinates into a Vertex
@@ -23,15 +24,15 @@ import org.jzy3d.plot3d.primitives.vbo.DrawableVBO;
  * 
  * @author martin
  */
-public class ListCoord3dVBOLoader implements IGLLoader<DrawableVBO> {
+public class VBOBuilderListCoord3d implements IGLLoader<DrawableVBO> {
     protected List<Coord3d> coordinates = null;
     protected ColorMapper coloring = null;
 
-    public ListCoord3dVBOLoader(List<Coord3d> coordinates) {
+    public VBOBuilderListCoord3d(List<Coord3d> coordinates) {
         this.coordinates = coordinates;
     }
     
-    public ListCoord3dVBOLoader(List<Coord3d> coordinates, ColorMapper coloring) {
+    public VBOBuilderListCoord3d(List<Coord3d> coordinates, ColorMapper coloring) {
         this.coordinates = coordinates;
         this.coloring = coloring;
     }
@@ -48,14 +49,20 @@ public class ListCoord3dVBOLoader implements IGLLoader<DrawableVBO> {
         int indexBufferSize = n * geometrySize;
 
         // build and load buffers
-        FloatBuffer vertices = FloatBuffer.allocate(verticeBufferSize);
-        IntBuffer indices = IntBuffer.allocate(indexBufferSize);
+        FloatVBO vbo = new FloatVBO(verticeBufferSize, indexBufferSize);
+        //FloatBuffer vertices = FloatBuffer.allocate(verticeBufferSize);
+        //IntBuffer indices = IntBuffer.allocate(indexBufferSize);
         BoundingBox3d bounds = new BoundingBox3d();
-        fillBuffersWithCollection(drawable, vertices, indices, bounds);
+        fillBuffersWithCollection(drawable, vbo, bounds);
+        //fillBuffersWithCollection(drawable, vertices, indices, bounds);
 
         // Store in GPU
-        drawable.setData(gl, indices, vertices, bounds);
-        Logger.getLogger(ListCoord3dVBOLoader.class).info("done loading " + n + " coords");
+        drawable.setData(gl, vbo, bounds);
+        Logger.getLogger(VBOBuilderListCoord3d.class).info("done loading " + n + " coords");
+    }
+
+    private void fillBuffersWithCollection(DrawableVBO drawable, FloatVBO vbo, BoundingBox3d bounds) {
+        fillBuffersWithCollection(drawable, vbo.getVertices(), vbo.getIndices(), bounds);        
     }
 
     protected void fillBuffersWithCollection(DrawableVBO drawable, FloatBuffer vertices, IntBuffer indices, BoundingBox3d bounds) {

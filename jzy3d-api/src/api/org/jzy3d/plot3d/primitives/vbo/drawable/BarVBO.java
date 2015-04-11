@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.vbo;
+package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import javax.media.opengl.GL;
 
