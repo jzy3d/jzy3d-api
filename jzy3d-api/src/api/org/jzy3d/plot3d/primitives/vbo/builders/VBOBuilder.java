@@ -39,6 +39,11 @@ import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
  *
  */
 public abstract class VBOBuilder implements IGLLoader<DrawableVBO> {
+    
+    
+    
+    /* */
+    
     protected void fillWithCollection(DrawableVBO drawable, Collection<Coord3d> coordinates, ColorMapper colors, FloatBuffer vertices, IntBuffer indices, BoundingBox3d bounds) {
         drawable.setHasColorBuffer(colors != null);
 
@@ -214,6 +219,12 @@ public abstract class VBOBuilder implements IGLLoader<DrawableVBO> {
                                                         // *2 for having a color
             } else {
                 return n * (dim * 2) * geometrySize;// *2 lines
+            }
+        } else if (type == GL.GL_LINE_STRIP) {
+            if (hasColor) {
+                return n * (dim * 2) * geometrySize; // *2 for having a color
+            } else {
+                return n * dim * geometrySize;// *2 lines
             }
         } else {
             if (hasColor) {
