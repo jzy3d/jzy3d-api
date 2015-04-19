@@ -27,6 +27,7 @@ import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 import com.jogamp.opengl.util.texture.TextureData;
@@ -84,17 +85,44 @@ public class Chart {
         view.setChart(this);
     }
     
-    public void black(){
+    /* HELPERS TO PRETTIFY CHARTS */
+    
+    public Chart black(){
         getView().setBackgroundColor(Color.BLACK);
         getAxeLayout().setGridColor(Color.WHITE);
         getAxeLayout().setMainColor(Color.WHITE);
+        return this;
     }
 
-    public void white(){
+    public Chart white(){
         getView().setBackgroundColor(Color.WHITE);
         getAxeLayout().setGridColor(Color.BLACK);
         getAxeLayout().setMainColor(Color.BLACK);
+        return this;
     }
+    
+    public Chart view2d() {
+        IAxeLayout axe = getAxeLayout();
+        axe.setZAxeLabelDisplayed(false);
+        axe.setTickLineDisplayed(false);
+
+        View view = getView();
+        view.setViewPositionMode(ViewPositionMode.TOP);
+        view.setSquared(true);
+        view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
+        return this;
+    }
+    
+    public Chart add(AbstractDrawable drawable) {
+        getScene().getGraph().add(drawable);
+        return this;
+    }
+
+    /** Alias for {@link display()} */
+    public IFrame show(Rectangle rectangle, String title) {
+        return display(rectangle, title);
+    }
+
 
     public IFrame display(Rectangle rectangle, String title) {
         return getFactory().newFrame(this, rectangle, title);
@@ -226,7 +254,7 @@ public class Chart {
     public List<AbstractCameraController> getControllers() {
         return controllers;
     }
-
+    
     public void addDrawable(AbstractDrawable drawable) {
         getScene().getGraph().add(drawable);
     }
@@ -264,6 +292,10 @@ public class Chart {
         light.setRepresentationRadius(radius);
         getScene().add(light);
         return light;
+    }
+    
+    public View view(){
+        return getView();
     }
 
     public View getView() {

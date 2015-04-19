@@ -6,13 +6,6 @@ public class Range extends Scale {
 		super(min, max);
 	}
 	
-	public void enlarge(double ratio){
-		double offset = (max-min) * ratio;
-		if(offset==0)
-    		offset=1;
-		min-=offset;
-		max+=offset;
-	}
 	
 	public Range createEnlarge(double ratio){
 		double offset = (max-min) * ratio;

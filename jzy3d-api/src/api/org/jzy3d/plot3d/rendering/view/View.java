@@ -298,11 +298,53 @@ public class View {
         }
     }
 
+    /** Z scale. 
+     * 
+     * @see setScaleX, setScaleY, setScaleZ
+     */
     public void setScale(org.jzy3d.maths.Scale scale) {
+        setScaleZ(scale, true);
+    }
+
+    /** Z scale. 
+     * 
+     * @see setScaleX, setScaleY, setScaleZ
+     */
+    public void setScale(org.jzy3d.maths.Scale scale, boolean notify) {
+        setScaleZ(scale, notify);
+    }
+    
+    public void setScaleX(org.jzy3d.maths.Scale scale) {
         setScale(scale, true);
     }
 
-    public void setScale(org.jzy3d.maths.Scale scale, boolean notify) {
+    public void setScaleX(org.jzy3d.maths.Scale scale, boolean notify) {
+        BoundingBox3d bounds = getBounds();
+        bounds.setXmin(scale.getMin());
+        bounds.setXmax(scale.getMax());
+        setBoundManual(bounds);
+        if (notify)
+            shoot();
+    }
+    
+    public void setScaleY(org.jzy3d.maths.Scale scale) {
+        setScale(scale, true);
+    }
+
+    public void setScaleY(org.jzy3d.maths.Scale scale, boolean notify) {
+        BoundingBox3d bounds = getBounds();
+        bounds.setYmin(scale.getMin());
+        bounds.setYmax(scale.getMax());
+        setBoundManual(bounds);
+        if (notify)
+            shoot();
+    }
+    
+    public void setScaleZ(org.jzy3d.maths.Scale scale) {
+        setScale(scale, true);
+    }
+
+    public void setScaleZ(org.jzy3d.maths.Scale scale, boolean notify) {
         BoundingBox3d bounds = getBounds();
         bounds.setZmin(scale.getMin());
         bounds.setZmax(scale.getMax());
@@ -868,7 +910,7 @@ public class View {
     public void render(GL gl, GLU glu) {
         fireViewLifecycleWillRender(null);
         
-        init(gl);
+//        init(gl);
         renderBackground(gl, glu, 0f, 1f);
         renderScene(gl, glu);
         renderOverlay(gl);

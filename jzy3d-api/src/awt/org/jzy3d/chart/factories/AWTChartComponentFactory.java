@@ -31,13 +31,14 @@ import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 public class AWTChartComponentFactory extends ChartComponentFactory {
+    
     public static Chart chart() {
         return chart(Quality.Intermediate);
     }
     
     public static Chart chart(Quality quality) {
         AWTChartComponentFactory f = new AWTChartComponentFactory();
-        return f.newChart(quality, Toolkit.newt);
+        return f.newChart(quality, /*Toolkit.newt*/Chart.DEFAULT_WINDOWING_TOOLKIT);
     }
 
     public static Chart chart(String toolkit) {
