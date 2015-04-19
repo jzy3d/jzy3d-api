@@ -58,7 +58,7 @@ public class TrialFaceOrdering {
 
     public void BuildAndLaunch() {
         IChartComponentFactory factory = getFactory();
-        final Chart chart = new Chart(factory, Quality.Advanced, "newt");
+        final Chart chart = new Chart(factory, Quality.Advanced, "awt");
         chart.getAxeLayout().setZTickRenderer(new ScientificNotationTickRenderer(1));
         chart.getAxeLayout().setYTickRenderer(new FixedDecimalTickRenderer(1));
         chart.getAxeLayout().setXTickRenderer(new FixedDecimalTickRenderer(1));
