@@ -3,7 +3,7 @@ package org.jzy3d.plot2d.primitives;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.HistogramRange;
+import org.jzy3d.maths.Histogram;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.Point;
@@ -12,10 +12,10 @@ import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.providers.StaticTickProvider;
 
 public class Histogram2d {
-    protected HistogramRange model;
+    protected Histogram model;
     protected AbstractComposite drawable;
     
-    public Histogram2d(HistogramRange model) {
+    public Histogram2d(Histogram model) {
         setModel(model);
     }
     
@@ -34,12 +34,12 @@ public class Histogram2d {
         layout(chart);
     }
     
-    public void setModel(HistogramRange model) {
+    public void setModel(Histogram model) {
         this.model = model;
         this.drawable = buildDrawable(model);
     }
 
-    public HistogramRange getModel() {
+    public Histogram getModel() {
         return model;
     }
 
@@ -47,7 +47,7 @@ public class Histogram2d {
         return drawable;
     }
 
-    protected AbstractComposite buildDrawable(HistogramRange model){
+    protected AbstractComposite buildDrawable(Histogram model){
         AbstractComposite c = new AbstractComposite() {
         };
         float z= 0;
