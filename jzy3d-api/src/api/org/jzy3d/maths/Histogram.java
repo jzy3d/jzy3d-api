@@ -1,56 +1,89 @@
 package org.jzy3d.maths;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
-public class Histogram<X,V> {
-    Map<X,V> data;
+import java.util.Map.Entry;
+
+public class Histogram {
+    protected Range[] ranges ;
+    protected Map<Range,Integer> data;
     
-    public Histogram(){
-        data = new HashMap<X,V>();
+    public Histogram(float min, float max, int bins){
+        initBins(min, max, bins);
     }
 
-    public static void main(String[] args) {
-        Histogram<Integer, Integer> h = new Histogram<Integer, Integer>();
-        h.put(20, 3);
-        h.put(30, 5);
-        h.put(40, 15);
-        h.put(50, 4);
-        h.console();
-
-    
+    private void initBins(float min, float max, int bins) {
+        data = new HashMap<Range,Integer>(bins);
+        ranges = new Range[bins];
         
-        float min = 0;
-        float max = 1;
-        int bins = 20;
         
-        Histogram<Range, Float> h2 = new Histogram<Range, Float>();
-
+        float step = (max-min)/bins;
+        float rmin = min;
+        for (int i = 0; i < bins - 1; i++) {
+            ranges[i] = new Range(rmin, rmin + step);
+            data.put(ranges[i], 0);
+            rmin = rmin + step;
+        }
+        ranges[bins-1] = new Range(rmin, max);
+        data.put(ranges[bins-1], 0);
     }
 
-    public void put(X x,V value){
-        data.put(x, value);
+    public void add(List<Float> values){
+        for(float v : values){
+            add(v);
+        }
     }
     
-    private void console(){
-        SortedSet<X> xs = new TreeSet<X>(data.keySet());
-        for(X x : xs){
-            V value = data.get(x);
-            consoleKeyValue(x, value);
+    public void add(float value){
+        for(Entry<Range,Integer> e: data.entrySet()){
+            Range r = e.getKey();
+            if(r.isIn(value, true, true)){
+                e.setValue(e.getValue()+1);
+                return;
+            }
+        }
+        illegalValueException(value);
+    }
+
+    private void illegalValueException(float value) {
+        StringBuilder sb = new StringBuilder();
+        String m = "value could not be added to any pre-configured bin. "
+                + "Are you adding a value out of the min-max range you used to build " 
+                + Histogram.class.getSimpleName() + "?";
+        sb.append(m + "\n");
+        sb.append("min:" + ranges[0].getMin() + "\n");
+        sb.append("max:" + ranges[ranges.length-1].getMax() + "\n");
+        sb.append("value:" + value + "\n");
+        throw new IllegalArgumentException(sb.toString());
+    }
+    
+    public Range[] ranges(){
+        return ranges;
+    }
+
+    public int getCount(int bin) {
+        return data.get(ranges[bin]);
+    }
+    
+    public void setCount(int bin, int value) {
+        data.put(ranges[bin], value);
+    }
+
+    public void console() {
+        for (int i = 0; i < ranges.length; i++) {
+            System.out.println(ranges[i] + " : " + data.get(ranges[0]));
         }
     }
 
-    private void consoleKeyValue(X x, V value) {
-        consoleKey(x);
-        consoleValue(value);
-        System.out.println();
-    }
-
-    private void consoleKey(X key) {
-        System.out.print(key + " : ");
-    }
-
-    private void consoleValue(V value) {
-        System.out.print(value);
+    
+    public int computeMaxCount() {
+        int max = Integer.MIN_VALUE;
+        for(Entry<Range,Integer> e : data.entrySet()){
+            int v = e.getValue();
+            if(v>max)
+                max = v;
+        }
+        return max;
     }
 }
