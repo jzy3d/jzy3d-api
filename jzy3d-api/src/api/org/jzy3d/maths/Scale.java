@@ -52,13 +52,18 @@ public class Scale {
     }
     
     public boolean isIn(float value){
-        if(value<=min)
+        return isIn(value, false, true);
+    }
+
+    public boolean isIn(float value, boolean includingMin, boolean includingMax){
+        if(includingMin?value<min:value<=min)
             return false;
-        if(value>max)
+        if(includingMax?value>max:value>=max)
             return false;
         return true;
     }
 
+    
     public boolean valid() {
         if (min <= max)
             return true;
