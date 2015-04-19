@@ -1,6 +1,7 @@
 package org.jzy3d.maths;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class Statistics {
 	/**
@@ -36,6 +37,22 @@ public class Statistics {
 			}
 		return sum/count;
 	}
+    
+    public static float min(List<Float> values) {
+        if(values.size()==0)
+            throw new IllegalArgumentException("Input list must have a length greater than 0");
+        
+        float minv = Float.POSITIVE_INFINITY;
+        
+        for( int i=0; i<values.size(); i++ ){
+            float f = values.get(i);
+            if(!Float.isNaN(f))
+                if( f < minv )
+                    minv = f;   
+        }
+        return minv;
+    }
+
     
     /**
 	 * Computes the minimum value of an array of doubles. NaN values are ignored during the computation.
@@ -132,6 +149,22 @@ public class Statistics {
 			}
 		return index;
 	}
+    
+    public static float max(List<Float> values){
+        if(values.size()==0)
+            throw new IllegalArgumentException("Input array must have a length greater than 0");
+
+        float maxv = Float.NEGATIVE_INFINITY;
+        
+        for( int i=0; i<values.size(); i++ ){
+            float f = values.get(i);
+            if(!Float.isNaN(f))
+                if( f > maxv )
+                    maxv = f;  
+        }
+        return maxv;
+    }
+
     
 	/**
 	 * Computes the maximum value of an array of doubles. NaN values are ignored during the computation.
@@ -349,4 +382,5 @@ public class Statistics {
     	
     	return out[0];
 	}
+
 }

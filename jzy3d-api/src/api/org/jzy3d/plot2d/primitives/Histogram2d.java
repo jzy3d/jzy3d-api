@@ -1,0 +1,75 @@
+package org.jzy3d.plot2d.primitives;
+
+import org.jzy3d.chart.Chart;
+import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.HistogramRange;
+import org.jzy3d.maths.Range;
+import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.Point;
+import org.jzy3d.plot3d.primitives.Polygon;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.providers.StaticTickProvider;
+
+public class Histogram2d {
+    protected HistogramRange model;
+    protected AbstractComposite drawable;
+    
+    public Histogram2d(HistogramRange model) {
+        setModel(model);
+    }
+    
+    /** Set global chart view settings to best draw this histogram. */
+    public void layout(Chart chart){
+        IAxeLayout layout = chart.getAxeLayout();
+        int ymax = getModel().computeMaxCount();
+        double[] ticks = {0, ymax/4, ymax/2, ymax/2 + ymax/4, ymax};
+        layout.setYTickProvider(new StaticTickProvider(ticks));
+        layout.setYAxeLabel("Count");
+        layout.setXAxeLabel("Value");
+    }
+    
+    public void addTo(Chart chart){
+        chart.add(drawable);
+        layout(chart);
+    }
+    
+    public void setModel(HistogramRange model) {
+        this.model = model;
+        this.drawable = buildDrawable(model);
+    }
+
+    public HistogramRange getModel() {
+        return model;
+    }
+
+    public AbstractComposite getDrawable() {
+        return drawable;
+    }
+
+    protected AbstractComposite buildDrawable(HistogramRange model){
+        AbstractComposite c = new AbstractComposite() {
+        };
+        float z= 0;
+        for (int i = 0; i < model.ranges().length; i++) {
+            Range range = model.ranges()[i];
+            
+            int count = model.getCount(i);
+            
+            Coord3d c1 = new Coord3d(range.getMin(), 0, z);
+            Coord3d c2 = new Coord3d(range.getMin(), count, z);
+            Coord3d c3 = new Coord3d(range.getMax(), count, z);
+            Coord3d c4 = new Coord3d(range.getMax(), 0, z);
+
+            Polygon p = new Polygon();
+            p.add(new Point(c1));
+            p.add(new Point(c2));
+            p.add(new Point(c3));
+            p.add(new Point(c4));
+            p.setColor(Color.MAGENTA);
+            p.setWireframeColor(Color.WHITE);
+            c.add(p);
+        }
+        return c;
+    }
+}
