@@ -36,7 +36,7 @@ public class AWTRenderer3d extends Renderer3d{
             view.render(gl, glu);
 
             if (doScreenshotAtNextDisplay) {
-                AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), true);
+                AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), false);
                 screenshot.readPixels(gl, true);
                 image = screenshot.getTextureData();
                 bufferedImage = screenshot.readPixelsToBufferedImage(gl, true);
