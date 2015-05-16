@@ -12,14 +12,11 @@ import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.ChartView;
-import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
 import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.maths.BoundingBox3d;
@@ -136,12 +133,12 @@ public class ChartComponentFactory implements IChartComponentFactory {
 
     @Override
     public ICameraMouseController newMouseController(Chart chart) {
-        ICameraMouseController mouse = null;
+        /*ICameraMouseController mouse = null;
         if (!chart.getWindowingToolkit().equals("newt"))
             mouse = new AWTCameraMouseController(chart);
         else
-            mouse = new NewtCameraMouseController(chart);
-        return mouse;
+            mouse = new NewtCameraMouseController(chart);*/
+        return new NewtCameraMouseController(chart);
     }
 
     @Override
@@ -150,9 +147,9 @@ public class ChartComponentFactory implements IChartComponentFactory {
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
         IScreenshotKeyController screenshot;
 
-        if (!chart.getWindowingToolkit().equals("newt"))
+/*        if (!chart.getWindowingToolkit().equals("newt"))
             screenshot = new AWTScreenshotKeyController(chart, file);
-        else
+        else*/
             screenshot = new NewtScreenshotKeyController(chart, file);
 
         screenshot.addListener(new IScreenshotEventListener() {
@@ -175,9 +172,9 @@ public class ChartComponentFactory implements IChartComponentFactory {
     @Override
     public ICameraKeyController newKeyController(Chart chart) {
         ICameraKeyController key = null;
-        if (!chart.getWindowingToolkit().equals("newt"))
+        /*if (!chart.getWindowingToolkit().equals("newt"))
             key = new AWTCameraKeyController(chart);
-        else
+        else*/
             key = new NewtCameraKeyController(chart);
         return key;
     }
@@ -193,8 +190,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
     }
 
     /**
-     * Use reflexion to access AWT dependant classes They will not be available
-     * for Android
+     * Use reflexion to access AWT dependant classes. 
      */
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {

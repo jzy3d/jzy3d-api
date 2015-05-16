@@ -1,5 +1,7 @@
 package org.jzy3d.chart.factories;
 
+import java.util.Date;
+
 import javax.media.opengl.GLCapabilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,9 +13,18 @@ import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
+import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
+import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
+import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
+import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
+import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
@@ -31,14 +42,14 @@ import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 public class AWTChartComponentFactory extends ChartComponentFactory {
-    
+
     public static Chart chart() {
         return chart(Quality.Intermediate);
     }
-    
+
     public static Chart chart(Quality quality) {
         AWTChartComponentFactory f = new AWTChartComponentFactory();
-        return f.newChart(quality, /*Toolkit.newt*/Chart.DEFAULT_WINDOWING_TOOLKIT);
+        return f.newChart(quality, Toolkit.awt/* Toolkit.newt */);
     }
 
     public static Chart chart(String toolkit) {
@@ -55,11 +66,11 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         AWTChartComponentFactory f = new AWTChartComponentFactory();
         return f.newChart(quality, toolkit);
     }
-    
+
     /* */
-    
+
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit){
+    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
         return new AWTChart(factory, quality, toolkit);
     }
 
@@ -75,19 +86,21 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         return new ColorbarViewportLayout();
     }
 
-    /** The AWTView support Java2d defined components (tooltips, background images)*/
+    /**
+     * The AWTView support Java2d defined components (tooltips, background
+     * images)
+     */
     @Override
     public View newView(Scene scene, ICanvas canvas, Quality quality) {
         return new AWTView(getFactory(), scene, canvas, quality);
     }
-    
 
     /** Provide AWT Texture loading for screenshots */
     @Override
     public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
         return new AWTRenderer3d(view, traceGL, debugGL);
     }
-    
+
     /** bypass reflection used in super implementation */
     @Override
     protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
@@ -99,7 +112,7 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     protected IFrame newFrameAWT(Chart chart, Rectangle bounds, String title, String message) {
         return new FrameAWT(chart, bounds, title, message);
     }
-    
+
     @Override
     public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
         boolean traceGL = false;
@@ -126,7 +139,7 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     protected ICanvas newCanvasAWT(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
         return new CanvasAWT(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
     }
-    
+
     /** bypass reflection used in super implementation */
     @Override
     protected ICanvas newCanvasSwing(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
@@ -137,8 +150,8 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     public IChartComponentFactory getFactory() {
         return this;
     }
-    
-    public JFrame newFrame(JPanel panel){
+
+    public JFrame newFrame(JPanel panel) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -151,4 +164,61 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         return frame;
     }
 
+    @Override
+    public ICameraMouseController newMouseController(Chart chart) {
+        return new AWTCameraMouseController(chart);
+    }
+
+    @Override
+    public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
+        // trigger screenshot on 's' letter
+        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
+        IScreenshotKeyController screenshot;
+
+        screenshot = new AWTScreenshotKeyController(chart, file);
+        screenshot.addListener(new IScreenshotEventListener() {
+            @Override
+            public void failedScreenshot(String file, Exception e) {
+                System.out.println("Failed to save screenshot:");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void doneScreenshot(String file) {
+                System.out.println("Screenshot: " + file);
+            }
+        });
+        return screenshot;
+    }
+
+    @Override
+    public ICameraKeyController newKeyController(Chart chart) {
+        ICameraKeyController key = null;
+        if (!chart.getWindowingToolkit().equals("newt"))
+            key = new AWTCameraKeyController(chart);
+        else
+            key = new NewtCameraKeyController(chart);
+        return key;
+    }
+
+    @Override
+    public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
+        /*Object canvas = chart.getCanvas();
+
+        if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasAWT"))
+            return newFrameAWT(chart, bounds, title, null);
+        // FrameSWT works as well
+        else if (canvas instanceof CanvasNewtAwt)
+            return newFrameAWT(chart, bounds, title, "[Newt]");
+        // FrameSWT works as well
+        else if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasSwing"))
+            return newFrameSwing(chart, bounds, title);
+        else {
+            String m = "No default frame could be found for the given Chart canvas: " + canvas.getClass();
+            System.err.println(m);
+            return null;
+            // throw new RuntimeException(m);
+        }*/
+        return newFrameAWT(chart, bounds, title, null);
+    }
 }

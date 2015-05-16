@@ -6,7 +6,6 @@ package org.jzy3d.plot3d.transform.space;
  * @author 
  */
 public class SpaceTransformLog implements SpaceTransform{
-
 	@Override
 	public float compute(float value) {
 		if(value <= 0) return 0;
