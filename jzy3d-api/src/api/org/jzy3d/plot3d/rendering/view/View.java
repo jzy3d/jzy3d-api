@@ -651,7 +651,7 @@ public class View {
             xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
             yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
             zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());
-            lmax = (float) Math.max(Math.max(xLen, yLen), zLen);
+            lmax = Math.max(Math.max(xLen, yLen), zLen);
         }
 
         if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
@@ -664,7 +664,10 @@ public class View {
             lmax = 1;
 
         // Return a scaler
-        return new Coord3d(lmax / xLen, lmax / yLen, lmax / zLen);
+        float xscale = (float)((double)lmax / (double)xLen);
+        float yscale = (float)((double)lmax / (double)yLen);
+        float zscale = (float)((double)lmax / (double)zLen);
+        return new Coord3d(xscale, yscale, zscale);
     }
 
     /* GL */
