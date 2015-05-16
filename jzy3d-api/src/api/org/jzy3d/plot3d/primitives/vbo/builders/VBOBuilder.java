@@ -13,8 +13,8 @@ import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
-import org.jzy3d.plot3d.primitives.vbo.buffers.VBO;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
  * The {@link VBOBuilder} is responsible for sizing a {@link FloatVBO}, filling

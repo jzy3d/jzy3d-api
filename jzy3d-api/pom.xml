@@ -57,7 +57,7 @@
 	</dependencies>
 
 	<build>
-<testSourceDirectory>src/tests</testSourceDirectory>		
+<!-- <testSourceDirectory>src/tests</testSourceDirectory>		 -->
 		<pluginManagement><!-- using it to have m2e being able to run add-source -->
 			<plugins>
 				<plugin>
