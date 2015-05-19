@@ -123,6 +123,13 @@ public class AxeBase implements IAxe {
         this.spaceTransformer = spaceTransformer;
     }
 
+    
+    @Override
+    public Coord3d getScale() {
+        return scale;
+    }
+
+
 	protected Coord3d scale;
 	protected BoundingBox3d bbox;
 	protected IAxeLayout layout;

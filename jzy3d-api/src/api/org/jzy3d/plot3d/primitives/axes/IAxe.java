@@ -20,6 +20,7 @@ public interface IAxe {
 	public void draw(GL gl, GLU glu, Camera camera);
 	
 	public void setScale(Coord3d scale);
+	public Coord3d getScale();
 	public BoundingBox3d getBoxBounds();
 	public Coord3d getCenter();
 	
