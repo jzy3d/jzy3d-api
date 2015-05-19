@@ -51,6 +51,13 @@ public class AxeBox implements IAxe {
     public void setAnnotations(List<AxeAnnotation> annotations) {
         this.annotations = annotations;
     }
+    
+    public void addAnnotation(AxeAnnotation annotation){
+        synchronized (annotations) {
+            annotations.add(annotation);
+        }
+    }
+
 
     /**
      * Draws the AxeBox. The camera is used to determine which axis is closest
@@ -68,8 +75,10 @@ public class AxeBox implements IAxe {
         doTransform(gl);
         drawGrid(gl);
 
-        for (AxeAnnotation a : annotations) {
-            a.draw(gl, this);
+        synchronized (annotations) {
+            for (AxeAnnotation a : annotations) {
+                a.draw(gl, this);
+            }
         }
 
         doTransform(gl);
