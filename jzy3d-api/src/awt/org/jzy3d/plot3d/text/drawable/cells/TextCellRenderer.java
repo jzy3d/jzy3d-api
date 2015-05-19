@@ -48,7 +48,7 @@ public class TextCellRenderer extends TextImageRenderer {
 
         // background
         g.setColor(backgroundColor);
-        g.fillRect(0, 0, c.x - 1, c.y - 1);
+        g.fillRect(0, 0, c.x, c.y);
 
         // border
         if (drawBorder) {
@@ -135,7 +135,7 @@ public class TextCellRenderer extends TextImageRenderer {
     /***************/
 
     protected IntegerCoord2d guessImageDimension(int n, Font font) {
-        BufferedImage img = new BufferedImage(100, 10, BufferedImage.TYPE_INT_ARGB);
+        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         Graphics g = img.getGraphics();
         g.setFont(font);
         FontMetrics fm = g.getFontMetrics();

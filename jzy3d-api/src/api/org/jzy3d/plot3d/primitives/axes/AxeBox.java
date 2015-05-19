@@ -1147,6 +1147,12 @@ public class AxeBox implements IAxe {
     public void setScale(Coord3d scale) {
         this.scale = scale;
     }
+    
+    @Override
+    public Coord3d getScale() {
+        return scale;
+    }
+
 
     /* */
 
@@ -1201,5 +1207,6 @@ public class AxeBox implements IAxe {
     protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
 
     protected SpaceTransformer spaceTransformer;
+
 
 }

@@ -32,7 +32,7 @@ public class TextImageRenderer {
 		return new BufferedImageTexture(img);
 	}
 	
-	protected IntegerCoord2d guessImageDimension(String text){
+	public IntegerCoord2d guessImageDimension(String text){
 		BufferedImage img = new BufferedImage(100,10, BufferedImage.TYPE_INT_ARGB);
 		Graphics g = img.getGraphics();
 		FontMetrics fm = g.getFontMetrics();		
