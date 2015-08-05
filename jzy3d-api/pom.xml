@@ -58,7 +58,66 @@
 
 	<build>
 <!-- <testSourceDirectory>src/tests</testSourceDirectory>		 -->
-		<pluginManagement><!-- using it to have m2e being able to run add-source -->
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/api</source>
+								<source>src/bridge</source>
+								<source>src/awt</source>
+								<source>src/swing</source>
+								<source>src/replay</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>org/jzy3d/junit/ChartTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>maths-io-jar</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<classifier>maths-io</classifier>
+							<excludes>
+								<exclude>org/jzy3d/*</exclude>
+							</excludes>
+							<includes>
+								<include>org/jzy3d/maths/**</include>
+								<include>org/jzy3d/io/*</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+
+		<!-- using it to have m2e being able to run add-source -->
+		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -90,64 +149,8 @@
 						<target>1.6</target>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<configuration>
-						<excludes>
-							<exclude>org/jzy3d/junit/ChartTest.java</exclude>
-						</excludes>
-					</configuration>
-				</plugin>
-
-				<plugin>
-					<artifactId>maven-jar-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>maths-io-jar</id>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-							<phase>package</phase>
-							<configuration>
-								<classifier>maths-io</classifier>
-								<excludes>
-									<exclude>org/jzy3d/*</exclude>
-								</excludes>
-								<includes>
-									<include>org/jzy3d/maths/**</include>
-									<include>org/jzy3d/io/*</include>
-								</includes>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
 			</plugins>
 		</pluginManagement>
-
-	<!-- <plugins>
-			<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>add-source</goal>
-							</goals>
-							<configuration>
-								<sources>
-									<source>src/api</source>
-									<source>src/bridge</source>
-									<source>src/awt</source>
-									<source>src/swing</source>
-									<source>src/replay</source>
-								</sources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-		</plugins> -->
 	</build>
 
 
