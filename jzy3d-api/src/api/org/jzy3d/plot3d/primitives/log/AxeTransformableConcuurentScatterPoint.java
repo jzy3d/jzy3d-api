@@ -2,14 +2,14 @@ package org.jzy3d.plot3d.primitives.log;
 
 import java.util.List;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterPoint;
 import org.jzy3d.plot3d.primitives.LightPoint;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 
 public class AxeTransformableConcuurentScatterPoint extends
 		ConcurrentScatterPoint {

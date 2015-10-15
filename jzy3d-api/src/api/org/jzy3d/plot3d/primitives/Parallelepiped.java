@@ -1,8 +1,5 @@
 package org.jzy3d.plot3d.primitives;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
@@ -11,6 +8,9 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 
 

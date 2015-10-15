@@ -3,14 +3,14 @@ package org.jzy3d.plot3d.primitives.log;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
+
+import com.jogamp.opengl.GL;
 
 public class AxeTransformableLineStrip extends LineStrip {
 	

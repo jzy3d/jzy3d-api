@@ -3,10 +3,9 @@ package org.jzy3d.plot3d.rendering.textures;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GLException;
-import javax.media.opengl.GLProfile;
-
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLException;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;

@@ -2,12 +2,10 @@ package org.jzy3d.chart.factories;
 
 import java.util.Date;
 
-import javax.media.opengl.GLCapabilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
-import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.bridge.swing.FrameSwing;
@@ -26,9 +24,7 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
-import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -39,6 +35,8 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+
+import com.jogamp.opengl.GLCapabilities;
 
 /**
  * Still using some AWT components

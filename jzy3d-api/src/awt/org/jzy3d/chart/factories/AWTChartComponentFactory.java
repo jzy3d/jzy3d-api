@@ -2,7 +2,6 @@ package org.jzy3d.chart.factories;
 
 import java.util.Date;
 
-import javax.media.opengl.GLCapabilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -42,6 +41,8 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+
+import com.jogamp.opengl.GLCapabilities;
 
 public class AWTChartComponentFactory extends ChartComponentFactory {
 

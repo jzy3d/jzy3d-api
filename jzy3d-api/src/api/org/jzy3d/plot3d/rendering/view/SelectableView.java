@@ -19,13 +19,13 @@
 
 package org.jzy3d.plot3d.rendering.view;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 /**
  * An {@ InteractiveView} handles 2d projection updates to ensure mouse is always computing

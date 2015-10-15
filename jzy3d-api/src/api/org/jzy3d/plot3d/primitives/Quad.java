@@ -1,10 +1,10 @@
 package org.jzy3d.plot3d.primitives;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 
 /**
  * A {@link Quad} extends a {@link Polygon} in order to provide a specific

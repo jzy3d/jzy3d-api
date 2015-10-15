@@ -5,8 +5,6 @@ import java.nio.IntBuffer;
 import java.util.Collection;
 import java.util.List;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.io.IGLLoader;
@@ -15,6 +13,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+
+import com.jogamp.opengl.GL;
 
 /**
  * The {@link VBOBuilder} is responsible for sizing a {@link FloatVBO}, filling

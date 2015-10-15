@@ -1,11 +1,11 @@
 package org.jzy3d.plot3d.primitives.axes;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GL2GL3;
-
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL2GL3;
 
 public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAnnotation {
 

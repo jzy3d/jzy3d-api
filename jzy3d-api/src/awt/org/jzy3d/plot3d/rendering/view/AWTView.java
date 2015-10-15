@@ -5,11 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2GL3;
-import javax.media.opengl.fixedfunc.GLMatrixFunc;
-import javax.media.opengl.glu.GLU;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartView;
@@ -28,6 +23,10 @@ import org.jzy3d.plot3d.rendering.tooltips.ITooltipRenderer;
 import org.jzy3d.plot3d.rendering.tooltips.Tooltip;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2GL3;
+import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
+import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.awt.Overlay;
 
 public class AWTView extends ChartView {
