@@ -1,13 +1,12 @@
 package org.jzy3d.chart;
 
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLProfile;
-
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 import com.jogamp.newt.Display;
 import com.jogamp.newt.NewtFactory;
 import com.jogamp.newt.Screen;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
 
 /**
  * {@link Settings} is a singleton that holds general settings that configure

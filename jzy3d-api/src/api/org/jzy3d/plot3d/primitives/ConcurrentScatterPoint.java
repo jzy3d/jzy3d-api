@@ -2,11 +2,11 @@ package org.jzy3d.plot3d.primitives;
 
 import java.util.List;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.transform.Transform;
+
+import com.jogamp.opengl.GL;
 
 public class ConcurrentScatterPoint extends ScatterPoint {
     public ConcurrentScatterPoint() {

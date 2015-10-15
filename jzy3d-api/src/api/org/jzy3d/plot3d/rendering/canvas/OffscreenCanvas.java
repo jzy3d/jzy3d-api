@@ -3,18 +3,17 @@ package org.jzy3d.plot3d.rendering.canvas;
 import java.io.File;
 import java.io.IOException;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLDrawable;
-import javax.media.opengl.GLDrawableFactory;
-import javax.media.opengl.GLPbuffer;
-import javax.media.opengl.GLProfile;
-
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLDrawable;
+import com.jogamp.opengl.GLDrawableFactory;
+import com.jogamp.opengl.GLOffscreenAutoDrawable;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -64,7 +63,7 @@ public class OffscreenCanvas implements ICanvas {
         
         if(glpBuffer!=null)
             glpBuffer.removeGLEventListener(renderer);
-        glpBuffer = factory.createGLPbuffer(null, capabilities, null, width, height, null);
+        glpBuffer = factory.createOffscreenAutoDrawable(null, capabilities, null, width, height);
         glpBuffer.addGLEventListener(renderer);
     }
 
@@ -76,11 +75,12 @@ public class OffscreenCanvas implements ICanvas {
         if (!GLDrawableFactory.getFactory(caps.getGLProfile()).canCreateGLPbuffer(null, caps.getGLProfile()))
             throw new RuntimeException("No pbuffer support");
 
-        glpBuffer = GLDrawableFactory.getFactory(caps.getGLProfile()).createGLPbuffer(null, caps, null, width, height, null);
+        glpBuffer = GLDrawableFactory.getFactory(caps.getGLProfile()).createOffscreenAutoDrawable(null, caps, null, width, height);
         glpBuffer.addGLEventListener(renderer);
     }
 
-    public GLPbuffer getGlpBuffer() {
+    @Deprecated
+    public GLOffscreenAutoDrawable getGlpBuffer() {
         return glpBuffer;
     }
 
@@ -174,6 +174,6 @@ public class OffscreenCanvas implements ICanvas {
 
     protected View view;
     protected Renderer3d renderer;
-    protected GLPbuffer glpBuffer;
+    protected GLOffscreenAutoDrawable glpBuffer;
     protected GLCapabilities capabilities;
 }

@@ -1,8 +1,5 @@
 package org.jzy3d.chart.controllers.mouse.picking;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
@@ -16,6 +13,8 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 public class NewtMousePickingController<V, E> extends AbstractCameraController
 		implements MouseListener {

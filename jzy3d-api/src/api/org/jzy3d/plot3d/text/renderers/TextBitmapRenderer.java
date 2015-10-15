@@ -1,8 +1,5 @@
 package org.jzy3d.plot3d.text.renderers;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
@@ -15,6 +12,8 @@ import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 /**
