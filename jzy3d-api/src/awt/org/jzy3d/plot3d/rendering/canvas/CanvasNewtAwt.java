@@ -5,11 +5,6 @@ import java.awt.Panel;
 import java.io.File;
 import java.io.IOException;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GLAnimatorControl;
-import javax.media.opengl.GLCapabilitiesImmutable;
-import javax.media.opengl.GLDrawable;
-
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -19,6 +14,10 @@ import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.opengl.GLWindow;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLAnimatorControl;
+import com.jogamp.opengl.GLCapabilitiesImmutable;
+import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;

@@ -1,10 +1,10 @@
 package org.jzy3d.plot3d.primitives.axes;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
 
 public class AxeLineAnnotation {
     protected Color color = Color.RED;

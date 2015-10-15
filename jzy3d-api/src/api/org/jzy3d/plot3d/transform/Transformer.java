@@ -1,8 +1,8 @@
 package org.jzy3d.plot3d.transform;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.Coord3d;
+
+import com.jogamp.opengl.GL;
 
 
 /** A {@link Transformer} is able to execute a transformation into

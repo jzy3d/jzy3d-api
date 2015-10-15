@@ -1,9 +1,9 @@
 package org.jzy3d.plot3d.rendering.view.layout;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.chart.Chart;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 public interface IViewportLayout {
     public void update(Chart chart);

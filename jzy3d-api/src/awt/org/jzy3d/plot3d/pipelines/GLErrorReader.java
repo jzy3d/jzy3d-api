@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.pipelines;
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2ES1;
-import javax.media.opengl.GL2ES2;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2ES1;
+import com.jogamp.opengl.GL2ES2;
 
 /** This utility allows checking the GL2 error bit after a call to a 
  * GL2 command.

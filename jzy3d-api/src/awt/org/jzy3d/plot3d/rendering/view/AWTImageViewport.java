@@ -3,12 +3,12 @@ package org.jzy3d.plot3d.rendering.view;
 import java.awt.Image;
 import java.nio.ByteBuffer;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.fixedfunc.GLMatrixFunc;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot3d.rendering.image.GLImage;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
+import com.jogamp.opengl.glu.GLU;
 
 
 /** A {@link AWTImageViewport} allows displaying a 2d {@link Image} within an OpenGL2 viewport.

@@ -1,8 +1,8 @@
 package org.jzy3d.io;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
+
+import com.jogamp.opengl.GL;
 
 /** Defines a loader that requires a GL context.
  * 

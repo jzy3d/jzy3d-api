@@ -3,10 +3,10 @@ package org.jzy3d.plot3d.transform;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
 
 /**
  * A {@link Transform} stores a sequence of {@link Transformer}s, that are of

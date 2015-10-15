@@ -1,9 +1,9 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.maths.Dimension;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 public interface IImageViewport {
 
