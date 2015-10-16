@@ -133,12 +133,12 @@ public class AWTView extends ChartView {
 
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
             Graphics2D g2d = null;
-            try {
+            //try {
                 g2d = overlay.createGraphics();
-            } catch (Exception e) {
+            /*} catch (Exception e) {
                 Logger.getLogger(View.class).error(e, e);
                 return;
-            }
+            }*/
             g2d.setBackground(bgOverlay);
             g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
