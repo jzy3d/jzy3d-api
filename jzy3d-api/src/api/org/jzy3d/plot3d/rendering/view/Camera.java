@@ -437,8 +437,12 @@ public class Camera extends AbstractViewportManager {
         // Set perspective
         if (projection == CameraMode.PERSPECTIVE) {
             boolean stretchToFill = ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode());
-
-            glu.gluPerspective(computeFieldOfView(radius * 2, eye.distance(target)), stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1, near, far);
+            double fov = computeFieldOfView(radius * 2, eye.distance(target)); 
+            float aspect = stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1;
+            float nearCorrected = near<=0?0.000000000000000000000000000000000000001f:near;
+            
+            glu.gluPerspective(fov, aspect, nearCorrected, far);
+            
         } else if (projection == CameraMode.ORTHOGONAL) {
             if (gl.isGL2()) {
                 if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
