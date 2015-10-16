@@ -1,6 +1,8 @@
 package org.jzy3d.analysis;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public abstract class AbstractAnalysis implements IAnalysis{
 	@Override
@@ -17,6 +19,19 @@ public abstract class AbstractAnalysis implements IAnalysis{
 	public boolean isInitialized(){
 	    return chart!=null;
 	}
+	
+	@Override
+	public Chart initializeChart(){
+        AWTChartComponentFactory f = new AWTChartComponentFactory();
+        return f.newChart(Chart.DEFAULT_QUALITY, getCanvasType());
+	}
+
+    @Override
+    public Chart initializeChart(Quality quality){
+        AWTChartComponentFactory f = new AWTChartComponentFactory();
+        return f.newChart(quality, getCanvasType());
+    }
+
 	
 	@Override
 	public Chart getChart(){

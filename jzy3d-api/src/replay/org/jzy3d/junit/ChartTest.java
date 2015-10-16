@@ -3,13 +3,18 @@ package org.jzy3d.junit;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-import org.junit.Test;
-import org.jzy3d.chart.Chart;
+import javax.imageio.ImageIO;
 
+import org.apache.log4j.Logger;
+import org.junit.Assert;
+import org.jzy3d.chart.Chart;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
+
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -17,21 +22,24 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * Primitives for chart tests.
  * 
  * A chart having a screenshot different from the test case
- * image will generate a call to {@link org.junit.Assert.fail}
+ * image will generate throw a ChartTestFailed exception.
  * 
  * @author martin
  */
 public class ChartTest{
-    public static ChartTest tester = new ChartTest();
+    //public static ChartTest tester = new ChartTest();
     
     public static void assertSimilar(Chart chart, String testImage){
         try {
-            tester.execute(chart, testImage);
+            new ChartTest().execute(chart, testImage);
         } catch (IOException e) {
             e.printStackTrace();
+            Assert.fail(e.getMessage());
         }
         assertTrue(testImage, true);
     }
+    
+    
     /*
      * In Java, a mouse click only registers if the mouse is pressed and
      * released without moving the mouse at all. This is difficult for most
@@ -69,18 +77,6 @@ public class ChartTest{
         execute(chart, getTestCaseFileName());
     }
 
-    public void execute(TextureData image, String testImage) throws IOException {
-        clean(getTestCaseFailedFileName());
-
-        if (!isBuilt(testImage))
-            build(image, testImage);
-        test(image, testImage);
-    }
-
-    public void execute(TextureData image) throws IOException {
-        execute(image, getTestCaseFileName());
-    }
-
     /* Primitives to test images */
 
     public void clean(String testImage) {
@@ -112,41 +108,52 @@ public class ChartTest{
             Logger.getLogger(ChartTest.class).info("compare chart with " + testImage);
             compare(chart, testImage);
         } catch (IOException e) {
-            fail("IOException: " + e.getMessage());
+            fail("IOException: " + e.getMessage() + " for " + testImage);
         } catch (ChartTestFailed e) {
-            screenshot(chart, testImage.replace(".", "#ERROR#."));
+            String errorFile = getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#ERROR#.");
+            screenshot(chart, errorFile);//testImage.replace(".", "#ERROR#."));
             fail("Chart test failed: " + e.getMessage() + " see " + testImage);
-        }
-    }
-
-    public void test(TextureData image, String testImage) throws IOException {
-        try {
-            Logger.getLogger(ChartTest.class).info("compare chart with " + testImage);
-            compare(image, testImage);
-        } catch (IOException e) {
-            fail("IOException: " + e.getMessage());
-        } catch (ChartTestFailed e) {
-            fail("Image test failed: " + e.getMessage() + " see " + testImage);
         }
     }
 
     /* */
 
+    /**
+     * Compare the image displayed by the chart with an image given by filename
+     * @param chart
+     * @param filename
+     * @throws IOException
+     * @throws ChartTestFailed
+     */
     public void compare(Chart chart, String filename) throws IOException, ChartTestFailed {
-        TextureData i = chart.screenshot();
-
-        if (i != null) {
-            compare(i, filename);
-        } else {
-            throw new RuntimeException("screenshot not available");
+        
+        // Will compare buffered
+        if(chart.getCanvas().getRenderer() instanceof AWTRenderer3d){
+            chart.screenshot();
+            AWTRenderer3d awtR = (AWTRenderer3d)chart.getCanvas().getRenderer();
+            BufferedImage actual = awtR.getLastScreenshotImage();
+            BufferedImage expected = loadBufferedImage(filename);
+            
+            compare(actual, expected);
+        }
+        else {
+            TextureData actual = chart.screenshot();
+            TextureData expected = loadTextureData(filename, chart.getView().getCurrentGL());
+            //compare(i, i2);
+            
+            Logger.getLogger(ChartTest.class).warn("CAN NOT COMPARE TEXTURE DATA FOR THE MOMENT");
         }
     }
-
-    public void compare(TextureData i, String filename) throws IOException, ChartTestFailed {
-    	Logger.getLogger(ChartTest.class).info("did NOT compared to " + filename);
-        //Texture i2 = TextureIO.newTexture(new File(filename), true);
-        //compare(i, i2);
+    
+    public BufferedImage loadBufferedImage(String filename) throws IOException{
+        return ImageIO.read(new File(filename));
     }
+
+    public TextureData loadTextureData(String filename, GL gl) throws IOException {
+        TextureData i2 = TextureIO.newTextureData(gl.getGLProfile(), new File(filename), true, null);
+        return i2;
+    }
+    
 
     /**
      * Compare images pixel-wise.
@@ -164,21 +171,46 @@ public class ChartTest{
         int i2W = i2.getWidth();
         int i2H = i2.getHeight();
 
-//        if (i1W == i2W && i1H == i2H) {
-//            for (int i = 0; i < i1W; i++) {
-//                for (int j = 0; j < i1H; j++) {
-//                    int p1rgb = i1.getRGB(i, j);
-//                    int p2rgb = i2.getRGB(i, j);
-//                    if (p1rgb != p2rgb) {
-//                        String m = "pixel diff @(" + i + "," + j + ")";
-//                        throw new ChartTestFailed(m, i1, i2);
-//                    }
-//                }
-//            }
-//        } else {
-//            String m = "image size differ: i1={" + i1W + "," + i1H + "} i2={" + i2W + "," + i2H + "}";
-//            throw new ChartTestFailed(m);
-//        }
+        if (i1W == i2W && i1H == i2H) {
+            for (int i = 0; i < i1W; i++) {
+                for (int j = 0; j < i1H; j++) {
+                    /*int p1rgb = i1.getRGB(i, j);
+                    int p2rgb = i2.getRGB(i, j);
+                    if (p1rgb != p2rgb) {
+                        String m = "pixel diff @(" + i + "," + j + ")";
+                        throw new ChartTestFailed(m, i1, i2);
+                    }*/
+                }
+            }
+        } else {
+            String m = "image size differ: i1={" + i1W + "," + i1H + "} i2={" + i2W + "," + i2H + "}";
+            throw new ChartTestFailed(m);
+        }
+    }
+    
+    public void compare(BufferedImage i1, BufferedImage i2) throws ChartTestFailed {
+        // int rbg = image.getRGB((int) x, (maxRow) - ((int) y));
+
+        int i1W = i1.getWidth();
+        int i1H = i1.getHeight();
+        int i2W = i2.getWidth();
+        int i2H = i2.getHeight();
+
+        if (i1W == i2W && i1H == i2H) {
+            for (int i = 0; i < i1W; i++) {
+                for (int j = 0; j < i1H; j++) {
+                    int p1rgb = i1.getRGB(i, j);
+                    int p2rgb = i2.getRGB(i, j);
+                    if (p1rgb != p2rgb) {
+                        String m = "pixel diff @(" + i + "," + j + ")";
+                        throw new ChartTestFailed(m, i1, i2);
+                    }
+                }
+            }
+        } else {
+            String m = "image size differ: i1={" + i1W + "," + i1H + "} i2={" + i2W + "," + i2H + "}";
+            throw new ChartTestFailed(m);
+        }
     }
 
     /* */
@@ -222,11 +254,6 @@ public class ChartTest{
 
     public String getTestCanvasType() {
         return "offscreen, " + WIDTH + ", " + HEIGHT;
-    }
-    
-    @Test
-    public void voidTest() {
-
     }
 
     /* */
