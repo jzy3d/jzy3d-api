@@ -96,7 +96,7 @@ public class NewtMousePickingController<V, E> extends AbstractCameraController
 		if (threadController != null)
 			threadController.stop();
 		float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
-		System.out.println(NewtMousePickingController.class.getSimpleName() + "wheel:" + factor * 100);
+		//System.out.println(NewtMousePickingController.class.getSimpleName() + "wheel:" + factor * 100);
 		zoomX(factor);
 		zoomY(factor);		
 		chart.getView().shoot();
