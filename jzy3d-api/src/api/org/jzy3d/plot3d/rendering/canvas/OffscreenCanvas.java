@@ -63,19 +63,7 @@ public class OffscreenCanvas implements ICanvas {
         
         if(glpBuffer!=null)
             glpBuffer.removeGLEventListener(renderer);
-        glpBuffer = factory.createOffscreenAutoDrawable(null, capabilities, null, width, height);
-        glpBuffer.addGLEventListener(renderer);
-    }
-
-    protected void initGLPBuffer(int width, int height) {
-        GLCapabilities caps = org.jzy3d.chart.Settings.getInstance().getGLCapabilities();
-        caps.setDoubleBuffered(false);
-        
-        
-        if (!GLDrawableFactory.getFactory(caps.getGLProfile()).canCreateGLPbuffer(null, caps.getGLProfile()))
-            throw new RuntimeException("No pbuffer support");
-
-        glpBuffer = GLDrawableFactory.getFactory(caps.getGLProfile()).createOffscreenAutoDrawable(null, caps, null, width, height);
+        glpBuffer = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), capabilities, null, width, height);
         glpBuffer.addGLEventListener(renderer);
     }
 
