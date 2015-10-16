@@ -28,6 +28,9 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * </code>
  * </pre>
  * 
+ * Note that the {@link GLCapabilities} are modified while an instance of {@link OffscreenCanvas} 
+ * is modified.
+ * 
  * @author Nils Hoffman
  * @author Martin Pernollet
  */
@@ -41,7 +44,7 @@ public class OffscreenCanvas implements ICanvas {
         this.renderer = factory.newRenderer(view, traceGL, debugGL);
         this.capabilities = capabilities;
         
-        initGLPBuffer(capabilities, width, height);
+        initBuffer(capabilities, width, height);
     }
 
     /**
@@ -53,13 +56,15 @@ public class OffscreenCanvas implements ICanvas {
      * @param width
      * @param height
      */
-    public void initGLPBuffer(GLCapabilities capabilities, int width, int height) {
+    public void initBuffer(GLCapabilities capabilities, int width, int height) {
         GLProfile profile = capabilities.getGLProfile();
         capabilities.setDoubleBuffered(false);
+        capabilities.setPBuffer(true);
         
-        if (!GLDrawableFactory.getFactory(profile).canCreateGLPbuffer(null, profile))
-            throw new RuntimeException("No pbuffer support");
         GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
+        
+        if (!factory.canCreateGLPbuffer(null, profile))
+            throw new RuntimeException("No pbuffer support");
         
         if(glpBuffer!=null)
             glpBuffer.removeGLEventListener(renderer);
@@ -73,7 +78,7 @@ public class OffscreenCanvas implements ICanvas {
     }
 
     @Override
-    public GLDrawable getDrawable() {
+    public GLOffscreenAutoDrawable getDrawable() {
         return glpBuffer;
     }
 
@@ -109,19 +114,11 @@ public class OffscreenCanvas implements ICanvas {
         return view;
     }
 
-    /**
-     * Provide the actual renderer width for the open gl camera settings, which
-     * is obtained after a resize event.
-     */
     @Override
     public int getRendererWidth() {
         return (renderer != null ? renderer.getWidth() : 0);
     }
 
-    /**
-     * Provide the actual renderer height for the open gl camera settings, which
-     * is obtained after a resize event.
-     */
     @Override
     public int getRendererHeight() {
         return (renderer != null ? renderer.getHeight() : 0);
@@ -157,8 +154,6 @@ public class OffscreenCanvas implements ICanvas {
     public GLCapabilities getCapabilities() {
         return capabilities;
     }
-
-
 
     protected View view;
     protected Renderer3d renderer;
