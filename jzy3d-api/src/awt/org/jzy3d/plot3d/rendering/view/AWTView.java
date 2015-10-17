@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.factories.IChartComponentFactory;
@@ -119,26 +118,25 @@ public class AWTView extends ChartView {
     public void renderOverlay(GL gl, ViewportConfiguration viewport) {
         if (!hasOverlayStuffs())
             return;
+
+        if (overlay == null)
+            this.overlay = new Overlay(canvas.getDrawable());
+
         if (gl.isGL2()) {
-            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL); // TODO:
-                                                                           // don't
-            // know why
-            // needed
-            // to allow
-            // working
-            // with
-            // Overlay!!!????
+            // TODO: don't know why needed to allow working with Overlay!!!????
+            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
         }
+        
         gl.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
             Graphics2D g2d = null;
-            //try {
-                g2d = overlay.createGraphics();
-            /*} catch (Exception e) {
-                Logger.getLogger(View.class).error(e, e);
-                return;
-            }*/
+            // try {
+            g2d = overlay.createGraphics();
+            /*
+             * } catch (Exception e) { Logger.getLogger(View.class).error(e, e);
+             * return; }
+             */
             g2d.setBackground(bgOverlay);
             g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
@@ -226,13 +224,9 @@ public class AWTView extends ChartView {
     }
 
     protected List<ITooltipRenderer> tooltips;
-
     protected List<Renderer2d> renderers;
-
     protected java.awt.Color bgOverlay = new java.awt.Color(0, 0, 0, 0);
-
     protected AWTImageViewport bgViewport;
     protected BufferedImage bgImg = null;
-    // protected TooltipRenderer tooltipRenderer;
-
+    protected Overlay overlay;
 }

@@ -40,7 +40,6 @@ import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.util.awt.Overlay;
 
 /**
  * A {@link View} holds a {@link Scene}, a {@link LightSet}, an {@link ICanvas}
@@ -93,7 +92,6 @@ public class View {
         this.viewLifecycleListeners = new ArrayList<IViewLifecycleEventListener>();
         this.wasOnTopAtLastRendering = false;
 
-        this.overlay = new Overlay(canvas.getDrawable());
         this.glu = new GLU();
 
         this.scene.getGraph().getStrategy().setView(this);
@@ -732,100 +730,6 @@ public class View {
         this.initBounds = initBounds;
     }
 
- /*   public void initQuality(GL gl) {
-        // Activate Depth buffer
-        if (quality.isDepthActivated()) {
-            gl.glEnable(GL2.GL_DEPTH_TEST);
-            gl.glDepthFunc(GL2.GL_LEQUAL);
-        } else
-            gl.glDisable(GL2.GL_DEPTH_TEST);
-
-        // Blending
-        gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-        // on/off is handled by each viewport (camera or image)
-
-        // Activate tranparency
-        if (quality.isAlphaActivated()) {
-<<<<<<< HEAD
-            gl.glEnable(GL2.GL_ALPHA_TEST);
-            if (quality.isDisableDepthBufferWhenAlpha())
-                gl.glDisable(GL2.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
-                                                 // // seams better for
-                                                 // transparent polygons
-                                                 // since
-                                                 // they're sorted
-            // gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
-        } else {
-            gl.glDisable(GL2.GL_ALPHA_TEST);
-=======
-            gl.glEnable(GL2ES1.GL_ALPHA_TEST);
-            if (quality.isDisableDepthBufferWhenAlpha())
-                // seams better for transparent polygons since they're sorted 
-                gl.glDisable(GL.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
-
-            // gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
-        } else {
-            gl.glDisable(GL2ES1.GL_ALPHA_TEST);
->>>>>>> master
-        }
-
-        // Make smooth colors for polygons (interpolate color between points)
-        if (gl.isGL2()) {
-            if (quality.isSmoothColor())
-<<<<<<< HEAD
-                gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
-            else
-                gl.getGL2().glShadeModel(GL2.GL_FLAT);
-=======
-                gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
-            else
-                gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
->>>>>>> master
-        }
-
-        // Make smoothing setting
-        if (quality.isSmoothPolygon()) {
-<<<<<<< HEAD
-            gl.glEnable(GL2.GL_POLYGON_SMOOTH);
-            gl.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL2.GL_NICEST);
-        } else
-            gl.glDisable(GL2.GL_POLYGON_SMOOTH);
-
-        if (quality.isSmoothLine()) {
-            gl.glEnable(GL2.GL_LINE_SMOOTH);
-            gl.glHint(GL2.GL_LINE_SMOOTH_HINT, GL2.GL_NICEST);
-        } else
-            gl.glDisable(GL2.GL_LINE_SMOOTH);
-
-        if (quality.isSmoothPoint()) {
-            gl.glEnable(GL2.GL_POINT_SMOOTH);
-            gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
-            // gl.glDisable(GL2.GL_BLEND);
-            // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
-        } else
-            gl.glDisable(GL2.GL_POINT_SMOOTH);
-=======
-            gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
-            gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
-        } else
-            gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
-
-        if (quality.isSmoothLine()) {
-            gl.glEnable(GL.GL_LINE_SMOOTH);
-            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
-        } else
-            gl.glDisable(GL.GL_LINE_SMOOTH);
-
-        if (quality.isSmoothPoint()) {
-            gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
-            gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
-            // gl.glDisable(GL2.GL_BLEND);
-            // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
-        } else
-            gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
->>>>>>> master
-    }*/
-    
     public void initQuality(GL gl) {
         // Activate Depth buffer
         if (quality.isDepthActivated()) {
@@ -1169,7 +1073,6 @@ public class View {
     protected Camera cam;
     protected IAxe axe;
     protected Quality quality;
-    protected Overlay overlay;
     protected Scene scene;
     protected ICanvas canvas;
 
