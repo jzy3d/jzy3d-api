@@ -10,7 +10,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLOffscreenAutoDrawable;
 import com.jogamp.opengl.GLProfile;
@@ -40,6 +39,7 @@ public class OffscreenCanvas implements ICanvas {
     }
 
     public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
+        
         this.view = scene.newView(this, quality);
         this.renderer = factory.newRenderer(view, traceGL, debugGL);
         this.capabilities = capabilities;
