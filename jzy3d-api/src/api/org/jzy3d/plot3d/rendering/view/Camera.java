@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Grid;
@@ -318,7 +319,7 @@ public class Camera extends AbstractViewportManager {
         if (failOnException)
             throw new RuntimeException(message);
         else
-            System.err.println(message);
+            Logger.getLogger(Camera.class).warn(message);
     }
 
     boolean failOnException = false;
