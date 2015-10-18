@@ -16,6 +16,11 @@ import java.util.List;
  * 
  */
 public class Coord3d implements Serializable{
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1636927109633279805L;
+
     public static List<Coord3d> list(int size){
         return new ArrayList<Coord3d>(size);
     }

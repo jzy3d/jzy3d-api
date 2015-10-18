@@ -44,10 +44,12 @@ public class AxeBox implements IAxe {
         init();
     }
 
+    @Override
     public List<AxeAnnotation> getAnnotations() {
         return annotations;
     }
 
+    @Override
     public void setAnnotations(List<AxeAnnotation> annotations) {
         this.annotations = annotations;
     }

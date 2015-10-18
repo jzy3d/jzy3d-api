@@ -149,6 +149,7 @@ public class Chart2dDemo {
 
         public void windowExitListener() {
             addWindowListener(new WindowAdapter() {
+                @Override
                 public void windowClosing(WindowEvent e) {
                     TimeChartWindow.this.dispose();
                     System.exit(0);
@@ -165,6 +166,6 @@ public class Chart2dDemo {
     }
 
     public static double elapsed() {
-        return (double) (System.nanoTime() - start) / 1000000000.0;
+        return (System.nanoTime() - start) / 1000000000.0;
     }
 }

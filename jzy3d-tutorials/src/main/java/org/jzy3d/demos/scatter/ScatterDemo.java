@@ -16,7 +16,8 @@ public class ScatterDemo extends AbstractAnalysis{
 		AnalysisLauncher.open(new ScatterDemo());
 	}
 		
-	public void init(){
+	@Override
+    public void init(){
         int size = 500000;
         float x;
         float y;

@@ -28,7 +28,8 @@ public class AxeTransformableConcurrentScatterMultiColor extends
 	        this.transformers = transformers;
 	    }
 
-	    public void drawGLES2() {
+	    @Override
+        public void drawGLES2() {
 	        GLES2CompatUtils.glPointSize(width);
 	        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
 
@@ -46,7 +47,8 @@ public class AxeTransformableConcurrentScatterMultiColor extends
 	        GLES2CompatUtils.glEnd();
 	    }
 
-	    public void drawGL2(GL gl) {
+	    @Override
+        public void drawGL2(GL gl) {
 	        gl.getGL2().glPointSize(width);
 	        gl.getGL2().glBegin(GL2.GL_POINTS);
 

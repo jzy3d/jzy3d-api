@@ -3,7 +3,11 @@ import java.awt.image.BufferedImage;
 
 
 public class ChartTestFailed extends Exception{
-	public ChartTestFailed() {
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 3514756078633688965L;
+    public ChartTestFailed() {
 		super();
 	}
 

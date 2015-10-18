@@ -56,30 +56,30 @@ public class MatlabVBOLoader implements IGLLoader<DrawableVBO>{
             Coord3d no = Normal.compute(c1, c2, c3);
             
             indices.put(size++);
-            vertices.put((float)c1.x);
-            vertices.put((float)c1.y);
-            vertices.put((float)c1.z);
-            vertices.put((float)no.x);
-            vertices.put((float)no.y);
-            vertices.put((float)no.z);            
+            vertices.put(c1.x);
+            vertices.put(c1.y);
+            vertices.put(c1.z);
+            vertices.put(no.x);
+            vertices.put(no.y);
+            vertices.put(no.z);            
             bounds.add(c1);
             
             indices.put(size++);
-            vertices.put((float)c2.x);
-            vertices.put((float)c2.y);
-            vertices.put((float)c2.z);
-            vertices.put((float)no.x);
-            vertices.put((float)no.y);
-            vertices.put((float)no.z);
+            vertices.put(c2.x);
+            vertices.put(c2.y);
+            vertices.put(c2.z);
+            vertices.put(no.x);
+            vertices.put(no.y);
+            vertices.put(no.z);
             bounds.add(c2);
 
             indices.put(size++);
-            vertices.put((float)c3.x);
-            vertices.put((float)c3.y);
-            vertices.put((float)c3.z);
-            vertices.put((float)no.x);
-            vertices.put((float)no.y);
-            vertices.put((float)no.z);            
+            vertices.put(c3.x);
+            vertices.put(c3.y);
+            vertices.put(c3.z);
+            vertices.put(no.x);
+            vertices.put(no.y);
+            vertices.put(no.z);            
             bounds.add(c3);
         }
         vertices.rewind();
