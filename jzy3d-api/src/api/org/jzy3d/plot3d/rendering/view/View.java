@@ -157,11 +157,8 @@ public class View {
         eye.x -= move.x;
         eye.y += move.y;
         
-        //Logger.getLogger(this.getClass()).info(eye);
-        //System.out.println(eye);
-        
         setViewPoint(eye, updateView);
-        // fireControllerEvent(ControllerType.ROTATE, eye);
+        //fireControllerEvent(ControllerType.ROTATE, eye);
     }
 
     public void shift(final float factor) {

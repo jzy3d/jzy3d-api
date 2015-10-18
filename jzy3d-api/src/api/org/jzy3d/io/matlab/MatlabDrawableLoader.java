@@ -41,7 +41,6 @@ public class MatlabDrawableLoader implements ILoader {
         MLNumericArray<Float> x = (MLNumericArray<Float>) mfr.getMLArray("X");
         MLNumericArray<Float> y = (MLNumericArray<Float>) mfr.getMLArray("Y");
         MLNumericArray<Float> z = (MLNumericArray<Float>) mfr.getMLArray("Z");
-        // System.out.println("x:" + x);
 
         List<AbstractDrawable> polygons = new ArrayList<AbstractDrawable>();
 

@@ -2,9 +2,9 @@ package org.jzy3d.utils;
 
 /** The Version provides an integer and string representation of the current library version.*/
 public class Version {
-	public static final int MAJOR  = 0;
-	public static final int MINOR  = 9;
-	public static final int PATCH  = 1;
+	public static final int MAJOR  = 1;
+	public static final int MINOR  = 0;
+	public static final int PATCH  = 0;
 	public static final String STR = new String(MAJOR + "." + MINOR + "." + PATCH);	
 	
 	public static void main(String[] args){

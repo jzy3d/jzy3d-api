@@ -66,13 +66,11 @@ public class AxeTransformableLineStrip extends LineStrip {
 	            for (Point p : points) {
 	                gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
 	                GlVertexExecutor.Vertex(gl, new Coord3d(p.xyz.x, p.xyz.y, p.xyz.z), transformers);
-	                //System.out.println(p.xyz + p.rgb.toString());
 	            }
 	        } else {
 	            for (Point p : points) {
 	                gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
 	                GlVertexExecutor.Vertex(gl, new Coord3d(p.xyz.x, p.xyz.y, p.xyz.z), transformers);
-	                //System.out.println(p.xyz + wfcolor.toString());
 	            }
 	        }
 	        gl.getGL2().glEnd();

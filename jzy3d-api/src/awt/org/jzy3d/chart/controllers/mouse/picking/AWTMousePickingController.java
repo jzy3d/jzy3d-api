@@ -19,146 +19,139 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
-public class AWTMousePickingController<V, E> extends AbstractCameraController
-		implements MouseListener, MouseWheelListener {
-	public AWTMousePickingController() {
-		super();
-		picking = new PickingSupport();
-	}
+public class AWTMousePickingController<V, E> extends AbstractCameraController implements MouseListener, MouseWheelListener {
+    public AWTMousePickingController() {
+        super();
+        picking = new PickingSupport();
+    }
 
-	public AWTMousePickingController(Chart chart) {
-		super(chart);
-		picking = new PickingSupport();
-	}
+    public AWTMousePickingController(Chart chart) {
+        super(chart);
+        picking = new PickingSupport();
+    }
 
-	public AWTMousePickingController(Chart chart, int brushSize) {
-		super(chart);
-		picking = new PickingSupport(brushSize);
-	}
+    public AWTMousePickingController(Chart chart, int brushSize) {
+        super(chart);
+        picking = new PickingSupport(brushSize);
+    }
 
-	public AWTMousePickingController(Chart chart, int brushSize, int bufferSize) {
-		super(chart);
-		picking = new PickingSupport(brushSize, bufferSize);
-	}
+    public AWTMousePickingController(Chart chart, int brushSize, int bufferSize) {
+        super(chart);
+        picking = new PickingSupport(brushSize, bufferSize);
+    }
 
-	@Override
+    @Override
     public void register(Chart chart) {
-		super.register(chart);
-		this.chart = chart;
-		this.prevMouse = Coord2d.ORIGIN;
-		chart.getCanvas().addMouseController(this);
-	}
+        super.register(chart);
+        this.chart = chart;
+        this.prevMouse = Coord2d.ORIGIN;
+        chart.getCanvas().addMouseController(this);
+    }
 
-	@Override
+    @Override
     public void dispose() {
-		for (Chart c : targets) {
-			c.getCanvas().removeMouseController(this);
-		}
+        for (Chart c : targets) {
+            c.getCanvas().removeMouseController(this);
+        }
 
-		if (threadController != null)
-			threadController.stop();
+        if (threadController != null)
+            threadController.stop();
 
-		super.dispose(); // i.e. target=null
-	}
+        super.dispose(); // i.e. target=null
+    }
 
-	/****************/
+    /****************/
 
-	public PickingSupport getPickingSupport() {
-		return picking;
-	}
+    public PickingSupport getPickingSupport() {
+        return picking;
+    }
 
-	public void setPickingSupport(PickingSupport picking) {
-		this.picking = picking;
-	}
+    public void setPickingSupport(PickingSupport picking) {
+        this.picking = picking;
+    }
 
-	/****************/
+    /****************/
 
-	@Override
+    @Override
     public void mouseClicked(MouseEvent e) {
-	}
+    }
 
-	@Override
+    @Override
     public void mouseEntered(MouseEvent e) {
-	}
+    }
 
-	@Override
+    @Override
     public void mouseExited(MouseEvent e) {
-	}
+    }
 
-	@Override
+    @Override
     public void mouseReleased(MouseEvent e) {
-	}
+    }
 
-	public void mouseDragged(MouseEvent e) {
-	}
+    public void mouseDragged(MouseEvent e) {
+    }
 
-	/** Compute zoom */
-	@Override
+    /** Compute zoom */
+    @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-		if (threadController != null)
-			threadController.stop();
-		System.out.println(e.getWheelRotation());
-		float factor = 1 + (e.getWheelRotation() / 10.0f);
-		System.out.println(AWTMousePickingController.class.getSimpleName() + "wheel:" + factor * 100);
-		zoomX(factor);
-		zoomY(factor);		
-		chart.getView().shoot();
-	}
-		
+        if (threadController != null)
+            threadController.stop();
+        float factor = 1 + (e.getWheelRotation() / 10.0f);
+        zoomX(factor);
+        zoomY(factor);
+        chart.getView().shoot();
+    }
 
-	public void mouseMoved(MouseEvent e) {
-	    System.out.println("moved");
-		pick(e);
-	}
+    public void mouseMoved(MouseEvent e) {
+        pick(e);
+    }
 
-	@Override
+    @Override
     public void mousePressed(MouseEvent e) {
-		if (handleSlaveThread(e))
-			return;
-		pick(e);
-	}
-	
+        if (handleSlaveThread(e))
+            return;
+        pick(e);
+    }
 
-	public void pick(MouseEvent e) {
-		int yflip = -e.getY() + targets.get(0).getCanvas().getRendererHeight();
-		prevMouse.x = e.getX();
-		prevMouse.y = e.getY();// yflip;
-		View view = targets.get(0).getView();
-		prevMouse3d = view.projectMouse(e.getX(), yflip);
+    public void pick(MouseEvent e) {
+        int yflip = -e.getY() + targets.get(0).getCanvas().getRendererHeight();
+        prevMouse.x = e.getX();
+        prevMouse.y = e.getY();// yflip;
+        View view = targets.get(0).getView();
+        prevMouse3d = view.projectMouse(e.getX(), yflip);
 
-		GL gl = chart().getView().getCurrentGL();
-		Graph graph = chart().getScene().getGraph();
+        GL gl = chart().getView().getCurrentGL();
+        Graph graph = chart().getScene().getGraph();
 
-		// will trigger vertex selection event to those subscribing to
-		// PickingSupport.
-		picking.pickObjects(gl, glu, view, graph, new IntegerCoord2d(e.getX(),
-				yflip));
-	}
+        // will trigger vertex selection event to those subscribing to
+        // PickingSupport.
+        picking.pickObjects(gl, glu, view, graph, new IntegerCoord2d(e.getX(), yflip));
+    }
 
-	public boolean handleSlaveThread(MouseEvent e) {
-		if (AWTMouseUtilities.isDoubleClick(e)) {
-			if (threadController != null) {
-				threadController.start();
-				return true;
-			}
-		}
-		if (threadController != null)
-			threadController.stop();
-		return false;
-	}
+    public boolean handleSlaveThread(MouseEvent e) {
+        if (AWTMouseUtilities.isDoubleClick(e)) {
+            if (threadController != null) {
+                threadController.start();
+                return true;
+            }
+        }
+        if (threadController != null)
+            threadController.stop();
+        return false;
+    }
 
-	/**********************/
+    /**********************/
 
-	protected float factor = 1;
-	protected float lastInc;
-	protected Coord3d mouse3d;
-	protected Coord3d prevMouse3d;
-	protected PickingSupport picking;
-	protected GLU glu = new GLU();
+    protected float factor = 1;
+    protected float lastInc;
+    protected Coord3d mouse3d;
+    protected Coord3d prevMouse3d;
+    protected PickingSupport picking;
+    protected GLU glu = new GLU();
 
-	protected Chart chart;
+    protected Chart chart;
 
-	protected Coord2d prevMouse;
-	protected CameraThreadController threadController;
+    protected Coord2d prevMouse;
+    protected CameraThreadController threadController;
 
 }

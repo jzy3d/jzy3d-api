@@ -278,19 +278,14 @@ public class Graph {
         else {
             BoundingBox3d box = new BoundingBox3d();
 
-            // synchronized(components){
             for (AbstractDrawable c : components) {
                 if (c != null && c.getBounds() != null) {
-                    // System.out.println(c.getBounds());
                     BoundingBox3d drawableBounds= c.getBounds();
                     if(!drawableBounds.isReset()){
                         box.add(drawableBounds);
-                        //System.out.println("adding bounds : " + drawableBounds);
-                        //System.out.println("got box: " + box);
                     }                    
                 }
             }
-            // }
             return box;
         }
     }

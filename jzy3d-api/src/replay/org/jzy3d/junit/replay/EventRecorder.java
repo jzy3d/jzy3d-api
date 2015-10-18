@@ -144,7 +144,6 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
     }
 
     protected int getButton(MouseEvent e) {
-        // System.out.println(e.getButton());
         int button = 0;
         if (e.getButton() == MouseEvent.BUTTON1)
             button = InputEvent.BUTTON1_MASK;
@@ -152,8 +151,6 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
             button = InputEvent.BUTTON2_MASK;
         if (e.getButton() == MouseEvent.BUTTON3)
             button = InputEvent.BUTTON3_MASK;
-        // if(e.getButton()==MouseEvent.BUTTON1_DOWN_MASK)
-        // button = InputEvent.BUTTON1_DOWN_MASK;
         return button;
     }
 
@@ -200,8 +197,6 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
             register(new KeyEventLog(KeyEventType.KEY_TYPED, e.getKeyCode(), since()));
         }
     }
-
-    
 
     @Override
     public void keyPressed(KeyEvent e) {

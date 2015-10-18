@@ -446,38 +446,33 @@ public class Camera extends AbstractViewportManager {
             
         } else if (projection == CameraMode.ORTHOGONAL) {
             if (gl.isGL2()) {
-                if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
-                    gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
-                else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
-                    gl.getGL2().glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
-                else if (ViewportMode.SQUARE.equals(viewport.getMode()))
-                    gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
+                projectionOrthoGL2(gl, viewport);
             } else {
-                if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
-                    GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
-                else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
-                    GLES2CompatUtils.glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
-                else if (ViewportMode.SQUARE.equals(viewport.getMode()))
-                    GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
+                projectionOrthoGLES2(viewport);
             }
-
-            // gl.glOrtho(-radius * viewport.ratio(), +radius *
-            // viewport.ratio(), -radius / viewport.ratio(), +radius/
-            // viewport.ratio(), near, far);
-            // gl.glOrtho(-radius / viewport.ratio(), +radius /
-            // viewport.ratio(), -radius, +radius, near, far);
-            // gl.glOrtho(-radius, +radius, -radius * viewport.ratio(), +radius
-            // * viewport.ratio(), near, far);
-
-            // gl.glOrtho(-radius, +radius, -radius, +radius,
-            // Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         } else
             throw new RuntimeException("Camera.shoot(): unknown projection mode '" + projection + "'");
 
         // Set camera position
         glu.gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
+    }
 
-        // System.out.println("eye:" + eye);
+    private void projectionOrthoGLES2(ViewportConfiguration viewport) {
+        if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
+            GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
+        else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
+            GLES2CompatUtils.glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
+        else if (ViewportMode.SQUARE.equals(viewport.getMode()))
+            GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
+    }
+
+    private void projectionOrthoGL2(GL gl, ViewportConfiguration viewport) {
+        if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
+            gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
+        else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
+            gl.getGL2().glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
+        else if (ViewportMode.SQUARE.equals(viewport.getMode()))
+            gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
     }
 
     /**

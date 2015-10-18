@@ -72,7 +72,6 @@ public class PickingSupport {
 		pickable.setPickingId(pickId++);
 		pickables.put(pickable.getPickingId(), pickable);
 		pickableTargets.put(pickable, model);
-		//System.out.println("register " + pickable);
 	}
 	
 	public synchronized void getPickableObject(int id){

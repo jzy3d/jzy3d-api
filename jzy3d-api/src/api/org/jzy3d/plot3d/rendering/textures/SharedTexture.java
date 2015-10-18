@@ -43,8 +43,6 @@ public class SharedTexture implements IGLBindedResource{
         coords = texture.getImageTexCoords();
         halfWidth = texture.getWidth() / 2;
         halfHeight = texture.getHeight() / 2;
-        // System.out.println("mount texture: " + file + " halfWidth=" +
-        // halfWidth + " halfHeight=" + halfHeight);
     }
     
     @Override
