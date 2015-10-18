@@ -13,6 +13,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class BoundingBox implements Serializable {
 	/**
+     * 
+     */
+    private static final long serialVersionUID = 3096537227117306103L;
+
+    /**
 	 * the minimum x-coordinate
 	 */
 	private double minX;

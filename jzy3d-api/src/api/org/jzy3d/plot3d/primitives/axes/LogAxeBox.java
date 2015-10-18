@@ -57,11 +57,12 @@ public class LogAxeBox extends AxeBox {
      * quad is indexed from 0.0f to 5.0f using glPassThrough, and may be traced
      * in feedback mode when mode=GL2.GL_FEEDBACK
      */
+    @Override
     protected void drawCube(GL gl, int mode) {
         for (int q = 0; q < 6; q++) {
             if (gl.isGL2()) {
                 if (mode == GL2.GL_FEEDBACK)
-                    gl.getGL2().glPassThrough((float) q);
+                    gl.getGL2().glPassThrough(q);
                 gl.getGL2().glBegin(GL2.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
                     Coord3d c3d = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]); //era qua
@@ -72,7 +73,7 @@ public class LogAxeBox extends AxeBox {
                 gl.getGL2().glEnd();
             } else {
                 if (mode == GL2.GL_FEEDBACK)
-                    GLES2CompatUtils.glPassThrough((float) q);
+                    GLES2CompatUtils.glPassThrough(q);
                 GLES2CompatUtils.glBegin(GL2.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
                     Coord3d c3d = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]);
@@ -87,6 +88,7 @@ public class LogAxeBox extends AxeBox {
     /**
      * Draw a grid on the desired quad.
      */
+    @Override
     protected void drawGridOnQuad(GL gl, int quad) {
         // Draw X grid along X axis
         if ((quad != 0) && (quad != 1)) {
@@ -138,6 +140,7 @@ public class LogAxeBox extends AxeBox {
         }
     }
     
+    @Override
     protected BoundingBox3d drawTicks(GL gl, GLU glu, Camera cam, int axis, int direction, Color color, Halign hal, Valign val) {
         int quad_0;
         int quad_1;
@@ -204,6 +207,7 @@ public class LogAxeBox extends AxeBox {
         return ticksTxtBounds;
     }
     
+    @Override
     public void drawAxisTicks(GL gl, GLU glu, Camera cam, int direction, Color color, Halign hal, Valign val, float tickLength, BoundingBox3d ticksTxtBounds, double xpos,
             double ypos, double zpos, float xdir, float ydir, float zdir, double[] ticks) {
         double xlab;

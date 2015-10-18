@@ -35,7 +35,8 @@ public class AxeTransformablePoint extends Point {
 
 	/* */
 
-	public void draw(GL gl, GLU glu, Camera cam) {
+	@Override
+    public void draw(GL gl, GLU glu, Camera cam) {
 		doTransform(gl, glu, cam);
 
 		if (gl.isGL2()) {
@@ -55,7 +56,8 @@ public class AxeTransformablePoint extends Point {
 		}
 	}
 	
-	public void updateBounds() {
+	@Override
+    public void updateBounds() {
 		bbox.reset();
 		if(transformers != null) {
 			bbox.add(transformers.compute(this.xyz));
