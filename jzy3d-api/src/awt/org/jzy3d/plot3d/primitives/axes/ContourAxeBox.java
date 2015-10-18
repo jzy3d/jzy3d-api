@@ -110,8 +110,9 @@ public class ContourAxeBox extends AxeBox {
 		//gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 		
 		// Render the contour texture if available
-		if( contourTexture != null )
+		if( contourTexture != null ){
 			contourTexture.draw(gl, glu, camera);
+		}
 		
 		if( mesh != null ){
 			drawMesh(gl, glu, camera, mesh);
