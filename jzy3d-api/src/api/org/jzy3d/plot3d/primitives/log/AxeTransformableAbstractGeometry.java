@@ -14,11 +14,13 @@ public abstract class AxeTransformableAbstractGeometry extends AbstractGeometry{
 		this.spaceTransformer = transformers;
 	}
 
-	protected void vertexGL2(GL gl, Coord3d c) {
+	@Override
+    protected void vertexGL2(GL gl, Coord3d c) {
         GlVertexExecutor.Vertex(gl, c, spaceTransformer);
     }
 	
-	protected void vertexGLES2(Coord3d c) {
+	@Override
+    protected void vertexGLES2(Coord3d c) {
 		GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y),spaceTransformer.getZ().compute(c.z));
 	}
 }

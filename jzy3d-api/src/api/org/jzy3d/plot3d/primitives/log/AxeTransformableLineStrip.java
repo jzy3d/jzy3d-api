@@ -42,7 +42,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        add(c2);
 	    }
 
-	    public void drawLineGLES2() {
+	    @Override
+        public void drawLineGLES2() {
 	        GLES2CompatUtils.glBegin(GL.GL_LINE_STRIP);
 
 	        if (wfcolor == null) {
@@ -59,7 +60,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        GLES2CompatUtils.glEnd();
 	    }
 
-	    public void drawLineGL2(GL gl) {
+	    @Override
+        public void drawLineGL2(GL gl) {
 	        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
 
 	        if (wfcolor == null) {
@@ -76,7 +78,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        gl.getGL2().glEnd();
 	    }
 
-	    public void drawPoints(GL gl) {
+	    @Override
+        public void drawPoints(GL gl) {
 	        if (showPoints) {
 	            if (gl.isGL2()) {
 	                drawPointsGL2(gl);
@@ -86,7 +89,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        }
 	    }
 
-	    public void drawPointsGLES2() {
+	    @Override
+        public void drawPointsGLES2() {
 	        GLES2CompatUtils.glBegin(GL.GL_POINTS);
 
 	        for (Point p : points) {
@@ -100,7 +104,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        GLES2CompatUtils.glEnd();
 	    }
 
-	    public void drawPointsGL2(GL gl) {
+	    @Override
+        public void drawPointsGL2(GL gl) {
 	        gl.getGL2().glBegin(GL.GL_POINTS);
 
 	        for (Point p : points) {
@@ -115,7 +120,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	    }
 	    
 	    
-	    public void updateBounds() {
+	    @Override
+        public void updateBounds() {
 	        bbox.reset();
 	        for (Point p : points)
 	            bbox.add(transform.compute(p.xyz));

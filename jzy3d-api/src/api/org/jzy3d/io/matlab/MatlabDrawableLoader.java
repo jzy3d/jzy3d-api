@@ -26,6 +26,7 @@ import com.jmatio.types.MLNumericArray;
  * @author Martin Pernollet
  */
 public class MatlabDrawableLoader implements ILoader {
+    @Override
     public List<AbstractDrawable> load(String filename) throws Exception {
         return load(filename, -1);
     }
