@@ -24,11 +24,22 @@ import org.apache.log4j.PatternLayout;
  * @author Martin Pernollet
  */
 public class LoggerUtils {
+    public static void maximal() {
+        Logger root = Logger.getRootLogger();
+        //root.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
+        root.addAppender(new ConsoleAppender(makeConsoleLayout()));
+        level(Level.INFO);
+    }
+    
     public static void minimal() {
         Logger root = Logger.getRootLogger();
         //root.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
-        root.addAppender(new ConsoleAppender(new PatternLayout("%-5p [%t][%c]: %m%n")));
+        root.addAppender(new ConsoleAppender(makeConsoleLayout()));
         level(Level.ERROR);
+    }
+
+    private static PatternLayout makeConsoleLayout() {
+        return new PatternLayout("%-5p [%t][%c]: %m%n");
     }
     
     public static void minimalDated() {
@@ -48,6 +59,6 @@ public class LoggerUtils {
     
     public static void setFileLogger(String file) throws IOException{
     	Logger root = Logger.getRootLogger();
-    	root.addAppender(new FileAppender(new PatternLayout("%-5p [%t][%c]: %m%n"), new File(file).getAbsolutePath(), false));
+    	root.addAppender(new FileAppender(makeConsoleLayout(), new File(file).getAbsolutePath(), false));
     }
 }
