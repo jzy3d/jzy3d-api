@@ -73,6 +73,9 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
 
     /* */
 
+    /**
+     * @param toolkit can be used to indicate "offscreen, 800, 600" and thus replace implicit "awt"
+     */
     @Override
     public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
         return new AWTChart(factory, quality, toolkit);
