@@ -78,8 +78,7 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
         try {
             scenario.save();
         } catch (Exception e) {
-            System.err.println(e);
-            Logger.getLogger(EventRecorder.class).error(e);
+            logger.error(e);
         }
     }
 

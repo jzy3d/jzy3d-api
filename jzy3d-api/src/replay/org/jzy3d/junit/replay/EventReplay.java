@@ -38,7 +38,7 @@ public class EventReplay extends Timestamped{
 	public EventReplay(final Component component, Frame frame){
 		/*component.addMouseListener(new MouseAdapter(){
 			 public void mouseDragged(MouseEvent e){
-				 System.err.println("DRAGGING");
+				 logger.info("DRAGGING");
 			 }
 		});*/
 		this.component = component;
@@ -125,23 +125,18 @@ public class EventReplay extends Timestamped{
 			getRobot().mousePress(mouse.getButton());
 		
 		else if(type==MouseEventType.MOUSE_PRESSED){
-			//System.err.println("robot press");
 			getRobot().mousePress(mouse.getButton());
 		}
 		else if(type==MouseEventType.MOUSE_RELEASED){
-			//System.err.println("robot released");
 			getRobot().mouseRelease(mouse.getButton());
 		}
 		else if(type==MouseEventType.MOUSE_DRAGGED){
-			//System.err.println("robot moved (dragged)");
 			getRobot().mouseMove(moveX(mouse, insets), moveY(mouse, insets));
 		}
 		else if(type==MouseEventType.MOUSE_MOVED){
-			//System.err.println("robot moved");
 			getRobot().mouseMove(moveX(mouse, insets), moveY(mouse, insets));
 		}
 		else if(type==MouseEventType.MOUSE_WHEEL){
-			//System.err.println("robot wheel");
 			getRobot().mouseWheel(mouse.getValue());
 		}
 
@@ -165,10 +160,10 @@ public class EventReplay extends Timestamped{
 				else if(key.getType()==KeyEventType.KEY_RELEASE)
 					doKeyRelease(key);
 				else
-					System.err.println("ignore key event " + key);
+					logger.warn("ignore key event " + key);
 			}
 			else 
-				System.err.println("ignore key event " + key + " because keycode=0");
+			    logger.warn("ignore key event " + key + " because keycode=0");
 		}
 		catch(Exception e){
 			log(key);
@@ -287,13 +282,13 @@ MOUSE_MOVED, x:107, y:55, bt:0, since:3899
 		component.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                System.err.println("ASSERT DRAGGED CALLED ON COMPONENT");
+                logger.info("ASSERT DRAGGED CALLED ON COMPONENT");
             }
         });
 		component.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
-                System.err.println("ASSERT MOVED CALLED ON COMPONENT");
+                logger.info("ASSERT MOVED CALLED ON COMPONENT");
             }
         });
 	}

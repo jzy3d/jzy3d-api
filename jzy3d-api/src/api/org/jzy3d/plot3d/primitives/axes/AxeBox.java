@@ -189,8 +189,6 @@ public class AxeBox implements IAxe {
                     BoundingBox3d bbox = drawTicks(gl, glu, camera, xselect, AXE_X, layout.getXTickColor());
                     wholeBounds.add(bbox);
                 } else {
-                    // System.err.println("no x axe selected: " +
-                    // Arrays.toString(quadIsHidden));
                     // HACK: handles "on top" view, when all face of cube are
                     // drawn, which forbid to select an axe automatically
                     BoundingBox3d bbox = drawTicks(gl, glu, camera, 2, AXE_X, layout.getXTickColor(), Halign.CENTER, Valign.TOP);
@@ -211,8 +209,6 @@ public class AxeBox implements IAxe {
                     BoundingBox3d bbox = drawTicks(gl, glu, camera, yselect, AXE_Y, layout.getYTickColor());
                     wholeBounds.add(bbox);
                 } else {
-                    // System.err.println("no y axe selected: " +
-                    // Arrays.toString(quadIsHidden));
                     // HACK: handles "on top" view, when all face of cube are
                     // drawn, which forbid to select an axe automatically
                     BoundingBox3d bbox = drawTicks(gl, glu, camera, 1, AXE_Y, layout.getYTickColor(), Halign.RIGHT, Valign.GROUND);

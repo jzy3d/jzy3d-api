@@ -3,6 +3,7 @@ package org.jzy3d.chart;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.maths.Rectangle;
 
@@ -11,6 +12,8 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 public class ChartLauncher {
+    static Logger logger = Logger.getLogger(ChartLauncher.class);
+    
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
     
     public static ICameraMouseController openChart(Chart chart) {
@@ -91,10 +94,10 @@ public class ChartLauncher {
         TextureData screen = chart.screenshot();
         if(screen!=null){
         	TextureIO.write(screen, new File(filename));    
-	        System.out.println("Dumped screenshot in: " + filename);
+	        logger.info("Dumped screenshot in: " + filename);
         }
         else{
-        	System.err.println("screenshot not available");
+        	logger.error("screenshot not available");
         }
     }
 }
