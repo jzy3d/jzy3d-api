@@ -7,8 +7,10 @@ import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 import com.jogamp.opengl.GL;
 
-/** Translate drawable to (0,0,0) or back to its previous position. */
-
+/**
+ * Translate drawable to (0,0,0) or back to its previous position according to
+ * the input parameters.
+ */
 public class TranslateDrawable implements Transformer {
     public TranslateDrawable(AbstractDrawable drawable, boolean reverse) {
         super();
