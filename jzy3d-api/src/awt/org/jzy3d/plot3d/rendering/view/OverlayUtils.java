@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.view;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.PolygonArray;
@@ -12,6 +13,7 @@ import org.jzy3d.maths.Statistics;
 
 /** Helps understanding how overlay is actually performed by JOGL2. */
 public class OverlayUtils {
+	static Logger logger = Logger.getLogger(OverlayUtils.class);
 	
 	public void drawSelection(Graphics2D g2d, IntegerCoord2d in, int width, int height) {
 			// shows mouse pointer
@@ -29,7 +31,7 @@ public class OverlayUtils {
 		// viewport diagonal badly displayed!!
 		Rectangle r = chart.getView().getSceneViewportRectangle();
 		drawDiagonal(g2d, java.awt.Color.BLUE, r.width, r.height, false);
-		System.out.println(" BUT viewport.dim ("+r.width+","+r.height+")"); 
+		logger.info(" BUT viewport.dim ("+r.width+","+r.height+")"); 
 		
 		/// chart.getCanvas().getRendererWidth()
 		//g2d.drawRect(r.x, r.y, r.width, r.height);
@@ -70,14 +72,14 @@ public class OverlayUtils {
 			float r  = ((float)i) / ((float)dmax);
 			int wcur = (int)( r * wmax );
 			int hcur = (int)( r * hmax );
-			//System.out.println(wcur + " " + hcur);
+			//logger.info(wcur + " " + hcur);
 			drawPixel(g2d, c, wcur, hcur);
 			
 			if(sysout){
 				if(i==0)
-					System.out.print(" diagonal from (" + wcur + "," + hcur + ")");
+					logger.info(" diagonal from (" + wcur + "," + hcur + ")");
 				else if(i==(dmax-1))
-					System.out.print(" to (" + wcur + "," + hcur + ")");
+					logger.info(" to (" + wcur + "," + hcur + ")");
 			}
 		}
 	}
@@ -157,6 +159,6 @@ public class OverlayUtils {
 					min = tmin;
 			}
 		}
-		System.out.println("xmin=" + min + " xmax=" + max);
+		logger.info("xmin=" + min + " xmax=" + max);
 	}
 }

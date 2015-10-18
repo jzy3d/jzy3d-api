@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Array;
@@ -45,7 +46,8 @@ import org.jzy3d.plot3d.primitives.Shape;
  *
  */
 public class OrthonormalTessellator extends Tessellator{
-
+    static Logger logger = Logger.getLogger(OrthonormalTessellator.class);
+    
 	@Override
 	public AbstractComposite build(float[] x, float[] y, float[] z) {
 		setData(x, y, z);
@@ -122,7 +124,7 @@ public class OrthonormalTessellator extends Tessellator{
 	    float last = Float.NaN;
 	    for(int i=0; i<copy.length; i++){
 	    	if(Float.isNaN(copy[i])){
-	    		//System.out.println("Ignoring NaN value at " + i);
+	    	    logger.info("Ignoring NaN value at " + i);
 	    	}
 	    	else if(copy[i] != last){
 	    		nunique++;
@@ -136,7 +138,7 @@ public class OrthonormalTessellator extends Tessellator{
 	    int r = 0;
 	    for(int d=0; d<copy.length; d++){
 	    	if(Float.isNaN(copy[d])){
-	    		//System.out.println("Ignoring NaN value at " + d);
+	    	    logger.info("Ignoring NaN value at " + d);
 	    	}
 	    	else if(copy[d] != last){
 	    		result[r] = copy[d];

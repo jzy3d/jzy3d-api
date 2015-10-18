@@ -40,7 +40,6 @@ public class AxeYLineAnnotation implements AxeAnnotation {
         gl.getGL2().glVertex3f(value, yrange.getMin()-yrange.getRange()/30, zrange.getMin()-2);
         gl.getGL2().glVertex3f(value, yrange.getMax()+yrange.getRange()/30, zrange.getMin()-2);
         
-        //System.out.println("x=" + value +  " y:" + yrange);
         gl.getGL2().glEnd();
     }
 

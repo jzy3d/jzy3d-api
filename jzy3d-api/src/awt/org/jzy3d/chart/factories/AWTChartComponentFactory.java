@@ -45,7 +45,8 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import com.jogamp.opengl.GLCapabilities;
 
 public class AWTChartComponentFactory extends ChartComponentFactory {
-
+    static Logger logger = Logger.getLogger(AWTChartComponentFactory.class);
+    
     public static Chart chart() {
         return chart(Quality.Intermediate);
     }
@@ -185,17 +186,15 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
             screenshot = new AWTScreenshotKeyController(chart, file);
         else
             screenshot = new NewtScreenshotKeyController(chart, file);
-
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
-                System.out.println("Failed to save screenshot:");
-                e.printStackTrace();
+                logger.error("Failed to save screenshot to '" + file + "'", e);
             }
 
             @Override
             public void doneScreenshot(String file) {
-                System.out.println("Screenshot: " + file);
+                logger.info("Screenshot save to '" + file + "'");
             }
         });
         return screenshot;

@@ -19,7 +19,6 @@ public class BufferedImageMapper extends Mapper {
 
     public BufferedImageMapper(BufferedImage bi) {
         this.image = bi;
-        //System.out.println("BufferedImage has dimensions: " + new Rectangle(0, 0, bi.getWidth(), bi.getHeight()));
         this.maxRow = this.image.getHeight() - 1;
         this.maxViewPort = new Rectangle(0, 0, bi.getWidth(), bi.getHeight());
     }

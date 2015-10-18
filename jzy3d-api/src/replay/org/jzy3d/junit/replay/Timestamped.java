@@ -1,10 +1,13 @@
 package org.jzy3d.junit.replay;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.junit.replay.events.IEventLog;
 import org.jzy3d.maths.TicToc;
 
 /** To be enhanced (wrapper tictoc)*/
 public class Timestamped {
+    static Logger logger = Logger.getLogger(Timestamped.class);
+    
 	protected TicToc t = new TicToc();
 
 	public Timestamped() {
@@ -51,7 +54,7 @@ public class Timestamped {
 
 	public void debugMs(long time){
 		long elapsed = elapsedMs();
-		System.out.println("-> @[" + time/1000 + " s] (" + time + " ms): elapsed:" + elapsed);
-		//System.out.println("-> @[" + time/1000 + " s] (" + time + " ms): elapsed:" + elapsed + ", now:" + now + ", start:" + startup());
+		logger.info("-> @[" + time/1000 + " s] (" + time + " ms): elapsed:" + elapsed);
+		//logger.info("-> @[" + time/1000 + " s] (" + time + " ms): elapsed:" + elapsed + ", now:" + now + ", start:" + startup());
 	}
 }

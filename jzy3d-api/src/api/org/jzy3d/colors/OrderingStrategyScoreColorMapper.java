@@ -2,6 +2,7 @@ package org.jzy3d.colors;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Statistics;
@@ -26,6 +27,8 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
  *
  */
 public class OrderingStrategyScoreColorMapper extends ColorMapper{
+    static Logger logger = Logger.getLogger(OrderingStrategyScoreColorMapper.class);
+    
     public OrderingStrategyScoreColorMapper(IColorMap colormap, IColorMapperUpdatePolicy policy, Graph sceneGraph, Color factor){
         super(colormap, factor);
         this.sceneGraph = sceneGraph;
@@ -59,10 +62,8 @@ public class OrderingStrategyScoreColorMapper extends ColorMapper{
         max = Statistics.max(scores);
         
         if(min==max){
-            System.err.println(OrderingStrategyScoreColorMapper.class.getSimpleName() + " !! min = max = "+min);
-            //Array.print(scores);
+            logger.warn("min = max = "+min);
         }
-        //System.out.println("min="+min+" max="+max);
     }
     
     protected int getNumCoordinates(List<AbstractDrawable> drawables, boolean onlyBaryCenter){

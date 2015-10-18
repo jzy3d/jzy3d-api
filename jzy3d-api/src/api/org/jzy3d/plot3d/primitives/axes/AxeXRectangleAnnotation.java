@@ -36,7 +36,6 @@ public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAn
         gl.getGL2().glVertex3f(value, ymax, z);
         gl.getGL2().glVertex3f(value, ymin, z);
         
-        //System.out.println("x=" + value +  " w:" + width + " ymin=" + ymin + " ymax=" + ymax);
         gl.getGL2().glEnd();
     }
     

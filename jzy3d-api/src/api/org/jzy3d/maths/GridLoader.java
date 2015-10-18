@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IColorMappable;
 import org.jzy3d.colors.colormaps.IColorMap;
@@ -49,6 +50,7 @@ import org.jzy3d.plot3d.primitives.Polygon;
  */
 @Deprecated
 public class GridLoader implements IColorMappable{
+    static Logger logger = Logger.getLogger(GridLoader.class);
 
 	/** Initialize a GridLoader by parsing the square grid directly.
 	 * When the grid is parsed, the GridLoader may return either:
@@ -145,7 +147,7 @@ public class GridLoader implements IColorMappable{
 	    float last = Float.NaN;
 	    for(int i=0; i<copy.length; i++){
 	    	if(Float.isNaN(copy[i])){
-	    		//System.out.println("Ignoring NaN value at " + i);
+	    	    logger.info("Ignoring NaN value at " + i);
 	    	}
 	    	else if(copy[i] != last){
 	    		nunique++;
@@ -159,7 +161,7 @@ public class GridLoader implements IColorMappable{
 	    int r = 0;
 	    for(int d=0; d<copy.length; d++){
 	    	if(Float.isNaN(copy[d])){
-	    		//System.out.println("Ignoring NaN value at " + d);
+	    	    logger.info("Ignoring NaN value at " + d);
 	    	}
 	    	else if(copy[d] != last){
 	    		result[r] = copy[d];

@@ -1,7 +1,7 @@
 package org.jzy3d.tests;
 
-import junit.framework.TestCase;
-
+import org.junit.Assert;
+import org.junit.Test;
 import org.jzy3d.maths.Coord3d;
 
 /**
@@ -10,16 +10,10 @@ import org.jzy3d.maths.Coord3d;
  * @author Florian Enner < florian @ enner.org >
  * @since 01.01.14
  */
-public class Coord3dTest extends TestCase {
-
+public class TestCoord3dRotate {
     float delta = 1E-6f;
 
-    void assertEqualCoord(Coord3d expected, Coord3d actual) {
-        assertEquals(expected.x, actual.x, delta);
-        assertEquals(expected.y, actual.y, delta);
-        assertEquals(expected.z, actual.z, delta);
-    }
-
+    @Test
     public void testCross() throws Exception {
         Coord3d x = new Coord3d(1, 0, 0);
         Coord3d y = new Coord3d(0, 1, 0);
@@ -27,7 +21,8 @@ public class Coord3dTest extends TestCase {
         assertEqualCoord(z, x.cross(y));
     }
 
-    public void testRotateX() throws Exception {
+    @Test
+    public void rotateX() throws Exception {
         Coord3d input = new Coord3d(0, 1, 0);
         Coord3d axis = new Coord3d(1, 0, 0);
         float angle = 90f;
@@ -35,7 +30,8 @@ public class Coord3dTest extends TestCase {
         assertEqualCoord(expected, input.rotate(angle, axis));
     }
 
-    public void testRotateY() throws Exception {
+    @Test
+    public void rotateY() throws Exception {
         Coord3d input = new Coord3d(1, 0, 0);
         Coord3d axis = new Coord3d(0, 1, 0);
         float angle = 90f;
@@ -43,11 +39,18 @@ public class Coord3dTest extends TestCase {
         assertEqualCoord(expected, input.rotate(angle, axis));
     }
 
-    public void testRotateZ() throws Exception {
+    @Test
+    public void rotateZ() throws Exception {
         Coord3d input = new Coord3d(0, 1, 0);
         Coord3d axis = new Coord3d(0, 0, 1);
         float angle = 90f;
         Coord3d expected = new Coord3d(-1, 0, 0);
         assertEqualCoord(expected, input.rotate(angle, axis));
+    }
+    
+    void assertEqualCoord(Coord3d expected, Coord3d actual) {
+        Assert.assertEquals(expected.x, actual.x, delta);
+        Assert.assertEquals(expected.y, actual.y, delta);
+        Assert.assertEquals(expected.z, actual.z, delta);
     }
 }

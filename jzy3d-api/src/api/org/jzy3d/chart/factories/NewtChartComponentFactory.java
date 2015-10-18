@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.bridge.swing.FrameSwing;
@@ -45,7 +46,8 @@ import com.jogamp.opengl.GLCapabilities;
  *
  */
 public class NewtChartComponentFactory extends ChartComponentFactory {
-
+    static Logger logger = Logger.getLogger(NewtChartComponentFactory.class);
+    
     public static Chart chart() {
         return chart(Quality.Intermediate);
     }
@@ -182,13 +184,12 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
-                System.out.println("Failed to save screenshot:");
-                e.printStackTrace();
+                logger.error("Failed to save screenshot to '" + file + "'", e);
             }
 
             @Override
             public void doneScreenshot(String file) {
-                System.out.println("Screenshot: " + file);
+                logger.info("Screenshot: " + file);
             }
         });
         return screenshot;

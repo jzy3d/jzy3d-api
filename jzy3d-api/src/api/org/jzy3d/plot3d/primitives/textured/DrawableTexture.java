@@ -41,6 +41,8 @@ import com.jogamp.opengl.util.texture.TextureCoords;
  * 
  */
 public class DrawableTexture extends AbstractDrawable implements ITranslucent {
+    static Logger logger = Logger.getLogger(DrawableTexture.class);
+    
     public DrawableTexture(SharedTexture resource) {
         this(resource, PlaneAxis.Z, 0, null, null);
     }
@@ -143,9 +145,9 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
     }
 
     public void debugMapping() {
-        System.out.println("mapping");
+        logger.info("mapping");
         for (Coord2d c : mapping) {
-            System.out.println(c);
+            logger.info(c);
         }
     }
 

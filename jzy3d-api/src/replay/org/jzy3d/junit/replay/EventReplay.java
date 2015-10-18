@@ -15,6 +15,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.junit.replay.events.IComponentEventLog;
 import org.jzy3d.junit.replay.events.IComponentEventLog.ComponentEventType;
 import org.jzy3d.junit.replay.events.IEventLog;
@@ -25,6 +26,8 @@ import org.jzy3d.junit.replay.events.IMouseEventLog.MouseEventType;
 import org.jzy3d.junit.replay.events.IWindowEventLog;
 
 public class EventReplay extends Timestamped{
+    static Logger logger = Logger.getLogger(EventReplay.class);
+    
     protected Component component;
     protected Frame frame;
     protected Robot robot;
@@ -48,20 +51,20 @@ public class EventReplay extends Timestamped{
             @Override
             public void focusLost(FocusEvent arg0) {
                 mute();
-                System.out.println("mute event replay as component lost focus");
+                logger.info("mute event replay as component lost focus");
             }
             
             @Override
             public void focusGained(FocusEvent arg0) {
                 unmute();
-                System.out.println("unmute event replay as component gained focus");
+                logger.info("unmute event replay as component gained focus");
             }
         });
 		frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent arg0) {
                 stop();
-                System.out.println("stop replay as window closes");
+                logger.info("stop replay as window closes");
             }
         });
     }
@@ -210,11 +213,11 @@ public class EventReplay extends Timestamped{
 	}
 	
 	protected void log(IEventLog event){
-		System.out.println("replay: " + event);
+		logger.info("replay: " + event);
 	}
 	
 	protected void log(IEventLog event, String info){
-		System.out.println("replay: " + event + " " + info);
+		logger.info("replay: " + event + " " + info);
 	}
 
 	public Robot getRobot(){

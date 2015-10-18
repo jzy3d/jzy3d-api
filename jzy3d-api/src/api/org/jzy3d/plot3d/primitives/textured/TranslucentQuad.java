@@ -34,7 +34,6 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 						callWithAlphaFactor(gl, c, alpha);
 					} else
 						callWithAlphaFactor(gl, p.rgb, alpha);
-					// System.out.println(p.rgb + " alpha factor = " + alpha);
 					gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 				}
 				gl.getGL2().glEnd();
@@ -78,7 +77,6 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 						callWithAlphaFactor(gl, c, alpha);
 					} else
 						callWithAlphaFactor(gl, p.rgb, alpha);
-					// System.out.println(p.rgb + " alpha factor = " + alpha);
 					GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 				}
 				GLES2CompatUtils.glEnd();
