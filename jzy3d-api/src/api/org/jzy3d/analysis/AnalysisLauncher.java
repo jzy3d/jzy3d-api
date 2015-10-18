@@ -19,6 +19,9 @@ public class AnalysisLauncher {
 		demo.init();
 		Chart chart = demo.getChart();
 
+		System.out.println(demo.getPitch());
+        System.out.println("------------------------------------");
+
 		ChartLauncher.instructions();
 		ChartLauncher.openChart(chart, rectangle, demo.getName());
 		// ChartLauncher.screenshot(demo.getChart(),

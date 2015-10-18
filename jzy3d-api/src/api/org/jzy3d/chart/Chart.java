@@ -282,7 +282,7 @@ public class Chart {
         return addLight(position, Color.BLUE, new Color(0.8f, 0.8f, 0.8f), Color.WHITE, 1);
     }
 
-    public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular, int radius) {
+    public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular, float radius) {
         Light light = new Light();
         light.setPosition(position);
         light.setAmbiantColor(ambiant);
