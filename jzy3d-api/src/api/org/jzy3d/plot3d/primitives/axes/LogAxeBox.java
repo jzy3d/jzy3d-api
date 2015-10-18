@@ -66,9 +66,7 @@ public class LogAxeBox extends AxeBox {
                 for (int v = 0; v < 4; v++) {
                     Coord3d c3d = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]); //era qua
                     
-                    //System.out.println(c3d.x);
-                    //System.out.println(Math.log(c3d.x));
-                    
+                    // TODO : awfull
                     GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                 }
                 gl.getGL2().glEnd();

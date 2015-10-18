@@ -59,10 +59,8 @@ public class AxeTransformablePoint extends Point {
 		bbox.reset();
 		if(transformers != null) {
 			bbox.add(transformers.compute(this.xyz));
-			System.out.println(this.getClass() + "log");
 		} else {
 			bbox.add(this);
-			System.out.println(this.getClass() + "nonlog");
 		}
 	}
 	

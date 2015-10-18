@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.io.SimpleFile;
 import org.jzy3d.junit.replay.events.EventParser;
 import org.jzy3d.junit.replay.events.IEventLog;
 
 public class Scenario {
+    static Logger logger = Logger.getLogger(Scenario.class);
+    
 	protected List<IEventLog> events;
 	protected String name;
 	
@@ -19,7 +22,7 @@ public class Scenario {
 	}
 	
 	public void register(IEventLog event){
-		System.out.println(event);
+		logger.info(event);
 		events.add(event);
 	}
 	
@@ -56,9 +59,9 @@ public class Scenario {
 	}
 
 	public void info(String file) {
-		System.out.println("---------------------------------------------------");
-		System.out.println(file);
-		System.out.println("---------------------------------------------------");
+		logger.info("---------------------------------------------------");
+		logger.info(file);
+		logger.info("---------------------------------------------------");
 		//Logger.getLogger(this.getClass()).info("saved events: " + file);
 	}
 
@@ -83,14 +86,14 @@ public class Scenario {
 		EventParser parser = new EventParser();
 		
 		for(String s: lines){
-			//System.out.println("read : " + s);
+			//logger.info("read : " + s);
 			IEventLog event = parser.parse(s);
 			if(event!=null){
-				System.out.println("parsed : " + event);
+				logger.info("parsed : " + event);
 				events.add(event);
 			}
 			else
-				System.err.println("non parsable event : " + s);
+				logger.error("non parsable event : " + s);
 		}
 		
 		info("parsed " + events.size() + " events from " + file);

@@ -57,7 +57,6 @@ public class ColorbarViewportLayout implements IViewportLayout{
 
         renderLegends(gl, glu, chart);
         // fix overlay on top of chart
-        //System.out.println(scenePort);
         view.renderOverlay(gl, view.getCamera().getLastViewPort());
     }
     

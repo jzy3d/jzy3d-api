@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
@@ -22,6 +23,8 @@ import com.jogamp.opengl.glu.GLU;
 
 
 public class ProjectionUtils {
+    static Logger logger = Logger.getLogger(ProjectionUtils.class);
+    
 	public static List<PolygonProjection> project(Chart chart){
 		return project(chart.getView().getCurrentGL(), new GLU(), chart.getView().getCamera(), chart.getScene().getGraph());
 	}
@@ -51,8 +54,8 @@ public class ProjectionUtils {
 				polygons.add( ProjectionUtils.getCoordinatesAsArrayList( (Polygon)d ) );
 				colors.add( ProjectionUtils.getColorsAsArrayList( (Polygon)d ) );
 			}
-			/*else
-				throw new RuntimeException("Only polygons are supported, not:" + d.getClass());*/
+			else
+			    logger.warn("Only polygons are supported. Ignoring :" + d.getClass());
 		}
 		
 		// project

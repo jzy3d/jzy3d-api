@@ -97,13 +97,11 @@ public class LineStrip extends AbstractWireframeable {
             for (Point p : points) {
                 gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
                 gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-                //System.out.println(p.xyz + p.rgb.toString());
             }
         } else {
             for (Point p : points) {
                 gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
                 gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-                //System.out.println(p.xyz + wfcolor.toString());
             }
         }
         gl.getGL2().glEnd();

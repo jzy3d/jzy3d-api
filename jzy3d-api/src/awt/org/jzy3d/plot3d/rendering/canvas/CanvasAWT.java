@@ -135,18 +135,14 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
 	}
 
 	public void triggerMouseEvent(java.awt.event.MouseEvent e) {
-		// System.out.println("trigger mouse " + e);
 		processMouseEvent(e);
-
 	}
 
 	public void triggerMouseMotionEvent(java.awt.event.MouseEvent e) {
-		// System.out.println("trigger mouse motion " + e);
 		processMouseMotionEvent(e);
 	}
 
 	public void triggerMouseWheelEvent(java.awt.event.MouseWheelEvent e) {
-		// System.out.println("trigger mouse wheel " + e);
 		processMouseWheelEvent(e);
 	}
 
