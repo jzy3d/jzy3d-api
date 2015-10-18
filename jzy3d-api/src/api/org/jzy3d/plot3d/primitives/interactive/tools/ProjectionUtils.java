@@ -73,8 +73,7 @@ public class ProjectionUtils {
 		// sort according to z
 		t.tic();
 		Collections.sort(polygonProjections, new ProjectionComparator());
-		t.toc(); report += " Sort :" + t.elapsedMilisecond();
-		System.out.println(report);
+		t.tocShow(report+ " Sort : "); 
 		return polygonProjections;
 	}
 	

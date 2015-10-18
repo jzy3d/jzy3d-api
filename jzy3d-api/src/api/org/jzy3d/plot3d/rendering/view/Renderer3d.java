@@ -60,7 +60,6 @@ public class Renderer3d implements GLEventListener {
      */
     @Override
     public void init(GLAutoDrawable canvas) {
-        // System.err.println("init");
         if (canvas != null && canvas.getGL() != null && canvas.getGL().getGL2() != null && view != null) {
             if (debugGL)
                 canvas.getGL().getContext().setGL(GLPipelineFactory.create("javax.media.opengl.Debug", null, canvas.getGL(), null));
@@ -95,7 +94,6 @@ public class Renderer3d implements GLEventListener {
     /** Called when the {@link GLAutoDrawable} is resized. */
     @Override
     public void reshape(GLAutoDrawable canvas, int x, int y, int width, int height) {
-        // System.err.println("reshape with " + width + " " + height);
         this.width = width;
         this.height = height;
 

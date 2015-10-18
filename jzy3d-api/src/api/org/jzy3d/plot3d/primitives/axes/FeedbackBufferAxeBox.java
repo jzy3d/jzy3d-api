@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.axes;
 
 import java.nio.FloatBuffer;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 
@@ -18,6 +19,8 @@ import com.jogamp.opengl.GL2;
  * @author Martin Pernollet
  */
 public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
+    static Logger logger = Logger.getLogger(FeedbackBufferAxeBox.class);
+    
 	public FeedbackBufferAxeBox(BoundingBox3d bbox){
 		super(bbox);
 	}
@@ -90,7 +93,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
             	count--;
             	
                 if(printout)
-                	System.out.println("GL.GL_PASS_THROUGH_TOKEN: " + passthrough_value);
+                	logger.info("GL.GL_PASS_THROUGH_TOKEN: " + passthrough_value);
 
                 // If the preceding token is also a GL_PASS_THROUGH_TOKEN
                 // we consider it as an empty token
@@ -109,7 +112,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
             // Other cases: just consume buffer
             else if (token_type == GL2.GL_POINT_TOKEN) {
             	if(printout){
-            		System.out.println(" GL.GL_POINT_TOKEN");
+            		logger.info(" GL.GL_POINT_TOKEN");
                 	count = print3DcolorVertex(size, count, buffer);
             	}else{
             		count = count - 7;
@@ -117,7 +120,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
             } 
             else if (token_type == GL2.GL_LINE_TOKEN) {
             	if(printout){
-            		System.out.println(" GL.GL_LINE_TOKEN ");
+            		logger.info(" GL.GL_LINE_TOKEN ");
             		count = print3DcolorVertex(size, count, buffer);
             		count = print3DcolorVertex(size, count, buffer);
             	}else{
@@ -126,7 +129,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
             } 
             else if (token_type == GL2.GL_LINE_RESET_TOKEN) {
             	if(printout){
-            		System.out.println(" GL.GL_LINE_RESET_TOKEN ");
+            		logger.info(" GL.GL_LINE_RESET_TOKEN ");
             		count = print3DcolorVertex(size, count, buffer);
             		count = print3DcolorVertex(size, count, buffer);
             	}else{
@@ -138,7 +141,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
             	count--;
             	
             	if(printout)
-            		System.out.println(" GL.GL_POLYGON_TOKEN: " + n + " vertices");
+            		logger.info(" GL.GL_POLYGON_TOKEN: " + n + " vertices");
             	
                 for(int i=0; i<n; i++){
                 	if(printout)

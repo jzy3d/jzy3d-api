@@ -28,7 +28,8 @@ public class GLErrorReader {
     	boolean status = true; // assume an error
     	
         if(err==GL.GL_NO_ERROR){
-        	status = false;//System.out.println("No error has been recorded. The value of this symbolic constant is guaranteed to be zero.");
+            //No error has been recorded. The value of this symbolic constant is guaranteed to be zero.
+        	status = false;
         }
         else if(err==GL.GL_INVALID_ENUM){
         	logger.error("GL_INVALID_ENUM: An unacceptable value is specified for an enumerated argument. The offending command is ignored, having no side effect other than to set the error flag.");

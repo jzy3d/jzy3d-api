@@ -196,7 +196,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
             return newFrameSwing(chart, bounds, title);
         else {
             String m = "No default frame could be found for the given Chart canvas: " + canvas.getClass();
-            System.err.println(m);
+            logger.error(m);
             return null;
             // throw new RuntimeException(m);
         }
