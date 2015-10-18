@@ -77,7 +77,6 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 		new Thread(new Runnable() {
 			@Override
             public void run() {
-				// System.err.println("stopping canvas animator");
 				if (animator != null && animator.isStarted()) {
 					animator.stop();
 				}

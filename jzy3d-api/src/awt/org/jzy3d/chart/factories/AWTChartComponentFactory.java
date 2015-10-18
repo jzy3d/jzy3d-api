@@ -212,21 +212,6 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
 
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        /*
-         * Object canvas = chart.getCanvas();
-         * 
-         * if (canvas.getClass().getName().equals(
-         * "org.jzy3d.plot3d.rendering.canvas.CanvasAWT")) return
-         * newFrameAWT(chart, bounds, title, null); // FrameSWT works as well
-         * else if (canvas instanceof CanvasNewtAwt) return newFrameAWT(chart,
-         * bounds, title, "[Newt]"); // FrameSWT works as well else if
-         * (canvas.getClass
-         * ().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasSwing"))
-         * return newFrameSwing(chart, bounds, title); else { String m =
-         * "No default frame could be found for the given Chart canvas: " +
-         * canvas.getClass(); System.err.println(m); return null; // throw new
-         * RuntimeException(m); }
-         */
         return newFrameAWT(chart, bounds, title, null);
     }
 }

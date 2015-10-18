@@ -16,11 +16,11 @@ public class CustomEventQueue extends EventQueue {
     @Override
     protected void dispatchEvent(AWTEvent event) {
         if (event instanceof PaintEvent)
-            ;// System.out.println("Dispatch [PAINT]: "+event);
+            logger.info("Dispatch [PAINT]: "+event);
         else if (event instanceof MouseEvent)
-            ;// System.out.println("Dispatch [MOUSE]: "+event);
+            logger.info("Dispatch [MOUSE]: "+event);
         else if (event instanceof InvocationEvent) {
-            ;// System.out.println("Dispatch [INVOC]: "+event);
+            logger.info("Dispatch [INVOC]: "+event);
         } else
             logger.warn("Dispatch [UNKNO]: " + event);
 
