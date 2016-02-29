@@ -315,7 +315,7 @@ public class View {
     }
     
     public void setScaleX(org.jzy3d.maths.Scale scale) {
-        setScale(scale, true);
+        setScaleX(scale, true);
     }
 
     public void setScaleX(org.jzy3d.maths.Scale scale, boolean notify) {
@@ -328,7 +328,7 @@ public class View {
     }
     
     public void setScaleY(org.jzy3d.maths.Scale scale) {
-        setScale(scale, true);
+        setScaleY(scale, true);
     }
 
     public void setScaleY(org.jzy3d.maths.Scale scale, boolean notify) {
@@ -341,7 +341,7 @@ public class View {
     }
     
     public void setScaleZ(org.jzy3d.maths.Scale scale) {
-        setScale(scale, true);
+        setScaleZ(scale, true);
     }
 
     public void setScaleZ(org.jzy3d.maths.Scale scale, boolean notify) {
