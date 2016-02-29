@@ -74,6 +74,7 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
 
     /* */
 
+    // TODO : create a NewtChart for consistency
     @Override
     public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
         return new AWTChart(factory, quality, toolkit);
@@ -125,9 +126,9 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
         Toolkit chartType = getToolkit(windowingToolkit);
         switch (chartType) {
         case awt:
-            throw new IllegalArgumentException("Can't ask for an AWT chart type in Newt Factory.");
+            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
         case swing:
-            throw new IllegalArgumentException("Can't ask for an Swing chart type in Newt Factory.");
+            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
         case newt:
             return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
         case offscreen:
