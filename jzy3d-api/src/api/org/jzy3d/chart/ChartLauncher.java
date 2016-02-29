@@ -76,10 +76,10 @@ public class ChartLauncher {
     
     /* FRAMES */
     
-    public static void frame(Chart chart){
+    /*public static void frame(Chart chart){
     	Screen screen = Settings.getInstance().getScreen();
         frame(chart, new Rectangle(0,0,screen.getWidth(), screen.getHeight()), "Jzy3d");
-    }
+    }*/
     
     public static void frame(Chart chart, Rectangle bounds, String title){
     	chart.getFactory().newFrame(chart, bounds, title);
