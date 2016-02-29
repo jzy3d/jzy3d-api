@@ -2,9 +2,9 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.nio.ByteBuffer;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
 
 public class ImageRenderer {
 	public static void renderImage(GL gl, ByteBuffer image, int imageWidth,

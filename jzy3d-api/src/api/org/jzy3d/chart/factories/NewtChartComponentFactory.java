@@ -2,7 +2,6 @@ package org.jzy3d.chart.factories;
 
 import java.util.Date;
 
-import javax.media.opengl.GLCapabilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -26,9 +25,7 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
-import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -40,6 +37,8 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
+import com.jogamp.opengl.GLCapabilities;
+
 /**
  * Still using some AWT components
  * 
@@ -47,7 +46,8 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
  *
  */
 public class NewtChartComponentFactory extends ChartComponentFactory {
-
+    static Logger logger = Logger.getLogger(NewtChartComponentFactory.class);
+    
     public static Chart chart() {
         return chart(Quality.Intermediate);
     }
@@ -74,6 +74,7 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
 
     /* */
 
+    // TODO : create a NewtChart for consistency
     @Override
     public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
         return new AWTChart(factory, quality, toolkit);
@@ -125,9 +126,9 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
         Toolkit chartType = getToolkit(windowingToolkit);
         switch (chartType) {
         case awt:
-            throw new IllegalArgumentException("Can't ask for an AWT chart type in Newt Factory.");
+            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
         case swing:
-            throw new IllegalArgumentException("Can't ask for an Swing chart type in Newt Factory.");
+            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
         case newt:
             return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
         case offscreen:
@@ -184,13 +185,12 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
-                System.out.println("Failed to save screenshot:");
-                e.printStackTrace();
+                logger.error("Failed to save screenshot to '" + file + "'", e);
             }
 
             @Override
             public void doneScreenshot(String file) {
-                System.out.println("Screenshot: " + file);
+                logger.info("Screenshot: " + file);
             }
         });
         return screenshot;

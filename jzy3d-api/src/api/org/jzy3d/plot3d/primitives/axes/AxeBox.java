@@ -3,11 +3,6 @@ package org.jzy3d.plot3d.primitives.axes;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GL2GL3;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -23,6 +18,11 @@ import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL2GL3;
+import com.jogamp.opengl.glu.GLU;
 
 /**
  * The AxeBox displays a box with front face invisible and ticks labels.
@@ -44,10 +44,12 @@ public class AxeBox implements IAxe {
         init();
     }
 
+    @Override
     public List<AxeAnnotation> getAnnotations() {
         return annotations;
     }
 
+    @Override
     public void setAnnotations(List<AxeAnnotation> annotations) {
         this.annotations = annotations;
     }
@@ -189,8 +191,6 @@ public class AxeBox implements IAxe {
                     BoundingBox3d bbox = drawTicks(gl, glu, camera, xselect, AXE_X, layout.getXTickColor());
                     wholeBounds.add(bbox);
                 } else {
-                    // System.err.println("no x axe selected: " +
-                    // Arrays.toString(quadIsHidden));
                     // HACK: handles "on top" view, when all face of cube are
                     // drawn, which forbid to select an axe automatically
                     BoundingBox3d bbox = drawTicks(gl, glu, camera, 2, AXE_X, layout.getXTickColor(), Halign.CENTER, Valign.TOP);
@@ -211,8 +211,6 @@ public class AxeBox implements IAxe {
                     BoundingBox3d bbox = drawTicks(gl, glu, camera, yselect, AXE_Y, layout.getYTickColor());
                     wholeBounds.add(bbox);
                 } else {
-                    // System.err.println("no y axe selected: " +
-                    // Arrays.toString(quadIsHidden));
                     // HACK: handles "on top" view, when all face of cube are
                     // drawn, which forbid to select an axe automatically
                     BoundingBox3d bbox = drawTicks(gl, glu, camera, 1, AXE_Y, layout.getYTickColor(), Halign.RIGHT, Valign.GROUND);

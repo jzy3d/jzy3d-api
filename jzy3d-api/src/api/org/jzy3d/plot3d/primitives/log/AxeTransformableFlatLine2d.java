@@ -15,7 +15,8 @@ public class AxeTransformableFlatLine2d extends FlatLine2d {
 		setData(x, y, depth);
 	}
 	
-	protected AxeTransformableQuad getLineElement(float x1, float x2, float y1, float y2, float depth){
+	@Override
+    protected AxeTransformableQuad getLineElement(float x1, float x2, float y1, float y2, float depth){
 		AxeTransformableQuad q = new AxeTransformableQuad(transformers);
 		q.add( new Point( new Coord3d( 0f, x1, y1 ) ) );
 		q.add( new Point( new Coord3d( 0f, x2, y2 ) ) );

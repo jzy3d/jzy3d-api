@@ -3,11 +3,10 @@ package org.jzy3d.plot3d.rendering.textures;
 import java.io.File;
 import java.io.IOException;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GLException;
-
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 import com.jogamp.opengl.util.texture.TextureIO;
@@ -44,8 +43,6 @@ public class SharedTexture implements IGLBindedResource{
         coords = texture.getImageTexCoords();
         halfWidth = texture.getWidth() / 2;
         halfHeight = texture.getHeight() / 2;
-        // System.out.println("mount texture: " + file + " halfWidth=" +
-        // halfWidth + " halfHeight=" + halfHeight);
     }
     
     @Override

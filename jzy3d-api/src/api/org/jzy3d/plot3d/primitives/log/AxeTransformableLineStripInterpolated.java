@@ -27,7 +27,8 @@ public class AxeTransformableLineStripInterpolated extends LineStripInterpolated
         add( this.interpolatedPoints );
 	}
 	
-	protected Point toPoint(Coord3d coord, Color color, float width){
+	@Override
+    protected Point toPoint(Coord3d coord, Color color, float width){
         return new AxeTransformablePoint(coord, color, width, transformers);
     }
 	

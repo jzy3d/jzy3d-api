@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -18,6 +15,9 @@ import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
 import org.jzy3d.plot3d.rendering.textures.TextureFactory;
 import org.jzy3d.plot3d.rendering.view.Camera;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 public class TextureGraph2d<V,E>  extends DefaultDrawableGraph2d<V, E> {
 	public static float TEX_MAPPING_WIDTH = 0.25f;

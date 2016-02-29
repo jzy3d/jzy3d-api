@@ -1,13 +1,13 @@
 package org.jzy3d.chart.factories;
 
-import javax.media.opengl.GLCapabilities;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.SwingChart;
 import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+
+import com.jogamp.opengl.GLCapabilities;
 
 @Deprecated
 public class SwingChartComponentFactory extends AWTChartComponentFactory {

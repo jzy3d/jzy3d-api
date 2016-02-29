@@ -32,14 +32,16 @@ public class CanvasSWT implements Canvas{
 			fgColor.dispose();
 	}
 	
-	public void drawString( int x, int y, String text ){
+	@Override
+    public void drawString( int x, int y, String text ){
 		target.setBackground(bgColor);
 		target.setForeground(fgColor); //display.getSystemColor(SWT.COLOR_BLUE)
 		target.setFont( new Font( Display.getDefault(), "Arial", 8, SWT.NONE ) ); //SWT.BOLD
 		target.drawString(text, x, y);
 	}
 	
-	public void drawRect( Color color, int x, int y, int width, int height, boolean border ){
+	@Override
+    public void drawRect( Color color, int x, int y, int width, int height, boolean border ){
 		if(color!=null){
 			if(current!=null)
 				current.dispose();
@@ -57,11 +59,13 @@ public class CanvasSWT implements Canvas{
 		bgColor.dispose();
 	}
 	
-	public void drawRect( Color color, int x, int y, int width, int height ){
+	@Override
+    public void drawRect( Color color, int x, int y, int width, int height ){
 		drawRect( color, x, y, width, height, true );
 	}
 	
-	public void drawDot( Color color, int x, int y ){
+	@Override
+    public void drawDot( Color color, int x, int y ){
 		if(current!=null)
 			current.dispose();
 		current = swt(color);
@@ -72,7 +76,8 @@ public class CanvasSWT implements Canvas{
 		//target.drawRectangle(x, y, PIXEL_WITH, PIXEL_WITH);
 	}
 	
-	public void drawOval( Color color, int x, int y, int width, int height ){
+	@Override
+    public void drawOval( Color color, int x, int y, int width, int height ){
 		if(current!=null)
 			current.dispose();
 		current = swt(color);
@@ -83,7 +88,8 @@ public class CanvasSWT implements Canvas{
 		target.drawOval(x, y, width, height);
 	}
 
-	public void drawBackground( Color color, int width, int heigth ){
+	@Override
+    public void drawBackground( Color color, int width, int heigth ){
 		if(bgColor!=null)
 			bgColor.dispose();
 		bgColor = swt(color);

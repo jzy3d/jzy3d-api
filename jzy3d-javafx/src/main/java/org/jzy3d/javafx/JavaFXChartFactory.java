@@ -124,7 +124,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
     protected void resetTo(Chart chart, double width, double height) {
         if (chart.getCanvas() instanceof OffscreenCanvas) {
             OffscreenCanvas canvas = (OffscreenCanvas) chart.getCanvas();
-            canvas.initGLPBuffer(canvas.getCapabilities(), (int) width, (int) height);
+            canvas.initBuffer(canvas.getCapabilities(), (int) width, (int) height);
             chart.render();
         } else {
             System.err.println("NOT AN OFFSCREEN CANVAS!");

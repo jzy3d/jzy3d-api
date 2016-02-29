@@ -6,9 +6,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GLAnimatorControl;
-import javax.media.opengl.GLCapabilities;
-
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
@@ -30,6 +27,8 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
+import com.jogamp.opengl.GLAnimatorControl;
+import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.util.texture.TextureData;
 
 /**
@@ -283,7 +282,7 @@ public class Chart {
         return addLight(position, Color.BLUE, new Color(0.8f, 0.8f, 0.8f), Color.WHITE, 1);
     }
 
-    public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular, int radius) {
+    public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular, float radius) {
         Light light = new Light();
         light.setPosition(position);
         light.setAmbiantColor(ambiant);

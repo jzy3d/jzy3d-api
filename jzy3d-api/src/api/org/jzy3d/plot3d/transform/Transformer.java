@@ -1,8 +1,8 @@
 package org.jzy3d.plot3d.transform;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.Coord3d;
+
+import com.jogamp.opengl.GL;
 
 
 /** A {@link Transformer} is able to execute a transformation into
@@ -14,15 +14,19 @@ import org.jzy3d.maths.Coord3d;
  */
 interface Transformer {	
 	/**
-	 * Execute the effective GL transformation held by this {@link Transformer}.
-	 * @param gl OpenGL context.
+	 * Execute the transformation to the current GL context.
+	 * 
+	 * As  {@link Transformer} are usually help by an {@ AbstractDrawable}, 
+	 * the transformation will apply to this {@ AbstractDrawable}.
+	 * 
+	 * Computation is performed by GPU.
 	 */
 	public void execute(GL gl);	
 	
 	/**
 	 * Apply the transformations to the input coordinates.
 	 * 
-	 * Warning: this method is a utility that may not be implemented.
+     * Computation is performed by CPU.
 	 */
 	public Coord3d compute(Coord3d input);	
 }

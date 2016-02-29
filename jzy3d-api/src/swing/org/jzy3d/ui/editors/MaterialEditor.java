@@ -38,9 +38,7 @@ public class MaterialEditor extends JPanel{
 		slider0.addChangeListener(new ChangeListener() {
 			@Override
             public void stateChanged(ChangeEvent e) {
-				//System.out.println(slider0.getValue());
 				color.r = getPercent(slider0);
-				System.out.println(color);
 				chart.render();
 			}
 		});
@@ -78,7 +76,6 @@ public class MaterialEditor extends JPanel{
 		
 	public void setTarget(AbstractEnlightable enlightable){
 		this.enlightable = enlightable;
-		System.out.println(enlightable);
 		registerColorControl(ambiantColorControl, enlightable.getMaterialAmbiantReflection());
 		registerColorControl(diffuseColorControl, enlightable.getMaterialDiffuseReflection());
 		registerColorControl(specularColorControl, enlightable.getMaterialSpecularReflection());

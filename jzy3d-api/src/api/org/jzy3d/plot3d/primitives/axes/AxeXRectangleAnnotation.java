@@ -1,11 +1,11 @@
 package org.jzy3d.plot3d.primitives.axes;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GL2GL3;
-
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL2GL3;
 
 public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAnnotation {
 
@@ -36,7 +36,6 @@ public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAn
         gl.getGL2().glVertex3f(value, ymax, z);
         gl.getGL2().glVertex3f(value, ymin, z);
         
-        //System.out.println("x=" + value +  " w:" + width + " ymin=" + ymin + " ymax=" + ymax);
         gl.getGL2().glEnd();
     }
     

@@ -24,8 +24,6 @@ public class SphereScatterGenerator {
         while(i<(2*Math.PI)){
         	double j = 0;
         	while(j<(jrat*Math.PI)){
-        		//System.out.println(i+"  "+j);
-        		//double d = 100 + (Math.abs( sin(i) )*200);
         		Coord3d c = new Coord3d(i,j,radius).cartesian();
         		if(center!=null){
         			c.x += center.x;

@@ -1,7 +1,7 @@
 package org.jzy3d.maths;
 
-import javax.media.nativewindow.util.Dimension;
-import javax.media.nativewindow.util.Point;
+import com.jogamp.nativewindow.util.Dimension;
+import com.jogamp.nativewindow.util.Point;
 
 /**
  * Replacement for java.awt.Rectangle

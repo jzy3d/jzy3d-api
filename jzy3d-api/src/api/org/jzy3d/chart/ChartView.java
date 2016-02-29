@@ -1,8 +1,5 @@
 package org.jzy3d.chart;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
@@ -12,6 +9,9 @@ import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 
 

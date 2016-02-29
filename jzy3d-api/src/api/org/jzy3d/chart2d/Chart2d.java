@@ -3,8 +3,6 @@ package org.jzy3d.chart2d;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.media.opengl.GLCapabilities;
-
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
@@ -16,6 +14,8 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
+
+import com.jogamp.opengl.GLCapabilities;
 
 // TODO:
 // AXEBOX ticks too long

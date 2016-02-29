@@ -1,14 +1,14 @@
 package org.jzy3d.plot3d.primitives.log;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 
 public class AxeTransformableScatter extends Scatter{
 	SpaceTransformer transformers;
@@ -48,7 +48,8 @@ public class AxeTransformableScatter extends Scatter{
 	    }
 	    
 
-	    public void drawGLES2() {
+	    @Override
+        public void drawGLES2() {
 	        GLES2CompatUtils.glPointSize(width);
 
 	        GLES2CompatUtils.glBegin(GL2.GL_POINTS);
@@ -67,7 +68,8 @@ public class AxeTransformableScatter extends Scatter{
 	        GLES2CompatUtils.glEnd();
 	    }
 
-	    public void drawGL2(GL gl) {
+	    @Override
+        public void drawGL2(GL gl) {
 	        gl.getGL2().glPointSize(width);
 
 	        gl.getGL2().glBegin(GL2.GL_POINTS);
@@ -86,7 +88,8 @@ public class AxeTransformableScatter extends Scatter{
 	        gl.getGL2().glEnd();
 	    }
 	    
-	    public void updateBounds() {
+	    @Override
+        public void updateBounds() {
 	        bbox.reset();
 	        for (Coord3d c : coordinates)
 	        	bbox.add(transformers.compute(c));

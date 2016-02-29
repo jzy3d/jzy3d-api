@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
-import javax.media.opengl.GL;
+import com.jogamp.opengl.GL;
 
 /**
  * Defines an objects that uses resources that should be loaded

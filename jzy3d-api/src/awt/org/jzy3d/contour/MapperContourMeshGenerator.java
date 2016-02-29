@@ -92,12 +92,10 @@ public class MapperContourMeshGenerator extends AbstractContourGenerator impleme
 			int i, int j, double[][] contours, boolean[][] processed,
 			float planeAxe) {
 		LineStrip strip = new LineStrip(100);
-		// System.out.println("strip");
 
 		// add current
 		processed[i][j] = true;
 		strip.add(new Point(map(i, j, planeAxe, contours)));
-		// System.out.println("["+i+","+j+"]");
 		int width = 1;
 		IntegerCoord2d next = findNext(i, j, width, contours, processed);
 		while (next != null) {
@@ -106,11 +104,9 @@ public class MapperContourMeshGenerator extends AbstractContourGenerator impleme
 			Color color = policy.getColorMapper().getColor(
 					new Coord3d(0, 0, contours[next.x][next.y]));
 			strip.add(new Point(coord, color));
-			// System.out.println("["+next.x+","+next.y+"]");
 			// follow path
 			next = findNext(next.x, next.y, width, contours, processed);
 		}
-		// System.out.println("length " + strip.size());
 		return strip;
 	}
 
@@ -130,7 +126,6 @@ public class MapperContourMeshGenerator extends AbstractContourGenerator impleme
 				}
 			}
 		}
-		// System.out.println("tried " + n);
 		if (width < PIXEL_NEIGHBOUR_THRESHOLD)
 			return findNext(i, j, width + 1, contours, processed);
 		return null;

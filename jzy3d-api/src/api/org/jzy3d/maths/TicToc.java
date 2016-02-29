@@ -6,8 +6,9 @@ package org.jzy3d.maths;
  * either: {@link elapsedNanosecond()}, {@link elapsedMilisecond()} or {@link
  * elapsedSecond()}.
  * 
+ * @see  {@link Timer}
+ * 
  * @author Martin Pernollet
- *
  */
 public class TicToc {
     public static TicToc T = new TicToc();

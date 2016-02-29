@@ -1,14 +1,14 @@
 package org.jzy3d.plot3d.primitives.textured;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2GL3;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Quad;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2GL3;
+import com.jogamp.opengl.glu.GLU;
 
 public class TranslucentQuad extends Quad implements ITranslucent {
 	@Override
@@ -34,7 +34,6 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 						callWithAlphaFactor(gl, c, alpha);
 					} else
 						callWithAlphaFactor(gl, p.rgb, alpha);
-					// System.out.println(p.rgb + " alpha factor = " + alpha);
 					gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 				}
 				gl.getGL2().glEnd();
@@ -78,7 +77,6 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 						callWithAlphaFactor(gl, c, alpha);
 					} else
 						callWithAlphaFactor(gl, p.rgb, alpha);
-					// System.out.println(p.rgb + " alpha factor = " + alpha);
 					GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 				}
 				GLES2CompatUtils.glEnd();

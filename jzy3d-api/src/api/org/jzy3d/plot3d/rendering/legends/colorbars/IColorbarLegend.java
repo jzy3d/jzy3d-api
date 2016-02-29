@@ -1,10 +1,10 @@
 package org.jzy3d.plot3d.rendering.legends.colorbars;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.Dimension;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 public interface IColorbarLegend {
     public void render(GL gl, GLU glu);
