@@ -90,7 +90,6 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
 	}
 	
 	public static boolean isDoubleClick(MouseEvent e){
-		//System.out.println(e.getClickCount());
     	return (e.getClickCount() > 1);
 	}
 	

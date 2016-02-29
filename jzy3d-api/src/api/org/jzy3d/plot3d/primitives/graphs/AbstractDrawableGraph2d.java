@@ -3,10 +3,6 @@ package org.jzy3d.plot3d.primitives.graphs;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2ES1;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
@@ -18,6 +14,10 @@ import org.jzy3d.plot3d.primitives.graphs.layout.IGraphLayout2d;
 import org.jzy3d.plot3d.primitives.pickable.Pickable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2ES1;
+import com.jogamp.opengl.glu.GLU;
 
 /** 
  * An implementation based on {@link Pickable} objects should register

@@ -1,9 +1,9 @@
 package org.jzy3d.plot3d.primitives.axes;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Range;
+
+import com.jogamp.opengl.GL;
 
 public class AxeCrossAnnotation extends AxeLineAnnotation implements AxeAnnotation {
     protected Coord2d value;

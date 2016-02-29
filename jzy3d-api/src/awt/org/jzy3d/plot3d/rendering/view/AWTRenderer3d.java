@@ -2,11 +2,10 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.image.BufferedImage;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLProfile;
-import javax.media.opengl.glu.GLU;
-
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
 
 public class AWTRenderer3d extends Renderer3d{

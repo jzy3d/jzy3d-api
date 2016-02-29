@@ -8,7 +8,11 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class Point implements Comparable<Point>, Serializable {
-	private double x, y, z;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -2171877036557953047L;
+    private double x, y, z;
 
 	/**
 	 * Default Constructor. <br />

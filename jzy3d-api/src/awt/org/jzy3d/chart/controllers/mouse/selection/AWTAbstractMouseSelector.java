@@ -103,22 +103,22 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
         // 2|1
         if (in.y < out.y) {
             if (in.x < out.x) {
-                // System.out.println("1");
+                // ("1");
                 if (in.x <= px && px <= out.x && in.y <= flipYProjection && flipYProjection <= out.y)
                     return true;
             } else {
-                // System.out.println("2");
+                // ("2");
                 if (out.x <= px && px <= in.x && in.y <= flipYProjection && flipYProjection <= out.y)
                     return true;
             }
 
         } else {
             if (in.x < out.x) {
-                // System.out.println("3");
+                // ("3");
                 if (in.x <= px && px <= out.x && out.y <= flipYProjection && flipYProjection <= in.y)
                     return true;
             } else {
-                // System.out.println("4");
+                // ("4");
                 if (out.x <= px && px <= in.x && out.y <= flipYProjection && flipYProjection <= in.y) // buggy
                     return true;
             }

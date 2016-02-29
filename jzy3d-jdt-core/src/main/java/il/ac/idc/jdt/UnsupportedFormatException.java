@@ -3,7 +3,12 @@ package il.ac.idc.jdt;
 @SuppressWarnings("serial")
 public class UnsupportedFormatException extends RuntimeException {
 
-	public UnsupportedFormatException() {
+	/**
+     * 
+     */
+    private static final long serialVersionUID = 7278143126965212994L;
+
+    public UnsupportedFormatException() {
 		super();
 	}
 

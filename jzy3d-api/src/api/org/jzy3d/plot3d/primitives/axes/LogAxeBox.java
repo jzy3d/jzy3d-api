@@ -1,9 +1,5 @@
 package org.jzy3d.plot3d.primitives.axes;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -15,6 +11,10 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.glu.GLU;
 
 /**
  * TODO : 
@@ -57,24 +57,23 @@ public class LogAxeBox extends AxeBox {
      * quad is indexed from 0.0f to 5.0f using glPassThrough, and may be traced
      * in feedback mode when mode=GL2.GL_FEEDBACK
      */
+    @Override
     protected void drawCube(GL gl, int mode) {
         for (int q = 0; q < 6; q++) {
             if (gl.isGL2()) {
                 if (mode == GL2.GL_FEEDBACK)
-                    gl.getGL2().glPassThrough((float) q);
+                    gl.getGL2().glPassThrough(q);
                 gl.getGL2().glBegin(GL2.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
                     Coord3d c3d = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]); //era qua
                     
-                    //System.out.println(c3d.x);
-                    //System.out.println(Math.log(c3d.x));
-                    
+                    // TODO : awfull
                     GlVertexExecutor.Vertex(gl, c3d, spaceTransformer);
                 }
                 gl.getGL2().glEnd();
             } else {
                 if (mode == GL2.GL_FEEDBACK)
-                    GLES2CompatUtils.glPassThrough((float) q);
+                    GLES2CompatUtils.glPassThrough(q);
                 GLES2CompatUtils.glBegin(GL2.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
                     Coord3d c3d = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]);
@@ -89,6 +88,7 @@ public class LogAxeBox extends AxeBox {
     /**
      * Draw a grid on the desired quad.
      */
+    @Override
     protected void drawGridOnQuad(GL gl, int quad) {
         // Draw X grid along X axis
         if ((quad != 0) && (quad != 1)) {
@@ -140,6 +140,7 @@ public class LogAxeBox extends AxeBox {
         }
     }
     
+    @Override
     protected BoundingBox3d drawTicks(GL gl, GLU glu, Camera cam, int axis, int direction, Color color, Halign hal, Valign val) {
         int quad_0;
         int quad_1;
@@ -206,6 +207,7 @@ public class LogAxeBox extends AxeBox {
         return ticksTxtBounds;
     }
     
+    @Override
     public void drawAxisTicks(GL gl, GLU glu, Camera cam, int direction, Color color, Halign hal, Valign val, float tickLength, BoundingBox3d ticksTxtBounds, double xpos,
             double ypos, double zpos, float xdir, float ydir, float zdir, double[] ticks) {
         double xlab;

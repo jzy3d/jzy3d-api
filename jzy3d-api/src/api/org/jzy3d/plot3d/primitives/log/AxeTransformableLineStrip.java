@@ -3,14 +3,14 @@ package org.jzy3d.plot3d.primitives.log;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
+
+import com.jogamp.opengl.GL;
 
 public class AxeTransformableLineStrip extends LineStrip {
 	
@@ -42,7 +42,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        add(c2);
 	    }
 
-	    public void drawLineGLES2() {
+	    @Override
+        public void drawLineGLES2() {
 	        GLES2CompatUtils.glBegin(GL.GL_LINE_STRIP);
 
 	        if (wfcolor == null) {
@@ -59,26 +60,26 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        GLES2CompatUtils.glEnd();
 	    }
 
-	    public void drawLineGL2(GL gl) {
+	    @Override
+        public void drawLineGL2(GL gl) {
 	        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
 
 	        if (wfcolor == null) {
 	            for (Point p : points) {
 	                gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
 	                GlVertexExecutor.Vertex(gl, new Coord3d(p.xyz.x, p.xyz.y, p.xyz.z), transformers);
-	                //System.out.println(p.xyz + p.rgb.toString());
 	            }
 	        } else {
 	            for (Point p : points) {
 	                gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
 	                GlVertexExecutor.Vertex(gl, new Coord3d(p.xyz.x, p.xyz.y, p.xyz.z), transformers);
-	                //System.out.println(p.xyz + wfcolor.toString());
 	            }
 	        }
 	        gl.getGL2().glEnd();
 	    }
 
-	    public void drawPoints(GL gl) {
+	    @Override
+        public void drawPoints(GL gl) {
 	        if (showPoints) {
 	            if (gl.isGL2()) {
 	                drawPointsGL2(gl);
@@ -88,7 +89,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        }
 	    }
 
-	    public void drawPointsGLES2() {
+	    @Override
+        public void drawPointsGLES2() {
 	        GLES2CompatUtils.glBegin(GL.GL_POINTS);
 
 	        for (Point p : points) {
@@ -102,7 +104,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	        GLES2CompatUtils.glEnd();
 	    }
 
-	    public void drawPointsGL2(GL gl) {
+	    @Override
+        public void drawPointsGL2(GL gl) {
 	        gl.getGL2().glBegin(GL.GL_POINTS);
 
 	        for (Point p : points) {
@@ -117,7 +120,8 @@ public class AxeTransformableLineStrip extends LineStrip {
 	    }
 	    
 	    
-	    public void updateBounds() {
+	    @Override
+        public void updateBounds() {
 	        bbox.reset();
 	        for (Point p : points)
 	            bbox.add(transform.compute(p.xyz));

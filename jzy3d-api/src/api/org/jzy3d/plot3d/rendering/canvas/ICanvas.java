@@ -3,11 +3,10 @@ package org.jzy3d.plot3d.rendering.canvas;
 import java.io.File;
 import java.io.IOException;
 
-import javax.media.opengl.GLDrawable;
-
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.util.texture.TextureData;
 
 
