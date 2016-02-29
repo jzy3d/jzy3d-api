@@ -1,8 +1,8 @@
 package org.jzy3d.plot3d.primitives.axes;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.Range;
+
+import com.jogamp.opengl.GL;
 
 public class AxeXLineAnnotation extends AxeLineAnnotation implements AxeAnnotation {
     protected float value;

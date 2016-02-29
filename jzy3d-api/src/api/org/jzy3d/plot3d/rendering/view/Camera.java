@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.fixedfunc.GLMatrixFunc;
-import javax.media.opengl.glu.GLU;
-
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Grid;
@@ -16,6 +13,10 @@ import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.transform.Transform;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
+import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link Camera} allow to define on the view and target points in a cartesian
@@ -318,7 +319,7 @@ public class Camera extends AbstractViewportManager {
         if (failOnException)
             throw new RuntimeException(message);
         else
-            System.err.println(message);
+            Logger.getLogger(Camera.class).warn(message);
     }
 
     boolean failOnException = false;
@@ -437,42 +438,41 @@ public class Camera extends AbstractViewportManager {
         // Set perspective
         if (projection == CameraMode.PERSPECTIVE) {
             boolean stretchToFill = ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode());
-
-            glu.gluPerspective(computeFieldOfView(radius * 2, eye.distance(target)), stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1, near, far);
+            double fov = computeFieldOfView(radius * 2, eye.distance(target)); 
+            float aspect = stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1;
+            float nearCorrected = near<=0?0.000000000000000000000000000000000000001f:near;
+            
+            glu.gluPerspective(fov, aspect, nearCorrected, far);
+            
         } else if (projection == CameraMode.ORTHOGONAL) {
             if (gl.isGL2()) {
-                if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
-                    gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
-                else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
-                    gl.getGL2().glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
-                else if (ViewportMode.SQUARE.equals(viewport.getMode()))
-                    gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
+                projectionOrthoGL2(gl, viewport);
             } else {
-                if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
-                    GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
-                else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
-                    GLES2CompatUtils.glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
-                else if (ViewportMode.SQUARE.equals(viewport.getMode()))
-                    GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
+                projectionOrthoGLES2(viewport);
             }
-
-            // gl.glOrtho(-radius * viewport.ratio(), +radius *
-            // viewport.ratio(), -radius / viewport.ratio(), +radius/
-            // viewport.ratio(), near, far);
-            // gl.glOrtho(-radius / viewport.ratio(), +radius /
-            // viewport.ratio(), -radius, +radius, near, far);
-            // gl.glOrtho(-radius, +radius, -radius * viewport.ratio(), +radius
-            // * viewport.ratio(), near, far);
-
-            // gl.glOrtho(-radius, +radius, -radius, +radius,
-            // Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         } else
             throw new RuntimeException("Camera.shoot(): unknown projection mode '" + projection + "'");
 
         // Set camera position
         glu.gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
+    }
 
-        // System.out.println("eye:" + eye);
+    private void projectionOrthoGLES2(ViewportConfiguration viewport) {
+        if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
+            GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
+        else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
+            GLES2CompatUtils.glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
+        else if (ViewportMode.SQUARE.equals(viewport.getMode()))
+            GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
+    }
+
+    private void projectionOrthoGL2(GL gl, ViewportConfiguration viewport) {
+        if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
+            gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
+        else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
+            gl.getGL2().glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
+        else if (ViewportMode.SQUARE.equals(viewport.getMode()))
+            gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
     }
 
     /**

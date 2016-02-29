@@ -1,8 +1,8 @@
 package org.jzy3d.plot3d.primitives;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
 
 /**
  * A polygon made of two triangles with no wireframe on their adjacent side.

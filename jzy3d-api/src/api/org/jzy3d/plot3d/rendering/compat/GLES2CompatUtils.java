@@ -2,9 +2,8 @@ package org.jzy3d.plot3d.rendering.compat;
 
 import java.nio.ByteBuffer;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2ES1;
-
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.util.ImmModeSink;
 import com.jogamp.opengl.util.PMVMatrix;
 import com.jogamp.opengl.util.glsl.ShaderState;

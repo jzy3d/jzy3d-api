@@ -3,13 +3,6 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.GL2ES1;
-import javax.media.opengl.GL2GL3;
-import javax.media.opengl.fixedfunc.GLPointerFunc;
-import javax.media.opengl.glu.GLU;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.IGLLoader;
@@ -26,6 +19,12 @@ import org.jzy3d.plot3d.transform.Rotator;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL2ES1;
+import com.jogamp.opengl.GL2GL3;
+import com.jogamp.opengl.fixedfunc.GLPointerFunc;
+import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link DrawableVBO} is able to efficiently draw a large collection of

@@ -44,7 +44,6 @@ public class LightEditor extends JPanel{
 		slider0.addChangeListener(new ChangeListener() {
 			@Override
             public void stateChanged(ChangeEvent e) {
-				//System.out.println(slider0.getValue());
 				color.r = getPercent(slider0);
 				chart.render();
 			}
@@ -83,7 +82,6 @@ public class LightEditor extends JPanel{
 		slider0.addChangeListener(new ChangeListener() {
 			@Override
             public void stateChanged(ChangeEvent e) {
-				//System.out.println(slider0.getValue());
 				coord.x = slider0.getValue();
 				light.setPosition(coord);
 				chart.render();

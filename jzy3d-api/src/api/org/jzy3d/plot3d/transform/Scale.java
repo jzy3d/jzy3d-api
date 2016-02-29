@@ -1,9 +1,9 @@
 package org.jzy3d.plot3d.transform;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
 
 /**
  * Scale is a {@link Transformer} that stores the scaling factor required to

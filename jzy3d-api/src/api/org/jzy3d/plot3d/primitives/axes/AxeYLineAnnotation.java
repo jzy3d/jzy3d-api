@@ -1,10 +1,10 @@
 package org.jzy3d.plot3d.primitives.axes;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
 
 public class AxeYLineAnnotation implements AxeAnnotation {
     protected float value;
@@ -40,7 +40,6 @@ public class AxeYLineAnnotation implements AxeAnnotation {
         gl.getGL2().glVertex3f(value, yrange.getMin()-yrange.getRange()/30, zrange.getMin()-2);
         gl.getGL2().glVertex3f(value, yrange.getMax()+yrange.getRange()/30, zrange.getMin()-2);
         
-        //System.out.println("x=" + value +  " y:" + yrange);
         gl.getGL2().glEnd();
     }
 

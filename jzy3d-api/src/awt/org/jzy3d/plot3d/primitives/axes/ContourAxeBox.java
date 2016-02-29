@@ -4,9 +4,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -23,6 +21,9 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
+
 
 /**
  * An axe box for displaying a contour map that
@@ -31,6 +32,8 @@ import org.jzy3d.plot3d.text.align.Valign;
  * @author Martin Pernollet
  */
 public class ContourAxeBox extends AxeBox {
+    static Logger logger = Logger.getLogger(ContourAxeBox.class);
+    
 	public ContourAxeBox(BoundingBox3d bbox, IAxeLayout layout) {
 		super(bbox, layout);
 	}
@@ -107,8 +110,9 @@ public class ContourAxeBox extends AxeBox {
 		//gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 		
 		// Render the contour texture if available
-		if( contourTexture != null )
+		if( contourTexture != null ){
 			contourTexture.draw(gl, glu, camera);
+		}
 		
 		if( mesh != null ){
 			drawMesh(gl, glu, camera, mesh);
@@ -120,7 +124,7 @@ public class ContourAxeBox extends AxeBox {
 		// draw contour lines
 		for (ContourLevel line: mesh.lines.getContourLevels()) {
 			line.draw(gl, glu, camera);
-			System.out.println(line.getValue() + " has " + line.getLines());
+			logger.info("Contour level '" + line.getValue() + "' has " + line.getLines());
 		}
 		
 		// draw text

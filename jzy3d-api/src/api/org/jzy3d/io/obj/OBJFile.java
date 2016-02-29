@@ -1,10 +1,10 @@
 package org.jzy3d.io.obj;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 
 /**
@@ -27,6 +28,8 @@ import org.jzy3d.maths.BoundingBox3d;
  * Copyright (c) NVIDIA Corporation. All rights reserved.
  */
 public class OBJFile {
+    static Logger logger = Logger.getLogger(OBJFile.class);
+    
     /** Enumeration of primitive types */
     public enum PrimType {
         eptNone(0x0), eptPoints(0x1), eptEdges(0x2), eptTriangles(0x4), eptTrianglesWithAdjacency(0x8), eptAll(0xf);
@@ -38,10 +41,6 @@ public class OBJFile {
     };
 
     public static final int NumPrimTypes = 4;
-
-    /*
-     * public Model CreateModel() { return new Model(); }
-     */
 
     public OBJFile() {
         posSize_ = 0;
@@ -66,6 +65,20 @@ public class OBJFile {
         }
     };
 
+    public boolean loadModelFromFilename(String file) {
+        //URL fileURL = getClass().getClassLoader().getResource(File.separator + file);
+
+        URL fileURL = null;
+        try {
+            fileURL = new URL(file);
+        } catch (MalformedURLException e) {
+            logger.error(e);
+            return false;
+        }
+        
+        return loadModelFromURL(fileURL);
+    }
+    
     /**
      * This function attempts to determine the type of the filename passed as a
      * parameter. If it understands that file type, it attempts to parse and
@@ -73,8 +86,7 @@ public class OBJFile {
      * recognized and successfully parsed, the function returns true, otherwise
      * it returns false.
      */
-    public boolean loadModelFromFile(String file) {
-        URL fileURL = getClass().getClassLoader().getResource(File.separator + file);
+    public boolean loadModelFromURL(URL fileURL) {        
         if (fileURL != null) {
             BufferedReader input = null;
             try {
@@ -198,11 +210,11 @@ public class OBJFile {
                 return true;
 
             } catch (FileNotFoundException kFNF) {
-                System.err.println("Unable to find the shader file " + file);
+                logger.error("Unable to find the shader file " + fileURL + " : FileNotFoundException : " + kFNF.getMessage());
             } catch (IOException kIO) {
-                System.err.println("Problem reading the shader file " + file);
+                logger.error("Problem reading the shader file " + fileURL + " : IOException : " + kIO.getMessage());
             } catch (NumberFormatException kIO) {
-                System.err.println("Problem reading the shader file " + file);
+                logger.error("Problem reading the shader file " + fileURL + " : NumberFormatException : " + kIO.getMessage());
             } finally {
                 try {
                     if (input != null) {
@@ -212,6 +224,10 @@ public class OBJFile {
                 }
             }
         }
+        else{
+            logger.error("URL was null");
+        }
+            
         return false;
     }
 

@@ -31,23 +31,12 @@ public class Coord3dEditor extends JPanel {
 		}
 		
 		final JSlider slider = new JSlider();
-		//slider.setBorder(BorderFactory.createTitledBorder(title));
-		//Component[] c = slider.getComponents();
 		slider.setMinimum(min);
-		//slider.setM
 		slider.setMaximum(max);
 		slider.setMajorTickSpacing((max-min)/5);
 		slider.setMinorTickSpacing((max-min));
-		
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
-		/*slider.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				System.out.println(title + ": " + slider.getValue());
-			}
-
-		});*/
 		return slider;
 	}
 	

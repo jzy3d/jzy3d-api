@@ -1,13 +1,13 @@
 package org.jzy3d.chart.graphs;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 public class GraphView extends ChartView {
 	public GraphView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {

@@ -5,8 +5,7 @@ import java.nio.IntBuffer;
 import java.util.Collection;
 import java.util.List;
 
-import javax.media.opengl.GL;
-
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.io.IGLLoader;
@@ -15,6 +14,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+
+import com.jogamp.opengl.GL;
 
 /**
  * The {@link VBOBuilder} is responsible for sizing a {@link FloatVBO}, filling
@@ -39,7 +40,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  *
  */
 public abstract class VBOBuilder implements IGLLoader<DrawableVBO> {
-    
+    static Logger logger = Logger.getLogger(VBOBuilder.class);
     
     
     /* */
@@ -114,7 +115,6 @@ public abstract class VBOBuilder implements IGLLoader<DrawableVBO> {
     }
 
     protected void putPoint(FloatVBO vbo, int id, Color color, Coord3d coord) {
-        // System.out.println("putPpoint "+ id);
         vbo.getIndices().put(id);
         putCoord(vbo, coord);
         putColor(vbo, color);
@@ -161,7 +161,7 @@ public abstract class VBOBuilder implements IGLLoader<DrawableVBO> {
         int geometrySize = computeGeometrySize(drawable);
         int verticeBufferSize = computeVerticeBufferSize(drawable.getGeometry(), n, dimension, geometrySize, hasNormal, hasColor);
         int indexBufferSize = computeIndexBufferSize(n, geometrySize, hasColor);
-        System.out.println(indexBufferSize + " " + verticeBufferSize);
+        logger.info(indexBufferSize + " " + verticeBufferSize);
         FloatVBO vbo = new FloatVBO(verticeBufferSize, indexBufferSize);
         return vbo;
     }

@@ -1,24 +1,25 @@
 package org.jzy3d.plot3d.primitives;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.plot3d.primitives.LineStrip;
-import org.jzy3d.plot3d.primitives.Point;
+
+import com.jogamp.opengl.GL;
 
 public class CroppableLineStrip extends LineStrip implements Croppable {
     boolean[] filter; // true = show, false = hide
 
+    @Override
     public void filter(BoundingBox3d bounds) {
         filter = new boolean[points.size()];
         for (int i = 0; i < filter.length; i++)
             filter[i] = bounds.contains(points.get(i).xyz);
     }
 
+    @Override
     public void resetFilter() {
         filter = null;
     }
 
+    @Override
     public void drawLineGL2(GL gl) {
         gl.getGL2().glBegin(GL.GL_LINE_STRIP);
 
@@ -30,6 +31,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
         gl.getGL2().glEnd();
     }
 
+    @Override
     public void drawPointsGL2(GL gl) {
         gl.getGL2().glBegin(GL.GL_POINTS);
         if (filter == null)

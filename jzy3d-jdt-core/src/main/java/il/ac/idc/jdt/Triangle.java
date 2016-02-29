@@ -9,7 +9,11 @@ import java.io.Serializable;
  */
 @SuppressWarnings("serial")
 public class Triangle implements Serializable {
-	private Point a, b, c;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -5260987553362967534L;
+    private Point a, b, c;
 	private Triangle abTriangle, bcTriangle, caTriangle;
 	private Circle circum;
 
@@ -149,7 +153,8 @@ public class Triangle implements Serializable {
 		return circum.radius() > circum.center().distance2(p);
 	}
 
-	public String toString() {
+	@Override
+    public String toString() {
 		String res = ""; // +_id+") ";
 		res += a.toString() + b.toString();
 		if (!halfplane)

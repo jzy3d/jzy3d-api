@@ -1,11 +1,11 @@
 package org.jzy3d.plot3d.primitives.enlightables;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.fixedfunc.GLLightingFunc;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.primitives.AbstractWireframeable;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 
 public abstract class AbstractEnlightable extends AbstractWireframeable {
 

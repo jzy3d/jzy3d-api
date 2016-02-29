@@ -1,10 +1,5 @@
 package org.jzy3d.plot3d.primitives.enlightables;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2GL3;
-import javax.media.opengl.glu.GLU;
-import javax.media.opengl.glu.GLUquadric;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
@@ -14,6 +9,11 @@ import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2GL3;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
 
 /**
  * A Sphere allows rendering a sphere. <br>
