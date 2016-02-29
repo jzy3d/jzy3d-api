@@ -231,6 +231,22 @@ public class BoundingBox3d {
         return xmin <= b2.xmin && b2.xmax <= xmax && ymin <= b2.ymin && b2.ymax <= ymax && zmin <= b2.zmin && b2.zmax <= zmax;
     }
 
+    public boolean contains(Coord3d c) {
+        if (c.x < getXmin())
+            return false;
+        else if (c.x > getXmax())
+            return false;
+        else if (c.y < getYmin())
+            return false;
+        else if (c.y > getYmax())
+            return false;
+        else if (c.z < getZmin())
+            return false;
+        else if (c.z > getZmax())
+            return false;
+        return true;
+    }
+
     /** Return true if intersect b2. */
     public boolean intersect(BoundingBox3d b2) {
         return xmin <= b2.xmin && b2.xmin <= xmax || xmin <= b2.xmax && b2.xmax <= xmax || ymin <= b2.ymin && b2.ymin <= ymax || ymin <= b2.ymax && b2.ymax <= ymax || zmin <= b2.zmin && b2.zmin <= zmax || zmin <= b2.zmax && b2.zmax <= zmax;
