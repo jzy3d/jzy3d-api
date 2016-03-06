@@ -4,6 +4,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,13 +28,13 @@ public class SmokeTest {
 				IOParsers.exportSmf(dt.getTriangulation(), smfTemp);
 				assertThat(
 						data + " trangulation is correct for smf",
-						IOUtils.contentEquals(FileUtils.openInputStream(smfTemp),
-								this.getClass().getResourceAsStream("/outputs/" + data + "_result.smf")));
+						IOUtils.contentEqualsIgnoreEOL(new InputStreamReader(FileUtils.openInputStream(smfTemp)),
+								new InputStreamReader(this.getClass().getResourceAsStream("/outputs/" + data + "_result.smf"))));
 				IOParsers.exportTsin(dt, tsinTemp);
 				assertThat(
 						data + " trangulation is correct tsin",
-						IOUtils.contentEquals(FileUtils.openInputStream(tsinTemp),
-								this.getClass().getResourceAsStream("/outputs/" + data + "_result.tsin")));
+						IOUtils.contentEqualsIgnoreEOL(new InputStreamReader(FileUtils.openInputStream(tsinTemp)),
+								new InputStreamReader(this.getClass().getResourceAsStream("/outputs/" + data + "_result.tsin"))));
 			} catch (IOException e) {
 				e.printStackTrace();
 				Assert.fail("Failed on " + data);
