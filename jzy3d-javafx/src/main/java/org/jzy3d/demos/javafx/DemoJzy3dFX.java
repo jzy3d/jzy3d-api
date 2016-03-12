@@ -42,7 +42,7 @@ public class DemoJzy3dFX extends Application {
     
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Jzy3d|FX");
+        stage.setTitle(DemoJzy3dFX.class.getSimpleName());
         
         // Jzy3d
         JavaFXChartFactory factory = new JavaFXChartFactory();
