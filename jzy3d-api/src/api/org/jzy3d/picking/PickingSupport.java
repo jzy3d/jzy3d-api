@@ -193,6 +193,11 @@ public class PickingSupport {
         }
         return picked;
     }
+
+  	public synchronized void unRegisterAllPickableObjects(){
+  		pickables.clear();
+  		pickableTargets.clear();
+  	}    
     
     /*********************/
 
