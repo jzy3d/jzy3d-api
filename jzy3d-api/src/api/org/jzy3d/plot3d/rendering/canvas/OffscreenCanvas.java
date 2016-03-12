@@ -66,8 +66,10 @@ public class OffscreenCanvas implements ICanvas {
         if (!factory.canCreateGLPbuffer(null, profile))
             throw new RuntimeException("No pbuffer support");
         
-        if(glpBuffer!=null)
+        if(glpBuffer!=null){
             glpBuffer.removeGLEventListener(renderer);
+            glpBuffer.destroy();
+        }
         glpBuffer = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), capabilities, null, width, height);
         glpBuffer.addGLEventListener(renderer);
     }
