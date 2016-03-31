@@ -131,9 +131,9 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
             
             //System.out.println("will init");
             canvas.initBuffer(canvas.getCapabilities(), (int) width, (int) height);
-            LOGGER.error("done initBuffer");
+            //LOGGER.error("done initBuffer");
             chart.render();
-            LOGGER.error("done render");
+            //LOGGER.error("done render");
         } else {
             LOGGER.error("NOT AN OFFSCREEN CANVAS!");
         }

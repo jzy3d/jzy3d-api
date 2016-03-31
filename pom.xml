@@ -46,7 +46,7 @@
 
   <modules>
       <module>jzy3d-api</module>
-      <!-- <module>jzy3d-javafx</module> -->
+      <module>jzy3d-javafx</module>
       <module>jzy3d-swt</module>
 
       <module>jzy3d-jdt-core</module>
