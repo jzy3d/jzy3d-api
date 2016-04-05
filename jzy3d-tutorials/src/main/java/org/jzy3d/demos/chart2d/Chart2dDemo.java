@@ -28,7 +28,7 @@ import org.jzy3d.ui.LookAndFeel;
  * Showing a pair of 2d charts to represent pitch and amplitude variation of an
  * audio signal.
  * 
- * When using large number of samples, run program with VM argument : -Xmx1024m
+ * Noticed problems on chart resize. Suspect "wrong stuffs" around miglayout or jogl.
  * 
  * @author Martin Pernollet
  */
