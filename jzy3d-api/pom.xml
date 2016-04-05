@@ -13,6 +13,16 @@
 	</parent>
 
 	<description>A Java API for 3d charts</description>
+	
+	<!-- <repositories>
+		<repository>
+			<id>miglayout-snapshots</id>
+			<name>Miglayout Snapshots</name>
+			<url>https://oss.sonatype.org/content/</url>
+		</repository>
+	</repositories>-->
+	
+	
 
 	<dependencies>
 		<dependency>
@@ -40,8 +50,8 @@
 		
 		<dependency>
 			<groupId>com.miglayout</groupId>
-			<artifactId>miglayout-swing</artifactId>
-			<version>5.1-SNAPSHOT</version>
+			<artifactId>miglayout</artifactId>
+			<version>3.7.4</version>
 		</dependency>
 
 		<dependency>
