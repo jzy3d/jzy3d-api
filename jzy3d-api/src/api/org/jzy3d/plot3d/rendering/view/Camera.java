@@ -1,11 +1,13 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Grid;
 import org.jzy3d.maths.PolygonArray;
@@ -35,6 +37,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  */
 public class Camera extends AbstractViewportManager {
+    static Logger LOGGER = Logger.getLogger(Camera.class);
 
     /** The polar default view point, i.e. Coord3d(Math.PI/3,Math.PI/5,500). */
     public static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 5, 500);
@@ -160,10 +163,21 @@ public class Camera extends AbstractViewportManager {
      */
     public Coord3d screenToModel(GL gl, GLU glu, Coord3d screen) {
         int viewport[] = getViewPortAsInt(gl);
+        float modelView[] = getModelViewAsFloat(gl);
+        float projection[] = getProjectionAsFloat(gl);
         float worldcoord[] = new float[3];// wx, wy, wz;// returned xyz coords
-        float realy = screen.y;// viewport[3] - (int)screen.y - 1;
+        //float screeny = viewport[3] - (int)screen.y - 1;
 
-        boolean s = glu.gluUnProject(screen.x, realy, screen.z, getModelViewAsFloat(gl), 0, getProjectionAsFloat(gl), 0, viewport, 0, worldcoord, 0);
+        //viewport[3] = 600;
+        //viewport[4] = 600;
+        
+        //LOGGER.info("viewport : " + Arrays.toString(viewport));
+        
+        /*LOGGER.info("modelView : " + Arrays.toString(modelView));
+        LOGGER.info("projection : " + Arrays.toString(projection));
+        LOGGER.info("worldcoord : " + Arrays.toString(worldcoord));*/
+        
+        boolean s = glu.gluUnProject(screen.x, screen.y, screen.z, modelView, 0, projection, 0, viewport, 0, worldcoord, 0);
         if (!s)
             failedProjection("Could not retrieve screen coordinates in model.");
 

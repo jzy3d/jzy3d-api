@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -72,6 +73,12 @@ public class OffscreenCanvas implements ICanvas {
         }
         glpBuffer = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), capabilities, null, width, height);
         glpBuffer.addGLEventListener(renderer);
+    }
+    
+    /* NOT IMPLEMENTED */
+    public void setPixelScale(float[] scale){
+        throw new NotImplementedException();
+        //glpBuffer.setSurfaceScale(scale);
     }
 
     @Deprecated

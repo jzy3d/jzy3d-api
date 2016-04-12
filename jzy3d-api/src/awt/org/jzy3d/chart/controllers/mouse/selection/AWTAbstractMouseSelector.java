@@ -144,20 +144,32 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
     /*****************************************/
 
     protected void startSelection(MouseEvent e) {
-        in = new IntegerCoord2d(e.getX(), e.getY());
-        last = new IntegerCoord2d(e.getX(), e.getY());
-        out = new IntegerCoord2d(e.getX(), e.getY());
+        in = xy(e);
+        last = xy(e);
+        out = xy(e);
+    }
+
+    public IntegerCoord2d xy(MouseEvent e) {
+        return new IntegerCoord2d(x(e), y(e));
+    }
+    
+    public int x(MouseEvent e) {
+        return e.getX();
+    }
+
+    public int y(MouseEvent e) {
+        return e.getY();
     }
 
     protected void dragSelection(MouseEvent e) {
-        out.x = e.getX();
-        out.y = e.getY();
+        out.x = x(e);
+        out.y = y(e);
         chart.render();
     }
 
     protected void releaseSelection(MouseEvent e) {
-        out.x = e.getX();
-        out.y = e.getY();
+        out.x = x(e);
+        out.y = y(e);
 
         processSelection(chart.getScene(), chart.getView(), chart.getCanvas().getRendererWidth(), chart.getCanvas().getRendererHeight());
         chart.render(); // calls draw selection
