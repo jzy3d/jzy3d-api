@@ -10,7 +10,7 @@ import com.jogamp.opengl.GLCapabilities;
 
 public class AWTChart extends Chart {
     public AWTChart() {
-        super();
+        this(DEFAULT_QUALITY, DEFAULT_WINDOWING_TOOLKIT);
     }
 
     public AWTChart(Quality quality, String windowingToolkit) {
@@ -31,11 +31,11 @@ public class AWTChart extends Chart {
     }
 
     public AWTChart(Quality quality) {
-        super(quality);
+        this(quality, DEFAULT_WINDOWING_TOOLKIT);
     }
 
     public AWTChart(String windowingToolkit) {
-        super(windowingToolkit);
+        this(DEFAULT_QUALITY, windowingToolkit);
     }
 
     public void addRenderer(Renderer2d renderer2d) {

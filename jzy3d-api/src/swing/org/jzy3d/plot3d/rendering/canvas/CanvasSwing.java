@@ -10,6 +10,7 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
 import com.jogamp.opengl.GLDrawable;
@@ -71,6 +72,10 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 			animator = new Animator(this);
 			getAnimator().start();
 		}
+		
+		if(quality.isPreserveViewportSize())
+	        setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE });
+
 	}
 
 	@Override
@@ -228,5 +233,10 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
     @Override
     public void removeKeyController(Object o) {
         removeKeyListener((KeyListener)o);
+    }
+
+    @Override
+    public void setPixelScale(float[] scale) {
+        setSurfaceScale(scale);
     }
 }

@@ -7,6 +7,10 @@ public class Scale {
         this.max = max;
     }
 
+    public Scale(double min, double max) {
+        this((float)min, (float)max);
+    }
+
     @Override
     public Scale clone() {
         return new Scale(min, max);

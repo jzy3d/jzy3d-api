@@ -48,14 +48,16 @@ public class AWTCameraMouseController extends AbstractCameraController implement
 		if (handleSlaveThread(e))
 			return;
 
-		prevMouse.x = e.getX();
-		prevMouse.y = e.getY();
+		prevMouse.x = x(e);
+		prevMouse.y = y(e);
 	}
+
+    
 
 	/** Compute shift or rotate */
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		Coord2d mouse = new Coord2d(e.getX(), e.getY());
+		Coord2d mouse = xy(e);
 
 		// Rotate
 		if (AWTMouseUtilities.isLeftDown(e)) {
@@ -70,6 +72,8 @@ public class AWTCameraMouseController extends AbstractCameraController implement
 		}
 		prevMouse = mouse;
 	}
+
+    
 
 	/** Compute zoom */
 	@Override
@@ -111,4 +115,18 @@ public class AWTCameraMouseController extends AbstractCameraController implement
 		return false;
 	}
 
+	
+	/* */
+	
+	public Coord2d xy(MouseEvent e) {
+        return new Coord2d(x(e), y(e));
+    }
+    
+    public int y(MouseEvent e) {
+        return e.getY();
+    }
+
+    public int x(MouseEvent e) {
+        return e.getX();
+    }
 }
