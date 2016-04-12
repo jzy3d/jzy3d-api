@@ -10,6 +10,7 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
@@ -42,7 +43,10 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
         view = scene.newView(this, quality);
         renderer = factory.newRenderer(view, traceGL, debugGL);
         window.addGLEventListener(renderer);
-
+        
+        if(quality.isPreserveViewportSize())
+            setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE });
+        
         // swing specific
         setFocusable(true);
         requestFocusInWindow();
@@ -54,6 +58,12 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
+        
+
+    }
+
+    public void setPixelScale(float[] scale) {
+        window.setSurfaceScale(scale);
     }
 
     public GLWindow getWindow() {

@@ -81,4 +81,9 @@ public class VoidCanvas implements ICanvas{
     protected Renderer3d renderer;
 
     protected static String INFO = VoidCanvas.class + " is not able to render anything and simply let you use Jzy3d geometry model";
+
+    @Override
+    public void setPixelScale(float[] scale) {
+        
+    }
 }
