@@ -141,7 +141,7 @@ public class View {
 
     public Coord3d projectMouse(int x, int y) {
         GL gl = getCurrentGL();
-        Coord3d p = cam.screenToModel(gl, glu, new Coord3d(x*2, y*2, 0));
+        Coord3d p = cam.screenToModel(gl, glu, new Coord3d(x, y, 0));
         getCurrentContext().release();
         return p;
     }
