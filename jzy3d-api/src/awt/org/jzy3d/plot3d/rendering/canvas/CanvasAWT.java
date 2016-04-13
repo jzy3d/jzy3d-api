@@ -62,7 +62,10 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
     }
 
     public void setPixelScale(float[] scale) {
+        if(scale!=null)
         setSurfaceScale(scale);
+        else
+            setSurfaceScale(new float[]{1f,1f});
     }
 
     @Override
