@@ -5,6 +5,7 @@ import java.awt.Panel;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -32,7 +33,8 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * {@link IScreenCanvas} documentation.
  */
 public class CanvasNewtAwt extends Panel implements IScreenCanvas {
-
+    static Logger LOGGER = Logger.getLogger(CanvasNewtAwt.class);
+    
     public CanvasNewtAwt(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
     }
@@ -63,7 +65,11 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
     }
 
     public void setPixelScale(float[] scale) {
-        window.setSurfaceScale(scale);
+        //LOGGER.info("setting scale " + scale);
+        if (scale != null)
+            window.setSurfaceScale(scale);
+        else
+            window.setSurfaceScale(new float[] { 1f, 1f });
     }
 
     public GLWindow getWindow() {
