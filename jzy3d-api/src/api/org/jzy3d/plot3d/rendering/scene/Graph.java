@@ -255,12 +255,12 @@ public class Graph {
     public synchronized void setTransform(Transform transform) {
         this.transform = transform;
 
-        // synchronized(components){
-        for (AbstractDrawable c : components) {
-            if (c != null)
-                c.setTransform(transform);
+        synchronized (components) {
+            for (AbstractDrawable c : components) {
+                if (c != null)
+                    c.setTransform(transform);
+            }
         }
-        // }
     }
 
     /** Return the transform that was affected to this composite. */
@@ -280,10 +280,10 @@ public class Graph {
 
             for (AbstractDrawable c : components) {
                 if (c != null && c.getBounds() != null) {
-                    BoundingBox3d drawableBounds= c.getBounds();
-                    if(!drawableBounds.isReset()){
+                    BoundingBox3d drawableBounds = c.getBounds();
+                    if (!drawableBounds.isReset()) {
                         box.add(drawableBounds);
-                    }                    
+                    }
                 }
             }
             return box;
@@ -343,8 +343,29 @@ public class Graph {
         // }
         return output;
     }
+    
+    
 
     /* */
+
+    public boolean isSort() {
+        return sort;
+    }
+
+    /**
+     * Set sort to false to desactivate decomposition of drawable. 
+     * 
+     * This bypass ranking polygons w.r.t. camera. This will produce visual cue
+     * if the scene is dynamic (changing the list of polygons or viewpoints).
+     * @param sort
+     */
+    public void setSort(boolean sort) {
+        this.sort = sort;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
 
     protected List<AbstractDrawable> components;
     protected Scene scene;
