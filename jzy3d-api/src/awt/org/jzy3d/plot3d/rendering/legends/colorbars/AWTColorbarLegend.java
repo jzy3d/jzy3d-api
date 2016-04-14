@@ -23,7 +23,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     }
 
     public AWTColorbarLegend(AbstractDrawable parent, IAxeLayout layout) {
-        this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), layout.getMainColor(), null);
+        this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), layout.getMainColor(), layout.getMainColor().negative());
     }
 
     public AWTColorbarLegend(AbstractDrawable parent, IAxeLayout layout, Color foreground) {
