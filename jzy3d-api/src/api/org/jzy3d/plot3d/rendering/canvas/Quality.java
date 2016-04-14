@@ -158,5 +158,7 @@ public class Quality {
 	protected boolean isAnimated = true;
 	protected boolean isAutoSwapBuffer = true;
 	
-	protected boolean preserveViewportSize = true;
+	protected boolean preserveViewportSize = DEFAULT_PRESERVE_VIEWPORT;
+	
+	public static boolean DEFAULT_PRESERVE_VIEWPORT = true;
 }

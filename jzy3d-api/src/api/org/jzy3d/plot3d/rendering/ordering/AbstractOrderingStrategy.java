@@ -28,6 +28,11 @@ public abstract class AbstractOrderingStrategy implements Comparator<AbstractDra
 
     public abstract double score(Coord3d coord);
 
+    /**
+     * @throws java.lang.IllegalArgumentException: "Comparison method violates its general contract!" on some JVM. Fix with System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+     * @param monotypes
+     * @param cam
+     */
     public void sort(List<AbstractDrawable> monotypes, Camera cam){
 		setCamera(cam);
 		Collections.sort(monotypes, this);

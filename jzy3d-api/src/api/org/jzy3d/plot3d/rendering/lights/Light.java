@@ -11,6 +11,10 @@ import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class Light {
+    public static void resetCounter(){
+        lightCount = 0;
+    }
+    
     public Light() {
         this(lightCount++, true);
     }
