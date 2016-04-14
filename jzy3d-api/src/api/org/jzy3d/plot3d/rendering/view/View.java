@@ -46,11 +46,10 @@ import com.jogamp.opengl.glu.GLU;
  * to render into. It is the responsability to layout a set of concrete
  * {@link AbstractViewportManager}s such as the {@Camera} rendering the
  * scene or an {@link AWTImageViewport} for displaying an image in the same
- * window.
- * On can control the {@link Camera} with a {@ViewController}
- * and get notifyed by a {@link IViewPointChangedListener} that the view point
- * has changed. The control is relative to the center of the {@link Scene} and
- * is defined using polar coordinates.
+ * window. On can control the {@link Camera} with a {@ViewController
+ * } and get notifyed by a {@link IViewPointChangedListener}
+ * that the view point has changed. The control is relative to the center of the
+ * {@link Scene} and is defined using polar coordinates.
  * 
  * The {@link View} supports post rendering through the addition of
  * {@link Renderer2d}s whose implementation can define Java2d calls to render on
@@ -156,9 +155,9 @@ public class View {
         Coord3d eye = getViewPoint();
         eye.x -= move.x;
         eye.y += move.y;
-        
+
         setViewPoint(eye, updateView);
-        //fireControllerEvent(ControllerType.ROTATE, eye);
+        // fireControllerEvent(ControllerType.ROTATE, eye);
     }
 
     public void shift(final float factor) {
@@ -292,7 +291,8 @@ public class View {
         }
     }
 
-    /** Z scale. 
+    /**
+     * Z scale.
      * 
      * @see setScaleX, setScaleY, setScaleZ
      */
@@ -300,14 +300,15 @@ public class View {
         setScaleZ(scale, true);
     }
 
-    /** Z scale. 
+    /**
+     * Z scale.
      * 
      * @see setScaleX, setScaleY, setScaleZ
      */
     public void setScale(org.jzy3d.maths.Scale scale, boolean notify) {
         setScaleZ(scale, notify);
     }
-    
+
     public void setScaleX(org.jzy3d.maths.Scale scale) {
         setScaleX(scale, true);
     }
@@ -320,7 +321,7 @@ public class View {
         if (notify)
             shoot();
     }
-    
+
     public void setScaleY(org.jzy3d.maths.Scale scale) {
         setScaleY(scale, true);
     }
@@ -333,7 +334,7 @@ public class View {
         if (notify)
             shoot();
     }
-    
+
     public void setScaleZ(org.jzy3d.maths.Scale scale) {
         setScaleZ(scale, true);
     }
@@ -585,12 +586,12 @@ public class View {
             throw new RuntimeException("Unknown bounds");
         shoot();
     }
-    
-    protected BoundingBox3d getSceneGraphBounds(){
+
+    protected BoundingBox3d getSceneGraphBounds() {
         return getSceneGraphBounds(scene);
     }
 
-    protected BoundingBox3d getSceneGraphBounds(Scene scene){
+    protected BoundingBox3d getSceneGraphBounds(Scene scene) {
         return scene.getGraph().getBounds();
     }
 
@@ -634,14 +635,14 @@ public class View {
         else {
             throw new RuntimeException("Unknown bounds mode");
         }
-        
+
         // Compute factors
         float xLen = 1;
         float yLen = 1;
         float zLen = 1;
         float lmax = 1;
-        
-       if(bounds!=null){
+
+        if (bounds != null) {
             xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
             yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
             zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());
@@ -658,9 +659,9 @@ public class View {
             lmax = 1;
 
         // Return a scaler
-        float xscale = (float)((double)lmax / (double)xLen);
-        float yscale = (float)((double)lmax / (double)yLen);
-        float zscale = (float)((double)lmax / (double)zLen);
+        float xscale = (float) ((double) lmax / (double) xLen);
+        float yscale = (float) ((double) lmax / (double) yLen);
+        float zscale = (float) ((double) lmax / (double) zLen);
         return new Coord3d(xscale, yscale, zscale);
     }
 
@@ -780,12 +781,12 @@ public class View {
         } else
             gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
     }
-    
 
     public void initLights(GL gl) {
         // Init light
         scene.getLightSet().init(gl);
         scene.getLightSet().enableLightIfThereAreLights(gl);
+        // scene.getLightSet().enable(gl, true);
     }
 
     public void initResources(GL gl) {
@@ -804,7 +805,9 @@ public class View {
         if (slave) {
             return;
         } else {
-            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // or use GL2
+            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // or
+                                                                         // use
+                                                                         // GL2
         }
     }
 
@@ -812,15 +815,15 @@ public class View {
 
     public void render(GL gl, GLU glu) {
         fireViewLifecycleWillRender(null);
-        
-//        init(gl);
+
+        // init(gl);
         renderBackground(gl, glu, 0f, 1f);
         renderScene(gl, glu);
         renderOverlay(gl);
 
         if (dimensionDirty)
             dimensionDirty = false;
-        
+
         cam.show(gl, new Transform(new Scale(scaling)), scaling);
     }
 
@@ -881,14 +884,13 @@ public class View {
     }
 
     public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
-        //before LOG was : (float)bounds.getRadius() * factorViewPointDistance;
+        // before LOG was : (float)bounds.getRadius() * factorViewPointDistance;
         float sceneRadius = (float) boundsScaled.getTransformedRadius(spaceTransformer);
         updateCamera(gl, glu, viewport, boundsScaled, sceneRadius);
     }
 
-
     public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled) {
-        viewpoint.z = sceneRadiusScaled  * factorViewPointDistance;
+        viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
         cam.setTarget(computeCameraTarget());
         cam.setUp(computeCameraUpAndTriggerEvents());
         cam.setEye(computeCameraEye(cam.getTarget()));
@@ -977,12 +979,11 @@ public class View {
             float ydiam = bounds.getYRange().getRange();
             float radius = Math.max(xdiam, ydiam) / 2;
             cam.setRenderingSphereRadius(radius);
-            correctCameraPositionForIncludingTextLabels(gl, glu, viewport); 
+            correctCameraPositionForIncludingTextLabels(gl, glu, viewport);
         } else {
-            cam.setRenderingSphereRadius((float)bounds.getTransformedRadius(spaceTransformer));
+            cam.setRenderingSphereRadius((float) bounds.getTransformedRadius(spaceTransformer));
         }
     }
-
 
     public void renderAxeBox(GL gl, GLU glu) {
         if (axeBoxDisplayed) {
@@ -1060,8 +1061,11 @@ public class View {
 
     public static float STRETCH_RATIO = 0.25f;
 
-    /** force to have all object maintained in screen, meaning axebox won't always keep the same size. */
-    protected boolean MAINTAIN_ALL_OBJECTS_IN_VIEW = false; 
+    /**
+     * force to have all object maintained in screen, meaning axebox won't
+     * always keep the same size.
+     */
+    protected boolean MAINTAIN_ALL_OBJECTS_IN_VIEW = false;
     /** display a magenta parallelepiped (debug). */
     protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false;
     protected boolean axeBoxDisplayed = true;
@@ -1119,6 +1123,5 @@ public class View {
     protected boolean slave = false;
 
     protected SpaceTransformer spaceTransformer = new SpaceTransformer();
-
 
 }

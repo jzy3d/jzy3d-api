@@ -132,10 +132,12 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
     public void updateBounds() {
         BoundingBox3d box = new BoundingBox3d();
 		
-		for(AbstractDrawable c: components){
-			if(c!=null && c.getBounds()!=null)
-				box.add(c.getBounds());
-		}
+        synchronized(components){
+    		for(AbstractDrawable c: components){
+    			if(c!=null && c.getBounds()!=null)
+    				box.add(c.getBounds());
+    		}
+        }
 		bbox = box;
     }
 	

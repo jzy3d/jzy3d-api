@@ -1,14 +1,18 @@
 package org.jzy3d.analysis;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
-import org.jzy3d.chart.factories.NewtChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public abstract class AbstractAnalysis implements IAnalysis{
+    protected Chart chart;
+    protected String canvasType="awt";
+    protected IChartComponentFactory factory;
+
     public AbstractAnalysis(){
-        this(new NewtChartComponentFactory());
-        //this(new AWTChartComponentFactory());
+        //this(new NewtChartComponentFactory());
+        this(new AWTChartComponentFactory());
     }
     
     public AbstractAnalysis(IChartComponentFactory factory){
@@ -70,10 +74,4 @@ public abstract class AbstractAnalysis implements IAnalysis{
     public void setFactory(IChartComponentFactory factory) {
         this.factory = factory;
     }
-
-
-
-    protected Chart chart;
-    protected String canvasType="awt";
-    protected IChartComponentFactory factory;
 }
