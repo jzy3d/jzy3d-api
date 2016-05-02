@@ -3,10 +3,6 @@ package org.jzy3d.plot3d.rendering.scene;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.fixedfunc.GLMatrixFunc;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
@@ -21,6 +17,10 @@ import org.jzy3d.plot3d.rendering.ordering.DefaultOrderingStrategy;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
+import com.jogamp.opengl.glu.GLU;
 
 /**
  * The scene's {@link Graph} basically stores the scene content and facilitate
@@ -255,12 +255,12 @@ public class Graph {
     public synchronized void setTransform(Transform transform) {
         this.transform = transform;
 
-        // synchronized(components){
-        for (AbstractDrawable c : components) {
-            if (c != null)
-                c.setTransform(transform);
+        synchronized (components) {
+            for (AbstractDrawable c : components) {
+                if (c != null)
+                    c.setTransform(transform);
+            }
         }
-        // }
     }
 
     /** Return the transform that was affected to this composite. */
@@ -278,19 +278,14 @@ public class Graph {
         else {
             BoundingBox3d box = new BoundingBox3d();
 
-            // synchronized(components){
             for (AbstractDrawable c : components) {
                 if (c != null && c.getBounds() != null) {
-                    // System.out.println(c.getBounds());
-                    BoundingBox3d drawableBounds= c.getBounds();
-                    if(!drawableBounds.isReset()){
+                    BoundingBox3d drawableBounds = c.getBounds();
+                    if (!drawableBounds.isReset()) {
                         box.add(drawableBounds);
-                        //System.out.println("adding bounds : " + drawableBounds);
-                        //System.out.println("got box: " + box);
-                    }                    
+                    }
                 }
             }
-            // }
             return box;
         }
     }
@@ -338,18 +333,39 @@ public class Graph {
         String output = "(Graph) #elements:" + components.size() + ":\n";
 
         int k = 0;
-        // synchronized(components){
-        for (AbstractDrawable c : components) {
-            if (c != null)
-                output += " Graph element [" + (k++) + "]:" + c.toString(1) + "\n";
-            else
-                output += " Graph element [" + (k++) + "] (null)\n";
+        synchronized(components){
+            for (AbstractDrawable c : components) {
+                if (c != null)
+                    output += " Graph element [" + (k++) + "]:" + c.toString(1) + "\n";
+                else
+                    output += " Graph element [" + (k++) + "] (null)\n";
+            }
         }
-        // }
         return output;
     }
+    
+    
 
     /* */
+
+    public boolean isSort() {
+        return sort;
+    }
+
+    /**
+     * Set sort to false to desactivate decomposition of drawable. 
+     * 
+     * This bypass ranking polygons w.r.t. camera. This will produce visual cue
+     * if the scene is dynamic (changing the list of polygons or viewpoints).
+     * @param sort
+     */
+    public void setSort(boolean sort) {
+        this.sort = sort;
+    }
+
+    public Scene getScene() {
+        return scene;
+    }
 
     protected List<AbstractDrawable> components;
     protected Scene scene;

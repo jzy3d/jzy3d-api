@@ -3,15 +3,15 @@ package org.jzy3d.plot3d.primitives.log;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.LightPoint;
 import org.jzy3d.plot3d.primitives.ScatterPoint;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 
 public class AxeTransformableScatterPoint extends ScatterPoint{
 
@@ -32,6 +32,7 @@ public class AxeTransformableScatterPoint extends ScatterPoint{
     }
 
  
+    @Override
     public void drawGLES2() {
         GLES2CompatUtils.glPointSize(width);
         GLES2CompatUtils.glBegin(GL2.GL_POINTS);
@@ -44,6 +45,7 @@ public class AxeTransformableScatterPoint extends ScatterPoint{
         GLES2CompatUtils.glEnd();
     }
 
+    @Override
     public void drawGL2(GL gl) {
         gl.getGL2().glPointSize(width);
         gl.getGL2().glBegin(GL2.GL_POINTS);
@@ -56,6 +58,7 @@ public class AxeTransformableScatterPoint extends ScatterPoint{
         gl.getGL2().glEnd();
     }
     
+    @Override
     public void updateBounds() {
         bbox.reset();
         for (LightPoint c : points)

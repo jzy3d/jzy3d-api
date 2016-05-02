@@ -2,6 +2,7 @@ package org.jzy3d.chart.graphs;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
@@ -10,6 +11,8 @@ import org.jzy3d.picking.IObjectPickedListener;
 import org.jzy3d.picking.PickingSupport;
 
 public class GraphChartComponentFactory extends ChartComponentFactory{
+    static Logger logger = Logger.getLogger(GraphChartComponentFactory.class);
+    
     @Override
     public ICameraMouseController newMouseController(Chart chart){
         ICameraMouseController mouse = null;
@@ -26,7 +29,7 @@ public class GraphChartComponentFactory extends ChartComponentFactory{
             @Override
             public void objectPicked(List<? extends Object> vertices, PickingSupport picking) {
                 for(Object vertex: vertices){
-                    System.out.println("picked: " + vertex);
+                    logger.info("picked: " + vertex);
                     //dGraph.setVertexHighlighted((String)vertex, true);
                 }
                 chart.render();

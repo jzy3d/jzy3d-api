@@ -1,13 +1,9 @@
 package org.jzy3d.chart;
 
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLProfile;
-
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
-import com.jogamp.newt.Display;
-import com.jogamp.newt.NewtFactory;
-import com.jogamp.newt.Screen;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
 
 /**
  * {@link Settings} is a singleton that holds general settings that configure
@@ -26,8 +22,8 @@ public class Settings {
         setHardwareAccelerated(false);
 
         // TODO Choose here somehow between NewtDisplay & AWTDisplay
-        display = NewtFactory.createDisplay(null);
-        screen = NewtFactory.createScreen(display, 0);
+        //display = NewtFactory.createDisplay(null);
+        //screen = NewtFactory.createScreen(display, 0);
     } 
     
     public static GLProfile detectProfile() {
@@ -72,10 +68,6 @@ public class Settings {
         return (GLCapabilities) glCapabilities.clone();
     }
 
-    public Screen getScreen() {
-        return screen;
-    }
-
     @Override
     public String toString() {
         return "HardwareAcceleration = " + isHardwareAccelerated() + "\n";
@@ -87,9 +79,4 @@ public class Settings {
     private GLCapabilities glCapabilities;
 
     private GLProfile glProfile;
-
-    private Display display;
-
-    private Screen screen;
-
 }

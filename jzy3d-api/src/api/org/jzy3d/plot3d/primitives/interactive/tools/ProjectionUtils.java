@@ -5,9 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
@@ -19,9 +17,14 @@ import org.jzy3d.plot3d.rendering.scene.Decomposition;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
+
 
 
 public class ProjectionUtils {
+    static Logger logger = Logger.getLogger(ProjectionUtils.class);
+    
 	public static List<PolygonProjection> project(Chart chart){
 		return project(chart.getView().getCurrentGL(), new GLU(), chart.getView().getCamera(), chart.getScene().getGraph());
 	}
@@ -51,8 +54,8 @@ public class ProjectionUtils {
 				polygons.add( ProjectionUtils.getCoordinatesAsArrayList( (Polygon)d ) );
 				colors.add( ProjectionUtils.getColorsAsArrayList( (Polygon)d ) );
 			}
-			/*else
-				throw new RuntimeException("Only polygons are supported, not:" + d.getClass());*/
+			else
+			    logger.warn("Only polygons are supported. Ignoring :" + d.getClass());
 		}
 		
 		// project
@@ -70,8 +73,7 @@ public class ProjectionUtils {
 		// sort according to z
 		t.tic();
 		Collections.sort(polygonProjections, new ProjectionComparator());
-		t.toc(); report += " Sort :" + t.elapsedMilisecond();
-		System.out.println(report);
+		t.tocShow(report+ " Sort : "); 
 		return polygonProjections;
 	}
 	

@@ -1,16 +1,16 @@
 package org.jzy3d.chart;
 
-import javax.media.opengl.GLCapabilities;
-
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 
+import com.jogamp.opengl.GLCapabilities;
+
 public class AWTChart extends Chart {
     public AWTChart() {
-        super();
+        this(DEFAULT_QUALITY, DEFAULT_WINDOWING_TOOLKIT);
     }
 
     public AWTChart(Quality quality, String windowingToolkit) {
@@ -31,11 +31,11 @@ public class AWTChart extends Chart {
     }
 
     public AWTChart(Quality quality) {
-        super(quality);
+        this(quality, DEFAULT_WINDOWING_TOOLKIT);
     }
 
     public AWTChart(String windowingToolkit) {
-        super(windowingToolkit);
+        this(DEFAULT_QUALITY, windowingToolkit);
     }
 
     public void addRenderer(Renderer2d renderer2d) {

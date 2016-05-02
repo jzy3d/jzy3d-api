@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
@@ -31,6 +32,7 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class JavaFXChartFactory extends AWTChartComponentFactory {
+    static Logger LOGGER = Logger.getLogger(JavaFXChartFactory.class);
     
     public static Chart chart(Quality quality, String toolkit) {
         JavaFXChartFactory f = new JavaFXChartFactory();
@@ -45,7 +47,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
             Image image = SwingFXUtils.toFXImage(i, null);
             return image;
         } else {
-            //System.err.println(this.getClass() + " SCREENSHOT NULL");
+            //LOGGER.error(this.getClass() + " SCREENSHOT NULL");
             return null;
         }
     }
@@ -69,7 +71,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
             System.out.println("setting image at init");
             imageView.setImage(image);
         } else{
-            //System.err.println("image is null at init");
+            //LOGGER.error("image is null at init");
         }
             
         JavaFXCameraMouseController jfxMouse = (JavaFXCameraMouseController) chart.addMouseController();
@@ -86,7 +88,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
      */
     public void bind(final ImageView imageView, AWTChart chart) {
         if (!(chart.getCanvas().getRenderer() instanceof JavaFXRenderer3d)) {
-            System.err.println("NOT BINDING IMAGE VIEW TO CHART AS NOT A JAVAFX RENDERER");
+            LOGGER.error("NOT BINDING IMAGE VIEW TO CHART AS NOT A JAVAFX RENDERER");
             return;
         }
 
@@ -98,7 +100,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
                 if (image != null) {
                     imageView.setImage(image);
                 } else {
-                    System.err.println("image is null while listening to renderer");
+                    LOGGER.error("image is null while listening to renderer");
                 }
             }
         });
@@ -110,6 +112,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
                 //System.out.println("scene Width: " + newSceneWidth);
                 resetTo(chart, scene.widthProperty().get(), scene.heightProperty().get());
+                //System.out.println("resize ok");
             }
         });
         scene.heightProperty().addListener(new ChangeListener<Number>() {
@@ -117,6 +120,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
                 //System.out.println("scene Height: " + newSceneHeight);
                 resetTo(chart, scene.widthProperty().get(), scene.heightProperty().get());
+                //System.out.println("resize ok");
             }
         });
     }
@@ -124,10 +128,14 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
     protected void resetTo(Chart chart, double width, double height) {
         if (chart.getCanvas() instanceof OffscreenCanvas) {
             OffscreenCanvas canvas = (OffscreenCanvas) chart.getCanvas();
-            canvas.initGLPBuffer(canvas.getCapabilities(), (int) width, (int) height);
+            
+            //System.out.println("will init");
+            canvas.initBuffer(canvas.getCapabilities(), (int) width, (int) height);
+            //LOGGER.error("done initBuffer");
             chart.render();
+            //LOGGER.error("done render");
         } else {
-            System.err.println("NOT AN OFFSCREEN CANVAS!");
+            LOGGER.error("NOT AN OFFSCREEN CANVAS!");
         }
     }
 

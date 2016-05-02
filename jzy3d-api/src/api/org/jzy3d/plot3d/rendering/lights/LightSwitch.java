@@ -1,8 +1,8 @@
 package org.jzy3d.plot3d.rendering.lights;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.GL2;
-import javax.media.opengl.fixedfunc.GLLightingFunc;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 
 public class LightSwitch {
 	public static void enable(GL gl, int lightId){

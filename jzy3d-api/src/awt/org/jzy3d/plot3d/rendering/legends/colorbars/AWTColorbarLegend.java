@@ -2,9 +2,6 @@ package org.jzy3d.plot3d.rendering.legends.colorbars;
 
 import java.awt.image.BufferedImage;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;
@@ -17,13 +14,16 @@ import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
+
 public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     public AWTColorbarLegend(AbstractDrawable parent, Chart chart) {
         this(parent, chart.getView().getAxe().getLayout());
     }
 
     public AWTColorbarLegend(AbstractDrawable parent, IAxeLayout layout) {
-        this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), layout.getMainColor(), null);
+        this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), layout.getMainColor(), layout.getMainColor().negative());
     }
 
     public AWTColorbarLegend(AbstractDrawable parent, IAxeLayout layout, Color foreground) {

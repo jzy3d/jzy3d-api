@@ -2,7 +2,6 @@ package org.jzy3d.chart.factories;
 
 import java.util.Date;
 
-import javax.media.opengl.GLCapabilities;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
@@ -19,8 +18,10 @@ import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
+import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
@@ -41,8 +42,11 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
-public class AWTChartComponentFactory extends ChartComponentFactory {
+import com.jogamp.opengl.GLCapabilities;
 
+public class AWTChartComponentFactory extends ChartComponentFactory {
+    static Logger logger = Logger.getLogger(AWTChartComponentFactory.class);
+    
     public static Chart chart() {
         return chart(Quality.Intermediate);
     }
@@ -69,6 +73,9 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
 
     /* */
 
+    /**
+     * @param toolkit can be used to indicate "offscreen, 800, 600" and thus replace implicit "awt"
+     */
     @Override
     public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
         return new AWTChart(factory, quality, toolkit);
@@ -166,7 +173,10 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
 
     @Override
     public ICameraMouseController newMouseController(Chart chart) {
-        return new AWTCameraMouseController(chart);
+        if (!chart.getWindowingToolkit().equals("newt"))
+            return new AWTCameraMouseController(chart);
+        else
+            return new NewtCameraMouseController(chart);
     }
 
     @Override
@@ -175,17 +185,19 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
         IScreenshotKeyController screenshot;
 
-        screenshot = new AWTScreenshotKeyController(chart, file);
+        if (!chart.getWindowingToolkit().equals("newt"))
+            screenshot = new AWTScreenshotKeyController(chart, file);
+        else
+            screenshot = new NewtScreenshotKeyController(chart, file);
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
-                System.out.println("Failed to save screenshot:");
-                e.printStackTrace();
+                logger.error("Failed to save screenshot to '" + file + "'", e);
             }
 
             @Override
             public void doneScreenshot(String file) {
-                System.out.println("Screenshot: " + file);
+                logger.info("Screenshot save to '" + file + "'");
             }
         });
         return screenshot;
@@ -203,22 +215,6 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
 
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        /*Object canvas = chart.getCanvas();
-
-        if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasAWT"))
-            return newFrameAWT(chart, bounds, title, null);
-        // FrameSWT works as well
-        else if (canvas instanceof CanvasNewtAwt)
-            return newFrameAWT(chart, bounds, title, "[Newt]");
-        // FrameSWT works as well
-        else if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasSwing"))
-            return newFrameSwing(chart, bounds, title);
-        else {
-            String m = "No default frame could be found for the given Chart canvas: " + canvas.getClass();
-            System.err.println(m);
-            return null;
-            // throw new RuntimeException(m);
-        }*/
         return newFrameAWT(chart, bounds, title, null);
     }
 }

@@ -26,7 +26,6 @@ import com.jogamp.opengl.util.Animator;
  * - include Advanced mode abilities
  * - Anti aliasing on wires
  * 
- * 
  * Toggling rendering model: one may either choose to have a repaint-on-demand 
  * or repaint-continuously model. Setting isAnimated(false) will desactivate a
  * the {@link Animator} updating the choosen {@link ICanvas} implementation.
@@ -137,6 +136,17 @@ public class Quality {
     public void setAutoSwapBuffer(boolean isAutoSwapBuffer) {
         this.isAutoSwapBuffer = isAutoSwapBuffer;
     }
+    
+    
+    public boolean isPreserveViewportSize() {
+        return preserveViewportSize;
+    }
+
+    public void setPreserveViewportSize(boolean preserveViewportSize) {
+        this.preserveViewportSize = preserveViewportSize;
+    }
+
+
 
     private boolean depthActivated;
 	private boolean alphaActivated;
@@ -147,4 +157,8 @@ public class Quality {
 	protected boolean disableDepthBufferWhenAlpha;
 	protected boolean isAnimated = true;
 	protected boolean isAutoSwapBuffer = true;
+	
+	protected boolean preserveViewportSize = DEFAULT_PRESERVE_VIEWPORT;
+	
+	public static boolean DEFAULT_PRESERVE_VIEWPORT = true;
 }

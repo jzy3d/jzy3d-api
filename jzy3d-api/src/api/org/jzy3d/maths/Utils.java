@@ -1,5 +1,7 @@
 package org.jzy3d.maths;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -270,5 +272,11 @@ public class Utils {
             if (max.before(dates[i]))
                 max = dates[i];
         return max;
+    }
+
+    public static Date str2date(String string) throws ParseException {
+        DateFormat format = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
+        Date date = format.parse(string);
+        return date;
     }
 }

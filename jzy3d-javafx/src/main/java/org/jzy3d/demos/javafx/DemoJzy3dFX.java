@@ -42,7 +42,7 @@ public class DemoJzy3dFX extends Application {
     
     @Override
     public void start(Stage stage) {
-        stage.setTitle("Jzy3d|FX");
+        stage.setTitle(DemoJzy3dFX.class.getSimpleName());
         
         // Jzy3d
         JavaFXChartFactory factory = new JavaFXChartFactory();
@@ -66,6 +66,7 @@ public class DemoJzy3dFX extends Application {
         // -------------------------------
         // Define a function to plot
         Mapper mapper = new Mapper() {
+            @Override
             public double f(double x, double y) {
                 return x * Math.sin(x * y);
             }

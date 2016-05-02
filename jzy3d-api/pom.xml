@@ -9,28 +9,51 @@
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-master</artifactId>
-		<version>0.9.2-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<description>A Java API for 3d charts</description>
+	
+	<!-- <repositories>
+		<repository>
+			<id>miglayout-snapshots</id>
+			<name>Miglayout Snapshots</name>
+			<url>https://oss.sonatype.org/content/</url>
+		</repository>
+	</repositories>-->
+	
+	
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-jdt-core</artifactId>
-			<version>0.9.2-SNAPSHOT</version>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-main</artifactId>
-			<version>2.1.5-01</version>
+			<version>2.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-main</artifactId>
-			<version>2.1.5-01</version>
+			<version>2.3.2</version>
 		</dependency>
+
+		<dependency>
+			<groupId>net.sourceforge.jmatio</groupId>
+			<artifactId>jmatio</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.miglayout</groupId>
+			<artifactId>miglayout</artifactId>
+			<version>3.7.4</version>
+		</dependency>
+
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -48,17 +71,71 @@
 			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay,
 				i.e. tools to ease non regression tests for interactive features -->
 		</dependency>
-		<dependency>
-			<groupId>com.miglayout</groupId>
-			<artifactId>miglayout</artifactId>
-			<version>3.7.4</version>
-		</dependency>
 
 	</dependencies>
 
 	<build>
 <!-- <testSourceDirectory>src/tests</testSourceDirectory>		 -->
-		<pluginManagement><!-- using it to have m2e being able to run add-source -->
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/api</source>
+								<source>src/bridge</source>
+								<source>src/awt</source>
+								<source>src/swing</source>
+								<source>src/replay</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>org/jzy3d/junit/ChartTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>maths-io-jar</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<phase>package</phase>
+						<configuration>
+							<classifier>maths-io</classifier>
+							<excludes>
+								<exclude>org/jzy3d/*</exclude>
+							</excludes>
+							<includes>
+								<include>org/jzy3d/maths/**</include>
+								<include>org/jzy3d/io/*</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+
+		<!-- using it to have m2e being able to run add-source -->
+		<pluginManagement>
 			<plugins>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -86,73 +163,21 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.0</version><!--$NO-MVN-MAN-VER$ -->
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>1.7</source>
+						<target>1.7</target>
 					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<configuration>
-						<excludes>
-							<exclude>org/jzy3d/junit/ChartTest.java</exclude>
-						</excludes>
-					</configuration>
-				</plugin>
-
-				<plugin>
-					<artifactId>maven-jar-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>maths-io-jar</id>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-							<phase>package</phase>
-							<configuration>
-								<classifier>maths-io</classifier>
-								<excludes>
-									<exclude>org/jzy3d/*</exclude>
-								</excludes>
-								<includes>
-									<include>org/jzy3d/maths/**</include>
-									<include>org/jzy3d/io/*</include>
-								</includes>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
-
-	<!-- <plugins>
-			<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>build-helper-maven-plugin</artifactId>
-					<executions>
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>add-source</goal>
-							</goals>
-							<configuration>
-								<sources>
-									<source>src/api</source>
-									<source>src/bridge</source>
-									<source>src/awt</source>
-									<source>src/swing</source>
-									<source>src/replay</source>
-								</sources>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-		</plugins> -->
 	</build>
 
 
 
 	<!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio
 		\ -DartifactId=jzyio \ -Dversion=0.1 \ -Dpackaging=jar \ -Dfile=./lib/misc/org.jzyio-0.1.jar -->
+
+	<!--  To download javadocs for dependencies
+		mvn dependency:resolve -Dclassifier=javadoc
+	 -->
 
 </project>

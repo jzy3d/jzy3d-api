@@ -13,7 +13,11 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Circle implements Serializable {
 
-	private Point center;
+	/**
+     * 
+     */
+    private static final long serialVersionUID = -4881217198003481262L;
+    private Point center;
 	private double radius;
 
 	/**

@@ -5,9 +5,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLCapabilitiesImmutable;
-
+import org.apache.log4j.Logger;
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
@@ -45,12 +43,17 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLCapabilitiesImmutable;
+
 /**
  * This {@link IChartComponentFactory} returns non-displayable charts.
  * 
  * @see AWTChartComponentFactory for a working implementation
  */
 public class ChartComponentFactory implements IChartComponentFactory {
+    static Logger logger = Logger.getLogger(ChartComponentFactory.class);
+
     public static Chart chart(Quality quality, Toolkit toolkit) {
         ChartComponentFactory f = new ChartComponentFactory();
         return f.newChart(quality, toolkit);
@@ -133,11 +136,6 @@ public class ChartComponentFactory implements IChartComponentFactory {
 
     @Override
     public ICameraMouseController newMouseController(Chart chart) {
-        /*ICameraMouseController mouse = null;
-        if (!chart.getWindowingToolkit().equals("newt"))
-            mouse = new AWTCameraMouseController(chart);
-        else
-            mouse = new NewtCameraMouseController(chart);*/
         return new NewtCameraMouseController(chart);
     }
 
@@ -147,21 +145,16 @@ public class ChartComponentFactory implements IChartComponentFactory {
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
         IScreenshotKeyController screenshot;
 
-/*        if (!chart.getWindowingToolkit().equals("newt"))
-            screenshot = new AWTScreenshotKeyController(chart, file);
-        else*/
-            screenshot = new NewtScreenshotKeyController(chart, file);
-
+        screenshot = new NewtScreenshotKeyController(chart, file);
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
-                System.out.println("Failed to save screenshot:");
-                e.printStackTrace();
+                logger.error("Failed to save screenshot to '" + file + "'", e);
             }
 
             @Override
             public void doneScreenshot(String file) {
-                System.out.println("Screenshot: " + file);
+                logger.info("Failed screenshot to '" + file + "'");
             }
         });
         return screenshot;
@@ -172,10 +165,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
     @Override
     public ICameraKeyController newKeyController(Chart chart) {
         ICameraKeyController key = null;
-        /*if (!chart.getWindowingToolkit().equals("newt"))
-            key = new AWTCameraKeyController(chart);
-        else*/
-            key = new NewtCameraKeyController(chart);
+        key = new NewtCameraKeyController(chart);
         return key;
     }
 
@@ -190,7 +180,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
     }
 
     /**
-     * Use reflexion to access AWT dependant classes. 
+     * Use reflexion to access AWT dependant classes.
      */
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
@@ -206,7 +196,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
             return newFrameSwing(chart, bounds, title);
         else {
             String m = "No default frame could be found for the given Chart canvas: " + canvas.getClass();
-            System.err.println(m);
+            logger.error(m);
             return null;
             // throw new RuntimeException(m);
         }

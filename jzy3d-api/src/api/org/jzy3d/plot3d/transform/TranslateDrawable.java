@@ -1,14 +1,16 @@
 package org.jzy3d.plot3d.transform;
 
-import javax.media.opengl.GL;
-
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
-/** Translate drawable to (0,0,0) or back to its previous position. */
+import com.jogamp.opengl.GL;
 
+/**
+ * Translate drawable to (0,0,0) or back to its previous position according to
+ * the input parameters.
+ */
 public class TranslateDrawable implements Transformer {
     public TranslateDrawable(AbstractDrawable drawable, boolean reverse) {
         super();

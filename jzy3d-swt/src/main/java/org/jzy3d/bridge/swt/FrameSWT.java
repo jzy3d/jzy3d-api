@@ -18,7 +18,8 @@ public class FrameSWT implements IFrame {
 		initialize(chart, bounds, title);
 	}
 
-	public void initialize(Chart chart, Rectangle bounds, String title) {
+	@Override
+    public void initialize(Chart chart, Rectangle bounds, String title) {
 		this.chart = chart;
 
 		Display display = new Display();

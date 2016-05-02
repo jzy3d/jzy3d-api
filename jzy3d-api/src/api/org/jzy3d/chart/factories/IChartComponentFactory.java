@@ -1,7 +1,5 @@
 package org.jzy3d.chart.factories;
 
-import javax.media.opengl.GLCapabilities;
-
 import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
@@ -23,6 +21,8 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+
+import com.jogamp.opengl.GLCapabilities;
 
 public interface IChartComponentFactory {
     public Chart newChart(Quality quality, Toolkit toolkit);

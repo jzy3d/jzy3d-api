@@ -3,13 +3,12 @@ package org.jzy3d.plot3d.rendering.canvas;
 import java.io.File;
 import java.io.IOException;
 
-import javax.media.opengl.GLDrawable;
-
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.util.texture.TextureData;
 
 public class VoidCanvas implements ICanvas{
@@ -82,4 +81,9 @@ public class VoidCanvas implements ICanvas{
     protected Renderer3d renderer;
 
     protected static String INFO = VoidCanvas.class + " is not able to render anything and simply let you use Jzy3d geometry model";
+
+    @Override
+    public void setPixelScale(float[] scale) {
+        
+    }
 }

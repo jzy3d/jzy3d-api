@@ -2,15 +2,15 @@ package org.jzy3d.plot3d.primitives.selectable;
 
 import java.util.List;
 
-import javax.media.opengl.GL;
-import javax.media.opengl.glu.GLU;
-
 import org.jzy3d.chart.controllers.mouse.selection.AWTAbstractMouseSelector;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
+
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 
 /** An {@link Selectable} object is supposed to be able to compute its projection

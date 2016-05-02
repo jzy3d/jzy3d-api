@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import javax.media.opengl.GLAnimatorControl;
-
+import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.util.Animator;
 
 /** 
@@ -32,4 +31,5 @@ import com.jogamp.opengl.util.Animator;
 public interface IScreenCanvas extends ICanvas{
 	public void display();
 	public GLAnimatorControl getAnimator();
+	
 }
