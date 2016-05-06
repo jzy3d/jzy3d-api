@@ -12,17 +12,20 @@
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.8</jdk.version>
+		<github.global.server>github</github.global.server>
+	</properties>
+
 	<description>A Java API for 3d charts</description>
-	
-	<!-- <repositories>
-		<repository>
-			<id>miglayout-snapshots</id>
-			<name>Miglayout Snapshots</name>
-			<url>https://oss.sonatype.org/content/</url>
-		</repository>
-	</repositories>-->
-	
-	
+
+	<!-- <repositories> <repository> <id>miglayout-snapshots</id> <name>Miglayout 
+		Snapshots</name> <url>https://oss.sonatype.org/content/</url> </repository> 
+		</repositories> -->
+
+
 
 	<dependencies>
 		<dependency>
@@ -47,7 +50,7 @@
 			<artifactId>jmatio</artifactId>
 			<version>1.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.miglayout</groupId>
 			<artifactId>miglayout</artifactId>
@@ -68,15 +71,26 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
-			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay,
+			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay, 
 				i.e. tools to ease non regression tests for interactive features -->
 		</dependency>
 
 	</dependencies>
 
 	<build>
-<!-- <testSourceDirectory>src/tests</testSourceDirectory>		 -->
+		<!-- <testSourceDirectory>src/tests</testSourceDirectory> -->
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+					<fork>true</fork>
+					<executable>/usr/lib/jvm/java-8-oracle/bin/javac</executable>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -131,6 +145,29 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.12</version>
+				<configuration>
+					<message>Creating site for ${project.version}</message>
+					<branch>mvn-repo</branch>
+
+					<userName>zhivko</userName>
+					<repositoryName>jzy3d-api</repositoryName>
+					<repositoryOwner>zhivko</repositoryOwner>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 
 
@@ -173,11 +210,9 @@
 
 
 
-	<!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio
+	<!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio 
 		\ -DartifactId=jzyio \ -Dversion=0.1 \ -Dpackaging=jar \ -Dfile=./lib/misc/org.jzyio-0.1.jar -->
 
-	<!--  To download javadocs for dependencies
-		mvn dependency:resolve -Dclassifier=javadoc
-	 -->
+	<!-- To download javadocs for dependencies mvn dependency:resolve -Dclassifier=javadoc -->
 
 </project>
