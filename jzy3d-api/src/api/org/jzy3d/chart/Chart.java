@@ -169,8 +169,10 @@ public class Chart {
 
     public void dispose() {
         clearControllerList();
-        canvas.dispose();
-        scene.dispose(); // view is disposed by scene
+        if(canvas!=null)
+            canvas.dispose();
+        if(scene!=null)
+            scene.dispose(); // view is disposed by scene
         canvas = null;
         scene = null;
     }
