@@ -62,7 +62,7 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
 		return null;
 	}
 	
-	protected boolean LAYOUT  = true;	
+	protected boolean LAYOUT  = false;	
 	
 	protected Font font;
 	protected TextRenderer.RenderDelegate style;
