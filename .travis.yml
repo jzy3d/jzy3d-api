@@ -1,8 +1,12 @@
 language: java
 jdk:
-#- openjdk7
+- openjdk7
 - oraclejdk8
-#- oraclejdk7
-#- openjdk6
+env:
+  global:
+    - secure: "IXWf2+0vzNUbNJToKc3eGa7xzmllI0hqlJc9fGhLyEjb40CeMmGgFUIdFHSkJchE7rQvUqFxjh+wne0m/BIFcDEyyjZIHD9NiekpU5JVhMC+OcWTAwV12Ddnn++Hpujocqvfec47AxlanulSigYt9mHxiU6ym7DUQnOMKIkbjEI3aGd/BHQL6mYX5M2/q
+B3mFVsQUDSTtpBdLAGm12jSq8QykDzMB+yavta8x0sfYNLR54oTfmZFtio4QMauDxkv1TkHdoQDBN+0xS+WyXHCFiZ/1Yy7OxJU5KEvDYlyrPWkD/ZRlMiK0eMff9f9k0WNeJZJTSmR+snBAgRF8uFFZL+AzVkUJFWJHcT6mgrB2pbhZ3/FTPmBsXSpAAJUVbUdxOW8J
+Cn3SyKlOcEqENivfN4rvbOKjgdAeSHvPwR5xDygyWRF/2pzbYqdpWSeKwiU1PGwHjFhZS/lY7b3eQZoAD5Bremfvs5dIDO89qzca2O2zBYJKhByJUgyoY8CbYEd/LkaLzBThgyOwiVRAyVH5DXeKti/iRyi5E2yDySfM+bCfhyw7g1QvqBmu1QN6d4+F+/SbqD/+JPZe
++w0sq0B+o/8ipb4+T2Mu1uaGPDT2rFeXpVCyb0lQkgZM2NnMSlj+i5Txr3GyQL7qdWYSpMpOlQCshnajGYDL3kqDPEjY24="
 before_install: openssl aes-256-cbc -K $encrypted_7d767fcac9aa_key -iv $encrypted_7d767fcac9aa_iv -in settings-obf.xml.enc -out settings-obf.xml -d
 after_success: mvn deploy --settings settings-obf.xml

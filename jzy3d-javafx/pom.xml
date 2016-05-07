@@ -15,6 +15,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.8</jdk.version>
 	</properties>
 
 	<dependencies>
@@ -39,17 +40,6 @@
 
 		<pluginManagement><!-- using it to have m2e being able to run add-source -->
 			<plugins>
-
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<configuration>
-						<source>${jdk.version}</source>
-						<target>${jdk.version}</target>
-						<fork>true</fork>
-						<executable>/usr/lib/jvm/java-8-oracle/bin/javac</executable>
-					</configuration>
-				</plugin>
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

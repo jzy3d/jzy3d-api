@@ -76,20 +76,20 @@
 		</dependency>
 
 	</dependencies>
-
+	
 	<build>
 		<!-- <testSourceDirectory>src/tests</testSourceDirectory> -->
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
-					<fork>true</fork>
-					<executable>/usr/lib/jvm/java-8-oracle/bin/javac</executable>
-				</configuration>
-			</plugin>
+<!-- 			<plugin> -->
+<!-- 				<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 				<artifactId>maven-compiler-plugin</artifactId> -->
+<!-- 				<configuration> -->
+<!-- 					<source>${jdk.version}</source> -->
+<!-- 					<target>${jdk.version}</target> -->
+<!-- 					<fork>true</fork> -->
+<!-- 					<executable>/usr/lib/jvm/java-8-oracle/bin/javac</executable> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -118,7 +118,8 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<excludes>
-						<exclude>org/jzy3d/junit/ChartTest.java</exclude>
+<!-- 						<exclude>org/jzy3d/junit/ChartTest.java</exclude> -->
+						<exclude>**/*</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
@@ -142,33 +143,6 @@
 								<include>org/jzy3d/io/*</include>
 							</includes>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-				<version>0.11</version>
-				<configuration>
-					<message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
-					<noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
-					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
-					<branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
-					<includes>
-						<include>**/*</include>
-					</includes>
-					<repositoryName>jzy3d-api</repositoryName>      <!-- github repo name -->
-					<repositoryOwner>zhivko</repositoryOwner>    <!-- github username -->
-				</configuration>
-				<executions>
-					<!-- run site-maven-plugin's 'site' target as part of the build's normal 
-						'deploy' phase -->
-					<execution>
-						<goals>
-							<goal>site</goal>
-						</goals>
-						<phase>deploy</phase>
 					</execution>
 				</executions>
 			</plugin>
@@ -199,15 +173,6 @@
 							</configuration>
 						</execution>
 					</executions>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.0</version><!--$NO-MVN-MAN-VER$ -->
-					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
-					</configuration>
 				</plugin>
 			</plugins>
 		</pluginManagement>

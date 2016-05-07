@@ -87,7 +87,6 @@
 		</repository>
 	</distributionManagement>
 
-
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -101,10 +100,12 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${version.mvn.compiler}</version>
 					<configuration>
-						<source>${version.java.source}</source>
-						<target>${version.java.target}</target>
+						<source>${jdk.version}</source>
+						<target>${jdk.version}</target>
+						<fork>true</fork>
+<!-- 						<executable>/usr/lib/jvm/java-8-oracle/bin/javac</executable> -->
+ 						<executable>c:\Program Files\Java\jdk1.8.0_20\bin\javac.exe</executable>
 					</configuration>
 				</plugin>
 
