@@ -66,10 +66,12 @@ public class AWTMousePickingController extends AbstractCameraController implemen
 
     /****************/
 
+    @Override
     public PickingSupport getPickingSupport() {
         return picking;
     }
 
+    @Override
     public void setPickingSupport(PickingSupport picking) {
         this.picking = picking;
     }

@@ -50,10 +50,12 @@ public class JavaFXMousePickingController extends AbstractCameraController imple
     }
     
 
+    @Override
     public Node getNode() {
         return node;
     }
 
+    @Override
     public void setNode(Node node) {
         register(node);
     }
@@ -89,10 +91,12 @@ public class JavaFXMousePickingController extends AbstractCameraController imple
 
     /****************/
 
+    @Override
     public PickingSupport getPickingSupport() {
         return picking;
     }
 
+    @Override
     public void setPickingSupport(PickingSupport picking) {
         this.picking = picking;
     }

@@ -64,6 +64,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 
     }
 
+    @Override
     public void setPixelScale(float[] scale) {
         //LOGGER.info("setting scale " + scale);
         if (scale != null)
