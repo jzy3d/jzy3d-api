@@ -43,9 +43,9 @@ public class ChartLauncher {
     }
 
     public static ICameraMouseController configureControllers(final Chart chart, final String title, boolean allowSlaveThreadOnDoubleClick, boolean startThreadImmediatly) {
-        chart.addKeyController();
-        chart.addScreenshotKeyController();
-        return chart.addMouseController();
+        chart.addKeyboardCameraController();
+        chart.addKeyboardScreenshotController();
+        return chart.addMouseCameraController();
     }
 
     public static void openStaticChart(Chart chart) {

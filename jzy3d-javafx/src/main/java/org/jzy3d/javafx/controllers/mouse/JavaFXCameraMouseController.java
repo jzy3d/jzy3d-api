@@ -9,9 +9,10 @@ import javafx.scene.input.ScrollEvent;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.javafx.controllers.JavaFXChartController;
 import org.jzy3d.maths.Coord2d;
 
-public class JavaFXCameraMouseController extends AbstractCameraController {
+public class JavaFXCameraMouseController extends AbstractCameraController implements JavaFXChartController {
     static {
         DEFAULT_UPDATE_VIEW = true;
     }
@@ -41,7 +42,7 @@ public class JavaFXCameraMouseController extends AbstractCameraController {
         register(node);
     }
 
-    private void register(Node node) {
+    protected void register(Node node) {
         this.node = node;
         
         if(node==null)

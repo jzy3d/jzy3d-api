@@ -13,17 +13,18 @@ import javafx.scene.image.ImageView;
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
 import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.javafx.JavaFXRenderer3d.DisplayListener;
 import org.jzy3d.javafx.controllers.keyboard.JavaFXCameraKeyController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
+import org.jzy3d.javafx.controllers.mouse.JavaFXMousePickingController;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -76,11 +77,11 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
             // LOGGER.error("image is null at init");
         }
 
-        JavaFXCameraMouseController jfxMouse = (JavaFXCameraMouseController) chart.addMouseController();
+        JavaFXCameraMouseController jfxMouse = (JavaFXCameraMouseController) chart.addMouseCameraController();
         jfxMouse.setNode(imageView);
         // JavaFXNodeMouse.makeDraggable(stage, imgView);
         
-        JavaFXCameraKeyController jfxKey = (JavaFXCameraKeyController) chart.addKeyController();
+        JavaFXCameraKeyController jfxKey = (JavaFXCameraKeyController) chart.addKeyboardCameraController();
         jfxKey.setNode(imageView);
         imageView.setFocusTraversable(true);
         return imageView;
@@ -154,21 +155,26 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
     /* ################################################# */
 
     @Override
-    public ICameraMouseController newMouseController(Chart chart) {
+    public ICameraMouseController newMouseCameraController(Chart chart) {
         ICameraMouseController mouse = new JavaFXCameraMouseController(chart, null);
         return mouse;
     }
 
-    /** TODO : replace by a JavaFXCameraKeyController */
     @Override
-    public ICameraKeyController newKeyController(Chart chart) {
+    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
+        IMousePickingController  mouse = new JavaFXMousePickingController(chart, clickWidth);
+        return mouse;
+    }
+
+    @Override
+    public ICameraKeyController newKeyboardCameraController(Chart chart) {
         ICameraKeyController key = new JavaFXCameraKeyController(chart, null);
         return key;
     }
 
     /** TODO : replace by a JavaFXScreenshotKeyController */
     @Override
-    public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
+    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
         // trigger screenshot on 's' letter
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
         IScreenshotKeyController screenshot;
