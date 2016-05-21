@@ -10,7 +10,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class AWTMousePickingPan2dController<V,E> extends AWTMousePickingController<V,E>{
+public class AWTMousePickingPan2dController extends AWTMousePickingController{
 	public AWTMousePickingPan2dController(){
 		super();
 	}
