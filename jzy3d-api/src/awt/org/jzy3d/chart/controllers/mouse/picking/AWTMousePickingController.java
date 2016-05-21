@@ -19,7 +19,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
-public class AWTMousePickingController extends AbstractCameraController implements MouseListener, MouseWheelListener {
+public class AWTMousePickingController extends AbstractCameraController implements MouseListener, MouseWheelListener, IMousePickingController {
     public AWTMousePickingController() {
         super();
         picking = new PickingSupport();

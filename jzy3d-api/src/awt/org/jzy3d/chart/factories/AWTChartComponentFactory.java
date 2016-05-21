@@ -22,6 +22,9 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyControll
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
+import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
+import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
@@ -172,15 +175,26 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     }
 
     @Override
-    public ICameraMouseController newMouseController(Chart chart) {
+    public ICameraMouseController newMouseCameraController(Chart chart) {
         if (!chart.getWindowingToolkit().equals("newt"))
             return new AWTCameraMouseController(chart);
         else
             return new NewtCameraMouseController(chart);
     }
-
+    
     @Override
-    public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
+    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
+        if (!chart.getWindowingToolkit().equals("newt"))
+            return new AWTMousePickingController(chart, clickWidth);
+        else
+            return new NewtMousePickingController(chart, clickWidth);
+    }
+
+    /**
+     * Output file of screenshot can be configured using {@link IScreenshotKeyController#setFilename(String)}.
+     */
+    @Override
+    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
         // trigger screenshot on 's' letter
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
         IScreenshotKeyController screenshot;
@@ -189,6 +203,8 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
             screenshot = new AWTScreenshotKeyController(chart, file);
         else
             screenshot = new NewtScreenshotKeyController(chart, file);
+        
+        
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
@@ -204,7 +220,7 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
     }
 
     @Override
-    public ICameraKeyController newKeyController(Chart chart) {
+    public ICameraKeyController newKeyboardCameraController(Chart chart) {
         ICameraKeyController key = null;
         if (!chart.getWindowingToolkit().equals("newt"))
             key = new AWTCameraKeyController(chart);

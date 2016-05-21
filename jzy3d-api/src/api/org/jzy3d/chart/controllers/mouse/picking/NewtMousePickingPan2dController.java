@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.newt.event.MouseEvent;
 
-public class NewtMousePickingPan2dController<V, E> extends NewtMousePickingController<V, E> {
+public class NewtMousePickingPan2dController extends NewtMousePickingController {
 
 	public NewtMousePickingPan2dController() {
 		super();

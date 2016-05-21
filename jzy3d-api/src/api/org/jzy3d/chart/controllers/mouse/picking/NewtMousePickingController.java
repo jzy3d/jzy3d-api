@@ -16,7 +16,7 @@ import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
-public class NewtMousePickingController extends AbstractCameraController implements MouseListener {
+public class NewtMousePickingController extends AbstractCameraController implements MouseListener, IMousePickingController {
     public NewtMousePickingController() {
         super();
         picking = new PickingSupport();
@@ -57,12 +57,19 @@ public class NewtMousePickingController extends AbstractCameraController impleme
         super.dispose(); // i.e. target=null
     }
 
-    /****************/
+    /* (non-Javadoc)
+     * @see org.jzy3d.chart.controllers.mouse.picking.MousePickingController#getPickingSupport()
+     */
 
+    @Override
     public PickingSupport getPickingSupport() {
         return picking;
     }
 
+    /* (non-Javadoc)
+     * @see org.jzy3d.chart.controllers.mouse.picking.MousePickingController#setPickingSupport(org.jzy3d.picking.PickingSupport)
+     */
+    @Override
     public void setPickingSupport(PickingSupport picking) {
         this.picking = picking;
     }
@@ -112,21 +119,28 @@ public class NewtMousePickingController extends AbstractCameraController impleme
         pick(e);
     }
 
-    public void pick(MouseEvent e) {
-        int yflip = -e.getY() + targets.get(0).getCanvas().getRendererHeight();
-        prevMouse.x = e.getX();
-        prevMouse.y = e.getY();// yflip;
+    protected void pick(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        
+        pick(x, y);
+    }
+
+    protected void pick(int x, int y) {
+        int yflip = -y + targets.get(0).getCanvas().getRendererHeight();
+        prevMouse.x = x;
+        prevMouse.y = y;// yflip;
         View view = targets.get(0).getView();
-        prevMouse3d = view.projectMouse(e.getX(), yflip);
+        prevMouse3d = view.projectMouse(x, yflip);
 
         GL gl = chart().getView().getCurrentGL();
         Graph graph = chart().getScene().getGraph();
 
         // will trigger vertex selection event to those subscribing to
         // PickingSupport.
-        picking.pickObjects(gl, glu, view, graph, new IntegerCoord2d(e.getX(), yflip));
+        picking.pickObjects(gl, glu, view, graph, new IntegerCoord2d(x, yflip));
     }
-
+    
     public boolean handleSlaveThread(MouseEvent e) {
         if (NewtMouseUtilities.isDoubleClick(e)) {
             if (threadController != null) {

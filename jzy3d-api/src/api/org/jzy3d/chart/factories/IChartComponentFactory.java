@@ -6,6 +6,7 @@ import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IBoundingPolicy;
@@ -37,11 +38,15 @@ public interface IChartComponentFactory {
     public Renderer3d newRenderer(View view);
     public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
     public AbstractOrderingStrategy newOrderingStrategy();
+
     public ICanvas newCanvas(Scene scene, Quality quality, String chartType, GLCapabilities capabilities);
     public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String chartType, GLCapabilities capabilities);
-    public ICameraMouseController newMouseController(Chart chart);
-    public ICameraKeyController newKeyController(Chart chart);
-    public IScreenshotKeyController newScreenshotKeyController(Chart chart);
+    
+    public ICameraMouseController newMouseCameraController(Chart chart);
+    public IMousePickingController newMousePickingController(Chart chart, int clickWidth);
+    public ICameraKeyController newKeyboardCameraController(Chart chart);
+    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
+    
     public IFrame newFrame(Chart chart);
     public IFrame newFrame(Chart chart, Rectangle bounds, String title);
     public IViewportLayout newViewportLayout();
@@ -58,5 +63,6 @@ public interface IChartComponentFactory {
     
     public static enum Toolkit {
         awt, swing, newt, offscreen
-    };
+    }
+
 }
