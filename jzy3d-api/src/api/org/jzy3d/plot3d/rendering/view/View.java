@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -61,6 +62,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  */
 public class View {
+    protected static Logger LOGGER = Logger.getLogger(View.class);
 
     /**
      * Create a view attached to a Scene, with its own Camera and Axe. The
