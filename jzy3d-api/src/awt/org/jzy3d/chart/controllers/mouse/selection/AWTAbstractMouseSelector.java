@@ -6,6 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
@@ -18,6 +19,8 @@ import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMotionListener {
+    static Logger LOGGER = Logger.getLogger(AWTAbstractMouseSelector.class);
+    
     public AWTAbstractMouseSelector() {
         in = new IntegerCoord2d(-1, -1);
         last = new IntegerCoord2d(-1, -1);
@@ -127,6 +130,8 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
     }
 
     protected void drawRectangle(Graphics2D g2d, IntegerCoord2d in, IntegerCoord2d out) {
+        //LOGGER.info(" " + in + " " + out);
+
         g2d.setColor(java.awt.Color.RED);
         if (in.y < out.y) {
             if (in.x < out.x)

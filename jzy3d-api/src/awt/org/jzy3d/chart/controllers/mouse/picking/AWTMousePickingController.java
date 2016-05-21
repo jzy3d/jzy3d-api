@@ -27,16 +27,20 @@ public class AWTMousePickingController<V, E> extends AbstractCameraController im
 
     public AWTMousePickingController(Chart chart) {
         super(chart);
+        chart.getCanvas().addMouseController(this);
+
         picking = new PickingSupport();
     }
 
     public AWTMousePickingController(Chart chart, int brushSize) {
         super(chart);
+        chart.getCanvas().addMouseController(this);
         picking = new PickingSupport(brushSize);
     }
 
     public AWTMousePickingController(Chart chart, int brushSize, int bufferSize) {
         super(chart);
+        chart.getCanvas().addMouseController(this);
         picking = new PickingSupport(brushSize, bufferSize);
     }
 
