@@ -1,4 +1,4 @@
-package org.jzy3d.javafx.controllers;
+package org.jzy3d.javafx.controllers.keyboard;
 
 import javafx.event.EventHandler;
 import javafx.scene.Node;
