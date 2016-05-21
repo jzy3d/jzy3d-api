@@ -29,6 +29,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.awt.Overlay;
 
 public class AWTView extends ChartView {
+    
     public AWTView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
         this.bgViewport = new AWTImageViewport();
@@ -126,31 +127,32 @@ public class AWTView extends ChartView {
             // TODO: don't know why needed to allow working with Overlay!!!????
             gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
         }
-        
+
         gl.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
             Graphics2D g2d = null;
-            // try {
-            g2d = overlay.createGraphics();
-            /*
-             * } catch (Exception e) { Logger.getLogger(View.class).error(e, e);
-             * return; }
-             */
-            g2d.setBackground(bgOverlay);
-            g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+            try {
+                g2d = overlay.createGraphics();
 
-            // Tooltips
-            for (ITooltipRenderer t : tooltips)
-                t.render(g2d);
+                g2d.setBackground(bgOverlay);
+                g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
-            // Renderers
-            for (Renderer2d renderer : renderers)
-                renderer.paint(g2d);
+                // Tooltips
+                for (ITooltipRenderer t : tooltips)
+                    t.render(g2d);
 
-            overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
-            overlay.drawAll();
-            g2d.dispose();
+                // Renderers
+                for (Renderer2d renderer : renderers)
+                    renderer.paint(g2d);
+
+                overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+                overlay.drawAll();
+                g2d.dispose();
+
+            } catch (Exception e) {
+                LOGGER.error(e, e);
+            }
         }
     }
 

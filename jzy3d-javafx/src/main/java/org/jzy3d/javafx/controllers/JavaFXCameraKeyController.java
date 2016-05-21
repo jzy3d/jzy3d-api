@@ -1,0 +1,90 @@
+package org.jzy3d.javafx.controllers;
+
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.input.KeyEvent;
+
+import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.camera.AbstractCameraController;
+import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
+import org.jzy3d.maths.Coord2d;
+
+public class JavaFXCameraKeyController extends AbstractCameraController implements EventHandler<KeyEvent>, ICameraKeyController {
+    protected Node node;
+
+    public JavaFXCameraKeyController(Node node) {
+        register(node);
+    }
+
+    public JavaFXCameraKeyController(Chart chart, Node node) {
+        register(chart);
+        register(node);
+    }
+
+    @Override
+    public void register(Chart chart) {
+        super.register(chart);
+    }
+
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        register(node);
+    }
+
+    private void register(Node node) {
+        this.node = node;
+
+        if (node == null)
+            return;
+
+        node.setOnKeyPressed(this);
+    }
+
+    @Override
+    public void handle(KeyEvent e) {
+        
+        if (!e.isShiftDown()) {
+            Coord2d move = new Coord2d();
+            float offset = 0.1f;
+
+            switch (e.getCode()) {
+            case UP:
+                move.y = move.y - offset;
+                rotate(move);
+                break;
+            case DOWN:
+                move.y = move.y + offset;
+                rotate(move);
+                break;
+            case LEFT:
+                move.x = move.x - offset;
+                rotate(move);
+                break;
+            case RIGHT:
+                move.x = move.x + offset;
+                rotate(move);
+                break;
+            }
+
+        } else {
+            switch (e.getCode()) {
+            case UP:
+                shift(-0.1f);
+                break;
+            case DOWN:
+                shift(0.1f);
+                break;
+            case LEFT:
+                zoomZ(0.9f);
+                break;
+            case RIGHT:
+                zoomZ(1.1f);
+                break;
+            }
+
+        }
+    }
+}

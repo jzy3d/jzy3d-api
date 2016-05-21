@@ -15,7 +15,6 @@ import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
@@ -23,6 +22,7 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyControll
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.javafx.JavaFXRenderer3d.DisplayListener;
+import org.jzy3d.javafx.controllers.JavaFXCameraKeyController;
 import org.jzy3d.javafx.controllers.JavaFXCameraMouseController;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
@@ -33,7 +33,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class JavaFXChartFactory extends AWTChartComponentFactory {
     static Logger LOGGER = Logger.getLogger(JavaFXChartFactory.class);
-    
+
     public static Chart chart(Quality quality, String toolkit) {
         JavaFXChartFactory f = new JavaFXChartFactory();
         return f.newChart(quality, toolkit);
@@ -47,14 +47,16 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
             Image image = SwingFXUtils.toFXImage(i, null);
             return image;
         } else {
-            //LOGGER.error(this.getClass() + " SCREENSHOT NULL");
+            // LOGGER.error(this.getClass() + " SCREENSHOT NULL");
             return null;
         }
     }
 
     /**
-     * Return an {@link ImageView} from an {@link AWTChart} expected to render offscreen 
-     * and to use a {@link JavaFXRenderer3d} poping Images when the chart is redrawn.
+     * Return an {@link ImageView} from an {@link AWTChart} expected to render
+     * offscreen and to use a {@link JavaFXRenderer3d} poping Images when the
+     * chart is redrawn.
+     * 
      * @param chart
      * @return
      */
@@ -70,16 +72,19 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
         if (image != null) {
             System.out.println("setting image at init");
             imageView.setImage(image);
-        } else{
-            //LOGGER.error("image is null at init");
+        } else {
+            // LOGGER.error("image is null at init");
         }
-            
+
         JavaFXCameraMouseController jfxMouse = (JavaFXCameraMouseController) chart.addMouseController();
         jfxMouse.setNode(imageView);
         // JavaFXNodeMouse.makeDraggable(stage, imgView);
+        
+        JavaFXCameraKeyController jfxKey = (JavaFXCameraKeyController) chart.addKeyController();
+        jfxKey.setNode(imageView);
+        imageView.setFocusTraversable(true);
         return imageView;
     }
-
 
     /* ########################################### */
 
@@ -110,17 +115,17 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
         scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
-                //System.out.println("scene Width: " + newSceneWidth);
+                // System.out.println("scene Width: " + newSceneWidth);
                 resetTo(chart, scene.widthProperty().get(), scene.heightProperty().get());
-                //System.out.println("resize ok");
+                // System.out.println("resize ok");
             }
         });
         scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
-                //System.out.println("scene Height: " + newSceneHeight);
+                // System.out.println("scene Height: " + newSceneHeight);
                 resetTo(chart, scene.widthProperty().get(), scene.heightProperty().get());
-                //System.out.println("resize ok");
+                // System.out.println("resize ok");
             }
         });
     }
@@ -128,12 +133,12 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
     protected void resetTo(Chart chart, double width, double height) {
         if (chart.getCanvas() instanceof OffscreenCanvas) {
             OffscreenCanvas canvas = (OffscreenCanvas) chart.getCanvas();
-            
-            //System.out.println("will init");
+
+            // System.out.println("will init");
             canvas.initBuffer(canvas.getCapabilities(), (int) width, (int) height);
-            //LOGGER.error("done initBuffer");
+            // LOGGER.error("done initBuffer");
             chart.render();
-            //LOGGER.error("done render");
+            // LOGGER.error("done render");
         } else {
             LOGGER.error("NOT AN OFFSCREEN CANVAS!");
         }
@@ -154,6 +159,14 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
         return mouse;
     }
 
+    /** TODO : replace by a JavaFXCameraKeyController */
+    @Override
+    public ICameraKeyController newKeyController(Chart chart) {
+        ICameraKeyController key = new JavaFXCameraKeyController(chart, null);
+        return key;
+    }
+
+    /** TODO : replace by a JavaFXScreenshotKeyController */
     @Override
     public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
         // trigger screenshot on 's' letter
@@ -182,13 +195,4 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
 
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
-    @Override
-    public ICameraKeyController newKeyController(Chart chart) {
-        ICameraKeyController key = null;
-        if (!chart.getWindowingToolkit().equals("newt"))
-            key = new AWTCameraKeyController(chart);
-        else
-            key = new NewtCameraKeyController(chart);
-        return key;
-    }
 }
