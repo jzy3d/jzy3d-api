@@ -1,4 +1,4 @@
-package org.jzy3d.javafx.controllers;
+package org.jzy3d.javafx.controllers.mouse;
 
 import javafx.application.Platform;
 
