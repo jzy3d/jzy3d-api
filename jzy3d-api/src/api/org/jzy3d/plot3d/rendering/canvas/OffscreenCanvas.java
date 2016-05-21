@@ -76,6 +76,7 @@ public class OffscreenCanvas implements ICanvas {
     }
     
     /* NOT IMPLEMENTED */
+    @Override
     public void setPixelScale(float[] scale){
         throw new NotImplementedException();
         //glpBuffer.setSurfaceScale(scale);

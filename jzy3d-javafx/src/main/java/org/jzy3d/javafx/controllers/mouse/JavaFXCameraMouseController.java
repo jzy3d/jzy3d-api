@@ -34,10 +34,12 @@ public class JavaFXCameraMouseController extends AbstractCameraController implem
         addSlaveThreadController(threadCam);
     }
     
+    @Override
     public Node getNode() {
         return node;
     }
 
+    @Override
     public void setNode(Node node) {
         register(node);
     }

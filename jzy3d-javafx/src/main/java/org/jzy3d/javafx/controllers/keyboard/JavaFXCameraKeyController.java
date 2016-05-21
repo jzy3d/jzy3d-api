@@ -27,10 +27,12 @@ public class JavaFXCameraKeyController extends AbstractCameraController implemen
         super.register(chart);
     }
 
+    @Override
     public Node getNode() {
         return node;
     }
 
+    @Override
     public void setNode(Node node) {
         register(node);
     }
