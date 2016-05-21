@@ -7,9 +7,10 @@ import javafx.scene.input.KeyEvent;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
+import org.jzy3d.javafx.controllers.JavaFXChartController;
 import org.jzy3d.maths.Coord2d;
 
-public class JavaFXCameraKeyController extends AbstractCameraController implements EventHandler<KeyEvent>, ICameraKeyController {
+public class JavaFXCameraKeyController extends AbstractCameraController implements EventHandler<KeyEvent>, ICameraKeyController, JavaFXChartController {
     protected Node node;
 
     public JavaFXCameraKeyController(Node node) {

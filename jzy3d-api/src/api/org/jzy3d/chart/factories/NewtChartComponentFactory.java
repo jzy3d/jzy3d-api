@@ -19,6 +19,8 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.
 import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
+import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
@@ -171,12 +173,24 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
     }
 
     @Override
-    public ICameraMouseController newMouseController(Chart chart) {
+    public ICameraMouseController newMouseCameraController(Chart chart) {
         return new NewtCameraMouseController(chart);
     }
 
     @Override
-    public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
+    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
+        return new NewtMousePickingController(chart, clickWidth);
+    }
+
+    
+    @Override
+    public ICameraKeyController newKeyboardCameraController(Chart chart) {
+        return new NewtCameraKeyController(chart);
+    }
+
+
+    @Override
+    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
         // trigger screenshot on 's' letter
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
         IScreenshotKeyController screenshot;
@@ -196,10 +210,6 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
         return screenshot;
     }
 
-    @Override
-    public ICameraKeyController newKeyController(Chart chart) {
-        return new NewtCameraKeyController(chart);
-    }
 
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {

@@ -17,6 +17,8 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.
 import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
+import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Dimension;
@@ -135,12 +137,17 @@ public class ChartComponentFactory implements IChartComponentFactory {
     }
 
     @Override
-    public ICameraMouseController newMouseController(Chart chart) {
+    public ICameraMouseController newMouseCameraController(Chart chart) {
         return new NewtCameraMouseController(chart);
+    }
+    
+    @Override
+    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
+        return new NewtMousePickingController(chart, clickWidth);
     }
 
     @Override
-    public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
+    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
         // trigger screenshot on 's' letter
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
         IScreenshotKeyController screenshot;
@@ -163,7 +170,7 @@ public class ChartComponentFactory implements IChartComponentFactory {
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
     @Override
-    public ICameraKeyController newKeyController(Chart chart) {
+    public ICameraKeyController newKeyboardCameraController(Chart chart) {
         ICameraKeyController key = null;
         key = new NewtCameraKeyController(chart);
         return key;
@@ -306,4 +313,6 @@ public class ChartComponentFactory implements IChartComponentFactory {
     public IChartComponentFactory getFactory() {
         return this;
     }
+
+    
 }
