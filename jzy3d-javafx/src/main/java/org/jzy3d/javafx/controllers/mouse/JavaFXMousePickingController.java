@@ -22,7 +22,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
-public class JavaFXMousePickingController<V, E> extends AbstractCameraController implements EventHandler<MouseEvent> {
+public class JavaFXMousePickingController extends AbstractCameraController implements EventHandler<MouseEvent> {
     protected Node node;
 
     public JavaFXMousePickingController() {
