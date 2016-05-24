@@ -6,6 +6,12 @@
 	<artifactId>jzy3d-tutorials</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-master</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
 	<name>Jzy3d Tutorials</name>
 
 	<!--To retrieve Jzy3d dependencies -->
@@ -62,7 +68,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>${version.mvn.compiler}</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -79,6 +85,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${version.mvn.surefire}</version>
 				<configuration>
 				</configuration>
 			</plugin>
@@ -86,6 +93,7 @@
 			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
+					<version>${version.mvn.source}</version>
 					<executions>
 						<execution>
 							<id>attach-sources</id>

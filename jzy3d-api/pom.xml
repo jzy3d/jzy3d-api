@@ -80,6 +80,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>${version.build.helper.mvn}</version>
 				<executions>
 					<execution>
 						<phase>generate-sources</phase>
@@ -102,6 +103,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${version.mvn.surefire}</version>
 				<configuration>
 					<excludes>
 						<exclude>org/jzy3d/junit/ChartTest.java</exclude>
@@ -111,6 +113,7 @@
 
 			<plugin>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>${version.mvn.jar}</version>
 				<executions>
 					<execution>
 						<id>maths-io-jar</id>
@@ -140,6 +143,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>${version.build.helper.mvn}</version>
 					<executions>
 						<execution>
 							<phase>generate-sources</phase>
@@ -161,7 +165,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.0</version><!--$NO-MVN-MAN-VER$ -->
+					<version>${version.mvn.compiler}</version>
 					<configuration>
 						<source>1.7</source>
 						<target>1.7</target>
@@ -171,6 +175,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
+					<version>${version.mvn.source}</version>
 					<executions>
 						<execution>
 							<id>attach-sources</id>
