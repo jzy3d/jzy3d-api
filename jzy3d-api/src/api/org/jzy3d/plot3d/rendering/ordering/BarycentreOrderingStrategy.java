@@ -28,12 +28,12 @@ public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
      * transitive: ((compare(x, y)>0) && (compare(y, z)>0)) implies compare(x, z)>0    true if all Drawables and the Camera don't change position!
      * consistency?: compare(x, y)==0  implies that sgn(compare(x, z))==sgn(compare(y, z))
      */
-	@Override
+    @Override
     public int compare(AbstractDrawable d1, AbstractDrawable d2) {
-		if(d1.equals(d2))
-			return 0;
-		return comparison(score(d1), score(d2));
-	}
+        if(d1.equals(d2) || d1.getBarycentre().equals(d2.getBarycentre()))
+            return 0;
+        return comparison(score(d1), score(d2));
+    }
 	
     @Override
     public double score(AbstractDrawable d) {
