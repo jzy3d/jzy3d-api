@@ -30,7 +30,7 @@ public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
      */
 	@Override
     public int compare(AbstractDrawable d1, AbstractDrawable d2) {
-		if(d1.equals(d2))
+		if(d1.equals(d2) || d1.getBarycentre().equals(d2.getBarycentre()))
 			return 0;
 		return comparison(score(d1), score(d2));
 	}
