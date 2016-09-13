@@ -33,14 +33,14 @@
 		<dependency>
 			<groupId>org.eclipse.swt</groupId>
 			<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-			<version>4.2.1</version>
+			<version>4.3</version>
 		</dependency>
 		<!--<dependency> <groupId>org.eclipse.swt.win32.win32</groupId> <artifactId>x86</artifactId>
-			<version>4.2.1</version> </dependency> -->
+			<version>4.3</version> </dependency> -->
 		<dependency>
 			<groupId>org.eclipse.swt</groupId>
 			<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-			<version>4.2.1</version>
+			<version>4.3</version>
 		</dependency>
 
 		<dependency>
