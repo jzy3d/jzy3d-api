@@ -14,8 +14,8 @@ public class TicToc {
     public static TicToc T = new TicToc();
 
     public TicToc() {
-        start = 0;
-        stop = 0;
+        start = System.nanoTime();
+        stop = System.nanoTime();
     }
 
     public void tic() {
@@ -30,9 +30,14 @@ public class TicToc {
 
     public double tocShow(String message) {
         double stop = toc();
-        System.out.println(message + " " + elapsedSecond() + "s\t" + elapsedMilisecond() + "ms\t" + elapsedMicrosecond() + "micro");
+        System.out.println(tocString(message));
         return stop;
     }
+
+	private String tocString(String message) {
+        toc();
+		return message + " " + elapsedSecond() + "s\t" + elapsedMilisecond() + "ms\t" + elapsedMicrosecond() + "micro";
+	}
 
     public long rawToc() {
         stop = System.nanoTime();
