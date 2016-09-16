@@ -12,6 +12,19 @@ public class Histogram {
     public Histogram(float min, float max, int bins){
         initBins(min, max, bins);
     }
+    
+    public Histogram(List<Float> values, int bins){
+    	float min = Float.MAX_VALUE;
+		float max = -Float.MAX_VALUE;
+		for(float v: values){
+			if(v<min)
+				min=v;
+			if(v>max)
+				max = v;
+		}
+		initBins(min, max, bins);
+		add(values);
+    }
 
     private void initBins(float min, float max, int bins) {
         data = new HashMap<Range,Integer>(bins);
