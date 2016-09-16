@@ -20,7 +20,8 @@
 	<repositories>
 		<repository>
 			<id>swt-repo</id>
-			<url>https://swt-repo.googlecode.com/svn/repo/</url>
+			<url> http://maven-eclipse.github.io/maven</url>
+			<!--<url>https://swt-repo.googlecode.com/svn/repo/</url>-->
 		</repository>
 	</repositories>
 
@@ -90,7 +91,7 @@
 						<!--<excludes> <exclude>org/jzy3d/junit/ChartTest.java</exclude> </excludes> -->
 					</configuration>
 				</plugin>
-				
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>

@@ -9,3 +9,6 @@ target
 *.log
 *~/
 *~
+
+jzy3d-javafx/.classpath
+jzy3d-jdt-core/.classpath
