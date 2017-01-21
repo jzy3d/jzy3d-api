@@ -112,7 +112,14 @@ public class Chart {
         view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
         return this;
     }
-    
+
+    public Chart add(List<? extends AbstractDrawable> drawables) {
+        for(AbstractDrawable drawable: drawables){
+            getScene().getGraph().add(drawable, false);
+        }
+        getView().updateBounds();
+        return this;
+    }
     public Chart add(AbstractDrawable drawable) {
         getScene().getGraph().add(drawable);
         return this;

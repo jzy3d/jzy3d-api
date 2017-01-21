@@ -70,11 +70,12 @@ public class Color {
 		this.a = (float)a/255;
 	}
 	
-	public void mul(Color factor){
+	public Color mul(Color factor){
 		this.r *= factor.r;
 		this.g *= factor.g;
 		this.b *= factor.b;
 		this.a *= factor.a;
+		return this;
 	}
 	
 	public Color alphaSelf(float alpha){
