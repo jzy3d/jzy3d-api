@@ -29,8 +29,10 @@ public class LightSet {
 				LightSwitch.enable(gl, light.getId());
 			lazyLightInit = false;
 		}
-		for (Light light : lights)
-			light.apply(gl, scale);
+		for (Light light : lights){
+            //LightSwitch.enable(gl, light.getId());
+		    light.apply(gl, scale);
+		}
 	}
 
 	public void enableLightIfThereAreLights(GL gl) {
