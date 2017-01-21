@@ -77,6 +77,23 @@ public class BoundingBox3d {
     /*********************************************************/
 
     /**
+     * Build an array of 8 coordinates indicating the 8 corners of the bounding box
+     * @return
+     */
+    public Coord3d[] corners(){
+        Coord3d[] corners = new Coord3d[8];
+        corners[0] = new Coord3d(xmax, ymax, zmax);
+        corners[1] = new Coord3d(xmin, ymax, zmax);
+        corners[2] = new Coord3d(xmin, ymin, zmax);
+        corners[3] = new Coord3d(xmax, ymax, zmax);
+        corners[4] = new Coord3d(xmax, ymax, zmin);
+        corners[5] = new Coord3d(xmin, ymax, zmin);
+        corners[6] = new Coord3d(xmin, ymin, zmin);
+        corners[7] = new Coord3d(xmax, ymax, zmin);
+        return corners;
+    }
+    
+    /**
      * Initialize the bounding box with Float.MAX_VALUE as minimum value, and
      * -Float.MAX_VALUE as maximum value for each dimension.
      */

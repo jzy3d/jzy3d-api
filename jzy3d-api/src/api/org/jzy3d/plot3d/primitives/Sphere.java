@@ -25,207 +25,197 @@ import com.jogamp.opengl.util.gl2.GLUT;
  */
 public class Sphere extends AbstractWireframeable implements ISingleColorable {
 
-	/**
-	 * Initialize a black sphere at the origin with a radius of 10, and slicing
-	 * of 15.
-	 */
-	public Sphere() {
-		super();
-		bbox = new BoundingBox3d();
-		setPosition(Coord3d.ORIGIN);
-		setVolume(10f);
-		setSlicing(15, 15);
-		setColor(Color.BLACK);
-	}
+    /**
+     * Initialize a black sphere at the origin with a radius of 10, and slicing
+     * of 15.
+     */
+    public Sphere() {
+        super();
+        bbox = new BoundingBox3d();
+        setPosition(Coord3d.ORIGIN);
+        setVolume(10f);
+        setSlicing(15, 15);
+        setColor(Color.BLACK);
+    }
 
-	/** Initialize a sphere with the given parameters. */
-	public Sphere(Coord3d position, float radius, int slicing, Color color) {
-		super();
-		bbox = new BoundingBox3d();
-		setPosition(position);
-		setVolume(radius);
-		setSlicing(slicing, slicing);
-		setColor(color);
-	}
+    /** Initialize a sphere with the given parameters. */
+    public Sphere(Coord3d position, float radius, int slicing, Color color) {
+        super();
+        bbox = new BoundingBox3d();
+        setPosition(position);
+        setVolume(radius);
+        setSlicing(slicing, slicing);
+        setColor(color);
+    }
 
-	/********************************************************/
+    /********************************************************/
 
-	@Override
+    @Override
     public void draw(GL gl, GLU glu, Camera cam) {
-		doTransform(gl, glu, cam);
+        doTransform(gl, glu, cam);
 
-		if (gl.isGL2()) {
+        if (gl.isGL2()) {
 
-			gl.getGL2().glTranslatef(position.x, position.y, position.z);
+            gl.getGL2().glTranslatef(position.x, position.y, position.z);
 
-			// Draw
-			// if(qobj==null)
-			// qobj = glu.gluNewQuadric();
+            // Draw
+            // if(qobj==null)
+            // qobj = glu.gluNewQuadric();
 
-			if (facestatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-				// glu.gluSphere(qobj, radius, slices, stacks);
-				glut.glutSolidSphere(radius, slices, stacks);
-			}
-			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-				gl.getGL2().glLineWidth(wfwidth);
-				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
-						wfcolor.a);
-				// glu.gluSphere(qobj, radius, slices, stacks);
-				glut.glutSolidSphere(radius, slices, stacks);
+            if (facestatus) {
+                gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+                gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
+                // glu.gluSphere(qobj, radius, slices, stacks);
+                glut.glutSolidSphere(radius, slices, stacks);
+            }
+            if (wfstatus) {
+                gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+                gl.getGL2().glLineWidth(wfwidth);
+                gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+                // glu.gluSphere(qobj, radius, slices, stacks);
+                glut.glutSolidSphere(radius, slices, stacks);
 
-				// gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
-				// gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
-			}
-		} else {
-			GLES2CompatUtils.glTranslatef(position.x, position.y,
-					position.z);
+                // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+                // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
+            }
+        } else {
+            GLES2CompatUtils.glTranslatef(position.x, position.y, position.z);
 
-			// Draw
-			// if(qobj==null)
-			// qobj = glu.gluNewQuadric();
+            // Draw
+            // if(qobj==null)
+            // qobj = glu.gluNewQuadric();
 
-			if (facestatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
-						GL2GL3.GL_FILL);
-				GLES2CompatUtils.glColor4f(color.r, color.g, color.b,
-						color.a);
-				// glu.gluSphere(qobj, radius, slices, stacks);
-				glut.glutSolidSphere(radius, slices, stacks);
-			}
-			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
-						GL2GL3.GL_LINE);
-				GLES2CompatUtils.glLineWidth(wfwidth);
-				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
-						wfcolor.a);
-				// glu.gluSphere(qobj, radius, slices, stacks);
-				glut.glutSolidSphere(radius, slices, stacks);
+            if (facestatus) {
+                GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+                GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
+                // glu.gluSphere(qobj, radius, slices, stacks);
+                glut.glutSolidSphere(radius, slices, stacks);
+            }
+            if (wfstatus) {
+                GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+                GLES2CompatUtils.glLineWidth(wfwidth);
+                GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+                // glu.gluSphere(qobj, radius, slices, stacks);
+                glut.glutSolidSphere(radius, slices, stacks);
 
-				// gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
-				// gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
-			}
-		}
+                // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+                // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
+            }
+        }
 
-		doDrawBounds(gl, glu, cam);
-	}
+        doDrawBounds(gl, glu, cam);
+    }
 
-	@Override
-	public void applyGeometryTransform(Transform transform) {
-		position.set(transform.compute(position));
-		updateBounds();
-	}
+    @Override
+    public void applyGeometryTransform(Transform transform) {
+        position.set(transform.compute(position));
+        updateBounds();
+    }
 
-	/*
-	 * protected GLUquadric qobj; public void draw2(){ // qobj =
-	 * glu.gluNewQuadric(); //glu.gluSphere(qobj, radius, slices, stacks); }
-	 */
+    /*
+     * protected GLUquadric qobj; public void draw2(){ // qobj =
+     * glu.gluNewQuadric(); //glu.gluSphere(qobj, radius, slices, stacks); }
+     */
 
-	/**********************************************************************/
+    /**********************************************************************/
 
-	/**
-	 * Set the sphere data.
-	 * 
-	 * @param position
-	 *            sphere position (may be handled differently in future version)
-	 * @param radius
-	 *            radius of the sphere
-	 * @param slices
-	 *            number of vertical slices (i.e. wireframes)
-	 * @param stacks
-	 *            number of horizontal stacks (i.e. wireframes)
-	 */
-	public void setData(Coord3d position, float radius, float height,
-			int slices, int stacks) {
-		setPosition(position);
-		setVolume(radius);
-		setSlicing(slices, stacks);
-	}
+    /**
+     * Set the sphere data.
+     * 
+     * @param position
+     *            sphere position (may be handled differently in future version)
+     * @param radius
+     *            radius of the sphere
+     * @param slices
+     *            number of vertical slices (i.e. wireframes)
+     * @param stacks
+     *            number of horizontal stacks (i.e. wireframes)
+     */
+    public void setData(Coord3d position, float radius, float height, int slices, int stacks) {
+        setPosition(position);
+        setVolume(radius);
+        setSlicing(slices, stacks);
+    }
 
-	/**
-	 * Set the position of the Sphere and the dimensions of its boundingbox.
-	 * Note that this position will be use to translate the object before
-	 * drawing it (meaning a glTranslate(position) is performed right after the
-	 * Translate.execute).
-	 * 
-	 * @param position
-	 */
-	public void setPosition(Coord3d position) {
-		this.position = position;
-		updateBounds();
-	}
+    /**
+     * Set the position of the Sphere and the dimensions of its boundingbox.
+     * Note that this position will be use to translate the object before
+     * drawing it (meaning a glTranslate(position) is performed right after the
+     * Translate.execute).
+     * 
+     * @param position
+     */
+    public void setPosition(Coord3d position) {
+        this.position = position;
+        updateBounds();
+    }
 
-	public Coord3d getPosition() {
-		return position;
-	}
+    public Coord3d getPosition() {
+        return position;
+    }
 
-	@Override
-	public void updateBounds() {
-		bbox.reset();
-		bbox.add(position.x + radius, position.y + radius, position.z + radius);
-		bbox.add(position.x - radius, position.y - radius, position.z - radius);
-	}
+    @Override
+    public void updateBounds() {
+        bbox.reset();
+        bbox.add(position.x + radius, position.y + radius, position.z + radius);
+        bbox.add(position.x - radius, position.y - radius, position.z - radius);
+    }
 
-	/**
-	 * Set the radius of the sphere, and the dimensions of its boundingbox.
-	 * 
-	 * @param radius
-	 *            sphere radius
-	 */
-	public void setVolume(float radius) {
-		this.radius = radius;
-		updateBounds();
-	}
+    /**
+     * Set the radius of the sphere, and the dimensions of its boundingbox.
+     * 
+     * @param radius
+     *            sphere radius
+     */
+    public void setVolume(float radius) {
+        this.radius = radius;
+        updateBounds();
+    }
 
-	/**
-	 * Set the sphere slicing parameters, i.e. the subtlety of the circle
-	 * estimation.
-	 * 
-	 * @param verticalWires
-	 *            number of vertical slices
-	 * @param horizontalWires
-	 *            number of horizontal slices
-	 */
-	public void setSlicing(int verticalWires, int horizontalWires) {
-		this.slices = verticalWires;
-		this.stacks = horizontalWires;
-	}
+    /**
+     * Set the sphere slicing parameters, i.e. the subtlety of the circle
+     * estimation.
+     * 
+     * @param verticalWires
+     *            number of vertical slices
+     * @param horizontalWires
+     *            number of horizontal slices
+     */
+    public void setSlicing(int verticalWires, int horizontalWires) {
+        this.slices = verticalWires;
+        this.stacks = horizontalWires;
+    }
 
-	/********************************************************/
+    /********************************************************/
 
-	@Override
+    @Override
     public void setColor(Color color) {
-		this.color = color;
+        this.color = color;
 
-		fireDrawableChanged(new DrawableChangedEvent(this,
-				DrawableChangedEvent.FIELD_COLOR));
-	}
+        fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
+    }
 
-	@Override
+    @Override
     public Color getColor() {
-		return color;
-	}
+        return color;
+    }
 
-	/********************************************************/
+    /********************************************************/
 
-	@Override
+    @Override
     public String toString(int depth) {
-		return Utils.blanks(depth) + "(Sphere) x=" + position.x + " y="
-				+ position.y + " z=" + position.z + " r=" + color.r + " g="
-				+ color.g + " b=" + color.b + " a=" + color.a;
-	}
+        return Utils.blanks(depth) + "(Sphere) radius= " + radius + " x=" + position.x + " y=" + position.y + " z=" + position.z + " r=" + color.r + " g=" + color.g + " b=" + color.b + " a=" + color.a;
+    }
 
-	/********************************************************/
+    /********************************************************/
 
-	protected Coord3d position;
-	protected float radius;
+    protected Coord3d position;
+    protected float radius;
 
-	protected int slices;
-	protected int stacks;
+    protected int slices;
+    protected int stacks;
 
-	protected Color color;
+    protected Color color;
 
-	protected static GLUT glut = new GLUT();
+    protected static GLUT glut = new GLUT();
 }
