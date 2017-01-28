@@ -64,6 +64,7 @@ public class Graph {
         this.components = new ArrayList<AbstractDrawable>();
         // components = Collections.synchronizedList(new
         // ArrayList<AbstractDrawable>());
+        this.graphListener = new ArrayList<>();
     }
 
     public synchronized void dispose() {
@@ -160,9 +161,31 @@ public class Graph {
         for (IGLBindedResource r : all)
             if (!r.hasMountedOnce())
                 r.mount(gl);
+        fireMountAll();
+    }
+    
+    public interface GraphListener{
+        public void onMountAll();
+    }
+    
+    protected void fireMountAll(){
+        for(GraphListener listener: graphListener){
+            listener.onMountAll();
+        }
     }
 
+    
+    
+    
     /* */
+
+    public List<GraphListener> getGraphListener() {
+        return graphListener;
+    }
+
+    public void addGraphListener(GraphListener graphListener) {
+        this.graphListener.add(graphListener);
+    }
 
     /**
      * Decompose all {@link AbstractComposite} objects, and sort the extracted
@@ -375,4 +398,7 @@ public class Graph {
     protected boolean VERBOSE = false;
     protected AbstractOrderingStrategy strategy;
     protected boolean sort = true;
+    
+    protected List<GraphListener> graphListener;
+
 }

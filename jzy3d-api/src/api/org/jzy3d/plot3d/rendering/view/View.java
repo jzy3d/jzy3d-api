@@ -737,6 +737,7 @@ public class View {
             gl.glDepthFunc(GL.GL_LEQUAL);
         } else
             gl.glDisable(GL.GL_DEPTH_TEST);
+        //gl.glDepthRangef(n, f);
 
         // Blending
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
