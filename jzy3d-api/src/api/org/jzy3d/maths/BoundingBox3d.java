@@ -294,6 +294,10 @@ public class BoundingBox3d {
 
     /*********************************************************/
 
+    /** Return range of X dimension.
+     * 
+     * @see {@link getRange}
+     */
     public Range getXRange() {
         return new Range(xmin, xmax);
     }
@@ -304,6 +308,14 @@ public class BoundingBox3d {
 
     public Range getZRange() {
         return new Range(zmin, zmax);
+    }
+    
+    /** Return range of each dimension.
+     * 
+     * @see {@link getXRange}
+     */
+    public Coord3d getRange(){
+        return new Coord3d(getXRange().getRange(),getYRange().getRange(),getZRange().getRange());
     }
 
     public float getXmin() {
