@@ -19,7 +19,7 @@ import com.jogamp.opengl.GL;
 
 /**
  * The {@link VBOBuilder} is responsible for sizing a {@link FloatVBO}, filling
- * it with vertex coordinates and colors properties, and and configure a
+ * it with vertex coordinates and colors properties, and configure a
  * {@link DrawableVBO} with filled buffer.
  * 
  * The builder will be called via method {@link load()} once GL context is ready 

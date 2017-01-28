@@ -228,13 +228,13 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
     protected void polygonOffseFillEnable(GL gl) {
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        gl.glPolygonOffset(1.0f, 1.0f);
+        gl.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
     }
 
     protected void polygonOffsetFillDisable(GL gl) {
         gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
     }
-
+    
     /* DATA */
 
     public void add(Point point) {
@@ -338,6 +338,23 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     public boolean isPolygonOffsetFillEnable() {
         return polygonOffsetFillEnable;
     }
+    
+    public float getPolygonOffsetFactor() {
+        return polygonOffsetFactor;
+    }
+
+    public void setPolygonOffsetFactor(float polygonOffsetFactor) {
+        this.polygonOffsetFactor = polygonOffsetFactor;
+    }
+
+    public float getPolygonOffsetUnit() {
+        return polygonOffsetUnit;
+    }
+
+    public void setPolygonOffsetUnit(float polygonOffsetUnit) {
+        this.polygonOffsetUnit = polygonOffsetUnit;
+    }
+
 
     /**
      * Enable offset fill, which let a polygon with a wireframe render cleanly
@@ -405,6 +422,9 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
     protected PolygonMode polygonMode;
     protected boolean polygonOffsetFillEnable = true;
+    protected float polygonOffsetFactor = 1.0f;
+    protected float polygonOffsetUnit = 1.0f;
+
 
     protected ColorMapper mapper;
     protected List<Point> points;
