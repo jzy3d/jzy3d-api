@@ -14,19 +14,29 @@ import org.jzy3d.plot3d.primitives.axes.layout.providers.StaticTickProvider;
 public class Histogram2d {
     protected Histogram model;
     protected AbstractComposite drawable;
+    String ylabel = "Count";
+    String xlabel = "Value";
     
     public Histogram2d(Histogram model) {
         setModel(model);
     }
     
-    /** Set global chart view settings to best draw this histogram. */
+    public Histogram2d(Histogram model, String xlabel, String ylabel) {
+		this(model);
+		this.ylabel = ylabel;
+		this.xlabel = xlabel;
+	}
+
+
+
+	/** Set global chart view settings to best draw this histogram. */
     public void layout(Chart chart){
         IAxeLayout layout = chart.getAxeLayout();
         int ymax = getModel().computeMaxCount();
         double[] ticks = {0, ymax/4, ymax/2, ymax/2 + ymax/4, ymax};
         layout.setYTickProvider(new StaticTickProvider(ticks));
-        layout.setYAxeLabel("Count");
-        layout.setXAxeLabel("Value");
+        layout.setYAxeLabel(ylabel);
+        layout.setXAxeLabel(xlabel);
     }
     
     public void addTo(Chart chart){
