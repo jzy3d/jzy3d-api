@@ -274,11 +274,11 @@ public class BoundingBox3d {
     public BoundingBox3d margin(float margin) {
         BoundingBox3d b = new BoundingBox3d();
         b.xmax = xmax + margin;
-        b.xmin = xmin + margin;
+        b.xmin = xmin - margin;
         b.ymax = ymax + margin;
-        b.ymin = ymin + margin;
+        b.ymin = ymin - margin;
         b.zmax = zmax + margin;
-        b.zmin = zmin + margin;
+        b.zmin = zmin - margin;
         return b;
     }
 
