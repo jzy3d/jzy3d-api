@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-tutorials</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<name>Jzy3d Tutorials</name>
 
@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-api</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
