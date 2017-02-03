@@ -34,8 +34,7 @@
 		</license>
 	</licenses>
 	<scm>
-	<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
-<!-- 		<connection>scm:git:git://github.com/jzy3d/jzy3d-api</connection> -->
+		<connection>scm:git:git://github.com/jzy3d/jzy3d-api</connection>
 	  <tag>1.0.0</tag>
   </scm>
 	<issueManagement>
