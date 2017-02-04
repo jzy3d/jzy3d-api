@@ -1,0 +1,22 @@
+
+
+Parameter hierarchy
+	by svm	
+	have kernel param object
+	
+UI
+	parameters through interface
+	selection of input dataset / model
+	train/apply on auto grid
+	
+IO
+	inputs
+	save trained model
+	remain compatible with libsvm format 
+	support csv format
+	
+	
+Scaling facilities
+progress monitor?
+std out?
+support vectors?
