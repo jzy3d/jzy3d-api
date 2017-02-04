@@ -10,5 +10,8 @@ target
 *~/
 *~
 
-jzy3d-javafx/.classpath
+*/.classpath
+*/.project
+*/.settings
+
 jzy3d-jdt-core/.classpath
