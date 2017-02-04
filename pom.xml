@@ -45,18 +45,20 @@
 
 	<modules>
 		<module>jzy3d-api</module>
+		<module>jzy3d-depthpeeling</module>
 		<module>jzy3d-javafx</module>
-		<module>jzy3d-swt</module>
-
 		<module>jzy3d-jdt-core</module>
+		<module>jzy3d-svm-mapper</module>
+		<module>jzy3d-swt</module>
+		<module>jzy3d-tools-libsvm</module>
 		<module>jzy3d-tutorials</module>
 	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.jzy3d>1.0.0-SNAPSHOT</version.jzy3d>
-		<version.java.source>1.6</version.java.source>
-		<version.java.target>1.6</version.java.target>
+		<version.java.source>1.8</version.java.source>
+		<version.java.target>1.8</version.java.target>
 		<version.mvn.compiler>3.0</version.mvn.compiler>
 		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
 		<version.mvn.deploy>2.4</version.mvn.deploy>
@@ -95,7 +97,7 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>${version.mvn.javadoc}</version>
-					<!--<configuration> <stylesheetfile>jzy3d-api/doc/layout.css</stylesheetfile> 
+					<!--<configuration> <stylesheetfile>jzy3d-api/doc/layout.css</stylesheetfile>
 						</configuration> -->
 				</plugin>
 

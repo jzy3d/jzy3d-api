@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jzy3d" default="release">
+    <property name="dir.src"   		 value="src/"/>
+    <property name="dir.src.api"     value="src/api/"/>
+    <property name="dir.lib"         value="lib/"/>
+    <property name="dir.build"       value="build/ant/"/>
+    <property name="dir.dist"        value="dist/"/>
+
+	<property name="lib.name"       value="org.jzy3d.peeling"/>
+	<property name="lib.version"    value="0.9"/>
+	<property name="lib.path" 	 	value="org/jzy3d"/>
+	
+	<property name="jogl"			value="jogl2-rc10"/>
+
+	<property name="dir.basedir"   value=""/>
+	<property name="jzy3d"     value="../../public/jzy3d-api/"/>
+    <property name="jzy3d.src.api"     value="${jzy3d}src/api/"/>
+    <property name="jzy3d.src.bridge"  value="${jzy3d}src/bridge/"/>
+	<property name="jzy3d.lib" value="${jzy3d}lib/"/>
+    <property name="jzy3d.dist"     value="${jzy3d}dist/"/>
+
+		
+
+    <path id="compile.classpath">
+        <fileset dir="${jzy3d.dist}"><include name="*.jar"/></fileset>
+    	
+        <fileset dir="${jzy3d.lib}/misc/"><include name="*.jar"/></fileset>
+        <fileset dir="${jzy3d.lib}/${jogl}"><include name="*.jar"/></fileset>
+    </path>
+
+    <path id="dir.classpath">
+        <!--<path refid="jdk.classpath"/>-->
+        <path refid="compile.classpath"/>
+    </path>
+
+	<target name="clean">
+        <delete dir="${dir.build}"/>
+        <delete dir="${dir.dist}"/>
+    </target>
+
+    <target name="compile.api" description="Compile Jzy3d API and Bridge" depends="clean">
+        <mkdir dir="${dir.build}"/>
+    	<echo>${dir.basedir}</echo>
+    	
+        <javac destdir="${dir.build}" debug="yes" target="1.5">
+            <classpath refid="dir.classpath"/>
+        	<src path="${dir.src.api}/" />
+        </javac>
+    	
+    	<copy todir="${dir.build}">
+            <fileset dir="${dir.src.api}" includes="**/*.glsl"/>
+        </copy>    	
+    </target>
+	
+	<target name="jar.api" description="Export in a jar" depends="compile.api">
+        <echo message="Create a jar containing classes AND sources." />
+        <mkdir dir="${dir.dist}" />        
+        <jar destfile="${dir.dist}/${lib.name}-${lib.version}.jar" >
+            <fileset dir="${dir.build}" includes="${lib.path}/**/*.class, ${lib.path}/**/*.glsl"  excludes="${lib.path}/trials/**, ${lib.path}/demos/**"/>
+            <!--<fileset dir="${dir.build}" includes="${lib.path}/**/*.glsl"/>-->
+            <!-- includes sources for debugging -->
+            <fileset dir="${dir.src.api}"    includes="**/*.java"/>
+        	
+        	<manifest>
+    	      <!-- Who is building this jar? -->
+    	      <attribute name="Built-By" value="${user.name}"/>
+    	      <!-- Information about the program itself -->
+    	      <attribute name="Implementation-Vendor" value="jzy3d.org"/>
+    	      <attribute name="newline" value="CR"/>
+    	      <!-- details -->
+        
+    	      <!--<section name="common/MyClass.class">
+    	        <attribute name="Sealed" value="false"/>
+    	      </section>-->
+    	    </manifest>
+        	
+        </jar>
+    </target>
+
+	<target name="release" depends="clean,jar.api">
+	</target>
+</project>
