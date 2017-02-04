@@ -211,4 +211,18 @@
 
 	<!-- To download javadocs for dependencies mvn dependency:resolve -Dclassifier=javadoc -->
 
+
+<!--To retrieve Jzy3d dependencies -->
+	<repositories>
+		<repository>
+			<id>jzy3d-snapshots</id>
+			<name>Jzy3d Snapshots</name>
+			<url>http://maven.jzy3d.org/snapshots/</url>
+		</repository>
+		<repository>
+			<id>jzy3d-releases</id>
+			<name>Jzy3d Snapshots</name>
+			<url>http://maven.jzy3d.org/releases/</url>
+		</repository>
+	</repositories>
 </project>
