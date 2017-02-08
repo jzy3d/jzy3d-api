@@ -20,7 +20,7 @@ public class AWTScreenshotKeyController extends AbstractScreenshotKeyController 
         switch (e.getKeyChar()) {
         case 's':
             try {
-                screenshot(chart, outputFile);
+                screenshot(chart);
                 fireDone(outputFile);
             } catch (IOException e1) {
                 fireError(outputFile, e1);

@@ -9,6 +9,10 @@ public interface IScreenshotKeyController {
 	public abstract void screenshot(Chart chart, String filename)
 			throws IOException;
 
+	public abstract void screenshot(Chart chart)
+			throws IOException;
+	
+	
 	public abstract void addListener(IScreenshotEventListener listener);
 
 	public interface IScreenshotEventListener{
