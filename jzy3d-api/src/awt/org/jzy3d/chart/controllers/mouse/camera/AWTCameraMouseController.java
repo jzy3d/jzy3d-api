@@ -80,7 +80,9 @@ public class AWTCameraMouseController extends AbstractCameraController implement
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		stopThreadController();
 		float factor = 1 + (e.getWheelRotation() / 10.0f);
-		zoomZ(factor);
+    zoomX(factor);
+    zoomY(factor);
+    zoomZ(factor);
 	}
 
 	@Override

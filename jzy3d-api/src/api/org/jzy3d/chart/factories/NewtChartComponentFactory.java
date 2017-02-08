@@ -1,5 +1,6 @@
 package org.jzy3d.chart.factories;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.swing.JFrame;
@@ -178,7 +179,7 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
     @Override
     public IScreenshotKeyController newScreenshotKeyController(Chart chart) {
         // trigger screenshot on 's' letter
-        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
+        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy_MM_dd_HH_mm_ss") + ".png";
         IScreenshotKeyController screenshot;
 
         screenshot = new NewtScreenshotKeyController(chart, file);

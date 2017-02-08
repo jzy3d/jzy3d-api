@@ -1,5 +1,6 @@
 package org.jzy3d.chart.factories;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.swing.JFrame;

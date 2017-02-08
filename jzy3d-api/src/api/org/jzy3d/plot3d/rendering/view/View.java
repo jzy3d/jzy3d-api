@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.IViewIsVerticalEventListener;
@@ -287,7 +288,7 @@ public class View {
             setBoundManual(bounds);
             if (updateView)
                 shoot();
-            // fireControllerEvent(ControllerType.ZOOM, scale);
+            //fireControllerEvent(ControllerType.ZOOM, scale);
         }
     }
 
