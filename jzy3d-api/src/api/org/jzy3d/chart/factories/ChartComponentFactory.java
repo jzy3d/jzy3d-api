@@ -1,7 +1,6 @@
 package org.jzy3d.chart.factories;
 
 import java.lang.reflect.Constructor;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
