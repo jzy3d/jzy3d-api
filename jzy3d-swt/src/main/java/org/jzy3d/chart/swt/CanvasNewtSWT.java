@@ -1,13 +1,12 @@
 package org.jzy3d.chart.swt;
 
-import java.awt.BorderLayout;
-import java.awt.Panel;
 import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -17,7 +16,6 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.nativewindow.ScalableSurface;
-import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.opengl.GLWindow;
@@ -31,7 +29,7 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
- * A Newt canvas wrapped in an AWT {@link Panel}.
+ * A Newt canvas wrapped in an AWT 
  * 
  * Newt is supposed to be faster than any other canvas, either for AWT or Swing.
  * 
@@ -57,10 +55,17 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
             setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE });
         
         window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
-//        if (quality.isAnimated()) {
-//            animator = new Animator(window);
-//            getAnimator().start();
-//        }
+        if (quality.isAnimated()) {
+            animator = new Animator(window);
+            getAnimator().start();
+        }
+        
+        addDisposeListener(new DisposeListener() {
+            public void widgetDisposed(DisposeEvent e)
+            {
+                dispose();
+            }
+        });
 
     }
 
