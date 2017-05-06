@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -45,8 +46,9 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
 
     public CanvasNewtSWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
     	super(((SWTChartComponentFactory)factory).getComposite(), SWT.NONE);
+    	this.setLayout(new FillLayout());
         window = GLWindow.create(glci);
-        canvas = new NewtCanvasSWT(((SWTChartComponentFactory)factory).getComposite(), SWT.NONE,window);
+        canvas = new NewtCanvasSWT(this, SWT.NONE,window);
         view = scene.newView(this, quality);
         renderer = factory.newRenderer(view, traceGL, debugGL);
         window.addGLEventListener(renderer);
@@ -102,7 +104,6 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
                 if (renderer != null) {
                     renderer.dispose(window);
                 }
-                canvas.dispose();
                 window = null;
                 renderer = null;
                 view = null;
