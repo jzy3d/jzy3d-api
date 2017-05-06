@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.rendering.canvas;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.opengl.util.Animator;
 
 /** Provides a structure for setting the rendering quality, i.e., the tradeoff
