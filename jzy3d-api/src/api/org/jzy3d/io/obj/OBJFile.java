@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Normal;
 
 /**
  * Translated from C++ Version: nvModel.h - Model support class
@@ -273,34 +275,52 @@ public class OBJFile {
         // Not following pattern "f  9227//9524 8376//8650 8377//8649"
         else if (ObjFaceFormat.vertex(line)) {
             String[] nums = line.split(" ");
-            idx[0][0] = Integer.parseInt(nums[0]);
-            
+            idx[0][0] = Integer.parseInt(nums[0]); // value
          // in .obj, f v1 .... the vertex index used start
             // from 1, so -1 here
             // remap them to the right spot
             idx[0][0] = (idx[0][0] > 0) ? (idx[0][0] - 1) : (positions_.size() - idx[0][0]);
             
             idx[1][0] = Integer.parseInt(nums[1]);
-            
             // remap them to the right spot
             idx[1][0] = (idx[1][0] > 0) ? (idx[1][0] - 1) : (positions_.size() - idx[1][0]);
 
             idx[2][0] = Integer.parseInt(nums[2]);
-            
             // remap them to the right spot
             idx[2][0] = (idx[2][0] > 0) ? (idx[2][0] - 1) : (positions_.size() - idx[2][0]);
-
 
             // add the indices
             for (int ii = 0; ii < 3; ii++) {
                 pIndex_.add(idx[ii][0]);
             }
-
+            
+            
             // prepare for the next iteration, the num 0
             // does not change.
             idx[1][0] = idx[2][0];
 
             // logger.info("FACE - " + line);
+            
+            
+            
+            /*if(autoNormal){
+                Coord3d c1 = new Coord3d(x.getReal(C1, i), y.getReal(C1, i), z.getReal(C1, i));
+                Coord3d c2 = new Coord3d(x.getReal(C2, i), y.getReal(C2, i), z.getReal(C2, i));
+                Coord3d c3 = new Coord3d(x.getReal(C3, i), y.getReal(C3, i), z.getReal(C3, i));
+                Coord3d no = Normal.compute(c1, c2, c3);
+                
+
+                // remap them to the right spot
+                idx[0][1] = (idx[0][1] > 0) ? (idx[0][1] - 1) : (normals_.size() - idx[0][1]);
+                idx[1][1] = (idx[1][1] > 0) ? (idx[1][1] - 1) : (normals_.size() - idx[1][1]);
+                idx[2][1] = (idx[2][1] > 0) ? (idx[2][1] - 1) : (normals_.size() - idx[2][1]);
+                
+                
+                 // add the indices
+                for (int ii = 0; ii < 3; ii++) {
+                    nIndex_.add(idx[ii][1]);
+                }
+            }*/
         }
         return hasNormals;
     }
@@ -316,7 +336,7 @@ public class OBJFile {
      */
     public void compileModel() {
         
-        logger.info("expect pIndex.size: " + pIndex_.size() + " Nindex.size:" + nIndex_.size());
+        //logger.info("expect pIndex.size: " + pIndex_.size() + " Nindex.size:" + nIndex_.size());
         
         boolean needsTriangles = true;
 
@@ -479,6 +499,10 @@ public class OBJFile {
         return "countVertices  =" + getPositionCount() + "  indexSize = " + getIndexCount() + "  vertexSize = " + getCompiledVertexCount() + "  byteOffset = " + getCompiledVertexSize() + "  normalOffset = " + getCompiledNormalOffset() + "  dimensions = " + getPositionSize();
     }
 
+    
+    /** Will calculate normals if they are missing */
+    protected boolean autoNormal = true;
+    
     protected List<Float> positions_ = new ArrayList<Float>();
     protected List<Float> normals_ = new ArrayList<Float>();
     protected int posSize_;
