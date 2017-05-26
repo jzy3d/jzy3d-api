@@ -62,7 +62,7 @@ public interface IChartComponentFactory {
     public IChartComponentFactory getFactory();
     
     public static enum Toolkit {
-        awt, swing, newt, offscreen, swt
+        awt, swing, newt, offscreen, swt_newt
     }
 
 }
