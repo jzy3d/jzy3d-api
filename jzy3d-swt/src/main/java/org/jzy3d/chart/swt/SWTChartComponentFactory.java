@@ -45,36 +45,16 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
     private SWTChartComponentFactory(Composite canvas) {
     	this.canvas = canvas;
     }
-    
-    
-//    public static Chart chart() {
-//        return chart(Quality.Intermediate);
-//    }
-    
+
     public static Chart chart(Composite parent) {
     	SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
-    	return f.newChart(Quality.Advanced, Toolkit.swt);
+    	return f.newChart(Quality.Intermediate, Toolkit.swt_newt);
     }
-
-//    public static Chart chart(Quality quality) {
-//    	SWTChartComponentFactory f = new SWTChartComponentFactory();
-//        return f.newChart(quality, Toolkit.awt/* Toolkit.newt */);
-//    }
-//
-//    public static Chart chart(String toolkit) {
-//    	SWTChartComponentFactory f = new SWTChartComponentFactory();
-//        return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
-//    }
-//
-//    public static Chart chart(Quality quality, Toolkit toolkit) {
-//    	SWTChartComponentFactory f = new SWTChartComponentFactory();
-//        return f.newChart(quality, toolkit);
-//    }
-//
-//    public static Chart chart(Quality quality, String toolkit) {
-//    	SWTChartComponentFactory f = new SWTChartComponentFactory();
-//        return f.newChart(quality, toolkit);
-//    }
+    
+    public static Chart chart(Composite parent, Quality quality) {
+    	SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
+    	return f.newChart(quality, Toolkit.swt_newt);
+    }
 
     /* */
 
@@ -145,7 +125,7 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
         case offscreen:
             Dimension dimension = getCanvasDimension(windowingToolkit);
             return new OffscreenCanvas(factory, scene, quality, capabilities, dimension.width, dimension.height, traceGL, debugGL);
-        case swt:
+        case swt_newt:
         	return new CanvasNewtSWT(factory, scene, quality, capabilities, traceGL, debugGL);
         default:
             throw new RuntimeException("unknown chart type:" + chartType);
@@ -168,19 +148,6 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
     public IChartComponentFactory getFactory() {
         return this;
     }
-//
-//    public JFrame newFrame(JPanel panel) {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//        } catch (Exception e) {
-//            // ignore failure to set default look en feel;
-//        }
-//        JFrame frame = new JFrame();
-//        frame.add(panel);
-//        frame.pack();
-//        frame.setVisible(true);
-//        return frame;
-//    }
 
     @Override
     public ICameraMouseController newMouseCameraController(Chart chart) {
