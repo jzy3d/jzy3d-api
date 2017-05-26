@@ -1,6 +1,5 @@
 package org.jzy3d.chart.swt;
 
-import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartComponentFactory;

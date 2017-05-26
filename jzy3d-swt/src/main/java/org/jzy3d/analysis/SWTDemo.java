@@ -1,15 +1,11 @@
 package org.jzy3d.analysis;
 
-import java.awt.Component;
-
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.jzy3d.bridge.swt.Bridge;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.Settings;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.chart.swt.SWTChartComponentFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -19,7 +15,6 @@ import org.jzy3d.plot3d.builder.Builder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class SWTDemo {
 

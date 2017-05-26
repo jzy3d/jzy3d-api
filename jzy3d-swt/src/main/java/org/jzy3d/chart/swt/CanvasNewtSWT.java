@@ -226,5 +226,4 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
     protected Animator animator;
     protected GLWindow window;
     protected NewtCanvasSWT canvas;
-    private static final long serialVersionUID = 8578690050666237742L;
 }
