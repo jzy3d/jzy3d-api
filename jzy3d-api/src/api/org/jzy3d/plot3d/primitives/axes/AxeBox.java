@@ -1128,6 +1128,7 @@ public class AxeBox implements IAxe {
      * texts. This requires calling {@link draw()} before, which computes actual
      * ticks position in 3d, and updates the bounds.
      */
+    @Override
     public BoundingBox3d getWholeBounds() {
         return wholeBounds;
     }

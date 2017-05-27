@@ -23,6 +23,24 @@ import com.jogamp.opengl.util.gl2.GLUT;
  */
 public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRenderer {
     /**
+     * GL Font code and size in pixel to initialize rendeer.
+     */
+    public enum Font{
+        Helvetica_10(GLUT.BITMAP_HELVETICA_10, 10),
+        Helvetica_12(GLUT.BITMAP_HELVETICA_12, 12),
+        Helvetica_18(GLUT.BITMAP_HELVETICA_18, 18),
+        TimesRoman_10(GLUT.BITMAP_TIMES_ROMAN_10, 10),
+        TimesRoman_24(GLUT.BITMAP_TIMES_ROMAN_24, 24);
+        
+        Font(int code, int height){
+            this.code = code;
+            this.height = height;
+        }
+        
+        protected int code;
+        protected int height;
+    }
+    /**
      * The TextBitmap class provides support for drawing ASCII characters Any
      * non ascii caracter will be replaced by a square.
      */
@@ -30,6 +48,16 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         super();
         font = GLUT.BITMAP_HELVETICA_10;
         fontHeight = 10;
+    }
+
+    public TextBitmapRenderer(Font font) {
+        this(font.code, font.height);
+    }
+    
+    public TextBitmapRenderer(int font, int fontSize) {
+        super();
+        this.font = font;
+        this.fontHeight = fontSize;
     }
 
     @Override

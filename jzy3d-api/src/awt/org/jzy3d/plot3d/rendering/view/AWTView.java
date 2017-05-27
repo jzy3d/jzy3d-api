@@ -76,8 +76,8 @@ public class AWTView extends ChartView {
         axe.draw(gl, glu, cam);
         clear(gl);
 
-        AxeBox abox = (AxeBox) axe;
-        BoundingBox3d newBounds = abox.getWholeBounds().scale(scaling);
+        //AxeBox abox = (AxeBox) axe;
+        BoundingBox3d newBounds = axe.getWholeBounds().scale(scaling);
 
         if (viewmode == ViewPositionMode.TOP) {
             float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(), newBounds.getYmax() - newBounds.getYmin()) / 2;

@@ -11,6 +11,8 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
 
 /**
@@ -91,6 +93,13 @@ public class LineStrip extends AbstractWireframeable {
     public void drawLineGL2(GL gl) {
         gl.getGL2().glBegin(GL.GL_LINE_STRIP);
 
+        
+        if(stipple){
+            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
+            gl.glEnable(GL2.GL_LINE_STIPPLE);
+            gl.getGL2().glLineStipple(1, (short) 0xAAAA);
+        }
+        
         gl.getGL2().glLineWidth(wfwidth);
         
         if (wfcolor == null) {
@@ -167,6 +176,10 @@ public class LineStrip extends AbstractWireframeable {
         bbox.add(point);
     }
 
+    public void add(Coord3d coord3d) {
+        add(new Point(coord3d));
+    }
+
     public void addAll(List<Point> points) {
         for (Point p : points)
             add(p);
@@ -210,6 +223,14 @@ public class LineStrip extends AbstractWireframeable {
 
     public void setShowPoints(boolean showPoints) {
         this.showPoints = showPoints;
+    }
+    
+    public boolean isStipple() {
+        return stipple;
+    }
+
+    public void setStipple(boolean stipple) {
+        this.stipple = stipple;
     }
 
     @Override
@@ -277,4 +298,5 @@ public class LineStrip extends AbstractWireframeable {
     protected List<Point> points;
     protected float width;
     protected boolean showPoints = false;
+    protected boolean stipple = false;
 }
