@@ -331,7 +331,7 @@ public class Camera extends AbstractViewportManager {
         if (failOnException)
             throw new RuntimeException(message);
         else
-            Logger.getLogger(Camera.class).warn(message);
+            Logger.getLogger(Camera.class).debug(message);
     }
 
     boolean failOnException = false;

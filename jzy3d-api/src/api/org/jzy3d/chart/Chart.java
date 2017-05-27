@@ -85,8 +85,18 @@ public class Chart {
         view.setChart(this);
     }
     
+    
+    
     /* HELPERS TO PRETTIFY CHARTS */
     
+    public Quality getQuality() {
+        return quality;
+    }
+
+    public void setQuality(Quality quality) {
+        this.quality = quality;
+    }
+
     public Chart black(){
         getView().setBackgroundColor(Color.BLACK);
         getAxeLayout().setGridColor(Color.WHITE);

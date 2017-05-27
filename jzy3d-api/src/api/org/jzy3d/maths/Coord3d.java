@@ -133,6 +133,14 @@ public class Coord3d implements Serializable{
         return this;
     }
 
+    public Coord3d addSelf(float x, float y, float z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+        return this;
+    }
+
+    
     /**
      * Add a value to all components of the current Coord and return the result
      * in a new Coord3d.
@@ -251,22 +259,29 @@ public class Coord3d implements Serializable{
      * Converts the current Coord3d into cartesian coordinates and return the
      * result in a new Coord3d.
      * 
+     * Assume that 
+     * <ul>
+     * <li>X represent azimuth
+     * <li>Y represent elevation
+     * <li>Z represent distance
+     * </ul>
+     * 
      * @return the result Coord3d
      */
     public Coord3d cartesian() {
         return new Coord3d(Math.cos(x) * Math.cos(y) * z, // azimuth
                 Math.sin(x) * Math.cos(y) * z, // elevation
                 Math.sin(y) * z); // range
-        /*
-         * return new Coord3d( Math.sin(x) * Math.cos(y) * z, // azimuth
-         * Math.sin(x) * Math.sin(y) * z, // elevation Math.cos(x) * z); //
-         * range*
-         * 
-         * return new Coord3d( Math.cos(x) * Math.cos(y) * z, // azimuth
-         * Math.sin(x) * Math.cos(y) * z, // elevation Math.sin(y) * z); //
-         * range
-         */
     }
+    
+    public Coord3d cartesianSelf() {
+        x = (float)(Math.cos(x) * Math.cos(y) * z); // azimuth
+        y = (float)(Math.sin(x) * Math.cos(y) * z);// elevation
+        z = (float)(Math.sin(y) * z); // range
+        return this;
+    }
+    
+    
 
     /**
      * Converts the current Coord3d into polar coordinates and return the result
@@ -302,11 +317,39 @@ public class Coord3d implements Serializable{
 
             return new Coord3d(a, e, r);
         }
+    }
+    
+    public Coord3d polarSelf() {
+        double a;
+        double e;
+        double r = Math.sqrt(x * x + y * y + z * z);
+        double d = Math.sqrt(x * x + y * y);
 
-        /*
-         * return new Coord3d( Math.atan(y/x), // azimuth Math.acos(z/r), //
-         * elevation r); // range
-         */
+        // case x=0 and y=0
+        if (d == 0 && z > 0)
+            return new Coord3d(0, Math.PI / 2, r);
+        else if (d == 0 && z <= 0)
+            return new Coord3d(0, -Math.PI / 2, r);
+        // other cases
+        else {
+            // classical case for azimuth
+            if (Math.abs(x / d) < 1)
+                a = Math.acos(x / d) * (y > 0 ? 1 : -1);
+            // special on each pole for azimuth
+            else if (y == 0 && x > 0) // y==0
+                a = 0;
+            else if (y == 0 && x < 0)
+                a = Math.PI;
+            else
+                a = 0;
+
+            e = Math.atan(z / d);
+
+            x = (float)a;
+            y = (float)e;
+            z = (float)r;
+            return this;
+        }
     }
 
     /** Compute the distance between two coordinates. */

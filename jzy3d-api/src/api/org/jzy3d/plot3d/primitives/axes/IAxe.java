@@ -31,4 +31,6 @@ public interface IAxe {
 
     public SpaceTransformer getSpaceTransformer();
     public void setSpaceTransformer(SpaceTransformer spaceTransformer) ;
+
+    public BoundingBox3d getWholeBounds();
 }
