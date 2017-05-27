@@ -147,4 +147,9 @@ public class AxeBase implements IAxe {
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public BoundingBox3d getWholeBounds() {
+        return bbox;
+    }
 }
