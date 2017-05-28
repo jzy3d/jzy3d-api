@@ -45,9 +45,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
      * non ascii caracter will be replaced by a square.
      */
     public TextBitmapRenderer() {
-        super();
-        font = GLUT.BITMAP_HELVETICA_10;
-        fontHeight = 10;
+        this(Font.Helvetica_10);
     }
 
     public TextBitmapRenderer(Font font) {
