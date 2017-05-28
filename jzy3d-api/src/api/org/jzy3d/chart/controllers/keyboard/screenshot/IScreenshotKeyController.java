@@ -19,4 +19,7 @@ public interface IScreenshotKeyController {
 
         public void failedScreenshot(String file, Exception e);
     }
+
+
+		void screenshot(Chart chart) throws IOException;
 }
