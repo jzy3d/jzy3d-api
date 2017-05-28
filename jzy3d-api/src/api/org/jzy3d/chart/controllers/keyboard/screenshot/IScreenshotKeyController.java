@@ -6,17 +6,17 @@ import org.jzy3d.chart.Chart;
 
 public interface IScreenshotKeyController {
 
-	public abstract void screenshot(Chart chart, String filename)
-			throws IOException;
+    public String getFilename();
+    public void setFilename(String filename);
+    
+    public void screenshot(Chart chart, String filename) throws IOException;
 
-	public abstract void screenshot(Chart chart)
-			throws IOException;
+    public void addListener(IScreenshotEventListener listener);
 	
-	
-	public abstract void addListener(IScreenshotEventListener listener);
 
-	public interface IScreenshotEventListener{
+    public interface IScreenshotEventListener {
         public void doneScreenshot(String file);
+
         public void failedScreenshot(String file, Exception e);
     }
 }

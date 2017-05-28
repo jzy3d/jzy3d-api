@@ -14,6 +14,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Normal;
 
 /**
  * Translated from C++ Version: nvModel.h - Model support class
@@ -29,7 +31,7 @@ import org.jzy3d.maths.BoundingBox3d;
  */
 public class OBJFile {
     static Logger logger = Logger.getLogger(OBJFile.class);
-    
+
     /** Enumeration of primitive types */
     public enum PrimType {
         eptNone(0x0), eptPoints(0x1), eptEdges(0x2), eptTriangles(0x4), eptTrianglesWithAdjacency(0x8), eptAll(0xf);
@@ -66,7 +68,8 @@ public class OBJFile {
     };
 
     public boolean loadModelFromFilename(String file) {
-        //URL fileURL = getClass().getClassLoader().getResource(File.separator + file);
+        // URL fileURL = getClass().getClassLoader().getResource(File.separator
+        // + file);
 
         URL fileURL = null;
         try {
@@ -75,10 +78,10 @@ public class OBJFile {
             logger.error(e);
             return false;
         }
-        
+
         return loadModelFromURL(fileURL);
     }
-    
+
     /**
      * This function attempts to determine the type of the filename passed as a
      * parameter. If it understands that file type, it attempts to parse and
@@ -86,7 +89,7 @@ public class OBJFile {
      * recognized and successfully parsed, the function returns true, otherwise
      * it returns false.
      */
-    public boolean loadModelFromURL(URL fileURL) {        
+    public boolean loadModelFromURL(URL fileURL) {
         if (fileURL != null) {
             BufferedReader input = null;
             try {
@@ -98,102 +101,18 @@ public class OBJFile {
                 boolean hasNormals = false;
 
                 while ((line = input.readLine()) != null) {
-                    if(line.isEmpty()){
+                    if (line.isEmpty()) {
                         continue;
                     }
                     switch (line.charAt(0)) {
                     case '#':
                         break;
                     case 'v':
-                        switch (line.charAt(1)) {
-
-                        case ' ':
-                            line = line.substring(line.indexOf(" ") + 1);
-                            // vertex, 3 or 4 components
-                            val[0] = Float.valueOf(line.substring(0, line.indexOf(" ")));
-                            line = line.substring(line.indexOf(" ") + 1);
-                            val[1] = Float.valueOf(line.substring(0, line.indexOf(" ")));
-                            line = line.substring(line.indexOf(" ") + 1);
-                            val[2] = Float.valueOf(line);
-                            positions_.add(val[0]);
-                            positions_.add(val[1]);
-                            positions_.add(val[2]);
-                            break;
-
-                        case 'n':
-                            // normal, 3 components
-                            line = line.substring(line.indexOf(" ") + 1);
-                            val[0] = Float.valueOf(line.substring(0, line.indexOf(" ")));
-                            line = line.substring(line.indexOf(" ") + 1);
-                            val[1] = Float.valueOf(line.substring(0, line.indexOf(" ")));
-                            line = line.substring(line.indexOf(" ") + 1);
-                            val[2] = Float.valueOf(line);
-                            normals_.add(val[0]);
-                            normals_.add(val[1]);
-                            normals_.add(val[2]);
-                            break;
-                        }
+                        parseObjVertex(line, val);
                         break;
-
                     case 'f':
-                        // face
-                        line = line.substring(line.indexOf(" ") + 1);
-
-                        // Remove any additional leading whitespace. The whitespace count
-                        // can vary for different programs, i.e., Right Hemisphere produces
-                        // obj files with 2 spaces. Meshlab produces single spaced files.
-                        while(line.startsWith(" ")){
-                            line = line.substring(1);
-                        }
-
-                        idx[0][0] = Integer.valueOf(line.substring(0, line.indexOf("//"))).intValue();
-                        line = line.substring(line.indexOf("//") + 2);
-                        idx[0][1] = Integer.valueOf(line.substring(0, line.indexOf(" "))).intValue();
-
-                        {
-                            // This face has vertex and normal indices
-
-                            // in .obj, f v1 .... the vertex index used start
-                            // from 1, so -1 here
-                            // remap them to the right spot
-                            idx[0][0] = (idx[0][0] > 0) ? (idx[0][0] - 1) : (positions_.size() - idx[0][0]);
-                            idx[0][1] = (idx[0][1] > 0) ? (idx[0][1] - 1) : (normals_.size() - idx[0][1]);
-
-                            // grab the second vertex to prime
-                            line = line.substring(line.indexOf(" ") + 1);
-                            idx[1][0] = Integer.valueOf(line.substring(0, line.indexOf("//")));
-                            line = line.substring(line.indexOf("//") + 2);
-                            idx[1][1] = Integer.valueOf(line.substring(0, line.indexOf(" ")));
-
-                            // remap them to the right spot
-                            idx[1][0] = (idx[1][0] > 0) ? (idx[1][0] - 1) : (positions_.size() - idx[1][0]);
-                            idx[1][1] = (idx[1][1] > 0) ? (idx[1][1] - 1) : (normals_.size() - idx[1][1]);
-
-                            // grab the third vertex to prime
-                            line = line.substring(line.indexOf(" ") + 1);
-                            idx[2][0] = Integer.valueOf(line.substring(0, line.indexOf("//")));
-                            line = line.substring(line.indexOf("//") + 2);
-                            idx[2][1] = Integer.valueOf(line);
-                            {
-                                // remap them to the right spot
-                                idx[2][0] = (idx[2][0] > 0) ? (idx[2][0] - 1) : (positions_.size() - idx[2][0]);
-                                idx[2][1] = (idx[2][1] > 0) ? (idx[2][1] - 1) : (normals_.size() - idx[2][1]);
-
-                                // add the indices
-                                for (int ii = 0; ii < 3; ii++) {
-                                    pIndex_.add(idx[ii][0]);
-                                    nIndex_.add(idx[ii][1]);
-                                }
-
-                                // prepare for the next iteration, the num 0
-                                // does not change.
-                                idx[1][0] = idx[2][0];
-                                idx[1][1] = idx[2][1];
-                            }
-                            hasNormals = true;
-                        }
+                        hasNormals = parseObjFace(line, idx, hasNormals);
                         break;
-
                     default:
                         break;
                     }
@@ -223,25 +142,202 @@ public class OBJFile {
                 } catch (IOException closee) {
                 }
             }
-        }
-        else{
+        } else {
             logger.error("URL was null");
         }
-            
+
         return false;
     }
 
     /**
-     * This function takes the raw model data in the internal
-     * structures, and attempts to bring it to a format directly
-     * accepted for vertex array style rendering. This means that
-     * a unique compiled vertex will exist for each unique
-     * combination of position, normal, tex coords, etc that are
-     * used in the model. The prim parameter, tells the model
-     * what type of index list to compile. By default it compiles
-     * a simple triangle mesh with no connectivity.
+     * 
+     * v 1.0 0.0 0.0
+     * 
+     */
+
+    /**
+     * Vertex/Normal Format
+     * 
+     * <pre>
+     * v 1.0 0.0 0.0 
+     * vn 0.0 1.0 0.0
+     * 
+     * n : normal
+     * 
+     * </pre>
+     * 
+     * @see https://fr.wikipedia.org/wiki/Objet_3D_%28format_de_fichier%29
+     */
+    public void parseObjVertex(String line, float[] val) {
+        switch (line.charAt(1)) {
+        case ' ':
+            // logger.info(line);
+
+            line = line.substring(line.indexOf(" ") + 1);
+            // vertex, 3 or 4 components
+            val[0] = Float.valueOf(line.substring(0, line.indexOf(" ")));
+            line = line.substring(line.indexOf(" ") + 1);
+            val[1] = Float.valueOf(line.substring(0, line.indexOf(" ")));
+            line = line.substring(line.indexOf(" ") + 1);
+            val[2] = Float.valueOf(line);
+            positions_.add(val[0]);
+            positions_.add(val[1]);
+            positions_.add(val[2]);
+            break;
+
+        case 'n':
+            // normal, 3 components
+            line = line.substring(line.indexOf(" ") + 1);
+            val[0] = Float.valueOf(line.substring(0, line.indexOf(" ")));
+            line = line.substring(line.indexOf(" ") + 1);
+            val[1] = Float.valueOf(line.substring(0, line.indexOf(" ")));
+            line = line.substring(line.indexOf(" ") + 1);
+            val[2] = Float.valueOf(line);
+            normals_.add(val[0]);
+            normals_.add(val[1]);
+            normals_.add(val[2]);
+            break;
+        }
+    }
+
+    /**
+     * Face Format
+     * 
+     * <pre>
+     * f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
+     * 
+     * t : texture
+     * n : normal
+     * 
+     * </pre>
+     * 
+     */
+    public boolean parseObjFace(String line, int[][] idx, boolean hasNormals) {
+        line = line.substring(line.indexOf(" ") + 1);
+
+        // Remove any additional leading whitespace. The whitespace count
+        // can vary for different programs, i.e., Right Hemisphere produces
+        // obj files with 2 spaces. Meshlab produces single spaced files.
+        while (line.startsWith(" ")) {
+            line = line.substring(1);
+        }
+
+        // If following pattern "f  9227//9524 8376//8650 8377//8649"
+        if (ObjFaceFormat.vertexNormal(line)) {
+            idx[0][0] = Integer.valueOf(line.substring(0, line.indexOf("//"))).intValue();
+            line = line.substring(line.indexOf("//") + 2);
+            idx[0][1] = Integer.valueOf(line.substring(0, line.indexOf(" "))).intValue();
+
+            {
+                // This face has vertex and normal indices
+
+                // in .obj, f v1 .... the vertex index used start
+                // from 1, so -1 here
+                // remap them to the right spot
+                idx[0][0] = (idx[0][0] > 0) ? (idx[0][0] - 1) : (positions_.size() - idx[0][0]);
+                idx[0][1] = (idx[0][1] > 0) ? (idx[0][1] - 1) : (normals_.size() - idx[0][1]);
+
+                // grab the second vertex to prime
+                line = line.substring(line.indexOf(" ") + 1);
+                idx[1][0] = Integer.valueOf(line.substring(0, line.indexOf("//")));
+                line = line.substring(line.indexOf("//") + 2);
+                idx[1][1] = Integer.valueOf(line.substring(0, line.indexOf(" ")));
+
+                // remap them to the right spot
+                idx[1][0] = (idx[1][0] > 0) ? (idx[1][0] - 1) : (positions_.size() - idx[1][0]);
+                idx[1][1] = (idx[1][1] > 0) ? (idx[1][1] - 1) : (normals_.size() - idx[1][1]);
+
+                // grab the third vertex to prime
+                line = line.substring(line.indexOf(" ") + 1);
+                idx[2][0] = Integer.valueOf(line.substring(0, line.indexOf("//")));
+                line = line.substring(line.indexOf("//") + 2);
+                idx[2][1] = Integer.valueOf(line);
+                {
+                    // remap them to the right spot
+                    idx[2][0] = (idx[2][0] > 0) ? (idx[2][0] - 1) : (positions_.size() - idx[2][0]);
+                    idx[2][1] = (idx[2][1] > 0) ? (idx[2][1] - 1) : (normals_.size() - idx[2][1]);
+
+                    // add the indices
+                    for (int ii = 0; ii < 3; ii++) {
+                        pIndex_.add(idx[ii][0]);
+                        nIndex_.add(idx[ii][1]);
+                    }
+
+                    // prepare for the next iteration, the num 0
+                    // does not change.
+                    idx[1][0] = idx[2][0];
+                    idx[1][1] = idx[2][1];
+                }
+                hasNormals = true;
+            }
+        }
+
+        // Not following pattern "f  9227//9524 8376//8650 8377//8649"
+        else if (ObjFaceFormat.vertex(line)) {
+            String[] nums = line.split(" ");
+            idx[0][0] = Integer.parseInt(nums[0]); // value
+         // in .obj, f v1 .... the vertex index used start
+            // from 1, so -1 here
+            // remap them to the right spot
+            idx[0][0] = (idx[0][0] > 0) ? (idx[0][0] - 1) : (positions_.size() - idx[0][0]);
+            
+            idx[1][0] = Integer.parseInt(nums[1]);
+            // remap them to the right spot
+            idx[1][0] = (idx[1][0] > 0) ? (idx[1][0] - 1) : (positions_.size() - idx[1][0]);
+
+            idx[2][0] = Integer.parseInt(nums[2]);
+            // remap them to the right spot
+            idx[2][0] = (idx[2][0] > 0) ? (idx[2][0] - 1) : (positions_.size() - idx[2][0]);
+
+            // add the indices
+            for (int ii = 0; ii < 3; ii++) {
+                pIndex_.add(idx[ii][0]);
+            }
+            
+            
+            // prepare for the next iteration, the num 0
+            // does not change.
+            idx[1][0] = idx[2][0];
+
+            // logger.info("FACE - " + line);
+            
+            
+            
+            /*if(autoNormal){
+                Coord3d c1 = new Coord3d(x.getReal(C1, i), y.getReal(C1, i), z.getReal(C1, i));
+                Coord3d c2 = new Coord3d(x.getReal(C2, i), y.getReal(C2, i), z.getReal(C2, i));
+                Coord3d c3 = new Coord3d(x.getReal(C3, i), y.getReal(C3, i), z.getReal(C3, i));
+                Coord3d no = Normal.compute(c1, c2, c3);
+                
+
+                // remap them to the right spot
+                idx[0][1] = (idx[0][1] > 0) ? (idx[0][1] - 1) : (normals_.size() - idx[0][1]);
+                idx[1][1] = (idx[1][1] > 0) ? (idx[1][1] - 1) : (normals_.size() - idx[1][1]);
+                idx[2][1] = (idx[2][1] > 0) ? (idx[2][1] - 1) : (normals_.size() - idx[2][1]);
+                
+                
+                 // add the indices
+                for (int ii = 0; ii < 3; ii++) {
+                    nIndex_.add(idx[ii][1]);
+                }
+            }*/
+        }
+        return hasNormals;
+    }
+
+    /**
+     * This function takes the raw model data in the internal structures, and
+     * attempts to bring it to a format directly accepted for vertex array style
+     * rendering. This means that a unique compiled vertex will exist for each
+     * unique combination of position, normal, tex coords, etc that are used in
+     * the model. The prim parameter, tells the model what type of index list to
+     * compile. By default it compiles a simple triangle mesh with no
+     * connectivity.
      */
     public void compileModel() {
+        
+        //logger.info("expect pIndex.size: " + pIndex_.size() + " Nindex.size:" + nIndex_.size());
+        
         boolean needsTriangles = true;
 
         HashMap<IdxSet, Integer> pts = new HashMap<IdxSet, Integer>();
@@ -296,12 +392,13 @@ public class OBJFile {
     }
 
     /**
-     * Returns the points defining the axis-aligned bounding box containing the model.
+     * Returns the points defining the axis-aligned bounding box containing the
+     * model.
      */
     public BoundingBox3d computeBoundingBox() {
         float[] minVal = new float[3];
         float[] maxVal = new float[3];
-        
+
         if (positions_.isEmpty())
             return null;
 
@@ -321,7 +418,7 @@ public class OBJFile {
             maxVal[1] = Math.max(maxVal[1], y);
             maxVal[2] = Math.max(maxVal[2], z);
         }
-        
+
         return new BoundingBox3d(minVal[0], maxVal[0], minVal[1], maxVal[1], minVal[2], maxVal[2]);
     }
 
@@ -398,6 +495,14 @@ public class OBJFile {
         return openEdges_;
     }
 
+    public String toString() {
+        return "countVertices  =" + getPositionCount() + "  indexSize = " + getIndexCount() + "  vertexSize = " + getCompiledVertexCount() + "  byteOffset = " + getCompiledVertexSize() + "  normalOffset = " + getCompiledNormalOffset() + "  dimensions = " + getPositionSize();
+    }
+
+    
+    /** Will calculate normals if they are missing */
+    protected boolean autoNormal = true;
+    
     protected List<Float> positions_ = new ArrayList<Float>();
     protected List<Float> normals_ = new ArrayList<Float>();
     protected int posSize_;

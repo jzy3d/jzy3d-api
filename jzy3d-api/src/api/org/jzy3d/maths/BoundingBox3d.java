@@ -77,6 +77,23 @@ public class BoundingBox3d {
     /*********************************************************/
 
     /**
+     * Build an array of 8 coordinates indicating the 8 corners of the bounding box
+     * @return
+     */
+    public Coord3d[] corners(){
+        Coord3d[] corners = new Coord3d[8];
+        corners[0] = new Coord3d(xmax, ymax, zmax);
+        corners[1] = new Coord3d(xmin, ymax, zmax);
+        corners[2] = new Coord3d(xmin, ymin, zmax);
+        corners[3] = new Coord3d(xmax, ymax, zmax);
+        corners[4] = new Coord3d(xmax, ymax, zmin);
+        corners[5] = new Coord3d(xmin, ymax, zmin);
+        corners[6] = new Coord3d(xmin, ymin, zmin);
+        corners[7] = new Coord3d(xmax, ymax, zmin);
+        return corners;
+    }
+    
+    /**
      * Initialize the bounding box with Float.MAX_VALUE as minimum value, and
      * -Float.MAX_VALUE as maximum value for each dimension.
      */
@@ -257,11 +274,11 @@ public class BoundingBox3d {
     public BoundingBox3d margin(float margin) {
         BoundingBox3d b = new BoundingBox3d();
         b.xmax = xmax + margin;
-        b.xmin = xmin + margin;
+        b.xmin = xmin - margin;
         b.ymax = ymax + margin;
-        b.ymin = ymin + margin;
+        b.ymin = ymin - margin;
         b.zmax = zmax + margin;
-        b.zmin = zmin + margin;
+        b.zmin = zmin - margin;
         return b;
     }
 
@@ -277,6 +294,10 @@ public class BoundingBox3d {
 
     /*********************************************************/
 
+    /** Return range of X dimension.
+     * 
+     * @see {@link getRange}
+     */
     public Range getXRange() {
         return new Range(xmin, xmax);
     }
@@ -287,6 +308,14 @@ public class BoundingBox3d {
 
     public Range getZRange() {
         return new Range(zmin, zmax);
+    }
+    
+    /** Return range of each dimension.
+     * 
+     * @see {@link getXRange}
+     */
+    public Coord3d getRange(){
+        return new Coord3d(getXRange().getRange(),getYRange().getRange(),getZRange().getRange());
     }
 
     public float getXmin() {

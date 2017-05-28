@@ -14,7 +14,7 @@ public class GraphChartComponentFactory extends ChartComponentFactory{
     static Logger logger = Logger.getLogger(GraphChartComponentFactory.class);
     
     @Override
-    public ICameraMouseController newMouseController(Chart chart){
+    public ICameraMouseController newMouseCameraController(Chart chart){
         ICameraMouseController mouse = null;
         if(!chart.getWindowingToolkit().equals("newt"))
             mouse = newAWTMouseController(chart);
@@ -24,7 +24,7 @@ public class GraphChartComponentFactory extends ChartComponentFactory{
     }
     
     public ICameraMouseController newAWTMouseController(final Chart chart){
-        NewtMousePickingController<String,String> mouse = new NewtMousePickingController<String,String>(chart);
+        NewtMousePickingController mouse = new NewtMousePickingController(chart);
         mouse.getPickingSupport().addObjectPickedListener(new IObjectPickedListener() {
             @Override
             public void objectPicked(List<? extends Object> vertices, PickingSupport picking) {

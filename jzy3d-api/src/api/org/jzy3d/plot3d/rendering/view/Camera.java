@@ -1,13 +1,11 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Grid;
 import org.jzy3d.maths.PolygonArray;

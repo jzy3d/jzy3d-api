@@ -19,7 +19,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
-public class AWTMousePickingController<V, E> extends AbstractCameraController implements MouseListener, MouseWheelListener {
+public class AWTMousePickingController extends AbstractCameraController implements MouseListener, MouseWheelListener, IMousePickingController {
     public AWTMousePickingController() {
         super();
         picking = new PickingSupport();
@@ -27,16 +27,20 @@ public class AWTMousePickingController<V, E> extends AbstractCameraController im
 
     public AWTMousePickingController(Chart chart) {
         super(chart);
+        chart.getCanvas().addMouseController(this);
+
         picking = new PickingSupport();
     }
 
     public AWTMousePickingController(Chart chart, int brushSize) {
         super(chart);
+        chart.getCanvas().addMouseController(this);
         picking = new PickingSupport(brushSize);
     }
 
     public AWTMousePickingController(Chart chart, int brushSize, int bufferSize) {
         super(chart);
+        chart.getCanvas().addMouseController(this);
         picking = new PickingSupport(brushSize, bufferSize);
     }
 
@@ -62,10 +66,12 @@ public class AWTMousePickingController<V, E> extends AbstractCameraController im
 
     /****************/
 
+    @Override
     public PickingSupport getPickingSupport() {
         return picking;
     }
 
+    @Override
     public void setPickingSupport(PickingSupport picking) {
         this.picking = picking;
     }

@@ -11,10 +11,10 @@ import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class Light {
-    public static void resetCounter(){
+    public static void resetCounter() {
         lightCount = 0;
     }
-    
+
     public Light() {
         this(lightCount++, true);
     }
@@ -55,13 +55,7 @@ public class Light {
                     gl.glEnable(GLLightingFunc.GL_LIGHTING);
                 }
 
-                // Actual light source setting TODO: check we really need to
-                // define @ each rendering
-                LightSwitch.enable(gl, lightId);
-                gl.getGL2().glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_POSITION, positionZero, 0);
-                gl.getGL2().glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
-                gl.getGL2().glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
-                gl.getGL2().glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
+                setGLLight(gl);
             } else {
                 // OpenGL ES 2
 
@@ -78,19 +72,95 @@ public class Light {
                     glut.glutSolidCube(representationRadius);
                     gl.glEnable(GLLightingFunc.GL_LIGHTING);
                 }
-                //
-                // // Actual light source setting TODO: check we really need to
-                // // define @ each rendering
-                LightSwitch.enable(gl, lightId);
-
-                GLES2CompatUtils.glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_POSITION, positionZero, 0);
-                GLES2CompatUtils.glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
-                GLES2CompatUtils.glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
-                GLES2CompatUtils.glLightfv(GLLightingFunc.GL_LIGHT0, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
+                
+                setGLESLight(GLLightingFunc.GL_LIGHT0);
 
             }
         } else
             gl.glDisable(GLLightingFunc.GL_LIGHTING);
+    }
+
+    protected void setGLLight(GL gl) {
+        // Actual light source setting TODO: check we really need to
+        // define @ each rendering
+        LightSwitch.enable(gl, lightId);
+        switch (lightId) {
+        case 0:
+            setGLLight(gl, GLLightingFunc.GL_LIGHT0);
+            break;
+        case 1:
+            setGLLight(gl, GLLightingFunc.GL_LIGHT1);
+            break;
+        case (2):
+            setGLLight(gl, GLLightingFunc.GL_LIGHT2);
+            break;
+        case 3:
+            setGLLight(gl, GLLightingFunc.GL_LIGHT3);
+            break;
+        case 4:
+            setGLLight(gl, GLLightingFunc.GL_LIGHT4);
+            break;
+        case 5:
+            setGLLight(gl, GLLightingFunc.GL_LIGHT5);
+            break;
+        case 6:
+            setGLLight(gl, GLLightingFunc.GL_LIGHT6);
+            break;
+        case 7:
+            setGLLight(gl, GLLightingFunc.GL_LIGHT7);
+            break;
+        }
+    }
+    
+    /**
+     * Warning : not tested. LighSwitch to be ported
+     */
+    protected void setGLESLight() {
+        // Actual light source setting TODO: check we really need to
+        // define @ each rendering
+    //LightSwitch.enable(gl, lightId);
+        
+        
+        switch (lightId) {
+        case 0:
+            setGLESLight(GLLightingFunc.GL_LIGHT0);
+            break;
+        case 1:
+            setGLESLight(GLLightingFunc.GL_LIGHT1);
+            break;
+        case (2):
+            setGLESLight(GLLightingFunc.GL_LIGHT2);
+            break;
+        case 3:
+            setGLESLight(GLLightingFunc.GL_LIGHT3);
+            break;
+        case 4:
+            setGLESLight(GLLightingFunc.GL_LIGHT4);
+            break;
+        case 5:
+            setGLESLight(GLLightingFunc.GL_LIGHT5);
+            break;
+        case 6:
+            setGLESLight(GLLightingFunc.GL_LIGHT6);
+            break;
+        case 7:
+            setGLESLight(GLLightingFunc.GL_LIGHT7);
+            break;
+        }
+    }
+
+    protected void setGLESLight(int func) {
+        GLES2CompatUtils.glLightfv(func, GLLightingFunc.GL_POSITION, positionZero, 0);
+        GLES2CompatUtils.glLightfv(func, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
+        GLES2CompatUtils.glLightfv(func, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
+        GLES2CompatUtils.glLightfv(func, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
+    }
+
+    protected void setGLLight(GL gl, int func) {
+        gl.getGL2().glLightfv(func, GLLightingFunc.GL_POSITION, positionZero, 0);
+        gl.getGL2().glLightfv(func, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
+        gl.getGL2().glLightfv(func, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
+        gl.getGL2().glLightfv(func, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
     }
 
     /** Indicates if a square is drawn to show the light position. */

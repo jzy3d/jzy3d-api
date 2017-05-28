@@ -137,7 +137,15 @@ public class Quality {
         this.isAutoSwapBuffer = isAutoSwapBuffer;
     }
     
-    
+    /** Used by a {@link Canvas} to setup pixel ratio. This might be used to avoid mouse pointer errors on Retina display
+     * as most canvas implementation will perform :
+     * 
+     * <code>
+     * if(quality.isPreserveViewportSize())
+            setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE });
+     *  </<code>
+     *  
+     */
     public boolean isPreserveViewportSize() {
         return preserveViewportSize;
     }

@@ -9,6 +9,7 @@ import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -50,6 +51,9 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     protected Quality quality = Quality.Nicest;
     
     protected int colorChannelNumber = 3;
+    
+    protected PolygonMode polygonMode;
+
 
     public DrawableVBO(IGLLoader<DrawableVBO> loader) {
         this.loader = loader;
@@ -108,6 +112,12 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
             enable(gl);
             applyWidth(gl);
             applyQuality(gl);
+            
+            applyPolygonModeFillGL2(gl);
+            
+            if(isPolygonOffsetFillEnable())
+                polygonOffseFillEnable(gl);
+            
             applyVertices(gl);
             disable(gl);
             disableColor(gl);
@@ -126,18 +136,18 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         }
     }
 
-    private void disableColor(GL gl) {
+    protected void disableColor(GL gl) {
         if (hasColorBuffer) {
             gl.getGL2().glDisableClientState(GL2.GL_COLOR_ARRAY);
         }
     }
 
-    private void pointers(GL gl) {
+    protected void pointers(GL gl) {
         gl.getGL2().glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
         gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
     }
 
-    private void color(GL gl) {
+    protected void color(GL gl) {
         if (hasColorBuffer) {
             // int bo = 6 * Buffers.SIZEOF_FLOAT;
             int p = 3 * Buffers.SIZEOF_FLOAT;
@@ -146,22 +156,22 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         }
     }
 
-    private void enable(GL gl) {
+    protected void enable(GL gl) {
         gl.getGL2().glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
         gl.getGL2().glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
     }
 
-    private void disable(GL gl) {
+    protected void disable(GL gl) {
         gl.getGL2().glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
         gl.getGL2().glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
     }
 
-    private void applyVertices(GL gl) {
+    protected void applyVertices(GL gl) {
         gl.getGL2().glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
         doBindGL2(gl);
     }
 
-    private void applyWidth(GL gl) {
+    protected void applyWidth(GL gl) {
         if(geometry==GL.GL_POINTS){
             gl.getGL2().glPointSize(width);
         } else if(geometry==GL.GL_LINES){
@@ -169,7 +179,7 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         }
     }
 
-    private void applyQuality(GL gl) {
+    protected void applyQuality(GL gl) {
         if (quality.isSmoothPolygon()) {
             gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
             gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
@@ -190,6 +200,35 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         } else
             gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
     }
+    
+    protected void applyPolygonModeFillGL2(GL gl) {
+        if(polygonMode==null)
+            return;
+        
+        switch (polygonMode) {
+        case FRONT:
+            gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
+            break;
+        case BACK:
+            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
+            break;
+        case FRONT_AND_BACK:
+            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+            break;
+        default:
+            break;
+        }
+    }
+    
+    protected void polygonOffseFillEnable(GL gl) {
+        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        gl.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
+    }
+
+    protected void polygonOffsetFillDisable(GL gl) {
+        gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+    }
+
 
     protected void doBindGL2(GL gl) {
         gl.getGL2().glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
@@ -202,10 +241,14 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
      */
     public Rotator rotator(boolean start) {
         final Rotate r = new Rotate(25, new Coord3d(0, 0, 1));
+        return rotator(start, r, 10);
+    }
+
+    public Rotator rotator(boolean start, final Rotate r, int sleep) {
         Transform t = new Transform();
         t.add(r);
         setTransformBefore(t);
-        Rotator rotator = new Rotator(10, r);
+        Rotator rotator = new Rotator(sleep, r);
         if(start)
             rotator.start();
         return rotator;
@@ -335,6 +378,42 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 
     /* */
 
+    public PolygonMode getPolygonMode() {
+        return polygonMode;
+    }
+
+    /**
+     * A null polygonMode imply no any call to gl.glPolygonMode(...) at
+     * rendering
+     */
+    public void setPolygonMode(PolygonMode polygonMode) {
+        this.polygonMode = polygonMode;
+    }
+    
+    public boolean isPolygonOffsetFillEnable() {
+        return polygonOffsetFillEnable;
+    }
+
+    public void setPolygonOffsetFillEnable(boolean polygonOffsetFillEnable) {
+        this.polygonOffsetFillEnable = polygonOffsetFillEnable;
+    }
+
+    public float getPolygonOffsetFactor() {
+        return polygonOffsetFactor;
+    }
+
+    public void setPolygonOffsetFactor(float polygonOffsetFactor) {
+        this.polygonOffsetFactor = polygonOffsetFactor;
+    }
+
+    public float getPolygonOffsetUnit() {
+        return polygonOffsetUnit;
+    }
+
+    public void setPolygonOffsetUnit(float polygonOffsetUnit) {
+        this.polygonOffsetUnit = polygonOffsetUnit;
+    }
+
     public Color getColor() {
         return color;
     }
@@ -356,4 +435,9 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
 
     protected boolean hasMountedOnce = false;
     protected Color color = new Color(1f, 0f, 1f, 0.75f);
+    
+    protected boolean polygonOffsetFillEnable = true;
+    protected float polygonOffsetFactor = 1.0f;
+    protected float polygonOffsetUnit = 1.0f;
+
 }

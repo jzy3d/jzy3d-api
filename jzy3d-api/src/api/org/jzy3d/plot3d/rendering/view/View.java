@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.view;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.chart.factories.IChartComponentFactory;
@@ -62,6 +63,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  */
 public class View {
+    protected static Logger LOGGER = Logger.getLogger(View.class);
 
     /**
      * Create a view attached to a Scene, with its own Camera and Axe. The
@@ -736,6 +738,7 @@ public class View {
             gl.glDepthFunc(GL.GL_LEQUAL);
         } else
             gl.glDisable(GL.GL_DEPTH_TEST);
+        //gl.glDepthRangef(n, f);
 
         // Blending
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);

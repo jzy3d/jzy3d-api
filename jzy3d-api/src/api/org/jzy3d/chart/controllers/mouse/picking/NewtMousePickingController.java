@@ -16,145 +16,155 @@ import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
-public class NewtMousePickingController<V, E> extends AbstractCameraController
-		implements MouseListener {
-	public NewtMousePickingController() {
-		super();
-		picking = new PickingSupport();
-	}
+public class NewtMousePickingController extends AbstractCameraController implements MouseListener, IMousePickingController {
+    public NewtMousePickingController() {
+        super();
+        picking = new PickingSupport();
+    }
 
-	public NewtMousePickingController(Chart chart) {
-		super(chart);
-		picking = new PickingSupport();
-	}
+    public NewtMousePickingController(Chart chart) {
+        super(chart);
+        picking = new PickingSupport();
+    }
 
-	public NewtMousePickingController(Chart chart, int brushSize) {
-		super(chart);
-		picking = new PickingSupport(brushSize);
-	}
+    public NewtMousePickingController(Chart chart, int brushSize) {
+        super(chart);
+        picking = new PickingSupport(brushSize);
+    }
 
-	public NewtMousePickingController(Chart chart, int brushSize, int bufferSize) {
-		super(chart);
-		picking = new PickingSupport(brushSize, bufferSize);
-	}
+    public NewtMousePickingController(Chart chart, int brushSize, int bufferSize) {
+        super(chart);
+        picking = new PickingSupport(brushSize, bufferSize);
+    }
 
-	@Override
+    @Override
     public void register(Chart chart) {
-		super.register(chart);
-		this.chart = chart;
-		this.prevMouse = Coord2d.ORIGIN;
-		chart.getCanvas().addMouseController(this);
-	}
+        super.register(chart);
+        this.chart = chart;
+        this.prevMouse = Coord2d.ORIGIN;
+        chart.getCanvas().addMouseController(this);
+    }
 
-	@Override
+    @Override
     public void dispose() {
-		for (Chart c : targets) {
-			c.getCanvas().removeMouseController(this);
-		}
+        for (Chart c : targets) {
+            c.getCanvas().removeMouseController(this);
+        }
 
-		if (threadController != null)
-			threadController.stop();
+        if (threadController != null)
+            threadController.stop();
 
-		super.dispose(); // i.e. target=null
-	}
+        super.dispose(); // i.e. target=null
+    }
 
-	/****************/
+    /* (non-Javadoc)
+     * @see org.jzy3d.chart.controllers.mouse.picking.MousePickingController#getPickingSupport()
+     */
 
-	public PickingSupport getPickingSupport() {
-		return picking;
-	}
+    @Override
+    public PickingSupport getPickingSupport() {
+        return picking;
+    }
 
-	public void setPickingSupport(PickingSupport picking) {
-		this.picking = picking;
-	}
+    /* (non-Javadoc)
+     * @see org.jzy3d.chart.controllers.mouse.picking.MousePickingController#setPickingSupport(org.jzy3d.picking.PickingSupport)
+     */
+    @Override
+    public void setPickingSupport(PickingSupport picking) {
+        this.picking = picking;
+    }
 
-	/****************/
+    /****************/
 
-	@Override
+    @Override
     public void mouseClicked(MouseEvent e) {
-	}
+    }
 
-	@Override
+    @Override
     public void mouseEntered(MouseEvent e) {
-	}
+    }
 
-	@Override
+    @Override
     public void mouseExited(MouseEvent e) {
-	}
+    }
 
-	@Override
+    @Override
     public void mouseReleased(MouseEvent e) {
-	}
+    }
 
-	@Override
+    @Override
     public void mouseDragged(MouseEvent e) {
-	}
+    }
 
-	/** Compute zoom */
-	@Override
+    /** Compute zoom */
+    @Override
     public void mouseWheelMoved(MouseEvent e) {
-		if (threadController != null)
-			threadController.stop();
-		float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
-		zoomX(factor);
-		zoomY(factor);		
-		chart.getView().shoot();
-	}
-		
+        if (threadController != null)
+            threadController.stop();
+        float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
+        zoomX(factor);
+        zoomY(factor);
+        chart.getView().shoot();
+    }
 
-	@Override
+    @Override
     public void mouseMoved(MouseEvent e) {
-		pick(e);
-	}
+        pick(e);
+    }
 
-	@Override
+    @Override
     public void mousePressed(MouseEvent e) {
-		if (handleSlaveThread(e))
-			return;
-		pick(e);
-	}
-	
+        if (handleSlaveThread(e))
+            return;
+        pick(e);
+    }
 
-	public void pick(MouseEvent e) {
-		int yflip = -e.getY() + targets.get(0).getCanvas().getRendererHeight();
-		prevMouse.x = e.getX();
-		prevMouse.y = e.getY();// yflip;
-		View view = targets.get(0).getView();
-		prevMouse3d = view.projectMouse(e.getX(), yflip);
+    protected void pick(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY();
+        
+        pick(x, y);
+    }
 
-		GL gl = chart().getView().getCurrentGL();
-		Graph graph = chart().getScene().getGraph();
+    protected void pick(int x, int y) {
+        int yflip = -y + targets.get(0).getCanvas().getRendererHeight();
+        prevMouse.x = x;
+        prevMouse.y = y;// yflip;
+        View view = targets.get(0).getView();
+        prevMouse3d = view.projectMouse(x, yflip);
 
-		// will trigger vertex selection event to those subscribing to
-		// PickingSupport.
-		picking.pickObjects(gl, glu, view, graph, new IntegerCoord2d(e.getX(),
-				yflip));
-	}
+        GL gl = chart().getView().getCurrentGL();
+        Graph graph = chart().getScene().getGraph();
 
-	public boolean handleSlaveThread(MouseEvent e) {
-		if (NewtMouseUtilities.isDoubleClick(e)) {
-			if (threadController != null) {
-				threadController.start();
-				return true;
-			}
-		}
-		if (threadController != null)
-			threadController.stop();
-		return false;
-	}
+        // will trigger vertex selection event to those subscribing to
+        // PickingSupport.
+        picking.pickObjects(gl, glu, view, graph, new IntegerCoord2d(x, yflip));
+    }
+    
+    public boolean handleSlaveThread(MouseEvent e) {
+        if (NewtMouseUtilities.isDoubleClick(e)) {
+            if (threadController != null) {
+                threadController.start();
+                return true;
+            }
+        }
+        if (threadController != null)
+            threadController.stop();
+        return false;
+    }
 
-	/**********************/
+    /**********************/
 
-	protected float factor = 1;
-	protected float lastInc;
-	protected Coord3d mouse3d;
-	protected Coord3d prevMouse3d;
-	protected PickingSupport picking;
-	protected GLU glu = new GLU();
+    protected float factor = 1;
+    protected float lastInc;
+    protected Coord3d mouse3d;
+    protected Coord3d prevMouse3d;
+    protected PickingSupport picking;
+    protected GLU glu = new GLU();
 
-	protected Chart chart;
+    protected Chart chart;
 
-	protected Coord2d prevMouse;
-	protected CameraThreadController threadController;
+    protected Coord2d prevMouse;
+    protected CameraThreadController threadController;
 
 }

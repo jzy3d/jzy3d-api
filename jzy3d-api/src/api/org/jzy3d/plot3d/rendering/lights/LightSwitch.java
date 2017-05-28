@@ -15,7 +15,7 @@ public class LightSwitch {
 			case 5: gl.glEnable(GLLightingFunc.GL_LIGHT5); break;
 			case 6: gl.glEnable(GLLightingFunc.GL_LIGHT6); break;
 			case 7: gl.glEnable(GLLightingFunc.GL_LIGHT7); break;
-			default: throw new IllegalArgumentException("light id must belong to [0;7]");
+			default: throw new IllegalArgumentException("light id must belong to [0;7]. Having " + lightId);
 		}
 	}
 	
@@ -29,7 +29,7 @@ public class LightSwitch {
 			case 5: gl.glDisable(GLLightingFunc.GL_LIGHT5); break;
 			case 6: gl.glDisable(GLLightingFunc.GL_LIGHT6); break;
 			case 7: gl.glDisable(GLLightingFunc.GL_LIGHT7); break;
-			default: throw new IllegalArgumentException("light id must belong to [0;7]");
+			default: throw new IllegalArgumentException("light id must belong to [0;7]. Having " + lightId);
 		}
 	}
 }

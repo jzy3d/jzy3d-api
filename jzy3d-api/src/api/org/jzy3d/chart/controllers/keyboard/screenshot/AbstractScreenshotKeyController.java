@@ -17,13 +17,7 @@ public class AbstractScreenshotKeyController extends AbstractController implemen
 	protected Chart chart;
 	protected String outputFile;
 	protected List<IScreenshotEventListener> listeners = new ArrayList<IScreenshotEventListener>(1);
-
-	/*
-	 * public AbstractScreenshotKeyController() { super(); }
-	 * 
-	 * public AbstractScreenshotKeyController(Chart chart) { super(chart); }
-	 */
-
+    
 	public AbstractScreenshotKeyController(Chart chart, String outputFile) {
 		super(chart);
 		register(chart);
@@ -79,6 +73,16 @@ public class AbstractScreenshotKeyController extends AbstractController implemen
 		for (IScreenshotEventListener listener : listeners) {
 			listener.failedScreenshot(file, e);
 		}
+    }
+
+    @Override
+    public String getFilename() {
+        return outputFile;
+    }
+
+    @Override
+    public void setFilename(String filename) {
+        outputFile = filename;
 	}
 
 }

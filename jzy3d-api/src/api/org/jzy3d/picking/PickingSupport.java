@@ -31,12 +31,15 @@ import com.jogamp.opengl.glu.GLU;
  *
  */
 public class PickingSupport {
+    public static int BRUSH_SIZE = 10;
+    public static int BUFFER_SIZE = 2048;
+    
 	public PickingSupport() {
-		this(10);
+		this(BRUSH_SIZE);
 	}
 
 	public PickingSupport(int brushSize) {
-		this(brushSize, 2048);
+		this(brushSize, BUFFER_SIZE);
 	}
 
 	public PickingSupport(int brushSize, int bufferSize) {

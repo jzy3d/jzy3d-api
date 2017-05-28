@@ -11,6 +11,7 @@ import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -111,7 +112,14 @@ public class Chart {
         view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
         return this;
     }
-    
+
+    public Chart add(List<? extends AbstractDrawable> drawables) {
+        for(AbstractDrawable drawable: drawables){
+            getScene().getGraph().add(drawable, false);
+        }
+        getView().updateBounds();
+        return this;
+    }
     public Chart add(AbstractDrawable drawable) {
         getScene().getGraph().add(drawable);
         return this;
@@ -169,8 +177,10 @@ public class Chart {
 
     public void dispose() {
         clearControllerList();
-        canvas.dispose();
-        scene.dispose(); // view is disposed by scene
+        if(canvas!=null)
+            canvas.dispose();
+        if(scene!=null)
+            scene.dispose(); // view is disposed by scene
         canvas = null;
         scene = null;
     }
@@ -208,16 +218,20 @@ public class Chart {
 
     /* */
 
-    public ICameraMouseController addMouseController() {
-        return getFactory().newMouseController(this);
+    public ICameraMouseController addMouseCameraController() {
+        return getFactory().newMouseCameraController(this);
     }
 
-    public ICameraKeyController addKeyController() {
-        return getFactory().newKeyController(this);
+    public IMousePickingController addMousePickingController(int clickWidth) {
+        return getFactory().newMousePickingController(this, clickWidth);
     }
 
-    public IScreenshotKeyController addScreenshotKeyController() {
-        return getFactory().newScreenshotKeyController(this);
+    public ICameraKeyController addKeyboardCameraController() {
+        return getFactory().newKeyboardCameraController(this);
+    }
+
+    public IScreenshotKeyController addKeyboardScreenshotController() {
+        return getFactory().newKeyboardScreenshotController(this);
     }
 
     public IFrame open(String title, int width, int height) {
