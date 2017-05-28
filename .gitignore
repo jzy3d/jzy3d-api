@@ -15,3 +15,5 @@ target
 */.settings
 
 jzy3d-jdt-core/.classpath
+
+jzy3d-api/data/objfiles/dragon.obj
