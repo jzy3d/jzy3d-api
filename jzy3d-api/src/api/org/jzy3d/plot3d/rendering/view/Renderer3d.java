@@ -62,9 +62,9 @@ public class Renderer3d implements GLEventListener {
     public void init(GLAutoDrawable canvas) {
         if (canvas != null && canvas.getGL() != null && canvas.getGL().getGL2() != null && view != null) {
             if (debugGL)
-                canvas.getGL().getContext().setGL(GLPipelineFactory.create("javax.media.opengl.Debug", null, canvas.getGL(), null));
+                canvas.getGL().getContext().setGL(GLPipelineFactory.create("com.jogamp.opengl.Debug", null, canvas.getGL(), null));
             if (traceGL)
-                canvas.getGL().getContext().setGL(GLPipelineFactory.create("javax.media.opengl.Trace", null, canvas.getGL(), new Object[] { System.err }));
+                canvas.getGL().getContext().setGL(GLPipelineFactory.create("com.jogamp.opengl.Trace", null, canvas.getGL(), new Object[] { System.err }));
 
             view.init(canvas.getGL());
         }
