@@ -15,35 +15,65 @@ API and modules
 Application will require <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/api">jzy3d-api</a> <i>plus</i> classes to address a specific windowing environement (AWT, SWT, Swing). The API itself has no dependency to AWT, making it buildable for Android environement.
 
 Code specific to a target windowing environement is made available through modules (or sometime source folder separation):
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/awt">jzy3d-awt</a> : provides AWT canvases (source folder separation but part of jzy3d-api build)
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/swing">jzy3d-swing</a> : provides Swing canvases  (source folder separation but jzy3d-api build)
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/awt">jzy3d-api/awt</a> : provides AWT canvases (source folder separation but part of jzy3d-api build)
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/swing">jzy3d-api/swing</a> : provides Swing canvases  (source folder separation but jzy3d-api build)
 - <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-swt">jzy3d-swt</a> : provides a wrapper on AWT canvas to embed a chart in a SWT application.
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-javafx">jzy3d-javafx</a> : render in Java FX applications.
 - <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jdt-core">jzy3d-jdt-core</a> : a clone of JDT, for Java Delaunay Triangulation
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-svm-mapper">jzy3d-svm-mapper</a> : fit a surface out of set of points using an SVM regression model
+- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tools-libsvm">jzy3d-tools-libsvm</a> : a wrapper on LibSVM
 
-The API has optional extensions bundled by a parent and several children module stored in separated Git repositories:
-- <a href="https://github.com/jzy3d/jzy3d-extensions">jzy3d-extensions</a> : gather 5 optional modules that may be checkout separately as well (Depth peeling, Graphs, G2D, )
+
+Additional modules kept separated demonstrate side works on Jzy3d
+- <a href="https://github.com/jzy3d/bigpicture">jzy3d-bigture</a> : drivers to few big data storage to draw massive amount of points
+- <a href="https://github.com/jzy3d/jzy3d-graphs">jzy3d-graph</a> : 3d graphs layout and rendering using Gephi toolkit
+- <a href="https://github.com/jzy3d/jzy3d-spectro">jzy3d-spectro</a> : 3d spectrogram
+
 
 
 Jzy3d Maven Repository
 -----------------------------------
-- Release versions WILL stand on maven central
-- Snapshot versions stand on Jzy3d maven repository:
-<pre>
-<code>
-&lt;repositories&gt;
-  &lt;repository&gt;
-	 &lt;id&gt;jzy3d-snapshots&lt;/id&gt;
-	 &lt;name&gt;Jzy3d Snapshots&lt;/name&gt;
-	 &lt;url&gt;http://maven.jzy3d.org/snapshots &lt;/url&gt;
-  &lt;/repository&gt;
-  &lt;repository&gt;
-	 &lt;id&gt;jzy3d-releases&lt;/id&gt;
-	 &lt;name&gt;Jzy3d Snapshots&lt;/name&gt;
-	 &lt;url&gt;http://maven.jzy3d.org/releases &lt;/url&gt;
-  &lt;/repository&gt;
-&lt;/repositories&gt;
-</code>
-</pre>
+- To add Jzy3d to your project
+
+  release
+  <pre>
+  <code>
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.jzy3d&lt;/groupId&gt;
+    &lt;artifactId&gt;jzy3d-api&lt;/artifactId&gt;
+    &lt;version&gt;1.0.1-SNAPSHOT&lt;/version&gt;
+  &lt;/dependency&gt;
+  </code>
+  </pre>
+ snapshot
+  <pre>
+  <code>
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.jzy3d&lt;/groupId&gt;
+    &lt;artifactId&gt;jzy3d-api&lt;/artifactId&gt;
+    &lt;version&gt;1.0.1-SNAPSHOT&lt;/version&gt;
+  &lt;/dependency&gt;
+  </code>
+  </pre>
+
+
+- Maven artifacts are stored there:
+  <pre>
+  <code>
+  &lt;repositories&gt;
+    &lt;repository&gt;
+  	 &lt;id&gt;jzy3d-snapshots&lt;/id&gt;
+  	 &lt;name&gt;Jzy3d Snapshots&lt;/name&gt;
+  	 &lt;url&gt;http://maven.jzy3d.org/snapshots &lt;/url&gt;
+    &lt;/repository&gt;
+    &lt;repository&gt;
+  	 &lt;id&gt;jzy3d-releases&lt;/id&gt;
+  	 &lt;name&gt;Jzy3d Releases&lt;/name&gt;
+  	 &lt;url&gt;http://maven.jzy3d.org/releases &lt;/url&gt;
+    &lt;/repository&gt;
+  &lt;/repositories&gt;
+  </code>
+  </pre>
 
 Building the projects with Maven
 -----------------------------------

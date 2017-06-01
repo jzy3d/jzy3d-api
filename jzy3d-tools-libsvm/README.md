@@ -1,8 +1,6 @@
 jzy3d-tools-libsvm
 ===================
 
-This project is part of a <a href="https://github.com/jzy3d/jzy3d-master">multi-modules project</a>
-
 A clone of http://www.csie.ntu.edu.tw/~cjlin/libsvm/
 
 Contains:
