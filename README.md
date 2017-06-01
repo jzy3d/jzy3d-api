@@ -25,7 +25,7 @@ Code specific to a target windowing environement is made available through modul
 
 
 Additional modules kept separated demonstrate side works on Jzy3d
-- <a href="https://github.com/jzy3d/bigpicture">jzy3d-bigture</a> : drivers to few big data storage to draw massive amount of points
+- <a href="https://github.com/jzy3d/bigpicture">jzy3d-bigpicture</a> : drivers to few big data storage to draw massive amount of points
 - <a href="https://github.com/jzy3d/jzy3d-graphs">jzy3d-graph</a> : 3d graphs layout and rendering using Gephi toolkit
 - <a href="https://github.com/jzy3d/jzy3d-spectro">jzy3d-spectro</a> : 3d spectrogram
 
