@@ -41,7 +41,7 @@ Jzy3d Maven Repository
   &lt;dependency&gt;
     &lt;groupId&gt;org.jzy3d&lt;/groupId&gt;
     &lt;artifactId&gt;jzy3d-api&lt;/artifactId&gt;
-    &lt;version&gt;1.0.1-SNAPSHOT&lt;/version&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
   &lt;/dependency&gt;
   </code>
   </pre>
