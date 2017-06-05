@@ -5,6 +5,7 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Coord3ds;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -41,6 +42,10 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
         setColor(rgb);
     }
 
+    public Scatter(Coord3ds coords) {
+        this(coords.coordsArray(), coords.colorsArray());
+    }
+    
     public Scatter(Coord3d[] coordinates, Color[] colors) {
         this(coordinates, colors, 1.0f);
     }
