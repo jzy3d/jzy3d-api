@@ -83,6 +83,15 @@ public class Color {
 		return this;
 	}
 	
+	   public Color mulSelf(float ratio){
+	        this.r *= ratio;
+            this.g *= ratio;
+            this.b *= ratio;
+            return this;
+	    }
+
+	
+	
 	/** Return the hexadecimal representation of this color.*/
 	public String toHex(){
 		String hexa = "#";

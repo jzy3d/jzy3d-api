@@ -58,7 +58,9 @@ public abstract class Abstract3dDemo {
     }
 
     protected static Chart getRegressionChart(SvmMapper mapper, Coord3d[] values) {
-        Chart chart = new AWTChart(Quality.Advanced);
+        Quality q = Quality.Advanced;
+        q.setSmoothPoint(true);
+        Chart chart = new AWTChart(q);
 
         // shape
         BoundingBox3d b = Conversion.getBounds(values);
@@ -75,7 +77,7 @@ public abstract class Abstract3dDemo {
     /* 3d OBJECTS GENERATION */
 
     public static Scatter loadScatter(Chart chart, Coord3d[] coords) {
-        Scatter scatter = new Scatter(coords, Color.BLACK, 5);
+        Scatter scatter = new Scatter(coords, Color.GREEN.mulSelf(1.2f), 20);
         chart.getScene().getGraph().add(scatter);
         return scatter;
     }
