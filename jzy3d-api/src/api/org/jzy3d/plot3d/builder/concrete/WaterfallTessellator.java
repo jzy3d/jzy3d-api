@@ -9,6 +9,11 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.TesselatedPolygon;
 import org.jzy3d.plot3d.primitives.WaterfallComposite;
 
+/**
+ * Build a drawable Waterfall using <a href="">Matlab style</a>
+ * 
+ * @author Jacob Filik
+ */
 public class WaterfallTessellator extends Tessellator {
 	
 	@Override
