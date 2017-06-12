@@ -248,9 +248,20 @@ public class Chart {
         return open(title, new Rectangle(0, 0, width, height));
     }
 
+    /**
+     * Open the frame if it was not opened before
+     * 
+     * @param title
+     * @param rect
+     * @return
+     */
     public IFrame open(String title, Rectangle rect) {
-        return getFactory().newFrame(this, rect, title);
+        if(frame==null){
+            frame = getFactory().newFrame(this, rect, title);
+        }
+        return frame;
     }
+    IFrame frame = null;
 
     /**
      * Add a {@link AbstractCameraController} to this {@link Chart}. Warning:
