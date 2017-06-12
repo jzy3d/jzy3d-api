@@ -12,9 +12,7 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalTessellator;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalTessellatorLog;
 import org.jzy3d.plot3d.builder.concrete.RingTessellator;
-import org.jzy3d.plot3d.builder.concrete.WaterfallTessellator;
 import org.jzy3d.plot3d.builder.delaunay.DelaunayTessellator;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -44,11 +42,6 @@ public class Builder {
 	    DelaunayTessellator tesselator = new DelaunayTessellator();
 	    return (Shape) tesselator.build(coordinates);
     }
-	
-	public static Shape buildWaterfall(float[] x, float[] y, float[] z) {
-		WaterfallTessellator t = new WaterfallTessellator();
-		return t.build(x,y,z);
-	}
 		
 	/* BIG SURFACE */
 	
