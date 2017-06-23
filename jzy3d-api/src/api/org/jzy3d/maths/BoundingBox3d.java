@@ -109,6 +109,10 @@ public class BoundingBox3d {
     public boolean isReset() {
         return xmin == Float.MAX_VALUE && xmax == -Float.MAX_VALUE && ymin == Float.MAX_VALUE && ymax == -Float.MAX_VALUE && zmin == Float.MAX_VALUE && zmax == -Float.MAX_VALUE;
     }
+    
+    public boolean isPoint() {
+        return xmin == xmax && ymin == ymax && zmin == zmax;
+    }
 
     public boolean valid() {
         return (xmin <= xmax && ymin <= ymax && zmin <= zmax);

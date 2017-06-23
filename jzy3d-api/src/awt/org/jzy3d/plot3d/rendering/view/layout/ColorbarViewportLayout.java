@@ -9,7 +9,6 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.plot2d.rendering.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
-import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -26,9 +25,8 @@ public class ColorbarViewportLayout implements IViewportLayout{
     
     @Override
     public void update(Chart chart) {
-        final Scene scene = chart.getScene();
         final ICanvas canvas = chart.getCanvas();
-        final List<ILegend> list = scene.getGraph().getLegends();
+        final List<ILegend> list = getLegends(chart);
         
         computeSeparator(canvas, list);
         sceneViewPort = ViewportBuilder.column(canvas, 0, screenSeparator);
@@ -62,9 +60,7 @@ public class ColorbarViewportLayout implements IViewportLayout{
     
     protected void renderLegends(GL gl, GLU glu, Chart chart){
         if (hasMeta){
-            Scene scene = chart.getScene();
-
-            renderLegends(gl, glu, screenSeparator, 1.0f, scene.getGraph().getLegends(), chart.getCanvas());
+            renderLegends(gl, glu, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
         }
     }
     
@@ -95,6 +91,10 @@ public class ColorbarViewportLayout implements IViewportLayout{
             CanvasAWT pencil = null;
         };
         view.addRenderer2d(layoutBorder);
+    }
+    
+    protected List<ILegend> getLegends(Chart chart){
+        return chart.getScene().getGraph().getLegends();
     }
     
     protected Rectangle zone1 = new Rectangle(0, 0, 0, 0);
