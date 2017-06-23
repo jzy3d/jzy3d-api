@@ -13,6 +13,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
+import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -45,6 +46,10 @@ public class AWTView extends ChartView {
 
     @Override
     public void renderAxeBox(GL gl, GLU glu) {
+        renderAxeBox(gl, glu, cam, scene, axe, scaling, axeBoxDisplayed);
+    }
+    
+    public void renderAxeBox(GL gl, GLU glu, Camera camera, Scene scene, IAxe axe, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
             if (gl.isGL2()) {
                 gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
@@ -54,7 +59,7 @@ public class AWTView extends ChartView {
             scene.getLightSet().disable(gl);
 
             axe.setScale(scaling);
-            axe.draw(gl, glu, cam);
+            axe.draw(gl, glu, camera);
             if (DISPLAY_AXE_WHOLE_BOUNDS) { // for debug
                 AxeBox abox = (AxeBox) axe;
                 BoundingBox3d box = abox.getWholeBounds();
@@ -62,7 +67,7 @@ public class AWTView extends ChartView {
                 p.setFaceDisplayed(false);
                 p.setWireframeColor(Color.MAGENTA);
                 p.setWireframeDisplayed(true);
-                p.draw(gl, glu, cam);
+                p.draw(gl, glu, camera);
             }
 
             scene.getLightSet().enableLightIfThereAreLights(gl);

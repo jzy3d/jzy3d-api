@@ -14,8 +14,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Normal;
 
 /**
  * Translated from C++ Version: nvModel.h - Model support class

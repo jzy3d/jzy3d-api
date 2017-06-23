@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer.Font;
 
 import com.jogamp.opengl.util.Animator;
 
