@@ -296,8 +296,9 @@ public class Graph {
      * those that have a defined bounding box.
      */
     public synchronized BoundingBox3d getBounds() {
-        if (components.size() == 0)
+        if (components.size() == 0){
             return new BoundingBox3d(0, 0, 0, 0, 0, 0);
+        }
         else {
             BoundingBox3d box = new BoundingBox3d();
 

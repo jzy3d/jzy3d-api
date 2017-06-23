@@ -617,6 +617,10 @@ public class View {
         boundmode = ViewBoundMode.MANUAL;
         lookToBox(bounds);
     }
+    
+    protected Coord3d squarify() {
+        return squarify(scene, boundmode, viewbounds, spaceTransformer);
+    }
 
     /**
      * Return a 3d scaling factor that allows scaling the scene into a square
@@ -627,7 +631,7 @@ public class View {
      * 
      * @return a scaling factor for each dimension.
      */
-    protected Coord3d squarify() {
+    protected Coord3d squarify(Scene scene, ViewBoundMode boundmode, BoundingBox3d viewbounds, SpaceTransformer spaceTransformer) {
         // Get the view bounds
         BoundingBox3d bounds;
         if (boundmode == ViewBoundMode.AUTO_FIT)
@@ -708,18 +712,20 @@ public class View {
         initQuality(gl);
         initLights(gl);
         initResources(gl);
-
+        initBounds(scene, viewbounds, initBounds);
+        fireViewLifecycleHasInit(null);
+    }
+    
+    protected void initBounds(Scene scene, BoundingBox3d viewbounds, BoundingBox3d initBounds){
         if (viewbounds == null) {
             if (initBounds == null)
-                setBoundManual(getScene().getGraph().getBounds());
+                setBoundManual(scene.getGraph().getBounds());
             else
                 setBoundManual(initBounds);
             // boundmode = ViewBoundMode.AUTO_FIT;
         } else {
             lookToBox(viewbounds);
         }
-
-        fireViewLifecycleHasInit(null);
     }
 
     public BoundingBox3d getInitBounds() {
@@ -786,6 +792,10 @@ public class View {
     }
 
     public void initLights(GL gl) {
+        initLights(gl, scene);
+    }
+    
+    public void initLights(GL gl, Scene scene) {
         // Init light
         scene.getLightSet().init(gl);
         scene.getLightSet().enableLightIfThereAreLights(gl);
@@ -880,8 +890,12 @@ public class View {
     }
 
     public Coord3d computeSceneScaling() {
+        return computeSceneScaling(scene, squared, boundmode, viewbounds, spaceTransformer);
+    }
+    
+    public Coord3d computeSceneScaling(Scene scene, boolean squared, ViewBoundMode boundmode, BoundingBox3d viewbounds, SpaceTransformer spaceTransformer) {
         if (squared)
-            return squarify();
+            return squarify(scene, boundmode, viewbounds, spaceTransformer);
         else
             return Coord3d.IDENTITY.clone();
     }
@@ -893,20 +907,36 @@ public class View {
     }
 
     public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled) {
+        updateCamera(gl, glu, viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam, cameraMode, factorViewPointDistance, center, scaling);
+    }
+    
+    public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam, CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
         viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
-        cam.setTarget(computeCameraTarget());
-        cam.setUp(computeCameraUpAndTriggerEvents());
-        cam.setEye(computeCameraEye(cam.getTarget()));
+        
+        cam.setTarget(computeCameraTarget(center, scaling));
+        cam.setUp(computeCameraUpAndTriggerEvents(viewpoint));
+        cam.setEye(computeCameraEye(cam.getTarget(), viewmode, viewpoint));
+        
         computeCameraRenderingSphereRadius(gl, glu, viewport, bounds);
+        
         cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
     }
 
     public Coord3d computeCameraTarget() {
-        return center.mul(scaling);
+        return computeCameraTarget(center, scaling);
+    }
+    
+    public Coord3d computeCameraEye(Coord3d target) {
+        return computeCameraEye(target, viewmode, viewpoint);
     }
 
-    public Coord3d computeCameraEye(Coord3d target) {
+
+    public Coord3d computeCameraTarget(Coord3d center, Coord3d scaling) {
+        return center.mul(scaling);
+    }
+    
+    public Coord3d computeCameraEye(Coord3d target, ViewPositionMode viewmode, Coord3d viewpoint) {
         Coord3d eye;
         if (viewmode == ViewPositionMode.FREE) {
             eye = computeCameraEyeFree(viewpoint, target);
@@ -943,6 +973,10 @@ public class View {
     }
 
     public Coord3d computeCameraUpAndTriggerEvents() {
+        return computeCameraUpAndTriggerEvents(viewpoint);
+    }
+    
+    public Coord3d computeCameraUpAndTriggerEvents(Coord3d viewpoint) {
         Coord3d up;
 
         if (Math.abs(viewpoint.y) == (float) Math.PI / 2) {
@@ -989,11 +1023,22 @@ public class View {
     }
 
     public void renderAxeBox(GL gl, GLU glu) {
-        if (axeBoxDisplayed) {
+        /*if (axeBoxDisplayed) {
             glModelView(gl);
             scene.getLightSet().disable(gl);
             axe.setScale(scaling);
             axe.draw(gl, glu, cam);
+            scene.getLightSet().enableLightIfThereAreLights(gl);
+        }*/
+        renderAxeBox(gl, glu, axe, scene, cam, scaling, axeBoxDisplayed);
+    }
+    
+    public void renderAxeBox(GL gl, GLU glu, IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
+        if (axeBoxDisplayed) {
+            glModelView(gl);
+            scene.getLightSet().disable(gl);
+            axe.setScale(scaling);
+            axe.draw(gl, glu, camera);
             scene.getLightSet().enableLightIfThereAreLights(gl);
         }
     }
@@ -1011,6 +1056,10 @@ public class View {
     }
 
     public void renderSceneGraph(GL gl, GLU glu, boolean light) {
+        renderSceneGraph(gl, glu, light, cam, scene, scaling);
+    }
+    
+    public void renderSceneGraph(GL gl, GLU glu, boolean light, Camera camera, Scene scene, Coord3d scaling) {
         if (light) {
             scene.getLightSet().apply(gl, scaling);
             // gl.glEnable(GL2.GL_LIGHTING);
@@ -1020,7 +1069,7 @@ public class View {
 
         Transform transform = new Transform(new Scale(scaling));
         scene.getGraph().setTransform(transform);
-        scene.getGraph().draw(gl, glu, cam);
+        scene.getGraph().draw(gl, glu, camera);
     }
 
     public void renderOverlay(GL gl) {

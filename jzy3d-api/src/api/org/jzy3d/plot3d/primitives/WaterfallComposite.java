@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
+import org.jzy3d.plot3d.builder.concrete.WaterfallTessellator;
 
 /**
  * A drawable Waterfall using <a href="">Matlab style</a>
