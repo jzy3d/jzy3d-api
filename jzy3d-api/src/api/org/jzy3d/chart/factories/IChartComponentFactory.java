@@ -7,6 +7,7 @@ import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IBoundingPolicy;
@@ -46,6 +47,7 @@ public interface IChartComponentFactory {
     public IMousePickingController newMousePickingController(Chart chart, int clickWidth);
     public ICameraKeyController newKeyboardCameraController(Chart chart);
     public IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
+    public CameraThreadController newCameraThreadController(Chart chart);
     
     public IFrame newFrame(Chart chart);
     public IFrame newFrame(Chart chart, Rectangle bounds, String title);
@@ -64,5 +66,7 @@ public interface IChartComponentFactory {
     public static enum Toolkit {
         awt, swing, newt, offscreen, swt_newt
     }
+
+
 
 }
