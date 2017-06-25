@@ -199,7 +199,7 @@ public class Graph {
 
     protected TicToc t = new TicToc();
 
-    protected synchronized void draw(GL gl, GLU glu, Camera camera, List<AbstractDrawable> components, boolean sort) {
+    public synchronized void draw(GL gl, GLU glu, Camera camera, List<AbstractDrawable> components, boolean sort) {
         glMatrixMode(gl);
         if (!sort) {
             drawSimple(gl, glu, camera, components);
