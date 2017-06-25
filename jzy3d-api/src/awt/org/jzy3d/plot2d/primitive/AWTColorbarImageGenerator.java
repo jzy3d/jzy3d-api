@@ -44,6 +44,10 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator impleme
 			return null;
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphic = image.createGraphics();
+		
+		graphic.setColor(ColorAWT.toAWT(Color.WHITE));
+        graphic.fillRect(0, 0, width, height);
+		
 		configureText(graphic);
 		drawBackground(width, height, graphic);
 		drawBarColors(height, barWidth, graphic);

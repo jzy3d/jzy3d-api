@@ -19,6 +19,7 @@ import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Dimension;
@@ -166,6 +167,13 @@ public class ChartComponentFactory implements IChartComponentFactory {
         });
         return screenshot;
     }
+    
+    @Override
+    public CameraThreadController newCameraThreadController(Chart chart){
+        return new CameraThreadController(chart);
+    }
+    
+
 
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 

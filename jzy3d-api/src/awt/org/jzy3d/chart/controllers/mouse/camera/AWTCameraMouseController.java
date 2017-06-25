@@ -21,7 +21,7 @@ public class AWTCameraMouseController extends AbstractCameraController implement
 
 	public AWTCameraMouseController(Chart chart) {
 		register(chart);
-		addSlaveThreadController(new CameraThreadController(chart));
+		addSlaveThreadController(chart.getFactory().newCameraThreadController(chart));
 	}
 
 	@Override
