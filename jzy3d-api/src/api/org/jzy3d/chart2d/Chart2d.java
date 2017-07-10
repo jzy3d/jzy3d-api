@@ -53,6 +53,7 @@ public class Chart2d extends AWTChart {
         if (!series.keySet().contains(name)) {
             serie = factory.newSerie(name, type);
             addDrawable(serie.getDrawable());
+            series.put(name,serie);
         } else {
             serie = series.get(name);
         }
