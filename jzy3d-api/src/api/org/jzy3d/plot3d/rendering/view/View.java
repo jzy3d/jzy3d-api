@@ -867,7 +867,7 @@ public class View {
         updateCamera(gl, glu, viewport, scaling);
         renderAxeBox(gl, glu);
         renderSceneGraph(gl, glu);
-        renderAnnotations(gl, glu);
+        renderAnnotations(gl, glu, cam);
     }
 
     public void updateQuality(GL gl) {
@@ -1079,10 +1079,10 @@ public class View {
     public void renderOverlay(GL gl, ViewportConfiguration viewportConfiguration) {
     }
 
-    public void renderAnnotations(GL gl, GLU glu) {
+    public void renderAnnotations(GL gl, GLU glu, Camera camera) {
         Transform transform = new Transform(new Scale(scaling));
         annotations.getGraph().setTransform(transform);
-        annotations.getGraph().draw(gl, glu, null);
+        annotations.getGraph().draw(gl, glu, camera);
     }
 
     protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
