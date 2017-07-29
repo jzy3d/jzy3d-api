@@ -1,0 +1,58 @@
+package org.jzy3d.bridge.swing;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.util.Collection;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import org.jzy3d.chart.Chart;
+import org.jzy3d.ui.LookAndFeel;
+
+/** A frame to show a list of charts */
+public class ChartGroupWindow extends JFrame {
+	private static final long serialVersionUID = 7519209038396190502L;
+
+	public ChartGroupWindow(Collection<? extends Chart> charts) throws IOException {
+		LookAndFeel.apply();
+
+		setGridLayout(charts);
+
+		windowExitListener();
+		this.pack();
+		setVisible(true);
+		setBounds(new java.awt.Rectangle(10, 10, 800, 600));
+	}
+
+	private void setGridLayout(Collection<? extends Chart> charts) {
+		setLayout(new GridLayout(charts.size(), 1));
+
+		int k = 0;
+		for (Chart c : charts) {
+			addChartToGridLayout(c, k++);
+		}
+	}
+	
+	public void addChartToGridLayout(Chart chart, int id) {
+		JPanel chartPanel = new JPanel(new BorderLayout());
+		//Border b = BorderFactory.createLineBorder(java.awt.Color.black);
+		//chartPanel.setBorder(b);
+		chartPanel.add((java.awt.Component) chart.getCanvas(),
+				BorderLayout.CENTER);
+		add(chartPanel);
+	}
+
+	public void windowExitListener() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				ChartGroupWindow.this.dispose();
+				System.exit(0);
+			}
+		});
+	}
+}
