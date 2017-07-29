@@ -143,6 +143,8 @@ public class LineStrip extends AbstractWireframeable {
     public void drawPointsGL2(GL gl) {
         gl.getGL2().glBegin(GL.GL_POINTS);
 
+        gl.getGL2().glPointSize(wfwidth);
+        
         for (Point p : points) {
             if (wfcolor == null)
                 gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
