@@ -1,12 +1,16 @@
 package org.jzy3d.chart2d;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot2d.primitives.Serie2d;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 
 public class Chart2dGroup {
@@ -19,6 +23,8 @@ public class Chart2dGroup {
 	 */
 	public Chart2dGroup(float timeMax, int ymin, int ymax, int chartNumber) {
 		for (int i = 0; i < chartNumber; i++) {
+			Quality q = Quality.Advanced;
+			q.setAnimated(false);
 			Chart2d pitchChart = new Chart2d();
 			pitchChart.asTimeChart(timeMax, ymin, ymax, "Time", "Value");
 			Serie2d seriePitch = pitchChart.getSerie(name(i), DEFAULT_SERIE_TYPE);
@@ -44,6 +50,13 @@ public class Chart2dGroup {
 			chart.asTimeChart(timeMax, ymin, ymax, xlabel, ylabel); 
 		}
 	}
+	
+	public void setBoundMode(ViewBoundMode mode){
+		for(Chart chart: getCharts()){
+            chart.getView().setBoundMode(mode);
+            //updateBounds();
+        }
+	}
 
 	public Collection<Chart2d> getCharts() {
 		return charts.values();
@@ -54,6 +67,14 @@ public class Chart2dGroup {
 	}
 	public Chart getChart(int key){
 		return getChart(""+key);
+	}
+	
+	public List<Chart> getCharts(int... keys){
+		List<Chart> selection = new ArrayList<Chart>();
+		for(int k: keys){
+			selection.add(getChart(k));
+		}
+		return selection;
 	}
 	
 	/**

@@ -56,6 +56,10 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
             animator = new Animator(this);
             getAnimator().start();
         }
+        else{
+        	animator = new Animator(this);
+        	getAnimator().stop();
+        }
 
         if (quality.isPreserveViewportSize())
             setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE });

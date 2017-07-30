@@ -31,13 +31,12 @@ public class ChartGroupWindow extends JFrame {
 	private void setGridLayout(Collection<? extends Chart> charts) {
 		setLayout(new GridLayout(charts.size(), 1));
 
-		int k = 0;
 		for (Chart c : charts) {
-			addChartToGridLayout(c, k++);
+			addChartToGridLayout(c);
 		}
 	}
 	
-	public void addChartToGridLayout(Chart chart, int id) {
+	public void addChartToGridLayout(Chart chart) {
 		JPanel chartPanel = new JPanel(new BorderLayout());
 		//Border b = BorderFactory.createLineBorder(java.awt.Color.black);
 		//chartPanel.setBorder(b);
