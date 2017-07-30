@@ -68,12 +68,7 @@ public class Chart2dGroup {
 	 */
 	public void setAnimated(boolean status) {
 		for (Chart chart : getCharts()) {
-			chart.getQuality().setAnimated(status);
-			if (status) {
-				((IScreenCanvas) chart.getCanvas()).getAnimator().start();
-			} else {
-				((IScreenCanvas) chart.getCanvas()).getAnimator().stop();
-			}
+			chart.setAnimated(status);
 		}
 	}
 
