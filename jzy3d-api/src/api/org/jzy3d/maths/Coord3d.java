@@ -15,29 +15,28 @@ import java.util.List;
  * @author Martin Pernollet
  * 
  */
-public class Coord3d implements Serializable{
+public class Coord3d implements Serializable {
     /**
      * 
      */
     private static final long serialVersionUID = -1636927109633279805L;
 
-    public static List<Coord3d> list(int size){
+    public static List<Coord3d> list(int size) {
         return new ArrayList<Coord3d>(size);
     }
-    
+
     public static Range getZRange(List<Coord3d> coords) {
         float min = Float.POSITIVE_INFINITY;
         float max = Float.NEGATIVE_INFINITY;
-        
-        for(Coord3d c: coords){
-            if(c.z>max)
+
+        for (Coord3d c : coords) {
+            if (c.z > max)
                 max = c.z;
-            if(c.z<min)
-                min = c.z; 
+            if (c.z < min)
+                min = c.z;
         }
         return new Range(min, max);
     }
-
 
     /** The origin is a Coord3d having value 0 for each dimension. */
     public static final Coord3d ORIGIN = new Coord3d(0.0f, 0.0f, 0.0f);
@@ -140,7 +139,6 @@ public class Coord3d implements Serializable{
         return this;
     }
 
-    
     /**
      * Add a value to all components of the current Coord and return the result
      * in a new Coord3d.
@@ -205,11 +203,9 @@ public class Coord3d implements Serializable{
     public Coord3d mul(Coord3d c2) {
         return new Coord3d(x * c2.x, y * c2.y, z * c2.z);
     }
-
-    public void mulSelf(Coord3d c2) {
-        x *= c2.x;
-        y *= c2.y;
-        z *= c2.z;
+    
+    public Coord3d mul(float x, float y, float z) {
+        return new Coord3d(this.x * x, this.y * y, this.z * z);
     }
 
     /**
@@ -221,6 +217,12 @@ public class Coord3d implements Serializable{
      */
     public Coord3d mul(float value) {
         return new Coord3d(x * value, y * value, z * value);
+    }
+
+    public void mulSelf(Coord3d c2) {
+        x *= c2.x;
+        y *= c2.y;
+        z *= c2.z;
     }
 
     /**
@@ -259,7 +261,7 @@ public class Coord3d implements Serializable{
      * Converts the current Coord3d into cartesian coordinates and return the
      * result in a new Coord3d.
      * 
-     * Assume that 
+     * Assume that
      * <ul>
      * <li>X represent azimuth
      * <li>Y represent elevation
@@ -273,15 +275,13 @@ public class Coord3d implements Serializable{
                 Math.sin(x) * Math.cos(y) * z, // elevation
                 Math.sin(y) * z); // range
     }
-    
+
     public Coord3d cartesianSelf() {
-        x = (float)(Math.cos(x) * Math.cos(y) * z); // azimuth
-        y = (float)(Math.sin(x) * Math.cos(y) * z);// elevation
-        z = (float)(Math.sin(y) * z); // range
+        x = (float) (Math.cos(x) * Math.cos(y) * z); // azimuth
+        y = (float) (Math.sin(x) * Math.cos(y) * z);// elevation
+        z = (float) (Math.sin(y) * z); // range
         return this;
     }
-    
-    
 
     /**
      * Converts the current Coord3d into polar coordinates and return the result
@@ -318,7 +318,7 @@ public class Coord3d implements Serializable{
             return new Coord3d(a, e, r);
         }
     }
-    
+
     public Coord3d polarSelf() {
         double a;
         double e;
@@ -345,9 +345,9 @@ public class Coord3d implements Serializable{
 
             e = Math.atan(z / d);
 
-            x = (float)a;
-            y = (float)e;
-            z = (float)r;
+            x = (float) a;
+            y = (float) e;
+            z = (float) r;
             return this;
         }
     }
@@ -387,22 +387,20 @@ public class Coord3d implements Serializable{
     }
 
     public final Coord3d cross(Coord3d v) {
-        return new Coord3d(
-                y * v.z - z * v.y,
-                z * v.x - x * v.z,
-                x * v.y - y * v.x
-        );
+        return new Coord3d(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
     }
 
     /**
-     * Applies a rotation represented by the AxisAngle
-     * notation using the Rodrigues' rotation formula.
+     * Applies a rotation represented by the AxisAngle notation using the
+     * Rodrigues' rotation formula.
      * <p/>
      * math implemented using
      * http://en.wikipedia.org/wiki/Rodrigues%27_rotation_formula
      *
-     * @param angleDeg angle of rotation about the given axis [deg]
-     * @param axis  unit vector describing an axis of rotation
+     * @param angleDeg
+     *            angle of rotation about the given axis [deg]
+     * @param axis
+     *            unit vector describing an axis of rotation
      * @return rotated copy of the original vector
      */
     public final Coord3d rotate(float angleDeg, Coord3d axis) {
@@ -414,10 +412,7 @@ public class Coord3d implements Serializable{
 
         float kdotv = k.dot(v);
         Coord3d kXv = k.cross(v);
-        return new Coord3d(
-                v.x * c + kXv.x * s + k.x * kdotv * (1 - c),
-                v.y * c + kXv.y * s + k.y * kdotv * (1 - c),
-                v.z * c + kXv.z * s + k.z * kdotv * (1 - c));
+        return new Coord3d(v.x * c + kXv.x * s + k.x * kdotv * (1 - c), v.y * c + kXv.y * s + k.y * kdotv * (1 - c), v.z * c + kXv.z * s + k.z * kdotv * (1 - c));
     }
 
     public final Coord3d interpolateTo(Coord3d v, float f) {
@@ -441,28 +436,118 @@ public class Coord3d implements Serializable{
     /**************************************************************/
 
     @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + Float.floatToIntBits(x);
-		result = prime * result + Float.floatToIntBits(y);
-		result = prime * result + Float.floatToIntBits(z);
-		return result;
-	}
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Float.floatToIntBits(x);
+        result = prime * result + Float.floatToIntBits(y);
+        result = prime * result + Float.floatToIntBits(z);
+        return result;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) return true;
-		if (obj == null) return false;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
 
-		if (!(obj instanceof Coord3d)) return false;
+        if (!(obj instanceof Coord3d))
+            return false;
 
-		Coord3d other = (Coord3d) obj;
-		if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x)) return false;
-		if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y)) return false;
-		if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z)) return false;
-		return true;
-	}
+        Coord3d other = (Coord3d) obj;
+        if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+            return false;
+        if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
+            return false;
+        if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
+            return false;
+        return true;
+    }
+
+    /**************************************************************/
+
+    /**
+     * Compute the component-wise minimum values of a set of coordinates.
+     * 
+     * @param coords
+     * @return minimum value on each dimension
+     */
+    public static Coord3d min(List<Coord3d> coords) {
+        Coord3d min = new Coord3d(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+        for (Coord3d c : coords) {
+            if (c.x < min.x)
+                min.x = c.x;
+
+            if (c.y < min.y)
+                min.y = c.y;
+
+            if (c.z < min.z)
+                min.z = c.z;
+        }
+        return min;
+    }
+
+    /**
+     * Compute the component-wise minimum values of a set of coordinates.
+     * 
+     * @param coords
+     * @return maximum value on each dimension
+     */
+    public static Coord3d max(List<Coord3d> coords) {
+        Coord3d max = new Coord3d(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
+        for (Coord3d c : coords) {
+            if (c.x > max.x)
+                max.x = c.x;
+
+            if (c.y > max.y)
+                max.y = c.y;
+
+            if (c.z > max.z)
+                max.z = c.z;
+        }
+        return max;
+    }
+    
+    public static void add(List<Coord3d> coords, float x, float y, float z) {
+        add(coords, new Coord3d(x, y, z));
+    }
+    
+    public static void add(List<Coord3d> coords, Coord3d add) {
+        for (Coord3d c : coords) {
+            c.addSelf(add);
+        }
+    }
+    
+    public static void sub(List<Coord3d> coords, float x, float y, float z) {
+        sub(coords, new Coord3d(x, y, z));
+    }
+    
+    public static void sub(List<Coord3d> coords, Coord3d add) {
+        for (Coord3d c : coords) {
+            c.subSelf(add);
+        }
+    }
+    
+    public static void mul(List<Coord3d> coords, float x, float y, float z) {
+        mul(coords, new Coord3d(x, y, z));
+    }
+
+    public static void mul(List<Coord3d> coords, Coord3d multiplier) {
+        for (Coord3d c : coords) {
+            c.mulSelf(multiplier);
+        }
+    }
+    
+    public static void div(List<Coord3d> coords, float x, float y, float z) {
+        div(coords, new Coord3d(x, y, z));
+    }
+    
+    public static void div(List<Coord3d> coords, Coord3d div) {
+        for (Coord3d c : coords) {
+            c.divSelf(div);
+        }
+    }
 
     /**************************************************************/
 
