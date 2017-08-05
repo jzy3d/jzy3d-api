@@ -22,6 +22,8 @@ import com.jogamp.opengl.util.gl2.GLUT;
  * @author Martin
  */
 public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRenderer {
+    protected static Logger LOGGER = Logger.getLogger(TextBitmapRenderer.class);
+    
     /**
      * GL Font code and size in pixel to initialize rendeer.
      */
@@ -91,10 +93,13 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
             posReal = cam.screenToModel(gl, glu, posScreenShifted);
         } catch (RuntimeException e) { 
             // TODO: solve this bug due to a Camera.PERSPECTIVE mode.
-            Logger.getLogger(TextBitmapRenderer.class).error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
+            LOGGER.error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
             return new BoundingBox3d();
         }
 
+        //LOGGER.info(text + " @ " + position + " projected to : " + posScreen + " shifted to " + posScreenShifted);
+        //LOGGER.info(text + " @ " + posReal + " with offset : " + sceneOffset);
+        
         // Draws actual string
         glRasterPos(gl, sceneOffset, posReal);
         glut.glutBitmapString(font, text);
