@@ -13,6 +13,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
@@ -115,6 +116,17 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
             for (AbstractDrawable c : components) {
                 if (c != null)
                     c.setTransformBefore(transform);
+            }
+        }
+    }
+    
+    public void setSpaceTransformer(SpaceTransformer spaceTransformer) {
+        this.spaceTransformer = spaceTransformer;
+        
+        synchronized (components) {
+            for (AbstractDrawable c : components) {
+                if (c != null)
+                    c.setSpaceTransformer(spaceTransformer);
             }
         }
     }

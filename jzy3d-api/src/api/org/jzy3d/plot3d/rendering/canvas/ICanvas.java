@@ -53,22 +53,28 @@ public interface ICanvas {
 
     /**
      * A generic interface for mouse listener to remain Windowing toolkit
-     * independant. * Implementation of this method should simply cast the input
-     * assuming it will correspond to canvas-compatible mouse listener.
+     * independant.
+     * 
+     * Implementation of this method should simply cast the input assuming it
+     * will correspond to canvas-compatible mouse listener.
      */
     public void addMouseController(Object o);
 
     /**
      * A generic interface for mouse listener to remain Windowing toolkit
-     * independant. * Implementation of this method should simply cast the input
-     * assuming it will correspond to canvas-compatible mouse listener.
+     * independant.
+     * 
+     * Implementation of this method should simply cast the input assuming it
+     * will correspond to canvas-compatible mouse listener.
      */
     public void addKeyController(Object o);
 
     /**
      * A generic interface for key listener to remain Windowing toolkit
-     * independant. * Implementation of this method should simply cast the input
-     * assuming it will correspond to canvas-compatible key listener.
+     * independant.
+     * 
+     * Implementation of this method should simply cast the input assuming it
+     * will correspond to canvas-compatible key listener.
      */
     public void removeMouseController(Object o);
 
