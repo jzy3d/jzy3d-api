@@ -13,15 +13,14 @@
 
 	<description>A Java API for 3d charts</description>
 
-	<!-- <repositories> <repository> <id>miglayout-snapshots</id> <name>Miglayout 
-		Snapshots</name> <url>https://oss.sonatype.org/content/</url> </repository> 
-		</repositories> -->
-		
 	<!-- DEPLOY SOURCE AND JAVADOC :
 	mvn clean source:jar javadoc:jar deploy
 	 -->
 
+ <!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio
+	 \ -DartifactId=jzyio \ -Dversion=0.1 \ -Dpackaging=jar \ -Dfile=./lib/misc/org.jzyio-0.1.jar -->
 
+ <!-- To download javadocs for dependencies mvn dependency:resolve -Dclassifier=javadoc -->
 
 	<dependencies>
 		<dependency>
@@ -73,7 +72,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
-			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay, 
+			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay,
 				i.e. tools to ease non regression tests for interactive features -->
 		</dependency>
 
@@ -136,7 +135,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -176,7 +175,7 @@
 					</execution>
 				</executions>
 			</plugin>-->
-			
+
 		</plugins>
 
 
@@ -244,13 +243,6 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-
-
-	<!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio 
-		\ -DartifactId=jzyio \ -Dversion=0.1 \ -Dpackaging=jar \ -Dfile=./lib/misc/org.jzyio-0.1.jar -->
-
-	<!-- To download javadocs for dependencies mvn dependency:resolve -Dclassifier=javadoc -->
 
 <!--To retrieve Jzy3d dependencies -->
 	<repositories>
