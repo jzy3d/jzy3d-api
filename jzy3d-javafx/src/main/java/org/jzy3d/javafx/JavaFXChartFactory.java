@@ -21,17 +21,19 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyControll
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.javafx.JavaFXRenderer3d.DisplayListener;
 import org.jzy3d.javafx.controllers.keyboard.JavaFXCameraKeyController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXMousePickingController;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+@SuppressWarnings("restriction")
+/* Disable JavaFX access restriction warnings */
 public class JavaFXChartFactory extends AWTChartComponentFactory {
     static Logger LOGGER = Logger.getLogger(JavaFXChartFactory.class);
 
@@ -80,7 +82,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
         JavaFXCameraMouseController jfxMouse = (JavaFXCameraMouseController) chart.addMouseCameraController();
         jfxMouse.setNode(imageView);
         // JavaFXNodeMouse.makeDraggable(stage, imgView);
-        
+
         JavaFXCameraKeyController jfxKey = (JavaFXCameraKeyController) chart.addKeyboardCameraController();
         jfxKey.setNode(imageView);
         imageView.setFocusTraversable(true);
@@ -102,9 +104,9 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
         JavaFXRenderer3d renderer = (JavaFXRenderer3d) chart.getCanvas().getRenderer();
         renderer.addDisplayListener(new DisplayListener() {
             @Override
-            public void onDisplay(Image image) {
+            public void onDisplay(Object image) {
                 if (image != null) {
-                    imageView.setImage(image);
+                    imageView.setImage((javafx.scene.image.Image) image);
                 } else {
                     LOGGER.error("image is null while listening to renderer");
                 }
@@ -162,7 +164,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
 
     @Override
     public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-        IMousePickingController  mouse = new JavaFXMousePickingController(chart, clickWidth);
+        IMousePickingController mouse = new JavaFXMousePickingController(chart, clickWidth);
         return mouse;
     }
 
