@@ -1,6 +1,7 @@
 package org.jzy3d.demos.chart2d;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
@@ -29,6 +30,8 @@ import org.jzy3d.ui.LookAndFeel;
  * audio signal.
  * 
  * Noticed problems on chart resize. Suspect "wrong stuffs" around miglayout or jogl.
+ * 
+ * FIXME : use ChartGroup to build interface. Miglayout/JOGL interaction causes problem when downsizing windows
  * 
  * @author Martin Pernollet
  */
@@ -140,10 +143,17 @@ public class Chart2dDemo {
         }
 
         public void addChart(Chart chart, int id) {
+            Component canvas = (java.awt.Component) chart.getCanvas();
+
             JPanel chartPanel = new JPanel(new BorderLayout());
+            /*chartPanel.setMaximumSize(null);
+            chartPanel.setMinimumSize(null);
+            canvas.setMinimumSize(null);
+            canvas.setMaximumSize(null);*/
+            
             Border b = BorderFactory.createLineBorder(java.awt.Color.black);
             chartPanel.setBorder(b);
-            chartPanel.add((java.awt.Component) chart.getCanvas(), BorderLayout.CENTER);
+            chartPanel.add(canvas, BorderLayout.CENTER);
             add(chartPanel, "cell 0 " + id + ", grow");
         }
 

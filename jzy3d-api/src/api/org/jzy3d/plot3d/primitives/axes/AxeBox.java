@@ -476,23 +476,49 @@ public class AxeBox implements IAxe {
             // and set the tick length
             if (spaceTransformer == null) {
                 if (isX(direction)) {
+                    
+                    // Tick position
                     xpos = ticks[t];
                     xlab = xpos;
                     ylab = (yrange / tickLength) * ydir + ypos;
                     zlab = (zrange / tickLength) * zdir + zpos;
-                    tickLabel = layout.getXTickRenderer().format(xpos);
+                    
+                    // Tick label
+                    float xPosLabelValue = (float)xpos;
+                    /*if(spaceTransformer!=null){
+                        xPosLabelValue = spaceTransformer.getX().compute((float)xpos);
+                    }*/
+                    tickLabel = layout.getXTickRenderer().format(xPosLabelValue);
+
                 } else if (isY(direction)) {
+
+                    // Tick position
                     ypos = ticks[t];
                     xlab = (xrange / tickLength) * xdir + xpos;
                     ylab = ypos;
                     zlab = (zrange / tickLength) * zdir + zpos;
-                    tickLabel = layout.getYTickRenderer().format(ypos);
+                    
+                    // Tick label
+                    float yPosLabelValue = (float)ypos;
+                    /*if(spaceTransformer!=null){
+                        yPosLabelValue = spaceTransformer.getY().compute((float)ypos);
+                    }*/
+                    tickLabel = layout.getYTickRenderer().format(yPosLabelValue);
+                    
                 } else { // (axis==AXE_Z)
+                    
+                    // Tick position                   
                     zpos = ticks[t];
                     xlab = (xrange / tickLength) * xdir + xpos;
                     ylab = (yrange / tickLength) * ydir + ypos;
                     zlab = zpos;
-                    tickLabel = layout.getZTickRenderer().format(zpos);
+                    
+                    // Tick label
+                    float zPosLabelValue = (float)zpos;
+                    /*if(spaceTransformer!=null && spaceTransformer.getZ()!=null){
+                        zPosLabelValue = spaceTransformer.getZ().compute((float)zpos);
+                    }*/
+                    tickLabel = layout.getZTickRenderer().format(zPosLabelValue);
                 }
             } else {
                 // use space transform shift if we have a space transformer
