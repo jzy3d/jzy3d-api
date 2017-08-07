@@ -16,7 +16,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLPipelineFactory;
 import com.jogamp.opengl.glu.GLU;
 
 /**
