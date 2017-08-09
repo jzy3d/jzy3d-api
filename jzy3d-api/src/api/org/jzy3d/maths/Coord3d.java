@@ -520,7 +520,7 @@ public class Coord3d implements Serializable {
      * @param coords
      * @return maximum value on each dimension
      */
-    public static Pair<Coord3d,Coord3d> minmax(List<Coord3d> coords) {
+    public static Pair<Coord3d,Coord3d> minMax(List<Coord3d> coords) {
         Coord3d min = new Coord3d(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
         Coord3d max = new Coord3d(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
 

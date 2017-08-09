@@ -355,13 +355,14 @@ public class View {
     }
 
     /**
-     * Set the surrounding AxeBox dimensions and the Camera target, and the
+     * Set the surrounding {@link AxeBox} dimensions, the {@link Camera} target and the
      * colorbar range.
      */
     public void lookToBox(BoundingBox3d box) {
         if (box.isReset())
             return;
-        center = box.getTransformedCenter(spaceTransformer);
+        
+        center = box.getCenter();//box.getTransformedCenter(spaceTransformer);
         axe.setAxe(box);
         viewbounds = box;
     }
@@ -649,9 +650,13 @@ public class View {
         float lmax = 1;
 
         if (bounds != null) {
-            xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
+            xLen = bounds.getXmax() - bounds.getXmin();
+            yLen = bounds.getYmax() - bounds.getYmin();
+            zLen = bounds.getZmax() - bounds.getZmin();
+
+            /*xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
             yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
-            zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());
+            zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());*/
             lmax = Math.max(Math.max(xLen, yLen), zLen);
         }
 
@@ -901,8 +906,9 @@ public class View {
     }
 
     public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
-        // before LOG was : (float)bounds.getRadius() * factorViewPointDistance;
-        float sceneRadius = (float) boundsScaled.getTransformedRadius(spaceTransformer);
+        // before LOG was : 
+        float sceneRadius = (float)boundsScaled.getRadius() * factorViewPointDistance;
+        //float sceneRadius = (float) boundsScaled.getTransformedRadius(spaceTransformer);
         updateCamera(gl, glu, viewport, boundsScaled, sceneRadius);
     }
 
@@ -1018,7 +1024,8 @@ public class View {
             cam.setRenderingSphereRadius(radius);
             correctCameraPositionForIncludingTextLabels(gl, glu, viewport);
         } else {
-            cam.setRenderingSphereRadius((float) bounds.getTransformedRadius(spaceTransformer));
+            cam.setRenderingSphereRadius((float) bounds.getRadius());
+            //cam.setRenderingSphereRadius((float) bounds.getTransformedRadius(spaceTransformer));
         }
     }
 
@@ -1043,7 +1050,7 @@ public class View {
         }
     }
 
-    public void glModelView(GL gl) {
+    protected void glModelView(GL gl) {
         if (gl.isGL2()) {
             gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         } else {

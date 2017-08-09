@@ -44,7 +44,11 @@ public class AxeTransformablePoint extends Point {
 
 			gl.getGL2().glBegin(GL2.GL_POINTS);
 			gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
-			GlVertexExecutor.Vertex(gl, new Coord3d(xyz.x, xyz.y, xyz.z), transformers);
+			
+			GlVertexExecutor.Vertex(gl, xyz, transformers);
+			
+			//System.out.println(transformers.compute(xyz));
+			
 			gl.getGL2().glEnd();
 		} else {
 			GLES2CompatUtils.glPointSize(width);
@@ -59,11 +63,12 @@ public class AxeTransformablePoint extends Point {
 	@Override
     public void updateBounds() {
 		bbox.reset();
-		if(transformers != null) {
+		/*if(transformers != null) {
 			bbox.add(transformers.compute(this.xyz));
 		} else {
 			bbox.add(this);
-		}
+		}*/
+		bbox.add(this);
 	}
 	
 	SpaceTransformer transformers;
