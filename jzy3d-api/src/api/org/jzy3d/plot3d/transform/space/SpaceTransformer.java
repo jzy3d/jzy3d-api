@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.transform.space;
 
+import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 
@@ -56,5 +57,9 @@ public class SpaceTransformer {
 
     public Coord2d compute(Coord2d point) {
         return new Coord2d(getX().compute(point.x), getY().compute(point.y));
+    }
+    
+    public BoundingBox3d compute(BoundingBox3d bounds) {
+        return bounds.transform(this);
     }
 }

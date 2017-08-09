@@ -65,7 +65,7 @@ public class TestCoord3d {
         
         Coord3d min = Coord3d.min(cs);
         Coord3d max = Coord3d.max(cs);
-        Pair<Coord3d,Coord3d> minmax = Coord3d.minmax(cs);
+        Pair<Coord3d,Coord3d> minmax = Coord3d.minMax(cs);
         
         Coord3d expectedMin = new Coord3d(1f,1f,1f);
         Coord3d expectedMax = new Coord3d(3f,3f,3f);

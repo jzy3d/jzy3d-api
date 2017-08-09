@@ -7,6 +7,6 @@ import com.jogamp.opengl.GL;
 
 public abstract class GlVertexExecutor {
 	public static void Vertex(GL gl, Coord3d c3d,SpaceTransformer transformers){
-		gl.getGL2().glVertex3d(transformers.getX().compute(c3d.x), transformers.getY().compute(c3d.y), transformers.getZ().compute(c3d.z));
+		gl.getGL2().glVertex3f(transformers.getX().compute(c3d.x), transformers.getY().compute(c3d.y), transformers.getZ().compute(c3d.z));
 	}
 }
