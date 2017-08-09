@@ -2,6 +2,7 @@ package org.jzy3d.maths;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,6 +24,10 @@ public class Coord3d implements Serializable {
 
     public static List<Coord3d> list(int size) {
         return new ArrayList<Coord3d>(size);
+    }
+    
+    public static List<Coord3d> list(Coord3d... coords) {
+        return Arrays.asList(coords);
     }
 
     public static Range getZRange(List<Coord3d> coords) {
@@ -507,6 +512,34 @@ public class Coord3d implements Serializable {
                 max.z = c.z;
         }
         return max;
+    }
+    
+    /**
+     * Compute the component-wise minimum and maximum values of a set of coordinates.
+     * 
+     * @param coords
+     * @return maximum value on each dimension
+     */
+    public static Pair<Coord3d,Coord3d> minmax(List<Coord3d> coords) {
+        Coord3d min = new Coord3d(Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY, Float.POSITIVE_INFINITY);
+        Coord3d max = new Coord3d(Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY, Float.NEGATIVE_INFINITY);
+
+        for (Coord3d c : coords) {
+            if (c.x < min.x)
+                min.x = c.x;
+            if (c.y < min.y)
+                min.y = c.y;
+            if (c.z < min.z)
+                min.z = c.z;
+            
+            if (c.x > max.x)
+                max.x = c.x;
+            if (c.y > max.y)
+                max.y = c.y;
+            if (c.z > max.z)
+                max.z = c.z;
+        }
+        return new Pair<Coord3d,Coord3d>(min, max);
     }
     
     public static void add(List<Coord3d> coords, float x, float y, float z) {

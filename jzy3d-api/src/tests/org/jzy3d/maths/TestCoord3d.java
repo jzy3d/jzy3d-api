@@ -1,8 +1,9 @@
-package org.jzy3d.tests;
+package org.jzy3d.maths;
+
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.jzy3d.maths.Coord3d;
 
 /**
  * Tests cross product and AxisAngle rotation
@@ -10,7 +11,7 @@ import org.jzy3d.maths.Coord3d;
  * @author Florian Enner < florian @ enner.org >
  * @since 01.01.14
  */
-public class TestCoord3dRotate {
+public class TestCoord3d {
     float delta = 1E-6f;
 
     @Test
@@ -52,5 +53,27 @@ public class TestCoord3dRotate {
         Assert.assertEquals(expected.x, actual.x, delta);
         Assert.assertEquals(expected.y, actual.y, delta);
         Assert.assertEquals(expected.z, actual.z, delta);
+        //Assert.assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void minMax(){
+        Coord3d c1 = new Coord3d(1f, 2f, 3f);
+        Coord3d c2 = new Coord3d(2f, 3f, 1f);
+        Coord3d c3 = new Coord3d(3f, 1f, 2f);
+        List<Coord3d> cs = Coord3d.list(c1, c2, c3);
+        
+        Coord3d min = Coord3d.min(cs);
+        Coord3d max = Coord3d.max(cs);
+        Pair<Coord3d,Coord3d> minmax = Coord3d.minmax(cs);
+        
+        Coord3d expectedMin = new Coord3d(1f,1f,1f);
+        Coord3d expectedMax = new Coord3d(3f,3f,3f);
+        Pair<Coord3d,Coord3d> expectedMinmax = new Pair<Coord3d,Coord3d>(min,max);
+        
+        Assert.assertEquals(expectedMin, min);
+        Assert.assertEquals(expectedMax, max);
+        Assert.assertEquals(expectedMinmax, minmax);
+        
     }
 }
