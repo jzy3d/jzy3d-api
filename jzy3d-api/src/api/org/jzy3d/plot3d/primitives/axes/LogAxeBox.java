@@ -223,19 +223,19 @@ public class LogAxeBox extends AxeBox {
                 xlab = xpos;
                 ylab = Math.signum(tickLength * ydir) * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength))) * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
                 zlab = Math.signum(tickLength * ydir) * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength))) * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
-                tickLabel = layout.getXTickRenderer().format(xpos);
+                tickLabel = layout.getXTickRenderer().format(ticks[t]);
             } else if (isY(direction)) {
                 ypos = spaceTransformer.getY().compute((float) ticks[t]);
                 xlab = Math.signum(tickLength * xdir) * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength))) * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
                 ylab = ypos;
                 zlab = Math.signum(tickLength * zdir) * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength))) * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
-                tickLabel = layout.getYTickRenderer().format(ypos);
+                tickLabel = layout.getYTickRenderer().format(ticks[t]);
             } else { // (axis==AXE_Z)
                 zpos = spaceTransformer.getZ().compute((float) ticks[t]);
                 xlab = Math.signum(tickLength * xdir) * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength))) * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
                 ylab = Math.signum(tickLength * ydir) * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength))) * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
                 zlab = zpos;
-                tickLabel = layout.getZTickRenderer().format(zpos);
+                tickLabel = layout.getZTickRenderer().format(ticks[t]);
             }
             Coord3d tickPosition = new Coord3d(xlab, ylab, zlab);
 

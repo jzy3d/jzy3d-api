@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.axes;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -30,6 +31,8 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  */
 public class AxeBox implements IAxe {
+    static Logger LOGGER = Logger.getLogger(AxeBox.class);
+    
     public AxeBox(BoundingBox3d bbox) {
         this(bbox, new AxeBoxLayout());
     }
@@ -1146,6 +1149,7 @@ public class AxeBox implements IAxe {
     @Override
     public void setAxe(BoundingBox3d bbox) {
         this.boxBounds = bbox;
+        //LOGGER.info(bbox);
         setAxeBox(bbox.getXmin(), bbox.getXmax(), bbox.getYmin(), bbox.getYmax(), bbox.getZmin(), bbox.getZmax());
     }
 

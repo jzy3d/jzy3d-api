@@ -446,6 +446,16 @@ public class BoundingBox3d {
         return new BoundingBox3d(xmin, xmax, ymin, ymax, zmin, zmax);
     }
     
+    /**
+     * Clone bounding box and apply transform to it
+     * @param transformers
+     * @return
+     */
+    public BoundingBox3d transform(SpaceTransformer transformers) {
+        return new BoundingBox3d(transformers.getX().compute(xmin), transformers.getX().compute(xmax), transformers.getY().compute(ymin), transformers.getY().compute(ymax), transformers.getZ().compute(zmin), transformers.getZ().compute(zmax));
+    }
+
+    
     /* */
     
     private float xmin;
