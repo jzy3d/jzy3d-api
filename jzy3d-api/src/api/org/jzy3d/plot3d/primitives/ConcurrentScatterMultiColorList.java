@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Coord3d;
@@ -35,12 +34,8 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
         if (coordinates != null) {
             synchronized (coordinates) {
                 for (Coord3d coord : coordinates) {
-                    // TODO: should store
-                    // result in the
-                    // point color?
-                    Color color = mapper.getColor(coord);
-                    GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
-                    GLES2CompatUtils.glVertex3f(coord.x, coord.y, coord.z);
+                    colorGLES2(mapper.getColor(coord));
+                    vertexGLES2(coord);
                 }
             }
         }
@@ -55,12 +50,8 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
         if (coordinates != null) {
             synchronized (coordinates) {
                 for (Coord3d coord : coordinates) {
-                    // TODO: should store
-                    // result in the
-                    // point color
-                    Color color = mapper.getColor(coord);
-                    gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-                    gl.getGL2().glVertex3f(coord.x, coord.y, coord.z);
+                    colorGL2(gl, mapper.getColor(coord));
+                    vertexGL2(gl, coord);
                 }
             }
         }

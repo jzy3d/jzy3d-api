@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.BoundingBox3d;
@@ -61,9 +60,8 @@ public class ScatterMultiColorList extends AbstractDrawable implements IMultiCol
 
         if (coordinates != null) {
             for (Coord3d coord : coordinates) {
-                Color color = mapper.getColor(coord);
-                GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
-                GLES2CompatUtils.glVertex3f(coord.x, coord.y, coord.z);
+                colorGLES2(mapper.getColor(coord));
+                vertexGLES2(coord);
             }
         }
         GLES2CompatUtils.glEnd();
@@ -75,9 +73,8 @@ public class ScatterMultiColorList extends AbstractDrawable implements IMultiCol
 
         if (coordinates != null) {
             for (Coord3d coord : coordinates) {
-                Color color = mapper.getColor(coord);
-                gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-                gl.getGL2().glVertex3f(coord.x, coord.y, coord.z);
+                colorGL2(gl, mapper.getColor(coord));
+                vertexGL2(gl, coord);
             }
         }
         gl.getGL2().glEnd();

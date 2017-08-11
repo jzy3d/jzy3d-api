@@ -66,7 +66,7 @@ public class AxeTransformableConcurrentScatterMultiColorList extends
                     // point color
                     Color color = mapper.getColor(coord);
                     gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-                    GlVertexExecutor.Vertex(gl, new Coord3d(coord.x, coord.y, coord.z), transformers);
+                    vertexGL2(gl, coord, transformers);
                 }
             }
         }

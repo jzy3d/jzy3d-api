@@ -98,10 +98,14 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
      * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
      */
     protected void vertexGL2(GL gl, Coord3d c) {
-        if (spaceTransformer == null) {
+        vertexGL2(gl, c, spaceTransformer);
+    }
+    
+    protected void vertexGL2(GL gl, Coord3d c, SpaceTransformer transform) {
+        if (transform == null) {
             gl.getGL2().glVertex3f(c.x, c.y, c.z);
         } else {
-            gl.getGL2().glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y), spaceTransformer.getZ().compute(c.z));
+            gl.getGL2().glVertex3f(transform.getX().compute(c.x), transform.getY().compute(c.y), transform.getZ().compute(c.z));
         }
     }
 
