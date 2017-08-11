@@ -32,7 +32,7 @@ import com.jogamp.opengl.glu.GLU;
  */
 public class AxeBox implements IAxe {
     static Logger LOGGER = Logger.getLogger(AxeBox.class);
-    
+
     public AxeBox(BoundingBox3d bbox) {
         this(bbox, new AxeBoxLayout());
     }
@@ -56,18 +56,15 @@ public class AxeBox implements IAxe {
     public void setAnnotations(List<AxeAnnotation> annotations) {
         this.annotations = annotations;
     }
-    
-    public void addAnnotation(AxeAnnotation annotation){
+
+    public void addAnnotation(AxeAnnotation annotation) {
         synchronized (annotations) {
             annotations.add(annotation);
         }
     }
 
-
     /**
-     * Draws the AxeBox. The camera is used to determine which axis is closest
-     * to the ur point ov view, in order to decide for an axis on which to
-     * diplay the tick values.
+     * Draws the AxeBox. The camera is used to determine which axis is closest to the ur point ov view, in order to decide for an axis on which to diplay the tick values.
      */
     @Override
     public void draw(GL gl, GLU glu, Camera camera) {
@@ -238,9 +235,7 @@ public class AxeBox implements IAxe {
     }
 
     /**
-     * Make all GL2 calls allowing to build a cube with 6 separate quads. Each
-     * quad is indexed from 0.0f to 5.0f using glPassThrough, and may be traced
-     * in feedback mode when mode=GL2.GL_FEEDBACK
+     * Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK
      */
     protected void drawCube(GL gl, int mode) {
         for (int q = 0; q < 6; q++) {
@@ -249,12 +244,7 @@ public class AxeBox implements IAxe {
                     gl.getGL2().glPassThrough(q);
                 gl.getGL2().glBegin(GL2GL3.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
-                    // gl.getGL2().glVertex3f(quadx[q][v], quady[q][v],
-                    // quadz[q][v]);
-                    Coord3d quadCoord = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]); // era
-                                                                                            // qua
-                    vertexGL2(gl, quadCoord);
-
+                    vertexGL2(gl, quadx[q][v], quady[q][v], quadz[q][v]);
                 }
                 gl.getGL2().glEnd();
             } else {
@@ -262,10 +252,7 @@ public class AxeBox implements IAxe {
                     GLES2CompatUtils.glPassThrough(q);
                 GLES2CompatUtils.glBegin(GL2GL3.GL_QUADS);
                 for (int v = 0; v < 4; v++) {
-                    // GLES2CompatUtils.glVertex3f(quadx[q][v], quady[q][v],
-                    // quadz[q][v]);
-                    Coord3d quadCoord = new Coord3d(quadx[q][v], quady[q][v], quadz[q][v]);
-                    vertexGLES2(quadCoord);
+                    vertexGLES2(quadx[q][v], quady[q][v], quadz[q][v]);
                 }
                 GLES2CompatUtils.glEnd();
             }
@@ -280,62 +267,43 @@ public class AxeBox implements IAxe {
         // Draw X grid along X axis
         if ((quad != 0) && (quad != 1)) {
             double[] xticks = layout.getXTicks();
-            for (int t = 0; t < xticks.length; t++) {
-                if (gl.isGL2()) {
+            if (gl.isGL2()) {
+                for (int t = 0; t < xticks.length; t++) {
                     gl.getGL2().glBegin(GL.GL_LINES);
-                    Coord3d quadCoord = new Coord3d(xticks[t], quady[quad][0], quadz[quad][0]);
-                    vertexGL2(gl, quadCoord);
-
-                    quadCoord = new Coord3d(xticks[t], quady[quad][2], quadz[quad][2]);
-                    vertexGL2(gl, quadCoord);
-                    // gl.getGL2().glVertex3d(xticks[t], quady[quad][0],
-                    // quadz[quad][0]);
-                    // gl.getGL2().glVertex3d(xticks[t], quady[quad][2],
-                    // quadz[quad][2]);
+                    vertexGL2(gl, (float) xticks[t], quady[quad][0], quadz[quad][0]);
+                    vertexGL2(gl, (float) xticks[t], quady[quad][2], quadz[quad][2]);
                     gl.getGL2().glEnd();
-                } else {
-                    // FIXME TO BE REWRITTEN ANDROID
                 }
+            } else {
+                // FIXME TO BE REWRITTEN ANDROID
             }
         }
         // Draw Y grid along Y axis
         if ((quad != 2) && (quad != 3)) {
             double[] yticks = layout.getYTicks();
-            for (int t = 0; t < yticks.length; t++) {
-                if (gl.isGL2()) {
+            if (gl.isGL2()) {
+                for (int t = 0; t < yticks.length; t++) {
                     gl.getGL2().glBegin(GL.GL_LINES);
-                    Coord3d quadCoord = new Coord3d(quadx[quad][0], yticks[t], quadz[quad][0]);
-                    vertexGL2(gl, quadCoord);
-                    quadCoord = new Coord3d(quadx[quad][2], yticks[t], quadz[quad][2]);
-                    vertexGL2(gl, quadCoord);
-                    // gl.getGL2().glVertex3d(quadx[quad][0], yticks[t],
-                    // quadz[quad][0]);
-                    // gl.getGL2().glVertex3d(quadx[quad][2], yticks[t],
-                    // quadz[quad][2]);
+                    vertexGL2(gl, quadx[quad][0], (float) yticks[t], quadz[quad][0]);
+                    vertexGL2(gl, quadx[quad][2], (float) yticks[t], quadz[quad][2]);
                     gl.getGL2().glEnd();
-                } else {
-                    // FIXME TO BE REWRITTEN ANDROID
                 }
+            } else {
+                // FIXME TO BE REWRITTEN ANDROID
             }
         }
         // Draw Z grid along Z axis
         if ((quad != 4) && (quad != 5)) {
             double[] zticks = layout.getZTicks();
-            for (int t = 0; t < zticks.length; t++) {
-                if (gl.isGL2()) {
+            if (gl.isGL2()) {
+                for (int t = 0; t < zticks.length; t++) {
                     gl.getGL2().glBegin(GL.GL_LINES);
-                    Coord3d quadCoord = new Coord3d(quadx[quad][0], quady[quad][0], zticks[t]);
-                    vertexGL2(gl, quadCoord);
-                    quadCoord = new Coord3d(quadx[quad][2], quady[quad][2], zticks[t]);
-                    vertexGL2(gl, quadCoord);
-                    // gl.getGL2().glVertex3d(quadx[quad][0], quady[quad][0],
-                    // zticks[t]);
-                    // gl.getGL2().glVertex3d(quadx[quad][2], quady[quad][2],
-                    // zticks[t]);
+                    vertexGL2(gl, quadx[quad][0], quady[quad][0], (float) zticks[t]);
+                    vertexGL2(gl, quadx[quad][2], quady[quad][2], (float) zticks[t]);
                     gl.getGL2().glEnd();
-                } else {
-                    // FIXME TO BE REWRITTEN ANDROID
                 }
+            } else {
+                // FIXME TO BE REWRITTEN ANDROID
             }
         }
     }
@@ -479,19 +447,15 @@ public class AxeBox implements IAxe {
             // and set the tick length
             if (spaceTransformer == null) {
                 if (isX(direction)) {
-                    
+
                     // Tick position
                     xpos = ticks[t];
                     xlab = xpos;
                     ylab = (yrange / tickLength) * ydir + ypos;
                     zlab = (zrange / tickLength) * zdir + zpos;
-                    
+
                     // Tick label
-                    float xPosLabelValue = (float)xpos;
-                    /*if(spaceTransformer!=null){
-                        xPosLabelValue = spaceTransformer.getX().compute((float)xpos);
-                    }*/
-                    tickLabel = layout.getXTickRenderer().format(xPosLabelValue);
+                    tickLabel = layout.getXTickRenderer().format(ticks[t]);
 
                 } else if (isY(direction)) {
 
@@ -500,28 +464,20 @@ public class AxeBox implements IAxe {
                     xlab = (xrange / tickLength) * xdir + xpos;
                     ylab = ypos;
                     zlab = (zrange / tickLength) * zdir + zpos;
-                    
+
                     // Tick label
-                    float yPosLabelValue = (float)ypos;
-                    /*if(spaceTransformer!=null){
-                        yPosLabelValue = spaceTransformer.getY().compute((float)ypos);
-                    }*/
-                    tickLabel = layout.getYTickRenderer().format(yPosLabelValue);
-                    
+                    tickLabel = layout.getYTickRenderer().format(ticks[t]);
+
                 } else { // (axis==AXE_Z)
-                    
-                    // Tick position                   
+
+                    // Tick position
                     zpos = ticks[t];
                     xlab = (xrange / tickLength) * xdir + xpos;
                     ylab = (yrange / tickLength) * ydir + ypos;
                     zlab = zpos;
-                    
+
                     // Tick label
-                    float zPosLabelValue = (float)zpos;
-                    /*if(spaceTransformer!=null && spaceTransformer.getZ()!=null){
-                        zPosLabelValue = spaceTransformer.getZ().compute((float)zpos);
-                    }*/
-                    tickLabel = layout.getZTickRenderer().format(zPosLabelValue);
+                    tickLabel = layout.getZTickRenderer().format(ticks[t]);
                 }
             } else {
                 // use space transform shift if we have a space transformer
@@ -530,23 +486,23 @@ public class AxeBox implements IAxe {
                     xlab = xpos;
                     ylab = Math.signum(tickLength * ydir) * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength))) * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
                     zlab = Math.signum(tickLength * ydir) * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength))) * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
-                    tickLabel = layout.getXTickRenderer().format(xpos);
+                    tickLabel = layout.getXTickRenderer().format(ticks[t]);
                 } else if (isY(direction)) {
                     ypos = spaceTransformer.getY().compute((float) ticks[t]);
                     xlab = Math.signum(tickLength * xdir) * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength))) * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
                     ylab = ypos;
                     zlab = Math.signum(tickLength * zdir) * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength))) * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
-                    tickLabel = layout.getYTickRenderer().format(ypos);
+                    tickLabel = layout.getYTickRenderer().format(ticks[t]);
                 } else { // (axis==AXE_Z)
                     zpos = spaceTransformer.getZ().compute((float) ticks[t]);
                     xlab = Math.signum(tickLength * xdir) * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength))) * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
                     ylab = Math.signum(tickLength * ydir) * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength))) * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
                     zlab = zpos;
-                    tickLabel = layout.getZTickRenderer().format(zpos);
+                    tickLabel = layout.getZTickRenderer().format(ticks[t]);
                 }
             }
             Coord3d tickPosition = new Coord3d(xlab, ylab, zlab);
-            
+
             if (layout.isTickLineDisplayed()) {
                 if (gl.isGL2()) {
                     drawTickLine(gl, color, xpos, ypos, zpos, xlab, ylab, zlab);
@@ -618,9 +574,7 @@ public class AxeBox implements IAxe {
     }
 
     /**
-     * A helper to call glVerted3f on the input coordinate. For GL2 profile
-     * only. If logTransform is non null, then each dimension transform is
-     * processed before calling glVertex3d.
+     * A helper to call glVerted3f on the input coordinate. For GL2 profile only. If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
      */
     protected void vertexGL2(GL gl, Coord3d c) {
         if (spaceTransformer == null) {
@@ -630,16 +584,30 @@ public class AxeBox implements IAxe {
         }
     }
 
+    protected void vertexGL2(GL gl, float x, float y, float z) {
+        if (spaceTransformer == null) {
+            gl.getGL2().glVertex3f(x, y, z);
+        } else {
+            gl.getGL2().glVertex3f(spaceTransformer.getX().compute(x), spaceTransformer.getY().compute(y), spaceTransformer.getZ().compute(z));
+        }
+    }
+
     /**
-     * A helper to call glVerted3f on the input coordinate. For GLES2 profile
-     * only. If logTransform is non null, then each dimension transform is
-     * processed before calling glVertex3d.
+     * A helper to call glVerted3f on the input coordinate. For GLES2 profile only. If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
      */
     protected void vertexGLES2(Coord3d c) {
         if (spaceTransformer == null) {
             GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
         } else {
             GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y), spaceTransformer.getZ().compute(c.z));
+        }
+    }
+
+    protected void vertexGLES2(float x, float y, float z) {
+        if (spaceTransformer == null) {
+            GLES2CompatUtils.glVertex3f(x, y, z);
+        } else {
+            GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(x), spaceTransformer.getY().compute(y), spaceTransformer.getZ().compute(z));
         }
     }
 
@@ -727,9 +695,7 @@ public class AxeBox implements IAxe {
     }
 
     /**
-     * Return the index of the minimum value contained in the input array of
-     * doubles. If no value is smaller than Double.MAX_VALUE, the returned index
-     * is -1.
+     * Return the index of the minimum value contained in the input array of doubles. If no value is smaller than Double.MAX_VALUE, the returned index is -1.
      */
     protected int min(double[] values) {
         double minv = Double.MAX_VALUE;
@@ -1093,8 +1059,7 @@ public class AxeBox implements IAxe {
         layout.getYTicks(ymin, ymax);
         layout.getZTicks(zmin, zmax);
         /*
-         * setXTickMode(TICK_REGULAR, 3);5 setYTickMode(TICK_REGULAR, 3);5
-         * setZTickMode(TICK_REGULAR, 5);6
+         * setXTickMode(TICK_REGULAR, 3);5 setYTickMode(TICK_REGULAR, 3);5 setZTickMode(TICK_REGULAR, 5);6
          */
     }
 
@@ -1127,7 +1092,7 @@ public class AxeBox implements IAxe {
     public IAxeLayout getLayout() {
         return layout;
     }
-    
+
     @Override
     public SpaceTransformer getSpaceTransformer() {
         return spaceTransformer;
@@ -1139,8 +1104,7 @@ public class AxeBox implements IAxe {
     }
 
     /**
-     * When setting a current view, the AxeBox can know the view is on mode
-     * CameraMode.TOP, and optimize some axis placement.
+     * When setting a current view, the AxeBox can know the view is on mode CameraMode.TOP, and optimize some axis placement.
      */
     public void setView(View view) {
         this.view = view;
@@ -1149,14 +1113,12 @@ public class AxeBox implements IAxe {
     @Override
     public void setAxe(BoundingBox3d bbox) {
         this.boxBounds = bbox;
-        //LOGGER.info(bbox);
+        // LOGGER.info(bbox);
         setAxeBox(bbox.getXmin(), bbox.getXmax(), bbox.getYmin(), bbox.getYmax(), bbox.getZmin(), bbox.getZmax());
     }
 
     /**
-     * Return the boundingBox of this axis, including the volume occupied by the
-     * texts. This requires calling {@link draw()} before, which computes actual
-     * ticks position in 3d, and updates the bounds.
+     * Return the boundingBox of this axis, including the volume occupied by the texts. This requires calling {@link draw()} before, which computes actual ticks position in 3d, and updates the bounds.
      */
     @Override
     public BoundingBox3d getWholeBounds() {
@@ -1169,19 +1131,17 @@ public class AxeBox implements IAxe {
     }
 
     /**
-     * Set the scaling factor that are applyed on this object before GL2
-     * commands.
+     * Set the scaling factor that are applyed on this object before GL2 commands.
      */
     @Override
     public void setScale(Coord3d scale) {
         this.scale = scale;
     }
-    
+
     @Override
     public Coord3d getScale() {
         return scale;
     }
-
 
     /* */
 
@@ -1236,6 +1196,5 @@ public class AxeBox implements IAxe {
     protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
 
     protected SpaceTransformer spaceTransformer;
-
 
 }

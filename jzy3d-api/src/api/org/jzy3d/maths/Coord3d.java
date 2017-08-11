@@ -581,6 +581,14 @@ public class Coord3d implements Serializable {
             c.divSelf(div);
         }
     }
+    
+    public static List<Coord3d> clone(List<Coord3d> coords) {
+        List<Coord3d> clone = new ArrayList<>();
+        for(Coord3d c: coords){
+            clone.add(c.clone());
+        }
+        return clone;
+    }
 
     /**************************************************************/
 

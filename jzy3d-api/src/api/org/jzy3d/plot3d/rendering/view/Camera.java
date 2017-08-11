@@ -61,6 +61,10 @@ public class Camera extends AbstractViewportManager {
         setRenderingSphereRadius(1);
         setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
     }
+    
+    public Camera() {
+        this(Coord3d.ORIGIN.clone());
+    }
 
     /******************************************************************/
 
