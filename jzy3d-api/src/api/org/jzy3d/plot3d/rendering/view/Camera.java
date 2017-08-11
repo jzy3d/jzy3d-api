@@ -281,7 +281,7 @@ public class Camera extends AbstractViewportManager {
         return new PolygonArray(x, y, z);
     }
 
-    public Grid modelToScreen(GL gl, GLU glu, Grid grid) {
+    /*public Grid modelToScreen(GL gl, GLU glu, Grid grid) {
         int viewport[] = getViewPortAsInt(gl);
         double screencoord[] = new double[3];
 
@@ -293,9 +293,9 @@ public class Camera extends AbstractViewportManager {
 
         for (int i = 0; i < xlen; i++) {
             for (int j = 0; j < ylen; j++) {
-                // if( ! glu.gluProject( grid.getX()[i], grid.getY()[i],
-                // grid.getZ()[i][j], getModelViewAsFloat(gl), 0,
-                // getProjectionAsFloat(gl), 0, viewport, 0, screencoord, 0 ) )
+                if( ! glu.gluProject( grid.getX()[i], grid.getY()[i],
+                 grid.getZ()[i][j], getModelViewAsFloat(gl), 0,
+                 getProjectionAsFloat(gl), 0, viewport, 0, screencoord, 0 ) )
                 failedProjection("Could not retrieve model coordinates in screen for point " + i);
                 x[i] = (float) screencoord[0];
                 y[j] = (float) screencoord[1]; // STUPID :)
@@ -303,7 +303,7 @@ public class Camera extends AbstractViewportManager {
             }
         }
         return new Grid(x, y, z);
-    }
+    }*/
 
     public PolygonArray[][] modelToScreen(GL gl, GLU glu, PolygonArray[][] polygons) {
         int viewport[] = getViewPortAsInt(gl);
@@ -399,6 +399,7 @@ public class Camera extends AbstractViewportManager {
             gl.getGL2().glBegin(GL.GL_POINTS);
             gl.getGL2().glPointSize(camWidth);
             gl.getGL2().glColor4f(camColor.r, camColor.g, camColor.b, camColor.a);
+            
             gl.getGL2().glVertex3f(eye.x, eye.y, eye.z);
             gl.getGL2().glEnd();
         }
@@ -470,10 +471,14 @@ public class Camera extends AbstractViewportManager {
             throw new RuntimeException("Camera.shoot(): unknown projection mode '" + projection + "'");
 
         // Set camera position
+        doLookAt(glu);
+    }
+
+    protected void doLookAt(GLU glu) {
         glu.gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
     }
 
-    private void projectionOrthoGLES2(ViewportConfiguration viewport) {
+    protected void projectionOrthoGLES2(ViewportConfiguration viewport) {
         if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
             GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
         else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
@@ -482,7 +487,7 @@ public class Camera extends AbstractViewportManager {
             GLES2CompatUtils.glOrtho(-radius, +radius, -radius, +radius, near, far);
     }
 
-    private void projectionOrthoGL2(GL gl, ViewportConfiguration viewport) {
+    protected void projectionOrthoGL2(GL gl, ViewportConfiguration viewport) {
         if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
             gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
         else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
