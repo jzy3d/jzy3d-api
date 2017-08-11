@@ -35,20 +35,4 @@ public class OrthonormalGrid extends Grid{
         }
         return output;
     }
-	
-	/* The former method that implied an ever centered surface.
-	  
-	public List<Coord3d> apply(Mapper mapper) {
-	double xstep = xrange.getRange() / (double)xsteps;
-	double ystep = yrange.getRange() / (double)ysteps;
-	
-	List<Coord3d> output = new ArrayList<Coord3d>((xsteps-1)*(ysteps-1));
-	
-	for(int xi=-(xsteps-1)/2; xi<=(xsteps-1)/2; xi++){
-		for(int yi=-(ysteps-1)/2; yi<=(ysteps-1)/2; yi++){
-			output.add( new Coord3d(xi*xstep, yi*ystep, mapper.f(xi*xstep, yi*ystep) ) );
-		}
-	}
-	return output;
-}*/
 }
