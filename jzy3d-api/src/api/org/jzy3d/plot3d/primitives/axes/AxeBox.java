@@ -713,31 +713,34 @@ public class AxeBox implements IAxe {
 
     /* COMPUTATION OF HIDDEN QUADS */
 
-    public void updateHiddenQuads(GL gl, Camera camera) {
+    protected void updateHiddenQuads(GL gl, Camera camera) {
         quadIsHidden = getHiddenQuads(gl, camera);
     }
 
     /** Computes the visibility of each cube face. */
     protected boolean[] getHiddenQuads(GL gl, Camera cam) {
+        Coord3d scaledEye = cam.getEye().div(scale);
+        return getHiddenQuads(scaledEye, center);
+    }
+
+    public boolean[] getHiddenQuads(Coord3d scaledEye, Coord3d center) {
         boolean[] status = new boolean[6];
-
-        Coord3d se = cam.getEye().div(scale);
-
-        if (se.x <= center.x) {
+        
+        if (scaledEye.x <= center.x) {
             status[0] = false;
             status[1] = true;
         } else {
             status[0] = true;
             status[1] = false;
         }
-        if (se.y <= center.y) {
+        if (scaledEye.y <= center.y) {
             status[2] = false;
             status[3] = true;
         } else {
             status[2] = true;
             status[3] = false;
         }
-        if (se.z <= center.z) {
+        if (scaledEye.z <= center.z) {
             status[4] = false;
             status[5] = true;
         } else {

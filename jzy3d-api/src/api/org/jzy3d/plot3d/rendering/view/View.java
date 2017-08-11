@@ -650,13 +650,11 @@ public class View {
         float lmax = 1;
 
         if (bounds != null) {
-            xLen = bounds.getXmax() - bounds.getXmin();
-            yLen = bounds.getYmax() - bounds.getYmin();
-            zLen = bounds.getZmax() - bounds.getZmin();
+            Coord3d range = squarifyComputeBoundsRanges(bounds);
+            xLen = range.x;
+            yLen = range.y;
+            zLen = range.z;
 
-            /*xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
-            yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
-            zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());*/
             lmax = Math.max(Math.max(xLen, yLen), zLen);
         }
 
@@ -674,6 +672,13 @@ public class View {
         float yscale = (float) ((double) lmax / (double) yLen);
         float zscale = (float) ((double) lmax / (double) zLen);
         return new Coord3d(xscale, yscale, zscale);
+    }
+    
+    protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds){
+        return bounds.getRange();
+        /*xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
+        yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
+        zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());*/
     }
 
     /* GL */
