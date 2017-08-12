@@ -45,11 +45,7 @@ public class AWTView extends ChartView {
     }
 
     @Override
-    public void renderAxeBox(GL gl, GLU glu) {
-        renderAxeBox(gl, glu, cam, scene, axe, scaling, axeBoxDisplayed);
-    }
-    
-    public void renderAxeBox(GL gl, GLU glu, Camera camera, Scene scene, IAxe axe, Coord3d scaling, boolean axeBoxDisplayed) {
+    protected void renderAxeBox(GL gl, GLU glu, IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
             if (gl.isGL2()) {
                 gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);

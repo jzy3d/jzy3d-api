@@ -77,6 +77,7 @@ public class View {
         this.viewpoint = DEFAULT_VIEW.clone();
         this.center = sceneBounds.getCenter();
         this.scaling = Coord3d.IDENTITY.clone();
+        this.viewbounds = null; // sceneBounds might not be ready yet //new BoundingBox3d(0, 1, 0, 1, 0, 1);
         this.viewmode = ViewPositionMode.FREE;
         this.boundmode = ViewBoundMode.AUTO_FIT;
         this.cameraMode = CameraMode.ORTHOGONAL;
@@ -361,8 +362,7 @@ public class View {
     public void lookToBox(BoundingBox3d box) {
         if (box.isReset())
             return;
-        
-        center = box.getCenter();//box.getTransformedCenter(spaceTransformer);
+        center = box.getCenter();
         axe.setAxe(box);
         viewbounds = box;
     }
@@ -614,71 +614,8 @@ public class View {
      * will update view bounds to the current bounds.
      */
     public void setBoundManual(BoundingBox3d bounds) {
-        // viewbounds = bounds;
         boundmode = ViewBoundMode.MANUAL;
         lookToBox(bounds);
-    }
-    
-    protected Coord3d squarify() {
-        return squarify(scene, boundmode, viewbounds, spaceTransformer);
-    }
-
-    /**
-     * Return a 3d scaling factor that allows scaling the scene into a square
-     * box, according to the current ViewBoundMode.
-     * <p/>
-     * If the scene bounds are Infinite, NaN or zero, for a given dimension, the
-     * scaler will be set to 1 on the given dimension.
-     * 
-     * @return a scaling factor for each dimension.
-     */
-    protected Coord3d squarify(Scene scene, ViewBoundMode boundmode, BoundingBox3d viewbounds, SpaceTransformer spaceTransformer) {
-        // Get the view bounds
-        BoundingBox3d bounds;
-        if (boundmode == ViewBoundMode.AUTO_FIT)
-            bounds = scene.getGraph().getBounds();
-        else if (boundmode == ViewBoundMode.MANUAL)
-            bounds = viewbounds;
-        else {
-            throw new RuntimeException("Unknown bounds mode");
-        }
-
-        // Compute factors
-        float xLen = 1;
-        float yLen = 1;
-        float zLen = 1;
-        float lmax = 1;
-
-        if (bounds != null) {
-            Coord3d range = squarifyComputeBoundsRanges(bounds);
-            xLen = range.x;
-            yLen = range.y;
-            zLen = range.z;
-
-            lmax = Math.max(Math.max(xLen, yLen), zLen);
-        }
-
-        if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
-            xLen = 1;
-        if (Float.isInfinite(yLen) || Float.isNaN(yLen) || yLen == 0)
-            yLen = 1;
-        if (Float.isInfinite(zLen) || Float.isNaN(zLen) || zLen == 0)
-            zLen = 1;
-        if (Float.isInfinite(lmax) || Float.isNaN(lmax) || lmax == 0)
-            lmax = 1;
-
-        // Return a scaler
-        float xscale = (float) ((double) lmax / (double) xLen);
-        float yscale = (float) ((double) lmax / (double) yLen);
-        float zscale = (float) ((double) lmax / (double) zLen);
-        return new Coord3d(xscale, yscale, zscale);
-    }
-    
-    protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds){
-        return bounds.getRange();
-        /*xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
-        yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
-        zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());*/
     }
 
     /* GL */
@@ -696,11 +633,9 @@ public class View {
 
     protected GLAutoDrawable getCanvasAsGLAutoDrawable() {
         if (canvas instanceof GLAutoDrawable) {
-            // this covers AWT and Swing
-            return ((GLAutoDrawable) canvas);
+            return ((GLAutoDrawable) canvas); // this covers AWT and Swing
         } else if (canvas.getDrawable() instanceof GLAutoDrawable) {
-            // this also covers NEWT and Offscreen
-            return ((GLAutoDrawable) canvas.getDrawable());
+            return ((GLAutoDrawable) canvas.getDrawable()); // this also covers NEWT and Offscreen
         } else
             throw new RuntimeException("Unexpected instance type : " + canvas.getClass().toString());
     }
@@ -828,13 +763,11 @@ public class View {
         if (slave) {
             return;
         } else {
-            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); // or
-                                                                         // use
-                                                                         // GL2
+            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); 
         }
     }
 
-    /* */
+    /* RENDERING */
 
     public void render(GL gl, GLU glu) {
         fireViewLifecycleWillRender(null);
@@ -886,9 +819,74 @@ public class View {
         else
             gl.glDisable(GL2.GL_BLEND);
     }
+    
+    /* SCALE PROCESSING */
+    
+    protected Coord3d squarify() {
+        return squarify(scene, boundmode, viewbounds, spaceTransformer);
+    }
+
+    /**
+     * Return a 3d scaling factor that allows scaling the scene into a square
+     * box, according to the current ViewBoundMode.
+     * <p/>
+     * If the scene bounds are Infinite, NaN or zero, for a given dimension, the
+     * scaler will be set to 1 on the given dimension.
+     * 
+     * @return a scaling factor for each dimension.
+     */
+    protected Coord3d squarify(Scene scene, ViewBoundMode boundmode, BoundingBox3d viewbounds, SpaceTransformer spaceTransformer) {
+        // Get the view bounds
+        BoundingBox3d bounds;
+        if (boundmode == ViewBoundMode.AUTO_FIT)
+            bounds = scene.getGraph().getBounds();
+        else if (boundmode == ViewBoundMode.MANUAL)
+            bounds = viewbounds;
+        else {
+            throw new RuntimeException("Unknown bounds mode");
+        }
+
+        // Compute factors
+        float xLen = 1;
+        float yLen = 1;
+        float zLen = 1;
+        float lmax = 1;
+
+        if (bounds != null) {
+            Coord3d range = squarifyComputeBoundsRanges(bounds);
+            xLen = range.x;
+            yLen = range.y;
+            zLen = range.z;
+
+            lmax = Math.max(Math.max(xLen, yLen), zLen);
+        }
+
+        if (Float.isInfinite(xLen) || Float.isNaN(xLen) || xLen == 0)
+            xLen = 1;
+        if (Float.isInfinite(yLen) || Float.isNaN(yLen) || yLen == 0)
+            yLen = 1;
+        if (Float.isInfinite(zLen) || Float.isNaN(zLen) || zLen == 0)
+            zLen = 1;
+        if (Float.isInfinite(lmax) || Float.isNaN(lmax) || lmax == 0)
+            lmax = 1;
+
+        // Return a scaler
+        float xscale = (float) ((double) lmax / (double) xLen);
+        float yscale = (float) ((double) lmax / (double) yLen);
+        float zscale = (float) ((double) lmax / (double) zLen);
+        return new Coord3d(xscale, yscale, zscale);
+    }
+    
+    protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds){
+        return bounds.getRange();
+        /*xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
+        yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
+        zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());*/
+    }
 
     public BoundingBox3d computeScaledViewBounds() {
         scaling = computeSceneScaling();
+        
         // -- Compute the bounds for computing cam distance, clipping planes,
         if (viewbounds == null)
             viewbounds = new BoundingBox3d(0, 1, 0, 1, 0, 1);
@@ -909,11 +907,11 @@ public class View {
         else
             return Coord3d.IDENTITY.clone();
     }
+    
+    /* CAMERA PROCESSING */
 
     public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
-        // before LOG was : 
         float sceneRadius = (float)boundsScaled.getRadius() * factorViewPointDistance;
-        //float sceneRadius = (float) boundsScaled.getTransformedRadius(spaceTransformer);
         updateCamera(gl, glu, viewport, boundsScaled, sceneRadius);
     }
 
@@ -928,66 +926,59 @@ public class View {
         cam.setUp(computeCameraUpAndTriggerEvents(viewpoint));
         cam.setEye(computeCameraEye(cam.getTarget(), viewmode, viewpoint));
         
-        computeCameraRenderingSphereRadius(gl, glu, viewport, bounds);
+        computeCameraRenderingSphereRadius(cam, gl, glu, viewport, bounds);
         
         cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
     }
 
-    public Coord3d computeCameraTarget() {
+    protected Coord3d computeCameraTarget() {
         return computeCameraTarget(center, scaling);
     }
     
-    public Coord3d computeCameraEye(Coord3d target) {
+    protected Coord3d computeCameraEye(Coord3d target) {
         return computeCameraEye(target, viewmode, viewpoint);
     }
 
-
-    public Coord3d computeCameraTarget(Coord3d center, Coord3d scaling) {
+    protected Coord3d computeCameraTarget(Coord3d center, Coord3d scaling) {
         return center.mul(scaling);
     }
     
-    public Coord3d computeCameraEye(Coord3d target, ViewPositionMode viewmode, Coord3d viewpoint) {
-        Coord3d eye;
+    protected Coord3d computeCameraEye(Coord3d target, ViewPositionMode viewmode, Coord3d viewpoint) {
         if (viewmode == ViewPositionMode.FREE) {
-            eye = computeCameraEyeFree(viewpoint, target);
+            return computeCameraEyeFree(viewpoint, target);
         } else if (viewmode == ViewPositionMode.TOP) {
-            eye = computeCameraEyeTop(viewpoint, target);
+            return computeCameraEyeTop(viewpoint, target);
         } else if (viewmode == ViewPositionMode.PROFILE) {
-            eye = computeCameraEyeProfile(viewpoint, target);
+            return computeCameraEyeProfile(viewpoint, target);
         } else
             throw new RuntimeException("Unsupported ViewMode: " + viewmode);
-        return eye;
     }
 
-    public static Coord3d computeCameraEyeProfile(Coord3d viewpoint, Coord3d target) {
-        Coord3d eye;
-        eye = viewpoint;
+    protected static Coord3d computeCameraEyeProfile(Coord3d viewpoint, Coord3d target) {
+        Coord3d eye = viewpoint;
         eye.y = 0;
         eye = eye.cartesian().add(target);
         return eye;
     }
 
-    public static Coord3d computeCameraEyeTop(Coord3d viewpoint, Coord3d target) {
-        Coord3d eye;
-        eye = viewpoint;
+    protected static Coord3d computeCameraEyeTop(Coord3d viewpoint, Coord3d target) {
+        Coord3d eye = viewpoint;
         eye.x = -(float) Math.PI / 2; // on x
         eye.y = (float) Math.PI / 2; // on top
         eye = eye.cartesian().add(target);
         return eye;
     }
 
-    public static Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
-        Coord3d eye;
-        eye = viewpoint.cartesian().add(target);
-        return eye;
+    protected static Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
+        return viewpoint.cartesian().add(target);
     }
 
-    public Coord3d computeCameraUpAndTriggerEvents() {
+    protected Coord3d computeCameraUpAndTriggerEvents() {
         return computeCameraUpAndTriggerEvents(viewpoint);
     }
     
-    public Coord3d computeCameraUpAndTriggerEvents(Coord3d viewpoint) {
+    protected Coord3d computeCameraUpAndTriggerEvents(Coord3d viewpoint) {
         Coord3d up;
 
         if (Math.abs(viewpoint.y) == (float) Math.PI / 2) {
@@ -1011,7 +1002,7 @@ public class View {
         return up;
     }
 
-    public Coord3d computeCameraUp() {
+    protected Coord3d computeCameraUp() {
         Coord2d direction = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
         Coord3d up;
         if (viewpoint.y > 0) // on top
@@ -1021,7 +1012,7 @@ public class View {
         return up;
     }
 
-    public void computeCameraRenderingSphereRadius(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds) {
+    protected void computeCameraRenderingSphereRadius(Camera cam, GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds) {
         if (viewmode == ViewPositionMode.TOP) {
             float xdiam = bounds.getXRange().getRange();
             float ydiam = bounds.getYRange().getRange();
@@ -1033,19 +1024,18 @@ public class View {
             //cam.setRenderingSphereRadius((float) bounds.getTransformedRadius(spaceTransformer));
         }
     }
+    
+    protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
+    }
 
-    public void renderAxeBox(GL gl, GLU glu) {
-        /*if (axeBoxDisplayed) {
-            glModelView(gl);
-            scene.getLightSet().disable(gl);
-            axe.setScale(scaling);
-            axe.draw(gl, glu, cam);
-            scene.getLightSet().enableLightIfThereAreLights(gl);
-        }*/
+
+    /* AXE BOX RENDERING */
+    
+    protected void renderAxeBox(GL gl, GLU glu) {
         renderAxeBox(gl, glu, axe, scene, cam, scaling, axeBoxDisplayed);
     }
     
-    public void renderAxeBox(GL gl, GLU glu, IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
+    protected void renderAxeBox(GL gl, GLU glu, IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
             glModelView(gl);
             scene.getLightSet().disable(gl);
@@ -1063,6 +1053,8 @@ public class View {
         }
     }
 
+    /* SCENE GRAPH RENDERING */
+    
     public void renderSceneGraph(GL gl, GLU glu) {
         renderSceneGraph(gl, glu, true);
     }
@@ -1084,6 +1076,8 @@ public class View {
         scene.getGraph().draw(gl, glu, camera);
     }
 
+    /* OVERLAY RENDERING */
+
     public void renderOverlay(GL gl) {
         renderOverlay(gl, new ViewportConfiguration(canvas));
     }
@@ -1097,8 +1091,6 @@ public class View {
         annotations.getGraph().draw(gl, glu, camera);
     }
 
-    protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
-    }
 
     /* */
 
