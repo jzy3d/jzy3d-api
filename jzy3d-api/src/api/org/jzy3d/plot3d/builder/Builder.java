@@ -57,13 +57,20 @@ public class Builder {
         return s;
     }
 
-    protected static CompileableComposite buildComposite(Shape s) {
+	/**
+	 * Build a {@link CompileableComposite} out of a {@link Shape}, which allows faster rendering.
+	 * 
+	 * @param s
+	 * @return
+	 */
+    public static CompileableComposite buildComposite(Shape s) {
         CompileableComposite sls = new CompileableComposite();
         sls.add(s.getDrawables());
         sls.setColorMapper(new ColorMapper(colorMap, sls.getBounds().getZmin(), sls.getBounds().getZmax(), colorFactor));
         sls.setFaceDisplayed(s.getFaceDisplayed());
         sls.setWireframeDisplayed(s.getWireframeDisplayed());
         sls.setWireframeColor(s.getWireframeColor());
+        sls.setSpaceTransformer(s.getSpaceTransformer());
         return sls;
     }
     

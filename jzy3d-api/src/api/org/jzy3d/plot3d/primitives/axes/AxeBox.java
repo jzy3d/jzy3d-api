@@ -753,36 +753,6 @@ public class AxeBox implements IAxe {
     /* */
 
     /**
-     * Print out parameters of a gl call in 3dColor mode.
-     */
-    protected int print3DcolorVertex(int size, int count, float[] buffer) {
-        int i;
-        int id = size - count;
-        int veclength = 7;
-
-        System.out.print("  [" + id + "]");
-        for (i = 0; i < veclength; i++) {
-            System.out.print(" " + buffer[size - count]);
-            count = count - 1;
-        }
-        System.out.println();
-        return count;
-    }
-
-    /**
-     * Print out display status of quads.
-     */
-    protected void printHiddenQuads() {
-        for (int t = 0; t < quadIsHidden.length; t++)
-            if (quadIsHidden[t])
-                System.out.println("Quad[" + t + "] is not displayed");
-            else
-                System.out.println("Quad[" + t + "] is displayed");
-    }
-
-    /* */
-
-    /**
      * Set the parameters and data of the AxeBox.
      */
     protected void setAxeBox(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax) {
@@ -1145,8 +1115,6 @@ public class AxeBox implements IAxe {
     public Coord3d getScale() {
         return scale;
     }
-
-    /* */
 
     /* */
 
