@@ -5,6 +5,7 @@ import java.nio.FloatBuffer;
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
@@ -32,7 +33,8 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	 * Render the cube into the feedback buffer, in order to parse feedback
 	 * and determine which quad where displayed or not.
 	 */
-	protected boolean [] getHiddenQuads(GL gl){
+	@Override
+	protected boolean [] getHiddenQuads(GL gl, Camera cam){
 		int feedbacklength = 1024;
 		FloatBuffer floatbuffer = Buffers.newDirectFloatBuffer(feedbacklength);
 		float [] feedback = new float[feedbacklength];
@@ -181,7 +183,6 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	/**
 	 *  Print out parameters of a gl call in 3dColor mode.
 	 */
-    @Override
     protected int print3DcolorVertex(int size, int count, float[] buffer) {
         int i;
         int id = size - count;
@@ -195,16 +196,4 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
         System.out.println();
         return count;
     }
-	
-	/**
-	 * Print out display status of quads.
-	 */
-	@Override
-    protected void printHiddenQuads(){
-		for(int t=0; t<quadIsHidden.length; t++)
-			if(quadIsHidden[t])
-				System.out.println("Quad[" + t + "] is not displayed");
-			else
-				System.out.println("Quad[" + t + "] is displayed");
-	}
 }
