@@ -493,6 +493,7 @@ public class OBJFile {
         return openEdges_;
     }
 
+    @Override
     public String toString() {
         return "countVertices  =" + getPositionCount() + "  indexSize = " + getIndexCount() + "  vertexSize = " + getCompiledVertexCount() + "  byteOffset = " + getCompiledVertexSize() + "  normalOffset = " + getCompiledNormalOffset() + "  dimensions = " + getPositionSize();
     }
