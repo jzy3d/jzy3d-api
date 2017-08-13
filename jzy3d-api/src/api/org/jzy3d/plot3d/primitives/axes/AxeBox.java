@@ -394,6 +394,11 @@ public class AxeBox implements IAxe {
     public void drawAxisLabel(GL gl, GLU glu, Camera cam, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
         if (isXDisplayed(direction) || isYDisplayed(direction) || isZDisplayed(direction)) {
             Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
+            
+            if(spaceTransformer!=null){
+                labelPosition = spaceTransformer.compute(labelPosition);
+            }
+            
             BoundingBox3d labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
             if (labelBounds != null)
                 ticksTxtBounds.add(labelBounds);
