@@ -120,6 +120,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
         }
     }
     
+    @Override
     public void setSpaceTransformer(SpaceTransformer spaceTransformer) {
         this.spaceTransformer = spaceTransformer;
         
