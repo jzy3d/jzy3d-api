@@ -12,7 +12,7 @@
 		<artifactId>jzy3d-master</artifactId>
 		<version>1.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-api</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
