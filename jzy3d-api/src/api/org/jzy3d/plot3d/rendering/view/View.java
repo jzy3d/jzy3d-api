@@ -955,14 +955,14 @@ public class View {
             throw new RuntimeException("Unsupported ViewMode: " + viewmode);
     }
 
-    protected static Coord3d computeCameraEyeProfile(Coord3d viewpoint, Coord3d target) {
+    protected Coord3d computeCameraEyeProfile(Coord3d viewpoint, Coord3d target) {
         Coord3d eye = viewpoint;
         eye.y = 0;
         eye = eye.cartesian().add(target);
         return eye;
     }
 
-    protected static Coord3d computeCameraEyeTop(Coord3d viewpoint, Coord3d target) {
+    protected Coord3d computeCameraEyeTop(Coord3d viewpoint, Coord3d target) {
         Coord3d eye = viewpoint;
         eye.x = -(float) Math.PI / 2; // on x
         eye.y = (float) Math.PI / 2; // on top
@@ -970,7 +970,7 @@ public class View {
         return eye;
     }
 
-    protected static Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
+    protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
         return viewpoint.cartesian().add(target);
     }
 

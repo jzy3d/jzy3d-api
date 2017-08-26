@@ -331,10 +331,20 @@ public class Coord3d implements Serializable {
         double d = Math.sqrt(x * x + y * y);
 
         // case x=0 and y=0
-        if (d == 0 && z > 0)
-            return new Coord3d(0, Math.PI / 2, r);
-        else if (d == 0 && z <= 0)
-            return new Coord3d(0, -Math.PI / 2, r);
+        if (d == 0 && z > 0){
+            x = 0;
+            y = (float)(Math.PI / 2);
+            z = (float) r;
+            return this;
+            //return new Coord3d(0, Math.PI / 2, r);
+        }
+        else if (d == 0 && z <= 0){
+            x = 0;
+            y = (float)(-Math.PI / 2);
+            z = (float) r;
+            return this;
+            //return new Coord3d(0, -Math.PI / 2, r);
+        }
         // other cases
         else {
             // classical case for azimuth
