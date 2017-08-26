@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-depthpeeling</artifactId>
 	<!-- <version>1.0.0-SNAPSHOT</version> -->
 
-	<version>1.0.1</version>
+	<version>1.0.1-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-master</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
 
@@ -23,7 +24,7 @@
 	<scm>
 		<connection>scm:git:https://github.com/jzy3d/jzy3d-depthpeeling</connection>
 
-		<tag>jzy3d-all-1.0.1</tag>
+		<tag>1.0.0</tag>
 	</scm>
 
 
