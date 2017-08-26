@@ -1,0 +1,133 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.jzy3d</groupId>
+	<artifactId>jzy3d-master</artifactId>
+	<version>1.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Jzy3d Master Project</name>
+	<url>http://www.jzy3d.org</url>
+	<description>A java API to draw 3d charts.</description>
+	<developers>
+		<developer>
+			<id>martin.pernollet</id>
+			<name>Martin Pernollet</name>
+			<email>martin@jzy3d.org</email>
+			<url>http://twitter.com/jzy3d</url>
+		</developer>
+		<developer>
+			<id>nils.hoffmann</id>
+			<name>Nils Hoffmann</name>
+		</developer>
+		<developer>
+			<id>juan.barandiaran</id>
+			<name>Juan Barandiaran</name>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The (New) BSD License</name>
+			<url>http://www.opensource.org/licenses/bsd-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+	<scm>
+	<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
+<!-- 		<connection>scm:git:git://github.com/jzy3d/jzy3d-api</connection> -->
+	  <tag>1.0.1</tag>
+  </scm>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/jzy3d/jzy3d-api/issues</url>
+	</issueManagement>
+
+	<modules>
+		<module>jzy3d-api</module>
+		<module>jzy3d-depthpeeling</module>
+		<module>jzy3d-javafx</module>
+		<module>jzy3d-jdt-core</module>
+		<module>jzy3d-svm-mapper</module>
+		<module>jzy3d-swt</module>
+		<module>jzy3d-tools-libsvm</module>
+		<module>jzy3d-tutorials</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<version.jzy3d>${project.version}</version.jzy3d>
+		<version.java.source>1.8</version.java.source>
+		<version.java.target>1.8</version.java.target>
+		<version.mvn.compiler>3.0</version.mvn.compiler>
+		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
+		<version.mvn.deploy>2.4</version.mvn.deploy>
+		<version.mvn.javadoc>2.9.1</version.mvn.javadoc>
+		<version.libs.junit>4.10</version.libs.junit>
+		<version.libs.swt>4.2.1</version.libs.swt>
+	</properties>
+
+	<distributionManagement>
+		<repository>
+			<id>jzy3d-ftp</id>
+			<name>Jzy3d Maven Folder</name>
+			<url>ftp://ftp.cluster013.ovh.net/maven/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>jzy3d-ftp</id>
+			<name>Jzy3d Maven Folder SNAPSHOTS</name>
+			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${version.mvn.compiler}</version>
+					<configuration>
+						<source>${version.java.source}</source>
+						<target>${version.java.target}</target>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${version.mvn.javadoc}</version>
+					<!--<configuration> <stylesheetfile>jzy3d-api/doc/layout.css</stylesheetfile>
+						</configuration> -->
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.3</version>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>${version.mvn.ftp}</version>
+			</extension>
+		</extensions>
+	</build>
+
+
+	<profiles>
+		<profile>
+			<id>disable-java8-doclint</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
+	</profiles>
+
+</project>

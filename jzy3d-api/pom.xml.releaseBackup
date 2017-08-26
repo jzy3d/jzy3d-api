@@ -8,26 +8,25 @@
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-master</artifactId>
-		<version>1.0.0-SNAPSHOT</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
 	<description>A Java API for 3d charts</description>
 
-	<!-- <repositories> <repository> <id>miglayout-snapshots</id> <name>Miglayout 
-		Snapshots</name> <url>https://oss.sonatype.org/content/</url> </repository> 
-		</repositories> -->
-		
 	<!-- DEPLOY SOURCE AND JAVADOC :
 	mvn clean source:jar javadoc:jar deploy
 	 -->
 
+ <!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio
+	 \ -DartifactId=jzyio \ -Dversion=0.1 \ -Dpackaging=jar \ -Dfile=./lib/misc/org.jzyio-0.1.jar -->
 
+ <!-- To download javadocs for dependencies mvn dependency:resolve -Dclassifier=javadoc -->
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-jdt-core</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
+			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -73,14 +72,14 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
-			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay, 
+			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay,
 				i.e. tools to ease non regression tests for interactive features -->
 		</dependency>
 
 	</dependencies>
 
 	<build>
-		<!-- <testSourceDirectory>src/tests</testSourceDirectory> -->
+		<testSourceDirectory>src/tests</testSourceDirectory>
 		<plugins>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -136,6 +135,47 @@
 					</execution>
 				</executions>
 			</plugin>
+
+			<!-- <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+
+							<artifactSet>
+								<excludes>
+									<exclude>classworlds:classworlds</exclude>
+									<exclude>jmock:*</exclude>
+									<exclude>*:xml-apis</exclude>
+									<exclude>org.apache.maven:lib:tests</exclude>
+								</excludes>
+							</artifactSet>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+								</transformer>
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>-->
+
 		</plugins>
 
 
@@ -204,11 +244,17 @@
 		</pluginManagement>
 	</build>
 
-
-
-	<!-- To install a lib locally: mvn install:install-file \ -DgroupId=org.jzyio 
-		\ -DartifactId=jzyio \ -Dversion=0.1 \ -Dpackaging=jar \ -Dfile=./lib/misc/org.jzyio-0.1.jar -->
-
-	<!-- To download javadocs for dependencies mvn dependency:resolve -Dclassifier=javadoc -->
-
+<!--To retrieve Jzy3d dependencies -->
+	<repositories>
+		<repository>
+			<id>jzy3d-snapshots</id>
+			<name>Jzy3d Snapshots</name>
+			<url>http://maven.jzy3d.org/snapshots/</url>
+		</repository>
+		<repository>
+			<id>jzy3d-releases</id>
+			<name>Jzy3d Snapshots</name>
+			<url>http://maven.jzy3d.org/releases/</url>
+		</repository>
+	</repositories>
 </project>
