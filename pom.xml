@@ -36,7 +36,7 @@
 	<scm>
 	<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
 <!-- 		<connection>scm:git:git://github.com/jzy3d/jzy3d-api</connection> -->
-	  <tag>1.0.0</tag>
+	  <tag>1.0.1</tag>
   </scm>
 	<issueManagement>
 		<system>Github</system>
@@ -56,7 +56,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.jzy3d>1.0.0-SNAPSHOT</version.jzy3d>
+		<version.jzy3d>${project.version}</version.jzy3d>
 		<version.java.source>1.8</version.java.source>
 		<version.java.target>1.8</version.java.target>
 		<version.mvn.compiler>3.0</version.mvn.compiler>

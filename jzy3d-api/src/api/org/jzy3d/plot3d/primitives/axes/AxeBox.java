@@ -355,8 +355,7 @@ public class AxeBox implements IAxe {
         float xdir = (normx[quad_0] + normx[quad_1]) - center.x;
         float ydir = (normy[quad_0] + normy[quad_1]) - center.y;
         float zdir = (normz[quad_0] + normz[quad_1]) - center.z;
-        xdir = xdir == 0 ? 0 : xdir / Math.abs(xdir); // so that direction as
-                                                      // length 1
+        xdir = xdir == 0 ? 0 : xdir / Math.abs(xdir); // so that direction has length 1
         ydir = ydir == 0 ? 0 : ydir / Math.abs(ydir);
         zdir = zdir == 0 ? 0 : zdir / Math.abs(zdir);
 
@@ -395,6 +394,7 @@ public class AxeBox implements IAxe {
         if (isXDisplayed(direction) || isYDisplayed(direction) || isZDisplayed(direction)) {
             Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
             
+            // not fully relevant
             if(spaceTransformer!=null){
                 labelPosition = spaceTransformer.compute(labelPosition);
             }
@@ -405,31 +405,31 @@ public class AxeBox implements IAxe {
         }
     }
 
-    public boolean isZDisplayed(int direction) {
+    protected boolean isZDisplayed(int direction) {
         return isZ(direction) && layout.isZAxeLabelDisplayed();
     }
 
-    public boolean isYDisplayed(int direction) {
+    protected boolean isYDisplayed(int direction) {
         return isY(direction) && layout.isYAxeLabelDisplayed();
     }
 
-    public boolean isXDisplayed(int direction) {
+    protected boolean isXDisplayed(int direction) {
         return isX(direction) && layout.isXAxeLabelDisplayed();
     }
 
-    public boolean isZ(int direction) {
+    protected boolean isZ(int direction) {
         return direction == AXE_Z;
     }
 
-    public boolean isY(int direction) {
+    protected boolean isY(int direction) {
         return direction == AXE_Y;
     }
 
-    public boolean isX(int direction) {
+    protected boolean isX(int direction) {
         return direction == AXE_X;
     }
 
-    public double[] getAxisTicks(int direction) {
+    protected double[] getAxisTicks(int direction) {
         double ticks[];
         if (isX(direction))
             ticks = layout.getXTicks();
@@ -441,6 +441,9 @@ public class AxeBox implements IAxe {
         return ticks;
     }
 
+    /** 
+     * Draw an array of ticks on the given axis indicated by direction field. 
+     */
     public void drawAxisTicks(GL gl, GLU glu, Camera cam, int direction, Color color, Halign hal, Valign val, float tickLength, BoundingBox3d ticksTxtBounds, double xpos, double ypos, double zpos, float xdir, float ydir, float zdir, double[] ticks) {
         double xlab;
         double ylab;
