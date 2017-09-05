@@ -35,8 +35,8 @@ public class WaterfallComposite extends Shape {
 		outline.setWireframeColor(Color.BLACK);
 		outline.setFaceDisplayed(false);
 		
-		add(outline);
 		add(fill);
+		add(outline);
 	}
 	
 	@Override
