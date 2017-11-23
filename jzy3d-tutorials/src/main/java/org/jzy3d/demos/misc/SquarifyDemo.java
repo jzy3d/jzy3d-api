@@ -12,7 +12,12 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.transform.squarifier.XYSquarifier;
 import org.jzy3d.plot3d.transform.squarifier.XZSquarifier;
+import org.jzy3d.plot3d.transform.squarifier.YXSquarifier;
+import org.jzy3d.plot3d.transform.squarifier.YZSquarifier;
+import org.jzy3d.plot3d.transform.squarifier.ZXSquarifier;
+import org.jzy3d.plot3d.transform.squarifier.ZYSquarifier;
 
 public class SquarifyDemo extends AbstractAnalysis {
     public static void main(String[] args) throws Exception {

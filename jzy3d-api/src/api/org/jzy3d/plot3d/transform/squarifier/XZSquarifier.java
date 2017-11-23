@@ -2,6 +2,9 @@ package org.jzy3d.plot3d.transform.squarifier;
 
 import org.jzy3d.maths.Coord3d;
 
+/**
+ * XZ square, XY correct aspect ratio
+ */
 public class XZSquarifier implements ISquarifier {
 
 	@Override
