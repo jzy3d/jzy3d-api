@@ -12,12 +12,7 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.transform.squarifier.XYSquarifier;
 import org.jzy3d.plot3d.transform.squarifier.XZSquarifier;
-import org.jzy3d.plot3d.transform.squarifier.YXSquarifier;
-import org.jzy3d.plot3d.transform.squarifier.YZSquarifier;
-import org.jzy3d.plot3d.transform.squarifier.ZXSquarifier;
-import org.jzy3d.plot3d.transform.squarifier.ZYSquarifier;
 
 public class SquarifyDemo extends AbstractAnalysis {
     public static void main(String[] args) throws Exception {
@@ -35,7 +30,7 @@ public class SquarifyDemo extends AbstractAnalysis {
         };
 
         // Define range and precision for the function to plot
-        Range range = new Range(-3, 3);
+        Range range = new Range(-2.5f, 2.5f);
         int steps = 80;
         Range yrange = new Range(-5, 5);
 
@@ -47,8 +42,10 @@ public class SquarifyDemo extends AbstractAnalysis {
 
         // Create a chart
         chart = AWTChartComponentFactory.chart(Quality.Intermediate, getCanvasType());
-        chart.getView().setSquarifier(new XZSquarifier());
         
+        //This addition keeps the aspect ratio of the X and Y data
+        //but makes X and Z square
+        chart.getView().setSquarifier(new XZSquarifier());
         chart.getView().setSquared(true);
         chart.getScene().getGraph().add(surface);
     }
