@@ -31,6 +31,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.transform.Scale;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
+import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -870,6 +871,9 @@ public class View {
         if (Float.isInfinite(lmax) || Float.isNaN(lmax) || lmax == 0)
             lmax = 1;
 
+        if (squarifier != null) {
+        	return squarifier.scale(xLen, yLen, zLen);
+        }
         // Return a scaler
         float xscale = (float) ((double) lmax / (double) xLen);
         float yscale = (float) ((double) lmax / (double) yLen);
@@ -1108,6 +1112,10 @@ public class View {
         this.spaceTransformer = transformer;
     }
 
+    public void setSquarifier(ISquarifier squarifier) {
+    	this.squarifier = squarifier;
+    }
+    
     /* */
 
     /** A view may optionnaly know its parent chart. */
@@ -1139,6 +1147,7 @@ public class View {
     protected Coord3d center;
     protected Coord3d scaling;
     protected BoundingBox3d viewbounds;
+    
 
     protected CameraMode cameraMode;
     protected ViewPositionMode viewmode;
@@ -1179,5 +1188,7 @@ public class View {
     protected boolean slave = false;
 
     protected SpaceTransformer spaceTransformer = new SpaceTransformer();
+    
+    private ISquarifier squarifier;
 
 }
