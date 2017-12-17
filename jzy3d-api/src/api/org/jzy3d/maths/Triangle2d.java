@@ -1,0 +1,16 @@
+package org.jzy3d.maths;
+
+public class Triangle2d {
+    public Coord2d a;
+    public Coord2d b;
+    public Coord2d c;
+    
+    public Triangle2d() {
+    }
+    
+    public Triangle2d(Coord2d a, Coord2d b, Coord2d c) {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+}

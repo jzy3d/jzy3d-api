@@ -287,4 +287,8 @@ public class Coord2d implements Serializable{
             return false;
         return true;
     }
+
+    public Coord3d to3d() {
+        return new Coord3d(this);
+    }
 }
