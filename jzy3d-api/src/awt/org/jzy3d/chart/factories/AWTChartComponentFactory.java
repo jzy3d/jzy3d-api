@@ -64,6 +64,11 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
     }
 
+    public static Chart chart(Toolkit toolkit) {
+        AWTChartComponentFactory f = new AWTChartComponentFactory();
+        return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
+    }
+
     public static Chart chart(Quality quality, Toolkit toolkit) {
         AWTChartComponentFactory f = new AWTChartComponentFactory();
         return f.newChart(quality, toolkit);
