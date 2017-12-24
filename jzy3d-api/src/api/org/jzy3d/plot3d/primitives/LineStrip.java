@@ -23,6 +23,11 @@ import com.jogamp.opengl.glu.GLU;
  * <li>Otherwise apply a uniform wireframe color.
  * </ul>
  * 
+ * 
+ * Dotted line are built using 
+ * 
+ * http://www.glprogramming.com/red/images/Image35.gif
+ * 
  * @author Martin Pernollet
  */
 public class LineStrip extends AbstractWireframeable {
@@ -91,15 +96,14 @@ public class LineStrip extends AbstractWireframeable {
     }
 
     public void drawLineGL2(GL gl) {
-        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
-
-        
         if(stipple){
             gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             gl.glEnable(GL2.GL_LINE_STIPPLE);
-            gl.getGL2().glLineStipple(1, (short) 0xAAAA);
+            gl.getGL2().glLineStipple(stippleFactor, stipplePattern);
         }
+
         
+        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
         gl.getGL2().glLineWidth(wfwidth);
         
         if (wfcolor == null) {
@@ -114,6 +118,10 @@ public class LineStrip extends AbstractWireframeable {
             }
         }
         gl.getGL2().glEnd();
+        
+        if(stipple){
+            gl.glDisable(GL2.GL_LINE_STIPPLE);
+        }
     }
 
     public void drawPoints(GL gl) {
@@ -226,13 +234,63 @@ public class LineStrip extends AbstractWireframeable {
     public void setShowPoints(boolean showPoints) {
         this.showPoints = showPoints;
     }
-    
+
+    /**
+     * Indicates if stippled rendering is enabled for this line.
+     * 
+     * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+     */
     public boolean isStipple() {
         return stipple;
     }
 
+    /**
+     * Enable or disable stippled rendering.
+     * 
+     * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+     */
     public void setStipple(boolean stipple) {
         this.stipple = stipple;
+    }
+
+    /**
+     * Stippled line factor.
+     * 
+     * @see http://www.glprogramming.com/red/images/Image35.gif
+     * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+     */
+    public int getStippleFactor() {
+        return stippleFactor;
+    }
+
+    /**
+     * Stippled line factor.
+     * 
+     * @see http://www.glprogramming.com/red/images/Image35.gif
+     * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+     */
+    public void setStippleFactor(int stippleFactor) {
+        this.stippleFactor = stippleFactor;
+    }
+
+    /**
+     * Stippled line pattern.
+     * 
+     * @see http://www.glprogramming.com/red/images/Image35.gif
+     * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+     */
+    public short getStipplePattern() {
+        return stipplePattern;
+    }
+
+    /**
+     * Stippled line pattern.
+     * 
+     * @see http://www.glprogramming.com/red/images/Image35.gif
+     * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+     */
+    public void setStipplePattern(short stipplePattern) {
+        this.stipplePattern = stipplePattern;
     }
 
     @Override
@@ -301,4 +359,6 @@ public class LineStrip extends AbstractWireframeable {
     protected float width;
     protected boolean showPoints = false;
     protected boolean stipple = false;
+    protected int stippleFactor = 4;
+    protected short stipplePattern = (short)0xAAAA;
 }
