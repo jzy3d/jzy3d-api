@@ -12,5 +12,17 @@ public class Triangle2d {
         this.a = a;
         this.b = b;
         this.c = c;
-    }   
+    }
+    
+    public Coord2d getMedianAB(){
+        return a.mean(b);
+    }
+    
+    public Coord2d getMedianBC(){
+        return b.mean(c);
+    }
+    
+    public Coord2d getMedianCA(){
+        return c.mean(a);
+    }
 }
