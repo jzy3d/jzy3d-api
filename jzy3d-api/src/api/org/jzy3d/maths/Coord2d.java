@@ -235,6 +235,20 @@ public class Coord2d implements Serializable{
         float yy = y*ratio+c.y*inv;
 	    return new Coord2d(xx,yy);
 	}
+	
+	public Coord2d mean(Coord2d b) {
+        Coord2d mean = new Coord2d();
+        mean.x = (x + b.x) / 2;
+        mean.y = (y + b.y) / 2;
+        return mean;
+    }
+	
+	public static Coord2d addWeighted(Coord2d a, Coord2d b, float weigthA, float weightB) {
+        Coord2d mean = new Coord2d();
+        mean.x = a.x * weigthA + b.x * weightB;
+        mean.y = a.y * weigthA + b.y * weightB;
+        return mean;
+    }
 
 	/** Return a string representation of this coordinate.*/
 	@Override
