@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.text;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -34,7 +35,7 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	@Override
     public void draw(GL gl, GLU glu, Camera cam){
 	    doTransform(gl, glu, cam);
-	    BoundingBox3d box = renderer.drawText(gl, glu, cam, txt, position, halign, valign, color);
+	    BoundingBox3d box = renderer.drawText(gl, glu, cam, txt, position, halign, valign, color, screenOffset, sceneOffset);
 	    if(box!=null)
 	        bbox = box.scale(new Coord3d(1/10,1/10,1/10));
 	    else
@@ -90,7 +91,23 @@ public class DrawableTextWrapper extends AbstractDrawable{
 		this.valign = valign;
 	}
 	
-	/*******************************************************************************************/
+	public Coord2d getScreenOffset() {
+        return screenOffset;
+    }
+
+    public void setScreenOffset(Coord2d screenOffset) {
+        this.screenOffset = screenOffset;
+    }
+
+    public Coord3d getSceneOffset() {
+        return sceneOffset;
+    }
+
+    public void setSceneOffset(Coord3d sceneOffset) {
+        this.sceneOffset = sceneOffset;
+    }
+
+    /*******************************************************************************************/
 	
 	@Override
     public String toString(){
@@ -104,7 +121,9 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	protected Halign  halign;
 	protected Valign  valign;	
 	protected Color   color;
-
+	protected Coord2d screenOffset = new Coord2d();
+    protected Coord3d sceneOffset = new Coord3d();
+    
 	protected ITextRenderer renderer;
 
     @Override
