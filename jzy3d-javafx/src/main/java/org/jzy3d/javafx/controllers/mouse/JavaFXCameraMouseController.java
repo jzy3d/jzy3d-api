@@ -13,14 +13,12 @@ import org.jzy3d.javafx.controllers.JavaFXChartController;
 import org.jzy3d.maths.Coord2d;
 
 public class JavaFXCameraMouseController extends AbstractCameraController implements JavaFXChartController {
-    static {
-        DEFAULT_UPDATE_VIEW = true;
-    }
     
     protected Node node;
     
     public JavaFXCameraMouseController(Node node) {
         super();
+        updateViewDefault = true;
         register(node);
     }
 

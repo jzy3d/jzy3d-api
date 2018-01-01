@@ -24,10 +24,19 @@ public abstract class AbstractCameraController extends AbstractController implem
     	super.dispose();
     }
 
-    public static boolean DEFAULT_UPDATE_VIEW = false;
+    public boolean isUpdateViewDefault() {
+        return updateViewDefault;
+    }
+
+    /** Define if the camera controller requires view update after editing camera. */
+    public void setUpdateViewDefault(boolean updateViewDefault) {
+        this.updateViewDefault = updateViewDefault;
+    }
+
+    protected boolean updateViewDefault = false;
     
     protected void rotate(final Coord2d move){
-        rotate(move, DEFAULT_UPDATE_VIEW);
+        rotate(move, updateViewDefault);
     }
     
 	protected void rotate(final Coord2d move, boolean updateView){
@@ -37,7 +46,7 @@ public abstract class AbstractCameraController extends AbstractController implem
 	}
 	
     protected void shift(final float factor){
-        shift(factor, DEFAULT_UPDATE_VIEW);
+        shift(factor, updateViewDefault);
     }	
     
 	protected void shift(final float factor, boolean updateView){
@@ -47,7 +56,7 @@ public abstract class AbstractCameraController extends AbstractController implem
 	}
 	
 	protected void zoomX(final float factor){
-        zoomX(factor, DEFAULT_UPDATE_VIEW);
+        zoomX(factor, updateViewDefault);
     }   
     
 	protected void zoomX(final float factor, boolean updateView){
@@ -57,7 +66,7 @@ public abstract class AbstractCameraController extends AbstractController implem
     }
 	
 	protected void zoomY(final float factor){
-        zoomY(factor, DEFAULT_UPDATE_VIEW);
+        zoomY(factor, updateViewDefault);
     }   
     
     protected void zoomY(final float factor, boolean updateView){
@@ -67,7 +76,7 @@ public abstract class AbstractCameraController extends AbstractController implem
     }
     
     protected void zoomZ(final float factor){
-        zoomZ(factor, DEFAULT_UPDATE_VIEW);
+        zoomZ(factor, updateViewDefault);
     }   
     
     protected void zoomZ(final float factor, boolean updateView){
