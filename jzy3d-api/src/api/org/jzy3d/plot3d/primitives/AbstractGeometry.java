@@ -237,6 +237,14 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     
     /* DATA */
 
+    public void add(float x, float y, float z) {
+        add(new Coord3d(x,y,z));
+    }
+    
+    public void add(Coord3d coord) {
+        add(new Point(coord, wfcolor), true);
+    }
+
     public void add(Point point) {
         add(point, true);
     }

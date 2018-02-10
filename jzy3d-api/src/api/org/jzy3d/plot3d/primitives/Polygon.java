@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
+import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 import com.jogamp.opengl.GL;
@@ -18,6 +19,11 @@ public class Polygon extends AbstractGeometry {
      */
     public Polygon() {
         super();
+    }
+    
+    public Polygon(Color wire, Color face){
+        setWireframeColor(wire);
+        setColor(face);
     }
 
     @Override
