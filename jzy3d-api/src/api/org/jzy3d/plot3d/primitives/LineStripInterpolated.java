@@ -11,8 +11,10 @@ import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 public class LineStripInterpolated extends AbstractComposite{
 	protected LineStripInterpolated() {  //needed to call the superconstructor in AxeTRansformableLineStripInterpolated
 	}
-	
-	public LineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution){
+
+    public LineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution) {
+    }
+	public LineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution, boolean drawPoints){
 	    this.controlCoords = controlPoints;
 		this.resolution = resolution;
 		this.interpolatedCoords = interpolator.interpolate(controlPoints, resolution);
@@ -23,8 +25,13 @@ public class LineStripInterpolated extends AbstractComposite{
         this.line.setWireframeColor(Color.BLACK);
         
 		add( this.line );
-        add( this.controlPoints );
-        add( this.interpolatedPoints );
+		
+		if(drawPoints){
+            add( this.controlPoints );
+            add( this.interpolatedPoints );
+		}
+		
+		//this.line.setShowPoints(drawPoints);
 	}
 
 	protected Point toPoint(Coord3d coord, Color color, float width){

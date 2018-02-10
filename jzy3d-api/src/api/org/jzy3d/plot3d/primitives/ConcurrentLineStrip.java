@@ -27,7 +27,7 @@ public class ConcurrentLineStrip extends LineStrip {
 
     @Override
     public void drawLine(GL gl) {
-        gl.glLineWidth(width);
+        gl.glLineWidth(wfwidth);
         // gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         // gl.glPolygonOffset(1.0f, 1.0f);
         if (gl.isGL2()) {
@@ -42,7 +42,7 @@ public class ConcurrentLineStrip extends LineStrip {
     }
 
     @Override
-    public void drawPoints(GL gl) {
+    public void drawPointsIfEnabled(GL gl) {
         if (showPoints) {
             if (gl.isGL2()) {
                 synchronized (points) {

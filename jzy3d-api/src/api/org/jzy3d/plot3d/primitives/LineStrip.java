@@ -1,8 +1,10 @@
 package org.jzy3d.plot3d.primitives;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
@@ -43,6 +45,15 @@ public class LineStrip extends AbstractWireframeable {
         setWireframeColor(null);
     }
 
+    public LineStrip(Coord3d... coords) {
+        this(Arrays.asList(coords));
+    }
+    
+    public LineStrip(Color color, Coord3d... coords) {
+        this(Arrays.asList(coords));
+        setWireframeColor(color);
+    }
+    
     public LineStrip(List<Coord3d> coords) {
         this();
         for (Coord3d c : coords) {
@@ -62,13 +73,19 @@ public class LineStrip extends AbstractWireframeable {
     @Override
     public void draw(GL gl, GLU glu, Camera cam) {
         doTransform(gl, glu, cam);
-        drawLine(gl);
-        drawPoints(gl);
+        if(points.size()>1){
+            drawLine(gl);
+        }
+        else if(points.size()==1 && !showPoints){
+            drawPoints(gl);
+        }
+        
+        drawPointsIfEnabled(gl);
         // gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
     }
 
     public void drawLine(GL gl) {
-        gl.glLineWidth(width);
+        gl.glLineWidth(wfwidth);
         // gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         // gl.glPolygonOffset(1.0f, 1.0f);
         if (gl.isGL2()) {
@@ -124,13 +141,17 @@ public class LineStrip extends AbstractWireframeable {
         }
     }
 
-    public void drawPoints(GL gl) {
+    public void drawPointsIfEnabled(GL gl) {
         if (showPoints) {
-            if (gl.isGL2()) {
-                drawPointsGL2(gl);
-            } else {
-                drawPointsGLES2();
-            }
+            drawPoints(gl);
+        }
+    }
+
+    public void drawPoints(GL gl) {
+        if (gl.isGL2()) {
+            drawPointsGL2(gl);
+        } else {
+            drawPointsGLES2();
         }
     }
 
@@ -189,6 +210,11 @@ public class LineStrip extends AbstractWireframeable {
     public void add(Coord3d coord3d) {
         add(new Point(coord3d));
     }
+    
+    public void add(List<Coord3d> coords) {
+        for(Coord3d c: coords)
+            add(c);
+    }
 
     public void addAll(List<Point> points) {
         for (Point p : points)
@@ -223,8 +249,10 @@ public class LineStrip extends AbstractWireframeable {
         return points.size();
     }
 
+    /** use setWireframeWidth(...) instead*/
+    @Deprecated
     public void setWidth(float width) {
-        this.width = width;
+        setWireframeWidth(width);
     }
 
     public boolean isShowPoints() {
@@ -356,9 +384,10 @@ public class LineStrip extends AbstractWireframeable {
     /**********************************************************************/
 
     protected List<Point> points;
-    protected float width;
+    //protected float width;
     protected boolean showPoints = false;
     protected boolean stipple = false;
     protected int stippleFactor = 4;
     protected short stipplePattern = (short)0xAAAA;
+
 }
