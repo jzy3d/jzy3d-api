@@ -80,7 +80,7 @@ public class ColorbarViewportLayout implements IViewportLayout{
     public void showLayout(AWTView view) {
         Renderer2d layoutBorder = new Renderer2d() {
             @Override
-            public void paint(Graphics g) {
+            public void paint(Graphics g, int canvasWidth, int canvasHeight) {
                 if (pencil == null)
                     pencil = new CanvasAWT((Graphics2D) g);
                 if (zone1.width > 0)

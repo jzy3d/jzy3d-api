@@ -76,7 +76,7 @@ public class TextOverlay implements Renderer2d{
 	}
 	
 	@Override
-    public void paint(Graphics g){
+    public void paint(Graphics g, int canvasWidth, int canvasHeight){
 		int x;
 		int y;
 		
