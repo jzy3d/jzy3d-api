@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-jdt-core</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
