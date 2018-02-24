@@ -92,7 +92,7 @@ public class AWTDualModeMouseSelector {
     public Renderer2d buildMessageRenderer() {
         return new Renderer2d() {
             @Override
-            public void paint(Graphics g) {
+            public void paint(Graphics g, int canvasWidth, int canvasHeight) {
                 if (displayMessage && message != null) {
                     g.setColor(java.awt.Color.RED);
                     g.drawString(message, 10, 30);

@@ -145,7 +145,7 @@ public class AWTView extends ChartView {
 
                 // Renderers
                 for (Renderer2d renderer : renderers)
-                    renderer.paint(g2d);
+                    renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
 
                 overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
                 overlay.drawAll();

@@ -20,7 +20,7 @@ public class FpsInfoRenderer implements Renderer2d{
     }
     
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics g, int canvasWidth, int canvasHeight) {
         Graphics2D g2d = (Graphics2D)g;
         g2d.setColor(java.awt.Color.BLACK);
         g2d.drawString(control.getLastFPS()+" FPS", 50, 50);
