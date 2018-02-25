@@ -23,7 +23,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.9</version>
 			<type>jar</type>
-			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
