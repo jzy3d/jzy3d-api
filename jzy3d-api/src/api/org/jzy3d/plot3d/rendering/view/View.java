@@ -687,22 +687,26 @@ public class View {
         if (quality.isDepthActivated()) {
             gl.glEnable(GL.GL_DEPTH_TEST);
             gl.glDepthFunc(GL.GL_LEQUAL);
-        } else
+        } else{
             gl.glDisable(GL.GL_DEPTH_TEST);
         //gl.glDepthRangef(n, f);
-
+        }
+        
         // Blending
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         // on/off is handled by each viewport (camera or image)
 
         // Activate tranparency
         if (quality.isAlphaActivated()) {
+            //gl.glEnable(GL2.GL_ALPHA_TEST);
             gl.glEnable(GL2ES1.GL_ALPHA_TEST);
-            if (quality.isDisableDepthBufferWhenAlpha())
+            //gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
+            //gl.getGL2().glAlphaFunc(GL2.GL_EQUAL,1.0f);
+            
+            if (quality.isDisableDepthBufferWhenAlpha()){
                 /* seams better for transparent polygons since they're sorted */
                 gl.glDisable(GL.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
-
-            // gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
+            }
         } else {
             gl.glDisable(GL2ES1.GL_ALPHA_TEST);
         }
