@@ -81,13 +81,10 @@ public class LineStrip extends AbstractWireframeable {
         }
         
         drawPointsIfEnabled(gl);
-        // gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
     }
 
     public void drawLine(GL gl) {
         gl.glLineWidth(wfwidth);
-        // gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        // gl.glPolygonOffset(1.0f, 1.0f);
         if (gl.isGL2()) {
             drawLineGL2(gl);
         } else {
@@ -123,6 +120,11 @@ public class LineStrip extends AbstractWireframeable {
         gl.getGL2().glBegin(GL.GL_LINE_STRIP);
         gl.getGL2().glLineWidth(wfwidth);
         
+        // Trying to deal with line co-planar with polygons
+        //gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        //gl.glPolygonOffset(1000.0f, 10000.0f);
+
+        
         if (wfcolor == null) {
             for (Point p : points) {
                 gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
@@ -134,6 +136,9 @@ public class LineStrip extends AbstractWireframeable {
                 gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
             }
         }
+        
+        //gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+
         gl.getGL2().glEnd();
         
         if(stipple){
