@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.textures;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -7,9 +8,11 @@ import org.jzy3d.plot3d.primitives.IGLBindedResource;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLException;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 import com.jogamp.opengl.util.texture.TextureIO;
+import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 public class SharedTexture implements IGLBindedResource{
     protected SharedTexture() {
@@ -52,6 +55,13 @@ public class SharedTexture implements IGLBindedResource{
 
     protected void load(GL gl, String fileName) throws GLException, IOException {
         texture = TextureIO.newTexture(new File(fileName), false);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+    }
+    
+    protected void load(GL gl, BufferedImage image){
+        
+        texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, false);
         texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
         texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
     }
