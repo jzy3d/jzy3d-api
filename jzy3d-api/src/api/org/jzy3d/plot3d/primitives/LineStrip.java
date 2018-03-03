@@ -8,6 +8,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.plot3d.primitives.symbols.MaskImageSymbolHandler;
+import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -20,13 +22,12 @@ import com.jogamp.opengl.glu.GLU;
 /**
  * Color works as follow:
  * <ul>
- * <li>If wireframe color is null (default), uses each point color and performs
- * color interpolation
+ * <li>If wireframe color is null (default), uses each point color and performs color interpolation
  * <li>Otherwise apply a uniform wireframe color.
  * </ul>
  * 
  * 
- * Dotted line are built using 
+ * Dotted line are built using
  * 
  * http://www.glprogramming.com/red/images/Image35.gif
  * 
@@ -40,26 +41,23 @@ public class LineStrip extends AbstractWireframeable {
     public LineStrip(int n) {
         points = new ArrayList<Point>(n);
         bbox = new BoundingBox3d();
-        for (Point p : points)
-            bbox.add(p);
+        symbolHandler = new MaskImageSymbolHandler(n);
         setWireframeColor(null);
     }
 
     public LineStrip(Coord3d... coords) {
         this(Arrays.asList(coords));
     }
-    
+
     public LineStrip(Color color, Coord3d... coords) {
         this(Arrays.asList(coords));
         setWireframeColor(color);
     }
-    
+
     public LineStrip(List<Coord3d> coords) {
-        this();
-        for (Coord3d c : coords) {
-            Point p = new Point(c);
-            add(p);
-        }
+        this(coords.size());
+
+        addAllPoints(coords);
     }
 
     public LineStrip(Point c1, Point c2) {
@@ -73,15 +71,21 @@ public class LineStrip extends AbstractWireframeable {
     @Override
     public void draw(GL gl, GLU glu, Camera cam) {
         doTransform(gl, glu, cam);
-        if(points.size()>1){
+        if (points.size() > 1) {
             drawLine(gl);
-        }
-        else if(points.size()==1 && !showPoints){
+        } else if (points.size() == 1 && !showPoints) {
             drawPoints(gl);
+
         }
-        
+
+        if (showSymbols) {
+            symbolHandler.drawSymbols(gl, glu, cam);
+        }
+
         drawPointsIfEnabled(gl);
     }
+
+    
 
     public void drawLine(GL gl) {
         gl.glLineWidth(wfwidth);
@@ -110,21 +114,19 @@ public class LineStrip extends AbstractWireframeable {
     }
 
     public void drawLineGL2(GL gl) {
-        if(stipple){
+        if (stipple) {
             gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             gl.glEnable(GL2.GL_LINE_STIPPLE);
             gl.getGL2().glLineStipple(stippleFactor, stipplePattern);
         }
 
-        
         gl.getGL2().glBegin(GL.GL_LINE_STRIP);
         gl.getGL2().glLineWidth(wfwidth);
-        
-        // Trying to deal with line co-planar with polygons
-        //gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        //gl.glPolygonOffset(1000.0f, 10000.0f);
 
-        
+        // Trying to deal with line co-planar with polygons
+        // gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        // gl.glPolygonOffset(1000.0f, 10000.0f);
+
         if (wfcolor == null) {
             for (Point p : points) {
                 gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
@@ -136,12 +138,12 @@ public class LineStrip extends AbstractWireframeable {
                 gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
             }
         }
-        
-        //gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+
+        // gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 
         gl.getGL2().glEnd();
-        
-        if(stipple){
+
+        if (stipple) {
             gl.glDisable(GL2.GL_LINE_STIPPLE);
         }
     }
@@ -178,7 +180,7 @@ public class LineStrip extends AbstractWireframeable {
         gl.getGL2().glBegin(GL.GL_POINTS);
 
         gl.getGL2().glPointSize(wfwidth);
-        
+
         for (Point p : points) {
             if (wfcolor == null)
                 gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
@@ -208,6 +210,10 @@ public class LineStrip extends AbstractWireframeable {
     }
 
     public void add(Point point) {
+        if (showSymbols) {
+            symbolHandler.addSymbolOn(point);
+        }
+
         points.add(point);
         bbox.add(point);
     }
@@ -215,9 +221,9 @@ public class LineStrip extends AbstractWireframeable {
     public void add(Coord3d coord3d) {
         add(new Point(coord3d));
     }
-    
+
     public void add(List<Coord3d> coords) {
-        for(Coord3d c: coords)
+        for (Coord3d c : coords)
             add(c);
     }
 
@@ -229,8 +235,15 @@ public class LineStrip extends AbstractWireframeable {
     public void addAll(LineStrip strip) {
         addAll(strip.getPoints());
     }
-    
-    public void clear(){
+
+    public void addAllPoints(List<Coord3d> coords) {
+        for (Coord3d c : coords) {
+            Point p = new Point(c);
+            add(p);
+        }
+    }
+
+    public void clear() {
         points.clear();
         updateBounds();
     }
@@ -238,10 +251,10 @@ public class LineStrip extends AbstractWireframeable {
     public Point get(int p) {
         return points.get(p);
     }
-    
-    public Point getLastPoint(){
-        int last = points.size()-1;
-        if(last>=0)
+
+    public Point getLastPoint() {
+        int last = points.size() - 1;
+        if (last >= 0)
             return points.get(last);
         return null;
     }
@@ -254,7 +267,7 @@ public class LineStrip extends AbstractWireframeable {
         return points.size();
     }
 
-    /** use setWireframeWidth(...) instead*/
+    /** use setWireframeWidth(...) instead */
     @Deprecated
     public void setWidth(float width) {
         setWireframeWidth(width);
@@ -266,6 +279,24 @@ public class LineStrip extends AbstractWireframeable {
 
     public void setShowPoints(boolean showPoints) {
         this.showPoints = showPoints;
+    }
+
+    public boolean isShowSymbols() {
+        return showSymbols;
+    }
+
+    public void setShowSymbols(boolean showSymbols) {
+        if (!showSymbols){
+            symbolHandler.clear();           
+        }
+        else {
+            symbolHandler.clear();           
+
+            for (Point point : getPoints()) {
+                symbolHandler.addSymbolOn(point);
+            }
+        }
+        this.showSymbols = showSymbols;
     }
 
     /**
@@ -355,11 +386,8 @@ public class LineStrip extends AbstractWireframeable {
         return max;
     }
 
-    /* */
-
     /**
-     * Merge lines by selecting the most relevant connection point: A-B to C-D
-     * if distance BC is shorter than distance DA C-D to A-B
+     * Merge lines by selecting the most relevant connection point: A-B to C-D if distance BC is shorter than distance DA C-D to A-B
      */
     public static LineStrip merge(LineStrip strip1, LineStrip strip2) {
         Coord3d a = strip1.get(0).xyz;
@@ -378,6 +406,14 @@ public class LineStrip extends AbstractWireframeable {
             return strip2;
         }
     }
+    
+    public SymbolHandler getSymbolHandler() {
+        return symbolHandler;
+    }
+
+    public void setSymbolHandler(SymbolHandler symbolHandler) {
+        this.symbolHandler = symbolHandler;
+    }
 
     /**********************************************************************/
 
@@ -389,10 +425,12 @@ public class LineStrip extends AbstractWireframeable {
     /**********************************************************************/
 
     protected List<Point> points;
-    //protected float width;
+    // protected float width;
     protected boolean showPoints = false;
+    protected boolean showSymbols = false;
+
     protected boolean stipple = false;
     protected int stippleFactor = 4;
-    protected short stipplePattern = (short)0xAAAA;
-
+    protected short stipplePattern = (short) 0xAAAA;
+    protected SymbolHandler symbolHandler = null;
 }

@@ -1,10 +1,8 @@
 package org.jzy3d.plot3d.rendering.textures;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
@@ -41,7 +39,7 @@ public class BufferedImageTexture extends SharedTexture {
         halfHeight = texture.getHeight() / 2;
     }
 
-    protected void load(GL gl, BufferedImage image) throws GLException, IOException {
+    protected void load(GL gl, BufferedImage image) {
         texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, false); 
         texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR); // different from shared texture!
         texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
