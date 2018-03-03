@@ -27,27 +27,14 @@ public class TexturedCube extends AbstractComposite implements Selectable, ITran
 	public TexturedCube(Coord3d position, MaskPair masks){
 		this(position, Color.CYAN, Color.RED, masks);
 	}
-	
-	public TexturedCube(Coord3d position, Color color, Color bgcolor, MaskPair masks){	
-		float width = 0.5f;
-		
-		List<Coord2d> zmapping  = new ArrayList<Coord2d>(4);
-		zmapping.add( new Coord2d(position.x-width, position.y-width) );
-		zmapping.add( new Coord2d(position.x+width, position.y-width) );
-		zmapping.add( new Coord2d(position.x+width, position.y+width) );
-		zmapping.add( new Coord2d(position.x-width, position.y+width) );
-		
-		List<Coord2d> ymapping  = new ArrayList<Coord2d>(4);
-		ymapping.add( new Coord2d(position.x-width, position.z-width) );
-		ymapping.add( new Coord2d(position.x+width, position.z-width) );
-		ymapping.add( new Coord2d(position.x+width, position.z+width) );
-		ymapping.add( new Coord2d(position.x-width, position.z+width) );
-		
-		List<Coord2d> xmapping  = new ArrayList<Coord2d>(4);
-		xmapping.add( new Coord2d(position.y-width, position.z-width) );
-		xmapping.add( new Coord2d(position.y+width, position.z-width) );
-		xmapping.add( new Coord2d(position.y+width, position.z+width) );
-		xmapping.add( new Coord2d(position.y-width, position.z+width) );
+    public TexturedCube(Coord3d position, Color color, Color bgcolor, MaskPair masks){  
+        this(position, color, bgcolor, masks, 0.5f);
+    }
+    
+	public TexturedCube(Coord3d position, Color color, Color bgcolor, MaskPair masks, float width){	
+		List<Coord2d> zmapping = makeZPlaneTextureMapping(position, width);
+		List<Coord2d> ymapping = makeYPlaneTextureMapping(position, width);
+		List<Coord2d> xmapping = makeXPlaneTextureMapping(position, width);
 		
 		northBg  = new DrawableTexture(masks.bgMask, PlaneAxis.Z, position.z + width, zmapping, bgcolor);
 		southBg  = new DrawableTexture(masks.bgMask, PlaneAxis.Z, position.z - width, zmapping, bgcolor);
@@ -79,6 +66,33 @@ public class TexturedCube extends AbstractComposite implements Selectable, ITran
 		
 		bbox = new BoundingBox3d(position, width*2);
 	}
+
+    public List<Coord2d> makeXPlaneTextureMapping(Coord3d position, float width) {
+        List<Coord2d> xmapping  = new ArrayList<Coord2d>(4);
+		xmapping.add( new Coord2d(position.y-width, position.z-width) );
+		xmapping.add( new Coord2d(position.y+width, position.z-width) );
+		xmapping.add( new Coord2d(position.y+width, position.z+width) );
+		xmapping.add( new Coord2d(position.y-width, position.z+width) );
+        return xmapping;
+    }
+
+    public static List<Coord2d> makeYPlaneTextureMapping(Coord3d position, float width) {
+        List<Coord2d> ymapping  = new ArrayList<Coord2d>(4);
+		ymapping.add( new Coord2d(position.x-width, position.z-width) );
+		ymapping.add( new Coord2d(position.x+width, position.z-width) );
+		ymapping.add( new Coord2d(position.x+width, position.z+width) );
+		ymapping.add( new Coord2d(position.x-width, position.z+width) );
+        return ymapping;
+    }
+
+    public static List<Coord2d> makeZPlaneTextureMapping(Coord3d position, float width) {
+        List<Coord2d> zmapping  = new ArrayList<Coord2d>(4);
+		zmapping.add( new Coord2d(position.x-width, position.y-width) );
+		zmapping.add( new Coord2d(position.x+width, position.y-width) );
+		zmapping.add( new Coord2d(position.x+width, position.y+width) );
+		zmapping.add( new Coord2d(position.x-width, position.y+width) );
+        return zmapping;
+    }
 	
 	@Override
     public BoundingBox3d getBounds(){
