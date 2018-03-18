@@ -29,12 +29,13 @@ public class AWTShapeSymbolHandler extends SymbolHandler{
 
     @Override
     public void addSymbolOn(Point point) {
-        Color face = point.rgb;//Color.WHITE;//
+        Color face = point.rgb;
         float size = 1;
         Coord3d position = point.xyz;
 
         List<Coord2d> zmapping = TexturedCube.makeZPlaneTextureMapping(position, size);
         
+        // TODO : let the SAME buffered image instance be used by all DrawableTextures
         BufferedImage image = getImage(awtShape, 100, 100);
         BufferedImageTexture t = new BufferedImageTexture(image);
         DrawableTexture dt = new DrawableTexture(t, PlaneAxis.Z, position.z, zmapping, face);
@@ -42,7 +43,11 @@ public class AWTShapeSymbolHandler extends SymbolHandler{
     }
 
     public static BufferedImage getImage(Shape shape, int width, int height) {
-        BufferedImage bimage = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_INDEXED);
+        return getImage(shape, width, height, BufferedImage.TYPE_4BYTE_ABGR);
+    }
+    
+    public static BufferedImage getImage(Shape shape, int width, int height, int imageType) {
+        BufferedImage bimage = new BufferedImage(width, height, imageType);
         Graphics2D g2d = bimage.createGraphics();
         g2d.fill(shape);
         g2d.dispose();
