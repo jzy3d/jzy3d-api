@@ -3,7 +3,7 @@
 
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-master</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<packaging>pom</packaging>
 
 	<name>Jzy3d Master Project</name>
@@ -36,7 +36,7 @@
 	<scm>
 	<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
 <!-- 		<connection>scm:git:git://github.com/jzy3d/jzy3d-api</connection> -->
-	  <tag>jzy3d-api-1.0.1</tag>
+	  <tag>jzy3d-org-1.0.2</tag>
   </scm>
 	<issueManagement>
 		<system>Github</system>
