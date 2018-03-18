@@ -12,6 +12,8 @@ public class BufferedImageTexture extends SharedTexture {
     public BufferedImageTexture(BufferedImage image) {
         super();
         this.image = image;
+        this.textureMagnificationFilter = GL.GL_LINEAR;
+        this.textureMinificationFilter = GL.GL_LINEAR;
     }
 
     @Override
@@ -40,9 +42,9 @@ public class BufferedImageTexture extends SharedTexture {
     }
 
     protected void load(GL gl, BufferedImage image) {
-        texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, false); 
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR); // different from shared texture!
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+        texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, useMipMap); 
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
     }
 
     /** returns null*/
