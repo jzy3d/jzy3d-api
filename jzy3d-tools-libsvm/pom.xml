@@ -4,12 +4,12 @@
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-tools-libsvm</artifactId>
 	<name>Jzy3d LibSVM</name>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-master</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 
 	<properties>
