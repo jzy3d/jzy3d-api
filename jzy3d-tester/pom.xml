@@ -3,13 +3,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-tester</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>Jzy3d Tester</name>
 
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-master</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>

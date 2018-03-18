@@ -5,12 +5,12 @@
 	<artifactId>jzy3d-svm-mapper</artifactId>
 	<name>Jzy3d SVM Mapper</name>
 
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-master</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.3-SNAPSHOT</version>
 	</parent>
 
 	<properties>
@@ -26,7 +26,7 @@
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-tools-libsvm</artifactId>
-			<version>1.0.2</version>
+			<version>1.0.3-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
