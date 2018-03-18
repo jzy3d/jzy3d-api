@@ -54,16 +54,16 @@ public class SharedTexture implements IGLBindedResource{
     }
 
     protected void load(GL gl, String fileName) throws GLException, IOException {
-        texture = TextureIO.newTexture(new File(fileName), false);
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+        texture = TextureIO.newTexture(new File(fileName), useMipMap);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
     }
     
     protected void load(GL gl, BufferedImage image){
         
-        texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, false);
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
+        texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, useMipMap);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
+        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
     }
 
     public String getFile() {
@@ -81,16 +81,52 @@ public class SharedTexture implements IGLBindedResource{
     public float getHalfHeight() {
         return halfHeight;
     }
+    
+    public boolean isUseMipMap() {
+        return useMipMap;
+    }
 
-    /*
-     * public BoundingBox3d getBounds(PlaneAxis plane){
+    /**
+     * Will apply if set before actually loading the texture.
      * 
-     * }
+     * @param useMipMap
      */
+    public void setUseMipMap(boolean useMipMap) {
+        this.useMipMap = useMipMap;
+    }
+    
+    public int getTextureMagnificationFilter() {
+        return textureMagnificationFilter;
+    }
+
+    /**
+     * Will apply if set before actually loading the texture.
+     * 
+     * @param textureMagnificationFilter
+     */
+    public void setTextureMagnificationFilter(int textureMagnificationFilter) {
+        this.textureMagnificationFilter = textureMagnificationFilter;
+    }
+
+    public int getTextureMinificationFilter() {
+        return textureMinificationFilter;
+    }
+
+    /**
+     * Will apply if set before actually loading the texture.
+     * 
+     * @param textureMinificationFilter
+     */
+    public void setTextureMinificationFilter(int textureMinificationFilter) {
+        this.textureMinificationFilter = textureMinificationFilter;
+    }
 
     protected Texture texture;
     protected String file;
     protected TextureCoords coords;
     protected float halfWidth;
     protected float halfHeight;
+    protected boolean useMipMap = false;
+    protected int textureMagnificationFilter = GL.GL_NEAREST;
+    protected int textureMinificationFilter = GL.GL_NEAREST;
 }

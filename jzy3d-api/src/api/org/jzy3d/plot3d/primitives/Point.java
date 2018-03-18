@@ -66,19 +66,15 @@ public class Point extends AbstractDrawable implements ISingleColorable {
 
 		if (gl.isGL2()) {
 			gl.getGL2().glPointSize(width);
-
 			gl.getGL2().glBegin(GL.GL_POINTS);
-			gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+			colorGL2(gl, rgb);
 			vertexGL2(gl, xyz);
-			//gl.getGL2().glVertex3f(xyz.x, xyz.y, xyz.z);
 			gl.getGL2().glEnd();
 		} else {
 			GLES2CompatUtils.glPointSize(width);
-
 			GLES2CompatUtils.glBegin(GL.GL_POINTS);
-			GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+			colorGLES2(rgb);
 			vertexGLES2(xyz);
-			//GLES2CompatUtils.glVertex3f(xyz.x, xyz.y, xyz.z);
 			GLES2CompatUtils.glEnd();
 		}
 	}
