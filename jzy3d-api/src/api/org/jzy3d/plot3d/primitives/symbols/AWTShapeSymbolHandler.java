@@ -14,10 +14,6 @@ import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
 import org.jzy3d.plot3d.primitives.textured.TexturedCube;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
-
 /**
  * Create {@link DrawableTexture} symbols based on an {@link java.awt.Shape}
  * 

@@ -61,25 +61,8 @@ public class OverlayLegendRenderer implements Renderer2d {
         int yTextPos = yBoxPos + layout.txtMarginY + textHeight;
 
         for (Legend line : info) {
-            // Text
-            g2d.setColor(ColorAWT.toAWT(layout.fontColor));
-            g2d.drawString(line.label, xTextPos, yTextPos);
-
-            // Line sample
-            int xLineStart = xTextPos + textWidthMax + layout.sampleLineMargin;
-            g2d.setColor(ColorAWT.toAWT(line.color));
-            g2d.drawLine(xLineStart, yTextPos - textHeight / 2, xLineStart + layout.sampleLineLength, yTextPos - textHeight / 2);
-
-            // Symbol
-            if (line.shape != null) {
-                AffineTransform at = new AffineTransform();
-                at.translate(xLineStart, yTextPos - textHeight + 1);
-                at.scale(0.10, 0.10);
-                at.translate(25, 0);
-
-                java.awt.Shape sh = at.createTransformedShape(line.shape);
-                g2d.fill(sh);
-            }
+            paintLegend(g2d, textHeight, textWidthMax, xTextPos, yTextPos, line);
+            
             // Shift
             yTextPos += (layout.txtInterline + textHeight);
         }
@@ -88,6 +71,34 @@ public class OverlayLegendRenderer implements Renderer2d {
         // Border
         g2d.setColor(ColorAWT.toAWT(layout.borderColor));
         g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
+    }
+
+    public void paintLegend(Graphics2D g2d, int textHeight, int textWidthMax, int xTextPos, int yTextPos, Legend line) {
+        // Text
+        g2d.setColor(ColorAWT.toAWT(layout.fontColor));
+        g2d.drawString(line.label, xTextPos, yTextPos);
+
+        // Line sample
+        int xLineStart = xTextPos + textWidthMax + layout.sampleLineMargin;
+        g2d.setColor(ColorAWT.toAWT(line.color));
+        g2d.drawLine(xLineStart, yTextPos - textHeight / 2, xLineStart + layout.sampleLineLength, yTextPos - textHeight / 2);
+
+        // Symbol
+        if (line.shape != null) {
+            AffineTransform at = makeShapeTransform(line, textHeight, yTextPos, xLineStart);
+
+            java.awt.Shape sh = at.createTransformedShape(line.shape);
+            g2d.fill(sh);
+            //g2d.fill(line.shape);
+        }
+    }
+
+    protected AffineTransform makeShapeTransform(Legend line, int textHeight, int yTextPos, int xLineStart) {
+        AffineTransform at = new AffineTransform();
+        at.translate(xLineStart, yTextPos - textHeight + 1);
+        at.scale(0.15, 0.15);
+        //at.translate(25, 0);
+        return at;
     }
 
     protected int maxStringWidth(FontMetrics fm) {
