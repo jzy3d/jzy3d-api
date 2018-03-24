@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-tutorials</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.3-SNAPSHOT</version>
 
 	<name>Jzy3d Tutorials</name>
 
@@ -21,8 +21,8 @@
 		</repository>
 	</repositories>
 
-	<!--To deploy tutorials: 1) this project does not references master to be 
-		able to be build alone 2) master still reference this project to build it 
+	<!--To deploy tutorials: 1) this project does not references master to be
+		able to be build alone 2) master still reference this project to build it
 		with the API involve being deployable by mvn deploy -->
 	<distributionManagement>
 		<repository>
@@ -81,7 +81,7 @@
 				<configuration>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
