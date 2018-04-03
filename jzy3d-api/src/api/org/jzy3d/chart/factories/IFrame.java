@@ -1,4 +1,4 @@
-package org.jzy3d.bridge;
+package org.jzy3d.chart.factories;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Rectangle;

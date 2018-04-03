@@ -1,6 +1,5 @@
 package org.jzy3d.chart.factories;
 
-import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
