@@ -132,24 +132,31 @@ public class AWTView extends ChartView {
         gl.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
-            Graphics2D g2d = null;
+            
             try {
-                g2d = overlay.createGraphics();
+                if(canvas.getDrawable().getSurfaceWidth()>0 && canvas.getDrawable().getSurfaceHeight()>0){
+                    //System.out.println("surf width=" + canvas.getDrawable().getSurfaceWidth());
+                    //System.out.println("surf height=" + canvas.getDrawable().getSurfaceHeight());
+                    Graphics2D g2d = overlay.createGraphics();
 
-                g2d.setBackground(bgOverlay);
-                g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+                    g2d.setBackground(bgOverlay);
+                    g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
-                // Tooltips
-                for (ITooltipRenderer t : tooltips)
-                    t.render(g2d);
+                    // Tooltips
+                    for (ITooltipRenderer t : tooltips)
+                        t.render(g2d);
 
-                // Renderers
-                for (Renderer2d renderer : renderers)
-                    renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
+                    // Renderers
+                    for (Renderer2d renderer : renderers)
+                        renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
 
-                overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
-                overlay.drawAll();
-                g2d.dispose();
+                    overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+                    overlay.drawAll();
+                    g2d.dispose();
+                }
+                
+                
+                
 
             } catch (Exception e) {
                 LOGGER.error(e, e);

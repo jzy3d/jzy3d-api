@@ -78,7 +78,7 @@ public class LineStrip extends AbstractWireframeable {
 
         }
 
-        if (showSymbols) {
+        if (showSymbols && symbolHandler!=null) {
             symbolHandler.drawSymbols(gl, glu, cam);
         }
 
@@ -290,10 +290,12 @@ public class LineStrip extends AbstractWireframeable {
             symbolHandler.clear();           
         }
         else {
-            symbolHandler.clear();           
+            if(symbolHandler!=null){
+                symbolHandler.clear();           
 
-            for (Point point : getPoints()) {
-                symbolHandler.addSymbolOn(point);
+                for (Point point : getPoints()) {
+                    symbolHandler.addSymbolOn(point);
+                }               
             }
         }
         this.showSymbols = showSymbols;
