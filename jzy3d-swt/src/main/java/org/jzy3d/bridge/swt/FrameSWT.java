@@ -5,8 +5,8 @@ import java.awt.Component;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;
 
 public class FrameSWT implements IFrame {

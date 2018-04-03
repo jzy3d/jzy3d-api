@@ -7,7 +7,6 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
-import org.jzy3d.bridge.IFrame;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.AWTChart;
