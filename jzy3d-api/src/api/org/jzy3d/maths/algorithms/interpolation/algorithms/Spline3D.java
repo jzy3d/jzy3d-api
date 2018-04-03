@@ -4,12 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.jzy3d.maths.Coord3d;
 
 /**
@@ -38,39 +32,19 @@ import org.jzy3d.maths.Coord3d;
  * @version 0015 Added JAXB annotations and List support for dynamic building of
  *          spline
  */
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Spline3D {
 
     public static final float DEFAULT_TIGHTNESS = 0.25f;
 
-    @XmlElement
     protected Coord3d[] points;
-
-    @XmlElement(name = "p")
     public List<Coord3d> pointList = new ArrayList<Coord3d>();
-
-    @XmlTransient
     public List<Coord3d> vertices;
-
-    @XmlTransient
     public BernsteinPolynomial bernstein;
-
-    @XmlTransient
     public Coord3d[] delta;
-
-    @XmlTransient
     public Coord3d[] coeffA;
-
-    @XmlTransient
     public float[] bi;
-
-    @XmlAttribute
     protected float tightness;
-
-    @XmlTransient
     protected float invTightness;
-
-    @XmlTransient
     protected int numP;
 
     /**

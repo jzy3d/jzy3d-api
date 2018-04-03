@@ -10,7 +10,6 @@ import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
-import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.ordering.DefaultOrderingStrategy;
@@ -317,7 +316,7 @@ public class Graph {
     /* */
 
     /**
-     * Return the list of available {@link AbstractDrawable}'s {@link AWTLegend}
+     * Return the list of available {@link AbstractDrawable}'s {@link ILegend}
      * .
      */
     public synchronized List<ILegend> getLegends() {
