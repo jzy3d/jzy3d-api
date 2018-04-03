@@ -4,7 +4,6 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Composite;
-import org.jzy3d.bridge.IFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
@@ -17,6 +16,7 @@ import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
