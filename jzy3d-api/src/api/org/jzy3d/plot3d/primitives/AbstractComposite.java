@@ -49,17 +49,23 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
     /** Add a Drawable to this composite. */
     public void add(AbstractDrawable drawable) {
-        components.add(drawable);
+        synchronized(components){
+            components.add(drawable);
+        }
     }
 
     /** Remove a Drawable from this composite. */
     public void remove(AbstractDrawable drawable) {
-        components.remove(drawable);
+        synchronized(components){
+            components.remove(drawable);
+        }
     }
 
     /** Get a Drawable stored by this composite. */
     public AbstractDrawable get(int p) {
-        return components.get(p);
+        synchronized(components){
+            return components.get(p);
+        }
     }
 
     public List<AbstractDrawable> getDrawables() {
@@ -331,7 +337,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
     /****************************************************************/
 
-    protected List<AbstractDrawable> components = Collections.synchronizedList(new ArrayList<AbstractDrawable>());
+    protected List<AbstractDrawable> components = null;
     protected Transform transform;
 
     protected ColorMapper mapper;
