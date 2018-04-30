@@ -183,6 +183,10 @@ public class Coord3d implements Serializable {
         return new Coord3d(x - c2.x, y - c2.y, z - c2.z);
     }
 
+    public Coord3d sub(float x2, float y2, float z2) {
+        return new Coord3d(x - x2, y - y2, z - z2);
+    }
+
     public Coord3d subSelf(Coord3d c2) {
         x -= c2.x;
         y -= c2.y;
