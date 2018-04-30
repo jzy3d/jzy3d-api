@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
+import java.util.List;
+
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
@@ -135,6 +137,13 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
         this.coordinates = coordinates;
 
         updateBounds();
+    }
+    
+    public void setData(List<Coord3d> coordinates) {
+        this.coordinates = new Coord3d[coordinates.size()];
+        int k = 0;
+        for(Coord3d c: coordinates)
+            this.coordinates[k++] = c;
     }
 
     @Override
