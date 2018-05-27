@@ -65,7 +65,33 @@ public class LineStrip extends AbstractWireframeable {
         add(c1);
         add(c2);
     }
-
+    
+    /**Set the wireframe color.*/
+    @Override
+    public void setWireframeColor(Color color){
+        super.setWireframeColor(color);
+        if(color!=null && points!=null){
+            for(Point p: points){
+                p.setColor(color);
+            }
+        }
+    }
+    
+    /**
+     * A convenient shortcut for {@link #setWireframeColor}
+     * @param color
+     */
+    public void setColor(Color color){
+        setWireframeColor(color);
+    }
+    
+    /**
+     * A convenient shortcut for {@link #getWireframeColor}
+     */
+    public Color getColor(){
+        return getWireframeColor();
+    }
+    
     /* */
 
     @Override
@@ -88,7 +114,7 @@ public class LineStrip extends AbstractWireframeable {
     
 
     public void drawLine(GL gl) {
-        gl.glLineWidth(wfwidth);
+        //gl.glLineWidth(wfwidth);
         if (gl.isGL2()) {
             drawLineGL2(gl);
         } else {
@@ -119,13 +145,9 @@ public class LineStrip extends AbstractWireframeable {
             gl.glEnable(GL2.GL_LINE_STIPPLE);
             gl.getGL2().glLineStipple(stippleFactor, stipplePattern);
         }
+        gl.getGL2().glLineWidth(wfwidth); 
 
         gl.getGL2().glBegin(GL.GL_LINE_STRIP);
-        gl.getGL2().glLineWidth(wfwidth);
-
-        // Trying to deal with line co-planar with polygons
-        // gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        // gl.glPolygonOffset(1000.0f, 10000.0f);
 
         if (wfcolor == null) {
             for (Point p : points) {
@@ -138,11 +160,8 @@ public class LineStrip extends AbstractWireframeable {
                 gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
             }
         }
-
-        // gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-
         gl.getGL2().glEnd();
-
+        
         if (stipple) {
             gl.glDisable(GL2.GL_LINE_STIPPLE);
         }
@@ -267,10 +286,14 @@ public class LineStrip extends AbstractWireframeable {
         return points.size();
     }
 
-    /** use setWireframeWidth(...) instead */
-    @Deprecated
+    /** A shortcut for {@link #setWireframeWidth} */
     public void setWidth(float width) {
         setWireframeWidth(width);
+    }
+
+    /** A shortcut for {@link #getWireframeWidth} */
+    public float getWidth() {
+        return getWireframeWidth();
     }
 
     public boolean isShowPoints() {
