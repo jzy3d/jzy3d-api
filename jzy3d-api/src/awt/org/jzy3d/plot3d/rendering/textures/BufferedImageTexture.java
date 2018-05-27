@@ -43,8 +43,11 @@ public class BufferedImageTexture extends SharedTexture {
 
     protected void load(GL gl, BufferedImage image) {
         texture = AWTTextureIO.newTexture(GLProfile.getDefault(), image, useMipMap); 
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
+        
+        if(textureMagnificationFilter!=-1)
+            texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
+        if(textureMinificationFilter!=-1)
+            texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
     }
 
     /** returns null*/
