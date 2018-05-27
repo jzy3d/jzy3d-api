@@ -52,8 +52,11 @@ public class SharedTexture implements IGLBindedResource{
 
     protected void load(GL gl, String fileName) throws GLException, IOException {
         texture = TextureIO.newTexture(new File(fileName), useMipMap);
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
-        texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
+        
+        if(textureMagnificationFilter!=-1)
+            texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
+        if(textureMinificationFilter!=-1)
+            texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
     }
     
     public String getFile() {
@@ -92,6 +95,11 @@ public class SharedTexture implements IGLBindedResource{
     /**
      * Will apply if set before actually loading the texture.
      * 
+     * Possible values documented in https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml 
+     * (see parameter GL_TEXTURE_MAG_FILTER)
+     * 
+     * Use -1 to avoid magnification
+     * 
      * @param textureMagnificationFilter
      */
     public void setTextureMagnificationFilter(int textureMagnificationFilter) {
@@ -104,6 +112,11 @@ public class SharedTexture implements IGLBindedResource{
 
     /**
      * Will apply if set before actually loading the texture.
+     * 
+     * Possible values documented in https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml 
+     * (see parameter GL_TEXTURE_MIN_FILTER)
+     * 
+     * Use -1 to avoid minification
      * 
      * @param textureMinificationFilter
      */
