@@ -9,11 +9,14 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.opengl.DefaultGLCapabilitiesChooser;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLDrawableFactory;
+import com.jogamp.opengl.GLFBODrawable;
 import com.jogamp.opengl.GLOffscreenAutoDrawable;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.util.GLPixelBuffer;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -49,7 +52,10 @@ public class OffscreenCanvas implements ICanvas {
     }
 
     /**
-     * Initialize a GLPBuffer with desired capabilities. 
+     * Initialize a {@link GLOffscreenAutoDrawable} to the desired dimensions 
+     * 
+     * Might be a {@link GLPixelBuffer} or {@link GLFBODrawable} depending on the provided
+     * {@link GLCapabilities} ({@link GLCapabilities#setPBuffer(true)} to enable PBuffer).
      * 
      * Can be called several time to reset buffer dimensions.
      * 
@@ -58,21 +64,32 @@ public class OffscreenCanvas implements ICanvas {
      * @param height
      */
     public void initBuffer(GLCapabilities capabilities, int width, int height) {
-        GLProfile profile = capabilities.getGLProfile();
-        capabilities.setDoubleBuffered(false);
-        capabilities.setPBuffer(true);
+        //capabilities.setDoubleBuffered(false);
+        //capabilities/setPBuffer(true);
         
+        /*capabilities.setHardwareAccelerated(true); 
+        capabilities.setDoubleBuffered(false); 
+        capabilities.setAlphaBits(8); 
+        capabilities.setRedBits(8); 
+        capabilities.setBlueBits(8); 
+        capabilities.setGreenBits(8); 
+        capabilities.setOnscreen(false); */
+
+        
+        GLProfile profile = capabilities.getGLProfile();
         GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
         
-        if (!factory.canCreateGLPbuffer(null, profile))
-            throw new RuntimeException("No pbuffer support");
+        //if (!factory.canCreateGLPbuffer(null, profile))
+        //    throw new RuntimeException("No pbuffer support");
         
-        if(glpBuffer!=null){
-            glpBuffer.removeGLEventListener(renderer);
-            glpBuffer.destroy();
+        if(offscreenDrawable!=null){
+            offscreenDrawable.removeGLEventListener(renderer);
+            offscreenDrawable.destroy();
+            //glpBuffer.setSurfaceSize(width, height);
         }
-        glpBuffer = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), capabilities, null, width, height);
-        glpBuffer.addGLEventListener(renderer);
+        offscreenDrawable = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), capabilities, null /*new DefaultGLCapabilitiesChooser()*/, width, height);
+        offscreenDrawable.addGLEventListener(renderer);            
+        
     }
     
     /* NOT IMPLEMENTED */
@@ -82,32 +99,27 @@ public class OffscreenCanvas implements ICanvas {
         //glpBuffer.setSurfaceScale(scale);
     }
 
-    @Deprecated
-    public GLOffscreenAutoDrawable getGlpBuffer() {
-        return glpBuffer;
-    }
-
     @Override
     public GLOffscreenAutoDrawable getDrawable() {
-        return glpBuffer;
+        return offscreenDrawable;
     }
 
     @Override
     public void dispose() {
-        glpBuffer.destroy();
+        offscreenDrawable.destroy();
         renderer = null;
         view = null;
     }
 
     @Override
     public void forceRepaint() {
-        glpBuffer.display();
+        offscreenDrawable.display();
     }
 
     @Override
     public TextureData screenshot() {
         renderer.nextDisplayUpdateScreenshot();
-        glpBuffer.display();
+        offscreenDrawable.display();
         return renderer.getLastScreenshot();
     }
     
@@ -144,7 +156,7 @@ public class OffscreenCanvas implements ICanvas {
         GL gl = getView().getCurrentGL();
 
         StringBuffer sb = new StringBuffer();
-        sb.append("Chosen GLCapabilities: " + glpBuffer.getChosenGLCapabilities() + "\n");
+        sb.append("Chosen GLCapabilities: " + offscreenDrawable.getChosenGLCapabilities() + "\n");
         sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
         sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
         sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
@@ -167,6 +179,6 @@ public class OffscreenCanvas implements ICanvas {
 
     protected View view;
     protected Renderer3d renderer;
-    protected GLOffscreenAutoDrawable glpBuffer;
+    protected GLOffscreenAutoDrawable offscreenDrawable;
     protected GLCapabilities capabilities;
 }

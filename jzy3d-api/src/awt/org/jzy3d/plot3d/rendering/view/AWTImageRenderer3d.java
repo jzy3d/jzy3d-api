@@ -6,12 +6,14 @@ import java.util.List;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
 
 /** A renderer generating AWT {@link BufferedImage}s and notifying a {@link DisplayListener} when
  * it is updated.
+ * 
+ * Especially usefull to perform offscreen rendering and displaying buffered image in a panel.
+ * 
  * 
  * @author Martin Pernollet
  */
@@ -27,6 +29,10 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
         super();
     }
 
+    public AWTImageRenderer3d(View view) {
+        super(view);
+    }
+
     public AWTImageRenderer3d(View view, boolean traceGL, boolean debugGL, GLU glu) {
         super(view, traceGL, debugGL, glu);
     }
@@ -39,16 +45,23 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
             view.clear(gl);
             view.render(gl, glu);
 
-            // Convert as JavaFX Image and notify all listeners
-            BufferedImage image = makeScreenshotAsBufferedImage(gl);
-            fireDisplay(image);
-            
-            if (doScreenshotAtNextDisplay) {
-                //makeScreenshotAsJavaFXImage(gl);
-                doScreenshotAtNextDisplay = false;
+            /*if(screenshot==null){
+                screenshot = new AWTGLReadBufferUtil(gl.getGLProfile(), true);
             }
+            screenshot.readPixels(gl, true);
+            bufferedImage = screenshot.readPixelsToBufferedImage(gl, true);
+            if(doScreenshotAtNextDisplay){
+                screenshot.readPixels(gl, true);
+                image = screenshot.getTextureData();
+            }*/
+            
+
+            bufferedImage = makeScreenshotAsBufferedImage(gl);
+            fireDisplay(bufferedImage);
         }
     }
+    
+    AWTGLReadBufferUtil screenshot = null;
 
     protected BufferedImage makeScreenshotAsBufferedImage(GL gl) {
         AWTGLReadBufferUtil screenshot = makeScreenshot(gl);
@@ -56,7 +69,7 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
     }
 
     private AWTGLReadBufferUtil makeScreenshot(GL gl) {
-        AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), true);
+        AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(gl.getGLProfile(), true);
         screenshot.readPixels(gl, true);
         image = screenshot.getTextureData();
         return screenshot;
@@ -75,9 +88,4 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
             listener.onDisplay(image);
         }
     }
-
-    public AWTImageRenderer3d(View view) {
-        super(view);
-    }
-
 }
