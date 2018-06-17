@@ -15,11 +15,10 @@ public class Settings {
     }
 
     private Settings(GLProfile glProfile) {
-        this.glProfile = glProfile;
         glCapabilities = new GLCapabilities(glProfile);
-
         // glCapabilities.setAlphaBits(8);
         setHardwareAccelerated(false);
+        
 
         // TODO Choose here somehow between NewtDisplay & AWTDisplay
         //display = NewtFactory.createDisplay(null);
@@ -39,6 +38,19 @@ public class Settings {
             return GLProfile.get(GLProfile.GL2ES2);
         }
     }
+    
+    public static GLCapabilities getOffscreenCapabilities(GLProfile glp) {
+        GLCapabilities caps = new GLCapabilities(glp); 
+        caps.setHardwareAccelerated(true); 
+        caps.setDoubleBuffered(false); 
+        caps.setAlphaBits(8); 
+        caps.setRedBits(8); 
+        caps.setBlueBits(8); 
+        caps.setGreenBits(8); 
+        caps.setOnscreen(false);
+        return caps;
+    } 
+
 
 
     /** Return the single allowed instance of Settings. */
@@ -52,7 +64,7 @@ public class Settings {
     /**
      * Modifies the acceleration status for all {@link ICanvas.Canvas}
      * instantiations. This doesn't modify the status of canvases that have
-     * allready been instantiated.
+     * already been instantiated.
      */
     public void setHardwareAccelerated(boolean hardwareAccelerated) {
         glCapabilities.setHardwareAccelerated(hardwareAccelerated);
@@ -64,8 +76,18 @@ public class Settings {
     }
 
     /** Returns a copy of the current GL2 capabilities. */
-    public GLCapabilities getGLCapabilities() {
+    public GLCapabilities getGLCapabilitiesClone() {
         return (GLCapabilities) glCapabilities.clone();
+    }
+    
+    
+
+    public GLCapabilities getGLCapabilities() {
+        return glCapabilities;
+    }
+
+    public void setGLCapabilities(GLCapabilities glCapabilities) {
+        this.glCapabilities = glCapabilities;
     }
 
     @Override
@@ -75,8 +97,5 @@ public class Settings {
 
     private static Settings instance;
 
-    // members
-    private GLCapabilities glCapabilities;
-
-    private GLProfile glProfile;
+    protected GLCapabilities glCapabilities;
 }
