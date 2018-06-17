@@ -487,12 +487,25 @@ public class Camera extends AbstractViewportManager {
     }
 
     protected void projectionOrthoGL2(GL gl, ViewportConfiguration viewport) {
-        if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()))
-            gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
-        else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode()))
-            gl.getGL2().glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
-        else if (ViewportMode.SQUARE.equals(viewport.getMode()))
-            gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
+        if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode())){
+            //gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
+            ortho(gl, -radius, +radius, -radius, +radius, near, far);
+        }
+        else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode())){
+            //gl.getGL2().glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
+            ortho(gl, -radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
+        }
+        else if (ViewportMode.SQUARE.equals(viewport.getMode())){
+            //gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
+            ortho(gl, -radius, +radius, -radius, +radius, near, far);
+        }
+    }
+    
+    /** Applies orthogonal projection only if parameters are valid (i.e. not zero) */
+    protected void ortho(GL gl, double left, double right, double bottom, double top, double near, double far){
+        if(left!=0 && right!=0 && bottom!=0 && top!=0 && near != 0 && far !=0){
+            gl.getGL2().glOrtho(left, right, bottom, top, near, far);
+        }
     }
 
     /**
