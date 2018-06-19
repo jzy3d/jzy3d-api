@@ -63,7 +63,6 @@ public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMu
 			colormapTexure.bind(gl);
 			mounted = true;
 		}
-		
 	}
 	
 	public void setMin(Number min) {
@@ -87,14 +86,19 @@ public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMu
         gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP);
         gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP);
         gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP);
-        gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MAG_FILTER,
-                GL.GL_LINEAR);
-        gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MIN_FILTER,
-                GL.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+        gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
         
         setTextureData(gl,buffer,shape);
     }
 	
+	/**
+	 * 
+	 * @param gl
+	 * @param buffer texture data
+	 * @param shape the dimensions of 3d texture.
+	 * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTexImage3D.xml
+	 */
 	public void setTextureData(final GL gl, Buffer buffer, int[] shape) {
 		gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
 		gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL.GL_R32F, shape[2], shape[1], shape[0], 0, GL2.GL_RED, GL.GL_FLOAT, buffer);
