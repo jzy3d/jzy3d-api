@@ -9,3 +9,8 @@ target
 *~/
 
 /bin/
+
+*.releaseBackup
+*.versionsBackup
+.DS_Store
+dependency-reduced-pom.xml
