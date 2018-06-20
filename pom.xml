@@ -9,6 +9,7 @@
 	<name>Jzy3d Master Project</name>
 	<url>http://www.jzy3d.org</url>
 	<description>A java API to draw 3d charts.</description>
+
 	<developers>
 		<developer>
 			<id>martin.pernollet</id>
@@ -24,6 +25,10 @@
 			<id>juan.barandiaran</id>
 			<name>Juan Barandiaran</name>
 		</developer>
+		<developer>
+			<id>jacob.filik</id>
+			<name>Jacob Filik</name>
+		</developer>
 	</developers>
 
 	<licenses>
@@ -34,10 +39,9 @@
 		</license>
 	</licenses>
 	<scm>
-	<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
-<!-- 		<connection>scm:git:git://github.com/jzy3d/jzy3d-api</connection> -->
-	  <tag>jzy3d-org-1.0.2</tag>
+  	<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
   </scm>
+
 	<issueManagement>
 		<system>Github</system>
 		<url>https://github.com/jzy3d/jzy3d-api/issues</url>
@@ -64,9 +68,13 @@
 		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
 		<version.mvn.deploy>2.4</version.mvn.deploy>
 		<version.mvn.javadoc>2.9.1</version.mvn.javadoc>
+		<version.mvn.release>2.5.3</version.mvn.release>
 		<version.libs.junit>4.10</version.libs.junit>
 		<version.libs.swt>4.2.1</version.libs.swt>
 	</properties>
+
+	<!--
+	Used to deploy to Jzy3d repository
 
 	<distributionManagement>
 		<repository>
@@ -79,11 +87,23 @@
 			<name>Jzy3d Maven Folder SNAPSHOTS</name>
 			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
 		</snapshotRepository>
+	</distributionManagement>-->
+
+
+	<distributionManagement>
+	  <snapshotRepository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	  </snapshotRepository>
+	  <repository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	  </repository>
 	</distributionManagement>
 
+
 	<build>
-		<pluginManagement>
-			<plugins>
+		<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
@@ -96,19 +116,79 @@
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${version.mvn.deploy}</version>
+					<configuration>
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<executions>
+						<execution>
+							<id>attach-sources</id>
+							<phase>deploy</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>${version.mvn.javadoc}</version>
 					<!--<configuration> <stylesheetfile>jzy3d-api/doc/layout.css</stylesheetfile>
 						</configuration> -->
+					<executions>
+						<execution>
+							<id>attach-javadocs</id>
+							<phase>deploy</phase>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
 				</plugin>
 
 				<plugin>
 					<artifactId>maven-release-plugin</artifactId>
-					<version>2.5.3</version>
+					<version>${version.mvn.release}</version>
 				</plugin>
 
-			</plugins>
-		</pluginManagement>
+				<plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>1.6.7</version>
+            <extensions>true</extensions>
+            <configuration>
+                <serverId>ossrh</serverId>
+                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                <!--<skipStagingRepositoryClose>true</skipStagingRepositoryClose>-->
+            </configuration>
+        </plugin>
+
+  			<!-- To sign artigact while deploying to Maven central via Sonatype -->
+		    <plugin>
+		      <groupId>org.apache.maven.plugins</groupId>
+		      <artifactId>maven-gpg-plugin</artifactId>
+		      <version>1.5</version>
+		      <executions>
+		        <execution>
+		          <id>sign-artifacts</id>
+		          <phase>deploy</phase>
+		          <goals>
+		            <goal>sign</goal>
+		          </goals>
+		        </execution>
+		      </executions>
+		    </plugin>
+		  </plugins>
+
 		<extensions>
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
