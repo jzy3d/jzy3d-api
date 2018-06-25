@@ -31,7 +31,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<repositories>
+	<!--<repositories>
       <repository>
          <id>jzy3d-releases</id>
          <name>Jzy3d Releases</name>
@@ -42,9 +42,22 @@
          <name>Jzy3d Snapshots</name>
          <url>http://maven.jzy3d.org/snapshots</url>
       </repository>
-   </repositories>
+   </repositories>-->
 
-   	<distributionManagement>
+	 <repositories>
+		 <repository>
+			 <id>Sonatype-snapshots</id>
+			 <name>Sonatyp Snapshots</name>
+			 <url>https://oss.sonatype.org/content/groups/public</url>
+		 </repository>
+		 <repository>
+			 <id>Sonatype-releases-staging</id>
+			 <name>Sonatype Releases Staging</name>
+			 <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		 </repository>
+	 </repositories>
+
+   	<!--<distributionManagement>
 		<repository>
 			<id>jzy3d-ftp</id>
 			<name>Jzy3d Maven Folder</name>
@@ -55,6 +68,17 @@
 			<name>Jzy3d Maven Folder SNAPSHOTS</name>
 			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
 		</snapshotRepository>
+	</distributionManagement>-->
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
 	</distributionManagement>
 
 
