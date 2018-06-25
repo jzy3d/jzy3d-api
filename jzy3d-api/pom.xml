@@ -41,8 +41,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.smurn</groupId>
-			<artifactId>jply</artifactId>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>org.smurn.jply</artifactId>
 			<version>0.2.1</version>
 		</dependency>
 
