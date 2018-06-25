@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-tutorials</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 
 	<name>Jzy3d Tutorials</name>
 
-	<!--To retrieve Jzy3d dependencies -->
+	<!--To retrieve Jzy3d dependencies
 	<repositories>
 		<repository>
 			<id>jzy3d-snapshots</id>
@@ -19,29 +19,54 @@
 			<name>Jzy3d Releases</name>
 			<url>http://maven.jzy3d.org/releases/</url>
 		</repository>
+	</repositories> -->
+
+	<repositories>
+		<repository>
+			<id>Sonatype-snapshots</id>
+			<name>Sonatyp Snapshots</name>
+			<url>https://oss.sonatype.org/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>Sonatype-releases-staging</id>
+			<name>Sonatype Releases Staging</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
 	</repositories>
 
-	<!--To deploy tutorials: 1) this project does not references master to be 
-		able to be build alone 2) master still reference this project to build it 
+	<!--To deploy tutorials: 1) this project does not references master to be
+		able to be build alone 2) master still reference this project to build it
 		with the API involve being deployable by mvn deploy -->
-	<distributionManagement>
-		<repository>
-			<id>jzy3d-ftp-maven</id>
-			<name>Jzy3d Maven Folder</name>
-			<url>ftp://www.jzy3d.org/v1/maven/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>jzy3d-ftp-maven</id>
-			<name>Jzy3d Maven Folder SNAPSHOTS</name>
-			<url>ftp://www.jzy3d.org/v1/maven/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
+		<distributionManagement>
+			<snapshotRepository>
+				<id>ossrh</id>
+				<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			</snapshotRepository>
+			<repository>
+				<id>ossrh</id>
+				<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+			</repository>
+		</distributionManagement>
+		<!--
+		Used to deploy to Jzy3d repository
+		<distributionManagement>
+			<repository>
+				<id>jzy3d-ftp</id>
+				<name>Jzy3d Maven Folder</name>
+				<url>ftp://ftp.cluster013.ovh.net/maven/releases</url>
+			</repository>
+			<snapshotRepository>
+				<id>jzy3d-ftp</id>
+				<name>Jzy3d Maven Folder SNAPSHOTS</name>
+				<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
+			</snapshotRepository>
+		</distributionManagement>-->
 
 	<dependencies>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-api</artifactId>
-			<version>1.0.2</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
@@ -81,7 +106,7 @@
 				<configuration>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
