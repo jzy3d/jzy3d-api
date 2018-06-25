@@ -7,7 +7,7 @@
 
 	<name>Jzy3d Tutorials</name>
 
-	<!--To retrieve Jzy3d dependencies -->
+	<!--To retrieve Jzy3d dependencies
 	<repositories>
 		<repository>
 			<id>jzy3d-snapshots</id>
@@ -19,7 +19,21 @@
 			<name>Jzy3d Releases</name>
 			<url>http://maven.jzy3d.org/releases/</url>
 		</repository>
+	</repositories> -->
+
+	<repositories>
+		<repository>
+			<id>Sonatype-snapshots</id>
+			<name>Sonatyp Snapshots</name>
+			<url>https://oss.sonatype.org/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>Sonatype-releases-staging</id>
+			<name>Sonatype Releases Staging</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
 	</repositories>
+
 
 	<!--To deploy tutorials: 1) this project does not references master to be
 		able to be build alone 2) master still reference this project to build it
