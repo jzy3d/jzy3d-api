@@ -22,7 +22,7 @@ public class CameraPathAnnotation extends LineStrip{
         super();
         this.view = view;
         setWireframeColor(color);
-        setWidth(1);
+        setWidth(3);
         timer.tic();
     }
     
