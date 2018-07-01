@@ -1,5 +1,6 @@
 package org.jzy3d.chart2d;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +59,20 @@ public class Chart2d extends AWTChart {
             serie = series.get(name);
         }
         return serie;
+    }
+    
+    public void setSerie(Serie2d serie){
+        this.series.put(serie.getName(), serie);
+    }
+
+    public void setSeries(Collection<Serie2d> series){
+        for(Serie2d serie: series){
+            setSerie(serie);
+        }
+    }
+
+    public void setSeries(Map<String,Serie2d> series){
+        this.series.putAll(series);
     }
 
     /* */
