@@ -88,7 +88,12 @@ public class ChartComponentFactory implements IChartComponentFactory {
 
     @Override
     public View newView(Scene scene, ICanvas canvas, Quality quality) {
-        return new ChartView(getFactory(), scene, canvas, quality);
+        return newView(getFactory(), scene, canvas, quality);
+    }
+    
+    @Override
+    public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+        return new ChartView(factory, scene, canvas, quality);
     }
 
     @Override

@@ -785,7 +785,7 @@ public class View {
         if (dimensionDirty)
             dimensionDirty = false;
 
-        cam.show(gl, new Transform(new Scale(scaling)), scaling);
+        //cam.show(gl, new Transform(new Scale(scaling)), scaling);
     }
 
     /**

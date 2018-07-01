@@ -39,8 +39,8 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
     }
 
     @Override
-    public View newView(Scene scene, ICanvas canvas, Quality quality) {
-        return new View2d(getFactory(), scene, canvas, quality);
+    public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+        return new View2d(factory, scene, canvas, quality);
     }
     
     /* */

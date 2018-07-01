@@ -98,8 +98,8 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
      * images)
      */
     @Override
-    public View newView(Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTView(getFactory(), scene, canvas, quality);
+    public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+        return new AWTView(factory, scene, canvas, quality);
     }
 
     /** Provide AWT Texture loading for screenshots */
