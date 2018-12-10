@@ -17,29 +17,29 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
     }
     
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit){
+    public Chart2d newChart(IChartComponentFactory factory, Quality quality, String toolkit){
         return new Chart2d(factory, quality, toolkit);
     }
     
     @Override
-    public Chart newChart(Quality quality, Toolkit toolkit) {
+    public Chart2d newChart(Quality quality, Toolkit toolkit) {
         return new Chart2d(getFactory(), quality, toolkit.toString());
     }
 
     @Override
-    public Chart newChart(Quality quality, String toolkit) {
+    public Chart2d newChart(Quality quality, String toolkit) {
         return new Chart2d(getFactory(), quality, toolkit);
     }
 
     @Override
-    public IAxe newAxe(BoundingBox3d box, View view) {
+    public AxeBox2d newAxe(BoundingBox3d box, View view) {
         AxeBox2d axe = new AxeBox2d(box);
         //axe.setTextRenderer(new TextBitmapRenderer());
         return axe;
     }
 
     @Override
-    public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public View2d newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         return new View2d(factory, scene, canvas, quality);
     }
     
@@ -49,16 +49,16 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
         return chart(Quality.Intermediate);
     }
     public static Chart2d chart(Quality quality) {
-        return (Chart2d)f.newChart(quality, Toolkit.newt);
+        return f.newChart(quality, Toolkit.newt);
     }
     public static Chart2d chart(String toolkit) {
-        return (Chart2d)f.newChart(Chart.DEFAULT_QUALITY, toolkit);
+        return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
     }
     public static Chart2d chart(Quality quality, Toolkit toolkit) {
-        return (Chart2d)f.newChart(quality, toolkit);
+        return f.newChart(quality, toolkit);
     }
     public static Chart2d chart(Quality quality, String toolkit) {
-        return (Chart2d)f.newChart(quality, toolkit);
+        return f.newChart(quality, toolkit);
     }
     
     static Chart2dComponentFactory f = new Chart2dComponentFactory();
