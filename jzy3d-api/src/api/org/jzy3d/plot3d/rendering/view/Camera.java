@@ -113,8 +113,8 @@ public class Camera extends AbstractViewportManager {
 
     /**
      * Set the radius of the sphere that will be contained into the rendered
-     * view. As a side effect, the "far" clipping plane is modified according to
-     * the eye-target distance, and the position of the "near" clipping plane.
+     * view. The "far" and "near" clipping planes are modified according to
+     * the eye-target distance.
      */
     public void setRenderingSphereRadius(float radius) {
         this.radius = radius;
@@ -492,15 +492,12 @@ public class Camera extends AbstractViewportManager {
 
     protected void projectionOrthoGL2(GL gl, ViewportConfiguration viewport) {
         if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode())){
-            //gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
             ortho(gl, -radius, +radius, -radius, +radius, near, far);
         }
         else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode())){
-            //gl.getGL2().glOrtho(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
             ortho(gl, -radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
         }
         else if (ViewportMode.SQUARE.equals(viewport.getMode())){
-            //gl.getGL2().glOrtho(-radius, +radius, -radius, +radius, near, far);
             ortho(gl, -radius, +radius, -radius, +radius, near, far);
         }
     }

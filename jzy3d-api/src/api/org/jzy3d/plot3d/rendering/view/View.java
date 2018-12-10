@@ -65,6 +65,81 @@ import com.jogamp.opengl.glu.GLU;
 public class View {
     protected static Logger LOGGER = Logger.getLogger(View.class);
 
+
+    /** A view may optionnaly know its parent chart. */
+    protected Chart chart;
+
+    protected GLU glu;
+
+    public static float STRETCH_RATIO = 0.25f;
+
+    /**
+     * force to have all object maintained in screen, meaning axebox won't
+     * always keep the same size.
+     */
+    protected boolean MAINTAIN_ALL_OBJECTS_IN_VIEW = false;
+    /** display a magenta parallelepiped (debug). */
+    protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false;
+    protected boolean axeBoxDisplayed = true;
+    protected boolean squared = true;
+
+    protected Camera cam;
+    protected IAxe axe;
+    protected Quality quality;
+    protected Scene scene;
+    protected ICanvas canvas;
+
+    protected Scene annotations;
+
+    protected Coord3d viewpoint;
+    protected Coord3d center;
+    protected Coord3d scaling;
+    protected BoundingBox3d viewbounds;
+    
+
+    protected CameraMode cameraMode;
+    protected ViewPositionMode viewmode;
+    protected ViewBoundMode boundmode;
+
+    // protected BoundingBox3d targetBox;
+
+    protected Color bgColor = Color.BLACK;
+
+    protected List<IViewPointChangedListener> viewPointChangedListeners;
+    protected List<IViewIsVerticalEventListener> viewOnTopListeners;
+    protected List<IViewLifecycleEventListener> viewLifecycleListeners;
+    protected boolean wasOnTopAtLastRendering;
+
+    protected static final float PI_div2 = (float) Math.PI / 2;
+    
+    public static final float DEFAULT_DISTANCE = 2000;
+    public static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 3, DEFAULT_DISTANCE);
+
+    protected boolean dimensionDirty = false;
+    /**
+     * can be set to true by the Renderer3d so that the View knows it is
+     * rendering due to a canvas size change
+     */
+    protected boolean viewDirty = false;
+
+    protected static View current;
+
+    protected BoundingBox3d initBounds;
+
+    /**
+     * Applies a factor to the default camera distance which is set to the
+     * radius of the scene bounds. Changing this value also change the camera
+     * clipping planes.
+     */
+    protected float factorViewPointDistance = 2;
+
+    /** A slave view won't clear its color and depth buffer before rendering */
+    protected boolean slave = false;
+
+    protected SpaceTransformer spaceTransformer = new SpaceTransformer();
+    
+    private ISquarifier squarifier;
+    
     /**
      * Create a view attached to a Scene, with its own Camera and Axe. The
      * initial view point is set at {@link View.DEFAULT_VIEW}.
@@ -928,7 +1003,7 @@ public class View {
     }
     
     public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam, CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
-        viewpoint.z = sceneRadiusScaled * factorViewPointDistance;
+        viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
         
         cam.setTarget(computeCameraTarget(center, scaling));
         cam.setUp(computeCameraUpAndTriggerEvents(viewpoint));
@@ -938,6 +1013,11 @@ public class View {
         
         cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
+    }
+
+    public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled, float factorViewPointDistance) {
+        //return (float)spaceTransformer.compute(bounds).getRadius() * factorViewPointDistance;
+        return sceneRadiusScaled * factorViewPointDistance;
     }
 
     protected Coord3d computeCameraTarget() {
@@ -1122,77 +1202,5 @@ public class View {
     
     /* */
 
-    /** A view may optionnaly know its parent chart. */
-    protected Chart chart;
-
-    protected GLU glu;
-
-    public static float STRETCH_RATIO = 0.25f;
-
-    /**
-     * force to have all object maintained in screen, meaning axebox won't
-     * always keep the same size.
-     */
-    protected boolean MAINTAIN_ALL_OBJECTS_IN_VIEW = false;
-    /** display a magenta parallelepiped (debug). */
-    protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false;
-    protected boolean axeBoxDisplayed = true;
-    protected boolean squared = true;
-
-    protected Camera cam;
-    protected IAxe axe;
-    protected Quality quality;
-    protected Scene scene;
-    protected ICanvas canvas;
-
-    protected Scene annotations;
-
-    protected Coord3d viewpoint;
-    protected Coord3d center;
-    protected Coord3d scaling;
-    protected BoundingBox3d viewbounds;
-    
-
-    protected CameraMode cameraMode;
-    protected ViewPositionMode viewmode;
-    protected ViewBoundMode boundmode;
-
-    // protected BoundingBox3d targetBox;
-
-    protected Color bgColor = Color.BLACK;
-
-    protected List<IViewPointChangedListener> viewPointChangedListeners;
-    protected List<IViewIsVerticalEventListener> viewOnTopListeners;
-    protected List<IViewLifecycleEventListener> viewLifecycleListeners;
-    protected boolean wasOnTopAtLastRendering;
-
-    protected static final float PI_div2 = (float) Math.PI / 2;
-
-    public static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 3, 2000);
-
-    protected boolean dimensionDirty = false;
-    /**
-     * can be set to true by the Renderer3d so that the View knows it is
-     * rendering due to a canvas size change
-     */
-    protected boolean viewDirty = false;
-
-    protected static View current;
-
-    protected BoundingBox3d initBounds;
-
-    /**
-     * Applies a factor to the default camera distance which is set to the
-     * radius of the scene bounds. Changing this value also change the camera
-     * clipping planes.
-     */
-    protected float factorViewPointDistance = 2;
-
-    /** A slave view won't clear its color and depth buffer before rendering */
-    protected boolean slave = false;
-
-    protected SpaceTransformer spaceTransformer = new SpaceTransformer();
-    
-    private ISquarifier squarifier;
 
 }

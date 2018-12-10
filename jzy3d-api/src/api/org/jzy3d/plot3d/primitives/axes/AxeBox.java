@@ -395,9 +395,9 @@ public class AxeBox implements IAxe {
             Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
             
             // not fully relevant
-            if(spaceTransformer!=null){
+            /*if(spaceTransformer!=null){
                 labelPosition = spaceTransformer.compute(labelPosition);
-            }
+            }*/
             
             BoundingBox3d labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
             if (labelBounds != null)
