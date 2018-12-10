@@ -54,6 +54,14 @@ public class SpaceTransformer {
     public Coord3d compute(Coord3d point) {
         return new Coord3d(getX().compute(point.x), getY().compute(point.y), getZ().compute(point.z));
     }
+    
+    public Coord3d computeSelf(Coord3d point) {
+        point.x = getX().compute(point.x);
+        point.y = getY().compute(point.y);
+        point.z = getZ().compute(point.z);
+        return point;
+    }
+
 
     public Coord2d compute(Coord2d point) {
         return new Coord2d(getX().compute(point.x), getY().compute(point.y));
