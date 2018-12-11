@@ -13,6 +13,7 @@ import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -127,13 +128,17 @@ public class LineStrip extends AbstractWireframeable {
 
         if (wfcolor == null) {
             for (Point p : points) {
-                GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
-                GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                colorGLES2(p.rgb);
+                vertexGLES2(p.xyz);
+                //GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                //GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
             }
         } else {
             for (Point p : points) {
-                GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-                GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                colorGLES2(wfcolor);
+                vertexGLES2(p.xyz);
+                //GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+                //GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
             }
         }
         GLES2CompatUtils.glEnd();
@@ -151,13 +156,13 @@ public class LineStrip extends AbstractWireframeable {
 
         if (wfcolor == null) {
             for (Point p : points) {
-                gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
-                gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                colorGL2(gl, p.rgb);
+                vertexGL2(gl, p.xyz);
             }
         } else {
             for (Point p : points) {
-                gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-                gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                colorGL2(gl, wfcolor);
+                vertexGL2(gl, p.xyz);
             }
         }
         gl.getGL2().glEnd();
@@ -186,10 +191,10 @@ public class LineStrip extends AbstractWireframeable {
 
         for (Point p : points) {
             if (wfcolor == null)
-                GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                colorGLES2(p.rgb);
             else
-                GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-            GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                colorGLES2(wfcolor);
+            vertexGLES2(p.xyz);
         }
 
         GLES2CompatUtils.glEnd();
@@ -202,10 +207,10 @@ public class LineStrip extends AbstractWireframeable {
 
         for (Point p : points) {
             if (wfcolor == null)
-                gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                colorGL2(gl, p.rgb);
             else
-                gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-            gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                colorGL2(gl, wfcolor);
+            vertexGL2(gl, p.xyz);
         }
 
         gl.getGL2().glEnd();
@@ -438,6 +443,14 @@ public class LineStrip extends AbstractWireframeable {
 
     public void setSymbolHandler(SymbolHandler symbolHandler) {
         this.symbolHandler = symbolHandler;
+    }
+    
+    @Override
+    public void setSpaceTransformer(SpaceTransformer spaceTransformer){
+        super.setSpaceTransformer(spaceTransformer);
+        if (showSymbols && symbolHandler!=null) {
+            symbolHandler.setSpaceTransformer(spaceTransformer);
+        }
     }
 
     /**********************************************************************/

@@ -84,15 +84,19 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
 
         GLES2CompatUtils.glBegin(GL.GL_POINTS);
         if (colors == null)
-            GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+            colorGLES2(rgb);
+            //GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+        
         if (coordinates != null) {
             int k = 0;
             for (Coord3d c : coordinates) {
                 if (colors != null) {
-                    GLES2CompatUtils.glColor4f(colors[k].r, colors[k].g, colors[k].b, colors[k].a);
+                    colorGLES2(colors[k]);
+                    //GLES2CompatUtils.glColor4f(colors[k].r, colors[k].g, colors[k].b, colors[k].a);
                     k++;
                 }
-                GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
+                vertexGLES2(c);
+                //GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
             }
         }
         GLES2CompatUtils.glEnd();
@@ -103,15 +107,19 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
 
         gl.getGL2().glBegin(GL.GL_POINTS);
         if (colors == null)
-            gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+            colorGL2(gl, rgb);
+            //gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+        
         if (coordinates != null) {
             int k = 0;
             for (Coord3d c : coordinates) {
                 if (colors != null) {
-                    gl.getGL2().glColor4f(colors[k].r, colors[k].g, colors[k].b, colors[k].a);
+                    colorGL2(gl, colors[k]);
+                    //gl.getGL2().glColor4f(colors[k].r, colors[k].g, colors[k].b, colors[k].a);
                     k++;
                 }
-                gl.getGL2().glVertex3f(c.x, c.y, c.z);
+                vertexGL2(gl, c);
+                //gl.getGL2().glVertex3f(c.x, c.y, c.z);
             }
         }
         gl.getGL2().glEnd();
