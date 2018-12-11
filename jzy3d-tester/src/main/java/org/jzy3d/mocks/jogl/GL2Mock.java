@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.rendering.view.Camera.Ortho;
 
 import com.jogamp.common.nio.PointerBuffer;
 import com.jogamp.opengl.GL;
@@ -225,8 +226,9 @@ public class GL2Mock implements GL2{
 
     @Override
     public void glOrtho(double left, double right, double bottom, double top, double near_val, double far_val) {
-        
-        
+        Ortho o = new Ortho();
+        o.update(left, right, bottom, top, near_val, far_val);
+        orthos.add(o);
     }
 
     @Override
@@ -1401,10 +1403,17 @@ public class GL2Mock implements GL2{
 
     @Override
     public void glOrthof(float left, float right, float bottom, float top, float zNear, float zFar) {
-        
-        
+        Ortho o = new Ortho();
+        o.update(left, right, bottom, top, zNear, zFar);
+        orthos.add(o);
     }
 
+    List<Ortho> orthos = new ArrayList<Ortho>();
+    
+    public List<Ortho> getOrthos(){
+        return orthos;
+    }
+    
     @Override
     public void glFrustumf(float left, float right, float bottom, float top, float zNear, float zFar) {
         

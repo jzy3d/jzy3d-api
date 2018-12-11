@@ -38,12 +38,40 @@ public class Camera extends AbstractViewportManager {
 
     /** The polar default view point, i.e. Coord3d(Math.PI/3,Math.PI/5,500). */
     public static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 5, 500);
+    
     /**
      * Defines if camera distance is real, or only squared (squared distance
      * avoid computing Math.sqrt() and is thus faster). Second mode requires
      * value true
      */
     public static final boolean DEFAULT_CAMERA_DISTANCE_MODE = true;
+    
+    /**
+     * Defines if camera distance is real, or only squared (squared distance
+     * avoid computing Math.sqrt() and is thus faster). 
+     */
+    protected boolean useSquaredDistance = DEFAULT_CAMERA_DISTANCE_MODE;
+
+    
+    /** The camera viewpoint */
+    protected Coord3d eye;
+    /** The camera target */
+    protected Coord3d target;
+    /** The camera up vector */
+    protected Coord3d up;
+
+    /** The rendering radius, used to automatically define with/height of scene and distance of clipping planes. */
+    protected float radius;
+    /** The distance between the camera eye and the near clipping plane. */
+    protected float near;
+    /** The distance between the camera eye and the far clipping plane. */
+    protected float far;
+
+    /** The configuration used to make orthogonal rendering.
+     * @see glOrtho
+     */
+    protected Ortho ortho = new Ortho();
+
 
     /**
      * Set up a Camera looking at target, with a viewpoint standing at
@@ -154,6 +182,12 @@ public class Camera extends AbstractViewportManager {
     public boolean side(Coord3d point) {
         return 0 < ((point.x - target.x) * (eye.y - target.y) - (point.y - target.y) * (eye.x - target.x));
     }
+
+    /** Return last values used to make orthogonal scene rendering. Do not edit. */
+    public Ortho getOrtho() {
+        return ortho;
+    }
+
 
     /************************** PROJECT / UNPROJECT ****************************/
 
@@ -492,23 +526,18 @@ public class Camera extends AbstractViewportManager {
 
     protected void projectionOrthoGL2(GL gl, ViewportConfiguration viewport) {
         if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode())){
-            ortho(gl, -radius, +radius, -radius, +radius, near, far);
+            ortho.update(-radius, +radius, -radius, +radius, near, far);
         }
         else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode())){
-            ortho(gl, -radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
+            ortho.update(-radius * viewport.ratio(), +radius * viewport.ratio(), -radius, +radius, near, far);
         }
         else if (ViewportMode.SQUARE.equals(viewport.getMode())){
-            ortho(gl, -radius, +radius, -radius, +radius, near, far);
+            ortho.update(-radius, +radius, -radius, +radius, near, far);
         }
+        
+        ortho.apply(gl);
     }
     
-    /** Applies orthogonal projection only if parameters are valid (i.e. not zero) */
-    protected void ortho(GL gl, double left, double right, double bottom, double top, double near, double far){
-        if(left!=0 && right!=0 && bottom!=0 && top!=0 && near != 0 && far !=0){
-            gl.getGL2().glOrtho(left, right, bottom, top, near, far);
-        }
-    }
-
     /**
      * Compute the field of View, in order to occupy the entire screen in
      * PERSPECTIVE mode.
@@ -599,16 +628,45 @@ public class Camera extends AbstractViewportManager {
         output += (" topToward = {" + up.x + ", " + up.y + ", " + up.z + "}");
         return output;
     }
-
-    /* */
-
-    protected Coord3d eye;
-    protected Coord3d target;
-    protected Coord3d up;
-
-    protected float radius;
-    protected float near;
-    protected float far;
-
-    protected boolean useSquaredDistance = DEFAULT_CAMERA_DISTANCE_MODE;
+    
+    /**
+     * The configuration used to call glOrtho
+     * 
+     */
+    public static class Ortho{
+        /** the latest value used to invoke glOrtho */
+        public double left; 
+        /** the latest value used to invoke glOrtho */
+        public double right;
+        /** the latest value used to invoke glOrtho */
+        public double bottom; 
+        /** the latest value used to invoke glOrtho */
+        public double top; 
+        /** the latest value used to invoke glOrtho */
+        public double near; 
+        /** the latest value used to invoke glOrtho */
+        public double far;
+        
+        public Ortho(){}
+        
+        public void update(double left, double right, double bottom, double top, double near, double far){
+            this.left = left;
+            this.right = right;
+            this.bottom = bottom; 
+            this.top = top; 
+            this.near = near; 
+            this.far = far;
+        }
+        
+        /** Applies orthogonal projection only if parameters are valid (i.e. not zero) */
+        public void apply(GL gl){
+            if(left!=0 && right!=0 && bottom!=0 && top!=0 && near != 0 && far !=0){
+                gl.getGL2().glOrtho(left, right, bottom, top, near, far);
+            }
+        }
+        
+        public String toString(){
+            return "left:"+left+" right:"+right+" bottom:"+bottom+" top:"+top+" near:"+near+" far:"+far;
+        }
+    }
 }
