@@ -10,6 +10,9 @@ import org.jzy3d.incubation.vbo.ShaderWaterfallDrawableVBO;
 import org.jzy3d.incubation.vbo.ShaderWaterfallVBOBuilder;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
+/**
+ * @author Jacok Filik
+ */
 public class BigWaterfallDemo extends AbstractAnalysis {
     public static void main(String[] args) throws Exception {
         AnalysisLauncher.open(new BigWaterfallDemo());
