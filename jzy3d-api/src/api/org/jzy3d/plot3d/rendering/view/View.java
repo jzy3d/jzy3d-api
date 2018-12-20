@@ -950,14 +950,16 @@ public class View {
         if (Float.isInfinite(lmax) || Float.isNaN(lmax) || lmax == 0)
             lmax = 1;
 
+        // Return a scaler
         if (squarifier != null) {
         	return squarifier.scale(xLen, yLen, zLen);
         }
-        // Return a scaler
-        float xscale = (float) ((double) lmax / (double) xLen);
-        float yscale = (float) ((double) lmax / (double) yLen);
-        float zscale = (float) ((double) lmax / (double) zLen);
-        return new Coord3d(xscale, yscale, zscale);
+        else{
+            float xscale = (float) ((double) lmax / (double) xLen);
+            float yscale = (float) ((double) lmax / (double) yLen);
+            float zscale = (float) ((double) lmax / (double) zLen);
+            return new Coord3d(xscale, yscale, zscale);
+        }
     }
     
     protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds){
@@ -1199,7 +1201,11 @@ public class View {
     public void setSquarifier(ISquarifier squarifier) {
     	this.squarifier = squarifier;
     }
-    
+
+    public ISquarifier getSquarifier() {
+        return squarifier;
+    }
+
     /* */
 
 
