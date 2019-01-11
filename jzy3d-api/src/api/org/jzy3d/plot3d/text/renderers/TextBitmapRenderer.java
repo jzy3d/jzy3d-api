@@ -107,6 +107,10 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     }
 
     public void glRasterPos(GL gl, Coord3d sceneOffset, Coord3d posReal) {
+        if(spaceTransformer!=null){
+            posReal = spaceTransformer.compute(posReal);
+        }
+        
         if (gl.isGL2()) {
             gl.getGL2().glRasterPos3f(posReal.x + sceneOffset.x, posReal.y + sceneOffset.y, posReal.z + sceneOffset.z);
         } else {
