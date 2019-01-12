@@ -62,7 +62,7 @@ public class ColorMapper implements IColorMappable {
 
     /** call a colormap with a three dimensions coordinate */
     public Color getColor(Coord3d coord) {
-        Color out = colormap.getColor(this, coord.x, coord.y, coord.z);
+        Color out = colormap.getColor(this /*provide min/max*/, coord.x, coord.y, coord.z);
 
         if (factor != null)
             out.mul(factor);

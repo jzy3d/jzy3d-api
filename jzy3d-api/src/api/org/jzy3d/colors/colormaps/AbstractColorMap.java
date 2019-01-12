@@ -2,6 +2,7 @@ package org.jzy3d.colors.colormaps;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IColorMappable;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public abstract class AbstractColorMap implements IColorMap{
     public abstract Color getColor(double x, double y, double z, double zMin, double zMax);
@@ -27,7 +28,7 @@ public abstract class AbstractColorMap implements IColorMap{
 
     protected double processRelativeZValue(double z, double zMin, double zMax) {
         double rel_value = 0;
-            
+           
         if (z < zMin) {
             if (direction)
                 rel_value = 0;
@@ -45,6 +46,7 @@ public abstract class AbstractColorMap implements IColorMap{
             else
                 rel_value = (zMax - z) / (zMax - zMin);
         }
+
         return rel_value;
     }
 
@@ -91,5 +93,17 @@ public abstract class AbstractColorMap implements IColorMap{
         return output;
     }
 
+    @Override
+    public SpaceTransformer getSpaceTransformer() {
+        return spaceTransformer;
+    }
+
+    @Override
+    public void setSpaceTransformer(SpaceTransformer transformer) {
+        this.spaceTransformer = transformer;
+    }
+
     protected boolean direction;
+    protected SpaceTransformer spaceTransformer;
+
 }
