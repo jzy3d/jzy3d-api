@@ -3,6 +3,7 @@ package org.jzy3d.colors.colormaps;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IColorMappable;
 import org.jzy3d.colors.IMultiColorable;
+import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
  * This interface defines the set of methods that any concrete colormap
@@ -122,4 +123,8 @@ public interface IColorMap {
      * @return color
      */
     public double colorComponentAbsolute(double value, double bLeft, double bRight, double tLeft, double tRight);
+    
+    public SpaceTransformer getSpaceTransformer();
+    public void setSpaceTransformer(SpaceTransformer transformer);
+
 }
