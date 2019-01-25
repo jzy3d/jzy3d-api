@@ -962,11 +962,22 @@ public class View {
         }
     }
     
-    protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds){
-        return bounds.getRange();
-        /*xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
-        yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
-        zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());*/
+
+    
+    /* LAYOUT */
+
+    protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds) {
+        if(spaceTransformer==null){
+            return bounds.getRange();
+        }
+        else{
+            float xLen = spaceTransformer.getX().compute(bounds.getXmax()) - spaceTransformer.getX().compute(bounds.getXmin());
+            float yLen = spaceTransformer.getY().compute(bounds.getYmax()) - spaceTransformer.getY().compute(bounds.getYmin());
+            float zLen = spaceTransformer.getZ().compute(bounds.getZmax()) - spaceTransformer.getZ().compute(bounds.getZmin());
+
+            return new Coord3d(xLen, yLen, zLen);
+        }
+
     }
 
     public BoundingBox3d computeScaledViewBounds() {
@@ -1017,10 +1028,15 @@ public class View {
         cam.shoot(gl, glu, cameraMode);
     }
 
-    public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled, float factorViewPointDistance) {
+    /*public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled, float factorViewPointDistance) {
         //return (float)spaceTransformer.compute(bounds).getRadius() * factorViewPointDistance;
         return sceneRadiusScaled * factorViewPointDistance;
+    }*/
+    
+    public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled, float factorViewPointDistance) {
+        return (float)spaceTransformer.compute(bounds).getRadius();// * factorViewPointDistance;
     }
+
 
     protected Coord3d computeCameraTarget() {
         return computeCameraTarget(center, scaling);
@@ -1102,7 +1118,31 @@ public class View {
         return up;
     }
 
-    protected void computeCameraRenderingSphereRadius(Camera cam, GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds) {
+    public void computeCameraRenderingSphereRadius(Camera cam, GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds) {
+
+        if (viewmode == ViewPositionMode.TOP) {
+            if(spaceTransformer!=null)
+                bounds = spaceTransformer.compute(bounds);
+
+            float xdiam = bounds.getXRange().getRange();
+            float ydiam = bounds.getYRange().getRange();
+            float radius = Math.max(xdiam, ydiam) / 2;
+            
+            cam.setRenderingSphereRadius(radius);
+            correctCameraPositionForIncludingTextLabels(gl, glu, viewport);
+        } else {
+            if(spaceTransformer!=null)
+                bounds = spaceTransformer.compute(bounds);
+
+            
+            cam.setRenderingSphereRadius((float) bounds.getRadius() * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR);
+        }
+    }
+    
+    public static final float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR = 1.2f;
+
+
+    /*protected void computeCameraRenderingSphereRadius(Camera cam, GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds) {
         if (viewmode == ViewPositionMode.TOP) {
             float xdiam = bounds.getXRange().getRange();
             float ydiam = bounds.getYRange().getRange();
@@ -1113,7 +1153,7 @@ public class View {
             cam.setRenderingSphereRadius((float) bounds.getRadius());
             //cam.setRenderingSphereRadius((float) bounds.getTransformedRadius(spaceTransformer));
         }
-    }
+    }*/
     
     protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
     }
