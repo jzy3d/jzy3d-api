@@ -26,6 +26,12 @@ public abstract class AbstractColorMap implements IColorMap{
         return getColor(x, y, z, colorable.getMin(), colorable.getMax());
     }
 
+    /** Compute a value in [0;1] to pick a color in a [0;1] color range.
+     * 
+     * Basically normalize the z value in its original range to the color range.
+     * 
+     * @return (z - zMin) / (zMax - zMin) OR (zMax - z) / (zMax - zMin) OR 1 OR 0
+     */
     protected double processRelativeZValue(double z, double zMin, double zMax) {
         double rel_value = 0;
            
