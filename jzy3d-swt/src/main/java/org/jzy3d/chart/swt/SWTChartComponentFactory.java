@@ -38,9 +38,9 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import com.jogamp.opengl.GLCapabilities;
 
 public class SWTChartComponentFactory extends ChartComponentFactory {
-    static Logger logger = Logger.getLogger(SWTChartComponentFactory.class);
+    private static final Logger logger = Logger.getLogger(SWTChartComponentFactory.class);
 
-    private Composite canvas;
+    private final Composite canvas;
 
     private SWTChartComponentFactory(Composite canvas) {
         this.canvas = canvas;
@@ -128,7 +128,7 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
         case swt_newt:
             return new CanvasNewtSWT(factory, scene, quality, capabilities, traceGL, debugGL);
         default:
-            throw new RuntimeException("unknown chart type:" + chartType);
+            throw new IllegalArgumentException("unknown chart type:" + chartType);
         }
     }
 
@@ -184,8 +184,7 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
 
     @Override
     public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        ICameraKeyController key = new NewtCameraKeyController(chart);
-        return key;
+        return new NewtCameraKeyController(chart);
     }
 
     @Override
