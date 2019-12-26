@@ -19,10 +19,12 @@ public class CanvasSWT implements Canvas {
     }
 
     public void dispose() {
-        if (bgColor != null)
+        if (bgColor != null) {
             bgColor.dispose();
-        if (fgColor != null)
+        }
+        if (fgColor != null) {
             fgColor.dispose();
+        }
     }
 
     @Override
@@ -36,8 +38,9 @@ public class CanvasSWT implements Canvas {
     @Override
     public void drawRect(Color color, int x, int y, int width, int height, boolean border) {
         if (color != null) {
-            if (current != null)
+            if (current != null) {
                 current.dispose();
+            }
             current = swt(color);
 
             target.setBackground(current);
@@ -59,20 +62,21 @@ public class CanvasSWT implements Canvas {
 
     @Override
     public void drawDot(Color color, int x, int y) {
-        if (current != null)
+        if (current != null) {
             current.dispose();
+        }
         current = swt(color);
 
         target.setBackground(current);
         target.setForeground(current);
         target.drawRectangle(x - PIXEL_WITH / 2, y - PIXEL_WITH / 2, PIXEL_WITH, PIXEL_WITH);
-        // target.drawRectangle(x, y, PIXEL_WITH, PIXEL_WITH);
     }
 
     @Override
     public void drawOval(Color color, int x, int y, int width, int height) {
-        if (current != null)
+        if (current != null) {
             current.dispose();
+        }
         current = swt(color);
 
         target.setBackground(current);
@@ -83,8 +87,9 @@ public class CanvasSWT implements Canvas {
 
     @Override
     public void drawBackground(Color color, int width, int heigth) {
-        if (bgColor != null)
+        if (bgColor != null) {
             bgColor.dispose();
+        }
         bgColor = swt(color);
 
         target.setBackground(bgColor);
@@ -105,24 +110,14 @@ public class CanvasSWT implements Canvas {
 
     /**********************************************************************************/
 
-    /** Set up an initial reference to the SWT Display. */
-    /*
-     * static{
-     * d = Display.getDefault();
-     * }
-     * private static Display d;
-     */
-
-    /**********************************************************************************/
-
-    private GC target;
+    private final GC target;
     private org.eclipse.swt.graphics.Color bgColor = new org.eclipse.swt.graphics.Color(Display.getDefault(), 255, 255, 255); // default bg
-    private org.eclipse.swt.graphics.Color fgColor = new org.eclipse.swt.graphics.Color(Display.getDefault(), 0, 0, 0); // default bg
+    private final org.eclipse.swt.graphics.Color fgColor = new org.eclipse.swt.graphics.Color(Display.getDefault(), 0, 0, 0); // default bg
     private org.eclipse.swt.graphics.Color current;
 
     @SuppressWarnings("unused")
-    private static org.eclipse.swt.graphics.Color WHITE = new org.eclipse.swt.graphics.Color(Display.getDefault(), 255, 255, 255);
-    private static org.eclipse.swt.graphics.Color BLACK = new org.eclipse.swt.graphics.Color(Display.getDefault(), 0, 0, 0);
+    private static final org.eclipse.swt.graphics.Color WHITE = new org.eclipse.swt.graphics.Color(Display.getDefault(), 255, 255, 255);
+    private static final org.eclipse.swt.graphics.Color BLACK = new org.eclipse.swt.graphics.Color(Display.getDefault(), 0, 0, 0);
 
-    private final static int PIXEL_WITH = 1;
+    private static final int PIXEL_WITH = 1;
 }

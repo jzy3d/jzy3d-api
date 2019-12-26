@@ -43,7 +43,6 @@ public class SWTDemo {
         Display display = new Display();
         Shell shell = new Shell(display);
         shell.setLayout(new FillLayout());
-        // Bridge.adapt(shell, (Component) chart.getCanvas());
 
         Chart chart = SWTChartComponentFactory.chart(shell);
         chart.getScene().getGraph().add(surface);
@@ -55,11 +54,10 @@ public class SWTDemo {
         shell.open();
 
         while (!shell.isDisposed()) {
-            if (!display.readAndDispatch())
+            if (!display.readAndDispatch()) {
                 display.sleep();
+            }
         }
         display.dispose();
-
     }
-
 }

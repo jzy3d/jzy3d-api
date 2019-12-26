@@ -20,7 +20,6 @@ public class FrameSWT implements IFrame {
 
     @Override
     public void initialize(Chart chart, Rectangle bounds, String title) {
-        this.chart = chart;
 
         Display display = new Display();
         Shell shell = new Shell(display);
@@ -32,15 +31,13 @@ public class FrameSWT implements IFrame {
         shell.open();
 
         while (!shell.isDisposed()) {
-            if (!display.readAndDispatch())
+            if (!display.readAndDispatch()) {
                 display.sleep();
+            }
         }
-        this.chart.dispose();
-        this.chart = null;
+        chart.dispose();
         display.dispose();
     }
-
-    private Chart chart;
 
     @Override
     public void initialize(Chart chart, Rectangle bounds, String title, String message) {
