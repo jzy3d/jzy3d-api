@@ -6,8 +6,6 @@ import java.awt.Frame;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
@@ -47,32 +45,16 @@ import org.eclipse.swt.widgets.Composite;
  * If problems are encountered with the Bridge, it is possible to check:<br>
  * http://wiki.eclipse.org/Albireo_SWT_AWT_bugs<br>
  * http://www.eclipsezone.com/eclipse/forums/t45697.html<br>
- * 
+ *
  * @author Martin Pernollet
  */
 public class Bridge {
+
     public static void adapt(Composite containerSWT, final Component componentAWT) {
         Composite embedder = new Composite(containerSWT, SWT.EMBEDDED);
         embedder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        final Frame frame = SWT_AWT.new_Frame(embedder);
-        frame.add(componentAWT);
-
-        // disposing the frame cleanly
-        embedder.addDisposeListener(new DisposeListener() {
-            @Override
-            public void widgetDisposed(DisposeEvent arg0) {
-                EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // System.out.println("Bridge is disposing frame containing " + componentAWT.getName() + " - " +
-                        // componentAWT.getClass());
-                        frame.dispose();
-                        // the awt component is supposed to be disposed by the user
-                    }
-                });
-            }
-        });
+        adaptIn(embedder, componentAWT);
     }
 
     public static void adaptIn(Composite embedder, final Component componentAWT) {
@@ -80,20 +62,7 @@ public class Bridge {
         frame.add(componentAWT);
 
         // disposing the frame cleanly
-        embedder.addDisposeListener(new DisposeListener() {
-            @Override
-            public void widgetDisposed(DisposeEvent arg0) {
-                EventQueue.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // System.out.println("Bridge is disposing frame containing " + componentAWT.getName() + " - " +
-                        // componentAWT.getClass());
-                        frame.dispose();
-                        // the awt component is supposed to be disposed by the user
-                    }
-                });
-            }
-        });
+        embedder.addDisposeListener(e -> EventQueue.invokeLater(frame::dispose));
+        // the awt component is supposed to be disposed by the user
     }
-
 }
