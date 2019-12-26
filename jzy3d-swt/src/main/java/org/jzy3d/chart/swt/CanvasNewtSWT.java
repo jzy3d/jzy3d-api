@@ -95,6 +95,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
 
     @Override
     public void dispose() {
+        super.dispose();
         new Thread(new Runnable() {
             @Override
             public void run() {
