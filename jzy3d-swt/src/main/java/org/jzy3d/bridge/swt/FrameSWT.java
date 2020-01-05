@@ -11,40 +11,39 @@ import org.jzy3d.maths.Rectangle;
 
 public class FrameSWT implements IFrame {
 
-	public FrameSWT() {
-	}
+    public FrameSWT() {
+    }
 
-	public FrameSWT(Chart chart, Rectangle bounds, String title) {
-		initialize(chart, bounds, title);
-	}
+    public FrameSWT(Chart chart, Rectangle bounds, String title) {
+        initialize(chart, bounds, title);
+    }
 
-	@Override
+    @Override
     public void initialize(Chart chart, Rectangle bounds, String title) {
-		this.chart = chart;
+        this.chart = chart;
 
-		Display display = new Display();
-		Shell shell = new Shell(display);
+        Display display = new Display();
+        Shell shell = new Shell(display);
 
-		shell.setLayout(new FillLayout());
-		shell.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
-		shell.setText(title + "[SWT]");
-		Bridge.adapt(shell, (Component) chart.getCanvas());
-		shell.open();
+        shell.setLayout(new FillLayout());
+        shell.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        shell.setText(title + "[SWT]");
+        Bridge.adapt(shell, (Component) chart.getCanvas());
+        shell.open();
 
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		this.chart.dispose();
-		this.chart = null;
-		display.dispose();
-	}
+        while (!shell.isDisposed()) {
+            if (!display.readAndDispatch())
+                display.sleep();
+        }
+        this.chart.dispose();
+        this.chart = null;
+        display.dispose();
+    }
 
-	private Chart chart;
+    private Chart chart;
 
-	@Override
-	public void initialize(Chart chart, Rectangle bounds, String title,
-			String message) {
-		initialize(chart, bounds, title);
-	}
+    @Override
+    public void initialize(Chart chart, Rectangle bounds, String title, String message) {
+        initialize(chart, bounds, title);
+    }
 }
