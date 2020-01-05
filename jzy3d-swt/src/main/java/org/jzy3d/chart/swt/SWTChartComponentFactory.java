@@ -39,21 +39,21 @@ import com.jogamp.opengl.GLCapabilities;
 
 public class SWTChartComponentFactory extends ChartComponentFactory {
     static Logger logger = Logger.getLogger(SWTChartComponentFactory.class);
-    
+
     private Composite canvas;
-    
+
     private SWTChartComponentFactory(Composite canvas) {
-    	this.canvas = canvas;
+        this.canvas = canvas;
     }
 
     public static Chart chart(Composite parent) {
-    	SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
-    	return f.newChart(Quality.Intermediate, Toolkit.swt_newt);
+        SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
+        return f.newChart(Quality.Intermediate, Toolkit.swt_newt);
     }
-    
+
     public static Chart chart(Composite parent, Quality quality) {
-    	SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
-    	return f.newChart(quality, Toolkit.swt_newt);
+        SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
+        return f.newChart(quality, Toolkit.swt_newt);
     }
 
     /* */
@@ -65,9 +65,9 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
     public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
         return new SWTChart(canvas, factory, quality, toolkit);
     }
-    
+
     public Composite getComposite() {
-    	return canvas;
+        return canvas;
     }
 
     @Override
@@ -126,7 +126,7 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
             Dimension dimension = getCanvasDimension(windowingToolkit);
             return new OffscreenCanvas(factory, scene, quality, capabilities, dimension.width, dimension.height, traceGL, debugGL);
         case swt_newt:
-        	return new CanvasNewtSWT(factory, scene, quality, capabilities, traceGL, debugGL);
+            return new CanvasNewtSWT(factory, scene, quality, capabilities, traceGL, debugGL);
         default:
             throw new RuntimeException("unknown chart type:" + chartType);
         }
@@ -151,12 +151,12 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
 
     @Override
     public ICameraMouseController newMouseCameraController(Chart chart) {
-            return new NewtCameraMouseController(chart);
+        return new NewtCameraMouseController(chart);
     }
-    
+
     @Override
     public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-            return new NewtMousePickingController(chart, clickWidth);
+        return new NewtMousePickingController(chart, clickWidth);
     }
 
     /**
@@ -167,8 +167,7 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
         // trigger screenshot on 's' letter
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
         IScreenshotKeyController screenshot = new NewtScreenshotKeyController(chart, file);
-        
-        
+
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
