@@ -30,41 +30,38 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
- * A Newt canvas wrapped in an AWT 
- * 
+ * A Newt canvas wrapped in an AWT
  * Newt is supposed to be faster than any other canvas, either for AWT or Swing.
- * 
  * If a non AWT panel where required, follow the guidelines given in
  * {@link IScreenCanvas} documentation.
  */
 public class CanvasNewtSWT extends Composite implements IScreenCanvas {
     static Logger LOGGER = Logger.getLogger(CanvasNewtSWT.class);
-    
+
     public CanvasNewtSWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
     }
 
     public CanvasNewtSWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
-    	super(((SWTChartComponentFactory)factory).getComposite(), SWT.NONE);
-    	this.setLayout(new FillLayout());
+        super(((SWTChartComponentFactory) factory).getComposite(), SWT.NONE);
+        this.setLayout(new FillLayout());
         window = GLWindow.create(glci);
-        canvas = new NewtCanvasSWT(this, SWT.NONE,window);
+        canvas = new NewtCanvasSWT(this, SWT.NONE, window);
         view = scene.newView(this, quality);
         renderer = factory.newRenderer(view, traceGL, debugGL);
         window.addGLEventListener(renderer);
-        
-        if(quality.isPreserveViewportSize())
+
+        if (quality.isPreserveViewportSize())
             setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE });
-        
+
         window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
         if (quality.isAnimated()) {
             animator = new Animator(window);
             getAnimator().start();
         }
-        
+
         addDisposeListener(new DisposeListener() {
-            public void widgetDisposed(DisposeEvent e)
-            {
+            public void widgetDisposed(DisposeEvent e) {
                 dispose();
             }
         });
@@ -73,7 +70,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
 
     @Override
     public void setPixelScale(float[] scale) {
-        //LOGGER.info("setting scale " + scale);
+        // LOGGER.info("setting scale " + scale);
         if (scale != null)
             window.setSurfaceScale(scale);
         else
