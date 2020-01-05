@@ -57,8 +57,18 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
             getAnimator().start();
         }
 
-        addDisposeListener(e -> dispose());
-
+        addDisposeListener(e -> new Thread(() -> {
+            if (animator != null && animator.isStarted()) {
+                animator.stop();
+            }
+            if (renderer != null) {
+                renderer.dispose(window);
+            }
+            window = null;
+            renderer = null;
+            view = null;
+            animator = null;
+        }).start());
     }
 
     @Override
@@ -81,23 +91,6 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
     @Override
     public GLDrawable getDrawable() {
         return window;
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-        new Thread(() -> {
-            if (animator != null && animator.isStarted()) {
-                animator.stop();
-            }
-            if (renderer != null) {
-                renderer.dispose(window);
-            }
-            window = null;
-            renderer = null;
-            view = null;
-            animator = null;
-        }).start();
     }
 
     @Override
