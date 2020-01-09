@@ -18,8 +18,8 @@ import org.jzy3d.plot3d.primitives.Shape;
 
 public class SWTDemo {
 
-	public static void main(String[] args) {
-		Mapper mapper = new Mapper() {
+    public static void main(String[] args) {
+        Mapper mapper = new Mapper() {
             @Override
             public double f(double x, double y) {
                 return x * Math.sin(x * y);
@@ -37,32 +37,27 @@ public class SWTDemo {
         surface.setWireframeDisplayed(false);
 
         // Create a chart
-        
-        
+
         Settings.getInstance().setHardwareAccelerated(true);
 
-		Display display = new Display();
-		Shell shell = new Shell(display);
-		shell.setLayout(new FillLayout());
-//		Bridge.adapt(shell, (Component) chart.getCanvas());
-		
-		Chart chart = SWTChartComponentFactory.chart(shell);
+        Display display = new Display();
+        Shell shell = new Shell(display);
+        shell.setLayout(new FillLayout());
+
+        Chart chart = SWTChartComponentFactory.chart(shell);
         chart.getScene().getGraph().add(surface);
-        
+
         ChartLauncher.openChart(chart);
 
-		shell.setText("name");
-		shell.setSize(800, 600);
-		shell.open();
+        shell.setText("name");
+        shell.setSize(800, 600);
+        shell.open();
 
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		display.dispose();
-
-	}
-	
-	
-
+        while (!shell.isDisposed()) {
+            if (!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+        display.dispose();
+    }
 }

@@ -1,6 +1,5 @@
 package org.jzy3d.analysis;
 
-
 import java.awt.Component;
 
 import org.eclipse.swt.layout.FillLayout;
@@ -12,24 +11,24 @@ import org.jzy3d.chart.Settings;
 
 public class SWTAnalysisLauncher extends AnalysisLauncher {
 
-	public static void openStaticSWT(IAnalysis demo) throws Exception {
-		Settings.getInstance().setHardwareAccelerated(true);
-		Chart chart = demo.getChart();
+    public static void openStaticSWT(IAnalysis demo) throws Exception {
+        Settings.getInstance().setHardwareAccelerated(true);
+        Chart chart = demo.getChart();
 
-		Display display = new Display();
-		Shell shell = new Shell(display);
-		shell.setLayout(new FillLayout());
-		Bridge.adapt(shell, (Component) chart.getCanvas());
+        Display display = new Display();
+        Shell shell = new Shell(display);
+        shell.setLayout(new FillLayout());
+        Bridge.adapt(shell, (Component) chart.getCanvas());
 
-		shell.setText(demo.getName());
-		shell.setSize(800, 600);
-		shell.open();
+        shell.setText(demo.getName());
+        shell.setSize(800, 600);
+        shell.open();
 
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch())
-				display.sleep();
-		}
-		display.dispose();
-	}
-
+        while (!shell.isDisposed()) {
+            if (!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+        display.dispose();
+    }
 }
