@@ -1175,5 +1175,17 @@ public class AxeBox implements IAxe {
     protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
 
     protected SpaceTransformer spaceTransformer;
-
+    
+    public float[][] getQuadX(){
+      return quadx;
+    }
+    public float[][] getQuadY(){
+      return quady;
+    }
+    public float[][] getQuadZ(){
+      return quadz;
+    }
+    public boolean[] getQuadIsHidden() {
+      return quadIsHidden;
+    }
 }
