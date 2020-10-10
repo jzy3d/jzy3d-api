@@ -192,6 +192,20 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
     public void setWidth(float width) {
         this.width = width;
     }
+    
+    public Color[] getColors() {
+      return colors;
+    }
+
+    public Coord3d[] getCoordinates() {
+      return coordinates;
+    }
+
+    public float getWidth() {
+      return width;
+    }
+
+
 
     /**********************************************************************/
 
