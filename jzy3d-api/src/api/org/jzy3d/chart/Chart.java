@@ -314,6 +314,7 @@ public class Chart {
     @Deprecated
     public void addDrawable(AbstractDrawable drawable, boolean updateViews) {
         getScene().getGraph().add(drawable, updateViews);
+        drawable.setSpaceTransformer(getView().getSpaceTransformer());
     }
 
     @Deprecated
