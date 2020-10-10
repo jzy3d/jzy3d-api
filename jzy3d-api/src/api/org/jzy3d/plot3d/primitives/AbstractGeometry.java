@@ -16,6 +16,7 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
 
@@ -59,6 +60,9 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         // Draw edge of polygon
         if (wfstatus) {
             applyPolygonModeLine(gl);
+            
+            gl.getGL2().glBegin(GL2.GL_LINE_LOOP);
+            
             if (polygonOffsetFillEnable)
                 polygonOffseFillEnable(gl);
             callPointForWireframe(gl);
