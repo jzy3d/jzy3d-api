@@ -181,7 +181,7 @@ public class ChartTester{
             compare(actual, expected);
         }
         else {
-            TextureData actual = chart.screenshot();
+            TextureData actual = (TextureData)chart.screenshot();
             TextureData expected = loadTextureData(filename, chart.getView().getCurrentGL());
             fail("CAN NOT COMPARE TEXTURE DATA FOR THE MOMENT");
         }
@@ -270,7 +270,7 @@ public class ChartTester{
     /* */
 
     public void screenshot(Chart chart, String filename) throws IOException {
-        screenshot(chart.screenshot(), filename);
+        chart.screenshot(new File(filename));
     }
 
     public void screenshot(TextureData image, String testImage) throws IOException {

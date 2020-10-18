@@ -103,10 +103,7 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
     }
 
     protected void screenshot(Chart chart, String filename) throws IOException {
-        File output = new File(filename);
-        if (!output.getParentFile().exists())
-            output.mkdirs();
-        TextureIO.write(chart.screenshot(), output);
+    	chart.screenshot(new File(filename));
         Logger.getLogger(EventRecorder.class).info("screenshot:" + filename);
     }
 
