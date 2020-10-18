@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jzy3d</groupId>
+	<artifactId>jzy3d-core</artifactId>
+	<name>Jzy3d Core</name>
+
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-all</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<description>A Java API for 3d charts</description>
+
+
+	<dependencies>
+<dependency>
+	<groupId>org.jogamp.gluegen</groupId>
+	<artifactId>gluegen-rt-main</artifactId>
+	<version>2.3.2</version>
+</dependency>
+<dependency>
+	<groupId>org.jogamp.jogl</groupId>
+	<artifactId>jogl-all-main</artifactId>
+	<version>2.3.2</version>
+</dependency>
+
+<dependency>
+	<groupId>org.jzy3d</groupId>
+	<artifactId>jzy3d-jdt-core</artifactId>
+	<version>${project.version}</version>
+</dependency>
+
+		<dependency>
+			<groupId>org.smurn</groupId>
+			<artifactId>jply</artifactId>
+			<version>0.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jmatio</groupId>
+			<artifactId>jmatio</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+
+		</plugins>
+	</build>
+
+
+</project>
