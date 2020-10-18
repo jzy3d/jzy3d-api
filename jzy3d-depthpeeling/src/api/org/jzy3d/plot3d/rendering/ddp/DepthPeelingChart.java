@@ -13,7 +13,12 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
 public class DepthPeelingChart extends Chart {
-    static Logger LOGGER = Logger.getLogger(DepthPeelingChart.class);
+    public DepthPeelingChart(IChartComponentFactory factory, Quality quality, String windowingToolkit,
+			GLCapabilities capabilities) {
+		super(factory, quality, windowingToolkit, capabilities);
+	}
+
+	static Logger LOGGER = Logger.getLogger(DepthPeelingChart.class);
 
     public static Chart get(Quality quality, String chartType) {
         return get(quality, chartType, PeelingMethod.DUAL_PEELING_MODE);
@@ -82,7 +87,7 @@ public class DepthPeelingChart extends Chart {
         GLCapabilities capabilities = new GLCapabilities(profile);
         capabilities.setHardwareAccelerated(true);
 
-        Chart chart = new AWTChart(factory, quality, chartType, capabilities);
+        Chart chart = new DepthPeelingChart(factory, quality, chartType, capabilities);
         chart.getView().setSquared(false);
         chart.getView().setAxeBoxDisplayed(true);
         return chart;

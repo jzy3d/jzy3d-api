@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jzy3d</groupId>
-	<artifactId>jzy3d-master</artifactId>
+	<artifactId>jzy3d-all</artifactId>
 	<version>2.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
@@ -48,15 +48,26 @@
 	</issueManagement>
 
 	<modules>
-		<module>jzy3d-api</module>
+		<!--<module>jzy3d-api</module>-->
 		<module>jzy3d-tester</module>
 		<module>jzy3d-depthpeeling</module>
-		<module>jzy3d-javafx</module>
+		<!--<module>jzy3d-javafx</module>-->
 		<module>jzy3d-jdt-core</module>
 		<module>jzy3d-svm-mapper</module>
-		<module>jzy3d-swt</module>
+		<!--<module>jzy3d-swt</module>-->
 		<module>jzy3d-tools-libsvm</module>
 		<module>jzy3d-tutorials</module>
+
+		<module>jzy3d-core</module>
+		<module>jzy3d-core-awt</module>
+		<module>jzy3d-core-swt</module>
+
+		<module>jzy3d-native-jogl-awt</module>
+		<module>jzy3d-native-jogl-newt</module>
+		<module>jzy3d-native-jogl-javafx</module>
+		<module>jzy3d-native-jogl-swing</module>
+		<module>jzy3d-native-jogl-swt</module>
+
 	</modules>
 
 	<properties>
@@ -72,6 +83,21 @@
 		<version.libs.junit>4.10</version.libs.junit>
 		<version.libs.swt>4.2.1</version.libs.swt>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.16</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
 
 	<!--
 	Used to deploy to Jzy3d repository
@@ -101,6 +127,19 @@
 	  </repository>
 	</distributionManagement>
 
+	<!--To retrieve Jzy3d dependencies -->
+	<repositories>
+		<repository>
+			<id>jzy3d-snapshots</id>
+			<name>Jzy3d Snapshots</name>
+			<url>http://maven.jzy3d.org/snapshots/</url>
+		</repository>
+		<repository>
+			<id>jzy3d-releases</id>
+			<name>Jzy3d Snapshots</name>
+			<url>http://maven.jzy3d.org/releases/</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
