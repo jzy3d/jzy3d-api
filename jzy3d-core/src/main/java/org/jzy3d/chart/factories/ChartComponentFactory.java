@@ -47,31 +47,27 @@ import com.jogamp.opengl.GLCapabilitiesImmutable;
  */
 public abstract class ChartComponentFactory implements IChartComponentFactory {
     static Logger logger = Logger.getLogger(ChartComponentFactory.class);
-
-    /*public static Chart chart(Quality quality, Toolkit toolkit) {
-        ChartComponentFactory f = new ChartComponentFactory();
-        return f.newChart(quality, toolkit);
-    }*/
     
     public abstract ICameraMouseController newMouseCameraController(Chart chart);
     public abstract IMousePickingController newMousePickingController(Chart chart, int clickWidth);
     public abstract IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
     public abstract ICameraKeyController newKeyboardCameraController(Chart chart);
+    public abstract IFrame newFrame(Chart chart, Rectangle bounds, String title);
 
 
     @Override
-    public Chart newChart(Quality quality, Toolkit toolkit) {
-        return newChart(getFactory(), quality, toolkit.toString());
+    public Chart newChart() {
+        return newChart(Quality.Advanced);
     }
 
     @Override
-    public Chart newChart(Quality quality, String toolkit) {
-        return newChart(getFactory(), quality, toolkit);
+    public Chart newChart(Quality quality) {
+        return newChart(getFactory(), quality);
     }
 
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
-        return new Chart(factory, quality, toolkit);
+    public Chart newChart(IChartComponentFactory factory, Quality quality) {
+        return new Chart(factory, quality);
     }
 
     @Override
@@ -162,128 +158,18 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
         return newFrame(chart, new Rectangle(0, 0, 800, 600), "Jzy3d");
     }
 
-    /**
-     * Use reflexion to access AWT dependant classes.
-     */
-    @Override
-    public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        Object canvas = chart.getCanvas();
 
-        if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasAWT"))
-            return newFrameAWT(chart, bounds, title, null);
-        // FrameSWT works as well
-        //else if (canvas instanceof CanvasNewtAwt)
-        //    return newFrameAWT(chart, bounds, title, "[Newt]");
-        // FrameSWT works as well
-        else if (canvas.getClass().getName().equals("org.jzy3d.plot3d.rendering.canvas.CanvasSwing"))
-            return newFrameSwing(chart, bounds, title);
-        else {
-            String m = "No default frame could be found for the given Chart canvas: " + canvas.getClass();
-            logger.error(m);
-            return null;
-            // throw new RuntimeException(m);
-        }
+    @Override
+    public ICanvas newCanvas(Scene scene, Quality quality, String windowingToolkit) {
+        return newCanvas(getFactory(), scene, quality, windowingToolkit);
     }
 
     @Override
-    public ICanvas newCanvas(Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
-        return newCanvas(getFactory(), scene, quality, windowingToolkit, capabilities);
-    }
-
-    @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit) {
         return new VoidCanvas(factory, scene, quality);
     }
 
-    /* */
-
-    protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
-        try {
-            Class frameClass = Class.forName("org.jzy3d.bridge.swing.FrameSwing");
-            IFrame frame = (IFrame) frameClass.newInstance();
-            frame.initialize(chart, bounds, title);
-            return frame;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("newFrameSwing", e);
-        }
-    }
-
-    protected IFrame newFrameAWT(Chart chart, Rectangle bounds, String title, String message) {
-        try {
-            Class frameClass = Class.forName("org.jzy3d.bridge.awt.FrameAWT");
-            IFrame frame = (IFrame) frameClass.newInstance();
-            if (message != null) {
-                frame.initialize(chart, bounds, title, message);
-            } else {
-                frame.initialize(chart, bounds, title);
-            }
-            return frame;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("newFrameAWT", e);
-        }
-    }
-
-    protected ICanvas newCanvasSwing(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        Class canvasSwingDefinition;
-        Class[] constrArgsClass = new Class[] { IChartComponentFactory.class, Scene.class, Quality.class, GLCapabilitiesImmutable.class, boolean.class, boolean.class };
-        Object[] constrArgs = new Object[] { chartComponentFactory, scene, quality, capabilities, traceGL, debugGL };
-        Constructor constructor;
-        ICanvas canvas;
-
-        try {
-            canvasSwingDefinition = Class.forName("org.jzy3d.plot3d.rendering.canvas.CanvasSwing");
-            constructor = canvasSwingDefinition.getConstructor(constrArgsClass);
-
-            return (ICanvas) constructor.newInstance(constrArgs);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("newCanvasSwing", e);
-        }
-    }
-
-    protected ICanvas newCanvasAWT(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        Class canvasAWTDefinition;
-        Class[] constrArgsClass = new Class[] { IChartComponentFactory.class, Scene.class, Quality.class, GLCapabilitiesImmutable.class, boolean.class, boolean.class };
-        Object[] constrArgs = new Object[] { chartComponentFactory, scene, quality, capabilities, traceGL, debugGL };
-        Constructor constructor;
-        ICanvas canvas;
-
-        try {
-            canvasAWTDefinition = Class.forName("org.jzy3d.plot3d.rendering.canvas.CanvasAWT");
-            constructor = canvasAWTDefinition.getConstructor(constrArgsClass);
-
-            return (ICanvas) constructor.newInstance(constrArgs);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("newCanvasAWT", e);
-        }
-    }
-
     /* UTILS */
-
-    public Toolkit getToolkit(String windowingToolkit) {
-        if (windowingToolkit.startsWith("offscreen")) {
-            return Toolkit.offscreen;
-        }
-        return Toolkit.valueOf(windowingToolkit);
-    }
-
-    protected Dimension getCanvasDimension(String windowingToolkit) {
-        if (windowingToolkit.startsWith("offscreen")) {
-            Pattern pattern = Pattern.compile("offscreen,(\\d+),(\\d+)");
-            Matcher matcher = pattern.matcher(windowingToolkit);
-            if (matcher.matches()) {
-                int width = Integer.parseInt(matcher.group(1));
-                int height = Integer.parseInt(matcher.group(2));
-                return new Dimension(width, height);
-            } else {
-                return new Dimension(500, 500);
-            }
-        }
-        return null;
-    }
 
     @Override
     public IChartComponentFactory getFactory() {

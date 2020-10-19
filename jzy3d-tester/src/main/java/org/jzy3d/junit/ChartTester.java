@@ -15,7 +15,6 @@ import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -41,7 +40,7 @@ public class ChartTester{
         Quality q = Quality.Intermediate;
 
         AWTChartComponentFactory f = new AWTChartComponentFactory();
-        AWTChart chart = (AWTChart)f.newChart(q, Toolkit.offscreen);
+        AWTChart chart = (AWTChart)f.newChart(q);
         AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
 
         // Optimise processor

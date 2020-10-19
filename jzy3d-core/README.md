@@ -26,11 +26,20 @@ DONE ==============
 
 animator moved to native chart
 screenshot remove texture data
+Rename ViewMouseController to NewtViewCameraController
 
 BROKE ==============
 
 JavaFX chart
 Guide tests generating picture
+WireSurfaceOffscreenDemo ne s'ouvre plus
+ShaderMandelbrotDemo
+DepthPeelingChart
+TrialFaceOrdering
+
+Toutes les book demo ne s'ouvrent plus
+
+Les graphes du plugin graphe ne sont plus colorié, les edges ont disparu
 
 TODO ==============
 
@@ -47,3 +56,24 @@ Move SwingChartLauncher to Swing Core
 
 
 SEPARATE IO MODULE TO AVOID MIXING WITH CLEAN API FOR TS etc GENERATION?
+
+Remove toolkit from FACTORY
+public Chart newChart(Quality quality, Toolkit toolkit)
+public Chart newChart(Quality quality, String toolkit)
+
+Nettoyer l'analyse
+
+Ajouter un test U pour chaque type de factory en utilisant ChartTester
+
+
+FINAL CLEANUP ===========
+
+DELETE ColorMapperUpdater
+CHART.add/removeDrawable
+
+GUIDE UPDATE =====
+
+Squarify
+Volume
+VBO
+Factories

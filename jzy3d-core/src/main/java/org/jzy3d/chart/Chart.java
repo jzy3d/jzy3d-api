@@ -36,19 +36,8 @@ import com.jogamp.opengl.GLCapabilities;
  */
 public class Chart {
     public static Quality DEFAULT_QUALITY = Quality.Intermediate;
-    public static String DEFAULT_WINDOWING_TOOLKIT = "awt";
 
-    public Chart(IChartComponentFactory components, Quality quality) {
-        this(components, quality, DEFAULT_WINDOWING_TOOLKIT, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
-    }
-
-    public Chart(IChartComponentFactory factory, Quality quality, String windowingToolkit) {
-        this(factory, quality, windowingToolkit, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
-    }
-
-    public Chart(IChartComponentFactory factory, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
-        this.capabilities = capabilities;
-        this.windowingToolkit = windowingToolkit;
+    public Chart(IChartComponentFactory factory, Quality quality) {
         this.factory = factory;
         this.quality = quality;
 
@@ -57,12 +46,16 @@ public class Chart {
 
         // Set up the scene and 3d canvas
         scene = factory.newScene(quality.isAlphaActivated());
-        canvas = factory.newCanvas(scene, quality, windowingToolkit, capabilities);
+        canvas = factory.newCanvas(scene, quality, "");
 
         // Set up the view
         view = canvas.getView();
         view.setBackgroundColor(Color.WHITE);
         view.setChart(this);
+    }
+    
+    protected Chart(){
+    	
     }
 
     /* HELPERS TO PRETTIFY CHARTS */
@@ -171,8 +164,7 @@ public class Chart {
     }
 
     public View newView() {
-        View v = scene.newView(canvas, quality);// factory.newView(scene,
-                                                // canvas, quality);
+        View v = scene.newView(canvas, quality);
         v.setSlave(true);
         return v;
     }
@@ -400,14 +392,6 @@ public class Chart {
         return factory;
     }
 
-    public String getWindowingToolkit() {
-        return windowingToolkit;
-    }
-
-    public GLCapabilities getCapabilities() {
-        return capabilities;
-    }
-
     public List<AbstractCameraController> getControllers() {
         return controllers;
     }
@@ -425,9 +409,6 @@ public class Chart {
     protected IChartComponentFactory factory;
 
     protected Quality quality;
-    protected GLCapabilities capabilities;
-    protected String windowingToolkit;
-
     protected ChartScene scene;
     protected View view;
     protected ICanvas canvas;

@@ -9,18 +9,13 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.util.texture.TextureData;
 
 public class NativeChart extends Chart{
-	public NativeChart(IChartComponentFactory factory, Quality quality, String windowingToolkit,
-			GLCapabilities capabilities) {
-		super(factory, quality, windowingToolkit, capabilities);
-	}
-
-	public NativeChart(IChartComponentFactory factory, Quality quality, String windowingToolkit) {
-		super(factory, quality, windowingToolkit);
-	}
-
 	public NativeChart(IChartComponentFactory components, Quality quality) {
 		super(components, quality);
 	}
+	
+	protected NativeChart(){
+    	super();
+    }
 
 	public void pauseAnimator() {
         if (canvas != null && canvas instanceof IScreenCanvas) {

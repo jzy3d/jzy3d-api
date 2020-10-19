@@ -13,35 +13,14 @@ import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import com.jogamp.opengl.GLCapabilities;
 
 public class AWTChart extends NativeChart {
-    public AWTChart() {
-        this(DEFAULT_QUALITY, DEFAULT_WINDOWING_TOOLKIT);
-    }
-
-    public AWTChart(Quality quality, String windowingToolkit) {
-        this(new AWTChartComponentFactory(), quality, windowingToolkit, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
-    }
-
-    
-    public AWTChart(IChartComponentFactory factory, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
-        super(factory, quality, windowingToolkit, capabilities);
-    }
-
-    public AWTChart(IChartComponentFactory factory, Quality quality, String windowingToolkit) {
-        super(factory, quality, windowingToolkit);
-    }
-
     public AWTChart(IChartComponentFactory components, Quality quality) {
         super(components, quality);
     }
-
-    public AWTChart(Quality quality) {
-        this(quality, DEFAULT_WINDOWING_TOOLKIT);
+    
+    protected AWTChart(){
+    	super();
     }
-
-    public AWTChart(String windowingToolkit) {
-        this(DEFAULT_QUALITY, windowingToolkit);
-    }
-
+    
     public void addRenderer(Renderer2d renderer2d) {
         getAWTView().addRenderer2d(renderer2d);
     }

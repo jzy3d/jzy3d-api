@@ -30,7 +30,7 @@ public class WorldMapDemo extends AbstractAnalysis {
                 return new CroppingView(factory, scene, canvas, quality);
             }
         };
-        chart = f.newChart(Quality.Advanced, "awt");
+        chart = f.newChart(Quality.Advanced);
 
         // Instantiate world map and parse the file
         WorldMapLoader worldMap = new WorldMapLoader();

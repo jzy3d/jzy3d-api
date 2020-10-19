@@ -31,7 +31,7 @@ public interface Painter {
     
     public void begin(Geometry geometry);
     public void end();
-    public void coord(Coord3d coord, SpaceTransformer transform);
+    public void vertex(Coord3d coord, SpaceTransformer transform);
 
     public void color(Color color);
     

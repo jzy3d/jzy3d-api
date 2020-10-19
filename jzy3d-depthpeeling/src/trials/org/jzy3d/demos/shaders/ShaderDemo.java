@@ -92,7 +92,7 @@ public class ShaderDemo {
         GLCapabilities capabilities = new GLCapabilities(profile);
         capabilities.setHardwareAccelerated(false);
         
-        Chart chart = new Chart(factory, Quality.Nicest, "awt", capabilities);
+        Chart chart = new Chart(factory, Quality.Nicest);
         chart.getView().setSquared(false);
         //chart.getView().setCameraMode(CameraMode.PERSPECTIVE);
         return chart;

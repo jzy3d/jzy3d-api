@@ -1,7 +1,6 @@
 package org.jzy3d.chart;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.chart.factories.SwingChartComponentFactory;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTView;
@@ -14,18 +13,10 @@ public class SwingChart extends Chart {
         super(new SwingChartComponentFactory(), quality);
     }
 
-    public SwingChart(IChartComponentFactory factory, Quality quality, GLCapabilities capabilities) {
-        super(factory, quality, Toolkit.swing.toString(), capabilities);
-    }
-    
-    public SwingChart(IChartComponentFactory factory, Quality quality, String toolkit) {
-        super(factory, quality, toolkit);
-    }
-
     public SwingChart(IChartComponentFactory factory, Quality quality) {
         super(factory, quality);
     }
-
+    
     public void addRenderer(Renderer2d renderer2d) {
         getAWTView().addRenderer2d(renderer2d);
     }

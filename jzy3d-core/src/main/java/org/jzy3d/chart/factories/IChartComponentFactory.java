@@ -23,12 +23,10 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
-import com.jogamp.opengl.GLCapabilities;
-
 public interface IChartComponentFactory {
-    public Chart newChart(Quality quality, Toolkit toolkit);
-    public Chart newChart(Quality quality, String toolkit);
-    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit);
+	public Chart newChart();
+    public Chart newChart(Quality quality);
+    public Chart newChart(IChartComponentFactory factory, Quality quality);
     
     public ChartScene newScene(boolean sort);
     public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort);
@@ -40,8 +38,8 @@ public interface IChartComponentFactory {
     public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
     public AbstractOrderingStrategy newOrderingStrategy();
 
-    public ICanvas newCanvas(Scene scene, Quality quality, String chartType, GLCapabilities capabilities);
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String chartType, GLCapabilities capabilities);
+    public ICanvas newCanvas(Scene scene, Quality quality, String chartType);
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String chartType);
     
     public ICameraMouseController newMouseCameraController(Chart chart);
     public IMousePickingController newMousePickingController(Chart chart, int clickWidth);
@@ -63,9 +61,9 @@ public interface IChartComponentFactory {
      */
     public IChartComponentFactory getFactory();
     
-    public static enum Toolkit {
+    /*public static enum Toolkit {
         awt, swing, newt, offscreen, swt_newt
-    }
+    }*/
 
 
 
