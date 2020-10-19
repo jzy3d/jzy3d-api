@@ -38,8 +38,8 @@ public interface IChartComponentFactory {
     public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
     public AbstractOrderingStrategy newOrderingStrategy();
 
-    public ICanvas newCanvas(Scene scene, Quality quality, String chartType);
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String chartType);
+    public ICanvas newCanvas(Scene scene, Quality quality);
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality);
     
     public ICameraMouseController newMouseCameraController(Chart chart);
     public IMousePickingController newMousePickingController(Chart chart, int clickWidth);

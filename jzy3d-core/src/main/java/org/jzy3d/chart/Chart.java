@@ -46,7 +46,7 @@ public class Chart {
 
         // Set up the scene and 3d canvas
         scene = factory.newScene(quality.isAlphaActivated());
-        canvas = factory.newCanvas(scene, quality, "");
+        canvas = factory.newCanvas(scene, quality);
 
         // Set up the view
         view = canvas.getView();
