@@ -44,7 +44,7 @@ public class ShaderMandelbrotDemo {
         GLCapabilities capabilities = new GLCapabilities(profile);
         capabilities.setHardwareAccelerated(false);
         
-        Chart chart = new Chart(factory, Quality.Intermediate, "awt", capabilities);
+        Chart chart = null;//new Chart(factory, Quality.Intermediate, "awt", capabilities);
         chart.getView().setSquared(false);
         
         //chart.getView().setCameraMode(CameraMode.PERSPECTIVE);

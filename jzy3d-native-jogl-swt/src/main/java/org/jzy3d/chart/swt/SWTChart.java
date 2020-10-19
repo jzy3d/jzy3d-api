@@ -9,8 +9,8 @@ public class SWTChart extends Chart {
 
     Composite swtcanvas;
 
-    public SWTChart(Composite canvas, IChartComponentFactory factory, Quality quality, String windowingToolkit) {
-        super(factory, quality, windowingToolkit);
+    public SWTChart(Composite canvas, IChartComponentFactory factory, Quality quality) {
+        super(factory, quality);
         this.swtcanvas = canvas;
     }
 }

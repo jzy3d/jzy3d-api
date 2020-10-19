@@ -4,8 +4,8 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class GraphChart extends Chart{
-	public GraphChart(Quality quality, String windowingToolkit){
-        super(new GraphChartComponentFactory(), quality, windowingToolkit, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
+	public GraphChart(Quality quality){
+        super(new GraphChartComponentFactory(), quality);
     }
 /*
 	protected ChartScene initializeScene(boolean graphsort){

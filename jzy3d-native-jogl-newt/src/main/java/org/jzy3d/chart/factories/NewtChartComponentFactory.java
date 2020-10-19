@@ -20,14 +20,12 @@ import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
@@ -45,7 +43,7 @@ import com.jogamp.opengl.GLCapabilities;
  * @author martin
  *
  */
-public class NewtChartComponentFactory extends ChartComponentFactory {
+public class NewtChartComponentFactory extends NativeChartFactory {
     static Logger logger = Logger.getLogger(NewtChartComponentFactory.class);
     
     public static Chart chart() {
@@ -54,30 +52,15 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
 
     public static Chart chart(Quality quality) {
         NewtChartComponentFactory f = new NewtChartComponentFactory();
-        return f.newChart(quality, Toolkit.newt);
-    }
-
-    public static Chart chart(String toolkit) {
-        NewtChartComponentFactory f = new NewtChartComponentFactory();
-        return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
-    }
-
-    public static Chart chart(Quality quality, Toolkit toolkit) {
-        NewtChartComponentFactory f = new NewtChartComponentFactory();
-        return f.newChart(quality, toolkit);
-    }
-
-    public static Chart chart(Quality quality, String toolkit) {
-        NewtChartComponentFactory f = new NewtChartComponentFactory();
-        return f.newChart(quality, toolkit);
+        return f.newChart(quality);
     }
 
     /* */
 
     // TODO : create a NewtChart for consistency
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
-        return new AWTChart(factory, quality, toolkit);
+    public Chart newChart(IChartComponentFactory factory, Quality quality) {
+        return new AWTChart(factory, quality);
     }
 
     @Override
@@ -107,49 +90,12 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
         return new AWTRenderer3d(view, traceGL, debugGL);
     }
 
-    /** bypass reflection used in super implementation */
     @Override
-    protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
-        return null; //new FrameSwing(chart, bounds, title);
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected IFrame newFrameAWT(Chart chart, Rectangle bounds, String title, String message) {
-        return new FrameAWT(chart, bounds, title, message);
-    }
-
-    @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit) {
         boolean traceGL = false;
         boolean debugGL = false;
-        Toolkit chartType = getToolkit(windowingToolkit);
-        switch (chartType) {
-        case awt:
-            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
-        case swing:
-            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
-        case newt:
-            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
-        case offscreen:
-            Dimension dimension = getCanvasDimension(windowingToolkit);
-            return new OffscreenCanvas(factory, scene, quality, capabilities, dimension.width, dimension.height, traceGL, debugGL);
-        default:
-            throw new IllegalArgumentException("unknown chart type:" + chartType);
-        }
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected ICanvas newCanvasAWT(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        throw new IllegalArgumentException("Can't ask for an AWT chart type in Newt Factory.");
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected ICanvas newCanvasSwing(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        throw new IllegalArgumentException("Can't ask for an Swing chart type in Newt Factory.");
-
+        
+        return new CanvasNewtAwt(factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
     @Override
@@ -211,6 +157,6 @@ public class NewtChartComponentFactory extends ChartComponentFactory {
 
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return newFrameAWT(chart, bounds, title, null);
+        return new FrameAWT(chart, bounds, title, null);
     }
 }

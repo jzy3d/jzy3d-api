@@ -39,7 +39,7 @@ public class SurfaceDemo extends AbstractAnalysis {
         surface.setWireframeDisplayed(false);
 
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Advanced, getCanvasType());
+        chart = AWTChartComponentFactory.chart(Quality.Advanced);
         chart.getScene().getGraph().add(surface);
     }
 }

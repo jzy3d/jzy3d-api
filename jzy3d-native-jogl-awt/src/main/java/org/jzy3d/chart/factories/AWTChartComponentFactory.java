@@ -12,7 +12,6 @@ import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
@@ -41,7 +40,7 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 import com.jogamp.opengl.GLCapabilities;
 
-public class AWTChartComponentFactory extends ChartComponentFactory {
+public class AWTChartComponentFactory extends NativeChartFactory {
     static Logger logger = Logger.getLogger(AWTChartComponentFactory.class);
     
     public static Chart chart() {
@@ -50,37 +49,16 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
 
     public static Chart chart(Quality quality) {
         AWTChartComponentFactory f = new AWTChartComponentFactory();
-        return f.newChart(quality, Toolkit.awt/* Toolkit.newt */);
-    }
-
-    public static Chart chart(String toolkit) {
-        AWTChartComponentFactory f = new AWTChartComponentFactory();
-        return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
-    }
-
-    public static Chart chart(Toolkit toolkit) {
-        AWTChartComponentFactory f = new AWTChartComponentFactory();
-        return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
-    }
-
-    public static Chart chart(Quality quality, Toolkit toolkit) {
-        AWTChartComponentFactory f = new AWTChartComponentFactory();
-        return f.newChart(quality, toolkit);
-    }
-
-    public static Chart chart(Quality quality, String toolkit) {
-        AWTChartComponentFactory f = new AWTChartComponentFactory();
-        return f.newChart(quality, toolkit);
+        return f.newChart(quality);
     }
 
     /* */
 
     /**
-     * @param toolkit can be used to indicate "offscreen, 800, 600" and thus replace implicit "awt"
      */
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
-        return new AWTChart(factory, quality, toolkit);
+    public Chart newChart(IChartComponentFactory factory, Quality quality) {
+        return new AWTChart(factory, quality);
     }
 
     @Override
@@ -110,49 +88,13 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
         return new AWTRenderer3d(view, traceGL, debugGL);
     }
 
-    /** bypass reflection used in super implementation */
-    @Override
-    protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
-        return null;//new FrameSwing(chart, bounds, title);
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected IFrame newFrameAWT(Chart chart, Rectangle bounds, String title, String message) {
-        return new FrameAWT(chart, bounds, title, message);
-    }
 
     @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit) {
         boolean traceGL = false;
         boolean debugGL = false;
-        Toolkit chartType = getToolkit(windowingToolkit);
-        switch (chartType) {
-        case awt:
-            return newCanvasAWT(factory, scene, quality, capabilities, traceGL, debugGL);
-        case swing:
-            Logger.getLogger(ChartComponentFactory.class).warn("Swing canvas is deprecated. Use Newt instead");
-            return newCanvasSwing(factory, scene, quality, capabilities, traceGL, debugGL);
-        case newt:
-            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
-        case offscreen:
-            Dimension dimension = getCanvasDimension(windowingToolkit);
-            return new OffscreenCanvas(factory, scene, quality, capabilities, dimension.width, dimension.height, traceGL, debugGL);
-        default:
-            throw new RuntimeException("unknown chart type:" + chartType);
-        }
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected ICanvas newCanvasAWT(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        return new CanvasAWT(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected ICanvas newCanvasSwing(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        return null;//new CanvasSwing(chartComponentFactory, scene, quality, capabilities, traceGL, debugGL);
+        
+        return new CanvasAWT(factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
     @Override
@@ -214,16 +156,11 @@ public class AWTChartComponentFactory extends ChartComponentFactory {
 
     @Override
     public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        ICameraKeyController key = null;
-        if (!chart.getWindowingToolkit().equals("newt"))
-            key = new AWTCameraKeyController(chart);
-        else
-            key = new NewtCameraKeyController(chart);
-        return key;
+        return new AWTCameraKeyController(chart);
     }
 
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return newFrameAWT(chart, bounds, title, null);
+        return new FrameAWT(chart, bounds, title, null);
     }
 }

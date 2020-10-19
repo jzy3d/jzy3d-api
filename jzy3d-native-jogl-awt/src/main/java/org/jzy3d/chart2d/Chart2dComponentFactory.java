@@ -17,18 +17,13 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
     }
     
     @Override
-    public Chart2d newChart(IChartComponentFactory factory, Quality quality, String toolkit){
-        return new Chart2d(factory, quality, toolkit);
+    public Chart2d newChart(IChartComponentFactory factory, Quality quality){
+        return new Chart2d(factory, quality);
     }
     
     @Override
-    public Chart2d newChart(Quality quality, Toolkit toolkit) {
-        return new Chart2d(getFactory(), quality, toolkit.toString());
-    }
-
-    @Override
-    public Chart2d newChart(Quality quality, String toolkit) {
-        return new Chart2d(getFactory(), quality, toolkit);
+    public Chart2d newChart(Quality quality) {
+        return new Chart2d(getFactory(), quality);
     }
 
     @Override
@@ -49,16 +44,10 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
         return chart(Quality.Intermediate);
     }
     public static Chart2d chart(Quality quality) {
-        return f.newChart(quality, Toolkit.newt);
+        return f.newChart(quality);
     }
     public static Chart2d chart(String toolkit) {
-        return f.newChart(Chart.DEFAULT_QUALITY, toolkit);
-    }
-    public static Chart2d chart(Quality quality, Toolkit toolkit) {
-        return f.newChart(quality, toolkit);
-    }
-    public static Chart2d chart(Quality quality, String toolkit) {
-        return f.newChart(quality, toolkit);
+        return f.newChart(Chart.DEFAULT_QUALITY);
     }
     
     static Chart2dComponentFactory f = new Chart2dComponentFactory();

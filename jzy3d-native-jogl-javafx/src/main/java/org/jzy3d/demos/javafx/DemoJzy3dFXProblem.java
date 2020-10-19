@@ -91,7 +91,7 @@ public class DemoJzy3dFXProblem extends Application {
         //quality.setAnimated(true);
         
         // let factory bind mouse and keyboard controllers to JavaFX node
-        AWTChart chart = (AWTChart) factory.newChart(quality, toolkit);
+        AWTChart chart = (AWTChart) factory.newChart(quality);
         chart.getScene().getGraph().add(drawable);
         return chart;
     }
@@ -123,7 +123,7 @@ public class DemoJzy3dFXProblem extends Application {
         //quality.setAnimated(true);
         
         // let factory bind mouse and keyboard controllers to JavaFX node
-        AWTChart chart = (AWTChart) factory.newChart(quality, toolkit);
+        AWTChart chart = (AWTChart) factory.newChart(quality);
         chart.getScene().getGraph().add(surface);
         return chart;
     }

@@ -38,7 +38,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
 
     public static Chart chart(Quality quality, String toolkit) {
         JavaFXChartFactory f = new JavaFXChartFactory();
-        return f.newChart(quality, toolkit);
+        return f.newChart(quality);
     }
 
     public Image getScreenshotAsJavaFXImage(AWTChart chart) {

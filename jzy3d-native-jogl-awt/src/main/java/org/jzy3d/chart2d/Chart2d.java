@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.factories.IChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory.Toolkit;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
@@ -15,8 +14,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
-
-import com.jogamp.opengl.GLCapabilities;
 
 // TODO:
 // AXEBOX ticks too long
@@ -78,43 +75,11 @@ public class Chart2d extends AWTChart {
     /* */
 
     public Chart2d() {
-        this(Toolkit.newt);
-    }
-
-    public Chart2d(Toolkit toolkit) {
-        this(new Chart2dComponentFactory(), toolkit);
-    }
-
-    public Chart2d(IChartComponentFactory factory, Toolkit toolkit) {
-        this(factory, Quality.Intermediate, toolkit);
-    }
-    public Chart2d(IChartComponentFactory factory, Quality quality) {
-        this(factory, quality, Toolkit.newt);
-    }
-
-    public Chart2d(IChartComponentFactory factory, Quality quality, Toolkit toolkit) {
-        this(factory, quality, toolkit.toString());
-        layout2d();
-    }
-
-    public Chart2d(IChartComponentFactory factory, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
-        super(factory, quality, windowingToolkit, capabilities);
-    }
-
-    public Chart2d(IChartComponentFactory factory, Quality quality, String windowingToolkit) {
-        super(factory, quality, windowingToolkit);
-        layout2d();
+    	this(new Chart2dComponentFactory(), Quality.Advanced);
     }
     
-    public Chart2d(Quality quality, String windowingToolkit) {
-        super(quality, windowingToolkit);
-    }
-
-    public Chart2d(Quality quality) {
-        super(quality);
-    }
-
-    public Chart2d(String windowingToolkit) {
-        super(windowingToolkit);
+    public Chart2d(IChartComponentFactory factory, Quality quality) {
+        super(factory, quality);
+        layout2d();
     }
 }

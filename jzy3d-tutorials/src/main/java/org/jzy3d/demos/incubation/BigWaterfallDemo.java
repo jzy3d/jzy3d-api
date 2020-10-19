@@ -43,7 +43,7 @@ public class BigWaterfallDemo extends AbstractAnalysis {
         
 
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate, getCanvasType());
+        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
         chart.getScene().getGraph().add(shape);
         chart.getView();
     }

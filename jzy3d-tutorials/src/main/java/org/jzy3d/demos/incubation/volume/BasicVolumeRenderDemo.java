@@ -42,7 +42,7 @@ public class BasicVolumeRenderDemo extends AbstractAnalysis {
 		Texture3D volume = new Texture3D(buffer, new int[] {10,10,10},(float)0,(float)1,colorMapper,new BoundingBox3d(1,10,1,10,1,10));	
         
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate, getCanvasType());
+        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
         chart.getScene().getGraph().add(volume);
         chart.getView();
     }
