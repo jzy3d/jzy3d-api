@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.lights.Light;
 
-public class AWTLightKeyController implements KeyListener, INewtLightKeyController{
+public class AWTLightKeyController implements KeyListener, ILightKeyController{
     
     public AWTLightKeyController(Chart chart) {
         super();

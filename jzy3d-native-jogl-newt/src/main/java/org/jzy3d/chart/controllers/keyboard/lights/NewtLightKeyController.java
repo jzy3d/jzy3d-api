@@ -6,7 +6,7 @@ import org.jzy3d.plot3d.rendering.lights.Light;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 
-public class NewtLightKeyController implements KeyListener, INewtLightKeyController{
+public class NewtLightKeyController implements KeyListener, ILightKeyController{
     
     public NewtLightKeyController(Chart chart) {
         super();

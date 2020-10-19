@@ -17,6 +17,7 @@ import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.chart.factories.ChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
 import org.jzy3d.chart.factories.IFrame;
+import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
@@ -37,7 +38,7 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 import com.jogamp.opengl.GLCapabilities;
 
-public class SWTChartComponentFactory extends ChartComponentFactory {
+public class SWTChartComponentFactory extends NativeChartFactory {
     private static final Logger logger = Logger.getLogger(SWTChartComponentFactory.class);
 
     private final Composite canvas;
@@ -48,22 +49,21 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
 
     public static Chart chart(Composite parent) {
         SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
-        return f.newChart(Quality.Intermediate, Toolkit.swt_newt);
+        return f.newChart(Quality.Intermediate);
     }
 
     public static Chart chart(Composite parent, Quality quality) {
         SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
-        return f.newChart(quality, Toolkit.swt_newt);
+        return f.newChart(quality);
     }
 
     /* */
 
     /**
-     * @param toolkit can be used to indicate "offscreen, 800, 600" and thus replace implicit "awt"
      */
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality, String toolkit) {
-        return new SWTChart(canvas, factory, quality, toolkit);
+    public Chart newChart(IChartComponentFactory factory, Quality quality) {
+        return new SWTChart(canvas, factory, quality);
     }
 
     public Composite getComposite() {
@@ -97,51 +97,12 @@ public class SWTChartComponentFactory extends ChartComponentFactory {
         return new AWTRenderer3d(view, traceGL, debugGL);
     }
 
-    /** bypass reflection used in super implementation */
     @Override
-    protected IFrame newFrameSwing(Chart chart, Rectangle bounds, String title) {
-        return null;
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected IFrame newFrameAWT(Chart chart, Rectangle bounds, String title, String message) {
-        return null;
-    }
-
-    @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit, GLCapabilities capabilities) {
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit) {
         boolean traceGL = false;
         boolean debugGL = false;
-        Toolkit chartType = getToolkit(windowingToolkit);
-        switch (chartType) {
-        case awt:
-            return newCanvasAWT(factory, scene, quality, capabilities, traceGL, debugGL);
-        case swing:
-            Logger.getLogger(ChartComponentFactory.class).warn("Swing canvas is deprecated. Use Newt instead");
-            return newCanvasSwing(factory, scene, quality, capabilities, traceGL, debugGL);
-        case newt:
-            return new CanvasNewtAwt(factory, scene, quality, capabilities, traceGL, debugGL);
-        case offscreen:
-            Dimension dimension = getCanvasDimension(windowingToolkit);
-            return new OffscreenCanvas(factory, scene, quality, capabilities, dimension.width, dimension.height, traceGL, debugGL);
-        case swt_newt:
-            return new CanvasNewtSWT(factory, scene, quality, capabilities, traceGL, debugGL);
-        default:
-            throw new IllegalArgumentException("unknown chart type:" + chartType);
-        }
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected ICanvas newCanvasAWT(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        return null;
-    }
-
-    /** bypass reflection used in super implementation */
-    @Override
-    protected ICanvas newCanvasSwing(IChartComponentFactory chartComponentFactory, Scene scene, Quality quality, GLCapabilities capabilities, boolean traceGL, boolean debugGL) {
-        return null;
+        
+        return new CanvasNewtSWT(factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
     @Override

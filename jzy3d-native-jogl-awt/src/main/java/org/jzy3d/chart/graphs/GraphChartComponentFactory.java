@@ -15,12 +15,7 @@ public class GraphChartComponentFactory extends AWTChartComponentFactory{
     
     @Override
     public ICameraMouseController newMouseCameraController(Chart chart){
-        ICameraMouseController mouse = null;
-        if(!chart.getWindowingToolkit().equals("newt"))
-            mouse = newAWTMouseController(chart);
-        else
-            throw new IllegalArgumentException("newt not supported");
-        return mouse;
+        return newAWTMouseController(chart);
     }
     
     public ICameraMouseController newAWTMouseController(final Chart chart){

@@ -34,7 +34,7 @@ public class NativeEmbeddedPainter implements Painter{
     }
 
     @Override
-    public void coord(Coord3d coord, SpaceTransformer transform) {
+    public void vertex(Coord3d coord, SpaceTransformer transform) {
         if(transform==null){
             GLES2CompatUtils.glVertex3f(coord.x, coord.y, coord.z);            
         }
@@ -84,19 +84,16 @@ public class NativeEmbeddedPainter implements Painter{
 
     @Override
     public IScreenCanvas getCanvas() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public Scene getScene() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public IAxe getAxe() {
-        // TODO Auto-generated method stub
         return null;
     }
 

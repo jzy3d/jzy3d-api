@@ -41,7 +41,7 @@ public class SquarifyDemo extends AbstractAnalysis {
         surface.setWireframeDisplayed(false);
 
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate, getCanvasType());
+        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
         
         //This addition keeps the aspect ratio of the X and Y data
         //but makes X and Z square

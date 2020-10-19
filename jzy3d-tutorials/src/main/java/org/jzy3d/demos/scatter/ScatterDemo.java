@@ -40,7 +40,7 @@ public class ScatterDemo extends AbstractAnalysis{
         }
         
         Scatter scatter = new Scatter(points, colors);
-        chart = AWTChartComponentFactory.chart(Quality.Advanced, "newt");
+        chart = new AWTChartComponentFactory().newChart(Quality.Advanced);
         chart.getScene().add(scatter);
     }
 }

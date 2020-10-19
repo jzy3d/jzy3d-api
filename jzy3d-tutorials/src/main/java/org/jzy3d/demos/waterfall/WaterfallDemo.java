@@ -38,7 +38,7 @@ public class WaterfallDemo extends AbstractAnalysis {
         build.setColorMapper(new ColorMapper(new ColorMapRainbow(), build.getBounds().getZmin(), build.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
 
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate, getCanvasType());
+        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
         chart.getScene().getGraph().add(build);
         chart.getView();
     }

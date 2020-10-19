@@ -36,12 +36,12 @@ public abstract class AbstractAnalysis implements IAnalysis{
 	
 	@Override
 	public Chart initializeChart(){
-        return factory.newChart(Chart.DEFAULT_QUALITY, getCanvasType());
+        return factory.newChart(Chart.DEFAULT_QUALITY);
 	}
 
     @Override
     public Chart initializeChart(Quality quality){
-        return factory.newChart(quality, getCanvasType());
+        return factory.newChart(quality);
     }
 
 	

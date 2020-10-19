@@ -40,7 +40,7 @@ public class SWTBridgeDemo {
         surface.setWireframeDisplayed(false);
 
         // Create a chart
-        Chart chart = AWTChartComponentFactory.chart(Quality.Advanced, "awt");
+        Chart chart = AWTChartComponentFactory.chart(Quality.Advanced);
         chart.getScene().getGraph().add(surface);
 
         Settings.getInstance().setHardwareAccelerated(true);

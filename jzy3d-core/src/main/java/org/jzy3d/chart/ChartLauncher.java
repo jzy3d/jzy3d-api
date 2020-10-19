@@ -35,7 +35,8 @@ public class ChartLauncher {
     public static ICameraMouseController openChart(final Chart chart, Rectangle bounds, final String title, boolean allowSlaveThreadOnDoubleClick, boolean startThreadImmediatly) {
         ICameraMouseController mouse = configureControllers(chart, title, allowSlaveThreadOnDoubleClick, startThreadImmediatly);
         chart.render();
-        frame(chart, bounds, title);
+        chart.open(title, bounds);
+        //frame(chart, bounds, title);
         return mouse;
     }
 
@@ -51,7 +52,8 @@ public class ChartLauncher {
 
     public static void openStaticChart(Chart chart, Rectangle bounds, String title) {
         chart.render();
-        frame(chart, bounds, title);
+        chart.open(title, bounds);
+        //frame(chart, bounds, title);
     }
 
     public static void instructions() {

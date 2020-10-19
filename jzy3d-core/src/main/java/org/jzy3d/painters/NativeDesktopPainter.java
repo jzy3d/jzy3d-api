@@ -33,7 +33,7 @@ public class NativeDesktopPainter implements Painter{
     }
 
     @Override
-    public void coord(Coord3d coord, SpaceTransformer transform) {
+    public void vertex(Coord3d coord, SpaceTransformer transform) {
         if (transform == null) {
             gl.getGL2().glVertex3f(coord.x, coord.y, coord.z);
         } else {

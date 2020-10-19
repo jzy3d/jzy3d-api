@@ -71,7 +71,7 @@ public class LizardVolumeRenderDemo extends AbstractAnalysis {
         Texture3D volume = new Texture3D(buffer, shape,(float)min+ ((max-min)/10),(float)max-((max-min)/10),colorMapper,new BoundingBox3d(0,shape[2],0,shape[1],0,shape[0]));   
         
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate, getCanvasType());
+        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
         chart.getScene().getGraph().add(volume);
 //        chart.getView().setBackgroundColor(new Color(0, 0, 0));
 //        IAxeLayout axeLayout = chart.getAxeLayout();
