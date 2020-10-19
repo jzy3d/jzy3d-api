@@ -91,7 +91,7 @@ public class NewtChartComponentFactory extends NativeChartFactory {
     }
 
     @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit) {
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
         boolean debugGL = false;
         
