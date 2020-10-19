@@ -160,12 +160,12 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
 
 
     @Override
-    public ICanvas newCanvas(Scene scene, Quality quality, String windowingToolkit) {
-        return newCanvas(getFactory(), scene, quality, windowingToolkit);
+    public ICanvas newCanvas(Scene scene, Quality quality) {
+        return newCanvas(getFactory(), scene, quality);
     }
 
     @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit) {
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality) {
         return new VoidCanvas(factory, scene, quality);
     }
 

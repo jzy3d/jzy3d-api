@@ -15,7 +15,7 @@ public class SwingChartComponentFactory extends AWTChartComponentFactory {
     }
 
     @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality, String windowingToolkit) {
+    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
         boolean debugGL = false;
         
