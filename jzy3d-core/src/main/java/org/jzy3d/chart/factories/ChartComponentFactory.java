@@ -1,9 +1,5 @@
 package org.jzy3d.chart.factories;
 
-import java.lang.reflect.Constructor;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
@@ -15,7 +11,6 @@ import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.IBoundingPolicy;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot2d.primitives.LineSerie2d;
@@ -37,15 +32,14 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLCapabilitiesImmutable;
-
 /**
  * This {@link IChartComponentFactory} returns non-displayable charts.
  * 
  * @see AWTChartComponentFactory for a working implementation
  */
 public abstract class ChartComponentFactory implements IChartComponentFactory {
+    public static String SCREENSHOT_FOLDER = "./data/screenshots/";
+
     static Logger logger = Logger.getLogger(ChartComponentFactory.class);
     
     public abstract ICameraMouseController newMouseCameraController(Chart chart);
@@ -134,19 +128,11 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
         else
             throw new IllegalArgumentException("Unsupported serie type " + type);
     }
-
-    
-    
     
     @Override
     public CameraThreadController newCameraThreadController(Chart chart){
         return new CameraThreadController(chart);
     }
-    
-
-
-    public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-
 
     @Override
     public IViewportLayout newViewportLayout() {
@@ -157,7 +143,6 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
     public IFrame newFrame(Chart chart) {
         return newFrame(chart, new Rectangle(0, 0, 800, 600), "Jzy3d");
     }
-
 
     @Override
     public ICanvas newCanvas(Scene scene, Quality quality) {

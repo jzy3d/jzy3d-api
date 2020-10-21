@@ -2,7 +2,7 @@ package org.jzy3d.demos.lines;
 
 import java.util.concurrent.Executors;
 
-import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.chart.factories.IChartComponentFactory;
@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.CroppingView;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class WorldMapDemo extends AbstractAnalysis {
+public class WorldMapDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
         AnalysisLauncher.open(new WorldMapDemo());
     }

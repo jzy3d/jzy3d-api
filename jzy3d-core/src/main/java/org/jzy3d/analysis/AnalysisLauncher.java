@@ -46,6 +46,5 @@ public class AnalysisLauncher {
         ChartLauncher.screenshot(demo.getChart(), "./data/screenshots/" + demo.getName() + ".png");
     }
 
-    protected static String DEFAULT_CANVAS_TYPE = "awt";
     protected static Rectangle DEFAULT_WINDOW = new Rectangle(200, 200, 600, 600);
 }

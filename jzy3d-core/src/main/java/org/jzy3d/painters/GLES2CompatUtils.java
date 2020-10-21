@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.rendering.compat;
+package org.jzy3d.painters;
 
 import java.nio.ByteBuffer;
 

@@ -2,7 +2,7 @@ package org.jzy3d.demos.incubation.volume;
 
 import java.nio.ByteBuffer;
 
-import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -19,7 +19,7 @@ import com.jogamp.opengl.util.GLBuffers;
  * @author Jacok Filik
  *
  */
-public class BasicVolumeRenderDemo extends AbstractAnalysis {
+public class BasicVolumeRenderDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
         AnalysisLauncher.open(new BasicVolumeRenderDemo());
     }

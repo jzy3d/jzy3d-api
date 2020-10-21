@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.TicToc;
+import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
-import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.ordering.DefaultOrderingStrategy;

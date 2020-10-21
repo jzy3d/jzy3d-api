@@ -2,8 +2,8 @@ package org.jzy3d.plot3d.rendering.view;
 
 
 import org.jzy3d.maths.Rectangle;
+import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;

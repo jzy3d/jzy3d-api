@@ -36,7 +36,6 @@ public class ChartLauncher {
         ICameraMouseController mouse = configureControllers(chart, title, allowSlaveThreadOnDoubleClick, startThreadImmediatly);
         chart.render();
         chart.open(title, bounds);
-        //frame(chart, bounds, title);
         return mouse;
     }
 
@@ -53,7 +52,6 @@ public class ChartLauncher {
     public static void openStaticChart(Chart chart, Rectangle bounds, String title) {
         chart.render();
         chart.open(title, bounds);
-        //frame(chart, bounds, title);
     }
 
     public static void instructions() {
@@ -69,18 +67,6 @@ public class ChartLauncher {
         sb.append("Animate    : Double left click\n");
         sb.append("Screenshot : Press 's'\n");
         return sb.toString();
-    }
-
-    
-    /* FRAMES */
-    
-    /*public static void frame(Chart chart){
-    	Screen screen = Settings.getInstance().getScreen();
-        frame(chart, new Rectangle(0,0,screen.getWidth(), screen.getHeight()), "Jzy3d");
-    }*/
-    
-    public static void frame(Chart chart, Rectangle bounds, String title){
-    	chart.getFactory().newFrame(chart, bounds, title);
     }
     
     /* SCREENSHOT */
