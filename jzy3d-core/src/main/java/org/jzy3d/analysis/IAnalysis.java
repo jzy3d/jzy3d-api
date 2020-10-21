@@ -11,9 +11,7 @@ public interface IAnalysis {
 	public void init() throws Exception;
     public boolean isInitialized();
     public boolean hasOwnChartControllers();
-    public String getCanvasType();
-    /** Determine the canvas, "awt", "swing", "newt", "offscreen".*/
-    public void setCanvasType(String type);
+    
     /** Use a factory to initialize a chart instance*/
     public Chart initializeChart();
     public Chart initializeChart(Quality quality);

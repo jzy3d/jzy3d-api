@@ -1,6 +1,6 @@
 package org.jzy3d.demos.surface;
 
-import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public class SurfaceDemo extends AbstractAnalysis {
+public class SurfaceDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
         AnalysisLauncher.open(new SurfaceDemo());
     }

@@ -1,9 +1,9 @@
 package org.jzy3d.plot3d.primitives.textured;
 
 import org.jzy3d.colors.Color;
+import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Quad;
-import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.opengl.GL;

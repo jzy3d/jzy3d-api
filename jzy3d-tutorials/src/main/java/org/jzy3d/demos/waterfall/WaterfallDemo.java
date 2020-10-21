@@ -1,6 +1,6 @@
 package org.jzy3d.demos.waterfall;
 
-import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.builder.concrete.WaterfallTessellator;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public class WaterfallDemo extends AbstractAnalysis {
+public class WaterfallDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
         AnalysisLauncher.open(new WaterfallDemo());
     }

@@ -6,7 +6,7 @@ import java.util.List;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;

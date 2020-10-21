@@ -1,6 +1,6 @@
 package org.jzy3d.debugGL;
 
-import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -14,7 +14,7 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public class DebugGL_Demo extends AbstractAnalysis {
+public class DebugGL_Demo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
         DebugGL_Demo d = new DebugGL_Demo();
         AnalysisLauncher.open(d, new Rectangle(300,0, 800, 800));
