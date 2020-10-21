@@ -5,9 +5,9 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
+import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.plot3d.builder.concrete.SphereScatterGenerator;
 import org.jzy3d.plot3d.primitives.Sphere;
-import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.opengl.GL;

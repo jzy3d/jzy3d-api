@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
-import org.jzy3d.plot3d.rendering.compat.GLES2CompatUtils;
+import org.jzy3d.painters.GLES2CompatUtils;
 
 import com.jogamp.opengl.GL;
 

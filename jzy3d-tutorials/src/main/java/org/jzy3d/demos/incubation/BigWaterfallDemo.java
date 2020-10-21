@@ -1,6 +1,6 @@
 package org.jzy3d.demos.incubation;
 
-import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.colors.Color;
@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 /**
  * @author Jacok Filik
  */
-public class BigWaterfallDemo extends AbstractAnalysis {
+public class BigWaterfallDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
         AnalysisLauncher.open(new BigWaterfallDemo());
     }

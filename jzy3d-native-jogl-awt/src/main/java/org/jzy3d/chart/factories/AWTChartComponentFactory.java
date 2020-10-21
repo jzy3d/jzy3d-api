@@ -2,10 +2,6 @@ package org.jzy3d.chart.factories;
 
 import java.util.Date;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.AWTChart;
@@ -20,15 +16,12 @@ import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
@@ -37,8 +30,6 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
-
-import com.jogamp.opengl.GLCapabilities;
 
 public class AWTChartComponentFactory extends NativeChartFactory {
     static Logger logger = Logger.getLogger(AWTChartComponentFactory.class);
@@ -88,7 +79,6 @@ public class AWTChartComponentFactory extends NativeChartFactory {
         return new AWTRenderer3d(view, traceGL, debugGL);
     }
 
-
     @Override
     public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
@@ -102,19 +92,6 @@ public class AWTChartComponentFactory extends NativeChartFactory {
         return this;
     }
 
-    public JFrame newFrame(JPanel panel) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            // ignore failure to set default look en feel;
-        }
-        JFrame frame = new JFrame();
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
-        return frame;
-    }
-
     @Override
     public ICameraMouseController newMouseCameraController(Chart chart) {
         return new AWTCameraMouseController(chart);
@@ -122,7 +99,7 @@ public class AWTChartComponentFactory extends NativeChartFactory {
     
     @Override
     public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-            return new AWTMousePickingController(chart, clickWidth);
+        return new AWTMousePickingController(chart, clickWidth);
     }
 
     /**

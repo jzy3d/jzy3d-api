@@ -36,10 +36,15 @@ WireSurfaceOffscreenDemo ne s'ouvre plus
 ShaderMandelbrotDemo
 DepthPeelingChart
 TrialFaceOrdering
+PickableGraphDemo
 
 Toutes les book demo ne s'ouvrent plus
 
 Les graphes du plugin graphe ne sont plus colorié, les edges ont disparu
+
+
+TextureDemoOffscreen génère des screenshot super pales
+SymbolPointOffscreenDemo n'a pas généré d'image
 
 TODO ==============
 
@@ -54,12 +59,13 @@ OffscreenChartFactory
 NewtChartFactory : rework newFrameSwing
 Move SwingChartLauncher to Swing Core
 
+TestDemos.test a besoin de modifier les factory en offscreen
 
-SEPARATE IO MODULE TO AVOID MIXING WITH CLEAN API FOR TS etc GENERATION?
 
-Remove toolkit from FACTORY
-public Chart newChart(Quality quality, Toolkit toolkit)
-public Chart newChart(Quality quality, String toolkit)
+SEPARATE 
+- IO MODULE TO AVOID MIXING WITH CLEAN API FOR TS etc GENERATION?
+- Offscreen in a dedicated maven artifact?
+- native-jogl-core pour le painter GL2, embedded, les VBO
 
 Nettoyer l'analyse
 
@@ -70,6 +76,8 @@ FINAL CLEANUP ===========
 
 DELETE ColorMapperUpdater
 CHART.add/removeDrawable
+
+Remplacer ChartLauncher par méthode open
 
 GUIDE UPDATE =====
 
