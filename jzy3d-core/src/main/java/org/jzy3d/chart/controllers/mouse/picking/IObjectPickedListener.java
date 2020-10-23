@@ -1,4 +1,4 @@
-package org.jzy3d.picking;
+package org.jzy3d.chart.controllers.mouse.picking;
 
 import java.util.List;
 

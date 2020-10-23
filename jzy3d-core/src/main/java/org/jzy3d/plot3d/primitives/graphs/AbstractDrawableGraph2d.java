@@ -3,10 +3,10 @@ package org.jzy3d.plot3d.primitives.graphs;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
-import org.jzy3d.picking.PickingSupport;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.graphs.layout.DefaultGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphFormatter;

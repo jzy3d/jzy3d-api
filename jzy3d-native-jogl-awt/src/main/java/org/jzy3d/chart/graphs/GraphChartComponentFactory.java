@@ -6,9 +6,9 @@ import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
+import org.jzy3d.chart.controllers.mouse.picking.IObjectPickedListener;
+import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.picking.IObjectPickedListener;
-import org.jzy3d.picking.PickingSupport;
 
 public class GraphChartComponentFactory extends AWTChartComponentFactory{
     static Logger logger = Logger.getLogger(GraphChartComponentFactory.class);
