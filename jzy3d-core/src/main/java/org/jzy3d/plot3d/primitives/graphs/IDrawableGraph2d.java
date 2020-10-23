@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives.graphs;
 
+import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.maths.graphs.IGraph;
-import org.jzy3d.picking.PickingSupport;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphLayout2d;
 
