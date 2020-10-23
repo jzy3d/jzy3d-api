@@ -27,8 +27,6 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.GLCapabilities;
-
 /**
  * {@link Chart} is a convenient object that gather all components required to render a 3d scene for plotting.
  * 

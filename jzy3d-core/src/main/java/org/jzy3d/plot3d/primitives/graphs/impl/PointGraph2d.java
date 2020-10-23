@@ -3,12 +3,12 @@ package org.jzy3d.plot3d.primitives.graphs.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
-import org.jzy3d.picking.PickingSupport;
 import org.jzy3d.plot3d.primitives.pickable.PickablePoint;
 import org.jzy3d.plot3d.rendering.view.Camera;
 

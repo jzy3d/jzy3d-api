@@ -38,6 +38,8 @@ DepthPeelingChart
 TrialFaceOrdering
 PickableGraphDemo
 
+Test : les images screenshot sont toutes grisées!! 0 couleur
+
 Toutes les book demo ne s'ouvrent plus
 
 Les graphes du plugin graphe ne sont plus colorié, les edges ont disparu
@@ -48,16 +50,7 @@ SymbolPointOffscreenDemo n'a pas généré d'image
 
 TODO ==============
 
-Chart : remove GLCapabilities to be passed to Canvas.
 Setting : move to Native
-
-ChartComponentFactory.newFrame : a desactivé CanvasNewtAWt + CLEAN REFLECTION
-
-AWTChartComponentFactory : remove Swing invoke + empêcher constructeur "awt", "newt", "swing", "offscreen"
-SwingChartComponentFactory
-OffscreenChartFactory
-NewtChartFactory : rework newFrameSwing
-Move SwingChartLauncher to Swing Core
 
 TestDemos.test a besoin de modifier les factory en offscreen
 
@@ -67,9 +60,11 @@ SEPARATE
 - Offscreen in a dedicated maven artifact?
 - native-jogl-core pour le painter GL2, embedded, les VBO
 
-Nettoyer l'analyse
 
 Ajouter un test U pour chaque type de factory en utilisant ChartTester
+
+Fix and move TestCoord3dRotate
+
 
 
 FINAL CLEANUP ===========
@@ -78,6 +73,8 @@ DELETE ColorMapperUpdater
 CHART.add/removeDrawable
 
 Remplacer ChartLauncher par méthode open
+
+
 
 GUIDE UPDATE =====
 
