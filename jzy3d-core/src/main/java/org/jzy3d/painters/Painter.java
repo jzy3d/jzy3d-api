@@ -35,8 +35,11 @@ public interface Painter {
     public void vertex(Coord3d coord, SpaceTransformer transform);
 
     public void color(Color color);
+    public void colorAlphaOverride(Color color, float alpha);
+    public void colorAlphaFactor(Color color, float alpha);
     
     public void transform(Transform transform, boolean loadIdentity);
+    
     
     
     // technical
@@ -55,7 +58,7 @@ public interface Painter {
     public IAxe getAxe();
     
     
-    
+    // GL INTERFACE
     
     public void glLoadIdentity();
     public void glScalef(float x, float y, float z);
@@ -68,9 +71,6 @@ public interface Painter {
     public void glVertex3f(float x, float y, float z);
     public void glVertex3d(double x, double y, double z);
 	
-	
-	
-    
     public void glEnable(int type);
     public void glDisable(int type);
 
@@ -81,4 +81,12 @@ public interface Painter {
     
     public void glLineWidth(float width);
 	public void glPointSize(float width);
+	
+    public void glTexCoord2f(float s, float t);
+    public void glTexEnvf(int target, int pname, float param);
+    public void glTexEnvi(int target, int pname, int param);
+    
+    public void glPushMatrix();
+    public void glPopMatrix();
+
 }

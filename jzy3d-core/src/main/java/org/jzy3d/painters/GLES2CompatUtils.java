@@ -177,7 +177,7 @@ public class GLES2CompatUtils {
 
 	}
 
-	public static void glTexEnvf(int glTexture2d, int glTextureEnvMode,
+	public static void glTexEnvi(int glTexture2d, int glTextureEnvMode,
 			int glReplace) {
 		gl2es1.glTexEnvf(glTexture2d, glTextureEnvMode, glReplace);
 

@@ -113,22 +113,22 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
      * A helper to call glVerted3f on the input coordinate. For GLES2 profile only.
      * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
      */
-    protected void vertexGLES2(Coord3d c) {
+    /*protected void vertexGLES2(Coord3d c) {
         if(spaceTransformer==null){
             GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);            
         }
         else{
             GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y),spaceTransformer.getZ().compute(c.z));
         }
-    }
+    }*/
 
     /** A helper to call glColor4f on the input color. For GL2 profile only. */
-    protected void colorGL2(GL gl, Color c) {
+    /*protected void colorGL2(GL gl, Color c) {
         gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
-    }
+    }*/
 
     /** A helper to call glColor4f on the input color. For GLES2 profile only. */
-    protected void colorGLES2(Color c) {
+    /*protected void colorGLES2(Color c) {
         GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
     }
 
@@ -138,9 +138,9 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
         } else {
             colorGLES2(c);
         }
-    }
+    }*/
 
-    protected void call(GL gl, Color c, float alpha) {
+    /*protected void call(GL gl, Color c, float alpha) {
         if (gl.isGL2()) {
             gl.getGL2().glColor4f(c.r, c.g, c.b, alpha);
         } else {
@@ -154,7 +154,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
         } else {
             GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a * alpha);
         }
-    }
+    }*/
 
     protected void negative(Color c) {
         c.r = 1 - c.r;

@@ -61,6 +61,18 @@ public abstract class AbstractPainter implements Painter{
     }
 	
 	@Override
+	public void colorAlphaOverride(Color color, float alpha) {
+        glColor4f(color.r, color.g, color.b, alpha);
+		
+	}
+
+	@Override
+	public void colorAlphaFactor(Color color, float alpha) {
+        glColor4f(color.r, color.g, color.b, color.a * alpha);
+	}
+
+	
+	@Override
 	public void vertex(Coord3d coord, SpaceTransformer transform) {
 		if (transform == null) {
 			vertex(coord);
@@ -73,6 +85,7 @@ public abstract class AbstractPainter implements Painter{
 	public void vertex(Coord3d coord) {
 		glVertex3f(coord.x, coord.y, coord.z);
 	}
+
 
 
 }

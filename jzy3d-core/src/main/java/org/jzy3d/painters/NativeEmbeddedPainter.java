@@ -11,6 +11,7 @@ import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -167,6 +168,31 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	@Override
 	public void glPointSize(float width) {
 		GLES2CompatUtils.glPointSize(width);
+	}
+	
+	@Override
+	public void glTexCoord2f(float s, float t) {
+		GLES2CompatUtils.glTexCoord2f(s, t);
+	}
+	
+	@Override
+	public void glTexEnvf(int target, int pname, float param) {
+		GLES2CompatUtils.glTexEnvi(target, pname, (int)param);
+	}
+
+	@Override
+	public void glTexEnvi(int target, int pname, int param) {
+		GLES2CompatUtils.glTexEnvi(target, pname, param);
+	}
+
+	@Override
+	public void glPushMatrix() {
+		GLES2CompatUtils.glPushMatrix();
+	}
+	
+	@Override
+	public void glPopMatrix() {
+		GLES2CompatUtils.glPopMatrix();
 	}
 
 }
