@@ -80,8 +80,6 @@
 		<version.mvn.deploy>2.4</version.mvn.deploy>
 		<version.mvn.javadoc>2.9.1</version.mvn.javadoc>
 		<version.mvn.release>2.5.3</version.mvn.release>
-		<version.libs.junit>4.10</version.libs.junit>
-		<version.libs.swt>4.2.1</version.libs.swt>
 	</properties>
 
 	<dependencies>
