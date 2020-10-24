@@ -32,10 +32,10 @@ public class ColoredWireframePolygon extends Polygon {
         if (wfstatus) {
             applyPolygonModeLine(painter, gl);
             if (polygonOffsetFillEnable)
-            	polygonOffsetLineEnable(gl);
+            	polygonOffsetLineEnable(painter, gl);
             callPointForWireframe(painter, gl);
             if (polygonOffsetFillEnable)
-            	polygonOffsetLineDisable(gl);
+            	polygonOffsetLineDisable(painter, gl);
         }
 
         if (mapper != null)
@@ -44,27 +44,26 @@ public class ColoredWireframePolygon extends Polygon {
         doDrawBounds(painter, gl, glu, cam);
     }
 	
-    protected void polygonOffsetLineEnable(GL gl) {
-    	if (gl.isGL2GL3()) {
-    		gl.glEnable(GL2GL3.GL_POLYGON_OFFSET_LINE);
-    		gl.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
-    	}
+    protected void polygonOffsetLineEnable(Painter painter, GL gl) {
+		painter.glEnable(GL2GL3.GL_POLYGON_OFFSET_LINE);
+		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
     }
 
-    protected void polygonOffsetLineDisable(GL gl) {
-        if (gl.isGL2GL3()) {
-        	gl.glDisable(GL2GL3.GL_POLYGON_OFFSET_LINE);
-        }
+    protected void polygonOffsetLineDisable(Painter painter, GL gl) {
+    	painter.glDisable(GL2GL3.GL_POLYGON_OFFSET_LINE);
     }
     
     @Override
     public void callPointForWireframe(Painter painter, GL gl) {
-        gl.glLineWidth(wfwidth);
+        painter.glLineWidth(wfwidth);
         Color c = wfcolor;
         
         begin(gl);
         for (Point p : points) {
-        	if (mapper != null) c = mapper.getColor(p.getCoord().z);
+        	if (mapper != null) {
+        		c = mapper.getColor(p.getCoord().z);
+        		painter.color(c);
+        	}
             painter.vertex(p.xyz, spaceTransformer);
         }
         painter.glEnd();
