@@ -175,12 +175,6 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 		return mapper;
 	}
 	
-	/*public void setColors(ColorMapper mapper){
-		for(Polygon quad:quads){
-			quad.setColors(mapper);
-		}
-	}*/
-
 	@Override
     public void setColor(Color color){
 		this.color = color;
@@ -207,6 +201,7 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 	private ColorMapper mapper;
 	private Polygon quads[];
 	private Color color;
+	
     @Override
     public void updateBounds() {
         throw new RuntimeException("not implemented");

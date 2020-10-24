@@ -70,8 +70,12 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         doTransform(painter, gl, glu, cam);
+        doDrawPoints(painter);
+        doDrawBounds(painter, gl, glu, cam);
+    }
 
-        painter.glPointSize(width);
+	protected void doDrawPoints(Painter painter) {
+		painter.glPointSize(width);
         
         painter.glBegin(GL.GL_POINTS);
         if (colors == null)
@@ -87,10 +91,8 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
                 painter.vertex(c, spaceTransformer);
             }
         }
-        gl.getGL2().glEnd();
-
-        doDrawBounds(painter, gl, glu, cam);
-    }
+        painter.glEnd();
+	}
 
     @Override
     public void applyGeometryTransform(Transform transform) {
@@ -171,8 +173,6 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
     public float getWidth() {
       return width;
     }
-
-
 
     /**********************************************************************/
 

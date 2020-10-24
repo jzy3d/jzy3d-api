@@ -58,7 +58,7 @@ public class ColoredWireframePolygon extends Polygon {
         painter.glLineWidth(wfwidth);
         Color c = wfcolor;
         
-        begin(gl);
+        begin(painter, gl);
         for (Point p : points) {
         	if (mapper != null) {
         		c = mapper.getColor(p.getCoord().z);

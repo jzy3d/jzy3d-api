@@ -6,7 +6,6 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -47,8 +46,12 @@ public class ScatterMultiColor extends AbstractDrawable implements IMultiColorab
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         doTransform(painter, gl, glu, cam);
+        doDrawPoints(painter);
+        doDrawBounds(painter, gl, glu, cam);
+    }
 
-        painter.glPointSize(width);
+	protected void doDrawPoints(Painter painter) {
+		painter.glPointSize(width);
         painter.glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
@@ -59,9 +62,7 @@ public class ScatterMultiColor extends AbstractDrawable implements IMultiColorab
             }
         }
         painter.glEnd();
-
-        doDrawBounds(painter, gl, glu, cam);
-    }
+	}
 
     @Override
     public void applyGeometryTransform(Transform transform) {

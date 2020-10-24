@@ -47,9 +47,3 @@ public class Cylinder extends AbstractComposite{
 	protected Polygon top;
 	protected Polygon low;
 }
-
-
-/*public void setWireframeDisplayed(boolean status){
-	top.setWireframeDisplayed(status);
-	low.setWireframeDisplayed(status);
-}*/

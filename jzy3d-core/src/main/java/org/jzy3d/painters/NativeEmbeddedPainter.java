@@ -13,6 +13,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
@@ -102,6 +103,12 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glScalef(float x, float y, float z) {
 		GLES2CompatUtils.glScalef(x, y, z);   
 	}
+	
+	@Override
+	public void glTranslatef(float x, float y, float z) {
+		GLES2CompatUtils.glTranslatef(x, y, z);
+	}
+
 
 	@Override
 	public void glLineWidth(float width) {
@@ -230,6 +237,21 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		throw new NotImplementedException();
 		//gl.getGL2().glDeleteLists(list, range);		
 	}
-
-
+	
+	// GLU / GLUT
+	
+	@Override
+	public void gluDisk(GLUquadric quad, double inner, double outer, int slices, int loops) {
+		glu.gluDisk(quad, inner, outer, slices, loops);		
+	}
+	
+	@Override
+	public void glutSolidSphere(double radius, int slices, int stacks) {
+		glut.glutSolidSphere(radius, slices, stacks);
+	}
+	
+	@Override
+	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks) {
+		glu.gluCylinder(quad, base, top, height, slices, stacks);
+	}
 }

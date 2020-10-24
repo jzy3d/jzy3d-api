@@ -103,7 +103,6 @@ public class LineStrip extends AbstractWireframeable {
             drawLine(painter, gl);
         } else if (points.size() == 1 && !showPoints) {
             drawPoints(painter, gl);
-
         }
 
         if (showSymbols && symbolHandler!=null) {
@@ -115,7 +114,7 @@ public class LineStrip extends AbstractWireframeable {
     
 
     public void drawLine(Painter painter, GL gl) {
-        //gl.glLineWidth(wfwidth);
+        //painter.glLineWidth(wfwidth);
         
         if (stipple) {
             painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
