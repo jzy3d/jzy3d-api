@@ -54,7 +54,7 @@ public class TesselatedPolygon extends AbstractComposite {
 					for (Point p : points) {
 						gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 					}
-					end(gl);
+					painter.glEnd();
 				} else {
 					GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g,
 							wfcolor.b, wfcolor.a);
@@ -65,7 +65,7 @@ public class TesselatedPolygon extends AbstractComposite {
 						GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y,
 								p.xyz.z);
 					}
-					end(gl);
+					painter.glEnd();
 				}
 			}
 

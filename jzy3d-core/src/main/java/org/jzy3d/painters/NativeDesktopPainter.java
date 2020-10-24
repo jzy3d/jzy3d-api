@@ -149,4 +149,34 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glPointSize(float width) {
 		gl.getGL2().glPointSize(width);
 	}
+
+	@Override
+	public void glTexCoord2f(float s, float t) {
+		gl.getGL2().glTexCoord2f(s, t);
+	}
+	
+	
+	
+	@Override
+	public void glTexEnvf(int target, int pname, float param) {
+		gl.getGL2().glTexEnvf(target, pname, param);
+	}
+	
+	@Override
+	public void glTexEnvi(int target, int pname, int param) {
+		gl.getGL2().glTexEnvi(target, pname, param);
+	}
+
+	@Override
+	public void glPushMatrix() {
+		gl.getGL2().glPushMatrix();
+	}
+	
+	@Override
+	public void glPopMatrix() {
+		gl.getGL2().glPopMatrix();
+	}
+	
+	
+	
 }

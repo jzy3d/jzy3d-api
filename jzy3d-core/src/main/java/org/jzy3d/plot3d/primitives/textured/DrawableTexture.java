@@ -187,113 +187,71 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
 
         // Bind texture & set color filter
         texture.bind(gl);
-        callWithAlphaFactor(gl, filter, alpha);
+        painter.colorAlphaFactor(filter, alpha);
 
         // Draw
-        before(gl);
+        before(painter, gl);
 
-        if (gl.isGL2()) {
-            gl.getGL2().glBegin(GL2GL3.GL_QUADS);
+        painter.glBegin(GL2GL3.GL_QUADS);
 
-            if (orientation == PlaneAxis.X) {
-                gl.getGL2().glTexCoord2f(coords.left(), coords.bottom());
-                gl.getGL2().glVertex3f(axisValue, mapping.get(0).x, mapping.get(0).y);
-                gl.getGL2().glTexCoord2f(coords.right(), coords.bottom());
-                gl.getGL2().glVertex3f(axisValue, mapping.get(1).x, mapping.get(1).y);
-                gl.getGL2().glTexCoord2f(coords.right(), coords.top());
-                gl.getGL2().glVertex3f(axisValue, mapping.get(2).x, mapping.get(2).y);
-                gl.getGL2().glTexCoord2f(coords.left(), coords.top());
-                gl.getGL2().glVertex3f(axisValue, mapping.get(3).x, mapping.get(3).y);
-            } else if (orientation == PlaneAxis.Y) {
-                gl.getGL2().glTexCoord2f(coords.left(), coords.bottom());
-                gl.getGL2().glVertex3f(mapping.get(0).x, axisValue, mapping.get(0).y);
-                gl.getGL2().glTexCoord2f(coords.right(), coords.bottom());
-                gl.getGL2().glVertex3f(mapping.get(1).x, axisValue, mapping.get(1).y);
-                gl.getGL2().glTexCoord2f(coords.right(), coords.top());
-                gl.getGL2().glVertex3f(mapping.get(2).x, axisValue, mapping.get(2).y);
-                gl.getGL2().glTexCoord2f(coords.left(), coords.top());
-                gl.getGL2().glVertex3f(mapping.get(3).x, axisValue, mapping.get(3).y);
-            } else if (orientation == PlaneAxis.Z) {
-                gl.getGL2().glTexCoord2f(coords.left(), coords.bottom());
-                gl.getGL2().glVertex3f(planePosition.x + mapping.get(0).x, planePosition.y + mapping.get(0).y, axisValue);
-                gl.getGL2().glTexCoord2f(coords.right(), coords.bottom());
-                gl.getGL2().glVertex3f(planePosition.x + mapping.get(1).x, planePosition.y + mapping.get(1).y, axisValue);
-                gl.getGL2().glTexCoord2f(coords.right(), coords.top());
-                gl.getGL2().glVertex3f(planePosition.x + mapping.get(2).x, planePosition.y + mapping.get(2).y, axisValue);
-                gl.getGL2().glTexCoord2f(coords.left(), coords.top());
-                gl.getGL2().glVertex3f(planePosition.x + mapping.get(3).x, planePosition.y + mapping.get(3).y, axisValue);
-            }
-
-            gl.getGL2().glEnd();
-        } else {
-            GLES2CompatUtils.glBegin(GL2GL3.GL_QUADS);
-
-            if (orientation == PlaneAxis.X) {
-                GLES2CompatUtils.glTexCoord2f(coords.left(), coords.bottom());
-                GLES2CompatUtils.glVertex3f(axisValue, mapping.get(0).x, mapping.get(0).y);
-                GLES2CompatUtils.glTexCoord2f(coords.right(), coords.bottom());
-                GLES2CompatUtils.glVertex3f(axisValue, mapping.get(1).x, mapping.get(1).y);
-                GLES2CompatUtils.glTexCoord2f(coords.right(), coords.top());
-                GLES2CompatUtils.glVertex3f(axisValue, mapping.get(2).x, mapping.get(2).y);
-                GLES2CompatUtils.glTexCoord2f(coords.left(), coords.top());
-                GLES2CompatUtils.glVertex3f(axisValue, mapping.get(3).x, mapping.get(3).y);
-            } else if (orientation == PlaneAxis.Y) {
-                GLES2CompatUtils.glTexCoord2f(coords.left(), coords.bottom());
-                GLES2CompatUtils.glVertex3f(mapping.get(0).x, axisValue, mapping.get(0).y);
-                GLES2CompatUtils.glTexCoord2f(coords.right(), coords.bottom());
-                GLES2CompatUtils.glVertex3f(mapping.get(1).x, axisValue, mapping.get(1).y);
-                GLES2CompatUtils.glTexCoord2f(coords.right(), coords.top());
-                GLES2CompatUtils.glVertex3f(mapping.get(2).x, axisValue, mapping.get(2).y);
-                GLES2CompatUtils.glTexCoord2f(coords.left(), coords.top());
-                GLES2CompatUtils.glVertex3f(mapping.get(3).x, axisValue, mapping.get(3).y);
-            } else if (orientation == PlaneAxis.Z) {
-                GLES2CompatUtils.glTexCoord2f(coords.left(), coords.bottom());
-                GLES2CompatUtils.glVertex3f(planePosition.x + mapping.get(0).x, planePosition.y + mapping.get(0).y, axisValue);
-                GLES2CompatUtils.glTexCoord2f(coords.right(), coords.bottom());
-                GLES2CompatUtils.glVertex3f(planePosition.x + mapping.get(1).x, planePosition.y + mapping.get(1).y, axisValue);
-                GLES2CompatUtils.glTexCoord2f(coords.right(), coords.top());
-                GLES2CompatUtils.glVertex3f(planePosition.x + mapping.get(2).x, planePosition.y + mapping.get(2).y, axisValue);
-                GLES2CompatUtils.glTexCoord2f(coords.left(), coords.top());
-                GLES2CompatUtils.glVertex3f(planePosition.x + mapping.get(3).x, planePosition.y + mapping.get(3).y, axisValue);
-            }
-
-            gl.getGL2().glEnd();
+        if (orientation == PlaneAxis.X) {
+        	painter.glTexCoord2f(coords.left(), coords.bottom());
+            painter.glVertex3f(axisValue, mapping.get(0).x, mapping.get(0).y);
+            painter.glTexCoord2f(coords.right(), coords.bottom());
+            painter.glVertex3f(axisValue, mapping.get(1).x, mapping.get(1).y);
+            painter.glTexCoord2f(coords.right(), coords.top());
+            painter.glVertex3f(axisValue, mapping.get(2).x, mapping.get(2).y);
+            painter.glTexCoord2f(coords.left(), coords.top());
+            painter.glVertex3f(axisValue, mapping.get(3).x, mapping.get(3).y);
+        } else if (orientation == PlaneAxis.Y) {
+            painter.glTexCoord2f(coords.left(), coords.bottom());
+            painter.glVertex3f(mapping.get(0).x, axisValue, mapping.get(0).y);
+            painter.glTexCoord2f(coords.right(), coords.bottom());
+            painter.glVertex3f(mapping.get(1).x, axisValue, mapping.get(1).y);
+            painter.glTexCoord2f(coords.right(), coords.top());
+            painter.glVertex3f(mapping.get(2).x, axisValue, mapping.get(2).y);
+            painter.glTexCoord2f(coords.left(), coords.top());
+            painter.glVertex3f(mapping.get(3).x, axisValue, mapping.get(3).y);
+        } else if (orientation == PlaneAxis.Z) {
+            painter.glTexCoord2f(coords.left(), coords.bottom());
+            painter.glVertex3f(planePosition.x + mapping.get(0).x, planePosition.y + mapping.get(0).y, axisValue);
+            painter.glTexCoord2f(coords.right(), coords.bottom());
+            painter.glVertex3f(planePosition.x + mapping.get(1).x, planePosition.y + mapping.get(1).y, axisValue);
+            painter.glTexCoord2f(coords.right(), coords.top());
+            painter.glVertex3f(planePosition.x + mapping.get(2).x, planePosition.y + mapping.get(2).y, axisValue);
+            painter.glTexCoord2f(coords.left(), coords.top());
+            painter.glVertex3f(planePosition.x + mapping.get(3).x, planePosition.y + mapping.get(3).y, axisValue);
         }
 
-        after(gl);
+        painter.glEnd();
+        
+        after(painter, gl);
     }
 
-    protected void before(GL gl) {
-        if (gl.isGL2()) {
-            gl.getGL2().glPushMatrix();
-            // gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT,GL2.GL_NICEST);
-            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+    protected void before(Painter painter, GL gl) {
+    	painter.glPushMatrix();
+        // gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT,GL2.GL_NICEST);
+        painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 
-            // gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
-            // gl.glPolygonOffset(1.0f, 1.0f);
+        // gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
+        // gl.glPolygonOffset(1.0f, 1.0f);
 
-            // gl.glEnable(GL2.GL_BLEND);
-            // gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
+        // gl.glEnable(GL2.GL_BLEND);
+        // gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
 
-            // gl.glEnable(GL2.GL_ALPHA_TEST);
-            // gl.glAlphaFunc(GL2.GL_GREATER, 0);
+        // gl.glEnable(GL2.GL_ALPHA_TEST);
+        // gl.glAlphaFunc(GL2.GL_GREATER, 0);
 
-            gl.glEnable(GL.GL_TEXTURE_2D);
-            gl.getGL2().glTexEnvf(GL.GL_TEXTURE_2D, GL2ES1.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
-        } else {
-            GLES2CompatUtils.glPushMatrix();
-            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-            gl.glEnable(GL.GL_TEXTURE_2D);
-            GLES2CompatUtils.glTexEnvf(GL.GL_TEXTURE_2D, GL2ES1.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
-        }
+        painter.glEnable(GL.GL_TEXTURE_2D);
+        painter.glTexEnvf(GL.GL_TEXTURE_2D, GL2ES1.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
     }
 
-    protected void after(GL gl) {
-        gl.glDisable(GL.GL_TEXTURE_2D);
-        gl.getGL2().glTexEnvi(GL2ES1.GL_TEXTURE_ENV, GL2ES1.GL_TEXTURE_ENV_MODE, GL2ES1.GL_MODULATE);
+    protected void after(Painter painter, GL gl) {
+        painter.glDisable(GL.GL_TEXTURE_2D);
+        painter.glTexEnvi(GL2ES1.GL_TEXTURE_ENV, GL2ES1.GL_TEXTURE_ENV_MODE, GL2ES1.GL_MODULATE);
         // gl.glDisable(GL2.GL_ALPHA);
         // gl.glDisable(GL2.GL_BLEND);
-        gl.getGL2().glPopMatrix();
+        painter.glPopMatrix();
     }
 
     public SharedTexture getResource() {

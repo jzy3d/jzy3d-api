@@ -82,17 +82,14 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
 //        gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
     }
 	
-	protected void configure(GL gl) {
+	protected void configure(Painter painter, GL gl) {
         // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
         // gl.glColor4f(1f,0f,1f,0.6f);
         // gl.glLineWidth(0.00001f);
-        if (gl.isGL2()) {
-            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-        } else {
-            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-        }
-        call(gl, color);
+		
+		painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+        painter.color(color);
     }
 
 	@Override

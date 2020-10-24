@@ -83,7 +83,7 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         if (hasMountedOnce) {
             doTransform(painter, gl, glu, cam);
-            configure(gl);
+            configure(painter, gl);
             doDrawElements(gl);
             doDrawBounds(painter, gl, glu, cam);
         }
@@ -265,7 +265,7 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
      * FRONT_AND_BACK spec, probably because such a big polygon set has huge
      * cost to have culling status computed (culling enabled by depth peeling).
      */
-    protected void configure(GL gl) {
+    protected void configure(Painter painter, GL gl) {
         // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
         // gl.glColor4f(1f,0f,1f,0.6f);
@@ -275,7 +275,7 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
         } else {
             GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
         }
-        call(gl, color);
+        painter.color(color);
     }
 
     boolean hasColorBuffer = false;
