@@ -1,3 +1,5 @@
+data/objfiles/*.obj
+
 target
 .settings
 .classpath

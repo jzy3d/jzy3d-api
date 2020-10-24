@@ -23,6 +23,15 @@
 
 	<build>
 		<plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${version.mvn.compiler}</version>
+                    <configuration>
+                        <source>${version.java.source}</source>
+                        <target>${version.java.target}</target>
+                    </configuration>
+                </plugin>
 
 		</plugins>
 	</build>
