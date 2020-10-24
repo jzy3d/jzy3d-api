@@ -30,7 +30,9 @@ Rename ViewMouseController to NewtViewCameraController
 
 BROKE ==============
 
-JavaFX chart
+Test : les images screenshot sont toutes grisées!! 0 couleur
+Toutes les book demo ne s'ouvrent plus
+JavaFX chart - attention devrait utiliser Offscreen
 Guide tests generating picture
 WireSurfaceOffscreenDemo ne s'ouvre plus
 ShaderMandelbrotDemo
@@ -38,17 +40,13 @@ DepthPeelingChart
 TrialFaceOrdering
 PickableGraphDemo
 
-Test : les images screenshot sont toutes grisées!! 0 couleur
-
-Toutes les book demo ne s'ouvrent plus
-
-Les graphes du plugin graphe ne sont plus colorié, les edges ont disparu
-
 
 TextureDemoOffscreen génère des screenshot super pales
 SymbolPointOffscreenDemo n'a pas généré d'image
 
 TODO ==============
+
+IGLLoader
 
 Setting : move to Native
 
