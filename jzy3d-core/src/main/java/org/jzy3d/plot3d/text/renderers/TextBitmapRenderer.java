@@ -6,6 +6,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
@@ -78,7 +79,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
      * occupied by the string according to the current Camera configuration.
      */
     @Override
-    public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
         color(gl, color);
 
         // compute a corrected position according to layout

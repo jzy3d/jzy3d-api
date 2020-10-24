@@ -11,6 +11,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Range;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.primitives.contour.ContourLevel;
@@ -104,26 +105,26 @@ public class ContourAxeBox extends AxeBox {
 	}
 	
 	@Override
-	public void draw(GL gl, GLU glu, Camera camera){
-		super.draw(gl, glu, camera);
+	public void draw(Painter painter, GL gl, GLU glu, Camera camera){
+		super.draw(painter, gl, glu, camera);
 		
 		//gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 		
 		// Render the contour texture if available
 		if( contourTexture != null ){
-			contourTexture.draw(gl, glu, camera);
+			contourTexture.draw(painter, gl, glu, camera);
 		}
 		
 		if( mesh != null ){
-			drawMesh(gl, glu, camera, mesh);
+			drawMesh(painter, gl, glu, camera, mesh);
 		}
 		
 	}
 	
-	public void drawMesh(GL gl, GLU glu, Camera camera, ContourMesh mesh){
+	public void drawMesh(Painter painter, GL gl, GLU glu, Camera camera, ContourMesh mesh){
 		// draw contour lines
 		for (ContourLevel line: mesh.lines.getContourLevels()) {
-			line.draw(gl, glu, camera);
+			line.draw(painter, gl, glu, camera);
 			logger.info("Contour level '" + line.getValue() + "' has " + line.getLines());
 		}
 		
@@ -134,7 +135,7 @@ public class ContourAxeBox extends AxeBox {
 			if(label!=null && level!=null){
 				for(LineStrip strip: contour.getLines()){
 					Coord3d position = strip.get( strip.size()/2 ).xyz;
-					txt.drawText(gl, glu, camera, label, position, Halign.CENTER, Valign.CENTER, Color.BLACK);
+					txt.drawText(painter, gl, glu, camera, label, position, Halign.CENTER, Valign.CENTER, Color.BLACK);
 				}
 			}
 		}

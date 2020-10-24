@@ -9,6 +9,7 @@ import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
@@ -79,12 +80,12 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     // @see
     // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         if (hasMountedOnce) {
-            doTransform(gl, glu, cam);
+            doTransform(painter, gl, glu, cam);
             configure(gl);
             doDrawElements(gl);
-            doDrawBounds(gl, glu, cam);
+            doDrawBounds(painter, gl, glu, cam);
         }
     }
     

@@ -137,7 +137,7 @@ public class NewtMousePickingController extends AbstractCameraController impleme
 
         // will trigger vertex selection event to those subscribing to
         // PickingSupport.
-        picking.pickObjects(gl, glu, view, graph, new IntegerCoord2d(x, yflip));
+        picking.pickObjects(chart.getView().getPainter(), gl, glu, view, graph, new IntegerCoord2d(x, yflip));
     }
     
     public boolean handleSlaveThread(MouseEvent e) {

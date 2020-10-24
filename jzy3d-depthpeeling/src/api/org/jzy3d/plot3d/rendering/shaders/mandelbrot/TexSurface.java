@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.rendering.shaders.mandelbrot;
 
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -9,7 +10,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
-// equivalent �pur� de DrawableTexture
+// equivalent de DrawableTexture
 public class TexSurface extends AbstractDrawable{
     protected static float SIZE = 100f;
     public TexSurface(){
@@ -17,8 +18,8 @@ public class TexSurface extends AbstractDrawable{
     }
     
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
         // Reset the current matrix to the "identity"
         GL2 gl2 = gl.getGL2();
         gl2.glLoadIdentity();

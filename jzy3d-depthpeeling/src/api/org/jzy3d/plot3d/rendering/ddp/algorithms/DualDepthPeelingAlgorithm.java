@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.ddp.AbstractDepthPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.IDepthPeelingAlgorithm;
 
@@ -24,7 +25,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm imp
     public GLSLProgram glslFinal;
 
     @Override
-    public void init(GL2 gl, int width, int height) {
+    public void init(Painter painter, GL2 gl, int width, int height) {
         try {
             initDualPeelingRenderTargets(gl, width, height);
         } catch (GLException e) {
@@ -39,13 +40,13 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm imp
     }
 
     @Override
-    public void display(GL2 gl, GLU glu) {
+    public void display(Painter painter, GL2 gl, GLU glu) {
         resetNumPass();
-        renderDualPeeling(gl); 
+        renderDualPeeling(painter, gl); 
     }
 
     @Override
-    public void reshape(GL2 gl, int width, int height) {
+    public void reshape(Painter painter, GL2 gl, int width, int height) {
         deleteDualPeelingRenderTargets(gl);
         initDualPeelingRenderTargets(gl, width, height);
     }
@@ -162,7 +163,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm imp
         gl.glDeleteTextures(1, g_dualBackBlenderTexId, 0);
     }
     
-    protected void renderDualPeeling(GL2 gl) {
+    protected void renderDualPeeling(Painter painter, GL2 gl) {
         gl.glDisable(GL2.GL_DEPTH_TEST);
         gl.glEnable(GL2.GL_BLEND);
 
@@ -187,7 +188,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm imp
 
         glslInit.bind(gl);
         
-        tasksToRender(gl);
+        tasksToRender(painter, gl);
         
         glslInit.unbind(gl);
 
@@ -231,7 +232,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm imp
             glslPeel.bindTextureRECT(gl, "FrontBlenderTex", g_dualFrontBlenderTexId[prevId], 1);
             glslPeel.setUniform(gl, "Alpha", g_opacity, 1);
             
-            tasksToRender(gl);
+            tasksToRender(painter, gl);
             
             glslPeel.unbind(gl);
 

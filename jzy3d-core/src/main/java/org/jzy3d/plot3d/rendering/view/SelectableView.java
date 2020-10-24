@@ -24,9 +24,6 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 /**
  * An {@ InteractiveView} handles 2d projection updates to ensure mouse is always computing
  * intersection with objects in a relevant state.
@@ -41,11 +38,11 @@ public class SelectableView extends View{
 	/** If chart is rendered for the first time, or rendered because it,
 	 * was resized, we need to update a projection for the CellSelector. */
 	@Override
-    public void render(GL gl, GLU glu) {
+    public void render() {
 		if( dimensionDirty )
 			wasDirty = true;
 
-		super.render(gl, glu); // need to render before projecting to have coherent viewport in selector
+		super.render(); // need to render before projecting to have coherent viewport in selector
 
 		if( firstRender ){
 			project();

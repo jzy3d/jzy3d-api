@@ -42,8 +42,8 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
         GL gl = canvas.getGL();
 
         if (view != null) {
-            view.clear(gl);
-            view.render(gl, glu);
+            view.clear();
+            view.render();
 
             /*if(screenshot==null){
                 screenshot = new AWTGLReadBufferUtil(gl.getGLProfile(), true);

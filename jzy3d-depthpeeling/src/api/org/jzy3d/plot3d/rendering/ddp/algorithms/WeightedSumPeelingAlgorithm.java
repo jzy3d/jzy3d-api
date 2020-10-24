@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.ddp.IDepthPeelingAlgorithm;
 
 import com.jogamp.opengl.GL2;
@@ -21,9 +22,9 @@ public class WeightedSumPeelingAlgorithm extends AbstractAccumlationDepthPeeling
     }
     
     @Override
-    public void display(GL2 gl, GLU glu) {
+    public void display(Painter painter, GL2 gl, GLU glu) {
         resetNumPass();
-        renderWeightedSum(gl);
+        renderWeightedSum(painter, gl);
     }
     
     @Override
@@ -47,7 +48,7 @@ public class WeightedSumPeelingAlgorithm extends AbstractAccumlationDepthPeeling
         glslFinal.destroy(gl);
     }
     
-    protected void renderWeightedSum(GL2 gl) {
+    protected void renderWeightedSum(Painter painter, GL2 gl) {
         gl.glDisable(GL2.GL_DEPTH_TEST);
 
         // ---------------------------------------------------------------------
@@ -67,7 +68,7 @@ public class WeightedSumPeelingAlgorithm extends AbstractAccumlationDepthPeeling
         glslInit.bind(gl);
         glslInit.setUniform(gl, "Alpha", g_opacity, 1);
         
-        tasksToRender(gl);
+        tasksToRender(painter, gl);
         
         glslInit.unbind(gl);
 

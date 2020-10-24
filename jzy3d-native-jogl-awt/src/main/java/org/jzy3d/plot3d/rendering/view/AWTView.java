@@ -12,6 +12,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
@@ -45,8 +46,12 @@ public class AWTView extends ChartView {
     }
 
     @Override
-    protected void renderAxeBox(GL gl, GLU glu, IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
+    protected void renderAxeBox(IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
+        	GL gl = ((NativeDesktopPainter)painter).getGL();
+            GLU glu = ((NativeDesktopPainter)painter).getGLU();
+
+        	
             if (gl.isGL2()) {
                 gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
             } else {
@@ -55,7 +60,7 @@ public class AWTView extends ChartView {
             scene.getLightSet().disable(gl);
 
             axe.setScale(scaling);
-            axe.draw(gl, glu, camera);
+            axe.draw(painter, gl, glu, camera);
             if (DISPLAY_AXE_WHOLE_BOUNDS) { // for debug
                 AxeBox abox = (AxeBox) axe;
                 BoundingBox3d box = abox.getWholeBounds();
@@ -63,7 +68,7 @@ public class AWTView extends ChartView {
                 p.setFaceDisplayed(false);
                 p.setWireframeColor(Color.MAGENTA);
                 p.setWireframeDisplayed(true);
-                p.draw(gl, glu, camera);
+                p.draw(painter, gl, glu, camera);
             }
 
             scene.getLightSet().enableLightIfThereAreLights(gl);
@@ -71,11 +76,14 @@ public class AWTView extends ChartView {
     }
 
     @Override
-    protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
-        cam.setViewPort(viewport);
+    protected void correctCameraPositionForIncludingTextLabels(ViewportConfiguration viewport) {
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
+        GLU glu = ((NativeDesktopPainter)painter).getGLU();
+    	
+    	cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
-        axe.draw(gl, glu, cam);
-        clear(gl);
+        axe.draw(null, gl, glu, cam);
+        clear();
 
         //AxeBox abox = (AxeBox) axe;
         BoundingBox3d newBounds = axe.getWholeBounds().scale(scaling);
@@ -117,12 +125,14 @@ public class AWTView extends ChartView {
      * drawable is current, and after the OpenGL2 scene has been rendered.
      */
     @Override
-    public void renderOverlay(GL gl, ViewportConfiguration viewport) {
+    public void renderOverlay(ViewportConfiguration viewport) {
         if (!hasOverlayStuffs())
             return;
 
         if (overlay == null)
             this.overlay = new Overlay(canvas.getDrawable());
+
+        GL gl = ((NativeDesktopPainter)painter).getGL();
 
         if (gl.isGL2()) {
             // TODO: don't know why needed to allow working with Overlay!!!????
@@ -165,16 +175,23 @@ public class AWTView extends ChartView {
     }
 
     @Override
-    public void renderBackground(GL gl, GLU glu, float left, float right) {
+    public void renderBackground(float left, float right) {
         if (bgImg != null) {
+        	GL gl = ((NativeDesktopPainter)painter).getGL();
+            GLU glu = ((NativeDesktopPainter)painter).getGLU();
+
             bgViewport.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
             bgViewport.render(gl, glu);
         }
     }
 
     @Override
-    public void renderBackground(GL gl, GLU glu, ViewportConfiguration viewport) {
+    public void renderBackground(ViewportConfiguration viewport) {
         if (bgImg != null) {
+        	GL gl = ((NativeDesktopPainter)painter).getGL();
+            GLU glu = ((NativeDesktopPainter)painter).getGLU();
+
+        	
             bgViewport.setViewPort(viewport);
             bgViewport.render(gl, glu);
         }

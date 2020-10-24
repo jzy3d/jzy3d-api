@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.colors.Color;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.opengl.GL;
@@ -11,8 +12,8 @@ public class ColoredWireframePolygon extends Polygon {
 
 	
 	@Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
 
         if (mapper != null)
             mapper.preDraw(this);
@@ -21,10 +22,10 @@ public class ColoredWireframePolygon extends Polygon {
         if (facestatus) {
             applyPolygonModeFill(gl);
             if (wfstatus && polygonOffsetFillEnable)
-                polygonOffseFillEnable(gl);
-            callPointsForFace(gl);
+                polygonOffseFillEnable(painter, gl);
+            callPointsForFace(painter, gl);
             if (wfstatus && polygonOffsetFillEnable)
-                polygonOffsetFillDisable(gl);
+                polygonOffsetFillDisable(painter, gl);
         }
 
         // Draw edge of polygon
@@ -32,7 +33,7 @@ public class ColoredWireframePolygon extends Polygon {
             applyPolygonModeLine(gl);
             if (polygonOffsetFillEnable)
             	polygonOffsetLineEnable(gl);
-            callPointForWireframe(gl);
+            callPointForWireframe(painter, gl);
             if (polygonOffsetFillEnable)
             	polygonOffsetLineDisable(gl);
         }
@@ -40,7 +41,7 @@ public class ColoredWireframePolygon extends Polygon {
         if (mapper != null)
             mapper.postDraw(this);
 
-        doDrawBounds(gl, glu, cam);
+        doDrawBounds(painter, gl, glu, cam);
     }
 	
     protected void polygonOffsetLineEnable(GL gl) {
@@ -57,15 +58,14 @@ public class ColoredWireframePolygon extends Polygon {
     }
     
     @Override
-    public void callPointsForWireframeGL2(GL gl) {
+    public void callPointForWireframe(Painter painter, GL gl) {
         gl.glLineWidth(wfwidth);
         Color c = wfcolor;
         
         begin(gl);
         for (Point p : points) {
         	if (mapper != null) c = mapper.getColor(p.getCoord().z);
-        	colorGL2(gl, c);
-            vertexGL2(gl, p.xyz);
+            painter.vertex(p.xyz, spaceTransformer);
         }
         end(gl);
     }

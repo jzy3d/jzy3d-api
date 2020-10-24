@@ -8,6 +8,7 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -43,41 +44,22 @@ public class ScatterMultiColorList extends AbstractDrawable implements IMultiCol
     /* */
 
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
-        if (gl.isGL2()) {
-            drawGL2(gl);
-        } else {
-            drawGLES2();
-        }
-
-        doDrawBounds(gl, glu, cam);
-    }
-
-    public void drawGLES2() {
-        GLES2CompatUtils.glPointSize(width);
-        GLES2CompatUtils.glBegin(GL.GL_POINTS);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
+        
+        painter.glPointSize(width);
+        painter.glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
             for (Coord3d coord : coordinates) {
-                colorGLES2(mapper.getColor(coord));
-                vertexGLES2(coord);
+                painter.color(mapper.getColor(coord));
+                painter.vertex(coord, spaceTransformer);
             }
         }
-        GLES2CompatUtils.glEnd();
-    }
+        painter.glEnd();
+        
 
-    public void drawGL2(GL gl) {
-        gl.getGL2().glPointSize(width);
-        gl.getGL2().glBegin(GL.GL_POINTS);
-
-        if (coordinates != null) {
-            for (Coord3d coord : coordinates) {
-                colorGL2(gl, mapper.getColor(coord));
-                vertexGL2(gl, coord);
-            }
-        }
-        gl.getGL2().glEnd();
+        doDrawBounds(painter, gl, glu, cam);
     }
 
     @Override

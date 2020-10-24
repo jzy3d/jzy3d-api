@@ -6,6 +6,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -49,8 +50,8 @@ public class Tube extends AbstractWireframeable implements ISingleColorable {
 	/* */
 
 	@Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-		doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+		doTransform(painter, gl, glu, cam);
 
 		if (gl.isGL2()) {
 			gl.getGL2().glTranslatef(x, y, z);
@@ -114,7 +115,7 @@ public class Tube extends AbstractWireframeable implements ISingleColorable {
 			}
 		}
 
-		doDrawBounds(gl, glu, cam);
+		doDrawBounds(painter, gl, glu, cam);
 	}
 
 	@Override

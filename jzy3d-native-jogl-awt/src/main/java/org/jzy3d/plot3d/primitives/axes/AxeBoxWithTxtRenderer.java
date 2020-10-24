@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.axes;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -51,8 +52,8 @@ public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
 	}
 
 	@Override
-    protected BoundingBox3d drawTicks(GL gl, GLU glu, Camera cam, int axis,
-			int direction, Color color, Halign hal, Valign val) {
+    protected BoundingBox3d drawTicks(Painter painter, GL gl, GLU glu, Camera cam,
+			int axis, int direction, Color color, Halign hal, Valign val) {
 		int quad_0;
 		int quad_1;
 		Halign hAlign;
@@ -123,9 +124,9 @@ public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
 				txtRenderer.appendText(gl, glu, cam, axeLabel, labelPosition,
 						Halign.CENTER, Valign.CENTER, color);
 			else {
-				BoundingBox3d labelBounds = txt.drawText(gl, glu, cam,
-						axeLabel, labelPosition, Halign.CENTER, Valign.CENTER,
-						color);
+				BoundingBox3d labelBounds = txt.drawText(painter, gl, glu,
+						cam, axeLabel, labelPosition, Halign.CENTER,
+						Valign.CENTER, color);
 				if (labelBounds != null)
 					ticksTxtBounds.add(labelBounds);
 			}
@@ -204,8 +205,8 @@ public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
 				txtRenderer.appendText(gl, glu, cam, tickLabel, tickPosition,
 						hAlign, vAlign, color);
 			else {
-				BoundingBox3d tickBounds = txt.drawText(gl, glu, cam,
-						tickLabel, tickPosition, hAlign, vAlign, color);
+				BoundingBox3d tickBounds = txt.drawText(painter, gl, glu,
+						cam, tickLabel, tickPosition, hAlign, vAlign, color);
 				if (tickBounds != null)
 					ticksTxtBounds.add(tickBounds);
 			}

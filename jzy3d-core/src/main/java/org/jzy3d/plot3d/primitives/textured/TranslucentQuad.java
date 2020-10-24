@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.textured;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Quad;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -12,9 +13,9 @@ import com.jogamp.opengl.glu.GLU;
 
 public class TranslucentQuad extends Quad implements ITranslucent {
 	@Override
-    public void draw(GL gl, GLU glu, Camera cam) {
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		// Execute transformation
-		doTransform(gl, glu, cam);
+		doTransform(painter, gl, glu, cam);
 
 		if (gl.isGL2()) {
 

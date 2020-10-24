@@ -4,6 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.opengl.GL;
@@ -28,8 +29,8 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
     /**********************************************************************/
 
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
 
         if (gl.isGL2()) {
 
@@ -109,6 +110,6 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
             }
         }
 
-        doDrawBounds(gl, glu, cam);
+        doDrawBounds(painter, gl, glu, cam);
     }
 }

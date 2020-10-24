@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
 
@@ -20,73 +21,73 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
     }
 
     @Override
-    public void drawLineGL2(GL gl) {
-        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
+    public void drawLine(Painter painter, GL gl) {
+        painter.glBegin(GL.GL_LINE_STRIP);
 
-        gl.getGL2().glLineWidth(wfwidth);
+        painter.glLineWidth(wfwidth);
         if (filter == null)
-            doDrawAllLines(gl);
+            doDrawAllLines(painter, gl);
         else
-            doDrawLinesFiltered(gl);
-        gl.getGL2().glEnd();
+            doDrawLinesFiltered(painter, gl);
+        painter.glEnd();
     }
 
     @Override
-    public void drawPointsGL2(GL gl) {
-        gl.getGL2().glBegin(GL.GL_POINTS);
+    public void drawPoints(Painter painter, GL gl) {
+        painter.glBegin(GL.GL_POINTS);
         if (filter == null)
-            doDrawAllPoints(gl);
+            doDrawAllPoints(painter, gl);
         else
-            doDrawPointsFiltered(gl);
-        gl.getGL2().glEnd();
+            doDrawPointsFiltered(painter, gl);
+        painter.glEnd();
     }
 
-    private void doDrawAllLines(GL gl) {
+    private void doDrawAllLines(Painter painter, GL gl) {
         if (wfcolor == null) {
             for (Point p : points) {
-                gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
-                gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                painter.color(p.rgb);
+            	painter.vertex(p.xyz, spaceTransformer);
             }
         } else {
             for (Point p : points) {
-                gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-                gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+            	painter.color(wfcolor);
+            	painter.vertex(p.xyz, spaceTransformer);
             }
         }
     }
 
-    private void doDrawLinesFiltered(GL gl) {
+    private void doDrawLinesFiltered(Painter painter, GL gl) {
         for (int i = 0; i < filter.length; i++) {
             if (filter[i]) {
                 Point p = points.get(i);
                 if (wfcolor == null)
-                    gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                    painter.color(p.rgb);
                 else
-                    gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-                gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                	painter.color(wfcolor);
+            	painter.vertex(p.xyz, spaceTransformer);
             }
         }
     }
 
-    private void doDrawAllPoints(GL gl) {
+    private void doDrawAllPoints(Painter painter, GL gl) {
         for (Point p : points) {
             if (wfcolor == null)
-                gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                painter.color(p.rgb);
             else
-                gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-            gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+            	painter.color(wfcolor);
+        	painter.vertex(p.xyz, spaceTransformer);
         }
     }
 
-    private void doDrawPointsFiltered(GL gl) {
+    private void doDrawPointsFiltered(Painter painter, GL gl) {
         for (int i = 0; i < filter.length; i++) {
             if (filter[i]) {
                 Point p = points.get(i);
                 if (wfcolor == null)
-                    gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
+                    painter.color(p.rgb);
                 else
-                    gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-                gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+                	painter.color(wfcolor);
+            	painter.vertex(p.xyz, spaceTransformer);
             }
         }
     }

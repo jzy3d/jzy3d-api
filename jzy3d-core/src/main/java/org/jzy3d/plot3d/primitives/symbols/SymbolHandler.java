@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.symbols;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
@@ -34,10 +35,10 @@ public abstract class SymbolHandler {
     public abstract void addSymbolOn(Point point);
 
 
-    public void drawSymbols(GL gl, GLU glu, Camera cam) {
+    public void drawSymbols(Painter painter, GL gl, GLU glu, Camera cam) {
         for (AbstractDrawable d : symbols) {
             d.setSpaceTransformer(spaceTransformer);
-            d.draw(gl, glu, cam);
+            d.draw(painter, gl, glu, cam);
         }
     }
 

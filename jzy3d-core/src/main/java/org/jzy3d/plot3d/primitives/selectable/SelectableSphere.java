@@ -6,6 +6,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.builder.concrete.SphereScatterGenerator;
 import org.jzy3d.plot3d.primitives.Sphere;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -25,8 +26,8 @@ public class SelectableSphere extends Sphere implements Selectable {
 	}
 
 	@Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-		super.draw(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+		super.draw(painter, gl, glu, cam);
 
 		if (gl.isGL2()) {
 			gl.getGL2().glBegin(GL.GL_POINTS);

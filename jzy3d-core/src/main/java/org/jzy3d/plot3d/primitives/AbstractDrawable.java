@@ -10,6 +10,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
@@ -57,7 +58,6 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Call OpenGL2 routines for rendering the object.
-     * 
      * @param gl
      *            GL2 context
      * @param glu
@@ -66,13 +66,13 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
      *            a reference to a shooting Camera.
      */
     @Override
-    public abstract void draw(GL gl, GLU glu, Camera cam);
+    public abstract void draw(Painter painter, GL gl, GLU glu, Camera cam);
 
     public abstract void applyGeometryTransform(Transform transform);
 
     public abstract void updateBounds();
 
-    public void doTransform(GL gl, GLU glu, Camera cam) {
+    public void doTransform(Painter painter, GL gl, GLU glu, Camera cam) {
         if (transformBefore != null) {
             if (transformBefore != null)
                 transformBefore.execute(gl, true);
@@ -84,12 +84,12 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
         }
     }
 
-    protected void doDrawBounds(GL gl, GLU glu, Camera cam) {
+    protected void doDrawBounds(Painter painter, GL gl, GLU glu, Camera cam) {
         if (isBoundingBoxDisplayed()) {
             Parallelepiped p = new Parallelepiped(getBounds());
             p.setFaceDisplayed(false);
             p.setWireframeColor(getBoundingBoxColor());
-            p.draw(gl, glu, cam);
+            p.draw(painter, gl, glu, cam);
         }
     }
 
@@ -97,7 +97,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
      * A helper to call glVerted3f on the input coordinate. For GL2 profile only.
      * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
      */
-    protected void vertexGL2(GL gl, Coord3d c) {
+    /*protected void vertexGL2(GL gl, Coord3d c) {
         vertexGL2(gl, c, spaceTransformer);
     }
     
@@ -107,7 +107,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
         } else {
             gl.getGL2().glVertex3f(transform.getX().compute(c.x), transform.getY().compute(c.y), transform.getZ().compute(c.z));
         }
-    }
+    }*/
 
     /**
      * A helper to call glVerted3f on the input coordinate. For GLES2 profile only.
@@ -164,7 +164,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Set object's transformation that is applied at the beginning of a call to
-     * {@link #draw(GL,GLU,Camera)}.
+     * {@link #draw(Painter,GL,GLU, Camera)}.
      * 
      * @param transform
      */
@@ -176,7 +176,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Get object's transformation that is applied at the beginning of a call to
-     * {@link #draw(GL,GLU,Camera)}.
+     * {@link #draw(Painter,GL,GLU, Camera)}.
      * 
      * @return transform
      */

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.colors.Color;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.AbstractGeometry;
@@ -47,7 +48,7 @@ public class BarycenterAnnotation extends AbstractComposite{
     }
 
     @Override
-    public void draw(GL gl, GLU glu, Camera camera) {
+    public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
         bary.xyz = annotated.getBarycentre();
         int k = 0;
         for(LineStrip line: lines){
@@ -55,7 +56,7 @@ public class BarycenterAnnotation extends AbstractComposite{
                 line.get(1).xyz = annotated.get(k).xyz.clone();
             k++;
         }
-        super.draw(gl, glu, camera);
+        super.draw(painter, gl, glu, camera);
     }
 
     public static List<BarycenterAnnotation> annotate(AbstractComposite composite){

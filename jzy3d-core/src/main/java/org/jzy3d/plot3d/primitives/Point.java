@@ -7,6 +7,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -61,22 +62,14 @@ public class Point extends AbstractDrawable implements ISingleColorable {
 	/* */
 
 	@Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-		doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+		doTransform(painter, gl, glu, cam);
 
-		if (gl.isGL2()) {
-			gl.getGL2().glPointSize(width);
-			gl.getGL2().glBegin(GL.GL_POINTS);
-			colorGL2(gl, rgb);
-			vertexGL2(gl, xyz);
-			gl.getGL2().glEnd();
-		} else {
-			GLES2CompatUtils.glPointSize(width);
-			GLES2CompatUtils.glBegin(GL.GL_POINTS);
-			colorGLES2(rgb);
-			vertexGLES2(xyz);
-			GLES2CompatUtils.glEnd();
-		}
+		painter.glPointSize(width);
+		painter.glBegin(GL.GL_POINTS);
+		painter.color(rgb);
+		painter.vertex(xyz, spaceTransformer);
+		painter.glEnd();
 	}
 
 	@Override
