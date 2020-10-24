@@ -49,7 +49,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
         // Draw content of polygon
         if (facestatus) {
-            applyPolygonModeFill(gl);
+            applyPolygonModeFill(painter, gl);
             if (wfstatus && polygonOffsetFillEnable)
                 polygonOffseFillEnable(painter, gl);
             callPointsForFace(painter, gl);
@@ -59,7 +59,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
         // Draw edge of polygon
         if (wfstatus) {
-            applyPolygonModeLine(gl);
+            applyPolygonModeLine(painter, gl);
             
             //gl.getGL2().glBegin(GL2.GL_LINE_LOOP);
             //gl.getGL2().glLineWidth(getWireframeWidth());
@@ -80,50 +80,20 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     /** Drawing the point list in wireframe mode
      */
     protected void callPointForWireframe(Painter painter, GL gl) {
-    	colorGL2(gl, wfcolor);
-        gl.glLineWidth(wfwidth);
+    	painter.color(wfcolor);
+        painter.glLineWidth(wfwidth);
 
         begin(gl);
         for (Point p : points) {
             painter.vertex(p.xyz, spaceTransformer);
         }
-        end(gl);
+        painter.glEnd();
     }
 
 
     /** Drawing the point list in face mode (polygon content) 
      * @param painter TODO*/
     protected void callPointsForFace(Painter painter, GL gl) {
-        if (gl.isGL2()) {
-            callPointsForFaceGL2(painter, gl);
-        } else {
-            callPointsForFaceGLES2(gl);
-        }
-    }
-
-    /** Drawing the point list in face mode (polygon content) with GLES2 profile */
-    public void callPointsForFaceGLES2(GL gl) {
-        callPointsForFaceGLES2(gl, points);
-    }
-
-    /** Drawing the point list in face mode (polygon content) with GLES2 profile */
-    public void callPointsForFaceGLES2(GL gl, List<Point> points) {
-        begin(gl);
-        for (Point p : points) {
-            if (mapper != null) {
-                Color c = mapper.getColor(p.xyz);
-                colorGLES2(c);
-            } else {
-                colorGLES2(p.rgb);
-            }
-            vertexGLES2(p.xyz);
-        }
-        end(gl);
-    }
-
-    /** Drawing the point list in face mode (polygon content) with GL2 profile 
-     * @param painter TODO*/
-    public void callPointsForFaceGL2(Painter painter, GL gl) {
         begin(gl);
         for (Point p : points) {
             if (mapper != null) {
@@ -134,107 +104,52 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
             }
             painter.vertex(p.xyz, spaceTransformer);
         }
-        end(gl);
+        painter.glEnd();
     }
-
 
     protected abstract void begin(GL gl);
 
-    protected void end(GL gl) {
-        if (gl.isGL2()) {
-            gl.getGL2().glEnd();
-        } else {
-            GLES2CompatUtils.glEnd();
-        }
-    }
 
-    protected void applyPolygonModeLine(GL gl) {
-        if (gl.isGL2()) {
-            applyPolygonModeLineGL2(gl);
-        } else {
-            applyPolygonModeLineGLES2();
-        }
-    }
-
-    protected void applyPolygonModeLineGLES2() {
+    protected void applyPolygonModeLine(Painter painter, GL gl) {
         switch (polygonMode) {
         case FRONT:
-            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
+            painter.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
             break;
         case BACK:
-            GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
+            painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
             break;
         case FRONT_AND_BACK:
-            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+            painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
             break;
         default:
             break;
         }
     }
 
-    protected void applyPolygonModeLineGL2(GL gl) {
+    protected void applyPolygonModeFill(Painter painter, GL gl) {
         switch (polygonMode) {
         case FRONT:
-            gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
+            painter.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
             break;
         case BACK:
-            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
+            painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
             break;
         case FRONT_AND_BACK:
-            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+            painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
             break;
         default:
             break;
         }
-    }
 
-    protected void applyPolygonModeFill(GL gl) {
-        if (gl.isGL2()) {
-            applyPolygonModeFillGL2(gl);
-        } else {
-            applyPolygonModeFillGLES2();
-        }
-    }
-
-    public void applyPolygonModeFillGLES2() {
-        switch (polygonMode) {
-        case FRONT:
-            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
-            break;
-        case BACK:
-            GLES2CompatUtils.glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
-            break;
-        case FRONT_AND_BACK:
-            GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-            break;
-        default:
-            break;
-        }
-    }
-
-    public void applyPolygonModeFillGL2(GL gl) {
-        switch (polygonMode) {
-        case FRONT:
-            gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
-            break;
-        case BACK:
-            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
-            break;
-        case FRONT_AND_BACK:
-            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-            break;
-        default:
-            break;
-        }
     }
 
     protected void polygonOffseFillEnable(Painter painter, GL gl) {
-        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        gl.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
+        painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
     }
 
     protected void polygonOffsetFillDisable(Painter painter, GL gl) {
-        gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+    	painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
     }
     
     /* DATA */

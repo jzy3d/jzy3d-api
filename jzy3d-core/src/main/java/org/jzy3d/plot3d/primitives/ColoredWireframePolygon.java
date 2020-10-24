@@ -20,7 +20,7 @@ public class ColoredWireframePolygon extends Polygon {
 
         // Draw content of polygon
         if (facestatus) {
-            applyPolygonModeFill(gl);
+            applyPolygonModeFill(painter, gl);
             if (wfstatus && polygonOffsetFillEnable)
                 polygonOffseFillEnable(painter, gl);
             callPointsForFace(painter, gl);
@@ -30,7 +30,7 @@ public class ColoredWireframePolygon extends Polygon {
 
         // Draw edge of polygon
         if (wfstatus) {
-            applyPolygonModeLine(gl);
+            applyPolygonModeLine(painter, gl);
             if (polygonOffsetFillEnable)
             	polygonOffsetLineEnable(gl);
             callPointForWireframe(painter, gl);
@@ -67,7 +67,7 @@ public class ColoredWireframePolygon extends Polygon {
         	if (mapper != null) c = mapper.getColor(p.getCoord().z);
             painter.vertex(p.xyz, spaceTransformer);
         }
-        end(gl);
+        painter.glEnd();
     }
 	
 }
