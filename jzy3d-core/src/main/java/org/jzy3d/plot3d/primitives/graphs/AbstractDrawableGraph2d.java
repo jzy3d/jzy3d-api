@@ -7,6 +7,7 @@ import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.graphs.layout.DefaultGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphFormatter;
@@ -78,11 +79,11 @@ public abstract class AbstractDrawableGraph2d<V, E> extends AbstractDrawable imp
 	/*******************************************************/
 	
 	@Override
-	public void draw(GL gl, GLU glu, Camera cam) {
+	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		if(layout==null)
 			throw new RuntimeException("missing vertex mapping");
 		
-		doTransform(gl, glu, cam);
+		doTransform(painter, gl, glu, cam);
 	    
 		// TODO move to graph view init
 	    gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
@@ -91,13 +92,13 @@ public abstract class AbstractDrawableGraph2d<V, E> extends AbstractDrawable imp
 	    if(formatter.areEdgesDisplayed())
 	    	drawEdges(gl, glu, cam);
 	    if(formatter.areVerticesDisplayed())
-	    	drawVertices(gl, glu, cam);
+	    	drawVertices(painter, gl, glu, cam);
 	    if(formatter.areVertexLabelsDisplayed())
-	    	drawVertexLabels(gl, glu, cam);
+	    	drawVertexLabels(painter, gl, glu, cam);
 	}
 	
-	protected abstract void drawVertices(GL gl, GLU glu, Camera cam);
-	protected abstract void drawVertexLabels(GL gl, GLU glu, Camera cam);
+	protected abstract void drawVertices(Painter painter, GL gl, GLU glu, Camera cam);
+	protected abstract void drawVertexLabels(Painter painter, GL gl, GLU glu, Camera cam);
 	protected abstract void drawEdges(GL gl, GLU glu, Camera cam);
 
 	/*******************************************************/

@@ -7,6 +7,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -51,8 +52,8 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable {
     /********************************************************/
 
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
 
         if (gl.isGL2()) {
 
@@ -103,7 +104,7 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable {
             }
         }
 
-        doDrawBounds(gl, glu, cam);
+        doDrawBounds(painter, gl, glu, cam);
     }
 
     @Override

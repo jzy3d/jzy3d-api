@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
 
@@ -28,32 +29,32 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
     }
 
     @Override
-    public void drawLineGL2(GL gl) {
-        gl.getGL2().glLineWidth(wfwidth);
+    public void drawLine(Painter painter, GL gl) {
+        painter.glLineWidth(wfwidth);
 
         if (wfcolor == null) {
-            drawLineSegmentsGL2ByPointColor(gl);
+            drawLineSegmentsByPointColor(painter, gl);
         } else {
-            drawLineSegmentsGL2ByWireColor(gl);
+            drawLineSegmentsByWireColor(painter, gl);
         }
     }
 
-    public void drawLineSegmentsGL2ByPointColor(GL gl) {
+    public void drawLineSegmentsByPointColor(Painter painter, GL gl) {
         int nPt = 0;
         int nOff = 0;
         int nextOff = idOff.size() != 0 ? idOff.get(nOff) : 0;
 
-        begin(gl);
+        painter.glBegin(GL.GL_LINE_STRIP);
 
         while (nPt <= points.size() - 1) {
             // point
             Point p = points.get(nPt);
-            pointColorSelf(gl, p);
+            pointColorSelf(painter, p);
 
             // consume off
             if (nextOff == nPt) {
-                end(gl);
-                begin(gl);
+            	painter.glEnd();
+                painter.glBegin(GL.GL_LINE_STRIP);
 
                 nOff++;
                 if (nOff <= idOff.size() - 1)
@@ -62,27 +63,27 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
             nPt++;
         }
 
-        end(gl);
+        painter.glEnd();
     }
 
-    public void drawLineSegmentsGL2ByWireColor(GL gl) {
+    public void drawLineSegmentsByWireColor(Painter painter, GL gl) {
         int nPt = 0;
         int nOff = 0;
         int nextOff = -1;
         if (idOff.size() > 0)
             nextOff = idOff.get(nOff);
 
-        begin(gl);
+        painter.glBegin(GL.GL_LINE_STRIP);
 
         while (nPt <= points.size() - 1) {
             // point
             Point p = points.get(nPt);
-            pointColorWire(gl, p);
+            pointColorWire(painter, p);
 
             // consume off
             if (nextOff == nPt) {
-                end(gl);
-                begin(gl);
+            	painter.glEnd();
+                painter.glBegin(GL.GL_LINE_STRIP);
 
                 nOff++;
                 if (nOff != -1 && nOff <= idOff.size() - 1)
@@ -90,26 +91,17 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
             }
             nPt++;
         }
-
-        end(gl);
+        painter.glEnd();
     }
 
-    public void pointColorWire(GL gl, Point p) {
-        gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-        gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+    public void pointColorWire(Painter painter, Point p) {
+        painter.color(wfcolor);
+        painter.vertex(p.xyz, spaceTransformer);
     }
 
-    public void pointColorSelf(GL gl, Point p) {
-        gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
-        gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-    }
-
-    public void begin(GL gl) {
-        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
-    }
-
-    public void end(GL gl) {
-        gl.getGL2().glEnd();
+    public void pointColorSelf(Painter painter, Point p) {
+        painter.color(p.rgb);
+        painter.vertex(p.xyz, spaceTransformer);
     }
 
     /* */

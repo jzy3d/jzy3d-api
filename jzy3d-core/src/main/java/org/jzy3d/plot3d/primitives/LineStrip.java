@@ -9,6 +9,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.symbols.MaskImageSymbolHandler;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -96,124 +97,74 @@ public class LineStrip extends AbstractWireframeable {
     /* */
 
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
         if (points.size() > 1) {
-            drawLine(gl);
+            drawLine(painter, gl);
         } else if (points.size() == 1 && !showPoints) {
-            drawPoints(gl);
+            drawPoints(painter, gl);
 
         }
 
         if (showSymbols && symbolHandler!=null) {
-            symbolHandler.drawSymbols(gl, glu, cam);
+            symbolHandler.drawSymbols(painter, gl, glu, cam);
         }
 
-        drawPointsIfEnabled(gl);
+        drawPointsIfEnabled(painter, gl);
     }
-
     
 
-    public void drawLine(GL gl) {
+    public void drawLine(Painter painter, GL gl) {
         //gl.glLineWidth(wfwidth);
-        if (gl.isGL2()) {
-            drawLineGL2(gl);
-        } else {
-            drawLineGLES2();
-        }
-    }
-
-    public void drawLineGLES2() {
-        GLES2CompatUtils.glBegin(GL.GL_LINE_STRIP);
-
-        if (wfcolor == null) {
-            for (Point p : points) {
-                colorGLES2(p.rgb);
-                vertexGLES2(p.xyz);
-                //GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
-                //GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-            }
-        } else {
-            for (Point p : points) {
-                colorGLES2(wfcolor);
-                vertexGLES2(p.xyz);
-                //GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-                //GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-            }
-        }
-        GLES2CompatUtils.glEnd();
-    }
-
-    public void drawLineGL2(GL gl) {
-        if (stipple) {
-            gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
-            gl.glEnable(GL2.GL_LINE_STIPPLE);
-            gl.getGL2().glLineStipple(stippleFactor, stipplePattern);
-        }
-        gl.getGL2().glLineWidth(wfwidth); 
-
-        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
-
-        if (wfcolor == null) {
-            for (Point p : points) {
-                colorGL2(gl, p.rgb);
-                vertexGL2(gl, p.xyz);
-            }
-        } else {
-            for (Point p : points) {
-                colorGL2(gl, wfcolor);
-                vertexGL2(gl, p.xyz);
-            }
-        }
-        gl.getGL2().glEnd();
         
         if (stipple) {
-            gl.glDisable(GL2.GL_LINE_STIPPLE);
+            painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
+            painter.glEnable(GL2.GL_LINE_STIPPLE);
+            painter.glLineStipple(stippleFactor, stipplePattern);
         }
-    }
+        painter.glLineWidth(wfwidth); 
 
-    public void drawPointsIfEnabled(GL gl) {
-        if (showPoints) {
-            drawPoints(gl);
-        }
-    }
+        painter.glBegin(GL.GL_LINE_STRIP);
 
-    public void drawPoints(GL gl) {
-        if (gl.isGL2()) {
-            drawPointsGL2(gl);
+        if (wfcolor == null) {
+            for (Point p : points) {
+                painter.color(p.rgb);
+                painter.vertex(p.xyz, spaceTransformer);
+            }
         } else {
-            drawPointsGLES2();
+            for (Point p : points) {
+                painter.color(wfcolor);
+                painter.vertex(p.xyz, spaceTransformer);
+            }
+        }
+        painter.glEnd();
+        
+        if (stipple) {
+        	painter.glDisable(GL2.GL_LINE_STIPPLE);
         }
     }
 
-    public void drawPointsGLES2() {
-        GLES2CompatUtils.glBegin(GL.GL_POINTS);
-
-        for (Point p : points) {
-            if (wfcolor == null)
-                colorGLES2(p.rgb);
-            else
-                colorGLES2(wfcolor);
-            vertexGLES2(p.xyz);
+    public void drawPointsIfEnabled(Painter painter, GL gl) {
+        if (showPoints) {
+            drawPoints(painter, gl);
         }
-
-        GLES2CompatUtils.glEnd();
     }
 
-    public void drawPointsGL2(GL gl) {
-        gl.getGL2().glBegin(GL.GL_POINTS);
+    public void drawPoints(Painter painter, GL gl) {
+    	painter.glBegin(GL.GL_POINTS);
 
-        gl.getGL2().glPointSize(wfwidth);
+        painter.glPointSize(wfwidth);
 
         for (Point p : points) {
             if (wfcolor == null)
-                colorGL2(gl, p.rgb);
+                painter.color(p.rgb);
             else
-                colorGL2(gl, wfcolor);
-            vertexGL2(gl, p.xyz);
+            	painter.color(wfcolor);
+            
+            painter.vertex(p.xyz, spaceTransformer);
         }
 
-        gl.getGL2().glEnd();
+        painter.glEnd();
     }
 
     /* */

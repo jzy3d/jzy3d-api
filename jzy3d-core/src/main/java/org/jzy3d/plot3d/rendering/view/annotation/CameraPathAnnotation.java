@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.view.annotation;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.TicToc;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -27,10 +28,10 @@ public class CameraPathAnnotation extends LineStrip{
     }
     
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         updateCameraPath();
         
-        super.draw(gl, glu, cam);
+        super.draw(painter, gl, glu, cam);
     }
 
     public void updateCameraPath() {

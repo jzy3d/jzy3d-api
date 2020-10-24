@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
@@ -26,33 +27,20 @@ public class ConcurrentLineStrip extends LineStrip {
     }
 
     @Override
-    public void drawLine(GL gl) {
+    public void drawLine(Painter painter, GL gl) {
         gl.glLineWidth(wfwidth);
         // gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         // gl.glPolygonOffset(1.0f, 1.0f);
-        if (gl.isGL2()) {
-            synchronized (points) {
-                drawLineGL2(gl);
-            }
-        } else {
-            synchronized (points) {
-                drawLineGLES2();
-            }
+        synchronized (points) {
+        	super.drawLine(painter, gl);
         }
+        
     }
 
     @Override
-    public void drawPointsIfEnabled(GL gl) {
-        if (showPoints) {
-            if (gl.isGL2()) {
-                synchronized (points) {
-                    drawPointsGL2(gl);
-                }
-            } else {
-                synchronized (points) {
-                    drawPointsGLES2();
-                }
-            }
+    public void drawPointsIfEnabled(Painter painter, GL gl) {
+        synchronized (points) {
+        	super.drawPointsIfEnabled(painter, gl);
         }
     }
 

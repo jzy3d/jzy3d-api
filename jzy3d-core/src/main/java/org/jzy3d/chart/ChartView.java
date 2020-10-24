@@ -1,6 +1,7 @@
 package org.jzy3d.chart;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -35,9 +36,13 @@ public class ChartView extends View {
      * to the scaled scene.
      */
     @Override
-    public void render(GL gl, GLU glu) {
+    public void render() {
     	fireViewLifecycleWillRender(null);
 
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
+        GLU glu = ((NativeDesktopPainter)painter).getGLU();
+
+    	
     	layout.update(getChart());
     	layout.render(gl, glu, getChart());
         

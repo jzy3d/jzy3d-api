@@ -10,6 +10,7 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -80,21 +81,21 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
     /** Delegate rendering iteratively to all Drawable of this composite. */
     @Override
-    public void draw(GL gl, GLU glu, Camera camera) {
+    public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
         if (mapper != null)
             mapper.preDraw(this);
 
         synchronized (components) {
             for (AbstractDrawable c : components) {
                 if (c != null)
-                    c.draw(gl, glu, camera);
+                    c.draw(painter, gl, glu, camera);
             }
         }
 
         if (mapper != null)
             mapper.postDraw(this);
 
-        doDrawBounds(gl, glu, camera);
+        doDrawBounds(painter, gl, glu, camera);
     }
 
     /**

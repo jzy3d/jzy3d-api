@@ -53,12 +53,12 @@ public class LegendViewportLayout implements IViewportLayout{
     @Override
     public void render(GL gl, GLU glu, Chart chart){
         View view = chart.getView();
-        view.renderBackground(gl, glu, backgroundViewPort);
-        view.renderScene(gl, glu, sceneViewPort);
+        view.renderBackground(backgroundViewPort);
+        view.renderScene(sceneViewPort);
         List<ILegend> legends = chart.getScene().getGraph().getLegends();
         if (hasMeta)
             renderLegends(gl, glu, screenSeparator, 1.0f, legends, chart.getCanvas());
-        view.renderOverlay(gl, view.getCamera().getLastViewPort());
+        view.renderOverlay(view.getCamera().getLastViewPort());
     }
     
     protected void renderLegends(GL gl, GLU glu, float left, float right, List<ILegend> data, ICanvas canvas) {

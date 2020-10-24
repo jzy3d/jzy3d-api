@@ -18,6 +18,8 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -88,6 +90,7 @@ public class View {
     protected Quality quality;
     protected Scene scene;
     protected ICanvas canvas;
+    protected Painter painter;
 
     protected Scene annotations;
 
@@ -160,6 +163,9 @@ public class View {
 
         this.axe = factory.newAxe(sceneBounds, this);
         this.cam = factory.newCamera(center);
+        this.painter = factory.newPainter();
+        this.painter.setCamera(cam);
+        
         this.scene = scene;
         this.canvas = canvas;
         this.quality = quality;
@@ -176,6 +182,10 @@ public class View {
 
         this.spaceTransformer = new SpaceTransformer(); // apply no transform
         current = this;
+    }
+    
+    public Painter getPainter() {
+    	return painter;
     }
 
     public Chart getChart() {
@@ -729,10 +739,10 @@ public class View {
      * The rendering settings are set by the {@link Quality} given in the
      * constructor parameters.
      */
-    public void init(GL gl) {
-        initQuality(gl);
-        initLights(gl);
-        initResources(gl);
+    public void init() {
+        initQuality();
+        initLights();
+        initResources();
         initBounds(scene, viewbounds, initBounds);
         fireViewLifecycleHasInit(null);
     }
@@ -757,7 +767,9 @@ public class View {
         this.initBounds = initBounds;
     }
 
-    public void initQuality(GL gl) {
+    public void initQuality() {
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
+    	
         // Activate Depth buffer
         if (quality.isDepthActivated()) {
             gl.glEnable(GL.GL_DEPTH_TEST);
@@ -816,27 +828,34 @@ public class View {
             gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
     }
 
-    public void initLights(GL gl) {
-        initLights(gl, scene);
+    public void initLights() {
+        initLights(scene);
     }
     
-    public void initLights(GL gl, Scene scene) {
+    public void initLights(Scene scene) {
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
+    	
         // Init light
         scene.getLightSet().init(gl);
         scene.getLightSet().enableLightIfThereAreLights(gl);
         // scene.getLightSet().enable(gl, true);
     }
 
-    public void initResources(GL gl) {
+    public void initResources() {
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
+    	
         getScene().getGraph().mountAllGLBindedResources(gl);
     }
 
     /** Clear the color and depth buffer. */
-    public void clear(GL gl) {
-        clearColorAndDepth(gl);
+    public void clear() {
+        clearColorAndDepth();
     }
 
-    public void clearColorAndDepth(GL gl) {
+    public void clearColorAndDepth() {
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
+    	
+    	
         gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         gl.glClearDepth(1);
 
@@ -849,13 +868,13 @@ public class View {
 
     /* RENDERING */
 
-    public void render(GL gl, GLU glu) {
+    public void render() {
         fireViewLifecycleWillRender(null);
 
         // init(gl);
-        renderBackground(gl, glu, 0f, 1f);
-        renderScene(gl, glu);
-        renderOverlay(gl);
+        renderBackground(0f, 1f);
+        renderScene();
+        renderOverlay();
 
         if (dimensionDirty)
             dimensionDirty = false;
@@ -866,34 +885,36 @@ public class View {
     /**
      * To be implemented (see AWTView)
      */
-    public void renderBackground(GL gl, GLU glu2, float f, float g) {
+    public void renderBackground(float left, float right) {
     }
 
     /**
      * To be implemented (see AWTView)
      */
-    public void renderBackground(GL gl, GLU glu2, ViewportConfiguration backgroundViewPort) {
+    public void renderBackground(ViewportConfiguration backgroundViewPort) {
     }
 
-    public void renderScene(GL gl, GLU glu) {
-        renderScene(gl, glu, new ViewportConfiguration(canvas.getRendererWidth(), canvas.getRendererHeight()));
+    public void renderScene() {
+        renderScene(new ViewportConfiguration(canvas.getRendererWidth(), canvas.getRendererHeight()));
     }
 
-    public void renderScene(GL gl, GLU glu, float left, float right) {
+    public void renderScene(float left, float right) {
         ViewportConfiguration vc = ViewportBuilder.column(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
-        renderScene(gl, glu, vc);
+        renderScene(vc);
     }
 
-    public void renderScene(GL gl, GLU glu, ViewportConfiguration viewport) {
-        updateQuality(gl);
+    public void renderScene(ViewportConfiguration viewport) {
+        updateQuality();
         BoundingBox3d scaling = computeScaledViewBounds();
-        updateCamera(gl, glu, viewport, scaling);
-        renderAxeBox(gl, glu);
-        renderSceneGraph(gl, glu);
-        renderAnnotations(gl, glu, cam);
+        updateCamera(viewport, scaling);
+        renderAxeBox();
+        renderSceneGraph();
+        renderAnnotations(cam);
     }
 
-    public void updateQuality(GL gl) {
+    public void updateQuality() {
+        GL gl = ((NativeDesktopPainter)painter).getGL();
+
         if (quality.isAlphaActivated())
             gl.glEnable(GL2.GL_BLEND);
         else
@@ -1006,23 +1027,27 @@ public class View {
     
     /* CAMERA PROCESSING */
 
-    public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
+    public void updateCamera(ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
         float sceneRadius = (float)boundsScaled.getRadius() * factorViewPointDistance;
-        updateCamera(gl, glu, viewport, boundsScaled, sceneRadius);
+        updateCamera(viewport, boundsScaled, sceneRadius);
     }
 
-    public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled) {
-        updateCamera(gl, glu, viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam, cameraMode, factorViewPointDistance, center, scaling);
+    public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled) {
+        updateCamera(viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam, cameraMode, factorViewPointDistance, center, scaling);
     }
     
-    public void updateCamera(GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam, CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
+    public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds, float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam, CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
         viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
         
         cam.setTarget(computeCameraTarget(center, scaling));
         cam.setUp(computeCameraUpAndTriggerEvents(viewpoint));
         cam.setEye(computeCameraEye(cam.getTarget(), viewmode, viewpoint));
         
-        computeCameraRenderingSphereRadius(cam, gl, glu, viewport, bounds);
+        GL gl = ((NativeDesktopPainter)painter).getGL();
+        GLU glu = ((NativeDesktopPainter)painter).getGLU();
+    	
+        
+        computeCameraRenderingSphereRadius(cam, viewport, bounds);
         
         cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
@@ -1118,7 +1143,7 @@ public class View {
         return up;
     }
 
-    public void computeCameraRenderingSphereRadius(Camera cam, GL gl, GLU glu, ViewportConfiguration viewport, BoundingBox3d bounds) {
+    public void computeCameraRenderingSphereRadius(Camera cam, ViewportConfiguration viewport, BoundingBox3d bounds) {
 
         if (viewmode == ViewPositionMode.TOP) {
             if(spaceTransformer!=null)
@@ -1129,7 +1154,7 @@ public class View {
             float radius = Math.max(xdiam, ydiam) / 2;
             
             cam.setRenderingSphereRadius(radius);
-            correctCameraPositionForIncludingTextLabels(gl, glu, viewport);
+            correctCameraPositionForIncludingTextLabels(viewport);
         } else {
             if(spaceTransformer!=null)
                 bounds = spaceTransformer.compute(bounds);
@@ -1155,22 +1180,26 @@ public class View {
         }
     }*/
     
-    protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
+    protected void correctCameraPositionForIncludingTextLabels(ViewportConfiguration viewport) {
     }
 
 
     /* AXE BOX RENDERING */
     
-    protected void renderAxeBox(GL gl, GLU glu) {
-        renderAxeBox(gl, glu, axe, scene, cam, scaling, axeBoxDisplayed);
+    protected void renderAxeBox() {
+        renderAxeBox(axe, scene, cam, scaling, axeBoxDisplayed);
     }
     
-    protected void renderAxeBox(GL gl, GLU glu, IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
+    protected void renderAxeBox(IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
+            GL gl = ((NativeDesktopPainter)painter).getGL();
+            GLU glu = ((NativeDesktopPainter)painter).getGLU();
+
+        	
             glModelView(gl);
             scene.getLightSet().disable(gl);
             axe.setScale(scaling);
-            axe.draw(gl, glu, camera);
+            axe.draw(painter, gl, glu, camera);
             scene.getLightSet().enableLightIfThereAreLights(gl);
         }
     }
@@ -1185,15 +1214,17 @@ public class View {
 
     /* SCENE GRAPH RENDERING */
     
-    public void renderSceneGraph(GL gl, GLU glu) {
-        renderSceneGraph(gl, glu, true);
+    public void renderSceneGraph() {
+        renderSceneGraph(true);
     }
 
-    public void renderSceneGraph(GL gl, GLU glu, boolean light) {
-        renderSceneGraph(gl, glu, light, cam, scene, scaling);
+    public void renderSceneGraph(boolean light) {
+        renderSceneGraph(light, cam, scene, scaling);
     }
     
-    public void renderSceneGraph(GL gl, GLU glu, boolean light, Camera camera, Scene scene, Coord3d scaling) {
+    public void renderSceneGraph(boolean light, Camera camera, Scene scene, Coord3d scaling) {
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
+
         if (light) {
             scene.getLightSet().apply(gl, scaling);
             // gl.glEnable(GL2.GL_LIGHTING);
@@ -1203,22 +1234,25 @@ public class View {
 
         Transform transform = new Transform(new Scale(scaling));
         scene.getGraph().setTransform(transform);
-        scene.getGraph().draw(gl, glu, camera);
+        scene.getGraph().draw(painter, gl, glu, camera);
     }
 
     /* OVERLAY RENDERING */
 
-    public void renderOverlay(GL gl) {
-        renderOverlay(gl, new ViewportConfiguration(canvas));
+    public void renderOverlay() {
+        renderOverlay(new ViewportConfiguration(canvas));
     }
 
-    public void renderOverlay(GL gl, ViewportConfiguration viewportConfiguration) {
+    public void renderOverlay(ViewportConfiguration viewportConfiguration) {
     }
 
-    public void renderAnnotations(GL gl, GLU glu, Camera camera) {
+    public void renderAnnotations(Camera camera) {
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
+        GLU glu = ((NativeDesktopPainter)painter).getGLU();
+
         Transform transform = new Transform(new Scale(scaling));
         annotations.getGraph().setTransform(transform);
-        annotations.getGraph().draw(gl, glu, camera);
+        annotations.getGraph().draw(painter, gl, glu, camera);
     }
 
 

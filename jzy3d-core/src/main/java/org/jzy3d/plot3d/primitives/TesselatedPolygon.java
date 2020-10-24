@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
 
@@ -43,7 +44,7 @@ public class TesselatedPolygon extends AbstractComposite {
 			 * shared adjacent triangle side is not drawn.
 			 */
 			@Override
-            protected void callPointForWireframe(GL gl) {
+            protected void callPointForWireframe(Painter painter, GL gl) {
 				if (gl.isGL2()) {
 					gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
 							wfcolor.a);

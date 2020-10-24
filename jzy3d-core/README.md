@@ -52,6 +52,16 @@ Setting : move to Native
 
 TestDemos.test a besoin de modifier les factory en offscreen
 
+Delete ChartScene that is not used (intention : spawn multiple views. Moreover Scene already hold a list of views
+
+Renderer3d to be moved to JOGL, extract CanvasListener interface?
+
+
+View
+- public GL getCurrentGL()
+- public GLContext getCurrentContext()
+- protected GLAutoDrawable getCanvasAsGLAutoDrawable()
+
 
 SEPARATE 
 - IO MODULE TO AVOID MIXING WITH CLEAN API FOR TS etc GENERATION?

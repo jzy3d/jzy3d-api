@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.shaders;
 
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
@@ -16,21 +17,21 @@ public class Shaderable implements IShaderable{
     protected ShaderFilePair shaders = new ShaderFilePair(Shaderable.class, "shade_vertex.glsl", "shade_fragment.glsl");
 
     @Override
-    public void init(GL2 gl, int width, int height) {
+    public void init(Painter painter, GL2 gl, int width, int height) {
         loadProgram(gl);
     }
 
     @Override
-    public void display(GL2 gl, GLU glu) {
-        executeProgram(gl); 
+    public void display(Painter painter, GL2 gl, GLU glu) {
+        executeProgram(painter, gl); 
     }
 
     @Override
-    public void reshape(GL2 gl, int width, int height) {
+    public void reshape(Painter painter, GL2 gl, int width, int height) {
     }
    
     @Override
-    public void dispose(GL2 gl) {
+    public void dispose(Painter painter, GL2 gl) {
         destroyProgram(gl);
     }
    
@@ -48,12 +49,12 @@ public class Shaderable implements IShaderable{
         program.destroy(gl);
     }
 
-    protected void executeProgram(GL2 gl) {
+    protected void executeProgram(Painter painter, GL2 gl) {
         float[] alpha = new float[] { 0.6f };
         
         program.bind(gl); 
         //program.setUniform(gl, "Alpha", alpha, 1);
-        renderTasks(gl);        
+        renderTasks(painter, gl);        
         program.unbind(gl);
     }
     
@@ -61,13 +62,13 @@ public class Shaderable implements IShaderable{
     
     /* ACTUAL RENDERING */
     
-    protected void renderTasks(GL2 gl) {
-        tasksToRender.draw(gl, glu, null);
+    protected void renderTasks(Painter painter, GL2 gl) {
+        tasksToRender.draw(painter, gl, glu, null);
     }
 
     IGLRenderer tasksToRender = new IGLRenderer() {
         @Override
-        public void draw(GL gl, GLU glu, Camera cam) {
+        public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
             throw new RuntimeException("nothing to render?!");
         }
     };

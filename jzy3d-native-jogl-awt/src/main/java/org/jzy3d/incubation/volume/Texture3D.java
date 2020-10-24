@@ -9,6 +9,7 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
@@ -117,7 +118,7 @@ public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMu
     }
 
 	@Override
-	public void draw(GL gl, GLU glu, Camera cam) {
+	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		
 		if (!mounted) {
 			mount(gl);
@@ -125,7 +126,7 @@ public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMu
 		
 		colormapTexure.update(gl);
 		
-		doTransform(gl, glu, cam);
+		doTransform(painter, gl, glu, cam);
     	
     	float mvmatrix[] = new float[16];
     	float projmatrix[] = new float[16];
@@ -173,7 +174,7 @@ public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMu
        gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
        gl.glCullFace(GL.GL_BACK);
 		
-       shapeVBO.draw(gl, glu, cam);
+       shapeVBO.draw(painter, gl, glu, cam);
        shaderProgram.unbind(gl.getGL2());
        
        if (disposed) {

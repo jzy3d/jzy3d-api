@@ -6,6 +6,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.graphs.AbstractDrawableGraph2d;
 import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -27,17 +28,17 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 	/*******************************************************/
 
 	@Override
-    protected void drawVertices(GL gl, GLU glu, Camera cam) {
+    protected void drawVertices(Painter painter, GL gl, GLU glu, Camera cam) {
 		if (gl.isGL2()) {
 			gl.getGL2().glPointSize(formatter.getVertexWidth());
 			gl.getGL2().glBegin(GL.GL_POINTS);
 			for (V v : graph.getVertices()) {
 				if (highlights.get(v))
-					drawVertexNode(gl, glu, cam, v, layout.get(v),
-							formatter.getHighlightedVertexColor());
+					drawVertexNode(painter, gl, glu, cam, v,
+							layout.get(v), formatter.getHighlightedVertexColor());
 				else
-					drawVertexNode(gl, glu, cam, v, layout.get(v),
-							formatter.getVertexColor());
+					drawVertexNode(painter, gl, glu, cam, v,
+							layout.get(v), formatter.getVertexColor());
 			}
 			gl.getGL2().glEnd();
 		} else {
@@ -45,25 +46,25 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 			GLES2CompatUtils.glBegin(GL.GL_POINTS);
 			for (V v : graph.getVertices()) {
 				if (highlights.get(v))
-					drawVertexNode(gl, glu, cam, v, layout.get(v),
-							formatter.getHighlightedVertexColor());
+					drawVertexNode(painter, gl, glu, cam, v,
+							layout.get(v), formatter.getHighlightedVertexColor());
 				else
-					drawVertexNode(gl, glu, cam, v, layout.get(v),
-							formatter.getVertexColor());
+					drawVertexNode(painter, gl, glu, cam, v,
+							layout.get(v), formatter.getVertexColor());
 			}
 			GLES2CompatUtils.glEnd();
 		}
 	}
 
 	@Override
-    protected void drawVertexLabels(GL gl, GLU glu, Camera cam) {
+    protected void drawVertexLabels(Painter painter, GL gl, GLU glu, Camera cam) {
 		for (V v : graph.getVertices()) {
 			if (highlights.get(v))
-				drawVertexLabel(gl, glu, cam, v, layout.get(v),
-						formatter.getHighlightedVertexColor());
+				drawVertexLabel(painter, gl, glu, cam, v,
+						layout.get(v), formatter.getHighlightedVertexColor());
 			else
-				drawVertexLabel(gl, glu, cam, v, layout.get(v),
-						formatter.getVertexLabelColor());
+				drawVertexLabel(painter, gl, glu, cam, v,
+						layout.get(v), formatter.getVertexLabelColor());
 		}
 	}
 
@@ -77,10 +78,11 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 		}
 	}
 
-	/*******************************************************/
+	/**
+	 * @param painter TODO*****************************************************/
 
-	protected void drawVertexNode(GL gl, GLU glu, Camera cam, V v,
-			Coord2d coord, Color color) {
+	protected void drawVertexNode(Painter painter, GL gl, GLU glu, Camera cam,
+			V v, Coord2d coord, Color color) {
 		if (gl.isGL2()) {
 			gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
 			gl.getGL2().glVertex3f(coord.x, coord.y, Z);
@@ -90,11 +92,11 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 		}
 	}
 
-	protected void drawVertexLabel(GL gl, GLU glu, Camera cam, V v,
-			Coord2d coord, Color color) {
+	protected void drawVertexLabel(Painter painter, GL gl, GLU glu, Camera cam,
+			V v, Coord2d coord, Color color) {
 		Coord3d textPosition = new Coord3d(coord, Z);
-		txt.drawText(gl, glu, cam, v.toString(), textPosition, Halign.CENTER,
-				Valign.BOTTOM, color, labelScreenOffset, labelSceneOffset);
+		txt.drawText(painter, gl, glu, cam, v.toString(), textPosition,
+				Halign.CENTER, Valign.BOTTOM, color, labelScreenOffset, labelSceneOffset);
 	}
 
 	protected void drawEdge(GL gl, GLU glu, Camera cam, E e, Coord2d c1,

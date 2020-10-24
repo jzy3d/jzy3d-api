@@ -7,6 +7,7 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
@@ -27,8 +28,8 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 	}
 
 	@Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-		doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+		doTransform(painter, gl, glu, cam);
 
 		if (gl.isGL2()) {
 

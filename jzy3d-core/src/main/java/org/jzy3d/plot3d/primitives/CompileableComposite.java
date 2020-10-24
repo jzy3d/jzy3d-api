@@ -10,6 +10,7 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -73,30 +74,31 @@ public class CompileableComposite extends AbstractWireframeable implements
 	 * and execute actual rendering.
 	 */
 	@Override
-	public void draw(GL gl, GLU glu, Camera cam) {
+	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		if (resetDL)
 			reset(gl);
 		if (dlID == -1)
-			compile(gl, glu, cam);
-		execute(gl, glu, cam);
+			compile(painter, gl, glu, cam);
+		execute(painter, gl, glu, cam);
 	}
 
 	/****************************************************************/
 
-	/** If you call compile, the display list will be regenerated. */
-	protected void compile(GL gl, GLU glu, Camera cam) {
+	/** If you call compile, the display list will be regenerated. 
+	 * @param painter TODO*/
+	protected void compile(Painter painter, GL gl, GLU glu, Camera cam) {
 		reset(gl); // clear old list
 
 		nullifyChildrenTransforms();
 		dlID = gl.getGL2().glGenLists(1);
 		gl.getGL2().glNewList(dlID, GL2.GL_COMPILE);
-		drawComponents(gl, glu, cam);
-		doDrawBounds(gl, glu, cam);
+		drawComponents(painter, gl, glu, cam);
+		doDrawBounds(painter, gl, glu, cam);
 		gl.getGL2().glEndList();
 	}
 
-	protected void execute(GL gl, GLU glu, Camera cam) {
-		doTransform(gl, glu, cam);
+	protected void execute(Painter painter, GL gl, GLU glu, Camera cam) {
+		doTransform(painter, gl, glu, cam);
 		gl.getGL2().glCallList(dlID);
 	}
 
@@ -126,10 +128,10 @@ public class CompileableComposite extends AbstractWireframeable implements
 		}
 	}
 
-	protected void drawComponents(GL gl, GLU glu, Camera cam) {
+	protected void drawComponents(Painter painter, GL gl, GLU glu, Camera cam) {
 		synchronized (components) {
 			for (AbstractDrawable s : components) {
-				s.draw(gl, glu, cam);
+				s.draw(painter, gl, glu, cam);
 			}
 		}
 	}

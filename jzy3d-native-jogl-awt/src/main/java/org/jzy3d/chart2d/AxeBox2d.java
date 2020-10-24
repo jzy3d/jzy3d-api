@@ -6,6 +6,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -34,12 +35,12 @@ public class AxeBox2d extends AxeBox {
      * Renders only X and Y ticks.
      */
     @Override
-    public void drawTicksAndLabels(GL gl, GLU glu, Camera camera) {
+    public void drawTicksAndLabels(Painter painter, GL gl, GLU glu, Camera camera) {
         wholeBounds.reset();
         wholeBounds.add(boxBounds);
 
-        drawTicksAndLabelsX(gl, glu, camera);
-        drawTicksAndLabelsY(gl, glu, camera);
+        drawTicksAndLabelsX(painter, gl, glu, camera);
+        drawTicksAndLabelsY(painter, gl, glu, camera);
     }
 
     /** Force given X axis to be used for tick placement */
@@ -67,20 +68,20 @@ public class AxeBox2d extends AxeBox {
 
     /** Draws Y axis label vertically. */
     @Override
-    public void drawAxisLabel(GL gl, GLU glu, Camera cam, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
+    public void drawAxisLabel(Painter painter, GL gl, GLU glu, Camera cam, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
         Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
         BoundingBox3d labelBounds = null;
 
         if (isXDisplayed(direction)) {
 //            doTransform(gl);
-            labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            labelBounds = txt.drawText(painter, gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         } else if (isYDisplayed(direction)) {
-            labelBounds = txt.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            labelBounds = txt.drawText(painter, gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
             //labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         }
         if (labelBounds != null)
             ticksTxtBounds.add(labelBounds);
-        doTransform(gl);
+        doTransform(null);
 
     }
 
@@ -92,8 +93,8 @@ public class AxeBox2d extends AxeBox {
     
     public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
         @Override
-        public BoundingBox3d drawText(GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset,
-                Coord3d sceneOffset) {
+        public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color,
+                Coord2d screenOffset, Coord3d sceneOffset) {
             color(gl, color);
 
             // compute a corrected position according to layout

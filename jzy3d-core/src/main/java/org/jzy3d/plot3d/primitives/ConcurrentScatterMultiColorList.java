@@ -7,9 +7,12 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
+import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.glu.GLU;
 
 public class ConcurrentScatterMultiColorList extends ScatterMultiColorList implements IMultiColorable {
     public ConcurrentScatterMultiColorList(ColorMapper mapper) {
@@ -25,37 +28,26 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
     }
 
     /* */
-
+    
     @Override
-    public void drawGLES2() {
-        GLES2CompatUtils.glPointSize(width);
-        GLES2CompatUtils.glBegin(GL.GL_POINTS);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
+        
+        painter.glPointSize(width);
+        painter.glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
-            synchronized (coordinates) {
-                for (Coord3d coord : coordinates) {
-                    colorGLES2(mapper.getColor(coord));
-                    vertexGLES2(coord);
-                }
-            }
+        	synchronized (coordinates) { // here is the difference!
+	            for (Coord3d coord : coordinates) {
+	                painter.color(mapper.getColor(coord));
+	                painter.vertex(coord, spaceTransformer);
+	            }
+        	}
         }
-        GLES2CompatUtils.glEnd();
-    }
+        painter.glEnd();
+        
 
-    @Override
-    public void drawGL2(GL gl) {
-        gl.getGL2().glPointSize(width);
-        gl.getGL2().glBegin(GL.GL_POINTS);
-
-        if (coordinates != null) {
-            synchronized (coordinates) {
-                for (Coord3d coord : coordinates) {
-                    colorGL2(gl, mapper.getColor(coord));
-                    vertexGL2(gl, coord);
-                }
-            }
-        }
-        gl.getGL2().glEnd();
+        doDrawBounds(painter, gl, glu, cam);
     }
 
     @Override

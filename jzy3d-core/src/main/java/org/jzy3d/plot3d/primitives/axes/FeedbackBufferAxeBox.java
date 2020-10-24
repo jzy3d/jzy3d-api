@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
@@ -34,7 +35,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 	 * and determine which quad where displayed or not.
 	 */
 	@Override
-	protected boolean [] getHiddenQuads(GL gl, Camera cam){
+	protected boolean [] getHiddenQuads(Painter painter, GL gl, Camera cam){
 		int feedbacklength = 1024;
 		FloatBuffer floatbuffer = Buffers.newDirectFloatBuffer(feedbacklength);
 		float [] feedback = new float[feedbacklength];
@@ -42,7 +43,7 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 		// Draw the cube into feedback buffer
 		gl.getGL2().glFeedbackBuffer(feedbacklength, GL2.GL_3D_COLOR, floatbuffer);
 		gl.getGL2().glRenderMode(GL2.GL_FEEDBACK);
-		drawCube(gl, GL2.GL_FEEDBACK);
+		drawCube(gl, GL2.GL_FEEDBACK, painter);
 		gl.getGL2().glRenderMode(GL2.GL_RENDER);
 		
 		// Parse feedback buffer and return hidden quads
