@@ -31,12 +31,8 @@ public class TesselatedPolygon extends AbstractComposite {
 	protected Polygon newTriangle() {
 		return new Polygon() {
 			@Override
-            protected void begin(GL gl) {
-				if (gl.isGL2()) {
-					gl.getGL2().glBegin(GL.GL_TRIANGLES);
-				} else {
-					GLES2CompatUtils.glBegin(GL.GL_TRIANGLES);
-				}
+            protected void begin(Painter painter, GL gl) {
+				painter.glBegin(GL.GL_TRIANGLES);
 			}
 
 			/**
@@ -45,38 +41,16 @@ public class TesselatedPolygon extends AbstractComposite {
 			 */
 			@Override
             protected void callPointForWireframe(Painter painter, GL gl) {
-				if (gl.isGL2()) {
-					gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
-							wfcolor.a);
-					gl.glLineWidth(wfwidth);
+				painter.color(wfcolor);
+				painter.glLineWidth(wfwidth);
+				painter.glBegin(GL.GL_LINE_STRIP);
 
-					beginWireWithLineStrip(gl); // <
-					for (Point p : points) {
-						gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-					}
-					painter.glEnd();
-				} else {
-					GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g,
-							wfcolor.b, wfcolor.a);
-					gl.glLineWidth(wfwidth);
-
-					beginWireWithLineStrip(gl); // <
-					for (Point p : points) {
-						GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y,
-								p.xyz.z);
-					}
-					painter.glEnd();
+				for (Point p : points) {
+					painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 				}
+				painter.glEnd();
+				
 			}
-
-			protected void beginWireWithLineStrip(GL gl) {
-				if (gl.isGL2()) {
-					gl.getGL2().glBegin(GL.GL_LINE_STRIP);
-				} else {
-					GLES2CompatUtils.glBegin(GL.GL_LINE_STRIP);
-				}
-			}
-
 		};
 	}
 }

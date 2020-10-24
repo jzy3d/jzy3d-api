@@ -46,8 +46,12 @@ public class ScatterMultiColorList extends AbstractDrawable implements IMultiCol
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         doTransform(painter, gl, glu, cam);
-        
-        painter.glPointSize(width);
+        doDrawPoints(painter);
+        doDrawBounds(painter, gl, glu, cam);
+    }
+
+	protected void doDrawPoints(Painter painter) {
+		painter.glPointSize(width);
         painter.glBegin(GL.GL_POINTS);
 
         if (coordinates != null) {
@@ -57,10 +61,7 @@ public class ScatterMultiColorList extends AbstractDrawable implements IMultiCol
             }
         }
         painter.glEnd();
-        
-
-        doDrawBounds(painter, gl, glu, cam);
-    }
+	}
 
     @Override
     public void applyGeometryTransform(Transform transform) {

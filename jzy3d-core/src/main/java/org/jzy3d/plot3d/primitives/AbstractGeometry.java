@@ -83,7 +83,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     	painter.color(wfcolor);
         painter.glLineWidth(wfwidth);
 
-        begin(gl);
+        begin(painter, gl);
         for (Point p : points) {
             painter.vertex(p.xyz, spaceTransformer);
         }
@@ -94,7 +94,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     /** Drawing the point list in face mode (polygon content) 
      * @param painter TODO*/
     protected void callPointsForFace(Painter painter, GL gl) {
-        begin(gl);
+        begin(painter, gl);
         for (Point p : points) {
             if (mapper != null) {
                 Color c = mapper.getColor(p.xyz);
@@ -107,7 +107,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         painter.glEnd();
     }
 
-    protected abstract void begin(GL gl);
+    protected abstract void begin(Painter painter, GL gl);
 
 
     protected void applyPolygonModeLine(Painter painter, GL gl) {

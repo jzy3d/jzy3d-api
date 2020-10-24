@@ -56,6 +56,7 @@ Delete ChartScene that is not used (intention : spawn multiple views. Moreover S
 
 Renderer3d to be moved to JOGL, extract CanvasListener interface?
 
+Disk object : GLUNewQuadric wrap with jGL and JOGl
 
 View
 - public GL getCurrentGL()

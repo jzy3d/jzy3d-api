@@ -11,6 +11,10 @@ import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
+
+import jogamp.opengl.glu.GLUquadricImpl;
 
 /** 
  * 1.0 way of drawing : 
@@ -63,7 +67,11 @@ public interface Painter {
     // GL INTERFACE
     
     public void glLoadIdentity();
+    public void glPushMatrix();
+    public void glPopMatrix();
+
     public void glScalef(float x, float y, float z);
+	public void glTranslatef(float x, float y, float z);
     
     public void glBegin(int type);
 	public void glEnd();
@@ -88,8 +96,6 @@ public interface Painter {
     public void glTexEnvf(int target, int pname, float param);
     public void glTexEnvi(int target, int pname, int param);
     
-    public void glPushMatrix();
-    public void glPopMatrix();
 
     public int glGenLists(int range);
     public void glNewList(int list, int mode);
@@ -97,5 +103,11 @@ public interface Painter {
 	public void glCallList(int list);
 	public boolean glIsList(int list);
 	public void glDeleteLists(int list, int range);
+	
+    // GLU INTERFACE
+
+	public void gluDisk(GLUquadric quad, double inner, double outer, int slices, int loops);
+	public void glutSolidSphere(final double radius, final int slices, final int stacks);
+	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks);
     
 }
