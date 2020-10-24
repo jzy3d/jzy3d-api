@@ -35,9 +35,13 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
 		else{
             this.setTitle(title);         
         }
+		
+		
 		this.add((java.awt.Component) chart.getCanvas());
 		this.pack();
+		//this.setSize(bounds.width, bounds.height);
 		this.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+		
 		this.setVisible(true);
 
 		this.addWindowListener(new WindowAdapter() {
