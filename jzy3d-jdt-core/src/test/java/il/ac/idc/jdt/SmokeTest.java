@@ -11,11 +11,10 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
-@Test
 public class SmokeTest {
-
+	@Test
 	public void shouldRunOnExampleData() throws Exception {
 		for (String data : Arrays.asList("t1_1000.tsin", "t1_5000.tsin", "il_1000.smf", "t1_5000.smf",
 				"terra_13000.smf", "terra_13000.tsin")) {
