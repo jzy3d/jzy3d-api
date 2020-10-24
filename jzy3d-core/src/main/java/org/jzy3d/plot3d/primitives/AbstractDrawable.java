@@ -93,69 +93,6 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
         }
     }
 
-    /**
-     * A helper to call glVerted3f on the input coordinate. For GL2 profile only.
-     * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
-     */
-    /*protected void vertexGL2(GL gl, Coord3d c) {
-        vertexGL2(gl, c, spaceTransformer);
-    }
-    
-    protected void vertexGL2(GL gl, Coord3d c, SpaceTransformer transform) {
-        if (transform == null) {
-            gl.getGL2().glVertex3f(c.x, c.y, c.z);
-        } else {
-            gl.getGL2().glVertex3f(transform.getX().compute(c.x), transform.getY().compute(c.y), transform.getZ().compute(c.z));
-        }
-    }*/
-
-    /**
-     * A helper to call glVerted3f on the input coordinate. For GLES2 profile only.
-     * If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
-     */
-    /*protected void vertexGLES2(Coord3d c) {
-        if(spaceTransformer==null){
-            GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);            
-        }
-        else{
-            GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y),spaceTransformer.getZ().compute(c.z));
-        }
-    }*/
-
-    /** A helper to call glColor4f on the input color. For GL2 profile only. */
-    /*protected void colorGL2(GL gl, Color c) {
-        gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
-    }*/
-
-    /** A helper to call glColor4f on the input color. For GLES2 profile only. */
-    /*protected void colorGLES2(Color c) {
-        GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
-    }
-
-    protected void call(GL gl, Color c) {
-        if (gl.isGL2()) {
-            colorGL2(gl, c);
-        } else {
-            colorGLES2(c);
-        }
-    }*/
-
-    /*protected void call(GL gl, Color c, float alpha) {
-        if (gl.isGL2()) {
-            gl.getGL2().glColor4f(c.r, c.g, c.b, alpha);
-        } else {
-            GLES2CompatUtils.glColor4f(c.r, c.g, c.b, alpha);
-        }
-    }
-
-    protected void callWithAlphaFactor(GL gl, Color c, float alpha) {
-        if (gl.isGL2()) {
-            gl.getGL2().glColor4f(c.r, c.g, c.b, c.a * alpha);
-        } else {
-            GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a * alpha);
-        }
-    }*/
-
     protected void negative(Color c) {
         c.r = 1 - c.r;
         c.g = 1 - c.g;

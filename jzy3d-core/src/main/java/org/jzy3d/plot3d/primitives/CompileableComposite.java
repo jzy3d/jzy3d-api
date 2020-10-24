@@ -76,7 +76,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 	@Override
 	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		if (resetDL)
-			reset(gl);
+			reset(painter, gl);
 		if (dlID == -1)
 			compile(painter, gl, glu, cam);
 		execute(painter, gl, glu, cam);
@@ -87,29 +87,25 @@ public class CompileableComposite extends AbstractWireframeable implements
 	/** If you call compile, the display list will be regenerated. 
 	 * @param painter TODO*/
 	protected void compile(Painter painter, GL gl, GLU glu, Camera cam) {
-		reset(gl); // clear old list
+		reset(painter, gl); // clear old list
 
 		nullifyChildrenTransforms();
-		dlID = gl.getGL2().glGenLists(1);
-		gl.getGL2().glNewList(dlID, GL2.GL_COMPILE);
+		dlID = painter.glGenLists(1);
+		painter.glNewList(dlID, GL2.GL_COMPILE);
 		drawComponents(painter, gl, glu, cam);
 		doDrawBounds(painter, gl, glu, cam);
-		gl.getGL2().glEndList();
+		painter.glEndList();
 	}
 
 	protected void execute(Painter painter, GL gl, GLU glu, Camera cam) {
 		doTransform(painter, gl, glu, cam);
-		gl.getGL2().glCallList(dlID);
+		painter.glCallList(dlID);
 	}
 
-	protected void reset(GL gl) {
-		if (!gl.isGL2()) {
-			throw new UnsupportedOperationException(
-					"CompileableComposite : Display lists not supported with OpenGL ES");
-		}
+	protected void reset(Painter painter, GL gl) {
 		if (dlID != -1) {
-			if (gl.getGL2().glIsList(dlID)) {
-				gl.getGL2().glDeleteLists(dlID, 1);
+			if (painter.glIsList(dlID)) {
+				painter.glDeleteLists(dlID, 1);
 			}
 			dlID = -1;
 		}

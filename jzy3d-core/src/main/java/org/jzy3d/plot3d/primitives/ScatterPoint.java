@@ -45,39 +45,22 @@ public class ScatterPoint extends AbstractDrawable implements ISingleColorable {
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         doTransform(painter, gl, glu, cam);
-
-        if (gl.isGL2()) {
-            drawGL2(gl);
-        } else {
-            drawGLES2();
-        }
-
+        doDrawPoints(painter);
         doDrawBounds(painter, gl, glu, cam);
     }
 
-    public void drawGLES2() {
-        GLES2CompatUtils.glPointSize(width);
-        GLES2CompatUtils.glBegin(GL.GL_POINTS);
+	protected void doDrawPoints(Painter painter) {
+		painter.glPointSize(width);
+        painter.glBegin(GL.GL_POINTS);
         if (points != null) {
             for (LightPoint p : points) {
-                GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
-                GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-            }
-        }
-        GLES2CompatUtils.glEnd();
-    }
+                painter.color(p.rgb);
+                painter.vertex(p.xyz, spaceTransformer);
 
-    public void drawGL2(GL gl) {
-        gl.getGL2().glPointSize(width);
-        gl.getGL2().glBegin(GL.GL_POINTS);
-        if (points != null) {
-            for (LightPoint p : points) {
-                gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b, p.rgb.a);
-                gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
             }
         }
-        gl.getGL2().glEnd();
-    }
+        painter.glEnd();
+	}
 
     @Override
     public void applyGeometryTransform(Transform transform) {

@@ -48,7 +48,6 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 		// TODO Auto-generated method stub
 	}
 
-
 	@Override
 	public void culling(boolean status) {
 		// TODO Auto-generated method stub
@@ -154,29 +153,60 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glTexCoord2f(float s, float t) {
 		gl.getGL2().glTexCoord2f(s, t);
 	}
-	
-	
-	
+
 	@Override
 	public void glTexEnvf(int target, int pname, float param) {
 		gl.getGL2().glTexEnvf(target, pname, param);
 	}
-	
+
 	@Override
 	public void glTexEnvi(int target, int pname, int param) {
 		gl.getGL2().glTexEnvi(target, pname, param);
 	}
 
+	// GL MATRIX
+	
 	@Override
 	public void glPushMatrix() {
 		gl.getGL2().glPushMatrix();
 	}
-	
+
 	@Override
 	public void glPopMatrix() {
 		gl.getGL2().glPopMatrix();
 	}
 	
-	
+	// GL LISTS
+
+	@Override
+	public int glGenLists(int range) {
+		return gl.getGL2().glGenLists(range);
+	}
+
+	@Override
+	public void glNewList(int list, int mode) {
+		gl.getGL2().glNewList(list, mode);
+	}
+
+	@Override
+	public void glEndList() {
+		gl.getGL2().glEndList();
+	}
+
+	@Override
+	public void glCallList(int list) {
+		gl.getGL2().glCallList(list);
+	}
+
+	@Override
+	public boolean glIsList(int list) {
+		return gl.getGL2().glIsList(list);
+	}
+
+	@Override
+	public void glDeleteLists(int list, int range) {
+		gl.getGL2().glDeleteLists(list, range);		
+	}
+
 	
 }
