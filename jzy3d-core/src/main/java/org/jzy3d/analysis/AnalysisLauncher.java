@@ -2,7 +2,6 @@ package org.jzy3d.analysis;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.chart.Settings;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.utils.LoggerUtils;
 
@@ -14,7 +13,8 @@ public class AnalysisLauncher {
     }
 
     public static void open(IAnalysis demo, Rectangle rectangle) throws Exception {
-        Settings.getInstance().setHardwareAccelerated(true);
+        //Settings.getInstance().setHardwareAccelerated(true);
+    	
         demo.init();
         Chart chart = demo.getChart();
 
@@ -38,7 +38,8 @@ public class AnalysisLauncher {
     }
 
     public static void openStatic(IAnalysis demo, Rectangle rectangle) throws Exception {
-        Settings.getInstance().setHardwareAccelerated(true);
+        //Settings.getInstance().setHardwareAccelerated(true);
+        
         demo.init();
         Chart chart = demo.getChart();
 
