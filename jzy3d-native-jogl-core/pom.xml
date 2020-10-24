@@ -2,8 +2,8 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
-	<artifactId>jzy3d-native-jogl-awt</artifactId>
-	<name>Jzy3d Native Implementation for AWT with JOGL</name>
+	<artifactId>jzy3d-native-jogl-core</artifactId>
+	<name>Jzy3d Native Implementation with JOGL</name>
 
 	<parent>
 		<groupId>org.jzy3d</groupId>
@@ -19,17 +19,6 @@
 			<artifactId>jzy3d-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-core-awt</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-native-jogl-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
