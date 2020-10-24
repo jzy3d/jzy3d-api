@@ -48,45 +48,19 @@ public class ScatterMultiColor extends AbstractDrawable implements IMultiColorab
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         doTransform(painter, gl, glu, cam);
 
-        if (gl.isGL2()) {
-            drawGL2(gl);
-        } else {
-            drawGLES2();
+        painter.glPointSize(width);
+        painter.glBegin(GL.GL_POINTS);
+
+        if (coordinates != null) {
+            for (Coord3d coord : coordinates) {
+                Color color = mapper.getColor(coord); 
+                painter.color(color);
+                painter.vertex(coord, spaceTransformer);
+            }
         }
+        painter.glEnd();
 
         doDrawBounds(painter, gl, glu, cam);
-    }
-
-    public void drawGLES2() {
-        GLES2CompatUtils.glPointSize(width);
-        GLES2CompatUtils.glBegin(GL.GL_POINTS);
-
-        if (coordinates != null) {
-            for (Coord3d coord : coordinates) {
-                Color color = mapper.getColor(coord); // TODO: should store
-                                                      // result in the
-                                                      // point color
-                GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
-                GLES2CompatUtils.glVertex3f(coord.x, coord.y, coord.z);
-            }
-        }
-        GLES2CompatUtils.glEnd();
-    }
-
-    public void drawGL2(GL gl) {
-        gl.getGL2().glPointSize(width);
-        gl.getGL2().glBegin(GL.GL_POINTS);
-
-        if (coordinates != null) {
-            for (Coord3d coord : coordinates) {
-                Color color = mapper.getColor(coord); // TODO: should store
-                                                      // result in the
-                                                      // point color
-                gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-                gl.getGL2().glVertex3f(coord.x, coord.y, coord.z);
-            }
-        }
-        gl.getGL2().glEnd();
     }
 
     @Override

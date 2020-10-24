@@ -10,6 +10,8 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
+import com.jogamp.opengl.GL2;
+
 /** 
  * 1.0 way of drawing : 
  * - isolation of actual engine
@@ -89,4 +91,11 @@ public interface Painter {
     public void glPushMatrix();
     public void glPopMatrix();
 
+    public int glGenLists(int range);
+    public void glNewList(int list, int mode);
+	public void glEndList();
+	public void glCallList(int list);
+	public boolean glIsList(int list);
+	public void glDeleteLists(int list, int range);
+    
 }

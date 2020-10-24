@@ -194,5 +194,42 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glPopMatrix() {
 		GLES2CompatUtils.glPopMatrix();
 	}
+	
+	@Override
+	public int glGenLists(int range) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glGenLists(range);
+	}
+
+	@Override
+	public void glNewList(int list, int mode) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glNewList(list, mode);
+	}
+
+	@Override
+	public void glEndList() {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glEndList();
+	}
+
+	@Override
+	public void glCallList(int list) {
+		throw new NotImplementedException();
+		//gl.getGL2().glCallList(list);
+	}
+	
+	@Override
+	public boolean glIsList(int list) {
+		throw new NotImplementedException();
+		//return gl.getGL2().glIsList(list);
+	}
+
+	@Override
+	public void glDeleteLists(int list, int range) {
+		throw new NotImplementedException();
+		//gl.getGL2().glDeleteLists(list, range);		
+	}
+
 
 }
