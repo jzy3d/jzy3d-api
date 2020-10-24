@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.ddp.AbstractDepthPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.IDepthPeelingAlgorithm;
 
@@ -29,7 +30,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm i
 
     
     @Override
-    public void init(GL2 gl, int width, int height) {
+    public void init(Painter painter, GL2 gl, int width, int height) {
         initFrontPeelingRenderTargets(gl, width, height);
        
         gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);
@@ -40,13 +41,13 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm i
     }
 
     @Override
-    public void display(GL2 gl, GLU glu) {
+    public void display(Painter painter, GL2 gl, GLU glu) {
         resetNumPass();
-        renderFrontToBackPeeling(gl);
+        renderFrontToBackPeeling(painter, gl);
     }
 
     @Override
-    public void reshape(GL2 gl, int width, int height) {
+    public void reshape(Painter painter, GL2 gl, int width, int height) {
         deleteFrontPeelingRenderTargets(gl);
         initFrontPeelingRenderTargets(gl, width, height);
     }
@@ -135,7 +136,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm i
         gl.glDeleteTextures(1, g_frontColorBlenderTexId, 0);
     }
 
-    protected void renderFrontToBackPeeling(GL2 gl) {
+    protected void renderFrontToBackPeeling(Painter painter, GL2 gl) {
         // ---------------------------------------------------------------------
         // 1. Initialize Min Depth Buffer
         // ---------------------------------------------------------------------
@@ -151,7 +152,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm i
         glslInit.bind(gl);
         glslInit.setUniform(gl, "Alpha", g_opacity, 1);
         
-        tasksToRender(gl);
+        tasksToRender(painter, gl);
         
         glslInit.unbind(gl);
 
@@ -181,7 +182,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm i
             glslPeel.bindTextureRECT(gl, "DepthTex", g_frontDepthTexId[prevId], 0);
             glslPeel.setUniform(gl, "Alpha", g_opacity, 1);
             
-            tasksToRender(gl);
+            tasksToRender(painter, gl);
             
             glslPeel.unbind(gl);
 

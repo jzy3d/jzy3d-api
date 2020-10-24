@@ -36,8 +36,8 @@ public class JavaFXRenderer3d extends AWTImageRenderer3d{
         GL gl = canvas.getGL();
 
         if (view != null) {
-            view.clear(gl);
-            view.render(gl, glu);
+            view.clear();
+            view.render();
 
             // Convert as JavaFX Image and notify all listeners
             Image image = makeScreenshotAsJavaFXImage(gl);

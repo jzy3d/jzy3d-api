@@ -1,8 +1,7 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
-import jogamp.opengl.gl4.GL4bcImpl;
-
 import org.apache.log4j.Logger;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.DualDepthPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.FrontToBackPeelingAlgorithm;
@@ -17,6 +16,8 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
+
+import jogamp.opengl.gl4.GL4bcImpl;
 
 /**
  * Execute depth peeling methods in a Jzy3d {@link Renderer3d}
@@ -73,13 +74,13 @@ public class DepthPeelingRenderer3d extends Renderer3d {
              * ("javax.media.opengl.Trace", null, canvas.getGL(), new Object[] {
              * System.err }));
              */
-            view.init(canvas.getGL());
+            view.init();
         }
 
         // super.init(drawable);
 
         canvas.setAutoSwapBufferMode(autoSwapBuffer);
-        dualPeelingAlgorithm.init(getGL2(canvas), width, height);
+        dualPeelingAlgorithm.init(view.getPainter(), getGL2(canvas), width, height);
     }
 
     protected GL2 getGL2(GLAutoDrawable drawable) {
@@ -114,7 +115,7 @@ public class DepthPeelingRenderer3d extends Renderer3d {
         GL2 gl = getGL2(drawable);
 
         preDisplay(gl);
-        dualPeelingAlgorithm.display(gl, glu); // will call taskToRender
+        dualPeelingAlgorithm.display(view.getPainter(), gl, glu); // will call taskToRender
         postDisplay(gl);
 
         if (!autoSwapBuffer)
@@ -122,7 +123,7 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     }
 
     public void postDisplay(GL2 gl) {
-        view.renderOverlay(gl);
+        view.renderOverlay();
     }
 
     public void preDisplay(GL2 gl) {
@@ -132,7 +133,7 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     public static IGLRenderer getDepthPeelingContentRenderer(final View view) {
         return new IGLRenderer() {
             @Override
-            public void draw(GL gl, GLU glu, Camera camera) {
+            public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
 
                 ((DepthPeelingView) view).renderPeeledView(gl, glu);
             }
@@ -149,13 +150,13 @@ public class DepthPeelingRenderer3d extends Renderer3d {
         if (this.width != width || this.height != height) {
             this.width = width;
             this.height = height;
-            dualPeelingAlgorithm.reshape(gl, width, height);
+            dualPeelingAlgorithm.reshape(view.getPainter(), gl, width, height);
         }
     }
 
     @Override
     public void dispose(GLAutoDrawable drawable) {
-        dualPeelingAlgorithm.dispose(getGL2(drawable));
+        dualPeelingAlgorithm.dispose(view.getPainter(), getGL2(drawable));
     }
 
     public static IDepthPeelingAlgorithm getDepthPeelingAlgorithm(PeelingMethod method) {

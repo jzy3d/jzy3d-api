@@ -1,5 +1,8 @@
 package org.jzy3d.chart.factories;
 
+import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.Painter;
+
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
@@ -15,6 +18,10 @@ public abstract class NativeChartFactory extends ChartComponentFactory{
 	/** Return Open GL Capabilities */
 	public GLCapabilities getCapabilities() {
 		return capabilities;
+	}
+	
+	public Painter newPainter() {
+		return new NativeDesktopPainter();
 	}
 	
 	/************ PROFILE AND CAPABILITIES HELPERS ************/

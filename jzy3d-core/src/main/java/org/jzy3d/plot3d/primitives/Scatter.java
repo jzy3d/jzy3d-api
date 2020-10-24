@@ -9,6 +9,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Coord3ds;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -67,62 +68,28 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
     /* */
 
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
 
-        if (gl.isGL2()) {
-            drawGL2(gl);
-        } else {
-            drawGLES2();
-        }
-
-        doDrawBounds(gl, glu, cam);
-    }
-
-    public void drawGLES2() {
-        GLES2CompatUtils.glPointSize(width);
-
-        GLES2CompatUtils.glBegin(GL.GL_POINTS);
+        painter.glPointSize(width);
+        
+        painter.glBegin(GL.GL_POINTS);
         if (colors == null)
-            colorGLES2(rgb);
-            //GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+            painter.color(rgb);
         
         if (coordinates != null) {
             int k = 0;
             for (Coord3d c : coordinates) {
                 if (colors != null) {
-                    colorGLES2(colors[k]);
-                    //GLES2CompatUtils.glColor4f(colors[k].r, colors[k].g, colors[k].b, colors[k].a);
+                	painter.color(colors[k]);
                     k++;
                 }
-                vertexGLES2(c);
-                //GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
-            }
-        }
-        GLES2CompatUtils.glEnd();
-    }
-
-    public void drawGL2(GL gl) {
-        gl.getGL2().glPointSize(width);
-
-        gl.getGL2().glBegin(GL.GL_POINTS);
-        if (colors == null)
-            colorGL2(gl, rgb);
-            //gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
-        
-        if (coordinates != null) {
-            int k = 0;
-            for (Coord3d c : coordinates) {
-                if (colors != null) {
-                    colorGL2(gl, colors[k]);
-                    //gl.getGL2().glColor4f(colors[k].r, colors[k].g, colors[k].b, colors[k].a);
-                    k++;
-                }
-                vertexGL2(gl, c);
-                //gl.getGL2().glVertex3f(c.x, c.y, c.z);
+                painter.vertex(c, spaceTransformer);
             }
         }
         gl.getGL2().glEnd();
+
+        doDrawBounds(painter, gl, glu, cam);
     }
 
     @Override

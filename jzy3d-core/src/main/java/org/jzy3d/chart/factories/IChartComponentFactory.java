@@ -11,6 +11,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IBoundingPolicy;
 import org.jzy3d.maths.Rectangle;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -27,7 +28,9 @@ public interface IChartComponentFactory {
 	public Chart newChart();
     public Chart newChart(Quality quality);
     public Chart newChart(IChartComponentFactory factory, Quality quality);
-    
+
+    public Painter newPainter();
+
     public ChartScene newScene(boolean sort);
     public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort);
     public View newView(Scene scene, ICanvas canvas, Quality quality);

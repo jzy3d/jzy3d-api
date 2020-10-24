@@ -8,9 +8,6 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 public class CroppingView extends AWTView {
     public CroppingView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
@@ -24,9 +21,9 @@ public class CroppingView extends AWTView {
     }
 
     @Override
-    public void renderSceneGraph(GL gl, GLU glu, boolean light) {
+    public void renderSceneGraph(boolean light) {
         synchronized (scene.getGraph()) {
-            super.renderSceneGraph(gl, glu, light);
+            super.renderSceneGraph(light);
         }
     }
 

@@ -5,6 +5,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.AbstractGeometry;
 import org.jzy3d.plot3d.primitives.Point;
@@ -37,9 +38,9 @@ public class CameraDistanceAnnotation extends Point {
 	}
 
 	@Override
-	public void draw(GL gl, GLU glu, Camera cam) {
+	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		computeCameraPosition();
-		doTransform(gl, glu, cam);
+		doTransform(painter, gl, glu, cam);
 
 		doDrawCamera(gl, glu, cam);
 
@@ -54,17 +55,17 @@ public class CameraDistanceAnnotation extends Point {
 		AbstractOrderingStrategy strat = graph.getStrategy();
 		for (AbstractDrawable drawables : graph.getDecomposition()) {
 			double d = strat.score(drawables);
-			txt.drawText(gl, glu, view.getCamera(), Utils.num2str(d, 4),
-					drawables.getBarycentre(), h, v, colorBary, screenOffset);
+			txt.drawText(painter, gl, glu, view.getCamera(),
+					Utils.num2str(d, 4), drawables.getBarycentre(), h, v, colorBary, screenOffset);
 
 			if (drawables instanceof AbstractGeometry) {
 				Polygon p = (Polygon) drawables;
 				for (Point pt : p.getPoints()) {
 					// Point pt2 = pt.clone();
 					d = strat.score(pt);
-					txt.drawText(gl, glu, view.getCamera(),
-							Utils.num2str(d, 4), pt.getCoord(), h, v, colorPt,
-							screenOffset);
+					txt.drawText(painter, gl, glu,
+							view.getCamera(), Utils.num2str(d, 4), pt.getCoord(), h, v,
+							colorPt, screenOffset);
 				}
 			}
 		}

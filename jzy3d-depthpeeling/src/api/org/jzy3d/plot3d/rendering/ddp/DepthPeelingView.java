@@ -26,13 +26,13 @@ public class DepthPeelingView extends View{
      // decompose super.display, i.e. prevent to render scenegraph now,
         // and delegate to peeling algorithm
         synchronized(this){
-            clear(gl);
+            clear();
             
             // render background
-            renderBackground(gl, glu, 0f, 1f);
+            renderBackground(0f, 1f);
 
             // fix quality
-            updateQuality(gl);
+            updateQuality();
 
             // prepare viewport
             this.width = width;
@@ -44,9 +44,9 @@ public class DepthPeelingView extends View{
     protected int height = 0;
     
     public void renderPeeledView(GL gl, GLU glu){
-        updateCamera(gl, glu,  new ViewportConfiguration(width, height), computeScaledViewBounds());
+        updateCamera(new ViewportConfiguration(width, height), computeScaledViewBounds());
 
-        renderAxeBox(gl, glu);
-        renderSceneGraph(gl, glu, false);  
+        renderAxeBox();
+        renderSceneGraph(false);  
     }
 }

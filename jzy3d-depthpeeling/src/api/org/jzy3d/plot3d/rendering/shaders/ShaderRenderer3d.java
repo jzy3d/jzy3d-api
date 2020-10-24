@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.shaders;
 
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -32,7 +33,7 @@ public class ShaderRenderer3d extends Renderer3d{
         GL2 gl = drawable.getGL().getGL2();
         super.init(drawable);
         drawable.setAutoSwapBufferMode(autoSwapBuffer);
-        shaderable.init(gl, width, height);       
+        shaderable.init(view.getPainter(), gl, width, height);       
     }
     
     public static boolean DECOMPOSE_VIEW = true;
@@ -42,7 +43,7 @@ public class ShaderRenderer3d extends Renderer3d{
         GL2 gl = drawable.getGL().getGL2();
 
         preDisplay(gl);
-        shaderable.display(gl, glu); // will call taskToRender
+        shaderable.display(view.getPainter(), gl, glu); // will call taskToRender
         postDisplay(gl);
         
         if(!autoSwapBuffer)
@@ -54,19 +55,19 @@ public class ShaderRenderer3d extends Renderer3d{
         // decompose super.display, i.e. prevent to render scenegraph now,
         // and delegate to peeling algorithm
         synchronized(view){
-            view.clear(gl);
+            view.clear();
             
             // render background
-            view.renderBackground(gl, glu, 0f, 1f);
+            view.renderBackground(0f, 1f);
             
             // render scene
-            view.updateQuality(gl);
-            view.updateCamera(gl, glu,  new ViewportConfiguration(width, height), view.computeScaledViewBounds());
+            view.updateQuality();
+            view.updateCamera(new ViewportConfiguration(width, height), view.computeScaledViewBounds());
         }
     }
     
     public void postDisplay(GL2 gl) {
-        view.renderOverlay(gl);
+        view.renderOverlay();
     }
 
     /* */
@@ -74,8 +75,8 @@ public class ShaderRenderer3d extends Renderer3d{
     public static IGLRenderer getShaderContentRenderer(final View view){
         return new IGLRenderer() {
             @Override
-            public void draw(GL gl, GLU glu, Camera camera) {
-                view.renderSceneGraph(gl, glu, true);  
+            public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+                view.renderSceneGraph(true);  
             }
         };
     }
@@ -90,12 +91,12 @@ public class ShaderRenderer3d extends Renderer3d{
         if (this.width != width || this.height != height) {
             this.width = width;
             this.height = height;
-            shaderable.reshape(gl, width, height);
+            shaderable.reshape(view.getPainter(), gl, width, height);
         }
     }
     
     @Override
     public void dispose(GLAutoDrawable drawable) {
-        shaderable.dispose(drawable.getGL().getGL2());
+        shaderable.dispose(view.getPainter(), drawable.getGL().getGL2());
     }
 }

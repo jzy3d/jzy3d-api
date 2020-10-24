@@ -1,7 +1,7 @@
 package org.jzy3d.painters;
 
-import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -14,7 +14,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
-public class NativeEmbeddedPainter implements Painter{
+public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
     protected GL gl;
     protected GLU glu = new GLU();
     protected GLUT glut = new GLUT();
@@ -30,21 +30,6 @@ public class NativeEmbeddedPainter implements Painter{
     public void end() {
         // TODO Auto-generated method stub
         
-    }
-
-    @Override
-    public void vertex(Coord3d coord, SpaceTransformer transform) {
-        if(transform==null){
-            GLES2CompatUtils.glVertex3f(coord.x, coord.y, coord.z);            
-        }
-        else{
-            GLES2CompatUtils.glVertex3f(transform.getX().compute(coord.x), transform.getY().compute(coord.y),transform.getZ().compute(coord.z));
-        }
-    }
-
-    @Override
-    public void color(Color color) {
-        GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
     }
 
     @Override
@@ -104,4 +89,84 @@ public class NativeEmbeddedPainter implements Painter{
     public void transform(Transform transform, boolean loadIdentity) {
         transform.execute(gl, loadIdentity);        
     }
+    
+    /************ OPEN GL Interface **************/
+    
+    @Override
+    public void glLoadIdentity() {
+    	GLES2CompatUtils.glLoadIdentity();
+    }
+
+	@Override
+	public void glScalef(float x, float y, float z) {
+		GLES2CompatUtils.glScalef(x, y, z);   
+	}
+
+	@Override
+	public void glLineWidth(float width) {
+		GLES2CompatUtils.glLineWidth(width);
+	}
+
+	@Override
+	public void glBegin(int type) {
+		GLES2CompatUtils.glBegin(type);
+	}
+
+	@Override
+	public void glColor3f(float r, float g, float b) {
+		GLES2CompatUtils.glColor3f(r, g, b); 
+	}
+
+	@Override
+	public void glVertex3f(float x, float y, float z) {
+		GLES2CompatUtils.glVertex3f(x, y, z);
+	}
+	
+	@Override
+	public void glVertex3d(double x, double y, double z) {
+		throw new NotImplementedException();
+	}
+
+
+	@Override
+	public void glEnd() {
+		GLES2CompatUtils.glEnd();
+	}
+	
+	@Override
+	public void glPolygonMode(int frontOrBack, int fill) {
+        GLES2CompatUtils.glPolygonMode(frontOrBack, fill);
+	}
+
+	@Override
+	public void glColor4f(float r, float g, float b, float a) {
+		GLES2CompatUtils.glColor4f(r, g, b, a);
+	}
+
+	@Override
+	public void glEnable(int type) {
+		GLES2CompatUtils.glEnable(type);
+	}
+
+	@Override
+	public void glPolygonOffset(float factor, float units) {
+		GLES2CompatUtils.glPolygonOffset(factor, units); // handle stippling
+		
+	}
+
+	@Override
+	public void glDisable(int type) {
+		GLES2CompatUtils.glDisable(type);		
+	}
+	
+	@Override
+	public void glLineStipple(int factor, short pattern) {
+		GLES2CompatUtils.glLineStipple(factor, pattern);		
+	}
+	
+	@Override
+	public void glPointSize(float width) {
+		GLES2CompatUtils.glPointSize(width);
+	}
+
 }

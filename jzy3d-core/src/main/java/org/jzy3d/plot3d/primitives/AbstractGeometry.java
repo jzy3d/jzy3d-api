@@ -12,6 +12,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -40,8 +41,8 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
     /* * */
 
     @Override
-    public void draw(GL gl, GLU glu, Camera cam) {
-        doTransform(gl, glu, cam);
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        doTransform(painter, gl, glu, cam);
 
         if (mapper != null)
             mapper.preDraw(this);
@@ -50,10 +51,10 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         if (facestatus) {
             applyPolygonModeFill(gl);
             if (wfstatus && polygonOffsetFillEnable)
-                polygonOffseFillEnable(gl);
-            callPointsForFace(gl);
+                polygonOffseFillEnable(painter, gl);
+            callPointsForFace(painter, gl);
             if (wfstatus && polygonOffsetFillEnable)
-                polygonOffsetFillDisable(gl);
+                polygonOffsetFillDisable(painter, gl);
         }
 
         // Draw edge of polygon
@@ -64,41 +65,37 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
             //gl.getGL2().glLineWidth(getWireframeWidth());
             
             if (polygonOffsetFillEnable)
-                polygonOffseFillEnable(gl);
-            callPointForWireframe(gl);
+                polygonOffseFillEnable(painter, gl);
+            callPointForWireframe(painter, gl);
             if (polygonOffsetFillEnable)
-                polygonOffsetFillDisable(gl);
+                polygonOffsetFillDisable(painter, gl);
         }
 
         if (mapper != null)
             mapper.postDraw(this);
 
-        doDrawBounds(gl, glu, cam);
+        doDrawBounds(painter, gl, glu, cam);
     }
 
-    /** Drawing the point list in wireframe mode if GL2 profile is available */
-    protected void callPointForWireframe(GL gl) {
-        if (gl.isGL2()) {
-            callPointsForWireframeGL2(gl);
-        }
-    }
-
-    /** Drawing the point list in wireframe mode */
-    public void callPointsForWireframeGL2(GL gl) {
-        colorGL2(gl, wfcolor);
+    /** Drawing the point list in wireframe mode
+     */
+    protected void callPointForWireframe(Painter painter, GL gl) {
+    	colorGL2(gl, wfcolor);
         gl.glLineWidth(wfwidth);
 
         begin(gl);
         for (Point p : points) {
-            vertexGL2(gl, p.xyz);
+            painter.vertex(p.xyz, spaceTransformer);
         }
         end(gl);
     }
 
-    /** Drawing the point list in face mode (polygon content) */
-    protected void callPointsForFace(GL gl) {
+
+    /** Drawing the point list in face mode (polygon content) 
+     * @param painter TODO*/
+    protected void callPointsForFace(Painter painter, GL gl) {
         if (gl.isGL2()) {
-            callPointsForFaceGL2(gl);
+            callPointsForFaceGL2(painter, gl);
         } else {
             callPointsForFaceGLES2(gl);
         }
@@ -124,17 +121,18 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         end(gl);
     }
 
-    /** Drawing the point list in face mode (polygon content) with GL2 profile */
-    public void callPointsForFaceGL2(GL gl) {
+    /** Drawing the point list in face mode (polygon content) with GL2 profile 
+     * @param painter TODO*/
+    public void callPointsForFaceGL2(Painter painter, GL gl) {
         begin(gl);
         for (Point p : points) {
             if (mapper != null) {
                 Color c = mapper.getColor(p.xyz);
-                colorGL2(gl, c);
+                painter.color(c);
             } else {
-                colorGL2(gl, p.rgb);
+                painter.color(p.rgb);
             }
-            vertexGL2(gl, p.xyz);
+            painter.vertex(p.xyz, spaceTransformer);
         }
         end(gl);
     }
@@ -230,12 +228,12 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
         }
     }
 
-    protected void polygonOffseFillEnable(GL gl) {
+    protected void polygonOffseFillEnable(Painter painter, GL gl) {
         gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         gl.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
     }
 
-    protected void polygonOffsetFillDisable(GL gl) {
+    protected void polygonOffsetFillDisable(Painter painter, GL gl) {
         gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
     }
     

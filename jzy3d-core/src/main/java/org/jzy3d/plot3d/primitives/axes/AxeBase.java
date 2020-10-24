@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -44,52 +44,26 @@ public class AxeBase implements IAxe {
 	}
 
 	@Override
-	public void draw(GL gl, GLU glu, Camera camera) {
+	public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+		painter.glLoadIdentity();
+		painter.glScalef(scale.x, scale.y, scale.z);
+		painter.glLineWidth(2);
 
-		if (gl.isGL2()) {
-			gl.getGL2().glLoadIdentity();
-			gl.getGL2().glScalef(scale.x, scale.y, scale.z);
-			gl.getGL2().glLineWidth(2);
-
-			gl.getGL2().glBegin(GL.GL_LINES);
-			gl.getGL2().glColor3f(1.0f, 0.0f, 0.0f); // R
-			gl.getGL2().glVertex3f(bbox.getXmin(), bbox.getYmin(),
-					bbox.getZmin());
-			gl.getGL2().glVertex3f(bbox.getXmax(), 0, 0);
-			gl.getGL2().glColor3f(0.0f, 1.0f, 0.0f); // G
-			gl.getGL2().glVertex3f(bbox.getXmin(), bbox.getYmin(),
-					bbox.getZmin());
-			gl.getGL2().glVertex3f(0, bbox.getYmax(), 0);
-			gl.getGL2().glColor3f(0.0f, 0.0f, 1.0f); // B
-			gl.getGL2().glVertex3f(bbox.getXmin(), bbox.getYmin(),
-					bbox.getZmin());
-			gl.getGL2().glVertex3f(0, 0, bbox.getZmax());
-			gl.getGL2().glEnd();
-		} else {
-			GLES2CompatUtils.glLoadIdentity();
-			GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
-			GLES2CompatUtils.glLineWidth(2);
-
-			GLES2CompatUtils.glBegin(GL.GL_LINES);
-			GLES2CompatUtils.glColor3f(1.0f, 0.0f, 0.0f); // R
-			GLES2CompatUtils.glVertex3f(bbox.getXmin(), bbox.getYmin(),
-					bbox.getZmin());
-			GLES2CompatUtils.glVertex3f(bbox.getXmax(), 0, 0);
-			GLES2CompatUtils.glColor3f(0.0f, 1.0f, 0.0f); // G
-			GLES2CompatUtils.glVertex3f(bbox.getXmin(), bbox.getYmin(),
-					bbox.getZmin());
-			GLES2CompatUtils.glVertex3f(0, bbox.getYmax(), 0);
-			GLES2CompatUtils.glColor3f(0.0f, 0.0f, 1.0f); // B
-			GLES2CompatUtils.glVertex3f(bbox.getXmin(), bbox.getYmin(),
-					bbox.getZmin());
-			GLES2CompatUtils.glVertex3f(0, 0, bbox.getZmax());
-			GLES2CompatUtils.glEnd();
-		}
+		painter.glBegin(GL.GL_LINES);
+		painter.glColor3f(1.0f, 0.0f, 0.0f); // R
+		painter.glVertex3f(bbox.getXmin(), bbox.getYmin(), bbox.getZmin());
+		painter.glVertex3f(bbox.getXmax(), 0, 0);
+		painter.glColor3f(0.0f, 1.0f, 0.0f); // G
+		painter.glVertex3f(bbox.getXmin(), bbox.getYmin(), bbox.getZmin());
+		painter.glVertex3f(0, bbox.getYmax(), 0);
+		painter.glColor3f(0.0f, 0.0f, 1.0f); // B
+		painter.glVertex3f(bbox.getXmin(), bbox.getYmin(), bbox.getZmin());
+		painter.glVertex3f(0, 0, bbox.getZmax());
+		painter.glEnd();
 	}
 
 	/**
-	 * Set the scaling factor that are applied on this object before GL2
-	 * commands.
+	 * Set the scaling factor that are applied on this object before GL2 commands.
 	 */
 	@Override
 	public void setScale(Coord3d scale) {
@@ -111,45 +85,42 @@ public class AxeBase implements IAxe {
 	public IAxeLayout getLayout() {
 		return layout;
 	}
-	
 
-    @Override
-    public SpaceTransformer getSpaceTransformer() {
-        return spaceTransformer;
-    }
+	@Override
+	public SpaceTransformer getSpaceTransformer() {
+		return spaceTransformer;
+	}
 
-    @Override
-    public void setSpaceTransformer(SpaceTransformer spaceTransformer) {
-        this.spaceTransformer = spaceTransformer;
-    }
+	@Override
+	public void setSpaceTransformer(SpaceTransformer spaceTransformer) {
+		this.spaceTransformer = spaceTransformer;
+	}
 
-    
-    @Override
-    public Coord3d getScale() {
-        return scale;
-    }
-
+	@Override
+	public Coord3d getScale() {
+		return scale;
+	}
 
 	protected Coord3d scale;
 	protected BoundingBox3d bbox;
 	protected IAxeLayout layout;
-	
+
 	protected SpaceTransformer spaceTransformer;
 
-    @Override
-    public List<AxeAnnotation> getAnnotations() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public List<AxeAnnotation> getAnnotations() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public void setAnnotations(List<AxeAnnotation> annotations) {
-        // TODO Auto-generated method stub
-        
-    }
+	@Override
+	public void setAnnotations(List<AxeAnnotation> annotations) {
+		// TODO Auto-generated method stub
 
-    @Override
-    public BoundingBox3d getWholeBounds() {
-        return bbox;
-    }
+	}
+
+	@Override
+	public BoundingBox3d getWholeBounds() {
+		return bbox;
+	}
 }

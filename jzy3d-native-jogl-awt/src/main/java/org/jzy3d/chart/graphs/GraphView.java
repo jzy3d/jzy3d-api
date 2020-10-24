@@ -7,7 +7,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
 public class GraphView extends ChartView {
@@ -17,7 +16,7 @@ public class GraphView extends ChartView {
 	
 
 	@Override
-	protected void correctCameraPositionForIncludingTextLabels(GL gl, GLU glu, ViewportConfiguration viewport) {
+	protected void correctCameraPositionForIncludingTextLabels(ViewportConfiguration viewport) {
         /*cam.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
         cam.shoot(gl, glu, cameraMode);
         axe.draw(gl, glu, cam);

@@ -6,6 +6,7 @@ import java.util.List;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
@@ -191,19 +192,20 @@ public class Graph {
      * monotype (i.e. non-{@link AbstractComposite} {@link AbstractDrawable}s)
      * in order to render them according to the default -or defined-
      * {@link AbstractOrderingStrategy}.
+     * @param painter TODO
      */
-    public void draw(GL gl, GLU glu, Camera camera) {
-        draw(gl, glu, camera, components, sort);
+    public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+        draw(painter, gl, glu, camera, components, sort);
     }
 
     protected TicToc t = new TicToc();
 
-    public synchronized void draw(GL gl, GLU glu, Camera camera, List<AbstractDrawable> components, boolean sort) {
+    public synchronized void draw(Painter painter, GL gl, GLU glu, Camera camera, List<AbstractDrawable> components, boolean sort) {
         glMatrixMode(gl);
         if (!sort) {
-            drawSimple(gl, glu, camera, components);
+            drawSimple(painter, gl, glu, camera, components);
         } else {
-            drawDecomposition(gl, glu, camera);
+            drawDecomposition(painter, gl, glu, camera);
         }
     }
 
@@ -215,23 +217,23 @@ public class Graph {
         }
     }
 
-    public void drawSimple(GL gl, GLU glu, Camera camera, List<AbstractDrawable> components) {
+    public void drawSimple(Painter painter, GL gl, GLU glu, Camera camera, List<AbstractDrawable> components) {
         // render all items of the graph
         // synchronized(components){
         for (AbstractDrawable d : components)
             if (d.isDisplayed())
-                d.draw(gl, glu, camera);
+                d.draw(painter, gl, glu, camera);
         // }
     }
 
-    public void drawDecomposition(GL gl, GLU glu, Camera camera) {
+    public void drawDecomposition(Painter painter, GL gl, GLU glu, Camera camera) {
         // Render sorted monotypes
         List<AbstractDrawable> monotypes = getDecomposition();
         strategy.sort(monotypes, camera);
 
         for (AbstractDrawable d : monotypes) {
             if (d.isDisplayed())
-                d.draw(gl, glu, camera);
+                d.draw(painter, gl, glu, camera);
         }
     }
 

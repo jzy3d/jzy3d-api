@@ -31,6 +31,7 @@ public interface Painter {
     
     public void begin(Geometry geometry);
     public void end();
+    public void vertex(Coord3d coord);
     public void vertex(Coord3d coord, SpaceTransformer transform);
 
     public void color(Color color);
@@ -54,4 +55,30 @@ public interface Painter {
     public IAxe getAxe();
     
     
+    
+    
+    public void glLoadIdentity();
+    public void glScalef(float x, float y, float z);
+    
+    public void glBegin(int type);
+	public void glEnd();
+
+	public void glColor3f(float r, float g, float b);
+    public void glColor4f(float r, float g, float b, float a);
+    public void glVertex3f(float x, float y, float z);
+    public void glVertex3d(double x, double y, double z);
+	
+	
+	
+    
+    public void glEnable(int type);
+    public void glDisable(int type);
+
+    public void glPolygonMode(int frontOrBack, int fill);
+    public void glPolygonOffset(float factor, float units);
+    
+    public void glLineStipple(int factor, short pattern);
+    
+    public void glLineWidth(float width);
+	public void glPointSize(float width);
 }

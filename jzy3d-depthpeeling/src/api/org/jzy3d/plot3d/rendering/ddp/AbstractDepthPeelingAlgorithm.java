@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.ddp;
 import java.io.File;
 import java.net.URL;
 
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
@@ -74,7 +75,7 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
     
     IGLRenderer tasksToRender = new IGLRenderer() {
         @Override
-        public void draw(GL gl, GLU glu, Camera cam) {
+        public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
             throw new RuntimeException("nothing to render?!");
         }
     };
@@ -89,8 +90,8 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
         this.tasksToRender = tasksToRender;
     }
 
-    protected void tasksToRender(GL2 gl) {
-        tasksToRender.draw(gl, glu, null);
+    protected void tasksToRender(Painter painter, GL2 gl) {
+        tasksToRender.draw(painter, gl, glu, null);
         incrementGeoPasses();
     }
     
@@ -103,7 +104,7 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
     }
     
     @Override
-    public void dispose(GL2 gl){
+    public void dispose(Painter painter, GL2 gl){
         destroyShaders(gl);
     }
     

@@ -6,6 +6,7 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -43,9 +44,9 @@ public class Parallelepiped extends AbstractWireframeable implements ISingleColo
 	/* */
 
 	@Override
-    public void draw(GL gl, GLU glu, Camera cam){
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam){
 		for(Polygon quad: quads)
-			quad.draw(gl, glu, cam);	
+			quad.draw(painter, gl, glu, cam);	
 	}
 	
 	@Override

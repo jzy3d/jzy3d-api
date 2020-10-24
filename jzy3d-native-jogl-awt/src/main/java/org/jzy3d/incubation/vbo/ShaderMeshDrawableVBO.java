@@ -5,6 +5,7 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
@@ -28,7 +29,7 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
 	private ColormapTexture colormapTexure;
 	
 	@Override
-    public void draw(GL gl, GLU glu, Camera cam) {
+    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		
 		if (!hasMountedOnce) {
 			mount(gl);
@@ -42,7 +43,7 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
 		shaderProgram.setUniform(gl.getGL2(), "min_max", new float[] {(float) mapper.getMin(), (float) mapper.getMax(),(float) mapper.getMin(), (float) mapper.getMax()},4);
 		int idc = gl.getGL2().glGetUniformLocation(shaderProgram.getProgramId(), "transfer");
     	gl.getGL2().glUniform1i(idc, 1);
-		super.draw(gl, glu, cam);
+		super.draw(painter, gl, glu, cam);
 		shaderProgram.unbind(gl.getGL2());
 		gl.getGL2().glEnable(GL.GL_BLEND);
 		

@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
@@ -66,7 +67,8 @@ public class Renderer3d implements GLEventListener {
             if (traceGL)
                 canvas.getGL().getContext().setGL(GLPipelineFactory.create("com.jogamp.opengl.Trace", null, canvas.getGL(), new Object[] { System.err }));
 
-            view.init(canvas.getGL());
+            ((NativeDesktopPainter)view.getPainter()).setGL(canvas.getGL());
+            view.init();
         }
     }
 
@@ -77,10 +79,13 @@ public class Renderer3d implements GLEventListener {
     @Override
     public void display(GLAutoDrawable canvas) {
         GL gl = canvas.getGL();
+        
+        ((NativeDesktopPainter)view.getPainter()).setGL(canvas.getGL());
+
 
         if (view != null) {
-            view.clear(gl);
-            view.render(gl, glu);
+            view.clear();
+            view.render();
 
             if (doScreenshotAtNextDisplay) {
                 GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
@@ -101,10 +106,14 @@ public class Renderer3d implements GLEventListener {
             view.dimensionDirty = true;
 
             if (canvas != null) {
+            	
+                ((NativeDesktopPainter)view.getPainter()).setGL(canvas.getGL());
+
+            	
                 // GL gl1 = canvas.getGL();
                 GL gl = canvas.getGL().getGL2();
-                view.clear(gl);
-                view.render(gl, glu);
+                view.clear();
+                view.render();
             }
         }
     }
