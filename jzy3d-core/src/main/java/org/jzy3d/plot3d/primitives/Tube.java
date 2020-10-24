@@ -53,17 +53,36 @@ public class Tube extends AbstractWireframeable implements ISingleColorable {
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		doTransform(painter, gl, glu, cam);
 
-		if (gl.isGL2()) {
-			gl.getGL2().glTranslatef(x, y, z);
-		} else {
-			GLES2CompatUtils.glTranslatef(x, y, z);
-		}
+		painter.glTranslatef(x, y, z);
+		painter.glLineWidth(wfwidth);
 
-		gl.glLineWidth(wfwidth);
-
+		
 		// Draw
 		GLUquadric qobj = glu.gluNewQuadric();
 
+		
+		if (facestatus) {
+			if (wfstatus) {
+				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glPolygonOffset(1.0f, 1.0f);
+			}
+
+			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+			painter.color(color);
+			painter.gluCylinder(qobj, radiusBottom, radiusTop, height, slices, stacks);
+
+			if (wfstatus)
+				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+
+		}
+		if (wfstatus) {
+			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+			painter.color(wfcolor);
+			painter.gluCylinder(qobj, radiusBottom, radiusTop, height, slices, stacks);
+		}
+		
+		
+		
 		if (gl.isGL2()) {
 			if (facestatus) {
 				if (wfstatus) {

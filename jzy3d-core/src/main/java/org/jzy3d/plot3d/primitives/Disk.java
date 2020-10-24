@@ -43,64 +43,37 @@ public class Disk extends AbstractWireframeable implements ISingleColorable {
 	@Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		doTransform(painter, gl, glu, cam);
-
-		if (gl.isGL2()) {
-			gl.getGL2().glTranslatef(x, y, z);
-
-			gl.glLineWidth(wfwidth);
-
-			// Draw
-			GLUquadric qobj = glu.gluNewQuadric();
-
-			if (facestatus) {
-				if (wfstatus) {
-					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-					gl.glPolygonOffset(1.0f, 1.0f);
-				}
-
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
-
-				if (wfstatus)
-					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-
-			}
-			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
-			}
-		} else {
-			GLES2CompatUtils.glTranslatef(x, y, z);
-
-			gl.glLineWidth(wfwidth);
-
-			// Draw
-			GLUquadric qobj = glu.gluNewQuadric();
-
-			if (facestatus) {
-				if (wfstatus) {
-					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-					gl.glPolygonOffset(1.0f, 1.0f);
-				}
-
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-				GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
-				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
-
-				if (wfstatus)
-					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-
-			}
-			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
-			}
-		}
-
+		doDrawDisk(painter, glu);
 		doDrawBounds(painter, gl, glu, cam);
+	}
+
+	protected void doDrawDisk(Painter painter, GLU glu) {
+		painter.glTranslatef(x, y, z);
+
+		painter.glLineWidth(wfwidth);
+
+		// Draw
+		GLUquadric qobj = glu.gluNewQuadric();
+
+		if (facestatus) {
+			if (wfstatus) {
+				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glPolygonOffset(1.0f, 1.0f);
+			}
+
+			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+			painter.color(color);
+			painter.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+
+			if (wfstatus)
+				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+
+		}
+		if (wfstatus) {
+			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+			painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+			painter.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+		}
 	}
 
 	/* */

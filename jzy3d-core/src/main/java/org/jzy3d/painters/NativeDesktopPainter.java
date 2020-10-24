@@ -7,6 +7,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
+import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class NativeDesktopPainter extends AbstractPainter implements Painter {
@@ -84,6 +85,40 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	}
 
 	@Override
+	public void glTranslatef(float x, float y, float z) {
+		gl.getGL2().glTranslatef(x, y, z);
+	}
+
+	@Override
+	public void glEnable(int type) {
+		gl.glEnable(type);
+	}
+
+	@Override
+	public void glDisable(int type) {
+		gl.glDisable(type);
+	}
+
+	// GL MATRIX
+
+	@Override
+	public void glPushMatrix() {
+		gl.getGL2().glPushMatrix();
+	}
+
+	@Override
+	public void glPopMatrix() {
+		gl.getGL2().glPopMatrix();
+	}
+
+	// GL GEOMETRY
+
+	@Override
+	public void glPointSize(float width) {
+		gl.getGL2().glPointSize(width);
+	}
+
+	@Override
 	public void glLineWidth(float width) {
 		gl.getGL2().glLineWidth(width);
 	}
@@ -96,6 +131,11 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	@Override
 	public void glColor3f(float r, float g, float b) {
 		gl.getGL2().glColor3f(r, b, b);
+	}
+
+	@Override
+	public void glColor4f(float r, float g, float b, float a) {
+		gl.getGL2().glColor4f(r, g, b, a);
 	}
 
 	@Override
@@ -119,24 +159,8 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	}
 
 	@Override
-	public void glColor4f(float r, float g, float b, float a) {
-		gl.getGL2().glColor4f(r, g, b, a);
-	}
-
-	@Override
-	public void glEnable(int type) {
-		gl.glEnable(type);
-	}
-
-	@Override
 	public void glPolygonOffset(float factor, float units) {
 		gl.glPolygonOffset(factor, units); // handle stippling
-
-	}
-
-	@Override
-	public void glDisable(int type) {
-		gl.glDisable(type);
 	}
 
 	@Override
@@ -144,10 +168,7 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 		gl.getGL2().glLineStipple(factor, pattern);
 	}
 
-	@Override
-	public void glPointSize(float width) {
-		gl.getGL2().glPointSize(width);
-	}
+	// GL TEXTURE
 
 	@Override
 	public void glTexCoord2f(float s, float t) {
@@ -164,18 +185,6 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 		gl.getGL2().glTexEnvi(target, pname, param);
 	}
 
-	// GL MATRIX
-	
-	@Override
-	public void glPushMatrix() {
-		gl.getGL2().glPushMatrix();
-	}
-
-	@Override
-	public void glPopMatrix() {
-		gl.getGL2().glPopMatrix();
-	}
-	
 	// GL LISTS
 
 	@Override
@@ -205,8 +214,24 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 
 	@Override
 	public void glDeleteLists(int list, int range) {
-		gl.getGL2().glDeleteLists(list, range);		
+		gl.getGL2().glDeleteLists(list, range);
 	}
 
-	
+	// GLU
+
+	@Override
+	public void gluDisk(GLUquadric quad, double inner, double outer, int slices, int loops) {
+		glu.gluDisk(quad, inner, outer, slices, loops);
+	}
+
+	@Override
+	public void glutSolidSphere(double radius, int slices, int stacks) {
+		glut.glutSolidSphere(radius, slices, stacks);
+	}
+
+	@Override
+	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks) {
+		glu.gluCylinder(quad, base, top, height, slices, stacks);
+	}
+
 }

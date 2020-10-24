@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -27,11 +27,7 @@ public class Polygon extends AbstractGeometry {
     }
 
     @Override
-    protected void begin(GL gl) {
-        if (gl.isGL2()) {
-            gl.getGL2().glBegin(GL2.GL_POLYGON);
-        } else {
-            GLES2CompatUtils.glBegin(GL2.GL_POLYGON);
-        }
+    protected void begin(Painter painter, GL gl) {
+    	painter.glBegin(GL2.GL_POLYGON);
     }
 }

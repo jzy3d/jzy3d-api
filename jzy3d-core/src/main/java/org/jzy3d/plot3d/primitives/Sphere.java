@@ -6,7 +6,6 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -54,58 +53,29 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable {
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         doTransform(painter, gl, glu, cam);
-
-        if (gl.isGL2()) {
-
-            gl.getGL2().glTranslatef(position.x, position.y, position.z);
-
-            // Draw
-            // if(qobj==null)
-            // qobj = glu.gluNewQuadric();
-
-            if (facestatus) {
-                gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-                gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-                // glu.gluSphere(qobj, radius, slices, stacks);
-                glut.glutSolidSphere(radius, slices, stacks);
-            }
-            if (wfstatus) {
-                gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-                gl.getGL2().glLineWidth(wfwidth);
-                gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-                // glu.gluSphere(qobj, radius, slices, stacks);
-                glut.glutSolidSphere(radius, slices, stacks);
-
-                // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
-                // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
-            }
-        } else {
-            GLES2CompatUtils.glTranslatef(position.x, position.y, position.z);
-
-            // Draw
-            // if(qobj==null)
-            // qobj = glu.gluNewQuadric();
-
-            if (facestatus) {
-                GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-                GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
-                // glu.gluSphere(qobj, radius, slices, stacks);
-                glut.glutSolidSphere(radius, slices, stacks);
-            }
-            if (wfstatus) {
-                GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-                GLES2CompatUtils.glLineWidth(wfwidth);
-                GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-                // glu.gluSphere(qobj, radius, slices, stacks);
-                glut.glutSolidSphere(radius, slices, stacks);
-
-                // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
-                // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
-            }
-        }
-
+        doDrawSphere(painter);
         doDrawBounds(painter, gl, glu, cam);
     }
+
+	protected void doDrawSphere(Painter painter) {
+		painter.glTranslatef(position.x, position.y, position.z);
+
+        if (facestatus) {
+            painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+            painter.glColor4f(color.r, color.g, color.b, color.a);
+            // glu.gluSphere(qobj, radius, slices, stacks);
+            painter.glutSolidSphere(radius, slices, stacks);
+        }
+        if (wfstatus) {
+            painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+            painter.glLineWidth(wfwidth);
+            painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+            // glu.gluSphere(qobj, radius, slices, stacks);
+            painter.glutSolidSphere(radius, slices, stacks);
+            // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+            // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
+        }
+	}
 
     @Override
     public void applyGeometryTransform(Transform transform) {
