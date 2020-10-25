@@ -176,7 +176,7 @@ public class View {
         this.viewLifecycleListeners = new ArrayList<IViewLifecycleEventListener>();
         this.wasOnTopAtLastRendering = false;
 
-        this.glu = new GLU();
+        this.glu = null;//new GLU();
 
         this.scene.getGraph().getStrategy().setView(this);
 
@@ -1224,6 +1224,7 @@ public class View {
     
     public void renderSceneGraph(boolean light, Camera camera, Scene scene, Coord3d scaling) {
     	GL gl = ((NativeDesktopPainter)painter).getGL();
+    	GLU glu = ((NativeDesktopPainter)painter).getGLU();
 
         if (light) {
             scene.getLightSet().apply(gl, scaling);

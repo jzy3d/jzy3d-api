@@ -252,8 +252,8 @@ public class Chart {
      * @return
      */
     public Chart add(AbstractDrawable drawable, boolean updateView) {
+    	drawable.setSpaceTransformer(getView().getSpaceTransformer());
         getScene().getGraph().add(drawable, updateView);
-        drawable.setSpaceTransformer(getView().getSpaceTransformer());
         return this;
     }
 

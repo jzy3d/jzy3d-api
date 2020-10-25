@@ -22,7 +22,6 @@ import org.jzy3d.plot3d.primitives.axes.AxeBase;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.canvas.VoidCanvas;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.ordering.BarycentreOrderingStrategy;
 import org.jzy3d.plot3d.rendering.scene.Graph;
@@ -47,9 +46,27 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
     public abstract IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
     public abstract ICameraKeyController newKeyboardCameraController(Chart chart);
     public abstract IFrame newFrame(Chart chart, Rectangle bounds, String title);
+    public abstract ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality);
 
-
-    @Override
+    boolean offscreen = false;
+    int width;
+    int height;
+    
+    public boolean isOffscreen() {
+		return offscreen;
+	}
+	
+    public void setOffscreenDisabled() {
+		this.offscreen = false;
+	}
+	
+	public void setOffscreen(int width, int height) {
+		this.offscreen = true;
+		this.width = width;
+		this.height = height;
+	}
+	
+	@Override
     public Chart newChart() {
         return newChart(Quality.Advanced);
     }
@@ -147,11 +164,6 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
     @Override
     public ICanvas newCanvas(Scene scene, Quality quality) {
         return newCanvas(getFactory(), scene, quality);
-    }
-
-    @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality) {
-        return new VoidCanvas(factory, scene, quality);
     }
 
     /* UTILS */

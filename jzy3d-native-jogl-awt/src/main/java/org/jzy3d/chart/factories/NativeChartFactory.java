@@ -2,6 +2,10 @@ package org.jzy3d.chart.factories;
 
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.scene.Scene;
 
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
@@ -23,6 +27,12 @@ public abstract class NativeChartFactory extends ChartComponentFactory{
 	public Painter newPainter() {
 		return new NativeDesktopPainter();
 	}
+	
+	protected ICanvas newOffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, boolean traceGL,
+			boolean debugGL) {
+		return new OffscreenCanvas(factory, scene, quality, getCapabilities(), width, height, traceGL, debugGL);
+	}
+
 	
 	/************ PROFILE AND CAPABILITIES HELPERS ************/
 	
