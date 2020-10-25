@@ -1,9 +1,8 @@
 package org.jzy3d.painters;
 
-import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Coord3d;
+import java.nio.FloatBuffer;
+
 import org.jzy3d.plot3d.transform.Transform;
-import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
@@ -152,6 +151,16 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glEnd() {
 		gl.getGL2().glEnd();
 	}
+	
+	@Override
+	public void glFrontFace(int mode) {
+		gl.glFrontFace(mode);		
+	}
+	
+	@Override
+	public void glCullFace(int mode) {
+		gl.glCullFace(mode);
+	}
 
 	@Override
 	public void glPolygonMode(int frontOrBack, int fill) {
@@ -184,9 +193,15 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glTexEnvi(int target, int pname, int param) {
 		gl.getGL2().glTexEnvi(target, pname, param);
 	}
+	
+	@Override
+	public void glRasterPos3f(float x, float y, float z) {
+		gl.getGL2().glRasterPos3f(x, y, z);
+	}
 
 	// GL LISTS
 
+	
 	@Override
 	public int glGenLists(int range) {
 		return gl.getGL2().glGenLists(range);
@@ -233,5 +248,21 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks) {
 		glu.gluCylinder(quad, base, top, height, slices, stacks);
 	}
+	
+	// GL FEEDBACK BUFER
 
+	@Override
+	public void glFeedbackBuffer(int size, int type, FloatBuffer buffer) {
+		gl.getGL2().glFeedbackBuffer(size, type, buffer);
+	}
+
+	@Override
+	public int glRenderMode(int mode) {
+		return gl.getGL2().glRenderMode(mode);
+	}
+
+	@Override
+	public void glPassThrough(float token) {
+		gl.getGL2().glPassThrough(token);		
+	}	
 }

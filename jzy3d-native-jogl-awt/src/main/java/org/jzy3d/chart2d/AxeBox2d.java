@@ -81,7 +81,7 @@ public class AxeBox2d extends AxeBox {
         }
         if (labelBounds != null)
             ticksTxtBounds.add(labelBounds);
-        doTransform(null);
+        doTransform(painter);
 
     }
 
@@ -95,7 +95,7 @@ public class AxeBox2d extends AxeBox {
         @Override
         public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color,
                 Coord2d screenOffset, Coord3d sceneOffset) {
-            color(gl, color);
+            painter.color(color);
 
             // compute a corrected position according to layout
             Coord3d posScreen = cam.modelToScreen(gl, glu, position);
@@ -116,7 +116,7 @@ public class AxeBox2d extends AxeBox {
             rotateText(gl, posReal); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
             // CETTE ROTATION NE MARCHE PAS ET AFFECTE LE BON RENDU QUAND ON UTILISE BOUNDING POLICY!!
             
-            glRasterPos(gl, sceneOffset, Coord3d.ORIGIN);
+            glRasterPos(painter, gl, sceneOffset, Coord3d.ORIGIN);
             glut.glutBitmapString(font, text);
             
             return computeTextBounds(gl, glu, cam, posScreenShifted, strlen);

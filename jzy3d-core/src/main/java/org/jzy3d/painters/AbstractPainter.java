@@ -80,12 +80,29 @@ public abstract class AbstractPainter implements Painter{
 			glVertex3f(transform.getX().compute(coord.x), transform.getY().compute(coord.y), transform.getZ().compute(coord.z));
 		}
 	}
+	
+	@Override
+	public void vertex(float x, float y, float z, SpaceTransformer transform) {
+		if (transform == null) {
+			glVertex3f(x, y, z);
+		} else {
+			glVertex3f(transform.getX().compute(x), transform.getY().compute(y), transform.getZ().compute(z));
+		}
+	}
+
 
 	@Override
 	public void vertex(Coord3d coord) {
 		glVertex3f(coord.x, coord.y, coord.z);
 	}
 
-
+	@Override
+	public void raster(Coord3d coord, SpaceTransformer transform) {
+		if (transform == null) {
+			glRasterPos3f(coord.x, coord.y, coord.z);
+		} else {
+			glRasterPos3f(transform.getX().compute(coord.x), transform.getY().compute(coord.y), transform.getZ().compute(coord.z));
+		}
+	}
 
 }

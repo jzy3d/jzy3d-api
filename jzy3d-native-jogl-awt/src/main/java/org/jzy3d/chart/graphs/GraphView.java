@@ -2,6 +2,7 @@ package org.jzy3d.chart.graphs;
 
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -16,7 +17,7 @@ public class GraphView extends ChartView {
 	
 
 	@Override
-	protected void correctCameraPositionForIncludingTextLabels(ViewportConfiguration viewport) {
+	protected void correctCameraPositionForIncludingTextLabels(Painter painter, ViewportConfiguration viewport) {
         /*cam.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
         cam.shoot(gl, glu, cameraMode);
         axe.draw(gl, glu, cam);

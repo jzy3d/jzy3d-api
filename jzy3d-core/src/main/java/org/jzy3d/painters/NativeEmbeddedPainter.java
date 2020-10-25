@@ -1,6 +1,7 @@
 package org.jzy3d.painters;
 
-import org.jzy3d.maths.Coord3d;
+import java.nio.FloatBuffer;
+
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -8,10 +9,8 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
-import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -159,9 +158,20 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	@Override
 	public void glPolygonOffset(float factor, float units) {
 		GLES2CompatUtils.glPolygonOffset(factor, units); // handle stippling
-		
 	}
 
+	@Override
+	public void glFrontFace(int mode) {
+		throw new NotImplementedException();
+		//gl.glFrontFace(mode);		
+	}
+	
+	@Override
+	public void glCullFace(int mode) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glCullFace(mode);
+	}
+	
 	@Override
 	public void glDisable(int type) {
 		GLES2CompatUtils.glDisable(type);		
@@ -191,6 +201,11 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glTexEnvi(int target, int pname, int param) {
 		GLES2CompatUtils.glTexEnvi(target, pname, param);
 	}
+	
+	@Override
+	public void glRasterPos3f(float x, float y, float z) {
+		GLES2CompatUtils.glRasterPos3f(x, y, z);
+	}
 
 	@Override
 	public void glPushMatrix() {
@@ -201,6 +216,8 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glPopMatrix() {
 		GLES2CompatUtils.glPopMatrix();
 	}
+	
+	// GL LISTS
 	
 	@Override
 	public int glGenLists(int range) {
@@ -254,4 +271,23 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks) {
 		glu.gluCylinder(quad, base, top, height, slices, stacks);
 	}
+	
+	// GL FEEDBACK BUFFER
+	
+	@Override
+	public void glFeedbackBuffer(int size, int type, FloatBuffer buffer) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glFeedbackBuffer(size, type, buffer);
+	}
+
+	@Override
+	public int glRenderMode(int mode) {
+		throw new NotImplementedException();
+		//return GLES2CompatUtils.glRenderMode(mode);
+	}
+
+	@Override
+	public void glPassThrough(float token) {
+		GLES2CompatUtils.glPassThrough(token);		
+	}	
 }

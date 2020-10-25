@@ -8,7 +8,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Vector3d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.AxeBoxLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
@@ -69,7 +68,7 @@ public class AxeBox implements IAxe {
      */
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
-        cullingEnable(gl);
+        cullingEnable(painter, gl);
         updateHiddenQuads(painter, gl, camera);
 
         doTransform(painter);
@@ -80,14 +79,14 @@ public class AxeBox implements IAxe {
 
         synchronized (annotations) {
             for (AxeAnnotation a : annotations) {
-                a.draw(gl, this);
+                a.draw(painter, gl, this);
             }
         }
 
         doTransform(painter);
         drawTicksAndLabels(painter, gl, glu, camera);
 
-        cullingDisable(gl);
+        cullingDisable(painter, gl);
 
     }
 
@@ -98,14 +97,14 @@ public class AxeBox implements IAxe {
         painter.glScalef(scale.x, scale.y, scale.z);
     }
 
-    public void cullingDisable(GL gl) {
-        gl.glDisable(GL.GL_CULL_FACE);
+    public void cullingDisable(Painter painter, GL gl) {
+    	painter.glDisable(GL.GL_CULL_FACE);
     }
 
-    public void cullingEnable(GL gl) {
-        gl.glEnable(GL.GL_CULL_FACE);
-        gl.glFrontFace(GL.GL_CCW);
-        gl.glCullFace(GL.GL_FRONT);
+    public void cullingEnable(Painter painter, GL gl) {
+        painter.glEnable(GL.GL_CULL_FACE);
+        painter.glFrontFace(GL.GL_CCW);
+        painter.glCullFace(GL.GL_FRONT);
     }
 
     /* */
@@ -142,7 +141,7 @@ public class AxeBox implements IAxe {
         painter.glEnable(GL2.GL_LINE_STIPPLE);
         for (int quad = 0; quad < 6; quad++)
             if (!quadIsHidden[quad])
-                drawGridOnQuad(gl, quad);
+                drawGridOnQuad(painter, gl, quad);
         painter.glDisable(GL2.GL_LINE_STIPPLE);
     }
 
@@ -152,7 +151,7 @@ public class AxeBox implements IAxe {
 
         drawTicksAndLabelsX(painter, gl, glu, camera);
         drawTicksAndLabelsY(painter, gl, glu, camera);
-        drawTicksAndLabelsZ(gl, glu, camera, painter);
+        drawTicksAndLabelsZ(painter, gl, glu, camera);
     }
 
     public void drawTicksAndLabelsX(Painter painter, GL gl, GLU glu, Camera camera) {
@@ -199,7 +198,7 @@ public class AxeBox implements IAxe {
         }
     }
 
-    public void drawTicksAndLabelsZ(GL gl, GLU glu, Camera camera, Painter painter) {
+    public void drawTicksAndLabelsZ(Painter painter, GL gl, GLU glu, Camera camera) {
         if (zrange > 0 && layout.isZTickLabelDisplayed()) {
             if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
 
@@ -219,71 +218,49 @@ public class AxeBox implements IAxe {
      */
     protected void drawCube(GL gl, int mode, Painter painter) {
         for (int q = 0; q < 6; q++) {
-            if (gl.isGL2()) {
-                if (mode == GL2.GL_FEEDBACK)
-                    gl.getGL2().glPassThrough(q);
-                gl.getGL2().glBegin(GL2GL3.GL_QUADS);
-                for (int v = 0; v < 4; v++) {
-                    vertexGL2(gl, quadx[q][v], quady[q][v], quadz[q][v]);
-                }
-                gl.getGL2().glEnd();
-            } else {
-                if (mode == GL2.GL_FEEDBACK)
-                    GLES2CompatUtils.glPassThrough(q);
-                GLES2CompatUtils.glBegin(GL2GL3.GL_QUADS);
-                for (int v = 0; v < 4; v++) {
-                    vertexGLES2(quadx[q][v], quady[q][v], quadz[q][v]);
-                }
-                GLES2CompatUtils.glEnd();
+            if (mode == GL2.GL_FEEDBACK)
+                painter.glPassThrough(q);
+            painter.glBegin(GL2GL3.GL_QUADS);
+            for (int v = 0; v < 4; v++) {
+            	painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
             }
-
+            painter.glEnd();
         }
     }
 
     /**
      * Draw a grid on the desired quad.
+     * @param painter TODO
      */
-    protected void drawGridOnQuad(GL gl, int quad) {
+    protected void drawGridOnQuad(Painter painter, GL gl, int quad) {
         // Draw X grid along X axis
         if ((quad != 0) && (quad != 1)) {
             double[] xticks = layout.getXTicks();
-            if (gl.isGL2()) {
-                for (int t = 0; t < xticks.length; t++) {
-                    gl.getGL2().glBegin(GL.GL_LINES);
-                    vertexGL2(gl, (float) xticks[t], quady[quad][0], quadz[quad][0]);
-                    vertexGL2(gl, (float) xticks[t], quady[quad][2], quadz[quad][2]);
-                    gl.getGL2().glEnd();
-                }
-            } else {
-                // FIXME TO BE REWRITTEN ANDROID
+            for (int t = 0; t < xticks.length; t++) {
+                painter.glBegin(GL.GL_LINES);
+                painter.vertex((float) xticks[t], quady[quad][0], quadz[quad][0], spaceTransformer);
+                painter.vertex((float) xticks[t], quady[quad][2], quadz[quad][2], spaceTransformer);
+                painter.glEnd();
             }
         }
         // Draw Y grid along Y axis
         if ((quad != 2) && (quad != 3)) {
             double[] yticks = layout.getYTicks();
-            if (gl.isGL2()) {
-                for (int t = 0; t < yticks.length; t++) {
-                    gl.getGL2().glBegin(GL.GL_LINES);
-                    vertexGL2(gl, quadx[quad][0], (float) yticks[t], quadz[quad][0]);
-                    vertexGL2(gl, quadx[quad][2], (float) yticks[t], quadz[quad][2]);
-                    gl.getGL2().glEnd();
-                }
-            } else {
-                // FIXME TO BE REWRITTEN ANDROID
+            for (int t = 0; t < yticks.length; t++) {
+                painter.glBegin(GL.GL_LINES);
+                painter.vertex(quadx[quad][0], (float) yticks[t], quadz[quad][0], spaceTransformer);
+                painter.vertex(quadx[quad][2], (float) yticks[t], quadz[quad][2], spaceTransformer);
+                painter.glEnd();
             }
         }
         // Draw Z grid along Z axis
         if ((quad != 4) && (quad != 5)) {
             double[] zticks = layout.getZTicks();
-            if (gl.isGL2()) {
-                for (int t = 0; t < zticks.length; t++) {
-                    gl.getGL2().glBegin(GL.GL_LINES);
-                    vertexGL2(gl, quadx[quad][0], quady[quad][0], (float) zticks[t]);
-                    vertexGL2(gl, quadx[quad][2], quady[quad][2], (float) zticks[t]);
-                    gl.getGL2().glEnd();
-                }
-            } else {
-                // FIXME TO BE REWRITTEN ANDROID
+            for (int t = 0; t < zticks.length; t++) {
+                painter.glBegin(GL.GL_LINES);
+                painter.vertex(quadx[quad][0], quady[quad][0], (float) zticks[t], spaceTransformer);
+                painter.vertex(quadx[quad][2], quady[quad][2], (float) zticks[t], spaceTransformer);
+                painter.glEnd();
             }
         }
     }
@@ -495,7 +472,7 @@ public class AxeBox implements IAxe {
 
             if (layout.isTickLineDisplayed()) {
                 if (gl.isGL2()) {
-                    drawTickLine(gl, color, xpos, ypos, zpos, xlab, ylab, zlab);
+                    drawTickLine(painter, gl, color, xpos, ypos, zpos, xlab, ylab, zlab);
                 } else {
                     // FIXME REWRITE ANDROID
                 }
@@ -512,15 +489,8 @@ public class AxeBox implements IAxe {
 
     public void drawAxisTickNumericLabel(Painter painter, GL gl, GLU glu, int direction, Camera cam, Color color, Halign hAlign, Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
         // doTransform(gl);
-        if (gl.isGL2()) {
-            gl.getGL2().glLoadIdentity();
-            gl.getGL2().glScalef(scale.x, scale.y, scale.z);
-            // gl.getGL2().glRotatef(90, 1, 0, 1);
-        } else {
-            GLES2CompatUtils.glLoadIdentity();
-            // GLES2CompatUtils.glRotatef((float)Math.PI/2, 1, 0, 1);
-            GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
-        }
+        painter.glLoadIdentity();
+        painter.glScalef(scale.x, scale.y, scale.z);
 
         BoundingBox3d tickBounds = txt.drawText(painter, gl, glu, cam, tickLabel, tickPosition, hAlign, vAlign, color);
         if (tickBounds != null)
@@ -552,53 +522,15 @@ public class AxeBox implements IAxe {
         return hAlign;
     }
 
-    public void drawTickLine(GL gl, Color color, double xpos, double ypos, double zpos, double xlab, double ylab, double zlab) {
-        gl.getGL2().glColor3f(color.r, color.g, color.b);
-        gl.getGL2().glLineWidth(1);
+    public void drawTickLine(Painter painter, GL gl, Color color, double xpos, double ypos, double zpos, double xlab, double ylab, double zlab) {
+        painter.glColor3f(color.r, color.g, color.b);
+        painter.glLineWidth(1);
 
         // Draw the tick line
-        gl.getGL2().glBegin(GL.GL_LINES);
-        gl.getGL2().glVertex3d(xpos, ypos, zpos);
-        gl.getGL2().glVertex3d(xlab, ylab, zlab);
-        gl.getGL2().glEnd();
-    }
-
-    /**
-     * A helper to call glVerted3f on the input coordinate. For GL2 profile only. If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
-     */
-    protected void vertexGL2(GL gl, Coord3d c) {
-        if (spaceTransformer == null) {
-            gl.getGL2().glVertex3f(c.x, c.y, c.z);
-        } else {
-            gl.getGL2().glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y), spaceTransformer.getZ().compute(c.z));
-        }
-    }
-
-    protected void vertexGL2(GL gl, float x, float y, float z) {
-        if (spaceTransformer == null) {
-            gl.getGL2().glVertex3f(x, y, z);
-        } else {
-            gl.getGL2().glVertex3f(spaceTransformer.getX().compute(x), spaceTransformer.getY().compute(y), spaceTransformer.getZ().compute(z));
-        }
-    }
-
-    /**
-     * A helper to call glVerted3f on the input coordinate. For GLES2 profile only. If logTransform is non null, then each dimension transform is processed before calling glVertex3d.
-     */
-    protected void vertexGLES2(Coord3d c) {
-        if (spaceTransformer == null) {
-            GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
-        } else {
-            GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(c.x), spaceTransformer.getY().compute(c.y), spaceTransformer.getZ().compute(c.z));
-        }
-    }
-
-    protected void vertexGLES2(float x, float y, float z) {
-        if (spaceTransformer == null) {
-            GLES2CompatUtils.glVertex3f(x, y, z);
-        } else {
-            GLES2CompatUtils.glVertex3f(spaceTransformer.getX().compute(x), spaceTransformer.getY().compute(y), spaceTransformer.getZ().compute(z));
-        }
+        painter.glBegin(GL.GL_LINES);
+        painter.glVertex3d(xpos, ypos, zpos);
+        painter.glVertex3d(xlab, ylab, zlab);
+        painter.glEnd();
     }
 
     /* */

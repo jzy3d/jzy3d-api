@@ -41,10 +41,10 @@ public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
 		float [] feedback = new float[feedbacklength];
 		
 		// Draw the cube into feedback buffer
-		gl.getGL2().glFeedbackBuffer(feedbacklength, GL2.GL_3D_COLOR, floatbuffer);
-		gl.getGL2().glRenderMode(GL2.GL_FEEDBACK);
+		painter.glFeedbackBuffer(feedbacklength, GL2.GL_3D_COLOR, floatbuffer);
+		painter.glRenderMode(GL2.GL_FEEDBACK);
 		drawCube(gl, GL2.GL_FEEDBACK, painter);
-		gl.getGL2().glRenderMode(GL2.GL_RENDER);
+		painter.glRenderMode(GL2.GL_RENDER);
 		
 		// Parse feedback buffer and return hidden quads
 		floatbuffer.get(feedback);

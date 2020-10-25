@@ -40,6 +40,10 @@ DepthPeelingChart
 TrialFaceOrdering
 PickableGraphDemo
 
+LOG CHARTS
+- ANNOTATIONS DE POINT MAL PLACEES (DebugGL_LogCharts)
+- AXIS LABEL DE LOG SCATTER MAL PLACEES (DemoLogScatter)
+- TOUTES LES SURFACE DEMO N'ONT PAS DE AXIS LABEL NI TICK LABEL
 
 TextureDemoOffscreen génère des screenshot super pales
 SymbolPointOffscreenDemo n'a pas généré d'image
