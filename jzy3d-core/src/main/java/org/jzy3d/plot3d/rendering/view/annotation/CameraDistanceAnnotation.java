@@ -23,7 +23,9 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
 /**
- * Draws all point distance to camera eye.
+ * Draws the distance of every scene graph drawable object to camera eye.
+ * 
+ * The distance label is plotted at the barycenter of the object.
  * 
  * The camera is represented as a red point.
  * 
@@ -53,16 +55,24 @@ public class CameraDistanceAnnotation extends Point {
 
 		Graph graph = view.getScene().getGraph();
 		AbstractOrderingStrategy strat = graph.getStrategy();
-		for (AbstractDrawable drawables : graph.getDecomposition()) {
-			double d = strat.score(drawables);
-			txt.drawText(painter, gl, glu, view.getCamera(),
-					Utils.num2str(d, 4), drawables.getBarycentre(), h, v, colorBary, screenOffset);
+		for (AbstractDrawable drawable : graph.getDecomposition()) {
+			double d = strat.score(drawable);
+			
+			//System.out.println(drawable.getBarycentre() );
 
-			if (drawables instanceof AbstractGeometry) {
-				Polygon p = (Polygon) drawables;
+			txt.setSpaceTransformer(drawable.getSpaceTransformer());
+			txt.drawText(painter, gl, glu, view.getCamera(),
+					Utils.num2str(d, 4), drawable.getBarycentre(), h, v, colorBary, screenOffset);
+
+			if (drawable instanceof AbstractGeometry) {
+				Polygon p = (Polygon) drawable;
 				for (Point pt : p.getPoints()) {
 					// Point pt2 = pt.clone();
 					d = strat.score(pt);
+					
+					//System.out.println(pt.xyz);
+					
+					txt.setSpaceTransformer(pt.getSpaceTransformer());
 					txt.drawText(painter, gl, glu,
 							view.getCamera(), Utils.num2str(d, 4), pt.getCoord(), h, v,
 							colorPt, screenOffset);

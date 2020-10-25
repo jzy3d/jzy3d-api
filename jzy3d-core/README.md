@@ -40,6 +40,8 @@ DepthPeelingChart
 TrialFaceOrdering
 PickableGraphDemo
 
+
+
 LOG CHARTS
 - ANNOTATIONS DE POINT MAL PLACEES (DebugGL_LogCharts)
 - AXIS LABEL DE LOG SCATTER MAL PLACEES (DemoLogScatter)
@@ -62,6 +64,10 @@ Renderer3d to be moved to JOGL, extract CanvasListener interface?
 
 Disk object : GLUNewQuadric wrap with jGL and JOGl
 
+Must test CameraDistanceAnnotation is properly applying Log transform
+
+Quand on utilise GLMock, il faut désactiver manuellement la mise à jour du GL dans Renderer3d. Trouver un meilleur mécanisme
+
 View
 - public GL getCurrentGL()
 - public GLContext getCurrentContext()
@@ -76,8 +82,8 @@ SEPARATE
 
 Ajouter un test U pour chaque type de factory en utilisant ChartTester
 
-Fix and move TestCoord3dRotate
-
+Déplacer vers chart-tester : CameraEyeOverlayAnnotation, CameraDistanceAnnotation, BarycenterAnnotation, CameraPathAnnotation. PLUS tester la capacité à appliquer space transform 
+Déplacer vers guide example tester : with example with FaceOrderingProblem in the GUIDE example
 
 
 FINAL CLEANUP ===========
