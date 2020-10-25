@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.axes;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
 
@@ -12,7 +13,7 @@ public class AxeYLineAnnotation implements AxeAnnotation {
     protected float width = 3;
 
     @Override
-    public void draw(GL gl, AxeBox axe) {
+    public void draw(Painter painter, GL gl, AxeBox axe) {
         Range xrange = axe.getBoxBounds().getXRange();
         Range zrange = axe.getBoxBounds().getYRange();
         if (gl.isGL2()) {

@@ -1,5 +1,7 @@
 package org.jzy3d.painters;
 
+import java.nio.FloatBuffer;
+
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
@@ -39,6 +41,7 @@ public interface Painter {
     public void end();
     public void vertex(Coord3d coord);
     public void vertex(Coord3d coord, SpaceTransformer transform);
+    public void vertex(float x, float y, float z, SpaceTransformer transform);
 
     public void color(Color color);
     public void colorAlphaOverride(Color color, float alpha);
@@ -46,6 +49,7 @@ public interface Painter {
     
     public void transform(Transform transform, boolean loadIdentity);
     
+    public void raster(Coord3d coord, SpaceTransformer transform);
     
     
     // technical
@@ -83,6 +87,9 @@ public interface Painter {
 	
     public void glEnable(int type);
     public void glDisable(int type);
+    
+    public void glFrontFace(int mode);
+    public void glCullFace(int mode);
 
     public void glPolygonMode(int frontOrBack, int fill);
     public void glPolygonOffset(float factor, float units);
@@ -96,6 +103,7 @@ public interface Painter {
     public void glTexEnvf(int target, int pname, float param);
     public void glTexEnvi(int target, int pname, int param);
     
+    public void glRasterPos3f(float x, float y, float z);
 
     public int glGenLists(int range);
     public void glNewList(int list, int mode);
@@ -109,5 +117,12 @@ public interface Painter {
 	public void gluDisk(GLUquadric quad, double inner, double outer, int slices, int loops);
 	public void glutSolidSphere(final double radius, final int slices, final int stacks);
 	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks);
+	
+	
+	// GL FEEDBACK BUFFER
+	
+	public void glFeedbackBuffer(int size, int type, FloatBuffer buffer);
+	public int glRenderMode(int mode);
+	public void glPassThrough(float token);
     
 }

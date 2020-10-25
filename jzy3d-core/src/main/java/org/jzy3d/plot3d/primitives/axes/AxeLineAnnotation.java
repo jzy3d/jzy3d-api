@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.axes;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
 
@@ -10,11 +11,7 @@ public class AxeLineAnnotation {
     protected Color color = Color.RED;
     protected float width = 3;
 
-    public AxeLineAnnotation() {
-        super();
-    }
-
-    public void drawVerticalLineGLES2(Range yrange, float value) {
+    public void drawVerticalLineGLES2(Painter painter, Range yrange, float value) {
         GLES2CompatUtils.glBegin(GL.GL_LINE_STRIP);
         GLES2CompatUtils.glLineWidth(width);
         GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
@@ -23,13 +20,13 @@ public class AxeLineAnnotation {
         GLES2CompatUtils.glEnd();
     }
 
-    public synchronized void drawVerticalLineGL2(GL gl, Range yrange, float value) {
-        gl.getGL2().glLineWidth(width);
-        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
-        gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-        gl.getGL2().glVertex3f(value, yrange.getMin()-yrange.getRange()/30, 0);
-        gl.getGL2().glVertex3f(value, yrange.getMax()+yrange.getRange()/30, 0);
-        gl.getGL2().glEnd();
+    public synchronized void drawVerticalLine(Painter painter, GL gl, Range yrange, float value) {
+        painter.glLineWidth(width);
+        painter.glBegin(GL.GL_LINE_STRIP);
+        painter.glColor4f(color.r, color.g, color.b, color.a);
+        painter.glVertex3f(value, yrange.getMin()-yrange.getRange()/30, 0);
+        painter.glVertex3f(value, yrange.getMax()+yrange.getRange()/30, 0);
+        painter.glEnd();
     }
     
     public void drawHorizontalLineGLES2(Range xrange, float value) {
@@ -41,13 +38,13 @@ public class AxeLineAnnotation {
         GLES2CompatUtils.glEnd();
     }
 
-    public synchronized void drawHorizontalLineGL2(GL gl, Range xrange, float value) {
-        gl.getGL2().glLineWidth(width);
-        gl.getGL2().glBegin(GL.GL_LINE_STRIP);
-        gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-        gl.getGL2().glVertex3f(xrange.getMin()-xrange.getRange()/30, value, 0);
-        gl.getGL2().glVertex3f(xrange.getMax()+xrange.getRange()/30, value, 0);
-        gl.getGL2().glEnd();
+    public synchronized void drawHorizontalLineGL2(Painter painter, GL gl, Range xrange, float value) {
+        painter.glLineWidth(width);
+        painter.glBegin(GL.GL_LINE_STRIP);
+        painter.glColor4f(color.r, color.g, color.b, color.a);
+        painter.glVertex3f(xrange.getMin()-xrange.getRange()/30, value, 0);
+        painter.glVertex3f(xrange.getMax()+xrange.getRange()/30, value, 0);
+        painter.glEnd();
     }
     
     public Color getColor() {
