@@ -1413,6 +1413,11 @@ public class GL2Mock implements GL2{
     public List<Ortho> getOrthos(){
         return orthos;
     }
+
+    public Ortho getOrthoLast(){
+        return orthos.get(orthos.size()-1);
+    }
+
     
     @Override
     public void glFrustumf(float left, float right, float bottom, float top, float zNear, float zFar) {

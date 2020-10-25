@@ -67,7 +67,7 @@ public class Renderer3d implements GLEventListener {
             if (traceGL)
                 canvas.getGL().getContext().setGL(GLPipelineFactory.create("com.jogamp.opengl.Trace", null, canvas.getGL(), new Object[] { System.err }));
 
-            ((NativeDesktopPainter)view.getPainter()).setGL(canvas.getGL());
+            updatePainterWithGL(canvas);
             view.init();
         }
     }
@@ -80,7 +80,7 @@ public class Renderer3d implements GLEventListener {
     public void display(GLAutoDrawable canvas) {
         GL gl = canvas.getGL();
         
-        ((NativeDesktopPainter)view.getPainter()).setGL(canvas.getGL());
+        updatePainterWithGL(canvas);
 
 
         if (view != null) {
@@ -107,16 +107,17 @@ public class Renderer3d implements GLEventListener {
 
             if (canvas != null) {
             	
-                ((NativeDesktopPainter)view.getPainter()).setGL(canvas.getGL());
+                updatePainterWithGL(canvas);
 
-            	
-                // GL gl1 = canvas.getGL();
-                GL gl = canvas.getGL().getGL2();
                 view.clear();
                 view.render();
             }
         }
     }
+
+	protected void updatePainterWithGL(GLAutoDrawable canvas) {
+		((NativeDesktopPainter)view.getPainter()).setGL(canvas.getGL());
+	}
 
     // protected boolean first = true;
 
