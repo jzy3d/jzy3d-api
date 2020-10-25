@@ -80,7 +80,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
      */
     @Override
     public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
-        color(gl, color);
+        painter.color(color);
 
         // compute a corrected position according to layout
         Coord3d posScreen = cam.modelToScreen(gl, glu, position);
@@ -102,21 +102,17 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         //LOGGER.info(text + " @ " + posReal + " with offset : " + sceneOffset);
         
         // Draws actual string
-        glRasterPos(gl, sceneOffset, posReal);
+        glRasterPos(painter, gl, sceneOffset, posReal);
         glut.glutBitmapString(font, text);
         return computeTextBounds(gl, glu, cam, posScreenShifted, strlen);
     }
 
-    public void glRasterPos(GL gl, Coord3d sceneOffset, Coord3d posReal) {
+    public void glRasterPos(Painter painter, GL gl, Coord3d sceneOffset, Coord3d posReal) {
         if(spaceTransformer!=null){
             posReal = spaceTransformer.compute(posReal);
         }
         
-        if (gl.isGL2()) {
-            gl.getGL2().glRasterPos3f(posReal.x + sceneOffset.x, posReal.y + sceneOffset.y, posReal.z + sceneOffset.z);
-        } else {
-            GLES2CompatUtils.glRasterPos3f(posReal.x + sceneOffset.x, posReal.y + sceneOffset.y, posReal.z + sceneOffset.z);
-        }
+        painter.raster(posReal.add(sceneOffset), null);
     }
 
     public BoundingBox3d computeTextBounds(GL gl, GLU glu, Camera cam, Coord3d posScreenShifted, float strlen) {
@@ -133,14 +129,6 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         txtBounds.add(cam.screenToModel(gl, glu, botLeft));
         txtBounds.add(cam.screenToModel(gl, glu, topRight));
         return txtBounds;
-    }
-
-    public void color(GL gl, Color color) {
-        if (gl.isGL2()) {
-            gl.getGL2().glColor3f(color.r, color.g, color.b);
-        } else {
-            GLES2CompatUtils.glColor3f(color.r, color.g, color.b);
-        }
     }
 
     public float computeYWithAlign(Valign valign, Coord3d posScreen, float y) {

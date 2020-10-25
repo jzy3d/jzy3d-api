@@ -13,6 +13,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
@@ -76,13 +77,13 @@ public class AWTView extends ChartView {
     }
 
     @Override
-    protected void correctCameraPositionForIncludingTextLabels(ViewportConfiguration viewport) {
+    protected void correctCameraPositionForIncludingTextLabels(Painter painter, ViewportConfiguration viewport) {
     	GL gl = ((NativeDesktopPainter)painter).getGL();
         GLU glu = ((NativeDesktopPainter)painter).getGLU();
     	
     	cam.setViewPort(viewport);
         cam.shoot(gl, glu, cameraMode);
-        axe.draw(null, gl, glu, cam);
+        axe.draw(painter, gl, glu, cam);
         clear();
 
         //AxeBox abox = (AxeBox) axe;

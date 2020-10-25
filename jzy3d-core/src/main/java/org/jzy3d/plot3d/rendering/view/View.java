@@ -1154,7 +1154,7 @@ public class View {
             float radius = Math.max(xdiam, ydiam) / 2;
             
             cam.setRenderingSphereRadius(radius);
-            correctCameraPositionForIncludingTextLabels(viewport);
+            correctCameraPositionForIncludingTextLabels(painter, viewport);
         } else {
             if(spaceTransformer!=null)
                 bounds = spaceTransformer.compute(bounds);
@@ -1180,7 +1180,7 @@ public class View {
         }
     }*/
     
-    protected void correctCameraPositionForIncludingTextLabels(ViewportConfiguration viewport) {
+    protected void correctCameraPositionForIncludingTextLabels(Painter painter, ViewportConfiguration viewport) {
     }
 
 
