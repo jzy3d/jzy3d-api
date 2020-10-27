@@ -2,9 +2,12 @@ package org.jzy3d.painters;
 
 import java.nio.FloatBuffer;
 
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLContext;
+import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -37,6 +40,21 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void setGLUT(GLUT glut) {
 		this.glut = glut;
 	}
+	
+	/** Get the current GL context of the canvas and make it current.
+	 * 
+	 * This is usefull when needing to get a GL instance outside of the context
+	 * of the {@link GLEventListener}, e.g. when clicking the frame with mouse.
+	 */
+    public GL getCurrentGL(ICanvas canvas) {
+    	getCurrentContext(canvas).makeCurrent();
+        return getCurrentContext(canvas).getGL();
+    }
+
+    public GLContext getCurrentContext(ICanvas canvas) {
+        return canvas.getDrawable().getContext();
+    }
+
 
 	@Override
 	public void begin(Geometry geometry) {

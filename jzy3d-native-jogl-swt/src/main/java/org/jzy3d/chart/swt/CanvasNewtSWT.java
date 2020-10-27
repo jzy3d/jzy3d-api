@@ -7,6 +7,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -20,8 +21,8 @@ import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.newt.swt.NewtCanvasSWT;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAnimatorControl;
+import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
-import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
@@ -89,7 +90,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
     }
 
     @Override
-    public GLDrawable getDrawable() {
+    public GLAutoDrawable getDrawable() {
         return window;
     }
 
@@ -124,7 +125,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas {
 
     @Override
     public String getDebugInfo() {
-        GL gl = getView().getCurrentGL();
+    	GL gl = ((NativeDesktopPainter)getView().getPainter()).getCurrentGL(this);
 
         StringBuilder sb = new StringBuilder();
         sb.append("Chosen GLCapabilities: " + window.getChosenGLCapabilities() + "\n");

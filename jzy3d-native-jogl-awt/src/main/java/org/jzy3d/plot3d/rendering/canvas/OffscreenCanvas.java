@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -152,8 +153,8 @@ public class OffscreenCanvas implements ICanvas {
 
     @Override
     public String getDebugInfo() {
-        GL gl = getView().getCurrentGL();
-
+    	GL gl = ((NativeDesktopPainter)getView().getPainter()).getCurrentGL(this);
+		
         StringBuffer sb = new StringBuffer();
         sb.append("Chosen GLCapabilities: " + offscreenDrawable.getChosenGLCapabilities() + "\n");
         sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");

@@ -16,6 +16,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.maths.IntegerCoord2d;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
@@ -35,11 +36,15 @@ import com.jogamp.opengl.util.texture.TextureIO;
 public class ChartTester{
     static Logger logger = Logger.getLogger(ChartTester.class);
     
+    static int TEST_IMG_SIZE = 500;
+    
     public static AWTChart offscreen(AbstractDrawable... drawables) {
         // Initialize chart
         Quality q = Quality.Intermediate;
 
         AWTChartComponentFactory f = new AWTChartComponentFactory();
+        f.setOffscreen(TEST_IMG_SIZE, TEST_IMG_SIZE);
+        
         AWTChart chart = (AWTChart)f.newChart(q);
         AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
 
@@ -181,7 +186,7 @@ public class ChartTester{
         }
         else {
             TextureData actual = (TextureData)chart.screenshot();
-            TextureData expected = loadTextureData(filename, chart.getView().getCurrentGL());
+            TextureData expected = loadTextureData(filename, ((NativeDesktopPainter)chart.getView().getPainter()).getCurrentGL(chart.getCanvas()));
             fail("CAN NOT COMPARE TEXTURE DATA FOR THE MOMENT");
         }
     }

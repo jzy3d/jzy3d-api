@@ -42,8 +42,6 @@ public class ChartTestFailed extends Exception{
 	}
 	
 	public void addDiffCoordinates(int i, int j){
-	    if(diffs==null)
-	        diffs = new ArrayList<IntegerCoord2d>();
 	    diffs.add(new IntegerCoord2d(i, j));
 	}
 	
@@ -53,6 +51,6 @@ public class ChartTestFailed extends Exception{
 
 	protected BufferedImage actual;
 	protected BufferedImage expected;
-	protected List<IntegerCoord2d> diffs;
+	protected List<IntegerCoord2d> diffs = new ArrayList<IntegerCoord2d>();
 }
 
