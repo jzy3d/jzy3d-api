@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -18,8 +19,8 @@ import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAnimatorControl;
+import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
-import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
@@ -82,7 +83,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
     }
 
     @Override
-    public GLDrawable getDrawable() {
+    public GLAutoDrawable getDrawable() {
         return window;
     }
 
@@ -137,7 +138,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas {
 
     @Override
     public String getDebugInfo() {
-        GL gl = getView().getCurrentGL();
+    	GL gl = ((NativeDesktopPainter)getView().getPainter()).getCurrentGL(this);
 
         StringBuffer sb = new StringBuffer();
         sb.append("Chosen GLCapabilities: " + window.getChosenGLCapabilities() + "\n");

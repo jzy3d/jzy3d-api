@@ -8,7 +8,7 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.nativewindow.ScalableSurface;
-import com.jogamp.opengl.GLDrawable;
+import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.util.texture.TextureData;
 
 /**
@@ -27,7 +27,7 @@ public interface ICanvas {
     public View getView();
 
     /** Returns the GLDrawable associated with the canvas */
-    public GLDrawable getDrawable();
+    public GLAutoDrawable getDrawable();
 
     /** Returns the renderer's width, i.e. the display width. */
     public int getRendererWidth();

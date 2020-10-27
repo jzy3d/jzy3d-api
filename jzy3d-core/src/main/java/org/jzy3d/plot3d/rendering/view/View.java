@@ -222,15 +222,21 @@ public class View {
     }
 
     public void project() {
-        GL gl = getCurrentGL();
+        GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
+        GLU glu = ((NativeDesktopPainter)painter).getGLU();
+        
         scene.getGraph().project(gl, glu, cam);
-        getCurrentContext().release();
+        
+        ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
     }
 
     public Coord3d projectMouse(int x, int y) {
-        GL gl = getCurrentGL();
+    	GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
+        GLU glu = ((NativeDesktopPainter)painter).getGLU();
+
         Coord3d p = cam.screenToModel(gl, glu, new Coord3d(x, y, 0));
-        getCurrentContext().release();
+        
+        ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
         return p;
     }
 
@@ -706,25 +712,6 @@ public class View {
 
     /* GL */
 
-    public GL getCurrentGL() {
-        getCurrentContext().makeCurrent();
-        return getCanvasAsGLAutoDrawable().getGL().getGL2();
-    }
-
-    public GLContext getCurrentContext() {
-        GLAutoDrawable c = getCanvasAsGLAutoDrawable();
-        GLContext context = c.getContext();
-        return context;
-    }
-
-    protected GLAutoDrawable getCanvasAsGLAutoDrawable() {
-        if (canvas instanceof GLAutoDrawable) {
-            return ((GLAutoDrawable) canvas); // this covers AWT and Swing
-        } else if (canvas.getDrawable() instanceof GLAutoDrawable) {
-            return ((GLAutoDrawable) canvas.getDrawable()); // this also covers NEWT and Offscreen
-        } else
-            throw new RuntimeException("Unexpected instance type : " + canvas.getClass().toString());
-    }
 
     /**
      * The initialization function:
