@@ -31,16 +31,17 @@ Rename ViewMouseController to NewtViewCameraController
 BROKE ==============
 
 Test : les images screenshot sont toutes grisées!! 0 couleur
-Toutes les book demo ne s'ouvrent plus
+
 JavaFX chart - attention devrait utiliser Offscreen
 Guide tests generating picture
 WireSurfaceOffscreenDemo ne s'ouvre plus
 ShaderMandelbrotDemo
 DepthPeelingChart
 TrialFaceOrdering
-PickableGraphDemo
+PickableGraphDemo -> le click selectionne une zone décallée
+ChartTester NPE
 
-
+ObjFileVBODemo : Caused by: java.lang.NoSuchMethodError: java.nio.FloatBuffer.rewind()Ljava/nio/FloatBuffer;
 
 LOG CHARTS
 - ANNOTATIONS DE POINT MAL PLACEES (DebugGL_LogCharts)
@@ -49,6 +50,8 @@ LOG CHARTS
 
 TextureDemoOffscreen génère des screenshot super pales
 SymbolPointOffscreenDemo n'a pas généré d'image
+
+GUIDE : SWT in classpath prevent an AWT application from opening -> document this in SWT module
 
 TODO ==============
 
@@ -80,15 +83,25 @@ SEPARATE
 - native-jogl-core pour le painter GL2, embedded, les VBO
 
 
-Ajouter un test U pour chaque type de factory en utilisant ChartTester
+Ajouter un test U 
+- sur ChartTester.compare 
+- pour chaque type de factory en utilisant ChartTester
+- ChartTest a une NPE quand la taille de l'image d'origine et comparées ne sont pas similaire ChartTester.TEST_IMG_SIZE
 
 Déplacer vers chart-tester : CameraEyeOverlayAnnotation, CameraDistanceAnnotation, BarycenterAnnotation, CameraPathAnnotation. PLUS tester la capacité à appliquer space transform 
 Déplacer vers guide example tester : with example with FaceOrderingProblem in the GUIDE example
 
 
+Tous les utilisateur de getCurrentContext ne devraient pas le faire explicitement, idéalement c'est à l'intérieur du Painter
+  AbstractCameraController -> Mouse pickers
+
+
+
+
 FINAL CLEANUP ===========
 
 DELETE ColorMapperUpdater
+DELETE ProjectionUtils
 CHART.add/removeDrawable
 
 Remplacer ChartLauncher par méthode open
@@ -101,3 +114,6 @@ Squarify
 Volume
 VBO
 Factories
+
+POST IMPROVEMENT ==
+EnlightableBar is not englightable!

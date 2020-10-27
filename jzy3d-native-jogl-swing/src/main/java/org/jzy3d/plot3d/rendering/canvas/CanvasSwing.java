@@ -6,14 +6,15 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
-import com.jogamp.opengl.GLDrawable;
 import com.jogamp.opengl.awt.GLJPanel;
 import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
@@ -137,7 +138,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	/* */
 
 	@Override
-	public GLDrawable getDrawable() {
+	public GLAutoDrawable getDrawable() {
 		return this;
 	}
 
@@ -172,7 +173,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 
 	@Override
 	public String getDebugInfo() {
-		GL gl = getView().getCurrentGL();
+		GL gl = ((NativeDesktopPainter)getView().getPainter()).getCurrentGL(this);
 
 		StringBuffer sb = new StringBuffer();
 		sb.append("Chosen GLCapabilities: " + getChosenGLCapabilities() + "\n");

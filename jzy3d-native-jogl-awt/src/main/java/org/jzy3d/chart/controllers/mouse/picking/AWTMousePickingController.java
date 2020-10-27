@@ -12,6 +12,7 @@ import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.View;
 
@@ -125,7 +126,7 @@ public class AWTMousePickingController extends AbstractCameraController implemen
         View view = targets.get(0).getView();
         prevMouse3d = view.projectMouse(e.getX(), yflip);
 
-        GL gl = chart().getView().getCurrentGL();
+        GL gl = ((NativeDesktopPainter)chart().getView().getPainter()).getCurrentGL(chart.getCanvas());
         Graph graph = chart().getScene().getGraph();
 
         // will trigger vertex selection event to those subscribing to

@@ -124,5 +124,9 @@ public interface Painter {
 	public void glFeedbackBuffer(int size, int type, FloatBuffer buffer);
 	public int glRenderMode(int mode);
 	public void glPassThrough(float token);
+	
+	// FROM JOGL
+	
+
     
 }
