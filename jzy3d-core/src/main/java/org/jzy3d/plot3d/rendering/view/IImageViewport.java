@@ -1,9 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import org.jzy3d.maths.Dimension;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
+import org.jzy3d.painters.Painter;
 
 public interface IImageViewport {
 
@@ -11,11 +9,9 @@ public interface IImageViewport {
      * 
      * If the picture is bigger than the viewport, it is simply centered in it,
      * otherwise, it is scaled in order to fit into the viewport.
-     * 
-     * @param gl
-     * @param glu
+     * @param painter TODO
      */
-    public abstract void render(GL gl, GLU glu);
+    public abstract void render(Painter painter);
 
     /** Return the minimum size for this graphic.*/
     public abstract Dimension getMinimumSize();

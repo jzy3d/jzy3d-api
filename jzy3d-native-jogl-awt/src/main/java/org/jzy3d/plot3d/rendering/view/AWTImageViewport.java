@@ -4,11 +4,10 @@ import java.awt.Image;
 import java.nio.ByteBuffer;
 
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.image.GLImage;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link AWTImageViewport} allows displaying a 2d {@link Image} within an
@@ -23,29 +22,27 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     }
 
     @Override
-    public void render(GL gl, GLU glu) {
+    public void render(Painter painter) {
         // gl.glDisable(GL2.GL_LIGHTING);
 
-        if (gl.isGL2()) {
-            // Set viewport and projection
-            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
-            gl.getGL2().glPushMatrix();
-            gl.getGL2().glLoadIdentity();
-            applyViewport(gl, glu);
-            gl.getGL2().glOrtho(0, screenWidth, 0, screenHeight, -1, 1);
+        // Set viewport and projection
+    	painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+        painter.glPushMatrix();
+        painter.glLoadIdentity();
+        applyViewport(painter);
+        painter.glOrtho(0, screenWidth, 0, screenHeight, -1, 1);
 
-            // Zoom and layout
-            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-            gl.getGL2().glPushMatrix();
-            gl.getGL2().glLoadIdentity();
+        // Zoom and layout
+        painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        painter.glPushMatrix();
+        painter.glLoadIdentity();
 
-            ImageRenderer.renderImage(gl, imageData, imageWidth, imageHeight, screenWidth, screenHeight, -0.75f);
+        ImageRenderer.renderImage(painter, imageData, imageWidth, imageHeight, screenWidth, screenHeight, -0.75f);
 
-            // Restore matrices state
-            gl.getGL2().glPopMatrix();
-            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_PROJECTION);
-            gl.getGL2().glPopMatrix();
-        }
+        // Restore matrices state
+        painter.glPopMatrix();
+        painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+        painter.glPopMatrix();
     }
 
     /**

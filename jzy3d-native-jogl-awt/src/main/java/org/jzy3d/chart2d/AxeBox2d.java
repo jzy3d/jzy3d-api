@@ -98,7 +98,7 @@ public class AxeBox2d extends AxeBox {
             painter.color(color);
 
             // compute a corrected position according to layout
-            Coord3d posScreen = cam.modelToScreen(gl, glu, position);
+            Coord3d posScreen = cam.modelToScreen(painter, position);
             float strlen = glut.glutBitmapLength(font, text);
             float x = computeXWithAlign(halign, posScreen, strlen, 0.0f);
             float y = computeYWithAlign(valign, posScreen, 0.0f);
@@ -106,7 +106,7 @@ public class AxeBox2d extends AxeBox {
 
             Coord3d posReal;
             try {
-                posReal = cam.screenToModel(gl, glu, posScreenShifted);
+                posReal = cam.screenToModel(painter, posScreenShifted);
             } catch (RuntimeException e) {
                 Logger.getLogger(TextBitmapRenderer.class).error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
                 return new BoundingBox3d();
@@ -119,7 +119,7 @@ public class AxeBox2d extends AxeBox {
             glRasterPos(painter, gl, sceneOffset, Coord3d.ORIGIN);
             glut.glutBitmapString(font, text);
             
-            return computeTextBounds(gl, glu, cam, posScreenShifted, strlen);
+            return computeTextBounds(painter, cam, posScreenShifted, strlen);
         }
 
         // CUSTOM ROTATION

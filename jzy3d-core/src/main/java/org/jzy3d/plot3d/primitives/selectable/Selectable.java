@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -31,7 +32,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  */
 public interface Selectable {
-	public void project(GL gl, GLU glu, Camera cam);
+	public void project(Painter painter, GL gl, GLU glu, Camera cam);
 	public Polygon2d getHull2d();
 	public List<Coord3d> getLastProjection();
 }

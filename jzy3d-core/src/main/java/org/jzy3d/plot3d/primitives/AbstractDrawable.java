@@ -9,7 +9,6 @@ import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -75,12 +74,12 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
     public void doTransform(Painter painter, GL gl, GLU glu, Camera cam) {
         if (transformBefore != null) {
             if (transformBefore != null)
-                transformBefore.execute(gl, true);
+                transformBefore.execute(painter, true);
             if (transform != null)
-                transform.execute(gl, false);
+                transform.execute(painter, false);
         } else {
             if (transform != null)
-                transform.execute(gl);
+                transform.execute(painter);
         }
     }
 

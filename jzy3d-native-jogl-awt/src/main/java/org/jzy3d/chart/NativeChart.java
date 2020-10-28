@@ -5,7 +5,6 @@ import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 import com.jogamp.opengl.GLAnimatorControl;
-import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.util.texture.TextureData;
 
 public class NativeChart extends Chart{

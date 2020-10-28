@@ -44,7 +44,7 @@ public class ChartView extends View {
 
     	
     	layout.update(getChart());
-    	layout.render(gl, glu, getChart());
+    	layout.render(painter, getChart());
         
         //renderOverlay(gl);
         if( dimensionDirty )

@@ -1,9 +1,7 @@
 package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
-
-import com.jogamp.opengl.GL;
+import org.jzy3d.painters.Painter;
 
 /**
  * Rotate is a {@link Transformer} that stores the angle and rotate values
@@ -30,12 +28,8 @@ public class Rotate implements Transformer {
 	}
 
 	@Override
-    public void execute(GL gl) {
-		if (gl.isGL2()) {
-			gl.getGL2().glRotatef(angle, rotate.x, rotate.y, rotate.z);
-		} else {
-			GLES2CompatUtils.glRotatef(angle, rotate.x, rotate.y, rotate.z);
-		}
+    public void execute(Painter painter) {
+		painter.glRotatef(angle, rotate.x, rotate.y, rotate.z);
 	}
 
 	@Override

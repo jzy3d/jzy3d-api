@@ -72,7 +72,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
     public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
         glRaster(gl, position, color);
         BillBoardSize dims = printString(gl, s, halign, valign);
-        BoundingBox3d txtBounds = computeTextBounds(gl, glu, cam, position, dims);
+        BoundingBox3d txtBounds = computeTextBounds(painter, gl, glu, cam, position, dims);
         return txtBounds;
     }
 
@@ -86,8 +86,8 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
         }
     }
 
-    public BoundingBox3d computeTextBounds(GL gl, GLU glu, Camera cam, Coord3d position, BillBoardSize dims) {
-        Coord3d posScreen = cam.modelToScreen(gl, glu, position);
+    public BoundingBox3d computeTextBounds(Painter painter, GL gl, GLU glu, Camera cam, Coord3d position, BillBoardSize dims) {
+        Coord3d posScreen = cam.modelToScreen(painter, position);
         Coord3d botLeft = new Coord3d();
         Coord3d topRight = new Coord3d();
 
@@ -99,8 +99,8 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
         topRight.z = botLeft.z;
 
         BoundingBox3d txtBounds = new BoundingBox3d();
-        txtBounds.add(cam.screenToModel(gl, glu, botLeft));
-        txtBounds.add(cam.screenToModel(gl, glu, topRight));
+        txtBounds.add(cam.screenToModel(painter, botLeft));
+        txtBounds.add(cam.screenToModel(painter, topRight));
         return txtBounds;
     }
 

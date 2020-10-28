@@ -121,8 +121,8 @@ public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
 				|| (direction == AXE_Z && layout.isZAxeLabelDisplayed())) {
 			Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
 			if (txtRenderer != null)
-				txtRenderer.appendText(gl, glu, cam, axeLabel, labelPosition,
-						Halign.CENTER, Valign.CENTER, color);
+				txtRenderer.appendText(painter, cam, axeLabel, labelPosition, Halign.CENTER,
+						Valign.CENTER, color);
 			else {
 				BoundingBox3d labelBounds = txt.drawText(painter, gl, glu,
 						cam, axeLabel, labelPosition, Halign.CENTER,
@@ -202,8 +202,8 @@ public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
 
 			// Draw the text label of the current tick
 			if (txtRenderer != null)
-				txtRenderer.appendText(gl, glu, cam, tickLabel, tickPosition,
-						hAlign, vAlign, color);
+				txtRenderer.appendText(painter, cam, tickLabel, tickPosition, hAlign,
+						vAlign, color);
 			else {
 				BoundingBox3d tickBounds = txt.drawText(painter, gl, glu,
 						cam, tickLabel, tickPosition, hAlign, vAlign, color);

@@ -46,7 +46,6 @@ ObjFileVBODemo : Caused by: java.lang.NoSuchMethodError: java.nio.FloatBuffer.re
 LOG CHARTS
 - ANNOTATIONS DE POINT MAL PLACEES (DebugGL_LogCharts)
 - AXIS LABEL DE LOG SCATTER MAL PLACEES (DemoLogScatter)
-- TOUTES LES SURFACE DEMO N'ONT PAS DE AXIS LABEL NI TICK LABEL
 
 TextureDemoOffscreen génère des screenshot super pales
 SymbolPointOffscreenDemo n'a pas généré d'image
@@ -57,19 +56,15 @@ TODO ==============
 
 IGLLoader
 
-Setting : move to Native
+Dive in
+- AWTImageViewport
 
-TestDemos.test a besoin de modifier les factory en offscreen
-
-Delete ChartScene that is not used (intention : spawn multiple views. Moreover Scene already hold a list of views
-
-Renderer3d to be moved to JOGL, extract CanvasListener interface?
-
-Disk object : GLUNewQuadric wrap with jGL and JOGl
-
-Must test CameraDistanceAnnotation is properly applying Log transform
-
-Quand on utilise GLMock, il faut désactiver manuellement la mise à jour du GL dans Renderer3d. Trouver un meilleur mécanisme
+Design
+- Setting : s'assurer plus utilités
+- TestDemos.test a besoin de modifier les factory en offscreen
+- Renderer3d to be moved to JOGL, extract CanvasListener interface?
+- Disk object : GLUNewQuadric wrap with jGL and JOGl
+- Quand on utilise GLMock, il faut désactiver manuellement la mise à jour du GL dans Renderer3d. Trouver un meilleur mécanisme
 
 View
 - public GL getCurrentGL()
@@ -77,19 +72,18 @@ View
 - protected GLAutoDrawable getCanvasAsGLAutoDrawable()
 
 
-SEPARATE 
+Maven modules
 - IO MODULE TO AVOID MIXING WITH CLEAN API FOR TS etc GENERATION?
 - Offscreen in a dedicated maven artifact?
 - native-jogl-core pour le painter GL2, embedded, les VBO
-
 
 Ajouter un test U 
 - sur ChartTester.compare 
 - pour chaque type de factory en utilisant ChartTester
 - ChartTest a une NPE quand la taille de l'image d'origine et comparées ne sont pas similaire ChartTester.TEST_IMG_SIZE
-
-Déplacer vers chart-tester : CameraEyeOverlayAnnotation, CameraDistanceAnnotation, BarycenterAnnotation, CameraPathAnnotation. PLUS tester la capacité à appliquer space transform 
-Déplacer vers guide example tester : with example with FaceOrderingProblem in the GUIDE example
+- Must test CameraDistanceAnnotation is properly applying Log transform
+- Déplacer vers chart-tester : CameraEyeOverlayAnnotation, CameraDistanceAnnotation, BarycenterAnnotation, CameraPathAnnotation. PLUS tester la capacité à appliquer space transform 
+- Déplacer vers guide example tester : with example with FaceOrderingProblem in the GUIDE example
 
 
 Tous les utilisateur de getCurrentContext ne devraient pas le faire explicitement, idéalement c'est à l'intérieur du Painter
@@ -100,12 +94,14 @@ Tous les utilisateur de getCurrentContext ne devraient pas le faire explicitemen
 
 FINAL CLEANUP ===========
 
-DELETE ColorMapperUpdater
-DELETE ProjectionUtils
+DELETE
+- ColorMapperUpdater
+- ProjectionUtils
+- ChartScene that is not used (intention : spawn multiple views. Moreover Scene already hold a list of views
+
 CHART.add/removeDrawable
 
 Remplacer ChartLauncher par méthode open
-
 
 
 GUIDE UPDATE =====

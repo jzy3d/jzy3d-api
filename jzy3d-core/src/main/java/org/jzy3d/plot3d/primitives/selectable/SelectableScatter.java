@@ -84,8 +84,8 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 	}
 
 	@Override
-	public void project(GL gl, GLU glu, Camera cam) {
-		projection = cam.modelToScreen(gl, glu, getData());
+	public void project(Painter painter, GL gl, GLU glu, Camera cam) {
+		projection = cam.modelToScreen(painter, getData());
 	}
 
 	public Coord3d[] getProjection() {

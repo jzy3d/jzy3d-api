@@ -2,19 +2,18 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.nio.ByteBuffer;
 
-import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
 
 public class ImageRenderer {
-	public static void renderImage(GL gl, ByteBuffer image, int imageWidth,
-			int imageHeight, int screenWidth, int screenHeight) {
-		renderImage(gl, image, imageWidth, imageHeight, screenWidth,
-				screenHeight, 0.75f);
+	public static void renderImage(Painter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
+			int screenHeight) {
+		renderImage(painter, image, imageWidth, imageHeight, screenWidth, screenHeight, 0.75f);
 	}
 
-	public static void renderImage(GL gl, ByteBuffer image, int imageWidth,
-			int imageHeight, int screenWidth, int screenHeight, float z) {
+	public static void renderImage(Painter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
+			int screenHeight, float z) {
 		if (image == null)
 			return;
 
@@ -34,29 +33,11 @@ public class ImageRenderer {
 			yratio = ((float) screenHeight) / ((float) imageHeight);
 
 		// Draw
-		if (gl.isGL2()) {
-			gl.getGL2().glPixelZoom(xratio, yratio);
-			gl.getGL2().glRasterPos3f(xpict, ypict, z);
+		painter.glPixelZoom(xratio, yratio);
+		painter.glRasterPos3f(xpict, ypict, z);
 
-			synchronized (image) { // we don't want to draw image while it is
-									// being set by setImage
-				gl.getGL2().glDrawPixels(imageWidth, imageHeight, GL.GL_RGBA,
-						GL.GL_UNSIGNED_BYTE, image);
-			}
-		} else {
-			GLES2CompatUtils.glPixelZoom(xratio, yratio);
-			GLES2CompatUtils.glRasterPos3f(xpict, ypict, z);
-
-			synchronized (image) { // we don't want to draw image while it is
-									// being set by setImage
-				GLES2CompatUtils.glDrawPixels(imageWidth, imageHeight, GL.GL_RGBA,
-						GL.GL_UNSIGNED_BYTE, image);
-			}
+		synchronized (image) { // we don't want to draw image while it is being set by setImage
+			painter.glDrawPixels(imageWidth, imageHeight, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, image);
 		}
-
-		// Copy elsewhere
-		// gl.glPixelZoom(1.0f, 1.0f); // x-factor, y-factor
-		// gl.glWindowPos2i(500, 0);
-		// gl.glCopyPixels(400, 300, 500, 600, GL2.GL_COLOR);
 	}
 }
