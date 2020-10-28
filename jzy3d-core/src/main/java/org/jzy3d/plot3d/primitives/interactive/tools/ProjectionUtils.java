@@ -11,6 +11,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Polygon;
@@ -28,23 +29,23 @@ public class ProjectionUtils {
     
 	public static List<PolygonProjection> project(Chart chart){
 		GL gl = ((NativeDesktopPainter)chart.getView().getPainter()).getCurrentGL(chart.getCanvas());
-		return project(gl, new GLU(), chart.getView().getCamera(), chart.getScene().getGraph());
+		return project(chart.getView().getPainter(), gl, new GLU(), chart.getView().getCamera(), chart.getScene().getGraph());
 	}
 	
-	public static List<PolygonProjection> project(GL gl, GLU glu, Camera cam, Graph g){
-		return project(gl, glu, cam, g.getAll());
+	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, Graph g){
+		return project(painter, gl, glu, cam, g.getAll());
 	}
 	
-	public static List<PolygonProjection> project(GL gl, GLU glu, Camera cam, List<AbstractDrawable> list){
-		return project(gl, glu, cam, Decomposition.getDecomposition(list));
+	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, List<AbstractDrawable> list){
+		return project(painter, gl, glu, cam, Decomposition.getDecomposition(list));
 	}
 	
-	public static List<PolygonProjection> project(GL gl, GLU glu, Camera cam, AbstractComposite c){
+	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, AbstractComposite c){
 		ArrayList<AbstractDrawable> monotypes = Decomposition.getDecomposition(c);
-		return project(gl, glu, cam, monotypes);
+		return project(painter, gl, glu, cam, monotypes);
 	}
 	
-	public static List<PolygonProjection> project(GL gl, GLU glu, Camera cam, ArrayList<AbstractDrawable> monotypes){
+	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, ArrayList<AbstractDrawable> monotypes){
 		final TicToc t = new TicToc();
 		String report = "";
 		
@@ -62,7 +63,7 @@ public class ProjectionUtils {
 		
 		// project
 		t.tic();
-		ArrayList<ArrayList<Coord3d>> projections = cam.modelToScreen(gl, glu, polygons);
+		ArrayList<ArrayList<Coord3d>> projections = cam.modelToScreen(painter, polygons);
 		t.toc(); report += " Projections :" + t.elapsedMilisecond();
 		
 		// gather polygon and its colors in a data structure

@@ -1,6 +1,6 @@
 package org.jzy3d.painters;
 
-import java.nio.ByteBuffer;
+import java.nio.Buffer;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
@@ -221,7 +221,7 @@ public class GLES2CompatUtils {
 	}
 
 	public static void glDrawPixels(int imageWidth, int imageHeight,
-			int glRgba, int glUnsignedByte, ByteBuffer image) {
+			int glRgba, int glUnsignedByte, Buffer image) {
 		// FIXME STUB
 		// The fastest way to upload textures is to write to a texture bound to
 		// an FBO.

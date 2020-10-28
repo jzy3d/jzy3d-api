@@ -1,5 +1,6 @@
 package org.jzy3d.painters;
 
+import java.nio.Buffer;
 import java.nio.FloatBuffer;
 
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
@@ -8,7 +9,6 @@ import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
@@ -83,20 +83,27 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
     }
 
     
-    /* */
-    
-
-    @Override
-    public void transform(Transform transform, boolean loadIdentity) {
-        transform.execute(gl, loadIdentity);        
-    }
-    
     /************ OPEN GL Interface **************/
     
     @Override
     public void glLoadIdentity() {
     	GLES2CompatUtils.glLoadIdentity();
     }
+    
+	@Override
+	public void glMatrixMode(int mode) {
+		GLES2CompatUtils.glMatrixMode(mode);	
+	}
+	
+	@Override
+	public void glPushMatrix() {
+		GLES2CompatUtils.glPushMatrix();
+	}
+	
+	@Override
+	public void glPopMatrix() {
+		GLES2CompatUtils.glPopMatrix();
+	}
 
 	@Override
 	public void glScalef(float x, float y, float z) {
@@ -107,7 +114,11 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glTranslatef(float x, float y, float z) {
 		GLES2CompatUtils.glTranslatef(x, y, z);
 	}
-
+	
+	@Override
+	public void glRotatef(float angle, float x, float y, float z) {
+		GLES2CompatUtils.glRotatef(angle, x, y, z);	
+	}
 
 	@Override
 	public void glLineWidth(float width) {
@@ -206,16 +217,18 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glRasterPos3f(float x, float y, float z) {
 		GLES2CompatUtils.glRasterPos3f(x, y, z);
 	}
-
-	@Override
-	public void glPushMatrix() {
-		GLES2CompatUtils.glPushMatrix();
-	}
 	
 	@Override
-	public void glPopMatrix() {
-		GLES2CompatUtils.glPopMatrix();
+	public void glDrawPixels(int width, int height, int format, int type, Buffer pixels) {
+		GLES2CompatUtils.glDrawPixels(width, height, format, type, pixels);
 	}
+
+	@Override
+	public void glPixelZoom(float xfactor, float yfactor) {
+		GLES2CompatUtils.glPixelZoom(xfactor, yfactor);
+	}
+
+
 	
 	// GL LISTS
 	
@@ -290,4 +303,59 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glPassThrough(float token) {
 		GLES2CompatUtils.glPassThrough(token);		
 	}	
+	
+	// GL VIEWPOINT
+	
+	@Override
+	public void glOrtho(double left, double right, double bottom, double top, double near_val, double far_val) {
+		gl.getGL2().glOrtho(left, right, bottom, top, near_val, far_val);
+	}	
+
+	@Override
+	public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {
+		glu.gluPerspective(fovy, aspect, zNear, zFar);		
+	}
+
+	@Override
+	public void gluLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX,
+			float upY, float upZ) {
+		glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);		
+	}
+	
+	@Override
+	public void glViewport(int x, int y, int width, int height) {
+		gl.getGL2().glViewport(x, y, width, height);	
+	}
+	
+	@Override
+	public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset, float[] proj,
+			int proj_offset, int[] view, int view_offset, float[] objPos, int objPos_offset) {
+		return glu.gluUnProject(winX, winY, winZ, model, model_offset, proj, proj_offset, view, view_offset, objPos, objPos_offset);
+	}
+
+	@Override
+	public boolean gluProject(float objX, float objY, float objZ, float[] model, int model_offset, float[] proj,
+			int proj_offset, int[] view, int view_offset, float[] winPos, int winPos_offset) {
+		return glu.gluProject(objX, objY, objZ, model, model_offset, proj, proj_offset, view, view_offset, winPos, winPos_offset);
+	}
+	
+	// GL GET
+	
+	
+	@Override
+	public void glGetIntegerv(int pname, int[] data, int data_offset) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glGetIntegerv(pname, data, data_offset);
+	}
+
+	@Override
+	public void glGetDoublev(int pname, double[] params, int params_offset) {
+		GLES2CompatUtils.glGetDoublev(pname, params, params_offset);
+	}
+
+	@Override
+	public void glGetFloatv(int pname, float[] data, int data_offset) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glGetFloatv(pname, data, data_offset);
+	}
 }

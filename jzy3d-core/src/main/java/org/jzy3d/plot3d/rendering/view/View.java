@@ -39,8 +39,6 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
@@ -225,7 +223,7 @@ public class View {
         GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
         GLU glu = ((NativeDesktopPainter)painter).getGLU();
         
-        scene.getGraph().project(gl, glu, cam);
+        scene.getGraph().project(painter, gl, glu, cam);
         
         ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
     }
@@ -234,7 +232,7 @@ public class View {
     	GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
         GLU glu = ((NativeDesktopPainter)painter).getGLU();
 
-        Coord3d p = cam.screenToModel(gl, glu, new Coord3d(x, y, 0));
+        Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
         
         ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
         return p;
@@ -1037,7 +1035,7 @@ public class View {
         computeCameraRenderingSphereRadius(cam, viewport, bounds);
         
         cam.setViewPort(viewport);
-        cam.shoot(gl, glu, cameraMode);
+        cam.shoot(painter, cameraMode);
     }
 
     /*public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled, float factorViewPointDistance) {

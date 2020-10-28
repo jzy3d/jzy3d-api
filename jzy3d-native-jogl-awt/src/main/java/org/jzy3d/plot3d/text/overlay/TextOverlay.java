@@ -12,6 +12,7 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -19,9 +20,6 @@ import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 
 /**
@@ -67,10 +65,11 @@ public class TextOverlay implements Renderer2d{
 		target.removeComponentListener(resizeListener);
 	}
 	
-	/****************************************************************/
+	/**
+	 * @param painter TODO**************************************************************/
 	
-	public void appendText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color){
-		Coord3d posScreen = cam.modelToScreen(gl, glu, position);
+	public void appendText(Painter painter, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color){
+		Coord3d posScreen = cam.modelToScreen(painter, position);
 
 		textList.add(new TextDescriptor(s, new Coord2d(posScreen.x, posScreen.y), color, halign, valign));
 	}

@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
-
-import com.jogamp.opengl.GL;
+import org.jzy3d.painters.Painter;
 
 /**
  * A {@link Transform} stores a sequence of {@link Transformer}s, that are of
@@ -68,25 +66,19 @@ public class Transform {
 
 	/**
 	 * Load the identity matrix and executes the stored sequence of Transformer.
-	 * 
-	 * @param gl
-	 *            OpenGL2 context
+	 * @param painter TODO
 	 */
-	public void execute(GL gl) {
-		execute(gl, true);
+	public void execute(Painter painter) {
+		execute(painter, true);
 	}
 
-	public void execute(GL gl, boolean loadIdentity) {
+	public void execute(Painter painter, boolean loadIdentity) {
 		if (loadIdentity) {
-			if (gl.isGL2()) {
-				gl.getGL2().glLoadIdentity();
-			} else {
-				GLES2CompatUtils.glLoadIdentity();
-			}
+			painter.glLoadIdentity();
 		}
 
 		for (Transformer t : sequence)
-			t.execute(gl);
+			t.execute(painter);
 	}
 
 	/** Apply the transformations to the input coordinate */

@@ -7,16 +7,16 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorAWT;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
+import org.jzy3d.plot3d.rendering.view.IImageViewport;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 
-public class AWTSerieLegend extends AWTLegend {
+public class AWTSerieLegend extends AWTLegend implements IImageViewport{
     public AWTSerieLegend(Serie2d serie) {
         this(serie.getDrawable());
         this.serie = serie;
@@ -87,9 +87,9 @@ public class AWTSerieLegend extends AWTLegend {
     }
 
     @Override
-    public void render(GL gl, GLU glu) {
-        gl.glEnable(GL2.GL_BLEND);
-        super.render(gl, glu);
+    public void render(Painter painter) {
+    	painter.glEnable(GL2.GL_BLEND);
+        super.render(painter);
     }
 
     @Override

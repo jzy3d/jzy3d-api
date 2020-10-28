@@ -1,8 +1,7 @@
 package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.Coord3d;
-
-import com.jogamp.opengl.GL;
+import org.jzy3d.painters.Painter;
 
 
 /** A {@link Transformer} is able to execute a transformation into
@@ -20,8 +19,9 @@ interface Transformer {
 	 * the transformation will apply to this {@ AbstractDrawable}.
 	 * 
 	 * Computation is performed by GPU.
+	 * @param painter TODO
 	 */
-	public void execute(GL gl);	
+	public void execute(Painter painter);	
 	
 	/**
 	 * Apply the transformations to the input coordinates.

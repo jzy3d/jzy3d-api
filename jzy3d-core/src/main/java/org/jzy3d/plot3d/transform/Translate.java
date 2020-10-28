@@ -1,9 +1,7 @@
 package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
-
-import com.jogamp.opengl.GL;
+import org.jzy3d.painters.Painter;
 
 /**
  * Translate is a {@link Transformer} that stores the offset required to perform
@@ -27,12 +25,8 @@ public class Translate implements Transformer {
 	}
 
 	@Override
-    public void execute(GL gl) {
-		if (gl.isGL2()) {
-			gl.getGL2().glTranslatef(shift.x, shift.y, shift.z);
-		} else {
-			GLES2CompatUtils.glTranslatef(shift.x, shift.y, shift.z);
-		}
+    public void execute(Painter painter) {
+		painter.glTranslatef(shift.x, shift.y, shift.z);
 	}
 
 	@Override

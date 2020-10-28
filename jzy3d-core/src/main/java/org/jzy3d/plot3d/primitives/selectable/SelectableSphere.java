@@ -48,8 +48,8 @@ public class SelectableSphere extends Sphere implements Selectable {
 	}
 
 	@Override
-	public void project(GL gl, GLU glu, Camera cam) {
-		projection = cam.modelToScreen(gl, glu, anchors);
+	public void project(Painter painter, GL gl, GLU glu, Camera cam) {
+		projection = cam.modelToScreen(painter, anchors);
 	}
 
 	public List<Coord3d> getProjection() {

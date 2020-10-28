@@ -118,7 +118,7 @@ public class PickingSupport {
         	gl.getGL2().glLoadIdentity();
 	        // Setup picking matrix, and update view frustrum
 	        glu.gluPickMatrix(xpick, ypick, brushSize, brushSize, viewport, 0);
-	        camera.doShoot(gl, glu, cMode);
+	        camera.doShoot(painter, cMode);
 	        
 	        // Draw each pickable element in select buffer
 	        gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);

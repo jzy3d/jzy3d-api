@@ -7,9 +7,11 @@ import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 
 public abstract class AbstractPainter implements Painter{
 
@@ -54,6 +56,10 @@ public abstract class AbstractPainter implements Painter{
 	    return null;
 	}
 	
+	@Override
+	public void transform(Transform transform, boolean loadIdentity) {
+		transform.execute(this, loadIdentity);
+	}
 
 	@Override
     public void color(Color color) {
@@ -104,5 +110,36 @@ public abstract class AbstractPainter implements Painter{
 			glRasterPos3f(transform.getX().compute(coord.x), transform.getY().compute(coord.y), transform.getZ().compute(coord.z));
 		}
 	}
+	
+	
+	public int[] getViewPortAsInt() {
+        int viewport[] = new int[4];
+        glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
+        return viewport;
+    }
+
+	public double[] getProjectionAsDouble() {
+        double projection[] = new double[16];
+        glGetDoublev(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
+        return projection;
+    }
+
+	public float[] getProjectionAsFloat() {
+        float projection[] = new float[16];
+        glGetFloatv(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
+        return projection;
+    }
+
+	public double[] getModelViewAsDouble() {
+        double modelview[] = new double[16];
+        glGetDoublev(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
+        return modelview;
+    }
+
+	public float[] getModelViewAsFloat() {
+        float modelview[] = new float[16];
+        glGetFloatv(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
+        return modelview;
+    }
 
 }

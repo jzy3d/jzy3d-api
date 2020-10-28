@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.rendering.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
@@ -15,9 +16,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportBuilder;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 public class ColorbarViewportLayout implements IViewportLayout{
     protected float screenSeparator = 1.0f;
@@ -48,32 +46,33 @@ public class ColorbarViewportLayout implements IViewportLayout{
     }
     
     @Override
-    public void render(GL gl, GLU glu, Chart chart){
+    public void render(Painter painter, Chart chart){
         View view = chart.getView();
         view.renderBackground(backgroundViewPort);
         view.renderScene(sceneViewPort);
 
-        renderLegends(gl, glu, chart);
+        renderLegends(painter, chart);
         // fix overlay on top of chart
         view.renderOverlay(view.getCamera().getLastViewPort());
     }
     
-    protected void renderLegends(GL gl, GLU glu, Chart chart){
+    protected void renderLegends(Painter painter, Chart chart){
         if (hasMeta){
-            renderLegends(gl, glu, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
+            renderLegends(painter, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
         }
     }
     
     /**
      * Renders the legend within the screen slice given by the left and right parameters.
+     * @param painter TODO
      */
-    protected void renderLegends(GL gl, GLU glu, float left, float right, List<ILegend> data, ICanvas canvas) {
+    protected void renderLegends(Painter painter, float left, float right, List<ILegend> data, ICanvas canvas) {
         float slice = (right - left) / data.size();
         int k = 0;
         for (ILegend layer : data) {
             layer.setViewportMode(ViewportMode.STRETCH_TO_FILL);
             layer.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left + slice * (k++), left + slice * k);
-            layer.render(gl, glu);
+            layer.render(painter);
         }
     }
     
