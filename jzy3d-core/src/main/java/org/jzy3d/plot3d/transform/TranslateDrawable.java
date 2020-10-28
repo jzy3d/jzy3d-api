@@ -2,10 +2,8 @@ package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
-
-import com.jogamp.opengl.GL;
 
 /**
  * Translate drawable to (0,0,0) or back to its previous position according to
@@ -19,26 +17,21 @@ public class TranslateDrawable implements Transformer {
     }
 
     @Override
-    public void execute(GL gl) {
+    public void execute(Painter painter) {
         if (drawable != null) {
             BoundingBox3d bounds = drawable.getBounds();
             if (bounds != null) {
                 Coord3d center = bounds.getCenter();
-                translateTo(gl, center, reverse);
+                translateTo(painter, center, reverse);
             }
         }
     }
 
-    public void translateTo(GL gl, Coord3d center, boolean reverse) {
-        if (gl.isGLES()) {
-            float reverseCoef = (reverse ? -1.0f : 1.0f);
-            GLES2CompatUtils.glTranslatef(reverseCoef * center.x / 2, reverseCoef * center.y / 2, reverseCoef * center.z / 2);
-        } else {
-            if (reverse)
-                gl.getGL2().glTranslatef(-center.x / 2, -center.y / 2, -center.z / 2);
-            else
-                gl.getGL2().glTranslatef(center.x / 2, center.y / 2, center.z / 2);
-        }
+    public void translateTo(Painter painter, Coord3d center, boolean reverse) {
+        if (reverse)
+            painter.glTranslatef(-center.x / 2, -center.y / 2, -center.z / 2);
+        else
+        	painter.glTranslatef(center.x / 2, center.y / 2, center.z / 2);
     }
 
     @Override

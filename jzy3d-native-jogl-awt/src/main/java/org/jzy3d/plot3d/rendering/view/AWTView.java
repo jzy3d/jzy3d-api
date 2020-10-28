@@ -82,7 +82,7 @@ public class AWTView extends ChartView {
         GLU glu = ((NativeDesktopPainter)painter).getGLU();
     	
     	cam.setViewPort(viewport);
-        cam.shoot(gl, glu, cameraMode);
+        cam.shoot(painter, cameraMode);
         axe.draw(painter, gl, glu, cam);
         clear();
 
@@ -182,7 +182,7 @@ public class AWTView extends ChartView {
             GLU glu = ((NativeDesktopPainter)painter).getGLU();
 
             bgViewport.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
-            bgViewport.render(gl, glu);
+            bgViewport.render(painter);
         }
     }
 
@@ -194,7 +194,7 @@ public class AWTView extends ChartView {
 
         	
             bgViewport.setViewPort(viewport);
-            bgViewport.render(gl, glu);
+            bgViewport.render(painter);
         }
     }
 

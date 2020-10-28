@@ -6,6 +6,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
@@ -15,7 +16,6 @@ import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     public AWTColorbarLegend(AbstractDrawable parent, Chart chart) {
@@ -58,9 +58,9 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     }
 
     @Override
-    public void render(GL gl, GLU glu) {
-        gl.glEnable(GL.GL_BLEND);
-        super.render(gl, glu);
+    public void render(Painter painter) {
+        painter.glEnable(GL.GL_BLEND);
+        super.render(painter);
     }
 
     @Override

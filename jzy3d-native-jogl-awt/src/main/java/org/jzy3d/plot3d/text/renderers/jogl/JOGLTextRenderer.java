@@ -44,9 +44,9 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
         renderer.begin3DRendering();
 		if(LAYOUT){ // work in progress
 			Rectangle2D d = style.getBounds(s, font, renderer.getFontRenderContext());
-			Coord3d left2d = cam.modelToScreen(gl, glu, position);
+			Coord3d left2d = cam.modelToScreen(painter, position);
 			Coord2d right2d = new Coord2d(left2d.x+(float)d.getWidth(), left2d.y+(float)d.getHeight());
-			Coord3d right3d = cam.screenToModel(gl, glu, new Coord3d(right2d,0));
+			Coord3d right3d = cam.screenToModel(painter, new Coord3d(right2d,0));
 			Coord3d offset3d = right3d.sub(position).div(2);//.mul(0.1f);
 			Coord3d real = position.add(sceneOffset).sub(offset3d);
 			renderer.draw3D(s, real.x, real.y, real.z, 1);//0.005f);

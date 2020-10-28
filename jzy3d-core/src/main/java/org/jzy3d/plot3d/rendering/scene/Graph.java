@@ -250,12 +250,13 @@ public class Graph {
         return monotypes;
     }
 
-    /** Update all interactive {@link AbstractDrawable} projections */
-    public synchronized void project(GL gl, GLU glu, Camera camera) {
+    /** Update all interactive {@link AbstractDrawable} projections 
+     * @param painter TODO*/
+    public synchronized void project(Painter painter, GL gl, GLU glu, Camera camera) {
         // synchronized(components){
         for (AbstractDrawable d : components) {
             if (d instanceof Selectable)
-                ((Selectable) d).project(gl, glu, camera);
+                ((Selectable) d).project(painter, gl, glu, camera);
         }
         // }
     }

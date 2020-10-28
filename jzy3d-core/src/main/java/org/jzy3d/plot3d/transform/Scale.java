@@ -1,9 +1,7 @@
 package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
-
-import com.jogamp.opengl.GL;
+import org.jzy3d.painters.Painter;
 
 /**
  * Scale is a {@link Transformer} that stores the scaling factor required to
@@ -16,29 +14,24 @@ public class Scale implements Transformer {
 	/**
 	 * Initialize a Scale.
 	 * 
-	 * @param scale
-	 *            scaling factor.
+	 * @param scale scaling factor.
 	 */
 	public Scale(Coord3d scale) {
 		this.scale = scale;
 	}
 
 	@Override
-    public void execute(GL gl) {
-		if (gl.isGL2()) {
-			gl.getGL2().glScalef(scale.x, scale.y, scale.z);
-		} else {
-			GLES2CompatUtils.glScalef(scale.x, scale.y, scale.z);
-		}
+	public void execute(Painter painter) {
+		painter.glScalef(scale.x, scale.y, scale.z);
 	}
 
 	@Override
-    public Coord3d compute(Coord3d input) {
+	public Coord3d compute(Coord3d input) {
 		return input.mul(scale);
 	}
 
 	@Override
-    public String toString() {
+	public String toString() {
 		return "(Scale)" + scale;
 	}
 

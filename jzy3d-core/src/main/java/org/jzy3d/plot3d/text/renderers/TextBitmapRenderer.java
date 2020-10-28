@@ -83,7 +83,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         painter.color(color);
 
         // compute a corrected position according to layout
-        Coord3d posScreen = cam.modelToScreen(gl, glu, position);
+        Coord3d posScreen = cam.modelToScreen(painter, position);
         float strlen = glut.glutBitmapLength(font, text);
         float x = computeXWithAlign(halign, posScreen, strlen, 0.0f);
         float y = computeYWithAlign(valign, posScreen, 0.0f);
@@ -91,7 +91,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         
         Coord3d posReal;
         try {
-            posReal = cam.screenToModel(gl, glu, posScreenShifted);
+            posReal = cam.screenToModel(painter, posScreenShifted);
         } catch (RuntimeException e) { 
             // TODO: solve this bug due to a Camera.PERSPECTIVE mode.
             LOGGER.error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
@@ -104,7 +104,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         // Draws actual string
         glRasterPos(painter, gl, sceneOffset, posReal);
         glut.glutBitmapString(font, text);
-        return computeTextBounds(gl, glu, cam, posScreenShifted, strlen);
+        return computeTextBounds(painter, cam, posScreenShifted, strlen);
     }
 
     public void glRasterPos(Painter painter, GL gl, Coord3d sceneOffset, Coord3d posReal) {
@@ -115,7 +115,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         painter.raster(posReal.add(sceneOffset), null);
     }
 
-    public BoundingBox3d computeTextBounds(GL gl, GLU glu, Camera cam, Coord3d posScreenShifted, float strlen) {
+    public BoundingBox3d computeTextBounds(Painter painter, Camera cam, Coord3d posScreenShifted, float strlen) {
         Coord3d botLeft = new Coord3d();
         Coord3d topRight = new Coord3d();
         botLeft.x = posScreenShifted.x;
@@ -126,8 +126,8 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         topRight.z = botLeft.z;
 
         BoundingBox3d txtBounds = new BoundingBox3d();
-        txtBounds.add(cam.screenToModel(gl, glu, botLeft));
-        txtBounds.add(cam.screenToModel(gl, glu, topRight));
+        txtBounds.add(cam.screenToModel(painter, botLeft));
+        txtBounds.add(cam.screenToModel(painter, topRight));
         return txtBounds;
     }
 

@@ -10,6 +10,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Polygon2d;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Point;
@@ -97,8 +98,8 @@ public class TexturedCylinder extends AbstractComposite implements Selectable, I
 	}
 	
 	@Override
-	public void project(GL gl, GLU glu, Camera cam) {
-		lastProjection = cam.modelToScreen( gl, glu, getBounds().getVertices() );
+	public void project(Painter painter, GL gl, GLU glu, Camera cam) {
+		lastProjection = cam.modelToScreen( painter, getBounds().getVertices() );
 		lastHull = ConvexHull.hull(lastProjection);
 	}
 	
