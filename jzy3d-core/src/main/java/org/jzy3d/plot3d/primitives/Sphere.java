@@ -52,7 +52,7 @@ public class Sphere extends AbstractWireframeable implements ISingleColorable {
 
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, gl, glu, cam);
+        doTransform(painter, cam);
         doDrawSphere(painter);
         doDrawBounds(painter, gl, glu, cam);
     }

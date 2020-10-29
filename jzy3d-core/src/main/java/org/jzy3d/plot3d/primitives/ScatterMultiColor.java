@@ -45,7 +45,7 @@ public class ScatterMultiColor extends AbstractDrawable implements IMultiColorab
 
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, gl, glu, cam);
+        doTransform(painter, cam);
         doDrawPoints(painter);
         doDrawBounds(painter, gl, glu, cam);
     }

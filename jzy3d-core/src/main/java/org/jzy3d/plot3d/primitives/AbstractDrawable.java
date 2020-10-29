@@ -71,7 +71,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
 
     public abstract void updateBounds();
 
-    public void doTransform(Painter painter, GL gl, GLU glu, Camera cam) {
+    public void doTransform(Painter painter, Camera cam) {
         if (transformBefore != null) {
             if (transformBefore != null)
                 transformBefore.execute(painter, true);

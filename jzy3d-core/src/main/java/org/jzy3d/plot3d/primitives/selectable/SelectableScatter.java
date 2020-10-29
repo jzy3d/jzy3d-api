@@ -29,7 +29,7 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 
 	@Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, gl, glu, cam);
+		doTransform(painter, cam);
 
 		if (gl.isGL2()) {
 
@@ -84,7 +84,7 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 	}
 
 	@Override
-	public void project(Painter painter, GL gl, GLU glu, Camera cam) {
+	public void project(Painter painter, Camera cam) {
 		projection = cam.modelToScreen(painter, getData());
 	}
 

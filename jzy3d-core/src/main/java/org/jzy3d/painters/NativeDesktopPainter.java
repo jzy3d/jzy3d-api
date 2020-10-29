@@ -6,8 +6,10 @@ import java.nio.FloatBuffer;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -350,6 +352,26 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	@Override
 	public void glGetFloatv(int pname, float[] data, int data_offset) {
 		gl.glGetFloatv(pname, data, data_offset);
+	}
+
+	@Override
+	public void glDepthFunc(int func) {
+		gl.glDepthFunc(func);
+	}
+
+	@Override
+	public void glBlendFunc(int sfactor, int dfactor) {
+		gl.glBlendFunc(sfactor, dfactor);		
+	}
+
+	@Override
+	public void glShadeModel(int mode) {
+		gl.getGL2().glShadeModel(mode);
+	}
+
+	@Override
+	public void glHint(int target, int mode) {
+		gl.glHint(target, mode);
 	}
 
 	

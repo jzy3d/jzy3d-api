@@ -41,7 +41,7 @@ public class Disk extends AbstractWireframeable implements ISingleColorable {
 
 	@Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, gl, glu, cam);
+		doTransform(painter, cam);
 		doDrawDisk(painter, glu);
 		doDrawBounds(painter, gl, glu, cam);
 	}

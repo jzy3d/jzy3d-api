@@ -51,7 +51,7 @@ public class Tube extends AbstractWireframeable implements ISingleColorable {
 
 	@Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, gl, glu, cam);
+		doTransform(painter, cam);
 
 		painter.glTranslatef(x, y, z);
 		painter.glLineWidth(wfwidth);

@@ -126,7 +126,7 @@ public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMu
 		
 		colormapTexure.update(gl);
 		
-		doTransform(painter, gl, glu, cam);
+		doTransform(painter, cam);
     	
     	float mvmatrix[] = new float[16];
     	float projmatrix[] = new float[16];

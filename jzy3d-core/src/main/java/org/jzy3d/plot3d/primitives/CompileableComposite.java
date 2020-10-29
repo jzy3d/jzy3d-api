@@ -98,7 +98,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 	}
 
 	protected void execute(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, gl, glu, cam);
+		doTransform(painter, cam);
 		painter.glCallList(dlID);
 	}
 
