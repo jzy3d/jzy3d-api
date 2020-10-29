@@ -56,6 +56,9 @@ public interface Painter {
     
     public void raster(Coord3d coord, SpaceTransformer transform);
     
+
+	public void clearColor(Color color);
+
     
     // technical
     public void culling(boolean status);
@@ -171,6 +174,8 @@ public interface Painter {
 	// OTHER
 	
 	public void glHint(int target, int mode);
-
+	public void glClearColor(float red, float green, float blue, float alpha);
+	public void glClearDepth(double d);
+	public void glClear(int mask);
     
 }

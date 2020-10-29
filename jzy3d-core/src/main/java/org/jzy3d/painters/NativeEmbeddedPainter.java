@@ -398,4 +398,20 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		throw new NotImplementedException();
 		//GLES2CompatUtils.glLightModeli(mode, value);
 	}
+	
+	@Override
+	public void glClearColor(float red, float green, float blue, float alpha) {
+		gl.glClearColor(red, green, blue, alpha);
+	}
+
+	@Override
+	public void glClearDepth(double d) {
+        gl.glClearDepth(d);
+	}
+	
+	@Override
+	public void glClear(int mask) {
+		gl.glClear(mask);
+	}
+	
 }

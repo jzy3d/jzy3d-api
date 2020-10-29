@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.TicToc;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
@@ -201,19 +200,11 @@ public class Graph {
     protected TicToc t = new TicToc();
 
     public synchronized void draw(Painter painter, GL gl, GLU glu, Camera camera, List<AbstractDrawable> components, boolean sort) {
-        glMatrixMode(gl);
+        painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         if (!sort) {
             drawSimple(painter, gl, glu, camera, components);
         } else {
             drawDecomposition(painter, gl, glu, camera);
-        }
-    }
-
-    public void glMatrixMode(GL gl) {
-        if (gl.isGL2()) {
-            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-        } else {
-            GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         }
     }
 
