@@ -807,12 +807,8 @@ public class View {
     }
     
     public void initLights(Scene scene) {
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-    	
-        // Init light
-        scene.getLightSet().init(gl);
-        scene.getLightSet().enableLightIfThereAreLights(gl);
-        // scene.getLightSet().enable(gl, true);
+        scene.getLightSet().init(painter);
+        scene.getLightSet().enableLightIfThereAreLights(painter);
     }
 
     public void initResources() {
@@ -1171,10 +1167,10 @@ public class View {
 
         	
             glModelView(gl);
-            scene.getLightSet().disable(gl);
+            scene.getLightSet().disable(painter);
             axe.setScale(scaling);
             axe.draw(painter, gl, glu, camera);
-            scene.getLightSet().enableLightIfThereAreLights(gl);
+            scene.getLightSet().enableLightIfThereAreLights(painter);
         }
     }
 
@@ -1201,7 +1197,7 @@ public class View {
     	GLU glu = ((NativeDesktopPainter)painter).getGLU();
 
         if (light) {
-            scene.getLightSet().apply(gl, scaling);
+            scene.getLightSet().apply(painter, scaling);
             // gl.glEnable(GL2.GL_LIGHTING);
             // gl.glEnable(GL2.GL_LIGHT0);
             // gl.glDisable(GL2.GL_LIGHTING);
