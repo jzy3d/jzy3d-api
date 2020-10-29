@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
-import com.jogamp.opengl.GL;
+import org.jzy3d.painters.Painter;
 
 /**
  * Defines an objects that uses resources that should be loaded
@@ -11,8 +11,8 @@ import com.jogamp.opengl.GL;
  * @author Martin Pernollet
  */
 public interface IGLBindedResource {
-    /** Mount resources to gl context*/
-    public void mount(GL gl);
+    /** Mount resources to gl context */
+    public void mount(Painter painter);
     /** Return true if mount(...) has been called at least one time */
     public boolean hasMountedOnce();
 }

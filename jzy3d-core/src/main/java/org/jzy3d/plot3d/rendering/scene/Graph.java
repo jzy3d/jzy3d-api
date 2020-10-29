@@ -155,11 +155,11 @@ public class Graph {
         return out;
     }
 
-    public void mountAllGLBindedResources(GL gl) {
+    public void mountAllGLBindedResources(Painter painter) {
         final List<IGLBindedResource> all = getAllGLBindedResources();
         for (IGLBindedResource r : all)
             if (!r.hasMountedOnce())
-                r.mount(gl);
+                r.mount(painter);
         fireMountAll();
     }
     
@@ -244,12 +244,10 @@ public class Graph {
     /** Update all interactive {@link AbstractDrawable} projections 
      * @param painter TODO*/
     public synchronized void project(Painter painter, Camera camera) {
-        // synchronized(components){
         for (AbstractDrawable d : components) {
             if (d instanceof Selectable)
                 ((Selectable) d).project(painter, camera);
         }
-        // }
     }
 
     /* */
