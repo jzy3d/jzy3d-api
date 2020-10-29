@@ -6,7 +6,6 @@ import java.nio.FloatBuffer;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.glu.GLU;
@@ -393,6 +392,21 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 		gl.getGL2().glLightModeli(mode, value);
 	}
 
+	// GL OTHER
+	@Override
+	public void glClearColor(float red, float green, float blue, float alpha) {
+        gl.glClearColor(red, green, blue, alpha);
+	}
+
+	@Override
+	public void glClearDepth(double d) {
+        gl.glClearDepth(d);
+	}
+
+	@Override
+	public void glClear(int mask) {
+		gl.glClear(mask);
+	}
 	
 	
 
