@@ -17,7 +17,6 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
@@ -216,18 +215,12 @@ public class View {
     }
 
     public void project() {
-        GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
-        GLU glu = ((NativeDesktopPainter)painter).getGLU();
-        
         scene.getGraph().project(painter, cam);
         
         ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
     }
 
     public Coord3d projectMouse(int x, int y) {
-    	//GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
-        //GLU glu = ((NativeDesktopPainter)painter).getGLU();
-
         Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
         
         ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
@@ -819,20 +812,13 @@ public class View {
 
     /** Clear the color and depth buffer. */
     public void clear() {
-        clearColorAndDepth();
-    }
-
-    public void clearColorAndDepth() {
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-    	
-    	
-        gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
-        gl.glClearDepth(1);
+        painter.clearColor(bgColor);
+        painter.glClearDepth(1);
 
         if (slave) {
             return;
         } else {
-            gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); 
+            painter.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); 
         }
     }
 
@@ -841,15 +827,12 @@ public class View {
     public void render() {
         fireViewLifecycleWillRender(null);
 
-        // init(gl);
         renderBackground(0f, 1f);
         renderScene();
         renderOverlay();
 
         if (dimensionDirty)
             dimensionDirty = false;
-
-        //cam.show(gl, new Transform(new Scale(scaling)), scaling);
     }
 
     /**
@@ -883,12 +866,10 @@ public class View {
     }
 
     public void updateQuality() {
-        GL gl = ((NativeDesktopPainter)painter).getGL();
-
         if (quality.isAlphaActivated())
-            gl.glEnable(GL2.GL_BLEND);
+            painter.glEnable(GL2.GL_BLEND);
         else
-            gl.glDisable(GL2.GL_BLEND);
+        	painter.glDisable(GL2.GL_BLEND);
     }
     
     /* SCALE PROCESSING */
@@ -953,8 +934,6 @@ public class View {
         }
     }
     
-
-    
     /* LAYOUT */
 
     protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds) {
@@ -968,7 +947,6 @@ public class View {
 
             return new Coord3d(xLen, yLen, zLen);
         }
-
     }
 
     public BoundingBox3d computeScaledViewBounds() {
@@ -1013,25 +991,15 @@ public class View {
         cam.setUp(computeCameraUpAndTriggerEvents(viewpoint));
         cam.setEye(computeCameraEye(cam.getTarget(), viewmode, viewpoint));
         
-        GL gl = ((NativeDesktopPainter)painter).getGL();
-        GLU glu = ((NativeDesktopPainter)painter).getGLU();
-    	
-        
         computeCameraRenderingSphereRadius(cam, viewport, bounds);
         
         cam.setViewPort(viewport);
         cam.shoot(painter, cameraMode);
     }
 
-    /*public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled, float factorViewPointDistance) {
-        //return (float)spaceTransformer.compute(bounds).getRadius() * factorViewPointDistance;
-        return sceneRadiusScaled * factorViewPointDistance;
-    }*/
-    
     public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled, float factorViewPointDistance) {
-        return (float)spaceTransformer.compute(bounds).getRadius();// * factorViewPointDistance;
+        return (float)spaceTransformer.compute(bounds).getRadius();
     }
-
 
     protected Coord3d computeCameraTarget() {
         return computeCameraTarget(center, scaling);
@@ -1114,7 +1082,6 @@ public class View {
     }
 
     public void computeCameraRenderingSphereRadius(Camera cam, ViewportConfiguration viewport, BoundingBox3d bounds) {
-
         if (viewmode == ViewPositionMode.TOP) {
             if(spaceTransformer!=null)
                 bounds = spaceTransformer.compute(bounds);
@@ -1128,7 +1095,6 @@ public class View {
         } else {
             if(spaceTransformer!=null)
                 bounds = spaceTransformer.compute(bounds);
-
             
             cam.setRenderingSphereRadius((float) bounds.getRadius() * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR);
         }
@@ -1166,19 +1132,12 @@ public class View {
             GLU glu = ((NativeDesktopPainter)painter).getGLU();
 
         	
-            glModelView(gl);
+            painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+
             scene.getLightSet().disable(painter);
             axe.setScale(scaling);
             axe.draw(painter, gl, glu, camera);
             scene.getLightSet().enableLightIfThereAreLights(painter);
-        }
-    }
-
-    protected void glModelView(GL gl) {
-        if (gl.isGL2()) {
-            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-        } else {
-            GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         }
     }
 
@@ -1193,14 +1152,11 @@ public class View {
     }
     
     public void renderSceneGraph(boolean light, Camera camera, Scene scene, Coord3d scaling) {
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-    	GLU glu = ((NativeDesktopPainter)painter).getGLU();
-
+    	GL gl = null;
+    	GLU glu = null;
+    	
         if (light) {
             scene.getLightSet().apply(painter, scaling);
-            // gl.glEnable(GL2.GL_LIGHTING);
-            // gl.glEnable(GL2.GL_LIGHT0);
-            // gl.glDisable(GL2.GL_LIGHTING);
         }
 
         Transform transform = new Transform(new Scale(scaling));
@@ -1218,8 +1174,8 @@ public class View {
     }
 
     public void renderAnnotations(Camera camera) {
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-        GLU glu = ((NativeDesktopPainter)painter).getGLU();
+    	GL gl = null;
+        GLU glu = null;
 
         Transform transform = new Transform(new Scale(scaling));
         annotations.getGraph().setTransform(transform);
@@ -1250,8 +1206,4 @@ public class View {
     public ISquarifier getSquarifier() {
         return squarifier;
     }
-
-    /* */
-
-
 }

@@ -76,6 +76,11 @@ public abstract class AbstractPainter implements Painter{
 	public void colorAlphaFactor(Color color, float alpha) {
         glColor4f(color.r, color.g, color.b, color.a * alpha);
 	}
+	
+	@Override
+	public void clearColor(Color color) {
+		glClearColor(color.r, color.g, color.b, color.a);
+	}
 
 	
 	@Override
