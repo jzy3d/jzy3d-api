@@ -26,10 +26,6 @@ public class SharedTexture implements IGLBindedResource{
     public Texture getTexture(Painter painter, GL gl) {
         if (texture == null)
             mount(painter);
-        else { // execute onmount even if we did not mount
-               // if( action != null )
-               // action.execute();
-        }
         return texture;
     }
 

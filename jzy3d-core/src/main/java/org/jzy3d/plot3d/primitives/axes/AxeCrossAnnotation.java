@@ -13,13 +13,9 @@ public class AxeCrossAnnotation extends AxeLineAnnotation implements AxeAnnotati
     public void draw(Painter painter, GL gl, AxeBox axe) {
         Range xrange = axe.getBoxBounds().getXRange();
         Range yrange = axe.getBoxBounds().getYRange();
-        if (gl.isGL2()) {
-            drawHorizontalLineGL2(painter, gl, xrange, value.y);
-            drawVerticalLine(painter, gl, yrange, value.x);
-        } else {
-            drawHorizontalLineGLES2(xrange, value.y);
-            drawVerticalLineGLES2(painter, yrange, value.x);
-        }
+
+        drawHorizontalLineGL2(painter, gl, xrange, value.y);
+        drawVerticalLine(painter, gl, yrange, value.x);
     }
    
     public synchronized Coord2d getValue() {

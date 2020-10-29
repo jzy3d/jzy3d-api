@@ -5,7 +5,6 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.builder.concrete.SphereScatterGenerator;
 import org.jzy3d.plot3d.primitives.Sphere;
@@ -29,22 +28,12 @@ public class SelectableSphere extends Sphere implements Selectable {
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		super.draw(painter, gl, glu, cam);
 
-		if (gl.isGL2()) {
-			gl.getGL2().glBegin(GL.GL_POINTS);
-			gl.getGL2().glColor4f(Color.RED.r, Color.RED.g, Color.RED.b,
-					Color.RED.a);
-			for (Coord3d a : anchors)
-				gl.getGL2().glVertex3f(a.x, a.y, a.z);
-			gl.getGL2().glEnd();
-		} else {
-			GLES2CompatUtils.glBegin(GL.GL_POINTS);
-			GLES2CompatUtils.glColor4f(Color.RED.r, Color.RED.g, Color.RED.b,
-					Color.RED.a);
-			for (Coord3d a : anchors)
-				GLES2CompatUtils.glVertex3f(a.x, a.y, a.z);
-			GLES2CompatUtils.glEnd();
-		}
-
+		// Draws selection anchors
+		painter.glBegin(GL.GL_POINTS);
+		painter.color(Color.RED);
+		for (Coord3d a : anchors)
+			painter.vertex(a);
+		painter.glEnd();
 	}
 
 	@Override

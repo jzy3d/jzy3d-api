@@ -10,7 +10,6 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
@@ -30,8 +29,7 @@ public class EnlightablePolygon extends AbstractEnlightable {
 	 */
 	public EnlightablePolygon() {
 		super();
-		points = new ArrayList<Point>(4); // use Vector for synchro, or
-											// ArrayList for unsyncro.
+		points = new ArrayList<Point>(4); 
 		bbox = new BoundingBox3d();
 		center = new Coord3d();
 	}
@@ -42,111 +40,53 @@ public class EnlightablePolygon extends AbstractEnlightable {
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		doTransform(painter, cam);
 
-		applyMaterial(gl); // TODO: shall we avoid calling this @ each draw?
+		applyMaterial(painter); 
+		
 		Coord3d norm = Normal.compute(points.get(0).xyz, points.get(1).xyz,
 				points.get(2).xyz);
 
 		// Draw content of polygon
 
-		if (gl.isGL2()) {
-
 			if (facestatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+				painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 				if (wfstatus) {
-					gl.getGL2().glEnable(GL.GL_POLYGON_OFFSET_FILL);
-					gl.getGL2().glPolygonOffset(1.0f, 1.0f);
+					painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+					painter.glPolygonOffset(1.0f, 1.0f);
 				}
 
-				gl.getGL2().glBegin(GL2.GL_POLYGON);
+				painter.glBegin(GL2.GL_POLYGON);
 				for (Point p : points) {
 					if (mapper != null) {
-						Color c = mapper.getColor(p.xyz); // TODO: should store
-															// result in the
-															// point color
-						gl.getGL2().glColor4f(c.r, c.g, c.b, c.a);
+						Color c = mapper.getColor(p.xyz);
+						painter.color(c);
 					} else
-						gl.getGL2().glColor4f(p.rgb.r, p.rgb.g, p.rgb.b,
-								p.rgb.a);
-					gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-					gl.getGL2().glNormal3f(norm.x, norm.y, norm.z);
+						painter.color(p.rgb);
+					painter.vertex(p.xyz);
+					painter.normal(norm);
 				}
-				gl.getGL2().glEnd();
+				painter.glEnd();
 				if (wfstatus)
-					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+					painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
 
 			// Draw edge of polygon
 			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+				painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 
-				gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-				gl.glPolygonOffset(1.0f, 1.0f);
+				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glPolygonOffset(1.0f, 1.0f);
 
-				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, 1);// wfcolor.a);
-				gl.glLineWidth(wfwidth);
+				painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, 1);// wfcolor.a);
+				painter.glLineWidth(wfwidth);
 
-				gl.getGL2().glBegin(GL2.GL_POLYGON);
+				painter.glBegin(GL2.GL_POLYGON);
 				for (Point p : points) {
-					gl.getGL2().glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-					gl.getGL2().glNormal3f(norm.x, norm.y, norm.z);
+					painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+					painter.glNormal3f(norm.x, norm.y, norm.z);
 				}
-				gl.getGL2().glEnd();
-				gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glEnd();
+				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 			}
-		} else {
-
-			if (facestatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
-						GL2GL3.GL_FILL);
-				if (wfstatus) {
-					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-					gl.glPolygonOffset(1.0f, 1.0f);
-				}
-
-				GLES2CompatUtils.glBegin(GL2.GL_POLYGON);
-				for (Point p : points) {
-					if (mapper != null) {
-						Color c = mapper.getColor(p.xyz); // TODO: should store
-															// result in the
-															// point color
-						GLES2CompatUtils.glColor4f(c.r, c.g, c.b, c.a);
-					} else
-						GLES2CompatUtils.glColor4f(p.rgb.r, p.rgb.g,
-								p.rgb.b, p.rgb.a);
-					GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-					GLES2CompatUtils.glNormal3f(norm.x, norm.y, norm.z);
-				}
-				GLES2CompatUtils.glEnd();
-				if (wfstatus)
-					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-			}
-
-			// Draw edge of polygon
-			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
-						GL2GL3.GL_LINE);
-
-				gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-				gl.glPolygonOffset(1.0f, 1.0f);
-
-				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
-						1);// wfcolor.a);
-				gl.glLineWidth(wfwidth);
-
-				GLES2CompatUtils.glBegin(GL2.GL_POLYGON);
-				for (Point p : points) {
-					GLES2CompatUtils.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-					GLES2CompatUtils.glNormal3f(norm.x, norm.y, norm.z);
-				}
-				GLES2CompatUtils.glEnd();
-				gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-			}
-		}
-
-		/*
-		 * // Drawbarycenter Point b = new Point(getBarycentre(), Color.BLUE);
-		 * b.setWidth(5); b.draw(gl,glu,cam);
-		 */
 
 	}
 

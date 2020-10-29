@@ -215,13 +215,17 @@ public class View {
     }
 
     public void project() {
+    	((NativeDesktopPainter)painter).getCurrentGL(canvas);
+    	
         scene.getGraph().project(painter, cam);
         
         ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
     }
 
     public Coord3d projectMouse(int x, int y) {
-        Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
+    	((NativeDesktopPainter)painter).getCurrentGL(canvas);
+    	
+    	Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
         
         ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
         return p;
@@ -1126,15 +1130,11 @@ public class View {
     
     protected void renderAxeBox(IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
-            GL gl = ((NativeDesktopPainter)painter).getGL();
-            GLU glu = ((NativeDesktopPainter)painter).getGLU();
-
-        	
             painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 
             scene.getLightSet().disable(painter);
             axe.setScale(scaling);
-            axe.draw(painter, gl, glu, camera);
+            axe.draw(painter, null, null, camera);
             scene.getLightSet().enableLightIfThereAreLights(painter);
         }
     }

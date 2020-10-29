@@ -64,13 +64,4 @@ public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAn
             break;
         }
     }
-
-    /*protected void polygonOffseFillEnable(GL gl) {
-        gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-        gl.glPolygonOffset(1.0f, 1.0f);
-    }
-
-    protected void polygonOffsetFillDisable(GL gl) {
-        gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-    }*/
 }

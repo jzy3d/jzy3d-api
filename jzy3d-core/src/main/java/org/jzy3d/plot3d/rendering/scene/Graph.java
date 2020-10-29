@@ -23,7 +23,7 @@ import com.jogamp.opengl.glu.GLU;
 
 /**
  * The scene's {@link Graph} basically stores the scene content and facilitate
- * objects control
+ * objects control.
  * 
  * The graph may decompose all {@link AbstractComposite} into a list of their
  * {@link AbstractDrawable}s primitives if constructor is called with parameters
