@@ -805,9 +805,7 @@ public class View {
     }
 
     public void initResources() {
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-    	
-        getScene().getGraph().mountAllGLBindedResources(gl);
+        getScene().getGraph().mountAllGLBindedResources(painter);
     }
 
     /** Clear the color and depth buffer. */
