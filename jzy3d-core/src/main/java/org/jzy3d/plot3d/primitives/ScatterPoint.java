@@ -43,7 +43,7 @@ public class ScatterPoint extends AbstractDrawable implements ISingleColorable {
 
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, gl, glu, cam);
+        doTransform(painter, cam);
         doDrawPoints(painter);
         doDrawBounds(painter, gl, glu, cam);
     }

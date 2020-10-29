@@ -18,9 +18,6 @@ import org.jzy3d.plot3d.primitives.Quad;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 
 public class TexturedCylinder extends AbstractComposite implements Selectable, ITranslucent{
 	public TexturedCylinder(MaskPair masks){
@@ -98,7 +95,7 @@ public class TexturedCylinder extends AbstractComposite implements Selectable, I
 	}
 	
 	@Override
-	public void project(Painter painter, GL gl, GLU glu, Camera cam) {
+	public void project(Painter painter, Camera cam) {
 		lastProjection = cam.modelToScreen( painter, getBounds().getVertices() );
 		lastHull = ConvexHull.hull(lastProjection);
 	}

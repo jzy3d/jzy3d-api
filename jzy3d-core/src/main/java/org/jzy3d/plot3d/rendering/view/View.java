@@ -69,8 +69,6 @@ public class View {
     /** A view may optionnaly know its parent chart. */
     protected Chart chart;
 
-    protected GLU glu;
-
     public static float STRETCH_RATIO = 0.25f;
 
     /**
@@ -174,8 +172,6 @@ public class View {
         this.viewLifecycleListeners = new ArrayList<IViewLifecycleEventListener>();
         this.wasOnTopAtLastRendering = false;
 
-        this.glu = null;//new GLU();
-
         this.scene.getGraph().getStrategy().setView(this);
 
         this.spaceTransformer = new SpaceTransformer(); // apply no transform
@@ -223,14 +219,14 @@ public class View {
         GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
         GLU glu = ((NativeDesktopPainter)painter).getGLU();
         
-        scene.getGraph().project(painter, gl, glu, cam);
+        scene.getGraph().project(painter, cam);
         
         ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
     }
 
     public Coord3d projectMouse(int x, int y) {
-    	GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
-        GLU glu = ((NativeDesktopPainter)painter).getGLU();
+    	//GL gl = ((NativeDesktopPainter)painter).getCurrentGL(canvas);
+        //GLU glu = ((NativeDesktopPainter)painter).getGLU();
 
         Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
         
@@ -753,64 +749,57 @@ public class View {
     }
 
     public void initQuality() {
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-    	
         // Activate Depth buffer
         if (quality.isDepthActivated()) {
-            gl.glEnable(GL.GL_DEPTH_TEST);
-            gl.glDepthFunc(GL.GL_LEQUAL);
+            painter.glEnable(GL.GL_DEPTH_TEST);
+            painter.glDepthFunc(GL.GL_LEQUAL);
         } else{
-            gl.glDisable(GL.GL_DEPTH_TEST);
-        //gl.glDepthRangef(n, f);
+        	painter.glDisable(GL.GL_DEPTH_TEST);
+        	//gl.glDepthRangef(n, f);
         }
         
         // Blending
-        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        painter.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
         // on/off is handled by each viewport (camera or image)
 
         // Activate tranparency
         if (quality.isAlphaActivated()) {
-            //gl.glEnable(GL2.GL_ALPHA_TEST);
-            gl.glEnable(GL2ES1.GL_ALPHA_TEST);
+            painter.glEnable(GL2ES1.GL_ALPHA_TEST);
             //gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
             //gl.getGL2().glAlphaFunc(GL2.GL_EQUAL,1.0f);
             
             if (quality.isDisableDepthBufferWhenAlpha()){
                 /* seams better for transparent polygons since they're sorted */
-                gl.glDisable(GL.GL_DEPTH_TEST); // gl.glDepthFunc(GL2.GL_ALWAYS);
+                painter.glDisable(GL.GL_DEPTH_TEST); 
             }
         } else {
-            gl.glDisable(GL2ES1.GL_ALPHA_TEST);
+            painter.glDisable(GL2ES1.GL_ALPHA_TEST);
         }
 
         // Make smooth colors for polygons (interpolate color between points)
-        if (gl.isGL2()) {
-            if (quality.isSmoothColor())
-                gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
-            else
-                gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
-        }
+        if (quality.isSmoothColor())
+            painter.glShadeModel(GLLightingFunc.GL_SMOOTH);
+        else
+        	painter.glShadeModel(GLLightingFunc.GL_FLAT);
 
         // Make smoothing setting
         if (quality.isSmoothPolygon()) {
-            gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
-            gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
+            painter.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
+            painter.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
         } else
-            gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
+        	painter.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
 
         if (quality.isSmoothLine()) {
-            gl.glEnable(GL.GL_LINE_SMOOTH);
-            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+            painter.glEnable(GL.GL_LINE_SMOOTH);
+            painter.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
         } else
-            gl.glDisable(GL.GL_LINE_SMOOTH);
+        	painter.glDisable(GL.GL_LINE_SMOOTH);
 
         if (quality.isSmoothPoint()) {
-            gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
-            gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
-            // gl.glDisable(GL2.GL_BLEND);
-            // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
+        	painter.glEnable(GL2ES1.GL_POINT_SMOOTH);
+        	painter.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
         } else
-            gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
+        	painter.glDisable(GL2ES1.GL_POINT_SMOOTH);
     }
 
     public void initLights() {

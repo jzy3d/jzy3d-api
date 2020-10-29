@@ -26,7 +26,7 @@ public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IM
     
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, gl, glu, cam);
+        doTransform(painter, cam);
 
         painter.glPointSize(width);
         painter.glBegin(GL.GL_POINTS);

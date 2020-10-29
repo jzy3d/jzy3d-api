@@ -83,7 +83,7 @@ public abstract class AbstractDrawableGraph2d<V, E> extends AbstractDrawable imp
 		if(layout==null)
 			throw new RuntimeException("missing vertex mapping");
 		
-		doTransform(painter, gl, glu, cam);
+		doTransform(painter, cam);
 	    
 		// TODO move to graph view init
 	    gl.glEnable(GL2ES1.GL_POINT_SMOOTH);

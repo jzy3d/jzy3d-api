@@ -19,7 +19,7 @@ public class TexSurface extends AbstractDrawable{
     
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, gl, glu, cam);
+        doTransform(painter, cam);
         // Reset the current matrix to the "identity"
         GL2 gl2 = gl.getGL2();
         gl2.glLoadIdentity();
