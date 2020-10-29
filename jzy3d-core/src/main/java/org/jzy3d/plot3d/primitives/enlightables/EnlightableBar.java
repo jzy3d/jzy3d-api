@@ -10,6 +10,7 @@ public class EnlightableBar extends AbstractComposite{
 	public EnlightableBar(Coord3d position, float height, float radius, Color color){
 		setData(position, height, radius, color);
 	}
+	
 	public void setData(Coord3d position, float height, float radius, Color color){
 		int angles = 20;
 		int loops  = 1;

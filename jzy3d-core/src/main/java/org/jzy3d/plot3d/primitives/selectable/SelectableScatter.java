@@ -6,7 +6,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -31,56 +30,28 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		doTransform(painter, cam);
 
-		if (gl.isGL2()) {
+		painter.glPointSize(width);
 
-			gl.getGL2().glPointSize(width);
-
-			gl.getGL2().glBegin(GL.GL_POINTS);
-			if (colors == null)
-				gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
-			if (coordinates != null) {
-				int k = 0;
-				for (Coord3d c : coordinates) {
-					if (colors != null) {
-						if (isHighlighted[k]) // Selection coloring goes here
-							gl.getGL2().glColor4f(highlightColor.r,
-									highlightColor.g, highlightColor.b,
-									highlightColor.a);
-						else
-							gl.getGL2().glColor4f(colors[k].r, colors[k].g,
-									colors[k].b, colors[k].a);
-						k++;
-					}
-
-					gl.getGL2().glVertex3f(c.x, c.y, c.z);
+		painter.glBegin(GL.GL_POINTS);
+		if (colors == null)
+			painter.color(rgb);
+		
+		if (coordinates != null) {
+			int k = 0;
+			for (Coord3d c : coordinates) {
+				if (colors != null) {
+					if (isHighlighted[k]) // Selection coloring goes here
+						painter.color(highlightColor);
+					else
+						painter.color(colors[k]);
+					k++;
 				}
-			}
-			gl.getGL2().glEnd();
-		} else {
-			GLES2CompatUtils.glPointSize(width);
 
-			gl.getGL2().glBegin(GL.GL_POINTS);
-			if (colors == null)
-				GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
-			if (coordinates != null) {
-				int k = 0;
-				for (Coord3d c : coordinates) {
-					if (colors != null) {
-						if (isHighlighted[k]) // Selection coloring goes here
-							GLES2CompatUtils.glColor4f(highlightColor.r,
-									highlightColor.g, highlightColor.b,
-									highlightColor.a);
-						else
-							GLES2CompatUtils.glColor4f(colors[k].r,
-									colors[k].g, colors[k].b, colors[k].a);
-						k++;
-					}
-
-					GLES2CompatUtils.glVertex3f(c.x, c.y, c.z);
-				}
+				painter.vertex(c, spaceTransformer);
 			}
-			GLES2CompatUtils.glEnd();
 		}
+		painter.glEnd();
+		
 	}
 
 	@Override

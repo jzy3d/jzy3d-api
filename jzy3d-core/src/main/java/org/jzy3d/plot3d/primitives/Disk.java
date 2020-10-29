@@ -12,7 +12,6 @@ import org.jzy3d.plot3d.transform.Transform;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.glu.GLUquadric;
 
 public class Disk extends AbstractWireframeable implements ISingleColorable {
 
@@ -48,11 +47,9 @@ public class Disk extends AbstractWireframeable implements ISingleColorable {
 
 	protected void doDrawDisk(Painter painter, GLU glu) {
 		painter.glTranslatef(x, y, z);
-
 		painter.glLineWidth(wfwidth);
 
 		// Draw
-		GLUquadric qobj = glu.gluNewQuadric();
 
 		if (facestatus) {
 			if (wfstatus) {
@@ -62,7 +59,7 @@ public class Disk extends AbstractWireframeable implements ISingleColorable {
 
 			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 			painter.color(color);
-			painter.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+			painter.gluDisk(radiusInner, radiusOuter, slices, loops);
 
 			if (wfstatus)
 				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
@@ -71,7 +68,7 @@ public class Disk extends AbstractWireframeable implements ISingleColorable {
 		if (wfstatus) {
 			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 			painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-			painter.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+			painter.gluDisk(radiusInner, radiusOuter, slices, loops);
 		}
 	}
 

@@ -106,6 +106,11 @@ public abstract class AbstractPainter implements Painter{
 	public void vertex(Coord3d coord) {
 		glVertex3f(coord.x, coord.y, coord.z);
 	}
+	
+	@Override
+	public void normal(Coord3d norm) {
+		glNormal3f(norm.x, norm.y, norm.z);
+	}
 
 	@Override
 	public void raster(Coord3d coord, SpaceTransformer transform) {
@@ -116,31 +121,40 @@ public abstract class AbstractPainter implements Painter{
 		}
 	}
 	
+	@Override
+	public void material(int face, int pname, Color color) {
+		glMaterialfv(face, pname, color.toArray(), 0);
+	}
 	
+	@Override
 	public int[] getViewPortAsInt() {
         int viewport[] = new int[4];
         glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
         return viewport;
     }
 
+	@Override
 	public double[] getProjectionAsDouble() {
         double projection[] = new double[16];
         glGetDoublev(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
         return projection;
     }
 
+	@Override
 	public float[] getProjectionAsFloat() {
         float projection[] = new float[16];
         glGetFloatv(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
         return projection;
     }
 
+	@Override
 	public double[] getModelViewAsDouble() {
         double modelview[] = new double[16];
         glGetDoublev(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
         return modelview;
     }
 
+	@Override
 	public float[] getModelViewAsFloat() {
         float modelview[] = new float[16];
         glGetFloatv(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);

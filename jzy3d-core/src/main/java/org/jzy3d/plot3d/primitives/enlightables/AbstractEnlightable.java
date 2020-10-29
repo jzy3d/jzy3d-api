@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives.enlightables;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractWireframeable;
 
 import com.jogamp.opengl.GL;
@@ -9,39 +9,14 @@ import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 
 public abstract class AbstractEnlightable extends AbstractWireframeable {
 
-	protected void applyMaterial(GL gl) {
-		if (gl.isGL2()) {
-			gl.getGL2().glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_AMBIENT,
-					materialAmbiantReflection.toArray(), 0);
-			gl.getGL2().glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_DIFFUSE,
-					materialDiffuseReflection.toArray(), 0);
-			gl.getGL2().glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SPECULAR,
-					materialSpecularReflection.toArray(), 0);
-			gl.getGL2().glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SHININESS,
-					materialShininess, 0);
-		} else {
-			GLES2CompatUtils.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_AMBIENT,
-					materialAmbiantReflection.toArray(), 0);
-			GLES2CompatUtils.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_DIFFUSE,
-					materialDiffuseReflection.toArray(), 0);
-			GLES2CompatUtils.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SPECULAR,
-					materialSpecularReflection.toArray(), 0);
-			GLES2CompatUtils.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SHININESS,
-					materialShininess, 0);
-		}
-		// gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_EMISSION,
-		// materialEmission.toArray(), 0);
+	protected void applyMaterial(Painter painter) {
+		painter.material(GL.GL_FRONT, GLLightingFunc.GL_AMBIENT, materialAmbiantReflection);
+		painter.material(GL.GL_FRONT, GLLightingFunc.GL_DIFFUSE, materialDiffuseReflection);
+		painter.material(GL.GL_FRONT, GLLightingFunc.GL_SPECULAR, materialSpecularReflection);
+		painter.glMaterialfv(GL.GL_FRONT, GLLightingFunc.GL_SHININESS, materialShininess, 0);
 	}
 
 	/******************** LIGHT CONFIG **************************/
-
-	/*
-	 * public void setEnlightedBy(Light light, boolean status){
-	 * 
-	 * }
-	 * 
-	 * public boolean isEnlightedBy(Light light){ return true; }
-	 */
 
 	public Color getMaterialAmbiantReflection() {
 		return materialAmbiantReflection;
