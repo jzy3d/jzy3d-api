@@ -285,6 +285,10 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		glu.gluCylinder(quad, base, top, height, slices, stacks);
 	}
 	
+	@Override
+	public void glutSolidCube(float size) {
+        glut.glutSolidCube(size);
+	}
 	// GL FEEDBACK BUFFER
 	
 	@Override
@@ -384,4 +388,14 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		//GLES2CompatUtils.glHint(target, mode);
 	}
 
+	@Override
+	public void glLightfv(int light, int pname, float[] params, int params_offset) {
+		GLES2CompatUtils.glLightfv(light, pname, params, params_offset);
+	}
+	
+	@Override
+	public void glLightModeli(int mode, int value) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glLightModeli(mode, value);
+	}
 }

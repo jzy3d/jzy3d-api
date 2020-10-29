@@ -6,10 +6,9 @@ import java.nio.FloatBuffer;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
+import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
-import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -284,9 +283,16 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks) {
 		glu.gluCylinder(quad, base, top, height, slices, stacks);
 	}
+	
+	@Override
+	public void glutSolidCube(float size) {
+        glut.glutSolidCube(size);
+	}
+
 
 	// GL FEEDBACK BUFER
 
+	
 	@Override
 	public void glFeedbackBuffer(int size, int type, FloatBuffer buffer) {
 		gl.getGL2().glFeedbackBuffer(size, type, buffer);
@@ -364,16 +370,30 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 		gl.glBlendFunc(sfactor, dfactor);		
 	}
 
-	@Override
-	public void glShadeModel(int mode) {
-		gl.getGL2().glShadeModel(mode);
-	}
 
 	@Override
 	public void glHint(int target, int mode) {
 		gl.glHint(target, mode);
 	}
 
+	// GL LIGHTS
+	
+	@Override
+	public void glShadeModel(int mode) {
+		gl.getGL2().glShadeModel(mode);
+	}
+
+	@Override
+	public void glLightfv(int light, int pname, float[] params, int params_offset) {
+        gl.getGL2().glLightfv(light, pname, params, params_offset);
+	}
+
+	@Override
+	public void glLightModeli(int mode, int value) {
+		gl.getGL2().glLightModeli(mode, value);
+	}
+
+	
 	
 
 }
