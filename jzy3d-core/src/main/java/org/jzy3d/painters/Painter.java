@@ -13,8 +13,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.glu.GLUquadric;
-
 /** 
  * 1.0 way of drawing : 
  * - isolation of actual engine
@@ -59,9 +57,12 @@ public interface Painter {
 
 	public void clearColor(Color color);
 
+	public void normal(Coord3d norm);
     
-    // technical
-    public void culling(boolean status);
+
+	public void material(int face, int pname, Color color);
+	
+	public void culling(boolean status);
     public void lights(boolean status);
     public void polygonOffset(boolean status);
     
@@ -71,6 +72,7 @@ public interface Painter {
 	public float[] getProjectionAsFloat();
 	public double[] getModelViewAsDouble();
 	public float[] getModelViewAsFloat();
+	
     
     
     // ----------------------------
@@ -146,9 +148,9 @@ public interface Painter {
 
     // GLU INTERFACE
 
-	public void gluDisk(GLUquadric quad, double inner, double outer, int slices, int loops);
+	public void gluDisk(double inner, double outer, int slices, int loops);
 	public void glutSolidSphere(final double radius, final int slices, final int stacks);
-	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks);
+	public void gluCylinder(double base, double top, double height, int slices, int stacks);
 	public void glutSolidCube(final float size);
 	
 	// GL FEEDBACK BUFFER
@@ -167,10 +169,12 @@ public interface Painter {
 	
 	// GL LIGHTS
 	
+	public void glNormal3f(float nx, float ny, float nz);
 	public void glShadeModel(int mode);
 	public void glLightfv(int light, int pname, float[] params, int params_offset);
 	public void glLightModeli(int mode, int value);
-	
+	public void glMaterialfv(int face, int pname, float[] params, int params_offset);
+
 	// OTHER
 	
 	public void glHint(int target, int mode);

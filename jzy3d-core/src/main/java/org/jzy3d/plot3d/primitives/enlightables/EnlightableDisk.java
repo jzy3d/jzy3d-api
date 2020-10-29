@@ -5,7 +5,6 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -13,7 +12,6 @@ import org.jzy3d.plot3d.transform.Transform;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.glu.GLUquadric;
 
 public class EnlightableDisk extends AbstractEnlightable implements
 		ISingleColorable {
@@ -44,66 +42,38 @@ public class EnlightableDisk extends AbstractEnlightable implements
 	/********************************************************/
 
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+    public void draw(Painter painter, GL gll, GLU gluu, Camera cam) {
 		doTransform(painter, cam);
 
-		if (gl.isGL2()) {
-			gl.getGL2().glTranslatef(x, y, z);
-		} else {
-			GLES2CompatUtils.glTranslatef(x, y, z);
-		}
-
-		applyMaterial(gl);
-		gl.glLineWidth(wfwidth);
+		painter.glTranslatef(x, y, z);
+		
+		applyMaterial(painter);
+		painter.glLineWidth(wfwidth);
 
 		// Draw
-		GLUquadric qobj = glu.gluNewQuadric();
 
-		if (gl.isGL2()) {
-			if (facestatus) {
-				if (wfstatus) {
-					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-					gl.glPolygonOffset(1.0f, 1.0f);
-				}
-
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-				gl.getGL2().glNormal3f(norm.x, norm.y, norm.z);
-				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
-
-				if (wfstatus)
-					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-
-			}
+		if (facestatus) {
 			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-				gl.getGL2().glNormal3f(norm.x, norm.y, norm.z);
-				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glPolygonOffset(1.0f, 1.0f);
 			}
-		} else {
-			if (facestatus) {
-				if (wfstatus) {
-					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-					gl.glPolygonOffset(1.0f, 1.0f);
-				}
 
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-				GLES2CompatUtils.glNormal3f(norm.x, norm.y, norm.z);
-				GLES2CompatUtils.glColor4f(color.r, color.g, color.b, color.a);
-				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
+			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+			painter.normal(norm);
+			painter.color(color);
+			painter.gluDisk(radiusInner, radiusOuter, slices, loops);
 
-				if (wfstatus)
-					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+			if (wfstatus)
+				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 
-			}
-			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-				GLES2CompatUtils.glNormal3f(norm.x, norm.y, norm.z);
-				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
-				glu.gluDisk(qobj, radiusInner, radiusOuter, slices, loops);
-			}
 		}
+		if (wfstatus) {
+			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+			painter.normal(norm);
+			painter.color(color);
+			painter.gluDisk(radiusInner, radiusOuter, slices, loops);
+		}
+		
 	}
 
 	@Override

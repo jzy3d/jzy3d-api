@@ -5,7 +5,6 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -13,7 +12,6 @@ import org.jzy3d.plot3d.transform.Transform;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.glu.GLUquadric;
 
 /**
  * A {@link Tube} may be used to render cylinders or pyramids, according to its
@@ -58,9 +56,6 @@ public class Tube extends AbstractWireframeable implements ISingleColorable {
 
 		
 		// Draw
-		GLUquadric qobj = glu.gluNewQuadric();
-
-		
 		if (facestatus) {
 			if (wfstatus) {
 				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
@@ -69,70 +64,18 @@ public class Tube extends AbstractWireframeable implements ISingleColorable {
 
 			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 			painter.color(color);
-			painter.gluCylinder(qobj, radiusBottom, radiusTop, height, slices, stacks);
+			painter.gluCylinder(radiusBottom, radiusTop, height, slices, stacks);
 
-			if (wfstatus)
+			if (wfstatus) {
 				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-
+			}
 		}
 		if (wfstatus) {
 			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 			painter.color(wfcolor);
-			painter.gluCylinder(qobj, radiusBottom, radiusTop, height, slices, stacks);
+			painter.gluCylinder(radiusBottom, radiusTop, height, slices, stacks);
 		}
 		
-		
-		
-		if (gl.isGL2()) {
-			if (facestatus) {
-				if (wfstatus) {
-					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-					gl.glPolygonOffset(1.0f, 1.0f);
-				}
-
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-				glu.gluCylinder(qobj, radiusBottom, radiusTop, height, slices,
-						stacks);
-
-				if (wfstatus)
-					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-
-			}
-			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
-						wfcolor.a);
-				glu.gluCylinder(qobj, radiusBottom, radiusTop, height, slices,
-						stacks);
-			}
-		} else {
-			if (facestatus) {
-				if (wfstatus) {
-					gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-					gl.glPolygonOffset(1.0f, 1.0f);
-				}
-
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
-						GL2GL3.GL_FILL);
-				GLES2CompatUtils.glColor4f(color.r, color.g, color.b,
-						color.a);
-				glu.gluCylinder(qobj, radiusBottom, radiusTop, height, slices,
-						stacks);
-
-				if (wfstatus)
-					gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
-
-			}
-			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
-						GL2GL3.GL_LINE);
-				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
-						wfcolor.a);
-				glu.gluCylinder(qobj, radiusBottom, radiusTop, height, slices,
-						stacks);
-			}
-		}
 
 		doDrawBounds(painter, gl, glu, cam);
 	}

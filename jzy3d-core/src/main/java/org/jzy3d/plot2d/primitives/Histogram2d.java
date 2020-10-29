@@ -27,8 +27,6 @@ public class Histogram2d {
 		this.xlabel = xlabel;
 	}
 
-
-
 	/** Set global chart view settings to best draw this histogram. */
     public void layout(Chart chart){
         IAxeLayout layout = chart.getAxeLayout();

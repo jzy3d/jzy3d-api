@@ -58,7 +58,7 @@ public class EnlightableSphere extends AbstractEnlightable implements
 			GLES2CompatUtils.glTranslatef(x, y, z);
 		}
 
-		applyMaterial(gl); // TODO: shall we avoid calling this @ each draw?
+		applyMaterial(painter); // TODO: shall we avoid calling this @ each draw?
 
 		gl.glLineWidth(wfwidth);
 

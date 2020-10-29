@@ -28,6 +28,11 @@ animator moved to native chart
 screenshot remove texture data
 Rename ViewMouseController to NewtViewCameraController
 
+DONE OBJECT
+- View : only consts
+- Camera : 2 consts
+- AbstractViewport
+
 BROKE ==============
 
 Test : les images screenshot sont toutes grisées!! 0 couleur
@@ -54,10 +59,15 @@ GUIDE : SWT in classpath prevent an AWT application from opening -> document thi
 
 TODO ==============
 
+GL.CONST 
+- Décider si on garde JOGL dans CORE
+- s'il faut wrapper dans des méthodes de painter : painter.glMatrixModePROJECTION(); glBeginPoint
+- s'il faut créer un enum
+
 IGLLoader
 
 Move
-- Drawable texture to NATIVE
+- Drawable texture to NATIVE because it uses an internal 
 
 Dive in
 - AWTImageViewport
@@ -81,6 +91,8 @@ Maven modules
 - native-jogl-core pour le painter GL2, embedded, les VBO
 
 Ajouter un test U 
+- Selection test : ensure points are selectable
+- Pickable test : ensure no NPE
 - sur ChartTester.compare 
 - pour chaque type de factory en utilisant ChartTester
 - ChartTest a une NPE quand la taille de l'image d'origine et comparées ne sont pas similaire ChartTester.TEST_IMG_SIZE

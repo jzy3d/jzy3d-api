@@ -271,8 +271,9 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	// GLU / GLUT
 	
 	@Override
-	public void gluDisk(GLUquadric quad, double inner, double outer, int slices, int loops) {
-		glu.gluDisk(quad, inner, outer, slices, loops);		
+	public void gluDisk(double inner, double outer, int slices, int loops) {
+		GLUquadric qobj = glu.gluNewQuadric();
+		glu.gluDisk(qobj, inner, outer, slices, loops);		
 	}
 	
 	@Override
@@ -281,8 +282,9 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	}
 	
 	@Override
-	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks) {
-		glu.gluCylinder(quad, base, top, height, slices, stacks);
+	public void gluCylinder(double base, double top, double height, int slices, int stacks) {
+		GLUquadric qobj = glu.gluNewQuadric();
+		glu.gluCylinder(qobj, base, top, height, slices, stacks);
 	}
 	
 	@Override
@@ -386,6 +388,18 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glHint(int target, int mode) {
 		throw new NotImplementedException();
 		//GLES2CompatUtils.glHint(target, mode);
+	}
+	
+	// GL LIGHTS
+	
+	@Override
+	public void glMaterialfv(int face, int pname, float[] params, int params_offset) {
+		GLES2CompatUtils.glMaterialfv(face, pname, params, 0);
+	}
+	
+	@Override
+	public void glNormal3f(float nx, float ny, float nz) {
+		GLES2CompatUtils.glNormal3f(nx, ny, nz);		
 	}
 
 	@Override
