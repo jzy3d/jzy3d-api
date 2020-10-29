@@ -10,6 +10,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
@@ -181,11 +182,11 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
             textureScale.execute(painter, false);
 
         // Retrieve resource content
-        Texture texture = resource.getTexture(gl);
+        Texture texture = resource.getTexture(painter, gl);
         TextureCoords coords = resource.getCoords();
 
         // Bind texture & set color filter
-        texture.bind(gl);
+        texture.bind(((NativeDesktopPainter)painter).getGL());
         painter.colorAlphaFactor(filter, alpha);
 
         // Draw

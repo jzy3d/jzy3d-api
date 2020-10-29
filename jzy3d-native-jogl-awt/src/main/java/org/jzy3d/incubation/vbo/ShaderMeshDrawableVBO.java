@@ -4,6 +4,7 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -31,7 +32,7 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		
 		if (!hasMountedOnce) {
-			mount(gl);
+			mount(painter);
 			this.doSetBoundingBox(this.getBounds());
 		}
 		
@@ -54,7 +55,8 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
 	}
 	
 	@Override
-	public void mount(GL gl) {
+	public void mount(Painter painter) {
+		GL gl = ((NativeDesktopPainter)painter).getGL();
 		try {
 			loader.load(gl, this);
 			hasMountedOnce = true;

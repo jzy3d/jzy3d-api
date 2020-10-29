@@ -9,6 +9,7 @@ import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
@@ -66,7 +67,8 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     }
     
     @Override
-    public void mount(GL gl) {
+    public void mount(Painter painter) {
+    	GL gl = ((NativeDesktopPainter)painter).getGL();
         try {
             loader.load(gl, this);
             hasMountedOnce = true;

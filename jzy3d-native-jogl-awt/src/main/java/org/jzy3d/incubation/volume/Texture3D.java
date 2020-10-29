@@ -9,6 +9,7 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
@@ -52,9 +53,10 @@ public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMu
     }
 	
 	@Override
-	public void mount(GL gl) {
+	public void mount(Painter painter) {
+		GL gl = ((NativeDesktopPainter)painter).getGL();
 		if (!mounted) {
-			shapeVBO.mount(gl);
+			shapeVBO.mount(painter);
 			shaderProgram = new GLSLProgram();
 			ShaderFilePair sfp = new ShaderFilePair(this.getClass(), "volume.vert", "volume.frag");
 			shaderProgram.loadAndCompileShaders(gl.getGL2(),sfp);
@@ -121,7 +123,7 @@ public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMu
 	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		
 		if (!mounted) {
-			mount(gl);
+			mount(painter);
 		}
 		
 		colormapTexure.update(gl);
