@@ -58,7 +58,7 @@ public class AWTView extends ChartView {
             } else {
                 GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
             }
-            scene.getLightSet().disable(gl);
+            scene.getLightSet().disable(painter);
 
             axe.setScale(scaling);
             axe.draw(painter, gl, glu, camera);
@@ -72,7 +72,7 @@ public class AWTView extends ChartView {
                 p.draw(painter, gl, glu, camera);
             }
 
-            scene.getLightSet().enableLightIfThereAreLights(gl);
+            scene.getLightSet().enableLightIfThereAreLights(painter);
         }
     }
 

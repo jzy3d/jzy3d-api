@@ -2,13 +2,12 @@ package org.jzy3d.plot3d.rendering.lights;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.util.gl2.GLUT;
 
 public class Light {
     public static void resetCounter() {
@@ -37,130 +36,64 @@ public class Light {
         specularColor = Color.WHITE;
     }
 
-    public void apply(GL gl, Coord3d scale) {
+    public void apply(Painter painter, Coord3d scale) {
         if (enabled) {
+            painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+            painter.glLoadIdentity();
+            painter.glTranslatef(position.x * scale.x, position.y * scale.y, position.z * scale.z);
 
-            if (gl.isGL2()) {
-                gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-                gl.getGL2().glLoadIdentity();
-
-                gl.getGL2().glTranslatef(position.x * scale.x, position.y * scale.y, position.z * scale.z);
-
-                // Light position representation (cube)
-                if (representationDisplayed) {
-                    gl.glDisable(GLLightingFunc.GL_LIGHTING);
-                    gl.getGL2().glColor3f(0.0f, 1.0f, 1.0f);
-                    gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-                    glut.glutSolidCube(representationRadius);
-                    gl.glEnable(GLLightingFunc.GL_LIGHTING);
-                }
-
-                setGLLight(gl);
-            } else {
-                // OpenGL ES 2
-
-                GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-                GLES2CompatUtils.glLoadIdentity();
-
-                GLES2CompatUtils.glTranslatef(position.x * scale.x, position.y * scale.y, position.z * scale.z);
-
-                // // Light position representation (cube)
-                if (representationDisplayed) {
-                    gl.glDisable(GLLightingFunc.GL_LIGHTING);
-                    GLES2CompatUtils.glColor3f(0.0f, 1.0f, 1.0f);
-                    GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-                    glut.glutSolidCube(representationRadius);
-                    gl.glEnable(GLLightingFunc.GL_LIGHTING);
-                }
-                
-                setGLESLight(GLLightingFunc.GL_LIGHT0);
-
+            // Light position representation (cube)
+            if (representationDisplayed) {
+                painter.glDisable(GLLightingFunc.GL_LIGHTING);
+                painter.glColor3f(0.0f, 1.0f, 1.0f);
+                painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+                painter.glutSolidCube(representationRadius);
+                painter.glEnable(GLLightingFunc.GL_LIGHTING);
             }
-        } else
-            gl.glDisable(GLLightingFunc.GL_LIGHTING);
-    }
 
-    protected void setGLLight(GL gl) {
-        // Actual light source setting TODO: check we really need to
-        // define @ each rendering
-        LightSwitch.enable(gl, lightId);
-        switch (lightId) {
-        case 0:
-            setGLLight(gl, GLLightingFunc.GL_LIGHT0);
-            break;
-        case 1:
-            setGLLight(gl, GLLightingFunc.GL_LIGHT1);
-            break;
-        case (2):
-            setGLLight(gl, GLLightingFunc.GL_LIGHT2);
-            break;
-        case 3:
-            setGLLight(gl, GLLightingFunc.GL_LIGHT3);
-            break;
-        case 4:
-            setGLLight(gl, GLLightingFunc.GL_LIGHT4);
-            break;
-        case 5:
-            setGLLight(gl, GLLightingFunc.GL_LIGHT5);
-            break;
-        case 6:
-            setGLLight(gl, GLLightingFunc.GL_LIGHT6);
-            break;
-        case 7:
-            setGLLight(gl, GLLightingFunc.GL_LIGHT7);
-            break;
+            configureLight(painter);            
+        } else {
+            painter.glDisable(GLLightingFunc.GL_LIGHTING);
         }
     }
-    
-    /**
-     * Warning : not tested. LighSwitch to be ported
-     */
-    protected void setGLESLight() {
+
+    protected void configureLight(Painter painter) {
         // Actual light source setting TODO: check we really need to
         // define @ each rendering
-    //LightSwitch.enable(gl, lightId);
-        
-        
+        LightSwitch.enable(painter, lightId);
         switch (lightId) {
         case 0:
-            setGLESLight(GLLightingFunc.GL_LIGHT0);
+            configureLight(painter, GLLightingFunc.GL_LIGHT0);
             break;
         case 1:
-            setGLESLight(GLLightingFunc.GL_LIGHT1);
+            configureLight(painter, GLLightingFunc.GL_LIGHT1);
             break;
         case (2):
-            setGLESLight(GLLightingFunc.GL_LIGHT2);
+            configureLight(painter, GLLightingFunc.GL_LIGHT2);
             break;
         case 3:
-            setGLESLight(GLLightingFunc.GL_LIGHT3);
+            configureLight(painter, GLLightingFunc.GL_LIGHT3);
             break;
         case 4:
-            setGLESLight(GLLightingFunc.GL_LIGHT4);
+            configureLight(painter, GLLightingFunc.GL_LIGHT4);
             break;
         case 5:
-            setGLESLight(GLLightingFunc.GL_LIGHT5);
+            configureLight(painter, GLLightingFunc.GL_LIGHT5);
             break;
         case 6:
-            setGLESLight(GLLightingFunc.GL_LIGHT6);
+            configureLight(painter, GLLightingFunc.GL_LIGHT6);
             break;
         case 7:
-            setGLESLight(GLLightingFunc.GL_LIGHT7);
+            configureLight(painter, GLLightingFunc.GL_LIGHT7);
             break;
         }
     }
 
-    protected void setGLESLight(int func) {
-        GLES2CompatUtils.glLightfv(func, GLLightingFunc.GL_POSITION, positionZero, 0);
-        GLES2CompatUtils.glLightfv(func, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
-        GLES2CompatUtils.glLightfv(func, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
-        GLES2CompatUtils.glLightfv(func, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
-    }
-
-    protected void setGLLight(GL gl, int func) {
-        gl.getGL2().glLightfv(func, GLLightingFunc.GL_POSITION, positionZero, 0);
-        gl.getGL2().glLightfv(func, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
-        gl.getGL2().glLightfv(func, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
-        gl.getGL2().glLightfv(func, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
+    protected void configureLight(Painter painter, int lightId) {
+        painter.glLightfv(lightId, GLLightingFunc.GL_POSITION, positionZero, 0);
+        painter.glLightfv(lightId, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
+        painter.glLightfv(lightId, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
+        painter.glLightfv(lightId, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
     }
 
     /** Indicates if a square is drawn to show the light position. */
@@ -236,8 +169,6 @@ public class Light {
 
     protected boolean representationDisplayed;
     protected float representationRadius = 10;
-
-    protected static GLUT glut = new GLUT();
 
     protected static int lightCount;
 }

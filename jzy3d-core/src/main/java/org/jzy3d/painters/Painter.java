@@ -146,7 +146,7 @@ public interface Painter {
 	public void gluDisk(GLUquadric quad, double inner, double outer, int slices, int loops);
 	public void glutSolidSphere(final double radius, final int slices, final int stacks);
 	public void gluCylinder(GLUquadric quad, double base, double top, double height, int slices, int stacks);
-	
+	public void glutSolidCube(final float size);
 	
 	// GL FEEDBACK BUFFER
 	
@@ -165,6 +165,8 @@ public interface Painter {
 	// GL LIGHTS
 	
 	public void glShadeModel(int mode);
+	public void glLightfv(int light, int pname, float[] params, int params_offset);
+	public void glLightModeli(int mode, int value);
 	
 	// OTHER
 	
