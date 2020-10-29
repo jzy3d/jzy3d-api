@@ -40,7 +40,7 @@ public class EnlightablePolygon extends AbstractEnlightable {
 
 	@Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, gl, glu, cam);
+		doTransform(painter, cam);
 
 		applyMaterial(gl); // TODO: shall we avoid calling this @ each draw?
 		Coord3d norm = Normal.compute(points.get(0).xyz, points.get(1).xyz,

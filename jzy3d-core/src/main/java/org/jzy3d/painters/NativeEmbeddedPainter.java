@@ -358,4 +358,30 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		throw new NotImplementedException();
 		//GLES2CompatUtils.glGetFloatv(pname, data, data_offset);
 	}
+	
+	
+	@Override
+	public void glDepthFunc(int func) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glDepthFunc(func);
+	}
+
+	@Override
+	public void glBlendFunc(int sfactor, int dfactor) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glBlendFunc(sfactor, dfactor);		
+	}
+
+	@Override
+	public void glShadeModel(int mode) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils..glShadeModel(mode);
+	}
+
+	@Override
+	public void glHint(int target, int mode) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glHint(target, mode);
+	}
+
 }

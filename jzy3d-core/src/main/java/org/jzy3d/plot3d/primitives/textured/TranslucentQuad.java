@@ -14,7 +14,7 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 	@Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		// Execute transformation
-		doTransform(painter, gl, glu, cam);
+		doTransform(painter, cam);
 		
 		// Draw content of polygon
 		if (facestatus) {

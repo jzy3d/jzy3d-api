@@ -35,7 +35,7 @@ public class DrawableTextWrapper extends AbstractDrawable{
 	
 	@Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam){
-	    doTransform(painter, gl, glu, cam);
+	    doTransform(painter, cam);
 	    BoundingBox3d box = renderer.drawText(painter, gl, glu, cam, txt, position, halign, valign, color, screenOffset, sceneOffset);
 	    if(box!=null)
 	        bbox = box.scale(new Coord3d(1/10,1/10,1/10));

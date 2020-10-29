@@ -16,9 +16,6 @@ import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 
 public class TexturedCube extends AbstractComposite implements Selectable, ITranslucent{
 	public TexturedCube(MaskPair masks){
@@ -101,7 +98,7 @@ public class TexturedCube extends AbstractComposite implements Selectable, ITran
 	}
 	
 	@Override
-	public void project(Painter painter, GL gl, GLU glu, Camera cam) {
+	public void project(Painter painter, Camera cam) {
 		lastProjection = cam.modelToScreen( painter, getBounds().getVertices() );
 		lastHull = ConvexHull.hull(lastProjection);
 	}

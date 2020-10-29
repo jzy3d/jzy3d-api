@@ -83,6 +83,12 @@ public interface Painter {
     public void glScalef(float x, float y, float z);
 	public void glTranslatef(float x, float y, float z);
 	public void glRotatef(float angle, float x, float y, float z);
+	
+	// GL CONFIG
+	
+	public void glDepthFunc(int func);
+	public void glBlendFunc(int sfactor, int dfactor);
+	
     
 	// GL GEOMETRIES
 	
@@ -156,8 +162,13 @@ public interface Painter {
 	public void glGetFloatv(int pname, float[] data, int data_offset);
 
 	
-	// FROM JOGL
+	// GL LIGHTS
 	
+	public void glShadeModel(int mode);
+	
+	// OTHER
+	
+	public void glHint(int target, int mode);
 
     
 }

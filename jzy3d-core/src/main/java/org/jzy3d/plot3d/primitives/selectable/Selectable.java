@@ -9,9 +9,6 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 
 /** An {@link Selectable} object is supposed to be able to compute its projection
  * on the screen according to the {@link Camera} settings (viewport, viewpoint, etc).
@@ -32,7 +29,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  */
 public interface Selectable {
-	public void project(Painter painter, GL gl, GLU glu, Camera cam);
+	public void project(Painter painter, Camera cam);
 	public Polygon2d getHull2d();
 	public List<Coord3d> getLastProjection();
 }

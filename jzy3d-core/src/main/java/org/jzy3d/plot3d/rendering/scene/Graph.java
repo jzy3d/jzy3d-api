@@ -252,11 +252,11 @@ public class Graph {
 
     /** Update all interactive {@link AbstractDrawable} projections 
      * @param painter TODO*/
-    public synchronized void project(Painter painter, GL gl, GLU glu, Camera camera) {
+    public synchronized void project(Painter painter, Camera camera) {
         // synchronized(components){
         for (AbstractDrawable d : components) {
             if (d instanceof Selectable)
-                ((Selectable) d).project(painter, gl, glu, camera);
+                ((Selectable) d).project(painter, camera);
         }
         // }
     }

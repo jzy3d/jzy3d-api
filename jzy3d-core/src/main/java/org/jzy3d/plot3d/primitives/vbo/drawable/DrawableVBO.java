@@ -82,7 +82,7 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     @Override
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         if (hasMountedOnce) {
-            doTransform(painter, gl, glu, cam);
+            doTransform(painter, cam);
             configure(painter, gl);
             doDrawElements(gl);
             doDrawBounds(painter, gl, glu, cam);
