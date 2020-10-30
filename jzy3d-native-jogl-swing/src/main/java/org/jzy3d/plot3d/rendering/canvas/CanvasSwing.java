@@ -5,7 +5,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -34,8 +34,8 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author Martin Pernollet
  */
 @Deprecated
-public class CanvasSwing extends GLJPanel implements IScreenCanvas {
-	public CanvasSwing(IChartComponentFactory factory, Scene scene,
+public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanvas {
+	public CanvasSwing(NativeChartFactory factory, Scene scene,
 			Quality quality) {
 		this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance()
 				.getGLCapabilities());
@@ -45,7 +45,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	 * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering
 	 * {@link Quality}.
 	 */
-	public CanvasSwing(IChartComponentFactory factory, Scene scene,
+	public CanvasSwing(NativeChartFactory factory, Scene scene,
 			Quality quality, GLCapabilitiesImmutable glci) {
 		this(factory, scene, quality, glci, false, false);
 	}
@@ -54,7 +54,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas {
 	 * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering
 	 * {@link Quality}.
 	 */
-	public CanvasSwing(IChartComponentFactory factory, Scene scene,
+	public CanvasSwing(NativeChartFactory factory, Scene scene,
 			Quality quality, GLCapabilitiesImmutable glci, boolean traceGL,
 			boolean debugGL) {
 		super(glci);

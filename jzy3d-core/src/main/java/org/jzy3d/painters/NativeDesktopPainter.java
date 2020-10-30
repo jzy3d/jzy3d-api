@@ -2,6 +2,7 @@ package org.jzy3d.painters;
 
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
@@ -233,8 +234,27 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glPixelZoom(float xfactor, float yfactor) {
 		gl.getGL2().glPixelZoom(xfactor, yfactor);
 	}
+	
+	@Override
+	public void glPixelStorei(int pname, int param) {
+		gl.glPixelStorei(pname, param);		
+	}
+
+	@Override
+	public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, byte[] bitmap, int bitmap_offset) {
+		gl.getGL2().glBitmap(width, height, xorig, yorig, xmove, ymove, bitmap, bitmap_offset);
+	}
+	
+	@Override
+	public void glutBitmapString(int font, String string) {
+		glut.glutBitmapString(font, string);
+	}
 
 	// GL LISTS
+
+	
+
+	
 
 	@Override
 	public int glGenLists(int range) {
@@ -407,6 +427,7 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	}
 
 	// GL OTHER
+	
 	@Override
 	public void glClearColor(float red, float green, float blue, float alpha) {
         gl.glClearColor(red, green, blue, alpha);
@@ -421,7 +442,44 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glClear(int mask) {
 		gl.glClear(mask);
 	}
+
 	
 	
+	// GL PICKING
+	
+	@Override
+	public void glInitNames() {
+		gl.getGL2().glInitNames();
+	}
+
+	@Override
+	public void glLoadName(int name) {
+		gl.getGL2().glLoadName(name);
+	}
+
+	@Override
+	public void glPushName(int name) {
+		gl.getGL2().glPushName(name);
+	}
+
+	@Override
+	public void glPopName() {
+		gl.getGL2().glPopName();
+	}
+
+	@Override
+	public void glSelectBuffer(int size, IntBuffer buffer) {
+		gl.getGL2().glSelectBuffer(size, buffer);
+	}
+
+	@Override
+	public void gluPickMatrix(double x, double y, double delX, double delY, int[] viewport, int viewport_offset) {
+		glu.gluPickMatrix(x, y, delX, delY, viewport, viewport_offset);
+	}
+
+	@Override
+	public void glFlush() {
+		gl.glFlush();
+	}
 
 }

@@ -21,6 +21,7 @@ import javax.swing.border.Border;
 import net.miginfocom.swing.MigLayout;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.ui.views.ImagePanel;
@@ -192,7 +193,7 @@ public class MultiChartPanel extends JPanel {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
-        AWTRenderer3d renderer = (AWTRenderer3d)chart.getCanvas().getRenderer();
+        AWTRenderer3d renderer = (AWTRenderer3d)((INativeCanvas)chart.getCanvas()).getRenderer();
         BufferedImage i = renderer.getLastScreenshotImage();
         JPanel component = new ImagePanel(i);
         return component;

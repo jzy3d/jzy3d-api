@@ -241,8 +241,7 @@ public class Graph {
         return monotypes;
     }
 
-    /** Update all interactive {@link AbstractDrawable} projections 
-     * @param painter TODO*/
+    /** Update all interactive {@link AbstractDrawable} projections */
     public synchronized void project(Painter painter, Camera camera) {
         for (AbstractDrawable d : components) {
             if (d instanceof Selectable)

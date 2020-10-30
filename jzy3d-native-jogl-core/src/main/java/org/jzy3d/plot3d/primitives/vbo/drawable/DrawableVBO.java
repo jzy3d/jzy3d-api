@@ -82,8 +82,11 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
     // @see
     // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        if (hasMountedOnce) {
+    public void draw(Painter painter, GL gll, GLU gluu, Camera cam) {
+    	if (hasMountedOnce) {
+    		GL gl = ((NativeDesktopPainter)painter).getGL();
+    		GLU glu = ((NativeDesktopPainter)painter).getGLU();
+    		
             doTransform(painter, cam);
             configure(painter, gl);
             doDrawElements(gl);

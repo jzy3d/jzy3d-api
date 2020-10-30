@@ -2,6 +2,7 @@ package org.jzy3d.painters;
 
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
@@ -228,7 +229,22 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		GLES2CompatUtils.glPixelZoom(xfactor, yfactor);
 	}
 
+	@Override
+	public void glPixelStorei(int pname, int param) {
+		throw new NotImplementedException();
+		//GLES2CompatUtils.glPixelStorei(pname, param);		
+	}
+	
+	@Override
+	public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, byte[] bitmap,
+			int bitmap_offset) {
+		GLES2CompatUtils.glBitmap(width, height, xorig, yorig, xmove, ymove, bitmap, bitmap_offset);
+	}
 
+	@Override
+	public void glutBitmapString(int font, String string) {
+		glut.glutBitmapString(font, string);
+	}
 	
 	// GL LISTS
 	
@@ -428,4 +444,47 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		gl.glClear(mask);
 	}
 	
+	// GL PICKING
+	
+	@Override
+	public void glInitNames() {
+		throw new NotImplementedException();
+		//gl.getGL2().glInitNames();
+	}
+
+	@Override
+	public void glLoadName(int name) {
+		throw new NotImplementedException();
+		//gl.getGL2().glLoadName(name);
+	}
+
+	@Override
+	public void glPushName(int name) {
+		throw new NotImplementedException();
+		//gl.getGL2().glPushName(name);
+	}
+
+	@Override
+	public void glPopName() {
+		throw new NotImplementedException();
+		//gl.getGL2().glPopName();
+	}
+
+	@Override
+	public void glSelectBuffer(int size, IntBuffer buffer) {
+		throw new NotImplementedException();
+		//gl.getGL2().glSelectBuffer(size, buffer);
+	}
+
+	@Override
+	public void gluPickMatrix(double x, double y, double delX, double delY, int[] viewport, int viewport_offset) {
+		throw new NotImplementedException();
+		//glu.gluPickMatrix(x, y, delX, delY, viewport, viewport_offset);
+	}
+
+	@Override
+	public void glFlush() {
+		throw new NotImplementedException();
+		//gl.glFlush();
+	}
 }

@@ -19,7 +19,7 @@ public class SwingChartComponentFactory extends AWTChartComponentFactory {
         boolean traceGL = false;
         boolean debugGL = false;
         
-        return new CanvasSwing(factory, scene, quality, capabilities, traceGL, debugGL);
+        return new CanvasSwing((NativeChartFactory) factory, scene, quality, capabilities, traceGL, debugGL);
     }
 
     /* */

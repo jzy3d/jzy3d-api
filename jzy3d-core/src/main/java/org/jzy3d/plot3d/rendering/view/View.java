@@ -17,10 +17,10 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightSet;
@@ -64,10 +64,8 @@ import com.jogamp.opengl.glu.GLU;
 public class View {
     protected static Logger LOGGER = Logger.getLogger(View.class);
 
-
     /** A view may optionnaly know its parent chart. */
     protected Chart chart;
-
     public static float STRETCH_RATIO = 0.25f;
 
     /**
@@ -79,30 +77,21 @@ public class View {
     protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false;
     protected boolean axeBoxDisplayed = true;
     protected boolean squared = true;
-
     protected Camera cam;
     protected IAxe axe;
     protected Quality quality;
     protected Scene scene;
     protected ICanvas canvas;
     protected Painter painter;
-
     protected Scene annotations;
-
     protected Coord3d viewpoint;
     protected Coord3d center;
     protected Coord3d scaling;
     protected BoundingBox3d viewbounds;
-    
-
     protected CameraMode cameraMode;
     protected ViewPositionMode viewmode;
     protected ViewBoundMode boundmode;
-
-    // protected BoundingBox3d targetBox;
-
     protected Color bgColor = Color.BLACK;
-
     protected List<IViewPointChangedListener> viewPointChangedListeners;
     protected List<IViewIsVerticalEventListener> viewOnTopListeners;
     protected List<IViewLifecycleEventListener> viewLifecycleListeners;
@@ -119,9 +108,7 @@ public class View {
      * rendering due to a canvas size change
      */
     protected boolean viewDirty = false;
-
     protected static View current;
-
     protected BoundingBox3d initBounds;
 
     /**
@@ -133,9 +120,7 @@ public class View {
 
     /** A slave view won't clear its color and depth buffer before rendering */
     protected boolean slave = false;
-
     protected SpaceTransformer spaceTransformer = new SpaceTransformer();
-    
     private ISquarifier squarifier;
     
     /**
@@ -214,20 +199,26 @@ public class View {
         canvas.forceRepaint();
     }
 
+    /** 
+     * Perform the 2d projection of all {@link Selectable} objects of the scene.
+     *
+     * The result of the projection can be retrieved on the objects's instances. 
+     */
     public void project() {
-    	((NativeDesktopPainter)painter).getCurrentGL(canvas);
+    	//((NativeDesktopPainter)painter).getCurrentGL(canvas);
     	
         scene.getGraph().project(painter, cam);
         
-        ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
+        //((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
     }
 
+    /** Perform the 3d projection of a 2d coordinate.*/
     public Coord3d projectMouse(int x, int y) {
-    	((NativeDesktopPainter)painter).getCurrentGL(canvas);
+    	//((NativeDesktopPainter)painter).getCurrentGL(canvas);
     	
     	Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
         
-        ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
+        //((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
         return p;
     }
 

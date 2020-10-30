@@ -5,7 +5,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
@@ -62,16 +61,10 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     }
 
     @Override
-    public void drawSimpleText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Color color) {
-        if (gl.isGL2()) {
-            gl.getGL2().glColor3f(color.r, color.g, color.b);
-            gl.getGL2().glRasterPos3f(position.x, position.y, position.z);
-        } else {
-            GLES2CompatUtils.glColor3f(color.r, color.g, color.b);
-            GLES2CompatUtils.glRasterPos3f(position.x, position.y, position.z);
-        }
-
-        glut.glutBitmapString(font, s);
+    public void drawSimpleText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Color color) {
+        glRaster(painter, position, color);
+    	
+        painter.glutBitmapString(font, s);
     }
 
     /**
@@ -103,7 +96,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         
         // Draws actual string
         glRasterPos(painter, gl, sceneOffset, posReal);
-        glut.glutBitmapString(font, text);
+        painter.glutBitmapString(font, text);
         return computeTextBounds(painter, cam, posScreenShifted, strlen);
     }
 
@@ -115,7 +108,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         painter.raster(posReal.add(sceneOffset), null);
     }
 
-    public BoundingBox3d computeTextBounds(Painter painter, Camera cam, Coord3d posScreenShifted, float strlen) {
+    protected BoundingBox3d computeTextBounds(Painter painter, Camera cam, Coord3d posScreenShifted, float strlen) {
         Coord3d botLeft = new Coord3d();
         Coord3d topRight = new Coord3d();
         botLeft.x = posScreenShifted.x;

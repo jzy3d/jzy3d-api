@@ -13,7 +13,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
@@ -46,10 +45,7 @@ public class TextOverlay implements Renderer2d{
 	}
 
     protected void init(ICanvas canvas) {
-        if(canvas instanceof CanvasAWT)
-			initComponent((Component)canvas);
-		else
-			throw new RuntimeException("TextRenderer not implemented for this Canvas implementation");
+		initComponent((Component)canvas);
     }
 	
     protected void initComponent(Component c){
@@ -65,8 +61,7 @@ public class TextOverlay implements Renderer2d{
 		target.removeComponentListener(resizeListener);
 	}
 	
-	/**
-	 * @param painter TODO**************************************************************/
+	/****************************************************************/
 	
 	public void appendText(Painter painter, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color){
 		Coord3d posScreen = cam.modelToScreen(painter, position);
