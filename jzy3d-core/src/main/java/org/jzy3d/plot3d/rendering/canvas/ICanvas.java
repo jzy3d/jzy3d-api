@@ -5,7 +5,6 @@ import java.io.IOException;
 
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.nativewindow.ScalableSurface;
@@ -36,7 +35,7 @@ public interface ICanvas {
     /** Returns the renderer's height, i.e. the display height. */
     public int getRendererHeight();
 
-    public Renderer3d getRenderer();
+    //public Renderer3d getRenderer();
 
     /**
      * Invoked when a user requires the Canvas to be repainted (e.g. a non 3d

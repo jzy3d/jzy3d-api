@@ -11,6 +11,9 @@ target
 *~/
 *~
 
+*.obj
+
+
 */.classpath
 */.project
 */.settings

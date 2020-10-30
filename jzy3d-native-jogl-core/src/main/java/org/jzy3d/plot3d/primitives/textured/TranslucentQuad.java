@@ -26,9 +26,7 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 			painter.glBegin(GL2GL3.GL_QUADS); // <<<
 			for (Point p : points) {
 				if (mapper != null) {
-					Color c = mapper.getColor(p.xyz); // TODO: should store
-														// result in the
-														// point color
+					Color c = mapper.getColor(p.xyz); 
 					painter.colorAlphaFactor(c, alpha);
 				} else
 					painter.colorAlphaFactor(p.rgb, alpha);

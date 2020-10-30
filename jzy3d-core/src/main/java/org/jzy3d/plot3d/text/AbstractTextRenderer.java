@@ -47,5 +47,11 @@ public abstract class AbstractTextRenderer implements ITextRenderer {
     public void setSpaceTransformer(SpaceTransformer transformer) {
         this.spaceTransformer = transformer;
     }
+    
+    protected void glRaster(Painter painter, Coord3d position, Color color) {
+		painter.glColor3f(color.r, color.g, color.b);
+        painter.raster(position, spaceTransformer);
+	}
+
 
 }

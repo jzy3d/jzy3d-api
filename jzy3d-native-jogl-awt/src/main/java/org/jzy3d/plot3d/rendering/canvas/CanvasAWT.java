@@ -5,7 +5,7 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -31,12 +31,12 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * 
  * @author Martin Pernollet
  */
-public class CanvasAWT extends GLCanvas implements IScreenCanvas {
-    public CanvasAWT(IChartComponentFactory factory, Scene scene, Quality quality) {
+public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas {
+    public CanvasAWT(NativeChartFactory factory, Scene scene, Quality quality) {
         this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }
 
-    public CanvasAWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
+    public CanvasAWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
     }
 
@@ -44,7 +44,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas {
      * Initialize a {@link CanvasAWT} attached to a {@link Scene}, with a given
      * rendering {@link Quality}.
      */
-    public CanvasAWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+    public CanvasAWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
         super(glci);
 
         view = scene.newView(this, quality);

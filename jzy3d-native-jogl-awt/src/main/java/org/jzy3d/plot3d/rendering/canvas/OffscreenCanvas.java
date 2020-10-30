@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 import java.io.File;
 import java.io.IOException;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -37,12 +37,12 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author Nils Hoffman
  * @author Martin Pernollet
  */
-public class OffscreenCanvas implements ICanvas {
-    public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height) {
+public class OffscreenCanvas implements ICanvas, INativeCanvas {
+    public OffscreenCanvas(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height) {
         this(factory, scene, quality, capabilities, width, height, false, false);
     }
 
-    public OffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
+    public OffscreenCanvas(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
         
         this.view = scene.newView(this, quality);
         this.renderer = factory.newRenderer(view, traceGL, debugGL);

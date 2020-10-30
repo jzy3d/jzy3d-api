@@ -27,7 +27,6 @@ import org.jzy3d.plot3d.rendering.ordering.BarycentreOrderingStrategy;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
@@ -112,15 +111,7 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
         return axe;
     }
 
-    @Override
-    public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
-        return new Renderer3d(view, traceGL, debugGL);
-    }
-
-    @Override
-    public Renderer3d newRenderer(View view) {
-        return newRenderer(view, false, false);
-    }
+    
 
     @Override
     public AbstractOrderingStrategy newOrderingStrategy() {

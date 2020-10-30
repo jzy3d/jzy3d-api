@@ -6,8 +6,9 @@ import java.io.IOException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -33,13 +34,13 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * If a non AWT panel where required, follow the guidelines given in
  * {@link IScreenCanvas} documentation.
  */
-public class CanvasNewtSWT extends Composite implements IScreenCanvas {
+public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCanvas {
 
-    public CanvasNewtSWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
+    public CanvasNewtSWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
     }
 
-    public CanvasNewtSWT(IChartComponentFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+    public CanvasNewtSWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
         super(((SWTChartComponentFactory) factory).getComposite(), SWT.NONE);
         this.setLayout(new FillLayout());
         window = GLWindow.create(glci);

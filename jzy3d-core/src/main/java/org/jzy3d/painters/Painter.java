@@ -2,6 +2,7 @@ package org.jzy3d.painters;
 
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
@@ -134,8 +135,12 @@ public interface Painter {
 	
     public void glDrawPixels(int width, int height, int format, int type, Buffer pixels);
     public void glPixelZoom(float xfactor, float yfactor);
+    public void glPixelStorei(int pname, int param);
     public void glRasterPos3f(float x, float y, float z);
+    public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, byte[] bitmap, int bitmap_offset);
 	
+    public void glutBitmapString(final int font, final String string);
+    
 	// GL VIEWPOINT
 	
 	public void glOrtho(double left, double right, double bottom, double top, double near_val, double far_val);
@@ -181,5 +186,15 @@ public interface Painter {
 	public void glClearColor(float red, float green, float blue, float alpha);
 	public void glClearDepth(double d);
 	public void glClear(int mask);
-    
+	
+	// GL PICKING
+	
+	public void glInitNames();
+	public void glLoadName(int name);
+	public void glPushName(int name);
+	public void glPopName();
+
+	public void glSelectBuffer(int size, IntBuffer buffer);
+	public void gluPickMatrix(double x, double y, double delX, double delY, int[] viewport, int viewport_offset);
+	public void glFlush();
 }

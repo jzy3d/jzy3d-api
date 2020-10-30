@@ -18,6 +18,7 @@ import org.jzy3d.chart.factories.AWTChartComponentFactory;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 
@@ -176,9 +177,9 @@ public class ChartTester{
     public void compare(Chart chart, String filename) throws IOException, ChartTestFailed {
         
         // Will compare buffered image
-        if(chart.getCanvas().getRenderer() instanceof AWTRenderer3d){
+        if(((INativeCanvas)chart.getCanvas()).getRenderer() instanceof AWTRenderer3d){
             chart.screenshot();
-            AWTRenderer3d awtR = (AWTRenderer3d)chart.getCanvas().getRenderer();
+            AWTRenderer3d awtR = (AWTRenderer3d)((INativeCanvas)chart.getCanvas()).getRenderer();
             BufferedImage actual = awtR.getLastScreenshotImage();
             BufferedImage expected = loadBufferedImage(filename);
             

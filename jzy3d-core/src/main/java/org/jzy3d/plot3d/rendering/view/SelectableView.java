@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010-2011, Martin Pernollet
+ * Copyright (c) Since 2010, Martin Pernollet
  * All rights reserved.
  *
  * Redistribution in binary form, with or without modification, is permitted.

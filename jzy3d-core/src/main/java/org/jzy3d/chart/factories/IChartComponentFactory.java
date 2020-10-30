@@ -20,7 +20,6 @@ import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
@@ -37,8 +36,8 @@ public interface IChartComponentFactory {
     public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality);
     public Camera newCamera(Coord3d center);
     public IAxe newAxe(BoundingBox3d box, View view);
-    public Renderer3d newRenderer(View view);
-    public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
+    //public Renderer3d newRenderer(View view);
+    //public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
     public AbstractOrderingStrategy newOrderingStrategy();
 
     public ICanvas newCanvas(Scene scene, Quality quality);

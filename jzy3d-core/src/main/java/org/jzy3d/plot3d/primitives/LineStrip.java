@@ -9,7 +9,6 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.symbols.MaskImageSymbolHandler;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -42,7 +41,7 @@ public class LineStrip extends AbstractWireframeable {
     public LineStrip(int n) {
         points = new ArrayList<Point>(n);
         bbox = new BoundingBox3d();
-        symbolHandler = new MaskImageSymbolHandler(n);
+        //symbolHandler = new MaskImageSymbolHandler(n);
         setWireframeColor(null);
     }
 
@@ -264,7 +263,8 @@ public class LineStrip extends AbstractWireframeable {
 
     public void setShowSymbols(boolean showSymbols) {
         if (!showSymbols){
-            symbolHandler.clear();           
+        	if(symbolHandler!=null)
+        		symbolHandler.clear();           
         }
         else {
             if(symbolHandler!=null){

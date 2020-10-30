@@ -1,4 +1,4 @@
-package org.jzy3d.analysis;
+package org.jzy3d.demos;
 
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;

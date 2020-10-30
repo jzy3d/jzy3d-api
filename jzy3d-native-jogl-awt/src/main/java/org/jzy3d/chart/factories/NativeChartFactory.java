@@ -6,6 +6,8 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.Renderer3d;
+import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
@@ -28,10 +30,20 @@ public abstract class NativeChartFactory extends ChartComponentFactory{
 		return new NativeDesktopPainter();
 	}
 	
-	protected ICanvas newOffscreenCanvas(IChartComponentFactory factory, Scene scene, Quality quality, boolean traceGL,
+	protected ICanvas newOffscreenCanvas(NativeChartFactory factory, Scene scene, Quality quality, boolean traceGL,
 			boolean debugGL) {
 		return new OffscreenCanvas(factory, scene, quality, getCapabilities(), width, height, traceGL, debugGL);
 	}
+	
+	//@Override
+    public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
+        return new Renderer3d(view, traceGL, debugGL);
+    }
+
+    //@Override
+    public Renderer3d newRenderer(View view) {
+        return newRenderer(view, false, false);
+    }
 
 	
 	/************ PROFILE AND CAPABILITIES HELPERS ************/

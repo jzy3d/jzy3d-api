@@ -67,7 +67,7 @@ GL.CONST
 IGLLoader
 
 Move
-- Drawable texture to NATIVE because it uses an internal 
+- Drawable texture to NATIVE because it uses an internal texture
 
 Dive in
 - AWTImageViewport
@@ -104,7 +104,7 @@ Ajouter un test U
 Tous les utilisateur de getCurrentContext ne devraient pas le faire explicitement, idéalement c'est à l'intérieur du Painter
   AbstractCameraController -> Mouse pickers
 
-
+Demo with 
 
 
 FINAL CLEANUP ===========

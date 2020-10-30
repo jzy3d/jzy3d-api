@@ -17,6 +17,7 @@ import org.jzy3d.javafx.controllers.keyboard.JavaFXCameraKeyController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXMousePickingController;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
@@ -43,7 +44,7 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
 
     public Image getScreenshotAsJavaFXImage(AWTChart chart) {
         chart.screenshot();
-        AWTRenderer3d renderer = (AWTRenderer3d) chart.getCanvas().getRenderer();
+        AWTRenderer3d renderer = (AWTRenderer3d) ((INativeCanvas)chart.getCanvas()).getRenderer();
         BufferedImage i = renderer.getLastScreenshotImage();
         if (i != null) {
             Image image = SwingFXUtils.toFXImage(i, null);
@@ -94,13 +95,13 @@ public class JavaFXChartFactory extends AWTChartComponentFactory {
      * Register for renderer notifications with a new JavaFX Image
      */
     public void bind(final ImageView imageView, AWTChart chart) {
-        if (!(chart.getCanvas().getRenderer() instanceof JavaFXRenderer3d)) {
+        if (!(((INativeCanvas)chart.getCanvas()).getRenderer() instanceof JavaFXRenderer3d)) {
             LOGGER.error("NOT BINDING IMAGE VIEW TO CHART AS NOT A JAVAFX RENDERER");
             return;
         }
 
         // Set listener on renderer to update imageView
-        JavaFXRenderer3d renderer = (JavaFXRenderer3d) chart.getCanvas().getRenderer();
+        JavaFXRenderer3d renderer = (JavaFXRenderer3d) ((INativeCanvas)chart.getCanvas()).getRenderer();
         renderer.addDisplayListener(new DisplayListener() {
             @Override
             public void onDisplay(Object image) {
