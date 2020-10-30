@@ -33,7 +33,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * If a non AWT panel where required, follow the guidelines given in
  * {@link IScreenCanvas} documentation.
  */
-public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas {
+public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeScreenCanvas {
     static Logger LOGGER = Logger.getLogger(CanvasNewtAwt.class);
     
     public CanvasNewtAwt(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
@@ -130,10 +130,12 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     }
 
     @Override
-    public TextureData screenshot(File file) throws IOException {
+    public void screenshot(File file) throws IOException {
+        if (!file.getParentFile().exists())
+            file.mkdirs();
+
         TextureData screen = screenshot();
         TextureIO.write(screen, file);
-        return screen;
     }
 
     @Override

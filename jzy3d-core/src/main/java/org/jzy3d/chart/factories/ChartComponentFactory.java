@@ -46,6 +46,7 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
     public abstract ICameraKeyController newKeyboardCameraController(Chart chart);
     public abstract IFrame newFrame(Chart chart, Rectangle bounds, String title);
     public abstract ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality);
+    public abstract IViewportLayout newViewportLayout();
 
     boolean offscreen = false;
     int width;
@@ -141,11 +142,7 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
     public CameraThreadController newCameraThreadController(Chart chart){
         return new CameraThreadController(chart);
     }
-
-    @Override
-    public IViewportLayout newViewportLayout() {
-        return null;
-    }
+    
 
     @Override
     public IFrame newFrame(Chart chart) {

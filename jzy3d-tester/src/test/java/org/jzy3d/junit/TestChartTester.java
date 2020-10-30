@@ -6,8 +6,6 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jzy3d.junit.ChartTester;
-import org.jzy3d.junit.ChartTestFailed;
 
 /**
  * Testing the test tool!

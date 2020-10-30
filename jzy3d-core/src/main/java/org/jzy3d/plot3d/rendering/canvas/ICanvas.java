@@ -26,9 +26,6 @@ public interface ICanvas {
     /** Returns a reference to the held view. */
     public View getView();
 
-    /** Returns the GLDrawable associated with the canvas */
-    public GLAutoDrawable getDrawable();
-
     /** Returns the renderer's width, i.e. the display width. */
     public int getRendererWidth();
 
@@ -36,6 +33,10 @@ public interface ICanvas {
     public int getRendererHeight();
 
     //public Renderer3d getRenderer();
+    
+    public void screenshot(File file) throws IOException;
+
+    public Object screenshot();
 
     /**
      * Invoked when a user requires the Canvas to be repainted (e.g. a non 3d
@@ -43,10 +44,6 @@ public interface ICanvas {
      */
     public void forceRepaint();
 
-    /** Returns an image with the current renderer's size */
-    public TextureData screenshot();
-
-    public TextureData screenshot(File file) throws IOException;
 
     /** Performs all required cleanup when destroying a Canvas. */
     public void dispose();

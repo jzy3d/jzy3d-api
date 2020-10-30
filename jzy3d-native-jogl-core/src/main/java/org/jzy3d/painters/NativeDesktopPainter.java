@@ -5,6 +5,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLContext;
@@ -54,7 +55,7 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	}
 
 	public GLContext getCurrentContext(ICanvas canvas) {
-		return canvas.getDrawable().getContext();
+		return ((INativeCanvas)canvas).getDrawable().getContext();
 	}
 
 	@Override
@@ -297,6 +298,12 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	@Override
 	public void glutSolidSphere(double radius, int slices, int stacks) {
 		glut.glutSolidSphere(radius, slices, stacks);
+	}
+	
+	@Override
+	public void gluSphere(double radius, int slices, int stacks) {
+		GLUquadric qobj = glu.gluNewQuadric();
+		glu.gluSphere(qobj, radius, slices, stacks);	
 	}
 
 	@Override

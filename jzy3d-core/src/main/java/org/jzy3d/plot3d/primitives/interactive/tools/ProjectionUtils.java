@@ -10,7 +10,6 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.TicToc;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractComposite;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
@@ -28,8 +27,8 @@ public class ProjectionUtils {
     static Logger logger = Logger.getLogger(ProjectionUtils.class);
     
 	public static List<PolygonProjection> project(Chart chart){
-		GL gl = ((NativeDesktopPainter)chart.getView().getPainter()).getCurrentGL(chart.getCanvas());
-		return project(chart.getView().getPainter(), gl, new GLU(), chart.getView().getCamera(), chart.getScene().getGraph());
+		//GL gl = ((NativeDesktopPainter)chart.getView().getPainter()).getCurrentGL(chart.getCanvas());
+		return project(chart.getView().getPainter(), null, null, chart.getView().getCamera(), chart.getScene().getGraph());
 	}
 	
 	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, Graph g){

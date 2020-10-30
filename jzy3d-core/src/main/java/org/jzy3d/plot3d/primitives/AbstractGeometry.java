@@ -91,7 +91,7 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 
 
     /** Drawing the point list in face mode (polygon content) 
-     * @param painter TODO*/
+     */
     protected void callPointsForFace(Painter painter, GL gl) {
         begin(painter, gl);
         for (Point p : points) {
