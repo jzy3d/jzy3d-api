@@ -95,7 +95,7 @@ public class NewtChartComponentFactory extends NativeChartFactory {
         boolean traceGL = false;
         boolean debugGL = false;
         
-        return new CanvasNewtAwt(factory, scene, quality, getCapabilities(), traceGL, debugGL);
+        return new CanvasNewtAwt((NativeChartFactory)factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
     @Override

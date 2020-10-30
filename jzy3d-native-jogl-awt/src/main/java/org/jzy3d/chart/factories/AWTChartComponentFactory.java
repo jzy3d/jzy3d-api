@@ -85,10 +85,10 @@ public class AWTChartComponentFactory extends NativeChartFactory {
         boolean debugGL = false;
         
         if(isOffscreen()) {
-            return newOffscreenCanvas(factory, scene, quality, traceGL, debugGL);
+            return newOffscreenCanvas((NativeChartFactory)factory, scene, quality, traceGL, debugGL);
         }
         else
-        	return new CanvasAWT(factory, scene, quality, getCapabilities(), traceGL, debugGL);
+        	return new CanvasAWT((NativeChartFactory) factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
 

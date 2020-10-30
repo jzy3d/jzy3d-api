@@ -24,7 +24,9 @@ public class StringGraphGenerator {
 	
 	public static DefaultGraphLayout2d<String> getRandomLayout(IGraph<String,String> graph, float size){
 		DefaultGraphLayout2d<String> layout = new DefaultGraphLayout2d<String>();
-		Random rng = new Random();		
+		Random rng = new Random();	
+		rng.setSeed(0);
+		
 		for (String v: graph.getVertices()) {
 			float x = rng.nextFloat()*size-size/2;
 			float y = rng.nextFloat()*size-size/2;

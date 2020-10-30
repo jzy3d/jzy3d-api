@@ -4,7 +4,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.AbstractGeometry;
@@ -44,7 +43,7 @@ public class CameraDistanceAnnotation extends Point {
 		computeCameraPosition();
 		doTransform(painter, cam);
 
-		doDrawCamera(gl, glu, cam);
+		doDrawCamera(painter, cam);
 
 		Halign h = Halign.RIGHT;
 		Valign v = Valign.CENTER;
@@ -87,20 +86,12 @@ public class CameraDistanceAnnotation extends Point {
 		xyz = xyz.div(scaling);
 	}
 
-	public void doDrawCamera(GL gl, GLU glu, Camera cam) {
-		if (gl.isGL2()) {
-			gl.getGL2().glPointSize(width);
-			gl.getGL2().glBegin(GL.GL_POINTS);
-			gl.getGL2().glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
-			gl.getGL2().glVertex3f(xyz.x, xyz.y, xyz.z);
-			gl.getGL2().glEnd();
-		} else {
-			GLES2CompatUtils.glPointSize(width);
-			GLES2CompatUtils.glBegin(GL.GL_POINTS);
-			GLES2CompatUtils.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
-			GLES2CompatUtils.glVertex3f(xyz.x, xyz.y, xyz.z);
-			GLES2CompatUtils.glEnd();
-		}
+	public void doDrawCamera(Painter painter, Camera cam) {
+		painter.glPointSize(width);
+		painter.glBegin(GL.GL_POINTS);
+		painter.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+		painter.glVertex3f(xyz.x, xyz.y, xyz.z);
+		painter.glEnd();
 	}
 
 	protected View view;

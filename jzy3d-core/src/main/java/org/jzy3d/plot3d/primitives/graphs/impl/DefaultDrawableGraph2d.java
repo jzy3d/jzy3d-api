@@ -8,7 +8,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.graphs.AbstractDrawableGraph2d;
-import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
@@ -104,12 +103,12 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
 	@Override
 	public void applyGeometryTransform(Transform transform) {
-		Logger.getLogger(DrawableTexture.class).warn("not implemented");
+		Logger.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
 	}
 
 	@Override
 	public void updateBounds() {
-		Logger.getLogger(DrawableTexture.class).warn("not implemented");
+		Logger.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
 	}
 
 }

@@ -30,7 +30,7 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
 	}
 	
 	@Override
-	public void drawSimpleText(GL gl, GLU glu, Camera cam, String s, Coord3d position, Color color) {
+	public void drawSimpleText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Color color) {
 		renderer.begin3DRendering();
 		renderer.draw3D(s, position.x, position.y, position.z, 0.01f);
 		renderer.flush();

@@ -102,7 +102,7 @@ public class SWTChartComponentFactory extends NativeChartFactory {
         boolean traceGL = false;
         boolean debugGL = false;
         
-        return new CanvasNewtSWT(factory, scene, quality, getCapabilities(), traceGL, debugGL);
+        return new CanvasNewtSWT((NativeChartFactory)factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
     @Override

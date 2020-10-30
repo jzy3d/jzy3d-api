@@ -230,18 +230,7 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
 
     protected void before(Painter painter, GL gl) {
     	painter.glPushMatrix();
-        // gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT,GL2.GL_NICEST);
         painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-
-        // gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
-        // gl.glPolygonOffset(1.0f, 1.0f);
-
-        // gl.glEnable(GL2.GL_BLEND);
-        // gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
-
-        // gl.glEnable(GL2.GL_ALPHA_TEST);
-        // gl.glAlphaFunc(GL2.GL_GREATER, 0);
-
         painter.glEnable(GL.GL_TEXTURE_2D);
         painter.glTexEnvf(GL.GL_TEXTURE_2D, GL2ES1.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
     }
@@ -249,8 +238,6 @@ public class DrawableTexture extends AbstractDrawable implements ITranslucent {
     protected void after(Painter painter, GL gl) {
         painter.glDisable(GL.GL_TEXTURE_2D);
         painter.glTexEnvi(GL2ES1.GL_TEXTURE_ENV, GL2ES1.GL_TEXTURE_ENV_MODE, GL2ES1.GL_MODULATE);
-        // gl.glDisable(GL2.GL_ALPHA);
-        // gl.glDisable(GL2.GL_BLEND);
         painter.glPopMatrix();
     }
 

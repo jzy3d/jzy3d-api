@@ -62,7 +62,7 @@ public class Settings {
     }
 
     /**
-     * Modifies the acceleration status for all {@link ICanvas.Canvas}
+     * Modifies the acceleration status for all {@link INativeCanvas.Canvas}
      * instantiations. This doesn't modify the status of canvases that have
      * already been instantiated.
      */

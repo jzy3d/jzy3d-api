@@ -12,6 +12,7 @@ import java.awt.image.DataBufferByte;
 import java.awt.image.PixelGrabber;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
@@ -142,7 +143,7 @@ public class GLImage {
 	public static ByteBuffer allocBytes(byte[] bytearray) {
 		ByteBuffer bb = ByteBuffer.allocateDirect(bytearray.length * SIZE_BYTE)
 				.order(ByteOrder.nativeOrder());
-		bb.put(bytearray).flip();
+		((Buffer)bb.put(bytearray)).flip();
 		return bb;
 	}
 

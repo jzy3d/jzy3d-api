@@ -23,7 +23,7 @@ public class OffscreenChartComponentFactory extends AWTChartComponentFactory {
         boolean traceGL = false;
         boolean debugGL = false;
         
-        return new OffscreenCanvas(factory, scene, quality, getCapabilities(), width, height, traceGL, debugGL);
+        return new OffscreenCanvas((NativeChartFactory)factory, scene, quality, getCapabilities(), width, height, traceGL, debugGL);
     }
 
 }
