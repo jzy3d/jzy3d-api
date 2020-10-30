@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.INativeScreenCanvas;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 
 import com.jogamp.opengl.GLAnimatorControl;
@@ -15,7 +15,7 @@ public class FpsInfoRenderer implements Renderer2d{
     protected GLAnimatorControl control;
     
     public FpsInfoRenderer(Chart chart){
-        this.control = ((IScreenCanvas)chart.getCanvas()).getAnimator();
+        this.control = ((INativeScreenCanvas)chart.getCanvas()).getAnimator();
         ((AWTChart)chart).addRenderer(this);
     }
     

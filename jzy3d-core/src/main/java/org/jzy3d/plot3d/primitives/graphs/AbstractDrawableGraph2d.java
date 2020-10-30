@@ -7,7 +7,6 @@ import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.graphs.layout.DefaultGraphFormatter;
@@ -86,19 +85,16 @@ public abstract class AbstractDrawableGraph2d<V, E> extends AbstractDrawable imp
 		
 		doTransform(painter, cam);
 		
-		GL gl = ((NativeDesktopPainter)painter).getGL();
-		GLU glu = ((NativeDesktopPainter)painter).getGLU();
-	    
 		// TODO move to graph view init
-	    gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
-	    gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+	    painter.glEnable(GL2ES1.GL_POINT_SMOOTH);
+	    painter.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
 	
 	    if(formatter.areEdgesDisplayed())
-	    	drawEdges(painter, gl, glu, cam);
+	    	drawEdges(painter, null, null, cam);
 	    if(formatter.areVerticesDisplayed())
-	    	drawVertices(painter, gl, glu, cam);
+	    	drawVertices(painter, null, null, cam);
 	    if(formatter.areVertexLabelsDisplayed())
-	    	drawVertexLabels(painter, gl, glu, cam);
+	    	drawVertexLabels(painter, null, null, cam);
 	}
 	
 	protected abstract void drawVertices(Painter painter, GL gl, GLU glu, Camera cam);

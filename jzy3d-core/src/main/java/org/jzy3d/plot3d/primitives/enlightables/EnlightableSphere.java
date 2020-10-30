@@ -6,7 +6,6 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -14,7 +13,6 @@ import org.jzy3d.plot3d.transform.Transform;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.glu.GLUquadric;
 
 /**
  * A Sphere allows rendering a sphere. <br>
@@ -52,57 +50,24 @@ public class EnlightableSphere extends AbstractEnlightable implements
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		doTransform(painter, cam);
 
-		if (gl.isGL2()) {
-			gl.getGL2().glTranslatef(x, y, z);
-		} else {
-			GLES2CompatUtils.glTranslatef(x, y, z);
-		}
-
+		painter.glTranslatef(x, y, z);
+		
 		applyMaterial(painter); // TODO: shall we avoid calling this @ each draw?
 
 		gl.glLineWidth(wfwidth);
-
-		// TODO: one may define lights that are authorized to enlight the object
-		// gl.glEnable(GL2.GL_LIGHT0);
-
 		// Draw
-		GLUquadric qobj = glu.gluNewQuadric();
 
-		if (gl.isGL2()) {
-			if (facestatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-				gl.getGL2().glColor4f(color.r, color.g, color.b, color.a);
-				glu.gluSphere(qobj, radius, slices, stacks);
-				// new GLUT().glutSolidSphere(radius, slices, stacks);
-			}
-			if (wfstatus) {
-				gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-				gl.getGL2().glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
-						wfcolor.a);
-				// new GLUT().glutSolidSphere(radius, slices, stacks);
-				glu.gluSphere(qobj, radius, slices, stacks);
-			}
-		} else {
-			if (facestatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
-						GL2GL3.GL_FILL);
-				GLES2CompatUtils.glColor4f(color.r, color.g, color.b,
-						color.a);
-				// FIXME : GLU support on android ??
-				glu.gluSphere(qobj, radius, slices, stacks);
-				// new GLUT().glutSolidSphere(radius, slices, stacks);
-			}
-			if (wfstatus) {
-				GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK,
-						GL2GL3.GL_LINE);
-				GLES2CompatUtils.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b,
-						wfcolor.a);
-				// new GLUT().glutSolidSphere(radius, slices, stacks);
-				glu.gluSphere(qobj, radius, slices, stacks);
-			}
+		if (facestatus) {
+			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+			painter.color(color);
+			painter.gluSphere(radius, slices, stacks);
 		}
-
-		// gl.glDisable(GL2.GL_LIGHT0);
+		if (wfstatus) {
+			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+			painter.color(wfcolor);
+			painter.gluSphere(radius, slices, stacks);
+		}
+	
 	}
 
 	@Override

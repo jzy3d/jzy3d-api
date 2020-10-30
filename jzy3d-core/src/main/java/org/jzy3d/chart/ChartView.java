@@ -1,16 +1,12 @@
 package org.jzy3d.chart;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 
 
@@ -38,17 +34,15 @@ public class ChartView extends View {
     @Override
     public void render() {
     	fireViewLifecycleWillRender(null);
-
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-        GLU glu = ((NativeDesktopPainter)painter).getGLU();
-
     	
-    	layout.update(getChart());
-    	layout.render(painter, getChart());
-        
-        //renderOverlay(gl);
-        if( dimensionDirty )
-        	dimensionDirty = false;
+    	if(layout!=null && getChart()!=null) {
+	    	layout.update(getChart());
+	    	layout.render(painter, getChart());
+	        
+	        //renderOverlay(gl);
+	        if( dimensionDirty )
+	        	dimensionDirty = false;
+    	}
     }
 
     

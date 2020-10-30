@@ -18,6 +18,7 @@ import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -147,9 +148,11 @@ public class AWTView extends ChartView {
     public void renderOverlay(ViewportConfiguration viewport) {
         if (!hasOverlayStuffs())
             return;
+        
+        INativeCanvas nCanvas = (INativeCanvas)canvas;
 
         if (overlay == null)
-            this.overlay = new Overlay(canvas.getDrawable());
+            this.overlay = new Overlay(nCanvas.getDrawable());
 
         GL gl = ((NativeDesktopPainter)painter).getGL();
 
@@ -163,9 +166,7 @@ public class AWTView extends ChartView {
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
             
             try {
-                if(canvas.getDrawable().getSurfaceWidth()>0 && canvas.getDrawable().getSurfaceHeight()>0){
-                    //System.out.println("surf width=" + canvas.getDrawable().getSurfaceWidth());
-                    //System.out.println("surf height=" + canvas.getDrawable().getSurfaceHeight());
+                if(nCanvas.getDrawable().getSurfaceWidth()>0 && nCanvas.getDrawable().getSurfaceHeight()>0){
                     Graphics2D g2d = overlay.createGraphics();
 
                     g2d.setBackground(bgOverlay);
