@@ -11,6 +11,7 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLFBODrawable;
@@ -124,10 +125,9 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
     }
     
     @Override
-    public TextureData screenshot(File file) throws IOException {
+    public void screenshot(File file) throws IOException {
         TextureData screen = screenshot();
         TextureIO.write(screen, file);
-        return screen;
     }
 
     /** Provide a reference to the View that renders into this canvas. */
@@ -176,9 +176,11 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
     public GLCapabilities getCapabilities() {
         return capabilities;
     }
-
+    
     protected View view;
     protected Renderer3d renderer;
     protected GLOffscreenAutoDrawable offscreenDrawable;
     protected GLCapabilities capabilities;
+    
+	
 }

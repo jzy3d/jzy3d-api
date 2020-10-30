@@ -14,6 +14,8 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
+import com.jogamp.opengl.glu.GLUquadric;
+
 /** 
  * 1.0 way of drawing : 
  * - isolation of actual engine
@@ -154,7 +156,8 @@ public interface Painter {
     // GLU INTERFACE
 
 	public void gluDisk(double inner, double outer, int slices, int loops);
-	public void glutSolidSphere(final double radius, final int slices, final int stacks);
+	public void glutSolidSphere(double radius, int slices, int stacks);
+	public void gluSphere(double radius, int slices, int stacks);
 	public void gluCylinder(double base, double top, double height, int slices, int stacks);
 	public void glutSolidCube(final float size);
 	

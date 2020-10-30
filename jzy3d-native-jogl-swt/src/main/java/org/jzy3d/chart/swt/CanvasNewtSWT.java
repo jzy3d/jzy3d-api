@@ -8,7 +8,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
+import org.jzy3d.plot3d.rendering.canvas.INativeScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -34,7 +34,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * If a non AWT panel where required, follow the guidelines given in
  * {@link IScreenCanvas} documentation.
  */
-public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCanvas {
+public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeScreenCanvas {
 
     public CanvasNewtSWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
@@ -118,10 +118,12 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     }
 
     @Override
-    public TextureData screenshot(File file) throws IOException {
+    public void screenshot(File file) throws IOException {
+        if (!file.getParentFile().exists())
+            file.mkdirs();
+
         TextureData screen = screenshot();
         TextureIO.write(screen, file);
-        return screen;
     }
 
     @Override

@@ -293,14 +293,20 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	}
 	
 	@Override
-	public void glutSolidSphere(double radius, int slices, int stacks) {
-		glut.glutSolidSphere(radius, slices, stacks);
+	public void gluSphere(double radius, int slices, int stacks) {
+		GLUquadric qobj = glu.gluNewQuadric();
+		glu.gluSphere(qobj, radius, slices, stacks);	
 	}
 	
 	@Override
 	public void gluCylinder(double base, double top, double height, int slices, int stacks) {
 		GLUquadric qobj = glu.gluNewQuadric();
 		glu.gluCylinder(qobj, base, top, height, slices, stacks);
+	}
+	
+	@Override
+	public void glutSolidSphere(double radius, int slices, int stacks) {
+		glut.glutSolidSphere(radius, slices, stacks);
 	}
 	
 	@Override

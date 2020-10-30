@@ -30,6 +30,5 @@ import com.jogamp.opengl.util.Animator;
  */
 public interface IScreenCanvas extends ICanvas{
 	public void display();
-	public GLAnimatorControl getAnimator();
 	
 }

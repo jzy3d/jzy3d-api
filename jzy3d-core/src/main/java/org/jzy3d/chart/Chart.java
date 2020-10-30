@@ -84,20 +84,6 @@ public class Chart {
         return this;
     }
 
-    public void setAnimated(boolean status) {
-        getQuality().setAnimated(status);
-
-        if (getCanvas() instanceof IScreenCanvas) {
-            IScreenCanvas sCanvas = ((IScreenCanvas) getCanvas());
-
-            if (status) {
-                sCanvas.getAnimator().start();
-            } else {
-                sCanvas.getAnimator().stop();
-            }
-        }
-    }
-
     /** Alias for {@link display()} */
     public IFrame show(Rectangle rectangle, String title) {
         return display(rectangle, title);
@@ -147,6 +133,7 @@ public class Chart {
      * Compute screenshot and save to file
      */
     public void screenshot(File file) throws IOException {
+    	//if(canvas instanceof INativeCanvas)
         canvas.screenshot(file);
     }
 

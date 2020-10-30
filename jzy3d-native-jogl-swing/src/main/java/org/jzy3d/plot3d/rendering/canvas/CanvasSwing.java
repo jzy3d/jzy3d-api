@@ -122,10 +122,12 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 
 	
 	@Override
-    public TextureData screenshot(File file) throws IOException {
+    public void screenshot(File file) throws IOException {
+        if (!file.getParentFile().exists())
+            file.mkdirs();
+
         TextureData screen = screenshot();
         TextureIO.write(screen, file);
-        return screen;
     }
 	
 	@Override

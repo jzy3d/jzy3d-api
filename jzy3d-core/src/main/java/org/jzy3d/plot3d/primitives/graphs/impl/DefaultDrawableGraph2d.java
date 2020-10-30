@@ -5,7 +5,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.graphs.AbstractDrawableGraph2d;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -28,31 +27,17 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
 	@Override
     protected void drawVertices(Painter painter, GL gl, GLU glu, Camera cam) {
-		if (gl.isGL2()) {
-			painter.glPointSize(formatter.getVertexWidth());
-			painter.glBegin(GL.GL_POINTS);
-			for (V v : graph.getVertices()) {
-				if (highlights.get(v))
-					drawVertexNode(painter, gl, glu, cam, v,
-							layout.get(v), formatter.getHighlightedVertexColor());
-				else
-					drawVertexNode(painter, gl, glu, cam, v,
-							layout.get(v), formatter.getVertexColor());
-			}
-			painter.glEnd();
-		} else {
-			GLES2CompatUtils.glPointSize(formatter.getVertexWidth());
-			GLES2CompatUtils.glBegin(GL.GL_POINTS);
-			for (V v : graph.getVertices()) {
-				if (highlights.get(v))
-					drawVertexNode(painter, gl, glu, cam, v,
-							layout.get(v), formatter.getHighlightedVertexColor());
-				else
-					drawVertexNode(painter, gl, glu, cam, v,
-							layout.get(v), formatter.getVertexColor());
-			}
-			GLES2CompatUtils.glEnd();
+		painter.glPointSize(formatter.getVertexWidth());
+		painter.glBegin(GL.GL_POINTS);
+		for (V v : graph.getVertices()) {
+			if (highlights.get(v))
+				drawVertexNode(painter, gl, glu, cam, v,
+						layout.get(v), formatter.getHighlightedVertexColor());
+			else
+				drawVertexNode(painter, gl, glu, cam, v,
+						layout.get(v), formatter.getVertexColor());
 		}
+		painter.glEnd();
 	}
 
 	@Override

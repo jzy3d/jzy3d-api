@@ -1,7 +1,7 @@
 package org.jzy3d.chart;
 
 import org.jzy3d.chart.factories.IChartComponentFactory;
-import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.INativeScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 import com.jogamp.opengl.GLAnimatorControl;
@@ -15,43 +15,52 @@ public class NativeChart extends Chart{
 	protected NativeChart(){
     	super();
     }
+	
+	public void setAnimated(boolean status) {
+        getQuality().setAnimated(status);
+
+        if (status) {
+            getAnimator().start();
+        } else {
+            getAnimator().stop();
+        }
+    }
 
 	public void pauseAnimator() {
-        if (canvas != null && canvas instanceof IScreenCanvas) {
-            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
-            if (control != null && control.isAnimating()) {
-                control.pause();
-            }
+        GLAnimatorControl control = getAnimator();
+        if (control != null && control.isAnimating()) {
+            control.pause();
         }
     }
 
     public void resumeAnimator() {
-        if (canvas != null && canvas instanceof IScreenCanvas) {
-            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
-            if (control != null && control.isPaused()) {
-                control.resume();
-            }
+        GLAnimatorControl control = getAnimator();
+        if (control != null && control.isPaused()) {
+            control.resume();
         }
     }
 
     public void startAnimator() {
-        if (canvas != null && canvas instanceof IScreenCanvas) {
-            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
+            GLAnimatorControl control = getAnimator();
             if (control != null && !control.isStarted()) {
                 control.start();
             }
-        }
     }
 
     public void stopAnimator() {
-        if (canvas != null && canvas instanceof IScreenCanvas) {
-            GLAnimatorControl control = ((IScreenCanvas) canvas).getAnimator();
-            if (control != null)
-                control.stop();
-        }
+        GLAnimatorControl control = getAnimator();
+        if (control != null)
+            control.stop();
+    }
+    
+    protected GLAnimatorControl getAnimator() {
+    	if (canvas != null && canvas instanceof INativeScreenCanvas) 
+            return ((INativeScreenCanvas) canvas).getAnimator();
+    	else 
+    		return null;
     }
     
     public TextureData screenshot() {
-        return canvas.screenshot();
+        return (TextureData)canvas.screenshot();
     }
 }
