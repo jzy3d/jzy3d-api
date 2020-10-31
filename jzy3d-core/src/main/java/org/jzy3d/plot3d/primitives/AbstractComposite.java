@@ -95,7 +95,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
         if (mapper != null)
             mapper.postDraw(this);
 
-        doDrawBounds(painter, gl, glu, camera);
+        doDrawBoundsIfDisplayed(painter, gl, glu, camera);
     }
 
     /**

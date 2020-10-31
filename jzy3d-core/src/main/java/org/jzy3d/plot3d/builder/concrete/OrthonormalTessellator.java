@@ -286,6 +286,7 @@ public class OrthonormalTessellator extends Tessellator{
 	
 	protected AbstractDrawable newQuad(Point p[]){
 	    Polygon quad = new Polygon();
+	    //quad.setPolygonOffsetFillEnable(false);
         for(int pi=0; pi<p.length; pi++)
             quad.add(p[pi]);
         return quad;

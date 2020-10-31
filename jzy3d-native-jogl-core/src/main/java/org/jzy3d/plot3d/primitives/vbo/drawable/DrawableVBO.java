@@ -90,7 +90,7 @@ public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
             doTransform(painter, cam);
             configure(painter, gl);
             doDrawElements(gl);
-            doDrawBounds(painter, gl, glu, cam);
+            doDrawBoundsIfDisplayed(painter, gl, glu, cam);
         }
     }
     

@@ -29,7 +29,7 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
 		doTransform(painter, cam);
 		doDrawPolygon(painter);
-		doDrawBounds(painter, gl, glu, cam);
+		doDrawBoundsIfDisplayed(painter, gl, glu, cam);
 	}
 
 	private void doDrawPolygon(Painter painter) {

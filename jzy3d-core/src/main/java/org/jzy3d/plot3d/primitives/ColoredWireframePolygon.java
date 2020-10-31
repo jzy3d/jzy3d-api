@@ -41,7 +41,7 @@ public class ColoredWireframePolygon extends Polygon {
         if (mapper != null)
             mapper.postDraw(this);
 
-        doDrawBounds(painter, gl, glu, cam);
+        doDrawBoundsIfDisplayed(painter, gl, glu, cam);
     }
 	
     protected void polygonOffsetLineEnable(Painter painter, GL gl) {

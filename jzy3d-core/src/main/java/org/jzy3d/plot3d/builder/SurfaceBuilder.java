@@ -16,8 +16,8 @@ import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.Shape;
 
 
-public class Builder {
-    public static Shape buildOrthonormal(Mapper mapper, Range range, int steps) {
+public class SurfaceBuilder {
+    /*public static Shape buildOrthonormal(Mapper mapper, Range range, int steps) {
         return buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
     }
     
@@ -39,17 +39,43 @@ public class Builder {
 	public static Shape buildDelaunay(List<Coord3d> coordinates) {
 	    DelaunayTessellator tesselator = new DelaunayTessellator();
 	    return (Shape) tesselator.build(coordinates);
+    }*/
+	
+	/* */
+	
+	public Shape buildOrthonormal(Mapper mapper, Range range, int steps) {
+        return buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    }
+    
+    public Shape buildOrthonormal(OrthonormalGrid grid, Mapper mapper) {
+		OrthonormalTessellator tesselator = new OrthonormalTessellator();
+		return (Shape) tesselator.build(grid.apply(mapper));
+	}
+	
+	public Shape buildRing(OrthonormalGrid grid, Mapper mapper, float ringMin, float ringMax) {
+        RingTessellator tesselator = new RingTessellator(ringMin, ringMax, new ColorMapper(new ColorMapRainbow(), 0, 1), Color.BLACK);
+        return (Shape) tesselator.build(grid.apply(mapper));
+    }
+
+	public Shape buildRing(OrthonormalGrid grid, Mapper mapper, float ringMin, float ringMax, ColorMapper cmap, Color factor) {
+        RingTessellator tesselator = new RingTessellator(ringMin, ringMax, cmap, factor);
+        return (Shape) tesselator.build(grid.apply(mapper));
+    }
+	
+	public Shape buildDelaunay(List<Coord3d> coordinates) {
+	    DelaunayTessellator tesselator = new DelaunayTessellator();
+	    return (Shape) tesselator.build(coordinates);
     }
 		
 	/* BIG SURFACE */
 	
-	public static CompileableComposite buildOrthonormalBig(OrthonormalGrid grid, Mapper mapper) {
+	public CompileableComposite buildOrthonormalBig(OrthonormalGrid grid, Mapper mapper) {
         Tessellator tesselator = new OrthonormalTessellator();
         Shape s1 = (Shape) tesselator.build(grid.apply(mapper));
         return buildComposite(applyStyling(s1));
     }
 	
-	public static Shape applyStyling(Shape s) {
+	public Shape applyStyling(Shape s) {
         s.setColorMapper(new ColorMapper(colorMap, s.getBounds().getZmin(), s.getBounds().getZmax()));
         s.setFaceDisplayed(faceDisplayed);
         s.setWireframeDisplayed(wireframeDisplayed);
@@ -63,7 +89,7 @@ public class Builder {
 	 * @param s
 	 * @return
 	 */
-    public static CompileableComposite buildComposite(Shape s) {
+    public CompileableComposite buildComposite(Shape s) {
         CompileableComposite sls = new CompileableComposite();
         sls.add(s.getDrawables());
         sls.setColorMapper(new ColorMapper(colorMap, sls.getBounds().getZmin(), sls.getBounds().getZmax(), colorFactor));
