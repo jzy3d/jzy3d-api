@@ -206,18 +206,14 @@ public class View {
      */
     public void project() {
     	//((NativeDesktopPainter)painter).getCurrentGL(canvas);
-    	
         scene.getGraph().project(painter, cam);
-        
         //((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
     }
 
     /** Perform the 3d projection of a 2d coordinate.*/
     public Coord3d projectMouse(int x, int y) {
     	//((NativeDesktopPainter)painter).getCurrentGL(canvas);
-    	
     	Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
-        
         //((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
         return p;
     }
