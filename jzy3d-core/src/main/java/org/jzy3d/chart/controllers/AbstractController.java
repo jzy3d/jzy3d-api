@@ -28,10 +28,14 @@ public class AbstractController {
         }   
     }
     
-    protected Chart chart(){
+    public Chart getChart(){
         return targets.get(0);
     }
-    
+
+    public List<Chart> getCharts(){
+        return targets;
+    }
+
     public void dispose(){
         targets.clear();
         controllerListeners.clear();

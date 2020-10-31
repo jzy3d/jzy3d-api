@@ -82,7 +82,6 @@ public class Renderer3d implements GLEventListener {
         
         updatePainterWithGL(canvas);
 
-
         if (view != null) {
             view.clear();
             view.render();
