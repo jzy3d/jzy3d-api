@@ -126,8 +126,8 @@ public class AWTMousePickingController extends AbstractCameraController implemen
         View view = targets.get(0).getView();
         prevMouse3d = view.projectMouse(e.getX(), yflip);
 
-        GL gl = ((NativeDesktopPainter)chart().getView().getPainter()).getCurrentGL(chart.getCanvas());
-        Graph graph = chart().getScene().getGraph();
+        GL gl = ((NativeDesktopPainter)getChart().getView().getPainter()).getCurrentGL(chart.getCanvas());
+        Graph graph = getChart().getScene().getGraph();
 
         // will trigger vertex selection event to those subscribing to PickingSupport
         picking.pickObjects(chart.getView().getPainter(), gl, glu, view, graph, new IntegerCoord2d(e.getX(), yflip));

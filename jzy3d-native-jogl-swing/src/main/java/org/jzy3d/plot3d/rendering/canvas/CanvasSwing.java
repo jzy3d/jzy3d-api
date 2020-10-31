@@ -34,7 +34,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author Martin Pernollet
  */
 @Deprecated
-public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanvas {
+public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeScreenCanvas {
 	public CanvasSwing(NativeChartFactory factory, Scene scene,
 			Quality quality) {
 		this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance()

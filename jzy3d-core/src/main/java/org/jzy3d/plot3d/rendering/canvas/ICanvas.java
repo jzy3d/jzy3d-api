@@ -8,8 +8,6 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.nativewindow.ScalableSurface;
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.util.texture.TextureData;
 
 /**
  * A {@link ICanvas} represent the target component for rendering OpenGL.
