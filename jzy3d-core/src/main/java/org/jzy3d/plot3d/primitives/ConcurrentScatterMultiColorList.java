@@ -46,7 +46,7 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
         painter.glEnd();
         
 
-        doDrawBounds(painter, gl, glu, cam);
+        doDrawBoundsIfDisplayed(painter, gl, glu, cam);
     }
 
     @Override

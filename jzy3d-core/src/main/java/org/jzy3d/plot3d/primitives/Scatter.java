@@ -70,7 +70,7 @@ public class Scatter extends AbstractDrawable implements ISingleColorable {
     public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
         doTransform(painter, cam);
         doDrawPoints(painter);
-        doDrawBounds(painter, gl, glu, cam);
+        doDrawBoundsIfDisplayed(painter, gl, glu, cam);
     }
 
 	protected void doDrawPoints(Painter painter) {

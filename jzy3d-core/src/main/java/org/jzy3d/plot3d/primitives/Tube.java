@@ -77,7 +77,7 @@ public class Tube extends AbstractWireframeable implements ISingleColorable {
 		}
 		
 
-		doDrawBounds(painter, gl, glu, cam);
+		doDrawBoundsIfDisplayed(painter, gl, glu, cam);
 	}
 
 	@Override

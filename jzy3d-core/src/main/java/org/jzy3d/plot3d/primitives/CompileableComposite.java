@@ -93,7 +93,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 		dlID = painter.glGenLists(1);
 		painter.glNewList(dlID, GL2.GL_COMPILE);
 		drawComponents(painter, gl, glu, cam);
-		doDrawBounds(painter, gl, glu, cam);
+		doDrawBoundsIfDisplayed(painter, gl, glu, cam);
 		painter.glEndList();
 	}
 

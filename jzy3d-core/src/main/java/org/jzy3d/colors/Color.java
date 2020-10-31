@@ -37,7 +37,7 @@ public class Color {
 
     /*************************************************************/
 
-    /** Initialize a color with an alpha channel set to 1. */
+    /** Initialize a color with an alpha channel set to 1, using input values between 0.0 and 1.0. */
     public Color(float r, float g, float b) {
         this.r = r;
         this.g = g;
@@ -45,7 +45,7 @@ public class Color {
         this.a = 1.0f;
     }
 
-    /** Initialize a color with an alpha channel set to 255. */
+    /** Initialize a color with an alpha channel set to 1, using input values between 0 and 255. */
     public Color(int r, int g, int b) {
         this.r = (float) r / 255;
         this.g = (float) g / 255;
@@ -53,7 +53,7 @@ public class Color {
         this.a = 1.0f;
     }
 
-    /** Initialize a color with values between 0 and 1. */
+    /** Initialize a color with input values between 0.0 and 1.0. */
     public Color(float r, float g, float b, float a) {
         this.r = r;
         this.g = g;

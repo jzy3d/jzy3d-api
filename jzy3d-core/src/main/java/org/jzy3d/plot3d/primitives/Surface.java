@@ -7,7 +7,7 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
-import org.jzy3d.plot3d.builder.Builder;
+import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 
@@ -21,7 +21,7 @@ public class Surface {
     public static boolean DEFAULT_WIREFRAME_DISPLAYED = false;
     
     public static Shape shape(Mapper f1, Range xyRange, int steps, IColorMap colormap, float alpha) {
-        final Shape surface = Builder.buildOrthonormal(f1, xyRange, steps);
+        final Shape surface = new SurfaceBuilder().buildOrthonormal(f1, xyRange, steps);
         surface.setColorMapper(new ColorMapper(colormap, surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1,1, 1,alpha)));
         surface.setFaceDisplayed(DEFAULT_FACE_DISPLAYED);
         surface.setWireframeDisplayed(DEFAULT_WIREFRAME_DISPLAYED);
@@ -29,7 +29,7 @@ public class Surface {
     }
     
     public static Shape shape(Mapper f1, Range xRange, Range yRange, int steps, IColorMap colormap, float alpha) {
-        final Shape surface = Builder.buildOrthonormal(new OrthonormalGrid(xRange, steps, yRange, steps), f1);
+        final Shape surface = new SurfaceBuilder().buildOrthonormal(new OrthonormalGrid(xRange, steps, yRange, steps), f1);
         surface.setColorMapper(new ColorMapper(colormap, surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1,1, 1,alpha)));
         surface.setFaceDisplayed(DEFAULT_FACE_DISPLAYED);
         surface.setWireframeDisplayed(DEFAULT_WIREFRAME_DISPLAYED);
@@ -37,7 +37,7 @@ public class Surface {
     }
 
     public static Shape shape(List<Coord3d> coordinates, IColorMap colormap, float alpha) {
-        final Shape surface = Builder.buildDelaunay(coordinates);
+        final Shape surface = new SurfaceBuilder().buildDelaunay(coordinates);
         surface.setColorMapper(new ColorMapper(colormap, surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1,1, 1,alpha)));
         surface.setFaceDisplayed(DEFAULT_FACE_DISPLAYED);
         surface.setWireframeDisplayed(DEFAULT_WIREFRAME_DISPLAYED);

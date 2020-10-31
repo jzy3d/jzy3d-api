@@ -42,7 +42,7 @@ public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IM
         }
         painter.glEnd();
 
-        doDrawBounds(painter, gl, glu, cam);
+        doDrawBoundsIfDisplayed(painter, gl, glu, cam);
     }
 
     @Override
