@@ -748,16 +748,16 @@ public class View {
 
         // Activate tranparency
         if (quality.isAlphaActivated()) {
-            painter.glEnable(GL2ES1.GL_ALPHA_TEST);
-            //gl.glAlphaFunc(GL2.GL_EQUAL,1.0f);
-            //gl.getGL2().glAlphaFunc(GL2.GL_EQUAL,1.0f);
+            painter.glEnable(GL2.GL_ALPHA_TEST);
             
             if (quality.isDisableDepthBufferWhenAlpha()){
-                /* seams better for transparent polygons since they're sorted */
+                // Disable depth test to keeping pixels of
+            	// "what's behind a polygon" when drawing with
+            	// alpha
                 painter.glDisable(GL.GL_DEPTH_TEST); 
             }
         } else {
-            painter.glDisable(GL2ES1.GL_ALPHA_TEST);
+            painter.glDisable(GL2.GL_ALPHA_TEST);
         }
 
         // Make smooth colors for polygons (interpolate color between points)
@@ -768,10 +768,10 @@ public class View {
 
         // Make smoothing setting
         if (quality.isSmoothPolygon()) {
-            painter.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
-            painter.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
+            painter.glEnable(GL2.GL_POLYGON_SMOOTH);
+            painter.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
         } else
-        	painter.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
+        	painter.glDisable(GL2.GL_POLYGON_SMOOTH);
 
         if (quality.isSmoothLine()) {
             painter.glEnable(GL.GL_LINE_SMOOTH);
@@ -856,9 +856,10 @@ public class View {
 
     public void updateQuality() {
         if (quality.isAlphaActivated())
-            painter.glEnable(GL2.GL_BLEND);
+            painter.glEnable(GL.GL_BLEND);
         else
-        	painter.glDisable(GL2.GL_BLEND);
+        	painter.glDisable(GL.GL_BLEND);
+        	//painter.glDisable(GL2.GL_BLEND);
     }
     
     /* SCALE PROCESSING */

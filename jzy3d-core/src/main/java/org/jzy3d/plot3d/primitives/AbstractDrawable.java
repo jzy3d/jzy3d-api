@@ -83,7 +83,7 @@ public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
         }
     }
 
-    protected void doDrawBounds(Painter painter, GL gl, GLU glu, Camera cam) {
+    protected void doDrawBoundsIfDisplayed(Painter painter, GL gl, GLU glu, Camera cam) {
         if (isBoundingBoxDisplayed()) {
             Parallelepiped p = new Parallelepiped(getBounds());
             p.setFaceDisplayed(false);

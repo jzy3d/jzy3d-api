@@ -10,7 +10,7 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.GLSLProgram.Strictness;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Range;
-import org.jzy3d.plot3d.builder.Builder;
+import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
@@ -38,7 +38,7 @@ public class PeeledWireSurfaceDemo {
         int steps = 50;
 
         // Create the object to represent the function over the given range.
-        final Shape surface = Builder.buildOrthonormal(
+        final Shape surface = new SurfaceBuilder().buildOrthonormal(
                 new OrthonormalGrid(range, steps, range, steps), mapper);
         surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface
                 .getBounds().getZmin(), surface.getBounds().getZmax(),

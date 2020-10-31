@@ -23,7 +23,7 @@ import org.jzy3d.javafx.JavaFXRenderer3d;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
-import org.jzy3d.plot3d.builder.Builder;
+import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.vbo.builders.VBOBuilderListCoord3d;
@@ -111,7 +111,7 @@ public class DemoJzy3dFXProblem extends Application {
         int steps = 80;
 
         // Create the object to represent the function over the given range.
-        final Shape surface = Builder.buildOrthonormal(mapper, range, steps);
+        final Shape surface = new SurfaceBuilder().buildOrthonormal(mapper, range, steps);
         surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
         surface.setFaceDisplayed(true);
         surface.setWireframeDisplayed(false);
