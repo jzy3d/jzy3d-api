@@ -1,5 +1,6 @@
 package org.jzy3d.painters;
 
+import java.awt.Font;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -8,6 +9,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -42,6 +44,9 @@ public interface Painter {
     enum Geometry{
         POINT, LINE, POLYGON
     }
+    
+	public void configureGL(Quality quality);
+
     
     public void begin(Geometry geometry);
     public void end();
@@ -143,6 +148,9 @@ public interface Painter {
 	
     public void glutBitmapString(final int font, final String string);
     
+    /** An interface for AWT user, jGL only @since 2.0.0 */
+	public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c);
+
 	// GL VIEWPOINT
 	
 	public void glOrtho(double left, double right, double bottom, double top, double near_val, double far_val);
