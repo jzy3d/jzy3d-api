@@ -22,6 +22,7 @@ import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightSet;
 import org.jzy3d.plot3d.rendering.scene.Graph;
@@ -37,7 +38,6 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
-import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
@@ -216,6 +216,14 @@ public class View {
     	Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
         //((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
         return p;
+    }
+    
+    /** 
+     * Might be invoked by a {@link IScreenCanvas} to indicate that dimension changed and that
+     * elements should be reprocessed at next rendering, e.g. 2d projections.
+     */
+    public void markDimensionDirty() {
+    	dimensionDirty = true;
     }
 
     /******************************* GENERAL DISPLAY CONTROLS ***********************************/
@@ -733,57 +741,7 @@ public class View {
     }
 
     public void initQuality() {
-        // Activate Depth buffer
-        if (quality.isDepthActivated()) {
-            painter.glEnable(GL.GL_DEPTH_TEST);
-            painter.glDepthFunc(GL.GL_LEQUAL);
-        } else{
-        	painter.glDisable(GL.GL_DEPTH_TEST);
-        	//gl.glDepthRangef(n, f);
-        }
-        
-        // Blending
-        painter.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-        // on/off is handled by each viewport (camera or image)
-
-        // Activate tranparency
-        if (quality.isAlphaActivated()) {
-            painter.glEnable(GL2.GL_ALPHA_TEST);
-            
-            if (quality.isDisableDepthBufferWhenAlpha()){
-                // Disable depth test to keeping pixels of
-            	// "what's behind a polygon" when drawing with
-            	// alpha
-                painter.glDisable(GL.GL_DEPTH_TEST); 
-            }
-        } else {
-            painter.glDisable(GL2.GL_ALPHA_TEST);
-        }
-
-        // Make smooth colors for polygons (interpolate color between points)
-        if (quality.isSmoothColor())
-            painter.glShadeModel(GLLightingFunc.GL_SMOOTH);
-        else
-        	painter.glShadeModel(GLLightingFunc.GL_FLAT);
-
-        // Make smoothing setting
-        if (quality.isSmoothPolygon()) {
-            painter.glEnable(GL2.GL_POLYGON_SMOOTH);
-            painter.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
-        } else
-        	painter.glDisable(GL2.GL_POLYGON_SMOOTH);
-
-        if (quality.isSmoothLine()) {
-            painter.glEnable(GL.GL_LINE_SMOOTH);
-            painter.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
-        } else
-        	painter.glDisable(GL.GL_LINE_SMOOTH);
-
-        if (quality.isSmoothPoint()) {
-        	painter.glEnable(GL2ES1.GL_POINT_SMOOTH);
-        	painter.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
-        } else
-        	painter.glDisable(GL2ES1.GL_POINT_SMOOTH);
+    	painter.configureGL(quality);
     }
 
     public void initLights() {

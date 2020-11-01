@@ -1,15 +1,23 @@
 package org.jzy3d.painters;
 
+import java.awt.Font;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
+import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
+import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -56,6 +64,61 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 
 	public GLContext getCurrentContext(ICanvas canvas) {
 		return ((INativeCanvas)canvas).getDrawable().getContext();
+	}
+	
+	@Override
+	public void configureGL(Quality quality) {
+		// Activate Depth buffer
+        if (quality.isDepthActivated()) {
+            gl.glEnable(GL.GL_DEPTH_TEST);
+            gl.glDepthFunc(GL.GL_LEQUAL);
+        } else{
+        	gl.glDisable(GL.GL_DEPTH_TEST);
+        	//gl.glDepthRangef(n, f);
+        }
+        
+        // Blending
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        // on/off is handled by each viewport (camera or image)
+
+        // Activate tranparency
+        if (quality.isAlphaActivated()) {
+            gl.glEnable(GL2.GL_ALPHA_TEST);
+            
+            if (quality.isDisableDepthBufferWhenAlpha()){
+                // Disable depth test to keeping pixels of
+            	// "what's behind a polygon" when drawing with
+            	// alpha
+                gl.glDisable(GL.GL_DEPTH_TEST); 
+            }
+        } else {
+            gl.glDisable(GL2.GL_ALPHA_TEST);
+        }
+
+        // Make smooth colors for polygons (interpolate color between points)
+        if (quality.isSmoothColor())
+            gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
+        else
+        	gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+
+        // Make smoothing setting
+        if (quality.isSmoothPolygon()) {
+            gl.glEnable(GL2.GL_POLYGON_SMOOTH);
+            gl.glHint(GL2.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+        	gl.glDisable(GL2.GL_POLYGON_SMOOTH);
+
+        if (quality.isSmoothLine()) {
+            gl.glEnable(GL.GL_LINE_SMOOTH);
+            gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+        	gl.glDisable(GL.GL_LINE_SMOOTH);
+
+        if (quality.isSmoothPoint()) {
+        	gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
+        	gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+        } else
+        	gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
 	}
 
 	@Override
@@ -250,6 +313,13 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glutBitmapString(int font, String string) {
 		glut.glutBitmapString(font, string);
 	}
+	
+	/** JGL only */
+	@Override
+	public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c) {
+		throw new NotImplementedException();
+	}
+
 
 	// GL LISTS
 

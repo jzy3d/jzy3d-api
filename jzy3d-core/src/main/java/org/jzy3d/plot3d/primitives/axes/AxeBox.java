@@ -471,11 +471,7 @@ public class AxeBox implements IAxe {
             Coord3d tickPosition = new Coord3d(xlab, ylab, zlab);
 
             if (layout.isTickLineDisplayed()) {
-                if (gl.isGL2()) {
                     drawTickLine(painter, gl, color, xpos, ypos, zpos, xlab, ylab, zlab);
-                } else {
-                    // FIXME REWRITE ANDROID
-                }
             }
 
             // Select the alignement of the tick label
