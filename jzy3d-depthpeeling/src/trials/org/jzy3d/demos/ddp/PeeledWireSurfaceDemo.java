@@ -38,7 +38,7 @@ public class PeeledWireSurfaceDemo {
         int steps = 50;
 
         // Create the object to represent the function over the given range.
-        final Shape surface = new SurfaceBuilder().buildOrthonormal(
+        final Shape surface = new SurfaceBuilder().orthonormal(
                 new OrthonormalGrid(range, steps, range, steps), mapper);
         surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface
                 .getBounds().getZmin(), surface.getBounds().getZmax(),
