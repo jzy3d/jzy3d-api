@@ -13,6 +13,18 @@ package org.jzy3d.maths;
 public class TicToc {
     public static TicToc T = new TicToc();
 
+    public static void tick() {
+    	T.tic();
+    }
+
+    public static void tock() {
+    	T.toc();
+    }
+    public static void tockShow(String message) {
+    	T.tocShow(message);
+    }
+
+    
     public TicToc() {
         start = System.nanoTime();
         stop = System.nanoTime();

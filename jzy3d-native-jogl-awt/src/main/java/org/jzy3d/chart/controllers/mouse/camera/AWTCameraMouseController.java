@@ -61,7 +61,10 @@ public class AWTCameraMouseController extends AbstractCameraController implement
 		// Rotate
 		if (AWTMouseUtilities.isLeftDown(e)) {
 			Coord2d move = mouse.sub(prevMouse).div(100);
-			rotate(move);
+			//synchronized (this) {
+				rotate(move);
+				//System.out.println("move:" + move);
+			//}
 		}
 		// Shift
 		else if (AWTMouseUtilities.isRightDown(e)) {

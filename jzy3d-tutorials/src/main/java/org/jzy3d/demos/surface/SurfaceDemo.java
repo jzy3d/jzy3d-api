@@ -33,7 +33,7 @@ public class SurfaceDemo extends AWTAbstractAnalysis {
         int steps = 80;
 
         // Create the object to represent the function over the given range.
-        final Shape surface = new SurfaceBuilder().buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+        final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
         surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
         surface.setFaceDisplayed(true);
         surface.setWireframeDisplayed(false);

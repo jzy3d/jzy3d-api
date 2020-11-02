@@ -15,108 +15,103 @@ import org.jzy3d.plot3d.builder.delaunay.DelaunayTessellator;
 import org.jzy3d.plot3d.primitives.CompileableComposite;
 import org.jzy3d.plot3d.primitives.Shape;
 
-
 public class SurfaceBuilder {
-    /*public static Shape buildOrthonormal(Mapper mapper, Range range, int steps) {
-        return buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-    }
-    
-    public static Shape buildOrthonormal(OrthonormalGrid grid, Mapper mapper) {
-		OrthonormalTessellator tesselator = new OrthonormalTessellator();
-		return (Shape) tesselator.build(grid.apply(mapper));
+	/**
+	 * Apply a function to an orthonormal grid and return a drawable surface object.
+	 */
+	public Shape orthonormal(Mapper mapper, Range range, int steps) {
+		return orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
 	}
-	
-	public static Shape buildRing(OrthonormalGrid grid, Mapper mapper, float ringMin, float ringMax) {
-        RingTessellator tesselator = new RingTessellator(ringMin, ringMax, new ColorMapper(new ColorMapRainbow(), 0, 1), Color.BLACK);
-        return (Shape) tesselator.build(grid.apply(mapper));
-    }
-
-	public static Shape buildRing(OrthonormalGrid grid, Mapper mapper, float ringMin, float ringMax, ColorMapper cmap, Color factor) {
-        RingTessellator tesselator = new RingTessellator(ringMin, ringMax, cmap, factor);
-        return (Shape) tesselator.build(grid.apply(mapper));
-    }
-	
-	public static Shape buildDelaunay(List<Coord3d> coordinates) {
-	    DelaunayTessellator tesselator = new DelaunayTessellator();
-	    return (Shape) tesselator.build(coordinates);
-    }*/
-	
-	/* */
-	
-	public Shape buildOrthonormal(Mapper mapper, Range range, int steps) {
-        return buildOrthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-    }
-    
-    public Shape buildOrthonormal(OrthonormalGrid grid, Mapper mapper) {
-		OrthonormalTessellator tesselator = new OrthonormalTessellator();
-		return (Shape) tesselator.build(grid.apply(mapper));
-	}
-	
-	public Shape buildRing(OrthonormalGrid grid, Mapper mapper, float ringMin, float ringMax) {
-        RingTessellator tesselator = new RingTessellator(ringMin, ringMax, new ColorMapper(new ColorMapRainbow(), 0, 1), Color.BLACK);
-        return (Shape) tesselator.build(grid.apply(mapper));
-    }
-
-	public Shape buildRing(OrthonormalGrid grid, Mapper mapper, float ringMin, float ringMax, ColorMapper cmap, Color factor) {
-        RingTessellator tesselator = new RingTessellator(ringMin, ringMax, cmap, factor);
-        return (Shape) tesselator.build(grid.apply(mapper));
-    }
-	
-	public Shape buildDelaunay(List<Coord3d> coordinates) {
-	    DelaunayTessellator tesselator = new DelaunayTessellator();
-	    return (Shape) tesselator.build(coordinates);
-    }
-		
-	/* BIG SURFACE */
-	
-	public CompileableComposite buildOrthonormalBig(OrthonormalGrid grid, Mapper mapper) {
-        Tessellator tesselator = new OrthonormalTessellator();
-        Shape s1 = (Shape) tesselator.build(grid.apply(mapper));
-        return buildComposite(applyStyling(s1));
-    }
-	
-	public Shape applyStyling(Shape s) {
-        s.setColorMapper(new ColorMapper(colorMap, s.getBounds().getZmin(), s.getBounds().getZmax()));
-        s.setFaceDisplayed(faceDisplayed);
-        s.setWireframeDisplayed(wireframeDisplayed);
-        s.setWireframeColor(wireframeColor);
-        return s;
-    }
 
 	/**
-	 * Build a {@link CompileableComposite} out of a {@link Shape}, which allows faster rendering.
+	 * Apply a function to an orthonormal grid and return a drawable surface object.
+	 */
+	public Shape orthonormal(OrthonormalGrid grid, Mapper mapper) {
+		OrthonormalTessellator tesselator = new OrthonormalTessellator();
+		return (Shape) tesselator.build(grid.apply(mapper));
+	}
+
+	/**
+	 * Apply a function to an orthonormal grid and then slice a ring from it between
+	 * a min and max radius
+	 */
+	public Shape ring(OrthonormalGrid grid, Mapper mapper, float ringMin, float ringMax) {
+		RingTessellator tesselator = new RingTessellator(ringMin, ringMax, new ColorMapper(new ColorMapRainbow(), 0, 1),
+				Color.BLACK);
+		return (Shape) tesselator.build(grid.apply(mapper));
+	}
+
+	/**
+	 * Apply a function to an orthonormal grid and then slice a ring from it between
+	 * a min and max radius
+	 */
+	public Shape ring(OrthonormalGrid grid, Mapper mapper, float ringMin, float ringMax, ColorMapper cmap,
+			Color factor) {
+		RingTessellator tesselator = new RingTessellator(ringMin, ringMax, cmap, factor);
+		return (Shape) tesselator.build(grid.apply(mapper));
+	}
+
+	/**
+	 * Build a surface out of an disordered point mesh.
+	 * 
+	 * The tesselation is built with a 3d Delaunay algorithm.
+	 * 
+	 * Note that this algorithm works better for horizontal distribution than
+	 * vertical distribution of points. The algorithm is based on a terrain library
+	 * and hence assume a set of point than lie as a floor rather than a wall.
+	 * 
+	 * Beside this limitation, Delaunay remains a fast and efficient solution when
+	 * sampling points can not be acquired based on a known structure (such as
+	 * orthonormal grid).
+	 */
+	public Shape delaunay(List<Coord3d> coordinates) {
+		DelaunayTessellator tesselator = new DelaunayTessellator();
+		return (Shape) tesselator.build(coordinates);
+	}
+
+	/* BIG SURFACE */
+
+	/**
+	 * Apply a function to an orthonormal grid and return a drawable surface object
+	 * optimized for large number of polygons through OpenGL Display Lists.
+	 */
+	public CompileableComposite orthonormalBig(OrthonormalGrid grid, Mapper mapper) {
+		Tessellator tesselator = new OrthonormalTessellator();
+		Shape s1 = (Shape) tesselator.build(grid.apply(mapper));
+		return buildComposite(applyStyling(s1));
+	}
+
+	public Shape applyStyling(Shape s) {
+		s.setColorMapper(new ColorMapper(DEFAULT_COLORMAP, s.getBounds().getZmin(), s.getBounds().getZmax()));
+		s.setFaceDisplayed(DEFAULT_FACE_DISPLAYED);
+		s.setWireframeDisplayed(DEFAULT_WIREFRAME_DISPLAYED);
+		s.setWireframeColor(DEFAULT_WIREFRAME_COLOR);
+		return s;
+	}
+
+	/**
+	 * Build a {@link CompileableComposite} out of a {@link Shape}, which allows
+	 * faster rendering.
 	 * 
 	 * @param s
 	 * @return
 	 */
-    public CompileableComposite buildComposite(Shape s) {
-        CompileableComposite sls = new CompileableComposite();
-        sls.add(s.getDrawables());
-        sls.setColorMapper(new ColorMapper(colorMap, sls.getBounds().getZmin(), sls.getBounds().getZmax(), colorFactor));
-        sls.setFaceDisplayed(s.getFaceDisplayed());
-        sls.setWireframeDisplayed(s.getWireframeDisplayed());
-        sls.setWireframeColor(s.getWireframeColor());
-        sls.setSpaceTransformer(s.getSpaceTransformer());
-        return sls;
-    }
-    
-    /* LOG */
-    
-    /*public static Shape buildOrthonormalLog(OrthonormalGrid grid, Mapper mapper, SpaceTransformer transformers) {
-        OrthonormalTessellatorLog tesselator = new OrthonormalTessellatorLog(transformers);
-        return (Shape) tesselator.build(grid.apply(mapper));
-    }
-    
-    public static CompileableComposite buildOrthonormalBigLog(OrthonormalGrid grid, Mapper mapper, SpaceTransformer transformers) {
-        Tessellator tesselator = new OrthonormalTessellatorLog(transformers);
-        Shape s1 = (Shape) tesselator.build(grid.apply(mapper));
-        return buildComposite(applyStyling(s1));
-    }*/
+	public CompileableComposite buildComposite(Shape s) {
+		CompileableComposite sls = new CompileableComposite();
+		sls.add(s.getDrawables());
+		sls.setColorMapper(new ColorMapper(DEFAULT_COLORMAP, sls.getBounds().getZmin(), sls.getBounds().getZmax(),
+				DEAFAULT_COLORFACTOR));
+		sls.setFaceDisplayed(s.getFaceDisplayed());
+		sls.setWireframeDisplayed(s.getWireframeDisplayed());
+		sls.setWireframeColor(s.getWireframeColor());
+		sls.setSpaceTransformer(s.getSpaceTransformer());
+		return sls;
+	}
 
-    
-    protected static IColorMap colorMap = new ColorMapRainbow();
-    protected static Color colorFactor = new Color(1, 1, 1, 1f);
-    protected static boolean faceDisplayed = true;
-    protected static boolean wireframeDisplayed = false;
-    protected static Color wireframeColor = Color.BLACK;
+	protected static IColorMap DEFAULT_COLORMAP = new ColorMapRainbow();
+	protected static Color DEAFAULT_COLORFACTOR = new Color(1, 1, 1, 1f);
+	protected static Color DEFAULT_WIREFRAME_COLOR = Color.BLACK;
+
+	protected static boolean DEFAULT_FACE_DISPLAYED = true;
+	protected static boolean DEFAULT_WIREFRAME_DISPLAYED = false;
 }
