@@ -16,10 +16,9 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -127,13 +126,10 @@ public class Chart {
         view.shoot();
     }
 
-    
-
     /**
      * Compute screenshot and save to file
      */
     public void screenshot(File file) throws IOException {
-    	//if(canvas instanceof INativeCanvas)
         canvas.screenshot(file);
     }
 
@@ -219,15 +215,27 @@ public class Chart {
 
     /* ADDING DRAWABLES */
 
-    public Chart add(List<? extends AbstractDrawable> drawables) {
-        for (AbstractDrawable drawable : drawables) {
+    /**
+     * Add a list of drawables and refresh the view of the scene once they are all added.
+     * 
+     * @param drawables
+     * @return
+     */
+    public Chart add(List<? extends Drawable> drawables) {
+        for (Drawable drawable : drawables) {
             add(drawable, false);
         }
         getView().updateBounds();
         return this;
     }
 
-    public Chart add(AbstractDrawable drawable) {
+    /**
+     * Add a drawable and refresh the view of the scene once it is added.
+     * 
+     * @param drawable
+     * @return
+     */
+    public Chart add(Drawable drawable) {
         add(drawable, true);
         return this;
     }
@@ -235,44 +243,24 @@ public class Chart {
     /**
      * Add a drawable to the scene graph of the chart.
      * 
-     * If the view holds a {@link SpaceTransformer}, then it will be applied to the drawable. This can be reset by later calling {@link AbstractDrawable#setSpaceTransformer(null)}
+     * If the view holds a {@link SpaceTransformer}, then it will be applied to the drawable. This can be reset by later calling {@link Drawable#setSpaceTransformer(null)}
      * 
      * @param drawable
      * @param updateView
      *            states if the view should be updated immediately. Should be false if adding multiple drawable at the same time.
      * @return
      */
-    public Chart add(AbstractDrawable drawable, boolean updateView) {
+    public Chart add(Drawable drawable, boolean updateView) {
     	drawable.setSpaceTransformer(getView().getSpaceTransformer());
         getScene().getGraph().add(drawable, updateView);
         return this;
     }
 
-    @Deprecated
-    public void addDrawable(AbstractDrawable drawable) {
-        getScene().getGraph().add(drawable);
-    }
-
-    @Deprecated
-    public void addDrawable(AbstractDrawable drawable, boolean updateViews) {
-        getScene().getGraph().add(drawable, updateViews);
-    }
-
-    @Deprecated
-    public void addDrawable(List<? extends AbstractDrawable> drawables, boolean updateViews) {
-        getScene().getGraph().add(drawables, updateViews);
-    }
-
-    @Deprecated
-    public void addDrawable(List<? extends AbstractDrawable> drawables) {
-        getScene().getGraph().add(drawables);
-    }
-
-    public void removeDrawable(AbstractDrawable drawable) {
+    public void remove(Drawable drawable) {
         getScene().getGraph().remove(drawable);
     }
 
-    public void removeDrawable(AbstractDrawable drawable, boolean updateViews) {
+    public void remove(Drawable drawable, boolean updateViews) {
         getScene().getGraph().remove(drawable, updateViews);
     }
 

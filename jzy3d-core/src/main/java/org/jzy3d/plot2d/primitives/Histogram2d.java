@@ -5,7 +5,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Histogram;
 import org.jzy3d.maths.Range;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.primitives.axes.layout.providers.StaticTickProvider;
 
 public class Histogram2d {
     protected Histogram model;
-    protected AbstractComposite drawable;
+    protected Composite drawable;
     String ylabel = "Count";
     String xlabel = "Value";
     
@@ -51,12 +51,12 @@ public class Histogram2d {
         return model;
     }
 
-    public AbstractComposite getDrawable() {
+    public Composite getDrawable() {
         return drawable;
     }
 
-    protected AbstractComposite buildDrawable(Histogram model){
-        AbstractComposite c = new AbstractComposite() {
+    protected Composite buildDrawable(Histogram model){
+        Composite c = new Composite() {
         };
         for (int i = 0; i < model.ranges().length; i++) {
             Range range = model.ranges()[i];

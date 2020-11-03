@@ -23,7 +23,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
  * 
  * @author Martin Pernollet
  */
-public class Sphere extends AbstractWireframeable implements ISingleColorable {
+public class Sphere extends Wireframeable implements ISingleColorable {
 
     /**
      * Initialize a black sphere at the origin with a radius of 10, and slicing

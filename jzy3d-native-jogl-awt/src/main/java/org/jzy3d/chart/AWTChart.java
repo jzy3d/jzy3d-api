@@ -2,7 +2,7 @@ package org.jzy3d.chart;
 
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.Dimension;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
@@ -30,15 +30,15 @@ public class AWTChart extends NativeChart {
         return (AWTView) view;
     }
     
-    public AWTColorbarLegend colorbar(AbstractDrawable drawable){
+    public AWTColorbarLegend colorbar(Drawable drawable){
         return colorbar(drawable, new Dimension(100, 600), getView().getAxe().getLayout());
     }
 
-    public AWTColorbarLegend colorbar(AbstractDrawable drawable, IAxeLayout layout){
+    public AWTColorbarLegend colorbar(Drawable drawable, IAxeLayout layout){
         return colorbar(drawable, new Dimension(100, 600), layout);
     }
     
-    public AWTColorbarLegend colorbar(AbstractDrawable drawable, Dimension d, IAxeLayout layout){
+    public AWTColorbarLegend colorbar(Drawable drawable, Dimension d, IAxeLayout layout){
         AWTColorbarLegend cbar = new AWTColorbarLegend(drawable, layout);
         cbar.setMinimumSize(d);
         drawable.setLegend(cbar);

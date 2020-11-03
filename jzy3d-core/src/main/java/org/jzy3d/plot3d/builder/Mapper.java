@@ -3,8 +3,8 @@ package org.jzy3d.plot3d.builder;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 
@@ -15,14 +15,14 @@ public abstract class Mapper {
 	 * Update the shape by remapping its polygon points' z coordinate
 	 * according to f(x,y)
 	 */
-	public void remap(AbstractComposite shape){
-		List<AbstractDrawable> polygons = shape.getDrawables();		
-		for(AbstractDrawable d: polygons){
+	public void remap(Composite shape){
+		List<Drawable> polygons = shape.getDrawables();		
+		for(Drawable d: polygons){
 			remapDrawable(d);
 		}
 	}
 
-	public void remapDrawable(AbstractDrawable d) {
+	public void remapDrawable(Drawable d) {
 		if(d instanceof Polygon){
 		    Polygon p = (Polygon) d;				
 			remapPolygon(p);

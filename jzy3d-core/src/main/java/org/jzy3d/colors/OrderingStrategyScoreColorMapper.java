@@ -6,8 +6,8 @@ import org.apache.log4j.Logger;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Statistics;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
@@ -20,7 +20,7 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
  * Method {@link preDraw} is overriden to compute each {@link AbstractDrawables} score with the ordering
  * strategy, so that we have a range.
  * 
- * As colormapper may be shared by several components of a single {@link AbstractComposite}, on must provide
+ * As colormapper may be shared by several components of a single {@link Composite}, on must provide
  * an update policy to state which objects are allowed to call the re-initilizer {@link preDraw} method.
  * 
  * @author Martin Pernollet
@@ -44,11 +44,11 @@ public class OrderingStrategyScoreColorMapper extends ColorMapper{
 
     private void doPreDraw() {
         AbstractOrderingStrategy s = sceneGraph.getStrategy();
-        List<AbstractDrawable> drawable = sceneGraph.getDecomposition();      
+        List<Drawable> drawable = sceneGraph.getDecomposition();      
 
         double[] scores = new double[getNumCoordinates(drawable, false)];
         int k = 0;
-        for(AbstractDrawable d: drawable){
+        for(Drawable d: drawable){
             scores[k++] = s.score(d);
             if(d instanceof Polygon){
                 Polygon p = (Polygon)d;
@@ -66,13 +66,13 @@ public class OrderingStrategyScoreColorMapper extends ColorMapper{
         }
     }
     
-    protected int getNumCoordinates(List<AbstractDrawable> drawables, boolean onlyBaryCenter){
+    protected int getNumCoordinates(List<Drawable> drawables, boolean onlyBaryCenter){
         if(onlyBaryCenter)
             return drawables.size();
         else{
             int n = drawables.size();
             
-            for(AbstractDrawable d: drawables){
+            for(Drawable d: drawables){
                 if(d instanceof Polygon){
                     Polygon p = (Polygon)d;
                     n+=p.size();

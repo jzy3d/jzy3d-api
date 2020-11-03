@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
-import org.jzy3d.plot3d.primitives.AbstractGeometry;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.Geometry;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.scene.Decomposition;
@@ -17,13 +17,13 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
 /**
- * Draws the barycenter of an {@link AbstractGeometry}
+ * Draws the barycenter of an {@link Geometry}
  * and a line each point and the barycenter.
  * 
  * @author Martin
  */
-public class BarycenterAnnotation extends AbstractComposite{
-    public BarycenterAnnotation(AbstractGeometry annotated) {
+public class BarycenterAnnotation extends Composite{
+    public BarycenterAnnotation(Geometry annotated) {
         Color c = Color.BLACK;
         
         this.annotated = annotated;
@@ -59,18 +59,18 @@ public class BarycenterAnnotation extends AbstractComposite{
         super.draw(painter, gl, glu, camera);
     }
 
-    public static List<BarycenterAnnotation> annotate(AbstractComposite composite){
+    public static List<BarycenterAnnotation> annotate(Composite composite){
         List<BarycenterAnnotation> annotations = new ArrayList<BarycenterAnnotation>();
         
-        ArrayList<AbstractDrawable> items= Decomposition.getDecomposition(composite);
-        for(AbstractDrawable item: items){
-            if(item instanceof AbstractGeometry)
-                annotations.add(new BarycenterAnnotation((AbstractGeometry)item));
+        ArrayList<Drawable> items= Decomposition.getDecomposition(composite);
+        for(Drawable item: items){
+            if(item instanceof Geometry)
+                annotations.add(new BarycenterAnnotation((Geometry)item));
         }
         return annotations;
     }
     
-    protected AbstractGeometry annotated;
+    protected Geometry annotated;
     protected Point bary;
     protected List<LineStrip> lines;
 }

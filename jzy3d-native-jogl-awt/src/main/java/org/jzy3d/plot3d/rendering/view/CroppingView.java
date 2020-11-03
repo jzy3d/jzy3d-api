@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.rendering.view;
 
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Croppable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -29,7 +29,7 @@ public class CroppingView extends AWTView {
 
     private void applyCropFilter() {
         synchronized (scene.getGraph()) {
-            for (AbstractDrawable d : scene.getGraph().getAll()) {
+            for (Drawable d : scene.getGraph().getAll()) {
                 if (d instanceof Croppable) {
                     Croppable c = (Croppable) d;
                     c.filter(filter);

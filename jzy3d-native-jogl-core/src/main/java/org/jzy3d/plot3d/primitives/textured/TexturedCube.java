@@ -11,13 +11,13 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Polygon2d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 
-public class TexturedCube extends AbstractComposite implements Selectable, ITranslucent{
+public class TexturedCube extends Composite implements Selectable, ITranslucent{
 	public TexturedCube(MaskPair masks){
 		this(new Coord3d(), Color.CYAN, Color.RED, masks);
 	}
@@ -132,19 +132,19 @@ public class TexturedCube extends AbstractComposite implements Selectable, ITran
 		((DrawableTexture)far).setAlphaFactor( alpha );
 	}
 	
-	protected AbstractDrawable north;
-	protected AbstractDrawable south;
-	protected AbstractDrawable west;
-	protected AbstractDrawable east;
-	protected AbstractDrawable near;
-	protected AbstractDrawable far;
+	protected Drawable north;
+	protected Drawable south;
+	protected Drawable west;
+	protected Drawable east;
+	protected Drawable near;
+	protected Drawable far;
 	
-	protected AbstractDrawable northBg;
-	protected AbstractDrawable southBg;
-	protected AbstractDrawable westBg;
-	protected AbstractDrawable eastBg;
-	protected AbstractDrawable nearBg;
-	protected AbstractDrawable farBg;
+	protected Drawable northBg;
+	protected Drawable southBg;
+	protected Drawable westBg;
+	protected Drawable eastBg;
+	protected Drawable nearBg;
+	protected Drawable farBg;
 	
 	protected List<Coord3d> lastProjection;
 	protected Polygon2d lastHull;

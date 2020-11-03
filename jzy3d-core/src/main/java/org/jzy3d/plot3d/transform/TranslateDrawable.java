@@ -3,14 +3,14 @@ package org.jzy3d.plot3d.transform;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 
 /**
  * Translate drawable to (0,0,0) or back to its previous position according to
  * the input parameters.
  */
 public class TranslateDrawable implements Transformer {
-    public TranslateDrawable(AbstractDrawable drawable, boolean reverse) {
+    public TranslateDrawable(Drawable drawable, boolean reverse) {
         super();
         this.reverse = reverse;
         this.drawable = drawable;
@@ -49,11 +49,11 @@ public class TranslateDrawable implements Transformer {
         return null;
     }
 
-    public AbstractDrawable getDrawable() {
+    public Drawable getDrawable() {
         return drawable;
     }
 
-    public void setDrawable(AbstractDrawable drawable) {
+    public void setDrawable(Drawable drawable) {
         this.drawable = drawable;
     }
 
@@ -70,6 +70,6 @@ public class TranslateDrawable implements Transformer {
         return "(TranslateDrawable)" + drawable;
     }
 
-    protected AbstractDrawable drawable;
+    protected Drawable drawable;
     protected boolean reverse;
 }

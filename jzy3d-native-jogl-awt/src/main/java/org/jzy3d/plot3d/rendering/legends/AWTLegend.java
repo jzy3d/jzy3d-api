@@ -10,16 +10,16 @@ import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.io.FileImage;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot2d.primitive.AWTImageGenerator;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
 
 /**
  * A {@link AWTLegend} represent information concerning a
- * {@link AbstractDrawable} that may be displayed as a metadata in the
+ * {@link Drawable} that may be displayed as a metadata in the
  * {@link ChartView}.
  * 
  * The constructor of a {@link AWTLegend} registers itself as listener of its
- * parent {@link AbstractDrawable}, and unregister itself when it is disposed.
+ * parent {@link Drawable}, and unregister itself when it is disposed.
  * 
  * When defining a concrete {@link AWTLegend}, one should:
  * <ul>
@@ -40,13 +40,13 @@ import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
  */
 public abstract class AWTLegend extends AWTImageViewport implements IDrawableListener, ILegend {
 
-    public AWTLegend(AbstractDrawable drawable) {
+    public AWTLegend(Drawable drawable) {
         this.drawable = drawable;
         if (drawable != null)
             drawable.addDrawableListener(this);
     }
 
-    public AWTLegend(AbstractDrawable drawable, Color foreground, Color background) {
+    public AWTLegend(Drawable drawable, Color foreground, Color background) {
         this(drawable);
         this.foreground = foreground;
         this.background = background;
@@ -137,7 +137,7 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
 
 
 
-    protected AbstractDrawable drawable;
+    protected Drawable drawable;
     protected Color foreground;
     protected Color background;
     protected Dimension minimumDimension;

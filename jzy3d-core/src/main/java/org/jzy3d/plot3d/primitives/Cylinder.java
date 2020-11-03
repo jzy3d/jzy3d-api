@@ -5,7 +5,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 
 
-public class Cylinder extends AbstractComposite{	
+public class Cylinder extends Composite{	
 	public void setData(Coord3d position, float height, float radius, int slices, int rings, Color color){
 		this.height = height;
 		this.radius = radius;

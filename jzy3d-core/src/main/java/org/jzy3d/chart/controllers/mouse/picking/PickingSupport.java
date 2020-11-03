@@ -10,7 +10,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.pickable.Pickable;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -66,7 +66,7 @@ public class PickingSupport {
 	
 	/*************************/
 	
-	public void registerDrawableObject(AbstractDrawable drawable, Object model){
+	public void registerDrawableObject(Drawable drawable, Object model){
         if(drawable instanceof Pickable){
             registerPickableObject((Pickable)drawable, model);
         }

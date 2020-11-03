@@ -6,8 +6,8 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
@@ -28,7 +28,7 @@ public class RingTessellator extends OrthonormalTessellator{
 
 	
 	@Override
-    public AbstractComposite build(float[] x, float[] y, float[] z) {
+    public Composite build(float[] x, float[] y, float[] z) {
 		setData(x, y, z);
 		Shape s = new Shape();
 		s.add(getInterpolatedRingPolygons());
@@ -66,8 +66,8 @@ public class RingTessellator extends OrthonormalTessellator{
 	 * @param ringMax the maximum radius of this ring.
 	 * @param colorFactor a weighting factor for the color returned by the Colormap.
 	 */
-	public List<AbstractDrawable> getInterpolatedRingPolygons(){
-		List<AbstractDrawable> polygons = new ArrayList<AbstractDrawable>();
+	public List<Drawable> getInterpolatedRingPolygons(){
+		List<Drawable> polygons = new ArrayList<Drawable>();
 		
 		boolean[] isIn; 
 

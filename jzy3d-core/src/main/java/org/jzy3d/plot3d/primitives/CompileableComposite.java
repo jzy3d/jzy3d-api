@@ -24,10 +24,10 @@ import com.jogamp.opengl.glu.GLU;
  * of individual contained instances drawing routines in an OpenGL display list.
  * 
  * Compiling the object take the time needed to render it as a standard
- * {@link AbstractComposite}, and rendering it once it is compiled seems to take
+ * {@link Composite}, and rendering it once it is compiled seems to take
  * roughly half the time up to now. Since compilation occurs during a {@link
  * draw()}, the first call to {@link draw()} is supposed to be 1.5x longer than
- * a standard {@link AbstractComposite}, while all next cycles would be 0.5x
+ * a standard {@link Composite}, while all next cycles would be 0.5x
  * longer.
  * 
  * Compilation occurs when the content or the display attributes of this
@@ -45,7 +45,7 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Nils Hoffmann
  */
-public class CompileableComposite extends AbstractWireframeable implements
+public class CompileableComposite extends Wireframeable implements
 		ISingleColorable, IMultiColorable {
 
 	private int dlID = -1;
@@ -54,11 +54,11 @@ public class CompileableComposite extends AbstractWireframeable implements
 	protected ColorMapper mapper;
 	protected Color color;
 	protected boolean detailedToString = false;
-	protected List<AbstractDrawable> components = new ArrayList<AbstractDrawable>();
+	protected List<Drawable> components = new ArrayList<Drawable>();
 
 	public CompileableComposite() {
 		super();
-		components = new ArrayList<AbstractDrawable>();
+		components = new ArrayList<Drawable>();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 	 * draw(...).
 	 */
 	protected void nullifyChildrenTransforms() {
-		for (AbstractDrawable c : components) {
+		for (Drawable c : components) {
 			if (c != null) {
 				c.setTransform(null);
 			}
@@ -126,7 +126,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 
 	protected void drawComponents(Painter painter, GL gl, GLU glu, Camera cam) {
 		synchronized (components) {
-			for (AbstractDrawable s : components) {
+			for (Drawable s : components) {
 				s.draw(painter, gl, glu, cam);
 			}
 		}
@@ -134,7 +134,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 
 	@Override
     public void applyGeometryTransform(Transform transform) {
-		for (AbstractDrawable c : components) {
+		for (Drawable c : components) {
 			c.applyGeometryTransform(transform);
 		}
 		// updateBounds(); getBounds() do the work
@@ -150,7 +150,7 @@ public class CompileableComposite extends AbstractWireframeable implements
     public void updateBounds() {
 		BoundingBox3d box = new BoundingBox3d();
 
-		for (AbstractDrawable c : components) {
+		for (Drawable c : components) {
 			if (c != null && c.getBounds() != null)
 				box.add(c.getBounds());
 		}
@@ -160,7 +160,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 	/****************************************************************/
 
 	/** Append a list of Drawables to this composite. */
-	public void add(List<? extends AbstractDrawable> drawables) {
+	public void add(List<? extends Drawable> drawables) {
 		components.addAll(drawables);
 		recompile();
 	}
@@ -172,23 +172,23 @@ public class CompileableComposite extends AbstractWireframeable implements
 	}
 
 	/** Add a Drawable to this composite. */
-	public void add(AbstractDrawable drawable) {
+	public void add(Drawable drawable) {
 		components.add(drawable);
 		recompile();
 	}
 
 	/** Remove a Drawable from this composite. */
-	public void remove(AbstractDrawable drawable) {
+	public void remove(Drawable drawable) {
 		components.remove(drawable);
 		recompile();
 	}
 
 	/** Get a Drawable stored by this composite. */
-	public AbstractDrawable get(int p) {
+	public Drawable get(int p) {
 		return components.get(p);
 	}
 
-	public List<AbstractDrawable> getDrawables() {
+	public List<Drawable> getDrawables() {
 		return components;
 	}
 
@@ -204,9 +204,9 @@ public class CompileableComposite extends AbstractWireframeable implements
 		super.setWireframeColor(color);
 
 		if (components != null) {
-			for (AbstractDrawable c : components) {
-				if (c != null && c instanceof AbstractWireframeable) {
-					((AbstractWireframeable) c).setWireframeColor(color);
+			for (Drawable c : components) {
+				if (c != null && c instanceof Wireframeable) {
+					((Wireframeable) c).setWireframeColor(color);
 				}
 			}
 		}
@@ -218,9 +218,9 @@ public class CompileableComposite extends AbstractWireframeable implements
 		super.setWireframeDisplayed(status);
 
 		if (components != null)
-			for (AbstractDrawable c : components)
-				if (c != null && c instanceof AbstractWireframeable)
-					((AbstractWireframeable) c).setWireframeDisplayed(status);
+			for (Drawable c : components)
+				if (c != null && c instanceof Wireframeable)
+					((Wireframeable) c).setWireframeDisplayed(status);
 		recompile();
 	}
 
@@ -229,9 +229,9 @@ public class CompileableComposite extends AbstractWireframeable implements
 		super.setWireframeWidth(width);
 
 		if (components != null)
-			for (AbstractDrawable c : components)
-				if (c != null && c instanceof AbstractWireframeable)
-					((AbstractWireframeable) c).setWireframeWidth(width);
+			for (Drawable c : components)
+				if (c != null && c instanceof Wireframeable)
+					((Wireframeable) c).setWireframeWidth(width);
 		recompile();
 	}
 
@@ -240,9 +240,9 @@ public class CompileableComposite extends AbstractWireframeable implements
 		super.setFaceDisplayed(status);
 
 		if (components != null)
-			for (AbstractDrawable c : components)
-				if (c != null && c instanceof AbstractWireframeable)
-					((AbstractWireframeable) c).setFaceDisplayed(status);
+			for (Drawable c : components)
+				if (c != null && c instanceof Wireframeable)
+					((Wireframeable) c).setFaceDisplayed(status);
 		recompile();
 	}
 
@@ -252,7 +252,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 		this.mapper = mapper;
 
 		if (components != null) {
-			for (AbstractDrawable d : components) {
+			for (Drawable d : components) {
 				if (d instanceof IMultiColorable) {
 					((IMultiColorable) d).setColorMapper(mapper);
 				} else if (d instanceof ISingleColorable) {
@@ -278,7 +278,7 @@ public class CompileableComposite extends AbstractWireframeable implements
 		this.color = color;
 
 		if (components != null) {
-			for (AbstractDrawable d : components) {
+			for (Drawable d : components) {
 				if (d instanceof ISingleColorable) {
 					((ISingleColorable) d).setColor(color);
 				}
@@ -309,11 +309,11 @@ public class CompileableComposite extends AbstractWireframeable implements
 
 		if (detailedToString) {
 			int k = 0;
-			for (AbstractDrawable c : components) {
+			for (Drawable c : components) {
 				if (c != null) {
-					if (c instanceof AbstractComposite) {
+					if (c instanceof Composite) {
 						output += "\n"
-								+ ((AbstractComposite) c).toString(depth + 1);
+								+ ((Composite) c).toString(depth + 1);
 					} else {
 						output += "\n" + Utils.blanks(depth + 1)
 								+ " Composite element[" + (k++) + "]:"

@@ -6,8 +6,8 @@ import java.util.List;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
@@ -25,8 +25,8 @@ import com.jogamp.opengl.glu.GLU;
  * The scene's {@link Graph} basically stores the scene content and facilitate
  * objects control.
  * 
- * The graph may decompose all {@link AbstractComposite} into a list of their
- * {@link AbstractDrawable}s primitives if constructor is called with parameters
+ * The graph may decompose all {@link Composite} into a list of their
+ * {@link Drawable}s primitives if constructor is called with parameters
  * enabling sorting.
  * 
  * The list of primitives is ordered using either the provided
@@ -38,7 +38,7 @@ import com.jogamp.opengl.glu.GLU;
  * to inform the {@link View}s when its content has change and that repainting
  * is required.
  * 
- * The add() method allows adding a {@link AbstractDrawable} to the scene Graph
+ * The add() method allows adding a {@link Drawable} to the scene Graph
  * and updates all views' viewpoint in order to target the center of the scene.
  * 
  * @author Martin Pernollet
@@ -60,7 +60,7 @@ public class Graph {
         this.scene = scene;
         this.strategy = strategy;
         this.sort = sort;
-        this.components = new ArrayList<AbstractDrawable>();
+        this.components = new ArrayList<Drawable>();
         // components = Collections.synchronizedList(new
         // ArrayList<AbstractDrawable>());
         this.graphListener = new ArrayList<>();
@@ -68,7 +68,7 @@ public class Graph {
 
     public synchronized void dispose() {
         // synchronized(components){
-        for (AbstractDrawable c : components)
+        for (Drawable c : components)
             if (c != null)
                 c.dispose();
         // }
@@ -90,7 +90,7 @@ public class Graph {
      *            : should be true if you wish to have all the views updated
      *            with old bounds including drawable bounds
      */
-    public void add(AbstractDrawable drawable, boolean updateViews) {
+    public void add(Drawable drawable, boolean updateViews) {
         synchronized (this) {
             components.add(drawable);
         }
@@ -100,19 +100,19 @@ public class Graph {
                 view.updateBounds();
     }
 
-    public void add(AbstractDrawable drawable) {
+    public void add(Drawable drawable) {
         add(drawable, true);
     }
 
-    public void add(List<? extends AbstractDrawable> drawables, boolean updateViews) {
-        for (AbstractDrawable d : drawables)
+    public void add(List<? extends Drawable> drawables, boolean updateViews) {
+        for (Drawable d : drawables)
             add(d, false);
         if (updateViews)
             for (View view : scene.views)
                 view.updateBounds();
     }
 
-    public void add(List<? extends AbstractDrawable> drawables) {
+    public void add(List<? extends Drawable> drawables) {
         add(drawables, true);
     }
 
@@ -123,7 +123,7 @@ public class Graph {
      * @param drawable
      *            The drawable that must be deleted from the scene graph.
      */
-    public boolean remove(AbstractDrawable drawable, boolean updateViews) {
+    public boolean remove(Drawable drawable, boolean updateViews) {
         boolean output = false;
         synchronized (this) {
             output = components.remove(drawable);
@@ -137,17 +137,17 @@ public class Graph {
         return output;
     }
 
-    public boolean remove(AbstractDrawable drawable) {
+    public boolean remove(Drawable drawable) {
         return remove(drawable, true);
     }
 
-    public List<AbstractDrawable> getAll() {
+    public List<Drawable> getAll() {
         return components;
     }
 
     public synchronized List<IGLBindedResource> getAllGLBindedResources() {
         List<IGLBindedResource> out = new ArrayList<IGLBindedResource>();
-        for (AbstractDrawable c : components) {
+        for (Drawable c : components) {
             if (c instanceof IGLBindedResource) {
                 out.add((IGLBindedResource) c);
             }
@@ -187,8 +187,8 @@ public class Graph {
     }
 
     /**
-     * Decompose all {@link AbstractComposite} objects, and sort the extracted
-     * monotype (i.e. non-{@link AbstractComposite} {@link AbstractDrawable}s)
+     * Decompose all {@link Composite} objects, and sort the extracted
+     * monotype (i.e. non-{@link Composite} {@link Drawable}s)
      * in order to render them according to the default -or defined-
      * {@link AbstractOrderingStrategy}.
      * @param painter TODO
@@ -199,7 +199,7 @@ public class Graph {
 
     protected TicToc t = new TicToc();
 
-    public synchronized void draw(Painter painter, GL gl, GLU glu, Camera camera, List<AbstractDrawable> components, boolean sort) {
+    public synchronized void draw(Painter painter, GL gl, GLU glu, Camera camera, List<Drawable> components, boolean sort) {
         painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         if (!sort) {
             drawSimple(painter, gl, glu, camera, components);
@@ -208,10 +208,10 @@ public class Graph {
         }
     }
 
-    public void drawSimple(Painter painter, GL gl, GLU glu, Camera camera, List<AbstractDrawable> components) {
+    public void drawSimple(Painter painter, GL gl, GLU glu, Camera camera, List<Drawable> components) {
         // render all items of the graph
         // synchronized(components){
-        for (AbstractDrawable d : components)
+        for (Drawable d : components)
             if (d.isDisplayed())
                 d.draw(painter, gl, glu, camera);
         // }
@@ -219,10 +219,10 @@ public class Graph {
 
     public void drawDecomposition(Painter painter, GL gl, GLU glu, Camera camera) {
         // Render sorted monotypes
-        List<AbstractDrawable> monotypes = getDecomposition();
+        List<Drawable> monotypes = getDecomposition();
         strategy.sort(monotypes, camera);
 
-        for (AbstractDrawable d : monotypes) {
+        for (Drawable d : monotypes) {
             if (d.isDisplayed())
                 d.draw(painter, gl, glu, camera);
         }
@@ -230,20 +230,20 @@ public class Graph {
 
     /**
      * Expand all {@link AbstractComposites} instance into a list of atomic
-     * {@link AbstractDrawable} types and return all the current Graph
+     * {@link Drawable} types and return all the current Graph
      * primitives decomposition.
      */
-    public List<AbstractDrawable> getDecomposition() {
-        ArrayList<AbstractDrawable> monotypes;
+    public List<Drawable> getDecomposition() {
+        ArrayList<Drawable> monotypes;
         synchronized (components) {
             monotypes = Decomposition.getDecomposition(components);
         }
         return monotypes;
     }
 
-    /** Update all interactive {@link AbstractDrawable} projections */
+    /** Update all interactive {@link Drawable} projections */
     public synchronized void project(Painter painter, Camera camera) {
-        for (AbstractDrawable d : components) {
+        for (Drawable d : components) {
             if (d instanceof Selectable)
                 ((Selectable) d).project(painter, camera);
         }
@@ -269,7 +269,7 @@ public class Graph {
         this.transform = transform;
 
         synchronized (components) {
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null)
                     c.setTransform(transform);
             }
@@ -292,7 +292,7 @@ public class Graph {
         else {
             BoundingBox3d box = new BoundingBox3d();
 
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null && c.getBounds() != null) {
                     BoundingBox3d drawableBounds = c.getBounds();
                     if (!drawableBounds.isReset()) {
@@ -307,14 +307,14 @@ public class Graph {
     /* */
 
     /**
-     * Return the list of available {@link AbstractDrawable}'s {@link ILegend}
+     * Return the list of available {@link Drawable}'s {@link ILegend}
      * .
      */
     public synchronized List<ILegend> getLegends() {
         List<ILegend> list = new ArrayList<ILegend>();
 
         // synchronized(components){
-        for (AbstractDrawable c : components)
+        for (Drawable c : components)
             if (c != null)
                 if (c.hasLegend() && c.isLegendDisplayed())
                     list.add(c.getLegend());
@@ -324,14 +324,14 @@ public class Graph {
 
     /**
      * Return true if the {@link Graph} contains at least one
-     * {@link AbstractDrawable} that has {@link AWTLegend} that must be
+     * {@link Drawable} that has {@link AWTLegend} that must be
      * displayed.
      */
     public synchronized int hasLegends() {
         int k = 0;
 
         // synchronized(components){
-        for (AbstractDrawable c : components)
+        for (Drawable c : components)
             if (c != null)
                 if (c.hasLegend() && c.isLegendDisplayed())
                     k++;
@@ -348,7 +348,7 @@ public class Graph {
 
         int k = 0;
         synchronized(components){
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null)
                     output += " Graph element [" + (k++) + "]:" + c.toString(1) + "\n";
                 else
@@ -381,7 +381,7 @@ public class Graph {
         return scene;
     }
 
-    protected List<AbstractDrawable> components;
+    protected List<Drawable> components;
     protected Scene scene;
     protected Transform transform;
     // protected OrderingStrategy strategy;
