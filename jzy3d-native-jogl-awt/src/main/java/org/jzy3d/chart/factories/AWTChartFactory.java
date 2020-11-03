@@ -18,7 +18,7 @@ import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.plot3d.primitives.axes.AxeBox;
+import org.jzy3d.plot3d.primitives.axes.AxisBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -54,7 +54,7 @@ public class AWTChartFactory extends NativeChartFactory {
 
     @Override
     public IAxe newAxe(BoundingBox3d box, View view) {
-        AxeBox axe = new AxeBox(box);
+        AxisBox axe = new AxisBox(box);
         axe.setView(view);
         return axe;
     }

@@ -5,5 +5,5 @@ import org.jzy3d.painters.Painter;
 import com.jogamp.opengl.GL;
 
 public interface AxeAnnotation {
-    public void draw(Painter painter, GL gl, AxeBox axe);
+    public void draw(Painter painter, GL gl, AxisBox axe);
 }

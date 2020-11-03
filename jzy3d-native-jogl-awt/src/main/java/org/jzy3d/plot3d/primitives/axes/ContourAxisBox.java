@@ -32,14 +32,14 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class ContourAxeBox extends AxeBox {
-    static Logger logger = Logger.getLogger(ContourAxeBox.class);
+public class ContourAxisBox extends AxisBox {
+    static Logger logger = Logger.getLogger(ContourAxisBox.class);
     
-	public ContourAxeBox(BoundingBox3d bbox, IAxeLayout layout) {
+	public ContourAxisBox(BoundingBox3d bbox, IAxeLayout layout) {
 		super(bbox, layout);
 	}
 
-	public ContourAxeBox(BoundingBox3d bbox) {
+	public ContourAxisBox(BoundingBox3d bbox) {
 		super(bbox);
 	}
 	

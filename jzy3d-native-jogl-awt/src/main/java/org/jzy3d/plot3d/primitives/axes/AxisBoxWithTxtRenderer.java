@@ -19,12 +19,12 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class AxeBoxWithTxtRenderer extends AxeBox implements IAxe {
-	public AxeBoxWithTxtRenderer(BoundingBox3d bbox, IAxeLayout layout) {
+public class AxisBoxWithTxtRenderer extends AxisBox implements IAxe {
+	public AxisBoxWithTxtRenderer(BoundingBox3d bbox, IAxeLayout layout) {
         super(bbox, layout);
     }
 
-    public AxeBoxWithTxtRenderer(BoundingBox3d bbox) {
+    public AxisBoxWithTxtRenderer(BoundingBox3d bbox) {
         super(bbox);
     }
 

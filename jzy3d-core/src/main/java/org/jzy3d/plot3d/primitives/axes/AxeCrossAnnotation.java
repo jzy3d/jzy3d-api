@@ -10,7 +10,7 @@ public class AxeCrossAnnotation extends AxeLineAnnotation implements AxeAnnotati
     protected Coord2d value;
 
     @Override
-    public void draw(Painter painter, GL gl, AxeBox axe) {
+    public void draw(Painter painter, GL gl, AxisBox axe) {
         Range xrange = axe.getBoxBounds().getXRange();
         Range yrange = axe.getBoxBounds().getYRange();
 
