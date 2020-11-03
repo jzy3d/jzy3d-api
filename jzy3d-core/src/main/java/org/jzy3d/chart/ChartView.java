@@ -20,8 +20,12 @@ public class ChartView extends View {
 
     public ChartView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
-        layout = factory.newViewportLayout();
     }
+    
+    public void init(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+		super.init(factory, scene, canvas, quality);
+        layout = factory.newViewportLayout();
+	}
 
     /* */
 
