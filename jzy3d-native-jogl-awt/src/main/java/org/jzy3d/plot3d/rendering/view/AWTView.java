@@ -15,7 +15,7 @@ import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
-import org.jzy3d.plot3d.primitives.axes.AxeBox;
+import org.jzy3d.plot3d.primitives.axes.AxisBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
@@ -87,7 +87,7 @@ public class AWTView extends ChartView {
             axe.setScale(scaling);
             axe.draw(painter, gl, glu, camera);
             if (DISPLAY_AXE_WHOLE_BOUNDS) { // for debug
-                AxeBox abox = (AxeBox) axe;
+                AxisBox abox = (AxisBox) axe;
                 BoundingBox3d box = abox.getWholeBounds();
                 Parallelepiped p = new Parallelepiped(box);
                 p.setFaceDisplayed(false);

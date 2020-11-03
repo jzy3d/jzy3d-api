@@ -13,20 +13,20 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
 /**
- * This {@link AxeBox} implementation was the first to appear in Jzy3d.
+ * This {@link AxisBox} implementation was the first to appear in Jzy3d.
  * It computes hidden faces via method {@link getHiddenQuads} using the 
  * OpenGL feedback buffer, which seems to fail on some laptop GPU.
  * (especially Lenovo notepads).
  * 
  * @author Martin Pernollet
  */
-public class FeedbackBufferAxeBox extends AxeBox implements IAxe{
-    static Logger logger = Logger.getLogger(FeedbackBufferAxeBox.class);
+public class FeedbackBufferAxisBox extends AxisBox implements IAxe{
+    static Logger logger = Logger.getLogger(FeedbackBufferAxisBox.class);
     
-	public FeedbackBufferAxeBox(BoundingBox3d bbox){
+	public FeedbackBufferAxisBox(BoundingBox3d bbox){
 		super(bbox);
 	}
-	public FeedbackBufferAxeBox(BoundingBox3d bbox, IAxeLayout layout){
+	public FeedbackBufferAxisBox(BoundingBox3d bbox, IAxeLayout layout){
 		super(bbox, layout);
 	}
 	

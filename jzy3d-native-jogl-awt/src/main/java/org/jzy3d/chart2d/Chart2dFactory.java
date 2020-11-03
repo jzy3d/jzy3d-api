@@ -26,8 +26,8 @@ public class Chart2dFactory extends AWTChartFactory{
     }
 
     @Override
-    public AxeBox2d newAxe(BoundingBox3d box, View view) {
-        AxeBox2d axe = new AxeBox2d(box);
+    public AxisBox2d newAxe(BoundingBox3d box, View view) {
+        AxisBox2d axe = new AxisBox2d(box);
         //axe.setTextRenderer(new TextBitmapRenderer());
         return axe;
     }
