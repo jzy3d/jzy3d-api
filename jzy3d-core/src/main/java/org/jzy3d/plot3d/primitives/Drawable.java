@@ -10,7 +10,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axes.AxeBox;
+import org.jzy3d.plot3d.primitives.axes.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -39,7 +39,7 @@ import com.jogamp.opengl.glu.GLU;
  * <p>
  * Note: A {@link Drawable} may last provide the information whether it
  * is displayed or not, according to a rendering into the FeedBack buffer. This
- * is currently supported specifically for the {@link AxeBox} object but could
+ * is currently supported specifically for the {@link AxisBox} object but could
  * be extended with some few more algorithm for referencing all GL2 polygons.
  * 
  * @author Martin Pernollet

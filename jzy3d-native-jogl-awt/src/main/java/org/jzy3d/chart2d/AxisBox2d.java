@@ -7,7 +7,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axes.AxeBox;
+import org.jzy3d.plot3d.primitives.axes.AxisBox;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
@@ -18,12 +18,12 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
 
-public class AxeBox2d extends AxeBox {
-    public AxeBox2d(BoundingBox3d bbox, IAxeLayout layout) {
+public class AxisBox2d extends AxisBox {
+    public AxisBox2d(BoundingBox3d bbox, IAxeLayout layout) {
         super(bbox, layout);
     }
 
-    public AxeBox2d(BoundingBox3d bbox) {
+    public AxisBox2d(BoundingBox3d bbox) {
         super(bbox);
         txt = new TextBitmapRenderer();
         //txt = new JOGLTextRenderer(new DefaultTextStyle(java.awt.Color.BLACK));// ATTENTION AWT!!

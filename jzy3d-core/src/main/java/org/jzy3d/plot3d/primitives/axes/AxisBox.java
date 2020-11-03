@@ -26,18 +26,18 @@ import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
 
 /**
- * The AxeBox displays a box with front face invisible and ticks labels.
+ * The {@link AxisBox} displays a box with front face invisible and ticks labels.
  * 
  * @author Martin Pernollet
  */
-public class AxeBox implements IAxe {
-    static Logger LOGGER = Logger.getLogger(AxeBox.class);
+public class AxisBox implements IAxe {
+    static Logger LOGGER = Logger.getLogger(AxisBox.class);
 
-    public AxeBox(BoundingBox3d bbox) {
+    public AxisBox(BoundingBox3d bbox) {
         this(bbox, new AxeBoxLayout());
     }
 
-    public AxeBox(BoundingBox3d bbox, IAxeLayout layout) {
+    public AxisBox(BoundingBox3d bbox, IAxeLayout layout) {
         this.layout = layout;
         if (bbox.valid())
             setAxe(bbox);

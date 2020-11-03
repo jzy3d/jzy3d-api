@@ -18,7 +18,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axes.AxeBox;
+import org.jzy3d.plot3d.primitives.axes.AxisBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -56,7 +56,7 @@ import com.jogamp.opengl.glu.GLU;
  * {@link Renderer2d}s whose implementation can define Java2d calls to render on
  * top on OpenGL2.
  * 
- * Last, the {@link View} offers the ability to get an {@link AxeBox} for
+ * Last, the {@link View} offers the ability to get an {@link AxisBox} for
  * embedding the {@link Scene} and getting values along axes.
  * 
  * @author Martin Pernollet
@@ -447,7 +447,7 @@ public class View {
     }
 
     /**
-     * Set the surrounding {@link AxeBox} dimensions, the {@link Camera} target and the
+     * Set the surrounding {@link AxisBox} dimensions, the {@link Camera} target and the
      * colorbar range.
      */
     public void lookToBox(BoundingBox3d box) {
@@ -466,7 +466,7 @@ public class View {
         return center;
     }
 
-    /** Get the {@link AxeBox}'s {@link BoundingBox3d} */
+    /** Get the {@link AxisBox}'s {@link BoundingBox3d} */
     public BoundingBox3d getBounds() {
         return axe.getBoxBounds();
     }

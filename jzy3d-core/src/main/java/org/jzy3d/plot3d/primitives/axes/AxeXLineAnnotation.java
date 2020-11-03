@@ -9,7 +9,7 @@ public class AxeXLineAnnotation extends AxeLineAnnotation implements AxeAnnotati
     protected float value;
 
     @Override
-    public void draw(Painter painter, GL gl, AxeBox axe) {
+    public void draw(Painter painter, GL gl, AxisBox axe) {
         Range yrange = axe.getBoxBounds().getYRange();
 
         drawVerticalLine(painter, gl, yrange, value);
