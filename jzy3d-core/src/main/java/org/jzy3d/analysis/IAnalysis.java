@@ -1,7 +1,7 @@
 package org.jzy3d.analysis;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public interface IAnalysis {
@@ -17,6 +17,6 @@ public interface IAnalysis {
     public Chart initializeChart(Quality quality);
     
     
-    public IChartComponentFactory getFactory();
-    public void setFactory(IChartComponentFactory factory);
+    public IChartFactory getFactory();
+    public void setFactory(IChartFactory factory);
 }

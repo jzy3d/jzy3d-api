@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
@@ -9,8 +9,8 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class PeelingComponentFactory extends AWTChartComponentFactory{
-	public PeelingComponentFactory(PeelingMethod method) {
+public class PeelingChartFactory extends AWTChartFactory{
+	public PeelingChartFactory(PeelingMethod method) {
 		super();
 		this.method = method;
 	}
@@ -22,7 +22,7 @@ public class PeelingComponentFactory extends AWTChartComponentFactory{
     }
 	
 	@Override
-	public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality){
+	public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality){
         return new DepthPeelingView(factory, scene, canvas, quality);
     }
 	

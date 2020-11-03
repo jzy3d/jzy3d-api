@@ -5,7 +5,7 @@ import org.jzy3d.plot3d.primitives.axes.ContourAxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class ContourChartComponentFactory extends AWTChartComponentFactory{
+public class ContourChartFactory extends AWTChartFactory{
     @Override
 	public IAxe newAxe(BoundingBox3d box, View view) {
     	ContourAxeBox axe = new ContourAxeBox(box);

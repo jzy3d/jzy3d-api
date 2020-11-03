@@ -12,7 +12,7 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.javafx.controllers.keyboard.JavaFXCameraKeyController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXMousePickingController;
@@ -34,7 +34,7 @@ import javafx.scene.image.ImageView;
 
 @SuppressWarnings("restriction")
 /* Disable JavaFX access restriction warnings */
-public class JavaFXChartFactory extends AWTChartComponentFactory {
+public class JavaFXChartFactory extends AWTChartFactory {
     static Logger LOGGER = Logger.getLogger(JavaFXChartFactory.class);
 
     public static Chart chart(Quality quality, String toolkit) {

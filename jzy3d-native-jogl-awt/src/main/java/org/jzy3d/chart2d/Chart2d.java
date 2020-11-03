@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jzy3d.chart.AWTChart;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
@@ -75,10 +75,10 @@ public class Chart2d extends AWTChart {
     /* */
 
     public Chart2d() {
-    	this(new Chart2dComponentFactory(), Quality.Advanced);
+    	this(new Chart2dFactory(), Quality.Advanced);
     }
     
-    public Chart2d(IChartComponentFactory factory, Quality quality) {
+    public Chart2d(IChartFactory factory, Quality quality) {
         super(factory, quality);
         layout2d();
     }

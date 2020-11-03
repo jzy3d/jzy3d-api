@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.rendering.scene;
 import java.util.List;
 import java.util.Vector;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -30,7 +30,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin Pernollet
  */
 public class Scene {	
-	public Scene(boolean graphsort, IChartComponentFactory factory){
+	public Scene(boolean graphsort, IChartFactory factory){
 		this.graph = factory.newGraph(this, factory.newOrderingStrategy(), graphsort);
 		this.lightSet = new LightSet();
 		this.views = new Vector<View>();
@@ -130,6 +130,6 @@ public class Scene {
 	protected Vector<View>  views;
 	protected Graph         graph;
 	protected LightSet      lightSet;
-	protected IChartComponentFactory factory;
+	protected IChartFactory factory;
 
 }

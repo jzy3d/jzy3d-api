@@ -8,14 +8,14 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
 @Deprecated
-public class SwingChartComponentFactory extends AWTChartComponentFactory {
+public class SwingChartFactory extends AWTChartFactory {
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality) {
+    public Chart newChart(IChartFactory factory, Quality quality) {
         return new SwingChart(factory, quality);
     }
 
     @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality) {
+    public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
         boolean debugGL = false;
         
@@ -25,7 +25,7 @@ public class SwingChartComponentFactory extends AWTChartComponentFactory {
     /* */
 
     public static Chart chart(Quality quality) {
-        IChartComponentFactory f = new SwingChartComponentFactory();
+        IChartFactory f = new SwingChartFactory();
         return f.newChart(quality);
     }
 }

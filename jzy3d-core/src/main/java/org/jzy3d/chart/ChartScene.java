@@ -1,6 +1,6 @@
 package org.jzy3d.chart;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -16,7 +16,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin Pernollet
  */
 public class ChartScene extends Scene {
-	public ChartScene(boolean graphsort, IChartComponentFactory factory){
+	public ChartScene(boolean graphsort, IChartFactory factory){
 		super(graphsort, factory);
 		this.nview = 0;
 	}

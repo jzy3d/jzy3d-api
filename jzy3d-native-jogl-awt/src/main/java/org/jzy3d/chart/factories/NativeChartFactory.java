@@ -12,7 +12,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
-public abstract class NativeChartFactory extends ChartComponentFactory{
+public abstract class NativeChartFactory extends ChartFactory{
 	
 	GLCapabilities capabilities;
 	

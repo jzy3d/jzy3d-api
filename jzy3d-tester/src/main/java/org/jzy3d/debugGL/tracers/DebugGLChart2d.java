@@ -6,7 +6,7 @@ import java.util.function.Function;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart2d.Chart2d;
-import org.jzy3d.chart2d.Chart2dComponentFactory;
+import org.jzy3d.chart2d.Chart2dFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Rectangle;
@@ -30,7 +30,7 @@ public class DebugGLChart2d {
     Chart watchedChart;
 
     //WatcherFactory wf = new WatcherFactory();
-    Chart2d debugChart = new Chart2dComponentFactory().newChart(Quality.Advanced);
+    Chart2d debugChart = new Chart2dFactory().newChart(Quality.Advanced);
     Timer timer = new Timer();
 
     public DebugGLChart2d(Chart watchedChart) {

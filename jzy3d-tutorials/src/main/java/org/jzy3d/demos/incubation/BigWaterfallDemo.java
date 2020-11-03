@@ -2,7 +2,7 @@ package org.jzy3d.demos.incubation;
 
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -43,7 +43,7 @@ public class BigWaterfallDemo extends AWTAbstractAnalysis {
         
 
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
+        chart = AWTChartFactory.chart(Quality.Intermediate);
         chart.getScene().getGraph().add(shape);
         chart.getView();
     }

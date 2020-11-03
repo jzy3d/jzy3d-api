@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.IViewIsVerticalEventListener;
 import org.jzy3d.events.IViewLifecycleEventListener;
@@ -130,7 +130,7 @@ public class View {
      * The {@link Quality} allows setting the rendering capabilities that are
      * set one time by the init() method.
      */
-    public View(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public View(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         BoundingBox3d sceneBounds = getSceneGraphBounds(scene);
 
         this.viewpoint = DEFAULT_VIEW.clone();

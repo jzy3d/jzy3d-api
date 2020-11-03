@@ -41,7 +41,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeSc
     }
 
     public CanvasNewtSWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
-        super(((SWTChartComponentFactory) factory).getComposite(), SWT.NONE);
+        super(((SWTChartFactory) factory).getComposite(), SWT.NONE);
         this.setLayout(new FillLayout());
         window = GLWindow.create(glci);
         canvas = new NewtCanvasSWT(this, SWT.NONE, window);

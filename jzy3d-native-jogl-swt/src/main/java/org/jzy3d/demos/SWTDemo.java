@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.Settings;
-import org.jzy3d.chart.swt.SWTChartComponentFactory;
+import org.jzy3d.chart.swt.SWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -44,7 +44,7 @@ public class SWTDemo {
         Shell shell = new Shell(display);
         shell.setLayout(new FillLayout());
 
-        Chart chart = SWTChartComponentFactory.chart(shell);
+        Chart chart = SWTChartFactory.chart(shell);
         chart.getScene().getGraph().add(surface);
 
         ChartLauncher.openChart(chart);
