@@ -131,7 +131,11 @@ public class View {
      * set one time by the init() method.
      */
     public View(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        BoundingBox3d sceneBounds = getSceneGraphBounds(scene);
+        init(factory, scene, canvas, quality);
+    }
+
+	public void init(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+		BoundingBox3d sceneBounds = getSceneGraphBounds(scene);
 
         this.viewpoint = DEFAULT_VIEW.clone();
         this.center = sceneBounds.getCenter();
@@ -160,7 +164,7 @@ public class View {
 
         this.spaceTransformer = new SpaceTransformer(); // apply no transform
         current = this;
-    }
+	}
     
     public Painter getPainter() {
     	return painter;
