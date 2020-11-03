@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -20,11 +20,11 @@ import com.jogamp.opengl.glu.GLU;
  *
  */
 public abstract class SymbolHandler {
-    protected List<AbstractDrawable> symbols = null;
+    protected List<Drawable> symbols = null;
     protected SpaceTransformer spaceTransformer;
 
     public SymbolHandler(int n) {
-        symbols = new ArrayList<AbstractDrawable>(n);
+        symbols = new ArrayList<Drawable>(n);
     }
 
 
@@ -36,7 +36,7 @@ public abstract class SymbolHandler {
 
 
     public void drawSymbols(Painter painter, GL gl, GLU glu, Camera cam) {
-        for (AbstractDrawable d : symbols) {
+        for (Drawable d : symbols) {
             d.setSpaceTransformer(spaceTransformer);
             d.draw(painter, gl, glu, cam);
         }

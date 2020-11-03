@@ -7,12 +7,12 @@ import com.jogamp.opengl.GL;
 /**
  * A polygon made of two triangles with no wireframe on their adjacent side.
  * 
- * By being an {@link AbstractComposite}, this polygon can be decomposed and is
+ * By being an {@link Composite}, this polygon can be decomposed and is
  * thus more flexible with a sorting algorithm.
  * 
  * @author Martin Pernollet
  */
-public class TesselatedPolygon extends AbstractComposite {
+public class TesselatedPolygon extends Composite {
 	public TesselatedPolygon(Point[] points) {
 		Polygon p1 = newTriangle();
 		p1.add(points[0]);

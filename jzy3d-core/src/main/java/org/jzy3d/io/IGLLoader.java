@@ -1,6 +1,6 @@
 package org.jzy3d.io;
 
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 
 import com.jogamp.opengl.GL;
 
@@ -8,6 +8,6 @@ import com.jogamp.opengl.GL;
  * 
  * @author Martin Pernollet
  */
-public interface IGLLoader<T extends AbstractDrawable> {
+public interface IGLLoader<T extends Drawable> {
     public void load(GL gl, T drawable) throws Exception;
 }

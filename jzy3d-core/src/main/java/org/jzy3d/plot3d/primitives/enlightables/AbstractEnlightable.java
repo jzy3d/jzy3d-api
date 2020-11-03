@@ -2,12 +2,12 @@ package org.jzy3d.plot3d.primitives.enlightables;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractWireframeable;
+import org.jzy3d.plot3d.primitives.Wireframeable;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 
-public abstract class AbstractEnlightable extends AbstractWireframeable {
+public abstract class AbstractEnlightable extends Wireframeable {
 
 	protected void applyMaterial(Painter painter) {
 		painter.material(GL.GL_FRONT, GLLightingFunc.GL_AMBIENT, materialAmbiantReflection);

@@ -17,7 +17,7 @@ import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
@@ -39,7 +39,7 @@ public class ChartTester{
     
     static int TEST_IMG_SIZE = 500;
     
-    public static AWTChart offscreen(AbstractDrawable... drawables) {
+    public static AWTChart offscreen(Drawable... drawables) {
         // Initialize chart
         Quality q = Quality.Intermediate;
 
@@ -53,7 +53,7 @@ public class ChartTester{
         chart.setAnimated(false);// keep animated otherwise mouse wheel not properly updating
         mouse.setUpdateViewDefault(!chart.getQuality().isAnimated());
 
-        for (AbstractDrawable d : drawables)
+        for (Drawable d : drawables)
             chart.add(d);
         return chart;
     }

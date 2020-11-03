@@ -26,7 +26,7 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class Parallelepiped extends AbstractWireframeable implements ISingleColorable, IMultiColorable{
+public class Parallelepiped extends Wireframeable implements ISingleColorable, IMultiColorable{
 	
 	/** Initialize a parallelepiped.*/
 	public Parallelepiped(){

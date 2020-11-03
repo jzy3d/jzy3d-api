@@ -1,7 +1,7 @@
 package org.jzy3d.chart;
 
 import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -12,7 +12,7 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 /**
  * A {@link ChartView} allows displaying a 3d scene on the left,
- * and a set of {@link AbstractDrawable}'s {@link AWTLegend} on the right.
+ * and a set of {@link Drawable}'s {@link AWTLegend} on the right.
  *
  * @author Martin Pernollet
  */

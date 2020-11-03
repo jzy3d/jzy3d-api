@@ -33,7 +33,7 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class LineStrip extends AbstractWireframeable {
+public class LineStrip extends Wireframeable {
     public LineStrip() {
         this(2);
     }

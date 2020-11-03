@@ -5,8 +5,8 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
-import org.jzy3d.plot3d.primitives.AbstractGeometry;
+import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.Geometry;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
@@ -54,7 +54,7 @@ public class CameraDistanceAnnotation extends Point {
 
 		Graph graph = view.getScene().getGraph();
 		AbstractOrderingStrategy strat = graph.getStrategy();
-		for (AbstractDrawable drawable : graph.getDecomposition()) {
+		for (Drawable drawable : graph.getDecomposition()) {
 			double d = strat.score(drawable);
 			
 			//System.out.println(drawable.getBarycentre() );
@@ -63,7 +63,7 @@ public class CameraDistanceAnnotation extends Point {
 			txt.drawText(painter, gl, glu, view.getCamera(),
 					Utils.num2str(d, 4), drawable.getBarycentre(), h, v, colorBary, screenOffset);
 
-			if (drawable instanceof AbstractGeometry) {
+			if (drawable instanceof Geometry) {
 				Polygon p = (Polygon) drawable;
 				for (Point pt : p.getPoints()) {
 					// Point pt2 = pt.clone();

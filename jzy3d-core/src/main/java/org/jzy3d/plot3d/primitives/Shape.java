@@ -10,7 +10,7 @@ import java.util.List;
  * 
  * @author Martin Pernollet
  */
-public class Shape extends AbstractComposite{
+public class Shape extends Composite{
 	
 	/** Initialize a Shape.*/
 	public Shape(){

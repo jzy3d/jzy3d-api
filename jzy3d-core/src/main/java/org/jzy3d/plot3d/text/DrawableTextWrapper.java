@@ -5,7 +5,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
@@ -16,11 +16,11 @@ import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link DrawableTextWrapper} wraps any text rendered by an {@link ITextRenderer}
- * into an {@link AbstractDrawable}, meaning it can be injected in the scene graph, and be transformed.
+ * into an {@link Drawable}, meaning it can be injected in the scene graph, and be transformed.
  * 
  * @author Martin Pernollet
  */
-public class DrawableTextWrapper extends AbstractDrawable{
+public class DrawableTextWrapper extends Drawable{
 	public DrawableTextWrapper(ITextRenderer renderer){
 		this("", new Coord3d(), Color.BLACK, renderer);
 	}

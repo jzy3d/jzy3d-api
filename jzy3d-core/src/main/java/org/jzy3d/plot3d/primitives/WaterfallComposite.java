@@ -17,8 +17,8 @@ public class WaterfallComposite extends Shape {
 
 	public void add(ColoredWireframePolygon outline, Shape fill) {
 		
-		List<AbstractDrawable> drawables = fill.getDrawables();
-		for (AbstractDrawable dr : drawables) {
+		List<Drawable> drawables = fill.getDrawables();
+		for (Drawable dr : drawables) {
 			if (dr instanceof Polygon) {
 				Polygon p = (Polygon)dr;
 				p.setPolygonOffsetFactor(1);
@@ -42,7 +42,7 @@ public class WaterfallComposite extends Shape {
 	@Override
 	public void setWireframeWidth(float width) {
 		if (getDrawables() == null) return;
-		for (AbstractDrawable d : getDrawables()) {
+		for (Drawable d : getDrawables()) {
 			if (d instanceof ColoredWireframePolygon) {
 				((ColoredWireframePolygon) d).setWireframeWidth(width);
 			}
@@ -51,7 +51,7 @@ public class WaterfallComposite extends Shape {
 	
 	@Override
 	public void setColorMapper(ColorMapper mapper) {
-		for (AbstractDrawable d : getDrawables()) {
+		for (Drawable d : getDrawables()) {
 			if (d instanceof ColoredWireframePolygon) {
 				((ColoredWireframePolygon) d).setColorMapper(mapper);
 			}
@@ -60,7 +60,7 @@ public class WaterfallComposite extends Shape {
 	
 	@Override
 	public void setColor(Color color) {
-		for (AbstractDrawable d : getDrawables()) {
+		for (Drawable d : getDrawables()) {
 			if (d instanceof ColoredWireframePolygon) {
 				((ColoredWireframePolygon) d).setWireframeColor(color);
 			}

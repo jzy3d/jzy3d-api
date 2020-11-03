@@ -7,7 +7,7 @@ import org.jzy3d.io.obj.OBJFileLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
+import org.jzy3d.plot3d.primitives.Geometry.PolygonMode;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;

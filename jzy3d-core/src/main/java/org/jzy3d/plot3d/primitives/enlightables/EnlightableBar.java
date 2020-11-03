@@ -2,11 +2,11 @@ package org.jzy3d.plot3d.primitives.enlightables;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Tube;
 
 
-public class EnlightableBar extends AbstractComposite{
+public class EnlightableBar extends Composite{
 	public EnlightableBar(Coord3d position, float height, float radius, Color color){
 		setData(position, height, radius, color);
 	}

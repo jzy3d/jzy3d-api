@@ -11,7 +11,7 @@ import com.jogamp.opengl.GL2;
  * 
  * @author Martin Pernollet
  */
-public class Polygon extends AbstractGeometry {
+public class Polygon extends Geometry {
 
     /**
      * Initializes an empty {@link Polygon} with face status defaulting to true,

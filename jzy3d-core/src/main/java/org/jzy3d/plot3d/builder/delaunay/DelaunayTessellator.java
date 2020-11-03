@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.builder.Tessellator;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
 
@@ -15,7 +15,7 @@ import il.ac.idc.jdt.Triangle;
 
 public class DelaunayTessellator extends Tessellator{
     @Override
-    public AbstractComposite build(List<Coord3d> coordinates) {
+    public Composite build(List<Coord3d> coordinates) {
         Shape s = new Shape();
         s.add(computePolygons(coordinates));
         return s;
@@ -42,7 +42,7 @@ public class DelaunayTessellator extends Tessellator{
     }
 
     @Override
-    public AbstractComposite build(float[] x, float[] y, float[] z) {
+    public Composite build(float[] x, float[] y, float[] z) {
         throw new RuntimeException("not called");
     }
 }

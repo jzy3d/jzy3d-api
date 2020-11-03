@@ -21,23 +21,23 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
 /**
- * A {@link AbstractDrawable} defines objects that may be rendered into an
+ * A {@link Drawable} defines objects that may be rendered into an
  * OpenGL context provided by a {@link ICanvas}. <br>
- * A {@link AbstractDrawable} must basically provide a rendering function called
+ * A {@link Drawable} must basically provide a rendering function called
  * draw() that receives a reference to a GL2 and a GLU context. It may also use
  * a reference to a Camera in order to implement specific behaviors according to
  * the Camera position. <br>
- * A {@link AbstractDrawable} provides services for setting the transformation
+ * A {@link Drawable} provides services for setting the transformation
  * factor that is used inside the draw function, as well as a getter of the
  * object's BoundingBox3d. Note that the BoundingBox must be set by a concrete
- * descendant of a {@link AbstractDrawable}. <br>
+ * descendant of a {@link Drawable}. <br>
  * A good practice is to define a setData function for initializing a
- * {@link AbstractDrawable} and building its polygons. Since each class may have
+ * {@link Drawable} and building its polygons. Since each class may have
  * its own inputs, setData is not part of the interface but should be used as a
- * convention. When not defining a setData function, a {@link AbstractDrawable}
+ * convention. When not defining a setData function, a {@link Drawable}
  * may have its data loaded by an {@link add(Drawable)} function.
  * <p>
- * Note: A {@link AbstractDrawable} may last provide the information whether it
+ * Note: A {@link Drawable} may last provide the information whether it
  * is displayed or not, according to a rendering into the FeedBack buffer. This
  * is currently supported specifically for the {@link AxeBox} object but could
  * be extended with some few more algorithm for referencing all GL2 polygons.
@@ -45,7 +45,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  * 
  */
-public abstract class AbstractDrawable implements IGLRenderer, ISortableDraw {
+public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Performs all required operation to cleanup the Drawable.

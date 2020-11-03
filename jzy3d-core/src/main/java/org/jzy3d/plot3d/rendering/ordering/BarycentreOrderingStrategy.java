@@ -1,12 +1,12 @@
 package org.jzy3d.plot3d.rendering.ordering;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
 
-/** The {@link BarycentreOrderingStrategy} compare two {@link AbstractDrawable}s by computing
+/** The {@link BarycentreOrderingStrategy} compare two {@link Drawable}s by computing
  * their respective distances to the {@link Camera}, which must be referenced prior to any
  * comparison.
  * 
@@ -29,14 +29,14 @@ public class BarycentreOrderingStrategy extends AbstractOrderingStrategy{
      * consistency?: compare(x, y)==0  implies that sgn(compare(x, z))==sgn(compare(y, z))
      */
 	@Override
-    public int compare(AbstractDrawable d1, AbstractDrawable d2) {
+    public int compare(Drawable d1, Drawable d2) {
 		if(d1.equals(d2))
 			return 0;
 		return comparison(score(d1), score(d2));
 	}
 	
     @Override
-    public double score(AbstractDrawable d) {
+    public double score(Drawable d) {
         if(view!=null)
             return camera.getDistance(d, view.getLastViewScaling());
         else

@@ -11,8 +11,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
-import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
+import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.Geometry.PolygonMode;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -47,7 +47,7 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class DrawableVBO extends AbstractDrawable implements IGLBindedResource {
+public class DrawableVBO extends Drawable implements IGLBindedResource {
     protected int geometry = GL.GL_TRIANGLES;
     protected float width = 1;
     protected Quality quality = Quality.Nicest;

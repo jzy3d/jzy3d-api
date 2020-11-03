@@ -19,7 +19,7 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class ScatterMultiColorList extends AbstractDrawable implements IMultiColorable {
+public class ScatterMultiColorList extends Drawable implements IMultiColorable {
     public ScatterMultiColorList(ColorMapper mapper) {
         this(new ArrayList<Coord3d>(), mapper, 1.0f);
     }

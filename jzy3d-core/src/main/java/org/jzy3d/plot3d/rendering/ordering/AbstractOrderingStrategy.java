@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
@@ -15,16 +15,16 @@ import com.jogamp.opengl.glu.GLU;
 
 
 
-/** An ordering strategy is a {@link Comparator} for {@link AbstractDrawable}s
- * that may compute the priority between {@link AbstractDrawable}s d1 and d2.
+/** An ordering strategy is a {@link Comparator} for {@link Drawable}s
+ * that may compute the priority between {@link Drawable}s d1 and d2.
  *
  * @author Martin Pernollet
  *
  */
-public abstract class AbstractOrderingStrategy implements Comparator<AbstractDrawable>{
+public abstract class AbstractOrderingStrategy implements Comparator<Drawable>{
     
     /** Returns a score for ranking this drawable among other drawables of the scenegraph. */
-    public abstract double score(AbstractDrawable drawable);
+    public abstract double score(Drawable drawable);
 
     public abstract double score(Coord3d coord);
 
@@ -33,7 +33,7 @@ public abstract class AbstractOrderingStrategy implements Comparator<AbstractDra
      * @param monotypes
      * @param cam
      */
-    public void sort(List<AbstractDrawable> monotypes, Camera cam){
+    public void sort(List<Drawable> monotypes, Camera cam){
 		setCamera(cam);
 		Collections.sort(monotypes, this);
 	}

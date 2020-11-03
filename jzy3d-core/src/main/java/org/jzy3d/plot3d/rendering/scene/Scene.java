@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
@@ -70,27 +70,27 @@ public class Scene {
 	/***************************************************************/
 	
 	/** Add a list of drawable to the scene.*/
-	public void add(List<AbstractDrawable> drawables){
+	public void add(List<Drawable> drawables){
 		this.graph.add(drawables);
 	}
 	
 	/** Add a drawable to the scene.*/
-	public void add(AbstractDrawable drawable){
+	public void add(Drawable drawable){
 		this.graph.add(drawable);
 	}
 	
 	/** Add a drawable to the scene and refresh on demand.*/
-	public void add(AbstractDrawable drawable, boolean updateViews){
+	public void add(Drawable drawable, boolean updateViews){
 		this.graph.add(drawable, updateViews);
 	}
 	
 	/** Remove a drawable from the scene and refresh on demand.*/
-	public void remove(AbstractDrawable drawable, boolean updateViews){
+	public void remove(Drawable drawable, boolean updateViews){
 		this.graph.remove(drawable, updateViews);
 	}
 	
 	/** Remove a drawable from the scene.*/
-	public void remove(AbstractDrawable drawable){
+	public void remove(Drawable drawable){
 		this.graph.remove(drawable);
 	}
 	
