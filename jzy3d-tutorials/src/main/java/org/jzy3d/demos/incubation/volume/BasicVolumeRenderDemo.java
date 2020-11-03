@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -42,7 +42,7 @@ public class BasicVolumeRenderDemo extends AWTAbstractAnalysis {
 		Texture3D volume = new Texture3D(buffer, new int[] {10,10,10},(float)0,(float)1,colorMapper,new BoundingBox3d(1,10,1,10,1,10));	
         
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
+        chart = AWTChartFactory.chart(Quality.Intermediate);
         chart.getScene().getGraph().add(volume);
         chart.getView();
     }

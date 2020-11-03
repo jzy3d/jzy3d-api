@@ -1,32 +1,27 @@
-package org.jzy3d.chart.swt;
+package org.jzy3d.chart.factories;
 
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.eclipse.swt.widgets.Composite;
+import org.jzy3d.bridge.awt.FrameAWT;
+import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
+import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
-import org.jzy3d.chart.controllers.keyboard.screenshot.NewtScreenshotKeyController;
+import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
-import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
+import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
-import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
-import org.jzy3d.chart.factories.ChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory;
-import org.jzy3d.chart.factories.IFrame;
-import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
-import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
+import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
@@ -36,24 +31,15 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
-import com.jogamp.opengl.GLCapabilities;
-
-public class SWTChartComponentFactory extends NativeChartFactory {
-    private static final Logger logger = Logger.getLogger(SWTChartComponentFactory.class);
-
-    private final Composite canvas;
-
-    private SWTChartComponentFactory(Composite canvas) {
-        this.canvas = canvas;
+public class AWTChartFactory extends NativeChartFactory {
+    static Logger logger = Logger.getLogger(AWTChartFactory.class);
+    
+    public static Chart chart() {
+        return chart(Quality.Intermediate);
     }
 
-    public static Chart chart(Composite parent) {
-        SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
-        return f.newChart(Quality.Intermediate);
-    }
-
-    public static Chart chart(Composite parent, Quality quality) {
-        SWTChartComponentFactory f = new SWTChartComponentFactory(parent);
+    public static Chart chart(Quality quality) {
+        AWTChartFactory f = new AWTChartFactory();
         return f.newChart(quality);
     }
 
@@ -62,12 +48,8 @@ public class SWTChartComponentFactory extends NativeChartFactory {
     /**
      */
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality) {
-        return new SWTChart(canvas, factory, quality);
-    }
-
-    public Composite getComposite() {
-        return canvas;
+    public Chart newChart(IChartFactory factory, Quality quality) {
+        return new AWTChart(factory, quality);
     }
 
     @Override
@@ -87,7 +69,7 @@ public class SWTChartComponentFactory extends NativeChartFactory {
      * images)
      */
     @Override
-    public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         return new AWTView(factory, scene, canvas, quality);
     }
 
@@ -98,26 +80,31 @@ public class SWTChartComponentFactory extends NativeChartFactory {
     }
 
     @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality) {
+    public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
         boolean debugGL = false;
         
-        return new CanvasNewtSWT((NativeChartFactory)factory, scene, quality, getCapabilities(), traceGL, debugGL);
+        if(isOffscreen()) {
+            return newOffscreenCanvas((NativeChartFactory)factory, scene, quality, traceGL, debugGL);
+        }
+        else
+        	return new CanvasAWT((NativeChartFactory) factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
+
     @Override
-    public IChartComponentFactory getFactory() {
+    public IChartFactory getFactory() {
         return this;
     }
 
     @Override
     public ICameraMouseController newMouseCameraController(Chart chart) {
-        return new NewtCameraMouseController(chart);
+        return new AWTCameraMouseController(chart);
     }
-
+    
     @Override
     public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-        return new NewtMousePickingController(chart, clickWidth);
+        return new AWTMousePickingController(chart, clickWidth);
     }
 
     /**
@@ -127,8 +114,14 @@ public class SWTChartComponentFactory extends NativeChartFactory {
     public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
         // trigger screenshot on 's' letter
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
-        IScreenshotKeyController screenshot = new NewtScreenshotKeyController(chart, file);
+        IScreenshotKeyController screenshot;
 
+        //if (!chart.getWindowingToolkit().equals("newt"))
+            screenshot = new AWTScreenshotKeyController(chart, file);
+        //else
+        //    screenshot = new NewtScreenshotKeyController(chart, file);
+        
+        
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
@@ -145,11 +138,11 @@ public class SWTChartComponentFactory extends NativeChartFactory {
 
     @Override
     public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        return new NewtCameraKeyController(chart);
+        return new AWTCameraKeyController(chart);
     }
 
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return null;
+        return new FrameAWT(chart, bounds, title, null);
     }
 }

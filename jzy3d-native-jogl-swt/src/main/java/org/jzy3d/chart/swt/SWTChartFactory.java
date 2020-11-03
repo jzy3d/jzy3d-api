@@ -1,14 +1,9 @@
-package org.jzy3d.chart.factories;
+package org.jzy3d.chart.swt;
 
 import java.util.Date;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.UIManager;
-
 import org.apache.log4j.Logger;
-import org.jzy3d.bridge.awt.FrameAWT;
-import org.jzy3d.chart.AWTChart;
+import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
@@ -19,13 +14,19 @@ import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.NewtCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
+import org.jzy3d.chart.factories.ChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.IFrame;
+import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxeBox;
 import org.jzy3d.plot3d.primitives.axes.IAxe;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
@@ -37,30 +38,36 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 import com.jogamp.opengl.GLCapabilities;
 
-/**
- * Still using some AWT components
- * 
- * @author martin
- *
- */
-public class NewtChartComponentFactory extends NativeChartFactory {
-    static Logger logger = Logger.getLogger(NewtChartComponentFactory.class);
-    
-    public static Chart chart() {
-        return chart(Quality.Intermediate);
+public class SWTChartFactory extends NativeChartFactory {
+    private static final Logger logger = Logger.getLogger(SWTChartFactory.class);
+
+    private final Composite canvas;
+
+    private SWTChartFactory(Composite canvas) {
+        this.canvas = canvas;
     }
 
-    public static Chart chart(Quality quality) {
-        NewtChartComponentFactory f = new NewtChartComponentFactory();
+    public static Chart chart(Composite parent) {
+        SWTChartFactory f = new SWTChartFactory(parent);
+        return f.newChart(Quality.Intermediate);
+    }
+
+    public static Chart chart(Composite parent, Quality quality) {
+        SWTChartFactory f = new SWTChartFactory(parent);
         return f.newChart(quality);
     }
 
     /* */
 
-    // TODO : create a NewtChart for consistency
+    /**
+     */
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality) {
-        return new AWTChart(factory, quality);
+    public Chart newChart(IChartFactory factory, Quality quality) {
+        return new SWTChart(canvas, factory, quality);
+    }
+
+    public Composite getComposite() {
+        return canvas;
     }
 
     @Override
@@ -80,7 +87,7 @@ public class NewtChartComponentFactory extends NativeChartFactory {
      * images)
      */
     @Override
-    public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         return new AWTView(factory, scene, canvas, quality);
     }
 
@@ -91,29 +98,16 @@ public class NewtChartComponentFactory extends NativeChartFactory {
     }
 
     @Override
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality) {
+    public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
         boolean debugGL = false;
         
-        return new CanvasNewtAwt((NativeChartFactory)factory, scene, quality, getCapabilities(), traceGL, debugGL);
+        return new CanvasNewtSWT((NativeChartFactory)factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
     @Override
-    public IChartComponentFactory getFactory() {
+    public IChartFactory getFactory() {
         return this;
-    }
-
-    public JFrame newFrame(JPanel panel) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            // ignore failure to set default look en feel;
-        }
-        JFrame frame = new JFrame();
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
-        return frame;
     }
 
     @Override
@@ -126,20 +120,15 @@ public class NewtChartComponentFactory extends NativeChartFactory {
         return new NewtMousePickingController(chart, clickWidth);
     }
 
-    
-    @Override
-    public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        return new NewtCameraKeyController(chart);
-    }
-
-
+    /**
+     * Output file of screenshot can be configured using {@link IScreenshotKeyController#setFilename(String)}.
+     */
     @Override
     public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
         // trigger screenshot on 's' letter
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
-        IScreenshotKeyController screenshot;
+        IScreenshotKeyController screenshot = new NewtScreenshotKeyController(chart, file);
 
-        screenshot = new NewtScreenshotKeyController(chart, file);
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
             public void failedScreenshot(String file, Exception e) {
@@ -148,15 +137,19 @@ public class NewtChartComponentFactory extends NativeChartFactory {
 
             @Override
             public void doneScreenshot(String file) {
-                logger.info("Screenshot: " + file);
+                logger.info("Screenshot save to '" + file + "'");
             }
         });
         return screenshot;
     }
 
+    @Override
+    public ICameraKeyController newKeyboardCameraController(Chart chart) {
+        return new NewtCameraKeyController(chart);
+    }
 
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return new FrameAWT(chart, bounds, title, null);
+        return null;
     }
 }

@@ -5,7 +5,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class GraphChart extends Chart{
 	public GraphChart(Quality quality){
-        super(new GraphChartComponentFactory(), quality);
+        super(new GraphChartFactory(), quality);
     }
 /*
 	protected ChartScene initializeScene(boolean graphsort){

@@ -2,7 +2,7 @@ package org.jzy3d.demos.misc;
 
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -41,7 +41,7 @@ public class SquarifyDemo extends AWTAbstractAnalysis {
         surface.setWireframeDisplayed(false);
 
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
+        chart = AWTChartFactory.chart(Quality.Intermediate);
         
         //This addition keeps the aspect ratio of the X and Y data
         //but makes X and Z square

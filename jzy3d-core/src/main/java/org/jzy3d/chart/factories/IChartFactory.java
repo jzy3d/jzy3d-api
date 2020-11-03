@@ -23,17 +23,17 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
-public interface IChartComponentFactory {
+public interface IChartFactory {
 	public Chart newChart();
     public Chart newChart(Quality quality);
-    public Chart newChart(IChartComponentFactory factory, Quality quality);
+    public Chart newChart(IChartFactory factory, Quality quality);
 
     public Painter newPainter();
 
     public ChartScene newScene(boolean sort);
     public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort);
     public View newView(Scene scene, ICanvas canvas, Quality quality);
-    public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality);
+    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality);
     public Camera newCamera(Coord3d center);
     public IAxe newAxe(BoundingBox3d box, View view);
     //public Renderer3d newRenderer(View view);
@@ -41,7 +41,7 @@ public interface IChartComponentFactory {
     public AbstractOrderingStrategy newOrderingStrategy();
 
     public ICanvas newCanvas(Scene scene, Quality quality);
-    public ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality);
+    public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);
     
     public ICameraMouseController newMouseCameraController(Chart chart);
     public IMousePickingController newMousePickingController(Chart chart, int clickWidth);
@@ -61,7 +61,7 @@ public interface IChartComponentFactory {
     /** usefull to override the current factory to call, especially for FactoryOverrider
      * that must be used as this instead of its wrapped delegate factory
      */
-    public IChartComponentFactory getFactory();
+    public IChartFactory getFactory();
     
     /*public static enum Toolkit {
         awt, swing, newt, offscreen, swt_newt

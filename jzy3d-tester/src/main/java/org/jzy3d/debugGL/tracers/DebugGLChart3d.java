@@ -5,7 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.debugGL.primitives.Cube;
 import org.jzy3d.maths.BoundingBox3d;
@@ -43,7 +43,7 @@ public class DebugGLChart3d {
     
     public DebugGLChart3d(Chart watchedChart){
         this.watchedChart = watchedChart;
-        this.debugChart = AWTChartComponentFactory.chart(Quality.Advanced);
+        this.debugChart = AWTChartFactory.chart(Quality.Advanced);
         this.debugChart.getView().setSquared(false);
         
         spaceTransform = watchedChart.getView().getSpaceTransformer();

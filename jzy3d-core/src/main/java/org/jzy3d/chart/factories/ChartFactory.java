@@ -31,21 +31,21 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 /**
- * This {@link IChartComponentFactory} returns non-displayable charts.
+ * This {@link IChartFactory} returns non-displayable charts.
  * 
  * @see AWTChartComponentFactory for a working implementation
  */
-public abstract class ChartComponentFactory implements IChartComponentFactory {
+public abstract class ChartFactory implements IChartFactory {
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
-    static Logger logger = Logger.getLogger(ChartComponentFactory.class);
+    static Logger logger = Logger.getLogger(ChartFactory.class);
     
     public abstract ICameraMouseController newMouseCameraController(Chart chart);
     public abstract IMousePickingController newMousePickingController(Chart chart, int clickWidth);
     public abstract IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
     public abstract ICameraKeyController newKeyboardCameraController(Chart chart);
     public abstract IFrame newFrame(Chart chart, Rectangle bounds, String title);
-    public abstract ICanvas newCanvas(IChartComponentFactory factory, Scene scene, Quality quality);
+    public abstract ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);
     public abstract IViewportLayout newViewportLayout();
 
     boolean offscreen = false;
@@ -77,7 +77,7 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
     }
 
     @Override
-    public Chart newChart(IChartComponentFactory factory, Quality quality) {
+    public Chart newChart(IChartFactory factory, Quality quality) {
         return new Chart(factory, quality);
     }
 
@@ -97,7 +97,7 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
     }
     
     @Override
-    public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         return new ChartView(factory, scene, canvas, quality);
     }
 
@@ -157,7 +157,7 @@ public abstract class ChartComponentFactory implements IChartComponentFactory {
     /* UTILS */
 
     @Override
-    public IChartComponentFactory getFactory() {
+    public IChartFactory getFactory() {
         return this;
     }
 

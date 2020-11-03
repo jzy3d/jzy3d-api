@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.jzy3d.bridge.swt.Bridge;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.Settings;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -40,7 +40,7 @@ public class SWTBridgeDemo {
         surface.setWireframeDisplayed(false);
 
         // Create a chart
-        Chart chart = AWTChartComponentFactory.chart(Quality.Advanced);
+        Chart chart = AWTChartFactory.chart(Quality.Advanced);
         chart.getScene().getGraph().add(surface);
 
         Settings.getInstance().setHardwareAccelerated(true);

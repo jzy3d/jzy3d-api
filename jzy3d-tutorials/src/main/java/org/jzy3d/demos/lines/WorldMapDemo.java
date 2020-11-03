@@ -4,8 +4,8 @@ import java.util.concurrent.Executors;
 
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
@@ -24,9 +24,9 @@ public class WorldMapDemo extends AWTAbstractAnalysis {
 
     public void init() throws Exception {
         // Create the world map chart
-        AWTChartComponentFactory f = new AWTChartComponentFactory() {
+        AWTChartFactory f = new AWTChartFactory() {
             @Override
-            public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+            public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
                 return new CroppingView(factory, scene, canvas, quality);
             }
         };

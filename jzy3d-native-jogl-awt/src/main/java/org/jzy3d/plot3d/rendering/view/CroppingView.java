@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.Croppable;
@@ -9,7 +9,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
 public class CroppingView extends AWTView {
-    public CroppingView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public CroppingView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
     }
 

@@ -10,7 +10,7 @@ import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
@@ -35,7 +35,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 public class Chart {
     public static Quality DEFAULT_QUALITY = Quality.Intermediate;
 
-    public Chart(IChartComponentFactory factory, Quality quality) {
+    public Chart(IChartFactory factory, Quality quality) {
         this.factory = factory;
         this.quality = quality;
 
@@ -377,7 +377,7 @@ public class Chart {
         return getView().getAxe().getLayout();
     }
 
-    public IChartComponentFactory getFactory() {
+    public IChartFactory getFactory() {
         return factory;
     }
 
@@ -395,7 +395,7 @@ public class Chart {
 
     /* */
 
-    protected IChartComponentFactory factory;
+    protected IChartFactory factory;
 
     protected Quality quality;
     protected ChartScene scene;

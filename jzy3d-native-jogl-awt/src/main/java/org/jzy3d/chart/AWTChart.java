@@ -1,6 +1,6 @@
 package org.jzy3d.chart;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 
 public class AWTChart extends NativeChart {
-    public AWTChart(IChartComponentFactory components, Quality quality) {
+    public AWTChart(IChartFactory components, Quality quality) {
         super(components, quality);
     }
     
