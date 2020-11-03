@@ -21,7 +21,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  * 
  */
-public class Scatter extends AbstractDrawable implements ISingleColorable {
+public class Scatter extends Drawable implements ISingleColorable {
 
     public Scatter() {
         bbox = new BoundingBox3d();

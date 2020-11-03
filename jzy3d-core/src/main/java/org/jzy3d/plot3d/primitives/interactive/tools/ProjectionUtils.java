@@ -11,8 +11,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.rendering.scene.Decomposition;
 import org.jzy3d.plot3d.rendering.scene.Graph;
@@ -35,23 +35,23 @@ public class ProjectionUtils {
 		return project(painter, gl, glu, cam, g.getAll());
 	}
 	
-	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, List<AbstractDrawable> list){
+	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, List<Drawable> list){
 		return project(painter, gl, glu, cam, Decomposition.getDecomposition(list));
 	}
 	
-	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, AbstractComposite c){
-		ArrayList<AbstractDrawable> monotypes = Decomposition.getDecomposition(c);
+	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, Composite c){
+		ArrayList<Drawable> monotypes = Decomposition.getDecomposition(c);
 		return project(painter, gl, glu, cam, monotypes);
 	}
 	
-	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, ArrayList<AbstractDrawable> monotypes){
+	public static List<PolygonProjection> project(Painter painter, GL gl, GLU glu, Camera cam, ArrayList<Drawable> monotypes){
 		final TicToc t = new TicToc();
 		String report = "";
 		
 		// prepare a more efficient datastructure
 		ArrayList<ArrayList<Coord3d>> polygons = new ArrayList<ArrayList<Coord3d>>(monotypes.size()); 
 		ArrayList<ArrayList<Color>> colors = new ArrayList<ArrayList<Color>>(monotypes.size()); 		
-		for(AbstractDrawable d: monotypes){
+		for(Drawable d: monotypes){
 			if( d instanceof Polygon ){
 				polygons.add( ProjectionUtils.getCoordinatesAsArrayList( (Polygon)d ) );
 				colors.add( ProjectionUtils.getColorsAsArrayList( (Polygon)d ) );

@@ -8,7 +8,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 
 
-public class LineStripInterpolated extends AbstractComposite{
+public class LineStripInterpolated extends Composite{
 	protected LineStripInterpolated() {
 	}
 

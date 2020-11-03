@@ -9,7 +9,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -451,7 +451,7 @@ public class Camera extends AbstractViewportManager {
      * Return the distance between the camera eye and the given drawable's
      * barycenter.
      */
-    public double getDistance(AbstractDrawable drawable) {
+    public double getDistance(Drawable drawable) {
         if (useSquaredDistance)
             return drawable.getBarycentre().distanceSq(getEye());
         else
@@ -462,7 +462,7 @@ public class Camera extends AbstractViewportManager {
      * Apply scaling before computing distance between the camera eye and the
      * given drawable's barycenter.
      */
-    public double getDistance(AbstractDrawable drawable, Coord3d viewScale) {
+    public double getDistance(Drawable drawable, Coord3d viewScale) {
         if (useSquaredDistance)
             return drawable.getBarycentre().distanceSq(getEye().div(viewScale));
         else

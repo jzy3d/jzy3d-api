@@ -8,7 +8,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.graphs.layout.DefaultGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphLayout2d;
@@ -30,7 +30,7 @@ import com.jogamp.opengl.glu.GLU;
  * One can later listen to picking events through:
  * {@link PickSupport.addVertexPickListener(IVertexPickListener<V> listener)}
  */
-public abstract class AbstractDrawableGraph2d<V, E> extends AbstractDrawable implements IDrawableGraph2d<V, E>{
+public abstract class AbstractDrawableGraph2d<V, E> extends Drawable implements IDrawableGraph2d<V, E>{
 	public AbstractDrawableGraph2d() {
 		super();
 		formatter = new DefaultGraphFormatter<V, E>();

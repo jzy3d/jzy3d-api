@@ -12,7 +12,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -41,7 +41,7 @@ import com.jogamp.opengl.util.texture.TextureCoords;
  * @author Martin
  * 
  */
-public class DrawableTexture extends AbstractDrawable implements ITranslucent {
+public class DrawableTexture extends Drawable implements ITranslucent {
     static Logger logger = Logger.getLogger(DrawableTexture.class);
     
     public DrawableTexture(SharedTexture resource) {

@@ -10,15 +10,15 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.builder.Tessellator;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
 
 
 /** The {@link OrthonormalTessellator} checks that coordinates are lying on an orthormal grid,
- * and is able to provide a {@link AbstractComposite} made of {@link Polygon}s built according to this grid
+ * and is able to provide a {@link Composite} made of {@link Polygon}s built according to this grid
  * 
  * On this model, one input coordinate is represented by one {@link Polygon}, for which each point is
  * a mean point between two grid ticks:
@@ -49,7 +49,7 @@ public class OrthonormalTessellator extends Tessellator{
     static Logger logger = Logger.getLogger(OrthonormalTessellator.class);
     
 	@Override
-	public AbstractComposite build(float[] x, float[] y, float[] z) {
+	public Composite build(float[] x, float[] y, float[] z) {
 		setData(x, y, z);
 		Shape s = new Shape();
 		s.add(getSquarePolygonsOnCoordinates());
@@ -177,16 +177,16 @@ public class OrthonormalTessellator extends Tessellator{
 		
 	/**************************************************************************************/
 	
-	public List<AbstractDrawable> getSquarePolygonsOnCoordinates(){
+	public List<Drawable> getSquarePolygonsOnCoordinates(){
 		return getSquarePolygonsOnCoordinates(null, null);
 	}
 	
-	public List<AbstractDrawable> getSquarePolygonsAroundCoordinates(){
+	public List<Drawable> getSquarePolygonsAroundCoordinates(){
 		return getSquarePolygonsAroundCoordinates(null, null);
 	}
 	
-	public List<AbstractDrawable> getSquarePolygonsOnCoordinates(ColorMapper cmap, Color colorFactor){
-		List<AbstractDrawable> polygons = new ArrayList<AbstractDrawable>();
+	public List<Drawable> getSquarePolygonsOnCoordinates(ColorMapper cmap, Color colorFactor){
+		List<Drawable> polygons = new ArrayList<Drawable>();
 		
 		for(int xi=0; xi<x.length-1; xi++){
 			for(int yi=0; yi<y.length-1; yi++){
@@ -210,15 +210,15 @@ public class OrthonormalTessellator extends Tessellator{
 				}
 				
 				// Store quad
-				AbstractDrawable quad = newQuad(p);
+				Drawable quad = newQuad(p);
                 polygons.add(quad);
 			}
 		}	
 		return polygons;
 	}
 	
-	public List<AbstractDrawable> getSquarePolygonsAroundCoordinates(ColorMapper cmap, Color colorFactor){
-		List<AbstractDrawable> polygons = new ArrayList<AbstractDrawable>();
+	public List<Drawable> getSquarePolygonsAroundCoordinates(ColorMapper cmap, Color colorFactor){
+		List<Drawable> polygons = new ArrayList<Drawable>();
 		
 		for(int xi=1; xi<x.length-1; xi++){
 			for(int yi=1; yi<y.length-1; yi++){
@@ -242,7 +242,7 @@ public class OrthonormalTessellator extends Tessellator{
 				}
 				
 				// Store quad
-				AbstractDrawable quad = newQuad(p);
+				Drawable quad = newQuad(p);
 				polygons.add(quad);
 			}
 		}	
@@ -284,7 +284,7 @@ public class OrthonormalTessellator extends Tessellator{
 		return !Float.isNaN(p.xyz.z);
 	}
 	
-	protected AbstractDrawable newQuad(Point p[]){
+	protected Drawable newQuad(Point p[]){
 	    Polygon quad = new Polygon();
 	    //quad.setPolygonOffsetFillEnable(false);
         for(int pi=0; pi<p.length; pi++)

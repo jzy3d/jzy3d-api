@@ -4,7 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 
 
-public class HistogramBar extends AbstractComposite{
+public class HistogramBar extends Composite{
 	public HistogramBar(){
 		this(10);
 	}

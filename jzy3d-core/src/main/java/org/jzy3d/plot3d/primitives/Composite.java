@@ -25,16 +25,16 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  *
  */
-public abstract class AbstractComposite extends AbstractWireframeable implements ISingleColorable, IMultiColorable {
-    public AbstractComposite() {
+public abstract class Composite extends Wireframeable implements ISingleColorable, IMultiColorable {
+    public Composite() {
         super();
-        components = new ArrayList<AbstractDrawable>();
+        components = new ArrayList<Drawable>();
     }
 
     /****************************************************************/
 
     /** Append a list of Drawables to this composite. */
-    public void add(List<? extends AbstractDrawable> drawables) {
+    public void add(List<? extends Drawable> drawables) {
         synchronized (components) {
             components.addAll(drawables);
         }
@@ -48,27 +48,27 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
     }
 
     /** Add a Drawable to this composite. */
-    public void add(AbstractDrawable drawable) {
+    public void add(Drawable drawable) {
         synchronized(components){
             components.add(drawable);
         }
     }
 
     /** Remove a Drawable from this composite. */
-    public void remove(AbstractDrawable drawable) {
+    public void remove(Drawable drawable) {
         synchronized(components){
             components.remove(drawable);
         }
     }
 
     /** Get a Drawable stored by this composite. */
-    public AbstractDrawable get(int p) {
+    public Drawable get(int p) {
         synchronized(components){
             return components.get(p);
         }
     }
 
-    public List<AbstractDrawable> getDrawables() {
+    public List<Drawable> getDrawables() {
         return components;
     }
 
@@ -86,7 +86,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
             mapper.preDraw(this);
 
         synchronized (components) {
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null)
                     c.draw(painter, gl, glu, camera);
             }
@@ -107,7 +107,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
         this.transform = transform;
 
         synchronized (components) {
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null)
                     c.setTransform(transform);
             }
@@ -119,7 +119,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
         this.transformBefore = transform;
 
         synchronized (components) {
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null)
                     c.setTransformBefore(transform);
             }
@@ -131,7 +131,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
         this.spaceTransformer = spaceTransformer;
         
         synchronized (components) {
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null)
                     c.setSpaceTransformer(spaceTransformer);
             }
@@ -159,7 +159,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
         BoundingBox3d box = new BoundingBox3d();
 
         synchronized (components) {
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null && c.getBounds() != null)
                     box.add(c.getBounds());
             }
@@ -170,7 +170,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
     @Override
     public void applyGeometryTransform(Transform transform) {
         synchronized (components) {
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 c.applyGeometryTransform(transform);
             }
         }
@@ -185,9 +185,9 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
         if (components != null) {
             synchronized (components) {
-                for (AbstractDrawable c : components) {
-                    if (c != null && c instanceof AbstractWireframeable)
-                        ((AbstractWireframeable) c).setWireframeColor(color);
+                for (Drawable c : components) {
+                    if (c != null && c instanceof Wireframeable)
+                        ((Wireframeable) c).setWireframeColor(color);
                 }
             }
         }
@@ -199,9 +199,9 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
         if (components != null) {
             synchronized (components) {
-                for (AbstractDrawable c : components) {
-                    if (c != null && c instanceof AbstractWireframeable)
-                        ((AbstractWireframeable) c).setWireframeDisplayed(status);
+                for (Drawable c : components) {
+                    if (c != null && c instanceof Wireframeable)
+                        ((Wireframeable) c).setWireframeDisplayed(status);
                 }
             }
         }
@@ -213,9 +213,9 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
         if (components != null) {
             synchronized (components) {
-                for (AbstractDrawable c : components) {
-                    if (c != null && c instanceof AbstractWireframeable)
-                        ((AbstractWireframeable) c).setWireframeWidth(width);
+                for (Drawable c : components) {
+                    if (c != null && c instanceof Wireframeable)
+                        ((Wireframeable) c).setWireframeWidth(width);
                 }
             }
         }
@@ -227,9 +227,9 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
         if (components != null) {
             synchronized (components) {
-                for (AbstractDrawable c : components) {
-                    if (c != null && c instanceof AbstractWireframeable)
-                        ((AbstractWireframeable) c).setFaceDisplayed(status);
+                for (Drawable c : components) {
+                    if (c != null && c instanceof Wireframeable)
+                        ((Wireframeable) c).setFaceDisplayed(status);
                 }
             }
         }
@@ -241,9 +241,9 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
         if (components != null) {
             synchronized (components) {
-                for (AbstractDrawable c : components) {
-                    if (c != null && c instanceof AbstractWireframeable)
-                        ((AbstractWireframeable) c).setDisplayed(status);
+                for (Drawable c : components) {
+                    if (c != null && c instanceof Wireframeable)
+                        ((Wireframeable) c).setDisplayed(status);
                 }
             }
         }
@@ -258,7 +258,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
         if (components != null) {
 
             synchronized (components) {
-                for (AbstractDrawable d : components) {
+                for (Drawable d : components) {
                     if (d instanceof IMultiColorable)
                         ((IMultiColorable) d).setColorMapper(mapper);
                     else if (d instanceof ISingleColorable)
@@ -282,7 +282,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
         if (components != null) {
             synchronized (components) {
-                for (AbstractDrawable d : components)
+                for (Drawable d : components)
                     if (d instanceof ISingleColorable)
                         ((ISingleColorable) d).setColor(color);
             }
@@ -309,10 +309,10 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
         if (detailedToString) {
             int k = 0;
-            for (AbstractDrawable c : components) {
+            for (Drawable c : components) {
                 if (c != null) {
-                    if (c instanceof AbstractComposite)
-                        output += "\n" + ((AbstractComposite) c).toString(depth + 1);
+                    if (c instanceof Composite)
+                        output += "\n" + ((Composite) c).toString(depth + 1);
                     else
                         output += "\n" + Utils.blanks(depth + 1) + " Composite element[" + (k++) + "]:" + c.toString();
                 } else
@@ -337,7 +337,7 @@ public abstract class AbstractComposite extends AbstractWireframeable implements
 
     /****************************************************************/
 
-    protected List<AbstractDrawable> components = null;
+    protected List<Drawable> components = null;
     protected Transform transform;
 
     protected ColorMapper mapper;

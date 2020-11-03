@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.jzy3d.io.ILoader;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.TicToc;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.enlightables.EnlightablePolygon;
 
@@ -27,12 +27,12 @@ import com.jmatio.types.MLNumericArray;
  */
 public class MatlabDrawableLoader implements ILoader {
     @Override
-    public List<AbstractDrawable> load(String filename) throws Exception {
+    public List<Drawable> load(String filename) throws Exception {
         return load(filename, -1);
     }
     
     @SuppressWarnings("unchecked")
-    public List<AbstractDrawable> load(String filename, int limit) throws Exception {
+    public List<Drawable> load(String filename, int limit) throws Exception {
         TicToc t = new TicToc();
         t.tic();
         MatFileReader mfr = new MatFileReader(filename);
@@ -43,7 +43,7 @@ public class MatlabDrawableLoader implements ILoader {
         MLNumericArray<Float> y = (MLNumericArray<Float>) mfr.getMLArray("Y");
         MLNumericArray<Float> z = (MLNumericArray<Float>) mfr.getMLArray("Z");
 
-        List<AbstractDrawable> polygons = new ArrayList<AbstractDrawable>();
+        List<Drawable> polygons = new ArrayList<Drawable>();
 
         int n = x.getN();
         if (limit > 0)

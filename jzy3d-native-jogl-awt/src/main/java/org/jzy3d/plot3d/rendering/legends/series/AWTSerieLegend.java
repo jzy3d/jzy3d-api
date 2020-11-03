@@ -10,7 +10,7 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitives.Serie2d;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 import org.jzy3d.plot3d.rendering.view.IImageViewport;
 
@@ -22,11 +22,11 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport{
         this.serie = serie;
     }
 
-    public AWTSerieLegend(AbstractDrawable drawable) {
+    public AWTSerieLegend(Drawable drawable) {
         this(drawable, Color.BLACK, Color.WHITE);
     }
 
-    public AWTSerieLegend(AbstractDrawable drawable, Color foreground, Color background) {
+    public AWTSerieLegend(Drawable drawable, Color foreground, Color background) {
         super(drawable, foreground, background);
         this.minimumDimension = new Dimension(AWTAbstractImageGenerator.MIN_BAR_WIDTH, AWTAbstractImageGenerator.MIN_BAR_HEIGHT);
 

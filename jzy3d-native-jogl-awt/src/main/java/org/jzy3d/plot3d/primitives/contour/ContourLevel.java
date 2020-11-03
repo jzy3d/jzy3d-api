@@ -4,18 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.contour.MapperContourPictureGenerator;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 
 
 /** 
- * A {@link ContourLevel} is an {@link AbstractComposite} gathering a collection of 
+ * A {@link ContourLevel} is an {@link Composite} gathering a collection of 
  * {@link LineStrip}s for a given contour level.
  * @author Martin
  */
-public class ContourLevel extends AbstractComposite {
+public class ContourLevel extends Composite {
 	public ContourLevel() {
 		super();
 		lines = new ArrayList<LineStrip>();
@@ -62,7 +62,7 @@ public class ContourLevel extends AbstractComposite {
 	}
 
 	public void fixZ(float value) {
-		for (AbstractDrawable d : components) {
+		for (Drawable d : components) {
 			LineStrip line = (LineStrip) d;
 			for (Point point : line.getPoints()) {
 				point.xyz.z = value;

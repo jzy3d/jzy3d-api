@@ -34,7 +34,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet
  * 
  */
-public class Point extends AbstractDrawable implements ISingleColorable {
+public class Point extends Drawable implements ISingleColorable {
 
 	/** Intialize a point at the origin, with a white color and a width of 1. */
 	public Point() {

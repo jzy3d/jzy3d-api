@@ -3,7 +3,7 @@ package org.jzy3d.debugGL.primitives;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Quad;
@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.primitives.Quad;
  * 
  * @author Martin Pernollet
  */
-public class Cube extends AbstractComposite {
+public class Cube extends Composite {
     protected Polygon north;
     protected Polygon south;
     protected Polygon west;

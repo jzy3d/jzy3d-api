@@ -11,7 +11,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -25,7 +25,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.math.FloatUtil;
 import com.jogamp.opengl.math.VectorUtil;
 
-public class Texture3D extends AbstractDrawable implements IGLBindedResource,IMultiColorable{
+public class Texture3D extends Drawable implements IGLBindedResource,IMultiColorable{
 
 	/** The GL texture ID. */
     private int texID;

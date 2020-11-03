@@ -11,15 +11,15 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Polygon2d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Quad;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 
-public class TexturedCylinder extends AbstractComposite implements Selectable, ITranslucent{
+public class TexturedCylinder extends Composite implements Selectable, ITranslucent{
 	public TexturedCylinder(MaskPair masks){
 		this(new Coord3d(), Color.CYAN, Color.RED, masks);
 	}
@@ -110,10 +110,10 @@ public class TexturedCylinder extends AbstractComposite implements Selectable, I
 		return lastProjection;
 	}	
 	
-	protected AbstractDrawable dArrowUp;
-	protected AbstractDrawable dArrowDown;
-	protected AbstractDrawable dDiskUp;
-	protected AbstractDrawable dDiskDown;
+	protected Drawable dArrowUp;
+	protected Drawable dArrowDown;
+	protected Drawable dDiskUp;
+	protected Drawable dDiskDown;
 	protected List<TranslucentQuad> quads;
 	
 	protected List<Coord3d> lastProjection;

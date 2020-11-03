@@ -13,7 +13,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
 
-public class Disk extends AbstractWireframeable implements ISingleColorable {
+public class Disk extends Wireframeable implements ISingleColorable {
 
 	/** Initialize a Cylinder at the origin. */
 	public Disk() {

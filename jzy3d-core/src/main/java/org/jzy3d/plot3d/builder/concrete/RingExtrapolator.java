@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
-import org.jzy3d.plot3d.primitives.AbstractDrawable;
+import org.jzy3d.plot3d.primitives.Composite;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Shape;
 
 
@@ -23,7 +23,7 @@ public class RingExtrapolator extends OrthonormalTessellator{
 	}
 	
 	@Override
-    public AbstractComposite build(float[] x, float[] y, float[] z) {
+    public Composite build(float[] x, float[] y, float[] z) {
 		setData(x, y, z);
 		Shape s = new Shape();
 		s.add(getExtrapolatedRingPolygons());
@@ -32,7 +32,7 @@ public class RingExtrapolator extends OrthonormalTessellator{
 	
 	/******************************************************************************/
 	
-	public List<AbstractDrawable> getExtrapolatedRingPolygons(){
+	public List<Drawable> getExtrapolatedRingPolygons(){
 		//backup current coords and extrapolate
 		float[]   xbackup = x;
 		float[]   ybackup = y;
@@ -52,7 +52,7 @@ public class RingExtrapolator extends OrthonormalTessellator{
 		interpolator.x = x;
 		interpolator.y = y;
 		interpolator.z = z;
-		List<AbstractDrawable> polygons = interpolator.getInterpolatedRingPolygons();
+		List<Drawable> polygons = interpolator.getInterpolatedRingPolygons();
 		
 		// get back to previous grid
 		x = xbackup;

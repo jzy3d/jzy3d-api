@@ -4,7 +4,7 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
+import org.jzy3d.plot3d.primitives.Geometry.PolygonMode;
 
 /**
  * A composite implementation of a parallelepiped, meaning it can be decomposed
@@ -12,7 +12,7 @@ import org.jzy3d.plot3d.primitives.AbstractGeometry.PolygonMode;
  * 
  * Supports two kind of sub polygon: culled or simple.
  */
-public class ParallelepipedComposite extends AbstractComposite implements ISingleColorable, IMultiColorable {
+public class ParallelepipedComposite extends Composite implements ISingleColorable, IMultiColorable {
     public enum PolygonType {
         SIMPLE, CULLED
     }

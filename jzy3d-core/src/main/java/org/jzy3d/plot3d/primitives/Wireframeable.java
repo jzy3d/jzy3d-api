@@ -4,7 +4,7 @@ package org.jzy3d.plot3d.primitives;
 import org.jzy3d.colors.Color;
 
 /**
- * An {@link AbstractWireframeable} is a {@link AbstractDrawable} 
+ * An {@link Wireframeable} is a {@link Drawable} 
  * that has a wireframe mode for display.
  * 
  * Defining an object as Wireframeable means this object may have a wireframe
@@ -14,10 +14,10 @@ import org.jzy3d.colors.Color;
  * 
  * @author Martin Pernollet
  */
-public abstract class AbstractWireframeable extends AbstractDrawable {
+public abstract class Wireframeable extends Drawable {
 	/** Initialize the wireframeable with a white color and 
 	 * width of 1 for wires, hidden wireframe, and displayed faces.*/
-	public AbstractWireframeable(){
+	public Wireframeable(){
 		super();
 		setWireframeColor(Color.WHITE);
 		setWireframeWidth(1.0f);

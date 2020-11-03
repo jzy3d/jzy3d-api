@@ -20,16 +20,16 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.glu.GLU;
 
-public abstract class AbstractGeometry extends AbstractWireframeable implements ISingleColorable, IMultiColorable {
+public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
 	public enum PolygonMode {
 		FRONT, BACK, FRONT_AND_BACK
 	}
 
 	/**
-	 * Initializes an empty {@link AbstractGeometry} with face status defaulting to
+	 * Initializes an empty {@link Geometry} with face status defaulting to
 	 * true, and wireframe status defaulting to false.
 	 */
-	public AbstractGeometry() {
+	public Geometry() {
 		super();
 		points = new ArrayList<Point>(4);
 		bbox = new BoundingBox3d();
@@ -318,18 +318,18 @@ public abstract class AbstractGeometry extends AbstractWireframeable implements 
 	}
 
 	/**
-	 * A utility to change polygon offset fill status of a {@link AbstractComposite}
-	 * containing {@link AbstractGeometry}s.
+	 * A utility to change polygon offset fill status of a {@link Composite}
+	 * containing {@link Geometry}s.
 	 * 
 	 * @param composite
 	 * @param polygonOffsetFillEnable status
 	 */
-	public static void setPolygonOffsetFillEnable(AbstractComposite composite, boolean polygonOffsetFillEnable) {
-		for (AbstractDrawable d : composite.getDrawables()) {
-			if (d instanceof AbstractGeometry) {
-				((AbstractGeometry) d).setPolygonOffsetFillEnable(polygonOffsetFillEnable);
-			} else if (d instanceof AbstractComposite) {
-				setPolygonOffsetFillEnable(((AbstractComposite) d), polygonOffsetFillEnable);
+	public static void setPolygonOffsetFillEnable(Composite composite, boolean polygonOffsetFillEnable) {
+		for (Drawable d : composite.getDrawables()) {
+			if (d instanceof Geometry) {
+				((Geometry) d).setPolygonOffsetFillEnable(polygonOffsetFillEnable);
+			} else if (d instanceof Composite) {
+				setPolygonOffsetFillEnable(((Composite) d), polygonOffsetFillEnable);
 			}
 		}
 	}

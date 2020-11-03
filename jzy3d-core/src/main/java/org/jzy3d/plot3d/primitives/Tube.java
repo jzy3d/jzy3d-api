@@ -22,7 +22,7 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class Tube extends AbstractWireframeable implements ISingleColorable {
+public class Tube extends Wireframeable implements ISingleColorable {
 
 	/** Initialize a Cylinder at the origin. */
 	public Tube() {
