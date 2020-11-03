@@ -131,10 +131,19 @@ public class View {
      * set one time by the init() method.
      */
     public View(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        init(factory, scene, canvas, quality);
+        initInstance(factory, scene, canvas, quality);
     }
 
-	public void init(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    /**
+     * Initialize a view object. Invoked by constructor
+     * 
+     * Method name is made clear to avoid confusion with {@link View#init()} which initialize open GL context.
+     * @param factory
+     * @param scene
+     * @param canvas
+     * @param quality
+     */
+	public void initInstance(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
 		BoundingBox3d sceneBounds = getSceneGraphBounds(scene);
 
         this.viewpoint = DEFAULT_VIEW.clone();
