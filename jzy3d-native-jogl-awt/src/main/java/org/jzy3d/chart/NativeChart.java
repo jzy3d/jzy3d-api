@@ -1,6 +1,6 @@
 package org.jzy3d.chart;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.INativeScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
@@ -8,7 +8,7 @@ import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.util.texture.TextureData;
 
 public class NativeChart extends Chart {
-	public NativeChart(IChartComponentFactory components, Quality quality) {
+	public NativeChart(IChartFactory components, Quality quality) {
 		super(components, quality);
 	}
 

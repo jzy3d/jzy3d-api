@@ -8,10 +8,10 @@ import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.IObjectPickedListener;
 import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 
-public class GraphChartComponentFactory extends AWTChartComponentFactory{
-    static Logger logger = Logger.getLogger(GraphChartComponentFactory.class);
+public class GraphChartFactory extends AWTChartFactory{
+    static Logger logger = Logger.getLogger(GraphChartFactory.class);
     
     @Override
     public ICameraMouseController newMouseCameraController(Chart chart){

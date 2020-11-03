@@ -19,7 +19,7 @@
 
 package org.jzy3d.plot3d.rendering.view;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -31,7 +31,7 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
  * @author Martin Pernollet
  */
 public class SelectableView extends View{
-	public SelectableView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+	public SelectableView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
     }
 

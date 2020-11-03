@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapGrayscale;
@@ -71,7 +71,7 @@ public class LizardVolumeRenderDemo extends AWTAbstractAnalysis {
         Texture3D volume = new Texture3D(buffer, shape,(float)min+ ((max-min)/10),(float)max-((max-min)/10),colorMapper,new BoundingBox3d(0,shape[2],0,shape[1],0,shape[0]));   
         
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate);
+        chart = AWTChartFactory.chart(Quality.Intermediate);
         chart.getScene().getGraph().add(volume);
 //        chart.getView().setBackgroundColor(new Color(0, 0, 0));
 //        IAxeLayout axeLayout = chart.getAxeLayout();

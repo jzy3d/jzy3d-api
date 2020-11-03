@@ -1,15 +1,15 @@
 package org.jzy3d.analysis;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public abstract class AbstractAnalysis  implements IAnalysis{
 
 	protected Chart chart;
-	protected IChartComponentFactory factory;
+	protected IChartFactory factory;
 	
-    public AbstractAnalysis(IChartComponentFactory factory){
+    public AbstractAnalysis(IChartFactory factory){
         this.factory = factory;
     }
 
@@ -49,12 +49,12 @@ public abstract class AbstractAnalysis  implements IAnalysis{
 	}
 
 	@Override
-	public IChartComponentFactory getFactory() {
+	public IChartFactory getFactory() {
 	    return factory;
 	}
 
 	@Override
-	public void setFactory(IChartComponentFactory factory) {
+	public void setFactory(IChartFactory factory) {
 	    this.factory = factory;
 	}
 

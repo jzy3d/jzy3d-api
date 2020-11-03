@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -18,7 +18,7 @@ import com.jogamp.opengl.glu.GLU;
  *
  */
 public class DepthPeelingView extends View{
-    public DepthPeelingView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public DepthPeelingView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
     }
 

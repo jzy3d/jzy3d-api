@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
@@ -40,7 +40,7 @@ public class ScatterDemo extends AWTAbstractAnalysis{
         }
         
         Scatter scatter = new Scatter(points, colors);
-        chart = new AWTChartComponentFactory().newChart(Quality.Advanced);
+        chart = new AWTChartFactory().newChart(Quality.Advanced);
         chart.getScene().add(scatter);
     }
 }

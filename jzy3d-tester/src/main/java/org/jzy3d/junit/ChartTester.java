@@ -14,7 +14,7 @@ import org.junit.Assert;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.AbstractDrawable;
@@ -43,7 +43,7 @@ public class ChartTester{
         // Initialize chart
         Quality q = Quality.Intermediate;
 
-        AWTChartComponentFactory f = new AWTChartComponentFactory();
+        AWTChartFactory f = new AWTChartFactory();
         f.setOffscreen(TEST_IMG_SIZE, TEST_IMG_SIZE);
         
         AWTChart chart = (AWTChart)f.newChart(q);

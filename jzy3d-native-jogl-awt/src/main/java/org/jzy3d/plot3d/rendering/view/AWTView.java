@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartView;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -34,7 +34,7 @@ import com.jogamp.opengl.util.awt.Overlay;
 
 public class AWTView extends ChartView {
     
-    public AWTView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public AWTView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
         this.bgViewport = new AWTImageViewport();
         this.renderers = new ArrayList<Renderer2d>(1);

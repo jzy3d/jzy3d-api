@@ -1,22 +1,22 @@
 package org.jzy3d.chart2d;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class Chart2dComponentFactory extends AWTChartComponentFactory{
+public class Chart2dFactory extends AWTChartFactory{
     @Override
-    public IChartComponentFactory getFactory() {
+    public IChartFactory getFactory() {
         return this;
     }
     
     @Override
-    public Chart2d newChart(IChartComponentFactory factory, Quality quality){
+    public Chart2d newChart(IChartFactory factory, Quality quality){
         return new Chart2d(factory, quality);
     }
     
@@ -33,7 +33,7 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
     }
 
     @Override
-    public View2d newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public View2d newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         return new View2d(factory, scene, canvas, quality);
     }
     
@@ -49,5 +49,5 @@ public class Chart2dComponentFactory extends AWTChartComponentFactory{
         return f.newChart(Chart.DEFAULT_QUALITY);
     }
     
-    static Chart2dComponentFactory f = new Chart2dComponentFactory();
+    static Chart2dFactory f = new Chart2dFactory();
 }
