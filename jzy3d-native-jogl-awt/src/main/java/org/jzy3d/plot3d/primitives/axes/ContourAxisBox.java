@@ -13,7 +13,7 @@ import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.LineStrip;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.contour.ContourLevel;
 import org.jzy3d.plot3d.primitives.contour.ContourMesh;
 import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
@@ -35,7 +35,7 @@ import com.jogamp.opengl.glu.GLU;
 public class ContourAxisBox extends AxisBox {
     static Logger logger = Logger.getLogger(ContourAxisBox.class);
     
-	public ContourAxisBox(BoundingBox3d bbox, IAxeLayout layout) {
+	public ContourAxisBox(BoundingBox3d bbox, IAxisLayout layout) {
 		super(bbox, layout);
 	}
 

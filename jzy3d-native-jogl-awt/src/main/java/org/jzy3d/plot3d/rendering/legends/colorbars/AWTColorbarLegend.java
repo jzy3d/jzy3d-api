@@ -10,7 +10,7 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
@@ -22,15 +22,15 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
         this(parent, chart.getView().getAxe().getLayout());
     }
 
-    public AWTColorbarLegend(Drawable parent, IAxeLayout layout) {
+    public AWTColorbarLegend(Drawable parent, IAxisLayout layout) {
         this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), layout.getMainColor(), layout.getMainColor().negative());
     }
 
-    public AWTColorbarLegend(Drawable parent, IAxeLayout layout, Color foreground) {
+    public AWTColorbarLegend(Drawable parent, IAxisLayout layout, Color foreground) {
         this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), foreground, null);
     }
 
-    public AWTColorbarLegend(Drawable parent, IAxeLayout layout, Color foreground, Color background) {
+    public AWTColorbarLegend(Drawable parent, IAxisLayout layout, Color foreground, Color background) {
         this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), foreground, background);
     }
 

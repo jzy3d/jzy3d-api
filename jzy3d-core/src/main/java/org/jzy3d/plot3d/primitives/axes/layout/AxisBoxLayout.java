@@ -7,12 +7,12 @@ import org.jzy3d.plot3d.primitives.axes.layout.renderers.DefaultDecimalTickRende
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 
 
-public class AxeBoxLayout implements IAxeLayout{
+public class AxisBoxLayout implements IAxisLayout{
 	/** Default AxeBox layout */
-	public AxeBoxLayout(){
-		setXAxeLabel("X");
-		setYAxeLabel("Y");
-		setZAxeLabel("Z");
+	public AxisBoxLayout(){
+		setXAxisLabel("X");
+		setYAxisLabel("Y");
+		setZAxisLabel("Z");
 
 		setXAxeLabelDisplayed(true);
 		setYAxeLabelDisplayed(true);
@@ -74,32 +74,32 @@ public class AxeBoxLayout implements IAxeLayout{
 	}
 	
 	@Override
-    public String getXAxeLabel() {
+    public String getXAxisLabel() {
 		return xAxeLabel;
 	}
 
 	@Override
-    public void setXAxeLabel(String axeLabel) {
+    public void setXAxisLabel(String axeLabel) {
 		xAxeLabel = axeLabel;
 	}
 
 	@Override
-    public String getYAxeLabel() {
+    public String getYAxisLabel() {
 		return yAxeLabel;
 	}
 
 	@Override
-    public void setYAxeLabel(String axeLabel) {
+    public void setYAxisLabel(String axeLabel) {
 		yAxeLabel = axeLabel;
 	}
 
 	@Override
-    public String getZAxeLabel() {
+    public String getZAxisLabel() {
 		return zAxeLabel;
 	}
 
 	@Override
-    public void setZAxeLabel(String axeLabel) {
+    public void setZAxisLabel(String axeLabel) {
 		zAxeLabel = axeLabel;
 	}
 

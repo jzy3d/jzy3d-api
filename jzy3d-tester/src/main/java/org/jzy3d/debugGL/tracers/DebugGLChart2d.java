@@ -13,7 +13,7 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Timer;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot2d.primitives.Serie2d.Type;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ElapsedTimeTickRenderer;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -39,7 +39,7 @@ public class DebugGLChart2d {
 
         timer.start();
         // debugChart.asTimeChart(120f, 0f, (float)Math.PI*2, "X", "Y");
-        IAxeLayout axe = debugChart.getAxeLayout();
+        IAxisLayout axe = debugChart.getAxeLayout();
         debugChart.getView().setBoundManual(new BoundingBox3d(0, 120f, 0, 1, -1, 1));
         debugChart.getView().setBoundMode(ViewBoundMode.AUTO_FIT);
         axe.setXTickRenderer(new ElapsedTimeTickRenderer());

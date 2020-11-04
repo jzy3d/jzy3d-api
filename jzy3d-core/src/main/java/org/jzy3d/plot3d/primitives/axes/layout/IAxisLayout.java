@@ -5,7 +5,7 @@ import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 
 
-public interface IAxeLayout {
+public interface IAxisLayout {
 	public void setMainColor(Color color);
 	public Color getMainColor();
 
@@ -20,12 +20,12 @@ public interface IAxeLayout {
 	public Color getQuadColor();
 	public void setQuadColor(Color quadColor);
 	
-	public void setXAxeLabel(String label);
-	public void setYAxeLabel(String label);
-	public void setZAxeLabel(String label);
-	public String getXAxeLabel();
-	public String getYAxeLabel();
-	public String getZAxeLabel();
+	public void setXAxisLabel(String label);
+	public void setYAxisLabel(String label);
+	public void setZAxisLabel(String label);
+	public String getXAxisLabel();
+	public String getYAxisLabel();
+	public String getZAxisLabel();
 
 	public void setXAxeLabelDisplayed(boolean axeLabelDisplayed);
 	public void setYAxeLabelDisplayed(boolean axeLabelDisplayed);

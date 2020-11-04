@@ -18,7 +18,7 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
@@ -73,7 +73,7 @@ public class Chart {
     }
 
     public Chart view2d() {
-        IAxeLayout axe = getAxeLayout();
+        IAxisLayout axe = getAxeLayout();
         axe.setZAxeLabelDisplayed(false);
         axe.setTickLineDisplayed(false);
 
@@ -366,7 +366,7 @@ public class Chart {
         return canvas;
     }
 
-    public IAxeLayout getAxeLayout() {
+    public IAxisLayout getAxeLayout() {
         return getView().getAxe().getLayout();
     }
 
