@@ -5,7 +5,7 @@ import java.nio.FloatBuffer;
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.common.nio.Buffers;
@@ -20,13 +20,13 @@ import com.jogamp.opengl.GL2;
  * 
  * @author Martin Pernollet
  */
-public class FeedbackBufferAxisBox extends AxisBox implements IAxe{
+public class FeedbackBufferAxisBox extends AxisBox implements IAxis{
     static Logger logger = Logger.getLogger(FeedbackBufferAxisBox.class);
     
 	public FeedbackBufferAxisBox(BoundingBox3d bbox){
 		super(bbox);
 	}
-	public FeedbackBufferAxisBox(BoundingBox3d bbox, IAxeLayout layout){
+	public FeedbackBufferAxisBox(BoundingBox3d bbox, IAxisLayout layout){
 		super(bbox, layout);
 	}
 	
