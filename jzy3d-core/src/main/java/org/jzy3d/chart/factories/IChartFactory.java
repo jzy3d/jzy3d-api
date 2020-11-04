@@ -13,7 +13,7 @@ import org.jzy3d.maths.IBoundingPolicy;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitives.Serie2d;
-import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
@@ -35,7 +35,7 @@ public interface IChartFactory {
     public View newView(Scene scene, ICanvas canvas, Quality quality);
     public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality);
     public Camera newCamera(Coord3d center);
-    public IAxe newAxe(BoundingBox3d box, View view);
+    public IAxis newAxe(BoundingBox3d box, View view);
     //public Renderer3d newRenderer(View view);
     //public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
     public AbstractOrderingStrategy newOrderingStrategy();

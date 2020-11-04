@@ -5,7 +5,7 @@ import java.util.List;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -14,7 +14,7 @@ import com.jogamp.opengl.glu.GLU;
 
 
 /**Specify services that a concrete Axe must provide.*/
-public interface IAxe {
+public interface IAxis {
 	public void dispose();
 	
 	public void setAxe(BoundingBox3d box);
@@ -25,7 +25,7 @@ public interface IAxe {
 	public BoundingBox3d getBoxBounds();
 	public Coord3d getCenter();
 	
-	public IAxeLayout getLayout();
+	public IAxisLayout getLayout();
 	
 	public List<AxeAnnotation> getAnnotations();
     public void setAnnotations(List<AxeAnnotation> annotations);

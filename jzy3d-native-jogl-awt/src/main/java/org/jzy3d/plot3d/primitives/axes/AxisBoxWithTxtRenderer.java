@@ -4,7 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
@@ -19,8 +19,8 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class AxisBoxWithTxtRenderer extends AxisBox implements IAxe {
-	public AxisBoxWithTxtRenderer(BoundingBox3d bbox, IAxeLayout layout) {
+public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
+	public AxisBoxWithTxtRenderer(BoundingBox3d bbox, IAxisLayout layout) {
         super(bbox, layout);
     }
 
@@ -103,17 +103,17 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxe {
 			xlab = center.x;
 			ylab = axeLabelDist * (yrange / tickLength) * dist * ydir + ypos;
 			zlab = axeLabelDist * (zrange / tickLength) * dist * zdir + zpos;
-			axeLabel = layout.getXAxeLabel();
+			axeLabel = layout.getXAxisLabel();
 		} else if (direction == AXE_Y) {
 			xlab = axeLabelDist * (xrange / tickLength) * dist * xdir + xpos;
 			ylab = center.y;
 			zlab = axeLabelDist * (zrange / tickLength) * dist * zdir + zpos;
-			axeLabel = layout.getYAxeLabel();
+			axeLabel = layout.getYAxisLabel();
 		} else {
 			xlab = axeLabelDist * (xrange / tickLength) * dist * xdir + xpos;
 			ylab = axeLabelDist * (yrange / tickLength) * dist * ydir + ypos;
 			zlab = center.z;
-			axeLabel = layout.getZAxeLabel();
+			axeLabel = layout.getZAxisLabel();
 		}
 
 		if ((direction == AXE_X && layout.isXAxeLabelDisplayed())

@@ -23,7 +23,7 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.axes.AxisBox;
-import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
@@ -71,7 +71,7 @@ public class SWTChartFactory extends NativeChartFactory {
     }
 
     @Override
-    public IAxe newAxe(BoundingBox3d box, View view) {
+    public IAxis newAxe(BoundingBox3d box, View view) {
         AxisBox axe = new AxisBox(box);
         axe.setView(view);
         return axe;

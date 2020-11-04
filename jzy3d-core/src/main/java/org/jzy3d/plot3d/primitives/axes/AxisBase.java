@@ -5,7 +5,7 @@ import java.util.List;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -18,16 +18,16 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class AxeBase implements IAxe {
+public class AxisBase implements IAxis {
 
 	/** Create a simple axe centered on (0,0,0), with a dimension of 1. */
-	public AxeBase() {
+	public AxisBase() {
 		setAxe(new BoundingBox3d(0, 1, 0, 1, 0, 1));
 		setScale(new Coord3d(1.0f, 1.0f, 1.0f));
 	}
 
 	/** Create a simple axe centered on (box.xmin, box.ymin, box.zmin) */
-	public AxeBase(BoundingBox3d box) {
+	public AxisBase(BoundingBox3d box) {
 		setAxe(box);
 		setScale(new Coord3d(1.0f, 1.0f, 1.0f));
 	}
@@ -82,7 +82,7 @@ public class AxeBase implements IAxe {
 	}
 
 	@Override
-	public IAxeLayout getLayout() {
+	public IAxisLayout getLayout() {
 		return layout;
 	}
 
@@ -103,7 +103,7 @@ public class AxeBase implements IAxe {
 
 	protected Coord3d scale;
 	protected BoundingBox3d bbox;
-	protected IAxeLayout layout;
+	protected IAxisLayout layout;
 
 	protected SpaceTransformer spaceTransformer;
 

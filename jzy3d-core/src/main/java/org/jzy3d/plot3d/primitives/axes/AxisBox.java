@@ -9,8 +9,8 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Vector3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axes.layout.AxeBoxLayout;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.AxisBoxLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -30,14 +30,14 @@ import com.jogamp.opengl.glu.GLU;
  * 
  * @author Martin Pernollet
  */
-public class AxisBox implements IAxe {
+public class AxisBox implements IAxis {
     static Logger LOGGER = Logger.getLogger(AxisBox.class);
 
     public AxisBox(BoundingBox3d bbox) {
-        this(bbox, new AxeBoxLayout());
+        this(bbox, new AxisBoxLayout());
     }
 
-    public AxisBox(BoundingBox3d bbox, IAxeLayout layout) {
+    public AxisBox(BoundingBox3d bbox, IAxisLayout layout) {
         this.layout = layout;
         if (bbox.valid())
             setAxe(bbox);
@@ -330,17 +330,17 @@ public class AxisBox implements IAxe {
             xlab = center.x;
             ylab = axeLabelDist * (yrange / tickLength) * dist * ydir + ypos;
             zlab = axeLabelDist * (zrange / tickLength) * dist * zdir + zpos;
-            axeLabel = layout.getXAxeLabel();
+            axeLabel = layout.getXAxisLabel();
         } else if (isY(direction)) {
             xlab = axeLabelDist * (xrange / tickLength) * dist * xdir + xpos;
             ylab = center.y;
             zlab = axeLabelDist * (zrange / tickLength) * dist * zdir + zpos;
-            axeLabel = layout.getYAxeLabel();
+            axeLabel = layout.getYAxisLabel();
         } else {
             xlab = axeLabelDist * (xrange / tickLength) * dist * xdir + xpos;
             ylab = axeLabelDist * (yrange / tickLength) * dist * ydir + ypos;
             zlab = center.z;
-            axeLabel = layout.getZAxeLabel();
+            axeLabel = layout.getZAxisLabel();
         }
 
         drawAxisLabel(painter, gl, glu, cam, direction, color, ticksTxtBounds, xlab, ylab, zlab, axeLabel);
@@ -981,7 +981,7 @@ public class AxisBox implements IAxe {
     }
 
     @Override
-    public IAxeLayout getLayout() {
+    public IAxisLayout getLayout() {
         return layout;
     }
 
@@ -1044,7 +1044,7 @@ public class AxisBox implements IAxe {
     // use this text renderer to get occupied volume by text
     protected ITextRenderer txt = new TextBitmapRenderer();
 
-    protected IAxeLayout layout;
+    protected IAxisLayout layout;
 
     protected BoundingBox3d boxBounds;
     protected BoundingBox3d wholeBounds;

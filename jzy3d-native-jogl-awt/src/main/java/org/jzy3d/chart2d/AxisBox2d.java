@@ -8,7 +8,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.AxisBox;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
+import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
@@ -19,7 +19,7 @@ import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
 
 public class AxisBox2d extends AxisBox {
-    public AxisBox2d(BoundingBox3d bbox, IAxeLayout layout) {
+    public AxisBox2d(BoundingBox3d bbox, IAxisLayout layout) {
         super(bbox, layout);
     }
 

@@ -16,7 +16,7 @@ import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axes.AxisBox;
-import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -71,7 +71,7 @@ public class AWTView extends ChartView {
     }
 
     @Override
-    protected void renderAxeBox(IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
+    protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
         	GL gl = ((NativeDesktopPainter)painter).getGL();
             GLU glu = ((NativeDesktopPainter)painter).getGLU();

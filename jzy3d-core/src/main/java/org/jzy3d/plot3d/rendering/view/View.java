@@ -19,7 +19,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.AxisBox;
-import org.jzy3d.plot3d.primitives.axes.IAxe;
+import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -78,7 +78,7 @@ public class View {
     protected boolean axeBoxDisplayed = true;
     protected boolean squared = true;
     protected Camera cam;
-    protected IAxe axe;
+    protected IAxis axe;
     protected Quality quality;
     protected Scene scene;
     protected ICanvas canvas;
@@ -530,12 +530,12 @@ public class View {
 
     /* CONTROLS ANNOTATIONS & GENERAL RENDERING */
 
-    public void setAxe(IAxe ax) {
+    public void setAxe(IAxis ax) {
         axe = ax;
         updateBounds();
     }
 
-    public IAxe getAxe() {
+    public IAxis getAxe() {
         return axe;
     }
 
@@ -1087,7 +1087,7 @@ public class View {
         renderAxeBox(axe, scene, cam, scaling, axeBoxDisplayed);
     }
     
-    protected void renderAxeBox(IAxe axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
+    protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
             painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
 
