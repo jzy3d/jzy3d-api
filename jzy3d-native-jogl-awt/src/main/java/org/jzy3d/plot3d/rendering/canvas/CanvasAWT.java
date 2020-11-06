@@ -114,7 +114,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeScreenC
             // - is slower than rendering in GL2 Thread
             // - throws java.lang.InterruptedException when rendering occurs
             // while closing the window
-            display();
+            display(); // JOGL
         } else {
             // -- Method2 --
             // Composite.repaint() is required with post/pre rendering, for
@@ -127,7 +127,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeScreenC
             //
             // Implies blinking with some JRE version (6.18, 6.17) but not with
             // some other (6.5)
-            repaint();
+            repaint(); // AWT
         }
     }
 
