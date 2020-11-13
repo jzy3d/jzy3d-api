@@ -314,12 +314,16 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 		glut.glutBitmapString(font, string);
 	}
 	
-	/** JGL only */
+	/** JGL only. Will throw exception */
 	@Override
 	public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c) {
 		throw new NotImplementedException();
 	}
 
+	@Override
+	public int glutBitmapLength(int font, String string) {
+		return glut.glutBitmapLength(font, string);
+	}
 
 	// GL LISTS
 

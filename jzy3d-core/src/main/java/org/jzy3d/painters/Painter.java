@@ -146,8 +146,9 @@ public interface Painter {
     public void glRasterPos3f(float x, float y, float z);
     public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, byte[] bitmap, int bitmap_offset);
 	
-    public void glutBitmapString(final int font, final String string);
-    
+    public void glutBitmapString(int font, String string);
+    public int glutBitmapLength(int font, String string);
+
     /** An interface for AWT user, jGL only @since 2.0.0 */
 	public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c);
 

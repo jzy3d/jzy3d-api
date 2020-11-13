@@ -10,16 +10,13 @@ import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 public interface ITextRenderer {
-	public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color);
-	public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset);	
-	public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset);
-	public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord3d sceneOffset);
+	public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color);
+	public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset);	
+	public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset);
+	public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord3d sceneOffset);
 	
-	public void drawSimpleText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Color color);
+	public void drawSimpleText(Painter painter, Camera cam, String s, Coord3d position, Color color);
 	
 	public SpaceTransformer getSpaceTransformer();
     public void setSpaceTransformer(SpaceTransformer transformer);

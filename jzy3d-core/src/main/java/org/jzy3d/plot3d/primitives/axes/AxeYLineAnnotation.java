@@ -12,7 +12,7 @@ public class AxeYLineAnnotation implements AxeAnnotation {
     protected float width = 3;
 
     @Override
-    public void draw(Painter painter, GL gl, AxisBox axe) {
+    public void draw(Painter painter, AxisBox axe) {
         Range xrange = axe.getBoxBounds().getXRange();
         Range zrange = axe.getBoxBounds().getYRange();
         drawLineGL2(painter, xrange, zrange);

@@ -14,9 +14,7 @@ import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.glu.GLU;
 
 public class AxisBox2d extends AxisBox {
     public AxisBox2d(BoundingBox3d bbox, IAxisLayout layout) {
@@ -35,12 +33,12 @@ public class AxisBox2d extends AxisBox {
      * Renders only X and Y ticks.
      */
     @Override
-    public void drawTicksAndLabels(Painter painter, GL gl, GLU glu, Camera camera) {
+    public void drawTicksAndLabels(Painter painter) {
         wholeBounds.reset();
         wholeBounds.add(boxBounds);
 
-        drawTicksAndLabelsX(painter, gl, glu, camera);
-        drawTicksAndLabelsY(painter, gl, glu, camera);
+        drawTicksAndLabelsX(painter);
+        drawTicksAndLabelsY(painter);
     }
 
     /** Force given X axis to be used for tick placement */
@@ -68,21 +66,20 @@ public class AxisBox2d extends AxisBox {
 
     /** Draws Y axis label vertically. */
     @Override
-    public void drawAxisLabel(Painter painter, GL gl, GLU glu, Camera cam, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
+    public void drawAxisLabel(Painter painter, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
         Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
         BoundingBox3d labelBounds = null;
 
         if (isXDisplayed(direction)) {
 //            doTransform(gl);
-            labelBounds = txt.drawText(painter, gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            labelBounds = txt.drawText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         } else if (isYDisplayed(direction)) {
-            labelBounds = txt.drawText(painter, gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            labelBounds = txt.drawText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
             //labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         }
         if (labelBounds != null)
             ticksTxtBounds.add(labelBounds);
         doTransform(painter);
-
     }
 
     /* VERTICAL ROTATION */
@@ -93,67 +90,52 @@ public class AxisBox2d extends AxisBox {
     
     public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
         @Override
-        public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color,
-                Coord2d screenOffset, Coord3d sceneOffset) {
+        public BoundingBox3d drawText(Painter painter, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
             painter.color(color);
 
             // compute a corrected position according to layout
-            Coord3d posScreen = cam.modelToScreen(painter, position);
-            float strlen = glut.glutBitmapLength(font, text);
+            Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
+            float strlen = painter.glutBitmapLength(font, text);
             float x = computeXWithAlign(halign, posScreen, strlen, 0.0f);
             float y = computeYWithAlign(valign, posScreen, 0.0f);
             Coord3d posScreenShifted = new Coord3d(x + screenOffset.x, y + screenOffset.y, posScreen.z);
 
             Coord3d posReal;
             try {
-                posReal = cam.screenToModel(painter, posScreenShifted);
+                posReal = painter.getCamera().screenToModel(painter, posScreenShifted);
             } catch (RuntimeException e) {
                 Logger.getLogger(TextBitmapRenderer.class).error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
                 return new BoundingBox3d();
             }
 
             // Draws actual string <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-            rotateText(gl, posReal); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            rotateText(painter, posReal); // <<<<<<<<<<<<<<<<<<<<<<<<<<<<
             // CETTE ROTATION NE MARCHE PAS ET AFFECTE LE BON RENDU QUAND ON UTILISE BOUNDING POLICY!!
             
-            glRasterPos(painter, gl, sceneOffset, Coord3d.ORIGIN);
+            glRasterPos(painter, sceneOffset, Coord3d.ORIGIN);
             glut.glutBitmapString(font, text);
             
-            return computeTextBounds(painter, cam, posScreenShifted, strlen);
+            return computeTextBounds(painter, posScreenShifted, strlen);
         }
 
         // CUSTOM ROTATION
         
-        public void rotateText(GL gl, Coord3d posReal) {
-            gl.getGL2().glPushMatrix();
+        public void rotateText(Painter painter, Coord3d posReal) {
+            painter.glPushMatrix();
             
-            gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-            loadIdentity(gl);
-            rotateOf(gl, 90, AXE_Z);
-            translateTo(gl, posReal, false);
-            gl.getGL2().glScalef(scale.x, scale.y, scale.z);
+            painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+            painter.glLoadIdentity();
+            painter.glRotatef(90, 0, 0, 1);
+            //rotateOf(gl, 90, AXE_Z);
+            //translateTo(gl, posReal, false);
             
-            gl.getGL2().glPopMatrix();
-        }
-
-        public void loadIdentity(GL gl) {
-            gl.getGL2().glLoadIdentity();
-        }
-        
-        public void rotateOf(GL gl, double angle, int axis) {
-            gl.getGL2().glRotatef((float) angle, 0, 0, 1);
-        }
-
-        public void translateTo(GL gl, Coord3d position, boolean reverse) {
-            if (gl.isGLES()) {
-                float reverseCoef = (reverse ? -1.0f : 1.0f);
-                GLES2CompatUtils.glTranslatef(reverseCoef * position.x, reverseCoef * position.y, reverseCoef * position.z);
-            } else {
-                if (reverse)
-                    gl.getGL2().glTranslatef(-position.x, -position.y, -position.z);
-                else
-                    gl.getGL2().glTranslatef(position.x, position.y / 2, position.z);
-            }
+            if (false)
+            	painter.glTranslatef(-posReal.x, -posReal.y, -posReal.z);
+            else
+            	painter.glTranslatef(posReal.x, posReal.y / 2, posReal.z);
+            
+            painter.glScalef(scale.x, scale.y, scale.z);
+            painter.glPopMatrix();
         }
     }
     

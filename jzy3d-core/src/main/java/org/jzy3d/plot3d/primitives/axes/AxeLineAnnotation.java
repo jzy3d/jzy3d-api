@@ -10,7 +10,7 @@ public class AxeLineAnnotation {
     protected Color color = Color.RED;
     protected float width = 3;
 
-    public synchronized void drawVerticalLine(Painter painter, GL gl, Range yrange, float value) {
+    public synchronized void drawVerticalLine(Painter painter, Range yrange, float value) {
         painter.glLineWidth(width);
         painter.glBegin(GL.GL_LINE_STRIP);
         painter.glColor4f(color.r, color.g, color.b, color.a);
@@ -19,7 +19,7 @@ public class AxeLineAnnotation {
         painter.glEnd();
     }
     
-    public synchronized void drawHorizontalLineGL2(Painter painter, GL gl, Range xrange, float value) {
+    public synchronized void drawHorizontalLineGL2(Painter painter, Range xrange, float value) {
         painter.glLineWidth(width);
         painter.glBegin(GL.GL_LINE_STRIP);
         painter.glColor4f(color.r, color.g, color.b, color.a);
