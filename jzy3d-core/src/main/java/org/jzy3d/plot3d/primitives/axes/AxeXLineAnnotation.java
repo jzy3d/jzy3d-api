@@ -3,16 +3,14 @@ package org.jzy3d.plot3d.primitives.axes;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL;
-
 public class AxeXLineAnnotation extends AxeLineAnnotation implements AxeAnnotation {
     protected float value;
 
     @Override
-    public void draw(Painter painter, GL gl, AxisBox axe) {
+    public void draw(Painter painter, AxisBox axe) {
         Range yrange = axe.getBoxBounds().getYRange();
 
-        drawVerticalLine(painter, gl, yrange, value);
+        drawVerticalLine(painter, yrange, value);
     }
    
     public synchronized float getValue() {

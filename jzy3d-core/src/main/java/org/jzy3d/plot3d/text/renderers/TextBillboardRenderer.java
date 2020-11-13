@@ -12,7 +12,6 @@ import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link TextBillboardRenderer} allows writing 2d text always facing the
@@ -52,14 +51,10 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
     }
 
     @Override
-    public void drawSimpleText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Color color) {
+    public void drawSimpleText(Painter painter, Camera cam, String s, Coord3d position, Color color) {
         glRaster(painter, position, color);
-
+        
         printString(painter, s, Halign.RIGHT, Valign.GROUND);
-    }
-
-    /** Draw a string at the specified position. */
-    public void drawText(GL gl, String s, Coord3d position, Halign halign, Valign valign, Color color) {
     }
 
     /**
@@ -67,17 +62,17 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
      * occupied by the string according to the current Camera configuration.
      */
     @Override
-    public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
         glRaster(painter, position, color);
         
         BillBoardSize dims = printString(painter, s, halign, valign);
-        BoundingBox3d txtBounds = computeTextBounds(painter, cam, position, dims);
+        BoundingBox3d txtBounds = computeTextBounds(painter, position, dims);
         return txtBounds;
     }
 
 	
-    protected BoundingBox3d computeTextBounds(Painter painter, Camera cam, Coord3d position, BillBoardSize dims) {
-        Coord3d posScreen = cam.modelToScreen(painter, position);
+    protected BoundingBox3d computeTextBounds(Painter painter, Coord3d position, BillBoardSize dims) {
+        Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
         Coord3d botLeft = new Coord3d();
         Coord3d topRight = new Coord3d();
 
@@ -89,8 +84,8 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
         topRight.z = botLeft.z;
 
         BoundingBox3d txtBounds = new BoundingBox3d();
-        txtBounds.add(cam.screenToModel(painter, botLeft));
-        txtBounds.add(cam.screenToModel(painter, topRight));
+        txtBounds.add(painter.getCamera().screenToModel(painter, botLeft));
+        txtBounds.add(painter.getCamera().screenToModel(painter, topRight));
         return txtBounds;
     }
 

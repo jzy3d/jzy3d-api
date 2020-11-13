@@ -73,8 +73,8 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 	protected void drawVertexLabel(Painter painter, GL gl, GLU glu, Camera cam,
 			V v, Coord2d coord, Color color) {
 		Coord3d textPosition = new Coord3d(coord, Z);
-		txt.drawText(painter, gl, glu, cam, v.toString(), textPosition,
-				Halign.CENTER, Valign.BOTTOM, color, labelScreenOffset, labelSceneOffset);
+		txt.drawText(painter, v.toString(), textPosition, Halign.CENTER, Valign.BOTTOM, color,
+				labelScreenOffset, labelSceneOffset);
 	}
 
 	protected void drawEdge(Painter painter, GL gl, GLU glu, Camera cam, E e,

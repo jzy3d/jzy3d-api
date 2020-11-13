@@ -6,10 +6,8 @@ import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
-import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.common.nio.Buffers;
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
 /**
@@ -35,7 +33,7 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis{
 	 * and determine which quad where displayed or not.
 	 */
 	@Override
-	protected boolean [] getHiddenQuads(Painter painter, GL gl, Camera cam){
+	protected boolean [] getHiddenQuads(Painter painter){
 		int feedbacklength = 1024;
 		FloatBuffer floatbuffer = Buffers.newDirectFloatBuffer(feedbacklength);
 		float [] feedback = new float[feedbacklength];
@@ -43,7 +41,7 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis{
 		// Draw the cube into feedback buffer
 		painter.glFeedbackBuffer(feedbacklength, GL2.GL_3D_COLOR, floatbuffer);
 		painter.glRenderMode(GL2.GL_FEEDBACK);
-		drawCube(gl, GL2.GL_FEEDBACK, painter);
+		drawCube(painter, GL2.GL_FEEDBACK);
 		painter.glRenderMode(GL2.GL_RENDER);
 		
 		// Parse feedback buffer and return hidden quads

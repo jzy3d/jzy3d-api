@@ -12,8 +12,6 @@ import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 /**
@@ -61,7 +59,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     }
 
     @Override
-    public void drawSimpleText(Painter painter, GL gl, GLU glu, Camera cam, String s, Coord3d position, Color color) {
+    public void drawSimpleText(Painter painter, Camera cam, String s, Coord3d position, Color color) {
         glRaster(painter, position, color);
     	
         painter.glutBitmapString(font, s);
@@ -72,19 +70,19 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
      * occupied by the string according to the current Camera configuration.
      */
     @Override
-    public BoundingBox3d drawText(Painter painter, GL gl, GLU glu, Camera cam, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    public BoundingBox3d drawText(Painter painter, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
         painter.color(color);
 
         // compute a corrected position according to layout
-        Coord3d posScreen = cam.modelToScreen(painter, position);
-        float strlen = glut.glutBitmapLength(font, text);
+        Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
+        float strlen = painter.glutBitmapLength(font, text);
         float x = computeXWithAlign(halign, posScreen, strlen, 0.0f);
         float y = computeYWithAlign(valign, posScreen, 0.0f);
         Coord3d posScreenShifted = new Coord3d(x + screenOffset.x, y + screenOffset.y, posScreen.z);
         
         Coord3d posReal;
         try {
-            posReal = cam.screenToModel(painter, posScreenShifted);
+            posReal = painter.getCamera().screenToModel(painter, posScreenShifted);
         } catch (RuntimeException e) { 
             // TODO: solve this bug due to a Camera.PERSPECTIVE mode.
             LOGGER.error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
@@ -95,12 +93,12 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         //LOGGER.info(text + " @ " + posReal + " with offset : " + sceneOffset);
         
         // Draws actual string
-        glRasterPos(painter, gl, sceneOffset, posReal);
+        glRasterPos(painter, sceneOffset, posReal);
         painter.glutBitmapString(font, text);
-        return computeTextBounds(painter, cam, posScreenShifted, strlen);
+        return computeTextBounds(painter, posScreenShifted, strlen);
     }
 
-    public void glRasterPos(Painter painter, GL gl, Coord3d sceneOffset, Coord3d posReal) {
+    public void glRasterPos(Painter painter, Coord3d sceneOffset, Coord3d posReal) {
         if(spaceTransformer!=null){
             posReal = spaceTransformer.compute(posReal);
         }
@@ -108,7 +106,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         painter.raster(posReal.add(sceneOffset), null);
     }
 
-    protected BoundingBox3d computeTextBounds(Painter painter, Camera cam, Coord3d posScreenShifted, float strlen) {
+    protected BoundingBox3d computeTextBounds(Painter painter, Coord3d posScreenShifted, float strlen) {
         Coord3d botLeft = new Coord3d();
         Coord3d topRight = new Coord3d();
         botLeft.x = posScreenShifted.x;
@@ -119,8 +117,8 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         topRight.z = botLeft.z;
 
         BoundingBox3d txtBounds = new BoundingBox3d();
-        txtBounds.add(cam.screenToModel(painter, botLeft));
-        txtBounds.add(cam.screenToModel(painter, topRight));
+        txtBounds.add(painter.getCamera().screenToModel(painter, botLeft));
+        txtBounds.add(painter.getCamera().screenToModel(painter, topRight));
         return txtBounds;
     }
 
