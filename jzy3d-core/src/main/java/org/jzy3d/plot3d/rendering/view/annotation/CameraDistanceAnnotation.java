@@ -19,7 +19,6 @@ import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * Draws the distance of every scene graph drawable object to camera eye.
@@ -39,11 +38,11 @@ public class CameraDistanceAnnotation extends Point {
 	}
 
 	@Override
-	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+	public void draw(Painter painter) {
 		computeCameraPosition();
-		doTransform(painter, cam);
+		doTransform(painter);
 
-		doDrawCamera(painter, cam);
+		doDrawCamera(painter, painter.getCamera());
 
 		Halign h = Halign.RIGHT;
 		Valign v = Valign.CENTER;

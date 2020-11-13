@@ -7,11 +7,7 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * SymbolHandlers are used to configure a symbol when rendering a {@link LineStrip}.
@@ -35,10 +31,10 @@ public abstract class SymbolHandler {
     public abstract void addSymbolOn(Point point);
 
 
-    public void drawSymbols(Painter painter, GL gl, GLU glu, Camera cam) {
+    public void drawSymbols(Painter painter) {
         for (Drawable d : symbols) {
             d.setSpaceTransformer(spaceTransformer);
-            d.draw(painter, gl, glu, cam);
+            d.draw(painter);
         }
     }
 

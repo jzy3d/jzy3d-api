@@ -5,11 +5,9 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IMultiColorable {
     public ConcurrentScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper) {
@@ -25,8 +23,8 @@ public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IM
     }
     
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, cam);
+    public void draw(Painter painter) {
+        doTransform(painter);
 
         painter.glPointSize(width);
         painter.glBegin(GL.GL_POINTS);
@@ -42,7 +40,7 @@ public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IM
         }
         painter.glEnd();
 
-        doDrawBoundsIfDisplayed(painter, gl, glu, cam);
+        doDrawBoundsIfDisplayed(painter);
     }
 
     @Override

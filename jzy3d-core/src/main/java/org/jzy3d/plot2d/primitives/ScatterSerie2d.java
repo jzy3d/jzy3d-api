@@ -8,8 +8,8 @@ import org.jzy3d.colors.colormaps.ColorMapRedAndGreen;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
-import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.ConcurrentScatterMultiColorList;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.ScatterMultiColorList;
 
 public class ScatterSerie2d implements Serie2d {

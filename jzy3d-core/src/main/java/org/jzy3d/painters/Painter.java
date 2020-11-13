@@ -16,8 +16,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.glu.GLUquadric;
-
 /** 
  * 1.0 way of drawing : 
  * - isolation of actual engine
@@ -209,4 +207,7 @@ public interface Painter {
 	public void glSelectBuffer(int size, IntBuffer buffer);
 	public void gluPickMatrix(double x, double y, double delX, double delY, int[] viewport, int viewport_offset);
 	public void glFlush();
-}
+	
+	
+	public void glEvalCoord2f(float u, float v);
+	public void glMap2f(int target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, FloatBuffer points);}

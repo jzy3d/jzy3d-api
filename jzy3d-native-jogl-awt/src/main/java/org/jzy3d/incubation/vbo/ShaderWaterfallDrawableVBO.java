@@ -7,11 +7,9 @@ import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
-import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 
 public class ShaderWaterfallDrawableVBO extends DrawableVBO implements IMultiColorable {
 	
@@ -30,8 +28,9 @@ public class ShaderWaterfallDrawableVBO extends DrawableVBO implements IMultiCol
 	private ColormapTexture colormapTexure;
 	
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		
+    public void draw(Painter painter) {
+		GL gl = ((NativeDesktopPainter)painter).getGL();
+
 		if (!hasMountedOnce) {
 			mount(painter);
 			this.doSetBoundingBox(this.getBounds());
@@ -45,7 +44,7 @@ public class ShaderWaterfallDrawableVBO extends DrawableVBO implements IMultiCol
 		int idc = gl.getGL2().glGetUniformLocation(shaderProgram.getProgramId(), "transfer");
     	gl.getGL2().glUniform1i(idc, 1);
 		this.setGeometry(GL2.GL_LINES);
-		super.draw(painter, gl, glu, cam);
+		super.draw(painter);
 //		this.setGeometry(GL2.GL_LINES);
 //		bindSecondIndices(gl);
 //		super.draw(gl, glu, cam);

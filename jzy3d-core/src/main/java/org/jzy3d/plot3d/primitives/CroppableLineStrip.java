@@ -21,28 +21,28 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
     }
 
     @Override
-    public void drawLine(Painter painter, GL gl) {
+    public void drawLine(Painter painter) {
         painter.glBegin(GL.GL_LINE_STRIP);
 
         painter.glLineWidth(wfwidth);
         if (filter == null)
-            doDrawAllLines(painter, gl);
+            doDrawAllLines(painter);
         else
-            doDrawLinesFiltered(painter, gl);
+            doDrawLinesFiltered(painter);
         painter.glEnd();
     }
 
     @Override
-    public void drawPoints(Painter painter, GL gl) {
+    public void drawPoints(Painter painter) {
         painter.glBegin(GL.GL_POINTS);
         if (filter == null)
-            doDrawAllPoints(painter, gl);
+            doDrawAllPoints(painter);
         else
-            doDrawPointsFiltered(painter, gl);
+            doDrawPointsFiltered(painter);
         painter.glEnd();
     }
 
-    private void doDrawAllLines(Painter painter, GL gl) {
+    private void doDrawAllLines(Painter painter) {
         if (wfcolor == null) {
             for (Point p : points) {
                 painter.color(p.rgb);
@@ -56,7 +56,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
         }
     }
 
-    private void doDrawLinesFiltered(Painter painter, GL gl) {
+    private void doDrawLinesFiltered(Painter painter) {
         for (int i = 0; i < filter.length; i++) {
             if (filter[i]) {
                 Point p = points.get(i);
@@ -69,7 +69,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
         }
     }
 
-    private void doDrawAllPoints(Painter painter, GL gl) {
+    private void doDrawAllPoints(Painter painter) {
         for (Point p : points) {
             if (wfcolor == null)
                 painter.color(p.rgb);
@@ -79,7 +79,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
         }
     }
 
-    private void doDrawPointsFiltered(Painter painter, GL gl) {
+    private void doDrawPointsFiltered(Painter painter) {
         for (int i = 0; i < filter.length; i++) {
             if (filter[i]) {
                 Point p = points.get(i);

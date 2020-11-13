@@ -7,12 +7,10 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 /**
@@ -51,10 +49,10 @@ public class Sphere extends Wireframeable implements ISingleColorable {
     /********************************************************/
 
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, cam);
+    public void draw(Painter painter) {
+        doTransform(painter);
         doDrawSphere(painter);
-        doDrawBoundsIfDisplayed(painter, gl, glu, cam);
+        doDrawBoundsIfDisplayed(painter);
     }
 
 	protected void doDrawSphere(Painter painter) {

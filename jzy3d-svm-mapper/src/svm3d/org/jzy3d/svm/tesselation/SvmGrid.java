@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-import libsvm.svm_node;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.svm.utils.Conversion;
+
+import libsvm.svm_node;
 
 public class SvmGrid extends OrthonormalGrid{
 	public SvmGrid(Range xyrange, int xysteps){

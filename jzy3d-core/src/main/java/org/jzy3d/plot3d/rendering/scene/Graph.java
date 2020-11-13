@@ -17,9 +17,7 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * The scene's {@link Graph} basically stores the scene content and facilitate
@@ -172,9 +170,6 @@ public class Graph {
             listener.onMountAll();
         }
     }
-
-    
-    
     
     /* */
 
@@ -193,38 +188,36 @@ public class Graph {
      * {@link AbstractOrderingStrategy}.
      * @param painter TODO
      */
-    public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
-        draw(painter, gl, glu, camera, components, sort);
+    public void draw(Painter painter) {
+        draw(painter, components, sort);
     }
 
     protected TicToc t = new TicToc();
 
-    public synchronized void draw(Painter painter, GL gl, GLU glu, Camera camera, List<Drawable> components, boolean sort) {
+    public synchronized void draw(Painter painter, List<Drawable> components, boolean sort) {
         painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
         if (!sort) {
-            drawSimple(painter, gl, glu, camera, components);
+            drawSimple(painter, components);
         } else {
-            drawDecomposition(painter, gl, glu, camera);
+            drawDecomposition(painter);
         }
     }
 
-    public void drawSimple(Painter painter, GL gl, GLU glu, Camera camera, List<Drawable> components) {
-        // render all items of the graph
-        // synchronized(components){
+    /** render all items of the graph*/
+    public void drawSimple(Painter painter, List<Drawable> components) {
         for (Drawable d : components)
             if (d.isDisplayed())
-                d.draw(painter, gl, glu, camera);
-        // }
+                d.draw(painter);
     }
 
-    public void drawDecomposition(Painter painter, GL gl, GLU glu, Camera camera) {
-        // Render sorted monotypes
+    /** render all items of the graph after decomposing all composite item into primitive drawables */
+    public void drawDecomposition(Painter painter) {
         List<Drawable> monotypes = getDecomposition();
-        strategy.sort(monotypes, camera);
+        strategy.sort(monotypes, painter.getCamera());
 
         for (Drawable d : monotypes) {
             if (d.isDisplayed())
-                d.draw(painter, gl, glu, camera);
+                d.draw(painter);
         }
     }
 

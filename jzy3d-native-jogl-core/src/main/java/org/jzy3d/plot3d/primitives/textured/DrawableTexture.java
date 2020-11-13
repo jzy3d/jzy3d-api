@@ -14,13 +14,11 @@ import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
@@ -176,13 +174,13 @@ public class DrawableTexture extends Drawable implements ITranslucent {
     protected Transform textureScale;
 
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, cam);
+    public void draw(Painter painter) {
+        doTransform(painter);
         if (textureScale != null)
             textureScale.execute(painter, false);
 
         // Retrieve resource content
-        Texture texture = resource.getTexture(painter, gl);
+        Texture texture = resource.getTexture(painter);
         TextureCoords coords = resource.getCoords();
 
         // Bind texture & set color filter
@@ -190,7 +188,7 @@ public class DrawableTexture extends Drawable implements ITranslucent {
         painter.colorAlphaFactor(filter, alpha);
 
         // Draw
-        before(painter, gl);
+        before(painter);
 
         painter.glBegin(GL2GL3.GL_QUADS);
 
@@ -225,17 +223,17 @@ public class DrawableTexture extends Drawable implements ITranslucent {
 
         painter.glEnd();
         
-        after(painter, gl);
+        after(painter);
     }
 
-    protected void before(Painter painter, GL gl) {
+    protected void before(Painter painter) {
     	painter.glPushMatrix();
         painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
         painter.glEnable(GL.GL_TEXTURE_2D);
         painter.glTexEnvf(GL.GL_TEXTURE_2D, GL2ES1.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
     }
 
-    protected void after(Painter painter, GL gl) {
+    protected void after(Painter painter) {
         painter.glDisable(GL.GL_TEXTURE_2D);
         painter.glTexEnvi(GL2ES1.GL_TEXTURE_ENV, GL2ES1.GL_TEXTURE_ENV_MODE, GL2ES1.GL_MODULATE);
         painter.glPopMatrix();

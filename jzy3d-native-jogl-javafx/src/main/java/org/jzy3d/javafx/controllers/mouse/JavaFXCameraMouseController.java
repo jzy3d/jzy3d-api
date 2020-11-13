@@ -1,16 +1,16 @@
 package org.jzy3d.javafx.controllers.mouse;
 
-import javafx.event.EventHandler;
-import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.javafx.controllers.JavaFXChartController;
 import org.jzy3d.maths.Coord2d;
+
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 
 public class JavaFXCameraMouseController extends AbstractCameraController implements JavaFXChartController {
     

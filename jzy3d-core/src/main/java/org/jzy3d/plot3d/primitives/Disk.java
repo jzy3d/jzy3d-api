@@ -6,12 +6,10 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 
 public class Disk extends Wireframeable implements ISingleColorable {
 
@@ -39,13 +37,13 @@ public class Disk extends Wireframeable implements ISingleColorable {
 	/* */
 
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, cam);
-		doDrawDisk(painter, glu);
-		doDrawBoundsIfDisplayed(painter, gl, glu, cam);
+    public void draw(Painter painter) {
+		doTransform(painter);
+		doDrawDisk(painter);
+		doDrawBoundsIfDisplayed(painter);
 	}
 
-	protected void doDrawDisk(Painter painter, GLU glu) {
+	protected void doDrawDisk(Painter painter) {
 		painter.glTranslatef(x, y, z);
 		painter.glLineWidth(wfwidth);
 

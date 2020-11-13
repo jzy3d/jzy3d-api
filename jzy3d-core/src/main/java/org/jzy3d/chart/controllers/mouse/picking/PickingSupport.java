@@ -125,7 +125,7 @@ public class PickingSupport {
     	        for(Pickable pickable: pickables.values()){
     	        	setCurrentName(painter, pickable);
     	        	pickable.setTransform(viewTransform);
-    	        	pickable.draw(painter, gll, gluu, camera);
+    	        	pickable.draw(painter);
     	        	releaseCurrentName(painter);
     	        }
 	        }

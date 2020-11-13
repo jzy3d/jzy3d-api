@@ -11,7 +11,6 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLFBODrawable;

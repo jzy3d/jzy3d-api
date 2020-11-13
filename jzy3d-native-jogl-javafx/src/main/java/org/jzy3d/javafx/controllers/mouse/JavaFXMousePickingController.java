@@ -3,10 +3,6 @@ package org.jzy3d.javafx.controllers.mouse;
 
 import java.awt.event.MouseWheelEvent;
 
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.input.MouseEvent;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
@@ -22,6 +18,10 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
+
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 
 public class JavaFXMousePickingController extends AbstractCameraController implements EventHandler<MouseEvent>, JavaFXChartController, IMousePickingController {
     protected Node node;

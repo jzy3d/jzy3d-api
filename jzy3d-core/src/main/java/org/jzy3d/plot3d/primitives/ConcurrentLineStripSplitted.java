@@ -9,7 +9,6 @@ import org.jzy3d.painters.Painter;
 import com.jogamp.opengl.GL;
 
 public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
-    // List<Integer> idOn = new ArrayList<Integer>();
     List<Integer> idOff = new ArrayList<Integer>();
 
     public ConcurrentLineStripSplitted() {
@@ -29,17 +28,17 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
     }
 
     @Override
-    public void drawLine(Painter painter, GL gl) {
+    public void drawLine(Painter painter) {
         painter.glLineWidth(wfwidth);
 
         if (wfcolor == null) {
-            drawLineSegmentsByPointColor(painter, gl);
+            drawLineSegmentsByPointColor(painter);
         } else {
-            drawLineSegmentsByWireColor(painter, gl);
+            drawLineSegmentsByWireColor(painter);
         }
     }
 
-    public void drawLineSegmentsByPointColor(Painter painter, GL gl) {
+    public void drawLineSegmentsByPointColor(Painter painter) {
         int nPt = 0;
         int nOff = 0;
         int nextOff = idOff.size() != 0 ? idOff.get(nOff) : 0;
@@ -66,7 +65,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
         painter.glEnd();
     }
 
-    public void drawLineSegmentsByWireColor(Painter painter, GL gl) {
+    public void drawLineSegmentsByWireColor(Painter painter) {
         int nPt = 0;
         int nOff = 0;
         int nextOff = -1;

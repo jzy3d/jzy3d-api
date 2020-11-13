@@ -6,11 +6,9 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * An AxeBase provide a simple 3-segment object which is configured by a
@@ -44,7 +42,7 @@ public class AxisBase implements IAxis {
 	}
 
 	@Override
-	public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+	public void draw(Painter painter) {
 		painter.glLoadIdentity();
 		painter.glScalef(scale.x, scale.y, scale.z);
 		painter.glLineWidth(2);

@@ -23,7 +23,7 @@ public class SharedTexture implements IGLBindedResource{
         this.file = file;
     }
 
-    public Texture getTexture(Painter painter, GL gl) {
+    public Texture getTexture(Painter painter) {
         if (texture == null)
             mount(painter);
         return texture;

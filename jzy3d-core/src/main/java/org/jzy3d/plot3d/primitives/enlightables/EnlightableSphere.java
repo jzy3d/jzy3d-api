@@ -7,12 +7,10 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A Sphere allows rendering a sphere. <br>
@@ -47,15 +45,14 @@ public class EnlightableSphere extends AbstractEnlightable implements
 	/********************************************************/
 
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, cam);
+    public void draw(Painter painter) {
+		doTransform(painter);
 
 		painter.glTranslatef(x, y, z);
 		
 		applyMaterial(painter); // TODO: shall we avoid calling this @ each draw?
 
-		gl.glLineWidth(wfwidth);
-		// Draw
+		painter.glLineWidth(wfwidth);
 
 		if (facestatus) {
 			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);

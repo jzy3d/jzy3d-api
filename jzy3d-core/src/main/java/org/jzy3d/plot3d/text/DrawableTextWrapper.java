@@ -6,13 +6,9 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.transform.Transform;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link DrawableTextWrapper} wraps any text rendered by an {@link ITextRenderer}
@@ -34,8 +30,8 @@ public class DrawableTextWrapper extends Drawable{
 	/*******************************************************************************************/
 	
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam){
-	    doTransform(painter, cam);
+    public void draw(Painter painter){
+	    doTransform(painter);
 	    BoundingBox3d box = renderer.drawText(painter, txt, position, halign, valign, color, screenOffset, sceneOffset);
 	    if(box!=null)
 	        bbox = box.scale(new Coord3d(1/10,1/10,1/10));

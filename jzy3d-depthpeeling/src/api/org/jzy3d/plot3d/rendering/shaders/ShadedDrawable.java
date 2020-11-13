@@ -20,6 +20,6 @@ public class ShadedDrawable extends Shaderable{
         executeProgram(painter, gl); 
         
         if(drawable!=null)
-            drawable.draw(painter, gl, glu, null);
+            drawable.draw(painter);
     }
 }
