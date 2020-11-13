@@ -11,7 +11,6 @@ import org.jzy3d.plot3d.primitives.Sphere;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 public class SelectableSphere extends Sphere implements Selectable {
 	public SelectableSphere() {
@@ -25,8 +24,8 @@ public class SelectableSphere extends Sphere implements Selectable {
 	}
 
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		super.draw(painter, gl, glu, cam);
+    public void draw(Painter painter) {
+		super.draw(painter);
 
 		// Draws selection anchors
 		painter.glBegin(GL.GL_POINTS);

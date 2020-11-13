@@ -15,10 +15,6 @@ import org.jzy3d.plot3d.primitives.pickable.PickableTexture;
 import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
 import org.jzy3d.plot3d.rendering.textures.TextureFactory;
-import org.jzy3d.plot3d.rendering.view.Camera;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 public class TextureGraph2d<V,E>  extends DefaultDrawableGraph2d<V, E> {
 	public static float TEX_MAPPING_WIDTH = 0.25f;
@@ -51,21 +47,21 @@ public class TextureGraph2d<V,E>  extends DefaultDrawableGraph2d<V, E> {
 	/***********************/
 	
 	@Override
-	protected void drawVertices(Painter painter, GL gl, GLU glu, Camera cam){
+	protected void drawVertices(Painter painter){
 		for(V v: graph.getVertices()){
 			if(highlights.get(v))
-				drawVertexNode(painter, gl, glu, cam, v, layout.get(v), formatter.getHighlightedVertexColor());
+				drawVertexNode(painter, v, layout.get(v), formatter.getHighlightedVertexColor());
 			else
-				drawVertexNode(painter, gl, glu, cam, v, layout.get(v), formatter.getVertexColor());
+				drawVertexNode(painter, v, layout.get(v), formatter.getVertexColor());
 		}
 	}
 	
 	@Override
-	protected void drawVertexNode(Painter painter, GL gl, GLU glu, Camera cam, V v, Coord2d coord, Color color){
+	protected void drawVertexNode(Painter painter, V v, Coord2d coord, Color color){
 		PickableTexture t = vertexTextures.get(v);
 		t.setColorFilter(color);
         t.setPlanePosition(coord);
-        t.draw(painter, gl, glu, cam);
+        t.draw(painter);
 	}
 	
 	/***********************/

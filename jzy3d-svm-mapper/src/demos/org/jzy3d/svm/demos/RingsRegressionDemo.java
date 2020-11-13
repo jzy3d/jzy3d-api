@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import libsvm.svm_parameter;
-
 import org.instantsvm.Parameters;
 import org.instantsvm.XValResult;
 import org.instantsvm.regression.RegressionInputs;
@@ -14,6 +12,8 @@ import org.instantsvm.regression.RegressionSVM;
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.svm.utils.Conversion;
+
+import libsvm.svm_parameter;
 
 public class RingsRegressionDemo extends Abstract3dDemo {
 	public static void main(String[] args) throws IOException {

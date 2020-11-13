@@ -6,11 +6,7 @@ import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * Record the camera position at regular interval and draws
@@ -28,10 +24,10 @@ public class CameraPathAnnotation extends LineStrip{
     }
     
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+    public void draw(Painter painter) {
         updateCameraPath();
         
-        super.draw(painter, gl, glu, cam);
+        super.draw(painter);
     }
 
     public void updateCameraPath() {

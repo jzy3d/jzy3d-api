@@ -17,26 +17,26 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 /**
  * A {@link Drawable} defines objects that may be rendered into an
- * OpenGL context provided by a {@link ICanvas}. <br>
+ * OpenGL context provided by a {@link ICanvas}. 
+ * 
  * A {@link Drawable} must basically provide a rendering function called
  * draw() that receives a reference to a GL2 and a GLU context. It may also use
  * a reference to a Camera in order to implement specific behaviors according to
- * the Camera position. <br>
+ * the Camera position. 
+ * 
  * A {@link Drawable} provides services for setting the transformation
  * factor that is used inside the draw function, as well as a getter of the
  * object's BoundingBox3d. Note that the BoundingBox must be set by a concrete
- * descendant of a {@link Drawable}. <br>
+ * descendant of a {@link Drawable}. 
+ * 
  * A good practice is to define a setData function for initializing a
  * {@link Drawable} and building its polygons. Since each class may have
  * its own inputs, setData is not part of the interface but should be used as a
  * convention. When not defining a setData function, a {@link Drawable}
  * may have its data loaded by an {@link add(Drawable)} function.
- * <p>
+ * 
  * Note: A {@link Drawable} may last provide the information whether it
  * is displayed or not, according to a rendering into the FeedBack buffer. This
  * is currently supported specifically for the {@link AxisBox} object but could
@@ -57,21 +57,15 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Call OpenGL2 routines for rendering the object.
-     * @param gl
-     *            GL2 context
-     * @param glu
-     *            GLU context
-     * @param cam
-     *            a reference to a shooting Camera.
      */
     @Override
-    public abstract void draw(Painter painter, GL gl, GLU glu, Camera cam);
+    public abstract void draw(Painter painter);
 
     public abstract void applyGeometryTransform(Transform transform);
 
     public abstract void updateBounds();
 
-    public void doTransform(Painter painter, Camera cam) {
+    public void doTransform(Painter painter) {
         if (transformBefore != null) {
             if (transformBefore != null)
                 transformBefore.execute(painter, true);
@@ -83,12 +77,12 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
         }
     }
 
-    protected void doDrawBoundsIfDisplayed(Painter painter, GL gl, GLU glu, Camera cam) {
+    protected void doDrawBoundsIfDisplayed(Painter painter) {
         if (isBoundingBoxDisplayed()) {
             Parallelepiped p = new Parallelepiped(getBounds());
             p.setFaceDisplayed(false);
             p.setWireframeColor(getBoundingBoxColor());
-            p.draw(painter, gl, glu, cam);
+            p.draw(painter);
         }
     }
 
@@ -100,7 +94,7 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Set object's transformation that is applied at the beginning of a call to
-     * {@link #draw(Painter,GL,GLU, Camera)}.
+     * {@link #draw(Painter)}.
      * 
      * @param transform
      */
@@ -112,7 +106,7 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Get object's transformation that is applied at the beginning of a call to
-     * {@link #draw(Painter,GL,GLU, Camera)}.
+     * {@link #draw(Painter)}.
      * 
      * @return transform
      */

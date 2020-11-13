@@ -11,10 +11,6 @@ import org.jzy3d.plot3d.primitives.Geometry;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.scene.Decomposition;
-import org.jzy3d.plot3d.rendering.view.Camera;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * Draws the barycenter of an {@link Geometry}
@@ -48,7 +44,7 @@ public class BarycenterAnnotation extends Composite{
     }
 
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+    public void draw(Painter painter) {
         bary.xyz = annotated.getBarycentre();
         int k = 0;
         for(LineStrip line: lines){
@@ -56,7 +52,7 @@ public class BarycenterAnnotation extends Composite{
                 line.get(1).xyz = annotated.get(k).xyz.clone();
             k++;
         }
-        super.draw(painter, gl, glu, camera);
+        super.draw(painter);
     }
 
     public static List<BarycenterAnnotation> annotate(Composite composite){

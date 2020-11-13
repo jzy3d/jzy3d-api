@@ -13,13 +13,11 @@ import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 
 public class EnlightablePolygon extends AbstractEnlightable {
 
@@ -37,8 +35,8 @@ public class EnlightablePolygon extends AbstractEnlightable {
 	/**********************************************************************/
 
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, cam);
+    public void draw(Painter painter) {
+		doTransform(painter);
 
 		applyMaterial(painter); 
 		

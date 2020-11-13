@@ -562,5 +562,23 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glFlush() {
 		gl.glFlush();
 	}
+	
+	
+	
+	
+
+	@Override
+	public void glEvalCoord2f(float u, float v) {
+		gl.getGL2().glEvalCoord2f(u, v);
+	}
+
+	@Override
+	public void glMap2f(int target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride,
+			int vorder, FloatBuffer points) {
+		gl.getGL2().glMap2f(target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, points);
+	}
+	
+	
+	
 
 }

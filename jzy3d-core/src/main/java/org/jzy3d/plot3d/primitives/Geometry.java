@@ -18,7 +18,6 @@ import org.jzy3d.plot3d.transform.Transform;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
 	public enum PolygonMode {
@@ -41,23 +40,23 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	/* * */
 
 	@Override
-	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, cam);
+	public void draw(Painter painter) {
+		doTransform(painter);
 
 		if (mapper != null)
 			mapper.preDraw(this);
 
 		// Draw content of polygon
 		if (facestatus) {
-			applyPolygonModeFill(painter, gl);
+			applyPolygonModeFill(painter);
 
 			if (wfstatus && polygonOffsetFillEnable)
-				polygonOffseFillEnable(painter, gl);
+				polygonOffseFillEnable(painter);
 
-			callPointsForFace(painter, gl);
+			callPointsForFace(painter);
 
 			if (wfstatus && polygonOffsetFillEnable)
-				polygonOffsetFillDisable(painter, gl);
+				polygonOffsetFillDisable(painter);
 		}
 
 		// Draw edge of polygon
@@ -70,11 +69,11 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		      	painter.glPolygonMode(GL.GL_BACK, GL2.GL_LINE);
 			}
 			else {
-				applyPolygonModeLine(painter, gl);
+				applyPolygonModeLine(painter);
 			}
 			
 			if (polygonOffsetFillEnable)
-				polygonOffseFillEnable(painter, gl);
+				polygonOffseFillEnable(painter);
 
 			if(fixJGL) {
 				painter.color(wfcolor);
@@ -88,27 +87,27 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 				painter.glEnd();
 			}
 			else {
-				callPointForWireframe(painter, gl);
+				callPointForWireframe(painter);
 			}
 
 			if (polygonOffsetFillEnable)
-				polygonOffsetFillDisable(painter, gl);
+				polygonOffsetFillDisable(painter);
 		}
 
 		if (mapper != null)
 			mapper.postDraw(this);
 
-		doDrawBoundsIfDisplayed(painter, gl, glu, cam);
+		doDrawBoundsIfDisplayed(painter);
 	}
 
 	/**
 	 * Drawing the point list in wireframe mode
 	 */
-	protected void callPointForWireframe(Painter painter, GL gl) {
+	protected void callPointForWireframe(Painter painter) {
 		painter.color(wfcolor);
 		painter.glLineWidth(wfwidth);
 
-		begin(painter, gl);
+		begin(painter);
 		for (Point p : points) {
 			painter.vertex(p.xyz, spaceTransformer);
 		}
@@ -118,8 +117,8 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	/**
 	 * Drawing the point list in face mode (polygon content)
 	 */
-	protected void callPointsForFace(Painter painter, GL gl) {
-		begin(painter, gl);
+	protected void callPointsForFace(Painter painter) {
+		begin(painter);
 		for (Point p : points) {
 			if (mapper != null) {
 				Color c = mapper.getColor(p.xyz);
@@ -136,9 +135,9 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	 * Invoke GL begin with the actual geometry type {@link GL#GL_POINTS},
 	 * {@link GL#GL_LINES}, {@link GL#GL_TRIANGLES}, {@link GL2#GL_POLYGON} ...
 	 */
-	protected abstract void begin(Painter painter, GL gl);
+	protected abstract void begin(Painter painter);
 
-	protected void applyPolygonModeLine(Painter painter, GL gl) {
+	protected void applyPolygonModeLine(Painter painter) {
 		switch (polygonMode) {
 		case FRONT:
 			painter.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
@@ -154,7 +153,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		}
 	}
 
-	protected void applyPolygonModeFill(Painter painter, GL gl) {
+	protected void applyPolygonModeFill(Painter painter) {
 		switch (polygonMode) {
 		case FRONT:
 			painter.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
@@ -171,12 +170,12 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
 	}
 
-	protected void polygonOffseFillEnable(Painter painter, GL gl) {
+	protected void polygonOffseFillEnable(Painter painter) {
 		painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
 	}
 
-	protected void polygonOffsetFillDisable(Painter painter, GL gl) {
+	protected void polygonOffsetFillDisable(Painter painter) {
 		painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 	}
 

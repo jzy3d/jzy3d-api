@@ -18,12 +18,8 @@ import org.jzy3d.plot3d.primitives.contour.ContourLevel;
 import org.jzy3d.plot3d.primitives.contour.ContourMesh;
 import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 
 /**
@@ -97,26 +93,26 @@ public class ContourAxisBox extends AxisBox {
 	}
 	
 	@Override
-	public void draw(Painter painter, GL gl, GLU glu, Camera camera){
-		super.draw(painter, gl, glu, camera);
+	public void draw(Painter painter){
+		super.draw(painter);
 		
 		//gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
 		
 		// Render the contour texture if available
 		if( contourTexture != null ){
-			contourTexture.draw(painter, gl, glu, camera);
+			contourTexture.draw(painter);
 		}
 		
 		if( mesh != null ){
-			drawMesh(painter, gl, glu, camera, mesh);
+			drawMesh(painter, mesh);
 		}
 		
 	}
 	
-	public void drawMesh(Painter painter, GL gl, GLU glu, Camera camera, ContourMesh mesh){
+	public void drawMesh(Painter painter, ContourMesh mesh){
 		// draw contour lines
 		for (ContourLevel line: mesh.lines.getContourLevels()) {
-			line.draw(painter, gl, glu, camera);
+			line.draw(painter);
 			logger.info("Contour level '" + line.getValue() + "' has " + line.getLines());
 		}
 		

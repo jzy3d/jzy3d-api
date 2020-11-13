@@ -12,7 +12,6 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A Point3d is a storage for a Coord3d and a Color that represents a drawable
@@ -61,8 +60,8 @@ public class Point extends Drawable implements ISingleColorable {
 	/* */
 
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, cam);
+    public void draw(Painter painter) {
+		doTransform(painter);
 
 		painter.glPointSize(width);
 		painter.glBegin(GL.GL_POINTS);

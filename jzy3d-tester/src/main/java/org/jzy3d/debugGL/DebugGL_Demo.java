@@ -9,8 +9,8 @@ import org.jzy3d.debugGL.tracers.DebugGLChart2d;
 import org.jzy3d.debugGL.tracers.DebugGLChart3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.Mapper;
+import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 

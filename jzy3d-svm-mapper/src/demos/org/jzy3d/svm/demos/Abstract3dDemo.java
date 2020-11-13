@@ -3,7 +3,6 @@ package org.jzy3d.svm.demos;
 import org.instantsvm.Parameters;
 import org.instantsvm.regression.RegressionInputs;
 import org.instantsvm.regression.RegressionSVM;
-import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.SwingChartLauncher;

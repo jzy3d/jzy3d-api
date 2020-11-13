@@ -85,7 +85,7 @@ public class AWTView extends ChartView {
             scene.getLightSet().disable(painter);
 
             axe.setScale(scaling);
-            axe.draw(painter, gl, glu, camera);
+            axe.draw(painter);
             if (DISPLAY_AXE_WHOLE_BOUNDS) { // for debug
                 AxisBox abox = (AxisBox) axe;
                 BoundingBox3d box = abox.getWholeBounds();
@@ -93,7 +93,7 @@ public class AWTView extends ChartView {
                 p.setFaceDisplayed(false);
                 p.setWireframeColor(Color.MAGENTA);
                 p.setWireframeDisplayed(true);
-                p.draw(painter, gl, glu, camera);
+                p.draw(painter);
             }
 
             scene.getLightSet().enableLightIfThereAreLights(painter);
@@ -107,7 +107,7 @@ public class AWTView extends ChartView {
     	
     	cam.setViewPort(viewport);
         cam.shoot(painter, cameraMode);
-        axe.draw(painter, gl, glu, cam);
+        axe.draw(painter);
         clear();
 
         //AxeBox abox = (AxeBox) axe;

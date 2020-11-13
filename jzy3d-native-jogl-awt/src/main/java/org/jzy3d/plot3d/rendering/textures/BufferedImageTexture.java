@@ -18,7 +18,7 @@ public class BufferedImageTexture extends SharedTexture {
     }
 
     @Override
-    public Texture getTexture(Painter painter, GL gl) {
+    public Texture getTexture(Painter painter) {
     	
         if (texture == null)
             mount(painter);

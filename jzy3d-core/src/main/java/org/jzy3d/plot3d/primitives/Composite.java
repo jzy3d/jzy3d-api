@@ -11,12 +11,8 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A Composite gathers several Drawable and provides default methods for
@@ -81,21 +77,21 @@ public abstract class Composite extends Wireframeable implements ISingleColorabl
 
     /** Delegate rendering iteratively to all Drawable of this composite. */
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+    public void draw(Painter painter) {
         if (mapper != null)
             mapper.preDraw(this);
 
         synchronized (components) {
             for (Drawable c : components) {
                 if (c != null)
-                    c.draw(painter, gl, glu, camera);
+                    c.draw(painter);
             }
         }
 
         if (mapper != null)
             mapper.postDraw(this);
 
-        doDrawBoundsIfDisplayed(painter, gl, glu, camera);
+        doDrawBoundsIfDisplayed(painter);
     }
 
     /**

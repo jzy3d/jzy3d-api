@@ -5,11 +5,9 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
-import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 
 public class CubeVBO extends DrawableVBO {
 
@@ -23,17 +21,18 @@ public class CubeVBO extends DrawableVBO {
 	}
 
 	@Override
-	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+	public void draw(Painter painter) {
 
-		doTransform(painter, cam);
+		doTransform(painter);
 
 		if (!hasMountedOnce) {
 			mount(painter);
 		}
 
-		super.draw(painter, gl, glu, cam);
+		super.draw(painter);
 
 		if (disposed) {
+			GL gl = ((NativeDesktopPainter)painter).getGL();
 
 			gl.glDeleteBuffers(1, arrayName, 0);
 			gl.glDeleteBuffers(1, elementName, 0);

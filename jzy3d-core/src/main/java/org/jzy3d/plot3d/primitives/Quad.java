@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
 /**
@@ -25,7 +24,7 @@ public class Quad extends Polygon {
 	}
 	
     @Override
-    protected void begin(Painter painter, GL gl) {
+    protected void begin(Painter painter) {
     	painter.glBegin(GL2.GL_QUADS);
     }
 

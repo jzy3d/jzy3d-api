@@ -30,8 +30,6 @@ import org.jzy3d.junit.replay.events.MouseEventLog;
 import org.jzy3d.junit.replay.events.WindowEventLog;
 import org.jzy3d.utils.LoggerUtils;
 
-import com.jogamp.opengl.util.texture.TextureIO;
-
 public class EventRecorder extends Timestamped implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, ComponentListener, WindowListener {
     protected Component awt;
     protected Scenario scenario;

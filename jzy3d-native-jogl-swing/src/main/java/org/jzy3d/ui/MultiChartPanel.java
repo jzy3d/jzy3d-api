@@ -18,13 +18,13 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.ui.views.ImagePanel;
+
+import net.miginfocom.swing.MigLayout;
 
 public class MultiChartPanel extends JPanel {
     private static final long serialVersionUID = 7519209038396190502L;

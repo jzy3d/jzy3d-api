@@ -2,15 +2,15 @@ package org.jzy3d.javafx;
 
 import java.awt.image.BufferedImage;
 
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
+
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.image.Image;
 
 @SuppressWarnings("restriction")
 /* Disable JavaFX access restriction warnings */

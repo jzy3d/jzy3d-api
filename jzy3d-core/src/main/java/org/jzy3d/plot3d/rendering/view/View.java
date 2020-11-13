@@ -36,11 +36,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL2ES1;
-import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link View} holds a {@link Scene}, a {@link LightSet}, an {@link ICanvas}
@@ -158,6 +154,7 @@ public class View {
         this.cam = factory.newCamera(center);
         this.painter = factory.newPainter();
         this.painter.setCamera(cam);
+        
         
         this.scene = scene;
         this.canvas = canvas;
@@ -1093,7 +1090,7 @@ public class View {
 
             scene.getLightSet().disable(painter);
             axe.setScale(scaling);
-            axe.draw(painter, null, null, camera);
+            axe.draw(painter);
             scene.getLightSet().enableLightIfThereAreLights(painter);
         }
     }
@@ -1109,16 +1106,13 @@ public class View {
     }
     
     public void renderSceneGraph(boolean light, Camera camera, Scene scene, Coord3d scaling) {
-    	GL gl = null;
-    	GLU glu = null;
-    	
         if (light) {
             scene.getLightSet().apply(painter, scaling);
         }
 
         Transform transform = new Transform(new Scale(scaling));
         scene.getGraph().setTransform(transform);
-        scene.getGraph().draw(painter, gl, glu, camera);
+        scene.getGraph().draw(painter);
     }
 
     /* OVERLAY RENDERING */
@@ -1131,12 +1125,9 @@ public class View {
     }
 
     public void renderAnnotations(Camera camera) {
-    	GL gl = null;
-        GLU glu = null;
-
         Transform transform = new Transform(new Scale(scaling));
         annotations.getGraph().setTransform(transform);
-        annotations.getGraph().draw(painter, gl, glu, camera);
+        annotations.getGraph().draw(painter);
     }
 
 

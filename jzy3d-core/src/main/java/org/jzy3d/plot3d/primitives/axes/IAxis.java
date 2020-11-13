@@ -6,11 +6,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 
 /**Specify services that a concrete Axe must provide.*/
@@ -18,7 +14,7 @@ public interface IAxis {
 	public void dispose();
 	
 	public void setAxe(BoundingBox3d box);
-	public void draw(Painter painter, GL gl, GLU glu, Camera camera);
+	public void draw(Painter painter);
 	
 	public void setScale(Coord3d scale);
 	public Coord3d getScale();
