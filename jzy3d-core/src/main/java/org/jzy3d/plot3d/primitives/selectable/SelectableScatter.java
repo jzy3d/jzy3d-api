@@ -11,7 +11,6 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A Scatter that supports an "highlighted status" to change selected point
@@ -27,8 +26,8 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 	}
 
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, cam);
+    public void draw(Painter painter) {
+		doTransform(painter);
 
 		painter.glPointSize(width);
 

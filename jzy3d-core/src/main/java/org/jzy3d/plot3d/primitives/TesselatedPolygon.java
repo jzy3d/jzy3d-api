@@ -30,7 +30,7 @@ public class TesselatedPolygon extends Composite {
 	protected Polygon newTriangle() {
 		return new Polygon() {
 			@Override
-            protected void begin(Painter painter, GL gl) {
+            protected void begin(Painter painter) {
 				painter.glBegin(GL.GL_TRIANGLES);
 			}
 
@@ -39,7 +39,7 @@ public class TesselatedPolygon extends Composite {
 			 * shared adjacent triangle side is not drawn.
 			 */
 			@Override
-            protected void callPointForWireframe(Painter painter, GL gl) {
+            protected void callPointForWireframe(Painter painter) {
 				painter.color(wfcolor);
 				painter.glLineWidth(wfwidth);
 				painter.glBegin(GL.GL_LINE_STRIP);

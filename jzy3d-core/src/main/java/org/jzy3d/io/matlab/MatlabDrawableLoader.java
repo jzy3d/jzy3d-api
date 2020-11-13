@@ -26,6 +26,10 @@ import com.jmatio.types.MLNumericArray;
  * @author Martin Pernollet
  */
 public class MatlabDrawableLoader implements ILoader {
+    protected static int C1 = 0;
+    protected static int C2 = 1;
+    protected static int C3 = 2;
+
     @Override
     public List<Drawable> load(String filename) throws Exception {
         return load(filename, -1);
@@ -73,9 +77,4 @@ public class MatlabDrawableLoader implements ILoader {
         Logger.getLogger(MatlabDrawableLoader.class).info(t.toc() + " to build polygon list");
         return polygons;
     }
-    
-    protected static int C1 = 0;
-    protected static int C2 = 1;
-    protected static int C3 = 2;
-
 }

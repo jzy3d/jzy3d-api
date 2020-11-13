@@ -2,63 +2,60 @@ package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 
 public class ColoredWireframePolygon extends Polygon {
 
 	
 	@Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, cam);
+    public void draw(Painter painter) {
+        doTransform(painter);
 
         if (mapper != null)
             mapper.preDraw(this);
 
         // Draw content of polygon
         if (facestatus) {
-            applyPolygonModeFill(painter, gl);
+            applyPolygonModeFill(painter);
             if (wfstatus && polygonOffsetFillEnable)
-                polygonOffseFillEnable(painter, gl);
-            callPointsForFace(painter, gl);
+                polygonOffseFillEnable(painter);
+            callPointsForFace(painter);
             if (wfstatus && polygonOffsetFillEnable)
-                polygonOffsetFillDisable(painter, gl);
+                polygonOffsetFillDisable(painter);
         }
 
         // Draw edge of polygon
         if (wfstatus) {
-            applyPolygonModeLine(painter, gl);
+            applyPolygonModeLine(painter);
             if (polygonOffsetFillEnable)
-            	polygonOffsetLineEnable(painter, gl);
-            callPointForWireframe(painter, gl);
+            	polygonOffsetLineEnable(painter);
+            callPointForWireframe(painter);
             if (polygonOffsetFillEnable)
-            	polygonOffsetLineDisable(painter, gl);
+            	polygonOffsetLineDisable(painter);
         }
 
         if (mapper != null)
             mapper.postDraw(this);
 
-        doDrawBoundsIfDisplayed(painter, gl, glu, cam);
+        doDrawBoundsIfDisplayed(painter);
     }
 	
-    protected void polygonOffsetLineEnable(Painter painter, GL gl) {
+    protected void polygonOffsetLineEnable(Painter painter) {
 		painter.glEnable(GL2GL3.GL_POLYGON_OFFSET_LINE);
 		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
     }
 
-    protected void polygonOffsetLineDisable(Painter painter, GL gl) {
+    protected void polygonOffsetLineDisable(Painter painter) {
     	painter.glDisable(GL2GL3.GL_POLYGON_OFFSET_LINE);
     }
     
     @Override
-    public void callPointForWireframe(Painter painter, GL gl) {
+    public void callPointForWireframe(Painter painter) {
         painter.glLineWidth(wfwidth);
         Color c = wfcolor;
         
-        begin(painter, gl);
+        begin(painter);
         for (Point p : points) {
         	if (mapper != null) {
         		c = mapper.getColor(p.getCoord().z);

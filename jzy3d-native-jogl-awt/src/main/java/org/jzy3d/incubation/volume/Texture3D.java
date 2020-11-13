@@ -21,7 +21,6 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.GLException;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.math.FloatUtil;
 import com.jogamp.opengl.math.VectorUtil;
 
@@ -120,7 +119,9 @@ public class Texture3D extends Drawable implements IGLBindedResource,IMultiColor
     }
 
 	@Override
-	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+	public void draw(Painter painter) {
+		Camera cam = painter.getCamera();
+		GL gl = ((NativeDesktopPainter)painter).getGL();
 		
 		if (!mounted) {
 			mount(painter);
@@ -128,12 +129,12 @@ public class Texture3D extends Drawable implements IGLBindedResource,IMultiColor
 		
 		colormapTexure.update(gl);
 		
-		doTransform(painter, cam);
+		doTransform(painter);
     	
     	float mvmatrix[] = new float[16];
     	float projmatrix[] = new float[16];
     	
-    	Coord3d eye = cam.getEye();
+    	Coord3d eye = painter.getCamera().getEye();
     	eye = eye.sub(cam.getTarget());
     	eye = eye.normalizeTo(1);
     	
@@ -176,7 +177,7 @@ public class Texture3D extends Drawable implements IGLBindedResource,IMultiColor
        gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
        gl.glCullFace(GL.GL_BACK);
 		
-       shapeVBO.draw(painter, gl, glu, cam);
+       shapeVBO.draw(painter);
        shaderProgram.unbind(gl.getGL2());
        
        if (disposed) {

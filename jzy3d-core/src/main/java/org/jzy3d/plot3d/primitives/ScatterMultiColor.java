@@ -7,11 +7,9 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A scatter plot supporting a colormap for shading each dot color and alpha.
@@ -44,10 +42,10 @@ public class ScatterMultiColor extends Drawable implements IMultiColorable {
     /* */
 
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, cam);
+    public void draw(Painter painter) {
+        doTransform(painter);
         doDrawPoints(painter);
-        doDrawBoundsIfDisplayed(painter, gl, glu, cam);
+        doDrawBoundsIfDisplayed(painter);
     }
 
 	protected void doDrawPoints(Painter painter) {

@@ -1,14 +1,14 @@
 package org.jzy3d.javafx.controllers.keyboard;
 
-import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.input.KeyEvent;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.javafx.controllers.JavaFXChartController;
 import org.jzy3d.maths.Coord2d;
+
+import javafx.event.EventHandler;
+import javafx.scene.Node;
+import javafx.scene.input.KeyEvent;
 
 public class JavaFXCameraKeyController extends AbstractCameraController implements EventHandler<KeyEvent>, ICameraKeyController, JavaFXChartController {
     protected Node node;

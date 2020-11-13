@@ -2,15 +2,12 @@ package org.jzy3d.plot3d.rendering.shaders;
 
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.glu.GLU;
 
 public class ShaderRenderer3d extends Renderer3d{
     protected IShaderable shaderable;
@@ -75,7 +72,7 @@ public class ShaderRenderer3d extends Renderer3d{
     public static IGLRenderer getShaderContentRenderer(final View view){
         return new IGLRenderer() {
             @Override
-            public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+            public void draw(Painter painter) {
                 view.renderSceneGraph(true);  
             }
         };

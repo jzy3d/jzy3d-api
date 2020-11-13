@@ -8,14 +8,11 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.FrontToBackPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedAveragePeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedSumPeelingAlgorithm;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.glu.GLU;
 
 import jogamp.opengl.gl4.GL4bcImpl;
 
@@ -133,9 +130,9 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     public static IGLRenderer getDepthPeelingContentRenderer(final View view) {
         return new IGLRenderer() {
             @Override
-            public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+            public void draw(Painter painter) {
 
-                ((DepthPeelingView) view).renderPeeledView(gl, glu);
+                ((DepthPeelingView) view).renderPeeledView();
             }
         };
     }

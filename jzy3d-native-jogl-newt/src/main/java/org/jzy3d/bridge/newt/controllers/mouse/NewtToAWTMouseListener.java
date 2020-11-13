@@ -3,10 +3,10 @@ package org.jzy3d.bridge.newt.controllers.mouse;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 
-import jogamp.newt.awt.event.AWTNewtEventFactory;
-
 import com.jogamp.newt.Window;
 import com.jogamp.newt.event.MouseListener;
+
+import jogamp.newt.awt.event.AWTNewtEventFactory;
 
 /**
  * @author cmh

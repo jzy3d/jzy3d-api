@@ -35,8 +35,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
-import com.jogamp.opengl.GLCapabilities;
-
 /**
  * Still using some AWT components
  * 

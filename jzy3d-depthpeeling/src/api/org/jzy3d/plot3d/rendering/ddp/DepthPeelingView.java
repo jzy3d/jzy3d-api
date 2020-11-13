@@ -43,7 +43,7 @@ public class DepthPeelingView extends View{
     protected int width = 0;
     protected int height = 0;
     
-    public void renderPeeledView(GL gl, GLU glu){
+    public void renderPeeledView(){
         updateCamera(new ViewportConfiguration(width, height), computeScaledViewBounds());
 
         renderAxeBox();

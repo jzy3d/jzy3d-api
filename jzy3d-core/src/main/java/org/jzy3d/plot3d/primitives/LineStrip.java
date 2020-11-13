@@ -17,7 +17,6 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * Color works as follow:
@@ -95,23 +94,23 @@ public class LineStrip extends Wireframeable {
     /* */
 
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-        doTransform(painter, cam);
+    public void draw(Painter painter) {
+        doTransform(painter);
         if (points.size() > 1) {
-            drawLine(painter, gl);
+            drawLine(painter);
         } else if (points.size() == 1 && !showPoints) {
-            drawPoints(painter, gl);
+            drawPoints(painter);
         }
 
         if (showSymbols && symbolHandler!=null) {
-            symbolHandler.drawSymbols(painter, gl, glu, cam);
+            symbolHandler.drawSymbols(painter);
         }
 
-        drawPointsIfEnabled(painter, gl);
+        drawPointsIfEnabled(painter);
     }
     
 
-    public void drawLine(Painter painter, GL gl) {
+    public void drawLine(Painter painter) {
         //painter.glLineWidth(wfwidth);
         
         if (stipple) {
@@ -141,15 +140,14 @@ public class LineStrip extends Wireframeable {
         }
     }
 
-    public void drawPointsIfEnabled(Painter painter, GL gl) {
+    public void drawPointsIfEnabled(Painter painter) {
         if (showPoints) {
-            drawPoints(painter, gl);
+            drawPoints(painter);
         }
     }
 
-    public void drawPoints(Painter painter, GL gl) {
+    public void drawPoints(Painter painter) {
     	painter.glBegin(GL.GL_POINTS);
-
         painter.glPointSize(wfwidth);
 
         for (Point p : points) {

@@ -23,7 +23,6 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * The {@link AxisBox} displays a box with front face invisible and ticks labels.
@@ -47,27 +46,11 @@ public class AxisBox implements IAxis {
         init();
     }
 
-    @Override
-    public List<AxeAnnotation> getAnnotations() {
-        return annotations;
-    }
-
-    @Override
-    public void setAnnotations(List<AxeAnnotation> annotations) {
-        this.annotations = annotations;
-    }
-
-    public void addAnnotation(AxeAnnotation annotation) {
-        synchronized (annotations) {
-            annotations.add(annotation);
-        }
-    }
-
     /**
      * Draws the AxeBox. The camera is used to determine which axis is closest to the ur point ov view, in order to decide for an axis on which to diplay the tick values.
      */
     @Override
-    public void draw(Painter painter, GL gl, GLU glu, Camera camera) {
+    public void draw(Painter painter) {
         cullingEnable(painter);
         updateHiddenQuads(painter);
 
@@ -1031,6 +1014,22 @@ public class AxisBox implements IAxis {
     @Override
     public Coord3d getScale() {
         return scale;
+    }
+    
+    @Override
+    public List<AxeAnnotation> getAnnotations() {
+        return annotations;
+    }
+
+    @Override
+    public void setAnnotations(List<AxeAnnotation> annotations) {
+        this.annotations = annotations;
+    }
+
+    public void addAnnotation(AxeAnnotation annotation) {
+        synchronized (annotations) {
+            annotations.add(annotation);
+        }
     }
 
     /* */

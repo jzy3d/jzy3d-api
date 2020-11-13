@@ -4,11 +4,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link SimplePolygon} makes the simplest possible GL rendering with
@@ -26,10 +23,10 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 	}
 
 	@Override
-	public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
-		doTransform(painter, cam);
+	public void draw(Painter painter) {
+		doTransform(painter);
 		doDrawPolygon(painter);
-		doDrawBoundsIfDisplayed(painter, gl, glu, cam);
+		doDrawBoundsIfDisplayed(painter);
 	}
 
 	private void doDrawPolygon(Painter painter) {

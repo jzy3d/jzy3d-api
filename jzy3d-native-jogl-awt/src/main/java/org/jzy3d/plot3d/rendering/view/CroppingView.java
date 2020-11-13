@@ -2,8 +2,8 @@ package org.jzy3d.plot3d.rendering.view;
 
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Croppable;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;

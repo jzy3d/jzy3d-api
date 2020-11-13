@@ -4,9 +4,7 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
-import org.jzy3d.plot3d.rendering.view.Camera;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
@@ -63,12 +61,12 @@ public class Shaderable implements IShaderable{
     /* ACTUAL RENDERING */
     
     protected void renderTasks(Painter painter, GL2 gl) {
-        tasksToRender.draw(painter, gl, glu, null);
+        tasksToRender.draw(painter);
     }
 
     IGLRenderer tasksToRender = new IGLRenderer() {
         @Override
-        public void draw(Painter painter, GL gl, GLU glu, Camera cam) {
+        public void draw(Painter painter) {
             throw new RuntimeException("nothing to render?!");
         }
     };

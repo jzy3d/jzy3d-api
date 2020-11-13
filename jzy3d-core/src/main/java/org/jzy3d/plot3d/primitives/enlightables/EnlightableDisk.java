@@ -6,12 +6,10 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.glu.GLU;
 
 public class EnlightableDisk extends AbstractEnlightable implements
 		ISingleColorable {
@@ -42,8 +40,8 @@ public class EnlightableDisk extends AbstractEnlightable implements
 	/********************************************************/
 
 	@Override
-    public void draw(Painter painter, GL gll, GLU gluu, Camera cam) {
-		doTransform(painter, cam);
+    public void draw(Painter painter) {
+		doTransform(painter);
 
 		painter.glTranslatef(x, y, z);
 		

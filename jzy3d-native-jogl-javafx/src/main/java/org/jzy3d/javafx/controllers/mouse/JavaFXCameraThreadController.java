@@ -1,9 +1,9 @@
 package org.jzy3d.javafx.controllers.mouse;
 
-import javafx.application.Platform;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+
+import javafx.application.Platform;
 
 /**
  * Trying to get rid of an exception 

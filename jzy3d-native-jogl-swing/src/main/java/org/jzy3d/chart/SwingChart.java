@@ -6,8 +6,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Renderer2d;
 
-import com.jogamp.opengl.GLCapabilities;
-
 public class SwingChart extends Chart {
     public SwingChart(Quality quality) {
         super(new SwingChartFactory(), quality);

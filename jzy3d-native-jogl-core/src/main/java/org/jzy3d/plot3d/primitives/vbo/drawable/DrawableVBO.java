@@ -16,7 +16,6 @@ import org.jzy3d.plot3d.primitives.Geometry.PolygonMode;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Rotate;
 import org.jzy3d.plot3d.transform.Rotator;
 import org.jzy3d.plot3d.transform.Transform;
@@ -82,15 +81,15 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     // @see
     // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
     @Override
-    public void draw(Painter painter, GL gll, GLU gluu, Camera cam) {
+    public void draw(Painter painter) {
     	if (hasMountedOnce) {
     		GL gl = ((NativeDesktopPainter)painter).getGL();
     		GLU glu = ((NativeDesktopPainter)painter).getGLU();
     		
-            doTransform(painter, cam);
+            doTransform(painter);
             configure(painter, gl);
             doDrawElements(gl);
-            doDrawBoundsIfDisplayed(painter, gl, glu, cam);
+            doDrawBoundsIfDisplayed(painter);
         }
     }
     

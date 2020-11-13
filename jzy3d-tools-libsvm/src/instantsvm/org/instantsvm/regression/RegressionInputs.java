@@ -3,9 +3,9 @@ package org.instantsvm.regression;
 import java.io.IOException;
 import java.util.Vector;
 
-import libsvm.svm_node;
-
 import org.instantsvm.utils.LibSvmIO;
+
+import libsvm.svm_node;
 
 public class RegressionInputs {
 	public RegressionInputs(){

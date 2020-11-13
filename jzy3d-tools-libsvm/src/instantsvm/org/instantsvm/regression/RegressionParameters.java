@@ -1,8 +1,8 @@
 package org.instantsvm.regression;
 
-import libsvm.svm_parameter;
-
 import org.instantsvm.Parameters;
+
+import libsvm.svm_parameter;
 
 public class RegressionParameters extends Parameters{
 	public RegressionParameters(){

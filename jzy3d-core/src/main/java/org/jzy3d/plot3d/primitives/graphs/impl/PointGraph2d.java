@@ -11,10 +11,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.pickable.PickablePoint;
-import org.jzy3d.plot3d.rendering.view.Camera;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 public class PointGraph2d<V,E>  extends DefaultDrawableGraph2d<V,E> {
 	public PointGraph2d(){
@@ -54,21 +50,21 @@ public class PointGraph2d<V,E>  extends DefaultDrawableGraph2d<V,E> {
 	/*******************************************************/
 	
 	@Override
-	protected void drawVertices(Painter painter, GL gl, GLU glu, Camera cam){
+	protected void drawVertices(Painter painter){
 		for(V v: graph.getVertices()){
 			if(highlights.get(v))
-				drawVertexNode(painter, gl, glu, cam, v, layout.get(v), formatter.getHighlightedVertexColor());
+				drawVertexNode(painter, v, layout.get(v), formatter.getHighlightedVertexColor());
 			else
-				drawVertexNode(painter, gl, glu, cam, v, layout.get(v), formatter.getVertexColor());
+				drawVertexNode(painter, v, layout.get(v), formatter.getVertexColor());
 		}
 	}
 	
 	@Override
-	protected void drawVertexNode(Painter painter, GL gl, GLU glu, Camera cam, V v, Coord2d coord, Color color){
+	protected void drawVertexNode(Painter painter, V v, Coord2d coord, Color color){
 		PickablePoint pt = vertexObjects.get(v);
 		pt.setData(new Coord3d(coord, Z));
 		pt.setColor(color);
-		pt.draw(painter, gl, glu, cam);
+		pt.draw(painter);
 	}
 	
 	/*******************************************************/
