@@ -314,6 +314,12 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		throw new NotImplementedException();
 	}
 	
+	@Override
+	public int glutBitmapLength(int font, String string) {
+		return glut.glutBitmapLength(font, string);
+	}
+
+	
 	// GL LISTS
 	
 	@Override

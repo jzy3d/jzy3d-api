@@ -6,13 +6,11 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.overlay.TextOverlay;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * The AxeBox displays a box with front face invisible and ticks labels.
@@ -52,8 +50,8 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 	}
 
 	@Override
-    protected BoundingBox3d drawTicks(Painter painter, GL gl, GLU glu, Camera cam,
-			int axis, int direction, Color color, Halign hal, Valign val) {
+    protected BoundingBox3d drawTicks(Painter painter, int axis, int direction, Color color,
+			Halign hal, Valign val) {
 		int quad_0;
 		int quad_1;
 		Halign hAlign;
@@ -121,12 +119,11 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 				|| (direction == AXE_Z && layout.isZAxeLabelDisplayed())) {
 			Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
 			if (txtRenderer != null)
-				txtRenderer.appendText(painter, cam, axeLabel, labelPosition, Halign.CENTER,
-						Valign.CENTER, color);
+				txtRenderer.appendText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER,
+						color);
 			else {
-				BoundingBox3d labelBounds = txt.drawText(painter, gl, glu,
-						cam, axeLabel, labelPosition, Halign.CENTER,
-						Valign.CENTER, color);
+				BoundingBox3d labelBounds = txt.drawText(painter, axeLabel, labelPosition,
+						Halign.CENTER, Valign.CENTER, color);
 				if (labelBounds != null)
 					ticksTxtBounds.add(labelBounds);
 			}
@@ -169,22 +166,19 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 			}
 			Coord3d tickPosition = new Coord3d(xlab, ylab, zlab);
 
-			if (gl.isGL2()) {
-				gl.getGL2().glColor3f(color.r, color.g, color.b);
-				gl.getGL2().glLineWidth(1);
+			
+			painter.glColor3f(color.r, color.g, color.b);
+			painter.glLineWidth(1);
 
-				// Draw the tick line
-				gl.getGL2().glBegin(GL.GL_LINES);
-				gl.getGL2().glVertex3d(xpos, ypos, zpos);
-				gl.getGL2().glVertex3d(xlab, ylab, zlab);
-				gl.getGL2().glEnd();
-			} else {
-				// FIXME REWRITE ANDROID
-			}
+			// Draw the tick line
+			painter.glBegin(GL.GL_LINES);
+			painter.glVertex3d(xpos, ypos, zpos);
+			painter.glVertex3d(xlab, ylab, zlab);
+			painter.glEnd();
 
 			// Select the alignement of the tick label
 			if (hal == null)
-				hAlign = cam.side(tickPosition) ? Halign.LEFT : Halign.RIGHT;
+				hAlign = painter.getCamera().side(tickPosition) ? Halign.LEFT : Halign.RIGHT;
 			else
 				hAlign = hal;
 
@@ -202,11 +196,11 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 
 			// Draw the text label of the current tick
 			if (txtRenderer != null)
-				txtRenderer.appendText(painter, cam, tickLabel, tickPosition, hAlign,
-						vAlign, color);
+				txtRenderer.appendText(painter, tickLabel, tickPosition, hAlign, vAlign,
+						color);
 			else {
-				BoundingBox3d tickBounds = txt.drawText(painter, gl, glu,
-						cam, tickLabel, tickPosition, hAlign, vAlign, color);
+				BoundingBox3d tickBounds = txt.drawText(painter, tickLabel, tickPosition,
+						hAlign, vAlign, color);
 				if (tickBounds != null)
 					ticksTxtBounds.add(tickBounds);
 			}

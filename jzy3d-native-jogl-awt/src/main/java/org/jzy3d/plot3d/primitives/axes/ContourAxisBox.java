@@ -43,8 +43,6 @@ public class ContourAxisBox extends AxisBox {
 		super(bbox);
 	}
 	
-	/****************/
-
 	public BufferedImage getContourImage() {
 		return contourImg;
 	}
@@ -54,8 +52,6 @@ public class ContourAxisBox extends AxisBox {
 		rebuildTexture();
 	}
 	
-	
-	
 	public ContourMesh getContourMesh() {
 		return mesh;
 	}
@@ -63,8 +59,6 @@ public class ContourAxisBox extends AxisBox {
 	public void setContourMesh(ContourMesh contour) {
 		this.mesh = contour;
 	}
-
-	/****************/
 
 	protected void rebuildTexture(){
         BufferedImageTexture contourResource = new BufferedImageTexture(contourImg);
@@ -80,8 +74,6 @@ public class ContourAxisBox extends AxisBox {
         mapping.add( new Coord2d(xmin, ymax) );
         return mapping;
     }
-	
-	/****************/
 	
 	@Override
     protected void setAxeBox(float xmin, float xmax, float ymin, float ymax, float zmin, float zmax){
@@ -135,13 +127,12 @@ public class ContourAxisBox extends AxisBox {
 			if(label!=null && level!=null){
 				for(LineStrip strip: contour.getLines()){
 					Coord3d position = strip.get( strip.size()/2 ).xyz;
-					txt.drawText(painter, gl, glu, camera, label, position, Halign.CENTER, Valign.CENTER, Color.BLACK);
+					txt.drawText(painter, label, position, Halign.CENTER, Valign.CENTER, Color.BLACK);
 				}
 			}
 		}
 	}
 	
-	/****************/
 
 	protected float xmin;
 	protected float xmax;

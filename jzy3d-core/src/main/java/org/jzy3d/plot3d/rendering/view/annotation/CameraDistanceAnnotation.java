@@ -60,8 +60,8 @@ public class CameraDistanceAnnotation extends Point {
 			//System.out.println(drawable.getBarycentre() );
 
 			txt.setSpaceTransformer(drawable.getSpaceTransformer());
-			txt.drawText(painter, gl, glu, view.getCamera(),
-					Utils.num2str(d, 4), drawable.getBarycentre(), h, v, colorBary, screenOffset);
+			txt.drawText(painter, Utils.num2str(d, 4), drawable.getBarycentre(), h,
+					v, colorBary, screenOffset);
 
 			if (drawable instanceof Geometry) {
 				Polygon p = (Polygon) drawable;
@@ -72,9 +72,8 @@ public class CameraDistanceAnnotation extends Point {
 					//System.out.println(pt.xyz);
 					
 					txt.setSpaceTransformer(pt.getSpaceTransformer());
-					txt.drawText(painter, gl, glu,
-							view.getCamera(), Utils.num2str(d, 4), pt.getCoord(), h, v,
-							colorPt, screenOffset);
+					txt.drawText(painter, Utils.num2str(d, 4), pt.getCoord(),
+							h, v, colorPt, screenOffset);
 				}
 			}
 		}
