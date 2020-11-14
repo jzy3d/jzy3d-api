@@ -18,6 +18,7 @@ import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
+import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
@@ -120,36 +121,6 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
         } else
         	gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
 	}
-
-	@Override
-	public void begin(Geometry geometry) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void end() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void culling(boolean status) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void lights(boolean status) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void polygonOffset(boolean status) {
-		// TODO Auto-generated method stub
-
-	}
-
-	
 
 	/************ OPEN GL Interface **************/
 
@@ -524,9 +495,14 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 		gl.glClear(mask);
 	}
 
-	
+	@Override
+	public void glClearColorAndDepthBuffers() {
+        glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); 
+	}
+
 	
 	// GL PICKING
+	
 	
 	@Override
 	public void glInitNames() {
@@ -577,7 +553,79 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 			int vorder, FloatBuffer points) {
 		gl.getGL2().glMap2f(target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, points);
 	}
+
 	
+	/* *********************************************************************** */
+	
+	/* ******************** SHORTCUTS TO GL CONSTANTS ************************ */
+	
+	/* *********************************************************************** */
+
+	
+	@Override
+	public void glEnable_Blend() {
+        glEnable(GL.GL_BLEND);
+	}
+
+	@Override
+	public void glDisable_Blend() {
+        glDisable(GL.GL_BLEND);
+	}
+
+	@Override
+	public void glMatrixMode_ModelView() {
+		glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+	}
+	
+	@Override
+	public void glMatrixMode_Projection() {
+		glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+	}
+
+	@Override
+	public void glBegin_Polygon() {
+		glBegin(GL2.GL_POLYGON);
+	}
+
+	@Override
+	public void glBegin_Quad() {
+		glBegin(GL2.GL_QUADS);
+	}
+
+	@Override
+	public void glBegin_Triangle() {
+		glBegin(GL.GL_TRIANGLES);
+	}
+
+	@Override
+	public void glBegin_Point() {
+		glBegin(GL.GL_POINTS);	
+	}
+
+	@Override
+	public void glBegin_LineStrip() {
+		glBegin(GL.GL_LINE_STRIP);	
+	}
+
+	@Override
+	public void glBegin_LineLoop() {
+		glBegin(GL.GL_LINE_LOOP);	
+	}
+
+	@Override
+	public void glBegin_Line() {
+		glBegin(GL.GL_LINES);		
+	}
+
+	@Override
+	public void glEnable_LineStipple() {
+		glEnable(GL2.GL_LINE_STIPPLE);	
+	}
+	
+	@Override
+	public void glDisable_LineStipple() {
+		glDisable(GL2.GL_LINE_STIPPLE);	
+	}
 	
 	
 

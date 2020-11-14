@@ -4,13 +4,12 @@ import org.jzy3d.maths.Range;
 import org.jzy3d.painters.Painter;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
 
 public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAnnotation {
     public synchronized void drawLine(Painter painter, GL gl, Range yrange, Range zrange) {
         //painter.glLineWidth(width);
-        painter.glBegin(GL2.GL_POLYGON);
+        painter.glBegin_Polygon();
         painter.glColor4f(color.r, color.g, color.b, color.a);
         
         applyPolygonModeLine(painter, gl);

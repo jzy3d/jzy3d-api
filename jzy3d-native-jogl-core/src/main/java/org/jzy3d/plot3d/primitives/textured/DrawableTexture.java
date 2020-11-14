@@ -190,7 +190,7 @@ public class DrawableTexture extends Drawable implements ITranslucent {
         // Draw
         before(painter);
 
-        painter.glBegin(GL2GL3.GL_QUADS);
+        painter.glBegin_Quad();//(GL2GL3.GL_QUADS);
 
         if (orientation == PlaneAxis.X) {
         	painter.glTexCoord2f(coords.left(), coords.bottom());

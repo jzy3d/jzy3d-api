@@ -6,8 +6,6 @@ import java.util.List;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL;
-
 public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
     List<Integer> idOff = new ArrayList<Integer>();
 
@@ -43,7 +41,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
         int nOff = 0;
         int nextOff = idOff.size() != 0 ? idOff.get(nOff) : 0;
 
-        painter.glBegin(GL.GL_LINE_STRIP);
+        painter.glBegin_LineStrip();
 
         while (nPt <= points.size() - 1) {
             // point
@@ -53,7 +51,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
             // consume off
             if (nextOff == nPt) {
             	painter.glEnd();
-                painter.glBegin(GL.GL_LINE_STRIP);
+                painter.glBegin_LineStrip();
 
                 nOff++;
                 if (nOff <= idOff.size() - 1)
@@ -72,7 +70,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
         if (idOff.size() > 0)
             nextOff = idOff.get(nOff);
 
-        painter.glBegin(GL.GL_LINE_STRIP);
+        painter.glBegin_LineStrip();
 
         while (nPt <= points.size() - 1) {
             // point
@@ -82,7 +80,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
             // consume off
             if (nextOff == nPt) {
             	painter.glEnd();
-                painter.glBegin(GL.GL_LINE_STRIP);
+                painter.glBegin_LineStrip();
 
                 nOff++;
                 if (nOff != -1 && nOff <= idOff.size() - 1)

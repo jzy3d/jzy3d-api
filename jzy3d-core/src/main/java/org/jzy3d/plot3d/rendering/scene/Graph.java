@@ -17,8 +17,6 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-
 /**
  * The scene's {@link Graph} basically stores the scene content and facilitate
  * objects control.
@@ -195,7 +193,7 @@ public class Graph {
     protected TicToc t = new TicToc();
 
     public synchronized void draw(Painter painter, List<Drawable> components, boolean sort) {
-        painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        painter.glMatrixMode_ModelView();
         if (!sort) {
             drawSimple(painter, components);
         } else {

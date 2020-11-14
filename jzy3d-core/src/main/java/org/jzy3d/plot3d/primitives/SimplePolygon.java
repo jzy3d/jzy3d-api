@@ -5,8 +5,6 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL2;
-
 /**
  * A {@link SimplePolygon} makes the simplest possible GL rendering with
  * especially no:
@@ -35,7 +33,7 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 			// if(wfstatus)
 			// polygonOffseFillEnable(gl);
 
-			painter.glBegin(GL2.GL_POLYGON);
+			painter.glBegin_Polygon();
 			for (Point p : points) {
 				if (mapper != null) {
 					Color c = mapper.getColor(p.xyz);
@@ -52,7 +50,7 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 
 		// Draw edge of polygon
 		if (wfstatus) {
-			painter.glBegin(GL2.GL_POLYGON);
+			painter.glBegin_Polygon();
 			painter.color(wfcolor);
 			painter.glLineWidth(wfwidth);
 			for (Point p : points) {

@@ -94,7 +94,7 @@ public class AxisBox2d extends AxisBox {
 
             // compute a corrected position according to layout
             Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
-            float strlen = painter.glutBitmapLength(font, text);
+            float strlen = painter.glutBitmapLength(fontId, text);
             float x = computeXWithAlign(halign, posScreen, strlen, 0.0f);
             float y = computeYWithAlign(valign, posScreen, 0.0f);
             Coord3d posScreenShifted = new Coord3d(x + screenOffset.x, y + screenOffset.y, posScreen.z);
@@ -112,7 +112,7 @@ public class AxisBox2d extends AxisBox {
             // CETTE ROTATION NE MARCHE PAS ET AFFECTE LE BON RENDU QUAND ON UTILISE BOUNDING POLICY!!
             
             glRasterPos(painter, sceneOffset, Coord3d.ORIGIN);
-            glut.glutBitmapString(font, text);
+            glut.glutBitmapString(fontId, text);
             
             return computeTextBounds(painter, posScreenShifted, strlen);
         }
@@ -122,7 +122,7 @@ public class AxisBox2d extends AxisBox {
         public void rotateText(Painter painter, Coord3d posReal) {
             painter.glPushMatrix();
             
-            painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+            painter.glMatrixMode_ModelView();
             painter.glLoadIdentity();
             painter.glRotatef(90, 0, 0, 1);
             //rotateOf(gl, 90, AXE_Z);

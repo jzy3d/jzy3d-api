@@ -10,8 +10,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-
 /**
  * Experimental 3d object.
  * 
@@ -48,7 +46,8 @@ public class ScatterPoint extends Drawable implements ISingleColorable {
 
 	protected void doDrawPoints(Painter painter) {
 		painter.glPointSize(width);
-        painter.glBegin(GL.GL_POINTS);
+		painter.glBegin_Point();
+		
         if (points != null) {
             for (LightPoint p : points) {
                 painter.color(p.rgb);

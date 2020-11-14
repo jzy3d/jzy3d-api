@@ -203,7 +203,7 @@ public class AxisBox implements IAxis {
         for (int q = 0; q < 6; q++) {
             if (mode == GL2.GL_FEEDBACK)
                 painter.glPassThrough(q);
-            painter.glBegin(GL2GL3.GL_QUADS);
+            painter.glBegin_Quad();
             for (int v = 0; v < 4; v++) {
             	painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
             }
@@ -220,7 +220,7 @@ public class AxisBox implements IAxis {
         if ((quad != 0) && (quad != 1)) {
             double[] xticks = layout.getXTicks();
             for (int t = 0; t < xticks.length; t++) {
-                painter.glBegin(GL.GL_LINES);
+                painter.glBegin_Line();
                 painter.vertex((float) xticks[t], quady[quad][0], quadz[quad][0], spaceTransformer);
                 painter.vertex((float) xticks[t], quady[quad][2], quadz[quad][2], spaceTransformer);
                 painter.glEnd();
@@ -230,7 +230,7 @@ public class AxisBox implements IAxis {
         if ((quad != 2) && (quad != 3)) {
             double[] yticks = layout.getYTicks();
             for (int t = 0; t < yticks.length; t++) {
-                painter.glBegin(GL.GL_LINES);
+                painter.glBegin_Line();
                 painter.vertex(quadx[quad][0], (float) yticks[t], quadz[quad][0], spaceTransformer);
                 painter.vertex(quadx[quad][2], (float) yticks[t], quadz[quad][2], spaceTransformer);
                 painter.glEnd();
@@ -240,7 +240,7 @@ public class AxisBox implements IAxis {
         if ((quad != 4) && (quad != 5)) {
             double[] zticks = layout.getZTicks();
             for (int t = 0; t < zticks.length; t++) {
-                painter.glBegin(GL.GL_LINES);
+                painter.glBegin_Line();
                 painter.vertex(quadx[quad][0], quady[quad][0], (float) zticks[t], spaceTransformer);
                 painter.vertex(quadx[quad][2], quady[quad][2], (float) zticks[t], spaceTransformer);
                 painter.glEnd();
@@ -504,7 +504,7 @@ public class AxisBox implements IAxis {
         painter.glLineWidth(1);
 
         // Draw the tick line
-        painter.glBegin(GL.GL_LINES);
+        painter.glBegin_Line();
         painter.glVertex3d(xpos, ypos, zpos);
         painter.glVertex3d(xlab, ylab, zlab);
         painter.glEnd();

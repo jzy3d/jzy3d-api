@@ -4,8 +4,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL;
-
 public class AxeYLineAnnotation implements AxeAnnotation {
     protected float value;
     protected Color color = Color.RED;
@@ -15,12 +13,13 @@ public class AxeYLineAnnotation implements AxeAnnotation {
     public void draw(Painter painter, AxisBox axe) {
         Range xrange = axe.getBoxBounds().getXRange();
         Range zrange = axe.getBoxBounds().getYRange();
-        drawLineGL2(painter, xrange, zrange);
+        
+        drawLine(painter, xrange, zrange);
     }
 
-    public synchronized void drawLineGL2(Painter painter, Range yrange, Range zrange) {
+    public synchronized void drawLine(Painter painter, Range yrange, Range zrange) {
         painter.glLineWidth(width);
-        painter.glBegin(GL.GL_LINE_STRIP);
+        painter.glBegin_LineStrip();
         painter.glColor4f(color.r, color.g, color.b, color.a);
         painter.glVertex3f(value, yrange.getMin()-yrange.getRange()/30, zrange.getMin()-2);
         painter.glVertex3f(value, yrange.getMax()+yrange.getRange()/30, zrange.getMin()-2);

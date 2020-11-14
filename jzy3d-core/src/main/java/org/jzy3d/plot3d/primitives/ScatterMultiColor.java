@@ -9,8 +9,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-
 /**
  * A scatter plot supporting a colormap for shading each dot color and alpha.
  * 
@@ -50,7 +48,7 @@ public class ScatterMultiColor extends Drawable implements IMultiColorable {
 
 	protected void doDrawPoints(Painter painter) {
 		painter.glPointSize(width);
-        painter.glBegin(GL.GL_POINTS);
+		painter.glBegin_Point();
 
         if (coordinates != null) {
             for (Coord3d coord : coordinates) {

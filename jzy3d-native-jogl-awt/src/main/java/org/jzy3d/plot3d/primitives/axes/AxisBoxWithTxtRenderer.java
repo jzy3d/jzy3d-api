@@ -171,7 +171,7 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 			painter.glLineWidth(1);
 
 			// Draw the tick line
-			painter.glBegin(GL.GL_LINES);
+			painter.glBegin_Line();
 			painter.glVertex3d(xpos, ypos, zpos);
 			painter.glVertex3d(xlab, ylab, zlab);
 			painter.glEnd();

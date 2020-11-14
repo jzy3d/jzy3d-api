@@ -43,34 +43,46 @@ public interface Painter {
         POINT, LINE, POLYGON
     }
     
+    /** Apply quality settings as OpenGL commands */
 	public void configureGL(Quality quality);
+	
 
-    
-    public void begin(Geometry geometry);
-    public void end();
+    /** A convenient shortcut to glNormal3f*/
+	public void normal(Coord3d norm);
+
+    /** A convenient shortcut to glVertex3f*/
     public void vertex(Coord3d coord);
+    
+    /** A convenient shortcut to glVertex3f, able to apply a space transform in case it is not null */
     public void vertex(Coord3d coord, SpaceTransformer transform);
+
+    /** A convenient shortcut to glVertex3f, able to apply a space transform in case it is not null */
     public void vertex(float x, float y, float z, SpaceTransformer transform);
 
+    /** A convenient shortcut to glColor4f*/
     public void color(Color color);
+    
+    /** A convenient shortcut to glColor4f which overrides the color's alpha channel */
     public void colorAlphaOverride(Color color, float alpha);
-    public void colorAlphaFactor(Color color, float alpha);
+    
+    /** A convenient shortcut to glColor4f which multiplies the color's alpha channel by the given factor */
+    public void colorAlphaFactor(Color color, float alphaFactor);
     
     public void transform(Transform transform, boolean loadIdentity);
     
     public void raster(Coord3d coord, SpaceTransformer transform);
-    
 
 	public void clearColor(Color color);
 
-	public void normal(Coord3d norm);
     
 
 	public void material(int face, int pname, Color color);
 	
-	public void culling(boolean status);
-    public void lights(boolean status);
-    public void polygonOffset(boolean status);
+    //public void begin(Geometry geometry);
+    //public void end();
+	//public void culling(boolean status);
+    //public void lights(boolean status);
+    //public void polygonOffset(boolean status);
     
     
     public int[] getViewPortAsInt();
@@ -196,6 +208,7 @@ public interface Painter {
 	public void glClearColor(float red, float green, float blue, float alpha);
 	public void glClearDepth(double d);
 	public void glClear(int mask);
+	public void glClearColorAndDepthBuffers();
 	
 	// GL PICKING
 	
@@ -210,4 +223,29 @@ public interface Painter {
 	
 	
 	public void glEvalCoord2f(float u, float v);
-	public void glMap2f(int target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, FloatBuffer points);}
+	public void glMap2f(int target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride, int vorder, FloatBuffer points);
+
+	
+
+	/* *********************************************************************** */
+	
+	/* ******************** SHORTCUTS TO GL CONSTANTS ************************ */
+	
+	/* *********************************************************************** */
+
+	public void glEnable_Blend();
+	public void glDisable_Blend();
+	public void glMatrixMode_ModelView();
+	public void glMatrixMode_Projection();
+	public void glBegin_Polygon();
+	public void glBegin_Quad();
+	public void glBegin_Triangle();
+	public void glBegin_Point();
+	public void glBegin_LineStrip();
+	public void glBegin_LineLoop();
+	public void glBegin_Line();
+	
+	public void glEnable_LineStipple();
+	public void glDisable_LineStipple();
+	
+}
