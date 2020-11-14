@@ -7,12 +7,12 @@ import org.jzy3d.painters.Painter;
 import com.jogamp.opengl.GL;
 
 public class ImageRenderer {
-	public static void renderImage(Painter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
+	public void renderImage(Painter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
 			int screenHeight) {
 		renderImage(painter, image, imageWidth, imageHeight, screenWidth, screenHeight, 0.75f);
 	}
 
-	public static void renderImage(Painter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
+	public void renderImage(Painter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
 			int screenHeight, float z) {
 		if (image == null)
 			return;
