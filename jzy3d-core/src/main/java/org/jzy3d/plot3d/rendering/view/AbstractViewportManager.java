@@ -213,7 +213,35 @@ public abstract class AbstractViewportManager {
         painter.glPopMatrix();
     }
 
-    
+    /** The left position of the viewport (x)*/
+    public int getScreenLeft() {
+		return screenLeft;
+	}
+
+    /** The bottom position of the viewport (y)*/
+    public int getScreenBottom() {
+		return screenBottom;
+	}
+
+	public int getScreenXOffset() {
+		return screenXOffset;
+	}
+
+	public int getScreenYOffset() {
+		return screenYOffset;
+	}
+
+	public int getScreenWidth() {
+		return screenWidth;
+	}
+
+	public int getScreenHeight() {
+		return screenHeight;
+	}
+
+	public boolean isScreenGridDisplayed() {
+		return screenGridDisplayed;
+	}
 
 	private static final float AREA_LEFT = -100;
     private static final float AREA_RIGHT = +100;

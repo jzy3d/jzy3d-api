@@ -18,12 +18,13 @@ import java.nio.ByteOrder;
 
 public class GLImage {
 	public static ByteBuffer getImageAsGlByteBuffer(Image image, int width, int height){
-		int[] px  = GLImage.getImagePixels(image, width, height);
-		return GLImage.convertImagePixels(px, width, height, true);
+		int[] px  = getImagePixels(image, width, height);
+		return convertImagePixels(px, width, height, true);
 	}	
 	
 	// FOLLOWING CONVERTER FUNCTIONS HAVE BEEN PICKED FROM:
 	// http://www.potatoland.com/code/gl/GLImage.java
+	
 
 	/** Return the image pixels in default Java int ARGB format. */
 	public static int[] getImagePixels(Image image, int width, int height) {
@@ -43,9 +44,14 @@ public class GLImage {
 	}
 
 	/**
-	 * Convert ARGB pixels to a ByteBuffer containing RGBA pixels.<BR>
-	 * Can be drawn in ORTHO mode using:<BR>
-	 * GL2.glDrawPixels(imgW, imgH, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, byteBuffer); <BR>
+	 * Convert ARGB pixels to a ByteBuffer containing RGBA pixels.
+	 * 
+	 * Can be drawn in ORTHO mode using:
+	 * 
+	 * <code>
+	 * GL2.glDrawPixels(imgW, imgH, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, byteBuffer);
+	 * </code>
+	 * 
 	 * If flipVertically is true, pixels will be flipped vertically for OpenGL
 	 * coord system.
 	 * 
@@ -134,7 +140,7 @@ public class GLImage {
 	}
 
 	/**
-	 * Same function as in GLApp.java. Allocates a ByteBuffer to hold the given
+	 * Allocates a ByteBuffer to hold the given
 	 * array of bytes.
 	 * 
 	 * @param bytearray
