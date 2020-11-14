@@ -7,8 +7,6 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.image.GLImage;
 
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-
 /**
  * A {@link AWTImageViewport} allows displaying a 2d {@link Image} within an
  * OpenGL2 viewport.
@@ -17,6 +15,8 @@ import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
  */
 public class AWTImageViewport extends AbstractViewportManager implements IImageViewport {
 	static final float IMAGE_Z = 0;//-0.75f;
+	
+	ImageRenderer imageRenderer = new ImageRenderer();
 	
     public AWTImageViewport() {
         setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
@@ -38,7 +38,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
         painter.glPushMatrix();
         painter.glLoadIdentity();
 
-        ImageRenderer.renderImage(painter, imageData, imageWidth, imageHeight, screenWidth, screenHeight, IMAGE_Z);
+        imageRenderer.renderImage(painter, imageData, imageWidth, imageHeight, screenWidth, screenHeight, IMAGE_Z);
 
         // Restore matrices state
         painter.glPopMatrix();

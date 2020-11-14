@@ -17,6 +17,18 @@ import org.jzy3d.plot3d.rendering.view.ViewportBuilder;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
+/**
+ * This class handles the layout of multiple OpenGL viewports
+ * <ul>
+ * <li>The {@link View} which handles its viewport with the {@link Camera}.
+ * <li>The {@link ILegend} objects which handle their viewport on their own.
+ * <li>The overlay of the View.
+ * </ul>
+ * 
+ * This allow making a composition of 3D and 2D content in a single screen.
+ * 
+ * @author Martin Pernollet
+ */
 public class ColorbarViewportLayout implements IViewportLayout{
     protected float screenSeparator = 1.0f;
     protected boolean hasMeta = true;
@@ -47,11 +59,13 @@ public class ColorbarViewportLayout implements IViewportLayout{
     
     @Override
     public void render(Painter painter, Chart chart){
-        View view = chart.getView();
+    	View view = chart.getView();
         view.renderBackground(backgroundViewPort);
         view.renderScene(sceneViewPort);
 
         renderLegends(painter, chart);
+
+        
         // fix overlay on top of chart
         view.renderOverlay(view.getCamera().getLastViewPort());
     }
@@ -64,15 +78,14 @@ public class ColorbarViewportLayout implements IViewportLayout{
     
     /**
      * Renders the legend within the screen slice given by the left and right parameters.
-     * @param painter TODO
      */
-    protected void renderLegends(Painter painter, float left, float right, List<ILegend> data, ICanvas canvas) {
-        float slice = (right - left) / data.size();
+    protected void renderLegends(Painter painter, float left, float right, List<ILegend> legends, ICanvas canvas) {
+        float slice = (right - left) / legends.size();
         int k = 0;
-        for (ILegend layer : data) {
-            layer.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-            layer.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left + slice * (k++), left + slice * k);
-            layer.render(painter);
+        for (ILegend legend : legends) {
+            legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+            legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left + slice * (k++), left + slice * k);
+            legend.render(painter);
         }
     }
     
