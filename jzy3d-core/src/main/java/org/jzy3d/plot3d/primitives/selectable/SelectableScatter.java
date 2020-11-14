@@ -10,8 +10,6 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
-import com.jogamp.opengl.GL;
-
 /**
  * A Scatter that supports an "highlighted status" to change selected point
  * color
@@ -30,8 +28,8 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 		doTransform(painter);
 
 		painter.glPointSize(width);
-
-		painter.glBegin(GL.GL_POINTS);
+		painter.glBegin_Point();
+		
 		if (colors == null)
 			painter.color(rgb);
 		

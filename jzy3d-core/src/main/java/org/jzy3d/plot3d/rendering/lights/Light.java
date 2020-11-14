@@ -7,7 +7,6 @@ import org.jzy3d.painters.Painter;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 
 public class Light {
     public static void resetCounter() {
@@ -38,7 +37,7 @@ public class Light {
 
     public void apply(Painter painter, Coord3d scale) {
         if (enabled) {
-            painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+            painter.glMatrixMode_ModelView();
             painter.glLoadIdentity();
             painter.glTranslatef(position.x * scale.x, position.y * scale.y, position.z * scale.z);
 

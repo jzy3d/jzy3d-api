@@ -6,8 +6,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-
 public class ConcurrentScatterPoint extends ScatterPoint {
     public ConcurrentScatterPoint() {
         super();
@@ -20,7 +18,7 @@ public class ConcurrentScatterPoint extends ScatterPoint {
     @Override
 	protected void doDrawPoints(Painter painter) {
 		painter.glPointSize(width);
-        painter.glBegin(GL.GL_POINTS);
+        painter.glBegin_Point();
         if (points != null) {
             synchronized (points) {
 	            for (LightPoint p : points) {

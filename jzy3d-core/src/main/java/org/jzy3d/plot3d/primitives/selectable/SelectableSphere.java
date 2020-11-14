@@ -10,8 +10,6 @@ import org.jzy3d.plot3d.builder.concrete.SphereScatterGenerator;
 import org.jzy3d.plot3d.primitives.Sphere;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
-import com.jogamp.opengl.GL;
-
 public class SelectableSphere extends Sphere implements Selectable {
 	public SelectableSphere() {
 		this(Coord3d.ORIGIN, 10f, 15, Color.BLACK);
@@ -28,7 +26,7 @@ public class SelectableSphere extends Sphere implements Selectable {
 		super.draw(painter);
 
 		// Draws selection anchors
-		painter.glBegin(GL.GL_POINTS);
+		painter.glBegin_Point();
 		painter.color(Color.RED);
 		for (Coord3d a : anchors)
 			painter.vertex(a);

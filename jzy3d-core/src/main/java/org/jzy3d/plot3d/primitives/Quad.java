@@ -3,8 +3,6 @@ package org.jzy3d.plot3d.primitives;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL2;
-
 /**
  * A {@link Quad} extends a {@link Polygon} in order to provide a specific
  * {@link draw()} method that relies on a dedicated GL2 call (GL_QUADS), and to
@@ -25,7 +23,7 @@ public class Quad extends Polygon {
 	
     @Override
     protected void begin(Painter painter) {
-    	painter.glBegin(GL2.GL_QUADS);
+    	painter.glBegin_Quad();
     }
 
 

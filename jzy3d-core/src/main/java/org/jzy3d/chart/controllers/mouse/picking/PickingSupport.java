@@ -109,7 +109,7 @@ public class PickingSupport {
         double ypick = pickPoint.y;
         
         // Setup projection matrix
-        painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+        painter.glMatrixMode_Projection();
         painter.glPushMatrix();
         {
         	painter.glLoadIdentity();
@@ -119,7 +119,7 @@ public class PickingSupport {
 	        camera.doShoot(painter, cMode);
 	        
 	        // Draw each pickable element in select buffer
-	        painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+	        painter.glMatrixMode_ModelView();
 	        
 	        synchronized(this){
     	        for(Pickable pickable: pickables.values()){

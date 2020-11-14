@@ -21,7 +21,7 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 				painter.glPolygonOffset(1.0f, 1.0f);
 			}
-			painter.glBegin(GL2GL3.GL_QUADS); // <<<
+			painter.glBegin_Quad(); // <<<
 			for (Point p : points) {
 				if (mapper != null) {
 					Color c = mapper.getColor(p.xyz); 
@@ -45,7 +45,7 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 			painter.colorAlphaFactor(wfcolor, alpha);
 			painter.glLineWidth(wfwidth);
 
-			painter.glBegin(GL2GL3.GL_QUADS);
+			painter.glBegin_Quad();
 			for (Point p : points) {
 				painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 			}

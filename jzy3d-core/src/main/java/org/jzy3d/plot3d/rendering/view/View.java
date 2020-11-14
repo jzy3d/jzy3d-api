@@ -35,8 +35,7 @@ import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
+//import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 
 /**
  * A {@link View} holds a {@link Scene}, a {@link LightSet}, an {@link ICanvas}
@@ -775,7 +774,7 @@ public class View {
         if (slave) {
             return;
         } else {
-            painter.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT); 
+            painter.glClearColorAndDepthBuffers();
         }
     }
 
@@ -824,10 +823,9 @@ public class View {
 
     public void updateQuality() {
         if (quality.isAlphaActivated())
-            painter.glEnable(GL.GL_BLEND);
+            painter.glEnable_Blend();
         else
-        	painter.glDisable(GL.GL_BLEND);
-        	//painter.glDisable(GL2.GL_BLEND);
+        	painter.glDisable_Blend();
     }
     
     /* SCALE PROCESSING */
@@ -1086,7 +1084,7 @@ public class View {
     
     protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
-            painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+            painter.glMatrixMode_ModelView();
 
             scene.getLightSet().disable(painter);
             axe.setScale(scaling);

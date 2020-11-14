@@ -7,8 +7,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-
 public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IMultiColorable {
     public ConcurrentScatterMultiColor(Coord3d[] coordinates, Color[] colors, ColorMapper mapper) {
         this(coordinates, colors, mapper, 1.0f);
@@ -27,7 +25,7 @@ public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IM
         doTransform(painter);
 
         painter.glPointSize(width);
-        painter.glBegin(GL.GL_POINTS);
+        painter.glBegin_Point();
 
         if (coordinates != null) {
             synchronized (coordinates) { // difference with super type is here

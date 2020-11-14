@@ -5,9 +5,6 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-
 /**
  * An {@link AbstractViewportManager} describes an element that occupies the
  * whole rendering {@link ICanvas} or only a vertical slice of it.
@@ -154,7 +151,7 @@ public abstract class AbstractViewportManager {
             return;
         
         // Set a 2d projection
-        painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+        painter.glMatrixMode_Projection();
         painter.glPushMatrix();
         painter.glLoadIdentity();
 
@@ -178,7 +175,7 @@ public abstract class AbstractViewportManager {
         painter.glOrtho(AREA_LEFT, AREA_RIGHT, AREA_DOWN, AREA_TOP, -1, 1);
 
         // Set a grid
-        painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        painter.glMatrixMode_ModelView();
         painter.glPushMatrix();
         painter.glLoadIdentity();
         painter.glColor3f(1f, 0.5f, 0.5f);
@@ -192,7 +189,7 @@ public abstract class AbstractViewportManager {
             if (x == AREA_LEFT)
                 x += OFFSET;
 
-            painter.glBegin(GL.GL_LINES);
+            painter.glBegin_Line();
             painter.glVertex3f(x, AREA_DOWN, 1);
             painter.glVertex3f(x, AREA_TOP, 1);
             painter.glEnd();
@@ -204,7 +201,7 @@ public abstract class AbstractViewportManager {
             if (y == AREA_TOP)
                 y -= OFFSET;
 
-            painter.glBegin(GL.GL_LINES);
+            painter.glBegin_Line();
             painter.glVertex3f(AREA_LEFT, y, 1);
             painter.glVertex3f(AREA_RIGHT, y, 1);
             painter.glEnd();
@@ -212,7 +209,7 @@ public abstract class AbstractViewportManager {
 
         // Restore matrices
         painter.glPopMatrix();
-        painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+        painter.glMatrixMode_Projection();
         painter.glPopMatrix();
     }
 

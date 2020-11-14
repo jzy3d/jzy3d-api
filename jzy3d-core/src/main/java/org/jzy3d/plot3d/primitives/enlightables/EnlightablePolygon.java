@@ -16,7 +16,6 @@ import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
 
 public class EnlightablePolygon extends AbstractEnlightable {
@@ -52,7 +51,7 @@ public class EnlightablePolygon extends AbstractEnlightable {
 					painter.glPolygonOffset(1.0f, 1.0f);
 				}
 
-				painter.glBegin(GL2.GL_POLYGON);
+				painter.glBegin_Polygon();
 				for (Point p : points) {
 					if (mapper != null) {
 						Color c = mapper.getColor(p.xyz);
@@ -77,7 +76,7 @@ public class EnlightablePolygon extends AbstractEnlightable {
 				painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, 1);// wfcolor.a);
 				painter.glLineWidth(wfwidth);
 
-				painter.glBegin(GL2.GL_POLYGON);
+				painter.glBegin_Polygon();
 				for (Point p : points) {
 					painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 					painter.glNormal3f(norm.x, norm.y, norm.z);

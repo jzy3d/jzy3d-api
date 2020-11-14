@@ -11,8 +11,6 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-
 /**
  * A Point3d is a storage for a Coord3d and a Color that represents a drawable
  * 3d point. <br>
@@ -64,7 +62,7 @@ public class Point extends Drawable implements ISingleColorable {
 		doTransform(painter);
 
 		painter.glPointSize(width);
-		painter.glBegin(GL.GL_POINTS);
+		painter.glBegin_Point();
 		painter.color(rgb);
 		painter.vertex(xyz, spaceTransformer);
 		painter.glEnd();

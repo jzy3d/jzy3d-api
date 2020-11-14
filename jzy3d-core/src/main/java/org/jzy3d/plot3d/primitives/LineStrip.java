@@ -15,7 +15,6 @@ import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
 
 /**
@@ -115,12 +114,12 @@ public class LineStrip extends Wireframeable {
         
         if (stipple) {
             painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
-            painter.glEnable(GL2.GL_LINE_STIPPLE);
+            painter.glEnable_LineStipple();
             painter.glLineStipple(stippleFactor, stipplePattern);
         }
         painter.glLineWidth(wfwidth); 
 
-        painter.glBegin(GL.GL_LINE_STRIP);
+        painter.glBegin_LineStrip();
 
         if (wfcolor == null) {
             for (Point p : points) {
@@ -136,7 +135,7 @@ public class LineStrip extends Wireframeable {
         painter.glEnd();
         
         if (stipple) {
-        	painter.glDisable(GL2.GL_LINE_STIPPLE);
+        	painter.glDisable_LineStipple();
         }
     }
 
@@ -147,7 +146,7 @@ public class LineStrip extends Wireframeable {
     }
 
     public void drawPoints(Painter painter) {
-    	painter.glBegin(GL.GL_POINTS);
+    	painter.glBegin_Point();
         painter.glPointSize(wfwidth);
 
         for (Point p : points) {
