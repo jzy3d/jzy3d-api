@@ -9,8 +9,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-
 public class ConcurrentScatterMultiColorList extends ScatterMultiColorList implements IMultiColorable {
     public ConcurrentScatterMultiColorList(ColorMapper mapper) {
         this(new ArrayList<Coord3d>(), mapper, 1.0f);
@@ -31,7 +29,7 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
         doTransform(painter);
         
         painter.glPointSize(width);
-        painter.glBegin(GL.GL_POINTS);
+        painter.glBegin_Point();
 
         if (coordinates != null) {
         	synchronized (coordinates) { // here is the difference!

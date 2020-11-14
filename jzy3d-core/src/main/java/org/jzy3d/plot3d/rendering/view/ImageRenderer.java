@@ -35,6 +35,7 @@ public class ImageRenderer {
 		// Draw
 		painter.glPixelZoom(xratio, yratio);
 		painter.glRasterPos3f(xpict, ypict, z);
+		//painter.glRasterPos2f(xpict, ypict);
 
 		synchronized (image) { // we don't want to draw image while it is being set by setImage
 			painter.glDrawPixels(imageWidth, imageHeight, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, image);

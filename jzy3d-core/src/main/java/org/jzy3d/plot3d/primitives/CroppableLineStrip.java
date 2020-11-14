@@ -3,8 +3,6 @@ package org.jzy3d.plot3d.primitives;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL;
-
 public class CroppableLineStrip extends LineStrip implements Croppable {
     boolean[] filter; // true = show, false = hide
 
@@ -22,9 +20,10 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
 
     @Override
     public void drawLine(Painter painter) {
-        painter.glBegin(GL.GL_LINE_STRIP);
+        painter.glBegin_LineStrip();
 
         painter.glLineWidth(wfwidth);
+        
         if (filter == null)
             doDrawAllLines(painter);
         else
@@ -34,7 +33,8 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
 
     @Override
     public void drawPoints(Painter painter) {
-        painter.glBegin(GL.GL_POINTS);
+        painter.glBegin_Point();
+        
         if (filter == null)
             doDrawAllPoints(painter);
         else

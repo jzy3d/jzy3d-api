@@ -5,8 +5,6 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL2;
-
 // equivalent de DrawableTexture
 public class TexSurface extends Drawable{
     protected static float SIZE = 100f;
@@ -24,7 +22,7 @@ public class TexSurface extends Drawable{
         // Draw A Quad
         //gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
         
-        painter.glBegin(GL2.GL_QUADS);
+        painter.glBegin_Quad();
         {
         	painter.glTexCoord2f(0.0f, 0.0f);
         	painter.glVertex3f(0.0f, SIZE, SIZE);

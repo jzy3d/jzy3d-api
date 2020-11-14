@@ -16,7 +16,8 @@ import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
  * @author Martin Pernollet
  */
 public class AWTImageViewport extends AbstractViewportManager implements IImageViewport {
-
+	static final float IMAGE_Z = 0;//-0.75f;
+	
     public AWTImageViewport() {
         setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
     }
@@ -26,22 +27,22 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
         // gl.glDisable(GL2.GL_LIGHTING);
 
         // Set viewport and projection
-    	painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+    	painter.glMatrixMode_Projection();
         painter.glPushMatrix();
         painter.glLoadIdentity();
         applyViewport(painter);
         painter.glOrtho(0, screenWidth, 0, screenHeight, -1, 1);
 
         // Zoom and layout
-        painter.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+        painter.glMatrixMode_ModelView();
         painter.glPushMatrix();
         painter.glLoadIdentity();
 
-        ImageRenderer.renderImage(painter, imageData, imageWidth, imageHeight, screenWidth, screenHeight, -0.75f);
+        ImageRenderer.renderImage(painter, imageData, imageWidth, imageHeight, screenWidth, screenHeight, IMAGE_Z);
 
         // Restore matrices state
         painter.glPopMatrix();
-        painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+        painter.glMatrixMode_Projection();
         painter.glPopMatrix();
     }
 

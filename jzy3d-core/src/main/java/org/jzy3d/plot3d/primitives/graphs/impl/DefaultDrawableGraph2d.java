@@ -11,8 +11,6 @@ import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-
 public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> {
 	public DefaultDrawableGraph2d() {
 		super();
@@ -26,7 +24,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 	@Override
     protected void drawVertices(Painter painter) {
 		painter.glPointSize(formatter.getVertexWidth());
-		painter.glBegin(GL.GL_POINTS);
+		painter.glBegin_Point();
 		for (V v : graph.getVertices()) {
 			if (highlights.get(v))
 				drawVertexNode(painter, v, layout.get(v), formatter.getHighlightedVertexColor());
@@ -69,7 +67,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 	}
 
 	protected void drawEdge(Painter painter, E e, Coord2d c1, Coord2d c2, Color color) {
-		painter.glBegin(GL.GL_LINE_STRIP);
+		painter.glBegin_LineStrip();
 		painter.color(color);
 		painter.glVertex3f(c1.x, c1.y, Z);
 		painter.glVertex3f(c2.x, c2.y, Z);

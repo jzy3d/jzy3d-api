@@ -79,7 +79,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 				painter.color(wfcolor);
 				//painter.glLineWidth(wfwidth);
 				//begin(painter, gl);
-				painter.glBegin(GL.GL_LINE_LOOP);
+				painter.glBegin_LineLoop();
 				painter.glLineWidth(getWireframeWidth());
 				for (Point p : points) {
 					painter.vertex(p.xyz, spaceTransformer);

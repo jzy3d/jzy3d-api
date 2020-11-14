@@ -54,7 +54,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     
     public TextBitmapRenderer(int font, int fontSize) {
         super();
-        this.font = font;
+        this.fontId = font;
         this.fontHeight = fontSize;
     }
 
@@ -62,7 +62,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     public void drawSimpleText(Painter painter, Camera cam, String s, Coord3d position, Color color) {
         glRaster(painter, position, color);
     	
-        painter.glutBitmapString(font, s);
+        painter.glutBitmapString(fontId, s);
     }
 
     /**
@@ -75,7 +75,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 
         // compute a corrected position according to layout
         Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
-        float strlen = painter.glutBitmapLength(font, text);
+        float strlen = painter.glutBitmapLength(fontId, text);
         float x = computeXWithAlign(halign, posScreen, strlen, 0.0f);
         float y = computeYWithAlign(valign, posScreen, 0.0f);
         Coord3d posScreenShifted = new Coord3d(x + screenOffset.x, y + screenOffset.y, posScreen.z);
@@ -94,7 +94,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         
         // Draws actual string
         glRasterPos(painter, sceneOffset, posReal);
-        painter.glutBitmapString(font, text);
+        painter.glutBitmapString(fontId, text);
         return computeTextBounds(painter, posScreenShifted, strlen);
     }
 
@@ -148,5 +148,5 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 
     protected static GLUT glut = new GLUT();
     protected int fontHeight;
-    protected int font;
+    protected int fontId;
 }

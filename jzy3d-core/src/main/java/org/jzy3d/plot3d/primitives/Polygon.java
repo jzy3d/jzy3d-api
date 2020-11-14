@@ -3,8 +3,6 @@ package org.jzy3d.plot3d.primitives;
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL2;
-
 /**
  * Supports additional settings
  * 
@@ -27,6 +25,6 @@ public class Polygon extends Geometry {
 
     @Override
     protected void begin(Painter painter) {
-    	painter.glBegin(GL2.GL_POLYGON);
+    	painter.glBegin_Polygon();
     }
 }

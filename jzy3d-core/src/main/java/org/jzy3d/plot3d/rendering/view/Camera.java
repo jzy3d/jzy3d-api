@@ -14,7 +14,6 @@ import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 
 /**
  * A {@link Camera} allow to define on the view and target points in a cartesian
@@ -384,7 +383,7 @@ public class Camera extends AbstractViewportManager {
     }
 
     public void shoot(Painter painter, CameraMode projection, boolean doPushMatrixBeforeShooting) {
-        painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+        painter.glMatrixMode_Projection();
         if (doPushMatrixBeforeShooting)
         	painter.glPushMatrix();
         painter.glLoadIdentity();

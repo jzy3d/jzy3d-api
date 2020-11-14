@@ -8,8 +8,6 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.GL;
-
 /**
  * An AxeBase provide a simple 3-segment object which is configured by a
  * BoundingBox.
@@ -47,7 +45,7 @@ public class AxisBase implements IAxis {
 		painter.glScalef(scale.x, scale.y, scale.z);
 		painter.glLineWidth(2);
 
-		painter.glBegin(GL.GL_LINES);
+		painter.glBegin_Line();
 		painter.glColor3f(1.0f, 0.0f, 0.0f); // R
 		painter.glVertex3f(bbox.getXmin(), bbox.getYmin(), bbox.getZmin());
 		painter.glVertex3f(bbox.getXmax(), 0, 0);
