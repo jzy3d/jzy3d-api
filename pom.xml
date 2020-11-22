@@ -78,7 +78,7 @@
 		<version.java.source>1.8</version.java.source>
 		<version.java.target>1.8</version.java.target>
 		<version.mvn.compiler>3.0</version.mvn.compiler>
-		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
+		<version.mvn.ftp>2.10</version.mvn.ftp>
 		<version.mvn.deploy>2.4</version.mvn.deploy>
 		<version.mvn.javadoc>2.9.1</version.mvn.javadoc>
 		<version.mvn.release>2.5.3</version.mvn.release>
@@ -153,6 +153,7 @@
 					</configuration>
 				</plugin>
 
+				<!--SKIP deploy configuration
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
@@ -160,7 +161,7 @@
 					<configuration>
 						<skip>true</skip>
 					</configuration>
-				</plugin>
+				</plugin>-->
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -198,7 +199,7 @@
 					<version>${version.mvn.release}</version>
 				</plugin>
 
-				<plugin>
+				<!--<plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
             <version>1.6.7</version>
@@ -207,12 +208,13 @@
                 <serverId>ossrh</serverId>
                 <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                 <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                <!--<skipStagingRepositoryClose>true</skipStagingRepositoryClose>-->
+                TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
             </configuration>
-        </plugin>
+        </plugin>-->
 
   			<!-- To sign artigact while deploying to Maven central via Sonatype -->
-		    <plugin>
+
+		    <!--<plugin>
 		      <groupId>org.apache.maven.plugins</groupId>
 		      <artifactId>maven-gpg-plugin</artifactId>
 		      <version>1.5</version>
@@ -225,18 +227,27 @@
 		          </goals>
 		        </execution>
 		      </executions>
-		    </plugin>
+		    </plugin>-->
+
+				<plugin>
+				    <groupId>org.codehaus.mojo</groupId>
+				    <artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+
+				    <configuration>
+				        <skip>true</skip>
+				    </configuration>
+				</plugin>
 		  </plugins>
 
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>${version.mvn.ftp}</version>
-			</extension>
-		</extensions>
+			<extensions>
+				<extension>
+					<groupId>org.apache.maven.wagon</groupId>
+					<artifactId>wagon-ftp</artifactId>
+					<version>${version.mvn.ftp}</version>
+				</extension>
+			</extensions>
 	</build>
-
 
 	<profiles>
 		<profile>

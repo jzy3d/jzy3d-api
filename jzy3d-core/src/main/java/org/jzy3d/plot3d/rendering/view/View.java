@@ -86,7 +86,7 @@ public class View {
     protected CameraMode cameraMode;
     protected ViewPositionMode viewmode;
     protected ViewBoundMode boundmode;
-    protected Color bgColor = Color.BLACK;
+    protected Color backgroundColor = Color.BLACK;
     protected List<IViewPointChangedListener> viewPointChangedListeners;
     protected List<IViewIsVerticalEventListener> viewOnTopListeners;
     protected List<IViewLifecycleEventListener> viewLifecycleListeners;
@@ -552,11 +552,11 @@ public class View {
     }
 
     public void setBackgroundColor(Color color) {
-        bgColor = color;
+        backgroundColor = color;
     }
 
     public Color getBackgroundColor() {
-        return bgColor;
+        return backgroundColor;
     }
 
     public Camera getCamera() {
@@ -768,7 +768,7 @@ public class View {
 
     /** Clear the color and depth buffer. */
     public void clear() {
-        painter.clearColor(bgColor);
+        painter.clearColor(backgroundColor);
         painter.glClearDepth(1);
 
         if (slave) {
