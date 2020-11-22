@@ -13,8 +13,6 @@ import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-
 public class AxisBox2d extends AxisBox {
     public AxisBox2d(BoundingBox3d bbox, IAxisLayout layout) {
         super(bbox, layout);
@@ -112,7 +110,7 @@ public class AxisBox2d extends AxisBox {
             // CETTE ROTATION NE MARCHE PAS ET AFFECTE LE BON RENDU QUAND ON UTILISE BOUNDING POLICY!!
             
             glRasterPos(painter, sceneOffset, Coord3d.ORIGIN);
-            glut.glutBitmapString(fontId, text);
+            painter.glutBitmapString(fontId, text);
             
             return computeTextBounds(painter, posScreenShifted, strlen);
         }

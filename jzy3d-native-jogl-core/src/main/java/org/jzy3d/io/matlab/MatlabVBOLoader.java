@@ -8,11 +8,12 @@ import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
+import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
 import com.jmatio.io.MatFileReader;
 import com.jmatio.types.MLNumericArray;
-import com.jogamp.opengl.GL;
 
 /**
  * Load a Matlab (TM) .mat file, assuming it contains at least three arrays named
@@ -32,7 +33,7 @@ public class MatlabVBOLoader implements IGLLoader<DrawableVBO>{
 
     @Override
     @SuppressWarnings("unchecked")
-    public void load(GL gl, DrawableVBO drawable) throws Exception {
+    public void load(Painter painter, DrawableVBO drawable) throws Exception {
         MatFileReader mfr = new MatFileReader(filename);
         MLNumericArray<Float> x = (MLNumericArray<Float>) mfr.getMLArray("X");
         MLNumericArray<Float> y = (MLNumericArray<Float>) mfr.getMLArray("Y");
@@ -86,7 +87,7 @@ public class MatlabVBOLoader implements IGLLoader<DrawableVBO>{
         indices.rewind();
         
         // Store in GPU
-        drawable.setData(gl, indices, vertices, bounds);
+        drawable.setData(((NativeDesktopPainter)painter).getGL(), indices, vertices, bounds);
         
         Logger.getLogger(MatlabVBOLoader.class).info("done loading " + filename);
     }

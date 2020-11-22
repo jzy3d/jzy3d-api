@@ -15,9 +15,6 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
 	/**
 	 * Initializes an empty {@link Geometry} with face status defaulting to
@@ -135,6 +132,15 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	protected void polygonOffsetFillDisable(Painter painter) {
 		painter.glDisable_PolygonOffsetFill();
 	}
+	
+	protected void polygonOffsetLineEnable(Painter painter) {
+		painter.glEnable_PolygonOffsetLine();
+		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
+    }
+
+    protected void polygonOffsetLineDisable(Painter painter) {
+    	painter.glDisable_PolygonOffsetLine();
+    }
 
 	/* DATA */
 

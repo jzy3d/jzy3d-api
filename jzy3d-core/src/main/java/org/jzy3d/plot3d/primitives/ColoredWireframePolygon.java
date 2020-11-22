@@ -3,8 +3,6 @@ package org.jzy3d.plot3d.primitives;
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL2GL3;
-
 public class ColoredWireframePolygon extends Polygon {
 
 	
@@ -43,14 +41,7 @@ public class ColoredWireframePolygon extends Polygon {
         doDrawBoundsIfDisplayed(painter);
     }
 	
-    protected void polygonOffsetLineEnable(Painter painter) {
-		painter.glEnable(GL2GL3.GL_POLYGON_OFFSET_LINE);
-		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
-    }
-
-    protected void polygonOffsetLineDisable(Painter painter) {
-    	painter.glDisable(GL2GL3.GL_POLYGON_OFFSET_LINE);
-    }
+    
     
     @Override
     public void callPointForWireframe(Painter painter) {

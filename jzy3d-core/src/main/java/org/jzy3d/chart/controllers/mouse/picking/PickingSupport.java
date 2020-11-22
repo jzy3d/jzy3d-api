@@ -1,5 +1,7 @@
 package org.jzy3d.chart.controllers.mouse.picking;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +12,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.pickable.Pickable;
 import org.jzy3d.plot3d.rendering.scene.Graph;
@@ -18,11 +21,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.transform.Scale;
 import org.jzy3d.plot3d.transform.Transform;
-
-import com.jogamp.common.nio.Buffers;
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 
 /**
  * @see: http://www.opengl.org/resources/faq/technical/selection.htm
@@ -90,12 +88,13 @@ public class PickingSupport {
 	    
         int viewport[] = new int[4];
         int selectBuf[] = new int[bufferSize]; // TODO: move @ construction
-        IntBuffer selectBuffer = Buffers.newDirectIntBuffer(bufferSize);
+        IntBuffer selectBuffer = newDirectIntBuffer(bufferSize);
         
         // Prepare selection data
-        painter.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);        
+        viewport = painter.getViewPortAsInt();
+        //painter.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);        
         painter.glSelectBuffer(bufferSize, selectBuffer);        
-        painter.glRenderMode(GL2.GL_SELECT);         
+        painter.glRenderMode(RenderMode.SELECT);         
         painter.glInitNames();
         painter.glPushName(0); 
 
@@ -130,13 +129,13 @@ public class PickingSupport {
 	        }
 	        
 	        // Back to projection matrix
-	        painter.glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+	        painter.glMatrixMode_Projection();
         }
         painter.glPopMatrix();
         painter.glFlush();
         
         // Process hits
-        int hits = painter.glRenderMode(GL2.GL_RENDER);
+        int hits = painter.glRenderMode(RenderMode.RENDER);
         selectBuffer.get(selectBuf);
         List<Pickable> picked = processHits(hits, selectBuf);
         
@@ -150,6 +149,24 @@ public class PickingSupport {
         
         fireObjectPicked(clickedObjects);
     }
+
+	/**Picked from JOGL Buffers class. */
+    public static final int SIZEOF_INT      = 4;
+
+	/**Picked from JOGL Buffers class. */
+    public static IntBuffer newDirectIntBuffer(final int numElements) {
+        return newDirectByteBuffer(numElements * SIZEOF_INT).asIntBuffer();
+    }
+	/**Picked from JOGL Buffers class. */
+	public static ByteBuffer newDirectByteBuffer(final int numElements) {
+        return nativeOrder(ByteBuffer.allocateDirect(numElements));
+    }
+	/**Picked from JOGL Buffers class. */
+	public static ByteBuffer nativeOrder(final ByteBuffer buf) {
+        return buf.order(ByteOrder.nativeOrder());
+    }
+	
+	
 	
 	public double getLastPickPerfMs(){
 	    return perf.elapsedMilisecond();

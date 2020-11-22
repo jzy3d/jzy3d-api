@@ -12,6 +12,8 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.LightModel;
+import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -80,6 +82,9 @@ public interface Painter {
 
 	public void material(int face, int pname, Color color);
 	
+	public void glMaterial(MaterialProperty material, Color color, boolean b);
+	public void glMaterial(MaterialProperty material, float[] value, boolean b);
+
     //public void begin(Geometry geometry);
     //public void end();
 	//public void culling(boolean status);
@@ -146,6 +151,8 @@ public interface Painter {
 
     public int glGenLists(int range);
     public void glNewList(int list, int mode);
+	public void glNewList(int list, ListMode compile);
+
 	public void glEndList();
 	public void glCallList(int list);
 	public boolean glIsList(int list);
@@ -156,6 +163,8 @@ public interface Painter {
     public void glDrawPixels(int width, int height, int format, int type, Buffer pixels);
     public void glPixelZoom(float xfactor, float yfactor);
     public void glPixelStorei(int pname, int param);
+    public void glPixelStore(PixelStore unpackAlignment, int param);
+	
     public void glRasterPos3f(float x, float y, float z);
     public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, byte[] bitmap, int bitmap_offset);
 	
@@ -187,6 +196,7 @@ public interface Painter {
 	
 	public void glFeedbackBuffer(int size, int type, FloatBuffer buffer);
 	public int glRenderMode(int mode);
+	public int glRenderMode(RenderMode mode);
 	public void glPassThrough(float token);
 	
 	
@@ -203,6 +213,8 @@ public interface Painter {
 	public void glShadeModel(int mode);
 	public void glLightfv(int light, int pname, float[] params, int params_offset);
 	public void glLightModeli(int mode, int value);
+	public void glLightModel(LightModel model, boolean value);
+	
 	public void glMaterialfv(int face, int pname, float[] params, int params_offset);
 
 	// OTHER
@@ -252,5 +264,30 @@ public interface Painter {
 	public void glDisable_LineStipple();
 	public void glEnable_PolygonOffsetFill();
 	public void glDisable_PolygonOffsetFill();
+	public void glEnable_PolygonOffsetLine();
+	public void glDisable_PolygonOffsetLine();
+
+	
+	public void glEnable_CullFace();
+	public void glDisable_CullFace();
+	public void glFrontFace_ClockWise();
+	public void glCullFace_Front();
+	
+	public void glDisable_Lighting();
+	public void glEnable_Lighting();
+	
+	public void glEnable_Light(int light);
+	public void glDisable_Light(int light);
+	
+	public void glLight_Position(int lightId, float[] positionZero);
+	public void glLight_Ambiant(int lightId, Color ambiantColor);
+	public void glLight_Diffuse(int lightId, Color diffuseColor);
+	public void glLight_Specular(int lightId, Color specularColor);
+	
+	public void glEnable_ColorMaterial();
+	
+	public void glEnable_PointSmooth();
+	public void glHint_PointSmooth_Nicest();
+
 	
 }

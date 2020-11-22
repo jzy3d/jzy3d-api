@@ -3,10 +3,8 @@ package org.jzy3d.plot3d.rendering.lights;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.fixedfunc.GLLightingFunc;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
 
 public class Light {
     public static void resetCounter() {
@@ -43,16 +41,16 @@ public class Light {
 
             // Light position representation (cube)
             if (representationDisplayed) {
-                painter.glDisable(GLLightingFunc.GL_LIGHTING);
+                painter.glDisable_Lighting();
                 painter.glColor3f(0.0f, 1.0f, 1.0f);
-                painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+                painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
                 painter.glutSolidCube(representationRadius);
-                painter.glEnable(GLLightingFunc.GL_LIGHTING);
+                painter.glEnable_Lighting();
             }
 
             configureLight(painter);            
         } else {
-            painter.glDisable(GLLightingFunc.GL_LIGHTING);
+            painter.glDisable_Lighting();
         }
     }
 
@@ -60,39 +58,15 @@ public class Light {
         // Actual light source setting TODO: check we really need to
         // define @ each rendering
         LightSwitch.enable(painter, lightId);
-        switch (lightId) {
-        case 0:
-            configureLight(painter, GLLightingFunc.GL_LIGHT0);
-            break;
-        case 1:
-            configureLight(painter, GLLightingFunc.GL_LIGHT1);
-            break;
-        case (2):
-            configureLight(painter, GLLightingFunc.GL_LIGHT2);
-            break;
-        case 3:
-            configureLight(painter, GLLightingFunc.GL_LIGHT3);
-            break;
-        case 4:
-            configureLight(painter, GLLightingFunc.GL_LIGHT4);
-            break;
-        case 5:
-            configureLight(painter, GLLightingFunc.GL_LIGHT5);
-            break;
-        case 6:
-            configureLight(painter, GLLightingFunc.GL_LIGHT6);
-            break;
-        case 7:
-            configureLight(painter, GLLightingFunc.GL_LIGHT7);
-            break;
-        }
+        
+        configureLight(painter, lightId);
     }
 
     protected void configureLight(Painter painter, int lightId) {
-        painter.glLightfv(lightId, GLLightingFunc.GL_POSITION, positionZero, 0);
-        painter.glLightfv(lightId, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
-        painter.glLightfv(lightId, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
-        painter.glLightfv(lightId, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
+        painter.glLight_Position(lightId, positionZero);
+        painter.glLight_Ambiant(lightId, ambiantColor);
+        painter.glLight_Diffuse(lightId, diffuseColor);
+        painter.glLight_Specular(lightId, specularColor);
     }
 
     /** Indicates if a square is drawn to show the light position. */
