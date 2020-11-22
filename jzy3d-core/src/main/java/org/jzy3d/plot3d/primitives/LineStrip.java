@@ -14,9 +14,6 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
-
 /**
  * Color works as follow:
  * <ul>
@@ -113,7 +110,7 @@ public class LineStrip extends Wireframeable {
         //painter.glLineWidth(wfwidth);
         
         if (stipple) {
-            painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
+            painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
             painter.glEnable_LineStipple();
             painter.glLineStipple(stippleFactor, stipplePattern);
         }

@@ -13,6 +13,8 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.LightModel;
+import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -116,6 +118,41 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
     @Override
     public IAxis getAxe() {
         return null;
+    }
+    
+    @Override
+	public int[] getViewPortAsInt() {
+        int viewport[] = new int[4];
+        glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
+        return viewport;
+    }
+
+	@Override
+	public double[] getProjectionAsDouble() {
+        double projection[] = new double[16];
+        glGetDoublev(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
+        return projection;
+    }
+
+	@Override
+	public float[] getProjectionAsFloat() {
+        float projection[] = new float[16];
+        glGetFloatv(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
+        return projection;
+    }
+
+	@Override
+	public double[] getModelViewAsDouble() {
+        double modelview[] = new double[16];
+        glGetDoublev(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
+        return modelview;
+    }
+
+	@Override
+	public float[] getModelViewAsFloat() {
+        float modelview[] = new float[16];
+        glGetFloatv(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
+        return modelview;
     }
 
     
@@ -303,6 +340,15 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	}
 	
 	@Override
+	public void glPixelStore(PixelStore store, int param) {
+		switch(store) {
+		case PACK_ALIGNMENT: gl.glPixelStorei(GL.GL_PACK_ALIGNMENT, param); break;
+		case UNPACK_ALIGNMENT: gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, param); break;
+		}
+		throw new IllegalArgumentException("Unsupported mode '"+ store + "'");
+	}
+	
+	@Override
 	public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove, byte[] bitmap,
 			int bitmap_offset) {
 		GLES2CompatUtils.glBitmap(width, height, xorig, yorig, xmove, ymove, bitmap, bitmap_offset);
@@ -337,6 +383,14 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glNewList(int list, int mode) {
 		throw new NotImplementedException();
 		//GLES2CompatUtils.glNewList(list, mode);
+	}
+	
+	@Override
+	public void glNewList(int list, ListMode mode) {
+		switch(mode) {
+		case COMPILE: glNewList(list, GL2.GL_COMPILE);
+		case COMPILE_AND_EXECUTE: glNewList(list, GL2.GL_COMPILE_AND_EXECUTE);
+		}
 	}
 
 	@Override
@@ -404,6 +458,16 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public int glRenderMode(int mode) {
 		throw new NotImplementedException();
 		//return GLES2CompatUtils.glRenderMode(mode);
+	}
+	
+	@Override
+	public int glRenderMode(RenderMode mode) {
+		switch(mode){
+		case RENDER: return glRenderMode(GL2.GL_RENDER);
+		case SELECT: return glRenderMode(GL2.GL_SELECT);
+		case FEEDBACK: return glRenderMode(GL2.GL_FEEDBACK);
+		}
+		throw new IllegalArgumentException("Unsupported mode '" + mode + "'");
 	}
 
 	@Override
@@ -505,13 +569,79 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 
 	@Override
 	public void glLightfv(int light, int pname, float[] params, int params_offset) {
-		GLES2CompatUtils.glLightfv(light, pname, params, params_offset);
+		GLES2CompatUtils.glLightfv(lightId(light), pname, params, params_offset);
+	}
+	
+	@Override
+	public void glLight_Position(int lightId, float[] positionZero) {
+		glLightfv(lightId, GLLightingFunc.GL_POSITION, positionZero, 0);
+	}
+
+	@Override
+	public void glLight_Ambiant(int lightId, Color ambiantColor) {
+		glLightfv(lightId, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
+		
+	}
+
+	@Override
+	public void glLight_Diffuse(int lightId, Color diffuseColor) {
+		glLightfv(lightId, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
+	}
+
+	@Override
+	public void glLight_Specular(int lightId, Color specularColor) {
+		glLightfv(lightId, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);		
+	}
+	
+	@Override
+	public void glEnable_Light(int light) {
+		glEnable(lightId(light));
+	}
+
+	@Override
+	public void glDisable_Light(int light) {
+		glEnable(lightId(light));
+	}
+	
+	protected int lightId(int id) {
+		switch (id) {
+        case 0:
+            return GLLightingFunc.GL_LIGHT0;
+        case 1:
+            return GLLightingFunc.GL_LIGHT1;
+        case (2):
+            return GLLightingFunc.GL_LIGHT2;
+        case 3:
+            return GLLightingFunc.GL_LIGHT3;
+        case 4:
+            return GLLightingFunc.GL_LIGHT4;
+        case 5:
+            return GLLightingFunc.GL_LIGHT5;
+        case 6:
+            return GLLightingFunc.GL_LIGHT6;
+        case 7:
+            return GLLightingFunc.GL_LIGHT7;
+        }
+		throw new IllegalArgumentException("Unsupported light ID '" + id + "'");
 	}
 	
 	@Override
 	public void glLightModeli(int mode, int value) {
 		throw new NotImplementedException();
 		//GLES2CompatUtils.glLightModeli(mode, value);
+	}
+	
+	@Override
+	public void glLightModel(LightModel model, boolean value) {
+		if(LightModel.LIGHT_MODEL_TWO_SIDE.equals(model)) {
+			glLightModeli(GL2ES1.GL_LIGHT_MODEL_TWO_SIDE, value?GL.GL_TRUE:GL.GL_FALSE);
+		}
+		else if(LightModel.LIGHT_MODEL_LOCAL_VIEWER.equals(model)) {
+			glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, value?GL.GL_TRUE:GL.GL_FALSE);			
+		}
+		else {
+			throw new IllegalArgumentException("Unsupported model '" + model + "'");
+		}
 	}
 	
 	@Override
@@ -608,6 +738,16 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	}
 	
 	@Override
+	public void glEnable_PolygonOffsetLine() {
+		glEnable(GL2.GL_POLYGON_OFFSET_LINE);
+	}
+
+	@Override
+	public void glDisable_PolygonOffsetLine() {
+		glDisable(GL2.GL_POLYGON_OFFSET_LINE);
+	}
+	
+	@Override
 	public void glEnable_LineStipple() {
 		glEnable(GL2.GL_LINE_STIPPLE);	
 	}
@@ -626,6 +766,17 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	public void glDisable_Blend() {
         glDisable(GL.GL_BLEND);
 	}
+	
+	@Override
+	public void glDisable_Lighting() {
+		glDisable(GLLightingFunc.GL_LIGHTING);
+	}
+
+	@Override
+	public void glEnable_Lighting() {
+		glEnable(GLLightingFunc.GL_LIGHTING);
+	}
+	
 
 	@Override
 	public void glMatrixMode_ModelView() {
@@ -670,5 +821,71 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 	@Override
 	public void glBegin_Line() {
 		glBegin(GL.GL_LINES);		
+	}
+	
+	
+	@Override
+	public void glEnable_CullFace() {
+		glEnable(GL.GL_CULL_FACE);
+	}
+
+	@Override
+	public void glDisable_CullFace() {
+		glDisable(GL.GL_CULL_FACE);
+	}
+
+	@Override
+	public void glFrontFace_ClockWise() {
+		glFrontFace(GL.GL_CCW);
+	}
+
+	@Override
+	public void glCullFace_Front() {
+		glCullFace(GL.GL_FRONT);
+	}
+	
+	@Override
+	public void glEnable_ColorMaterial() {
+		glEnable(GLLightingFunc.GL_COLOR_MATERIAL);
+	}
+	
+	@Override
+	public void glMaterial(MaterialProperty material, Color color, boolean isFront) {
+		if(isFront) {
+			glMaterialfv(GL.GL_FRONT, materialProperty(material), color.toArray(), 0);
+		}
+		else {
+			glMaterialfv(GL.GL_BACK, materialProperty(material), color.toArray(), 0);
+		}
+	}
+	
+	@Override
+	public void glMaterial(MaterialProperty material, float[] color, boolean isFront) {
+		if(isFront) {
+			glMaterialfv(GL.GL_FRONT, materialProperty(material), color, 0);
+		}
+		else {
+			glMaterialfv(GL.GL_BACK, materialProperty(material), color, 0);
+		}
+	}
+
+	protected int materialProperty(MaterialProperty material) {
+		switch(material) {
+		case AMBIENT:return GLLightingFunc.GL_AMBIENT;
+		case DIFFUSE:return GLLightingFunc.GL_DIFFUSE;
+		case SPECULAR:return GLLightingFunc.GL_SPECULAR;
+		case SHININESS:return GLLightingFunc.GL_SHININESS;
+		}
+		throw new IllegalArgumentException("Unsupported property '" + material + "'");
+	}
+	
+	@Override
+	public void glEnable_PointSmooth() {
+		glEnable(GL2.GL_POINT_SMOOTH);
+	}
+
+	@Override
+	public void glHint_PointSmooth_Nicest() {
+		glHint(GL2.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
 	}
 }

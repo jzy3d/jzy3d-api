@@ -6,11 +6,12 @@ import java.nio.IntBuffer;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.primitives.vbo.builders.VBOBuilder;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
 public class ShaderWaterfallVBOBuilder extends VBOBuilder {
@@ -46,8 +47,8 @@ public class ShaderWaterfallVBOBuilder extends VBOBuilder {
 	}
 
 	@Override
-	public void load(GL gl, DrawableVBO drawable) throws Exception {
-        drawable.setData(gl, vbo);
+	public void load(Painter painter, DrawableVBO drawable) throws Exception {
+        drawable.setData(((NativeDesktopPainter)painter).getGL(), vbo);
         drawable.setGeometry(GL2.GL_TRIANGLES);
 	}
 	

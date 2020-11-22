@@ -70,7 +70,7 @@ public class ShaderWaterfallDrawableVBO extends DrawableVBO implements IMultiCol
 	public void mount(Painter painter) {
 		GL gl = ((NativeDesktopPainter)painter).getGL();
 		try {
-			loader.load(gl, this);
+			loader.load(painter, this);
 			hasMountedOnce = true;
 			shaderProgram = new GLSLProgram();
 			ShaderFilePair sfp = new ShaderFilePair(this.getClass(), "colour_mapped_waterfall.vert", "colour_mapped_waterfall.frag");

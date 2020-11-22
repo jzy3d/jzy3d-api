@@ -6,10 +6,6 @@ import java.util.List;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2ES1;
-import com.jogamp.opengl.fixedfunc.GLLightingFunc;
-
 public class LightSet {
 	public LightSet() {
 		this.lights = new ArrayList<Light>();
@@ -20,7 +16,7 @@ public class LightSet {
 	}
 
 	public void init(Painter painter) {
-		painter.glEnable(GLLightingFunc.GL_COLOR_MATERIAL);
+		painter.glEnable_ColorMaterial();
 	}
 
 	public void apply(Painter painter, Coord3d scale) {
@@ -42,13 +38,13 @@ public class LightSet {
 	public void enable(Painter painter, boolean onlyIfAtLeastOneLight) {
 		if (onlyIfAtLeastOneLight) {
 			if (lights.size() > 0)
-				painter.glEnable(GLLightingFunc.GL_LIGHTING);
+				painter.glEnable_Lighting();
 		} else
-			painter.glEnable(GLLightingFunc.GL_LIGHTING);
+			painter.glEnable_Lighting();
 	}
 
 	public void disable(Painter painter) {
-		painter.glDisable(GLLightingFunc.GL_LIGHTING);
+		painter.glDisable_Lighting();
 	}
 
 	public Light get(int id) {
@@ -73,13 +69,14 @@ public class LightSet {
 
 	// http://www.sjbaker.org/steve/omniv/opengl_lighting.html
 	protected void initLight(Painter painter) {
-		painter.glEnable(GLLightingFunc.GL_COLOR_MATERIAL);
-		painter.glEnable(GLLightingFunc.GL_LIGHTING);
+		painter.glEnable_ColorMaterial();
+		painter.glEnable_Lighting();
 
 		// Light model
-		painter.glLightModeli(GL2ES1.GL_LIGHT_MODEL_TWO_SIDE, GL.GL_TRUE);
-		// gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_TRUE);
-		// gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, GL2.GL_FALSE);
+		
+		painter.glLightModel(LightModel.LIGHT_MODEL_TWO_SIDE, true);
+		// painter.glLightModel(LightModel.LIGHT_MODEL_LOCAL_VIEWER, true);
+		// painter.glLightModel(LightModel.LIGHT_MODEL_LOCAL_VIEWER, false);
 	}
 
 	/***********************************/

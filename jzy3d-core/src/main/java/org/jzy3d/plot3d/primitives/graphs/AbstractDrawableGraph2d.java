@@ -15,8 +15,6 @@ import org.jzy3d.plot3d.primitives.graphs.layout.IGraphLayout2d;
 import org.jzy3d.plot3d.primitives.pickable.Pickable;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2ES1;
 
 /** 
  * An implementation based on {@link Pickable} objects should register
@@ -84,8 +82,9 @@ public abstract class AbstractDrawableGraph2d<V, E> extends Drawable implements 
 		doTransform(painter);
 		
 		// TODO move to graph view init
-	    painter.glEnable(GL2ES1.GL_POINT_SMOOTH);
-	    painter.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+	    painter.glEnable_PointSmooth();//(GL2ES1.GL_POINT_SMOOTH);
+	    painter.glHint_PointSmooth_Nicest();
+	    //painter.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
 	
 	    if(formatter.areEdgesDisplayed())
 	    	drawEdges(painter);

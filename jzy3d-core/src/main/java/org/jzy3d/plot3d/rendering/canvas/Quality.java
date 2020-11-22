@@ -5,7 +5,6 @@ import java.awt.Canvas;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.opengl.util.Animator;
 
 /** Provides a structure for setting the rendering quality, i.e., the tradeoff
  * between computation speed, and graphic quality. Following mode have an impact

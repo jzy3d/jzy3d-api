@@ -1,8 +1,5 @@
 package org.jzy3d.maths;
 
-import com.jogamp.nativewindow.util.Dimension;
-import com.jogamp.nativewindow.util.Point;
-
 /**
  * Replacement for java.awt.Rectangle
  * 
@@ -23,23 +20,6 @@ public class Rectangle {
 	public Rectangle(int width, int height) {
 		this.width = width;
 		this.height = height;
-	}
-
-	public Rectangle(Dimension d) {
-		this.width = d.getWidth();
-		this.height = d.getHeight();
-	}
-
-	public Rectangle(Point p) {
-		this.x = p.getX();
-		this.y = p.getY();
-	}
-
-	public Rectangle(Point p, Dimension d) {
-		this.x = p.getX();
-		this.y = p.getY();
-		this.width = d.getWidth();
-		this.height = d.getHeight();
 	}
 
 	public Rectangle intersection(Rectangle r) {

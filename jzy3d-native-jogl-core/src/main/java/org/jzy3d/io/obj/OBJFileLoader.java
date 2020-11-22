@@ -6,10 +6,11 @@ import java.nio.IntBuffer;
 import org.apache.log4j.Logger;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
 import com.jogamp.common.nio.Buffers;
-import com.jogamp.opengl.GL;
 
 public class OBJFileLoader implements IGLLoader<DrawableVBO>{
     static Logger logger = Logger.getLogger(OBJFileLoader.class);
@@ -22,7 +23,7 @@ public class OBJFileLoader implements IGLLoader<DrawableVBO>{
     }
 
     @Override
-    public void load(GL gl, DrawableVBO drawable) {
+    public void load(Painter painter, DrawableVBO drawable) {
         obj = new OBJFile();
         
         logger.info("Start loading OBJ file '" + filename + "'");
@@ -48,8 +49,8 @@ public class OBJFileLoader implements IGLLoader<DrawableVBO>{
         BoundingBox3d bounds = obj.computeBoundingBox();
         
         drawable.doConfigure(pointer, size, byteOffset, normalOffset, dimensions);
-        drawable.doLoadArrayFloatBuffer(gl, vertexSize, vertices);
-        drawable.doLoadElementIntBuffer(gl, indexSize, indices);
+        drawable.doLoadArrayFloatBuffer(((NativeDesktopPainter)painter).getGL(), vertexSize, vertices);
+        drawable.doLoadElementIntBuffer(((NativeDesktopPainter)painter).getGL(), indexSize, indices);
         drawable.doSetBoundingBox(bounds);
     }
 

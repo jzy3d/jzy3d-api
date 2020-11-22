@@ -7,8 +7,6 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.nativewindow.ScalableSurface;
-
 /**
  * A {@link ICanvas} represent the target component for rendering OpenGL.
  * 

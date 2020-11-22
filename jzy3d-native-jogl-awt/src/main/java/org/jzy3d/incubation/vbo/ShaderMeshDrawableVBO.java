@@ -58,7 +58,7 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
 		GL gl = ((NativeDesktopPainter)painter).getGL();
 		
 		try {
-			loader.load(gl, this);
+			loader.load(painter, this);
 			hasMountedOnce = true;
 			shaderProgram = new GLSLProgram();
 			ShaderFilePair sfp = new ShaderFilePair(this.getClass(), "colour_mapped_surface.vert", "colour_mapped_surface.frag");

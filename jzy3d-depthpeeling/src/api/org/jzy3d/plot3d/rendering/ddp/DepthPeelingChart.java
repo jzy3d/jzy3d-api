@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
 import org.apache.log4j.Logger;
-import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.io.glsl.GLSLProgram;

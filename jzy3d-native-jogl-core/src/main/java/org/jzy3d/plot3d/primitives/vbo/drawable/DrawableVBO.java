@@ -69,7 +69,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     public void mount(Painter painter) {
     	GL gl = ((NativeDesktopPainter)painter).getGL();
         try {
-            loader.load(gl, this);
+            loader.load(painter, this);
             hasMountedOnce = true;
         } catch (Exception e) {
             e.printStackTrace();

@@ -13,8 +13,6 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-
 /**
  * A {@link Camera} allow to define on the view and target points in a cartesian
  * coordinate system.
@@ -351,7 +349,7 @@ public class Camera extends AbstractViewportManager {
 
         Coord3d eye = getEye().mul(scaling);
 
-        painter.glBegin(GL.GL_POINTS);
+        painter.glBegin_Point();
         painter.glPointSize(camWidth);
         painter.glColor4f(camColor.r, camColor.g, camColor.b, camColor.a);
         painter.glVertex3f(eye.x, eye.y, eye.z);
