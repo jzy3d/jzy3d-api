@@ -8,9 +8,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
-
 /**
  * A {@link Tube} may be used to render cylinders or pyramids, according to its
  * input parameters. <br>
@@ -56,20 +53,20 @@ public class Tube extends Wireframeable implements ISingleColorable {
 		// Draw
 		if (facestatus) {
 			if (wfstatus) {
-				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glEnable_PolygonOffsetFill();
 				painter.glPolygonOffset(1.0f, 1.0f);
 			}
 
-			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 			painter.color(color);
 			painter.gluCylinder(radiusBottom, radiusTop, height, slices, stacks);
 
 			if (wfstatus) {
-				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glDisable_PolygonOffsetFill();
 			}
 		}
 		if (wfstatus) {
-			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
 			painter.color(wfcolor);
 			painter.gluCylinder(radiusBottom, radiusTop, height, slices, stacks);
 		}
