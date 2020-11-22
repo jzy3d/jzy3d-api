@@ -7,6 +7,8 @@ import java.nio.IntBuffer;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -129,6 +131,7 @@ public interface Painter {
     public void glFrontFace(int mode);
     public void glCullFace(int mode);
 
+    public void glPolygonMode(PolygonMode mode, PolygonFill fill);
     public void glPolygonMode(int frontOrBack, int fill);
     public void glPolygonOffset(float factor, float units);
     
@@ -247,5 +250,7 @@ public interface Painter {
 	
 	public void glEnable_LineStipple();
 	public void glDisable_LineStipple();
+	public void glEnable_PolygonOffsetFill();
+	public void glDisable_PolygonOffsetFill();
 	
 }

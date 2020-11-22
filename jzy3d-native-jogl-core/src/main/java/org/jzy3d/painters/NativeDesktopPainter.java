@@ -8,6 +8,8 @@ import java.nio.IntBuffer;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -223,6 +225,37 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 		gl.glCullFace(mode);
 	}
 
+	@Override
+	public void glPolygonMode(PolygonMode mode, PolygonFill fill) {
+		int modeValue = polygonModeValue(mode);
+		int fillValue = polygonFillValue(fill);
+		
+		glPolygonMode(modeValue, fillValue);
+	}
+	
+	protected int polygonModeValue(PolygonMode mode) {
+		switch (mode) {
+		case FRONT:
+			return GL.GL_FRONT;
+		case BACK:
+			return GL.GL_BACK;
+		case FRONT_AND_BACK:
+			return GL.GL_FRONT_AND_BACK;
+		default:
+			throw new IllegalArgumentException("Unsupported mode '" + mode + "'");
+		}
+	}
+	
+	protected int polygonFillValue(PolygonFill mode) {
+		switch (mode) {
+		case FILL:
+			return GL2.GL_FILL;
+		case LINE:
+			return GL2.GL_LINE;
+		default:
+			throw new IllegalArgumentException("Unsupported mode '" + mode + "'");
+		}
+	}
 	@Override
 	public void glPolygonMode(int frontOrBack, int fill) {
 		gl.getGL2().glPolygonMode(frontOrBack, fill);
@@ -561,6 +594,15 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	
 	/* *********************************************************************** */
 
+	@Override
+	public void glEnable_PolygonOffsetFill() {
+		glEnable(GL.GL_POLYGON_OFFSET_FILL);
+	}
+
+	@Override
+	public void glDisable_PolygonOffsetFill() {
+		glDisable(GL.GL_POLYGON_OFFSET_FILL);
+	}
 	
 	@Override
 	public void glEnable_Blend() {

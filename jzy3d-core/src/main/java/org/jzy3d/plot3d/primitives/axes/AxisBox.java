@@ -9,6 +9,8 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Vector3d;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axes.layout.AxisBoxLayout;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -97,35 +99,36 @@ public class AxisBox implements IAxis {
     public void drawFace(Painter painter) {
         if (layout.isFaceDisplayed()) {
             Color quadcolor = layout.getQuadColor();
-            painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
+            painter.glPolygonMode(PolygonMode.BACK, PolygonFill.FILL);
+            
             painter.glColor4f(quadcolor.r, quadcolor.g, quadcolor.b, quadcolor.a);
             painter.glLineWidth(1.0f);
-            painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+            painter.glEnable_PolygonOffsetFill();
             painter.glPolygonOffset(1.0f, 1.0f); // handle stippling
             drawCube(painter, GL2.GL_RENDER);
-            painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+            painter.glDisable_PolygonOffsetFill();
         }
     }
 
     public void drawGrid(Painter painter) {
         Color gridcolor = layout.getGridColor();
 
-        painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
+        painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
         painter.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
         painter.glLineWidth(1);
         drawCube(painter, GL2.GL_RENDER);
 
         // Draw grids on non hidden quads
-        painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
+        painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
         painter.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
         painter.glLineWidth(1);
         painter.glLineStipple(1, (short) 0xAAAA);
         
-        painter.glEnable(GL2.GL_LINE_STIPPLE);
+        painter.glEnable_LineStipple();
         for (int quad = 0; quad < 6; quad++)
             if (!quadIsHidden[quad])
                 drawGridOnQuad(painter, quad);
-        painter.glDisable(GL2.GL_LINE_STIPPLE);
+        painter.glDisable_LineStipple();
     }
 
     public void drawTicksAndLabels(Painter painter) {
@@ -197,7 +200,6 @@ public class AxisBox implements IAxis {
 
     /**
      * Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK
-     * @param painter TODO
      */
     protected void drawCube(Painter painter, int mode) {
         for (int q = 0; q < 6; q++) {
@@ -213,7 +215,6 @@ public class AxisBox implements IAxis {
 
     /**
      * Draw a grid on the desired quad.
-     * @param painter TODO
      */
     protected void drawGridOnQuad(Painter painter, int quad) {
         // Draw X grid along X axis

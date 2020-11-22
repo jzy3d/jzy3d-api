@@ -17,13 +17,8 @@ import org.jzy3d.plot3d.transform.Transform;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL2GL3;
 
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
-	public enum PolygonMode {
-		FRONT, BACK, FRONT_AND_BACK
-	}
-
 	/**
 	 * Initializes an empty {@link Geometry} with face status defaulting to
 	 * true, and wireframe status defaulting to false.
@@ -48,7 +43,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
 		// Draw content of polygon
 		if (facestatus) {
-			applyPolygonModeFill(painter);
+			painter.glPolygonMode(polygonMode, PolygonFill.FILL);
 
 			if (wfstatus && polygonOffsetFillEnable)
 				polygonOffseFillEnable(painter);
@@ -61,20 +56,13 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
 		// Draw edge of polygon
 		if (wfstatus) {
-			
-			// Fix for JGL
-			boolean fixJGL = true; // TODO : delete me, already existing approach in EmulGLSurfaceBuilder
-			if(fixJGL) {
-				painter.glPolygonMode(GL.GL_FRONT, GL2.GL_LINE);
-		      	painter.glPolygonMode(GL.GL_BACK, GL2.GL_LINE);
-			}
-			else {
-				applyPolygonModeLine(painter);
-			}
+			painter.glPolygonMode(polygonMode, PolygonFill.LINE);
 
 			if (polygonOffsetFillEnable)
 				polygonOffseFillEnable(painter);
 
+			// Fix for JGL
+			boolean fixJGL = true; // TODO : delete me, already existing approach in EmulGLSurfaceBuilder
 
 			if(fixJGL) {
 				painter.color(wfcolor);
@@ -138,46 +126,14 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	 */
 	protected abstract void begin(Painter painter);
 
-	protected void applyPolygonModeLine(Painter painter) {
-		switch (polygonMode) {
-		case FRONT:
-			painter.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_LINE);
-			break;
-		case BACK:
-			painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_LINE);
-			break;
-		case FRONT_AND_BACK:
-			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-			break;
-		default:
-			break;
-		}
-	}
-
-	protected void applyPolygonModeFill(Painter painter) {
-		switch (polygonMode) {
-		case FRONT:
-			painter.glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
-			break;
-		case BACK:
-			painter.glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
-			break;
-		case FRONT_AND_BACK:
-			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-			break;
-		default:
-			break;
-		}
-
-	}
-
+	
 	protected void polygonOffseFillEnable(Painter painter) {
-		painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+		painter.glEnable_PolygonOffsetFill();
 		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
 	}
 
 	protected void polygonOffsetFillDisable(Painter painter) {
-		painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+		painter.glDisable_PolygonOffsetFill();
 	}
 
 	/* DATA */

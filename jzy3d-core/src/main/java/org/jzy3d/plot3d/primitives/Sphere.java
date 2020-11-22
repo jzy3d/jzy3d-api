@@ -9,10 +9,6 @@ import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.util.gl2.GLUT;
-
 /**
  * A Sphere allows rendering a sphere. <br>
  * The position and shape of a Sphere3d is defined through its {@link setData()}
@@ -59,14 +55,14 @@ public class Sphere extends Wireframeable implements ISingleColorable {
 		painter.glTranslatef(position.x, position.y, position.z);
 
         if (facestatus) {
-            painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+            painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
             painter.glColor4f(color.r, color.g, color.b, color.a);
             // glu.gluSphere(qobj, radius, slices, stacks);
             painter.glutSolidSphere(radius, slices, stacks);
         }
         if (wfstatus) {
-            painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
-            painter.glLineWidth(wfwidth);
+        	painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
+        	painter.glLineWidth(wfwidth);
             painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
             // glu.gluSphere(qobj, radius, slices, stacks);
             painter.glutSolidSphere(radius, slices, stacks);
@@ -185,6 +181,4 @@ public class Sphere extends Wireframeable implements ISingleColorable {
     protected int stacks;
 
     protected Color color;
-
-    protected static GLUT glut = new GLUT();
 }
