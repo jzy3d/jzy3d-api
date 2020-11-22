@@ -63,7 +63,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		if (wfstatus) {
 			
 			// Fix for JGL
-			boolean fixJGL = false;
+			boolean fixJGL = true; // TODO : delete me, already existing approach in EmulGLSurfaceBuilder
 			if(fixJGL) {
 				painter.glPolygonMode(GL.GL_FRONT, GL2.GL_LINE);
 		      	painter.glPolygonMode(GL.GL_BACK, GL2.GL_LINE);
@@ -71,16 +71,17 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 			else {
 				applyPolygonModeLine(painter);
 			}
-			
+
 			if (polygonOffsetFillEnable)
 				polygonOffseFillEnable(painter);
+
 
 			if(fixJGL) {
 				painter.color(wfcolor);
 				//painter.glLineWidth(wfwidth);
 				//begin(painter, gl);
-				painter.glBegin_LineLoop();
 				painter.glLineWidth(getWireframeWidth());
+				painter.glBegin_LineLoop();
 				for (Point p : points) {
 					painter.vertex(p.xyz, spaceTransformer);
 				}
