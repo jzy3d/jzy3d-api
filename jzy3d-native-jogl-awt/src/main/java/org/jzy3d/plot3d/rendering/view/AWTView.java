@@ -11,10 +11,11 @@ import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axes.AxisBox;
 import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -26,12 +27,15 @@ import org.jzy3d.plot3d.rendering.tooltips.ITooltipRenderer;
 import org.jzy3d.plot3d.rendering.tooltips.Tooltip;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.awt.Overlay;
 
+/**
+ * This view is named AWTView because it uses AWT to handle background and overlay rendering.
+ * 
+ * 
+ * @author Martin Pernollet
+ *
+ */
 public class AWTView extends ChartView {
     
     public AWTView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
@@ -40,7 +44,7 @@ public class AWTView extends ChartView {
     
     public void initInstance(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
 		super.initInstance(factory, scene, canvas, quality);
-        this.bgViewport = new AWTImageViewport();
+        this.backgroundViewport = new AWTImageViewport();
         this.renderers = new ArrayList<Renderer2d>(1);
         this.tooltips = new ArrayList<ITooltipRenderer>();
 	}
@@ -73,15 +77,8 @@ public class AWTView extends ChartView {
     @Override
     protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {
         if (axeBoxDisplayed) {
-        	GL gl = ((NativeDesktopPainter)painter).getGL();
-            GLU glu = ((NativeDesktopPainter)painter).getGLU();
-
-        	
-            if (gl.isGL2()) {
-                gl.getGL2().glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-            } else {
-                GLES2CompatUtils.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
-            }
+        	painter.glMatrixMode_ModelView();
+            
             scene.getLightSet().disable(painter);
 
             axe.setScale(scaling);
@@ -102,9 +99,6 @@ public class AWTView extends ChartView {
 
     @Override
     protected void correctCameraPositionForIncludingTextLabels(Painter painter, ViewportConfiguration viewport) {
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-        GLU glu = ((NativeDesktopPainter)painter).getGLU();
-    	
     	cam.setViewPort(viewport);
         cam.shoot(painter, cameraMode);
         axe.draw(painter);
@@ -159,14 +153,12 @@ public class AWTView extends ChartView {
         if (overlay == null)
             this.overlay = new Overlay(nCanvas.getDrawable());
 
-        GL gl = ((NativeDesktopPainter)painter).getGL();
 
-        if (gl.isGL2()) {
-            // TODO: don't know why needed to allow working with Overlay!!!????
-            gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-        }
-
-        gl.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+        // TODO: don't know why needed to allow working with Overlay!!!????
+        
+        painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
+        
+        painter.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
         if (overlay != null && viewport.width > 0 && viewport.height > 0) {
             
@@ -201,32 +193,25 @@ public class AWTView extends ChartView {
 
     @Override
     public void renderBackground(float left, float right) {
-        if (bgImg != null) {
-        	GL gl = ((NativeDesktopPainter)painter).getGL();
-            GLU glu = ((NativeDesktopPainter)painter).getGLU();
-
-            bgViewport.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
-            bgViewport.render(painter);
+        if (backgroundImage != null) {
+            backgroundViewport.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
+            backgroundViewport.render(painter);
         }
     }
 
     @Override
     public void renderBackground(ViewportConfiguration viewport) {
-        if (bgImg != null) {
-        	GL gl = ((NativeDesktopPainter)painter).getGL();
-            GLU glu = ((NativeDesktopPainter)painter).getGLU();
-
-        	
-            bgViewport.setViewPort(viewport);
-            bgViewport.render(painter);
+        if (backgroundImage != null) {
+            backgroundViewport.setViewPort(viewport);
+            backgroundViewport.render(painter);
         }
     }
 
     /** Set a buffered image, or null to desactivate background image */
     public void setBackgroundImage(BufferedImage i) {
-        bgImg = i;
-        bgViewport.setImage(bgImg, bgImg.getWidth(), bgImg.getHeight());
-        bgViewport.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+        backgroundImage = i;
+        backgroundViewport.setImage(backgroundImage, backgroundImage.getWidth(), backgroundImage.getHeight());
+        backgroundViewport.setViewportMode(ViewportMode.STRETCH_TO_FILL);
         // when stretched, applyViewport() is cheaper to compute, and this does
         // not change
         // the picture rendering.
@@ -234,7 +219,7 @@ public class AWTView extends ChartView {
     }
 
     public BufferedImage getBackgroundImage() {
-        return bgImg;
+        return backgroundImage;
     }
 
     public void clearTooltips() {
@@ -278,7 +263,7 @@ public class AWTView extends ChartView {
     protected List<ITooltipRenderer> tooltips;
     protected List<Renderer2d> renderers;
     protected java.awt.Color bgOverlay = new java.awt.Color(0, 0, 0, 0);
-    protected AWTImageViewport bgViewport;
-    protected BufferedImage bgImg = null;
+    protected AWTImageViewport backgroundViewport;
+    protected BufferedImage backgroundImage = null;
     protected Overlay overlay;
 }

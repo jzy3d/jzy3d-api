@@ -1,18 +1,13 @@
 package org.jzy3d.plot3d.rendering.view.layout;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+//import java.awt.Rectangle;
 import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot2d.rendering.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
-import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportBuilder;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
@@ -90,7 +85,7 @@ public class ColorbarViewportLayout implements IViewportLayout{
         }
     }
     
-    public void showLayout(AWTView view) {
+    /*public void showLayout(AWTView view) {
         Renderer2d layoutBorder = new Renderer2d() {
             @Override
             public void paint(Graphics g, int canvasWidth, int canvasHeight) {
@@ -104,14 +99,12 @@ public class ColorbarViewportLayout implements IViewportLayout{
             CanvasAWT pencil = null;
         };
         view.addRenderer2d(layoutBorder);
-    }
+    }*/
     
     protected List<ILegend> getLegends(Chart chart){
         return chart.getScene().getGraph().getLegends();
     }
     
-    protected Rectangle zone1 = new Rectangle(0, 0, 0, 0);
-    protected Rectangle zone2 = new Rectangle(0, 0, 0, 0);
     protected ViewportConfiguration sceneViewPort;
     protected ViewportConfiguration backgroundViewPort;
 }
