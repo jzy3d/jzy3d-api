@@ -15,8 +15,6 @@ import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 
-import com.jogamp.opengl.GL;
-
 public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     public AWTColorbarLegend(Drawable parent, Chart chart) {
         this(parent, chart.getView().getAxe().getLayout());
@@ -59,7 +57,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
 
     @Override
     public void render(Painter painter) {
-        painter.glEnable(GL.GL_BLEND);
+        painter.glEnable_Blend();
         super.render(painter);
     }
 
