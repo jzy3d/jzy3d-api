@@ -5,6 +5,7 @@ import java.nio.FloatBuffer;
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 
 import com.jogamp.common.nio.Buffers;
@@ -40,9 +41,9 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis{
 		
 		// Draw the cube into feedback buffer
 		painter.glFeedbackBuffer(feedbacklength, GL2.GL_3D_COLOR, floatbuffer);
-		painter.glRenderMode(GL2.GL_FEEDBACK);
-		drawCube(painter, GL2.GL_FEEDBACK);
-		painter.glRenderMode(GL2.GL_RENDER);
+		painter.glRenderMode(RenderMode.FEEDBACK);
+		drawCube(painter, RenderMode.FEEDBACK);
+		painter.glRenderMode(RenderMode.RENDER);
 		
 		// Parse feedback buffer and return hidden quads
 		floatbuffer.get(feedback);

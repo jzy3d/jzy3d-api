@@ -5,13 +5,12 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.PixelStore;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
-
-import com.jogamp.opengl.GL;
 
 /**
  * A {@link TextBillboardRenderer} allows writing 2d text always facing the
@@ -137,7 +136,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
             throw new IllegalArgumentException("Vertical alignement constant unknown: " + valign);
 
         // Draw the bitmaps
-        painter.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
+        painter.glPixelStore(PixelStore.UNPACK_ALIGNMENT, 1);
         int idx;
         for (int c = 0; c < acodes.length; c++) {
             idx = acodes[c] - 32;

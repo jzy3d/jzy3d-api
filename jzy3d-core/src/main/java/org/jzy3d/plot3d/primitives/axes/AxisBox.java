@@ -9,6 +9,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Vector3d;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axes.layout.AxisBoxLayout;
@@ -22,9 +23,6 @@ import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL2GL3;
 
 /**
  * The {@link AxisBox} displays a box with front face invisible and ticks labels.
@@ -83,13 +81,13 @@ public class AxisBox implements IAxis {
     }
 
     public void cullingDisable(Painter painter) {
-    	painter.glDisable(GL.GL_CULL_FACE);
+    	painter.glDisable_CullFace();
     }
 
     public void cullingEnable(Painter painter) {
-        painter.glEnable(GL.GL_CULL_FACE);
-        painter.glFrontFace(GL.GL_CCW);
-        painter.glCullFace(GL.GL_FRONT);
+        painter.glEnable_CullFace();
+        painter.glFrontFace_ClockWise();
+        painter.glCullFace_Front();
     }
 
     /* */
@@ -105,7 +103,7 @@ public class AxisBox implements IAxis {
             painter.glLineWidth(1.0f);
             painter.glEnable_PolygonOffsetFill();
             painter.glPolygonOffset(1.0f, 1.0f); // handle stippling
-            drawCube(painter, GL2.GL_RENDER);
+            drawCube(painter, RenderMode.RENDER);
             painter.glDisable_PolygonOffsetFill();
         }
     }
@@ -116,7 +114,7 @@ public class AxisBox implements IAxis {
         painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
         painter.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
         painter.glLineWidth(1);
-        drawCube(painter, GL2.GL_RENDER);
+        drawCube(painter, RenderMode.RENDER);
 
         // Draw grids on non hidden quads
         painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
@@ -201,9 +199,9 @@ public class AxisBox implements IAxis {
     /**
      * Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK
      */
-    protected void drawCube(Painter painter, int mode) {
+    protected void drawCube(Painter painter, RenderMode mode) {
         for (int q = 0; q < 6; q++) {
-            if (mode == GL2.GL_FEEDBACK)
+            if (mode == RenderMode.FEEDBACK)
                 painter.glPassThrough(q);
             painter.glBegin_Quad();
             for (int v = 0; v < 4; v++) {

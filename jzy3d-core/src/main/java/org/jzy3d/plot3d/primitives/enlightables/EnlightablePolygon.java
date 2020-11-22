@@ -13,10 +13,9 @@ import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.transform.Transform;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
 
 public class EnlightablePolygon extends AbstractEnlightable {
 
@@ -45,9 +44,10 @@ public class EnlightablePolygon extends AbstractEnlightable {
 		// Draw content of polygon
 
 			if (facestatus) {
-				painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+				painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
+
 				if (wfstatus) {
-					painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+					painter.glEnable_PolygonOffsetFill();
 					painter.glPolygonOffset(1.0f, 1.0f);
 				}
 
@@ -63,14 +63,14 @@ public class EnlightablePolygon extends AbstractEnlightable {
 				}
 				painter.glEnd();
 				if (wfstatus)
-					painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+					painter.glDisable_PolygonOffsetFill();
 			}
 
 			// Draw edge of polygon
 			if (wfstatus) {
-				painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+				painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
 
-				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glEnable_PolygonOffsetFill();
 				painter.glPolygonOffset(1.0f, 1.0f);
 
 				painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, 1);// wfcolor.a);
@@ -82,7 +82,7 @@ public class EnlightablePolygon extends AbstractEnlightable {
 					painter.glNormal3f(norm.x, norm.y, norm.z);
 				}
 				painter.glEnd();
-				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+				painter.glDisable_PolygonOffsetFill();
 			}
 
 	}

@@ -10,11 +10,10 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.painters.ListMode;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.transform.Transform;
-
-import com.jogamp.opengl.GL2;
 
 /**
  * A {@link CompileableComposite} allows storage and subsequent faster execution
@@ -88,7 +87,7 @@ public class CompileableComposite extends Wireframeable implements
 
 		nullifyChildrenTransforms();
 		dlID = painter.glGenLists(1);
-		painter.glNewList(dlID, GL2.GL_COMPILE);
+		painter.glNewList(dlID, ListMode.COMPILE);
 		drawComponents(painter);
 		doDrawBoundsIfDisplayed(painter);
 		painter.glEndList();

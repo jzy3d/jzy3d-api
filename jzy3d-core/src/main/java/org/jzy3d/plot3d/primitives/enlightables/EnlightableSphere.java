@@ -7,10 +7,9 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.transform.Transform;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
 
 /**
  * A Sphere allows rendering a sphere. <br>
@@ -55,12 +54,12 @@ public class EnlightableSphere extends AbstractEnlightable implements
 		painter.glLineWidth(wfwidth);
 
 		if (facestatus) {
-			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 			painter.color(color);
 			painter.gluSphere(radius, slices, stacks);
 		}
 		if (wfstatus) {
-			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
 			painter.color(wfcolor);
 			painter.gluSphere(radius, slices, stacks);
 		}

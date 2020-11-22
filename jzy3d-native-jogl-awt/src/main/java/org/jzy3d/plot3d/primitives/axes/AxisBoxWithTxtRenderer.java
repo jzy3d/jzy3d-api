@@ -10,8 +10,6 @@ import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.overlay.TextOverlay;
 
-import com.jogamp.opengl.GL;
-
 /**
  * The AxeBox displays a box with front face invisible and ticks labels.
  * 

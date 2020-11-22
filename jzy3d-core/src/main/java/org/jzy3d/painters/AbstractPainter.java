@@ -10,9 +10,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-
 public abstract class AbstractPainter implements Painter{
 
 	protected Camera camera;
@@ -126,39 +123,6 @@ public abstract class AbstractPainter implements Painter{
 		glMaterialfv(face, pname, color.toArray(), 0);
 	}
 	
-	@Override
-	public int[] getViewPortAsInt() {
-        int viewport[] = new int[4];
-        glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
-        return viewport;
-    }
-
-	@Override
-	public double[] getProjectionAsDouble() {
-        double projection[] = new double[16];
-        glGetDoublev(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
-        return projection;
-    }
-
-	@Override
-	public float[] getProjectionAsFloat() {
-        float projection[] = new float[16];
-        glGetFloatv(GLMatrixFunc.GL_PROJECTION_MATRIX, projection, 0);
-        return projection;
-    }
-
-	@Override
-	public double[] getModelViewAsDouble() {
-        double modelview[] = new double[16];
-        glGetDoublev(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
-        return modelview;
-    }
-
-	@Override
-	public float[] getModelViewAsFloat() {
-        float modelview[] = new float[16];
-        glGetFloatv(GLMatrixFunc.GL_MODELVIEW_MATRIX, modelview, 0);
-        return modelview;
-    }
+	
 
 }
