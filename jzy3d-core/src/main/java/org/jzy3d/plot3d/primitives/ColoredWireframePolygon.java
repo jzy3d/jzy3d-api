@@ -17,7 +17,8 @@ public class ColoredWireframePolygon extends Polygon {
 
         // Draw content of polygon
         if (facestatus) {
-            applyPolygonModeFill(painter);
+			painter.glPolygonMode(polygonMode, PolygonFill.FILL);
+
             if (wfstatus && polygonOffsetFillEnable)
                 polygonOffseFillEnable(painter);
             callPointsForFace(painter);
@@ -27,8 +28,9 @@ public class ColoredWireframePolygon extends Polygon {
 
         // Draw edge of polygon
         if (wfstatus) {
-            applyPolygonModeLine(painter);
-            if (polygonOffsetFillEnable)
+			painter.glPolygonMode(polygonMode, PolygonFill.LINE);
+
+			if (polygonOffsetFillEnable)
             	polygonOffsetLineEnable(painter);
             callPointForWireframe(painter);
             if (polygonOffsetFillEnable)

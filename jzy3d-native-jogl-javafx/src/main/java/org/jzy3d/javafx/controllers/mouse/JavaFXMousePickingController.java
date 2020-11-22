@@ -146,7 +146,7 @@ public class JavaFXMousePickingController extends AbstractCameraController imple
 
         // will trigger vertex selection event to those subscribing to
         // PickingSupport.
-        picking.pickObjects(chart.getView().getPainter(), gl, glu, view, graph, new IntegerCoord2d((int)e.getX(), yflip));
+        picking.pickObjects(chart.getView().getPainter(), view, graph, new IntegerCoord2d((int)e.getX(), yflip));
     }
 
     public boolean handleSlaveThread(MouseEvent e) {

@@ -130,7 +130,7 @@ public class AWTMousePickingController extends AbstractCameraController implemen
         Graph graph = getChart().getScene().getGraph();
 
         // will trigger vertex selection event to those subscribing to PickingSupport
-        picking.pickObjects(chart.getView().getPainter(), gl, glu, view, graph, new IntegerCoord2d(e.getX(), yflip));
+        picking.pickObjects(chart.getView().getPainter(), view, graph, new IntegerCoord2d(e.getX(), yflip));
     }
 
     public boolean handleSlaveThread(MouseEvent e) {

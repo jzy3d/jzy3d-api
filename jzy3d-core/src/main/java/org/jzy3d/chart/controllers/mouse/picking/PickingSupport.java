@@ -23,7 +23,6 @@ import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * @see: http://www.opengl.org/resources/faq/technical/selection.htm
@@ -86,7 +85,7 @@ public class PickingSupport {
 	
 	protected TicToc perf = new TicToc();
 	
-	public void pickObjects(Painter painter, GL gll, GLU gluu, View view, Graph graph, IntegerCoord2d pickPoint) {
+	public void pickObjects(Painter painter, View view, Graph graph, IntegerCoord2d pickPoint) {
 	    perf.tic();
 	    
         int viewport[] = new int[4];

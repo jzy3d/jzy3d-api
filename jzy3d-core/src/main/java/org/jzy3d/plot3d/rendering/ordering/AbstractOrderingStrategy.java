@@ -10,9 +10,6 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 
 
 /** An ordering strategy is a {@link Comparator} for {@link Drawable}s
@@ -50,9 +47,7 @@ public abstract class AbstractOrderingStrategy implements Comparator<Drawable>{
 	
 	/* */
 
-	public void setAll(GL gl, GLU glu, Camera camera, Transform transform){
-		this.gl        = gl;
-		this.glu       = glu;
+	public void setAll(Camera camera, Transform transform){
 		this.camera    = camera;
 		this.transform = transform;
 	}
@@ -73,23 +68,6 @@ public abstract class AbstractOrderingStrategy implements Comparator<Drawable>{
 		this.transform = transform;
 	}
 	
-	public GL getGl() {
-		return gl;
-	}
-
-	public void setGl(GL gl) {
-		this.gl = gl;
-	}
-
-	public GLU getGlu() {
-		return glu;
-	}
-
-	public void setGlu(GLU glu) {
-		this.glu = glu;
-	}
-	
-
     public View getView() {
         return view;
     }
@@ -104,7 +82,4 @@ public abstract class AbstractOrderingStrategy implements Comparator<Drawable>{
     protected View view;
     protected Camera camera;
 	protected Transform transform;
-	protected GL gl;
-	protected GLU glu;
-	
 }
