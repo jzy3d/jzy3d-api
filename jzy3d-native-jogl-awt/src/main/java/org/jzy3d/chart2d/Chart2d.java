@@ -26,7 +26,7 @@ public class Chart2d extends AWTChart {
     protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
 
     public void layout2d() {
-        IAxisLayout axe = getAxeLayout();
+        IAxisLayout axe = getAxisLayout();
         axe.setZAxeLabelDisplayed(false);
         axe.setTickLineDisplayed(false);
 
@@ -37,7 +37,7 @@ public class Chart2d extends AWTChart {
     }
 
     public void asTimeChart(float timeMax, float ymin, float ymax, String xlabel, String ylabel) {
-        IAxisLayout axe = getAxeLayout();
+        IAxisLayout axe = getAxisLayout();
         axe.setYAxisLabel(ylabel);
         axe.setXAxisLabel(xlabel);
         axe.setXTickRenderer(new ElapsedTimeTickRenderer());

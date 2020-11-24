@@ -25,7 +25,7 @@ public class ShaderMandelbrotDemo {
         
         chart.getScene().getGraph().add(new TexSurface());
 
-        chart.getView().setAxeBoxDisplayed(false);
+        chart.getView().setAxisDisplayed(false);
         ChartLauncher.openChart(chart, new Rectangle(0,0,600,600));
     }
     

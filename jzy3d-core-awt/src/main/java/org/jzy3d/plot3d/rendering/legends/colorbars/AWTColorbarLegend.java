@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 
 public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     public AWTColorbarLegend(Drawable parent, Chart chart) {
-        this(parent, chart.getView().getAxe().getLayout());
+        this(parent, chart.getView().getAxis().getLayout());
     }
 
     public AWTColorbarLegend(Drawable parent, IAxisLayout layout) {

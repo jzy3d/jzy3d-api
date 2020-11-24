@@ -87,7 +87,7 @@ public class DepthPeelingChart extends Chart {
 
         Chart chart = null;//new DepthPeelingChart(factory, quality, chartType, capabilities);
         chart.getView().setSquared(false);
-        chart.getView().setAxeBoxDisplayed(true);
+        chart.getView().setAxisDisplayed(true);
         return chart;
     }
 }

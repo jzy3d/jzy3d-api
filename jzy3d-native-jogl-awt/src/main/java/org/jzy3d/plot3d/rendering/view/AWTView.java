@@ -101,11 +101,11 @@ public class AWTView extends ChartView {
     protected void correctCameraPositionForIncludingTextLabels(Painter painter, ViewportConfiguration viewport) {
     	cam.setViewPort(viewport);
         cam.shoot(painter, cameraMode);
-        axe.draw(painter);
+        axis.draw(painter);
         clear();
 
         //AxeBox abox = (AxeBox) axe;
-        BoundingBox3d newBounds = axe.getWholeBounds().scale(scaling);
+        BoundingBox3d newBounds = axis.getWholeBounds().scale(scaling);
 
         if (viewmode == ViewPositionMode.TOP) {
             float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(), newBounds.getYmax() - newBounds.getYmin()) / 2;
