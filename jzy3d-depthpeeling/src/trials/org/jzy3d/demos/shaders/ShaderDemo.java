@@ -42,7 +42,7 @@ public class ShaderDemo {
         createCylinder(chart, c2, 5, 15, Color.CYAN);
         createLine(chart, c1, c2, 3);
         
-        chart.getView().setAxeBoxDisplayed(false);
+        chart.getView().setAxisDisplayed(false);
         //chart.getScene().getGraph().add(new TexSurface());
         ChartLauncher.openChart(chart, new Rectangle(0,0,600,600));
     }

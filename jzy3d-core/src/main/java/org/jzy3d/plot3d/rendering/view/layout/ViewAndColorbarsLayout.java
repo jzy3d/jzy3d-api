@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -16,16 +17,15 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
 /**
  * This class handles the layout of multiple OpenGL viewports
  * <ul>
- * <li>The {@link View} which handles its viewport with the {@link Camera}.
- * <li>The {@link ILegend} objects which handle their viewport on their own.
- * <li>The overlay of the View.
+ * <li>The {@link View} which handles its viewport with the {@link Camera}. If the view is and {@link AWTView} or children, it has its own overlay
+ * <li>The {@link ILegend} objects which handle their viewport on their own. They are added to the right of the chart according to the number of {@link Drawable} having a {@link ILegend} set such as {@link AWTColorbarLegend}
  * </ul>
  * 
  * This allow making a composition of 3D and 2D content in a single screen.
  * 
  * @author Martin Pernollet
  */
-public class ColorbarViewportLayout implements IViewportLayout{
+public class ViewAndColorbarsLayout implements IViewportLayout{
     protected float screenSeparator = 1.0f;
     protected boolean hasMeta = true;
     

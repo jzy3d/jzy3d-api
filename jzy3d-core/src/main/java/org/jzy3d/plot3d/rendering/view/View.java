@@ -70,10 +70,10 @@ public class View {
     protected boolean MAINTAIN_ALL_OBJECTS_IN_VIEW = false;
     /** display a magenta parallelepiped (debug). */
     protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false;
-    protected boolean axeBoxDisplayed = true;
+    protected boolean axisDisplayed = true;
     protected boolean squared = true;
     protected Camera cam;
-    protected IAxis axe;
+    protected IAxis axis;
     protected Quality quality;
     protected Scene scene;
     protected ICanvas canvas;
@@ -149,7 +149,7 @@ public class View {
         this.boundmode = ViewBoundMode.AUTO_FIT;
         this.cameraMode = CameraMode.ORTHOGONAL;
 
-        this.axe = factory.newAxe(sceneBounds, this);
+        this.axis = factory.newAxe(sceneBounds, this);
         this.cam = factory.newCamera(center);
         this.painter = factory.newPainter();
         this.painter.setCamera(cam);
@@ -192,7 +192,7 @@ public class View {
     }
 
     public void dispose() {
-        axe.dispose();
+        axis.dispose();
         cam = null;
         viewOnTopListeners.clear();
         scene = null;
@@ -450,7 +450,7 @@ public class View {
         if (box.isReset())
             return;
         center = box.getCenter();
-        axe.setAxe(box);
+        axis.setAxe(box);
         viewbounds = box;
     }
 
@@ -464,7 +464,7 @@ public class View {
 
     /** Get the {@link AxisBox}'s {@link BoundingBox3d} */
     public BoundingBox3d getBounds() {
-        return axe.getBoxBounds();
+        return axis.getBoxBounds();
     }
 
     public ViewBoundMode getBoundsMode() {
@@ -526,13 +526,13 @@ public class View {
 
     /* CONTROLS ANNOTATIONS & GENERAL RENDERING */
 
-    public void setAxe(IAxis ax) {
-        axe = ax;
+    public void setAxis(IAxis axis) {
+        this.axis = axis;
         updateBounds();
     }
 
-    public IAxis getAxe() {
-        return axe;
+    public IAxis getAxis() {
+        return axis;
     }
 
     public boolean getSquared() {
@@ -543,12 +543,12 @@ public class View {
         this.squared = status;
     }
 
-    public boolean isAxeBoxDisplayed() {
-        return axeBoxDisplayed;
+    public boolean isAxisDisplayed() {
+        return axisDisplayed;
     }
 
-    public void setAxeBoxDisplayed(boolean axeBoxDisplayed) {
-        this.axeBoxDisplayed = axeBoxDisplayed;
+    public void setAxisDisplayed(boolean axisDisplayed) {
+        this.axisDisplayed = axisDisplayed;
     }
 
     public void setBackgroundColor(Color color) {
@@ -1079,7 +1079,7 @@ public class View {
     /* AXE BOX RENDERING */
     
     protected void renderAxeBox() {
-        renderAxeBox(axe, scene, cam, scaling, axeBoxDisplayed);
+        renderAxeBox(axis, scene, cam, scaling, axisDisplayed);
     }
     
     protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling, boolean axeBoxDisplayed) {

@@ -33,7 +33,7 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 public class PeeledCubesDemo {
     public static void main(String[] args) {
         Chart chart = DepthPeelingChart.get(Quality.Fastest, "awt", PeelingMethod.F2B_PEELING_MODE);//DUAL_PEELING_MODE);
-        chart.getView().setAxeBoxDisplayed(false);
+        chart.getView().setAxisDisplayed(false);
 
         createStack(chart, 0.01f, 0.01f, Coord3d.ORIGIN, Color.BLUE /*no alpha*/, Color.BLACK);
         createStack(chart, 0.01f, 0.01f, new Coord3d(0.005f, 0.005f, 0.005f), new Color(1f,0f,0f,0.5f), Color.BLACK);

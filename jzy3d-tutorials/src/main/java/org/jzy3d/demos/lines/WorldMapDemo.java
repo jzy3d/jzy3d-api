@@ -40,7 +40,7 @@ public class WorldMapDemo extends AWTAbstractAnalysis {
         chart.getScene().getGraph().add(worldMap.lineStrips);
 
         // Set axis labels for chart
-        IAxisLayout axeLayout = chart.getAxeLayout();
+        IAxisLayout axeLayout = chart.getAxisLayout();
         axeLayout.setXAxisLabel("Longitude (deg)");
         axeLayout.setYAxisLabel("Latitude (deg)");
         axeLayout.setZAxisLabel("Altitude (km)");
