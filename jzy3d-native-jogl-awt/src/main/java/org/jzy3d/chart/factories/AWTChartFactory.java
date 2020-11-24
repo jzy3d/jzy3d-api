@@ -28,7 +28,7 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.ColorbarViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 public class AWTChartFactory extends NativeChartFactory {
@@ -61,7 +61,7 @@ public class AWTChartFactory extends NativeChartFactory {
 
     @Override
     public IViewportLayout newViewportLayout() {
-        return new ColorbarViewportLayout();
+        return new ViewAndColorbarsLayout();
     }
 
     /**

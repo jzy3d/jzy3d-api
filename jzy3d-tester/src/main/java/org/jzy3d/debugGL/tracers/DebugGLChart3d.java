@@ -66,7 +66,7 @@ public class DebugGLChart3d {
                     g2d.drawString("watched.far=" + watchedChart.getView().getCamera().getFar(), 5, 40);
                     g2d.drawString("watched.radius=" + watchedChart.getView().getCamera().getRenderingSphereRadius(), 5, 60);
                     g2d.drawString("watched.up.z=" + watchedChart.getView().getCamera().getUp().z, 5, 80);
-                    g2d.drawString("watched.axe=" + watchedChart.getView().getAxe().getBoxBounds().toString(), 5, 100);
+                    g2d.drawString("watched.axe=" + watchedChart.getView().getAxis().getBoxBounds().toString(), 5, 100);
                     g2d.drawString("transformed axe=" + axisBox.getBounds().toString(), 5, 120);
                 }
             }
@@ -86,7 +86,7 @@ public class DebugGLChart3d {
     }
 
     public void watchAxis() {
-        BoundingBox3d axisBounds = watchedChart.getView().getAxe().getBoxBounds();
+        BoundingBox3d axisBounds = watchedChart.getView().getAxis().getBoxBounds();
         if(spaceTransform!=null){
             axisBounds = spaceTransform.compute(axisBounds);
         }

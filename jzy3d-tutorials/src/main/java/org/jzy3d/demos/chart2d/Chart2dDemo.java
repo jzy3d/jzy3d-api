@@ -100,7 +100,7 @@ public class Chart2dDemo {
             pitchChart = new Chart2d();
             pitchChart.asTimeChart(timeMax, 0, freqMax, "Time", "Frequency");
 
-            IAxisLayout axe = pitchChart.getAxeLayout();
+            IAxisLayout axe = pitchChart.getAxisLayout();
             axe.setYTickProvider(new PitchTickProvider(nOctave));
             axe.setYTickRenderer(new PitchTickRenderer());
 

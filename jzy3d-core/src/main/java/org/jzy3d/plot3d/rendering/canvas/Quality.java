@@ -56,14 +56,14 @@ public class Quality {
 	public static final Quality Fastest      = new Quality(true, false, false, false, false, false, true);
 	
 	/** Initialize a Quality configuration for a View.*/
-	public Quality(boolean depthActivated, boolean alphaActivated, boolean smoothColor, boolean smoothPoint, boolean smoothLine, boolean smoothPolygon, boolean disableDepth){
+	public Quality(boolean depthActivated, boolean alphaActivated, boolean smoothColor, boolean smoothPoint, boolean smoothLine, boolean smoothPolygon, boolean disableDepthTestWhenAlphaActivated){
 		this.depthActivated = depthActivated;
 		this.alphaActivated = alphaActivated;
 		this.smoothColor    = smoothColor;
 		this.smoothPoint    = smoothPoint;
         this.smoothLine     = smoothLine;
         this.smoothPolygon  = smoothPolygon;
-		this.disableDepthBufferWhenAlpha = disableDepth;
+		this.disableDepthTestWhenAlpha = disableDepthTestWhenAlphaActivated;
 	}
 	
 	public boolean isDepthActivated() {
@@ -115,11 +115,11 @@ public class Quality {
     }
 	
 	public boolean isDisableDepthBufferWhenAlpha() {
-		return disableDepthBufferWhenAlpha;
+		return disableDepthTestWhenAlpha;
 	}
 
 	public void setDisableDepthBufferWhenAlpha(boolean disableDepthBufferWhenAlpha) {
-		this.disableDepthBufferWhenAlpha = disableDepthBufferWhenAlpha;
+		this.disableDepthTestWhenAlpha = disableDepthBufferWhenAlpha;
 	}
 	
 	public boolean isAnimated() {
@@ -163,7 +163,7 @@ public class Quality {
 	private boolean smoothPoint;
     private boolean smoothLine;
     private boolean smoothPolygon;
-	protected boolean disableDepthBufferWhenAlpha;
+	protected boolean disableDepthTestWhenAlpha;
 	protected boolean isAnimated = true;
 	protected boolean isAutoSwapBuffer = true;
 	

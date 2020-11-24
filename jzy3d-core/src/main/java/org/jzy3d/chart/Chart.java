@@ -60,20 +60,20 @@ public class Chart {
 
     public Chart black() {
         getView().setBackgroundColor(Color.BLACK);
-        getAxeLayout().setGridColor(Color.WHITE);
-        getAxeLayout().setMainColor(Color.WHITE);
+        getAxisLayout().setGridColor(Color.WHITE);
+        getAxisLayout().setMainColor(Color.WHITE);
         return this;
     }
 
     public Chart white() {
         getView().setBackgroundColor(Color.WHITE);
-        getAxeLayout().setGridColor(Color.BLACK);
-        getAxeLayout().setMainColor(Color.BLACK);
+        getAxisLayout().setGridColor(Color.BLACK);
+        getAxisLayout().setMainColor(Color.BLACK);
         return this;
     }
 
     public Chart view2d() {
-        IAxisLayout axe = getAxeLayout();
+        IAxisLayout axe = getAxisLayout();
         axe.setZAxeLabelDisplayed(false);
         axe.setTickLineDisplayed(false);
 
@@ -285,7 +285,7 @@ public class Chart {
     /* SHORTCUTS */
 
     public void setAxeDisplayed(boolean status) {
-        view.setAxeBoxDisplayed(status);
+        view.setAxisDisplayed(status);
         view.shoot();
     }
 
@@ -366,8 +366,8 @@ public class Chart {
         return canvas;
     }
 
-    public IAxisLayout getAxeLayout() {
-        return getView().getAxe().getLayout();
+    public IAxisLayout getAxisLayout() {
+        return getView().getAxis().getLayout();
     }
 
     public IChartFactory getFactory() {

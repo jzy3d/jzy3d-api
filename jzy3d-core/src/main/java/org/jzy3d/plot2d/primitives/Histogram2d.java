@@ -29,7 +29,7 @@ public class Histogram2d {
 
 	/** Set global chart view settings to best draw this histogram. */
     public void layout(Chart chart){
-        IAxisLayout layout = chart.getAxeLayout();
+        IAxisLayout layout = chart.getAxisLayout();
         int ymax = getModel().computeMaxCount();
         double[] ticks = {0, ymax/4, ymax/2, ymax/2 + ymax/4, ymax};
         layout.setYTickProvider(new StaticTickProvider(ticks));

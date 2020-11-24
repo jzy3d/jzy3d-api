@@ -31,7 +31,7 @@ public class AWTChart extends NativeChart {
     }
     
     public AWTColorbarLegend colorbar(Drawable drawable){
-        return colorbar(drawable, new Dimension(100, 600), getView().getAxe().getLayout());
+        return colorbar(drawable, new Dimension(100, 600), getView().getAxis().getLayout());
     }
 
     public AWTColorbarLegend colorbar(Drawable drawable, IAxisLayout layout){
