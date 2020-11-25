@@ -813,7 +813,8 @@ public class View {
     }
 
     public void renderScene(ViewportConfiguration viewport) {
-        updateQuality();
+    	// updateQuality(); // REMOVED BECAUSE NOT NECESSARY 
+    	
         BoundingBox3d scaling = computeScaledViewBounds();
         updateCamera(viewport, scaling);
         renderAxeBox();
@@ -821,6 +822,12 @@ public class View {
         renderAnnotations(cam);
     }
 
+    /** 
+     * Not called anymore as alpha and blending setting are not supposed to change during lifetime of a chart.
+     * 
+     * If this should change, then the entire {@link View#initQuality()} method should be invoked
+     */
+    @Deprecated 
     public void updateQuality() {
         if (quality.isAlphaActivated())
             painter.glEnable_Blend();
