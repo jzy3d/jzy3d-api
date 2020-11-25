@@ -71,9 +71,8 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<!--<scope>test</scope> do not limit scope to test as the lib embbed Replay,
-				i.e. tools to ease non regression tests for interactive features -->
+			<version>4.13.1</version>
+			<scope>test</scope> 
 		</dependency>
 
 	</dependencies>
