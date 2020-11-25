@@ -244,6 +244,30 @@ public abstract class Composite extends Wireframeable implements ISingleColorabl
             }
         }
     }
+    
+    /**
+	 * A utility to change polygon offset fill status of a {@link Composite}
+	 * containing {@link Geometry}s.
+	 * 
+	 * @param composite
+	 * @param polygonOffsetFillEnable status
+	 */
+    @Override
+	public void setPolygonOffsetFillEnable(boolean polygonOffsetFillEnable) {
+        if (components != null) {
+            synchronized (components) {
+
+				for (Drawable d : components) {
+					if (d instanceof Wireframeable) {
+						((Wireframeable) d).setPolygonOffsetFillEnable(polygonOffsetFillEnable);
+					} else if (d instanceof Composite) {
+						((Composite) d).setPolygonOffsetFillEnable(polygonOffsetFillEnable);
+					}
+				}
+            }
+        }
+	}
+
 
     /****************************************************************/
 
