@@ -25,7 +25,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		points = new ArrayList<Point>(4);
 		bbox = new BoundingBox3d();
 		center = new Coord3d();
-		polygonOffsetFillEnable = true;
 		polygonMode = PolygonMode.FRONT_AND_BACK;
 	}
 
@@ -58,23 +57,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 			if (polygonOffsetFillEnable)
 				polygonOffseFillEnable(painter);
 
-			// Fix for JGL
-			boolean fixJGL = true; // TODO : delete me, already existing approach in EmulGLSurfaceBuilder
-
-			if(fixJGL) {
-				painter.color(wfcolor);
-				//painter.glLineWidth(wfwidth);
-				//begin(painter, gl);
-				painter.glLineWidth(getWireframeWidth());
-				painter.glBegin_LineLoop();
-				for (Point p : points) {
-					painter.vertex(p.xyz, spaceTransformer);
-				}
-				painter.glEnd();
-			}
-			else {
-				callPointForWireframe(painter);
-			}
+			callPointForWireframe(painter);
 
 			if (polygonOffsetFillEnable)
 				polygonOffsetFillDisable(painter);
@@ -91,9 +74,9 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	 */
 	protected void callPointForWireframe(Painter painter) {
 		painter.color(wfcolor);
-		painter.glLineWidth(wfwidth);
+		painter.glLineWidth(getWireframeWidth());
 
-		begin(painter);
+		painter.glBegin_LineLoop(); // changed for JGL as wireframe polygon are transformed to pair of triangles
 		for (Point p : points) {
 			painter.vertex(p.xyz, spaceTransformer);
 		}
@@ -124,23 +107,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	protected abstract void begin(Painter painter);
 
 	
-	protected void polygonOffseFillEnable(Painter painter) {
-		painter.glEnable_PolygonOffsetFill();
-		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
-	}
-
-	protected void polygonOffsetFillDisable(Painter painter) {
-		painter.glDisable_PolygonOffsetFill();
-	}
 	
-	protected void polygonOffsetLineEnable(Painter painter) {
-		painter.glEnable_PolygonOffsetLine();
-		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
-    }
-
-    protected void polygonOffsetLineDisable(Painter painter) {
-    	painter.glDisable_PolygonOffsetLine();
-    }
 
 	/* DATA */
 
@@ -249,53 +216,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		this.polygonMode = polygonMode;
 	}
 
-	public boolean isPolygonOffsetFillEnable() {
-		return polygonOffsetFillEnable;
-	}
-
-	public float getPolygonOffsetFactor() {
-		return polygonOffsetFactor;
-	}
-
-	public void setPolygonOffsetFactor(float polygonOffsetFactor) {
-		this.polygonOffsetFactor = polygonOffsetFactor;
-	}
-
-	public float getPolygonOffsetUnit() {
-		return polygonOffsetUnit;
-	}
-
-	public void setPolygonOffsetUnit(float polygonOffsetUnit) {
-		this.polygonOffsetUnit = polygonOffsetUnit;
-	}
-
-	/**
-	 * Enable offset fill, which let a polygon with a wireframe render cleanly
-	 * without weird depth incertainty between face and border.
-	 * 
-	 * Default value is true.
-	 */
-	public void setPolygonOffsetFillEnable(boolean polygonOffsetFillEnable) {
-		this.polygonOffsetFillEnable = polygonOffsetFillEnable;
-	}
-
-	/**
-	 * A utility to change polygon offset fill status of a {@link Composite}
-	 * containing {@link Geometry}s.
-	 * 
-	 * @param composite
-	 * @param polygonOffsetFillEnable status
-	 */
-	public static void setPolygonOffsetFillEnable(Composite composite, boolean polygonOffsetFillEnable) {
-		for (Drawable d : composite.getDrawables()) {
-			if (d instanceof Geometry) {
-				((Geometry) d).setPolygonOffsetFillEnable(polygonOffsetFillEnable);
-			} else if (d instanceof Composite) {
-				setPolygonOffsetFillEnable(((Composite) d), polygonOffsetFillEnable);
-			}
-		}
-	}
-
 	/* COLOR */
 
 	@Override
@@ -333,10 +253,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	/* */
 
 	protected PolygonMode polygonMode;
-	protected boolean polygonOffsetFillEnable = true;
-	protected float polygonOffsetFactor = 1.0f;
-	protected float polygonOffsetUnit = 1.0f;
-
 	protected ColorMapper mapper;
 	protected List<Point> points;
 	protected Color color;
