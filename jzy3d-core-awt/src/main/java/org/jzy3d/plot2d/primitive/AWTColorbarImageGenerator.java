@@ -4,11 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorAWT;
+import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.IColorMap;
-import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
-import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
+import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 
 
 /** 
@@ -45,7 +45,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator impleme
 		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 		Graphics2D graphic = image.createGraphics();
 		
-		graphic.setColor(ColorAWT.toAWT(Color.WHITE));
+		graphic.setColor(AWTColor.toAWT(Color.WHITE));
         graphic.fillRect(0, 0, width, height);
 		
 		configureText(graphic);
@@ -57,7 +57,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator impleme
 	}
 
     public void drawBarContour(int height, int barWidth, Graphics2D graphic) {
-        graphic.setColor(ColorAWT.toAWT(foregroundColor));
+        graphic.setColor(AWTColor.toAWT(foregroundColor));
 		graphic.drawRect(0, textSize/2, barWidth, height-textSize);
     }
 
@@ -68,7 +68,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator impleme
 			Color c = mapper.getColor(v);  //To allow the Color to be a variable independent of the coordinates
 			
 			// Draw line
-			graphic.setColor(ColorAWT.toAWT(c));
+			graphic.setColor(AWTColor.toAWT(c));
 			graphic.drawLine(0, height-h, barWidth, height-h);
 		}
     }

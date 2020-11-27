@@ -1,7 +1,7 @@
 package org.jzy3d.contour;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorAWT;
+import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Coord3d;
 
@@ -16,7 +16,7 @@ public class DefaultContourColoringPolicy implements IContourColoringPolicy{
 		if( z != AbstractContourGenerator.NON_CONTOUR ){
 			Coord3d coord = new Coord3d(0.0f, 0.0f, z);
 			Color color   = cmapper.getColor(coord);
-			return ColorAWT.toAWT(color).getRGB();					
+			return AWTColor.toAWT(color).getRGB();					
 		}
 		else{
 			return WHITE_ALPHA_RGB;
@@ -34,5 +34,5 @@ public class DefaultContourColoringPolicy implements IContourColoringPolicy{
 
 
 	protected ColorMapper cmapper;
-	protected static int WHITE_ALPHA_RGB = ColorAWT.toAWT(Color.WHITE).getRGB();
+	protected static int WHITE_ALPHA_RGB = AWTColor.toAWT(Color.WHITE).getRGB();
 }
