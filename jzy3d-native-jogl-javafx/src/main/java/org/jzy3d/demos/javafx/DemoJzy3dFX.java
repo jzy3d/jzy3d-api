@@ -1,5 +1,5 @@
 package org.jzy3d.demos.javafx;
-import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -46,7 +46,7 @@ public class DemoJzy3dFX extends Application {
         
         // Jzy3d
         JavaFXChartFactory factory = new JavaFXChartFactory();
-        AWTChart chart  = getDemoChart(factory, "offscreen");
+        AWTNativeChart chart  = getDemoChart(factory, "offscreen");
         ImageView imageView = factory.bindImageView(chart);
 
         // JavaFX
@@ -62,7 +62,7 @@ public class DemoJzy3dFX extends Application {
         stage.setHeight(500);
     }
 
-    private AWTChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
+    private AWTNativeChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
         // -------------------------------
         // Define a function to plot
         Mapper mapper = new Mapper() {
@@ -89,7 +89,7 @@ public class DemoJzy3dFX extends Application {
         //quality.setAnimated(true);
         
         // let factory bind mouse and keyboard controllers to JavaFX node
-        AWTChart chart = (AWTChart) factory.newChart(quality);
+        AWTNativeChart chart = (AWTNativeChart)factory.newChart(quality);
         chart.getScene().getGraph().add(surface);
         return chart;
     }

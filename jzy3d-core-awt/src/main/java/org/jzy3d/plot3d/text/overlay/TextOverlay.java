@@ -14,7 +14,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
@@ -38,7 +38,7 @@ import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
  * // TODO: there may be a bug of non-rendering without resizing at init -> check that
  * // TODO: the 1<->N relation TextRenderer<->Canvas won't work because TextRenderer has only one target Component.
  */
-public class TextOverlay implements Renderer2d{
+public class TextOverlay implements AWTRenderer2d{
 	public TextOverlay(ICanvas canvas){
 		init(canvas);
 	}

@@ -12,10 +12,11 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTNativeView;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractViewportManager;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMotionListener {
@@ -36,20 +37,20 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
         this.chart.getCanvas().addMouseController(this);
         final ICanvas c = chart.getCanvas();
         selectionRenderer = initRenderer2d(c);
-        if (chart.getView() instanceof AWTView)
+        if (chart.getView() instanceof AWTNativeView)
             ((AWTView) this.chart.getView()).addRenderer2d(selectionRenderer);
     }
 
     public void unregister() {
         if (chart != null) {
             chart.getCanvas().removeMouseController(this);
-            if (chart.getView() instanceof AWTView)
+            if (chart.getView() instanceof AWTNativeView)
                 ((AWTView) this.chart.getView()).removeRenderer2d(selectionRenderer);
         }
     }
 
-    protected Renderer2d initRenderer2d(final ICanvas c) {
-        return new Renderer2d() {
+    protected AWTRenderer2d initRenderer2d(final ICanvas c) {
+        return new AWTRenderer2d() {
             @Override
             public void paint(Graphics g, int canvasWidth, int canvasHeight) {
                 drawSelection((Graphics2D) g, c.getRendererWidth(), c.getRendererHeight());
@@ -242,5 +243,5 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
     protected IntegerCoord2d out;
     protected IntegerCoord2d last;
 
-    protected Renderer2d selectionRenderer;
+    protected AWTRenderer2d selectionRenderer;
 }

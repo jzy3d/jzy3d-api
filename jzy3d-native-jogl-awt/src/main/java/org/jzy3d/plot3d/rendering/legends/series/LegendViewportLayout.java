@@ -11,8 +11,8 @@ import org.jzy3d.plot2d.rendering.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportBuilder;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
@@ -67,7 +67,7 @@ public class LegendViewportLayout implements IViewportLayout{
     }
     
     public void showLayout(AWTView view) {
-        Renderer2d layoutBorder = new Renderer2d() {
+        AWTRenderer2d layoutBorder = new AWTRenderer2d() {
             @Override
             public void paint(Graphics g, int canvasWidth, int canvasHeight) {
                 if (pencil == null)

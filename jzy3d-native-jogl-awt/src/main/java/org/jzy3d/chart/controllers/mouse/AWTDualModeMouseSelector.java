@@ -9,7 +9,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.selection.AWTAbstractMouseSelector;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 
 
 /**
@@ -89,8 +89,8 @@ public class AWTDualModeMouseSelector {
         };
     }
 
-    public Renderer2d buildMessageRenderer() {
-        return new Renderer2d() {
+    public AWTRenderer2d buildMessageRenderer() {
+        return new AWTRenderer2d() {
             @Override
             public void paint(Graphics g, int canvasWidth, int canvasHeight) {
                 if (displayMessage && message != null) {
@@ -112,7 +112,7 @@ public class AWTDualModeMouseSelector {
     }
 
     protected Chart chart;
-    protected Renderer2d messageRenderer;
+    protected AWTRenderer2d messageRenderer;
 
     protected CameraThreadController threadCamera;
     protected AWTCameraMouseController mouseCamera;

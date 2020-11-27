@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -46,7 +47,7 @@ public class ChartTester{
         AWTChartFactory f = new AWTChartFactory();
         f.setOffscreen(TEST_IMG_SIZE, TEST_IMG_SIZE);
         
-        AWTChart chart = (AWTChart)f.newChart(q);
+        AWTNativeChart chart = (AWTNativeChart)f.newChart(q);
         AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
 
         // Optimise processor
