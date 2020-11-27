@@ -25,12 +25,12 @@ import org.jzy3d.plot3d.primitives.axes.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTNativeView;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class SWTChartFactory extends NativeChartFactory {
     private static final Logger logger = Logger.getLogger(SWTChartFactory.class);
@@ -82,7 +82,7 @@ public class SWTChartFactory extends NativeChartFactory {
      */
     @Override
     public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTView(factory, scene, canvas, quality);
+        return new AWTNativeView(factory, scene, canvas, quality);
     }
 
     /** Provide AWT Texture loading for screenshots */

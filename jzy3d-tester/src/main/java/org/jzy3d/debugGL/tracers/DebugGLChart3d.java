@@ -13,8 +13,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
@@ -54,7 +54,7 @@ public class DebugGLChart3d {
 
         
         
-        ((AWTView)debugChart.getView()).addRenderer2d(new Renderer2d(){
+        ((AWTView)debugChart.getView()).addRenderer2d(new AWTRenderer2d(){
             @Override
             public void paint(Graphics g, int canvasWidth, int canvasHeight) {
                 

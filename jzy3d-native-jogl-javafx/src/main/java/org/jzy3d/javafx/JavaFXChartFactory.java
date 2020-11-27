@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
@@ -42,7 +43,7 @@ public class JavaFXChartFactory extends AWTChartFactory {
         return f.newChart(quality);
     }
 
-    public Image getScreenshotAsJavaFXImage(AWTChart chart) {
+    public Image getScreenshotAsJavaFXImage(AWTNativeChart chart) {
         chart.screenshot();
         AWTRenderer3d renderer = (AWTRenderer3d) ((INativeCanvas)chart.getCanvas()).getRenderer();
         BufferedImage i = renderer.getLastScreenshotImage();
@@ -63,7 +64,7 @@ public class JavaFXChartFactory extends AWTChartFactory {
      * @param chart
      * @return
      */
-    public ImageView bindImageView(AWTChart chart) {
+    public ImageView bindImageView(AWTNativeChart chart) {
         ImageView imageView = new ImageView();
         imageView.fitHeightProperty();
         imageView.fitWidthProperty();

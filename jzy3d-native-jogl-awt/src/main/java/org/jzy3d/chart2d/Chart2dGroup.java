@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.NativeChart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
@@ -68,7 +68,7 @@ public class Chart2dGroup {
 	 */
 	public void setAnimated(boolean status) {
 		for (Chart chart : getCharts()) {
-			((NativeChart)chart).setAnimated(status);
+			((AWTNativeChart)chart).setAnimated(status);
 		}
 	}
 

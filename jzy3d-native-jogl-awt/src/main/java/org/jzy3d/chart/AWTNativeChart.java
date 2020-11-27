@@ -7,12 +7,12 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.util.texture.TextureData;
 
-public class NativeChart extends Chart {
-	public NativeChart(IChartFactory components, Quality quality) {
+public class AWTNativeChart extends AWTChart {
+	public AWTNativeChart(IChartFactory components, Quality quality) {
 		super(components, quality);
 	}
 
-	protected NativeChart() {
+	protected AWTNativeChart() {
 		super();
 	}
 

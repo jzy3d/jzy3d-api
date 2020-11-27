@@ -77,7 +77,7 @@ public class Camera extends AbstractViewportManager {
     public Camera(Coord3d target) {
         initWithTarget(target);
     }
-
+    
     public void initWithTarget(Coord3d target) {
         setTarget(target);
         setEye(DEFAULT_VIEW.cartesian().add(target));

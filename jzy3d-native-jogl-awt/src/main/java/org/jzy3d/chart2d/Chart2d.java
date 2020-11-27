@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot2d.primitives.Serie2d;
@@ -22,7 +22,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 // 
 // Interface de LineSerie fournie par Chart2d package, using x, y float args
 
-public class Chart2d extends AWTChart {
+public class Chart2d extends AWTNativeChart {
     protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
 
     public void layout2d() {

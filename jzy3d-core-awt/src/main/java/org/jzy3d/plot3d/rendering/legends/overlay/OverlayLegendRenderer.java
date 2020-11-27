@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.jzy3d.colors.ColorAWT;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 
 /**
  * 
@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.rendering.view.Renderer2d;
  * @author Martin Pernollet
  *
  */
-public class OverlayLegendRenderer implements Renderer2d {
+public class OverlayLegendRenderer implements AWTRenderer2d {
     protected List<Legend> info;
     protected LegendLayout layout = new LegendLayout();
 
