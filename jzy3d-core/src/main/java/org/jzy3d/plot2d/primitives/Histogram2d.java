@@ -8,8 +8,8 @@ import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
-import org.jzy3d.plot3d.primitives.axes.layout.providers.StaticTickProvider;
+import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.providers.StaticTickProvider;
 
 public class Histogram2d {
     protected Histogram model;

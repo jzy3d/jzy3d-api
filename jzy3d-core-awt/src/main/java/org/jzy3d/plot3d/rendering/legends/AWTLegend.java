@@ -7,7 +7,7 @@ import org.jzy3d.chart.ChartView;
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.events.IDrawableListener;
-import org.jzy3d.io.FileImage;
+import org.jzy3d.io.AWTImageFile;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot2d.primitive.AWTImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
@@ -86,7 +86,7 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     }
 
     public void saveImage(String filename) throws IOException {
-        FileImage.savePNG(imageObj, filename);
+        AWTImageFile.savePNG(imageObj, filename);
     }
     
     

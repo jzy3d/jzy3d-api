@@ -13,7 +13,7 @@ import org.jzy3d.maths.IBoundingPolicy;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitives.Serie2d;
-import org.jzy3d.plot3d.primitives.axes.IAxis;
+import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
