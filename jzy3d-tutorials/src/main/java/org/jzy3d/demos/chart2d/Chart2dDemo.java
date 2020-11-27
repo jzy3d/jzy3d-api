@@ -18,9 +18,9 @@ import org.jzy3d.chart2d.Chart2d;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.ConcurrentLineStrip;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
-import org.jzy3d.plot3d.primitives.axes.layout.providers.PitchTickProvider;
-import org.jzy3d.plot3d.primitives.axes.layout.renderers.PitchTickRenderer;
+import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.providers.PitchTickProvider;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.PitchTickRenderer;
 import org.jzy3d.ui.LookAndFeel;
 
 import net.miginfocom.swing.MigLayout;

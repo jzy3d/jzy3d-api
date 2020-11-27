@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
-import org.jzy3d.colors.ColorAWT;
+import org.jzy3d.colors.AWTColor;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 
@@ -51,7 +51,7 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
         
         // Background
         if (layout.backgroundColor != null) {
-            g2d.setColor(ColorAWT.toAWT(layout.backgroundColor));
+            g2d.setColor(AWTColor.toAWT(layout.backgroundColor));
             g2d.fillRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
         }
 
@@ -69,18 +69,18 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
 
         
         // Border
-        g2d.setColor(ColorAWT.toAWT(layout.borderColor));
+        g2d.setColor(AWTColor.toAWT(layout.borderColor));
         g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
     }
 
     public void paintLegend(Graphics2D g2d, int textHeight, int textWidthMax, int xTextPos, int yTextPos, Legend line) {
         // Text
-        g2d.setColor(ColorAWT.toAWT(layout.fontColor));
+        g2d.setColor(AWTColor.toAWT(layout.fontColor));
         g2d.drawString(line.label, xTextPos, yTextPos);
 
         // Line sample
         int xLineStart = xTextPos + textWidthMax + layout.sampleLineMargin;
-        g2d.setColor(ColorAWT.toAWT(line.color));
+        g2d.setColor(AWTColor.toAWT(line.color));
         g2d.drawLine(xLineStart, yTextPos - textHeight / 2, xLineStart + layout.sampleLineLength, yTextPos - textHeight / 2);
 
         // Symbol

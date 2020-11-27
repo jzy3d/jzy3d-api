@@ -4,8 +4,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
-import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
+import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 
 public class AWTScatterMultiColor extends ScatterMultiColor implements

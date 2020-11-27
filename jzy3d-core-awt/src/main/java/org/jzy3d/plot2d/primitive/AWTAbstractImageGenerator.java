@@ -4,7 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorAWT;
+import org.jzy3d.colors.AWTColor;
 
 public abstract class AWTAbstractImageGenerator implements AWTImageGenerator{
     public void configureText(Graphics2D graphic) {
@@ -13,7 +13,7 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator{
 
     public void drawBackground(int width, int height, Graphics2D graphic) {
         if(hasBackground){
-            graphic.setColor(ColorAWT.toAWT(backgroundColor));
+            graphic.setColor(AWTColor.toAWT(backgroundColor));
             graphic.fillRect(0, 0, width, height);
         }
     }
@@ -50,7 +50,7 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator{
     }
     
     public void drawLegendBorder(Graphics2D graphic, int width, int height) {
-        graphic.setColor(ColorAWT.toAWT(foregroundColor));
+        graphic.setColor(AWTColor.toAWT(foregroundColor));
         graphic.drawRect(0, 0, width - 1, height-1);
     }
 

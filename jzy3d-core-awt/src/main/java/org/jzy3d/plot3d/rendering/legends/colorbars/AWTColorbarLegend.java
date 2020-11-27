@@ -10,9 +10,9 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
-import org.jzy3d.plot3d.primitives.axes.layout.providers.ITickProvider;
-import org.jzy3d.plot3d.primitives.axes.layout.renderers.ITickRenderer;
+import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 
 public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
