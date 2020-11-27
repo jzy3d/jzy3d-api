@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.rendering.view.annotation;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 /**
@@ -12,7 +12,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin
  *
  */
-public class CameraEyeOverlayAnnotation implements Renderer2d{
+public class CameraEyeOverlayAnnotation implements AWTRenderer2d{
     public CameraEyeOverlayAnnotation(View view) {
         this.view = view;
     }

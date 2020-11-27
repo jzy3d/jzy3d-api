@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -58,7 +59,7 @@ public class DemoJzy3dFXProblem extends Application {
         
         // Jzy3d
         JavaFXChartFactory factory = new JavaFXChartFactory();
-        AWTChart chart  = getDemoChartVBO(factory, "offscreen");
+        AWTNativeChart chart  = getDemoChartVBO(factory, "offscreen");
         ImageView imageView = factory.bindImageView(chart);
 
         // JavaFX
@@ -76,7 +77,7 @@ public class DemoJzy3dFXProblem extends Application {
     }
     
     public static int MILION = 1000000;
-    private AWTChart getDemoChartVBO(JavaFXChartFactory factory, String toolkit) {
+    private AWTNativeChart getDemoChartVBO(JavaFXChartFactory factory, String toolkit) {
                 float ratio = 1.0f;
         int size = (int) (ratio * MILION);
 
@@ -91,7 +92,7 @@ public class DemoJzy3dFXProblem extends Application {
         //quality.setAnimated(true);
         
         // let factory bind mouse and keyboard controllers to JavaFX node
-        AWTChart chart = (AWTChart) factory.newChart(quality);
+        AWTNativeChart chart = (AWTNativeChart) factory.newChart(quality);
         chart.getScene().getGraph().add(drawable);
         return chart;
     }

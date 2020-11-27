@@ -4,7 +4,7 @@ import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.bridge.awt.FrameAWT;
-import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
@@ -24,12 +24,12 @@ import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTNativeView;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class AWTChartFactory extends NativeChartFactory {
     static Logger logger = Logger.getLogger(AWTChartFactory.class);
@@ -48,8 +48,8 @@ public class AWTChartFactory extends NativeChartFactory {
     /**
      */
     @Override
-    public Chart newChart(IChartFactory factory, Quality quality) {
-        return new AWTChart(factory, quality);
+    public AWTNativeChart newChart(IChartFactory factory, Quality quality) {
+        return new AWTNativeChart(factory, quality);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class AWTChartFactory extends NativeChartFactory {
      */
     @Override
     public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTView(factory, scene, canvas, quality);
+        return new AWTNativeView(factory, scene, canvas, quality);
     }
 
     /** Provide AWT Texture loading for screenshots */

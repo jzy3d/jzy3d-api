@@ -6,10 +6,10 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axes.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
 
-public class AWTChart extends NativeChart {
+public class AWTChart extends Chart {
     public AWTChart(IChartFactory components, Quality quality) {
         super(components, quality);
     }
@@ -18,11 +18,11 @@ public class AWTChart extends NativeChart {
     	super();
     }
     
-    public void addRenderer(Renderer2d renderer2d) {
+    public void addRenderer(AWTRenderer2d renderer2d) {
         getAWTView().addRenderer2d(renderer2d);
     }
 
-    public void removeRenderer(Renderer2d renderer2d) {
+    public void removeRenderer(AWTRenderer2d renderer2d) {
         getAWTView().removeRenderer2d(renderer2d);
     }
 

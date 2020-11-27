@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.canvas.INativeScreenCanvas;
-import org.jzy3d.plot3d.rendering.view.Renderer2d;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 
 import com.jogamp.opengl.GLAnimatorControl;
 
-public class FpsInfoRenderer implements Renderer2d{
+public class FpsInfoRenderer implements AWTRenderer2d{
     protected Chart chart;
     protected GLAnimatorControl control;
     

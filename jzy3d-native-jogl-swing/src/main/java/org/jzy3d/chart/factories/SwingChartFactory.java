@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 @Deprecated
 public class SwingChartFactory extends AWTChartFactory {
     @Override
-    public Chart newChart(IChartFactory factory, Quality quality) {
+    public SwingChart newChart(IChartFactory factory, Quality quality) {
         return new SwingChart(factory, quality);
     }
 
