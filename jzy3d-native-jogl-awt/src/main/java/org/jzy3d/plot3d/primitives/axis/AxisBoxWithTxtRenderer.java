@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
-import org.jzy3d.plot3d.text.overlay.TextOverlay;
+import org.jzy3d.plot3d.text.overlay.AWTTextOverlay;
 
 /**
  * The AxeBox displays a box with front face invisible and ticks labels.
@@ -34,7 +34,7 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 	}
 
 
-	public TextOverlay getExperimentalTextRenderer() {
+	public AWTTextOverlay getExperimentalTextRenderer() {
 		return txtRenderer;
 	}
 
@@ -46,7 +46,7 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 	 * @param canvas
 	 */
 	public void setExperimentalTextOverlayRenderer(ICanvas canvas) {
-		txtRenderer = new TextOverlay(canvas);
+		txtRenderer = new AWTTextOverlay(canvas);
 	}
 
 	@Override
@@ -209,5 +209,5 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 		return ticksTxtBounds;
 	}
 
-	protected TextOverlay txtRenderer; // keep it null in order to not use it
+	protected AWTTextOverlay txtRenderer; // keep it null in order to not use it
 }

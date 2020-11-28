@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import org.jzy3d.bridge.BufferedPanel;
 
 
-public abstract class SimpleBufferedPanelSwing extends JPanel implements BufferedPanel{
+public abstract class SwingSimpleBufferedPanel extends JPanel implements BufferedPanel{
 	
 	@Override
     public abstract void draw(Graphics g);

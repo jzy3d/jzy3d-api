@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.Composite;
  *
  * @author Martin Pernollet
  */
-public class Bridge {
+public class SWT_AWT_Bridge {
 
     public static void adapt(Composite containerSWT, final Component componentAWT) {
         Composite embedder = new Composite(containerSWT, SWT.EMBEDDED);

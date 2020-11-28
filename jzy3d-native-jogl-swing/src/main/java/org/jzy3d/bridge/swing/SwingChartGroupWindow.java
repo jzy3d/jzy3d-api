@@ -14,14 +14,14 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.ui.LookAndFeel;
 
 /** A frame to show a list of charts */
-public class ChartGroupWindow extends JFrame {
+public class SwingChartGroupWindow extends JFrame {
     private static final long serialVersionUID = 7519209038396190502L;
 
-    public ChartGroupWindow(Chart... charts) {
+    public SwingChartGroupWindow(Chart... charts) {
         this(Arrays.asList(charts));
     }
 
-    public ChartGroupWindow(Collection<? extends Chart> charts) {
+    public SwingChartGroupWindow(Collection<? extends Chart> charts) {
         LookAndFeel.apply();
 
         setGridLayout(charts);
@@ -52,7 +52,7 @@ public class ChartGroupWindow extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                ChartGroupWindow.this.dispose();
+                SwingChartGroupWindow.this.dispose();
                 System.exit(0);
             }
         });
