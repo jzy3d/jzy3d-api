@@ -1,10 +1,9 @@
-package org.jzy3d.incubation.volume;
+package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.Buffer;
 
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
-import org.jzy3d.incubation.vbo.ColormapTexture;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.maths.BoundingBox3d;
@@ -13,6 +12,7 @@ import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
+import org.jzy3d.plot3d.primitives.vbo.ColormapTexture;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
