@@ -6,8 +6,8 @@ import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.incubation.vbo.ShaderWaterfallDrawableVBO;
-import org.jzy3d.incubation.vbo.ShaderWaterfallVBOBuilder;
+import org.jzy3d.plot3d.primitives.vbo.ShaderWaterfallDrawableVBO;
+import org.jzy3d.plot3d.primitives.vbo.ShaderWaterfallVBOBuilder;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**

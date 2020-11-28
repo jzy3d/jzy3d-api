@@ -1,4 +1,4 @@
-package org.jzy3d.incubation.vbo;
+package org.jzy3d.plot3d.primitives.vbo;
 
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;

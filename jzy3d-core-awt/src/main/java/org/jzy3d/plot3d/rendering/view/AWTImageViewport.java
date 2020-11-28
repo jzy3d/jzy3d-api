@@ -9,7 +9,7 @@ import org.jzy3d.plot3d.rendering.image.GLImage;
 
 /**
  * A {@link AWTImageViewport} allows displaying a 2d {@link Image} within an
- * OpenGL2 viewport.
+ * OpenGL viewport.
  * 
  * @author Martin Pernollet
  */
@@ -17,6 +17,11 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
 	static final float IMAGE_Z = 0;//-0.75f;
 	
 	ImageRenderer imageRenderer = new ImageRenderer();
+	
+    protected ByteBuffer imageData = null;
+    protected Image imageObj;
+    protected int imageHeight;
+    protected int imageWidth;
 	
     public AWTImageViewport() {
         setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
@@ -92,10 +97,4 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
         return new Dimension(1, 1);
     }
 
-    /*******************************************************************************/
-
-    private ByteBuffer imageData = null;
-    protected Image imageObj;
-    protected int imageHeight;
-    protected int imageWidth;
 }

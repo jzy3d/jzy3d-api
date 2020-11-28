@@ -1,4 +1,4 @@
-package org.jzy3d.incubation.volume;
+package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
