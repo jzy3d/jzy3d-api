@@ -5,7 +5,7 @@ import java.awt.Component;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.jzy3d.bridge.swt.Bridge;
+import org.jzy3d.bridge.swt.SWT_AWT_Bridge;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.Settings;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -48,7 +48,7 @@ public class SWTBridgeDemo {
         Display display = new Display();
         Shell shell = new Shell(display);
         shell.setLayout(new FillLayout());
-        Bridge.adapt(shell, (Component) chart.getCanvas());
+        SWT_AWT_Bridge.adapt(shell, (Component) chart.getCanvas());
 
         shell.setText("name");
         shell.setSize(800, 600);

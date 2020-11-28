@@ -23,7 +23,7 @@ import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 /**
  * Highly experimental text renderer.
  * 
- * The {@link TextOverlay} allows computing the 2d position of a text in the window, according to its required position
+ * The {@link AWTTextOverlay} allows computing the 2d position of a text in the window, according to its required position
  * in the 3d environment (using appenText method).
  * As a 2nd pass, it might be rendered into a java {@link Graphics} context. The interesting thing, compared to the
  * currently used {@link TextBitmapRenderer}, is that the user may select any java Font, whereas the {@link TextBitmapRenderer}
@@ -38,8 +38,8 @@ import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
  * // TODO: there may be a bug of non-rendering without resizing at init -> check that
  * // TODO: the 1<->N relation TextRenderer<->Canvas won't work because TextRenderer has only one target Component.
  */
-public class TextOverlay implements AWTRenderer2d{
-	public TextOverlay(ICanvas canvas){
+public class AWTTextOverlay implements AWTRenderer2d{
+	public AWTTextOverlay(ICanvas canvas){
 		init(canvas);
 	}
 

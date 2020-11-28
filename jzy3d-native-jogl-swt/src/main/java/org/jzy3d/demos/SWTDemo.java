@@ -15,6 +15,7 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class SWTDemo {
 
@@ -44,7 +45,10 @@ public class SWTDemo {
         Shell shell = new Shell(display);
         shell.setLayout(new FillLayout());
 
-        Chart chart = SWTChartFactory.chart(shell);
+        SWTChartFactory f = new SWTChartFactory(shell);
+        Chart chart = f.newChart(Quality.Advanced);
+
+        //Chart chart = SWTChartFactory.chart(shell);
         chart.getScene().getGraph().add(surface);
 
         ChartLauncher.openChart(chart);
