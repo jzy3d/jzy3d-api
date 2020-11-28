@@ -27,7 +27,7 @@ public class FrameSWT implements IFrame {
         shell.setLayout(new FillLayout());
         shell.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
         shell.setText(title + "[SWT]");
-        Bridge.adapt(shell, (Component) chart.getCanvas());
+        SWT_AWT_Bridge.adapt(shell, (Component) chart.getCanvas());
         shell.open();
 
         while (!shell.isDisposed()) {

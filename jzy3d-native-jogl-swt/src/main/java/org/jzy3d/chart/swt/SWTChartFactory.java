@@ -35,9 +35,9 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 public class SWTChartFactory extends NativeChartFactory {
     private static final Logger logger = Logger.getLogger(SWTChartFactory.class);
 
-    private final Composite canvas;
+    protected final Composite canvas;
 
-    private SWTChartFactory(Composite canvas) {
+    public SWTChartFactory(Composite canvas) {
         this.canvas = canvas;
     }
 
