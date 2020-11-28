@@ -8,8 +8,8 @@ import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.incubation.volume.Texture3D;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.plot3d.primitives.volume.Texture3D;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 import com.jogamp.opengl.util.GLBuffers;

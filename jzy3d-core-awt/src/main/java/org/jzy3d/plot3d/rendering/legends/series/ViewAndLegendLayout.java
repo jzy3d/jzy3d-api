@@ -19,7 +19,7 @@ import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
-public class LegendViewportLayout implements IViewportLayout{
+public class ViewAndLegendLayout implements IViewportLayout{
     protected float screenSeparator = 1.0f;
     protected boolean hasMeta = true;
     

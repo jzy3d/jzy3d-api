@@ -1,4 +1,4 @@
-package org.jzy3d.incubation.vbo;
+package org.jzy3d.plot3d.primitives.vbo;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;

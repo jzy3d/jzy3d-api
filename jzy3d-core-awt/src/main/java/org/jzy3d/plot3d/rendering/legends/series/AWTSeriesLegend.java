@@ -17,7 +17,12 @@ import org.jzy3d.plot3d.rendering.view.IImageViewport;
 
 public class AWTSeriesLegend extends AWTLegend implements IImageViewport{
     private static final int LINE_HEIGHT = 15;
+    private static final int INTERLINE_HEIGHT = 5;
     private static final int FONT_HEIGHT = 12;
+    
+    protected int margin = 25;
+    protected List<Serie2d> series;
+    
 	public AWTSeriesLegend() {
         this(new ArrayList<Serie2d>());
     }
@@ -55,7 +60,7 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport{
                 configureText(graphic);
 
                 int steps = series.size();
-                int step = 15;
+                int step = LINE_HEIGHT;
                 int y = step;
                 int legendBorderHeight = step * (steps+1);
 
@@ -81,7 +86,7 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport{
                     graphic.setColor(AWTColor.toAWT(color));
                     graphic.drawLine(0, y, LINE_HEIGHT, y);
                 }
-                graphic.drawString(text, LINE_HEIGHT+5, y + 5);
+                graphic.drawString(text, LINE_HEIGHT+INTERLINE_HEIGHT, y + INTERLINE_HEIGHT);
             }
 
             private String getSerieText(Serie2d serie) {
@@ -98,8 +103,7 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport{
                 return Color.GRAY;
             }
         };
-        //this.font = new java.awt.Font("Helvetica",0,12);
-        //imageGenerator.setF
+
         imageGenerator.setHasBackground(true);
         imageGenerator.setFont(new java.awt.Font("Helvetica",0,FONT_HEIGHT));
     }
@@ -126,6 +130,5 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport{
         return null;
     }
 
-    protected int margin = 25;
-    protected List<Serie2d> series;
+
 }
