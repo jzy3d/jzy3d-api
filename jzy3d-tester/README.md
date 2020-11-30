@@ -4,7 +4,7 @@ A set of tools to test charts
 
 ## ChartTester
 
-ChartTester is A non regression test tool allowing to compare screenshots of charts.
+ChartTester is a non regression test tool allowing to compare screenshots of charts.
 
 Works as follow
 - Generates an image first time the test is ran. The developer should verify the image is correct.
@@ -36,6 +36,27 @@ p.draw(glMock, null, null);
 // Then
 Assert.assertTrue(glMock.vertex3f_contains(3, 30, 1000)); 
 ``` 
+
+
+## DebugGL
+
+These are 2D and 3D charts displaying properties of a 3D chart that should be debugged. 
+I created it while I was banging my head understanding why Logarithmic charts where not working as expected. 
+
+<img src="doc/debug_gl.png"/>
+* The big chart on the right is the one currently being debugged
+* The top left chart shows the main chart axisbox in blue, and the camera with dots.
+* The bottom left chart shows properties of the camera.
+
+Watching chart properties for debugging is as easy as follow
+
+```java
+DebugGLChart2d debugChart2d = new DebugGLChart2d(d.getChart());
+debugChart2d.watch("far", Color.BLUE, c->c.getView().getCamera().getFar());
+debugChart2d.watch("radius", Color.GREEN, c->c.getView().getCamera().getRenderingSphereRadius());
+debugChart2d.watch("viewpoint.x", Color.RED, c->c.getView().getViewPoint().x);
+``` 
+  
 
 
 ## Replay

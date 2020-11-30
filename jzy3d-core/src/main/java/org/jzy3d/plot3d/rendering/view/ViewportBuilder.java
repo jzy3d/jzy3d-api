@@ -11,7 +11,7 @@ public class ViewportBuilder {
         int w = (int)((right-left)*width);
         int h = height;
         int x = (int)(left*width);
-        int y = x + w;
+        int y = height;//x + w;
         return new ViewportConfiguration(w, h, x, y);
     }
 
