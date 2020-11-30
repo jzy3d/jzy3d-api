@@ -333,11 +333,11 @@ public class Chart {
         // Set new view mode and former view point
         view.setViewPositionMode(mode);
         if (mode == ViewPositionMode.FREE)
-            view.setViewPoint(previousViewPointFree == null ? View.DEFAULT_VIEW.clone() : previousViewPointFree);
+            view.setViewPoint(previousViewPointFree == null ? View.VIEWPOINT_DEFAULT.clone() : previousViewPointFree);
         else if (mode == ViewPositionMode.TOP)
-            view.setViewPoint(previousViewPointTop == null ? View.DEFAULT_VIEW.clone() : previousViewPointTop);
+            view.setViewPoint(previousViewPointTop == null ? View.VIEWPOINT_DEFAULT.clone() : previousViewPointTop);
         else if (mode == ViewPositionMode.PROFILE)
-            view.setViewPoint(previousViewPointProfile == null ? View.DEFAULT_VIEW.clone() : previousViewPointProfile);
+            view.setViewPoint(previousViewPointProfile == null ? View.VIEWPOINT_DEFAULT.clone() : previousViewPointProfile);
 
         view.shoot();
     }

@@ -7,7 +7,6 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
-@Deprecated
 public class SwingChartFactory extends AWTChartFactory {
     @Override
     public SwingChart newChart(IChartFactory factory, Quality quality) {

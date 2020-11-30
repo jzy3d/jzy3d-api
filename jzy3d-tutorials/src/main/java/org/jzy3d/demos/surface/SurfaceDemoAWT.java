@@ -13,9 +13,9 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public class SurfaceDemo extends AWTAbstractAnalysis {
+public class SurfaceDemoAWT extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
-        AnalysisLauncher.open(new SurfaceDemo());
+        AnalysisLauncher.open(new SurfaceDemoAWT());
     }
 
     @Override

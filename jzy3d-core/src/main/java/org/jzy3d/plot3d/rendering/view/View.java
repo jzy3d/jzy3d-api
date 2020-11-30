@@ -57,8 +57,6 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
 public class View {
 	protected static Logger LOGGER = Logger.getLogger(View.class);
 
-	/** A view may optionnaly know its parent chart. */
-	protected Chart chart;
 
 	/**
 	 * This allows stretching the camera rendering sphere when the camera is on top
@@ -80,7 +78,7 @@ public class View {
 	 * 
 	 * TODO : delete me or make a better view setting
 	 */
-	public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR = 1.2f;
+	public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR = 1f;//.2f;
 
 	/**
 	 * force to have all object maintained in screen, meaning axebox won't always
@@ -94,8 +92,15 @@ public class View {
 	 */
 	protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false;
 
+	// view setting
+	protected CameraMode cameraMode;
+	protected ViewPositionMode viewmode;
+	protected ViewBoundMode boundmode;
+	protected Color backgroundColor = Color.BLACK;
 	protected boolean axisDisplayed = true;
 	protected boolean squared = true;
+
+	// view objects
 	protected Camera cam;
 	protected IAxis axis;
 	protected Quality quality;
@@ -107,20 +112,25 @@ public class View {
 	protected Coord3d center;
 	protected Coord3d scaling;
 	protected BoundingBox3d viewbounds;
-	protected CameraMode cameraMode;
-	protected ViewPositionMode viewmode;
-	protected ViewBoundMode boundmode;
-	protected Color backgroundColor = Color.BLACK;
+	protected Chart chart;
+	
+	// view listeners
 	protected List<IViewPointChangedListener> viewPointChangedListeners;
 	protected List<IViewIsVerticalEventListener> viewOnTopListeners;
 	protected List<IViewLifecycleEventListener> viewLifecycleListeners;
 	protected boolean wasOnTopAtLastRendering;
 
-	protected static final float PI_div2 = (float) Math.PI / 2;
+	// constants
+	public static final float PI_div2 = (float) Math.PI / 2;
+	public static final float DISTANCE_DEFAULT = 2000;
+	
+	/** A nice viewpoint to start the chart */
+	public static final Coord3d VIEWPOINT_DEFAULT = new Coord3d(Math.PI / 3, Math.PI / 3, DISTANCE_DEFAULT);
+	/** A viewpoint where two corners of the axis box touch top and bottom lines of the canvas. */
+	public static final Coord3d VIEWPOINT_AXIS_CORNER_TOUCH_BORDER = new Coord3d(Math.PI / 4, Math.PI / 3, DISTANCE_DEFAULT);
 
-	public static final float DEFAULT_DISTANCE = 2000;
-	public static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 3, DEFAULT_DISTANCE);
-
+	
+	
 	protected boolean dimensionDirty = false;
 	/**
 	 * can be set to true by the Renderer3d so that the View knows it is rendering
@@ -166,7 +176,7 @@ public class View {
 	public void initInstance(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
 		BoundingBox3d sceneBounds = getSceneGraphBounds(scene);
 
-		this.viewpoint = DEFAULT_VIEW.clone();
+		this.viewpoint = VIEWPOINT_DEFAULT.clone();
 		this.center = sceneBounds.getCenter();
 		this.scaling = Coord3d.IDENTITY.clone();
 		this.viewbounds = null; // sceneBounds might not be ready yet //new BoundingBox3d(0, 1, 0, 1, 0, 1);

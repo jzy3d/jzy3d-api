@@ -16,6 +16,13 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class BoundingBox3d {
+    protected float xmin;
+    protected float xmax;
+    protected float ymin;
+    protected float ymax;
+    protected float zmin;
+    protected float zmax;
+
     /**
      * Initialize a BoundingBox by calling its reset method, leaving the box in
      * an inconsitent state, with minimums = Float.MAX_VALUE and maximums =
@@ -455,14 +462,65 @@ public class BoundingBox3d {
         return new BoundingBox3d(transformers.getX().compute(xmin), transformers.getX().compute(xmax), transformers.getY().compute(ymin), transformers.getY().compute(ymax), transformers.getZ().compute(zmin), transformers.getZ().compute(zmax));
     }
 
+    public Corners getCorners() {
+    	return new Corners(this);
+    }
     
     /* */
     
-    private float xmin;
-    private float xmax;
-    private float ymin;
-    private float ymax;
-    private float zmin;
-    private float zmax;
+    
+    
+    public class Corners{
+    	BoundingBox3d box;
+
+		public Corners(BoundingBox3d box) {
+			this.box = box;
+		}
+		
+		public Coord3d getXminYminZmin() {
+			return new Coord3d(box.xmin, box.ymin, box.zmin);
+		}
+		public Coord3d getXminYminZmax() {
+			return new Coord3d(box.xmin, box.ymin, box.zmax);
+		}
+		public Coord3d getXminYmaxZmin() {
+			return new Coord3d(box.xmin, box.ymax, box.zmin);
+		}
+		public Coord3d getXminYmaxZmax() {
+			return new Coord3d(box.xmin, box.ymax, box.zmax);
+		}
+		
+		public Coord3d getXmaxYminZmin() {
+			return new Coord3d(box.xmax, box.ymin, box.zmin);
+		}
+		public Coord3d getXmaxYminZmax() {
+			return new Coord3d(box.xmax, box.ymin, box.zmax);
+		}
+		public Coord3d getXmaxYmaxZmin() {
+			return new Coord3d(box.xmax, box.ymax, box.zmin);
+		}
+		public Coord3d getXmaxYmaxZmax() {
+			return new Coord3d(box.xmax, box.ymax, box.zmax);
+		}
+
+		public List<Coord3d> getAll(){
+			List<Coord3d> all = new ArrayList<>();
+			
+			all.add(getXminYminZmin());
+			all.add(getXminYminZmax());	
+			
+			all.add(getXminYmaxZmin());
+			all.add(getXminYmaxZmax());
+
+			all.add(getXmaxYminZmin());
+			all.add(getXmaxYminZmax());	
+			
+			all.add(getXmaxYmaxZmin());
+			all.add(getXmaxYmaxZmax());
+
+			return all;
+		}
+    	
+    }
 
 }

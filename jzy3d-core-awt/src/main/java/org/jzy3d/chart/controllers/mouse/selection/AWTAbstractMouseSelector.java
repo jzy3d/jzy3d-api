@@ -12,7 +12,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
-import org.jzy3d.plot3d.rendering.view.AWTNativeView;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractViewportManager;
@@ -37,14 +36,14 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
         this.chart.getCanvas().addMouseController(this);
         final ICanvas c = chart.getCanvas();
         selectionRenderer = initRenderer2d(c);
-        if (chart.getView() instanceof AWTNativeView)
+        if (chart.getView() instanceof AWTView)
             ((AWTView) this.chart.getView()).addRenderer2d(selectionRenderer);
     }
 
     public void unregister() {
         if (chart != null) {
             chart.getCanvas().removeMouseController(this);
-            if (chart.getView() instanceof AWTNativeView)
+            if (chart.getView() instanceof AWTView)
                 ((AWTView) this.chart.getView()).removeRenderer2d(selectionRenderer);
         }
     }

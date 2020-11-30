@@ -33,7 +33,6 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * 
  * @author Martin Pernollet
  */
-@Deprecated
 public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeScreenCanvas {
 	public CanvasSwing(NativeChartFactory factory, Scene scene,
 			Quality quality) {

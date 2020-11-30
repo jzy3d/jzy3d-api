@@ -43,14 +43,14 @@ public class Chart2dDemo {
     public static int nOctave = 5;
 
     public static void main(String[] args) throws Exception {
-        PitchAmpliControlCharts log = new PitchAmpliControlCharts(duration, maxfreq, nOctave);
+        PitchAndAmplitudeCharts log = new PitchAndAmplitudeCharts(duration, maxfreq, nOctave);
         new TimeChartWindow(log.getCharts());
 
         generateSamplesInTime(log);
         // generateSamples(log, 500000);
     }
 
-    public static void generateSamples(PitchAmpliControlCharts log, int n) throws InterruptedException {
+    public static void generateSamples(PitchAndAmplitudeCharts log, int n) throws InterruptedException {
         System.out.println("will generate " + n + " samples");
 
         for (int i = 0; i < n; i++) {
@@ -68,7 +68,7 @@ public class Chart2dDemo {
         return ((double) i / n) * duration;
     }
 
-    public static void generateSamplesInTime(PitchAmpliControlCharts log) throws InterruptedException {
+    public static void generateSamplesInTime(PitchAndAmplitudeCharts log) throws InterruptedException {
         System.out.println("will generate approx. " + duration * 1000 / interval + " samples");
 
         start();
@@ -88,7 +88,7 @@ public class Chart2dDemo {
     }
 
     /** Hold 2 charts, 2 time series, and 2 drawable lines */
-    public static class PitchAmpliControlCharts {
+    public static class PitchAndAmplitudeCharts {
         public Chart2d pitchChart;
         public Chart2d ampliChart;
         public Serie2d seriePitch;
@@ -96,7 +96,7 @@ public class Chart2dDemo {
         public ConcurrentLineStrip pitchLineStrip;
         public ConcurrentLineStrip amplitudeLineStrip;
 
-        public PitchAmpliControlCharts(float timeMax, int freqMax, int nOctave) {
+        public PitchAndAmplitudeCharts(float timeMax, int freqMax, int nOctave) {
             pitchChart = new Chart2d();
             pitchChart.asTimeChart(timeMax, 0, freqMax, "Time", "Frequency");
 
