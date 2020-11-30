@@ -66,13 +66,13 @@ public class AWTView extends ChartView {
 		axis.draw(painter);
 		clear();
 	
-		// AxeBox abox = (AxeBox) axe;
+		// Base camera radius on {@link AxisBox#getWholeBounds} to ensure we display text labels complete
 		BoundingBox3d newBounds = axis.getWholeBounds().scale(scaling);
 	
 		if (viewmode == ViewPositionMode.TOP) {
 			float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(),
 					newBounds.getYmax() - newBounds.getYmin()) / 2;
-			radius += (radius * STRETCH_RATIO);
+			radius += (radius * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP);
 			cam.setRenderingSphereRadius(radius);
 		} else
 			cam.setRenderingSphereRadius((float) newBounds.getRadius());
