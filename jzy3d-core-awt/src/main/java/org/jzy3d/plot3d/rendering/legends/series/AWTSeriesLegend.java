@@ -121,7 +121,7 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport{
             
             
             int iWidth = Math.max(width - margin, 1);
-            int iHeight = 50;//Math.max(height - margin, 1);
+            int iHeight = series.size() * (LINE_HEIGHT + INTERLINE_HEIGHT);
             
             //setViewPort(iWidth, iHeight, float left, float right);
             
