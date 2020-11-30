@@ -15,6 +15,10 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class AxisBase implements IAxis {
+	protected Coord3d scale;
+	protected BoundingBox3d boundingBox;
+	protected IAxisLayout layout;
+	protected SpaceTransformer spaceTransformer;
 
 	/** Create a simple axe centered on (0,0,0), with a dimension of 1. */
 	public AxisBase() {
@@ -36,7 +40,7 @@ public class AxisBase implements IAxis {
 
 	@Override
 	public void setAxe(BoundingBox3d box) {
-		bbox = box;
+		boundingBox = box;
 	}
 
 	@Override
@@ -47,14 +51,14 @@ public class AxisBase implements IAxis {
 
 		painter.glBegin_Line();
 		painter.glColor3f(1.0f, 0.0f, 0.0f); // R
-		painter.glVertex3f(bbox.getXmin(), bbox.getYmin(), bbox.getZmin());
-		painter.glVertex3f(bbox.getXmax(), 0, 0);
+		painter.glVertex3f(boundingBox.getXmin(), boundingBox.getYmin(), boundingBox.getZmin());
+		painter.glVertex3f(boundingBox.getXmax(), 0, 0);
 		painter.glColor3f(0.0f, 1.0f, 0.0f); // G
-		painter.glVertex3f(bbox.getXmin(), bbox.getYmin(), bbox.getZmin());
-		painter.glVertex3f(0, bbox.getYmax(), 0);
+		painter.glVertex3f(boundingBox.getXmin(), boundingBox.getYmin(), boundingBox.getZmin());
+		painter.glVertex3f(0, boundingBox.getYmax(), 0);
 		painter.glColor3f(0.0f, 0.0f, 1.0f); // B
-		painter.glVertex3f(bbox.getXmin(), bbox.getYmin(), bbox.getZmin());
-		painter.glVertex3f(0, 0, bbox.getZmax());
+		painter.glVertex3f(boundingBox.getXmin(), boundingBox.getYmin(), boundingBox.getZmin());
+		painter.glVertex3f(0, 0, boundingBox.getZmax());
 		painter.glEnd();
 	}
 
@@ -68,13 +72,13 @@ public class AxisBase implements IAxis {
 
 	@Override
 	public BoundingBox3d getBoxBounds() {
-		return bbox;
+		return boundingBox;
 	}
 
 	/** Get the minimum values of the bounding box for each dimension. */
 	@Override
 	public Coord3d getCenter() {
-		return new Coord3d(bbox.getXmin(), bbox.getYmin(), bbox.getZmin());
+		return new Coord3d(boundingBox.getXmin(), boundingBox.getYmin(), boundingBox.getZmin());
 	}
 
 	@Override
@@ -97,11 +101,6 @@ public class AxisBase implements IAxis {
 		return scale;
 	}
 
-	protected Coord3d scale;
-	protected BoundingBox3d bbox;
-	protected IAxisLayout layout;
-
-	protected SpaceTransformer spaceTransformer;
 
 	@Override
 	public List<AxeAnnotation> getAnnotations() {
@@ -117,6 +116,6 @@ public class AxisBase implements IAxis {
 
 	@Override
 	public BoundingBox3d getWholeBounds() {
-		return bbox;
+		return boundingBox;
 	}
 }

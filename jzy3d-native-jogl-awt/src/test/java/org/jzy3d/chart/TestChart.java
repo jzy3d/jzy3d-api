@@ -14,7 +14,7 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
-public class ChartTest {
+public class TestChart {
 	@Test
 	public void givenNativeOffscreenChart_whenAddSurface_thenViewIsInAutotFitMode() {
 		

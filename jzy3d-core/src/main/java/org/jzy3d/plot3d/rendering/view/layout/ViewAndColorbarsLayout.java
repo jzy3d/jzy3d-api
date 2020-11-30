@@ -35,8 +35,8 @@ public class ViewAndColorbarsLayout implements IViewportLayout{
         final List<ILegend> list = getLegends(chart);
         
         computeSeparator(canvas, list);
-        sceneViewPort = ViewportBuilder.column(canvas, 0, screenSeparator);
-        backgroundViewPort = new ViewportConfiguration(canvas);
+        sceneViewport = ViewportBuilder.column(canvas, 0, screenSeparator);
+        backgroundViewport = new ViewportConfiguration(canvas);
     }
 
     public void computeSeparator(final ICanvas canvas, final List<ILegend> list) {
@@ -56,8 +56,8 @@ public class ViewAndColorbarsLayout implements IViewportLayout{
     @Override
     public void render(Painter painter, Chart chart){
     	View view = chart.getView();
-        view.renderBackground(backgroundViewPort);
-        view.renderScene(sceneViewPort);
+        view.renderBackground(backgroundViewport);
+        view.renderScene(sceneViewport);
 
         renderLegends(painter, chart);
 
@@ -105,6 +105,19 @@ public class ViewAndColorbarsLayout implements IViewportLayout{
         return chart.getScene().getGraph().getLegends();
     }
     
-    protected ViewportConfiguration sceneViewPort;
-    protected ViewportConfiguration backgroundViewPort;
+    
+    /** Return the scene viewport as it was processed according to the number of legends to display. */
+    public ViewportConfiguration getSceneViewport() {
+		return sceneViewport;
+	}
+
+    /** Return the scene viewport as it was processed to cover the whole canvas. */
+	public ViewportConfiguration getBackgroundViewport() {
+		return backgroundViewport;
+	}
+
+
+
+	protected ViewportConfiguration sceneViewport;
+    protected ViewportConfiguration backgroundViewport;
 }
