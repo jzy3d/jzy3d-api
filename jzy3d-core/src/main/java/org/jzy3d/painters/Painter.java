@@ -70,7 +70,25 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * 
  * Last, there are utility methods for Jzy3d for easily configuring multiple
  * OpenGL settings with {@link Painter#configureGL(Quality)}.
+ * <br>
  * 
+ * <b>Using the complete OpenGL interface</b>
+ * Note that you may still access the "real" OpenGL interface in case the Painter
+ * does not adress your need. To get it, simply downcast the {@link Painter} to the 
+ * concrete type you are using, and call the accessors as follow. 
+ * 
+ * Emulated OpenGL interface
+ * <ul>
+ * <li>GL gl = {@link EmulGLPainter#getGL()}; // jGL GL interface 
+ * <li>GLU glu = {@link EmulGLPainter#getGLU()}; // jGL GLU interface
+ * <li>GLUT glut = {@link EmulGLPainter#getGLUT()}; // jGL GLUT interface
+ * </ul>
+ * Native OpenGL interface
+ * <ul>
+ * <li>GL gl = {@link NativeDeskopPainter#getGL()}; // JOGL GL interface 
+ * <li>GLU glu = {@link NativeDeskopPainter#getGLU()}; // JOGL GLU interface
+ * <li>GLUT glut = {@link NativeDeskopPainter#getGLUT()}; // JOGL GLUT interface
+ * </ul>
  */
 public interface Painter {
 	public Camera getCamera();

@@ -1095,4 +1095,9 @@ public class AxisBox implements IAxis {
     public boolean[] getQuadIsHidden() {
       return quadIsHidden;
     }
+    
+    public BoundingBox3d.Corners getCorners() {
+    	return getBoxBounds().getCorners();
+    }
+    
 }
