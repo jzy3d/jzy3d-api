@@ -48,27 +48,30 @@
 	</issueManagement>
 
 	<modules>
-		<!--<module>jzy3d-api</module>-->
-		<module>jzy3d-tester</module>
-		<module>jzy3d-depthpeeling</module>
-		<!--<module>jzy3d-javafx</module>-->
-		<module>jzy3d-jdt-core</module>
-		<module>jzy3d-svm-mapper</module>
-		<!--<module>jzy3d-swt</module>-->
-		<module>jzy3d-tools-libsvm</module>
-		<module>jzy3d-tutorials</module>
 
 		<module>jzy3d-core</module>
 		<module>jzy3d-core-awt</module>
 		<module>jzy3d-core-swt</module>
 
-		<module>jzy3d-native-jogl-core</module>
+		<module>jzy3d-emul-gl</module>
 
+		<module>jzy3d-native-jogl-core</module>
 		<module>jzy3d-native-jogl-awt</module>
 		<module>jzy3d-native-jogl-newt</module>
 		<module>jzy3d-native-jogl-javafx</module>
 		<module>jzy3d-native-jogl-swing</module>
 		<module>jzy3d-native-jogl-swt</module>
+
+		<module>jzy3d-tester</module>
+		<module>jzy3d-depthpeeling</module>
+
+		<module>jzy3d-tutorials</module>
+
+
+		<!-- Maths -->
+		<module>jzy3d-jdt-core</module>
+		<module>jzy3d-svm-mapper</module>
+		<module>jzy3d-tools-libsvm</module>
 
 	</modules>
 
