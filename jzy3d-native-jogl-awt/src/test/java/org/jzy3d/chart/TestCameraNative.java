@@ -32,7 +32,7 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
  * 
  * @author martin
  */
-public class TestCamera {
+public class TestCameraNative {
 
 	@Test
 	public void whenResize_thenCameraViewportUpdatesAccordingToMode() throws InterruptedException {
@@ -55,7 +55,7 @@ public class TestCamera {
 		Rectangle FRAME_SIZE = new Rectangle(800, 600);
 		int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
 
-		FrameAWT frame = (FrameAWT) chart.open("TestCamera", FRAME_SIZE);
+		FrameAWT frame = (FrameAWT) chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
 
 		Thread.sleep(500); // let time for opening window otheriwse follwing assertions may fail
 
@@ -164,7 +164,7 @@ public class TestCamera {
 		Corners corners = ((AxisBox)chart.getView().getAxis()).getCorners();
 		
 		
-		Thread.sleep(1000);
+		Thread.sleep(500);
 		
 		for(Coord3d corner: corners.getAll()) {
 			//System.out.println("3d : " + corner);
@@ -174,7 +174,7 @@ public class TestCamera {
 		}
 		
 		
-		Thread.sleep(500000); // let time for opening window otheriwse follwing assertions may fail
+		//Thread.sleep(500000); // let time for opening window otheriwse follwing assertions may fail
 
 	}
 
