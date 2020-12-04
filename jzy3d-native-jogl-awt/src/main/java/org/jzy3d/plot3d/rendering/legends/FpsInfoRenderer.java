@@ -4,7 +4,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.Animator;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.plot3d.rendering.canvas.INativeScreenCanvas;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 
@@ -15,9 +17,13 @@ public class FpsInfoRenderer implements AWTRenderer2d{
     protected GLAnimatorControl control;
     
     public FpsInfoRenderer(Chart chart){
-        this.control = ((INativeScreenCanvas)chart.getCanvas()).getAnimator();
+        this.control = ((NativeAnimator)getAnimation(chart)).getAnimator();
         ((AWTChart)chart).addRenderer(this);
     }
+
+	private Animator getAnimation(Chart chart) {
+		return ((INativeScreenCanvas)chart.getCanvas()).getAnimation();
+	}
     
     @Override
     public void paint(Graphics g, int canvasWidth, int canvasHeight) {

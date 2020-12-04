@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import com.jogamp.opengl.GLAnimatorControl;
+import org.jzy3d.chart.Animator;
 
 public interface INativeScreenCanvas extends INativeCanvas{
-	public GLAnimatorControl getAnimator();
+	public Animator getAnimation();
 }

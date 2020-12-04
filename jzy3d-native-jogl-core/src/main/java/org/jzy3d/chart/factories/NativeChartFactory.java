@@ -1,5 +1,6 @@
 package org.jzy3d.chart.factories;
 
+import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -9,6 +10,7 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
+import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
@@ -29,6 +31,12 @@ public abstract class NativeChartFactory extends ChartFactory{
 	public Painter newPainter() {
 		return new NativeDesktopPainter();
 	}
+	
+	@Override
+    public NativeAnimator newAnimator(ICanvas canvas) {
+        return new NativeAnimator((GLAutoDrawable)canvas);
+    }
+
 	
 	protected ICanvas newOffscreenCanvas(NativeChartFactory factory, Scene scene, Quality quality, boolean traceGL,
 			boolean debugGL) {

@@ -3,8 +3,11 @@ package org.jzy3d.chart;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 
 public class EmulGLAnimator implements Animator{
+	private static final int RENDERING_LOOP_PAUSE = 100;
 	protected EmulGLCanvas canvas;
 	protected Thread t;
+	
+	
 
 	public EmulGLAnimator(EmulGLCanvas canvas) {
 		this.canvas = canvas;
@@ -21,10 +24,8 @@ public class EmulGLAnimator implements Animator{
 				while(true) {
 					canvas.doDisplay();
 					
-					//Thread.yield();
-					
 					try {
-						Thread.sleep(100);
+						Thread.sleep(RENDERING_LOOP_PAUSE);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -41,6 +42,4 @@ public class EmulGLAnimator implements Animator{
 			t.interrupt();
 		}
 	}
-	
-
 }
