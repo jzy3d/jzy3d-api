@@ -3,6 +3,7 @@ package org.jzy3d.chart.factories;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.EmulGLAnimator;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
@@ -34,6 +35,11 @@ public class EmulGLChartFactory extends ChartFactory {
 	@Override
     public EmulGLView newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         return new EmulGLView(factory, scene, canvas, quality);
+    }
+	
+	@Override
+    public EmulGLAnimator newAnimator(ICanvas canvas) {
+        return new EmulGLAnimator((EmulGLCanvas)canvas);
     }
 	
 	@Override

@@ -21,7 +21,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
-import com.jogamp.opengl.util.Animator;
+import org.jzy3d.chart.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -55,14 +55,17 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeScreen
         requestFocusInWindow();
         window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
         if (quality.isAnimated()) {
-            animator = new Animator(window);
-            getAnimator().start();
+            animator = factory.newAnimator((ICanvas)window);//new Animator(window);
+            animator.start();
         }
 
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
-        
+    }
 
+    @Override
+    public Animator getAnimation() {
+    	return animator;
     }
 
     @Override
@@ -92,7 +95,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeScreen
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (animator != null && animator.isStarted()) {
+                if (animator != null) {
                     animator.stop();
                 }
                 if (renderer != null) {
@@ -115,11 +118,6 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeScreen
     @Override
     public void forceRepaint() {
         display();
-    }
-
-    @Override
-    public GLAnimatorControl getAnimator() {
-        return window.getAnimator();
     }
 
     @Override

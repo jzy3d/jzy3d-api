@@ -98,7 +98,7 @@ public class Chart {
         view.shoot();
     }
 
-    public void pauseAnimator() {
+    /*public void pauseAnimator() {
     }
 
     public void resumeAnimator() {
@@ -108,7 +108,7 @@ public class Chart {
     }
 
     public void stopAnimator() {
-    }
+    }*/
 
     public void dispose() {
         clearControllerList();

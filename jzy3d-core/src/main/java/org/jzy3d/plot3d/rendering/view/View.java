@@ -78,7 +78,7 @@ public class View {
 	 * 
 	 * TODO : delete me or make a better view setting
 	 */
-	public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR = 1.2f;//.2f;
+	public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR = 1f;//1.2f for log charts;
 
 	/**
 	 * force to have all object maintained in screen, meaning axebox won't always

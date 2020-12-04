@@ -16,7 +16,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
 import com.jogamp.opengl.awt.GLJPanel;
-import com.jogamp.opengl.util.Animator;
+import org.jzy3d.chart.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -68,14 +68,19 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeScree
 
 		setAutoSwapBufferMode(quality.isAutoSwapBuffer());
 
+		animator = factory.newAnimator(this);
 		if (quality.isAnimated()) {
-			animator = new Animator(this);
-			getAnimator().start();
+			animator.start();
 		}
 		
 		if(quality.isPreserveViewportSize())
 	        setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE });
 
+	}
+	
+	@Override
+	public Animator getAnimation() {
+		return animator;
 	}
 
 	@Override
