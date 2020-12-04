@@ -1,5 +1,6 @@
 package org.jzy3d.chart.factories;
 
+import org.jzy3d.chart.Animator;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
@@ -48,6 +49,8 @@ public interface IChartFactory {
     public ICameraKeyController newKeyboardCameraController(Chart chart);
     public IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
     public CameraThreadController newCameraThreadController(Chart chart);
+    
+    public Animator newAnimator(ICanvas canvas);
     
     public IFrame newFrame(Chart chart);
     public IFrame newFrame(Chart chart, Rectangle bounds, String title);

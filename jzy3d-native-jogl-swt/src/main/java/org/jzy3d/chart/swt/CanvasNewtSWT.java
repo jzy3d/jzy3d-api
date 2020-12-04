@@ -6,8 +6,10 @@ import java.io.IOException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.jzy3d.chart.Animator;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.INativeScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -24,7 +26,6 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
-import com.jogamp.opengl.util.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -54,13 +55,14 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeSc
         }
 
         window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
+        
+        animator = factory.newAnimator((ICanvas)window);//new Animator(window);
         if (quality.isAnimated()) {
-            animator = new Animator(window);
-            getAnimator().start();
+            animator.start();
         }
 
         addDisposeListener(e -> new Thread(() -> {
-            if (animator != null && animator.isStarted()) {
+            if (animator != null) {
                 animator.stop();
             }
             if (renderer != null) {
@@ -72,6 +74,12 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeSc
             animator = null;
         }).start());
     }
+    
+    @Override
+    public Animator getAnimation() {
+    	return animator;
+    }
+
 
     @Override
     public void setPixelScale(float[] scale) {
@@ -103,11 +111,6 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeSc
     @Override
     public void forceRepaint() {
         display();
-    }
-
-    @Override
-    public GLAnimatorControl getAnimator() {
-        return window.getAnimator();
     }
 
     @Override
