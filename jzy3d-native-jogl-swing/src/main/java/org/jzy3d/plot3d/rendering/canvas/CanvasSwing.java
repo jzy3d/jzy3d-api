@@ -21,19 +21,9 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
- * As of version 0.9.1, {@link CanvasSwing} is deprecated as the underlying
- * extended {@link GLJPanel} has several drawbacks:
- * <ul>
- * <li>It is buggy, at least while resizing the panel, and sometime for any
- * rendering
- * <li>Newt is now the recommended windowing toolkit by JOGL developers
- * </ul>
- * It is thus suggested to use {@link CanvasNewtAwt} instead which is obtained by
- * building a chart with newt parameter: new Chart("newt")
- * 
  * @author Martin Pernollet
  */
-public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeScreenCanvas {
+public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanvas {
 	public CanvasSwing(NativeChartFactory factory, Scene scene,
 			Quality quality) {
 		this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance()

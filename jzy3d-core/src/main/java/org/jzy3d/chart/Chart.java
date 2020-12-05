@@ -98,18 +98,6 @@ public class Chart {
         view.shoot();
     }
 
-    /*public void pauseAnimator() {
-    }
-
-    public void resumeAnimator() {
-    }
-
-    public void startAnimator() {
-    }
-
-    public void stopAnimator() {
-    }*/
-
     public void dispose() {
         clearControllerList();
         if (canvas != null)

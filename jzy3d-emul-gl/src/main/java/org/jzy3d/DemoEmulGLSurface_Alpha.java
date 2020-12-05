@@ -84,7 +84,7 @@ public class DemoEmulGLSurface_Alpha {
 		if(fixWithAnimator) {
 			rotation.setUpdateViewDefault(true);
 			mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
-			((EmulGLCanvas)chart.getCanvas()).startAnimator();	
+			((EmulGLCanvas)chart.getCanvas()).getAnimation().start();
 		}
 		else {
 			

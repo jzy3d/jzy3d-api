@@ -88,8 +88,9 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 
         // Activate tranparency
         if (quality.isAlphaActivated()) {
-            gl.glEnable(GL2.GL_ALPHA_TEST);
-            
+            gl.glEnable(GL.GL_BLEND);
+        	gl.glEnable(GL2.GL_ALPHA_TEST);
+                        
             if (quality.isDisableDepthBufferWhenAlpha()){
                 // Disable depth test to keeping pixels of
             	// "what's behind a polygon" when drawing with

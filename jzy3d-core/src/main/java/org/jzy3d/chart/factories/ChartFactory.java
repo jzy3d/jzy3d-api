@@ -18,7 +18,7 @@ import org.jzy3d.plot2d.primitives.LineSerie2dSplitted;
 import org.jzy3d.plot2d.primitives.ScatterPointSerie2d;
 import org.jzy3d.plot2d.primitives.ScatterSerie2d;
 import org.jzy3d.plot2d.primitives.Serie2d;
-import org.jzy3d.plot3d.primitives.axis.AxisBase;
+import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -108,11 +108,10 @@ public abstract class ChartFactory implements IChartFactory {
 
     @Override
     public IAxis newAxe(BoundingBox3d box, View view) {
-        AxisBase axe = new AxisBase(box);
+        AxisBox axe = new AxisBox(box);
+        axe.setView(view);
         return axe;
     }
-
-    
 
     @Override
     public AbstractOrderingStrategy newOrderingStrategy() {

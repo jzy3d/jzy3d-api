@@ -9,8 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.Animator;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.INativeScreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -23,7 +22,6 @@ import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.newt.swt.NewtCanvasSWT;
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
 import com.jogamp.opengl.util.texture.TextureData;
@@ -35,7 +33,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * If a non AWT panel where required, follow the guidelines given in
  * {@link IScreenCanvas} documentation.
  */
-public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeScreenCanvas {
+public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCanvas {
 
     public CanvasNewtSWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
@@ -56,7 +54,9 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeSc
 
         window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
         
-        animator = factory.newAnimator((ICanvas)window);//new Animator(window);
+        
+        
+        animator = ((SWTChartFactory)factory).newAnimator(window);
         if (quality.isAnimated()) {
             animator.start();
         }

@@ -5,6 +5,7 @@ import java.util.Date;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
@@ -17,11 +18,8 @@ import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.chart.factories.NativeChartFactory;
-import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.plot3d.primitives.axis.AxisBox;
-import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -31,6 +29,8 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+
+import com.jogamp.newt.opengl.GLWindow;
 
 public class SWTChartFactory extends NativeChartFactory {
     private static final Logger logger = Logger.getLogger(SWTChartFactory.class);
@@ -59,16 +59,14 @@ public class SWTChartFactory extends NativeChartFactory {
     public Chart newChart(IChartFactory factory, Quality quality) {
         return new SWTChart(canvas, factory, quality);
     }
+    
+    /** Dedicated to {@link CanvasNewtSWT} implementation. */
+    public NativeAnimator newAnimator(GLWindow canvas) {
+        return new NativeAnimator(canvas);
+    }
 
     public Composite getComposite() {
         return canvas;
-    }
-
-    @Override
-    public IAxis newAxe(BoundingBox3d box, View view) {
-        AxisBox axe = new AxisBox(box);
-        axe.setView(view);
-        return axe;
     }
 
     @Override

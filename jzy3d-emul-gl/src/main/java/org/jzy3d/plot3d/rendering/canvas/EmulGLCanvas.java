@@ -14,7 +14,6 @@ import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Animator;
-import org.jzy3d.chart.EmulGLAnimator;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.TicToc;
@@ -58,18 +57,55 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 
 		init();
 		
+		animator = factory.newAnimator(this);
 		
-		//startAnimator();
-	}
+		// TODO : ANIMATOR MUST STARTED MANUALLY ONCE THE CANVAS IS DISPLAYED
+		/*if(quality.isAnimated) {
+			new Thread(new Runnable() {
 
-	public void startAnimator() {
-		animator = new EmulGLAnimator(this);
-		animator.start();
+				@Override
+				public void run() {
+					try {
+						Thread.sleep(250);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					animator.start();
+				}
+				
+			}).run();
+		//	animator.start();
+		}*/
+		
+		
+		/*addComponentListener(new ComponentListener() {
+			
+			@Override
+			public void componentShown(ComponentEvent e) {
+				System.out.println("GOOOO");
+				animator.start();
+				System.out.println("GOOOO");
+			}
+			@Override
+			public void componentResized(ComponentEvent e) {
+			}
+			@Override
+			public void componentMoved(ComponentEvent e) {
+			}
+			@Override
+			public void componentHidden(ComponentEvent e) {
+			}
+		});*/
+	}
+	@Override
+	public Animator getAnimation() {
+		return animator;
 	}
 
 	/** set to TRUE to show in console events of the component (to debug GLUT) */
 	boolean debugEvents = false;
 
+	@Override
 	public void processEvent(AWTEvent e) {
 		if (debugEvents && shouldPrintEvent(e)) {
 			System.out.println("EMulGLCanvas.processEvent:" + e);
@@ -137,14 +173,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 			}
 
 			view.clear();
-			
-		//painter.glClearColor(1, 1, 1, 1);
-		//painter.glClear(GL.GL_COLOR_BUFFER_BIT);
-		//painter.glLoadIdentity();
-		    
-		//painter.glColor3f(1.0f, 1.0f, 1.0f);
-
-			
 			view.render();
 
 			// checkAlphaChannelOfColorBuffer(painter);
