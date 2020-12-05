@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.jzy3d.chart.Animator;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -18,10 +19,8 @@ import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GLAnimatorControl;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
-import org.jzy3d.chart.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -33,7 +32,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * If a non AWT panel where required, follow the guidelines given in
  * {@link IScreenCanvas} documentation.
  */
-public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeScreenCanvas {
+public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas {
     static Logger LOGGER = Logger.getLogger(CanvasNewtAwt.class);
     
     public CanvasNewtAwt(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {

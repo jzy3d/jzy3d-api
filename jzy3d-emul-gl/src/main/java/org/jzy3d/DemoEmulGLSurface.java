@@ -19,7 +19,6 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
-import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 /**
@@ -31,7 +30,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
  */
 public class DemoEmulGLSurface {
 	
-	static final float ALPHA_FACTOR = 0.61f;
+	static final float ALPHA_FACTOR = 0.75f;//.61f;
 
 	public static void main(String[] args) {
 		//LoggerUtils.minimal();
@@ -85,7 +84,7 @@ public class DemoEmulGLSurface {
 		if(fixWithAnimator) {
 			rotation.setUpdateViewDefault(true);
 			mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
-			((EmulGLCanvas)chart.getCanvas()).startAnimator();	
+			((EmulGLCanvas)chart.getCanvas()).getAnimation().start();	
 		}
 		else {
 			

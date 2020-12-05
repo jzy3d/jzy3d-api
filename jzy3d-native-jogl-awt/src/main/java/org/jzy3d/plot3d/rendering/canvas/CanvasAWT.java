@@ -31,7 +31,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * 
  * @author Martin Pernollet
  */
-public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeScreenCanvas {
+public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas {
     public CanvasAWT(NativeChartFactory factory, Scene scene, Quality quality) {
         this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }

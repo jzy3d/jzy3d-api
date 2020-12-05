@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import org.jzy3d.chart.Animator;
+
 /** 
  * An {@link IScreenCanvas} defines a panel into which rendering occurs,
  * and that can be integrated in an existing GUI. An {@link IScreenCanvas}
@@ -27,5 +29,5 @@ package org.jzy3d.plot3d.rendering.canvas;
  */
 public interface IScreenCanvas extends ICanvas{
 	public void display();
-	
+	public Animator getAnimation();
 }
