@@ -7,13 +7,19 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 
-
+/**
+ * Creates an interpolated line to make a smooth 3d curve based on control points.
+ * 
+ * @author martin
+ */
 public class LineStripInterpolated extends Composite{
 	protected LineStripInterpolated() {
 	}
 
     public LineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution) {
+    	this(interpolator, controlPoints, resolution, true);
     }
+    
 	public LineStripInterpolated(IInterpolator interpolator, List<Coord3d> controlPoints, int resolution, boolean drawPoints){
 	    this.controlCoords = controlPoints;
 		this.resolution = resolution;
