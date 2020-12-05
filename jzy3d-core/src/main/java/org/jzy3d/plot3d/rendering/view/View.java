@@ -849,7 +849,7 @@ public class View {
 	}
 
 	public void renderScene(ViewportConfiguration viewport) {
-		// updateQuality(); // REMOVED BECAUSE NOT NECESSARY
+		//updateQuality(); // REMOVED BECAUSE NOT NECESSARY
 
 		BoundingBox3d scaling = computeScaledViewBounds();
 		updateCamera(viewport, scaling);

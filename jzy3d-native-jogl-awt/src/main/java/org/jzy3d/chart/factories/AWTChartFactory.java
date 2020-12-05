@@ -15,11 +15,8 @@ import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
-import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.plot3d.primitives.axis.AxisBox;
-import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -43,20 +40,9 @@ public class AWTChartFactory extends NativeChartFactory {
         return f.newChart(quality);
     }
 
-    /* */
-
-    /**
-     */
     @Override
     public AWTNativeChart newChart(IChartFactory factory, Quality quality) {
         return new AWTNativeChart(factory, quality);
-    }
-
-    @Override
-    public IAxis newAxe(BoundingBox3d box, View view) {
-        AxisBox axe = new AxisBox(box);
-        axe.setView(view);
-        return axe;
     }
 
     @Override
@@ -114,13 +100,8 @@ public class AWTChartFactory extends NativeChartFactory {
     public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
         // trigger screenshot on 's' letter
         String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
-        IScreenshotKeyController screenshot;
-
-        //if (!chart.getWindowingToolkit().equals("newt"))
-            screenshot = new AWTScreenshotKeyController(chart, file);
-        //else
-        //    screenshot = new NewtScreenshotKeyController(chart, file);
         
+        IScreenshotKeyController screenshot = new AWTScreenshotKeyController(chart, file);
         
         screenshot.addListener(new IScreenshotEventListener() {
             @Override
