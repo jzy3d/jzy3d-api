@@ -3,8 +3,8 @@ package org.jzy3d.plot3d.rendering.legends.series;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import org.jzy3d.colors.Color;
 import org.jzy3d.colors.AWTColor;
+import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.Painter;
@@ -18,6 +18,9 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport{
     private static final int LINE_HEIGHT = 15;
     private static final int INTERLINE_HEIGHT = 5;
     private static final int FONT_HEIGHT = 12;
+    
+    private static final int LEGEND_BORDER_HEIGHT = 30;
+
 
     
     public AWTSerieLegend(Serie2d serie) {
@@ -52,12 +55,11 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport{
                 Graphics2D graphic = image.createGraphics();
                 configureText(graphic);
 
-                int legendBorderHeight = 30;
                 int y = LINE_HEIGHT;
 
-                drawBackground(width, legendBorderHeight, graphic);
+                drawBackground(width, LEGEND_BORDER_HEIGHT, graphic);
                 drawSerieLineAndNameAtY(color, text, graphic, y);
-                drawLegendBorder(graphic, width, legendBorderHeight);
+                drawLegendBorder(graphic, width, LEGEND_BORDER_HEIGHT);
                 return image;
             }
 
@@ -101,7 +103,7 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport{
             setGeneratorColors();
             
             int iWidth = Math.max(width - margin, 1);
-            int iHeight = (LINE_HEIGHT + INTERLINE_HEIGHT);
+            int iHeight = LEGEND_BORDER_HEIGHT;//(LINE_HEIGHT + INTERLINE_HEIGHT);
             return imageGenerator.toImage(iWidth, iHeight);
         }
         return null;
