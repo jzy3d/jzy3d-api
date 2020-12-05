@@ -13,7 +13,6 @@ import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.LineStrip;
-import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.contour.ContourLevel;
 import org.jzy3d.plot3d.primitives.contour.ContourMesh;

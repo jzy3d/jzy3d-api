@@ -1099,7 +1099,9 @@ public class View {
 			float xdiam = bounds.getXRange().getRange();
 			float ydiam = bounds.getYRange().getRange();
 			float radius = Math.max(xdiam, ydiam) / 2;
-
+			
+			radius += (radius * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP);
+			
 			cam.setRenderingSphereRadius(radius);
 			correctCameraPositionForIncludingTextLabels(painter, viewport);
 		} else {

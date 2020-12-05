@@ -7,18 +7,14 @@ import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.maths.BoundingBox3d.Corners;
-import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
@@ -32,7 +28,7 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
  * 
  * @author martin
  */
-public class TestCameraNative {
+public class TestCameraNative_Viewport {
 
 	@Test
 	public void whenResize_thenCameraViewportUpdatesAccordingToMode() throws InterruptedException {
@@ -56,8 +52,10 @@ public class TestCameraNative {
 		int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
 
 		FrameAWT frame = (FrameAWT) chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
-
-		Thread.sleep(500); // let time for opening window otheriwse follwing assertions may fail
+		
+		chart.render(); // ensure we have rendered one to get latest layout later
+		
+		Thread.sleep(10); // let time for opening window otheriwse follwing assertions may fail
 
 		// Then scene viewport size is set to occupy the full frame
 		ViewAndColorbarsLayout layout = (ViewAndColorbarsLayout) ((ChartView) chart.getView()).getLayout();
@@ -131,52 +129,6 @@ public class TestCameraNative {
 
 	}
 
-	@Test
-	public void whenOptimalViewpoint_thenCameraProjectAxisCornersToTheYminAndYmaxCoordinates() throws InterruptedException {
-		// GIVEN
-		AWTChartFactory factory = new AWTChartFactory();
-
-		Quality q = Quality.Advanced;
-
-		// ATTENTION : viewport of a retina display has double number of pixel
-		// Also, the Y value is 600, whereas the height is 578
-		q.setPreserveViewportSize(true);
-
-		Chart chart = factory.newChart(q);
-		chart.add(surface());
-		
-		Camera camera = chart.getView().getCamera();
-
-		// ----------------------------------------
-		// When opening window to a chosen size
-
-		Rectangle FRAME_SIZE = new Rectangle(800, 600);
-		int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
-
-		FrameAWT frame = (FrameAWT) chart.open("TestCamera", FRAME_SIZE);
-
-		chart.addMouseCameraController();
-		
-		
-		// azimuth facing : 1.5*Math.PI / 3
-		
-		chart.getView().setViewPoint(View.VIEWPOINT_AXIS_CORNER_TOUCH_BORDER, true);
-		Corners corners = ((AxisBox)chart.getView().getAxis()).getCorners();
-		
-		
-		Thread.sleep(500);
-		
-		for(Coord3d corner: corners.getAll()) {
-			//System.out.println("3d : " + corner);
-			Coord3d corner2d = camera.modelToScreen(chart.getPainter(), corner);
-
-			System.out.println(" 2d : " + corner2d);
-		}
-		
-		
-		//Thread.sleep(500000); // let time for opening window otheriwse follwing assertions may fail
-
-	}
 
 	private static Shape surface() {
 

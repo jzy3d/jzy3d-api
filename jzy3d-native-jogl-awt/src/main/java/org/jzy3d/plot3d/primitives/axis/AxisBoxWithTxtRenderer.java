@@ -4,8 +4,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.axis.AxisBox;
-import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.text.align.Halign;

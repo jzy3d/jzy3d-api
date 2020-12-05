@@ -74,8 +74,9 @@ public class AWTView extends ChartView {
 					newBounds.getYmax() - newBounds.getYmin()) / 2;
 			radius += (radius * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP);
 			cam.setRenderingSphereRadius(radius);
-		} else
-			cam.setRenderingSphereRadius((float) newBounds.getRadius());
+		} else {
+			cam.setRenderingSphereRadius((float) newBounds.getRadius() * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR);
+		}
 	
 		Coord3d target = newBounds.getCenter();
 		Coord3d eye = viewpoint.cartesian().add(target);
