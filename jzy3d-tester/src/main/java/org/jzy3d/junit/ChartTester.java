@@ -11,21 +11,8 @@ import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
-import org.jzy3d.chart.AWTChart;
-import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
-import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.maths.IntegerCoord2d;
-import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
-import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.util.texture.TextureData;
-import com.jogamp.opengl.util.texture.TextureIO;
 
 /**
  * Primitives for chart tests.
@@ -36,39 +23,20 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author martin
  */
 public class ChartTester{
-    static Logger logger = Logger.getLogger(ChartTester.class);
+    private static Logger logger = Logger.getLogger(ChartTester.class);
     
-    static int TEST_IMG_SIZE = 500;
+    public static int TEST_IMG_SIZE = 500;
     
-    public static AWTChart offscreen(Drawable... drawables) {
-        // Initialize chart
-        Quality q = Quality.Intermediate;
-
-        AWTChartFactory f = new AWTChartFactory();
-        f.setOffscreen(TEST_IMG_SIZE, TEST_IMG_SIZE);
-        
-        AWTNativeChart chart = (AWTNativeChart)f.newChart(q);
-        AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-
-        // Optimise processor
-        chart.setAnimated(false);// keep animated otherwise mouse wheel not properly updating
-        mouse.setUpdateViewDefault(!chart.getQuality().isAnimated());
-
-        for (Drawable d : drawables)
-            chart.add(d);
-        return chart;
-    }
     
-    public static void assertSimilar(Chart chart, String testImage){
-        try {
-            new ChartTester().execute(chart, testImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-            Assert.fail(e.getMessage());
-        }
-        assertTrue(testImage, true);
-    }
-    
+    public void assertSimilar(Chart chart, String testImage) {
+		try {
+			execute(chart, testImage);
+		} catch (IOException e) {
+			e.printStackTrace();
+			Assert.fail(e.getMessage());
+		}
+		assertTrue(testImage, true);
+	}
     
     /*
      * In Java, a mouse click only registers if the mouse is pressed and
@@ -123,10 +91,6 @@ public class ChartTester{
         screenshot(chart, testImage);
     }
 
-    public void build(TextureData image, String testImage) throws IOException {
-        logger.warn("saving the image to assert later as no test image is available: " + testImage);
-        screenshot(image, testImage);
-    }
 
     public boolean isBuilt(String testImage) {
         return new File(testImage).exists();
@@ -143,12 +107,16 @@ public class ChartTester{
             String diffFile = getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#DIFF#.");
             screenshot(chart, errorFile);
             
+            logger.error("ERROR FILE : " + errorFile);
+            
             BufferedImage expected = e.getExpectedImage();
             
             for(IntegerCoord2d diffs : e.getDiffCoordinates()){
+            	//System.out.println(diffs);
                 pixelInvert(expected, diffs);
             }
             ImageIO.write(expected, "png", new File(diffFile));
+            logger.error("DIFF FILE : " + diffFile);
             
             fail("Chart test failed: " + e.getMessage() + " see " + testImage);
         }
@@ -163,45 +131,30 @@ public class ChartTester{
         int blue = ((rgb ) & 0xff); 
 
         rgb = (alpha << 24) | (255-red << 16) | (255-green << 8) | 255-blue; 
+        //rgb = (255 << 24) | (255 << 16); 
         expected.setRGB(diffs.x, diffs.y, rgb);
     }
 
     /* */
 
     /**
-     * Compare the image displayed by the chart with an image given by filename
-     * @param chart
-     * @param filename
-     * @throws IOException
-     * @throws ChartTestFailed
-     */
-    public void compare(Chart chart, String filename) throws IOException, ChartTestFailed {
-        
-        // Will compare buffered image
-        if(((INativeCanvas)chart.getCanvas()).getRenderer() instanceof AWTRenderer3d){
-            chart.screenshot();
-            AWTRenderer3d awtR = (AWTRenderer3d)((INativeCanvas)chart.getCanvas()).getRenderer();
-            BufferedImage actual = awtR.getLastScreenshotImage();
-            BufferedImage expected = loadBufferedImage(filename);
-            
-            compare(actual, expected);
-        }
-        else {
-            TextureData actual = (TextureData)chart.screenshot();
-            TextureData expected = loadTextureData(filename, ((NativeDesktopPainter)chart.getView().getPainter()).getCurrentGL(chart.getCanvas()));
-            fail("CAN NOT COMPARE TEXTURE DATA FOR THE MOMENT");
-        }
-    }
+	 * Compare the image displayed by the chart with an image given by filename
+	 * 
+	 * @param chart
+	 * @param filename
+	 * @throws IOException
+	 * @throws ChartTestFailed
+	 */
+	public void compare(Chart chart, String filename) throws IOException, ChartTestFailed {
+		BufferedImage actual = (BufferedImage) chart.screenshot();
+		BufferedImage expected = loadBufferedImage(filename);
+
+		compare(actual, expected);
+	}
     
     public BufferedImage loadBufferedImage(String filename) throws IOException{
         return ImageIO.read(new File(filename));
     }
-
-    public TextureData loadTextureData(String filename, GL gl) throws IOException {
-        TextureData i2 = TextureIO.newTextureData(gl.getGLProfile(), new File(filename), true, null);
-        return i2;
-    }
-
     
     public void compare(BufferedImage actual, BufferedImage expected) throws ChartTestFailed {
         // int rbg = image.getRGB((int) x, (maxRow) - ((int) y));
@@ -240,38 +193,7 @@ public class ChartTester{
         }
     }
     
-    /**
-     * Compare images pixel-wise.
-     * 
-     * @param i1
-     * @param i2
-     * @throws ChartTestFailed
-     *             as soon as a pixel difference can be found
-     */
-    public void compare(TextureData i1, TextureData i2) throws ChartTestFailed {
-        // int rbg = image.getRGB((int) x, (maxRow) - ((int) y));
-
-        int i1W = i1.getWidth();
-        int i1H = i1.getHeight();
-        int i2W = i2.getWidth();
-        int i2H = i2.getHeight();
-
-        if (i1W == i2W && i1H == i2H) {
-            for (int i = 0; i < i1W; i++) {
-                for (int j = 0; j < i1H; j++) {
-                    /*int p1rgb = i1.getRGB(i, j);
-                    int p2rgb = i2.getRGB(i, j);
-                    if (p1rgb != p2rgb) {
-                        String m = "pixel diff @(" + i + "," + j + ")";
-                        throw new ChartTestFailed(m, i1, i2);
-                    }*/
-                }
-            }
-        } else {
-            String m = "image size differ: i1={" + i1W + "," + i1H + "} i2={" + i2W + "," + i2H + "}";
-            throw new ChartTestFailed(m);
-        }
-    }
+    
 
     /* */
 
@@ -279,12 +201,6 @@ public class ChartTester{
         chart.screenshot(new File(filename));
     }
 
-    public void screenshot(TextureData image, String testImage) throws IOException {
-        File output = new File(testImage);
-        if (!output.getParentFile().exists())
-            output.getParentFile().mkdirs();
-        TextureIO.write(image, output);
-    }
 
     /* */
 
@@ -297,16 +213,13 @@ public class ChartTester{
     }
 
     public String getTestCaseFileName(String testName) {
-        return getTestCaseFolder() + testName + ".png";
+        return getTestCaseInputFolder() + testName + ".png";
     }
 
     public String getTestCaseFailedFileName() {
-        return getTestCaseFolder() + "error-";
+        return getTestCaseOutputFolder() + "error-";
     }
 
-    public String getTestCaseFolder() {
-        return "data/tests/";
-    }
 
     public String getTestName() {
         return this.getClass().getSimpleName();
@@ -315,9 +228,33 @@ public class ChartTester{
     public String getTestCanvasType() {
         return "offscreen, " + WIDTH + ", " + HEIGHT;
     }
+    
+    public String getTestCaseInputFolder() {
+        return testCaseInputFolder;
+    }
 
-    /* */
+    
+    public void setTestCaseInputFolder(String testCaseFolder) {
+		this.testCaseInputFolder = testCaseFolder;
+	}
 
+	public String getTestCaseOutputFolder() {
+		return testCaseOutputFolder;
+	}
+
+	public void setTestCaseOutputFolder(String testCaseOutputFolder) {
+		this.testCaseOutputFolder = testCaseOutputFolder;
+	}
+
+
+
+
+	protected String testCaseOutputFolder = ERROR_IMAGE_FOLDER_DEFAULT;
+	protected String testCaseInputFolder = EXPECTED_IMAGE_FOLDER_DEFAULT;
+	
+	public static final String EXPECTED_IMAGE_FOLDER_DEFAULT = "src/test/resources/";
+	public static final String ERROR_IMAGE_FOLDER_DEFAULT = "target/";
+    
     // int bufImgType = BufferedImage.TYPE_3BYTE_BGR;// );
     protected int WIDTH = 800;
     protected int HEIGHT = 600;

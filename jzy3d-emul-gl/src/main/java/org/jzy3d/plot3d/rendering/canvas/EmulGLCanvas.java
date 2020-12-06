@@ -34,7 +34,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 	 * if false : call full component.resize to force resize + view.render + glFlush + swap image
 	 */
 	public static boolean TO_BE_CHOOSEN_REPAINT_WITH_FLUSH = false;
-	boolean profileDisplayMethod = true;
+	boolean profileDisplayMethod = false;
 
 	
 	protected View view;
@@ -147,8 +147,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 		view.init();
 	}
 
-	Font debugFont = new Font("Arial", Font.PLAIN, 12);
-	int kDisplay = 0;
 
 	/**
 	 * Method is synchronized : 
@@ -210,11 +208,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 		}
 	}
 	
+	Font profileFont = new Font("Arial", Font.PLAIN, 12);
+	int kDisplay = 0;
+
 	TicToc rateLimit = new TicToc();
 	
 	/** Draw a 2d text at the given position */
 	void postRenderString(String message, int x, int y, Color color){
-		painter.getGL().appendTextToDraw(debugFont, message, x, y, color.r, color.g, color.b);
+		painter.getGL().appendTextToDraw(profileFont, message, x, y, color.r, color.g, color.b);
 	}
 
 
@@ -353,9 +354,18 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 	public void display() {
 		forceRepaint();
 	}
+	
+	
 
 	/* ******************* DEBUG ********************* */
 
+	public boolean isProfileDisplayMethod() {
+		return profileDisplayMethod;
+	}
+	public void setProfileDisplayMethod(boolean profileDisplayMethod) {
+		this.profileDisplayMethod = profileDisplayMethod;
+	}
+	
 	protected void checkAlphaChannelOfColorBuffer(EmulGLPainter painter) {
 		int[] colorBuffer = painter.getGL().getContext().ColorBuffer.Buffer;
 

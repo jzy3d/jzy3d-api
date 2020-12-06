@@ -15,9 +15,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-native-jogl-awt</artifactId>
+			<artifactId>jzy3d-core-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+
 
 		<dependency>
 			<groupId>junit</groupId>

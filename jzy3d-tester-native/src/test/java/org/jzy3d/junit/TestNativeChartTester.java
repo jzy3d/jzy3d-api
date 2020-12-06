@@ -13,12 +13,12 @@ import org.junit.Test;
  * @author martin
  *
  */
-public class TestChartTester {
+public class TestNativeChartTester {
     ChartTester test;
     
     @Before
     public void before(){
-        test = new ChartTester();
+        test = new NativeChartTester();
     }
     
     @Test

@@ -63,6 +63,8 @@
 		<module>jzy3d-native-jogl-swt</module>
 
 		<module>jzy3d-tester</module>
+		<module>jzy3d-tester-native</module>
+
 		<module>jzy3d-depthpeeling</module>
 
 		<module>jzy3d-tutorials</module>
