@@ -31,6 +31,23 @@
 			<version>${project.version}</version>
 		</dependency>
 
+        <dependency>
+            <groupId>org.jzy3d</groupId>
+            <artifactId>jzy3d-native-jogl-core</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+        </dependency>
+
+		
+		<!-- CIRCULAR DEPENDENCY !!
+		<dependency>
+            <groupId>org.jzy3d</groupId>
+            <artifactId>jzy3d-tester-native</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>-->
+		
+
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>

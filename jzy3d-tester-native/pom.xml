@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>jzy3d-tester</artifactId>
-	<name>Jzy3d Tester</name>
+	<artifactId>jzy3d-tester-native</artifactId>
+	<name>Jzy3d Tester for native charts</name>
 
 	<parent>
 		<groupId>org.jzy3d</groupId>
@@ -15,11 +15,15 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-core-awt</artifactId>
+			<artifactId>jzy3d-native-jogl-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-tester</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>junit</groupId>

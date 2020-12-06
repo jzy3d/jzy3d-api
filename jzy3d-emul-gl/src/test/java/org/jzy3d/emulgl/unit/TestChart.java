@@ -1,4 +1,4 @@
-package org.jzy3d.emulgl;
+package org.jzy3d.emulgl.unit;
 
 import org.junit.Assert;
 import org.junit.Test;

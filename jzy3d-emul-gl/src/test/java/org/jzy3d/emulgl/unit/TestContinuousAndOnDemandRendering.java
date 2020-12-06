@@ -1,4 +1,4 @@
-package org.jzy3d.emulgl;
+package org.jzy3d.emulgl.unit;
 
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;

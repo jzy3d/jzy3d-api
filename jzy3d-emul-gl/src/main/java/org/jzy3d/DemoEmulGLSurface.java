@@ -30,7 +30,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
  */
 public class DemoEmulGLSurface {
 	
-	static final float ALPHA_FACTOR = 0.75f;//.61f;
+	static final float ALPHA_FACTOR = 0.55f;//.61f;
 
 	public static void main(String[] args) {
 		//LoggerUtils.minimal();
@@ -57,12 +57,10 @@ public class DemoEmulGLSurface {
 
 		chart.add(surface);
 		
-		// --------------------------------
-        AWTColorbarLegend cbar = new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
-        cbar.setMinimumSize(new Dimension(100, 600));
-        surface.setLegend(cbar);
-
+		((EmulGLCanvas)chart.getCanvas()).setProfileDisplayMethod(true);
 		
+		// --------------------------------
+        		
         //chart.getView().getCamera().setViewportMode(ViewportMode.SQUARE);
 
 		chart.open();

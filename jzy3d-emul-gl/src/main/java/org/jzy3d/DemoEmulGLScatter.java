@@ -16,6 +16,38 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 public class DemoEmulGLScatter {
 	public static void main(String[] args) throws Exception {
 
+		Scatter scatter = scatter();
+
+		// --------------------------------
+		Quality q = Quality.Advanced;
+
+		Chart chart = new EmulGLChartFactory().newChart(q);
+		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
+		chart.getScene().add(scatter);
+		chart.open();
+		
+		((EmulGLCanvas)chart.getCanvas()).setProfileDisplayMethod(true);
+
+
+		// --------------------------------
+		CameraThreadController rotation = new CameraThreadController(chart);
+		rotation.setStep(0.025f);
+		rotation.setUpdateViewDefault(true);
+
+		AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
+		mouse.addSlaveThreadController(rotation);
+
+		boolean fixWithAnimator = true;
+		if (fixWithAnimator) {
+			rotation.setUpdateViewDefault(true);
+			mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
+			((EmulGLCanvas)chart.getCanvas()).getAnimation().start();	
+		} else {
+
+		}
+	}
+
+	private static Scatter scatter() {
 		int size = 50000;
 		float x;
 		float y;
@@ -39,30 +71,6 @@ public class DemoEmulGLScatter {
 
 		Scatter scatter = new Scatter(points, colors);
 		scatter.setWidth(3);
-
-		// --------------------------------
-		Quality q = Quality.Advanced;
-
-		Chart chart = new EmulGLChartFactory().newChart(q);
-		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
-		chart.getScene().add(scatter);
-		chart.open();
-
-		// --------------------------------
-		CameraThreadController rotation = new CameraThreadController(chart);
-		rotation.setStep(0.025f);
-		rotation.setUpdateViewDefault(true);
-
-		AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-		mouse.addSlaveThreadController(rotation);
-
-		boolean fixWithAnimator = true;
-		if (fixWithAnimator) {
-			rotation.setUpdateViewDefault(true);
-			mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
-			((EmulGLCanvas)chart.getCanvas()).getAnimation().start();	
-		} else {
-
-		}
+		return scatter;
 	}
 }
