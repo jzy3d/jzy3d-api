@@ -62,6 +62,7 @@ public class NativeChartTester extends ChartTester {
      * @throws IOException
      * @throws ChartTestFailed
      */
+    @Override
     public void compare(Chart chart, String filename) throws IOException, ChartTestFailed {
     	NativeDesktopPainter painter = (NativeDesktopPainter)chart.getPainter();
     	GLContext glContext = painter.getCurrentContext(chart.getCanvas());

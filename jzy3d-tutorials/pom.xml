@@ -38,7 +38,7 @@
 	<!--To deploy tutorials: 1) this project does not references master to be
 		able to be build alone 2) master still reference this project to build it
 		with the API involve being deployable by mvn deploy -->
-	<!--<distributionManagement>
+	<distributionManagement>
 		<repository>
 			<id>jzy3d-ftp-maven</id>
 			<name>Jzy3d Maven Folder</name>
@@ -49,8 +49,9 @@
 			<name>Jzy3d Maven Folder SNAPSHOTS</name>
 			<url>ftp://www.jzy3d.org/v1/maven/snapshots</url>
 		</snapshotRepository>
-	</distributionManagement>-->
+	</distributionManagement>
 
+<!--
 	<distributionManagement>
 	  <snapshotRepository>
 	    <id>ossrh</id>
@@ -60,7 +61,7 @@
 	    <id>ossrh</id>
 	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	  </repository>
-	</distributionManagement>
+	</distributionManagement>-->
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -83,13 +84,13 @@
 			<artifactId>jzy3d-native-jogl-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency> <!-- For a single demo, remove me! -->
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-native-jogl-swing</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
             <groupId>org.jzy3d</groupId>
             <artifactId>jzy3d-tester-native</artifactId>
