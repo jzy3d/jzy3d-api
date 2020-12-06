@@ -104,9 +104,10 @@
 	</dependencies>
 
 
+
 	<!--
 	Used to deploy to Jzy3d repository
-
+-->
 	<distributionManagement>
 		<repository>
 			<id>jzy3d-ftp</id>
@@ -118,10 +119,10 @@
 			<name>Jzy3d Maven Folder SNAPSHOTS</name>
 			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
 		</snapshotRepository>
-	</distributionManagement>-->
+	</distributionManagement>
 
 
-	<distributionManagement>
+	<!--<distributionManagement>
 	  <snapshotRepository>
 	    <id>ossrh</id>
 	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
@@ -130,7 +131,7 @@
 	    <id>ossrh</id>
 	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	  </repository>
-	</distributionManagement>
+	</distributionManagement>-->
 
 	<!--To retrieve Jzy3d dependencies -->
 	<repositories>
@@ -265,5 +266,23 @@
 			</properties>
 		</profile>
 	</profiles>
+
+	<!-- Get coverage with mvn cobertura:cobertura -->
+	<reporting>
+		<plugins>
+		  <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>cobertura-maven-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<outputDirectory>./target/tmpCobertura</outputDirectory>
+				    <formats>
+					    <format>html</format>
+				    </formats>
+				    <aggregate>true</aggregate>
+				</configuration>
+		  </plugin>
+		</plugins>
+    </reporting>
 
 </project>
