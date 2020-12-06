@@ -20,7 +20,10 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 /**
- * Display parameters of jzy3d components
+ * Display parameters of jzy3d components.
+ * 
+ * Unfortunately in native because Chart2D are built with a NATIVE FACTORY.
+ * 
  * 
  * @author martin
  *

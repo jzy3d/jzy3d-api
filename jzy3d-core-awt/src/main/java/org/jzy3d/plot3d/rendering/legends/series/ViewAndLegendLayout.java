@@ -1,18 +1,13 @@
 package org.jzy3d.plot3d.rendering.legends.series;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.Painter;
-import org.jzy3d.plot2d.rendering.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.scene.Scene;
-import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
-import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportBuilder;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
@@ -56,17 +51,21 @@ public class ViewAndLegendLayout implements IViewportLayout{
         List<ILegend> legends = chart.getScene().getGraph().getLegends();
         if (hasMeta)
             renderLegends(painter, screenSeparator, 1.0f, legends, chart.getCanvas());
+        
         view.renderOverlay(view.getCamera().getLastViewPort());
+        
+        //showLayout((AWTView)view);
     }
     
     protected void renderLegends(Painter painter, float left, float right, List<ILegend> data, ICanvas canvas) {
-        ILegend layer = data.get(data.size()-1);
-        layer.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-        layer.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left , right);
-        layer.render(painter);
+    	for (ILegend legend : data) {
+            legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+            legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left , right);
+            legend.render(painter);
+        }
     }
     
-    public void showLayout(AWTView view) {
+    /*public void showLayout(AWTView view) {
         AWTRenderer2d layoutBorder = new AWTRenderer2d() {
             @Override
             public void paint(Graphics g, int canvasWidth, int canvasHeight) {
@@ -81,7 +80,7 @@ public class ViewAndLegendLayout implements IViewportLayout{
             CanvasAWT pencil = null;
         };
         view.addRenderer2d(layoutBorder);
-    }
+    }*/
     
     protected Rectangle zone1 = new Rectangle(0, 0, 0, 0);
     protected Rectangle zone2 = new Rectangle(0, 0, 0, 0);

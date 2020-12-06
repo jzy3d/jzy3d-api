@@ -1,4 +1,4 @@
-package org.jzy3d.emulgl;
+package org.jzy3d.emulgl.unit;
 
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.chart.factories.IChartFactory;
