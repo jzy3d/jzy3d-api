@@ -18,10 +18,15 @@ public class AWTNativeChart extends AWTChart {
 	public void setAnimated(boolean status) {
 		getQuality().setAnimated(status);
 
-		if (status) {
-			((IScreenCanvas)getCanvas()).getAnimation().start();
-		} else {
-			((IScreenCanvas)getCanvas()).getAnimation().stop();
+		
+		if(getCanvas() instanceof IScreenCanvas) {
+			IScreenCanvas screenCanvas =  (IScreenCanvas)getCanvas();
+
+			if (status) {
+				screenCanvas.getAnimation().start();
+			} else {
+				screenCanvas.getAnimation().stop();
+			}
 		}
 	}
 
