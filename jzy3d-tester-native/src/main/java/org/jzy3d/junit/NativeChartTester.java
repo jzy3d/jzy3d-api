@@ -19,6 +19,9 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 
 import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GLContext;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
@@ -60,8 +63,24 @@ public class NativeChartTester extends ChartTester {
      * @throws ChartTestFailed
      */
     public void compare(Chart chart, String filename) throws IOException, ChartTestFailed {
+    	NativeDesktopPainter painter = (NativeDesktopPainter)chart.getPainter();
+    	GLContext glContext = painter.getCurrentContext(chart.getCanvas());
+    	
+    	glContext.makeCurrent();
+    	
+    	// make screenshot
+    	AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), true);
+        screenshot.readPixels(painter.getGL(), true);
+        BufferedImage actual = screenshot.readPixelsToBufferedImage(painter.getGL(), true);
+    	
+        glContext.release();
         
-        // Will compare buffered image
+        BufferedImage expected = loadBufferedImage(filename);
+        
+        compare(actual, expected);
+
+        
+        /*// Will compare buffered image
         if(((INativeCanvas)chart.getCanvas()).getRenderer() instanceof AWTRenderer3d){
             chart.screenshot();
             AWTRenderer3d awtR = (AWTRenderer3d)((INativeCanvas)chart.getCanvas()).getRenderer();
@@ -74,7 +93,7 @@ public class NativeChartTester extends ChartTester {
             TextureData actual = (TextureData)chart.screenshot();
             TextureData expected = loadTextureData(filename, ((NativeDesktopPainter)chart.getView().getPainter()).getCurrentGL(chart.getCanvas()));
             fail("CAN NOT COMPARE TEXTURE DATA FOR THE MOMENT");
-        }
+        }*/
     }
     
     public TextureData loadTextureData(String filename, GL gl) throws IOException {

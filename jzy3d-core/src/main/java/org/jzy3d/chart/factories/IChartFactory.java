@@ -59,6 +59,10 @@ public interface IChartFactory {
     public Serie2d newSerie(String name, Serie2d.Type type);
     
     public IBoundingPolicy newBoundingPolicy();
+    
+    public boolean isOffscreen();
+    public void setOffscreenDisabled();
+	public void setOffscreen(int width, int height);
 
     
     /** usefull to override the current factory to call, especially for FactoryOverrider

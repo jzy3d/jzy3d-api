@@ -19,8 +19,10 @@ public abstract class NativeChartFactory extends ChartFactory{
 	GLCapabilities capabilities;
 	
 	public NativeChartFactory() {
-		capabilities = new GLCapabilities(detectGLProfile());
-		capabilities.setHardwareAccelerated(false);
+		capabilities = getOffscreenCapabilities(detectGLProfile());
+		capabilities.setHardwareAccelerated(true);
+
+		//capabilities = new GLCapabilities(detectGLProfile());
 	}
 
 	/** Return Open GL Capabilities */
@@ -70,6 +72,7 @@ public abstract class NativeChartFactory extends ChartFactory{
         }
     }
     
+	/** This profile has prove to fix the fact that using a raw GLCapabilities without settings let screenshot as gray only */
     public static GLCapabilities getOffscreenCapabilities(GLProfile glp) {
         GLCapabilities caps = new GLCapabilities(glp); 
         caps.setHardwareAccelerated(true); 

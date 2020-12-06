@@ -52,14 +52,17 @@ public abstract class ChartFactory implements IChartFactory {
     int width;
     int height;
     
+    @Override
     public boolean isOffscreen() {
 		return offscreen;
 	}
 	
+    @Override
     public void setOffscreenDisabled() {
 		this.offscreen = false;
 	}
 	
+    @Override
 	public void setOffscreen(int width, int height) {
 		this.offscreen = true;
 		this.width = width;
