@@ -4,15 +4,11 @@ import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.ChartView;
-import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
-import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
-import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.IBoundingPolicy;
-import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot2d.primitives.LineSerie2d;
 import org.jzy3d.plot2d.primitives.LineSerie2dSplitted;
 import org.jzy3d.plot2d.primitives.ScatterPointSerie2d;
@@ -33,24 +29,45 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 /**
  * This {@link IChartFactory} returns non-displayable charts.
  * 
- * @see AWTChartComponentFactory for a working implementation
+ * @see {@link AWTChartFactory} for a working implementation
  */
 public abstract class ChartFactory implements IChartFactory {
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
     static Logger logger = Logger.getLogger(ChartFactory.class);
     
-    public abstract ICameraMouseController newMouseCameraController(Chart chart);
-    public abstract IMousePickingController newMousePickingController(Chart chart, int clickWidth);
-    public abstract IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
-    public abstract ICameraKeyController newKeyboardCameraController(Chart chart);
-    public abstract IFrame newFrame(Chart chart, Rectangle bounds, String title);
-    public abstract ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);
+    //public abstract ICameraMouseController newMouseCameraController(Chart chart);
+    //public abstract IMousePickingController newMousePickingController(Chart chart, int clickWidth);
+    //public abstract IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
+    //public abstract ICameraKeyController newKeyboardCameraController(Chart chart);
+    //public abstract IFrame newFrame(Chart chart, Rectangle bounds, String title);
+    //public abstract ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);
     public abstract IViewportLayout newViewportLayout();
 
     boolean offscreen = false;
     int width;
     int height;
+    
+    IPainterFactory painterFactory;
+    
+    public ChartFactory() {
+    	this(null);
+    }
+    
+    public ChartFactory(IPainterFactory painterFactory) {
+    	this.painterFactory = painterFactory;
+    }
+
+    @Override
+    public IPainterFactory getPainterFactory() {
+		return painterFactory;
+	}
+
+    @Override
+	public void setPainterFactory(IPainterFactory painterFactory) {
+		this.painterFactory = painterFactory;
+	}
+    
     
     @Override
     public boolean isOffscreen() {
@@ -68,6 +85,12 @@ public abstract class ChartFactory implements IChartFactory {
 		this.width = width;
 		this.height = height;
 	}
+    
+    @Override
+    public Dimension getOffscreenDimension() {
+    	return new Dimension(width, height);
+    }
+    
 	
 	@Override
     public Chart newChart() {
@@ -146,15 +169,6 @@ public abstract class ChartFactory implements IChartFactory {
     }
     
 
-    @Override
-    public IFrame newFrame(Chart chart) {
-        return newFrame(chart, new Rectangle(0, 0, 800, 600), "Jzy3d");
-    }
-
-    @Override
-    public ICanvas newCanvas(Scene scene, Quality quality) {
-        return newCanvas(getFactory(), scene, quality);
-    }
 
     /* UTILS */
 

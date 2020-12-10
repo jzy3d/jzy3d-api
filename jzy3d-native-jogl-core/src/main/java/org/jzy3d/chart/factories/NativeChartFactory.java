@@ -1,8 +1,5 @@
 package org.jzy3d.chart.factories;
 
-import org.jzy3d.chart.NativeAnimator;
-import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -10,7 +7,6 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
@@ -19,26 +15,19 @@ public abstract class NativeChartFactory extends ChartFactory{
 	GLCapabilities capabilities;
 	
 	public NativeChartFactory() {
+		this(null);
+	}
+
+	public NativeChartFactory(IPainterFactory painterFactory) {
+		super(painterFactory);
 		capabilities = getOffscreenCapabilities(detectGLProfile());
 		capabilities.setHardwareAccelerated(true);
-
-		//capabilities = new GLCapabilities(detectGLProfile());
 	}
 
 	/** Return Open GL Capabilities */
 	public GLCapabilities getCapabilities() {
 		return capabilities;
 	}
-	
-	public Painter newPainter() {
-		return new NativeDesktopPainter();
-	}
-	
-	@Override
-    public NativeAnimator newAnimator(ICanvas canvas) {
-        return new NativeAnimator((GLAutoDrawable)canvas);
-    }
-
 	
 	protected ICanvas newOffscreenCanvas(NativeChartFactory factory, Scene scene, Quality quality, boolean traceGL,
 			boolean debugGL) {

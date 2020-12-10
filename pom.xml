@@ -58,7 +58,7 @@
 		<module>jzy3d-native-jogl-core</module>
 		<module>jzy3d-native-jogl-awt</module>
 		<module>jzy3d-native-jogl-newt</module>
-		<module>jzy3d-native-jogl-javafx</module>
+<!--		<module>jzy3d-native-jogl-javafx</module> -->
 		<module>jzy3d-native-jogl-swing</module>
 		<module>jzy3d-native-jogl-swt</module>
 

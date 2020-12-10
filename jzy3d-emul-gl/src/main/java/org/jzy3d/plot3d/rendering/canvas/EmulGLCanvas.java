@@ -14,7 +14,7 @@ import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Animator;
-import org.jzy3d.chart.factories.EmulGLChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.EmulGLPainter;
@@ -41,7 +41,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 	protected EmulGLPainter painter;
 	protected Animator animator;
 
-	public EmulGLCanvas(EmulGLChartFactory factory, Scene scene, Quality quality) {
+	public EmulGLCanvas(IChartFactory factory, Scene scene, Quality quality) {
 		super();
 
 		view = scene.newView(this, quality);
@@ -57,7 +57,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 
 		init();
 		
-		animator = factory.newAnimator(this);
+		animator = factory.getPainterFactory().newAnimator(this);
 		
 		// TODO : ANIMATOR MUST STARTED MANUALLY ONCE THE CANVAS IS DISPLAYED
 		/*if(quality.isAnimated) {

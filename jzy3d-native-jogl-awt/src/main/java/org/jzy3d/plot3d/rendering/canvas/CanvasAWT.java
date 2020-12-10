@@ -53,7 +53,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
 
         setAutoSwapBufferMode(quality.isAutoSwapBuffer());
 
-        animator = factory.newAnimator(this);
+        animator = factory.getPainterFactory().newAnimator(this);
         if (quality.isAnimated()) {
             animator.start();
         }

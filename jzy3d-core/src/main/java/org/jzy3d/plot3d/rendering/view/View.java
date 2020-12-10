@@ -186,7 +186,7 @@ public class View {
 
 		this.axis = factory.newAxe(sceneBounds, this);
 		this.cam = factory.newCamera(center);
-		this.painter = factory.newPainter();
+		this.painter = factory.getPainterFactory().newPainter();
 		this.painter.setCamera(cam);
 
 		this.scene = scene;

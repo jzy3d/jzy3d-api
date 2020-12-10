@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public class SWTDemo {
+public class SurfaceDemoSWT {
 
     public static void main(String[] args) {
         Mapper mapper = new Mapper() {
