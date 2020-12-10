@@ -1,23 +1,8 @@
 package org.jzy3d.chart.factories;
 
-import java.util.Date;
-
 import org.apache.log4j.Logger;
-import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
-import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
-import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
-import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.IScreenshotEventListener;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
-import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
-import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
-import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
-import org.jzy3d.maths.Rectangle;
-import org.jzy3d.maths.Utils;
-import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -29,8 +14,6 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class AWTChartFactory extends NativeChartFactory {
-    static Logger logger = Logger.getLogger(AWTChartFactory.class);
-    
     public static Chart chart() {
         return chart(Quality.Intermediate);
     }
@@ -40,7 +23,19 @@ public class AWTChartFactory extends NativeChartFactory {
         return f.newChart(quality);
     }
 
-    @Override
+    /* *************************************************** */
+	
+    static Logger logger = Logger.getLogger(AWTChartFactory.class);
+    
+    public AWTChartFactory() {
+    	super(new AWTPainterFactory());
+    }
+    
+    public AWTChartFactory(IPainterFactory painterFactory) {
+    	super(painterFactory);
+    }
+
+	@Override
     public AWTNativeChart newChart(IChartFactory factory, Quality quality) {
         return new AWTNativeChart(factory, quality);
     }
@@ -66,64 +61,7 @@ public class AWTChartFactory extends NativeChartFactory {
     }
 
     @Override
-    public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
-        boolean traceGL = false;
-        boolean debugGL = false;
-        
-        if(isOffscreen()) {
-            return newOffscreenCanvas((NativeChartFactory)factory, scene, quality, traceGL, debugGL);
-        }
-        else
-        	return new CanvasAWT((NativeChartFactory) factory, scene, quality, getCapabilities(), traceGL, debugGL);
-    }
-
-
-    @Override
     public IChartFactory getFactory() {
         return this;
-    }
-
-    @Override
-    public ICameraMouseController newMouseCameraController(Chart chart) {
-        return new AWTCameraMouseController(chart);
-    }
-    
-    @Override
-    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-        return new AWTMousePickingController(chart, clickWidth);
-    }
-
-    /**
-     * Output file of screenshot can be configured using {@link IScreenshotKeyController#setFilename(String)}.
-     */
-    @Override
-    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
-        // trigger screenshot on 's' letter
-        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
-        
-        IScreenshotKeyController screenshot = new AWTScreenshotKeyController(chart, file);
-        
-        screenshot.addListener(new IScreenshotEventListener() {
-            @Override
-            public void failedScreenshot(String file, Exception e) {
-                logger.error("Failed to save screenshot to '" + file + "'", e);
-            }
-
-            @Override
-            public void doneScreenshot(String file) {
-                logger.info("Screenshot save to '" + file + "'");
-            }
-        });
-        return screenshot;
-    }
-
-    @Override
-    public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        return new AWTCameraKeyController(chart);
-    }
-
-    @Override
-    public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return new FrameAWT(chart, bounds, title, null);
     }
 }

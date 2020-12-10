@@ -20,6 +20,7 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -44,7 +45,7 @@ public class Chart {
 
         // Set up the scene and 3d canvas
         scene = factory.newScene(quality.isAlphaActivated());
-        canvas = factory.newCanvas(scene, quality);
+        canvas = factory.getPainterFactory().newCanvas(factory, scene, quality);
 
         // Set up the view
         view = canvas.getView();
@@ -90,7 +91,7 @@ public class Chart {
     }
 
     public IFrame display(Rectangle rectangle, String title) {
-        return getFactory().newFrame(this, rectangle, title);
+        return getFactory().getPainterFactory().newFrame(this, rectangle, title);
     }
 
     public void clear() {
@@ -114,6 +115,22 @@ public class Chart {
     public void render() {
         view.shoot();
     }
+    
+	public void setAnimated(boolean status) {
+		getQuality().setAnimated(status);
+
+		
+		if(getCanvas() instanceof IScreenCanvas) {
+			IScreenCanvas screenCanvas =  (IScreenCanvas)getCanvas();
+
+			if (status) {
+				screenCanvas.getAnimation().start();
+			} else {
+				screenCanvas.getAnimation().stop();
+			}
+		}
+	}
+
 
     /**
      * Compute screenshot and save to file
@@ -142,19 +159,19 @@ public class Chart {
     /* CONTROLLERS */
 
     public ICameraMouseController addMouseCameraController() {
-        return getFactory().newMouseCameraController(this);
+        return getFactory().getPainterFactory().newMouseCameraController(this);
     }
 
     public IMousePickingController addMousePickingController(int clickWidth) {
-        return getFactory().newMousePickingController(this, clickWidth);
+        return getFactory().getPainterFactory().newMousePickingController(this, clickWidth);
     }
 
     public ICameraKeyController addKeyboardCameraController() {
-        return getFactory().newKeyboardCameraController(this);
+        return getFactory().getPainterFactory().newKeyboardCameraController(this);
     }
 
     public IScreenshotKeyController addKeyboardScreenshotController() {
-        return getFactory().newKeyboardScreenshotController(this);
+        return getFactory().getPainterFactory().newKeyboardScreenshotController(this);
     }
 
     /**
@@ -195,7 +212,7 @@ public class Chart {
      */
     public IFrame open(String title, Rectangle rect) {
         if (frame == null) {
-            frame = getFactory().newFrame(this, rect, title);
+            frame = getFactory().getPainterFactory().newFrame(this, rect, title);
         }
         return frame;
     }

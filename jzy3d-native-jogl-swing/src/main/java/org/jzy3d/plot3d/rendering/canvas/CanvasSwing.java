@@ -58,7 +58,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 
 		setAutoSwapBufferMode(quality.isAutoSwapBuffer());
 
-		animator = factory.newAnimator(this);
+		animator = factory.getPainterFactory().newAnimator(this);
 		if (quality.isAnimated()) {
 			animator.start();
 		}
