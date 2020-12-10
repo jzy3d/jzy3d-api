@@ -96,7 +96,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
             posReal = painter.getCamera().screenToModel(painter, posScreenShifted);
         } catch (RuntimeException e) { 
             // TODO: solve this bug due to a Camera.PERSPECTIVE mode.
-            LOGGER.error("TextBitmap.drawText(): could not process text position: " + posScreen + " " + posScreenShifted);
+            LOGGER.error("could not process text position: " + posScreen + " " + posScreenShifted + e.getMessage());
             return new BoundingBox3d();
         }
 
@@ -106,6 +106,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
         // Draws actual string
         glRasterPos(painter, sceneOffset, posReal);
         painter.glutBitmapString(fontId, text);
+        
         return computeTextBounds(painter, posScreenShifted, strlen);
     }
 

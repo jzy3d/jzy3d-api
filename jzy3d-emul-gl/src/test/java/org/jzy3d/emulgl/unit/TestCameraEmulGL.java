@@ -26,7 +26,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 public class TestCameraEmulGL {
 
 	@Test
-	public void whenViewShoot_thenCameraIsProperlySet() {
+	public void whenViewShoot_thenCameraIsProperlySet() throws InterruptedException {
 		// LoggerUtils.minimal();
 
 		// ---------------------
@@ -113,6 +113,8 @@ public class TestCameraEmulGL {
 		int APP_BAR_HEIGHT = 22;
 		
 		chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
+		
+		Thread.sleep(500);
 
 		// Then viewport size is set to occupy the full frame
 		Assert.assertEquals(FRAME_SIZE.width, cam.getLastViewPort().getWidth());

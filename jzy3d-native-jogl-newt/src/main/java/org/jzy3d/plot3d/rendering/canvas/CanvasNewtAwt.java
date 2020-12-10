@@ -54,7 +54,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
         requestFocusInWindow();
         window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
         if (quality.isAnimated()) {
-            animator = factory.newAnimator((ICanvas)window);//new Animator(window);
+            animator = factory.getPainterFactory().newAnimator((ICanvas)window);//new Animator(window);
             animator.start();
         }
 

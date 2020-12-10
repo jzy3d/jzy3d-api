@@ -24,7 +24,7 @@ public abstract class Wireframeable extends Drawable {
 		setWireframeWidth(1.0f);
 		setWireframeDisplayed(true);
 		setFaceDisplayed(true);
-		setPolygonOffsetFillEnable(true);
+		setPolygonOffsetFillEnable(false);
 	}
 	
 	/**Set the wireframe color.*/

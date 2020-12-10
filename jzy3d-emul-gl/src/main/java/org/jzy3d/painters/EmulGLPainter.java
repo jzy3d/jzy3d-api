@@ -80,13 +80,12 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 		}
 
 		// Blending : more beautifull with jGL without this
-		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);		
+		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 		// on/off is handled by each viewport (camera or image)
 
-		
 		// Activate tranparency
 		if (quality.isAlphaActivated()) {
-			gl.glEnable(GL.GL_BLEND); 
+			gl.glEnable(GL.GL_BLEND);
 			gl.glEnable(GL.GL_ALPHA_TEST);
 
 			if (quality.isDisableDepthBufferWhenAlpha()) {
@@ -124,42 +123,41 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 		} else
 			gl.glDisable(GL.GL_POINT_SMOOTH);
 	}
-	
-	
+
 	@Override
 	public int[] getViewPortAsInt() {
-        int viewport[] = new int[4];
-        glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
-        return viewport;
-    }
+		int viewport[] = new int[4];
+		glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
+		return viewport;
+	}
 
 	@Override
 	public double[] getProjectionAsDouble() {
-        double projection[] = new double[16];
-        glGetDoublev(GL.GL_PROJECTION_MATRIX, projection, 0);
-        return projection;
-    }
+		double projection[] = new double[16];
+		glGetDoublev(GL.GL_PROJECTION_MATRIX, projection, 0);
+		return projection;
+	}
 
 	@Override
 	public float[] getProjectionAsFloat() {
-        float projection[] = new float[16];
-        glGetFloatv(GL.GL_PROJECTION_MATRIX, projection, 0);
-        return projection;
-    }
+		float projection[] = new float[16];
+		glGetFloatv(GL.GL_PROJECTION_MATRIX, projection, 0);
+		return projection;
+	}
 
 	@Override
 	public double[] getModelViewAsDouble() {
-        double modelview[] = new double[16];
-        glGetDoublev(GL.GL_MODELVIEW_MATRIX, modelview, 0);
-        return modelview;
-    }
+		double modelview[] = new double[16];
+		glGetDoublev(GL.GL_MODELVIEW_MATRIX, modelview, 0);
+		return modelview;
+	}
 
 	@Override
 	public float[] getModelViewAsFloat() {
-        float modelview[] = new float[16];
-        glGetFloatv(GL.GL_MODELVIEW_MATRIX, modelview, 0);
-        return modelview;
-    }
+		float modelview[] = new float[16];
+		glGetFloatv(GL.GL_MODELVIEW_MATRIX, modelview, 0);
+		return modelview;
+	}
 
 	/************ OPEN GL Interface **************/
 
@@ -261,15 +259,15 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public void glCullFace(int mode) {
 		gl.glCullFace(mode);
 	}
-	
+
 	@Override
 	public void glPolygonMode(PolygonMode mode, PolygonFill fill) {
 		int modeValue = polygonModeValue(mode);
 		int fillValue = polygonFillValue(fill);
-		
+
 		glPolygonMode(modeValue, fillValue);
 	}
-	
+
 	protected int polygonModeValue(PolygonMode mode) {
 		switch (mode) {
 		case FRONT:
@@ -282,7 +280,7 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 			throw new IllegalArgumentException("Unsupported mode '" + mode + "'");
 		}
 	}
-	
+
 	protected int polygonFillValue(PolygonFill mode) {
 		switch (mode) {
 		case FILL:
@@ -298,7 +296,7 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public void glPolygonMode(int frontOrBack, int fill) {
 		gl.glPolygonMode(frontOrBack, fill);
 	}
-	
+
 	/**
 	 * Not supported by jGL.
 	 * 
@@ -309,12 +307,11 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 		// gl.glPolygonOffset(factor, units); // handle stippling
 	}
-	
+
 	String OFFSET_FILL_NOT_IMPLEMENTED = "not in jGL. \n"
 			+ "Was added to OpenGL 2 (https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glPolygonOffset.xhtml). \n"
 			+ "You may desactivate offset fill with drawable.setPolygonOffsetFillEnable(false). \n"
 			+ "More here : https://github.com/jzy3d/jGL/issues/3";
-
 
 	@Override
 	public void glLineStipple(int factor, short pattern) {
@@ -346,7 +343,7 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	 */
 	@Override
 	public void glRasterPos3f(float x, float y, float z) {
-		if (z != 0)
+		if (!(z != 0 || Float.isNaN(z)))
 			throw new NotImplementedException("z:" + z);
 		else
 			gl.glRasterPos2f(x, y);
@@ -357,9 +354,9 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	 */
 	@Override
 	public void glDrawPixels(int width, int height, int format, int type, Buffer pixels) {
-		
-		//pixels[x][y][i]
-		
+
+		// pixels[x][y][i]
+
 		/*
 		 * if (s == 8) return get_pixel(x, y, i, (byte[][][]) pixels); <<< if (s == 16)
 		 * return get_pixel(x, y, i, (short[][][]) pixels); if (s == 32) return
@@ -402,11 +399,11 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 		 * Each unsigned byte is treated as eight 1-bit pixels, with bit ordering
 		 * determined by GL_UNPACK_LSB_FIRST (see glPixelStore).
 		 */
-		
+
 		boolean testWithImage = false;
-		
-		if(testWithImage) {
-			
+
+		if (testWithImage) {
+
 			Image img = null;
 			try {
 				img = ImageIO.read(new File("colorbar-crop.png"));
@@ -414,82 +411,82 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			int w=img.getWidth(null);
-			int h =img.getHeight(null);
+
+			int w = img.getWidth(null);
+			int h = img.getHeight(null);
 			int[] pix = GLImage.getImagePixels(img, w, h);
 			int[][][] pxl = toPixels(w, h, pix);
-			
-			
+
 			gl.glDrawPixels(w, h, format, GL.GL_INT, pxl);
 
-		}
-		else {
-		
+		} else {
+
 			// CALLED WITH : GL.GL_RGBA, GL.GL_UNSIGNED_BYTE
-			//pixels.flip();
+			// pixels.flip();
 			byte[] imgBytes = new byte[pixels.remaining()];
-			((ByteBuffer)pixels).get(imgBytes);
-			
+			((ByteBuffer) pixels).get(imgBytes);
+
 			int[][][] pxl = toPixels(width, height, imgBytes);
-			
-			//System.out.println("width:"+width+ " w:" + w + " height:"+height+ " h:" + h);
-			//pixels.
-			
-			//GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE
-			
-			//gl.glDrawPixels(width, height, format, GL.GL_INT, pxl);//.array());
-			
-			// will break in jGL since it is smaller h/w are smaller than viewport, 
+
+			// System.out.println("width:"+width+ " w:" + w + " height:"+height+ " h:" + h);
+			// pixels.
+
+			// GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE
+
+			// gl.glDrawPixels(width, height, format, GL.GL_INT, pxl);//.array());
+
+			// will break in jGL since it is smaller h/w are smaller than viewport,
 			// which was set to higher dimension (600*500) : drawpixel is trying to update
-			// the part of the colorbuffer that is in width-w and height-h which fails if width/height
+			// the part of the colorbuffer that is in width-w and height-h which fails if
+			// width/height
 			// are smaller than image
 			gl.glDrawPixels(width, height, format, GL.GL_INT, pxl);
-			
-			
-			// gl_context.gl_raster_pos n'ayant pas d'implem, le glDrawPixels dessign à partir de 0,0
-		
+
+			// gl_context.gl_raster_pos n'ayant pas d'implem, le glDrawPixels dessign à
+			// partir de 0,0
+
 		}
 
-		
-		//gl.glDrawPixels(width, height, format, type, pixels.array());
+		// gl.glDrawPixels(width, height, format, type, pixels.array());
 	}
 
 // MOVE FOLLOWING TO GLImage	
-	
-	/** Convert a pixel array with int Values to a pixel array with splitted color components for jGL glDrawPixels*/
+
+	/**
+	 * Convert a pixel array with int Values to a pixel array with splitted color
+	 * components for jGL glDrawPixels
+	 */
 	private int[][][] toPixels(int w, int h, int[] pix) {
-	 	// height, width
+		// height, width
 		int[][][] pxl = new int[h][w][4];
-		
+
 		for (int x = 0; x < w; x++) {
 			for (int y = 0; y < h; y++) {
 				// (j - y) * scansize + (i - x) + off
-				int pos = y*w + x;//x*w+y;//
-				
-				if(pos<pix.length) {
-				
+				int pos = y * w + x;// x*w+y;//
+
+				if (pos < pix.length) {
+
 					int color = pix[pos];
-					
+
 					pxl[y][x][0] = gl_util.ItoR(color);
 					pxl[y][x][1] = gl_util.ItoG(color);
 					pxl[y][x][2] = gl_util.ItoB(color);
 					pxl[y][x][3] = gl_util.ItoA(color);
 				}
-			}			
+			}
 		}
 		return pxl;
 	}
-	
+
 	static int R = 0;
 	static int G = 1;
 	static int B = 2;
 	static int A = 3;
-	
+
 	/**
-	 * 2 soucis
-	 * la valeur des couleurs est mal récupérée pour les canaux G et B (R est OK, alpha aussi)
-	 * l'image est à l'envers
+	 * 2 soucis la valeur des couleurs est mal récupérée pour les canaux G et B (R
+	 * est OK, alpha aussi) l'image est à l'envers
 	 * 
 	 * @param w
 	 * @param h
@@ -499,75 +496,66 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	private int[][][] toPixels(int w, int h, byte[] pix) {
 		boolean hasAlpha = true;
 		boolean isFlipped = true; // because image in byte array was flipped!!
-		
-	 	// height, width
+
+		// height, width
 		int[][][] pxl = new int[h][w][4];
-		
+
 		for (int x = 0; x < w; x++) {
 			for (int y = 0; y < h; y++) {
-				if(hasAlpha) {
-					int pos = (y*w + x)*4; // SIZE OF INT THAT FED THE BYTEBUFFER
+				if (hasAlpha) {
+					int pos = (y * w + x) * 4; // SIZE OF INT THAT FED THE BYTEBUFFER
 
-					int yy = isFlipped?h-y-1:y;
-					
+					int yy = isFlipped ? h - y - 1 : y;
+
 					// GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE
 
 					// Color ID in array is defined based on
 					// gl_colorbuffer.draw_pixels
-					pxl[yy][x][R] = pix[pos+R];//Math.max((pix[pos+0] & 0xff) ,0);// & 0xff)-128;
-					pxl[yy][x][G] = Math.max( (pix[pos+G] & 0xff)-128, 0); 
+					pxl[yy][x][R] = pix[pos + R];// Math.max((pix[pos+0] & 0xff) ,0);// & 0xff)-128;
+					pxl[yy][x][G] = Math.max((pix[pos + G] & 0xff) - 128, 0);
 					// green : 127, yellow : 255
-					//((int)pix[pos+1])>>24;//jaune?? devrait être vert
+					// ((int)pix[pos+1])>>24;//jaune?? devrait être vert
 					//
-					
-					pxl[yy][x][B] = Math.max((pix[pos+B] & 0xff)-128, 0);
-					pxl[yy][x][A] = pix[pos+A] & 0xff;
-					
-					//System.out.println("RED   : " + pxl[y][x][R]);
-					//System.out.println("GREEN : " + pxl[y][x][G]);
-					//System.out.println("BLUE  : " + pxl[y][x][B]);
-					//System.out.println("ALPHA : " + pxl[y][x][A]);
-					
+
+					pxl[yy][x][B] = Math.max((pix[pos + B] & 0xff) - 128, 0);
+					pxl[yy][x][A] = pix[pos + A] & 0xff;
+
+					// System.out.println("RED : " + pxl[y][x][R]);
+					// System.out.println("GREEN : " + pxl[y][x][G]);
+					// System.out.println("BLUE : " + pxl[y][x][B]);
+					// System.out.println("ALPHA : " + pxl[y][x][A]);
+
 					// then colorbuffer read array and build single color value with
-					//int color = ((a << 24) | (r << 16) | (g << 8) | b);
+					// int color = ((a << 24) | (r << 16) | (g << 8) | b);
+
+				} else {
+					int pos = (y * w + x) * 3;
+
+					pxl[y][x][R] = pix[pos + 0];
+					pxl[y][x][G] = pix[pos + 1];
+					pxl[y][x][B] = pix[pos + 2];
+					pxl[y][x][A] = 255;// pix[pos+3];
 
 				}
-				else {
-					int pos = (y*w + x)*3;
-					
-					pxl[y][x][R] = pix[pos+0];
-					pxl[y][x][G] = pix[pos+1];
-					pxl[y][x][B] = pix[pos+2];
-					pxl[y][x][A] = 255;//pix[pos+3];
-					
-				}
-			}			
+			}
 		}
 		return pxl;
 	}
-	
-	/*private int[][][] toPixels(int w, int h, int[] pix) {
-		// height, width
-		int[][][] pxl = new int[w][h][4];
-		
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w; x++) {
-				
-				int pos = x*w+y;//y*h+x;
-				if(pos<pix.length) {
-				
-					int color = pix[pos];
-					//int color = pix[x*w+y];
-					
-					pxl[x][y][0] = gl_util.ItoR(color);
-					pxl[x][y][1] = gl_util.ItoG(color);
-					pxl[x][y][2] = gl_util.ItoB(color);
-					pxl[x][y][3] = gl_util.ItoA(color);
-				}
-			}			
-		}
-		return pxl;
-	}*/
+
+	/*
+	 * private int[][][] toPixels(int w, int h, int[] pix) { // height, width
+	 * int[][][] pxl = new int[w][h][4];
+	 * 
+	 * for (int y = 0; y < h; y++) { for (int x = 0; x < w; x++) {
+	 * 
+	 * int pos = x*w+y;//y*h+x; if(pos<pix.length) {
+	 * 
+	 * int color = pix[pos]; //int color = pix[x*w+y];
+	 * 
+	 * pxl[x][y][0] = gl_util.ItoR(color); pxl[x][y][1] = gl_util.ItoG(color);
+	 * pxl[x][y][2] = gl_util.ItoB(color); pxl[x][y][3] = gl_util.ItoA(color); } } }
+	 * return pxl; }
+	 */
 
 	/**
 	 * glPixelZoom is not implemented by {@link GL}. This method will do nothing but
@@ -586,14 +574,18 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public void glPixelStorei(int pname, int param) {
 		gl.glPixelStorei(pname, param);
 	}
-	
+
 	@Override
 	public void glPixelStore(PixelStore store, int param) {
-		switch(store) {
-		case PACK_ALIGNMENT: gl.glPixelStorei(GL.GL_PACK_ALIGNMENT, param); break;
-		case UNPACK_ALIGNMENT: gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, param); break;
+		switch (store) {
+		case PACK_ALIGNMENT:
+			gl.glPixelStorei(GL.GL_PACK_ALIGNMENT, param);
+			break;
+		case UNPACK_ALIGNMENT:
+			gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, param);
+			break;
 		}
-		throw new IllegalArgumentException("Unsupported mode '"+ store + "'");
+		throw new IllegalArgumentException("Unsupported mode '" + store + "'");
 	}
 
 	@Override
@@ -607,7 +599,8 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	/**
 	 * Not implemented yet.
 	 * 
-	 * @see {@link #glutBitmapString(Font, String, Coord3d, Color)} as a convenient replacement.
+	 * @see {@link #glutBitmapString(Font, String, Coord3d, Color)} as a convenient
+	 *      replacement.
 	 */
 	@Override
 	public void glutBitmapString(int font, String string) {
@@ -619,25 +612,28 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	/**
 	 * Not implemented yet.
 	 * 
-	 * @see {@link #glutBitmapString(Font, String, Coord3d, Color)} as a convenient replacement.
+	 * @see {@link #glutBitmapString(Font, String, Coord3d, Color)} as a convenient
+	 *      replacement.
 	 */
 	@Override
 	public int glutBitmapLength(int font, String string) {
-		throw new NotImplementedException();
+		return 12 * string.length();
+		// throw new NotImplementedException();
 		// return glut.glutBitmapLength(font, string);
 	}
 
 	/**
-	 * Replace {@link #glutBitmapString(int, String) which is the official expected OpenGL interface.
+	 * Replace {@link #glutBitmapString(int, String) which is the official expected
+	 * OpenGL interface.
 	 * 
-	 * This alternative interface allows rendering text based on AWT Fonts which are drawn on top of the GL Image.
+	 * This alternative interface allows rendering text based on AWT Fonts which are
+	 * drawn on top of the GL Image.
 	 */
 	@Override
 	public void glutBitmapString(Font font, String label, Coord3d position, Color color) {
 		glut.glutBitmapString(font, label, position.x, position.y, position.z, color.r, color.g, color.b);
 	}
 
-	
 	// GL LISTS
 
 	@Override
@@ -649,12 +645,14 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public void glNewList(int list, int mode) {
 		gl.glNewList(list, mode);
 	}
-	
+
 	@Override
 	public void glNewList(int list, ListMode mode) {
-		switch(mode) {
-		case COMPILE: glNewList(list, GL.GL_COMPILE);
-		case COMPILE_AND_EXECUTE: glNewList(list, GL.GL_COMPILE_AND_EXECUTE);
+		switch (mode) {
+		case COMPILE:
+			glNewList(list, GL.GL_COMPILE);
+		case COMPILE_AND_EXECUTE:
+			glNewList(list, GL.GL_COMPILE_AND_EXECUTE);
 		}
 	}
 
@@ -712,7 +710,8 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 
 	@Override
 	public void glFeedbackBuffer(int size, int type, FloatBuffer buffer) {
-		throw new NotImplementedException("Not in jGL. Was added to OpenGL 2. https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFeedbackBuffer.xml");
+		throw new NotImplementedException(
+				"Not in jGL. Was added to OpenGL 2. https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glFeedbackBuffer.xml");
 		// gl.glFeedbackBuffer(size, type, buffer);
 	}
 
@@ -720,13 +719,16 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public int glRenderMode(int mode) {
 		return gl.glRenderMode(mode);
 	}
-	
+
 	@Override
 	public int glRenderMode(RenderMode mode) {
-		switch(mode){
-		case RENDER: return glRenderMode(GL.GL_RENDER);
-		case SELECT: return glRenderMode(GL.GL_SELECT);
-		case FEEDBACK: return glRenderMode(GL.GL_FEEDBACK);
+		switch (mode) {
+		case RENDER:
+			return glRenderMode(GL.GL_RENDER);
+		case SELECT:
+			return glRenderMode(GL.GL_SELECT);
+		case FEEDBACK:
+			return glRenderMode(GL.GL_FEEDBACK);
 		}
 		throw new IllegalArgumentException("Unsupported mode '" + mode + "'");
 	}
@@ -762,9 +764,28 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	@Override
 	public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset, float[] proj,
 			int proj_offset, int[] view, int view_offset, float[] objPos, int objPos_offset) {
-		throw new NotImplementedException();
-		// return glu.gluUnProject(winX, winY, winZ, model, model_offset, proj,
-		// proj_offset, view, view_offset, objPos, objPos_offset);
+		// throw new NotImplementedException();
+
+		double objX[] = new double[1];
+		double objY[] = new double[1];
+		double objZ[] = new double[1];
+
+		boolean st = glu.gluUnProject((double) winX, (double) winY, (double) winZ, dbl(model), dbl(proj), view, objX,
+				objY, objZ);
+
+		objPos[0] = (float)objX[0];
+		objPos[1] = (float)objY[0];
+		objPos[2] = (float)objZ[0];
+		
+		return st;
+	}
+
+	protected double[] dbl(float[] values) {
+		double[] dbl = new double[values.length];
+		for (int i = 0; i < values.length; i++) {
+			dbl[i] = values[i];
+		}
+		return dbl;
 	}
 
 	@Override
@@ -830,7 +851,8 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 
 	@Override
 	public void glHint(int target, int mode) {
-		throw new NotImplementedException("not in jGL. https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glHint.xml");
+		throw new NotImplementedException(
+				"not in jGL. https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glHint.xml");
 		// gl.glHint(target, mode);
 
 	}
@@ -874,9 +896,9 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 
 	@Override
 	public void glLight_Specular(int lightId, Color specularColor) {
-		glLightfv(lightId, GL.GL_SPECULAR, specularColor.toArray(), 0);		
+		glLightfv(lightId, GL.GL_SPECULAR, specularColor.toArray(), 0);
 	}
-	
+
 	@Override
 	public void glEnable_Light(int light) {
 		glEnable(lightId(light));
@@ -886,43 +908,41 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public void glDisable_Light(int light) {
 		glEnable(lightId(light));
 	}
-	
+
 	protected int lightId(int id) {
 		switch (id) {
-        case 0:
-            return GL.GL_LIGHT0;
-        case 1:
-            return GL.GL_LIGHT1;
-        case (2):
-            return GL.GL_LIGHT2;
-        case 3:
-            return GL.GL_LIGHT3;
-        case 4:
-            return GL.GL_LIGHT4;
-        case 5:
-            return GL.GL_LIGHT5;
-        case 6:
-            return GL.GL_LIGHT6;
-        case 7:
-            return GL.GL_LIGHT7;
-        }
+		case 0:
+			return GL.GL_LIGHT0;
+		case 1:
+			return GL.GL_LIGHT1;
+		case (2):
+			return GL.GL_LIGHT2;
+		case 3:
+			return GL.GL_LIGHT3;
+		case 4:
+			return GL.GL_LIGHT4;
+		case 5:
+			return GL.GL_LIGHT5;
+		case 6:
+			return GL.GL_LIGHT6;
+		case 7:
+			return GL.GL_LIGHT7;
+		}
 		throw new IllegalArgumentException("Unsupported light ID '" + id + "'");
 	}
-	
+
 	@Override
 	public void glLightModeli(int mode, int value) {
 		gl.glLightModeli(mode, value);
 	}
-	
+
 	@Override
 	public void glLightModel(LightModel model, boolean value) {
-		if(LightModel.LIGHT_MODEL_TWO_SIDE.equals(model)) {
-			glLightModeli(GL.GL_LIGHT_MODEL_TWO_SIDE, value?1:0);//value?GL.GL_TRUE:GL.GL_FALSE);
-		}
-		else if(LightModel.LIGHT_MODEL_LOCAL_VIEWER.equals(model)) {
-			glLightModeli(GL.GL_LIGHT_MODEL_LOCAL_VIEWER, value?1:0);//value?GL.GL_TRUE:GL.GL_FALSE);			
-		}
-		else {
+		if (LightModel.LIGHT_MODEL_TWO_SIDE.equals(model)) {
+			glLightModeli(GL.GL_LIGHT_MODEL_TWO_SIDE, value ? 1 : 0);// value?GL.GL_TRUE:GL.GL_FALSE);
+		} else if (LightModel.LIGHT_MODEL_LOCAL_VIEWER.equals(model)) {
+			glLightModeli(GL.GL_LIGHT_MODEL_LOCAL_VIEWER, value ? 1 : 0);// value?GL.GL_TRUE:GL.GL_FALSE);
+		} else {
 			throw new IllegalArgumentException("Unsupported model '" + model + "'");
 		}
 	}
@@ -947,8 +967,8 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 
 	@Override
 	public void glClearColorAndDepthBuffers() {
-		//glClear(GL.GL_COLOR_BUFFER_BIT);
-	    //gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+		// glClear(GL.GL_COLOR_BUFFER_BIT);
+		// gl.glClear(GL.GL_COLOR_BUFFER_BIT);
 
 		glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 	}
@@ -1005,32 +1025,30 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 
 	/* ***************** SHORTCUTS TO GL CONSTANTS *************************** */
 
-	
-	
 	@Override
 	public void glEnable_PolygonOffsetFill() {
-		//glEnable(GL.GL_POLYGON_OFFSET_FILL);
+		// glEnable(GL.GL_POLYGON_OFFSET_FILL);
 		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 	}
 
 	@Override
 	public void glDisable_PolygonOffsetFill() {
-		//glDisable(GL.GL_POLYGON_OFFSET_FILL);
+		// glDisable(GL.GL_POLYGON_OFFSET_FILL);
 		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 	}
-	
+
 	@Override
 	public void glEnable_PolygonOffsetLine() {
-		//glEnable(GL.GL_POLYGON_OFFSET_LINE);
+		// glEnable(GL.GL_POLYGON_OFFSET_LINE);
 		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 	}
 
 	@Override
 	public void glDisable_PolygonOffsetLine() {
-		//glDisable(GL.GL_POLYGON_OFFSET_LINE);
+		// glDisable(GL.GL_POLYGON_OFFSET_LINE);
 		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 	}
-	
+
 	@Override
 	public void glDisable_Lighting() {
 		glDisable(GL.GL_LIGHTING);
@@ -1040,7 +1058,7 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public void glEnable_Lighting() {
 		glEnable(GL.GL_LIGHTING);
 	}
-	
+
 	@Override
 	public void glEnable_LineStipple() {
 		glEnable(GL.GL_LINE_STIPPLE);
@@ -1106,7 +1124,6 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 		glBegin(GL.GL_LINES);
 	}
 
-	
 	@Override
 	public void glEnable_CullFace() {
 		glEnable(GL.GL_CULL_FACE);
@@ -1126,38 +1143,40 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public void glCullFace_Front() {
 		glCullFace(GL.GL_FRONT);
 	}
-	
+
 	@Override
 	public void glEnable_ColorMaterial() {
 		glEnable(GL.GL_COLOR_MATERIAL);
 	}
-	
+
 	@Override
 	public void glMaterial(MaterialProperty material, Color color, boolean isFront) {
-		if(isFront) {
+		if (isFront) {
 			glMaterialfv(GL.GL_FRONT, materialProperty(material), color.toArray(), 0);
-		}
-		else {
+		} else {
 			glMaterialfv(GL.GL_BACK, materialProperty(material), color.toArray(), 0);
 		}
 	}
-	
+
 	@Override
 	public void glMaterial(MaterialProperty material, float[] color, boolean isFront) {
-		if(isFront) {
+		if (isFront) {
 			glMaterialfv(GL.GL_FRONT, materialProperty(material), color, 0);
-		}
-		else {
+		} else {
 			glMaterialfv(GL.GL_BACK, materialProperty(material), color, 0);
 		}
 	}
 
 	protected int materialProperty(MaterialProperty material) {
-		switch(material) {
-		case AMBIENT:return GL.GL_AMBIENT;
-		case DIFFUSE:return GL.GL_DIFFUSE;
-		case SPECULAR:return GL.GL_SPECULAR;
-		case SHININESS:return GL.GL_SHININESS;
+		switch (material) {
+		case AMBIENT:
+			return GL.GL_AMBIENT;
+		case DIFFUSE:
+			return GL.GL_DIFFUSE;
+		case SPECULAR:
+			return GL.GL_SPECULAR;
+		case SHININESS:
+			return GL.GL_SHININESS;
 		}
 		throw new IllegalArgumentException("Unsupported property '" + material + "'");
 	}
@@ -1171,7 +1190,5 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	public void glHint_PointSmooth_Nicest() {
 		glHint(GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
 	}
-	
-	
-	
+
 }
