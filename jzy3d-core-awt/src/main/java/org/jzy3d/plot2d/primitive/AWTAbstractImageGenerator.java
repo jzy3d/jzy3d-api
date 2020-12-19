@@ -3,8 +3,8 @@ package org.jzy3d.plot2d.primitive;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import org.jzy3d.colors.Color;
 import org.jzy3d.colors.AWTColor;
+import org.jzy3d.colors.Color;
 
 public abstract class AWTAbstractImageGenerator implements AWTImageGenerator{
     public void configureText(Graphics2D graphic) {

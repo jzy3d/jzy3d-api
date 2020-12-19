@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.primitives.axes;
 
-import java.awt.Font;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +7,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.Painter.Font;
 import org.jzy3d.plot3d.primitives.axis.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
@@ -140,7 +140,7 @@ public class EmulGLAxisBox extends AxisBox {
 	
 	
 	
-	Font axisFont = new Font("Arial", Font.PLAIN, 12);
+	Font axisFont = Font.Helvetica_10;
 
 	/** Override default behaviour to replace direct text rendering by tick labels collection for later rendering.*/
 	@Override

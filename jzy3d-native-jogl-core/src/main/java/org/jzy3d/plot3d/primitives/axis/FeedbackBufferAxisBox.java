@@ -6,8 +6,6 @@ import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.painters.RenderMode;
-import org.jzy3d.plot3d.primitives.axis.AxisBox;
-import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 
 import com.jogamp.common.nio.Buffers;

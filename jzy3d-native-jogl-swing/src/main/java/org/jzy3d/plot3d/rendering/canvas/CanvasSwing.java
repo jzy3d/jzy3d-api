@@ -5,6 +5,7 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 
+import org.jzy3d.chart.Animator;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -16,7 +17,6 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
 import com.jogamp.opengl.awt.GLJPanel;
-import org.jzy3d.chart.Animator;
 import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
