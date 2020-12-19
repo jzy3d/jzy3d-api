@@ -1,6 +1,5 @@
 package org.jzy3d.painters;
 
-import java.awt.Font;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;

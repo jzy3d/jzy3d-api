@@ -338,7 +338,7 @@ public class AxisBox implements IAxis {
                 labelPosition = spaceTransformer.compute(labelPosition);
             }*/
             
-            BoundingBox3d labelBounds = txt.drawText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            BoundingBox3d labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
             if (labelBounds != null)
                 ticksTxtBounds.add(labelBounds);
         }
@@ -468,7 +468,7 @@ public class AxisBox implements IAxis {
         painter.glLoadIdentity();
         painter.glScalef(scale.x, scale.y, scale.z);
 
-        BoundingBox3d tickBounds = txt.drawText(painter, tickLabel, tickPosition, hAlign, vAlign, color);
+        BoundingBox3d tickBounds = textRenderer.drawText(painter, tickLabel, tickPosition, hAlign, vAlign, color);
         if (tickBounds != null)
             ticksTxtBounds.add(tickBounds);
     }
@@ -943,12 +943,14 @@ public class AxisBox implements IAxis {
     public void dispose() {
     }
 
+    @Override
     public ITextRenderer getTextRenderer() {
-        return txt;
+        return textRenderer;
     }
 
+    @Override
     public void setTextRenderer(ITextRenderer renderer) {
-        txt = renderer;
+        textRenderer = renderer;
     }
 
     public View getView() {
@@ -1030,6 +1032,8 @@ public class AxisBox implements IAxis {
             annotations.add(annotation);
         }
     }
+    
+    
 
     /* */
 
@@ -1038,7 +1042,7 @@ public class AxisBox implements IAxis {
     protected View view;
 
     // use this text renderer to get occupied volume by text
-    protected ITextRenderer txt = new TextBitmapRenderer();
+    protected ITextRenderer textRenderer = new TextBitmapRenderer();
 
     protected IAxisLayout layout;
 

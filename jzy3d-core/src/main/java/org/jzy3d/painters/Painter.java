@@ -1,6 +1,5 @@
 package org.jzy3d.painters;
 
-import java.awt.Font;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -42,9 +41,10 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * <li>GL.glBegin(GL.GL_POLYGON) -> {@link Painter#glBegin_Polygon()}
  * </ul>
  * 
- * Traditional OpenGL constants mapping with enums, e.g. 
+ * Traditional OpenGL constants mapping with enums, e.g.
  * <ul>
- * <li>GL.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, float[], 0) -> {@link Painter#glMaterial(MaterialProperty, Color, boolean)}
+ * <li>GL.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, float[], 0) ->
+ * {@link Painter#glMaterial(MaterialProperty, Color, boolean)}
  * </ul>
  * 
  * Jzy3d model mapping
@@ -69,28 +69,118 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * position and orientation. of the painter.
  * 
  * Last, there are utility methods for Jzy3d for easily configuring multiple
- * OpenGL settings with {@link Painter#configureGL(Quality)}.
- * <br>
+ * OpenGL settings with {@link Painter#configureGL(Quality)}. <br>
  * 
- * <b>Using the complete OpenGL interface</b>
- * Note that you may still access the "real" OpenGL interface in case the Painter
- * does not adress your need. To get it, simply downcast the {@link Painter} to the 
- * concrete type you are using, and call the accessors as follow. 
+ * <b>Using the complete OpenGL interface</b> Note that you may still access the
+ * "real" OpenGL interface in case the Painter does not adress your need. To get
+ * it, simply downcast the {@link Painter} to the concrete type you are using,
+ * and call the accessors as follow.
  * 
  * Emulated OpenGL interface
  * <ul>
- * <li>GL gl = {@link EmulGLPainter#getGL()}; // jGL GL interface 
+ * <li>GL gl = {@link EmulGLPainter#getGL()}; // jGL GL interface
  * <li>GLU glu = {@link EmulGLPainter#getGLU()}; // jGL GLU interface
  * <li>GLUT glut = {@link EmulGLPainter#getGLUT()}; // jGL GLUT interface
  * </ul>
  * Native OpenGL interface
  * <ul>
- * <li>GL gl = {@link NativeDeskopPainter#getGL()}; // JOGL GL interface 
+ * <li>GL gl = {@link NativeDeskopPainter#getGL()}; // JOGL GL interface
  * <li>GLU glu = {@link NativeDeskopPainter#getGLU()}; // JOGL GLU interface
  * <li>GLUT glut = {@link NativeDeskopPainter#getGLUT()}; // JOGL GLUT interface
  * </ul>
  */
 public interface Painter {
+	/**
+	 * A Font subset supported both by OpenGL 1 and AWT.
+	 * 
+	 * Painters such as {@link EmulGLPainter} use AWT for font rendering and may
+	 * support more font names and size than those provided as default to fit OpenGL
+	 * 1 spec.
+	 */
+	public enum Font {
+		Helvetica_10(BITMAP_HELVETICA_10, 10), Helvetica_12(BITMAP_HELVETICA_12, 12),
+		Helvetica_18(BITMAP_HELVETICA_18, 18), TimesRoman_10(BITMAP_TIMES_ROMAN_10, 10),
+		TimesRoman_24(BITMAP_TIMES_ROMAN_24, 24);
+
+		private static final String TIMES_NEW_ROMAN = "Times New Roman";
+		private static final String HELVETICA = "Helvetica";
+
+		Font(int code, int height) {
+			this.code = code;
+			this.height = height;
+
+			if (code == BITMAP_HELVETICA_10 || code == BITMAP_HELVETICA_12 || code == BITMAP_HELVETICA_18) {
+				this.name = HELVETICA;
+			} else if (code == BITMAP_TIMES_ROMAN_10 || code == BITMAP_TIMES_ROMAN_24) {
+				this.name = TIMES_NEW_ROMAN;
+			}
+		}
+
+		Font(String name, int height) {
+			this.name = name;
+			this.height = height;
+
+			if (HELVETICA.toLowerCase().equals(name.toLowerCase())) {
+				switch (height) {
+				case 10:
+					code = BITMAP_HELVETICA_10;
+					break;
+				case 12:
+					code = BITMAP_HELVETICA_12;
+					break;
+				case 18:
+					code = BITMAP_HELVETICA_18;
+					break;
+				default:
+					code = BITMAP_HELVETICA_12;
+					break;
+				}
+			} else if (TIMES_NEW_ROMAN.toLowerCase().equals(name.toLowerCase())) {
+				switch (height) {
+				case 10:
+					code = BITMAP_TIMES_ROMAN_10;
+					break;
+				case 24:
+					code = BITMAP_TIMES_ROMAN_24;
+					break;
+				default:
+					code = BITMAP_TIMES_ROMAN_10;
+					break;
+				}
+			}
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public int getCode() {
+			return code;
+		}
+
+		public int getHeight() {
+			return height;
+		}
+
+		protected String name;
+		protected int code;
+		protected int height;
+
+	}
+
+	// Font constants below are picked from GLU object in JOGL
+	public static final int STROKE_ROMAN = 0;
+	public static final int STROKE_MONO_ROMAN = 1;
+	public static final int BITMAP_9_BY_15 = 2;
+	public static final int BITMAP_8_BY_13 = 3;
+	public static final int BITMAP_TIMES_ROMAN_10 = 4;
+	public static final int BITMAP_TIMES_ROMAN_24 = 5;
+	public static final int BITMAP_HELVETICA_10 = 6;
+	public static final int BITMAP_HELVETICA_12 = 7;
+	public static final int BITMAP_HELVETICA_18 = 8;
+
+	/* ****************************************** */
+
 	public Camera getCamera();
 
 	public void setCamera(Camera camera);
@@ -431,5 +521,4 @@ public interface Painter {
 	public void glEnable_PointSmooth();
 
 	public void glHint_PointSmooth_Nicest();
-
 }

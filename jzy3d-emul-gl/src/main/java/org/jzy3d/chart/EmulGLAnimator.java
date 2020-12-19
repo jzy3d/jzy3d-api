@@ -32,7 +32,7 @@ public class EmulGLAnimator implements Animator{
 				}
 			}
 			
-		});
+		}, "EmulGLAnimator");
 		t.run();
 	}
 

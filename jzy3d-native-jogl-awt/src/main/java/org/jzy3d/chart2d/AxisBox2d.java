@@ -20,7 +20,7 @@ public class AxisBox2d extends AxisBox {
 
     public AxisBox2d(BoundingBox3d bbox) {
         super(bbox);
-        txt = new TextBitmapRenderer();
+        textRenderer = new TextBitmapRenderer();
         //txt = new JOGLTextRenderer(new DefaultTextStyle(java.awt.Color.BLACK));// ATTENTION AWT!!
     }
 
@@ -69,9 +69,9 @@ public class AxisBox2d extends AxisBox {
 
         if (isXDisplayed(direction)) {
 //            doTransform(gl);
-            labelBounds = txt.drawText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         } else if (isYDisplayed(direction)) {
-            labelBounds = txt.drawText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
+            labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
             //labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER, color);
         }
         if (labelBounds != null)
@@ -92,9 +92,9 @@ public class AxisBox2d extends AxisBox {
 
             // compute a corrected position according to layout
             Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
-            float strlen = painter.glutBitmapLength(fontId, text);
-            float x = computeXWithAlign(halign, posScreen, strlen, 0.0f);
-            float y = computeYWithAlign(valign, posScreen, 0.0f);
+            float strlen = painter.glutBitmapLength(font.getCode(), text);
+            float x = computeXAlign(halign, posScreen, strlen, 0.0f);
+            float y = computeYAlign(valign, posScreen, 0.0f);
             Coord3d posScreenShifted = new Coord3d(x + screenOffset.x, y + screenOffset.y, posScreen.z);
 
             Coord3d posReal;
@@ -110,7 +110,7 @@ public class AxisBox2d extends AxisBox {
             // CETTE ROTATION NE MARCHE PAS ET AFFECTE LE BON RENDU QUAND ON UTILISE BOUNDING POLICY!!
             
             glRasterPos(painter, sceneOffset, Coord3d.ORIGIN);
-            painter.glutBitmapString(fontId, text);
+            painter.glutBitmapString(font.getCode(), text);
             
             return computeTextBounds(painter, posScreenShifted, strlen);
         }

@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jzy3d.colors.Color;
 import org.jzy3d.colors.AWTColor;
+import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.Painter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
