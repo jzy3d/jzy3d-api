@@ -1,6 +1,5 @@
 package org.jzy3d.painters;
 
-import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -631,7 +630,11 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	 */
 	@Override
 	public void glutBitmapString(Font font, String label, Coord3d position, Color color) {
-		glut.glutBitmapString(font, label, position.x, position.y, position.z, color.r, color.g, color.b);
+		glut.glutBitmapString(toAWT(font), label, position.x, position.y, position.z, color.r, color.g, color.b);
+	}
+
+	private java.awt.Font toAWT(Font font) {
+		return new java.awt.Font(font.getName(), java.awt.Font.PLAIN, font.getHeight());
 	}
 
 	// GL LISTS

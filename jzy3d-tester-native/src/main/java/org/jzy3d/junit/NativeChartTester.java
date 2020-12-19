@@ -1,7 +1,5 @@
 package org.jzy3d.junit;
 
-import static org.junit.Assert.fail;
-
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,9 +12,7 @@ import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLContext;

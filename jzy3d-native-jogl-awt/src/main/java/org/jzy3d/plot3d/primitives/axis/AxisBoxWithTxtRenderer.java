@@ -120,7 +120,7 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 				txtRenderer.appendText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER,
 						color);
 			else {
-				BoundingBox3d labelBounds = txt.drawText(painter, axeLabel, labelPosition,
+				BoundingBox3d labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition,
 						Halign.CENTER, Valign.CENTER, color);
 				if (labelBounds != null)
 					ticksTxtBounds.add(labelBounds);
@@ -197,7 +197,7 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 				txtRenderer.appendText(painter, tickLabel, tickPosition, hAlign, vAlign,
 						color);
 			else {
-				BoundingBox3d tickBounds = txt.drawText(painter, tickLabel, tickPosition,
+				BoundingBox3d tickBounds = textRenderer.drawText(painter, tickLabel, tickPosition,
 						hAlign, vAlign, color);
 				if (tickBounds != null)
 					ticksTxtBounds.add(tickBounds);

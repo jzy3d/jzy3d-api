@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.Canvas;
 
+import org.jzy3d.chart.Animator;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.view.View;
 

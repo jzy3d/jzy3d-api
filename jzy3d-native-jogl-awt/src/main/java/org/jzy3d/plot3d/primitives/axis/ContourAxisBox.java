@@ -123,7 +123,7 @@ public class ContourAxisBox extends AxisBox {
 			if(label!=null && level!=null){
 				for(LineStrip strip: contour.getLines()){
 					Coord3d position = strip.get( strip.size()/2 ).xyz;
-					txt.drawText(painter, label, position, Halign.CENTER, Valign.CENTER, Color.BLACK);
+					textRenderer.drawText(painter, label, position, Halign.CENTER, Valign.CENTER, Color.BLACK);
 				}
 			}
 		}

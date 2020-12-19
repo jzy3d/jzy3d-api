@@ -1,13 +1,11 @@
 package org.jzy3d.painters;
 
-import java.awt.Font;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -368,7 +366,9 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	/** JGL only. Will throw exception */
 	@Override
 	public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c) {
-		throw new NotImplementedException();
+		color(c);
+		raster(p, null);
+		glutBitmapString(axisFont.getCode(), label);
 	}
 
 	@Override
@@ -377,10 +377,6 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	}
 
 	// GL LISTS
-
-	
-
-	
 
 	@Override
 	public int glGenLists(int range) {
