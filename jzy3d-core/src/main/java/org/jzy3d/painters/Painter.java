@@ -91,11 +91,25 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  */
 public interface Painter {
 	/**
-	 * A Font subset supported both by OpenGL 1 and AWT.
+	 * A Font subset supported both by OpenGL 1 and AWT. These fonts can be used
+	 * both for charts based on native OpenGL and charts based on raw AWT.
+	 * 
+	 * Painters such as {@link NativeDesktopPainter} use OpenGL for font rendering
+	 * and address a font name AND size through a font ID (e.g
+	 * {@link Painter#BITMAP_HELVETICA_10}, {@link Painter#BITMAP_HELVETICA_12}, etc).
 	 * 
 	 * Painters such as {@link EmulGLPainter} use AWT for font rendering and may
 	 * support more font names and size than those provided as default to fit OpenGL
-	 * 1 spec.
+	 * 1 spec. To use other fonts than the defaults (e.g. {@link Font#Helvetica_12},
+	 * simply
+	 * 
+	 * <code>
+	 * Font font = new Font("Arial", 12);
+	 * </code>
+	 * 
+	 * 
+	 * Font names not supported by OpenGL 1 will be ignored. Instead, the default
+	 * font {@link Painter#BITMAP_HELVETICA_12} will apply.
 	 */
 	public enum Font {
 		Helvetica_10(BITMAP_HELVETICA_10, 10), Helvetica_12(BITMAP_HELVETICA_12, 12),
@@ -147,6 +161,8 @@ public interface Painter {
 					code = BITMAP_TIMES_ROMAN_10;
 					break;
 				}
+			} else { // default
+				code = BITMAP_HELVETICA_12;
 			}
 		}
 
@@ -181,21 +197,19 @@ public interface Painter {
 
 	/* ****************************************** */
 
-	public Camera getCamera();
-
-	public void setCamera(Camera camera);
-
-	public View getView();
-
-	public IScreenCanvas getCanvas();
-
-	public Scene getScene();
-
-	public IAxis getAxe();
-
 	enum Geometry {
 		POINT, LINE, POLYGON
 	}
+
+	/* ****************************************** */
+
+	public Camera getCamera();
+	public void setCamera(Camera camera);
+	public View getView();
+	public IScreenCanvas getCanvas();
+	public Scene getScene();
+	public IAxis getAxe();
+
 
 	/** Apply quality settings as OpenGL commands */
 	public void configureGL(Quality quality);
