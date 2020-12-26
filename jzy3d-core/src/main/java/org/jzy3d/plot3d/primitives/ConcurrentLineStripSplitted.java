@@ -27,7 +27,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
 
     @Override
     public void drawLine(Painter painter) {
-        painter.glLineWidth(wfwidth);
+        painter.glLineWidth(wireframeWidth);
 
         if (wireframeColor == null) {
             drawLineSegmentsByPointColor(painter);

@@ -42,7 +42,7 @@ public class Disk extends Wireframeable implements ISingleColorable {
 
 	protected void doDrawDisk(Painter painter) {
 		painter.glTranslatef(x, y, z);
-		painter.glLineWidth(wfwidth);
+		painter.glLineWidth(wireframeWidth);
 
 		// Draw
 

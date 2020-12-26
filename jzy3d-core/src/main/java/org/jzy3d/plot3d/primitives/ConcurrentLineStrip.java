@@ -26,7 +26,7 @@ public class ConcurrentLineStrip extends LineStrip {
 
     @Override
     public void drawLine(Painter painter) {
-        painter.glLineWidth(wfwidth);
+        painter.glLineWidth(wireframeWidth);
         // gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
         // gl.glPolygonOffset(1.0f, 1.0f);
         synchronized (points) {

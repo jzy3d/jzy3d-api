@@ -114,8 +114,8 @@ public class LineStrip extends Wireframeable {
             painter.glEnable_LineStipple();
             painter.glLineStipple(stippleFactor, stipplePattern);
         }
-        painter.glLineWidth(wfwidth); 
 
+        painter.glLineWidth(wireframeWidth); 
         painter.glBegin_LineStrip();
 
         if (wireframeColor == null) {
@@ -144,7 +144,7 @@ public class LineStrip extends Wireframeable {
 
     public void drawPoints(Painter painter) {
     	painter.glBegin_Point();
-        painter.glPointSize(wfwidth);
+        painter.glPointSize(wireframeWidth);
 
         for (Point p : points) {
             if (wireframeColor == null)

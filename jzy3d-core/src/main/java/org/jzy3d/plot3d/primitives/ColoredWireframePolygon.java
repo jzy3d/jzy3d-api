@@ -45,7 +45,7 @@ public class ColoredWireframePolygon extends Polygon {
     
     @Override
     public void callPointForWireframe(Painter painter) {
-        painter.glLineWidth(wfwidth);
+        painter.glLineWidth(wireframeWidth);
         Color c = wireframeColor;
         
         begin(painter);
