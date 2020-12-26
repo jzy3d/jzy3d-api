@@ -297,13 +297,11 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 	}
 
 	/**
-	 * Not supported by jGL.
-	 * 
-	 * https://github.com/jzy3d/jGL/issues/3
+	 * @see {@link #glEnable_PolygonOffsetFill()}
 	 */
 	@Override
 	public void glPolygonOffset(float factor, float units) {
-		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
+		//throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 		// gl.glPolygonOffset(factor, units); // handle stippling
 	}
 
@@ -776,10 +774,10 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 		boolean st = glu.gluUnProject((double) winX, (double) winY, (double) winZ, dbl(model), dbl(proj), view, objX,
 				objY, objZ);
 
-		objPos[0] = (float)objX[0];
-		objPos[1] = (float)objY[0];
-		objPos[2] = (float)objZ[0];
-		
+		objPos[0] = (float) objX[0];
+		objPos[1] = (float) objY[0];
+		objPos[2] = (float) objZ[0];
+
 		return st;
 	}
 
@@ -847,6 +845,13 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 		gl.glDepthFunc(func);
 	}
 
+
+	@Override
+	public void glDepthRangef(float near, float far) {
+		gl.glDepthRange(near, far);
+	}
+
+	
 	@Override
 	public void glBlendFunc(int sfactor, int dfactor) {
 		gl.glBlendFunc(sfactor, dfactor);
@@ -1028,28 +1033,47 @@ public class EmulGLPainter extends AbstractPainter implements Painter {
 
 	/* ***************** SHORTCUTS TO GL CONSTANTS *************************** */
 
+	/**
+	 * NOT SUPPORTED in jGL wich emulate OpenGL 1 only.
+	 * 
+	 * Note that {@lin NotImplementedException} are NOT triggered to ease compatibility
+	 * with geometries that have the polygon offset fill setting enabled by default.
+	 * 
+	 * Was added to OpenGL 2
+	 * (https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glPolygonOffset.xhtml).
+	 * 
+	 * You may desactivate offset fill with
+	 * drawable.setPolygonOffsetFillEnable(false).
+	 * 
+	 * @see https://github.com/jzy3d/jGL/issues/3
+	 */
 	@Override
 	public void glEnable_PolygonOffsetFill() {
-		// glEnable(GL.GL_POLYGON_OFFSET_FILL);
-		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
+		// throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 	}
 
+	/**
+	 * @see {@link #glEnable_PolygonOffsetFill()}
+	 */
 	@Override
 	public void glDisable_PolygonOffsetFill() {
-		// glDisable(GL.GL_POLYGON_OFFSET_FILL);
-		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
+		// throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 	}
 
+	/**
+	 * @see {@link #glEnable_PolygonOffsetFill()}
+	 */
 	@Override
 	public void glEnable_PolygonOffsetLine() {
-		// glEnable(GL.GL_POLYGON_OFFSET_LINE);
-		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
+		// throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 	}
 
+	/**
+	 * @see {@link #glEnable_PolygonOffsetFill()}
+	 */
 	@Override
 	public void glDisable_PolygonOffsetLine() {
-		// glDisable(GL.GL_POLYGON_OFFSET_LINE);
-		throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
+		// throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
 	}
 
 	@Override

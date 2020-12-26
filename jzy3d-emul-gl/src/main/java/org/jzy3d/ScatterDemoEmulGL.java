@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
-public class DemoEmulGLScatter {
+public class ScatterDemoEmulGL {
 	public static void main(String[] args) throws Exception {
 
 		Scatter scatter = scatter();

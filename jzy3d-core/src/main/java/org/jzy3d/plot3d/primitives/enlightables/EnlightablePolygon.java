@@ -43,10 +43,10 @@ public class EnlightablePolygon extends AbstractEnlightable {
 
 		// Draw content of polygon
 
-			if (facestatus) {
+			if (faceDisplayed) {
 				painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
-				if (wfstatus) {
+				if (wireframeDisplayed) {
 					painter.glEnable_PolygonOffsetFill();
 					painter.glPolygonOffset(1.0f, 1.0f);
 				}
@@ -62,18 +62,18 @@ public class EnlightablePolygon extends AbstractEnlightable {
 					painter.normal(norm);
 				}
 				painter.glEnd();
-				if (wfstatus)
+				if (wireframeDisplayed)
 					painter.glDisable_PolygonOffsetFill();
 			}
 
 			// Draw edge of polygon
-			if (wfstatus) {
+			if (wireframeDisplayed) {
 				painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
 
 				painter.glEnable_PolygonOffsetFill();
 				painter.glPolygonOffset(1.0f, 1.0f);
 
-				painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, 1);// wfcolor.a);
+				painter.glColor4f(wireframeColor.r, wireframeColor.g, wireframeColor.b, 1);// wfcolor.a);
 				painter.glLineWidth(wfwidth);
 
 				painter.glBegin_Polygon();

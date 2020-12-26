@@ -51,8 +51,8 @@ public class Tube extends Wireframeable implements ISingleColorable {
 
 		
 		// Draw
-		if (facestatus) {
-			if (wfstatus) {
+		if (faceDisplayed) {
+			if (wireframeDisplayed) {
 				painter.glEnable_PolygonOffsetFill();
 				painter.glPolygonOffset(1.0f, 1.0f);
 			}
@@ -61,13 +61,13 @@ public class Tube extends Wireframeable implements ISingleColorable {
 			painter.color(color);
 			painter.gluCylinder(radiusBottom, radiusTop, height, slices, stacks);
 
-			if (wfstatus) {
+			if (wireframeDisplayed) {
 				painter.glDisable_PolygonOffsetFill();
 			}
 		}
-		if (wfstatus) {
+		if (wireframeDisplayed) {
 			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
-			painter.color(wfcolor);
+			painter.color(wireframeColor);
 			painter.gluCylinder(radiusBottom, radiusTop, height, slices, stacks);
 		}
 		

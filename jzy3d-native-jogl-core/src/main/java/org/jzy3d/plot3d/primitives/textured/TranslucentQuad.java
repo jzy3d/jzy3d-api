@@ -15,9 +15,9 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 		doTransform(painter);
 		
 		// Draw content of polygon
-		if (facestatus) {
+		if (faceDisplayed) {
 			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-			if (wfstatus) {
+			if (wireframeDisplayed) {
 				painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 				painter.glPolygonOffset(1.0f, 1.0f);
 			}
@@ -31,18 +31,18 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 				painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
 			}
 			painter.glEnd();
-			if (wfstatus)
+			if (wireframeDisplayed)
 				painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
 		}
 
 		// Draw edge of polygon
-		if (wfstatus) {
+		if (wireframeDisplayed) {
 			painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
 
 			painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
 			painter.glPolygonOffset(1.0f, 1.0f);
 
-			painter.colorAlphaFactor(wfcolor, alpha);
+			painter.colorAlphaFactor(wireframeColor, alpha);
 			painter.glLineWidth(wfwidth);
 
 			painter.glBegin_Quad();

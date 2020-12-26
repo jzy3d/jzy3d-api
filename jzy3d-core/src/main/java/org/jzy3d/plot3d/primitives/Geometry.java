@@ -37,23 +37,31 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		if (mapper != null)
 			mapper.preDraw(this);
 
+		
+
 		// Draw content of polygon
-		if (facestatus) {
+		if (faceDisplayed) {
 			painter.glPolygonMode(polygonMode, PolygonFill.FILL);
 
-			if (wfstatus && polygonOffsetFillEnable)
+			if(wireframeDisplayed && polygonWireframeDepthTrick)
+				applyDepthRangeForUnderlying(painter);
+
+			if (wireframeDisplayed && polygonOffsetFillEnable)
 				polygonOffseFillEnable(painter);
 
 			callPointsForFace(painter);
 
-			if (wfstatus && polygonOffsetFillEnable)
+			if (wireframeDisplayed && polygonOffsetFillEnable)
 				polygonOffsetFillDisable(painter);
 		}
-
+		
 		// Draw edge of polygon
-		if (wfstatus) {
+		if (wireframeDisplayed) {
 			painter.glPolygonMode(polygonMode, PolygonFill.LINE);
 
+			if(polygonWireframeDepthTrick)
+				applyDepthRangeForOverlying(painter);
+			
 			if (polygonOffsetFillEnable)
 				polygonOffseFillEnable(painter);
 
@@ -69,11 +77,12 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		doDrawBoundsIfDisplayed(painter);
 	}
 
+
 	/**
 	 * Drawing the point list in wireframe mode
 	 */
 	protected void callPointForWireframe(Painter painter) {
-		painter.color(wfcolor);
+		painter.color(wireframeColor);
 		painter.glLineWidth(getWireframeWidth());
 
 		painter.glBegin_LineLoop(); // changed for JGL as wireframe polygon are transformed to pair of triangles
@@ -116,7 +125,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	}
 
 	public void add(Coord3d coord) {
-		add(new Point(coord, wfcolor), true);
+		add(new Point(coord, wireframeColor), true);
 	}
 
 	public void add(Point point) {

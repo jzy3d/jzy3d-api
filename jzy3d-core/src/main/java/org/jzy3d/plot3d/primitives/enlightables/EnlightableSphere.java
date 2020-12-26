@@ -53,14 +53,14 @@ public class EnlightableSphere extends AbstractEnlightable implements
 
 		painter.glLineWidth(wfwidth);
 
-		if (facestatus) {
+		if (faceDisplayed) {
 			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 			painter.color(color);
 			painter.gluSphere(radius, slices, stacks);
 		}
-		if (wfstatus) {
+		if (wireframeDisplayed) {
 			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
-			painter.color(wfcolor);
+			painter.color(wireframeColor);
 			painter.gluSphere(radius, slices, stacks);
 		}
 	

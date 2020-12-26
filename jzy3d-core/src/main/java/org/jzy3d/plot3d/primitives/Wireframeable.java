@@ -1,72 +1,75 @@
 package org.jzy3d.plot3d.primitives;
 
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Painter;
 
 /**
- * An {@link Wireframeable} is a {@link Drawable} 
- * that has a wireframe mode for display.
+ * An {@link Wireframeable} is a {@link Drawable} that has a wireframe mode for
+ * display.
  * 
  * Defining an object as Wireframeable means this object may have a wireframe
- * mode status (on/off), a wireframe color, and a wireframe width.
- * As a consequence of being wireframeable, a 3d object may have his faces
- * displayed or not by setFaceDisplayed().
+ * mode status (on/off), a wireframe color, and a wireframe width. As a
+ * consequence of being wireframeable, a 3d object may have his faces displayed
+ * or not by setFaceDisplayed().
  * 
  * @author Martin Pernollet
  */
 public abstract class Wireframeable extends Drawable {
-	/** Initialize the wireframeable with a white color and 
-	 * width of 1 for wires, hidden wireframe, and displayed faces.*/
-	public Wireframeable(){
+	/**
+	 * Initialize the wireframeable with a white color and width of 1 for wires,
+	 * hidden wireframe, and displayed faces.
+	 */
+	public Wireframeable() {
 		super();
 		setWireframeColor(Color.WHITE);
 		setWireframeWidth(1.0f);
 		setWireframeDisplayed(true);
 		setFaceDisplayed(true);
-		setPolygonOffsetFillEnable(false);
+		setPolygonOffsetFillEnable(true);
 	}
-	
-	/**Set the wireframe color.*/
-	public void setWireframeColor(Color color){
-		wfcolor = color;
+
+	/** Set the wireframe color. */
+	public void setWireframeColor(Color color) {
+		wireframeColor = color;
 	}
-	
-	/**Set the wireframe display status to on or off.*/
-	public void setWireframeDisplayed(boolean status){
-		wfstatus = status;
+
+	/** Set the wireframe display status to on or off. */
+	public void setWireframeDisplayed(boolean status) {
+		wireframeDisplayed = status;
 	}
-	
-	/**Set the wireframe width.*/
-	public void setWireframeWidth(float width){
+
+	/** Set the wireframe width. */
+	public void setWireframeWidth(float width) {
 		wfwidth = width;
 	}
 
-	/**Set the face display status to on or off.*/
-	public void setFaceDisplayed(boolean status){
-		facestatus = status;
+	/** Set the face display status to on or off. */
+	public void setFaceDisplayed(boolean status) {
+		faceDisplayed = status;
 	}
 
-	/**Get the wireframe color.*/
-	public Color getWireframeColor(){
-		return wfcolor;
+	/** Get the wireframe color. */
+	public Color getWireframeColor() {
+		return wireframeColor;
 	}
-	
-	/**Get the wireframe display status to on or off.*/
-	public boolean getWireframeDisplayed(){
-		return wfstatus;
+
+	/** Get the wireframe display status to on or off. */
+	public boolean getWireframeDisplayed() {
+		return wireframeDisplayed;
 	}
-	
-	/**Get the wireframe width.*/
-	public float getWireframeWidth(){
+
+	/** Get the wireframe width. */
+	public float getWireframeWidth() {
 		return wfwidth;
 	}
 
-	/**Get the face display status to on or off.*/
-	public boolean getFaceDisplayed(){
-		return facestatus;
+	/** Get the face display status to on or off. */
+	public boolean getFaceDisplayed() {
+		return faceDisplayed;
 	}
-	
+
+	/* ************ POLYGON OFFSET **************** */
+
 	protected void polygonOffseFillEnable(Painter painter) {
 		painter.glEnable_PolygonOffsetFill();
 		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
@@ -91,14 +94,12 @@ public abstract class Wireframeable extends Drawable {
 
 	/**
 	 * Enable offset fill, which let a polygon with a wireframe render cleanly
-	 * without weird depth incertainty between face and border.
-	 * 
-	 * Default value is true.
+	 * without weird depth uncertainty between face polygon and wireframe polygon.
 	 */
 	public void setPolygonOffsetFillEnable(boolean polygonOffsetFillEnable) {
 		this.polygonOffsetFillEnable = polygonOffsetFillEnable;
 	}
-	
+
 	public float getPolygonOffsetFactor() {
 		return polygonOffsetFactor;
 	}
@@ -115,10 +116,37 @@ public abstract class Wireframeable extends Drawable {
 		this.polygonOffsetUnit = polygonOffsetUnit;
 	}
 
-	protected Color   wfcolor;
-	protected float   wfwidth;
-	protected boolean wfstatus;	
-	protected boolean facestatus;
+	/* ************ POLYGON OFFSET **************** */
+
+	/**
+	 * May be used as alternative to {@link #setPolygonOffsetFillEnable(boolean)} in
+	 * case it is not supported by underlying OpenGL version (Polygon offset appears
+	 * as off version 2).
+	 */
+	public void setPolygonWireframeDepthTrick(boolean polygonWireframeDepthTrick) {
+		this.polygonWireframeDepthTrick = polygonWireframeDepthTrick;
+	}
+
+	public boolean isPolygonWireframeDepthTrick() {
+		return polygonWireframeDepthTrick;
+	}
+
+	protected void applyDepthRangeForUnderlying(Painter painter) {
+		painter.glDepthRangef(0.1f, 1f);
+	}
+
+	protected void applyDepthRangeForOverlying(Painter painter) {
+		painter.glDepthRangef(0.0f, 0.9f);
+	}
+	
+
+
+
+	protected Color wireframeColor;
+	protected float wfwidth;
+	protected boolean wireframeDisplayed;
+	protected boolean faceDisplayed;
+	protected boolean polygonWireframeDepthTrick = false;
 	protected boolean polygonOffsetFillEnable = true;
 	protected float polygonOffsetFactor = 1.0f;
 	protected float polygonOffsetUnit = 1.0f;

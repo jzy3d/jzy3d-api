@@ -49,8 +49,8 @@ public class EnlightableDisk extends AbstractEnlightable implements
 
 		// Draw
 
-		if (facestatus) {
-			if (wfstatus) {
+		if (faceDisplayed) {
+			if (wireframeDisplayed) {
 				painter.glEnable_PolygonOffsetFill();
 				painter.glPolygonOffset(1.0f, 1.0f);
 			}
@@ -60,11 +60,11 @@ public class EnlightableDisk extends AbstractEnlightable implements
 			painter.color(color);
 			painter.gluDisk(radiusInner, radiusOuter, slices, loops);
 
-			if (wfstatus)
+			if (wireframeDisplayed)
 				painter.glDisable_PolygonOffsetFill();
 
 		}
-		if (wfstatus) {
+		if (wireframeDisplayed) {
 			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
 			painter.normal(norm);

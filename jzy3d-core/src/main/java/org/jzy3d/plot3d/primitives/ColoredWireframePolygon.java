@@ -14,18 +14,18 @@ public class ColoredWireframePolygon extends Polygon {
             mapper.preDraw(this);
 
         // Draw content of polygon
-        if (facestatus) {
+        if (faceDisplayed) {
 			painter.glPolygonMode(polygonMode, PolygonFill.FILL);
 
-            if (wfstatus && polygonOffsetFillEnable)
+            if (wireframeDisplayed && polygonOffsetFillEnable)
                 polygonOffseFillEnable(painter);
             callPointsForFace(painter);
-            if (wfstatus && polygonOffsetFillEnable)
+            if (wireframeDisplayed && polygonOffsetFillEnable)
                 polygonOffsetFillDisable(painter);
         }
 
         // Draw edge of polygon
-        if (wfstatus) {
+        if (wireframeDisplayed) {
 			painter.glPolygonMode(polygonMode, PolygonFill.LINE);
 
 			if (polygonOffsetFillEnable)
@@ -46,7 +46,7 @@ public class ColoredWireframePolygon extends Polygon {
     @Override
     public void callPointForWireframe(Painter painter) {
         painter.glLineWidth(wfwidth);
-        Color c = wfcolor;
+        Color c = wireframeColor;
         
         begin(painter);
         for (Point p : points) {

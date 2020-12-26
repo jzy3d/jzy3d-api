@@ -11,6 +11,7 @@ import org.jzy3d.plot3d.rendering.view.EmulGLView;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.EmulGLViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 import jgl.GL;
 
@@ -26,7 +27,9 @@ public class EmulGLChartFactory extends ChartFactory {
 	
 	@Override
     public Chart newChart(IChartFactory factory, Quality quality) {
-        return new AWTChart(factory, quality);
+		AWTChart chart = new AWTChart(factory, quality);
+		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // EMULGL NEEDS AUTO_FIT!!!
+        return chart;
     }
 	
 	@Override
