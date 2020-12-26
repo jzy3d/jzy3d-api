@@ -47,7 +47,7 @@ public class Tube extends Wireframeable implements ISingleColorable {
 		doTransform(painter);
 
 		painter.glTranslatef(x, y, z);
-		painter.glLineWidth(wfwidth);
+		painter.glLineWidth(wireframeWidth);
 
 		
 		// Draw

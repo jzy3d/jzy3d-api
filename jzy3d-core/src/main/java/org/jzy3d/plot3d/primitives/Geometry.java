@@ -17,8 +17,8 @@ import org.jzy3d.plot3d.transform.Transform;
 
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
 	/**
-	 * Initializes an empty {@link Geometry} with face status defaulting to
-	 * true, and wireframe status defaulting to false.
+	 * Initializes an empty {@link Geometry} with face status defaulting to true,
+	 * and wireframe status defaulting to false.
 	 */
 	public Geometry() {
 		super();
@@ -37,13 +37,25 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		if (mapper != null)
 			mapper.preDraw(this);
 
-		
-
 		// Draw content of polygon
+		drawFace(painter);
+
+		// drawing order is important for EmulGL to cleanly render polygon edges
+
+		// Draw edge of polygon
+		drawWireframe(painter);
+
+		if (mapper != null)
+			mapper.postDraw(this);
+
+		doDrawBoundsIfDisplayed(painter);
+	}
+
+	protected void drawFace(Painter painter) {
 		if (faceDisplayed) {
 			painter.glPolygonMode(polygonMode, PolygonFill.FILL);
 
-			if(wireframeDisplayed && polygonWireframeDepthTrick)
+			if (wireframeDisplayed && polygonWireframeDepthTrick)
 				applyDepthRangeForUnderlying(painter);
 
 			if (wireframeDisplayed && polygonOffsetFillEnable)
@@ -54,14 +66,15 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 			if (wireframeDisplayed && polygonOffsetFillEnable)
 				polygonOffsetFillDisable(painter);
 		}
-		
-		// Draw edge of polygon
+	}
+
+	protected void drawWireframe(Painter painter) {
 		if (wireframeDisplayed) {
 			painter.glPolygonMode(polygonMode, PolygonFill.LINE);
 
-			if(polygonWireframeDepthTrick)
+			if (polygonWireframeDepthTrick)
 				applyDepthRangeForOverlying(painter);
-			
+
 			if (polygonOffsetFillEnable)
 				polygonOffseFillEnable(painter);
 
@@ -70,13 +83,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 			if (polygonOffsetFillEnable)
 				polygonOffsetFillDisable(painter);
 		}
-
-		if (mapper != null)
-			mapper.postDraw(this);
-
-		doDrawBoundsIfDisplayed(painter);
 	}
-
 
 	/**
 	 * Drawing the point list in wireframe mode
@@ -114,9 +121,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	 * {@link GL#GL_LINES}, {@link GL#GL_TRIANGLES}, {@link GL2#GL_POLYGON} ...
 	 */
 	protected abstract void begin(Painter painter);
-
-	
-	
 
 	/* DATA */
 

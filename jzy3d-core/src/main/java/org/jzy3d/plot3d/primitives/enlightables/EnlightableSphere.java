@@ -51,7 +51,7 @@ public class EnlightableSphere extends AbstractEnlightable implements
 		
 		applyMaterial(painter); // TODO: shall we avoid calling this @ each draw?
 
-		painter.glLineWidth(wfwidth);
+		painter.glLineWidth(wireframeWidth);
 
 		if (faceDisplayed) {
 			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);

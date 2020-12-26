@@ -62,7 +62,7 @@ public class Sphere extends Wireframeable implements ISingleColorable {
         }
         if (wireframeDisplayed) {
         	painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
-        	painter.glLineWidth(wfwidth);
+        	painter.glLineWidth(wireframeWidth);
             painter.glColor4f(wireframeColor.r, wireframeColor.g, wireframeColor.b, wireframeColor.a);
             // glu.gluSphere(qobj, radius, slices, stacks);
             painter.glutSolidSphere(radius, slices, stacks);

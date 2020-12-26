@@ -74,7 +74,7 @@ public class EnlightablePolygon extends AbstractEnlightable {
 				painter.glPolygonOffset(1.0f, 1.0f);
 
 				painter.glColor4f(wireframeColor.r, wireframeColor.g, wireframeColor.b, 1);// wfcolor.a);
-				painter.glLineWidth(wfwidth);
+				painter.glLineWidth(wireframeWidth);
 
 				painter.glBegin_Polygon();
 				for (Point p : points) {

@@ -7,10 +7,10 @@ import org.jzy3d.painters.Painter;
  * An {@link Wireframeable} is a {@link Drawable} that has a wireframe mode for
  * display.
  * 
- * Defining an object as Wireframeable means this object may have a wireframe
+ * Defining an object as {@link Wireframeable} means this object may have a wireframe
  * mode status (on/off), a wireframe color, and a wireframe width. As a
- * consequence of being wireframeable, a 3d object may have his faces displayed
- * or not by setFaceDisplayed().
+ * consequence of being {@link Wireframeable}, a 3d object may have his faces displayed
+ * or not by {@link Wireframeable#setFaceDisplayed(boolean)}.
  * 
  * @author Martin Pernollet
  */
@@ -25,7 +25,11 @@ public abstract class Wireframeable extends Drawable {
 		setWireframeWidth(1.0f);
 		setWireframeDisplayed(true);
 		setFaceDisplayed(true);
-		setPolygonOffsetFillEnable(true);
+		
+		// Apply most supported way of rendering
+		// polygon edges cleanly
+		setPolygonOffsetFillEnable(false);
+		setPolygonWireframeDepthTrick(true);
 	}
 
 	/** Set the wireframe color. */
@@ -40,7 +44,7 @@ public abstract class Wireframeable extends Drawable {
 
 	/** Set the wireframe width. */
 	public void setWireframeWidth(float width) {
-		wfwidth = width;
+		wireframeWidth = width;
 	}
 
 	/** Set the face display status to on or off. */
@@ -60,7 +64,7 @@ public abstract class Wireframeable extends Drawable {
 
 	/** Get the wireframe width. */
 	public float getWireframeWidth() {
-		return wfwidth;
+		return wireframeWidth;
 	}
 
 	/** Get the face display status to on or off. */
@@ -143,7 +147,7 @@ public abstract class Wireframeable extends Drawable {
 
 
 	protected Color wireframeColor;
-	protected float wfwidth;
+	protected float wireframeWidth;
 	protected boolean wireframeDisplayed;
 	protected boolean faceDisplayed;
 	protected boolean polygonWireframeDepthTrick = false;
