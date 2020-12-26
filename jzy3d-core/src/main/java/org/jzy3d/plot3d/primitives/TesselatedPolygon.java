@@ -39,7 +39,7 @@ public class TesselatedPolygon extends Composite {
 			@Override
             protected void callPointForWireframe(Painter painter) {
 				painter.color(wireframeColor);
-				painter.glLineWidth(wfwidth);
+				painter.glLineWidth(wireframeWidth);
 				painter.glBegin_LineStrip();
 
 				for (Point p : points) {

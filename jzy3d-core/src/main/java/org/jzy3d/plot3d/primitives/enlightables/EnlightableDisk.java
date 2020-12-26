@@ -45,7 +45,7 @@ public class EnlightableDisk extends AbstractEnlightable implements
 		painter.glTranslatef(x, y, z);
 		
 		applyMaterial(painter);
-		painter.glLineWidth(wfwidth);
+		painter.glLineWidth(wireframeWidth);
 
 		// Draw
 

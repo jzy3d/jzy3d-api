@@ -43,7 +43,7 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 			painter.glPolygonOffset(1.0f, 1.0f);
 
 			painter.colorAlphaFactor(wireframeColor, alpha);
-			painter.glLineWidth(wfwidth);
+			painter.glLineWidth(wireframeWidth);
 
 			painter.glBegin_Quad();
 			for (Point p : points) {

@@ -52,7 +52,7 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 		if (wireframeDisplayed) {
 			painter.glBegin_Polygon();
 			painter.color(wireframeColor);
-			painter.glLineWidth(wfwidth);
+			painter.glLineWidth(wireframeWidth);
 			for (Point p : points) {
 				painter.vertex(p.xyz);
 			}
