@@ -54,16 +54,16 @@ public class Sphere extends Wireframeable implements ISingleColorable {
 	protected void doDrawSphere(Painter painter) {
 		painter.glTranslatef(position.x, position.y, position.z);
 
-        if (facestatus) {
+        if (faceDisplayed) {
             painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
             painter.glColor4f(color.r, color.g, color.b, color.a);
             // glu.gluSphere(qobj, radius, slices, stacks);
             painter.glutSolidSphere(radius, slices, stacks);
         }
-        if (wfstatus) {
+        if (wireframeDisplayed) {
         	painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
         	painter.glLineWidth(wfwidth);
-            painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+            painter.glColor4f(wireframeColor.r, wireframeColor.g, wireframeColor.b, wireframeColor.a);
             // glu.gluSphere(qobj, radius, slices, stacks);
             painter.glutSolidSphere(radius, slices, stacks);
             // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);

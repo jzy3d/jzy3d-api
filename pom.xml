@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jzy3d</groupId>
@@ -39,8 +41,8 @@
 		</license>
 	</licenses>
 	<scm>
-  	<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
-  </scm>
+		<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
+	</scm>
 
 	<issueManagement>
 		<system>Github</system>
@@ -58,7 +60,7 @@
 		<module>jzy3d-native-jogl-core</module>
 		<module>jzy3d-native-jogl-awt</module>
 		<module>jzy3d-native-jogl-newt</module>
-<!--		<module>jzy3d-native-jogl-javafx</module> -->
+		<!-- <module>jzy3d-native-jogl-javafx</module> -->
 		<module>jzy3d-native-jogl-swing</module>
 		<module>jzy3d-native-jogl-swt</module>
 
@@ -105,9 +107,7 @@
 
 
 
-	<!--
-	Used to deploy to Jzy3d repository
--->
+	<!-- Used to deploy to Jzy3d repository -->
 	<distributionManagement>
 		<repository>
 			<id>jzy3d-ftp</id>
@@ -122,16 +122,9 @@
 	</distributionManagement>
 
 
-	<!--<distributionManagement>
-	  <snapshotRepository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-	  </snapshotRepository>
-	  <repository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-	  </repository>
-	</distributionManagement>-->
+	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
+		</repository> </distributionManagement> -->
 
 	<!--To retrieve Jzy3d dependencies -->
 	<repositories>
@@ -149,124 +142,119 @@
 
 	<build>
 		<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>${version.mvn.compiler}</version>
-					<configuration>
-						<source>${version.java.source}</source>
-						<target>${version.java.target}</target>
-					</configuration>
-				</plugin>
 
-				<!--SKIP deploy configuration
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-deploy-plugin</artifactId>
-					<version>${version.mvn.deploy}</version>
-					<configuration>
-						<skip>true</skip>
-					</configuration>
-				</plugin>-->
+			<!-- COMPILER VERSION -->
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<phase>deploy</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version.mvn.compiler}</version>
+				<configuration>
+					<source>${version.java.source}</source>
+					<target>${version.java.target}</target>
+				</configuration>
+			</plugin>
 
-				<plugin>
-           <groupId>org.apache.maven.plugins</groupId>
-           <artifactId>maven-jar-plugin</artifactId>
-           <version>2.2</version>
+			<!--SKIP deploy configuration <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-deploy-plugin</artifactId> <version>${version.mvn.deploy}</version> 
+				<configuration> <skip>true</skip> </configuration> </plugin> -->
 
-           <executions>
-               <execution>
-                   <goals>
-                       <goal>test-jar</goal>
-                   </goals>
-               </execution>
-           </executions>
-       </plugin>
+			<!-- SOURCE JAR -->
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${version.mvn.javadoc}</version>
-					<!--<configuration> <stylesheetfile>jzy3d-api/doc/layout.css</stylesheetfile>
-						</configuration> -->
-					<executions>
-						<execution>
-							<id>attach-javadocs</id>
-							<phase>deploy</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-				<plugin>
-					<artifactId>maven-release-plugin</artifactId>
-					<version>${version.mvn.release}</version>
-				</plugin>
+			<!-- TEST JAR -->
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.2</version>
 
-				<!--<plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-            <version>1.6.7</version>
-            <extensions>true</extensions>
-            <configuration>
-                <serverId>ossrh</serverId>
-                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
-            </configuration>
-        </plugin>-->
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-  			<!-- To sign artigact while deploying to Maven central via Sonatype -->
+			<!-- JAVADOC JAR -->
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>${version.mvn.javadoc}</version>
+				<configuration>
+					<additionalparam>-Xdoclint:none</additionalparam>
+					<doclint>none</doclint>
+					<source>8</source>
+					<failOnError>false</failOnError>
 
-		    <!--<plugin>
-		      <groupId>org.apache.maven.plugins</groupId>
-		      <artifactId>maven-gpg-plugin</artifactId>
-		      <version>1.5</version>
-		      <executions>
-		        <execution>
-		          <id>sign-artifacts</id>
-		          <phase>deploy</phase>
-		          <goals>
-		            <goal>sign</goal>
-		          </goals>
-		        </execution>
-		      </executions>
-		    </plugin>-->
+					<stylesheetfile>jzy3d-api/doc/layout.css</stylesheetfile>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-				<plugin>
-				    <groupId>org.codehaus.mojo</groupId>
-				    <artifactId>maven-gpg-plugin</artifactId>
-						<version>1.5</version>
+            <!-- RELEASE -->
 
-				    <configuration>
-				        <skip>true</skip>
-				    </configuration>
-				</plugin>
-		  </plugins>
+			<plugin>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${version.mvn.release}</version>
+			</plugin>
 
-			<extensions>
-				<extension>
-					<groupId>org.apache.maven.wagon</groupId>
-					<artifactId>wagon-ftp</artifactId>
-					<version>${version.mvn.ftp}</version>
-				</extension>
-			</extensions>
+			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
+				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
+				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
+				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose> 
+				</configuration> </plugin> -->
+
+			<!-- To sign artigact while deploying to Maven central via Sonatype -->
+
+			<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-gpg-plugin</artifactId> 
+				<version>1.5</version> <executions> <execution> <id>sign-artifacts</id> <phase>deploy</phase> 
+				<goals> <goal>sign</goal> </goals> </execution> </executions> </plugin> -->
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
+
+        <!-- DEPLOY TO FTP -->
+
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>${version.mvn.ftp}</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<profiles>
@@ -284,19 +272,19 @@
 	<!-- Get coverage with mvn cobertura:cobertura -->
 	<reporting>
 		<plugins>
-		  <plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
 				<version>2.7</version>
 				<configuration>
 					<outputDirectory>./target/tmpCobertura</outputDirectory>
-				    <formats>
-					    <format>html</format>
-				    </formats>
-				    <aggregate>true</aggregate>
+					<formats>
+						<format>html</format>
+					</formats>
+					<aggregate>true</aggregate>
 				</configuration>
-		  </plugin>
+			</plugin>
 		</plugins>
-    </reporting>
+	</reporting>
 
 </project>

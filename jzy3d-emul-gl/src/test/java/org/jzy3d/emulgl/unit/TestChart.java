@@ -30,7 +30,8 @@ public class TestChart {
 		// INVESTIGUER POURQUOI AUTO_FIT!!!
 		// L'appel à view.init déclenche un setting de bound manuel
 		// view.initBounds(...) avec 0,0,0
-		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); 
+		//chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // called from factory
+		
 
 		// --------------------------
 		// When

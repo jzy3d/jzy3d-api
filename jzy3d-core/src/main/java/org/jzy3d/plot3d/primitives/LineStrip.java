@@ -118,14 +118,14 @@ public class LineStrip extends Wireframeable {
 
         painter.glBegin_LineStrip();
 
-        if (wfcolor == null) {
+        if (wireframeColor == null) {
             for (Point p : points) {
                 painter.color(p.rgb);
                 painter.vertex(p.xyz, spaceTransformer);
             }
         } else {
             for (Point p : points) {
-                painter.color(wfcolor);
+                painter.color(wireframeColor);
                 painter.vertex(p.xyz, spaceTransformer);
             }
         }
@@ -147,10 +147,10 @@ public class LineStrip extends Wireframeable {
         painter.glPointSize(wfwidth);
 
         for (Point p : points) {
-            if (wfcolor == null)
+            if (wireframeColor == null)
                 painter.color(p.rgb);
             else
-            	painter.color(wfcolor);
+            	painter.color(wireframeColor);
             
             painter.vertex(p.xyz, spaceTransformer);
         }
