@@ -26,9 +26,9 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
  * TODO : why need to chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT);
  * TODO : why need to q.setAlphaActivated(false); to avoid DARK ALPHA (problem not existing in POC)
  */
-public class DemoEmulGLSurface {
+public class SurfaceDemoEmulGL_Alpha {
 	
-	static final float ALPHA_FACTOR = 0.55f;//.61f;
+	static final float ALPHA_FACTOR = .50f;
 
 	public static void main(String[] args) {
 		//LoggerUtils.minimal();
@@ -42,7 +42,15 @@ public class DemoEmulGLSurface {
 		EmulGLChartFactory factory = new EmulGLChartFactory();
 
 		Quality q = Quality.Advanced; // assez propre avec l'ancienne méthode de setQuality 
-		//q.setAlphaActivated(false); /// ALPHA BUG
+		
+		// Le mode Fastest      blend la couleur mais ne fait pas le calcul de la transparence + WEIRD WIREFRAME
+		// Le mode Intermediate blend la couleur mais ne fait pas le calcul de la transparence + WEIRD WIREFRAME -> Offset fill bug with glClearColor
+		// Le mode Advanced     active le calcul de la transparence mais BLACK BACKGROUND bug (surface should be white)
+		
+		
+		q.setAlphaActivated(false); 
+		// ALPHA BUG
+		// Also, q.setAlphaActivated(false) is what involve a WEIRD WIREFRAME effect
 		
 		//q.setSmoothEdge(true);
 		//q.setSmoothPolygon(true);
@@ -51,15 +59,11 @@ public class DemoEmulGLSurface {
 		//q.setSmoothColor(false);
 		Chart chart = factory.newChart(q);
 		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
-		
-
 		chart.add(surface);
+		chart.getView().setAxisDisplayed(false);
 		
-		((EmulGLCanvas)chart.getCanvas()).setProfileDisplayMethod(true);
-		
-		// --------------------------------
-        		
-        //chart.getView().getCamera().setViewportMode(ViewportMode.SQUARE);
+		//chart.getView().setBackgroundColor(Color.BLUE);
+				
 
 		chart.open();
 		
@@ -80,7 +84,7 @@ public class DemoEmulGLSurface {
 		if(fixWithAnimator) {
 			rotation.setUpdateViewDefault(true);
 			mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
-			((EmulGLCanvas)chart.getCanvas()).getAnimation().start();	
+			((EmulGLCanvas)chart.getCanvas()).getAnimation().start();
 		}
 		else {
 			
@@ -91,7 +95,7 @@ public class DemoEmulGLSurface {
 		
 
 		try {
-			chart.screenshot(new File("target/" + DemoEmulGLSurface.class.getSimpleName() + ".png"));
+			chart.screenshot(new File("target/" + SurfaceDemoEmulGL_Alpha.class.getSimpleName() + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -112,13 +116,13 @@ public class DemoEmulGLSurface {
 		int steps = 50;
 
 		// ---------------------------
-		// MAKE SURFACE
+		// CUSTOMIZE SURFACE BUILDER FOR JGL
 
 		SurfaceBuilder builder = new SurfaceBuilder();
-
+		
 		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
 		
-		surface.setPolygonOffsetFillEnable(false); // VERY IMPORTANT FOR JGL TO WORK !!
+		surface.setPolygonOffsetFillEnable(false);
 		
 		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
 				surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));//0.65f));

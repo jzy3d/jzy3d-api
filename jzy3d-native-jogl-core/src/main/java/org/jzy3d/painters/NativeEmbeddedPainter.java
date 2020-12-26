@@ -103,21 +103,6 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
     public void setCamera(Camera camera) {
         this.camera = camera;
     }
-
-    @Override
-    public IScreenCanvas getCanvas() {
-        return null;
-    }
-
-    @Override
-    public Scene getScene() {
-        return null;
-    }
-
-    @Override
-    public IAxis getAxe() {
-        return null;
-    }
     
     @Override
 	public int[] getViewPortAsInt() {
@@ -535,6 +520,13 @@ public class NativeEmbeddedPainter extends AbstractPainter implements Painter{
 		throw new NotImplementedException();
 		//GLES2CompatUtils.glDepthFunc(func);
 	}
+	
+
+	@Override
+	public void glDepthRangef(float near, float far) {
+		gl.glDepthRangef(near, far);
+	}
+
 
 	@Override
 	public void glBlendFunc(int sfactor, int dfactor) {

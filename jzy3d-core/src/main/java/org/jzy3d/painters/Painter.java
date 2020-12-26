@@ -96,17 +96,17 @@ public interface Painter {
 	 * 
 	 * Painters such as {@link NativeDesktopPainter} use OpenGL for font rendering
 	 * and address a font name AND size through a font ID (e.g
-	 * {@link Painter#BITMAP_HELVETICA_10}, {@link Painter#BITMAP_HELVETICA_12}, etc).
+	 * {@link Painter#BITMAP_HELVETICA_10}, {@link Painter#BITMAP_HELVETICA_12},
+	 * etc).
 	 * 
 	 * Painters such as {@link EmulGLPainter} use AWT for font rendering and may
 	 * support more font names and size than those provided as default to fit OpenGL
-	 * 1 spec. To use other fonts than the defaults (e.g. {@link Font#Helvetica_12},
-	 * simply
+	 * 1 spec. To use other fonts than the defaults (e.g. {@link Font#Helvetica_12}),
+	 * simply build them as follow
 	 * 
 	 * <code>
-	 * Font font = new Font("Arial", 12);
+	 * Font font = new org.jzy3d.painters.Painter.Font("Arial", 11);
 	 * </code>
-	 * 
 	 * 
 	 * Font names not supported by OpenGL 1 will be ignored. Instead, the default
 	 * font {@link Painter#BITMAP_HELVETICA_12} will apply.
@@ -204,12 +204,10 @@ public interface Painter {
 	/* ****************************************** */
 
 	public Camera getCamera();
-	public void setCamera(Camera camera);
-	public View getView();
-	public IScreenCanvas getCanvas();
-	public Scene getScene();
-	public IAxis getAxe();
 
+	public void setCamera(Camera camera);
+
+	public View getView();
 
 	/** Apply quality settings as OpenGL commands */
 	public void configureGL(Quality quality);
@@ -295,6 +293,8 @@ public interface Painter {
 	// GL CONFIG
 
 	public void glDepthFunc(int func);
+	
+	public void glDepthRangef(float near, float far);
 
 	public void glBlendFunc(int sfactor, int dfactor);
 

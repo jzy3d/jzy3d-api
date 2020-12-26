@@ -35,23 +35,6 @@ public abstract class AbstractPainter implements Painter{
 	    this.camera = camera;
 	}
 
-	@Override
-	public IScreenCanvas getCanvas() {
-	    // TODO Auto-generated method stub
-	    return null;
-	}
-
-	@Override
-	public Scene getScene() {
-	    // TODO Auto-generated method stub
-	    return null;
-	}
-
-	@Override
-	public IAxis getAxe() {
-	    // TODO Auto-generated method stub
-	    return null;
-	}
 	
 	@Override
 	public void transform(Transform transform, boolean loadIdentity) {

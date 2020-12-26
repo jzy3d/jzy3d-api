@@ -46,8 +46,8 @@ public class Disk extends Wireframeable implements ISingleColorable {
 
 		// Draw
 
-		if (facestatus) {
-			if (wfstatus) {
+		if (faceDisplayed) {
+			if (wireframeDisplayed) {
 				painter.glEnable_PolygonOffsetFill();
 				painter.glPolygonOffset(1.0f, 1.0f);
 			}
@@ -56,13 +56,13 @@ public class Disk extends Wireframeable implements ISingleColorable {
 			painter.color(color);
 			painter.gluDisk(radiusInner, radiusOuter, slices, loops);
 
-			if (wfstatus)
+			if (wireframeDisplayed)
 				painter.glDisable_PolygonOffsetFill();
 
 		}
-		if (wfstatus) {
+		if (wireframeDisplayed) {
 			painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
-			painter.glColor4f(wfcolor.r, wfcolor.g, wfcolor.b, wfcolor.a);
+			painter.glColor4f(wireframeColor.r, wireframeColor.g, wireframeColor.b, wireframeColor.a);
 			painter.gluDisk(radiusInner, radiusOuter, slices, loops);
 		}
 	}

@@ -531,6 +531,11 @@ public class NativeDesktopPainter extends AbstractPainter implements Painter {
 	public void glDepthFunc(int func) {
 		gl.glDepthFunc(func);
 	}
+	
+	@Override
+	public void glDepthRangef(float near, float far) {
+		gl.glDepthRangef(near, far);
+	}
 
 	@Override
 	public void glBlendFunc(int sfactor, int dfactor) {

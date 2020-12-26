@@ -29,7 +29,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
     public void drawLine(Painter painter) {
         painter.glLineWidth(wfwidth);
 
-        if (wfcolor == null) {
+        if (wireframeColor == null) {
             drawLineSegmentsByPointColor(painter);
         } else {
             drawLineSegmentsByWireColor(painter);
@@ -92,7 +92,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
     }
 
     public void pointColorWire(Painter painter, Point p) {
-        painter.color(wfcolor);
+        painter.color(wireframeColor);
         painter.vertex(p.xyz, spaceTransformer);
     }
 

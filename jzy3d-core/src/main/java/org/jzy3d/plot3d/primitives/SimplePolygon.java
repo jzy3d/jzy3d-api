@@ -29,7 +29,7 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 
 	private void doDrawPolygon(Painter painter) {
 		// Draw content of polygon
-		if (facestatus) {
+		if (faceDisplayed) {
 			// if(wfstatus)
 			// polygonOffseFillEnable(gl);
 
@@ -49,9 +49,9 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 		}
 
 		// Draw edge of polygon
-		if (wfstatus) {
+		if (wireframeDisplayed) {
 			painter.glBegin_Polygon();
-			painter.color(wfcolor);
+			painter.color(wireframeColor);
 			painter.glLineWidth(wfwidth);
 			for (Point p : points) {
 				painter.vertex(p.xyz);
