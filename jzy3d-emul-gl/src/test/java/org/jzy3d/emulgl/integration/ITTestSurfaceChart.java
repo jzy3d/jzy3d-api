@@ -13,7 +13,6 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestSurfaceChart {
@@ -24,7 +23,6 @@ public class ITTestSurfaceChart {
 		// When
 		EmulGLChartFactory factory = new EmulGLChartFactory();
 		Chart chart = factory.newChart(Quality.Advanced);
-		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
 
 		chart.add(surface());
 
@@ -32,6 +30,8 @@ public class ITTestSurfaceChart {
 		ChartTester tester = new ChartTester();
         tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER_DEFAULT + this.getClass().getSimpleName() + ".png");
 	}
+	
+	
 	
 	private static Shape surface() {
 		Mapper mapper = new Mapper() {
