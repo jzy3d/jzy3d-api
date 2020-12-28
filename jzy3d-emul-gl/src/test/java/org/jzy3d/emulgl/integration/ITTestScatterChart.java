@@ -10,7 +10,6 @@ import org.jzy3d.junit.ChartTester;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestScatterChart {
@@ -21,7 +20,6 @@ public class ITTestScatterChart {
 		// When
 		EmulGLChartFactory factory = new EmulGLChartFactory();
 		Chart chart = factory.newChart(Quality.Advanced);
-		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
 
 		chart.add(scatter());
 
