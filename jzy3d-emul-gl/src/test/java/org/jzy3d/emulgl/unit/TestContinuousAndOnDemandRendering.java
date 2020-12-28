@@ -29,7 +29,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.EmulGLView;
-import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.mockito.Mockito;
 
 /**
@@ -67,7 +66,6 @@ public class TestContinuousAndOnDemandRendering {
 		q.setAlphaActivated(true);
 
 		Chart chart = factory.newChart(q);
-		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
 		chart.add(surface());
 
 		CameraThreadController rotation = new CameraThreadController(chart);
