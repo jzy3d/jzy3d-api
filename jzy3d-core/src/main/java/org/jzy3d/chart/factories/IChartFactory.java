@@ -54,11 +54,4 @@ public interface IChartFactory {
      * that must be used as this instead of its wrapped delegate factory
      */
     public IChartFactory getFactory();
-    
-    /*public static enum Toolkit {
-        awt, swing, newt, offscreen, swt_newt
-    }*/
-
-
-
-}
+ }

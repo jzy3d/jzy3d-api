@@ -58,7 +58,6 @@ public class SurfaceDemoEmulGL_Alpha {
 		
 		//q.setSmoothColor(false);
 		Chart chart = factory.newChart(q);
-		chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
 		chart.add(surface);
 		chart.getView().setAxisDisplayed(false);
 		
