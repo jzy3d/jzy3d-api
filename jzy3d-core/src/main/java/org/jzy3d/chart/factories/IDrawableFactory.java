@@ -44,6 +44,9 @@ public interface IDrawableFactory {
 
 	/* ****************** CHART BASED ****************** */
 
+	// TernarySurface.shape
+	// Surface.shape
+	// SurfaceBig.shape
 	public Shape newSurface(); // return Surface
 	
 	public Scatter newScatter();
