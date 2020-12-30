@@ -20,8 +20,8 @@ import org.jzy3d.plot3d.primitives.volume.textured.AWTNativeDrawableImage;
 public class AWTShapeNativeSymbolHandler extends SymbolHandler{
     protected Shape awtShape;
     
-    public AWTShapeNativeSymbolHandler(int n, Shape awtShape) {
-        super(n);
+    public AWTShapeNativeSymbolHandler(Shape awtShape) {
+        super();
         this.awtShape = awtShape;
     }
 
@@ -34,8 +34,7 @@ public class AWTShapeNativeSymbolHandler extends SymbolHandler{
         List<Coord2d> zmapping = TexturedCube.makeZPlaneTextureMapping(position, size);
         
         // TODO : let the SAME buffered image instance be used by all DrawableTextures
-        NativeDrawableImage dt = new AWTNativeDrawableImage(awtShape, PlaneAxis.Z, position.z, zmapping, face);
-        symbols.add(dt);
+        symbols.add(new AWTNativeDrawableImage(awtShape, PlaneAxis.Z, position.z, zmapping, face));
     }
 
 
