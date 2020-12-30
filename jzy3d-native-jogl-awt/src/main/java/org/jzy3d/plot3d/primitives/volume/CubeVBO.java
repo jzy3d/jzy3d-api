@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives.volume;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
 import com.jogamp.opengl.GL;
@@ -21,7 +21,7 @@ public class CubeVBO extends DrawableVBO {
 	}
 
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 
 		doTransform(painter);
 
@@ -42,7 +42,7 @@ public class CubeVBO extends DrawableVBO {
 	}
 
 	@Override
-	public void mount(Painter painter) {
+	public void mount(IPainter painter) {
 		GL gl = ((NativeDesktopPainter) painter).getGL();
 		try {
 			loader.load(painter, this);

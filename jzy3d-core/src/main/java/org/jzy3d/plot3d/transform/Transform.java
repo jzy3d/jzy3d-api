@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * A {@link Transform} stores a sequence of {@link Transformer}s, that are of
@@ -68,11 +68,11 @@ public class Transform {
 	 * Load the identity matrix and executes the stored sequence of Transformer.
 	 * @param painter TODO
 	 */
-	public void execute(Painter painter) {
+	public void execute(IPainter painter) {
 		execute(painter, true);
 	}
 
-	public void execute(Painter painter, boolean loadIdentity) {
+	public void execute(IPainter painter, boolean loadIdentity) {
 		if (loadIdentity) {
 			painter.glLoadIdentity();
 		}

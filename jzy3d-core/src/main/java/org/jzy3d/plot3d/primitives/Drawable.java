@@ -9,7 +9,7 @@ import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
@@ -59,13 +59,13 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
      * Call OpenGL2 routines for rendering the object.
      */
     @Override
-    public abstract void draw(Painter painter);
+    public abstract void draw(IPainter painter);
 
     public abstract void applyGeometryTransform(Transform transform);
 
     public abstract void updateBounds();
 
-    public void doTransform(Painter painter) {
+    public void doTransform(IPainter painter) {
         if (transformBefore != null) {
             if (transformBefore != null)
                 transformBefore.execute(painter, true);
@@ -77,7 +77,7 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
         }
     }
 
-    protected void doDrawBoundsIfDisplayed(Painter painter) {
+    protected void doDrawBoundsIfDisplayed(IPainter painter) {
         if (isBoundingBoxDisplayed()) {
             Parallelepiped p = new Parallelepiped(getBounds());
             p.setFaceDisplayed(false);
@@ -94,7 +94,7 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Set object's transformation that is applied at the beginning of a call to
-     * {@link #draw(Painter)}.
+     * {@link #draw(IPainter)}.
      * 
      * @param transform
      */
@@ -106,7 +106,7 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
     /**
      * Get object's transformation that is applied at the beginning of a call to
-     * {@link #draw(Painter)}.
+     * {@link #draw(IPainter)}.
      * 
      * @return transform
      */

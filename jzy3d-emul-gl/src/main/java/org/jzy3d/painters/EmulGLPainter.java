@@ -27,7 +27,7 @@ import jgl.GLUT;
 import jgl.context.gl_util;
 import jgl.glu.GLUquadricObj;
 
-public class EmulGLPainter extends AbstractPainter implements Painter {
+public class EmulGLPainter extends AbstractPainter implements IPainter {
 	protected GL gl;
 	protected GLU glu;
 	protected GLUT glut;

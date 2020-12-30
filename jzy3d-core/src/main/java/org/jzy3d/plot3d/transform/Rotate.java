@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * Rotate is a {@link Transformer} that stores the angle and rotate values
@@ -28,7 +28,7 @@ public class Rotate implements Transformer {
 	}
 
 	@Override
-    public void execute(Painter painter) {
+    public void execute(IPainter painter) {
 		painter.glRotatef(angle, rotate.x, rotate.y, rotate.z);
 	}
 

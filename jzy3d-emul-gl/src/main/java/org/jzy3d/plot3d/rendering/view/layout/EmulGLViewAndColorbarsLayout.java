@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.EmulGLPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
@@ -20,7 +20,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 	}
 
 	@Override
-	public void render(Painter painter, Chart chart) {
+	public void render(IPainter painter, Chart chart) {
 		View view = chart.getView();
 		view.renderBackground(backgroundViewport);
 
@@ -38,7 +38,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 	}
 
 	@Override
-	protected void renderLegends(Painter painter, float left, float right, List<ILegend> legends, ICanvas canvas) {
+	protected void renderLegends(IPainter painter, float left, float right, List<ILegend> legends, ICanvas canvas) {
 		EmulGLPainter emulGL = (EmulGLPainter) painter;
 
 		// ---------------------------------------

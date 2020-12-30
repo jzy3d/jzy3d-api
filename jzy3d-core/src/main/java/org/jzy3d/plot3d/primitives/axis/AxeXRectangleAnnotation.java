@@ -1,14 +1,14 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import org.jzy3d.maths.Range;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 
 public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAnnotation {
 	PolygonMode polygonMode = PolygonMode.FRONT_AND_BACK;
 	
-    public synchronized void drawLine(Painter painter, Range yrange, Range zrange) {
+    public synchronized void drawLine(IPainter painter, Range yrange, Range zrange) {
         //painter.glLineWidth(width);
         painter.glBegin_Polygon();
         painter.glColor4f(color.r, color.g, color.b, color.a);

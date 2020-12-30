@@ -5,7 +5,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.graphs.AbstractDrawableGraph2d;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
@@ -22,7 +22,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 	/*******************************************************/
 
 	@Override
-    protected void drawVertices(Painter painter) {
+    protected void drawVertices(IPainter painter) {
 		painter.glPointSize(formatter.getVertexWidth());
 		painter.glBegin_Point();
 		for (V v : graph.getVertices()) {
@@ -35,7 +35,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 	}
 
 	@Override
-    protected void drawVertexLabels(Painter painter) {
+    protected void drawVertexLabels(IPainter painter) {
 		for (V v : graph.getVertices()) {
 			if (highlights.get(v))
 				drawVertexLabel(painter, v, layout.get(v), formatter.getHighlightedVertexColor());
@@ -45,7 +45,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 	}
 
 	@Override
-    protected void drawEdges(Painter painter) {
+    protected void drawEdges(IPainter painter) {
 		for (E e : graph.getEdges()) {
 			V v1 = graph.getEdgeStartVertex(e);
 			V v2 = graph.getEdgeStopVertex(e);
@@ -55,18 +55,18 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
 	/*******************************************************/
 
-	protected void drawVertexNode(Painter painter, V v, Coord2d coord, Color color) {
+	protected void drawVertexNode(IPainter painter, V v, Coord2d coord, Color color) {
 		painter.color(color);
 		painter.glVertex3f(coord.x, coord.y, Z);
 	}
 
-	protected void drawVertexLabel(Painter painter, V v, Coord2d coord, Color color) {
+	protected void drawVertexLabel(IPainter painter, V v, Coord2d coord, Color color) {
 		Coord3d textPosition = new Coord3d(coord, Z);
 		txt.drawText(painter, v.toString(), textPosition, Halign.CENTER, Valign.BOTTOM, color,
 				labelScreenOffset, labelSceneOffset);
 	}
 
-	protected void drawEdge(Painter painter, E e, Coord2d c1, Coord2d c2, Color color) {
+	protected void drawEdge(IPainter painter, E e, Coord2d c1, Coord2d c2, Color color) {
 		painter.glBegin_LineStrip();
 		painter.color(color);
 		painter.glVertex3f(c1.x, c1.y, Z);

@@ -9,7 +9,7 @@ import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
@@ -68,7 +68,7 @@ public class AWTView extends ChartView {
 	}
 
 	@Override
-	protected void correctCameraPositionForIncludingTextLabels(Painter painter, ViewportConfiguration viewport) {
+	protected void correctCameraPositionForIncludingTextLabels(IPainter painter, ViewportConfiguration viewport) {
 		cam.setViewPort(viewport);
 		cam.shoot(painter, cameraMode);
 		axis.draw(painter);

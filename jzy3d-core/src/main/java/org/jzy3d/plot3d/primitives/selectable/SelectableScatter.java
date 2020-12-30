@@ -6,7 +6,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
@@ -24,7 +24,7 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 	}
 
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
 		doTransform(painter);
 
 		painter.glPointSize(width);
@@ -52,7 +52,7 @@ public class SelectableScatter extends Scatter implements ISingleColorable,
 	}
 
 	@Override
-	public void project(Painter painter, Camera cam) {
+	public void project(IPainter painter, Camera cam) {
 		projection = cam.modelToScreen(painter, getData());
 	}
 

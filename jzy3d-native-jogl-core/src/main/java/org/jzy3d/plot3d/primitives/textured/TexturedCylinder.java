@@ -10,7 +10,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Polygon2d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
@@ -36,10 +36,10 @@ public class TexturedCylinder extends Composite implements Selectable, ITransluc
 		mapping.add( new Coord2d(position.x+0.5, position.y+0.5) );
 		mapping.add( new Coord2d(position.x-0.5, position.y+0.5) );
 		
-		dDiskDown  = new DrawableTexture(masks.bgMask, PlaneAxis.Z, position.z - 0.5f, mapping, bgcolor);
-		dDiskUp    = new DrawableTexture(masks.bgMask, PlaneAxis.Z, position.z + 0.5f, mapping, bgcolor);
-		dArrowDown = new DrawableTexture(masks.symbolMask, PlaneAxis.Z, position.z - 0.5f, mapping, color);
-		dArrowUp   = new DrawableTexture(masks.symbolMask, PlaneAxis.Z, position.z + 0.5f, mapping, color);
+		dDiskDown  = new NativeDrawableImage(masks.bgMask, PlaneAxis.Z, position.z - 0.5f, mapping, bgcolor);
+		dDiskUp    = new NativeDrawableImage(masks.bgMask, PlaneAxis.Z, position.z + 0.5f, mapping, bgcolor);
+		dArrowDown = new NativeDrawableImage(masks.symbolMask, PlaneAxis.Z, position.z - 0.5f, mapping, color);
+		dArrowUp   = new NativeDrawableImage(masks.symbolMask, PlaneAxis.Z, position.z + 0.5f, mapping, color);
 		
 		int slices = 20;
 		float radius = 0.5f;
@@ -80,10 +80,10 @@ public class TexturedCylinder extends Composite implements Selectable, ITransluc
 	public void setAlphaFactor(float a) {
 		alpha = a;
 		
-		((DrawableTexture)dDiskDown).setAlphaFactor( alpha );
-		((DrawableTexture)dArrowDown).setAlphaFactor( alpha );
-		((DrawableTexture)dDiskUp).setAlphaFactor( alpha );
-		((DrawableTexture)dArrowUp).setAlphaFactor( alpha );
+		((NativeDrawableImage)dDiskDown).setAlphaFactor( alpha );
+		((NativeDrawableImage)dArrowDown).setAlphaFactor( alpha );
+		((NativeDrawableImage)dDiskUp).setAlphaFactor( alpha );
+		((NativeDrawableImage)dArrowUp).setAlphaFactor( alpha );
 		for(TranslucentQuad q: quads){
 			q.setAlphaFactor( alpha );
 		}
@@ -95,7 +95,7 @@ public class TexturedCylinder extends Composite implements Selectable, ITransluc
 	}
 	
 	@Override
-	public void project(Painter painter, Camera cam) {
+	public void project(IPainter painter, Camera cam) {
 		lastProjection = cam.modelToScreen( painter, getBounds().getVertices() );
 		lastHull = ConvexHull.hull(lastProjection);
 	}

@@ -1,12 +1,14 @@
 package org.jzy3d.plot3d.primitives.axes.symbols;
 
+import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.image.BufferedImage;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.EmulGLPainter;
-import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.DrawableImage;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
@@ -14,7 +16,7 @@ import org.jzy3d.plot3d.transform.Transform;
  * 
  * The equivalent of {@link DrawableTexture}.
  */
-public class EmulGLDrawableImage extends Drawable{
+public class EmulGLDrawableImage extends DrawableImage{
 	protected BufferedImage image;
 	protected Coord3d position;
 	
@@ -29,7 +31,7 @@ public class EmulGLDrawableImage extends Drawable{
 	}
 
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 		if(painter instanceof EmulGLPainter) {
 			EmulGLPainter emulgl = (EmulGLPainter) painter;
 			
@@ -56,5 +58,36 @@ public class EmulGLDrawableImage extends Drawable{
 	public void setPosition(Coord3d position) {
 		this.position = position;
 	}
+	
+    /* ****************************************** */
+
+    public static int DEFAULT_IMG_WIDTH = 50;
+    public static int DEFAULT_IMG_HEIGHT = DEFAULT_IMG_WIDTH;
+    
+    public static BufferedImage getImage(Shape shape) {
+    	return getImage(shape, DEFAULT_IMG_WIDTH, DEFAULT_IMG_HEIGHT, null);
+    }
+
+    public static BufferedImage getImage(Shape shape, int width, int height) {
+    	return getImage(shape, width, height, null);
+    }
+    
+    public static BufferedImage getImage(Shape shape, int width, int height, java.awt.Color color) {
+        return getImage(shape, width, height, BufferedImage.TYPE_4BYTE_ABGR, color);
+    }
+    
+    public static BufferedImage getImage(Shape shape, int width, int height, int imageType, java.awt.Color color) {
+        BufferedImage bimage = new BufferedImage(width, height, imageType);
+        Graphics2D g2d = bimage.createGraphics();
+        
+        if(color!=null) {
+        	g2d.setColor(color);
+        }
+        
+        g2d.fill(shape);
+        g2d.dispose();
+        return bimage;
+    }
+
 }
 

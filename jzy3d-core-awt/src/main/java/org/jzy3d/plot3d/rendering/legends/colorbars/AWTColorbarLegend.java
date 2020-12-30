@@ -6,7 +6,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Dimension;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
@@ -56,7 +56,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     }
 
     @Override
-    public void render(Painter painter) {
+    public void render(IPainter painter) {
         painter.glEnable_Blend();
         super.render(painter);
     }

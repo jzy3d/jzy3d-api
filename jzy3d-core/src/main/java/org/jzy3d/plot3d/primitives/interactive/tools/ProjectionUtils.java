@@ -10,7 +10,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.TicToc;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Polygon;
@@ -26,20 +26,20 @@ public class ProjectionUtils {
 		return project(chart.getView().getPainter(), chart.getScene().getGraph());
 	}
 	
-	public static List<PolygonProjection> project(Painter painter, Graph g){
+	public static List<PolygonProjection> project(IPainter painter, Graph g){
 		return project(painter, g.getAll());
 	}
 	
-	public static List<PolygonProjection> project(Painter painter, List<Drawable> list){
+	public static List<PolygonProjection> project(IPainter painter, List<Drawable> list){
 		return project(painter, Decomposition.getDecomposition(list));
 	}
 	
-	public static List<PolygonProjection> project(Painter painter, Composite c){
+	public static List<PolygonProjection> project(IPainter painter, Composite c){
 		ArrayList<Drawable> monotypes = Decomposition.getDecomposition(c);
 		return project(painter, monotypes);
 	}
 	
-	public static List<PolygonProjection> project(Painter painter, ArrayList<Drawable> monotypes){
+	public static List<PolygonProjection> project(IPainter painter, ArrayList<Drawable> monotypes){
 		final TicToc t = new TicToc();
 		String report = "";
 		

@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 
 import com.jogamp.opengl.GL;
@@ -23,7 +23,7 @@ public class SharedTexture implements IGLBindedResource{
         this.file = file;
     }
 
-    public Texture getTexture(Painter painter) {
+    public Texture getTexture(IPainter painter) {
         if (texture == null)
             mount(painter);
         return texture;
@@ -31,7 +31,7 @@ public class SharedTexture implements IGLBindedResource{
 
     /** A GL2 context MUST be current. */
     @Override
-    public void mount(Painter painter) {
+    public void mount(IPainter painter) {
     	GL gl = ((NativeDesktopPainter)painter).getGL();
         try {
             load(gl, file);

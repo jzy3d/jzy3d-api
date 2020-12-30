@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives.axis;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.text.align.Halign;
@@ -48,7 +48,7 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 	}
 
 	@Override
-    protected BoundingBox3d drawTicks(Painter painter, int axis, int direction, Color color,
+    protected BoundingBox3d drawTicks(IPainter painter, int axis, int direction, Color color,
 			Halign hal, Valign val) {
 		int quad_0;
 		int quad_1;

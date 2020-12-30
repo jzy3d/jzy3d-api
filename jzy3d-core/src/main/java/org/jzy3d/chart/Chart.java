@@ -16,7 +16,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -319,7 +319,7 @@ public class Chart {
         return new Scale(view.getBounds().getZmin(), view.getBounds().getZmax());
     }
     
-    public Painter getPainter() {
+    public IPainter getPainter() {
     	return getView().getPainter();
     }
 

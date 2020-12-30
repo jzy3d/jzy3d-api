@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.ISingleColorable;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * A {@link SimplePolygon} makes the simplest possible GL rendering with
@@ -21,13 +21,13 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 	}
 
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 		doTransform(painter);
 		doDrawPolygon(painter);
 		doDrawBoundsIfDisplayed(painter);
 	}
 
-	private void doDrawPolygon(Painter painter) {
+	private void doDrawPolygon(IPainter painter) {
 		// Draw content of polygon
 		if (faceDisplayed) {
 			// if(wfstatus)

@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.ddp.IDepthPeelingAlgorithm;
 
 import com.jogamp.opengl.GL2;
@@ -22,7 +22,7 @@ public class WeightedAveragePeelingAlgorithm extends AbstractAccumlationDepthPee
     }
 
     @Override
-    public void display(Painter painter, GL2 gl, GLU glu) {
+    public void display(IPainter painter, GL2 gl, GLU glu) {
         resetNumPass();
         renderAverageColors(painter, gl);
     }
@@ -50,7 +50,7 @@ public class WeightedAveragePeelingAlgorithm extends AbstractAccumlationDepthPee
         glslFinal.destroy(gl);
     }
     
-    protected void renderAverageColors(Painter painter, GL2 gl) {
+    protected void renderAverageColors(IPainter painter, GL2 gl) {
         gl.glDisable(GL2.GL_DEPTH_TEST);
 
         // ---------------------------------------------------------------------

@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * An {@link Wireframeable} is a {@link Drawable} that has a wireframe mode for
@@ -74,21 +74,21 @@ public abstract class Wireframeable extends Drawable {
 
 	/* ************ POLYGON OFFSET **************** */
 
-	protected void polygonOffseFillEnable(Painter painter) {
+	protected void polygonOffseFillEnable(IPainter painter) {
 		painter.glEnable_PolygonOffsetFill();
 		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
 	}
 
-	protected void polygonOffsetFillDisable(Painter painter) {
+	protected void polygonOffsetFillDisable(IPainter painter) {
 		painter.glDisable_PolygonOffsetFill();
 	}
 
-	protected void polygonOffsetLineEnable(Painter painter) {
+	protected void polygonOffsetLineEnable(IPainter painter) {
 		painter.glEnable_PolygonOffsetLine();
 		painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
 	}
 
-	protected void polygonOffsetLineDisable(Painter painter) {
+	protected void polygonOffsetLineDisable(IPainter painter) {
 		painter.glDisable_PolygonOffsetLine();
 	}
 
@@ -135,11 +135,11 @@ public abstract class Wireframeable extends Drawable {
 		return polygonWireframeDepthTrick;
 	}
 
-	protected void applyDepthRangeForUnderlying(Painter painter) {
+	protected void applyDepthRangeForUnderlying(IPainter painter) {
 		painter.glDepthRangef(0.1f, 1f);
 	}
 
-	protected void applyDepthRangeForOverlying(Painter painter) {
+	protected void applyDepthRangeForOverlying(IPainter painter) {
 		painter.glDepthRangef(0.0f, 0.9f);
 	}
 	

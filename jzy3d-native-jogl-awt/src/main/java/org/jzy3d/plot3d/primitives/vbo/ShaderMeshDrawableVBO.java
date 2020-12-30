@@ -5,7 +5,7 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
 import com.jogamp.opengl.GL;
@@ -27,7 +27,7 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
 	private ColormapTexture colormapTexure;
 	
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
 		GL gl = ((NativeDesktopPainter)painter).getGL();
 		
 		if (!hasMountedOnce) {
@@ -54,7 +54,7 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
 	}
 	
 	@Override
-	public void mount(Painter painter) {
+	public void mount(IPainter painter) {
 		GL gl = ((NativeDesktopPainter)painter).getGL();
 		
 		try {
@@ -83,7 +83,7 @@ public class ShaderMeshDrawableVBO extends DrawableVBO implements IMultiColorabl
 //        gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
     }
 	
-	protected void configure(Painter painter, GL gl) {
+	protected void configure(IPainter painter, GL gl) {
         // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
         // gl.glColor4f(1f,0f,1f,0.6f);

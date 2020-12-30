@@ -10,7 +10,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.PolygonFill;
@@ -33,7 +33,7 @@ public class EnlightablePolygon extends AbstractEnlightable {
 	/**********************************************************************/
 
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
 		doTransform(painter);
 
 		applyMaterial(painter); 

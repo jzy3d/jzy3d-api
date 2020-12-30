@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.rendering.textures;
 import java.awt.image.BufferedImage;
 
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.util.texture.Texture;
@@ -18,7 +18,7 @@ public class BufferedImageTexture extends SharedTexture {
     }
 
     @Override
-    public Texture getTexture(Painter painter) {
+    public Texture getTexture(IPainter painter) {
     	
         if (texture == null)
             mount(painter);
@@ -31,7 +31,7 @@ public class BufferedImageTexture extends SharedTexture {
 
     /** A GL2 context MUST be current. */
     @Override
-    public void mount(Painter painter) {
+    public void mount(IPainter painter) {
     	GL gl = ((NativeDesktopPainter)painter).getGL();
     	
         try {

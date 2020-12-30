@@ -4,7 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -20,17 +20,17 @@ public abstract class AbstractTextRenderer implements ITextRenderer {
     }
 
     @Override
-    public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color) {
+    public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Halign halign, Valign valign, Color color) {
         return drawText(painter, s, position, halign, valign, color, defScreenOffset, defSceneOffset);
     }
 
     @Override
-    public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset) {
+    public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset) {
         return drawText(painter, s, position, halign, valign, color, screenOffset, defSceneOffset);
     }
 
     @Override
-    public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord3d sceneOffset) {
+    public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord3d sceneOffset) {
         return drawText(painter, s, position, halign, valign, color, defScreenOffset, sceneOffset);
     }
 
@@ -44,7 +44,7 @@ public abstract class AbstractTextRenderer implements ITextRenderer {
         this.spaceTransformer = transformer;
     }
     
-    protected void glRaster(Painter painter, Coord3d position, Color color) {
+    protected void glRaster(IPainter painter, Coord3d position, Color color) {
 		painter.glColor3f(color.r, color.g, color.b);
         painter.raster(position, spaceTransformer);
 	}

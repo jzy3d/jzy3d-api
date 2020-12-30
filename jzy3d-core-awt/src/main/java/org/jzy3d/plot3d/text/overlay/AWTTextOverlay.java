@@ -12,7 +12,7 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.text.align.Halign;
@@ -62,7 +62,7 @@ public class AWTTextOverlay implements AWTRenderer2d{
 	
 	/****************************************************************/
 	
-	public void appendText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color){
+	public void appendText(IPainter painter, String s, Coord3d position, Halign halign, Valign valign, Color color){
 		Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
 
 		textList.add(new TextDescriptor(s, new Coord2d(posScreen.x, posScreen.y), color, halign, valign));

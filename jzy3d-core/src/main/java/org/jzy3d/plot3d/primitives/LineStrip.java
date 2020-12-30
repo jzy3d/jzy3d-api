@@ -8,7 +8,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -90,7 +90,7 @@ public class LineStrip extends Wireframeable {
     /* */
 
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         doTransform(painter);
         if (points.size() > 1) {
             drawLine(painter);
@@ -106,7 +106,7 @@ public class LineStrip extends Wireframeable {
     }
     
 
-    public void drawLine(Painter painter) {
+    public void drawLine(IPainter painter) {
         //painter.glLineWidth(wfwidth);
         
         if (stipple) {
@@ -136,13 +136,13 @@ public class LineStrip extends Wireframeable {
         }
     }
 
-    public void drawPointsIfEnabled(Painter painter) {
+    public void drawPointsIfEnabled(IPainter painter) {
         if (showPoints) {
             drawPoints(painter);
         }
     }
 
-    public void drawPoints(Painter painter) {
+    public void drawPoints(IPainter painter) {
     	painter.glBegin_Point();
         painter.glPointSize(wireframeWidth);
 

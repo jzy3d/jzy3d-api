@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 
@@ -34,7 +34,7 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis{
 	 * and determine which quad where displayed or not.
 	 */
 	@Override
-	protected boolean [] getHiddenQuads(Painter painter){
+	protected boolean [] getHiddenQuads(IPainter painter){
 		int feedbacklength = 1024;
 		FloatBuffer floatbuffer = Buffers.newDirectFloatBuffer(feedbacklength);
 		float [] feedback = new float[feedbacklength];

@@ -6,7 +6,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
@@ -58,7 +58,7 @@ public class Point extends Drawable implements ISingleColorable {
 	/* */
 
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
 		doTransform(painter);
 
 		painter.glPointSize(width);

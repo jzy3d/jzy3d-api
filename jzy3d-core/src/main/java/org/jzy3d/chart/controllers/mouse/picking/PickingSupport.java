@@ -11,7 +11,7 @@ import java.util.Map;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.TicToc;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.pickable.Pickable;
@@ -83,7 +83,7 @@ public class PickingSupport {
 	
 	protected TicToc perf = new TicToc();
 	
-	public void pickObjects(Painter painter, View view, Graph graph, IntegerCoord2d pickPoint) {
+	public void pickObjects(IPainter painter, View view, Graph graph, IntegerCoord2d pickPoint) {
 	    perf.tic();
 	    
         int viewport[] = new int[4];
@@ -172,14 +172,14 @@ public class PickingSupport {
 	    return perf.elapsedMilisecond();
 	}
 	
-    protected void setCurrentName(Painter painter, Pickable pickable){
+    protected void setCurrentName(IPainter painter, Pickable pickable){
     	if(method==0)
     		painter.glLoadName(pickable.getPickingId());
     	else
     		painter.glPushName(pickable.getPickingId());
     } 
     
-    protected void releaseCurrentName(Painter painter){
+    protected void releaseCurrentName(IPainter painter){
     	if(method==0)
     		;
     	else

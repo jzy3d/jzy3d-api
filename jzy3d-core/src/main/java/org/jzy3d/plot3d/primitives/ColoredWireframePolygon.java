@@ -1,13 +1,13 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 public class ColoredWireframePolygon extends Polygon {
 
 	
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         doTransform(painter);
 
         if (mapper != null)
@@ -44,7 +44,7 @@ public class ColoredWireframePolygon extends Polygon {
     
     
     @Override
-    public void callPointForWireframe(Painter painter) {
+    public void callPointForWireframe(IPainter painter) {
         painter.glLineWidth(wireframeWidth);
         Color c = wireframeColor;
         

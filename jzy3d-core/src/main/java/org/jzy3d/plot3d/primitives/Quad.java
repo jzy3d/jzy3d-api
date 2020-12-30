@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * A {@link Quad} extends a {@link Polygon} in order to provide a specific
@@ -22,7 +22,7 @@ public class Quad extends Polygon {
 	}
 	
     @Override
-    protected void begin(Painter painter) {
+    protected void begin(IPainter painter) {
     	painter.glBegin_Quad();
     }
 

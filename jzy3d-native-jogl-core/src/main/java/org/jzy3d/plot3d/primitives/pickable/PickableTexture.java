@@ -5,10 +5,10 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.PlaneAxis;
-import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
+import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
 
-public class PickableTexture extends DrawableTexture implements Pickable {
+public class PickableTexture extends NativeDrawableImage implements Pickable {
 	public PickableTexture(SharedTexture resource, PlaneAxis orientation, float axisValue, List<Coord2d> coords, Color filter) {
 		super(resource, orientation, axisValue, coords, filter);
 	}

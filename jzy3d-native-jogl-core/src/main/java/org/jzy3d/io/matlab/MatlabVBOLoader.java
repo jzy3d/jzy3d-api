@@ -9,7 +9,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
 import com.jmatio.io.MatFileReader;
@@ -33,7 +33,7 @@ public class MatlabVBOLoader implements IGLLoader<DrawableVBO>{
 
     @Override
     @SuppressWarnings("unchecked")
-    public void load(Painter painter, DrawableVBO drawable) throws Exception {
+    public void load(IPainter painter, DrawableVBO drawable) throws Exception {
         MatFileReader mfr = new MatFileReader(filename);
         MLNumericArray<Float> x = (MLNumericArray<Float>) mfr.getMLArray("X");
         MLNumericArray<Float> y = (MLNumericArray<Float>) mfr.getMLArray("Y");

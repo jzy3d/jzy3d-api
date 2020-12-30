@@ -10,7 +10,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Polygon2d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
@@ -34,19 +34,19 @@ public class TexturedCube extends Composite implements Selectable, ITranslucent{
 		List<Coord2d> ymapping = makeYPlaneTextureMapping(position, width);
 		List<Coord2d> xmapping = makeXPlaneTextureMapping(position, width);
 		
-		northBg  = new DrawableTexture(masks.bgMask, PlaneAxis.Z, position.z + width, zmapping, bgcolor);
-		southBg  = new DrawableTexture(masks.bgMask, PlaneAxis.Z, position.z - width, zmapping, bgcolor);
-		westBg  = new DrawableTexture(masks.bgMask, PlaneAxis.X, position.x - width, xmapping, bgcolor);
-		eastBg  = new DrawableTexture(masks.bgMask, PlaneAxis.X, position.x + width, xmapping, bgcolor);
-		nearBg  = new DrawableTexture(masks.bgMask, PlaneAxis.Y, position.y - width, ymapping, bgcolor);
-		farBg  = new DrawableTexture(masks.bgMask, PlaneAxis.Y, position.y + width, ymapping, bgcolor);
+		northBg  = new NativeDrawableImage(masks.bgMask, PlaneAxis.Z, position.z + width, zmapping, bgcolor);
+		southBg  = new NativeDrawableImage(masks.bgMask, PlaneAxis.Z, position.z - width, zmapping, bgcolor);
+		westBg  = new NativeDrawableImage(masks.bgMask, PlaneAxis.X, position.x - width, xmapping, bgcolor);
+		eastBg  = new NativeDrawableImage(masks.bgMask, PlaneAxis.X, position.x + width, xmapping, bgcolor);
+		nearBg  = new NativeDrawableImage(masks.bgMask, PlaneAxis.Y, position.y - width, ymapping, bgcolor);
+		farBg  = new NativeDrawableImage(masks.bgMask, PlaneAxis.Y, position.y + width, ymapping, bgcolor);
 		
-		north  = new DrawableTexture(masks.symbolMask, PlaneAxis.Z, position.z + width, zmapping, color);
-		south  = new DrawableTexture(masks.symbolMask, PlaneAxis.Z, position.z - width, zmapping, color);
-		west  = new DrawableTexture(masks.symbolMask, PlaneAxis.X, position.x - width, xmapping, color);
-		east  = new DrawableTexture(masks.symbolMask, PlaneAxis.X, position.x + width, xmapping, color);
-		near  = new DrawableTexture(masks.symbolMask, PlaneAxis.Y, position.y - width, ymapping, color);
-		far  = new DrawableTexture(masks.symbolMask, PlaneAxis.Y, position.y + width, ymapping, color);
+		north  = new NativeDrawableImage(masks.symbolMask, PlaneAxis.Z, position.z + width, zmapping, color);
+		south  = new NativeDrawableImage(masks.symbolMask, PlaneAxis.Z, position.z - width, zmapping, color);
+		west  = new NativeDrawableImage(masks.symbolMask, PlaneAxis.X, position.x - width, xmapping, color);
+		east  = new NativeDrawableImage(masks.symbolMask, PlaneAxis.X, position.x + width, xmapping, color);
+		near  = new NativeDrawableImage(masks.symbolMask, PlaneAxis.Y, position.y - width, ymapping, color);
+		far  = new NativeDrawableImage(masks.symbolMask, PlaneAxis.Y, position.y + width, ymapping, color);
 				
 		add(north);
 		add(south);
@@ -98,7 +98,7 @@ public class TexturedCube extends Composite implements Selectable, ITranslucent{
 	}
 	
 	@Override
-	public void project(Painter painter, Camera cam) {
+	public void project(IPainter painter, Camera cam) {
 		lastProjection = cam.modelToScreen( painter, getBounds().getVertices() );
 		lastHull = ConvexHull.hull(lastProjection);
 	}
@@ -117,19 +117,19 @@ public class TexturedCube extends Composite implements Selectable, ITranslucent{
 	public void setAlphaFactor(float a) {
 		alpha = a;
 		
-		((DrawableTexture)northBg).setAlphaFactor( alpha );
-		((DrawableTexture)southBg).setAlphaFactor( alpha );
-		((DrawableTexture)westBg).setAlphaFactor( alpha );
-		((DrawableTexture)eastBg).setAlphaFactor( alpha );
-		((DrawableTexture)nearBg).setAlphaFactor( alpha );
-		((DrawableTexture)farBg).setAlphaFactor( alpha );
+		((NativeDrawableImage)northBg).setAlphaFactor( alpha );
+		((NativeDrawableImage)southBg).setAlphaFactor( alpha );
+		((NativeDrawableImage)westBg).setAlphaFactor( alpha );
+		((NativeDrawableImage)eastBg).setAlphaFactor( alpha );
+		((NativeDrawableImage)nearBg).setAlphaFactor( alpha );
+		((NativeDrawableImage)farBg).setAlphaFactor( alpha );
 		
-		((DrawableTexture)north).setAlphaFactor( alpha );
-		((DrawableTexture)south).setAlphaFactor( alpha );
-		((DrawableTexture)west).setAlphaFactor( alpha );
-		((DrawableTexture)east).setAlphaFactor( alpha );
-		((DrawableTexture)near).setAlphaFactor( alpha );
-		((DrawableTexture)far).setAlphaFactor( alpha );
+		((NativeDrawableImage)north).setAlphaFactor( alpha );
+		((NativeDrawableImage)south).setAlphaFactor( alpha );
+		((NativeDrawableImage)west).setAlphaFactor( alpha );
+		((NativeDrawableImage)east).setAlphaFactor( alpha );
+		((NativeDrawableImage)near).setAlphaFactor( alpha );
+		((NativeDrawableImage)far).setAlphaFactor( alpha );
 	}
 	
 	protected Drawable north;
