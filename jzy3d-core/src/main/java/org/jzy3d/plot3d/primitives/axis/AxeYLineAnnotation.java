@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.primitives.axis;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Range;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 public class AxeYLineAnnotation implements AxeAnnotation {
     protected float value;
@@ -10,14 +10,14 @@ public class AxeYLineAnnotation implements AxeAnnotation {
     protected float width = 3;
 
     @Override
-    public void draw(Painter painter, AxisBox axe) {
+    public void draw(IPainter painter, AxisBox axe) {
         Range xrange = axe.getBoxBounds().getXRange();
         Range zrange = axe.getBoxBounds().getYRange();
         
         drawLine(painter, xrange, zrange);
     }
 
-    public synchronized void drawLine(Painter painter, Range yrange, Range zrange) {
+    public synchronized void drawLine(IPainter painter, Range yrange, Range zrange) {
         painter.glLineWidth(width);
         painter.glBegin_LineStrip();
         painter.glColor4f(color.r, color.g, color.b, color.a);

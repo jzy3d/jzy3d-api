@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.painters.EmulGLPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.tooltips.ITooltipRenderer;
 
@@ -24,7 +24,7 @@ public class EmulGLViewOverlay implements IViewOverlay {
 	protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
 
 	@Override
-	public void render(View view, ViewportConfiguration viewport, Painter painter) {
+	public void render(View view, ViewportConfiguration viewport, IPainter painter) {
 		AWTView awtView = ((AWTView)view);
 		ICanvas canvas = view.getCanvas();
 		

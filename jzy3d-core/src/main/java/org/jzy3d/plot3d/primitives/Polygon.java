@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * Supports additional settings
@@ -24,7 +24,7 @@ public class Polygon extends Geometry {
     }
 
     @Override
-    protected void begin(Painter painter) {
+    protected void begin(IPainter painter) {
     	painter.glBegin_Polygon();
     }
 }

@@ -7,7 +7,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.plot3d.primitives.pickable.PickableTexture;
-import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
+import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
 
@@ -55,6 +55,6 @@ public class DrawableTextTexture extends PickableTexture{
 	}
 	
 	protected static List<Coord2d> makeMapping(Coord2d dim){
-		return DrawableTexture.getManualTextureMapping(dim.x, dim.y,dim.x/2, dim.y/2);
+		return NativeDrawableImage.getManualTextureMapping(dim.x, dim.y,dim.x/2, dim.y/2);
 	}
 }

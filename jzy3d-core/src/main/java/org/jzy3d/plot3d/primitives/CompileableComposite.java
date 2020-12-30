@@ -11,7 +11,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.ListMode;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -70,7 +70,7 @@ public class CompileableComposite extends Wireframeable implements
 	 * and execute actual rendering.
 	 */
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 		if (resetDL)
 			reset(painter);
 		if (dlID == -1)
@@ -82,7 +82,7 @@ public class CompileableComposite extends Wireframeable implements
 
 	/** If you call compile, the display list will be regenerated. 
 	 * @param painter TODO*/
-	protected void compile(Painter painter) {
+	protected void compile(IPainter painter) {
 		reset(painter); // clear old list
 
 		nullifyChildrenTransforms();
@@ -93,12 +93,12 @@ public class CompileableComposite extends Wireframeable implements
 		painter.glEndList();
 	}
 
-	protected void execute(Painter painter) {
+	protected void execute(IPainter painter) {
 		doTransform(painter);
 		painter.glCallList(dlID);
 	}
 
-	protected void reset(Painter painter) {
+	protected void reset(IPainter painter) {
 		if (dlID != -1) {
 			if (painter.glIsList(dlID)) {
 				painter.glDeleteLists(dlID, 1);
@@ -120,7 +120,7 @@ public class CompileableComposite extends Wireframeable implements
 		}
 	}
 
-	protected void drawComponents(Painter painter) {
+	protected void drawComponents(IPainter painter) {
 		synchronized (components) {
 			for (Drawable s : components) {
 				s.draw(painter);

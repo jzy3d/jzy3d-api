@@ -26,7 +26,7 @@ public class LegendLayout {
     /** Color of legend background. Translucent if none.*/
     public Color backgroundColor = null;
     /** Legend position.*/
-    public Corner corner = Corner.TOP_RIGHT;
+    public Corner corner = Corner.TOP_LEFT;
     /** Legend font. Can be null, or otherwise initialized like <code>new Font("Helvetica", Font.PLAIN, 11)</code>*/
     public Font font = null;
 

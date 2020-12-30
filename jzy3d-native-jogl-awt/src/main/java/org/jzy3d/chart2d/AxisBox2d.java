@@ -5,7 +5,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -30,7 +30,7 @@ public class AxisBox2d extends AxisBox {
      * Renders only X and Y ticks.
      */
     @Override
-    public void drawTicksAndLabels(Painter painter) {
+    public void drawTicksAndLabels(IPainter painter) {
         wholeBounds.reset();
         wholeBounds.add(boxBounds);
 
@@ -63,7 +63,7 @@ public class AxisBox2d extends AxisBox {
 
     /** Draws Y axis label vertically. */
     @Override
-    public void drawAxisLabel(Painter painter, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
+    public void drawAxisLabel(IPainter painter, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
         Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
         BoundingBox3d labelBounds = null;
 
@@ -87,7 +87,7 @@ public class AxisBox2d extends AxisBox {
     
     public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
         @Override
-        public BoundingBox3d drawText(Painter painter, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+        public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
             painter.color(color);
 
             // compute a corrected position according to layout
@@ -117,7 +117,7 @@ public class AxisBox2d extends AxisBox {
 
         // CUSTOM ROTATION
         
-        public void rotateText(Painter painter, Coord3d posReal) {
+        public void rotateText(IPainter painter, Coord3d posReal) {
             painter.glPushMatrix();
             
             painter.glMatrixMode_ModelView();

@@ -7,7 +7,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.primitives.vbo.builders.VBOBuilder;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
@@ -32,7 +32,7 @@ public class CubeVBOBuilder extends VBOBuilder {
 	}
 
 	@Override
-	public void load(Painter painter, DrawableVBO drawable) throws Exception {
+	public void load(IPainter painter, DrawableVBO drawable) throws Exception {
 		FloatVBO vbo = initFloatVBO(drawable, true, 24);
 		fillFromArray(drawable,  xMin,  xMax,  yMin,  yMax,  zMin,  zMax, vbo);
 		drawable.setData(((NativeDesktopPainter)painter).getGL(), vbo);

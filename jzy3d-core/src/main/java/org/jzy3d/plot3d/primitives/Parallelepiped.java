@@ -6,7 +6,7 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 
@@ -40,7 +40,7 @@ public class Parallelepiped extends Wireframeable implements ISingleColorable, I
 	/* */
 
 	@Override
-    public void draw(Painter painter){
+    public void draw(IPainter painter){
 		for(Polygon quad: quads)
 			quad.draw(painter);	
 	}

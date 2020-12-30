@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
     List<Integer> idOff = new ArrayList<Integer>();
@@ -26,7 +26,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
     }
 
     @Override
-    public void drawLine(Painter painter) {
+    public void drawLine(IPainter painter) {
         painter.glLineWidth(wireframeWidth);
 
         if (wireframeColor == null) {
@@ -36,7 +36,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
         }
     }
 
-    public void drawLineSegmentsByPointColor(Painter painter) {
+    public void drawLineSegmentsByPointColor(IPainter painter) {
         int nPt = 0;
         int nOff = 0;
         int nextOff = idOff.size() != 0 ? idOff.get(nOff) : 0;
@@ -63,7 +63,7 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
         painter.glEnd();
     }
 
-    public void drawLineSegmentsByWireColor(Painter painter) {
+    public void drawLineSegmentsByWireColor(IPainter painter) {
         int nPt = 0;
         int nOff = 0;
         int nextOff = -1;
@@ -91,12 +91,12 @@ public class ConcurrentLineStripSplitted extends ConcurrentLineStrip {
         painter.glEnd();
     }
 
-    public void pointColorWire(Painter painter, Point p) {
+    public void pointColorWire(IPainter painter, Point p) {
         painter.color(wireframeColor);
         painter.vertex(p.xyz, spaceTransformer);
     }
 
-    public void pointColorSelf(Painter painter, Point p) {
+    public void pointColorSelf(IPainter painter, Point p) {
         painter.color(p.rgb);
         painter.vertex(p.xyz, spaceTransformer);
     }

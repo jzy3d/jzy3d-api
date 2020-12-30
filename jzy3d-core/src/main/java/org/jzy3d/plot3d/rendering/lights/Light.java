@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.rendering.lights;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 
@@ -33,7 +33,7 @@ public class Light {
         specularColor = Color.WHITE;
     }
 
-    public void apply(Painter painter, Coord3d scale) {
+    public void apply(IPainter painter, Coord3d scale) {
         if (enabled) {
             painter.glMatrixMode_ModelView();
             painter.glLoadIdentity();
@@ -54,7 +54,7 @@ public class Light {
         }
     }
 
-    protected void configureLight(Painter painter) {
+    protected void configureLight(IPainter painter) {
         // Actual light source setting TODO: check we really need to
         // define @ each rendering
         LightSwitch.enable(painter, lightId);
@@ -62,7 +62,7 @@ public class Light {
         configureLight(painter, lightId);
     }
 
-    protected void configureLight(Painter painter, int lightId) {
+    protected void configureLight(IPainter painter, int lightId) {
         painter.glLight_Position(lightId, positionZero);
         painter.glLight_Ambiant(lightId, ambiantColor);
         painter.glLight_Diffuse(lightId, diffuseColor);

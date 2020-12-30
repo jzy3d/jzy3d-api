@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * Translate is a {@link Transformer} that stores the offset required to perform
@@ -25,7 +25,7 @@ public class Translate implements Transformer {
 	}
 
 	@Override
-    public void execute(Painter painter) {
+    public void execute(IPainter painter) {
 		painter.glTranslatef(shift.x, shift.y, shift.z);
 	}
 

@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 
 /** A {@link Transformer} is able to execute a transformation into
@@ -21,7 +21,7 @@ interface Transformer {
 	 * Computation is performed by GPU.
 	 * @param painter TODO
 	 */
-	public void execute(Painter painter);	
+	public void execute(IPainter painter);	
 	
 	/**
 	 * Apply the transformations to the input coordinates.

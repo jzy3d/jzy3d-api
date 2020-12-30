@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 import java.io.File;
 import java.io.IOException;
 
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
@@ -87,7 +87,7 @@ public interface ICanvas {
      * 
      * On MacOS Retina displays, a X*Y chart uses a (X*2)*(Y*2) viewport. This
      * makes some calculation based on viewport (such as
-     * {@link Camera#screenToModel(Painter, org.jzy3d.maths.Coord3d)}
+     * {@link Camera#screenToModel(IPainter, org.jzy3d.maths.Coord3d)}
      * output wrong result.
      * 
      * When running on Retina display, those two options fixed buggy mouse

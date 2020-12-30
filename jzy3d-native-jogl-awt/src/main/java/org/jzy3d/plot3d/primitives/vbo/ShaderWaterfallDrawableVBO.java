@@ -5,7 +5,7 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
 import com.jogamp.opengl.GL;
@@ -28,7 +28,7 @@ public class ShaderWaterfallDrawableVBO extends DrawableVBO implements IMultiCol
 	private ColormapTexture colormapTexure;
 	
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
 		GL gl = ((NativeDesktopPainter)painter).getGL();
 
 		if (!hasMountedOnce) {
@@ -67,7 +67,7 @@ public class ShaderWaterfallDrawableVBO extends DrawableVBO implements IMultiCol
     }
 	
 	@Override
-	public void mount(Painter painter) {
+	public void mount(IPainter painter) {
 		GL gl = ((NativeDesktopPainter)painter).getGL();
 		try {
 			loader.load(painter, this);

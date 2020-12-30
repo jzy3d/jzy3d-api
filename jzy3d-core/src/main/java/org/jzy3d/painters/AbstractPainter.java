@@ -7,7 +7,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
-public abstract class AbstractPainter implements Painter {
+public abstract class AbstractPainter implements IPainter {
 
 	protected Camera camera;
 	protected View view;

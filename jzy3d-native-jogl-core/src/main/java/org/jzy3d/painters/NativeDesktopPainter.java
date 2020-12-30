@@ -25,7 +25,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
 
-public class NativeDesktopPainter extends AbstractPainter implements Painter {
+public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 	protected GL gl;
 	protected GLU glu = new GLU();
 	protected GLUT glut = new GLUT();

@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import org.jzy3d.maths.Dimension;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 public interface IImageViewport {
 
@@ -11,7 +11,7 @@ public interface IImageViewport {
      * otherwise, it is scaled in order to fit into the viewport.
      * @param painter TODO
      */
-    public abstract void render(Painter painter);
+    public abstract void render(IPainter painter);
 
     /** Return the minimum size for this graphic.*/
     public abstract Dimension getMinimumSize();

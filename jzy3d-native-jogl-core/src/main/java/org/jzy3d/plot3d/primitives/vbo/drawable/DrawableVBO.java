@@ -10,7 +10,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.GLES2CompatUtils;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -66,7 +66,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     }
     
     @Override
-    public void mount(Painter painter) {
+    public void mount(IPainter painter) {
     	GL gl = ((NativeDesktopPainter)painter).getGL();
         try {
             loader.load(painter, this);
@@ -81,7 +81,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     // @see
     // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
     	if (hasMountedOnce) {
     		GL gl = ((NativeDesktopPainter)painter).getGL();
     		GLU glu = ((NativeDesktopPainter)painter).getGLU();
@@ -269,7 +269,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
      * FRONT_AND_BACK spec, probably because such a big polygon set has huge
      * cost to have culling status computed (culling enabled by depth peeling).
      */
-    protected void configure(Painter painter, GL gl) {
+    protected void configure(IPainter painter, GL gl) {
         // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
         // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
         // gl.glColor4f(1f,0f,1f,0.6f);

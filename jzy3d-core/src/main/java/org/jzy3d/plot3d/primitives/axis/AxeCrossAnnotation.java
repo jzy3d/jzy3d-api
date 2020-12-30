@@ -2,13 +2,13 @@ package org.jzy3d.plot3d.primitives.axis;
 
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Range;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 public class AxeCrossAnnotation extends AxeLineAnnotation implements AxeAnnotation {
     protected Coord2d value;
 
     @Override
-    public void draw(Painter painter, AxisBox axe) {
+    public void draw(IPainter painter, AxisBox axe) {
         Range xrange = axe.getBoxBounds().getXRange();
         Range yrange = axe.getBoxBounds().getYRange();
 

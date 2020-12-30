@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.rendering.shaders;
 
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -72,7 +72,7 @@ public class ShaderRenderer3d extends Renderer3d{
     public static IGLRenderer getShaderContentRenderer(final View view){
         return new IGLRenderer() {
             @Override
-            public void draw(Painter painter) {
+            public void draw(IPainter painter) {
                 view.renderSceneGraph(true);  
             }
         };

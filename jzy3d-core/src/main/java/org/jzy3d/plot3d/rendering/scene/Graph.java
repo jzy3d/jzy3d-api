@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.TicToc;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
@@ -151,7 +151,7 @@ public class Graph {
         return out;
     }
 
-    public void mountAllGLBindedResources(Painter painter) {
+    public void mountAllGLBindedResources(IPainter painter) {
         final List<IGLBindedResource> all = getAllGLBindedResources();
         for (IGLBindedResource r : all)
             if (!r.hasMountedOnce())
@@ -186,13 +186,13 @@ public class Graph {
      * {@link AbstractOrderingStrategy}.
      * @param painter TODO
      */
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         draw(painter, components, sort);
     }
 
     protected TicToc t = new TicToc();
 
-    public synchronized void draw(Painter painter, List<Drawable> components, boolean sort) {
+    public synchronized void draw(IPainter painter, List<Drawable> components, boolean sort) {
         painter.glMatrixMode_ModelView();
         if (!sort) {
             drawSimple(painter, components);
@@ -202,14 +202,14 @@ public class Graph {
     }
 
     /** render all items of the graph*/
-    public void drawSimple(Painter painter, List<Drawable> components) {
+    public void drawSimple(IPainter painter, List<Drawable> components) {
         for (Drawable d : components)
             if (d.isDisplayed())
                 d.draw(painter);
     }
 
     /** render all items of the graph after decomposing all composite item into primitive drawables */
-    public void drawDecomposition(Painter painter) {
+    public void drawDecomposition(IPainter painter) {
         List<Drawable> monotypes = getDecomposition();
         strategy.sort(monotypes, painter.getCamera());
 
@@ -233,7 +233,7 @@ public class Graph {
     }
 
     /** Update all interactive {@link Drawable} projections */
-    public synchronized void project(Painter painter, Camera camera) {
+    public synchronized void project(IPainter painter, Camera camera) {
         for (Drawable d : components) {
             if (d instanceof Selectable)
                 ((Selectable) d).project(painter, camera);

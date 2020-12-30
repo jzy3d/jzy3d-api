@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Geometry;
@@ -44,7 +44,7 @@ public class BarycenterAnnotation extends Composite{
     }
 
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         bary.xyz = annotated.getBarycentre();
         int k = 0;
         for(LineStrip line: lines){

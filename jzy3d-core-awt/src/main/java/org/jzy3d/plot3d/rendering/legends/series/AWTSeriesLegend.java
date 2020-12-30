@@ -9,7 +9,7 @@ import java.util.List;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Dimension;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
@@ -109,7 +109,7 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport{
     }
 
     @Override
-    public void render(Painter painter) {
+    public void render(IPainter painter) {
     	painter.glEnable_Blend();
         super.render(painter);
     }

@@ -8,7 +8,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Vector3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -50,7 +50,7 @@ public class AxisBox implements IAxis {
      * Draws the AxeBox. The camera is used to determine which axis is closest to the ur point ov view, in order to decide for an axis on which to diplay the tick values.
      */
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         cullingEnable(painter);
         updateHiddenQuads(painter);
 
@@ -75,16 +75,16 @@ public class AxisBox implements IAxis {
 
     /** reset to identity and apply scaling 
      * @param painter TODO*/
-    public void doTransform(Painter painter) {
+    public void doTransform(IPainter painter) {
         painter.glLoadIdentity();
         painter.glScalef(scale.x, scale.y, scale.z);
     }
 
-    public void cullingDisable(Painter painter) {
+    public void cullingDisable(IPainter painter) {
     	painter.glDisable_CullFace();
     }
 
-    public void cullingEnable(Painter painter) {
+    public void cullingEnable(IPainter painter) {
         painter.glEnable_CullFace();
         painter.glFrontFace_ClockWise();
         painter.glCullFace_Front();
@@ -94,7 +94,7 @@ public class AxisBox implements IAxis {
 
     /* DRAW AXEBOX ELEMENTS */
 
-    public void drawFace(Painter painter) {
+    public void drawFace(IPainter painter) {
         if (layout.isFaceDisplayed()) {
             Color quadcolor = layout.getQuadColor();
             painter.glPolygonMode(PolygonMode.BACK, PolygonFill.FILL);
@@ -108,7 +108,7 @@ public class AxisBox implements IAxis {
         }
     }
 
-    public void drawGrid(Painter painter) {
+    public void drawGrid(IPainter painter) {
         Color gridcolor = layout.getGridColor();
 
         painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
@@ -129,7 +129,7 @@ public class AxisBox implements IAxis {
         painter.glDisable_LineStipple();
     }
 
-    public void drawTicksAndLabels(Painter painter) {
+    public void drawTicksAndLabels(IPainter painter) {
         wholeBounds.reset();
         wholeBounds.add(boxBounds);
 
@@ -138,7 +138,7 @@ public class AxisBox implements IAxis {
         drawTicksAndLabelsZ(painter);
     }
 
-    public void drawTicksAndLabelsX(Painter painter) {
+    public void drawTicksAndLabelsX(IPainter painter) {
         if (xrange > 0 && layout.isXTickLabelDisplayed()) {
 
             // If we are on top, we make direct axe placement
@@ -162,7 +162,7 @@ public class AxisBox implements IAxis {
         }
     }
 
-    public void drawTicksAndLabelsY(Painter painter) {
+    public void drawTicksAndLabelsY(IPainter painter) {
         if (yrange > 0 && layout.isYTickLabelDisplayed()) {
             if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
                 BoundingBox3d bbox = drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Halign.LEFT, Valign.GROUND);
@@ -182,7 +182,7 @@ public class AxisBox implements IAxis {
         }
     }
 
-    public void drawTicksAndLabelsZ(Painter painter) {
+    public void drawTicksAndLabelsZ(IPainter painter) {
         if (zrange > 0 && layout.isZTickLabelDisplayed()) {
             if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
 
@@ -199,7 +199,7 @@ public class AxisBox implements IAxis {
     /**
      * Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK
      */
-    protected void drawCube(Painter painter, RenderMode mode) {
+    protected void drawCube(IPainter painter, RenderMode mode) {
         for (int q = 0; q < 6; q++) {
             if (mode == RenderMode.FEEDBACK)
                 painter.glPassThrough(q);
@@ -214,7 +214,7 @@ public class AxisBox implements IAxis {
     /**
      * Draw a grid on the desired quad.
      */
-    protected void drawGridOnQuad(Painter painter, int quad) {
+    protected void drawGridOnQuad(IPainter painter, int quad) {
         // Draw X grid along X axis
         if ((quad != 0) && (quad != 1)) {
             double[] xticks = layout.getXTicks();
@@ -247,12 +247,12 @@ public class AxisBox implements IAxis {
         }
     }
 
-    protected BoundingBox3d drawTicks(Painter painter, int axis, int direction, Color color) {
+    protected BoundingBox3d drawTicks(IPainter painter, int axis, int direction, Color color) {
         return drawTicks(painter, axis, direction, color, null, null);
     }
 
     /** Draws axis labels, tick lines and tick label*/
-    protected BoundingBox3d drawTicks(Painter painter, int axis, int direction, Color color, Halign hal, Valign val) {
+    protected BoundingBox3d drawTicks(IPainter painter, int axis, int direction, Color color, Halign hal, Valign val) {
         int quad_0;
         int quad_1;
         float tickLength = 20.0f; // with respect to range
@@ -329,7 +329,7 @@ public class AxisBox implements IAxis {
         return ticksTxtBounds;
     }
 
-    public void drawAxisLabel(Painter painter, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
+    public void drawAxisLabel(IPainter painter, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
         if (isXDisplayed(direction) || isYDisplayed(direction) || isZDisplayed(direction)) {
             Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
             
@@ -383,7 +383,7 @@ public class AxisBox implements IAxis {
     /** 
      * Draw an array of ticks on the given axis indicated by direction field. 
      */
-    public void drawAxisTicks(Painter painter, int direction, Color color, Halign hal, Valign val, float tickLength, BoundingBox3d ticksTxtBounds, double xpos, double ypos, double zpos, float xdir, float ydir, float zdir, double[] ticks) {
+    public void drawAxisTicks(IPainter painter, int direction, Color color, Halign hal, Valign val, float tickLength, BoundingBox3d ticksTxtBounds, double xpos, double ypos, double zpos, float xdir, float ydir, float zdir, double[] ticks) {
         double xlab;
         double ylab;
         double zlab;
@@ -463,7 +463,7 @@ public class AxisBox implements IAxis {
         }
     }
 
-    public void drawAxisTickNumericLabel(Painter painter, int direction, Color color, Halign hAlign, Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
+    public void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Halign hAlign, Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
         // doTransform(gl);
         painter.glLoadIdentity();
         painter.glScalef(scale.x, scale.y, scale.z);
@@ -498,7 +498,7 @@ public class AxisBox implements IAxis {
         return hAlign;
     }
 
-    public void drawTickLine(Painter painter, Color color, double xpos, double ypos, double zpos, double xlab, double ylab, double zlab) {
+    public void drawTickLine(IPainter painter, Color color, double xpos, double ypos, double zpos, double xlab, double ylab, double zlab) {
         painter.glColor3f(color.r, color.g, color.b);
         painter.glLineWidth(1);
 
@@ -611,13 +611,13 @@ public class AxisBox implements IAxis {
 
     /* COMPUTATION OF HIDDEN QUADS */
 
-    protected void updateHiddenQuads(Painter painter) {
+    protected void updateHiddenQuads(IPainter painter) {
         quadIsHidden = getHiddenQuads(painter);
     }
 
     /** Computes the visibility of each cube face. 
      * @param painter TODO*/
-    protected boolean[] getHiddenQuads(Painter painter) {
+    protected boolean[] getHiddenQuads(IPainter painter) {
         Coord3d scaledEye = painter.getCamera().getEye().div(scale);
         return getHiddenQuads(scaledEye, center);
     }

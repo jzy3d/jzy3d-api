@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 public class ConcurrentScatterPoint extends ScatterPoint {
@@ -16,7 +16,7 @@ public class ConcurrentScatterPoint extends ScatterPoint {
     }
     
     @Override
-	protected void doDrawPoints(Painter painter) {
+	protected void doDrawPoints(IPainter painter) {
 		painter.glPointSize(width);
         painter.glBegin_Point();
         if (points != null) {

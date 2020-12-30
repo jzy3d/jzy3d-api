@@ -4,7 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
@@ -30,7 +30,7 @@ public class DrawableTextWrapper extends Drawable{
 	/*******************************************************************************************/
 	
 	@Override
-    public void draw(Painter painter){
+    public void draw(IPainter painter){
 	    doTransform(painter);
 	    BoundingBox3d box = renderer.drawText(painter, txt, position, halign, valign, color, screenOffset, sceneOffset);
 	    if(box!=null)

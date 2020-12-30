@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * A polygon made of two triangles with no wireframe on their adjacent side.
@@ -28,7 +28,7 @@ public class TesselatedPolygon extends Composite {
 	protected Polygon newTriangle() {
 		return new Polygon() {
 			@Override
-            protected void begin(Painter painter) {
+            protected void begin(IPainter painter) {
 				painter.glBegin_Triangle();
 			}
 
@@ -37,7 +37,7 @@ public class TesselatedPolygon extends Composite {
 			 * shared adjacent triangle side is not drawn.
 			 */
 			@Override
-            protected void callPointForWireframe(Painter painter) {
+            protected void callPointForWireframe(IPainter painter) {
 				painter.color(wireframeColor);
 				painter.glLineWidth(wireframeWidth);
 				painter.glBegin_LineStrip();

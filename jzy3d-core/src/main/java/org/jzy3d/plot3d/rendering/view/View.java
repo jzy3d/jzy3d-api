@@ -17,7 +17,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
@@ -106,7 +106,7 @@ public class View {
 	protected Quality quality;
 	protected Scene scene;
 	protected ICanvas canvas;
-	protected Painter painter;
+	protected IPainter painter;
 	protected Scene annotations;
 	protected Coord3d viewpoint;
 	protected Coord3d center;
@@ -209,7 +209,7 @@ public class View {
 		current = this;
 	}
 
-	public Painter getPainter() {
+	public IPainter getPainter() {
 		return painter;
 	}
 
@@ -1128,7 +1128,7 @@ public class View {
 	 * bounds.getTransformedRadius(spaceTransformer)); } }
 	 */
 
-	protected void correctCameraPositionForIncludingTextLabels(Painter painter, ViewportConfiguration viewport) {
+	protected void correctCameraPositionForIncludingTextLabels(IPainter painter, ViewportConfiguration viewport) {
 	}
 
 	/* AXE BOX RENDERING */

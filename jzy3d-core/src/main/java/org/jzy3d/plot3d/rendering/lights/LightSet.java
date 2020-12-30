@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 public class LightSet {
 	public LightSet() {
@@ -15,11 +15,11 @@ public class LightSet {
 		this.lights = lights;
 	}
 
-	public void init(Painter painter) {
+	public void init(IPainter painter) {
 		painter.glEnable_ColorMaterial();
 	}
 
-	public void apply(Painter painter, Coord3d scale) {
+	public void apply(IPainter painter, Coord3d scale) {
 		if (lazyLightInit) {
 			initLight(painter);
 			for (Light light : lights)
@@ -31,11 +31,11 @@ public class LightSet {
 		}
 	}
 
-	public void enableLightIfThereAreLights(Painter painter) {
+	public void enableLightIfThereAreLights(IPainter painter) {
 		enable(painter, true);
 	}
 
-	public void enable(Painter painter, boolean onlyIfAtLeastOneLight) {
+	public void enable(IPainter painter, boolean onlyIfAtLeastOneLight) {
 		if (onlyIfAtLeastOneLight) {
 			if (lights.size() > 0)
 				painter.glEnable_Lighting();
@@ -43,7 +43,7 @@ public class LightSet {
 			painter.glEnable_Lighting();
 	}
 
-	public void disable(Painter painter) {
+	public void disable(IPainter painter) {
 		painter.glDisable_Lighting();
 	}
 
@@ -68,7 +68,7 @@ public class LightSet {
 	}
 
 	// http://www.sjbaker.org/steve/omniv/opengl_lighting.html
-	protected void initLight(Painter painter) {
+	protected void initLight(IPainter painter) {
 		painter.glEnable_ColorMaterial();
 		painter.glEnable_Lighting();
 

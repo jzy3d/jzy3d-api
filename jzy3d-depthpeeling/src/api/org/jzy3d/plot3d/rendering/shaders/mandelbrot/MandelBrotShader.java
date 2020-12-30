@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.rendering.shaders.mandelbrot;
 
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.shaders.Shaderable;
 
 import com.jogamp.opengl.GL2;
@@ -28,7 +28,7 @@ public class MandelBrotShader extends Shaderable{
     }
 
     @Override
-    protected void executeProgram(Painter painter, GL2 gl) {
+    protected void executeProgram(IPainter painter, GL2 gl) {
         //gl.glShadeModel(GL2.GL_FLAT);
         //gl.setSwapInterval(1);
         

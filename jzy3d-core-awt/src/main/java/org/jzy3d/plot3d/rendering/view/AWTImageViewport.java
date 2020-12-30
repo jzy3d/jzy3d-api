@@ -4,7 +4,7 @@ import java.awt.Image;
 import java.nio.ByteBuffer;
 
 import org.jzy3d.maths.Dimension;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.image.GLImage;
 
 /**
@@ -28,7 +28,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     }
 
     @Override
-    public void render(Painter painter) {
+    public void render(IPainter painter) {
         // gl.glDisable(GL2.GL_LIGHTING);
 
         // Set viewport and projection

@@ -7,7 +7,7 @@ import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.graphs.layout.DefaultGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphFormatter;
@@ -75,7 +75,7 @@ public abstract class AbstractDrawableGraph2d<V, E> extends Drawable implements 
 	/*******************************************************/
 	
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 		if(layout==null)
 			throw new RuntimeException("missing vertex mapping");
 		
@@ -94,9 +94,9 @@ public abstract class AbstractDrawableGraph2d<V, E> extends Drawable implements 
 	    	drawVertexLabels(painter);
 	}
 	
-	protected abstract void drawVertices(Painter painter);
-	protected abstract void drawVertexLabels(Painter painter);
-	protected abstract void drawEdges(Painter painter);
+	protected abstract void drawVertices(IPainter painter);
+	protected abstract void drawVertexLabels(IPainter painter);
+	protected abstract void drawEdges(IPainter painter);
 
 	/*******************************************************/
 

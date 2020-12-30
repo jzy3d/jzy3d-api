@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.rendering.view;
 
 
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 /**
@@ -85,7 +85,7 @@ public abstract class AbstractViewportManager {
      * </ul>
      * @param painter TODO
      */
-    protected ViewportConfiguration applyViewport(Painter painter) {
+    protected ViewportConfiguration applyViewport(IPainter painter) {
         // Stretch projection on the whole viewport
         if (ViewportMode.STRETCH_TO_FILL.equals(mode) || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) {
             screenXOffset = screenLeft;
@@ -146,7 +146,7 @@ public abstract class AbstractViewportManager {
     }
 
     /** Renders a grid on the defined sub screen. */
-    protected void renderSubScreenGrid(Painter painter) {
+    protected void renderSubScreenGrid(IPainter painter) {
         if (screenWidth <= 0)
             return;
         

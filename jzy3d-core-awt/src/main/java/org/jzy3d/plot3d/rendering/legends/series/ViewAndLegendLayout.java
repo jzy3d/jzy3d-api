@@ -4,7 +4,7 @@ import java.awt.Rectangle;
 import java.util.List;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -44,7 +44,7 @@ public class ViewAndLegendLayout implements IViewportLayout{
     }
     
     @Override
-    public void render(Painter painter, Chart chart){
+    public void render(IPainter painter, Chart chart){
         View view = chart.getView();
         view.renderBackground(backgroundViewPort);
         view.renderScene(sceneViewPort);
@@ -57,7 +57,7 @@ public class ViewAndLegendLayout implements IViewportLayout{
         //showLayout((AWTView)view);
     }
     
-    protected void renderLegends(Painter painter, float left, float right, List<ILegend> data, ICanvas canvas) {
+    protected void renderLegends(IPainter painter, float left, float right, List<ILegend> data, ICanvas canvas) {
     	for (ILegend legend : data) {
             legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
             legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left , right);

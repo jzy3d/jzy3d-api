@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
 import org.apache.log4j.Logger;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.DualDepthPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.FrontToBackPeelingAlgorithm;
@@ -130,7 +130,7 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     public static IGLRenderer getDepthPeelingContentRenderer(final View view) {
         return new IGLRenderer() {
             @Override
-            public void draw(Painter painter) {
+            public void draw(IPainter painter) {
 
                 ((DepthPeelingView) view).renderPeeledView();
             }
