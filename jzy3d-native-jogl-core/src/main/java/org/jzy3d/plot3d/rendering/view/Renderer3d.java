@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 
@@ -118,7 +118,7 @@ public class Renderer3d implements GLEventListener {
 	}
 
 	/**
-	 * This method allows configuring the {@link Painter} with the current
+	 * This method allows configuring the {@link IPainter} with the current
 	 * {@link GL} context provided by the {@link GLAutoDrawable}. This may be
 	 * usefull to override in case of a mocking GL (to avoid having the mock
 	 * replaced by a real GL Context).

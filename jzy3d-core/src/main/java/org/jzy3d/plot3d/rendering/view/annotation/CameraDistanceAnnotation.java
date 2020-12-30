@@ -4,7 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Geometry;
 import org.jzy3d.plot3d.primitives.Point;
@@ -36,7 +36,7 @@ public class CameraDistanceAnnotation extends Point {
 	}
 
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 		computeCameraPosition();
 		doTransform(painter);
 
@@ -82,7 +82,7 @@ public class CameraDistanceAnnotation extends Point {
 		xyz = xyz.div(scaling);
 	}
 
-	public void doDrawCamera(Painter painter, Camera cam) {
+	public void doDrawCamera(IPainter painter, Camera cam) {
 		painter.glPointSize(width);
 		painter.glBegin_Point();
 		painter.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);

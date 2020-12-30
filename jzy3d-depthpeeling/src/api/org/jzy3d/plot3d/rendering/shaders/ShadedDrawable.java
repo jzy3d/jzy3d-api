@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.shaders;
 
 import org.jzy3d.io.glsl.ShaderFilePair;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 
 import com.jogamp.opengl.GL2;
@@ -16,7 +16,7 @@ public class ShadedDrawable extends Shaderable{
     }
     
     @Override
-    public void display(Painter painter, GL2 gl, GLU glu) {
+    public void display(IPainter painter, GL2 gl, GLU glu) {
         executeProgram(painter, gl); 
         
         if(drawable!=null)

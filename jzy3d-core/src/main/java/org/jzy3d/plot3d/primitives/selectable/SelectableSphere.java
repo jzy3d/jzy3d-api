@@ -5,7 +5,7 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.builder.concrete.SphereScatterGenerator;
 import org.jzy3d.plot3d.primitives.Sphere;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -22,7 +22,7 @@ public class SelectableSphere extends Sphere implements Selectable {
 	}
 
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
 		super.draw(painter);
 
 		// Draws selection anchors
@@ -34,7 +34,7 @@ public class SelectableSphere extends Sphere implements Selectable {
 	}
 
 	@Override
-	public void project(Painter painter, Camera cam) {
+	public void project(IPainter painter, Camera cam) {
 		projection = cam.modelToScreen(painter, anchors);
 	}
 

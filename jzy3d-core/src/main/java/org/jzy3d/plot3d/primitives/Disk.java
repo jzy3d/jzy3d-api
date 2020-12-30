@@ -5,7 +5,7 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 public class Disk extends Wireframeable implements ISingleColorable {
@@ -34,13 +34,13 @@ public class Disk extends Wireframeable implements ISingleColorable {
 	/* */
 
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
 		doTransform(painter);
 		doDrawDisk(painter);
 		doDrawBoundsIfDisplayed(painter);
 	}
 
-	protected void doDrawDisk(Painter painter) {
+	protected void doDrawDisk(IPainter painter) {
 		painter.glTranslatef(x, y, z);
 		painter.glLineWidth(wireframeWidth);
 

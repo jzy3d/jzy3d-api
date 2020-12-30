@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.transform.Transform;
@@ -195,7 +195,7 @@ public class Camera extends AbstractViewportManager {
 	 * @throws a RuntimeException if an error occured while trying to retrieve model
 	 *           coordinates
 	 */
-	public Coord3d screenToModel(Painter painter, Coord3d screen) {
+	public Coord3d screenToModel(IPainter painter, Coord3d screen) {
 		int viewport[] = painter.getViewPortAsInt();
 		float modelView[] = painter.getModelViewAsFloat();
 		float projection[] = painter.getProjectionAsFloat();
@@ -233,7 +233,7 @@ public class Camera extends AbstractViewportManager {
 	 *           is false). In case {@link #failOnException} is false, a DEBUG log
 	 *           is sent to the {@link #LOGGER}.
 	 */
-	public Coord3d modelToScreen(Painter painter, Coord3d point) {
+	public Coord3d modelToScreen(IPainter painter, Coord3d point) {
 		int viewport[] = painter.getViewPortAsInt();
 
 		float screenCoord[] = new float[3];// wx, wy, wz;// returned xyz coords
@@ -244,7 +244,7 @@ public class Camera extends AbstractViewportManager {
 		return new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]);
 	}
 
-	public Coord3d[] modelToScreen(Painter painter, Coord3d[] points) {
+	public Coord3d[] modelToScreen(IPainter painter, Coord3d[] points) {
 		int viewport[] = painter.getViewPortAsInt();
 
 		float screenCoord[] = new float[3];
@@ -260,7 +260,7 @@ public class Camera extends AbstractViewportManager {
 		return projection;
 	}
 
-	public Coord3d[][] modelToScreen(Painter painter, Coord3d[][] points) {
+	public Coord3d[][] modelToScreen(IPainter painter, Coord3d[][] points) {
 		int viewport[] = painter.getViewPortAsInt();
 
 		float screenCoord[] = new float[3];
@@ -278,7 +278,7 @@ public class Camera extends AbstractViewportManager {
 		return projection;
 	}
 
-	public List<Coord3d> modelToScreen(Painter painter, List<Coord3d> points) {
+	public List<Coord3d> modelToScreen(IPainter painter, List<Coord3d> points) {
 		int viewport[] = painter.getViewPortAsInt();
 
 		float screenCoord[] = new float[3];
@@ -294,7 +294,7 @@ public class Camera extends AbstractViewportManager {
 		return projection;
 	}
 
-	public ArrayList<ArrayList<Coord3d>> modelToScreen(Painter painter, ArrayList<ArrayList<Coord3d>> polygons) {
+	public ArrayList<ArrayList<Coord3d>> modelToScreen(IPainter painter, ArrayList<ArrayList<Coord3d>> polygons) {
 		int viewport[] = painter.getViewPortAsInt();
 
 		float screenCoord[] = new float[3];
@@ -314,7 +314,7 @@ public class Camera extends AbstractViewportManager {
 		return projections;
 	}
 
-	public PolygonArray modelToScreen(Painter painter, PolygonArray polygon) {
+	public PolygonArray modelToScreen(IPainter painter, PolygonArray polygon) {
 		int viewport[] = painter.getViewPortAsInt();
 
 		float screenCoord[] = new float[3];
@@ -336,7 +336,7 @@ public class Camera extends AbstractViewportManager {
 		return new PolygonArray(x, y, z);
 	}
 
-	public PolygonArray[][] modelToScreen(Painter painter, PolygonArray[][] polygons) {
+	public PolygonArray[][] modelToScreen(IPainter painter, PolygonArray[][] polygons) {
 		int viewport[] = painter.getViewPortAsInt();
 		float screencoord[] = new float[3];
 
@@ -375,7 +375,7 @@ public class Camera extends AbstractViewportManager {
 
 	/*******************************************************************/
 
-	public void show(Painter painter, Transform transform, Coord3d scaling) {
+	public void show(IPainter painter, Transform transform, Coord3d scaling) {
 		if (transform != null)
 			transform.execute(painter);
 
@@ -407,11 +407,11 @@ public class Camera extends AbstractViewportManager {
 	 * @throws a Runtime Exception if the projection mode is neither
 	 *           Camera.PERSPECTIVE nor Camera.ORTHOGONAL.
 	 */
-	public void shoot(Painter painter, CameraMode projection) {
+	public void shoot(IPainter painter, CameraMode projection) {
 		shoot(painter, projection, false);
 	}
 
-	public void shoot(Painter painter, CameraMode projection, boolean doPushMatrixBeforeShooting) {
+	public void shoot(IPainter painter, CameraMode projection, boolean doPushMatrixBeforeShooting) {
 		painter.glMatrixMode_Projection();
 		if (doPushMatrixBeforeShooting)
 			painter.glPushMatrix();
@@ -420,7 +420,7 @@ public class Camera extends AbstractViewportManager {
 		doShoot(painter, projection);
 	}
 
-	public void doShoot(Painter painter, CameraMode projection) {
+	public void doShoot(IPainter painter, CameraMode projection) {
 		// Set viewport
 		ViewportConfiguration viewport = applyViewport(painter);
 
@@ -436,7 +436,7 @@ public class Camera extends AbstractViewportManager {
 		doLookAt(painter);
 	}
 
-	protected void projectionPerspective(Painter painter, ViewportConfiguration viewport) {
+	protected void projectionPerspective(IPainter painter, ViewportConfiguration viewport) {
 		boolean stretchToFill = ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode());
 		double fov = computeFieldOfView(radius * 2, eye.distance(target));
 		float aspect = stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1;
@@ -445,11 +445,11 @@ public class Camera extends AbstractViewportManager {
 		painter.gluPerspective(fov, aspect, nearCorrected, far);
 	}
 
-	protected void doLookAt(Painter painter) {
+	protected void doLookAt(IPainter painter) {
 		painter.gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
 	}
 
-	protected void projectionOrtho(Painter painter, ViewportConfiguration viewport) {
+	protected void projectionOrtho(IPainter painter, ViewportConfiguration viewport) {
 		if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode())) {
 			ortho.update(-radius, +radius, -radius, +radius, near, far);
 		} else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode())) {
@@ -584,7 +584,7 @@ public class Camera extends AbstractViewportManager {
 		/**
 		 * Applies orthogonal projection only if parameters are valid (i.e. not zero)
 		 */
-		public void apply(Painter painter) {
+		public void apply(IPainter painter) {
 			if (left != 0 && right != 0 && bottom != 0 && top != 0 && near != 0 && far != 0) {
 				painter.glOrtho(left, right, bottom, top, near, far);
 			}

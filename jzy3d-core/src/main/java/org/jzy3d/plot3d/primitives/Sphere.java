@@ -6,7 +6,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
@@ -45,13 +45,13 @@ public class Sphere extends Wireframeable implements ISingleColorable {
     /********************************************************/
 
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         doTransform(painter);
         doDrawSphere(painter);
         doDrawBoundsIfDisplayed(painter);
     }
 
-	protected void doDrawSphere(Painter painter) {
+	protected void doDrawSphere(IPainter painter) {
 		painter.glTranslatef(position.x, position.y, position.z);
 
         if (faceDisplayed) {

@@ -5,8 +5,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
-import org.jzy3d.painters.Painter.Font;
+import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
@@ -36,7 +36,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 	}
 
 	@Override
-	public void drawSimpleText(Painter painter, Camera cam, String s, Coord3d position, Color color) {
+	public void drawSimpleText(IPainter painter, Camera cam, String s, Coord3d position, Color color) {
 		glRaster(painter, position, color);
 
 		painter.glutBitmapString(font.getCode(), s);
@@ -47,7 +47,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 	 * the string according to the current Camera configuration.
 	 */
 	@Override
-	public BoundingBox3d drawText(Painter painter, String text, Coord3d position, Halign halign, Valign valign,
+	public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Halign halign, Valign valign,
 			Color color, Coord2d screenOffset, Coord3d sceneOffset) {
 		painter.color(color);
 
@@ -72,7 +72,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 	}
 
 	/** Left as a helper for subclasses*/
-	protected void glRasterPos(Painter painter, Coord3d sceneOffset, Coord3d screenPositionAligned3d) {
+	protected void glRasterPos(IPainter painter, Coord3d sceneOffset, Coord3d screenPositionAligned3d) {
 		if (spaceTransformer != null) {
 			screenPositionAligned3d = spaceTransformer.compute(screenPositionAligned3d);
 		}
@@ -80,7 +80,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 		painter.raster(screenPositionAligned3d.add(sceneOffset), null);
 	}
 
-	protected Coord3d toModelViewPosition(Painter painter, Coord3d screenPosition, Coord3d screenPositionAligned) {
+	protected Coord3d toModelViewPosition(IPainter painter, Coord3d screenPosition, Coord3d screenPositionAligned) {
 		Coord3d screenPositionAligned3d;
 		try {
 			screenPositionAligned3d = painter.getCamera().screenToModel(painter, screenPositionAligned);
@@ -101,7 +101,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 		return screenPositionAligned;
 	}
 
-	protected BoundingBox3d computeTextBounds(Painter painter, Coord3d posScreenShifted, float strlen) {
+	protected BoundingBox3d computeTextBounds(IPainter painter, Coord3d posScreenShifted, float strlen) {
 		Coord3d botLeft = new Coord3d();
 		Coord3d topRight = new Coord3d();
 		botLeft.x = posScreenShifted.x;

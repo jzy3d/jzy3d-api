@@ -2,19 +2,19 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.nio.ByteBuffer;
 
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 public class ImageRenderer {
 	// elements of GL spec picked in JOGL GL interface
 	public static final int GL_RGBA = 0x1908;
 	public static final int GL_UNSIGNED_BYTE = 0x1401;
 	
-	public void renderImage(Painter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
+	public void renderImage(IPainter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
 			int screenHeight) {
 		renderImage(painter, image, imageWidth, imageHeight, screenWidth, screenHeight, 0.75f);
 	}
 
-	public void renderImage(Painter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
+	public void renderImage(IPainter painter, ByteBuffer image, int imageWidth, int imageHeight, int screenWidth,
 			int screenHeight, float z) {
 		if (image == null)
 			return;

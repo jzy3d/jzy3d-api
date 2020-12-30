@@ -11,12 +11,12 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Range;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.contour.ContourLevel;
 import org.jzy3d.plot3d.primitives.contour.ContourMesh;
-import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
+import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
@@ -59,7 +59,7 @@ public class ContourAxisBox extends AxisBox {
 	protected void rebuildTexture(){
         BufferedImageTexture contourResource = new BufferedImageTexture(contourImg);
         float zrange = zmax - zmin; // avoids rendering problems with the tick lines on the bottom part of the cube
-        this.contourTexture = new DrawableTexture(contourResource, PlaneAxis.Z, zmin - zrange/1000, getDefaultTextureMapping());        
+        this.contourTexture = new NativeDrawableImage(contourResource, PlaneAxis.Z, zmin - zrange/1000, getDefaultTextureMapping());        
     }
 
 	protected List<Coord2d> getDefaultTextureMapping(){
@@ -93,7 +93,7 @@ public class ContourAxisBox extends AxisBox {
 	}
 	
 	@Override
-	public void draw(Painter painter){
+	public void draw(IPainter painter){
 		super.draw(painter);
 		
 		//gl.glHint(GL2.GL_PERSPECTIVE_CORRECTION_HINT, GL2.GL_NICEST);
@@ -109,7 +109,7 @@ public class ContourAxisBox extends AxisBox {
 		
 	}
 	
-	public void drawMesh(Painter painter, ContourMesh mesh){
+	public void drawMesh(IPainter painter, ContourMesh mesh){
 		// draw contour lines
 		for (ContourLevel line: mesh.lines.getContourLevels()) {
 			line.draw(painter);
@@ -137,6 +137,6 @@ public class ContourAxisBox extends AxisBox {
 	protected float zmin;
 	protected float zmax;
 	protected BufferedImage contourImg;
-	protected DrawableTexture contourTexture;
+	protected NativeDrawableImage contourTexture;
 	protected ContourMesh mesh;
 }

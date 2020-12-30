@@ -4,27 +4,25 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.painters.IPainter;
 
 /**
- * Supports additional settings
- * 
  * @author Martin Pernollet
  */
-public class Polygon extends Geometry {
+public class Triangle extends Geometry {
 
     /**
-     * Initializes an empty {@link Polygon} with face status defaulting to true,
+     * Initializes an empty {@link Triangle} with face status defaulting to true,
      * and wireframe status defaulting to false.
      */
-    public Polygon() {
+    public Triangle() {
         super();
     }
     
-    public Polygon(Color wire, Color face){
+    public Triangle(Color wire, Color face){
         setWireframeColor(wire);
         setColor(face);
     }
 
     @Override
     protected void begin(IPainter painter) {
-    	painter.glBegin_Polygon();
+    	painter.glBegin_Triangle();
     }
 }

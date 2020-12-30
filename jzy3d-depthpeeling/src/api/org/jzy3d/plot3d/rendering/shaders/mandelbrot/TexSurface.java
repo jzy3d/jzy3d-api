@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.shaders.mandelbrot;
 
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -13,7 +13,7 @@ public class TexSurface extends Drawable{
     }
     
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         doTransform(painter);
         // Reset the current matrix to the "identity"
         //GL2 gl2 = gl.getGL2();

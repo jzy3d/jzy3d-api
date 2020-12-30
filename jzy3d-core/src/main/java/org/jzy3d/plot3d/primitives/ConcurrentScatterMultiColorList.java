@@ -6,7 +6,7 @@ import java.util.List;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 public class ConcurrentScatterMultiColorList extends ScatterMultiColorList implements IMultiColorable {
@@ -25,7 +25,7 @@ public class ConcurrentScatterMultiColorList extends ScatterMultiColorList imple
     /* */
     
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         doTransform(painter);
         
         painter.glPointSize(width);

@@ -11,7 +11,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -31,7 +31,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	/* * */
 
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 		doTransform(painter);
 
 		if (mapper != null)
@@ -51,7 +51,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		doDrawBoundsIfDisplayed(painter);
 	}
 
-	protected void drawFace(Painter painter) {
+	protected void drawFace(IPainter painter) {
 		if (faceDisplayed) {
 			painter.glPolygonMode(polygonMode, PolygonFill.FILL);
 
@@ -68,7 +68,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 		}
 	}
 
-	protected void drawWireframe(Painter painter) {
+	protected void drawWireframe(IPainter painter) {
 		if (wireframeDisplayed) {
 			painter.glPolygonMode(polygonMode, PolygonFill.LINE);
 
@@ -88,7 +88,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	/**
 	 * Drawing the point list in wireframe mode
 	 */
-	protected void callPointForWireframe(Painter painter) {
+	protected void callPointForWireframe(IPainter painter) {
 		painter.color(wireframeColor);
 		painter.glLineWidth(getWireframeWidth());
 
@@ -102,7 +102,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	/**
 	 * Drawing the point list in face mode (polygon content)
 	 */
-	protected void callPointsForFace(Painter painter) {
+	protected void callPointsForFace(IPainter painter) {
 		begin(painter);
 		for (Point p : points) {
 			if (mapper != null) {
@@ -120,7 +120,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	 * Invoke GL begin with the actual geometry type {@link GL#GL_POINTS},
 	 * {@link GL#GL_LINES}, {@link GL#GL_TRIANGLES}, {@link GL2#GL_POLYGON} ...
 	 */
-	protected abstract void begin(Painter painter);
+	protected abstract void begin(IPainter painter);
 
 	/* DATA */
 

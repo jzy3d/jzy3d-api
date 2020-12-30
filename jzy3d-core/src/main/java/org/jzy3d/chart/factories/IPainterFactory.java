@@ -7,7 +7,7 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -26,7 +26,7 @@ import org.jzy3d.plot3d.rendering.view.IViewOverlay;
  * 
  * The {@link IPainterFactory} provides the following objects : 
  * 
- * The {@link Painter} itself allows flipping between native rendering
+ * The {@link IPainter} itself allows flipping between native rendering
  * ({@link NativeDesktopPainter}) and software rendering
  * ({@link EmulGLPainter}).
  * 
@@ -47,8 +47,8 @@ import org.jzy3d.plot3d.rendering.view.IViewOverlay;
  */
 public interface IPainterFactory {
 
-	public Painter newPainter();
-
+	public IPainter newPainter();
+	
 	public IViewOverlay newViewOverlay();
 
 	public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);

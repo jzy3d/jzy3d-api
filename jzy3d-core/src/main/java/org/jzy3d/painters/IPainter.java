@@ -18,7 +18,7 @@ import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
- * A {@link Painter} offers methods for drawing and viewing 3d objects.
+ * An {@link IPainter} offers methods for drawing and viewing 3d objects.
  * 
  * It draws things by providing a generalization of the OpenGL interface to
  * allow any {@link Drawable} to be painted. The painter methods are named to
@@ -27,33 +27,33 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * 
  * Traditional OpenGL methods mapping
  * <ul>
- * <li>GL.glBegin() -> {@link Painter#glBegin()}
- * <li>GLU.gluLookAt() -> {@link Painter#gluLookAt()}
- * <li>GLUT.glutBitmapString() -> {@link Painter#glutBitmapString()}
+ * <li>GL.glBegin() -> {@link IPainter#glBegin()}
+ * <li>GLU.gluLookAt() -> {@link IPainter#gluLookAt()}
+ * <li>GLUT.glutBitmapString() -> {@link IPainter#glutBitmapString()}
  * </ul>
  * 
  * Traditional OpenGL constants mapping with "_"
  * <ul>
- * <li>GL.glEnable(GL.GL_BLEND) -> {@link Painter#glEnable_Blend()}
- * <li>GL.glBegin(GL.GL_POLYGON) -> {@link Painter#glBegin_Polygon()}
+ * <li>GL.glEnable(GL.GL_BLEND) -> {@link IPainter#glEnable_Blend()}
+ * <li>GL.glBegin(GL.GL_POLYGON) -> {@link IPainter#glBegin_Polygon()}
  * </ul>
  * 
  * Traditional OpenGL constants mapping with enums, e.g.
  * <ul>
  * <li>GL.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT, float[], 0) ->
- * {@link Painter#glMaterial(MaterialProperty, Color, boolean)}
+ * {@link IPainter#glMaterial(MaterialProperty, Color, boolean)}
  * </ul>
  * 
  * Jzy3d model mapping
  * <ul>
- * <li>GL.glNormal3f(x,y,z) -> {@link Painter#normal(Coord3d)}
- * <li>GL.glVertex3f(x,y,z) -> {@link Painter#vertex(Coord3d)}
- * <li>GL.glColor4f(r,g,b,a) -> {@link Painter#color(Color)}
+ * <li>GL.glNormal3f(x,y,z) -> {@link IPainter#normal(Coord3d)}
+ * <li>GL.glVertex3f(x,y,z) -> {@link IPainter#vertex(Coord3d)}
+ * <li>GL.glColor4f(r,g,b,a) -> {@link IPainter#color(Color)}
  * </ul>
  * 
  * NB : note that jzy3d model mapping comes in addition to the existing OpenGL
- * methods : {@link Painter#color(Color)} and
- * {@link Painter#glColor4f(float, float, float, float)} are both available.
+ * methods : {@link IPainter#color(Color)} and
+ * {@link IPainter#glColor4f(float, float, float, float)} are both available.
  * 
  * 
  * Implementations of this interface may use native rendering
@@ -61,16 +61,16 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * ({@link EmulGLPainter}). They are instanciated by their factories
  * (respectively {@link AWTChartFactory} and {@link EmulGLChartFactory}).
  * 
- * The {@link Painter} is initialized by a {@link View} which provides a
+ * The {@link IPainter} is initialized by a {@link View} which provides a
  * {@link Camera}. The {@link Camera} allows drawing things based on the eye
  * position and orientation. of the painter.
  * 
  * Last, there are utility methods for Jzy3d for easily configuring multiple
- * OpenGL settings with {@link Painter#configureGL(Quality)}. <br>
+ * OpenGL settings with {@link IPainter#configureGL(Quality)}. <br>
  * 
  * <b>Using the complete OpenGL interface</b> Note that you may still access the
  * "real" OpenGL interface in case the Painter does not adress your need. To get
- * it, simply downcast the {@link Painter} to the concrete type you are using,
+ * it, simply downcast the {@link IPainter} to the concrete type you are using,
  * and call the accessors as follow.
  * 
  * Emulated OpenGL interface
@@ -86,14 +86,14 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * <li>GLUT glut = {@link NativeDeskopPainter#getGLUT()}; // JOGL GLUT interface
  * </ul>
  */
-public interface Painter {
+public interface IPainter {
 	/**
 	 * A Font subset supported both by OpenGL 1 and AWT. These fonts can be used
 	 * both for charts based on native OpenGL and charts based on raw AWT.
 	 * 
 	 * Painters such as {@link NativeDesktopPainter} use OpenGL for font rendering
 	 * and address a font name AND size through a font ID (e.g
-	 * {@link Painter#BITMAP_HELVETICA_10}, {@link Painter#BITMAP_HELVETICA_12},
+	 * {@link IPainter#BITMAP_HELVETICA_10}, {@link IPainter#BITMAP_HELVETICA_12},
 	 * etc).
 	 * 
 	 * Painters such as {@link EmulGLPainter} use AWT for font rendering and may
@@ -106,7 +106,7 @@ public interface Painter {
 	 * </code>
 	 * 
 	 * Font names not supported by OpenGL 1 will be ignored. Instead, the default
-	 * font {@link Painter#BITMAP_HELVETICA_12} will apply.
+	 * font {@link IPainter#BITMAP_HELVETICA_12} will apply.
 	 */
 	public enum Font {
 		Helvetica_10(BITMAP_HELVETICA_10, 10), Helvetica_12(BITMAP_HELVETICA_12, 12),

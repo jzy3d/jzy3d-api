@@ -1,13 +1,13 @@
 package org.jzy3d.plot3d.primitives.enlightables;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 
 public abstract class AbstractEnlightable extends Wireframeable {
 
-	protected void applyMaterial(Painter painter) {
+	protected void applyMaterial(IPainter painter) {
 		painter.glMaterial(MaterialProperty.AMBIENT, materialAmbiantReflection, true);
 		painter.glMaterial(MaterialProperty.DIFFUSE, materialDiffuseReflection, true);
 		painter.glMaterial(MaterialProperty.SPECULAR, materialSpecularReflection, true);

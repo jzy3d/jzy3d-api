@@ -1,5 +1,8 @@
 package org.jzy3d.plot3d.primitives.textured;
 
+import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,9 +13,9 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
-import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.DrawableImage;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -23,13 +26,13 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
 /**
- * A {@link DrawableTexture} can only mount its texture while the GL2 thread is
+ * A {@link NativeDrawableImage} can only mount its texture while the GL2 thread is
  * current, so the best is to let draw() automount texture file the first time
  * the resource is required. When a texture is loaded for the first time, it
  * updates the current view bounds since the texture bounds where up to now
  * unknown and fixed to origin with no width.
  * 
- * A {@link DrawableTexture} requires a color filter (default is white), and a
+ * A {@link NativeDrawableImage} requires a color filter (default is white), and a
  * set of coordinates defining the polygon on which the texture should be drawn.
  * 
  * This texture implementation impose the texture to be perpendicular to a
@@ -39,30 +42,40 @@ import com.jogamp.opengl.util.texture.TextureCoords;
  * @author Martin
  * 
  */
-public class DrawableTexture extends Drawable implements ITranslucent {
-    static Logger logger = Logger.getLogger(DrawableTexture.class);
+public class NativeDrawableImage extends DrawableImage implements ITranslucent {
+    static Logger logger = Logger.getLogger(NativeDrawableImage.class);
     
-    public DrawableTexture(SharedTexture resource) {
+    protected SharedTexture resource;
+    protected PlaneAxis orientation;
+    protected float texMatMix[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    protected Color filter;
+    protected float axisValue;
+    protected List<Coord2d> mapping;
+    protected float alpha;
+    protected Coord2d planePosition = new Coord2d();
+
+    
+    public NativeDrawableImage(SharedTexture resource) {
         this(resource, PlaneAxis.Z, 0, null, null);
     }
 
-    public DrawableTexture(SharedTexture resource, PlaneAxis orientation) {
+    public NativeDrawableImage(SharedTexture resource, PlaneAxis orientation) {
         this(resource, orientation, 0, null, null);
     }
 
-    public DrawableTexture(SharedTexture resource, PlaneAxis orientation, float axisValue) {
+    public NativeDrawableImage(SharedTexture resource, PlaneAxis orientation, float axisValue) {
         this(resource, orientation, axisValue, null, null);
     }
 
-    public DrawableTexture(SharedTexture resource, PlaneAxis orientation, float axisValue, Color filter) {
+    public NativeDrawableImage(SharedTexture resource, PlaneAxis orientation, float axisValue, Color filter) {
         this(resource, orientation, axisValue, null, filter);
     }
 
-    public DrawableTexture(SharedTexture resource, PlaneAxis orientation, float axisValue, List<Coord2d> coords) {
+    public NativeDrawableImage(SharedTexture resource, PlaneAxis orientation, float axisValue, List<Coord2d> coords) {
         this(resource, orientation, axisValue, coords, null);
     }
 
-    public DrawableTexture(SharedTexture resource, PlaneAxis orientation, float axisValue, List<Coord2d> coords, Color filter) {
+    public NativeDrawableImage(SharedTexture resource, PlaneAxis orientation, float axisValue, List<Coord2d> coords, Color filter) {
         this.alpha = 1.0f;
         this.resource = resource;
         this.axisValue = axisValue;
@@ -174,7 +187,7 @@ public class DrawableTexture extends Drawable implements ITranslucent {
     protected Transform textureScale;
 
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         doTransform(painter);
         if (textureScale != null)
             textureScale.execute(painter, false);
@@ -226,14 +239,14 @@ public class DrawableTexture extends Drawable implements ITranslucent {
         after(painter);
     }
 
-    protected void before(Painter painter) {
+    protected void before(IPainter painter) {
     	painter.glPushMatrix();
         painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
         painter.glEnable(GL.GL_TEXTURE_2D);
         painter.glTexEnvf(GL.GL_TEXTURE_2D, GL2ES1.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
     }
 
-    protected void after(Painter painter) {
+    protected void after(IPainter painter) {
         painter.glDisable(GL.GL_TEXTURE_2D);
         painter.glTexEnvi(GL2ES1.GL_TEXTURE_ENV, GL2ES1.GL_TEXTURE_ENV_MODE, GL2ES1.GL_MODULATE);
         painter.glPopMatrix();
@@ -249,20 +262,42 @@ public class DrawableTexture extends Drawable implements ITranslucent {
 
     @Override
     public void applyGeometryTransform(Transform transform) {
-        Logger.getLogger(DrawableTexture.class).warn("not implemented");
+        Logger.getLogger(NativeDrawableImage.class).warn("not implemented");
     }
 
     @Override
     public void updateBounds() {
-        Logger.getLogger(DrawableTexture.class).warn("not implemented");
+        Logger.getLogger(NativeDrawableImage.class).warn("not implemented");
+    }
+    
+    /* ****************************************** */
+
+    public static int DEFAULT_IMG_WIDTH = 50;
+    public static int DEFAULT_IMG_HEIGHT = DEFAULT_IMG_WIDTH;
+    
+    public static BufferedImage getImage(Shape shape) {
+    	return getImage(shape, DEFAULT_IMG_WIDTH, DEFAULT_IMG_HEIGHT, null);
     }
 
-    protected SharedTexture resource;
-    protected PlaneAxis orientation;
-    protected float texMatMix[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    protected Color filter;
-    protected float axisValue;
-    protected List<Coord2d> mapping;
-    protected float alpha;
-    protected Coord2d planePosition = new Coord2d();
+    public static BufferedImage getImage(Shape shape, int width, int height) {
+    	return getImage(shape, width, height, null);
+    }
+    
+    public static BufferedImage getImage(Shape shape, int width, int height, java.awt.Color color) {
+        return getImage(shape, width, height, BufferedImage.TYPE_4BYTE_ABGR, color);
+    }
+    
+    public static BufferedImage getImage(Shape shape, int width, int height, int imageType, java.awt.Color color) {
+        BufferedImage bimage = new BufferedImage(width, height, imageType);
+        Graphics2D g2d = bimage.createGraphics();
+        
+        if(color!=null) {
+        	g2d.setColor(color);
+        }
+        
+        g2d.fill(shape);
+        g2d.dispose();
+        return bimage;
+    }
+
 }

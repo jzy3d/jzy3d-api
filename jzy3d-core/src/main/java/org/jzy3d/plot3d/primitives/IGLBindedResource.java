@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 /**
  * Defines an objects that uses resources that should be loaded
@@ -12,7 +12,7 @@ import org.jzy3d.painters.Painter;
  */
 public interface IGLBindedResource {
     /** Mount resources to gl context */
-    public void mount(Painter painter);
+    public void mount(IPainter painter);
     /** Return true if mount(...) has been called at least one time */
     public boolean hasMountedOnce();
 }

@@ -4,7 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IMultiColorable {
@@ -21,7 +21,7 @@ public class ConcurrentScatterMultiColor extends ScatterMultiColor implements IM
     }
     
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         doTransform(painter);
 
         painter.glPointSize(width);

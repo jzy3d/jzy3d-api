@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -44,7 +44,7 @@ public class AWTNativeViewOverlay implements IViewOverlay {
 	 * drawable is current, and after the OpenGL2 scene has been rendered.
 	 */
 	@Override
-	public void render(View view, ViewportConfiguration viewport, Painter painter) {
+	public void render(View view, ViewportConfiguration viewport, IPainter painter) {
 		AWTView awtView = ((AWTView)view);
 		ICanvas canvas = view.getCanvas();
 		INativeCanvas nCanvas = (INativeCanvas) canvas;

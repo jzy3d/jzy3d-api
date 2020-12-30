@@ -39,10 +39,10 @@ public class EmulGLChartFactory extends ChartFactory {
         return new AWTView(factory, scene, canvas, quality);
     }
 
-	@Override
+	/*@Override
     public View newView(Scene scene, ICanvas canvas, Quality quality) {
         return newView(getFactory(), scene, canvas, quality);
-    }
+    }*/
 
     @Override
     public Camera newCamera(Coord3d center) {
@@ -59,7 +59,7 @@ public class EmulGLChartFactory extends ChartFactory {
 
 
 	/**
-	 * This overide intend to use jGL image rendering fallback based on AWT as jGL
+	 * This override intend to use jGL image rendering fallback based on AWT as jGL
 	 * hardly handles the original {@link GL#glDrawPixel()} primitives.
 	 * 
 	 * As the View is still rendered center in the frame, we perform a hacky shift

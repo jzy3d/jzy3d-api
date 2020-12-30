@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 public class CroppableLineStrip extends LineStrip implements Croppable {
     boolean[] filter; // true = show, false = hide
@@ -19,7 +19,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
     }
 
     @Override
-    public void drawLine(Painter painter) {
+    public void drawLine(IPainter painter) {
         painter.glBegin_LineStrip();
 
         painter.glLineWidth(wireframeWidth);
@@ -32,7 +32,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
     }
 
     @Override
-    public void drawPoints(Painter painter) {
+    public void drawPoints(IPainter painter) {
         painter.glBegin_Point();
         
         if (filter == null)
@@ -42,7 +42,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
         painter.glEnd();
     }
 
-    private void doDrawAllLines(Painter painter) {
+    private void doDrawAllLines(IPainter painter) {
         if (wireframeColor == null) {
             for (Point p : points) {
                 painter.color(p.rgb);
@@ -56,7 +56,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
         }
     }
 
-    private void doDrawLinesFiltered(Painter painter) {
+    private void doDrawLinesFiltered(IPainter painter) {
         for (int i = 0; i < filter.length; i++) {
             if (filter[i]) {
                 Point p = points.get(i);
@@ -69,7 +69,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
         }
     }
 
-    private void doDrawAllPoints(Painter painter) {
+    private void doDrawAllPoints(IPainter painter) {
         for (Point p : points) {
             if (wireframeColor == null)
                 painter.color(p.rgb);
@@ -79,7 +79,7 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
         }
     }
 
-    private void doDrawPointsFiltered(Painter painter) {
+    private void doDrawPointsFiltered(IPainter painter) {
         for (int i = 0; i < filter.length; i++) {
             if (filter[i]) {
                 Point p = points.get(i);

@@ -7,7 +7,7 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
@@ -39,13 +39,13 @@ public class ScatterMultiColorList extends Drawable implements IMultiColorable {
     /* */
 
     @Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
         doTransform(painter);
         doDrawPoints(painter);
         doDrawBoundsIfDisplayed(painter);
     }
 
-	protected void doDrawPoints(Painter painter) {
+	protected void doDrawPoints(IPainter painter) {
 		painter.glPointSize(width);
 		painter.glBegin_Point();
 		

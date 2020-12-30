@@ -4,7 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.PixelStore;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
@@ -50,7 +50,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
     }
 
     @Override
-    public void drawSimpleText(Painter painter, Camera cam, String s, Coord3d position, Color color) {
+    public void drawSimpleText(IPainter painter, Camera cam, String s, Coord3d position, Color color) {
         glRaster(painter, position, color);
         
         printString(painter, s, Halign.RIGHT, Valign.GROUND);
@@ -61,7 +61,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
      * occupied by the string according to the current Camera configuration.
      */
     @Override
-    public BoundingBox3d drawText(Painter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Halign halign, Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
         glRaster(painter, position, color);
         
         BillBoardSize dims = printString(painter, s, halign, valign);
@@ -70,7 +70,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
     }
 
 	
-    protected BoundingBox3d computeTextBounds(Painter painter, Coord3d position, BillBoardSize dims) {
+    protected BoundingBox3d computeTextBounds(IPainter painter, Coord3d position, BillBoardSize dims) {
         Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
         Coord3d botLeft = new Coord3d();
         Coord3d topRight = new Coord3d();
@@ -105,7 +105,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
      *             IllegalArgumentException if the vertical or horizontal
      *             alignment constant value is unknown.
      */
-    protected BillBoardSize printString(Painter painter, String s, Halign halign, Valign valign) {
+    protected BillBoardSize printString(IPainter painter, String s, Halign halign, Valign valign) {
         byte[] acodes = s.getBytes();
         int nchar = s.length();
         float xorig = 0.0f;

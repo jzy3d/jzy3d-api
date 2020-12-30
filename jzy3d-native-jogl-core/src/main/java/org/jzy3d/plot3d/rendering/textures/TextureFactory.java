@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 
 import com.jogamp.opengl.GL;
 
@@ -19,7 +19,7 @@ public class TextureFactory {
 		map.put(name, new SharedTexture(name));
 	}
 	
-	public static void init(Painter painter, GL gl){
+	public static void init(IPainter painter, GL gl){
 		for( SharedTexture texture: map.values() )
 			texture.mount(painter);
 	}

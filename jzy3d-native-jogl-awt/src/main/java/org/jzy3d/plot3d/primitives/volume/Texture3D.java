@@ -9,7 +9,7 @@ import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.vbo.ColormapTexture;
@@ -52,7 +52,7 @@ public class Texture3D extends Drawable implements IGLBindedResource,IMultiColor
     }
 	
 	@Override
-	public void mount(Painter painter) {
+	public void mount(IPainter painter) {
 		GL gl = ((NativeDesktopPainter)painter).getGL();
 		if (!mounted) {
 			shapeVBO.mount(painter);
@@ -119,7 +119,7 @@ public class Texture3D extends Drawable implements IGLBindedResource,IMultiColor
     }
 
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 		Camera cam = painter.getCamera();
 		GL gl = ((NativeDesktopPainter)painter).getGL();
 		

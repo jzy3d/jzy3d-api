@@ -1,10 +1,11 @@
 package org.jzy3d.plot3d.rendering.view.layout;
 
+import java.util.ArrayList;
 //import java.awt.Rectangle;
 import java.util.List;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
@@ -54,7 +55,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout{
     }
     
     @Override
-    public void render(Painter painter, Chart chart){
+    public void render(IPainter painter, Chart chart){
     	View view = chart.getView();
         view.renderBackground(backgroundViewport);
         view.renderScene(sceneViewport);
@@ -66,7 +67,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout{
         view.renderOverlay(view.getCamera().getLastViewPort());
     }
     
-    protected void renderLegends(Painter painter, Chart chart){
+    protected void renderLegends(IPainter painter, Chart chart){
         if (hasMeta){
             renderLegends(painter, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
         }
@@ -75,7 +76,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout{
     /**
      * Renders the legend within the screen slice given by the left and right parameters.
      */
-    protected void renderLegends(Painter painter, float left, float right, List<ILegend> legends, ICanvas canvas) {
+    protected void renderLegends(IPainter painter, float left, float right, List<ILegend> legends, ICanvas canvas) {
         float slice = (right - left) / legends.size();
         int k = 0;
         for (ILegend legend : legends) {
@@ -102,7 +103,10 @@ public class ViewAndColorbarsLayout implements IViewportLayout{
     }*/
     
     protected List<ILegend> getLegends(Chart chart){
-        return chart.getScene().getGraph().getLegends();
+    	if(chart!=null && chart.getScene()!=null && chart.getScene().getGraph()!=null && chart.getScene().getGraph().getLegends()!=null)
+    		return chart.getScene().getGraph().getLegends();
+    	else 
+    		return new ArrayList<>();
     }
     
     

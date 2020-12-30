@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -29,7 +29,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin Pernollet
  */
 public interface Selectable {
-	public void project(Painter painter, Camera cam);
+	public void project(IPainter painter, Camera cam);
 	public Polygon2d getHull2d();
 	public List<Coord3d> getLastProjection();
 }

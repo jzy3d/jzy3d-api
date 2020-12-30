@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.transform;
 
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 
 /**
@@ -17,7 +17,7 @@ public class TranslateDrawable implements Transformer {
     }
 
     @Override
-    public void execute(Painter painter) {
+    public void execute(IPainter painter) {
         if (drawable != null) {
             BoundingBox3d bounds = drawable.getBounds();
             if (bounds != null) {
@@ -27,7 +27,7 @@ public class TranslateDrawable implements Transformer {
         }
     }
 
-    public void translateTo(Painter painter, Coord3d center, boolean reverse) {
+    public void translateTo(IPainter painter, Coord3d center, boolean reverse) {
         if (reverse)
             painter.glTranslatef(-center.x / 2, -center.y / 2, -center.z / 2);
         else

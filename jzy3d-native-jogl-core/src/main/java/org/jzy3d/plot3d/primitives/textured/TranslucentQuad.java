@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives.textured;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.Painter;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Quad;
 
@@ -10,7 +10,7 @@ import com.jogamp.opengl.GL2GL3;
 
 public class TranslucentQuad extends Quad implements ITranslucent {
 	@Override
-    public void draw(Painter painter) {
+    public void draw(IPainter painter) {
 		// Execute transformation
 		doTransform(painter);
 		

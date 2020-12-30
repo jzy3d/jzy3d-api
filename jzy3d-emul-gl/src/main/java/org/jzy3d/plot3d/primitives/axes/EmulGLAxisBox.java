@@ -6,8 +6,8 @@ import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Painter;
-import org.jzy3d.painters.Painter.Font;
+import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.primitives.axis.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
@@ -26,7 +26,7 @@ public class EmulGLAxisBox extends AxisBox {
 	}
 
 	@Override
-	public void draw(Painter painter) {
+	public void draw(IPainter painter) {
 		
 		updateHiddenQuads(painter);
 
@@ -144,7 +144,7 @@ public class EmulGLAxisBox extends AxisBox {
 
 	/** Override default behaviour to replace direct text rendering by tick labels collection for later rendering.*/
 	@Override
-	public void drawAxisTickNumericLabel(Painter painter, int direction, Color color,
+	public void drawAxisTickNumericLabel(IPainter painter, int direction, Color color,
 			Halign hAlign, Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
 
 		//super.drawAxisTickNumericLabel(painter, direction, color, hAlign, vAlign, ticksTxtBounds, tickLabel, tickPosition);
@@ -160,7 +160,7 @@ public class EmulGLAxisBox extends AxisBox {
 
 	// invoke tick and axe label rendering
 	@Override
-	public void drawTicksAndLabels(Painter painter) {
+	public void drawTicksAndLabels(IPainter painter) {
 		synchronized (ticks) {
 			ticks.clear();
 		}
@@ -168,7 +168,7 @@ public class EmulGLAxisBox extends AxisBox {
 	}
 	
 	// prevent invoking original text renderer
-	public void drawAxisLabel(Painter painter, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
+	public void drawAxisLabel(IPainter painter, int direction, Color color, BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
        // super.drawAxisLabel(painter, direction, color, ticksTxtBounds, xlab, ylab, zlab, axeLabel);
     }
 

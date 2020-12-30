@@ -7,13 +7,13 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
+import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.primitives.textured.MaskPair;
 import org.jzy3d.plot3d.primitives.textured.TexturedCube;
 import org.jzy3d.plot3d.rendering.textures.TextureFactory;
 
 /**
- * Create symbols based on an {@link MaskPair} defined {@link DrawableTexture}s
+ * Create symbols based on an {@link MaskPair} defined {@link NativeDrawableImage}s
  * 
  * @author martin
  */
@@ -38,8 +38,8 @@ public class MaskImageSymbolHandler extends SymbolHandler{
         // symbols.add(new TexturedCube(position, face, face.negative(), mask, size));
 
         List<Coord2d> zmapping = TexturedCube.makeZPlaneTextureMapping(position, size);
-        DrawableTexture northBg = new DrawableTexture(mask.bgMask, PlaneAxis.Z, position.z, zmapping, face.negative());
-        DrawableTexture north = new DrawableTexture(mask.symbolMask, PlaneAxis.Z, position.z, zmapping, face);
+        NativeDrawableImage northBg = new NativeDrawableImage(mask.bgMask, PlaneAxis.Z, position.z, zmapping, face.negative());
+        NativeDrawableImage north = new NativeDrawableImage(mask.symbolMask, PlaneAxis.Z, position.z, zmapping, face);
         symbols.add(northBg);
         symbols.add(north);
     }
