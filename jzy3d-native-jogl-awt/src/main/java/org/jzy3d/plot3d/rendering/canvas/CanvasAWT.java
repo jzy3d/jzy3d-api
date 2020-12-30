@@ -5,7 +5,7 @@ import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 
-import org.jzy3d.chart.Animator;
+import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -66,7 +66,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     }
     
     @Override
-    public Animator getAnimation() {
+    public IAnimator getAnimation() {
     	return animator;
     }
 
@@ -226,6 +226,6 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
 
     protected View view;
     protected Renderer3d renderer;
-    protected Animator animator;
+    protected IAnimator animator;
     private static final long serialVersionUID = 980088854683562436L;
 }

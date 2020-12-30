@@ -199,6 +199,7 @@ public interface Painter {
 	public void setCamera(Camera camera);
 
 	public View getView();
+	public void setView(View view);
 
 	/** Apply quality settings as OpenGL commands */
 	public void configureGL(Quality quality);

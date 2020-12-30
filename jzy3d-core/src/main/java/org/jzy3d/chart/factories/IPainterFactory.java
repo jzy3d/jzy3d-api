@@ -1,7 +1,7 @@
 package org.jzy3d.chart.factories;
 
-import org.jzy3d.chart.Animator;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
@@ -15,6 +15,16 @@ import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 
 /**
  * An {@link IPainterFactory} provides all Windowing toolkit dependent objects.
+ * It is a sub factory of {@link IChartFactory} and hence allows porting charts
+ * to any windowing toolkit by setting
+ * {@link IChartFactory#setPainterFactory(IPainterFactory)}.
+ * 
+ * The two main {@link IPainterFactory} are {@link NativePainterFactory} and
+ * {@link EmulGLPainterFactory} which enable a {@link IChartFactory} for native
+ * or software rendering. Each of these factories may be further overriden to
+ * cover a specific windowind toolkit (AWT, NEWT, etc).
+ * 
+ * The {@link IPainterFactory} provides the following objects : 
  * 
  * The {@link Painter} itself allows flipping between native rendering
  * ({@link NativeDesktopPainter}) and software rendering
@@ -23,23 +33,27 @@ import org.jzy3d.plot3d.rendering.view.IViewOverlay;
  * Following interfaces allows flipping between native or software AWT, NEWT,
  * SWT, Swing, JavaFX:
  * <ul>
- * <li>The {@link ICanvas}
- * <li>And so does the {@link IFrame},
+ * <li>{@link IViewOverlay}
+ * <li>{@link ICanvas}
+ * <li>{@link IFrame}
  * <li>Controllers : {@link IMousePickingController},
  * {@link ICameraKeyController}, {@link IScreenshotKeyController}.
  * </ul>
  * 
+ * The {@link IAnimator} allows flipping between native or software continuous
+ * rendering.
+ * 
  * @author Martin Pernollet
  */
 public interface IPainterFactory {
-	
+
 	public Painter newPainter();
 
 	public IViewOverlay newViewOverlay();
-	
+
 	public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);
 
-	public Animator newAnimator(ICanvas canvas);
+	public IAnimator newAnimator(ICanvas canvas);
 
 	public ICameraMouseController newMouseCameraController(Chart chart);
 
@@ -52,9 +66,9 @@ public interface IPainterFactory {
 	public IFrame newFrame(Chart chart);
 
 	public IFrame newFrame(Chart chart, Rectangle bounds, String title);
-	
+
 	public void setChartFactory(IChartFactory factory);
-	
+
 	public IChartFactory getChartFactory();
 
 }

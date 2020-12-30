@@ -13,7 +13,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
-import org.jzy3d.chart.Animator;
+import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.TicToc;
@@ -39,7 +39,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 	
 	protected View view;
 	protected EmulGLPainter painter;
-	protected Animator animator;
+	protected IAnimator animator;
 
 	public EmulGLCanvas(IChartFactory factory, Scene scene, Quality quality) {
 		super();
@@ -98,7 +98,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 		});*/
 	}
 	@Override
-	public Animator getAnimation() {
+	public IAnimator getAnimation() {
 		return animator;
 	}
 

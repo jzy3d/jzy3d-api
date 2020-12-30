@@ -6,7 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.jzy3d.chart.Animator;
+import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -63,7 +63,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     }
 
     @Override
-    public Animator getAnimation() {
+    public IAnimator getAnimation() {
     	return animator;
     }
 
@@ -217,7 +217,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
 
     protected View view;
     protected Renderer3d renderer;
-    protected Animator animator;
+    protected IAnimator animator;
     protected GLWindow window;
     protected NewtCanvasAWT canvas;
     private static final long serialVersionUID = 8578690050666237742L;

@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import org.jzy3d.chart.AWTChart;
-import org.jzy3d.chart.Animator;
+import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -21,7 +21,7 @@ public class FpsInfoRenderer implements AWTRenderer2d{
         ((AWTChart)chart).addRenderer(this);
     }
 
-	private Animator getAnimation(Chart chart) {
+	private IAnimator getAnimation(Chart chart) {
 		return ((IScreenCanvas)chart.getCanvas()).getAnimation();
 	}
     

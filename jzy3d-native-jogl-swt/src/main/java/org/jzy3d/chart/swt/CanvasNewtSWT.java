@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.jzy3d.chart.Animator;
+import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
@@ -76,7 +76,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     }
     
     @Override
-    public Animator getAnimation() {
+    public IAnimator getAnimation() {
     	return animator;
     }
 
@@ -210,7 +210,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
 
     protected View view;
     protected Renderer3d renderer;
-    protected Animator animator;
+    protected IAnimator animator;
     protected GLWindow window;
     protected NewtCanvasSWT canvas;
 }
