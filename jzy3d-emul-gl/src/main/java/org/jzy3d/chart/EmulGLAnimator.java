@@ -2,7 +2,7 @@ package org.jzy3d.chart;
 
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 
-public class EmulGLAnimator implements Animator{
+public class EmulGLAnimator implements IAnimator{
 	private static final int RENDERING_LOOP_PAUSE = 100;
 	protected EmulGLCanvas canvas;
 	protected Thread t;

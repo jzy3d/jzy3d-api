@@ -108,6 +108,10 @@ public class Point extends Drawable implements ISingleColorable {
 	public void setWidth(float width) {
 		this.width = width;
 	}
+	
+	public float getWidth() {
+		return width;
+	}
 
 	@Override
     public double getDistance(Camera camera) {
