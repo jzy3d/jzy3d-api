@@ -152,7 +152,6 @@ public class View {
 	private ISquarifier squarifier;
 	
 	protected IViewOverlay viewOverlay;
-	protected IViewBackground viewBackground;
 
 	/**
 	 * Create a view attached to a Scene, with its own Camera and Axe. The initial
