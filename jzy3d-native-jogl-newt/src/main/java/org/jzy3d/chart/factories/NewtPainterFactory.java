@@ -20,10 +20,17 @@ import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTNativeViewOverlay;
+import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 
 public class NewtPainterFactory extends NativePainterFactory implements IPainterFactory{
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
     static Logger logger = Logger.getLogger(NewtPainterFactory.class);
+
+	@Override
+	public IViewOverlay newViewOverlay() {
+		return new AWTNativeViewOverlay();
+	}
 
     @Override
     public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {

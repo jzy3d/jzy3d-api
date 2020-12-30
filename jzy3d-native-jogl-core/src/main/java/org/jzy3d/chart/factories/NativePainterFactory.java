@@ -8,7 +8,8 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import com.jogamp.opengl.GLAutoDrawable;
 
 public abstract class NativePainterFactory implements IPainterFactory{
-
+	IChartFactory chartFactory;
+	
 	@Override
 	public Painter newPainter() {
 		return new NativeDesktopPainter();
@@ -19,4 +20,13 @@ public abstract class NativePainterFactory implements IPainterFactory{
         return new NativeAnimator((GLAutoDrawable)canvas);
     }
 
+	public IChartFactory getChartFactory() {
+		return chartFactory;
+	}
+
+	public void setChartFactory(IChartFactory chartFactory) {
+		this.chartFactory = chartFactory;
+	}
+	
+	
 }

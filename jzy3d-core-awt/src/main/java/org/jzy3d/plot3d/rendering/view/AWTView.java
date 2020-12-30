@@ -22,6 +22,14 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 public class AWTView extends ChartView {
 
 	protected List<ITooltipRenderer> tooltips;
+	protected List<AWTRenderer2d> renderers;
+	protected AWTImageViewport backgroundViewport;
+	protected BufferedImage backgroundImage = null;
+	//protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
+
+	public AWTView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+		super(factory, scene, canvas, quality);
+	}
 
 	public void initInstance(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
 		super.initInstance(factory, scene, canvas, quality);
@@ -149,17 +157,11 @@ public class AWTView extends ChartView {
 		renderers.remove(renderer);
 	}
 
-	protected boolean hasOverlayStuffs() {
+	public List<AWTRenderer2d> getRenderers2d() {
+		return renderers;
+	}
+
+	public boolean hasOverlayStuffs() {
 		return tooltips.size() > 0 || renderers.size() > 0;
 	}
-
-	protected List<AWTRenderer2d> renderers;
-	protected AWTImageViewport backgroundViewport;
-	protected BufferedImage backgroundImage = null;
-	protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
-
-	public AWTView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-		super(factory, scene, canvas, quality);
-	}
-
 }

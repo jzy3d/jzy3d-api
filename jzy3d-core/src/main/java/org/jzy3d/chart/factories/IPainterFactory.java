@@ -11,6 +11,7 @@ import org.jzy3d.painters.Painter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 
 /**
  * An {@link IPainterFactory} provides all Windowing toolkit dependent objects.
@@ -22,8 +23,8 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
  * Following interfaces allows flipping between native or software AWT, NEWT,
  * SWT, Swing, JavaFX:
  * <ul>
- * <li>The {@link ICanvas} 
- * <li> And so does the {@link IFrame},
+ * <li>The {@link ICanvas}
+ * <li>And so does the {@link IFrame},
  * <li>Controllers : {@link IMousePickingController},
  * {@link ICameraKeyController}, {@link IScreenshotKeyController}.
  * </ul>
@@ -31,8 +32,11 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
  * @author Martin Pernollet
  */
 public interface IPainterFactory {
+	
 	public Painter newPainter();
 
+	public IViewOverlay newViewOverlay();
+	
 	public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);
 
 	public Animator newAnimator(ICanvas canvas);
@@ -48,4 +52,9 @@ public interface IPainterFactory {
 	public IFrame newFrame(Chart chart);
 
 	public IFrame newFrame(Chart chart, Rectangle bounds, String title);
+	
+	public void setChartFactory(IChartFactory factory);
+	
+	public IChartFactory getChartFactory();
+
 }

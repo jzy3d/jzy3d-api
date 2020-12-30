@@ -13,8 +13,12 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.EmulGLViewOverlay;
+import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 
 public class EmulGLPainterFactory implements IPainterFactory{
+	IChartFactory chartFactory;
+
 	EmulGLCanvas internalCanvas;
 	EmulGLPainter internalPainter;
 
@@ -26,6 +30,12 @@ public class EmulGLPainterFactory implements IPainterFactory{
 		}
 		return internalPainter;
 	}
+	
+	@Override
+	public IViewOverlay newViewOverlay() {
+		return new EmulGLViewOverlay();
+	}
+
 	
 	@Override
     public EmulGLAnimator newAnimator(ICanvas canvas) {
@@ -96,4 +106,13 @@ public class EmulGLPainterFactory implements IPainterFactory{
 		return null;
 	}
 	
+	
+	public IChartFactory getChartFactory() {
+		return chartFactory;
+	}
+
+	public void setChartFactory(IChartFactory chartFactory) {
+		this.chartFactory = chartFactory;
+	}
+
 }
