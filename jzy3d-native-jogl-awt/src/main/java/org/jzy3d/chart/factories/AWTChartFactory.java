@@ -35,6 +35,15 @@ public class AWTChartFactory extends NativeChartFactory {
     	super(painterFactory);
     }
 
+    /**
+     * The AWTView support Java2d defined components (tooltips, background
+     * images)
+     */
+    @Override
+    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+        return new AWTNativeView(factory, scene, canvas, quality);
+    }
+    
 	@Override
     public AWTNativeChart newChart(IChartFactory factory, Quality quality) {
         return new AWTNativeChart(factory, quality);
@@ -45,15 +54,7 @@ public class AWTChartFactory extends NativeChartFactory {
         return new ViewAndColorbarsLayout();
     }
 
-    /**
-     * The AWTView support Java2d defined components (tooltips, background
-     * images)
-     */
-    @Override
-    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTNativeView(factory, scene, canvas, quality);
-    }
-
+    
     /** Provide AWT Texture loading for screenshots */
     @Override
     public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {

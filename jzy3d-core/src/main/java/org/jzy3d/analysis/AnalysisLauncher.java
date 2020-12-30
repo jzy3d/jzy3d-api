@@ -13,8 +13,6 @@ public class AnalysisLauncher {
     }
 
     public static void open(IAnalysis demo, Rectangle rectangle) throws Exception {
-        //Settings.getInstance().setHardwareAccelerated(true);
-    	
         demo.init();
         Chart chart = demo.getChart();
 
@@ -23,8 +21,6 @@ public class AnalysisLauncher {
 
         ChartLauncher.instructions();
         ChartLauncher.openChart(chart, rectangle, demo.getName());
-        // ChartLauncher.screenshot(demo.getChart(),
-        // "./data/screenshots/"+demo.getName()+".png");
     }
 
     /**

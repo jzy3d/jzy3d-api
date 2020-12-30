@@ -150,6 +150,9 @@ public class View {
 	protected boolean slave = false;
 	protected SpaceTransformer spaceTransformer = new SpaceTransformer();
 	private ISquarifier squarifier;
+	
+	protected IViewOverlay viewOverlay;
+	protected IViewBackground viewBackground;
 
 	/**
 	 * Create a view attached to a Scene, with its own Camera and Axe. The initial
@@ -188,6 +191,7 @@ public class View {
 		this.cam = factory.newCamera(center);
 		this.painter = factory.getPainterFactory().newPainter();
 		this.painter.setCamera(cam);
+		this.viewOverlay = factory.getPainterFactory().newViewOverlay();
 
 		this.scene = scene;
 		this.canvas = canvas;
@@ -1171,6 +1175,7 @@ public class View {
 	}
 
 	public void renderOverlay(ViewportConfiguration viewportConfiguration) {
+		viewOverlay.render(this, viewportConfiguration, painter);
 	}
 
 	public void renderAnnotations(Camera camera) {

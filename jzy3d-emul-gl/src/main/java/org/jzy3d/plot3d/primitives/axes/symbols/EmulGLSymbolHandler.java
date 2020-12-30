@@ -1,28 +1,23 @@
-package org.jzy3d.plot3d.primitives.symbols;
+package org.jzy3d.plot3d.primitives.axes.symbols;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
-import java.util.List;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.textured.DrawableTexture;
-import org.jzy3d.plot3d.primitives.textured.TexturedCube;
-import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
+import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 
 /**
  * Create {@link DrawableTexture} symbols based on an {@link java.awt.Shape}
  * 
  * @author martin
  */
-public class AWTShapeSymbolHandler extends SymbolHandler{
+public class EmulGLSymbolHandler extends SymbolHandler{
     protected Shape awtShape;
     
-    public AWTShapeSymbolHandler(int n, Shape awtShape) {
+    public EmulGLSymbolHandler(int n, Shape awtShape) {
         super(n);
         this.awtShape = awtShape;
     }
@@ -33,13 +28,14 @@ public class AWTShapeSymbolHandler extends SymbolHandler{
         float size = 1;
         Coord3d position = point.xyz;
 
-        List<Coord2d> zmapping = TexturedCube.makeZPlaneTextureMapping(position, size);
+        /*List<Coord2d> zmapping = TexturedCube.makeZPlaneTextureMapping(position, size);
         
         // TODO : let the SAME buffered image instance be used by all DrawableTextures
         BufferedImage image = getImage(awtShape, 100, 100);
         BufferedImageTexture t = new BufferedImageTexture(image);
-        DrawableTexture dt = new DrawableTexture(t, PlaneAxis.Z, position.z, zmapping, face);
-        symbols.add(dt);
+        DrawableTexture dt = new DrawableTexture(t, PlaneAxis.Z, position.z, zmapping, face);*/
+
+        //symbols.add(dt);
     }
 
     public static BufferedImage getImage(Shape shape, int width, int height) {

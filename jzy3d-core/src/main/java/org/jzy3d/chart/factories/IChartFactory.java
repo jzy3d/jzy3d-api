@@ -22,16 +22,21 @@ public interface IChartFactory {
 	public IPainterFactory getPainterFactory();
 	public void setPainterFactory(IPainterFactory painterFactory);
 	
+	public View newView(Scene scene, ICanvas canvas, Quality quality);
+	public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality);
+	public Camera newCamera(Coord3d center);
+
 	public Chart newChart();
     public Chart newChart(Quality quality);
     public Chart newChart(IChartFactory factory, Quality quality);
 
     public ChartScene newScene(boolean sort);
     public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort);
-    public View newView(Scene scene, ICanvas canvas, Quality quality);
-    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality);
-    public Camera newCamera(Coord3d center);
     public IAxis newAxe(BoundingBox3d box, View view);
+    
+    
+    
+    
     //public Renderer3d newRenderer(View view);
     //public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
     public AbstractOrderingStrategy newOrderingStrategy();
