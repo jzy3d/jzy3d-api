@@ -19,6 +19,10 @@ public abstract class SymbolHandler {
     protected List<Drawable> symbols = null;
     protected SpaceTransformer spaceTransformer;
 
+    public SymbolHandler() {
+    	this(10);
+    }
+    
     public SymbolHandler(int n) {
         symbols = new ArrayList<Drawable>(n);
     }
