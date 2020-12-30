@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import org.jzy3d.chart.Animator;
+import org.jzy3d.chart.IAnimator;
 
 /** 
  * An {@link IScreenCanvas} defines a panel into which rendering occurs,
@@ -12,7 +12,7 @@ import org.jzy3d.chart.Animator;
  * <li>{@link CanvasSwing} is a deprecated implementation for Swing (since 0.9.1)</li>
  * </ul>
  *  
- * An {@link IScreenCanvas} provides access to an {@link Animator} instance.
+ * An {@link IScreenCanvas} provides access to an {@link IAnimator} instance.
  * This offers the alternative of repaint-on-demand-model based on Controllers, 
  * and repaint-continuously model based on the Animator (default behaviour).
  * 
@@ -29,5 +29,5 @@ import org.jzy3d.chart.Animator;
  */
 public interface IScreenCanvas extends ICanvas{
 	public void display();
-	public Animator getAnimation();
+	public IAnimator getAnimation();
 }

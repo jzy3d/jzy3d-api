@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.Canvas;
 
-import org.jzy3d.chart.Animator;
+import org.jzy3d.chart.IAnimator;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
 import org.jzy3d.plot3d.rendering.view.View;
 
@@ -30,7 +30,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * 
  * Toggling rendering model: one may either choose to have a repaint-on-demand 
  * or repaint-continuously model. Setting isAnimated(false) will desactivate a
- * the {@link Animator} updating the choosen {@link ICanvas} implementation.
+ * the {@link IAnimator} updating the choosen {@link ICanvas} implementation.
  * 
  * setAutoSwapBuffer(false) will equaly configure the {@link ICanvas}.
  * 

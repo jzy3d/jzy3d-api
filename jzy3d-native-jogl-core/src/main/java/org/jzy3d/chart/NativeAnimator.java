@@ -2,7 +2,7 @@ package org.jzy3d.chart;
 
 import com.jogamp.opengl.GLAutoDrawable;
 
-public class NativeAnimator implements Animator{
+public class NativeAnimator implements IAnimator{
 	protected com.jogamp.opengl.util.Animator animator;
 	
 	public NativeAnimator(GLAutoDrawable canvas) {

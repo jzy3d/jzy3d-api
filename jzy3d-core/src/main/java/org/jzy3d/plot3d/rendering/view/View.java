@@ -190,6 +190,7 @@ public class View {
 		this.cam = factory.newCamera(center);
 		this.painter = factory.getPainterFactory().newPainter();
 		this.painter.setCamera(cam);
+		this.painter.setView(this);
 		this.viewOverlay = factory.getPainterFactory().newViewOverlay();
 
 		this.scene = scene;
