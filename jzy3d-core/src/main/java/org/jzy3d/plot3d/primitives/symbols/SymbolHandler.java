@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
- * SymbolHandlers are used to configure a symbol when rendering a {@link LineStrip}.
+ * {@link SymbolHandler}s are used to configure a symbol when rendering a {@link LineStrip}.
  * 
  * @author martin
  *

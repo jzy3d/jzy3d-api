@@ -36,12 +36,6 @@ public abstract class ChartFactory implements IChartFactory {
 
     static Logger logger = Logger.getLogger(ChartFactory.class);
     
-    //public abstract ICameraMouseController newMouseCameraController(Chart chart);
-    //public abstract IMousePickingController newMousePickingController(Chart chart, int clickWidth);
-    //public abstract IScreenshotKeyController newKeyboardScreenshotController(Chart chart);
-    //public abstract ICameraKeyController newKeyboardCameraController(Chart chart);
-    //public abstract IFrame newFrame(Chart chart, Rectangle bounds, String title);
-    //public abstract ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);
     public abstract IViewportLayout newViewportLayout();
 
     boolean offscreen = false;
@@ -55,7 +49,7 @@ public abstract class ChartFactory implements IChartFactory {
     }
     
     public ChartFactory(IPainterFactory painterFactory) {
-    	this.painterFactory = painterFactory;
+    	setPainterFactory(painterFactory);
     }
 
     @Override
@@ -66,6 +60,9 @@ public abstract class ChartFactory implements IChartFactory {
     @Override
 	public void setPainterFactory(IPainterFactory painterFactory) {
 		this.painterFactory = painterFactory;
+		
+		if(painterFactory!=null)
+			this.painterFactory.setChartFactory(this);
 	}
     
     
@@ -131,7 +128,7 @@ public abstract class ChartFactory implements IChartFactory {
     public Camera newCamera(Coord3d center) {
         return new Camera(center);
     }
-
+    
     @Override
     public IAxis newAxe(BoundingBox3d box, View view) {
         AxisBox axe = new AxisBox(box);

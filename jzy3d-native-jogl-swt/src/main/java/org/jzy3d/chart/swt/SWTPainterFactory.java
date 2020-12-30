@@ -23,10 +23,17 @@ import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTNativeViewOverlay;
+import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 
 public class SWTPainterFactory extends NativePainterFactory implements IPainterFactory{
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
     static Logger logger = Logger.getLogger(SWTPainterFactory.class);
+
+	@Override
+	public IViewOverlay newViewOverlay() {
+		return new AWTNativeViewOverlay();
+	}
 
 
     @Override
