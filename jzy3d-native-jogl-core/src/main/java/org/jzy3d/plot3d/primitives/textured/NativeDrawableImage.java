@@ -272,11 +272,15 @@ public class NativeDrawableImage extends DrawableImage implements ITranslucent {
     
     /* ****************************************** */
 
-    public static int DEFAULT_IMG_WIDTH = 50;
-    public static int DEFAULT_IMG_HEIGHT = DEFAULT_IMG_WIDTH;
+    public static int SPRITE_WIDTH = 100;
+    public static int SPRITE_HEIGHT = SPRITE_WIDTH;
     
     public static BufferedImage getImage(Shape shape) {
-    	return getImage(shape, DEFAULT_IMG_WIDTH, DEFAULT_IMG_HEIGHT, null);
+    	return getImage(shape, SPRITE_WIDTH, SPRITE_HEIGHT, null);
+    }
+
+    public static BufferedImage getImage(Shape shape, java.awt.Color color) {
+    	return getImage(shape, SPRITE_WIDTH, SPRITE_HEIGHT, color);
     }
 
     public static BufferedImage getImage(Shape shape, int width, int height) {
@@ -294,10 +298,13 @@ public class NativeDrawableImage extends DrawableImage implements ITranslucent {
         if(color!=null) {
         	g2d.setColor(color);
         }
+        else {
+        	g2d.setColor(java.awt.Color.BLACK);
+        }
         
         g2d.fill(shape);
         g2d.dispose();
         return bimage;
     }
-
+    
 }

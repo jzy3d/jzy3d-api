@@ -91,8 +91,8 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 	protected void callPointForWireframe(IPainter painter) {
 		painter.color(wireframeColor);
 		painter.glLineWidth(getWireframeWidth());
-
 		painter.glBegin_LineLoop(); // changed for JGL as wireframe polygon are transformed to pair of triangles
+
 		for (Point p : points) {
 			painter.vertex(p.xyz, spaceTransformer);
 		}
