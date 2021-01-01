@@ -126,6 +126,7 @@ public class SurfaceDemoEmulGL {
 		surface.setFaceDisplayed(true);
 		surface.setWireframeDisplayed(true);
 		surface.setWireframeColor(Color.BLACK);
+		surface.setWireframeWidth(1);
 		return surface;
 	}
 
