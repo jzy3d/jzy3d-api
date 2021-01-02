@@ -26,7 +26,7 @@ public class ScatterDemoEmulGL {
 		chart.getScene().add(scatter);
 		chart.open();
 		
-		((EmulGLCanvas)chart.getCanvas()).setProfileDisplayMethod(true);
+		((EmulGLCanvas)chart.getCanvas()).setProfileDisplayMethod(false);
 
 
 		// --------------------------------

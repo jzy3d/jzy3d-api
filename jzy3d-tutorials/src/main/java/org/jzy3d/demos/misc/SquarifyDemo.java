@@ -30,12 +30,12 @@ public class SquarifyDemo extends AWTAbstractAnalysis {
         };
 
         // Define range and precision for the function to plot
-        Range range = new Range(-2.5f, 2.5f);
+        Range xrange = new Range(-2.5f, 2.5f);
         int steps = 80;
         Range yrange = new Range(-5, 5);
 
         // Create the object to represent the function over the given range.
-        final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, yrange, steps), mapper);
+        final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(xrange, steps, yrange, steps), mapper);
         surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
         surface.setFaceDisplayed(true);
         surface.setWireframeDisplayed(false);
