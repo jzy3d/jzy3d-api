@@ -34,16 +34,17 @@ GLMock glMock = new GLMock();
 p.draw(glMock, null, null);
 
 // Then
-Assert.assertTrue(glMock.vertex3f_contains(3, 30, 1000)); 
-``` 
+Assert.assertTrue(glMock.vertex3f_contains(3, 30, 1000));
+```
 
 
 ## DebugGL
 
-These are 2D and 3D charts displaying properties of a 3D chart that should be debugged. 
-I created it while I was banging my head understanding why Logarithmic charts where not working as expected. 
+These are 2D and 3D charts displaying properties of a 3D chart that should be debugged.
+I created it while I was banging my head understanding why Logarithmic charts where not working as expected.
 
 <img src="doc/debug_gl.png"/>
+
 * The big chart on the right is the one currently being debugged
 * The top left chart shows the main chart axisbox in blue, and the camera with dots.
 * The bottom left chart shows properties of the camera.
@@ -55,11 +56,10 @@ DebugGLChart2d debugChart2d = new DebugGLChart2d(d.getChart());
 debugChart2d.watch("far", Color.BLUE, c->c.getView().getCamera().getFar());
 debugChart2d.watch("radius", Color.GREEN, c->c.getView().getCamera().getRenderingSphereRadius());
 debugChart2d.watch("viewpoint.x", Color.RED, c->c.getView().getViewPoint().x);
-``` 
-  
+```
+
 
 
 ## Replay
 
-Replay is a tool to record a sequence of mouse actions on a chart and then replay the mouse scenario to ensure the final chart image is the same as the reference scenario. 
-
+Replay is a tool to record a sequence of mouse actions on a chart and then replay the mouse scenario to ensure the final chart image is the same as the reference scenario.
