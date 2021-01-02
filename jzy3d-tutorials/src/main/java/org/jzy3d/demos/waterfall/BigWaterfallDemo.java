@@ -11,6 +11,8 @@ import org.jzy3d.plot3d.primitives.vbo.ShaderWaterfallVBOBuilder;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
+ * Demonstrate how to use vertex and fragment shaders.
+ * 
  * @author Jacok Filik
  */
 public class BigWaterfallDemo extends AWTAbstractAnalysis {
