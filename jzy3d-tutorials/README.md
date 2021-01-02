@@ -10,7 +10,7 @@ For more documentation about the framework design, see the API Readme file.
 
 # Adding dependencies
 
-See pom.xml file as an example.
+See [pom.xml](pom.xml) file as an example.
 
 ## Add reference to Jzy3d Maven repository
 
@@ -30,6 +30,8 @@ See pom.xml file as an example.
 ```
 
 ## Add dependencies for native charts
+
+These are the dependencies to use by default to enable JOGL Native Charts on Jzy3d.
 
 ```xml
 <dependencies>
@@ -58,11 +60,14 @@ See pom.xml file as an example.
     <groupId>org.jzy3d</groupId>
     <artifactId>jzy3d-tester-native</artifactId>
     <version>2.0.0-SNAPSHOT</version>
+    <!-- not scoped test to demonstrate DebugGL in src/main/java -->
   </dependency>
 </dependencies>
 ```
 
 ## Add dependencies for emulated charts
+
+These are the dependencies to use to enable jGL Emulated OpenGL Charts on Jzy3d.
 
 ```xml
 <dependencies>
@@ -70,7 +75,16 @@ See pom.xml file as an example.
       <groupId>org.jzy3d</groupId>
       <artifactId>jzy3d-emul-gl</artifactId>
       <version>2.0.0-SNAPSHOT</version>
+
   </dependency>
+
+  <dependency>
+    <groupId>org.jzy3d</groupId>
+    <artifactId>jzy3d-tester</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <scope>test</scope>
+  </dependency>
+
 </dependencies>
 ```
 
