@@ -1,4 +1,4 @@
-package org.jzy3d.demos.incubation.volume;
+package org.jzy3d.demos.volume;
 
 import java.nio.ByteBuffer;
 
@@ -19,9 +19,9 @@ import com.jogamp.opengl.util.GLBuffers;
  * @author Jacok Filik
  *
  */
-public class BasicVolumeRenderDemo extends AWTAbstractAnalysis {
+public class BasicVolumeDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
-        AnalysisLauncher.open(new BasicVolumeRenderDemo());
+        AnalysisLauncher.open(new BasicVolumeDemo());
     }
 
     @Override
