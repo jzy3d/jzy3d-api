@@ -1,4 +1,4 @@
-package org.jzy3d.demos.incubation;
+package org.jzy3d.demos.waterfall;
 
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
