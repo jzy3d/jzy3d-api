@@ -1,8 +1,5 @@
 package org.jzy3d.plot3d.primitives.textured;
 
-import java.awt.Graphics2D;
-import java.awt.Shape;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -272,39 +269,5 @@ public class NativeDrawableImage extends DrawableImage implements ITranslucent {
     
     /* ****************************************** */
 
-    public static int SPRITE_WIDTH = 100;
-    public static int SPRITE_HEIGHT = SPRITE_WIDTH;
-    
-    public static BufferedImage getImage(Shape shape) {
-    	return getImage(shape, SPRITE_WIDTH, SPRITE_HEIGHT, null);
-    }
-
-    public static BufferedImage getImage(Shape shape, java.awt.Color color) {
-    	return getImage(shape, SPRITE_WIDTH, SPRITE_HEIGHT, color);
-    }
-
-    public static BufferedImage getImage(Shape shape, int width, int height) {
-    	return getImage(shape, width, height, null);
-    }
-    
-    public static BufferedImage getImage(Shape shape, int width, int height, java.awt.Color color) {
-        return getImage(shape, width, height, BufferedImage.TYPE_4BYTE_ABGR, color);
-    }
-    
-    public static BufferedImage getImage(Shape shape, int width, int height, int imageType, java.awt.Color color) {
-        BufferedImage bimage = new BufferedImage(width, height, imageType);
-        Graphics2D g2d = bimage.createGraphics();
-        
-        if(color!=null) {
-        	g2d.setColor(color);
-        }
-        else {
-        	g2d.setColor(java.awt.Color.BLACK);
-        }
-        
-        g2d.fill(shape);
-        g2d.dispose();
-        return bimage;
-    }
     
 }

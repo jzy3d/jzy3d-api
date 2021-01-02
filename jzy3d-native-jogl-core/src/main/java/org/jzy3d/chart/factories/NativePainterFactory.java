@@ -1,9 +1,11 @@
 package org.jzy3d.chart.factories;
 
 import org.jzy3d.chart.NativeAnimator;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 
 import com.jogamp.opengl.GLAutoDrawable;
 
@@ -18,6 +20,11 @@ public abstract class NativePainterFactory implements IPainterFactory{
 	@Override
     public NativeAnimator newAnimator(ICanvas canvas) {
         return new NativeAnimator((GLAutoDrawable)canvas);
+    }
+
+	@Override
+    public SymbolHandler newSymbolHandler(IImageWrapper image){
+        return null;//AWTShapeNativeSymbolHandler.from(image);
     }
 
 	public IChartFactory getChartFactory() {

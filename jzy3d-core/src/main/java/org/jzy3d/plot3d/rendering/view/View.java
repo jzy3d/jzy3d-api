@@ -243,7 +243,8 @@ public class View {
 	 * rendering.
 	 */
 	public void shoot() {
-		canvas.forceRepaint();
+		if(canvas!=null)
+			canvas.forceRepaint();
 	}
 
 	/**
@@ -252,17 +253,12 @@ public class View {
 	 * The result of the projection can be retrieved on the objects's instances.
 	 */
 	public void project() {
-		// ((NativeDesktopPainter)painter).getCurrentGL(canvas);
 		scene.getGraph().project(painter, cam);
-		// ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
 	}
 
 	/** Perform the 3d projection of a 2d coordinate. */
 	public Coord3d projectMouse(int x, int y) {
-		// ((NativeDesktopPainter)painter).getCurrentGL(canvas);
-		Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
-		// ((NativeDesktopPainter)painter).getCurrentContext(canvas).release();
-		return p;
+		return cam.screenToModel(painter, new Coord3d(x, y, 0));
 	}
 
 	/**

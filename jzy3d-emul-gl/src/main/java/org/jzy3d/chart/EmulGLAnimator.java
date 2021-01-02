@@ -33,7 +33,7 @@ public class EmulGLAnimator implements IAnimator{
 			}
 			
 		}, "EmulGLAnimator");
-		t.run();
+		t.start();
 	}
 
 	@Override

@@ -8,8 +8,10 @@ import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 
@@ -50,6 +52,8 @@ public interface IPainterFactory {
 	public IPainter newPainter();
 	
 	public IViewOverlay newViewOverlay();
+	
+    public SymbolHandler newSymbolHandler(IImageWrapper image);
 
 	public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality);
 
