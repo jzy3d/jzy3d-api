@@ -36,7 +36,7 @@ public class SurfaceDemoEmulGL_Alpha {
 		// JZY3D CONTENT
 
 		Shape surface = surface();
-		//surface.setWireframeDisplayed(false);
+		surface.setPolygonWireframeDepthTrick(true); // IMPORTANT FOR JGL TO RENDER COPLANAR POLYGON & EDGE WHEN ALPHA DISABLED
 
 		EmulGLChartFactory factory = new EmulGLChartFactory();
 
@@ -59,10 +59,6 @@ public class SurfaceDemoEmulGL_Alpha {
 		Chart chart = factory.newChart(q);
 		chart.add(surface);
 		chart.getView().setAxisDisplayed(false);
-		
-		//chart.getView().setBackgroundColor(Color.BLUE);
-				
-
 		chart.open();
 		
 		
@@ -87,10 +83,6 @@ public class SurfaceDemoEmulGL_Alpha {
 		else {
 			
 		}
-		// autre solution  :quand drag, n'envoyer d'event repaint que si un certain temps s'est écoulé
-		// quand paint, n'envoyer d'event repain que si un certain temps s'est écoule
-		
-		
 
 		try {
 			chart.screenshot(new File("target/" + SurfaceDemoEmulGL_Alpha.class.getSimpleName() + ".png"));
@@ -120,7 +112,7 @@ public class SurfaceDemoEmulGL_Alpha {
 		
 		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
 		
-		surface.setPolygonOffsetFillEnable(false);
+		//surface.setPolygonOffsetFillEnable(false);
 		
 		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
 				surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));//0.65f));

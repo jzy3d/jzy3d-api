@@ -268,6 +268,22 @@ public abstract class Composite extends Wireframeable implements ISingleColorabl
         }
 	}
 
+    @Override
+	public void setPolygonWireframeDepthTrick(boolean polygonOffsetFillEnable) {
+        if (components != null) {
+            synchronized (components) {
+
+				for (Drawable d : components) {
+					if (d instanceof Wireframeable) {
+						((Wireframeable) d).setPolygonWireframeDepthTrick(polygonOffsetFillEnable);
+					} else if (d instanceof Composite) {
+						((Composite) d).setPolygonWireframeDepthTrick(polygonOffsetFillEnable);
+					}
+				}
+            }
+        }
+	}
+
 
     /****************************************************************/
 

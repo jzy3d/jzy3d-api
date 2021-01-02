@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-tutorials</artifactId>
@@ -7,19 +9,10 @@
 
 	<name>Jzy3d Tutorials</name>
 
-	<!--To retrieve Jzy3d dependencies
-	<repositories>
-		<repository>
-			<id>jzy3d-snapshots</id>
-			<name>Jzy3d Snapshots</name>
-			<url>http://maven.jzy3d.org/snapshots/</url>
-		</repository>
-		<repository>
-			<id>jzy3d-releases</id>
-			<name>Jzy3d Releases</name>
-			<url>http://maven.jzy3d.org/releases/</url>
-		</repository>
-	</repositories> -->
+	<!--To retrieve Jzy3d dependencies <repositories> <repository> <id>jzy3d-snapshots</id> 
+		<name>Jzy3d Snapshots</name> <url>http://maven.jzy3d.org/snapshots/</url> 
+		</repository> <repository> <id>jzy3d-releases</id> <name>Jzy3d Releases</name> 
+		<url>http://maven.jzy3d.org/releases/</url> </repository> </repositories> -->
 
 	<repositories>
 		<repository>
@@ -35,8 +28,8 @@
 	</repositories>
 
 
-	<!--To deploy tutorials: 1) this project does not references master to be
-		able to be build alone 2) master still reference this project to build it
+	<!--To deploy tutorials: 1) this project does not references master to be 
+		able to be build alone 2) master still reference this project to build it 
 		with the API involve being deployable by mvn deploy -->
 	<distributionManagement>
 		<repository>
@@ -51,17 +44,9 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-<!--
-	<distributionManagement>
-	  <snapshotRepository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-	  </snapshotRepository>
-	  <repository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-	  </repository>
-	</distributionManagement>-->
+	<!-- <distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
+		</repository> </distributionManagement> -->
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -92,10 +77,16 @@
 		</dependency>
 
 		<dependency>
-            <groupId>org.jzy3d</groupId>
-            <artifactId>jzy3d-tester-native</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-emul-gl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-tester-native</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.miglayout</groupId>
@@ -128,40 +119,24 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			<!--<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-				</configuration>
-			</plugin>-->
+			<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
+				<configuration> </configuration> </plugin> -->
 
 			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<phase>deploy</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>attach-javadocs</id>
-							<phase>deploy</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+
 		</plugins>
 	</build>
 </project>

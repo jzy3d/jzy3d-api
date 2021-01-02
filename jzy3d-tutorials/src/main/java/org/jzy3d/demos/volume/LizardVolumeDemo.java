@@ -1,4 +1,4 @@
-package org.jzy3d.demos.incubation.volume;
+package org.jzy3d.demos.volume;
 
 import java.nio.ByteBuffer;
 
@@ -22,12 +22,13 @@ import com.jogamp.opengl.util.GLBuffers;
  * @author Jacok Filik
  *
  */
-public class LizardVolumeRenderDemo extends AWTAbstractAnalysis {
+public class LizardVolumeDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
-        AnalysisLauncher.open(new LizardVolumeRenderDemo());
+        AnalysisLauncher.open(new LizardVolumeDemo());
     }
 
-    @Override
+    @SuppressWarnings("unchecked")
+	@Override
     public void init() {
         
         ByteBuffer buffer = null;

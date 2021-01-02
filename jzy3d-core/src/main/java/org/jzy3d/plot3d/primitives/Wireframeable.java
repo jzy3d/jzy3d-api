@@ -28,8 +28,8 @@ public abstract class Wireframeable extends Drawable {
 		
 		// Apply most supported way of rendering
 		// polygon edges cleanly
-		setPolygonOffsetFillEnable(false);
-		setPolygonWireframeDepthTrick(true);
+		setPolygonOffsetFillEnable(true);
+		setPolygonWireframeDepthTrick(false);
 	}
 
 	/** Set the wireframe color. */
