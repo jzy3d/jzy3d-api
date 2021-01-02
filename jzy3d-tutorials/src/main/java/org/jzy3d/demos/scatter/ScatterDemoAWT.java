@@ -11,9 +11,9 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 
-public class ScatterDemo extends AWTAbstractAnalysis{
+public class ScatterDemoAWT extends AWTAbstractAnalysis{
 	public static void main(String[] args) throws Exception {
-		AnalysisLauncher.open(new ScatterDemo());
+		AnalysisLauncher.open(new ScatterDemoAWT());
 	}
 		
 	@Override

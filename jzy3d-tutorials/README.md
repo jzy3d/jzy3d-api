@@ -92,6 +92,12 @@ See ```SurfaceDemoAWT```
 
 <img src="doc/demo-surface.png"/>
 
+# Waterfall charts
+
+See ```WaterfallDemo```
+
+<img src="doc/demo-waterfall.png"/>
+
 # Volume charts
 
 See ```LizardVolumeDemo```
@@ -109,3 +115,18 @@ See ```Chart2DDemo```
 See ```DebugGL_Demo``` and modules ```jzy3d-tester```, ```jzy3d-tester-native```
 
 <img src="doc/demo-debug-gl.png"/>
+
+
+# Test charts
+
+See ```ITTestNativeSurfaceChart``` and ```ITTestNativeScatterChart``` for examples unit test showing how to verify no regression on a chart based on a pixel-wise comparison of the chart with a previously generated screenshot stored in ```src/test/resources```.
+
+See ```ChartTester``` [README page](https://github.com/jzy3d/jzy3d-api/blob/emulgl/jzy3d-tester/README.md) for more information on Chart testing.  
+
+<img src="src/test/resources/ITTestNativeSurfaceChart.png"/>
+
+
+
+# More charts
+
+For more example, refer to the complete [developer guide](http://jzy3d.org/documentation.php).
