@@ -10,12 +10,68 @@ Refer to the [tutorial README](jzy3d-tutorials/README.md) file to get help on cr
 
 # Architecture
 
+Creating a chart implies building and wiring the below high-level components.
+
 <img src="doc/Components.png"/>
+
+
+## Customize chart with factories
+
+The ```IChartFactory``` builds all objects that will define how the chart will look (```Axis```, ```View```, ```Camera```, ```Chart```).
+
+The ```IPainterFactory``` builds every objects that allow compatibility across windowing toolkits and GPU/CPU. The chart factories and drawable have no knowledge of concrete AWT, SWT, Swing, etc. This is all powered by the painter factory introduced in Jzy3d 2.0.
+
+The ```Drawable``` class hierarchy defines geometries able to use a ```IPainter``` to draw something.
+
 
 <img src="doc/Factories.png"/>
 
+
+### Native and emulated elements
+
 <img src="doc/Interop.png"/>
 
+
+
+# Changes in 2.0 version
+
+Version 2.0 is a major refactor to allow using multiple OpenGL implementations, which opened the door to EmulGL. To ease porting your 1.* charts, we add the following cheatsheet.
+
+## Renamings
+
+| Class name in 1.* | Class name in 2.0 |
+|-------------------|-------------------|
+| AbstractDrawable | Drawable |
+| AbstractWireframeable | Wireframeable |
+| AxeBox | AxisBox |
+| DrawableTexture | NativeDrawableImage & EmulGLDrawableImage |
+|||
+| _IChartComponentFactory_ | _IChartFactory_ |
+| AWTChartComponentFactory | AWTChartFactory |
+| NewtChartComponentFactory | NewtChartFactory |
+| JavaFXChartComponentFactory | :exclamation: JavaFXChartFactory |
+| SwingChartComponentFactory | SwingChartFactory |
+| SWTChartComponentFactory | SWTChartFactory |
+|  | FallbackChartFactory |
+|||
+| ColorbarViewportLayout | ViewAndColorbarsLayout |
+| ViewMouseController | NewtViewCameraController |
+
+:exclamation: work in progress.
+
+SurfaceBuilder is not static anymore to be overridable.
+
+
+## Additions
+
+* IPainter
+* IPainterFactory
+* EmulGLPainterFactory
+* IAnimator
+* IImageWrapper and SymbolHandler
+
+
+## Deletions
 
 
 # Extensions
