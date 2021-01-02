@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 

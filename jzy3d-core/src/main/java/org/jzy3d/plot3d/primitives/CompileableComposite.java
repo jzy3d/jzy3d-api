@@ -10,8 +10,8 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.painters.ListMode;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.ListMode;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.transform.Transform;
 

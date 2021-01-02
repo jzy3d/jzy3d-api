@@ -9,9 +9,11 @@ import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.EmulGLPainter;
+import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.EmulGLViewOverlay;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
@@ -35,14 +37,16 @@ public class EmulGLPainterFactory implements IPainterFactory{
 	public IViewOverlay newViewOverlay() {
 		return new EmulGLViewOverlay();
 	}
-
 	
+	@Override
+    public SymbolHandler newSymbolHandler(IImageWrapper image){
+        return null;
+    }
+
 	@Override
     public EmulGLAnimator newAnimator(ICanvas canvas) {
         return new EmulGLAnimator((EmulGLCanvas)canvas);
     }
-
-
 	
 	@Override
 	public FrameAWT newFrame(Chart chart, Rectangle bounds, String title) {

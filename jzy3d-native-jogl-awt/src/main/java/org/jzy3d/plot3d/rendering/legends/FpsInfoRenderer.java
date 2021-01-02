@@ -4,8 +4,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import org.jzy3d.chart.AWTChart;
-import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;

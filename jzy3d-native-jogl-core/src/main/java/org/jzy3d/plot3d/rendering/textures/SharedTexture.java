@@ -3,8 +3,8 @@ package org.jzy3d.plot3d.rendering.textures;
 import java.io.File;
 import java.io.IOException;
 
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 
 import com.jogamp.opengl.GL;

@@ -7,8 +7,8 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.primitives.textured.MaskPair;
+import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.primitives.textured.TexturedCube;
 import org.jzy3d.plot3d.rendering.textures.TextureFactory;
 
