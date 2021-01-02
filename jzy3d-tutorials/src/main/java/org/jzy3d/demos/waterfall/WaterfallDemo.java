@@ -35,7 +35,7 @@ public class WaterfallDemo extends AWTAbstractAnalysis {
         WaterfallTessellator waterfall = new WaterfallTessellator();
 
         Shape build = waterfall.build(x, y, z);
-        build.setColorMapper(new ColorMapper(new ColorMapRainbow(), build.getBounds().getZmin(), build.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
+        build.setColorMapper(new ColorMapper(new ColorMapRainbow(), build.getBounds().getZmin(), build.getBounds().getZmax(), new Color(1, 1, 1, 1.0f)));
 
         // Create a chart
         chart = AWTChartFactory.chart(Quality.Intermediate);

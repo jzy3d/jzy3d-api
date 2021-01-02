@@ -66,8 +66,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.jzy3d>${project.version}</version.jzy3d>
-		<version.java.source>1.8</version.java.source>
-		<version.java.target>1.8</version.java.target>
+		<version.java.source>1.9</version.java.source>
+		<version.java.target>1.9</version.java.target>
 		<version.mvn.compiler>3.0</version.mvn.compiler>
 		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
 		<version.mvn.deploy>2.4</version.mvn.deploy>
