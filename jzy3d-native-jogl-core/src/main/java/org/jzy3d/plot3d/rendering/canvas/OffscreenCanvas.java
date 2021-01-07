@@ -126,6 +126,7 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
     @Override
     public void screenshot(File file) throws IOException {
         TextureData screen = screenshot();
+        file.getParentFile().mkdirs();
         TextureIO.write(screen, file);
     }
 
