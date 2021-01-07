@@ -24,6 +24,8 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTNativeViewOverlay;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class AWTPainterFactory extends NativePainterFactory implements IPainterFactory{
 	
@@ -35,7 +37,11 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
 	public IViewOverlay newViewOverlay() {
 		return new AWTNativeViewOverlay();
 	}
-
+	
+    @Override
+    public IViewportLayout newViewportLayout() {
+        return new ViewAndColorbarsLayout();
+    }
 
     @Override
     public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {

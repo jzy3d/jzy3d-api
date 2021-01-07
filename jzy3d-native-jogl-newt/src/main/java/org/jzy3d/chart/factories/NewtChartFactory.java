@@ -52,14 +52,9 @@ public class NewtChartFactory extends NativeChartFactory {
         return new AWTChart(factory, quality);
     }
 
-    @Override
-    public IViewportLayout newViewportLayout() {
-        return new ViewAndColorbarsLayout();
-    }
-
     /**
-     * The AWTView support Java2d defined components (tooltips, background
-     * images)
+     * The {@link AWTNativeView} supports Java2d defined components (background
+     * images, tooltips, post-renderers and overlay)
      */
     @Override
     public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {

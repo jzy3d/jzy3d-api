@@ -25,6 +25,8 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTNativeViewOverlay;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class SWTPainterFactory extends NativePainterFactory implements IPainterFactory{
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
@@ -35,6 +37,10 @@ public class SWTPainterFactory extends NativePainterFactory implements IPainterF
 		return new AWTNativeViewOverlay();
 	}
 
+    @Override
+    public IViewportLayout newViewportLayout() {
+        return new ViewAndColorbarsLayout();
+    }
 
     @Override
     public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {

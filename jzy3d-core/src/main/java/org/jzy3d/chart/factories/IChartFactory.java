@@ -42,7 +42,6 @@ public interface IChartFactory {
     public AbstractOrderingStrategy newOrderingStrategy();
 
 
-    public IViewportLayout newViewportLayout();
     public CameraThreadController newCameraThreadController(Chart chart);
     
 
