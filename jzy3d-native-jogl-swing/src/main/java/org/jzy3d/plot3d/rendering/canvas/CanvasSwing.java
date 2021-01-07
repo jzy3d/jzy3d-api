@@ -49,7 +49,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 		super(glci);
 
 		view = scene.newView(this, quality);
-		renderer = factory.newRenderer(view, traceGL, debugGL);
+		renderer = factory.newRenderer3D(view, traceGL, debugGL);
 		addGLEventListener(renderer);
 
 		// swing specific

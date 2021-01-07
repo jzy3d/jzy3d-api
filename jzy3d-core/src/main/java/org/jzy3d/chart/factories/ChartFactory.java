@@ -24,7 +24,6 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 /**
  * This {@link IChartFactory} returns non-displayable charts.
@@ -163,6 +162,10 @@ public abstract class ChartFactory implements IChartFactory {
         return new CameraThreadController(chart);
     }
     
+    /*@Override
+    public Renderer newRenderer(View view) {
+        return newRenderer(view, false, false);
+    }*/
 
 
     /* UTILS */

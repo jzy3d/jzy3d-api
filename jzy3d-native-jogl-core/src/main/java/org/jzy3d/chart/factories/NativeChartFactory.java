@@ -1,6 +1,7 @@
 package org.jzy3d.chart.factories;
 
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -35,14 +36,22 @@ public abstract class NativeChartFactory extends ChartFactory{
 	}
 	
 	//@Override
-    public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
+	/** Only needed by {@link INativeCanvas} */
+    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
         return new Renderer3d(view, traceGL, debugGL);
     }
 
     //@Override
-    public Renderer3d newRenderer(View view) {
-        return newRenderer(view, false, false);
+	/** Only needed by {@link INativeCanvas} */
+    public Renderer3d newRenderer3D(View view) {
+        return newRenderer3D(view, false, false);
     }
+
+    
+    /*@Override
+    public Renderer newRenderer(View view, boolean traceGL, boolean debugGL) {
+        return new NativeRenderer(view, traceGL, debugGL);
+    }*/
 
 	
 	/************ PROFILE AND CAPABILITIES HELPERS ************/

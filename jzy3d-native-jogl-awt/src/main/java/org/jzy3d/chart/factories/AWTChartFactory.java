@@ -10,8 +10,6 @@ import org.jzy3d.plot3d.rendering.view.AWTNativeView;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
-import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class AWTChartFactory extends NativeChartFactory {
     public static Chart chart() {
@@ -51,7 +49,7 @@ public class AWTChartFactory extends NativeChartFactory {
     
     /** Provide AWT Texture loading for screenshots */
     @Override
-    public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
+    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
         return new AWTRenderer3d(view, traceGL, debugGL);
     }
 

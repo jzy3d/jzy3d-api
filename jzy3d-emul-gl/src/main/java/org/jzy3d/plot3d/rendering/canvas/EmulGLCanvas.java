@@ -96,7 +96,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 			public void componentHidden(ComponentEvent e) {
 			}
 		});*/
+		
+		
+		// FROM NATIVE
+		//
+		//renderer = factory.newRenderer(view, traceGL, debugGL);
+        //addGLEventListener(renderer);
 	}
+	
 	@Override
 	public IAnimator getAnimation() {
 		return animator;
