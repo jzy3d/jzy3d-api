@@ -88,7 +88,8 @@ public class ChartTester {
 
 	public void build(Chart chart, String testImage) throws IOException {
 		logger.warn("building the screenshot to assert later as no test image is available: " + testImage);
-		screenshot(chart, testImage);
+		
+		chart.screenshot(new File(testImage));
 	}
 
 	public boolean isBuilt(String testImage) {
@@ -117,9 +118,9 @@ public class ChartTester {
 			// -----------------------------
 			// Writing ACTUAL file
 
-			String errorFile = getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#ACTUAL#.");
-			screenshot(chart, errorFile);
-			logger.error("ACTUAL IMAGE : " + errorFile);
+			String actualFile = getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#ACTUAL#.");
+			chart.screenshot(new File(actualFile));
+			logger.error("ACTUAL IMAGE : " + actualFile);
 
 			// -----------------------------
 			// Writing EXPECTED file
@@ -135,7 +136,6 @@ public class ChartTester {
 			String diffFile = getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#DIFF#.");
 
 			BufferedImage diffImage = copyImage(expected);
-			//BufferedImage diffImage = new BufferedImage(expected.getWidth(), expected.getHeight(), expected.getType());
 			pixelHighlight(diffImage, e.getDiffCoordinates(), Highlight.RED);
 			
 			ImageIO.write(diffImage, "png", new File(diffFile));
@@ -206,13 +206,17 @@ public class ChartTester {
 	 *                         exists.
 	 */
 	public void compare(Chart chart, String filename) throws IOException, ChartTestFailed {
-		BufferedImage actual = (BufferedImage) chart.screenshot();
+		BufferedImage actual = getBufferedImage(chart);
 		BufferedImage expected = loadBufferedImage(filename);
 
 		compare(actual, expected);
 	}
 
-	public BufferedImage loadBufferedImage(String filename) throws IOException {
+	protected BufferedImage getBufferedImage(Chart chart) throws IOException {
+		return (BufferedImage) chart.screenshot();
+	}
+
+	protected BufferedImage loadBufferedImage(String filename) throws IOException {
 		return ImageIO.read(new File(filename));
 	}
 
@@ -261,11 +265,6 @@ public class ChartTester {
 		}
 	}
 
-	/* */
-
-	public void screenshot(Chart chart, String filename) throws IOException {
-		chart.screenshot(new File(filename));
-	}
 
 	/* */
 

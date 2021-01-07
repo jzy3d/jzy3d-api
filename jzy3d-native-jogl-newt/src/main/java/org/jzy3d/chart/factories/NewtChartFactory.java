@@ -14,8 +14,6 @@ import org.jzy3d.plot3d.rendering.view.AWTNativeView;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
-import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 /**
  * Still using some AWT components
@@ -63,7 +61,7 @@ public class NewtChartFactory extends NativeChartFactory {
 
     /** Provide AWT Texture loading for screenshots */
     @Override
-    public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL) {
+    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
         return new AWTRenderer3d(view, traceGL, debugGL);
     }
 

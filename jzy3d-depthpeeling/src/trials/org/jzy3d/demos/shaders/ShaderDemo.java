@@ -82,7 +82,7 @@ public class ShaderDemo {
     public static Chart initChart() {
     	IChartFactory factory = new AWTChartFactory(){
     	    @Override
-    		public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL){
+    		public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL){
                 ShaderRenderer3d r = new ShaderRenderer3d(view, traceGL, debugGL, new Shaderable());
                 return r;
             }

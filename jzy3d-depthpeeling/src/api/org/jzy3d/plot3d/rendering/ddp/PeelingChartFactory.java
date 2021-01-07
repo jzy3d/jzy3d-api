@@ -16,7 +16,7 @@ public class PeelingChartFactory extends AWTChartFactory{
 	}
 
 	@Override
-	public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL){
+	public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL){
         DepthPeelingRenderer3d r = new DepthPeelingRenderer3d(method, (DepthPeelingView)view, traceGL, debugGL);
         return r;
     }
