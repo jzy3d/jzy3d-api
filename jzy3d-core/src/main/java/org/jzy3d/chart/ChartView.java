@@ -24,7 +24,7 @@ public class ChartView extends View {
     
     public void initInstance(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
 		super.initInstance(factory, scene, canvas, quality);
-        layout = factory.newViewportLayout();
+        layout = factory.getPainterFactory().newViewportLayout();
 	}
 
     /* */

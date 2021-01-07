@@ -17,6 +17,10 @@ import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.EmulGLViewOverlay;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
+import org.jzy3d.plot3d.rendering.view.layout.EmulGLViewAndColorbarsLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+
+import jgl.GL;
 
 public class EmulGLPainterFactory implements IPainterFactory{
 	IChartFactory chartFactory;
@@ -36,6 +40,21 @@ public class EmulGLPainterFactory implements IPainterFactory{
 	@Override
 	public IViewOverlay newViewOverlay() {
 		return new EmulGLViewOverlay();
+	}
+	
+	/**
+	 * This override intend to use jGL image rendering fallback based on AWT as jGL
+	 * hardly handles the original {@link GL#glDrawPixel()} primitives.
+	 * 
+	 * As the View is still rendered center in the frame, we perform a hacky shift
+	 * of the OpenGL image rendering in canvas to avoid the axis ticks beeing
+	 * covered by the colorbar on the right.
+	 * 
+	 * @see https://github.com/jzy3d/jGL/issues/5
+	 */
+	@Override
+	public ViewAndColorbarsLayout newViewportLayout() {
+		return new EmulGLViewAndColorbarsLayout();
 	}
 	
 	@Override

@@ -63,11 +63,6 @@ public class SWTChartFactory extends NativeChartFactory {
         return canvas;
     }
 
-    @Override
-    public IViewportLayout newViewportLayout() {
-        return new ViewAndColorbarsLayout();
-    }
-
     /**
      * The AWTView support Java2d defined components (tooltips, background
      * images)

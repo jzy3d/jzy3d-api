@@ -2,7 +2,6 @@ package org.jzy3d.chart.factories;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 import com.jogamp.opengl.GLCapabilities;
 
@@ -10,15 +9,7 @@ import com.jogamp.opengl.GLCapabilities;
 public class TestNativeChartFactory {
 	@Test
 	public void hasGoodSettingsToMakeOffscreenRenderingWithColor() {
-		NativeChartFactory f = new NativeChartFactory() {
-			
-			@Override
-			public IViewportLayout newViewportLayout() {
-				// TODO Auto-generated method stub
-				return null;
-			}
-			
-		};
+		NativeChartFactory f = new NativeChartFactory() {};
 	
 		GLCapabilities caps = f.getCapabilities();
 		

@@ -35,8 +35,6 @@ public abstract class ChartFactory implements IChartFactory {
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
     static Logger logger = Logger.getLogger(ChartFactory.class);
-    
-    public abstract IViewportLayout newViewportLayout();
 
     boolean offscreen = false;
     int width;

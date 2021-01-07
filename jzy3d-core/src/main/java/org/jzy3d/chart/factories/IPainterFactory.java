@@ -14,6 +14,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 /**
  * An {@link IPainterFactory} provides all Windowing toolkit dependent objects.
@@ -52,6 +53,9 @@ public interface IPainterFactory {
 	public IPainter newPainter();
 	
 	public IViewOverlay newViewOverlay();
+	
+    public IViewportLayout newViewportLayout();
+
 	
     public SymbolHandler newSymbolHandler(IImageWrapper image);
 
