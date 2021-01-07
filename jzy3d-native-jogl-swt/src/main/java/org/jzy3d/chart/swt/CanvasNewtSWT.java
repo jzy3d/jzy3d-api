@@ -45,7 +45,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
         window = GLWindow.create(glci);
         canvas = new NewtCanvasSWT(this, SWT.NONE, window);
         view = scene.newView(this, quality);
-        renderer = factory.newRenderer(view, traceGL, debugGL);
+        renderer = factory.newRenderer3D(view, traceGL, debugGL);
         window.addGLEventListener(renderer);
 
         if (quality.isPreserveViewportSize()) {

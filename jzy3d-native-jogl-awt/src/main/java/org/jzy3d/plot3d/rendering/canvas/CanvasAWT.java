@@ -48,8 +48,32 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
         super(glci);
 
         view = scene.newView(this, quality);
-        renderer = factory.newRenderer(view, traceGL, debugGL);
+        renderer = factory.newRenderer3D(view, traceGL, debugGL);
         addGLEventListener(renderer);
+        
+        /*addGLEventListener(new GLEventListener() {
+        	Renderer r = factory.newRenderer(view, traceGL, debugGL);
+        	
+			@Override
+			public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+				r.reshape(CanvasAWT.this, x, y, width, height);
+			}
+			
+			@Override
+			public void init(GLAutoDrawable drawable) {
+				r.init(CanvasAWT.this);
+			}
+			
+			@Override
+			public void dispose(GLAutoDrawable drawable) {
+				r.dispose(CanvasAWT.this);
+			}
+			
+			@Override
+			public void display(GLAutoDrawable drawable) {
+				r.display(CanvasAWT.this);
+			}
+		});*/
 
         setAutoSwapBufferMode(quality.isAutoSwapBuffer());
 

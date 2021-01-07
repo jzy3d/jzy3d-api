@@ -16,7 +16,6 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 
 public interface IChartFactory {
 	public IPainterFactory getPainterFactory();
@@ -37,8 +36,9 @@ public interface IChartFactory {
     
     
     
-    //public Renderer3d newRenderer(View view);
-    //public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL);
+    //public Renderer newRenderer(View view);
+    //public Renderer newRenderer(View view, boolean traceGL, boolean debugGL);
+    
     public AbstractOrderingStrategy newOrderingStrategy();
 
 
