@@ -35,8 +35,7 @@ public class EmulGLViewOverlay implements IViewOverlay {
 
 			try {
 
-				BufferedImage image = new BufferedImage(viewport.getWidth(), viewport.getHeight(),
-						BufferedImage.TYPE_INT_ARGB);
+				BufferedImage image = new BufferedImage(viewport.getWidth(), viewport.getHeight(), BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = image.createGraphics();
 
 				g2d.setBackground(overlayBackground);
@@ -52,7 +51,7 @@ public class EmulGLViewOverlay implements IViewOverlay {
 
 				g2d.dispose();
 
-				((EmulGLPainter) painter).getGL().appendImageToDraw(image, 0, 0);
+				((EmulGLPainter) painter).getGL().appendImageToDraw(image);
 
 			} catch (Exception e) {
 				LOGGER.error(e, e);
