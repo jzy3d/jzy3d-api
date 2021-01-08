@@ -4,7 +4,9 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 public class ViewportBuilder {
     public static ViewportConfiguration column(ICanvas canvas, float left, float right){
-        return column(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
+    	if(canvas!=null)
+    		return column(canvas.getRendererWidth(), canvas.getRendererHeight(), left, right);
+    	return null;
     }
     
     public static ViewportConfiguration column(int width, int height, float left, float right){
