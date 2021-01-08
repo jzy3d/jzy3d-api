@@ -13,6 +13,8 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportBuilder;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
+import jgl.GL;
+
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
 	public EmulGLViewAndColorbarsLayout() {
@@ -37,6 +39,13 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 		view.renderOverlay(view.getCamera().getLastViewPort());
 	}
 
+	/**
+	 * This override allows
+	 * <ul>
+	 * <li>Shifting the viewport to let some place for a colorbar rendering.
+	 * <li>Rendering the image using jGL dedicated image management ({@link GL#appendImageToDraw(BufferedImage, int, int)}).
+	 * </ul>
+	 */
 	@Override
 	protected void renderLegends(IPainter painter, float left, float right, List<ILegend> legends, ICanvas canvas) {
 		EmulGLPainter emulGL = (EmulGLPainter) painter;

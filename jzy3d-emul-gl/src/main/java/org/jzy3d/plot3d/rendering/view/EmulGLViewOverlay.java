@@ -9,6 +9,8 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.tooltips.ITooltipRenderer;
 
+import jgl.GL;
+
 /**
  * An EmulGL view implementation that is able to handle overlay and tooltip
  * rendering using an AWT BufferedImage painted with a Graphics2D passed to
@@ -51,7 +53,8 @@ public class EmulGLViewOverlay implements IViewOverlay {
 
 				g2d.dispose();
 
-				((EmulGLPainter) painter).getGL().appendImageToDraw(image);
+				// Append Image to draw
+				((EmulGLPainter) painter).getGL().appendImageToDraw(image, 0, 0, GL.ImageLayer.FOREGROUND);
 
 			} catch (Exception e) {
 				LOGGER.error(e, e);
