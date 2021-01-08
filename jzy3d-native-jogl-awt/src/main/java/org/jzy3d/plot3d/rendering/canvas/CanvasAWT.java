@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.jzy3d.chart.IAnimator;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -44,11 +45,11 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
      * Initialize a {@link CanvasAWT} attached to a {@link Scene}, with a given
      * rendering {@link Quality}.
      */
-    public CanvasAWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+    public CanvasAWT(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
         super(glci);
 
         view = scene.newView(this, quality);
-        renderer = factory.newRenderer3D(view, traceGL, debugGL);
+        renderer = new Renderer3d(view, traceGL, debugGL);
         addGLEventListener(renderer);
         
         /*addGLEventListener(new GLEventListener() {
