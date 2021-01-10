@@ -1105,25 +1105,15 @@ public class View {
 			cam.setRenderingSphereRadius(radius);
 			correctCameraPositionForIncludingTextLabels(painter, viewport);
 		} else {
-			if (spaceTransformer != null)
+			if (spaceTransformer != null) {
 				bounds = spaceTransformer.compute(bounds);
-
-			cam.setRenderingSphereRadius((float) bounds.getRadius() * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR);
+			}
+			double radius = bounds.getRadius();
+			
+			cam.setRenderingSphereRadius((float) radius * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR);
 		}
 	}
-
-	/*
-	 * protected void computeCameraRenderingSphereRadius(Camera cam, GL gl, GLU glu,
-	 * ViewportConfiguration viewport, BoundingBox3d bounds) { if (viewmode ==
-	 * ViewPositionMode.TOP) { float xdiam = bounds.getXRange().getRange(); float
-	 * ydiam = bounds.getYRange().getRange(); float radius = Math.max(xdiam, ydiam)
-	 * / 2; cam.setRenderingSphereRadius(radius);
-	 * correctCameraPositionForIncludingTextLabels(gl, glu, viewport); } else {
-	 * cam.setRenderingSphereRadius((float) bounds.getRadius());
-	 * //cam.setRenderingSphereRadius((float)
-	 * bounds.getTransformedRadius(spaceTransformer)); } }
-	 */
-
+	
 	protected void correctCameraPositionForIncludingTextLabels(IPainter painter, ViewportConfiguration viewport) {
 	}
 

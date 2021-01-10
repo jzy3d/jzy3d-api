@@ -49,7 +49,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
         super(glci);
 
         view = scene.newView(this, quality);
-        renderer = new Renderer3d(view, traceGL, debugGL);
+        renderer = ((NativeChartFactory)factory).newRenderer3D(view, traceGL, debugGL);
         addGLEventListener(renderer);
         
         /*addGLEventListener(new GLEventListener() {
