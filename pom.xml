@@ -3,7 +3,7 @@
 
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-master</artifactId>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.3</version>
 	<packaging>pom</packaging>
 
 	<name>Jzy3d Master Project</name>
@@ -40,6 +40,7 @@
 	</licenses>
 	<scm>
   	<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
+    <tag>jzy3d-master-1.0.3</tag>
   </scm>
 
 	<issueManagement>
@@ -74,7 +75,7 @@
 	</properties>
 
 	<!--
-	Used to deploy to Jzy3d repository
+	Used to deploy to Jzy3d repository-->
 
 	<distributionManagement>
 		<repository>
@@ -87,9 +88,9 @@
 			<name>Jzy3d Maven Folder SNAPSHOTS</name>
 			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
 		</snapshotRepository>
-	</distributionManagement>-->
+	</distributionManagement>
 
-
+<!--
 	<distributionManagement>
 	  <snapshotRepository>
 	    <id>ossrh</id>
@@ -100,6 +101,7 @@
 	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 	  </repository>
 	</distributionManagement>
+-->
 
 
 	<build>
@@ -114,14 +116,14 @@
 					</configuration>
 				</plugin>
 
-				<plugin>
+				<!--<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-deploy-plugin</artifactId>
 					<version>${version.mvn.deploy}</version>
 					<configuration>
 						<skip>true</skip>
 					</configuration>
-				</plugin>
+				</plugin>-->
 
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -159,7 +161,7 @@
 					<version>${version.mvn.release}</version>
 				</plugin>
 
-				<plugin>
+				<!--<plugin>
             <groupId>org.sonatype.plugins</groupId>
             <artifactId>nexus-staging-maven-plugin</artifactId>
             <version>1.6.7</version>
@@ -168,12 +170,12 @@
                 <serverId>ossrh</serverId>
                 <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                 <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                <!--<skipStagingRepositoryClose>true</skipStagingRepositoryClose>-->
+                COMMENT ME PLEASE<skipStagingRepositoryClose>true</skipStagingRepositoryClose>
             </configuration>
-        </plugin>
+        </plugin>-->
 
   			<!-- To sign artigact while deploying to Maven central via Sonatype -->
-		    <plugin>
+		    <!--<plugin>
 		      <groupId>org.apache.maven.plugins</groupId>
 		      <artifactId>maven-gpg-plugin</artifactId>
 		      <version>1.5</version>
@@ -186,7 +188,7 @@
 		          </goals>
 		        </execution>
 		      </executions>
-		    </plugin>
+		    </plugin>-->
 		  </plugins>
 
 		<extensions>
