@@ -27,12 +27,11 @@ public class EmulGLAnimator implements IAnimator{
 					try {
 						Thread.sleep(RENDERING_LOOP_PAUSE);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
 					}
 				}
 			}
 			
-		}, "EmulGLAnimator");
+		}, "org.jzy3d.chart.EmulGLAnimator");
 		t.start();
 	}
 

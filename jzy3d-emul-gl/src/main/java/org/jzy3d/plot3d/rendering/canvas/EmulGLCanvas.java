@@ -34,7 +34,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 	 * if false : call full component.resize to force resize + view.render + glFlush + swap image
 	 */
 	public static boolean TO_BE_CHOOSEN_REPAINT_WITH_FLUSH = false;
-	boolean profileDisplayMethod = false;
+	
+	/** set to TRUE to overlay performance info on top left corner */
+	protected boolean profileDisplayMethod = false;
+	/** set to TRUE to show in console events of the component (to debug GLUT) */
+	protected boolean debugEvents = false;
+
 
 	
 	protected View view;
@@ -43,61 +48,11 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 
 	public EmulGLCanvas(IChartFactory factory, Scene scene, Quality quality) {
 		super();
-
 		view = scene.newView(this, quality);
-		// view.setChart(chart);
-		// renderer = factory.newRenderer(view, false, false);
-		// addGLEventListener(renderer);
-
-		// if (quality.isPreserveViewportSize())
-		// setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE,
-		// ScalableSurface.IDENTITY_PIXELSCALE });
-
 		painter = (EmulGLPainter) view.getPainter();
-
 		init();
-		
 		animator = factory.getPainterFactory().newAnimator(this);
-		
-		// TODO : ANIMATOR MUST STARTED MANUALLY ONCE THE CANVAS IS DISPLAYED
-		/*if(quality.isAnimated) {
-			new Thread(new Runnable() {
 
-				@Override
-				public void run() {
-					try {
-						Thread.sleep(250);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					animator.start();
-				}
-				
-			}).run();
-		//	animator.start();
-		}*/
-		
-		
-		/*addComponentListener(new ComponentListener() {
-			
-			@Override
-			public void componentShown(ComponentEvent e) {
-				System.out.println("GOOOO");
-				animator.start();
-				System.out.println("GOOOO");
-			}
-			@Override
-			public void componentResized(ComponentEvent e) {
-			}
-			@Override
-			public void componentMoved(ComponentEvent e) {
-			}
-			@Override
-			public void componentHidden(ComponentEvent e) {
-			}
-		});*/
-		
-		
 		// FROM NATIVE
 		//
 		//renderer = factory.newRenderer(view, traceGL, debugGL);
@@ -109,8 +64,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 		return animator;
 	}
 
-	/** set to TRUE to show in console events of the component (to debug GLUT) */
-	boolean debugEvents = false;
 
 	@Override
 	public void processEvent(AWTEvent e) {
@@ -167,7 +120,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 	 * </ul>
 	 */
 	public synchronized void doDisplay() {
-		/// System.out.println("doDisplay " + (kDisplay++));
 		TicToc t = new TicToc();
 		
 		if (view != null) {
@@ -179,26 +131,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 
 			view.clear();
 			view.render();
-
-			// checkAlphaChannelOfColorBuffer(painter);
-
-			if (profileDisplayMethod) {
-				// printCountGLBegin();
-				//t.tocShow("Rendering took");
-				t.toc();
-
-				int x = 30;
-				int y = 12;
-				
-				postRenderString("FrameID    : " + kDisplay, x, y, Color.BLACK);
-				postRenderString("Render in  : " + t.elapsedMilisecond() + "ms", x, y*2, Color.BLACK);
-				postRenderString("Surf size  : " + view.getScene().getGraph().getDecomposition().size(), x, y*3, Color.BLACK);
-				postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y*4, Color.BLACK);
-			
-			}
-			
-			if (profileDisplayMethod)
-				t.toc();
 			
 			// Ask opengl to provide an image for display
 			myGL.glFlush();
@@ -207,18 +139,36 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 			// the latest built with glFlush
 			repaint(); 
 			
-			//if (profile)
-			//	TicToc.tockShow("Flush     took");
+			
+			// checkAlphaChannelOfColorBuffer(painter);
 
-			// repaint();
+			if (profileDisplayMethod) {
+				// printCountGLBegin();
+				//t.tocShow("Rendering took");
+				t.toc();
+
+				postRenderProfiling(t);
+			
+			}
+
+			
 			kDisplay++;
 		}
+	}
+
+	protected void postRenderProfiling(TicToc t) {
+		int x = 30;
+		int y = 12;
+		
+		postRenderString("FrameID    : " + kDisplay, x, y, Color.BLACK);
+		postRenderString("Render in  : " + t.elapsedMilisecond() + "ms", x, y*2, Color.BLACK);
+		postRenderString("Surf size  : " + view.getScene().getGraph().getDecomposition().size(), x, y*3, Color.BLACK);
+		postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y*4, Color.BLACK);
 	}
 	
 	Font profileFont = new Font("Arial", Font.PLAIN, 12);
 	int kDisplay = 0;
 
-	TicToc rateLimit = new TicToc();
 	
 	/** Draw a 2d text at the given position */
 	void postRenderString(String message, int x, int y, Color color){

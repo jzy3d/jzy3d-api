@@ -92,6 +92,8 @@ public class LineStrip extends Wireframeable {
     @Override
     public void draw(IPainter painter) {
         doTransform(painter);
+        
+        // Draw a line (or point if there is a single point in this line)
         if (points.size() > 1) {
             drawLine(painter);
         } else if (points.size() == 1 && !showPoints) {
