@@ -55,12 +55,12 @@ public class AWTImageWrapper implements IImageWrapper{
     }
     
     public static BufferedImage getImage(Shape shape, int width, int height, java.awt.Color color) {
-        return getImage(shape, width, height, BufferedImage.TYPE_4BYTE_ABGR, color);
+        return getImage(shape, width, height, BufferedImage.TYPE_INT_ARGB, color);  //BufferedImage.TYPE_4BYTE_ABGR
     }
     
     public static BufferedImage getImage(Shape shape, int width, int height, int imageType, java.awt.Color color) {
-        BufferedImage bimage = new BufferedImage(width, height, imageType);
-        Graphics2D g2d = bimage.createGraphics();
+        BufferedImage image = new BufferedImage(width, height, imageType);
+        Graphics2D g2d = image.createGraphics();
         
         if(color!=null) {
         	g2d.setColor(color);
@@ -71,7 +71,7 @@ public class AWTImageWrapper implements IImageWrapper{
         
         g2d.fill(shape);
         g2d.dispose();
-        return bimage;
+        return image;
     }
 
 }
