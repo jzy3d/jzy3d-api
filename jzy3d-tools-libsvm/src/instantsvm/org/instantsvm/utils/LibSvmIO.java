@@ -6,13 +6,12 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import libsvm.svm;
-import libsvm.svm_model;
-import libsvm.svm_node;
-
 import org.instantsvm.regression.RegressionInputs;
 
 import au.com.bytecode.opencsv.CSVReader;
+import libsvm.svm;
+import libsvm.svm_model;
+import libsvm.svm_node;
 
 public class LibSvmIO {
 	public static final String DIR_DATASETS = "data/datasets/";

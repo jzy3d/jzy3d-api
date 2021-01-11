@@ -1,25 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-tutorials</artifactId>
-	<version>1.0.3</version>
+	<version>2.0.0-SNAPSHOT</version>
 
 	<name>Jzy3d Tutorials</name>
 
-	<!--To retrieve Jzy3d dependencies
-	<repositories>
-		<repository>
-			<id>jzy3d-snapshots</id>
-			<name>Jzy3d Snapshots</name>
-			<url>http://maven.jzy3d.org/snapshots/</url>
-		</repository>
-		<repository>
-			<id>jzy3d-releases</id>
-			<name>Jzy3d Releases</name>
-			<url>http://maven.jzy3d.org/releases/</url>
-		</repository>
-	</repositories> -->
+	<!--To retrieve Jzy3d dependencies <repositories> <repository> <id>jzy3d-snapshots</id>
+		<name>Jzy3d Snapshots</name> <url>http://maven.jzy3d.org/snapshots/</url>
+		</repository> <repository> <id>jzy3d-releases</id> <name>Jzy3d Releases</name>
+		<url>http://maven.jzy3d.org/releases/</url> </repository> </repositories> -->
 
 	<repositories>
 		<repository>
@@ -38,7 +31,7 @@
 	<!--To deploy tutorials: 1) this project does not references master to be
 		able to be build alone 2) master still reference this project to build it
 		with the API involve being deployable by mvn deploy -->
-	<!--<distributionManagement>
+	<distributionManagement>
 		<repository>
 			<id>jzy3d-ftp-maven</id>
 			<name>Jzy3d Maven Folder</name>
@@ -49,24 +42,17 @@
 			<name>Jzy3d Maven Folder SNAPSHOTS</name>
 			<url>ftp://www.jzy3d.org/v1/maven/snapshots</url>
 		</snapshotRepository>
-	</distributionManagement>-->
-
-	<distributionManagement>
-	  <snapshotRepository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-	  </snapshotRepository>
-	  <repository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-	  </repository>
 	</distributionManagement>
+
+	<!-- <distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository> </distributionManagement> -->
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.jzy3d>${project.version}</version.jzy3d>
-		<version.java.source>1.8</version.java.source>
-		<version.java.target>1.8</version.java.target>
+		<version.java.source>1.9</version.java.source>
+		<version.java.target>1.9</version.java.target>
 		<version.mvn.compiler>3.0</version.mvn.compiler>
 		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
 		<version.mvn.deploy>2.4</version.mvn.deploy>
@@ -80,7 +66,25 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-api</artifactId>
+			<artifactId>jzy3d-native-jogl-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency> <!-- For a single demo, remove me! -->
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-native-jogl-swing</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-emul-gl</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-tester-native</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -115,40 +119,24 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			<!--<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-				</configuration>
-			</plugin>-->
+			<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId>
+				<configuration> </configuration> </plugin> -->
 
 			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>attach-sources</id>
-							<phase>deploy</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<executions>
-						<execution>
-							<id>attach-javadocs</id>
-							<phase>deploy</phase>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
+
 		</plugins>
 	</build>
 </project>

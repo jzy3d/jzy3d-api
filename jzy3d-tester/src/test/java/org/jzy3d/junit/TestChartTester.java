@@ -6,12 +6,11 @@ import java.io.IOException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.jzy3d.junit.ChartTester;
-import org.jzy3d.junit.ChartTestFailed;
 
 /**
- * Testing the test tool!
+ * Testing the test tool! 
  * 
+ * @see more test in {@link NativeChartTester}
  * @author martin
  *
  */
@@ -25,7 +24,7 @@ public class TestChartTester {
     
     @Test
     public void compareImageWithHerselfSucceed() throws IOException{
-        BufferedImage bi = test.loadBufferedImage("data/test-test/testimage.png");
+        BufferedImage bi = test.loadBufferedImage("src/test/resources/testimage.png");
         try {
             test.compare(bi, bi);
         } catch (ChartTestFailed e) {
@@ -36,8 +35,8 @@ public class TestChartTester {
     
     @Test
     public void compareImageWithAnotherFails() throws IOException{
-        BufferedImage bi1 = test.loadBufferedImage("data/test-test/testimage.png");
-        BufferedImage bi2 = test.loadBufferedImage("data/test-test/testimage2.png");
+        BufferedImage bi1 = test.loadBufferedImage("src/test/resources/testimage.png");
+        BufferedImage bi2 = test.loadBufferedImage("src/test/resources/testimage2.png");
         try {
             test.compare(bi1, bi2);
         } catch (ChartTestFailed e) {

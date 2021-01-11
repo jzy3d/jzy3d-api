@@ -7,7 +7,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalTessellator;
-import org.jzy3d.plot3d.primitives.AbstractComposite;
+import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
@@ -27,7 +27,7 @@ public class RingInterpolator extends OrthonormalTessellator{
 
 	
 	@Override
-    public AbstractComposite build(float[] x, float[] y, float[] z) {
+    public Composite build(float[] x, float[] y, float[] z) {
 		setData(x, y, z);
 		Shape s = new Shape();
 		s.add(getInterpolatedRingPolygons());

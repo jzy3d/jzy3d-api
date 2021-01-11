@@ -1,8 +1,8 @@
 package org.jzy3d.demos.waterfall;
 
-import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.builder.concrete.WaterfallTessellator;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public class WaterfallDemo extends AbstractAnalysis {
+public class WaterfallDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
         AnalysisLauncher.open(new WaterfallDemo());
     }
@@ -35,10 +35,10 @@ public class WaterfallDemo extends AbstractAnalysis {
         WaterfallTessellator waterfall = new WaterfallTessellator();
 
         Shape build = waterfall.build(x, y, z);
-        build.setColorMapper(new ColorMapper(new ColorMapRainbow(), build.getBounds().getZmin(), build.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
+        build.setColorMapper(new ColorMapper(new ColorMapRainbow(), build.getBounds().getZmin(), build.getBounds().getZmax(), new Color(1, 1, 1, 1.0f)));
 
         // Create a chart
-        chart = AWTChartComponentFactory.chart(Quality.Intermediate, getCanvasType());
+        chart = AWTChartFactory.chart(Quality.Intermediate);
         chart.getScene().getGraph().add(build);
         chart.getView();
     }

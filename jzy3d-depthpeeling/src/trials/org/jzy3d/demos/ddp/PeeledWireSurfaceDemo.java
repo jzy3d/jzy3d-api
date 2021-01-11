@@ -2,7 +2,7 @@ package org.jzy3d.demos.ddp;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -10,12 +10,12 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.GLSLProgram.Strictness;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Range;
-import org.jzy3d.plot3d.builder.Builder;
 import org.jzy3d.plot3d.builder.Mapper;
+import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.ddp.PeelingComponentFactory;
+import org.jzy3d.plot3d.rendering.ddp.PeelingChartFactory;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 
@@ -38,7 +38,7 @@ public class PeeledWireSurfaceDemo {
         int steps = 50;
 
         // Create the object to represent the function over the given range.
-        final Shape surface = Builder.buildOrthonormal(
+        final Shape surface = new SurfaceBuilder().orthonormal(
                 new OrthonormalGrid(range, steps, range, steps), mapper);
         surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface
                 .getBounds().getZmin(), surface.getBounds().getZmax(),
@@ -49,7 +49,7 @@ public class PeeledWireSurfaceDemo {
 
         // Create a chart and add surface
         GLSLProgram.DEFAULT_STRICTNESS = Strictness.CONSOLE_NO_WARN_UNIFORM_NOT_FOUND;
-        IChartComponentFactory factory = new PeelingComponentFactory(PeelingMethod.F2B_PEELING_MODE);
+        IChartFactory factory = new PeelingChartFactory(PeelingMethod.F2B_PEELING_MODE);
         
         
         GLProfile profile = GLProfile.getMaxProgrammable(true);
@@ -61,7 +61,7 @@ public class PeeledWireSurfaceDemo {
         chart.getScene().getGraph().add(surface);
 
         // Setup a colorbar 
-        AWTColorbarLegend cbar = new AWTColorbarLegend(surface, chart.getView().getAxe().getLayout());
+        AWTColorbarLegend cbar = new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
         cbar.setMinimumSize(new Dimension(100, 600));
         surface.setLegend(cbar);
         

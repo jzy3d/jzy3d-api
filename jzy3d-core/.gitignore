@@ -1,0 +1,16 @@
+data/objfiles/*.obj
+
+target
+.settings
+.classpath
+.project
+.DS_Store
+
+*.class
+*.log
+*~/
+
+*.releaseBackup
+*.versionsBackup
+.DS_Store
+dependency-reduced-pom.xml

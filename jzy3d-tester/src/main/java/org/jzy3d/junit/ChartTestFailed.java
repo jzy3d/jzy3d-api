@@ -7,10 +7,13 @@ import org.jzy3d.maths.IntegerCoord2d;
 
 
 public class ChartTestFailed extends Exception{
-	/**
-     * 
-     */
     private static final long serialVersionUID = 3514756078633688965L;
+
+	protected BufferedImage actual;
+	protected BufferedImage expected;
+	protected List<IntegerCoord2d> diffs = new ArrayList<IntegerCoord2d>();
+
+    
     public ChartTestFailed() {
 		super();
 	}
@@ -42,8 +45,6 @@ public class ChartTestFailed extends Exception{
 	}
 	
 	public void addDiffCoordinates(int i, int j){
-	    if(diffs==null)
-	        diffs = new ArrayList<IntegerCoord2d>();
 	    diffs.add(new IntegerCoord2d(i, j));
 	}
 	
@@ -51,8 +52,5 @@ public class ChartTestFailed extends Exception{
 	    return diffs;
 	}
 
-	protected BufferedImage actual;
-	protected BufferedImage expected;
-	protected List<IntegerCoord2d> diffs;
 }
 

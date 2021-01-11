@@ -2,35 +2,35 @@ package org.jzy3d.demos.lines;
 
 import java.util.concurrent.Executors;
 
-import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
-import org.jzy3d.plot3d.primitives.axes.layout.providers.SmartTickProvider;
-import org.jzy3d.plot3d.primitives.axes.layout.renderers.IntegerTickRenderer;
+import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.providers.SmartTickProvider;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.IntegerTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.CroppingView;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class WorldMapDemo extends AbstractAnalysis {
+public class WorldMapDemo extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
         AnalysisLauncher.open(new WorldMapDemo());
     }
 
     public void init() throws Exception {
         // Create the world map chart
-        AWTChartComponentFactory f = new AWTChartComponentFactory() {
+        AWTChartFactory f = new AWTChartFactory() {
             @Override
-            public View newView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+            public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
                 return new CroppingView(factory, scene, canvas, quality);
             }
         };
-        chart = f.newChart(Quality.Advanced, "awt");
+        chart = f.newChart(Quality.Advanced);
 
         // Instantiate world map and parse the file
         WorldMapLoader worldMap = new WorldMapLoader();
@@ -40,10 +40,10 @@ public class WorldMapDemo extends AbstractAnalysis {
         chart.getScene().getGraph().add(worldMap.lineStrips);
 
         // Set axis labels for chart
-        IAxeLayout axeLayout = chart.getAxeLayout();
-        axeLayout.setXAxeLabel("Longitude (deg)");
-        axeLayout.setYAxeLabel("Latitude (deg)");
-        axeLayout.setZAxeLabel("Altitude (km)");
+        IAxisLayout axeLayout = chart.getAxisLayout();
+        axeLayout.setXAxisLabel("Longitude (deg)");
+        axeLayout.setYAxisLabel("Latitude (deg)");
+        axeLayout.setZAxisLabel("Altitude (km)");
 
         // Set precision of tick values
         axeLayout.setXTickRenderer(new IntegerTickRenderer());
