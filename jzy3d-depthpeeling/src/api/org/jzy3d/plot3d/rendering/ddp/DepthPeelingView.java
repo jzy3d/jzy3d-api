@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -18,7 +18,7 @@ import com.jogamp.opengl.glu.GLU;
  *
  */
 public class DepthPeelingView extends View{
-    public DepthPeelingView(IChartComponentFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    public DepthPeelingView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         super(factory, scene, canvas, quality);
     }
 
@@ -26,13 +26,13 @@ public class DepthPeelingView extends View{
      // decompose super.display, i.e. prevent to render scenegraph now,
         // and delegate to peeling algorithm
         synchronized(this){
-            clear(gl);
+            clear();
             
             // render background
-            renderBackground(gl, glu, 0f, 1f);
+            renderBackground(0f, 1f);
 
             // fix quality
-            updateQuality(gl);
+            updateQuality();
 
             // prepare viewport
             this.width = width;
@@ -43,10 +43,10 @@ public class DepthPeelingView extends View{
     protected int width = 0;
     protected int height = 0;
     
-    public void renderPeeledView(GL gl, GLU glu){
-        updateCamera(gl, glu,  new ViewportConfiguration(width, height), computeScaledViewBounds());
+    public void renderPeeledView(){
+        updateCamera(new ViewportConfiguration(width, height), computeScaledViewBounds());
 
-        renderAxeBox(gl, glu);
-        renderSceneGraph(gl, glu, false);  
+        renderAxeBox();
+        renderSceneGraph(false);  
     }
 }

@@ -2,8 +2,6 @@ package org.jzy3d.svm.demos;
 
 import java.io.IOException;
 
-import libsvm.svm_parameter;
-
 import org.instantsvm.Parameters;
 import org.instantsvm.regression.RegressionInputs;
 import org.instantsvm.regression.RegressionParameters;
@@ -12,6 +10,8 @@ import org.instantsvm.utils.LazySVM;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.builder.concrete.SphereScatterGenerator;
 import org.jzy3d.svm.utils.Conversion;
+
+import libsvm.svm_parameter;
 
 public class ConeRegressionDemo extends Abstract3dDemo {
 	public static void main(String[] args) throws IOException {

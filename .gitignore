@@ -5,16 +5,19 @@ target
 .settings
 .DS_Store
 .classpath
+.project
 *.class
 *.log
 *~/
 *~
 
+*.obj
+
+
 */.classpath
 */.project
 */.settings
-
-jzy3d-jdt-core/.classpath
+*/.DS_Store
 
 jzy3d-api/data/objfiles/dragon.obj
 

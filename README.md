@@ -1,28 +1,80 @@
-jzy3d-main
-==========
+jzy3d-api
+=========
 
-This is a main Git repository for Jzy3d providing multiple maven modules.
-
-Travis build status : [![Build Status](https://travis-ci.org/jzy3d/jzy3d-api.svg?branch=master)](https://travis-ci.org/jzy3d/jzy3d-api)
+Jzy3d is a framework for easily drawing 3d and 2d charts in Java, using either fast native GPU rendering or CPU based rendering. The framework targets simplicity and portability (AWT, SWT, NEWT, Swing, GPU/CPU, etc).
 
 
+# How to use
+
+Refer to the [tutorial README](jzy3d-tutorials/README.md) file to get help on creating your first chart project with the help of example code.
+
+# Architecture
+
+Creating a chart implies building and wiring the below high-level components.
+
+<img src="doc/Components.png"/>
 
 
-API and modules
------------------------------------
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials">jzy3d-tutorials</a> : few examples for building main chart families (surfaces, scatters, etc).
+## Customize chart with factories
 
-Application will require <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/api">jzy3d-api</a> <i>plus</i> classes to address a specific windowing environement (AWT, SWT, Swing). The API itself has no dependency to AWT, making it buildable for Android environement.
+The ```IChartFactory``` builds all objects that will define how the chart will look (```Axis```, ```View```, ```Camera```, ```Chart```).
 
-Code specific to a target windowing environement is made available through modules (or sometime source folder separation):
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/awt">jzy3d-api/awt</a> : provides AWT canvases (source folder separation but part of jzy3d-api build)
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-api/src/swing">jzy3d-api/swing</a> : provides Swing canvases  (source folder separation but jzy3d-api build)
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-swt">jzy3d-swt</a> : provides a wrapper on AWT canvas to embed a chart in a SWT application.
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-javafx">jzy3d-javafx</a> : render in Java FX applications.
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jdt-core">jzy3d-jdt-core</a> : a clone of JDT, for Java Delaunay Triangulation
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-svm-mapper">jzy3d-svm-mapper</a> : fit a surface out of set of points using an SVM regression model
-- <a href="https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tools-libsvm">jzy3d-tools-libsvm</a> : a wrapper on LibSVM
+The ```IPainterFactory``` builds every objects that allow compatibility across windowing toolkits and GPU/CPU. The chart factories and drawable have no knowledge of concrete AWT, SWT, Swing, etc. This is all powered by the painter factory introduced in Jzy3d 2.0.
 
+The ```Drawable``` class hierarchy defines geometries able to use a ```IPainter``` to draw something.
+
+
+<img src="doc/Factories.png"/>
+
+
+### Native and emulated elements
+
+<img src="doc/Interop.png"/>
+
+
+
+# Changes in 2.0 version
+
+Version 2.0 is a major refactor to allow using multiple OpenGL implementations, which opened the door to EmulGL. To ease porting your 1.* charts, we add the following cheatsheet.
+
+## Renamings
+
+| Class name in 1.* | Class name in 2.0 |
+|-------------------|-------------------|
+| AbstractDrawable | Drawable |
+| AbstractWireframeable | Wireframeable |
+| AxeBox | AxisBox |
+| DrawableTexture | NativeDrawableImage & EmulGLDrawableImage |
+|||
+| _IChartComponentFactory_ | _IChartFactory_ |
+| AWTChartComponentFactory | AWTChartFactory |
+| NewtChartComponentFactory | NewtChartFactory |
+| JavaFXChartComponentFactory | :exclamation: JavaFXChartFactory |
+| SwingChartComponentFactory | SwingChartFactory |
+| SWTChartComponentFactory | SWTChartFactory |
+|  | FallbackChartFactory |
+|||
+| ColorbarViewportLayout | ViewAndColorbarsLayout |
+| ViewMouseController | NewtViewCameraController |
+
+:exclamation: work in progress.
+
+SurfaceBuilder is not static anymore to be overridable.
+
+
+## Additions
+
+* IPainter
+* IPainterFactory
+* EmulGLPainterFactory
+* IAnimator
+* IImageWrapper and SymbolHandler
+
+
+## Deletions
+
+
+# Extensions
 
 Additional modules kept separated demonstrate side works on Jzy3d
 - <a href="https://github.com/jzy3d/bigpicture">jzy3d-bigpicture</a> : drivers to few big data storage to draw massive amount of points
@@ -31,69 +83,21 @@ Additional modules kept separated demonstrate side works on Jzy3d
 
 
 
-Jzy3d Maven Repository
------------------------------------
-- To add Jzy3d to your project
-
-  release
-  <pre>
-  <code>
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.jzy3d&lt;/groupId&gt;
-    &lt;artifactId&gt;jzy3d-api&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0&lt;/version&gt;
-  &lt;/dependency&gt;
-  </code>
-  </pre>
- snapshot
-  <pre>
-  <code>
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.jzy3d&lt;/groupId&gt;
-    &lt;artifactId&gt;jzy3d-api&lt;/artifactId&gt;
-    &lt;version&gt;1.0.1-SNAPSHOT&lt;/version&gt;
-  &lt;/dependency&gt;
-  </code>
-  </pre>
 
 
-- Maven artifacts are stored there:
-  <pre>
-  <code>
-  &lt;repositories&gt;
-    &lt;repository&gt;
-  	 &lt;id&gt;jzy3d-snapshots&lt;/id&gt;
-  	 &lt;name&gt;Jzy3d Snapshots&lt;/name&gt;
-  	 &lt;url&gt;http://maven.jzy3d.org/snapshots &lt;/url&gt;
-    &lt;/repository&gt;
-    &lt;repository&gt;
-  	 &lt;id&gt;jzy3d-releases&lt;/id&gt;
-  	 &lt;name&gt;Jzy3d Releases&lt;/name&gt;
-  	 &lt;url&gt;http://maven.jzy3d.org/releases &lt;/url&gt;
-    &lt;/repository&gt;
-  &lt;/repositories&gt;
-  </code>
-  </pre>
 
-Building the projects with Maven
------------------------------------
-Build all module from master repository by calling
-- mvn install
+# Build
 
-To be friendly with Eclipse-but-non-Maven users, we add .project and .classpath files to the repositories. If you want to regenerate this files with maven and have the projects linked all together, simply run
-- mvn eclipse:eclipse -Declipse.workspace=~[your current eclipse workspace folder]
-- then edit jzy3d-api project properties to export all dependencies to other projects (Properties > Java Build Path > Order and Export > Select All. Then remove JRE System libraries).
+```
+mvn install
+```
 
-Building the projects without Maven
------------------------------------
-We kept the repository easy to use for non-maven users.
-- Eclipse project files (.project & .classpath) with inter-project relations are commited to the repositories
-- Some modules have a lib/ directory containing required Jars. If you want to use these jars, simply edit the libraries dependencies of the Eclipse project to use them instead of the maven dependencies.
+# License
 
-License
---------------
 New BSD
 
-More information
---------------
+# More information
+
 http://www.jzy3d.org
+
+Travis build status : [![Build Status](https://travis-ci.org/jzy3d/jzy3d-api.svg?branch=master)](https://travis-ci.org/jzy3d/jzy3d-api)

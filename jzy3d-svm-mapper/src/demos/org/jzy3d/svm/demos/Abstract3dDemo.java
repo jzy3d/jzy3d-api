@@ -3,10 +3,10 @@ package org.jzy3d.svm.demos;
 import org.instantsvm.Parameters;
 import org.instantsvm.regression.RegressionInputs;
 import org.instantsvm.regression.RegressionSVM;
-import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.SwingChartLauncher;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -60,7 +60,7 @@ public abstract class Abstract3dDemo {
     protected static Chart getRegressionChart(SvmMapper mapper, Coord3d[] values) {
         Quality q = Quality.Advanced;
         q.setSmoothPoint(true);
-        Chart chart = new AWTChart(q);
+        Chart chart = new AWTChartFactory().newChart(q);
 
         // shape
         BoundingBox3d b = Conversion.getBounds(values);

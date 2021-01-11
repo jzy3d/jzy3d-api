@@ -2,10 +2,9 @@ package org.jzy3d.demos.shaders;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.shaders.IShaderable;
 import org.jzy3d.plot3d.rendering.shaders.ShaderRenderer3d;
 import org.jzy3d.plot3d.rendering.shaders.Shaderable;
@@ -26,15 +25,15 @@ public class ShaderMandelbrotDemo {
         
         chart.getScene().getGraph().add(new TexSurface());
 
-        chart.getView().setAxeBoxDisplayed(false);
+        chart.getView().setAxisDisplayed(false);
         ChartLauncher.openChart(chart, new Rectangle(0,0,600,600));
     }
     
     
     public static Chart initChart(final IShaderable s) {
-    	IChartComponentFactory factory = new AWTChartComponentFactory(){
+    	IChartFactory factory = new AWTChartFactory(){
     		@Override
-            public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL){
+            public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL){
                 ShaderRenderer3d r = new ShaderRenderer3d(view, traceGL, debugGL, new Shaderable());
                 return r;
             }
@@ -44,7 +43,7 @@ public class ShaderMandelbrotDemo {
         GLCapabilities capabilities = new GLCapabilities(profile);
         capabilities.setHardwareAccelerated(false);
         
-        Chart chart = new Chart(factory, Quality.Intermediate, "awt", capabilities);
+        Chart chart = null;//new Chart(factory, Quality.Intermediate, "awt", capabilities);
         chart.getView().setSquared(false);
         
         //chart.getView().setCameraMode(CameraMode.PERSPECTIVE);
