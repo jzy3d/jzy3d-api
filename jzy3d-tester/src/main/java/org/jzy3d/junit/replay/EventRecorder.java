@@ -30,8 +30,6 @@ import org.jzy3d.junit.replay.events.MouseEventLog;
 import org.jzy3d.junit.replay.events.WindowEventLog;
 import org.jzy3d.utils.LoggerUtils;
 
-import com.jogamp.opengl.util.texture.TextureIO;
-
 public class EventRecorder extends Timestamped implements MouseListener, MouseMotionListener, MouseWheelListener, KeyListener, ComponentListener, WindowListener {
     protected Component awt;
     protected Scenario scenario;
@@ -103,10 +101,7 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
     }
 
     protected void screenshot(Chart chart, String filename) throws IOException {
-        File output = new File(filename);
-        if (!output.getParentFile().exists())
-            output.mkdirs();
-        TextureIO.write(chart.screenshot(), output);
+    	chart.screenshot(new File(filename));
         Logger.getLogger(EventRecorder.class).info("screenshot:" + filename);
     }
 

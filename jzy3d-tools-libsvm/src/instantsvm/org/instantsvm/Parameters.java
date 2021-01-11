@@ -1,8 +1,8 @@
 package org.instantsvm;
 
-import libsvm.svm_parameter;
-
 import org.instantsvm.utils.LibSvmConsole;
+
+import libsvm.svm_parameter;
 /**
  * options:
 	-s svm_type : set type of SVM (default 0)

@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.ddp.AbstractDepthPeelingAlgorithm;
 
 import com.jogamp.opengl.GL2;
@@ -14,7 +15,7 @@ public abstract class AbstractAccumlationDepthPeeling extends AbstractDepthPeeli
     }
     
     @Override
-    public void init(GL2 gl, int width, int height) {
+    public void init(IPainter painter, GL2 gl, int width, int height) {
         initAccumulationRenderTargets(gl, width, height);
        
         gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);
@@ -25,7 +26,7 @@ public abstract class AbstractAccumlationDepthPeeling extends AbstractDepthPeeli
     }
     
     @Override
-    public void reshape(GL2 gl, int width, int height) {
+    public void reshape(IPainter painter, GL2 gl, int width, int height) {
         deleteAccumulationRenderTargets(gl);
         initAccumulationRenderTargets(gl, width, height);
     }

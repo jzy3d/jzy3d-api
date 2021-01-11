@@ -1,9 +1,8 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
 import org.apache.log4j.Logger;
-import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.GLSLProgram.Strictness;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -13,7 +12,11 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
 public class DepthPeelingChart extends Chart {
-    static Logger LOGGER = Logger.getLogger(DepthPeelingChart.class);
+    public DepthPeelingChart(IChartFactory factory, Quality quality) {
+		super(factory, quality);
+	}
+
+	static Logger LOGGER = Logger.getLogger(DepthPeelingChart.class);
 
     public static Chart get(Quality quality, String chartType) {
         return get(quality, chartType, PeelingMethod.DUAL_PEELING_MODE);
@@ -30,7 +33,7 @@ public class DepthPeelingChart extends Chart {
     public static Chart get(Quality quality, String chartType, final PeelingMethod method, Strictness strictness, boolean editFactories) {
         GLSLProgram.DEFAULT_STRICTNESS = strictness;
 
-        IChartComponentFactory factory = new PeelingComponentFactory(method);
+        IChartFactory factory = new PeelingChartFactory(method);
 
         LOGGER.info("is available GL2 : " + GLProfile.isAvailable(GLProfile.GL2));
         LOGGER.info("is available GL3 : " + GLProfile.isAvailable(GLProfile.GL3));
@@ -82,9 +85,9 @@ public class DepthPeelingChart extends Chart {
         GLCapabilities capabilities = new GLCapabilities(profile);
         capabilities.setHardwareAccelerated(true);
 
-        Chart chart = new AWTChart(factory, quality, chartType, capabilities);
+        Chart chart = null;//new DepthPeelingChart(factory, quality, chartType, capabilities);
         chart.getView().setSquared(false);
-        chart.getView().setAxeBoxDisplayed(true);
+        chart.getView().setAxisDisplayed(true);
         return chart;
     }
 }

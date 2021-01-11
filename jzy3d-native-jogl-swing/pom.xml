@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jzy3d</groupId>
+	<artifactId>jzy3d-native-jogl-swing</artifactId>
+	<name>Jzy3d Native Implementation for Swing with JOGL</name>
+
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-all</artifactId>
+		<version>2.0.0-SNAPSHOT</version>
+	</parent>
+
+	<description>A Java API for 3d charts</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-native-jogl-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<!-- JUST FOR MULTICHART PANEL CLASS - TO BE REMOVED? -->
+		<dependency>
+			<groupId>com.miglayout</groupId>
+			<artifactId>miglayout</artifactId>
+			<version>3.7.4</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+
+		</plugins>
+	</build>
+
+
+</project>

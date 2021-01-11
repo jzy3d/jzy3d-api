@@ -2,8 +2,8 @@ package org.jzy3d.demos.shaders;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
-import org.jzy3d.chart.factories.AWTChartComponentFactory;
-import org.jzy3d.chart.factories.IChartComponentFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -42,7 +42,7 @@ public class ShaderDemo {
         createCylinder(chart, c2, 5, 15, Color.CYAN);
         createLine(chart, c1, c2, 3);
         
-        chart.getView().setAxeBoxDisplayed(false);
+        chart.getView().setAxisDisplayed(false);
         //chart.getScene().getGraph().add(new TexSurface());
         ChartLauncher.openChart(chart, new Rectangle(0,0,600,600));
     }
@@ -80,9 +80,9 @@ public class ShaderDemo {
     }
     
     public static Chart initChart() {
-    	IChartComponentFactory factory = new AWTChartComponentFactory(){
+    	IChartFactory factory = new AWTChartFactory(){
     	    @Override
-    		public Renderer3d newRenderer(View view, boolean traceGL, boolean debugGL){
+    		public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL){
                 ShaderRenderer3d r = new ShaderRenderer3d(view, traceGL, debugGL, new Shaderable());
                 return r;
             }
@@ -92,7 +92,7 @@ public class ShaderDemo {
         GLCapabilities capabilities = new GLCapabilities(profile);
         capabilities.setHardwareAccelerated(false);
         
-        Chart chart = new Chart(factory, Quality.Nicest, "awt", capabilities);
+        Chart chart = new Chart(factory, Quality.Nicest);
         chart.getView().setSquared(false);
         //chart.getView().setCameraMode(CameraMode.PERSPECTIVE);
         return chart;

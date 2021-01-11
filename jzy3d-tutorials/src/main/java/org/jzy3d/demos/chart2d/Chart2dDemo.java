@@ -13,17 +13,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart2d.Chart2d;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.ConcurrentLineStrip;
-import org.jzy3d.plot3d.primitives.axes.layout.IAxeLayout;
-import org.jzy3d.plot3d.primitives.axes.layout.providers.PitchTickProvider;
-import org.jzy3d.plot3d.primitives.axes.layout.renderers.PitchTickRenderer;
+import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.providers.PitchTickProvider;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.PitchTickRenderer;
 import org.jzy3d.ui.LookAndFeel;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Showing a pair of 2d charts to represent pitch and amplitude variation of an
@@ -43,14 +43,14 @@ public class Chart2dDemo {
     public static int nOctave = 5;
 
     public static void main(String[] args) throws Exception {
-        PitchAmpliControlCharts log = new PitchAmpliControlCharts(duration, maxfreq, nOctave);
+        PitchAndAmplitudeCharts log = new PitchAndAmplitudeCharts(duration, maxfreq, nOctave);
         new TimeChartWindow(log.getCharts());
 
         generateSamplesInTime(log);
         // generateSamples(log, 500000);
     }
 
-    public static void generateSamples(PitchAmpliControlCharts log, int n) throws InterruptedException {
+    public static void generateSamples(PitchAndAmplitudeCharts log, int n) throws InterruptedException {
         System.out.println("will generate " + n + " samples");
 
         for (int i = 0; i < n; i++) {
@@ -68,7 +68,7 @@ public class Chart2dDemo {
         return ((double) i / n) * duration;
     }
 
-    public static void generateSamplesInTime(PitchAmpliControlCharts log) throws InterruptedException {
+    public static void generateSamplesInTime(PitchAndAmplitudeCharts log) throws InterruptedException {
         System.out.println("will generate approx. " + duration * 1000 / interval + " samples");
 
         start();
@@ -88,7 +88,7 @@ public class Chart2dDemo {
     }
 
     /** Hold 2 charts, 2 time series, and 2 drawable lines */
-    public static class PitchAmpliControlCharts {
+    public static class PitchAndAmplitudeCharts {
         public Chart2d pitchChart;
         public Chart2d ampliChart;
         public Serie2d seriePitch;
@@ -96,11 +96,11 @@ public class Chart2dDemo {
         public ConcurrentLineStrip pitchLineStrip;
         public ConcurrentLineStrip amplitudeLineStrip;
 
-        public PitchAmpliControlCharts(float timeMax, int freqMax, int nOctave) {
+        public PitchAndAmplitudeCharts(float timeMax, int freqMax, int nOctave) {
             pitchChart = new Chart2d();
             pitchChart.asTimeChart(timeMax, 0, freqMax, "Time", "Frequency");
 
-            IAxeLayout axe = pitchChart.getAxeLayout();
+            IAxisLayout axe = pitchChart.getAxisLayout();
             axe.setYTickProvider(new PitchTickProvider(nOctave));
             axe.setYTickRenderer(new PitchTickRenderer());
 
