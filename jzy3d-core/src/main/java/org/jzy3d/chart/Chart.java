@@ -262,32 +262,8 @@ public class Chart {
         return this;
     }
 
-<<<<<<< HEAD:jzy3d-api/src/api/org/jzy3d/chart/Chart.java
-    @Deprecated
-    public void addDrawable(AbstractDrawable drawable) {
-        getScene().getGraph().add(drawable);
-    }
 
-    @Deprecated
-    public void addDrawable(AbstractDrawable drawable, boolean updateViews) {
-        getScene().getGraph().add(drawable, updateViews);
-        drawable.setSpaceTransformer(getView().getSpaceTransformer());
-    }
-
-    @Deprecated
-    public void addDrawable(List<? extends AbstractDrawable> drawables, boolean updateViews) {
-        getScene().getGraph().add(drawables, updateViews);
-    }
-
-    @Deprecated
-    public void addDrawable(List<? extends AbstractDrawable> drawables) {
-        getScene().getGraph().add(drawables);
-    }
-
-    public void removeDrawable(AbstractDrawable drawable) {
-=======
     public void remove(Drawable drawable) {
->>>>>>> origin/emulgl:jzy3d-core/src/main/java/org/jzy3d/chart/Chart.java
         getScene().getGraph().remove(drawable);
     }
 
