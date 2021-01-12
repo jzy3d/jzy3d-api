@@ -6,7 +6,7 @@ public class EmulGLAnimator implements IAnimator{
 	private static final int RENDERING_LOOP_PAUSE = 100;
 	protected EmulGLCanvas canvas;
 	protected Thread t;
-	
+	protected boolean loop = false;
 	
 
 	public EmulGLAnimator(EmulGLCanvas canvas) {
@@ -21,7 +21,9 @@ public class EmulGLAnimator implements IAnimator{
 
 			@Override
 			public void run() {
-				while(true) {
+				loop = true;
+				
+				while(loop) {
 					canvas.doDisplay();
 					
 					try {
@@ -38,7 +40,7 @@ public class EmulGLAnimator implements IAnimator{
 	@Override
 	public void stop() {
 		if(t!=null) {
-			t.interrupt();
+			loop = false;
 		}
 	}
 }
