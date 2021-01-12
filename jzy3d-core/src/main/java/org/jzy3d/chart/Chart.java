@@ -100,6 +100,8 @@ public class Chart {
     }
 
     public void dispose() {
+    	setAnimated(false);
+    	
         clearControllerList();
         if (canvas != null)
             canvas.dispose();
