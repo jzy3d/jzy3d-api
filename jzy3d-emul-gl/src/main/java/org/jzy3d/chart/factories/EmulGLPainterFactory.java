@@ -23,10 +23,9 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import jgl.GL;
 
 public class EmulGLPainterFactory implements IPainterFactory{
-	IChartFactory chartFactory;
-
-	EmulGLCanvas internalCanvas;
-	EmulGLPainter internalPainter;
+	protected IChartFactory chartFactory;
+	protected EmulGLCanvas internalCanvas;
+	protected EmulGLPainter internalPainter;
 
 
 	@Override
@@ -80,11 +79,15 @@ public class EmulGLPainterFactory implements IPainterFactory{
 	@Override
 	public EmulGLCanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
 		if (internalCanvas == null) {
-			internalCanvas = new EmulGLCanvas(factory, scene, quality);
+			internalCanvas = newEmulGLCanvas(factory, scene, quality);
 
 			link();
 		}
 		return internalCanvas;
+	}
+
+	protected EmulGLCanvas newEmulGLCanvas(IChartFactory factory, Scene scene, Quality quality) {
+		return new EmulGLCanvas(factory, scene, quality);
 	}
 
 	protected void link() {
