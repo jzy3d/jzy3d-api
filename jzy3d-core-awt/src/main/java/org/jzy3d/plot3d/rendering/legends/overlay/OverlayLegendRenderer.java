@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.legends.overlay;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 
@@ -29,10 +30,12 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
     @Override
     public void paint(Graphics g, int canvasWidth, int canvasHeight) {
         Graphics2D g2d = (Graphics2D) g;
+        configureRenderingHints(g2d);
+        
         if (layout.font != null)
             g2d.setFont(layout.font);
+        
         FontMetrics fm = g.getFontMetrics();
-
         int textHeight = fm.getHeight();
         int textWidthMax = maxStringWidth(fm);
 
@@ -73,6 +76,14 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
         g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
     }
 
+	protected void configureRenderingHints(Graphics2D g2d) {
+		RenderingHints rh = new RenderingHints(
+				RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g2d.setRenderingHints(rh);
+	}
+
+    
     public void paintLegend(Graphics2D g2d, int textHeight, int textWidthMax, int xTextPos, int yTextPos, Legend line) {
         // Text
         g2d.setColor(AWTColor.toAWT(layout.fontColor));
