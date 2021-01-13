@@ -57,29 +57,6 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
 public class View {
 	protected static Logger LOGGER = Logger.getLogger(View.class);
 
-
-	/**
-	 * This allows stretching the camera rendering sphere when the camera is on top
-	 * of the scene (meaning we are drawing in 2D).
-	 */
-	public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP = 0.25f;
-
-	/**
-	 * This allows editing the camera rendering sphere.
-	 * <ul>
-	 * <li>A value of 1 allows having an AxisBox with corners touching the
-	 * top/bottom part of the canvas.
-	 * <li>A vamue greater than 1 makes the rendering sphere bigger, hence the
-	 * AxisBox appears smaller.
-	 * </ul>
-	 * 
-	 * NB : this was added to workaround logarithmic charts but this should be
-	 * adressed better.
-	 * 
-	 * TODO : delete me or make a better view setting
-	 */
-	public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR = 1f;//1.2f for log charts;
-
 	/**
 	 * force to have all object maintained in screen, meaning axebox won't always
 	 * keep the same size.
@@ -99,6 +76,9 @@ public class View {
 	protected Color backgroundColor = Color.BLACK;
 	protected boolean axisDisplayed = true;
 	protected boolean squared = true;
+	protected float cameraRenderingSphereRadiusFactor = 1f;
+	protected float cameraRenderingSphereRadiusFactorOnTop = 0.25f;
+
 
 	// view objects
 	protected Camera cam;
@@ -621,6 +601,45 @@ public class View {
 		else
 			this.cam.setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
 	}
+	
+	
+	public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP = 0.25f;
+
+	
+	/**
+	 * @see setter
+	 */
+	public float getCameraRenderingSphereRadiusFactor() {
+		return cameraRenderingSphereRadiusFactor;
+	}
+
+	/**
+	 * This allows zooming the 3d scene by editing the camera rendering sphere.
+	 * <ul>
+	 * <li>A value of 1 allows having an AxisBox with corners touching the
+	 * top/bottom part of the canvas.
+	 * <li>A value greater than 1 makes the rendering sphere bigger, hence the
+	 * AxisBox appears smaller.
+	 * </ul>
+	 */
+	public void setCameraRenderingSphereRadiusFactor(float cameraRenderingSphereRadiusFactor) {
+		this.cameraRenderingSphereRadiusFactor = cameraRenderingSphereRadiusFactor;
+	}
+
+	/**
+	 * @see setter
+	 */
+	public float getCameraRenderingSphereRadiusFactorOnTop() {
+		return cameraRenderingSphereRadiusFactorOnTop;
+	}
+
+	/**
+	 * This allows stretching the camera rendering sphere when the camera is on top
+	 * of the scene (meaning we are drawing in 2D).
+	 */
+	public void setCameraRenderingSphereRadiusFactorOnTop(float cameraRenderingSphereRadiusFactorOnTop) {
+		this.cameraRenderingSphereRadiusFactorOnTop = cameraRenderingSphereRadiusFactorOnTop;
+	}
 
 	public Scene getScene() {
 		return scene;
@@ -1110,7 +1129,7 @@ public class View {
 			}
 			double radius = bounds.getRadius();
 			
-			cam.setRenderingSphereRadius((float) radius * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR);
+			cam.setRenderingSphereRadius((float) radius * cameraRenderingSphereRadiusFactor);
 		}
 	}
 	
