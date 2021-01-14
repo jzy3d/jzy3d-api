@@ -156,6 +156,12 @@ public class Quality {
         this.preserveViewportSize = preserveViewportSize;
     }
 
+    public Quality clone() {
+    	Quality copy = new Quality(depthActivated, alphaActivated, smoothColor, smoothPoint, smoothLine, smoothPolygon, disableDepthTestWhenAlpha);
+    	copy.isAnimated = isAnimated;
+    	copy.isAutoSwapBuffer = isAutoSwapBuffer;
+    	return copy;
+    }
 
 
     private boolean depthActivated;
