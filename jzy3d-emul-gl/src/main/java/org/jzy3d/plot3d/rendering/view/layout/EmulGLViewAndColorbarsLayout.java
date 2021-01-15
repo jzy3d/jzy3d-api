@@ -54,8 +54,8 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 		/// HAAACKKKKYYYYY : SHIFT THE VIEWPORT
 
 		float shift = (right - left) * canvas.getRendererWidth() / 2;
-		emulGL.getGL().setShiftHoritontally((int) -shift);
-
+		emulGL.getGL().setShiftHorizontally((int) -shift);
+		
 		float slice = (right - left) / legends.size();
 		int k = 0;
 		for (ILegend legend : legends) {
