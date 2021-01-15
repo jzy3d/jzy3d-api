@@ -11,8 +11,7 @@ public class OffscreenWindowFactory extends AWTPainterFactory{
     public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
         boolean debugGL = false;
-        NativeChartFactory nFactory = (NativeChartFactory)factory;
-        Dimension dim = nFactory.getOffscreenDimension();
-        return new OffscreenCanvas(nFactory, scene, quality, nFactory.getCapabilities(), dim.width, dim.height, traceGL, debugGL);
+        Dimension dim = factory.getOffscreenDimension();
+        return new OffscreenCanvas(factory, scene, quality, ((NativePainterFactory)factory.getPainterFactory()).getCapabilities(), dim.width, dim.height, traceGL, debugGL);
     }
 }

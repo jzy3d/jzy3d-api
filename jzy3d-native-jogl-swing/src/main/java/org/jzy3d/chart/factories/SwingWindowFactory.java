@@ -16,8 +16,7 @@ public class SwingWindowFactory extends AWTPainterFactory{
         boolean traceGL = false;
         boolean debugGL = false;
         
-        NativeChartFactory nFactory = (NativeChartFactory) factory;
-        return new CanvasSwing((NativeChartFactory) factory, scene, quality, nFactory.getCapabilities(), traceGL, debugGL);
+        return new CanvasSwing(factory, scene, quality, ((NativePainterFactory)factory.getPainterFactory()).getCapabilities(), traceGL, debugGL);
     }
 
 }

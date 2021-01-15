@@ -16,8 +16,6 @@ import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
-import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.ui.views.ImagePanel;
 
 public class FallbackChartFactory extends AWTChartFactory {
@@ -41,7 +39,7 @@ public class FallbackChartFactory extends AWTChartFactory {
     }*/
     
     public FallbackChartFactory() {
-    	super(new FallbackWindowFactory());
+    	super(new FallbackPainterFactory());
     	setOffscreen(600, 600);
     }
 
@@ -144,8 +142,8 @@ public class FallbackChartFactory extends AWTChartFactory {
 
     /* ################################################# */
 
-    @Override
+    /*@Override
     public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
         return new AWTImageRenderer3d(view, traceGL, debugGL);
-    }
+    }*/
 }

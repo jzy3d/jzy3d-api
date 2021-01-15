@@ -7,7 +7,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.IAnimator;
-import org.jzy3d.chart.factories.NativeChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -35,17 +36,17 @@ import com.jogamp.opengl.util.texture.TextureIO;
  */
 public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCanvas {
 
-    public CanvasNewtSWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
+    public CanvasNewtSWT(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
     }
 
-    public CanvasNewtSWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+    public CanvasNewtSWT(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
         super(((SWTChartFactory) factory).getComposite(), SWT.NONE);
         this.setLayout(new FillLayout());
         window = GLWindow.create(glci);
         canvas = new NewtCanvasSWT(this, SWT.NONE, window);
         view = scene.newView(this, quality);
-        renderer = factory.newRenderer3D(view, traceGL, debugGL);
+        renderer = ((NativePainterFactory)factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
         window.addGLEventListener(renderer);
 
         if (quality.isPreserveViewportSize()) {
@@ -57,6 +58,8 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
         
         
         animator = ((SWTChartFactory)factory).newAnimator(window);
+        
+        
         if (quality.isAnimated()) {
             animator.start();
         }

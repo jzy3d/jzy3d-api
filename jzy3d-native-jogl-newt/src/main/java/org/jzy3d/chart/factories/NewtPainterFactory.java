@@ -21,13 +21,26 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTNativeViewOverlay;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
+import org.jzy3d.plot3d.rendering.view.Renderer3d;
+import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+
+import com.jogamp.opengl.GLCapabilities;
 
 public class NewtPainterFactory extends NativePainterFactory implements IPainterFactory{
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
     static Logger logger = Logger.getLogger(NewtPainterFactory.class);
+    
+	public NewtPainterFactory() {
+		super();
+	}
+
+	public NewtPainterFactory(GLCapabilities capabilities) {
+		super(capabilities);
+	}
 
 	@Override
 	public IViewOverlay newViewOverlay() {
@@ -38,14 +51,19 @@ public class NewtPainterFactory extends NativePainterFactory implements IPainter
     public IViewportLayout newViewportLayout() {
         return new ViewAndColorbarsLayout();
     }
+    
+    /** Provide AWT Texture loading for screenshots */
+    @Override
+    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+        return new AWTRenderer3d(view, traceGL, debugGL);
+    }
 
     @Override
     public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
         boolean debugGL = false;
         
-        NativeChartFactory nFactory = (NativeChartFactory)factory;
-        return new CanvasNewtAwt(nFactory, scene, quality, nFactory.getCapabilities(), traceGL, debugGL);
+        return new CanvasNewtAwt(factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
 
 	

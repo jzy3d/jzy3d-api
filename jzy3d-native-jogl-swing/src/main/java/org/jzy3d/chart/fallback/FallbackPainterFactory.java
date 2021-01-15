@@ -13,9 +13,17 @@ import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.AWTPainterFactory;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d;
+import org.jzy3d.plot3d.rendering.view.Renderer3d;
+import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.ui.views.ImagePanel;
 
-public class FallbackWindowFactory extends AWTPainterFactory {
+public class FallbackPainterFactory extends AWTPainterFactory {
+    @Override
+    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+        return new AWTImageRenderer3d(view, traceGL, debugGL);
+    }
+
     @Override
     public ICameraMouseController newMouseCameraController(Chart chart) {
         //if (chart.getFactory() instanceof OffscreenChartFactory)

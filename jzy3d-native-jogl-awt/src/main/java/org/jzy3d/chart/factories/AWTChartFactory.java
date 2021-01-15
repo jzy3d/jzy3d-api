@@ -7,11 +7,9 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTNativeView;
-import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class AWTChartFactory extends NativeChartFactory {
+public class AWTChartFactory extends ChartFactory {
     public static Chart chart() {
         return chart(Quality.Intermediate);
     }
@@ -33,7 +31,7 @@ public class AWTChartFactory extends NativeChartFactory {
     	super(painterFactory);
     }
 
-    /**
+	/**
      * The {@link AWTNativeView} returned by this factory support Java2d defined components 
      * (background images, tooltips, post-renderers and overlay)
      */
@@ -47,12 +45,6 @@ public class AWTChartFactory extends NativeChartFactory {
         return new AWTNativeChart(factory, quality);
     }
     
-    /** Provide AWT Texture loading for screenshots */
-    @Override
-    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-        return new AWTRenderer3d(view, traceGL, debugGL);
-    }
-
     @Override
     public IChartFactory getFactory() {
         return this;

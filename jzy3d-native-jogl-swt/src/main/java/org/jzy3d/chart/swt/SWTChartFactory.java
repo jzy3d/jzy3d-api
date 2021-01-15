@@ -1,24 +1,21 @@
 package org.jzy3d.chart.swt;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.NativeAnimator;
+import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IPainterFactory;
-import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTNativeView;
-import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.newt.opengl.GLWindow;
 
-public class SWTChartFactory extends NativeChartFactory {
-    private static final Logger logger = Logger.getLogger(SWTChartFactory.class);
+public class SWTChartFactory extends ChartFactory {
+    //private static final Logger logger = Logger.getLogger(SWTChartFactory.class);
 
     protected final Composite canvas;
 
@@ -70,17 +67,8 @@ public class SWTChartFactory extends NativeChartFactory {
         return new AWTNativeView(factory, scene, canvas, quality);
     }
 
-    /** Provide AWT Texture loading for screenshots */
-    @Override
-    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-        return new AWTRenderer3d(view, traceGL, debugGL);
-    }
-
-
     @Override
     public IChartFactory getFactory() {
         return this;
     }
-
-    
 }
