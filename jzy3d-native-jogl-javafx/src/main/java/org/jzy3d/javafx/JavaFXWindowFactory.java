@@ -14,8 +14,15 @@ import org.jzy3d.javafx.controllers.keyboard.JavaFXCameraKeyController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXMousePickingController;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.plot3d.rendering.view.Renderer3d;
+import org.jzy3d.plot3d.rendering.view.View;
 
 public class JavaFXWindowFactory extends AWTPainterFactory{
+	@Override
+    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+        return new JavaFXRenderer3d(view, traceGL, debugGL);
+    }
+
     @Override
     public ICameraMouseController newMouseCameraController(Chart chart) {
         ICameraMouseController mouse = new JavaFXCameraMouseController(chart, null);

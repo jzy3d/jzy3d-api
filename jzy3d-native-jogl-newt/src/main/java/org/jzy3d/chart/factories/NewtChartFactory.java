@@ -11,8 +11,6 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTNativeView;
-import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
 /**
@@ -21,7 +19,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author martin
  *
  */
-public class NewtChartFactory extends NativeChartFactory {
+public class NewtChartFactory extends ChartFactory {
     static Logger logger = Logger.getLogger(NewtChartFactory.class);
     
     public static Chart chart() {
@@ -43,8 +41,7 @@ public class NewtChartFactory extends NativeChartFactory {
     	super(painterFactory);
     }
 
-
-    // TODO : create a NewtChart for consistency
+	// TODO : create a NewtChart for consistency
     @Override
     public Chart newChart(IChartFactory factory, Quality quality) {
         return new AWTChart(factory, quality);
@@ -58,13 +55,6 @@ public class NewtChartFactory extends NativeChartFactory {
     public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
         return new AWTNativeView(factory, scene, canvas, quality);
     }
-
-    /** Provide AWT Texture loading for screenshots */
-    @Override
-    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-        return new AWTRenderer3d(view, traceGL, debugGL);
-    }
-
 
     @Override
     public IChartFactory getFactory() {

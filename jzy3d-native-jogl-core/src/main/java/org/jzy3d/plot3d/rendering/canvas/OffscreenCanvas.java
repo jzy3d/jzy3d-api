@@ -3,7 +3,8 @@ package org.jzy3d.plot3d.rendering.canvas;
 import java.io.File;
 import java.io.IOException;
 
-import org.jzy3d.chart.factories.NativeChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -38,14 +39,13 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author Martin Pernollet
  */
 public class OffscreenCanvas implements ICanvas, INativeCanvas {
-    public OffscreenCanvas(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height) {
+    public OffscreenCanvas(IChartFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height) {
         this(factory, scene, quality, capabilities, width, height, false, false);
     }
 
-    public OffscreenCanvas(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
-        
+    public OffscreenCanvas(IChartFactory factory, Scene scene, Quality quality, GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
         this.view = scene.newView(this, quality);
-        this.renderer = factory.newRenderer3D(view, traceGL, debugGL);
+        this.renderer = ((NativePainterFactory)factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
         this.capabilities = capabilities;
         
         initBuffer(capabilities, width, height);
