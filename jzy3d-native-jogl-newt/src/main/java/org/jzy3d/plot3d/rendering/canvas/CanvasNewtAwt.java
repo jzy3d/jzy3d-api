@@ -7,7 +7,8 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
-import org.jzy3d.chart.factories.NativeChartFactory;
+import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -35,15 +36,15 @@ import com.jogamp.opengl.util.texture.TextureIO;
 public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas {
     static Logger LOGGER = Logger.getLogger(CanvasNewtAwt.class);
     
-    public CanvasNewtAwt(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
+    public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
     }
 
-    public CanvasNewtAwt(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+    public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
         window = GLWindow.create(glci);
         canvas = new NewtCanvasAWT(window);
         view = scene.newView(this, quality);
-        renderer = factory.newRenderer3D(view, traceGL, debugGL);
+        renderer = ((NativePainterFactory)factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
         window.addGLEventListener(renderer);
         
         if(quality.isPreserveViewportSize())

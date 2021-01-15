@@ -8,7 +8,6 @@ import org.jzy3d.io.glsl.GLSLProgram.Strictness;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 
-import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
 public class DepthPeelingChart extends Chart {
@@ -82,10 +81,10 @@ public class DepthPeelingChart extends Chart {
 
         LOGGER.info(profile);
 
-        GLCapabilities capabilities = new GLCapabilities(profile);
-        capabilities.setHardwareAccelerated(true);
+        //GLCapabilities capabilities = new GLCapabilities(profile);
+        //capabilities.setHardwareAccelerated(true);
 
-        Chart chart = null;//new DepthPeelingChart(factory, quality, chartType, capabilities);
+        Chart chart = new DepthPeelingChart(factory, quality);
         chart.getView().setSquared(false);
         chart.getView().setAxisDisplayed(true);
         return chart;

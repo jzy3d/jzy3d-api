@@ -7,7 +7,7 @@ import java.io.IOException;
 
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.chart.factories.NativeChartFactory;
+import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -33,11 +33,11 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author Martin Pernollet
  */
 public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas {
-    public CanvasAWT(NativeChartFactory factory, Scene scene, Quality quality) {
+    public CanvasAWT(IChartFactory factory, Scene scene, Quality quality) {
         this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
     }
 
-    public CanvasAWT(NativeChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
+    public CanvasAWT(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
         this(factory, scene, quality, glci, false, false);
     }
 
@@ -49,7 +49,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
         super(glci);
 
         view = scene.newView(this, quality);
-        renderer = ((NativeChartFactory)factory).newRenderer3D(view, traceGL, debugGL);
+        renderer = ((NativePainterFactory)factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
         addGLEventListener(renderer);
         
         /*addGLEventListener(new GLEventListener() {

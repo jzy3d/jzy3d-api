@@ -16,7 +16,6 @@ import org.jzy3d.chart.controllers.mouse.picking.NewtMousePickingController;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.chart.factories.IPainterFactory;
-import org.jzy3d.chart.factories.NativeChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
@@ -24,13 +23,26 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTNativeViewOverlay;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
+import org.jzy3d.plot3d.rendering.view.Renderer3d;
+import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+
+import com.jogamp.opengl.GLCapabilities;
 
 public class SWTPainterFactory extends NativePainterFactory implements IPainterFactory{
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
     static Logger logger = Logger.getLogger(SWTPainterFactory.class);
+    
+	public SWTPainterFactory() {
+		super();
+	}
+
+	public SWTPainterFactory(GLCapabilities capabilities) {
+		super(capabilities);
+	}
 
 	@Override
 	public IViewOverlay newViewOverlay() {
@@ -42,13 +54,18 @@ public class SWTPainterFactory extends NativePainterFactory implements IPainterF
         return new ViewAndColorbarsLayout();
     }
 
+    /** Provide AWT Texture loading for screenshots */
+    @Override
+    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+        return new AWTRenderer3d(view, traceGL, debugGL);
+    }
+    
     @Override
     public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
         boolean traceGL = false;
         boolean debugGL = false;
         
-        NativeChartFactory nFactory = (NativeChartFactory)factory;
-        return new CanvasNewtSWT((NativeChartFactory)factory, scene, quality, nFactory.getCapabilities(), traceGL, debugGL);
+        return new CanvasNewtSWT(factory, scene, quality, ((NativePainterFactory)factory.getPainterFactory()).getCapabilities(), traceGL, debugGL);
     }
 
 	

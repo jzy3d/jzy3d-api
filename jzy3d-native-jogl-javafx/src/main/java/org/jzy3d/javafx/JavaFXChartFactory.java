@@ -15,8 +15,6 @@ import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
-import org.jzy3d.plot3d.rendering.view.View;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -150,13 +148,4 @@ public class JavaFXChartFactory extends AWTChartFactory {
             LOGGER.error("NOT AN OFFSCREEN CANVAS!");
         }
     }
-
-    /* ################################################# */
-
-    @Override
-    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-        return new JavaFXRenderer3d(view, traceGL, debugGL);
-    }
-
-
 }

@@ -71,6 +71,9 @@ public class DepthPeelingRenderer3d extends Renderer3d {
              * ("javax.media.opengl.Trace", null, canvas.getGL(), new Object[] {
              * System.err }));
              */
+        	
+			updatePainterWithGL(canvas);
+
             view.init();
         }
 
@@ -99,7 +102,7 @@ public class DepthPeelingRenderer3d extends Renderer3d {
 
         
         if (drawable.getGL() instanceof GL4bcImpl) {
-            return drawable.getGL().getGL3().getGL2();//(GL2)drawable;//drawable.getGL().getGL2();//getGL3().getGL2();
+            return drawable.getGL().getGL2();//(GL2)drawable;//drawable.getGL().getGL2();//getGL3().getGL2();
         } else {
             return (GL2)drawable;//drawable.getGL().getGL2();
         }
@@ -109,6 +112,8 @@ public class DepthPeelingRenderer3d extends Renderer3d {
 
     @Override
     public void display(GLAutoDrawable drawable) {
+		updatePainterWithGL(drawable);
+
         GL2 gl = getGL2(drawable);
 
         preDisplay(gl);
@@ -142,6 +147,8 @@ public class DepthPeelingRenderer3d extends Renderer3d {
      */
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+		updatePainterWithGL(drawable);
+
         GL2 gl = getGL2(drawable);
 
         if (this.width != width || this.height != height) {

@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
@@ -24,8 +23,6 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 public class NativeChartTester extends ChartTester {
-    private static Logger logger = Logger.getLogger(NativeChartTester.class);
-    
     protected BufferedImage getBufferedImage(Chart chart) throws IOException {
     	if(classicScreenshotGen) {
     		// This screenshot generation is working well
