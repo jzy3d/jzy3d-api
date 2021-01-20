@@ -23,7 +23,7 @@ public class TestChart {
 		// Given
 		
 		ChartFactory factory = new EmulGLChartFactory();
-		factory.setOffscreen(500, 500);
+		factory.getPainterFactory().setOffscreen(500, 500);
 		
 		Chart chart = factory.newChart();
 		
@@ -52,7 +52,7 @@ public class TestChart {
 		// Given
 		
 		ChartFactory factory = new EmulGLChartFactory();
-		factory.setOffscreen(500, 500);
+		factory.getPainterFactory().setOffscreen(500, 500);
 		
 		Chart chart = factory.newChart();
 		

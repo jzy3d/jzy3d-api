@@ -6,6 +6,7 @@ import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
@@ -55,7 +56,6 @@ public interface IPainterFactory {
 	public IViewOverlay newViewOverlay();
 	
     public IViewportLayout newViewportLayout();
-
 	
     public SymbolHandler newSymbolHandler(IImageWrapper image);
 
@@ -78,5 +78,11 @@ public interface IPainterFactory {
 	public void setChartFactory(IChartFactory factory);
 
 	public IChartFactory getChartFactory();
+	
+	
+    public boolean isOffscreen();
+    public void setOffscreenDisabled();
+	public void setOffscreen(int width, int height);
+	public Dimension getOffscreenDimension();
 
 }

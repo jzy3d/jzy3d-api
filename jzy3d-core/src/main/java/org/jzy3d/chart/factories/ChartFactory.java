@@ -34,10 +34,6 @@ public abstract class ChartFactory implements IChartFactory {
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
     static Logger logger = Logger.getLogger(ChartFactory.class);
-
-    boolean offscreen = false;
-    int width;
-    int height;
     
     IPainterFactory painterFactory;
     
@@ -63,27 +59,6 @@ public abstract class ChartFactory implements IChartFactory {
 	}
     
     
-    @Override
-    public boolean isOffscreen() {
-		return offscreen;
-	}
-	
-    @Override
-    public void setOffscreenDisabled() {
-		this.offscreen = false;
-	}
-	
-    @Override
-	public void setOffscreen(int width, int height) {
-		this.offscreen = true;
-		this.width = width;
-		this.height = height;
-	}
-    
-    @Override
-    public Dimension getOffscreenDimension() {
-    	return new Dimension(width, height);
-    }
     
 	
 	@Override

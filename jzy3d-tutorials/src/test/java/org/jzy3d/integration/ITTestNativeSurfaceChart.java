@@ -3,6 +3,9 @@ package org.jzy3d.integration;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.AWTPainterFactory;
+import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -16,14 +19,30 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.utils.LoggerUtils;
 
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
+
 public class ITTestNativeSurfaceChart {
 	@Test
 	public void surfaceTest() {
 		LoggerUtils.minimal();
 
 		// When
-		AWTChartFactory factory = new AWTChartFactory();
-		factory.setOffscreen(600, 600);
+		GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL2));
+		c.setOnscreen(false);
+		c.setDoubleBuffered(false);
+		c.setAlphaBits(8);
+		c.setRedBits(8);
+		c.setBlueBits(8);
+		c.setGreenBits(8);
+
+
+		
+        IPainterFactory p = new AWTPainterFactory(c);
+        IChartFactory factory = new AWTChartFactory(p);
+        
+		//AWTChartFactory factory = new AWTChartFactory();
+		factory.getPainterFactory().setOffscreen(600, 600);
 		
 		Chart chart = factory.newChart(Quality.Advanced);
 

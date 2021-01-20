@@ -7,6 +7,7 @@ import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
@@ -26,6 +27,12 @@ public class EmulGLPainterFactory implements IPainterFactory{
 	protected IChartFactory chartFactory;
 	protected EmulGLCanvas internalCanvas;
 	protected EmulGLPainter internalPainter;
+
+	// not really needed actually since EmulGL renders
+	// chart offscreen even when the frame is not shown
+	protected boolean offscreen = false;
+	protected int width;
+	protected int height;
 
 
 	@Override
@@ -140,5 +147,28 @@ public class EmulGLPainterFactory implements IPainterFactory{
 	public void setChartFactory(IChartFactory chartFactory) {
 		this.chartFactory = chartFactory;
 	}
+	
+    @Override
+    public boolean isOffscreen() {
+		return offscreen;
+	}
+	
+    @Override
+    public void setOffscreenDisabled() {
+		this.offscreen = false;
+	}
+	
+    @Override
+	public void setOffscreen(int width, int height) {
+		this.offscreen = true;
+		this.width = width;
+		this.height = height;
+	}
+    
+    @Override
+    public Dimension getOffscreenDimension() {
+    	return new Dimension(width, height);
+    }
+
 
 }

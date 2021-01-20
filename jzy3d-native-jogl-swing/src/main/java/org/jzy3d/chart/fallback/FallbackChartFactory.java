@@ -32,13 +32,12 @@ public class FallbackChartFactory extends AWTChartFactory {
     }
     
     public FallbackChartFactory() {
-    	super(new FallbackPainterFactory());
-    	setOffscreen(600, 600);
+    	this(new FallbackPainterFactory());
     }
 
     public FallbackChartFactory(IPainterFactory factory) {
     	super(factory);
-    	setOffscreen(600, 600);
+    	getPainterFactory().setOffscreen(600, 600);
     }
 
     /* ########################################### */

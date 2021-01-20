@@ -65,7 +65,7 @@ public class NativeChartTester extends ChartTester {
         Quality q = Quality.Intermediate;
 
         AWTChartFactory f = new AWTChartFactory();
-        f.setOffscreen(TEST_IMG_SIZE, TEST_IMG_SIZE);
+        f.getPainterFactory().setOffscreen(TEST_IMG_SIZE, TEST_IMG_SIZE);
         
         AWTNativeChart chart = (AWTNativeChart)f.newChart(q);
         AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
