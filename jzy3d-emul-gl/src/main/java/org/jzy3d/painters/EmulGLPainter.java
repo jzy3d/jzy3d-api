@@ -57,16 +57,16 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 		this.glut = glut;
 	}
 
-	public GL getCurrentGL(ICanvas canvas) {
-		// getCurrentContext(canvas).makeCurrent();
-		return getGL();// getCurrentContext(canvas).getGL();
+	@Override
+	public Object acquireGL(ICanvas canvas) {
+		return getGL();
 	}
 
-	/*
-	 * public GLContext getCurrentContext(ICanvas canvas) { return
-	 * canvas.getDrawable().getContext(); }
-	 */
-
+	@Override
+	public void releaseGL(ICanvas canvas) {
+		//getCurrentContext(canvas).release();
+	}
+	
 	@Override
 	public void configureGL(Quality quality) {
 		// Activate Depth buffer

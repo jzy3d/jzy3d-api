@@ -9,7 +9,7 @@ import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
-import org.jzy3d.plot3d.rendering.view.AWTNativeView;
+import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.newt.opengl.GLWindow;
@@ -17,8 +17,11 @@ import com.jogamp.newt.opengl.GLWindow;
 public class SWTChartFactory extends ChartFactory {
     //private static final Logger logger = Logger.getLogger(SWTChartFactory.class);
 
-    protected final Composite canvas;
+    protected Composite canvas;
 
+    public SWTChartFactory() {
+    }
+    
     public SWTChartFactory(Composite canvas) {
     	super(new SWTPainterFactory());
 
@@ -64,7 +67,7 @@ public class SWTChartFactory extends ChartFactory {
      */
     @Override
     public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTNativeView(factory, scene, canvas, quality);
+        return new AWTView(factory, scene, canvas, quality);
     }
 
     @Override

@@ -53,6 +53,16 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 	public void setGLUT(GLUT glut) {
 		this.glut = glut;
 	}
+	
+	@Override
+	public Object acquireGL(ICanvas canvas) {
+		return getCurrentGL(canvas);
+	}
+
+	@Override
+	public void releaseGL(ICanvas canvas) {
+		getCurrentContext(canvas).release();
+	}
 
 	/**
 	 * Get the current GL context of the canvas and make it current.

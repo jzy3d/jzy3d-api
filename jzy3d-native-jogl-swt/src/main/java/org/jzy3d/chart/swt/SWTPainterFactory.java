@@ -109,7 +109,7 @@ public class SWTPainterFactory extends NativePainterFactory implements IPainterF
 
     @Override
     public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return null;
+        return null;//new FrameSWTBridge(chart, bounds, title);
     }
     
     @Override

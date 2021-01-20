@@ -6,7 +6,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
-import org.jzy3d.plot3d.rendering.view.AWTNativeView;
+import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class AWTChartFactory extends ChartFactory {
@@ -37,7 +37,7 @@ public class AWTChartFactory extends ChartFactory {
      */
     @Override
     public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTNativeView(factory, scene, canvas, quality);
+        return new AWTView(factory, scene, canvas, quality);
     }
     
 	@Override

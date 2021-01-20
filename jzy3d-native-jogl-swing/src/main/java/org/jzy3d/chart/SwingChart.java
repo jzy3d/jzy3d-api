@@ -14,16 +14,4 @@ public class SwingChart extends AWTNativeChart {
     public SwingChart(IChartFactory factory, Quality quality) {
         super(factory, quality);
     }
-    
-    public void addRenderer(AWTRenderer2d renderer2d) {
-        getAWTView().addRenderer2d(renderer2d);
-    }
-
-    public void removeRenderer(AWTRenderer2d renderer2d) {
-        getAWTView().removeRenderer2d(renderer2d);
-    }
-
-    public AWTView getAWTView() {
-        return (AWTView) view;
-    }
 }
