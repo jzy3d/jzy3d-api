@@ -21,7 +21,7 @@ public class TestChart {
 		// Given
 		
 		ChartFactory factory = new AWTChartFactory();
-		factory.setOffscreen(500, 500);
+		factory.getPainterFactory().setOffscreen(500, 500);
 		
 		Chart chart = factory.newChart();
 

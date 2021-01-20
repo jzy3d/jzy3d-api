@@ -21,11 +21,27 @@ public class TestNativePainterFactory {
 	@Test
 	public void hasGoodSettingsToMakeOffscreenRenderingWithColor() {
 		NativePainterFactory f = newAbstractNativePainterFactory();
+		f.setOffscreen(800, 800);
+		
+		GLCapabilities caps = f.getCapabilities();
+		
+		Assert.assertFalse(caps.isOnscreen());
+		
+		Assert.assertEquals(8, caps.getAlphaBits());
+		Assert.assertEquals(8, caps.getRedBits());
+		Assert.assertEquals(8, caps.getBlueBits());
+		Assert.assertEquals(8, caps.getGreenBits());
+	}
 	
+	@Test
+	public void hasGoodSettingsToMakeOnscreenRenderingWithColor() {
+		NativePainterFactory f = newAbstractNativePainterFactory();
+		
 		GLCapabilities caps = f.getCapabilities();
 		
 		Assert.assertTrue(caps.getHardwareAccelerated());
-		Assert.assertFalse(caps.isOnscreen());
+		Assert.assertTrue(caps.isOnscreen());
+		
 		Assert.assertEquals(8, caps.getAlphaBits());
 		Assert.assertEquals(8, caps.getRedBits());
 		Assert.assertEquals(8, caps.getBlueBits());

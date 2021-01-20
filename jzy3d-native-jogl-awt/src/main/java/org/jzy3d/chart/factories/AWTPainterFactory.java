@@ -66,7 +66,7 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
         boolean traceGL = false;
         boolean debugGL = false;
 
-        if(factory.isOffscreen()) {
+        if(isOffscreen()) {
             return newOffscreenCanvas(factory, scene, quality, traceGL, debugGL);
         }
         else {
@@ -77,7 +77,7 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
     
 	protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality, boolean traceGL,
 			boolean debugGL) {
-		Dimension dim = factory.getOffscreenDimension();
+		Dimension dim = getOffscreenDimension();
 		return new OffscreenCanvas(factory, scene, quality, getCapabilities(), dim.width, dim.height, traceGL, debugGL);
 	}
 

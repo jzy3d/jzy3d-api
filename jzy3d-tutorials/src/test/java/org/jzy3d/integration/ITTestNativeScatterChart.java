@@ -20,7 +20,7 @@ public class ITTestNativeScatterChart {
 
 		// When
 		AWTChartFactory factory = new AWTChartFactory();
-		factory.setOffscreen(600, 600);
+		factory.getPainterFactory().setOffscreen(600, 600);
 		Chart chart = factory.newChart(Quality.Advanced);
 
 		chart.add(scatter());
