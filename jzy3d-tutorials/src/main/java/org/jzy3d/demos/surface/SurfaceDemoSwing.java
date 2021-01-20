@@ -1,7 +1,10 @@
 package org.jzy3d.demos.surface;
 
+import java.io.IOException;
+
 import org.jzy3d.analysis.AbstractAnalysis;
-import org.jzy3d.analysis.AnalysisLauncher;
+import org.jzy3d.bridge.swing.FrameSwing;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.SwingChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -20,8 +23,23 @@ public class SurfaceDemoSwing extends AbstractAnalysis {
 
     public static void main(String[] args) throws Exception {
     	SurfaceDemoSwing d= new SurfaceDemoSwing();
-    	AnalysisLauncher.open(d);
+    	//AnalysisLauncher.open(d);
+    	openAndPrintFrame(d);
     }
+
+	private static void openAndPrintFrame(SurfaceDemoSwing d) throws InterruptedException, IOException {
+		d.init();
+    	Chart chart = d.getChart();
+    	chart.addMouseCameraController();
+    	
+    	FrameSwing frame = (FrameSwing)d.getChart().open();
+    	Thread.sleep(1000); // wait for frame to be ready for printing
+    	
+    	String file = "./target/" + d.getClass().getSimpleName() + ".png";
+    	
+    	Frame.print(chart, frame, file);
+	}
+
 
     @Override
     public void init() {
@@ -46,6 +64,5 @@ public class SurfaceDemoSwing extends AbstractAnalysis {
         // Create a chart
         chart = new SwingChartFactory().newChart(Quality.Advanced);
         chart.add(surface);
-        
     }
 }

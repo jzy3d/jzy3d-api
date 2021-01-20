@@ -233,12 +233,18 @@ public class View {
 	 * The result of the projection can be retrieved on the objects's instances.
 	 */
 	public void project() {
+		painter.acquireGL(canvas);
 		scene.getGraph().project(painter, cam);
+		painter.releaseGL(canvas);
 	}
 
 	/** Perform the 3d projection of a 2d coordinate. */
 	public Coord3d projectMouse(int x, int y) {
-		return cam.screenToModel(painter, new Coord3d(x, y, 0));
+		painter.acquireGL(canvas);
+		Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
+		painter.releaseGL(canvas);
+		return p;
+		//return cam.screenToModel(painter, new Coord3d(x, y, 0));
 	}
 
 	/**

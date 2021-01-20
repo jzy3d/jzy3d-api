@@ -6,7 +6,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class SwingChartFactory extends AWTChartFactory {
 	public SwingChartFactory() {
-    	super(new SwingWindowFactory());
+    	super(new SwingPainterFactory());
     }
 	
 	@Override

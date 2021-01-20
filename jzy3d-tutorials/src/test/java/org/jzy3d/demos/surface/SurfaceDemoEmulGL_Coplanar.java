@@ -34,7 +34,9 @@ public class SurfaceDemoEmulGL_Coplanar {
 		// DISABLED
 		surface.setPolygonWireframeDepthTrick(true);
 		q.setAlphaActivated(false);
-
+		//
+		
+		
 		Chart chart = factory.newChart(q);
 		chart.add(surface);
 		chart.getView().setAxisDisplayed(false);

@@ -4,7 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -62,6 +66,14 @@ public class FrameSwing extends JFrame implements IFrame {
 	public void initialize(Chart chart, Rectangle bounds, String title,
 			String message) {
 		initialize(chart, bounds, title);
+	}
+
+	public void print(String file) throws IOException {
+		BufferedImage i = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_ARGB);
+    	//paint(i.getGraphics());
+    	print(i.getGraphics());
+    	ImageIO.write(i, "png", new File(file));
+    	System.out.println("Print Swing Frame to " + file);
 	}
 
 }

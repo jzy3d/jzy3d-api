@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.ui.LookAndFeel;
 
-public abstract class FallbackChartFrameAbstract extends JFrame {
+public abstract class FallbackChartFrameAbstract extends JFrame  {
     private static final long serialVersionUID = 2241304275629861521L;
 
     public FallbackChartFrameAbstract(Chart... charts) {
