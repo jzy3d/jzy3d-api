@@ -64,7 +64,7 @@ public class TestNativeChartTester {
     	String screenshotFilename = "target/" + TestNativeChartTester.class.getSimpleName() + ".png";
     	
     	AWTChartFactory f = new AWTChartFactory();
-    	f.setOffscreen(600, 600);
+    	f.getPainterFactory().setOffscreen(600, 600);
     	Chart chart = f.newChart().add(surface());
 
     	// When    	
@@ -80,7 +80,7 @@ public class TestNativeChartTester {
     	String screenshotFilename = "target/" + TestNativeChartTester.class.getSimpleName() + ".png";
     	
     	AWTChartFactory f = new AWTChartFactory();
-    	f.setOffscreen(600, 600);
+    	f.getPainterFactory().setOffscreen(600, 600);
     	Chart chart = f.newChart().add(surface());
 
     	// When    	

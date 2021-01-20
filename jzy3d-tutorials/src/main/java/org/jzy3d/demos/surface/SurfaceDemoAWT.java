@@ -6,6 +6,10 @@ import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.AWTPainterFactory;
+import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.IPainterFactory;
+import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -15,6 +19,9 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
 
 public class SurfaceDemoAWT extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
@@ -57,7 +64,11 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
         surface.setWireframeColor(Color.BLACK);
 
         // Create a chart
-        chart = AWTChartFactory.chart(Quality.Advanced);
+        GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL2));
+        IPainterFactory p = new AWTPainterFactory(c);
+        IChartFactory f = new AWTChartFactory(p);
+        
+        chart = f.newChart(Quality.Advanced);
         chart.getScene().getGraph().add(surface);
     }
 }

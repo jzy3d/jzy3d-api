@@ -49,10 +49,7 @@ public interface IChartFactory {
     
     public IBoundingPolicy newBoundingPolicy();
     
-    public boolean isOffscreen();
-    public void setOffscreenDisabled();
-	public void setOffscreen(int width, int height);
-	public Dimension getOffscreenDimension();
+
     
     /** usefull to override the current factory to call, especially for FactoryOverrider
      * that must be used as this instead of its wrapped delegate factory
