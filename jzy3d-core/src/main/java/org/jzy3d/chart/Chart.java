@@ -200,7 +200,11 @@ public class Chart {
     public IFrame open() {
         return open("Jzy3d", new Rectangle(0, 0, 600, 600));
     }
-    
+
+    public IFrame open(String title) {
+        return open(title, new Rectangle(0, 0, 600, 600));
+    }
+
     public IFrame open(String title, int width, int height) {
         return open(title, new Rectangle(0, 0, width, height));
     }
@@ -219,6 +223,7 @@ public class Chart {
         return frame;
     }
 
+    
     IFrame frame = null;
 
     /* ADDING DRAWABLES */

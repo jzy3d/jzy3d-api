@@ -1,7 +1,10 @@
 package org.jzy3d.demos.surface;
 
+import java.io.IOException;
+
 import org.jzy3d.analysis.AWTAbstractAnalysis;
-import org.jzy3d.analysis.AnalysisLauncher;
+import org.jzy3d.bridge.awt.FrameAWT;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -15,8 +18,22 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class SurfaceDemoAWT extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
-        AnalysisLauncher.open(new SurfaceDemoAWT());
+    	SurfaceDemoAWT d = new SurfaceDemoAWT();
+    	openAndPrintFrame(d);
+        //AnalysisLauncher.open(d);
     }
+
+	private static void openAndPrintFrame(SurfaceDemoAWT d) throws InterruptedException, IOException {
+		d.init();
+    	Chart chart = d.getChart();
+    	chart.addMouseCameraController();
+    	FrameAWT f = (FrameAWT)chart.open();
+    	//Thread.sleep(1000);
+    	String file = "./target/" + d.getClass().getSimpleName() + ".png";
+    	Frame.print(chart, f, file);
+	}
+
+	
 
     @Override
     public void init() {

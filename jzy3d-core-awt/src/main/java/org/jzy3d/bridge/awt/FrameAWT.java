@@ -8,7 +8,10 @@ import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;
 
 public class FrameAWT extends java.awt.Frame implements IFrame {
-	
+	private static final long serialVersionUID = -4482149010771554002L;
+
+	protected Chart chart;
+
 	// public constructor for easier construction by reflexion
 	public FrameAWT() {	
 	}
@@ -55,9 +58,5 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
 			}
 		});
 	}
-
-	private Chart chart;
-	private static final long serialVersionUID = 1L;
-
 
 }

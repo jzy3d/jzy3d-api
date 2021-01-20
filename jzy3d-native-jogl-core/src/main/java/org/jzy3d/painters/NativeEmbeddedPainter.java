@@ -9,6 +9,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
@@ -83,6 +84,17 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter{
         	gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
         } else
         	gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
+	}
+    
+    @Override
+	public Object acquireGL(ICanvas canvas) {
+	//	return getCurrentGL(canvas);
+    	return null;
+	}
+
+	@Override
+	public void releaseGL(ICanvas canvas) {
+	//	getCurrentContext(canvas).release();
 	}
     
     @Override

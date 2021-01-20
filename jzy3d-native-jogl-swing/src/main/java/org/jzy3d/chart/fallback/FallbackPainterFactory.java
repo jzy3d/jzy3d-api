@@ -97,6 +97,12 @@ public class FallbackPainterFactory extends AWTPainterFactory {
         });
         return screenshot;
     }
+    
+	/*public IFrame newFrame(Chart chart) {
+	}
+
+	public IFrame newFrame(Chart chart, Rectangle bounds, String title);*/
+
 
     public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 }

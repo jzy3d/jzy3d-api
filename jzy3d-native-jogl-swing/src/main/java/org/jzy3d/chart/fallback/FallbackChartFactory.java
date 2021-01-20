@@ -30,13 +30,6 @@ public class FallbackChartFactory extends AWTChartFactory {
     public FallbackChart newChart(IChartFactory factory, Quality quality) {
         return new FallbackChart(factory, quality);
     }
-
-    /*public BufferedImage getScreenshotAsBufferedImage(AWTChart chart) {
-        chart.screenshot();
-        AWTRenderer3d renderer = (AWTRenderer3d) chart.getCanvas().getRenderer();
-        BufferedImage i = renderer.getLastScreenshotImage();
-        return i;
-    }*/
     
     public FallbackChartFactory() {
     	super(new FallbackPainterFactory());
@@ -94,18 +87,14 @@ public class FallbackChartFactory extends AWTChartFactory {
             @Override
             public void componentResized(ComponentEvent e) {
                 Component c = e.getComponent();
-
                 resetTo(chart, c);
             }
-
             @Override
             public void componentMoved(ComponentEvent e) {
             }
-
             @Override
             public void componentShown(ComponentEvent e) {
             }
-
             @Override
             public void componentHidden(ComponentEvent e) {
             }
@@ -129,21 +118,10 @@ public class FallbackChartFactory extends AWTChartFactory {
         
         if (chart.getCanvas() instanceof OffscreenCanvas) {
             OffscreenCanvas canvas = (OffscreenCanvas) chart.getCanvas();
-
-            // System.out.println("will init");
             canvas.initBuffer(canvas.getCapabilities(), (int) width, (int) height);
-            // LOGGER.error("done initBuffer");
             chart.render();
-            // LOGGER.info("done render");
         } else {
             LOGGER.error("NOT AN OFFSCREEN CANVAS!");
         }
     }
-
-    /* ################################################# */
-
-    /*@Override
-    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-        return new AWTImageRenderer3d(view, traceGL, debugGL);
-    }*/
 }
