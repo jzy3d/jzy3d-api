@@ -6,7 +6,6 @@ import java.util.List;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
 
 /** A renderer generating AWT {@link BufferedImage}s and notifying a {@link DisplayListener} when
@@ -33,8 +32,8 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
         super(view);
     }
 
-    public AWTImageRenderer3d(View view, boolean traceGL, boolean debugGL, GLU glu) {
-        super(view, traceGL, debugGL, glu);
+    public AWTImageRenderer3d(View view, boolean traceGL, boolean debugGL) {
+        super(view, traceGL, debugGL);
     }
     
     @Override
@@ -44,17 +43,6 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
         if (view != null) {
             view.clear();
             view.render();
-
-            /*if(screenshot==null){
-                screenshot = new AWTGLReadBufferUtil(gl.getGLProfile(), true);
-            }
-            screenshot.readPixels(gl, true);
-            bufferedImage = screenshot.readPixelsToBufferedImage(gl, true);
-            if(doScreenshotAtNextDisplay){
-                screenshot.readPixels(gl, true);
-                image = screenshot.getTextureData();
-            }*/
-            
 
             bufferedImage = makeScreenshotAsBufferedImage(gl);
             fireDisplay(bufferedImage);
@@ -73,10 +61,6 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
         screenshot.readPixels(gl, true);
         image = screenshot.getTextureData();
         return screenshot;
-    }
-
-    public AWTImageRenderer3d(View view, boolean traceGL, boolean debugGL) {
-        super(view, traceGL, debugGL);
     }
 
     public void addDisplayListener(DisplayListener listener) {

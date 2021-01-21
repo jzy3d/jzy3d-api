@@ -11,6 +11,8 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IPainterFactory;
+import org.jzy3d.events.IViewPointChangedListener;
+import org.jzy3d.events.ViewPointChangedEvent;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -20,11 +22,6 @@ import org.jzy3d.ui.views.ImagePanel;
 
 public class FallbackChartFactory extends AWTChartFactory {
     static Logger LOGGER = Logger.getLogger(FallbackChartFactory.class);
-
-    public static Chart chart(Quality quality, String toolkit) {
-        FallbackChartFactory f = new FallbackChartFactory();
-        return f.newChart(quality);
-    }
 
     @Override
     public FallbackChart newChart(IChartFactory factory, Quality quality) {
@@ -59,7 +56,7 @@ public class FallbackChartFactory extends AWTChartFactory {
             public void onDisplay(Object image) {
                 if (image != null) {
                     imageView.setImage((java.awt.Image) image);
-                    //System.out.println("image");
+                    System.out.println("image");
                     
                     /*try {
                         ImageIO.write((BufferedImage)image, "png", new File("data/screenshots/fallback.png"));
@@ -74,6 +71,15 @@ public class FallbackChartFactory extends AWTChartFactory {
                 }
             }
         });
+        
+        // Set listener on view to update imageView
+        chart.getView().addViewPointChangedListener(new IViewPointChangedListener() {
+			
+			@Override
+			public void viewPointChanged(ViewPointChangedEvent e) {
+				
+			}
+		});
 
         // imageView.setFocusable(true);
         // imageView.setF

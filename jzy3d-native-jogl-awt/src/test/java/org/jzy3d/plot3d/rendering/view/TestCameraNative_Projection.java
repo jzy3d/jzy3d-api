@@ -20,8 +20,6 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.rendering.view.View;
 
 /**
  * Possible improvement : mock canvas (avoid displaying for faster test,

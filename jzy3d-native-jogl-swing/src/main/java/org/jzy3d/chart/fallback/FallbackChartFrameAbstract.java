@@ -10,9 +10,11 @@ import java.util.Collection;
 import javax.swing.JFrame;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.IFrame;
+import org.jzy3d.maths.Rectangle;
 import org.jzy3d.ui.LookAndFeel;
 
-public abstract class FallbackChartFrameAbstract extends JFrame  {
+public abstract class FallbackChartFrameAbstract extends JFrame implements IFrame  {
     private static final long serialVersionUID = 2241304275629861521L;
 
     public FallbackChartFrameAbstract(Chart... charts) {
@@ -33,6 +35,16 @@ public abstract class FallbackChartFrameAbstract extends JFrame  {
     }
     
     protected abstract void setLayout(Collection<? extends Chart> charts);
+
+	@Override
+	public void initialize(Chart chart, Rectangle bounds, String title) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void initialize(Chart chart, Rectangle bounds, String title, String message) {
+		// TODO Auto-generated method stub
+	}
 
     
     public FallbackChartFrameAbstract() throws HeadlessException {

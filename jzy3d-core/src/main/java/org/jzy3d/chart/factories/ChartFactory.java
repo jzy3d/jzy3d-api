@@ -7,7 +7,6 @@ import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.IBoundingPolicy;
 import org.jzy3d.plot2d.primitives.LineSerie2d;
 import org.jzy3d.plot2d.primitives.LineSerie2dSplitted;

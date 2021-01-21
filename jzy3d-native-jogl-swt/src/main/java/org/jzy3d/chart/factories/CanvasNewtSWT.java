@@ -7,8 +7,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.IAnimator;
-import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;

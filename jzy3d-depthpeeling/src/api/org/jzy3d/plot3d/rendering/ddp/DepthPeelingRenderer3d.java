@@ -13,6 +13,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.glu.GLU;
 
 import jogamp.opengl.gl4.GL4bcImpl;
 
@@ -47,6 +48,8 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     protected static boolean AXE_IN_PEELING = false;
     protected static boolean DEBUG = false;
 
+    GLU glu = new GLU();
+    
     public DepthPeelingRenderer3d(final DepthPeelingView view, boolean traceGL, boolean debugGL) {
         this(PeelingMethod.WEIGHTED_AVERAGE_MODE, view, traceGL, debugGL);
     }
