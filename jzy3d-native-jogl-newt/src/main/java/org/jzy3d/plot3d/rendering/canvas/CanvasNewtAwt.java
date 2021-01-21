@@ -7,6 +7,7 @@ import java.io.IOException;
 
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
+import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
@@ -55,7 +56,8 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
         requestFocusInWindow();
         window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
         if (quality.isAnimated()) {
-            animator = factory.getPainterFactory().newAnimator((ICanvas)window);//new Animator(window);
+            //animator = factory.getPainterFactory().newAnimator((ICanvas)window);
+            animator = new NativeAnimator(window);
             animator.start();
         }
 

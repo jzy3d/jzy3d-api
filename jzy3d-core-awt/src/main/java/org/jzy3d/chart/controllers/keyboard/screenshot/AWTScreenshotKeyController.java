@@ -8,7 +8,6 @@ import org.jzy3d.chart.Chart;
 
 /**
  * Saves a screenshot in PNG format once key S is pressed.
- * 
  */
 public class AWTScreenshotKeyController extends AbstractScreenshotKeyController implements KeyListener, IScreenshotKeyController {
     public AWTScreenshotKeyController(Chart chart, String outputFile) {

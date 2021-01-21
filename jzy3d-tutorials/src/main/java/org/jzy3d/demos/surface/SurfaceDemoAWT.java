@@ -9,7 +9,6 @@ import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.AWTPainterFactory;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IPainterFactory;
-import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -22,7 +21,13 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
 
+/**
+ * Demo an AWT chart using JOGL {@link GLCanvas}.
+ * 
+ * @author martin
+ */
 public class SurfaceDemoAWT extends AWTAbstractAnalysis {
     public static void main(String[] args) throws Exception {
     	SurfaceDemoAWT d = new SurfaceDemoAWT();

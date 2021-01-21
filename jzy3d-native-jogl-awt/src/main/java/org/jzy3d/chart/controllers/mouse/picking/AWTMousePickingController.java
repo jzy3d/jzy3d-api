@@ -12,35 +12,39 @@ import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.View;
 
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
-
 public class AWTMousePickingController extends AbstractCameraController implements MouseListener, MouseWheelListener, IMousePickingController {
-    public AWTMousePickingController() {
+    protected float factor = 1;
+    protected float lastInc;
+    protected Coord3d mouse3d;
+    protected Coord3d prevMouse3d;
+    protected PickingSupport picking;
+
+    protected Chart chart;
+
+    protected Coord2d prevMouse;
+    protected CameraThreadController threadController;
+
+    
+	public AWTMousePickingController() {
         super();
         picking = new PickingSupport();
     }
 
     public AWTMousePickingController(Chart chart) {
         super(chart);
-        chart.getCanvas().addMouseController(this);
-
         picking = new PickingSupport();
     }
 
     public AWTMousePickingController(Chart chart, int brushSize) {
         super(chart);
-        chart.getCanvas().addMouseController(this);
         picking = new PickingSupport(brushSize);
     }
 
     public AWTMousePickingController(Chart chart, int brushSize, int bufferSize) {
         super(chart);
-        chart.getCanvas().addMouseController(this);
         picking = new PickingSupport(brushSize, bufferSize);
     }
 
@@ -126,7 +130,6 @@ public class AWTMousePickingController extends AbstractCameraController implemen
         View view = targets.get(0).getView();
         prevMouse3d = view.projectMouse(e.getX(), yflip);
 
-        GL gl = ((NativeDesktopPainter)getChart().getView().getPainter()).getCurrentGL(chart.getCanvas());
         Graph graph = getChart().getScene().getGraph();
 
         // will trigger vertex selection event to those subscribing to PickingSupport
@@ -144,19 +147,4 @@ public class AWTMousePickingController extends AbstractCameraController implemen
             threadController.stop();
         return false;
     }
-
-    /**********************/
-
-    protected float factor = 1;
-    protected float lastInc;
-    protected Coord3d mouse3d;
-    protected Coord3d prevMouse3d;
-    protected PickingSupport picking;
-    protected GLU glu = new GLU();
-
-    protected Chart chart;
-
-    protected Coord2d prevMouse;
-    protected CameraThreadController threadController;
-
 }

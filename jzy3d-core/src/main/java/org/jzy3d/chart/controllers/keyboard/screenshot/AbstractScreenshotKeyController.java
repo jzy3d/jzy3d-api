@@ -15,7 +15,6 @@ public class AbstractScreenshotKeyController extends AbstractController implemen
     
     public AbstractScreenshotKeyController(Chart chart, String outputFile) {
         super(chart);
-        register(chart);
         this.chart = chart;
         this.outputFile = outputFile;
     }
@@ -32,7 +31,7 @@ public class AbstractScreenshotKeyController extends AbstractController implemen
     	    c.getCanvas().removeKeyController(this);
     	}
     	
-    	super.dispose(); // i.e. target=null
+    	super.dispose(); 
     }
 
     @Override
