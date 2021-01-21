@@ -7,7 +7,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.glu.GLU;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
@@ -17,10 +16,6 @@ import javafx.scene.image.Image;
 public class JavaFXRenderer3d extends AWTImageRenderer3d{
     public JavaFXRenderer3d() {
         super();
-    }
-
-    public JavaFXRenderer3d(View view, boolean traceGL, boolean debugGL, GLU glu) {
-        super(view, traceGL, debugGL, glu);
     }
 
     public JavaFXRenderer3d(View view, boolean traceGL, boolean debugGL) {

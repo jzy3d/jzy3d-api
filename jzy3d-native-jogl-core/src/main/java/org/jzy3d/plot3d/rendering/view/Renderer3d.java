@@ -9,7 +9,6 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLPipelineFactory;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 
@@ -25,6 +24,13 @@ import com.jogamp.opengl.util.texture.TextureData;
  * @author Martin Pernollet
  */
 public class Renderer3d implements GLEventListener {
+	protected View view;
+	protected int width = 0;
+	protected int height = 0;
+	protected boolean doScreenshotAtNextDisplay = false;
+	protected TextureData image = null;
+	protected boolean traceGL = false;
+	protected boolean debugGL = false;
 
 	/** Initialize a Renderer attached to the given View. */
 	public Renderer3d(View view) {
@@ -40,14 +46,9 @@ public class Renderer3d implements GLEventListener {
 	 * errors to console.
 	 */
 	public Renderer3d(View view, boolean traceGL, boolean debugGL) {
-		this(view, traceGL, debugGL, new GLU());
-	}
-
-	public Renderer3d(View view, boolean traceGL, boolean debugGL, GLU glu) {
 		this.view = view;
 		this.traceGL = traceGL;
 		this.debugGL = debugGL;
-		this.glu = glu;
 	}
 
 	/**
@@ -134,7 +135,6 @@ public class Renderer3d implements GLEventListener {
 	@Override
 	public void dispose(GLAutoDrawable arg0) {
 		view = null;
-		glu = null;
 	}
 
 	public void nextDisplayUpdateScreenshot() {
@@ -154,15 +154,4 @@ public class Renderer3d implements GLEventListener {
 	public int getHeight() {
 		return height;
 	}
-
-	protected GLU glu;
-
-	protected View view;
-	protected int width = 0;
-	protected int height = 0;
-	protected boolean doScreenshotAtNextDisplay = false;
-	protected TextureData image = null;
-	protected boolean traceGL = false;
-	protected boolean debugGL = false;
-
 }
