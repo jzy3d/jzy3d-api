@@ -14,7 +14,7 @@ public class AWTColor {
 		return new java.awt.Color(c.r, c.g, c.b, c.a);
 	}
 
-	public Color fromAWT(java.awt.Color c) {
+	public static Color fromAWT(java.awt.Color c) {
 		return new Color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
 	}
 
