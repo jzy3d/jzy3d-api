@@ -1,12 +1,14 @@
 package org.jzy3d.chart;
 
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.util.FPSAnimator;
 
 public class NativeAnimator implements IAnimator{
-	protected com.jogamp.opengl.util.Animator animator;
+	protected com.jogamp.opengl.util.AnimatorBase animator;
 	
 	public NativeAnimator(GLAutoDrawable canvas) {
-        animator = new com.jogamp.opengl.util.Animator(canvas);
+        //animator = new com.jogamp.opengl.util.Animator(canvas);
+        animator = new FPSAnimator(canvas, 40);
 	}
 
 	@Override
@@ -18,9 +20,4 @@ public class NativeAnimator implements IAnimator{
 	public void stop() {
 		animator.stop();
 	}
-	
-	public com.jogamp.opengl.util.Animator getAnimator(){
-		return animator;
-	}
-
 }
