@@ -1,5 +1,7 @@
 package org.jzy3d.demos.surface;
 
+import java.awt.Panel;
+
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.IChartFactory;
@@ -13,6 +15,8 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+
+import com.jogamp.newt.awt.NewtCanvasAWT;
 
 /**
  * Demo an AWT chart using JOGL {@link NewtCanvasAWT} wrapped in an AWT {@link Panel}.

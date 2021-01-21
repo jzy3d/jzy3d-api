@@ -8,12 +8,14 @@ import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.glu.GLU;
 
 public class ShaderRenderer3d extends Renderer3d{
     protected IShaderable shaderable;
     protected boolean autoSwapBuffer = true;
     protected static boolean DEBUG = false;
     
+    GLU glu = new GLU();
     
     public ShaderRenderer3d(final View view, boolean traceGL, boolean debugGL) {
         this(view, traceGL, debugGL, new Shaderable());

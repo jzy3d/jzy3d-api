@@ -5,15 +5,11 @@ import java.awt.image.BufferedImage;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
 
 public class AWTRenderer3d extends Renderer3d{
     public AWTRenderer3d() {
         super();
-    }
-    public AWTRenderer3d(View view, boolean traceGL, boolean debugGL, GLU glu) {
-        super(view, traceGL, debugGL, glu);
     }
     public AWTRenderer3d(View view, boolean traceGL, boolean debugGL) {
         super(view, traceGL, debugGL);
