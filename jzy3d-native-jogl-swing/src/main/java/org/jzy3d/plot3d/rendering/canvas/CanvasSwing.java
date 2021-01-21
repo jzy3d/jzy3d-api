@@ -2,6 +2,8 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -25,6 +27,12 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author Martin Pernollet
  */
 public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanvas {
+	private static final long serialVersionUID = 980088854683562436L;
+
+	protected View view;
+	protected Renderer3d renderer;
+	protected IAnimator animator;
+	
 	public CanvasSwing(IChartFactory factory, Scene scene,
 			Quality quality) {
 		this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance()
@@ -181,41 +189,14 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 		return sb.toString();
 	}
 
-/*	@Override
-	public void addMouseListener(MouseListener listener) {
-		addMouseListener(new NewtToAWTMouseListener(null, listener));
-	}
-
-	@Override
-	public void removeMouseListener(MouseListener listener) {
-		// TODO
-	}
-
-	@Override
-	public void addKeyListener(KeyListener listener) {
-		addKeyListener(new NewtToAWTKeyListener(null, listener));
-
-	}
-
-	@Override
-	public void removeKeyListener(KeyListener listener) {
-		// TODO
-	}
-*/
-	
-	
-	
-	/* */
-
-	protected View view;
-	protected Renderer3d renderer;
-	protected IAnimator animator;
-
-	private static final long serialVersionUID = 980088854683562436L;
-
     @Override
     public void addMouseController(Object o) {
         addMouseListener((MouseListener)o);
+        
+        if (o instanceof MouseWheelListener)
+            addMouseWheelListener((MouseWheelListener) o);
+        if (o instanceof MouseMotionListener)
+            addMouseMotionListener((MouseMotionListener) o);
     }
 
     @Override

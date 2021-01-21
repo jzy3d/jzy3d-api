@@ -2,7 +2,7 @@ package org.jzy3d.demos;
 
 import org.jzy3d.bridge.swt.FrameSWTBridge;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.swt.bridged.SWTBridgeChartFactory;
+import org.jzy3d.chart.factories.bridged.SWTBridgeChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;

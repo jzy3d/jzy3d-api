@@ -1,9 +1,10 @@
-package org.jzy3d.chart;
+package org.jzy3d.plot3d.rendering.view;
 
 import java.io.IOException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;

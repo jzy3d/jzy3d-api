@@ -18,6 +18,15 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
+import jgl.GLCanvas;
+
+
+/**
+ * Demo an AWT chart using jGL {@link GLCanvas} for CPU rendering (instead of GPU rendering).
+ * 
+ * @author martin
+ *
+ */
 public class SurfaceDemoEmulGL {
 	
 	static final float ALPHA_FACTOR = 0.55f;//.61f;
