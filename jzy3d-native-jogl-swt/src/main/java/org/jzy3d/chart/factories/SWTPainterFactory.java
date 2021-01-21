@@ -1,4 +1,4 @@
-package org.jzy3d.chart.swt;
+package org.jzy3d.chart.factories;
 
 import java.util.Date;
 

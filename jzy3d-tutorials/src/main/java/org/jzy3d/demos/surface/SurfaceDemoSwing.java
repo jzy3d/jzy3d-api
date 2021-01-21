@@ -3,6 +3,7 @@ package org.jzy3d.demos.surface;
 import java.io.IOException;
 
 import org.jzy3d.analysis.AbstractAnalysis;
+import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.SwingChartFactory;
@@ -16,6 +17,13 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
+import com.jogamp.opengl.awt.GLJPanel;
+
+/**
+ * Demo an Swing chart using JOGL {@link GLJPanel}.
+ * 
+ * @author martin
+ */
 public class SurfaceDemoSwing extends AbstractAnalysis {
     public SurfaceDemoSwing(){
         super(new SwingChartFactory());
@@ -23,8 +31,8 @@ public class SurfaceDemoSwing extends AbstractAnalysis {
 
     public static void main(String[] args) throws Exception {
     	SurfaceDemoSwing d= new SurfaceDemoSwing();
-    	//AnalysisLauncher.open(d);
-    	openAndPrintFrame(d);
+    	AnalysisLauncher.open(d);
+    	//openAndPrintFrame(d);
     }
 
 	private static void openAndPrintFrame(SurfaceDemoSwing d) throws InterruptedException, IOException {

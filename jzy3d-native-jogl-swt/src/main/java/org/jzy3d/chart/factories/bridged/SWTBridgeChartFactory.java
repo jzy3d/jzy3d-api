@@ -1,9 +1,9 @@
-package org.jzy3d.chart.swt.bridged;
+package org.jzy3d.chart.factories.bridged;
 
 import org.jzy3d.chart.NativeAnimator;
+import org.jzy3d.chart.factories.CanvasNewtSWT;
 import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.chart.swt.CanvasNewtSWT;
-import org.jzy3d.chart.swt.SWTChartFactory;
+import org.jzy3d.chart.factories.SWTChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;

@@ -1,7 +1,8 @@
-package org.jzy3d.chart;
+package org.jzy3d.plot3d.rendering.view;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.colors.Color;
@@ -14,7 +15,7 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
-public class TestChart {
+public class TestViewModeAndCameraClippingPlanes {
 	@Test
 	public void givenNativeOffscreenChart_whenAddSurface_thenViewIsInAutotFitMode() {
 		
