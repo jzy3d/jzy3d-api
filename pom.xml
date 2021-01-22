@@ -158,15 +158,32 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.6</version>
+				<version>3.0.0-M5</version>
 				<configuration>
 					<includes>
 					    <include>**/Test*.java</include>
 					    <include>**/*Test.java</include>
-					    <include>**/ITTest*.java</include>
 					</includes>
 				</configuration>
 			</plugin>
+
+			<!-- Use failsafe to run (and skip) integration tests which success may depend on
+					GPU. Skip them with mvn install -DskipITs
+
+				<plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-failsafe-plugin</artifactId>
+          <version>3.0.0-M5</version>
+          <executions>
+            <execution>
+              <id>integration-test</id>
+              <goals>
+                <goal>integration-test</goal>
+                <goal>verify</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>-->
 
 
 			<!--SKIP deploy configuration <plugin> <groupId>org.apache.maven.plugins</groupId>
@@ -258,6 +275,23 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
+
+
+			<!-- display active profile in compile phase -->
+	    <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-help-plugin</artifactId>
+	        <version>3.1.0</version>
+	        <executions>
+	            <execution>
+	                <id>show-profiles</id>
+	                <phase>compile</phase>
+	                <goals>
+	                    <goal>active-profiles</goal>
+	                </goals>
+	            </execution>
+	        </executions>
+	    </plugin>
 		</plugins>
 
         <!-- DEPLOY TO FTP -->
@@ -269,6 +303,8 @@
 				<version>${version.mvn.ftp}</version>
 			</extension>
 		</extensions>
+
+
 	</build>
 
 	<profiles>
