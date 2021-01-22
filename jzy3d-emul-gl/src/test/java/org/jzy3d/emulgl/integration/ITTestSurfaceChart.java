@@ -17,7 +17,7 @@ import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestSurfaceChart {
 	@Test
-	public void surfaceTest() {
+	public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
 		LoggerUtils.minimal();
 
 		// When
@@ -45,7 +45,6 @@ public class ITTestSurfaceChart {
 
 		SurfaceBuilder builder = new SurfaceBuilder();
 		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-		surface.setPolygonOffsetFillEnable(false); // VERY IMPORTANT FOR JGL TO WORK !!
 		
 		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
 				surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));

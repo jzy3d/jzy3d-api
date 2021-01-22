@@ -14,7 +14,7 @@ import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestScatterChart {
 	@Test
-	public void surfaceTest() {
+	public void whenScatterChart_ThenMatchBaselineImagePixelwise() {
 		LoggerUtils.minimal();
 
 		// When
