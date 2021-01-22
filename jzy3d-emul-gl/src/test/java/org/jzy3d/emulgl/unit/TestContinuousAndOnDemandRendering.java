@@ -109,11 +109,11 @@ public class TestContinuousAndOnDemandRendering {
 		// Then camera was called at least once
 		verify(chart.getView().getCamera(), atLeast(1)).shoot(chart.getPainter(), chart.getView().getCameraMode());
 
-		try {
+		/*try {
 			chart.screenshot(new File("target/whenComponentResizeWithoutAnimator_thenViewRender.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 	}
 
 	//@Test
@@ -121,9 +121,6 @@ public class TestContinuousAndOnDemandRendering {
 	}
 
 	private static Shape surface() {
-
-		// ---------------------------
-		// DEFINE SURFACE MATHS
 		Mapper mapper = new Mapper() {
 			@Override
 			public double f(double x, double y) {
@@ -133,14 +130,10 @@ public class TestContinuousAndOnDemandRendering {
 		Range range = new Range(-3, 3);
 		int steps = 60;
 
-		// ---------------------------
-		// CUSTOMIZE SURFACE BUILDER FOR JGL
 		SurfaceBuilder builder = new SurfaceBuilder();
 
-		// ---------------------------
-		// MAKE SURFACE
 		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-		surface.setPolygonOffsetFillEnable(false);
+		//surface.setPolygonOffsetFillEnable(false);
 		
 		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
 				surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));

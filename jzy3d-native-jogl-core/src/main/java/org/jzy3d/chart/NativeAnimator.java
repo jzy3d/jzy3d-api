@@ -7,8 +7,8 @@ public class NativeAnimator implements IAnimator{
 	protected com.jogamp.opengl.util.AnimatorBase animator;
 	
 	public NativeAnimator(GLAutoDrawable canvas) {
-        //animator = new com.jogamp.opengl.util.Animator(canvas);
-        animator = new FPSAnimator(canvas, 40);
+        //animator = new com.jogamp.opengl.util.Animator(canvas); 
+        animator = new FPSAnimator(canvas, 10);
 	}
 
 	@Override
