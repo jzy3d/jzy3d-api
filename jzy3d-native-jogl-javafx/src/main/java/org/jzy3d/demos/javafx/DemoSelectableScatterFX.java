@@ -1,4 +1,5 @@
 package org.jzy3d.demos.javafx;
+
 import java.util.Random;
 
 import org.jzy3d.chart.AWTNativeChart;
@@ -21,76 +22,72 @@ import javafx.stage.Stage;
 /**
  * Showing how to pipe an offscreen Jzy3d chart image to a JavaFX ImageView.
  * 
- * {@link JavaFXChartFactory} delivers dedicated  {@link JavaFXCameraMouseController}
- * and {@link JavaFXRenderer3d}
+ * {@link JavaFXChartFactory} delivers dedicated {@link JavaFXCameraMouseController} and
+ * {@link JavaFXRenderer3d}
  * 
- * Support 
- * Rotation control with left mouse button hold+drag
- * Scaling scene using mouse wheel 
- * Keyboard (rotate/shift, etc)
- * Animation (camera rotation with thread) 
+ * Support Rotation control with left mouse button hold+drag Scaling scene using mouse wheel
+ * Keyboard (rotate/shift, etc) Animation (camera rotation with thread)
  * 
- * TODO : 
- * Mouse right click shift
+ * TODO : Mouse right click shift
  * 
  * @author Martin Pernollet
  */
 @SuppressWarnings("restriction")
 
 public class DemoSelectableScatterFX extends Application {
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-    
-    @Override
-    public void start(Stage stage) {
-        stage.setTitle(DemoSelectableScatterFX.class.getSimpleName());
-        
-        // Jzy3d
-        JavaFXChartFactory factory = new JavaFXChartFactory();
-        AWTNativeChart chart  = getDemoChart(factory, "offscreen");
-        ImageView imageView = factory.bindImageView(chart);
+  public static void main(String[] args) {
+    Application.launch(args);
+  }
 
-        // JavaFX
-        StackPane pane = new StackPane();
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.show();
-        pane.getChildren().add(imageView);
+  @Override
+  public void start(Stage stage) {
+    stage.setTitle(DemoSelectableScatterFX.class.getSimpleName());
 
-        factory.addSceneSizeChangedListener(chart, scene);
-        
-        stage.setWidth(500);
-        stage.setHeight(500);
-    }
-    
-    private AWTNativeChart getDemoChart(JavaFXChartFactory factory, String toolkit){
-        Quality quality = Quality.Advanced;
-        int POINTS = 1000;
-        SelectableScatter scatter = generateScatter(POINTS);
-        AWTNativeChart chart = (AWTNativeChart) factory.newChart(quality);
-        chart.getScene().add( scatter );
-        chart.getView().setMaximized(true);
-        
-        AWTScatterMouseSelector selector = new AWTScatterMouseSelector(scatter);
-        AWTDualModeMouseSelector mouse = new AWTDualModeMouseSelector(chart, selector);
-        
-        return chart;
+    // Jzy3d
+    JavaFXChartFactory factory = new JavaFXChartFactory();
+    AWTNativeChart chart = getDemoChart(factory, "offscreen");
+    ImageView imageView = factory.bindImageView(chart);
 
+    // JavaFX
+    StackPane pane = new StackPane();
+    Scene scene = new Scene(pane);
+    stage.setScene(scene);
+    stage.show();
+    pane.getChildren().add(imageView);
+
+    factory.addSceneSizeChangedListener(chart, scene);
+
+    stage.setWidth(500);
+    stage.setHeight(500);
+  }
+
+  private AWTNativeChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
+    Quality quality = Quality.Advanced;
+    int POINTS = 1000;
+    SelectableScatter scatter = generateScatter(POINTS);
+    AWTNativeChart chart = (AWTNativeChart) factory.newChart(quality);
+    chart.getScene().add(scatter);
+    chart.getView().setMaximized(true);
+
+    AWTScatterMouseSelector selector = new AWTScatterMouseSelector(scatter);
+    AWTDualModeMouseSelector mouse = new AWTDualModeMouseSelector(chart, selector);
+
+    return chart;
+
+  }
+
+  protected SelectableScatter generateScatter(int npt) {
+    Coord3d[] points = new Coord3d[npt];
+    Color[] colors = new Color[npt];
+    Random rng = new Random();
+    rng.setSeed(0);
+    for (int i = 0; i < npt; i++) {
+      colors[i] = new Color(0, 64 / 255f, 84 / 255f);
+      points[i] = new Coord3d(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
     }
-    
-    protected SelectableScatter generateScatter(int npt){
-        Coord3d[] points = new Coord3d[npt];
-        Color[] colors = new Color[npt];
-        Random rng = new Random();
-        rng.setSeed(0);
-        for (int i = 0; i < npt; i++) {
-            colors[i] = new Color(0, 64/255f, 84/255f);
-            points[i] = new Coord3d(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
-        }
-        SelectableScatter dots = new SelectableScatter(points, colors);
-        dots.setWidth(1);
-        dots.setHighlightColor(Color.YELLOW);
-        return dots;
-    }
+    SelectableScatter dots = new SelectableScatter(points, colors);
+    dots.setWidth(1);
+    dots.setHighlightColor(Color.YELLOW);
+    return dots;
+  }
 }

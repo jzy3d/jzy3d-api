@@ -12,13 +12,12 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
- * A Point3d is a storage for a Coord3d and a Color that represents a drawable
- * 3d point. <br>
+ * A Point3d is a storage for a Coord3d and a Color that represents a drawable 3d point. <br>
  * The Point3d is used for:
  * <ul>
  * <li>adding a Point3d to a {@link Graph}.
- * <li>providing to other primitives (e.g. {@link Polygon}) a way to associate a
- * coordinate and a color.
+ * <li>providing to other primitives (e.g. {@link Polygon}) a way to associate a coordinate and a
+ * color.
  * </ul>
  * <br>
  * A Point3d is defined by the following methods:
@@ -33,124 +32,122 @@ import org.jzy3d.plot3d.transform.Transform;
  */
 public class Point extends Drawable implements ISingleColorable {
 
-	/** Intialize a point at the origin, with a white color and a width of 1. */
-	public Point() {
-		this(Coord3d.ORIGIN, Color.WHITE, 1.0f);
-	}
+  /** Intialize a point at the origin, with a white color and a width of 1. */
+  public Point() {
+    this(Coord3d.ORIGIN, Color.WHITE, 1.0f);
+  }
 
-	/** Intialize a point with a white color and a width of 1. */
-	public Point(Coord3d xyz) {
-		this(xyz, Color.WHITE, 1.0f);
-	}
+  /** Intialize a point with a white color and a width of 1. */
+  public Point(Coord3d xyz) {
+    this(xyz, Color.WHITE, 1.0f);
+  }
 
-	/** Intialize a point with a width of 1. */
-	public Point(Coord3d xyz, Color rgb) {
-		this(xyz, rgb, 1.0f);
-	}
+  /** Intialize a point with a width of 1. */
+  public Point(Coord3d xyz, Color rgb) {
+    this(xyz, rgb, 1.0f);
+  }
 
-	public Point(Coord3d xyz, Color rgb, float width) {
-		bbox = new BoundingBox3d();
-		setData(xyz);
-		setWidth(width);
-		setColor(rgb);
-	}
+  public Point(Coord3d xyz, Color rgb, float width) {
+    bbox = new BoundingBox3d();
+    setData(xyz);
+    setWidth(width);
+    setColor(rgb);
+  }
 
-	/* */
+  /* */
 
-	@Override
-    public void draw(IPainter painter) {
-		doTransform(painter);
+  @Override
+  public void draw(IPainter painter) {
+    doTransform(painter);
 
-		painter.glPointSize(width);
-		painter.glBegin_Point();
-		painter.color(rgb);
-		painter.vertex(xyz, spaceTransformer);
-		painter.glEnd();
-	}
+    painter.glPointSize(width);
+    painter.glBegin_Point();
+    painter.color(rgb);
+    painter.vertex(xyz, spaceTransformer);
+    painter.glEnd();
+  }
 
-	@Override
-    public void applyGeometryTransform(Transform transform) {
-		xyz = transform.compute(xyz);
-	}
+  @Override
+  public void applyGeometryTransform(Transform transform) {
+    xyz = transform.compute(xyz);
+  }
 
-	/* */
+  /* */
 
-	/**
-	 * Set the coordinates of the point.
-	 * 
-	 * @param xyz
-	 *            point's coordinates
-	 */
-	public void setData(Coord3d xyz) {
-		this.xyz = xyz;
-		updateBounds();
-	}
+  /**
+   * Set the coordinates of the point.
+   * 
+   * @param xyz point's coordinates
+   */
+  public void setData(Coord3d xyz) {
+    this.xyz = xyz;
+    updateBounds();
+  }
 
-	@Override
-    public void updateBounds() {
-		bbox.reset();
-		bbox.add(this);
-	}
+  @Override
+  public void updateBounds() {
+    bbox.reset();
+    bbox.add(this);
+  }
 
-	@Override
-    public void setColor(Color color) {
-		this.rgb = color;
+  @Override
+  public void setColor(Color color) {
+    this.rgb = color;
 
-		fireDrawableChanged(new DrawableChangedEvent(this,
-				DrawableChangedEvent.FIELD_COLOR));
-	}
+    fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
+  }
 
-	@Override
-    public Color getColor() {
-		return rgb;
-	}
+  @Override
+  public Color getColor() {
+    return rgb;
+  }
 
-	public void setWidth(float width) {
-		this.width = width;
-	}
-	
-	public float getWidth() {
-		return width;
-	}
+  public void setWidth(float width) {
+    this.width = width;
+  }
 
-	@Override
-    public double getDistance(Camera camera) {
-		return xyz.distance(camera.getEye());
-	}
+  public float getWidth() {
+    return width;
+  }
 
-	@Override
-    public double getShortestDistance(Camera camera) {
-		return xyz.distance(camera.getEye());
-	}
+  @Override
+  public double getDistance(Camera camera) {
+    return xyz.distance(camera.getEye());
+  }
 
-	@Override
-    public double getLongestDistance(Camera camera) {
-		return xyz.distance(camera.getEye());
-	}
+  @Override
+  public double getShortestDistance(Camera camera) {
+    return xyz.distance(camera.getEye());
+  }
 
-	@Override
-    public Point clone() {
-		Point p = new Point(xyz.clone(), rgb.clone());
-		p.setWidth(width);
-		return p;
-	}
+  @Override
+  public double getLongestDistance(Camera camera) {
+    return xyz.distance(camera.getEye());
+  }
 
-	@Override
-    public String toString(int depth) {
-		return (Utils.blanks(depth) + "(Point) coord=" + xyz + ", color=" + rgb);
-	}
+  @Override
+  public Point clone() {
+    Point p = new Point(xyz.clone(), rgb.clone());
+    p.setWidth(width);
+    return p;
+  }
 
-	/* */
+  @Override
+  public String toString(int depth) {
+    return (Utils.blanks(depth) + "(Point) coord=" + xyz + ", color=" + rgb);
+  }
 
-	public Coord3d getCoord() {
-		return xyz;
-	}
+  /* */
 
-	public void setCoord(Coord3d xyz) {
-		this.xyz = xyz;
-	}
+  public Coord3d getCoord() {
+    return xyz;
+  }
 
-	public Coord3d xyz;
-	public Color rgb;
-	public float width;
+  public void setCoord(Coord3d xyz) {
+    this.xyz = xyz;
+  }
+
+  public Coord3d xyz;
+  public Color rgb;
+  public float width;
 }

@@ -11,28 +11,28 @@ import org.apache.log4j.Logger;
 
 /** Utility for debugging event queue related to 3d in AWT. */
 public class CustomEventQueue extends EventQueue {
-    static Logger logger = Logger.getLogger(CustomEventQueue.class);
+  static Logger logger = Logger.getLogger(CustomEventQueue.class);
 
-    @Override
-    protected void dispatchEvent(AWTEvent event) {
-        if (event instanceof PaintEvent)
-            logger.info("Dispatch [PAINT]: "+event);
-        else if (event instanceof MouseEvent)
-            logger.info("Dispatch [MOUSE]: "+event);
-        else if (event instanceof InvocationEvent) {
-            logger.info("Dispatch [INVOC]: "+event);
-        } else
-            logger.warn("Dispatch [UNKNO]: " + event);
+  @Override
+  protected void dispatchEvent(AWTEvent event) {
+    if (event instanceof PaintEvent)
+      logger.info("Dispatch [PAINT]: " + event);
+    else if (event instanceof MouseEvent)
+      logger.info("Dispatch [MOUSE]: " + event);
+    else if (event instanceof InvocationEvent) {
+      logger.info("Dispatch [INVOC]: " + event);
+    } else
+      logger.warn("Dispatch [UNKNO]: " + event);
 
-        super.dispatchEvent(event);
-    }
+    super.dispatchEvent(event);
+  }
 
-    public static void setCustomEventQueue() {
-        if (!customQueueSet)
-            Toolkit.getDefaultToolkit().getSystemEventQueue().push(new CustomEventQueue());
-    }
+  public static void setCustomEventQueue() {
+    if (!customQueueSet)
+      Toolkit.getDefaultToolkit().getSystemEventQueue().push(new CustomEventQueue());
+  }
 
-    /*********************************************************/
+  /*********************************************************/
 
-    private static boolean customQueueSet = false;
+  private static boolean customQueueSet = false;
 }

@@ -6,12 +6,12 @@ import org.jzy3d.plot3d.text.DrawableTextWrapper;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
-public class DrawableTextBitmap extends DrawableTextWrapper{
-	public DrawableTextBitmap(String txt, Coord3d position, Color color){	
-		super(txt, position, color, getRenderer());
-	}
+public class DrawableTextBitmap extends DrawableTextWrapper {
+  public DrawableTextBitmap(String txt, Coord3d position, Color color) {
+    super(txt, position, color, getRenderer());
+  }
 
-	protected static ITextRenderer getRenderer(){
-		return new TextBitmapRenderer();
-	}
+  protected static ITextRenderer getRenderer() {
+    return new TextBitmapRenderer();
+  }
 }

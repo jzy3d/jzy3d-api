@@ -10,21 +10,21 @@ import org.jzy3d.painters.IPainter;
  */
 public class Polygon extends Geometry {
 
-    /**
-     * Initializes an empty {@link Polygon} with face status defaulting to true,
-     * and wireframe status defaulting to false.
-     */
-    public Polygon() {
-        super();
-    }
-    
-    public Polygon(Color wire, Color face){
-        setWireframeColor(wire);
-        setColor(face);
-    }
+  /**
+   * Initializes an empty {@link Polygon} with face status defaulting to true, and wireframe status
+   * defaulting to false.
+   */
+  public Polygon() {
+    super();
+  }
 
-    @Override
-    protected void begin(IPainter painter) {
-    	painter.glBegin_Polygon();
-    }
+  public Polygon(Color wire, Color face) {
+    setWireframeColor(wire);
+    setColor(face);
+  }
+
+  @Override
+  protected void begin(IPainter painter) {
+    painter.glBegin_Polygon();
+  }
 }

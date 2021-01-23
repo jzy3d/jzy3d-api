@@ -30,124 +30,122 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @see {@link AWTChartFactory} for a working implementation
  */
 public abstract class ChartFactory implements IChartFactory {
-    public static String SCREENSHOT_FOLDER = "./data/screenshots/";
+  public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
-    static Logger logger = Logger.getLogger(ChartFactory.class);
-    
-    IPainterFactory painterFactory;
-    
-    public ChartFactory() {
-    	this(null);
-    }
-    
-    public ChartFactory(IPainterFactory painterFactory) {
-    	setPainterFactory(painterFactory);
-    }
+  static Logger logger = Logger.getLogger(ChartFactory.class);
 
-    @Override
-    public IPainterFactory getPainterFactory() {
-		return painterFactory;
-	}
+  IPainterFactory painterFactory;
 
-    @Override
-	public void setPainterFactory(IPainterFactory painterFactory) {
-		this.painterFactory = painterFactory;
-		
-		if(painterFactory!=null)
-			this.painterFactory.setChartFactory(this);
-	}
-    
-    
-    
-	
-	@Override
-    public Chart newChart() {
-        return newChart(Quality.Advanced);
-    }
+  public ChartFactory() {
+    this(null);
+  }
 
-    @Override
-    public Chart newChart(Quality quality) {
-        return newChart(getFactory(), quality);
-    }
+  public ChartFactory(IPainterFactory painterFactory) {
+    setPainterFactory(painterFactory);
+  }
 
-    @Override
-    public Chart newChart(IChartFactory factory, Quality quality) {
-        return new Chart(factory, quality);
-    }
+  @Override
+  public IPainterFactory getPainterFactory() {
+    return painterFactory;
+  }
 
-    @Override
-    public ChartScene newScene(boolean sort) {
-        return new ChartScene(sort, getFactory());
-    }
+  @Override
+  public void setPainterFactory(IPainterFactory painterFactory) {
+    this.painterFactory = painterFactory;
 
-    @Override
-    public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort) {
-        return new Graph(scene, strategy, sort);
-    }
-
-    @Override
-    public View newView(Scene scene, ICanvas canvas, Quality quality) {
-        return newView(getFactory(), scene, canvas, quality);
-    }
-    
-    @Override
-    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new ChartView(factory, scene, canvas, quality);
-    }
-
-    @Override
-    public Camera newCamera(Coord3d center) {
-        return new Camera(center);
-    }
-    
-    @Override
-    public IAxis newAxe(BoundingBox3d box, View view) {
-        AxisBox axe = new AxisBox(box);
-        axe.setView(view);
-        return axe;
-    }
-
-    @Override
-    public AbstractOrderingStrategy newOrderingStrategy() {
-        return new BarycentreOrderingStrategy();
-    }
-
-    @Override
-    public IBoundingPolicy newBoundingPolicy() {
-        return null;
-    }
-
-    @Override
-    public Serie2d newSerie(String name, Serie2d.Type type) {
-        if (Serie2d.Type.LINE.equals(type))
-            return new LineSerie2d(name);
-        else if (Serie2d.Type.LINE_ON_OFF.equals(type))
-            return new LineSerie2dSplitted(name);
-        else if (Serie2d.Type.SCATTER.equals(type))
-            return new ScatterSerie2d(name);
-        else if (Serie2d.Type.SCATTER_POINTS.equals(type))
-            return new ScatterPointSerie2d(name);
-        else
-            throw new IllegalArgumentException("Unsupported serie type " + type);
-    }
-    
-    @Override
-    public CameraThreadController newCameraThreadController(Chart chart){
-        return new CameraThreadController(chart);
-    }
-    
-    /*@Override
-    public Renderer newRenderer(View view) {
-        return newRenderer(view, false, false);
-    }*/
+    if (painterFactory != null)
+      this.painterFactory.setChartFactory(this);
+  }
 
 
-    /* UTILS */
 
-    @Override
-    public IChartFactory getFactory() {
-        return this;
-    }
+  @Override
+  public Chart newChart() {
+    return newChart(Quality.Advanced);
+  }
 
-    
+  @Override
+  public Chart newChart(Quality quality) {
+    return newChart(getFactory(), quality);
+  }
+
+  @Override
+  public Chart newChart(IChartFactory factory, Quality quality) {
+    return new Chart(factory, quality);
+  }
+
+  @Override
+  public ChartScene newScene(boolean sort) {
+    return new ChartScene(sort, getFactory());
+  }
+
+  @Override
+  public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort) {
+    return new Graph(scene, strategy, sort);
+  }
+
+  @Override
+  public View newView(Scene scene, ICanvas canvas, Quality quality) {
+    return newView(getFactory(), scene, canvas, quality);
+  }
+
+  @Override
+  public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    return new ChartView(factory, scene, canvas, quality);
+  }
+
+  @Override
+  public Camera newCamera(Coord3d center) {
+    return new Camera(center);
+  }
+
+  @Override
+  public IAxis newAxe(BoundingBox3d box, View view) {
+    AxisBox axe = new AxisBox(box);
+    axe.setView(view);
+    return axe;
+  }
+
+  @Override
+  public AbstractOrderingStrategy newOrderingStrategy() {
+    return new BarycentreOrderingStrategy();
+  }
+
+  @Override
+  public IBoundingPolicy newBoundingPolicy() {
+    return null;
+  }
+
+  @Override
+  public Serie2d newSerie(String name, Serie2d.Type type) {
+    if (Serie2d.Type.LINE.equals(type))
+      return new LineSerie2d(name);
+    else if (Serie2d.Type.LINE_ON_OFF.equals(type))
+      return new LineSerie2dSplitted(name);
+    else if (Serie2d.Type.SCATTER.equals(type))
+      return new ScatterSerie2d(name);
+    else if (Serie2d.Type.SCATTER_POINTS.equals(type))
+      return new ScatterPointSerie2d(name);
+    else
+      throw new IllegalArgumentException("Unsupported serie type " + type);
+  }
+
+  @Override
+  public CameraThreadController newCameraThreadController(Chart chart) {
+    return new CameraThreadController(chart);
+  }
+
+  /*
+   * @Override public Renderer newRenderer(View view) { return newRenderer(view, false, false); }
+   */
+
+
+  /* UTILS */
+
+  @Override
+  public IChartFactory getFactory() {
+    return this;
+  }
+
+
 }

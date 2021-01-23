@@ -10,9 +10,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 /**
- * Adapts an AWT component into an SWT container.
- * The following piece of code shows a convenient way of porting an AWT component
- * to SWT:<br>
+ * Adapts an AWT component into an SWT container. The following piece of code shows a convenient way
+ * of porting an AWT component to SWT:<br>
  * <br>
  * <code>
  * <ul>public class SWTplot extends AWTplot{<br>
@@ -22,12 +21,12 @@ import org.eclipse.swt.widgets.Composite;
  *     }</ul>
  * }</ul>
  * </code><br>
- * Important notice: AWT components may trigger events (mouse, keyboard, component
- * events, etc). When attaching a listener on a bridged AWT component that is supposed
- * to modify an SWT widget (such as a text field), it is required to perform
- * this modification into the SWT UI event queue. If not, the target SWT component
- * will throw a {@link org.eclipse.swt.SWTException} with message "Invalid thread access".
- * Indeed, all SWT widgets check that they are modified inside the UI thread.<br>
+ * Important notice: AWT components may trigger events (mouse, keyboard, component events, etc).
+ * When attaching a listener on a bridged AWT component that is supposed to modify an SWT widget
+ * (such as a text field), it is required to perform this modification into the SWT UI event queue.
+ * If not, the target SWT component will throw a {@link org.eclipse.swt.SWTException} with message
+ * "Invalid thread access". Indeed, all SWT widgets check that they are modified inside the UI
+ * thread.<br>
  * <br>
  * Thus, it is suggested to compute events this way:<br>
  * <code>
@@ -50,19 +49,19 @@ import org.eclipse.swt.widgets.Composite;
  */
 public class SWT_AWT_Bridge {
 
-    public static void adapt(Composite containerSWT, final Component componentAWT) {
-        Composite embedder = new Composite(containerSWT, SWT.EMBEDDED);
-        embedder.setLayoutData(new GridData(GridData.FILL_BOTH));
+  public static void adapt(Composite containerSWT, final Component componentAWT) {
+    Composite embedder = new Composite(containerSWT, SWT.EMBEDDED);
+    embedder.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-        adaptIn(embedder, componentAWT);
-    }
+    adaptIn(embedder, componentAWT);
+  }
 
-    public static void adaptIn(Composite embedder, final Component componentAWT) {
-        final Frame frame = SWT_AWT.new_Frame(embedder);
-        frame.add(componentAWT);
+  public static void adaptIn(Composite embedder, final Component componentAWT) {
+    final Frame frame = SWT_AWT.new_Frame(embedder);
+    frame.add(componentAWT);
 
-        // disposing the frame cleanly
-        embedder.addDisposeListener(e -> EventQueue.invokeLater(frame::dispose));
-        // the awt component is supposed to be disposed by the user
-    }
+    // disposing the frame cleanly
+    embedder.addDisposeListener(e -> EventQueue.invokeLater(frame::dispose));
+    // the awt component is supposed to be disposed by the user
+  }
 }

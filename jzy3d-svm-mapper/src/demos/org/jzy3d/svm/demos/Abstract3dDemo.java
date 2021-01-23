@@ -25,84 +25,90 @@ import org.jzy3d.svm.tesselation.SvmMapper;
 import org.jzy3d.svm.utils.Conversion;
 
 public abstract class Abstract3dDemo {
-    public static void openChart(Chart chart) {
-        ChartLauncher.openChart(chart, "Svm3D ");
+  public static void openChart(Chart chart) {
+    ChartLauncher.openChart(chart, "Svm3D ");
+  }
+
+  public static void openChart(Chart chart, Parameters params) {
+    ChartLauncher.openChart(chart, "InstantSVM & Svm3D ");
+    SwingChartLauncher.openPanel(new RegressionParamsEditor(params),
+        new Rectangle(100, 100, 800, 600), "Regression params");
+  }
+
+  public static void scale(Coord3d[] pts, float xfact, float yfact, float zfact) {
+    for (int i = 0; i < pts.length; i++) {
+      pts[i].x *= xfact;
+      pts[i].y *= yfact;
+      pts[i].y *= zfact;
     }
+  }
 
-    public static void openChart(Chart chart, Parameters params) {
-        ChartLauncher.openChart(chart, "InstantSVM & Svm3D ");
-        SwingChartLauncher.openPanel(new RegressionParamsEditor(params), new Rectangle(100, 100, 800, 600), "Regression params");
-    }
+  /****************** CHART GENERATION ********************/
 
-    public static void scale(Coord3d[] pts, float xfact, float yfact, float zfact) {
-        for (int i = 0; i < pts.length; i++) {
-            pts[i].x *= xfact;
-            pts[i].y *= yfact;
-            pts[i].y *= zfact;
-        }
-    }
+  public static Chart getRegressionChart(Coord3d[] values, Parameters parameters) {
+    SvmMapper mapper = new SvmMapper(values, parameters);
 
-    /****************** CHART GENERATION ********************/
+    mapper.getSvm().getParameters().print();
+    return getRegressionChart(mapper, values);
+  }
 
-    public static Chart getRegressionChart(Coord3d[] values, Parameters parameters) {
-        SvmMapper mapper = new SvmMapper(values, parameters);
+  public static Chart getRegressionChart(RegressionSVM svm, RegressionInputs inputs) {
+    Coord3d[] values = Conversion.toCoord3d(inputs);
+    SvmMapper mapper = new SvmMapper(svm);
+    return getRegressionChart(mapper, values);
+  }
 
-        mapper.getSvm().getParameters().print();
-        return getRegressionChart(mapper, values);
-    }
+  protected static Chart getRegressionChart(SvmMapper mapper, Coord3d[] values) {
+    Quality q = Quality.Advanced;
+    q.setSmoothPoint(true);
+    Chart chart = new AWTChartFactory().newChart(q);
 
-    public static Chart getRegressionChart(RegressionSVM svm, RegressionInputs inputs) {
-        Coord3d[] values = Conversion.toCoord3d(inputs);
-        SvmMapper mapper = new SvmMapper(svm);
-        return getRegressionChart(mapper, values);
-    }
+    // shape
+    BoundingBox3d b = Conversion.getBounds(values);
+    System.out.println(b);
+    final Shape s = getRingSurface(mapper, b.getXRange(), b.getYRange(), b.getZRange(), 50);
+    chart.getScene().getGraph().add(s);
 
-    protected static Chart getRegressionChart(SvmMapper mapper, Coord3d[] values) {
-        Quality q = Quality.Advanced;
-        q.setSmoothPoint(true);
-        Chart chart = new AWTChartFactory().newChart(q);
+    // scatter
+    loadScatter(chart, values);
 
-        // shape
-        BoundingBox3d b = Conversion.getBounds(values);
-        System.out.println(b);
-        final Shape s = getRingSurface(mapper, b.getXRange(), b.getYRange(), b.getZRange(), 50);
-        chart.getScene().getGraph().add(s);
+    return chart;
+  }
 
-        // scatter
-        loadScatter(chart, values);
+  /* 3d OBJECTS GENERATION */
 
-        return chart;
-    }
+  public static Scatter loadScatter(Chart chart, Coord3d[] coords) {
+    Scatter scatter = new Scatter(coords, Color.GREEN.mulSelf(1.2f), 20);
+    chart.getScene().getGraph().add(scatter);
+    return scatter;
+  }
 
-    /* 3d OBJECTS GENERATION */
+  public static Shape getRingSurface(Mapper mapper, Range xrange, Range yrange, Range zrange,
+      int steps) {
+    ColorMapper cmapper = new ColorMapper(new ColorMapRainbow(), zrange.getMin(), zrange.getMax(),
+        new Color(1, 1, 1, .5f));
+    RingInterpolator tesselator =
+        new RingInterpolator(0, xrange.getMax(), cmapper, new Color(1f, 1f, 1f));
+    SvmGrid grid = new SvmGrid(xrange, steps, yrange, steps);
 
-    public static Scatter loadScatter(Chart chart, Coord3d[] coords) {
-        Scatter scatter = new Scatter(coords, Color.GREEN.mulSelf(1.2f), 20);
-        chart.getScene().getGraph().add(scatter);
-        return scatter;
-    }
+    Shape surface = (Shape) tesselator.build(grid.apply(mapper));
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    return surface;
+  }
 
-    public static Shape getRingSurface(Mapper mapper, Range xrange, Range yrange, Range zrange, int steps) {
-        ColorMapper cmapper = new ColorMapper(new ColorMapRainbow(), zrange.getMin(), zrange.getMax(), new Color(1, 1, 1, .5f));
-        RingInterpolator tesselator = new RingInterpolator(0, xrange.getMax(), cmapper, new Color(1f, 1f, 1f));
-        SvmGrid grid = new SvmGrid(xrange, steps, yrange, steps);
+  public static Shape getSquareSurface(Chart chart, Mapper mapper, Range xrange, Range yrange,
+      int steps) {
+    OrthonormalTessellator tesselator = new OrthonormalTessellator();
+    SvmGrid grid = new SvmGrid(xrange, steps, yrange, steps);
+    Shape surface = (Shape) tesselator.build(grid.apply(mapper));
 
-        Shape surface = (Shape) tesselator.build(grid.apply(mapper));
-        surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(true);
-        surface.setWireframeColor(Color.BLACK);
-        return surface;
-    }
-
-    public static Shape getSquareSurface(Chart chart, Mapper mapper, Range xrange, Range yrange, int steps) {
-        OrthonormalTessellator tesselator = new OrthonormalTessellator();
-        SvmGrid grid = new SvmGrid(xrange, steps, yrange, steps);
-        Shape surface = (Shape) tesselator.build(grid.apply(mapper));
-
-        surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
-        surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(true);
-        surface.setWireframeColor(Color.BLACK);
-        return surface;
-    }
+    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    return surface;
+  }
 }

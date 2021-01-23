@@ -37,111 +37,112 @@ import org.mockito.Mockito;
  * @author martin
  */
 public class TestContinuousAndOnDemandRendering {
-	@Test
-	public void whenComponentResizeWithoutAnimator_thenViewRender() {
-		// LoggerUtils.minimal();
+  @Test
+  public void whenComponentResizeWithoutAnimator_thenViewRender() {
+    // LoggerUtils.minimal();
 
-		// ---------------------
-		// JZY3D CONTENT
-		// EmulGLChartFactory factory = new SpyEmulGLChartFactory();
+    // ---------------------
+    // JZY3D CONTENT
+    // EmulGLChartFactory factory = new SpyEmulGLChartFactory();
 
-		EmulGLChartFactory factory = new EmulGLChartFactory() {
-			@Override
-			public AWTView newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-				AWTView view = Mockito.spy((AWTView) super.newView(factory, scene, canvas, quality));
-				view.initInstance(factory, scene, canvas, quality);
-				return view;
+    EmulGLChartFactory factory = new EmulGLChartFactory() {
+      @Override
+      public AWTView newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+        AWTView view = Mockito.spy((AWTView) super.newView(factory, scene, canvas, quality));
+        view.initInstance(factory, scene, canvas, quality);
+        return view;
 
-			}
+      }
 
-			@Override
-			public Camera newCamera(Coord3d center) {
-				Camera camera = Mockito.spy((Camera) super.newCamera(center));
-				return camera;
-			}
+      @Override
+      public Camera newCamera(Coord3d center) {
+        Camera camera = Mockito.spy((Camera) super.newCamera(center));
+        return camera;
+      }
 
-		};
+    };
 
-		Quality q = Quality.Nicest;
-		q.setAlphaActivated(true);
+    Quality q = Quality.Nicest;
+    q.setAlphaActivated(true);
 
-		Chart chart = factory.newChart(q);
-		chart.add(surface());
+    Chart chart = factory.newChart(q);
+    chart.add(surface());
 
-		CameraThreadController rotation = new CameraThreadController(chart);
-		rotation.setStep(0.005f);
-		rotation.setUpdateViewDefault(true);
+    CameraThreadController rotation = new CameraThreadController(chart);
+    rotation.setStep(0.005f);
+    rotation.setUpdateViewDefault(true);
 
-		AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-		mouse.setUpdateViewDefault(true);
-		mouse.addSlaveThreadController(rotation);
+    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
+    mouse.setUpdateViewDefault(true);
+    mouse.addSlaveThreadController(rotation);
 
-		// -----------------------------------
-		// When Trigger canvas
-		EmulGLCanvas canvas = (EmulGLCanvas) chart.getCanvas();
+    // -----------------------------------
+    // When Trigger canvas
+    EmulGLCanvas canvas = (EmulGLCanvas) chart.getCanvas();
 
-		/// needed 7-10 sec up to there
+    /// needed 7-10 sec up to there
 
-		// this does not change anything
-		ComponentEvent event = new ComponentEvent(canvas, ComponentEvent.COMPONENT_RESIZED);
-		if (false) {
-			canvas.processEvent(event); // 2.5s
-			canvas.processEvent(event); // 2.5s
-			canvas.doDisplay(); // 10
-			canvas.doDisplay(); // 10*/
-			// canvas.doDisplay(); // 10
-		}
+    // this does not change anything
+    ComponentEvent event = new ComponentEvent(canvas, ComponentEvent.COMPONENT_RESIZED);
+    if (false) {
+      canvas.processEvent(event); // 2.5s
+      canvas.processEvent(event); // 2.5s
+      canvas.doDisplay(); // 10
+      canvas.doDisplay(); // 10*/
+      // canvas.doDisplay(); // 10
+    }
 
-		// this change test result
-		if (false) {
-			chart.getView().shoot();
-			chart.getView().shoot();
-		}
+    // this change test result
+    if (false) {
+      chart.getView().shoot();
+      chart.getView().shoot();
+    }
 
-		// -----------------------------------
-		// Then view was called
-		verify(chart.getView(), atLeast(1)).initInstance(factory, chart.getScene(), canvas, chart.getQuality());
-		verify(chart.getView(), atLeast(1)).shoot();
+    // -----------------------------------
+    // Then view was called
+    verify(chart.getView(), atLeast(1)).initInstance(factory, chart.getScene(), canvas,
+        chart.getQuality());
+    verify(chart.getView(), atLeast(1)).shoot();
 
-		// undesired
-		verify(chart.getView(), times(2)).shoot(); // VIEW IS CALLED 2 TIMES !!!!!!!!!!!!!!!!!!!!!!
+    // undesired
+    verify(chart.getView(), times(2)).shoot(); // VIEW IS CALLED 2 TIMES !!!!!!!!!!!!!!!!!!!!!!
 
-		// Then camera was called at least once
-		verify(chart.getView().getCamera(), atLeast(1)).shoot(chart.getPainter(), chart.getView().getCameraMode());
+    // Then camera was called at least once
+    verify(chart.getView().getCamera(), atLeast(1)).shoot(chart.getPainter(),
+        chart.getView().getCameraMode());
 
-		/*try {
-			chart.screenshot(new File("target/whenComponentResizeWithoutAnimator_thenViewRender.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-	}
+    /*
+     * try { chart.screenshot(new
+     * File("target/whenComponentResizeWithoutAnimator_thenViewRender.png")); } catch (IOException
+     * e) { e.printStackTrace(); }
+     */
+  }
 
-	//@Test
-	public void whenMouseControlWithoutAnimator_thenViewRender() {
-	}
+  // @Test
+  public void whenMouseControlWithoutAnimator_thenViewRender() {}
 
-	private static Shape surface() {
-		Mapper mapper = new Mapper() {
-			@Override
-			public double f(double x, double y) {
-				return x * Math.sin(x * y);
-			}
-		};
-		Range range = new Range(-3, 3);
-		int steps = 60;
+  private static Shape surface() {
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+    Range range = new Range(-3, 3);
+    int steps = 60;
 
-		SurfaceBuilder builder = new SurfaceBuilder();
+    SurfaceBuilder builder = new SurfaceBuilder();
 
-		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-		//surface.setPolygonOffsetFillEnable(false);
-		
-		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-				surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
-		surface.setColorMapper(colorMapper);
-		surface.setFaceDisplayed(true);
-		surface.setWireframeDisplayed(true);
-		surface.setWireframeColor(Color.BLACK);
-		return surface;
-	}
+    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    // surface.setPolygonOffsetFillEnable(false);
+
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
+    surface.setColorMapper(colorMapper);
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    return surface;
+  }
 
 }

@@ -14,100 +14,102 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 
 public class TestSwtBridgeChartControllers {
-	@Test
-	public void givenSwtBridgeChart_whenAddMouseCameraController_ThenCanvasHasMouseListener() {
-		// Given
-        Chart chart = new SWTBridgeChartFactory().newChart();
-        chart.add(surface());
-        CanvasAWT canvas = (CanvasAWT)chart.getCanvas();
+  @Test
+  public void givenSwtBridgeChart_whenAddMouseCameraController_ThenCanvasHasMouseListener() {
+    // Given
+    Chart chart = new SWTBridgeChartFactory().newChart();
+    chart.add(surface());
+    CanvasAWT canvas = (CanvasAWT) chart.getCanvas();
 
-        // Then
-        Assert.assertEquals(0, canvas.getMouseListeners().length);
-        Assert.assertEquals(0, canvas.getMouseWheelListeners().length);
-        Assert.assertEquals(0, canvas.getMouseMotionListeners().length);
-
-
-        // When
-        chart.addMouseCameraController();
-
-        // Then
-        Assert.assertEquals(1, canvas.getMouseListeners().length);
-        Assert.assertEquals(1, canvas.getMouseWheelListeners().length);
-        Assert.assertEquals(1, canvas.getMouseMotionListeners().length);
-	}
-	
-	@Test
-	public void givenSwtBridgeChart_whenAddMousePickingController_ThenCanvasHasMouseListener() {
-		// Given
-        Chart chart = new SWTBridgeChartFactory().newChart();
-        chart.add(surface());
-        CanvasAWT canvas = (CanvasAWT)chart.getCanvas();
-
-        // Then
-        Assert.assertEquals(0, canvas.getMouseListeners().length);
-        Assert.assertEquals(0, canvas.getMouseWheelListeners().length);
-        Assert.assertEquals(0, canvas.getMouseMotionListeners().length);
+    // Then
+    Assert.assertEquals(0, canvas.getMouseListeners().length);
+    Assert.assertEquals(0, canvas.getMouseWheelListeners().length);
+    Assert.assertEquals(0, canvas.getMouseMotionListeners().length);
 
 
-        // When
-        chart.addMousePickingController(10);
+    // When
+    chart.addMouseCameraController();
 
-        // Then
-        Assert.assertEquals(1, canvas.getMouseListeners().length);
-        Assert.assertEquals(1, canvas.getMouseWheelListeners().length);
-	}
-	
-	@Test
-	public void givenSwtBridgeChart_whenAddKeyboardCameraController_ThenCanvasHasKeyboardListener() {
-		// Given
-        Chart chart = new SWTBridgeChartFactory().newChart();
-        chart.add(surface());
-        CanvasAWT canvas = (CanvasAWT)chart.getCanvas();
+    // Then
+    Assert.assertEquals(1, canvas.getMouseListeners().length);
+    Assert.assertEquals(1, canvas.getMouseWheelListeners().length);
+    Assert.assertEquals(1, canvas.getMouseMotionListeners().length);
+  }
 
-        // Then
-        Assert.assertEquals(0, canvas.getKeyListeners().length);
+  @Test
+  public void givenSwtBridgeChart_whenAddMousePickingController_ThenCanvasHasMouseListener() {
+    // Given
+    Chart chart = new SWTBridgeChartFactory().newChart();
+    chart.add(surface());
+    CanvasAWT canvas = (CanvasAWT) chart.getCanvas();
 
-        // When
-        chart.addKeyboardCameraController();
+    // Then
+    Assert.assertEquals(0, canvas.getMouseListeners().length);
+    Assert.assertEquals(0, canvas.getMouseWheelListeners().length);
+    Assert.assertEquals(0, canvas.getMouseMotionListeners().length);
 
-        // Then
-        Assert.assertEquals(1, canvas.getKeyListeners().length);
-	}
 
-	@Test
-	public void givenSwtBridgeChart_whenAddKeyboardScreenshotController_ThenCanvasHasKeyboardListener() {
-		// Given
-        Chart chart = new SWTBridgeChartFactory().newChart();
-        chart.add(surface());
-        CanvasAWT canvas = (CanvasAWT)chart.getCanvas();
+    // When
+    chart.addMousePickingController(10);
 
-        // Then
-        Assert.assertEquals(0, canvas.getKeyListeners().length);
+    // Then
+    Assert.assertEquals(1, canvas.getMouseListeners().length);
+    Assert.assertEquals(1, canvas.getMouseWheelListeners().length);
+  }
 
-        // When
-        chart.addKeyboardScreenshotController();
-        
-        // Then
-        Assert.assertEquals(1, canvas.getKeyListeners().length);
-	}
-	
-	
-	private Shape surface() {
-        Mapper mapper = new Mapper() {
-            @Override
-            public double f(double x, double y) {
-                return x * Math.sin(x * y);
-            }
-        };
+  @Test
+  public void givenSwtBridgeChart_whenAddKeyboardCameraController_ThenCanvasHasKeyboardListener() {
+    // Given
+    Chart chart = new SWTBridgeChartFactory().newChart();
+    chart.add(surface());
+    CanvasAWT canvas = (CanvasAWT) chart.getCanvas();
 
-        Range range = new Range(-3, 3);
-        int steps = 80;
+    // Then
+    Assert.assertEquals(0, canvas.getKeyListeners().length);
 
-        final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-        surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
-        surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(false);
-		return surface;
-	}
+    // When
+    chart.addKeyboardCameraController();
+
+    // Then
+    Assert.assertEquals(1, canvas.getKeyListeners().length);
+  }
+
+  @Test
+  public void givenSwtBridgeChart_whenAddKeyboardScreenshotController_ThenCanvasHasKeyboardListener() {
+    // Given
+    Chart chart = new SWTBridgeChartFactory().newChart();
+    chart.add(surface());
+    CanvasAWT canvas = (CanvasAWT) chart.getCanvas();
+
+    // Then
+    Assert.assertEquals(0, canvas.getKeyListeners().length);
+
+    // When
+    chart.addKeyboardScreenshotController();
+
+    // Then
+    Assert.assertEquals(1, canvas.getKeyListeners().length);
+  }
+
+
+  private Shape surface() {
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+
+    Range range = new Range(-3, 3);
+    int steps = 80;
+
+    final Shape surface =
+        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(false);
+    return surface;
+  }
 
 }

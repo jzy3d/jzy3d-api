@@ -16,78 +16,76 @@ import org.jzy3d.plot3d.rendering.tooltips.Tooltip;
 import com.jogamp.opengl.util.awt.Overlay;
 
 public class AWTNativeViewOverlay implements IViewOverlay {
-	protected static Logger LOGGER = Logger.getLogger(AWTNativeViewOverlay.class);
+  protected static Logger LOGGER = Logger.getLogger(AWTNativeViewOverlay.class);
 
-	protected Overlay overlay;
-	protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
+  protected Overlay overlay;
+  protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
 
-	/**
-	 * Renders all provided {@link Tooltip}s and {@link AWTRenderer2d}s on top of the
-	 * scene.
-	 * 
-	 * Due to the behaviour of the {@link Overlay} implementation, Java2d geometries
-	 * must be drawn relative to the {@link Chart}'s {@link IScreenCanvas}, BUT will
-	 * then be stretched to fit in the {@link Camera}'s viewport. This bug is very
-	 * important to consider, since the Camera's viewport may not occupy the full
-	 * {@link IScreenCanvas}. Indeed, when View is not maximized (like the default
-	 * behaviour), the viewport remains square and centered in the canvas, meaning
-	 * the Overlay won't cover the full canvas area.
-	 * 
-	 * In other words, the following piece of code draws a border around the
-	 * {@link View}, and not around the complete chart canvas, although queried to
-	 * occupy chart canvas dimensions:
-	 * 
-	 * g2d.drawRect(1, 1, chart.getCanvas().getRendererWidth()-2,
-	 * chart.getCanvas().getRendererHeight()-2);
-	 * 
-	 * {@link renderOverlay()} must be called while the OpenGL2 context for the
-	 * drawable is current, and after the OpenGL2 scene has been rendered.
-	 */
-	@Override
-	public void render(View view, ViewportConfiguration viewport, IPainter painter) {
-		AWTView awtView = ((AWTView)view);
-		ICanvas canvas = view.getCanvas();
-		INativeCanvas nCanvas = (INativeCanvas) canvas;
-		
-		if (!awtView.hasOverlayStuffs())
-			return;
-		
-		if (overlay == null)
-			this.overlay = new Overlay(nCanvas.getDrawable());
+  /**
+   * Renders all provided {@link Tooltip}s and {@link AWTRenderer2d}s on top of the scene.
+   * 
+   * Due to the behaviour of the {@link Overlay} implementation, Java2d geometries must be drawn
+   * relative to the {@link Chart}'s {@link IScreenCanvas}, BUT will then be stretched to fit in the
+   * {@link Camera}'s viewport. This bug is very important to consider, since the Camera's viewport
+   * may not occupy the full {@link IScreenCanvas}. Indeed, when View is not maximized (like the
+   * default behaviour), the viewport remains square and centered in the canvas, meaning the Overlay
+   * won't cover the full canvas area.
+   * 
+   * In other words, the following piece of code draws a border around the {@link View}, and not
+   * around the complete chart canvas, although queried to occupy chart canvas dimensions:
+   * 
+   * g2d.drawRect(1, 1, chart.getCanvas().getRendererWidth()-2,
+   * chart.getCanvas().getRendererHeight()-2);
+   * 
+   * {@link renderOverlay()} must be called while the OpenGL2 context for the drawable is current,
+   * and after the OpenGL2 scene has been rendered.
+   */
+  @Override
+  public void render(View view, ViewportConfiguration viewport, IPainter painter) {
+    AWTView awtView = ((AWTView) view);
+    ICanvas canvas = view.getCanvas();
+    INativeCanvas nCanvas = (INativeCanvas) canvas;
 
-		// TODO: don't know why needed to allow working with Overlay!!!????
+    if (!awtView.hasOverlayStuffs())
+      return;
 
-		painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
+    if (overlay == null)
+      this.overlay = new Overlay(nCanvas.getDrawable());
 
-		painter.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+    // TODO: don't know why needed to allow working with Overlay!!!????
 
-		if (overlay != null && viewport.width > 0 && viewport.height > 0) {
+    painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
-			try {
-				if (nCanvas.getDrawable().getSurfaceWidth() > 0 && nCanvas.getDrawable().getSurfaceHeight() > 0) {
-					Graphics2D g2d = overlay.createGraphics();
+    painter.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
-					g2d.setBackground(overlayBackground);
-					g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+    if (overlay != null && viewport.width > 0 && viewport.height > 0) {
 
-					// Tooltips
-					for (ITooltipRenderer t : awtView.getTooltips())
-						t.render(g2d);
+      try {
+        if (nCanvas.getDrawable().getSurfaceWidth() > 0
+            && nCanvas.getDrawable().getSurfaceHeight() > 0) {
+          Graphics2D g2d = overlay.createGraphics();
 
-					// Renderers
-					for (AWTRenderer2d renderer : awtView.getRenderers2d())
-						renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
+          g2d.setBackground(overlayBackground);
+          g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
-					overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
-					overlay.drawAll();
-					g2d.dispose();
-				}
+          // Tooltips
+          for (ITooltipRenderer t : awtView.getTooltips())
+            t.render(g2d);
 
-			} catch (Exception e) {
-				LOGGER.error(e, e);
-			}
-		}
-		
-	}
+          // Renderers
+          for (AWTRenderer2d renderer : awtView.getRenderers2d())
+            renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
+
+          overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+          overlay.drawAll();
+          g2d.dispose();
+        }
+
+      } catch (Exception e) {
+        LOGGER.error(e, e);
+      }
+    }
+
+  }
 
 }

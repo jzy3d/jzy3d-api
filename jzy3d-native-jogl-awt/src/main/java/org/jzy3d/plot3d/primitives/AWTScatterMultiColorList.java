@@ -15,21 +15,20 @@ import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
  * @author Martin Pernollet
  * 
  */
-public class AWTScatterMultiColorList extends ScatterMultiColorList implements
-		IMultiColorable {
-	
-	public AWTScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, float width) {
-        super(coordinates, mapper, width);
-        // TODO Auto-generated constructor stub
-    }
+public class AWTScatterMultiColorList extends ScatterMultiColorList implements IMultiColorable {
 
-    public AWTScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper) {
-        super(coordinates, mapper);
-        // TODO Auto-generated constructor stub
-    }
+  public AWTScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper, float width) {
+    super(coordinates, mapper, width);
+    // TODO Auto-generated constructor stub
+  }
 
-    public void enableColorBar(ITickProvider provider, ITickRenderer renderer) {
-		setLegend(new AWTColorbarLegend(this, provider, renderer));
-		setLegendDisplayed(true);
-	}
+  public AWTScatterMultiColorList(List<Coord3d> coordinates, ColorMapper mapper) {
+    super(coordinates, mapper);
+    // TODO Auto-generated constructor stub
+  }
+
+  public void enableColorBar(ITickProvider provider, ITickRenderer renderer) {
+    setLegend(new AWTColorbarLegend(this, provider, renderer));
+    setLegendDisplayed(true);
+  }
 }

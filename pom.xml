@@ -250,7 +250,7 @@
 					<doclint>none</doclint>
 					<source>8</source>
 					<failOnError>false</failOnError>
-					<stylesheetfile>jzy3d-api/doc/layout.css</stylesheetfile>
+					<stylesheetfile>doc/style/javadoc.css</stylesheetfile>
 				</configuration>
 				<executions>
 					<execution>

@@ -31,197 +31,201 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * 
  * Newt is supposed to be faster than any other canvas, either for AWT or Swing.
  * 
- * If a non AWT panel where required, follow the guidelines given in
- * {@link IScreenCanvas} documentation.
+ * If a non AWT panel where required, follow the guidelines given in {@link IScreenCanvas}
+ * documentation.
  */
 public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas {
-    static Logger LOGGER = Logger.getLogger(CanvasNewtAwt.class);
-    
-    public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
-        this(factory, scene, quality, glci, false, false);
+  static Logger LOGGER = Logger.getLogger(CanvasNewtAwt.class);
+
+  public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality,
+      GLCapabilitiesImmutable glci) {
+    this(factory, scene, quality, glci, false, false);
+  }
+
+  public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality,
+      GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+    window = GLWindow.create(glci);
+    canvas = new NewtCanvasAWT(window);
+    view = scene.newView(this, quality);
+    renderer =
+        ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
+    window.addGLEventListener(renderer);
+
+    if (quality.isPreserveViewportSize())
+      setPixelScale(
+          new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE});
+
+    // swing specific
+    setFocusable(true);
+    requestFocusInWindow();
+    window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
+    if (quality.isAnimated()) {
+      // animator = factory.getPainterFactory().newAnimator((ICanvas)window);
+      animator = new NativeAnimator(window);
+      animator.start();
     }
 
-    public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
-        window = GLWindow.create(glci);
-        canvas = new NewtCanvasAWT(window);
-        view = scene.newView(this, quality);
-        renderer = ((NativePainterFactory)factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
-        window.addGLEventListener(renderer);
-        
-        if(quality.isPreserveViewportSize())
-            setPixelScale(new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE });
-        
-        // swing specific
-        setFocusable(true);
-        requestFocusInWindow();
-        window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
-        if (quality.isAnimated()) {
-            //animator = factory.getPainterFactory().newAnimator((ICanvas)window);
-            animator = new NativeAnimator(window);
-            animator.start();
+    setLayout(new BorderLayout());
+    add(canvas, BorderLayout.CENTER);
+  }
+
+  @Override
+  public IAnimator getAnimation() {
+    return animator;
+  }
+
+  @Override
+  public void setPixelScale(float[] scale) {
+    // LOGGER.info("setting scale " + scale);
+    if (scale != null)
+      window.setSurfaceScale(scale);
+    else
+      window.setSurfaceScale(new float[] {1f, 1f});
+  }
+
+  public GLWindow getWindow() {
+    return window;
+  }
+
+  public NewtCanvasAWT getCanvas() {
+    return canvas;
+  }
+
+  @Override
+  public GLAutoDrawable getDrawable() {
+    return window;
+  }
+
+  @Override
+  public void dispose() {
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        if (animator != null) {
+          animator.stop();
         }
+        if (renderer != null) {
+          renderer.dispose(window);
+        }
+        canvas.destroy();
+        window = null;
+        renderer = null;
+        view = null;
+        animator = null;
+      }
+    }).start();
+  }
 
-        setLayout(new BorderLayout());
-        add(canvas, BorderLayout.CENTER);
-    }
+  @Override
+  public void display() {
+    window.display();
+  }
 
-    @Override
-    public IAnimator getAnimation() {
-    	return animator;
-    }
+  @Override
+  public void forceRepaint() {
+    display();
+  }
 
-    @Override
-    public void setPixelScale(float[] scale) {
-        //LOGGER.info("setting scale " + scale);
-        if (scale != null)
-            window.setSurfaceScale(scale);
-        else
-            window.setSurfaceScale(new float[] { 1f, 1f });
-    }
+  @Override
+  public TextureData screenshot() {
+    renderer.nextDisplayUpdateScreenshot();
+    display();
+    return renderer.getLastScreenshot();
+  }
 
-    public GLWindow getWindow() {
-        return window;
-    }
+  @Override
+  public void screenshot(File file) throws IOException {
+    if (!file.getParentFile().exists())
+      file.mkdirs();
 
-    public NewtCanvasAWT getCanvas() {
-        return canvas;
-    }
+    TextureData screen = screenshot();
+    TextureIO.write(screen, file);
+  }
 
-    @Override
-    public GLAutoDrawable getDrawable() {
-        return window;
-    }
+  @Override
+  public String getDebugInfo() {
+    GL gl = ((NativeDesktopPainter) getView().getPainter()).getCurrentGL(this);
 
-    @Override
-    public void dispose() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (animator != null) {
-                    animator.stop();
-                }
-                if (renderer != null) {
-                    renderer.dispose(window);
-                }
-                canvas.destroy();
-                window = null;
-                renderer = null;
-                view = null;
-                animator = null;
-            }
-        }).start();
-    }
+    StringBuffer sb = new StringBuffer();
+    sb.append("Chosen GLCapabilities: " + window.getChosenGLCapabilities() + "\n");
+    sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
+    sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
+    sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
+    // sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
+    return sb.toString();
+  }
 
-    @Override
-    public void display() {
-        window.display();
-    }
+  /**
+   * Provide the actual renderer width for the open gl camera settings, which is obtained after a
+   * resize event.
+   */
+  @Override
+  public int getRendererWidth() {
+    return (renderer != null ? renderer.getWidth() : 0);
+  }
 
-    @Override
-    public void forceRepaint() {
-        display();
-    }
+  /**
+   * Provide the actual renderer height for the open gl camera settings, which is obtained after a
+   * resize event.
+   */
+  @Override
+  public int getRendererHeight() {
+    return (renderer != null ? renderer.getHeight() : 0);
+  }
 
-    @Override
-    public TextureData screenshot() {
-        renderer.nextDisplayUpdateScreenshot();
-        display();
-        return renderer.getLastScreenshot();
-    }
+  @Override
+  public Renderer3d getRenderer() {
+    return renderer;
+  }
 
-    @Override
-    public void screenshot(File file) throws IOException {
-        if (!file.getParentFile().exists())
-            file.mkdirs();
+  /** Provide a reference to the View that renders into this canvas. */
+  @Override
+  public View getView() {
+    return view;
+  }
 
-        TextureData screen = screenshot();
-        TextureIO.write(screen, file);
-    }
+  /* */
 
-    @Override
-    public String getDebugInfo() {
-    	GL gl = ((NativeDesktopPainter)getView().getPainter()).getCurrentGL(this);
+  public synchronized void addKeyListener(KeyListener l) {
+    getWindow().addKeyListener(l);
+  }
 
-        StringBuffer sb = new StringBuffer();
-        sb.append("Chosen GLCapabilities: " + window.getChosenGLCapabilities() + "\n");
-        sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
-        sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
-        sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
-        // sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
-        return sb.toString();
-    }
+  public void addMouseListener(MouseListener l) {
+    getWindow().addMouseListener(l);
+  }
 
-    /**
-     * Provide the actual renderer width for the open gl camera settings, which
-     * is obtained after a resize event.
-     */
-    @Override
-    public int getRendererWidth() {
-        return (renderer != null ? renderer.getWidth() : 0);
-    }
+  public void removeMouseListener(com.jogamp.newt.event.MouseListener l) {
+    getWindow().removeMouseListener(l);
+  }
 
-    /**
-     * Provide the actual renderer height for the open gl camera settings, which
-     * is obtained after a resize event.
-     */
-    @Override
-    public int getRendererHeight() {
-        return (renderer != null ? renderer.getHeight() : 0);
-    }
+  public void removeKeyListener(com.jogamp.newt.event.KeyListener l) {
+    getWindow().removeKeyListener(l);
+  }
 
-    @Override
-    public Renderer3d getRenderer() {
-        return renderer;
-    }
+  @Override
+  public void addMouseController(Object o) {
+    addMouseListener((MouseListener) o);
+  }
 
-    /** Provide a reference to the View that renders into this canvas. */
-    @Override
-    public View getView() {
-        return view;
-    }
+  @Override
+  public void addKeyController(Object o) {
+    addKeyListener((KeyListener) o);
+  }
 
-    /* */
+  @Override
+  public void removeMouseController(Object o) {
+    removeMouseListener((MouseListener) o);
+  }
 
-    public synchronized void addKeyListener(KeyListener l) {
-        getWindow().addKeyListener(l);
-    }
+  @Override
+  public void removeKeyController(Object o) {
+    removeKeyListener((KeyListener) o);
+  }
 
-    public void addMouseListener(MouseListener l) {
-        getWindow().addMouseListener(l);
-    }
-
-    public void removeMouseListener(com.jogamp.newt.event.MouseListener l) {
-        getWindow().removeMouseListener(l);
-    }
-
-    public void removeKeyListener(com.jogamp.newt.event.KeyListener l) {
-        getWindow().removeKeyListener(l);
-    }
-
-    @Override
-    public void addMouseController(Object o) {
-        addMouseListener((MouseListener) o);
-    }
-
-    @Override
-    public void addKeyController(Object o) {
-        addKeyListener((KeyListener) o);
-    }
-
-    @Override
-    public void removeMouseController(Object o) {
-        removeMouseListener((MouseListener) o);
-    }
-
-    @Override
-    public void removeKeyController(Object o) {
-        removeKeyListener((KeyListener) o);
-    }
-
-    protected View view;
-    protected Renderer3d renderer;
-    protected IAnimator animator;
-    protected GLWindow window;
-    protected NewtCanvasAWT canvas;
-    private static final long serialVersionUID = 8578690050666237742L;
+  protected View view;
+  protected Renderer3d renderer;
+  protected IAnimator animator;
+  protected GLWindow window;
+  protected NewtCanvasAWT canvas;
+  private static final long serialVersionUID = 8578690050666237742L;
 }

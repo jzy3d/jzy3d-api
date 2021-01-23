@@ -16,44 +16,45 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 public class TestViewModeAndCameraClippingPlanes {
-	@Test
-	public void givenNativeOffscreenChart_whenAddSurface_thenViewIsInAutotFitMode() {
-		
-		// Given
-		
-		ChartFactory factory = new AWTChartFactory();
-		factory.getPainterFactory().setOffscreen(500, 500);
-		
-		Chart chart = factory.newChart();
+  @Test
+  public void givenNativeOffscreenChart_whenAddSurface_thenViewIsInAutotFitMode() {
 
-		// --------------------------
-		// When
-		
-		chart.add(surface());
-		
-		// --------------------------
-		// Then
+    // Given
 
-		Assert.assertEquals(ViewBoundMode.AUTO_FIT, chart.getView().getBoundsMode());
-		Assert.assertFalse("Near clipping plane != 0", 0==chart.getView().getCamera().getNear());
-		Assert.assertFalse("Far clipping plane != 0", 0==chart.getView().getCamera().getFar());
-	}
-	
+    ChartFactory factory = new AWTChartFactory();
+    factory.getPainterFactory().setOffscreen(500, 500);
 
-	protected Shape surface() {
-		Mapper mapper = new Mapper() {
-			@Override
-			public double f(double x, double y) {
-				return x * Math.sin(x * y);
-			}
-		};
-		Range range = new Range(-3, 3);
-		int steps = 50;
+    Chart chart = factory.newChart();
 
-		Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-				surface.getBounds().getZmax(), new Color(1, 1, 1, .5f));
-		surface.setColorMapper(colorMapper);
-		return surface;
-	}
+    // --------------------------
+    // When
+
+    chart.add(surface());
+
+    // --------------------------
+    // Then
+
+    Assert.assertEquals(ViewBoundMode.AUTO_FIT, chart.getView().getBoundsMode());
+    Assert.assertFalse("Near clipping plane != 0", 0 == chart.getView().getCamera().getNear());
+    Assert.assertFalse("Far clipping plane != 0", 0 == chart.getView().getCamera().getFar());
+  }
+
+
+  protected Shape surface() {
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+    Range range = new Range(-3, 3);
+    int steps = 50;
+
+    Shape surface =
+        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f));
+    surface.setColorMapper(colorMapper);
+    return surface;
+  }
 }

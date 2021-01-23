@@ -10,25 +10,25 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import com.jogamp.opengl.glu.GLU;
 
 public class TestPoint {
-    GLU glu = new GLU();
-    Camera cam = new Camera();
-    
-    @Test
-    public void glCoordinatesConform(){
-        // Given
-        Point p = new Point();
-        p.setData(new Coord3d(3, 30, 1000));
+  GLU glu = new GLU();
+  Camera cam = new Camera();
 
-        // When
-        GLMock glMock = new GLMock();
-        
-        NativeDesktopPainter painter = new NativeDesktopPainter();
-        painter.setGL(glMock);
-        
-        p.draw(painter);
-        
-        // Then
-        Assert.assertTrue(glMock.vertex3f_contains(3, 30, 1000)); 
-    }
-    
+  @Test
+  public void glCoordinatesConform() {
+    // Given
+    Point p = new Point();
+    p.setData(new Coord3d(3, 30, 1000));
+
+    // When
+    GLMock glMock = new GLMock();
+
+    NativeDesktopPainter painter = new NativeDesktopPainter();
+    painter.setGL(glMock);
+
+    p.draw(painter);
+
+    // Then
+    Assert.assertTrue(glMock.vertex3f_contains(3, 30, 1000));
+  }
+
 }

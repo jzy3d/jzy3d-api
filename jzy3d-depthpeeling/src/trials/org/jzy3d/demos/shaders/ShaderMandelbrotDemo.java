@@ -21,37 +21,38 @@ import com.jogamp.opengl.GLProfile;
 
 public class ShaderMandelbrotDemo {
 
-    
-    public static void main(String[] args) {
-        Chart chart = initChart(new MandelBrotShader());
-        
-        chart.getScene().getGraph().add(new TexSurface());
 
-        chart.getView().setAxisDisplayed(false);
-        ChartLauncher.openChart(chart, new Rectangle(0,0,600,600));
-    }
-    
-    
-    public static Chart initChart(final IShaderable s) {
-        GLProfile profile = GLProfile.getMaxProgrammable(true);
-        GLCapabilities capabilities = new GLCapabilities(profile);
-        capabilities.setHardwareAccelerated(false);
+  public static void main(String[] args) {
+    Chart chart = initChart(new MandelBrotShader());
 
-    	AWTPainterFactory painter = new AWTPainterFactory(capabilities) {
-    		@Override
-    		public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL){
-                ShaderRenderer3d r = new ShaderRenderer3d(view, traceGL, debugGL, new Shaderable());
-                return r;
-            }
-    	};
+    chart.getScene().getGraph().add(new TexSurface());
 
-    	IChartFactory factory = new AWTChartFactory(painter);
-        
-        Chart chart = factory.newChart(Quality.Intermediate);
-        chart.getView().setSquared(false);
-        
-        //chart.getView().setCameraMode(CameraMode.PERSPECTIVE);
-        return chart;
-    }    
-    public static boolean CHART_CANVAS_AUTOSWAP = true;
+    chart.getView().setAxisDisplayed(false);
+    ChartLauncher.openChart(chart, new Rectangle(0, 0, 600, 600));
+  }
+
+
+  public static Chart initChart(final IShaderable s) {
+    GLProfile profile = GLProfile.getMaxProgrammable(true);
+    GLCapabilities capabilities = new GLCapabilities(profile);
+    capabilities.setHardwareAccelerated(false);
+
+    AWTPainterFactory painter = new AWTPainterFactory(capabilities) {
+      @Override
+      public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+        ShaderRenderer3d r = new ShaderRenderer3d(view, traceGL, debugGL, new Shaderable());
+        return r;
+      }
+    };
+
+    IChartFactory factory = new AWTChartFactory(painter);
+
+    Chart chart = factory.newChart(Quality.Intermediate);
+    chart.getView().setSquared(false);
+
+    // chart.getView().setCameraMode(CameraMode.PERSPECTIVE);
+    return chart;
+  }
+
+  public static boolean CHART_CANVAS_AUTOSWAP = true;
 }

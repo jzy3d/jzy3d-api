@@ -32,105 +32,106 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 import com.jogamp.opengl.GLCapabilities;
 
-public class AWTPainterFactory extends NativePainterFactory implements IPainterFactory{
-	
-    public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-    static Logger logger = Logger.getLogger(AWTPainterFactory.class);
-	
-	public AWTPainterFactory() {
-		super();
-	}
+public class AWTPainterFactory extends NativePainterFactory implements IPainterFactory {
 
-	public AWTPainterFactory(GLCapabilities capabilities) {
-		super(capabilities);
-	}
+  public static String SCREENSHOT_FOLDER = "./data/screenshots/";
+  static Logger logger = Logger.getLogger(AWTPainterFactory.class);
 
-	@Override
-	public IViewOverlay newViewOverlay() {
-		return new AWTNativeViewOverlay();
-	}
-	
-    @Override
-    public IViewportLayout newViewportLayout() {
-        return new ViewAndColorbarsLayout();
+  public AWTPainterFactory() {
+    super();
+  }
+
+  public AWTPainterFactory(GLCapabilities capabilities) {
+    super(capabilities);
+  }
+
+  @Override
+  public IViewOverlay newViewOverlay() {
+    return new AWTNativeViewOverlay();
+  }
+
+  @Override
+  public IViewportLayout newViewportLayout() {
+    return new ViewAndColorbarsLayout();
+  }
+
+  /** Provide AWT Texture loading for screenshots */
+  @Override
+  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+    return new AWTRenderer3d(view, traceGL, debugGL);
+  }
+
+  @Override
+  public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    boolean traceGL = false;
+    boolean debugGL = false;
+
+    if (isOffscreen()) {
+      return newOffscreenCanvas(factory, scene, quality, traceGL, debugGL);
+    } else {
+
+      return new CanvasAWT(factory, scene, quality, getCapabilities(), traceGL, debugGL);
     }
-    
-    /** Provide AWT Texture loading for screenshots */
-    @Override
-    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-        return new AWTRenderer3d(view, traceGL, debugGL);
-    }
+  }
 
-    @Override
-    public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
-        boolean traceGL = false;
-        boolean debugGL = false;
-
-        if(isOffscreen()) {
-            return newOffscreenCanvas(factory, scene, quality, traceGL, debugGL);
-        }
-        else {
-
-        	return new CanvasAWT(factory, scene, quality, getCapabilities(), traceGL, debugGL);
-        }
-    }
-    
-	protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality, boolean traceGL,
-			boolean debugGL) {
-		Dimension dim = getOffscreenDimension();
-		return new OffscreenCanvas(factory, scene, quality, getCapabilities(), dim.width, dim.height, traceGL, debugGL);
-	}
+  protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
+      boolean traceGL, boolean debugGL) {
+    Dimension dim = getOffscreenDimension();
+    return new OffscreenCanvas(factory, scene, quality, getCapabilities(), dim.width, dim.height,
+        traceGL, debugGL);
+  }
 
 
-    
-    
-    @Override
-    public ICameraMouseController newMouseCameraController(Chart chart) {
-        return new AWTCameraMouseController(chart);
-    }
-    
-    @Override
-    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-        return new AWTMousePickingController(chart, clickWidth);
-    }
 
-    @Override
-    public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        return new AWTCameraKeyController(chart);
-    }
+  @Override
+  public ICameraMouseController newMouseCameraController(Chart chart) {
+    return new AWTCameraMouseController(chart);
+  }
 
-    @Override
-    public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return new FrameAWT(chart, bounds, title, null);
-    }
-    
-    @Override
-    public IFrame newFrame(Chart chart) {
-        return newFrame(chart, new Rectangle(0, 0, 800, 600), "Jzy3d");
-    }
+  @Override
+  public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
+    return new AWTMousePickingController(chart, clickWidth);
+  }
+
+  @Override
+  public ICameraKeyController newKeyboardCameraController(Chart chart) {
+    return new AWTCameraKeyController(chart);
+  }
+
+  @Override
+  public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
+    return new FrameAWT(chart, bounds, title, null);
+  }
+
+  @Override
+  public IFrame newFrame(Chart chart) {
+    return newFrame(chart, new Rectangle(0, 0, 800, 600), "Jzy3d");
+  }
 
 
-    /**
-     * Output file of screenshot can be configured using {@link IScreenshotKeyController#setFilename(String)}.
-     */
-    @Override
-    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
-        // trigger screenshot on 's' letter
-        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
-        
-        IScreenshotKeyController screenshot = new AWTScreenshotKeyController(chart, file);
-        
-        screenshot.addListener(new IScreenshotEventListener() {
-            @Override
-            public void failedScreenshot(String file, Exception e) {
-                logger.error("Failed to save screenshot to '" + file + "'", e);
-            }
+  /**
+   * Output file of screenshot can be configured using
+   * {@link IScreenshotKeyController#setFilename(String)}.
+   */
+  @Override
+  public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
+    // trigger screenshot on 's' letter
+    String file =
+        SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
 
-            @Override
-            public void doneScreenshot(String file) {
-                logger.info("Screenshot save to '" + file + "'");
-            }
-        });
-        return screenshot;
-    }
+    IScreenshotKeyController screenshot = new AWTScreenshotKeyController(chart, file);
+
+    screenshot.addListener(new IScreenshotEventListener() {
+      @Override
+      public void failedScreenshot(String file, Exception e) {
+        logger.error("Failed to save screenshot to '" + file + "'", e);
+      }
+
+      @Override
+      public void doneScreenshot(String file) {
+        logger.info("Screenshot save to '" + file + "'");
+      }
+    });
+    return screenshot;
+  }
 }

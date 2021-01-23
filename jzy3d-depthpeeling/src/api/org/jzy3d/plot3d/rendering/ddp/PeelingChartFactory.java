@@ -8,18 +8,18 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class PeelingChartFactory extends AWTChartFactory{
-	public PeelingChartFactory(PeelingMethod method) {
-		super(new PeelingPainterFactory());
-		this.method = method;
-	}
-	
-	@Override
-	public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality){
-        return new DepthPeelingView(factory, scene, canvas, quality);
-    }
-	
-    public static boolean CHART_CANVAS_AUTOSWAP = false;
+public class PeelingChartFactory extends AWTChartFactory {
+  public PeelingChartFactory(PeelingMethod method) {
+    super(new PeelingPainterFactory());
+    this.method = method;
+  }
 
-	PeelingMethod method;
+  @Override
+  public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    return new DepthPeelingView(factory, scene, canvas, quality);
+  }
+
+  public static boolean CHART_CANVAS_AUTOSWAP = false;
+
+  PeelingMethod method;
 }

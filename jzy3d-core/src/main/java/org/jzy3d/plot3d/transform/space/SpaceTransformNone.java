@@ -3,13 +3,13 @@ package org.jzy3d.plot3d.transform.space;
 /**
  * Do not apply any transform (return input value).
  * 
- * @author 
+ * @author
  */
 public class SpaceTransformNone implements SpaceTransform {
 
-	@Override
-	public float compute(float value) {
-		return value;
-	}
+  @Override
+  public float compute(float value) {
+    return value;
+  }
 
 }

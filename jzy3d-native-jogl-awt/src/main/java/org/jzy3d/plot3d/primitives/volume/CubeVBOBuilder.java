@@ -14,237 +14,238 @@ import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 
 public class CubeVBOBuilder extends VBOBuilder {
 
-	private float xMin;
-	private float xMax;
-	private float yMin;
-	private float yMax;
-	private float zMin;
-	private float zMax;
+  private float xMin;
+  private float xMax;
+  private float yMin;
+  private float yMax;
+  private float zMin;
+  private float zMax;
 
-	public CubeVBOBuilder(BoundingBox3d bbox) {
-		this.xMin = bbox.getXmin();
-		this.xMax = bbox.getXmax();
-		this.yMin = bbox.getYmin();
-		this.yMax = bbox.getYmax();
-		this.zMin = bbox.getZmin();
-		this.zMax = bbox.getZmax();
+  public CubeVBOBuilder(BoundingBox3d bbox) {
+    this.xMin = bbox.getXmin();
+    this.xMax = bbox.getXmax();
+    this.yMin = bbox.getYmin();
+    this.yMax = bbox.getYmax();
+    this.zMin = bbox.getZmin();
+    this.zMax = bbox.getZmax();
 
-	}
+  }
 
-	@Override
-	public void load(IPainter painter, DrawableVBO drawable) throws Exception {
-		FloatVBO vbo = initFloatVBO(drawable, true, 24);
-		fillFromArray(drawable,  xMin,  xMax,  yMin,  yMax,  zMin,  zMax, vbo);
-		drawable.setData(((NativeDesktopPainter)painter).getGL(), vbo);
-	}
+  @Override
+  public void load(IPainter painter, DrawableVBO drawable) throws Exception {
+    FloatVBO vbo = initFloatVBO(drawable, true, 24);
+    fillFromArray(drawable, xMin, xMax, yMin, yMax, zMin, zMax, vbo);
+    drawable.setData(((NativeDesktopPainter) painter).getGL(), vbo);
+  }
 
-	private void fillFromArray(DrawableVBO drawable, float xMin, float xMax, float yMin, float yMax, float zMin, float zMax, FloatVBO vbo) {
-		FloatBuffer vertices= vbo.getVertices();
-		IntBuffer indices = vbo.getIndices();
-		drawable.setHasColorBuffer(true);
+  private void fillFromArray(DrawableVBO drawable, float xMin, float xMax, float yMin, float yMax,
+      float zMin, float zMax, FloatVBO vbo) {
+    FloatBuffer vertices = vbo.getVertices();
+    IntBuffer indices = vbo.getIndices();
+    drawable.setHasColorBuffer(true);
 
-		int size = 0;
-		Coord3d c = new Coord3d();
-		//zMin
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMin;
-		c.z = zMin;
+    int size = 0;
+    Coord3d c = new Coord3d();
+    // zMin
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMin;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,0,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 0, 0));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMax;
-		c.z = zMin;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMax;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,255,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 255, 0));
 
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMax;
-		c.z = zMin;
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMax;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,255,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 255, 0));
 
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMin;
-		c.z = zMin;
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMin;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,0,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 0, 0));
 
-		//xMin
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMin;
-		c.z = zMin;
+    // xMin
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMin;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,0,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 0, 0));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMin;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMin;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,0,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 0, 255));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMax;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMax;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,255,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 255, 255));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMax;
-		c.z = zMin;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMax;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,255,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 255, 0));
 
-		//yMin
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMin;
-		c.z = zMin;
+    // yMin
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMin;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,0,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 0, 0));
 
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMin;
-		c.z = zMin;
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMin;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,0,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 0, 0));
 
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMin;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMin;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,0,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 0, 255));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMin;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMin;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,0,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 0, 255));
 
-		//zMax
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMax;
-		c.z = zMax;
+    // zMax
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMax;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,255,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 255, 255));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMax;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMax;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,255,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 255, 255));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMin;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMin;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,0,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 0, 255));
 
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMin;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMin;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,0,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 0, 255));
 
-		//xMax
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMax;
-		c.z = zMax;
+    // xMax
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMax;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,255,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 255, 255));
 
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMin;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMin;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,0,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 0, 255));
 
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMin;
-		c.z = zMin;
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMin;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,0,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 0, 0));
 
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMax;
-		c.z = zMin;
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMax;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,255,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 255, 0));
 
-		//yMax
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMax;
-		c.z = zMin;
+    // yMax
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMax;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,255,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 255, 0));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMax;
-		c.z = zMin;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMax;
+    c.z = zMin;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,255,0));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 255, 0));
 
-		indices.put(size++);
-		c.x = xMin;
-		c.y = yMax;
-		c.z = zMax;
+    indices.put(size++);
+    c.x = xMin;
+    c.y = yMax;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(0,255,255));
-		indices.put(size++);
-		c.x = xMax;
-		c.y = yMax;
-		c.z = zMax;
+    putCoord(vertices, c);
+    putColor(vertices, new Color(0, 255, 255));
+    indices.put(size++);
+    c.x = xMax;
+    c.y = yMax;
+    c.z = zMax;
 
-		putCoord(vertices, c);
-		putColor(vertices, new Color(255,255,255));
+    putCoord(vertices, c);
+    putColor(vertices, new Color(255, 255, 255));
 
-		vertices.rewind();
-		indices.rewind();
-		vbo.setBounds(new BoundingBox3d(xMin, yMin, xMax, yMax, zMin, zMax));
-	}
+    vertices.rewind();
+    indices.rewind();
+    vbo.setBounds(new BoundingBox3d(xMin, yMin, xMax, yMax, zMin, zMax));
+  }
 }
 

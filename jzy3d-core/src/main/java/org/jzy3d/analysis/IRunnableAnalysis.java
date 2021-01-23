@@ -1,6 +1,7 @@
 package org.jzy3d.analysis;
 
-public interface IRunnableAnalysis extends IAnalysis{
-	public void start();
-	public void stop();
+public interface IRunnableAnalysis extends IAnalysis {
+  public void start();
+
+  public void stop();
 }
