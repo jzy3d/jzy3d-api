@@ -7,6 +7,8 @@ import org.jzy3d.painters.IPainter;
  * Rotate is a {@link Transformer} that stores the angle and rotate values required to perform the
  * effective OpenGL rotation in the ModelView matrix.
  * 
+ * @see https://docs.gl/gl3/glRotate
+ * 
  * @author Martin Pernollet
  */
 public class Rotate implements Transformer {
@@ -27,6 +29,9 @@ public class Rotate implements Transformer {
     this.rotate = rotate;
   }
 
+  /**
+   * produces a rotation of angle degrees around the vector (𝑥,𝑦,𝑧)
+   */
   @Override
   public void execute(IPainter painter) {
     painter.glRotatef(angle, rotate.x, rotate.y, rotate.z);
