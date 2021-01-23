@@ -143,7 +143,7 @@
 	<build>
 		<plugins>
 
-			<!-- COMPILER VERSION -->
+			<!-- COMPILER AND JAVA VERSION CONFIGURATION -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -155,6 +155,8 @@
 				</configuration>
 			</plugin>
 
+			<!-- CONFIGURATION FOR RUNNING UNIT TESTS -->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -163,12 +165,20 @@
 					<includes>
 					    <include>**/Test*.java</include>
 					    <include>**/*Test.java</include>
+							<!-- ITTest* are integration tests that should be run by failsafe (below)
+									 but failsafe run is failing
+							-->
+							<include>**/ITTest*.java</include>
 					</includes>
 				</configuration>
 			</plugin>
 
+			<!-- CONFIGURATION FOR RUNNING INTEGRATION TESTS -->
+
 			<!-- Use failsafe to run (and skip) integration tests which success may depend on
 					GPU. Skip them with mvn install -DskipITs
+
+					Replace in surefire	<include>**/ITTest*.java</include>
 
 				<plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -212,7 +222,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>2.2</version>
-
 				<executions>
 					<execution>
 						<goals>
@@ -233,7 +242,6 @@
 					<doclint>none</doclint>
 					<source>8</source>
 					<failOnError>false</failOnError>
-
 					<stylesheetfile>jzy3d-api/doc/layout.css</stylesheetfile>
 				</configuration>
 				<executions>
@@ -247,7 +255,7 @@
 				</executions>
 			</plugin>
 
-            <!-- RELEASE -->
+      <!-- RELEASE -->
 
 			<plugin>
 				<artifactId>maven-release-plugin</artifactId>
@@ -277,7 +285,7 @@
 			</plugin>
 
 
-			<!-- display active profile in compile phase -->
+			<!-- display active profile in compile phase
 	    <plugin>
 	        <groupId>org.apache.maven.plugins</groupId>
 	        <artifactId>maven-help-plugin</artifactId>
@@ -291,10 +299,10 @@
 	                </goals>
 	            </execution>
 	        </executions>
-	    </plugin>
+	    </plugin>-->
 		</plugins>
 
-        <!-- DEPLOY TO FTP -->
+    <!-- DEPLOY TO FTP -->
 
 		<extensions>
 			<extension>
