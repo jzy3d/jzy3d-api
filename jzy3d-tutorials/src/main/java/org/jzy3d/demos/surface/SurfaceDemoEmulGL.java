@@ -67,29 +67,23 @@ public class SurfaceDemoEmulGL {
 
 
   private static Shape surface() {
-
-    // ---------------------------
-    // DEFINE SURFACE MATHS
+    SurfaceBuilder builder = new SurfaceBuilder();
+    
     Mapper mapper = new Mapper() {
       @Override
       public double f(double x, double y) {
         return x * Math.sin(x * y);
       }
     };
+
     Range range = new Range(-3, 3);
     int steps = 50;
 
-    // ---------------------------
-    // MAKE SURFACE
-
-    SurfaceBuilder builder = new SurfaceBuilder();
-
     Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
 
-    surface.setPolygonOffsetFillEnable(false); // VERY IMPORTANT FOR JGL TO WORK !!
+    ColorMapper colorMapper =
+        new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, ALPHA_FACTOR));// 0.65f));
 
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));// 0.65f));
     surface.setColorMapper(colorMapper);
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);

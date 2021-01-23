@@ -4,6 +4,7 @@ import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Scale;
+import org.jzy3d.plot3d.primitives.Drawable;
 
 /**
  * A {@link ColorMapper} uses a {@link IColorMap} to process a color for a given {@link Coord3d}.
@@ -35,10 +36,18 @@ public class ColorMapper implements IColorMappable {
     this.max = max;
   }
 
+  public ColorMapper(IColorMap colormap, Drawable drawable) {
+    this(colormap, drawable.getBounds().getZmin(), drawable.getBounds().getZmax());
+  }
+
   public ColorMapper(IColorMap colormap, Range range) {
     this.colormap = colormap;
     this.min = range.getMin();
     this.max = range.getMax();
+  }
+
+  public ColorMapper(IColorMap colormap, Drawable drawable, Color factor) {
+    this(colormap, drawable.getBounds().getZmin(), drawable.getBounds().getZmax(), factor);
   }
 
   public ColorMapper(IColorMap colormap, double min, double max, Color factor) {
