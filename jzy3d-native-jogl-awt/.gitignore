@@ -8,6 +8,8 @@ target
 *.log
 *~/
 
+*.obj
+
 *.releaseBackup
 *.versionsBackup
 .DS_Store
