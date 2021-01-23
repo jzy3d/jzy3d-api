@@ -1,4 +1,4 @@
-package org.jzy3d.demos.surface;
+package org.jzy3d.tests.emulgl;
 
 import java.io.File;
 import java.io.IOException;

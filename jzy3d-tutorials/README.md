@@ -116,7 +116,7 @@ See ```WaterfallDemo```
 
 See ```LizardVolumeDemo```
 
-<img src="doc/demo-volume.png"/>
+<img src="doc/demo-volume-rotated.png"/>
 
 # 2D Line charts
 

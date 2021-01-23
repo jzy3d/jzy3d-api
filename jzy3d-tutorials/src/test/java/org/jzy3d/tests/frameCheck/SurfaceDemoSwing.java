@@ -1,7 +1,11 @@
-package org.jzy3d.demos.surface;
+package org.jzy3d.tests.frameCheck;
+
+import java.io.IOException;
 
 import org.jzy3d.analysis.AbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
+import org.jzy3d.bridge.swing.FrameSwing;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.SwingChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -12,6 +16,7 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.tests.frameCheck.Frame;
 import com.jogamp.opengl.awt.GLJPanel;
 
 /**
@@ -27,7 +32,23 @@ public class SurfaceDemoSwing extends AbstractAnalysis {
   public static void main(String[] args) throws Exception {
     SurfaceDemoSwing d = new SurfaceDemoSwing();
     AnalysisLauncher.open(d);
+    // openAndPrintFrame(d);
   }
+
+  private static void openAndPrintFrame(SurfaceDemoSwing d)
+      throws InterruptedException, IOException {
+    d.init();
+    Chart chart = d.getChart();
+    chart.addMouseCameraController();
+
+    FrameSwing frame = (FrameSwing) d.getChart().open();
+    Thread.sleep(1000); // wait for frame to be ready for printing
+
+    String file = "./target/" + d.getClass().getSimpleName() + ".png";
+
+    Frame.print(chart, frame, file);
+  }
+
 
   @Override
   public void init() {
@@ -44,7 +65,8 @@ public class SurfaceDemoSwing extends AbstractAnalysis {
     int steps = 80;
 
     // Create the object to represent the function over the given range.
-    final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps), mapper);
+    final Shape surface =
+        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
     surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .5f)));
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(false);

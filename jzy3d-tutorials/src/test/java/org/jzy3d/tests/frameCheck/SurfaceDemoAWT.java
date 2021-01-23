@@ -1,11 +1,14 @@
-package org.jzy3d.demos.surface;
+package org.jzy3d.tests.frameCheck;
 
-import java.awt.Panel;
+import java.io.IOException;
 
 import org.jzy3d.analysis.AWTAbstractAnalysis;
-import org.jzy3d.analysis.AnalysisLauncher;
+import org.jzy3d.bridge.awt.FrameAWT;
+import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.AWTPainterFactory;
 import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.chart.factories.NewtChartFactory;
+import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -15,20 +18,33 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-
-import com.jogamp.newt.awt.NewtCanvasAWT;
+import org.jzy3d.tests.frameCheck.Frame;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
 
 /**
- * Demo an AWT chart using JOGL {@link NewtCanvasAWT} wrapped in an AWT {@link Panel}.
+ * Demo an AWT chart using JOGL {@link GLCanvas}.
  * 
  * @author martin
  */
-public class SurfaceDemoAWTNewt extends AWTAbstractAnalysis {
+public class SurfaceDemoAWT extends AWTAbstractAnalysis {
   public static void main(String[] args) throws Exception {
-    SurfaceDemoAWTNewt d = new SurfaceDemoAWTNewt();
-    AnalysisLauncher.open(d);
-    // d.getChart().render();
+    SurfaceDemoAWT d = new SurfaceDemoAWT();
+    openAndPrintFrame(d);
+    // AnalysisLauncher.open(d);
   }
+
+  private static void openAndPrintFrame(SurfaceDemoAWT d) throws InterruptedException, IOException {
+    d.init();
+    Chart chart = d.getChart();
+    chart.addMouseCameraController();
+    FrameAWT f = (FrameAWT) chart.open();
+    // Thread.sleep(1000);
+    String file = "./target/" + d.getClass().getSimpleName() + ".png";
+    Frame.print(chart, f, file);
+  }
+
 
 
   @Override
@@ -46,14 +62,17 @@ public class SurfaceDemoAWTNewt extends AWTAbstractAnalysis {
     int steps = 80;
 
     // Create the object to represent the function over the given range.
-    final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps), mapper);
+    final Shape surface =
+        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
     surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .5f)));
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);
     surface.setWireframeColor(Color.BLACK);
 
     // Create a chart
-    IChartFactory f = new NewtChartFactory();
+    GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL2));
+    IPainterFactory p = new AWTPainterFactory(c);
+    IChartFactory f = new AWTChartFactory(p);
 
     chart = f.newChart(Quality.Advanced);
     chart.getScene().getGraph().add(surface);
