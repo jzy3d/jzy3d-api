@@ -12,63 +12,62 @@ import jogamp.newt.awt.event.AWTNewtEventFactory;
  * @author cmh
  */
 public class NewtToAWTMouseListener implements java.awt.event.MouseListener,
-		java.awt.event.MouseMotionListener, java.awt.event.MouseWheelListener {
+    java.awt.event.MouseMotionListener, java.awt.event.MouseWheelListener {
 
-	private final com.jogamp.newt.event.MouseListener mouseListener;
-	private final com.jogamp.newt.Window source;
+  private final com.jogamp.newt.event.MouseListener mouseListener;
+  private final com.jogamp.newt.Window source;
 
-	public NewtToAWTMouseListener(Window source,
-			MouseListener mouseListener) {
-		this.source = source;
-		this.mouseListener = mouseListener;
-	}
-	
-	protected com.jogamp.newt.event.MouseEvent convertEvent(java.awt.event.MouseEvent event) {
-		return AWTNewtEventFactory.createMouseEvent(event, source);
-	}
-	
-	protected com.jogamp.newt.event.MouseEvent convertEvent(java.awt.event.MouseWheelEvent event) {
-		return AWTNewtEventFactory.createMouseEvent(event, source);
-	}
+  public NewtToAWTMouseListener(Window source, MouseListener mouseListener) {
+    this.source = source;
+    this.mouseListener = mouseListener;
+  }
 
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
-		mouseListener.mouseWheelMoved(convertEvent(e));
-	}
+  protected com.jogamp.newt.event.MouseEvent convertEvent(java.awt.event.MouseEvent event) {
+    return AWTNewtEventFactory.createMouseEvent(event, source);
+  }
 
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		mouseListener.mouseDragged(convertEvent(e));
-	}
+  protected com.jogamp.newt.event.MouseEvent convertEvent(java.awt.event.MouseWheelEvent event) {
+    return AWTNewtEventFactory.createMouseEvent(event, source);
+  }
 
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		mouseListener.mouseMoved(convertEvent(e));
-	}
+  @Override
+  public void mouseWheelMoved(MouseWheelEvent e) {
+    mouseListener.mouseWheelMoved(convertEvent(e));
+  }
 
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		mouseListener.mouseClicked(convertEvent(e));
-	}
+  @Override
+  public void mouseDragged(MouseEvent e) {
+    mouseListener.mouseDragged(convertEvent(e));
+  }
 
-	@Override
-	public void mousePressed(MouseEvent e) {
-		mouseListener.mousePressed(convertEvent(e));
-	}
+  @Override
+  public void mouseMoved(MouseEvent e) {
+    mouseListener.mouseMoved(convertEvent(e));
+  }
 
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		mouseListener.mouseReleased(convertEvent(e));
-	}
+  @Override
+  public void mouseClicked(MouseEvent e) {
+    mouseListener.mouseClicked(convertEvent(e));
+  }
 
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		mouseListener.mouseEntered(convertEvent(e));
-	}
+  @Override
+  public void mousePressed(MouseEvent e) {
+    mouseListener.mousePressed(convertEvent(e));
+  }
 
-	@Override
-	public void mouseExited(MouseEvent e) {
-		mouseListener.mouseExited(convertEvent(e));
-	}
+  @Override
+  public void mouseReleased(MouseEvent e) {
+    mouseListener.mouseReleased(convertEvent(e));
+  }
+
+  @Override
+  public void mouseEntered(MouseEvent e) {
+    mouseListener.mouseEntered(convertEvent(e));
+  }
+
+  @Override
+  public void mouseExited(MouseEvent e) {
+    mouseListener.mouseExited(convertEvent(e));
+  }
 
 }

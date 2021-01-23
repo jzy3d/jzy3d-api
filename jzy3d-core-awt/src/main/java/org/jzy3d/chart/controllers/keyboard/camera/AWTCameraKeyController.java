@@ -9,75 +9,85 @@ import org.jzy3d.maths.Coord2d;
 
 
 
-public class AWTCameraKeyController extends AbstractCameraController implements KeyListener, ICameraKeyController{
-		
-	public AWTCameraKeyController(){
-	}
-	
-	public AWTCameraKeyController(Chart chart){
-		register(chart);
-	}
-	
-	@Override
-    public void register(Chart chart){
-		super.register(chart);
-		chart.getCanvas().addKeyController(this);
-	}
-	
-	@Override
-    public void dispose(){
-		for(Chart c: targets){
-			c.getCanvas().removeKeyController(this);
-		}
-		
-		super.dispose(); // i.e. target=null
-	}
-	
-	/*********************************************************/
-	
-    @Override
-    public void keyPressed(KeyEvent e) {
-    	// rotation
-    	if(!e.isShiftDown()){
-    		Coord2d move = new Coord2d();
-    		float offset = 0.1f;
-    		switch(e.getKeyCode()){
-    		case KeyEvent.VK_DOWN:
-    			move.y = move.y + offset; rotate( move ); break;
-    		case KeyEvent.VK_UP:
-    			move.y = move.y - offset; rotate( move ); break;
-    		case KeyEvent.VK_LEFT:
-    			move.x = move.x - offset; rotate( move ); break;
-    		case KeyEvent.VK_RIGHT:
-    			move.x = move.x + offset; rotate( move ); break;
-    		default:
-    			break;
-    		}
-    	}
-    	// zoom
-    	else{    		
-    		switch(e.getKeyCode()){
-    		// shift
-    		case KeyEvent.VK_DOWN:
-    			shift( 0.1f ); break;
-    		case KeyEvent.VK_UP:
-    			shift( -0.1f ); break;
-    		// zoom
-    		case KeyEvent.VK_LEFT:
-    			zoomZ( 0.9f ); break;
-    		case KeyEvent.VK_RIGHT:
-    			zoomZ( 1.1f ); break;
-    		default:
-    			break;
-    		}
-    	}
+public class AWTCameraKeyController extends AbstractCameraController
+    implements KeyListener, ICameraKeyController {
+
+  public AWTCameraKeyController() {}
+
+  public AWTCameraKeyController(Chart chart) {
+    register(chart);
+  }
+
+  @Override
+  public void register(Chart chart) {
+    super.register(chart);
+    chart.getCanvas().addKeyController(this);
+  }
+
+  @Override
+  public void dispose() {
+    for (Chart c : targets) {
+      c.getCanvas().removeKeyController(this);
     }
-    
-    @Override
-    public void keyTyped(KeyEvent e) {
+
+    super.dispose(); // i.e. target=null
+  }
+
+  /*********************************************************/
+
+  @Override
+  public void keyPressed(KeyEvent e) {
+    // rotation
+    if (!e.isShiftDown()) {
+      Coord2d move = new Coord2d();
+      float offset = 0.1f;
+      switch (e.getKeyCode()) {
+        case KeyEvent.VK_DOWN:
+          move.y = move.y + offset;
+          rotate(move);
+          break;
+        case KeyEvent.VK_UP:
+          move.y = move.y - offset;
+          rotate(move);
+          break;
+        case KeyEvent.VK_LEFT:
+          move.x = move.x - offset;
+          rotate(move);
+          break;
+        case KeyEvent.VK_RIGHT:
+          move.x = move.x + offset;
+          rotate(move);
+          break;
+        default:
+          break;
+      }
     }
-    
-    @Override
-    public void keyReleased(KeyEvent e) {
+    // zoom
+    else {
+      switch (e.getKeyCode()) {
+        // shift
+        case KeyEvent.VK_DOWN:
+          shift(0.1f);
+          break;
+        case KeyEvent.VK_UP:
+          shift(-0.1f);
+          break;
+        // zoom
+        case KeyEvent.VK_LEFT:
+          zoomZ(0.9f);
+          break;
+        case KeyEvent.VK_RIGHT:
+          zoomZ(1.1f);
+          break;
+        default:
+          break;
+      }
     }
+  }
+
+  @Override
+  public void keyTyped(KeyEvent e) {}
+
+  @Override
+  public void keyReleased(KeyEvent e) {}
 }

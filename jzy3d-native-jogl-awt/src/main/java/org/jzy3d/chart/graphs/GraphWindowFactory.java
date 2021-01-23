@@ -11,22 +11,22 @@ import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.chart.factories.AWTPainterFactory;
 
 public class GraphWindowFactory extends AWTPainterFactory {
-    static Logger logger = Logger.getLogger(GraphChartFactory.class);
+  static Logger logger = Logger.getLogger(GraphChartFactory.class);
 
-	@Override
-    public ICameraMouseController newMouseCameraController(Chart chart){
-		AWTMousePickingController mouse = new AWTMousePickingController(chart);
-        mouse.getPickingSupport().addObjectPickedListener(new IObjectPickedListener() {
-            @Override
-            public void objectPicked(List<? extends Object> vertices, PickingSupport picking) {
-                for(Object vertex: vertices){
-                    logger.info("picked: " + vertex);
-                    //dGraph.setVertexHighlighted((String)vertex, true);
-                }
-                chart.render();
-            }
-        });
-        return mouse;
-    }
-    
+  @Override
+  public ICameraMouseController newMouseCameraController(Chart chart) {
+    AWTMousePickingController mouse = new AWTMousePickingController(chart);
+    mouse.getPickingSupport().addObjectPickedListener(new IObjectPickedListener() {
+      @Override
+      public void objectPicked(List<? extends Object> vertices, PickingSupport picking) {
+        for (Object vertex : vertices) {
+          logger.info("picked: " + vertex);
+          // dGraph.setVertexHighlighted((String)vertex, true);
+        }
+        chart.render();
+      }
+    });
+    return mouse;
+  }
+
 }

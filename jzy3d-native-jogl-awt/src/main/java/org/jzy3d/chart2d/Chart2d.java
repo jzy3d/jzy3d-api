@@ -19,67 +19,67 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 // AXEBOX ticks too long
 // AXEBOX Y label sur le côté
 // X Labels centrés
-// 
+//
 // Interface de LineSerie fournie par Chart2d package, using x, y float args
 
 public class Chart2d extends AWTNativeChart {
-    protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
+  protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
 
-    public void layout2d() {
-        IAxisLayout axe = getAxisLayout();
-        axe.setZAxeLabelDisplayed(false);
-        axe.setTickLineDisplayed(false);
+  public void layout2d() {
+    IAxisLayout axe = getAxisLayout();
+    axe.setZAxeLabelDisplayed(false);
+    axe.setTickLineDisplayed(false);
 
-        View view = getView();
-        view.setViewPositionMode(ViewPositionMode.TOP);
-        view.setSquared(true);
-        view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
+    View view = getView();
+    view.setViewPositionMode(ViewPositionMode.TOP);
+    view.setSquared(true);
+    view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
+  }
+
+  public void asTimeChart(float timeMax, float ymin, float ymax, String xlabel, String ylabel) {
+    IAxisLayout axe = getAxisLayout();
+    axe.setYAxisLabel(ylabel);
+    axe.setXAxisLabel(xlabel);
+    axe.setXTickRenderer(new ElapsedTimeTickRenderer());
+
+    View view = getView();
+    view.setBoundManual(new BoundingBox3d(0, timeMax, ymin, ymax, -1, 1));
+  }
+
+  public Serie2d getSerie(String name, Serie2d.Type type) {
+    Serie2d serie = null;
+    if (!series.keySet().contains(name)) {
+      serie = factory.newSerie(name, type);
+      add(serie.getDrawable());
+      series.put(name, serie);
+    } else {
+      serie = series.get(name);
     }
+    return serie;
+  }
 
-    public void asTimeChart(float timeMax, float ymin, float ymax, String xlabel, String ylabel) {
-        IAxisLayout axe = getAxisLayout();
-        axe.setYAxisLabel(ylabel);
-        axe.setXAxisLabel(xlabel);
-        axe.setXTickRenderer(new ElapsedTimeTickRenderer());
+  public void setSerie(Serie2d serie) {
+    this.series.put(serie.getName(), serie);
+  }
 
-        View view = getView();
-        view.setBoundManual(new BoundingBox3d(0, timeMax, ymin, ymax, -1, 1));
+  public void setSeries(Collection<Serie2d> series) {
+    for (Serie2d serie : series) {
+      setSerie(serie);
     }
+  }
 
-    public Serie2d getSerie(String name, Serie2d.Type type) {
-        Serie2d serie = null;
-        if (!series.keySet().contains(name)) {
-            serie = factory.newSerie(name, type);
-            add(serie.getDrawable());
-            series.put(name,serie);
-        } else {
-            serie = series.get(name);
-        }
-        return serie;
-    }
-    
-    public void setSerie(Serie2d serie){
-        this.series.put(serie.getName(), serie);
-    }
+  public void setSeries(Map<String, Serie2d> series) {
+    this.series.putAll(series);
+  }
 
-    public void setSeries(Collection<Serie2d> series){
-        for(Serie2d serie: series){
-            setSerie(serie);
-        }
-    }
+  /* */
 
-    public void setSeries(Map<String,Serie2d> series){
-        this.series.putAll(series);
-    }
+  public Chart2d() {
+    this(new Chart2dFactory(), Quality.Advanced);
+  }
 
-    /* */
-
-    public Chart2d() {
-    	this(new Chart2dFactory(), Quality.Advanced);
-    }
-    
-    public Chart2d(IChartFactory factory, Quality quality) {
-        super(factory, quality);
-        layout2d();
-    }
+  public Chart2d(IChartFactory factory, Quality quality) {
+    super(factory, quality);
+    layout2d();
+  }
 }

@@ -27,49 +27,51 @@ import com.jogamp.newt.swt.NewtCanvasSWT;
  */
 public class SurfaceDemoSWT {
 
-    public static void main(String[] args) {
-        Mapper mapper = new Mapper() {
-            @Override
-            public double f(double x, double y) {
-                return x * Math.sin(x * y);
-            }
-        };
+  public static void main(String[] args) {
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
 
-        // Define range and precision for the function to plot
-        Range range = new Range(-3, 3);
-        int steps = 80;
+    // Define range and precision for the function to plot
+    Range range = new Range(-3, 3);
+    int steps = 80;
 
-        // Create the object to represent the function over the given range.
-        final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-        surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
-        surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(false);
+    // Create the object to represent the function over the given range.
+    final Shape surface =
+        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(false);
 
-        // Create a chart
+    // Create a chart
 
-        Settings.getInstance().setHardwareAccelerated(true);
+    Settings.getInstance().setHardwareAccelerated(true);
 
-        Display display = new Display();
-        Shell shell = new Shell(display);
-        shell.setLayout(new FillLayout());
+    Display display = new Display();
+    Shell shell = new Shell(display);
+    shell.setLayout(new FillLayout());
 
-        SWTChartFactory f = new SWTChartFactory(shell);
-        Chart chart = f.newChart(Quality.Advanced);
+    SWTChartFactory f = new SWTChartFactory(shell);
+    Chart chart = f.newChart(Quality.Advanced);
 
-        //Chart chart = SWTChartFactory.chart(shell);
-        chart.getScene().getGraph().add(surface);
+    // Chart chart = SWTChartFactory.chart(shell);
+    chart.getScene().getGraph().add(surface);
 
-        ChartLauncher.openChart(chart);
+    ChartLauncher.openChart(chart);
 
-        shell.setText("name");
-        shell.setSize(800, 600);
-        shell.open();
+    shell.setText("name");
+    shell.setSize(800, 600);
+    shell.open();
 
-        while (!shell.isDisposed()) {
-            if (!display.readAndDispatch()) {
-                display.sleep();
-            }
-        }
-        display.dispose();
+    while (!shell.isDisposed()) {
+      if (!display.readAndDispatch()) {
+        display.sleep();
+      }
     }
+    display.dispose();
+  }
 }

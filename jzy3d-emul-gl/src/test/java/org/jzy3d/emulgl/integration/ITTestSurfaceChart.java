@@ -16,46 +16,47 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestSurfaceChart {
-	@Test
-	public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
-		LoggerUtils.minimal();
+  @Test
+  public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
+    LoggerUtils.minimal();
 
-		// When
-		EmulGLChartFactory factory = new EmulGLChartFactory();
-		Chart chart = factory.newChart(Quality.Advanced);
+    // When
+    EmulGLChartFactory factory = new EmulGLChartFactory();
+    Chart chart = factory.newChart(Quality.Advanced);
 
-		chart.add(surface());
+    chart.add(surface());
 
-		// Then
-		ChartTester tester = new ChartTester();
-        tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER_DEFAULT + this.getClass().getSimpleName() + ".png");
-	}
-	
-	
-	
-	private static Shape surface() {
-		Mapper mapper = new Mapper() {
-			@Override
-			public double f(double x, double y) {
-				return x * Math.sin(x * y);
-			}
-		};
-		Range range = new Range(-3, 3);
-		int steps = 50;
+    // Then
+    ChartTester tester = new ChartTester();
+    tester.assertSimilar(chart,
+        ChartTester.EXPECTED_IMAGE_FOLDER_DEFAULT + this.getClass().getSimpleName() + ".png");
+  }
 
-		SurfaceBuilder builder = new SurfaceBuilder();
-		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-		
-		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-				surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));
-		surface.setColorMapper(colorMapper);
-		surface.setFaceDisplayed(true);
-		surface.setWireframeDisplayed(true);
-		surface.setWireframeColor(Color.BLACK);
-		return surface;
-	}
-	
-	static final float ALPHA_FACTOR = 0.75f;
+
+
+  private static Shape surface() {
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+    Range range = new Range(-3, 3);
+    int steps = 50;
+
+    SurfaceBuilder builder = new SurfaceBuilder();
+    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));
+    surface.setColorMapper(colorMapper);
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    return surface;
+  }
+
+  static final float ALPHA_FACTOR = 0.75f;
 
 
 }

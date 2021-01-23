@@ -17,57 +17,58 @@ import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class JavaFXWindowFactory extends AWTPainterFactory{
-	@Override
-    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-        return new JavaFXRenderer3d(view, traceGL, debugGL);
-    }
+public class JavaFXWindowFactory extends AWTPainterFactory {
+  @Override
+  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+    return new JavaFXRenderer3d(view, traceGL, debugGL);
+  }
 
-    @Override
-    public ICameraMouseController newMouseCameraController(Chart chart) {
-        ICameraMouseController mouse = new JavaFXCameraMouseController(chart, null);
-        return mouse;
-    }
+  @Override
+  public ICameraMouseController newMouseCameraController(Chart chart) {
+    ICameraMouseController mouse = new JavaFXCameraMouseController(chart, null);
+    return mouse;
+  }
 
-    @Override
-    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-        IMousePickingController mouse = new JavaFXMousePickingController(chart, clickWidth);
-        return mouse;
-    }
+  @Override
+  public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
+    IMousePickingController mouse = new JavaFXMousePickingController(chart, clickWidth);
+    return mouse;
+  }
 
-    @Override
-    public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        ICameraKeyController key = new JavaFXCameraKeyController(chart, null);
-        return key;
-    }
+  @Override
+  public ICameraKeyController newKeyboardCameraController(Chart chart) {
+    ICameraKeyController key = new JavaFXCameraKeyController(chart, null);
+    return key;
+  }
 
-    /** TODO : replace by a JavaFXScreenshotKeyController */
-    @Override
-    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
-        // trigger screenshot on 's' letter
-        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
-        IScreenshotKeyController screenshot;
+  /** TODO : replace by a JavaFXScreenshotKeyController */
+  @Override
+  public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
+    // trigger screenshot on 's' letter
+    String file =
+        SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
+    IScreenshotKeyController screenshot;
 
-        //if (!chart.getWindowingToolkit().equals("newt"))
-            screenshot = new AWTScreenshotKeyController(chart, file);
-        //else
-        //    screenshot = new NewtScreenshotKeyController(chart, file);
+    // if (!chart.getWindowingToolkit().equals("newt"))
+    screenshot = new AWTScreenshotKeyController(chart, file);
+    // else
+    // screenshot = new NewtScreenshotKeyController(chart, file);
 
-        screenshot.addListener(new IScreenshotEventListener() {
-            @Override
-            public void failedScreenshot(String file, Exception e) {
-                System.out.println("Failed to save screenshot:");
-                e.printStackTrace();
-            }
+    screenshot.addListener(new IScreenshotEventListener() {
+      @Override
+      public void failedScreenshot(String file, Exception e) {
+        System.out.println("Failed to save screenshot:");
+        e.printStackTrace();
+      }
 
-            @Override
-            public void doneScreenshot(String file) {
-                System.out.println("Screenshot: " + file);
-            }
-        });
-        return screenshot;
-    }
+      @Override
+      public void doneScreenshot(String file) {
+        System.out.println("Screenshot: " + file);
+      }
+    });
+    return screenshot;
+  }
 
-    public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-	
+  public static String SCREENSHOT_FOLDER = "./data/screenshots/";
+
 }

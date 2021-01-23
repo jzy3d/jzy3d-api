@@ -8,21 +8,22 @@ import org.jzy3d.maths.parameq.ParametricEquation2;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 
-public class ParametricDrawable2 extends LineStrip{
-    public ParametricDrawable2(){
+public class ParametricDrawable2 extends LineStrip {
+  public ParametricDrawable2() {}
+
+  public ParametricDrawable2(ParametricEquation2 equation, double tmin, double tmax, int tsteps,
+      double umin, double umax, int usteps, Color color) {
+    this.color = color;
+    init(equation, tmin, tmax, tsteps, umin, umax, usteps);
+  }
+
+  public void init(ParametricEquation2 equation, double tmin, double tmax, int tsteps, double umin,
+      double umax, int usteps) {
+    List<Coord3d> coords = equation.apply(tmin, tmax, tsteps, umin, umax, usteps);
+    for (Coord3d coord : coords) {
+      add(new Point(coord, color));
     }
-    
-    public ParametricDrawable2(ParametricEquation2 equation, double tmin, double tmax, int tsteps, double umin, double umax, int usteps, Color color){
-        this.color = color;
-        init(equation, tmin, tmax, tsteps, umin, umax, usteps);
-    }
-    
-    public void init(ParametricEquation2 equation, double tmin, double tmax, int tsteps, double umin, double umax, int usteps){
-        List<Coord3d> coords = equation.apply(tmin, tmax, tsteps, umin, umax, usteps);
-        for(Coord3d coord: coords){
-            add(new Point(coord, color));
-        }
-    }
-    
-    protected Color color = Color.BLUE;
+  }
+
+  protected Color color = Color.BLUE;
 }

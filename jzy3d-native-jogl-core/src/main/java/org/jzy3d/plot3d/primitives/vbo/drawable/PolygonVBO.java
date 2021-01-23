@@ -4,10 +4,10 @@ import org.jzy3d.io.IGLLoader;
 
 import com.jogamp.opengl.GL2;
 
-public class PolygonVBO extends DrawableVBO{
+public class PolygonVBO extends DrawableVBO {
 
-    public PolygonVBO(IGLLoader<DrawableVBO> loader) {
-        super(loader);
-        geometry = GL2.GL_POLYGON;
-    }
+  public PolygonVBO(IGLLoader<DrawableVBO> loader) {
+    super(loader);
+    geometry = GL2.GL_POLYGON;
+  }
 }

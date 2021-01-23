@@ -9,85 +9,95 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
 
-public class WeightedAveragePeelingAlgorithm extends AbstractAccumlationDepthPeeling implements IDepthPeelingAlgorithm{
-    public GLSLProgram glslInit;
-    public GLSLProgram glslFinal;
-    
-    protected ShaderFilePair shaderBase = new ShaderFilePair(WeightedAveragePeelingAlgorithm.class, "shade_vertex.glsl", "shade_fragment.glsl");
-    protected ShaderFilePair shaderInit = new ShaderFilePair(WeightedAveragePeelingAlgorithm.class, "wavg_init_vertex.glsl", "wavg_init_fragment.glsl");
-    protected ShaderFilePair shaderFinal = new ShaderFilePair(WeightedAveragePeelingAlgorithm.class, "wavg_final_vertex.glsl", "wavg_final_fragment.glsl");
+public class WeightedAveragePeelingAlgorithm extends AbstractAccumlationDepthPeeling
+    implements IDepthPeelingAlgorithm {
+  public GLSLProgram glslInit;
+  public GLSLProgram glslFinal;
 
-    public WeightedAveragePeelingAlgorithm() {
-        super();
-    }
+  protected ShaderFilePair shaderBase = new ShaderFilePair(WeightedAveragePeelingAlgorithm.class,
+      "shade_vertex.glsl", "shade_fragment.glsl");
+  protected ShaderFilePair shaderInit = new ShaderFilePair(WeightedAveragePeelingAlgorithm.class,
+      "wavg_init_vertex.glsl", "wavg_init_fragment.glsl");
+  protected ShaderFilePair shaderFinal = new ShaderFilePair(WeightedAveragePeelingAlgorithm.class,
+      "wavg_final_vertex.glsl", "wavg_final_fragment.glsl");
 
-    @Override
-    public void display(IPainter painter, GL2 gl, GLU glu) {
-        resetNumPass();
-        renderAverageColors(painter, gl);
-    }
-   
-    /* */
-    
-    @Override
-    protected void buildShaders(GL2 gl) {
-        glslInit = new GLSLProgram();
-        glslInit.loadAndCompileVertexShader(gl, shaderBase.getVertexStream(), shaderBase.getVertexURL());
-        glslInit.loadAndCompileVertexShader(gl, shaderInit.getVertexStream(), shaderInit.getVertexURL());
-        glslInit.loadAndCompileFragmentShader(gl, shaderBase.getFragmentStream(), shaderBase.getFragmentURL());
-        glslInit.loadAndCompileFragmentShader(gl, shaderInit.getFragmentStream(), shaderInit.getFragmentURL());
-        glslInit.link(gl);
+  public WeightedAveragePeelingAlgorithm() {
+    super();
+  }
 
-        glslFinal = new GLSLProgram();
-        glslFinal.loadAndCompileVertexShader(gl, shaderFinal.getVertexStream(), shaderFinal.getVertexURL());
-        glslFinal.loadAndCompileFragmentShader(gl, shaderFinal.getFragmentStream(), shaderFinal.getFragmentURL());
-        glslFinal.link(gl);
-    }
+  @Override
+  public void display(IPainter painter, GL2 gl, GLU glu) {
+    resetNumPass();
+    renderAverageColors(painter, gl);
+  }
 
-    @Override
-    protected void destroyShaders(GL2 gl) {
-        glslInit.destroy(gl);
-        glslFinal.destroy(gl);
-    }
-    
-    protected void renderAverageColors(IPainter painter, GL2 gl) {
-        gl.glDisable(GL2.GL_DEPTH_TEST);
+  /* */
 
-        // ---------------------------------------------------------------------
-        // 1. Accumulate Colors and Depth Complexity
-        // ---------------------------------------------------------------------
+  @Override
+  protected void buildShaders(GL2 gl) {
+    glslInit = new GLSLProgram();
+    glslInit.loadAndCompileVertexShader(gl, shaderBase.getVertexStream(),
+        shaderBase.getVertexURL());
+    glslInit.loadAndCompileVertexShader(gl, shaderInit.getVertexStream(),
+        shaderInit.getVertexURL());
+    glslInit.loadAndCompileFragmentShader(gl, shaderBase.getFragmentStream(),
+        shaderBase.getFragmentURL());
+    glslInit.loadAndCompileFragmentShader(gl, shaderInit.getFragmentStream(),
+        shaderInit.getFragmentURL());
+    glslInit.link(gl);
 
-        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, g_accumulationFboId[0]);
-        gl.glDrawBuffers(2, g_drawBuffers, 0);
+    glslFinal = new GLSLProgram();
+    glslFinal.loadAndCompileVertexShader(gl, shaderFinal.getVertexStream(),
+        shaderFinal.getVertexURL());
+    glslFinal.loadAndCompileFragmentShader(gl, shaderFinal.getFragmentStream(),
+        shaderFinal.getFragmentURL());
+    glslFinal.link(gl);
+  }
 
-        gl.glClearColor(0, 0, 0, 0);
-        gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
+  @Override
+  protected void destroyShaders(GL2 gl) {
+    glslInit.destroy(gl);
+    glslFinal.destroy(gl);
+  }
 
-        gl.glBlendEquation(GL2.GL_FUNC_ADD);
-        gl.glBlendFunc(GL2.GL_ONE, GL2.GL_ONE);
-        gl.glEnable(GL2.GL_BLEND);
+  protected void renderAverageColors(IPainter painter, GL2 gl) {
+    gl.glDisable(GL2.GL_DEPTH_TEST);
 
-        glslInit.bind(gl);
-        glslInit.setUniform(gl, "Alpha", g_opacity, 1);
-        
-        tasksToRender(painter, gl);
-        
-        glslInit.unbind(gl);
+    // ---------------------------------------------------------------------
+    // 1. Accumulate Colors and Depth Complexity
+    // ---------------------------------------------------------------------
 
-        gl.glDisable(GL2.GL_BLEND);
+    gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, g_accumulationFboId[0]);
+    gl.glDrawBuffers(2, g_drawBuffers, 0);
 
-        // ---------------------------------------------------------------------
-        // 2. Approximate Blending
-        // ---------------------------------------------------------------------
+    gl.glClearColor(0, 0, 0, 0);
+    gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 
-        gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);
-        gl.glDrawBuffer(GL2.GL_BACK);
+    gl.glBlendEquation(GL2.GL_FUNC_ADD);
+    gl.glBlendFunc(GL2.GL_ONE, GL2.GL_ONE);
+    gl.glEnable(GL2.GL_BLEND);
 
-        glslFinal.bind(gl);
-        glslFinal.setUniform(gl, "BackgroundColor", g_backgroundColor, 3);
-        glslFinal.bindTextureRECT(gl, "ColorTex0", g_accumulationTexId[0], 0);
-        glslFinal.bindTextureRECT(gl, "ColorTex1", g_accumulationTexId[1], 1);
-        gl.glCallList(g_quadDisplayList);
-        glslFinal.unbind(gl);
-    }
+    glslInit.bind(gl);
+    glslInit.setUniform(gl, "Alpha", g_opacity, 1);
+
+    tasksToRender(painter, gl);
+
+    glslInit.unbind(gl);
+
+    gl.glDisable(GL2.GL_BLEND);
+
+    // ---------------------------------------------------------------------
+    // 2. Approximate Blending
+    // ---------------------------------------------------------------------
+
+    gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);
+    gl.glDrawBuffer(GL2.GL_BACK);
+
+    glslFinal.bind(gl);
+    glslFinal.setUniform(gl, "BackgroundColor", g_backgroundColor, 3);
+    glslFinal.bindTextureRECT(gl, "ColorTex0", g_accumulationTexId[0], 0);
+    glslFinal.bindTextureRECT(gl, "ColorTex1", g_accumulationTexId[1], 1);
+    gl.glCallList(g_quadDisplayList);
+    glslFinal.unbind(gl);
+  }
 }

@@ -17,39 +17,39 @@ import org.jzy3d.plot3d.primitives.Triangle;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 
 public interface IDrawableFactory {
-	
-	/* ****************** PRIMITIVES ****************** */
-	
-	public Point newPoint(Coord3d coord);
 
-	public LineStrip newLine(Coord3d... coords);
+  /* ****************** PRIMITIVES ****************** */
 
-	public LineStrip newLine(List<Coord3d> coords);
-	
-    public LineStripInterpolated newLineInterpolated(List<Coord3d> controlPoints, int resolution);
+  public Point newPoint(Coord3d coord);
 
-	public Triangle newTriangle();
+  public LineStrip newLine(Coord3d... coords);
 
-	public Quad newQuad();
+  public LineStrip newLine(List<Coord3d> coords);
 
-	public Polygon newPolygon();
+  public LineStripInterpolated newLineInterpolated(List<Coord3d> controlPoints, int resolution);
 
-	public Disk newDisk();
+  public Triangle newTriangle();
 
-	public Cylinder newCylinder();
+  public Quad newQuad();
 
-	public Sphere newSphere();
+  public Polygon newPolygon();
 
-	public SymbolHandler newSymbolHandler();
+  public Disk newDisk();
 
-	/* ****************** CHART BASED ****************** */
+  public Cylinder newCylinder();
 
-	// TernarySurface.shape
-	// Surface.shape
-	// SurfaceBig.shape
-	public Shape newSurface(); // return Surface
-	
-	public Scatter newScatter();
+  public Sphere newSphere();
+
+  public SymbolHandler newSymbolHandler();
+
+  /* ****************** CHART BASED ****************** */
+
+  // TernarySurface.shape
+  // Surface.shape
+  // SurfaceBig.shape
+  public Shape newSurface(); // return Surface
+
+  public Scatter newScatter();
 
 
 }

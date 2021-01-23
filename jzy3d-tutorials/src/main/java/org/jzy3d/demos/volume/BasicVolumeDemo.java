@@ -20,30 +20,31 @@ import com.jogamp.opengl.util.GLBuffers;
  *
  */
 public class BasicVolumeDemo extends AWTAbstractAnalysis {
-    public static void main(String[] args) throws Exception {
-        AnalysisLauncher.open(new BasicVolumeDemo());
+  public static void main(String[] args) throws Exception {
+    AnalysisLauncher.open(new BasicVolumeDemo());
+  }
+
+  @Override
+  public void init() {
+
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), 0, 1, new Color(1, 1, 1, .5f));
+
+    ByteBuffer buffer = GLBuffers.newDirectByteBuffer(10 * 10 * 10 * 4);
+    // make some kind of volume
+    for (float x = 0; x < 2; x += 0.2) {
+      for (float y = 0; y < 2; y += 0.2) {
+        for (float z = 0; z < 2; z += 0.2) {
+          buffer.putFloat((float) Math.sin(x * y * z));
+        }
+      }
     }
 
-    @Override
-    public void init() {
-        
-        ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), 0, 1, new Color(1, 1, 1, .5f));
+    Texture3D volume = new Texture3D(buffer, new int[] {10, 10, 10}, (float) 0, (float) 1,
+        colorMapper, new BoundingBox3d(1, 10, 1, 10, 1, 10));
 
-        ByteBuffer buffer = GLBuffers.newDirectByteBuffer(10*10*10*4);
-		//make some kind of volume
-		for (float x = 0; x < 2; x+=0.2) {
-			for (float y = 0; y < 2; y+=0.2) {
-				for (float z = 0; z < 2; z+=0.2) {
-					buffer.putFloat((float)Math.sin(x*y*z));
-				}
-			}
-		}
-		
-		Texture3D volume = new Texture3D(buffer, new int[] {10,10,10},(float)0,(float)1,colorMapper,new BoundingBox3d(1,10,1,10,1,10));	
-        
-        // Create a chart
-        chart = AWTChartFactory.chart(Quality.Intermediate);
-        chart.getScene().getGraph().add(volume);
-        chart.getView();
-    }
+    // Create a chart
+    chart = AWTChartFactory.chart(Quality.Intermediate);
+    chart.getScene().getGraph().add(volume);
+    chart.getView();
+  }
 }

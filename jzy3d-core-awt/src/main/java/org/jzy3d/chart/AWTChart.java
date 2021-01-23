@@ -10,38 +10,38 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 
 public class AWTChart extends Chart {
-    public AWTChart(IChartFactory components, Quality quality) {
-        super(components, quality);
-    }
-    
-    protected AWTChart(){
-    	super();
-    }
-    
-    public void addRenderer(AWTRenderer2d renderer2d) {
-        getAWTView().addRenderer2d(renderer2d);
-    }
+  public AWTChart(IChartFactory components, Quality quality) {
+    super(components, quality);
+  }
 
-    public void removeRenderer(AWTRenderer2d renderer2d) {
-        getAWTView().removeRenderer2d(renderer2d);
-    }
+  protected AWTChart() {
+    super();
+  }
 
-    public AWTView getAWTView() {
-        return (AWTView) view;
-    }
-    
-    public AWTColorbarLegend colorbar(Drawable drawable){
-        return colorbar(drawable, new Dimension(100, 600), getView().getAxis().getLayout());
-    }
+  public void addRenderer(AWTRenderer2d renderer2d) {
+    getAWTView().addRenderer2d(renderer2d);
+  }
 
-    public AWTColorbarLegend colorbar(Drawable drawable, IAxisLayout layout){
-        return colorbar(drawable, new Dimension(100, 600), layout);
-    }
-    
-    public AWTColorbarLegend colorbar(Drawable drawable, Dimension d, IAxisLayout layout){
-        AWTColorbarLegend cbar = new AWTColorbarLegend(drawable, layout);
-        cbar.setMinimumSize(d);
-        drawable.setLegend(cbar);
-        return cbar;
-    }
+  public void removeRenderer(AWTRenderer2d renderer2d) {
+    getAWTView().removeRenderer2d(renderer2d);
+  }
+
+  public AWTView getAWTView() {
+    return (AWTView) view;
+  }
+
+  public AWTColorbarLegend colorbar(Drawable drawable) {
+    return colorbar(drawable, new Dimension(100, 600), getView().getAxis().getLayout());
+  }
+
+  public AWTColorbarLegend colorbar(Drawable drawable, IAxisLayout layout) {
+    return colorbar(drawable, new Dimension(100, 600), layout);
+  }
+
+  public AWTColorbarLegend colorbar(Drawable drawable, Dimension d, IAxisLayout layout) {
+    AWTColorbarLegend cbar = new AWTColorbarLegend(drawable, layout);
+    cbar.setMinimumSize(d);
+    drawable.setLegend(cbar);
+    return cbar;
+  }
 }

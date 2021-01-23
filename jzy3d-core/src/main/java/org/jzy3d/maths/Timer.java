@@ -9,19 +9,19 @@ import org.apache.log4j.Logger;
  * @author Martin Pernollet
  */
 public class Timer {
-    static Logger logger = Logger.getLogger(Timer.class);
-    
-    public static double TEN_POW_9 = 1000000000.0;
-    public static double TEN_POW_6 = 1000000.0;
+  static Logger logger = Logger.getLogger(Timer.class);
 
-    protected long start;
-    
-    public void start() {
-        logger.info("timer start");
-        start = System.nanoTime();
-    }
+  public static double TEN_POW_9 = 1000000000.0;
+  public static double TEN_POW_6 = 1000000.0;
 
-    public double elapsed() {
-        return (System.nanoTime() - start) / TEN_POW_9;
-    }
+  protected long start;
+
+  public void start() {
+    logger.info("timer start");
+    start = System.nanoTime();
+  }
+
+  public double elapsed() {
+    return (System.nanoTime() - start) / TEN_POW_9;
+  }
 }

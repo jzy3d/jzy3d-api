@@ -15,8 +15,7 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 /**
  * A utility to toggle between
  * <ul>
- * <li>the main default mouse controller {@link AWTCameraMouseController}, used to
- * control viewpoint
+ * <li>the main default mouse controller {@link AWTCameraMouseController}, used to control viewpoint
  * <li>another custom mouse controller, such as a selection mouse utility
  * </ul>
  * 
@@ -25,102 +24,105 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
  * @author Martin Pernollet
  */
 public class AWTDualModeMouseSelector {
-    public AWTDualModeMouseSelector(Chart chart, AWTAbstractMouseSelector alternativeMouse) {
-        build(chart, alternativeMouse);
-    }
+  public AWTDualModeMouseSelector(Chart chart, AWTAbstractMouseSelector alternativeMouse) {
+    build(chart, alternativeMouse);
+  }
 
-    public Chart build(final Chart chart, AWTAbstractMouseSelector alternativeMouse) {
-        this.chart = chart;
-        this.mouseSelection = alternativeMouse;
+  public Chart build(final Chart chart, AWTAbstractMouseSelector alternativeMouse) {
+    this.chart = chart;
+    this.mouseSelection = alternativeMouse;
 
-        // Create and add controllers
-        threadCamera = new CameraThreadController(chart);
-        mouseCamera = new AWTCameraMouseController(chart);
-        mouseCamera.addSlaveThreadController(threadCamera);
-        chart.getCanvas().addKeyController(buildToggleKeyListener(chart));
-        releaseCam(); // default mode is selection
+    // Create and add controllers
+    threadCamera = new CameraThreadController(chart);
+    mouseCamera = new AWTCameraMouseController(chart);
+    mouseCamera.addSlaveThreadController(threadCamera);
+    chart.getCanvas().addKeyController(buildToggleKeyListener(chart));
+    releaseCam(); // default mode is selection
 
-        message = MESSAGE_SELECTION_MODE;
-        messageRenderer = buildMessageRenderer();
-        getAWTChart(chart).addRenderer(messageRenderer);
-        return chart;
-    }
+    message = MESSAGE_SELECTION_MODE;
+    messageRenderer = buildMessageRenderer();
+    getAWTChart(chart).addRenderer(messageRenderer);
+    return chart;
+  }
 
-    private AWTChart getAWTChart(final Chart chart) {
-        return (AWTChart)chart;
-    }
+  private AWTChart getAWTChart(final Chart chart) {
+    return (AWTChart) chart;
+  }
 
-    public KeyListener buildToggleKeyListener(final Chart chart) {
-        return new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-            @Override
-            public void keyReleased(KeyEvent e) {
-                switch (e.getKeyChar()) {
-                case 'c':
-                    releaseCam();
-                    holding = false;
-                    message = MESSAGE_SELECTION_MODE;
-                    break;
-                default:
-                    break;
-                }
-                chart.render(); // update message display
-            }
+  public KeyListener buildToggleKeyListener(final Chart chart) {
+    return new KeyListener() {
+      @Override
+      public void keyPressed(KeyEvent e) {}
 
-            @Override
-            public void keyTyped(KeyEvent e) {
-                if (!holding) {
-                    switch (e.getKeyChar()) {
-                    case 'c':
-                        useCam();
-                        mouseSelection.clearLastSelection();
-                        holding = true;
-                        message = MESSAGE_ROTATION_MODE;
-                        break;
-                    default:
-                        break;
-                    }
-                    chart.render();
-                }
-            }
-            protected boolean holding = false;
-        };
-    }
+      @Override
+      public void keyReleased(KeyEvent e) {
+        switch (e.getKeyChar()) {
+          case 'c':
+            releaseCam();
+            holding = false;
+            message = MESSAGE_SELECTION_MODE;
+            break;
+          default:
+            break;
+        }
+        chart.render(); // update message display
+      }
 
-    public AWTRenderer2d buildMessageRenderer() {
-        return new AWTRenderer2d() {
-            @Override
-            public void paint(Graphics g, int canvasWidth, int canvasHeight) {
-                if (displayMessage && message != null) {
-                    g.setColor(java.awt.Color.RED);
-                    g.drawString(message, 10, 30);
-                }
-            }
-        };
-    }
+      @Override
+      public void keyTyped(KeyEvent e) {
+        if (!holding) {
+          switch (e.getKeyChar()) {
+            case 'c':
+              useCam();
+              mouseSelection.clearLastSelection();
+              holding = true;
+              message = MESSAGE_ROTATION_MODE;
+              break;
+            default:
+              break;
+          }
+          chart.render();
+        }
+      }
 
-    protected void useCam() {
-        mouseSelection.unregister();
-        chart.addController(mouseCamera);
-    }
+      protected boolean holding = false;
+    };
+  }
 
-    protected void releaseCam() {
-        chart.removeController(mouseCamera);
-        mouseSelection.register(chart);
-    }
+  public AWTRenderer2d buildMessageRenderer() {
+    return new AWTRenderer2d() {
+      @Override
+      public void paint(Graphics g, int canvasWidth, int canvasHeight) {
+        if (displayMessage && message != null) {
+          g.setColor(java.awt.Color.RED);
+          g.drawString(message, 10, 30);
+        }
+      }
+    };
+  }
 
-    protected Chart chart;
-    protected AWTRenderer2d messageRenderer;
+  protected void useCam() {
+    mouseSelection.unregister();
+    chart.addController(mouseCamera);
+  }
 
-    protected CameraThreadController threadCamera;
-    protected AWTCameraMouseController mouseCamera;
-    protected AWTAbstractMouseSelector mouseSelection;
+  protected void releaseCam() {
+    chart.removeController(mouseCamera);
+    mouseSelection.register(chart);
+  }
 
-    protected boolean displayMessage = true;
-    protected String message;
+  protected Chart chart;
+  protected AWTRenderer2d messageRenderer;
 
-    public static String MESSAGE_SELECTION_MODE = "Current mouse mode: selection (hold 'c' to switch to camera mode)";
-    public static String MESSAGE_ROTATION_MODE = "Current mouse mode: camera (release 'c' to switch to selection mode)";
+  protected CameraThreadController threadCamera;
+  protected AWTCameraMouseController mouseCamera;
+  protected AWTAbstractMouseSelector mouseSelection;
+
+  protected boolean displayMessage = true;
+  protected String message;
+
+  public static String MESSAGE_SELECTION_MODE =
+      "Current mouse mode: selection (hold 'c' to switch to camera mode)";
+  public static String MESSAGE_ROTATION_MODE =
+      "Current mouse mode: camera (release 'c' to switch to selection mode)";
 }

@@ -4,58 +4,58 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public abstract class AbstractAnalysis  implements IAnalysis{
+public abstract class AbstractAnalysis implements IAnalysis {
 
-	protected Chart chart;
-	protected IChartFactory factory;
-	
-    public AbstractAnalysis(IChartFactory factory){
-        this.factory = factory;
-    }
+  protected Chart chart;
+  protected IChartFactory factory;
 
-	@Override
-	public String getName() {
-		return this.getClass().getSimpleName();
-	}
+  public AbstractAnalysis(IChartFactory factory) {
+    this.factory = factory;
+  }
 
-	@Override
-	public String getPitch() {
-		return "";
-	}
+  @Override
+  public String getName() {
+    return this.getClass().getSimpleName();
+  }
 
-	@Override
-	public boolean isInitialized() {
-	    return chart!=null;
-	}
+  @Override
+  public String getPitch() {
+    return "";
+  }
 
-	@Override
-	public Chart initializeChart() {
-	    return factory.newChart(Chart.DEFAULT_QUALITY);
-	}
+  @Override
+  public boolean isInitialized() {
+    return chart != null;
+  }
 
-	@Override
-	public Chart initializeChart(Quality quality) {
-	    return factory.newChart(quality);
-	}
+  @Override
+  public Chart initializeChart() {
+    return factory.newChart(Chart.DEFAULT_QUALITY);
+  }
 
-	@Override
-	public Chart getChart() {
-	    return chart;
-	}
+  @Override
+  public Chart initializeChart(Quality quality) {
+    return factory.newChart(quality);
+  }
 
-	@Override
-	public boolean hasOwnChartControllers() {
-	    return false;
-	}
+  @Override
+  public Chart getChart() {
+    return chart;
+  }
 
-	@Override
-	public IChartFactory getFactory() {
-	    return factory;
-	}
+  @Override
+  public boolean hasOwnChartControllers() {
+    return false;
+  }
 
-	@Override
-	public void setFactory(IChartFactory factory) {
-	    this.factory = factory;
-	}
+  @Override
+  public IChartFactory getFactory() {
+    return factory;
+  }
+
+  @Override
+  public void setFactory(IChartFactory factory) {
+    this.factory = factory;
+  }
 
 }

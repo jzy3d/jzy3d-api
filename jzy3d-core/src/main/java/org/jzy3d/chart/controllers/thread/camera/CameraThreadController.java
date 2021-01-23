@@ -6,75 +6,73 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 /**
- * The {@link CameraThreadController} provides a Thread for controlling the
- * {@link Camera} and make it turn around the view point along its the azimuth
- * dimension.
+ * The {@link CameraThreadController} provides a Thread for controlling the {@link Camera} and make
+ * it turn around the view point along its the azimuth dimension.
  * 
  * @author Martin Pernollet
  */
 public class CameraThreadController extends AbstractCameraController implements Runnable {
 
-	protected Coord2d move;
-	protected Thread process = null;
-	protected int sleep = 1;// 1000/25; // nb milisecond wait between two frames
-	protected float step = 0.0005f;
+  protected Coord2d move;
+  protected Thread process = null;
+  protected int sleep = 1;// 1000/25; // nb milisecond wait between two frames
+  protected float step = 0.0005f;
 
-	
-	public CameraThreadController() {
-	}
 
-	public CameraThreadController(Chart chart) {
-		register(chart);
-	}
+  public CameraThreadController() {}
 
-	@Override
-	public void dispose() {
-		stop();
-		super.dispose();
-	}
+  public CameraThreadController(Chart chart) {
+    register(chart);
+  }
 
-	/** Start the camera rotation . */
-	public void start() {
-		if (process == null) {
-			process = new Thread(this);
-			process.setName("Embedded by ChartThreadController");
-			process.start();
-		}
-	}
+  @Override
+  public void dispose() {
+    stop();
+    super.dispose();
+  }
 
-	/** Stop the rotation. */
-	public void stop() {
-		if (process != null) {
-			process.interrupt();
-			process = null;
-		}
-	}
+  /** Start the camera rotation . */
+  public void start() {
+    if (process == null) {
+      process = new Thread(this);
+      process.setName("Embedded by ChartThreadController");
+      process.start();
+    }
+  }
 
-	/** Run the animation. */
-	@Override
-	public void run() {
-		doRun();
-	}
+  /** Stop the rotation. */
+  public void stop() {
+    if (process != null) {
+      process.interrupt();
+      process = null;
+    }
+  }
 
-	protected void doRun() {
-		move = new Coord2d(step, 0);
+  /** Run the animation. */
+  @Override
+  public void run() {
+    doRun();
+  }
 
-		while (process != null) {
-			try {
-				rotate(move);
-				Thread.sleep(sleep);
-			} catch (InterruptedException e) {
-				process = null;
-			}
-		}
-	}
+  protected void doRun() {
+    move = new Coord2d(step, 0);
 
-	public float getStep() {
-		return step;
-	}
+    while (process != null) {
+      try {
+        rotate(move);
+        Thread.sleep(sleep);
+      } catch (InterruptedException e) {
+        process = null;
+      }
+    }
+  }
 
-	public void setStep(float step) {
-		this.step = step;
-	}
-	
+  public float getStep() {
+    return step;
+  }
+
+  public void setStep(float step) {
+    this.step = step;
+  }
+
 }

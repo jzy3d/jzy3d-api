@@ -6,6 +6,7 @@ import org.jzy3d.maths.IntegerCoord2d;
 
 
 public interface ITooltipRenderer {
-	public void render(Graphics2D g2d);
-	public void updateScreenPosition(IntegerCoord2d position);
+  public void render(Graphics2D g2d);
+
+  public void updateScreenPosition(IntegerCoord2d position);
 }

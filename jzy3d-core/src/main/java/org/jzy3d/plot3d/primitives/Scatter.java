@@ -19,161 +19,159 @@ import org.jzy3d.plot3d.transform.Transform;
  */
 public class Scatter extends Drawable implements ISingleColorable {
 
-    public Scatter() {
-        bbox = new BoundingBox3d();
-        setWidth(1.0f);
-        setColor(Color.BLACK);
-    }
+  public Scatter() {
+    bbox = new BoundingBox3d();
+    setWidth(1.0f);
+    setColor(Color.BLACK);
+  }
 
-    public Scatter(Coord3d[] coordinates) {
-        this(coordinates, Color.BLACK);
-    }
+  public Scatter(Coord3d[] coordinates) {
+    this(coordinates, Color.BLACK);
+  }
 
-    public Scatter(Coord3d[] coordinates, Color rgb) {
-        this(coordinates, rgb, 1.0f);
-    }
+  public Scatter(Coord3d[] coordinates, Color rgb) {
+    this(coordinates, rgb, 1.0f);
+  }
 
-    public Scatter(Coord3d[] coordinates, Color rgb, float width) {
-        bbox = new BoundingBox3d();
-        setData(coordinates);
-        setWidth(width);
-        setColor(rgb);
-    }
+  public Scatter(Coord3d[] coordinates, Color rgb, float width) {
+    bbox = new BoundingBox3d();
+    setData(coordinates);
+    setWidth(width);
+    setColor(rgb);
+  }
 
-    public Scatter(Coord3ds coords) {
-        this(coords.coordsArray(), coords.colorsArray());
-    }
-    
-    public Scatter(Coord3d[] coordinates, Color[] colors) {
-        this(coordinates, colors, 1.0f);
-    }
+  public Scatter(Coord3ds coords) {
+    this(coords.coordsArray(), coords.colorsArray());
+  }
 
-    public Scatter(Coord3d[] coordinates, Color[] colors, float width) {
-        bbox = new BoundingBox3d();
-        setData(coordinates);
-        setWidth(width);
-        setColors(colors);
-    }
+  public Scatter(Coord3d[] coordinates, Color[] colors) {
+    this(coordinates, colors, 1.0f);
+  }
 
-    public void clear() {
-        coordinates = null;
-        bbox.reset();
-    }
+  public Scatter(Coord3d[] coordinates, Color[] colors, float width) {
+    bbox = new BoundingBox3d();
+    setData(coordinates);
+    setWidth(width);
+    setColors(colors);
+  }
 
-    /* */
+  public void clear() {
+    coordinates = null;
+    bbox.reset();
+  }
 
-    @Override
-    public void draw(IPainter painter) {
-        doTransform(painter);
-        doDrawPoints(painter);
-        doDrawBoundsIfDisplayed(painter);
-    }
+  /* */
 
-	protected void doDrawPoints(IPainter painter) {
-		painter.glPointSize(width);
-        
-        painter.glBegin_Point();
-        
-        if (colors == null)
-            painter.color(rgb);
-        
-        if (coordinates != null) {
-            int k = 0;
-            for (Coord3d c : coordinates) {
-                if (colors != null) {
-                	painter.color(colors[k]);
-                    k++;
-                }
-                painter.vertex(c, spaceTransformer);
-            }
+  @Override
+  public void draw(IPainter painter) {
+    doTransform(painter);
+    doDrawPoints(painter);
+    doDrawBoundsIfDisplayed(painter);
+  }
+
+  protected void doDrawPoints(IPainter painter) {
+    painter.glPointSize(width);
+
+    painter.glBegin_Point();
+
+    if (colors == null)
+      painter.color(rgb);
+
+    if (coordinates != null) {
+      int k = 0;
+      for (Coord3d c : coordinates) {
+        if (colors != null) {
+          painter.color(colors[k]);
+          k++;
         }
-        painter.glEnd();
-	}
-
-    @Override
-    public void applyGeometryTransform(Transform transform) {
-        for (Coord3d c : coordinates) {
-            c.set(transform.compute(c));
-        }
-        updateBounds();
+        painter.vertex(c, spaceTransformer);
+      }
     }
+    painter.glEnd();
+  }
 
-    /* */
-
-    /**
-     * Set the coordinates of the point.
-     * 
-     * @param xyz
-     *            point's coordinates
-     */
-    public void setData(Coord3d[] coordinates) {
-        this.coordinates = coordinates;
-
-        updateBounds();
+  @Override
+  public void applyGeometryTransform(Transform transform) {
+    for (Coord3d c : coordinates) {
+      c.set(transform.compute(c));
     }
-    
-    public void setData(List<Coord3d> coordinates) {
-        this.coordinates = new Coord3d[coordinates.size()];
-        int k = 0;
-        for(Coord3d c: coordinates)
-            this.coordinates[k++] = c;
-    }
+    updateBounds();
+  }
 
-    @Override
-    public void updateBounds() {
-        bbox.reset();
-        for (Coord3d c : coordinates)
-            bbox.add(c);
-    }
+  /* */
 
-    public Coord3d[] getData() {
-        return coordinates;
-    }
+  /**
+   * Set the coordinates of the point.
+   * 
+   * @param xyz point's coordinates
+   */
+  public void setData(Coord3d[] coordinates) {
+    this.coordinates = coordinates;
 
-    public void setColors(Color[] colors) {
-        this.colors = colors;
+    updateBounds();
+  }
 
-        fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
-    }
+  public void setData(List<Coord3d> coordinates) {
+    this.coordinates = new Coord3d[coordinates.size()];
+    int k = 0;
+    for (Coord3d c : coordinates)
+      this.coordinates[k++] = c;
+  }
 
-    @Override
-    public void setColor(Color color) {
-        this.rgb = color;
+  @Override
+  public void updateBounds() {
+    bbox.reset();
+    for (Coord3d c : coordinates)
+      bbox.add(c);
+  }
 
-        fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
-    }
+  public Coord3d[] getData() {
+    return coordinates;
+  }
 
-    @Override
-    public Color getColor() {
-        return rgb;
-    }
+  public void setColors(Color[] colors) {
+    this.colors = colors;
 
-    /**
-     * Set the width of the point.
-     * 
-     * @param width
-     *            point's width
-     */
-    public void setWidth(float width) {
-        this.width = width;
-    }
-    
-    public Color[] getColors() {
-      return colors;
-    }
+    fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
+  }
 
-    public Coord3d[] getCoordinates() {
-      return coordinates;
-    }
+  @Override
+  public void setColor(Color color) {
+    this.rgb = color;
 
-    public float getWidth() {
-      return width;
-    }
+    fireDrawableChanged(new DrawableChangedEvent(this, DrawableChangedEvent.FIELD_COLOR));
+  }
 
-    /**********************************************************************/
+  @Override
+  public Color getColor() {
+    return rgb;
+  }
 
-    public Color[] colors;
-    public Coord3d[] coordinates;
-    public Color rgb;
-    public float width;
+  /**
+   * Set the width of the point.
+   * 
+   * @param width point's width
+   */
+  public void setWidth(float width) {
+    this.width = width;
+  }
+
+  public Color[] getColors() {
+    return colors;
+  }
+
+  public Coord3d[] getCoordinates() {
+    return coordinates;
+  }
+
+  public float getWidth() {
+    return width;
+  }
+
+  /**********************************************************************/
+
+  public Color[] colors;
+  public Coord3d[] coordinates;
+  public Color rgb;
+  public float width;
 }

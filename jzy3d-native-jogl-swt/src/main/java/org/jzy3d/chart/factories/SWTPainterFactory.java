@@ -28,89 +28,92 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 import com.jogamp.opengl.GLCapabilities;
 
-public class SWTPainterFactory extends NativePainterFactory implements IPainterFactory{
-    public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-    static Logger logger = Logger.getLogger(SWTPainterFactory.class);
-    
-	public SWTPainterFactory() {
-		super();
-	}
+public class SWTPainterFactory extends NativePainterFactory implements IPainterFactory {
+  public static String SCREENSHOT_FOLDER = "./data/screenshots/";
+  static Logger logger = Logger.getLogger(SWTPainterFactory.class);
 
-	public SWTPainterFactory(GLCapabilities capabilities) {
-		super(capabilities);
-	}
+  public SWTPainterFactory() {
+    super();
+  }
 
-	@Override
-	public IViewOverlay newViewOverlay() {
-		return new AWTNativeViewOverlay();
-	}
+  public SWTPainterFactory(GLCapabilities capabilities) {
+    super(capabilities);
+  }
 
-    @Override
-    public IViewportLayout newViewportLayout() {
-        return new ViewAndColorbarsLayout();
-    }
+  @Override
+  public IViewOverlay newViewOverlay() {
+    return new AWTNativeViewOverlay();
+  }
 
-    /** Provide AWT Texture loading for screenshots */
-    @Override
-    public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-        return new AWTRenderer3d(view, traceGL, debugGL);
-    }
-    
-    @Override
-    public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
-        boolean traceGL = false;
-        boolean debugGL = false;
-        
-        return new CanvasNewtSWT(factory, scene, quality, ((NativePainterFactory)factory.getPainterFactory()).getCapabilities(), traceGL, debugGL);
-    }
+  @Override
+  public IViewportLayout newViewportLayout() {
+    return new ViewAndColorbarsLayout();
+  }
 
-	
-    @Override
-    public ICameraMouseController newMouseCameraController(Chart chart) {
-        return new NewtCameraMouseController(chart);
-    }
+  /** Provide AWT Texture loading for screenshots */
+  @Override
+  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+    return new AWTRenderer3d(view, traceGL, debugGL);
+  }
 
-    @Override
-    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-        return new NewtMousePickingController(chart, clickWidth);
-    }
+  @Override
+  public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    boolean traceGL = false;
+    boolean debugGL = false;
 
-    /**
-     * Output file of screenshot can be configured using {@link IScreenshotKeyController#setFilename(String)}.
-     */
-    @Override
-    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
-        // trigger screenshot on 's' letter
-        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
-        IScreenshotKeyController screenshot = new NewtScreenshotKeyController(chart, file);
+    return new CanvasNewtSWT(factory, scene, quality,
+        ((NativePainterFactory) factory.getPainterFactory()).getCapabilities(), traceGL, debugGL);
+  }
 
-        screenshot.addListener(new IScreenshotEventListener() {
-            @Override
-            public void failedScreenshot(String file, Exception e) {
-                logger.error("Failed to save screenshot to '" + file + "'", e);
-            }
 
-            @Override
-            public void doneScreenshot(String file) {
-                logger.info("Screenshot save to '" + file + "'");
-            }
-        });
-        return screenshot;
-    }
+  @Override
+  public ICameraMouseController newMouseCameraController(Chart chart) {
+    return new NewtCameraMouseController(chart);
+  }
 
-    @Override
-    public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        return new NewtCameraKeyController(chart);
-    }
+  @Override
+  public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
+    return new NewtMousePickingController(chart, clickWidth);
+  }
 
-    @Override
-    public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return null;//new FrameSWTBridge(chart, bounds, title);
-    }
-    
-    @Override
-    public IFrame newFrame(Chart chart) {
-        return newFrame(chart, new Rectangle(0, 0, 800, 600), "Jzy3d");
-    }
+  /**
+   * Output file of screenshot can be configured using
+   * {@link IScreenshotKeyController#setFilename(String)}.
+   */
+  @Override
+  public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
+    // trigger screenshot on 's' letter
+    String file =
+        SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
+    IScreenshotKeyController screenshot = new NewtScreenshotKeyController(chart, file);
+
+    screenshot.addListener(new IScreenshotEventListener() {
+      @Override
+      public void failedScreenshot(String file, Exception e) {
+        logger.error("Failed to save screenshot to '" + file + "'", e);
+      }
+
+      @Override
+      public void doneScreenshot(String file) {
+        logger.info("Screenshot save to '" + file + "'");
+      }
+    });
+    return screenshot;
+  }
+
+  @Override
+  public ICameraKeyController newKeyboardCameraController(Chart chart) {
+    return new NewtCameraKeyController(chart);
+  }
+
+  @Override
+  public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
+    return null;// new FrameSWTBridge(chart, bounds, title);
+  }
+
+  @Override
+  public IFrame newFrame(Chart chart) {
+    return newFrame(chart, new Rectangle(0, 0, 800, 600), "Jzy3d");
+  }
 
 }

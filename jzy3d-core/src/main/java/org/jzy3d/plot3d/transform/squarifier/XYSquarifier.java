@@ -7,9 +7,9 @@ import org.jzy3d.maths.Coord3d;
  */
 public class XYSquarifier implements ISquarifier {
 
-	@Override
-	public Coord3d scale(float xRange, float yRange, float zRange) {
-		return new Coord3d(1, xRange/yRange, 1);
-	}
+  @Override
+  public Coord3d scale(float xRange, float yRange, float zRange) {
+    return new Coord3d(1, xRange / yRange, 1);
+  }
 
 }

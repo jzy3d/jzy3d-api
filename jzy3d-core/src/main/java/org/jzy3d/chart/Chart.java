@@ -29,388 +29,396 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
- * {@link Chart} is a convenient object that gather all components required to render a 3d scene for plotting.
+ * {@link Chart} is a convenient object that gather all components required to render a 3d scene for
+ * plotting.
  * 
  * @author Martin Pernollet
  */
 public class Chart {
-    public static Quality DEFAULT_QUALITY = Quality.Intermediate;
+  public static Quality DEFAULT_QUALITY = Quality.Intermediate;
 
-    public Chart(IChartFactory factory, Quality quality) {
-        this.factory = factory;
-        this.quality = quality;
+  public Chart(IChartFactory factory, Quality quality) {
+    this.factory = factory;
+    this.quality = quality;
 
-        // Set up controllers
-        controllers = new ArrayList<AbstractCameraController>(1);
+    // Set up controllers
+    controllers = new ArrayList<AbstractCameraController>(1);
 
-        // Set up the scene and 3d canvas
-        scene = factory.newScene(quality.isAlphaActivated());
-        canvas = factory.getPainterFactory().newCanvas(factory, scene, quality);
+    // Set up the scene and 3d canvas
+    scene = factory.newScene(quality.isAlphaActivated());
+    canvas = factory.getPainterFactory().newCanvas(factory, scene, quality);
 
-        // Set up the view
-        view = canvas.getView();
-        view.setBackgroundColor(Color.WHITE);
-        view.setChart(this);
+    // Set up the view
+    view = canvas.getView();
+    view.setBackgroundColor(Color.WHITE);
+    view.setChart(this);
+  }
+
+  protected Chart() {
+
+  }
+
+  /* HELPERS TO PRETTIFY CHARTS */
+
+  public Chart black() {
+    getView().setBackgroundColor(Color.BLACK);
+    getAxisLayout().setGridColor(Color.WHITE);
+    getAxisLayout().setMainColor(Color.WHITE);
+    return this;
+  }
+
+  public Chart white() {
+    getView().setBackgroundColor(Color.WHITE);
+    getAxisLayout().setGridColor(Color.BLACK);
+    getAxisLayout().setMainColor(Color.BLACK);
+    return this;
+  }
+
+  public Chart view2d() {
+    IAxisLayout axe = getAxisLayout();
+    axe.setZAxeLabelDisplayed(false);
+    axe.setTickLineDisplayed(false);
+
+    View view = getView();
+    view.setViewPositionMode(ViewPositionMode.TOP);
+    view.setSquared(true);
+    view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
+    return this;
+  }
+
+  /** Alias for {@link display()} */
+  public IFrame show(Rectangle rectangle, String title) {
+    return display(rectangle, title);
+  }
+
+  public IFrame display(Rectangle rectangle, String title) {
+    return getFactory().getPainterFactory().newFrame(this, rectangle, title);
+  }
+
+  public void clear() {
+    scene.clear();
+    view.shoot();
+  }
+
+  public void dispose() {
+    setAnimated(false);
+
+    clearControllerList();
+    if (canvas != null)
+      canvas.dispose();
+    if (scene != null)
+      scene.dispose(); // view is disposed by scene
+    canvas = null;
+    scene = null;
+  }
+
+  /**
+   * Trigger a chart rendering. Only usefull if chart Quality.is
+   */
+  public void render() {
+    view.shoot();
+  }
+
+  public void setAnimated(boolean status) {
+    getQuality().setAnimated(status);
+
+
+    if (getCanvas() instanceof IScreenCanvas) {
+      IScreenCanvas screenCanvas = (IScreenCanvas) getCanvas();
+
+      if (status) {
+        screenCanvas.getAnimation().start();
+      } else {
+        screenCanvas.getAnimation().stop();
+      }
     }
-    
-    protected Chart(){
-    	
+  }
+
+
+  /**
+   * Compute screenshot and save to file
+   */
+  public void screenshot(File file) throws IOException {
+    canvas.screenshot(file);
+  }
+
+  public Object screenshot() throws IOException {
+    return canvas.screenshot();
+  }
+
+
+  public void updateProjectionsAndRender() {
+    getView().shoot();
+    getView().project();
+    render();
+  }
+
+  public View newView() {
+    View v = scene.newView(canvas, quality);
+    v.setSlave(true);
+    return v;
+  }
+
+  /* CONTROLLERS */
+
+  public ICameraMouseController addMouseCameraController() {
+    return getFactory().getPainterFactory().newMouseCameraController(this);
+  }
+
+  public IMousePickingController addMousePickingController(int clickWidth) {
+    return getFactory().getPainterFactory().newMousePickingController(this, clickWidth);
+  }
+
+  public ICameraKeyController addKeyboardCameraController() {
+    return getFactory().getPainterFactory().newKeyboardCameraController(this);
+  }
+
+  public IScreenshotKeyController addKeyboardScreenshotController() {
+    return getFactory().getPainterFactory().newKeyboardScreenshotController(this);
+  }
+
+  /**
+   * Add a {@link AbstractCameraController} to this {@link Chart}. Warning: the {@link Chart} is not
+   * the owner of the controller. Disposing the chart thus just unregisters the controllers, but
+   * does not handle stopping and disposing controllers.
+   */
+  public void addController(AbstractCameraController controller) {
+    controller.register(this);
+    controllers.add(controller);
+  }
+
+  public void removeController(AbstractCameraController controller) {
+    controller.unregister(this);
+    controllers.remove(controller);
+  }
+
+  protected void clearControllerList() {
+    for (AbstractCameraController controller : controllers)
+      controller.unregister(this);
+    controllers.clear();
+  }
+
+  /* FRAME */
+
+  public IFrame open() {
+    return open("Jzy3d", new Rectangle(0, 0, 600, 600));
+  }
+
+  public IFrame open(String title) {
+    return open(title, new Rectangle(0, 0, 600, 600));
+  }
+
+  public IFrame open(String title, int width, int height) {
+    return open(title, new Rectangle(0, 0, width, height));
+  }
+
+  /**
+   * Open the frame if it was not opened before
+   * 
+   * @param title
+   * @param rect
+   * @return
+   */
+  public IFrame open(String title, Rectangle rect) {
+    if (frame == null) {
+      frame = getFactory().getPainterFactory().newFrame(this, rect, title);
     }
+    return frame;
+  }
 
-    /* HELPERS TO PRETTIFY CHARTS */
 
-    public Chart black() {
-        getView().setBackgroundColor(Color.BLACK);
-        getAxisLayout().setGridColor(Color.WHITE);
-        getAxisLayout().setMainColor(Color.WHITE);
-        return this;
+  IFrame frame = null;
+
+  /* ADDING DRAWABLES */
+
+  /**
+   * Add a list of drawables and refresh the view of the scene once they are all added.
+   * 
+   * @param drawables
+   * @return
+   */
+  public Chart add(List<? extends Drawable> drawables) {
+    for (Drawable drawable : drawables) {
+      add(drawable, false);
     }
-
-    public Chart white() {
-        getView().setBackgroundColor(Color.WHITE);
-        getAxisLayout().setGridColor(Color.BLACK);
-        getAxisLayout().setMainColor(Color.BLACK);
-        return this;
-    }
-
-    public Chart view2d() {
-        IAxisLayout axe = getAxisLayout();
-        axe.setZAxeLabelDisplayed(false);
-        axe.setTickLineDisplayed(false);
-
-        View view = getView();
-        view.setViewPositionMode(ViewPositionMode.TOP);
-        view.setSquared(true);
-        view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
-        return this;
-    }
-
-    /** Alias for {@link display()} */
-    public IFrame show(Rectangle rectangle, String title) {
-        return display(rectangle, title);
-    }
-
-    public IFrame display(Rectangle rectangle, String title) {
-        return getFactory().getPainterFactory().newFrame(this, rectangle, title);
-    }
-
-    public void clear() {
-        scene.clear();
-        view.shoot();
-    }
-
-    public void dispose() {
-    	setAnimated(false);
-    	
-        clearControllerList();
-        if (canvas != null)
-            canvas.dispose();
-        if (scene != null)
-            scene.dispose(); // view is disposed by scene
-        canvas = null;
-        scene = null;
-    }
-
-    /**
-     * Trigger a chart rendering. Only usefull if chart Quality.is
-     */
-    public void render() {
-        view.shoot();
-    }
-    
-	public void setAnimated(boolean status) {
-		getQuality().setAnimated(status);
-
-		
-		if(getCanvas() instanceof IScreenCanvas) {
-			IScreenCanvas screenCanvas =  (IScreenCanvas)getCanvas();
-
-			if (status) {
-				screenCanvas.getAnimation().start();
-			} else {
-				screenCanvas.getAnimation().stop();
-			}
-		}
-	}
-
-
-    /**
-     * Compute screenshot and save to file
-     */
-    public void screenshot(File file) throws IOException {
-        canvas.screenshot(file);
-    }
-
-    public Object screenshot() throws IOException {
-        return canvas.screenshot();
-    }
-
-    
-    public void updateProjectionsAndRender() {
-        getView().shoot();
-        getView().project();
-        render();
-    }
-
-    public View newView() {
-        View v = scene.newView(canvas, quality);
-        v.setSlave(true);
-        return v;
-    }
-
-    /* CONTROLLERS */
-
-    public ICameraMouseController addMouseCameraController() {
-        return getFactory().getPainterFactory().newMouseCameraController(this);
-    }
-
-    public IMousePickingController addMousePickingController(int clickWidth) {
-        return getFactory().getPainterFactory().newMousePickingController(this, clickWidth);
-    }
-
-    public ICameraKeyController addKeyboardCameraController() {
-        return getFactory().getPainterFactory().newKeyboardCameraController(this);
-    }
-
-    public IScreenshotKeyController addKeyboardScreenshotController() {
-        return getFactory().getPainterFactory().newKeyboardScreenshotController(this);
-    }
-
-    /**
-     * Add a {@link AbstractCameraController} to this {@link Chart}. Warning: the {@link Chart} is not the owner of the controller. Disposing the chart thus just unregisters the controllers, but does not handle stopping and disposing controllers.
-     */
-    public void addController(AbstractCameraController controller) {
-        controller.register(this);
-        controllers.add(controller);
-    }
-
-    public void removeController(AbstractCameraController controller) {
-        controller.unregister(this);
-        controllers.remove(controller);
-    }
-
-    protected void clearControllerList() {
-        for (AbstractCameraController controller : controllers)
-            controller.unregister(this);
-        controllers.clear();
-    }
-
-    /* FRAME */
-
-    public IFrame open() {
-        return open("Jzy3d", new Rectangle(0, 0, 600, 600));
-    }
-
-    public IFrame open(String title) {
-        return open(title, new Rectangle(0, 0, 600, 600));
-    }
-
-    public IFrame open(String title, int width, int height) {
-        return open(title, new Rectangle(0, 0, width, height));
-    }
-
-    /**
-     * Open the frame if it was not opened before
-     * 
-     * @param title
-     * @param rect
-     * @return
-     */
-    public IFrame open(String title, Rectangle rect) {
-        if (frame == null) {
-            frame = getFactory().getPainterFactory().newFrame(this, rect, title);
-        }
-        return frame;
-    }
-
-    
-    IFrame frame = null;
-
-    /* ADDING DRAWABLES */
-
-    /**
-     * Add a list of drawables and refresh the view of the scene once they are all added.
-     * 
-     * @param drawables
-     * @return
-     */
-    public Chart add(List<? extends Drawable> drawables) {
-        for (Drawable drawable : drawables) {
-            add(drawable, false);
-        }
-        getView().updateBounds();
-        return this;
-    }
-
-    /**
-     * Add a drawable and refresh the view of the scene once it is added.
-     * 
-     * @param drawable
-     * @return
-     */
-    public Chart add(Drawable drawable) {
-        add(drawable, true);
-        return this;
-    }
-
-    /**
-     * Add a drawable to the scene graph of the chart.
-     * 
-     * If the view holds a {@link SpaceTransformer}, then it will be applied to the drawable. This can be reset by later calling {@link Drawable#setSpaceTransformer(null)}
-     * 
-     * @param drawable
-     * @param updateView
-     *            states if the view should be updated immediately. Should be false if adding multiple drawable at the same time.
-     * @return
-     */
-    public Chart add(Drawable drawable, boolean updateView) {
-    	drawable.setSpaceTransformer(getView().getSpaceTransformer());
-        getScene().getGraph().add(drawable, updateView);
-        return this;
-    }
-
-
-    public void remove(Drawable drawable) {
-        getScene().getGraph().remove(drawable);
-    }
-
-    public void remove(Drawable drawable, boolean updateViews) {
-        getScene().getGraph().remove(drawable, updateViews);
-    }
-
-    /* ADDING LIGHTS */
-
-    public Light addLight(Coord3d position) {
-        return addLight(position, Color.BLUE, new Color(0.8f, 0.8f, 0.8f), Color.WHITE, 1);
-    }
-
-    public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular, float radius) {
-        Light light = new Light();
-        light.setPosition(position);
-        light.setAmbiantColor(ambiant);
-        light.setDiffuseColor(diffuse);
-        light.setSpecularColor(specular);
-        light.setRepresentationRadius(radius);
-        getScene().add(light);
-        return light;
-    }
-
-    /* SHORTCUTS */
-
-    public void setAxeDisplayed(boolean status) {
-        view.setAxisDisplayed(status);
-        view.shoot();
-    }
-
-    public void setViewPoint(Coord3d viewPoint) {
-        view.setViewPoint(viewPoint);
-        view.shoot();
-    }
-
-    public Coord3d getViewPoint() {
-        return view.getViewPoint();
-    }
-
-    public ViewPositionMode getViewMode() {
-        return view.getViewMode();
-    }
-
-    public void setScale(org.jzy3d.maths.Scale scale, boolean notify) {
-        view.setScale(scale, notify);
-    }
-
-    public void setScale(Scale scale) {
-        setScale(scale, true);
-    }
-
-    public Scale getScale() {
-        return new Scale(view.getBounds().getZmin(), view.getBounds().getZmax());
-    }
-    
-    public IPainter getPainter() {
-    	return getView().getPainter();
-    }
-
-    /* */
-
-    public void setViewMode(ViewPositionMode mode) {
-        // Store current view mode and view point in memory
-        ViewPositionMode previous = view.getViewMode();
-        if (previous == ViewPositionMode.FREE)
-            previousViewPointFree = view.getViewPoint();
-        else if (previous == ViewPositionMode.TOP)
-            previousViewPointTop = view.getViewPoint();
-        else if (previous == ViewPositionMode.PROFILE)
-            previousViewPointProfile = view.getViewPoint();
-
-        // Set new view mode and former view point
-        view.setViewPositionMode(mode);
-        if (mode == ViewPositionMode.FREE)
-            view.setViewPoint(previousViewPointFree == null ? View.VIEWPOINT_DEFAULT.clone() : previousViewPointFree);
-        else if (mode == ViewPositionMode.TOP)
-            view.setViewPoint(previousViewPointTop == null ? View.VIEWPOINT_DEFAULT.clone() : previousViewPointTop);
-        else if (mode == ViewPositionMode.PROFILE)
-            view.setViewPoint(previousViewPointProfile == null ? View.VIEWPOINT_DEFAULT.clone() : previousViewPointProfile);
-
-        view.shoot();
-    }
-
-    /* */
-
-    public float flip(float y) {
-        return canvas.getRendererHeight() - y;
-    }
-
-    /* GETTERS */
-
-    public View view() {
-        return getView();
-    }
-
-    public View getView() {
-        return view;
-    }
-
-    public ChartScene getScene() {
-        return scene;
-    }
-
-    public ICanvas getCanvas() {
-        return canvas;
-    }
-
-    public IAxisLayout getAxisLayout() {
-        return getView().getAxis().getLayout();
-    }
-
-    public IChartFactory getFactory() {
-        return factory;
-    }
-
-    public List<AbstractCameraController> getControllers() {
-        return controllers;
-    }
-
-    public Quality getQuality() {
-        return quality;
-    }
-
-    public void setQuality(Quality quality) {
-        this.quality = quality;
-    }
-
-    /* */
-
-    protected IChartFactory factory;
-
-    protected Quality quality;
-    protected ChartScene scene;
-    protected View view;
-    protected ICanvas canvas;
-
-    protected Coord3d previousViewPointFree;
-    protected Coord3d previousViewPointTop;
-    protected Coord3d previousViewPointProfile;
-
-    protected ArrayList<AbstractCameraController> controllers;
+    getView().updateBounds();
+    return this;
+  }
+
+  /**
+   * Add a drawable and refresh the view of the scene once it is added.
+   * 
+   * @param drawable
+   * @return
+   */
+  public Chart add(Drawable drawable) {
+    add(drawable, true);
+    return this;
+  }
+
+  /**
+   * Add a drawable to the scene graph of the chart.
+   * 
+   * If the view holds a {@link SpaceTransformer}, then it will be applied to the drawable. This can
+   * be reset by later calling {@link Drawable#setSpaceTransformer(null)}
+   * 
+   * @param drawable
+   * @param updateView states if the view should be updated immediately. Should be false if adding
+   *        multiple drawable at the same time.
+   * @return
+   */
+  public Chart add(Drawable drawable, boolean updateView) {
+    drawable.setSpaceTransformer(getView().getSpaceTransformer());
+    getScene().getGraph().add(drawable, updateView);
+    return this;
+  }
+
+
+  public void remove(Drawable drawable) {
+    getScene().getGraph().remove(drawable);
+  }
+
+  public void remove(Drawable drawable, boolean updateViews) {
+    getScene().getGraph().remove(drawable, updateViews);
+  }
+
+  /* ADDING LIGHTS */
+
+  public Light addLight(Coord3d position) {
+    return addLight(position, Color.BLUE, new Color(0.8f, 0.8f, 0.8f), Color.WHITE, 1);
+  }
+
+  public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular,
+      float radius) {
+    Light light = new Light();
+    light.setPosition(position);
+    light.setAmbiantColor(ambiant);
+    light.setDiffuseColor(diffuse);
+    light.setSpecularColor(specular);
+    light.setRepresentationRadius(radius);
+    getScene().add(light);
+    return light;
+  }
+
+  /* SHORTCUTS */
+
+  public void setAxeDisplayed(boolean status) {
+    view.setAxisDisplayed(status);
+    view.shoot();
+  }
+
+  public void setViewPoint(Coord3d viewPoint) {
+    view.setViewPoint(viewPoint);
+    view.shoot();
+  }
+
+  public Coord3d getViewPoint() {
+    return view.getViewPoint();
+  }
+
+  public ViewPositionMode getViewMode() {
+    return view.getViewMode();
+  }
+
+  public void setScale(org.jzy3d.maths.Scale scale, boolean notify) {
+    view.setScale(scale, notify);
+  }
+
+  public void setScale(Scale scale) {
+    setScale(scale, true);
+  }
+
+  public Scale getScale() {
+    return new Scale(view.getBounds().getZmin(), view.getBounds().getZmax());
+  }
+
+  public IPainter getPainter() {
+    return getView().getPainter();
+  }
+
+  /* */
+
+  public void setViewMode(ViewPositionMode mode) {
+    // Store current view mode and view point in memory
+    ViewPositionMode previous = view.getViewMode();
+    if (previous == ViewPositionMode.FREE)
+      previousViewPointFree = view.getViewPoint();
+    else if (previous == ViewPositionMode.TOP)
+      previousViewPointTop = view.getViewPoint();
+    else if (previous == ViewPositionMode.PROFILE)
+      previousViewPointProfile = view.getViewPoint();
+
+    // Set new view mode and former view point
+    view.setViewPositionMode(mode);
+    if (mode == ViewPositionMode.FREE)
+      view.setViewPoint(
+          previousViewPointFree == null ? View.VIEWPOINT_DEFAULT.clone() : previousViewPointFree);
+    else if (mode == ViewPositionMode.TOP)
+      view.setViewPoint(
+          previousViewPointTop == null ? View.VIEWPOINT_DEFAULT.clone() : previousViewPointTop);
+    else if (mode == ViewPositionMode.PROFILE)
+      view.setViewPoint(previousViewPointProfile == null ? View.VIEWPOINT_DEFAULT.clone()
+          : previousViewPointProfile);
+
+    view.shoot();
+  }
+
+  /* */
+
+  public float flip(float y) {
+    return canvas.getRendererHeight() - y;
+  }
+
+  /* GETTERS */
+
+  public View view() {
+    return getView();
+  }
+
+  public View getView() {
+    return view;
+  }
+
+  public ChartScene getScene() {
+    return scene;
+  }
+
+  public ICanvas getCanvas() {
+    return canvas;
+  }
+
+  public IAxisLayout getAxisLayout() {
+    return getView().getAxis().getLayout();
+  }
+
+  public IChartFactory getFactory() {
+    return factory;
+  }
+
+  public List<AbstractCameraController> getControllers() {
+    return controllers;
+  }
+
+  public Quality getQuality() {
+    return quality;
+  }
+
+  public void setQuality(Quality quality) {
+    this.quality = quality;
+  }
+
+  /* */
+
+  protected IChartFactory factory;
+
+  protected Quality quality;
+  protected ChartScene scene;
+  protected View view;
+  protected ICanvas canvas;
+
+  protected Coord3d previousViewPointFree;
+  protected Coord3d previousViewPointTop;
+  protected Coord3d previousViewPointProfile;
+
+  protected ArrayList<AbstractCameraController> controllers;
 }

@@ -28,66 +28,69 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 
 import com.jogamp.opengl.GLCapabilities;
 
-public class SWTBridgePainterFactory extends SWTPainterFactory implements IPainterFactory{
-    public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-    static Logger logger = Logger.getLogger(SWTBridgePainterFactory.class);
-    
-	public SWTBridgePainterFactory() {
-		super();
-	}
+public class SWTBridgePainterFactory extends SWTPainterFactory implements IPainterFactory {
+  public static String SCREENSHOT_FOLDER = "./data/screenshots/";
+  static Logger logger = Logger.getLogger(SWTBridgePainterFactory.class);
 
-	public SWTBridgePainterFactory(GLCapabilities capabilities) {
-		super(capabilities);
-	}
+  public SWTBridgePainterFactory() {
+    super();
+  }
 
-	@Override
-    public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
-        boolean traceGL = false;
-        boolean debugGL = false;
-        
-        return new CanvasAWT(factory, scene, quality, ((NativePainterFactory)factory.getPainterFactory()).getCapabilities(), traceGL, debugGL);
-    }
-	
-    @Override
-    public ICameraMouseController newMouseCameraController(Chart chart) {
-        return new AWTCameraMouseController(chart);
-    }
+  public SWTBridgePainterFactory(GLCapabilities capabilities) {
+    super(capabilities);
+  }
 
-    @Override
-    public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-        return new AWTMousePickingController(chart, clickWidth);
-    }
+  @Override
+  public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    boolean traceGL = false;
+    boolean debugGL = false;
 
-    /**
-     * Output file of screenshot can be configured using {@link IScreenshotKeyController#setFilename(String)}.
-     */
-    @Override
-    public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
-        // trigger screenshot on 's' letter
-        String file = SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
-        IScreenshotKeyController screenshot = new AWTScreenshotKeyController(chart, file);
+    return new CanvasAWT(factory, scene, quality,
+        ((NativePainterFactory) factory.getPainterFactory()).getCapabilities(), traceGL, debugGL);
+  }
 
-        screenshot.addListener(new IScreenshotEventListener() {
-            @Override
-            public void failedScreenshot(String file, Exception e) {
-                logger.error("Failed to save screenshot to '" + file + "'", e);
-            }
+  @Override
+  public ICameraMouseController newMouseCameraController(Chart chart) {
+    return new AWTCameraMouseController(chart);
+  }
 
-            @Override
-            public void doneScreenshot(String file) {
-                logger.info("Screenshot save to '" + file + "'");
-            }
-        });
-        return screenshot;
-    }
+  @Override
+  public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
+    return new AWTMousePickingController(chart, clickWidth);
+  }
 
-    @Override
-    public ICameraKeyController newKeyboardCameraController(Chart chart) {
-        return new AWTCameraKeyController(chart);
-    }
-	
-    @Override
-    public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
-        return new FrameSWTBridge(chart, bounds, title);
-    }
+  /**
+   * Output file of screenshot can be configured using
+   * {@link IScreenshotKeyController#setFilename(String)}.
+   */
+  @Override
+  public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
+    // trigger screenshot on 's' letter
+    String file =
+        SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
+    IScreenshotKeyController screenshot = new AWTScreenshotKeyController(chart, file);
+
+    screenshot.addListener(new IScreenshotEventListener() {
+      @Override
+      public void failedScreenshot(String file, Exception e) {
+        logger.error("Failed to save screenshot to '" + file + "'", e);
+      }
+
+      @Override
+      public void doneScreenshot(String file) {
+        logger.info("Screenshot save to '" + file + "'");
+      }
+    });
+    return screenshot;
+  }
+
+  @Override
+  public ICameraKeyController newKeyboardCameraController(Chart chart) {
+    return new AWTCameraKeyController(chart);
+  }
+
+  @Override
+  public IFrame newFrame(Chart chart, Rectangle bounds, String title) {
+    return new FrameSWTBridge(chart, bounds, title);
+  }
 }

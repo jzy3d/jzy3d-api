@@ -9,14 +9,14 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 
 
 public class ColorMapperUpdater {
-	public static void update(Graph g, Scale scale){
-		List<Drawable> dlist = g.getAll();
-		
-		for(Drawable d: dlist){
-			if( d instanceof IMultiColorable ){
-				IMultiColorable mc = (IMultiColorable) d;
-				mc.getColorMapper().setScale(scale);
-			}
-		}
-	}
+  public static void update(Graph g, Scale scale) {
+    List<Drawable> dlist = g.getAll();
+
+    for (Drawable d : dlist) {
+      if (d instanceof IMultiColorable) {
+        IMultiColorable mc = (IMultiColorable) d;
+        mc.getColorMapper().setScale(scale);
+      }
+    }
+  }
 }

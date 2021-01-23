@@ -25,52 +25,55 @@ import com.jogamp.opengl.awt.GLJPanel;
  * @author martin
  */
 public class SurfaceDemoSwing extends AbstractAnalysis {
-    public SurfaceDemoSwing(){
-        super(new SwingChartFactory());
-    }
+  public SurfaceDemoSwing() {
+    super(new SwingChartFactory());
+  }
 
-    public static void main(String[] args) throws Exception {
-    	SurfaceDemoSwing d= new SurfaceDemoSwing();
-    	AnalysisLauncher.open(d);
-    	//openAndPrintFrame(d);
-    }
+  public static void main(String[] args) throws Exception {
+    SurfaceDemoSwing d = new SurfaceDemoSwing();
+    AnalysisLauncher.open(d);
+    // openAndPrintFrame(d);
+  }
 
-	private static void openAndPrintFrame(SurfaceDemoSwing d) throws InterruptedException, IOException {
-		d.init();
-    	Chart chart = d.getChart();
-    	chart.addMouseCameraController();
-    	
-    	FrameSwing frame = (FrameSwing)d.getChart().open();
-    	Thread.sleep(1000); // wait for frame to be ready for printing
-    	
-    	String file = "./target/" + d.getClass().getSimpleName() + ".png";
-    	
-    	Frame.print(chart, frame, file);
-	}
+  private static void openAndPrintFrame(SurfaceDemoSwing d)
+      throws InterruptedException, IOException {
+    d.init();
+    Chart chart = d.getChart();
+    chart.addMouseCameraController();
+
+    FrameSwing frame = (FrameSwing) d.getChart().open();
+    Thread.sleep(1000); // wait for frame to be ready for printing
+
+    String file = "./target/" + d.getClass().getSimpleName() + ".png";
+
+    Frame.print(chart, frame, file);
+  }
 
 
-    @Override
-    public void init() {
-        // Define a function to plot
-        Mapper mapper = new Mapper() {
-            @Override
-            public double f(double x, double y) {
-                return x * Math.sin(x * y);
-            }
-        };
+  @Override
+  public void init() {
+    // Define a function to plot
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
 
-        // Define range and precision for the function to plot
-        Range range = new Range(-3, 3);
-        int steps = 80;
+    // Define range and precision for the function to plot
+    Range range = new Range(-3, 3);
+    int steps = 80;
 
-        // Create the object to represent the function over the given range.
-        final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-        surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
-        surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(false);
+    // Create the object to represent the function over the given range.
+    final Shape surface =
+        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(false);
 
-        // Create a chart
-        chart = new SwingChartFactory().newChart(Quality.Advanced);
-        chart.add(surface);
-    }
+    // Create a chart
+    chart = new SwingChartFactory().newChart(Quality.Advanced);
+    chart.add(surface);
+  }
 }

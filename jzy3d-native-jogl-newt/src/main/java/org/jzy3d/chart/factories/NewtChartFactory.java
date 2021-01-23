@@ -20,59 +20,59 @@ import org.jzy3d.plot3d.rendering.view.View;
  *
  */
 public class NewtChartFactory extends ChartFactory {
-    static Logger logger = Logger.getLogger(NewtChartFactory.class);
-    
-    public static Chart chart() {
-        return chart(Quality.Intermediate);
-    }
+  static Logger logger = Logger.getLogger(NewtChartFactory.class);
 
-    public static Chart chart(Quality quality) {
-        NewtChartFactory f = new NewtChartFactory();
-        return f.newChart(quality);
-    }
+  public static Chart chart() {
+    return chart(Quality.Intermediate);
+  }
 
-    /* */
-    
-    public NewtChartFactory() {
-    	super(new NewtPainterFactory());
-    }
+  public static Chart chart(Quality quality) {
+    NewtChartFactory f = new NewtChartFactory();
+    return f.newChart(quality);
+  }
 
-    public NewtChartFactory(IPainterFactory painterFactory) {
-    	super(painterFactory);
-    }
+  /* */
 
-	// TODO : create a NewtChart for consistency
-    @Override
-    public Chart newChart(IChartFactory factory, Quality quality) {
-        return new AWTChart(factory, quality);
-    }
+  public NewtChartFactory() {
+    super(new NewtPainterFactory());
+  }
 
-    /**
-     * The {@link AWTNativeView} supports Java2d defined components (background
-     * images, tooltips, post-renderers and overlay)
-     */
-    @Override
-    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTView(factory, scene, canvas, quality);
-    }
+  public NewtChartFactory(IPainterFactory painterFactory) {
+    super(painterFactory);
+  }
 
-    @Override
-    public IChartFactory getFactory() {
-        return this;
-    }
+  // TODO : create a NewtChart for consistency
+  @Override
+  public Chart newChart(IChartFactory factory, Quality quality) {
+    return new AWTChart(factory, quality);
+  }
 
-    public JFrame newFrame(JPanel panel) {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            // ignore failure to set default look en feel;
-        }
-        JFrame frame = new JFrame();
-        frame.add(panel);
-        frame.pack();
-        frame.setVisible(true);
-        return frame;
-    }
+  /**
+   * The {@link AWTNativeView} supports Java2d defined components (background images, tooltips,
+   * post-renderers and overlay)
+   */
+  @Override
+  public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    return new AWTView(factory, scene, canvas, quality);
+  }
 
-    
+  @Override
+  public IChartFactory getFactory() {
+    return this;
+  }
+
+  public JFrame newFrame(JPanel panel) {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    } catch (Exception e) {
+      // ignore failure to set default look en feel;
+    }
+    JFrame frame = new JFrame();
+    frame.add(panel);
+    frame.pack();
+    frame.setVisible(true);
+    return frame;
+  }
+
+
 }

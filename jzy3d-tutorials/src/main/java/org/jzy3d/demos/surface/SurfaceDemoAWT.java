@@ -29,51 +29,53 @@ import com.jogamp.opengl.awt.GLCanvas;
  * @author martin
  */
 public class SurfaceDemoAWT extends AWTAbstractAnalysis {
-    public static void main(String[] args) throws Exception {
-    	SurfaceDemoAWT d = new SurfaceDemoAWT();
-    	openAndPrintFrame(d);
-        //AnalysisLauncher.open(d);
-    }
+  public static void main(String[] args) throws Exception {
+    SurfaceDemoAWT d = new SurfaceDemoAWT();
+    openAndPrintFrame(d);
+    // AnalysisLauncher.open(d);
+  }
 
-	private static void openAndPrintFrame(SurfaceDemoAWT d) throws InterruptedException, IOException {
-		d.init();
-    	Chart chart = d.getChart();
-    	chart.addMouseCameraController();
-    	FrameAWT f = (FrameAWT)chart.open();
-    	//Thread.sleep(1000);
-    	String file = "./target/" + d.getClass().getSimpleName() + ".png";
-    	Frame.print(chart, f, file);
-	}
+  private static void openAndPrintFrame(SurfaceDemoAWT d) throws InterruptedException, IOException {
+    d.init();
+    Chart chart = d.getChart();
+    chart.addMouseCameraController();
+    FrameAWT f = (FrameAWT) chart.open();
+    // Thread.sleep(1000);
+    String file = "./target/" + d.getClass().getSimpleName() + ".png";
+    Frame.print(chart, f, file);
+  }
 
-	
 
-    @Override
-    public void init() {
-        // Define a function to plot
-        Mapper mapper = new Mapper() {
-            @Override
-            public double f(double x, double y) {
-                return x * Math.sin(x * y);
-            }
-        };
 
-        // Define range and precision for the function to plot
-        Range range = new Range(-3, 3);
-        int steps = 80;
+  @Override
+  public void init() {
+    // Define a function to plot
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
 
-        // Create the object to represent the function over the given range.
-        final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-        surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
-        surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(true);
-        surface.setWireframeColor(Color.BLACK);
+    // Define range and precision for the function to plot
+    Range range = new Range(-3, 3);
+    int steps = 80;
 
-        // Create a chart
-        GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL2));
-        IPainterFactory p = new AWTPainterFactory(c);
-        IChartFactory f = new AWTChartFactory(p);
-        
-        chart = f.newChart(Quality.Advanced);
-        chart.getScene().getGraph().add(surface);
-    }
+    // Create the object to represent the function over the given range.
+    final Shape surface =
+        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+
+    // Create a chart
+    GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL2));
+    IPainterFactory p = new AWTPainterFactory(c);
+    IChartFactory f = new AWTChartFactory(p);
+
+    chart = f.newChart(Quality.Advanced);
+    chart.getScene().getGraph().add(surface);
+  }
 }

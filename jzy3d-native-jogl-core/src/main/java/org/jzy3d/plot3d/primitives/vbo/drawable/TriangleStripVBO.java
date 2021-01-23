@@ -4,10 +4,10 @@ import org.jzy3d.io.IGLLoader;
 
 import com.jogamp.opengl.GL2;
 
-public class TriangleStripVBO extends DrawableVBO{
+public class TriangleStripVBO extends DrawableVBO {
 
-    public TriangleStripVBO(IGLLoader<DrawableVBO> loader) {
-        super(loader);
-        geometry = GL2.GL_TRIANGLE_STRIP;
-    }
+  public TriangleStripVBO(IGLLoader<DrawableVBO> loader) {
+    super(loader);
+    geometry = GL2.GL_TRIANGLE_STRIP;
+  }
 }
