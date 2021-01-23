@@ -1,4 +1,4 @@
-package org.jzy3d.integration;
+package org.jzy3d.tests.integration;
 
 import java.util.Random;
 
