@@ -17,65 +17,67 @@ import jgl.GL;
 
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
-	public EmulGLViewAndColorbarsLayout() {
-		// TODO Auto-generated constructor stub
-	}
+  public EmulGLViewAndColorbarsLayout() {
+    // TODO Auto-generated constructor stub
+  }
 
-	@Override
-	public void render(IPainter painter, Chart chart) {
-		View view = chart.getView();
-		view.renderBackground(backgroundViewport);
+  @Override
+  public void render(IPainter painter, Chart chart) {
+    View view = chart.getView();
+    view.renderBackground(backgroundViewport);
 
-		// Here we force the scene to be rendered on the entire screen to avoid a GRAY
-		// (=CLEAR COLOR?) BAND
-		// that can't be overriden by legend image
-		sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, 1);// screenSeparator);
+    // Here we force the scene to be rendered on the entire screen to avoid a GRAY
+    // (=CLEAR COLOR?) BAND
+    // that can't be overriden by legend image
+    sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, 1);// screenSeparator);
 
-		view.renderScene(sceneViewport);
+    view.renderScene(sceneViewport);
 
-		renderLegends(painter, chart);
+    renderLegends(painter, chart);
 
-		// fix overlay on top of chart
-		view.renderOverlay(view.getCamera().getLastViewPort());
-	}
+    // fix overlay on top of chart
+    view.renderOverlay(view.getCamera().getLastViewPort());
+  }
 
-	/**
-	 * This override allows
-	 * <ul>
-	 * <li>Shifting the viewport to let some place for a colorbar rendering.
-	 * <li>Rendering the image using jGL dedicated image management ({@link GL#appendImageToDraw(BufferedImage, int, int)}).
-	 * </ul>
-	 */
-	@Override
-	protected void renderLegends(IPainter painter, float left, float right, List<ILegend> legends, ICanvas canvas) {
-		EmulGLPainter emulGL = (EmulGLPainter) painter;
+  /**
+   * This override allows
+   * <ul>
+   * <li>Shifting the viewport to let some place for a colorbar rendering.
+   * <li>Rendering the image using jGL dedicated image management
+   * ({@link GL#appendImageToDraw(BufferedImage, int, int)}).
+   * </ul>
+   */
+  @Override
+  protected void renderLegends(IPainter painter, float left, float right, List<ILegend> legends,
+      ICanvas canvas) {
+    EmulGLPainter emulGL = (EmulGLPainter) painter;
 
-		// ---------------------------------------
-		/// HAAACKKKKYYYYY : SHIFT THE VIEWPORT
+    // ---------------------------------------
+    /// HAAACKKKKYYYYY : SHIFT THE VIEWPORT
 
-		float shift = (right - left) * canvas.getRendererWidth() / 2;
-		emulGL.getGL().setShiftHorizontally((int) -shift);
-		
-		float slice = (right - left) / legends.size();
-		int k = 0;
-		for (ILegend legend : legends) {
-			legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-			legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(), left + slice * (k++),
-					left + slice * k);
+    float shift = (right - left) * canvas.getRendererWidth() / 2;
+    emulGL.getGL().setShiftHorizontally((int) -shift);
 
-			// legend.render(painter); // BYPASS IMAGE RENDERING THAT DOES NOT WORK WELL IN
-			// jGL
-			// legend.get
+    float slice = (right - left) / legends.size();
+    int k = 0;
+    for (ILegend legend : legends) {
+      legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+      legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(),
+          left + slice * (k++), left + slice * k);
 
-			if (legend instanceof AWTColorbarLegend) {
-				AWTColorbarLegend leg = (AWTColorbarLegend) legend;
+      // legend.render(painter); // BYPASS IMAGE RENDERING THAT DOES NOT WORK WELL IN
+      // jGL
+      // legend.get
 
-				int x = leg.getScreenLeft();
-				// System.out.println(((AWTColorbarLegend) legend).getScreenLeft());
-				emulGL.getGL().appendImageToDraw((BufferedImage) leg.getImage(), x, 0);
+      if (legend instanceof AWTColorbarLegend) {
+        AWTColorbarLegend leg = (AWTColorbarLegend) legend;
 
-			}
-		}
-	}
+        int x = leg.getScreenLeft();
+        // System.out.println(((AWTColorbarLegend) legend).getScreenLeft());
+        emulGL.getGL().appendImageToDraw((BufferedImage) leg.getImage(), x, 0);
+
+      }
+    }
+  }
 
 }

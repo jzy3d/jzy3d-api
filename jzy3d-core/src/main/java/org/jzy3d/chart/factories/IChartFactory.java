@@ -17,41 +17,48 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public interface IChartFactory {
-	public IPainterFactory getPainterFactory();
-	public void setPainterFactory(IPainterFactory painterFactory);
-	
-	public View newView(Scene scene, ICanvas canvas, Quality quality);
-	public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality);
-	public Camera newCamera(Coord3d center);
+  public IPainterFactory getPainterFactory();
 
-	public Chart newChart();
-    public Chart newChart(Quality quality);
-    public Chart newChart(IChartFactory factory, Quality quality);
+  public void setPainterFactory(IPainterFactory painterFactory);
 
-    public ChartScene newScene(boolean sort);
-    public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort);
-    public IAxis newAxe(BoundingBox3d box, View view);
-    
-    
-    
-    
-    //public Renderer newRenderer(View view);
-    //public Renderer newRenderer(View view, boolean traceGL, boolean debugGL);
-    
-    public AbstractOrderingStrategy newOrderingStrategy();
+  public View newView(Scene scene, ICanvas canvas, Quality quality);
+
+  public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality);
+
+  public Camera newCamera(Coord3d center);
+
+  public Chart newChart();
+
+  public Chart newChart(Quality quality);
+
+  public Chart newChart(IChartFactory factory, Quality quality);
+
+  public ChartScene newScene(boolean sort);
+
+  public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort);
+
+  public IAxis newAxe(BoundingBox3d box, View view);
 
 
-    public CameraThreadController newCameraThreadController(Chart chart);
-    
 
-    public Serie2d newSerie(String name, Serie2d.Type type);
-    
-    public IBoundingPolicy newBoundingPolicy();
-    
+  // public Renderer newRenderer(View view);
+  // public Renderer newRenderer(View view, boolean traceGL, boolean debugGL);
 
-    
-    /** usefull to override the current factory to call, especially for FactoryOverrider
-     * that must be used as this instead of its wrapped delegate factory
-     */
-    public IChartFactory getFactory();
- }
+  public AbstractOrderingStrategy newOrderingStrategy();
+
+
+  public CameraThreadController newCameraThreadController(Chart chart);
+
+
+  public Serie2d newSerie(String name, Serie2d.Type type);
+
+  public IBoundingPolicy newBoundingPolicy();
+
+
+
+  /**
+   * usefull to override the current factory to call, especially for FactoryOverrider that must be
+   * used as this instead of its wrapped delegate factory
+   */
+  public IChartFactory getFactory();
+}

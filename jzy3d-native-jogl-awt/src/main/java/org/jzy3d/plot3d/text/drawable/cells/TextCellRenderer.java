@@ -21,135 +21,136 @@ import org.jzy3d.plot3d.text.drawable.TextImageRenderer;
  *
  */
 public class TextCellRenderer extends TextImageRenderer {
-    protected static int OFFSET_CONSTANT = 13;
+  protected static int OFFSET_CONSTANT = 13;
 
-    public TextCellRenderer(int n, String txt, Font font) {
-        this(n, txt, font, Halign.LEFT, true);
+  public TextCellRenderer(int n, String txt, Font font) {
+    this(n, txt, font, Halign.LEFT, true);
+  }
+
+  public TextCellRenderer(int n, String txt, Font font, Halign halign, boolean drawBorder) {
+    super(txt, font);
+    this.n = n;
+    this.h = halign;
+    this.drawBorder = drawBorder;
+    this.drawText = true;
+    this.borderColor = Color.BLACK;
+    this.textColor = Color.BLACK;
+  }
+
+  @Override
+  public BufferedImageTexture getImage(float ratio) {
+    IntegerCoord2d c = guessImageDimension(n, font);
+    c.x += OFFSET_CONSTANT;
+
+    BufferedImage img = new BufferedImage(((int) (c.x * ratio)), ((int) (c.y * ratio)),
+        BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = (Graphics2D) img.getGraphics();
+    g.scale(ratio, ratio);
+
+    // background
+    g.setColor(backgroundColor);
+    g.fillRect(0, 0, c.x, c.y);
+
+    // border
+    if (drawBorder) {
+      g.setColor(borderColor);
+      g.drawRect(0, 0, c.x - 1, c.y - 1);
     }
 
-    public TextCellRenderer(int n, String txt, Font font, Halign halign, boolean drawBorder) {
-        super(txt, font);
-        this.n = n;
-        this.h = halign;
-        this.drawBorder = drawBorder;
-        this.drawText = true;
-        this.borderColor = Color.BLACK;
-        this.textColor = Color.BLACK;
+    if (drawText) {
+      // int width =
+      // (int)(g.getFontMetrics().getMaxCharBounds(g).getWidth() * n);
+      g.setFont(font);
+      int width = g.getFontMetrics().stringWidth(text);
+      int height = g.getFontMetrics().getHeight();
+      g.setColor(textColor);
+      if (h == Halign.LEFT)
+        g.drawString(text, 1, c.y - 1 - height / 5);
+      else if (h == Halign.RIGHT)
+        g.drawString(text, c.x - width, c.y - 1 - height / 5);
+      else if (h == Halign.CENTER)
+        g.drawString(text, c.x / 2 - width / 2, c.y - 1 - height / 5);
     }
 
-    @Override
-    public BufferedImageTexture getImage(float ratio) {
-        IntegerCoord2d c = guessImageDimension(n, font);
-        c.x += OFFSET_CONSTANT;
+    return new BufferedImageTexture(img);
+  }
 
-        BufferedImage img = new BufferedImage(((int) (c.x * ratio)), ((int) (c.y * ratio)), BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = (Graphics2D) img.getGraphics();
-        g.scale(ratio, ratio);
+  /***************/
 
-        // background
-        g.setColor(backgroundColor);
-        g.fillRect(0, 0, c.x, c.y);
+  public Color getBorderColor() {
+    return borderColor;
+  }
 
-        // border
-        if (drawBorder) {
-            g.setColor(borderColor);
-            g.drawRect(0, 0, c.x - 1, c.y - 1);
-        }
+  public void setBorderColor(Color borderColor) {
+    this.borderColor = borderColor;
+  }
 
-        if (drawText) {
-            // int width =
-            // (int)(g.getFontMetrics().getMaxCharBounds(g).getWidth() * n);
-            g.setFont(font);
-            int width = g.getFontMetrics().stringWidth(text);
-            int height = g.getFontMetrics().getHeight();
-            g.setColor(textColor);
-            if (h == Halign.LEFT)
-                g.drawString(text, 1, c.y - 1 - height / 5);
-            else if (h == Halign.RIGHT)
-                g.drawString(text, c.x - width, c.y - 1 - height / 5);
-            else if (h == Halign.CENTER)
-                g.drawString(text, c.x / 2 - width / 2, c.y - 1 - height / 5);
-        }
+  public Color getTextColor() {
+    return textColor;
+  }
 
-        return new BufferedImageTexture(img);
-    }
+  public void setTextColor(Color textColor) {
+    this.textColor = textColor;
+  }
 
-    /***************/
+  public boolean isBorderDisplayed() {
+    return drawBorder;
+  }
 
-    public Color getBorderColor() {
-        return borderColor;
-    }
+  public void setBorderDisplayed(boolean drawBorder) {
+    this.drawBorder = drawBorder;
+  }
 
-    public void setBorderColor(Color borderColor) {
-        this.borderColor = borderColor;
-    }
+  public boolean isTextDisplayed() {
+    return drawText;
+  }
 
-    public Color getTextColor() {
-        return textColor;
-    }
+  public void setTextDisplayed(boolean drawText) {
+    this.drawText = drawText;
+  }
 
-    public void setTextColor(Color textColor) {
-        this.textColor = textColor;
-    }
+  public int getCharacterWidth() {
+    return n;
+  }
 
-    public boolean isBorderDisplayed() {
-        return drawBorder;
-    }
+  public void setCharacterWidth(int n) {
+    this.n = n;
+  }
 
-    public void setBorderDisplayed(boolean drawBorder) {
-        this.drawBorder = drawBorder;
-    }
+  public Halign getHorizontalAlignement() {
+    return h;
+  }
 
-    public boolean isTextDisplayed() {
-        return drawText;
-    }
+  public void setHorizontalAlignement(Halign h) {
+    this.h = h;
+  }
 
-    public void setTextDisplayed(boolean drawText) {
-        this.drawText = drawText;
-    }
+  public Coord3d getSceneOffset() {
+    return sceneOffset;
+  }
 
-    public int getCharacterWidth() {
-        return n;
-    }
+  public void setSceneOffset(Coord3d sceneOffset) {
+    this.sceneOffset = sceneOffset;
+  }
 
-    public void setCharacterWidth(int n) {
-        this.n = n;
-    }
+  /***************/
 
-    public Halign getHorizontalAlignement() {
-        return h;
-    }
+  protected IntegerCoord2d guessImageDimension(int n, Font font) {
+    BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+    Graphics g = img.getGraphics();
+    g.setFont(font);
+    FontMetrics fm = g.getFontMetrics();
+    Rectangle2D r = fm.getMaxCharBounds(g);
+    return new IntegerCoord2d((int) (n * r.getWidth()), fm.getHeight());
+  }
 
-    public void setHorizontalAlignement(Halign h) {
-        this.h = h;
-    }
+  protected int n;
+  protected Halign h = Halign.LEFT;
+  protected Color borderColor = Color.RED;
+  protected Color backgroundColor = Color.WHITE;
+  protected Color textColor = Color.BLACK;
+  protected boolean drawBorder = true;
+  protected boolean drawText = true;
 
-    public Coord3d getSceneOffset() {
-        return sceneOffset;
-    }
-
-    public void setSceneOffset(Coord3d sceneOffset) {
-        this.sceneOffset = sceneOffset;
-    }
-
-    /***************/
-
-    protected IntegerCoord2d guessImageDimension(int n, Font font) {
-        BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-        Graphics g = img.getGraphics();
-        g.setFont(font);
-        FontMetrics fm = g.getFontMetrics();
-        Rectangle2D r = fm.getMaxCharBounds(g);
-        return new IntegerCoord2d((int) (n * r.getWidth()), fm.getHeight());
-    }
-
-    protected int n;
-    protected Halign h = Halign.LEFT;
-    protected Color borderColor = Color.RED;
-    protected Color backgroundColor = Color.WHITE;
-    protected Color textColor = Color.BLACK;
-    protected boolean drawBorder = true;
-    protected boolean drawText = true;
-
-    protected Coord3d sceneOffset;
+  protected Coord3d sceneOffset;
 }

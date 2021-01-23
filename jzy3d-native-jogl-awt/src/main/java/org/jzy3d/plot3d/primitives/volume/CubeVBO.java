@@ -11,50 +11,50 @@ import com.jogamp.opengl.GL2;
 
 public class CubeVBO extends DrawableVBO {
 
-	boolean disposed = false;
+  boolean disposed = false;
 
-	public CubeVBO(CubeVBOBuilder builder) {
-		super(builder);
-		this.setGeometry(GL2.GL_QUADS);
-		this.setColor(new Color(1f, 0f, 1f, 1f));
-		this.doSetBoundingBox(new BoundingBox3d(0, 1, 0, 1, 0, 1));
-	}
+  public CubeVBO(CubeVBOBuilder builder) {
+    super(builder);
+    this.setGeometry(GL2.GL_QUADS);
+    this.setColor(new Color(1f, 0f, 1f, 1f));
+    this.doSetBoundingBox(new BoundingBox3d(0, 1, 0, 1, 0, 1));
+  }
 
-	@Override
-	public void draw(IPainter painter) {
+  @Override
+  public void draw(IPainter painter) {
 
-		doTransform(painter);
+    doTransform(painter);
 
-		if (!hasMountedOnce) {
-			mount(painter);
-		}
+    if (!hasMountedOnce) {
+      mount(painter);
+    }
 
-		super.draw(painter);
+    super.draw(painter);
 
-		if (disposed) {
-			GL gl = ((NativeDesktopPainter)painter).getGL();
+    if (disposed) {
+      GL gl = ((NativeDesktopPainter) painter).getGL();
 
-			gl.glDeleteBuffers(1, arrayName, 0);
-			gl.glDeleteBuffers(1, elementName, 0);
-			return;
-		}
+      gl.glDeleteBuffers(1, arrayName, 0);
+      gl.glDeleteBuffers(1, elementName, 0);
+      return;
+    }
 
-	}
+  }
 
-	@Override
-	public void mount(IPainter painter) {
-		GL gl = ((NativeDesktopPainter) painter).getGL();
-		try {
-			loader.load(painter, this);
-			hasMountedOnce = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-//	            Logger.getLogger(DrawableVBO.class).error(e, e);
-		}
-	}
+  @Override
+  public void mount(IPainter painter) {
+    GL gl = ((NativeDesktopPainter) painter).getGL();
+    try {
+      loader.load(painter, this);
+      hasMountedOnce = true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      // Logger.getLogger(DrawableVBO.class).error(e, e);
+    }
+  }
 
-	@Override
-	public void dispose() {
-		disposed = true;
-	}
+  @Override
+  public void dispose() {
+    disposed = true;
+  }
 }

@@ -28,68 +28,67 @@ import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
  * @author Martin
  */
 public class CameraDistanceAnnotation extends Point {
-	public CameraDistanceAnnotation(View view, Color color) {
-		super();
-		this.view = view;
-		setColor(color);
-		setWidth(5);
-	}
+  public CameraDistanceAnnotation(View view, Color color) {
+    super();
+    this.view = view;
+    setColor(color);
+    setWidth(5);
+  }
 
-	@Override
-	public void draw(IPainter painter) {
-		computeCameraPosition();
-		doTransform(painter);
+  @Override
+  public void draw(IPainter painter) {
+    computeCameraPosition();
+    doTransform(painter);
 
-		doDrawCamera(painter, painter.getCamera());
+    doDrawCamera(painter, painter.getCamera());
 
-		Halign h = Halign.RIGHT;
-		Valign v = Valign.CENTER;
-		Coord2d screenOffset = new Coord2d(10, 0);
-		Color colorBary = Color.BLACK;
-		Color colorPt = Color.GRAY.clone();
-		colorPt.alphaSelf(0.5f);
+    Halign h = Halign.RIGHT;
+    Valign v = Valign.CENTER;
+    Coord2d screenOffset = new Coord2d(10, 0);
+    Color colorBary = Color.BLACK;
+    Color colorPt = Color.GRAY.clone();
+    colorPt.alphaSelf(0.5f);
 
-		Graph graph = view.getScene().getGraph();
-		AbstractOrderingStrategy strat = graph.getStrategy();
-		for (Drawable drawable : graph.getDecomposition()) {
-			double d = strat.score(drawable);
-			
-			//System.out.println(drawable.getBarycentre() );
+    Graph graph = view.getScene().getGraph();
+    AbstractOrderingStrategy strat = graph.getStrategy();
+    for (Drawable drawable : graph.getDecomposition()) {
+      double d = strat.score(drawable);
 
-			txt.setSpaceTransformer(drawable.getSpaceTransformer());
-			txt.drawText(painter, Utils.num2str(d, 4), drawable.getBarycentre(), h,
-					v, colorBary, screenOffset);
+      // System.out.println(drawable.getBarycentre() );
 
-			if (drawable instanceof Geometry) {
-				Polygon p = (Polygon) drawable;
-				for (Point pt : p.getPoints()) {
-					// Point pt2 = pt.clone();
-					d = strat.score(pt);
-					
-					//System.out.println(pt.xyz);
-					
-					txt.setSpaceTransformer(pt.getSpaceTransformer());
-					txt.drawText(painter, Utils.num2str(d, 4), pt.getCoord(),
-							h, v, colorPt, screenOffset);
-				}
-			}
-		}
-	}
+      txt.setSpaceTransformer(drawable.getSpaceTransformer());
+      txt.drawText(painter, Utils.num2str(d, 4), drawable.getBarycentre(), h, v, colorBary,
+          screenOffset);
 
-	public void computeCameraPosition() {
-		Coord3d scaling = view.getLastViewScaling().clone();
-		xyz = view.getCamera().getEye().clone();
-		xyz = xyz.div(scaling);
-	}
+      if (drawable instanceof Geometry) {
+        Polygon p = (Polygon) drawable;
+        for (Point pt : p.getPoints()) {
+          // Point pt2 = pt.clone();
+          d = strat.score(pt);
 
-	public void doDrawCamera(IPainter painter, Camera cam) {
-		painter.glPointSize(width);
-		painter.glBegin_Point();
-		painter.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
-		painter.glVertex3f(xyz.x, xyz.y, xyz.z);
-		painter.glEnd();
-	}
+          // System.out.println(pt.xyz);
 
-	protected View view;
-	protected ITextRenderer txt = new TextBitmapRenderer();
+          txt.setSpaceTransformer(pt.getSpaceTransformer());
+          txt.drawText(painter, Utils.num2str(d, 4), pt.getCoord(), h, v, colorPt, screenOffset);
+        }
+      }
+    }
+  }
+
+  public void computeCameraPosition() {
+    Coord3d scaling = view.getLastViewScaling().clone();
+    xyz = view.getCamera().getEye().clone();
+    xyz = xyz.div(scaling);
+  }
+
+  public void doDrawCamera(IPainter painter, Camera cam) {
+    painter.glPointSize(width);
+    painter.glBegin_Point();
+    painter.glColor4f(rgb.r, rgb.g, rgb.b, rgb.a);
+    painter.glVertex3f(xyz.x, xyz.y, xyz.z);
+    painter.glEnd();
+  }
+
+  protected View view;
+  protected ITextRenderer txt = new TextBitmapRenderer();
 }

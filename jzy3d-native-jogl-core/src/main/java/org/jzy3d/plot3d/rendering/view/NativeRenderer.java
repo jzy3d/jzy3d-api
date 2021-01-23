@@ -14,162 +14,158 @@ import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 
 /**
- * The {@link NativeRenderer} object is a {@link GLEventListener}, that makes openGL
- * calls necessary to initialize and render a {@link Scene} for an
- * {@link ICanvas}.
+ * The {@link NativeRenderer} object is a {@link GLEventListener}, that makes openGL calls necessary
+ * to initialize and render a {@link Scene} for an {@link ICanvas}.
  * 
- * One can activate OpenGl errors in console by setting debugGL to true in the
- * constructor One can activate OpenGl feedback in console by setting traceGL to
- * true in the constructor
+ * One can activate OpenGl errors in console by setting debugGL to true in the constructor One can
+ * activate OpenGl feedback in console by setting traceGL to true in the constructor
  * 
  * @author Martin Pernollet
  */
 public class NativeRenderer implements Renderer {
 
-	/** Initialize a Renderer attached to the given View. */
-	public NativeRenderer(View view) {
-		this(view, false, false);
-	}
+  /** Initialize a Renderer attached to the given View. */
+  public NativeRenderer(View view) {
+    this(view, false, false);
+  }
 
-	public NativeRenderer() {
-		this(null, false, false);
-	}
+  public NativeRenderer() {
+    this(null, false, false);
+  }
 
-	/**
-	 * Initialize a Renderer attached to the given View, and activate GL trace and
-	 * errors to console.
-	 */
-	public NativeRenderer(View view, boolean traceGL, boolean debugGL) {
-		this.view = view;
-		this.traceGL = traceGL;
-		this.debugGL = debugGL;
-	}
+  /**
+   * Initialize a Renderer attached to the given View, and activate GL trace and errors to console.
+   */
+  public NativeRenderer(View view, boolean traceGL, boolean debugGL) {
+    this.view = view;
+    this.traceGL = traceGL;
+    this.debugGL = debugGL;
+  }
 
-	/**
-	 * Called when the {@link GLAutoDrawable} is rendered for the first time. When
-	 * one calls Scene.init() function, this function is called and makes the OpenGL
-	 * buffers initialization.
-	 * 
-	 * Note: in this implementation, GL Exceptions are not triggered. To do so, make
-	 * te following call at the beginning of the init() body: <code>
-	 * canvas.setGL( new DebugGL(canvas.getGL()) );
-	 * </code>
-	 */
-	@Override
-	public void init(ICanvas canvas) {
-		if(!(canvas instanceof INativeCanvas))
-			return;
-		
-		GLAutoDrawable glDrawable = ((INativeCanvas)canvas).getDrawable();
-		
-		if (glDrawable != null && glDrawable.getGL() != null && glDrawable.getGL().getGL2() != null && view != null) {
-			if (debugGL)
-				glDrawable.getGL().getContext()
-						.setGL(GLPipelineFactory.create("com.jogamp.opengl.Debug", null, glDrawable.getGL(), null));
-			if (traceGL)
-				glDrawable.getGL().getContext().setGL(GLPipelineFactory.create("com.jogamp.opengl.Trace", null,
-						glDrawable.getGL(), new Object[] { System.err }));
+  /**
+   * Called when the {@link GLAutoDrawable} is rendered for the first time. When one calls
+   * Scene.init() function, this function is called and makes the OpenGL buffers initialization.
+   * 
+   * Note: in this implementation, GL Exceptions are not triggered. To do so, make te following call
+   * at the beginning of the init() body: <code>
+   * canvas.setGL( new DebugGL(canvas.getGL()) );
+   * </code>
+   */
+  @Override
+  public void init(ICanvas canvas) {
+    if (!(canvas instanceof INativeCanvas))
+      return;
 
-			updatePainterWithGL(glDrawable);
-			view.init();
-		}
-	}
+    GLAutoDrawable glDrawable = ((INativeCanvas) canvas).getDrawable();
 
-	/**
-	 * Called when the {@link GLAutoDrawable} requires a rendering. All call to
-	 * rendering methods should appear here.
-	 */
-	@Override
-	public void display(ICanvas canvas) {
-		if(!(canvas instanceof INativeCanvas))
-			return;
-		
-		GLAutoDrawable glDrawable = ((INativeCanvas)canvas).getDrawable();
-		GL gl = glDrawable.getGL();
+    if (glDrawable != null && glDrawable.getGL() != null && glDrawable.getGL().getGL2() != null
+        && view != null) {
+      if (debugGL)
+        glDrawable.getGL().getContext().setGL(
+            GLPipelineFactory.create("com.jogamp.opengl.Debug", null, glDrawable.getGL(), null));
+      if (traceGL)
+        glDrawable.getGL().getContext().setGL(GLPipelineFactory.create("com.jogamp.opengl.Trace",
+            null, glDrawable.getGL(), new Object[] {System.err}));
 
-		updatePainterWithGL(glDrawable);
+      updatePainterWithGL(glDrawable);
+      view.init();
+    }
+  }
 
-		if (view != null) {
-			view.clear();
-			view.render();
+  /**
+   * Called when the {@link GLAutoDrawable} requires a rendering. All call to rendering methods
+   * should appear here.
+   */
+  @Override
+  public void display(ICanvas canvas) {
+    if (!(canvas instanceof INativeCanvas))
+      return;
 
-			if (doScreenshotAtNextDisplay) {
-				GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
-				screenshot.readPixels(gl, true);
-				image = screenshot.getTextureData();
-				doScreenshotAtNextDisplay = false;
-			}
-		}
-	}
+    GLAutoDrawable glDrawable = ((INativeCanvas) canvas).getDrawable();
+    GL gl = glDrawable.getGL();
 
-	/** Called when the {@link GLAutoDrawable} is resized. */
-	@Override
-	public void reshape(ICanvas canvas, int x, int y, int width, int height) {
-		if(!(canvas instanceof INativeCanvas))
-			return;
-		
-		GLAutoDrawable glDrawable = ((INativeCanvas)canvas).getDrawable();
-		
-		this.width = width;
-		this.height = height;
+    updatePainterWithGL(glDrawable);
 
-		if (view != null) {
-			view.dimensionDirty = true;
+    if (view != null) {
+      view.clear();
+      view.render();
 
-			if (canvas != null) {
+      if (doScreenshotAtNextDisplay) {
+        GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
+        screenshot.readPixels(gl, true);
+        image = screenshot.getTextureData();
+        doScreenshotAtNextDisplay = false;
+      }
+    }
+  }
 
-				updatePainterWithGL(glDrawable);
+  /** Called when the {@link GLAutoDrawable} is resized. */
+  @Override
+  public void reshape(ICanvas canvas, int x, int y, int width, int height) {
+    if (!(canvas instanceof INativeCanvas))
+      return;
 
-				view.clear();
-				view.render();
-			}
-		}
-	}
+    GLAutoDrawable glDrawable = ((INativeCanvas) canvas).getDrawable();
 
-	/**
-	 * This method allows configuring the {@link IPainter} with the current
-	 * {@link GL} context provided by the {@link GLAutoDrawable}. This may be
-	 * usefull to override in case of a mocking GL (to avoid having the mock
-	 * replaced by a real GL Context).
-	 * 
-	 * @param canvas
-	 */
-	protected void updatePainterWithGL(GLAutoDrawable canvas) {
-		((NativeDesktopPainter) view.getPainter()).setGL(canvas.getGL());
-	}
+    this.width = width;
+    this.height = height;
 
-	// protected boolean first = true;
+    if (view != null) {
+      view.dimensionDirty = true;
 
-	@Override
-	public void dispose(ICanvas canvas) {
-		view = null;
-	}
+      if (canvas != null) {
 
-	public void nextDisplayUpdateScreenshot() {
-		doScreenshotAtNextDisplay = true;
-	}
+        updatePainterWithGL(glDrawable);
 
-	public TextureData getLastScreenshot() {
-		return image;
-	}
+        view.clear();
+        view.render();
+      }
+    }
+  }
 
-	/** Return the width that was given after the last resize event. */
-	public int getWidth() {
-		return width;
-	}
+  /**
+   * This method allows configuring the {@link IPainter} with the current {@link GL} context
+   * provided by the {@link GLAutoDrawable}. This may be usefull to override in case of a mocking GL
+   * (to avoid having the mock replaced by a real GL Context).
+   * 
+   * @param canvas
+   */
+  protected void updatePainterWithGL(GLAutoDrawable canvas) {
+    ((NativeDesktopPainter) view.getPainter()).setGL(canvas.getGL());
+  }
 
-	/** Return the height that was given after the last resize event. */
-	public int getHeight() {
-		return height;
-	}
+  // protected boolean first = true;
+
+  @Override
+  public void dispose(ICanvas canvas) {
+    view = null;
+  }
+
+  public void nextDisplayUpdateScreenshot() {
+    doScreenshotAtNextDisplay = true;
+  }
+
+  public TextureData getLastScreenshot() {
+    return image;
+  }
+
+  /** Return the width that was given after the last resize event. */
+  public int getWidth() {
+    return width;
+  }
+
+  /** Return the height that was given after the last resize event. */
+  public int getHeight() {
+    return height;
+  }
 
 
-	protected View view;
-	protected int width = 0;
-	protected int height = 0;
-	protected boolean doScreenshotAtNextDisplay = false;
-	protected TextureData image = null;
-	protected boolean traceGL = false;
-	protected boolean debugGL = false;
+  protected View view;
+  protected int width = 0;
+  protected int height = 0;
+  protected boolean doScreenshotAtNextDisplay = false;
+  protected TextureData image = null;
+  protected boolean traceGL = false;
+  protected boolean debugGL = false;
 
 }

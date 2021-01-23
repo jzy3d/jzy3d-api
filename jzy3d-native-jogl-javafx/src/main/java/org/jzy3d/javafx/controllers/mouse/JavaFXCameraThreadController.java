@@ -6,36 +6,35 @@ import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import javafx.application.Platform;
 
 /**
- * Trying to get rid of an exception 
+ * Trying to get rid of an exception
  * http://stackoverflow.com/questions/860187/access-restriction-on-class-due-to-restriction-on-required-library-rt-jar
  * 
  * @author Martin Pernollet
  *
  */
-public class JavaFXCameraThreadController extends CameraThreadController{
-    protected boolean doLater = false;
-    
-    public JavaFXCameraThreadController() {
-        super();
-    }
+public class JavaFXCameraThreadController extends CameraThreadController {
+  protected boolean doLater = false;
 
-    public JavaFXCameraThreadController(Chart chart) {
-        super(chart);
-    }
+  public JavaFXCameraThreadController() {
+    super();
+  }
 
-    @Override
-    public void run() { 
-        if(doLater){
-            Platform.runLater(new Runnable(){
-                @Override
-                public void run() {
-                    JavaFXCameraThreadController.super.doRun();
-                }
-            });
-   
+  public JavaFXCameraThreadController(Chart chart) {
+    super(chart);
+  }
+
+  @Override
+  public void run() {
+    if (doLater) {
+      Platform.runLater(new Runnable() {
+        @Override
+        public void run() {
+          JavaFXCameraThreadController.super.doRun();
         }
-        else{
-            doRun();
-        }
+      });
+
+    } else {
+      doRun();
     }
+  }
 }

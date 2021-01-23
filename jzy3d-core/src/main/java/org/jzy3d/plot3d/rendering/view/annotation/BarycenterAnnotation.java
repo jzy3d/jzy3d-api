@@ -13,60 +13,59 @@ import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.scene.Decomposition;
 
 /**
- * Draws the barycenter of an {@link Geometry}
- * and a line each point and the barycenter.
+ * Draws the barycenter of an {@link Geometry} and a line each point and the barycenter.
  * 
  * @author Martin
  */
-public class BarycenterAnnotation extends Composite{
-    public BarycenterAnnotation(Geometry annotated) {
-        Color c = Color.BLACK;
-        
-        this.annotated = annotated;
-        bary = new Point();
-        bary.setWidth(5);
-        lines = new ArrayList<LineStrip>();
-        
-        for(Point pt: annotated.getPoints()){
-            Point b2 = bary.clone();
-            Point pt2 = pt.clone();
-            
-            LineStrip line = new LineStrip(b2, pt2);
-            line.setWireframeColor(c);
-            lines.add(line);
-        }
-    
-        add(bary);
-        add(lines);
+public class BarycenterAnnotation extends Composite {
+  public BarycenterAnnotation(Geometry annotated) {
+    Color c = Color.BLACK;
 
-        setColor(c);
-        setWireframeColor(c);
+    this.annotated = annotated;
+    bary = new Point();
+    bary.setWidth(5);
+    lines = new ArrayList<LineStrip>();
+
+    for (Point pt : annotated.getPoints()) {
+      Point b2 = bary.clone();
+      Point pt2 = pt.clone();
+
+      LineStrip line = new LineStrip(b2, pt2);
+      line.setWireframeColor(c);
+      lines.add(line);
     }
 
-    @Override
-    public void draw(IPainter painter) {
-        bary.xyz = annotated.getBarycentre();
-        int k = 0;
-        for(LineStrip line: lines){
-            line.get(0).xyz = bary.xyz.clone();
-                line.get(1).xyz = annotated.get(k).xyz.clone();
-            k++;
-        }
-        super.draw(painter);
-    }
+    add(bary);
+    add(lines);
 
-    public static List<BarycenterAnnotation> annotate(Composite composite){
-        List<BarycenterAnnotation> annotations = new ArrayList<BarycenterAnnotation>();
-        
-        ArrayList<Drawable> items= Decomposition.getDecomposition(composite);
-        for(Drawable item: items){
-            if(item instanceof Geometry)
-                annotations.add(new BarycenterAnnotation((Geometry)item));
-        }
-        return annotations;
+    setColor(c);
+    setWireframeColor(c);
+  }
+
+  @Override
+  public void draw(IPainter painter) {
+    bary.xyz = annotated.getBarycentre();
+    int k = 0;
+    for (LineStrip line : lines) {
+      line.get(0).xyz = bary.xyz.clone();
+      line.get(1).xyz = annotated.get(k).xyz.clone();
+      k++;
     }
-    
-    protected Geometry annotated;
-    protected Point bary;
-    protected List<LineStrip> lines;
+    super.draw(painter);
+  }
+
+  public static List<BarycenterAnnotation> annotate(Composite composite) {
+    List<BarycenterAnnotation> annotations = new ArrayList<BarycenterAnnotation>();
+
+    ArrayList<Drawable> items = Decomposition.getDecomposition(composite);
+    for (Drawable item : items) {
+      if (item instanceof Geometry)
+        annotations.add(new BarycenterAnnotation((Geometry) item));
+    }
+    return annotations;
+  }
+
+  protected Geometry annotated;
+  protected Point bary;
+  protected List<LineStrip> lines;
 }

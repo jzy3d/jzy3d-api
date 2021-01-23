@@ -14,94 +14,94 @@ import org.jzy3d.plot3d.primitives.Quad;
  * @author Martin Pernollet
  */
 public class Cube extends Composite {
-    protected Polygon north;
-    protected Polygon south;
-    protected Polygon west;
-    protected Polygon east;
-    protected Polygon near;
-    protected Polygon far;
+  protected Polygon north;
+  protected Polygon south;
+  protected Polygon west;
+  protected Polygon east;
+  protected Polygon near;
+  protected Polygon far;
 
-    
-    public Cube(BoundingBox3d box){ 
-        this(box, Color.BLACK, Color.BLUE);
-    }	
-    
-	public Cube(BoundingBox3d box, Color wireframe, Color face){	
-        setWireframeColor(wireframe);
-        setColor(face);
-        
-		north  = new Quad();
-		south  = new Quad();
-		west  = new Quad();
-		east  = new Quad();
-		near  = new Quad();
-		far  = new Quad();
-		
-		north.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmax()), getColor()));
-        north.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmax()), getColor()));
-        north.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmax()), getColor()));
-        north.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmax()), getColor()));
 
-        south.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmin()), getColor()));
-        south.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmin()), getColor()));
-        south.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmin()), getColor()));
-        south.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmin()), getColor()));
+  public Cube(BoundingBox3d box) {
+    this(box, Color.BLACK, Color.BLUE);
+  }
 
-        west.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmin()), getColor()));
-        west.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmin()), getColor()));
-        west.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmax()), getColor()));
-        west.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmax()), getColor()));
+  public Cube(BoundingBox3d box, Color wireframe, Color face) {
+    setWireframeColor(wireframe);
+    setColor(face);
 
-        east.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmin()), getColor()));
-        east.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmin()), getColor()));
-        east.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmax()), getColor()));
-        east.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmax()), getColor()));
+    north = new Quad();
+    south = new Quad();
+    west = new Quad();
+    east = new Quad();
+    near = new Quad();
+    far = new Quad();
 
-        
-        near.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmin()), getColor()));
-        near.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmin()), getColor()));
-        near.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmax()), getColor()));
-        near.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmax()), getColor()));
+    north.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmax()), getColor()));
+    north.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmax()), getColor()));
+    north.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmax()), getColor()));
+    north.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmax()), getColor()));
 
-        far.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmin()), getColor()));
-        far.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmin()), getColor()));
-        far.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmax()), getColor()));
-        far.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmax()), getColor()));
+    south.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmin()), getColor()));
+    south.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmin()), getColor()));
+    south.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmin()), getColor()));
+    south.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmin()), getColor()));
 
-        //System.out.println(box.getXmin());
-		add(north);
-		add(south);
-		add(west);
-		add(east);
-		add(near);
-		add(far);
-		
-		bbox = box;
-		
-		setWireframeColor(wireframe);
-	}
+    west.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmin()), getColor()));
+    west.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmin()), getColor()));
+    west.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmax()), getColor()));
+    west.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmax()), getColor()));
 
-    public Polygon getNorth() {
-        return north;
-    }
+    east.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmin()), getColor()));
+    east.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmin()), getColor()));
+    east.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmax()), getColor()));
+    east.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmax()), getColor()));
 
-    public Polygon getSouth() {
-        return south;
-    }
 
-    public Polygon getWest() {
-        return west;
-    }
+    near.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmin()), getColor()));
+    near.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmin()), getColor()));
+    near.add(new Point(new Coord3d(box.getXmax(), box.getYmin(), box.getZmax()), getColor()));
+    near.add(new Point(new Coord3d(box.getXmin(), box.getYmin(), box.getZmax()), getColor()));
 
-    public Polygon getEast() {
-        return east;
-    }
+    far.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmin()), getColor()));
+    far.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmin()), getColor()));
+    far.add(new Point(new Coord3d(box.getXmax(), box.getYmax(), box.getZmax()), getColor()));
+    far.add(new Point(new Coord3d(box.getXmin(), box.getYmax(), box.getZmax()), getColor()));
 
-    public Polygon getNear() {
-        return near;
-    }
+    // System.out.println(box.getXmin());
+    add(north);
+    add(south);
+    add(west);
+    add(east);
+    add(near);
+    add(far);
 
-    public Polygon getFar() {
-        return far;
-    }
+    bbox = box;
+
+    setWireframeColor(wireframe);
+  }
+
+  public Polygon getNorth() {
+    return north;
+  }
+
+  public Polygon getSouth() {
+    return south;
+  }
+
+  public Polygon getWest() {
+    return west;
+  }
+
+  public Polygon getEast() {
+    return east;
+  }
+
+  public Polygon getNear() {
+    return near;
+  }
+
+  public Polygon getFar() {
+    return far;
+  }
 }

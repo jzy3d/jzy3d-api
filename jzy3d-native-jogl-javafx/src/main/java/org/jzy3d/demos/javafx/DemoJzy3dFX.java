@@ -1,4 +1,5 @@
 package org.jzy3d.demos.javafx;
+
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -21,76 +22,73 @@ import javafx.stage.Stage;
 /**
  * Showing how to pipe an offscreen Jzy3d chart image to a JavaFX ImageView.
  * 
- * {@link JavaFXChartFactory} delivers dedicated  {@link JavaFXCameraMouseController}
- * and {@link JavaFXRenderer3d}
+ * {@link JavaFXChartFactory} delivers dedicated {@link JavaFXCameraMouseController} and
+ * {@link JavaFXRenderer3d}
  * 
- * Support 
- * Rotation control with left mouse button hold+drag
- * Scaling scene using mouse wheel 
- * Animation (camera rotation with thread) 
+ * Support Rotation control with left mouse button hold+drag Scaling scene using mouse wheel
+ * Animation (camera rotation with thread)
  * 
- * TODO : 
- * Mouse right click shift
- * Keyboard support (rotate/shift, etc)
+ * TODO : Mouse right click shift Keyboard support (rotate/shift, etc)
  * 
  * @author Martin Pernollet
  */
 public class DemoJzy3dFX extends Application {
-    public static void main(String[] args) {
-        Application.launch(args);
-    }
-    
-    @Override
-    public void start(Stage stage) {
-        stage.setTitle(DemoJzy3dFX.class.getSimpleName());
-        
-        // Jzy3d
-        JavaFXChartFactory factory = new JavaFXChartFactory();
-        AWTNativeChart chart  = getDemoChart(factory, "offscreen");
-        ImageView imageView = factory.bindImageView(chart);
+  public static void main(String[] args) {
+    Application.launch(args);
+  }
 
-        // JavaFX
-        StackPane pane = new StackPane();
-        Scene scene = new Scene(pane);
-        stage.setScene(scene);
-        stage.show();
-        pane.getChildren().add(imageView);
+  @Override
+  public void start(Stage stage) {
+    stage.setTitle(DemoJzy3dFX.class.getSimpleName());
 
-        factory.addSceneSizeChangedListener(chart, scene);
-        
-        stage.setWidth(500);
-        stage.setHeight(500);
-    }
+    // Jzy3d
+    JavaFXChartFactory factory = new JavaFXChartFactory();
+    AWTNativeChart chart = getDemoChart(factory, "offscreen");
+    ImageView imageView = factory.bindImageView(chart);
 
-    private AWTNativeChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
-        // -------------------------------
-        // Define a function to plot
-        Mapper mapper = new Mapper() {
-            @Override
-            public double f(double x, double y) {
-                return x * Math.sin(x * y);
-            }
-        };
+    // JavaFX
+    StackPane pane = new StackPane();
+    Scene scene = new Scene(pane);
+    stage.setScene(scene);
+    stage.show();
+    pane.getChildren().add(imageView);
 
-        // Define range and precision for the function to plot
-        Range range = new Range(-3, 3);
-        int steps = 80;
+    factory.addSceneSizeChangedListener(chart, scene);
 
-        // Create the object to represent the function over the given range.
-        final Shape surface = new SurfaceBuilder().orthonormal(mapper, range, steps);
-        surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(), surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
-        surface.setFaceDisplayed(true);
-        surface.setWireframeDisplayed(false);
+    stage.setWidth(500);
+    stage.setHeight(500);
+  }
 
-        // -------------------------------
-        // Create a chart
-        Quality quality = Quality.Advanced;
-        //quality.setSmoothPolygon(true);
-        //quality.setAnimated(true);
-        
-        // let factory bind mouse and keyboard controllers to JavaFX node
-        AWTNativeChart chart = (AWTNativeChart)factory.newChart(quality);
-        chart.getScene().getGraph().add(surface);
-        return chart;
-    }
+  private AWTNativeChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
+    // -------------------------------
+    // Define a function to plot
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+
+    // Define range and precision for the function to plot
+    Range range = new Range(-3, 3);
+    int steps = 80;
+
+    // Create the object to represent the function over the given range.
+    final Shape surface = new SurfaceBuilder().orthonormal(mapper, range, steps);
+    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f)));
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(false);
+
+    // -------------------------------
+    // Create a chart
+    Quality quality = Quality.Advanced;
+    // quality.setSmoothPolygon(true);
+    // quality.setAnimated(true);
+
+    // let factory bind mouse and keyboard controllers to JavaFX node
+    AWTNativeChart chart = (AWTNativeChart) factory.newChart(quality);
+    chart.getScene().getGraph().add(surface);
+    return chart;
+  }
 }

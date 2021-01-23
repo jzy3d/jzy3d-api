@@ -19,144 +19,146 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 /**
- * TODO : MUST ALSO TEST WITH COLORBARS TODO : MUST ALSO VERIFY APPROPRIATE
- * LOOK_TO AND ORTHO CALL OF THE CAMERA!!
+ * TODO : MUST ALSO TEST WITH COLORBARS TODO : MUST ALSO VERIFY APPROPRIATE LOOK_TO AND ORTHO CALL
+ * OF THE CAMERA!!
  * 
- * Possible improvement : mock canvas (avoid displaying for faster test,
- * independent from OS)
+ * Possible improvement : mock canvas (avoid displaying for faster test, independent from OS)
  * 
  * @author martin
  */
 public class TestCameraNative_Viewport {
 
-	@Test
-	public void whenResize_thenCameraViewportUpdatesAccordingToMode() throws InterruptedException {
-		// GIVEN
-		AWTChartFactory factory = new AWTChartFactory();
+  @Test
+  public void whenResize_thenCameraViewportUpdatesAccordingToMode() throws InterruptedException {
+    // GIVEN
+    AWTChartFactory factory = new AWTChartFactory();
 
-		Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced;
 
-// ATTENTION : viewport of a retina display has double number of pixel		
-// Also, the Y value is 600, whereas the height is 578
-		q.setPreserveViewportSize(true);
+    // ATTENTION : viewport of a retina display has double number of pixel
+    // Also, the Y value is 600, whereas the height is 578
+    q.setPreserveViewportSize(true);
 
-		Chart chart = factory.newChart(q);
-		chart.add(surface());
-		Camera camera = chart.getView().getCamera();
+    Chart chart = factory.newChart(q);
+    chart.add(surface());
+    Camera camera = chart.getView().getCamera();
 
-		// ----------------------------------------
-		// When opening window to a chosen size
+    // ----------------------------------------
+    // When opening window to a chosen size
 
-		Rectangle FRAME_SIZE = new Rectangle(800, 600);
-		int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
+    Rectangle FRAME_SIZE = new Rectangle(800, 600);
+    int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
 
-		FrameAWT frame = (FrameAWT) chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
-		
-		chart.render(); // ensure we have rendered one to get latest layout later
-		
-		Thread.sleep(10); // let time for opening window otheriwse follwing assertions may fail
+    FrameAWT frame = (FrameAWT) chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
 
-		// Then scene viewport size is set to occupy the full frame
-		ViewAndColorbarsLayout layout = (ViewAndColorbarsLayout) ((ChartView) chart.getView()).getLayout();
-		ViewportConfiguration sceneViewport = layout.getSceneViewport();
+    chart.render(); // ensure we have rendered one to get latest layout later
 
-		Assert.assertEquals(FRAME_SIZE.width, sceneViewport.getWidth());
-		Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, sceneViewport.getHeight());
-		Assert.assertEquals(0, sceneViewport.getX());
-		Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, sceneViewport.getY());
+    Thread.sleep(10); // let time for opening window otheriwse follwing assertions may fail
 
-		// Then camera viewport size is set to occupy the full frame
-		Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, camera.getLastViewPort().getMode());
-		Assert.assertEquals(FRAME_SIZE.width, camera.getLastViewPort().getWidth());
-		Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, camera.getLastViewPort().getHeight());
+    // Then scene viewport size is set to occupy the full frame
+    ViewAndColorbarsLayout layout =
+        (ViewAndColorbarsLayout) ((ChartView) chart.getView()).getLayout();
+    ViewportConfiguration sceneViewport = layout.getSceneViewport();
 
-		// ----------------------------------------
-		// When change canvas size and update view
+    Assert.assertEquals(FRAME_SIZE.width, sceneViewport.getWidth());
+    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, sceneViewport.getHeight());
+    Assert.assertEquals(0, sceneViewport.getX());
+    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, sceneViewport.getY());
 
-		Rectangle CANVAS_SIZE_V = new Rectangle(100, 300);
-		frame.setBounds(0, 0, CANVAS_SIZE_V.width, CANVAS_SIZE_V.height);
-		frame.repaint();
+    // Then camera viewport size is set to occupy the full frame
+    Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, camera.getLastViewPort().getMode());
+    Assert.assertEquals(FRAME_SIZE.width, camera.getLastViewPort().getWidth());
+    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, camera.getLastViewPort().getHeight());
 
-		Thread.sleep(300); // let time for resize and redraw otherwise following assertions may fail
+    // ----------------------------------------
+    // When change canvas size and update view
 
-		// Then viewport on the complete canvas
-		Assert.assertEquals(CANVAS_SIZE_V.height - APP_BAR_HEIGHT, camera.getLastViewPort().getHeight());
-		Assert.assertEquals(CANVAS_SIZE_V.width, camera.getLastViewPort().getWidth());
+    Rectangle CANVAS_SIZE_V = new Rectangle(100, 300);
+    frame.setBounds(0, 0, CANVAS_SIZE_V.width, CANVAS_SIZE_V.height);
+    frame.repaint();
 
-		// ----------------------------------------
-		// When set STRETCH_TO_FILL
+    Thread.sleep(300); // let time for resize and redraw otherwise following assertions may fail
 
-		camera.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-		chart.getView().shoot();
+    // Then viewport on the complete canvas
+    Assert.assertEquals(CANVAS_SIZE_V.height - APP_BAR_HEIGHT,
+        camera.getLastViewPort().getHeight());
+    Assert.assertEquals(CANVAS_SIZE_V.width, camera.getLastViewPort().getWidth());
 
-		// Then viewport on the complete canvas
-		Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, camera.getLastViewPort().getMode());
-		Assert.assertEquals(CANVAS_SIZE_V.height - APP_BAR_HEIGHT, camera.getLastViewPort().getHeight());
-		Assert.assertEquals(CANVAS_SIZE_V.width, camera.getLastViewPort().getWidth());
+    // ----------------------------------------
+    // When set STRETCH_TO_FILL
 
-		// ----------------------------------------
-		// When set SQUARE in vertical rectangle frame
+    camera.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+    chart.getView().shoot();
 
-		camera.setViewportMode(ViewportMode.SQUARE);
-		chart.getView().shoot();
+    // Then viewport on the complete canvas
+    Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, camera.getLastViewPort().getMode());
+    Assert.assertEquals(CANVAS_SIZE_V.height - APP_BAR_HEIGHT,
+        camera.getLastViewPort().getHeight());
+    Assert.assertEquals(CANVAS_SIZE_V.width, camera.getLastViewPort().getWidth());
 
-		// Then viewport is SQUARE
-		Assert.assertEquals(ViewportMode.SQUARE, camera.getLastViewPort().getMode());
+    // ----------------------------------------
+    // When set SQUARE in vertical rectangle frame
 
-		int sideLength = 100;
-		Assert.assertEquals(sideLength, camera.getLastViewPort().getHeight());
-		Assert.assertEquals(sideLength, camera.getLastViewPort().getWidth());
-		Assert.assertEquals(0, camera.getLastViewPort().getX());
-//Assert.assertEquals(0, camera.getLastViewPort().getY());
+    camera.setViewportMode(ViewportMode.SQUARE);
+    chart.getView().shoot();
 
-		// ----------------------------------------
-		// When set SQUARE in a horizontal rectangle frame
+    // Then viewport is SQUARE
+    Assert.assertEquals(ViewportMode.SQUARE, camera.getLastViewPort().getMode());
 
-		camera.setViewportMode(ViewportMode.SQUARE);
+    int sideLength = 100;
+    Assert.assertEquals(sideLength, camera.getLastViewPort().getHeight());
+    Assert.assertEquals(sideLength, camera.getLastViewPort().getWidth());
+    Assert.assertEquals(0, camera.getLastViewPort().getX());
+    // Assert.assertEquals(0, camera.getLastViewPort().getY());
 
-		Rectangle CANVAS_SIZE_H = new Rectangle(400, 100);
-		frame.setBounds(0, 0, CANVAS_SIZE_H.width, CANVAS_SIZE_H.height);
-		frame.repaint();
+    // ----------------------------------------
+    // When set SQUARE in a horizontal rectangle frame
 
-		Thread.sleep(300); // let time for resize and redraw otherwise following assertions may fail
+    camera.setViewportMode(ViewportMode.SQUARE);
 
-		sideLength = 100 - APP_BAR_HEIGHT;
-		Assert.assertEquals(sideLength, camera.getLastViewPort().getHeight());
-		Assert.assertEquals(sideLength, camera.getLastViewPort().getWidth());
-		// check viewport is shifted to the right so that square viewport is centered
-		Assert.assertEquals(CANVAS_SIZE_H.width / 2 - sideLength / 2, camera.getLastViewPort().getX());
+    Rectangle CANVAS_SIZE_H = new Rectangle(400, 100);
+    frame.setBounds(0, 0, CANVAS_SIZE_H.width, CANVAS_SIZE_H.height);
+    frame.repaint();
 
-	}
+    Thread.sleep(300); // let time for resize and redraw otherwise following assertions may fail
+
+    sideLength = 100 - APP_BAR_HEIGHT;
+    Assert.assertEquals(sideLength, camera.getLastViewPort().getHeight());
+    Assert.assertEquals(sideLength, camera.getLastViewPort().getWidth());
+    // check viewport is shifted to the right so that square viewport is centered
+    Assert.assertEquals(CANVAS_SIZE_H.width / 2 - sideLength / 2, camera.getLastViewPort().getX());
+
+  }
 
 
-	private static Shape surface() {
+  private static Shape surface() {
 
-		// ---------------------------
-		// DEFINE SURFACE MATHS
-		Mapper mapper = new Mapper() {
-			@Override
-			public double f(double x, double y) {
-				return x * Math.sin(x * y);
-			}
-		};
-		Range range = new Range(-3, 3);
-		int steps = 60;
+    // ---------------------------
+    // DEFINE SURFACE MATHS
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+    Range range = new Range(-3, 3);
+    int steps = 60;
 
-		// ---------------------------
-		// CUSTOMIZE SURFACE BUILDER FOR JGL
-		SurfaceBuilder builder = new SurfaceBuilder();
+    // ---------------------------
+    // CUSTOMIZE SURFACE BUILDER FOR JGL
+    SurfaceBuilder builder = new SurfaceBuilder();
 
-		// ---------------------------
-		// MAKE SURFACE
-		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-		surface.setPolygonOffsetFillEnable(false);
+    // ---------------------------
+    // MAKE SURFACE
+    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    surface.setPolygonOffsetFillEnable(false);
 
-		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-				surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
-		surface.setColorMapper(colorMapper);
-		surface.setFaceDisplayed(true);
-		surface.setWireframeDisplayed(true);
-		surface.setWireframeColor(Color.BLACK);
-		return surface;
-	}
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
+    surface.setColorMapper(colorMapper);
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    return surface;
+  }
 }

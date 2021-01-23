@@ -10,75 +10,76 @@ import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Point;
 
 
-/** 
- * A {@link ContourLevel} is an {@link Composite} gathering a collection of 
- * {@link LineStrip}s for a given contour level.
+/**
+ * A {@link ContourLevel} is an {@link Composite} gathering a collection of {@link LineStrip}s for a
+ * given contour level.
+ * 
  * @author Martin
  */
 public class ContourLevel extends Composite {
-	public ContourLevel() {
-		super();
-		lines = new ArrayList<LineStrip>();
-	}
-	
-	public ContourLevel(float value) {
-		super();
-		this.value = value;
-		lines = new ArrayList<LineStrip>();
-	}
+  public ContourLevel() {
+    super();
+    lines = new ArrayList<LineStrip>();
+  }
 
-	public ContourLevel(int id, float value, List<LineStrip> lines) {
-		super();
-		this.id = id;
-		this.value = value;
-		this.lines = lines;
+  public ContourLevel(float value) {
+    super();
+    this.value = value;
+    lines = new ArrayList<LineStrip>();
+  }
 
-		updateComponents();
-	}
+  public ContourLevel(int id, float value, List<LineStrip> lines) {
+    super();
+    this.id = id;
+    this.value = value;
+    this.lines = lines;
 
-	public int getId() {
-		return id;
-	}
+    updateComponents();
+  }
 
-	public float getValue() {
-		return value;
-	}
+  public int getId() {
+    return id;
+  }
 
-	public List<LineStrip> getLines() {
-		return lines;
-	}
+  public float getValue() {
+    return value;
+  }
 
-	public void appendLine(LineStrip strip) {
-		LineStrip friend = policy.mostMergeableIfAny(strip, lines);
-		if(friend != null){
-			int fid = lines.indexOf(friend);
-			friend = LineStrip.merge(strip, friend);
-			lines.set(fid, friend);
-		}
-		else{ // no one to connect
-			lines.add(strip);
-		}
-		updateComponents();
-	}
+  public List<LineStrip> getLines() {
+    return lines;
+  }
 
-	public void fixZ(float value) {
-		for (Drawable d : components) {
-			LineStrip line = (LineStrip) d;
-			for (Point point : line.getPoints()) {
-				point.xyz.z = value;
-			}
-		}
-	}
+  public void appendLine(LineStrip strip) {
+    LineStrip friend = policy.mostMergeableIfAny(strip, lines);
+    if (friend != null) {
+      int fid = lines.indexOf(friend);
+      friend = LineStrip.merge(strip, friend);
+      lines.set(fid, friend);
+    } else { // no one to connect
+      lines.add(strip);
+    }
+    updateComponents();
+  }
 
-	protected void updateComponents() {
-		components.clear();
-		for (LineStrip strip : lines)
-			components.add(strip);
-	}
+  public void fixZ(float value) {
+    for (Drawable d : components) {
+      LineStrip line = (LineStrip) d;
+      for (Point point : line.getPoints()) {
+        point.xyz.z = value;
+      }
+    }
+  }
 
-	protected ILineStripMergePolicy policy = new DefaultLineStripMergePolicy(MapperContourPictureGenerator.MERGE_STRIP_DIST);
+  protected void updateComponents() {
+    components.clear();
+    for (LineStrip strip : lines)
+      components.add(strip);
+  }
 
-	protected int id;
-	protected float value;
-	protected List<LineStrip> lines = new ArrayList<LineStrip>();
+  protected ILineStripMergePolicy policy =
+      new DefaultLineStripMergePolicy(MapperContourPictureGenerator.MERGE_STRIP_DIST);
+
+  protected int id;
+  protected float value;
+  protected List<LineStrip> lines = new ArrayList<LineStrip>();
 }

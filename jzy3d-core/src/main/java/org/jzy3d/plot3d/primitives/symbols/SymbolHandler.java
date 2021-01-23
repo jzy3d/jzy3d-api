@@ -16,39 +16,40 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  *
  */
 public abstract class SymbolHandler {
-    protected List<Drawable> symbols = null;
-    protected SpaceTransformer spaceTransformer;
+  protected List<Drawable> symbols = null;
+  protected SpaceTransformer spaceTransformer;
 
-    public SymbolHandler() {
-    	this(10);
+  public SymbolHandler() {
+    this(10);
+  }
+
+  public SymbolHandler(int n) {
+    symbols = new ArrayList<Drawable>(n);
+  }
+
+
+  public void clear() {
+    symbols.clear();
+
+  }
+
+  public abstract void addSymbolOn(Point point);
+
+
+  public void drawSymbols(IPainter painter) {
+    for (Drawable d : symbols) {
+      d.setSpaceTransformer(spaceTransformer);
+      d.draw(painter);
     }
-    
-    public SymbolHandler(int n) {
-        symbols = new ArrayList<Drawable>(n);
-    }
+  }
 
 
-    public void clear() {
-        symbols.clear();
-
-    }
-    public abstract void addSymbolOn(Point point);
+  public SpaceTransformer getSpaceTransformer() {
+    return spaceTransformer;
+  }
 
 
-    public void drawSymbols(IPainter painter) {
-        for (Drawable d : symbols) {
-            d.setSpaceTransformer(spaceTransformer);
-            d.draw(painter);
-        }
-    }
-
-
-    public SpaceTransformer getSpaceTransformer() {
-        return spaceTransformer;
-    }
-
-
-    public void setSpaceTransformer(SpaceTransformer spaceTransformer) {
-        this.spaceTransformer = spaceTransformer;
-    }
+  public void setSpaceTransformer(SpaceTransformer spaceTransformer) {
+    this.spaceTransformer = spaceTransformer;
+  }
 }

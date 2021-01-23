@@ -19,111 +19,109 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
- * TODO : stop my Animator properly
- * TODO : single animator interface for all
+ * TODO : stop my Animator properly TODO : single animator interface for all
  * 
- * TODO : why need to chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT);
- * TODO : why need to q.setAlphaActivated(false); to avoid DARK ALPHA (problem not existing in POC)
+ * TODO : why need to chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); TODO : why need to
+ * q.setAlphaActivated(false); to avoid DARK ALPHA (problem not existing in POC)
  */
 public class SurfaceDemoEmulGL {
-	
-	static final float ALPHA_FACTOR = 0.55f;//.61f;
 
-	public static void main(String[] args) {
-		//LoggerUtils.minimal();
-		
-		// ---------------------
-		// JZY3D CONTENT
+  static final float ALPHA_FACTOR = 0.55f;// .61f;
 
-		Shape surface = surface();
-		//surface.setWireframeDisplayed(false);
+  public static void main(String[] args) {
+    // LoggerUtils.minimal();
 
-		EmulGLChartFactory factory = new EmulGLChartFactory();
+    // ---------------------
+    // JZY3D CONTENT
 
-		Quality q = Quality.Advanced; // assez propre avec l'ancienne méthode de setQuality 
-		//q.setAlphaActivated(false); /// ALPHA BUG
-		
-		//q.setSmoothEdge(true);
-		//q.setSmoothPolygon(true);
-		//q.setSmoothColor(false);
-		
-		//q.setSmoothColor(false);
-		Chart chart = factory.newChart(q);
-		chart.add(surface);
-		
-		((EmulGLCanvas)chart.getCanvas()).setProfileDisplayMethod(false);
-		
-		// --------------------------------
-        		
-        //chart.getView().getCamera().setViewportMode(ViewportMode.SQUARE);
+    Shape surface = surface();
+    // surface.setWireframeDisplayed(false);
 
-		chart.open();
-		
-		
-		
-		// --------------------------------
-		CameraThreadController rotation = new CameraThreadController(chart);
-		rotation.setStep(0.025f);
-		rotation.setUpdateViewDefault(true);
-		
-		AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-		mouse.addSlaveThreadController(rotation);
-		
-		//chart.getView().setBackgroundColor(Color.BLUE);
-		//chart.getView().setAxisDisplayed(true);
-		
-		boolean fixWithAnimator = true;
-		if(fixWithAnimator) {
-			rotation.setUpdateViewDefault(true);
-			mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
-			((EmulGLCanvas)chart.getCanvas()).getAnimation().start();	
-		}
-		else {
-			
-		}
-		// autre solution  :quand drag, n'envoyer d'event repaint que si un certain temps s'est écoulé
-		// quand paint, n'envoyer d'event repain que si un certain temps s'est écoule
-		
-		
+    EmulGLChartFactory factory = new EmulGLChartFactory();
 
-		try {
-			chart.screenshot(new File("target/" + SurfaceDemoEmulGL.class.getSimpleName() + ".png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    Quality q = Quality.Advanced; // assez propre avec l'ancienne méthode de setQuality
+    // q.setAlphaActivated(false); /// ALPHA BUG
 
-	
-	private static Shape surface() {
+    // q.setSmoothEdge(true);
+    // q.setSmoothPolygon(true);
+    // q.setSmoothColor(false);
 
-		// ---------------------------
-		// DEFINE SURFACE MATHS
-		Mapper mapper = new Mapper() {
-			@Override
-			public double f(double x, double y) {
-				return x * Math.sin(x * y);
-			}
-		};
-		Range range = new Range(-3, 3);
-		int steps = 50;
+    // q.setSmoothColor(false);
+    Chart chart = factory.newChart(q);
+    chart.add(surface);
 
-		// ---------------------------
-		// MAKE SURFACE
+    ((EmulGLCanvas) chart.getCanvas()).setProfileDisplayMethod(false);
 
-		SurfaceBuilder builder = new SurfaceBuilder();
+    // --------------------------------
 
-		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-		
-		surface.setPolygonOffsetFillEnable(false); // VERY IMPORTANT FOR JGL TO WORK !!
-		
-		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-				surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));//0.65f));
-		surface.setColorMapper(colorMapper);
-		surface.setFaceDisplayed(true);
-		surface.setWireframeDisplayed(true);
-		surface.setWireframeColor(Color.BLACK);
-		surface.setWireframeWidth(1);
-		return surface;
-	}
+    // chart.getView().getCamera().setViewportMode(ViewportMode.SQUARE);
+
+    chart.open();
+
+
+
+    // --------------------------------
+    CameraThreadController rotation = new CameraThreadController(chart);
+    rotation.setStep(0.025f);
+    rotation.setUpdateViewDefault(true);
+
+    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
+    mouse.addSlaveThreadController(rotation);
+
+    // chart.getView().setBackgroundColor(Color.BLUE);
+    // chart.getView().setAxisDisplayed(true);
+
+    boolean fixWithAnimator = true;
+    if (fixWithAnimator) {
+      rotation.setUpdateViewDefault(true);
+      mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
+      ((EmulGLCanvas) chart.getCanvas()).getAnimation().start();
+    } else {
+
+    }
+    // autre solution :quand drag, n'envoyer d'event repaint que si un certain temps s'est écoulé
+    // quand paint, n'envoyer d'event repain que si un certain temps s'est écoule
+
+
+
+    try {
+      chart.screenshot(new File("target/" + SurfaceDemoEmulGL.class.getSimpleName() + ".png"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+
+  private static Shape surface() {
+
+    // ---------------------------
+    // DEFINE SURFACE MATHS
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+    Range range = new Range(-3, 3);
+    int steps = 50;
+
+    // ---------------------------
+    // MAKE SURFACE
+
+    SurfaceBuilder builder = new SurfaceBuilder();
+
+    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+
+    surface.setPolygonOffsetFillEnable(false); // VERY IMPORTANT FOR JGL TO WORK !!
+
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));// 0.65f));
+    surface.setColorMapper(colorMapper);
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    surface.setWireframeWidth(1);
+    return surface;
+  }
 
 }

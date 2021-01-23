@@ -5,8 +5,11 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 
 public interface IColorbarLegend {
-    public void render(IPainter painter);
-    public void drawableChanged(DrawableChangedEvent e);
-    public Dimension getMinimumSize();
-    public void setMinimumSize(Dimension dimension);
+  public void render(IPainter painter);
+
+  public void drawableChanged(DrawableChangedEvent e);
+
+  public Dimension getMinimumSize();
+
+  public void setMinimumSize(Dimension dimension);
 }

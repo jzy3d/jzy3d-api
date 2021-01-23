@@ -22,72 +22,73 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  */
 public class SurfaceDemoEmulGL_Coplanar {
 
-	static final float ALPHA_FACTOR = .50f;
+  static final float ALPHA_FACTOR = .50f;
 
-	public static void main(String[] args) {
-		EmulGLChartFactory factory = new EmulGLChartFactory();
-		Quality q = Quality.Advanced; 
+  public static void main(String[] args) {
+    EmulGLChartFactory factory = new EmulGLChartFactory();
+    Quality q = Quality.Advanced;
 
-		Shape surface = surface();
+    Shape surface = surface();
 
-		// IMPORTANT FOR JGL TO RENDER COPLANAR POLYGON & EDGE WHEN ALPHA
-		// DISABLED
-		surface.setPolygonWireframeDepthTrick(true);
-		q.setAlphaActivated(false);
-		//
-		
-		
-		Chart chart = factory.newChart(q);
-		chart.add(surface);
-		chart.getView().setAxisDisplayed(false);
-		chart.open();
+    // IMPORTANT FOR JGL TO RENDER COPLANAR POLYGON & EDGE WHEN ALPHA
+    // DISABLED
+    surface.setPolygonWireframeDepthTrick(true);
+    q.setAlphaActivated(false);
+    //
 
-		// --------------------------------
-		CameraThreadController rotation = new CameraThreadController(chart);
-		rotation.setStep(0.025f);
-		rotation.setUpdateViewDefault(true);
 
-		AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-		mouse.addSlaveThreadController(rotation);
-		rotation.setUpdateViewDefault(true);
-		mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
+    Chart chart = factory.newChart(q);
+    chart.add(surface);
+    chart.getView().setAxisDisplayed(false);
+    chart.open();
 
-		chart.setAnimated(true);
+    // --------------------------------
+    CameraThreadController rotation = new CameraThreadController(chart);
+    rotation.setStep(0.025f);
+    rotation.setUpdateViewDefault(true);
 
-		try {
-			chart.screenshot(new File("target/" + SurfaceDemoEmulGL_Coplanar.class.getSimpleName() + ".png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
+    mouse.addSlaveThreadController(rotation);
+    rotation.setUpdateViewDefault(true);
+    mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
 
-	private static Shape surface() {
+    chart.setAnimated(true);
 
-		// ---------------------------
-		// DEFINE SURFACE MATHS
-		Mapper mapper = new Mapper() {
-			@Override
-			public double f(double x, double y) {
-				return x * Math.sin(x * y);
-			}
-		};
-		Range range = new Range(-3, 3);
-		int steps = 50;
+    try {
+      chart.screenshot(
+          new File("target/" + SurfaceDemoEmulGL_Coplanar.class.getSimpleName() + ".png"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
 
-		// ---------------------------
-		// CUSTOMIZE SURFACE BUILDER FOR JGL
+  private static Shape surface() {
 
-		SurfaceBuilder builder = new SurfaceBuilder();
+    // ---------------------------
+    // DEFINE SURFACE MATHS
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+    Range range = new Range(-3, 3);
+    int steps = 50;
 
-		Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    // ---------------------------
+    // CUSTOMIZE SURFACE BUILDER FOR JGL
 
-		ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-				surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));// 0.65f));
-		surface.setColorMapper(colorMapper);
-		surface.setFaceDisplayed(true);
-		surface.setWireframeDisplayed(true);
-		surface.setWireframeColor(Color.BLACK);
-		return surface;
-	}
+    SurfaceBuilder builder = new SurfaceBuilder();
+
+    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+        surface.getBounds().getZmax(), new Color(1, 1, 1, ALPHA_FACTOR));// 0.65f));
+    surface.setColorMapper(colorMapper);
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    return surface;
+  }
 
 }

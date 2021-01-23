@@ -13,122 +13,124 @@ import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.TextureCoords;
 import com.jogamp.opengl.util.texture.TextureIO;
 
-public class SharedTexture implements IGLBindedResource{
-    protected SharedTexture() {
-        this.texture = null;
-    }
-    
-    public SharedTexture(String file) {
-        this.texture = null;
-        this.file = file;
+public class SharedTexture implements IGLBindedResource {
+  protected SharedTexture() {
+    this.texture = null;
+  }
+
+  public SharedTexture(String file) {
+    this.texture = null;
+    this.file = file;
+  }
+
+  public Texture getTexture(IPainter painter) {
+    if (texture == null)
+      mount(painter);
+    return texture;
+  }
+
+  /** A GL2 context MUST be current. */
+  @Override
+  public void mount(IPainter painter) {
+    GL gl = ((NativeDesktopPainter) painter).getGL();
+    try {
+      load(gl, file);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
 
-    public Texture getTexture(IPainter painter) {
-        if (texture == null)
-            mount(painter);
-        return texture;
-    }
+    coords = texture.getImageTexCoords();
+    halfWidth = texture.getWidth() / 2;
+    halfHeight = texture.getHeight() / 2;
+  }
 
-    /** A GL2 context MUST be current. */
-    @Override
-    public void mount(IPainter painter) {
-    	GL gl = ((NativeDesktopPainter)painter).getGL();
-        try {
-            load(gl, file);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+  @Override
+  public boolean hasMountedOnce() {
+    return texture != null;
+  }
 
-        coords = texture.getImageTexCoords();
-        halfWidth = texture.getWidth() / 2;
-        halfHeight = texture.getHeight() / 2;
-    }
-    
-    @Override
-    public boolean hasMountedOnce(){
-        return texture!=null;
-    }
+  protected void load(GL gl, String fileName) throws GLException, IOException {
+    texture = TextureIO.newTexture(new File(fileName), useMipMap);
 
-    protected void load(GL gl, String fileName) throws GLException, IOException {
-        texture = TextureIO.newTexture(new File(fileName), useMipMap);
-        
-        if(textureMagnificationFilter!=-1)
-            texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
-        if(textureMinificationFilter!=-1)
-            texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
-    }
-    
-    public String getFile() {
-        return file;
-    }
+    if (textureMagnificationFilter != -1)
+      texture.setTexParameteri(gl, GL.GL_TEXTURE_MAG_FILTER, textureMagnificationFilter);
+    if (textureMinificationFilter != -1)
+      texture.setTexParameteri(gl, GL.GL_TEXTURE_MIN_FILTER, textureMinificationFilter);
+  }
 
-    public TextureCoords getCoords() {
-        return coords;
-    }
+  public String getFile() {
+    return file;
+  }
 
-    public float getHalfWidth() {
-        return halfWidth;
-    }
+  public TextureCoords getCoords() {
+    return coords;
+  }
 
-    public float getHalfHeight() {
-        return halfHeight;
-    }
-    
-    public boolean isUseMipMap() {
-        return useMipMap;
-    }
+  public float getHalfWidth() {
+    return halfWidth;
+  }
 
-    /**
-     * Will apply if set before actually loading the texture.
-     * 
-     * @param useMipMap
-     */
-    public void setUseMipMap(boolean useMipMap) {
-        this.useMipMap = useMipMap;
-    }
-    
-    public int getTextureMagnificationFilter() {
-        return textureMagnificationFilter;
-    }
+  public float getHalfHeight() {
+    return halfHeight;
+  }
 
-    /**
-     * Will apply if set before actually loading the texture.
-     * 
-     * Possible values documented in https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml 
-     * (see parameter GL_TEXTURE_MAG_FILTER)
-     * 
-     * Use -1 to avoid magnification
-     * 
-     * @param textureMagnificationFilter
-     */
-    public void setTextureMagnificationFilter(int textureMagnificationFilter) {
-        this.textureMagnificationFilter = textureMagnificationFilter;
-    }
+  public boolean isUseMipMap() {
+    return useMipMap;
+  }
 
-    public int getTextureMinificationFilter() {
-        return textureMinificationFilter;
-    }
+  /**
+   * Will apply if set before actually loading the texture.
+   * 
+   * @param useMipMap
+   */
+  public void setUseMipMap(boolean useMipMap) {
+    this.useMipMap = useMipMap;
+  }
 
-    /**
-     * Will apply if set before actually loading the texture.
-     * 
-     * Possible values documented in https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml 
-     * (see parameter GL_TEXTURE_MIN_FILTER)
-     * 
-     * Use -1 to avoid minification
-     * 
-     * @param textureMinificationFilter
-     */
-    public void setTextureMinificationFilter(int textureMinificationFilter) {
-        this.textureMinificationFilter = textureMinificationFilter;
-    }
+  public int getTextureMagnificationFilter() {
+    return textureMagnificationFilter;
+  }
 
-    protected Texture texture;
-    protected String file;
-    protected TextureCoords coords;
-    protected float halfWidth;
-    protected float halfHeight;
-    protected boolean useMipMap = false;
-    protected int textureMagnificationFilter = GL.GL_NEAREST;
-    protected int textureMinificationFilter = GL.GL_NEAREST;
+  /**
+   * Will apply if set before actually loading the texture.
+   * 
+   * Possible values documented in
+   * https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml (see parameter
+   * GL_TEXTURE_MAG_FILTER)
+   * 
+   * Use -1 to avoid magnification
+   * 
+   * @param textureMagnificationFilter
+   */
+  public void setTextureMagnificationFilter(int textureMagnificationFilter) {
+    this.textureMagnificationFilter = textureMagnificationFilter;
+  }
+
+  public int getTextureMinificationFilter() {
+    return textureMinificationFilter;
+  }
+
+  /**
+   * Will apply if set before actually loading the texture.
+   * 
+   * Possible values documented in
+   * https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml (see parameter
+   * GL_TEXTURE_MIN_FILTER)
+   * 
+   * Use -1 to avoid minification
+   * 
+   * @param textureMinificationFilter
+   */
+  public void setTextureMinificationFilter(int textureMinificationFilter) {
+    this.textureMinificationFilter = textureMinificationFilter;
+  }
+
+  protected Texture texture;
+  protected String file;
+  protected TextureCoords coords;
+  protected float halfWidth;
+  protected float halfHeight;
+  protected boolean useMipMap = false;
+  protected int textureMagnificationFilter = GL.GL_NEAREST;
+  protected int textureMinificationFilter = GL.GL_NEAREST;
 }

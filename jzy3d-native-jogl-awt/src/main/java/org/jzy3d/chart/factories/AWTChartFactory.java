@@ -10,43 +10,43 @@ import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class AWTChartFactory extends ChartFactory {
-    public static Chart chart() {
-        return chart(Quality.Intermediate);
-    }
+  public static Chart chart() {
+    return chart(Quality.Intermediate);
+  }
 
-    public static Chart chart(Quality quality) {
-        AWTChartFactory f = new AWTChartFactory();
-        return f.newChart(quality);
-    }
+  public static Chart chart(Quality quality) {
+    AWTChartFactory f = new AWTChartFactory();
+    return f.newChart(quality);
+  }
 
-    /* *************************************************** */
-	
-    static Logger logger = Logger.getLogger(AWTChartFactory.class);
-    
-    public AWTChartFactory() {
-    	super(new AWTPainterFactory());
-    }
-    
-    public AWTChartFactory(IPainterFactory painterFactory) {
-    	super(painterFactory);
-    }
+  /* *************************************************** */
 
-	/**
-     * The {@link AWTNativeView} returned by this factory support Java2d defined components 
-     * (background images, tooltips, post-renderers and overlay)
-     */
-    @Override
-    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTView(factory, scene, canvas, quality);
-    }
-    
-	@Override
-    public AWTNativeChart newChart(IChartFactory factory, Quality quality) {
-        return new AWTNativeChart(factory, quality);
-    }
-    
-    @Override
-    public IChartFactory getFactory() {
-        return this;
-    }
+  static Logger logger = Logger.getLogger(AWTChartFactory.class);
+
+  public AWTChartFactory() {
+    super(new AWTPainterFactory());
+  }
+
+  public AWTChartFactory(IPainterFactory painterFactory) {
+    super(painterFactory);
+  }
+
+  /**
+   * The {@link AWTNativeView} returned by this factory support Java2d defined components
+   * (background images, tooltips, post-renderers and overlay)
+   */
+  @Override
+  public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    return new AWTView(factory, scene, canvas, quality);
+  }
+
+  @Override
+  public AWTNativeChart newChart(IChartFactory factory, Quality quality) {
+    return new AWTNativeChart(factory, quality);
+  }
+
+  @Override
+  public IChartFactory getFactory() {
+    return this;
+  }
 }

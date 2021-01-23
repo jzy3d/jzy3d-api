@@ -7,5 +7,5 @@ import org.jzy3d.maths.Coord2d;
 
 public interface ConvexHullFunction {
 
-    public Deque<Coord2d> getConvexHull(Coord2d[] pts);
+  public Deque<Coord2d> getConvexHull(Coord2d[] pts);
 }

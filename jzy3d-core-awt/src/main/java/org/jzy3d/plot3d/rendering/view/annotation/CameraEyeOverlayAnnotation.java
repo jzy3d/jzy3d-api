@@ -12,18 +12,18 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin
  *
  */
-public class CameraEyeOverlayAnnotation implements AWTRenderer2d{
-    public CameraEyeOverlayAnnotation(View view) {
-        this.view = view;
-    }
+public class CameraEyeOverlayAnnotation implements AWTRenderer2d {
+  public CameraEyeOverlayAnnotation(View view) {
+    this.view = view;
+  }
 
-    @Override
-    public void paint(Graphics g, int canvasWidth, int canvasHeight) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setColor(java.awt.Color.BLACK);
-        g2d.drawString("eye=" + view.getCamera().getEye(), 20, 20);
-        g2d.drawString("scaling=" + view.getLastViewScaling(), 20, 50);
-    }
-    
-    protected View view;
+  @Override
+  public void paint(Graphics g, int canvasWidth, int canvasHeight) {
+    Graphics2D g2d = (Graphics2D) g;
+    g2d.setColor(java.awt.Color.BLACK);
+    g2d.drawString("eye=" + view.getCamera().getEye(), 20, 20);
+    g2d.drawString("scaling=" + view.getLastViewScaling(), 20, 50);
+  }
+
+  protected View view;
 }

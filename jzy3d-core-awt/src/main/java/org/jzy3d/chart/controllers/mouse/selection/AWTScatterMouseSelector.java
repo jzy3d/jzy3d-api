@@ -10,39 +10,38 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 
 public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
-    static Logger LOGGER = Logger.getLogger(AWTScatterMouseSelector.class);
-    
-    
-	public AWTScatterMouseSelector(SelectableScatter scatter) {
-		this.scatter = scatter;
-	}
+  static Logger LOGGER = Logger.getLogger(AWTScatterMouseSelector.class);
 
-	/** Make projection and match points belonging to selection. */
-	@Override
-	protected void processSelection(Scene scene, View view, int width, int height) {
-		view.project();
-		Coord3d[] projection = scatter.getProjection();
-		for (int i = 0; i < projection.length; i++)
-			if (matchRectangleSelection(in, out, projection[i], width, height))
-				scatter.setHighlighted(i, true);
-	}
 
-	@Override
-	protected void drawSelection(Graphics2D g2d, int width, int height) {
-		this.width = width;
-		this.height = height;
-		
-		//LOGGER.info(" " + width + " " + height);
+  public AWTScatterMouseSelector(SelectableScatter scatter) {
+    this.scatter = scatter;
+  }
 
-		if (dragging)
-			drawRectangle(g2d, in, out);
-	}
-	
-	@Override
-    public void clearLastSelection(){
-    }
+  /** Make projection and match points belonging to selection. */
+  @Override
+  protected void processSelection(Scene scene, View view, int width, int height) {
+    view.project();
+    Coord3d[] projection = scatter.getProjection();
+    for (int i = 0; i < projection.length; i++)
+      if (matchRectangleSelection(in, out, projection[i], width, height))
+        scatter.setHighlighted(i, true);
+  }
 
-	protected SelectableScatter scatter;
-	protected int width;
-	protected int height;
+  @Override
+  protected void drawSelection(Graphics2D g2d, int width, int height) {
+    this.width = width;
+    this.height = height;
+
+    // LOGGER.info(" " + width + " " + height);
+
+    if (dragging)
+      drawRectangle(g2d, in, out);
+  }
+
+  @Override
+  public void clearLastSelection() {}
+
+  protected SelectableScatter scatter;
+  protected int width;
+  protected int height;
 }

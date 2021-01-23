@@ -14,102 +14,102 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 import org.jzy3d.plot3d.rendering.view.IImageViewport;
 
-public class AWTSerieLegend extends AWTLegend implements IImageViewport{
-    private static final int LINE_HEIGHT = 15;
-    private static final int INTERLINE_HEIGHT = 5;
-    private static final int FONT_HEIGHT = 12;
-    
-    private static final int LEGEND_BORDER_HEIGHT = 30;
+public class AWTSerieLegend extends AWTLegend implements IImageViewport {
+  private static final int LINE_HEIGHT = 15;
+  private static final int INTERLINE_HEIGHT = 5;
+  private static final int FONT_HEIGHT = 12;
+
+  private static final int LEGEND_BORDER_HEIGHT = 30;
 
 
-    
-    public AWTSerieLegend(Serie2d serie) {
-        this(serie.getDrawable());
-        this.serie = serie;
-    }
 
-    public AWTSerieLegend(Drawable drawable) {
-        this(drawable, Color.BLACK, Color.WHITE);
-    }
+  public AWTSerieLegend(Serie2d serie) {
+    this(serie.getDrawable());
+    this.serie = serie;
+  }
 
-    public AWTSerieLegend(Drawable drawable, Color foreground, Color background) {
-        super(drawable, foreground, background);
-        this.minimumDimension = new Dimension(AWTAbstractImageGenerator.MIN_BAR_WIDTH, AWTAbstractImageGenerator.MIN_BAR_HEIGHT);
+  public AWTSerieLegend(Drawable drawable) {
+    this(drawable, Color.BLACK, Color.WHITE);
+  }
 
-        drawable.setLegend(this);
-        initImageGenerator();
-        imageGenerator.setHasBackground(true);
-        imageGenerator.setFont(new java.awt.Font("Helvetica", 0, 12));
-        setGeneratorColors();
+  public AWTSerieLegend(Drawable drawable, Color foreground, Color background) {
+    super(drawable, foreground, background);
+    this.minimumDimension = new Dimension(AWTAbstractImageGenerator.MIN_BAR_WIDTH,
+        AWTAbstractImageGenerator.MIN_BAR_HEIGHT);
 
-    }
+    drawable.setLegend(this);
+    initImageGenerator();
+    imageGenerator.setHasBackground(true);
+    imageGenerator.setFont(new java.awt.Font("Helvetica", 0, 12));
+    setGeneratorColors();
 
-    public void initImageGenerator() {
-        imageGenerator = new AWTAbstractImageGenerator() {
-            @Override
-            public BufferedImage toImage(int width, int height) {
-                Color color = getSerieColor();
-                String text = getSerieText();
+  }
 
-                BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-                Graphics2D graphic = image.createGraphics();
-                configureText(graphic);
+  public void initImageGenerator() {
+    imageGenerator = new AWTAbstractImageGenerator() {
+      @Override
+      public BufferedImage toImage(int width, int height) {
+        Color color = getSerieColor();
+        String text = getSerieText();
 
-                int y = LINE_HEIGHT;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D graphic = image.createGraphics();
+        configureText(graphic);
 
-                drawBackground(width, LEGEND_BORDER_HEIGHT, graphic);
-                drawSerieLineAndNameAtY(color, text, graphic, y);
-                drawLegendBorder(graphic, width, LEGEND_BORDER_HEIGHT);
-                return image;
-            }
+        int y = LINE_HEIGHT;
 
-            public void drawSerieLineAndNameAtY(Color color, String text, Graphics2D graphic, int y) {
-                if (color != null) {
-                    graphic.setColor(AWTColor.toAWT(color));
-                    graphic.drawLine(0, y, LINE_HEIGHT, y);
-                }
-                graphic.drawString(text, LINE_HEIGHT+INTERLINE_HEIGHT, y + INTERLINE_HEIGHT);
-            }
+        drawBackground(width, LEGEND_BORDER_HEIGHT, graphic);
+        drawSerieLineAndNameAtY(color, text, graphic, y);
+        drawLegendBorder(graphic, width, LEGEND_BORDER_HEIGHT);
+        return image;
+      }
 
-            private String getSerieText() {
-                if(serie!=null){
-                    return serie.getName();
-                }
-                return "unknown";
-            }
+      public void drawSerieLineAndNameAtY(Color color, String text, Graphics2D graphic, int y) {
+        if (color != null) {
+          graphic.setColor(AWTColor.toAWT(color));
+          graphic.drawLine(0, y, LINE_HEIGHT, y);
+        }
+        graphic.drawString(text, LINE_HEIGHT + INTERLINE_HEIGHT, y + INTERLINE_HEIGHT);
+      }
 
-            public Color getSerieColor() {
-                if(serie!=null){
-                    return serie.getColor();
-                }
-                else if (drawable instanceof ISingleColorable) {
-                    return ((ISingleColorable) drawable).getColor();
-                }
-                return null;
-            }
+      private String getSerieText() {
+        if (serie != null) {
+          return serie.getName();
+        }
+        return "unknown";
+      }
 
-        };
-    }
-
-    @Override
-    public void render(IPainter painter) {
-    	painter.glEnable_Blend();
-        super.render(painter);
-    }
-
-    @Override
-    public BufferedImage toImage(int width, int height) {
-        if (imageGenerator != null) {
-            setGeneratorColors();
-            
-            int iWidth = Math.max(width - margin, 1);
-            int iHeight = LEGEND_BORDER_HEIGHT;//(LINE_HEIGHT + INTERLINE_HEIGHT);
-            return imageGenerator.toImage(iWidth, iHeight);
+      public Color getSerieColor() {
+        if (serie != null) {
+          return serie.getColor();
+        } else if (drawable instanceof ISingleColorable) {
+          return ((ISingleColorable) drawable).getColor();
         }
         return null;
+      }
+
+    };
+  }
+
+  @Override
+  public void render(IPainter painter) {
+    painter.glEnable_Blend();
+    super.render(painter);
+  }
+
+  @Override
+  public BufferedImage toImage(int width, int height) {
+    if (imageGenerator != null) {
+      setGeneratorColors();
+
+      int iWidth = Math.max(width - margin, 1);
+      int iHeight = LEGEND_BORDER_HEIGHT;// (LINE_HEIGHT + INTERLINE_HEIGHT);
+      return imageGenerator.toImage(iWidth, iHeight);
     }
+    return null;
+  }
 
-    protected int margin = 25;
+  protected int margin = 25;
 
-    protected Serie2d serie;
+  protected Serie2d serie;
 }

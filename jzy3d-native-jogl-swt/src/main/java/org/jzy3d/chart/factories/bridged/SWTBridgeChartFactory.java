@@ -13,29 +13,28 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.newt.opengl.GLWindow;
 
 public class SWTBridgeChartFactory extends SWTChartFactory {
-    public SWTBridgeChartFactory() {
-    	super();
-    	setPainterFactory(new SWTBridgePainterFactory());
-    }
-    
-    /* */
-    
-    /** Dedicated to {@link CanvasNewtSWT} implementation. */
-    public NativeAnimator newAnimator(GLWindow canvas) {
-        return new NativeAnimator(canvas);
-    }
+  public SWTBridgeChartFactory() {
+    super();
+    setPainterFactory(new SWTBridgePainterFactory());
+  }
 
-    /**
-     * The AWTView support Java2d defined components (tooltips, background
-     * images)
-     */
-    @Override
-    public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
-        return new AWTView(factory, scene, canvas, quality);
-    }
+  /* */
 
-    @Override
-    public IChartFactory getFactory() {
-        return this;
-    }
+  /** Dedicated to {@link CanvasNewtSWT} implementation. */
+  public NativeAnimator newAnimator(GLWindow canvas) {
+    return new NativeAnimator(canvas);
+  }
+
+  /**
+   * The AWTView support Java2d defined components (tooltips, background images)
+   */
+  @Override
+  public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    return new AWTView(factory, scene, canvas, quality);
+  }
+
+  @Override
+  public IChartFactory getFactory() {
+    return this;
+  }
 }
