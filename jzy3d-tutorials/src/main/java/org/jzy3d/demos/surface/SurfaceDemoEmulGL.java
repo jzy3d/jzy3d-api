@@ -79,11 +79,9 @@ public class SurfaceDemoEmulGL {
     Range range = new Range(-3, 3);
     int steps = 50;
 
-    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps), mapper);
 
-    ColorMapper colorMapper =
-        new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, ALPHA_FACTOR));// 0.65f));
-
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, ALPHA_FACTOR));// 0.65f));
     surface.setColorMapper(colorMapper);
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);

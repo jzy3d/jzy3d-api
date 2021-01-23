@@ -1,4 +1,4 @@
-package org.jzy3d.demos.surface;
+package org.jzy3d.tests.frameCheck;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

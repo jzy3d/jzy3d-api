@@ -20,10 +20,7 @@ public class SurfaceDemoFallback {
   public static void main(String[] args) {
     Shape surface = surface();
 
-    // -------------------------------
-    // Create a chart
     Quality quality = Quality.Advanced;
-
     FallbackChartFactory factory = new FallbackChartFactory();
     Chart chart = factory.newChart(quality);
     chart.getScene().getGraph().add(surface);
@@ -44,7 +41,6 @@ public class SurfaceDemoFallback {
     Range range = new Range(-3, 3);
     int steps = 80;
 
-    Shape surface = Surface.shape(mapper, range, steps, new ColorMapRainbow(), .5f);
-    return surface;
+    return Surface.shape(mapper, range, steps, new ColorMapRainbow(), .5f);
   }
 }

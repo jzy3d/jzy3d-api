@@ -1,4 +1,4 @@
-package org.jzy3d.integration;
+package org.jzy3d.tests.integration;
 
 import org.junit.Test;
 import org.jzy3d.chart.Chart;

@@ -1,7 +1,11 @@
-jzy3d-api
+Jzy3d
 =========
 
-Jzy3d is a framework for easily drawing 3d and 2d charts in Java, using either fast native GPU rendering or CPU based rendering. The framework targets simplicity and portability (AWT, SWT, NEWT, Swing, GPU/CPU, etc).
+Jzy3d is a framework for easily drawing 3d and 2d charts in Java, using either fast native GPU rendering or CPU based rendering to enhance portability across combination of OS/JVM/GPU.
+
+The framework targets simplicity and portability (AWT, SWT, NEWT, Swing, JavaFX, Offscreen rendering using either GPU or CPU), running on MacOS, Windows and Linux. Jzy3d available for other languages/platforms such as [Scala, Groovy, Matlab](http://jzy3d.org/community.php), [C#](https://github.com/jzy3d/nzy3d-api), and even [Python](https://github.com/jzy3d/pyzy3d) through a bridge allowing either Py4j or Jython.  
+
+The API can be used [freely in commercial applications](license.txt). You can explore the [tutorials](jzy3d-tutorials). an then purchase the [extended developper guide](http://jzy3d.org/guide.php) to support the development effort.
 
 
 # How to use
@@ -25,39 +29,18 @@ Refer to the [tutorial README](jzy3d-tutorials/README.md) file to get help on cr
   </tr>
 </table>
 
-As this library focuses on portability of the charts, the Surface tutorial package demonstrates the same chart running on AWT, SWT, Swing using native OpenGL powered by JOGL. In addition, `SurfaceDemoEmulGL` shows how to use CPU based rendering as a fallback, which only vary to the native demo by using a dedicated `EmulGLPainterFactory` :
+As this library focuses on portability of the charts, the `org.jzy3d.demos.surface` package in [jzy3d-tutorials](jzy3d-tutorials) demonstrates the same chart running on AWT, SWT, Swing using native OpenGL powered by JOGL and jGL CPU rendering.
 
 ```java
-public class SurfaceDemoEmulGL {
-  public static void main(String[] args) {
-    Shape surface = surface();
-
-    EmulGLChartFactory factory = new EmulGLChartFactory();
-
-    Quality q = Quality.Advanced;
-    Chart chart = factory.newChart(q);
-    chart.add(surface);
-    chart.open();
-
-    // --------------------------------
-    // Controllers
-
-    CameraThreadController rotation = new CameraThreadController(chart);
-    rotation.setStep(0.025f);
-    rotation.setUpdateViewDefault(true);
-
-    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-    mouse.addSlaveThreadController(rotation);
-
-    rotation.setUpdateViewDefault(true);
-    mouse.setUpdateViewDefault(false);
-    chart.setAnimated(true);
+public class SurfaceDemoAWT extends AWTAbstractAnalysis {
+  public static void main(String[] args) throws Exception {
+    SurfaceDemoAWT d = new SurfaceDemoAWT();
+    AnalysisLauncher.open(d);
   }
 
-
-  private static Shape surface() {
-    SurfaceBuilder builder = new SurfaceBuilder();
-
+  @Override
+  public void init() {
+    // Define a function to plot
     Mapper mapper = new Mapper() {
       @Override
       public double f(double x, double y) {
@@ -65,32 +48,95 @@ public class SurfaceDemoEmulGL {
       }
     };
 
+    // Define range and precision for the function to plot
     Range range = new Range(-3, 3);
-    int steps = 50;
+    int steps = 80;
 
-    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-
-    ColorMapper colorMapper =
-        new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, 0.65f));
-
-    surface.setColorMapper(colorMapper);
+    // Create the object to represent the function over the given range.
+    final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps), mapper);
+    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .5f)));
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);
     surface.setWireframeColor(Color.BLACK);
-    surface.setWireframeWidth(1);
-    return surface;
+
+    // Create a chart
+    GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL2));
+    IPainterFactory p = new AWTPainterFactory(c);
+    IChartFactory f = new AWTChartFactory(p);
+
+    chart = f.newChart(Quality.Advanced);
+    chart.getScene().getGraph().add(surface);
   }
 }
 ```
 
-# Architecture
+# What's inside
+
+## Features
+
+Multiple chart types
+* Surface charts
+* Bar charts
+* Scatter charts
+* Volume charts
+* 3D and 2D graphs charts
+* Rich chart options
+* Many primitives (spheres, triangles, polygons, ...)
+
+Flexible layout
+* Colorbars
+* Colormappers for coloring objects
+* Axis box layout with detailed tick definition and tick rendering tools
+* Contour functions
+* Tooltips
+* Background images
+* 2D post renderers
+* Lights
+
+Algorithms
+* Grid based and Delaunay surface tesselation methods
+* 3d line strip interpolation to smooth pathes (Bernstein 3d)
+* 2d envelopes (Convex hulls)
+* Polygon ordering for improved transparency rendering
+* Dual depth peeling: scene graph order independent transparency (expected for 1.0)
+* Matlab-like array processors and statistics tools
+* Experimental Support Vector Machine integration (Svm3d)
+
+Interactions
+* Mouse interaction with objects (selection & picking methods)
+* Mouse interaction with chart (rotation, zoom, scale)
+* Key interaction with chart (rotation, zoom, scale)
+* Thread Controllers
+* Animation of objects' structures (surface, series of lines, etc)
+
+High and low level OpenGL programming
+* Hide complexity and provide out of the box solutions for common low level OpenGL tasks
+* Fully cutomizable framework with access to all OpenGL native features through JOGL
+
+Cross platforms and compatible
+* Straightforward integration to either AWT, Swing, Eclipse RCP (SWT), or JavaFX
+* Windows, Unix, and MacOS. Android supposed to work if enable appropriate JOGL jars
+* Offscreen rendering
+* Multiple file formats (Ply, Obj, Matlab, CSV)
+* [C#](https://github.com/jzy3d/nzy3d-api) port
+* [Python](https://github.com/jzy3d/pyzy3d) binding
+* [Scala](https://github.com/jzy3d/jzy3d-sbt) example
+* [Matlab](https://fr.mathworks.com/matlabcentral/fileexchange/35026-opengl-3d-graphics-in-matlab-using-jzy3d-a-demo) integration
+
+Extensions
+* <a href="https://github.com/jzy3d/jzy3d-graphs">jzy3d-graph</a> : 3d graphs layout and rendering using Gephi toolkit
+* <a href="https://github.com/jzy3d/jzy3d-spectro">jzy3d-spectro</a> : 3d spectrogram
+* <a href="https://github.com/jzy3d/bigpicture">jzy3d-bigpicture</a> : drivers to few big data storage to draw massive amount of points
+
+
+## Architecture
 
 Creating a chart implies building and wiring the below high-level components.
 
 <img src="doc/Components.png"/>
 
 
-## Customize chart with factories
+### Customize chart with factories
 
 The ```IChartFactory``` builds all objects that will define how the chart will look (```Axis```, ```View```, ```Camera```, ```Chart```).
 
@@ -111,6 +157,19 @@ Jzy3d depends on the following libraries that are available on [Jzy3d Maven repo
 * [jGL](https://github.com/jzy3d/jGL) provides a pure Java implementation of OpenGL hence allowing CPU rendering as an alternative to GPU rendering (JOGL)
 * [jPLY](https://github.com/jzy3d/jPLY) supports the PLY format for loading 3d objects
 * [vecmath](https://github.com/jzy3d/vecmath) is a clone of a former java package
+
+# How to build
+
+```
+mvn install
+```
+
+# How to get help
+
+* Google [Discussion group](https://groups.google.com/g/jzy3d?pli=1)
+* Gitlab [Discussions](https://github.com/jzy3d/jzy3d-api/discussions)
+* StackOverflow [Tag](https://stackoverflow.com/questions/tagged/jzy3d)
+* If you are looking for professional services related to 3d rendering, contact [me](martin@jzy3d.org)
 
 
 # Changes in 2.0 version
@@ -154,26 +213,6 @@ SurfaceBuilder is not static anymore to be overridable.
 ## Deletions
 
 
-# Extensions
 
-Additional modules kept separated demonstrate side works on Jzy3d
-- <a href="https://github.com/jzy3d/bigpicture">jzy3d-bigpicture</a> : drivers to few big data storage to draw massive amount of points
-- <a href="https://github.com/jzy3d/jzy3d-graphs">jzy3d-graph</a> : 3d graphs layout and rendering using Gephi toolkit
-- <a href="https://github.com/jzy3d/jzy3d-spectro">jzy3d-spectro</a> : 3d spectrogram
-
-
-# Build
-
-```
-mvn install
-```
-
-# License
-
-New BSD
-
-# More information
-
-http://www.jzy3d.org
 
 <!--Travis build status : [![Build Status](https://travis-ci.org/jzy3d/jzy3d-api.svg?branch=master)](https://travis-ci.org/jzy3d/jzy3d-api)-->
