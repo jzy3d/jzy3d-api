@@ -82,6 +82,17 @@ Multiple chart types
 * 3D and 2D graphs charts
 * Many primitives to build custom charts (spheres, triangles, polygons, ...)
 
+
+
+<table>
+<tr>
+<td><img src="http://jzy3d.org/js/slider/images/HistogramDemo.png"></td>
+<td><img src="http://jzy3d.org/js/slider/images/ScatterDemo.png"></td>
+<td><img src="http://jzy3d.org/js/slider/images/ColorWaveDemo.png"></td>
+</tr>
+</table>
+
+
 Flexible layout
 * Colorbars
 * Colormappers for coloring objects
@@ -92,6 +103,15 @@ Flexible layout
 * 2D post renderers
 * Lights
 
+<table>
+<tr>
+<td><img src="http://jzy3d.org/js/slider/images/WireSurfaceDemo.png"></td>
+<td><img src="http://jzy3d.org/js/slider/images/AxeRendererDemo.png"></td>
+<td><img src="http://jzy3d.org/js/slider/images/ContourPlotsDemo.png"></td>
+</tr>
+</table>
+
+
 Algorithms
 * Grid based and Delaunay surface tesselation methods
 * 3d line strip interpolation to smooth pathes (Bernstein 3d)
@@ -100,6 +120,15 @@ Algorithms
 * Dual depth peeling: scene graph order independent transparency (expected for 1.0)
 * Matlab-like array processors and statistics tools
 * Experimental Support Vector Machine integration (Svm3d)
+
+<table>
+<tr>
+<td><img src="http://jzy3d.org/js/slider/images/GeneratedDelaunaySurfaceDemo.png"></td>
+<td><img src="http://jzy3d.org/js/slider/images/InterpolationDemo.png"></td>
+<td><img src="http://jzy3d.org/js/slider/images/SvmDemo.png"></td>
+</tr>
+</table>
+
 
 Interactions
 * Mouse interaction with objects (selection & picking methods)
