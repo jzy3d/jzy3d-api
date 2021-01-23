@@ -166,9 +166,17 @@
 					    <include>**/Test*.java</include>
 					    <include>**/*Test.java</include>
 							<!-- ITTest* are integration tests that should be run by failsafe (below)
-									 but failsafe run is failing
-							-->
-							<include>**/ITTest*.java</include>
+									 but failsafe run is failing so may trigger ITTest using surefire.
+
+									 But as ITTest fail when ran from another computer than mine (e.g. Github Workflow,
+									 which is most probably due to thin differences between Github GPU and my MacBook GPU
+									 we desactivate ITTest from base profile and will need to create a dedicated profiles
+									 to run them.
+
+									 Note that it may usefull to have the ability to have difference baseline image for
+									 macos/window/linux in case JVM difference make jGL text rendering be different somehow.
+									 
+							<include>**/ITTest*.java</include>-->
 					</includes>
 				</configuration>
 			</plugin>
