@@ -3,7 +3,7 @@ Jzy3d
 
 Jzy3d is a framework for easily drawing 3d and 2d charts in Java, using either fast native GPU rendering or CPU based rendering to enhance portability across combination of OS/JVM/GPU.
 
-The framework targets simplicity and portability (AWT, SWT, NEWT, Swing, JavaFX, Offscreen rendering using either GPU or CPU), running on MacOS, Windows and Linux. Jzy3d available for other languages/platforms such as [Scala, Groovy, Matlab](http://jzy3d.org/community.php), [C#](https://github.com/jzy3d/nzy3d-api), and even [Python](https://github.com/jzy3d/pyzy3d) through a bridge allowing either Py4j or Jython.  
+The framework targets simplicity and portability across Java windowing toolkits (AWT, SWT, NEWT, Swing, JavaFX, Offscreen rendering), running either on MacOS, Windows and Linux. Jzy3d is available for other languages or platforms such as [Scala, Groovy, Matlab](http://jzy3d.org/community.php), [C#](https://github.com/jzy3d/nzy3d-api), and even [Python](https://github.com/jzy3d/pyzy3d).  
 
 The API can be used [freely in commercial applications](license.txt). You can explore the [tutorials](jzy3d-tutorials). an then purchase the [extended developper guide](http://jzy3d.org/guide.php) to support the development effort.
 
