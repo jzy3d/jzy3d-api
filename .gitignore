@@ -11,8 +11,9 @@ target
 *~/
 *~
 
-*.obj
-
+**/dragon.obj
+#*.obj
+#!jzy3d-core/data/objfiles/bunny.obj
 
 */.classpath
 */.project
