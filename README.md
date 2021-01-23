@@ -76,12 +76,11 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
 
 Multiple chart types
 * Surface charts
-* Bar charts
 * Scatter charts
 * Volume charts
+* Bar charts
 * 3D and 2D graphs charts
-* Rich chart options
-* Many primitives (spheres, triangles, polygons, ...)
+* Many primitives to build custom charts (spheres, triangles, polygons, ...)
 
 Flexible layout
 * Colorbars
