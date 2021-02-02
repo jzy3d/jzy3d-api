@@ -2,8 +2,10 @@ package org.jzy3d.demos.ddp;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
+import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.io.obj.OBJFileLoader;
+import org.jzy3d.factories.DepthPeelingChartFactory;
+import org.jzy3d.factories.DepthPeelingPainterFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
@@ -12,21 +14,29 @@ import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ddp.DepthPeelingChart;
+import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
 
 
-public class PeeledDragonDemo {
+public class PeeledCubesDemo_2 {
   public static void main(String[] args) {
-    System.err.println("May require vm argument -Xmx1024m");
 
-    Chart chart = DepthPeelingChart.get(Quality.Fastest, "awt");
+    GLProfile profile = GLProfile.get(GLProfile.GL4);
+    GLCapabilities caps = NativePainterFactory.getOffscreenCapabilities(profile);
+    DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.DUAL_PEELING_MODE);
+    Chart chart = f.newChart();
+    chart.getView().setAxisDisplayed(false);
+    // chart.setAnimated(false);
 
-    OBJFileLoader loader = new OBJFileLoader("models/dragon.obj");
-    //chart.getScene().add(new DrawableVBO(loader));
-    //chart.getScene().add(new DrawableOBJFile("models/bun_zipper.ply"));
-
-
-    // createStack(chart, 0.01f, 0.01f, Coord3d.ORIGIN, Color.BLUE /*no alpha*/, Color.BLACK);
-
+    createStack(chart, 0.01f, 0.01f, Coord3d.ORIGIN, Color.BLUE /* no alpha */, Color.BLACK);
+    createStack(chart, 0.01f, 0.01f, new Coord3d(0.005f, 0.005f, 0.005f),
+        new Color(1f, 0f, 0f, 0.5f), Color.BLACK);
+    createStack(chart, 0.01f, 0.01f, new Coord3d(0.01f, 0.01f, 0.01f), new Color(0f, 1f, 0f, 0.5f),
+        Color.BLACK);
+    
+    
     ChartLauncher.openChart(chart, new Rectangle(0, 0, 600, 600));
   }
 

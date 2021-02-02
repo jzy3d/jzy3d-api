@@ -36,7 +36,7 @@ public class SurfaceDemoEmulGL {
 
     EmulGLChartFactory factory = new EmulGLChartFactory();
 
-    Quality q = Quality.Advanced; // assez propre avec l'ancienne méthode de setQuality
+    Quality q = Quality.Advanced; 
     Chart chart = factory.newChart(q);
     chart.add(surface);
 
