@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.ddp;
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.factories.DepthPeelingChartFactory;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.GLSLProgram.Strictness;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -34,7 +35,7 @@ public class DepthPeelingChart extends Chart {
       Strictness strictness, boolean editFactories) {
     GLSLProgram.DEFAULT_STRICTNESS = strictness;
 
-    IChartFactory factory = new PeelingChartFactory(method);
+    IChartFactory factory = new DepthPeelingChartFactory(method);
 
     LOGGER.info("is available GL2 : " + GLProfile.isAvailable(GLProfile.GL2));
     LOGGER.info("is available GL3 : " + GLProfile.isAvailable(GLProfile.GL3));

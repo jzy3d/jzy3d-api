@@ -128,6 +128,8 @@ public abstract class NativePainterFactory implements IPainterFactory {
       return GLProfile.get(GLProfile.GL2ES2);
     }
   }
+  
+
 
   /**
    * This profile has prove to fix the fact that using a raw GLCapabilities without settings let
