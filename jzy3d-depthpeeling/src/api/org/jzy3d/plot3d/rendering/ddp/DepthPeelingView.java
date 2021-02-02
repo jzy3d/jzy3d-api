@@ -4,9 +4,8 @@ import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
-import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
 
@@ -18,7 +17,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin
  *
  */
-public class DepthPeelingView extends View {
+public class DepthPeelingView extends AWTView {
   public DepthPeelingView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
     super(factory, scene, canvas, quality);
   }

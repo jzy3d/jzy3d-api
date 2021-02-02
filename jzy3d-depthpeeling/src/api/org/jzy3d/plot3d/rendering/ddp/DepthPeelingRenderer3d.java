@@ -84,6 +84,17 @@ public class DepthPeelingRenderer3d extends Renderer3d {
   }
 
   protected GL2 getGL2(GLAutoDrawable drawable) {
+    //logGLContext(drawable);
+
+
+    if (drawable.getGL() instanceof GL4bcImpl) {
+      return drawable.getGL().getGL2();// (GL2)drawable;//drawable.getGL().getGL2();//getGL3().getGL2();
+    } else {
+      return (GL2) drawable;// drawable.getGL().getGL2();
+    }
+  }
+
+  private void logGLContext(GLAutoDrawable drawable) {
     LOGGER.info("GL context : " + drawable.getContext());
     LOGGER.info("GL profile : " + drawable.getGLProfile());
     LOGGER.info("GL impl : " + drawable.getGL().getClass().getSimpleName());
@@ -99,13 +110,6 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     LOGGER.info("isGL3ES3 : " + drawable.getGL().isGL3ES3());
     LOGGER.info("isGL4 : " + drawable.getGL().isGL4());
     LOGGER.info("isGL4bc : " + drawable.getGL().isGL4bc());
-
-
-    if (drawable.getGL() instanceof GL4bcImpl) {
-      return drawable.getGL().getGL2();// (GL2)drawable;//drawable.getGL().getGL2();//getGL3().getGL2();
-    } else {
-      return (GL2) drawable;// drawable.getGL().getGL2();
-    }
   }
 
   public static boolean DECOMPOSE_VIEW = true;

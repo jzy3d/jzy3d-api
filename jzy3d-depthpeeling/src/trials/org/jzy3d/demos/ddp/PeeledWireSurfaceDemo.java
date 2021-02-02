@@ -6,6 +6,7 @@ import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
+import org.jzy3d.factories.DepthPeelingChartFactory;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.GLSLProgram.Strictness;
 import org.jzy3d.maths.Dimension;
@@ -15,7 +16,6 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.ddp.PeelingChartFactory;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 
@@ -48,7 +48,7 @@ public class PeeledWireSurfaceDemo {
 
     // Create a chart and add surface
     GLSLProgram.DEFAULT_STRICTNESS = Strictness.CONSOLE_NO_WARN_UNIFORM_NOT_FOUND;
-    IChartFactory factory = new PeelingChartFactory(PeelingMethod.F2B_PEELING_MODE);
+    IChartFactory factory = new DepthPeelingChartFactory(PeelingMethod.F2B_PEELING_MODE);
 
 
     GLProfile profile = GLProfile.getMaxProgrammable(true);

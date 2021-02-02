@@ -33,6 +33,7 @@ public class PeeledCubesDemo {
   public static void main(String[] args) {
     Chart chart = DepthPeelingChart.get(Quality.Fastest, "awt", PeelingMethod.F2B_PEELING_MODE);// DUAL_PEELING_MODE);
     chart.getView().setAxisDisplayed(false);
+chart.setAnimated(false);
 
     createStack(chart, 0.01f, 0.01f, Coord3d.ORIGIN, Color.BLUE /* no alpha */, Color.BLACK);
     createStack(chart, 0.01f, 0.01f, new Coord3d(0.005f, 0.005f, 0.005f),
