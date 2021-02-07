@@ -43,6 +43,7 @@ public class AxisBox implements IAxis {
     else
       setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
     wholeBounds = new BoundingBox3d();
+    textRenderer = new TextBitmapRenderer(layout.getFont());
     init();
   }
 
@@ -1088,7 +1089,7 @@ public class AxisBox implements IAxis {
   protected View view;
 
   // use this text renderer to get occupied volume by text
-  protected ITextRenderer textRenderer = new TextBitmapRenderer();
+  protected ITextRenderer textRenderer;
 
   protected IAxisLayout layout;
 

@@ -104,9 +104,11 @@ public interface IPainter {
    * {@link IPainter#BITMAP_HELVETICA_12} will apply.
    */
   public enum Font {
-    Helvetica_10(BITMAP_HELVETICA_10, 10), Helvetica_12(BITMAP_HELVETICA_12, 12), Helvetica_18(
-        BITMAP_HELVETICA_18,
-        18), TimesRoman_10(BITMAP_TIMES_ROMAN_10, 10), TimesRoman_24(BITMAP_TIMES_ROMAN_24, 24);
+    Helvetica_10(BITMAP_HELVETICA_10, 10), 
+    Helvetica_12(BITMAP_HELVETICA_12, 12), 
+    Helvetica_18(BITMAP_HELVETICA_18, 18), 
+    TimesRoman_10(BITMAP_TIMES_ROMAN_10, 10), 
+    TimesRoman_24(BITMAP_TIMES_ROMAN_24, 24);
 
     private static final String TIMES_NEW_ROMAN = "Times New Roman";
     private static final String HELVETICA = "Helvetica";

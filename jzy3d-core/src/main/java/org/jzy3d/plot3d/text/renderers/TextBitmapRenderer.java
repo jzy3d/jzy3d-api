@@ -34,6 +34,14 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
   public TextBitmapRenderer(Font font) {
     this.font = font;
   }
+  
+  public Font getFont() {
+    return font;
+  }
+
+  public void setFont(Font font) {
+    this.font = font;
+  }
 
   @Override
   public void drawSimpleText(IPainter painter, Camera cam, String s, Coord3d position,

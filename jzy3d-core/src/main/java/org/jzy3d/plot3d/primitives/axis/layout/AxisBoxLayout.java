@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.primitives.axis.layout;
 
 import org.jzy3d.colors.Color;
+import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.SmartTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
@@ -317,12 +318,24 @@ public class AxisBoxLayout implements IAxisLayout {
     this.tickLineDisplayed = tickLineDisplayed;
   }
 
+  @Override
+  public Font getFont() {
+    return font;
+  }
+
+  @Override
+  public void setFont(Font font) {
+    this.font = font;
+  }
+
 
 
   /**********************************************************/
 
   protected boolean tickLineDisplayed = true;
 
+  protected Font font = Font.Helvetica_10;
+  
   protected String xAxeLabel;
   protected String yAxeLabel;
   protected String zAxeLabel;
