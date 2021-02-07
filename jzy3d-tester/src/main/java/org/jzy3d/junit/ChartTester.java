@@ -111,6 +111,7 @@ public class ChartTester {
     try {
       logger.info("compare chart with " + testImage);
       compare(chart, testImage);
+      logger.info("compared chart OK  " + testImage);
 
     } catch (ChartTestFailed e) {
 

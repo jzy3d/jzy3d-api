@@ -2,7 +2,6 @@ package org.jzy3d.demos.surface;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
@@ -11,13 +10,15 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Range;
+import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import jgl.GLCanvas;
 
 
@@ -39,10 +40,13 @@ public class SurfaceDemoEmulGL {
     Quality q = Quality.Advanced; 
     Chart chart = factory.newChart(q);
     chart.add(surface);
-
-    ((EmulGLCanvas) chart.getCanvas()).setProfileDisplayMethod(false);
-
-
+    
+    EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
+    c.setProfileDisplayMethod(false);
+    c.getGL().setAutoAdaptToHiDPI(false);
+    
+    //chart.getAxisLayout().setFont(Font.Helvetica_18);
+    ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer()).setFont(Font.TimesRoman_10);
     chart.open();
 
     // --------------------------------
