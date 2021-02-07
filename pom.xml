@@ -131,12 +131,12 @@
 		<repository>
 			<id>jzy3d-snapshots</id>
 			<name>Jzy3d Snapshots</name>
-			<url>http://maven.jzy3d.org/snapshots/</url>
+			<url>https://maven.jzy3d.org/snapshots/</url>
 		</repository>
 		<repository>
 			<id>jzy3d-releases</id>
 			<name>Jzy3d Snapshots</name>
-			<url>http://maven.jzy3d.org/releases/</url>
+			<url>https://maven.jzy3d.org/releases/</url>
 		</repository>
 	</repositories>
 
