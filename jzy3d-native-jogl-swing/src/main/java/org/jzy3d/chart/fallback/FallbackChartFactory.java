@@ -57,7 +57,6 @@ public class FallbackChartFactory extends AWTChartFactory {
       public void onDisplay(Object image) {
         if (image != null) {
           imageView.setImage((java.awt.Image) image);
-          System.out.println("image");
 
           /*
            * try { ImageIO.write((BufferedImage)image, "png", new
