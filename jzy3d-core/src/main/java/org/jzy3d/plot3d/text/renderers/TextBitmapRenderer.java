@@ -7,7 +7,6 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.IPainter.Font;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Halign;
@@ -43,14 +42,6 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     this.font = font;
   }
 
-  @Override
-  public void drawSimpleText(IPainter painter, Camera cam, String s, Coord3d position,
-      Color color) {
-    glRaster(painter, position, color);
-
-    painter.glutBitmapString(font.getCode(), s);
-  }
-
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string
    * according to the current Camera configuration.
@@ -76,7 +67,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     screenPositionAligned3d = screenPositionAligned3d.add(sceneOffset);
 
     // Draws actual string
-    painter.glutBitmapString(font, text, screenPositionAligned3d, Color.BLACK);
+    painter.glutBitmapString(font, text, screenPositionAligned3d, color);
 
     // Return text bounds
     return computeTextBounds(painter, screenPositionAligned, stringLength);

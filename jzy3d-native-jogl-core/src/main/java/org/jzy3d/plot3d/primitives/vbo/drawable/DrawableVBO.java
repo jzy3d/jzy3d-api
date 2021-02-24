@@ -65,7 +65,6 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
 
   @Override
   public void mount(IPainter painter) {
-    GL gl = ((NativeDesktopPainter) painter).getGL();
     try {
       loader.load(painter, this);
       hasMountedOnce = true;
@@ -82,7 +81,6 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
   public void draw(IPainter painter) {
     if (hasMountedOnce) {
       GL gl = ((NativeDesktopPainter) painter).getGL();
-      GLU glu = ((NativeDesktopPainter) painter).getGLU();
 
       doTransform(painter);
       configure(painter, gl);
