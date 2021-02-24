@@ -360,12 +360,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     switch (store) {
       case PACK_ALIGNMENT:
         gl.glPixelStorei(GL.GL_PACK_ALIGNMENT, param);
-        break;
+        break; 
       case UNPACK_ALIGNMENT:
         gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, param);
         break;
+      default: throw new IllegalArgumentException("Unsupported mode '" + store + "'");
     }
-    throw new IllegalArgumentException("Unsupported mode '" + store + "'");
   }
 
   @Override

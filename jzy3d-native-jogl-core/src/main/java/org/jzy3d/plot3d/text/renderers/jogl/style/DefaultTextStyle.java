@@ -1,17 +1,15 @@
-package org.jzy3d.plot3d.text.renderers.jogl;
+package org.jzy3d.plot3d.text.renderers.jogl.style;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Rectangle2D;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
-public class DefaultTextStyle implements ITextStyle {
-  protected Color color;
+public class DefaultTextStyle implements TextRenderer.RenderDelegate {
 
-  public DefaultTextStyle(Color color) {
-    this.color = color;
+  public DefaultTextStyle() {
   }
 
   @Override
@@ -38,19 +36,11 @@ public class DefaultTextStyle implements ITextStyle {
 
   @Override
   public void drawGlyphVector(Graphics2D graphics, GlyphVector str, int x, int y) {
-    graphics.setColor(Color.WHITE);
-    graphics.setPaint(/*
-                       * new GradientPaint(x, y, color, x, y + gradientSize / 2, color2, true)
-                       */color);
     graphics.drawGlyphVector(str, x, y);
   }
 
   @Override
   public void draw(Graphics2D graphics, String str, int x, int y) {
-    graphics.setColor(Color.WHITE);
-    graphics.setPaint(/*
-                       * new GradientPaint(x, y, color1, x, y + gradientSize / 2, color2, true)
-                       */color);
     graphics.drawString(str, x, y);
   }
 }
