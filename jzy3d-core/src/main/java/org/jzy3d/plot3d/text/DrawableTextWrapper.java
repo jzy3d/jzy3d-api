@@ -17,6 +17,16 @@ import org.jzy3d.plot3d.transform.Transform;
  * @author Martin Pernollet
  */
 public class DrawableTextWrapper extends Drawable {
+  protected String txt;
+  protected Coord3d position;
+  protected Halign halign;
+  protected Valign valign;
+  protected Color color;
+  protected Coord2d screenOffset = new Coord2d();
+  protected Coord3d sceneOffset = new Coord3d();
+
+  protected ITextRenderer renderer;
+
   public DrawableTextWrapper(ITextRenderer renderer) {
     this("", new Coord3d(), Color.BLACK, renderer);
   }
@@ -105,25 +115,11 @@ public class DrawableTextWrapper extends Drawable {
     this.sceneOffset = sceneOffset;
   }
 
-  /*******************************************************************************************/
-
   @Override
   public String toString() {
     return "(TextBitmapDrawable) \"" + txt + "\" at " + position.toString() + " halign=" + halign
         + " valign=" + valign;
   }
-
-  /********************************************************************/
-
-  protected String txt;
-  protected Coord3d position;
-  protected Halign halign;
-  protected Valign valign;
-  protected Color color;
-  protected Coord2d screenOffset = new Coord2d();
-  protected Coord3d sceneOffset = new Coord3d();
-
-  protected ITextRenderer renderer;
 
   @Override
   public void applyGeometryTransform(Transform transform) {
