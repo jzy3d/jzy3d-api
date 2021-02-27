@@ -62,16 +62,19 @@ public class AxisBox implements IAxis {
     doTransform(painter);
     drawGrid(painter);
 
+    cullingDisable(painter);
+
+    
     synchronized (annotations) {
       for (AxeAnnotation a : annotations) {
         a.draw(painter, this);
       }
     }
 
+    
     doTransform(painter);
     drawTicksAndLabels(painter);
 
-    cullingDisable(painter);
 
   }
 
