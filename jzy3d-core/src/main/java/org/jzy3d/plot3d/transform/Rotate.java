@@ -14,7 +14,7 @@ import org.jzy3d.painters.IPainter;
 public class Rotate implements Transformer {
 
   /**
-   * Initialize a Rotation.
+   * Initialize a Rotation of angle degrees around the vector (x,y,z)
    * 
    * @param angle
    * @param rotate

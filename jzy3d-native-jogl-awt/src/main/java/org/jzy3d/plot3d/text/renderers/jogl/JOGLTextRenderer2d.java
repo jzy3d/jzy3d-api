@@ -1,0 +1,134 @@
+package org.jzy3d.plot3d.text.renderers.jogl;
+
+import java.awt.Font;
+import java.awt.font.FontRenderContext;
+import java.awt.font.GlyphVector;
+import java.awt.geom.Rectangle2D;
+import org.jzy3d.colors.AWTColor;
+import org.jzy3d.colors.Color;
+import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
+import org.jzy3d.plot3d.text.AbstractTextRenderer;
+import org.jzy3d.plot3d.text.ITextRenderer;
+import org.jzy3d.plot3d.text.align.Halign;
+import org.jzy3d.plot3d.text.align.TextLayout;
+import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.renderers.jogl.style.DefaultTextStyle;
+import com.jogamp.opengl.util.awt.TextRenderer;
+import com.jogamp.opengl.util.awt.TextRenderer.RenderDelegate;
+
+/**
+ * Render 2D texts using JOGL {@link TextRenderer}.
+ * 
+ * The text color is defined either by {@link TextRenderer#setColor(java.awt.Color)} or inside the
+ * implementation of {@link RenderDelegate#draw(java.awt.Graphics2D, String, int, int)}
+ * if the {@link TextRenderer} is initialized with a non null {@link RenderDelegate}.
+ * 
+ * Note that Jzy3d and JOGL behave differently with text rendering
+ * <ul>
+ * <li>Jzy3d's text color is defined for each string.
+ * <li>JOGL's text color is defined globally and can not be changed consistently afterward if it
+ * uses a {@link TextRenderer.RenderDelegate}.
+ * </ul>
+ * Wrapping a JOGL text renderer hence requires recreating a new TextRenderer if the color of the
+ * strings changes.
+ * 
+ * @author Martin Pernollet
+ */
+public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRenderer {
+  protected Font font;
+  protected TextRenderer renderer;
+  protected TextRenderer.RenderDelegate renderDelegate;
+  protected float scaleFactor = 0.01f;
+
+  public JOGLTextRenderer2d() {
+    this(new Font("Arial", Font.PLAIN, 16));
+  }
+
+  public JOGLTextRenderer2d(Font font) {
+    this(font, null);
+  }
+
+  /**
+   * @param font text font, style and size.
+   * @param renderDelegate may be null if no particular custom styling should be applied.
+   */
+  public JOGLTextRenderer2d(Font font, RenderDelegate renderDelegate) {
+    this.font = font;
+    this.renderer = new TextRenderer(font, true, true, renderDelegate);
+    this.renderDelegate = renderDelegate;
+  }
+
+  @Override
+  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Halign halign,
+      Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    // configureRenderer();
+    resetTextColor(color);
+
+    // Reset to a polygon mode suitable for rendering the texture handling the text
+    painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
+
+    drawText2D(painter, s, position, color, halign, valign);
+
+    return null;
+  }
+
+  /** Draws a 2D text (facing camera) at the specified 3D position */
+  protected void drawText2D(IPainter painter, String text, Coord3d position, Color color,
+      Halign halign, Valign valign) {
+
+    // Canvas size
+    int width = painter.getView().getCanvas().getRendererWidth();
+    int height = painter.getView().getCanvas().getRendererHeight();
+
+    // Text screen position
+    Coord3d screen = painter.getCamera().modelToScreen(painter, position);
+    Coord2d textSize = getBounds(text, font, renderer.getFontRenderContext());
+    screen = TextLayout.align(textSize.x, textSize.y, halign, valign, screen);
+
+    // Render text
+    renderer.setColor(color.r, color.g, color.b, color.a);
+    renderer.beginRendering(width, height);
+    renderer.draw(text, (int) screen.x, (int) screen.y);
+    renderer.flush();
+    renderer.endRendering();
+  }
+
+  protected Coord2d getBounds(String str, Font font, FontRenderContext frc) {
+    return getBounds(font.createGlyphVector(frc, str));
+  }
+
+  protected Coord2d getBounds(GlyphVector gv) {
+    Rectangle2D bounds = gv.getPixelBounds(null, 0, 0);
+    return new Coord2d(bounds.getWidth(), bounds.getHeight());
+  }
+
+
+  // not efficient : will reset text renderer at each rendering rendering loop for each string
+  // just to be able to reset color... while setting color is rare.
+  protected void resetTextColor(Color color) {
+    if (lastColor != null && !lastColor.equals(color)) {
+      if (renderDelegate != null) {
+        if (renderDelegate instanceof DefaultTextStyle) {
+          ((DefaultTextStyle) renderDelegate).setColor(AWTColor.toAWT(color));
+          renderer = new TextRenderer(font, true, true, renderDelegate);
+        }
+      }
+    }
+
+    lastColor = color;
+  }
+
+  Color lastColor;
+
+  protected void configureRenderer() {
+    // some GPU do not handle smoothing well
+    renderer.setSmoothing(false);
+    // some GPU do not handle VBO properly
+    renderer.setUseVertexArrays(false);
+  }
+}
