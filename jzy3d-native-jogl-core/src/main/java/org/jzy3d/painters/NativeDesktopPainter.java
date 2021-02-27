@@ -238,7 +238,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glColor3f(float r, float g, float b) {
-    gl.getGL2().glColor3f(r, b, b);
+    gl.getGL2().glColor3f(r, g, b);
   }
 
   @Override
