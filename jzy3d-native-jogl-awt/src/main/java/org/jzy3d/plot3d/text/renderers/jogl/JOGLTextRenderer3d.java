@@ -15,6 +15,7 @@ import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.jogl.style.DefaultTextStyle;
+import org.jzy3d.plot3d.transform.Rotate;
 import com.jogamp.opengl.util.awt.TextRenderer;
 
 /**
@@ -33,23 +34,25 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  * 
  * @author Martin Pernollet
  */
-public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRenderer {
+public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRenderer {
   protected boolean is3D = false;
   protected Font font;
   protected TextRenderer renderer;
   protected TextRenderer.RenderDelegate renderDelegate;
   protected float scaleFactor = 0.01f;
+  
+  protected Rotate rotate = new Rotate(0, new Coord3d(0,0,0));
 
 
-  public JOGLTextRenderer() {
+  public JOGLTextRenderer3d() {
     this(new Font("Arial", Font.PLAIN, 16));
   }
 
-  public JOGLTextRenderer(Font font) {
+  public JOGLTextRenderer3d(Font font) {
     this(font, false);
   }
 
-  public JOGLTextRenderer(Font font, boolean is3D) {
+  public JOGLTextRenderer3d(Font font, boolean is3D) {
     this(font, null, is3D);
   }
 
@@ -59,7 +62,7 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
    * @param renderDelegate
    * @param is3D the text will be facing camera if false.
    */
-  public JOGLTextRenderer(Font font, TextRenderer.RenderDelegate renderDelegate, boolean is3D) {
+  public JOGLTextRenderer3d(Font font, TextRenderer.RenderDelegate renderDelegate, boolean is3D) {
     this.font = font;
     this.renderer = new TextRenderer(font, true, true, renderDelegate);
     this.renderDelegate = renderDelegate;
@@ -126,10 +129,18 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
   /* TEXT PLACED AS 3D OBJECT (ROTATE WITH CAM) */
   
   protected void drawText3D(IPainter painter, String s, Coord3d position, Color color, Coord3d sceneOffset) {
+    if(rotate!=null) {
+      rotate.execute(painter);
+    }
+    
+    painter.glTranslatef(position.x, position.y, position.z);
+    
     renderer.setColor(color.r, color.g, color.b, color.a);
     renderer.begin3DRendering();
-    drawText3D(s, position, sceneOffset);
-    //drawText3DWithLayout(painter, s, position, sceneOffset);
+    
+    renderer.draw3D(s, 0, 0, 0, scaleFactor);
+    //drawText3D(s, position, sceneOffset);
+    
     renderer.flush();
     renderer.end3DRendering();
   }
@@ -151,4 +162,12 @@ public class JOGLTextRenderer extends AbstractTextRenderer implements ITextRende
     renderer.draw3D(s, real.x, real.y, real.z, scaleFactor);
   }
 
+  public Rotate getRotate() {
+    return rotate;
+  }
+
+  /** Set the rotation of the text if the text is 3D. */
+  public void setRotate(Rotate rotate) {
+    this.rotate = rotate;
+  }  
 }

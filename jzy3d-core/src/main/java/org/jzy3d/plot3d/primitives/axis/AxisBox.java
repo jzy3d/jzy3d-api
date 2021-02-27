@@ -537,7 +537,7 @@ public class AxisBox implements IAxis {
 
   public void drawTickLine(IPainter painter, Color color, double xpos, double ypos, double zpos,
       double xlab, double ylab, double zlab) {
-    painter.glColor3f(color.r, color.g, color.b);
+    painter.color(color);
     painter.glLineWidth(1);
 
     // Draw the tick line

@@ -10,6 +10,7 @@ import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Halign;
+import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Valign;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
@@ -98,8 +99,8 @@ public class AxisBox2d extends AxisBox {
       // compute a corrected position according to layout
       Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
       float strlen = painter.glutBitmapLength(font.getCode(), text);
-      float x = computeXAlign(halign, posScreen, strlen, 0.0f);
-      float y = computeYAlign(valign, posScreen, 0.0f);
+      float x = TextLayout.computeXAlign(strlen, halign, posScreen, 0.0f);
+      float y = TextLayout.computeYAlign(font.getHeight(), valign, posScreen, 0.0f);
       Coord3d posScreenShifted = new Coord3d(x + screenOffset.x, y + screenOffset.y, posScreen.z);
 
       Coord3d posReal;
