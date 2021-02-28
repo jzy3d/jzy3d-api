@@ -1,9 +1,6 @@
 package org.jzy3d.plot3d.text.renderers.jogl;
 
 import java.awt.Font;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.Rectangle2D;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
@@ -14,6 +11,7 @@ import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
+import org.jzy3d.plot3d.text.align.AWTTextLayout;
 import org.jzy3d.plot3d.text.align.Halign;
 import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Valign;
@@ -44,6 +42,8 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
   protected TextRenderer renderer;
   protected TextRenderer.RenderDelegate renderDelegate;
   protected float scaleFactor = 0.01f;
+  
+  protected AWTTextLayout layout = new AWTTextLayout();
 
   public JOGLTextRenderer2d() {
     this(new Font("Arial", Font.PLAIN, 16));
@@ -87,8 +87,8 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
 
     // Text screen position
     Coord3d screen = painter.getCamera().modelToScreen(painter, position);
-    Coord2d textSize = getBounds(text, font, renderer.getFontRenderContext());
-    screen = TextLayout.align(textSize.x, textSize.y, halign, valign, screen);
+    Coord2d textSize = layout.getBounds(text, font, renderer.getFontRenderContext());
+    screen = layout.align(textSize.x, textSize.y, halign, valign, screen);
 
     // Render text
     renderer.setColor(color.r, color.g, color.b, color.a);
@@ -98,14 +98,6 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
     renderer.endRendering();
   }
 
-  protected Coord2d getBounds(String str, Font font, FontRenderContext frc) {
-    return getBounds(font.createGlyphVector(frc, str));
-  }
-
-  protected Coord2d getBounds(GlyphVector gv) {
-    Rectangle2D bounds = gv.getPixelBounds(null, 0, 0);
-    return new Coord2d(bounds.getWidth(), bounds.getHeight());
-  }
 
 
   // not efficient : will reset text renderer at each rendering rendering loop for each string

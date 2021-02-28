@@ -23,6 +23,8 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 
   protected Font font;
 
+  protected TextLayout layout = new TextLayout();
+
   /**
    * The TextBitmap class provides support for drawing ASCII characters Any non ascii caracter will
    * be replaced by a square.
@@ -58,10 +60,10 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 
     Coord3d screen = painter.getCamera().modelToScreen(painter, position);
     Coord3d screenAligned =
-        TextLayout.align(textWidth, textHeight, halign, valign, screenOffset, screen);
+        layout.align(textWidth, textHeight, halign, valign, screenOffset, screen);
 
     // process the aligned position in 3D coordinates
-    Coord3d positionAligned = toModelViewPosition(painter, screen, screenAligned);
+    Coord3d positionAligned = to3D(painter, screenAligned);
 
     // process space stransform if any (log, etc)
     if (spaceTransformer != null) {
@@ -86,18 +88,17 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     painter.raster(screenPositionAligned3d.add(sceneOffset), null);
   }
 
-  protected Coord3d toModelViewPosition(IPainter painter, Coord3d screen, Coord3d screenAligned) {
-
-    Coord3d screenAligned3d;
+  /** Convert a 2D screen position to 3D world coordinate */
+  protected Coord3d to3D(IPainter painter, Coord3d screen) {
+    Coord3d model;
     try {
-      screenAligned3d = painter.getCamera().screenToModel(painter, screenAligned);
+      model = painter.getCamera().screenToModel(painter, screen);
     } catch (RuntimeException e) {
       // TODO: solve this bug due to a Camera.PERSPECTIVE mode.
-      LOGGER.error(
-          "could not process text position: " + screen + " " + screenAligned + e.getMessage());
+      LOGGER.error("could not process text position: " + screen + e.getMessage());
       return new Coord3d();
     }
-    return screenAligned3d;
+    return model;
   }
 
   protected BoundingBox3d computeTextBounds(IPainter painter, Coord3d posScreenShifted,

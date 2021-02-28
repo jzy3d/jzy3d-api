@@ -97,19 +97,21 @@ public class AxisBox2d extends AxisBox {
       painter.color(color);
 
       // compute a corrected position according to layout
-      Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
-      float strlen = painter.glutBitmapLength(font.getCode(), text);
-      float x = TextLayout.computeXAlign(strlen, halign, posScreen, 0.0f);
-      float y = TextLayout.computeYAlign(font.getHeight(), valign, posScreen, 0.0f);
-      Coord3d posScreenShifted = new Coord3d(x + screenOffset.x, y + screenOffset.y, posScreen.z);
+      Coord3d screen = painter.getCamera().modelToScreen(painter, position);
+      float textWidth = painter.glutBitmapLength(font.getCode(), text);
+      float textHeight = font.getHeight();
+      
+      float x = layout.computeXAlign(textWidth, halign, screen, 0.0f);
+      float y = layout.computeYAlign(textHeight, valign, screen, 0.0f);
+      Coord3d screenAligned = new Coord3d(x + screenOffset.x, y + screenOffset.y, screen.z);
 
       Coord3d posReal;
       try {
-        posReal = painter.getCamera().screenToModel(painter, posScreenShifted);
+        posReal = painter.getCamera().screenToModel(painter, screenAligned);
       } catch (RuntimeException e) {
         Logger.getLogger(TextBitmapRenderer.class)
-            .error("TextBitmap.drawText(): could not process text position: " + posScreen + " "
-                + posScreenShifted);
+            .error("TextBitmap.drawText(): could not process text position: " + screen + " "
+                + screenAligned);
         return new BoundingBox3d();
       }
 
@@ -120,7 +122,7 @@ public class AxisBox2d extends AxisBox {
       glRasterPos(painter, sceneOffset, Coord3d.ORIGIN);
       painter.glutBitmapString(font.getCode(), text);
 
-      return computeTextBounds(painter, posScreenShifted, strlen);
+      return computeTextBounds(painter, screenAligned, textWidth);
     }
 
     // CUSTOM ROTATION

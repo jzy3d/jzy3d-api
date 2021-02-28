@@ -11,7 +11,7 @@ import org.jzy3d.maths.Coord3d;
  */
 public class TextLayout {
   /**
-   * Compute final text position according to the below layout parameters and initial screen
+   * Compute final text position on screen according to the layout parameters and initial screen
    * position.
    * 
    * @param textWidth width of the text in pixel
@@ -20,10 +20,11 @@ public class TextLayout {
    * @param valign vertical alignment
    * @param offset an (x,y) offset to apply to the base position once X and Y alignment are
    *        processed
-   * @param screen base position of the text on screen (Z dimension is used to indicate how far is
-   *        the text in the 3D scene)
+   * @param screen base 2D position of the text on screen before applying layout (Z dimension is
+   *        used to indicate how far is the text in the 3D scene, given as a ratio between the near
+   *        and far clipping plane of the camera)
    */
-  public static Coord3d align(float textWidth, float textHeight, Halign halign, Valign valign,
+  public Coord3d align(float textWidth, float textHeight, Halign halign, Valign valign,
       Coord2d offset, Coord3d screen) {
     float x = computeXAlign(textWidth, halign, screen, 0.0f);
     float y = computeYAlign(textHeight, valign, screen, 0.0f);
@@ -31,13 +32,24 @@ public class TextLayout {
     return new Coord3d(x + offset.x, y + offset.y, screen.z);
   }
 
-  public static Coord3d align(float textWidth, float textHeight, Halign halign, Valign valign,
+  /**
+   * Compute final text position on screen according to the layout parameters and initial screen
+   * position.
+   * 
+   * @param textWidth width of the text in pixel
+   * @param textHeight height of the text font in pixel
+   * @param halign horizontal alignment
+   * @param valign vertical alignment
+   * @param screen base 2D position of the text on screen before applying layout (Z dimension is
+   *        used to indicate how far is the text in the 3D scene, given as a ratio between the near
+   *        and far clipping plane of the camera)
+   */
+  public Coord3d align(float textWidth, float textHeight, Halign halign, Valign valign,
       Coord3d screen) {
     return align(textWidth, textHeight, halign, valign, new Coord2d(), screen);
   }
 
-  public static float computeXAlign(float textWidth, Halign halign, Coord3d screenPosition,
-      float x) {
+  public float computeXAlign(float textWidth, Halign halign, Coord3d screenPosition, float x) {
     if (halign == Halign.RIGHT)
       x = screenPosition.x;
     else if (halign == Halign.CENTER)
@@ -47,8 +59,7 @@ public class TextLayout {
     return x;
   }
 
-  public static float computeYAlign(float textHeight, Valign valign, Coord3d screenPosition,
-      float y) {
+  public float computeYAlign(float textHeight, Valign valign, Coord3d screenPosition, float y) {
     if (valign == Valign.TOP)
       y = screenPosition.y;
     else if (valign == Valign.GROUND)
