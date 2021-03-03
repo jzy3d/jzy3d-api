@@ -62,16 +62,19 @@ public class AxisBox implements IAxis {
     doTransform(painter);
     drawGrid(painter);
 
+    cullingDisable(painter);
+
+    
     synchronized (annotations) {
       for (AxeAnnotation a : annotations) {
         a.draw(painter, this);
       }
     }
 
+    
     doTransform(painter);
     drawTicksAndLabels(painter);
 
-    cullingDisable(painter);
 
   }
 
@@ -344,7 +347,7 @@ public class AxisBox implements IAxis {
     return ticksTxtBounds;
   }
 
-  public void drawAxisLabel(IPainter painter, int direction, Color color,
+  protected void drawAxisLabel(IPainter painter, int direction, Color color,
       BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
     if (isXDisplayed(direction) || isYDisplayed(direction) || isZDisplayed(direction)) {
       Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
@@ -400,7 +403,7 @@ public class AxisBox implements IAxis {
   /**
    * Draw an array of ticks on the given axis indicated by direction field.
    */
-  public void drawAxisTicks(IPainter painter, int direction, Color color, Halign hal, Valign val,
+  protected void drawAxisTicks(IPainter painter, int direction, Color color, Halign hal, Valign val,
       float tickLength, BoundingBox3d ticksTxtBounds, double xpos, double ypos, double zpos,
       float xdir, float ydir, float zdir, double[] ticks) {
     double xlab;
@@ -490,12 +493,11 @@ public class AxisBox implements IAxis {
       Valign vAlign = layoutVertical(direction, val, zdir);
 
       // Draw the text label of the current tick
-      drawAxisTickNumericLabel(painter, direction, color, hAlign, vAlign, ticksTxtBounds, tickLabel,
-          tickPosition);
+      drawAxisTickNumericLabel(painter, direction, color, hAlign, vAlign, ticksTxtBounds, tickLabel, tickPosition);
     }
   }
 
-  public void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Halign hAlign,
+  protected void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Halign hAlign,
       Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
     // doTransform(gl);
     painter.glLoadIdentity();
@@ -507,7 +509,7 @@ public class AxisBox implements IAxis {
       ticksTxtBounds.add(tickBounds);
   }
 
-  public Valign layoutVertical(int direction, Valign val, float zdir) {
+  protected Valign layoutVertical(int direction, Valign val, float zdir) {
     Valign vAlign;
     if (val == null) {
       if (isZ(direction))
@@ -523,7 +525,7 @@ public class AxisBox implements IAxis {
     return vAlign;
   }
 
-  public Halign layoutHorizontal(int direction, Camera cam, Halign hal, Coord3d tickPosition) {
+  protected Halign layoutHorizontal(int direction, Camera cam, Halign hal, Coord3d tickPosition) {
     Halign hAlign;
     if (hal == null)
       hAlign = cam.side(tickPosition) ? Halign.LEFT : Halign.RIGHT;
@@ -532,9 +534,12 @@ public class AxisBox implements IAxis {
     return hAlign;
   }
 
-  public void drawTickLine(IPainter painter, Color color, double xpos, double ypos, double zpos,
+  protected void drawTickLine(IPainter painter, Color color, double xpos, double ypos, double zpos,
       double xlab, double ylab, double zlab) {
-    painter.glColor3f(color.r, color.g, color.b);
+    painter.glLoadIdentity();
+    painter.glScalef(scale.x, scale.y, scale.z);
+    
+    painter.color(color);
     painter.glLineWidth(1);
 
     // Draw the tick line

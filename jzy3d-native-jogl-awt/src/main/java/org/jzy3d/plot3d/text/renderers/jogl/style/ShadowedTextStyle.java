@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.text.renderers.jogl;
+package org.jzy3d.plot3d.text.renderers.jogl.style;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -7,8 +7,9 @@ import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Rectangle2D;
+import com.jogamp.opengl.util.awt.TextRenderer;
 
-public class ShadowedTextStyle implements ITextStyle {
+public class ShadowedTextStyle implements TextRenderer.RenderDelegate {
   private float gradientSize;
   private int dropShadowDepth;
   private Color color1;
