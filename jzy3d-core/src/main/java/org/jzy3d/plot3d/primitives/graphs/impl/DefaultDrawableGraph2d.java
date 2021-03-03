@@ -15,8 +15,6 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
   public DefaultDrawableGraph2d() {
     super();
     bbox = new BoundingBox3d();
-    labelScreenOffset = new Coord2d(0, 0);
-    labelSceneOffset = new Coord3d(0, 0, 0);
   }
 
   /*******************************************************/
@@ -62,8 +60,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
   protected void drawVertexLabel(IPainter painter, V v, Coord2d coord, Color color) {
     Coord3d textPosition = new Coord3d(coord, Z);
-    txt.drawText(painter, v.toString(), textPosition, Halign.CENTER, Valign.BOTTOM, color,
-        labelScreenOffset, labelSceneOffset);
+    txt.drawText(painter, v.toString(), textPosition, Halign.CENTER, Valign.BOTTOM, color);
   }
 
   protected void drawEdge(IPainter painter, E e, Coord2d c1, Coord2d c2, Color color) {
