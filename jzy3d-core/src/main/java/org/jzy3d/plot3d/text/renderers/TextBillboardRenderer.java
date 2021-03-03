@@ -6,7 +6,6 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.PixelStore;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Halign;
@@ -47,14 +46,6 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
    */
   public TextBillboardRenderer() {}
 
-  @Override
-  public void drawSimpleText(IPainter painter, Camera cam, String s, Coord3d position,
-      Color color) {
-    glRaster(painter, position, color);
-
-    printString(painter, s, Halign.RIGHT, Valign.GROUND);
-  }
-
   /**
    * Draw a string at the specified position and compute the 3d volume occupied by the string
    * according to the current Camera configuration.
@@ -68,6 +59,12 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
     BoundingBox3d txtBounds = computeTextBounds(painter, position, dims);
     return txtBounds;
   }
+  
+  protected void glRaster(IPainter painter, Coord3d position, Color color) {
+    painter.glColor3f(color.r, color.g, color.b);
+    painter.raster(position, spaceTransformer);
+  }
+
 
 
   protected BoundingBox3d computeTextBounds(IPainter painter, Coord3d position,

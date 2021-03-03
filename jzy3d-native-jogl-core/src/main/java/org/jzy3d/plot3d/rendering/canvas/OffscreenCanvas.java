@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.painters.NativeDesktopPainter;
@@ -10,7 +9,6 @@ import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLDrawableFactory;
@@ -40,6 +38,11 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * @author Martin Pernollet
  */
 public class OffscreenCanvas implements ICanvas, INativeCanvas {
+  protected View view;
+  protected Renderer3d renderer;
+  protected GLOffscreenAutoDrawable offscreenDrawable;
+  protected GLCapabilities capabilities;
+
   public OffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
       GLCapabilities capabilities, int width, int height) {
     this(factory, scene, quality, capabilities, width, height, false, false);
@@ -63,21 +66,19 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
    * 
    * Can be called several time to reset buffer dimensions.
    * 
-   * @param capabilities
-   * @param width
-   * @param height
+   * @param capabilities with a setOnscreen flag set to true, otherwise forced to true.
+   * @param width image width
+   * @param height image width
    */
   public void initBuffer(GLCapabilities capabilities, int width, int height) {
-    // capabilities.setDoubleBuffered(false);
-    // capabilities/setPBuffer(true);
+    if(capabilities.isOnscreen()) {
+      System.err.println(this.getClass().getSimpleName() + " : The provided capabilities should be set to setOnscreen(false). Forcing this configuration");
+      capabilities.setOnscreen(false);
+      // capabilities.setDoubleBuffered(false);
+      // capabilities.setPBuffer(true);
 
-    /*
-     * capabilities.setHardwareAccelerated(true); capabilities.setDoubleBuffered(false);
-     * capabilities.setAlphaBits(8); capabilities.setRedBits(8); capabilities.setBlueBits(8);
-     * capabilities.setGreenBits(8); capabilities.setOnscreen(false);
-     */
-
-
+    }
+    
     GLProfile profile = capabilities.getGLProfile();
     GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
 
@@ -89,8 +90,7 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
       offscreenDrawable.destroy();
       // glpBuffer.setSurfaceSize(width, height);
     }
-    offscreenDrawable = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(),
-        capabilities, null /* new DefaultGLCapabilitiesChooser() */, width, height);
+    offscreenDrawable = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), capabilities, null, width, height);
     offscreenDrawable.addGLEventListener(renderer);
 
   }
@@ -99,7 +99,6 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   @Override
   public void setPixelScale(float[] scale) {
     throw new NotImplementedException();
-    // glpBuffer.setSurfaceScale(scale);
   }
 
   @Override
@@ -163,7 +162,6 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
     sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
     sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
     sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
-    // sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
     return sb.toString();
   }
 
@@ -182,11 +180,4 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   public GLCapabilities getCapabilities() {
     return capabilities;
   }
-
-  protected View view;
-  protected Renderer3d renderer;
-  protected GLOffscreenAutoDrawable offscreenDrawable;
-  protected GLCapabilities capabilities;
-
-
 }
