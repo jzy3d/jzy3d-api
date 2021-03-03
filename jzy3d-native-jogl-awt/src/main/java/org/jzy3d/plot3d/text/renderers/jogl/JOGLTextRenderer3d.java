@@ -10,6 +10,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
+import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.AWTTextLayout;
@@ -89,6 +90,10 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
   protected void drawText3D(IPainter painter, String text, Coord3d position, Halign halign,
       Valign valign, Color color) {
     
+    Camera cam = painter.getCamera();
+    
+    
+    
 
     /*Coord3d screen = painter.getCamera().modelToScreen(painter, position);
     Coord2d textSize = layout.getBounds(text, font, renderer.getFontRenderContext());
@@ -106,7 +111,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
 
     painter.glTranslatef(position.x, position.y, position.z);
     
-    if(Halign.LEFT.equals(halign)) {
+    /*if(Halign.LEFT.equals(halign)) {
       Coord2d textSize = layout.getBounds(text, font, renderer.getFontRenderContext());
       
       // eval shift in 3D required to make 2D layout of a text renderer at 0
@@ -114,12 +119,12 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
       Coord3d shift3D = painter.getCamera().screenToModel(painter, shift2D);
       
       painter.glTranslatef(shift3D.x, shift3D.y, shift3D.y);
-    }
+    }*/
     
     
-    if (rotate != null) {
+    /*if (rotate != null) {
       rotate.execute(painter);
-    }
+    }*/
     
 
     renderer.flush();
