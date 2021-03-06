@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import java.io.File;
 import java.io.IOException;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
@@ -59,9 +59,10 @@ public class TestCameraNative_Projection {
     // -----------------------------------------------------------------------
     // Then at least one corner of AxisBox touch canvas top and bottom border
 
+    chart.screenshot(new File("target/" + this.getClass().getSimpleName() + ".png"));
+
     assertAxisCornersTouchCanvasTopAndBottomBorder(chart, FRAME_SIZE);
 
-    // chart.screenshot(new File("target/" + this.getClass().getSimpleName() + ".png"));
   }
 
   private void assertAxisCornersTouchCanvasTopAndBottomBorder(Chart chart, Rectangle FRAME_SIZE) {
@@ -91,7 +92,7 @@ public class TestCameraNative_Projection {
       }
 
 
-      System.out.println(" 2d : " + corner2d);
+      //System.out.println(" 2d : " + corner2d);
     }
 
     System.out.println(FRAME_SIZE.height - APP_BAR_HEIGHT);
