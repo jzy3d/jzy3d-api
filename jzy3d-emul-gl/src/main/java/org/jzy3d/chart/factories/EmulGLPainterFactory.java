@@ -162,6 +162,11 @@ public class EmulGLPainterFactory implements IPainterFactory {
     this.width = width;
     this.height = height;
   }
+  
+  @Override
+  public void setOffscreen(Rectangle rectangle) {
+    setOffscreen(rectangle.width, rectangle.height);
+  }
 
   @Override
   public Dimension getOffscreenDimension() {
