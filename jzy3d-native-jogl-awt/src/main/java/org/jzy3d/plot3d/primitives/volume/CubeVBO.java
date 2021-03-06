@@ -43,7 +43,6 @@ public class CubeVBO extends DrawableVBO {
 
   @Override
   public void mount(IPainter painter) {
-    GL gl = ((NativeDesktopPainter) painter).getGL();
     try {
       loader.load(painter, this);
       hasMountedOnce = true;

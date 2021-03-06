@@ -374,6 +374,8 @@ public interface IPainter {
 
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar);
 
+  public void glFrustum(double left, double right, double bottom, double top, double zNear, double zFar);
+  
   public void gluLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY,
       float centerZ, float upX, float upY, float upZ);
 
