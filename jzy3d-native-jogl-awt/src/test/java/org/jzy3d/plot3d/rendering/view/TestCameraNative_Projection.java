@@ -28,7 +28,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  */
 public class TestCameraNative_Projection {
   static int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
-  static Rectangle FRAME_SIZE = new Rectangle(800, 600);
+  static Rectangle CANVAS_SIZE = new Rectangle(800, 600);
 
 
   @Test
@@ -36,6 +36,7 @@ public class TestCameraNative_Projection {
       throws InterruptedException, IOException {
     // GIVEN
     AWTChartFactory factory = new AWTChartFactory();
+    factory.getPainterFactory().setOffscreen(CANVAS_SIZE);
 
     Quality q = Quality.Advanced;
 
@@ -45,8 +46,9 @@ public class TestCameraNative_Projection {
 
     Chart chart = factory.newChart(q);
     chart.add(surface());
-    chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
-    chart.addMouseCameraController();
+    factory.getPainterFactory().setOffscreen(CANVAS_SIZE);
+    //chart.open(this.getClass().getSimpleName(), FRAME_SIZE); // requires considering OS dependent frame top bar
+    //chart.addMouseCameraController();
 
 
     // -----------------------------------------------------------------------
@@ -54,14 +56,14 @@ public class TestCameraNative_Projection {
     chart.getView().setViewPoint(View.VIEWPOINT_AXIS_CORNER_TOUCH_BORDER, true);
 
 
-    Thread.sleep(500);
+    //Thread.sleep(500);
 
     // -----------------------------------------------------------------------
     // Then at least one corner of AxisBox touch canvas top and bottom border
 
     chart.screenshot(new File("target/" + this.getClass().getSimpleName() + ".png"));
 
-    assertAxisCornersTouchCanvasTopAndBottomBorder(chart, FRAME_SIZE);
+    assertAxisCornersTouchCanvasTopAndBottomBorder(chart, CANVAS_SIZE);
 
   }
 
@@ -87,12 +89,12 @@ public class TestCameraNative_Projection {
         atLeastOneCornerNearBottom = true;
       }
 
-      if (corner2d.y > (FRAME_SIZE.height - APP_BAR_HEIGHT) - MAX_PIXEL_NUMBER_TO_FRAME_BORDER) {
+      if (corner2d.y > (FRAME_SIZE.height /*- APP_BAR_HEIGHT*/) - MAX_PIXEL_NUMBER_TO_FRAME_BORDER) {
         atLeastOneCornerNearTop = true;
       }
 
 
-      //System.out.println(" 2d : " + corner2d);
+      System.out.println(" 2d : " + corner2d);
     }
 
     System.out.println(FRAME_SIZE.height - APP_BAR_HEIGHT);
