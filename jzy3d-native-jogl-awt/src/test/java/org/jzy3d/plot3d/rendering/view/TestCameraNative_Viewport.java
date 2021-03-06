@@ -49,6 +49,8 @@ public class TestCameraNative_Viewport {
     Rectangle FRAME_SIZE = new Rectangle(800, 600);
     int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
 
+    //factory.getPainterFactory().setOffscreen(FRAME_SIZE);
+
     FrameAWT frame = (FrameAWT) chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
 
     chart.render(); // ensure we have rendered one to get latest layout later

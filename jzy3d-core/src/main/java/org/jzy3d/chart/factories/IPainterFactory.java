@@ -81,6 +81,8 @@ public interface IPainterFactory {
   public void setOffscreenDisabled();
 
   public void setOffscreen(int width, int height);
+  
+  public void setOffscreen(Rectangle rectangle);
 
   public Dimension getOffscreenDimension();
 

@@ -2,6 +2,7 @@ package org.jzy3d.chart.factories;
 
 import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
@@ -12,7 +13,6 @@ import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
@@ -105,6 +105,11 @@ public abstract class NativePainterFactory implements IPainterFactory {
     this.width = width;
     this.height = height;
     this.capabilities.setOnscreen(false);
+  }
+  
+  @Override
+  public void setOffscreen(Rectangle rectangle) {
+    setOffscreen(rectangle.width, rectangle.height);
   }
 
   @Override

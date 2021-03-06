@@ -23,7 +23,7 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 
-public class TestCameraEmulGL {
+public class TestCamera_EmulGL_Offscreen {
 
   @Test
   public void whenViewShoot_thenCameraIsProperlySet() throws InterruptedException {
@@ -106,15 +106,8 @@ public class TestCameraEmulGL {
     // After opening window to a chosen size
 
     Rectangle FRAME_SIZE = new Rectangle(800, 600);
-    int APP_BAR_HEIGHT = 22;
 
-    chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
-
-    Thread.sleep(500);
-
-    // Then viewport size is set to occupy the full frame
-    Assert.assertEquals(FRAME_SIZE.width, cam.getLastViewPort().getWidth());
-    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, cam.getLastViewPort().getHeight());
+    factory.getPainterFactory().setOffscreen(FRAME_SIZE);
 
     // ----------------------------------------
     // When change canvas size and update view
