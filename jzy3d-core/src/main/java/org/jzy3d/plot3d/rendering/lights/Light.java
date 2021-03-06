@@ -20,7 +20,7 @@ public class Light {
   }
 
   public Light(int id, boolean representationDisplayed) {
-    this(id, true, true);
+    this(id, true, false);
   }
 
   public Light(int id, boolean enabled, boolean representationDisplayed) {

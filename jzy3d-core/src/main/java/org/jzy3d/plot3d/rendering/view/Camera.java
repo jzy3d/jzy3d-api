@@ -462,7 +462,12 @@ public class Camera extends AbstractViewportManager {
     float aspect = stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1;
     float nearCorrected = near <= 0 ? 0.000000000000000000000000000000000000001f : near;
 
-    painter.gluPerspective(fov, aspect, nearCorrected, far);
+    painter.gluPerspective(fov/1, aspect*0.55, nearCorrected, far);
+
+    
+    
+    //painter.glFrustum(-radius*3, radius*3, -radius*3, radius*3, near, far);
+
   }
 
   protected void doLookAt(IPainter painter) {
