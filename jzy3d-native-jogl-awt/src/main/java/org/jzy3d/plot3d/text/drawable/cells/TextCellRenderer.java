@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
-import org.jzy3d.plot3d.text.align.Halign;
+import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.drawable.TextImageRenderer;
 
 /**
@@ -24,10 +24,10 @@ public class TextCellRenderer extends TextImageRenderer {
   protected static int OFFSET_CONSTANT = 13;
 
   public TextCellRenderer(int n, String txt, Font font) {
-    this(n, txt, font, Halign.LEFT, true);
+    this(n, txt, font, Horizontal.LEFT, true);
   }
 
-  public TextCellRenderer(int n, String txt, Font font, Halign halign, boolean drawBorder) {
+  public TextCellRenderer(int n, String txt, Font font, Horizontal halign, boolean drawBorder) {
     super(txt, font);
     this.n = n;
     this.h = halign;
@@ -64,11 +64,11 @@ public class TextCellRenderer extends TextImageRenderer {
       int width = g.getFontMetrics().stringWidth(text);
       int height = g.getFontMetrics().getHeight();
       g.setColor(textColor);
-      if (h == Halign.LEFT)
+      if (h == Horizontal.LEFT)
         g.drawString(text, 1, c.y - 1 - height / 5);
-      else if (h == Halign.RIGHT)
+      else if (h == Horizontal.RIGHT)
         g.drawString(text, c.x - width, c.y - 1 - height / 5);
-      else if (h == Halign.CENTER)
+      else if (h == Horizontal.CENTER)
         g.drawString(text, c.x / 2 - width / 2, c.y - 1 - height / 5);
     }
 
@@ -117,11 +117,11 @@ public class TextCellRenderer extends TextImageRenderer {
     this.n = n;
   }
 
-  public Halign getHorizontalAlignement() {
+  public Horizontal getHorizontalAlignement() {
     return h;
   }
 
-  public void setHorizontalAlignement(Halign h) {
+  public void setHorizontalAlignement(Horizontal h) {
     this.h = h;
   }
 
@@ -145,7 +145,7 @@ public class TextCellRenderer extends TextImageRenderer {
   }
 
   protected int n;
-  protected Halign h = Halign.LEFT;
+  protected Horizontal h = Horizontal.LEFT;
   protected Color borderColor = Color.RED;
   protected Color backgroundColor = Color.WHITE;
   protected Color textColor = Color.BLACK;

@@ -8,8 +8,8 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.PixelStore;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
  * A {@link TextBillboardRenderer} allows writing 2d text always facing the Camera of a 3d Scene.
@@ -51,8 +51,8 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
    * according to the current Camera configuration.
    */
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Halign halign,
-      Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
+      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     glRaster(painter, position, color);
 
     BillBoardSize dims = printString(painter, s, halign, valign);
@@ -99,7 +99,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
    * @throws an IllegalArgumentException if the vertical or horizontal alignment constant value is
    *         unknown.
    */
-  protected BillBoardSize printString(IPainter painter, String s, Halign halign, Valign valign) {
+  protected BillBoardSize printString(IPainter painter, String s, Horizontal halign, Vertical valign) {
     byte[] acodes = s.getBytes();
     int nchar = s.length();
     float xorig = 0.0f;
@@ -108,23 +108,23 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
     float ymove = 0.0f;
 
     // Compute horizontal alignment
-    if (halign == Halign.RIGHT)
+    if (halign == Horizontal.RIGHT)
       ;/* xorig = xorig; */
-    else if (halign == Halign.CENTER)
+    else if (halign == Horizontal.CENTER)
       xorig = nchar * xmove / 2;
-    else if (halign == Halign.LEFT)
+    else if (halign == Horizontal.LEFT)
       xorig = nchar * xmove;
     else
       throw new IllegalArgumentException("Horizontal alignement constant unknown: " + halign);
 
     // Compute vertical alignment
-    if (valign == Valign.TOP)
+    if (valign == Vertical.TOP)
       yorig = 0.0f;
-    else if (valign == Valign.GROUND)
+    else if (valign == Vertical.GROUND)
       ;/* yorig = yorig; */
-    else if (valign == Valign.CENTER)
+    else if (valign == Vertical.CENTER)
       yorig = charHeight / 2;
-    else if (valign == Valign.BOTTOM)
+    else if (valign == Vertical.BOTTOM)
       yorig = charHeight;
     else
       throw new IllegalArgumentException("Vertical alignement constant unknown: " + valign);

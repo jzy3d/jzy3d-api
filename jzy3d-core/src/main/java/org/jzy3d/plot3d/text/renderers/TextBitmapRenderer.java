@@ -9,9 +9,9 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
-import org.jzy3d.plot3d.text.align.Halign;
+import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.TextLayout;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
  * could enhance using http://www.angelcode.com/products/bmfont/
@@ -50,8 +50,8 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
    * according to the current Camera configuration.
    */
   @Override
-  public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Halign halign,
-      Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Horizontal halign,
+      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     painter.color(color);
 
     // compute a corrected 3D position according to the 2D layout on screen
