@@ -18,8 +18,8 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.text.ITextRenderer;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -152,7 +152,7 @@ public class AxisBox implements IAxis {
       // If we are on top, we make direct axe placement
       if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
         BoundingBox3d bbox =
-            drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Halign.LEFT, Valign.TOP);
+            drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
         wholeBounds.add(bbox);
       }
       // otherwise computed placement
@@ -165,7 +165,7 @@ public class AxisBox implements IAxis {
           // HACK: handles "on top" view, when all face of cube are
           // drawn, which forbid to select an axe automatically
           BoundingBox3d bbox =
-              drawTicks(painter, 2, AXE_X, layout.getXTickColor(), Halign.CENTER, Valign.TOP);
+              drawTicks(painter, 2, AXE_X, layout.getXTickColor(), Horizontal.CENTER, Vertical.TOP);
           wholeBounds.add(bbox);
         }
       }
@@ -176,7 +176,7 @@ public class AxisBox implements IAxis {
     if (yrange > 0 && layout.isYTickLabelDisplayed()) {
       if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
         BoundingBox3d bbox =
-            drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Halign.LEFT, Valign.GROUND);
+            drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
         wholeBounds.add(bbox);
       } else {
         int yselect = findClosestYaxe(painter.getCamera());
@@ -187,7 +187,7 @@ public class AxisBox implements IAxis {
           // HACK: handles "on top" view, when all face of cube are
           // drawn, which forbid to select an axe automatically
           BoundingBox3d bbox =
-              drawTicks(painter, 1, AXE_Y, layout.getYTickColor(), Halign.RIGHT, Valign.GROUND);
+              drawTicks(painter, 1, AXE_Y, layout.getYTickColor(), Horizontal.RIGHT, Vertical.GROUND);
           wholeBounds.add(bbox);
         }
       }
@@ -266,7 +266,7 @@ public class AxisBox implements IAxis {
 
   /** Draws axis labels, tick lines and tick label */
   protected BoundingBox3d drawTicks(IPainter painter, int axis, int direction, Color color,
-      Halign hal, Valign val) {
+      Horizontal hal, Vertical val) {
     int quad_0;
     int quad_1;
     float tickLength = 20.0f; // with respect to range
@@ -358,7 +358,7 @@ public class AxisBox implements IAxis {
        */
 
       BoundingBox3d labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition,
-          Halign.CENTER, Valign.CENTER, color);
+          Horizontal.CENTER, Vertical.CENTER, color);
       if (labelBounds != null)
         ticksTxtBounds.add(labelBounds);
     }
@@ -403,7 +403,7 @@ public class AxisBox implements IAxis {
   /**
    * Draw an array of ticks on the given axis indicated by direction field.
    */
-  protected void drawAxisTicks(IPainter painter, int direction, Color color, Halign hal, Valign val,
+  protected void drawAxisTicks(IPainter painter, int direction, Color color, Horizontal hal, Vertical val,
       float tickLength, BoundingBox3d ticksTxtBounds, double xpos, double ypos, double zpos,
       float xdir, float ydir, float zdir, double[] ticks) {
     double xlab;
@@ -489,16 +489,16 @@ public class AxisBox implements IAxis {
       }
 
       // Select the alignement of the tick label
-      Halign hAlign = layoutHorizontal(direction, painter.getCamera(), hal, tickPosition);
-      Valign vAlign = layoutVertical(direction, val, zdir);
+      Horizontal hAlign = layoutHorizontal(direction, painter.getCamera(), hal, tickPosition);
+      Vertical vAlign = layoutVertical(direction, val, zdir);
 
       // Draw the text label of the current tick
       drawAxisTickNumericLabel(painter, direction, color, hAlign, vAlign, ticksTxtBounds, tickLabel, tickPosition);
     }
   }
 
-  protected void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Halign hAlign,
-      Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
+  protected void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Horizontal hAlign,
+      Vertical vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
     // doTransform(gl);
     painter.glLoadIdentity();
     painter.glScalef(scale.x, scale.y, scale.z);
@@ -509,26 +509,26 @@ public class AxisBox implements IAxis {
       ticksTxtBounds.add(tickBounds);
   }
 
-  protected Valign layoutVertical(int direction, Valign val, float zdir) {
-    Valign vAlign;
+  protected Vertical layoutVertical(int direction, Vertical val, float zdir) {
+    Vertical vAlign;
     if (val == null) {
       if (isZ(direction))
-        vAlign = Valign.CENTER;
+        vAlign = Vertical.CENTER;
       else {
         if (zdir > 0)
-          vAlign = Valign.TOP;
+          vAlign = Vertical.TOP;
         else
-          vAlign = Valign.BOTTOM;
+          vAlign = Vertical.BOTTOM;
       }
     } else
       vAlign = val;
     return vAlign;
   }
 
-  protected Halign layoutHorizontal(int direction, Camera cam, Halign hal, Coord3d tickPosition) {
-    Halign hAlign;
+  protected Horizontal layoutHorizontal(int direction, Camera cam, Horizontal hal, Coord3d tickPosition) {
+    Horizontal hAlign;
     if (hal == null)
-      hAlign = cam.side(tickPosition) ? Halign.LEFT : Halign.RIGHT;
+      hAlign = cam.side(tickPosition) ? Horizontal.LEFT : Horizontal.RIGHT;
     else
       hAlign = hal;
     return hAlign;

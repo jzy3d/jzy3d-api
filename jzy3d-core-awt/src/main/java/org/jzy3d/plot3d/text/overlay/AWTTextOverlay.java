@@ -15,8 +15,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 
@@ -62,7 +62,7 @@ public class AWTTextOverlay implements AWTRenderer2d {
 
   /****************************************************************/
 
-  public void appendText(IPainter painter, String s, Coord3d position, Halign halign, Valign valign,
+  public void appendText(IPainter painter, String s, Coord3d position, Horizontal halign, Vertical valign,
       Color color) {
     Coord3d posScreen = painter.getCamera().modelToScreen(painter, position);
 
@@ -87,18 +87,18 @@ public class AWTTextOverlay implements AWTRenderer2d {
       // Apply alignment
       Rectangle2D area = metric.getStringBounds(t.str, g);
 
-      if (t.halign == Halign.RIGHT)
+      if (t.halign == Horizontal.RIGHT)
         ;// x = x;
-      else if (t.halign == Halign.CENTER)
+      else if (t.halign == Horizontal.CENTER)
         x = x - (int) area.getWidth() / 2;
-      else if (t.halign == Halign.LEFT)
+      else if (t.halign == Horizontal.LEFT)
         x = x - (int) area.getWidth();
 
-      if (t.valign == Valign.TOP)
+      if (t.valign == Vertical.TOP)
         ;// y = y;
-      else if (t.valign == Valign.CENTER)
+      else if (t.valign == Vertical.CENTER)
         y = y + (int) area.getHeight() / 2;
-      else if (t.valign == Valign.BOTTOM || t.valign == Valign.GROUND)
+      else if (t.valign == Vertical.BOTTOM || t.valign == Vertical.GROUND)
         y = y + (int) area.getHeight();
 
       // Perform the actual text rendering
@@ -138,7 +138,7 @@ public class AWTTextOverlay implements AWTRenderer2d {
   /***************************************************************************/
 
   private class TextDescriptor {
-    public TextDescriptor(String str, Coord2d position, Color color, Halign halign, Valign valign) {
+    public TextDescriptor(String str, Coord2d position, Color color, Horizontal halign, Vertical valign) {
       this.str = str;
       this.position = position;
       this.color = color;
@@ -149,7 +149,7 @@ public class AWTTextOverlay implements AWTRenderer2d {
     public String str;
     public Color color;
     public Coord2d position;
-    public Halign halign;
-    public Valign valign;
+    public Horizontal halign;
+    public Vertical valign;
   }
 }

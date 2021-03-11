@@ -19,9 +19,14 @@ import com.jogamp.opengl.util.GLBuffers;
  * 
  * 
  * 
- * Inspired by http://math.hws.edu/graphicsbook/source/jogl/ColorCubeOfSpheres.java
  * 
- * @author Martin
+ * Warning! Observed that the sphere will render weirdly for rare viewpoint when following GL setting is applied.
+ * <code>gl.glDisable(GL.GL_DEPTH_TEST)</code>
+ * 
+ * This is true when Quality.setAlphaActivated(false), in other word for Quality.Advanced.
+ * 
+ * @uthor David Eck inspired this class with http://math.hws.edu/graphicsbook/source/jogl/ColorCubeOfSpheres.java
+ * @author Martin Pernollet
  */
 public class SphereVBO extends DrawableVBO {
   VBOSphereMeshBuilder builder;
@@ -38,7 +43,7 @@ public class SphereVBO extends DrawableVBO {
   Mode mode = Mode.VBO;
 
 
-    public SphereVBO(Coord3d position, float radius, int stacks, int slices, Color color) {
+  public SphereVBO(Coord3d position, float radius, int stacks, int slices, Color color) {
       
     super(getBuilder(radius, stacks, slices));
 
@@ -115,22 +120,31 @@ public class SphereVBO extends DrawableVBO {
        */
 
       painter.color(color);
-      // gl.glColor3f(r,g,b);
-      painter.glPushMatrix();
+
+      //painter.glPushMatrix();
       painter.glTranslatef(position.x, position.y, position.z);// i-5,j-5,k-5);
 
 
+    //gl.glEnable(GL.GL_BLEND);
+      //gl.glEnable(GL2.GL_ALPHA_TEST);
+      //gl.glDisable(GL.GL_DEPTH_TEST);
+
+      //painter.glDisable_CullFace();
 
       if (Mode.VBO.equals(mode)) {
         // FASTER!!
         drawSphereWithDrawArrays(gl, builder.slices, builder.stacks); // Draw using DrawArrays
       } else if (Mode.ARRAY.equals(mode)) {
         drawSphereDirectWithDataFromArrays(gl);
-
       }
+      
+      gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+      gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+      //painter.glPopMatrix();
+      
+      
     }
 
-    painter.glPopMatrix();
   }
 
 
