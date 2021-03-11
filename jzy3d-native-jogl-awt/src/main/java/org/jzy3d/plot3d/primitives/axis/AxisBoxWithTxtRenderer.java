@@ -6,8 +6,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.overlay.AWTTextOverlay;
 
 /**
@@ -48,11 +48,11 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 
   @Override
   protected BoundingBox3d drawTicks(IPainter painter, int axis, int direction, Color color,
-      Halign hal, Valign val) {
+      Horizontal hal, Vertical val) {
     int quad_0;
     int quad_1;
-    Halign hAlign;
-    Valign vAlign;
+    Horizontal hAlign;
+    Vertical vAlign;
     float tickLength = 20.0f; // with respect to range
     float axeLabelDist = 2.5f;
     BoundingBox3d ticksTxtBounds = new BoundingBox3d();
@@ -116,11 +116,11 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
         || (direction == AXE_Z && layout.isZAxeLabelDisplayed())) {
       Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
       if (txtRenderer != null)
-        txtRenderer.appendText(painter, axeLabel, labelPosition, Halign.CENTER, Valign.CENTER,
+        txtRenderer.appendText(painter, axeLabel, labelPosition, Horizontal.CENTER, Vertical.CENTER,
             color);
       else {
         BoundingBox3d labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition,
-            Halign.CENTER, Valign.CENTER, color);
+            Horizontal.CENTER, Vertical.CENTER, color);
         if (labelBounds != null)
           ticksTxtBounds.add(labelBounds);
       }
@@ -175,18 +175,18 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
 
       // Select the alignement of the tick label
       if (hal == null)
-        hAlign = painter.getCamera().side(tickPosition) ? Halign.LEFT : Halign.RIGHT;
+        hAlign = painter.getCamera().side(tickPosition) ? Horizontal.LEFT : Horizontal.RIGHT;
       else
         hAlign = hal;
 
       if (val == null) {
         if (direction == AXE_Z)
-          vAlign = Valign.CENTER;
+          vAlign = Vertical.CENTER;
         else {
           if (zdir > 0)
-            vAlign = Valign.TOP;
+            vAlign = Vertical.TOP;
           else
-            vAlign = Valign.BOTTOM;
+            vAlign = Vertical.BOTTOM;
         }
       } else
         vAlign = val;

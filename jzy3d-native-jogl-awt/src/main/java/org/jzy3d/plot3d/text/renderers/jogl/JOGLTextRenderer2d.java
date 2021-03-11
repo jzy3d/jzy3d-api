@@ -12,9 +12,9 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.AWTTextLayout;
-import org.jzy3d.plot3d.text.align.Halign;
+import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.TextLayout;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.jogl.style.DefaultTextStyle;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.awt.TextRenderer.RenderDelegate;
@@ -64,22 +64,22 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
   }
 
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Halign halign,
-      Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal horizontal,
+      Vertical vertical, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     // configureRenderer();
     resetTextColor(color);
 
     // Reset to a polygon mode suitable for rendering the texture handling the text
     painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
-    drawText2D(painter, s, position, color, halign, valign);
+    drawText2D(painter, s, position, color, horizontal, vertical);
 
     return null;
   }
 
   /** Draws a 2D text (facing camera) at the specified 3D position */
   protected void drawText2D(IPainter painter, String text, Coord3d position, Color color,
-      Halign halign, Valign valign) {
+      Horizontal horizontal, Vertical vertical) {
 
     // Canvas size
     int width = painter.getView().getCanvas().getRendererWidth();
@@ -88,7 +88,7 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
     // Text screen position
     Coord3d screen = painter.getCamera().modelToScreen(painter, position);
     Coord2d textSize = layout.getBounds(text, font, renderer.getFontRenderContext());
-    screen = layout.align(textSize.x, textSize.y, halign, valign, screen);
+    screen = layout.align(textSize.x, textSize.y, horizontal, vertical, screen);
 
     // Render text
     renderer.setColor(color.r, color.g, color.b, color.a);

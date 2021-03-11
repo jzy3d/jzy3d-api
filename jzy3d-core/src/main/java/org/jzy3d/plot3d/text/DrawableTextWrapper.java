@@ -6,8 +6,8 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
@@ -19,8 +19,8 @@ import org.jzy3d.plot3d.transform.Transform;
 public class DrawableTextWrapper extends Drawable {
   protected String txt;
   protected Coord3d position;
-  protected Halign halign;
-  protected Valign valign;
+  protected Horizontal halign;
+  protected Vertical valign;
   protected Color color;
   protected Coord2d screenOffset = new Coord2d();
   protected Coord3d sceneOffset = new Coord3d();
@@ -34,7 +34,7 @@ public class DrawableTextWrapper extends Drawable {
   public DrawableTextWrapper(String txt, Coord3d position, Color color, ITextRenderer renderer) {
     super();
     this.renderer = renderer;
-    configure(txt, position, color, Halign.CENTER, Valign.CENTER);
+    configure(txt, position, color, Horizontal.CENTER, Vertical.CENTER);
   }
 
   /*******************************************************************************************/
@@ -55,7 +55,7 @@ public class DrawableTextWrapper extends Drawable {
     return bbox;
   }
 
-  public void configure(String txt, Coord3d position, Color color, Halign ha, Valign va) {
+  public void configure(String txt, Coord3d position, Color color, Horizontal ha, Vertical va) {
     setText(txt);
     setPosition(position);
     setColor(color);
@@ -83,19 +83,19 @@ public class DrawableTextWrapper extends Drawable {
     this.color = color;
   }
 
-  public Halign getHalign() {
+  public Horizontal getHalign() {
     return halign;
   }
 
-  public void setHalign(Halign halign) {
+  public void setHalign(Horizontal halign) {
     this.halign = halign;
   }
 
-  public Valign getValign() {
+  public Vertical getValign() {
     return valign;
   }
 
-  public void setValign(Valign valign) {
+  public void setValign(Vertical valign) {
     this.valign = valign;
   }
 

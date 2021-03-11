@@ -11,8 +11,8 @@ import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.primitives.axis.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 
 import jgl.GL;
 
@@ -149,8 +149,8 @@ public class EmulGLAxisBox extends AxisBox {
    * rendering.
    */
   @Override
-  public void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Halign hAlign,
-      Valign vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
+  public void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Horizontal hAlign,
+      Vertical vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
 
     // super.drawAxisTickNumericLabel(painter, direction, color, hAlign, vAlign, ticksTxtBounds,
     // tickLabel, tickPosition);

@@ -1,8 +1,8 @@
 package org.jzy3d.plot3d.primitives.graphs.layout;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 
 public interface IGraphFormatter<V, E> {
 
@@ -66,12 +66,12 @@ public interface IGraphFormatter<V, E> {
 
   public void setEdgesDisplayed(boolean edgeDisplayed);
 
-  public abstract void setVertexLabelValign(Valign vertexLabelValign);
+  public abstract void setVertexLabelValign(Vertical vertexLabelValign);
 
-  public abstract Valign getVertexLabelValign();
+  public abstract Vertical getVertexLabelValign();
 
-  public abstract void setVertexLabelHalign(Halign vertexLabelHalign);
+  public abstract void setVertexLabelHalign(Horizontal vertexLabelHalign);
 
-  public abstract Halign getVertexLabelHalign();
+  public abstract Horizontal getVertexLabelHalign();
 
 }

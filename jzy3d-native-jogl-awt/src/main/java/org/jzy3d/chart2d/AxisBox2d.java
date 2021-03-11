@@ -9,9 +9,9 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
-import org.jzy3d.plot3d.text.align.Halign;
+import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.TextLayout;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 public class AxisBox2d extends AxisBox {
@@ -52,13 +52,13 @@ public class AxisBox2d extends AxisBox {
   }
 
   @Override
-  public Halign layoutHorizontal(int direction, Camera cam, Halign hal, Coord3d tickPosition) {
+  public Horizontal layoutHorizontal(int direction, Camera cam, Horizontal hal, Coord3d tickPosition) {
     if (direction == AXE_X) {
-      return Halign.CENTER;
+      return Horizontal.CENTER;
     } else if (direction == AXE_Y) {
-      return Halign.LEFT;
+      return Horizontal.LEFT;
     } else {
-      return Halign.LEFT;
+      return Horizontal.LEFT;
     }
   }
 
@@ -71,11 +71,11 @@ public class AxisBox2d extends AxisBox {
 
     if (isXDisplayed(direction)) {
       // doTransform(gl);
-      labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Halign.CENTER,
-          Valign.CENTER, color);
+      labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Horizontal.CENTER,
+          Vertical.CENTER, color);
     } else if (isYDisplayed(direction)) {
-      labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Halign.CENTER,
-          Valign.CENTER, color);
+      labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Horizontal.CENTER,
+          Vertical.CENTER, color);
       // labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER,
       // Valign.CENTER, color);
     }
@@ -92,8 +92,8 @@ public class AxisBox2d extends AxisBox {
 
   public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
     @Override
-    public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Halign halign,
-        Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Horizontal halign,
+        Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
       painter.color(color);
 
       // compute a corrected position according to layout

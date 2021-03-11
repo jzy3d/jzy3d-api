@@ -18,8 +18,8 @@ import org.jzy3d.plot3d.primitives.contour.ContourLevel;
 import org.jzy3d.plot3d.primitives.contour.ContourMesh;
 import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 
 
 /**
@@ -125,7 +125,7 @@ public class ContourAxisBox extends AxisBox {
       if (label != null && level != null) {
         for (LineStrip strip : contour.getLines()) {
           Coord3d position = strip.get(strip.size() / 2).xyz;
-          textRenderer.drawText(painter, label, position, Halign.CENTER, Valign.CENTER,
+          textRenderer.drawText(painter, label, position, Horizontal.CENTER, Vertical.CENTER,
               Color.BLACK);
         }
       }

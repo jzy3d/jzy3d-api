@@ -1,8 +1,8 @@
 package org.jzy3d.plot3d.primitives.graphs.layout;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 
 public class DefaultGraphFormatter<V, E> implements IGraphFormatter<V, E> {
   public DefaultGraphFormatter() {
@@ -40,8 +40,8 @@ public class DefaultGraphFormatter<V, E> implements IGraphFormatter<V, E> {
     highlightedEdgeColor = highlight;
     highlightedEdgeWidth = 2;
 
-    vertexLabelHalign = Halign.CENTER;
-    vertexLabelValign = Valign.BOTTOM;
+    vertexLabelHalign = Horizontal.CENTER;
+    vertexLabelValign = Vertical.BOTTOM;
   }
 
 
@@ -196,22 +196,22 @@ public class DefaultGraphFormatter<V, E> implements IGraphFormatter<V, E> {
   }
 
   @Override
-  public Halign getVertexLabelHalign() {
+  public Horizontal getVertexLabelHalign() {
     return vertexLabelHalign;
   }
 
   @Override
-  public void setVertexLabelHalign(Halign vertexLabelHalign) {
+  public void setVertexLabelHalign(Horizontal vertexLabelHalign) {
     this.vertexLabelHalign = vertexLabelHalign;
   }
 
   @Override
-  public Valign getVertexLabelValign() {
+  public Vertical getVertexLabelValign() {
     return vertexLabelValign;
   }
 
   @Override
-  public void setVertexLabelValign(Valign vertexLabelValign) {
+  public void setVertexLabelValign(Vertical vertexLabelValign) {
     this.vertexLabelValign = vertexLabelValign;
   }
 
@@ -236,6 +236,6 @@ public class DefaultGraphFormatter<V, E> implements IGraphFormatter<V, E> {
   protected boolean nodeLabelDisplayed = true;
   protected boolean edgeDisplayed = true;
 
-  protected Halign vertexLabelHalign;
-  protected Valign vertexLabelValign;
+  protected Horizontal vertexLabelHalign;
+  protected Vertical vertexLabelValign;
 }

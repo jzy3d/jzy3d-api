@@ -14,8 +14,8 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.text.ITextRenderer;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 /**
@@ -42,8 +42,8 @@ public class CameraDistanceAnnotation extends Point {
 
     doDrawCamera(painter, painter.getCamera());
 
-    Halign h = Halign.RIGHT;
-    Valign v = Valign.CENTER;
+    Horizontal h = Horizontal.RIGHT;
+    Vertical v = Vertical.CENTER;
     Coord2d screenOffset = new Coord2d(10, 0);
     Color colorBary = Color.BLACK;
     Color colorPt = Color.GRAY.clone();

@@ -14,8 +14,8 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.AWTTextLayout;
-import org.jzy3d.plot3d.text.align.Halign;
-import org.jzy3d.plot3d.text.align.Valign;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.jogl.style.DefaultTextStyle;
 import org.jzy3d.plot3d.transform.Rotate;
 import com.jogamp.opengl.util.awt.TextRenderer;
@@ -70,8 +70,8 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
   }
 
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Halign halign,
-      Valign valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
+      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     // configureRenderer();
     resetTextColor(color);
 
@@ -87,8 +87,8 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
 
   /* TEXT PLACED AS 3D OBJECT (ROTATE WITH CAM) */
 
-  protected void drawText3D(IPainter painter, String text, Coord3d position, Halign halign,
-      Valign valign, Color color) {
+  protected void drawText3D(IPainter painter, String text, Coord3d position, Horizontal halign,
+      Vertical valign, Color color) {
     
     Camera cam = painter.getCamera();
     

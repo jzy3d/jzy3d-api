@@ -93,7 +93,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     // Blending
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
     // on/off is handled by each viewport (camera or image)
-
+    
     // Activate tranparency
     if (quality.isAlphaActivated()) {
       gl.glEnable(GL.GL_BLEND);
