@@ -223,6 +223,9 @@ Version 2.0 is a major refactor to allow using multiple OpenGL implementations, 
 |||
 | ColorbarViewportLayout | ViewAndColorbarsLayout |
 | ViewMouseController | NewtViewCameraController |
+| Halign | Horizontal |
+| Valign | Vertical |
+| Surface | SurfaceBuilder |
 
 :exclamation: work in progress.
 
