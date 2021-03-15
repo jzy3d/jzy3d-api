@@ -40,6 +40,7 @@ public class SurfaceDemoEmulGL {
     EmulGLChartFactory factory = new EmulGLChartFactory();
 
     Quality q = Quality.Advanced; // assez propre avec l'ancienne méthode de setQuality
+    q.setPreserveViewportSize(false);
     // q.setAlphaActivated(false); /// ALPHA BUG
 
     // q.setSmoothEdge(true);
