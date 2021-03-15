@@ -52,6 +52,13 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
     painter = (EmulGLPainter) view.getPainter();
     init();
     animator = factory.getPainterFactory().newAnimator(this);
+    
+    if(quality.isPreserveViewportSize()) {
+      myGL.setAutoAdaptToHiDPI(false);
+    }
+    else {
+      myGL.setAutoAdaptToHiDPI(true);
+    }
 
     // FROM NATIVE
     //
