@@ -7,6 +7,7 @@ public class EmulGLAnimator implements IAnimator {
   protected EmulGLCanvas canvas;
   protected Thread t;
   protected boolean loop = false;
+  protected static int id = 0;
 
 
   public EmulGLAnimator(EmulGLCanvas canvas) {
@@ -33,7 +34,7 @@ public class EmulGLAnimator implements IAnimator {
         }
       }
 
-    }, "org.jzy3d.chart.EmulGLAnimator");
+    }, "org.jzy3d.chart.EmulGLAnimator thread " + (id++));
     t.start();
   }
 
@@ -41,6 +42,9 @@ public class EmulGLAnimator implements IAnimator {
   public void stop() {
     if (t != null) {
       loop = false;
+      //t.stop();
+      t.interrupt();
+      t = null;
     }
   }
 }
