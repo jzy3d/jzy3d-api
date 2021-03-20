@@ -42,25 +42,25 @@ public class SurfaceDemoEmulGL {
     chart.add(surface);
     
     EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
-    c.setProfileDisplayMethod(false);
-    c.getGL().setAutoAdaptToHiDPI(false);
+    c.setProfileDisplayMethod(true);
+    c.getGL().setAutoAdaptToHiDPI(true);
     
     //chart.getAxisLayout().setFont(Font.Helvetica_18);
     ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer()).setFont(Font.TimesRoman_10);
     chart.open();
 
     // --------------------------------
+    
+    chart.setAnimated(true);
+
 
     CameraThreadController rotation = new CameraThreadController(chart);
     rotation.setStep(0.025f);
-    rotation.setUpdateViewDefault(true);
+    rotation.setUpdateViewDefault(true);//!chart.getQuality().isAnimated());
 
     AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
     mouse.addSlaveThreadController(rotation);
-
-    rotation.setUpdateViewDefault(true);
-    mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
-    chart.setAnimated(true);
+    mouse.setUpdateViewDefault(!chart.getQuality().isAnimated()); // keep to false otherwise double rendering
 
     try {
       chart.screenshot(new File("target/" + SurfaceDemoEmulGL.class.getSimpleName() + ".png"));

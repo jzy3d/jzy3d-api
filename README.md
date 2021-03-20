@@ -189,8 +189,14 @@ Jzy3d depends on the following libraries that are available on [Jzy3d Maven repo
 # How to build
 
 ```
-mvn install
+mvn clean install
 ```
+
+The [integration tests might be disabled on purpose](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L168), as they are still
+sometime sensitive to thin rendering differences across computers. If they are enabled, you may have tests named ```ITTest*``` failing. In this case, you may
+* Comment it from [Surefire plugin configuration](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L168). The best is to edit the Maven pom to only disable ITTest*. If you are busy, you may simply run ```mvn install -DskipTests```
+* Skip it from [Faisafe if this plugin is currently active](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L186) in the Maven pom. To do so run ```mvn install -DskipITs```
+
 
 # How to get help
 
