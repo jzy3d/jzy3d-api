@@ -13,13 +13,15 @@ Native charts (using JOGL) remain the preferred option for fast rendering of ver
 
 Despite not exhaustive at all, I was able to have the following performance on a MacBook Pro (Retina 15 inches, 2013), 2,7 GHz Intel Core i7, RAM 16 Go 1600 MHz DDR3
 
-Surfaces
+[EmulGL Surface charts](https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials/src/main/java/org/jzy3d/demos/surface/SurfaceDemoEmulGL.java)
 * A 60x60 polygon 3D surface in a 500x500 pixels frame is rendered in ~30ms
 * A 60x60 polygon 3D surface in a 1440x800 pixel frame is rendered in ~45ms
 
-Scatters
+[EmulGL Scatter charts](https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials/src/main/java/org/jzy3d/demos/scatter/ScatterDemoEmulGL.java)
 * A 50.000 points 3D scatter in a 500x500 pixels frame is rendered in ~10ms
 * A 500.000 points 3D scatter in a 500x500 pixels frame is rendered in ~90ms
+
+Please report here the performance you encounter while running EmulGL charts by [adding comments to this issue](https://github.com/jzy3d/jzy3d-api/issues/149). 
 
 # Implementation
 
