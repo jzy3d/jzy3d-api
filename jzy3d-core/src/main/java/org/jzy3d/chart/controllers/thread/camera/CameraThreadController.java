@@ -17,6 +17,7 @@ public class CameraThreadController extends AbstractCameraController implements 
   protected Thread process = null;
   protected int sleep = 1;// 1000/25; // nb milisecond wait between two frames
   protected float step = 0.0005f;
+  protected static int id = 0;
 
 
   public CameraThreadController() {}
@@ -35,7 +36,7 @@ public class CameraThreadController extends AbstractCameraController implements 
   public void start() {
     if (process == null) {
       process = new Thread(this);
-      process.setName("Embedded by ChartThreadController");
+      process.setName("CameraThreadController (automatic rotation)" + (id++));
       process.start();
     }
   }
