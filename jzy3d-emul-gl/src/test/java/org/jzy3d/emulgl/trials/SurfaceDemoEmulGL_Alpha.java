@@ -1,4 +1,4 @@
-package org.jzy3d;
+package org.jzy3d.emulgl.trials;
 
 import java.io.File;
 import java.io.IOException;
