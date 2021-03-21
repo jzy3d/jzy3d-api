@@ -177,7 +177,6 @@ public class Graph {
    * non-{@link Composite} {@link Drawable}s) in order to render them according to the default -or
    * defined- {@link AbstractOrderingStrategy}.
    * 
-   * @param painter TODO
    */
   public void draw(IPainter painter) {
     draw(painter, components, sort);
