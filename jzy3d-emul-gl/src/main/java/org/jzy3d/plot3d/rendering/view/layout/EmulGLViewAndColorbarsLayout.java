@@ -16,9 +16,10 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import jgl.GL;
 
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
+  boolean doShiftjGLForColorbar = false;
+  boolean doFixHiDPI = true;
 
   public EmulGLViewAndColorbarsLayout() {
-    // TODO Auto-generated constructor stub
   }
 
   @Override
@@ -42,7 +43,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
   /**
    * This override allows
    * <ul>
-   * <li>Shifting the viewport to let some place for a colorbar rendering.
+   * <li>Shifting artificially the complete jGL viewport to let some place for a colorbar rendering.
    * <li>Rendering the image using jGL dedicated image management
    * ({@link GL#appendImageToDraw(BufferedImage, int, int)}).
    * </ul>
@@ -52,18 +53,37 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       ICanvas canvas) {
     EmulGLPainter emulGL = (EmulGLPainter) painter;
 
+    
+    
+
+    int width = canvas.getRendererWidth();
+    int height = canvas.getRendererHeight();
+
+    if (doFixHiDPI) {
+    width = (int)(sceneViewport.getWidth()*emulGL.getGL().getPixelScaleX());
+    height = (int)(sceneViewport.getHeight()*emulGL.getGL().getPixelScaleY());//canvas.getRendererHeight();
+    }
+    
     // ---------------------------------------
-    /// HAAACKKKKYYYYY : SHIFT THE VIEWPORT
+    /// HAAACKKKKYYYYY : SHIFT THE VIEWPORT TO LET SPACE FOR COLORBAR
 
-    float shift = (right - left) * canvas.getRendererWidth() / 2;
-    emulGL.getGL().setShiftHorizontally((int) -shift);
+    if(doShiftjGLForColorbar) {
+      float shift = (right - left) * width / 2;
 
+      emulGL.getGL().setShiftHorizontally((int) -shift);
+    }
+    
+    // ---------------------------------------
+    
+    
     float slice = (right - left) / legends.size();
     int k = 0;
     for (ILegend legend : legends) {
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-      legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(),
-          left + slice * (k++), left + slice * k);
+      
+      float from = left + slice * (k++);
+      float to = left + slice * k;
+      legend.setViewPort(width, height, from, to);
 
       // legend.render(painter); // BYPASS IMAGE RENDERING THAT DOES NOT WORK WELL IN
       // jGL
@@ -72,7 +92,10 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       if (legend instanceof AWTColorbarLegend) {
         AWTColorbarLegend leg = (AWTColorbarLegend) legend;
 
+        //int x = (int)(leg.getScreenLeft());
+        
         int x = leg.getScreenLeft();
+        
         // System.out.println(((AWTColorbarLegend) legend).getScreenLeft());
         emulGL.getGL().appendImageToDraw((BufferedImage) leg.getImage(), x, 0);
 
