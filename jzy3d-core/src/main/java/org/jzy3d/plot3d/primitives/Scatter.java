@@ -77,9 +77,9 @@ public class Scatter extends Drawable implements ISingleColorable {
     if (colors == null)
       painter.color(rgb);
 
-    if (coordinates != null) {
+    if (getData() != null) {
       int k = 0;
-      for (Coord3d c : coordinates) {
+      for (Coord3d c : getData()) {
         if (colors != null) {
           painter.color(colors[k]);
           k++;

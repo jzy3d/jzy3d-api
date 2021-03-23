@@ -9,22 +9,22 @@ import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.TicToc;
+import org.jzy3d.monitor.IMonitorable;
+import org.jzy3d.monitor.Measure.CanvasPerfMeasure;
+import org.jzy3d.monitor.Monitor;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import jgl.GLCanvas;
 import jgl.context.gl_pointer;
 
-public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
+public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorable {
   Logger log = Logger.getLogger(EmulGLCanvas.class);
 
   private static final long serialVersionUID = 980088854683562436L;
@@ -52,11 +52,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
     painter = (EmulGLPainter) view.getPainter();
     init();
     animator = factory.getPainterFactory().newAnimator(this);
-    
-    if(quality.isPreserveViewportSize()) {
+
+    if (quality.isPreserveViewportSize()) {
       myGL.setAutoAdaptToHiDPI(false);
-    }
-    else {
+    } else {
       myGL.setAutoAdaptToHiDPI(true);
     }
 
@@ -128,12 +127,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
    */
   public synchronized void doDisplay() {
     TicToc t = new TicToc();
+    t.tic();
 
     if (view != null) {
 
       if (profileDisplayMethod) {
         resetCountGLBegin();
-        t.tic();
       }
 
       view.clear();
@@ -149,30 +148,32 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
 
       // checkAlphaChannelOfColorBuffer(painter);
 
+      // -------------------------------
+      // PROFILE
+      t.toc();
       if (profileDisplayMethod) {
-        // printCountGLBegin();
-        // t.tocShow("Rendering took");
-        t.toc();
-
-        postRenderProfiling(t);
+        postRenderProfiling(t.elapsedMilisecond());
 
       }
-
+      if (monitor != null) {
+        monitor(monitor, t.elapsedMilisecond());
+      }
 
       kDisplay++;
     }
   }
 
-  protected void postRenderProfiling(TicToc t) {
+  protected void postRenderProfiling(double mili) {
     int x = 30;
     int y = 12;
 
     postRenderString("FrameID    : " + kDisplay, x, y, Color.BLACK);
-    postRenderString("Render in  : " + t.elapsedMilisecond() + "ms", x, y * 2, Color.BLACK);
-    postRenderString("Surf size  : " + view.getScene().getGraph().getDecomposition().size(), x,
-        y * 3, Color.BLACK);
+    postRenderString("Render in  : " + mili + "ms", x, y * 2, Color.BLACK);
+    postRenderString("Surf size  : " + view.getScene().getGraph().getDecomposition().size(), x, y * 3, Color.BLACK);
     postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
   }
+
+
 
   Font profileFont = new Font("Arial", Font.PLAIN, 12);
   int kDisplay = 0;
@@ -320,8 +321,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
     forceRepaint();
   }
 
-
-
   /* ******************* DEBUG ********************* */
 
   public boolean isProfileDisplayMethod() {
@@ -358,4 +357,27 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
     painter.getGL().getPointer().geometry.countBegin = 0;
   }
 
+  @Override
+  public String getFullname() {
+    return this.toString();
+  }
+
+  @Override
+  public String getLabel() {
+    return this.getClass().getSimpleName();
+  }
+
+  @Override
+  public void add(Monitor monitor) {
+    this.monitor = monitor;
+  }
+
+  protected void monitor(Monitor monitor, double mili) {
+    CanvasPerfMeasure m =
+        new CanvasPerfMeasure(getWidth(), getHeight(), getWidth() * getHeight(), mili);
+    monitor.add(this, m);
+  }
+
+
+  Monitor monitor;
 }
