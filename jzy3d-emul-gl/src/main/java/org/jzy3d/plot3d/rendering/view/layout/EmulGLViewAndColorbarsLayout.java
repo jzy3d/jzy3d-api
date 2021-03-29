@@ -31,6 +31,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     // (=CLEAR COLOR?) BAND
     // that can't be overriden by legend image
     sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, 1);// screenSeparator);
+    //sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, screenSeparator);
 
     view.renderScene(sceneViewport);
 
@@ -82,7 +83,10 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
       
       float from = left + slice * (k++);
-      float to = left + slice * k;
+      float to = from + slice;
+      
+      
+      
       legend.setViewPort(width, height, from, to);
 
       // legend.render(painter); // BYPASS IMAGE RENDERING THAT DOES NOT WORK WELL IN
@@ -90,15 +94,13 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       // legend.get
 
       if (legend instanceof AWTColorbarLegend) {
-        AWTColorbarLegend leg = (AWTColorbarLegend) legend;
-
-        //int x = (int)(leg.getScreenLeft());
+        AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
+        BufferedImage legendImage =  (BufferedImage) awtLegend.getImage();
+        int legendWidth = (int)(legendImage.getWidth() / emulGL.getGL().getPixelScaleX());
         
-        int x = leg.getScreenLeft();
+        //System.out.println("leg.width=" + legendWidth + " canvas.hidpi.width=" + width + " canvas.width=" + canvas.getRendererWidth());
         
-        // System.out.println(((AWTColorbarLegend) legend).getScreenLeft());
-        emulGL.getGL().appendImageToDraw((BufferedImage) leg.getImage(), x, 0);
-
+        emulGL.getGL().appendImageToDraw(legendImage, width-legendWidth*(k), 0);
       }
     }
   }
