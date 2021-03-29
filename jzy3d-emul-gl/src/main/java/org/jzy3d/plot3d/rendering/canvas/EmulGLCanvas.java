@@ -164,7 +164,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
   }
 
   protected void postRenderProfiling(TicToc t) {
-    int x = 60;
+    int x = 05;
     int y = 12;
 
     
