@@ -33,10 +33,10 @@ public class EmulGLChartFactory extends ChartFactory {
     return new AWTView(factory, scene, canvas, quality);
   }
 
-  @Override
+  /*@Override
   public EmulGLAxisBox newAxe(BoundingBox3d box, View view) {
     EmulGLAxisBox axe = new EmulGLAxisBox(box);
     axe.setView(view);
     return axe;
-  }
+  }*/
 }
