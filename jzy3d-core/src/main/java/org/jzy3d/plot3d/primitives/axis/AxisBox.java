@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.axis;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
@@ -103,7 +102,7 @@ public class AxisBox implements IAxis {
 
   /* DRAW AXEBOX ELEMENTS */
 
-  public void drawFace(IPainter painter) {
+  /*public void drawFace(IPainter painter) {
     if (layout.isFaceDisplayed()) {
       Color quadcolor = layout.getQuadColor();
       painter.glPolygonMode(PolygonMode.BACK, PolygonFill.FILL);
@@ -136,6 +135,74 @@ public class AxisBox implements IAxis {
       if (!quadIsHidden[quad])
         drawGridOnQuad(painter, quad);
     painter.glDisable_LineStipple();
+  }*/
+  
+  public void drawGrid(IPainter painter) {
+    painter.glLineStipple(1, (short) 0xAAAA);
+    painter.glEnable_LineStipple();
+
+    /*
+     * for (int quad = 0; quad < 6; quad++) if (!quadIsHidden[quad]) drawGridOnQuad(painter, gl,
+     * quad);
+     */
+
+
+    for (int quad = 0; quad < 6; quad++) {
+      if (!getQuadIsHidden()[quad]) {
+
+        // Draw X grid along X axis
+        if ((quad != 0) && (quad != 1)) {
+          double[] xticks = layout.getXTicks();
+          for (int t = 0; t < xticks.length; t++) {
+            painter.glBegin_Line(); // JOGL CONSTANT VALUE 2 -> THIS REQUIRES 1, recognized by
+                                          // JGL
+            painter.vertex((float) xticks[t], quady[quad][0], quadz[quad][0], spaceTransformer);
+            painter.vertex((float) xticks[t], quady[quad][2], quadz[quad][2], spaceTransformer);
+            painter.glEnd();
+          }
+        }
+        // Draw Y grid along Y axis
+        if ((quad != 2) && (quad != 3)) {
+          double[] yticks = layout.getYTicks();
+          for (int t = 0; t < yticks.length; t++) {
+            painter.glBegin_Line();
+            painter.vertex(quadx[quad][0], (float) yticks[t], quadz[quad][0], spaceTransformer);
+            painter.vertex(quadx[quad][2], (float) yticks[t], quadz[quad][2], spaceTransformer);
+            painter.glEnd();
+          }
+        }
+        // Draw Z grid along Z axis
+        if ((quad != 4) && (quad != 5)) {
+          double[] zticks = layout.getZTicks();
+          for (int t = 0; t < zticks.length; t++) {
+            painter.glBegin_Line();
+            painter.vertex(quadx[quad][0], quady[quad][0], (float) zticks[t], spaceTransformer);
+            painter.vertex(quadx[quad][2], quady[quad][2], (float) zticks[t], spaceTransformer);
+            painter.glEnd();
+          }
+        }
+      }
+    }
+
+    painter.glDisable_LineStipple();
+  }
+
+  public void drawFace(IPainter painter) {
+    //painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
+    painter.glPolygonMode(PolygonMode.FRONT, PolygonFill.LINE);
+
+    painter.glColor4f(0, 0, 0, 1);
+
+    for (int q = 0; q < 6; q++) {
+      if (!getQuadIsHidden()[q]) {
+        painter.glBegin_LineLoop(); // weird : left the triangle
+
+        for (int v = 0; v < 4; v++) {
+          painter.vertex(getQuadX()[q][v], getQuadY()[q][v], getQuadZ()[q][v], spaceTransformer);
+        }
+        painter.glEnd();
+      }
+    }
   }
 
   public void drawTicksAndLabels(IPainter painter) {

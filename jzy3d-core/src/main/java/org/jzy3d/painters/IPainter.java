@@ -172,7 +172,7 @@ public interface IPainter {
     public int getHeight() {
       return height;
     }
-
+    
     protected String name;
     protected int code;
     protected int height;

@@ -56,6 +56,9 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 
     // compute a corrected 3D position according to the 2D layout on screen
     float textHeight = font.getHeight();
+    
+    java.awt.Font f = new java.awt.Font(font.getName(), java.awt.Font.PLAIN, font.getHeight());
+    //float textWidth = (float)f.getStringBounds(text, null).getWidth();
     float textWidth = painter.glutBitmapLength(font.getCode(), text);
 
     Coord3d screen = painter.getCamera().modelToScreen(painter, position);
