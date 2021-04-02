@@ -14,6 +14,7 @@ import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisBoxLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -623,19 +624,30 @@ public class AxisBox implements IAxis {
         distAxeZ[a] = Double.MAX_VALUE;
     }
 
-    // prefers the right one
+    // prefers the left or right one accoring to layout
     for (int a = 0; a < na; a++) {
       if (distAxeZ[a] < Double.MAX_VALUE) {
         Coord3d axeCenter = new Coord3d((axeZx[a][0] + axeZx[a][1]) / 2,
             (axeZy[a][0] + axeZy[a][1]) / 2, (axeZz[a][0] + axeZz[a][1]) / 2);
-        if (!cam.side(axeCenter))
-          distAxeZ[a] *= -1;
+        
+
+        if(ZAxisSide.LEFT.equals(layout.getZAxisSide())) {
+          if (cam.side(axeCenter))
+            distAxeZ[a] *= -1;
+        }
+        else {
+          if (!cam.side(axeCenter))
+            distAxeZ[a] *= -1;
+        }
+        
       }
     }
 
     return min(distAxeZ);
   }
-
+  
+  
+  
   /**
    * Return the index of the minimum value contained in the input array of doubles. If no value is
    * smaller than Double.MAX_VALUE, the returned index is -1.
