@@ -42,7 +42,7 @@ public class CameraDistanceAnnotation extends Point {
 
     doDrawCamera(painter, painter.getCamera());
 
-    Horizontal h = Horizontal.RIGHT;
+    Horizontal h = Horizontal.CENTER;
     Vertical v = Vertical.CENTER;
     Coord2d screenOffset = new Coord2d(10, 0);
     Color colorBary = Color.BLACK;
@@ -50,27 +50,40 @@ public class CameraDistanceAnnotation extends Point {
     colorPt.alphaSelf(0.5f);
 
     Graph graph = view.getScene().getGraph();
+    
     AbstractOrderingStrategy strat = graph.getStrategy();
+    
     for (Drawable drawable : graph.getDecomposition()) {
-      double d = strat.score(drawable);
+      drawBarycenterDistanceToCamera(painter, h, v, screenOffset, colorBary, strat, drawable);
 
-      // System.out.println(drawable.getBarycentre() );
+      //drawPolygonPointsDistanceToCamera(painter, h, v, screenOffset, colorPt, strat, drawable);
+    }
+  }
 
-      txt.setSpaceTransformer(drawable.getSpaceTransformer());
-      txt.drawText(painter, Utils.num2str(d, 4), drawable.getBarycentre(), h, v, colorBary,
-          screenOffset);
+  private void drawBarycenterDistanceToCamera(IPainter painter, Horizontal h, Vertical v,
+      Coord2d screenOffset, Color colorBary, AbstractOrderingStrategy strat, Drawable drawable) {
+    double d = strat.score(drawable);
 
-      if (drawable instanceof Geometry) {
-        Polygon p = (Polygon) drawable;
-        for (Point pt : p.getPoints()) {
-          // Point pt2 = pt.clone();
-          d = strat.score(pt);
+    // System.out.println(drawable.getBarycentre() );
 
-          // System.out.println(pt.xyz);
+    txt.setSpaceTransformer(drawable.getSpaceTransformer());
+    txt.drawText(painter, Utils.num2str(d, 4), drawable.getBarycentre(), h, v, colorBary,
+        screenOffset);
+  }
 
-          txt.setSpaceTransformer(pt.getSpaceTransformer());
-          txt.drawText(painter, Utils.num2str(d, 4), pt.getCoord(), h, v, colorPt, screenOffset);
-        }
+  private void drawPolygonPointsDistanceToCamera(IPainter painter, Horizontal h, Vertical v,
+      Coord2d screenOffset, Color colorPt, AbstractOrderingStrategy strat, Drawable drawable) {
+    double d;
+    if (drawable instanceof Geometry) {
+      Polygon p = (Polygon) drawable;
+      for (Point pt : p.getPoints()) {
+        // Point pt2 = pt.clone();
+        d = strat.score(pt);
+
+        // System.out.println(pt.xyz);
+
+        txt.setSpaceTransformer(pt.getSpaceTransformer());
+        txt.drawText(painter, Utils.num2str(d, 4), pt.getCoord(), h, v, colorPt, screenOffset);
       }
     }
   }
