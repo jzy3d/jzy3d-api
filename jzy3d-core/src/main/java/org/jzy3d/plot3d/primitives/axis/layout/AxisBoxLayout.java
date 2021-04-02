@@ -328,6 +328,20 @@ public class AxisBoxLayout implements IAxisLayout {
     this.font = font;
   }
 
+  
+  
+
+
+  public ZAxisSide getZAxisSide() {
+    return zAxisSide;
+  }
+
+  public void setZAxisSide(ZAxisSide zAxisSide) {
+    this.zAxisSide = zAxisSide;
+  }
+
+
+
 
 
   /**********************************************************/
@@ -376,4 +390,6 @@ public class AxisBoxLayout implements IAxisLayout {
   protected double lastZmax = Float.NaN;
 
   protected Color mainColor;
+  
+  protected ZAxisSide zAxisSide = ZAxisSide.RIGHT;
 }
