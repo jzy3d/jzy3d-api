@@ -606,7 +606,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
    */
   @Override
   public int glutBitmapLength(int font, String string) {
-    return 12 * string.length();
+    return 6 * string.length();
     // throw new NotImplementedException();
     // return glut.glutBitmapLength(font, string);
   }
