@@ -12,10 +12,6 @@
 	<artifactId>jzy3d-emul-gl</artifactId>
 	<name>Jzy3d EmulGL Implementation for AWT with jGL</name>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
