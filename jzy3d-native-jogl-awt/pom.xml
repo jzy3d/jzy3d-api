@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
@@ -16,11 +16,13 @@
 	<description>A Java API for 3d charts</description>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-core-awt</artifactId>
@@ -32,20 +34,13 @@
 			<artifactId>jzy3d-native-jogl-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-native-jogl-core</artifactId>
 			<version>${project.version}</version>
 			<type>test-jar</type>
 		</dependency>
+
 	</dependencies>
-
-	<build>
-		<plugins>
-
-		</plugins>
-	</build>
-
-
 </project>
