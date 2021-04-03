@@ -3,14 +3,13 @@ package org.jzy3d.debugGL.tracers;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.debugGL.primitives.Cube;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
+import org.jzy3d.plot3d.primitives.Cube;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
