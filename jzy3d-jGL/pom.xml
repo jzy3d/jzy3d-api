@@ -1,13 +1,14 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-all</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
+
 	<artifactId>jGL</artifactId>
 	<name>Jzy3d Embedded jGL</name>
 
@@ -27,6 +28,7 @@
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -79,20 +81,20 @@
 			<!-- Generate an additional Jar containing Javadoc -->
 
 			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9</version>
-					<executions>
-							<execution>
-									<id>attach-javadocs</id>
-									<goals>
-											<goal>jar</goal>
-									</goals>
-									<configuration>
-										<failOnError>false</failOnError>
-									</configuration>
-							</execution>
-					</executions>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.9</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<failOnError>false</failOnError>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 
@@ -100,12 +102,12 @@
 		<!-- Extension to perform FTP upload of artifact -->
 
 		<extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-          <artifactId>wagon-ftp</artifactId>
-          <version>1.0-beta-6</version>
-      </extension>
-    </extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>1.0-beta-6</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<!-- Repositories where to get dependencies -->
@@ -142,16 +144,16 @@
 	<!-- Disable Javadoc Linter -->
 
 	<profiles>
-			<profile>
-					<id>disable-java8-doclint</id>
-					<activation>
-							<!--<jdk>[1.8,)</jdk>-->
-							<activeByDefault>true</activeByDefault>
-					</activation>
-					<properties>
-							<additionalparam>-Xdoclint:none</additionalparam>
-					</properties>
-			</profile>
+		<profile>
+			<id>disable-java8-doclint</id>
+			<activation>
+				<!--<jdk>[1.8,)</jdk> -->
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
 	</profiles>
 
 </project>

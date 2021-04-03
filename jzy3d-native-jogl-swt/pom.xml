@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.jzy3d</groupId>
@@ -14,19 +16,23 @@
 	<description>A Java API for 3d charts</description>
 
 	<repositories>
+
 		<repository>
 			<id>swt-repo</id>
 			<url>http://maven-eclipse.github.io/maven</url>
 			<!--<url>https://swt-repo.googlecode.com/svn/repo/</url> -->
 		</repository>
+
 	</repositories>
 
 	<dependencies>
+
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-native-jogl-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-native-jogl-newt</artifactId>
@@ -34,23 +40,13 @@
 		</dependency>
 
 		<!-- LINUX 64 -->
-		<!-- <dependency>
-			<groupId>org.eclipse.swt</groupId>
-			<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
-			<version>4.3</version>
-		</dependency>  -->
+		<!-- <dependency> <groupId>org.eclipse.swt</groupId> <artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId> 
+			<version>4.3</version> </dependency> -->
 
-		<!-- WIN 64 
-		<dependency>
-		    <groupId>org.eclipse.swt</groupId>
-		    <artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
-		    <version>4.3</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.eclipse.swt</groupId>
-		    <artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
-		    <version>4.3</version>
-		</dependency>-->
+		<!-- WIN 64 <dependency> <groupId>org.eclipse.swt</groupId> <artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId> 
+			<version>4.3</version> </dependency> <dependency> <groupId>org.eclipse.swt</groupId> 
+			<artifactId>org.eclipse.swt.win32.win32.x86</artifactId> <version>4.3</version> 
+			</dependency> -->
 
 		<!-- MACOSX 64 -->
 		<dependency>
@@ -68,11 +64,10 @@
 
 		<!-- https://mvnrepository.com/artifact/org.eclipse.platform/org.eclipse.jface -->
 		<dependency>
-		    <groupId>org.eclipse.platform</groupId>
-		    <artifactId>org.eclipse.jface</artifactId>
-		    <version>3.18.0</version>
+			<groupId>org.eclipse.platform</groupId>
+			<artifactId>org.eclipse.jface</artifactId>
+			<version>3.18.0</version>
 		</dependency>
 
 	</dependencies>
-
 </project>
