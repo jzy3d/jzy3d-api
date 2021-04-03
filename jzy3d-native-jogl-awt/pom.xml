@@ -1,11 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.jzy3d</groupId>
-	<artifactId>jzy3d-native-jogl-awt</artifactId>
-	<name>Jzy3d Native Implementation for AWT with JOGL</name>
 
 	<parent>
 		<groupId>org.jzy3d</groupId>
@@ -13,7 +9,8 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 
-	<description>A Java API for 3d charts</description>
+	<artifactId>jzy3d-native-jogl-awt</artifactId>
+	<name>Jzy3d Native Implementation for AWT with JOGL</name>
 
 	<dependencies>
 

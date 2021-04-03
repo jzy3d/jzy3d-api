@@ -9,8 +9,16 @@
 	<packaging>pom</packaging>
 
 	<name>Jzy3d Master Project</name>
-	<url>http://www.jzy3d.org</url>
 	<description>A java API to draw 3d charts.</description>
+	<url>http://www.jzy3d.org</url>
+
+	<licenses>
+		<license>
+			<name>The (New) BSD License</name>
+			<url>http://www.opensource.org/licenses/bsd-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<developers>
 		<developer>
@@ -32,22 +40,6 @@
 			<name>Jacob Filik</name>
 		</developer>
 	</developers>
-
-	<licenses>
-		<license>
-			<name>The (New) BSD License</name>
-			<url>http://www.opensource.org/licenses/bsd-license.php</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-	<scm>
-		<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
-	</scm>
-
-	<issueManagement>
-		<system>Github</system>
-		<url>https://github.com/jzy3d/jzy3d-api/issues</url>
-	</issueManagement>
 
 	<modules>
 
@@ -84,9 +76,34 @@
 
 	</modules>
 
+	<scm>
+		<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
+	</scm>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/jzy3d/jzy3d-api/issues</url>
+	</issueManagement>
+
+	<!-- Used to deploy to Jzy3d repository -->
+	<distributionManagement>
+		<repository>
+			<id>jzy3d-ftp</id>
+			<name>Jzy3d Maven Folder</name>
+			<url>ftp://ftp.cluster013.ovh.net/maven/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>jzy3d-ftp</id>
+			<name>Jzy3d Maven Folder SNAPSHOTS</name>
+			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
+		</repository> </distributionManagement> -->
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.jzy3d>${project.version}</version.jzy3d>
 		<version.java.source>1.8</version.java.source>
 		<version.java.target>1.8</version.java.target>
 		<version.mvn.compiler>3.0</version.mvn.compiler>
@@ -112,24 +129,6 @@
 		</dependency>
 
 	</dependencies>
-
-	<!-- Used to deploy to Jzy3d repository -->
-	<distributionManagement>
-		<repository>
-			<id>jzy3d-ftp</id>
-			<name>Jzy3d Maven Folder</name>
-			<url>ftp://ftp.cluster013.ovh.net/maven/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>jzy3d-ftp</id>
-			<name>Jzy3d Maven Folder SNAPSHOTS</name>
-			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
-		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
-		</repository> </distributionManagement> -->
 
 	<!--To retrieve Jzy3d dependencies -->
 	<repositories>
@@ -301,21 +300,9 @@
 		</extensions>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>disable-java8-doclint</id>
-			<activation>
-				<jdk>[1.8,)</jdk>
-			</activation>
-			<properties>
-				<additionalparam>-Xdoclint:none</additionalparam>
-			</properties>
-		</profile>
-	</profiles>
-
-	<!-- Get coverage with mvn cobertura:cobertura -->
 	<reporting>
 		<plugins>
+			<!-- Get coverage with mvn cobertura:cobertura -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
@@ -331,4 +318,17 @@
 		</plugins>
 	</reporting>
 
+	<profiles>
+
+		<profile>
+			<id>disable-java8-doclint</id>
+			<activation>
+				<jdk>[1.8,)</jdk>
+			</activation>
+			<properties>
+				<additionalparam>-Xdoclint:none</additionalparam>
+			</properties>
+		</profile>
+
+	</profiles>
 </project>
