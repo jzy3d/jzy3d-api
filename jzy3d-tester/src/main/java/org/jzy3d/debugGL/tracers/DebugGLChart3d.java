@@ -9,7 +9,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.primitives.Cube;
+import org.jzy3d.plot3d.primitives.CubeComposite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
@@ -36,8 +36,8 @@ public class DebugGLChart3d {
   Point cameraEye;
   Point cameraTarget;
   Point cameraUp;
-  Cube viewBox;
-  Cube axisBox;
+  CubeComposite viewBox;
+  CubeComposite axisBox;
 
 
   public DebugGLChart3d(Chart watchedChart, ChartFactory debugChartFactory) {
@@ -82,7 +82,7 @@ public class DebugGLChart3d {
     if (spaceTransform != null) {
       viewBounds = spaceTransform.compute(viewBounds);
     }
-    viewBox = new Cube(viewBounds, Color.CYAN, Color.BLUE.alphaSelf(0.5f));
+    viewBox = new CubeComposite(viewBounds, Color.CYAN, Color.BLUE.alphaSelf(0.5f));
     viewBox.setWireframeWidth(2);
 
     debugChart.add(viewBox);
@@ -94,7 +94,7 @@ public class DebugGLChart3d {
       axisBounds = spaceTransform.compute(axisBounds);
     }
     System.out.println(axisBounds);
-    axisBox = new Cube(axisBounds, Color.YELLOW, Color.BLUE.alphaSelf(0.5f));
+    axisBox = new CubeComposite(axisBounds, Color.YELLOW, Color.BLUE.alphaSelf(0.5f));
     axisBox.setWireframeWidth(3);
 
     debugChart.add(axisBox);

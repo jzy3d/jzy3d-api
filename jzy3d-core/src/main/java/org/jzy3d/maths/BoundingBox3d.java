@@ -44,13 +44,13 @@ public class BoundingBox3d {
       add(c);
   }
 
-  public BoundingBox3d(Coord3d center, float edgeLength) {
-    this.xmin = center.x - edgeLength / 2;
-    this.xmax = center.x + edgeLength / 2;
-    this.ymin = center.y - edgeLength / 2;
-    this.ymax = center.y + edgeLength / 2;
-    this.zmin = center.z - edgeLength / 2;
-    this.zmax = center.z + edgeLength / 2;
+  public BoundingBox3d(Coord3d center, float diameter) {
+    this.xmin = center.x - diameter / 2;
+    this.xmax = center.x + diameter / 2;
+    this.ymin = center.y - diameter / 2;
+    this.ymax = center.y + diameter / 2;
+    this.zmin = center.z - diameter / 2;
+    this.zmax = center.z + diameter / 2;
   }
 
   public BoundingBox3d(BoundingBox3d box) {
