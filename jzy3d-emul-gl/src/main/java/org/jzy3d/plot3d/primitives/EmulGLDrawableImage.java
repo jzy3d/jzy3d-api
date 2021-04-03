@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.axes.symbols;
+package org.jzy3d.plot3d.primitives;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;

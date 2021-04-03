@@ -16,10 +16,9 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import jgl.GL;
 
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
+  boolean doFixHiDPI = true;
 
-  public EmulGLViewAndColorbarsLayout() {
-    // TODO Auto-generated constructor stub
-  }
+  public EmulGLViewAndColorbarsLayout() {}
 
   @Override
   public void render(IPainter painter, Chart chart) {
@@ -30,6 +29,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     // (=CLEAR COLOR?) BAND
     // that can't be overriden by legend image
     sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, 1);// screenSeparator);
+    // sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, screenSeparator);
 
     view.renderScene(sceneViewport);
 
@@ -42,7 +42,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
   /**
    * This override allows
    * <ul>
-   * <li>Shifting the viewport to let some place for a colorbar rendering.
+   * <li>Shifting artificially the complete jGL viewport to let some place for a colorbar rendering.
    * <li>Rendering the image using jGL dedicated image management
    * ({@link GL#appendImageToDraw(BufferedImage, int, int)}).
    * </ul>
@@ -52,30 +52,42 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       ICanvas canvas) {
     EmulGLPainter emulGL = (EmulGLPainter) painter;
 
-    // ---------------------------------------
-    /// HAAACKKKKYYYYY : SHIFT THE VIEWPORT
+    int width = canvas.getRendererWidth();
+    int height = canvas.getRendererHeight();
 
-    float shift = (right - left) * canvas.getRendererWidth() / 2;
-    emulGL.getGL().setShiftHorizontally((int) -shift);
+    if (doFixHiDPI) {
+      width = (int) (sceneViewport.getWidth() * emulGL.getGL().getPixelScaleX());
+      height = (int) (sceneViewport.getHeight() * emulGL.getGL().getPixelScaleY());// canvas.getRendererHeight();
+    }
+
+    // ---------------------------------------
+
 
     float slice = (right - left) / legends.size();
     int k = 0;
     for (ILegend legend : legends) {
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-      legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(),
-          left + slice * (k++), left + slice * k);
+
+      float from = left + slice * (k++);
+      float to = from + slice;
+
+
+
+      legend.setViewPort(width, height, from, to);
 
       // legend.render(painter); // BYPASS IMAGE RENDERING THAT DOES NOT WORK WELL IN
       // jGL
       // legend.get
 
       if (legend instanceof AWTColorbarLegend) {
-        AWTColorbarLegend leg = (AWTColorbarLegend) legend;
+        AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
+        BufferedImage legendImage = (BufferedImage) awtLegend.getImage();
+        int legendWidth = (int) (legendImage.getWidth() / emulGL.getGL().getPixelScaleX());
 
-        int x = leg.getScreenLeft();
-        // System.out.println(((AWTColorbarLegend) legend).getScreenLeft());
-        emulGL.getGL().appendImageToDraw((BufferedImage) leg.getImage(), x, 0);
+        // System.out.println("leg.width=" + legendWidth + " canvas.hidpi.width=" + width + "
+        // canvas.width=" + canvas.getRendererWidth());
 
+        emulGL.getGL().appendImageToDraw(legendImage, width - legendWidth * (k), 0);
       }
     }
   }

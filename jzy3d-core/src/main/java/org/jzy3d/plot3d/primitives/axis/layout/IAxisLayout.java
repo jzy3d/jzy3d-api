@@ -19,6 +19,10 @@ public interface IAxisLayout {
 
   // not for axebase
   public void setFaceDisplayed(boolean status);
+  
+  public ZAxisSide getZAxisSide();
+
+  public void setZAxisSide(ZAxisSide zAxisSide);
 
   public boolean isFaceDisplayed();
 

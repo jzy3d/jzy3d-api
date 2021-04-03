@@ -36,24 +36,39 @@ public class EmulGLAxisBox extends AxisBox {
       return;
 
     // Draw faces
-    painter.glPolygonMode(GL.GL_BACK, GL.GL_LINE);
-    painter.glPolygonMode(GL.GL_FRONT, GL.GL_LINE);
-
-    painter.glColor4f(0, 0, 0, 1);
-
-    for (int q = 0; q < 6; q++) {
-      if (!getQuadIsHidden()[q]) {
-        painter.glBegin_LineLoop(); // weird : left the triangle
-
-        for (int v = 0; v < 4; v++) {
-          painter.glVertex3f(getQuadX()[q][v], getQuadY()[q][v], getQuadZ()[q][v]);
-        }
-        painter.glEnd();
-      }
-    }
+    drawFace(painter);
 
     // Draw Grid on quad
 
+    drawGrid(painter);
+
+
+    synchronized (annotations) {
+      for (AxeAnnotation a : annotations) {
+        a.draw(painter, this);
+      }
+    }
+
+    doTransform(painter);
+
+    // Execute this to collect text to draw
+    drawTicksAndLabels(painter);
+
+
+    // Text of axis
+    synchronized (ticks) {
+      for (Tick tick : ticks) {
+        // Coord3d screen = modelToScreen(tick.position);
+        // glut.glutBitmapString(axisFont, tick.label, (int) screen.x,
+        // canvas.getHeight() - (int) screen.y);
+        Color c = getLayout().getXTickColor();
+        Coord3d p = tick.position;
+        painter.glutBitmapString(axisFont, tick.label, p, c);
+      }
+    }
+  }
+
+  public void drawGrid(IPainter painter) {
     painter.glLineStipple(1, (short) 0xAAAA);
     painter.glEnable_LineStipple();
 
@@ -101,29 +116,22 @@ public class EmulGLAxisBox extends AxisBox {
     }
 
     painter.glDisable_LineStipple();
+  }
 
+  public void drawFace(IPainter painter) {
+    painter.glPolygonMode(GL.GL_BACK, GL.GL_LINE);
+    painter.glPolygonMode(GL.GL_FRONT, GL.GL_LINE);
 
-    synchronized (annotations) {
-      for (AxeAnnotation a : annotations) {
-        a.draw(painter, this);
-      }
-    }
+    painter.glColor4f(0, 0, 0, 1);
 
-    doTransform(painter);
+    for (int q = 0; q < 6; q++) {
+      if (!getQuadIsHidden()[q]) {
+        painter.glBegin_LineLoop(); // weird : left the triangle
 
-    // Execute this to collect text to draw
-    drawTicksAndLabels(painter);
-
-
-    // Text of axis
-    synchronized (ticks) {
-      for (Tick tick : ticks) {
-        // Coord3d screen = modelToScreen(tick.position);
-        // glut.glutBitmapString(axisFont, tick.label, (int) screen.x,
-        // canvas.getHeight() - (int) screen.y);
-        Color c = getLayout().getXTickColor();
-        Coord3d p = tick.position;
-        painter.glutBitmapString(axisFont, tick.label, p, c);
+        for (int v = 0; v < 4; v++) {
+          painter.glVertex3f(getQuadX()[q][v], getQuadY()[q][v], getQuadZ()[q][v]);
+        }
+        painter.glEnd();
       }
     }
   }
