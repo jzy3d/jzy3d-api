@@ -10,7 +10,8 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
- * A Sphere allows rendering a sphere. <br>
+ * Allows rendering a sphere. 
+ * 
  * The position and shape of a Sphere3d is defined through its {@link setData()} method. Moreover, a
  * Sphere3d is Wireframeable3d and support only one color that is defined trough its
  * {@link setColor()} method.
