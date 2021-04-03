@@ -13,7 +13,8 @@
 	<name>Jzy3d Embedded jGL</name>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Disable Javadoc Linter -->
+		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
 
 	<dependencies>
@@ -109,51 +110,4 @@
 			</extension>
 		</extensions>
 	</build>
-
-	<!-- Repositories where to get dependencies -->
-
-	<repositories>
-		<repository>
-			<id>jzy3d-snapshots</id>
-			<name>Jzy3d Snapshots</name>
-			<url>http://maven.jzy3d.org/snapshots/</url>
-		</repository>
-		<repository>
-			<id>jzy3d-releases</id>
-			<name>Jzy3d Releases</name>
-			<url>http://maven.jzy3d.org/releases/</url>
-		</repository>
-	</repositories>
-
-	<!-- Repositories where to deploy this artifact -->
-
-	<distributionManagement>
-		<repository>
-			<id>jzy3d-ftp</id>
-			<name>Jzy3d Maven Folder</name>
-			<url>ftp://ftp.cluster013.ovh.net/maven/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>jzy3d-ftp</id>
-			<name>Jzy3d Maven Folder SNAPSHOTS</name>
-			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-
-	<!-- Disable Javadoc Linter -->
-
-	<profiles>
-		<profile>
-			<id>disable-java8-doclint</id>
-			<activation>
-				<!--<jdk>[1.8,)</jdk> -->
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<properties>
-				<additionalparam>-Xdoclint:none</additionalparam>
-			</properties>
-		</profile>
-	</profiles>
-
 </project>
