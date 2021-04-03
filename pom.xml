@@ -77,6 +77,11 @@
 		<module>jzy3d-svm-mapper</module>
 		<module>jzy3d-tools-libsvm</module>
 
+
+		<module>jzy3d-io-xls</module>
+		<module>jzy3d-io-reports</module>
+
+
 	</modules>
 
 	<properties>
@@ -175,7 +180,7 @@
 
 									 Note that it may usefull to have the ability to have difference baseline image for
 									 macos/window/linux in case JVM difference make jGL text rendering be different somehow.
-									 
+
 							<include>**/ITTest*.java</include>-->
 					</includes>
 				</configuration>

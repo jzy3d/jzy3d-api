@@ -13,7 +13,8 @@ import org.jzy3d.chart.factories.NewtChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.io.xls.monitor.MonitorXLS;
+import org.jzy3d.io.psy4j.Psy4j;
+import org.jzy3d.io.xls.monitor.*;
 import org.jzy3d.maths.Range;
 import org.jzy3d.monitor.Monitor;
 import org.jzy3d.plot3d.builder.Mapper;
@@ -23,7 +24,6 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import jgl.GLCanvas;
-
 
 /**
  * Demo an AWT chart using jGL {@link GLCanvas} for CPU rendering (instead of GPU rendering).
@@ -65,7 +65,7 @@ public class SurfaceEmulGL_ReportXLS_Dump {
       }
     });
     
-    
+    //Psy4j p = new Psy4j();
     
 
     // --------------------------------
