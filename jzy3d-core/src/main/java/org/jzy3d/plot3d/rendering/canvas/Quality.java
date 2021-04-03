@@ -45,8 +45,7 @@ public class Quality {
   /**
    * Enables color interpolation.
    */
-  public static final Quality Intermediate =
-      new Quality(true, false, true, false, false, false, true);
+  public static final Quality Intermediate = new Quality(true, false, true, false, false, false, true);
   /**
    * Minimal quality to allow fastest rendering (no alpha, interpolation or antialiasing).
    */

@@ -24,41 +24,20 @@
 			<artifactId>jzy3d-core-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-native-jogl-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-        <dependency>
-            <groupId>org.jzy3d</groupId>
-            <artifactId>jzy3d-native-jogl-core</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-        </dependency>
+    <dependency>
+      <groupId>org.jzy3d</groupId>
+      <artifactId>jzy3d-native-jogl-core</artifactId>
+      <version>${project.version}</version>
+      <type>test-jar</type>
+    </dependency>
 
-		
-		<!-- CIRCULAR DEPENDENCY !!
-		<dependency>
-            <groupId>org.jzy3d</groupId>
-            <artifactId>jzy3d-tester-native</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>-->
-		
-
-
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-main</artifactId>
-			<version>2.3.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-main</artifactId>
-			<version>2.3.2</version>
-		</dependency>
 	</dependencies>
 
 	<build>

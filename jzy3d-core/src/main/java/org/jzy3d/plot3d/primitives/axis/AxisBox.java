@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.axis;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
@@ -14,6 +13,7 @@ import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisBoxLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -53,7 +53,7 @@ public class AxisBox implements IAxis {
    */
   @Override
   public void draw(IPainter painter) {
-    cullingEnable(painter);
+    //cullingEnable(painter);
     updateHiddenQuads(painter);
 
     doTransform(painter);
@@ -62,7 +62,7 @@ public class AxisBox implements IAxis {
     doTransform(painter);
     drawGrid(painter);
 
-    cullingDisable(painter);
+    //cullingDisable(painter);
 
     
     synchronized (annotations) {
@@ -70,12 +70,9 @@ public class AxisBox implements IAxis {
         a.draw(painter, this);
       }
     }
-
     
     doTransform(painter);
     drawTicksAndLabels(painter);
-
-
   }
 
   /**
@@ -102,6 +99,8 @@ public class AxisBox implements IAxis {
 
   /* DRAW AXEBOX ELEMENTS */
 
+  // FORMER NATIVE PRIMITIVE 
+  
   public void drawFace(IPainter painter) {
     if (layout.isFaceDisplayed()) {
       Color quadcolor = layout.getQuadColor();
@@ -136,6 +135,59 @@ public class AxisBox implements IAxis {
         drawGridOnQuad(painter, quad);
     painter.glDisable_LineStipple();
   }
+  
+  
+  ///////////////////////////
+
+  protected void drawCube(IPainter painter, RenderMode mode) {
+    for (int q = 0; q < 6; q++) {
+      if (!getQuadIsHidden()[q]) { // makes culling useless!
+        
+        painter.glBegin_LineLoop();
+        for (int v = 0; v < 4; v++) {
+          painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
+        }
+        painter.glEnd();
+      }
+    }
+  }
+
+  //Draw a grid on the desired quad.
+  protected void drawGridOnQuad(IPainter painter, int quad) {
+    // Draw X grid along X axis
+    if ((quad != 0) && (quad != 1)) {
+      double[] xticks = layout.getXTicks();
+      for (int t = 0; t < xticks.length; t++) {
+        painter.glBegin_Line();
+        painter.vertex((float) xticks[t], quady[quad][0], quadz[quad][0], spaceTransformer);
+        painter.vertex((float) xticks[t], quady[quad][2], quadz[quad][2], spaceTransformer);
+        painter.glEnd();
+      }
+    }
+    // Draw Y grid along Y axis
+    if ((quad != 2) && (quad != 3)) {
+      double[] yticks = layout.getYTicks();
+      for (int t = 0; t < yticks.length; t++) {
+        painter.glBegin_Line();
+        painter.vertex(quadx[quad][0], (float) yticks[t], quadz[quad][0], spaceTransformer);
+        painter.vertex(quadx[quad][2], (float) yticks[t], quadz[quad][2], spaceTransformer);
+        painter.glEnd();
+      }
+    }
+    // Draw Z grid along Z axis
+    if ((quad != 4) && (quad != 5)) {
+      double[] zticks = layout.getZTicks();
+      for (int t = 0; t < zticks.length; t++) {
+        painter.glBegin_Line();
+        painter.vertex(quadx[quad][0], quady[quad][0], (float) zticks[t], spaceTransformer);
+        painter.vertex(quadx[quad][2], quady[quad][2], (float) zticks[t], spaceTransformer);
+        painter.glEnd();
+      }
+    }
+  }
+  
+  ///////////////////////////
+  
 
   public void drawTicksAndLabels(IPainter painter) {
     wholeBounds.reset();
@@ -204,58 +256,6 @@ public class AxisBox implements IAxis {
           BoundingBox3d bbox = drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
           wholeBounds.add(bbox);
         }
-      }
-    }
-  }
-
-  /**
-   * Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from
-   * 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK
-   */
-  protected void drawCube(IPainter painter, RenderMode mode) {
-    for (int q = 0; q < 6; q++) {
-      if (mode == RenderMode.FEEDBACK)
-        painter.glPassThrough(q);
-      painter.glBegin_Quad();
-      for (int v = 0; v < 4; v++) {
-        painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
-      }
-      painter.glEnd();
-    }
-  }
-
-  /**
-   * Draw a grid on the desired quad.
-   */
-  protected void drawGridOnQuad(IPainter painter, int quad) {
-    // Draw X grid along X axis
-    if ((quad != 0) && (quad != 1)) {
-      double[] xticks = layout.getXTicks();
-      for (int t = 0; t < xticks.length; t++) {
-        painter.glBegin_Line();
-        painter.vertex((float) xticks[t], quady[quad][0], quadz[quad][0], spaceTransformer);
-        painter.vertex((float) xticks[t], quady[quad][2], quadz[quad][2], spaceTransformer);
-        painter.glEnd();
-      }
-    }
-    // Draw Y grid along Y axis
-    if ((quad != 2) && (quad != 3)) {
-      double[] yticks = layout.getYTicks();
-      for (int t = 0; t < yticks.length; t++) {
-        painter.glBegin_Line();
-        painter.vertex(quadx[quad][0], (float) yticks[t], quadz[quad][0], spaceTransformer);
-        painter.vertex(quadx[quad][2], (float) yticks[t], quadz[quad][2], spaceTransformer);
-        painter.glEnd();
-      }
-    }
-    // Draw Z grid along Z axis
-    if ((quad != 4) && (quad != 5)) {
-      double[] zticks = layout.getZTicks();
-      for (int t = 0; t < zticks.length; t++) {
-        painter.glBegin_Line();
-        painter.vertex(quadx[quad][0], quady[quad][0], (float) zticks[t], spaceTransformer);
-        painter.vertex(quadx[quad][2], quady[quad][2], (float) zticks[t], spaceTransformer);
-        painter.glEnd();
       }
     }
   }
@@ -623,19 +623,30 @@ public class AxisBox implements IAxis {
         distAxeZ[a] = Double.MAX_VALUE;
     }
 
-    // prefers the right one
+    // prefers the left or right one accoring to layout
     for (int a = 0; a < na; a++) {
       if (distAxeZ[a] < Double.MAX_VALUE) {
         Coord3d axeCenter = new Coord3d((axeZx[a][0] + axeZx[a][1]) / 2,
             (axeZy[a][0] + axeZy[a][1]) / 2, (axeZz[a][0] + axeZz[a][1]) / 2);
-        if (!cam.side(axeCenter))
-          distAxeZ[a] *= -1;
+        
+
+        if(ZAxisSide.LEFT.equals(layout.getZAxisSide())) {
+          if (cam.side(axeCenter))
+            distAxeZ[a] *= -1;
+        }
+        else {
+          if (!cam.side(axeCenter))
+            distAxeZ[a] *= -1;
+        }
+        
       }
     }
 
     return min(distAxeZ);
   }
-
+  
+  
+  
   /**
    * Return the index of the minimum value contained in the input array of doubles. If no value is
    * smaller than Double.MAX_VALUE, the returned index is -1.

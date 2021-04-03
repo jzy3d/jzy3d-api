@@ -129,10 +129,10 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       gl.glDisable(GL.GL_LINE_SMOOTH);
 
     if (quality.isSmoothPoint()) {
-      gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
-      gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+      gl.glEnable(GL2.GL_POINT_SMOOTH);
+      gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
     } else
-      gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
+      gl.glDisable(GL2.GL_POINT_SMOOTH);
   }
 
   @Override
