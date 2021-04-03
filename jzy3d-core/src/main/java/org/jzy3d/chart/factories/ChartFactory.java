@@ -29,7 +29,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * 
  * @see {@link AWTChartFactory} for a working implementation
  */
-public abstract class ChartFactory implements IChartFactory {
+public class ChartFactory implements IChartFactory {
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
   static Logger logger = Logger.getLogger(ChartFactory.class);

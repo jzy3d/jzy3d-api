@@ -3,8 +3,6 @@ package org.jzy3d.demos.surface;
 import java.io.File;
 import java.io.IOException;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -52,15 +50,8 @@ public class SurfaceDemoEmulGL {
     // --------------------------------
     
     chart.setAnimated(true);
+    chart.addMouseCameraController();
 
-
-    CameraThreadController rotation = new CameraThreadController(chart);
-    rotation.setStep(0.025f);
-    rotation.setUpdateViewDefault(true);//!chart.getQuality().isAnimated());
-
-    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-    mouse.addSlaveThreadController(rotation);
-    mouse.setUpdateViewDefault(!chart.getQuality().isAnimated()); // keep to false otherwise double rendering
 
     try {
       chart.screenshot(new File("target/" + SurfaceDemoEmulGL.class.getSimpleName() + ".png"));

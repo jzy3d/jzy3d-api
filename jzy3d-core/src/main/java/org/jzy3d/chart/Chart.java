@@ -4,12 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.colors.Color;
@@ -122,11 +122,14 @@ public class Chart {
   public void setAnimated(boolean status) {
     getQuality().setAnimated(status);
 
+    updateAnimationThreadWithQualitySettings();
+  }
 
+  protected void updateAnimationThreadWithQualitySettings() {
     if (getCanvas() instanceof IScreenCanvas) {
       IScreenCanvas screenCanvas = (IScreenCanvas) getCanvas();
 
-      if (status) {
+      if (getQuality().isAnimated()) {
         screenCanvas.getAnimation().start();
       } else {
         screenCanvas.getAnimation().stop();
@@ -162,7 +165,20 @@ public class Chart {
   /* CONTROLLERS */
 
   public ICameraMouseController addMouseCameraController() {
-    return getFactory().getPainterFactory().newMouseCameraController(this);
+    
+    CameraThreadController rotation = new CameraThreadController(this);
+    rotation.setStep(0.025f);
+    rotation.setUpdateViewDefault(true);//!chart.getQuality().isAnimated());
+
+    ICameraMouseController mouse = getFactory().getPainterFactory().newMouseCameraController(this);
+    mouse.addSlaveThreadController(rotation);
+    
+    // Switch between on demand/continuous rendering
+    // keep to false if animated to avoid double rendering
+    // keep to true otherwise the mouse does not update 
+    mouse.setUpdateViewDefault(!getQuality().isAnimated()); 
+    
+    return mouse;
   }
 
   public IMousePickingController addMousePickingController(int clickWidth) {
@@ -223,6 +239,10 @@ public class Chart {
     if (frame == null) {
       frame = getFactory().getPainterFactory().newFrame(this, rect, title);
     }
+    
+    // start animator according to quality
+    updateAnimationThreadWithQualitySettings();
+    
     return frame;
   }
 

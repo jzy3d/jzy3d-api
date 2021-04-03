@@ -1,10 +1,7 @@
 package org.jzy3d.demos.scatter;
 
 import java.util.Random;
-
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
@@ -14,29 +11,16 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class ScatterDemoEmulGL {
   public static void main(String[] args) throws Exception {
-
-    Scatter scatter = scatter();
-
-    // --------------------------------
     Quality q = Quality.Advanced;
+    q.setAnimated(true);
+    q.setPreserveViewportSize(false);
 
     Chart chart = new EmulGLChartFactory().newChart(q);
-    chart.getScene().add(scatter);
+    chart.getScene().add(scatter());
     chart.open();
-
-    ((EmulGLCanvas) chart.getCanvas()).setProfileDisplayMethod(false);
-
-    // --------------------------------
-    CameraThreadController rotation = new CameraThreadController(chart);
-    rotation.setStep(0.025f);
-    rotation.setUpdateViewDefault(true);
-
-    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-    mouse.addSlaveThreadController(rotation);
-
-    rotation.setUpdateViewDefault(true);
-    mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
-    chart.setAnimated(true);
+    chart.addMouseCameraController();
+    
+    ((EmulGLCanvas) chart.getCanvas()).setProfileDisplayMethod(true); // to print frame rate
   }
 
   private static Scatter scatter() {
