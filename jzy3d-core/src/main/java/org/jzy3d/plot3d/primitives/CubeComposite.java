@@ -3,17 +3,13 @@ package org.jzy3d.plot3d.primitives;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.Composite;
-import org.jzy3d.plot3d.primitives.Point;
-import org.jzy3d.plot3d.primitives.Polygon;
-import org.jzy3d.plot3d.primitives.Quad;
 
 /**
  * A cube defined by a {@link BoundingBox3d}
  * 
  * @author Martin Pernollet
  */
-public class Cube extends Composite {
+public class CubeComposite extends Composite {
   protected Polygon north;
   protected Polygon south;
   protected Polygon west;
@@ -22,12 +18,16 @@ public class Cube extends Composite {
   protected Polygon far;
 
 
-  public Cube(BoundingBox3d box) {
+  public CubeComposite(Coord3d c, float radius) {
+    this(new BoundingBox3d(c, radius*2));
+  }
+
+  public CubeComposite(BoundingBox3d box) {
     this(box, Color.BLACK, Color.BLUE);
   }
 
-  public Cube(BoundingBox3d box, Color wireframe, Color face) {
-    setWireframeColor(wireframe);
+  public CubeComposite(BoundingBox3d box, Color wireframe, Color face) {
+    //setWireframeColor(wireframe);
     setColor(face);
 
     north = new Quad();
