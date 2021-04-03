@@ -166,12 +166,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas {
   protected void postRenderProfiling(TicToc t) {
     int x = 05;
     int y = 12;
-
     
     postRenderString("FrameID    : " + kDisplay, x, y, Color.BLACK);
     postRenderString("Render in  : " + t.elapsedMilisecond() + "ms", x, y * 2, Color.BLACK);
-    postRenderString("Surf size  : " + view.getScene().getGraph().getDecomposition().size(), x,
-        y * 3, Color.BLACK);
+    postRenderString("Surf size  : " + view.getScene().getGraph().getDecomposition().size(), x, y * 3, Color.BLACK);
     postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
   }
 
