@@ -53,7 +53,7 @@ public class AxisBox implements IAxis {
    */
   @Override
   public void draw(IPainter painter) {
-    cullingEnable(painter);
+    //cullingEnable(painter);
     updateHiddenQuads(painter);
 
     doTransform(painter);
@@ -62,7 +62,7 @@ public class AxisBox implements IAxis {
     doTransform(painter);
     drawGrid(painter);
 
-    cullingDisable(painter);
+    //cullingDisable(painter);
 
     
     synchronized (annotations) {
@@ -70,12 +70,9 @@ public class AxisBox implements IAxis {
         a.draw(painter, this);
       }
     }
-
     
     doTransform(painter);
     drawTicksAndLabels(painter);
-
-
   }
 
   /**
@@ -102,7 +99,9 @@ public class AxisBox implements IAxis {
 
   /* DRAW AXEBOX ELEMENTS */
 
-  /*public void drawFace(IPainter painter) {
+  // FORMER NATIVE PRIMITIVE 
+  
+  public void drawFace(IPainter painter) {
     if (layout.isFaceDisplayed()) {
       Color quadcolor = layout.getQuadColor();
       painter.glPolygonMode(PolygonMode.BACK, PolygonFill.FILL);
@@ -135,75 +134,60 @@ public class AxisBox implements IAxis {
       if (!quadIsHidden[quad])
         drawGridOnQuad(painter, quad);
     painter.glDisable_LineStipple();
-  }*/
-  
-  public void drawGrid(IPainter painter) {
-    painter.glLineStipple(1, (short) 0xAAAA);
-    painter.glEnable_LineStipple();
-
-    /*
-     * for (int quad = 0; quad < 6; quad++) if (!quadIsHidden[quad]) drawGridOnQuad(painter, gl,
-     * quad);
-     */
-
-
-    for (int quad = 0; quad < 6; quad++) {
-      if (!getQuadIsHidden()[quad]) {
-
-        // Draw X grid along X axis
-        if ((quad != 0) && (quad != 1)) {
-          double[] xticks = layout.getXTicks();
-          for (int t = 0; t < xticks.length; t++) {
-            painter.glBegin_Line(); // JOGL CONSTANT VALUE 2 -> THIS REQUIRES 1, recognized by
-                                          // JGL
-            painter.vertex((float) xticks[t], quady[quad][0], quadz[quad][0], spaceTransformer);
-            painter.vertex((float) xticks[t], quady[quad][2], quadz[quad][2], spaceTransformer);
-            painter.glEnd();
-          }
-        }
-        // Draw Y grid along Y axis
-        if ((quad != 2) && (quad != 3)) {
-          double[] yticks = layout.getYTicks();
-          for (int t = 0; t < yticks.length; t++) {
-            painter.glBegin_Line();
-            painter.vertex(quadx[quad][0], (float) yticks[t], quadz[quad][0], spaceTransformer);
-            painter.vertex(quadx[quad][2], (float) yticks[t], quadz[quad][2], spaceTransformer);
-            painter.glEnd();
-          }
-        }
-        // Draw Z grid along Z axis
-        if ((quad != 4) && (quad != 5)) {
-          double[] zticks = layout.getZTicks();
-          for (int t = 0; t < zticks.length; t++) {
-            painter.glBegin_Line();
-            painter.vertex(quadx[quad][0], quady[quad][0], (float) zticks[t], spaceTransformer);
-            painter.vertex(quadx[quad][2], quady[quad][2], (float) zticks[t], spaceTransformer);
-            painter.glEnd();
-          }
-        }
-      }
-    }
-
-    painter.glDisable_LineStipple();
   }
+  
+  
+  ///////////////////////////
 
-  public void drawFace(IPainter painter) {
-    //painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
-    painter.glPolygonMode(PolygonMode.FRONT, PolygonFill.LINE);
-
-    painter.glColor4f(0, 0, 0, 1);
-
+  protected void drawCube(IPainter painter, RenderMode mode) {
     for (int q = 0; q < 6; q++) {
-      if (!getQuadIsHidden()[q]) {
-        painter.glBegin_LineLoop(); // weird : left the triangle
-
+      if (!getQuadIsHidden()[q]) { // makes culling useless!
+        
+        painter.glBegin_LineLoop();
         for (int v = 0; v < 4; v++) {
-          painter.vertex(getQuadX()[q][v], getQuadY()[q][v], getQuadZ()[q][v], spaceTransformer);
+          painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
         }
         painter.glEnd();
       }
     }
   }
+
+  //Draw a grid on the desired quad.
+  protected void drawGridOnQuad(IPainter painter, int quad) {
+    // Draw X grid along X axis
+    if ((quad != 0) && (quad != 1)) {
+      double[] xticks = layout.getXTicks();
+      for (int t = 0; t < xticks.length; t++) {
+        painter.glBegin_Line();
+        painter.vertex((float) xticks[t], quady[quad][0], quadz[quad][0], spaceTransformer);
+        painter.vertex((float) xticks[t], quady[quad][2], quadz[quad][2], spaceTransformer);
+        painter.glEnd();
+      }
+    }
+    // Draw Y grid along Y axis
+    if ((quad != 2) && (quad != 3)) {
+      double[] yticks = layout.getYTicks();
+      for (int t = 0; t < yticks.length; t++) {
+        painter.glBegin_Line();
+        painter.vertex(quadx[quad][0], (float) yticks[t], quadz[quad][0], spaceTransformer);
+        painter.vertex(quadx[quad][2], (float) yticks[t], quadz[quad][2], spaceTransformer);
+        painter.glEnd();
+      }
+    }
+    // Draw Z grid along Z axis
+    if ((quad != 4) && (quad != 5)) {
+      double[] zticks = layout.getZTicks();
+      for (int t = 0; t < zticks.length; t++) {
+        painter.glBegin_Line();
+        painter.vertex(quadx[quad][0], quady[quad][0], (float) zticks[t], spaceTransformer);
+        painter.vertex(quadx[quad][2], quady[quad][2], (float) zticks[t], spaceTransformer);
+        painter.glEnd();
+      }
+    }
+  }
+  
+  ///////////////////////////
+  
 
   public void drawTicksAndLabels(IPainter painter) {
     wholeBounds.reset();
@@ -272,58 +256,6 @@ public class AxisBox implements IAxis {
           BoundingBox3d bbox = drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
           wholeBounds.add(bbox);
         }
-      }
-    }
-  }
-
-  /**
-   * Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from
-   * 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK
-   */
-  protected void drawCube(IPainter painter, RenderMode mode) {
-    for (int q = 0; q < 6; q++) {
-      if (mode == RenderMode.FEEDBACK)
-        painter.glPassThrough(q);
-      painter.glBegin_Quad();
-      for (int v = 0; v < 4; v++) {
-        painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
-      }
-      painter.glEnd();
-    }
-  }
-
-  /**
-   * Draw a grid on the desired quad.
-   */
-  protected void drawGridOnQuad(IPainter painter, int quad) {
-    // Draw X grid along X axis
-    if ((quad != 0) && (quad != 1)) {
-      double[] xticks = layout.getXTicks();
-      for (int t = 0; t < xticks.length; t++) {
-        painter.glBegin_Line();
-        painter.vertex((float) xticks[t], quady[quad][0], quadz[quad][0], spaceTransformer);
-        painter.vertex((float) xticks[t], quady[quad][2], quadz[quad][2], spaceTransformer);
-        painter.glEnd();
-      }
-    }
-    // Draw Y grid along Y axis
-    if ((quad != 2) && (quad != 3)) {
-      double[] yticks = layout.getYTicks();
-      for (int t = 0; t < yticks.length; t++) {
-        painter.glBegin_Line();
-        painter.vertex(quadx[quad][0], (float) yticks[t], quadz[quad][0], spaceTransformer);
-        painter.vertex(quadx[quad][2], (float) yticks[t], quadz[quad][2], spaceTransformer);
-        painter.glEnd();
-      }
-    }
-    // Draw Z grid along Z axis
-    if ((quad != 4) && (quad != 5)) {
-      double[] zticks = layout.getZTicks();
-      for (int t = 0; t < zticks.length; t++) {
-        painter.glBegin_Line();
-        painter.vertex(quadx[quad][0], quady[quad][0], (float) zticks[t], spaceTransformer);
-        painter.vertex(quadx[quad][2], quady[quad][2], (float) zticks[t], spaceTransformer);
-        painter.glEnd();
       }
     }
   }
