@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.rendering.view;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
+import java.util.function.Predicate;
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
@@ -40,7 +40,7 @@ import org.jzy3d.plot3d.transform.Transform;
  * @author Martin Pernollet
  */
 public class Camera extends AbstractViewportManager {
-  static Logger LOGGER = Logger.getLogger(Camera.class);
+  private static final Logger LOGGER = Logger.getLogger(Camera.class);
 
   /** The polar default view point, i.e. Coord3d(Math.PI/3,Math.PI/5,500). */
   public static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 5, 500);
@@ -63,6 +63,11 @@ public class Camera extends AbstractViewportManager {
   protected Coord3d target;
   /** The camera up vector */
   protected Coord3d up;
+  /** The scale used to display elements */
+  protected Coord3d scale;
+
+  /** Predicate caching pre-computed data to quickly decide if a point is 'on the left'. */
+  private Predicate<Coord3d> isOnLeftSide;
 
   /**
    * The rendering radius, used to automatically define with/height of scene and distance of
@@ -89,10 +94,11 @@ public class Camera extends AbstractViewportManager {
     initWithTarget(target);
   }
 
-  public void initWithTarget(Coord3d target) {
-    setTarget(target);
-    setEye(DEFAULT_VIEW.cartesian().add(target));
-    setUp(new Coord3d(0, 0, 1));
+  public void initWithTarget(Coord3d initialTarget) {
+    Coord3d initialEye = DEFAULT_VIEW.cartesian().add(initialTarget);
+    Coord3d initialUp = new Coord3d(0, 0, 1);
+    Coord3d initialScale = new Coord3d(1, 1, 1);
+    setPosition(initialEye, initialTarget, initialUp, initialScale);
 
     setViewPort(1, 1, 0, 1);
     setRenderingDepth(0.5f, 100000f);
@@ -106,9 +112,17 @@ public class Camera extends AbstractViewportManager {
 
   /******************************************************************/
 
-  /** Set the eye's position. */
+  /**
+   * Set the position of this camera's lens.
+   * <p>
+   * All other parameters of this camera remain unchanged. To change multiple parameters atomically
+   * use {@link #setPosition(Coord3d, Coord3d, Coord3d, Coord3d)}.
+   * </p>
+   * 
+   * @param eye the new <em>scaled</em> position of this camera's lens.
+   */
   public void setEye(Coord3d eye) {
-    this.eye = eye;
+    setPosition(eye, target);
   }
 
   /** Returns the eye's position. */
@@ -116,9 +130,17 @@ public class Camera extends AbstractViewportManager {
     return eye;
   }
 
-  /** Set the target point of the camera. */
+  /**
+   * Set the position of the target at which this camera is centering.
+   * <p>
+   * All other parameters of this camera remain unchanged. To change multiple parameters atomically
+   * use {@link #setPosition(Coord3d, Coord3d, Coord3d, Coord3d)}.
+   * </p>
+   * 
+   * @param target the new <em>scaled</em> position of this camera's target
+   */
   public void setTarget(Coord3d target) {
-    this.target = target;
+    setPosition(eye, target);
   }
 
   /** Returns the target's position that was set at the last call to lookAt(). */
@@ -126,14 +148,60 @@ public class Camera extends AbstractViewportManager {
     return target;
   }
 
-  /** Set the top of the camera. */
+  /**
+   * Set the up-direction of this camera.
+   * <p>
+   * All other parameters of this camera remain unchanged. To change multiple parameters atomically
+   * use {@link #setPosition(Coord3d, Coord3d, Coord3d, Coord3d)}.
+   * </p>
+   * 
+   * @param up the new up-direction of this camera
+   */
   public void setUp(Coord3d up) {
-    this.up = up;
+    setPosition(eye, target, up, scale);
   }
 
   /** Returns the top of the camera. */
   public Coord3d getUp() {
     return this.up;
+  }
+
+  /** Returns the scale used by this camera to display elements. */
+  public Coord3d getScale() {
+    return scale;
+  }
+
+  /**
+   * Set the camera's eye- and target-location.
+   * <p>
+   * All other parameters of this camera remain unchanged. To change more parameters atomically use
+   * {@link #setPosition(Coord3d, Coord3d, Coord3d, Coord3d)}.
+   * </p>
+   * 
+   * @param eye
+   * @param target
+   */
+  public void setPosition(Coord3d eye, Coord3d target) {
+    setPosition(eye, target, up, scale);
+  }
+
+  /**
+   * Atomically sets this camera's eye- and target-position, its up-direction and the scale with
+   * which data are displayed.
+   *
+   * @param eye the scaled location of the camera eye (previously multiplied with this camera's
+   *        scale)
+   * @param target the scaled location at which this camera will look (previously multiplied with
+   *        this camera's scale)
+   * @param up the direction of the up-side of this camera (not scaled)
+   * @param scale the scale used by this camera to display elements
+   */
+  public void setPosition(Coord3d eye, Coord3d target, Coord3d up, Coord3d scale) {
+    this.eye = eye;
+    this.target = target;
+    this.up = up;
+    this.scale = scale;
+    this.isOnLeftSide = null; // trigger full re-computation of all data for side-computation
   }
 
   /**
@@ -143,8 +211,6 @@ public class Camera extends AbstractViewportManager {
   public boolean isTiltUp() {
     return eye.z < target.z;
   }
-
-  /* */
 
   /**
    * Set the radius of the sphere that will be contained into the rendered view. The "far" and
@@ -182,10 +248,33 @@ public class Camera extends AbstractViewportManager {
     return far;
   }
 
-  /** Return true if the given point is on the left of the vector eye->target. */
+  /**
+   * Return true if the given (not scaled) point is on the left of the plane build by the
+   * eye->target and up-direction vector, else false.
+   *
+   * @param point not scaled point (its values correspond to a point in the scene)
+   * @return true if the given point is 'on the left side' of this camera
+   */
   public boolean side(Coord3d point) {
-    return 0 < ((point.x - target.x) * (eye.y - target.y)
-        - (point.y - target.y) * (eye.x - target.x));
+    // Compute the sign of the triple product of eye-to-point-direction, up-direction and
+    // eye-to-target-direction (all not scaled). The given point is left of this camera's view-plane
+    // build by eye-to-target-vector and the up-direction, if the following inequation holds
+    // <e-p> * (<up> x <e-t>) > 0
+    if (isOnLeftSide == null) {
+      // Pre-compute and capture the required data in a Predicate to quickly decide (without
+      // creating objects) if a point is on the left of the current camera position.
+
+      Coord3d e = eye.div(scale); // un-scaled eye vector
+      Coord3d viewDirectionU = target.sub(eye).div(scale).normalizeTo(1f);
+      // Left pointing normal vector of the view-plane build by the eye->target-vector and the
+      // up-direction (effectivly the cross product of up-direction and eye-target-vector).
+      // Not scaled but normalized to length one for numerical stability.
+      Coord3d vpn = up.getNormalizedTo(1f).cross(viewDirectionU); // view-plane normal
+
+      isOnLeftSide = p -> 0 < (p.x - e.x) * vpn.x + (p.y - e.y) * vpn.y + (p.z - e.z) * vpn.z;
+      // equivalent to: 0 < p.sub(e).dot(vpn)
+    }
+    return this.isOnLeftSide.test(point);
   }
 
   /** Return last values used to make orthogonal scene rendering. Do not edit. */
@@ -375,8 +464,7 @@ public class Camera extends AbstractViewportManager {
     if (failOnException)
       throw new RuntimeException(message);
     else
-      // System.err.println(message);
-      Logger.getLogger(Camera.class).debug(message);
+      LOGGER.debug(message);
   }
 
   boolean failOnException = false;
@@ -462,12 +550,9 @@ public class Camera extends AbstractViewportManager {
     float aspect = stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1;
     float nearCorrected = near <= 0 ? 0.000000000000000000000000000000000000001f : near;
 
-    painter.gluPerspective(fov/1, aspect*0.55, nearCorrected, far);
+    painter.gluPerspective(fov / 1, aspect * 0.55, nearCorrected, far);
 
-    
-    
-    //painter.glFrustum(-radius*3, radius*3, -radius*3, radius*3, near, far);
-
+    // painter.glFrustum(-radius*3, radius*3, -radius*3, radius*3, near, far);
   }
 
   protected void doLookAt(IPainter painter) {
@@ -507,8 +592,7 @@ public class Camera extends AbstractViewportManager {
    */
   protected double computeFieldOfView(double size, double distance) {
     double radianTheta = 2.0 * Math.atan2(size / 2.0, distance);
-    double degreeTheta = (180.0 * radianTheta) / Math.PI;
-    return degreeTheta;
+    return (180.0 * radianTheta) / Math.PI;
   }
 
   /**
@@ -626,6 +710,7 @@ public class Camera extends AbstractViewportManager {
       }
     }
 
+    @Override
     public String toString() {
       return "left:" + left + " right:" + right + " bottom:" + bottom + " top:" + top + " near:"
           + near + " far:" + far;
