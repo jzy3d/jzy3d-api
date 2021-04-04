@@ -104,13 +104,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.java.source>1.8</version.java.source>
-		<version.java.target>1.8</version.java.target>
-		<version.mvn.compiler>3.0</version.mvn.compiler>
-		<version.mvn.ftp>2.10</version.mvn.ftp>
-		<version.mvn.deploy>2.4</version.mvn.deploy>
-		<version.mvn.javadoc>2.9.1</version.mvn.javadoc>
-		<version.mvn.release>2.5.3</version.mvn.release>
+		<version.java>1.8</version.java>
 	</properties>
 
 	<dependencies>
@@ -141,13 +135,43 @@
 
 		<repository>
 			<id>jzy3d-releases</id>
-			<name>Jzy3d Snapshots</name>
+			<name>Jzy3d Releases</name>
 			<url>https://maven.jzy3d.org/releases/</url>
 		</repository>
 
 	</repositories>
 
 	<build>
+		<pluginManagement>
+			<plugins>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M5</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>3.0.0-M5</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>build-helper-maven-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+
 		<plugins>
 
 			<!-- COMPILER AND JAVA VERSION CONFIGURATION -->
@@ -155,10 +179,9 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${version.mvn.compiler}</version>
 				<configuration>
-					<source>${version.java.source}</source>
-					<target>${version.java.target}</target>
+					<source>${version.java}</source>
+					<target>${version.java}</target>
 				</configuration>
 			</plugin>
 
@@ -167,7 +190,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.0.0-M5</version>
 				<configuration>
 					<includes>
 						<include>**/Test*.java</include>
@@ -194,15 +216,12 @@
 				</executions> </plugin> -->
 
 
-			<!--SKIP deploy configuration <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-deploy-plugin</artifactId> <version>${version.mvn.deploy}</version> 
-				<configuration> <skip>true</skip> </configuration> </plugin> -->
-
 			<!-- SOURCE JAR -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -219,7 +238,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.2</version>
+				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -234,7 +253,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${version.mvn.javadoc}</version>
+				<version>2.9.1</version>
 				<configuration>
 					<additionalparam>-Xdoclint:none</additionalparam>
 					<doclint>none</doclint>
@@ -256,8 +275,9 @@
 			<!-- RELEASE -->
 
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>${version.mvn.release}</version>
+				<version>2.5.3</version>
 			</plugin>
 
 			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
@@ -266,27 +286,35 @@
 				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose> 
 				</configuration> </plugin> -->
 
-			<!-- To sign artigact while deploying to Maven central via Sonatype -->
-
-			<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-gpg-plugin</artifactId> 
-				<version>1.5</version> <executions> <execution> <id>sign-artifacts</id> <phase>deploy</phase> 
-				<goals> <goal>sign</goal> </goals> </execution> </executions> </plugin> -->
+			<!-- To sign artifacts while deploying to Maven central via Sonatype -->
 
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-
+				<version>1.6</version>
 				<configuration>
 					<skip>true</skip>
 				</configuration>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<version>2.8.2</version>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+			</plugin>
 
-			<!-- display active profile in compile phase <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-help-plugin</artifactId> <version>3.1.0</version> <executions> 
-				<execution> <id>show-profiles</id> <phase>compile</phase> <goals> <goal>active-profiles</goal> 
-				</goals> </execution> </executions> </plugin> -->
 		</plugins>
 
 		<!-- DEPLOY TO FTP -->
@@ -295,7 +323,7 @@
 			<extension>
 				<groupId>org.apache.maven.wagon</groupId>
 				<artifactId>wagon-ftp</artifactId>
-				<version>${version.mvn.ftp}</version>
+				<version>2.10</version>
 			</extension>
 		</extensions>
 	</build>
