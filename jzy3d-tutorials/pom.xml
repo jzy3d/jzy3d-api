@@ -56,16 +56,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.jzy3d>${project.version}</version.jzy3d>
-		<version.java.source>1.8</version.java.source>
-		<version.java.target>1.8</version.java.target>
-		<version.mvn.compiler>3.0</version.mvn.compiler>
-		<version.mvn.ftp>1.0-beta-6</version.mvn.ftp>
-		<version.mvn.deploy>2.4</version.mvn.deploy>
-		<version.mvn.javadoc>2.9.1</version.mvn.javadoc>
-		<version.mvn.release>2.5.3</version.mvn.release>
-		<version.libs.junit>4.10</version.libs.junit>
-		<version.libs.swt>4.2.1</version.libs.swt>
+		<version.java>1.8</version.java>
 	</properties>
 
 	<dependencies>
@@ -120,17 +111,17 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>3.8.1</version>
 				<configuration>
-					<source>${version.java.source}</source>
-					<target>${version.java.target}</target>
+					<source>${version.java}</source>
+					<target>${version.java}</target>
 				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
-				<version>${version.mvn.deploy}</version>
+				<version>2.8.2</version>
 				<configuration>
 					<skip>true</skip>
 				</configuration>
@@ -160,6 +151,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
