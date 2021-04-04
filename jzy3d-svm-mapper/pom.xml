@@ -16,13 +16,13 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-native-jogl-swing</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-tools-libsvm</artifactId>
 			<version>${project.version}</version>
 		</dependency>

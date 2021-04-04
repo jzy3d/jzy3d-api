@@ -15,7 +15,7 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>

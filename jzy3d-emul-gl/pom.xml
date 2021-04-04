@@ -14,40 +14,29 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-core-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jGL</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-tester</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>2.22.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- <dependency> <groupId>junit</groupId> <artifactId>junit</artifactId> 
-			<version>4.9</version> <type>jar</type> <scope>test</scope> </dependency> -->
 
 	</dependencies>
 
