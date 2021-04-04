@@ -15,7 +15,7 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-native-jogl-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -24,7 +24,6 @@
 		<dependency>
 			<groupId>com.miglayout</groupId>
 			<artifactId>miglayout</artifactId>
-			<version>3.7.4</version>
 		</dependency>
 
 	</dependencies>
