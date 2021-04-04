@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.rendering.view;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
@@ -31,6 +30,7 @@ public class AWTView extends ChartView {
     super(factory, scene, canvas, quality);
   }
 
+  @Override
   public void initInstance(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
     super.initInstance(factory, scene, canvas, quality);
     this.backgroundViewport = new AWTImageViewport();
@@ -92,8 +92,7 @@ public class AWTView extends ChartView {
 
     Coord3d target = newBounds.getCenter();
     Coord3d eye = viewpoint.cartesian().add(target);
-    cam.setTarget(target);
-    cam.setEye(eye);
+    cam.setPosition(eye, target);
   }
 
   @Override
