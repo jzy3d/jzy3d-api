@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
@@ -825,9 +824,7 @@ public class View {
     painter.clearColor(backgroundColor);
     painter.glClearDepth(1);
 
-    if (slave) {
-      return;
-    } else {
+    if (!slave) {
       painter.glClearColorAndDepthBuffers();
     }
   }
@@ -1011,11 +1008,15 @@ public class View {
   public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds,
       float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
       CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
+
     viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
 
-    cam.setTarget(computeCameraTarget(center, scaling));
-    cam.setUp(computeCameraUpAndTriggerEvents(viewpoint));
-    cam.setEye(computeCameraEye(cam.getTarget(), viewmode, viewpoint));
+    Coord3d cameraTarget = computeCameraTarget(center, scaling);
+    Coord3d cameraUp = computeCameraUp(viewpoint);
+    Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
+    cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
+
+    triggerCameraUpEvents(viewpoint);
 
     computeCameraRenderingSphereRadius(cam, viewport, bounds);
 
@@ -1070,42 +1071,30 @@ public class View {
     return viewpoint.cartesian().add(target);
   }
 
-  protected Coord3d computeCameraUpAndTriggerEvents() {
-    return computeCameraUpAndTriggerEvents(viewpoint);
-  }
-
-  protected Coord3d computeCameraUpAndTriggerEvents(Coord3d viewpoint) {
-    Coord3d up;
-
-    if (Math.abs(viewpoint.y) == (float) Math.PI / 2) {
-      up = computeCameraUp();
-
-      // handle "on-top" events
+  protected void triggerCameraUpEvents(Coord3d viewpoint) {
+    if (Math.abs(viewpoint.y) == PI_div2) { // handle "on-top" events
       if (!wasOnTopAtLastRendering) {
         wasOnTopAtLastRendering = true;
         fireViewOnTopEvent(true);
       }
-    } else {
-      // handle up vector
-      up = new Coord3d(0, 0, 1);
-
-      // handle "on-top" events
-      if (wasOnTopAtLastRendering) {
-        wasOnTopAtLastRendering = false;
-        fireViewOnTopEvent(false);
-      }
+    } else // handle "on-top" events
+    if (wasOnTopAtLastRendering) {
+      wasOnTopAtLastRendering = false;
+      fireViewOnTopEvent(false);
     }
-    return up;
   }
 
-  protected Coord3d computeCameraUp() {
-    Coord2d direction = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
-    Coord3d up;
-    if (viewpoint.y > 0) // on top
-      up = new Coord3d(-direction.x, -direction.y, 0);
-    else
-      up = new Coord3d(direction.x, direction.y, 0);
-    return up;
+  protected Coord3d computeCameraUp(Coord3d viewpoint) {
+    if (Math.abs(viewpoint.y) == PI_div2) { // handle on top
+      Coord2d direction = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
+      if (viewpoint.y > 0) {
+        return new Coord3d(-direction.x, -direction.y, 0);
+      } else {
+        return new Coord3d(direction.x, direction.y, 0);
+      }
+    } else {
+      return new Coord3d(0, 0, 1); // use z axis as up vector, if not on top
+    }
   }
 
   public void computeCameraRenderingSphereRadius(Camera cam, ViewportConfiguration viewport,
