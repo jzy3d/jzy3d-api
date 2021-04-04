@@ -19,45 +19,33 @@
 	<dependencies>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-native-jogl-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency> <!-- For a single demo, remove me! -->
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-native-jogl-swing</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-native-jogl-newt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-emul-gl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jzy3d</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-tester-native</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.miglayout</groupId>
-			<artifactId>miglayout</artifactId>
-			<version>3.7.4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.opencsv</groupId>
-			<artifactId>opencsv</artifactId>
-			<version>3.7</version>
 		</dependency>
 
 	</dependencies>
