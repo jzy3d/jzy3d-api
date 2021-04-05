@@ -57,6 +57,19 @@ public class TestCamera {
       float v = r.nextFloat() * 1000;
       Assert.assertFalse(camera.side(new Coord3d(v, i, v)));
     }
+    
+    
+    // ----------------------------------------
+    // Flip camera to check that object on left 
+    // is now on right side.
+    
+    Coord3d eye = camera.getEye();
+    Coord3d target = camera.getTarget();
+    camera.setPosition(target, eye);
+    
+    Assert.assertFalse(camera.side(onLeft));
+    Assert.assertTrue(camera.side(onRight));
+
   }
 
 }
