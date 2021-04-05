@@ -50,6 +50,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     super();
     view = scene.newView(this, quality);
     painter = (EmulGLPainter) view.getPainter();
+    painter.setCanvas(this);
     init();
     animator = factory.getPainterFactory().newAnimator(this);
 
@@ -173,10 +174,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
   }
 
-
-
-  Font profileFont = new Font("Arial", Font.PLAIN, 12);
-  int kDisplay = 0;
+  protected Font profileFont = new Font("Arial", Font.PLAIN, 12);
+  protected int kDisplay = 0;
 
 
   /** Draw a 2d text at the given position */
@@ -200,10 +199,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   public synchronized void doMotion(int x, int y) {
     doDisplay();
-    // repaint();
     // paint
     System.out.println("EmulGLCanvas.doMotion!" + kDisplay);
-
   }
 
 

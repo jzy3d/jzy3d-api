@@ -45,6 +45,8 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     window = GLWindow.create(glci);
     canvas = new NewtCanvasSWT(this, SWT.NONE, window);
     view = scene.newView(this, quality);
+    view.getPainter().setCanvas(this);
+
     renderer =
         ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
     window.addGLEventListener(renderer);
@@ -56,10 +58,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
 
     window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
 
-
-
     animator = ((SWTChartFactory) factory).newAnimator(window);
-
 
     if (quality.isAnimated()) {
       animator.start();
