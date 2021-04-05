@@ -47,6 +47,8 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     window = GLWindow.create(glci);
     canvas = new NewtCanvasAWT(window);
     view = scene.newView(this, quality);
+    view.getPainter().setCanvas(this);
+
     renderer =
         ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
     window.addGLEventListener(renderer);

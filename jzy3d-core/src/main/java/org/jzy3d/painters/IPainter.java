@@ -3,7 +3,6 @@ package org.jzy3d.painters;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Drawable;
@@ -176,7 +175,17 @@ public interface IPainter {
     protected String name;
     protected int code;
     protected int height;
-
+    
+    public static Font getById(int id) {
+      switch(id) {
+        case BITMAP_HELVETICA_10: return Helvetica_10;
+        case BITMAP_HELVETICA_12: return Helvetica_12;
+        case BITMAP_HELVETICA_18: return Helvetica_18;
+        case BITMAP_TIMES_ROMAN_10: return TimesRoman_10;
+        case BITMAP_TIMES_ROMAN_24: return TimesRoman_24;
+        default: return null;
+      }
+    }
   }
 
   // Font constants below are picked from GLU object in JOGL
@@ -203,6 +212,10 @@ public interface IPainter {
   public View getView();
 
   public void setView(View view);
+
+  public ICanvas getCanvas();
+
+  public void setCanvas(ICanvas canvas);
 
   /** Apply quality settings as OpenGL commands */
   public void configureGL(Quality quality);

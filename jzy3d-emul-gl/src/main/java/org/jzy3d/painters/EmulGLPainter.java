@@ -1,5 +1,7 @@
 package org.jzy3d.painters;
 
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
@@ -7,20 +9,18 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import javax.imageio.ImageIO;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
+import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.image.GLImage;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
-
 import jgl.GL;
 import jgl.GLU;
 import jgl.GLUT;
@@ -600,15 +600,34 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   }
 
   /**
-   * Not implemented yet.
+   * Process the given font length to further process alignement.
    * 
-   * @see {@link #glutBitmapString(Font, String, Coord3d, Color)} as a convenient replacement.
+   * As this method is not implemented in jGL, we rely on AWT to process string width
+   * as soon as the canvas graphics is non null. 
+   * 
+   * In case the canvas is not able to return a {@link Graphics2D} instance we fallback
+   * on a simple formulae that is valid for the default font.
+   * 
+   * <code>6 * string.length()</code>
    */
   @Override
   public int glutBitmapLength(int font, String string) {
-    return 6 * string.length();
-    // throw new NotImplementedException();
-    // return glut.glutBitmapLength(font, string);
+    EmulGLCanvas c = (EmulGLCanvas)getCanvas();
+    Graphics2D g = (Graphics2D)c.getGraphics();
+    if(g!=null) {
+      Font fnt = Font.getById(font);
+      if(fnt!=null) {
+        java.awt.Font f = new java.awt.Font(fnt.getName(), java.awt.Font.PLAIN, fnt.getHeight());  
+        g.setFont(f);
+        
+        FontMetrics fm = g.getFontMetrics();
+        if(fm!=null) {
+          return fm.stringWidth(string);
+        }
+      }
+    }
+    
+    return 6 * string.length();     
   }
 
   /**
