@@ -127,27 +127,6 @@
 				</configuration>
 			</plugin>
 
-			<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-surefire-plugin</artifactId> 
-				<configuration> </configuration> </plugin> -->
-
-			<!-- Use failsafe to run (and skip) integration tests which success may 
-				depend on GPU. Skip them with mvn install -DskipITs -->
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>3.0.0-M5</version>
-				<executions>
-					<execution>
-						<id>integration-test</id>
-						<goals>
-							<goal>integration-test</goal>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -165,4 +144,34 @@
 
 		</plugins>
 	</build>
+
+	<profiles>
+
+		<profile>
+			<id>integration-tests</id>
+			<build>
+				<plugins>
+
+					<!-- Use failsafe to run integration tests which success may depend 
+						on GPU. Run them with mvn verify -Pintegration-tests -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>3.0.0-M5</version>
+						<executions>
+							<execution>
+								<id>integration-test</id>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
 </project>

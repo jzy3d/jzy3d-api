@@ -345,37 +345,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- CONFIGURATION FOR RUNNING UNIT TESTS -->
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>**/Test*.java</include>
-						<include>**/*Test.java</include>
-						<!-- ITTest* are integration tests that should be run by failsafe (below) 
-							but failsafe run is failing so may trigger ITTest using surefire. But as 
-							ITTest fail when ran from another computer than mine (e.g. Github Workflow, 
-							which is most probably due to thin differences between Github GPU and my 
-							MacBook GPU we desactivate ITTest from base profile and will need to create 
-							a dedicated profiles to run them. Note that it may usefull to have the ability 
-							to have difference baseline image for macos/window/linux in case JVM difference 
-							make jGL text rendering be different somehow. <include>**/ITTest*.java</include> -->
-					</includes>
-				</configuration>
-			</plugin>
-
-			<!-- CONFIGURATION FOR RUNNING INTEGRATION TESTS -->
-
-			<!-- Use failsafe to run (and skip) integration tests which success may 
-				depend on GPU. Skip them with mvn install -DskipITs Replace in surefire <include>**/ITTest*.java</include> 
-				<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-failsafe-plugin</artifactId> 
-				<version>3.0.0-M5</version> <executions> <execution> <id>integration-test</id> 
-				<goals> <goal>integration-test</goal> <goal>verify</goal> </goals> </execution> 
-				</executions> </plugin> -->
-
-
 			<!-- SOURCE JAR -->
 
 			<plugin>
@@ -516,6 +485,40 @@
 			<properties>
 				<additionalparam>-Xdoclint:none</additionalparam>
 			</properties>
+		</profile>
+
+
+		<!-- CONFIGURATION FOR RUNNING INTEGRATION TESTS -->
+
+		<profile>
+			<id>integration-tests</id>
+			<build>
+				<plugins>
+
+					<!-- Use failsafe to run integration tests which success may depend 
+						on GPU. Run them with mvn verify -Pintegration-tests -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>3.0.0-M5</version>
+						<configuration>
+							<includes>
+								<include>**/ITTest*.java</include>
+							</includes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>integration-test</id>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+				</plugins>
+			</build>
 		</profile>
 
 	</profiles>
