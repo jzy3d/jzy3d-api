@@ -53,6 +53,8 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     super(glci);
 
     view = scene.newView(this, quality);
+    view.getPainter().setCanvas(this);
+
     renderer =
         ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
     addGLEventListener(renderer);

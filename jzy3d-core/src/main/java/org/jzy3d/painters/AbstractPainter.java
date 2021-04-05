@@ -2,6 +2,7 @@ package org.jzy3d.painters;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
@@ -11,6 +12,7 @@ public abstract class AbstractPainter implements IPainter {
 
   protected Camera camera;
   protected View view;
+  protected ICanvas canvas;
 
   public AbstractPainter() {
     super();
@@ -24,6 +26,16 @@ public abstract class AbstractPainter implements IPainter {
   @Override
   public void setView(View view) {
     this.view = view;
+  }
+
+  @Override
+  public ICanvas getCanvas() {
+    return canvas;
+  }
+
+  @Override
+  public void setCanvas(ICanvas canvas) {
+    this.canvas = canvas;
   }
 
   @Override

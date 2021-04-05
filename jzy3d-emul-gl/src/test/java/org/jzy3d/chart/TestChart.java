@@ -1,11 +1,15 @@
 package org.jzy3d.chart;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
+import org.jzy3d.painters.IPainter.Font;
+import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 public class TestChart {
   /**
@@ -48,5 +52,16 @@ public class TestChart {
     
     Assert.assertTrue(mouse.isUpdateViewDefault());
   }
-
+  
+@Ignore  
+  @Test
+  public void whenChartAxisLayoutHasCustomFont_ThenAxisBoxHasThisFont() {
+    Chart chart = new EmulGLChartFactory().newChart();
+    chart.getAxisLayout().setFont(Font.TimesRoman_24);
+    
+    AxisBox axis = (AxisBox)chart.getView().getAxis();
+    
+    TextBitmapRenderer tbr = (TextBitmapRenderer)axis.getTextRenderer();
+    Assert.assertEquals(Font.TimesRoman_24, tbr.getFont());
+  }
 }

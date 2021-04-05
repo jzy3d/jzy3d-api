@@ -673,8 +673,6 @@ public class AxisBox implements IAxis {
 
   /**
    * Computes the visibility of each cube face.
-   * 
-   * @param painter TODO
    */
   protected boolean[] getHiddenQuads(IPainter painter) {
     Coord3d scaledEye = painter.getCamera().getEye().div(scale);
