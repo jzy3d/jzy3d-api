@@ -1,6 +1,7 @@
 package org.jzy3d.painters;
 
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.io.File;
@@ -612,22 +613,50 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
    */
   @Override
   public int glutBitmapLength(int font, String string) {
-    EmulGLCanvas c = (EmulGLCanvas)getCanvas();
-    Graphics2D g = (Graphics2D)c.getGraphics();
-    if(g!=null) {
-      Font fnt = Font.getById(font);
-      if(fnt!=null) {
-        java.awt.Font f = new java.awt.Font(fnt.getName(), java.awt.Font.PLAIN, fnt.getHeight());  
-        g.setFont(f);
-        
-        FontMetrics fm = g.getFontMetrics();
-        if(fm!=null) {
-          return fm.stringWidth(string);
-        }
+    
+    if(font==IPainter.BITMAP_HELVETICA_12) {
+      return 6 * string.length();     
+    }
+    else if(font==IPainter.BITMAP_HELVETICA_18) {
+      return 9 * string.length();     
+    }
+    else if(font==IPainter.BITMAP_TIMES_ROMAN_10) {
+      return 5 * string.length();     
+    }
+    else if(font==IPainter.BITMAP_TIMES_ROMAN_24) {
+      return 12 * string.length();     
+    }
+    else if(allowAutoDetectTextLength){
+      int width = autodetectTextLength(font, string);
+
+      if(width>0) {
+        return width;
       }
     }
     
-    return 6 * string.length();     
+    return 6 * string.length(); 
+  }
+
+  boolean allowAutoDetectTextLength = false;
+  
+  /** Very precise text length detection BUT very slow  as it is invoked for each string at each frame*/
+  protected int autodetectTextLength(int font, String string) {
+    EmulGLCanvas c = (EmulGLCanvas)getCanvas();
+    if(c!=null) {
+      Graphics g = c.getGraphics();
+      if(g!=null) {
+        Font fnt = Font.getById(font);
+        if(fnt!=null) {
+          g.setFont(toAWT(fnt));
+          
+          FontMetrics fm = g.getFontMetrics();
+          if(fm!=null) {
+            return fm.stringWidth(string);
+          }
+        }
+      }
+    }
+    return -1;
   }
 
   /**
