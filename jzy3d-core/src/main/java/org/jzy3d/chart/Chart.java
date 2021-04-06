@@ -35,14 +35,29 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class Chart {
-  public static Quality DEFAULT_QUALITY = Quality.Intermediate;
+  private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";
+  public static final Quality DEFAULT_QUALITY = Quality.Intermediate.clone();
+
+  protected IChartFactory factory;
+
+  protected Quality quality;
+  protected ChartScene scene;
+  protected View view;
+  protected ICanvas canvas;
+
+  protected Coord3d previousViewPointFree;
+  protected Coord3d previousViewPointTop;
+  protected Coord3d previousViewPointProfile;
+
+  protected ArrayList<AbstractCameraController> controllers;
+
 
   public Chart(IChartFactory factory, Quality quality) {
     this.factory = factory;
     this.quality = quality;
 
     // Set up controllers
-    controllers = new ArrayList<AbstractCameraController>(1);
+    controllers = new ArrayList<>(1);
 
     // Set up the scene and 3d canvas
     scene = factory.newScene(quality.isAlphaActivated());
@@ -168,7 +183,11 @@ public class Chart {
     
     CameraThreadController rotation = new CameraThreadController(this);
     rotation.setStep(0.025f);
-    rotation.setUpdateViewDefault(true);//!chart.getQuality().isAnimated());
+    // Always keep update view until the camera thread controller
+    // Has a timer to avoid rotating too fast (when no update view, thread can
+    // go much faster so rotation is to speedy!)
+    rotation.setUpdateViewDefault(true);
+    // later, should apply : !chart.getQuality().isAnimated());
 
     ICameraMouseController mouse = getFactory().getPainterFactory().newMouseCameraController(this);
     mouse.addSlaveThreadController(rotation);
@@ -217,7 +236,7 @@ public class Chart {
   /* FRAME */
 
   public IFrame open() {
-    return open("Jzy3d", new Rectangle(0, 0, 600, 600));
+    return open(DEFAULT_WINDOW_TITLE, new Rectangle(0, 0, 600, 600));
   }
 
   public IFrame open(String title) {
@@ -226,6 +245,10 @@ public class Chart {
 
   public IFrame open(String title, int width, int height) {
     return open(title, new Rectangle(0, 0, width, height));
+  }
+
+  public IFrame open(int width, int height) {
+    return open(DEFAULT_WINDOW_TITLE, new Rectangle(0, 0, width, height));
   }
 
   /**
@@ -427,18 +450,4 @@ public class Chart {
     this.quality = quality;
   }
 
-  /* */
-
-  protected IChartFactory factory;
-
-  protected Quality quality;
-  protected ChartScene scene;
-  protected View view;
-  protected ICanvas canvas;
-
-  protected Coord3d previousViewPointFree;
-  protected Coord3d previousViewPointTop;
-  protected Coord3d previousViewPointProfile;
-
-  protected ArrayList<AbstractCameraController> controllers;
 }

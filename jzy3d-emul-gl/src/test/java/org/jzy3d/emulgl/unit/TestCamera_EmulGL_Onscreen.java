@@ -37,41 +37,7 @@ public class TestCamera_EmulGL_Onscreen {
       @Override
       public Camera newCamera(Coord3d center) {
         // Camera camera = Mockito.spy((Camera) super.newCamera(center));
-
-        Camera camera = new Camera(center) {
-          protected ViewportConfiguration applyViewport(IPainter painter) {
-            /*
-             * // Stretch projection on the whole viewport if
-             * (ViewportMode.STRETCH_TO_FILL.equals(mode) ||
-             * ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) { screenXOffset = screenLeft;
-             * screenYOffset = 0;
-             * 
-             * painter.glViewport(screenXOffset, screenYOffset, screenWidth, screenHeight);
-             * 
-             * lastViewPort = new ViewportConfiguration(screenWidth, screenHeight, screenXOffset,
-             * screenYOffset); lastViewPort.setMode(mode); } // Set the projection into the largest
-             * square area centered in the // window slice else if
-             * (ViewportMode.SQUARE.equals(mode)) { screenSquaredDim = Math.min(screenWidth,
-             * screenHeight); screenXOffset = screenLeft + screenWidth / 2 - screenSquaredDim / 2;
-             * screenYOffset = screenBottom + screenHeight / 2 - screenSquaredDim / 2;
-             * 
-             * painter.glViewport(screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
-             * 
-             * lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim,
-             * screenXOffset, screenYOffset); lastViewPort.setMode(mode); } else { throw new
-             * IllegalArgumentException("unknown mode " + mode); }
-             * 
-             * // Render the screen grid if required if (screenGridDisplayed)
-             * renderSubScreenGrid(painter);
-             * 
-             * return lastViewPort;
-             */
-            return super.applyViewport(painter);
-          }
-
-        };
-
-
+        Camera camera = new Camera(center);
         return camera;
       }
 
