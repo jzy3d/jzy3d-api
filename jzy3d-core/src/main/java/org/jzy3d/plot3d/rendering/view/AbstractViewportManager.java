@@ -72,13 +72,11 @@ public abstract class AbstractViewportManager {
   /**
    * Build and return a {@link ViewportConfiguration}. Uses gl to
    * <ul>
-   * <li>apply viewport
+   * <li>apply viewport with {@link IPainter#glViewport(int, int, int, int)}
    * <li>optionnaly to render the viewport debug grid
    * </ul>
-   * 
-   * @param painter TODO
    */
-  protected ViewportConfiguration applyViewport(IPainter painter) {
+  public ViewportConfiguration applyViewport(IPainter painter) {
     // Stretch projection on the whole viewport
     if (ViewportMode.STRETCH_TO_FILL.equals(mode)
         || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) {
@@ -100,8 +98,7 @@ public abstract class AbstractViewportManager {
 
       painter.glViewport(screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
 
-      lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim, screenXOffset,
-          screenYOffset);
+      lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim, screenXOffset, screenYOffset);
       lastViewPort.setMode(mode);
     } else {
       throw new IllegalArgumentException("unknown mode " + mode);

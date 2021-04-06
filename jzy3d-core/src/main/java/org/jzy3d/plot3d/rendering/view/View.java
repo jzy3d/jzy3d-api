@@ -1024,6 +1024,29 @@ public class View {
     cam.shoot(painter, cameraMode);
   }
 
+  /**
+   * Update the camera configuration without triggering the {@link Camera#shoot(IPainter, CameraMode)} method.
+   * 
+   * This is useful in rare case where one need to manually invoke only a subset of OpenGL methods that
+   * are invoked by shoot method.
+   */
+  public void updateCameraWithoutShooting(ViewportConfiguration viewport, BoundingBox3d bounds,
+      float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
+      float factorViewPointDistance, Coord3d center, Coord3d scaling) {
+
+    viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
+
+    Coord3d cameraTarget = computeCameraTarget(center, scaling);
+    Coord3d cameraUp = computeCameraUp(viewpoint);
+    Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
+    cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
+
+    triggerCameraUpEvents(viewpoint);
+
+    computeCameraRenderingSphereRadius(cam, viewport, bounds);
+  }
+
+  
   public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled,
       float factorViewPointDistance) {
     return (float) spaceTransformer.compute(bounds).getRadius();
