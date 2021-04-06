@@ -59,6 +59,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     } else {
       myGL.setAutoAdaptToHiDPI(true);
     }
+    
+
 
     // FROM NATIVE
     //
@@ -112,8 +114,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     // en autonome sur paint (quel cycle de vie?)
     // sur demande quand on fait "updateView" dans les mouse / thread controller etc
     // pourquoi est il nécessaire de le faire pendant mouse dragged?
-
+    
+    
     view.init();
+
   }
 
 
