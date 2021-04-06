@@ -40,8 +40,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   /** set to TRUE to show in console events of the component (to debug GLUT) */
   protected boolean debugEvents = false;
 
-
-
   protected View view;
   protected EmulGLPainter painter;
   protected IAnimator animator;
