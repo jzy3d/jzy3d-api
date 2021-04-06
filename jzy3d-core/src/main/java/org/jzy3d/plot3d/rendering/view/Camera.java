@@ -544,7 +544,7 @@ public class Camera extends AbstractViewportManager {
    * @param painter
    * @param viewport
    */
-  protected void projectionPerspective(IPainter painter, ViewportConfiguration viewport) {
+  public void projectionPerspective(IPainter painter, ViewportConfiguration viewport) {
     boolean stretchToFill = ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode());
     double fov = computeFieldOfView(radius * 2, eye.distance(target));
     float aspect = stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1;
@@ -555,7 +555,7 @@ public class Camera extends AbstractViewportManager {
     // painter.glFrustum(-radius*3, radius*3, -radius*3, radius*3, near, far);
   }
 
-  protected void doLookAt(IPainter painter) {
+  public void doLookAt(IPainter painter) {
     painter.gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
   }
 
@@ -574,7 +574,7 @@ public class Camera extends AbstractViewportManager {
    * @param painter
    * @param viewport
    */
-  protected void projectionOrtho(IPainter painter, ViewportConfiguration viewport) {
+  public void projectionOrtho(IPainter painter, ViewportConfiguration viewport) {
     if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode())) {
       ortho.update(-radius, +radius, -radius, +radius, near, far);
     } else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode())) {
