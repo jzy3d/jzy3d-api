@@ -24,6 +24,8 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import jgl.GL;
 
 public class EmulGLPainterFactory implements IPainterFactory {
+  private static final int DEFAULT_HEIGHT = 500;
+  private static final int DEFAULT_WIDTH = 500;
   protected IChartFactory chartFactory;
   protected EmulGLCanvas internalCanvas;
   protected EmulGLPainter internalPainter;
@@ -86,8 +88,14 @@ public class EmulGLPainterFactory implements IPainterFactory {
   public EmulGLCanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
     if (internalCanvas == null) {
       internalCanvas = newEmulGLCanvas(factory, scene, quality);
-
-      link();
+      
+      if (factory.getPainterFactory().isOffscreen()) {
+        Dimension d = getOffscreenDimension();
+        link(d.width, d.height);
+      }
+      else {
+        link(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+      }
     }
     return internalCanvas;
   }
@@ -96,7 +104,7 @@ public class EmulGLPainterFactory implements IPainterFactory {
     return new EmulGLCanvas(factory, scene, quality);
   }
 
-  protected void link() {
+  protected void link(int width, int height) {
     if (internalPainter == null) {
       newPainter();
     }
@@ -104,7 +112,7 @@ public class EmulGLPainterFactory implements IPainterFactory {
     internalPainter.setGLU(internalCanvas.getGLU());
     internalPainter.setGLUT(internalCanvas.getGLUT());
 
-    internalPainter.getGLUT().glutInitWindowSize(500, 500);
+    internalPainter.getGLUT().glutInitWindowSize(width, height);
     internalPainter.getGLUT().glutInitWindowPosition(0, 0);
     internalPainter.getGLUT().glutCreateWindow(internalCanvas);
 
