@@ -49,7 +49,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     view = scene.newView(this, quality);
     painter = (EmulGLPainter) view.getPainter();
     painter.setCanvas(this);
-    init();
+    
+    init(getWidth(), getHeight());
+    
     animator = factory.getPainterFactory().newAnimator(this);
 
     if (quality.isPreserveViewportSize()) {
@@ -87,11 +89,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   // ******************* VIEW ******************* //
 
   // Equivalent to registering a Renderer3d
-  protected void init() {
+  protected void init(int width, int height) {
     updatePainterWithGL(); // painter can call this canvas GL
-
-    int width = getWidth();
-    int height = getHeight();
 
     myUT.glutInitWindowSize(width, height);
     myUT.glutInitWindowPosition(getX(), getY());
