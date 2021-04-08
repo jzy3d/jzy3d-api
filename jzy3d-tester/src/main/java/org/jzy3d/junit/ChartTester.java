@@ -311,9 +311,9 @@ public class ChartTester {
   }
 
   protected String testCaseOutputFolder = ERROR_IMAGE_FOLDER_DEFAULT;
-  protected String testCaseInputFolder = EXPECTED_IMAGE_FOLDER_DEFAULT;
+  protected String testCaseInputFolder = EXPECTED_IMAGE_FOLDER;
 
-  public static final String EXPECTED_IMAGE_FOLDER_DEFAULT = "src/test/resources/";
+  public static final String EXPECTED_IMAGE_FOLDER = "src/test/resources/";
   public static final String ERROR_IMAGE_FOLDER_DEFAULT = "target/";
 
   // int bufImgType = BufferedImage.TYPE_3BYTE_BGR;// );
