@@ -93,6 +93,11 @@ public abstract class AbstractCameraController extends AbstractController
     removeSlaveThreadController();
     this.threadController = controller;
   }
+  
+  @Override
+  public CameraThreadController getSlaveThreadController() {
+    return this.threadController;
+  }
 
   public void removeSlaveThreadController() {
     if (threadController != null) {
