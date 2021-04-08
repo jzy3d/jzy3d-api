@@ -1,6 +1,6 @@
 package org.jzy3d.emulgl.integration;
 
-import org.junit.Test;
+import java.awt.Toolkit;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
@@ -35,6 +35,9 @@ public class ITTestHiDPI {
 
   //@Test
   public static void main(String[] a) {
+    int dpi = Toolkit.getDefaultToolkit().getScreenResolution();
+    System.out.println("dpi : "+dpi);
+    
     Shape surface = surface();
 
     IPainterFactory painter = new EmulGLPainterFactory();
@@ -57,6 +60,8 @@ public class ITTestHiDPI {
     chart.open(800, 600);
     chart.setAnimated(true);
     chart.addMouseCameraController();
+    
+
 
  //   ChartTester tester = new ChartTester();
   //  tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + this.getClass().getSimpleName() + ".png");
