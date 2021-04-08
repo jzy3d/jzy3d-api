@@ -34,8 +34,13 @@ Please report here the performance you encounter while running EmulGL charts by 
 EmulGL supports HiDPI rendering by enabling a chart with `Quality.setPreserveViewportSize(false);` 
 (which actually forbids to preserve the usual pixel ratio in case a HiDPI configuration is detected)
 
-We noticed that HiDPI may not trigger on Java 8, whereas it works on Java 9. This is highlighted by `ITTestHiDPI` that is kept 
+
+We noticed the following limitations with HiDPI on EmulGL as it is currently implemented
+* We noticed that HiDPI may not trigger on Java 8, whereas it works on Java 9. This is highlighted by `ITTestHiDPI` that is kept 
 as a program with main() rather than junit test.
+* HiDPI in jGL is detected at runtime and that chart will properly scale to HiDPI after a first rendering. A chart configured with `chart.setAnimated(true)` and `Quality.setPreserveViewportSize(false);` will automatically turn to HiDPI at the second frame.
+* Offscreen charts currently do not seem to support HiDPI. 
+
 
 # Further work
 
