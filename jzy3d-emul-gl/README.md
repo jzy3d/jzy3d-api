@@ -26,3 +26,27 @@ Please report here the performance you encounter while running EmulGL charts by 
 # Implementation
 
 [jGL readme](https://github.com/jzy3d/jGL/blob/master/README.md) is the best place to better understand how OpenGL is implemented and how the framework is structured.
+
+# Remarks
+
+## HiDPI
+
+EmulGL supports HiDPI rendering by enabling a chart with `Quality.setPreserveViewportSize(false);` 
+(which actually forbids to preserve the usual pixel ratio in case a HiDPI configuration is detected)
+
+We noticed that HiDPI may not trigger on Java 8, whereas it works on Java 9. This is highlighted by `ITTestHiDPI` that is kept 
+as a program with main() rather than junit test.
+
+# Further work
+
+## Fail : Performance with multithreading
+
+We explored multithreaded rendering in SurfaceDemoEmulGL_Multithreaded which is a complete failure. jGL  
+won't support multithreading easily. OpenGL indeed requires a consistent call to a serie of commands (glBegin, glVertex, glEnd, etc) that prevent multiple
+threads to deal with a sub group of geometries to render since the GL context will receive commands from multiple interlaced geometries.
+Note that JOGL has the same limitation. We explored Newt canvas in JOGL supposed to allow such multithreaded access to the same OpenGL context but did not succeed.
+
+Performance studies shows that handling all geometries draw() method is where an optimization may be done. Handling copy of colorbuffer to the canvas is negligeable compared
+to handling all OpenGL drawing primitives.
+
+   

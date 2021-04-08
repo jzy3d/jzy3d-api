@@ -36,7 +36,7 @@ public class ITTestSurfaceChart {
     // Then
     ChartTester tester = new ChartTester();
     tester.assertSimilar(chart,
-        ChartTester.EXPECTED_IMAGE_FOLDER_DEFAULT + this.getClass().getSimpleName() + ".png");
+        ChartTester.EXPECTED_IMAGE_FOLDER + this.getClass().getSimpleName() + ".png");
   }
 
 
