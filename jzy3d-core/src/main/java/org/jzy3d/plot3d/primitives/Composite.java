@@ -11,12 +11,17 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.rendering.scene.Decomposition;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
- * A Composite gathers several Drawable and provides default methods for rendering them all in one
- * call. <br>
+ * A {@link Composite} gathers several {@link Drawable} and provides default methods managing them
+ * all in one call : drawing, getting bounds, setting face or wireframe colors, etc.
+ * 
+ * {@link Composite}s have the nice property of being decomposable (see {@link Decomposition}),
+ * meaning a scene {@link Graph} can take all items independently to sort them for optimized
+ * translucency rendering.
  *
  * @author Martin Pernollet
  *
