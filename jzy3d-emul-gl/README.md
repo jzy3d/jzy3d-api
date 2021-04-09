@@ -5,7 +5,7 @@ EmulGL is a Java implementation of OpenGL running *C*PU, hence allowing to avoid
 
 Traditional GPU rendering offers great performance but sometimes hit a compatibility issue for some rare {OS, JDK, GPU} combination. EmulGL processes the 3D scene inside the JVM with Java code only with rendering time below 40ms for most surface and scatter charts. This makes EmulGL a good fallback renderer for both offscreen chart and onscreen interactive chart that may be animated without visible lag (and without flooding CPU either).
 
-EmulGL relies on [jGL](https://github.com/jzy3d/jGL), a pure Java implementation of the OpenGL 1 specification. EmulGL remains relevant for simple charts.
+EmulGL relies on [jGL](https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-jGL), a pure Java implementation of the OpenGL 1 specification. EmulGL remains relevant for simple charts.
 
 Native charts (using JOGL) remain the preferred option for fast rendering of very large geometries, volumes or rendering involving shaders. Native charts also tend to better handle alpha blending (using translucent objects).
 
@@ -25,7 +25,7 @@ Please report here the performance you encounter while running EmulGL charts by 
 
 # Implementation
 
-[jGL readme](https://github.com/jzy3d/jGL/blob/master/README.md) is the best place to better understand how OpenGL is implemented and how the framework is structured.
+[jGL readme](https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jGL/README.md) is the best place to better understand how OpenGL is implemented and how the framework is structured.
 
 # Remarks
 
