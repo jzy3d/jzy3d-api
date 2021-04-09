@@ -21,7 +21,7 @@ Despite not exhaustive at all, I was able to have the following performance on a
 * A 50.000 points 3D scatter in a 500x500 pixels frame is rendered in ~10ms
 * A 500.000 points 3D scatter in a 500x500 pixels frame is rendered in ~90ms
 
-Please report here the performance you encounter while running EmulGL charts by [adding comments to this issue](https://github.com/jzy3d/jzy3d-api/issues/149). 
+Please report here the performance you encounter while running EmulGL charts by [adding comments to this issue](https://github.com/jzy3d/jzy3d-api/issues/149).
 
 # Implementation
 
@@ -31,16 +31,19 @@ Please report here the performance you encounter while running EmulGL charts by 
 
 ## HiDPI
 
-EmulGL supports HiDPI rendering by enabling a chart with `Quality.setPreserveViewportSize(false);` 
+EmulGL supports HiDPI rendering by enabling a chart with `Quality.setPreserveViewportSize(false);`
 (which actually forbids to preserve the usual pixel ratio in case a HiDPI configuration is detected)
 
 
 We noticed the following limitations with HiDPI on EmulGL as it is currently implemented
-* I noticed that HiDPI may not trigger on Java 8, whereas it works on Java 9. This is highlighted by `ITTestHiDPI` that is kept 
-as a program with main() rather than junit test.
+* I noticed that HiDPI may not trigger on Java 8, whereas it works on Java 9. Jzy3d is intentionally build for Java 8 to remain compatible with "old" software. This does not prevent a software running on Java 9 to use HiDPI automatically. This is highlighted by `ITTestHiDPI` that is kept as a program with main() rather than junit test.
 * HiDPI in jGL is detected at runtime and that chart will properly scale to HiDPI after a first rendering. A chart configured with `chart.setAnimated(true)` and `Quality.setPreserveViewportSize(false);` will automatically turn to HiDPI at the second frame.
-* Offscreen charts currently do not seem to adapt to HiDPI automatically. This may be due to the way I do the HiDPI detection in jGL that relies on the state of the *displayed* AWT Canvas. Anyway, no offscreen HiDPI make it *impossible to create non regression tests about HiDPI* at this step. Even if this would be supported, there would be limitation with build since such kind of tests should be ignored on computer that do not have the same HiDPI capabilities than the computer used to generate the baseline image, which is not possible with current maven build. 
+* Offscreen charts currently do not seem to adapt to HiDPI automatically. This may be due to the way I do the HiDPI detection in jGL that relies on the state of the *displayed* AWT Canvas. Anyway, no offscreen HiDPI make it *impossible to create non regression tests about HiDPI* at this step. Even if this would be supported, there would be limitation with build since such kind of tests should be ignored on computer that do not have the same HiDPI capabilities than the computer used to generate the baseline image, which is not possible with current maven build.
 
+Usefull links about HiDPI and java
+* https://bugs.openjdk.java.net/browse/JDK-8055212
+* https://intellij-support.jetbrains.com/hc/en-us/articles/360007994999-HiDPI-configuration
+* https://cwiki.apache.org/confluence/display/NETBEANS/HiDPI+%28Retina%29+improvements
 
 # Further work
 
@@ -53,5 +56,3 @@ Note that JOGL has the same limitation. We explored Newt canvas in JOGL supposed
 
 Performance studies shows that handling all geometries draw() method is where an optimization may be done. Handling copy of colorbuffer to the canvas is negligeable compared
 to handling all OpenGL drawing primitives.
-
-   

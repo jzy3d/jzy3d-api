@@ -9,7 +9,7 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>jGL</artifactId>
-	<name>jGL integrated in Jzy3D</name>
+	<name>Jzy3d Embedded jGL</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
