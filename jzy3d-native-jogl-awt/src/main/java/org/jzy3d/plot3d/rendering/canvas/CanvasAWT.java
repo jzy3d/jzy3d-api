@@ -1,18 +1,19 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.awt.Graphics2D;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -96,6 +97,27 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     else
       setSurfaceScale(new float[] {1f, 1f});
   }
+
+  /**
+   * Pixel scale is used to model the pixel ratio thay may be introduced by HiDPI or Retina
+   * displays.
+   */
+  @Override
+  public Coord2d getPixelScale() {
+    Graphics2D g2d = (Graphics2D) getGraphics();
+    AffineTransform globalTransform = g2d.getTransform();
+    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
+  }
+
+  double pixelScaleX;
+  double pixelScaleY;
+
+  /** Reset pixel scale to (1,1) */
+  protected void resetPixelScale() {
+    pixelScaleX = 1;
+    pixelScaleY = 1;
+  }
+
 
   @Override
   public void dispose() {

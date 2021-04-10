@@ -1,15 +1,18 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -73,7 +76,18 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     if (quality.isPreserveViewportSize())
       setPixelScale(
           new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE});
-
+  }
+  
+  @Override
+  public void setPixelScale(float[] scale) {
+    setSurfaceScale(scale);
+  }
+  
+  @Override
+  public Coord2d getPixelScale() {
+    Graphics2D g2d = (Graphics2D) getGraphics();
+    AffineTransform globalTransform = g2d.getTransform();
+    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
   }
 
   @Override
@@ -213,8 +227,5 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     removeKeyListener((KeyListener) o);
   }
 
-  @Override
-  public void setPixelScale(float[] scale) {
-    setSurfaceScale(scale);
-  }
+  
 }

@@ -1,7 +1,9 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics2D;
 import java.awt.Panel;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 
@@ -10,6 +12,7 @@ import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -78,12 +81,19 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
 
   @Override
   public void setPixelScale(float[] scale) {
-    // LOGGER.info("setting scale " + scale);
     if (scale != null)
       window.setSurfaceScale(scale);
     else
       window.setSurfaceScale(new float[] {1f, 1f});
   }
+  
+  @Override
+  public Coord2d getPixelScale() {
+    Graphics2D g2d = (Graphics2D) getGraphics();
+    AffineTransform globalTransform = g2d.getTransform();
+    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
+  }
+
 
   public GLWindow getWindow() {
     return window;

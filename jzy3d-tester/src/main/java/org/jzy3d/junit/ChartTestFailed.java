@@ -12,6 +12,9 @@ public class ChartTestFailed extends Exception {
 
   protected BufferedImage actual;
   protected BufferedImage expected;
+  protected int actualPixel;
+  protected int expectedPixel;
+  
   protected List<IntegerCoord2d> diffs = new ArrayList<IntegerCoord2d>();
 
 
@@ -52,6 +55,24 @@ public class ChartTestFailed extends Exception {
   public List<IntegerCoord2d> getDiffCoordinates() {
     return diffs;
   }
+
+  public int getActualPixel() {
+    return actualPixel;
+  }
+
+  public void setActualPixel(int actualPixel) {
+    this.actualPixel = actualPixel;
+  }
+
+  public int getExpectedPixel() {
+    return expectedPixel;
+  }
+
+  public void setExpectedPixel(int expectedPixel) {
+    this.expectedPixel = expectedPixel;
+  }
+  
+  
 
 }
 

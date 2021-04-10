@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.io.File;
 import java.io.IOException;
-
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -92,8 +92,18 @@ public interface ICanvas {
    * <ul>
    * 
    * @see {@link ScalableSurface#setSurfaceScale(float[])} in JOGL javadoc for more informations
+   * @see {@link #getPixelScale()} similar but non symetric method
    * 
    */
   public void setPixelScale(float[] scale);
+
+  /**
+   * Provide pixel scale as feasible by the Hardware, OS, and JVM, independently of what was asked
+   * by {@link #setPixelScale(float[])}. Hence the two functions may not be consistent together.
+   * 
+   * Implementations may return (1,1) even if HiDPI exists on hardware, especially on Java 8. Java
+   * 9+ provide canvas with HiDPI detection.
+   */
+  public Coord2d getPixelScale();
 
 }

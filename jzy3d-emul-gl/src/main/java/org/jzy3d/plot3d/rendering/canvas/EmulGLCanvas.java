@@ -2,10 +2,12 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.AWTEvent;
 import java.awt.Font;
+import java.awt.Graphics2D;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.monitor.IMonitorable;
 import org.jzy3d.monitor.Measure.CanvasPerfMeasure;
@@ -67,6 +70,18 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     // renderer = factory.newRenderer(view, traceGL, debugGL);
     // addGLEventListener(renderer);
   }
+  
+  @Override
+  public void setPixelScale(float[] scale) {
+  }
+  
+  @Override
+  public Coord2d getPixelScale() {
+    Graphics2D g2d = (Graphics2D) getGraphics();
+    AffineTransform globalTransform = g2d.getTransform();
+    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
+  }
+
 
   @Override
   public IAnimator getAnimation() {
@@ -171,7 +186,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     
     postRenderString("FrameID    : " + kDisplay, x, y, Color.BLACK);
     postRenderString("Render in  : " + mili + "ms", x, y * 2, Color.BLACK);
-    postRenderString("Surf size  : " + view.getScene().getGraph().getDecomposition().size(), x, y * 3, Color.BLACK);
+    postRenderString("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * 3, Color.BLACK);
     postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
   }
 
@@ -294,25 +309,17 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   @Override
   public void addKeyController(Object o) {
-    // TODO Auto-generated method stub
   }
 
   @Override
   public void removeKeyController(Object o) {
-    // TODO Auto-generated method stub
   }
 
   @Override
   public String getDebugInfo() {
-    // TODO Auto-generated method stub
     return null;
   }
 
-  @Override
-  public void setPixelScale(float[] scale) {
-    // TODO Auto-generated method stub
-
-  }
 
   @Override
   public void display() {
