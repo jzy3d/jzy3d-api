@@ -145,7 +145,8 @@ public class ChartTester {
       logger.error("DIFF IMAGE : " + diffFile);
 
       // LET TEST FAIL
-      fail("Chart test failed: " + e.getMessage() + " see " + diffFile);
+      
+      fail("Chart test failed: " + e.getMessage() + " pix("+e.getDiffCoordinates()+ " see " + diffFile);
 
     } catch (IOException e) {
       // -----------------------------
@@ -251,6 +252,8 @@ public class ChartTester {
           if (p1rgb != p2rgb) {
             ok = false;
             potentialFailure.addDiffCoordinates(i, j);
+            potentialFailure.setActualPixel(p1rgb);
+            potentialFailure.setExpectedPixel(p2rgb);
             // String m = "pixel diff start @(" + i + "," + j + ")";
             // throw new ChartTestFailed(m, i1, i2);
           }

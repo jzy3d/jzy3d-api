@@ -1,19 +1,22 @@
 package org.jzy3d.chart.controllers.mouse.selection;
 
 import java.awt.Graphics2D;
-
-import org.apache.log4j.Logger;
+import org.jzy3d.chart.Chart;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.plot3d.primitives.selectable.SelectableScatter;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
 
 public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
-  static Logger LOGGER = Logger.getLogger(AWTScatterMouseSelector.class);
-
-
-  public AWTScatterMouseSelector(SelectableScatter scatter) {
+  ICanvas canvas;
+  
+  public AWTScatterMouseSelector(SelectableScatter scatter, Chart chart) {
+    this.chart = chart;
+    this.canvas =  chart.getCanvas();
     this.scatter = scatter;
   }
 
@@ -22,9 +25,23 @@ public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
   protected void processSelection(Scene scene, View view, int width, int height) {
     view.project();
     Coord3d[] projection = scatter.getProjection();
+    
+    Coord2d pixScale = getPixelScale();
+    IntegerCoord2d from  =in.mul(pixScale);
+    IntegerCoord2d to = out.mul(pixScale);
+    
     for (int i = 0; i < projection.length; i++)
-      if (matchRectangleSelection(in, out, projection[i], width, height))
+      if (matchRectangleSelection(from, to, projection[i], width, height))
         scatter.setHighlighted(i, true);
+  }
+
+  private Coord2d getPixelScale() {
+    if(chart.getQuality().isPreserveViewportSize()) {
+      return new Coord2d(1,1);
+    }
+    else {
+      return canvas.getPixelScale();
+    }
   }
 
   @Override
@@ -32,10 +49,12 @@ public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
     this.width = width;
     this.height = height;
 
-    // LOGGER.info(" " + width + " " + height);
+    Coord2d pixScale = getPixelScale();
+    IntegerCoord2d from  =in.mul(pixScale);
+    IntegerCoord2d to = out.mul(pixScale);
 
     if (dragging)
-      drawRectangle(g2d, in, out);
+      drawRectangle(g2d, from, to);
   }
 
   @Override

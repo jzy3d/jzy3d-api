@@ -1,7 +1,6 @@
 package org.jzy3d.demos.javafx;
 
 import java.util.Random;
-
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.controllers.mouse.AWTDualModeMouseSelector;
 import org.jzy3d.chart.controllers.mouse.selection.AWTScatterMouseSelector;
@@ -12,7 +11,6 @@ import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.selectable.SelectableScatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -69,11 +67,9 @@ public class DemoSelectableScatterFX extends Application {
     chart.getScene().add(scatter);
     chart.getView().setMaximized(true);
 
-    AWTScatterMouseSelector selector = new AWTScatterMouseSelector(scatter);
-    AWTDualModeMouseSelector mouse = new AWTDualModeMouseSelector(chart, selector);
-
+    AWTScatterMouseSelector selector = new AWTScatterMouseSelector(scatter, chart);
+    new AWTDualModeMouseSelector(chart, selector);
     return chart;
-
   }
 
   protected SelectableScatter generateScatter(int npt) {
