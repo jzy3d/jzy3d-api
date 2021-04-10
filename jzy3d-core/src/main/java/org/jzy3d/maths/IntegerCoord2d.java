@@ -1,6 +1,8 @@
 package org.jzy3d.maths;
 
 public class IntegerCoord2d {
+  public int x, y;
+
   public IntegerCoord2d() {
     this.x = 0;
     this.y = 0;
@@ -15,6 +17,8 @@ public class IntegerCoord2d {
   public String toString() {
     return "(IntegerCoord2d) " + x + "," + y;
   }
-
-  public int x, y;
+  
+  public IntegerCoord2d mul(Coord2d mul) {
+    return new IntegerCoord2d((int)(x * mul.x), (int)(y * mul.y));
+  }
 }

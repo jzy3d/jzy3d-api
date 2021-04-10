@@ -2,8 +2,10 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.io.File;
 import java.io.IOException;
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -100,6 +102,13 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   public void setPixelScale(float[] scale) {
     throw new NotImplementedException();
   }
+  
+  @Override
+  public Coord2d getPixelScale() {
+    Logger.getLogger(OffscreenCanvas.class).info("getPixelScale() not implemented. Will return {1,1}"); 
+    return new Coord2d(1, 1);
+  }
+
 
   @Override
   public GLOffscreenAutoDrawable getDrawable() {
