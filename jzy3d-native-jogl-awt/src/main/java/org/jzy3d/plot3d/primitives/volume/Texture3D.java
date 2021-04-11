@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.Buffer;
-
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.io.glsl.GLSLProgram;
@@ -16,7 +15,6 @@ import org.jzy3d.plot3d.primitives.vbo.ColormapTexture;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;

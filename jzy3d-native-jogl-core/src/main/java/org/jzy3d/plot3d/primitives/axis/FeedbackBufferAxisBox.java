@@ -1,13 +1,11 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import java.nio.FloatBuffer;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
-
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL2;
 

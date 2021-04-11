@@ -2,7 +2,6 @@ package org.jzy3d.utils;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.FileAppender;
 import org.apache.log4j.Level;

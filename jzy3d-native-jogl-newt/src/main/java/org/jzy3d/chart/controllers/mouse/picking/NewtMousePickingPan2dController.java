@@ -7,7 +7,6 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.newt.event.MouseEvent;
 
 public class NewtMousePickingPan2dController extends NewtMousePickingController {

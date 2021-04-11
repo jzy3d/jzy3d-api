@@ -2,7 +2,6 @@ package org.jzy3d.chart.fallback;
 
 import java.awt.Dimension;
 import java.awt.Image;
-
 import org.jzy3d.ui.views.ImagePanel;
 
 public class FallbackChartImagePanel extends ImagePanel {

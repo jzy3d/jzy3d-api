@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives.graphs.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;

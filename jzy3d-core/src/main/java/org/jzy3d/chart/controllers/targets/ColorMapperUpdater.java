@@ -1,7 +1,6 @@
 package org.jzy3d.chart.controllers.targets;
 
 import java.util.List;
-
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Scale;
 import org.jzy3d.plot3d.primitives.Drawable;

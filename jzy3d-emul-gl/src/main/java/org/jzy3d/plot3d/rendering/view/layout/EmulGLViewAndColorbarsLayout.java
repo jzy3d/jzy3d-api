@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.view.layout;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.painters.IPainter;
@@ -12,7 +11,6 @@ import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportBuilder;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
-
 import jgl.GL;
 
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {

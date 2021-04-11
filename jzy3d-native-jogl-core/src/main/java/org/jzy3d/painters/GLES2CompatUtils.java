@@ -1,7 +1,6 @@
 package org.jzy3d.painters;
 
 import java.nio.Buffer;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.util.ImmModeSink;

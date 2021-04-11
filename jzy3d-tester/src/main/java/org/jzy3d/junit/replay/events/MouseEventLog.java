@@ -1,7 +1,6 @@
 package org.jzy3d.junit.replay.events;
 
 import java.awt.event.InputEvent;
-
 import org.jzy3d.maths.IntegerCoord2d;
 
 public class MouseEventLog extends AbstractEventLog implements IMouseEventLog {

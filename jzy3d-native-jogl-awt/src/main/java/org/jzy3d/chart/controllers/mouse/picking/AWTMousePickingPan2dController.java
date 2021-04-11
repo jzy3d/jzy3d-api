@@ -2,7 +2,6 @@ package org.jzy3d.chart.controllers.mouse.picking;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.maths.BoundingBox3d;

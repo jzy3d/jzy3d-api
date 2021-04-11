@@ -3,7 +3,6 @@ package org.jzy3d.maths.algorithms.interpolation.algorithms;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 
 /**

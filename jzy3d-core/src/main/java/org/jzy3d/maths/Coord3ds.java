@@ -2,7 +2,6 @@ package org.jzy3d.maths;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 
 /**

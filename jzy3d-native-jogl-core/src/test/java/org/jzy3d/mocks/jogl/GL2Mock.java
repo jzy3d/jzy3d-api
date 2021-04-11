@@ -9,10 +9,8 @@ import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.Camera.Ortho;
-
 import com.jogamp.common.nio.PointerBuffer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;

@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.jzy3d.junit.replay.events.IComponentEventLog.ComponentEventType;
 import org.jzy3d.junit.replay.events.IKeyEventLog.KeyEventType;
 import org.jzy3d.junit.replay.events.IMouseEventLog.MouseEventType;

@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.selectable;
 
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Polygon2d;

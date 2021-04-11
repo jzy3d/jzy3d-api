@@ -3,11 +3,7 @@ package org.jzy3d.emulgl.unit;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-
 import java.awt.event.ComponentEvent;
-import java.io.File;
-import java.io.IOException;
-
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;

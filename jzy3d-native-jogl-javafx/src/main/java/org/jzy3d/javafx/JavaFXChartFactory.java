@@ -1,7 +1,6 @@
 package org.jzy3d.javafx;
 
 import java.awt.image.BufferedImage;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.AWTNativeChart;
@@ -15,7 +14,6 @@ import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingFXUtils;

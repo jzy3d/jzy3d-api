@@ -1,10 +1,8 @@
 package org.jzy3d.plot3d.rendering.textures;
 
 import java.awt.image.BufferedImage;
-
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;

@@ -1,7 +1,6 @@
 package org.jzy3d.colors;
 
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord3d;

@@ -1,7 +1,6 @@
 package org.jzy3d.contour;
 
 import java.awt.image.BufferedImage;
-
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.Mapper;
 

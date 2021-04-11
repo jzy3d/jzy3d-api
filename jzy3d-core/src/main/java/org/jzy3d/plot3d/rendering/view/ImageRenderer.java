@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.nio.ByteBuffer;
-
 import org.jzy3d.painters.IPainter;
 
 public class ImageRenderer {

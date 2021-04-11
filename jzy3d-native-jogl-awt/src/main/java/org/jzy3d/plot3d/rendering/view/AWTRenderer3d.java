@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.image.BufferedImage;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLProfile;

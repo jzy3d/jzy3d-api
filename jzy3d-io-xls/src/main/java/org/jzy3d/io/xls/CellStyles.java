@@ -2,7 +2,6 @@ package org.jzy3d.io.xls;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;

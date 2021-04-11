@@ -1,7 +1,6 @@
 package org.jzy3d.chart.factories;
 
 import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
@@ -25,7 +24,6 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
-
 import com.jogamp.opengl.GLCapabilities;
 
 public class SWTPainterFactory extends NativePainterFactory implements IPainterFactory {

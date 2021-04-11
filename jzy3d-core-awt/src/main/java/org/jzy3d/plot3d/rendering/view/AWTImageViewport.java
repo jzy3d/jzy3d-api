@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.Image;
 import java.nio.ByteBuffer;
-
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.image.GLImage;

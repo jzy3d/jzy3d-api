@@ -10,11 +10,9 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedAveragePeelingAlgorithm
 import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedSumPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
-
 import jogamp.opengl.gl4.GL4bcImpl;
 
 /**

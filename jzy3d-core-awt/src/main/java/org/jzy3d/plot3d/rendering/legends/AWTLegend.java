@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.legends;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.DrawableChangedEvent;

@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.symbols;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.LineStrip;

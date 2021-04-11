@@ -2,7 +2,6 @@ package org.jzy3d.maths;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;

@@ -6,7 +6,6 @@ import java.awt.Toolkit;
 import java.awt.event.InvocationEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.PaintEvent;
-
 import org.apache.log4j.Logger;
 
 /** Utility for debugging event queue related to 3d in AWT. */

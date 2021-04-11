@@ -1,7 +1,6 @@
 package org.jzy3d.chart.factories.bridged;
 
 import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.bridge.swt.FrameSWTBridge;
 import org.jzy3d.chart.Chart;
@@ -25,7 +24,6 @@ import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
-
 import com.jogamp.opengl.GLCapabilities;
 
 public class SWTBridgePainterFactory extends SWTPainterFactory implements IPainterFactory {

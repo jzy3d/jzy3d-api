@@ -2,7 +2,6 @@ package org.jzy3d.io.matlab;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.io.ILoader;
 import org.jzy3d.maths.Coord3d;
@@ -10,7 +9,6 @@ import org.jzy3d.maths.TicToc;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.enlightables.EnlightablePolygon;
-
 import com.jmatio.io.MatFileReader;
 import com.jmatio.types.MLNumericArray;
 

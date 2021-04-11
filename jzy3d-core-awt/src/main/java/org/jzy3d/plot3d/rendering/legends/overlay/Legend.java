@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.rendering.legends.overlay;
 
 import java.awt.Shape;
-
 import org.jzy3d.colors.Color;
 
 public class Legend {
