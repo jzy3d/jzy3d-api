@@ -73,6 +73,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   
   @Override
   public void setPixelScale(float[] scale) {
+    Logger.getLogger(EmulGLCanvas.class).info("Not implemented. Pixel scale is driven by AWT Canvas itself and jGL adapts to it");
   }
   
   @Override

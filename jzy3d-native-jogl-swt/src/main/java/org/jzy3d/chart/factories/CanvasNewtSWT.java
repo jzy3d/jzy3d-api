@@ -1,10 +1,7 @@
 package org.jzy3d.chart.factories;
 
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -17,7 +14,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseListener;
@@ -98,8 +94,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
   
   @Override
   public Coord2d getPixelScale() {
-    Logger.getLogger(CanvasNewtSWT.class).info("getPixelScale() not implemented. Will return {1,1}"); 
-    return new Coord2d(1, 1);
+    return new Coord2d((int)(window.getSurfaceWidth()/(float)getSize().x), (int)(window.getSurfaceHeight()/(float)getSize().y));
   }
 
 

@@ -12,5 +12,7 @@ public class OffscreenChartFactory extends AWTChartFactory {
     super(new OffscreenWindowFactory());
     this.width = width;
     this.height = height;
+    
+    getPainterFactory().setOffscreen(width, height);
   }
 }

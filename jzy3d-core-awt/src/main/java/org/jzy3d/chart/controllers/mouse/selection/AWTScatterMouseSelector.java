@@ -35,13 +35,13 @@ public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
         scatter.setHighlighted(i, true);
   }
 
-  private Coord2d getPixelScale() {
-    if(chart.getQuality().isPreserveViewportSize()) {
+  protected Coord2d getPixelScale() {
+    /*if(chart.getQuality().isPreserveViewportSize()) {
       return new Coord2d(1,1);
     }
-    else {
+    else {*/
       return canvas.getPixelScale();
-    }
+    //}
   }
 
   @Override
