@@ -30,7 +30,7 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
   protected IntegerCoord2d last;
   protected AWTRenderer2d selectionRenderer;
 
-  AWTAbstractMouseSelector() {
+  public AWTAbstractMouseSelector() {
     in = new IntegerCoord2d(-1, -1);
     last = new IntegerCoord2d(-1, -1);
     out = new IntegerCoord2d(-1, -1);
