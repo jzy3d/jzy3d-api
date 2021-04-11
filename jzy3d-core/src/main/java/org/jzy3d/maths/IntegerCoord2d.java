@@ -21,4 +21,9 @@ public class IntegerCoord2d {
   public IntegerCoord2d mul(Coord2d mul) {
     return new IntegerCoord2d((int)(x * mul.x), (int)(y * mul.y));
   }
+  
+  public IntegerCoord2d div(Coord2d div) {
+    return new IntegerCoord2d((int)(x / div.x), (int)(y / div.y));
+  }
+
 }
