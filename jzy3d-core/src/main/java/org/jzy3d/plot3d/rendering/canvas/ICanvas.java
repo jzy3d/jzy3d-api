@@ -92,7 +92,7 @@ public interface ICanvas {
    * <ul>
    * 
    * @see {@link ScalableSurface#setSurfaceScale(float[])} in JOGL javadoc for more informations
-   * @see {@link #getPixelScale()} similar but non symetric method
+   * @see {@link #getPixelScale()} similar but may be non symetric
    * 
    */
   public void setPixelScale(float[] scale);
@@ -100,9 +100,6 @@ public interface ICanvas {
   /**
    * Provide pixel scale as feasible by the Hardware, OS, and JVM, independently of what was asked
    * by {@link #setPixelScale(float[])}. Hence the two functions may not be consistent together.
-   * 
-   * Implementations may return (1,1) even if HiDPI exists on hardware, especially on Java 8. Java
-   * 9+ provide canvas with HiDPI detection.
    */
   public Coord2d getPixelScale();
 

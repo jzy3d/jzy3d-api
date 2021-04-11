@@ -1,14 +1,11 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import java.awt.Graphics2D;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
@@ -17,7 +14,6 @@ import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -85,9 +81,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   
   @Override
   public Coord2d getPixelScale() {
-    Graphics2D g2d = (Graphics2D) getGraphics();
-    AffineTransform globalTransform = g2d.getTransform();
-    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
+    return new Coord2d((int)(getSurfaceWidth()/(float)getWidth()), (int)(getSurfaceHeight()/(float)getHeight()));
   }
 
   @Override
