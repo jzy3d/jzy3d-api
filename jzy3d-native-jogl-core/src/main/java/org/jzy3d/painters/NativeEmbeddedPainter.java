@@ -3,19 +3,16 @@ package org.jzy3d.painters;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
@@ -87,13 +84,13 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
-  public Object acquireGL(ICanvas canvas) {
+  public Object acquireGL() {
     // return getCurrentGL(canvas);
     return null;
   }
 
   @Override
-  public void releaseGL(ICanvas canvas) {
+  public void releaseGL() {
     // getCurrentContext(canvas).release();
   }
 

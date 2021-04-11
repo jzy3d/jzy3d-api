@@ -17,7 +17,6 @@ import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.image.GLImage;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
@@ -59,12 +58,13 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
-  public Object acquireGL(ICanvas canvas) {
+  public Object acquireGL() {
     return getGL();
   }
 
   @Override
-  public void releaseGL(ICanvas canvas) {
+  public void releaseGL() {
+    // in JOGL :
     // getCurrentContext(canvas).release();
   }
 
