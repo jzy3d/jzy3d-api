@@ -1,7 +1,6 @@
 package org.jzy3d.chart.graphs;
 
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;

@@ -2,13 +2,10 @@ package org.jzy3d.chart.fallback;
 
 import java.awt.Dimension;
 import java.util.Collection;
-
 import javax.swing.BorderFactory;
 import javax.swing.border.Border;
-
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
-
 import net.miginfocom.swing.MigLayout;
 
 /** A frame to show a list of charts */

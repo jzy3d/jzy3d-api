@@ -1,7 +1,6 @@
 package org.jzy3d.tests.integration;
 
 import java.util.Random;
-
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;

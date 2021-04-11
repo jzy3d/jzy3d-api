@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.builder.concrete;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.Grid;

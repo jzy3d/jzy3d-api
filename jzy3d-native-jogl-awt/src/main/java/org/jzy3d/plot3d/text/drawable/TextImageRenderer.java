@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
 

@@ -2,7 +2,6 @@ package org.jzy3d.chart.fallback;
 
 import java.awt.GridLayout;
 import java.util.Collection;
-
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.ui.views.ImagePanel;

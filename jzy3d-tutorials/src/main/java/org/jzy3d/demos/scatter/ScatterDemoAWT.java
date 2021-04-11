@@ -1,7 +1,6 @@
 package org.jzy3d.demos.scatter;
 
 import java.util.Random;
-
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartFactory;

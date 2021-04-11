@@ -1,9 +1,7 @@
 package org.jzy3d.bridge.swing;
 
 import java.awt.Graphics;
-
 import javax.swing.JPanel;
-
 import org.jzy3d.bridge.BufferedPanel;
 
 

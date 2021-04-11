@@ -4,10 +4,8 @@ import java.awt.Container;
 import java.awt.Image;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.primitives.enlightables.AbstractEnlightable;
 import org.jzy3d.ui.editors.LightEditor;

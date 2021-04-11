@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.events.IDrawableListener;

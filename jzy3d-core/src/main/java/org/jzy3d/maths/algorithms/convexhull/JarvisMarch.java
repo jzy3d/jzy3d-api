@@ -2,7 +2,6 @@ package org.jzy3d.maths.algorithms.convexhull;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.algorithms.convexhull.algorithms.XYComparator;
 import org.jzy3d.maths.algorithms.convexhull.utils.QuickSort;

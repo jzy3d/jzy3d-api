@@ -1,11 +1,9 @@
 package org.jzy3d.svm.editors;
 
 import java.awt.GridLayout;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
 import org.instantsvm.Parameters;
 
 public class RegressionParamsEditor extends JPanel {

@@ -1,7 +1,6 @@
 package org.jzy3d.bridge.swt;
 
 import java.awt.Component;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;

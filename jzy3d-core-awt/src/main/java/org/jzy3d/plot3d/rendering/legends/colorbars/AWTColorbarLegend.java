@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.rendering.legends.colorbars;
 
 import java.awt.image.BufferedImage;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;

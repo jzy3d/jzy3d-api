@@ -8,7 +8,6 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.GLSLProgram.Strictness;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
-
 import com.jogamp.opengl.GLProfile;
 
 public class DepthPeelingChart extends Chart {

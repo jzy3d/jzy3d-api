@@ -3,7 +3,6 @@ package org.jzy3d.chart2d;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;

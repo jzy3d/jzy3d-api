@@ -2,10 +2,8 @@ package org.jzy3d.plot3d.rendering.ddp;
 
 import java.io.File;
 import java.net.URL;
-
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
-
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 

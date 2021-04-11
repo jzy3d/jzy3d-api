@@ -6,7 +6,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.mocks.jogl.GLMock;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
-
 import com.jogamp.opengl.glu.GLU;
 
 public class TestPoint {

@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.rendering.view.layout;
 import java.util.ArrayList;
 // import java.awt.Rectangle;
 import java.util.List;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;

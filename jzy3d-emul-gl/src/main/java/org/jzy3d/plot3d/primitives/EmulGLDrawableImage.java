@@ -3,12 +3,10 @@ package org.jzy3d.plot3d.primitives;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot3d.primitives.DrawableImage;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**

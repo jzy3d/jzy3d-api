@@ -1,10 +1,8 @@
 package org.jzy3d.maths;
 
 import static org.junit.Assert.assertEquals;
-
 import java.text.ParseException;
 import java.util.Date;
-
 import org.junit.Assert;
 import org.junit.Test;
 

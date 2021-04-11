@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import java.util.List;
-
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;

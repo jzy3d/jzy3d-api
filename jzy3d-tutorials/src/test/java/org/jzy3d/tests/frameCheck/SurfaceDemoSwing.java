@@ -1,7 +1,6 @@
 package org.jzy3d.tests.frameCheck;
 
 import java.io.IOException;
-
 import org.jzy3d.analysis.AbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.bridge.swing.FrameSwing;
@@ -16,7 +15,6 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.tests.frameCheck.Frame;
 import com.jogamp.opengl.awt.GLJPanel;
 
 /**

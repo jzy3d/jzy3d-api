@@ -1,9 +1,7 @@
 package org.jzy3d.chart.controllers.keyboard.screenshot;
 
 import java.io.IOException;
-
 import org.jzy3d.chart.Chart;
-
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 

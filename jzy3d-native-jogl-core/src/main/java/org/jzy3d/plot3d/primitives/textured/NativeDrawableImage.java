@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.textured;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox2d;
@@ -15,7 +14,6 @@ import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.DrawableImage;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
 import org.jzy3d.plot3d.transform.Transform;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GL2GL3;

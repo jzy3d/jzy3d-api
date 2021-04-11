@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.vbo.buffers;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import org.jzy3d.maths.BoundingBox3d;
 
 public class FloatVBO implements VBO<FloatBuffer> {

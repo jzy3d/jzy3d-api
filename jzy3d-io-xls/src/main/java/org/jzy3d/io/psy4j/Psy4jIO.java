@@ -11,9 +11,6 @@ import java.util.TreeSet;
 import org.apache.commons.math3.util.Pair;
 import org.apache.poi.ss.usermodel.Cell;
 import org.jzy3d.io.xls.ExcelBuilder;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
-import com.microsoft.schemas.office.visio.x2012.main.CellType;
 
 public class Psy4jIO {
   private static final int COL_PATIENT = 1;

@@ -3,7 +3,6 @@ package org.jzy3d.junit;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.maths.IntegerCoord2d;
 
 

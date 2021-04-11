@@ -7,7 +7,6 @@ import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 

@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.shaders;
 
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
-
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 

@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.legends.series;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;

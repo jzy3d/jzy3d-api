@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;

@@ -2,7 +2,6 @@ package org.jzy3d.javafx.controllers.mouse;
 
 
 import java.awt.event.MouseWheelEvent;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
@@ -15,10 +14,8 @@ import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.glu.GLU;
-
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;

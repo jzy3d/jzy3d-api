@@ -1,12 +1,9 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.BorderLayout;
-import java.awt.Graphics2D;
 import java.awt.Panel;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.NativeAnimator;
@@ -17,7 +14,6 @@ import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.event.KeyListener;

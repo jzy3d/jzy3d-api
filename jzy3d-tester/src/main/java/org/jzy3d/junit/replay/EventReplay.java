@@ -14,7 +14,6 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.junit.replay.events.IComponentEventLog;
 import org.jzy3d.junit.replay.events.IComponentEventLog.ComponentEventType;

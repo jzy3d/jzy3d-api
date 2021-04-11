@@ -3,7 +3,6 @@ package org.jzy3d.junit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
@@ -14,7 +13,6 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLProfile;

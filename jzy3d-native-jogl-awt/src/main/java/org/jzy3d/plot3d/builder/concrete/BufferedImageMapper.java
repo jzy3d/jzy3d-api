@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.builder.concrete;
 
 import java.awt.image.BufferedImage;
-
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.builder.Mapper;
 

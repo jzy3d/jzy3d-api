@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.rendering.view.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
-
 import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.events.ControllerEvent;
 import org.jzy3d.events.ControllerEventListener;

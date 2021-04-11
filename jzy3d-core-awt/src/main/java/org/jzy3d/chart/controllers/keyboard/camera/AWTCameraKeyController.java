@@ -2,7 +2,6 @@ package org.jzy3d.chart.controllers.keyboard.camera;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.maths.Coord2d;

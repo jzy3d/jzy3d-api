@@ -3,13 +3,11 @@ package org.jzy3d.plot3d.builder.delaunay;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.builder.Tessellator;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Shape;
-
 import il.ac.idc.jdt.DelaunayTriangulation;
 import il.ac.idc.jdt.Triangle;
 

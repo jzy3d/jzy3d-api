@@ -5,6 +5,7 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**

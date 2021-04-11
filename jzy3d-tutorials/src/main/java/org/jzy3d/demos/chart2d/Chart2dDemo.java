@@ -7,12 +7,10 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart2d.Chart2d;
 import org.jzy3d.colors.Color;
@@ -22,7 +20,6 @@ import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.PitchTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.PitchTickRenderer;
 import org.jzy3d.ui.LookAndFeel;
-
 import net.miginfocom.swing.MigLayout;
 
 /**

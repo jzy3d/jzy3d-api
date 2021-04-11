@@ -1,7 +1,6 @@
 package org.jzy3d.chart.factories;
 
 import java.util.Date;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
@@ -29,7 +28,6 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
-
 import com.jogamp.opengl.GLCapabilities;
 
 public class AWTPainterFactory extends NativePainterFactory implements IPainterFactory {

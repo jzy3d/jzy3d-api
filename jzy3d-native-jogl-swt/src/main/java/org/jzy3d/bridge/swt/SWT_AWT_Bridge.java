@@ -3,7 +3,6 @@ package org.jzy3d.bridge.swt;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Frame;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.layout.GridData;
