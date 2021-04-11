@@ -201,9 +201,20 @@ public interface IPainter {
 
   /* ****************************************** */
 
-  public Object acquireGL(ICanvas canvas);
+  /** 
+   * In the context of a multithreaded application, this method allows
+   * retrieving the GL context for the calling thread. Once work is done
+   * the caller should call {@link #releaseGL()}
+   */
+  public Object acquireGL();
 
-  public void releaseGL(ICanvas canvas);
+  /** 
+   * In the context of a multithreaded application, this method allows
+   * releasing the GL context by the calling thread to let other thread use it.
+   * 
+   * {@link #acquireGL()}
+   */
+  public void releaseGL();
 
   public Camera getCamera();
 

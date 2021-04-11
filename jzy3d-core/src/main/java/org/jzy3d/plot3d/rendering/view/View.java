@@ -176,9 +176,9 @@ public class View {
     this.quality = quality;
     this.annotations = factory.newScene(false);
 
-    this.viewOnTopListeners = new ArrayList<IViewIsVerticalEventListener>();
-    this.viewPointChangedListeners = new ArrayList<IViewPointChangedListener>();
-    this.viewLifecycleListeners = new ArrayList<IViewLifecycleEventListener>();
+    this.viewOnTopListeners = new ArrayList<>();
+    this.viewPointChangedListeners = new ArrayList<>();
+    this.viewLifecycleListeners = new ArrayList<>();
     this.wasOnTopAtLastRendering = false;
 
     this.scene.getGraph().getStrategy().setView(this);
@@ -230,18 +230,17 @@ public class View {
    * The result of the projection can be retrieved on the objects's instances.
    */
   public void project() {
-    painter.acquireGL(canvas);
+    painter.acquireGL();
     scene.getGraph().project(painter, cam);
-    painter.releaseGL(canvas);
+    painter.releaseGL();
   }
 
   /** Perform the 3d projection of a 2d coordinate. */
   public Coord3d projectMouse(int x, int y) {
-    painter.acquireGL(canvas);
+    painter.acquireGL();
     Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
-    painter.releaseGL(canvas);
+    painter.releaseGL();
     return p;
-    // return cam.screenToModel(painter, new Coord3d(x, y, 0));
   }
 
   /**

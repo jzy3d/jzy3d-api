@@ -112,6 +112,8 @@ public class PickingSupport {
     {
       painter.glLoadIdentity();
 
+      painter.acquireGL();
+      
       // Setup picking matrix, and update view frustrum
       painter.gluPickMatrix(xpick, ypick, brushSize, brushSize, viewport, 0);
       camera.doShoot(painter, cMode);
@@ -127,6 +129,8 @@ public class PickingSupport {
           releaseCurrentName(painter);
         }
       }
+
+      painter.releaseGL();
 
       // Back to projection matrix
       painter.glMatrixMode_Projection();

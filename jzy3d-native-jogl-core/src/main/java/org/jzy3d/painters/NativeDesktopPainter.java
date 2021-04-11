@@ -55,12 +55,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
-  public Object acquireGL(ICanvas canvas) {
+  public Object acquireGL() {
     return getCurrentGL(canvas);
   }
 
   @Override
-  public void releaseGL(ICanvas canvas) {
+  public void releaseGL() {
     getCurrentContext(canvas).release();
   }
 
