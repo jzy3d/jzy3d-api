@@ -1,9 +1,7 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import java.awt.Graphics2D;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
-import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import org.jzy3d.chart.IAnimator;
@@ -104,9 +102,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
    */
   @Override
   public Coord2d getPixelScale() {
-    Graphics2D g2d = (Graphics2D) getGraphics();
-    AffineTransform globalTransform = g2d.getTransform();
-    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
+    return new Coord2d((int)(getSurfaceWidth()/(float)getWidth()), (int)(getSurfaceHeight()/(float)getHeight()));
   }
 
   double pixelScaleX;

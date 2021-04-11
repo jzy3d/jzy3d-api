@@ -86,12 +86,11 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     else
       window.setSurfaceScale(new float[] {1f, 1f});
   }
-  
+
   @Override
   public Coord2d getPixelScale() {
-    Graphics2D g2d = (Graphics2D) getGraphics();
-    AffineTransform globalTransform = g2d.getTransform();
-    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
+    return new Coord2d((int) (window.getSurfaceWidth() / (float) getWidth()),
+        (int) (window.getSurfaceHeight() / (float) getHeight()));
   }
 
 
