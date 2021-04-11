@@ -12,9 +12,13 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 
 public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
-  ICanvas canvas;
+  protected SelectableScatter scatter;
+  protected int width;
+  protected int height;
+
   
   public AWTScatterMouseSelector(SelectableScatter scatter, Chart chart) {
+    super();
     this.chart = chart;
     this.canvas =  chart.getCanvas();
     this.scatter = scatter;
@@ -27,7 +31,7 @@ public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
     Coord3d[] projection = scatter.getProjection();
     
     Coord2d pixScale = getPixelScale();
-    IntegerCoord2d from  =in.mul(pixScale);
+    IntegerCoord2d from = in.mul(pixScale);
     IntegerCoord2d to = out.mul(pixScale);
     
     for (int i = 0; i < projection.length; i++)
@@ -36,12 +40,7 @@ public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
   }
 
   protected Coord2d getPixelScale() {
-    /*if(chart.getQuality().isPreserveViewportSize()) {
-      return new Coord2d(1,1);
-    }
-    else {*/
-      return canvas.getPixelScale();
-    //}
+    return canvas.getPixelScale();
   }
 
   @Override
@@ -60,7 +59,4 @@ public class AWTScatterMouseSelector extends AWTAbstractMouseSelector {
   @Override
   public void clearLastSelection() {}
 
-  protected SelectableScatter scatter;
-  protected int width;
-  protected int height;
 }
