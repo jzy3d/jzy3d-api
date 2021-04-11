@@ -20,8 +20,17 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMotionListener {
   static Logger LOGGER = Logger.getLogger(AWTAbstractMouseSelector.class);
+  
+  protected Chart chart;
+  protected ICanvas canvas;
 
-  public AWTAbstractMouseSelector() {
+  protected boolean dragging = false;
+  protected IntegerCoord2d in;
+  protected IntegerCoord2d out;
+  protected IntegerCoord2d last;
+  protected AWTRenderer2d selectionRenderer;
+
+  AWTAbstractMouseSelector() {
     in = new IntegerCoord2d(-1, -1);
     last = new IntegerCoord2d(-1, -1);
     out = new IntegerCoord2d(-1, -1);
@@ -34,10 +43,12 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
   public void register(Chart chart) {
     this.chart = chart;
     this.chart.getCanvas().addMouseController(this);
-    final ICanvas c = chart.getCanvas();
-    selectionRenderer = initRenderer2d(c);
-    if (chart.getView() instanceof AWTView)
+    this.canvas = chart.getCanvas();
+    
+    if (chart.getView() instanceof AWTView) {
+      this.selectionRenderer = initRenderer2d(canvas);
       ((AWTView) this.chart.getView()).addRenderer2d(selectionRenderer);
+    }
   }
 
   public void unregister() {
@@ -225,14 +236,4 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
 
   @Override
   public void mouseClicked(MouseEvent e) {}
-
-  /*****************************************/
-
-  protected Chart chart;
-  protected boolean dragging = false;
-  protected IntegerCoord2d in;
-  protected IntegerCoord2d out;
-  protected IntegerCoord2d last;
-
-  protected AWTRenderer2d selectionRenderer;
 }
