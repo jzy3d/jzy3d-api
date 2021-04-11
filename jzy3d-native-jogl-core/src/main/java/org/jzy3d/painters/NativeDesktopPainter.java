@@ -3,7 +3,6 @@ package org.jzy3d.painters;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.PolygonFill;
@@ -13,10 +12,10 @@ import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
+import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
@@ -71,12 +70,14 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
    * {@link GLEventListener}, e.g. when clicking the frame with mouse.
    */
   public GL getCurrentGL(ICanvas canvas) {
-    getCurrentContext(canvas).makeCurrent();
-    return getCurrentContext(canvas).getGL();
+    GLContext context = getCurrentContext(canvas);
+    context.makeCurrent();
+    return context.getGL();
   }
 
   public GLContext getCurrentContext(ICanvas canvas) {
-    return ((INativeCanvas) canvas).getDrawable().getContext();
+    GLAutoDrawable d = ((INativeCanvas) canvas).getDrawable();
+    return d.getContext();
   }
 
   @Override
