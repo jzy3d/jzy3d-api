@@ -1,10 +1,8 @@
 package org.instantsvm.regression;
 
 import java.io.IOException;
-
 import org.instantsvm.Parameters;
 import org.instantsvm.SVM;
-
 import libsvm.svm_model;
 
 public class RegressionSVM extends SVM {

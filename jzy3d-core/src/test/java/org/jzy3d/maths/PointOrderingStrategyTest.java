@@ -2,7 +2,6 @@ package org.jzy3d.maths;
 
 import java.util.ArrayList;
 import java.util.Random;
-
 import org.junit.Test;
 import org.jzy3d.plot3d.rendering.ordering.PointOrderingStrategy;
 import org.jzy3d.plot3d.rendering.view.Camera;

@@ -3,7 +3,6 @@ package org.jzy3d.chart.controllers.keyboard.screenshot;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
-
 import org.jzy3d.chart.Chart;
 
 /**

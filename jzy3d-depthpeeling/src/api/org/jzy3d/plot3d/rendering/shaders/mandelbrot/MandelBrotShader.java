@@ -4,7 +4,6 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.shaders.Shaderable;
-
 import com.jogamp.opengl.GL2;
 
 public class MandelBrotShader extends Shaderable {

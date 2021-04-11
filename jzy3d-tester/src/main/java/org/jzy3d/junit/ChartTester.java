@@ -2,15 +2,12 @@ package org.jzy3d.junit;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import javax.imageio.ImageIO;
-
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.jzy3d.chart.Chart;

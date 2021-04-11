@@ -2,7 +2,6 @@ package org.jzy3d.tests.emulgl;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;

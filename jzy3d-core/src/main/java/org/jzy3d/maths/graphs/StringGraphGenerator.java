@@ -1,7 +1,6 @@
 package org.jzy3d.maths.graphs;
 
 import java.util.Random;
-
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot3d.primitives.graphs.layout.DefaultGraphLayout2d;
 

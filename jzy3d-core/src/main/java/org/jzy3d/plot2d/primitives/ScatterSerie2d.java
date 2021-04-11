@@ -1,7 +1,6 @@
 package org.jzy3d.plot2d.primitives;
 
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRedAndGreen;

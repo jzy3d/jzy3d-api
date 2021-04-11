@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.contour;
 
 import java.util.List;
-
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.LineStrip;

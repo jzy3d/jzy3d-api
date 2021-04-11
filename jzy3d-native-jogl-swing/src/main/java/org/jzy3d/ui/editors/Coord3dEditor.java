@@ -1,11 +1,9 @@
 package org.jzy3d.ui.editors;
 
 import java.awt.GridLayout;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
-
 import org.jzy3d.maths.Range;
 
 

@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.builder.concrete;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;

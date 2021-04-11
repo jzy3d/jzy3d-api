@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jzy3d.io.SimpleFile;
 import org.jzy3d.junit.replay.events.EventParser;

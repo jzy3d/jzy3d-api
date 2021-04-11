@@ -1,7 +1,6 @@
 package org.jzy3d.demos.lines;
 
 import java.util.concurrent.Executors;
-
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartFactory;

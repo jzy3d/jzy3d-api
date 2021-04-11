@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.builder.concrete;
 
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.plot3d.primitives.Composite;

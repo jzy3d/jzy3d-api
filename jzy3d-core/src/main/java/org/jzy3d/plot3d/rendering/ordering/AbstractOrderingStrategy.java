@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.rendering.ordering;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.Camera;

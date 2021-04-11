@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.scene;
 
 import java.util.List;
 import java.util.Vector;
-
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;

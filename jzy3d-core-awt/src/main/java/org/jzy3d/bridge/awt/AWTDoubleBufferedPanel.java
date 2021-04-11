@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Panel;
-
 import org.jzy3d.bridge.BufferedPanel;
 
 

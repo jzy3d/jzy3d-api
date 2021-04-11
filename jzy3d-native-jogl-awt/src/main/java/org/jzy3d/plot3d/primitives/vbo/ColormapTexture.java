@@ -2,10 +2,8 @@ package org.jzy3d.plot3d.primitives.vbo;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;

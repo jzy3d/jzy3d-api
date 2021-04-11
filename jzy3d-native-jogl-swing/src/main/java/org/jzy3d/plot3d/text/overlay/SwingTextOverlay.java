@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.text.overlay;
 
 import java.awt.Component;
-
 import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 

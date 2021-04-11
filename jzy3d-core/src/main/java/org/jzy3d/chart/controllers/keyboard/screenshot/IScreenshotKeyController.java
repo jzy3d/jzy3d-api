@@ -1,7 +1,6 @@
 package org.jzy3d.chart.controllers.keyboard.screenshot;
 
 import java.io.IOException;
-
 import org.jzy3d.chart.Chart;
 
 public interface IScreenshotKeyController {

@@ -13,7 +13,6 @@ import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.AWTTextLayout;
 import org.jzy3d.plot3d.text.align.Horizontal;
-import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.jogl.style.DefaultTextStyle;
 import com.jogamp.opengl.util.awt.TextRenderer;

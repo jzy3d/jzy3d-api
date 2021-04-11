@@ -13,7 +13,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
-
 import com.jogamp.opengl.GLCapabilities;
 
 

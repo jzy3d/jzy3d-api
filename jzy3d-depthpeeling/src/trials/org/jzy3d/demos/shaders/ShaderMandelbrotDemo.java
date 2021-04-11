@@ -14,7 +14,6 @@ import org.jzy3d.plot3d.rendering.shaders.mandelbrot.MandelBrotShader;
 import org.jzy3d.plot3d.rendering.shaders.mandelbrot.TexSurface;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 

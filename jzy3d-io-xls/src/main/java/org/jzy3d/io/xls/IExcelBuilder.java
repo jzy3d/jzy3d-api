@@ -3,7 +3,6 @@ package org.jzy3d.io.xls;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;

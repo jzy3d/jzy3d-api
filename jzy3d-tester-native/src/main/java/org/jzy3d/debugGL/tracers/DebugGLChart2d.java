@@ -3,7 +3,6 @@ package org.jzy3d.debugGL.tracers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart2d.Chart2d;
 import org.jzy3d.chart2d.Chart2dFactory;

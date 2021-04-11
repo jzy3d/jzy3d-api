@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
-
 import jgl.GL;
 import jgl.context.gl_util;
 

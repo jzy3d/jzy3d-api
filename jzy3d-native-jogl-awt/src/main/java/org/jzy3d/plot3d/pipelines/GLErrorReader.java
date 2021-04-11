@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.pipelines;
 
 import org.apache.log4j.Logger;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GL2ES2;

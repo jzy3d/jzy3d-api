@@ -20,7 +20,6 @@ import org.jzy3d.plot3d.rendering.view.EmulGLViewOverlay;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 import org.jzy3d.plot3d.rendering.view.layout.EmulGLViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
-
 import jgl.GL;
 
 public class EmulGLPainterFactory implements IPainterFactory {

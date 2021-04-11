@@ -1,7 +1,6 @@
 package org.jzy3d.javafx;
 
 import java.util.Date;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;

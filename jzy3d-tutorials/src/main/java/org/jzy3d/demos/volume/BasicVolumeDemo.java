@@ -1,7 +1,6 @@
 package org.jzy3d.demos.volume;
 
 import java.nio.ByteBuffer;
-
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -11,7 +10,6 @@ import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.volume.Texture3D;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-
 import com.jogamp.opengl.util.GLBuffers;
 
 /**

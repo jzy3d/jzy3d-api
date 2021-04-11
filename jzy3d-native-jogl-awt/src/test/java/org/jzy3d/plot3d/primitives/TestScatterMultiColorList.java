@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.colors.Color;

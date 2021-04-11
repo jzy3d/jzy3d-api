@@ -3,7 +3,6 @@ package org.jzy3d.chart.controllers.mouse.selection;
 import java.awt.Graphics2D;
 import java.util.Deque;
 import java.util.List;
-
 import org.jzy3d.maths.ConvexHull;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
