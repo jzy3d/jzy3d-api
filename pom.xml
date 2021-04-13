@@ -39,6 +39,10 @@
 			<id>jacob.filik</id>
 			<name>Jacob Filik</name>
 		</developer>
+		<developer>
+			<id>hannes.wellmann</id>
+			<name>Hannes Wellmann</name>
+		</developer>
 	</developers>
 
 	<modules>
