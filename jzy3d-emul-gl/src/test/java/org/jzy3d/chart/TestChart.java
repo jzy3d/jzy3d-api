@@ -3,6 +3,7 @@ package org.jzy3d.chart;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
@@ -19,18 +20,24 @@ public class TestChart {
   public void whenChart_IS_Animated_ThenMouse_ISNOT_UpdatingViewUponRotation() {
     Quality q = Quality.Advanced.clone();
     
+    // When
     Assert.assertTrue(q.isAnimated());
-    
     ChartFactory factory = new EmulGLChartFactory();
     Chart chart = factory.newChart(q);
     
-    Assert.assertTrue(chart.getQuality().isAnimated());
-    
-    chart.render();
+    // Then
+    Assert.assertTrue("Check chart is animated", chart.getQuality().isAnimated());
 
+    // When
     ICameraMouseController mouse = chart.addMouseCameraController();
-    
+    // Then    
     Assert.assertFalse(mouse.isUpdateViewDefault());
+
+    // When
+    ICameraKeyController key = chart.addKeyboardCameraController();
+    // Then    
+    Assert.assertFalse(key.isUpdateViewDefault());
+
   }
   
   /**
@@ -39,18 +46,26 @@ public class TestChart {
   @Test
   public void whenChart_ISNOT_Animated_ThenMouse_IS_UpdatingViewUponRotation() {
     Quality q = Quality.Advanced.clone();
-    q.setAnimated(false);
-
-    Assert.assertFalse(q.isAnimated());
     
+    // When
+    q.setAnimated(false);
+    Assert.assertFalse(q.isAnimated());
     ChartFactory factory = new EmulGLChartFactory();
     Chart chart = factory.newChart(q);
     
-    Assert.assertFalse(chart.getQuality().isAnimated());
+    // Then
+    Assert.assertFalse("Check chart is NOT animated", chart.getQuality().isAnimated());
     
+    // When
     ICameraMouseController mouse = chart.addMouseCameraController();
-    
+    // Then
     Assert.assertTrue(mouse.isUpdateViewDefault());
+    
+    // When
+    ICameraKeyController key = chart.addKeyboardCameraController();
+    // Then    
+    Assert.assertTrue(key.isUpdateViewDefault());
+
   }
   
 @Ignore  
