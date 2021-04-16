@@ -23,6 +23,40 @@ Despite not exhaustive at all, I was able to have the following performance on a
 
 Please report here the performance you encounter while running EmulGL charts by [adding comments to this issue](https://github.com/jzy3d/jzy3d-api/issues/149).
 
+# Tuning performance
+
+The quick hints to play with performance are below, if you are willing to understand how these parameters affect performance, read the next section.
+
+## Reducing rendering quality in favor of faster repaint
+
+```java
+Quality q = Quality.Advanced;
+q.setPreserveViewportSize(true); // prevent HiDPI/Retina to apply hence reduce the number of pixel to process
+
+Chart chart = factory.newChart(q);
+
+```
+
+## Reducing liveness in favor of less CPU usage
+
+```java
+Quality q = Quality.Advanced;
+q.setAnimated(false); // avoid rendering continuously, especially when chart does not need to change (most often)
+
+Chart chart = factory.newChart(q);
+```
+
+
+## Improving rendering quality with possible liveness issues
+
+```java
+Quality q = Quality.Advanced;
+q.setPreserveViewportSize(false); // Let HiDPI/Retina inform their pixel ratio to process GL image on more pixels
+q.setAnimated(true); // requires the mouse, keyboard and thread events to be rate limited to avoid AWT congestion
+
+Chart chart = factory.newChart(q);
+```
+
 # Repaint on demand VS repaint continuously
 
 Repaint on demand means refreshing the canvas if at least one pixel changes. This is less CPU intensive in the long term as
@@ -32,27 +66,30 @@ however a carefull management of events that is exposed below and shows liveness
 Repainting continuously allows getting rid off all these issues : a CPU thread will run [at a mean rate](https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-emul-gl/src/main/java/org/jzy3d/chart/EmulGLAnimator.java#L6) and ensure the chart always appear in the correct position without needing to handle refresh upon mouse, key or other thread events.
 
 Setting repaint on demand is handled by
-```
+```java
 Quality q = Quality.Advanced;
 q.setAnimated(false);
 
 Chart chart = factory.newChart(q);
+chart.addMouseCameraController();
+chart.addKeyboardCameraController();
 ```
-
-Repaint continuously requires the opposite setting.
+Mouse, keyboard, and rotation thread controllers will behave according to the configuration (trigger repaint is repaint is
+  on demand, do nothing if repaint continuously).
 
 # Handling slow rendering
 
 EmulGL/jGL run in CPU, hence the rendering performance remains sensitive to
 * the number of pixels (the same Processing Unit must handle all pixels)
 * the hardware capacity (HiDMI & Retina display may multiply the physicial number of pixels)
-* the number of drawable to draw
+* the number of drawables to draw
+* the number of rendering requests
 
 In the worse conditions, rendering time may reach a visible duration (e.g. 200ms). In that case, policies must
-be defined to avoid freezing AWT either for rendering or for handling interactions.
+be defined to avoid freezing AWT either for rendering or for handling interactions. The below sections explain why the JVM
+brings limitations, and how EmulGL resolves them.
 
 ## Integrating in AWT
-
 
 ### Unpredictability of AWT
 
