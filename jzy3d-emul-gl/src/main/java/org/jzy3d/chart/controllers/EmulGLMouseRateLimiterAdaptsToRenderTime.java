@@ -53,7 +53,7 @@ public class EmulGLMouseRateLimiterAdaptsToRenderTime extends RateLimiterByMilis
     return allowRendering;
   }
 
-  private void adaptRateLimitToRenderTimeHistory() {
+  protected void adaptRateLimitToRenderTimeHistory() {
     double lastRenderingTimeMs = canvas.getLastRenderingTime();
 
     if (lastRenderingTimeMs != EmulGLCanvas.LAST_RENDER_TIME_UNDEFINED) {

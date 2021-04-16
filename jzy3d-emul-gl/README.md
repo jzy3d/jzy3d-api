@@ -23,27 +23,89 @@ Despite not exhaustive at all, I was able to have the following performance on a
 
 Please report here the performance you encounter while running EmulGL charts by [adding comments to this issue](https://github.com/jzy3d/jzy3d-api/issues/149).
 
-# Implementation
+# Repaint on demand VS repaint continuously
 
-## OpenGL Java implementation
-[jGL readme](https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jGL/README.md) is the best place to better understand how OpenGL is implemented and how the framework is structured.
+Repaint on demand means refreshing the canvas if at least one pixel changes. This is less CPU intensive in the long term as
+chart are only changed if user interacts with it, add elements, or if the application resizes. Repainting on demand requires
+however a carefull management of events that is exposed below and shows liveness issues in some rare conditions.
+
+Repainting continuously allows getting rid off all these issues : a CPU thread will run [at a mean rate](https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-emul-gl/src/main/java/org/jzy3d/chart/EmulGLAnimator.java#L6) and ensure the chart always appear in the correct position without needing to handle refresh upon mouse, key or other thread events.
+
+Setting repaint on demand is handled by
+```
+Quality q = Quality.Advanced;
+q.setAnimated(false);
+
+Chart chart = factory.newChart(q);
+```
+
+Repaint continuously requires the opposite setting.
+
+# Handling slow rendering
+
+EmulGL/jGL run in CPU, hence the rendering performance remains sensitive to
+* the number of pixels (the same Processing Unit must handle all pixels)
+* the hardware capacity (HiDMI & Retina display may multiply the physicial number of pixels)
+* the number of drawable to draw
+
+In the worse conditions, rendering time may reach a visible duration (e.g. 200ms). In that case, policies must
+be defined to avoid freezing AWT either for rendering or for handling interactions.
 
 ## Integrating in AWT
 
-Integrating in AWT is tricky because of how AWT works and how the canvas displaying 3D will react to multiple events.
 
-I discovered a few thing on my way that are interesting
-* You don't know when AWT will really render. You only send rendering or interaction 
-  events (mouse, ...) to the EventQueue. The JVM will decide when it will be actually displayed.
-* You can't be sure that all events will all be handled : the [EventQueue has the ability 
-  to coalesce multiple mouse or paint event](https://docs.oracle.com/javase/8/docs/api/java/awt/EventQueue.html#postEvent-java.awt.AWTEvent-) 
-  in case it becomes overwhelmed by queries. 
-  As a consequence, in the case multiple rotation command triggered by a mouse drag event - 
-  and if these event lead to slow rendering, then you may only see the last rendering and not all intermediate images. 
-  In that case, it is necessary to limit the event rate to ensure not too many rendering are triggered (said 
-  differently, that repaint query are not arriving faster than the ability to compute what should 
-  be drawn - which may arrive if EmulGL is used on large screen with HiDPI (more pixel to compute)).
-* All windowing toolkit event are not coalesced! For example mouse wheel does not seam to be coalesced.
+### Unpredictability of AWT
+
+Integrating in AWT is tricky because of how AWT works and how it will react to multiple events. Such events may be
+* canvas display & resize occuring in the embedding application
+* mouse events
+* keyboard events
+* application events (e.g. a NON GUI class allows edit a 3D parameter triggering a new rendering outside the AWT Thread)
+
+I discovered a few thing about non predictability of rendering upon reaction to these events. These are my understanding but *I may wrong*.
+Please correct me via [an issue](https://github.com/jzy3d/jzy3d-api/issues) if I am!
+
+#### You don't know when AWT will really render
+
+AWT send rendering or interaction events (mouse, ...) to the EventQueue.
+The JVM will decide when it will be actually displayed.
+I found no event or hook to get notified when an update happens.
+
+<img src="doc/awt-event-queue.png">
+
+[Edit schema](https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=wz_twV5gX99-#)
+
+#### You can't be sure that all events will all be handled independently
+
+The [EventQueue has the ability to coalesce multiple mouse or paint event](https://docs.oracle.com/javase/8/docs/api/java/awt/EventQueue.html#postEvent-java.awt.AWTEvent-)
+in case it becomes overwhelmed by queries that it had no time to handled.
+
+As a consequence, in the case multiple rotation command triggered by a mouse drag event -
+and if these event lead to slow rendering, then you may only see the last rendering and not all intermediate images.
+In that case, it is necessary to limit the event rate to ensure not too many rendering are triggered (said
+differently, that repaint query are not arriving faster than the ability to compute what should
+be drawn).
+
+<img src="doc/awt-coalesce.png">
+
+[Edit schema](https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=IG_tq9NVLe03#)
+
+All windowing toolkit event are not coalesced! For example the mouse wheel events do not seam to be coalesced, whereas mouse dragged events are.
+
+#### Actual rendering in AWT
+
+Rendering of AWT components is made with... OpenGL! But it is limited to 2D graphics only.
+
+## EmulGL canvas
+
+The below map describes how EmulGL canvas replies to these events.
+
+
+<img src="doc/emulgl-canvas.png">
+
+[Edit schema](https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=IG_tq9NVLe03#)
+
+
 
 
 
