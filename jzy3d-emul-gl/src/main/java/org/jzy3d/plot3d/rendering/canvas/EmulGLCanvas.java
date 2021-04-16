@@ -11,6 +11,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
@@ -25,6 +26,7 @@ import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import jgl.GLCanvas;
+import jgl.GLUT;
 import jgl.context.gl_pointer;
 
 public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorable {
@@ -36,25 +38,34 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
    * if true if false : call full component.resize to force resize + view.render + glFlush + swap
    * image
    */
-  public static boolean TO_BE_CHOOSEN_REPAINT_WITH_FLUSH = false;
+  public static final boolean TO_BE_CHOOSEN_REPAINT_WITH_FLUSH = false;
 
   /** set to TRUE to overlay performance info on top left corner */
   protected boolean profileDisplayMethod = false;
   /** set to TRUE to show in console events of the component (to debug GLUT) */
   protected boolean debugEvents = false;
 
+  protected TicToc profileDisplayTimer = new TicToc();
+  protected Font profileDisplayFont = new Font("Arial", Font.PLAIN, 12);
+  protected int profileDisplayCount = 0;
+
+  protected Monitor monitor;
+
+
   protected View view;
   protected EmulGLPainter painter;
   protected IAnimator animator;
+
+  protected AtomicBoolean isRenderingFlag = new AtomicBoolean(false);
 
   public EmulGLCanvas(IChartFactory factory, Scene scene, Quality quality) {
     super();
     view = scene.newView(this, quality);
     painter = (EmulGLPainter) view.getPainter();
     painter.setCanvas(this);
-    
+
     init(getWidth(), getHeight());
-    
+
     animator = factory.getPainterFactory().newAnimator(this);
 
     if (quality.isPreserveViewportSize()) {
@@ -62,27 +73,25 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     } else {
       myGL.setAutoAdaptToHiDPI(true);
     }
-    
-
-
     // FROM NATIVE
-    //
     // renderer = factory.newRenderer(view, traceGL, debugGL);
     // addGLEventListener(renderer);
+    
+    
   }
-  
+
   @Override
   public void setPixelScale(float[] scale) {
-    Logger.getLogger(EmulGLCanvas.class).info("Not implemented. Pixel scale is driven by AWT Canvas itself and jGL adapts to it");
+    Logger.getLogger(EmulGLCanvas.class)
+        .info("Not implemented. Pixel scale is driven by AWT Canvas itself and jGL adapts to it");
   }
-  
+
   @Override
   public Coord2d getPixelScale() {
     Graphics2D g2d = (Graphics2D) getGraphics();
     AffineTransform globalTransform = g2d.getTransform();
     return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
   }
-
 
   @Override
   public IAnimator getAnimation() {
@@ -93,7 +102,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   @Override
   public void processEvent(AWTEvent e) {
     if (debugEvents && shouldPrintEvent(e)) {
-      System.out.println("EMulGLCanvas.processEvent:" + e);
+      System.out.println("EmulGLCanvas.processEvent:" + e);
     }
     super.processEvent(e);
   }
@@ -102,12 +111,16 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     return !(e.getID() == MouseEvent.MOUSE_MOVED);
   }
 
-  // ******************* VIEW ******************* //
+  // ******************* INIT ******************* //
 
-  // Equivalent to registering a Renderer3d
+  /** Equivalent to registering a Renderer3d in native canvas. */
   protected void init(int width, int height) {
     updatePainterWithGL(); // painter can call this canvas GL
+    initGLUT(width, height);
+    view.init();
+  }
 
+  protected void initGLUT(int width, int height) {
     myUT.glutInitWindowSize(width, height);
     myUT.glutInitWindowPosition(getX(), getY());
 
@@ -121,31 +134,40 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     // TODO : RESIZED semble emis par le composant quand on fait un mouse dragg!!
 
 
-    myUT.glutMainLoop();
+    // myUT.glutMainLoop();
 
     // CLARIFIER comment le composant se met à jour :
     // en autonome sur paint (quel cycle de vie?)
     // sur demande quand on fait "updateView" dans les mouse / thread controller etc
     // pourquoi est il nécessaire de le faire pendant mouse dragged?
-    
-    
-    view.init();
-
   }
 
 
+  // ******************* DISPLAY ******************* //
+
   /**
-   * Method is synchronized :
-   * <ul>
-   * <li>to avoid multiple concurrent calls to doDisplay which might make jGL get crazy with GL
-   * state consistency : GL states must be consistent during a complete rendering pass, and should
-   * not be modified by a second rendering pass in the middle of the first one.
-   * <li>to ensure rendered image is painted in GLCanvas immediately after being generated
-   * </ul>
+   * Triggers an atomic rendering of a frame, measure rendering performance and update the status of
+   * rendering (active or not).
+   * 
+   * Performance measurement can be seen on screen if {@link #setProfileDisplayMethod(boolean)} was
+   * set to true OR can be collected by a {@link Monitor} defined by {@link #add(Monitor)}.
+   * 
+   * Method is synchronized to avoid multiple concurrent calls to doDisplay which might make jGL get
+   * crazy with GL state consistency : GL states must be consistent during a complete rendering
+   * pass, and should not be modified by a second rendering pass in the middle of the first one.
+   * 
+   * In addition, the display method has a {@link #isRenderingFlag} so that external components may
+   * known that the canvas is working or not. This allows ignoring a rendering query in case the
+   * canvas is not ready for working. This is different from making use of <code>synchronized</code>
+   * (which lead to a queue of calls to be resolved) in that one may simply not append work to do
+   * according to the status of the canvas. This is used by mouse and thread controller which tend
+   * to send lot of rendering queries faster than the frame rate.
    */
   public synchronized void doDisplay() {
-    TicToc t = new TicToc();
-    t.tic();
+    //System.out.println("IS RENDERING");
+    isRenderingFlag.set(true);
+
+    profileDisplayTimer.tic();
 
     if (view != null) {
 
@@ -168,67 +190,53 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
       // -------------------------------
       // PROFILE
-      t.toc();
+      profileDisplayTimer.toc();
+      
+      lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
+      
       if (profileDisplayMethod) {
-        postRenderProfiling(t.elapsedMilisecond());
+        postRenderProfiling(lastRenderingTimeMs);
 
       }
       if (monitor != null) {
-        monitor(monitor, t.elapsedMilisecond());
+        monitorRenderingTime(monitor, lastRenderingTimeMs);
       }
 
-      kDisplay++;
-    }
-  }
-
-  protected void postRenderProfiling(double mili) {
-    int x = 05;
-    int y = 12;
-    
-    postRenderString("FrameID    : " + kDisplay, x, y, Color.BLACK);
-    postRenderString("Render in  : " + mili + "ms", x, y * 2, Color.BLACK);
-    postRenderString("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * 3, Color.BLACK);
-    postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
-  }
-
-  protected Font profileFont = new Font("Arial", Font.PLAIN, 12);
-  protected int kDisplay = 0;
-
-
-  /** Draw a 2d text at the given position */
-  void postRenderString(String message, int x, int y, Color color) {
-    painter.getGL().appendTextToDraw(profileFont, message, x, y, color.r, color.g, color.b);
-  }
-
-
-  // TODO : GLUT.processComponentEvent is calling reshape THEN display, so no need
-  // to call view.render here (double rendering otherwise).
-  public synchronized void doReshape(int w, int h) {
-    // System.out.println("doReshape " + w);
-    myUT.glutInitWindowSize(w, h);
-
-    if (view != null) {
-      view.markDimensionDirty();
-      // then doDisplay will be called by glutReshapeFunc
+      profileDisplayCount++;
     }
 
+
+    isRenderingFlag.set(false);
+    //System.out.println("DONE RENDERING");
+
   }
-
-  public synchronized void doMotion(int x, int y) {
-    doDisplay();
-    // paint
-    System.out.println("EmulGLCanvas.doMotion!" + kDisplay);
+  
+  protected double lastRenderingTimeMs = LAST_RENDER_TIME_UNDEFINED;
+  
+  public double getLastRenderingTime() {
+    return lastRenderingTimeMs;
   }
+  
+  public static final double LAST_RENDER_TIME_UNDEFINED = -1;
 
+  /*
+   * @Override public void paint(Graphics g) { synchronized(this) {
+   * System.out.println("IS RENDERING"); isRenderingFlag.set(true); //super.paint(g);
+   * myGL.glXSwapBuffers(g, this); isRenderingFlag.set(false); System.out.println("DONE RENDERING");
+   * } }
+   */
 
-  /* *************************************************** */
+  @Override
+  public void display() {
+    forceRepaint();
+  }
 
   /**
    * Can be used to update image if camera has changed position. (usually called by
    * {@link View#shoot()})
    * 
-   * FIXME : Warning if this is invoked by a thread external to AWT, maybe this will require to
-   * redraw GL while GL is already used by AWT.
+   * Warning if this is invoked by a thread external to AWT, this may redraw 
+   * GL while GL is already used by AWT, which would turn GL into an inconsistent state.
    */
   @Override
   public void forceRepaint() {
@@ -244,9 +252,82 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
 
     // This triggers copy of newly generated picture to the GLCanvas
-    repaint();
+    // repaint();
   }
 
+
+  public AtomicBoolean getIsRenderingFlag() {
+    return isRenderingFlag;
+  }
+
+  protected void postRenderProfiling(double mili) {
+    int x = 05;
+    int y = 12;
+
+    postRenderString("FrameID    : " + profileDisplayCount, x, y, Color.BLACK);
+    postRenderString("Render in  : " + mili + "ms", x, y * 2, Color.BLACK);
+    postRenderString("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x,
+        y * 3, Color.BLACK);
+    postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
+  }
+
+  /** Draw a 2d text at the given position */
+  protected void postRenderString(String message, int x, int y, Color color) {
+    painter.getGL().appendTextToDraw(profileDisplayFont, message, x, y, color.r, color.g, color.b);
+  }
+
+  // ******************* RESIZE ******************* //
+
+  /**
+   * Handle resize events emitted by GLUT.
+   * 
+   * {@link GLUT#processComponentEvent(ComponentEvent)} is calling reshape handler (this method)
+   * THEN the display handler ({@link #doDisplay()), so this method will only inform {@link GLUT}
+   * and {@link View} that window size changed.
+   */
+  public synchronized void doReshape(int w, int h) {
+    // System.out.println("doReshape " + w);
+    myUT.glutInitWindowSize(w, h);
+
+    if (view != null) {
+      view.markDimensionDirty();
+      // then doDisplay will be called by glutReshapeFunc
+    }
+
+  }
+
+  // ******************* MOUSE MOTION ******************* //
+
+  /**
+   * Handle mouse events emitted by GLUT. Most probably not registered as mouse already handled by
+   * Jzy3D.
+   */
+  public synchronized void doMotion(int x, int y) {
+    doDisplay();
+    System.out.println("EmulGLCanvas.doMotion!" + profileDisplayCount);
+  }
+
+  // ******************* SCREENSHOTS ******************* //
+
+  @Override
+  public BufferedImage screenshot() {
+    EmulGLPainter painter = (EmulGLPainter) getView().getPainter();
+    return (BufferedImage) painter.getGL().getRenderedImage();
+  }
+
+  @Override
+  public void screenshot(File file) throws IOException {
+    if (!file.getParentFile().exists())
+      file.mkdirs();
+    ImageIO.write(screenshot(), "png", file);
+  }
+
+  /* *************************************************** */
+
+
+  /**
+   * Register {@link EmulGLPainter}.
+   */
   protected void updatePainterWithGL() {
     if (view != null && view.getPainter() != null && getGL() != null) {
       EmulGLPainter painter = (EmulGLPainter) view.getPainter();
@@ -271,24 +352,13 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     return this.getHeight();
   }
 
-  @Override
-  public BufferedImage screenshot() {
-    EmulGLPainter painter = (EmulGLPainter) getView().getPainter();
-    return (BufferedImage) painter.getGL().getRenderedImage();
-  }
-
-  @Override
-  public void screenshot(File file) throws IOException {
-    if (!file.getParentFile().exists())
-      file.mkdirs();
-
-    ImageIO.write(screenshot(), "png", file);
-  }
 
   @Override
   public void dispose() {
 
   }
+
+  // ******************* LISTENERS ******************* //
 
   @Override
   public void addMouseController(Object o) {
@@ -310,21 +380,17 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   @Override
   public void addKeyController(Object o) {
+    addKeyListener((java.awt.event.KeyListener) o);
   }
 
   @Override
   public void removeKeyController(Object o) {
+    removeKeyListener((java.awt.event.KeyListener) o);
   }
 
   @Override
   public String getDebugInfo() {
     return null;
-  }
-
-
-  @Override
-  public void display() {
-    forceRepaint();
   }
 
   /* ******************* DEBUG ********************* */
@@ -363,6 +429,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     painter.getGL().getPointer().geometry.countBegin = 0;
   }
 
+  /* ******************* MONITOR ********************* */
+
   @Override
   public String getFullname() {
     return this.toString();
@@ -378,12 +446,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     this.monitor = monitor;
   }
 
-  protected void monitor(Monitor monitor, double mili) {
-    CanvasPerfMeasure m =
-        new CanvasPerfMeasure(getWidth(), getHeight(), getWidth() * getHeight(), mili);
-    monitor.add(this, m);
+  protected void monitorRenderingTime(Monitor monitor, double mili) {
+    monitor.add(this,
+        new CanvasPerfMeasure(getWidth(), getHeight(), getWidth() * getHeight(), mili));
   }
 
 
-  Monitor monitor;
 }

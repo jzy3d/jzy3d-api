@@ -126,7 +126,6 @@ public class EmulGLPainterFactory implements IPainterFactory {
   @Override
   public AWTCameraMouseController newMouseCameraController(Chart chart) {
     return new AWTCameraMouseController(chart);
-    // return new EmulGLMouse(chart);
   }
 
   @Override

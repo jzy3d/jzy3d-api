@@ -17,17 +17,17 @@
 	</properties>
 
 	<dependencies>
-    <dependency>
-        <groupId>org.jzy3d</groupId>
-        <artifactId>jzy3d-core</artifactId>
-        <version>${project.version}</version>
-    </dependency>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
-    <dependency>
-        <groupId>org.jzy3d</groupId>
-        <artifactId>jzy3d-core-awt</artifactId>
-        <version>${project.version}</version>
-    </dependency>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-core-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 
 
 		<dependency>
@@ -35,6 +35,13 @@
 			<artifactId>jGL</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>4.4</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.jzy3d</groupId>
@@ -49,7 +56,7 @@
 			<version>2.22.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- <dependency> <groupId>junit</groupId> <artifactId>junit</artifactId>
+		<!-- <dependency> <groupId>junit</groupId> <artifactId>junit</artifactId> 
 			<version>4.9</version> <type>jar</type> <scope>test</scope> </dependency> -->
 	</dependencies>
 

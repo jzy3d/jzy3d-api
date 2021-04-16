@@ -241,6 +241,14 @@ public class GL {
       pixelScaleY = globalTransform.getScaleY();  
     }
     
+    public void setPixelScaleX(double pixelScaleX) {
+      this.pixelScaleX = pixelScaleX;
+    }
+
+    public void setPixelScaleY(double pixelScaleY) {
+      this.pixelScaleY = pixelScaleY;
+    }
+
     /** Reset pixel scale to (1,1) */
     protected void resetPixelScale() {
       pixelScaleX = 1;

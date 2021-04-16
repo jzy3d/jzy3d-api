@@ -164,7 +164,6 @@ public class Chart {
     return canvas.screenshot();
   }
 
-
   public void updateProjectionsAndRender() {
     getView().shoot();
     getView().project();
@@ -205,7 +204,14 @@ public class Chart {
   }
 
   public ICameraKeyController addKeyboardCameraController() {
-    return getFactory().getPainterFactory().newKeyboardCameraController(this);
+    ICameraKeyController key = getFactory().getPainterFactory().newKeyboardCameraController(this);
+
+    // Switch between on demand/continuous rendering
+    // keep to false if animated to avoid double rendering
+    // keep to true otherwise the mouse does not update 
+    key.setUpdateViewDefault(!getQuality().isAnimated()); 
+
+    return key;
   }
 
   public IScreenshotKeyController addKeyboardScreenshotController() {
