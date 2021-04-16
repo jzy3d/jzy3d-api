@@ -115,10 +115,13 @@ I found no event or hook to get notified when an update happens.
 #### You can't be sure that all events will all be handled independently
 
 The [EventQueue has the ability to coalesce multiple mouse or paint event](https://docs.oracle.com/javase/8/docs/api/java/awt/EventQueue.html#postEvent-java.awt.AWTEvent-)
-in case it becomes overwhelmed by queries that it had no time to handled.
+in case it becomes overwhelmed by similar queries that it had no time to process. A mouse event or a canvas repaint on the
+whole canvas (as EmulGL does) are events considered coalescable : the JVM is right dropping images display if a new image
+rendering has been queried.
 
 As a consequence, in the case multiple rotation command triggered by a mouse drag event -
-and if these event lead to slow rendering, then you may only see the last rendering and not all intermediate images.
+and if these events lead to slow rendering, then you may only see the last rendering and not all intermediate images. This will
+let the user feel that rotating is slow whereas intermidate rotation updates were just drop for display. 
 In that case, it is necessary to limit the event rate to ensure not too many rendering are triggered (said
 differently, that repaint query are not arriving faster than the ability to compute what should
 be drawn).
