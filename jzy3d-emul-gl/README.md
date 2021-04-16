@@ -25,7 +25,28 @@ Please report here the performance you encounter while running EmulGL charts by 
 
 # Implementation
 
+## OpenGL Java implementation
 [jGL readme](https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-jGL/README.md) is the best place to better understand how OpenGL is implemented and how the framework is structured.
+
+## Integrating in AWT
+
+Integrating in AWT is tricky because of how AWT works and how the canvas displaying 3D will react to multiple events.
+
+I discovered a few thing on my way that are interesting
+* You don't know when AWT will really render. You only send rendering or interaction 
+  events (mouse, ...) to the EventQueue. The JVM will decide when it will be actually displayed.
+* You can't be sure that all events will all be handled : the [EventQueue has the ability 
+  to coalesce multiple mouse or paint event](https://docs.oracle.com/javase/8/docs/api/java/awt/EventQueue.html#postEvent-java.awt.AWTEvent-) 
+  in case it becomes overwhelmed by queries. 
+  As a consequence, in the case multiple rotation command triggered by a mouse drag event - 
+  and if these event lead to slow rendering, then you may only see the last rendering and not all intermediate images. 
+  In that case, it is necessary to limit the event rate to ensure not too many rendering are triggered (said 
+  differently, that repaint query are not arriving faster than the ability to compute what should 
+  be drawn - which may arrive if EmulGL is used on large screen with HiDPI (more pixel to compute)).
+* All windowing toolkit event are not coalesced! For example mouse wheel does not seam to be coalesced.
+
+
+
 
 # Remarks
 

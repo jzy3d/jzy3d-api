@@ -6,16 +6,16 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.RateLimiter;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
 import org.jzy3d.maths.Coord2d;
-import org.jzy3d.maths.TicToc;
 
 
 public class AWTCameraMouseController extends AbstractCameraController
     implements MouseListener, MouseWheelListener, MouseMotionListener {
 
-  protected MouseRateLimiter rateLimiter;
+  protected RateLimiter rateLimiter;
 
   public AWTCameraMouseController() {}
 
@@ -24,11 +24,11 @@ public class AWTCameraMouseController extends AbstractCameraController
     addSlaveThreadController(chart.getFactory().newCameraThreadController(chart));
   }
   
-  public MouseRateLimiter getRateLimiter() {
+  public RateLimiter getRateLimiter() {
     return rateLimiter;
   }
 
-  public void setRateLimiter(MouseRateLimiter rateLimiter) {
+  public void setRateLimiter(RateLimiter rateLimiter) {
     this.rateLimiter = rateLimiter;
   }
 
@@ -66,6 +66,14 @@ public class AWTCameraMouseController extends AbstractCameraController
   @Override
   public void mouseDragged(MouseEvent e) {
     
+/*    if(isApplyingMouseDragged) {
+      System.out.println("SKIP MOUSE");
+      return;
+    }
+    isApplyingMouseDragged = true;
+    System.out.println("* LOCK MOUSE");*/
+    
+    
     // Check if mouse rate limiter wish to forbid this mouse drag instruction
     if(rateLimiter!=null && !rateLimiter.rateLimitCheck()) {
       return;
@@ -87,14 +95,33 @@ public class AWTCameraMouseController extends AbstractCameraController
         shift(move.y / 500);
     }
     prevMouse = mouse;
+    
+    
+    //isApplyingMouseDragged = false;
+    
+    //System.out.println("UNLOCK MOUSE");
+
   }
+  
+  //boolean isApplyingMouseDragged = false;
 
   /** Compute zoom */
   @Override
   public void mouseWheelMoved(MouseWheelEvent e) {
+    
+    // Check if mouse rate limiter wish to forbid this mouse drag instruction
+    if(rateLimiter!=null && !rateLimiter.rateLimitCheck()) {
+      System.out.println("Wheel bypass");
+      return;
+    }
+    else {
+      System.out.println("Wheel apply");
+    }
+    
     stopThreadController();
     float factor = 1 + (e.getWheelRotation() / 10.0f);
     zoomZ(factor);
+    System.out.println(" DONE wheel");
   }
 
   @Override
