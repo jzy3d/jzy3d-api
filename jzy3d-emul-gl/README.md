@@ -57,6 +57,16 @@ q.setAnimated(true); // requires the mouse, keyboard and thread events to be rat
 Chart chart = factory.newChart(q);
 ```
 
+## Improving liveness
+
+```java
+Quality q = Quality.Advanced;
+q.setAnimated(true); // ensure chart is always refreshed, avoid sync with mouse, key, thread
+
+Chart chart = factory.newChart(q);
+```
+
+
 # Repaint on demand VS repaint continuously
 
 Repaint on demand means refreshing the canvas if at least one pixel changes. This is less CPU intensive in the long term as
@@ -121,10 +131,13 @@ rendering has been queried.
 
 As a consequence, in the case multiple rotation command triggered by a mouse drag event -
 and if these events lead to slow rendering, then you may only see the last rendering and not all intermediate images. This will
-let the user feel that rotating is slow whereas intermidate rotation updates were just drop for display. 
+let the user feel that rotating is slow whereas intermidate rotation updates were just drop for display.
+
 In that case, it is necessary to limit the event rate to ensure not too many rendering are triggered (said
 differently, that repaint query are not arriving faster than the ability to compute what should
-be drawn).
+be drawn). ```EmulGLPainterFactory``` adds an adaptive rate limiter to the controllers (mouse, keyboard) to ensure they do not
+flood AWT Event Queue. To ensure the rate limiter is optimal with the current canvas size/hidpi requirements  (e.g. not compromising liveness of a mouse rotation), it keeps an history
+of past rendering time and fits to the poorest case plus a time margin of 20ms. I did this because I observed peaks in rendering time that may not be relevant for performance (optimal performance & liveness tradeoff in the beginning of chart lifetime may not relevant 1 minute later if the chart get resized).
 
 <img src="doc/awt-coalesce.png">
 
@@ -139,7 +152,6 @@ Rendering of AWT components is made with... OpenGL! But it is limited to 2D grap
 ## EmulGL canvas
 
 The below map describes how EmulGL canvas replies to these events.
-
 
 <img src="doc/emulgl-canvas.png">
 

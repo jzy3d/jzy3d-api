@@ -27,14 +27,14 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
  * de cette mémoire
  * 
  */
-public class EmulGLMouseRateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond implements RateLimiter {
+public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond implements RateLimiter {
   protected EmulGLCanvas canvas;
   static final int HISTORY = 25;
   Queue<Double> renderingTimeHistory = new CircularFifoQueue<Double>(HISTORY);
   static final double MARGIN_MS = 20;
   double marginMs = MARGIN_MS;
 
-  public EmulGLMouseRateLimiterAdaptsToRenderTime(EmulGLCanvas canvas) {
+  public RateLimiterAdaptsToRenderTime(EmulGLCanvas canvas) {
     super();
     this.canvas = canvas;
   }

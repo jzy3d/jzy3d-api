@@ -8,10 +8,10 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
  * @author martin
  *
  */
-public class EmulGLMouseRateLimiterLock implements RateLimiter{
+public class RateLimiterLock implements RateLimiter{
   protected EmulGLCanvas canvas;
   
-  public EmulGLMouseRateLimiterLock(EmulGLCanvas canvas) {
+  public RateLimiterLock(EmulGLCanvas canvas) {
     this.canvas = canvas;
   }
 
