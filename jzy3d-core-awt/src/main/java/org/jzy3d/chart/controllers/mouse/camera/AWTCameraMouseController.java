@@ -108,20 +108,14 @@ public class AWTCameraMouseController extends AbstractCameraController
   /** Compute zoom */
   @Override
   public void mouseWheelMoved(MouseWheelEvent e) {
-    
     // Check if mouse rate limiter wish to forbid this mouse drag instruction
     if(rateLimiter!=null && !rateLimiter.rateLimitCheck()) {
-      System.out.println("Wheel bypass");
       return;
-    }
-    else {
-      System.out.println("Wheel apply");
     }
     
     stopThreadController();
     float factor = 1 + (e.getWheelRotation() / 10.0f);
     zoomZ(factor);
-    System.out.println(" DONE wheel");
   }
 
   @Override
