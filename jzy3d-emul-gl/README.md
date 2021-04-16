@@ -80,10 +80,10 @@ Mouse, keyboard, and rotation thread controllers will behave according to the co
 # Handling slow rendering
 
 EmulGL/jGL run in CPU, hence the rendering performance remains sensitive to
-* the number of pixels (the same Processing Unit must handle all pixels)
-* the hardware capacity (HiDMI & Retina display may multiply the physicial number of pixels)
-* the number of drawables to draw
-* the number of rendering requests
+* the number of pixels, hence the canvas size (the same processing unit (*C*PU) thread must handle all pixels)
+* the hardware capacity (HiDMI & Retina display may multiply number of actual physicial pixels to draw if maximal quality is required)
+* the number of drawables to draw (a 60x60 surface leads to 3600 polygons to render, that are sorted and lead to pixel change requests)
+* the number of rendering requests (canvas resize, mouse, keyboard, or external rendering requests)
 
 In the worse conditions, rendering time may reach a visible duration (e.g. 200ms). In that case, policies must
 be defined to avoid freezing AWT either for rendering or for handling interactions. The below sections explain why the JVM
