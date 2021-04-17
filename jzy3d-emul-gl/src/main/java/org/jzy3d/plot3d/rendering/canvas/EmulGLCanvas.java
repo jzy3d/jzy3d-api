@@ -25,6 +25,7 @@ import org.jzy3d.monitor.Monitor;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
+import jgl.GL;
 import jgl.GLCanvas;
 import jgl.GLUT;
 import jgl.context.gl_pointer;
@@ -76,8 +77,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     // FROM NATIVE
     // renderer = factory.newRenderer(view, traceGL, debugGL);
     // addGLEventListener(renderer);
-    
-    
   }
 
   @Override
@@ -243,16 +242,18 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     // This makes GLUT invoke the myReshape function
 
     // SHOULD NOT BE CALLED IF ANIMATOR IS ACTIVE
-    if (TO_BE_CHOOSEN_REPAINT_WITH_FLUSH)
+    if (TO_BE_CHOOSEN_REPAINT_WITH_FLUSH) {
       painter.getGL().glFlush();
-    else
+
+      // This triggers copy of newly generated picture to the GLCanvas
+      // repaint();
+    }
+    else {
       processEvent(new ComponentEvent(this, ComponentEvent.COMPONENT_RESIZED));
+      // equivalent to view.clear(), view.render(), glFlush(), glXSwapBuffers
+    }
     // INTRODUCE A UNDESIRED RESIZE EVENT (WE ARE NOT RESHAPING VIEWPORT
     // WAS JUST USED TO FORCE REPAINT
-
-
-    // This triggers copy of newly generated picture to the GLCanvas
-    // repaint();
   }
 
 
@@ -268,7 +269,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     postRenderString("Render in  : " + mili + "ms", x, y * 2, Color.BLACK);
     postRenderString("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x,
         y * 3, Color.BLACK);
-    postRenderString("Frame Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
+    postRenderString("Canvas Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
+   
+    GL gl = painter.getGL();
+    postRenderString("Viewport Size : " + gl.getContext().Viewport.Width + "x" + gl.getContext().Viewport.Height, x, y * 5, Color.BLACK);
   }
 
   /** Draw a 2d text at the given position */

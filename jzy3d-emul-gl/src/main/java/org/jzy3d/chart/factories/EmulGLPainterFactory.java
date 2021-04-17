@@ -130,7 +130,10 @@ public class EmulGLPainterFactory implements IPainterFactory {
     }
     return controller;
   }
-  
+
+  public RateLimiter newRateLimiter(Chart chart) {
+    return newRateLimiter((EmulGLCanvas)chart.getCanvas());
+  }
   public RateLimiter newRateLimiter(EmulGLCanvas canvas) {
     //mouse.setRateLimiter(new RateLimiterByMilisecond(200));
     //mouse.setRateLimiter(new EmulGLMouseRateLimiterLock(c));

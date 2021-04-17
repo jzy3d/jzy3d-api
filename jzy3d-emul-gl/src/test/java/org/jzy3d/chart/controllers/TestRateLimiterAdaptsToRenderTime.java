@@ -32,7 +32,7 @@ public class TestRateLimiterAdaptsToRenderTime {
     // ------------
     // When rendering time shrinks after N iteration (which kick the LONG rendering out of history)
     when(c.getLastRenderingTime()).thenReturn(renderingTimeShort);
-    for (int i = 0; i < RateLimiterAdaptsToRenderTime.HISTORY+1; i++) {
+    for (int i = 0; i < RateLimiterAdaptsToRenderTime.HISTORY_SIZE+1; i++) {
       rl.rateLimitCheck(); // invoke recalculation of rate which fetch last rendering time
     }
 

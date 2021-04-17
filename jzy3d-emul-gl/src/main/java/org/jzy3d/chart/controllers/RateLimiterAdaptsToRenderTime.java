@@ -29,8 +29,8 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
  */
 public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond implements RateLimiter {
   protected EmulGLCanvas canvas;
-  static final int HISTORY = 25;
-  Queue<Double> renderingTimeHistory = new CircularFifoQueue<Double>(HISTORY);
+  static final int HISTORY_SIZE = 10;
+  Queue<Double> renderingTimeHistory = new CircularFifoQueue<Double>(HISTORY_SIZE);
   static final double MARGIN_MS = 20;
   double marginMs = MARGIN_MS;
 
