@@ -151,6 +151,14 @@ public class Chart {
       }
     }
   }
+  
+  public void stopAnimation() {
+    setAnimated(false);
+  }
+
+  public void startAnimation() {
+    setAnimated(true);
+  }
 
 
   /**
@@ -179,8 +187,10 @@ public class Chart {
   /* CONTROLLERS */
 
   public ICameraMouseController addMouseCameraController() {
+    ICameraMouseController mouse = getFactory().getPainterFactory().newMouseCameraController(this);
+
     
-    CameraThreadController rotation = new CameraThreadController(this);
+    CameraThreadController rotation = mouse.getSlaveThreadController();//new CameraThreadController(this);
     rotation.setStep(0.025f);
     // Always keep update view until the camera thread controller
     // Has a timer to avoid rotating too fast (when no update view, thread can
@@ -188,8 +198,8 @@ public class Chart {
     rotation.setUpdateViewDefault(true);
     // later, should apply : !chart.getQuality().isAnimated());
 
-    ICameraMouseController mouse = getFactory().getPainterFactory().newMouseCameraController(this);
-    mouse.addSlaveThreadController(rotation);
+    
+   // mouse.addSlaveThreadController(rotation);
     
     // Switch between on demand/continuous rendering
     // keep to false if animated to avoid double rendering

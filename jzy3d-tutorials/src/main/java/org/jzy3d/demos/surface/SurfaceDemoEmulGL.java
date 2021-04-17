@@ -41,7 +41,7 @@ public class SurfaceDemoEmulGL {
     
     EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
     c.setProfileDisplayMethod(true);
-    c.getGL().setAutoAdaptToHiDPI(true);
+    c.getGL().setAutoAdaptToHiDPI(true); // need java 9+ to enable HiDPI & Retina displays
     
     //chart.getAxisLayout().setFont(Font.Helvetica_18);
     ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer()).setFont(Font.TimesRoman_10);

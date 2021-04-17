@@ -43,6 +43,10 @@ public class Coord2d implements Serializable {
     y = (float) yi;
   }
 
+  public Coord2d(double xi) {
+    this(xi, 0);
+  }
+
   /** Return a duplicate of this 3d coordinate. */
   @Override
   public Coord2d clone() {

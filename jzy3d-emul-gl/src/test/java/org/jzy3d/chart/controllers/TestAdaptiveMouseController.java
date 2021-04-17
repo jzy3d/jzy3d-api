@@ -146,6 +146,7 @@ public class TestAdaptiveMouseController {
   /** Create a chart with an adaptive mouse that has a mock on canvas performance retrieval. */
   protected Chart mockChartWithAdaptiveMouse(boolean repaintContinuously, boolean allowHiDPI,
       MockRenderingTime mockRenderingPerf) {
+    
     // --------------------------------------------------------
     // Configure quality optimization when slow rendering
 
@@ -153,12 +154,13 @@ public class TestAdaptiveMouseController {
 
       @Override
       public AdaptiveMouseController newMouseCameraController(Chart chart) {
+        
         // THIS IS THE OBJECT UNDER TEST!!
         AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
         policy.renderingRateLimiter =
             new RateLimiterAdaptsToRenderTime((EmulGLCanvas) chart.getCanvas()) {
-
-              // THIS IS EQUIVALENT TO MOCKING THE CANVAS
+          
+              // THIS IS EQUIVALENT TO PARTIAL MOCKING THE RENDERING OPTIMIZER
               protected double getLastRenderingTimeFromCanvas() {
                 return mockRenderingPerf.value;
               }
@@ -169,6 +171,7 @@ public class TestAdaptiveMouseController {
         policy.optimizeWithFace = false;
 
         return new AdaptiveMouseController(chart, policy) {
+          
           // THIS IS EQUIVALENT TO PARTIAL MOCKING THE MOUSE CONTROLLER
           protected double getLastRenderingTimeFromCanvas() {
             return mockRenderingPerf.value;
@@ -238,6 +241,4 @@ public class TestAdaptiveMouseController {
     surface.setWireframeWidth(1);
     return surface;
   }
-
-
 }
