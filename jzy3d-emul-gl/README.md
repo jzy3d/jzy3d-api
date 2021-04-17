@@ -23,20 +23,20 @@ Despite not exhaustive at all, I was able to have the following performance on a
 
 Please report here the performance you encounter while running EmulGL charts by [adding comments to this issue](https://github.com/jzy3d/jzy3d-api/issues/149).
 
-# Tuning performance
+## Tuning performance
 
 The quick hints to play with performance are below, if you are willing to understand how these parameters affect performance, read the next section.
 
-## Reducing rendering quality in favor of faster repaint in all cases
+### Reducing rendering quality in favor of faster repaint in all cases
 
 ```java
 Quality q = Quality.Advanced;
-q.setPreserveViewportSize(true); // prevent HiDPI/Retina to apply hence reduce the number of pixel to process
+q.setHiDPIEnabled(false); // prevent HiDPI/Retina to apply hence reduce the number of pixel to process
 
 Chart chart = factory.newChart(q);
 ```
 
-## Reducing rendering quality in favor of faster repaint only in case of rotation AND low performance
+### Reducing rendering quality in favor of faster repaint only in case of rotation AND low performance
 
 Visible rendering lag mainly occur when the chart rotates. This may happen according to two situations
 * canvas is large
@@ -50,52 +50,51 @@ which will depend mainly on the computer running your program.
 EmulGLChartFactory factory = new EmulGLChartFactory();
 Quality q = Quality.Advanced;
 q.setAnimated(false); // enable repaint on demand to minimize CPU usage when chart do not change
-q.setPreserveViewportSize(false); // enable HiDPI if possible
+q.setHiDPIEnabled(true); // enable HiDPI if hardware provides it
 
 Chart chart = factory.newChart(q);
 chart.open(1264, 812);
 
 // Configure adaptive quality optimization upon slow rendering
 AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
+// The rate limiter will ensure mouse events won't flood AWT with repaints
 policy.renderingRateLimiter = new RateLimiterAdaptsToRenderTime();
+// This is the rendering time above which dynamic optimizer will trigger according to options
 policy.optimizeForRenderingTimeLargerThan = 100;//ms
+// If optimizer active, allow -or not- to disable HiDPI (2D items such as colorbars and overlay may "bump"). Not satisfying visually so just keep default value
 policy.optimizeWithHiDPI = false;
+// If optimizer active, allow -or not- to disable wireframe of surface to be displayed. Not impacting performance so just keep default value
 policy.optimizeWithWireframe = false;
-policy.optimizeWithFace = true; // disable face rendering
+// If optimizer active, allow -or not- to disable faces of the surface polygons and only draw wireframe colored with face edge colors. Very good looking, fast rendering.
+policy.optimizeWithFace = true;
 
+// Apply this policy (or your override of this policy) to the adaptive mouse controller
 AdaptiveMouseController mouse = (AdaptiveMouseController)chart.addMouseCameraController();
 mouse.setPolicy(policy);
-
-
 ```
 
 
 
-## Reducing liveness in favor of less CPU usage
+### Reducing liveness in favor of less CPU usage
 
 ```java
 Quality q = Quality.Advanced;
 q.setAnimated(false); // avoid rendering continuously, especially when chart does not need to change (most often)
+// controllers (mouse, thread, etc) will have to update the chart themselves and won't rely on an animator.
 
 Chart chart = factory.newChart(q);
 ```
 
 
-## Improving rendering quality with possible liveness issues
+### Improving rendering quality with possible liveness issues
 
 ```java
 Quality q = Quality.Advanced;
-q.setPreserveViewportSize(false); // Let HiDPI/Retina inform their pixel ratio to process GL image on more pixels
-q.setAnimated(true); // requires the mouse, keyboard and thread events to be rate limited to avoid AWT congestion
+q.setHiDPIEnabled(true); // Let HiDPI/Retina inform their pixel ratio to process GL image on more pixels
+q.setAnimated(true); // the chart repaints every 100ms, without knowing if hardware can handle it
 
-Chart chart = factory.newChart(q);
-```
-
-## Improving liveness
-
-```java
-Quality q = Quality.Advanced;
-q.setAnimated(true); // ensure chart is always refreshed, avoid sync with mouse, key, thread
+// Possible liveness issue : mouse drag looks slow on large HiDPI screens as rendering is slower than usual
+// Possible solution at runtime : diminish canvas size (make it smaller in your application)
 
 Chart chart = factory.newChart(q);
 ```
@@ -120,6 +119,7 @@ chart.addKeyboardCameraController();
 ```
 Mouse, keyboard, and rotation thread controllers will behave according to the configuration (trigger repaint is repaint is
   on demand, do nothing if repaint continuously).
+
 
 # Handling slow rendering
 
@@ -186,7 +186,7 @@ Rendering of AWT components is made with... OpenGL! But it is limited to 2D grap
 
 ## EmulGL canvas
 
-The below map describes how EmulGL canvas replies to these events.
+The below map describes how EmulGL canvas replies to all events.
 
 <img src="doc/emulgl-canvas.png">
 
