@@ -13,7 +13,8 @@ import org.jzy3d.plot3d.rendering.view.Camera;
  * 
  * If the chart is configured to repaint on demand, then the thread will adapt the amount of
  * rendering request according to the current computer capabilities w.r.t. the configuration
- * constraints (size, HiDPI, etc). The rate limiter may be disabled by {@link #setRateLimiter(RateLimiterAdaptsToRenderTime)}
+ * constraints (size, HiDPI, etc). The rate limiter may be disabled by
+ * {@link #setRateLimiter(RateLimiterAdaptsToRenderTime)}
  * 
  * In case the angle steps for the rotation are too high, then one should let the chart work with
  * less demanding processing
@@ -40,7 +41,13 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
    * The interval between each rate limit verification in MS
    */
   protected static final int RATE_CHECK_RATE = 100;
-  
+
+  protected Direction direction = Direction.LEFT;
+
+  public enum Direction {
+    LEFT, RIGHT;
+  }
+
 
   public CameraThreadControllerWithTime() {}
 
@@ -77,12 +84,12 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
         // consider the history of past rendering time.
         if (rateLimiter != null) {
           while (!rateLimiter.rateLimitCheck()) {
-            
+
             t.toc();
-            int elapsedMili = (int)t.elapsedMilisecond();
+            int elapsedMili = (int) t.elapsedMilisecond();
             int pauseMili = RATE_CHECK_RATE - elapsedMili;
-            if(pauseMili>0)
-              Thread.sleep(pauseMili); // wait not more than 
+            if (pauseMili > 0)
+              Thread.sleep(pauseMili); // wait not more than
           }
         } else {
           Thread.sleep(MIN_LOOP_PAUSE_MS);
@@ -94,9 +101,15 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
         t.toc();
         double elapsedRatio = t.elapsedSecond() / speed;
         double rotation = elapsedRatio * Math.PI * 2;
-        rotate(-rotation);
-        //System.out.println("Rotate after " + ((RateLimiterAdaptsToRenderTime)rateLimiter).getLastRenderingTimeFromCanvas()
-        //    + " move ratio : " + elapsedRatio + " rotation:" + rotation);
+
+        if (Direction.LEFT.equals(direction))
+          rotate(-rotation);
+        else
+          rotate(rotation);
+
+        // System.out.println("Rotate after " +
+        // ((RateLimiterAdaptsToRenderTime)rateLimiter).getLastRenderingTimeFromCanvas()
+        // + " move ratio : " + elapsedRatio + " rotation:" + rotation);
 
         // ---------------------------------
         // restart time counter for next loop
@@ -117,13 +130,22 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
     this.speed = speed;
   }
 
+  public Direction getDirection() {
+    return direction;
+  }
+
+  public void setDirection(Direction direction) {
+    this.direction = direction;
+  }
+
   public RateLimiter getRateLimiter() {
     return rateLimiter;
   }
 
   public void setRateLimiter(RateLimiter rateLimiter) {
-    if(rateLimiter!=null && rateLimiter instanceof RateLimiterAdaptsToRenderTime) {
-      ((RateLimiterAdaptsToRenderTime)rateLimiter).setCanvas((EmulGLCanvas) getChart().getCanvas());
+    if (rateLimiter != null && rateLimiter instanceof RateLimiterAdaptsToRenderTime) {
+      ((RateLimiterAdaptsToRenderTime) rateLimiter)
+          .setCanvas((EmulGLCanvas) getChart().getCanvas());
     }
     this.rateLimiter = rateLimiter;
   }

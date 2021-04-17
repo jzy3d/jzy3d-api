@@ -23,6 +23,8 @@ import org.jzy3d.monitor.IMonitorable;
 import org.jzy3d.monitor.Measure.CanvasPerfMeasure;
 import org.jzy3d.monitor.Monitor;
 import org.jzy3d.painters.EmulGLPainter;
+import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import jgl.GL;
@@ -264,15 +266,27 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   protected void postRenderProfiling(double mili) {
     int x = 05;
     int y = 12;
+    
+    int line = 1;
 
-    postRenderString("FrameID    : " + profileDisplayCount, x, y, Color.BLACK);
-    postRenderString("Render in  : " + mili + "ms", x, y * 2, Color.BLACK);
+    postRenderString("FrameID    : " + profileDisplayCount, x, y*line++, Color.BLACK);
+    postRenderString("Render in  : " + mili + "ms", x, y*line++, Color.BLACK);
     postRenderString("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x,
-        y * 3, Color.BLACK);
-    postRenderString("Canvas Size : " + getWidth() + "x" + getHeight(), x, y * 4, Color.BLACK);
+        y*line++, Color.BLACK);
+    
+    for(Drawable d: view.getScene().getGraph().getAll()) {
+      if(d instanceof Scatter) {
+        Scatter s = (Scatter)d;
+        postRenderString("Scatter    : " + s.coordinates.length + " points", x,
+            y*(line++), Color.BLACK);
+        
+      }
+    }
+    
+    postRenderString("Canvas Size : " + getWidth() + "x" + getHeight(), x, y*line++, Color.BLACK);
    
     GL gl = painter.getGL();
-    postRenderString("Viewport Size : " + gl.getContext().Viewport.Width + "x" + gl.getContext().Viewport.Height, x, y * 5, Color.BLACK);
+    postRenderString("Viewport Size : " + gl.getContext().Viewport.Width + "x" + gl.getContext().Viewport.Height, x, y * (line++), Color.BLACK);
   }
 
   /** Draw a 2d text at the given position */
