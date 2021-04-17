@@ -41,6 +41,10 @@ public abstract class AbstractCameraController extends AbstractController
 
   protected boolean updateViewDefault = false;
 
+  protected void rotate(double azimuth) {
+    rotate(new Coord2d(azimuth, 0));
+  }
+  
   protected void rotate(final Coord2d move) {
     rotate(move, updateViewDefault);
   }

@@ -24,6 +24,9 @@ public class SurfaceDemoSWTAWTBridge {
 
     // TODO : let SWT Frame open in non blocking mode.
     FrameSWTBridge f = (FrameSWTBridge) chart.open(SurfaceDemoSWTAWTBridge.class.getSimpleName());
+    
+    chart.addMouseCameraController();
+    //chart.startAnimation();
     // f.print("target/" + SurfaceDemoSWTAWTBridge.class.getSimpleName() + ".png");
   }
 

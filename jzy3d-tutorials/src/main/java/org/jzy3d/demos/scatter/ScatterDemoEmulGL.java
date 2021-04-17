@@ -12,8 +12,8 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 public class ScatterDemoEmulGL {
   public static void main(String[] args) throws Exception {
     Quality q = Quality.Advanced;
-    q.setAnimated(true);
-    q.setPreserveViewportSize(false);
+    q.setAnimated(false);
+    q.setPreserveViewportSize(false); // need java 9+ to enable HiDPI & Retina displays
 
     Chart chart = new EmulGLChartFactory().newChart(q);
     chart.getScene().add(scatter());

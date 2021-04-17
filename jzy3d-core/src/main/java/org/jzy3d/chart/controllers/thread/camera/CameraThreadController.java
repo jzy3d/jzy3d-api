@@ -6,7 +6,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 /**
- * The {@link CameraThreadController} provides a Thread for controlling the {@link Camera} and make
+ * The {@link CameraThreadController} provides a {@link Thread} for controlling the {@link Camera} and make
  * it turn around the view point along its the azimuth dimension.
  * 
  * @author Martin Pernollet
@@ -36,7 +36,7 @@ public class CameraThreadController extends AbstractCameraController implements 
   public void start() {
     if (process == null) {
       process = new Thread(this);
-      process.setName("CameraThreadController (automatic rotation)" + (id++));
+      process.setName(this.getClass().getSimpleName() + " (automatic rotation)" + (id++));
       process.start();
     }
   }
