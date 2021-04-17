@@ -7,7 +7,7 @@ Traditional GPU rendering offers great performance but sometimes hit a compatibi
 
 EmulGL relies on [jGL](https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-jGL), a pure Java implementation of the OpenGL 1 specification. EmulGL remains relevant for simple charts.
 
-Native charts (using JOGL) remain the preferred option for fast rendering of very large geometries, volumes or rendering involving shaders. Native charts also tend to better handle alpha blending (using translucent objects).
+Native charts (using [JOGL](https://jogamp.org/jogl/www/)) remains the preferred option for fast rendering of very large geometries, volumes or rendering involving shaders. Native charts also tend to better handle alpha blending (using translucent objects).
 
 # Performance
 
@@ -73,6 +73,9 @@ AdaptiveMouseController mouse = (AdaptiveMouseController)chart.addMouseCameraCon
 mouse.setPolicy(policy);
 ```
 
+Which will turn the chart in the below mode if _by default_ mouse drag leads to a rendering time above  `policy.optimizeForRenderingTimeLargerThan`. In that case, rendering drops face rendering to go faster and reach ~30ms to render which lead to a fluid chart rotation.
+
+<img src="doc/adaptive-render-mouse-drag.png">
 
 
 ### Reducing liveness in favor of less CPU usage
