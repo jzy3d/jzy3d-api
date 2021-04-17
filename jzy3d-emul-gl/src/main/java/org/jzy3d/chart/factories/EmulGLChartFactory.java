@@ -3,7 +3,6 @@ package org.jzy3d.chart.factories;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.CameraThreadControllerWithTime;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -32,8 +31,11 @@ public class EmulGLChartFactory extends ChartFactory {
     return new AWTView(factory, scene, canvas, quality);
   }
   
+  /**
+   * Returns a {@link CameraThreadControllerWithTime} which speed may be tuned.
+   */
   @Override
-  public CameraThreadController newCameraThreadController(Chart chart) {
+  public CameraThreadControllerWithTime newCameraThreadController(Chart chart) {
     CameraThreadControllerWithTime controller = new CameraThreadControllerWithTime(chart, 60);
     //controller.setRateLimiter(null);
     return controller;
