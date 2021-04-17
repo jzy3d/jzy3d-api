@@ -4,9 +4,11 @@ import org.jzy3d.chart.controllers.RateLimiter;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 
 /**
- * Present mouse to trigger repaint in case canvas is already painting
+ * Present mouse to trigger repaint in case canvas is already painting.
+ * 
+ * Kept for further tests, but actually did not work.
+ * 
  * @author martin
- *
  */
 public class RateLimiterLock implements RateLimiter{
   protected EmulGLCanvas canvas;
