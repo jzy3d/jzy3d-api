@@ -3,8 +3,9 @@ package org.jzy3d.chart.factories;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLAnimator;
-import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
+import org.jzy3d.chart.controllers.AdaptiveMouseController;
 import org.jzy3d.chart.controllers.RateLimiter;
+import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
@@ -122,7 +123,8 @@ public class EmulGLPainterFactory implements IPainterFactory {
 
   @Override
   public AWTCameraMouseController newMouseCameraController(Chart chart) {
-    AWTCameraMouseController controller = new AWTCameraMouseController(chart);
+    //AWTCameraMouseController controller = new AWTCameraMouseController(chart);
+    AdaptiveMouseController controller = new AdaptiveMouseController(chart);
     EmulGLCanvas canvas = (EmulGLCanvas)chart.getCanvas();
     RateLimiter rateLimiter = newRateLimiter(canvas);
     if(rateLimiter!=null) {

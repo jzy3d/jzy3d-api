@@ -27,15 +27,49 @@ Please report here the performance you encounter while running EmulGL charts by 
 
 The quick hints to play with performance are below, if you are willing to understand how these parameters affect performance, read the next section.
 
-## Reducing rendering quality in favor of faster repaint
+## Reducing rendering quality in favor of faster repaint in all cases
 
 ```java
 Quality q = Quality.Advanced;
 q.setPreserveViewportSize(true); // prevent HiDPI/Retina to apply hence reduce the number of pixel to process
 
 Chart chart = factory.newChart(q);
+```
+
+## Reducing rendering quality in favor of faster repaint only in case of rotation AND low performance
+
+Visible rendering lag mainly occur when the chart rotates. This may happen according to two situations
+* canvas is large
+* hidpi is active on a computer that has the ability to enable HiDPI
+
+This is a complex but usefull configuration as it will lower the rendering quality only if rendering performance drops,
+which will depend mainly on the computer running your program.
+
+```java
+// Configure base quality for standard case
+EmulGLChartFactory factory = new EmulGLChartFactory();
+Quality q = Quality.Advanced;
+q.setAnimated(false); // enable repaint on demand to minimize CPU usage when chart do not change
+q.setPreserveViewportSize(false); // enable HiDPI if possible
+
+Chart chart = factory.newChart(q);
+chart.open(1264, 812);
+
+// Configure adaptive quality optimization upon slow rendering
+AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
+policy.renderingRateLimiter = new RateLimiterAdaptsToRenderTime();
+policy.optimizeForRenderingTimeLargerThan = 100;//ms
+policy.optimizeWithHiDPI = false;
+policy.optimizeWithWireframe = false;
+policy.optimizeWithFace = true; // disable face rendering
+
+AdaptiveMouseController mouse = (AdaptiveMouseController)chart.addMouseCameraController();
+mouse.setPolicy(policy);
+
 
 ```
+
+
 
 ## Reducing liveness in favor of less CPU usage
 

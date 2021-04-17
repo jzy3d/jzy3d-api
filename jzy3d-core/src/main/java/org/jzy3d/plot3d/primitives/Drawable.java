@@ -174,8 +174,8 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
   /* */
 
-  public void setLegend(ILegend face) {
-    this.legend = face;
+  public void setLegend(ILegend legend) {
+    this.legend = legend;
     legendDisplayed = true;
     fireDrawableChanged(DrawableChangedEvent.FIELD_METADATA);
   }

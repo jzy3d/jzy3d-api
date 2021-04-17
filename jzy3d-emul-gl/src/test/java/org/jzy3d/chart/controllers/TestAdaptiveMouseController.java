@@ -185,7 +185,7 @@ public class TestAdaptiveMouseController {
     // --------------------------------------------------------
     // Open and enable controllers
 
-    chart.open(1264, 812);
+    chart.open(1264, 812); // need to open chart to have a Graphics2D instance
     return chart;
   }
 
