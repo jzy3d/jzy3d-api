@@ -54,7 +54,7 @@ public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond imple
   }
 
   protected void adaptRateLimitToRenderTimeHistory() {
-    double lastRenderingTimeMs = canvas.getLastRenderingTime();
+    double lastRenderingTimeMs = getLastRenderingTimeFromCanvas();
 
     if (lastRenderingTimeMs != EmulGLCanvas.LAST_RENDER_TIME_UNDEFINED) {
       renderingTimeHistory.add(lastRenderingTimeMs);
@@ -73,6 +73,10 @@ public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond imple
        */
 
     }
+  }
+
+  protected double getLastRenderingTimeFromCanvas() {
+    return canvas.getLastRenderingTime();
   }
 
   protected double max(Queue<Double> renderingTimeHistory) {
