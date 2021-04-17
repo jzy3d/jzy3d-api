@@ -203,18 +203,10 @@ The below map describes how EmulGL canvas replies to all events.
 
 ## HiDPI
 
-EmulGL supports HiDPI rendering by enabling a chart with `Quality.setPreserveViewportSize(false);`
-(which actually forbids to preserve the usual pixel ratio in case a HiDPI configuration is detected). This is a shortcut
-to a jGL Setting
-
-```java
-EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
-c.getGL().setAutoAdaptToHiDPI(true);
-```
-
-
 I noticed the following limitations with HiDPI on EmulGL as it is currently implemented
 * HiDPI may not trigger on Java 8, whereas it works on Java 9. Jzy3d is intentionally build for Java 8 to remain compatible with "old" software. This does not prevent a software running on Java 9 to use HiDPI automatically. This is highlighted by `ITTestHiDPI` that is kept as a program with main() rather than junit test.
+
+Will be fixed soon !
 * HiDPI in jGL is detected at runtime and that chart will properly scale to HiDPI after a first rendering. A chart configured with `chart.setAnimated(true)` and `Quality.setPreserveViewportSize(false);` will automatically turn to HiDPI at the second frame.
 * Offscreen charts currently do not seem to adapt to HiDPI automatically. This may be due to the way I do the HiDPI detection in jGL that relies on the state of the *displayed* AWT Canvas. Anyway, no offscreen HiDPI make it *impossible to create non regression tests about HiDPI* at this step. Even if this would be supported, there would be limitation with build since such kind of tests should be ignored on computer that do not have the same HiDPI capabilities than the computer used to generate the baseline image, which is not possible with current maven build.
 
