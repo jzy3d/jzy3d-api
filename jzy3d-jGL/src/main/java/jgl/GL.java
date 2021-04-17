@@ -82,6 +82,10 @@ public class GL {
     protected double pixelScaleX = 1;
     /** Vertical pixel scale induced by HiDPI. */
     protected double pixelScaleY = 1;
+    
+    protected int desiredX = 0;
+    protected int desiredY = 0;
+    
     /** Width after considering pixel scale induced by HiDPI. */
     protected int actualWidth = 0;
     /** Height after considering pixel scale induced by HiDPI. */
@@ -154,18 +158,27 @@ public class GL {
 	 * <code>void glXSwapBuffers (Display *dpy, GLXDrawable drawable)</code>
 	 */
 	public void glXSwapBuffers(Graphics g, ImageObserver o) {
-	  Graphics2D g2d = (Graphics2D)g;
-	  //printGlobalScale(g2d); 
-      // produce 2.0 factory on MacOS with Retina
-	  // produce 1.5 factor on Win10 HiDPI on the same Apple hardware as above
+	  updatePixelScale(g);
 	  
-	  if(autoAdaptToHiDPI)
-	    getPixelScaleFromG2D(g2d);
-	  else
-	    resetPixelScale();
-	  
+	  //System.out.println("UPDATE PIX SCALE");
 	  g.drawImage(glImage, StartX, StartY, desiredWidth, desiredHeight, o);
 	}
+
+    public void updatePixelScale(Graphics g) {
+      Graphics2D g2d = (Graphics2D)g;
+  	  //printGlobalScale(g2d); 
+        // produce 2.0 factory on MacOS with Retina
+  	  // produce 1.5 factor on Win10 HiDPI on the same Apple hardware as above
+  	  
+  	  // We will read pixel scale from G2D while swapping images. This means
+  	  // we may be late of 1 image to adapt to an HiDPI change.
+  	  if(autoAdaptToHiDPI) {
+  	      getPixelScaleFromG2D(g2d);
+  	  }
+  	  else {
+  	      resetPixelScale();
+  	  }
+    }
 
 	public void glXSwapBuffers(Graphics g, Applet o) {
 		glXSwapBuffers(g, (ImageObserver) o);
@@ -1747,15 +1760,12 @@ public class GL {
 			height = 1;
 		}
 		
+		desiredX = x;
+	    desiredY = y;
 		desiredWidth = width;
         desiredHeight = height;
-        actualWidth = (int)(width * pixelScaleX);
-        actualHeight = (int)(height * pixelScaleY);
         
-		if(pixelScaleX>0 && pixelScaleY>0)
-		  CC.gl_viewport(x, y, actualWidth, actualHeight);
-		else
-		  CC.gl_viewport(x, y, width, height);
+        resetViewport();
 		/*
 		 * JavaImageSource = new MemoryImageSource (Context.Viewport.Width,
 		 * Context.Viewport.Height, Context.ColorBuffer.Buffer, 0,
@@ -1764,6 +1774,22 @@ public class GL {
 		 * JavaComponent.createImage (JavaImageSource);
 		 */
 	}
+
+	/**
+	 * Apply viewport according to the latest known expected width/height
+	 * and the latest known pixel scales.
+	 */
+    public void resetViewport() {
+      //System.out.println("Viewport : " + autoAdaptToHiDPI + pixelScaleX);
+          
+      actualWidth = (int)(desiredWidth * pixelScaleX);
+      actualHeight = (int)(desiredHeight * pixelScaleY);
+
+      if(pixelScaleX>0 && pixelScaleY>0)
+         CC.gl_viewport(desiredX, desiredY, actualWidth, actualHeight);
+      else
+         CC.gl_viewport(desiredX, desiredY, desiredWidth, desiredHeight);
+    }
 
 	/** GLvoid glPushMatrix (GLvoid) */
 	public void glPushMatrix() {
