@@ -5,6 +5,8 @@ import java.awt.event.MouseEvent;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
+import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.chart.factories.EmulGLPainterFactory;
 import org.jzy3d.colors.Color;
@@ -31,6 +33,24 @@ import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
  * @author Martin Pernollet
  */
 public class TestAdaptiveMouseController {
+  /**
+   * Ensure a mouse/keyboard rate limiter are set even if we have not defined an optimization policy
+   */
+  @Test
+  public void whenNoPolicyDefined_ThenThereIsStillMouseRateLimiter() {
+    // Given
+    EmulGLChartFactory factory = new EmulGLChartFactory();
+    Chart chart = factory.newChart();
+    
+    // When
+    AWTCameraMouseController m = (AWTCameraMouseController)chart.addMouseCameraController();
+    AWTCameraKeyController k = (AWTCameraKeyController)chart.addKeyboardCameraController();
+    
+    // Then
+    Assert.assertNotNull(m.getRateLimiter());
+    Assert.assertNotNull(k.getRateLimiter());
+  }
+  
   @Test
   public void whenRepaintOnDemand_onHiDPIChart_ThenOptimizationTriggersIfPerformanceIsBad() {
     // Given
