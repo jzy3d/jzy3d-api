@@ -35,8 +35,12 @@ public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond imple
   double marginMs = MARGIN_MS;
 
   public RateLimiterAdaptsToRenderTime(EmulGLCanvas canvas) {
+    this();
+    setCanvas(canvas);
+  }
+
+  public RateLimiterAdaptsToRenderTime() {
     super();
-    this.canvas = canvas;
   }
 
   /**
@@ -89,4 +93,11 @@ public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond imple
     return max;
   }
 
+  public EmulGLCanvas getCanvas() {
+    return canvas;
+  }
+
+  public void setCanvas(EmulGLCanvas canvas) {
+    this.canvas = canvas;
+  }
 }
