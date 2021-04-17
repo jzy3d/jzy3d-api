@@ -19,7 +19,6 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   protected EmulGLCanvas canvas;
   protected GL gl;
   protected EmulGLPainter painter;
-  protected double lastRenderingTime = -1;
 
   /**
    * An optimization policy
@@ -31,16 +30,32 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
    * won't be applied at mouse release.
    */
   protected boolean mustOptimizeMouseDrag = false;
+  
+  /**
+   * Keep track of drawable that have had their wireframe disabled for optimization in order to re-activate at mouse release.
+   */
+  protected List<Wireframeable> wireframeToReset = new ArrayList<>();
+
+  /**
+   * Keep track of drawable that have had their face disabled for optimization in order to re-activate at mouse release.
+   */
+  protected List<Wireframeable> faceToReset = new ArrayList<>();
+
+  /**
+   * Keep track of canvas performance.
+   */
+  //protected double lastRenderingTime = -1;
+
 
   public AdaptiveMouseController() {
     super();
   }
 
   public AdaptiveMouseController(Chart chart, AdaptiveRenderingPolicy policy) {
-    super(chart, policy.renderingRateLimiter);
-    this.policy = policy;
+    super(chart);
+    setPolicy(policy);
   }
-
+  
   public AdaptiveMouseController(Chart chart) {
     super(chart);
   }
@@ -49,14 +64,14 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   public void mousePressed(MouseEvent e) {
     loadChartItems(getChart());
 
-    lastRenderingTime = getLastRenderingTimeFromCanvas();
+    double lastRenderingTime = getLastRenderingTimeFromCanvas();
 
-
-    // apply optimization
-    if (!getChart().getQuality().isAnimated() && detectIfRenderingIsSlow()) {
+    // decide if an optimization should be applied
+    if (!getChart().getQuality().isAnimated() && detectIfRenderingIsSlow(lastRenderingTime)) {
       mustOptimizeMouseDrag = true;
     }
 
+    // apply optimization
     if (mustOptimizeMouseDrag) {
       if (policy.optimizeWithWireframe)
         disableWireframe(getChart());
@@ -74,7 +89,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     return canvas.getLastRenderingTime();
   }
 
-  protected boolean detectIfRenderingIsSlow() {
+  protected boolean detectIfRenderingIsSlow(double lastRenderingTime) {
     return policy.optimizeForRenderingTimeLargerThan < lastRenderingTime;
   }
 
@@ -108,9 +123,14 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     currentHiDPI = painter.getGL().isAutoAdaptToHiDPI();
     canvas = (EmulGLCanvas) chart.getCanvas();
     gl = ((EmulGLPainter) chart.getPainter()).getGL();
+    
+    RateLimiter r = getRateLimiter();
+    if(r!=null && r instanceof RateLimiterAdaptsToRenderTime) {
+      ((RateLimiterAdaptsToRenderTime)r).setCanvas(canvas);
+    }
   }
 
-  // TODO : return false if quality was not reduced before
+  // TODO : return false if quality was not reduced before to avoid reset
   protected void reduceQuality(Chart chart) {
     Quality alternativeQuality = currentQuality.clone();
     alternativeQuality.setPreserveViewportSize(true);
@@ -121,12 +141,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   protected void reloadQuality(Chart chart) {
     chart.setQuality(currentQuality);
     gl.setAutoAdaptToHiDPI(currentHiDPI);
-    
-    System.out.println("CURRENT HIDPI NOW : " + currentHiDPI);
-    
-    // System.out.println("Release : hidpi : " + gl.isAutoAdaptToHiDPI());
-
-    // this force the GL image to apply the new HiDPI setting
+    // this force the GL image to apply the new HiDPI setting immediatly
     gl.updatePixelScale(canvas.getGraphics());
     gl.resetViewport();
   }
@@ -137,7 +152,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
       if (d instanceof Wireframeable) {
         Wireframeable w = (Wireframeable) d;
         if (w.getWireframeDisplayed()) {
-          wire.add(w);
+          wireframeToReset.add(w);
           w.setWireframeDisplayed(false);
         }
       }
@@ -150,26 +165,35 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
       if (d instanceof Wireframeable) {
         Wireframeable w = (Wireframeable) d;
         if (w.getFaceDisplayed()) {
-          face.add(w);
+          faceToReset.add(w);
           w.setFaceDisplayed(false);
         }
       }
     }
   }
 
-  protected List<Wireframeable> wire = new ArrayList<>();
-  protected List<Wireframeable> face = new ArrayList<>();
 
   protected void reloadWireframe() {
-    for (Wireframeable w : wire) {
+    for (Wireframeable w : wireframeToReset) {
       w.setWireframeDisplayed(true);
     }
   }
 
   protected void reloadFace() {
-    for (Wireframeable w : face) {
+    for (Wireframeable w : faceToReset) {
       w.setFaceDisplayed(true);
     }
+  }
+
+  
+  
+  public AdaptiveRenderingPolicy getPolicy() {
+    return policy;
+  }
+
+  public void setPolicy(AdaptiveRenderingPolicy policy) {
+    this.policy = policy;
+    this.setRateLimiter(policy.renderingRateLimiter);
   }
 
 }
