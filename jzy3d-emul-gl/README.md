@@ -137,7 +137,8 @@ In that case, it is necessary to limit the event rate to ensure not too many ren
 differently, that repaint query are not arriving faster than the ability to compute what should
 be drawn). ```EmulGLPainterFactory``` adds an adaptive rate limiter to the controllers (mouse, keyboard) to ensure they do not
 flood AWT Event Queue. To ensure the rate limiter is optimal with the current canvas size/hidpi requirements  (e.g. not compromising liveness of a mouse rotation), it keeps an history
-of past rendering time and fits to the poorest case plus a time margin of 20ms. I did this because I observed peaks in rendering time that may not be relevant for performance (optimal performance & liveness tradeoff in the beginning of chart lifetime may not relevant 1 minute later if the chart get resized).
+of past rendering time and fits to the poorest case plus a time margin of 20ms. I did this because I observed peaks in rendering time that may not be relevant for performance (optimal performance & liveness tradeoff in the beginning of chart lifetime may not relevant 1 minute later if the chart get resized). With this liveness is very fluid for small charts, and acceptable for fullscreen
+canvas with HiDPI/Retina enabled, both holding high quality and alpha.
 
 <img src="doc/awt-coalesce.png">
 

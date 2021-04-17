@@ -24,6 +24,11 @@ public class AWTCameraMouseController extends AbstractCameraController
     addSlaveThreadController(chart.getFactory().newCameraThreadController(chart));
   }
   
+  public AWTCameraMouseController(Chart chart, RateLimiter limiter) {
+    this(chart);
+    setRateLimiter(limiter);
+  }
+  
   public RateLimiter getRateLimiter() {
     return rateLimiter;
   }
