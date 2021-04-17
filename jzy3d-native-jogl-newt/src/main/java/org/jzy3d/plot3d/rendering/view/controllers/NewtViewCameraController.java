@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.rendering.view.controllers;
 
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.chart.controllers.thread.camera.AbstractCameraThreadController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -35,7 +35,7 @@ public class NewtViewCameraController extends ViewCameraController implements Mo
 
   /*********************************************************/
 
-  public void addSlaveThreadController(CameraThreadController controller) {
+  public void addSlaveThreadController(AbstractCameraThreadController controller) {
     removeSlaveThreadController();
     this.threadController = controller;
   }
@@ -130,7 +130,7 @@ public class NewtViewCameraController extends ViewCameraController implements Mo
 
   protected IScreenCanvas canvas;
   protected Coord2d prevMouse;
-  protected CameraThreadController threadController;
+  protected AbstractCameraThreadController threadController;
 
 
   // protected Chart chart;
