@@ -42,8 +42,7 @@ Visible rendering lag mainly occur when the chart rotates. This may happen accor
 * canvas is large
 * hidpi is active on a computer that has the ability to enable HiDPI
 
-This is a complex but usefull configuration as it will lower the rendering quality only if rendering performance drops,
-which will depend mainly on the computer running your program.
+This is a complex but usefull configuration as it will lower dynamically the rendering quality only if rendering performance drops (which will depend mainly on the computer running your program) to ensure rotation remains fluid.
 
 ```java
 // Configure base quality for standard case
