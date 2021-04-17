@@ -185,12 +185,28 @@ public abstract class Composite extends Wireframeable implements ISingleColorabl
     if (components != null) {
       synchronized (components) {
         for (Drawable c : components) {
-          if (c != null && c instanceof Wireframeable)
+          if (c instanceof Wireframeable)
             ((Wireframeable) c).setWireframeColor(color);
         }
       }
     }
   }
+  
+  @Override
+  public void setWireframeColorFromPolygonPoints(boolean status) {
+    super.setWireframeColorFromPolygonPoints(status);
+    
+    if (components != null) {
+      synchronized (components) {
+        for (Drawable c : components) {
+          if (c instanceof Wireframeable)
+            ((Wireframeable) c).setWireframeColorFromPolygonPoints(status);
+          //System.out.println(status);
+        }
+      }
+    }
+  }
+
 
   @Override
   public void setWireframeDisplayed(boolean status) {
@@ -199,7 +215,7 @@ public abstract class Composite extends Wireframeable implements ISingleColorabl
     if (components != null) {
       synchronized (components) {
         for (Drawable c : components) {
-          if (c != null && c instanceof Wireframeable)
+          if (c instanceof Wireframeable)
             ((Wireframeable) c).setWireframeDisplayed(status);
         }
       }

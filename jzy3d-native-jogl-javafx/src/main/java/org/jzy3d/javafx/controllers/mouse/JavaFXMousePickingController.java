@@ -6,7 +6,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.chart.controllers.thread.camera.AbstractCameraThreadController;
 import org.jzy3d.javafx.controllers.JavaFXChartController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -169,5 +169,5 @@ public class JavaFXMousePickingController extends AbstractCameraController
   protected Chart chart;
 
   protected Coord2d prevMouse;
-  protected CameraThreadController threadController;
+  protected AbstractCameraThreadController threadController;
 }
