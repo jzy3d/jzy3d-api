@@ -60,12 +60,12 @@ AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
 policy.renderingRateLimiter = new RateLimiterAdaptsToRenderTime();
 // This is the rendering time above which dynamic optimizer will trigger according to options
 policy.optimizeForRenderingTimeLargerThan = 100;//ms
+// If optimizer active, allow -or not- to disable faces of the surface polygons and only draw wireframe colored with face edge colors. Very good looking, fast rendering. Keep default value
+policy.optimizeWithFace = true;
 // If optimizer active, allow -or not- to disable HiDPI (2D items such as colorbars and overlay may "bump"). Not satisfying visually so just keep default value
 policy.optimizeWithHiDPI = false;
 // If optimizer active, allow -or not- to disable wireframe of surface to be displayed. Not impacting performance so just keep default value
 policy.optimizeWithWireframe = false;
-// If optimizer active, allow -or not- to disable faces of the surface polygons and only draw wireframe colored with face edge colors. Very good looking, fast rendering.
-policy.optimizeWithFace = true;
 
 // Apply this policy (or your override of this policy) to the adaptive mouse controller
 AdaptiveMouseController mouse = (AdaptiveMouseController)chart.addMouseCameraController();
@@ -219,10 +219,10 @@ Usefull links about HiDPI and java
 
 ## Fail : Performance with multithreading
 
-We explored multithreaded rendering in SurfaceDemoEmulGL_Multithreaded which is a complete failure. jGL  
-won't support multithreading easily. OpenGL indeed requires a consistent call to a serie of commands (glBegin, glVertex, glEnd, etc) that prevent multiple
+We explored multithreaded rendering in `SurfaceDemoEmulGL_Multithreaded` which is a complete failure. jGL  won't support multithreading easily. OpenGL indeed requires a consistent call to a serie of commands (glBegin, glVertex, glEnd, etc) that prevent multiple
 threads to deal with a sub group of geometries to render since the GL context will receive commands from multiple interlaced geometries.
-Note that JOGL has the same limitation. We explored Newt canvas in JOGL supposed to allow such multithreaded access to the same OpenGL context but did not succeed.
+
+Note that JOGL has the same limitation. We explored Newt canvas in JOGL supposed to allow such multithreaded access to the same OpenGL context but did not succeed. This attempt was made with `MultithreadedGraph` wich may not be designed properly for Newt.
 
 Performance studies shows that handling all geometries draw() method is where an optimization may be done. Handling copy of colorbuffer to the canvas is negligeable compared
 to handling all OpenGL drawing primitives.
