@@ -171,6 +171,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
         if (w.getFaceDisplayed()) {
           faceToReset.add(w);
           w.setFaceDisplayed(false);
+          w.setWireframeColorFromPolygonPoints(true);
         }
       }
     }
@@ -186,6 +187,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   protected void reloadFace() {
     for (Wireframeable w : faceToReset) {
       w.setFaceDisplayed(true);
+      w.setWireframeColorFromPolygonPoints(false);
     }
   }
 

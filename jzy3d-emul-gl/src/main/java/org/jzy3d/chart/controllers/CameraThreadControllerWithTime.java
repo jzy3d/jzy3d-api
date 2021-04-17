@@ -36,6 +36,11 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
 
   /** Used in case no rate limiter is used */
   protected static final int MIN_LOOP_PAUSE_MS = 100;
+  /**
+   * The interval between each rate limit verification in MS
+   */
+  protected static final int RATE_CHECK_RATE = 100;
+  
 
   public CameraThreadControllerWithTime() {}
 
@@ -72,7 +77,12 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
         // consider the history of past rendering time.
         if (rateLimiter != null) {
           while (!rateLimiter.rateLimitCheck()) {
-            Thread.sleep(100); // wait 10 ms between each check
+            
+            t.toc();
+            int elapsedMili = (int)t.elapsedMilisecond();
+            int pauseMili = RATE_CHECK_RATE - elapsedMili;
+            if(pauseMili>0)
+              Thread.sleep(pauseMili); // wait not more than 
           }
         } else {
           Thread.sleep(MIN_LOOP_PAUSE_MS);
@@ -85,7 +95,7 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
         double elapsedRatio = t.elapsedSecond() / speed;
         double rotation = elapsedRatio * Math.PI * 2;
         rotate(-rotation);
-        //System.out.println("Rotate after " + rateLimiter.getLastRenderingTimeFromCanvas()
+        //System.out.println("Rotate after " + ((RateLimiterAdaptsToRenderTime)rateLimiter).getLastRenderingTimeFromCanvas()
         //    + " move ratio : " + elapsedRatio + " rotation:" + rotation);
 
         // ---------------------------------
@@ -99,12 +109,12 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
     }
   }
 
-  public float getStep() {
-    return step;
+  public double getSpeed() {
+    return speed;
   }
 
-  public void setStep(float step) {
-    this.step = step;
+  public void setSpeed(double speed) {
+    this.speed = speed;
   }
 
   public RateLimiter getRateLimiter() {
