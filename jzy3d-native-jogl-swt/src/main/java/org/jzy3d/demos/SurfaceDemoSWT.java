@@ -71,6 +71,7 @@ public class SurfaceDemoSWT {
         display.sleep();
       }
     }
+    chart.stopAnimation();
     display.dispose();
   }
 }

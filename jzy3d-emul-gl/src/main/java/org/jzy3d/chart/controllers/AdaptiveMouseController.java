@@ -69,6 +69,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     // decide if an optimization should be applied
     if (!getChart().getQuality().isAnimated() && detectIfRenderingIsSlow(lastRenderingTime)) {
       mustOptimizeMouseDrag = true;
+      // never true if policy is null
     }
 
     // apply optimization
@@ -90,7 +91,10 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   }
 
   protected boolean detectIfRenderingIsSlow(double lastRenderingTime) {
-    return policy.optimizeForRenderingTimeLargerThan < lastRenderingTime;
+    if(policy==null)
+      return false;
+    else
+      return policy.optimizeForRenderingTimeLargerThan < lastRenderingTime;
   }
 
   @Override
