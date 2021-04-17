@@ -44,7 +44,8 @@ public class Quality {
   /**
    * Enables color interpolation.
    */
-  public static final Quality Intermediate = new Quality(true, false, true, false, false, false, true);
+  public static final Quality Intermediate =
+      new Quality(true, false, true, false, false, false, true);
   /**
    * Minimal quality to allow fastest rendering (no alpha, interpolation or antialiasing).
    */
@@ -151,6 +152,24 @@ public class Quality {
 
   public void setPreserveViewportSize(boolean preserveViewportSize) {
     this.preserveViewportSize = preserveViewportSize;
+  }
+
+  public boolean isHiDPIEnabled() {
+    return !isPreserveViewportSize();
+  }
+
+  /**
+   * If true, states that the chart should make use of HiDPI or Retina capabilities to draw more
+   * good looking charts due to higher number of physical pixels.
+   * 
+   * A convenient shortcut to 
+   * <code>
+   * setPreserveViewportSize(!hidpi)
+   * </code>
+   * @param hidpi
+   */
+  public void setHiDPIEnabled(boolean hidpi) {
+    setPreserveViewportSize(!hidpi);
   }
 
   public Quality clone() {
