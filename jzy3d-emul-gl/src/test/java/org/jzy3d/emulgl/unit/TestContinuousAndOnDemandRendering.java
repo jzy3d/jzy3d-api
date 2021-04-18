@@ -83,8 +83,8 @@ public class TestContinuousAndOnDemandRendering {
     if (false) {
       canvas.processEvent(event); // 2.5s
       canvas.processEvent(event); // 2.5s
-      canvas.doDisplay(); // 10
-      canvas.doDisplay(); // 10*/
+      canvas.doRender(); // 10
+      canvas.doRender(); // 10*/
       // canvas.doDisplay(); // 10
     }
 

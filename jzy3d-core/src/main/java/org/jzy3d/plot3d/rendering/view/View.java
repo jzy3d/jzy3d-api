@@ -6,7 +6,7 @@ import org.apache.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.events.IViewIsVerticalEventListener;
+import org.jzy3d.events.IViewEventListener;
 import org.jzy3d.events.IViewLifecycleEventListener;
 import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewIsVerticalEvent;
@@ -73,8 +73,7 @@ public class View {
   protected boolean squared = true;
   protected float cameraRenderingSphereRadiusFactor = 1f;
   protected float cameraRenderingSphereRadiusFactorOnTop = 0.25f;
-
-
+  
   // view objects
   protected Camera cam;
   protected IAxis axis;
@@ -91,10 +90,13 @@ public class View {
 
   // view listeners
   protected List<IViewPointChangedListener> viewPointChangedListeners;
-  protected List<IViewIsVerticalEventListener> viewOnTopListeners;
+  protected List<IViewEventListener> viewOnTopListeners;
   protected List<IViewLifecycleEventListener> viewLifecycleListeners;
   protected boolean wasOnTopAtLastRendering;
 
+  // view states
+  protected boolean first = true;
+  
   // constants
   public static final float PI_div2 = (float) Math.PI / 2;
   public static final float DISTANCE_DEFAULT = 2000;
@@ -657,11 +659,11 @@ public class View {
     return annotations.getGraph();
   }
 
-  public boolean addViewOnTopEventListener(IViewIsVerticalEventListener listener) {
+  public boolean addViewEventListener(IViewEventListener listener) {
     return viewOnTopListeners.add(listener);
   }
 
-  public boolean removeViewOnTopEventListener(IViewIsVerticalEventListener listener) {
+  public boolean removeViewOnTopEventListener(IViewEventListener listener) {
     return viewOnTopListeners.remove(listener);
   }
 
@@ -669,11 +671,16 @@ public class View {
     ViewIsVerticalEvent e = new ViewIsVerticalEvent(this);
 
     if (isOnTop)
-      for (IViewIsVerticalEventListener listener : viewOnTopListeners)
+      for (IViewEventListener listener : viewOnTopListeners)
         listener.viewVerticalReached(e);
     else
-      for (IViewIsVerticalEventListener listener : viewOnTopListeners)
+      for (IViewEventListener listener : viewOnTopListeners)
         listener.viewVerticalLeft(e);
+  }
+
+  protected void fireViewFirstRender() {
+      for (IViewEventListener listener : viewOnTopListeners)
+        listener.viewFirstRender();
   }
 
   public boolean addViewPointChangedListener(IViewPointChangedListener listener) {
@@ -832,7 +839,7 @@ public class View {
 
   public void render() {
     fireViewLifecycleWillRender(null);
-
+    
     renderBackground(0f, 1f);
     renderScene();
     renderOverlay();
@@ -862,8 +869,14 @@ public class View {
   }
 
   public void renderScene(ViewportConfiguration viewport) {
-    // updateQuality(); // REMOVED BECAUSE NOT NECESSARY
 
+    //synchronized(this) {
+      if(first) {
+        fireViewFirstRender();
+        first=false;
+      }
+    //}
+    
     BoundingBox3d scaling = computeScaledViewBounds();
     updateCamera(viewport, scaling);
     renderAxeBox();

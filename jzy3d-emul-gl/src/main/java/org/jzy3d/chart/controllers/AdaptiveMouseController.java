@@ -147,7 +147,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     gl.setAutoAdaptToHiDPI(currentHiDPI);
     // this force the GL image to apply the new HiDPI setting immediatly
     gl.updatePixelScale(canvas.getGraphics());
-    gl.resetViewport();
+    gl.applyViewport();
   }
 
   protected void disableWireframe(Chart chart) {

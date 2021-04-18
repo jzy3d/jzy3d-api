@@ -2,11 +2,11 @@ package org.jzy3d.demos.scatter;
 
 import java.util.Random;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
-import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class ScatterDemoEmulGL {
@@ -16,15 +16,15 @@ public class ScatterDemoEmulGL {
     q.setPreserveViewportSize(false); // need java 9+ to enable HiDPI & Retina displays
 
     Chart chart = new EmulGLChartFactory().newChart(q);
-    chart.getScene().add(scatter());
+    chart.add(scatter(500000));
     chart.open();
     chart.addMouseCameraController();
     
-    ((EmulGLCanvas) chart.getCanvas()).setProfileDisplayMethod(true); // to print frame rate
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    skin.getCanvas().setProfileDisplayMethod(true);
   }
 
-  private static Scatter scatter() {
-    int size = 50000;
+  private static Scatter scatter(int size) {
     float x;
     float y;
     float z;
