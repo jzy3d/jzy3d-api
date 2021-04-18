@@ -23,6 +23,7 @@ import java.awt.AWTEvent;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 
@@ -39,7 +40,7 @@ public class GLCanvas extends Canvas {
 	protected GL myGL = new GL();
 	protected GLU myGLU = new GLU(myGL);
 	protected GLUT myUT = new GLUT(myGL);
-
+		
 	/**
 	 * This override let {@link GLUT#processEvent(AWTEvent)} be informed of
 	 * {@link AWTEvent} traversing this canvas (mouse, keyboard, resize).
@@ -69,15 +70,15 @@ public class GLCanvas extends Canvas {
 
 	public void paint(Graphics g) {
 		myGL.glXSwapBuffers(g, this);
-		//postRenderString(g, "GLCanvas.paint(Graphics g) : " + kPaint, 10, 12*4);
-		kPaint++;
 	}
 	
-	int kPaint = 0;
-	
-	void postRenderString(Graphics g, String message, int x, int y){
-		g.drawString(message, x, y);		
-	}
+    /** Pixel scale is used to model the pixel ratio introduced by HiDPI */
+    protected void getPixelScaleFromG2D(Graphics2D g2d) {
+      AffineTransform globalTransform = g2d.getTransform();
+      myGL.setPixelScaleX(globalTransform.getScaleX());
+      myGL.setPixelScaleY(globalTransform.getScaleY());  
+    }
+
 
 	// ************ RETRIEVE RENDERING CONTEXT ************ //
 

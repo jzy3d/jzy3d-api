@@ -3,6 +3,9 @@ package org.jzy3d.chart.factories;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLAnimator;
+import org.jzy3d.chart.controllers.AdaptiveMouseController;
+import org.jzy3d.chart.controllers.RateLimiter;
+import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
@@ -118,20 +121,38 @@ public class EmulGLPainterFactory implements IPainterFactory {
     internalPainter.getGLUT();
   }
 
-
-
-  /**
-   * This override
-   */
   @Override
   public AWTCameraMouseController newMouseCameraController(Chart chart) {
-    return new AWTCameraMouseController(chart);
-    // return new EmulGLMouse(chart);
+    //AWTCameraMouseController controller = new AWTCameraMouseController(chart);
+    AdaptiveMouseController controller = new AdaptiveMouseController(chart);
+    EmulGLCanvas canvas = (EmulGLCanvas)chart.getCanvas();
+    RateLimiter rateLimiter = newRateLimiter(canvas);
+    if(rateLimiter!=null) {
+      controller.setRateLimiter(rateLimiter);
+    }
+    return controller;
   }
 
+  public RateLimiter newRateLimiter(Chart chart) {
+    return newRateLimiter((EmulGLCanvas)chart.getCanvas());
+  }
+  public RateLimiter newRateLimiter(EmulGLCanvas canvas) {
+    //mouse.setRateLimiter(new RateLimiterByMilisecond(200));
+    //mouse.setRateLimiter(new EmulGLMouseRateLimiterLock(c));
+    return new RateLimiterAdaptsToRenderTime(canvas);
+    //key.setRateLimiter(new EmulGLMouseRateLimiterAdaptsToRenderTime(c));
+    
+  }
+  
   @Override
   public AWTCameraKeyController newKeyboardCameraController(Chart chart) {
-    return new AWTCameraKeyController(chart);
+    AWTCameraKeyController controller = new AWTCameraKeyController(chart);
+    EmulGLCanvas canvas = (EmulGLCanvas)chart.getCanvas();
+    RateLimiter rateLimiter = newRateLimiter(canvas);
+    if(rateLimiter!=null) {
+      controller.setRateLimiter(rateLimiter);
+    }
+    return controller;
   }
 
   @Override
