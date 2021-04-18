@@ -88,12 +88,18 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
    * Drawing the point list in wireframe mode
    */
   protected void callPointForWireframe(IPainter painter) {
-    painter.color(wireframeColor);
+    if(!isWireframeColorFromPolygonPoints()) {
+      painter.color(wireframeColor);
+    }
     painter.glLineWidth(getWireframeWidth());
     painter.glBegin_LineLoop(); // changed for JGL as wireframe polygon are transformed to pair of
                                 // triangles
 
     for (Point p : points) {
+      if(isWireframeColorFromPolygonPoints()) {
+        painter.color(p.rgb);
+      }
+
       painter.vertex(p.xyz, spaceTransformer);
     }
     painter.glEnd();
@@ -108,6 +114,10 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       if (mapper != null) {
         Color c = mapper.getColor(p.xyz);
         painter.color(c);
+        
+        // store this color in case it should be used for drawing
+        // the wireframe as stated by setWireframeColorFrom...
+        p.rgb = c; 
       } else {
         painter.color(p.rgb);
       }

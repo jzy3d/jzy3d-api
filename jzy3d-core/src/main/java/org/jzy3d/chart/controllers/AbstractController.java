@@ -8,6 +8,10 @@ import org.jzy3d.events.ControllerEvent;
 import org.jzy3d.events.ControllerEventListener;
 
 public class AbstractController {
+  protected List<Chart> targets;
+  protected Vector<ControllerEventListener> controllerListeners =
+      new Vector<ControllerEventListener>(1);
+
   public AbstractController() {}
 
   public AbstractController(Chart chart) {
@@ -52,8 +56,4 @@ public class AbstractController {
     for (ControllerEventListener listener : controllerListeners)
       listener.controllerEventFired(e);
   }
-
-  protected List<Chart> targets;
-  protected Vector<ControllerEventListener> controllerListeners =
-      new Vector<ControllerEventListener>(1);
 }

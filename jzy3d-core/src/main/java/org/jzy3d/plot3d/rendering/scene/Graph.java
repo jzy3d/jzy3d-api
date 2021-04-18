@@ -292,12 +292,13 @@ public class Graph {
   public synchronized List<ILegend> getLegends() {
     List<ILegend> list = new ArrayList<ILegend>();
 
-    // synchronized(components){
-    for (Drawable c : components)
-      if (c != null)
-        if (c.hasLegend() && c.isLegendDisplayed())
+    for (Drawable c : components) {
+      if (c != null) {
+        if (c.hasLegend() && c.isLegendDisplayed()) {
           list.add(c.getLegend());
-    // }
+        }
+      }
+    }
     return list;
   }
 
