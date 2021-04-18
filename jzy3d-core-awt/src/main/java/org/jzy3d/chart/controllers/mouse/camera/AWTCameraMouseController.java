@@ -70,15 +70,6 @@ public class AWTCameraMouseController extends AbstractCameraController
   /** Compute shift or rotate */
   @Override
   public void mouseDragged(MouseEvent e) {
-    
-/*    if(isApplyingMouseDragged) {
-      System.out.println("SKIP MOUSE");
-      return;
-    }
-    isApplyingMouseDragged = true;
-    System.out.println("* LOCK MOUSE");*/
-    
-    
     // Check if mouse rate limiter wish to forbid this mouse drag instruction
     if(rateLimiter!=null && !rateLimiter.rateLimitCheck()) {
       return;
@@ -100,15 +91,7 @@ public class AWTCameraMouseController extends AbstractCameraController
         shift(move.y / 500);
     }
     prevMouse = mouse;
-    
-    
-    //isApplyingMouseDragged = false;
-    
-    //System.out.println("UNLOCK MOUSE");
-
   }
-  
-  //boolean isApplyingMouseDragged = false;
 
   /** Compute zoom */
   @Override

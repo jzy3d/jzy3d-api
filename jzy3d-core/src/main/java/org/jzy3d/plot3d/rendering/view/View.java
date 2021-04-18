@@ -90,7 +90,7 @@ public class View {
 
   // view listeners
   protected List<IViewPointChangedListener> viewPointChangedListeners;
-  protected List<IViewEventListener> viewOnTopListeners;
+  protected List<IViewEventListener> viewEventListeners;
   protected List<IViewLifecycleEventListener> viewLifecycleListeners;
   protected boolean wasOnTopAtLastRendering;
 
@@ -178,7 +178,7 @@ public class View {
     this.quality = quality;
     this.annotations = factory.newScene(false);
 
-    this.viewOnTopListeners = new ArrayList<>();
+    this.viewEventListeners = new ArrayList<>();
     this.viewPointChangedListeners = new ArrayList<>();
     this.viewLifecycleListeners = new ArrayList<>();
     this.wasOnTopAtLastRendering = false;
@@ -212,7 +212,7 @@ public class View {
   public void dispose() {
     axis.dispose();
     cam = null;
-    viewOnTopListeners.clear();
+    viewEventListeners.clear();
     scene = null;
     canvas = null;
     quality = null;
@@ -660,27 +660,27 @@ public class View {
   }
 
   public boolean addViewEventListener(IViewEventListener listener) {
-    return viewOnTopListeners.add(listener);
+    return viewEventListeners.add(listener);
   }
 
   public boolean removeViewOnTopEventListener(IViewEventListener listener) {
-    return viewOnTopListeners.remove(listener);
+    return viewEventListeners.remove(listener);
   }
 
   protected void fireViewOnTopEvent(boolean isOnTop) {
     ViewIsVerticalEvent e = new ViewIsVerticalEvent(this);
 
     if (isOnTop)
-      for (IViewEventListener listener : viewOnTopListeners)
+      for (IViewEventListener listener : viewEventListeners)
         listener.viewVerticalReached(e);
     else
-      for (IViewEventListener listener : viewOnTopListeners)
+      for (IViewEventListener listener : viewEventListeners)
         listener.viewVerticalLeft(e);
   }
 
-  protected void fireViewFirstRender() {
-      for (IViewEventListener listener : viewOnTopListeners)
-        listener.viewFirstRender();
+  protected void fireViewFirstRenderStarts() {
+      for (IViewEventListener listener : viewEventListeners)
+        listener.viewFirstRenderStarts();
   }
 
   public boolean addViewPointChangedListener(IViewPointChangedListener listener) {
@@ -872,7 +872,7 @@ public class View {
 
     //synchronized(this) {
       if(first) {
-        fireViewFirstRender();
+        fireViewFirstRenderStarts();
         first=false;
       }
     //}

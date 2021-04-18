@@ -1,7 +1,7 @@
 package org.jzy3d.events;
 
 public interface IViewEventListener {
-  public void viewFirstRender();
+  public void viewFirstRenderStarts();
 
   public void viewVerticalReached(ViewIsVerticalEvent e);
 
