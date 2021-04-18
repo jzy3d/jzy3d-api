@@ -26,6 +26,8 @@ import org.jzy3d.plot3d.rendering.view.Camera;
  * @author Martin Pernollet
  */
 public class CameraThreadControllerWithTime extends CameraThreadController implements Runnable {
+  private static final int TIME_TO_SPIN_DEFAULT = 10;
+
   protected double speed = 10; // seconds to make a complete revolution
 
   /**
@@ -40,19 +42,25 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
   /**
    * The interval between each rate limit verification in MS
    */
-  protected static final int RATE_CHECK_RATE = 100;
-
+  protected static final int RATE_CHECK_RATE = 40;
+  /**
+   * Rotation direction : Direction.LEFT makes negative azimuth increments, while Direction.RIGHT
+   * make positive azimuth increments.
+   */
   protected Direction direction = Direction.LEFT;
 
   public enum Direction {
     LEFT, RIGHT;
   }
 
-
   public CameraThreadControllerWithTime() {}
 
+  /**
+   * Defaults time to spin to 10
+   * @param chart
+   */
   public CameraThreadControllerWithTime(Chart chart) {
-    this(chart, 10);
+    this(chart, TIME_TO_SPIN_DEFAULT);
   }
 
   /**

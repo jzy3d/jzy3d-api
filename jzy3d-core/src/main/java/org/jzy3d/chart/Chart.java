@@ -156,13 +156,18 @@ public class Chart {
       }
     }
   }
-  
+
+  public void startAnimation() {
+    setAnimated(true);
+  }
+
   public void stopAnimation() {
     setAnimated(false);
   }
 
-  public void startAnimation() {
-    setAnimated(true);
+  public void stopAllThreads() {
+    getMouse().getSlaveThreadController().stop();
+    stopAnimation();
   }
 
 
@@ -194,31 +199,31 @@ public class Chart {
   public ICameraMouseController addMouseCameraController() {
     if(mouse==null) {
       mouse = getFactory().getPainterFactory().newMouseCameraController(this);
-    }
-    
-    CameraThreadController rotation = mouse.getSlaveThreadController();//new CameraThreadController(this);
-    rotation.setStep(0.025f);
-    
-    // Always keep update view until the camera thread controller
-    // Has a timer to avoid rotating too fast (when no update view, thread can
-    // go much faster so rotation is to speedy!)
-    rotation.setUpdateViewDefault(true);
-    // later, should apply : !chart.getQuality().isAnimated());
 
-    
-   // mouse.addSlaveThreadController(rotation);
-    
-    // Switch between on demand/continuous rendering
-    // keep to false if animated to avoid double rendering
-    // keep to true otherwise the mouse does not update 
-    mouse.setUpdateViewDefault(!getQuality().isAnimated()); 
-    
+      CameraThreadController rotation = mouse.getSlaveThreadController();//new CameraThreadController(this);
+      rotation.setStep(0.025f);
+      
+      // Always keep update view until the camera thread controller
+      // Has a timer to avoid rotating too fast (when no update view, thread can
+      // go much faster so rotation is to speedy!)
+      rotation.setUpdateViewDefault(true);
+      // later, should apply : !chart.getQuality().isAnimated());
+
+      
+     // mouse.addSlaveThreadController(rotation);
+      
+      // Switch between on demand/continuous rendering
+      // keep to false if animated to avoid double rendering
+      // keep to true otherwise the mouse does not update 
+      mouse.setUpdateViewDefault(!getQuality().isAnimated()); 
+
+    }
     return mouse;
   }
 
   public IMousePickingController addMousePickingController(int clickWidth) {
     if(mousePicking==null) {
-    mousePicking = getFactory().getPainterFactory().newMousePickingController(this, clickWidth);
+      mousePicking = getFactory().getPainterFactory().newMousePickingController(this, clickWidth);
     }
     return mousePicking;
   }
@@ -226,11 +231,12 @@ public class Chart {
   public ICameraKeyController addKeyboardCameraController() {
     if(keyboard==null) {
       keyboard = getFactory().getPainterFactory().newKeyboardCameraController(this);
+
+      // Switch between on demand/continuous rendering
+      // keep to false if animated to avoid double rendering
+      // keep to true otherwise the mouse does not update 
+      keyboard.setUpdateViewDefault(!getQuality().isAnimated()); 
     }
-    // Switch between on demand/continuous rendering
-    // keep to false if animated to avoid double rendering
-    // keep to true otherwise the mouse does not update 
-    keyboard.setUpdateViewDefault(!getQuality().isAnimated()); 
 
     return keyboard;
   }
