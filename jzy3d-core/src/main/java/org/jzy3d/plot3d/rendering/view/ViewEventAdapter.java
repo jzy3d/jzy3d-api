@@ -5,7 +5,7 @@ import org.jzy3d.events.ViewIsVerticalEvent;
 
 public class ViewEventAdapter implements IViewEventListener{
   @Override
-  public void viewFirstRender() {
+  public void viewFirstRenderStarts() {
   }
 
   @Override

@@ -35,6 +35,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class Chart {
+  private static final int MOUSE_PICK_SIZE_DEFAULT = 10;
   private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";
   public static final Quality DEFAULT_QUALITY = Quality.Intermediate.clone();
 
@@ -200,18 +201,17 @@ public class Chart {
     if(mouse==null) {
       mouse = getFactory().getPainterFactory().newMouseCameraController(this);
 
-      CameraThreadController rotation = mouse.getSlaveThreadController();//new CameraThreadController(this);
+      CameraThreadController rotation = mouse.getSlaveThreadController();
       rotation.setStep(0.025f);
-      
+
+      // ---------------------------------------------------
       // Always keep update view until the camera thread controller
       // Has a timer to avoid rotating too fast (when no update view, thread can
       // go much faster so rotation is to speedy!)
       rotation.setUpdateViewDefault(true);
       // later, should apply : !chart.getQuality().isAnimated());
-
       
-     // mouse.addSlaveThreadController(rotation);
-      
+      // ---------------------------------------------------
       // Switch between on demand/continuous rendering
       // keep to false if animated to avoid double rendering
       // keep to true otherwise the mouse does not update 
@@ -257,7 +257,7 @@ public class Chart {
 
   public IMousePickingController getMousePicking() {
     if(mousePicking==null)
-      return addMousePickingController(10);
+      return addMousePickingController(MOUSE_PICK_SIZE_DEFAULT);
     else
       return mousePicking;
   }
