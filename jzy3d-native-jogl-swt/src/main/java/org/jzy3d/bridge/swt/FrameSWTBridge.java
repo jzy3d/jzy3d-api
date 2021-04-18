@@ -70,7 +70,7 @@ public class FrameSWTBridge implements IFrame {
   }
 
   public void dispose() {
-    chart.stopAnimation();
+    chart.stopAllThreads();
     chart.dispose();
     display.dispose();
   }
