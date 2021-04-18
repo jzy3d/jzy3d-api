@@ -5,7 +5,12 @@ import org.jzy3d.chart.controllers.CameraThreadControllerWithTime;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.chart.factories.IFrame;
+import org.jzy3d.maths.Rectangle;
+import org.jzy3d.painters.IPainter.Font;
+import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 /**
  * {@link EmulGLSkin} is a chart facade that returns known subtypes of chart components already downcasted.
@@ -41,6 +46,24 @@ public class EmulGLSkin {
     return (EmulGLCanvas)chart.getCanvas();
   }
 
+  public IFrame open(int width, int height) {
+    IFrame frame = chart.open(width, height);
+    
+    triggerRenderAfterMili(30);
+
+    return frame;
+  }
+
+  public void triggerRenderAfterMili(long mili) {
+    if (!chart.getQuality().isAnimated()) {
+      try {
+        Thread.sleep(30);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      chart.render();
+    }
+  }
   
   public AdaptiveMouseController addMouseCameraController() {
     return (AdaptiveMouseController)chart.addMouseCameraController();
@@ -72,7 +95,12 @@ public class EmulGLSkin {
   }
 
   
-  public CameraThreadControllerWithTime getSlaveThreadController() {
+  public CameraThreadControllerWithTime getThread() {
     return getSlaveThreadController(getMouse());
+  }
+  
+  public TextBitmapRenderer getAxisTextRenderer() {
+    return ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer());
+
   }
 }

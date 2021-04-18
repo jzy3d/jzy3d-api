@@ -3,6 +3,7 @@ package org.jzy3d.demos.surface;
 import java.io.File;
 import java.io.IOException;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -13,10 +14,7 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axis.AxisBox;
-import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import jgl.GLCanvas;
 
 
@@ -36,20 +34,17 @@ public class SurfaceDemoEmulGL {
     EmulGLChartFactory factory = new EmulGLChartFactory();
 
     Quality q = Quality.Advanced; 
+    q.setAnimated(false); // leave CPU quiet if no need to re-render
+    q.setHiDPIEnabled(true); // need java 9+ to enable HiDPI & Retina displays 
+    // (tutorials built with Java 8 for backward compatibility, update your runtime to get HiDPI)
     Chart chart = factory.newChart(q);
     chart.add(surface);
     
-    EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
-    c.setProfileDisplayMethod(true);
-    c.getGL().setAutoAdaptToHiDPI(true); // need java 9+ to enable HiDPI & Retina displays
-    
-    //chart.getAxisLayout().setFont(Font.Helvetica_18);
-    ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer()).setFont(Font.TimesRoman_10);
-    chart.open();
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    skin.getCanvas().setProfileDisplayMethod(true);
+    skin.getAxisTextRenderer().setFont(Font.TimesRoman_10);
 
-    // --------------------------------
-    
-    chart.setAnimated(true);
+    chart.open();
     chart.addMouseCameraController();
 
 

@@ -39,7 +39,7 @@ public class FrameSwing extends JFrame implements IFrame {
       @Override
       public void windowClosing(WindowEvent e) {
         FrameSwing.this.remove((java.awt.Component) FrameSwing.this.chart.getCanvas());
-        FrameSwing.this.chart.stopAnimation();
+        FrameSwing.this.chart.stopAllThreads();
         FrameSwing.this.chart.dispose();
         FrameSwing.this.chart = null;
         FrameSwing.this.dispose();

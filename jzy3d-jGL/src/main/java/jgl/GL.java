@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.tools.JavaCompiler;
 import jgl.context.gl_context;
 import jgl.context.gl_list;
 import jgl.context.gl_object;
@@ -59,7 +60,7 @@ public class GL {
 	protected gl_list List;
 
 	protected Component canvas;
-	protected Image glImage;
+	protected BufferedImage glImage;
 	protected int StartX = 0;
 	protected int StartY = 0;
 	protected List<TextToDraw> textsToDraw = new ArrayList<>();
@@ -103,7 +104,7 @@ public class GL {
 		return Context.CR;
 	}
 
-	public Image getRenderedImage() {
+	public BufferedImage getRenderedImage() {
 		return glImage;
 	}
 	
@@ -114,8 +115,10 @@ public class GL {
 	public double getPixelScaleY() {
       return pixelScaleY;
     }
+	
+	
 
-  /** the following functions are only for developpers **/
+  /* the following functions are only for developpers 
 	public MemoryImageSource glJGetImageSource() {
 		return new MemoryImageSource(Context.Viewport.Width, Context.Viewport.Height, Context.ColorBuffer.Buffer, 0,
 				Context.Viewport.Width);
@@ -123,9 +126,25 @@ public class GL {
 
 	public Image glJGetImage(MemoryImageSource imagesource) {
 		return canvas.createImage(imagesource);
-	}
+	}*/
 
-	public Component glJGetComponent() {
+	public int getStartX() {
+      return StartX;
+    }
+  
+    public int getStartY() {
+      return StartY;
+    }
+  
+    public int getDesiredWidth() {
+      return desiredWidth;
+    }
+  
+    public int getDesiredHeight() {
+      return desiredHeight;
+    }
+  
+    public Component glJGetComponent() {
 		return canvas;
 	}
 
@@ -158,11 +177,10 @@ public class GL {
 	 * <code>void glXSwapBuffers (Display *dpy, GLXDrawable drawable)</code>
 	 */
 	public void glXSwapBuffers(Graphics g, ImageObserver o) {
-	  updatePixelScale(g);
-	  
-	  //System.out.println("UPDATE PIX SCALE");
 	  g.drawImage(glImage, StartX, StartY, desiredWidth, desiredHeight, o);
 	}
+	
+	
 
     public void updatePixelScale(Graphics g) {
       Graphics2D g2d = (Graphics2D)g;
@@ -1764,31 +1782,28 @@ public class GL {
 	    desiredY = y;
 		desiredWidth = width;
         desiredHeight = height;
+
+        // Update pixel scale to guess if HiDPI
+        if(canvas.getGraphics()!=null)
+          updatePixelScale(canvas.getGraphics());
         
-        resetViewport();
-		/*
-		 * JavaImageSource = new MemoryImageSource (Context.Viewport.Width,
-		 * Context.Viewport.Height, Context.ColorBuffer.Buffer, 0,
-		 * Context.Viewport.Width); JavaImageSource.setAnimated (true);
-		 * JavaImageSource.setFullBufferUpdates (true); JavaImage =
-		 * JavaComponent.createImage (JavaImageSource);
-		 */
+        applyViewport();
 	}
 
 	/**
 	 * Apply viewport according to the latest known expected width/height
 	 * and the latest known pixel scales.
 	 */
-    public void resetViewport() {
-      //System.out.println("Viewport : " + autoAdaptToHiDPI + pixelScaleX);
-          
-      actualWidth = (int)(desiredWidth * pixelScaleX);
-      actualHeight = (int)(desiredHeight * pixelScaleY);
-
-      if(pixelScaleX>0 && pixelScaleY>0)
-         CC.gl_viewport(desiredX, desiredY, actualWidth, actualHeight);
-      else
-         CC.gl_viewport(desiredX, desiredY, desiredWidth, desiredHeight);
+    public void applyViewport() {
+      if(autoAdaptToHiDPI) {
+        actualWidth = (int)(desiredWidth * pixelScaleX);
+        actualHeight = (int)(desiredHeight * pixelScaleY);
+      }
+      else {
+        actualWidth = desiredWidth;
+        actualHeight = desiredHeight;
+      }
+      CC.gl_viewport(desiredX, desiredY, actualWidth, actualHeight);
     }
 
 	/** GLvoid glPushMatrix (GLvoid) */
