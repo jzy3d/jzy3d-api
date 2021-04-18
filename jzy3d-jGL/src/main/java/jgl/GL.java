@@ -1784,7 +1784,7 @@ public class GL {
         desiredHeight = height;
 
         // Update pixel scale to guess if HiDPI
-        if(canvas.getGraphics()!=null)
+        if(canvas!=null && canvas.getGraphics()!=null)
           updatePixelScale(canvas.getGraphics());
         
         applyViewport();
