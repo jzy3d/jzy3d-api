@@ -14,6 +14,16 @@ import org.jzy3d.painters.IPainter;
  * @author Martin Pernollet
  */
 public abstract class Wireframeable extends Drawable {
+  protected Color wireframeColor;
+  protected float wireframeWidth;
+  protected boolean wireframeDisplayed;
+  protected boolean wireframeColorFromPolygonPoints;
+  protected boolean faceDisplayed;
+  protected boolean polygonWireframeDepthTrick = false;
+  protected boolean polygonOffsetFillEnable = true;
+  protected float polygonOffsetFactor = 1.0f;
+  protected float polygonOffsetUnit = 1.0f;
+
   /**
    * Initialize the wireframeable with a white color and width of 1 for wires, hidden wireframe, and
    * displayed faces.
@@ -30,6 +40,16 @@ public abstract class Wireframeable extends Drawable {
     setPolygonOffsetFillEnable(true);
     setPolygonWireframeDepthTrick(false);
   }
+  
+  public boolean isWireframeColorFromPolygonPoints() {
+    return wireframeColorFromPolygonPoints;
+  }
+
+  public void setWireframeColorFromPolygonPoints(boolean wireframeColorFromPolygonPoints) {
+    this.wireframeColorFromPolygonPoints = wireframeColorFromPolygonPoints;
+  }
+
+
 
   /** Set the wireframe color. */
   public void setWireframeColor(Color color) {
@@ -140,15 +160,4 @@ public abstract class Wireframeable extends Drawable {
   protected void applyDepthRangeForOverlying(IPainter painter) {
     painter.glDepthRangef(0.0f, 0.9f);
   }
-
-
-
-  protected Color wireframeColor;
-  protected float wireframeWidth;
-  protected boolean wireframeDisplayed;
-  protected boolean faceDisplayed;
-  protected boolean polygonWireframeDepthTrick = false;
-  protected boolean polygonOffsetFillEnable = true;
-  protected float polygonOffsetFactor = 1.0f;
-  protected float polygonOffsetUnit = 1.0f;
 }

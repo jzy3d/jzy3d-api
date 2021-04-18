@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
+import javax.tools.JavaCompiler;
 import jgl.context.gl_context;
 import jgl.context.gl_list;
 import jgl.context.gl_object;
@@ -59,7 +60,7 @@ public class GL {
 	protected gl_list List;
 
 	protected Component canvas;
-	protected Image glImage;
+	protected BufferedImage glImage;
 	protected int StartX = 0;
 	protected int StartY = 0;
 	protected List<TextToDraw> textsToDraw = new ArrayList<>();
@@ -82,6 +83,10 @@ public class GL {
     protected double pixelScaleX = 1;
     /** Vertical pixel scale induced by HiDPI. */
     protected double pixelScaleY = 1;
+    
+    protected int desiredX = 0;
+    protected int desiredY = 0;
+    
     /** Width after considering pixel scale induced by HiDPI. */
     protected int actualWidth = 0;
     /** Height after considering pixel scale induced by HiDPI. */
@@ -99,7 +104,7 @@ public class GL {
 		return Context.CR;
 	}
 
-	public Image getRenderedImage() {
+	public BufferedImage getRenderedImage() {
 		return glImage;
 	}
 	
@@ -110,8 +115,10 @@ public class GL {
 	public double getPixelScaleY() {
       return pixelScaleY;
     }
+	
+	
 
-  /** the following functions are only for developpers **/
+  /* the following functions are only for developpers 
 	public MemoryImageSource glJGetImageSource() {
 		return new MemoryImageSource(Context.Viewport.Width, Context.Viewport.Height, Context.ColorBuffer.Buffer, 0,
 				Context.Viewport.Width);
@@ -119,9 +126,25 @@ public class GL {
 
 	public Image glJGetImage(MemoryImageSource imagesource) {
 		return canvas.createImage(imagesource);
-	}
+	}*/
 
-	public Component glJGetComponent() {
+	public int getStartX() {
+      return StartX;
+    }
+  
+    public int getStartY() {
+      return StartY;
+    }
+  
+    public int getDesiredWidth() {
+      return desiredWidth;
+    }
+  
+    public int getDesiredHeight() {
+      return desiredHeight;
+    }
+  
+    public Component glJGetComponent() {
 		return canvas;
 	}
 
@@ -154,18 +177,26 @@ public class GL {
 	 * <code>void glXSwapBuffers (Display *dpy, GLXDrawable drawable)</code>
 	 */
 	public void glXSwapBuffers(Graphics g, ImageObserver o) {
-	  Graphics2D g2d = (Graphics2D)g;
-	  //printGlobalScale(g2d); 
-      // produce 2.0 factory on MacOS with Retina
-	  // produce 1.5 factor on Win10 HiDPI on the same Apple hardware as above
-	  
-	  if(autoAdaptToHiDPI)
-	    getPixelScaleFromG2D(g2d);
-	  else
-	    resetPixelScale();
-	  
 	  g.drawImage(glImage, StartX, StartY, desiredWidth, desiredHeight, o);
 	}
+	
+	
+
+    public void updatePixelScale(Graphics g) {
+      Graphics2D g2d = (Graphics2D)g;
+  	  //printGlobalScale(g2d); 
+        // produce 2.0 factory on MacOS with Retina
+  	  // produce 1.5 factor on Win10 HiDPI on the same Apple hardware as above
+  	  
+  	  // We will read pixel scale from G2D while swapping images. This means
+  	  // we may be late of 1 image to adapt to an HiDPI change.
+  	  if(autoAdaptToHiDPI) {
+  	      getPixelScaleFromG2D(g2d);
+  	  }
+  	  else {
+  	      resetPixelScale();
+  	  }
+    }
 
 	public void glXSwapBuffers(Graphics g, Applet o) {
 		glXSwapBuffers(g, (ImageObserver) o);
@@ -241,6 +272,14 @@ public class GL {
       pixelScaleY = globalTransform.getScaleY();  
     }
     
+    public void setPixelScaleX(double pixelScaleX) {
+      this.pixelScaleX = pixelScaleX;
+    }
+
+    public void setPixelScaleY(double pixelScaleY) {
+      this.pixelScaleY = pixelScaleY;
+    }
+
     /** Reset pixel scale to (1,1) */
     protected void resetPixelScale() {
       pixelScaleX = 1;
@@ -1739,23 +1778,33 @@ public class GL {
 			height = 1;
 		}
 		
+		desiredX = x;
+	    desiredY = y;
 		desiredWidth = width;
         desiredHeight = height;
-        actualWidth = (int)(width * pixelScaleX);
-        actualHeight = (int)(height * pixelScaleY);
+
+        // Update pixel scale to guess if HiDPI
+        if(canvas!=null && canvas.getGraphics()!=null)
+          updatePixelScale(canvas.getGraphics());
         
-		if(pixelScaleX>0 && pixelScaleY>0)
-		  CC.gl_viewport(x, y, actualWidth, actualHeight);
-		else
-		  CC.gl_viewport(x, y, width, height);
-		/*
-		 * JavaImageSource = new MemoryImageSource (Context.Viewport.Width,
-		 * Context.Viewport.Height, Context.ColorBuffer.Buffer, 0,
-		 * Context.Viewport.Width); JavaImageSource.setAnimated (true);
-		 * JavaImageSource.setFullBufferUpdates (true); JavaImage =
-		 * JavaComponent.createImage (JavaImageSource);
-		 */
+        applyViewport();
 	}
+
+	/**
+	 * Apply viewport according to the latest known expected width/height
+	 * and the latest known pixel scales.
+	 */
+    public void applyViewport() {
+      if(autoAdaptToHiDPI) {
+        actualWidth = (int)(desiredWidth * pixelScaleX);
+        actualHeight = (int)(desiredHeight * pixelScaleY);
+      }
+      else {
+        actualWidth = desiredWidth;
+        actualHeight = desiredHeight;
+      }
+      CC.gl_viewport(desiredX, desiredY, actualWidth, actualHeight);
+    }
 
 	/** GLvoid glPushMatrix (GLvoid) */
 	public void glPushMatrix() {
