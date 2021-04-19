@@ -17,10 +17,12 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightSet;
@@ -29,6 +31,7 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import org.jzy3d.plot3d.transform.Scale;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -51,6 +54,7 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
  * @author Martin Pernollet
  */
 public class View {
+  
   protected static Logger LOGGER = Logger.getLogger(View.class);
 
   /**
@@ -116,7 +120,7 @@ public class View {
    * size change
    */
   protected boolean viewDirty = false;
-  protected static View current;
+
   protected BoundingBox3d initBounds;
 
   /**
@@ -186,7 +190,22 @@ public class View {
     this.scene.getGraph().getStrategy().setView(this);
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
-    current = this;
+    
+    canvas.addCanvasListener(new ICanvasListener() {
+      @Override
+      public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        TextBitmapRenderer txt = (TextBitmapRenderer)axis.getTextRenderer();
+        
+        if(pixelScaleX<=1) {
+          txt.setFont(Font.TimesRoman_10);
+          txt.setFont(Font.Helvetica_12);
+        }
+        else {
+          txt.setFont(Font.TimesRoman_24);
+          txt.setFont(Font.Helvetica_18);
+        }
+      }
+    });
   }
 
   public IPainter getPainter() {
@@ -1211,12 +1230,6 @@ public class View {
     Transform transform = new Transform(new Scale(scaling));
     annotations.getGraph().setTransform(transform);
     annotations.getGraph().draw(painter);
-  }
-
-  /* */
-
-  public static View current() {
-    return current;
   }
 
   /* */

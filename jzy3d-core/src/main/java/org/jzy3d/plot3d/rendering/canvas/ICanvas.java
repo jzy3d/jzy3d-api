@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -108,5 +109,9 @@ public interface ICanvas {
   
   public static final double LAST_RENDER_TIME_UNDEFINED = -1;
 
+  
+  public void addCanvasListener(ICanvasListener listener);
+  public void removeCanvasListener(ICanvasListener listener);
+  public List<ICanvasListener> getCanvasListeners();
 
 }
