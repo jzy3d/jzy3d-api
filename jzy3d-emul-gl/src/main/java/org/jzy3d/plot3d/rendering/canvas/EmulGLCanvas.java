@@ -293,11 +293,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   protected double lastRenderingTimeMs = LAST_RENDER_TIME_UNDEFINED;
 
-  public double getLastRenderingTime() {
+  @Override
+  public double getLastRenderingTimeMs() {
     return lastRenderingTimeMs;
   }
-
-  public static final double LAST_RENDER_TIME_UNDEFINED = -1;
 
   /*
    * @Override public void paint(Graphics g) { synchronized(this) {
