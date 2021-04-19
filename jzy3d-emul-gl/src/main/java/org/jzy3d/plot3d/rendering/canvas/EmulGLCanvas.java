@@ -33,6 +33,7 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import jgl.GL;
+import jgl.GL.PixelScaleListener;
 import jgl.GLCanvas;
 import jgl.GLUT;
 import jgl.context.gl_pointer;
@@ -62,6 +63,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   protected View view;
   protected EmulGLPainter painter;
   protected IAnimator animator;
+
+  protected List<ICanvasListener> canvasListeners = new ArrayList<>();
 
   protected AtomicBoolean isRenderingFlag = new AtomicBoolean(false);
 
@@ -95,6 +98,13 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     } else {
       myGL.setAutoAdaptToHiDPI(false);
     }
+    
+    myGL.addPixelScaleListener(new PixelScaleListener() {
+      @Override
+      public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        firePixelScaleChanged(pixelScaleX, pixelScaleY);
+      }
+    });
   }
 
   @Override
@@ -424,15 +434,38 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   public void removeKeyController(Object o) {
     removeKeyListener((java.awt.event.KeyListener) o);
   }
+  
+  @Override
+  public void addCanvasListener(ICanvasListener listener) {
+    canvasListeners.add(listener);
+  }
 
+  @Override
+  public void removeCanvasListener(ICanvasListener listener) {
+    canvasListeners.remove(listener);
+  }
+  
+  @Override
+  public List<ICanvasListener> getCanvasListeners(){
+    return canvasListeners;
+  }
+  
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for(ICanvasListener listener: canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
+  }
+  
+
+  /* *********************************************************************** */
+  /* ************************** PROFILE AND DEBUG ************************** */
+  /* *********************************************************************** */
+  
   @Override
   public String getDebugInfo() {
     return null;
   }
 
-  /* *********************************************************************** */
-  /* ************************** PROFILE AND DEBUG ************************** */
-  /* *********************************************************************** */
 
   /**
    * Render profile on top of an image (probably the image of the GL scene) previously collected
