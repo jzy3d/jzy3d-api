@@ -69,6 +69,12 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     setLayout(new BorderLayout());
     add(canvas, BorderLayout.CENTER);
   }
+  
+  @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
+
 
   @Override
   public IAnimator getAnimation() {

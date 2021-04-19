@@ -56,7 +56,8 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
     IPainterFactory p = new AWTPainterFactory(c);
     IChartFactory f = new AWTChartFactory(p);
 
-    chart = f.newChart(Quality.Advanced);
+    Quality q = Quality.Advanced.clone();
+    chart = f.newChart(q);
     chart.getScene().getGraph().add(surface);
   }
 }

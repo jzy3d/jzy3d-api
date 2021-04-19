@@ -76,6 +76,12 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
       animator = null;
     }).start());
   }
+  
+  @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
+
 
   @Override
   public IAnimator getAnimation() {

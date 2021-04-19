@@ -18,6 +18,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin Pernollet
  */
 public interface ICanvas {
+  
   /** Returns a reference to the held view. */
   public View getView();
 
@@ -102,5 +103,10 @@ public interface ICanvas {
    * by {@link #setPixelScale(float[])}. Hence the two functions may not be consistent together.
    */
   public Coord2d getPixelScale();
+  
+  public double getLastRenderingTimeMs();
+  
+  public static final double LAST_RENDER_TIME_UNDEFINED = -1;
+
 
 }

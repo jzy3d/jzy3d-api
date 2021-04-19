@@ -75,6 +75,11 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   }
   
   @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
+  
+  @Override
   public void setPixelScale(float[] scale) {
     setSurfaceScale(scale);
   }

@@ -82,6 +82,11 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
       setPixelScale(
           new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE});
   }
+  
+  @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
 
   @Override
   public IAnimator getAnimation() {

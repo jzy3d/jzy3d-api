@@ -1,40 +1,34 @@
 package org.jzy3d.chart.controllers;
 
-import java.awt.EventQueue;
 import java.util.Queue;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
-import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 /**
- * A theoretical rate limit would be 40ms. However, the coallesce mecanism in AWT
- * {@link EventQueue#coalesceEvent} thread being not known enough, we remain much higher to ensure
- * picture has time to render.
+ * This rate limiter keeps an history of past rendering time to auto configure the rate limit
+ * and ensure we stick to actual rendering time before doing an action.
  * 
- * Le drag reste fluide TANT QUE le temps de rendu est inférieur au rate limit. Quand il est
- * supérieur au rate limit, ça patine. Bien que la gestion d'un event souris ne se termine que
- * quand le rendering est terminé, les repaints n'ont pas lieu, probablement car le deuxième event,
- * quoique SUIVANT le premier, arrive "juste après". Une optim pourrait être d'avoir un temps
- * pendant le quel APRES la gestion du mouse on event, on ne prend pas d'autre demande de mouse.
+ * This rate limiter is useful to ensure a controller such as mouse or thread won't ask more
+ * rendering than possible.
  * 
- * Une implementation équivalente est le fait d'avoir un mouseRate limiter qui prend le temps max
- * dans l'historique .
+ * The time limit is computed as follow
+ * <ul>
+ * <li>Compute the maximum rendering time in the list of the 10 last rendering time
+ * <li>Adds a 20ms margin
+ * </ul>
  * 
- * Amélioration : utiliser un mouse limiter adaptatif selon le
- * temps de rendu du canvas. Utiliser la propriété Monitorable du canvas pour écouter son temps de
- * calcul.
- * 
- * Extends Monitor, permet en plus d'avoir l'historique des temps de calcul ET d'overrider la taille
- * de cette mémoire
- * 
+ * This allows adapting the rate limit if the rendering capabilities changes, which may happen
+ * according to a changing canvas size, changing screen, changing HiDPI settings, changing content 
+ * of chart.
  */
 public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond implements RateLimiter {
-  protected EmulGLCanvas canvas;
+  protected ICanvas canvas;
   static final int HISTORY_SIZE = 10;
   Queue<Double> renderingTimeHistory = new CircularFifoQueue<Double>(HISTORY_SIZE);
   static final double MARGIN_MS = 20;
   double marginMs = MARGIN_MS;
 
-  public RateLimiterAdaptsToRenderTime(EmulGLCanvas canvas) {
+  public RateLimiterAdaptsToRenderTime(ICanvas canvas) {
     this();
     setCanvas(canvas);
   }
@@ -60,7 +54,7 @@ public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond imple
   protected void adaptRateLimitToRenderTimeHistory() {
     double lastRenderingTimeMs = getLastRenderingTimeFromCanvas();
 
-    if (lastRenderingTimeMs != EmulGLCanvas.LAST_RENDER_TIME_UNDEFINED) {
+    if (lastRenderingTimeMs != ICanvas.LAST_RENDER_TIME_UNDEFINED) {
       renderingTimeHistory.add(lastRenderingTimeMs);
 
       double referenceRenderingTimeMs = max(renderingTimeHistory) + marginMs;
@@ -80,7 +74,7 @@ public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond imple
   }
 
   protected double getLastRenderingTimeFromCanvas() {
-    return canvas.getLastRenderingTime();
+    return canvas.getLastRenderingTimeMs();
   }
 
   protected double max(Queue<Double> renderingTimeHistory) {
@@ -93,11 +87,11 @@ public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond imple
     return max;
   }
 
-  public EmulGLCanvas getCanvas() {
+  public ICanvas getCanvas() {
     return canvas;
   }
 
-  public void setCanvas(EmulGLCanvas canvas) {
+  public void setCanvas(ICanvas canvas) {
     this.canvas = canvas;
   }
 }
