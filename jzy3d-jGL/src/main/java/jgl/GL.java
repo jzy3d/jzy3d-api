@@ -40,7 +40,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
-import javax.tools.JavaCompiler;
 import jgl.context.gl_context;
 import jgl.context.gl_list;
 import jgl.context.gl_object;
@@ -92,6 +91,7 @@ public class GL {
     /** Height after considering pixel scale induced by HiDPI. */
     protected int actualHeight = 0;
 	
+    protected List<PixelScaleListener> pixelScaleListeners = new ArrayList<>();
 
 	public GL() {
 	}
@@ -268,9 +268,42 @@ public class GL {
     /** Pixel scale is used to model the pixel ratio introduced by HiDPI */
     protected void getPixelScaleFromG2D(Graphics2D g2d) {
       AffineTransform globalTransform = g2d.getTransform();
-      pixelScaleX = globalTransform.getScaleX();
-      pixelScaleY = globalTransform.getScaleY();  
+      
+      double oldPixelScaleX = pixelScaleX;
+      double oldPixelScaleY = pixelScaleY;
+      double newPixelScaleX = globalTransform.getScaleX();
+      double newPixelScaleY = globalTransform.getScaleY();
+      
+      setPixelScaleX(newPixelScaleX);
+      setPixelScaleY(newPixelScaleY);  
+
+      if(newPixelScaleX!=oldPixelScaleX || newPixelScaleY!=oldPixelScaleY) {
+        firePixelScaleChanged(newPixelScaleX, newPixelScaleY);
+      }
     }
+
+    public void addPixelScaleListener(PixelScaleListener listener) {
+      pixelScaleListeners.add(listener);
+    }
+
+    public void removePixelScaleListener(PixelScaleListener listener) {
+      pixelScaleListeners.remove(listener);
+    }
+
+    public List<PixelScaleListener> getPixelScaleListeners() {
+      return pixelScaleListeners;
+    }
+
+    protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+      for (PixelScaleListener listener : pixelScaleListeners) {
+        listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+      }
+    }
+    
+    public interface PixelScaleListener{
+      public void pixelScaleChanged(double pixelScaleX, double pixelScaleY);
+    }
+    
     
     public void setPixelScaleX(double pixelScaleX) {
       this.pixelScaleX = pixelScaleX;
@@ -282,6 +315,10 @@ public class GL {
 
     /** Reset pixel scale to (1,1) */
     protected void resetPixelScale() {
+      if(pixelScaleX != 1 || pixelScaleY != 1) {
+        firePixelScaleChanged(1, 1);
+      }
+      
       pixelScaleX = 1;
       pixelScaleY = 1;  
     }

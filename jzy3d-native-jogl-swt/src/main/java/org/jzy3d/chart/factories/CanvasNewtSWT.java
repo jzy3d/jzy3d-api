@@ -2,12 +2,18 @@ package org.jzy3d.chart.factories;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -31,6 +37,14 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * {@link IScreenCanvas} documentation.
  */
 public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCanvas {
+  protected View view;
+  protected Renderer3d renderer;
+  protected IAnimator animator;
+  protected GLWindow window;
+  protected NewtCanvasSWT canvas;
+  protected List<ICanvasListener> canvasListeners = new ArrayList<>();
+
+  protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
 
   public CanvasNewtSWT(IChartFactory factory, Scene scene, Quality quality,
       GLCapabilitiesImmutable glci) {
@@ -46,13 +60,11 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     view = scene.newView(this, quality);
     view.getPainter().setCanvas(this);
 
-    renderer =
-        ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
+    renderer = newRenderer(factory, traceGL, debugGL);
     window.addGLEventListener(renderer);
 
     if (quality.isPreserveViewportSize()) {
-      setPixelScale(
-          new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE});
+      setPixelScale(newPixelScaleIdentity());
     }
 
     window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
@@ -62,6 +74,8 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     if (quality.isAnimated()) {
       animator.start();
     }
+    
+    watchPixelScale();
 
     addDisposeListener(e -> new Thread(() -> {
       if (animator != null) {
@@ -77,6 +91,50 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     }).start());
   }
   
+  private void watchPixelScale() {
+    exec.schedule(new Runnable() {
+      double prevX = -1;
+      double prevY = -1;
+      
+      @Override
+      public void run() {
+        while(true) {
+          watchPixelScaleAndNotifyUponChange();
+
+          try {
+            Thread.sleep(300);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+      }
+
+      private void watchPixelScaleAndNotifyUponChange() {
+        double x = getPixelScaleX(); 
+        double y = getPixelScaleY();
+        
+        if((prevX!=-1)&&(prevY!=-1)) {
+          if((x!=prevX)||(y!=prevY)) {
+            firePixelScaleChanged(x, y);
+          }
+        }
+        
+        prevX = x;
+        prevY = y;
+        
+      }
+    }, 0, TimeUnit.SECONDS);
+  }
+
+  private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,
+        debugGL);
+  }
+
+  private float[] newPixelScaleIdentity() {
+    return new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE};
+  }
+
   @Override
   public double getLastRenderingTimeMs() {
     return renderer.getLastRenderingTimeMs();
@@ -97,13 +155,24 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
       window.setSurfaceScale(new float[] {1f, 1f});
     }
   }
-  
+
+  /**
+   * Pixel scale is used to model the pixel ratio thay may be introduced by HiDPI or Retina
+   * displays.
+   */
   @Override
   public Coord2d getPixelScale() {
-    return new Coord2d((int)(window.getSurfaceWidth()/(float)getSize().x), (int)(window.getSurfaceHeight()/(float)getSize().y));
+    return new Coord2d(getPixelScaleX(), getPixelScaleY());
   }
 
 
+  public double getPixelScaleX() {
+    return window.getSurfaceWidth() / (double) getSize().x;
+  }
+
+  public double getPixelScaleY() {
+    return window.getSurfaceHeight() / (double) getSize().y;
+  }
   public GLWindow getWindow() {
     return window;
   }
@@ -222,9 +291,26 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     removeKeyListener((KeyListener) o);
   }
 
-  protected View view;
-  protected Renderer3d renderer;
-  protected IAnimator animator;
-  protected GLWindow window;
-  protected NewtCanvasSWT canvas;
+
+  @Override
+  public void addCanvasListener(ICanvasListener listener) {
+    canvasListeners.add(listener);
+  }
+
+  @Override
+  public void removeCanvasListener(ICanvasListener listener) {
+    canvasListeners.remove(listener);
+  }
+
+  @Override
+  public List<ICanvasListener> getCanvasListeners() {
+    return canvasListeners;
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
+  }
+
 }
