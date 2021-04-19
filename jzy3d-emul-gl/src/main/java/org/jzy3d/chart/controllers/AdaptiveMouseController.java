@@ -9,6 +9,7 @@ import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import jgl.GL;
@@ -16,7 +17,7 @@ import jgl.GL;
 public class AdaptiveMouseController extends AWTCameraMouseController {
   protected Quality currentQuality;
   protected boolean currentHiDPI;
-  protected EmulGLCanvas canvas;
+  protected ICanvas canvas;
   protected GL gl;
   protected EmulGLPainter painter;
 
@@ -87,7 +88,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   }
 
   protected double getLastRenderingTimeFromCanvas() {
-    return canvas.getLastRenderingTime();
+    return canvas.getLastRenderingTimeMs();
   }
 
   protected boolean detectIfRenderingIsSlow(double lastRenderingTime) {
@@ -146,7 +147,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     chart.setQuality(currentQuality);
     gl.setAutoAdaptToHiDPI(currentHiDPI);
     // this force the GL image to apply the new HiDPI setting immediatly
-    gl.updatePixelScale(canvas.getGraphics());
+    gl.updatePixelScale(((EmulGLCanvas)canvas).getGraphics());
     gl.applyViewport();
   }
 

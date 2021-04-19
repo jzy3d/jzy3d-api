@@ -208,7 +208,8 @@ public class Chart {
       // Always keep update view until the camera thread controller
       // Has a timer to avoid rotating too fast (when no update view, thread can
       // go much faster so rotation is to speedy!)
-      rotation.setUpdateViewDefault(true);
+      //rotation.setUpdateViewDefault(true);
+      rotation.setUpdateViewDefault(!getQuality().isAnimated());
       // later, should apply : !chart.getQuality().isAnimated());
       
       // ---------------------------------------------------
@@ -253,6 +254,10 @@ public class Chart {
       return addMouseCameraController();
     else
       return mouse;
+  }
+  
+  public CameraThreadController getThread() {
+    return getMouse().getSlaveThreadController();
   }
 
   public IMousePickingController getMousePicking() {

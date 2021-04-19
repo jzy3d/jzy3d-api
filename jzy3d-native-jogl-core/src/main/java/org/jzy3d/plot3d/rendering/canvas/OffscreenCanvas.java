@@ -97,6 +97,12 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
     offscreenDrawable.addGLEventListener(renderer);
 
   }
+  
+  @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
+
 
   /* NOT IMPLEMENTED */
   @Override

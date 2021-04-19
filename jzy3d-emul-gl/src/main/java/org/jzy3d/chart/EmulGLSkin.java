@@ -1,10 +1,10 @@
 package org.jzy3d.chart;
 
 import org.jzy3d.chart.controllers.AdaptiveMouseController;
-import org.jzy3d.chart.controllers.CameraThreadControllerWithTime;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadControllerWithTime;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter.Font;

@@ -33,6 +33,8 @@ public class AxisBoxLayout implements IAxisLayout {
     setZTickLabelDisplayed(true);
 
     setMainColor(Color.BLACK);
+    
+    setZAxisSide(ZAxisSide.LEFT);
   }
 
   @Override

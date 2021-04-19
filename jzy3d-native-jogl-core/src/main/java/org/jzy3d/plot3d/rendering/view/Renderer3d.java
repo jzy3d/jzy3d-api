@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -28,6 +29,9 @@ public class Renderer3d implements GLEventListener {
   protected TextureData image = null;
   protected boolean traceGL = false;
   protected boolean debugGL = false;
+  
+  protected TicToc profileDisplayTimer = new TicToc();
+  protected double lastRenderingTimeMs;
 
   /** Initialize a Renderer attached to the given View. */
   public Renderer3d(View view) {
@@ -78,6 +82,8 @@ public class Renderer3d implements GLEventListener {
    */
   @Override
   public void display(GLAutoDrawable canvas) {
+    profileDisplayTimer.tic();
+
     GL gl = canvas.getGL();
 
     updatePainterWithGL(canvas);
@@ -93,6 +99,10 @@ public class Renderer3d implements GLEventListener {
         doScreenshotAtNextDisplay = false;
       }
     }
+    
+    profileDisplayTimer.toc();
+    lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
+
   }
 
   /** Called when the {@link GLAutoDrawable} is resized. */
@@ -149,4 +159,10 @@ public class Renderer3d implements GLEventListener {
   public int getHeight() {
     return height;
   }
+
+  public double getLastRenderingTimeMs() {
+    return lastRenderingTimeMs;
+  }
+  
+  
 }
