@@ -51,7 +51,7 @@ public class Chart {
   protected Coord3d previousViewPointProfile;
 
   protected ArrayList<AbstractCameraController> controllers;
-  
+
   protected ICameraMouseController mouse;
   protected IMousePickingController mousePicking;
   protected ICameraKeyController keyboard;
@@ -147,6 +147,8 @@ public class Chart {
   }
 
   protected void updateAnimationThreadWithQualitySettings() {
+
+    // Start or stop animator on canvas
     if (getCanvas() instanceof IScreenCanvas) {
       IScreenCanvas screenCanvas = (IScreenCanvas) getCanvas();
 
@@ -156,6 +158,10 @@ public class Chart {
         screenCanvas.getAnimation().stop();
       }
     }
+
+    // Apply relevant animation setting to controller so they behave accordingly
+    configureMouseWithAnimator();
+    configureKeyboardWithAnimator();
   }
 
   public void startAnimation() {
@@ -198,84 +204,90 @@ public class Chart {
   /* CONTROLLERS */
 
   public ICameraMouseController addMouseCameraController() {
-    if(mouse==null) {
+    if (mouse == null) {
       mouse = getFactory().getPainterFactory().newMouseCameraController(this);
 
-      CameraThreadController rotation = mouse.getSlaveThreadController();
-      rotation.setStep(0.025f);
-
-      // ---------------------------------------------------
-      // Always keep update view until the camera thread controller
-      // Has a timer to avoid rotating too fast (when no update view, thread can
-      // go much faster so rotation is to speedy!)
-      //rotation.setUpdateViewDefault(true);
-      rotation.setUpdateViewDefault(!getQuality().isAnimated());
-      // later, should apply : !chart.getQuality().isAnimated());
-      
-      // ---------------------------------------------------
-      // Switch between on demand/continuous rendering
-      // keep to false if animated to avoid double rendering
-      // keep to true otherwise the mouse does not update 
-      mouse.setUpdateViewDefault(!getQuality().isAnimated()); 
+      configureMouseWithAnimator();
 
     }
     return mouse;
   }
 
+  /**
+   * Switch between on demand/continuous rendering keep to false if animated to avoid double
+   * rendering keep to true otherwise the mouse does not update
+   */
+  protected void configureMouseWithAnimator() {
+    if (mouse == null)
+      return;
+
+    mouse.setUpdateViewDefault(!getQuality().isAnimated());
+
+    // Rotation thread
+    CameraThreadController rotation = mouse.getThread();
+    rotation.setUpdateViewDefault(!getQuality().isAnimated());
+  }
+
   public IMousePickingController addMousePickingController(int clickWidth) {
-    if(mousePicking==null) {
+    if (mousePicking == null) {
       mousePicking = getFactory().getPainterFactory().newMousePickingController(this, clickWidth);
     }
     return mousePicking;
   }
 
   public ICameraKeyController addKeyboardCameraController() {
-    if(keyboard==null) {
+    if (keyboard == null) {
       keyboard = getFactory().getPainterFactory().newKeyboardCameraController(this);
 
-      // Switch between on demand/continuous rendering
-      // keep to false if animated to avoid double rendering
-      // keep to true otherwise the mouse does not update 
-      keyboard.setUpdateViewDefault(!getQuality().isAnimated()); 
+      configureKeyboardWithAnimator();
     }
 
     return keyboard;
   }
 
+  /**
+   * Switch between on demand/continuous rendering keep to false if animated to avoid double
+   * rendering keep to true otherwise the mouse does not update
+   */
+  protected void configureKeyboardWithAnimator() {
+    if (keyboard != null)
+      keyboard.setUpdateViewDefault(!getQuality().isAnimated());
+  }
+
   public IScreenshotKeyController addKeyboardScreenshotController() {
-    if(screenshotKey==null) {
+    if (screenshotKey == null) {
       screenshotKey = getFactory().getPainterFactory().newKeyboardScreenshotController(this);
     }
     return screenshotKey;
   }
-  
+
   public ICameraMouseController getMouse() {
-    if(mouse==null)
+    if (mouse == null)
       return addMouseCameraController();
     else
       return mouse;
   }
-  
+
   public CameraThreadController getThread() {
     return getMouse().getSlaveThreadController();
   }
 
   public IMousePickingController getMousePicking() {
-    if(mousePicking==null)
+    if (mousePicking == null)
       return addMousePickingController(MOUSE_PICK_SIZE_DEFAULT);
     else
       return mousePicking;
   }
 
   public ICameraKeyController getKeyboard() {
-    if(keyboard==null)
+    if (keyboard == null)
       return addKeyboardCameraController();
     else
       return keyboard;
   }
 
   public IScreenshotKeyController getScreenshotKey() {
-    if(screenshotKey==null) 
+    if (screenshotKey == null)
       return addKeyboardScreenshotController();
     else
       return screenshotKey;
@@ -331,10 +343,10 @@ public class Chart {
     if (frame == null) {
       frame = getFactory().getPainterFactory().newFrame(this, rect, title);
     }
-    
+
     // start animator according to quality
     updateAnimationThreadWithQualitySettings();
-    
+
     return frame;
   }
 

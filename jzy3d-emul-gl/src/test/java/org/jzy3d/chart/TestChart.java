@@ -43,10 +43,7 @@ public class TestChart {
     ICameraMouseController mouse = chart.addMouseCameraController();
     // Then
     Assert.assertFalse(mouse.isUpdateViewDefault());
-    
-    // temporary, keep thread refreshing as native part would require
-    // porting the WithTime camera thread of EmulGL 
-    Assert.assertTrue(mouse.getSlaveThreadController().isUpdateViewDefault());
+    Assert.assertFalse(mouse.getThread().isUpdateViewDefault());
 
 
     // When
@@ -77,6 +74,7 @@ public class TestChart {
     ICameraMouseController mouse = chart.addMouseCameraController();
     // Then
     Assert.assertTrue(mouse.isUpdateViewDefault());
+    Assert.assertTrue(mouse.getThread().isUpdateViewDefault());
 
     // When
     ICameraKeyController key = chart.addKeyboardCameraController();
@@ -102,10 +100,16 @@ public class TestChart {
     Assert.assertFalse("Check chart is NOT animated", chart.getQuality().isAnimated());
     Assert.assertTrue(key.isUpdateViewDefault());
     Assert.assertTrue(mouse.isUpdateViewDefault());
-    Assert.assertTrue(mouse.getSlaveThreadController().isUpdateViewDefault());
+    Assert.assertTrue(mouse.getThread().isUpdateViewDefault());
 
     // When change 
     chart.setAnimated(true);
+
+    // Then non animated controllers
+    Assert.assertTrue("Check chart IS animated", chart.getQuality().isAnimated());
+    Assert.assertFalse(key.isUpdateViewDefault());
+    Assert.assertFalse(mouse.isUpdateViewDefault());
+    Assert.assertFalse(mouse.getThread().isUpdateViewDefault());
   }
 
   @Ignore
