@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives.axis.layout;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.IPainter.Font;
+import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 
