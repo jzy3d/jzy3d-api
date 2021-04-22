@@ -32,19 +32,27 @@ public class AdaptiveRenderingPolicy {
    * 
    * Defaults to false
    */
-  public boolean optimizeWithWireframe = false;
+  public boolean optimizeByDroppingWireframeOnly = false;
   
   /**
    * If true, the polygon face will be desactivated between mouse pressed and mouse release.
    * 
    * Defaults to true
    */
-  public boolean optimizeWithFace = true;
+  public boolean optimizeByDroppingFaceAndColoringWireframe = false;
+  
+
+  /**
+   * If true, the polygon face will be desactivated between mouse pressed and mouse release.
+   * 
+   * Defaults to true
+   */
+  public boolean optimizeByDroppingFace = true;
   
   /**
    * If true, HiDPI will be desactivated between mouse pressed and mouse release.
    * 
    * Defaults to false
    */
-  public boolean optimizeWithHiDPI = false;
+  public boolean optimizeByDroppingHiDPI = false;
 }

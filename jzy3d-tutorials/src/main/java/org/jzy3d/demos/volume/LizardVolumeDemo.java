@@ -77,7 +77,7 @@ public class LizardVolumeDemo extends AWTAbstractAnalysis {
     //volume.setTransformBefore(transform);
     
     // Create a chart
-    chart = AWTChartFactory.chart(Quality.Intermediate);
+    chart = AWTChartFactory.chart(Quality.Intermediate());
     chart.getScene().getGraph().add(volume);
     // chart.getView().setBackgroundColor(new Color(0, 0, 0));
     // IAxeLayout axeLayout = chart.getAxeLayout();

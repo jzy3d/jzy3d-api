@@ -58,7 +58,7 @@ public class TestContinuousAndOnDemandRendering {
 
     };
 
-    Quality q = Quality.Nicest;
+    Quality q = Quality.Nicest();
     q.setAlphaActivated(true);
 
     Chart chart = factory.newChart(q);

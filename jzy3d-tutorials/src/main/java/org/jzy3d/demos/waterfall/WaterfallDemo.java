@@ -39,7 +39,7 @@ public class WaterfallDemo extends AWTAbstractAnalysis {
         build.getBounds().getZmax(), new Color(1, 1, 1, 1.0f)));
 
     // Create a chart
-    chart = AWTChartFactory.chart(Quality.Intermediate);
+    chart = AWTChartFactory.chart(Quality.Intermediate());
     chart.getScene().getGraph().add(build);
     chart.getView();
   }

@@ -86,7 +86,7 @@ public class DemoPickableGraphFX extends Application {
     formatter.setHighlightedVertexColor(new Color(247 / 255f, 79 / 255f, 119 / 255f));
 
     // Setup a chart
-    Quality quality = Quality.Advanced;
+    Quality quality = Quality.Advanced();
     // quality.setDepthActivated(false);
 
 

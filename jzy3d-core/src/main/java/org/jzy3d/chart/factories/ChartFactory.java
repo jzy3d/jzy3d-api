@@ -62,7 +62,7 @@ public class ChartFactory implements IChartFactory {
 
   @Override
   public Chart newChart() {
-    return newChart(Quality.Advanced);
+    return newChart(Quality.Advanced());
   }
 
   @Override

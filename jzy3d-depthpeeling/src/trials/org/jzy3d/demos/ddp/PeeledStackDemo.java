@@ -23,7 +23,7 @@ public class PeeledStackDemo {
 
 
   public static void main(String[] args) {
-    Chart chart = DepthPeelingChart.get(Quality.Fastest, "awt", PeelingMethod.WEIGHTED_SUM_MODE);
+    Chart chart = DepthPeelingChart.get(Quality.Fastest(), "awt", PeelingMethod.WEIGHTED_SUM_MODE);
 
     createStack(chart, STACK_WIDTH, STACK_HEIGHT, 0, STACK_FACE, STACK_WIRE);
     createStack(chart, STACK_WIDTH, STACK_HEIGHT, 20, STACK_FACE, STACK_WIRE);

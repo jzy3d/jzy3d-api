@@ -65,7 +65,7 @@ public class DebugGL_Demo extends AWTAbstractAnalysis {
     surface.setWireframeDisplayed(false);
 
     // Create a chart
-    chart = initializeChart(Quality.Advanced);
+    chart = initializeChart(Quality.Advanced());
     chart.getScene().getGraph().add(surface);
     chart.addKeyboardCameraController();
   }

@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
@@ -60,9 +61,11 @@ public class TestAdaptiveMouseController {
 
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
     Chart chart = mockChartWithAdaptiveMouse(repaintContinuously, allowHiDPI, mockRenderingPerf);
-    AdaptiveMouseController mouse = (AdaptiveMouseController) chart.addMouseCameraController();
-    EmulGLCanvas canvas = (EmulGLCanvas) chart.getCanvas();
-
+    
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    AdaptiveMouseController mouse = skin.getMouse();
+    EmulGLCanvas canvas = skin.getCanvas();
+    
     // -------------------------------------
     // When : fast rendering
     mockRenderingPerf.value = 10;
@@ -78,14 +81,18 @@ public class TestAdaptiveMouseController {
     // When : slow rendering
     mockRenderingPerf.value = 1000;
 
-    // Then : optimization is triggered at mouse PRESSED
+    // Then : optimization IS set to ON at MOUSE PRESS
     mouse.mousePressed(mouseEvent(canvas, 100, 100));
     Assert.assertTrue(mouse.mustOptimizeMouseDrag);
 
-    // Then : HiDPI is disabled DURING mouse RELEASED
-    Assert.assertTrue("Just check test properly configured HiDPI", mouse.policy.optimizeWithHiDPI);
+    // Then : HiDPI is disabled DURING mouse DRAGGED
+    Assert.assertTrue("Just check test properly configured HiDPI", mouse.policy.optimizeByDroppingHiDPI);
+    Assert.assertTrue("Did NOT start drag already", mouse.isFirstDrag);
+    
     mouse.mouseDragged(mouseEvent(canvas, 100, 100));
-    Assert.assertFalse(canvas.getGL().isAutoAdaptToHiDPI());
+    
+    Assert.assertFalse("Did start drag already", mouse.isFirstDrag);
+    Assert.assertFalse("GL properly configured", canvas.getGL().isAutoAdaptToHiDPI());
 
     // Then : HiDPI is reset to intial state (true) AFTER mouse RELEASED
     mouse.mouseReleased(mouseEvent(canvas, 100, 100));
@@ -98,22 +105,23 @@ public class TestAdaptiveMouseController {
   }
 
   @Test
-  public void whenRepaintContinuously_ThenOptimizationNeverTriggers() {
+  public void whenRepaintContinuously_ThenOptimizationTriggers() {
     // Given
     boolean repaintContinuously = true; // THIS IS THE IMPORTANT SETTING
     boolean allowHiDPI = true;
 
 
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
-
     Chart chart = mockChartWithAdaptiveMouse(repaintContinuously, allowHiDPI, mockRenderingPerf);
 
-    AdaptiveMouseController mouse = (AdaptiveMouseController) chart.addMouseCameraController();
-
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    AdaptiveMouseController mouse = skin.getMouse();
+    EmulGLCanvas canvas = skin.getCanvas();
+    
     // -------------------------------------
     // When : fast rendering
     mockRenderingPerf.value = 10;
-    mouse.mousePressed(mouseEvent((EmulGLCanvas) chart.getCanvas(), 100, 100));
+    mouse.mousePressed(mouseEvent(canvas, 100, 100));
 
     // Then : no optimization triggered
     Assert.assertFalse(mouse.mustOptimizeMouseDrag);
@@ -122,17 +130,26 @@ public class TestAdaptiveMouseController {
     // When : slow rendering
     mockRenderingPerf.value = 1000;
 
-    // Then : optimization is NOT triggered SINCE WE REPAINT CONTINUOUSLY
-    mouse.mousePressed(mouseEvent((EmulGLCanvas) chart.getCanvas(), 100, 100));
+    // Then : optimization IS set to ON at MOUSE PRESS
+    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    
+    Assert.assertTrue(mouse.mustOptimizeMouseDrag);
+    
+    // Then : HiDPI is disabled DURING mouse DRAGGED
+    Assert.assertTrue("Just check test properly configured HiDPI", mouse.policy.optimizeByDroppingHiDPI);
+    Assert.assertTrue("Did NOT start drag already", mouse.isFirstDrag);
+    
+    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+    
+    Assert.assertFalse("Did start drag already", mouse.isFirstDrag);
+    Assert.assertFalse("GL properly configured", canvas.getGL().isAutoAdaptToHiDPI());
+
+    
+    // Then : HiDPI remains configured as before 
+    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+
     Assert.assertFalse(mouse.mustOptimizeMouseDrag);
-
-    // Then : HiDPI remains configured as before SINCE WE REPAINT CONTINUOUSLY
-    Assert.assertEquals(allowHiDPI,
-        ((EmulGLCanvas) chart.getCanvas()).getGL().isAutoAdaptToHiDPI());
-
-    // Consistent state
-    Assert.assertFalse(mouse.mustOptimizeMouseDrag);
-
+    Assert.assertEquals(allowHiDPI, canvas.getGL().isAutoAdaptToHiDPI());
   }
 
   // --------------------------------------------------------------------------------- //
@@ -166,9 +183,9 @@ public class TestAdaptiveMouseController {
               }
             };
         policy.optimizeForRenderingTimeLargerThan = 100;// ms
-        policy.optimizeWithHiDPI = true;
-        policy.optimizeWithWireframe = false;
-        policy.optimizeWithFace = false;
+        policy.optimizeByDroppingHiDPI = true;
+        policy.optimizeByDroppingWireframeOnly = false;
+        policy.optimizeByDroppingFaceAndColoringWireframe = false;
 
         return new AdaptiveMouseController(chart, policy) {
           
@@ -184,7 +201,7 @@ public class TestAdaptiveMouseController {
     // Configure base quality for standard case
 
     EmulGLChartFactory factory = new EmulGLChartFactory(painter);
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
     q.setAnimated(repaintContinuously);
     q.setPreserveViewportSize(!allowHiDPI); // prevent HiDPI/Retina to apply hence reduce the number
                                             // of pixel to process

@@ -98,13 +98,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     } else {
       myGL.setAutoAdaptToHiDPI(false);
     }
-    
-    myGL.addPixelScaleListener(new PixelScaleListener() {
-      @Override
-      public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-        firePixelScaleChanged(pixelScaleX, pixelScaleY);
-      }
-    });
+
+//    if (ALLOW_WATCH_PIXEL_SCALE)
+      myGL.addPixelScaleListener(new PixelScaleListener() {
+        @Override
+        public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+          firePixelScaleChanged(pixelScaleX, pixelScaleY);
+        }
+      });
   }
 
   @Override
@@ -146,6 +147,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   protected void init(int width, int height) {
     updatePainterWithGL(); // painter can call this canvas GL
     initGLUT(width, height);
+    initView();
+  }
+
+  protected void initView() {
     view.init();
   }
 
@@ -434,7 +439,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   public void removeKeyController(Object o) {
     removeKeyListener((java.awt.event.KeyListener) o);
   }
-  
+
   @Override
   public void addCanvasListener(ICanvasListener listener) {
     canvasListeners.add(listener);
@@ -444,23 +449,23 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   public void removeCanvasListener(ICanvasListener listener) {
     canvasListeners.remove(listener);
   }
-  
+
   @Override
-  public List<ICanvasListener> getCanvasListeners(){
+  public List<ICanvasListener> getCanvasListeners() {
     return canvasListeners;
   }
-  
+
   protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-    for(ICanvasListener listener: canvasListeners) {
+    for (ICanvasListener listener : canvasListeners) {
       listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
     }
   }
-  
+
 
   /* *********************************************************************** */
   /* ************************** PROFILE AND DEBUG ************************** */
   /* *********************************************************************** */
-  
+
   @Override
   public String getDebugInfo() {
     return null;
@@ -507,15 +512,13 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       profile("Render in  : " + mili + "ms", x, y * line++, c);
 
       // Drawables size
-      profile("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * line++,
-          c);
+      profile("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * line++, c);
 
       // Scatters sizes
       for (Drawable d : view.getScene().getGraph().getAll()) {
         if (d instanceof Scatter) {
           Scatter s = (Scatter) d;
           profile("Scatter    : " + s.coordinates.length + " points", x, y * (line++), c);
-
         }
       }
 

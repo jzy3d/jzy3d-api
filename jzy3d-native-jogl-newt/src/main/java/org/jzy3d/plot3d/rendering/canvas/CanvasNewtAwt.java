@@ -6,6 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.NativeAnimator;
@@ -48,6 +51,8 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
 
   protected List<ICanvasListener> canvasListeners = new ArrayList<>();
 
+  protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
+
 
   public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality,
       GLCapabilitiesImmutable glci) {
@@ -67,6 +72,10 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     if (quality.isPreserveViewportSize())
       setPixelScale(newPixelScaleIdentity());
 
+    if(ALLOW_WATCH_PIXEL_SCALE)
+      watchPixelScale();
+
+    
     // swing specific
     setFocusable(true);
     requestFocusInWindow();
@@ -80,6 +89,24 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     setLayout(new BorderLayout());
     add(canvas, BorderLayout.CENTER);
   }
+  
+  protected void watchPixelScale() {
+    exec.schedule(new PixelScaleWatch() {
+      @Override
+      public double getPixelScaleY() {
+        return getPixelScaleX();
+      }
+      @Override
+      public double getPixelScaleX() {
+        return getPixelScaleY();
+      }
+      @Override
+      protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        firePixelScaleChanged(pixelScaleX, pixelScaleY);
+      }
+    }, 0, TimeUnit.SECONDS);
+  }
+
 
   private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
     return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,

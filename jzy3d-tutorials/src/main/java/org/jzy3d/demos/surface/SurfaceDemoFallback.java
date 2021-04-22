@@ -20,7 +20,7 @@ public class SurfaceDemoFallback {
   public static void main(String[] args) {
     Shape surface = surface();
 
-    Quality quality = Quality.Advanced;
+    Quality quality = Quality.Advanced();
     FallbackChartFactory factory = new FallbackChartFactory();
     Chart chart = factory.newChart(quality);
     chart.getScene().getGraph().add(surface);

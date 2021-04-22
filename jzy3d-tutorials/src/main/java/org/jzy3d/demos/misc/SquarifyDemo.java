@@ -43,7 +43,7 @@ public class SquarifyDemo extends AWTAbstractAnalysis {
     surface.setWireframeDisplayed(false);
 
     // Create a chart
-    chart = AWTChartFactory.chart(Quality.Intermediate);
+    chart = AWTChartFactory.chart(Quality.Intermediate());
 
     // This addition keeps the aspect ratio of the X and Y data
     // but makes X and Z square

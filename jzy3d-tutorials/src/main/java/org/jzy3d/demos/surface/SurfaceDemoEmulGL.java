@@ -33,7 +33,7 @@ public class SurfaceDemoEmulGL {
 
     EmulGLChartFactory factory = new EmulGLChartFactory();
 
-    Quality q = Quality.Advanced; 
+    Quality q = Quality.Advanced(); 
     q.setAnimated(false); // leave CPU quiet if no need to re-render
     q.setHiDPIEnabled(true); // need java 9+ to enable HiDPI & Retina displays 
     // (tutorials built with Java 8 for backward compatibility, update your runtime to get HiDPI)
@@ -42,7 +42,7 @@ public class SurfaceDemoEmulGL {
     
     EmulGLSkin skin = EmulGLSkin.on(chart);
     skin.getCanvas().setProfileDisplayMethod(true);
-    skin.getAxisTextRenderer().setFont(Font.TimesRoman_10);
+    skin.getAxisTextRenderer().setFont(Font.Helvetica_12);
 
     chart.open();
     chart.addMouseCameraController();

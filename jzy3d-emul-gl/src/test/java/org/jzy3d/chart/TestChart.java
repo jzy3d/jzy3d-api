@@ -29,7 +29,7 @@ public class TestChart {
    */
   @Test
   public void whenChart_IS_Animated_ThenControllers_DO_NOT_UpdateViewUponRotation() {
-    Quality q = Quality.Advanced.clone();
+    Quality q = Quality.Advanced();
 
     // When
     Assert.assertTrue(q.isAnimated());
@@ -59,7 +59,7 @@ public class TestChart {
    */
   @Test
   public void whenChart_ISNOT_Animated_ThenControllers_DO_UpdateViewUponRotation() {
-    Quality q = Quality.Advanced.clone();
+    Quality q = Quality.Advanced();
 
     // When
     q.setAnimated(false);
@@ -85,7 +85,7 @@ public class TestChart {
   
   @Test
   public void whenChartAnimation_CHANGE_ThenControllersConfiguration_CHANGE() {
-    Quality q = Quality.Advanced.clone();
+    Quality q = Quality.Advanced();
 
     // When non animated chart
     q.setAnimated(false);

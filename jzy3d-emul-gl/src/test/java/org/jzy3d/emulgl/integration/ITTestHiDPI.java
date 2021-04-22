@@ -45,7 +45,7 @@ public class ITTestHiDPI {
     ChartFactory factory = new EmulGLChartFactory(painter);
     
 
-    Quality q = Quality.Advanced; 
+    Quality q = Quality.Advanced(); 
     q.setPreserveViewportSize(false); // Enable HiDPI if available on computer
     
     Chart chart = factory.newChart(q);
