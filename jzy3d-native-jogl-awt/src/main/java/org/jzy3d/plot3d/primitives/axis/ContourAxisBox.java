@@ -124,8 +124,8 @@ public class ContourAxisBox extends AxisBox {
       if (label != null && level != null) {
         for (LineStrip strip : contour.getLines()) {
           Coord3d position = strip.get(strip.size() / 2).xyz;
-          textRenderer.drawText(painter, label, position, Horizontal.CENTER, Vertical.CENTER,
-              Color.BLACK);
+          textRenderer.drawText(painter, getLayout().getFont(), label, position,
+              Horizontal.CENTER, Vertical.CENTER, Color.BLACK);
         }
       }
     }

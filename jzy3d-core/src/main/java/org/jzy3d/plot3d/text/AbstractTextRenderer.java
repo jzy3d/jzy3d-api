@@ -4,6 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
@@ -20,21 +21,21 @@ public abstract class AbstractTextRenderer implements ITextRenderer {
   }
 
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color) {
-    return drawText(painter, s, position, halign, valign, color, defScreenOffset, defSceneOffset);
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      Horizontal halign, Vertical valign, Color color) {
+    return drawText(painter, font, s, position, halign, valign, color, defScreenOffset, defSceneOffset);
   }
 
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord2d screenOffset) {
-    return drawText(painter, s, position, halign, valign, color, screenOffset, defSceneOffset);
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset) {
+    return drawText(painter, font, s, position, halign, valign, color, screenOffset, defSceneOffset);
   }
 
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord3d sceneOffset) {
-    return drawText(painter, s, position, halign, valign, color, defScreenOffset, sceneOffset);
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      Horizontal halign, Vertical valign, Color color, Coord3d sceneOffset) {
+    return drawText(painter, font, s, position, halign, valign, color, defScreenOffset, sceneOffset);
   }
 
   @Override

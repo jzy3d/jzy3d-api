@@ -8,6 +8,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
@@ -17,8 +18,8 @@ public class MockTextBitmapRenderer extends TextBitmapRenderer {
   List<Map<String, Object>> callArguments = new ArrayList<>();
 
   @Override
-  public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
+      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     Map<String, Object> args = new HashMap<String, Object>();
     args.put("text", text);
     args.put("position", position);

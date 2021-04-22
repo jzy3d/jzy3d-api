@@ -50,8 +50,8 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
    * according to the current Camera configuration.
    */
   @Override
-  public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
+      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     painter.color(color);
 
     // compute a corrected 3D position according to the 2D layout on screen
