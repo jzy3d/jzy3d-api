@@ -1,5 +1,7 @@
 package org.jzy3d.painters;
 
+import org.checkerframework.checker.fenum.qual.AwtFlowLayout;
+
 /**
  * A Font subset supported both by OpenGL 1 and AWT. These fonts can be used both for charts based
  * on native OpenGL and charts based on raw AWT.
@@ -20,6 +22,7 @@ package org.jzy3d.painters;
  * {@link IPainter#BITMAP_HELVETICA_12} will apply.
  */
 public class Font {
+  private static final int STYLE_UNDEFINED = -1;
   // Font constants below are picked from GLU object in JOGL
   protected static final int STROKE_ROMAN = 0;
   protected static final int STROKE_MONO_ROMAN = 1;
@@ -46,28 +49,37 @@ public class Font {
   protected String name;
   protected int code;
   protected int height;
+  protected int style;
 
 
   public Font(int code, int height) {
     this.code = code;
+    this.style = STYLE_UNDEFINED;
     this.height = height;
 
     detectFontNameFromOpenGLCode(code);
   }
 
+  public Font(String name, int height) {
+    this(name, STYLE_UNDEFINED, height);
+  }
 
   /**
    * Build a font from its name.
    * 
    * Its OpenGL code will be guessed to ensure the font is usable with OpenGL 1 renderer supporting
    * a limited font set. If the font name is not recognized among such set, the default
-   * {@link #BITMAP_HELVETICA_12} will be loaded
+   * {@link #BITMAP_HELVETICA_12} will be loaded.
+   * 
+   * See also {@link AWTFont.toAWT(font)} to convert to AWT an font.
    * 
    * @param name
+   * @param style a style value. May not be supported by the text renderer
    * @param height
    */
-  public Font(String name, int height) {
+  public Font(String name, int style, int height) {
     this.name = name;
+    this.style = style;
     this.height = height;
 
     detectOpenGLFontCodeFromName(name, height);
