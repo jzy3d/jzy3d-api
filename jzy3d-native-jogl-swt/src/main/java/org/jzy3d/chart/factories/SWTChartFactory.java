@@ -30,7 +30,7 @@ public class SWTChartFactory extends ChartFactory {
 
   public static Chart chart(Composite parent) {
     SWTChartFactory f = new SWTChartFactory(parent);
-    return f.newChart(Quality.Intermediate);
+    return f.newChart(Quality.Intermediate());
   }
 
   public static Chart chart(Composite parent, Quality quality) {

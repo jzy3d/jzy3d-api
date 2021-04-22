@@ -22,7 +22,7 @@ public class NewtChartFactory extends ChartFactory {
   static Logger logger = Logger.getLogger(NewtChartFactory.class);
 
   public static Chart chart() {
-    return chart(Quality.Intermediate);
+    return chart(Quality.Intermediate());
   }
 
   public static Chart chart(Quality quality) {

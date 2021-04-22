@@ -81,6 +81,17 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
     // Blending : more beautifull with jGL without this
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+    //gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_NONE);
+    
+    /*gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_DST_ALPHA);
+    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_COLOR);
+    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_DST_COLOR);
+    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_SRC_ALPHA_SATURATE);    
+    gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);*/
+
+    
+    //GL_SRC_ALPHA_SATURATE
     // on/off is handled by each viewport (camera or image)
 
     // Activate tranparency

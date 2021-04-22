@@ -74,7 +74,7 @@ public class SurfaceDemoEmulGL_Multithreaded {
 
     // --------------------------------
 
-    Quality q = Quality.Advanced; 
+    Quality q = Quality.Advanced(); 
     Chart chart = factory.newChart(q);
     chart.add(surface);
     

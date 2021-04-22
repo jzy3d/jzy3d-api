@@ -59,7 +59,7 @@ public abstract class Abstract3dDemo {
   }
 
   protected static Chart getRegressionChart(SvmMapper mapper, Coord3d[] values) {
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
     q.setSmoothPoint(true);
     Chart chart = new AWTChartFactory().newChart(q);
 

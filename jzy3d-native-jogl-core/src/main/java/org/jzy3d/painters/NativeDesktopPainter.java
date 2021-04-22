@@ -1,6 +1,7 @@
 package org.jzy3d.painters;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import org.jzy3d.colors.Color;
@@ -93,6 +94,24 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
     // Blending
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+    
+    // KEEP THIS DOC!!
+    //gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_ONE);
+    // ONE : make a white screen
+    // NONE : make surface look opaque
+    // GL_ONE_MINUS_DST_ALPHA : make surface look opaque
+    // GL_ONE_MINUS_SRC_ALPHA : make surface look translucent but change coloring
+    // GL_SRC_ALPHA : make surface look translucent but change coloring + no wireframe
+    // GL_DST_ALPHA : make a white screen
+    //glBlendFunc(GL.GL_ONE_MINUS_DST_ALPHA,GL.GL_DST_ALPHA);
+    
+    //gl.glBlen
+    //ByteBuffer byteBuffer = ByteBuffer.allocate(10);
+    //IntBuffer ib = byteBuffer.asIntBuffer();
+    //gl.glGetIntegerv(GL.GL_BLEND_SRC_ALPHA, ib);
+    //gl.glGetIntegerv(GL.GL_BLEND_DST_ALPHA, ib);
+    //System.out.println(ib.array());
+    
     // on/off is handled by each viewport (camera or image)
     
     // Activate tranparency

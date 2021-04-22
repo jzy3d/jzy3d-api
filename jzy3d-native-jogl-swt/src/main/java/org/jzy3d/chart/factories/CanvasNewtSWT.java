@@ -16,6 +16,7 @@ import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.PixelScaleWatch;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -75,7 +76,8 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
       animator.start();
     }
     
-    watchPixelScale();
+    if(ALLOW_WATCH_PIXEL_SCALE)
+      watchPixelScale();
 
     addDisposeListener(e -> new Thread(() -> {
       if (animator != null) {
@@ -91,40 +93,23 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     }).start());
   }
   
-  private void watchPixelScale() {
-    exec.schedule(new Runnable() {
-      double prevX = -1;
-      double prevY = -1;
-      
+  protected void watchPixelScale() {
+    exec.schedule(new PixelScaleWatch() {
       @Override
-      public void run() {
-        while(true) {
-          watchPixelScaleAndNotifyUponChange();
-
-          try {
-            Thread.sleep(300);
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
+      public double getPixelScaleY() {
+        return getPixelScaleX();
       }
-
-      private void watchPixelScaleAndNotifyUponChange() {
-        double x = getPixelScaleX(); 
-        double y = getPixelScaleY();
-        
-        if((prevX!=-1)&&(prevY!=-1)) {
-          if((x!=prevX)||(y!=prevY)) {
-            firePixelScaleChanged(x, y);
-          }
-        }
-        
-        prevX = x;
-        prevY = y;
-        
+      @Override
+      public double getPixelScaleX() {
+        return getPixelScaleY();
+      }
+      @Override
+      protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        firePixelScaleChanged(pixelScaleX, pixelScaleY);
       }
     }, 0, TimeUnit.SECONDS);
   }
+
 
   private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
     return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,

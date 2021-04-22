@@ -19,7 +19,7 @@ public class SurfaceDemoSWTAWTBridge {
     final Shape surface = surface();
 
     // Create a chart
-    Chart chart = new SWTBridgeChartFactory().newChart(Quality.Advanced);
+    Chart chart = new SWTBridgeChartFactory().newChart(Quality.Advanced());
     chart.getScene().getGraph().add(surface);
 
     // TODO : let SWT Frame open in non blocking mode.

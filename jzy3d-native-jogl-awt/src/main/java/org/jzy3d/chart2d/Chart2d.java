@@ -74,7 +74,7 @@ public class Chart2d extends AWTNativeChart {
   /* */
 
   public Chart2d() {
-    this(new Chart2dFactory(), Quality.Advanced);
+    this(new Chart2dFactory(), Quality.Advanced());
   }
 
   public Chart2d(IChartFactory factory, Quality quality) {
