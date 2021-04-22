@@ -41,7 +41,7 @@ public class BasicVolumeDemo extends AWTAbstractAnalysis {
         colorMapper, new BoundingBox3d(1, 10, 1, 10, 1, 10));
 
     // Create a chart
-    chart = AWTChartFactory.chart(Quality.Intermediate);
+    chart = AWTChartFactory.chart(Quality.Intermediate());
     chart.getScene().getGraph().add(volume);
     chart.getView();
   }

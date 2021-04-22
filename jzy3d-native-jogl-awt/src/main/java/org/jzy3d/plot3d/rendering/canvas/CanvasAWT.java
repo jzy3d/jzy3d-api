@@ -80,44 +80,26 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
       animator.stop();
     }
 
-    watchPixelScale();
+    if(ALLOW_WATCH_PIXEL_SCALE)
+      watchPixelScale();
     
     if (quality.isPreserveViewportSize())
       setPixelScale(newPixelScaleIdentity());
   }
 
-  private void watchPixelScale() {
-    exec.schedule(new Runnable() {
-      double prevX = -1;
-      double prevY = -1;
-      
+  protected void watchPixelScale() {
+    exec.schedule(new PixelScaleWatch() {
       @Override
-      public void run() {
-        while(true) {
-          watchPixelScaleAndNotifyUponChange();
-
-          try {
-            Thread.sleep(300);
-          } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-          }
-        }
+      public double getPixelScaleY() {
+        return getPixelScaleX();
       }
-
-      private void watchPixelScaleAndNotifyUponChange() {
-        double x = getPixelScaleX(); 
-        double y = getPixelScaleY();
-        
-        if((prevX!=-1)&&(prevY!=-1)) {
-          if((x!=prevX)||(y!=prevY)) {
-            firePixelScaleChanged(x, y);
-          }
-        }
-        
-        prevX = x;
-        prevY = y;
-        
+      @Override
+      public double getPixelScaleX() {
+        return getPixelScaleY();
+      }
+      @Override
+      protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        firePixelScaleChanged(pixelScaleX, pixelScaleY);
       }
     }, 0, TimeUnit.SECONDS);
   }

@@ -18,7 +18,7 @@ public class PeeledDragonDemo {
   public static void main(String[] args) {
     System.err.println("May require vm argument -Xmx1024m");
 
-    Chart chart = DepthPeelingChart.get(Quality.Fastest, "awt");
+    Chart chart = DepthPeelingChart.get(Quality.Fastest(), "awt");
 
     OBJFileLoader loader = new OBJFileLoader("models/dragon.obj");
     //chart.getScene().add(new DrawableVBO(loader));

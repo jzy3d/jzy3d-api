@@ -37,7 +37,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 public class Chart {
   private static final int MOUSE_PICK_SIZE_DEFAULT = 10;
   private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";
-  public static final Quality DEFAULT_QUALITY = Quality.Intermediate.clone();
+  public static final Quality DEFAULT_QUALITY = Quality.Intermediate();
 
   protected IChartFactory factory;
 

@@ -191,21 +191,35 @@ public class View {
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
     
-    canvas.addCanvasListener(new ICanvasListener() {
-      @Override
-      public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-        TextBitmapRenderer txt = (TextBitmapRenderer)axis.getTextRenderer();
-        
-        if(pixelScaleX<=1) {
-          txt.setFont(Font.TimesRoman_10);
-          txt.setFont(Font.Helvetica_12);
+   // if(ICanvas.ALLOW_WATCH_PIXEL_SCALE)
+      canvas.addCanvasListener(new ICanvasListener() {
+        /**
+         * Upon pixel scale change, either at startup or during execution of the program,
+         * the listener will
+         * <ul>
+         * <li>reconfigure the current font of the axis text renderer
+         * <li>reconfigure the current font of the colorbar
+         * </ul>
+         * 
+         * TODO : verify that pixel scale change event do not trigger if hdpi disabled 
+         *        AND running on HiDPI screen
+         *        
+         * TODO : add unit test to verify view changes text when pixelscale change      
+         */
+        @Override
+        public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+          TextBitmapRenderer txt = (TextBitmapRenderer)axis.getTextRenderer();
+          System.out.println("View:scale " + pixelScaleX);
+          if(pixelScaleX<=1) {
+            //txt.setFont(Font.TimesRoman_10);
+            txt.setFont(Font.Helvetica_12);
+          }
+          else {
+            //txt.setFont(Font.TimesRoman_24);
+            txt.setFont(Font.Helvetica_18);
+          }
         }
-        else {
-          txt.setFont(Font.TimesRoman_24);
-          txt.setFont(Font.Helvetica_18);
-        }
-      }
-    });
+      });
   }
 
   public IPainter getPainter() {

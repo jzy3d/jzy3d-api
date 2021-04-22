@@ -39,7 +39,7 @@ public class SurfaceDemoEmulGL_Alpha {
 
     EmulGLChartFactory factory = new EmulGLChartFactory();
 
-    Quality q = Quality.Advanced; // assez propre avec l'ancienne méthode de setQuality
+    Quality q = Quality.Advanced(); // assez propre avec l'ancienne méthode de setQuality
 
     // Le mode Fastest blend la couleur mais ne fait pas le calcul de la transparence + WEIRD
     // WIREFRAME
@@ -48,8 +48,12 @@ public class SurfaceDemoEmulGL_Alpha {
     // Le mode Advanced active le calcul de la transparence mais BLACK BACKGROUND bug (surface
     // should be white)
 
-
+    // READ THIS : https://opengl-notes.readthedocs.io/en/latest/topics/texturing/aliasing.html
+    // ABOUT HOW ALPHA IS USED TO IMPLEMENT ANTI ALIASING
+    // WHICH MAY EXPLAIN WHY NO ALPHA MAKE SURFACE UGLY WITH WIREFRAME
     q.setAlphaActivated(false);
+    
+    
     // ALPHA BUG
     // Also, q.setAlphaActivated(false) is what involve a WEIRD WIREFRAME effect
 
@@ -62,35 +66,8 @@ public class SurfaceDemoEmulGL_Alpha {
     chart.add(surface);
     chart.getView().setAxisDisplayed(false);
     chart.open();
+    chart.getMouse();
 
-
-
-    // --------------------------------
-    CameraThreadController rotation = new CameraThreadController(chart);
-    rotation.setStep(0.025f);
-    rotation.setUpdateViewDefault(true);
-
-    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
-    mouse.addSlaveThreadController(rotation);
-
-    // chart.getView().setBackgroundColor(Color.BLUE);
-    // chart.getView().setAxisDisplayed(true);
-
-    boolean fixWithAnimator = true;
-    if (fixWithAnimator) {
-      rotation.setUpdateViewDefault(true);
-      mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
-      ((EmulGLCanvas) chart.getCanvas()).getAnimation().start();
-    } else {
-
-    }
-
-    try {
-      chart
-          .screenshot(new File("target/" + SurfaceDemoEmulGL_Alpha.class.getSimpleName() + ".png"));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
 

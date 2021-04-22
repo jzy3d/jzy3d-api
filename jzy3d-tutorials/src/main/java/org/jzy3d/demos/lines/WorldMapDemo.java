@@ -29,7 +29,7 @@ public class WorldMapDemo extends AWTAbstractAnalysis {
         return new CroppingView(factory, scene, canvas, quality);
       }
     };
-    chart = f.newChart(Quality.Advanced);
+    chart = f.newChart(Quality.Advanced());
 
     // Instantiate world map and parse the file
     WorldMapLoader worldMap = new WorldMapLoader();

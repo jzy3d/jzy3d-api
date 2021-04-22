@@ -12,44 +12,77 @@ import org.jzy3d.plot3d.rendering.view.View;
  * GL2 initialization. The {@link Quality} may also activate an {@link AbstractOrderingStrategy}
  * algorithm that enables clean alpha results.
  * 
- * Fastest: - No transparency, no color shading, just handle depth buffer.
- * 
- * Intermediate: - include Fastest mode abilities - Color shading, mainly usefull to have
+ * <ul>
+ * <li>Fastest: No transparency, no color shading, just handle depth buffer.
+ * <li>Intermediate: include Fastest mode abilities, Color shading, mainly usefull to have
  * interpolated colors on polygons.
- * 
- * Advanced: - include Intermediate mode abilities - Transparency (GL2 alpha blending + polygon
+ * <li>Advanced: include Intermediate mode abilities, Transparency (GL2 alpha blending + polygon
  * ordering in scene graph)
- * 
- * Nicest: - include Advanced mode abilities - Anti aliasing on wires
+ * <li>Nicest: include Advanced mode abilities, Anti aliasing on wires
+ * </ul>
  * 
  * Toggling rendering model: one may either choose to have a repaint-on-demand or
- * repaint-continuously model. Setting isAnimated(false) will desactivate a the {@link IAnimator}
+ * repaint-continuously model. Setting isAnimated(false) will desactivate the {@link IAnimator}
  * updating the choosen {@link ICanvas} implementation.
  * 
- * setAutoSwapBuffer(false) will equaly configure the {@link ICanvas}.
+ * setAutoSwapBuffer(false) will configure the {@link ICanvas}.
  * 
  * @author Martin Pernollet
  */
 public class Quality {
 
-
   /**
    * Enables alpha, color interpolation and antialiasing on lines, points, and polygons.
    */
-  public static final Quality Nicest = new Quality(true, true, true, true, true, true, true);
+  public static final Quality Nicest() {
+    return Nicest.clone();
+  }
+
   /**
    * Enables alpha and color interpolation.
    */
-  public static final Quality Advanced = new Quality(true, true, true, false, false, false, true);
+  public static final Quality Advanced() {
+    return Advanced.clone();
+  }
+
   /**
    * Enables color interpolation.
    */
-  public static final Quality Intermediate =
-      new Quality(true, false, true, false, false, false, true);
+  public static final Quality Intermediate() {
+    return Intermediate.clone();
+  }
+
   /**
    * Minimal quality to allow fastest rendering (no alpha, interpolation or antialiasing).
    */
-  public static final Quality Fastest = new Quality(true, false, false, false, false, false, true);
+  public static final Quality Fastest() {
+    return Fastest.clone();
+  }
+
+  protected static final Quality Nicest = new Quality(true, true, true, true, true, true, true);
+  protected static final Quality Advanced =
+      new Quality(true, true, true, false, false, false, true);
+  protected static final Quality Intermediate =
+      new Quality(true, false, true, false, false, false, true);
+  protected static final Quality Fastest =
+      new Quality(true, false, false, false, false, false, true);
+
+  // ****************************************************************** //
+
+  protected boolean depthActivated;
+  protected boolean alphaActivated;
+  protected boolean smoothColor;
+  protected boolean smoothPoint;
+  protected boolean smoothLine;
+  protected boolean smoothPolygon;
+  protected boolean disableDepthTestWhenAlpha;
+  protected boolean isAnimated = true;
+  protected boolean isAutoSwapBuffer = true;
+
+  protected boolean preserveViewportSize = DEFAULT_PRESERVE_VIEWPORT;
+
+  public static boolean DEFAULT_PRESERVE_VIEWPORT = true;
+
 
   /** Initialize a Quality configuration for a View. */
   public Quality(boolean depthActivated, boolean alphaActivated, boolean smoothColor,
@@ -162,10 +195,10 @@ public class Quality {
    * If true, states that the chart should make use of HiDPI or Retina capabilities to draw more
    * good looking charts due to higher number of physical pixels.
    * 
-   * A convenient shortcut to 
-   * <code>
+   * A convenient shortcut to <code>
    * setPreserveViewportSize(!hidpi)
    * </code>
+   * 
    * @param hidpi
    */
   public void setHiDPIEnabled(boolean hidpi) {
@@ -181,17 +214,5 @@ public class Quality {
   }
 
 
-  private boolean depthActivated;
-  private boolean alphaActivated;
-  private boolean smoothColor;
-  private boolean smoothPoint;
-  private boolean smoothLine;
-  private boolean smoothPolygon;
-  protected boolean disableDepthTestWhenAlpha;
-  protected boolean isAnimated = true;
-  protected boolean isAutoSwapBuffer = true;
 
-  protected boolean preserveViewportSize = DEFAULT_PRESERVE_VIEWPORT;
-
-  public static boolean DEFAULT_PRESERVE_VIEWPORT = true;
 }

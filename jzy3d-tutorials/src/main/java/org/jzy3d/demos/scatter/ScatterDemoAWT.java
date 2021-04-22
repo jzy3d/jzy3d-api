@@ -40,7 +40,7 @@ public class ScatterDemoAWT extends AWTAbstractAnalysis {
 
     Scatter scatter = new Scatter(points, colors);
 
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
     // q.setPreserveViewportSize(true);
 
     chart = new AWTChartFactory().newChart(q);

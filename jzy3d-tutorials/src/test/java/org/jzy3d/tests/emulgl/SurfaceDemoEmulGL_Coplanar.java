@@ -25,7 +25,7 @@ public class SurfaceDemoEmulGL_Coplanar {
 
   public static void main(String[] args) {
     EmulGLChartFactory factory = new EmulGLChartFactory();
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
 
     Shape surface = surface();
 

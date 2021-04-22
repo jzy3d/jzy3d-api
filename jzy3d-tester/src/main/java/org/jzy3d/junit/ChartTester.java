@@ -143,7 +143,7 @@ public class ChartTester {
 
       // LET TEST FAIL
       
-      fail("Chart test failed: " + e.getMessage() + " pix("+e.getDiffCoordinates()+ " see " + diffFile);
+      fail("Chart test failed: " + e.getMessage() + " see " + diffFile);
 
     } catch (IOException e) {
       // -----------------------------

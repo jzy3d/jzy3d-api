@@ -19,7 +19,7 @@ public class ITTestScatterChart {
 
     // When
     EmulGLChartFactory factory = new EmulGLChartFactory();
-    Chart chart = factory.newChart(Quality.Advanced);
+    Chart chart = factory.newChart(Quality.Advanced());
 
     EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
     c.setProfileDisplayMethod(false);

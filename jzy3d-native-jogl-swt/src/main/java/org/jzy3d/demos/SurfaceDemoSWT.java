@@ -55,7 +55,7 @@ public class SurfaceDemoSWT {
     shell.setLayout(new FillLayout());
 
     SWTChartFactory f = new SWTChartFactory(shell);
-    Chart chart = f.newChart(Quality.Advanced);
+    Chart chart = f.newChart(Quality.Advanced());
 
     // Chart chart = SWTChartFactory.chart(shell);
     chart.getScene().getGraph().add(surface);

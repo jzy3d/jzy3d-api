@@ -23,7 +23,7 @@ public class ITTestSurfaceChart {
 
     // When
     EmulGLChartFactory factory = new EmulGLChartFactory();
-    Chart chart = factory.newChart(Quality.Advanced);
+    Chart chart = factory.newChart(Quality.Advanced());
     
     //System.out.println(chart.getQuality().isAlphaActivated());
 
