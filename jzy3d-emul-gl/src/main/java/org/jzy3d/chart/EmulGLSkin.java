@@ -6,8 +6,6 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyControlle
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadControllerWithTime;
 import org.jzy3d.chart.factories.IFrame;
-import org.jzy3d.maths.Rectangle;
-import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;

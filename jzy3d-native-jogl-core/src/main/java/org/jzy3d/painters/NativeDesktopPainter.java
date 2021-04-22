@@ -1,7 +1,6 @@
 package org.jzy3d.painters;
 
 import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import org.jzy3d.colors.Color;
