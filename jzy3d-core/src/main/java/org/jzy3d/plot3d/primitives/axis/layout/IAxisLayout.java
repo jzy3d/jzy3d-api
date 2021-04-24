@@ -8,6 +8,8 @@ import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 
 public interface IAxisLayout {
+  public static final Font FONT_DEFAULT = Font.Helvetica_12;
+
   public void setMainColor(Color color);
 
   public Color getMainColor();

@@ -60,9 +60,5 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
 
     chart = f.newChart(Quality.Advanced().setHiDPIEnabled(true));
     chart.getScene().getGraph().add(surface);
-    
-//    chart.getAxisLayout().setFont(new Font("Helvetica", 30), HiDPI.OFF);
- //   chart.getAxisLayout().setFont(new Font("Helvetica", 30), HiDPI.ON);
-
   }
 }

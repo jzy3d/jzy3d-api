@@ -52,6 +52,8 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
     int width = canvas.getRendererWidth();
     int height = canvas.getRendererHeight();
+    
+
 
     if (doFixHiDPI) {
       width = (int) (sceneViewport.getWidth() * emulGL.getGL().getPixelScaleX());
@@ -69,6 +71,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       float from = left + slice * (k++);
       float to = from + slice;
 
+      legend.setFont(painter.getView().getAxis().getLayout().getFont());
 
 
       legend.setViewPort(width, height, from, to);
