@@ -112,18 +112,6 @@ public class TestChart {
     Assert.assertFalse(mouse.getThread().isUpdateViewDefault());
   }
 
-  @Ignore
-  @Test
-  public void whenChartAxisLayoutHasCustomFont_ThenAxisBoxHasThisFont() {
-    Chart chart = new EmulGLChartFactory().newChart();
-    chart.getAxisLayout().setFont(Font.TimesRoman_24);
-
-    AxisBox axis = (AxisBox) chart.getView().getAxis();
-
-    TextBitmapRenderer tbr = (TextBitmapRenderer) axis.getTextRenderer();
-    Assert.assertEquals(Font.TimesRoman_24, tbr.getFont());
-  }
-
   @Test
   public void givenEmulatedChart_whenAddSurface_thenViewIsInAutotFitMode() {
 

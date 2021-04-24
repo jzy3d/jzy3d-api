@@ -91,15 +91,15 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     exec.schedule(new PixelScaleWatch() {
       @Override
       public double getPixelScaleY() {
-        return getPixelScaleX();
+        return CanvasAWT.this.getPixelScaleX();
       }
       @Override
       public double getPixelScaleX() {
-        return getPixelScaleY();
+        return CanvasAWT.this.getPixelScaleY();
       }
       @Override
       protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-        firePixelScaleChanged(pixelScaleX, pixelScaleY);
+        CanvasAWT.this.firePixelScaleChanged(pixelScaleX, pixelScaleY);
       }
     }, 0, TimeUnit.SECONDS);
   }
