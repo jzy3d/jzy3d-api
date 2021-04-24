@@ -20,14 +20,8 @@ package org.jzy3d.painters;
  * {@link IPainter#BITMAP_HELVETICA_12} will apply.
  */
 public class Font {
-  public enum HiDPI{
-    ON,OFF;
-    
-    public static HiDPI from(boolean hidpi) {
-      if(hidpi) return ON; return OFF;
-    }
-  }
-  private static final int STYLE_UNDEFINED = -1;
+  
+  private static final int UNDEFINED = -1;
   // Font constants below are picked from GLU object in JOGL
   protected static final int STROKE_ROMAN = 0;
   protected static final int STROKE_MONO_ROMAN = 1;
@@ -59,14 +53,14 @@ public class Font {
 
   public Font(int code, int height) {
     this.code = code;
-    this.style = STYLE_UNDEFINED;
+    this.style = UNDEFINED;
     this.height = height;
 
     detectFontNameFromOpenGLCode(code);
   }
 
   public Font(String name, int height) {
-    this(name, STYLE_UNDEFINED, height);
+    this(name, UNDEFINED, height);
   }
 
   /**
@@ -163,4 +157,40 @@ public class Font {
       code = BITMAP_HELVETICA_12;
     }
   }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + code;
+    result = prime * result + height;
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    result = prime * result + style;
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Font other = (Font) obj;
+    if (code != other.code)
+      return false;
+    if (height != other.height)
+      return false;
+    if (name == null) {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals(other.name))
+      return false;
+    if (style != other.style)
+      return false;
+    return true;
+  }
+  
+  
 }

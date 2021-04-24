@@ -4,6 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
+import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 
 public interface IAxisLayout {
@@ -127,11 +128,11 @@ public interface IAxisLayout {
   public Font getFont();
   public void setFont(Font font);
 
-  public Font getFont(FontType type, Font.HiDPI hidpi);
-  public void setFont(Font font, FontType type, Font.HiDPI hidpi);
+  public Font getFont(FontType type, HiDPI hidpi);
+  public void setFont(Font font, FontType type, HiDPI hidpi);
 
-  public Font getFont(Font.HiDPI hidpi);
-  public void setFont(Font font, Font.HiDPI hidpi);
+  public Font getFont(HiDPI hidpi);
+  public void setFont(Font font, HiDPI hidpi);
 
   public enum FontType{
     Major,Minor

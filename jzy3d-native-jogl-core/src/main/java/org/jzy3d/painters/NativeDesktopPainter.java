@@ -1,5 +1,8 @@
 package org.jzy3d.painters;
 
+import java.awt.Component;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -409,6 +412,35 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   @Override
   public int glutBitmapLength(int font, String string) {
     return glut.glutBitmapLength(font, string);
+  }
+
+  @Override
+  public int getTextLengthInPixels(int font, String string) {
+    Font fnt = Font.getById(font);
+
+    return getTextLengthInPixels(fnt, string);
+  }
+
+  @Override
+  public int getTextLengthInPixels(Font font, String string) {
+    
+    ICanvas c = getCanvas();
+    if(c instanceof Component) {
+      Graphics g = ((Component)c).getGraphics();
+      if(g!=null && font!=null) {
+        g.setFont(toAWT(font));
+        
+        FontMetrics fm = g.getFontMetrics();
+        if(fm!=null) {
+          return fm.stringWidth(string);
+        }
+      }
+    }
+    // fallback on glut
+    return glutBitmapLength(font.getCode(), string);
+  }
+  private java.awt.Font toAWT(Font font) {
+    return new java.awt.Font(font.getName(), java.awt.Font.PLAIN, font.getHeight());
   }
 
   // GL LISTS

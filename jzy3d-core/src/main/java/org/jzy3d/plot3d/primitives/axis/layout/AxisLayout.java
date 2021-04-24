@@ -2,11 +2,11 @@ package org.jzy3d.plot3d.primitives.axis.layout;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
-import org.jzy3d.painters.Font.HiDPI;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.SmartTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
+import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 
 public class AxisLayout implements IAxisLayout {

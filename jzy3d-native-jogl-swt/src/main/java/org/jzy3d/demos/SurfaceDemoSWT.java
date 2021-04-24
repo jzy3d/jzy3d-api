@@ -12,6 +12,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Range;
+import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
@@ -21,6 +22,7 @@ import com.jogamp.newt.swt.NewtCanvasSWT;
 
 /**
  * Demo an AWT chart using JOGL {@link NewtCanvasSWT} wrapped in a SWT {@link Composite}.
+ * 
  * 
  * @author martin
  */
@@ -55,8 +57,10 @@ public class SurfaceDemoSWT {
     shell.setLayout(new FillLayout());
 
     SWTChartFactory f = new SWTChartFactory(shell);
-    Chart chart = f.newChart(Quality.Advanced());
-
+    Quality q = Quality.Advanced();
+    q.setHiDPIEnabled(true);
+    Chart chart = f.newChart(q);
+    
     // Chart chart = SWTChartFactory.chart(shell);
     chart.getScene().getGraph().add(surface);
 

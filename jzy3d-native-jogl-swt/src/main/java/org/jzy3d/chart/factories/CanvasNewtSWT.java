@@ -97,15 +97,15 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     exec.schedule(new PixelScaleWatch() {
       @Override
       public double getPixelScaleY() {
-        return getPixelScaleX();
+        return CanvasNewtSWT.this.getPixelScaleY();
       }
       @Override
       public double getPixelScaleX() {
-        return getPixelScaleY();
+        return CanvasNewtSWT.this.getPixelScaleX();
       }
       @Override
       protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-        firePixelScaleChanged(pixelScaleX, pixelScaleY);
+        CanvasNewtSWT.this.firePixelScaleChanged(pixelScaleX, pixelScaleY);
       }
     }, 0, TimeUnit.SECONDS);
   }

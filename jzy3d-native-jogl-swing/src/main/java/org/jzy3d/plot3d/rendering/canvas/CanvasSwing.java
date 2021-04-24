@@ -87,11 +87,11 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     exec.schedule(new PixelScaleWatch() {
       @Override
       public double getPixelScaleY() {
-        return CanvasSwing.this.getPixelScaleX();
+        return CanvasSwing.this.getPixelScaleY();
       }
       @Override
       public double getPixelScaleX() {
-        return CanvasSwing.this.getPixelScaleY();
+        return CanvasSwing.this.getPixelScaleX();
       }
       @Override
       protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {

@@ -17,7 +17,6 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.Font;
-import org.jzy3d.painters.Font.HiDPI;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
@@ -100,7 +99,7 @@ public class View {
 
   // view states
   protected boolean first = true;
-  protected Font.HiDPI hidpi = HiDPI.OFF;
+  protected HiDPI hidpi = HiDPI.OFF;
 
   // constants
   public static final float PI_div2 = (float) Math.PI / 2;
@@ -192,6 +191,11 @@ public class View {
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
 
+    // Prefer waiting for canvas to notify of HiDPI
+    //if(quality.isHiDPIEnabled()) {
+    //  applyHiDPIToFonts(hidpi);
+    //}
+    
     // if(ICanvas.ALLOW_WATCH_PIXEL_SCALE)
     canvas.addCanvasListener(new ICanvasListener() {
       /**
@@ -220,10 +224,15 @@ public class View {
         LOGGER.info("Apply HiDPI " + hidpi);
         //System.out.println("Apply HiDPI " + pixelScaleX);
 
-        Font font = axis.getLayout().getFont(hidpi);
-        axis.getLayout().setFont(font);
+        applyHiDPIToFonts(hidpi);
       }
+
     });
+  }
+  
+  protected void applyHiDPIToFonts(HiDPI hidpi) {
+    Font font = axis.getLayout().getFont(hidpi);
+    axis.getLayout().setFont(font);
   }
 
 
