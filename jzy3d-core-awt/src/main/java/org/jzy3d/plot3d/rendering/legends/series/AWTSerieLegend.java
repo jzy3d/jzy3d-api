@@ -6,8 +6,10 @@ import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
+import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
@@ -33,13 +35,13 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
 
   public AWTSerieLegend(Drawable drawable, Color foreground, Color background) {
     super(drawable, foreground, background);
-    this.minimumDimension = new Dimension(AWTAbstractImageGenerator.MIN_BAR_WIDTH,
-        AWTAbstractImageGenerator.MIN_BAR_HEIGHT);
+    this.minimumDimension = new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
+        AWTColorbarImageGenerator.MIN_BAR_HEIGHT);
 
     drawable.setLegend(this);
     initImageGenerator();
     imageGenerator.setHasBackground(true);
-    imageGenerator.setFont(new java.awt.Font("Helvetica", 0, 12));
+    imageGenerator.setAWTFont(new java.awt.Font("Helvetica", 0, 12));
     setGeneratorColors();
 
   }
@@ -89,6 +91,17 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
 
     };
   }
+
+  @Override
+  public void setFont(Font font) {
+    imageGenerator.setFont(font);
+  }
+
+  @Override
+  public Font getFont() {
+    return imageGenerator.getFont();
+  }
+
 
   @Override
   public void render(IPainter painter) {

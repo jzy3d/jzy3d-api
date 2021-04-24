@@ -655,7 +655,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     if (c != null) {
       Graphics g = c.getGraphics();
       if (g != null && font != null) {
-        g.setFont(toAWT(font));
+        g.setFont(toAWT(font)); // TODO : cache?
 
         FontMetrics fm = g.getFontMetrics();
         if (fm != null) {

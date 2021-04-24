@@ -13,8 +13,7 @@ public class AxisLayout implements IAxisLayout {
   protected boolean tickLineDisplayed = true;
 
 
-
-  protected Font font = Font.Helvetica_12;
+  protected Font font = FONT_DEFAULT;
   protected Font fontNoHiDPI = Font.Helvetica_12;
   protected Font fontHiDPI = Font.Helvetica_18;
 
