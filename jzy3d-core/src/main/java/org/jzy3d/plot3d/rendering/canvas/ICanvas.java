@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -18,6 +19,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin Pernollet
  */
 public interface ICanvas {
+  
   /** Returns a reference to the held view. */
   public View getView();
 
@@ -102,5 +104,22 @@ public interface ICanvas {
    * by {@link #setPixelScale(float[])}. Hence the two functions may not be consistent together.
    */
   public Coord2d getPixelScale();
+  
+  public double getLastRenderingTimeMs();
+  
+  public static final double LAST_RENDER_TIME_UNDEFINED = -1;
+
+  
+  public void addCanvasListener(ICanvasListener listener);
+  public void removeCanvasListener(ICanvasListener listener);
+  public List<ICanvasListener> getCanvasListeners();
+  
+  /**
+   * Temporary way of enabling/disabling a thread watching pixel scale change of a native canvas.
+   * 
+   * Set to false if you encounter threading issues with a native Canvas.
+   */
+  @Deprecated
+  public static boolean ALLOW_WATCH_PIXEL_SCALE = true;
 
 }

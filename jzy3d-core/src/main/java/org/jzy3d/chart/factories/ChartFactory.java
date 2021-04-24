@@ -5,6 +5,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadControllerWithTime;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IBoundingPolicy;
@@ -61,7 +62,7 @@ public class ChartFactory implements IChartFactory {
 
   @Override
   public Chart newChart() {
-    return newChart(Quality.Advanced);
+    return newChart(Quality.Advanced());
   }
 
   @Override
@@ -132,7 +133,8 @@ public class ChartFactory implements IChartFactory {
 
   @Override
   public CameraThreadController newCameraThreadController(Chart chart) {
-    return new CameraThreadController(chart);
+    //return new CameraThreadController(chart);
+    return new CameraThreadControllerWithTime(chart, 10);
   }
 
   /*

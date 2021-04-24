@@ -46,7 +46,7 @@ public class ShaderMandelbrotDemo {
 
     IChartFactory factory = new AWTChartFactory(painter);
 
-    Chart chart = factory.newChart(Quality.Intermediate);
+    Chart chart = factory.newChart(Quality.Intermediate());
     chart.getView().setSquared(false);
 
     // chart.getView().setCameraMode(CameraMode.PERSPECTIVE);

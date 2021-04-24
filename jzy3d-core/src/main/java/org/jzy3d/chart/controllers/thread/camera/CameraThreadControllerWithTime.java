@@ -1,10 +1,9 @@
-package org.jzy3d.chart.controllers;
+package org.jzy3d.chart.controllers.thread.camera;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.EmulGLAnimator;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.chart.controllers.RateLimiter;
+import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
 import org.jzy3d.maths.TicToc;
-import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
 
 /**
@@ -153,7 +152,7 @@ public class CameraThreadControllerWithTime extends CameraThreadController imple
   public void setRateLimiter(RateLimiter rateLimiter) {
     if (rateLimiter != null && rateLimiter instanceof RateLimiterAdaptsToRenderTime) {
       ((RateLimiterAdaptsToRenderTime) rateLimiter)
-          .setCanvas((EmulGLCanvas) getChart().getCanvas());
+          .setCanvas(getChart().getCanvas());
     }
     this.rateLimiter = rateLimiter;
   }

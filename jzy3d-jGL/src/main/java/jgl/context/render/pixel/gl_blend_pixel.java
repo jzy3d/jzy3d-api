@@ -27,7 +27,7 @@ import jgl.context.gl_util;
  * gl_blend_pixel is the pixel blending class of jGL 2.4.
  * 
  * It overrides gl_render_pixel to have all {@link gl_render_pixel#put_pixel(int, int, int)} methods 
- * will apply blending first.
+ * apply blending first.
  *
  * @version 0.1, 20 Nov. 2006
  * @author Robin Bing-Yu Chen
@@ -115,7 +115,12 @@ public class gl_blend_pixel extends gl_render_pixel {
     float dst[] = gl_util.ItoRGBAf(CC.ColorBuffer.Buffer[index]);
     float rst[] = { 0.0f, 0.0f, 0.0f, 0.0f };
 
+    // Apply SRC blend func to mix source and destination color 
+    // and increment rst with this result
     blend_pixel(rst, src, src, dst, CC.ColorBuffer.BlendSrc);
+    
+    // Apply DST blend func to mix source and destination color 
+    // and increment rst with this result
     blend_pixel(rst, dst, src, dst, CC.ColorBuffer.BlendDst);
 
     //gl_render_pixel.debug_color_to_console(color);

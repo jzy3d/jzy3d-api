@@ -11,7 +11,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class AWTChartFactory extends ChartFactory {
   public static Chart chart() {
-    return chart(Quality.Intermediate);
+    return chart(Quality.Intermediate());
   }
 
   public static Chart chart(Quality quality) {

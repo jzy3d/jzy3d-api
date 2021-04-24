@@ -33,6 +33,7 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import jgl.GL;
+import jgl.GL.PixelScaleListener;
 import jgl.GLCanvas;
 import jgl.GLUT;
 import jgl.context.gl_pointer;
@@ -62,6 +63,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   protected View view;
   protected EmulGLPainter painter;
   protected IAnimator animator;
+
+  protected List<ICanvasListener> canvasListeners = new ArrayList<>();
 
   protected AtomicBoolean isRenderingFlag = new AtomicBoolean(false);
 
@@ -95,6 +98,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     } else {
       myGL.setAutoAdaptToHiDPI(false);
     }
+
+//    if (ALLOW_WATCH_PIXEL_SCALE)
+      myGL.addPixelScaleListener(new PixelScaleListener() {
+        @Override
+        public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+          firePixelScaleChanged(pixelScaleX, pixelScaleY);
+        }
+      });
   }
 
   @Override
@@ -136,6 +147,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   protected void init(int width, int height) {
     updatePainterWithGL(); // painter can call this canvas GL
     initGLUT(width, height);
+    initView();
+  }
+
+  protected void initView() {
     view.init();
   }
 
@@ -293,11 +308,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   protected double lastRenderingTimeMs = LAST_RENDER_TIME_UNDEFINED;
 
-  public double getLastRenderingTime() {
+  @Override
+  public double getLastRenderingTimeMs() {
     return lastRenderingTimeMs;
   }
-
-  public static final double LAST_RENDER_TIME_UNDEFINED = -1;
 
   /*
    * @Override public void paint(Graphics g) { synchronized(this) {
@@ -427,13 +441,36 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   }
 
   @Override
-  public String getDebugInfo() {
-    return null;
+  public void addCanvasListener(ICanvasListener listener) {
+    canvasListeners.add(listener);
   }
+
+  @Override
+  public void removeCanvasListener(ICanvasListener listener) {
+    canvasListeners.remove(listener);
+  }
+
+  @Override
+  public List<ICanvasListener> getCanvasListeners() {
+    return canvasListeners;
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
+  }
+
 
   /* *********************************************************************** */
   /* ************************** PROFILE AND DEBUG ************************** */
   /* *********************************************************************** */
+
+  @Override
+  public String getDebugInfo() {
+    return null;
+  }
+
 
   /**
    * Render profile on top of an image (probably the image of the GL scene) previously collected
@@ -475,15 +512,13 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       profile("Render in  : " + mili + "ms", x, y * line++, c);
 
       // Drawables size
-      profile("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * line++,
-          c);
+      profile("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * line++, c);
 
       // Scatters sizes
       for (Drawable d : view.getScene().getGraph().getAll()) {
         if (d instanceof Scatter) {
           Scatter s = (Scatter) d;
           profile("Scatter    : " + s.coordinates.length + " points", x, y * (line++), c);
-
         }
       }
 

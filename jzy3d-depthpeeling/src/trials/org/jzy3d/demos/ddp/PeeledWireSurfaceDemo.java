@@ -55,7 +55,7 @@ public class PeeledWireSurfaceDemo {
     capabilities.setHardwareAccelerated(true);
     // ATTENTION AVEC
 
-    Chart chart = new Chart(factory, Quality.Advanced);
+    Chart chart = new Chart(factory, Quality.Advanced());
     chart.getScene().getGraph().add(surface);
 
     // Setup a colorbar

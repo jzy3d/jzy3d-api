@@ -10,11 +10,13 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Range;
+import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.view.HiDPI;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
@@ -56,7 +58,7 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
     IPainterFactory p = new AWTPainterFactory(c);
     IChartFactory f = new AWTChartFactory(p);
 
-    chart = f.newChart(Quality.Advanced);
+    chart = f.newChart(Quality.Advanced().setHiDPIEnabled(true));
     chart.getScene().getGraph().add(surface);
   }
 }

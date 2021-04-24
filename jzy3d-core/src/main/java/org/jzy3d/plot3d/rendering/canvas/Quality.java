@@ -12,44 +12,77 @@ import org.jzy3d.plot3d.rendering.view.View;
  * GL2 initialization. The {@link Quality} may also activate an {@link AbstractOrderingStrategy}
  * algorithm that enables clean alpha results.
  * 
- * Fastest: - No transparency, no color shading, just handle depth buffer.
- * 
- * Intermediate: - include Fastest mode abilities - Color shading, mainly usefull to have
+ * <ul>
+ * <li>Fastest: No transparency, no color shading, just handle depth buffer.
+ * <li>Intermediate: include Fastest mode abilities, Color shading, mainly usefull to have
  * interpolated colors on polygons.
- * 
- * Advanced: - include Intermediate mode abilities - Transparency (GL2 alpha blending + polygon
+ * <li>Advanced: include Intermediate mode abilities, Transparency (GL2 alpha blending + polygon
  * ordering in scene graph)
- * 
- * Nicest: - include Advanced mode abilities - Anti aliasing on wires
+ * <li>Nicest: include Advanced mode abilities, Anti aliasing on wires
+ * </ul>
  * 
  * Toggling rendering model: one may either choose to have a repaint-on-demand or
- * repaint-continuously model. Setting isAnimated(false) will desactivate a the {@link IAnimator}
+ * repaint-continuously model. Setting isAnimated(false) will desactivate the {@link IAnimator}
  * updating the choosen {@link ICanvas} implementation.
  * 
- * setAutoSwapBuffer(false) will equaly configure the {@link ICanvas}.
+ * setAutoSwapBuffer(false) will configure the {@link ICanvas}.
  * 
  * @author Martin Pernollet
  */
 public class Quality {
 
-
   /**
    * Enables alpha, color interpolation and antialiasing on lines, points, and polygons.
    */
-  public static final Quality Nicest = new Quality(true, true, true, true, true, true, true);
+  public static final Quality Nicest() {
+    return Nicest.clone().setHiDPIEnabled(true);
+  }
+
   /**
-   * Enables alpha and color interpolation.
+   * Enables alpha and color interpolation. Set HiDPI on by default
    */
-  public static final Quality Advanced = new Quality(true, true, true, false, false, false, true);
+  public static final Quality Advanced() {
+    return Advanced.clone().setHiDPIEnabled(true);
+  }
+
   /**
-   * Enables color interpolation.
+   * Enables color interpolation. Keep HiDPI off by default
    */
-  public static final Quality Intermediate =
-      new Quality(true, false, true, false, false, false, true);
+  public static final Quality Intermediate() {
+    return Intermediate.clone();
+  }
+
   /**
    * Minimal quality to allow fastest rendering (no alpha, interpolation or antialiasing).
    */
-  public static final Quality Fastest = new Quality(true, false, false, false, false, false, true);
+  public static final Quality Fastest() {
+    return Fastest.clone();
+  }
+
+  protected static final Quality Nicest = new Quality(true, true, true, true, true, true, true);
+  protected static final Quality Advanced =
+      new Quality(true, true, true, false, false, false, true);
+  protected static final Quality Intermediate =
+      new Quality(true, false, true, false, false, false, true);
+  protected static final Quality Fastest =
+      new Quality(true, false, false, false, false, false, true);
+
+  // ****************************************************************** //
+
+  protected boolean depthActivated;
+  protected boolean alphaActivated;
+  protected boolean smoothColor;
+  protected boolean smoothPoint;
+  protected boolean smoothLine;
+  protected boolean smoothPolygon;
+  protected boolean disableDepthTestWhenAlpha;
+  protected boolean isAnimated = true;
+  protected boolean isAutoSwapBuffer = true;
+
+  protected boolean preserveViewportSize = DEFAULT_PRESERVE_VIEWPORT;
+
+  public static boolean DEFAULT_PRESERVE_VIEWPORT = true;
+
 
   /** Initialize a Quality configuration for a View. */
   public Quality(boolean depthActivated, boolean alphaActivated, boolean smoothColor,
@@ -68,72 +101,81 @@ public class Quality {
     return depthActivated;
   }
 
-  public void setDepthActivated(boolean depthActivated) {
+  public Quality setDepthActivated(boolean depthActivated) {
     this.depthActivated = depthActivated;
+    return this;
   }
 
   public boolean isAlphaActivated() {
     return alphaActivated;
   }
 
-  public void setAlphaActivated(boolean alphaActivated) {
+  public Quality setAlphaActivated(boolean alphaActivated) {
     this.alphaActivated = alphaActivated;
+    return this;
   }
 
   public boolean isSmoothColor() {
     return smoothColor;
   }
 
-  public void setSmoothColor(boolean smoothColor) {
+  public Quality setSmoothColor(boolean smoothColor) {
     this.smoothColor = smoothColor;
+    return this;
   }
 
   public boolean isSmoothLine() {
     return smoothLine;
   }
 
-  public void setSmoothEdge(boolean smoothLine) {
+  public Quality setSmoothEdge(boolean smoothLine) {
     this.smoothLine = smoothLine;
+    return this;
   }
 
   public boolean isSmoothPoint() {
     return smoothPoint;
   }
 
-  public void setSmoothPoint(boolean smoothPoint) {
+  public Quality setSmoothPoint(boolean smoothPoint) {
     this.smoothPoint = smoothPoint;
+    return this;
   }
 
   public boolean isSmoothPolygon() {
     return smoothPolygon;
   }
 
-  public void setSmoothPolygon(boolean smoothPolygon) {
+  public Quality setSmoothPolygon(boolean smoothPolygon) {
     this.smoothPolygon = smoothPolygon;
+    return this;
   }
 
   public boolean isDisableDepthBufferWhenAlpha() {
     return disableDepthTestWhenAlpha;
   }
 
-  public void setDisableDepthBufferWhenAlpha(boolean disableDepthBufferWhenAlpha) {
+  public Quality setDisableDepthBufferWhenAlpha(boolean disableDepthBufferWhenAlpha) {
     this.disableDepthTestWhenAlpha = disableDepthBufferWhenAlpha;
+    return this;
   }
 
   public boolean isAnimated() {
     return isAnimated;
   }
 
-  public void setAnimated(boolean isAnimated) {
+  public Quality setAnimated(boolean isAnimated) {
     this.isAnimated = isAnimated;
+    return this;
   }
 
   public boolean isAutoSwapBuffer() {
     return isAutoSwapBuffer;
   }
 
-  public void setAutoSwapBuffer(boolean isAutoSwapBuffer) {
+  public Quality setAutoSwapBuffer(boolean isAutoSwapBuffer) {
     this.isAutoSwapBuffer = isAutoSwapBuffer;
+    return this;
   }
 
   /**
@@ -150,8 +192,9 @@ public class Quality {
     return preserveViewportSize;
   }
 
-  public void setPreserveViewportSize(boolean preserveViewportSize) {
+  public Quality setPreserveViewportSize(boolean preserveViewportSize) {
     this.preserveViewportSize = preserveViewportSize;
+    return this;
   }
 
   public boolean isHiDPIEnabled() {
@@ -162,14 +205,14 @@ public class Quality {
    * If true, states that the chart should make use of HiDPI or Retina capabilities to draw more
    * good looking charts due to higher number of physical pixels.
    * 
-   * A convenient shortcut to 
-   * <code>
+   * A convenient shortcut to <code>
    * setPreserveViewportSize(!hidpi)
    * </code>
+   * 
    * @param hidpi
    */
-  public void setHiDPIEnabled(boolean hidpi) {
-    setPreserveViewportSize(!hidpi);
+  public Quality setHiDPIEnabled(boolean hidpi) {
+    return setPreserveViewportSize(!hidpi);
   }
 
   public Quality clone() {
@@ -181,17 +224,5 @@ public class Quality {
   }
 
 
-  private boolean depthActivated;
-  private boolean alphaActivated;
-  private boolean smoothColor;
-  private boolean smoothPoint;
-  private boolean smoothLine;
-  private boolean smoothPolygon;
-  protected boolean disableDepthTestWhenAlpha;
-  protected boolean isAnimated = true;
-  protected boolean isAutoSwapBuffer = true;
 
-  protected boolean preserveViewportSize = DEFAULT_PRESERVE_VIEWPORT;
-
-  public static boolean DEFAULT_PRESERVE_VIEWPORT = true;
 }
