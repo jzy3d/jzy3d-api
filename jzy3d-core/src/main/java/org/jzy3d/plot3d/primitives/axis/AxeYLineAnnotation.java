@@ -11,8 +11,8 @@ public class AxeYLineAnnotation implements AxeAnnotation {
 
   @Override
   public void draw(IPainter painter, AxisBox axe) {
-    Range xrange = axe.getBoxBounds().getXRange();
-    Range zrange = axe.getBoxBounds().getYRange();
+    Range xrange = axe.getBounds().getXRange();
+    Range zrange = axe.getBounds().getYRange();
 
     drawLine(painter, xrange, zrange);
   }
