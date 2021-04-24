@@ -1015,7 +1015,7 @@ public class AxisBox implements IAxis {
   }
 
   @Override
-  public BoundingBox3d getBoxBounds() {
+  public BoundingBox3d getBounds() {
     return boxBounds;
   }
 
@@ -1165,7 +1165,7 @@ public class AxisBox implements IAxis {
   }
 
   public BoundingBox3d.Corners getCorners() {
-    return getBoxBounds().getCorners();
+    return getBounds().getCorners();
   }
 
 }

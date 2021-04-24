@@ -21,7 +21,7 @@ public interface IAxis {
 
   public Coord3d getScale();
 
-  public BoundingBox3d getBoxBounds();
+  public BoundingBox3d getBounds();
 
   public Coord3d getCenter();
 

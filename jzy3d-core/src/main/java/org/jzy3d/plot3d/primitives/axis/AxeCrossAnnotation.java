@@ -9,8 +9,8 @@ public class AxeCrossAnnotation extends AxeLineAnnotation implements AxeAnnotati
 
   @Override
   public void draw(IPainter painter, AxisBox axe) {
-    Range xrange = axe.getBoxBounds().getXRange();
-    Range yrange = axe.getBoxBounds().getYRange();
+    Range xrange = axe.getBounds().getXRange();
+    Range yrange = axe.getBounds().getYRange();
 
     drawHorizontalLineGL2(painter, xrange, value.y);
     drawVerticalLine(painter, yrange, value.x);

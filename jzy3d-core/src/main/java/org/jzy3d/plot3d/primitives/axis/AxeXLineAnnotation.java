@@ -8,7 +8,7 @@ public class AxeXLineAnnotation extends AxeLineAnnotation implements AxeAnnotati
 
   @Override
   public void draw(IPainter painter, AxisBox axe) {
-    Range yrange = axe.getBoxBounds().getYRange();
+    Range yrange = axe.getBounds().getYRange();
 
     drawVerticalLine(painter, yrange, value);
   }

@@ -20,6 +20,7 @@ import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
@@ -190,39 +191,33 @@ public class View {
     this.scene.getGraph().getStrategy().setView(this);
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
-
+    
+    configureHiDPIListener(canvas);
     // Prefer waiting for canvas to notify of HiDPI
     //if(quality.isHiDPIEnabled()) {
     //  applyHiDPIToFonts(hidpi);
     //}
-    
-    // if(ICanvas.ALLOW_WATCH_PIXEL_SCALE)
+  }
+
+  /**
+   * Upon pixel scale change, either at startup or during execution of the program, the listener
+   * will reconfigure the default font according to current HiDPI settings. This will reconfigure anything
+   * that draws based on {@link AxisLayout#getFont()}, hence:
+   * <ul>
+   * <li>the font of the axis text renderer
+   * <li>the font of the colorbar 
+   * </ul>
+   */
+  protected void configureHiDPIListener(ICanvas canvas) {
     canvas.addCanvasListener(new ICanvasListener() {
-      /**
-       * Upon pixel scale change, either at startup or during execution of the program, the listener
-       * will
-       * <ul>
-       * <li>reconfigure the current font of the axis text renderer
-       * <li>reconfigure the current font of the colorbar
-       * </ul>
-       * 
-       * TODO : verify that pixel scale change event do not trigger if hdpi disabled AND running on
-       * HiDPI screen
-       * 
-       * TODO : add unit test to verify view changes text when pixelscale change
-       */
       @Override
       public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
-          //axis.getLayout().setFont(Font.Helvetica_12);
         } else {
           hidpi = HiDPI.ON;
-          //axis.getLayout().setFont(Font.Helvetica_18);
         }
-        LOGGER.info("Apply HiDPI " + hidpi);
-        //System.out.println("Apply HiDPI " + pixelScaleX);
+        //LOGGER.info("Apply HiDPI " + hidpi);
 
         applyHiDPIToFonts(hidpi);
       }
@@ -545,7 +540,7 @@ public class View {
 
   /** Get the {@link AxisBox}'s {@link BoundingBox3d} */
   public BoundingBox3d getBounds() {
-    return axis.getBoxBounds();
+    return axis.getBounds();
   }
 
   public ViewBoundMode getBoundsMode() {

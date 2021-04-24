@@ -73,7 +73,7 @@ public class AxisBase implements IAxis {
   }
 
   @Override
-  public BoundingBox3d getBoxBounds() {
+  public BoundingBox3d getBounds() {
     return boundingBox;
   }
 

@@ -24,4 +24,16 @@ public class Triangle2d {
   public Coord2d getMedianCA() {
     return c.mean(a);
   }
+  
+  public Triangle2d mul(float value) {
+     return new Triangle2d(a.mul(value), b.mul(value), c.mul(value));
+  }
+
+  public Triangle2d mulSelf(float value) {
+    a = a.mul(value);
+    b = b.mul(value);
+    c = c.mul(value);
+    return this;
+ }
+
 }
