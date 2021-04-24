@@ -35,18 +35,18 @@ public class Quality {
    * Enables alpha, color interpolation and antialiasing on lines, points, and polygons.
    */
   public static final Quality Nicest() {
-    return Nicest.clone();
+    return Nicest.clone().setHiDPIEnabled(true);
   }
 
   /**
-   * Enables alpha and color interpolation.
+   * Enables alpha and color interpolation. Set HiDPI on by default
    */
   public static final Quality Advanced() {
-    return Advanced.clone();
+    return Advanced.clone().setHiDPIEnabled(true);
   }
 
   /**
-   * Enables color interpolation.
+   * Enables color interpolation. Keep HiDPI off by default
    */
   public static final Quality Intermediate() {
     return Intermediate.clone();
@@ -101,72 +101,81 @@ public class Quality {
     return depthActivated;
   }
 
-  public void setDepthActivated(boolean depthActivated) {
+  public Quality setDepthActivated(boolean depthActivated) {
     this.depthActivated = depthActivated;
+    return this;
   }
 
   public boolean isAlphaActivated() {
     return alphaActivated;
   }
 
-  public void setAlphaActivated(boolean alphaActivated) {
+  public Quality setAlphaActivated(boolean alphaActivated) {
     this.alphaActivated = alphaActivated;
+    return this;
   }
 
   public boolean isSmoothColor() {
     return smoothColor;
   }
 
-  public void setSmoothColor(boolean smoothColor) {
+  public Quality setSmoothColor(boolean smoothColor) {
     this.smoothColor = smoothColor;
+    return this;
   }
 
   public boolean isSmoothLine() {
     return smoothLine;
   }
 
-  public void setSmoothEdge(boolean smoothLine) {
+  public Quality setSmoothEdge(boolean smoothLine) {
     this.smoothLine = smoothLine;
+    return this;
   }
 
   public boolean isSmoothPoint() {
     return smoothPoint;
   }
 
-  public void setSmoothPoint(boolean smoothPoint) {
+  public Quality setSmoothPoint(boolean smoothPoint) {
     this.smoothPoint = smoothPoint;
+    return this;
   }
 
   public boolean isSmoothPolygon() {
     return smoothPolygon;
   }
 
-  public void setSmoothPolygon(boolean smoothPolygon) {
+  public Quality setSmoothPolygon(boolean smoothPolygon) {
     this.smoothPolygon = smoothPolygon;
+    return this;
   }
 
   public boolean isDisableDepthBufferWhenAlpha() {
     return disableDepthTestWhenAlpha;
   }
 
-  public void setDisableDepthBufferWhenAlpha(boolean disableDepthBufferWhenAlpha) {
+  public Quality setDisableDepthBufferWhenAlpha(boolean disableDepthBufferWhenAlpha) {
     this.disableDepthTestWhenAlpha = disableDepthBufferWhenAlpha;
+    return this;
   }
 
   public boolean isAnimated() {
     return isAnimated;
   }
 
-  public void setAnimated(boolean isAnimated) {
+  public Quality setAnimated(boolean isAnimated) {
     this.isAnimated = isAnimated;
+    return this;
   }
 
   public boolean isAutoSwapBuffer() {
     return isAutoSwapBuffer;
   }
 
-  public void setAutoSwapBuffer(boolean isAutoSwapBuffer) {
+  public Quality setAutoSwapBuffer(boolean isAutoSwapBuffer) {
     this.isAutoSwapBuffer = isAutoSwapBuffer;
+    return this;
   }
 
   /**
@@ -183,8 +192,9 @@ public class Quality {
     return preserveViewportSize;
   }
 
-  public void setPreserveViewportSize(boolean preserveViewportSize) {
+  public Quality setPreserveViewportSize(boolean preserveViewportSize) {
     this.preserveViewportSize = preserveViewportSize;
+    return this;
   }
 
   public boolean isHiDPIEnabled() {
@@ -201,8 +211,8 @@ public class Quality {
    * 
    * @param hidpi
    */
-  public void setHiDPIEnabled(boolean hidpi) {
-    setPreserveViewportSize(!hidpi);
+  public Quality setHiDPIEnabled(boolean hidpi) {
+    return setPreserveViewportSize(!hidpi);
   }
 
   public Quality clone() {

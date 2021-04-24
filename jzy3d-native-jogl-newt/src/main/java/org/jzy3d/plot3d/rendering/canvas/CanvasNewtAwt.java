@@ -94,11 +94,11 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     exec.schedule(new PixelScaleWatch() {
       @Override
       public double getPixelScaleY() {
-        return CanvasNewtAwt.this.getPixelScaleX();
+        return CanvasNewtAwt.this.getPixelScaleY();
       }
       @Override
       public double getPixelScaleX() {
-        return CanvasNewtAwt.this.getPixelScaleY();
+        return CanvasNewtAwt.this.getPixelScaleX();
       }
       @Override
       protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {

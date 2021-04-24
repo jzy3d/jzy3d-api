@@ -22,6 +22,7 @@ import org.jzy3d.plot3d.rendering.image.GLImage;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import jgl.GL;
+import jgl.GLCanvas;
 import jgl.GLU;
 import jgl.GLUT;
 import jgl.context.gl_util;
@@ -82,16 +83,17 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     // Blending : more beautifull with jGL without this
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
-    //gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_NONE);
-    
-    /*gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_DST_ALPHA);
-    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_COLOR);
-    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_DST_COLOR);
-    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_SRC_ALPHA_SATURATE);    
-    gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);*/
+    // gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_NONE);
 
-    
-    //GL_SRC_ALPHA_SATURATE
+    /*
+     * gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_DST_ALPHA); gl.glBlendFunc(GL.GL_SRC_ALPHA,
+     * GL.GL_ONE_MINUS_SRC_COLOR); gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_DST_COLOR);
+     * gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_SRC_ALPHA_SATURATE); gl.glBlendFunc(GL.GL_DST_ALPHA,
+     * GL.GL_ONE_MINUS_SRC_ALPHA);
+     */
+
+
+    // GL_SRC_ALPHA_SATURATE
     // on/off is handled by each viewport (camera or image)
 
     // Activate tranparency
@@ -614,64 +616,59 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   /**
    * Process the given font length to further process alignement.
    * 
-   * As this method is not implemented in jGL, we rely on AWT to process string width
-   * as soon as the canvas graphics is non null. 
+   * Will only return a valid width for known {@link Font} (Helevetica and Times Roman). 
    * 
-   * In case the canvas is not able to return a {@link Graphics2D} instance we fallback
-   * on a simple formulae that is valid for the default font.
-   * 
-   * <code>6 * string.length()</code>
+   * Getting text width of any string can be done {@link #getTextLengthInPixels(Font, String)}.
    */
   @Override
   public int glutBitmapLength(int font, String string) {
-    
-    if(font==Font.BITMAP_HELVETICA_12) {
-      return 6 * string.length();     
-    }
-    else if(font==Font.BITMAP_HELVETICA_18) {
-      return 9 * string.length();     
-    }
-    else if(font==Font.BITMAP_TIMES_ROMAN_10) {
-      return 5 * string.length();     
-    }
-    else if(font==Font.BITMAP_TIMES_ROMAN_24) {
-      return 12 * string.length();     
-    }
-    else if(allowAutoDetectTextLength){
-      int width = autodetectTextLength(font, string);
-
-      if(width>0) {
-        return width;
-      }
-    }
-    
-    return 6 * string.length(); 
+    if (font == Font.BITMAP_HELVETICA_12) {
+      return 6 * string.length();
+    } else if (font == Font.BITMAP_HELVETICA_18) {
+      return 9 * string.length();
+    } else if (font == Font.BITMAP_TIMES_ROMAN_10) {
+      return 5 * string.length();
+    } else if (font == Font.BITMAP_TIMES_ROMAN_24) {
+      return 12 * string.length();
+    } 
+    return 6 * string.length();
   }
 
-  boolean allowAutoDetectTextLength = false;
-  
-  /** Very precise text length detection BUT very slow  as it is invoked for each string at each frame*/
-  protected int autodetectTextLength(int font, String string) {
-    EmulGLCanvas c = (EmulGLCanvas)getCanvas();
-    if(c!=null) {
-      Graphics g = c.getGraphics();
-      if(g!=null) {
-        Font fnt = Font.getById(font);
-        if(fnt!=null) {
-          g.setFont(toAWT(fnt));
-          
-          FontMetrics fm = g.getFontMetrics();
-          if(fm!=null) {
-            return fm.stringWidth(string);
-          }
-        }
-      }
-    }
-    return -1;
+  boolean allowAutoDetectTextLength = true;
+
+  @Override
+  public int getTextLengthInPixels(int font, String string) {
+    Font fnt = Font.getById(font);
+
+    return getTextLengthInPixels(fnt, string);
   }
 
   /**
-   * Replace {@link #glutBitmapString(int, String) which is the official expected OpenGL interface.
+   * Text length processing based on AWT {@link FontMetrics} obtained
+   * by retrieving the graphic context of the {@link GLCanvas}.
+   * 
+   * In case no graphics is available
+   */
+  @Override
+  public int getTextLengthInPixels(Font font, String string) {
+    EmulGLCanvas c = (EmulGLCanvas) getCanvas();
+    if (c != null) {
+      Graphics g = c.getGraphics();
+      if (g != null && font != null) {
+        g.setFont(toAWT(font));
+
+        FontMetrics fm = g.getFontMetrics();
+        if (fm != null) {
+          return fm.stringWidth(string);
+        }
+      }
+    }
+    // fallback on glut
+    return glutBitmapLength(font.getCode(), string);
+  }
+
+  /**
+   * Replace {@link #glutBitmapString(int, String) which is the official OpenGL interface.
    * 
    * This alternative interface allows rendering text based on AWT Fonts which are drawn on top of
    * the GL Image.
@@ -802,9 +799,10 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {
     glu.gluPerspective(fovy, aspect, zNear, zFar);
   }
-  
+
   @Override
-  public void glFrustum(double left, double right, double bottom, double top, double zNear, double zFar) {
+  public void glFrustum(double left, double right, double bottom, double top, double zNear,
+      double zFar) {
     gl.glFrustum(left, right, bottom, top, zNear, zFar);
   }
 
