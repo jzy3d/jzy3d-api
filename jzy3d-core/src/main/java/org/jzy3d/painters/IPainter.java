@@ -276,6 +276,10 @@ public interface IPainter {
 
   /** An interface for AWT user, jGL only @since 2.0.0 */
   public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c);
+  
+  public int getTextLengthInPixels(int font, String string);
+
+  public int getTextLengthInPixels(Font font, String string);
 
   // GL VIEWPOINT
 

@@ -120,6 +120,6 @@ public interface ICanvas {
    * Set to false if you encounter threading issues with a native Canvas.
    */
   @Deprecated
-  public static final boolean ALLOW_WATCH_PIXEL_SCALE = true;
+  public static boolean ALLOW_WATCH_PIXEL_SCALE = true;
 
 }
