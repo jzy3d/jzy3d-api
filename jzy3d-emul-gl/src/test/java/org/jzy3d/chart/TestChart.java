@@ -12,7 +12,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Range;
-import org.jzy3d.painters.IPainter.Font;
+import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
@@ -29,7 +29,7 @@ public class TestChart {
    */
   @Test
   public void whenChart_IS_Animated_ThenControllers_DO_NOT_UpdateViewUponRotation() {
-    Quality q = Quality.Advanced.clone();
+    Quality q = Quality.Advanced();
 
     // When
     Assert.assertTrue(q.isAnimated());
@@ -43,6 +43,8 @@ public class TestChart {
     ICameraMouseController mouse = chart.addMouseCameraController();
     // Then
     Assert.assertFalse(mouse.isUpdateViewDefault());
+    Assert.assertFalse(mouse.getThread().isUpdateViewDefault());
+
 
     // When
     ICameraKeyController key = chart.addKeyboardCameraController();
@@ -57,7 +59,7 @@ public class TestChart {
    */
   @Test
   public void whenChart_ISNOT_Animated_ThenControllers_DO_UpdateViewUponRotation() {
-    Quality q = Quality.Advanced.clone();
+    Quality q = Quality.Advanced();
 
     // When
     q.setAnimated(false);
@@ -72,6 +74,7 @@ public class TestChart {
     ICameraMouseController mouse = chart.addMouseCameraController();
     // Then
     Assert.assertTrue(mouse.isUpdateViewDefault());
+    Assert.assertTrue(mouse.getThread().isUpdateViewDefault());
 
     // When
     ICameraKeyController key = chart.addKeyboardCameraController();
@@ -79,17 +82,34 @@ public class TestChart {
     Assert.assertTrue(key.isUpdateViewDefault());
 
   }
-
-  @Ignore
+  
   @Test
-  public void whenChartAxisLayoutHasCustomFont_ThenAxisBoxHasThisFont() {
-    Chart chart = new EmulGLChartFactory().newChart();
-    chart.getAxisLayout().setFont(Font.TimesRoman_24);
+  public void whenChartAnimation_CHANGE_ThenControllersConfiguration_CHANGE() {
+    Quality q = Quality.Advanced();
 
-    AxisBox axis = (AxisBox) chart.getView().getAxis();
+    // When non animated chart
+    q.setAnimated(false);
+    Assert.assertFalse(q.isAnimated());
+    ChartFactory factory = new EmulGLChartFactory();
+    Chart chart = factory.newChart(q);
 
-    TextBitmapRenderer tbr = (TextBitmapRenderer) axis.getTextRenderer();
-    Assert.assertEquals(Font.TimesRoman_24, tbr.getFont());
+    ICameraMouseController mouse = chart.addMouseCameraController();
+    ICameraKeyController key = chart.addKeyboardCameraController();
+
+    // Then animated controllers
+    Assert.assertFalse("Check chart is NOT animated", chart.getQuality().isAnimated());
+    Assert.assertTrue(key.isUpdateViewDefault());
+    Assert.assertTrue(mouse.isUpdateViewDefault());
+    Assert.assertTrue(mouse.getThread().isUpdateViewDefault());
+
+    // When change 
+    chart.setAnimated(true);
+
+    // Then non animated controllers
+    Assert.assertTrue("Check chart IS animated", chart.getQuality().isAnimated());
+    Assert.assertFalse(key.isUpdateViewDefault());
+    Assert.assertFalse(mouse.isUpdateViewDefault());
+    Assert.assertFalse(mouse.getThread().isUpdateViewDefault());
   }
 
   @Test

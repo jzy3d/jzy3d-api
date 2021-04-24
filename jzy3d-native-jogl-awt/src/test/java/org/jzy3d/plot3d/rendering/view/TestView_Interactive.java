@@ -56,7 +56,7 @@ public class TestView_Interactive {
     AWTChartFactory factory = new AWTChartFactory();
     factory.getPainterFactory().setOffscreen(200, 200);
 
-    Chart chart = factory.newChart(Quality.Advanced);
+    Chart chart = factory.newChart(Quality.Advanced());
     chart.getScene().add(scatter);
     chart.getView().setMaximized(true);
 
@@ -93,7 +93,7 @@ public class TestView_Interactive {
     AWTChartFactory factory = new AWTChartFactory();
     // factory.setOffscreen(200, 200); // want to test offscreen but will use mouse events from AWT!
 
-    Chart chart = factory.newChart(Quality.Advanced);
+    Chart chart = factory.newChart(Quality.Advanced());
     // chart.getView().setAxeBoxDisplayed(false);
     chart.getView().setViewPositionMode(ViewPositionMode.TOP);
     chart.getView().setSquared(false);

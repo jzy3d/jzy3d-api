@@ -41,7 +41,7 @@ public class TestCamera_EmulGL_Onscreen {
 
     };
 
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
 
     Chart chart = factory.newChart(q);
     chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!

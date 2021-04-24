@@ -32,7 +32,7 @@ public class DebugGLChart2d {
   Chart watchedChart;
 
   // WatcherFactory wf = new WatcherFactory();
-  Chart2d debugChart = new Chart2dFactory().newChart(Quality.Advanced);
+  Chart2d debugChart = new Chart2dFactory().newChart(Quality.Advanced());
   Timer timer = new Timer();
 
   public DebugGLChart2d(Chart watchedChart) {

@@ -13,7 +13,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Range;
-import org.jzy3d.painters.IPainter.Font;
+import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
@@ -74,16 +74,14 @@ public class SurfaceDemoEmulGL_Multithreaded {
 
     // --------------------------------
 
-    Quality q = Quality.Advanced; 
+    Quality q = Quality.Advanced(); 
     Chart chart = factory.newChart(q);
     chart.add(surface);
     
     EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
     c.setProfileDisplayMethod(true);
     c.getGL().setAutoAdaptToHiDPI(true);
-    
-    //chart.getAxisLayout().setFont(Font.Helvetica_18);
-    ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer()).setFont(Font.TimesRoman_10);
+    chart.getAxisLayout().setFont(Font.TimesRoman_10);
     chart.open();
 
     // --------------------------------

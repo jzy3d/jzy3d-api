@@ -59,7 +59,7 @@ public class NativeChartTester extends ChartTester {
   /** A helper to build an offscreen chart simply out of a list of {@link Drawable} */
   public static AWTChart offscreen(Drawable... drawables) {
     // Initialize chart
-    Quality q = Quality.Intermediate;
+    Quality q = Quality.Intermediate();
 
     AWTChartFactory f = new AWTChartFactory();
     f.getPainterFactory().setOffscreen(TEST_IMG_SIZE, TEST_IMG_SIZE);

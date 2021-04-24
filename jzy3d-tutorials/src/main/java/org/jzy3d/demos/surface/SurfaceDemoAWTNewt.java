@@ -3,6 +3,7 @@ package org.jzy3d.demos.surface;
 import java.awt.Panel;
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadControllerWithTime;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NewtChartFactory;
 import org.jzy3d.colors.Color;
@@ -53,7 +54,9 @@ public class SurfaceDemoAWTNewt extends AWTAbstractAnalysis {
     // Create a chart
     IChartFactory f = new NewtChartFactory();
 
-    chart = f.newChart(Quality.Advanced);
+    chart = f.newChart(Quality.Advanced());
     chart.getScene().getGraph().add(surface);
+    CameraThreadControllerWithTime t = (CameraThreadControllerWithTime)chart.getThread();
+    t.setSpeed(60);
   }
 }

@@ -96,15 +96,27 @@ public abstract class AbstractCameraController extends AbstractController
   }
 
 
-
+  @Deprecated
   @Override
   public void addSlaveThreadController(CameraThreadController controller) {
+   addThread(controller);
+  }
+  
+
+  @Deprecated
+  @Override
+  public CameraThreadController getSlaveThreadController() {
+    return getThread();
+  }
+
+  @Override
+  public void addThread(CameraThreadController controller) {
     removeSlaveThreadController();
     this.threadController = controller;
   }
   
   @Override
-  public CameraThreadController getSlaveThreadController() {
+  public CameraThreadController getThread() {
     return this.threadController;
   }
 

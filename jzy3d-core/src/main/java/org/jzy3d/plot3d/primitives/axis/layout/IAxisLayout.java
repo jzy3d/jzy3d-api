@@ -1,12 +1,15 @@
 package org.jzy3d.plot3d.primitives.axis.layout;
 
 import org.jzy3d.colors.Color;
-import org.jzy3d.painters.IPainter.Font;
+import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
+import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 
 public interface IAxisLayout {
+  public static final Font FONT_DEFAULT = Font.Helvetica_12;
+
   public void setMainColor(Color color);
 
   public Color getMainColor();
@@ -125,6 +128,16 @@ public interface IAxisLayout {
   public Color getZTickColor();
   
   public Font getFont();
-
   public void setFont(Font font);
+
+  public Font getFont(FontType type, HiDPI hidpi);
+  public void setFont(Font font, FontType type, HiDPI hidpi);
+
+  public Font getFont(HiDPI hidpi);
+  public void setFont(Font font, HiDPI hidpi);
+
+  public enum FontType{
+    Major,Minor
+  }
+
 }

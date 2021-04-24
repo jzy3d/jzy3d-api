@@ -38,7 +38,7 @@ public class TestCameraNative_Projection {
     AWTChartFactory factory = new AWTChartFactory();
     factory.getPainterFactory().setOffscreen(CANVAS_SIZE);
 
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
 
     // ATTENTION : viewport of a retina display has double number of pixel
     // Also, the Y value is 600, whereas the height is 578

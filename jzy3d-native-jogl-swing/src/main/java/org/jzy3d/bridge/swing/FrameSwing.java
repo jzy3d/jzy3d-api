@@ -11,11 +11,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 
 public class FrameSwing extends JFrame implements IFrame {
 

@@ -83,6 +83,9 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     float slice = (right - left) / legends.size();
     int k = 0;
     for (ILegend legend : legends) {
+      
+      legend.setFont(painter.getView().getAxis().getLayout().getFont());
+      
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
       legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(),
           left + slice * (k++), left + slice * k);
