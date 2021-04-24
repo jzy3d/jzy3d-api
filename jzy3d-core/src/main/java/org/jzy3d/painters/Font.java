@@ -193,4 +193,9 @@ public class Font {
   }
   
   
+  @Override
+  public String toString() {
+    return "Font: '" + name + "' height:" + height + " code:" + code + " style:" + style;
+  }
+  
 }

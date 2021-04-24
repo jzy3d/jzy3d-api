@@ -1,13 +1,24 @@
 package org.jzy3d.plot2d.primitive;
 
-import java.awt.Font;
+
 import java.awt.Graphics2D;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
+import org.jzy3d.painters.AWTFont;
+import org.jzy3d.painters.Font;
 
 public abstract class AWTAbstractImageGenerator implements AWTImageGenerator {
+  protected java.awt.Font awtFont;
+  protected Font font;
+
+  protected int textSize;
+
+  protected Color backgroundColor;
+  protected Color foregroundColor = Color.BLACK;
+
+  
   public void configureText(Graphics2D graphic) {
-    graphic.setFont(font); // Text for the numbers in the ColorBar is Size=12
+    graphic.setFont(awtFont); // Text for the numbers in the ColorBar is Size=12
   }
 
   public void drawBackground(int width, int height, Graphics2D graphic) {
@@ -55,20 +66,30 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator {
   }
 
   @Override
-  public Font getFont() {
-    return font;
+  public java.awt.Font getAWTFont() {
+    return awtFont;
+  }
+
+  @Override
+  public void setAWTFont(java.awt.Font font) {
+    this.awtFont = font;
   }
 
   @Override
   public void setFont(Font font) {
-    this.font = font;
+    // reset font only if necessary
+    if(this.font==null || !this.font.equals(font)) {
+      this.font = font;
+      this.textSize = font.getHeight();
+      
+      setAWTFont(AWTFont.toAWT(font));
+    }
+    
+
+  }
+  @Override
+  public Font getFont() {
+    return font;
   }
 
-  protected Font font;
-  protected int textSize;
-
-  protected Color backgroundColor;
-  protected Color foregroundColor = Color.BLACK;
-  public static final int MIN_BAR_WIDTH = 100;
-  public static final int MIN_BAR_HEIGHT = 100;
 }

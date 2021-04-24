@@ -5,6 +5,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
@@ -43,8 +44,8 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     super(parent, foreground, background);
     this.provider = provider;
     this.renderer = renderer;
-    this.minimumDimension = new Dimension(AWTAbstractImageGenerator.MIN_BAR_WIDTH,
-        AWTAbstractImageGenerator.MIN_BAR_HEIGHT);
+    this.minimumDimension = new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
+        AWTColorbarImageGenerator.MIN_BAR_HEIGHT);
 
     initImageGenerator(parent, provider, renderer);
   }
@@ -54,8 +55,18 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
       IMultiColorable mc = ((IMultiColorable) parent);
       if (mc.getColorMapper() != null) {
         imageGenerator = new AWTColorbarImageGenerator(mc.getColorMapper(), provider, renderer);
+        
+        
       }
     }
+  }
+  
+  public void setFont(Font font) {
+    ((AWTColorbarImageGenerator)imageGenerator).setFont(font);
+  }
+
+  public Font getFont() {
+    return ((AWTColorbarImageGenerator)imageGenerator).getFont();
   }
 
   @Override
