@@ -33,7 +33,7 @@ public class TestCameraNative_Viewport {
     // GIVEN
     AWTChartFactory factory = new AWTChartFactory();
 
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
 
     // ATTENTION : viewport of a retina display has double number of pixel
     // Also, the Y value is 600, whereas the height is 578

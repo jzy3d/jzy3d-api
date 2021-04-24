@@ -1,5 +1,8 @@
 package org.jzy3d.painters;
 
+import java.awt.Component;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -93,6 +96,24 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
     // Blending
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+    
+    // KEEP THIS DOC!!
+    //gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_ONE);
+    // ONE : make a white screen
+    // NONE : make surface look opaque
+    // GL_ONE_MINUS_DST_ALPHA : make surface look opaque
+    // GL_ONE_MINUS_SRC_ALPHA : make surface look translucent but change coloring
+    // GL_SRC_ALPHA : make surface look translucent but change coloring + no wireframe
+    // GL_DST_ALPHA : make a white screen
+    //glBlendFunc(GL.GL_ONE_MINUS_DST_ALPHA,GL.GL_DST_ALPHA);
+    
+    //gl.glBlen
+    //ByteBuffer byteBuffer = ByteBuffer.allocate(10);
+    //IntBuffer ib = byteBuffer.asIntBuffer();
+    //gl.glGetIntegerv(GL.GL_BLEND_SRC_ALPHA, ib);
+    //gl.glGetIntegerv(GL.GL_BLEND_DST_ALPHA, ib);
+    //System.out.println(ib.array());
+    
     // on/off is handled by each viewport (camera or image)
     
     // Activate tranparency
@@ -391,6 +412,35 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   @Override
   public int glutBitmapLength(int font, String string) {
     return glut.glutBitmapLength(font, string);
+  }
+
+  @Override
+  public int getTextLengthInPixels(int font, String string) {
+    Font fnt = Font.getById(font);
+
+    return getTextLengthInPixels(fnt, string);
+  }
+
+  @Override
+  public int getTextLengthInPixels(Font font, String string) {
+    
+    ICanvas c = getCanvas();
+    if(c instanceof Component) {
+      Graphics g = ((Component)c).getGraphics();
+      if(g!=null && font!=null) {
+        g.setFont(toAWT(font));
+        
+        FontMetrics fm = g.getFontMetrics();
+        if(fm!=null) {
+          return fm.stringWidth(string);
+        }
+      }
+    }
+    // fallback on glut
+    return glutBitmapLength(font.getCode(), string);
+  }
+  private java.awt.Font toAWT(Font font) {
+    return new java.awt.Font(font.getName(), java.awt.Font.PLAIN, font.getHeight());
   }
 
   // GL LISTS

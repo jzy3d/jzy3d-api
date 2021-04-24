@@ -4,6 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.PixelStore;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
@@ -51,8 +52,8 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
    * according to the current Camera configuration.
    */
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     glRaster(painter, position, color);
 
     BillBoardSize dims = printString(painter, s, halign, valign);

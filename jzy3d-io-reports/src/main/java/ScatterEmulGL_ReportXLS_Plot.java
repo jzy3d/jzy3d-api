@@ -17,7 +17,7 @@ public class ScatterEmulGL_ReportXLS_Plot {
     Scatter scatter = scatter();
 
     // --------------------------------
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
 
     Chart chart = new EmulGLChartFactory().newChart(q);
     chart.getScene().add(scatter);

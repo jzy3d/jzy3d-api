@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.text.drawable.cells;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,6 +8,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
+import org.jzy3d.painters.AWTFont;
+import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.drawable.TextImageRenderer;
@@ -27,7 +28,7 @@ public class TextCellRenderer extends TextImageRenderer {
   }
 
   public TextCellRenderer(int n, String txt, Font font, Horizontal halign, boolean drawBorder) {
-    super(txt, font);
+    super(txt, AWTFont.toAWT(font));
     this.n = n;
     this.h = halign;
     this.drawBorder = drawBorder;
@@ -134,7 +135,7 @@ public class TextCellRenderer extends TextImageRenderer {
 
   /***************/
 
-  protected IntegerCoord2d guessImageDimension(int n, Font font) {
+  protected IntegerCoord2d guessImageDimension(int n, java.awt.Font font) {
     BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
     Graphics g = img.getGraphics();
     g.setFont(font);

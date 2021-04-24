@@ -2,6 +2,8 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
@@ -44,6 +46,8 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   protected Renderer3d renderer;
   protected GLOffscreenAutoDrawable offscreenDrawable;
   protected GLCapabilities capabilities;
+  protected List<ICanvasListener> canvasListeners = new ArrayList<>();
+
 
   public OffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
       GLCapabilities capabilities, int width, int height) {
@@ -54,11 +58,15 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
       GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
     this.view = scene.newView(this, quality);
     this.view.getPainter().setCanvas(this);
-    this.renderer =
-        ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
+    this.renderer = newRenderer(factory, traceGL, debugGL);
     this.capabilities = capabilities;
 
     initBuffer(capabilities, width, height);
+  }
+
+  private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,
+        debugGL);
   }
 
   /**
@@ -74,14 +82,15 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
    * @param height image width
    */
   public void initBuffer(GLCapabilities capabilities, int width, int height) {
-    if(capabilities.isOnscreen()) {
-      System.err.println(this.getClass().getSimpleName() + " : The provided capabilities should be set to setOnscreen(false). Forcing this configuration");
+    if (capabilities.isOnscreen()) {
+      System.err.println(this.getClass().getSimpleName()
+          + " : The provided capabilities should be set to setOnscreen(false). Forcing this configuration");
       capabilities.setOnscreen(false);
       // capabilities.setDoubleBuffered(false);
       // capabilities.setPBuffer(true);
 
     }
-    
+
     GLProfile profile = capabilities.getGLProfile();
     GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
 
@@ -93,20 +102,32 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
       offscreenDrawable.destroy();
       // glpBuffer.setSurfaceSize(width, height);
     }
-    offscreenDrawable = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), capabilities, null, width, height);
+    offscreenDrawable = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(),
+        capabilities, null, width, height);
     offscreenDrawable.addGLEventListener(renderer);
 
   }
+
+  public GLCapabilities getCapabilities() {
+    return capabilities;
+  }
+
+  @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
+
 
   /* NOT IMPLEMENTED */
   @Override
   public void setPixelScale(float[] scale) {
     throw new NotImplementedException();
   }
-  
+
   @Override
   public Coord2d getPixelScale() {
-    Logger.getLogger(OffscreenCanvas.class).info("getPixelScale() not implemented. Will return {1,1}"); 
+    Logger.getLogger(OffscreenCanvas.class)
+        .info("getPixelScale() not implemented. Will return {1,1}");
     return new Coord2d(1, 1);
   }
 
@@ -187,7 +208,24 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   @Override
   public void removeKeyController(Object o) {}
 
-  public GLCapabilities getCapabilities() {
-    return capabilities;
+  @Override
+  public void addCanvasListener(ICanvasListener listener) {
+    canvasListeners.add(listener);
+  }
+
+  @Override
+  public void removeCanvasListener(ICanvasListener listener) {
+    canvasListeners.remove(listener);
+  }
+
+  @Override
+  public List<ICanvasListener> getCanvasListeners() {
+    return canvasListeners;
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
   }
 }

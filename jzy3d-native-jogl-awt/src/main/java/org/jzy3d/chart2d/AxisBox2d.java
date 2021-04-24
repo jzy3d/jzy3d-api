@@ -5,6 +5,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
@@ -70,11 +71,11 @@ public class AxisBox2d extends AxisBox {
 
     if (isXDisplayed(direction)) {
       // doTransform(gl);
-      labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Horizontal.CENTER,
-          Vertical.CENTER, color);
+      labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
+          labelPosition, Horizontal.CENTER, Vertical.CENTER, color);
     } else if (isYDisplayed(direction)) {
-      labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Horizontal.CENTER,
-          Vertical.CENTER, color);
+      labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
+          labelPosition, Horizontal.CENTER, Vertical.CENTER, color);
       // labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER,
       // Valign.CENTER, color);
     }
@@ -91,8 +92,8 @@ public class AxisBox2d extends AxisBox {
 
   public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
     @Override
-    public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Horizontal halign,
-        Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
+        Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
       painter.color(color);
 
       // compute a corrected position according to layout
@@ -121,7 +122,7 @@ public class AxisBox2d extends AxisBox {
       glRasterPos(painter, sceneOffset, Coord3d.ORIGIN);
       painter.glutBitmapString(font.getCode(), text);
 
-      return computeTextBounds(painter, screenAligned, textWidth);
+      return computeTextBounds(painter, font, screenAligned, textWidth);
     }
 
     // CUSTOM ROTATION

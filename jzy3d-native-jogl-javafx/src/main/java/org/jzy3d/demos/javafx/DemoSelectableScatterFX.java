@@ -60,7 +60,7 @@ public class DemoSelectableScatterFX extends Application {
   }
 
   private AWTNativeChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
-    Quality quality = Quality.Advanced;
+    Quality quality = Quality.Advanced();
     int POINTS = 1000;
     SelectableScatter scatter = generateScatter(POINTS);
     AWTNativeChart chart = (AWTNativeChart) factory.newChart(quality);

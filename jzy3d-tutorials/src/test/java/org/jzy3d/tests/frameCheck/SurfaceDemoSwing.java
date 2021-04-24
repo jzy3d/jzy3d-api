@@ -70,7 +70,7 @@ public class SurfaceDemoSwing extends AbstractAnalysis {
     surface.setWireframeDisplayed(false);
 
     // Create a chart
-    chart = new SwingChartFactory().newChart(Quality.Advanced);
+    chart = new SwingChartFactory().newChart(Quality.Advanced());
     chart.add(surface);
   }
 }

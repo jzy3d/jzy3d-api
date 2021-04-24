@@ -39,7 +39,7 @@ public class SurfaceEmulGL_ReportXLS_Dump {
 
     EmulGLChartFactory factory = new EmulGLChartFactory();
 
-    Quality q = Quality.Advanced; 
+    Quality q = Quality.Advanced(); 
     Chart chart = factory.newChart(q);
     chart.add(surface);
     

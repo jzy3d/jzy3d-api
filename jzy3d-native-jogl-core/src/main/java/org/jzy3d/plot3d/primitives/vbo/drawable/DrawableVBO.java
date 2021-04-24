@@ -44,7 +44,7 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
 public class DrawableVBO extends Drawable implements IGLBindedResource {
   protected int geometry = GL.GL_TRIANGLES;
   protected float width = 1;
-  protected Quality quality = Quality.Nicest;
+  protected Quality quality = Quality.Nicest();
 
   protected int colorChannelNumber = 3;
 

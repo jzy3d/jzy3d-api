@@ -42,7 +42,7 @@ public class DebugGLChart3d {
 
   public DebugGLChart3d(Chart watchedChart, ChartFactory debugChartFactory) {
     this.watchedChart = watchedChart;
-    this.debugChart = debugChartFactory.newChart(Quality.Advanced);
+    this.debugChart = debugChartFactory.newChart(Quality.Advanced());
     this.debugChart.getView().setSquared(false);
 
     spaceTransform = watchedChart.getView().getSpaceTransformer();

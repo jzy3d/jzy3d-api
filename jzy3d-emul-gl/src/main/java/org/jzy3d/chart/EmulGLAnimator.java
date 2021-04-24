@@ -25,8 +25,10 @@ public class EmulGLAnimator implements IAnimator {
         loop = true;
 
         while (loop) {
-          canvas.doRender();
-
+          synchronized (canvas) {
+            if (canvas != null)
+              canvas.doRender();
+          }
           try {
             Thread.sleep(RENDERING_LOOP_PAUSE);
           } catch (InterruptedException e) {
@@ -42,7 +44,7 @@ public class EmulGLAnimator implements IAnimator {
   public void stop() {
     if (t != null) {
       loop = false;
-      //t.stop();
+      // t.stop();
       t.interrupt();
       t = null;
     }

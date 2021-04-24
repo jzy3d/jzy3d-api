@@ -4,6 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Panel;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.NativeAnimator;
@@ -34,7 +39,20 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * documentation.
  */
 public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas {
+  private static final long serialVersionUID = 8578690050666237742L;
+
   static Logger LOGGER = Logger.getLogger(CanvasNewtAwt.class);
+
+  protected View view;
+  protected Renderer3d renderer;
+  protected IAnimator animator;
+  protected GLWindow window;
+  protected NewtCanvasAWT canvas;
+
+  protected List<ICanvasListener> canvasListeners = new ArrayList<>();
+
+  protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
+
 
   public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality,
       GLCapabilitiesImmutable glci) {
@@ -48,14 +66,16 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     view = scene.newView(this, quality);
     view.getPainter().setCanvas(this);
 
-    renderer =
-        ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
+    renderer = newRenderer(factory, traceGL, debugGL);
     window.addGLEventListener(renderer);
 
     if (quality.isPreserveViewportSize())
-      setPixelScale(
-          new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE});
+      setPixelScale(newPixelScaleIdentity());
 
+    if(ALLOW_WATCH_PIXEL_SCALE)
+      watchPixelScale();
+
+    
     // swing specific
     setFocusable(true);
     requestFocusInWindow();
@@ -69,6 +89,39 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     setLayout(new BorderLayout());
     add(canvas, BorderLayout.CENTER);
   }
+  
+  protected void watchPixelScale() {
+    exec.schedule(new PixelScaleWatch() {
+      @Override
+      public double getPixelScaleY() {
+        return CanvasNewtAwt.this.getPixelScaleY();
+      }
+      @Override
+      public double getPixelScaleX() {
+        return CanvasNewtAwt.this.getPixelScaleX();
+      }
+      @Override
+      protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        CanvasNewtAwt.this.firePixelScaleChanged(pixelScaleX, pixelScaleY);
+      }
+    }, 0, TimeUnit.SECONDS);
+  }
+
+
+  private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,
+        debugGL);
+  }
+
+  private float[] newPixelScaleIdentity() {
+    return new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE};
+  }
+
+  @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
+
 
   @Override
   public IAnimator getAnimation() {
@@ -83,12 +136,23 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
       window.setSurfaceScale(new float[] {1f, 1f});
   }
 
+  /**
+   * Pixel scale is used to model the pixel ratio thay may be introduced by HiDPI or Retina
+   * displays.
+   */
   @Override
   public Coord2d getPixelScale() {
-    return new Coord2d((int) (window.getSurfaceWidth() / (float) getWidth()),
-        (int) (window.getSurfaceHeight() / (float) getHeight()));
+    return new Coord2d(getPixelScaleX(), getPixelScaleY());
   }
 
+
+  public double getPixelScaleX() {
+    return window.getSurfaceWidth() / (double) getWidth();
+  }
+
+  public double getPixelScaleY() {
+    return window.getSurfaceHeight() / (double) getHeight();
+  }
 
   public GLWindow getWindow() {
     return window;
@@ -229,10 +293,25 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     removeKeyListener((KeyListener) o);
   }
 
-  protected View view;
-  protected Renderer3d renderer;
-  protected IAnimator animator;
-  protected GLWindow window;
-  protected NewtCanvasAWT canvas;
-  private static final long serialVersionUID = 8578690050666237742L;
+
+  @Override
+  public void addCanvasListener(ICanvasListener listener) {
+    canvasListeners.add(listener);
+  }
+
+  @Override
+  public void removeCanvasListener(ICanvasListener listener) {
+    canvasListeners.remove(listener);
+  }
+
+  @Override
+  public List<ICanvasListener> getCanvasListeners() {
+    return canvasListeners;
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
+  }
 }

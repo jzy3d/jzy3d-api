@@ -41,9 +41,9 @@ public class ITTestNativeSurfaceChart {
     IChartFactory factory = new AWTChartFactory(p);
 
     // AWTChartFactory factory = new AWTChartFactory();
-    factory.getPainterFactory().setOffscreen(600, 600);
+    factory.getPainterFactory().setOffscreen(700, 600);
 
-    Chart chart = factory.newChart(Quality.Advanced);
+    Chart chart = factory.newChart(Quality.Advanced());
 
     chart.add(surface());
 

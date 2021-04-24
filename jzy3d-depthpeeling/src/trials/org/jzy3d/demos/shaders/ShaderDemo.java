@@ -100,7 +100,7 @@ public class ShaderDemo {
     IChartFactory factory = new AWTChartFactory(painter);
 
 
-    Chart chart = factory.newChart(Quality.Nicest);
+    Chart chart = factory.newChart(Quality.Nicest());
     chart.getView().setSquared(false);
     // chart.getView().setCameraMode(CameraMode.PERSPECTIVE);
     return chart;

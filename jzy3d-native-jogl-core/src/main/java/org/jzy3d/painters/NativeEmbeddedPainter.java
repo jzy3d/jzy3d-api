@@ -905,4 +905,16 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   public void glHint_PointSmooth_Nicest() {
     glHint(GL2.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
   }
+
+  @Override
+  public int getTextLengthInPixels(int font, String string) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public int getTextLengthInPixels(Font font, String string) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
 }

@@ -82,7 +82,7 @@ public class DemoJzy3dFXProblem extends Application {
 
     // -------------------------------
     // Create a chart
-    Quality quality = Quality.Advanced;
+    Quality quality = Quality.Advanced();
     // quality.setSmoothPolygon(true);
     // quality.setAnimated(true);
 
@@ -115,7 +115,7 @@ public class DemoJzy3dFXProblem extends Application {
 
     // -------------------------------
     // Create a chart
-    Quality quality = Quality.Advanced;
+    Quality quality = Quality.Advanced();
     // quality.setSmoothPolygon(true);
     // quality.setAnimated(true);
 

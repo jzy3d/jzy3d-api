@@ -31,7 +31,7 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
  */
 public class PeeledCubesDemo {
   public static void main(String[] args) {
-    Chart chart = DepthPeelingChart.get(Quality.Fastest, "awt", PeelingMethod.F2B_PEELING_MODE);// DUAL_PEELING_MODE);
+    Chart chart = DepthPeelingChart.get(Quality.Fastest(), "awt", PeelingMethod.F2B_PEELING_MODE);// DUAL_PEELING_MODE);
     chart.getView().setAxisDisplayed(false);
 chart.setAnimated(false);
 
