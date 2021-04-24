@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.text.renderers;
 
+import java.awt.Graphics2D;
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
@@ -14,36 +15,25 @@ import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
- * could enhance using http://www.angelcode.com/products/bmfont/
+ * The {@link ITextRenderer} is able to draw basic OpenGL font as supported by
+ * {@link IPainter#glutBitmapString(Font, String, Coord3d, Color)}.
  * 
- * @author Martin
+ * Concrete painters might rely on
+ * <ul>
+ * <li>EmulGL : AWT Font rendering by {@link Graphics2D#drawString(String, float, float)} by using
+ * jGL AWT helpers.
+ * <li>Native : GLUT.glutBitmapString(Font, String, Coord3d, Color)
+ * </ul>
+ * 
+ * As EmulGL painter relies on AWT, much more font than the base OpenGL one can be used as it is
+ * backed by AWT.
  */
 public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRenderer {
   protected static Logger LOGGER = Logger.getLogger(TextBitmapRenderer.class);
 
-  protected Font font;
-
   protected TextLayout layout = new TextLayout();
 
-  /**
-   * The TextBitmap class provides support for drawing ASCII characters Any non ascii caracter will
-   * be replaced by a square.
-   */
-  public TextBitmapRenderer() {
-    this(Font.Helvetica_10);
-  }
-
-  public TextBitmapRenderer(Font font) {
-    this.font = font;
-  }
-
-  public Font getFont() {
-    return font;
-  }
-
-  public void setFont(Font font) {
-    this.font = font;
-  }
+  public TextBitmapRenderer() {}
 
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string
@@ -75,7 +65,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     painter.glutBitmapString(font, text, positionAligned, color);
 
     // Return text bounds
-    return computeTextBounds(painter, screenAligned, textWidth);
+    return computeTextBounds(painter, font, screenAligned, textWidth);
   }
 
   /** Left as a helper for subclasses. TODO delete me and subclass */
@@ -101,8 +91,8 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     return model;
   }
 
-  protected BoundingBox3d computeTextBounds(IPainter painter, Coord3d posScreenShifted,
-      float strlen) {
+  protected BoundingBox3d computeTextBounds(IPainter painter, Font font,
+      Coord3d posScreenShifted, float strlen) {
     Coord3d botLeft = new Coord3d();
     Coord3d topRight = new Coord3d();
     botLeft.x = posScreenShifted.x;

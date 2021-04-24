@@ -122,7 +122,7 @@ public class AxisBox2d extends AxisBox {
       glRasterPos(painter, sceneOffset, Coord3d.ORIGIN);
       painter.glutBitmapString(font.getCode(), text);
 
-      return computeTextBounds(painter, screenAligned, textWidth);
+      return computeTextBounds(painter, font, screenAligned, textWidth);
     }
 
     // CUSTOM ROTATION

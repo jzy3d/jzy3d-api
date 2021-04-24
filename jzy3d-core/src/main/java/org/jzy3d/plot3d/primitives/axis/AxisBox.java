@@ -11,7 +11,7 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
-import org.jzy3d.plot3d.primitives.axis.layout.AxisBoxLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -33,7 +33,7 @@ public class AxisBox implements IAxis {
   static Logger LOGGER = Logger.getLogger(AxisBox.class);
 
   public AxisBox(BoundingBox3d bbox) {
-    this(bbox, new AxisBoxLayout());
+    this(bbox, new AxisLayout());
   }
 
   public AxisBox(BoundingBox3d bbox, IAxisLayout layout) {
@@ -43,7 +43,7 @@ public class AxisBox implements IAxis {
     else
       setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
     wholeBounds = new BoundingBox3d();
-    textRenderer = new TextBitmapRenderer(layout.getFont());
+    textRenderer = new TextBitmapRenderer();
     init();
   }
 

@@ -115,9 +115,11 @@ public interface ICanvas {
   public List<ICanvasListener> getCanvasListeners();
   
   /**
-   * Temporary way of enabling/disabling a thread watching pixel scale change of a native canvas
+   * Temporary way of enabling/disabling a thread watching pixel scale change of a native canvas.
+   * 
+   * Set to false if you encounter threading issues with a native Canvas.
    */
   @Deprecated
-  public static final boolean ALLOW_WATCH_PIXEL_SCALE = false;
+  public static final boolean ALLOW_WATCH_PIXEL_SCALE = true;
 
 }

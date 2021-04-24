@@ -17,6 +17,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.Font;
+import org.jzy3d.painters.Font.HiDPI;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
@@ -31,7 +32,6 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import org.jzy3d.plot3d.transform.Scale;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -54,7 +54,7 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
  * @author Martin Pernollet
  */
 public class View {
-  
+
   protected static Logger LOGGER = Logger.getLogger(View.class);
 
   /**
@@ -77,7 +77,7 @@ public class View {
   protected boolean squared = true;
   protected float cameraRenderingSphereRadiusFactor = 1f;
   protected float cameraRenderingSphereRadiusFactorOnTop = 0.25f;
-  
+
   // view objects
   protected Camera cam;
   protected IAxis axis;
@@ -100,7 +100,8 @@ public class View {
 
   // view states
   protected boolean first = true;
-  
+  protected Font.HiDPI hidpi = HiDPI.OFF;
+
   // constants
   public static final float PI_div2 = (float) Math.PI / 2;
   public static final float DISTANCE_DEFAULT = 2000;
@@ -190,36 +191,54 @@ public class View {
     this.scene.getGraph().getStrategy().setView(this);
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
-    
-   // if(ICanvas.ALLOW_WATCH_PIXEL_SCALE)
-      canvas.addCanvasListener(new ICanvasListener() {
-        /**
-         * Upon pixel scale change, either at startup or during execution of the program,
-         * the listener will
-         * <ul>
-         * <li>reconfigure the current font of the axis text renderer
-         * <li>reconfigure the current font of the colorbar
-         * </ul>
-         * 
-         * TODO : verify that pixel scale change event do not trigger if hdpi disabled 
-         *        AND running on HiDPI screen
-         *        
-         * TODO : add unit test to verify view changes text when pixelscale change      
-         */
-        @Override
-        public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-          TextBitmapRenderer txt = (TextBitmapRenderer)axis.getTextRenderer();
-          System.out.println("View:scale " + pixelScaleX);
-          if(pixelScaleX<=1) {
-            //txt.setFont(Font.TimesRoman_10);
-            txt.setFont(Font.Helvetica_12);
-          }
-          else {
-            //txt.setFont(Font.TimesRoman_24);
-            txt.setFont(Font.Helvetica_18);
-          }
+
+    // if(ICanvas.ALLOW_WATCH_PIXEL_SCALE)
+    canvas.addCanvasListener(new ICanvasListener() {
+      /**
+       * Upon pixel scale change, either at startup or during execution of the program, the listener
+       * will
+       * <ul>
+       * <li>reconfigure the current font of the axis text renderer
+       * <li>reconfigure the current font of the colorbar
+       * </ul>
+       * 
+       * TODO : verify that pixel scale change event do not trigger if hdpi disabled AND running on
+       * HiDPI screen
+       * 
+       * TODO : add unit test to verify view changes text when pixelscale change
+       */
+      @Override
+      public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+
+        if (pixelScaleX <= 1) {
+          hidpi = HiDPI.OFF;
+          //axis.getLayout().setFont(Font.Helvetica_12);
+        } else {
+          hidpi = HiDPI.ON;
+          //axis.getLayout().setFont(Font.Helvetica_18);
         }
-      });
+        LOGGER.info("Apply HiDPI " + hidpi);
+        //System.out.println("Apply HiDPI " + pixelScaleX);
+
+        Font font = axis.getLayout().getFont(hidpi);
+        axis.getLayout().setFont(font);
+      }
+    });
+  }
+
+
+
+  /**
+   * Return HiDPI status as ACTUALLY possible by the ICanvas on the current screen and computer,
+   * regardless of the {@link Quality#setHiDPIEnabled(true)}.
+   * 
+   * Will always return {@link HiDPI.OFF} is chart is set to {@link Quality#setHiDPIEnabled(false)}
+   * as this forces the canvas to NOT make use of HiDPI.
+   * 
+   * @return
+   */
+  public HiDPI getHiDPI() {
+    return hidpi;
   }
 
   public IPainter getPainter() {
@@ -712,8 +731,8 @@ public class View {
   }
 
   protected void fireViewFirstRenderStarts() {
-      for (IViewEventListener listener : viewEventListeners)
-        listener.viewFirstRenderStarts();
+    for (IViewEventListener listener : viewEventListeners)
+      listener.viewFirstRenderStarts();
   }
 
   public boolean addViewPointChangedListener(IViewPointChangedListener listener) {
@@ -872,7 +891,7 @@ public class View {
 
   public void render() {
     fireViewLifecycleWillRender(null);
-    
+
     renderBackground(0f, 1f);
     renderScene();
     renderOverlay();
@@ -903,13 +922,13 @@ public class View {
 
   public void renderScene(ViewportConfiguration viewport) {
 
-    //synchronized(this) {
-      if(first) {
-        fireViewFirstRenderStarts();
-        first=false;
-      }
-    //}
-    
+    // synchronized(this) {
+    if (first) {
+      fireViewFirstRenderStarts();
+      first = false;
+    }
+    // }
+
     BoundingBox3d scaling = computeScaledViewBounds();
     updateCamera(viewport, scaling);
     renderAxeBox();
@@ -1070,10 +1089,11 @@ public class View {
   }
 
   /**
-   * Update the camera configuration without triggering the {@link Camera#shoot(IPainter, CameraMode)} method.
+   * Update the camera configuration without triggering the
+   * {@link Camera#shoot(IPainter, CameraMode)} method.
    * 
-   * This is useful in rare case where one need to manually invoke only a subset of OpenGL methods that
-   * are invoked by shoot method.
+   * This is useful in rare case where one need to manually invoke only a subset of OpenGL methods
+   * that are invoked by shoot method.
    */
   public void updateCameraWithoutShooting(ViewportConfiguration viewport, BoundingBox3d bounds,
       float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
@@ -1091,7 +1111,7 @@ public class View {
     computeCameraRenderingSphereRadius(cam, viewport, bounds);
   }
 
-  
+
   public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled,
       float factorViewPointDistance) {
     return (float) spaceTransformer.compute(bounds).getRadius();

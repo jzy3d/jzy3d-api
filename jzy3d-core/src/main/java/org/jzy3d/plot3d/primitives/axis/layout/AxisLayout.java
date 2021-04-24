@@ -2,15 +2,77 @@ package org.jzy3d.plot3d.primitives.axis.layout;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
+import org.jzy3d.painters.Font.HiDPI;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.SmartTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 
 
-public class AxisBoxLayout implements IAxisLayout {
+public class AxisLayout implements IAxisLayout {
+  protected boolean tickLineDisplayed = true;
+
+
+
+  protected Font font = Font.Helvetica_12;
+  protected Font fontNoHiDPI = Font.Helvetica_12;
+  protected Font fontHiDPI = Font.Helvetica_18;
+
+  
+  protected Font fontMajorHiDPI = Font.Helvetica_18;
+  protected Font fontMinorHiDPI = Font.Helvetica_12;
+  protected Font fontMajorNoHiDPI = Font.Helvetica_12;
+  protected Font fontMinorNoHiDPI = Font.Helvetica_10;
+
+  // protected Font hiDPIMajourFont
+
+
+  protected String xAxeLabel;
+  protected String yAxeLabel;
+  protected String zAxeLabel;
+  protected boolean xAxeLabelDisplayed;
+  protected boolean yAxeLabelDisplayed;
+  protected boolean zAxeLabelDisplayed;
+
+  protected double xTicks[];
+  protected double yTicks[];
+  protected double zTicks[];
+
+  protected ITickProvider xTickProvider;
+  protected ITickProvider yTickProvider;
+  protected ITickProvider zTickProvider;
+
+  protected ITickRenderer xTickRenderer;
+  protected ITickRenderer yTickRenderer;
+  protected ITickRenderer zTickRenderer;
+
+  protected Color xTickColor;
+  protected Color yTickColor;
+  protected Color zTickColor;
+
+  protected boolean xTickLabelDisplayed;
+  protected boolean yTickLabelDisplayed;
+  protected boolean zTickLabelDisplayed;
+
+  protected boolean faceDisplayed;
+
+  protected Color quadColor;
+  protected Color gridColor;
+
+  protected double lastXmin = Float.NaN;
+  protected double lastXmax = Float.NaN;
+  protected double lastYmin = Float.NaN;
+  protected double lastYmax = Float.NaN;
+  protected double lastZmin = Float.NaN;
+  protected double lastZmax = Float.NaN;
+
+  protected Color mainColor;
+
+  protected ZAxisSide zAxisSide = ZAxisSide.RIGHT;
+
+
   /** Default AxeBox layout */
-  public AxisBoxLayout() {
+  public AxisLayout() {
     setXAxisLabel("X");
     setYAxisLabel("Y");
     setZAxisLabel("Z");
@@ -33,7 +95,7 @@ public class AxisBoxLayout implements IAxisLayout {
     setZTickLabelDisplayed(true);
 
     setMainColor(Color.BLACK);
-    
+
     setZAxisSide(ZAxisSide.LEFT);
   }
 
@@ -321,6 +383,17 @@ public class AxisBoxLayout implements IAxisLayout {
   }
 
   @Override
+  public ZAxisSide getZAxisSide() {
+    return zAxisSide;
+  }
+
+  @Override
+  public void setZAxisSide(ZAxisSide zAxisSide) {
+    this.zAxisSide = zAxisSide;
+  }
+
+
+  @Override
   public Font getFont() {
     return font;
   }
@@ -330,68 +403,83 @@ public class AxisBoxLayout implements IAxisLayout {
     this.font = font;
   }
 
+  /**
+   * Get registered font according to conditions
+   * 
+   * @param type the major/minor font case
+   * @param hidpi the HiDPI context for this font, allowing to define bigger fonts in case screen
+   *        resolution is high (and text small)
+   */
+  @Override
+  public Font getFont(FontType type, HiDPI hidpi) {
+    if (type == null) {
+      // most frequent case so keep first in this selection
+      if (HiDPI.ON.equals(hidpi)) {
+        return fontMajorHiDPI;
+      } else if (HiDPI.OFF.equals(hidpi)) {
+        return fontMajorNoHiDPI;
+      }
+    } else if (FontType.Major.equals(type)) {
+      if (HiDPI.ON.equals(hidpi)) {
+        return fontMajorHiDPI;
+      } else if (HiDPI.OFF.equals(hidpi)) {
+        return fontMajorNoHiDPI;
+      }
+    } else if (FontType.Minor.equals(type)) {
+      if (HiDPI.ON.equals(hidpi)) {
+        return fontMinorHiDPI;
+      } else if (HiDPI.OFF.equals(hidpi)) {
+        return fontMinorNoHiDPI;
+      }
+    }
+    return null;
+    // return font;
+  }
   
   
 
 
-  public ZAxisSide getZAxisSide() {
-    return zAxisSide;
+  /**
+   * Get font according to a given context
+   * 
+   * @param font the font to use for the context
+   * @param type the major/minor font possibilites that a drawable or colorbar may use
+   * @param hidpi the HiDPI context for this font, allowing to define bigger fonts in case screen
+   *        resolution is high (and text small)
+   */
+  @Override
+  public void setFont(Font font, FontType type, HiDPI hidpi) {
+    if (FontType.Major.equals(type)) {
+      if (HiDPI.ON.equals(hidpi)) {
+        fontMajorHiDPI = font;
+      } else if (HiDPI.OFF.equals(hidpi)) {
+        fontMajorNoHiDPI = font;
+      }
+    } else if (FontType.Minor.equals(type)) {
+      if (HiDPI.ON.equals(hidpi)) {
+        fontMinorHiDPI = font;
+      } else if (HiDPI.OFF.equals(hidpi)) {
+        fontMinorNoHiDPI = font;
+      }
+    }
   }
 
-  public void setZAxisSide(ZAxisSide zAxisSide) {
-    this.zAxisSide = zAxisSide;
+  @Override
+  public Font getFont(HiDPI hidpi) {
+    if (HiDPI.ON.equals(hidpi)) {
+      return fontHiDPI;
+    } else if (HiDPI.OFF.equals(hidpi)) {
+      return fontNoHiDPI;
+    }
+    return font;
   }
 
-
-
-
-
-  /**********************************************************/
-
-  protected boolean tickLineDisplayed = true;
-
-  protected Font font = Font.Helvetica_10;
-  
-  protected String xAxeLabel;
-  protected String yAxeLabel;
-  protected String zAxeLabel;
-  protected boolean xAxeLabelDisplayed;
-  protected boolean yAxeLabelDisplayed;
-  protected boolean zAxeLabelDisplayed;
-
-  protected double xTicks[];
-  protected double yTicks[];
-  protected double zTicks[];
-
-  protected ITickProvider xTickProvider;
-  protected ITickProvider yTickProvider;
-  protected ITickProvider zTickProvider;
-
-  protected ITickRenderer xTickRenderer;
-  protected ITickRenderer yTickRenderer;
-  protected ITickRenderer zTickRenderer;
-
-  protected Color xTickColor;
-  protected Color yTickColor;
-  protected Color zTickColor;
-
-  protected boolean xTickLabelDisplayed;
-  protected boolean yTickLabelDisplayed;
-  protected boolean zTickLabelDisplayed;
-
-  protected boolean faceDisplayed;
-
-  protected Color quadColor;
-  protected Color gridColor;
-
-  protected double lastXmin = Float.NaN;
-  protected double lastXmax = Float.NaN;
-  protected double lastYmin = Float.NaN;
-  protected double lastYmax = Float.NaN;
-  protected double lastZmin = Float.NaN;
-  protected double lastZmax = Float.NaN;
-
-  protected Color mainColor;
-  
-  protected ZAxisSide zAxisSide = ZAxisSide.RIGHT;
+  @Override
+  public void setFont(Font font, HiDPI hidpi) {
+    if (HiDPI.ON.equals(hidpi)) {
+      fontHiDPI = font;
+    } else if (HiDPI.OFF.equals(hidpi)) {
+      fontNoHiDPI = font;
+    }
+  }
 }

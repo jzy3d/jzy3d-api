@@ -1,7 +1,5 @@
 package org.jzy3d.painters;
 
-import org.checkerframework.checker.fenum.qual.AwtFlowLayout;
-
 /**
  * A Font subset supported both by OpenGL 1 and AWT. These fonts can be used both for charts based
  * on native OpenGL and charts based on raw AWT.
@@ -22,6 +20,13 @@ import org.checkerframework.checker.fenum.qual.AwtFlowLayout;
  * {@link IPainter#BITMAP_HELVETICA_12} will apply.
  */
 public class Font {
+  public enum HiDPI{
+    ON,OFF;
+    
+    public static HiDPI from(boolean hidpi) {
+      if(hidpi) return ON; return OFF;
+    }
+  }
   private static final int STYLE_UNDEFINED = -1;
   // Font constants below are picked from GLU object in JOGL
   protected static final int STROKE_ROMAN = 0;
