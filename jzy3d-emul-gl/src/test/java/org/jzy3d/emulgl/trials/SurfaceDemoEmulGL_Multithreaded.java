@@ -81,9 +81,7 @@ public class SurfaceDemoEmulGL_Multithreaded {
     EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
     c.setProfileDisplayMethod(true);
     c.getGL().setAutoAdaptToHiDPI(true);
-    
-    //chart.getAxisLayout().setFont(Font.Helvetica_18);
-    ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer()).setFont(Font.TimesRoman_10);
+    chart.getAxisLayout().setFont(Font.TimesRoman_10);
     chart.open();
 
     // --------------------------------

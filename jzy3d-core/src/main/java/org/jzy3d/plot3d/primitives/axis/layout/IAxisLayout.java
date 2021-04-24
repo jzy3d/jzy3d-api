@@ -125,6 +125,16 @@ public interface IAxisLayout {
   public Color getZTickColor();
   
   public Font getFont();
-
   public void setFont(Font font);
+
+  public Font getFont(FontType type, Font.HiDPI hidpi);
+  public void setFont(Font font, FontType type, Font.HiDPI hidpi);
+
+  public Font getFont(Font.HiDPI hidpi);
+  public void setFont(Font font, Font.HiDPI hidpi);
+
+  public enum FontType{
+    Major,Minor
+  }
+
 }

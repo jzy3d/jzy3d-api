@@ -39,10 +39,10 @@ public class SurfaceDemoEmulGL {
     // (tutorials built with Java 8 for backward compatibility, update your runtime to get HiDPI)
     Chart chart = factory.newChart(q);
     chart.add(surface);
+    chart.getAxisLayout().setFont(Font.Helvetica_12);
     
     EmulGLSkin skin = EmulGLSkin.on(chart);
     skin.getCanvas().setProfileDisplayMethod(true);
-    skin.getAxisTextRenderer().setFont(Font.Helvetica_12);
 
     chart.open();
     chart.addMouseCameraController();

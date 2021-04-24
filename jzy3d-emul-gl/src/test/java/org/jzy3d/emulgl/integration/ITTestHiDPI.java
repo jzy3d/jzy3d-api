@@ -51,8 +51,8 @@ public class ITTestHiDPI {
     Chart chart = factory.newChart(q);
     chart.add(surface);
     chart.getAxisLayout().setZAxisSide(ZAxisSide.LEFT);
-    TextBitmapRenderer tbr = ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer());
-    tbr.setFont(Font.TimesRoman_24); 
+    chart.getAxisLayout().setFont(Font.TimesRoman_24); 
+    
     surface.setLegend(new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout()));
 
     // --------------------------------
