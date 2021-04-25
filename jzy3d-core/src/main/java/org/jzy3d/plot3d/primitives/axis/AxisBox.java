@@ -65,7 +65,7 @@ public class AxisBox implements IAxis {
     drawGrid(painter);
 
     drawAnnotations(painter);
-    
+
     doTransform(painter);
     drawTicksAndLabels(painter);
   }
@@ -102,8 +102,8 @@ public class AxisBox implements IAxis {
 
   /* DRAW AXEBOX ELEMENTS */
 
-  // FORMER NATIVE PRIMITIVE 
-  
+  // FORMER NATIVE PRIMITIVE
+
   public void drawFace(IPainter painter) {
     if (layout.isFaceDisplayed()) {
       Color quadcolor = layout.getQuadColor();
@@ -138,14 +138,14 @@ public class AxisBox implements IAxis {
         drawGridOnQuad(painter, quad);
     painter.glDisable_LineStipple();
   }
-  
-  
+
+
   ///////////////////////////
 
   protected void drawCube(IPainter painter, RenderMode mode) {
     for (int q = 0; q < 6; q++) {
       if (!getQuadIsHidden()[q]) { // makes culling useless!
-        
+
         painter.glBegin_LineLoop();
         for (int v = 0; v < 4; v++) {
           painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
@@ -155,7 +155,7 @@ public class AxisBox implements IAxis {
     }
   }
 
-  //Draw a grid on the desired quad.
+  // Draw a grid on the desired quad.
   protected void drawGridOnQuad(IPainter painter, int quad) {
     // Draw X grid along X axis
     if ((quad != 0) && (quad != 1)) {
@@ -188,9 +188,9 @@ public class AxisBox implements IAxis {
       }
     }
   }
-  
+
   ///////////////////////////
-  
+
 
   public void drawTicksAndLabels(IPainter painter) {
     wholeBounds.reset();
@@ -241,8 +241,8 @@ public class AxisBox implements IAxis {
         } else {
           // HACK: handles "on top" view, when all face of cube are
           // drawn, which forbid to select an axe automatically
-          BoundingBox3d bbox =
-              drawTicks(painter, 1, AXE_Y, layout.getYTickColor(), Horizontal.RIGHT, Vertical.GROUND);
+          BoundingBox3d bbox = drawTicks(painter, 1, AXE_Y, layout.getYTickColor(),
+              Horizontal.RIGHT, Vertical.GROUND);
           wholeBounds.add(bbox);
         }
       }
@@ -343,116 +343,112 @@ public class AxisBox implements IAxis {
       zlab = center.z;
       axeLabel = layout.getZAxisLabel();
     }
-    
+
     Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
 
-
-    Coord3d[] segment = drawAxisTicks(painter, direction, color, hal, val, tickLength, ticksTxtBounds, xpos, ypos, zpos,
-        xdir, ydir, zdir, getAxisTicks(direction));
+    Coord3d[] axisSegment = drawAxisTicks(painter, direction, color, hal, val, tickLength,
+        ticksTxtBounds, xpos, ypos, zpos, xdir, ydir, zdir, getAxisTicks(direction));
 
 
     // Process rotation of axis label if required by layout setting
     float rotation = 0;
-    
+
     LabelOrientation orientation = null;
-    if(isX(direction)) {
+    if (isX(direction)) {
       orientation = layout.getXAxisLabelOrientation();
-    }
-    else if(isY(direction)) {
+    } else if (isY(direction)) {
       orientation = layout.getYAxisLabelOrientation();
-    }
-    else if(isZ(direction)) {
+    } else if (isZ(direction)) {
       orientation = layout.getzAxisLabelOrientation();
     }
-    if(LabelOrientation.VERTICAL.equals(orientation)) {
-      rotation = -(float)Math.PI/2;
-      
+    if (LabelOrientation.VERTICAL.equals(orientation)) {
+      rotation = -(float) Math.PI / 2;
+
       // In case Z label on right, flip text to have it written
-      if(isZ(direction) && ZAxisSide.RIGHT.equals(getLayout().getZAxisSide())){
+      if (isZ(direction) && ZAxisSide.RIGHT.equals(getLayout().getZAxisSide())) {
         rotation *= -1;
       }
-    }
-    else if(LabelOrientation.PARALLEL_TO_AXIS.equals(orientation)) {
-      Coord3d[] axs = painter.getCamera().modelToScreen(painter, segment);
-      rotation = computeAxisSegmentRotation(axs);
+    } else if (LabelOrientation.PARALLEL_TO_AXIS.equals(orientation)) {
+      rotation = computeAxisSegmentRotation2D(painter, axisSegment);
     }
 
-    
-    
-    
     drawAxisLabel(painter, direction, color, ticksTxtBounds, labelPosition, axeLabel, rotation);
 
     return ticksTxtBounds;
   }
 
-  protected float computeAxisSegmentRotation(Coord3d[] axs) {
-    float rotation = 0;
-    if(axs!=null) {
-      boolean sameX = axs[0].x == axs[1].x;
-      boolean sameY = axs[0].y == axs[1].y;
-      
-      // case of vertical segment
-      if(sameX && !sameY) {
-        // do nothing
-        rotation = (float)-Math.PI/2;
-      }
-      // case of horizontal segment
-      else if(!sameX && sameY) {
-        rotation = 0;
-      }
-      // other
-      else {
-        
-        //Angle2d angle = new Angle2d(axs[0].x, axs[0].y, axs[1].x, axs[1].y, axs[1].x, axs[0].y);
-        //rotation = -angle.angle();
+  /**
+   * Compute the 2D orientation (rotation) of an axis made of 2 3D points. The 2D orientation is
+   * processed according to the viewpoint on this segment.
+   * <ul>
+   * <li>segment[0] : 3D world coordinates of the starting point of the axis segment.
+   * <li>segment[1] : 3D world coordinates of the ending point of the axis segment.
+   * </ul>
+   * 
+   * @return
+   */
+  protected float computeAxisSegmentRotation2D(IPainter painter, Coord3d[] axisSegment) {
+    Coord3d[] axs = painter.getCamera().modelToScreen(painter, axisSegment);
+    return computeAxisSegmentRotation(axs[0], axs[1]);
+  }
 
-        
-        // points are from left to right
-        if(axs[0].x<axs[1].x){
-          // points are from bottom to top 
-          // like the x/y axis when it is on the right and view on top
-          //
-          //
-          //
-          if(axs[0].y<axs[1].y){
-            Coord2d virt = new Coord2d(axs[1].x, axs[0].y);
-            
-            Angle2d angle = new Angle2d(virt.x, virt.y, axs[0].x, axs[0].y, axs[1].x, axs[1].y);
-            rotation = -angle.angle();
-          }
-          // points are from top to bottom
-          // like the x/y axis when it is on the left and view on top
-          else {
-            Coord2d virt = new Coord2d(axs[1].x, axs[0].y);
-            
-            Angle2d angle = new Angle2d(virt.x, virt.y, axs[0].x, axs[0].y, axs[1].x, axs[1].y);
-            rotation = angle.angle();
-            
-          }
+  /**
+   * Compute the 2D orientation (rotation) of an axis as it is currently displayed to screen (which
+   * may change according to camera viewpoint)
+   * 
+   * @param p1 2D screen coordinates of the starting point of the axis segment.
+   * @param p2 2D screen coordinates of the ending point of the axis segment.
+   * 
+   *        NB : the third dimension of the screen coordinates is the depth of the point compared to
+   *        camera. This may be usefull for guessing the direction of the axis : going toward or
+   *        away from the viewer according to point order.
+   * 
+   * @return
+   */
+  protected float computeAxisSegmentRotation(Coord3d p1, Coord3d p2) {
+    float rotation = 0;
+
+    boolean sameX = p1.x == p2.x;
+    boolean sameY = p1.y == p2.y;
+
+    // case of oblique 2D segment
+    if (!sameX && !sameY) {
+      Coord2d squareAngle = new Coord2d(p2.x, p1.y);
+      Angle2d angle = new Angle2d(squareAngle.x, squareAngle.y, p1.x, p1.y, p2.x, p2.y);
+
+      // points are from left to right
+      if (p1.x < p2.x) {
+        // points are from bottom to top
+        // like the x/y axis when it is on the right and view on top
+        if (p1.y < p2.y) {
+          rotation = -angle.angle();
         }
-        // point are from right to left
+        // points are from top to bottom
+        // like the x/y axis when it is on the left and view on top
         else {
-       // points are from bottom to top 
-          if(axs[0].y<axs[1].y){
-            Coord2d virt = new Coord2d(axs[1].x, axs[0].y);
-            
-            Angle2d angle = new Angle2d(virt.x, virt.y, axs[0].x, axs[0].y, axs[1].x, axs[1].y);
-            rotation = angle.angle(); // flip this
-          }
-          // points are from top to bottom
-          else {
-            Coord2d virt = new Coord2d(axs[1].x, axs[0].y);
-            
-            Angle2d angle = new Angle2d(virt.x, virt.y, axs[0].x, axs[0].y, axs[1].x, axs[1].y);
-            rotation = -angle.angle(); // flip this
-            
-          }
+          rotation = angle.angle();
         }
       }
-      
-      //System.out.println(rotation);
-      //float rotation = isZ(direction)?-90:0;
-      
+      // point are from right to left
+      else {
+        // points are from bottom to top
+        if (p1.y < p2.y) {
+          rotation = angle.angle(); // flip this
+        }
+        // points are from top to bottom
+        else {
+          rotation = -angle.angle(); // flip this
+        }
+      }
+    }
+    // case of 2D vertical segment
+    else if (sameX && !sameY) {
+      // do nothing
+      rotation = (float) -Math.PI / 2;
+    }
+    // case of 2D horizontal segment
+    else if (!sameX && sameY) {
+      rotation = 0;
     }
     return rotation;
   }
@@ -465,11 +461,11 @@ public class AxisBox implements IAxis {
       /*
        * if(spaceTransformer!=null){ labelPosition = spaceTransformer.compute(labelPosition); }
        */
-      
 
 
-      BoundingBox3d labelBounds = textRenderer.drawText(painter, getLayout().getFont(),
-          axeLabel, labelPosition, rotation, Horizontal.CENTER, Vertical.CENTER, color);
+
+      BoundingBox3d labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
+          labelPosition, rotation, Horizontal.CENTER, Vertical.CENTER, color);
       if (labelBounds != null)
         ticksTxtBounds.add(labelBounds);
     }
@@ -516,14 +512,14 @@ public class AxisBox implements IAxis {
    * 
    * Return the segment of the axis.
    */
-  protected Coord3d[] drawAxisTicks(IPainter painter, int direction, Color color, Horizontal hal, Vertical val,
-      float tickLength, BoundingBox3d ticksTxtBounds, double xpos, double ypos, double zpos,
-      float xdir, float ydir, float zdir, double[] ticks) {
+  protected Coord3d[] drawAxisTicks(IPainter painter, int direction, Color color, Horizontal hal,
+      Vertical val, float tickLength, BoundingBox3d ticksTxtBounds, double xpos, double ypos,
+      double zpos, float xdir, float ydir, float zdir, double[] ticks) {
     double xlab;
     double ylab;
     double zlab;
     String tickLabel = "";
-    
+
     Coord3d[] axisSegment = new Coord3d[2];
 
     for (int t = 0; t < ticks.length; t++) {
@@ -599,11 +595,10 @@ public class AxisBox implements IAxis {
       }
       Coord3d tickLabelPosition = new Coord3d(xlab, ylab, zlab);
       Coord3d tickStartPosition = new Coord3d(xpos, ypos, zpos);
-      
-      if(t==0) {
+
+      if (t == 0) {
         axisSegment[0] = tickStartPosition;
-      }
-      else if(t==(ticks.length-1)) {
+      } else if (t == (ticks.length - 1)) {
         axisSegment[1] = tickStartPosition;
       }
 
@@ -616,20 +611,22 @@ public class AxisBox implements IAxis {
       Vertical vAlign = layoutVertical(direction, val, zdir);
 
       // Draw the text label of the current tick
-      drawAxisTickNumericLabel(painter, direction, color, hAlign, vAlign, ticksTxtBounds, tickLabel, tickLabelPosition);
+      drawAxisTickNumericLabel(painter, direction, color, hAlign, vAlign, ticksTxtBounds, tickLabel,
+          tickLabelPosition);
     }
-    
+
     return axisSegment;
   }
 
-  protected void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Horizontal hAlign,
-      Vertical vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
+  protected void drawAxisTickNumericLabel(IPainter painter, int direction, Color color,
+      Horizontal hAlign, Vertical vAlign, BoundingBox3d ticksTxtBounds, String tickLabel,
+      Coord3d tickPosition) {
     // doTransform(gl);
     painter.glLoadIdentity();
     painter.glScalef(scale.x, scale.y, scale.z);
 
-    BoundingBox3d tickBounds =
-        textRenderer.drawText(painter, getLayout().getFont(), tickLabel, tickPosition, hAlign, vAlign, color);
+    BoundingBox3d tickBounds = textRenderer.drawText(painter, getLayout().getFont(), tickLabel,
+        tickPosition, hAlign, vAlign, color);
     if (tickBounds != null)
       ticksTxtBounds.add(tickBounds);
   }
@@ -650,7 +647,8 @@ public class AxisBox implements IAxis {
     return vAlign;
   }
 
-  protected Horizontal layoutHorizontal(int direction, Camera cam, Horizontal hal, Coord3d tickPosition) {
+  protected Horizontal layoutHorizontal(int direction, Camera cam, Horizontal hal,
+      Coord3d tickPosition) {
     Horizontal hAlign;
     if (hal == null)
       hAlign = cam.side(tickPosition) ? Horizontal.LEFT : Horizontal.RIGHT;
@@ -663,7 +661,7 @@ public class AxisBox implements IAxis {
       double xlab, double ylab, double zlab) {
     painter.glLoadIdentity();
     painter.glScalef(scale.x, scale.y, scale.z);
-    
+
     painter.color(color);
     painter.glLineWidth(1);
 
@@ -753,25 +751,24 @@ public class AxisBox implements IAxis {
       if (distAxeZ[a] < Double.MAX_VALUE) {
         Coord3d axeCenter = new Coord3d((axeZx[a][0] + axeZx[a][1]) / 2,
             (axeZy[a][0] + axeZy[a][1]) / 2, (axeZz[a][0] + axeZz[a][1]) / 2);
-        
 
-        if(ZAxisSide.LEFT.equals(layout.getZAxisSide())) {
+
+        if (ZAxisSide.LEFT.equals(layout.getZAxisSide())) {
           if (cam.side(axeCenter))
             distAxeZ[a] *= -1;
-        }
-        else {
+        } else {
           if (!cam.side(axeCenter))
             distAxeZ[a] *= -1;
         }
-        
+
       }
     }
 
     return min(distAxeZ);
   }
-  
-  
-  
+
+
+
   /**
    * Return the index of the minimum value contained in the input array of doubles. If no value is
    * smaller than Double.MAX_VALUE, the returned index is -1.

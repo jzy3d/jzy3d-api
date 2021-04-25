@@ -24,6 +24,8 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * {@link Drawable} to be painted. The painter methods are named to both match the OpenGL function
  * naming and also match the Jzy3d primitives (Coord3d, Color, etc)
  * 
+ * <h1>OpenGL naming conventions</h1>
+ * 
  * Traditional OpenGL methods mapping
  * <ul>
  * <li>GL.glBegin() -> {@link IPainter#glBegin()}
@@ -43,7 +45,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * {@link IPainter#glMaterial(MaterialProperty, Color, boolean)}
  * </ul>
  * 
- * Jzy3d model mapping
+ * <h1>Jzy3d naming conventions</h1>
  * <ul>
  * <li>GL.glNormal3f(x,y,z) -> {@link IPainter#normal(Coord3d)}
  * <li>GL.glVertex3f(x,y,z) -> {@link IPainter#vertex(Coord3d)}
@@ -54,6 +56,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * {@link IPainter#color(Color)} and {@link IPainter#glColor4f(float, float, float, float)} are both
  * available.
  * 
+ * <h1>Native GL and Emulated GL</h1>
  * 
  * Implementations of this interface may use native rendering ({@link NativeDeskopPainter}) or rely
  * on pure java emulation of OpenGL1 ({@link EmulGLPainter}). They are instanciated by their
@@ -81,22 +84,36 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * <li>GLU glu = {@link NativeDeskopPainter#getGLU()}; // JOGL GLU interface
  * <li>GLUT glut = {@link NativeDeskopPainter#getGLUT()}; // JOGL GLUT interface
  * </ul>
+ * 
+ * <h1>Text</h1>
+ * 
+ * The {@link #drawText(Font, String, Coord3d, Color, float)} and
+ * {@link #getTextLengthInPixels(Font, String)} are not OpenGL related and specific to
+ * {@link IPainter}. They allows to draw 2D text easily and enabling rotation, which may not be
+ * supported by all {@link IPainter} implementations (currently only supported with EmulGL).
+ * 
+ * Beside this, all implementation will provide support on {@link #glutBitmapString(int, String)}
+ * and {@link #glutBitmapLength(int, String)} which are the base OpenGL primitives for drawing
+ * strings.
+ * 
+ * Note that the {@link View#configureHiDPIListener} will adapt the text size according to HiDPI to ensure text does not
+ * appear to small on high resolution screens.
+ * 
  */
 public interface IPainter {
-  
+
 
   /* ****************************************** */
 
-  /** 
-   * In the context of a multithreaded application, this method allows
-   * retrieving the GL context for the calling thread. Once work is done
-   * the caller should call {@link #releaseGL()}
+  /**
+   * In the context of a multithreaded application, this method allows retrieving the GL context for
+   * the calling thread. Once work is done the caller should call {@link #releaseGL()}
    */
   public Object acquireGL();
 
-  /** 
-   * In the context of a multithreaded application, this method allows
-   * releasing the GL context by the calling thread to let other thread use it.
+  /**
+   * In the context of a multithreaded application, this method allows releasing the GL context by
+   * the calling thread to let other thread use it.
    * 
    * {@link #acquireGL()}
    */
@@ -276,11 +293,11 @@ public interface IPainter {
 
   /** An interface for AWT user, jGL only @since 2.0.0 */
   public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c);
-  
+
   public int getTextLengthInPixels(int font, String string);
 
   public int getTextLengthInPixels(Font font, String string);
-  
+
   public void drawText(Font font, String label, Coord3d position, Color color, float rotation);
 
 
@@ -291,8 +308,9 @@ public interface IPainter {
 
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar);
 
-  public void glFrustum(double left, double right, double bottom, double top, double zNear, double zFar);
-  
+  public void glFrustum(double left, double right, double bottom, double top, double zNear,
+      double zFar);
+
   public void gluLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY,
       float centerZ, float upX, float upY, float upZ);
 
