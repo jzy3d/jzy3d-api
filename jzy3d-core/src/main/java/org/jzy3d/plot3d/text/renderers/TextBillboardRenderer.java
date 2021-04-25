@@ -53,7 +53,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
    */
   @Override
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
-      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     glRaster(painter, position, color);
 
     BillBoardSize dims = printString(painter, s, halign, valign);
