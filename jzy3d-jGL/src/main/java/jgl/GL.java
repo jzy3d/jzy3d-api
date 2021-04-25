@@ -24,6 +24,7 @@ import java.awt.Color;
 // import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -547,35 +548,83 @@ public class GL {
 
         int x = text.x + shiftHorizontally;
         int y = text.y;
-        int rotate = 10;
+        float rotate = text.rotate;
 
-        preRotateFromLeftPoint(g2d, x, y, rotate);
-		if (useOSFontRendering) {		  
-		  
-			g2d.setFont(text.font);
+        int textWidth = 0;
+
+        
+        g2d.setFont(text.font);
+        FontMetrics fm = g2d.getFontMetrics();
+        if (fm != null) {
+          textWidth = fm.stringWidth(text.string);
+        }
+        
+        // GOOD FOR Z LABEL VERTICAL CENTERED: RotationPoint.LEFT
+        // GOOD FOR X/Y LABEL OBLIQUE CENTERED: RotationPoint.CENTER
+        RotationPoint rotationPoint = RotationPoint.LEFT;
+
+        preRotateFromLeftPoint(g2d, x, y, rotate, textWidth, rotationPoint);
+        
+        // rotation point / position of text
+        //g2d.fillRect(-1, -1, 2, 2);
+        
+
+		if (useOSFontRendering) {
 			g2d.drawString(text.string, 0,0);
-
-			
 		} else {
 			FontRenderContext frc = g2d.getFontRenderContext();
 			GlyphVector gv = text.font.createGlyphVector(frc, text.string);
+			
 			g2d.drawGlyphVector(gv, 0,0);
+
 		}
-        postRotateFromLeftPoint(g2d, x, y, rotate);
+        postRotateFromLeftPoint(g2d, x, y, rotate, textWidth, rotationPoint);
 		
 		//g2d.setTransform(orig);
 
 	}
 
 
-  protected void preRotateFromLeftPoint(Graphics2D g2d, int x, int y, int rotate) {
+	enum RotationPoint{
+	  LEFT, CENTER
+	}
+	
+	// assume initial text layout is CENTERED
+  protected void preRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth, RotationPoint point) {
+    if(RotationPoint.LEFT.equals(point)) {
+      if(rotate!=0) {
+        g2d.translate(textWidth/2, 0);
+      }
+    }
+    
     g2d.translate(x, y);
-    g2d.rotate(Math.toRadians(rotate));
+    g2d.rotate(rotate);
+    
+    if(RotationPoint.LEFT.equals(point)) {
+      // post 
+      if(rotate!=0) {
+        g2d.translate(-textWidth/2, 0);
+      }
+    }
   }
 
-  protected void postRotateFromLeftPoint(Graphics2D g2d, int x, int y, int rotate) {
-    g2d.rotate(-Math.toRadians(rotate));
+  protected void postRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth, RotationPoint point) {
+    if(RotationPoint.LEFT.equals(point)) {
+      if(rotate!=0) {
+        g2d.translate(textWidth/2, 0);
+
+      }
+    }
+    
+    g2d.rotate(-rotate);//Math.toRadians(rotate));
     g2d.translate(-x, -y);
+    
+    if(RotationPoint.LEFT.equals(point)) {
+      // post 
+      if(rotate!=0) {
+        g2d.translate(-textWidth/2, 0);
+      }
+    }
   }
 
 	/**
@@ -592,9 +641,9 @@ public class GL {
 	 * To be called by {@link GLUT#glutBitmapString(Font, String, float, float)} to
 	 * append text to a list of text to render at {@link GL#glFlush()} step.
 	 */
-	public void appendTextToDraw(Font font, String string, int x, int y, float r, float g, float b) {
+	public void appendTextToDraw(Font font, String string, int x, int y, float r, float g, float b, float rotate) {
 		synchronized (textsToDraw) {
-			textsToDraw.add(new TextToDraw(font, string, x, y, r, g, b));
+			textsToDraw.add(new TextToDraw(font, string, x, y, r, g, b, rotate));
 		}
 	}
 
@@ -606,13 +655,13 @@ public class GL {
 		protected float r;
 		protected float g;
 		protected float b;
-		protected int rotate;
+		protected float rotate;
 
 		public TextToDraw(Font font, String string, int x, int y) {
-			this(font, string, x, y, -1, -1, -1);
+			this(font, string, x, y, -1, -1, -1, 0);
 		}
 
-		public TextToDraw(Font font, String string, int x, int y, float r, float g, float b) {
+		public TextToDraw(Font font, String string, int x, int y, float r, float g, float b, float rotate) {
 			super();
 			this.font = font;
 			this.string = string;
@@ -621,7 +670,7 @@ public class GL {
 			this.r = r;
 			this.g = g;
 			this.b = b;
-			this.rotate = 0;
+			this.rotate = rotate;
 		}
 	}
 

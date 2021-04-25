@@ -401,7 +401,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     glut.glutBitmapString(font, string);
   }
 
-  /** JGL only. Will throw exception */
+  @Override
+  public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
+    glutBitmapString(font, label, position, color);
+  }
+
   @Override
   public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c) {
     color(c);

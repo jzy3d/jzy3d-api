@@ -676,9 +676,15 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   @Override
   public void glutBitmapString(Font font, String label, Coord3d position, Color color) {
     glut.glutBitmapString(toAWT(font), label, position.x, position.y, position.z, color.r, color.g,
-        color.b);
+        color.b, 0);
   }
-
+  
+  @Override
+  public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
+    glut.glutBitmapString(toAWT(font), label, position.x, position.y, position.z, color.r, color.g,
+        color.b, rotation);
+  }
+  
   private java.awt.Font toAWT(Font font) {
     return new java.awt.Font(font.getName(), java.awt.Font.PLAIN, font.getHeight());
   }
