@@ -559,72 +559,46 @@ public class GL {
           textWidth = fm.stringWidth(text.string);
         }
         
-        // GOOD FOR Z LABEL VERTICAL CENTERED: RotationPoint.LEFT
-        // GOOD FOR X/Y LABEL OBLIQUE CENTERED: RotationPoint.CENTER
-        RotationPoint rotationPoint = RotationPoint.LEFT;
-
-        preRotateFromLeftPoint(g2d, x, y, rotate, textWidth, rotationPoint);
+        preRotateFromLeftPoint(g2d, x, y, rotate, textWidth);
         
         // rotation point / position of text
         //g2d.fillRect(-1, -1, 2, 2);
         
-
 		if (useOSFontRendering) {
 			g2d.drawString(text.string, 0,0);
 		} else {
 			FontRenderContext frc = g2d.getFontRenderContext();
 			GlyphVector gv = text.font.createGlyphVector(frc, text.string);
-			
 			g2d.drawGlyphVector(gv, 0,0);
-
 		}
-        postRotateFromLeftPoint(g2d, x, y, rotate, textWidth, rotationPoint);
-		
-		//g2d.setTransform(orig);
-
+        postRotateFromLeftPoint(g2d, x, y, rotate, textWidth);
 	}
 
-
-	enum RotationPoint{
-	  LEFT, CENTER
-	}
-	
-	// assume initial text layout is CENTERED
-  protected void preRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth, RotationPoint point) {
-    if(RotationPoint.LEFT.equals(point)) {
-      if(rotate!=0) {
-        g2d.translate(textWidth/2, 0);
-      }
+  protected void preRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth) {
+    if(rotate!=0) {
+      g2d.translate(textWidth/2, 0);
     }
     
     g2d.translate(x, y);
-    g2d.rotate(rotate);
     
-    if(RotationPoint.LEFT.equals(point)) {
-      // post 
-      if(rotate!=0) {
-        g2d.translate(-textWidth/2, 0);
-      }
+    if(rotate!=0) {
+      g2d.rotate(rotate);
+      g2d.translate(-textWidth/2, 0);
     }
+    
   }
 
-  protected void postRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth, RotationPoint point) {
-    if(RotationPoint.LEFT.equals(point)) {
+  protected void postRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth) {
       if(rotate!=0) {
         g2d.translate(textWidth/2, 0);
-
+        g2d.rotate(-rotate);
       }
-    }
     
-    g2d.rotate(-rotate);//Math.toRadians(rotate));
-    g2d.translate(-x, -y);
+      g2d.translate(-x, -y);
     
-    if(RotationPoint.LEFT.equals(point)) {
-      // post 
       if(rotate!=0) {
         g2d.translate(-textWidth/2, 0);
       }
-    }
   }
 
 	/**
