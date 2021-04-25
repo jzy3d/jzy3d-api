@@ -350,6 +350,9 @@ public class AxisLayout implements IAxisLayout {
     return xTickLabelDisplayed;
   }
 
+  /**
+   * Supported by EmulGL only
+   */
   @Override
   public void setXTickLabelDisplayed(boolean tickLabelDisplayed) {
     xTickLabelDisplayed = tickLabelDisplayed;
@@ -360,6 +363,9 @@ public class AxisLayout implements IAxisLayout {
     return yTickLabelDisplayed;
   }
 
+  /**
+   * Supported by EmulGL only
+   */
   @Override
   public void setYTickLabelDisplayed(boolean tickLabelDisplayed) {
     yTickLabelDisplayed = tickLabelDisplayed;
@@ -370,6 +376,9 @@ public class AxisLayout implements IAxisLayout {
     return zTickLabelDisplayed;
   }
 
+  /**
+   * Supported by EmulGL only
+   */
   @Override
   public void setZTickLabelDisplayed(boolean tickLabelDisplayed) {
     zTickLabelDisplayed = tickLabelDisplayed;
