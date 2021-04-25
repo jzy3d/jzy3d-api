@@ -73,7 +73,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
 
   @Override
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
-      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     // configureRenderer();
     resetTextColor(color);
 

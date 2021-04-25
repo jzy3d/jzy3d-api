@@ -65,8 +65,7 @@ public class AxisBox2d extends AxisBox {
   /** Draws Y axis label vertically. */
   @Override
   public void drawAxisLabel(IPainter painter, int direction, Color color,
-      BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
-    Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
+      BoundingBox3d ticksTxtBounds, Coord3d labelPosition, String axeLabel, float rotation) {
     BoundingBox3d labelBounds = null;
 
     if (isXDisplayed(direction)) {
@@ -93,7 +92,7 @@ public class AxisBox2d extends AxisBox {
   public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
     @Override
     public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
-        Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+        float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
       painter.color(color);
 
       // compute a corrected position according to layout

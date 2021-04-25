@@ -19,7 +19,7 @@ public class MockTextBitmapRenderer extends TextBitmapRenderer {
 
   @Override
   public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
-      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     Map<String, Object> args = new HashMap<String, Object>();
     args.put("text", text);
     args.put("position", position);

@@ -24,13 +24,17 @@ import java.awt.Color;
 // import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.image.MemoryImageSource;
@@ -532,21 +536,70 @@ public class GL {
 	}
 
 	protected void doDrawString(Graphics2D g2d, TextToDraw text) {
+	  
+	  //AffineTransform orig = g2d.getTransform();
+	  //g2d.rotate(Math.PI/2);
+	  
 		if (text.r >= 0) {
 			g2d.setColor(new Color(text.r, text.g, text.b));
 		} else {
 			g2d.setColor(Color.BLACK);
 		}
 
+        int x = text.x + shiftHorizontally;
+        int y = text.y;
+        float rotate = text.rotate;
+
+        int textWidth = 0;
+
+        
+        g2d.setFont(text.font);
+        FontMetrics fm = g2d.getFontMetrics();
+        if (fm != null) {
+          textWidth = fm.stringWidth(text.string);
+        }
+        
+        preRotateFromLeftPoint(g2d, x, y, rotate, textWidth);
+        
+        // rotation point / position of text
+        //g2d.fillRect(-1, -1, 2, 2);
+        
 		if (useOSFontRendering) {
-			g2d.setFont(text.font);
-			g2d.drawString(text.string, text.x + shiftHorizontally, text.y);
+			g2d.drawString(text.string, 0,0);
 		} else {
 			FontRenderContext frc = g2d.getFontRenderContext();
 			GlyphVector gv = text.font.createGlyphVector(frc, text.string);
-			g2d.drawGlyphVector(gv, text.x + shiftHorizontally, text.y);
+			g2d.drawGlyphVector(gv, 0,0);
 		}
+        postRotateFromLeftPoint(g2d, x, y, rotate, textWidth);
 	}
+
+  protected void preRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth) {
+    if(rotate!=0) {
+      g2d.translate(textWidth/2, 0);
+    }
+    
+    g2d.translate(x, y);
+    
+    if(rotate!=0) {
+      g2d.rotate(rotate);
+      g2d.translate(-textWidth/2, 0);
+    }
+    
+  }
+
+  protected void postRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth) {
+      if(rotate!=0) {
+        g2d.translate(textWidth/2, 0);
+        g2d.rotate(-rotate);
+      }
+    
+      g2d.translate(-x, -y);
+    
+      if(rotate!=0) {
+        g2d.translate(-textWidth/2, 0);
+      }
+  }
 
 	/**
 	 * To be called by {@link GLUT#glutBitmapString(Font, String, float, float)} to
@@ -562,9 +615,9 @@ public class GL {
 	 * To be called by {@link GLUT#glutBitmapString(Font, String, float, float)} to
 	 * append text to a list of text to render at {@link GL#glFlush()} step.
 	 */
-	public void appendTextToDraw(Font font, String string, int x, int y, float r, float g, float b) {
+	public void appendTextToDraw(Font font, String string, int x, int y, float r, float g, float b, float rotate) {
 		synchronized (textsToDraw) {
-			textsToDraw.add(new TextToDraw(font, string, x, y, r, g, b));
+			textsToDraw.add(new TextToDraw(font, string, x, y, r, g, b, rotate));
 		}
 	}
 
@@ -576,12 +629,13 @@ public class GL {
 		protected float r;
 		protected float g;
 		protected float b;
+		protected float rotate;
 
 		public TextToDraw(Font font, String string, int x, int y) {
-			this(font, string, x, y, -1, -1, -1);
+			this(font, string, x, y, -1, -1, -1, 0);
 		}
 
-		public TextToDraw(Font font, String string, int x, int y, float r, float g, float b) {
+		public TextToDraw(Font font, String string, int x, int y, float r, float g, float b, float rotate) {
 			super();
 			this.font = font;
 			this.string = string;
@@ -590,6 +644,7 @@ public class GL {
 			this.r = r;
 			this.g = g;
 			this.b = b;
+			this.rotate = rotate;
 		}
 	}
 
