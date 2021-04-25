@@ -44,7 +44,7 @@ public class DrawableTextWrapper extends Drawable {
   public void draw(IPainter painter) {
     doTransform(painter);
     BoundingBox3d box =
-        renderer.drawText(painter, Font.Helvetica_12, txt, position, halign, valign, color, screenOffset, sceneOffset);
+        renderer.drawText(painter, Font.Helvetica_12, txt, position, 0, halign, valign, color, screenOffset, sceneOffset);
     if (box != null)
       bbox = box.scale(new Coord3d(1 / 10, 1 / 10, 1 / 10));
     else

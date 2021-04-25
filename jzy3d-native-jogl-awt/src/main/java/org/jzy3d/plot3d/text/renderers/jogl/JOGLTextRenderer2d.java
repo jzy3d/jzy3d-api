@@ -65,7 +65,7 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
 
   @Override
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
-      Horizontal horizontal, Vertical vertical, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+      float rotation, Horizontal horizontal, Vertical vertical, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     // configureRenderer();
     resetTextColor(color);
 
@@ -77,8 +77,7 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
     return null;
   }
 
-  /** Draws a 2D text (facing camera) at the specified 3D position 
-   * @param font TODO*/
+  /** Draws a 2D text (facing camera) at the specified 3D position. */
   protected void drawText2D(IPainter painter, Font font, String text, Coord3d position,
       Color color, Horizontal horizontal, Vertical vertical) {
 
@@ -94,6 +93,8 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
     // Render text
     renderer.setColor(color.r, color.g, color.b, color.a);
     renderer.beginRendering(width, height);
+    
+    
     renderer.draw(text, (int) screen.x, (int) screen.y);
     renderer.flush();
     renderer.endRendering();

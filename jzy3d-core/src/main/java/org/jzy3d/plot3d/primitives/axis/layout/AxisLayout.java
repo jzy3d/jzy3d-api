@@ -25,7 +25,9 @@ public class AxisLayout implements IAxisLayout {
 
   // protected Font hiDPIMajourFont
 
-
+  protected LabelOrientation xAxisLabelOrientation;
+  protected LabelOrientation yAxisLabelOrientation;
+  protected LabelOrientation zAxisLabelOrientation;
   protected String xAxeLabel;
   protected String yAxeLabel;
   protected String zAxeLabel;
@@ -68,6 +70,8 @@ public class AxisLayout implements IAxisLayout {
   protected Color mainColor;
 
   protected ZAxisSide zAxisSide = ZAxisSide.RIGHT;
+  
+
 
 
   /** Default AxeBox layout */
@@ -481,4 +485,36 @@ public class AxisLayout implements IAxisLayout {
       fontNoHiDPI = font;
     }
   }
+
+  @Override
+  public LabelOrientation getXAxisLabelOrientation() {
+    return xAxisLabelOrientation;
+  }
+
+  @Override
+  public void setXAxisLabelOrientation(LabelOrientation xAxisLabelOrientation) {
+    this.xAxisLabelOrientation = xAxisLabelOrientation;
+  }
+
+  @Override
+  public LabelOrientation getYAxisLabelOrientation() {
+    return yAxisLabelOrientation;
+  }
+
+  @Override
+  public void setYAxisLabelOrientation(LabelOrientation yAxisLabelOrientation) {
+    this.yAxisLabelOrientation = yAxisLabelOrientation;
+  }
+
+  @Override
+  public LabelOrientation getzAxisLabelOrientation() {
+    return zAxisLabelOrientation;
+  }
+
+  @Override
+  public void setZAxisLabelOrientation(LabelOrientation zAxisLabelOrientation) {
+    this.zAxisLabelOrientation = zAxisLabelOrientation;
+  }
+  
+  
 }

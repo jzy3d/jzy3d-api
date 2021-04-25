@@ -33,15 +33,13 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 
   protected TextLayout layout = new TextLayout();
 
-  public TextBitmapRenderer() {}
-
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string
    * according to the current Camera configuration.
    */
   @Override
   public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
-      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     painter.color(color);
 
     // compute a corrected 3D position according to the 2D layout on screen
@@ -65,8 +63,10 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     positionAligned = positionAligned.add(sceneOffset);
 
     // Draws actual string
-    painter.glutBitmapString(font, text, positionAligned, color);
-
+    //painter.glutBitmapString(font, text, positionAligned, color);
+    
+    painter.drawText(font, text, positionAligned, color, rotation);
+    
     // Return text bounds
     return computeTextBounds(painter, font, screenAligned, textWidth);
   }
@@ -110,4 +110,5 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     txtBounds.add(painter.getCamera().screenToModel(painter, topRight));
     return txtBounds;
   }
+
 }

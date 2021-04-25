@@ -280,6 +280,9 @@ public interface IPainter {
   public int getTextLengthInPixels(int font, String string);
 
   public int getTextLengthInPixels(Font font, String string);
+  
+  public void drawText(Font font, String label, Coord3d position, Color color, float rotation);
+
 
   // GL VIEWPOINT
 
