@@ -358,6 +358,11 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c) {
     throw new NotImplementedException();
   }
+  
+  @Override
+  public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
+    throw new NotImplementedException();
+  }
 
   @Override
   public int glutBitmapLength(int font, String string) {
