@@ -127,14 +127,14 @@ public class GLUT implements Runnable {
    * provide all data to {@link GL#appendTextToDraw(Font, String, int, int, float, float, float)}
    * that will handle the text rendering in {@link GL#glFlush()}
    */
-  public void glutBitmapString(Font font, String string, float x, float y, float z, float r, float g, float b) {
+  public void glutBitmapString(Font font, String string, float x, float y, float z, float r, float g, float b, float rotate) {
 	  double[] win = modelToScreen(x, y, z);
 	  
 	  double winX = win[0];
 	  double winY = JavaGL.Context.Viewport.Height - win[1];
 	  
 	  
-	  JavaGL.appendTextToDraw(font, string, (int)winX, (int)winY, r, g, b);
+	  JavaGL.appendTextToDraw(font, string, (int)winX, (int)winY, r, g, b, rotate);
   }
   
   protected double[] modelToScreen(float x, float y, float z) {

@@ -139,5 +139,18 @@ public interface IAxisLayout {
   public enum FontType{
     Major,Minor
   }
+  
+  
+  public LabelOrientation getXAxisLabelOrientation();
+
+  public void setXAxisLabelOrientation(LabelOrientation xAxisLabelOrientation);
+
+  public LabelOrientation getYAxisLabelOrientation();
+
+  public void setYAxisLabelOrientation(LabelOrientation yAxisLabelOrientation);
+
+  public LabelOrientation getzAxisLabelOrientation();
+
+  public void setZAxisLabelOrientation(LabelOrientation zAxisLabelOrientation);
 
 }

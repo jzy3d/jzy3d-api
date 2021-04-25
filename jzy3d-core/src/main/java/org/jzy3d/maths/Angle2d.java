@@ -7,8 +7,7 @@ package org.jzy3d.maths;
 public class Angle2d {
 
   /** Create an angle, described by three points. */
-  public Angle2d(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3,
-      float z3) {
+  public Angle2d(float x1, float y1, float x2, float y2, float x3, float y3) {
     this.x1 = x1;
     this.x2 = x2;
     this.x3 = x3;
