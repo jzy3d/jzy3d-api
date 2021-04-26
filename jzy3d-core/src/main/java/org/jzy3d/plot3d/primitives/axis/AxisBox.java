@@ -380,6 +380,9 @@ public class AxisBox implements IAxis {
   /**
    * Compute the 2D orientation (rotation) of an axis made of 2 3D points. The 2D orientation is
    * processed according to the viewpoint on this segment.
+   * 
+   * <img src="doc-files/AxisBox-Label.png">
+   * 
    * <ul>
    * <li>segment[0] : 3D world coordinates of the starting point of the axis segment.
    * <li>segment[1] : 3D world coordinates of the ending point of the axis segment.
@@ -396,6 +399,8 @@ public class AxisBox implements IAxis {
    * Compute the 2D orientation (rotation) of an axis as it is currently displayed to screen (which
    * may change according to camera viewpoint)
    * 
+   * <img src="doc-files/AxisBox-Label.png">
+   * 
    * @param p1 2D screen coordinates of the starting point of the axis segment.
    * @param p2 2D screen coordinates of the ending point of the axis segment.
    * 
@@ -403,7 +408,7 @@ public class AxisBox implements IAxis {
    *        camera. This may be usefull for guessing the direction of the axis : going toward or
    *        away from the viewer according to point order.
    * 
-   * @return
+   * @return rotation in radian
    */
   protected float computeAxisSegmentRotation(Coord3d p1, Coord3d p2) {
     float rotation = 0;
