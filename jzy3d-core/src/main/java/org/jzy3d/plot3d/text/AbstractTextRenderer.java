@@ -39,6 +39,13 @@ public abstract class AbstractTextRenderer implements ITextRenderer {
       float rotation, Horizontal halign, Vertical valign, Color color) {
     return drawText(painter, font, s, position, rotation, halign, valign, color, NO_SCREEN_OFFSET, NO_SCENE_OFFSET);
   }
+  
+  @Override
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset) {
+    return drawText(painter, font, s, position, rotation, halign, valign, color, screenOffset, NO_SCENE_OFFSET);
+  }
+
 
 
   @Override

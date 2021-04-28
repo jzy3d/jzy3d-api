@@ -157,7 +157,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     if (policy.optimizeByDroppingFace)
       startDroppingFace(getChart());
     if (policy.optimizeByDroppingFaceAndColoringWireframe)
-      startDroppingFaceAndColoredWireframe(getChart());
+      startDroppingFaceAndColoringWireframe(getChart());
     if (policy.optimizeByDroppingHiDPI)
       startNoHiDPI(getChart());
   }
@@ -236,7 +236,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
 
   // DroppingFaceAndColoringWireframe
 
-  protected void startDroppingFaceAndColoredWireframe(Chart chart) {
+  protected void startDroppingFaceAndColoringWireframe(Chart chart) {
     Graph graph = chart.getScene().getGraph();
     for (Drawable d : graph.getAll()) {
       if (d instanceof Wireframeable) {
