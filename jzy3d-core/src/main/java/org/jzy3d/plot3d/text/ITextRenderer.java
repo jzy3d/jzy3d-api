@@ -18,6 +18,8 @@ public interface ITextRenderer {
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position, float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset);
 
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position, float rotation, Horizontal halign, Vertical valign, Color color);
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position, float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset);
+
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position, Horizontal halign, Vertical valign, Color color);
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset);
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position, Horizontal halign, Vertical valign, Color color, Coord3d sceneOffset);
