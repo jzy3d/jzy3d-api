@@ -40,6 +40,10 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
   @Override
   public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
       float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    if(text==null) {
+      return null;
+    }
+    
     painter.color(color);
 
     // compute a corrected 3D position according to the 2D layout on screen
@@ -110,5 +114,6 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     txtBounds.add(painter.getCamera().screenToModel(painter, topRight));
     return txtBounds;
   }
+
 
 }
