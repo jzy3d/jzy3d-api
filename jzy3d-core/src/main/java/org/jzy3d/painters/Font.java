@@ -50,7 +50,9 @@ public class Font {
   protected int height;
   protected int style;
 
-
+  protected Font() {
+  }
+  
   public Font(int code, int height) {
     this.code = code;
     this.style = UNDEFINED;
@@ -84,8 +86,6 @@ public class Font {
     detectOpenGLFontCodeFromName(name, height);
   }
 
-
-
   public String getName() {
     return name;
   }
@@ -98,26 +98,15 @@ public class Font {
     return height;
   }
 
-
-  /** Load a font from its ID */
-  public static Font getById(int id) {
-    switch (id) {
-      case BITMAP_HELVETICA_10:
-        return Helvetica_10;
-      case BITMAP_HELVETICA_12:
-        return Helvetica_12;
-      case BITMAP_HELVETICA_18:
-        return Helvetica_18;
-      case BITMAP_TIMES_ROMAN_10:
-        return TimesRoman_10;
-      case BITMAP_TIMES_ROMAN_24:
-        return TimesRoman_24;
-      default:
-        return null;
-    }
+  public int getStyle() {
+    return style;
   }
   
-  private void detectFontNameFromOpenGLCode(int code) {
+  public void setHeight(int height) {
+    this.height = height;
+  }
+
+  protected void detectFontNameFromOpenGLCode(int code) {
     if (code == BITMAP_HELVETICA_10 || code == BITMAP_HELVETICA_12 || code == BITMAP_HELVETICA_18) {
       this.name = HELVETICA;
     } else if (code == BITMAP_TIMES_ROMAN_10 || code == BITMAP_TIMES_ROMAN_24) {
@@ -125,7 +114,7 @@ public class Font {
     }
   }
 
-  private void detectOpenGLFontCodeFromName(String name, int height) {
+  protected void detectOpenGLFontCodeFromName(String name, int height) {
     if (HELVETICA.equalsIgnoreCase(name.toLowerCase())) {
       switch (height) {
         case 10:
@@ -157,6 +146,25 @@ public class Font {
       code = BITMAP_HELVETICA_12;
     }
   }
+  
+  /** Load a font from its ID */
+  public static Font getById(int id) {
+    switch (id) {
+      case BITMAP_HELVETICA_10:
+        return Helvetica_10;
+      case BITMAP_HELVETICA_12:
+        return Helvetica_12;
+      case BITMAP_HELVETICA_18:
+        return Helvetica_18;
+      case BITMAP_TIMES_ROMAN_10:
+        return TimesRoman_10;
+      case BITMAP_TIMES_ROMAN_24:
+        return TimesRoman_24;
+      default:
+        return null;
+    }
+  }
+
 
   @Override
   public int hashCode() {
@@ -196,6 +204,15 @@ public class Font {
   @Override
   public String toString() {
     return "Font: '" + name + "' height:" + height + " code:" + code + " style:" + style;
+  }
+  
+  public Font clone() {
+    Font f = new Font();
+    f.name = name;
+    f.code = code;
+    f.style = style;
+    f.height = height;
+    return f;
   }
   
 }
