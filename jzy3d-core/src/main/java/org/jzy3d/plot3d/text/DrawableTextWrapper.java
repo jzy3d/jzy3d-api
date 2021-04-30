@@ -116,6 +116,14 @@ public class DrawableTextWrapper extends Drawable {
   public void setSceneOffset(Coord3d sceneOffset) {
     this.sceneOffset = sceneOffset;
   }
+  
+  public float getRotation() {
+    return rotation;
+  }
+
+  public void setRotation(float rotation) {
+    this.rotation = rotation;
+  }
 
   @Override
   public String toString() {

@@ -191,12 +191,11 @@ public class View {
     this.scene.getGraph().getStrategy().setView(this);
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
+
     
+    //applyHiDPIToFonts(quality.isHiDPIEnabled()?HiDPI.ON:HiDPI.OFF);
+
     configureHiDPIListener(canvas);
-    // Prefer waiting for canvas to notify of HiDPI
-    //if(quality.isHiDPIEnabled()) {
-    //  applyHiDPIToFonts(hidpi);
-    //}
   }
 
   /**
@@ -217,7 +216,6 @@ public class View {
         } else {
           hidpi = HiDPI.ON;
         }
-        //LOGGER.info("Apply HiDPI " + hidpi);
 
         applyHiDPIToFonts(hidpi);
       }

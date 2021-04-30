@@ -1,10 +1,16 @@
-package org.jzy3d.chart.controllers;
+package org.jzy3d.chart.controllers.mouse.camera;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
+import org.jzy3d.chart.controllers.RateLimiter;
+import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
+import org.jzy3d.chart.controllers.mouse.camera.adaptive.AbstractAdativeRenderingHandler;
+import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingFaceAndKeepingWireframe;
+import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingFaceAndKeepingWireframeWithColor;
+import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingHiDPI;
+import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingWireframe;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Wireframeable;
@@ -38,6 +44,10 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   protected boolean isFirstDrag = true;
 
 
+  protected AbstractAdativeRenderingHandler adaptByDroppingFace;
+  protected AdaptByDroppingFaceAndKeepingWireframeWithColor adaptByDroppingFaceAndColoringWire;
+  protected AdaptByDroppingWireframe adaptByDroppingWireframe;
+  protected AdaptByDroppingHiDPI adaptByDroppingHiDPI;
 
   /**
    * Keep track of drawable that have had their wireframe disabled for optimization in order to
@@ -51,12 +61,6 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
    */
   protected List<Wireframeable> droppedFaceAndColoredWireframeToReset = new ArrayList<>();
 
-  protected List<Wireframeable> droppedFaceToReset = new ArrayList<>();
-
-  /**
-   * Keep track of canvas performance.
-   */
-  // protected double lastRenderingTime = -1;
 
 
   public AdaptiveMouseController() {
@@ -134,8 +138,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     else
       return policy.optimizeForRenderingTimeLargerThan < lastRenderingTime;
   }
-
-
+  
   protected void loadChartFields(Chart chart) {
     painter = (EmulGLPainter) chart.getPainter();
     currentQuality = chart.getQuality();
@@ -147,30 +150,45 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     if (r instanceof RateLimiterAdaptsToRenderTime) {
       ((RateLimiterAdaptsToRenderTime) r).setCanvas(canvas);
     }
+    
+    if(adaptByDroppingFace==null)
+      adaptByDroppingFace = new AdaptByDroppingFaceAndKeepingWireframe(chart);
+    if(adaptByDroppingFaceAndColoringWire==null)
+      adaptByDroppingFaceAndColoringWire = new AdaptByDroppingFaceAndKeepingWireframeWithColor(chart);
+    if(adaptByDroppingWireframe==null)
+      adaptByDroppingWireframe = new AdaptByDroppingWireframe(chart);
+    if(adaptByDroppingHiDPI==null)
+      adaptByDroppingHiDPI = new AdaptByDroppingHiDPI(chart);
   }
 
   // **************** START/STOP OPTIMISATION ***************** //
 
   protected void startOptimizations() {
     if (policy.optimizeByDroppingWireframeOnly)
-      startDroppingWireframeOnly(getChart());
-    if (policy.optimizeByDroppingFace)
-      startDroppingFace(getChart());
-    if (policy.optimizeByDroppingFaceAndColoringWireframe)
-      startDroppingFaceAndColoredWireframe(getChart());
+      adaptByDroppingWireframe.apply();
+    
+    if (policy.optimizeByDroppingFaceAndKeepingWireframe)
+      adaptByDroppingFace.apply();
+    
+    if (policy.optimizeByDroppingFaceAndKeepingWireframeWithColor)
+      adaptByDroppingFaceAndColoringWire.apply();
+    
     if (policy.optimizeByDroppingHiDPI)
-      startNoHiDPI(getChart());
+      adaptByDroppingHiDPI.apply();
   }
 
   protected void stopOptimizations() {
     if (policy.optimizeByDroppingWireframeOnly)
-      stopDroppingWireframeOnly();
-    if (policy.optimizeByDroppingFace)
-      stopDroppingFace();
-    if (policy.optimizeByDroppingFaceAndColoringWireframe)
-      stopDroppingFaceAndColoringWireframe();
+      adaptByDroppingWireframe.revert();
+    
+    if (policy.optimizeByDroppingFaceAndKeepingWireframe)
+      adaptByDroppingFace.revert();
+    
+    if (policy.optimizeByDroppingFaceAndKeepingWireframeWithColor)
+      adaptByDroppingFaceAndColoringWire.revert();
+
     if (policy.optimizeByDroppingHiDPI)
-      stopNoHiDPI(getChart()); // trigger a last rendering
+      adaptByDroppingHiDPI.revert();
   }
 
 
@@ -189,72 +207,6 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     // this force the GL image to apply the new HiDPI setting immediatly
     gl.updatePixelScale(((EmulGLCanvas) canvas).getGraphics());
     gl.applyViewport();
-  }
-
-  // KeepingWireframeOnly
-
-  protected void startDroppingWireframeOnly(Chart chart) {
-    Graph graph = chart.getScene().getGraph();
-    for (Drawable d : graph.getAll()) {
-      if (d instanceof Wireframeable) {
-        Wireframeable w = (Wireframeable) d;
-        if (w.getWireframeDisplayed()) {
-          droppedWireframeToReset.add(w);
-          w.setWireframeDisplayed(false);
-        }
-      }
-    }
-  }
-
-  protected void stopDroppingWireframeOnly() {
-    for (Wireframeable w : droppedWireframeToReset) {
-      w.setWireframeDisplayed(true);
-    }
-  }
-
-  // DroppingFace
-
-  protected void startDroppingFace(Chart chart) {
-    Graph graph = chart.getScene().getGraph();
-    for (Drawable d : graph.getAll()) {
-      if (d instanceof Wireframeable) {
-        Wireframeable w = (Wireframeable) d;
-        if (w.getFaceDisplayed()) {
-          droppedFaceToReset.add(w);
-          w.setFaceDisplayed(false);
-        }
-      }
-    }
-  }
-
-  protected void stopDroppingFace() {
-    for (Wireframeable w : droppedFaceToReset) {
-      w.setFaceDisplayed(true);
-      w.setWireframeColorFromPolygonPoints(false);
-    }
-  }
-
-  // DroppingFaceAndColoringWireframe
-
-  protected void startDroppingFaceAndColoredWireframe(Chart chart) {
-    Graph graph = chart.getScene().getGraph();
-    for (Drawable d : graph.getAll()) {
-      if (d instanceof Wireframeable) {
-        Wireframeable w = (Wireframeable) d;
-        if (w.getFaceDisplayed()) {
-          droppedFaceAndColoredWireframeToReset.add(w);
-          w.setFaceDisplayed(false);
-          w.setWireframeColorFromPolygonPoints(true);
-        }
-      }
-    }
-  }
-
-  protected void stopDroppingFaceAndColoringWireframe() {
-    for (Wireframeable w : droppedFaceAndColoredWireframeToReset) {
-      w.setFaceDisplayed(true);
-      w.setWireframeColorFromPolygonPoints(false);
-    }
   }
 
   // GET / SET

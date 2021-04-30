@@ -261,6 +261,10 @@ public class Coord2d implements Serializable {
     return mean;
   }
 
+  public static Coord2d interpolate(Coord2d a, Coord2d b, float weigthA) {
+    return addWeighted(a, b, weigthA, 1f - weigthA);
+  }
+
   /** Return a string representation of this coordinate. */
   @Override
   public String toString() {
