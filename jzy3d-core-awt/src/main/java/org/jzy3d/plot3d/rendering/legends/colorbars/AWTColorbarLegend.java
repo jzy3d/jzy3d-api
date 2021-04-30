@@ -7,7 +7,6 @@ import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
