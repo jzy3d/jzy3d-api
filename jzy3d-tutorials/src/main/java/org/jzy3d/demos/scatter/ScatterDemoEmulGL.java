@@ -13,7 +13,7 @@ public class ScatterDemoEmulGL {
   public static void main(String[] args) throws Exception {
     Quality q = Quality.Advanced();
     q.setAnimated(false);
-    q.setPreserveViewportSize(false); // need java 9+ to enable HiDPI & Retina displays
+    q.setHiDPIEnabled(true); // need java 9+ to enable HiDPI & Retina displays
 
     Chart chart = new EmulGLChartFactory().newChart(q);
     chart.add(scatter(500000));

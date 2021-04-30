@@ -207,6 +207,8 @@ public class Camera extends AbstractViewportManager {
   /**
    * Returns true if the camera is 'looking up', in other word if the eye's Z value is inferior to
    * the target's Z value.
+   * 
+   * @see {@link #side(Coord3d)}
    */
   public boolean isTiltUp() {
     return eye.z < target.z;

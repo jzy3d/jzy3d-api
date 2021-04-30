@@ -19,11 +19,11 @@ public class ITTestScatterChart {
 
     // When
     EmulGLChartFactory factory = new EmulGLChartFactory();
-    Chart chart = factory.newChart(Quality.Advanced());
+    Chart chart = factory.newChart(Quality.Advanced().setHiDPIEnabled(false));
 
     EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
     c.setProfileDisplayMethod(false);
-    c.getGL().setAutoAdaptToHiDPI(false);
+    //c.getGL().setAutoAdaptToHiDPI(false);
 
     chart.add(scatter());
 
