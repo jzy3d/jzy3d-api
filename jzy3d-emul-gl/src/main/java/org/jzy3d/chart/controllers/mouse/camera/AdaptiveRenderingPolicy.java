@@ -12,6 +12,7 @@ import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
  * @author Martin Pernollet
  */
 public class AdaptiveRenderingPolicy {
+  protected static final boolean DEFAULT = false;
   /**
    * the rate limiter will ensure the canvas do not look frozen when too much mouse events. It may
    * do it in an adaptive manner (e.g. when using {@link RateLimiterAdaptsToRenderTime}. 
@@ -35,7 +36,7 @@ public class AdaptiveRenderingPolicy {
    * 
    * Defaults to false
    */
-  public boolean optimizeByDroppingWireframeOnly = false;
+  public boolean optimizeByDroppingWireframeOnly = DEFAULT;
   
   /**
    * If true, the polygon face will be desactivated and wireframe will be colored according to face colors
@@ -43,20 +44,20 @@ public class AdaptiveRenderingPolicy {
    * 
    * Defaults to false
    */
-  public boolean optimizeByDroppingFaceAndKeepingWireframeWithColor = false;
+  public boolean optimizeByDroppingFaceAndKeepingWireframeWithColor = DEFAULT;
   
 
   /**
    * If true, the polygon face will be desactivated between mouse pressed and mouse release.
    * 
-   * Defaults to true
+   * Defaults to false
    */
-  public boolean optimizeByDroppingFaceAndKeepingWireframe = true;
+  public boolean optimizeByDroppingFaceAndKeepingWireframe = DEFAULT;
   
   /**
    * If true, HiDPI will be desactivated between mouse pressed and mouse release.
    * 
    * Defaults to false
    */
-  public boolean optimizeByDroppingHiDPI = false;
+  public boolean optimizeByDroppingHiDPI = DEFAULT;
 }
