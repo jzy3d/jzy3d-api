@@ -136,6 +136,8 @@ public class View {
   private ISquarifier squarifier;
 
   protected IViewOverlay viewOverlay;
+  
+  protected Coord2d pixelScale;
 
   /**
    * Create a view attached to a Scene, with its own Camera and Axe. The initial view point is set
@@ -191,6 +193,8 @@ public class View {
     this.scene.getGraph().getStrategy().setView(this);
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
+    
+    this.pixelScale = new Coord2d();
 
     
     //applyHiDPIToFonts(quality.isHiDPIEnabled()?HiDPI.ON:HiDPI.OFF);
@@ -211,24 +215,30 @@ public class View {
     canvas.addCanvasListener(new ICanvasListener() {
       @Override
       public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        pixelScale.x = (float)pixelScaleX;
+        pixelScale.y = (float)pixelScaleY;
+        
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
         } else {
           hidpi = HiDPI.ON;
         }
 
-        applyHiDPIToFonts(hidpi);
+        getAxis().getLayout().applyFontSizePolicy();
       }
 
     });
   }
   
-  protected void applyHiDPIToFonts(HiDPI hidpi) {
-    Font font = axis.getLayout().getFont(hidpi);
-    axis.getLayout().setFont(font);
+  /**
+   * Return a copy of the currently known pixel scale as notified by the canvas.
+   * 
+   * If the View received no pixel scale change event, the pixel scale will be 0.
+   */
+  public Coord2d getPixelScale() {
+    return pixelScale.clone();
   }
-
-
+  
 
   /**
    * Return HiDPI status as ACTUALLY possible by the ICanvas on the current screen and computer,

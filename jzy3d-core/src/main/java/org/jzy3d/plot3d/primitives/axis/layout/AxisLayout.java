@@ -2,6 +2,8 @@ package org.jzy3d.plot3d.primitives.axis.layout;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
+import org.jzy3d.plot3d.primitives.axis.layout.fonts.IFontSizePolicy;
+import org.jzy3d.plot3d.primitives.axis.layout.fonts.StaticFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.SmartTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
@@ -12,11 +14,9 @@ import org.jzy3d.plot3d.rendering.view.HiDPI;
 public class AxisLayout implements IAxisLayout {
   protected boolean tickLineDisplayed = true;
 
+  protected IFontSizePolicy fontSizePolicy = new StaticFontSizePolicy();
 
   protected Font font = FONT_DEFAULT;
-  protected Font fontNoHiDPI = Font.Helvetica_12;
-  protected Font fontHiDPI = Font.Helvetica_18;
-
   
   protected Font fontMajorHiDPI = Font.Helvetica_18;
   protected Font fontMinorHiDPI = Font.Helvetica_12;
@@ -101,7 +101,24 @@ public class AxisLayout implements IAxisLayout {
 
     setZAxisSide(ZAxisSide.LEFT);
   }
+  
+  @Override
+  public IFontSizePolicy getFontSizePolicy() {
+    return fontSizePolicy;
+  }
 
+  @Override
+  public void setFontSizePolicy(IFontSizePolicy fontSizePolicy) {
+    this.fontSizePolicy = fontSizePolicy;
+  }
+
+  @Override
+  public void applyFontSizePolicy() {
+    if(fontSizePolicy!=null) {
+      fontSizePolicy.apply(this);
+    }
+  }
+  
   @Override
   public void setMainColor(Color color) {
     mainColor = color;
@@ -473,25 +490,6 @@ public class AxisLayout implements IAxisLayout {
       } else if (HiDPI.OFF.equals(hidpi)) {
         fontMinorNoHiDPI = font;
       }
-    }
-  }
-
-  @Override
-  public Font getFont(HiDPI hidpi) {
-    if (HiDPI.ON.equals(hidpi)) {
-      return fontHiDPI;
-    } else if (HiDPI.OFF.equals(hidpi)) {
-      return fontNoHiDPI;
-    }
-    return font;
-  }
-
-  @Override
-  public void setFont(Font font, HiDPI hidpi) {
-    if (HiDPI.ON.equals(hidpi)) {
-      fontHiDPI = font;
-    } else if (HiDPI.OFF.equals(hidpi)) {
-      fontNoHiDPI = font;
     }
   }
 
