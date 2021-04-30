@@ -47,6 +47,7 @@ public class AxisBox implements IAxis {
       setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
     wholeBounds = new BoundingBox3d();
     textRenderer = new TextBitmapRenderer();
+    rotateLabel = new AxisLabelRotator();
     init();
   }
 
@@ -369,7 +370,7 @@ public class AxisBox implements IAxis {
         rotation *= -1;
       }
     } else if (LabelOrientation.PARALLEL_TO_AXIS.equals(orientation)) {
-      rotation = computeAxisSegmentRotation2D(painter, axisSegment);
+      rotation = rotateLabel.computeSegmentRotation2D(painter, axisSegment);
     }
 
     drawAxisLabel(painter, direction, color, ticksTxtBounds, labelPosition, axeLabel, rotation);
@@ -377,86 +378,7 @@ public class AxisBox implements IAxis {
     return ticksTxtBounds;
   }
 
-  /**
-   * Compute the 2D orientation (rotation) of an axis made of 2 3D points. The 2D orientation is
-   * processed according to the viewpoint on this segment.
-   * 
-   * <img src="doc-files/AxisBox-Label.png">
-   * 
-   * <ul>
-   * <li>segment[0] : 3D world coordinates of the starting point of the axis segment.
-   * <li>segment[1] : 3D world coordinates of the ending point of the axis segment.
-   * </ul>
-   * 
-   * @return
-   */
-  protected float computeAxisSegmentRotation2D(IPainter painter, Coord3d[] axisSegment) {
-    Coord3d[] axs = painter.getCamera().modelToScreen(painter, axisSegment);
-    return computeAxisSegmentRotation(axs[0], axs[1]);
-  }
-
-  /**
-   * Compute the 2D orientation (rotation) of an axis as it is currently displayed to screen (which
-   * may change according to camera viewpoint)
-   * 
-   * <img src="doc-files/AxisBox-Label.png">
-   * 
-   * @param p1 2D screen coordinates of the starting point of the axis segment.
-   * @param p2 2D screen coordinates of the ending point of the axis segment.
-   * 
-   *        NB : the third dimension of the screen coordinates is the depth of the point compared to
-   *        camera. This may be usefull for guessing the direction of the axis : going toward or
-   *        away from the viewer according to point order.
-   * 
-   * @return rotation in radian
-   */
-  protected float computeAxisSegmentRotation(Coord3d p1, Coord3d p2) {
-    float rotation = 0;
-
-    boolean sameX = p1.x == p2.x;
-    boolean sameY = p1.y == p2.y;
-
-    // case of oblique 2D segment
-    if (!sameX && !sameY) {
-      Coord2d squareAngle = new Coord2d(p2.x, p1.y);
-      Angle2d angle = new Angle2d(squareAngle.x, squareAngle.y, p1.x, p1.y, p2.x, p2.y);
-
-      // points are from left to right
-      if (p1.x < p2.x) {
-        // points are from bottom to top
-        // like the x/y axis when it is on the right and view on top
-        if (p1.y < p2.y) {
-          rotation = -angle.angle();
-        }
-        // points are from top to bottom
-        // like the x/y axis when it is on the left and view on top
-        else {
-          rotation = angle.angle();
-        }
-      }
-      // point are from right to left
-      else {
-        // points are from bottom to top
-        if (p1.y < p2.y) {
-          rotation = angle.angle(); // flip this
-        }
-        // points are from top to bottom
-        else {
-          rotation = -angle.angle(); // flip this
-        }
-      }
-    }
-    // case of 2D vertical segment
-    else if (sameX && !sameY) {
-      // do nothing
-      rotation = (float) -Math.PI / 2;
-    }
-    // case of 2D horizontal segment
-    else if (!sameX && sameY) {
-      rotation = 0;
-    }
-    return rotation;
-  }
+  
 
   protected void drawAxisLabel(IPainter painter, int direction, Color color,
       BoundingBox3d ticksTxtBounds, Coord3d labelPosition, String axeLabel, float rotation) {
@@ -1231,6 +1153,7 @@ public class AxisBox implements IAxis {
 
   // use this text renderer to get occupied volume by text
   protected ITextRenderer textRenderer;
+  protected AxisLabelRotator rotateLabel;
 
   protected IAxisLayout layout;
 
