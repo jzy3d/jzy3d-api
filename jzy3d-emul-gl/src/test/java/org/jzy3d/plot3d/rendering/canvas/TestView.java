@@ -15,6 +15,7 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPITwoFontSizesPolicy;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 
@@ -36,10 +37,10 @@ public class TestView {
     Font font_NoHiDPI = new Font("font_NoHiDPI", 10);
     Font font_HiDPI = new Font("font_HiDPI", 20);
     
-    chart.getAxisLayout().setFont(font_Default);
-    chart.getAxisLayout().setFont(font_NoHiDPI, HiDPI.OFF);
-    chart.getAxisLayout().setFont(font_HiDPI, HiDPI.ON);
-    
+    HiDPITwoFontSizesPolicy fontSizePolicy = new HiDPITwoFontSizesPolicy(chart.getView());
+    fontSizePolicy.setFontHiDPI(font_HiDPI);
+    fontSizePolicy.setFontNoHiDPI(font_NoHiDPI);
+    chart.getAxisLayout().setFontSizePolicy(fontSizePolicy);
     
     // When
     canvas.firePixelScaleChanged(2, 2); // trigger update of axis font size and default font size
