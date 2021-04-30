@@ -6,8 +6,10 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 
 /**
- * An helper class to 
- * @author martin
+ * An helper class to process the orientation of text according to a driving axis defined by 2 3D or
+ * 2D points (already resulting from a screen projection).
+ * 
+ * @author Martin Pernollet
  *
  */
 public class AxisLabelRotator {
