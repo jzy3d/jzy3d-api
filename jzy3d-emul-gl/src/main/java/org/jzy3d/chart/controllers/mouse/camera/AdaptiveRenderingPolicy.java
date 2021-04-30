@@ -1,4 +1,7 @@
-package org.jzy3d.chart.controllers;
+package org.jzy3d.chart.controllers.mouse.camera;
+
+import org.jzy3d.chart.controllers.RateLimiter;
+import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
 
 /**
  * A collection of settings to allow a controller to adapt rendering quality in order to
@@ -35,11 +38,12 @@ public class AdaptiveRenderingPolicy {
   public boolean optimizeByDroppingWireframeOnly = false;
   
   /**
-   * If true, the polygon face will be desactivated between mouse pressed and mouse release.
+   * If true, the polygon face will be desactivated and wireframe will be colored according to face colors
+   * between mouse pressed and mouse release.
    * 
-   * Defaults to true
+   * Defaults to false
    */
-  public boolean optimizeByDroppingFaceAndColoringWireframe = false;
+  public boolean optimizeByDroppingFaceAndKeepingWireframeWithColor = false;
   
 
   /**
@@ -47,7 +51,7 @@ public class AdaptiveRenderingPolicy {
    * 
    * Defaults to true
    */
-  public boolean optimizeByDroppingFace = true;
+  public boolean optimizeByDroppingFaceAndKeepingWireframe = true;
   
   /**
    * If true, HiDPI will be desactivated between mouse pressed and mouse release.

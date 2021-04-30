@@ -1,4 +1,4 @@
-package org.jzy3d.chart.controllers;
+package org.jzy3d.chart.controllers.mouse.camera;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
@@ -6,8 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLSkin;
+import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.chart.factories.EmulGLPainterFactory;
 import org.jzy3d.colors.Color;
@@ -151,6 +151,89 @@ public class TestAdaptiveMouseController {
     Assert.assertFalse(mouse.mustOptimizeMouseDrag);
     Assert.assertEquals(allowHiDPI, canvas.getGL().isAutoAdaptToHiDPI());
   }
+  
+  
+  @Test
+  public void givenWireframeOff_whenOptimizeByDroppingFace_thenDrawableHaveWireframeHidden() {
+    MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
+    Chart chart = mockChartWithAdaptiveMouse(false, true, mockRenderingPerf);
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    AdaptiveMouseController mouse = skin.getMouse();
+    EmulGLCanvas canvas = skin.getCanvas();
+
+    
+    // -------------------------------------
+    // Given
+
+    boolean WIREFRAME_STATUS_BEFORE_OPTIM = false;
+    
+    Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
+    surface.setWireframeDisplayed(WIREFRAME_STATUS_BEFORE_OPTIM);
+    
+    mouse.getPolicy().optimizeByDroppingFaceAndKeepingWireframe = true;
+
+    
+    // -------------------------------------
+    // When : slow rendering on a mouse drag sequence
+    
+    mockRenderingPerf.value = 1000;
+
+    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+
+    Assert.assertTrue("Wireframe enabled during drag", surface.getWireframeDisplayed());
+    Assert.assertFalse("Face hidden during drag", surface.getFaceDisplayed());
+
+    
+    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    
+    // -------------------------------------
+    // Then the wireframe status is back to original value
+
+    Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.getWireframeDisplayed());
+
+  }
+  
+  @Test
+  public void givenWireframeOn_whenOptimizeByDroppingFace_thenDrawableHaveWireframeDisplayed() {
+    MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
+    Chart chart = mockChartWithAdaptiveMouse(false, true, mockRenderingPerf);
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    AdaptiveMouseController mouse = skin.getMouse();
+    EmulGLCanvas canvas = skin.getCanvas();
+
+    
+    // -------------------------------------
+    // Given
+
+    boolean WIREFRAME_STATUS_BEFORE_OPTIM = true;
+    
+    Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
+    surface.setWireframeDisplayed(WIREFRAME_STATUS_BEFORE_OPTIM);
+    
+    mouse.getPolicy().optimizeByDroppingFaceAndKeepingWireframe = true;
+
+    
+    // -------------------------------------
+    // When : slow rendering on a mouse drag sequence
+    
+    mockRenderingPerf.value = 1000;
+
+    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+
+    Assert.assertTrue("Wireframe enabled during drag", surface.getWireframeDisplayed());
+    Assert.assertFalse("Face hidden during drag", surface.getFaceDisplayed());
+
+    
+    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    
+    // -------------------------------------
+    // Then the wireframe status is back to original value
+
+    Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.getWireframeDisplayed());
+
+  }
 
   // --------------------------------------------------------------------------------- //
   // --------------------------------------------------------------------------------- //
@@ -185,7 +268,7 @@ public class TestAdaptiveMouseController {
         policy.optimizeForRenderingTimeLargerThan = 100;// ms
         policy.optimizeByDroppingHiDPI = true;
         policy.optimizeByDroppingWireframeOnly = false;
-        policy.optimizeByDroppingFaceAndColoringWireframe = false;
+        policy.optimizeByDroppingFaceAndKeepingWireframeWithColor = false;
 
         return new AdaptiveMouseController(chart, policy) {
           
