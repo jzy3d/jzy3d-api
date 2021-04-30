@@ -61,14 +61,10 @@ policy.renderingRateLimiter = new RateLimiterAdaptsToRenderTime();
 // This is the rendering time above which dynamic optimizer will trigger according to options
 policy.optimizeForRenderingTimeLargerThan = 100;//ms
 // If optimizer active, allow -or not- to disable faces of the surface polygons and only draw wireframe colored with face edge colors. Very good looking, fast rendering. Keep default value
-policy.optimizeWithFace = true;
-// If optimizer active, allow -or not- to disable HiDPI (2D items such as colorbars and overlay may "bump"). Not satisfying visually so just keep default value
-policy.optimizeWithHiDPI = false;
-// If optimizer active, allow -or not- to disable wireframe of surface to be displayed. Not impacting performance so just keep default value
-policy.optimizeWithWireframe = false;
+policy.optimizeByDroppingFaceAndKeepingWireframeWithColor = true;
 
 // Apply this policy (or your override of this policy) to the adaptive mouse controller
-AdaptiveMouseController mouse = (AdaptiveMouseController)chart.addMouseCameraController();
+AdaptiveMouseController mouse = (AdaptiveMouseController)chart.getMouse();
 mouse.setPolicy(policy);
 ```
 

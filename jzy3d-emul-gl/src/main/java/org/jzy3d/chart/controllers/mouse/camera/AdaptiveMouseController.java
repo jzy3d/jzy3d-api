@@ -174,7 +174,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
       adaptByDroppingFaceAndColoringWire.apply();
     
     if (policy.optimizeByDroppingHiDPI)
-      adaptByDroppingHiDPI.apply();//startNoHiDPI(getChart());
+      adaptByDroppingHiDPI.apply();
   }
 
   protected void stopOptimizations() {
@@ -188,7 +188,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
       adaptByDroppingFaceAndColoringWire.revert();
 
     if (policy.optimizeByDroppingHiDPI)
-      adaptByDroppingHiDPI.revert();//stopNoHiDPI(getChart()); // trigger a last rendering
+      adaptByDroppingHiDPI.revert();
   }
 
 
