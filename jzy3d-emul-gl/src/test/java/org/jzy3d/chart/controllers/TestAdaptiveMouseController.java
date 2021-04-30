@@ -213,8 +213,8 @@ public class TestAdaptiveMouseController {
 
     Chart chart = factory.newChart(q);
     chart.getAxisLayout().setZAxisSide(ZAxisSide.LEFT);
-    chart.add(surface());
-    surface.setLegend(new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout()));
+    chart.add(surface);
+    surface.setLegend(new AWTColorbarLegend(surface, chart));
 
     // --------------------------------------------------------
     // Enable visible profiling
