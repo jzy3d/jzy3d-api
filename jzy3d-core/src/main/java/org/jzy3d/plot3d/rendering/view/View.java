@@ -221,6 +221,8 @@ public class View {
         } else {
           hidpi = HiDPI.ON;
         }
+        
+        axis.getLayout().applyFontSizePolicy();
       }
     });
   }
