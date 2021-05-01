@@ -3,8 +3,11 @@ package org.jzy3d.painters;
 import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -191,6 +194,15 @@ public interface IPainter {
   public double[] getModelViewAsDouble();
 
   public float[] getModelViewAsFloat();
+  
+  public Coord3d screenToModel(Coord3d screen);
+  public Coord3d modelToScreen(Coord3d point);
+  public Coord3d[] modelToScreen(Coord3d[] points);
+  public Coord3d[][] modelToScreen(Coord3d[][] points);
+  public List<Coord3d> modelToScreen(List<Coord3d> points);
+  public ArrayList<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons);
+  public PolygonArray modelToScreen(PolygonArray polygon);
+  public PolygonArray[][] modelToScreen(PolygonArray[][] polygons);
 
   // ----------------------------
 

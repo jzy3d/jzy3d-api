@@ -17,7 +17,7 @@ public class AxisLayout implements IAxisLayout {
   protected IFontSizePolicy fontSizePolicy = new StaticFontSizePolicy();
 
   protected Font font = FONT_DEFAULT;
-  
+
   protected Font fontMajorHiDPI = Font.Helvetica_18;
   protected Font fontMinorHiDPI = Font.Helvetica_12;
   protected Font fontMajorNoHiDPI = Font.Helvetica_12;
@@ -70,9 +70,10 @@ public class AxisLayout implements IAxisLayout {
   protected Color mainColor;
 
   protected ZAxisSide zAxisSide = ZAxisSide.RIGHT;
-  
 
+  protected boolean axisLabelOffsetAuto = false;
 
+  protected int axisLabelOffsetMargin = 0;
 
   /** Default AxeBox layout */
   public AxisLayout() {
@@ -101,24 +102,9 @@ public class AxisLayout implements IAxisLayout {
 
     setZAxisSide(ZAxisSide.LEFT);
   }
-  
-  @Override
-  public IFontSizePolicy getFontSizePolicy() {
-    return fontSizePolicy;
-  }
 
-  @Override
-  public void setFontSizePolicy(IFontSizePolicy fontSizePolicy) {
-    this.fontSizePolicy = fontSizePolicy;
-  }
-
-  @Override
-  public void applyFontSizePolicy() {
-    if(fontSizePolicy!=null) {
-      fontSizePolicy.apply(this);
-    }
-  }
   
+
   @Override
   public void setMainColor(Color color) {
     mainColor = color;
@@ -133,6 +119,9 @@ public class AxisLayout implements IAxisLayout {
   public Color getMainColor() {
     return mainColor;
   }
+  
+  // ********************* TICKS PROPERTIES ************************ //
+
 
   @Override
   public double[] getXTicks(double min, double max) {
@@ -156,36 +145,6 @@ public class AxisLayout implements IAxisLayout {
     lastZmax = max;
     zTicks = zTickProvider.generateTicks(min, max);
     return zTicks;
-  }
-
-  @Override
-  public String getXAxisLabel() {
-    return xAxeLabel;
-  }
-
-  @Override
-  public void setXAxisLabel(String axeLabel) {
-    xAxeLabel = axeLabel;
-  }
-
-  @Override
-  public String getYAxisLabel() {
-    return yAxeLabel;
-  }
-
-  @Override
-  public void setYAxisLabel(String axeLabel) {
-    yAxeLabel = axeLabel;
-  }
-
-  @Override
-  public String getZAxisLabel() {
-    return zAxeLabel;
-  }
-
-  @Override
-  public void setZAxisLabel(String axeLabel) {
-    zAxeLabel = axeLabel;
   }
 
   @Override
@@ -272,6 +231,8 @@ public class AxisLayout implements IAxisLayout {
     zTickRenderer = tickRenderer;
   }
 
+  // TICK COLORS 
+  
   @Override
   public Color getXTickColor() {
     return xTickColor;
@@ -301,67 +262,9 @@ public class AxisLayout implements IAxisLayout {
   public void setZTickColor(Color tickColor) {
     zTickColor = tickColor;
   }
-
-  @Override
-  public boolean isFaceDisplayed() {
-    return faceDisplayed;
-  }
-
-  @Override
-  public void setFaceDisplayed(boolean faceDisplayed) {
-    this.faceDisplayed = faceDisplayed;
-  }
-
-  @Override
-  public Color getQuadColor() {
-    return quadColor;
-  }
-
-  @Override
-  public void setQuadColor(Color quadColor) {
-    this.quadColor = quadColor;
-  }
-
-  @Override
-  public Color getGridColor() {
-    return gridColor;
-  }
-
-  @Override
-  public void setGridColor(Color gridColor) {
-    this.gridColor = gridColor;
-  }
-
-  @Override
-  public boolean isXAxeLabelDisplayed() {
-    return xAxeLabelDisplayed;
-  }
-
-  @Override
-  public void setXAxeLabelDisplayed(boolean axeLabelDisplayed) {
-    xAxeLabelDisplayed = axeLabelDisplayed;
-  }
-
-  @Override
-  public boolean isYAxeLabelDisplayed() {
-    return yAxeLabelDisplayed;
-  }
-
-  @Override
-  public void setYAxeLabelDisplayed(boolean axeLabelDisplayed) {
-    yAxeLabelDisplayed = axeLabelDisplayed;
-  }
-
-  @Override
-  public boolean isZAxeLabelDisplayed() {
-    return zAxeLabelDisplayed;
-  }
-
-  @Override
-  public void setZAxeLabelDisplayed(boolean axeLabelDisplayed) {
-    zAxeLabelDisplayed = axeLabelDisplayed;
-  }
-
+  
+  // TICK LABELS
+  
   @Override
   public boolean isXTickLabelDisplayed() {
     return xTickLabelDisplayed;
@@ -411,6 +314,124 @@ public class AxisLayout implements IAxisLayout {
     this.tickLineDisplayed = tickLineDisplayed;
   }
 
+  // ********************* AXIS LABELS ************************ //
+
+  @Override
+  public boolean isAxisLabelOffsetAuto() {
+    return axisLabelOffsetAuto;
+  }
+
+  /**
+   * When enabled, the axis will have the X, Y and Z axis label shifted to avoid covering the tick
+   * labels.
+   */
+  @Override
+  public void setAxisLabelOffsetAuto(boolean isAuto) {
+    this.axisLabelOffsetAuto = isAuto;
+  }
+  
+  public int getAxisLabelOffsetMargin() {
+    return axisLabelOffsetMargin;
+  }
+  /**
+   * When {@link #setAxisLabelOffsetAuto(true)}, use this margin
+   * to define the horizontal margin to let between the ticks and the axis labels
+   */
+  public void setAxisLabelOffsetMargin(int margin) {
+    this.axisLabelOffsetMargin = margin;
+  }
+
+
+  @Override
+  public String getXAxisLabel() {
+    return xAxeLabel;
+  }
+
+  @Override
+  public void setXAxisLabel(String axeLabel) {
+    xAxeLabel = axeLabel;
+  }
+
+  @Override
+  public String getYAxisLabel() {
+    return yAxeLabel;
+  }
+
+  @Override
+  public void setYAxisLabel(String axeLabel) {
+    yAxeLabel = axeLabel;
+  }
+
+  @Override
+  public String getZAxisLabel() {
+    return zAxeLabel;
+  }
+
+  @Override
+  public void setZAxisLabel(String axeLabel) {
+    zAxeLabel = axeLabel;
+  }
+  
+  @Override
+  public boolean isXAxeLabelDisplayed() {
+    return xAxeLabelDisplayed;
+  }
+
+  @Override
+  public void setXAxeLabelDisplayed(boolean axeLabelDisplayed) {
+    xAxeLabelDisplayed = axeLabelDisplayed;
+  }
+
+  @Override
+  public boolean isYAxeLabelDisplayed() {
+    return yAxeLabelDisplayed;
+  }
+
+  @Override
+  public void setYAxeLabelDisplayed(boolean axeLabelDisplayed) {
+    yAxeLabelDisplayed = axeLabelDisplayed;
+  }
+
+  @Override
+  public boolean isZAxeLabelDisplayed() {
+    return zAxeLabelDisplayed;
+  }
+
+  @Override
+  public void setZAxeLabelDisplayed(boolean axeLabelDisplayed) {
+    zAxeLabelDisplayed = axeLabelDisplayed;
+  }
+  
+  @Override
+  public LabelOrientation getXAxisLabelOrientation() {
+    return xAxisLabelOrientation;
+  }
+
+  @Override
+  public void setXAxisLabelOrientation(LabelOrientation xAxisLabelOrientation) {
+    this.xAxisLabelOrientation = xAxisLabelOrientation;
+  }
+
+  @Override
+  public LabelOrientation getYAxisLabelOrientation() {
+    return yAxisLabelOrientation;
+  }
+
+  @Override
+  public void setYAxisLabelOrientation(LabelOrientation yAxisLabelOrientation) {
+    this.yAxisLabelOrientation = yAxisLabelOrientation;
+  }
+
+  @Override
+  public LabelOrientation getZAxisLabelOrientation() {
+    return zAxisLabelOrientation;
+  }
+
+  @Override
+  public void setZAxisLabelOrientation(LabelOrientation zAxisLabelOrientation) {
+    this.zAxisLabelOrientation = zAxisLabelOrientation;
+  }
+  
   @Override
   public ZAxisSide getZAxisSide() {
     return zAxisSide;
@@ -422,6 +443,60 @@ public class AxisLayout implements IAxisLayout {
   }
 
 
+  // ********************************************* //
+
+
+  @Override
+  public boolean isFaceDisplayed() {
+    return faceDisplayed;
+  }
+
+  @Override
+  public void setFaceDisplayed(boolean faceDisplayed) {
+    this.faceDisplayed = faceDisplayed;
+  }
+
+  @Override
+  public Color getQuadColor() {
+    return quadColor;
+  }
+
+  @Override
+  public void setQuadColor(Color quadColor) {
+    this.quadColor = quadColor;
+  }
+
+  @Override
+  public Color getGridColor() {
+    return gridColor;
+  }
+
+  @Override
+  public void setGridColor(Color gridColor) {
+    this.gridColor = gridColor;
+  }
+
+  
+
+  // ************************* FONT *********************** //
+
+  @Override
+  public IFontSizePolicy getFontSizePolicy() {
+    return fontSizePolicy;
+  }
+
+  @Override
+  public void setFontSizePolicy(IFontSizePolicy fontSizePolicy) {
+    this.fontSizePolicy = fontSizePolicy;
+  }
+
+  @Override
+  public void applyFontSizePolicy() {
+    if (fontSizePolicy != null) {
+      fontSizePolicy.apply(this);
+    }
+  }
+  
   @Override
   public Font getFont() {
     return font;
@@ -464,8 +539,7 @@ public class AxisLayout implements IAxisLayout {
     return null;
     // return font;
   }
-  
-  
+
 
 
   /**
@@ -492,36 +566,4 @@ public class AxisLayout implements IAxisLayout {
       }
     }
   }
-
-  @Override
-  public LabelOrientation getXAxisLabelOrientation() {
-    return xAxisLabelOrientation;
-  }
-
-  @Override
-  public void setXAxisLabelOrientation(LabelOrientation xAxisLabelOrientation) {
-    this.xAxisLabelOrientation = xAxisLabelOrientation;
-  }
-
-  @Override
-  public LabelOrientation getYAxisLabelOrientation() {
-    return yAxisLabelOrientation;
-  }
-
-  @Override
-  public void setYAxisLabelOrientation(LabelOrientation yAxisLabelOrientation) {
-    this.yAxisLabelOrientation = yAxisLabelOrientation;
-  }
-
-  @Override
-  public LabelOrientation getzAxisLabelOrientation() {
-    return zAxisLabelOrientation;
-  }
-
-  @Override
-  public void setZAxisLabelOrientation(LabelOrientation zAxisLabelOrientation) {
-    this.zAxisLabelOrientation = zAxisLabelOrientation;
-  }
-  
-  
 }
