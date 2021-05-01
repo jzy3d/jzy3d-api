@@ -4,6 +4,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox.AxisRenderingInfo;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
@@ -23,7 +24,9 @@ public class AxisLabelProcessor {
   }
 
   /**
-   * Compute the offset to apply to a vertical Z label to avoid covering the tick labels
+   * Compute the offset to apply to a vertical Z label to avoid covering the tick labels.
+   * 
+   * Retrieve pixel scale in view to adapt margin
    * 
    * @param painter
    * @param info
@@ -44,15 +47,16 @@ public class AxisLabelProcessor {
     for (int i = 0; i < info.tickValues.length; i++) {
       
       Coord3d t2d = painter.modelToScreen(info.tickLabelPositions[i]);
-      int stringWidth = (int)(painter.getTextLengthInPixels(layout.getFont(), info.tickLabels[i]));//* pixelScale.x
+      int tickLabelWidth = (int)(painter.getTextLengthInPixels(layout.getFont(), info.tickLabels[i]));//* pixelScale.x
       
-      
+      //System.out.println(pixelScale);
       if(ZAxisSide.LEFT.equals(layout.getZAxisSide())) {
-        labelBorderX = t2d.x - stringWidth - fontHeight/2 - margin* pixelScale.x; 
+        labelBorderX = t2d.x - tickLabelWidth - fontHeight/2 - margin * pixelScale.x; 
         // (text is layout at center, so divide by half font height
+        
       }
       else if(ZAxisSide.RIGHT.equals(layout.getZAxisSide())) {
-        labelBorderX = t2d.x + stringWidth + fontHeight/2 - margin* pixelScale.x;
+        labelBorderX = t2d.x + tickLabelWidth + fontHeight/2 - margin * pixelScale.x;
       }
 
     }
@@ -83,16 +87,18 @@ public class AxisLabelProcessor {
   protected Coord2d axisLabelOffset(IPainter painter, AxisRenderingInfo info,
       Coord3d labelPosition, int margin) {
     
+    Coord2d pixelScale = painter.getView().getPixelScale();
+
     // 2D label position
     Coord3d label2D = painter.modelToScreen(labelPosition);
     int fontHeight = layout.getFont().getHeight();
     
     // Compute longest tick label in pixels
-    int maxStringWidth = 0;
+    int maxTickLabelWidth = 0;
     for (int i = 0; i < info.tickValues.length; i++) {
-      int stringWidth = painter.getTextLengthInPixels(layout.getFont(), info.tickLabels[i]);
-      if(stringWidth>maxStringWidth) {
-        maxStringWidth = stringWidth;
+      int tickLabelWidth = painter.getTextLengthInPixels(layout.getFont(), info.tickLabels[i]);
+      if(tickLabelWidth>maxTickLabelWidth) {
+        maxTickLabelWidth = tickLabelWidth;
       }
     }
 
@@ -105,14 +111,20 @@ public class AxisLabelProcessor {
     float labelBorderX = 0;
 
     if(painter.getCamera().side(labelPosition)) { // left side offset
-      labelBorderX = tick2D.x - maxStringWidth - fontHeight/2 - margin; 
+      labelBorderX = tick2D.x - maxTickLabelWidth - fontHeight/2 - margin  * pixelScale.x; 
       // (text is layout at center, so divide by half font height
+      
+      // TODO : consider TEXT ROTATION to guess correct max width
+      
       if(label2D.x > labelBorderX) {
         offset2D.x = labelBorderX - label2D.x;          
       }
     }
     else  { // right side offset
-      labelBorderX = tick2D.x + maxStringWidth + fontHeight/2 - margin;
+      labelBorderX = tick2D.x + maxTickLabelWidth + fontHeight/2 + margin  * pixelScale.x;
+
+      // TODO : consider TEXT ROTATION to guess correct max width
+
       if(label2D.x < labelBorderX) {
         offset2D.x = labelBorderX - label2D.x;          
       }

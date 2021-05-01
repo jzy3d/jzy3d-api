@@ -18,6 +18,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
@@ -57,16 +58,6 @@ public class View {
 
   protected static Logger LOGGER = Logger.getLogger(View.class);
 
-  /**
-   * force to have all object maintained in screen, meaning axebox won't always keep the same size.
-   */
-  protected boolean MAINTAIN_ALL_OBJECTS_IN_VIEW = false;
-
-  /**
-   * display a magenta parallelepiped around the "whole bounds" of the axis (box + labels) for
-   * debugging purpose.
-   */
-  protected boolean DISPLAY_AXE_WHOLE_BOUNDS = false;
 
   // view setting
   protected CameraMode cameraMode;
@@ -77,6 +68,16 @@ public class View {
   protected boolean squared = true;
   protected float cameraRenderingSphereRadiusFactor = 1f;
   protected float cameraRenderingSphereRadiusFactorOnTop = 0.25f;
+  /**
+   * force to have all object maintained in screen, meaning axebox won't always keep the same size.
+   */
+  protected boolean maintainAllObjectsInView = false;
+  /**
+   * display a magenta parallelepiped around the "whole bounds" of the axis (box + labels) for
+   * debugging purpose.
+   */
+  protected boolean displayAxisWholeBounds = false;
+
 
   // view objects
   protected Camera cam;
@@ -101,6 +102,7 @@ public class View {
   // view states
   protected boolean first = true;
   protected HiDPI hidpi = HiDPI.OFF;
+  protected Coord2d pixelScale;
 
   // constants
   public static final float PI_div2 = (float) Math.PI / 2;
@@ -136,8 +138,6 @@ public class View {
   private ISquarifier squarifier;
 
   protected IViewOverlay viewOverlay;
-  
-  protected Coord2d pixelScale;
 
   /**
    * Create a view attached to a Scene, with its own Camera and Axe. The initial view point is set
@@ -193,43 +193,38 @@ public class View {
     this.scene.getGraph().getStrategy().setView(this);
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
-    
+
     this.pixelScale = new Coord2d();
 
-    
-    //applyHiDPIToFonts(quality.isHiDPIEnabled()?HiDPI.ON:HiDPI.OFF);
-
+    // applyHiDPIToFonts(quality.isHiDPIEnabled()?HiDPI.ON:HiDPI.OFF);
     configureHiDPIListener(canvas);
   }
 
   /**
    * Upon pixel scale change, either at startup or during execution of the program, the listener
-   * will reconfigure the default font according to current HiDPI settings. This will reconfigure anything
-   * that draws based on {@link AxisLayout#getFont()}, hence:
+   * will reconfigure the default font according to current HiDPI settings. This will reconfigure
+   * anything that draws based on {@link AxisLayout#getFont()}, hence:
    * <ul>
    * <li>the font of the axis text renderer
-   * <li>the font of the colorbar 
+   * <li>the font of the colorbar
    * </ul>
    */
   protected void configureHiDPIListener(ICanvas canvas) {
     canvas.addCanvasListener(new ICanvasListener() {
       @Override
       public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-        pixelScale.x = (float)pixelScaleX;
-        pixelScale.y = (float)pixelScaleY;
-        
+        pixelScale.x = (float) pixelScaleX;
+        pixelScale.y = (float) pixelScaleY;
+
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
         } else {
           hidpi = HiDPI.ON;
         }
-
-        getAxis().getLayout().applyFontSizePolicy();
       }
-
     });
   }
-  
+
   /**
    * Return a copy of the currently known pixel scale as notified by the canvas.
    * 
@@ -238,7 +233,7 @@ public class View {
   public Coord2d getPixelScale() {
     return pixelScale.clone();
   }
-  
+
 
   /**
    * Return HiDPI status as ACTUALLY possible by the ICanvas on the current screen and computer,
@@ -706,6 +701,22 @@ public class View {
       float cameraRenderingSphereRadiusFactorOnTop) {
     this.cameraRenderingSphereRadiusFactorOnTop = cameraRenderingSphereRadiusFactorOnTop;
   }
+  
+  public boolean isMaintainAllObjectsInView() {
+    return maintainAllObjectsInView;
+  }
+
+  public void setMaintainAllObjectsInView(boolean maintainAllObjectsInView) {
+    this.maintainAllObjectsInView = maintainAllObjectsInView;
+  }
+
+  public boolean isDisplayAxisWholeBounds() {
+    return displayAxisWholeBounds;
+  }
+
+  public void setDisplayAxisWholeBounds(boolean displayAxisWholeBounds) {
+    this.displayAxisWholeBounds = displayAxisWholeBounds;
+  }
 
   public Scene getScene() {
     return scene;
@@ -1050,9 +1061,10 @@ public class View {
     BoundingBox3d boundsScaled = new BoundingBox3d();
     boundsScaled.add(viewbounds.scale(scaling));
 
-    if (MAINTAIN_ALL_OBJECTS_IN_VIEW)
+    if (maintainAllObjectsInView) {
       boundsScaled.add(getSceneGraphBounds().scale(scaling));
-
+      boundsScaled.add(axis.getWholeBounds().scale(scaling));
+    }
     return boundsScaled;
   }
 
@@ -1222,7 +1234,9 @@ public class View {
   }
 
   protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
-      ViewportConfiguration viewport) {}
+      ViewportConfiguration viewport) {
+    
+  }
 
   /* AXE BOX RENDERING */
 
@@ -1238,6 +1252,17 @@ public class View {
       scene.getLightSet().disable(painter);
       axe.setScale(scaling);
       axe.draw(painter);
+      
+      if (displayAxisWholeBounds) { // for debug
+        AxisBox abox = (AxisBox) axe;
+        BoundingBox3d box = abox.getWholeBounds();
+        Parallelepiped p = new Parallelepiped(box);
+        p.setFaceDisplayed(false);
+        p.setWireframeColor(Color.MAGENTA);
+        p.setWireframeDisplayed(true);
+        p.draw(painter);
+      }
+      
       scene.getLightSet().enableLightIfThereAreLights(painter);
     }
   }

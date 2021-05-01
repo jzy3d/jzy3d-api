@@ -44,7 +44,7 @@ public class AWTView extends ChartView {
     renderers.clear();
   }
 
-  @Override
+  /*@Override
   protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling,
       boolean axeBoxDisplayed) {
     if (axeBoxDisplayed) {
@@ -54,7 +54,8 @@ public class AWTView extends ChartView {
 
       axe.setScale(scaling);
       axe.draw(painter);
-      if (DISPLAY_AXE_WHOLE_BOUNDS) { // for debug
+      
+      if (displayAxisWholeBounds) { // for debug
         AxisBox abox = (AxisBox) axe;
         BoundingBox3d box = abox.getWholeBounds();
         Parallelepiped p = new Parallelepiped(box);
@@ -66,7 +67,7 @@ public class AWTView extends ChartView {
 
       scene.getLightSet().enableLightIfThereAreLights(painter);
     }
-  }
+  }*/
 
   @Override
   protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
