@@ -198,9 +198,15 @@ public class GL {
   	      getPixelScaleFromG2D(g2d);
   	  }
   	  else {
-  	      resetPixelScale();
+        resetPixelScale();
+  	    if(!renderedOnce) {
+  	      firePixelScaleChanged(1, 1);
+  	      renderedOnce = true;
+  	    }
   	  }
     }
+    
+    boolean renderedOnce = false;
 
 	public void glXSwapBuffers(Graphics g, Applet o) {
 		glXSwapBuffers(g, (ImageObserver) o);

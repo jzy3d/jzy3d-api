@@ -319,8 +319,13 @@ public class AxisBox implements IAxis {
     Coord2d offset2D = null;
 
     if(layout.isAxisLabelOffsetAuto()) {
-      if(isZ(dimension) && LabelOrientation.VERTICAL.equals(layout.getZAxisLabelOrientation())) {
-        offset2D = labels.axisLabelOffsetVertical(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
+      if(isZ(dimension)) {
+        if(LabelOrientation.VERTICAL.equals(layout.getZAxisLabelOrientation())) {
+          offset2D = labels.axisLabelOffsetVertical(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
+        }
+        else if(LabelOrientation.PARALLEL_TO_AXIS.equals(layout.getZAxisLabelOrientation())) {
+          offset2D = labels.axisLabelOffset(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
+        }
       }
       else if(isX(dimension) && !LabelOrientation.HORIZONTAL.equals(layout.getXAxisLabelOrientation())) {
         offset2D = labels.axisLabelOffset(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
