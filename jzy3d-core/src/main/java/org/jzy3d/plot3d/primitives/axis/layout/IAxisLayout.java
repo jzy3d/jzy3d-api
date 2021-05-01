@@ -33,7 +33,23 @@ public interface IAxisLayout {
   public Color getQuadColor();
 
   public void setQuadColor(Color quadColor);
-
+  
+  
+  public boolean isAxisLabelOffsetAuto();
+  
+  /** 
+   * When enabled, the axis will have the X, Y and Z axis label shifted
+   * to avoid covering the tick labels.
+   */
+  public void setAxisLabelOffsetAuto(boolean isAuto);
+  
+  public int getAxisLabelOffsetMargin();
+  /**
+   * When {@link #setAxisLabelOffsetAuto(true)}, use this margin
+   * to define the horizontal margin to let between the ticks and the axis labels
+   */
+  public void setAxisLabelOffsetMargin(int margin);
+  
   public void setXAxisLabel(String label);
 
   public void setYAxisLabel(String label);
@@ -156,7 +172,7 @@ public interface IAxisLayout {
 
   public void setYAxisLabelOrientation(LabelOrientation yAxisLabelOrientation);
 
-  public LabelOrientation getzAxisLabelOrientation();
+  public LabelOrientation getZAxisLabelOrientation();
 
   public void setZAxisLabelOrientation(LabelOrientation zAxisLabelOrientation);
 

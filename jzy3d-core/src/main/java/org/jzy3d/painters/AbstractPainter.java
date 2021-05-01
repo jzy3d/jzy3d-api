@@ -1,7 +1,10 @@
 package org.jzy3d.painters;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -119,4 +122,43 @@ public abstract class AbstractPainter implements IPainter {
     glMaterialfv(face, pname, color.toArray(), 0);
   }
 
+  
+  
+  
+  
+  public Coord3d screenToModel(Coord3d screen) {
+    return getCamera().screenToModel(this, screen);
+  }
+
+  /**
+   * Transform a 3d point coordinate into its screen position.
+   * @see {@link Camera#modelToScreen(IPainter, Coord3d)}
+   */
+  public Coord3d modelToScreen(Coord3d point) {
+    return getCamera().modelToScreen(this, point);
+  }
+
+  public Coord3d[] modelToScreen(Coord3d[] points) {
+    return getCamera().modelToScreen(this, points);
+  }
+
+  public Coord3d[][] modelToScreen(Coord3d[][] points) {
+    return getCamera().modelToScreen(this, points);
+  }
+
+  public List<Coord3d> modelToScreen(List<Coord3d> points) {
+    return getCamera().modelToScreen(this, points);
+  }
+
+  public ArrayList<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons) {
+    return getCamera().modelToScreen(this, polygons);
+  }
+
+  public PolygonArray modelToScreen(PolygonArray polygon) {
+    return getCamera().modelToScreen(this, polygon);
+  }
+
+  public PolygonArray[][] modelToScreen(PolygonArray[][] polygons){
+    return getCamera().modelToScreen(this, polygons);    
+  }
 }
