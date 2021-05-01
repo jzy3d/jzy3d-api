@@ -1,6 +1,7 @@
 package org.jzy3d.emulgl.unit;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
@@ -22,7 +23,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 
 public class TestCamera_EmulGL_Onscreen {
-
+@Ignore("Unstable from command line")
   @Test
   public void whenViewShoot_thenCameraIsProperlySet() throws InterruptedException {
     // LoggerUtils.minimal();

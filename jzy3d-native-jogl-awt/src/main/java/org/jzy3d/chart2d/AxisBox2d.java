@@ -52,7 +52,7 @@ public class AxisBox2d extends AxisBox {
   }
 
   @Override
-  public Horizontal layoutHorizontal(int direction, Camera cam, Horizontal hal, Coord3d tickPosition) {
+  public Horizontal align(Horizontal hal, int direction, Camera cam, Coord3d tickPosition) {
     if (direction == AXE_X) {
       return Horizontal.CENTER;
     } else if (direction == AXE_Y) {
@@ -65,14 +65,14 @@ public class AxisBox2d extends AxisBox {
   /** Draws Y axis label vertically. */
   @Override
   public void drawAxisLabel(IPainter painter, int direction, Color color,
-      BoundingBox3d ticksTxtBounds, Coord3d labelPosition, String axeLabel, float rotation) {
+      BoundingBox3d ticksTxtBounds, Coord3d labelPosition, String axeLabel, float rotation, Coord2d offset) {
     BoundingBox3d labelBounds = null;
 
-    if (isXDisplayed(direction)) {
+    if (isXAxeLabelDisplayed(direction)) {
       // doTransform(gl);
       labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
           labelPosition, Horizontal.CENTER, Vertical.CENTER, color);
-    } else if (isYDisplayed(direction)) {
+    } else if (isYAxeLabelDisplayed(direction)) {
       labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
           labelPosition, Horizontal.CENTER, Vertical.CENTER, color);
       // labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER,
