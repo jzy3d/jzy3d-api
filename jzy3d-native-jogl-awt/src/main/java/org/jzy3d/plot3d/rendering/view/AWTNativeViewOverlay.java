@@ -62,6 +62,9 @@ public class AWTNativeViewOverlay implements IViewOverlay {
         if (nCanvas.getDrawable().getSurfaceWidth() > 0
             && nCanvas.getDrawable().getSurfaceHeight() > 0) {
           Graphics2D g2d = overlay.createGraphics();
+          
+          // make overlay HiDPI aware
+          g2d.scale(view.getPixelScale().x, view.getPixelScale().y);
 
           g2d.setBackground(overlayBackground);
           g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());

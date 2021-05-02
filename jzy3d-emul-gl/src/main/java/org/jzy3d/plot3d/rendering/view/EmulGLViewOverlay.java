@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.view;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import org.apache.log4j.Logger;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -34,10 +35,13 @@ public class EmulGLViewOverlay implements IViewOverlay {
     if (viewport.getWidth() > 0 && viewport.getHeight() > 0) {
 
       try {
-
-        BufferedImage image = new BufferedImage(viewport.getWidth(), viewport.getHeight(),
-            BufferedImage.TYPE_INT_ARGB);
+        int imWidth = (int) (viewport.getWidth() * view.getPixelScale().x);
+        int imHeight = (int) (viewport.getHeight() * view.getPixelScale().y);
+        BufferedImage image = new BufferedImage(imWidth, imHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
+
+        // make overlay HiDPI aware
+        g2d.scale(view.getPixelScale().x, view.getPixelScale().y);
 
         g2d.setBackground(overlayBackground);
         g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
