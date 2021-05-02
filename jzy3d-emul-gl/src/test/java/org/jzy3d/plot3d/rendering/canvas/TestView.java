@@ -18,7 +18,6 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPITwoFontSizesPolicy;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
-import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 public class TestView {
   @Test

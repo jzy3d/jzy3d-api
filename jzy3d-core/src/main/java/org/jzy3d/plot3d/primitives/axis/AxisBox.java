@@ -5,16 +5,15 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Vector3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
+import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
-import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -48,6 +47,7 @@ public class AxisBox implements IAxis {
     textRenderer = new TextBitmapRenderer();
     rotateLabel = new AxisLabelRotator();
     labels = new AxisLabelProcessor(this);
+    ticks = new AxisTickProcessor(this);
     init();
   }
 
@@ -208,20 +208,20 @@ public class AxisBox implements IAxis {
       // If we are on top, we make direct axe placement
       if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
         BoundingBox3d bbox =
-            drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
+            ticks.drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
         wholeBounds.add(bbox);
       }
       // otherwise computed placement
       else {
         int xselect = findClosestXaxe(painter.getCamera());
         if (xselect >= 0) {
-          BoundingBox3d bbox = drawTicks(painter, xselect, AXE_X, layout.getXTickColor());
+          BoundingBox3d bbox = ticks.drawTicks(painter, xselect, AXE_X, layout.getXTickColor());
           wholeBounds.add(bbox);
         } else {
           // HACK: handles "on top" view, when all face of cube are
           // drawn, which forbid to select an axe automatically
           BoundingBox3d bbox =
-              drawTicks(painter, 2, AXE_X, layout.getXTickColor(), Horizontal.CENTER, Vertical.TOP);
+              ticks.drawTicks(painter, 2, AXE_X, layout.getXTickColor(), Horizontal.CENTER, Vertical.TOP);
           wholeBounds.add(bbox);
         }
       }
@@ -232,17 +232,17 @@ public class AxisBox implements IAxis {
     if (yrange > 0 && layout.isYTickLabelDisplayed()) {
       if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
         BoundingBox3d bbox =
-            drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
+            ticks.drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
         wholeBounds.add(bbox);
       } else {
         int yselect = findClosestYaxe(painter.getCamera());
         if (yselect >= 0) {
-          BoundingBox3d bbox = drawTicks(painter, yselect, AXE_Y, layout.getYTickColor());
+          BoundingBox3d bbox = ticks.drawTicks(painter, yselect, AXE_Y, layout.getYTickColor());
           wholeBounds.add(bbox);
         } else {
           // HACK: handles "on top" view, when all face of cube are
           // drawn, which forbid to select an axe automatically
-          BoundingBox3d bbox = drawTicks(painter, 1, AXE_Y, layout.getYTickColor(),
+          BoundingBox3d bbox = ticks.drawTicks(painter, 1, AXE_Y, layout.getYTickColor(),
               Horizontal.RIGHT, Vertical.GROUND);
           wholeBounds.add(bbox);
         }
@@ -257,7 +257,7 @@ public class AxisBox implements IAxis {
       } else {
         int zselect = findClosestZaxe(painter.getCamera());
         if (zselect >= 0) {
-          BoundingBox3d bbox = drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
+          BoundingBox3d bbox = ticks.drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
           wholeBounds.add(bbox);
         }
       }
@@ -267,99 +267,8 @@ public class AxisBox implements IAxis {
   ///////////////////////////
 
 
-  protected BoundingBox3d drawTicks(IPainter painter, int axis, int dimension, Color color) {
-    return drawTicks(painter, axis, dimension, color, null, null);
-  }
+  
 
-  /** Draws axis labels, tick lines and tick label */
-  protected BoundingBox3d drawTicks(IPainter painter, int axis, int dimension, Color color,
-      Horizontal hal, Vertical val) {
-    int quad_0;
-    int quad_1;
-    float tickLength = 20.0f; // with respect to range
-    float axeLabelDist = 2.5f;
-    BoundingBox3d ticksTxtBounds = new BoundingBox3d();
-
-    // Retrieve the quads that intersect and create the selected axe
-    if (isX(dimension)) {
-      quad_0 = axeXquads[axis][0];
-      quad_1 = axeXquads[axis][1];
-    } else if (isY(dimension)) {
-      quad_0 = axeYquads[axis][0];
-      quad_1 = axeYquads[axis][1];
-    } else { // (axis==AXE_Z)
-      quad_0 = axeZquads[axis][0];
-      quad_1 = axeZquads[axis][1];
-    }
-
-    // --------------------------------------------------------------
-    // Computes POSition of ticks lying on the selected axe (i.e. 1st point of the tick line)
-    
-    Coord3d pos = labels.tickPosition(quad_0, quad_1);
-
-    // Computes the DIRection of the ticks assuming initial vector point is the center
-    Coord3d dir = labels.tickDirection(quad_0, quad_1);
-
-    // Do draw ticks
-    AxisRenderingInfo info = drawAxisTicks(painter, dimension, color, hal, val, tickLength,
-        ticksTxtBounds, pos, dir, getAxisTicks(dimension));
-
-    // --------------------------------------------------------------
-    // Variables for storing the position of the LABel position
-    // (2nd point on the tick line)
-
-    String axisLabel = labels.axisLabel(dimension);
-    float rotation = labels.axisLabelRotation(painter, dimension, info.axisSegment);
-    Coord3d labelPosition = labels.axisLabelPosition(dimension, tickLength, axeLabelDist, pos, dir);
-
-    
-    // --------------------------------------------------------------
-    // Verify if needs a left/right offset to avoid covering tick labels
-    
-    Coord2d offset2D = null;
-
-    if(layout.isAxisLabelOffsetAuto()) {
-      if(isZ(dimension)) {
-        if(LabelOrientation.VERTICAL.equals(layout.getZAxisLabelOrientation())) {
-          offset2D = labels.axisLabelOffsetVertical(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
-        }
-        else if(LabelOrientation.PARALLEL_TO_AXIS.equals(layout.getZAxisLabelOrientation())) {
-          offset2D = labels.axisLabelOffset(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
-        }
-      }
-      else if(isX(dimension) && !LabelOrientation.HORIZONTAL.equals(layout.getXAxisLabelOrientation())) {
-        offset2D = labels.axisLabelOffset(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
-      }
-      else if(isY(dimension) && !LabelOrientation.HORIZONTAL.equals(layout.getYAxisLabelOrientation())) {
-        offset2D = labels.axisLabelOffset(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
-      }
-    }
-    if(offset2D==null) {
-      offset2D = new Coord2d();
-    }
-    
-    // --------------------------------------------------------------
-    // Do draw axis label
-    
-    drawAxisLabel(painter, dimension, color, ticksTxtBounds, labelPosition, axisLabel, rotation, offset2D);
-
-    return ticksTxtBounds;
-  }
-
-  protected void drawAxisLabel(IPainter painter, int direction, Color color,
-      BoundingBox3d ticksTxtBounds, Coord3d labelPosition, String axeLabel, float rotation, Coord2d offset) {
-    if (isXAxeLabelDisplayed(direction) || isYAxeLabelDisplayed(direction) || isZAxeLabelDisplayed(direction)) {
-      // not fully relevant
-      /*
-       * if(spaceTransformer!=null){ labelPosition = spaceTransformer.compute(labelPosition); }
-       */
-
-      BoundingBox3d labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
-          labelPosition, rotation, Horizontal.CENTER, Vertical.CENTER, color, offset);
-      if (labelBounds != null)
-        ticksTxtBounds.add(labelBounds);
-    }
-  }
 
   protected boolean isZAxeLabelDisplayed(int direction) {
     return isZ(direction) && layout.isZAxeLabelDisplayed();
@@ -394,201 +303,7 @@ public class AxisBox implements IAxis {
       return layout.getZTicks();
   }
 
-  protected AxisRenderingInfo drawAxisTicks(IPainter painter, int dimension, Color color,
-      Horizontal hal, Vertical val, float tickLength, BoundingBox3d ticksTxtBounds, Coord3d pos,
-      Coord3d dir, double[] ticks) {
 
-    return drawAxisTicks(painter, dimension, color, hal, val, tickLength, ticksTxtBounds, pos.x,
-        pos.y, pos.z, dir.x, dir.y, dir.z, ticks);
-
-  }
-
-  /**
-   * Draw an array of ticks on the given axis indicated by direction field.
-   * 
-   * Return the segment of the axis.
-   */
-  protected AxisRenderingInfo drawAxisTicks(IPainter painter, int dimension, Color color,
-      Horizontal hal, Vertical val, float tickLength, BoundingBox3d ticksTxtBounds, double xpos,
-      double ypos, double zpos, float xdir, float ydir, float zdir, double[] ticks) {
-    double xlab;
-    double ylab;
-    double zlab;
-    String tickLabel = "";
-
-    AxisRenderingInfo info = new AxisRenderingInfo();
-    info.axisSegment = new Coord3d[2];
-    info.tickValues = ticks;
-    info.tickLabels = new String[ticks.length];
-    info.tickLabelPositions = new Coord3d[ticks.length];
-
-    // Coord3d[] axisSegment = new Coord3d[2];
-
-    for (int t = 0; t < ticks.length; t++) {
-      // Shift the tick vector along the selected axis
-      // and set the tick length
-      if (spaceTransformer == null) {
-        if (isX(dimension)) {
-
-          // Tick position
-          xpos = ticks[t];
-          xlab = xpos;
-          ylab = (yrange / tickLength) * ydir + ypos;
-          zlab = (zrange / tickLength) * zdir + zpos;
-
-          // Tick label
-          tickLabel = layout.getXTickRenderer().format(ticks[t]);
-
-        } else if (isY(dimension)) {
-
-          // Tick position
-          ypos = ticks[t];
-          xlab = (xrange / tickLength) * xdir + xpos;
-          ylab = ypos;
-          zlab = (zrange / tickLength) * zdir + zpos;
-
-          // Tick label
-          tickLabel = layout.getYTickRenderer().format(ticks[t]);
-
-        } else { // (axis==AXE_Z)
-
-          // Tick position
-          zpos = ticks[t];
-          xlab = (xrange / tickLength) * xdir + xpos;
-          ylab = (yrange / tickLength) * ydir + ypos;
-          zlab = zpos;
-
-          // Tick label
-          tickLabel = layout.getZTickRenderer().format(ticks[t]);
-        }
-      } else {
-        // use space transform shift if we have a space transformer
-        if (isX(dimension)) {
-          xpos = spaceTransformer.getX().compute((float) ticks[t]);
-          xlab = xpos;
-          ylab = Math.signum(tickLength * ydir)
-              * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength)))
-              * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
-          zlab = Math.signum(tickLength * ydir)
-              * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength)))
-              * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
-          tickLabel = layout.getXTickRenderer().format(ticks[t]);
-        } else if (isY(dimension)) {
-          ypos = spaceTransformer.getY().compute((float) ticks[t]);
-          xlab = Math.signum(tickLength * xdir)
-              * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength)))
-              * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
-          ylab = ypos;
-          zlab = Math.signum(tickLength * zdir)
-              * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength)))
-              * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
-          tickLabel = layout.getYTickRenderer().format(ticks[t]);
-        } else { // (axis==AXE_Z)
-          zpos = spaceTransformer.getZ().compute((float) ticks[t]);
-          xlab = Math.signum(tickLength * xdir)
-              * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength)))
-              * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
-          ylab = Math.signum(tickLength * ydir)
-              * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength)))
-              * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
-          zlab = zpos;
-          tickLabel = layout.getZTickRenderer().format(ticks[t]);
-        }
-      }
-      Coord3d tickLabelPosition = new Coord3d(xlab, ylab, zlab);
-      Coord3d tickStartPosition = new Coord3d(xpos, ypos, zpos);
-
-      // Select the alignement of the tick label
-      Horizontal hAlign = align(hal, dimension, painter.getCamera(), tickLabelPosition);
-      Vertical vAlign = align(val, dimension, zdir);
-
-      // Draw the text label of the current tick
-      drawAxisTickNumericLabel(painter, dimension, color, hAlign, vAlign, ticksTxtBounds, tickLabel,
-          tickLabelPosition);
-
-      // Draw the tick line
-      if (layout.isTickLineDisplayed()) {
-        drawTickLine(painter, color, tickStartPosition, tickLabelPosition);
-      }
-
-
-      // ------------------------
-      // Remember the axis info
-      if (t == 0) {
-        info.axisSegment[0] = tickStartPosition;
-      } else if (t == (ticks.length - 1)) {
-        info.axisSegment[1] = tickStartPosition;
-      }
-      info.tickLabels[t] = tickLabel;
-      info.tickLabelPositions[t] = tickLabelPosition;
-    }
-
-    return info;
-  }
-
-  public class AxisRenderingInfo {
-    Coord3d[] axisSegment;
-
-    String[] tickLabels;
-    double[] tickValues;
-    Coord3d[] tickLabelPositions;
-    // BoundingBox3d
-  }
-
-  protected void drawAxisTickNumericLabel(IPainter painter, int direction, Color color,
-      Horizontal hAlign, Vertical vAlign, BoundingBox3d ticksTxtBounds, String tickLabel,
-      Coord3d tickPosition) {
-    painter.glLoadIdentity();
-    painter.glScalef(scale.x, scale.y, scale.z);
-
-    BoundingBox3d tickBounds = textRenderer.drawText(painter, getLayout().getFont(), tickLabel,
-        tickPosition, hAlign, vAlign, color);
-    if (tickBounds != null)
-      ticksTxtBounds.add(tickBounds);
-  }
-
-  /** Compute the vertical alignment of a tick label based on direction in Z space. */
-  protected Vertical align(Vertical alignDefault, int dimension, float zdir) {
-    Vertical align;
-    if (alignDefault == null) {
-      if (isZ(dimension))
-        align = Vertical.CENTER;
-      else {
-        if (zdir > 0)
-          align = Vertical.TOP;
-        else
-          align = Vertical.BOTTOM;
-      }
-    } else
-      align = alignDefault;
-    return align;
-  }
-
-  /** Compute horizontal alignement of a tick label based on tick position relative to camera, if the input default is null*/
-  protected Horizontal align(Horizontal alignDefault, int dimension, Camera cam,
-      Coord3d tickPosition) {
-    Horizontal align;
-    if (alignDefault == null)
-      align = cam.side(tickPosition) ? Horizontal.LEFT : Horizontal.RIGHT;
-    else
-      align = alignDefault;
-    return align;
-  }
-
-  /** Actually draws the line. */
-  protected void drawTickLine(IPainter painter, Color color, Coord3d pos, Coord3d lab) {
-    painter.glLoadIdentity();
-    painter.glScalef(scale.x, scale.y, scale.z);
-
-    painter.color(color);
-    painter.glLineWidth(1);
-
-    // Draw the tick line
-    painter.glBegin_Line();
-    painter.glVertex3d(pos.x, pos.y, pos.z);
-    painter.glVertex3d(lab.x, lab.y, lab.z);
-    painter.glEnd();
-  }
 
   /* */
 
@@ -1146,6 +861,7 @@ public class AxisBox implements IAxis {
   protected ITextRenderer textRenderer;
   protected AxisLabelRotator rotateLabel;
   protected AxisLabelProcessor labels;
+  protected AxisTickProcessor ticks;
   protected IAxisLayout layout;
 
   protected BoundingBox3d boxBounds;

@@ -1,13 +1,8 @@
 package org.jzy3d.plot3d.primitives.axis;
 
-import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.text.align.Horizontal;
-import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.overlay.AWTTextOverlay;
 
 /**
@@ -45,7 +40,7 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
   public void setExperimentalTextOverlayRenderer(ICanvas canvas) {
     txtRenderer = new AWTTextOverlay(canvas);
   }
-
+/*
   @Override
   protected BoundingBox3d drawTicks(IPainter painter, int axis, int direction, Color color,
       Horizontal hal, Vertical val) {
@@ -203,7 +198,7 @@ public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
     }
 
     return ticksTxtBounds;
-  }
+  }*/
 
   protected AWTTextOverlay txtRenderer; // keep it null in order to not use it
 }

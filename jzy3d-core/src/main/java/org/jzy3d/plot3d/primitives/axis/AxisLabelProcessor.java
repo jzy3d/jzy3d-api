@@ -1,13 +1,15 @@
 package org.jzy3d.plot3d.primitives.axis;
 
+import org.jzy3d.colors.Color;
+import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot3d.primitives.axis.AxisBox.AxisRenderingInfo;
-import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
  * A helper class to process axis labels.
@@ -22,6 +24,24 @@ public class AxisLabelProcessor {
     this.axis = axis;
     this.layout = axis.getLayout();
   }
+  
+  protected void drawAxisLabel(IPainter painter, int direction, Color color,
+      BoundingBox3d ticksTxtBounds, Coord3d labelPosition, String axeLabel, float rotation, Coord2d offset) {
+    if (axis.isXAxeLabelDisplayed(direction) || axis.isYAxeLabelDisplayed(direction) || axis.isZAxeLabelDisplayed(direction)) {
+      // not fully relevant
+      /*
+       * if(spaceTransformer!=null){ labelPosition = spaceTransformer.compute(labelPosition); }
+       */
+
+      BoundingBox3d labelBounds = axis.textRenderer.drawText(painter, layout.getFont(), axeLabel,
+          labelPosition, rotation, Horizontal.CENTER, Vertical.CENTER, color, offset);
+      if (labelBounds != null)
+        ticksTxtBounds.add(labelBounds);
+    }
+  }
+
+  
+  
 
   /**
    * Compute the offset to apply to a vertical Z label to avoid covering the tick labels.
@@ -203,40 +223,5 @@ public class AxisLabelProcessor {
     }
 
     return new Coord3d(xlab, ylab, zlab);
-  }
-
-  
-  protected Coord3d tickPosition(int quad_0, int quad_1) {
-    double xpos = 0;
-    double ypos = 0;
-    double zpos = 0;
-
-    if (axis.spaceTransformer == null) {
-      xpos = axis.normx[quad_0] + axis.normx[quad_1];
-      ypos = axis.normy[quad_0] + axis.normy[quad_1];
-      zpos = axis.normz[quad_0] + axis.normz[quad_1];
-    } else {
-      xpos = axis.spaceTransformer.getX().compute(axis.normx[quad_0])
-          + axis.spaceTransformer.getX().compute(axis.normx[quad_1]);
-      ypos = axis.spaceTransformer.getY().compute(axis.normy[quad_0])
-          + axis.spaceTransformer.getY().compute(axis.normy[quad_1]);
-      zpos = axis.spaceTransformer.getZ().compute(axis.normz[quad_0])
-          + axis.spaceTransformer.getZ().compute(axis.normz[quad_1]);
-    }
-
-    Coord3d pos = new Coord3d(xpos, ypos, zpos);
-    return pos;
-  }
-
-  protected Coord3d tickDirection(int quad_0, int quad_1) {
-    float xdir = (axis.normx[quad_0] + axis.normx[quad_1]) - axis.center.x;
-    float ydir = (axis.normy[quad_0] + axis.normy[quad_1]) - axis.center.y;
-    float zdir = (axis.normz[quad_0] + axis.normz[quad_1]) - axis.center.z;
-
-    xdir = xdir == 0 ? 0 : xdir / Math.abs(xdir); // so that direction has length 1
-    ydir = ydir == 0 ? 0 : ydir / Math.abs(ydir);
-    zdir = zdir == 0 ? 0 : zdir / Math.abs(zdir);
-
-    return new Coord3d(xdir, ydir, zdir);
   }
 }
