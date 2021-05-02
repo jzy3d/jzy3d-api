@@ -7,6 +7,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.transform.Transform;
@@ -29,6 +30,9 @@ public class DrawableTextWrapper extends Drawable {
 
   protected ITextRenderer renderer;
 
+  protected IAxisLayout axisLayout;
+  protected Font defaultFont = Font.Helvetica_12;
+
   public DrawableTextWrapper(ITextRenderer renderer) {
     this("", new Coord3d(), Color.BLACK, renderer);
   }
@@ -44,8 +48,14 @@ public class DrawableTextWrapper extends Drawable {
   @Override
   public void draw(IPainter painter) {
     doTransform(painter);
-    BoundingBox3d box =
-        renderer.drawText(painter, Font.Helvetica_12, txt, position, rotation, halign, valign, color, screenOffset, sceneOffset);
+
+    Font font = defaultFont;
+    if (axisLayout != null) {
+      font = axisLayout.getFont();
+    }
+    
+    BoundingBox3d box = renderer.drawText(painter, font, txt, position, rotation, halign, valign,
+        color, screenOffset, sceneOffset);
     if (box != null)
       bbox = box.scale(new Coord3d(1 / 10, 1 / 10, 1 / 10));
     else
@@ -116,13 +126,38 @@ public class DrawableTextWrapper extends Drawable {
   public void setSceneOffset(Coord3d sceneOffset) {
     this.sceneOffset = sceneOffset;
   }
-  
+
   public float getRotation() {
     return rotation;
   }
 
   public void setRotation(float rotation) {
     this.rotation = rotation;
+  }
+
+
+
+  public IAxisLayout getAxisLayout() {
+    return axisLayout;
+  }
+
+  /**
+   * The axis layout acts as main font provider, to allow all text renderer to use the same current
+   * font than the one selected for axis and colorbar texts.
+   * 
+   * To for this drawable text to use a given font, set this to null and configure
+   * {@link #setDefaultFont(Font)}
+   */
+  public void setAxisLayout(IAxisLayout axisLayout) {
+    this.axisLayout = axisLayout;
+  }
+
+  public Font getDefaultFont() {
+    return defaultFont;
+  }
+
+  public void setDefaultFont(Font defaultFont) {
+    this.defaultFont = defaultFont;
   }
 
   @Override

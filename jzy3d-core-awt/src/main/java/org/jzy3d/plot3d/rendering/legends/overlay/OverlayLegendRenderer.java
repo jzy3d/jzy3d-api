@@ -7,6 +7,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 import org.jzy3d.colors.AWTColor;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 
@@ -22,6 +23,8 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
   protected List<Legend> info;
   protected LegendLayout layout = new LegendLayout();
 
+  Coord2d scale = new Coord2d(1,1);
+
   public OverlayLegendRenderer(List<Legend> info) {
     super();
     this.info = info;
@@ -30,6 +33,9 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
   @Override
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {
     Graphics2D g2d = (Graphics2D) g;
+    
+    g2d.scale(scale.x, scale.y);
+    
     configureRenderingHints(g2d);
 
     if (layout.font != null)
@@ -143,4 +149,11 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
     this.layout = layout;
   }
 
+  public Coord2d getScale() {
+    return scale;
+  }
+
+  public void setScale(Coord2d scale) {
+    this.scale = scale;
+  }
 }
