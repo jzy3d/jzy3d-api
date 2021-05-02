@@ -87,6 +87,16 @@ public class Triangle2d {
   public Coord2d getCenter() {
     return Coord2d.interpolate(a, getMedianBC(), 2f / 3);
   }
+  
+  public Coord2d getCenterAB() {
+    return Coord2d.interpolate(c, getMedianAB(), 2f / 3);
+  }
+  public Coord2d getCenterAC() {
+    return Coord2d.interpolate(b, getMedianAC(), 2f / 3);
+  }
+  public Coord2d getCenterBC() {
+    return Coord2d.interpolate(a, getMedianBC(), 2f / 3);
+  }
 
   /**
    * Creates the following 2D equilateral triangle with A at (0,0) and C at (side,0).

@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.axis;
 import org.jzy3d.maths.Angle2d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Triangle2d;
 import org.jzy3d.painters.IPainter;
 
 /**
@@ -93,5 +94,63 @@ public class AxisLabelRotator {
       rotation = 0;
     }
     return rotation;
+  }
+  
+  
+  
+  
+  public TextLayout computeTextLayout(IPainter painter, Coord3d[] segment3D, Coord3d center3D,
+      Coord3d label3D, float offset) {
+    // Project to 2D
+    Coord3d center2D = painter.getCamera().modelToScreen(painter, center3D);
+    Coord3d label2D = painter.getCamera().modelToScreen(painter, label3D);
+    Coord3d segmentStart2D = painter.getCamera().modelToScreen(painter, segment3D[0]);
+    Coord3d segmentStop2D = painter.getCamera().modelToScreen(painter, segment3D[1]);
+    Coord3d[] segment2D = Triangle2d.leftMostFirst(segmentStart2D, segmentStop2D);
+
+    float rotation = computeSegmentRotation(segment2D[0], segment2D[1]);
+
+    // Compute absolute offset
+    double absoluteXOffset = Math.abs(Math.sin(rotation)) * offset * painter.getView().getPixelScale().y;
+    double absoluteYOffset = Math.abs(Math.cos(rotation)) * offset * painter.getView().getPixelScale().y;
+
+
+    // Get label quadrant to process 2D offset
+    double xOffset;
+    double yOffset;
+
+    if (label2D.x < center2D.x) { // left quadrant
+      if (label2D.y < center2D.y) { // top quadrant
+        xOffset = -absoluteXOffset; // left
+        yOffset = -absoluteYOffset;
+      } else { // right quadrant
+        xOffset = -absoluteXOffset; // left
+        yOffset = +absoluteYOffset;
+      }
+
+    } else { // right quadrant
+      if (label2D.y < center2D.y) { // top quadrant
+        xOffset = +absoluteXOffset; // right
+        yOffset = -absoluteYOffset;
+      } else { // right quadrant
+        xOffset = +absoluteXOffset; // right
+        yOffset = +absoluteYOffset;
+      }
+    }
+
+    Coord2d offset2D = new Coord2d(xOffset, yOffset);
+    
+    TextLayout i = new TextLayout(offset2D, rotation);
+    return i;
+  }
+  
+  public class TextLayout{
+    public Coord2d offset;
+    public float rotation;
+    public TextLayout(Coord2d offset, float rotation) {
+      super();
+      this.offset = offset;
+      this.rotation = rotation;
+    }
   }
 }
