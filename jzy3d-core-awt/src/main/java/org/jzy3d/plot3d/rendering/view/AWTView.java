@@ -44,6 +44,7 @@ public class AWTView extends ChartView {
     renderers.clear();
   }
 
+  // DON T KNOW WHY THE HELL IT IS THERE. MOVED TO SUPER CLASS 
   /*@Override
   protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling,
       boolean axeBoxDisplayed) {
@@ -69,6 +70,7 @@ public class AWTView extends ChartView {
     }
   }*/
 
+  // MOVE TO SUPER CLASS THAT HAS EMPTY IMPLEMENTATION FOR FORGOTTEN REASON
   @Override
   protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
       ViewportConfiguration viewport) {
