@@ -32,6 +32,59 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  */
 public class AxisBox implements IAxis {
   static Logger LOGGER = Logger.getLogger(AxisBox.class);
+  
+
+  protected static final int PRECISION = 6;
+
+  protected View view;
+
+  // use this text renderer to get occupied volume by text
+  protected ITextRenderer textRenderer;
+  protected AxisLabelRotator rotateLabel;
+  protected AxisLabelProcessor labels;
+  protected AxisTickProcessor ticks;
+  protected IAxisLayout layout;
+
+  protected BoundingBox3d boxBounds;
+  protected BoundingBox3d wholeBounds;
+  protected Coord3d center;
+  protected Coord3d scale;
+
+  protected float xrange;
+  protected float yrange;
+  protected float zrange;
+
+  protected float quadx[][];
+  protected float quady[][];
+  protected float quadz[][];
+
+  protected float normx[];
+  protected float normy[];
+  protected float normz[];
+
+  protected float axeXx[][];
+  protected float axeXy[][];
+  protected float axeXz[][];
+  protected float axeYx[][];
+  protected float axeYy[][];
+  protected float axeYz[][];
+  protected float axeZx[][];
+  protected float axeZy[][];
+  protected float axeZz[][];
+
+  protected int axeXquads[][];
+  protected int axeYquads[][];
+  protected int axeZquads[][];
+
+  protected boolean quadIsHidden[];
+
+  public static final int AXE_X = 0;
+  public static final int AXE_Y = 1;
+  public static final int AXE_Z = 2;
+
+  protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
+
+  protected SpaceTransformer spaceTransformer;
 
   public AxisBox(BoundingBox3d bbox) {
     this(bbox, new AxisLayout());
@@ -266,10 +319,6 @@ public class AxisBox implements IAxis {
 
   ///////////////////////////
 
-
-  
-
-
   protected boolean isZAxeLabelDisplayed(int direction) {
     return isZ(direction) && layout.isZAxeLabelDisplayed();
   }
@@ -303,11 +352,9 @@ public class AxisBox implements IAxis {
       return layout.getZTicks();
   }
 
-
-
-  /* */
-
-  /* AXIS SELECTION */
+  /* ************************************************/
+  /* ************** AXIS SELECTION ******************/
+  /* ************************************************/
 
   /**
    * Selects the closest displayable X axe from camera
@@ -400,8 +447,6 @@ public class AxisBox implements IAxis {
     return min(distAxeZ);
   }
 
-
-
   /**
    * Return the index of the minimum value contained in the input array of doubles. If no value is
    * smaller than Double.MAX_VALUE, the returned index is -1.
@@ -461,7 +506,9 @@ public class AxisBox implements IAxis {
     return status;
   }
 
-  /* */
+  /* ************************************************/
+  /* ************** CONFIGURE AXIS ******************/
+  /* ************************************************/
 
   /**
    * Set the parameters and data of the AxeBox.
@@ -848,62 +895,6 @@ public class AxisBox implements IAxis {
       annotations.add(annotation);
     }
   }
-
-
-
-  /* */
-
-  protected static final int PRECISION = 6;
-
-  protected View view;
-
-  // use this text renderer to get occupied volume by text
-  protected ITextRenderer textRenderer;
-  protected AxisLabelRotator rotateLabel;
-  protected AxisLabelProcessor labels;
-  protected AxisTickProcessor ticks;
-  protected IAxisLayout layout;
-
-  protected BoundingBox3d boxBounds;
-  protected BoundingBox3d wholeBounds;
-  protected Coord3d center;
-  protected Coord3d scale;
-
-  protected float xrange;
-  protected float yrange;
-  protected float zrange;
-
-  protected float quadx[][];
-  protected float quady[][];
-  protected float quadz[][];
-
-  protected float normx[];
-  protected float normy[];
-  protected float normz[];
-
-  protected float axeXx[][];
-  protected float axeXy[][];
-  protected float axeXz[][];
-  protected float axeYx[][];
-  protected float axeYy[][];
-  protected float axeYz[][];
-  protected float axeZx[][];
-  protected float axeZy[][];
-  protected float axeZz[][];
-
-  protected int axeXquads[][];
-  protected int axeYquads[][];
-  protected int axeZquads[][];
-
-  protected boolean quadIsHidden[];
-
-  public static final int AXE_X = 0;
-  public static final int AXE_Y = 1;
-  public static final int AXE_Z = 2;
-
-  protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
-
-  protected SpaceTransformer spaceTransformer;
 
   public float[][] getQuadX() {
     return quadx;
