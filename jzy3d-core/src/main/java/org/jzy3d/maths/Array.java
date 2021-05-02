@@ -239,6 +239,17 @@ public class Array {
     }
     return output;
   }
+  
+  public static float[] toFloat(double[] input) {
+    if (input == null) {
+      return null;
+    }
+    float[] output = new float[input.length];
+    for (int i = 0; i < input.length; i++) {
+      output[i] = (float)input[i];
+    }
+    return output;
+  }
 
   /*********************************************************************/
 
