@@ -12,12 +12,10 @@ import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppin
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingHiDPI;
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingWireframe;
 import org.jzy3d.painters.EmulGLPainter;
-import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.scene.Graph;
 import jgl.GL;
 
 public class AdaptiveMouseController extends AWTCameraMouseController {

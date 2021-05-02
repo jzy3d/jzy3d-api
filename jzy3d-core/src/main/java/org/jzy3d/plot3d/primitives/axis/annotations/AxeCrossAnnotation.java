@@ -1,8 +1,9 @@
-package org.jzy3d.plot3d.primitives.axis;
+package org.jzy3d.plot3d.primitives.axis.annotations;
 
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.axis.AxisBox;
 
 public class AxeCrossAnnotation extends AxeLineAnnotation implements AxeAnnotation {
   protected Coord2d value;
