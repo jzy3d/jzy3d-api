@@ -40,7 +40,6 @@ public class EmulGLViewOverlay implements IViewOverlay {
 					imWidth = (int) (viewport.getWidth() * view.getPixelScale().x);
 					imHeight = (int) (viewport.getHeight() * view.getPixelScale().y);
 				}
-				// System.out.println("EmulGLViewOverlay::pixelScale " + view.getPixelScale());
 
 				BufferedImage image = new BufferedImage(imWidth, imHeight, BufferedImage.TYPE_INT_ARGB);
 				Graphics2D g2d = image.createGraphics();
