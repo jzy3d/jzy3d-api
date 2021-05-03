@@ -10,8 +10,8 @@ import org.jzy3d.plot3d.rendering.tooltips.ITooltipRenderer;
 import jgl.GL;
 
 /**
- * An EmulGL view implementation that is able to handle overlay and tooltip rendering using an AWT
- * BufferedImage painted with a Graphics2D passed to
+ * An EmulGL view implementation that is able to handle overlay and tooltip
+ * rendering using an AWT BufferedImage painted with a Graphics2D passed to
  * {@link AWTRenderer2d#paint(java.awt.Graphics, int, int)} or
  * {@link ITooltipRenderer#render(Graphics2D)}.
  * 
@@ -19,49 +19,55 @@ import jgl.GL;
  *
  */
 public class EmulGLViewOverlay implements IViewOverlay {
-  protected static Logger LOGGER = Logger.getLogger(EmulGLViewOverlay.class);
+	protected static Logger LOGGER = Logger.getLogger(EmulGLViewOverlay.class);
 
-  protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
+	protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
 
-  @Override
-  public void render(View view, ViewportConfiguration viewport, IPainter painter) {
-    AWTView awtView = ((AWTView) view);
-    ICanvas canvas = view.getCanvas();
+	@Override
+	public void render(View view, ViewportConfiguration viewport, IPainter painter) {
+		AWTView awtView = ((AWTView) view);
+		ICanvas canvas = view.getCanvas();
 
-    if (!awtView.hasOverlayStuffs())
-      return;
+		if (!awtView.hasOverlayStuffs())
+			return;
 
-    if (viewport.getWidth() > 0 && viewport.getHeight() > 0) {
+		if (viewport.getWidth() > 0 && viewport.getHeight() > 0) {
 
-      try {
-        int imWidth = (int) (viewport.getWidth() * view.getPixelScale().x);
-        int imHeight = (int) (viewport.getHeight() * view.getPixelScale().y);
-        BufferedImage image = new BufferedImage(imWidth, imHeight, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g2d = image.createGraphics();
+			try {
+				int imWidth = viewport.getWidth();
+				int imHeight = viewport.getHeight();
+				if (view.getPixelScale().x > 1 || view.getPixelScale().y > 1) {
+					imWidth = (int) (viewport.getWidth() * view.getPixelScale().x);
+					imHeight = (int) (viewport.getHeight() * view.getPixelScale().y);
+				}
+				// System.out.println("EmulGLViewOverlay::pixelScale " + view.getPixelScale());
 
-        // make overlay HiDPI aware
-        g2d.scale(view.getPixelScale().x, view.getPixelScale().y);
+				BufferedImage image = new BufferedImage(imWidth, imHeight, BufferedImage.TYPE_INT_ARGB);
+				Graphics2D g2d = image.createGraphics();
 
-        g2d.setBackground(overlayBackground);
-        g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+				// make overlay HiDPI aware
+				g2d.scale(view.getPixelScale().x, view.getPixelScale().y);
 
-        // Tooltips
-        for (ITooltipRenderer t : awtView.getTooltips())
-          t.render(g2d);
+				g2d.setBackground(overlayBackground);
+				g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
-        // Renderers
-        for (AWTRenderer2d renderer : awtView.getRenderers2d())
-          renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
+				// Tooltips
+				for (ITooltipRenderer t : awtView.getTooltips())
+					t.render(g2d);
 
-        g2d.dispose();
+				// Renderers
+				for (AWTRenderer2d renderer : awtView.getRenderers2d())
+					renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
 
-        // Append Image to draw
-        ((EmulGLPainter) painter).getGL().appendImageToDraw(image, 0, 0, GL.ImageLayer.FOREGROUND);
+				g2d.dispose();
 
-      } catch (Exception e) {
-        LOGGER.error(e, e);
-      }
-    }
-  }
+				// Append Image to draw
+				((EmulGLPainter) painter).getGL().appendImageToDraw(image, 0, 0, GL.ImageLayer.FOREGROUND);
+
+			} catch (Exception e) {
+				LOGGER.error(e, e);
+			}
+		}
+	}
 
 }
