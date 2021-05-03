@@ -193,7 +193,7 @@ public class View {
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
 
-    this.pixelScale = new Coord2d();
+    this.pixelScale = new Coord2d(1,1);
 
     // applyHiDPIToFonts(quality.isHiDPIEnabled()?HiDPI.ON:HiDPI.OFF);
     configureHiDPIListener(canvas);
