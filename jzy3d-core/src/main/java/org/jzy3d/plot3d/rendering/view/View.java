@@ -215,8 +215,6 @@ public class View {
         pixelScale.x = (float) pixelScaleX;
         pixelScale.y = (float) pixelScaleY;
 
-        System.out.println("View pix scale : " + pixelScale);
-        
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
         } else {
