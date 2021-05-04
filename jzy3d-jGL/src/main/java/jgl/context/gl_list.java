@@ -17,7 +17,6 @@
 package jgl.context;
 
 import java.util.Vector;
-
 import jgl.GL;
 
 /**

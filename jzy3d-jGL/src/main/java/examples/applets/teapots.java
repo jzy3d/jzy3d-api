@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.util.Date;
-
 // must import jgl.GL....
 import jgl.GL;
 import jgl.GLAUX;

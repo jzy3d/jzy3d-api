@@ -31,7 +31,6 @@ import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-
 import jgl.glaux.teapot;
 import jgl.glu.GLUquadricObj;
 import jgl.glut.glut_menu;

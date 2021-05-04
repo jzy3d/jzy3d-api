@@ -17,7 +17,6 @@ package jgl.context;
 
 import java.util.Stack;
 import java.util.Vector;
-
 import jgl.GL;
 import jgl.context.attrib.gl_colorbuffer;
 import jgl.context.attrib.gl_current;
