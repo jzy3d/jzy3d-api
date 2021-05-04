@@ -461,7 +461,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     }
   }
 
-
   /* *********************************************************************** */
   /* ************************** PROFILE AND DEBUG ************************** */
   /* *********************************************************************** */
@@ -487,8 +486,38 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     Graphics2D g2d = glImage.createGraphics();
 
     AWTGraphicsUtils.configureRenderingHints(g2d);
+    
+    int minX = Integer.MAX_VALUE;
+    int maxX = 0;
+    int minY = Integer.MAX_VALUE;
+    int maxY = 0;
 
     synchronized (profileInfo) {
+      // Render a rectangle around profile text
+      for (ProfileInfo profile : profileInfo) {
+        int stringWidth = AWTGraphicsUtils.stringWidth(g2d, profile.message);
+        
+        if(minX > profile.x)
+          minX = profile.x;
+        if(maxX < profile.x + stringWidth)
+          maxX = profile.x + stringWidth;        
+        if(minY > profile.y)
+          minY = profile.y;
+        if(maxY < profile.y)
+          maxY = profile.y;        
+      }
+      
+      int x = minX;
+      int y = minY - profileDisplayFont.getSize();
+      int width = maxX-minX;
+      int height = maxY-minY + profileDisplayFont.getSize();
+      
+      g2d.setColor(java.awt.Color.WHITE);
+      g2d.fillRect(x, y, width, height);
+      g2d.setColor(java.awt.Color.RED);
+      g2d.drawRect(x, y, width, height);
+      
+      // Render all text info
       for (ProfileInfo profile : profileInfo) {
         java.awt.Color awtColor = AWTColor.toAWT(profile.color);
         g2d.setColor(awtColor);
@@ -496,17 +525,19 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
         AWTGraphicsUtils.drawString(g2d, profileDisplayFont, false, profile.message, profile.x,
             profile.y);
       }
+
     }
   }
 
 
   protected void profile(double mili) {
+    int x = 10;
+    int y = 12;
+    
     synchronized (profileInfo) {
 
       profileClear();
 
-      int x = 10;
-      int y = 12;
       int line = 1;
       Color c = Color.BLACK;
 
@@ -538,6 +569,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     }
 
+    
   }
 
   /** Draw a 2d text at the given position */
