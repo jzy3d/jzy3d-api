@@ -1,9 +1,7 @@
 package examples.apps;
 /*
- *  list.java
- *  This program demonstrates how to make and execute a 
- *  display list.  Note that attributes, such as current 
- *  color and matrix, are changed.
+ * list.java This program demonstrates how to make and execute a display list. Note that attributes,
+ * such as current color and matrix, are changed.
  */
 
 import java.awt.Frame;
@@ -65,16 +63,16 @@ public class list extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 
   /*
-   * Main Loop Open window with initial window size, title bar, RGBA display mode,
-   * and handle input events.
+   * Main Loop Open window with initial window size, title bar, RGBA display mode, and handle input
+   * events.
    */
   public void init() {
     myUT.glutInitWindowSize(400, 50);

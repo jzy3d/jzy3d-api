@@ -16,10 +16,10 @@ public class drawf extends Applet implements ComponentListener {
   GL myGL = new GL();
   GLAUX myAUX = new GLAUX(myGL);
 
-//    public static final byte rasters [] = {
-//    	0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00,
-//	0xff, 0x00, 0xff, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00,
-//	0xff, 0xc0, 0xff, 0xc0 };	
+  // public static final byte rasters [] = {
+  // 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00,
+  // 0xff, 0x00, 0xff, 0x00, 0xc0, 0x00, 0xc0, 0x00, 0xc0, 0x00,
+  // 0xff, 0xc0, 0xff, 0xc0 };
 
   private void myinit() {
     myGL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
@@ -36,14 +36,11 @@ public class drawf extends Applet implements ComponentListener {
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

@@ -1,10 +1,8 @@
 package examples.applets.glut;
 /*
- *  planet.java
- *  This program shows how to composite modeling transformations
- *  to draw translated and rotated models.
- *  Interaction:  pressing the d and y keys (day and year)
- *  alters the rotation of the planet around the sun.
+ * planet.java This program shows how to composite modeling transformations to draw translated and
+ * rotated models. Interaction: pressing the d and y keys (day and year) alters the rotation of the
+ * planet around the sun.
  */
 
 import jgl.GL;
@@ -46,24 +44,24 @@ public class planet extends GLApplet {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 'd':
-      day = (day + 10) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'D':
-      day = (day - 10) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'y':
-      year = (year + 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'Y':
-      year = (year - 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    default:
-      break;
+      case 'd':
+        day = (day + 10) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'D':
+        day = (day - 10) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'y':
+        year = (year + 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'Y':
+        year = (year - 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      default:
+        break;
     }
   }
 

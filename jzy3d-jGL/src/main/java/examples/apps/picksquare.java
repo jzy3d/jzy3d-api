@@ -1,10 +1,8 @@
 package examples.apps;
 /*
- * picksquare.java
- * Use of multiple names and picking are demonstrated.  
- * A 3x3 grid of squares is drawn.  When the left mouse 
- * button is pressed, all squares under the cursor position 
- * have their color changed.
+ * picksquare.java Use of multiple names and picking are demonstrated. A 3x3 grid of squares is
+ * drawn. When the left mouse button is pressed, all squares under the cursor position have their
+ * color changed.
  */
 
 import java.awt.Frame;
@@ -28,10 +26,9 @@ public class picksquare extends GLCanvas {
   }
 
   /*
-   * The nine squares are drawn. In selection mode, each square is given two
-   * names: one for the row and the other for the column on the grid. The color of
-   * each square is determined by its position on the grid, and the value in the
-   * board[][] array.
+   * The nine squares are drawn. In selection mode, each square is given two names: one for the row
+   * and the other for the column on the grid. The color of each square is determined by its
+   * position on the grid, and the value in the board[][] array.
    */
   private void drawSquares(int mode) {
     int i, j;
@@ -82,8 +79,8 @@ public class picksquare extends GLCanvas {
   }
 
   /*
-   * pickSquares() sets up selection mode, name stack, and projection matrix for
-   * picking. Then the objects are drawn.
+   * pickSquares() sets up selection mode, name stack, and projection matrix for picking. Then the
+   * objects are drawn.
    */
   private static final int BUFSIZE = 512;
 
@@ -138,10 +135,10 @@ public class picksquare extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

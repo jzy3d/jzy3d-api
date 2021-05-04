@@ -1,19 +1,16 @@
 /*
  * @(#)gl_render.java 0.4 99/11/29
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1996-1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1996-1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -64,11 +61,9 @@ public class gl_render {
     set_first_xy();
   }
 
-  protected void init_dx(int dx) {
-  }
+  protected void init_dx(int dx) {}
 
-  protected void init_dy(int dy) {
-  }
+  protected void init_dy(int dy) {}
 
   protected void init_dx_dy(int dx, int dy) {
     if (dx != 0) {
@@ -112,7 +107,7 @@ public class gl_render {
   }
 
   protected void put_pixel() {
-	pixel.put_pixel(x, y, color);
+    pixel.put_pixel(x, y, color);
   }
 
   protected void put_pixel_by_index() {
@@ -120,7 +115,8 @@ public class gl_render {
   }
 
   protected void draw_point(gl_vertex v) {
-    CC.CR.pixel.put_pixel((int) (v.Vertex[0] + (float) 0.5), (int) (v.Vertex[1] + (float) 0.5), color);
+    CC.CR.pixel.put_pixel((int) (v.Vertex[0] + (float) 0.5), (int) (v.Vertex[1] + (float) 0.5),
+        color);
   }
 
   protected void draw_point(gl_vertex v, int color) {
@@ -129,8 +125,7 @@ public class gl_render {
   }
 
   /**
-   * Draw a flat horizontal line in the Color Buffer, assume that x1 is in the
-   * left side of x2
+   * Draw a flat horizontal line in the Color Buffer, assume that x1 is in the left side of x2
    */
   protected void draw_horizontal_line(int x1, int x2, int y) {
     this.LineXY[0][0] = x1;
@@ -141,8 +136,7 @@ public class gl_render {
   }
 
   /**
-   * Draw a flat horizontal line in the Color Buffer, assume that x1 is in the
-   * left side of x2
+   * Draw a flat horizontal line in the Color Buffer, assume that x1 is in the left side of x2
    */
   protected void draw_horizontal_line() {
     int dx = LineXY[1][0] - LineXY[0][0];
@@ -269,9 +263,12 @@ public class gl_render {
     TriXY[0][1] = (int) (v1.Vertex[1] + (float) 0.5);
     TriXY[1][1] = (int) (v2.Vertex[1] + (float) 0.5);
     TriXY[2][1] = (int) (v3.Vertex[1] + (float) 0.5);
-//	System.out.println (TriXY[0][0]+" "+TriXY[0][1]+" "+v1.Vertex[0]+" "+v1.Vertex[1]+" "+v1.Vertex[2]);
-//	System.out.println (TriXY[1][0]+" "+TriXY[1][1]+" "+v2.Vertex[0]+" "+v2.Vertex[1]+" "+v2.Vertex[2]);
-//	System.out.println (TriXY[2][0]+" "+TriXY[2][1]+" "+v3.Vertex[0]+" "+v3.Vertex[1]+" "+v3.Vertex[2]);
+    // System.out.println (TriXY[0][0]+" "+TriXY[0][1]+" "+v1.Vertex[0]+" "+v1.Vertex[1]+"
+    // "+v1.Vertex[2]);
+    // System.out.println (TriXY[1][0]+" "+TriXY[1][1]+" "+v2.Vertex[0]+" "+v2.Vertex[1]+"
+    // "+v2.Vertex[2]);
+    // System.out.println (TriXY[2][0]+" "+TriXY[2][1]+" "+v3.Vertex[0]+" "+v3.Vertex[1]+"
+    // "+v3.Vertex[2]);
   }
 
   protected void init(gl_vertex v1, gl_vertex v2, gl_vertex v3) {
@@ -294,11 +291,9 @@ public class gl_render {
     set_right_xy(pos);
   }
 
-  protected void init_dx_dy(int area, int left, int right, int top) {
-  }
+  protected void init_dx_dy(int area, int left, int right, int top) {}
 
-  protected void init_other(boolean delta, int dy) {
-  }
+  protected void init_other(boolean delta, int dy) {}
 
   protected void init_left_xy() {
     boolean deltaxl = (dxl < 0);
@@ -368,11 +363,9 @@ public class gl_render {
     init_right_xy();
   }
 
-  protected void inc_y_once() {
-  }
+  protected void inc_y_once() {}
 
-  protected void inc_y_more() {
-  }
+  protected void inc_y_more() {}
 
   protected void inc_left_xy() {
     errxl += dxl;
@@ -405,8 +398,8 @@ public class gl_render {
   }
 
   /*
-   * protected void draw_line (gl_vertex v1, gl_vertex v2, gl_vertex v3) {
-   * draw_line (v1, v2); draw_line (v2, v3); }
+   * protected void draw_line (gl_vertex v1, gl_vertex v2, gl_vertex v3) { draw_line (v1, v2);
+   * draw_line (v2, v3); }
    */
 
   protected void draw_horizontal_line(int y) {
@@ -414,8 +407,7 @@ public class gl_render {
   }
 
   /*
-   * protected void draw_point (int v) { CC.CR.pixel.put_pixel (TriXY[v][0],
-   * TriXY[v][1], color); }
+   * protected void draw_point (int v) { CC.CR.pixel.put_pixel (TriXY[v][0], TriXY[v][1], color); }
    */
 
   /** Draw a flat triangle in the Color Buffer */
@@ -479,15 +471,14 @@ public class gl_render {
 
     if (area == 0) {
       /*
-       * if (CC.Raster.CullFace && (CC.Raster.CullFaceMode == GL.GL_FRONT_AND_BACK))
-       * return; if ((CC.Raster.FrontMode == GL.GL_POINT) && (CC.Raster.BackMode ==
-       * GL.GL_POINT)) { draw_point (v1); draw_point (v2); draw_point (v3); //
-       * draw_point (Top); // draw_point (Mid); // draw_point (Down); } else {
-       * draw_line (v1, v2); draw_line (v2, v3); }
+       * if (CC.Raster.CullFace && (CC.Raster.CullFaceMode == GL.GL_FRONT_AND_BACK)) return; if
+       * ((CC.Raster.FrontMode == GL.GL_POINT) && (CC.Raster.BackMode == GL.GL_POINT)) { draw_point
+       * (v1); draw_point (v2); draw_point (v3); // draw_point (Top); // draw_point (Mid); //
+       * draw_point (Down); } else { draw_line (v1, v2); draw_line (v2, v3); }
        */
       return;
     }
-    
+
     facing = facing ^ (area > 0) ^ (CC.Raster.FrontFace == GL.GL_CW);
 
     if (CC.Raster.CullFace) {
@@ -501,35 +492,35 @@ public class gl_render {
 
     if (facing) {
       switch (CC.Raster.FrontMode) {
-      case GL.GL_POINT:
-        draw_point(v1);
-        draw_point(v2);
-        draw_point(v3);
-//		    draw_point (Top);
-//		    draw_point (Mid);
-//		    draw_point (Down);
-        return;
-      case GL.GL_LINE:
-        draw_line(v1, v2);
-        draw_line(v2, v3);
-        draw_line(v3, v1);
-        return;
+        case GL.GL_POINT:
+          draw_point(v1);
+          draw_point(v2);
+          draw_point(v3);
+          // draw_point (Top);
+          // draw_point (Mid);
+          // draw_point (Down);
+          return;
+        case GL.GL_LINE:
+          draw_line(v1, v2);
+          draw_line(v2, v3);
+          draw_line(v3, v1);
+          return;
       }
     } else {
       switch (CC.Raster.BackMode) {
-      case GL.GL_POINT:
-        draw_point(v1);
-        draw_point(v2);
-        draw_point(v3);
-//		    draw_point (Top);
-//		    draw_point (Mid);
-//		    draw_point (Down);
-        return;
-      case GL.GL_LINE:
-        draw_line(v1, v2);
-        draw_line(v2, v3);
-        draw_line(v3, v1);
-        return;
+        case GL.GL_POINT:
+          draw_point(v1);
+          draw_point(v2);
+          draw_point(v3);
+          // draw_point (Top);
+          // draw_point (Mid);
+          // draw_point (Down);
+          return;
+        case GL.GL_LINE:
+          draw_line(v1, v2);
+          draw_line(v2, v3);
+          draw_line(v3, v1);
+          return;
       }
     }
 

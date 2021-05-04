@@ -1,7 +1,6 @@
 package examples.apps;
 /*
- * simple.java
- * This is a simple, introductory OpenGL program.
+ * simple.java This is a simple, introductory OpenGL program.
  */
 
 import java.awt.Frame;
@@ -17,8 +16,7 @@ public class simple extends GLCanvas {
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT);
 
     /*
-     * draw white polygon (rectangle) with corners at (0.25, 0.25, 0.0) and (0.75,
-     * 0.75, 0.0)
+     * draw white polygon (rectangle) with corners at (0.25, 0.25, 0.0) and (0.75, 0.75, 0.0)
      */
     myGL.glColor3f(1.0f, 1.0f, 1.0f);
     myGL.glBegin(GL.GL_POLYGON);
@@ -36,10 +34,10 @@ public class simple extends GLCanvas {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 
@@ -54,10 +52,9 @@ public class simple extends GLCanvas {
   }
 
   /*
-   * Declare initial window size, position, and display mode (single buffer and
-   * RGBA). Open window with "hello" in its title bar. Call initialization
-   * routines. Register callback function to display graphics. Enter main loop and
-   * process events.
+   * Declare initial window size, position, and display mode (single buffer and RGBA). Open window
+   * with "hello" in its title bar. Call initialization routines. Register callback function to
+   * display graphics. Enter main loop and process events.
    */
   public void init() {
     myUT.glutInitWindowSize(500, 500);

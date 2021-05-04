@@ -19,11 +19,11 @@ public class colormat extends Applet implements ComponentListener, MouseListener
   GL myGL = new GL();
   GLAUX myAUX = new GLAUX(myGL);
 
-  private float diffuseMaterial[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+  private float diffuseMaterial[] = {0.5f, 0.5f, 0.5f, 1.0f};
 
   private void myinit() {
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float light_position[] = {1.0f, 1.0f, 1.0f, 0.0f};
 
     myGL.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, diffuseMaterial);
     myGL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, mat_specular);
@@ -63,17 +63,13 @@ public class colormat extends Applet implements ComponentListener, MouseListener
     myGL.glColor4fv(diffuseMaterial);
   }
 
-  public void mouseClicked(MouseEvent e) {
-  }
+  public void mouseClicked(MouseEvent e) {}
 
-  public void mouseEntered(MouseEvent e) {
-  }
+  public void mouseEntered(MouseEvent e) {}
 
-  public void mouseExited(MouseEvent e) {
-  }
+  public void mouseExited(MouseEvent e) {}
 
-  public void mouseReleased(MouseEvent e) {
-  }
+  public void mouseReleased(MouseEvent e) {}
 
   public void mousePressed(MouseEvent e) {
     // process which button by myself
@@ -99,14 +95,11 @@ public class colormat extends Applet implements ComponentListener, MouseListener
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself
@@ -120,9 +113,11 @@ public class colormat extends Applet implements ComponentListener, MouseListener
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f,
+          10.0f);
     } else {
-      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f,
+          10.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();

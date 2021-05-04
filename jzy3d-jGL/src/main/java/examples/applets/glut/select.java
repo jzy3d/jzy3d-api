@@ -6,8 +6,8 @@ import jgl.GLApplet;
 public class select extends GLApplet {
 
   /*
-   * draw a triangle with vertices at (x1, y1), (x2, y2) and (x3, y3) at z units
-   * away from the origin.
+   * draw a triangle with vertices at (x1, y1), (x2, y2) and (x3, y3) at z units away from the
+   * origin.
    */
   private void drawTriangle(float x1, float y1, float x2, float y2, float x3, float y3, float z) {
     myGL.glBegin(GL.GL_TRIANGLES);
@@ -47,8 +47,7 @@ public class select extends GLApplet {
   }
 
   /*
-   * drawScene draws 4 triangles and a wire frame which represents the viewing
-   * volume.
+   * drawScene draws 4 triangles and a wire frame which represents the viewing volume.
    */
   private void drawScene() {
     myGL.glMatrixMode(GL.GL_PROJECTION);
@@ -95,10 +94,9 @@ public class select extends GLApplet {
   }
 
   /*
-   * selectObjects "draws" the triangles in selection mode, assigning names for
-   * the triangles. Note that the third and fourth triangles share one name, so
-   * that if either or both triangles intersects the viewing/clipping volume, only
-   * one hit will be registered.
+   * selectObjects "draws" the triangles in selection mode, assigning names for the triangles. Note
+   * that the third and fourth triangles share one name, so that if either or both triangles
+   * intersects the viewing/clipping volume, only one hit will be registered.
    */
   private static final int BUFSIZE = 512;
 

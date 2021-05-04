@@ -1,7 +1,6 @@
 package examples.apps;
 /*
- *  model.java
- *  This program demonstrates modeling transformations
+ * model.java This program demonstrates modeling transformations
  */
 
 import java.awt.Frame;
@@ -58,9 +57,11 @@ public class model extends GLCanvas {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-50.0f, 50.0f, -50.0f * (float) h / (float) w, 50.0f * (float) h / (float) w, -1.0f, 1.0f);
+      myGL.glOrtho(-50.0f, 50.0f, -50.0f * (float) h / (float) w, 50.0f * (float) h / (float) w,
+          -1.0f, 1.0f);
     } else {
-      myGL.glOrtho(-50.0f * (float) w / (float) h, 50.0f * (float) w / (float) h, -50.0f, 50.0f, -1.0f, 1.0f);
+      myGL.glOrtho(-50.0f * (float) w / (float) h, 50.0f * (float) w / (float) h, -50.0f, 50.0f,
+          -1.0f, 1.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
   }
@@ -68,10 +69,10 @@ public class model extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

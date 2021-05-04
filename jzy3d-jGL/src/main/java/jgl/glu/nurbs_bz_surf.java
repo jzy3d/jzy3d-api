@@ -1,19 +1,16 @@
 /*
  * @(#)nurbs_bz_surf.java 0.1 99/11/6
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -41,8 +38,8 @@ public class nurbs_bz_surf {
   private int s_cnt;
   private int t_cnt;
 
-  private void tesselate_strip_t_line(int top_start, int top_end, int top_z, int bot_start, int bot_end, int bot_z,
-      int bot_domain) {
+  private void tesselate_strip_t_line(int top_start, int top_end, int top_z, int bot_start,
+      int bot_end, int bot_z, int bot_domain) {
     int top_cnt, bot_cnt, tri_cnt, k;
     int dir;
 
@@ -76,8 +73,8 @@ public class nurbs_bz_surf {
     JavaGL.glEnd();
   }
 
-  private void tesselate_strip_t_fill(int top_start, int top_end, int top_z, int bot_start, int bot_end, int bot_z,
-      int bot_domain) {
+  private void tesselate_strip_t_fill(int top_start, int top_end, int top_z, int bot_start,
+      int bot_end, int bot_z, int bot_domain) {
     int top_cnt, bot_cnt, tri_cnt, k;
     int dir;
 
@@ -107,16 +104,16 @@ public class nurbs_bz_surf {
     }
   }
 
-  private void tesselate_strip_t(int top_start, int top_end, int top_z, int bot_start, int bot_end, int bot_z,
-      int bot_domain) {
+  private void tesselate_strip_t(int top_start, int top_end, int top_z, int bot_start, int bot_end,
+      int bot_z, int bot_domain) {
     if (mode == GL.GL_FILL)
       tesselate_strip_t_fill(top_start, top_end, top_z, bot_start, bot_end, bot_z, bot_domain);
     else
       tesselate_strip_t_line(top_start, top_end, top_z, bot_start, bot_end, bot_z, bot_domain);
   }
 
-  private void tesselate_strip_s_fill(int top_start, int top_end, int top_z, int bot_start, int bot_end, int bot_z,
-      float bot_domain) {
+  private void tesselate_strip_s_fill(int top_start, int top_end, int top_z, int bot_start,
+      int bot_end, int bot_z, float bot_domain) {
     int top_cnt, bot_cnt, tri_cnt, k;
     int dir;
 
@@ -146,8 +143,8 @@ public class nurbs_bz_surf {
     }
   }
 
-  private void tesselate_strip_s_line(int top_start, int top_end, int top_z, int bot_start, int bot_end, int bot_z,
-      float bot_domain) {
+  private void tesselate_strip_s_line(int top_start, int top_end, int top_z, int bot_start,
+      int bot_end, int bot_z, float bot_domain) {
     int top_cnt, bot_cnt, tri_cnt, k;
     int dir;
 
@@ -181,8 +178,8 @@ public class nurbs_bz_surf {
     JavaGL.glEnd();
   }
 
-  private void tesselate_strip_s(int top_start, int top_end, int top_z, int bot_start, int bot_end, int bot_z,
-      float bot_domain) {
+  private void tesselate_strip_s(int top_start, int top_end, int top_z, int bot_start, int bot_end,
+      int bot_z, float bot_domain) {
     if (mode == GL.GL_FILL)
       tesselate_strip_s_fill(top_start, top_end, top_z, bot_start, bot_end, bot_z, bot_domain);
     else
@@ -344,7 +341,8 @@ public class nurbs_bz_surf {
             JavaGL.glMapGrid2f(let, (float) 0.0, (float) 1.0, bot, (float) 0.0, (float) 1.0);
             JavaGL.glEvalMesh2(mode, 0, let - 1, 0, bot - 1);
             tesselate_strip_t(0, bot - 1, let - 1, 0, top - 1, top, top);
-            tesselate_tr_corn(let - 1, bot - 1, rit, top, (float) 1.0 / (float) rit, (float) 1.0 / (float) top);
+            tesselate_tr_corn(let - 1, bot - 1, rit, top, (float) 1.0 / (float) rit,
+                (float) 1.0 / (float) top);
             tesselate_strip_s(let - 1, 0, bot - 1, rit - 1, 0, rit, rit);
           }
         }
@@ -352,7 +350,8 @@ public class nurbs_bz_surf {
     }
   }
 
-  public void set_property(int display_mode, int sfactors[][], int tfactors[][], int s_bezier_cnt, int t_bezier_cnt) {
+  public void set_property(int display_mode, int sfactors[][], int tfactors[][], int s_bezier_cnt,
+      int t_bezier_cnt) {
     if (display_mode == GLU.GLU_FILL) {
       mode = GL.GL_FILL;
     } else {

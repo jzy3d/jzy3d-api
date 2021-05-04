@@ -1,19 +1,16 @@
 /*
  * @(#)nurbs_ct_surfs.java 0.1 99/11/5
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -38,8 +35,8 @@ public class nurbs_ct_surfs {
   public int s_bezier_cnt = 0;
   public int t_bezier_cnt = 0;
 
-  public void draw(GLUnurbsObj nobj, GL JavaGL, int display_mode, nurbs_surfaces surface, int sfactors[][],
-      int tfactors[][]) {
+  public void draw(GLUnurbsObj nobj, GL JavaGL, int display_mode, nurbs_surfaces surface,
+      int sfactors[][], int tfactors[][]) {
     nurbs_bz_surf n_map_b = new nurbs_bz_surf(JavaGL);
     boolean do_color, do_normal, do_texture;
     int i, j;
@@ -68,8 +65,8 @@ public class nurbs_ct_surfs {
 
     for (j = 0; j < s_bezier_cnt; j++) {
       for (i = 0; i < t_bezier_cnt; i++) {
-        if (!nobj.culling_test_3d(geom.offsets[j][i], surface.geom.s.order, surface.geom.t.order, geom.s_stride,
-            geom.t_stride, surface.geom.dim)) {
+        if (!nobj.culling_test_3d(geom.offsets[j][i], surface.geom.s.order, surface.geom.t.order,
+            geom.s_stride, geom.t_stride, surface.geom.dim)) {
           geom.draw(JavaGL, surface.geom, j, i);
           if (do_color) {
             color.draw(JavaGL, surface.color, j, i);
@@ -103,9 +100,9 @@ public class nurbs_ct_surfs {
     }
   }
 
-  public void convert(nurbs_knot geom_s_knot, nurbs_knot geom_t_knot, nurbs_knot color_s_knot, nurbs_knot color_t_knot,
-      nurbs_knot normal_s_knot, nurbs_knot normal_t_knot, nurbs_knot texture_s_knot, nurbs_knot texture_t_knot,
-      nurbs_surfaces surface) {
+  public void convert(nurbs_knot geom_s_knot, nurbs_knot geom_t_knot, nurbs_knot color_s_knot,
+      nurbs_knot color_t_knot, nurbs_knot normal_s_knot, nurbs_knot normal_t_knot,
+      nurbs_knot texture_s_knot, nurbs_knot texture_t_knot, nurbs_surfaces surface) {
     geom.convert(geom_s_knot, geom_t_knot, surface.geom);
 
     // Yes, if xxx_s_knot has been set, xxx_t_knot must be set, too.

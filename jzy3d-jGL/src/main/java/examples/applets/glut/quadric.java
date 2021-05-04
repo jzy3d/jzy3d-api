@@ -1,11 +1,8 @@
 package examples.applets.glut;
 /*
- *  quadric.java
- *  This program demonstrates the use of some of the gluQuadric*
- *  routines. Quadric objects are created with some quadric
- *  properties and the callback routine to handle errors.
- *  Note that the cylinder has no top or bottom and the circle
- *  has a hole in it.
+ * quadric.java This program demonstrates the use of some of the gluQuadric* routines. Quadric
+ * objects are created with some quadric properties and the callback routine to handle errors. Note
+ * that the cylinder has no top or bottom and the circle has a hole in it.
  */
 
 import jgl.GL;
@@ -26,11 +23,11 @@ public class quadric extends GLApplet {
 
   private void myinit() {
     GLUquadricObj qobj;
-    float mat_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float mat_shininess[] = { 50.0f };
-    float light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
-    float model_ambient[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+    float mat_ambient[] = {0.5f, 0.5f, 0.5f, 1.0f};
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float mat_shininess[] = {50.0f};
+    float light_position[] = {1.0f, 1.0f, 1.0f, 0.0f};
+    float model_ambient[] = {0.5f, 0.5f, 0.5f, 1.0f};
 
     myGL.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -45,8 +42,8 @@ public class quadric extends GLApplet {
     myGL.glEnable(GL.GL_DEPTH_TEST);
 
     /*
-     * Create 4 display lists, each with a different quadric object. Different
-     * drawing styles and surface normal specifications are demonstrated.
+     * Create 4 display lists, each with a different quadric object. Different drawing styles and
+     * surface normal specifications are demonstrated.
      */
     startList = myGL.glGenLists(4);
     qobj = myGLU.gluNewQuadric();
@@ -111,9 +108,11 @@ public class quadric extends GLApplet {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-2.5f, 2.5f, -2.5f * (float) h / (float) w, 2.5f * (float) h / (float) w, -10.0f, 10.0f);
+      myGL.glOrtho(-2.5f, 2.5f, -2.5f * (float) h / (float) w, 2.5f * (float) h / (float) w, -10.0f,
+          10.0f);
     } else {
-      myGL.glOrtho(-2.5f * (float) w / (float) h, 2.5f * (float) w / (float) h, -2.5f, 2.5f, -10.0f, 10.0f);
+      myGL.glOrtho(-2.5f * (float) w / (float) h, 2.5f * (float) w / (float) h, -2.5f, 2.5f, -10.0f,
+          10.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();

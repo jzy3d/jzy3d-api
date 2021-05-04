@@ -1,19 +1,16 @@
 /*
  * @(#)gl_tex_z.java 0.2 99/11/30
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -86,17 +83,19 @@ public class gl_tex_z extends gl_tex {
 
   protected void put_pixel_by_index() {
     if (CC.Lighting.Enable) {
-      pixel.put_pixel_by_index(x, z, w, s / w, t / w, r / w, dsdx, dsdy, dtdx, dtdy, drdx, drdy, color);
+      pixel.put_pixel_by_index(x, z, w, s / w, t / w, r / w, dsdx, dsdy, dtdx, dtdy, drdx, drdy,
+          color);
     } else {
       pixel.put_pixel_by_index(x, z, w, s / w, t / w, r / w, dsdx, dsdy, dtdx, dtdy, drdx, drdy);
     }
   }
 
   /**
-   * Draw a flat horizontal line in the Color Buffer with depth value, assume that
-   * x1 is in the left side of x2
+   * Draw a flat horizontal line in the Color Buffer with depth value, assume that x1 is in the left
+   * side of x2
    */
-  private void draw_horizontal_line(int x1, int x2, int y, float z1, float w1, float s1, float t1, float r1) {
+  private void draw_horizontal_line(int x1, int x2, int y, float z1, float w1, float s1, float t1,
+      float r1) {
     this.LineZ[0] = z1;
     draw_horizontal_line(x1, x2, y, w1, s1, t1, r1);
   }
@@ -132,7 +131,8 @@ public class gl_tex_z extends gl_tex {
   }
 
   protected void draw_horizontal_line(int y) {
-    draw_horizontal_line(LeftPoint, RightPoint, y, LeftPointZ, LeftPointW, LeftPointS, LeftPointT, LeftPointR);
+    draw_horizontal_line(LeftPoint, RightPoint, y, LeftPointZ, LeftPointW, LeftPointS, LeftPointT,
+        LeftPointR);
   }
 
   public gl_tex_z(gl_context cc) {

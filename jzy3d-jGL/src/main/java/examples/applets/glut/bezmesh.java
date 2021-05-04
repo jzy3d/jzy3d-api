@@ -1,8 +1,7 @@
 package examples.applets.glut;
 /*
- *  bezmesh.java
- *  This program renders a lighted, filled Bezier surface,
- *  using two-dimensional evaluators.
+ * bezmesh.java This program renders a lighted, filled Bezier surface, using two-dimensional
+ * evaluators.
  */
 
 import jgl.GL;
@@ -10,18 +9,18 @@ import jgl.GLApplet;
 
 public class bezmesh extends GLApplet {
 
-  private static final float ctrlpoints[][][] = {
-      { { -1.5f, -1.5f, 4.0f }, { -0.5f, -1.5f, 2.0f }, { 0.5f, -1.5f, -1.0f }, { 1.5f, -1.5f, 2.0f } },
-      { { -1.5f, -0.5f, 1.0f }, { -0.5f, -0.5f, 3.0f }, { 0.5f, -0.5f, 0.0f }, { 1.5f, -0.5f, -1.0f } },
-      { { -1.5f, 0.5f, 4.0f }, { -0.5f, 0.5f, 0.0f }, { 0.5f, 0.5f, 3.0f }, { 1.5f, 0.5f, 4.0f } },
-      { { -1.5f, 1.5f, -2.0f }, { -0.5f, 1.5f, -2.0f }, { 0.5f, 1.5f, 0.0f }, { 1.5f, 1.5f, -1.0f } } };
+  private static final float ctrlpoints[][][] =
+      {{{-1.5f, -1.5f, 4.0f}, {-0.5f, -1.5f, 2.0f}, {0.5f, -1.5f, -1.0f}, {1.5f, -1.5f, 2.0f}},
+          {{-1.5f, -0.5f, 1.0f}, {-0.5f, -0.5f, 3.0f}, {0.5f, -0.5f, 0.0f}, {1.5f, -0.5f, -1.0f}},
+          {{-1.5f, 0.5f, 4.0f}, {-0.5f, 0.5f, 0.0f}, {0.5f, 0.5f, 3.0f}, {1.5f, 0.5f, 4.0f}},
+          {{-1.5f, 1.5f, -2.0f}, {-0.5f, 1.5f, -2.0f}, {0.5f, 1.5f, 0.0f}, {1.5f, 1.5f, -1.0f}}};
 
   private void initlights() {
-    float ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-    float position[] = { 0.0f, 0.0f, 2.0f, 1.0f };
-    float mat_diffuse[] = { 0.6f, 0.6f, 0.6f, 1.0f };
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float mat_shininess[] = { 50.0f };
+    float ambient[] = {0.2f, 0.2f, 0.2f, 1.0f};
+    float position[] = {0.0f, 0.0f, 2.0f, 1.0f};
+    float mat_diffuse[] = {0.6f, 0.6f, 0.6f, 1.0f};
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float mat_shininess[] = {50.0f};
 
     myGL.glEnable(GL.GL_LIGHTING);
     myGL.glEnable(GL.GL_LIGHT0);
@@ -59,9 +58,11 @@ public class bezmesh extends GLApplet {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-4.0f, 4.0f, -4.0f * (float) h / (float) w, 4.0f * (float) h / (float) w, -4.0f, 4.0f);
+      myGL.glOrtho(-4.0f, 4.0f, -4.0f * (float) h / (float) w, 4.0f * (float) h / (float) w, -4.0f,
+          4.0f);
     } else {
-      myGL.glOrtho(-4.0f * (float) w / (float) h, 4.0f * (float) w / (float) h, -4.0f, 4.0f, -4.0f, 4.0f);
+      myGL.glOrtho(-4.0f * (float) w / (float) h, 4.0f * (float) w / (float) h, -4.0f, 4.0f, -4.0f,
+          4.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();

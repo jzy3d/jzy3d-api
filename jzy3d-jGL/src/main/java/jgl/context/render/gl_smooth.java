@@ -1,19 +1,15 @@
 /*
  * @(#)gl_smooth.java 0.5 06/11/23
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1996-2006 Robin Bing-Yu Chen (robin@ntu.edu.tw)
+ * jGL 3-D graphics library for Java Copyright (c) 1996-2006 Robin Bing-Yu Chen (robin@ntu.edu.tw)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -151,8 +147,8 @@ public class gl_smooth extends gl_depth {
     pixel.put_pixel_by_index(x, rgb);
   }
 
-//    public void draw_horizontal_line (int x1, int rgb1 [],
-//				      int x2, int rgb2 [], int y) {
+  // public void draw_horizontal_line (int x1, int rgb1 [],
+  // int x2, int rgb2 [], int y) {
   protected void draw_horizontal_line(int x1, int rgb1[], int x2, int rgb2[], int y) {
     this.LineRGB[0] = rgb1;
     this.LineRGB[1] = rgb2;
@@ -208,11 +204,9 @@ public class gl_smooth extends gl_depth {
     set_right_color(pos);
   }
 
-  protected void init_dx_dy(int area, int left, int right, int top) {
-  }
+  protected void init_dx_dy(int area, int left, int right, int top) {}
 
-  protected void init_other(boolean delta, int dy) {
-  }
+  protected void init_other(boolean delta, int dy) {}
 
   protected void init_left_rgb(int down, int top) {
     boolean deltargbl[] = new boolean[4];
@@ -288,11 +282,9 @@ public class gl_smooth extends gl_depth {
     init_right_rgb(down, top);
   }
 
-  protected void inc_y_once() {
-  }
+  protected void inc_y_once() {}
 
-  protected void inc_y_more() {
-  }
+  protected void inc_y_more() {}
 
   protected void inc_left_rgb() {
     for (int i = 0; i < 4; i++) {

@@ -1,19 +1,16 @@
 /*
  * @(#)gl_depthbuffer.java 0.3 01/03/15
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2001 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2001 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -52,22 +49,22 @@ public class gl_depthbuffer {
 
   public boolean Test(float a, int b) {
     switch (Func) {
-    case GL.GL_NEVER:
-      return false;
-    case GL.GL_LESS:
-      return (a < Buffer[b]);
-    case GL.GL_GEQUAL:
-      return (a >= Buffer[b]);
-    case GL.GL_LEQUAL:
-      return (a <= Buffer[b]);
-    case GL.GL_GREATER:
-      return (a > Buffer[b]);
-    case GL.GL_NOTEQUAL:
-      return (a != Buffer[b]);
-    case GL.GL_EQUAL:
-      return (a == Buffer[b]);
-    case GL.GL_ALWAYS:
-      return true;
+      case GL.GL_NEVER:
+        return false;
+      case GL.GL_LESS:
+        return (a < Buffer[b]);
+      case GL.GL_GEQUAL:
+        return (a >= Buffer[b]);
+      case GL.GL_LEQUAL:
+        return (a <= Buffer[b]);
+      case GL.GL_GREATER:
+        return (a > Buffer[b]);
+      case GL.GL_NOTEQUAL:
+        return (a != Buffer[b]);
+      case GL.GL_EQUAL:
+        return (a == Buffer[b]);
+      case GL.GL_ALWAYS:
+        return true;
     }
     return true;
   }
@@ -128,11 +125,10 @@ public class gl_depthbuffer {
       Pos += CC.Viewport.Width - width;
       for (j = 0; j < width; j++) {
         /*
-         * if (need_scale) { Val = CC.Pixel.Depth.apply_bias_scale (Buffer[Pos++]); }
-         * else {
+         * if (need_scale) { Val = CC.Pixel.Depth.apply_bias_scale (Buffer[Pos++]); } else {
          */
         Val = Buffer[Pos++];
-//		}
+        // }
         if (size == 8) {
           set_pixel(si, sj, (byte[][]) pixels, Val);
         }
@@ -177,11 +173,10 @@ public class gl_depthbuffer {
           Val = get_pixel(si, sj, (float[][]) pixels);
         }
         /*
-         * if (need_scale) { Buffer[Pos++] = CC.Pixel.Depth.apply_bias_scale (Val); }
-         * else {
+         * if (need_scale) { Buffer[Pos++] = CC.Pixel.Depth.apply_bias_scale (Val); } else {
          */
         Buffer[Pos++] = Val;
-//		}
+        // }
         sj++;
       }
       si++;
@@ -201,16 +196,14 @@ public class gl_depthbuffer {
   }
 
   /*
-   * public void push_attrib (gl_list_item AttribItem) { AttribItem.BoolPtr = new
-   * boolean [2]; AttribItem.IntPtr = new int [1]; AttribItem.FloatPtr = new float
-   * [1];
+   * public void push_attrib (gl_list_item AttribItem) { AttribItem.BoolPtr = new boolean [2];
+   * AttribItem.IntPtr = new int [1]; AttribItem.FloatPtr = new float [1];
    * 
-   * AttribItem.BoolPtr [0] = Enable; AttribItem.IntPtr [0] = Func;
-   * AttribItem.BoolPtr [1] = Mask; AttribItem.FloatPtr [0] = Clear; }
+   * AttribItem.BoolPtr [0] = Enable; AttribItem.IntPtr [0] = Func; AttribItem.BoolPtr [1] = Mask;
+   * AttribItem.FloatPtr [0] = Clear; }
    * 
-   * public void pop_attrib (gl_list_item AttribItem) { Enable =
-   * AttribItem.BoolPtr [0]; Func = AttribItem.IntPtr [0]; Mask =
-   * AttribItem.BoolPtr [1]; Clear = AttribItem.FloatPtr [0]; }
+   * public void pop_attrib (gl_list_item AttribItem) { Enable = AttribItem.BoolPtr [0]; Func =
+   * AttribItem.IntPtr [0]; Mask = AttribItem.BoolPtr [1]; Clear = AttribItem.FloatPtr [0]; }
    */
 
   public gl_depthbuffer(gl_depthbuffer cc) {

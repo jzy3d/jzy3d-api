@@ -1,9 +1,7 @@
 package examples.applets.glut;
 /*
- *  light.java
- *  This program demonstrates the use of the OpenGL lighting
- *  model.  A sphere is drawn using a grey material characteristic.
- *  A single light source illuminates the object.
+ * light.java This program demonstrates the use of the OpenGL lighting model. A sphere is drawn
+ * using a grey material characteristic. A single light source illuminates the object.
  */
 
 import jgl.GL;
@@ -15,9 +13,9 @@ public class light extends GLApplet {
    * Initialize material property, light source, lighting model, and depth buffer.
    */
   private void myinit() {
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float mat_shininess[] = { 50.0f };
-    float light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float mat_shininess[] = {50.0f};
+    float light_position[] = {1.0f, 1.0f, 1.0f, 0.0f};
 
     myGL.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     myGL.glShadeModel(GL.GL_SMOOTH);
@@ -42,9 +40,11 @@ public class light extends GLApplet {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f,
+          10.0f);
     } else {
-      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f,
+          10.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();

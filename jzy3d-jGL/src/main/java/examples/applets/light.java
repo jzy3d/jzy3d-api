@@ -17,9 +17,9 @@ public class light extends Applet implements ComponentListener {
   GLAUX myAUX = new GLAUX(myGL);
 
   private void myinit() {
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float mat_shininess[] = { 50.0f };
-    float light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float mat_shininess[] = {50.0f};
+    float light_position[] = {1.0f, 1.0f, 1.0f, 0.0f};
 
     myGL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, mat_specular);
     myGL.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess);
@@ -37,14 +37,11 @@ public class light extends Applet implements ComponentListener {
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself
@@ -58,9 +55,11 @@ public class light extends Applet implements ComponentListener {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f,
+          10.0f);
     } else {
-      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f,
+          10.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();

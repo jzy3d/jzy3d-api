@@ -48,8 +48,8 @@ public class checker extends Applet implements ComponentListener {
     myGL.glDepthFunc(GL.GL_LEQUAL);
     makeCheckImage();
     myGL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, 3, checkImageWidth, checkImageHeight, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
-        checkImage);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, 3, checkImageWidth, checkImageHeight, 0, GL.GL_RGB,
+        GL.GL_UNSIGNED_BYTE, checkImage);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
@@ -83,14 +83,11 @@ public class checker extends Applet implements ComponentListener {
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

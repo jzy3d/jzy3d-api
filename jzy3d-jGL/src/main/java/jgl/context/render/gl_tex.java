@@ -1,19 +1,16 @@
 /*
  * @(#)gl_tex.java 0.3 03/05/16
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2003 Robin Bing-Yu Chen (robin@nis-lab.is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2003 Robin Bing-Yu Chen
+ * (robin@nis-lab.is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -135,13 +132,15 @@ public class gl_tex extends gl_depth {
 
   protected void put_pixel_by_index() {
     if (CC.Lighting.Enable) {
-      pixel.put_pixel_by_index(x, w, s / w, t / w, r / w, dsdx, dsdy, dtdx, dtdy, drdx, drdy, color);
+      pixel.put_pixel_by_index(x, w, s / w, t / w, r / w, dsdx, dsdy, dtdx, dtdy, drdx, drdy,
+          color);
     } else {
       pixel.put_pixel_by_index(x, w, s / w, t / w, r / w, dsdx, dsdy, dtdx, dtdy, drdx, drdy);
     }
   }
 
-  protected void draw_horizontal_line(int x1, int x2, int y, float w1, float s1, float t1, float r1) {
+  protected void draw_horizontal_line(int x1, int x2, int y, float w1, float s1, float t1,
+      float r1) {
     this.LineW[0] = w1;
     this.LineST[0][0] = s1;
     this.LineST[0][1] = t1;

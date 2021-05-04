@@ -1,19 +1,16 @@
 /*
  * @(#)gl_colorbuffer.java 0.3 01/03/15
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2001 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2001 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -41,13 +38,13 @@ public class gl_colorbuffer {
 
   /** GL_COLOR_WRITEMASK: Color write enabled; R, G, B, or A */
   /*
-   * public boolean RedMask = true; public boolean GreenMask = true; public
-   * boolean BlueMask = true; public boolean AlphaMask = true;
+   * public boolean RedMask = true; public boolean GreenMask = true; public boolean BlueMask = true;
+   * public boolean AlphaMask = true;
    */
   public int ColorMask = 0xffffffff;
 
   /** GL_COLOR_CLEAR_VALUE: Color-buffer clear value (RGBA mode) */
-  public float ClearColor[] = { 0, 0, 0, 0 };
+  public float ClearColor[] = {0, 0, 0, 0};
 
   /** The clear color in int for Java format */
   public int IntClearColor = 0xff000000;
@@ -90,11 +87,9 @@ public class gl_colorbuffer {
     ClearColor[1] = g;
     ClearColor[2] = b;
     ClearColor[3] = a;
-    IntClearColor = //0xff000000  // ALPHA IS FORCED TO 255 !
-    		 ((int) (a * (float) 255.0)) << 24
-    		| ((int) (r * (float) 255.0)) << 16 
-    		| ((int) (g * (float) 255.0)) << 8
-    		| ((int) (b * (float) 255.0));
+    IntClearColor = // 0xff000000 // ALPHA IS FORCED TO 255 !
+        ((int) (a * (float) 255.0)) << 24 | ((int) (r * (float) 255.0)) << 16
+            | ((int) (g * (float) 255.0)) << 8 | ((int) (b * (float) 255.0));
   }
 
   public void set_color_mask(boolean r, boolean g, boolean b, boolean a) {
@@ -117,7 +112,7 @@ public class gl_colorbuffer {
       ColorMask |= 0xff000000;
     else
       ColorMask &= 0x00ffffff;
-//	ColorMask = r || g || b || a;
+    // ColorMask = r || g || b || a;
   }
 
   public void set_buffer(int size) {
@@ -125,10 +120,10 @@ public class gl_colorbuffer {
   }
 
   public void clear_buffer(int size) {
-	  //System.err.println("gl_colorbuffer.clear_buffer " + size + " pixels");
-	  
-	  //gl_render_pixel.debug_color_to_console(IntClearColor);
-	  
+    // System.err.println("gl_colorbuffer.clear_buffer " + size + " pixels");
+
+    // gl_render_pixel.debug_color_to_console(IntClearColor);
+
     for (int i = 0; i < size; i++) {
       Buffer[i] = IntClearColor;
     }
@@ -193,13 +188,14 @@ public class gl_colorbuffer {
     return (byte) (((int) r + (int) g + (int) b) / 3);
   }
 
-  public void read_pixels(int x, int y, int width, int height, int format, int size, Object pixels) {
+  public void read_pixels(int x, int y, int width, int height, int format, int size,
+      Object pixels) {
     /*
      * boolean need_scale = false;
      * 
-     * if ((p.Red.Scale != 1) || (p.Red.Bias != 0) || (p.Green.Scale != 1) ||
-     * (p.Green.Bias != 0) || (p.Blue.Scale != 1) || (p.Blue.Bias != 0) ||
-     * (p.Alpha.Scale != 1) || (p.Alpha.Bias != 0)) { need_scale = true; }
+     * if ((p.Red.Scale != 1) || (p.Red.Bias != 0) || (p.Green.Scale != 1) || (p.Green.Bias != 0) ||
+     * (p.Blue.Scale != 1) || (p.Blue.Bias != 0) || (p.Alpha.Scale != 1) || (p.Alpha.Bias != 0)) {
+     * need_scale = true; }
      */
     int i, j, si, sj, Pos = x + CC.Viewport.Width * y;
 
@@ -219,40 +215,40 @@ public class gl_colorbuffer {
         a = (byte) ((Buffer[Pos] & 0xff000000) >> 24);
         /*
          * if (need_scale) { r = CC.Pixel.Red.apply_bias_scale (r); g =
-         * CC.Pixel.Green.apply_bias_scale (g); b = CC.Pixel.Blue.apply_bias_scale (b);
-         * a = CC.Pixel.Alpha.apply_bias_scale (a); }
+         * CC.Pixel.Green.apply_bias_scale (g); b = CC.Pixel.Blue.apply_bias_scale (b); a =
+         * CC.Pixel.Alpha.apply_bias_scale (a); }
          */
         switch (format) {
-        case GL.GL_RGB:
-          set_pixel(si, sj, 0, size, pixels, r);
-          set_pixel(si, sj, 1, size, pixels, g);
-          set_pixel(si, sj, 2, size, pixels, b);
-          break;
-        case GL.GL_RGBA:
-          set_pixel(si, sj, 0, size, pixels, r);
-          set_pixel(si, sj, 1, size, pixels, g);
-          set_pixel(si, sj, 2, size, pixels, b);
-          set_pixel(si, sj, 3, size, pixels, a);
-          break;
-        case GL.GL_RED:
-          set_pixel(si, sj, 0, size, pixels, r);
-          break;
-        case GL.GL_GREEN:
-          set_pixel(si, sj, 0, size, pixels, g);
-          break;
-        case GL.GL_BLUE:
-          set_pixel(si, sj, 0, size, pixels, b);
-          break;
-        case GL.GL_ALPHA:
-          set_pixel(si, sj, 0, size, pixels, a);
-          break;
-        case GL.GL_LUMINANCE:
-          set_pixel(si, sj, 0, size, pixels, cal_lum(r, g, b));
-          break;
-        case GL.GL_LUMINANCE_ALPHA:
-          set_pixel(si, sj, 0, size, pixels, cal_lum(r, g, b));
-          set_pixel(si, sj, 1, size, pixels, a);
-          break;
+          case GL.GL_RGB:
+            set_pixel(si, sj, 0, size, pixels, r);
+            set_pixel(si, sj, 1, size, pixels, g);
+            set_pixel(si, sj, 2, size, pixels, b);
+            break;
+          case GL.GL_RGBA:
+            set_pixel(si, sj, 0, size, pixels, r);
+            set_pixel(si, sj, 1, size, pixels, g);
+            set_pixel(si, sj, 2, size, pixels, b);
+            set_pixel(si, sj, 3, size, pixels, a);
+            break;
+          case GL.GL_RED:
+            set_pixel(si, sj, 0, size, pixels, r);
+            break;
+          case GL.GL_GREEN:
+            set_pixel(si, sj, 0, size, pixels, g);
+            break;
+          case GL.GL_BLUE:
+            set_pixel(si, sj, 0, size, pixels, b);
+            break;
+          case GL.GL_ALPHA:
+            set_pixel(si, sj, 0, size, pixels, a);
+            break;
+          case GL.GL_LUMINANCE:
+            set_pixel(si, sj, 0, size, pixels, cal_lum(r, g, b));
+            break;
+          case GL.GL_LUMINANCE_ALPHA:
+            set_pixel(si, sj, 0, size, pixels, cal_lum(r, g, b));
+            set_pixel(si, sj, 1, size, pixels, a);
+            break;
         }
         Pos++;
         sj++;
@@ -265,9 +261,9 @@ public class gl_colorbuffer {
     /*
      * boolean need_scale = false;
      * 
-     * if ((p.Red.Scale != 1) || (p.Red.Bias != 0) || (p.Green.Scale != 1) ||
-     * (p.Green.Bias != 0) || (p.Blue.Scale != 1) || (p.Blue.Bias != 0) ||
-     * (p.Alpha.Scale != 1) || (p.Alpha.Bias != 0)) { need_scale = true; }
+     * if ((p.Red.Scale != 1) || (p.Red.Bias != 0) || (p.Green.Scale != 1) || (p.Green.Bias != 0) ||
+     * (p.Blue.Scale != 1) || (p.Blue.Bias != 0) || (p.Alpha.Scale != 1) || (p.Alpha.Bias != 0)) {
+     * need_scale = true; }
      */
     int i, j, si, sj, Pos = 0;
 
@@ -282,52 +278,52 @@ public class gl_colorbuffer {
       Pos += CC.Viewport.Width - width;
       for (j = 0; j < width; j++) {
         switch (format) {
-        case GL.GL_RGB:
-          r = get_pixel(si, sj, 0, size, pixels);
-          g = get_pixel(si, sj, 1, size, pixels);
-          b = get_pixel(si, sj, 2, size, pixels);
-          break;
-        case GL.GL_RGBA:
-          r = get_pixel(si, sj, 0, size, pixels);
-          g = get_pixel(si, sj, 1, size, pixels);
-          b = get_pixel(si, sj, 2, size, pixels);
-          a = get_pixel(si, sj, 3, size, pixels);
-          break;
-        case GL.GL_RED:
-          r = get_pixel(si, sj, 0, size, pixels);
-          break;
-        case GL.GL_GREEN:
-          g = get_pixel(si, sj, 0, size, pixels);
-          break;
-        case GL.GL_BLUE:
-          b = get_pixel(si, sj, 0, size, pixels);
-          break;
-        case GL.GL_ALPHA:
-          a = get_pixel(si, sj, 0, size, pixels);
-          break;
-        case GL.GL_LUMINANCE:
-          r = get_pixel(si, sj, 0, size, pixels);
-          g = r;
-          b = r;
-          break;
-        case GL.GL_LUMINANCE_ALPHA:
-          r = get_pixel(si, sj, 0, size, pixels);
-          g = r;
-          b = r;
-          a = get_pixel(si, sj, 1, size, pixels);
-          break;
+          case GL.GL_RGB:
+            r = get_pixel(si, sj, 0, size, pixels);
+            g = get_pixel(si, sj, 1, size, pixels);
+            b = get_pixel(si, sj, 2, size, pixels);
+            break;
+          case GL.GL_RGBA:
+            r = get_pixel(si, sj, 0, size, pixels);
+            g = get_pixel(si, sj, 1, size, pixels);
+            b = get_pixel(si, sj, 2, size, pixels);
+            a = get_pixel(si, sj, 3, size, pixels);
+            break;
+          case GL.GL_RED:
+            r = get_pixel(si, sj, 0, size, pixels);
+            break;
+          case GL.GL_GREEN:
+            g = get_pixel(si, sj, 0, size, pixels);
+            break;
+          case GL.GL_BLUE:
+            b = get_pixel(si, sj, 0, size, pixels);
+            break;
+          case GL.GL_ALPHA:
+            a = get_pixel(si, sj, 0, size, pixels);
+            break;
+          case GL.GL_LUMINANCE:
+            r = get_pixel(si, sj, 0, size, pixels);
+            g = r;
+            b = r;
+            break;
+          case GL.GL_LUMINANCE_ALPHA:
+            r = get_pixel(si, sj, 0, size, pixels);
+            g = r;
+            b = r;
+            a = get_pixel(si, sj, 1, size, pixels);
+            break;
         }
         /*
          * if (need_scale) { r = CC.Pixel.Red.apply_bias_scale (r); g =
-         * CC.Pixel.Green.apply_bias_scale (g); b = CC.Pixel.Blue.apply_bias_scale (b);
-         * a = CC.Pixel.Alpha.apply_bias_scale (a); }
+         * CC.Pixel.Green.apply_bias_scale (g); b = CC.Pixel.Blue.apply_bias_scale (b); a =
+         * CC.Pixel.Alpha.apply_bias_scale (a); }
          */
-        
+
         int color = ((a << 24) | (r << 16) | (g << 8) | b);
         Buffer[Pos++] = color;
-        
-        //gl_render_pixel.debug_color_to_console(color);
-        
+
+        // gl_render_pixel.debug_color_to_console(color);
+
         sj++;
       }
       si++;
@@ -347,28 +343,24 @@ public class gl_colorbuffer {
   }
 
   /*
-   * public void push_attrib (gl_list_item AttribItem) { AttribItem.BoolPtr = new
-   * boolean [4]; AttribItem.IntPtr = new int [9]; AttribItem.FloatPtr = new float
-   * [4];
+   * public void push_attrib (gl_list_item AttribItem) { AttribItem.BoolPtr = new boolean [4];
+   * AttribItem.IntPtr = new int [9]; AttribItem.FloatPtr = new float [4];
    * 
    * AttribItem.IntPtr [0] = DrawBuffer; AttribItem.IntPtr [1] = ClearIndex;
-   * System.arraycopy(ClearColor, 0, AttribItem.FloatPtr, 0, 4); AttribItem.IntPtr
-   * [2] = IntClearColor; AttribItem.IntPtr [3] = IndexMask; AttribItem.IntPtr [4]
-   * = ColorMask; AttribItem.BoolPtr [0] = AlphaEnable; AttribItem.IntPtr [5] =
-   * AlphaFunc; AttribItem.IntPtr [6] = AlphaRef; AttribItem.BoolPtr [1] =
-   * BlendEnable; AttribItem.IntPtr [7] = BlendSrc; AttribItem.IntPtr [8] =
-   * BlendDst; AttribItem.BoolPtr [2] = LogicOPEnable; AttribItem.IntPtr [9] =
-   * LogicOPMode; AttribItem.BoolPtr [3] = DitherEnable; }
+   * System.arraycopy(ClearColor, 0, AttribItem.FloatPtr, 0, 4); AttribItem.IntPtr [2] =
+   * IntClearColor; AttribItem.IntPtr [3] = IndexMask; AttribItem.IntPtr [4] = ColorMask;
+   * AttribItem.BoolPtr [0] = AlphaEnable; AttribItem.IntPtr [5] = AlphaFunc; AttribItem.IntPtr [6]
+   * = AlphaRef; AttribItem.BoolPtr [1] = BlendEnable; AttribItem.IntPtr [7] = BlendSrc;
+   * AttribItem.IntPtr [8] = BlendDst; AttribItem.BoolPtr [2] = LogicOPEnable; AttribItem.IntPtr [9]
+   * = LogicOPMode; AttribItem.BoolPtr [3] = DitherEnable; }
    * 
-   * public void pop_attrib (gl_list_item AttribItem) { DrawBuffer =
-   * AttribItem.IntPtr [0]; ClearIndex = AttribItem.IntPtr [1];
-   * System.arraycopy(AttribItem.FloatPtr, 0, ClearColor, 0, 4); IntClearColor =
-   * AttribItem.IntPtr [2]; IndexMask = AttribItem.IntPtr [3]; ColorMask =
-   * AttribItem.IntPtr [4]; AlphaEnable = AttribItem.BoolPtr [0]; AlphaFunc =
-   * AttribItem.IntPtr [5]; AlphaRef = AttribItem.IntPtr [6]; BlendEnable =
-   * AttribItem.BoolPtr [1]; BlendSrc = AttribItem.IntPtr [7]; BlendDst =
-   * AttribItem.IntPtr [8]; LogicOPEnable = AttribItem.BoolPtr [2]; LogicOPMode =
-   * AttribItem.IntPtr [9]; DitherEnable = AttribItem.BoolPtr [3]; }
+   * public void pop_attrib (gl_list_item AttribItem) { DrawBuffer = AttribItem.IntPtr [0];
+   * ClearIndex = AttribItem.IntPtr [1]; System.arraycopy(AttribItem.FloatPtr, 0, ClearColor, 0, 4);
+   * IntClearColor = AttribItem.IntPtr [2]; IndexMask = AttribItem.IntPtr [3]; ColorMask =
+   * AttribItem.IntPtr [4]; AlphaEnable = AttribItem.BoolPtr [0]; AlphaFunc = AttribItem.IntPtr [5];
+   * AlphaRef = AttribItem.IntPtr [6]; BlendEnable = AttribItem.BoolPtr [1]; BlendSrc =
+   * AttribItem.IntPtr [7]; BlendDst = AttribItem.IntPtr [8]; LogicOPEnable = AttribItem.BoolPtr
+   * [2]; LogicOPMode = AttribItem.IntPtr [9]; DitherEnable = AttribItem.BoolPtr [3]; }
    */
 
   public gl_colorbuffer(gl_colorbuffer cc) {

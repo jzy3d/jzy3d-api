@@ -1,18 +1,12 @@
 package examples.apps;
 /*
- * select.java
- * This is an illustration of the selection mode and 
- * name stack, which detects whether objects which collide 
- * with a viewing volume.  First, four triangles and a 
- * rectangular box representing a viewing volume are drawn 
- * (drawScene routine).  The green triangle and yellow 
- * triangles appear to lie within the viewing volume, but 
- * the red triangle appears to lie outside it.  Then the 
- * selection mode is entered (selectObjects routine).  
- * Drawing to the screen ceases.  To see if any collisions 
- * occur, the four triangles are called.  In this example, 
- * the green triangle causes one hit with the name 1, and 
- * the yellow triangles cause one hit with the name 3.
+ * select.java This is an illustration of the selection mode and name stack, which detects whether
+ * objects which collide with a viewing volume. First, four triangles and a rectangular box
+ * representing a viewing volume are drawn (drawScene routine). The green triangle and yellow
+ * triangles appear to lie within the viewing volume, but the red triangle appears to lie outside
+ * it. Then the selection mode is entered (selectObjects routine). Drawing to the screen ceases. To
+ * see if any collisions occur, the four triangles are called. In this example, the green triangle
+ * causes one hit with the name 1, and the yellow triangles cause one hit with the name 3.
  */
 
 import java.awt.Frame;
@@ -24,8 +18,8 @@ import jgl.GLCanvas;
 public class select extends GLCanvas {
 
   /*
-   * draw a triangle with vertices at (x1, y1), (x2, y2) and (x3, y3) at z units
-   * away from the origin.
+   * draw a triangle with vertices at (x1, y1), (x2, y2) and (x3, y3) at z units away from the
+   * origin.
    */
   private void drawTriangle(float x1, float y1, float x2, float y2, float x3, float y3, float z) {
     myGL.glBegin(GL.GL_TRIANGLES);
@@ -65,8 +59,7 @@ public class select extends GLCanvas {
   }
 
   /*
-   * drawScene draws 4 triangles and a wire frame which represents the viewing
-   * volume.
+   * drawScene draws 4 triangles and a wire frame which represents the viewing volume.
    */
   private void drawScene() {
     myGL.glMatrixMode(GL.GL_PROJECTION);
@@ -113,10 +106,9 @@ public class select extends GLCanvas {
   }
 
   /*
-   * selectObjects "draws" the triangles in selection mode, assigning names for
-   * the triangles. Note that the third and fourth triangles share one name, so
-   * that if either or both triangles intersects the viewing/clipping volume, only
-   * one hit will be registered.
+   * selectObjects "draws" the triangles in selection mode, assigning names for the triangles. Note
+   * that the third and fourth triangles share one name, so that if either or both triangles
+   * intersects the viewing/clipping volume, only one hit will be registered.
    */
   private static final int BUFSIZE = 512;
 
@@ -166,10 +158,10 @@ public class select extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

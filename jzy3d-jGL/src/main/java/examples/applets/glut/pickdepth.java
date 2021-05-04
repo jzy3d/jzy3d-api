@@ -15,8 +15,8 @@ public class pickdepth extends GLApplet {
   }
 
   /*
-   * The three rectangles are drawn. In selection mode, each rectangle is given
-   * the same name. Note that each rectangle is drawn with a different z value.
+   * The three rectangles are drawn. In selection mode, each rectangle is given the same name. Note
+   * that each rectangle is drawn with a different z value.
    */
   private void drawRects(int mode) {
     if (mode == GL.GL_SELECT)
@@ -75,8 +75,8 @@ public class pickdepth extends GLApplet {
   }
 
   /*
-   * pickRects() sets up selection mode, name stack, and projection matrix for
-   * picking. Then the objects are drawn.
+   * pickRects() sets up selection mode, name stack, and projection matrix for picking. Then the
+   * objects are drawn.
    */
   private static final int BUFSIZE = 512;
 
@@ -126,8 +126,8 @@ public class pickdepth extends GLApplet {
   }
 
   /*
-   * Main Loop Open window with initial window size, title bar, RGBA display mode,
-   * depth buffer, and handle input events.
+   * Main Loop Open window with initial window size, title bar, RGBA display mode, depth buffer, and
+   * handle input events.
    */
   public void init() {
     myUT.glutInitWindowSize(100, 100);

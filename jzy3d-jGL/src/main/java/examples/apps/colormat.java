@@ -1,9 +1,7 @@
 package examples.apps;
 /*
- *  colormat.java
- *  After initialization, the program will be in
- *  ColorMaterial mode.  Interaction:  pressing the 
- *  mouse buttons will change the diffuse reflection values.
+ * colormat.java After initialization, the program will be in ColorMaterial mode. Interaction:
+ * pressing the mouse buttons will change the diffuse reflection values.
  */
 
 import java.awt.Frame;
@@ -15,14 +13,14 @@ import jgl.GLUT;
 
 public class colormat extends GLCanvas {
 
-  private float diffuseMaterial[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+  private float diffuseMaterial[] = {0.5f, 0.5f, 0.5f, 1.0f};
 
   /*
    * Initialize material property, light source, lighting model, and depth buffer.
    */
   private void myinit() {
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float light_position[] = {1.0f, 1.0f, 1.0f, 0.0f};
 
     myGL.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     myGL.glShadeModel(GL.GL_SMOOTH);
@@ -49,9 +47,11 @@ public class colormat extends GLCanvas {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f,
+          10.0f);
     } else {
-      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f,
+          10.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();
@@ -60,45 +60,45 @@ public class colormat extends GLCanvas {
   /* ARGSUSED2 */
   public void mouse(int button, int state, int x, int y) {
     switch (button) {
-    case GLUT.GLUT_LEFT_BUTTON:
-      if (state == GLUT.GLUT_DOWN) {
-        diffuseMaterial[0] += 0.1f;
-        if (diffuseMaterial[0] > 1.0f)
-          diffuseMaterial[0] = 0.0f;
-        myGL.glColor4fv(diffuseMaterial);
-        myUT.glutPostRedisplay();
-      }
-      break;
-    case GLUT.GLUT_MIDDLE_BUTTON:
-      if (state == GLUT.GLUT_DOWN) {
-        diffuseMaterial[1] += 0.1f;
-        if (diffuseMaterial[1] > 1.0f)
-          diffuseMaterial[1] = 0.0f;
-        myGL.glColor4fv(diffuseMaterial);
-        myUT.glutPostRedisplay();
-      }
-      break;
-    case GLUT.GLUT_RIGHT_BUTTON:
-      if (state == GLUT.GLUT_DOWN) {
-        diffuseMaterial[2] += 0.1f;
-        if (diffuseMaterial[2] > 1.0f)
-          diffuseMaterial[2] = 0.0f;
-        myGL.glColor4fv(diffuseMaterial);
-        myUT.glutPostRedisplay();
-      }
-      break;
-    default:
-      break;
+      case GLUT.GLUT_LEFT_BUTTON:
+        if (state == GLUT.GLUT_DOWN) {
+          diffuseMaterial[0] += 0.1f;
+          if (diffuseMaterial[0] > 1.0f)
+            diffuseMaterial[0] = 0.0f;
+          myGL.glColor4fv(diffuseMaterial);
+          myUT.glutPostRedisplay();
+        }
+        break;
+      case GLUT.GLUT_MIDDLE_BUTTON:
+        if (state == GLUT.GLUT_DOWN) {
+          diffuseMaterial[1] += 0.1f;
+          if (diffuseMaterial[1] > 1.0f)
+            diffuseMaterial[1] = 0.0f;
+          myGL.glColor4fv(diffuseMaterial);
+          myUT.glutPostRedisplay();
+        }
+        break;
+      case GLUT.GLUT_RIGHT_BUTTON:
+        if (state == GLUT.GLUT_DOWN) {
+          diffuseMaterial[2] += 0.1f;
+          if (diffuseMaterial[2] > 1.0f)
+            diffuseMaterial[2] = 0.0f;
+          myGL.glColor4fv(diffuseMaterial);
+          myUT.glutPostRedisplay();
+        }
+        break;
+      default:
+        break;
     }
   }
 
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

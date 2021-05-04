@@ -1,12 +1,9 @@
 package examples.applets.glut;
 /*
- *  texsub.java
- *  This program texture maps a checkerboard image onto
- *  two rectangles.  This program clamps the texture, if
- *  the texture coordinates fall outside 0.0 and 1.0.
- *  If the s key is pressed, a texture subimage is used to
- *  alter the original texture.  If the r key is pressed, 
- *  the original texture is restored.
+ * texsub.java This program texture maps a checkerboard image onto two rectangles. This program
+ * clamps the texture, if the texture coordinates fall outside 0.0 and 1.0. If the s key is pressed,
+ * a texture subimage is used to alter the original texture. If the r key is pressed, the original
+ * texture is restored.
  */
 
 import jgl.GL;
@@ -69,8 +66,8 @@ public class texsub extends GLApplet {
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, checkImageWidth, checkImageHeight, 0, GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE, checkImage);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, checkImageWidth, checkImageHeight, 0,
+        GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, checkImage);
   }
 
   public void display() {
@@ -113,22 +110,22 @@ public class texsub extends GLApplet {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 's':
-    case 'S':
-      myGL.glBindTexture(GL.GL_TEXTURE_2D, texName[0]);
-      myGL.glTexSubImage2D(GL.GL_TEXTURE_2D, 0, 12, 44, subImageWidth, subImageHeight, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE,
-          subImage);
-      myUT.glutPostRedisplay();
-      break;
-    case 'r':
-    case 'R':
-      myGL.glBindTexture(GL.GL_TEXTURE_2D, texName[0]);
-      myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, checkImageWidth, checkImageHeight, 0, GL.GL_RGBA,
-          GL.GL_UNSIGNED_BYTE, checkImage);
-      myUT.glutPostRedisplay();
-      break;
-    default:
-      break;
+      case 's':
+      case 'S':
+        myGL.glBindTexture(GL.GL_TEXTURE_2D, texName[0]);
+        myGL.glTexSubImage2D(GL.GL_TEXTURE_2D, 0, 12, 44, subImageWidth, subImageHeight, GL.GL_RGBA,
+            GL.GL_UNSIGNED_BYTE, subImage);
+        myUT.glutPostRedisplay();
+        break;
+      case 'r':
+      case 'R':
+        myGL.glBindTexture(GL.GL_TEXTURE_2D, texName[0]);
+        myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, checkImageWidth, checkImageHeight, 0,
+            GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, checkImage);
+        myUT.glutPostRedisplay();
+        break;
+      default:
+        break;
     }
   }
 

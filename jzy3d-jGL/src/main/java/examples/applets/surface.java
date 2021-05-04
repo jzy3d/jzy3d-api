@@ -41,9 +41,9 @@ public class surface extends Applet implements ComponentListener {
   }
 
   private void myinit() {
-    float mat_diffuse[] = { 0.7f, 0.7f, 0.7f, 1.0f };
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float mat_shininess[] = { 100.0f };
+    float mat_diffuse[] = {0.7f, 0.7f, 0.7f, 1.0f};
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float mat_shininess[] = {100.0f};
 
     myGL.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     myGL.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse);
@@ -65,7 +65,7 @@ public class surface extends Applet implements ComponentListener {
   }
 
   private void display() {
-    float knots[] = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+    float knots[] = {0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
@@ -74,21 +74,19 @@ public class surface extends Applet implements ComponentListener {
     myGL.glScalef(0.5f, 0.5f, 0.5f);
 
     myGLU.gluBeginSurface(theNurb);
-    myGLU.gluNurbsSurface(theNurb, 8, knots, 8, knots, 4 * 3, 3, ctlpoints, 4, 4, GL.GL_MAP2_VERTEX_3);
+    myGLU.gluNurbsSurface(theNurb, 8, knots, 8, knots, 4 * 3, 3, ctlpoints, 4, 4,
+        GL.GL_MAP2_VERTEX_3);
     myGLU.gluEndSurface(theNurb);
 
     myGL.glPopMatrix();
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

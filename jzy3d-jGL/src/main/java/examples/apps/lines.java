@@ -1,8 +1,6 @@
 package examples.apps;
 /*
- *  lines.java
- *  This program demonstrates geometric primitives and
- *  their attributes.
+ * lines.java This program demonstrates geometric primitives and their attributes.
  */
 
 import java.awt.Frame;
@@ -86,10 +84,10 @@ public class lines extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

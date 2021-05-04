@@ -1,7 +1,6 @@
 package examples.apps;
 /*
- *  clip.java
- *  This program demonstrates arbitrary clipping planes.
+ * clip.java This program demonstrates arbitrary clipping planes.
  */
 
 import java.awt.Frame;
@@ -18,8 +17,8 @@ public class clip extends GLCanvas {
   }
 
   public void display() {
-    double eqn[] = { 0.0, 1.0, 0.0, 0.0 };
-    double eqn2[] = { 1.0, 0.0, 0.0, 0.0 };
+    double eqn[] = {0.0, 1.0, 0.0, 0.0};
+    double eqn2[] = {1.0, 0.0, 0.0, 0.0};
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT);
 
@@ -52,10 +51,10 @@ public class clip extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

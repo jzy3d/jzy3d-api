@@ -1,7 +1,6 @@
 package examples.applets.glut;
 /*
- * torus.java
- * This program demonstrates the creation of a display list.
+ * torus.java This program demonstrates the creation of a display list.
  */
 
 import jgl.GL;
@@ -65,30 +64,30 @@ public class torus extends GLApplet {
   }
 
   /*
-   * Rotate about x-axis when "x" typed; rotate about y-axis when "y" typed; "i"
-   * returns torus to original view
+   * Rotate about x-axis when "x" typed; rotate about y-axis when "y" typed; "i" returns torus to
+   * original view
    */
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 'x':
-    case 'X':
-      myGL.glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
-      myUT.glutPostRedisplay();
-      break;
-    case 'y':
-    case 'Y':
-      myGL.glRotatef(30.0f, 0.0f, 1.0f, 0.0f);
-      myUT.glutPostRedisplay();
-      break;
-    case 'i':
-    case 'I':
-      myGL.glLoadIdentity();
-      myGLU.gluLookAt(0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-      myUT.glutPostRedisplay();
-      break;
-    default:
-      break;
+      case 'x':
+      case 'X':
+        myGL.glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
+        myUT.glutPostRedisplay();
+        break;
+      case 'y':
+      case 'Y':
+        myGL.glRotatef(30.0f, 0.0f, 1.0f, 0.0f);
+        myUT.glutPostRedisplay();
+        break;
+      case 'i':
+      case 'I':
+        myGL.glLoadIdentity();
+        myGLU.gluLookAt(0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+        myUT.glutPostRedisplay();
+        break;
+      default:
+        break;
     }
   }
 

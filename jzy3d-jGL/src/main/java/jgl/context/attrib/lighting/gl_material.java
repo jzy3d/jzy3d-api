@@ -1,19 +1,16 @@
 /*
  * @(#)gl_material.java 0.3 01/03/15
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1996-2001 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1996-2001 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -31,16 +28,16 @@ import jgl.GL;
 public class gl_material {
 
   /** GL_AMBIENT: Ambient material color */
-  public float Ambient[] = { 0.2f, 0.2f, 0.2f, 1 };
+  public float Ambient[] = {0.2f, 0.2f, 0.2f, 1};
 
   /** GL_DEFFUSE: Diffuse material color */
-  public float Diffuse[] = { 0.8f, 0.8f, 0.8f, 1 };
+  public float Diffuse[] = {0.8f, 0.8f, 0.8f, 1};
 
   /** GL_SPECULAR: Specular material color */
-  public float Specular[] = { 0, 0, 0, 1 };
+  public float Specular[] = {0, 0, 0, 1};
 
   /** GL_EMISSION: Emissive material color */
-  public float Emission[] = { 0, 0, 0, 1 };
+  public float Emission[] = {0, 0, 0, 1};
 
   /** GL_SHININESS: Specular exponent of material */
   public float Shininess = 0;
@@ -52,56 +49,56 @@ public class gl_material {
 
   public void set_material(int pname, float params[]) {
     switch (pname) {
-    case GL.GL_AMBIENT:
-      Ambient = params;
-      break;
-    case GL.GL_DIFFUSE:
-      Diffuse = params;
-      break;
-    case GL.GL_SPECULAR:
-      Specular = params;
-      break;
-    case GL.GL_EMISSION:
-      Emission = params;
-      break;
-    case GL.GL_SHININESS:
-      Shininess = params[0];
-      break;
-    case GL.GL_AMBIENT_AND_DIFFUSE:
-      Ambient = params;
-      Diffuse = params;
-      break;
-    case GL.GL_COLOR_INDEXES:
-      ColorIndexAmbient = params[0];
-      ColorIndexDiffuse = params[1];
-      ColorIndexSpecular = params[2];
-      break;
-    default:
-      break;
+      case GL.GL_AMBIENT:
+        Ambient = params;
+        break;
+      case GL.GL_DIFFUSE:
+        Diffuse = params;
+        break;
+      case GL.GL_SPECULAR:
+        Specular = params;
+        break;
+      case GL.GL_EMISSION:
+        Emission = params;
+        break;
+      case GL.GL_SHININESS:
+        Shininess = params[0];
+        break;
+      case GL.GL_AMBIENT_AND_DIFFUSE:
+        Ambient = params;
+        Diffuse = params;
+        break;
+      case GL.GL_COLOR_INDEXES:
+        ColorIndexAmbient = params[0];
+        ColorIndexDiffuse = params[1];
+        ColorIndexSpecular = params[2];
+        break;
+      default:
+        break;
     }
   }
 
   public float[] get_material(int pname) {
     float temp[];
     switch (pname) {
-    case GL.GL_AMBIENT:
-      return Ambient;
-    case GL.GL_DIFFUSE:
-      return Diffuse;
-    case GL.GL_SPECULAR:
-      return Specular;
-    case GL.GL_EMISSION:
-      return Emission;
-    case GL.GL_SHININESS:
-      temp = new float[1];
-      temp[0] = Shininess;
-      return temp;
-    case GL.GL_COLOR_INDEXES:
-      temp = new float[3];
-      temp[0] = ColorIndexAmbient;
-      temp[1] = ColorIndexDiffuse;
-      temp[2] = ColorIndexSpecular;
-      return temp;
+      case GL.GL_AMBIENT:
+        return Ambient;
+      case GL.GL_DIFFUSE:
+        return Diffuse;
+      case GL.GL_SPECULAR:
+        return Specular;
+      case GL.GL_EMISSION:
+        return Emission;
+      case GL.GL_SHININESS:
+        temp = new float[1];
+        temp[0] = Shininess;
+        return temp;
+      case GL.GL_COLOR_INDEXES:
+        temp = new float[3];
+        temp[0] = ColorIndexAmbient;
+        temp[1] = ColorIndexDiffuse;
+        temp[2] = ColorIndexSpecular;
+        return temp;
     }
     return null;
   }
@@ -117,7 +114,6 @@ public class gl_material {
     this.ColorIndexSpecular = cc.ColorIndexSpecular;
   }
 
-  public gl_material() {
-  };
+  public gl_material() {};
 
 }

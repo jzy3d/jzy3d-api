@@ -1,13 +1,9 @@
 package examples.apps;
 /*
- *  pickdepth.java
- *  Picking is demonstrated in this program.  In 
- *  rendering mode, three overlapping rectangles are 
- *  drawn.  When the left mouse button is pressed, 
- *  selection mode is entered with the picking matrix.  
- *  Rectangles which are drawn under the cursor position
- *  are "picked."  Pay special attention to the depth 
- *  value range, which is returned.
+ * pickdepth.java Picking is demonstrated in this program. In rendering mode, three overlapping
+ * rectangles are drawn. When the left mouse button is pressed, selection mode is entered with the
+ * picking matrix. Rectangles which are drawn under the cursor position are "picked." Pay special
+ * attention to the depth value range, which is returned.
  */
 
 import java.awt.Frame;
@@ -28,8 +24,8 @@ public class pickdepth extends GLCanvas {
   }
 
   /*
-   * The three rectangles are drawn. In selection mode, each rectangle is given
-   * the same name. Note that each rectangle is drawn with a different z value.
+   * The three rectangles are drawn. In selection mode, each rectangle is given the same name. Note
+   * that each rectangle is drawn with a different z value.
    */
   private void drawRects(int mode) {
     if (mode == GL.GL_SELECT)
@@ -88,8 +84,8 @@ public class pickdepth extends GLCanvas {
   }
 
   /*
-   * pickRects() sets up selection mode, name stack, and projection matrix for
-   * picking. Then the objects are drawn.
+   * pickRects() sets up selection mode, name stack, and projection matrix for picking. Then the
+   * objects are drawn.
    */
   private static final int BUFSIZE = 512;
 
@@ -140,16 +136,16 @@ public class pickdepth extends GLCanvas {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 
   /*
-   * Main Loop Open window with initial window size, title bar, RGBA display mode,
-   * depth buffer, and handle input events.
+   * Main Loop Open window with initial window size, title bar, RGBA display mode, depth buffer, and
+   * handle input events.
    */
   public void init() {
     myUT.glutInitWindowSize(100, 100);

@@ -1,8 +1,6 @@
 package examples.applets.glut;
 /*
- *  lines.java
- *  This program demonstrates geometric primitives and
- *  their attributes.
+ * lines.java This program demonstrates geometric primitives and their attributes.
  */
 
 import jgl.GL;

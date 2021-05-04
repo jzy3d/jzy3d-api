@@ -1,10 +1,8 @@
 package examples.apps;
 /*
- * robot.java
- * This program shows how to composite modeling transformations
- * to draw translated and rotated hierarchical models.
- * Interaction:  pressing the s and e keys (shoulder and elbow)
- * alters the rotation of the robot arm.
+ * robot.java This program shows how to composite modeling transformations to draw translated and
+ * rotated hierarchical models. Interaction: pressing the s and e keys (shoulder and elbow) alters
+ * the rotation of the robot arm.
  */
 
 import java.awt.Frame;
@@ -58,26 +56,26 @@ public class robot extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 's':
-      shoulder = (shoulder + 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'S':
-      shoulder = (shoulder - 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'e':
-      elbow = (elbow + 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'E':
-      elbow = (elbow - 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 's':
+        shoulder = (shoulder + 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'S':
+        shoulder = (shoulder - 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'e':
+        elbow = (elbow + 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'E':
+        elbow = (elbow - 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

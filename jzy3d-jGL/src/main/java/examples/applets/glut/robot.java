@@ -1,10 +1,8 @@
 package examples.applets.glut;
 /*
- * robot.java
- * This program shows how to composite modeling transformations
- * to draw translated and rotated hierarchical models.
- * Interaction:  pressing the s and e keys (shoulder and elbow)
- * alters the rotation of the robot arm.
+ * robot.java This program shows how to composite modeling transformations to draw translated and
+ * rotated hierarchical models. Interaction: pressing the s and e keys (shoulder and elbow) alters
+ * the rotation of the robot arm.
  */
 
 import jgl.GL;
@@ -55,24 +53,24 @@ public class robot extends GLApplet {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 's':
-      shoulder = (shoulder + 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'S':
-      shoulder = (shoulder - 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'e':
-      elbow = (elbow + 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    case 'E':
-      elbow = (elbow - 5) % 360;
-      myUT.glutPostRedisplay();
-      break;
-    default:
-      break;
+      case 's':
+        shoulder = (shoulder + 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'S':
+        shoulder = (shoulder - 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'e':
+        elbow = (elbow + 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      case 'E':
+        elbow = (elbow - 5) % 360;
+        myUT.glutPostRedisplay();
+        break;
+      default:
+        break;
     }
   }
 
