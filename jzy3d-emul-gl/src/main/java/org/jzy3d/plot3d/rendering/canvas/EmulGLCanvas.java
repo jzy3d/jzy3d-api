@@ -28,6 +28,7 @@ import org.jzy3d.monitor.IMonitorable;
 import org.jzy3d.monitor.Measure.CanvasPerfMeasure;
 import org.jzy3d.monitor.Monitor;
 import org.jzy3d.painters.EmulGLPainter;
+import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -75,7 +76,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   /** set to TRUE to overlay performance info on top left corner */
   protected boolean profileDisplayMethod = false;
   protected TicToc profileDisplayTimer = new TicToc();
-  protected Font profileDisplayFont = new Font("Arial", Font.PLAIN, 12);
+  protected Font profileDisplayFont = new Font("Helvetica", Font.PLAIN, 12);
   protected int profileDisplayCount = 0;
   protected List<ProfileInfo> profileInfo = new ArrayList<>();
 
@@ -99,13 +100,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       myGL.setAutoAdaptToHiDPI(false);
     }
 
-//    if (ALLOW_WATCH_PIXEL_SCALE)
-      myGL.addPixelScaleListener(new PixelScaleListener() {
-        @Override
-        public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-          firePixelScaleChanged(pixelScaleX, pixelScaleY);
-        }
-      });
+    myGL.addPixelScaleListener(new PixelScaleListener() {
+      @Override
+      public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        firePixelScaleChanged(pixelScaleX, pixelScaleY);
+      }
+    });
   }
 
   @Override
@@ -461,7 +461,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     }
   }
 
-
   /* *********************************************************************** */
   /* ************************** PROFILE AND DEBUG ************************** */
   /* *********************************************************************** */
@@ -484,26 +483,63 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
    * 
    */
   protected void paintProfileInfo(BufferedImage glImage) {
-    Graphics2D g2d = (Graphics2D) glImage.getGraphics();
-    g2d.setFont(profileDisplayFont);
+    Graphics2D g2d = glImage.createGraphics();
+
+    AWTGraphicsUtils.configureRenderingHints(g2d);
+    
+    int minX = Integer.MAX_VALUE;
+    int maxX = 0;
+    int minY = Integer.MAX_VALUE;
+    int maxY = 0;
 
     synchronized (profileInfo) {
+      // Render a rectangle around profile text
+      for (ProfileInfo profile : profileInfo) {
+        int stringWidth = AWTGraphicsUtils.stringWidth(g2d, profile.message);
+        
+        if(minX > profile.x)
+          minX = profile.x;
+        if(maxX < profile.x + stringWidth)
+          maxX = profile.x + stringWidth;        
+        if(minY > profile.y)
+          minY = profile.y;
+        if(maxY < profile.y)
+          maxY = profile.y;        
+      }
+      
+      int x = minX - PROFILE_LINE_X_START/2;
+      int y = minY - profileDisplayFont.getSize() - PROFILE_LINE_HEIGHT/2;
+      int width = maxX-minX + PROFILE_LINE_X_START;
+      int height = maxY-minY + profileDisplayFont.getSize() + PROFILE_LINE_HEIGHT;
+      
+      g2d.setColor(java.awt.Color.WHITE);
+      g2d.fillRect(x, y, width, height);
+      g2d.setColor(java.awt.Color.RED);
+      g2d.drawRect(x, y, width, height);
+      
+      // Render all text info
       for (ProfileInfo profile : profileInfo) {
         java.awt.Color awtColor = AWTColor.toAWT(profile.color);
         g2d.setColor(awtColor);
-        g2d.drawString(profile.message, profile.x, profile.y);
+
+        AWTGraphicsUtils.drawString(g2d, profileDisplayFont, false, profile.message, profile.x,
+            profile.y);
       }
+
     }
   }
-
+  
+  static final int PROFILE_LINE_X_START = 10;
+  static final int PROFILE_LINE_HEIGHT = 12;
 
   protected void profile(double mili) {
+    int x = PROFILE_LINE_X_START;
+    int y = PROFILE_LINE_HEIGHT;
+    
     synchronized (profileInfo) {
 
       profileClear();
 
-      int x = 10;
-      int y = 12;
       int line = 1;
       Color c = Color.BLACK;
 
@@ -512,7 +548,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       profile("Render in  : " + mili + "ms", x, y * line++, c);
 
       // Drawables size
-      profile("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * line++, c);
+      profile("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * line++,
+          c);
 
       // Scatters sizes
       for (Drawable d : view.getScene().getGraph().getAll()) {
@@ -534,11 +571,11 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     }
 
+    
   }
 
   /** Draw a 2d text at the given position */
   protected void profile(String message, int x, int y, Color c) {
-    // painter.getGL().appendTextToDraw(profileDisplayFont, message, x, y, c.r, c.g, c.b);
     profileInfo.add(new ProfileInfo(message, x, y, c));
   }
 
