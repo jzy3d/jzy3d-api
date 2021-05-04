@@ -3,11 +3,11 @@ package org.jzy3d.plot3d.rendering.legends.overlay;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 
@@ -36,7 +36,7 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
     
     g2d.scale(scale.x, scale.y);
     
-    configureRenderingHints(g2d);
+    AWTGraphicsUtils.configureRenderingHints(g2d);
 
     if (layout.font != null)
       g2d.setFont(layout.font);
@@ -84,11 +84,6 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
     g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
   }
 
-  protected void configureRenderingHints(Graphics2D g2d) {
-    RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
-        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    g2d.setRenderingHints(rh);
-  }
 
 
   public void paintLegend(Graphics2D g2d, int textHeight, int textWidthMax, int xTextPos,
