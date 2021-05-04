@@ -1,19 +1,15 @@
 /*
  * @(#)gl_clipping.java 0.6 06/11/24
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1996-2006 Robin Bing-Yu Chen (robin@ntu.edu.tw)
+ * jGL 3-D graphics library for Java Copyright (c) 1996-2006 Robin Bing-Yu Chen (robin@ntu.edu.tw)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -176,7 +172,8 @@ public class gl_clipping {
             outlist.Polygon = temp;
             size += 5;
           }
-          outlist.Polygon[outlist.n++] = inter_point(inlist.Polygon[prev], inlist.Polygon[curr], i, j);
+          outlist.Polygon[outlist.n++] =
+              inter_point(inlist.Polygon[prev], inlist.Polygon[curr], i, j);
           outlist.Polygon[outlist.n++] = inlist.Polygon[curr];
         }
       } else {
@@ -188,7 +185,8 @@ public class gl_clipping {
             outlist.Polygon = temp;
             size += 5;
           }
-          outlist.Polygon[outlist.n++] = inter_point(inlist.Polygon[curr], inlist.Polygon[prev], i, j);
+          outlist.Polygon[outlist.n++] =
+              inter_point(inlist.Polygon[curr], inlist.Polygon[prev], i, j);
         } // else, both out, do nothing....
       }
       prev = curr;
@@ -210,8 +208,7 @@ public class gl_clipping {
     return inlist;
   }
 
-  public gl_clipping() {
-  }
+  public gl_clipping() {}
 
   public gl_clipping(gl_context cc) {
     CC = cc;

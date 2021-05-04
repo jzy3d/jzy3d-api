@@ -1,9 +1,7 @@
 package examples.applets.glut;
 /*
- *  cube.java
- *  This program demonstrates a single modeling transformation,
- *  glScalef() and a single viewing transformation, gluLookAt().
- *  A wireframe cube is rendered.
+ * cube.java This program demonstrates a single modeling transformation, glScalef() and a single
+ * viewing transformation, gluLookAt(). A wireframe cube is rendered.
  */
 
 import jgl.GL;

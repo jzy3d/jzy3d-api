@@ -1,19 +1,16 @@
 /*
  * @(#)mat_t.java 0.1 96/09/19
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1996 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1996 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -31,9 +28,10 @@ public class mat_t {
   public double mat[][] = new double[4][4];
   public double norm[][] = new double[3][3];
 
-  public mat_t(double m11, double m12, double m13, double m14, double m21, double m22, double m23, double m24,
-      double m31, double m32, double m33, double m34, double m41, double m42, double m43, double m44, double n11,
-      double n12, double n13, double n21, double n22, double n23, double n31, double n32, double n33) {
+  public mat_t(double m11, double m12, double m13, double m14, double m21, double m22, double m23,
+      double m24, double m31, double m32, double m33, double m34, double m41, double m42,
+      double m43, double m44, double n11, double n12, double n13, double n21, double n22,
+      double n23, double n31, double n32, double n33) {
     mat[0] = new double[4];
     mat[1] = new double[4];
     mat[2] = new double[4];

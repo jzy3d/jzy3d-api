@@ -1,19 +1,16 @@
 /*
  * @(#)nurbs_knot.java 0.1 99/11/2
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -77,7 +74,8 @@ public class nurbs_knot {
     }
   }
 
-  public int calc_new_ctrl_pts(float ctrl[][], int stride, int dim, float new_ctrl[][][], int ctrl_i) {
+  public int calc_new_ctrl_pts(float ctrl[][], int stride, int dim, float new_ctrl[][][],
+      int ctrl_i) {
     int n = nknots - order;
     int m = t_max + 1 - t_min - order;
     int k = t_min;
@@ -239,9 +237,8 @@ public class nurbs_knot {
       return GLU.GLU_NURBS_ERROR3;
     }
     /*
-     * if (knot [0] == knot [t_min]) { open_at_begin = true; } else { open_at_begin
-     * = false; } if (knot [t_max] == knot [nknots-1]) { open_at_end = true; } else
-     * { open_at_end = false; }
+     * if (knot [0] == knot [t_min]) { open_at_begin = true; } else { open_at_begin = false; } if
+     * (knot [t_max] == knot [nknots-1]) { open_at_end = true; } else { open_at_end = false; }
      */
     return GLU.GLU_NO_ERROR;
   }

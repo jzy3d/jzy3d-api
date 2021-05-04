@@ -1,19 +1,16 @@
 /*
  * @(#)gle_phong.java 0.5 02/12/23
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 2000-2002 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 2000-2002 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 package jgl.gle.render;
@@ -24,8 +21,7 @@ import jgl.gle.gle_context;
 import jgl.gle.gle_vertex;
 
 /**
- * gle_phong is the rendering class for phong shading as an extension of jGL
- * 2.5.
+ * gle_phong is the rendering class for phong shading as an extension of jGL 2.5.
  *
  * @version 0.5, 23 Dev 2002
  * @author Robin Bing-Yu Chen
@@ -149,8 +145,8 @@ public class gle_phong extends gl_depth {
   }
 
   protected int get_color() {
-    float coord[] = { px, py, pz };
-    float norm[] = { nx, ny, nz };
+    float coord[] = {px, py, pz};
+    float norm[] = {nx, ny, nz};
     return ((gle_context) CC).ColorTransformation(coord, norm);
   }
 
@@ -162,8 +158,8 @@ public class gle_phong extends gl_depth {
     pixel.put_pixel_by_index(x, get_color());
   }
 
-  protected void draw_horizontal_line(int x1, int x2, int y, float nx1, float ny1, float nz1, float px1, float py1,
-      float pz1) {
+  protected void draw_horizontal_line(int x1, int x2, int y, float nx1, float ny1, float nz1,
+      float px1, float py1, float pz1) {
     this.LineN[0][0] = nx1;
     this.LineN[0][1] = ny1;
     this.LineN[0][2] = nz1;
@@ -326,8 +322,8 @@ public class gle_phong extends gl_depth {
   }
 
   protected void draw_horizontal_line(int y) {
-    draw_horizontal_line(LeftPoint, RightPoint, y, LeftPointNX, LeftPointNY, LeftPointNZ, LeftPointPX, LeftPointPY,
-        LeftPointPZ);
+    draw_horizontal_line(LeftPoint, RightPoint, y, LeftPointNX, LeftPointNY, LeftPointNZ,
+        LeftPointPX, LeftPointPY, LeftPointPZ);
   }
 
   public gle_phong(gle_context cc) {

@@ -1,11 +1,8 @@
 package examples.applets.glut;
 /*
- *  alpha3D.java
- *  This program demonstrates how to intermix opaque and
- *  alpha blended polygons in the same scene, by using 
- *  glDepthMask.  Press the 'a' key to animate moving the 
- *  transparent object through the opaque object.  Press 
- *  the 'r' key to reset the scene.
+ * alpha3D.java This program demonstrates how to intermix opaque and alpha blended polygons in the
+ * same scene, by using glDepthMask. Press the 'a' key to animate moving the transparent object
+ * through the opaque object. Press the 'r' key to reset the scene.
  */
 
 import jgl.GL;
@@ -22,9 +19,9 @@ public class alpha3D extends GLApplet {
   private int sphereList, cubeList;
 
   private void myinit() {
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 0.15f };
-    float mat_shininess[] = { 100.0f };
-    float position[] = { 0.5f, 0.5f, 1.0f, 0.0f };
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 0.15f};
+    float mat_shininess[] = {100.0f};
+    float position[] = {0.5f, 0.5f, 1.0f, 0.0f};
 
     myGL.glMaterialfv(GL.GL_FRONT, GL.GL_SPECULAR, mat_specular);
     myGL.glMaterialfv(GL.GL_FRONT, GL.GL_SHININESS, mat_shininess);
@@ -46,10 +43,10 @@ public class alpha3D extends GLApplet {
   }
 
   public void display() {
-    float mat_solid[] = { 0.75f, 0.75f, 0.0f, 1.0f };
-    float mat_zero[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-    float mat_transparent[] = { 0.0f, 0.8f, 0.8f, 0.6f };
-    float mat_emission[] = { 0.0f, 0.3f, 0.3f, 0.6f };
+    float mat_solid[] = {0.75f, 0.75f, 0.0f, 1.0f};
+    float mat_zero[] = {0.0f, 0.0f, 0.0f, 1.0f};
+    float mat_transparent[] = {0.0f, 0.8f, 0.8f, 0.6f};
+    float mat_emission[] = {0.0f, 0.3f, 0.3f, 0.6f};
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
@@ -82,9 +79,11 @@ public class alpha3D extends GLApplet {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f, 1.5f, -1.5f * (float) h / (float) w, 1.5f * (float) h / (float) w, -10.0f,
+          10.0f);
     } else {
-      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f, 10.0f);
+      myGL.glOrtho(-1.5f * (float) w / (float) h, 1.5f * (float) w / (float) h, -1.5f, 1.5f, -10.0f,
+          10.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();
@@ -102,20 +101,20 @@ public class alpha3D extends GLApplet {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 'a':
-    case 'A':
-      solidZ = MAXZ;
-      transparentZ = MINZ;
-      myUT.glutIdleFunc("animate");
-      break;
-    case 'r':
-    case 'R':
-      solidZ = MAXZ;
-      transparentZ = MINZ;
-      myUT.glutPostRedisplay();
-      break;
-    default:
-      break;
+      case 'a':
+      case 'A':
+        solidZ = MAXZ;
+        transparentZ = MINZ;
+        myUT.glutIdleFunc("animate");
+        break;
+      case 'r':
+      case 'R':
+        solidZ = MAXZ;
+        transparentZ = MINZ;
+        myUT.glutPostRedisplay();
+        break;
+      default:
+        break;
     }
   }
 

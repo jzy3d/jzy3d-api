@@ -1,19 +1,16 @@
 /*
  * @(#)gl_stipple_line_pixel.java 0.2 99/11/28
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -40,8 +37,8 @@ public class gl_stipple_line_pixel extends gl_stipple_pixel {
   private int step;
 
   /**
-   * Calculate the line width for GL_LINE, return du and dv of it. So, the point
-   * (x,y) will be a short line from (x+du,y-dv) to (x-du,y+dv)
+   * Calculate the line width for GL_LINE, return du and dv of it. So, the point (x,y) will be a
+   * short line from (x+du,y-dv) to (x-du,y+dv)
    */
   private float[] cal_line_size(float dx, float dy) {
     float[] xy = new float[2]; /* 0 for x, 1 for y */

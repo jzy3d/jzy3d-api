@@ -16,13 +16,14 @@ public class texturesurf extends Applet implements ComponentListener {
   GL myGL = new GL();
   GLAUX myAUX = new GLAUX(myGL);
 
-  private static final float ctrlpoints[][][] = {
-      { { -1.5f, -1.5f, 4.0f }, { -0.5f, -1.5f, 2.0f }, { 0.5f, -1.5f, -1.0f }, { 1.5f, -1.5f, 2.0f } },
-      { { -1.5f, -0.5f, 1.0f }, { -0.5f, -0.5f, 3.0f }, { 0.5f, -0.5f, 0.0f }, { 1.5f, -0.5f, -1.0f } },
-      { { -1.5f, 0.5f, 4.0f }, { -0.5f, 0.5f, 0.0f }, { 0.5f, 0.5f, 3.0f }, { 1.5f, 0.5f, 4.0f } },
-      { { -1.5f, 1.5f, -2.0f }, { -0.5f, 1.5f, -2.0f }, { 0.5f, 1.5f, 0.0f }, { 1.5f, 1.5f, -1.0f } } };
+  private static final float ctrlpoints[][][] =
+      {{{-1.5f, -1.5f, 4.0f}, {-0.5f, -1.5f, 2.0f}, {0.5f, -1.5f, -1.0f}, {1.5f, -1.5f, 2.0f}},
+          {{-1.5f, -0.5f, 1.0f}, {-0.5f, -0.5f, 3.0f}, {0.5f, -0.5f, 0.0f}, {1.5f, -0.5f, -1.0f}},
+          {{-1.5f, 0.5f, 4.0f}, {-0.5f, 0.5f, 0.0f}, {0.5f, 0.5f, 3.0f}, {1.5f, 0.5f, 4.0f}},
+          {{-1.5f, 1.5f, -2.0f}, {-0.5f, 1.5f, -2.0f}, {0.5f, 1.5f, 0.0f}, {1.5f, 1.5f, -1.0f}}};
 
-  private static final float texpts[][][] = { { { 0.0f, 0.0f }, { 0.0f, 1.0f } }, { { 1.0f, 0.0f }, { 1.0f, 1.0f } } };
+  private static final float texpts[][][] =
+      {{{0.0f, 0.0f}, {0.0f, 1.0f}}, {{1.0f, 0.0f}, {1.0f, 1.0f}}};
 
   private static final int imageWidth = 64;
   private static final int imageHeight = 64;
@@ -55,7 +56,8 @@ public class texturesurf extends Applet implements ComponentListener {
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, 3, imageWidth, imageHeight, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, image);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, 3, imageWidth, imageHeight, 0, GL.GL_RGB,
+        GL.GL_UNSIGNED_BYTE, image);
     myGL.glEnable(GL.GL_TEXTURE_2D);
     myGL.glEnable(GL.GL_DEPTH_TEST);
     myGL.glEnable(GL.GL_NORMALIZE);
@@ -71,14 +73,11 @@ public class texturesurf extends Applet implements ComponentListener {
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself
@@ -92,9 +91,11 @@ public class texturesurf extends Applet implements ComponentListener {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-4.0f, 4.0f, -4.0f * (float) h / (float) w, 4.0f * (float) h / (float) w, -4.0f, 4.0f);
+      myGL.glOrtho(-4.0f, 4.0f, -4.0f * (float) h / (float) w, 4.0f * (float) h / (float) w, -4.0f,
+          4.0f);
     } else {
-      myGL.glOrtho(-4.0f * (float) w / (float) h, 4.0f * (float) w / (float) h, -4.0f, 4.0f, -4.0f, 4.0f);
+      myGL.glOrtho(-4.0f * (float) w / (float) h, 4.0f * (float) w / (float) h, -4.0f, 4.0f, -4.0f,
+          4.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();

@@ -1,17 +1,12 @@
 package examples.apps;
 /*
- *  texgen.java
- *  This program draws a texture mapped teapot with 
- *  automatically generated texture coordinates.  The
- *  texture is rendered as stripes on the teapot.
- *  Initially, the object is drawn with texture coordinates
- *  based upon the object coordinates of the vertex
- *  and distance from the plane x = 0.  Pressing the 'e'
- *  key changes the coordinate generation to eye coordinates
- *  of the vertex.  Pressing the 'o' key switches it back
- *  to the object coordinates.  Pressing the 's' key 
- *  changes the plane to a slanted one (x + y + z = 0).
- *  Pressing the 'x' key switches it back to x = 0.
+ * texgen.java This program draws a texture mapped teapot with automatically generated texture
+ * coordinates. The texture is rendered as stripes on the teapot. Initially, the object is drawn
+ * with texture coordinates based upon the object coordinates of the vertex and distance from the
+ * plane x = 0. Pressing the 'e' key changes the coordinate generation to eye coordinates of the
+ * vertex. Pressing the 'o' key switches it back to the object coordinates. Pressing the 's' key
+ * changes the plane to a slanted one (x + y + z = 0). Pressing the 'x' key switches it back to x =
+ * 0.
  */
 
 import java.awt.Frame;
@@ -43,8 +38,8 @@ public class texgen extends GLCanvas {
   }
 
   /* planes for texture coordinate generation */
-  private float xequalzero[] = { 1.0f, 0.0f, 0.0f, 0.0f };
-  private float slanted[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+  private float xequalzero[] = {1.0f, 0.0f, 0.0f, 0.0f};
+  private float slanted[] = {1.0f, 1.0f, 1.0f, 0.0f};
   private float currentCoeff[];
   private int currentPlane;
   private int currentGenMode;
@@ -60,7 +55,8 @@ public class texgen extends GLCanvas {
     myGL.glTexParameterf(GL.GL_TEXTURE_1D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
     myGL.glTexParameterf(GL.GL_TEXTURE_1D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     myGL.glTexParameterf(GL.GL_TEXTURE_1D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-    myGL.glTexImage1D(GL.GL_TEXTURE_1D, 0, 4, stripeImageWidth, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, stripeImage);
+    myGL.glTexImage1D(GL.GL_TEXTURE_1D, 0, 4, stripeImageWidth, 0, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE,
+        stripeImage);
 
     myGL.glTexEnvf(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE);
     currentCoeff = xequalzero;
@@ -96,9 +92,11 @@ public class texgen extends GLCanvas {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-3.5f, 3.5f, -3.5f * (float) h / (float) w, 3.5f * (float) h / (float) w, -3.5f, 3.5f);
+      myGL.glOrtho(-3.5f, 3.5f, -3.5f * (float) h / (float) w, 3.5f * (float) h / (float) w, -3.5f,
+          3.5f);
     } else {
-      myGL.glOrtho(-3.5f * (float) w / (float) h, 3.5f * (float) w / (float) h, -3.5f, 3.5f, -3.5f, 3.5f);
+      myGL.glOrtho(-3.5f * (float) w / (float) h, 3.5f * (float) w / (float) h, -3.5f, 3.5f, -3.5f,
+          3.5f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();
@@ -107,38 +105,38 @@ public class texgen extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 'e':
-    case 'E':
-      currentGenMode = GL.GL_EYE_LINEAR;
-      currentPlane = GL.GL_EYE_PLANE;
-      myGL.glTexGeni(GL.GL_S, GL.GL_TEXTURE_GEN_MODE, currentGenMode);
-      myGL.glTexGenfv(GL.GL_S, currentPlane, currentCoeff);
-      myUT.glutPostRedisplay();
-      break;
-    case 'o':
-    case 'O':
-      currentGenMode = GL.GL_OBJECT_LINEAR;
-      currentPlane = GL.GL_OBJECT_PLANE;
-      myGL.glTexGeni(GL.GL_S, GL.GL_TEXTURE_GEN_MODE, currentGenMode);
-      myGL.glTexGenfv(GL.GL_S, currentPlane, currentCoeff);
-      myUT.glutPostRedisplay();
-      break;
-    case 's':
-    case 'S':
-      currentCoeff = slanted;
-      myGL.glTexGenfv(GL.GL_S, currentPlane, currentCoeff);
-      myUT.glutPostRedisplay();
-      break;
-    case 'x':
-    case 'X':
-      currentCoeff = xequalzero;
-      myGL.glTexGenfv(GL.GL_S, currentPlane, currentCoeff);
-      myUT.glutPostRedisplay();
-      break;
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 'e':
+      case 'E':
+        currentGenMode = GL.GL_EYE_LINEAR;
+        currentPlane = GL.GL_EYE_PLANE;
+        myGL.glTexGeni(GL.GL_S, GL.GL_TEXTURE_GEN_MODE, currentGenMode);
+        myGL.glTexGenfv(GL.GL_S, currentPlane, currentCoeff);
+        myUT.glutPostRedisplay();
+        break;
+      case 'o':
+      case 'O':
+        currentGenMode = GL.GL_OBJECT_LINEAR;
+        currentPlane = GL.GL_OBJECT_PLANE;
+        myGL.glTexGeni(GL.GL_S, GL.GL_TEXTURE_GEN_MODE, currentGenMode);
+        myGL.glTexGenfv(GL.GL_S, currentPlane, currentCoeff);
+        myUT.glutPostRedisplay();
+        break;
+      case 's':
+      case 'S':
+        currentCoeff = slanted;
+        myGL.glTexGenfv(GL.GL_S, currentPlane, currentCoeff);
+        myUT.glutPostRedisplay();
+        break;
+      case 'x':
+      case 'X':
+        currentCoeff = xequalzero;
+        myGL.glTexGenfv(GL.GL_S, currentPlane, currentCoeff);
+        myUT.glutPostRedisplay();
+        break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

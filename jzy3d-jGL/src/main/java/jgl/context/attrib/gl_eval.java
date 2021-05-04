@@ -1,19 +1,16 @@
 /*
  * @(#)gl_eval.java 0.4 01/03/15
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2001 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2001 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -100,45 +97,45 @@ public class gl_eval {
     gl_eval_map1 map = new gl_eval_map1(u1, u2, order);
     int dim;
     switch (target) {
-    case GL.GL_MAP1_VERTEX_3:
-      dim = 3;
-      Map1Vertex3 = map;
-      break;
-    case GL.GL_MAP1_VERTEX_4:
-      dim = 4;
-      Map1Vertex4 = map;
-      break;
-    case GL.GL_MAP1_INDEX:
-      dim = 1;
-      Map1Index = map;
-      break;
-    case GL.GL_MAP1_COLOR_4:
-      dim = 4;
-      Map1Color4 = map;
-      break;
-    case GL.GL_MAP1_NORMAL:
-      dim = 3;
-      Map1Normal = map;
-      break;
-    case GL.GL_MAP1_TEXTURE_COORD_1:
-      dim = 1;
-      Map1TexCoord1 = map;
-      break;
-    case GL.GL_MAP1_TEXTURE_COORD_2:
-      dim = 2;
-      Map1TexCoord2 = map;
-      break;
-    case GL.GL_MAP1_TEXTURE_COORD_3:
-      dim = 3;
-      Map1TexCoord3 = map;
-      break;
-    case GL.GL_MAP1_TEXTURE_COORD_4:
-      dim = 4;
-      Map1TexCoord4 = map;
-      break;
-    default:
-      dim = 0;
-      break;
+      case GL.GL_MAP1_VERTEX_3:
+        dim = 3;
+        Map1Vertex3 = map;
+        break;
+      case GL.GL_MAP1_VERTEX_4:
+        dim = 4;
+        Map1Vertex4 = map;
+        break;
+      case GL.GL_MAP1_INDEX:
+        dim = 1;
+        Map1Index = map;
+        break;
+      case GL.GL_MAP1_COLOR_4:
+        dim = 4;
+        Map1Color4 = map;
+        break;
+      case GL.GL_MAP1_NORMAL:
+        dim = 3;
+        Map1Normal = map;
+        break;
+      case GL.GL_MAP1_TEXTURE_COORD_1:
+        dim = 1;
+        Map1TexCoord1 = map;
+        break;
+      case GL.GL_MAP1_TEXTURE_COORD_2:
+        dim = 2;
+        Map1TexCoord2 = map;
+        break;
+      case GL.GL_MAP1_TEXTURE_COORD_3:
+        dim = 3;
+        Map1TexCoord3 = map;
+        break;
+      case GL.GL_MAP1_TEXTURE_COORD_4:
+        dim = 4;
+        Map1TexCoord4 = map;
+        break;
+      default:
+        dim = 0;
+        break;
     }
     if (dim != 0) {
       map.Points = new float[order][dim];
@@ -151,50 +148,50 @@ public class gl_eval {
     return dim;
   }
 
-  public int set_map_2(int target, float u1, float u2, int ustride, int uorder, float v1, float v2, int vstride,
-      int vorder, float points[][][]) {
+  public int set_map_2(int target, float u1, float u2, int ustride, int uorder, float v1, float v2,
+      int vstride, int vorder, float points[][][]) {
     gl_eval_map2 map = new gl_eval_map2(u1, u2, uorder, v1, v2, vorder);
     int dim;
     switch (target) {
-    case GL.GL_MAP2_VERTEX_3:
-      dim = 3;
-      Map2Vertex3 = map;
-      break;
-    case GL.GL_MAP2_VERTEX_4:
-      dim = 4;
-      Map2Vertex4 = map;
-      break;
-    case GL.GL_MAP2_INDEX:
-      dim = 1;
-      Map2Index = map;
-      break;
-    case GL.GL_MAP2_COLOR_4:
-      dim = 4;
-      Map2Color4 = map;
-      break;
-    case GL.GL_MAP2_NORMAL:
-      dim = 3;
-      Map2Normal = map;
-      break;
-    case GL.GL_MAP2_TEXTURE_COORD_1:
-      dim = 1;
-      Map2TexCoord1 = map;
-      break;
-    case GL.GL_MAP2_TEXTURE_COORD_2:
-      dim = 2;
-      Map2TexCoord2 = map;
-      break;
-    case GL.GL_MAP2_TEXTURE_COORD_3:
-      dim = 3;
-      Map2TexCoord3 = map;
-      break;
-    case GL.GL_MAP2_TEXTURE_COORD_4:
-      dim = 4;
-      Map2TexCoord4 = map;
-      break;
-    default:
-      dim = 0;
-      break;
+      case GL.GL_MAP2_VERTEX_3:
+        dim = 3;
+        Map2Vertex3 = map;
+        break;
+      case GL.GL_MAP2_VERTEX_4:
+        dim = 4;
+        Map2Vertex4 = map;
+        break;
+      case GL.GL_MAP2_INDEX:
+        dim = 1;
+        Map2Index = map;
+        break;
+      case GL.GL_MAP2_COLOR_4:
+        dim = 4;
+        Map2Color4 = map;
+        break;
+      case GL.GL_MAP2_NORMAL:
+        dim = 3;
+        Map2Normal = map;
+        break;
+      case GL.GL_MAP2_TEXTURE_COORD_1:
+        dim = 1;
+        Map2TexCoord1 = map;
+        break;
+      case GL.GL_MAP2_TEXTURE_COORD_2:
+        dim = 2;
+        Map2TexCoord2 = map;
+        break;
+      case GL.GL_MAP2_TEXTURE_COORD_3:
+        dim = 3;
+        Map2TexCoord3 = map;
+        break;
+      case GL.GL_MAP2_TEXTURE_COORD_4:
+        dim = 4;
+        Map2TexCoord4 = map;
+        break;
+      default:
+        dim = 0;
+        break;
     }
     if (dim != 0) {
       if (ustride > vstride) {
@@ -319,8 +316,8 @@ public class gl_eval {
    *
    * dS dS M = -- X -- du dv
    *
-   * since n (n) S(u,v) = E ( )*u^i*(1-u)^(n-i)* C(v)i i=0 (i) so dS n-1 (n-1) --
-   * = E ( )*u^i*(1-u)^(n-i-1)*(-C(v)i + C(v)i+1) du i=0 ( i )
+   * since n (n) S(u,v) = E ( )*u^i*(1-u)^(n-i)* C(v)i i=0 (i) so dS n-1 (n-1) -- = E (
+   * )*u^i*(1-u)^(n-i-1)*(-C(v)i + C(v)i+1) du i=0 ( i )
    *
    * then use Bezier curve function to solve this
    * 
@@ -408,45 +405,36 @@ public class gl_eval {
   }
 
   /*
-   * public void push_attrib (gl_list_item AttribItem) { AttribItem.BoolPtr = new
-   * boolean [19]; AttribItem.IntPtr = new int [ 3]; AttribItem.FloatPtr = new
-   * float [ 6];
+   * public void push_attrib (gl_list_item AttribItem) { AttribItem.BoolPtr = new boolean [19];
+   * AttribItem.IntPtr = new int [ 3]; AttribItem.FloatPtr = new float [ 6];
    * 
-   * AttribItem.BoolPtr [ 0] = Map1Vertex3Enable; AttribItem.BoolPtr [ 1] =
-   * Map1Vertex4Enable; AttribItem.BoolPtr [ 2] = Map1IndexEnable;
-   * AttribItem.BoolPtr [ 3] = Map1Color4Enable; AttribItem.BoolPtr [ 4] =
-   * Map1NormalEnable; AttribItem.BoolPtr [ 5] = Map1TexCoord1Enable;
-   * AttribItem.BoolPtr [ 6] = Map1TexCoord2Enable; AttribItem.BoolPtr [ 7] =
-   * Map1TexCoord3Enable; AttribItem.BoolPtr [ 8] = Map1TexCoord4Enable;
-   * AttribItem.BoolPtr [ 9] = Map2Vertex3Enable; AttribItem.BoolPtr [10] =
-   * Map2Vertex4Enable; AttribItem.BoolPtr [11] = Map2IndexEnable;
-   * AttribItem.BoolPtr [12] = Map2Color4Enable; AttribItem.BoolPtr [13] =
-   * Map2NormalEnable; AttribItem.BoolPtr [14] = Map2TexCoord1Enable;
-   * AttribItem.BoolPtr [15] = Map2TexCoord2Enable; AttribItem.BoolPtr [16] =
-   * Map2TexCoord3Enable; AttribItem.BoolPtr [17] = Map2TexCoord4Enable;
-   * AttribItem.FloatPtr [0] = MapGrid1u1; AttribItem.FloatPtr [1] = MapGrid1u2;
-   * AttribItem.FloatPtr [2] = MapGrid2u1; AttribItem.FloatPtr [3] = MapGrid2u2;
-   * AttribItem.FloatPtr [4] = MapGrid2v1; AttribItem.FloatPtr [5] = MapGrid2v2;
-   * AttribItem.IntPtr [0] = MapGrid1un; AttribItem.IntPtr [1] = MapGrid2un;
-   * AttribItem.IntPtr [2] = MapGrid2vn; AttribItem.BoolPtr [18] = AutoNormal; }
+   * AttribItem.BoolPtr [ 0] = Map1Vertex3Enable; AttribItem.BoolPtr [ 1] = Map1Vertex4Enable;
+   * AttribItem.BoolPtr [ 2] = Map1IndexEnable; AttribItem.BoolPtr [ 3] = Map1Color4Enable;
+   * AttribItem.BoolPtr [ 4] = Map1NormalEnable; AttribItem.BoolPtr [ 5] = Map1TexCoord1Enable;
+   * AttribItem.BoolPtr [ 6] = Map1TexCoord2Enable; AttribItem.BoolPtr [ 7] = Map1TexCoord3Enable;
+   * AttribItem.BoolPtr [ 8] = Map1TexCoord4Enable; AttribItem.BoolPtr [ 9] = Map2Vertex3Enable;
+   * AttribItem.BoolPtr [10] = Map2Vertex4Enable; AttribItem.BoolPtr [11] = Map2IndexEnable;
+   * AttribItem.BoolPtr [12] = Map2Color4Enable; AttribItem.BoolPtr [13] = Map2NormalEnable;
+   * AttribItem.BoolPtr [14] = Map2TexCoord1Enable; AttribItem.BoolPtr [15] = Map2TexCoord2Enable;
+   * AttribItem.BoolPtr [16] = Map2TexCoord3Enable; AttribItem.BoolPtr [17] = Map2TexCoord4Enable;
+   * AttribItem.FloatPtr [0] = MapGrid1u1; AttribItem.FloatPtr [1] = MapGrid1u2; AttribItem.FloatPtr
+   * [2] = MapGrid2u1; AttribItem.FloatPtr [3] = MapGrid2u2; AttribItem.FloatPtr [4] = MapGrid2v1;
+   * AttribItem.FloatPtr [5] = MapGrid2v2; AttribItem.IntPtr [0] = MapGrid1un; AttribItem.IntPtr [1]
+   * = MapGrid2un; AttribItem.IntPtr [2] = MapGrid2vn; AttribItem.BoolPtr [18] = AutoNormal; }
    * 
-   * public void pop_attrib (gl_list_item AttribItem) { Map1Vertex3Enable =
-   * AttribItem.BoolPtr [ 0]; Map1Vertex4Enable = AttribItem.BoolPtr [ 1];
-   * Map1IndexEnable = AttribItem.BoolPtr [ 2]; Map1Color4Enable =
-   * AttribItem.BoolPtr [ 3]; Map1NormalEnable = AttribItem.BoolPtr [ 4];
-   * Map1TexCoord1Enable = AttribItem.BoolPtr [ 5]; Map1TexCoord2Enable =
-   * AttribItem.BoolPtr [ 6]; Map1TexCoord3Enable = AttribItem.BoolPtr [ 7];
-   * Map1TexCoord4Enable = AttribItem.BoolPtr [ 8]; Map2Vertex3Enable =
-   * AttribItem.BoolPtr [ 9]; Map2Vertex4Enable = AttribItem.BoolPtr [10];
-   * Map2IndexEnable = AttribItem.BoolPtr [11]; Map2Color4Enable =
-   * AttribItem.BoolPtr [12]; Map2NormalEnable = AttribItem.BoolPtr [13];
-   * Map2TexCoord1Enable = AttribItem.BoolPtr [14]; Map2TexCoord2Enable =
-   * AttribItem.BoolPtr [15]; Map2TexCoord3Enable = AttribItem.BoolPtr [16];
-   * Map2TexCoord4Enable = AttribItem.BoolPtr [17]; MapGrid1u1 =
-   * AttribItem.FloatPtr [0]; MapGrid1u2 = AttribItem.FloatPtr [1]; MapGrid2u1 =
-   * AttribItem.FloatPtr [2]; MapGrid2u2 = AttribItem.FloatPtr [3]; MapGrid2v1 =
-   * AttribItem.FloatPtr [4]; MapGrid2v2 = AttribItem.FloatPtr [5]; MapGrid1un =
-   * AttribItem.IntPtr [0]; MapGrid2un = AttribItem.IntPtr [1]; MapGrid2vn =
+   * public void pop_attrib (gl_list_item AttribItem) { Map1Vertex3Enable = AttribItem.BoolPtr [ 0];
+   * Map1Vertex4Enable = AttribItem.BoolPtr [ 1]; Map1IndexEnable = AttribItem.BoolPtr [ 2];
+   * Map1Color4Enable = AttribItem.BoolPtr [ 3]; Map1NormalEnable = AttribItem.BoolPtr [ 4];
+   * Map1TexCoord1Enable = AttribItem.BoolPtr [ 5]; Map1TexCoord2Enable = AttribItem.BoolPtr [ 6];
+   * Map1TexCoord3Enable = AttribItem.BoolPtr [ 7]; Map1TexCoord4Enable = AttribItem.BoolPtr [ 8];
+   * Map2Vertex3Enable = AttribItem.BoolPtr [ 9]; Map2Vertex4Enable = AttribItem.BoolPtr [10];
+   * Map2IndexEnable = AttribItem.BoolPtr [11]; Map2Color4Enable = AttribItem.BoolPtr [12];
+   * Map2NormalEnable = AttribItem.BoolPtr [13]; Map2TexCoord1Enable = AttribItem.BoolPtr [14];
+   * Map2TexCoord2Enable = AttribItem.BoolPtr [15]; Map2TexCoord3Enable = AttribItem.BoolPtr [16];
+   * Map2TexCoord4Enable = AttribItem.BoolPtr [17]; MapGrid1u1 = AttribItem.FloatPtr [0]; MapGrid1u2
+   * = AttribItem.FloatPtr [1]; MapGrid2u1 = AttribItem.FloatPtr [2]; MapGrid2u2 =
+   * AttribItem.FloatPtr [3]; MapGrid2v1 = AttribItem.FloatPtr [4]; MapGrid2v2 = AttribItem.FloatPtr
+   * [5]; MapGrid1un = AttribItem.IntPtr [0]; MapGrid2un = AttribItem.IntPtr [1]; MapGrid2vn =
    * AttribItem.IntPtr [2]; AutoNormal = AttribItem.BoolPtr [18]; }
    */
 
@@ -481,7 +469,6 @@ public class gl_eval {
     this.AutoNormal = cc.AutoNormal;
   }
 
-  public gl_eval() {
-  };
+  public gl_eval() {};
 
 }

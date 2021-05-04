@@ -36,7 +36,7 @@ public class texgen extends Applet implements ComponentListener {
   }
 
   /* glTexGen stuff: */
-  float sgenparams[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+  float sgenparams[] = {1.0f, 1.0f, 1.0f, 0.0f};
 
   private void myinit() {
     myGL.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -47,7 +47,8 @@ public class texgen extends Applet implements ComponentListener {
     myGL.glTexParameterf(GL.GL_TEXTURE_1D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
     myGL.glTexParameterf(GL.GL_TEXTURE_1D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     myGL.glTexParameterf(GL.GL_TEXTURE_1D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-    myGL.glTexImage1D(GL.GL_TEXTURE_1D, 0, 3, stripeImageWidth, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, stripeImage);
+    myGL.glTexImage1D(GL.GL_TEXTURE_1D, 0, 3, stripeImageWidth, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
+        stripeImage);
 
     myGL.glTexGeni(GL.GL_S, GL.GL_TEXTURE_GEN_MODE, GL.GL_OBJECT_LINEAR);
     myGL.glTexGenfv(GL.GL_S, GL.GL_OBJECT_PLANE, sgenparams);
@@ -80,22 +81,21 @@ public class texgen extends Applet implements ComponentListener {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-3.5f, 3.5f, -3.5f * (float) h / (float) w, 3.5f * (float) h / (float) w, -3.5f, 3.5f);
+      myGL.glOrtho(-3.5f, 3.5f, -3.5f * (float) h / (float) w, 3.5f * (float) h / (float) w, -3.5f,
+          3.5f);
     } else {
-      myGL.glOrtho(-3.5f * (float) w / (float) h, 3.5f * (float) w / (float) h, -3.5f, 3.5f, -3.5f, 3.5f);
+      myGL.glOrtho(-3.5f * (float) w / (float) h, 3.5f * (float) w / (float) h, -3.5f, 3.5f, -3.5f,
+          3.5f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

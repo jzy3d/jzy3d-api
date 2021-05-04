@@ -1,8 +1,7 @@
 package examples.apps;
 /*
- *  texbind.java
- *  This program demonstrates using glBindTexture() by 
- *  creating and managing two textures.
+ * texbind.java This program demonstrates using glBindTexture() by creating and managing two
+ * textures.
  */
 
 import java.awt.Frame;
@@ -60,8 +59,8 @@ public class texbind extends GLCanvas {
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, checkImageWidth, checkImageHeight, 0, GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE, checkImage);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, checkImageWidth, checkImageHeight, 0,
+        GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, checkImage);
 
     myGL.glBindTexture(GL.GL_TEXTURE_2D, texName[1]);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
@@ -69,8 +68,8 @@ public class texbind extends GLCanvas {
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
     myGL.glTexEnvf(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_DECAL);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, checkImageWidth, checkImageHeight, 0, GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE, otherImage);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, checkImageWidth, checkImageHeight, 0,
+        GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, otherImage);
     myGL.glEnable(GL.GL_TEXTURE_2D);
   }
 
@@ -113,10 +112,10 @@ public class texbind extends GLCanvas {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

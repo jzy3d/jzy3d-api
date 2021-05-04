@@ -10,11 +10,11 @@ public class tea extends GLCanvas {
 
   /* Initialize light source. */
   private void myinit() {
-    float light_ambient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-    float light_diffuse[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    float light_ambient[] = {0.0f, 0.0f, 0.0f, 1.0f};
+    float light_diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float light_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
     /* light_position is NOT default value */
-    float light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+    float light_position[] = {1.0f, 1.0f, 1.0f, 0.0f};
 
     myGL.glLightfv(GL.GL_LIGHT0, GL.GL_AMBIENT, light_ambient);
     myGL.glLightfv(GL.GL_LIGHT0, GL.GL_DIFFUSE, light_diffuse);
@@ -31,11 +31,11 @@ public class tea extends GLCanvas {
   }
 
   public void display() {
-    double eqn[] = { 1.0, 0.0, -1.0, 1.0 };
-    boolean two_side_on[] = { GL.GL_TRUE };
-    boolean two_side_off[] = { GL.GL_FALSE };
-    float mat_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-    float back_diffuse[] = { 0.8f, 0.2f, 0.8f, 1.0f };
+    double eqn[] = {1.0, 0.0, -1.0, 1.0};
+    boolean two_side_on[] = {GL.GL_TRUE};
+    boolean two_side_off[] = {GL.GL_FALSE};
+    float mat_diffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
+    float back_diffuse[] = {0.8f, 0.2f, 0.8f, 1.0f};
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
@@ -75,19 +75,21 @@ public class tea extends GLCanvas {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-4.0f, 4.0f, -4.0f * (float) h / (float) w, 4.0f * (float) h / (float) w, -10.0f, 10.0f);
+      myGL.glOrtho(-4.0f, 4.0f, -4.0f * (float) h / (float) w, 4.0f * (float) h / (float) w, -10.0f,
+          10.0f);
     } else {
-      myGL.glOrtho(-4.0f * (float) w / (float) h, 4.0f * (float) w / (float) h, -4.0f, 4.0f, -10.0f, 10.0f);
+      myGL.glOrtho(-4.0f * (float) w / (float) h, 4.0f * (float) w / (float) h, -4.0f, 4.0f, -10.0f,
+          10.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
   }
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

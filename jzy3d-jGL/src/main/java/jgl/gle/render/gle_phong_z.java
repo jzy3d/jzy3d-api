@@ -1,19 +1,16 @@
 /*
  * @(#)gle_phong_z.java 0.1 02/12/31
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 2002 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 2002 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -84,8 +81,8 @@ public class gle_phong_z extends gle_phong {
     pixel.put_pixel_by_index(x, z, get_color());
   }
 
-  private void draw_horizontal_line(int x1, int x2, int y, float z1, float nx1, float ny1, float nz1, float px1,
-      float py1, float pz1) {
+  private void draw_horizontal_line(int x1, int x2, int y, float z1, float nx1, float ny1,
+      float nz1, float px1, float py1, float pz1) {
     this.LineZ[0] = z1;
     draw_horizontal_line(x1, x2, y, nx1, ny1, nz1, px1, py1, pz1);
   }
@@ -121,8 +118,8 @@ public class gle_phong_z extends gle_phong {
   }
 
   protected void draw_horizontal_line(int y) {
-    draw_horizontal_line(LeftPoint, RightPoint, y, LeftPointZ, LeftPointNX, LeftPointNY, LeftPointNZ, LeftPointPX,
-        LeftPointPY, LeftPointPZ);
+    draw_horizontal_line(LeftPoint, RightPoint, y, LeftPointZ, LeftPointNX, LeftPointNY,
+        LeftPointNZ, LeftPointPX, LeftPointPY, LeftPointPZ);
   }
 
   public gle_phong_z(gle_context cc) {

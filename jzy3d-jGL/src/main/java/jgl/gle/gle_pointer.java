@@ -1,19 +1,16 @@
 /*
  * @(#)gle_pointer.java 0.1 02/12/30
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 2002 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 2002 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -49,9 +46,9 @@ public class gle_pointer extends gl_pointer {
    */
 
   /*
-   * public void gl_clipping (boolean state) { if ((gle_status == 0) || !state) {
-   * super.gl_clipping (state); } else { if ((status & 0x00000001) == 0) {
-   * clipping = new gl_cp_phong_clipping (CC); status |= 0x00000001; } } }
+   * public void gl_clipping (boolean state) { if ((gle_status == 0) || !state) { super.gl_clipping
+   * (state); } else { if ((status & 0x00000001) == 0) { clipping = new gl_cp_phong_clipping (CC);
+   * status |= 0x00000001; } } }
    */
 
   public void gl_depth(boolean state) {
@@ -111,10 +108,10 @@ public class gle_pointer extends gl_pointer {
           }
           geometry = new gle_phong_geo((gle_context) CC, this);
         }
-//		    if ((status & 0x00000001) != 0) {
-//			clipping = new gl_cp_color_clipping (CC);
-//		    }
-//		    vp_clipping = new gl_vp_color_clipping (CC);
+        // if ((status & 0x00000001) != 0) {
+        // clipping = new gl_cp_color_clipping (CC);
+        // }
+        // vp_clipping = new gl_vp_color_clipping (CC);
       }
       status &= 0xfffffff7;
     }
@@ -136,10 +133,10 @@ public class gle_pointer extends gl_pointer {
           render = new gle_phong((gle_context) CC);
           geometry = new gle_phong_geo((gle_context) CC, this);
         }
-//		    if ((status & 0x00000001) != 0) {
-//			clipping = new gl_cp_color_clipping (CC);
-//		    }
-//		    vp_clipping = new gl_vp_color_clipping (CC);
+        // if ((status & 0x00000001) != 0) {
+        // clipping = new gl_cp_color_clipping (CC);
+        // }
+        // vp_clipping = new gl_vp_color_clipping (CC);
       }
 
       if ((status & 0x00000010) != 0) {
@@ -161,8 +158,8 @@ public class gle_pointer extends gl_pointer {
         render = new gle_phong((gle_context) CC);
         geometry = new gle_phong_geo((gle_context) CC, this);
       }
-//	    clipping = new gl_cp_phong_clipping ((gle_context)CC);
-//	    vp_clipping = new gl_vp_phong_clipping ((gle_context)CC);
+      // clipping = new gl_cp_phong_clipping ((gle_context)CC);
+      // vp_clipping = new gl_vp_phong_clipping ((gle_context)CC);
       gle_status = 1;
     }
   }

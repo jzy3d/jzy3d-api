@@ -1,19 +1,15 @@
 /*
  * @(#)gl_util.java 0.3 06/11/20
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2006 Robin Bing-Yu Chen (robin@ntu.edu.tw)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2006 Robin Bing-Yu Chen (robin@ntu.edu.tw)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -118,14 +114,17 @@ public final class gl_util {
     return (a * d - b * c);
   }
 
-  public static float det33(float a1, float a2, float a3, float b1, float b2, float b3, float c1, float c2, float c3) {
+  public static float det33(float a1, float a2, float a3, float b1, float b2, float b3, float c1,
+      float c2, float c3) {
     return (a1 * det22(b2, b3, c2, c3) - b1 * det22(a2, a3, c2, c3) + c1 * det22(a2, a3, b2, b3));
   }
 
-  public static float det44(float a1, float a2, float a3, float a4, float b1, float b2, float b3, float b4, float c1,
-      float c2, float c3, float c4, float d1, float d2, float d3, float d4) {
-    return (a1 * det33(b2, b3, b4, c2, c3, c4, d2, d3, d4) - b1 * det33(a2, a3, a4, c2, c3, c4, d2, d3, d4)
-        + c1 * det33(a2, a3, a4, b2, b3, b4, d2, d3, d4) - d1 * det33(a2, a3, a4, b2, b3, b4, c2, c3, c4));
+  public static float det44(float a1, float a2, float a3, float a4, float b1, float b2, float b3,
+      float b4, float c1, float c2, float c3, float c4, float d1, float d2, float d3, float d4) {
+    return (a1 * det33(b2, b3, b4, c2, c3, c4, d2, d3, d4)
+        - b1 * det33(a2, a3, a4, c2, c3, c4, d2, d3, d4)
+        + c1 * det33(a2, a3, a4, b2, b3, b4, d2, d3, d4)
+        - d1 * det33(a2, a3, a4, b2, b3, b4, c2, c3, c4));
   }
 
   public static float[] adjoint44(float a[]) {
@@ -150,8 +149,8 @@ public final class gl_util {
 
   public static float[] inverseMatrix44(float a[]) {
     float m[] = adjoint44(a);
-    float det = det44(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11], m[12], m[13], m[14],
-        m[15]);
+    float det = det44(m[0], m[1], m[2], m[3], m[4], m[5], m[6], m[7], m[8], m[9], m[10], m[11],
+        m[12], m[13], m[14], m[15]);
     int i;
     if (det != 0) {
       for (i = 0; i < 16; i++) {

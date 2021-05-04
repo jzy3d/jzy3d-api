@@ -1,18 +1,15 @@
 package examples.applets.glut;
 /*
- *  movelight.java
- *  This program demonstrates when to issue lighting and
- *  transformation commands to render a model with a light
- *  which is moved by a modeling transformation (rotate or
- *  translate).  The light position is reset after the modeling
- *  transformation is called.  The eye position does not change.
+ * movelight.java This program demonstrates when to issue lighting and transformation commands to
+ * render a model with a light which is moved by a modeling transformation (rotate or translate).
+ * The light position is reset after the modeling transformation is called. The eye position does
+ * not change.
  *
- *  A sphere is drawn using a grey material characteristic.
- *  A single light source illuminates the object.
+ * A sphere is drawn using a grey material characteristic. A single light source illuminates the
+ * object.
  *
- *  Interaction:  pressing the left mouse button alters
- *  the modeling transformation (x rotation) by 30 degrees.
- *  The scene is then redrawn with the light in a new position.
+ * Interaction: pressing the left mouse button alters the modeling transformation (x rotation) by 30
+ * degrees. The scene is then redrawn with the light in a new position.
  */
 
 import jgl.GL;
@@ -35,12 +32,12 @@ public class movelight extends GLApplet {
   }
 
   /*
-   * Here is where the light position is reset after the modeling transformation
-   * (glRotated) is called. This places the light at a new position in world
-   * coordinates. The cube represents the position of the light.
+   * Here is where the light position is reset after the modeling transformation (glRotated) is
+   * called. This places the light at a new position in world coordinates. The cube represents the
+   * position of the light.
    */
   public void display() {
-    float position[] = { 0.0f, 0.0f, 1.5f, 1.0f };
+    float position[] = {0.0f, 0.0f, 1.5f, 1.0f};
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
     myGL.glPushMatrix();
@@ -74,14 +71,14 @@ public class movelight extends GLApplet {
   /* ARGSUSED2 */
   public void mouse(int button, int state, int x, int y) {
     switch (button) {
-    case GLUT.GLUT_LEFT_BUTTON:
-      if (state == GLUT.GLUT_DOWN) {
-        spin = (spin + 30) % 360;
-        myUT.glutPostRedisplay();
-      }
-      break;
-    default:
-      break;
+      case GLUT.GLUT_LEFT_BUTTON:
+        if (state == GLUT.GLUT_DOWN) {
+          spin = (spin + 30) % 360;
+          myUT.glutPostRedisplay();
+        }
+        break;
+      default:
+        break;
     }
   }
 

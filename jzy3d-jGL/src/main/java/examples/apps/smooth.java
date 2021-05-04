@@ -1,8 +1,7 @@
 package examples.apps;
 /*
- * smooth.java
- * This program demonstrates smooth shading.
- * A smooth shaded polygon is drawn in a 2-D projection.
+ * smooth.java This program demonstrates smooth shading. A smooth shaded polygon is drawn in a 2-D
+ * projection.
  */
 
 import java.awt.Frame;
@@ -50,10 +49,10 @@ public class smooth extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

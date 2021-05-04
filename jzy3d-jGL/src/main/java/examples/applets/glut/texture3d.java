@@ -1,10 +1,8 @@
 package examples.applets.glut;
 /*
- *  texture3d.java
- *  This program demonstrates using a three-dimensional texture.
- *  It creates a 3D texture and then renders two rectangles
- *  with different texture coordinates to obtain different
- *  "slices" of the 3D texture.
+ * texture3d.java This program demonstrates using a three-dimensional texture. It creates a 3D
+ * texture and then renders two rectangles with different texture coordinates to obtain different
+ * "slices" of the 3D texture.
  */
 
 import jgl.GL;
@@ -20,8 +18,8 @@ public class texture3d extends GLApplet {
   private int texName[] = new int[1];
 
   /*
-   * Create a 16x16x16x3 array with different color values in each array element
-   * [r, g, b]. Values range from 0 to 255.
+   * Create a 16x16x16x3 array with different color values in each array element [r, g, b]. Values
+   * range from 0 to 255.
    */
   private void makeImage() {
     int s, t, r;
@@ -57,8 +55,8 @@ public class texture3d extends GLApplet {
 
     myGL.glTexParameterf(GL.GL_TEXTURE_3D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
     myGL.glTexParameterf(GL.GL_TEXTURE_3D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_NEAREST);
-    myGL.glTexImage3D(GL.GL_TEXTURE_3D, 0, GL.GL_RGB, iWidth, iHeight, iDepth, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
-        image);
+    myGL.glTexImage3D(GL.GL_TEXTURE_3D, 0, GL.GL_RGB, iWidth, iHeight, iDepth, 0, GL.GL_RGB,
+        GL.GL_UNSIGNED_BYTE, image);
     myGL.glEnable(GL.GL_TEXTURE_3D);
   }
 

@@ -794,6 +794,11 @@ public class AxisBox implements IAxis {
      * 5);6
      */
   }
+  
+  /* ************************************************/
+  /* ************ AXIS GETTER/SETTER ****************/
+  /* ************************************************/
+
 
   protected void init() {
     setScale(new Coord3d(1.0f, 1.0f, 1.0f));

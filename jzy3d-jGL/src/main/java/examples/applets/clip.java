@@ -21,8 +21,8 @@ public class clip extends Applet implements ComponentListener {
   GLAUX myAUX = new GLAUX(myGL);
 
   private void display() {
-    double eqn[] = { 0.0, 1.0, 0.0, 0.0 }; /* y < 0 */
-    double eqn2[] = { 1.0, 0.0, 0.0, 0.0 }; /* x < 0 */
+    double eqn[] = {0.0, 1.0, 0.0, 0.0}; /* y < 0 */
+    double eqn2[] = {1.0, 0.0, 0.0, 0.0}; /* x < 0 */
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT);
 
@@ -45,14 +45,11 @@ public class clip extends Applet implements ComponentListener {
     myGL.glShadeModel(GL.GL_FLAT);
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

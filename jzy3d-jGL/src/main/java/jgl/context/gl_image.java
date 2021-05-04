@@ -1,19 +1,16 @@
 /*
  * @(#)gl_image.java 0.4 01/12/03
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2001 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2001 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -121,125 +118,124 @@ public class gl_image {
   }
 
   /*
-   * private boolean is_need_scale (gl_pixel_pack p) { if ((p.Red.Scale != 1) ||
-   * (p.Red.Bias != 0) || (p.Green.Scale != 1) || (p.Green.Bias != 0) ||
-   * (p.Blue.Scale != 1) || (p.Blue.Bias != 0) || (p.Alpha.Scale != 1) ||
-   * (p.Alpha.Bias != 0)) { return true; } else return false; }
+   * private boolean is_need_scale (gl_pixel_pack p) { if ((p.Red.Scale != 1) || (p.Red.Bias != 0)
+   * || (p.Green.Scale != 1) || (p.Green.Bias != 0) || (p.Blue.Scale != 1) || (p.Blue.Bias != 0) ||
+   * (p.Alpha.Scale != 1) || (p.Alpha.Bias != 0)) { return true; } else return false; }
    */
 
   private void get_image(int f, byte pixel[], byte data[]) {
     switch (f) {
-    case GL.GL_COLOR_INDEX:
-      break;
-    case GL.GL_RGBA:
-      pixel[3] = data[3];
-    case GL.GL_RGB:
-      pixel[0] = data[0];
-      pixel[1] = data[1];
-      pixel[2] = data[2];
-      break;
-    case GL.GL_LUMINANCE_ALPHA:
-      pixel[1] = data[3];
-    case GL.GL_LUMINANCE:
-    case GL.GL_RED:
-      pixel[0] = data[0];
-      break;
-    case GL.GL_GREEN:
-      pixel[0] = data[1];
-      break;
-    case GL.GL_BLUE:
-      pixel[0] = data[2];
-      break;
-    case GL.GL_ALPHA:
-      pixel[0] = data[3];
-      break;
+      case GL.GL_COLOR_INDEX:
+        break;
+      case GL.GL_RGBA:
+        pixel[3] = data[3];
+      case GL.GL_RGB:
+        pixel[0] = data[0];
+        pixel[1] = data[1];
+        pixel[2] = data[2];
+        break;
+      case GL.GL_LUMINANCE_ALPHA:
+        pixel[1] = data[3];
+      case GL.GL_LUMINANCE:
+      case GL.GL_RED:
+        pixel[0] = data[0];
+        break;
+      case GL.GL_GREEN:
+        pixel[0] = data[1];
+        break;
+      case GL.GL_BLUE:
+        pixel[0] = data[2];
+        break;
+      case GL.GL_ALPHA:
+        pixel[0] = data[3];
+        break;
     }
   }
 
   private void get_image(int f, short pixel[], byte data[]) {
     switch (f) {
-    case GL.GL_COLOR_INDEX:
-      break;
-    case GL.GL_RGBA:
-      pixel[3] = data[3];
-    case GL.GL_RGB:
-      pixel[0] = data[0];
-      pixel[1] = data[1];
-      pixel[2] = data[2];
-      break;
-    case GL.GL_LUMINANCE_ALPHA:
-      pixel[1] = data[3];
-    case GL.GL_LUMINANCE:
-    case GL.GL_RED:
-      pixel[0] = data[0];
-      break;
-    case GL.GL_GREEN:
-      pixel[0] = data[1];
-      break;
-    case GL.GL_BLUE:
-      pixel[0] = data[2];
-      break;
-    case GL.GL_ALPHA:
-      pixel[0] = data[3];
-      break;
+      case GL.GL_COLOR_INDEX:
+        break;
+      case GL.GL_RGBA:
+        pixel[3] = data[3];
+      case GL.GL_RGB:
+        pixel[0] = data[0];
+        pixel[1] = data[1];
+        pixel[2] = data[2];
+        break;
+      case GL.GL_LUMINANCE_ALPHA:
+        pixel[1] = data[3];
+      case GL.GL_LUMINANCE:
+      case GL.GL_RED:
+        pixel[0] = data[0];
+        break;
+      case GL.GL_GREEN:
+        pixel[0] = data[1];
+        break;
+      case GL.GL_BLUE:
+        pixel[0] = data[2];
+        break;
+      case GL.GL_ALPHA:
+        pixel[0] = data[3];
+        break;
     }
   }
 
   private void get_image(int f, int pixel[], byte data[]) {
     switch (f) {
-    case GL.GL_COLOR_INDEX:
-      break;
-    case GL.GL_RGBA:
-      pixel[3] = data[3];
-    case GL.GL_RGB:
-      pixel[0] = data[0];
-      pixel[1] = data[1];
-      pixel[2] = data[2];
-      break;
-    case GL.GL_LUMINANCE_ALPHA:
-      pixel[1] = data[3];
-    case GL.GL_LUMINANCE:
-    case GL.GL_RED:
-      pixel[0] = data[0];
-      break;
-    case GL.GL_GREEN:
-      pixel[0] = data[1];
-      break;
-    case GL.GL_BLUE:
-      pixel[0] = data[2];
-      break;
-    case GL.GL_ALPHA:
-      pixel[0] = data[3];
-      break;
+      case GL.GL_COLOR_INDEX:
+        break;
+      case GL.GL_RGBA:
+        pixel[3] = data[3];
+      case GL.GL_RGB:
+        pixel[0] = data[0];
+        pixel[1] = data[1];
+        pixel[2] = data[2];
+        break;
+      case GL.GL_LUMINANCE_ALPHA:
+        pixel[1] = data[3];
+      case GL.GL_LUMINANCE:
+      case GL.GL_RED:
+        pixel[0] = data[0];
+        break;
+      case GL.GL_GREEN:
+        pixel[0] = data[1];
+        break;
+      case GL.GL_BLUE:
+        pixel[0] = data[2];
+        break;
+      case GL.GL_ALPHA:
+        pixel[0] = data[3];
+        break;
     }
   }
 
   private void get_image(int f, float pixel[], byte data[]) {
     switch (f) {
-    case GL.GL_COLOR_INDEX:
-      break;
-    case GL.GL_RGBA:
-      pixel[3] = (float) data[3] / 255.0f;
-    case GL.GL_RGB:
-      pixel[0] = (float) data[0] / 255.0f;
-      pixel[1] = (float) data[1] / 255.0f;
-      pixel[2] = (float) data[2] / 255.0f;
-      break;
-    case GL.GL_LUMINANCE_ALPHA:
-      pixel[1] = (float) data[3] / 255.0f;
-    case GL.GL_LUMINANCE:
-    case GL.GL_RED:
-      pixel[0] = (float) data[0] / 255.0f;
-      break;
-    case GL.GL_GREEN:
-      pixel[0] = (float) data[1] / 255.0f;
-      break;
-    case GL.GL_BLUE:
-      pixel[0] = (float) data[2] / 255.0f;
-      break;
-    case GL.GL_ALPHA:
-      pixel[0] = (float) data[3] / 255.0f;
-      break;
+      case GL.GL_COLOR_INDEX:
+        break;
+      case GL.GL_RGBA:
+        pixel[3] = (float) data[3] / 255.0f;
+      case GL.GL_RGB:
+        pixel[0] = (float) data[0] / 255.0f;
+        pixel[1] = (float) data[1] / 255.0f;
+        pixel[2] = (float) data[2] / 255.0f;
+        break;
+      case GL.GL_LUMINANCE_ALPHA:
+        pixel[1] = (float) data[3] / 255.0f;
+      case GL.GL_LUMINANCE:
+      case GL.GL_RED:
+        pixel[0] = (float) data[0] / 255.0f;
+        break;
+      case GL.GL_GREEN:
+        pixel[0] = (float) data[1] / 255.0f;
+        break;
+      case GL.GL_BLUE:
+        pixel[0] = (float) data[2] / 255.0f;
+        break;
+      case GL.GL_ALPHA:
+        pixel[0] = (float) data[3] / 255.0f;
+        break;
     }
   }
 
@@ -306,65 +302,64 @@ public class gl_image {
       si = 0;
       for (i = x; i < w; i++) {
         switch (f) {
-        case GL.GL_COLOR_INDEX:
-          break;
-        case GL.GL_RGB:
-          r = get_data(si, 0, s, data);
-          g = get_data(si, 1, s, data);
-          b = get_data(si, 2, s, data);
-          a = (byte) 255;
-          break;
-        case GL.GL_RGBA:
-          r = get_data(si, 0, s, data);
-          g = get_data(si, 1, s, data);
-          b = get_data(si, 2, s, data);
-          a = get_data(si, 3, s, data);
-          break;
-        case GL.GL_RED:
-          r = get_data(si, 0, s, data);
-          g = (byte) 0;
-          b = (byte) 0;
-          a = (byte) 255;
-          break;
-        case GL.GL_GREEN:
-          r = (byte) 0;
-          g = get_data(si, 0, s, data);
-          b = (byte) 0;
-          a = (byte) 255;
-          break;
-        case GL.GL_BLUE:
-          r = (byte) 0;
-          g = (byte) 0;
-          b = get_data(si, 0, s, data);
-          a = (byte) 255;
-          break;
-        case GL.GL_ALPHA:
-          r = (byte) 0;
-          g = (byte) 0;
-          b = (byte) 0;
-          a = get_data(si, 0, s, data);
-          break;
-        case GL.GL_LUMINANCE:
-          r = get_data(si, 0, s, data);
-          g = r;
-          b = r;
-          a = (byte) 255;
-          break;
-        case GL.GL_LUMINANCE_ALPHA:
-          r = get_data(si, 0, s, data);
-          g = r;
-          b = r;
-          a = get_data(si, 1, s, data);
-          break;
+          case GL.GL_COLOR_INDEX:
+            break;
+          case GL.GL_RGB:
+            r = get_data(si, 0, s, data);
+            g = get_data(si, 1, s, data);
+            b = get_data(si, 2, s, data);
+            a = (byte) 255;
+            break;
+          case GL.GL_RGBA:
+            r = get_data(si, 0, s, data);
+            g = get_data(si, 1, s, data);
+            b = get_data(si, 2, s, data);
+            a = get_data(si, 3, s, data);
+            break;
+          case GL.GL_RED:
+            r = get_data(si, 0, s, data);
+            g = (byte) 0;
+            b = (byte) 0;
+            a = (byte) 255;
+            break;
+          case GL.GL_GREEN:
+            r = (byte) 0;
+            g = get_data(si, 0, s, data);
+            b = (byte) 0;
+            a = (byte) 255;
+            break;
+          case GL.GL_BLUE:
+            r = (byte) 0;
+            g = (byte) 0;
+            b = get_data(si, 0, s, data);
+            a = (byte) 255;
+            break;
+          case GL.GL_ALPHA:
+            r = (byte) 0;
+            g = (byte) 0;
+            b = (byte) 0;
+            a = get_data(si, 0, s, data);
+            break;
+          case GL.GL_LUMINANCE:
+            r = get_data(si, 0, s, data);
+            g = r;
+            b = r;
+            a = (byte) 255;
+            break;
+          case GL.GL_LUMINANCE_ALPHA:
+            r = get_data(si, 0, s, data);
+            g = r;
+            b = r;
+            a = get_data(si, 1, s, data);
+            break;
         }
         /*
-         * switch (c) { case 1: ImageData [i][0][0][0] = r; ImageData [i][0][0][1] =
-         * (byte)0; ImageData [i][0][0][2] = (byte)0; ImageData [i][0][0][3] =
-         * (byte)255; break; case 2: ImageData [i][0][0][0] = r; ImageData [i][0][0][1]
-         * = (byte)0; ImageData [i][0][0][2] = (byte)0; ImageData [i][0][0][3] = a;
-         * break; case 3: ImageData [i][0][0][0] = r; ImageData [i][0][0][1] = g;
-         * ImageData [i][0][0][2] = b; ImageData [i][0][0][3] = (byte)255; break; case
-         * 4:
+         * switch (c) { case 1: ImageData [i][0][0][0] = r; ImageData [i][0][0][1] = (byte)0;
+         * ImageData [i][0][0][2] = (byte)0; ImageData [i][0][0][3] = (byte)255; break; case 2:
+         * ImageData [i][0][0][0] = r; ImageData [i][0][0][1] = (byte)0; ImageData [i][0][0][2] =
+         * (byte)0; ImageData [i][0][0][3] = a; break; case 3: ImageData [i][0][0][0] = r; ImageData
+         * [i][0][0][1] = g; ImageData [i][0][0][2] = b; ImageData [i][0][0][3] = (byte)255; break;
+         * case 4:
          */
         ImageData[i][0][0][0] = r;
         ImageData[i][0][0][1] = g;
@@ -378,7 +373,8 @@ public class gl_image {
     }
   }
 
-  public void set_sub_image(int x, int y, int w, int h, int f, int s, gl_pixel_pack p, Object data) {
+  public void set_sub_image(int x, int y, int w, int h, int f, int s, gl_pixel_pack p,
+      Object data) {
     int i, j, si, sj;
     byte r = (byte) 0;
     byte g = (byte) 0;
@@ -392,65 +388,64 @@ public class gl_image {
         sj = 0;
         for (j = y; j < h; j++) {
           switch (f) {
-          case GL.GL_COLOR_INDEX:
-            break;
-          case GL.GL_RGB:
-            r = get_data(si, sj, 0, s, data);
-            g = get_data(si, sj, 1, s, data);
-            b = get_data(si, sj, 2, s, data);
-            a = (byte) 255;
-            break;
-          case GL.GL_RGBA:
-            r = get_data(si, sj, 0, s, data);
-            g = get_data(si, sj, 1, s, data);
-            b = get_data(si, sj, 2, s, data);
-            a = get_data(si, sj, 3, s, data);
-            break;
-          case GL.GL_RED:
-            r = get_data(si, sj, 0, s, data);
-            g = (byte) 0;
-            b = (byte) 0;
-            a = (byte) 255;
-            break;
-          case GL.GL_GREEN:
-            r = (byte) 0;
-            g = get_data(si, sj, 0, s, data);
-            b = (byte) 0;
-            a = (byte) 255;
-            break;
-          case GL.GL_BLUE:
-            r = (byte) 0;
-            g = (byte) 0;
-            b = get_data(si, sj, 0, s, data);
-            a = (byte) 255;
-            break;
-          case GL.GL_ALPHA:
-            r = (byte) 0;
-            g = (byte) 0;
-            b = (byte) 0;
-            a = get_data(si, sj, 0, s, data);
-            break;
-          case GL.GL_LUMINANCE:
-            r = get_data(si, sj, 0, s, data);
-            g = r;
-            b = r;
-            a = (byte) 255;
-            break;
-          case GL.GL_LUMINANCE_ALPHA:
-            r = get_data(si, sj, 0, s, data);
-            g = r;
-            b = r;
-            a = get_data(si, sj, 1, s, data);
-            break;
+            case GL.GL_COLOR_INDEX:
+              break;
+            case GL.GL_RGB:
+              r = get_data(si, sj, 0, s, data);
+              g = get_data(si, sj, 1, s, data);
+              b = get_data(si, sj, 2, s, data);
+              a = (byte) 255;
+              break;
+            case GL.GL_RGBA:
+              r = get_data(si, sj, 0, s, data);
+              g = get_data(si, sj, 1, s, data);
+              b = get_data(si, sj, 2, s, data);
+              a = get_data(si, sj, 3, s, data);
+              break;
+            case GL.GL_RED:
+              r = get_data(si, sj, 0, s, data);
+              g = (byte) 0;
+              b = (byte) 0;
+              a = (byte) 255;
+              break;
+            case GL.GL_GREEN:
+              r = (byte) 0;
+              g = get_data(si, sj, 0, s, data);
+              b = (byte) 0;
+              a = (byte) 255;
+              break;
+            case GL.GL_BLUE:
+              r = (byte) 0;
+              g = (byte) 0;
+              b = get_data(si, sj, 0, s, data);
+              a = (byte) 255;
+              break;
+            case GL.GL_ALPHA:
+              r = (byte) 0;
+              g = (byte) 0;
+              b = (byte) 0;
+              a = get_data(si, sj, 0, s, data);
+              break;
+            case GL.GL_LUMINANCE:
+              r = get_data(si, sj, 0, s, data);
+              g = r;
+              b = r;
+              a = (byte) 255;
+              break;
+            case GL.GL_LUMINANCE_ALPHA:
+              r = get_data(si, sj, 0, s, data);
+              g = r;
+              b = r;
+              a = get_data(si, sj, 1, s, data);
+              break;
           }
           /*
-           * switch (c) { case 1: ImageData [i][j][0][0] = r; ImageData [i][j][0][1] =
-           * (byte)0; ImageData [i][j][0][2] = (byte)0; ImageData [i][j][0][3] =
-           * (byte)255; break; case 2: ImageData [i][j][0][0] = r; ImageData [i][j][0][1]
-           * = (byte)0; ImageData [i][j][0][2] = (byte)0; ImageData [i][j][0][3] = a;
-           * break; case 3: ImageData [i][j][0][0] = r; ImageData [i][j][0][1] = g;
-           * ImageData [i][j][0][2] = b; ImageData [i][j][0][3] = (byte)255; break; case
-           * 4:
+           * switch (c) { case 1: ImageData [i][j][0][0] = r; ImageData [i][j][0][1] = (byte)0;
+           * ImageData [i][j][0][2] = (byte)0; ImageData [i][j][0][3] = (byte)255; break; case 2:
+           * ImageData [i][j][0][0] = r; ImageData [i][j][0][1] = (byte)0; ImageData [i][j][0][2] =
+           * (byte)0; ImageData [i][j][0][3] = a; break; case 3: ImageData [i][j][0][0] = r;
+           * ImageData [i][j][0][1] = g; ImageData [i][j][0][2] = b; ImageData [i][j][0][3] =
+           * (byte)255; break; case 4:
            */
           ImageData[i][j][0][0] = r;
           ImageData[i][j][0][1] = g;
@@ -466,7 +461,8 @@ public class gl_image {
     }
   }
 
-  public void set_sub_image(int x, int y, int z, int w, int h, int d, int f, int s, gl_pixel_pack p, Object data) {
+  public void set_sub_image(int x, int y, int z, int w, int h, int d, int f, int s, gl_pixel_pack p,
+      Object data) {
     int i, j, k, si, sj, sk;
     byte r = (byte) 0;
     byte g = (byte) 0;
@@ -480,65 +476,64 @@ public class gl_image {
         sj = 0;
         for (j = y; j < h; j++) {
           switch (f) {
-          case GL.GL_COLOR_INDEX:
-            break;
-          case GL.GL_RGB:
-            r = get_data(si, sj, 0, s, data);
-            g = get_data(si, sj, 1, s, data);
-            b = get_data(si, sj, 2, s, data);
-            a = (byte) 255;
-            break;
-          case GL.GL_RGBA:
-            r = get_data(si, sj, 0, s, data);
-            g = get_data(si, sj, 1, s, data);
-            b = get_data(si, sj, 2, s, data);
-            a = get_data(si, sj, 3, s, data);
-            break;
-          case GL.GL_RED:
-            r = get_data(si, sj, 0, s, data);
-            g = (byte) 0;
-            b = (byte) 0;
-            a = (byte) 255;
-            break;
-          case GL.GL_GREEN:
-            r = (byte) 0;
-            g = get_data(si, sj, 0, s, data);
-            b = (byte) 0;
-            a = (byte) 255;
-            break;
-          case GL.GL_BLUE:
-            r = (byte) 0;
-            g = (byte) 0;
-            b = get_data(si, sj, 0, s, data);
-            a = (byte) 255;
-            break;
-          case GL.GL_ALPHA:
-            r = (byte) 0;
-            g = (byte) 0;
-            b = (byte) 0;
-            a = get_data(si, sj, 0, s, data);
-            break;
-          case GL.GL_LUMINANCE:
-            r = get_data(si, sj, 0, s, data);
-            g = r;
-            b = r;
-            a = (byte) 255;
-            break;
-          case GL.GL_LUMINANCE_ALPHA:
-            r = get_data(si, sj, 0, s, data);
-            g = r;
-            b = r;
-            a = get_data(si, sj, 1, s, data);
-            break;
+            case GL.GL_COLOR_INDEX:
+              break;
+            case GL.GL_RGB:
+              r = get_data(si, sj, 0, s, data);
+              g = get_data(si, sj, 1, s, data);
+              b = get_data(si, sj, 2, s, data);
+              a = (byte) 255;
+              break;
+            case GL.GL_RGBA:
+              r = get_data(si, sj, 0, s, data);
+              g = get_data(si, sj, 1, s, data);
+              b = get_data(si, sj, 2, s, data);
+              a = get_data(si, sj, 3, s, data);
+              break;
+            case GL.GL_RED:
+              r = get_data(si, sj, 0, s, data);
+              g = (byte) 0;
+              b = (byte) 0;
+              a = (byte) 255;
+              break;
+            case GL.GL_GREEN:
+              r = (byte) 0;
+              g = get_data(si, sj, 0, s, data);
+              b = (byte) 0;
+              a = (byte) 255;
+              break;
+            case GL.GL_BLUE:
+              r = (byte) 0;
+              g = (byte) 0;
+              b = get_data(si, sj, 0, s, data);
+              a = (byte) 255;
+              break;
+            case GL.GL_ALPHA:
+              r = (byte) 0;
+              g = (byte) 0;
+              b = (byte) 0;
+              a = get_data(si, sj, 0, s, data);
+              break;
+            case GL.GL_LUMINANCE:
+              r = get_data(si, sj, 0, s, data);
+              g = r;
+              b = r;
+              a = (byte) 255;
+              break;
+            case GL.GL_LUMINANCE_ALPHA:
+              r = get_data(si, sj, 0, s, data);
+              g = r;
+              b = r;
+              a = get_data(si, sj, 1, s, data);
+              break;
           }
           /*
-           * switch (c) { case 1: ImageData [i][j][0][0] = r; ImageData [i][j][0][1] =
-           * (byte)0; ImageData [i][j][0][2] = (byte)0; ImageData [i][j][0][3] =
-           * (byte)255; break; case 2: ImageData [i][j][0][0] = r; ImageData [i][j][0][1]
-           * = (byte)0; ImageData [i][j][0][2] = (byte)0; ImageData [i][j][0][3] = a;
-           * break; case 3: ImageData [i][j][0][0] = r; ImageData [i][j][0][1] = g;
-           * ImageData [i][j][0][2] = b; ImageData [i][j][0][3] = (byte)255; break; case
-           * 4:
+           * switch (c) { case 1: ImageData [i][j][0][0] = r; ImageData [i][j][0][1] = (byte)0;
+           * ImageData [i][j][0][2] = (byte)0; ImageData [i][j][0][3] = (byte)255; break; case 2:
+           * ImageData [i][j][0][0] = r; ImageData [i][j][0][1] = (byte)0; ImageData [i][j][0][2] =
+           * (byte)0; ImageData [i][j][0][3] = a; break; case 3: ImageData [i][j][0][0] = r;
+           * ImageData [i][j][0][1] = g; ImageData [i][j][0][2] = b; ImageData [i][j][0][3] =
+           * (byte)255; break; case 4:
            */
           ImageData[i][j][0][0] = r;
           ImageData[i][j][0][1] = g;
@@ -566,102 +561,101 @@ public class gl_image {
     Depth = 1;
     ImageData = new byte[Width][1][1][4];
 
-//	boolean need_scale = is_need_scale(p);
+    // boolean need_scale = is_need_scale(p);
 
     if (s == 0) { // data is GL_BITMAP
     } else {
       si = p.SkipPixels;
       for (i = 0; i < Width; i++) {
         switch (f) {
-        case GL.GL_COLOR_INDEX:
-          break;
-        case GL.GL_RGB:
-          r = get_data(si, 0, s, data);
-          g = get_data(si, 1, s, data);
-          b = get_data(si, 2, s, data);
-          a = (byte) 255;
-          break;
-        case GL.GL_RGBA:
-          r = get_data(si, 0, s, data);
-          g = get_data(si, 1, s, data);
-          b = get_data(si, 2, s, data);
-          a = get_data(si, 3, s, data);
-          break;
-        case GL.GL_RED:
-          r = get_data(si, 0, s, data);
-          g = (byte) 0;
-          b = (byte) 0;
-          a = (byte) 255;
-          break;
-        case GL.GL_GREEN:
-          r = (byte) 0;
-          g = get_data(si, 0, s, data);
-          b = (byte) 0;
-          a = (byte) 255;
-          break;
-        case GL.GL_BLUE:
-          r = (byte) 0;
-          g = (byte) 0;
-          b = get_data(si, 0, s, data);
-          a = (byte) 255;
-          break;
-        case GL.GL_ALPHA:
-          r = (byte) 0;
-          g = (byte) 0;
-          b = (byte) 0;
-          a = get_data(si, 0, s, data);
-          break;
-        case GL.GL_LUMINANCE:
-          r = get_data(si, 0, s, data);
-          g = r;
-          b = r;
-          a = (byte) 255;
-          break;
-        case GL.GL_LUMINANCE_ALPHA:
-          r = get_data(si, 0, s, data);
-          g = r;
-          b = r;
-          a = get_data(si, 1, s, data);
-          break;
+          case GL.GL_COLOR_INDEX:
+            break;
+          case GL.GL_RGB:
+            r = get_data(si, 0, s, data);
+            g = get_data(si, 1, s, data);
+            b = get_data(si, 2, s, data);
+            a = (byte) 255;
+            break;
+          case GL.GL_RGBA:
+            r = get_data(si, 0, s, data);
+            g = get_data(si, 1, s, data);
+            b = get_data(si, 2, s, data);
+            a = get_data(si, 3, s, data);
+            break;
+          case GL.GL_RED:
+            r = get_data(si, 0, s, data);
+            g = (byte) 0;
+            b = (byte) 0;
+            a = (byte) 255;
+            break;
+          case GL.GL_GREEN:
+            r = (byte) 0;
+            g = get_data(si, 0, s, data);
+            b = (byte) 0;
+            a = (byte) 255;
+            break;
+          case GL.GL_BLUE:
+            r = (byte) 0;
+            g = (byte) 0;
+            b = get_data(si, 0, s, data);
+            a = (byte) 255;
+            break;
+          case GL.GL_ALPHA:
+            r = (byte) 0;
+            g = (byte) 0;
+            b = (byte) 0;
+            a = get_data(si, 0, s, data);
+            break;
+          case GL.GL_LUMINANCE:
+            r = get_data(si, 0, s, data);
+            g = r;
+            b = r;
+            a = (byte) 255;
+            break;
+          case GL.GL_LUMINANCE_ALPHA:
+            r = get_data(si, 0, s, data);
+            g = r;
+            b = r;
+            a = get_data(si, 1, s, data);
+            break;
         }
         /*
-         * if (need_scale) { r = p.Red.apply_bias_scale(r); g =
-         * p.Green.apply_bias_scale(g); b = p.Blue.apply_bias_scale(b); a =
-         * p.Alpha.apply_bias_scale(a); }
+         * if (need_scale) { r = p.Red.apply_bias_scale(r); g = p.Green.apply_bias_scale(g); b =
+         * p.Blue.apply_bias_scale(b); a = p.Alpha.apply_bias_scale(a); }
          */
         switch (c) {
-        case 1:
-          ImageData[i][0][0][0] = r;
-          ImageData[i][0][0][1] = (byte) 0;
-          ImageData[i][0][0][2] = (byte) 0;
-          ImageData[i][0][0][3] = (byte) 255;
-          break;
-        case 2:
-          ImageData[i][0][0][0] = r;
-          ImageData[i][0][0][1] = (byte) 0;
-          ImageData[i][0][0][2] = (byte) 0;
-          ImageData[i][0][0][3] = a;
-          break;
-        case 3:
-          ImageData[i][0][0][0] = r;
-          ImageData[i][0][0][1] = g;
-          ImageData[i][0][0][2] = b;
-          ImageData[i][0][0][3] = (byte) 255;
-          break;
-        case 4:
-          ImageData[i][0][0][0] = r;
-          ImageData[i][0][0][1] = g;
-          ImageData[i][0][0][2] = b;
-          ImageData[i][0][0][3] = a;
-          break;
+          case 1:
+            ImageData[i][0][0][0] = r;
+            ImageData[i][0][0][1] = (byte) 0;
+            ImageData[i][0][0][2] = (byte) 0;
+            ImageData[i][0][0][3] = (byte) 255;
+            break;
+          case 2:
+            ImageData[i][0][0][0] = r;
+            ImageData[i][0][0][1] = (byte) 0;
+            ImageData[i][0][0][2] = (byte) 0;
+            ImageData[i][0][0][3] = a;
+            break;
+          case 3:
+            ImageData[i][0][0][0] = r;
+            ImageData[i][0][0][1] = g;
+            ImageData[i][0][0][2] = b;
+            ImageData[i][0][0][3] = (byte) 255;
+            break;
+          case 4:
+            ImageData[i][0][0][0] = r;
+            ImageData[i][0][0][1] = g;
+            ImageData[i][0][0][2] = b;
+            ImageData[i][0][0][3] = a;
+            break;
         }
         si++;
       }
     }
   }
 
-//    public gl_image (int w, int h, int c, int f, int t,
-//		     gl_pixel_pack p, byte data [][][]) {
+  // public gl_image (int w, int h, int c, int f, int t,
+  // gl_pixel_pack p, byte data [][][]) {
   public gl_image(int w, int h, int c, int f, int s, gl_pixel_pack p, Object data) {
     int i, j, si, sj;
     byte r = (byte) 0;
@@ -674,7 +668,7 @@ public class gl_image {
     Depth = 1;
     ImageData = new byte[Width][Height][1][4];
 
-//	boolean need_scale = is_need_scale(p);
+    // boolean need_scale = is_need_scale(p);
 
     if (s == 0) { // data is GL_BITMAP
     } else {
@@ -683,87 +677,86 @@ public class gl_image {
         sj = p.SkipRows;
         for (j = 0; j < Height; j++) {
           switch (f) {
-          case GL.GL_COLOR_INDEX:
-            break;
-          case GL.GL_RGB:
-            r = get_data(si, sj, 0, s, data);
-            g = get_data(si, sj, 1, s, data);
-            b = get_data(si, sj, 2, s, data);
-            a = (byte) 255;
-            break;
-          case GL.GL_RGBA:
-            r = get_data(si, sj, 0, s, data);
-            g = get_data(si, sj, 1, s, data);
-            b = get_data(si, sj, 2, s, data);
-            a = get_data(si, sj, 3, s, data);
-            break;
-          case GL.GL_RED:
-            r = get_data(si, sj, 0, s, data);
-            g = (byte) 0;
-            b = (byte) 0;
-            a = (byte) 255;
-            break;
-          case GL.GL_GREEN:
-            r = (byte) 0;
-            g = get_data(si, sj, 0, s, data);
-            b = (byte) 0;
-            a = (byte) 255;
-            break;
-          case GL.GL_BLUE:
-            r = (byte) 0;
-            g = (byte) 0;
-            b = get_data(si, sj, 0, s, data);
-            a = (byte) 255;
-            break;
-          case GL.GL_ALPHA:
-            r = (byte) 0;
-            g = (byte) 0;
-            b = (byte) 0;
-            a = get_data(si, sj, 0, s, data);
-            break;
-          case GL.GL_LUMINANCE:
-            r = get_data(si, sj, 0, s, data);
-            g = r;
-            b = r;
-            a = (byte) 255;
-            break;
-          case GL.GL_LUMINANCE_ALPHA:
-            r = get_data(si, sj, 0, s, data);
-            g = r;
-            b = r;
-            a = get_data(si, sj, 1, s, data);
-            break;
+            case GL.GL_COLOR_INDEX:
+              break;
+            case GL.GL_RGB:
+              r = get_data(si, sj, 0, s, data);
+              g = get_data(si, sj, 1, s, data);
+              b = get_data(si, sj, 2, s, data);
+              a = (byte) 255;
+              break;
+            case GL.GL_RGBA:
+              r = get_data(si, sj, 0, s, data);
+              g = get_data(si, sj, 1, s, data);
+              b = get_data(si, sj, 2, s, data);
+              a = get_data(si, sj, 3, s, data);
+              break;
+            case GL.GL_RED:
+              r = get_data(si, sj, 0, s, data);
+              g = (byte) 0;
+              b = (byte) 0;
+              a = (byte) 255;
+              break;
+            case GL.GL_GREEN:
+              r = (byte) 0;
+              g = get_data(si, sj, 0, s, data);
+              b = (byte) 0;
+              a = (byte) 255;
+              break;
+            case GL.GL_BLUE:
+              r = (byte) 0;
+              g = (byte) 0;
+              b = get_data(si, sj, 0, s, data);
+              a = (byte) 255;
+              break;
+            case GL.GL_ALPHA:
+              r = (byte) 0;
+              g = (byte) 0;
+              b = (byte) 0;
+              a = get_data(si, sj, 0, s, data);
+              break;
+            case GL.GL_LUMINANCE:
+              r = get_data(si, sj, 0, s, data);
+              g = r;
+              b = r;
+              a = (byte) 255;
+              break;
+            case GL.GL_LUMINANCE_ALPHA:
+              r = get_data(si, sj, 0, s, data);
+              g = r;
+              b = r;
+              a = get_data(si, sj, 1, s, data);
+              break;
           }
           /*
-           * if (need_scale) { r = p.Red.apply_bias_scale(r); g =
-           * p.Green.apply_bias_scale(g); b = p.Blue.apply_bias_scale(b); a =
-           * p.Alpha.apply_bias_scale(a); }
+           * if (need_scale) { r = p.Red.apply_bias_scale(r); g = p.Green.apply_bias_scale(g); b =
+           * p.Blue.apply_bias_scale(b); a = p.Alpha.apply_bias_scale(a); }
            */
           switch (c) {
-          case 1:
-            ImageData[i][j][0][0] = r;
-            ImageData[i][j][0][1] = (byte) 0;
-            ImageData[i][j][0][2] = (byte) 0;
-            ImageData[i][j][0][3] = (byte) 255;
-            break;
-          case 2:
-            ImageData[i][j][0][0] = r;
-            ImageData[i][j][0][1] = (byte) 0;
-            ImageData[i][j][0][2] = (byte) 0;
-            ImageData[i][j][0][3] = a;
-            break;
-          case 3:
-            ImageData[i][j][0][0] = r;
-            ImageData[i][j][0][1] = g;
-            ImageData[i][j][0][2] = b;
-            ImageData[i][j][0][3] = (byte) 255;
-            break;
-          case 4:
-            ImageData[i][j][0][0] = r;
-            ImageData[i][j][0][1] = g;
-            ImageData[i][j][0][2] = b;
-            ImageData[i][j][0][3] = a;
-            break;
+            case 1:
+              ImageData[i][j][0][0] = r;
+              ImageData[i][j][0][1] = (byte) 0;
+              ImageData[i][j][0][2] = (byte) 0;
+              ImageData[i][j][0][3] = (byte) 255;
+              break;
+            case 2:
+              ImageData[i][j][0][0] = r;
+              ImageData[i][j][0][1] = (byte) 0;
+              ImageData[i][j][0][2] = (byte) 0;
+              ImageData[i][j][0][3] = a;
+              break;
+            case 3:
+              ImageData[i][j][0][0] = r;
+              ImageData[i][j][0][1] = g;
+              ImageData[i][j][0][2] = b;
+              ImageData[i][j][0][3] = (byte) 255;
+              break;
+            case 4:
+              ImageData[i][j][0][0] = r;
+              ImageData[i][j][0][1] = g;
+              ImageData[i][j][0][2] = b;
+              ImageData[i][j][0][3] = a;
+              break;
           }
           sj++;
         }
@@ -784,7 +777,7 @@ public class gl_image {
     Depth = d - p.SkipImages;
     ImageData = new byte[Width][Height][Depth][4];
 
-//	boolean need_scale = is_need_scale(p);
+    // boolean need_scale = is_need_scale(p);
 
     if (s == 0) { // data is GL_BITMAP
     } else {
@@ -795,87 +788,86 @@ public class gl_image {
           sk = p.SkipImages;
           for (k = 0; k < Depth; k++) {
             switch (f) {
-            case GL.GL_COLOR_INDEX:
-              break;
-            case GL.GL_RGB:
-              r = get_data(si, sj, sk, 0, s, data);
-              g = get_data(si, sj, sk, 1, s, data);
-              b = get_data(si, sj, sk, 2, s, data);
-              a = (byte) 255;
-              break;
-            case GL.GL_RGBA:
-              r = get_data(si, sj, sk, 0, s, data);
-              g = get_data(si, sj, sk, 1, s, data);
-              b = get_data(si, sj, sk, 2, s, data);
-              a = get_data(si, sj, sk, 3, s, data);
-              break;
-            case GL.GL_RED:
-              r = get_data(si, sj, sk, 0, s, data);
-              g = (byte) 0;
-              b = (byte) 0;
-              a = (byte) 255;
-              break;
-            case GL.GL_GREEN:
-              r = (byte) 0;
-              g = get_data(si, sj, sk, 0, s, data);
-              b = (byte) 0;
-              a = (byte) 255;
-              break;
-            case GL.GL_BLUE:
-              r = (byte) 0;
-              g = (byte) 0;
-              b = get_data(si, sj, sk, 0, s, data);
-              a = (byte) 255;
-              break;
-            case GL.GL_ALPHA:
-              r = (byte) 0;
-              g = (byte) 0;
-              b = (byte) 0;
-              a = get_data(si, sj, sk, 0, s, data);
-              break;
-            case GL.GL_LUMINANCE:
-              r = get_data(si, sj, sk, 0, s, data);
-              g = r;
-              b = r;
-              a = (byte) 255;
-              break;
-            case GL.GL_LUMINANCE_ALPHA:
-              r = get_data(si, sj, sk, 0, s, data);
-              g = r;
-              b = r;
-              a = get_data(si, sj, sk, 1, s, data);
-              break;
+              case GL.GL_COLOR_INDEX:
+                break;
+              case GL.GL_RGB:
+                r = get_data(si, sj, sk, 0, s, data);
+                g = get_data(si, sj, sk, 1, s, data);
+                b = get_data(si, sj, sk, 2, s, data);
+                a = (byte) 255;
+                break;
+              case GL.GL_RGBA:
+                r = get_data(si, sj, sk, 0, s, data);
+                g = get_data(si, sj, sk, 1, s, data);
+                b = get_data(si, sj, sk, 2, s, data);
+                a = get_data(si, sj, sk, 3, s, data);
+                break;
+              case GL.GL_RED:
+                r = get_data(si, sj, sk, 0, s, data);
+                g = (byte) 0;
+                b = (byte) 0;
+                a = (byte) 255;
+                break;
+              case GL.GL_GREEN:
+                r = (byte) 0;
+                g = get_data(si, sj, sk, 0, s, data);
+                b = (byte) 0;
+                a = (byte) 255;
+                break;
+              case GL.GL_BLUE:
+                r = (byte) 0;
+                g = (byte) 0;
+                b = get_data(si, sj, sk, 0, s, data);
+                a = (byte) 255;
+                break;
+              case GL.GL_ALPHA:
+                r = (byte) 0;
+                g = (byte) 0;
+                b = (byte) 0;
+                a = get_data(si, sj, sk, 0, s, data);
+                break;
+              case GL.GL_LUMINANCE:
+                r = get_data(si, sj, sk, 0, s, data);
+                g = r;
+                b = r;
+                a = (byte) 255;
+                break;
+              case GL.GL_LUMINANCE_ALPHA:
+                r = get_data(si, sj, sk, 0, s, data);
+                g = r;
+                b = r;
+                a = get_data(si, sj, sk, 1, s, data);
+                break;
             }
             /*
-             * if (need_scale) { r = p.Red.apply_bias_scale(r); g =
-             * p.Green.apply_bias_scale(g); b = p.Blue.apply_bias_scale(b); a =
-             * p.Alpha.apply_bias_scale(a); }
+             * if (need_scale) { r = p.Red.apply_bias_scale(r); g = p.Green.apply_bias_scale(g); b =
+             * p.Blue.apply_bias_scale(b); a = p.Alpha.apply_bias_scale(a); }
              */
             switch (c) {
-            case 1:
-              ImageData[i][j][k][0] = r;
-              ImageData[i][j][k][1] = (byte) 0;
-              ImageData[i][j][k][2] = (byte) 0;
-              ImageData[i][j][k][3] = (byte) 255;
-              break;
-            case 2:
-              ImageData[i][j][k][0] = r;
-              ImageData[i][j][k][1] = (byte) 0;
-              ImageData[i][j][k][2] = (byte) 0;
-              ImageData[i][j][k][3] = a;
-              break;
-            case 3:
-              ImageData[i][j][k][0] = r;
-              ImageData[i][j][k][1] = g;
-              ImageData[i][j][k][2] = b;
-              ImageData[i][j][k][3] = (byte) 255;
-              break;
-            case 4:
-              ImageData[i][j][k][0] = r;
-              ImageData[i][j][k][1] = g;
-              ImageData[i][j][k][2] = b;
-              ImageData[i][j][k][3] = a;
-              break;
+              case 1:
+                ImageData[i][j][k][0] = r;
+                ImageData[i][j][k][1] = (byte) 0;
+                ImageData[i][j][k][2] = (byte) 0;
+                ImageData[i][j][k][3] = (byte) 255;
+                break;
+              case 2:
+                ImageData[i][j][k][0] = r;
+                ImageData[i][j][k][1] = (byte) 0;
+                ImageData[i][j][k][2] = (byte) 0;
+                ImageData[i][j][k][3] = a;
+                break;
+              case 3:
+                ImageData[i][j][k][0] = r;
+                ImageData[i][j][k][1] = g;
+                ImageData[i][j][k][2] = b;
+                ImageData[i][j][k][3] = (byte) 255;
+                break;
+              case 4:
+                ImageData[i][j][k][0] = r;
+                ImageData[i][j][k][1] = g;
+                ImageData[i][j][k][2] = b;
+                ImageData[i][j][k][3] = a;
+                break;
             }
             sk++;
           }

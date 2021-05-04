@@ -1,19 +1,16 @@
 /*
  * @(#)gl_render_point.java 0.2 99/11/28
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -92,14 +89,14 @@ public class gl_render_point extends gl_render_pixel {
   }
 
   /** Draw a mip-mapping point for GL_POINTS with size other than 1 */
-  public void put_pixel(int x, int y, float w, float s, float t, float r, float dsdx, float dsdy, float dtdx,
-      float dtdy, float drdx, float drdy) {
+  public void put_pixel(int x, int y, float w, float s, float t, float r, float dsdx, float dsdy,
+      float dtdx, float dtdy, float drdx, float drdy) {
     put_pixel(x, y, CC.Texture.tex_vertex(s, t, r, w, dsdx, dsdy, dtdx, dtdy, drdx, drdy));
   }
 
   /** Draw a mip-mapping point for GL_POINTS with size other than 1 */
-  public void put_pixel(int x, int y, float z, float w, float s, float t, float r, float dsdx, float dsdy, float dtdx,
-      float dtdy, float drdx, float drdy) {
+  public void put_pixel(int x, int y, float z, float w, float s, float t, float r, float dsdx,
+      float dsdy, float dtdx, float dtdy, float drdx, float drdy) {
     put_pixel(x, y, z, CC.Texture.tex_vertex(s, t, r, w, dsdx, dsdy, dtdx, dtdy, drdx, drdy));
   }
 

@@ -1,9 +1,7 @@
 package examples.applets.glut;
 /*
- *  alpha.java
- *  This program draws several overlapping filled polygons
- *  to demonstrate the effect order has on alpha blending results.
- *  Use the 't' key to toggle the order of drawing polygons.
+ * alpha.java This program draws several overlapping filled polygons to demonstrate the effect order
+ * has on alpha blending results. Use the 't' key to toggle the order of drawing polygons.
  */
 
 import jgl.GL;
@@ -72,19 +70,19 @@ public class alpha extends GLApplet {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 't':
-    case 'T':
-      leftFirst = !leftFirst;
-      myUT.glutPostRedisplay();
-      break;
-    default:
-      break;
+      case 't':
+      case 'T':
+        leftFirst = !leftFirst;
+        myUT.glutPostRedisplay();
+        break;
+      default:
+        break;
     }
   }
 
   /*
-   * Main Loop Open window with initial window size, title bar, RGBA display mode,
-   * and handle input events.
+   * Main Loop Open window with initial window size, title bar, RGBA display mode, and handle input
+   * events.
    */
   public void init() {
     myUT.glutInitWindowSize(200, 200);
