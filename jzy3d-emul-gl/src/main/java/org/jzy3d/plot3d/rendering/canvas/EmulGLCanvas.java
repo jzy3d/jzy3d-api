@@ -507,10 +507,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
           maxY = profile.y;        
       }
       
-      int x = minX;
-      int y = minY - profileDisplayFont.getSize();
-      int width = maxX-minX;
-      int height = maxY-minY + profileDisplayFont.getSize();
+      int x = minX - PROFILE_LINE_X_START/2;
+      int y = minY - profileDisplayFont.getSize() - PROFILE_LINE_HEIGHT/2;
+      int width = maxX-minX + PROFILE_LINE_X_START;
+      int height = maxY-minY + profileDisplayFont.getSize() + PROFILE_LINE_HEIGHT;
       
       g2d.setColor(java.awt.Color.WHITE);
       g2d.fillRect(x, y, width, height);
@@ -528,11 +528,13 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     }
   }
-
+  
+  static final int PROFILE_LINE_X_START = 10;
+  static final int PROFILE_LINE_HEIGHT = 12;
 
   protected void profile(double mili) {
-    int x = 10;
-    int y = 12;
+    int x = PROFILE_LINE_X_START;
+    int y = PROFILE_LINE_HEIGHT;
     
     synchronized (profileInfo) {
 
