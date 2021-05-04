@@ -76,7 +76,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   /** set to TRUE to overlay performance info on top left corner */
   protected boolean profileDisplayMethod = false;
   protected TicToc profileDisplayTimer = new TicToc();
-  protected Font profileDisplayFont = new Font("Arial", Font.PLAIN, 12);
+  protected Font profileDisplayFont = new Font("Helvetica", Font.PLAIN, 12);
   protected int profileDisplayCount = 0;
   protected List<ProfileInfo> profileInfo = new ArrayList<>();
 
@@ -100,13 +100,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       myGL.setAutoAdaptToHiDPI(false);
     }
 
-//    if (ALLOW_WATCH_PIXEL_SCALE)
-      myGL.addPixelScaleListener(new PixelScaleListener() {
-        @Override
-        public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-          firePixelScaleChanged(pixelScaleX, pixelScaleY);
-        }
-      });
+    myGL.addPixelScaleListener(new PixelScaleListener() {
+      @Override
+      public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        firePixelScaleChanged(pixelScaleX, pixelScaleY);
+      }
+    });
   }
 
   @Override
@@ -197,11 +196,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     if (profileDisplayMethod) {
       // Overrides GL swapping to retrieve the image and print performance info inside
       BufferedImage glImage = myGL.getRenderedImage();
-      
-      AWTGraphicsUtils.configureRenderingHints((Graphics2D)glImage.getGraphics());
-      
       paintProfileInfo(glImage);
-      
       g.drawImage(glImage, myGL.getStartX(), myGL.getStartY(), myGL.getDesiredWidth(),
           myGL.getDesiredHeight(), this);
     }
@@ -489,14 +484,17 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
    * 
    */
   protected void paintProfileInfo(BufferedImage glImage) {
-    Graphics2D g2d = (Graphics2D) glImage.getGraphics();
-    g2d.setFont(profileDisplayFont);
+    Graphics2D g2d = glImage.createGraphics();
+
+    AWTGraphicsUtils.configureRenderingHints((Graphics2D) glImage.getGraphics());
 
     synchronized (profileInfo) {
       for (ProfileInfo profile : profileInfo) {
         java.awt.Color awtColor = AWTColor.toAWT(profile.color);
         g2d.setColor(awtColor);
-        g2d.drawString(profile.message, profile.x, profile.y);
+
+        AWTGraphicsUtils.drawString(g2d, profileDisplayFont, false, profile.message, profile.x,
+            profile.y);
       }
     }
   }
@@ -517,7 +515,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       profile("Render in  : " + mili + "ms", x, y * line++, c);
 
       // Drawables size
-      profile("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * line++, c);
+      profile("Drawables  : " + view.getScene().getGraph().getDecomposition().size(), x, y * line++,
+          c);
 
       // Scatters sizes
       for (Drawable d : view.getScene().getGraph().getAll()) {
@@ -543,7 +542,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   /** Draw a 2d text at the given position */
   protected void profile(String message, int x, int y, Color c) {
-    // painter.getGL().appendTextToDraw(profileDisplayFont, message, x, y, c.r, c.g, c.b);
     profileInfo.add(new ProfileInfo(message, x, y, c));
   }
 

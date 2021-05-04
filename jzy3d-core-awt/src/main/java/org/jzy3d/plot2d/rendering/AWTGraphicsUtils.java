@@ -15,9 +15,13 @@ public class AWTGraphicsUtils {
     g2d.setRenderingHints(rh);
   }
   
-  /** A draw string method allowing to bypass OS font rendering if noticing font rendering glitches. */
+  /** A draw string method allowing to bypass OS font rendering if noticing font rendering glitches.
+   *
+   * It may be worth invoking {@link #configureRenderingHints(Graphics2D)} right before.
+   */
   public static void drawString(Graphics2D g2d, Font font, boolean useOSFontRendering, String string, int x, int y) {
     if (useOSFontRendering) {
+      g2d.setFont(font);
       g2d.drawString(string, x, y);
     } else {
       FontRenderContext frc = g2d.getFontRenderContext();
