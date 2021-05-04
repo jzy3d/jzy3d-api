@@ -125,17 +125,6 @@ public class GL {
     return pixelScaleY;
   }
 
-
-
-  /*
-   * the following functions are only for developpers public MemoryImageSource glJGetImageSource() {
-   * return new MemoryImageSource(Context.Viewport.Width, Context.Viewport.Height,
-   * Context.ColorBuffer.Buffer, 0, Context.Viewport.Width); }
-   * 
-   * public Image glJGetImage(MemoryImageSource imagesource) { return
-   * canvas.createImage(imagesource); }
-   */
-
   public int getStartX() {
     return StartX;
   }

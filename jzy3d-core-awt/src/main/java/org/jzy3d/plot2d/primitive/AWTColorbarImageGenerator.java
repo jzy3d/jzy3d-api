@@ -6,6 +6,7 @@ import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.IColorMap;
+import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
@@ -56,6 +57,8 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
       return null;
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     Graphics2D graphic = image.createGraphics();
+    
+    AWTGraphicsUtils.configureRenderingHints(graphic);
 
     graphic.setColor(AWTColor.toAWT(Color.WHITE));
     graphic.fillRect(0, 0, width, height);
