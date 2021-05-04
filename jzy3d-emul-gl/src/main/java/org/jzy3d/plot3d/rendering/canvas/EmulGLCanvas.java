@@ -28,6 +28,7 @@ import org.jzy3d.monitor.IMonitorable;
 import org.jzy3d.monitor.Measure.CanvasPerfMeasure;
 import org.jzy3d.monitor.Monitor;
 import org.jzy3d.painters.EmulGLPainter;
+import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -196,7 +197,11 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     if (profileDisplayMethod) {
       // Overrides GL swapping to retrieve the image and print performance info inside
       BufferedImage glImage = myGL.getRenderedImage();
+      
+      AWTGraphicsUtils.configureRenderingHints((Graphics2D)glImage.getGraphics());
+      
       paintProfileInfo(glImage);
+      
       g.drawImage(glImage, myGL.getStartX(), myGL.getStartY(), myGL.getDesiredWidth(),
           myGL.getDesiredHeight(), this);
     }
