@@ -1,19 +1,16 @@
 /*
  * @(#)gl_tex_geo.java 0.4 02/12/17
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2002 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2002 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -37,8 +34,8 @@ public class gl_tex_geo extends gl_geometry {
   protected float TexCoord[][];
 
   protected void draw_point(float p[], int i) {
-    CR.pixel.put_pixel((int) (p[0] + (float) 0.5), (int) (p[1] + (float) 0.5), TexCoord[i][0], TexCoord[i][1],
-        TexCoord[i][2]);
+    CR.pixel.put_pixel((int) (p[0] + (float) 0.5), (int) (p[1] + (float) 0.5), TexCoord[i][0],
+        TexCoord[i][1], TexCoord[i][2]);
   }
 
   protected gl_vertex[] pack_line(int i, int j) {
@@ -70,8 +67,8 @@ public class gl_tex_geo extends gl_geometry {
       if (!CC.Lighting.Enable) {
         CC.EyeNormal = CC.NormalTransformation(CC.Current.Normal);
       }
-      TexCoord[i] = CC
-          .TextureTransformation(CC.Texture.get_tex_gen_coord(CC.Current.Vertex, CC.EyeCoord, CC.EyeNormal));
+      TexCoord[i] = CC.TextureTransformation(
+          CC.Texture.get_tex_gen_coord(CC.Current.Vertex, CC.EyeCoord, CC.EyeNormal));
     } else {
       TexCoord[i] = CC.TextureTransformation(CC.Current.TexCoord);
     }

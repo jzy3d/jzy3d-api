@@ -77,12 +77,18 @@ public class mipmap extends Applet implements ComponentListener {
     myGL.glTranslatef(0.0f, 0.0f, -3.6f);
     loadImage();
     myGL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, 3, 32, 32, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, mipmapImage32);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 1, 3, 16, 16, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, mipmapImage16);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 2, 3, 8, 8, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, mipmapImage8);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 3, 3, 4, 4, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, mipmapImage4);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 4, 3, 2, 2, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, mipmapImage2);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 5, 3, 1, 1, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE, mipmapImage1);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, 3, 32, 32, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
+        mipmapImage32);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 1, 3, 16, 16, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
+        mipmapImage16);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 2, 3, 8, 8, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
+        mipmapImage8);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 3, 3, 4, 4, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
+        mipmapImage4);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 4, 3, 2, 2, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
+        mipmapImage2);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 5, 3, 1, 1, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
+        mipmapImage1);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_REPEAT);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_REPEAT);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
@@ -106,14 +112,11 @@ public class mipmap extends Applet implements ComponentListener {
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

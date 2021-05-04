@@ -41,14 +41,11 @@ public class smooth extends Applet implements ComponentListener {
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

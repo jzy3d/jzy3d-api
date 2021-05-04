@@ -115,17 +115,13 @@ public class picksquare extends Applet implements ComponentListener, MouseListen
     processHits(hits, selectBuf);
   }
 
-  public void mouseClicked(MouseEvent e) {
-  }
+  public void mouseClicked(MouseEvent e) {}
 
-  public void mouseEntered(MouseEvent e) {
-  }
+  public void mouseEntered(MouseEvent e) {}
 
-  public void mouseExited(MouseEvent e) {
-  }
+  public void mouseExited(MouseEvent e) {}
 
-  public void mouseReleased(MouseEvent e) {
-  }
+  public void mouseReleased(MouseEvent e) {}
 
   public void mousePressed(MouseEvent e) {
     // process which button by myself
@@ -143,14 +139,11 @@ public class picksquare extends Applet implements ComponentListener, MouseListen
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

@@ -1,7 +1,6 @@
 package examples.apps;
 /*
- *  bezcurve.java			
- *  This program uses evaluators to draw a Bezier curve.
+ * bezcurve.java This program uses evaluators to draw a Bezier curve.
  */
 
 import java.awt.Frame;
@@ -12,8 +11,8 @@ import jgl.GLCanvas;
 
 public class bezcurve extends GLCanvas {
 
-  private static final float ctrlpoints[][] = { { -4.0f, -4.0f, 0.0f }, { -2.0f, 4.0f, 0.0f }, { 2.0f, -4.0f, 0.0f },
-      { 4.0f, 4.0f, 0.0f } };
+  private static final float ctrlpoints[][] =
+      {{-4.0f, -4.0f, 0.0f}, {-2.0f, 4.0f, 0.0f}, {2.0f, -4.0f, 0.0f}, {4.0f, 4.0f, 0.0f}};
 
   private void myinit() {
     myGL.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -46,9 +45,11 @@ public class bezcurve extends GLCanvas {
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
     if (w <= h) {
-      myGL.glOrtho(-5.0f, 5.0f, -5.0f * (float) h / (float) w, 5.0f * (float) h / (float) w, -5.0f, 5.0f);
+      myGL.glOrtho(-5.0f, 5.0f, -5.0f * (float) h / (float) w, 5.0f * (float) h / (float) w, -5.0f,
+          5.0f);
     } else {
-      myGL.glOrtho(-5.0f * (float) w / (float) h, 5.0f * (float) w / (float) h, -5.0f, 5.0f, -5.0f, 5.0f);
+      myGL.glOrtho(-5.0f * (float) w / (float) h, 5.0f * (float) w / (float) h, -5.0f, 5.0f, -5.0f,
+          5.0f);
     }
     myGL.glMatrixMode(GL.GL_MODELVIEW);
     myGL.glLoadIdentity();
@@ -57,10 +58,10 @@ public class bezcurve extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

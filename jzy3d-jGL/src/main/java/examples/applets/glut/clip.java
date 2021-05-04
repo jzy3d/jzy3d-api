@@ -1,7 +1,6 @@
 package examples.applets.glut;
 /*
- *  clip.java
- *  This program demonstrates arbitrary clipping planes.
+ * clip.java This program demonstrates arbitrary clipping planes.
  */
 
 import jgl.GL;
@@ -15,8 +14,8 @@ public class clip extends GLApplet {
   }
 
   public void display() {
-    double eqn[] = { 0.0, 1.0, 0.0, 0.0 };
-    double eqn2[] = { 1.0, 0.0, 0.0, 0.0 };
+    double eqn[] = {0.0, 1.0, 0.0, 0.0};
+    double eqn2[] = {1.0, 0.0, 0.0, 0.0};
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT);
 

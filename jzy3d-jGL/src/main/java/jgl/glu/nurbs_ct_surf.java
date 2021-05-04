@@ -1,19 +1,16 @@
 /*
  * @(#)nurbs_ct_surf.java 0.1 99/10/31
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -38,7 +35,8 @@ public class nurbs_ct_surf {
   public int t_pt_cnt;
 
   public void draw(GL JavaGL, nurbs_surface surf, int i, int j) {
-    JavaGL.glMap2f(surf.type, 0, 1, s_stride, surf.s.order, 0, 1, t_stride, surf.t.order, offsets[i][j]);
+    JavaGL.glMap2f(surf.type, 0, 1, s_stride, surf.s.order, 0, 1, t_stride, surf.t.order,
+        offsets[i][j]);
   }
 
   public void augment(int s, int t, nurbs_surface surf) {
@@ -53,7 +51,8 @@ public class nurbs_ct_surf {
       for (j = 0; j < t; j++) {
         for (k = 0; k < surf.s.order; k++) {
           for (l = 0; l < surf.t.order; l++) {
-            System.arraycopy(ctrl[i * surf.s.order + k][j * surf.t.order + l], 0, offsets[i][j][k][l], 0, surf.dim);
+            System.arraycopy(ctrl[i * surf.s.order + k][j * surf.t.order + l], 0,
+                offsets[i][j][k][l], 0, surf.dim);
           }
         }
       }

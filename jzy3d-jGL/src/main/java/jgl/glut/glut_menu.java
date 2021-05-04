@@ -1,19 +1,16 @@
 /*
  * @(#)glut_menu.java 0.2 03/05/20
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 2001-2003 Robin Bing-Yu Chen (robin@nis-lab.is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 2001-2003 Robin Bing-Yu Chen
+ * (robin@nis-lab.is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -45,7 +42,7 @@ public class glut_menu implements ActionListener {
   private Component JavaComponent = null;
 
   public void actionPerformed(ActionEvent e) {
-    Object[] arguments = new Object[] { JavaMenuItem.get(e.getActionCommand()) };
+    Object[] arguments = new Object[] {JavaMenuItem.get(e.getActionCommand())};
     try {
       menuMethod.invoke(JavaComponent, arguments);
     } catch (IllegalAccessException ee) {
@@ -131,7 +128,7 @@ public class glut_menu implements ActionListener {
 
   public glut_menu(String func, int id, Component comp) {
     if (func != null) {
-      Class[] parameterTypes = new Class[] { int.class };
+      Class[] parameterTypes = new Class[] {int.class};
       try {
         menuMethod = comp.getClass().getMethod(func, parameterTypes);
         JavaMenu = new PopupMenu();
@@ -147,7 +144,6 @@ public class glut_menu implements ActionListener {
     }
   }
 
-  public glut_menu() {
-  }
+  public glut_menu() {}
 
 }

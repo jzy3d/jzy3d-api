@@ -1,19 +1,16 @@
 /*
  * @(#)gl_cg_clipping.java 0.4 99/12/03
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1997-1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1997-1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -32,7 +29,7 @@ import jgl.context.gl_vertex;
 
 public class gl_cp_clipping extends gl_clipping {
 
-//    protected gl_nf_clipping nf_clipping;
+  // protected gl_nf_clipping nf_clipping;
 
   private float mulMatrix11(float a[], float b[]) {
     return (a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3]);
@@ -83,7 +80,7 @@ public class gl_cp_clipping extends gl_clipping {
         }
       }
     }
-//	return nf_clipping.IsInside (p);
+    // return nf_clipping.IsInside (p);
     return true;
   }
 
@@ -96,7 +93,7 @@ public class gl_cp_clipping extends gl_clipping {
         }
       }
     }
-//	return nf_clipping.clip_line (temp);
+    // return nf_clipping.clip_line (temp);
     return temp;
   }
 
@@ -106,13 +103,13 @@ public class gl_cp_clipping extends gl_clipping {
         inlist = clip_polygon(inlist, i, 0);
       }
     }
-//	return nf_clipping.clip_polygon (inlist);
+    // return nf_clipping.clip_polygon (inlist);
     return inlist;
   }
 
   public gl_cp_clipping(gl_context cc) {
     super(cc);
-//    	nf_clipping = new gl_nf_clipping (CC);
+    // nf_clipping = new gl_nf_clipping (CC);
   }
 
 }

@@ -29,17 +29,13 @@ public class movelight extends Applet implements ComponentListener, MouseListene
     spin = (spin + 30) % 360;
   }
 
-  public void mouseClicked(MouseEvent e) {
-  }
+  public void mouseClicked(MouseEvent e) {}
 
-  public void mouseEntered(MouseEvent e) {
-  }
+  public void mouseEntered(MouseEvent e) {}
 
-  public void mouseExited(MouseEvent e) {
-  }
+  public void mouseExited(MouseEvent e) {}
 
-  public void mouseReleased(MouseEvent e) {
-  }
+  public void mouseReleased(MouseEvent e) {}
 
   public void mousePressed(MouseEvent e) {
     // process which button by myself
@@ -60,7 +56,7 @@ public class movelight extends Applet implements ComponentListener, MouseListene
   }
 
   private void display() {
-    float position[] = { 0.0f, 0.0f, 1.5f, 1.0f };
+    float position[] = {0.0f, 0.0f, 1.5f, 1.0f};
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
     myGL.glPushMatrix();
@@ -83,14 +79,11 @@ public class movelight extends Applet implements ComponentListener, MouseListene
     myGL.glFlush();
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

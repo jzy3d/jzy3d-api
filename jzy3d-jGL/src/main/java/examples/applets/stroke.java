@@ -18,6 +18,7 @@ class CP {
   }
 }
 
+
 public class stroke extends Applet {
   // must use GL to use jGL.....
   // and use GLAUX to use the aux functions.....
@@ -29,40 +30,41 @@ public class stroke extends Applet {
   public static final int STROKE = 2;
   public static final int END = 3;
 
-  private CP Adata[] = { new CP(0, 0, PT), new CP(0, 9, PT), new CP(1, 10, PT), new CP(4, 10, PT), new CP(5, 9, PT),
-      new CP(5, 0, STROKE), new CP(0, 5, PT), new CP(5, 5, END) };
+  private CP Adata[] = {new CP(0, 0, PT), new CP(0, 9, PT), new CP(1, 10, PT), new CP(4, 10, PT),
+      new CP(5, 9, PT), new CP(5, 0, STROKE), new CP(0, 5, PT), new CP(5, 5, END)};
 
-  private CP Edata[] = { new CP(5, 0, PT), new CP(0, 0, PT), new CP(0, 10, PT), new CP(5, 10, STROKE), new CP(0, 5, PT),
-      new CP(4, 5, END) };
+  private CP Edata[] = {new CP(5, 0, PT), new CP(0, 0, PT), new CP(0, 10, PT),
+      new CP(5, 10, STROKE), new CP(0, 5, PT), new CP(4, 5, END)};
 
-  private CP Pdata[] = { new CP(0, 0, PT), new CP(0, 10, PT), new CP(4, 10, PT), new CP(5, 9, PT), new CP(5, 6, PT),
-      new CP(4, 5, PT), new CP(0, 5, END) };
+  private CP Pdata[] = {new CP(0, 0, PT), new CP(0, 10, PT), new CP(4, 10, PT), new CP(5, 9, PT),
+      new CP(5, 6, PT), new CP(4, 5, PT), new CP(0, 5, END)};
 
-  private CP Rdata[] = { new CP(0, 0, PT), new CP(0, 10, PT), new CP(4, 10, PT), new CP(5, 9, PT), new CP(5, 6, PT),
-      new CP(4, 5, PT), new CP(0, 5, STROKE), new CP(3, 5, PT), new CP(5, 0, END) };
+  private CP Rdata[] =
+      {new CP(0, 0, PT), new CP(0, 10, PT), new CP(4, 10, PT), new CP(5, 9, PT), new CP(5, 6, PT),
+          new CP(4, 5, PT), new CP(0, 5, STROKE), new CP(3, 5, PT), new CP(5, 0, END)};
 
-  private CP Sdata[] = { new CP(0, 1, PT), new CP(1, 0, PT), new CP(4, 0, PT), new CP(5, 1, PT), new CP(5, 4, PT),
-      new CP(4, 5, PT), new CP(1, 5, PT), new CP(0, 6, PT), new CP(0, 9, PT), new CP(1, 10, PT), new CP(4, 10, PT),
-      new CP(5, 9, END) };
+  private CP Sdata[] = {new CP(0, 1, PT), new CP(1, 0, PT), new CP(4, 0, PT), new CP(5, 1, PT),
+      new CP(5, 4, PT), new CP(4, 5, PT), new CP(1, 5, PT), new CP(0, 6, PT), new CP(0, 9, PT),
+      new CP(1, 10, PT), new CP(4, 10, PT), new CP(5, 9, END)};
 
   private void drawLetter(CP l[]) {
     int i = 0;
     myGL.glBegin(GL.GL_LINE_STRIP);
     while (i < l.length) {
       switch (l[i].type) {
-      case PT:
-        myGL.glVertex2fv(l[i].x);
-        break;
-      case STROKE:
-        myGL.glVertex2fv(l[i].x);
-        myGL.glEnd();
-        myGL.glBegin(GL.GL_LINE_STRIP);
-        break;
-      case END:
-        myGL.glVertex2fv(l[i].x);
-        myGL.glEnd();
-        myGL.glTranslatef(8.0f, 0.0f, 0.0f);
-        return;
+        case PT:
+          myGL.glVertex2fv(l[i].x);
+          break;
+        case STROKE:
+          myGL.glVertex2fv(l[i].x);
+          myGL.glEnd();
+          myGL.glBegin(GL.GL_LINE_STRIP);
+          break;
+        case END:
+          myGL.glVertex2fv(l[i].x);
+          myGL.glEnd();
+          myGL.glTranslatef(8.0f, 0.0f, 0.0f);
+          return;
       }
       i++;
     }

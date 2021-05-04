@@ -18,10 +18,9 @@ public class picksquare extends GLApplet {
   }
 
   /*
-   * The nine squares are drawn. In selection mode, each square is given two
-   * names: one for the row and the other for the column on the grid. The color of
-   * each square is determined by its position on the grid, and the value in the
-   * board[][] array.
+   * The nine squares are drawn. In selection mode, each square is given two names: one for the row
+   * and the other for the column on the grid. The color of each square is determined by its
+   * position on the grid, and the value in the board[][] array.
    */
   private void drawSquares(int mode) {
     int i, j;
@@ -72,8 +71,8 @@ public class picksquare extends GLApplet {
   }
 
   /*
-   * pickSquares() sets up selection mode, name stack, and projection matrix for
-   * picking. Then the objects are drawn.
+   * pickSquares() sets up selection mode, name stack, and projection matrix for picking. Then the
+   * objects are drawn.
    */
   private static final int BUFSIZE = 512;
 

@@ -1,8 +1,7 @@
 package examples.applets.glut;
 /*
- * smooth.java
- * This program demonstrates smooth shading.
- * A smooth shaded polygon is drawn in a 2-D projection.
+ * smooth.java This program demonstrates smooth shading. A smooth shaded polygon is drawn in a 2-D
+ * projection.
  */
 
 import jgl.GL;

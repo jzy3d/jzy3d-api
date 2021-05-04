@@ -1,8 +1,6 @@
 package examples.apps;
 /*
- *  surface.java
- *  This program draws a NURBS surface in the shape of a 
- *  symmetrical hill.
+ * surface.java This program draws a NURBS surface in the shape of a symmetrical hill.
  */
 
 import java.awt.Frame;
@@ -22,8 +20,8 @@ public class surface extends GLCanvas {
   private GLUnurbsObj theNurb;
 
   /*
-   * Initializes the control points of the surface to a small hill. The control
-   * points range from -3 to +3 in x, y, and z
+   * Initializes the control points of the surface to a small hill. The control points range from -3
+   * to +3 in x, y, and z
    */
   private void init_surface() {
     int u, v;
@@ -45,9 +43,9 @@ public class surface extends GLCanvas {
    * Initialize material property and depth buffer.
    */
   private void myinit() {
-    float mat_diffuse[] = { 0.7f, 0.7f, 0.7f, 1.0f };
-    float mat_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    float mat_shininess[] = { 100.0f };
+    float mat_diffuse[] = {0.7f, 0.7f, 0.7f, 1.0f};
+    float mat_specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    float mat_shininess[] = {100.0f};
 
     myGL.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     myGL.glMaterialfv(GL.GL_FRONT, GL.GL_DIFFUSE, mat_diffuse);
@@ -73,7 +71,7 @@ public class surface extends GLCanvas {
   }
 
   public void display() {
-    float knots[] = { 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f };
+    float knots[] = {0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     int i, j;
 
     myGL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
@@ -83,7 +81,8 @@ public class surface extends GLCanvas {
     myGL.glScalef(0.25f, 0.25f, 0.25f);
 
     myGLU.gluBeginSurface(theNurb);
-    myGLU.gluNurbsSurface(theNurb, 8, knots, 8, knots, 4 * 3, 3, ctlpoints, 4, 4, GL.GL_MAP2_VERTEX_3);
+    myGLU.gluNurbsSurface(theNurb, 8, knots, 8, knots, 4 * 3, 3, ctlpoints, 4, 4,
+        GL.GL_MAP2_VERTEX_3);
     myGLU.gluEndSurface(theNurb);
 
     if (showPoints) {
@@ -115,18 +114,18 @@ public class surface extends GLCanvas {
 
   public void menu(int value) {
     switch (value) {
-    case 0:
-      showPoints = false;
-      break;
-    case 1:
-      showPoints = true;
-      break;
-    case 2:
-      myGLU.gluNurbsProperty(theNurb, GLU.GLU_DISPLAY_MODE, GLU.GLU_FILL);
-      break;
-    case 3:
-      myGLU.gluNurbsProperty(theNurb, GLU.GLU_DISPLAY_MODE, GLU.GLU_OUTLINE_POLYGON);
-      break;
+      case 0:
+        showPoints = false;
+        break;
+      case 1:
+        showPoints = true;
+        break;
+      case 2:
+        myGLU.gluNurbsProperty(theNurb, GLU.GLU_DISPLAY_MODE, GLU.GLU_FILL);
+        break;
+      case 3:
+        myGLU.gluNurbsProperty(theNurb, GLU.GLU_DISPLAY_MODE, GLU.GLU_OUTLINE_POLYGON);
+        break;
     }
     myUT.glutPostRedisplay();
   }
@@ -157,10 +156,10 @@ public class surface extends GLCanvas {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

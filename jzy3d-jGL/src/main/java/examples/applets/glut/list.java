@@ -1,9 +1,7 @@
 package examples.applets.glut;
 /*
- *  list.java
- *  This program demonstrates how to make and execute a 
- *  display list.  Note that attributes, such as current 
- *  color and matrix, are changed.
+ * list.java This program demonstrates how to make and execute a display list. Note that attributes,
+ * such as current color and matrix, are changed.
  */
 
 import jgl.GL;
@@ -60,8 +58,8 @@ public class list extends GLApplet {
   }
 
   /*
-   * Main Loop Open window with initial window size, title bar, RGBA display mode,
-   * and handle input events.
+   * Main Loop Open window with initial window size, title bar, RGBA display mode, and handle input
+   * events.
    */
   public void init() {
     myUT.glutInitWindowSize(400, 50);

@@ -1,19 +1,16 @@
 /*
  * @(#)gl_texture.java 0.5 03/05/14
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2003 Robin Bing-Yu Chen (robin@nis-lab.is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2003 Robin Bing-Yu Chen
+ * (robin@nis-lab.is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -38,11 +35,11 @@ import jgl.context.attrib.texture.gl_texture_obj;
 public class gl_texture {
 
   /*
-   * public static final int TEXTURE_1D = 1; public static final int TEXTURE_2D =
-   * 2; public static final int TEXTURE_3D = 4;
+   * public static final int TEXTURE_1D = 1; public static final int TEXTURE_2D = 2; public static
+   * final int TEXTURE_3D = 4;
    * 
-   * public static final int Q_BIT = 1; public static final int R_BIT = 2; public
-   * static final int S_BIT = 4; public static final int T_BIT = 8;
+   * public static final int Q_BIT = 1; public static final int R_BIT = 2; public static final int
+   * S_BIT = 4; public static final int T_BIT = 8;
    */
 
   /** GL_TEXTURE_x: True if x-D texturing enabled (x is 1D, 2D, or 3D) */
@@ -60,10 +57,10 @@ public class gl_texture {
   public int EnvMode = GL.GL_MODULATE;
 
   /** GL_TEXTURE_ENV_COLOR: Texture environment color */
-  public float EnvColor[] = { 0, 0, 0, 0 };
+  public float EnvColor[] = {0, 0, 0, 0};
 
   /** GL_TEXTURE_GEN_x: Texgen enabled (x is S, T, R, Q) */
-//    public int GenEnabled = 0;		/* Bitwise-OR of [QRST]_BIT values */
+  // public int GenEnabled = 0; /* Bitwise-OR of [QRST]_BIT values */
 
   /** For texgen x */
   public gl_texture_gen CurrentS = new gl_texture_gen();
@@ -100,12 +97,12 @@ public class gl_texture {
 
   public boolean is_tex_enabled(int cap) {
     switch (cap) {
-    case GL.GL_TEXTURE_1D:
-      return (Enable1D);
-    case GL.GL_TEXTURE_2D:
-      return (Enable2D);
-    case GL.GL_TEXTURE_3D:
-      return (Enable3D);
+      case GL.GL_TEXTURE_1D:
+        return (Enable1D);
+      case GL.GL_TEXTURE_2D:
+        return (Enable2D);
+      case GL.GL_TEXTURE_3D:
+        return (Enable3D);
     }
     return false;
   }
@@ -128,15 +125,15 @@ public class gl_texture {
 
   public boolean tex_enable(int cap, boolean state) {
     switch (cap) {
-    case GL.GL_TEXTURE_1D:
-      Enable1D = state;
-      break;
-    case GL.GL_TEXTURE_2D:
-      Enable2D = state;
-      break;
-    case GL.GL_TEXTURE_3D:
-      Enable3D = state;
-      break;
+      case GL.GL_TEXTURE_1D:
+        Enable1D = state;
+        break;
+      case GL.GL_TEXTURE_2D:
+        Enable2D = state;
+        break;
+      case GL.GL_TEXTURE_3D:
+        Enable3D = state;
+        break;
     }
     return check_tex();
   }
@@ -156,14 +153,14 @@ public class gl_texture {
 
   public boolean is_tex_gen_enabled(int cap) {
     switch (cap) {
-    case GL.GL_TEXTURE_GEN_Q:
-      return (CurrentQ.Enable);
-    case GL.GL_TEXTURE_GEN_R:
-      return (CurrentR.Enable);
-    case GL.GL_TEXTURE_GEN_S:
-      return (CurrentS.Enable);
-    case GL.GL_TEXTURE_GEN_T:
-      return (CurrentT.Enable);
+      case GL.GL_TEXTURE_GEN_Q:
+        return (CurrentQ.Enable);
+      case GL.GL_TEXTURE_GEN_R:
+        return (CurrentR.Enable);
+      case GL.GL_TEXTURE_GEN_S:
+        return (CurrentS.Enable);
+      case GL.GL_TEXTURE_GEN_T:
+        return (CurrentT.Enable);
     }
     return false;
   }
@@ -189,107 +186,107 @@ public class gl_texture {
 
   public void tex_gen_enable(int cap, boolean state) {
     switch (cap) {
-    case GL.GL_TEXTURE_GEN_Q:
-      CurrentQ.Enable = state;
-      break;
-    case GL.GL_TEXTURE_GEN_R:
-      CurrentR.Enable = state;
-      break;
-    case GL.GL_TEXTURE_GEN_S:
-      CurrentS.Enable = state;
-      break;
-    case GL.GL_TEXTURE_GEN_T:
-      CurrentT.Enable = state;
-      break;
+      case GL.GL_TEXTURE_GEN_Q:
+        CurrentQ.Enable = state;
+        break;
+      case GL.GL_TEXTURE_GEN_R:
+        CurrentR.Enable = state;
+        break;
+      case GL.GL_TEXTURE_GEN_S:
+        CurrentS.Enable = state;
+        break;
+      case GL.GL_TEXTURE_GEN_T:
+        CurrentT.Enable = state;
+        break;
     }
   }
 
   public void set_tex(int target, int pname, float params[]) {
     switch (target) {
-    case GL.GL_TEXTURE_1D:
-      Current1D.set_tex(pname, params);
-      break;
-    case GL.GL_TEXTURE_2D:
-      Current2D.set_tex(pname, params);
-      break;
-    case GL.GL_TEXTURE_3D:
-      Current3D.set_tex(pname, params);
-      break;
+      case GL.GL_TEXTURE_1D:
+        Current1D.set_tex(pname, params);
+        break;
+      case GL.GL_TEXTURE_2D:
+        Current2D.set_tex(pname, params);
+        break;
+      case GL.GL_TEXTURE_3D:
+        Current3D.set_tex(pname, params);
+        break;
     }
   }
 
   public void set_tex_image(int target, int level, int border, gl_image img) {
     switch (target) {
-    case GL.GL_TEXTURE_1D:
-      Current1D.set_tex_image(level, border, img);
-      break;
-    case GL.GL_TEXTURE_2D:
-      Current2D.set_tex_image(level, border, img);
-      break;
-    case GL.GL_TEXTURE_3D:
-      Current3D.set_tex_image(level, border, img);
-      break;
+      case GL.GL_TEXTURE_1D:
+        Current1D.set_tex_image(level, border, img);
+        break;
+      case GL.GL_TEXTURE_2D:
+        Current2D.set_tex_image(level, border, img);
+        break;
+      case GL.GL_TEXTURE_3D:
+        Current3D.set_tex_image(level, border, img);
+        break;
     }
   }
 
   public gl_image get_tex_image(int target, int level) {
     switch (target) {
-    case GL.GL_TEXTURE_1D:
-      return Current1D.get_tex_image(level);
-    case GL.GL_TEXTURE_2D:
-      return Current2D.get_tex_image(level);
-    case GL.GL_TEXTURE_3D:
-      return Current3D.get_tex_image(level);
-    default:
-      return null;
+      case GL.GL_TEXTURE_1D:
+        return Current1D.get_tex_image(level);
+      case GL.GL_TEXTURE_2D:
+        return Current2D.get_tex_image(level);
+      case GL.GL_TEXTURE_3D:
+        return Current3D.get_tex_image(level);
+      default:
+        return null;
     }
   }
 
   public void set_tex_gen_i(int coord, int param) {
     switch (coord) {
-    case GL.GL_Q:
-      CurrentQ.Mode = param;
-      break;
-    case GL.GL_R:
-      CurrentR.Mode = param;
-      break;
-    case GL.GL_S:
-      CurrentS.Mode = param;
-      break;
-    case GL.GL_T:
-      CurrentT.Mode = param;
-      break;
+      case GL.GL_Q:
+        CurrentQ.Mode = param;
+        break;
+      case GL.GL_R:
+        CurrentR.Mode = param;
+        break;
+      case GL.GL_S:
+        CurrentS.Mode = param;
+        break;
+      case GL.GL_T:
+        CurrentT.Mode = param;
+        break;
     }
   }
 
   public void set_tex_gen_f(int coord, int pname, float params[]) {
     switch (coord) {
-    case GL.GL_Q:
-      CurrentQ.set_tex_gen(pname, params);
-      break;
-    case GL.GL_R:
-      CurrentR.set_tex_gen(pname, params);
-      break;
-    case GL.GL_S:
-      CurrentS.set_tex_gen(pname, params);
-      break;
-    case GL.GL_T:
-      CurrentT.set_tex_gen(pname, params);
-      break;
+      case GL.GL_Q:
+        CurrentQ.set_tex_gen(pname, params);
+        break;
+      case GL.GL_R:
+        CurrentR.set_tex_gen(pname, params);
+        break;
+      case GL.GL_S:
+        CurrentS.set_tex_gen(pname, params);
+        break;
+      case GL.GL_T:
+        CurrentT.set_tex_gen(pname, params);
+        break;
     }
   }
 
   public void bind_texture(int target, gl_texture_obj obj) {
     switch (target) {
-    case GL.GL_TEXTURE_1D:
-      Current1D = obj;
-      break;
-    case GL.GL_TEXTURE_2D:
-      Current2D = obj;
-      break;
-    case GL.GL_TEXTURE_3D:
-      Current3D = obj;
-      break;
+      case GL.GL_TEXTURE_1D:
+        Current1D = obj;
+        break;
+      case GL.GL_TEXTURE_2D:
+        Current2D = obj;
+        break;
+      case GL.GL_TEXTURE_3D:
+        Current3D = obj;
+        break;
     }
     check_tex();
   }
@@ -316,8 +313,8 @@ public class gl_texture {
 
     int i = get_map_nearest_index(s, img.Width, CurrentObj.WrapS);
 
-    return (0xff000000 | (img.ImageData[i][0][0][0] & 0x000000ff) << 16 | (img.ImageData[i][0][0][1] & 0x000000ff) << 8
-        | (img.ImageData[i][0][0][2] & 0x000000ff));
+    return (0xff000000 | (img.ImageData[i][0][0][0] & 0x000000ff) << 16
+        | (img.ImageData[i][0][0][1] & 0x000000ff) << 8 | (img.ImageData[i][0][0][2] & 0x000000ff));
   }
 
   private int tex_map_nearest_2d(float s, float t, int l) {
@@ -326,8 +323,8 @@ public class gl_texture {
     int i = get_map_nearest_index(s, img.Width, CurrentObj.WrapS);
     int j = get_map_nearest_index(t, img.Height, CurrentObj.WrapT);
 
-    return (0xff000000 | (img.ImageData[i][j][0][0] & 0x000000ff) << 16 | (img.ImageData[i][j][0][1] & 0x000000ff) << 8
-        | (img.ImageData[i][j][0][2] & 0x000000ff));
+    return (0xff000000 | (img.ImageData[i][j][0][0] & 0x000000ff) << 16
+        | (img.ImageData[i][j][0][1] & 0x000000ff) << 8 | (img.ImageData[i][j][0][2] & 0x000000ff));
   }
 
   private int tex_map_nearest_3d(float s, float t, float r, int l) {
@@ -337,8 +334,8 @@ public class gl_texture {
     int j = get_map_nearest_index(t, img.Height, CurrentObj.WrapT);
     int k = get_map_nearest_index(r, img.Depth, CurrentObj.WrapR);
 
-    return (0xff000000 | (img.ImageData[i][j][k][0] & 0x000000ff) << 16 | (img.ImageData[i][j][k][1] & 0x000000ff) << 8
-        | (img.ImageData[i][j][k][2] & 0x000000ff));
+    return (0xff000000 | (img.ImageData[i][j][k][0] & 0x000000ff) << 16
+        | (img.ImageData[i][j][k][1] & 0x000000ff) << 8 | (img.ImageData[i][j][k][2] & 0x000000ff));
   }
 
   private float get_map_linear_index(float s, int w, int WrapS, int i[]) {
@@ -551,7 +548,8 @@ public class gl_texture {
         level = max;
       }
 
-      return get_mid_linear_color(tex_map_nearest_1d(s, level - 1), tex_map_nearest_1d(s, level), l);
+      return get_mid_linear_color(tex_map_nearest_1d(s, level - 1), tex_map_nearest_1d(s, level),
+          l);
     }
   }
 
@@ -568,7 +566,8 @@ public class gl_texture {
         level = max;
       }
 
-      return get_mid_linear_color(tex_map_nearest_2d(s, t, level - 1), tex_map_nearest_2d(s, t, level), l);
+      return get_mid_linear_color(tex_map_nearest_2d(s, t, level - 1),
+          tex_map_nearest_2d(s, t, level), l);
     }
   }
 
@@ -585,7 +584,8 @@ public class gl_texture {
         level = max;
       }
 
-      return get_mid_linear_color(tex_map_nearest_3d(s, t, r, level - 1), tex_map_nearest_3d(s, t, r, level), l);
+      return get_mid_linear_color(tex_map_nearest_3d(s, t, r, level - 1),
+          tex_map_nearest_3d(s, t, r, level), l);
     }
   }
 
@@ -619,7 +619,8 @@ public class gl_texture {
         level = max;
       }
 
-      return get_mid_linear_color(tex_map_linear_2d(s, t, level - 1), tex_map_linear_2d(s, t, level), l);
+      return get_mid_linear_color(tex_map_linear_2d(s, t, level - 1),
+          tex_map_linear_2d(s, t, level), l);
     }
   }
 
@@ -636,15 +637,17 @@ public class gl_texture {
         level = max;
       }
 
-      return get_mid_linear_color(tex_map_linear_3d(s, t, r, level - 1), tex_map_linear_3d(s, t, r, level), l);
+      return get_mid_linear_color(tex_map_linear_3d(s, t, r, level - 1),
+          tex_map_linear_3d(s, t, r, level), l);
     }
   }
 
   private int tex_mid(float s, float t, float r, float l) {
     float c;
 
-    if (CurrentObj.MagFilter == GL.GL_LINEAR && (CurrentObj.MinFilter == GL.GL_NEAREST_MIPMAP_NEAREST
-        || CurrentObj.MinFilter == GL.GL_LINEAR_MIPMAP_NEAREST)) {
+    if (CurrentObj.MagFilter == GL.GL_LINEAR
+        && (CurrentObj.MinFilter == GL.GL_NEAREST_MIPMAP_NEAREST
+            || CurrentObj.MinFilter == GL.GL_LINEAR_MIPMAP_NEAREST)) {
       c = (float) 0.5;
     } else {
       c = 0;
@@ -652,35 +655,36 @@ public class gl_texture {
 
     if (l > c) {
       switch (CurrentObj.MinFilter) {
-      case GL.GL_NEAREST_MIPMAP_NEAREST:
-        return tex_mid_nearest_nearest(s, t, r, l);
-      case GL.GL_LINEAR_MIPMAP_NEAREST:
-        return tex_mid_linear_nearest(s, t, r, l);
-      case GL.GL_NEAREST_MIPMAP_LINEAR:
-        if (Enable3D)
-          return tex_mid_nearest_linear_3d(s, t, r, l);
-        if (Enable2D)
-          return tex_mid_nearest_linear_2d(s, t, l);
-        if (Enable1D)
-          return tex_mid_nearest_linear_1d(s, l);
-      case GL.GL_LINEAR_MIPMAP_LINEAR:
-        if (Enable3D)
-          tex_mid_linear_linear_3d(s, t, r, l);
-        if (Enable2D)
-          tex_mid_linear_linear_2d(s, t, l);
-        if (Enable1D)
-          tex_mid_linear_linear_1d(s, l);
-      default:
-        return 0;
+        case GL.GL_NEAREST_MIPMAP_NEAREST:
+          return tex_mid_nearest_nearest(s, t, r, l);
+        case GL.GL_LINEAR_MIPMAP_NEAREST:
+          return tex_mid_linear_nearest(s, t, r, l);
+        case GL.GL_NEAREST_MIPMAP_LINEAR:
+          if (Enable3D)
+            return tex_mid_nearest_linear_3d(s, t, r, l);
+          if (Enable2D)
+            return tex_mid_nearest_linear_2d(s, t, l);
+          if (Enable1D)
+            return tex_mid_nearest_linear_1d(s, l);
+        case GL.GL_LINEAR_MIPMAP_LINEAR:
+          if (Enable3D)
+            tex_mid_linear_linear_3d(s, t, r, l);
+          if (Enable2D)
+            tex_mid_linear_linear_2d(s, t, l);
+          if (Enable1D)
+            tex_mid_linear_linear_1d(s, l);
+        default:
+          return 0;
       }
     } else {
       return tex_map(s, t, r);
     }
   }
 
-//    private float lambda (float w,float dsdx,float dsdy,float dtdx,float dtdy) {
-  private float lambda(float w, float dsdx, float dsdy, float dtdx, float dtdy, float drdx, float drdy) {
-//	float dudx, dudy, dvdx, dvdy, r1, r2, rho;
+  // private float lambda (float w,float dsdx,float dsdy,float dtdx,float dtdy) {
+  private float lambda(float w, float dsdx, float dsdy, float dtdx, float dtdy, float drdx,
+      float drdy) {
+    // float dudx, dudy, dvdx, dvdy, r1, r2, rho;
     float dudx, dudy, dvdx, dvdy, dwdx, dwdy, r1, r2, r3, rho;
 
     if (dsdx < 0) {
@@ -717,7 +721,7 @@ public class gl_texture {
     r1 = Math.max(dudx, dudy) * CurrentObj.Image[0].Width;
     r2 = Math.max(dvdx, dvdy) * CurrentObj.Image[0].Height;
     r3 = Math.max(dwdx, dwdy) * CurrentObj.Image[0].Depth;
-//	rho = Math.max (r1, r2) / w;
+    // rho = Math.max (r1, r2) / w;
     rho = Math.max(Math.max(r1, r2), r3) / w;
 
     if (rho < 0) {
@@ -730,10 +734,10 @@ public class gl_texture {
     return ((float) (Math.log(rho) * 1.442695)); // 1.442695=1/log2
   }
 
-//    public int tex_vertex (float s, float t, float w, float dsdx, float dsdy,
-//						      float dtdx, float dtdy) {
-  public int tex_vertex(float s, float t, float r, float w, float dsdx, float dsdy, float dtdx, float dtdy, float drdx,
-      float drdy) {
+  // public int tex_vertex (float s, float t, float w, float dsdx, float dsdy,
+  // float dtdx, float dtdy) {
+  public int tex_vertex(float s, float t, float r, float w, float dsdx, float dsdy, float dtdx,
+      float dtdy, float drdx, float drdy) {
     if (CurrentObj.MinFilter == GL.GL_NEAREST || CurrentObj.MinFilter == GL.GL_LINEAR) {
       return tex_map(s, t, r);
     } else {
@@ -767,35 +771,30 @@ public class gl_texture {
   }
 
   /*
-   * public void push_attrib (gl_list_item AttribItem) { AttribItem.BoolPtr = new
-   * boolean [4]; AttribItem.IntPtr = new int [1]; AttribItem.FloatPtr = new float
-   * [4];
+   * public void push_attrib (gl_list_item AttribItem) { AttribItem.BoolPtr = new boolean [4];
+   * AttribItem.IntPtr = new int [1]; AttribItem.FloatPtr = new float [4];
    * 
-   * public gl_texture_obj Current1D = new gl_texture_obj (); public
-   * gl_texture_obj Current2D = new gl_texture_obj (); public gl_texture_obj
-   * Current3D = new gl_texture_obj (); public int EnvMode = GL.GL_MODULATE;
-   * public float EnvColor [] = {0, 0, 0, 0}; public gl_texture_gen CurrentS = new
-   * gl_texture_gen (); public gl_texture_gen CurrentT = new gl_texture_gen ();
-   * public gl_texture_gen CurrentR = new gl_texture_gen (); public gl_texture_gen
-   * CurrentQ = new gl_texture_gen ();
+   * public gl_texture_obj Current1D = new gl_texture_obj (); public gl_texture_obj Current2D = new
+   * gl_texture_obj (); public gl_texture_obj Current3D = new gl_texture_obj (); public int EnvMode
+   * = GL.GL_MODULATE; public float EnvColor [] = {0, 0, 0, 0}; public gl_texture_gen CurrentS = new
+   * gl_texture_gen (); public gl_texture_gen CurrentT = new gl_texture_gen (); public
+   * gl_texture_gen CurrentR = new gl_texture_gen (); public gl_texture_gen CurrentQ = new
+   * gl_texture_gen ();
    * 
-   * AttribItem.IntPtr [0] = ClearIndex; System.arraycopy(ClearColor, 0,
-   * AttribItem.FloatPtr, 0, 4); AttribItem.IntPtr [1] = IntClearColor;
-   * AttribItem.IntPtr [2] = IndexMask; AttribItem.IntPtr [3] = ColorMask;
-   * AttribItem.BoolPtr [0] = AlphaEnable; AttribItem.IntPtr [4] = AlphaFunc;
-   * AttribItem.IntPtr [5] = AlphaRef; AttribItem.BoolPtr [1] = BlendEnable;
-   * AttribItem.IntPtr [6] = BlendSrc; AttribItem.IntPtr [7] = BlendDst;
-   * AttribItem.BoolPtr [2] = LogicOPEnable; AttribItem.IntPtr [8] = LogicOPMode;
-   * AttribItem.BoolPtr [3] = DitherEnable; }
+   * AttribItem.IntPtr [0] = ClearIndex; System.arraycopy(ClearColor, 0, AttribItem.FloatPtr, 0, 4);
+   * AttribItem.IntPtr [1] = IntClearColor; AttribItem.IntPtr [2] = IndexMask; AttribItem.IntPtr [3]
+   * = ColorMask; AttribItem.BoolPtr [0] = AlphaEnable; AttribItem.IntPtr [4] = AlphaFunc;
+   * AttribItem.IntPtr [5] = AlphaRef; AttribItem.BoolPtr [1] = BlendEnable; AttribItem.IntPtr [6] =
+   * BlendSrc; AttribItem.IntPtr [7] = BlendDst; AttribItem.BoolPtr [2] = LogicOPEnable;
+   * AttribItem.IntPtr [8] = LogicOPMode; AttribItem.BoolPtr [3] = DitherEnable; }
    * 
-   * public void pop_attrib (gl_list_item AttribItem) { ClearIndex =
-   * AttribItem.IntPtr [0]; System.arraycopy(AttribItem.FloatPtr, 0, ClearColor,
-   * 0, 4); IntClearColor = AttribItem.IntPtr [1]; IndexMask = AttribItem.IntPtr
-   * [2]; ColorMask = AttribItem.IntPtr [3]; AlphaEnable = AttribItem.BoolPtr [0];
-   * AlphaFunc = AttribItem.IntPtr [4]; AlphaRef = AttribItem.IntPtr [5];
-   * BlendEnable = AttribItem.BoolPtr [1]; BlendSrc = AttribItem.IntPtr [6];
-   * BlendDst = AttribItem.IntPtr [7]; LogicOPEnable = AttribItem.BoolPtr [2];
-   * LogicOPMode = AttribItem.IntPtr [8]; DitherEnable = AttribItem.BoolPtr [3]; }
+   * public void pop_attrib (gl_list_item AttribItem) { ClearIndex = AttribItem.IntPtr [0];
+   * System.arraycopy(AttribItem.FloatPtr, 0, ClearColor, 0, 4); IntClearColor = AttribItem.IntPtr
+   * [1]; IndexMask = AttribItem.IntPtr [2]; ColorMask = AttribItem.IntPtr [3]; AlphaEnable =
+   * AttribItem.BoolPtr [0]; AlphaFunc = AttribItem.IntPtr [4]; AlphaRef = AttribItem.IntPtr [5];
+   * BlendEnable = AttribItem.BoolPtr [1]; BlendSrc = AttribItem.IntPtr [6]; BlendDst =
+   * AttribItem.IntPtr [7]; LogicOPEnable = AttribItem.BoolPtr [2]; LogicOPMode = AttribItem.IntPtr
+   * [8]; DitherEnable = AttribItem.BoolPtr [3]; }
    */
 
 }

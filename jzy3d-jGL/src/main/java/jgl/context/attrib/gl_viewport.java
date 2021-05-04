@@ -1,19 +1,16 @@
 /*
  * @(#)gl_viewport.java 0.2 01/03/15
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999-2001 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999-2001 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -99,25 +96,21 @@ public class gl_viewport {
   }
 
   /*
-   * public void push_attrib (gl_list_item AttribItem) { AttribItem.IntPtr = new
-   * int [4]; AttribItem.FloatPtr = new float [8];
+   * public void push_attrib (gl_list_item AttribItem) { AttribItem.IntPtr = new int [4];
+   * AttribItem.FloatPtr = new float [8];
    * 
-   * AttribItem.IntPtr [0] = X; AttribItem.IntPtr [1] = Y; AttribItem.IntPtr [2] =
-   * Width; AttribItem.IntPtr [3] = Height; AttribItem.FloatPtr [0] = Near;
-   * AttribItem.FloatPtr [1] = Far;
+   * AttribItem.IntPtr [0] = X; AttribItem.IntPtr [1] = Y; AttribItem.IntPtr [2] = Width;
+   * AttribItem.IntPtr [3] = Height; AttribItem.FloatPtr [0] = Near; AttribItem.FloatPtr [1] = Far;
    * 
-   * AttribItem.FloatPtr [2] = Sx; AttribItem.FloatPtr [3] = Sy;
-   * AttribItem.FloatPtr [4] = Sz; AttribItem.FloatPtr [5] = Tx;
-   * AttribItem.FloatPtr [6] = Ty; AttribItem.FloatPtr [7] = Tz; }
+   * AttribItem.FloatPtr [2] = Sx; AttribItem.FloatPtr [3] = Sy; AttribItem.FloatPtr [4] = Sz;
+   * AttribItem.FloatPtr [5] = Tx; AttribItem.FloatPtr [6] = Ty; AttribItem.FloatPtr [7] = Tz; }
    * 
-   * public void pop_attrib (gl_list_item AttribItem) { X = AttribItem.IntPtr [0];
-   * Y = AttribItem.IntPtr [1]; Width = AttribItem.IntPtr [2]; Height =
-   * AttribItem.IntPtr [3]; Near = AttribItem.FloatPtr [0]; Far =
-   * AttribItem.FloatPtr [1];
+   * public void pop_attrib (gl_list_item AttribItem) { X = AttribItem.IntPtr [0]; Y =
+   * AttribItem.IntPtr [1]; Width = AttribItem.IntPtr [2]; Height = AttribItem.IntPtr [3]; Near =
+   * AttribItem.FloatPtr [0]; Far = AttribItem.FloatPtr [1];
    * 
-   * Sx = AttribItem.FloatPtr [2]; Sy = AttribItem.FloatPtr [3]; Sz =
-   * AttribItem.FloatPtr [4]; Tx = AttribItem.FloatPtr [5]; Ty =
-   * AttribItem.FloatPtr [6]; Tz = AttribItem.FloatPtr [7]; }
+   * Sx = AttribItem.FloatPtr [2]; Sy = AttribItem.FloatPtr [3]; Sz = AttribItem.FloatPtr [4]; Tx =
+   * AttribItem.FloatPtr [5]; Ty = AttribItem.FloatPtr [6]; Tz = AttribItem.FloatPtr [7]; }
    */
 
   public gl_viewport(gl_viewport cc) {
@@ -136,7 +129,6 @@ public class gl_viewport {
     this.Tz = cc.Tz;
   }
 
-  public gl_viewport() {
-  };
+  public gl_viewport() {};
 
 }

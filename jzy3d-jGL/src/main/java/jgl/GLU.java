@@ -1,19 +1,16 @@
 /*
  * @(#)GLU.java 0.4 03/5/12
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1996-2003 Robin Bing-Yu Chen (robin@nis-lab.is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1996-2003 Robin Bing-Yu Chen
+ * (robin@nis-lab.is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -30,12 +27,11 @@ import jgl.glu.GLUquadricObj;
  * @version 0.4, 12 May 2003
  * @author Robin Bing-Yu Chen
  *
- *         Modified 11/15/2002 by Jon McCall. Fixed the gluUnProject code. To
- *         fix the gluUnProject method I replaced the inverseMatrix44 with with
- *         a different algorithum, it was returning incorrect results. Also
- *         added a method to swap rows and columns (swapRowsCols44) because the
- *         projection and model matrixes are expected to be in this format for
- *         the gluUnproject algoithum to work correctly.
+ *         Modified 11/15/2002 by Jon McCall. Fixed the gluUnProject code. To fix the gluUnProject
+ *         method I replaced the inverseMatrix44 with with a different algorithum, it was returning
+ *         incorrect results. Also added a method to swap rows and columns (swapRowsCols44) because
+ *         the projection and model matrixes are expected to be in this format for the gluUnproject
+ *         algoithum to work correctly.
  */
 
 public class GLU {
@@ -193,15 +189,18 @@ public class GLU {
     return (a * d - b * c);
   }
 
-  private double det33(double a1, double a2, double a3, double b1, double b2, double b3, double c1, double c2,
-      double c3) {
+  private double det33(double a1, double a2, double a3, double b1, double b2, double b3, double c1,
+      double c2, double c3) {
     return (a1 * det22(b2, b3, c2, c3) - b1 * det22(a2, a3, c2, c3) + c1 * det22(a2, a3, b2, b3));
   }
 
-  private double det44(double a1, double a2, double a3, double a4, double b1, double b2, double b3, double b4,
-      double c1, double c2, double c3, double c4, double d1, double d2, double d3, double d4) {
-    return (a1 * det33(b2, b3, b4, c2, c3, c4, d2, d3, d4) - b1 * det33(a2, a3, a4, c2, c3, c4, d2, d3, d4)
-        + c1 * det33(a2, a3, a4, b2, b3, b4, d2, d3, d4) - d1 * det33(a2, a3, a4, b2, b3, b4, c2, c3, c4));
+  private double det44(double a1, double a2, double a3, double a4, double b1, double b2, double b3,
+      double b4, double c1, double c2, double c3, double c4, double d1, double d2, double d3,
+      double d4) {
+    return (a1 * det33(b2, b3, b4, c2, c3, c4, d2, d3, d4)
+        - b1 * det33(a2, a3, a4, c2, c3, c4, d2, d3, d4)
+        + c1 * det33(a2, a3, a4, b2, b3, b4, d2, d3, d4)
+        - d1 * det33(a2, a3, a4, b2, b3, b4, c2, c3, c4));
   }
 
   private double[] adjoint44(double a[]) {
@@ -225,8 +224,8 @@ public class GLU {
   }
 
   /**
-   * return the inverse of a 4x4 matrix. This method replaced by Jon McCall,
-   * 11/15/2002 since it was returning incorrect results.
+   * return the inverse of a 4x4 matrix. This method replaced by Jon McCall, 11/15/2002 since it was
+   * returning incorrect results.
    */
   private double[] inverseMatrix44(double a[]) {
     // create a new identity matrix, becomes our output
@@ -282,16 +281,15 @@ public class GLU {
    */
 
   /**
-   * GLvoid gluOrtho2D (GLdouble left, GLdouble right, GLdouble bottom, GLdouble
-   * top)
+   * GLvoid gluOrtho2D (GLdouble left, GLdouble right, GLdouble bottom, GLdouble top)
    */
   public void gluOrtho2D(double left, double right, double bottom, double top) {
-    JavaGL.glOrtho((float) left, (float) right, (float) bottom, (float) top, (float) -1.0, (float) 1.0);
+    JavaGL.glOrtho((float) left, (float) right, (float) bottom, (float) top, (float) -1.0,
+        (float) 1.0);
   }
 
   /**
-   * GLvoid gluPerspective (GLdouble fovy, GLdouble aspect, GLdouble zNear,
-   * GLdouble zFar)
+   * GLvoid gluPerspective (GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar)
    */
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {
     double xmin, xmax, ymin, ymax;
@@ -302,12 +300,13 @@ public class GLU {
     xmin = ymin * aspect;
     xmax = ymax * aspect;
 
-    JavaGL.glFrustum((float) xmin, (float) xmax, (float) ymin, (float) ymax, (float) zNear, (float) zFar);
+    JavaGL.glFrustum((float) xmin, (float) xmax, (float) ymin, (float) ymax, (float) zNear,
+        (float) zFar);
   }
 
   /**
-   * GLvoid gluPickMatrix (GLdouble x, GLdouble y, GLdouble width, GLdouble
-   * height, GLint viewport[4])
+   * GLvoid gluPickMatrix (GLdouble x, GLdouble y, GLdouble width, GLdouble height, GLint
+   * viewport[4])
    */
   public void gluPickMatrix(double x, double y, double width, double height, int viewport[]) {
     float m[] = new float[16];
@@ -330,12 +329,11 @@ public class GLU {
   }
 
   /**
-   * GLint gluProject (GLdouble objx, GLdouble objy, GLdouble objz, const GLdouble
-   * model [16], const GLdouble proj [16], const GLint viewport [4], GLdouble
-   * *winx, GLdouble *winy, GLdouble *winz)
+   * GLint gluProject (GLdouble objx, GLdouble objy, GLdouble objz, const GLdouble model [16], const
+   * GLdouble proj [16], const GLint viewport [4], GLdouble *winx, GLdouble *winy, GLdouble *winz)
    */
-  public boolean gluProject(double objx, double objy, double objz, double model[], double proj[], int viewport[],
-      double winx[], double winy[], double winz[]) {
+  public boolean gluProject(double objx, double objy, double objz, double model[], double proj[],
+      int viewport[], double winx[], double winy[], double winz[]) {
     /* change *win? to be win? [], and the size of win? must be 1 */
     double in[] = new double[4];
     double out[];
@@ -362,12 +360,12 @@ public class GLU {
   }
 
   /**
-   * GLint gluUnProject (GLdouble winx, GLdouble winy, GLdouble winz, const
-   * GLdouble model [16], const GLdouble proj [16], const GLint viewport [4],
-   * GLdouble *objx, GLdouble *objy, GLdouble *objz)
+   * GLint gluUnProject (GLdouble winx, GLdouble winy, GLdouble winz, const GLdouble model [16],
+   * const GLdouble proj [16], const GLint viewport [4], GLdouble *objx, GLdouble *objy, GLdouble
+   * *objz)
    */
-  public boolean gluUnProject(double winx, double winy, double winz, double model[], double proj[], int viewport[],
-      double objx[], double objy[], double objz[]) {
+  public boolean gluUnProject(double winx, double winy, double winz, double model[], double proj[],
+      int viewport[], double objx[], double objy[], double objz[]) {
     /* change *obj? to be obj? [], and the size of obj? must be 1 */
     double m[] = new double[16];
     double A[] = new double[16];
@@ -397,12 +395,11 @@ public class GLU {
   }
 
   /**
-   * GLvoid gluLookAt (GLdouble eyex, GLdouble eyey, GLdouble eyez, GLdouble
-   * centerx, GLdouble centery, GLdouble centerz, GLdouble upx, GLdouble upy,
-   * GLdouble upz)
+   * GLvoid gluLookAt (GLdouble eyex, GLdouble eyey, GLdouble eyez, GLdouble centerx, GLdouble
+   * centery, GLdouble centerz, GLdouble upx, GLdouble upy, GLdouble upz)
    */
-  public void gluLookAt(double eyex, double eyey, double eyez, double centerx, double centery, double centerz,
-      double upx, double upy, double upz) {
+  public void gluLookAt(double eyex, double eyey, double eyez, double centerx, double centery,
+      double centerz, double upx, double upy, double upz) {
     double m[] = new double[16];
     double x[] = new double[3];
     double y[] = new double[3];
@@ -439,8 +436,8 @@ public class GLU {
 
     /* mpichler, 19950515 */
     /*
-     * cross product gives area of parallelogram, which is < 1.0 for
-     * non-perpendicular unit-length vectors; so normalize x, y here
+     * cross product gives area of parallelogram, which is < 1.0 for non-perpendicular unit-length
+     * vectors; so normalize x, y here
      */
 
     mag = Math.sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
@@ -476,57 +473,61 @@ public class GLU {
 
   /** const GLubyte* gluErrorString (GLenum errorCode) */
   public static String gluErrorString(int errorCode) {
-    String tess_error[] = { "missing gluEndPolygon", "missing gluBeginPolygon", "misoriented contour",
-        "vertex/edge intersection", "misoriented or self-intersecting loops", "coincident vertices",
-        "colinear vertices", "intersecting edges", "not coplanar contours" };
+    String tess_error[] = {"missing gluEndPolygon", "missing gluBeginPolygon",
+        "misoriented contour", "vertex/edge intersection", "misoriented or self-intersecting loops",
+        "coincident vertices", "colinear vertices", "intersecting edges", "not coplanar contours"};
 
-    String nurbs_error[] = { "spline order un-supported", "too few knots", "valid knot range is empty",
-        "decreasing knot sequence knot", "knot multiplicity greater than order of spline",
-        "endcurve() must follow bgncurve()", "bgncurve() must precede endcurve()", "missing or extra geometric data",
-        "can't draw pwlcurves", "missing bgncurve()", "missing bgnsurface()", "endtrim() must precede endsurface()",
-        "bgnsurface() must precede endsurface()", "curve of improper type passed as trim curve",
-        "bgnsurface() must precede bgntrim()", "endtrim() must follow bgntrim()", "bgntrim() must precede endtrim()",
-        "invalid or missing trim curve", "bgntrim() must precede pwlcurve()", "pwlcurve referenced twice",
-        "pwlcurve and nurbscurve mixed", "improper usage of trim data type", "nurbscurve referenced twice",
-        "invalid property", "endsurface() must follow bgnsurface()", "misoriented trim curves",
+    String nurbs_error[] = {"spline order un-supported", "too few knots",
+        "valid knot range is empty", "decreasing knot sequence knot",
+        "knot multiplicity greater than order of spline", "endcurve() must follow bgncurve()",
+        "bgncurve() must precede endcurve()", "missing or extra geometric data",
+        "can't draw pwlcurves", "missing bgncurve()", "missing bgnsurface()",
+        "endtrim() must precede endsurface()", "bgnsurface() must precede endsurface()",
+        "curve of improper type passed as trim curve", "bgnsurface() must precede bgntrim()",
+        "endtrim() must follow bgntrim()", "bgntrim() must precede endtrim()",
+        "invalid or missing trim curve", "bgntrim() must precede pwlcurve()",
+        "pwlcurve referenced twice", "pwlcurve and nurbscurve mixed",
+        "improper usage of trim data type", "nurbscurve referenced twice", "invalid property",
+        "endsurface() must follow bgnsurface()", "misoriented trim curves",
         "intersecting trim curves", "UNUSED", "unconnected trim curves", "unknown knot error",
-        "negative vertex count encountered", "negative byte-stride encounteed", "unknown type descriptor",
-        "null control array or knot vector", "duplicate point on pwlcurve" };
+        "negative vertex count encountered", "negative byte-stride encounteed",
+        "unknown type descriptor", "null control array or knot vector",
+        "duplicate point on pwlcurve"};
 
     switch (errorCode) {
-    case GL.GL_NO_ERROR:
-      return new String("no error");
-    case GL.GL_INVALID_VALUE:
-      return new String("invalid value");
-    case GL.GL_INVALID_ENUM:
-      return new String("invalid enum");
-    case GL.GL_INVALID_OPERATION:
-      return new String("invalid operation");
-    case GL.GL_STACK_OVERFLOW:
-      return new String("stack overflow");
-    case GL.GL_STACK_UNDERFLOW:
-      return new String("stack underflow");
-    case GL.GL_OUT_OF_MEMORY:
-      return new String("out of memory");
-//	    case GLU_NO_ERROR:
-//		return new String ("no error");
-    case GLU_INVALID_ENUM:
-      return new String("invalid enum");
-    case GLU_INVALID_VALUE:
-      return new String("invalid value");
-    case GLU_OUT_OF_MEMORY:
-      return new String("out of memory");
-//	    case GLU_INCOMPATIBLE_GL_VERSION:
-//		return new String ("incompatible GL version");
-    default:
-//		if (errorCode >= GLU_TESS_ERROR1 &&
-//		    errorCode <= GLU_TESS_ERROR9) {
-//		    return tess_error [errorCode - GLU_TESS_ERROR1];
-//		} else {
-      if (errorCode >= GLU_NURBS_ERROR1 && errorCode <= GLU_NURBS_ERROR37) {
-        return nurbs_error[errorCode - GLU_NURBS_ERROR1];
-      }
-//		}
+      case GL.GL_NO_ERROR:
+        return new String("no error");
+      case GL.GL_INVALID_VALUE:
+        return new String("invalid value");
+      case GL.GL_INVALID_ENUM:
+        return new String("invalid enum");
+      case GL.GL_INVALID_OPERATION:
+        return new String("invalid operation");
+      case GL.GL_STACK_OVERFLOW:
+        return new String("stack overflow");
+      case GL.GL_STACK_UNDERFLOW:
+        return new String("stack underflow");
+      case GL.GL_OUT_OF_MEMORY:
+        return new String("out of memory");
+      // case GLU_NO_ERROR:
+      // return new String ("no error");
+      case GLU_INVALID_ENUM:
+        return new String("invalid enum");
+      case GLU_INVALID_VALUE:
+        return new String("invalid value");
+      case GLU_OUT_OF_MEMORY:
+        return new String("out of memory");
+      // case GLU_INCOMPATIBLE_GL_VERSION:
+      // return new String ("incompatible GL version");
+      default:
+        // if (errorCode >= GLU_TESS_ERROR1 &&
+        // errorCode <= GLU_TESS_ERROR9) {
+        // return tess_error [errorCode - GLU_TESS_ERROR1];
+        // } else {
+        if (errorCode >= GLU_NURBS_ERROR1 && errorCode <= GLU_NURBS_ERROR37) {
+          return nurbs_error[errorCode - GLU_NURBS_ERROR1];
+        }
+        // }
     }
     return null;
   }
@@ -538,7 +539,7 @@ public class GLU {
   private void quadric_error(GLUquadricObj qobj, int error, String msg) {
     /* Call the error call back function if any */
     if (qobj.ErrorFunc != null) {
-      Object[] arguments = new Object[] { new Integer(error) };
+      Object[] arguments = new Object[] {new Integer(error)};
       try {
         qobj.ErrorFunc.invoke(JavaGL.glJGetComponent(), arguments);
       } catch (IllegalAccessException e) {
@@ -569,7 +570,8 @@ public class GLU {
 
   /** GLvoid gluQuadricDrawStyle (GLUquadricObj *quadObject, GLenum drawStyle) */
   public void gluQuadricDrawStyle(GLUquadricObj quadObject, int drawStyle) {
-    if (drawStyle == GLU_FILL || drawStyle == GLU_LINE || drawStyle == GLU_SILHOUETTE || drawStyle == GLU_POINT) {
+    if (drawStyle == GLU_FILL || drawStyle == GLU_LINE || drawStyle == GLU_SILHOUETTE
+        || drawStyle == GLU_POINT) {
       quadObject.DrawStyle = drawStyle;
     } else {
       quadric_error(quadObject, GLU_INVALID_ENUM, "qluQuadricDrawStyle");
@@ -588,12 +590,11 @@ public class GLU {
   }
 
   /**
-   * GLvoid gluQuadricCallback (GLUquadricObj *qobj, GLenum which, void
-   * (GLCALLBACK * fn) ())
+   * GLvoid gluQuadricCallback (GLUquadricObj *qobj, GLenum which, void (GLCALLBACK * fn) ())
    */
   public void gluQuadricCallback(GLUquadricObj qobj, int which, String fn) {
     if (qobj != null && which == GLU_ERROR) {
-      Class[] parameterTypes = new Class[] { int.class };
+      Class[] parameterTypes = new Class[] {int.class};
       try {
         qobj.ErrorFunc = JavaGL.glJGetComponent().getClass().getMethod(fn, parameterTypes);
       } catch (NoSuchMethodException e) {
@@ -619,11 +620,11 @@ public class GLU {
   }
 
   /**
-   * GLvoid gluCylinder (GLUquadricObj *qobj, GLdouble baseRadius, GLdouble
-   * topRadius, GLdouble height, GLint slices, GLint stacks)
+   * GLvoid gluCylinder (GLUquadricObj *qobj, GLdouble baseRadius, GLdouble topRadius, GLdouble
+   * height, GLint slices, GLint stacks)
    */
-  public void gluCylinder(GLUquadricObj qobj, double baseRadius, double topRadius, double height, int slices,
-      int stacks) {
+  public void gluCylinder(GLUquadricObj qobj, double baseRadius, double topRadius, double height,
+      int slices, int stacks) {
     double da, r, dr, dz;
     float x, y, z, nz, nsign;
     boolean normal_state;
@@ -720,17 +721,17 @@ public class GLU {
         for (j = 0; j <= stacks; j++) {
           if (nsign == 1.0) {
             JavaGL.glNormal3f(x1 * nsign, y1 * nsign, nz * nsign);
-//			if (qobj.TextureFlag) JavaGL.glTexCoord2f(s, t);
+            // if (qobj.TextureFlag) JavaGL.glTexCoord2f(s, t);
             JavaGL.glVertex3f(x1 * (float) r, y1 * (float) r, z);
             JavaGL.glNormal3f(x2 * nsign, y2 * nsign, nz * nsign);
-//			if (qobj.TextureFlag) JavaGL.glTexCoord2f(s, t);
+            // if (qobj.TextureFlag) JavaGL.glTexCoord2f(s, t);
             JavaGL.glVertex3f(x2 * (float) r, y2 * (float) r, z);
           } else {
             JavaGL.glNormal3f(x2 * nsign, y2 * nsign, nz * nsign);
-//			if (qobj.TextureFlag) JavaGL.glTexCoord2f(s, t);
+            // if (qobj.TextureFlag) JavaGL.glTexCoord2f(s, t);
             JavaGL.glVertex3f(x2 * (float) r, y2 * (float) r, z);
             JavaGL.glNormal3f(x1 * nsign, y1 * nsign, nz * nsign);
-//			if (qobj.TextureFlag) JavaGL.glTexCoord2f(s, t);
+            // if (qobj.TextureFlag) JavaGL.glTexCoord2f(s, t);
             JavaGL.glVertex3f(x1 * (float) r, y1 * (float) r, z);
           }
           z += (float) dz;
@@ -746,8 +747,7 @@ public class GLU {
   }
 
   /**
-   * GLvoid gluSphere (GLUquadricObj *qobj, GLdouble radius, GLint slices, GLint
-   * stacks)
+   * GLvoid gluSphere (GLUquadricObj *qobj, GLdouble radius, GLint slices, GLint stacks)
    */
   public void gluSphere(GLUquadricObj qobj, double radius, int slices, int stacks) {
     float rho, drho, theta, dtheta;
@@ -904,10 +904,11 @@ public class GLU {
   }
 
   /**
-   * GLvoid gluDisk (GLUquadricObj *qobj, GLdouble innerRadius, GLdouble
-   * outerRadius, GLint slices, GLint loops)
+   * GLvoid gluDisk (GLUquadricObj *qobj, GLdouble innerRadius, GLdouble outerRadius, GLint slices,
+   * GLint loops)
    */
-  public void gluDisk(GLUquadricObj qobj, double innerRadius, double outerRadius, int slices, int loops) {
+  public void gluDisk(GLUquadricObj qobj, double innerRadius, double outerRadius, int slices,
+      int loops) {
     float da, dr;
     int l, s;
 
@@ -924,129 +925,128 @@ public class GLU {
     dr = (float) (outerRadius - innerRadius) / (float) loops;
 
     switch (qobj.DrawStyle) {
-    case GLU_FILL:
-      /*
-       * texture of a gluDisk is a cut out of the texture unit square x, y in
-       * [-outerRadius, +outerRadius]; s, t in [0, 1] (linear mapping)
-       */
-      float dtc = 2.0f * (float) outerRadius;
-      float sa, ca;
-      float r1 = (float) innerRadius;
-//		int l;
-      for (l = 0; l < loops; l++) {
-        float r2 = r1 + dr;
-        if (qobj.Orientation == GLU_OUTSIDE) {
-//			int s;
-          JavaGL.glBegin(GL.GL_QUAD_STRIP);
-          for (s = 0; s <= slices; s++) {
-            float a;
-            if (s == slices)
-              a = 0.0f;
-            else
-              a = s * da;
-            sa = (float) Math.sin(a);
-            ca = (float) Math.cos(a);
-            if (qobj.TextureFlag)
-              JavaGL.glTexCoord2f(0.5f + sa * r2 / dtc, 0.5f + ca * r2 / dtc);
-            JavaGL.glVertex2f(r2 * sa, r2 * ca);
-            if (qobj.TextureFlag)
-              JavaGL.glTexCoord2f(0.5f + sa * r1 / dtc, 0.5f + ca * r1 / dtc);
-            JavaGL.glVertex2f(r1 * sa, r1 * ca);
+      case GLU_FILL:
+        /*
+         * texture of a gluDisk is a cut out of the texture unit square x, y in [-outerRadius,
+         * +outerRadius]; s, t in [0, 1] (linear mapping)
+         */
+        float dtc = 2.0f * (float) outerRadius;
+        float sa, ca;
+        float r1 = (float) innerRadius;
+        // int l;
+        for (l = 0; l < loops; l++) {
+          float r2 = r1 + dr;
+          if (qobj.Orientation == GLU_OUTSIDE) {
+            // int s;
+            JavaGL.glBegin(GL.GL_QUAD_STRIP);
+            for (s = 0; s <= slices; s++) {
+              float a;
+              if (s == slices)
+                a = 0.0f;
+              else
+                a = s * da;
+              sa = (float) Math.sin(a);
+              ca = (float) Math.cos(a);
+              if (qobj.TextureFlag)
+                JavaGL.glTexCoord2f(0.5f + sa * r2 / dtc, 0.5f + ca * r2 / dtc);
+              JavaGL.glVertex2f(r2 * sa, r2 * ca);
+              if (qobj.TextureFlag)
+                JavaGL.glTexCoord2f(0.5f + sa * r1 / dtc, 0.5f + ca * r1 / dtc);
+              JavaGL.glVertex2f(r1 * sa, r1 * ca);
+            }
+            JavaGL.glEnd();
+          } else {
+            // int s;
+            JavaGL.glBegin(GL.GL_QUAD_STRIP);
+            for (s = slices; s >= 0; s--) {
+              float a;
+              if (s == slices)
+                a = 0.0f;
+              else
+                a = s * da;
+              sa = (float) Math.sin(a);
+              ca = (float) Math.cos(a);
+              if (qobj.TextureFlag)
+                JavaGL.glTexCoord2f(0.5f - sa * r2 / dtc, 0.5f + ca * r2 / dtc);
+              JavaGL.glVertex2f(r2 * sa, r2 * ca);
+              if (qobj.TextureFlag)
+                JavaGL.glTexCoord2f(0.5f - sa * r1 / dtc, 0.5f + ca * r1 / dtc);
+              JavaGL.glVertex2f(r1 * sa, r1 * ca);
+            }
+            JavaGL.glEnd();
           }
-          JavaGL.glEnd();
-        } else {
-//			int s;
-          JavaGL.glBegin(GL.GL_QUAD_STRIP);
-          for (s = slices; s >= 0; s--) {
-            float a;
-            if (s == slices)
-              a = 0.0f;
-            else
-              a = s * da;
-            sa = (float) Math.sin(a);
-            ca = (float) Math.cos(a);
-            if (qobj.TextureFlag)
-              JavaGL.glTexCoord2f(0.5f - sa * r2 / dtc, 0.5f + ca * r2 / dtc);
-            JavaGL.glVertex2f(r2 * sa, r2 * ca);
-            if (qobj.TextureFlag)
-              JavaGL.glTexCoord2f(0.5f - sa * r1 / dtc, 0.5f + ca * r1 / dtc);
-            JavaGL.glVertex2f(r1 * sa, r1 * ca);
-          }
-          JavaGL.glEnd();
+          r1 = r2;
         }
-        r1 = r2;
-      }
-      break;
-    case GLU_LINE:
-//		int l, s;
-      /* draw loops */
-      for (l = 0; l <= loops; l++) {
-        float r = (float) innerRadius + l * dr;
-        JavaGL.glBegin(GL.GL_LINE_LOOP);
-        for (s = 0; s < slices; s++) {
-          float a = s * da;
-          JavaGL.glVertex2f(r * (float) Math.sin(a), r * (float) Math.cos(a));
-        }
-        JavaGL.glEnd();
-      }
-      /* draw spokes */
-      for (s = 0; s < slices; s++) {
-        float a = s * da;
-        float x = (float) Math.sin(a);
-        float y = (float) Math.cos(a);
-        JavaGL.glBegin(GL.GL_LINE_STRIP);
+        break;
+      case GLU_LINE:
+        // int l, s;
+        /* draw loops */
         for (l = 0; l <= loops; l++) {
           float r = (float) innerRadius + l * dr;
-          JavaGL.glVertex2f(r * x, r * y);
+          JavaGL.glBegin(GL.GL_LINE_LOOP);
+          for (s = 0; s < slices; s++) {
+            float a = s * da;
+            JavaGL.glVertex2f(r * (float) Math.sin(a), r * (float) Math.cos(a));
+          }
+          JavaGL.glEnd();
+        }
+        /* draw spokes */
+        for (s = 0; s < slices; s++) {
+          float a = s * da;
+          float x = (float) Math.sin(a);
+          float y = (float) Math.cos(a);
+          JavaGL.glBegin(GL.GL_LINE_STRIP);
+          for (l = 0; l <= loops; l++) {
+            float r = (float) innerRadius + l * dr;
+            JavaGL.glVertex2f(r * x, r * y);
+          }
+          JavaGL.glEnd();
+        }
+        break;
+      case GLU_POINT:
+        // int s;
+        JavaGL.glBegin(GL.GL_POINTS);
+        for (s = 0; s < slices; s++) {
+          float a = s * da;
+          float x = (float) Math.sin(a);
+          float y = (float) Math.cos(a);
+          // int l;
+          for (l = 0; l <= loops; l++) {
+            float r = (float) innerRadius * l * dr;
+            JavaGL.glVertex2f(r * x, r * y);
+          }
         }
         JavaGL.glEnd();
-      }
-      break;
-    case GLU_POINT:
-//		int s;
-      JavaGL.glBegin(GL.GL_POINTS);
-      for (s = 0; s < slices; s++) {
-        float a = s * da;
-        float x = (float) Math.sin(a);
-        float y = (float) Math.cos(a);
-//		    int l;
-        for (l = 0; l <= loops; l++) {
-          float r = (float) innerRadius * l * dr;
-          JavaGL.glVertex2f(r * x, r * y);
+        break;
+      case GLU_SILHOUETTE:
+        if (innerRadius != 0.0) {
+          float a;
+          JavaGL.glBegin(GL.GL_LINE_LOOP);
+          for (a = 0.0f; a < (float) (2.0 * Math.PI); a += da) {
+            float x = (float) (innerRadius * Math.sin(a));
+            float y = (float) (innerRadius * Math.cos(a));
+            JavaGL.glVertex2f(x, y);
+          }
+          JavaGL.glEnd();
         }
-      }
-      JavaGL.glEnd();
-      break;
-    case GLU_SILHOUETTE:
-      if (innerRadius != 0.0) {
         float a;
         JavaGL.glBegin(GL.GL_LINE_LOOP);
         for (a = 0.0f; a < (float) (2.0 * Math.PI); a += da) {
-          float x = (float) (innerRadius * Math.sin(a));
-          float y = (float) (innerRadius * Math.cos(a));
+          float x = (float) (outerRadius * Math.sin(a));
+          float y = (float) (outerRadius * Math.cos(a));
           JavaGL.glVertex2f(x, y);
         }
         JavaGL.glEnd();
-      }
-      float a;
-      JavaGL.glBegin(GL.GL_LINE_LOOP);
-      for (a = 0.0f; a < (float) (2.0 * Math.PI); a += da) {
-        float x = (float) (outerRadius * Math.sin(a));
-        float y = (float) (outerRadius * Math.cos(a));
-        JavaGL.glVertex2f(x, y);
-      }
-      JavaGL.glEnd();
-      break;
+        break;
     }
   }
 
   /**
-   * GLvoid gluPartialDisk (GLUquadricObj *qobj, GLdouble innerRadius, GLdouble
-   * outerRadius, GLint slices, GLint loops, GLdouble startAngle, GLdouble
-   * sweepAngle)
+   * GLvoid gluPartialDisk (GLUquadricObj *qobj, GLdouble innerRadius, GLdouble outerRadius, GLint
+   * slices, GLint loops, GLdouble startAngle, GLdouble sweepAngle)
    */
-  public void gluPartialDisk(GLUquadricObj qobj, double innerRadius, double outerRadius, int slices, int loops,
-      double startAngle, double sweepAngle) {
+  public void gluPartialDisk(GLUquadricObj qobj, double innerRadius, double outerRadius, int slices,
+      int loops, double startAngle, double sweepAngle) {
     if (qobj.Normals != GLU_NONE) {
       if (qobj.Orientation == GLU_OUTSIDE) {
         JavaGL.glNormal3f(0.0f, 0.0f, 1.0f);
@@ -1150,11 +1150,13 @@ public class GLU {
         angle = startAngle * Math.PI / 180.0;
         for (slice = 0; slice <= slices; slice++) {
           if (qobj.Orientation == GLU_OUTSIDE) {
-            JavaGL.glVertex2d((radius + delta_radius) * Math.sin(angle), (radius + delta_radius) * Math.cos(angle));
+            JavaGL.glVertex2d((radius + delta_radius) * Math.sin(angle),
+                (radius + delta_radius) * Math.cos(angle));
             JavaGL.glVertex2d(radius * Math.sin(angle), radius * Math.cos(angle));
           } else {
             JavaGL.glVertex2d(radius * Math.sin(angle), radius * Math.cos(angle));
-            JavaGL.glVertex2d((radius + delta_radius) * Math.sin(angle), (radius + delta_radius) * Math.cos(angle));
+            JavaGL.glVertex2d((radius + delta_radius) * Math.sin(angle),
+                (radius + delta_radius) * Math.cos(angle));
           }
           angle += delta_angle;
         }
@@ -1174,14 +1176,14 @@ public class GLU {
   }
 
   /** GLvoid gluDeleteNurbsRenderer (GLUnurbsObj *nobj) */
-  public void gluDeleteNurbsRenderer(GLUnurbsObj nobj) {
-  }
+  public void gluDeleteNurbsRenderer(GLUnurbsObj nobj) {}
 
   /**
-   * GLvoid gluLoadSamplingMatrices (GLUnurbsObj *nobj, const GLfloat modelMatrix
-   * [16], const GLfloat projMatrix [16], const GLint viewport [4])
+   * GLvoid gluLoadSamplingMatrices (GLUnurbsObj *nobj, const GLfloat modelMatrix [16], const
+   * GLfloat projMatrix [16], const GLint viewport [4])
    */
-  public void gluLoadSamplingMatrices(GLUnurbsObj nobj, float modelMatrix[], float projMatrix[], int viewport[]) {
+  public void gluLoadSamplingMatrices(GLUnurbsObj nobj, float modelMatrix[], float projMatrix[],
+      int viewport[]) {
     nobj.glu_load_sampling_matrices(modelMatrix, projMatrix, viewport);
   }
 
@@ -1192,74 +1194,73 @@ public class GLU {
     int val;
 
     switch (property) {
-    case GLU_SAMPLING_TOLERANCE:
-      nobj.glu_set_sampling_tolerance(value);
-      break;
-    case GLU_DISPLAY_MODE:
-      val = (int) value;
-      nobj.glu_set_display_mode(val);
-      break;
-    case GLU_CULLING:
-      val = (int) value;
-      switch (val) {
-      case 0:
-        nobj.glu_set_culling(GL.GL_FALSE);
+      case GLU_SAMPLING_TOLERANCE:
+        nobj.glu_set_sampling_tolerance(value);
         break;
-      case 1:
-        nobj.glu_set_culling(GL.GL_TRUE);
+      case GLU_DISPLAY_MODE:
+        val = (int) value;
+        nobj.glu_set_display_mode(val);
+        break;
+      case GLU_CULLING:
+        val = (int) value;
+        switch (val) {
+          case 0:
+            nobj.glu_set_culling(GL.GL_FALSE);
+            break;
+          case 1:
+            nobj.glu_set_culling(GL.GL_TRUE);
+            break;
+          default:
+            nobj.glu_error(GLU_INVALID_ENUM);
+            return;
+        }
+        break;
+      case GLU_AUTO_LOAD_MATRIX:
+        val = (int) value;
+        switch (val) {
+          case 0:
+            nobj.glu_set_auto_load_matrix(GL.GL_FALSE);
+            break;
+          case 1:
+            nobj.glu_set_auto_load_matrix(GL.GL_TRUE);
+            break;
+          default:
+            nobj.glu_error(GLU_INVALID_ENUM);
+            return;
+        }
         break;
       default:
-        nobj.glu_error(GLU_INVALID_ENUM);
-        return;
-      }
-      break;
-    case GLU_AUTO_LOAD_MATRIX:
-      val = (int) value;
-      switch (val) {
-      case 0:
-        nobj.glu_set_auto_load_matrix(GL.GL_FALSE);
-        break;
-      case 1:
-        nobj.glu_set_auto_load_matrix(GL.GL_TRUE);
-        break;
-      default:
-        nobj.glu_error(GLU_INVALID_ENUM);
-        return;
-      }
-      break;
-    default:
-      nobj.glu_error(GLU_NURBS_ERROR26);
+        nobj.glu_error(GLU_NURBS_ERROR26);
     }
   }
 
   /**
-   * GLvoid gluGetNurbsProperty (GLUnurbsObj *nobj, GLenum property, GLfloat
-   * *value)
+   * GLvoid gluGetNurbsProperty (GLUnurbsObj *nobj, GLenum property, GLfloat *value)
    */
   public void gluGetNurbsProperty(GLUnurbsObj nobj, int property, float value[]) {
     switch (property) {
-    case GLU_SAMPLING_TOLERANCE:
-      value[0] = nobj.sampling_tolerance;
-      break;
-    case GLU_DISPLAY_MODE:
-      value[0] = nobj.display_mode;
-      break;
-    case GLU_CULLING:
-      if (nobj.culling) {
-        value[0] = (float) 1.0;
-      } else {
-        value[0] = (float) 0.0;
-      }
-      break;
-    case GLU_AUTO_LOAD_MATRIX:
-      if (nobj.auto_load_matrix) {
-        value[0] = (float) 1.0;
-      } else {
-        value[0] = (float) 0.0;
-      }
-      break;
-    default:
-      nobj.glu_error(GLU_INVALID_ENUM);
+      case GLU_SAMPLING_TOLERANCE:
+        value[0] = nobj.sampling_tolerance;
+        break;
+      case GLU_DISPLAY_MODE:
+        value[0] = nobj.display_mode;
+        break;
+      case GLU_CULLING:
+        if (nobj.culling) {
+          value[0] = (float) 1.0;
+        } else {
+          value[0] = (float) 0.0;
+        }
+        break;
+      case GLU_AUTO_LOAD_MATRIX:
+        if (nobj.auto_load_matrix) {
+          value[0] = (float) 1.0;
+        } else {
+          value[0] = (float) 0.0;
+        }
+        break;
+      default:
+        nobj.glu_error(GLU_INVALID_ENUM);
     }
   }
 
@@ -1274,11 +1275,11 @@ public class GLU {
   }
 
   /**
-   * GLvoid gluNurbsCurve (GLUnurbsObj *nobj, GLint knot_count, GLfloat *knot,
-   * GLint stride, GLfloat *ctlarray, GLint order, GLenum type)
+   * GLvoid gluNurbsCurve (GLUnurbsObj *nobj, GLint knot_count, GLfloat *knot, GLint stride, GLfloat
+   * *ctlarray, GLint order, GLenum type)
    */
-  public void gluNurbsCurve(GLUnurbsObj nobj, int knot_count, float knot[], int stride, float ctlarray[][], int order,
-      int type) {
+  public void gluNurbsCurve(GLUnurbsObj nobj, int knot_count, float knot[], int stride,
+      float ctlarray[][], int order, int type) {
     nobj.glu_nurbs_curve(knot_count, knot, stride, ctlarray, order, type);
   }
 
@@ -1293,18 +1294,20 @@ public class GLU {
   }
 
   /**
-   * GLvoid gluNurbsSurface (GLUnurbsObj *nobj, GLint sknot_count, GLfloat *sknot,
-   * GLint tknot_count, GLfloat *tknot, GLint s_stride, GLint t_stride, GLfloat
-   * *ctlarray, GLint sorder, GLint torder, GLenum type)
+   * GLvoid gluNurbsSurface (GLUnurbsObj *nobj, GLint sknot_count, GLfloat *sknot, GLint
+   * tknot_count, GLfloat *tknot, GLint s_stride, GLint t_stride, GLfloat *ctlarray, GLint sorder,
+   * GLint torder, GLenum type)
    */
-  public void gluNurbsSurface(GLUnurbsObj nobj, int sknot_count, float sknot[], int tknot_count, float tknot[],
-      int s_stride, int t_stride, float ctlarray[][][], int sorder, int torder, int type) {
-    nobj.glu_nurbs_surface(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray, sorder, torder, type);
+  public void gluNurbsSurface(GLUnurbsObj nobj, int sknot_count, float sknot[], int tknot_count,
+      float tknot[], int s_stride, int t_stride, float ctlarray[][][], int sorder, int torder,
+      int type) {
+    nobj.glu_nurbs_surface(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray,
+        sorder, torder, type);
   }
 
-  /*public GLU() {
-    System.out.println("Please call new GLU (yourGL)");
-  }*/
+  /*
+   * public GLU() { System.out.println("Please call new GLU (yourGL)"); }
+   */
 
   public GLU(GL myGL) {
     JavaGL = myGL;

@@ -1,19 +1,16 @@
 /*
  * @(#)GLUnurbsObj.java 0.1 99/10/31
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1999 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 1999 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -52,17 +49,17 @@ public class GLUnurbsObj {
   public int error = GLU.GLU_NO_ERROR;
   public int type = GLU_NURBS_NONE;
 
-  public float sampling_model[] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
-  public float sampling_proj[] = { 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1 };
+  public float sampling_model[] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+  public float sampling_proj[] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
   public int sampling_viewport[] = new int[4];
 
   public nurbs_surfaces surface = new nurbs_surfaces();
   public nurbs_curves curve = new nurbs_curves();
 
-//    public nurbs_trim trim;
+  // public nurbs_trim trim;
 
-  private void set_new_t_min_t_max(nurbs_knot geom_knot, nurbs_knot color_knot, nurbs_knot normal_knot,
-      nurbs_knot texture_knot, float max_min_knot, float min_max_knot) {
+  private void set_new_t_min_t_max(nurbs_knot geom_knot, nurbs_knot color_knot,
+      nurbs_knot normal_knot, nurbs_knot texture_knot, float max_min_knot, float min_max_knot) {
     int t_min, t_max, cnt;
 
     if (geom_knot.unified_nknots != 0) {
@@ -83,8 +80,8 @@ public class GLUnurbsObj {
     }
   }
 
-  private void select_knot_working_range(nurbs_knot geom_knot, nurbs_knot color_knot, nurbs_knot normal_knot,
-      nurbs_knot texture_knot) {
+  private void select_knot_working_range(nurbs_knot geom_knot, nurbs_knot color_knot,
+      nurbs_knot normal_knot, nurbs_knot texture_knot) {
     int max_nknots;
     float max_min_knot, min_max_knot;
     int i;
@@ -165,7 +162,8 @@ public class GLUnurbsObj {
           texture_knot.collect(geom_knot, max_min_knot, min_max_knot);
         }
         // now, all the knots are the same
-        set_new_t_min_t_max(geom_knot, color_knot, normal_knot, texture_knot, max_min_knot, min_max_knot);
+        set_new_t_min_t_max(geom_knot, color_knot, normal_knot, texture_knot, max_min_knot,
+            min_max_knot);
       }
     } else {
       geom_knot.unified_nknots = 0;
@@ -201,8 +199,8 @@ public class GLUnurbsObj {
     nurbs_knot texture_s_knot = new nurbs_knot();
     nurbs_knot texture_t_knot = new nurbs_knot();
 
-    int err = surface.fill_knot(geom_s_knot, geom_t_knot, color_s_knot, color_t_knot, normal_s_knot, normal_t_knot,
-        texture_s_knot, texture_t_knot);
+    int err = surface.fill_knot(geom_s_knot, geom_t_knot, color_s_knot, color_t_knot, normal_s_knot,
+        normal_t_knot, texture_s_knot, texture_t_knot);
     if (err != GLU.GLU_NO_ERROR) {
       glu_error(err);
       return GLU.GLU_ERROR;
@@ -211,8 +209,8 @@ public class GLUnurbsObj {
     select_knot_working_range(geom_s_knot, color_s_knot, normal_s_knot, texture_s_knot);
     select_knot_working_range(geom_t_knot, color_t_knot, normal_t_knot, texture_t_knot);
 
-    new_ctrl.convert(geom_s_knot, geom_t_knot, color_s_knot, color_t_knot, normal_s_knot, normal_t_knot, texture_s_knot,
-        texture_t_knot, surface);
+    new_ctrl.convert(geom_s_knot, geom_t_knot, color_s_knot, color_t_knot, normal_s_knot,
+        normal_t_knot, texture_s_knot, texture_t_knot, surface);
 
     return GLU.GLU_NO_ERROR;
   }
@@ -288,7 +286,8 @@ public class GLUnurbsObj {
     glu_set_sampling_matrices();
     ctrl = new_ctrl.geom.ctrl;
     for (i = 0; i < new_ctrl.bezier_cnt; i++) {
-      tmp_factor = calc_factor(new_ctrl.geom.ctrl, curve.geom.c.order, i * curve.geom.c.order, curve.geom.dim);
+      tmp_factor = calc_factor(new_ctrl.geom.ctrl, curve.geom.c.order, i * curve.geom.c.order,
+          curve.geom.dim);
       if (tmp_factor == 0) {
         factors[i] = 1;
       } else {
@@ -306,17 +305,17 @@ public class GLUnurbsObj {
     glu_set_sampling_matrices();
     ctrl = new_ctrl.geom.ctrl;
     for (j = 0; j < new_ctrl.t_bezier_cnt; j++) {
-      vfactors[j][1] = tmp_factor1 = calc_factor(ctrl[0], surface.geom.t.order, j * surface.geom.t.order,
-          surface.geom.dim);
+      vfactors[j][1] = tmp_factor1 =
+          calc_factor(ctrl[0], surface.geom.t.order, j * surface.geom.t.order, surface.geom.dim);
       for (i = 1; i < new_ctrl.s_bezier_cnt; i++) {
-        tmp_factor2 = calc_factor(ctrl[i * surface.geom.s.order], surface.geom.t.order, j * surface.geom.t.order,
-            surface.geom.dim);
+        tmp_factor2 = calc_factor(ctrl[i * surface.geom.s.order], surface.geom.t.order,
+            j * surface.geom.t.order, surface.geom.dim);
         if (tmp_factor2 > tmp_factor1) {
           tmp_factor1 = tmp_factor2;
         }
       }
-      vfactors[j][2] = tmp_factor2 = calc_factor(ctrl[i * surface.geom.s.order - 1], surface.geom.t.order,
-          j * surface.geom.t.order, surface.geom.dim);
+      vfactors[j][2] = tmp_factor2 = calc_factor(ctrl[i * surface.geom.s.order - 1],
+          surface.geom.t.order, j * surface.geom.t.order, surface.geom.dim);
       if (tmp_factor2 > tmp_factor1) {
         vfactors[j][0] = tmp_factor2;
       } else {
@@ -332,17 +331,17 @@ public class GLUnurbsObj {
     }
 
     for (j = 0; j < new_ctrl.t_bezier_cnt; j++) {
-      ufactors[j][1] = tmp_factor1 = calc_factor(ctrl[0], surface.geom.s.order, j * surface.geom.s.order,
-          surface.geom.dim);
+      ufactors[j][1] = tmp_factor1 =
+          calc_factor(ctrl[0], surface.geom.s.order, j * surface.geom.s.order, surface.geom.dim);
       for (i = 1; i < new_ctrl.s_bezier_cnt; i++) {
-        tmp_factor2 = calc_factor(ctrl[i * surface.geom.t.order], surface.geom.s.order, j * surface.geom.s.order,
-            surface.geom.dim);
+        tmp_factor2 = calc_factor(ctrl[i * surface.geom.t.order], surface.geom.s.order,
+            j * surface.geom.s.order, surface.geom.dim);
         if (tmp_factor2 > tmp_factor1) {
           tmp_factor1 = tmp_factor2;
         }
       }
-      ufactors[j][2] = tmp_factor2 = calc_factor(ctrl[i * surface.geom.t.order - 1], surface.geom.s.order,
-          j * surface.geom.s.order, surface.geom.dim);
+      ufactors[j][2] = tmp_factor2 = calc_factor(ctrl[i * surface.geom.t.order - 1],
+          surface.geom.s.order, j * surface.geom.s.order, surface.geom.dim);
       if (tmp_factor2 > tmp_factor1) {
         ufactors[j][0] = tmp_factor2;
       } else {
@@ -376,7 +375,8 @@ public class GLUnurbsObj {
       z = pt[2] / w;
       JavaGLU.gluProject(x, y, z, model, proj, viewport, winx, winy, winz);
     }
-    if ((winx[0] >= viewport[0]) && (winx[0] < viewport[2]) && (winy[0] >= viewport[1]) && (winy[0] < viewport[3])) {
+    if ((winx[0] >= viewport[0]) && (winx[0] < viewport[2]) && (winy[0] >= viewport[1])
+        && (winy[0] < viewport[3])) {
       return true;
     } else {
       return false;
@@ -399,7 +399,8 @@ public class GLUnurbsObj {
     return true;
   }
 
-  public boolean culling_test_3d(float pts[][][], int s_cnt, int t_cnt, int s_stride, int t_stride, int dim) {
+  public boolean culling_test_3d(float pts[][][], int s_cnt, int t_cnt, int s_stride, int t_stride,
+      int dim) {
     int i, j;
 
     if (culling == false) {
@@ -454,12 +455,11 @@ public class GLUnurbsObj {
     sampling_3d(new_ctrl, sfactors, tfactors);
     new_ctrl.draw(this, JavaGL, display_mode, surface, sfactors, tfactors);
     /*
-     * switch (display_mode) { case GLU.GLU_FILL: new_ctrl.draw (this, JavaGL,
-     * GLU.GLU_FILL, surface, sfactors, tfactors); break; case
-     * GLU.GLU_OUTLINE_POLYGON: new_ctrl.draw (this, JavaGL,
-     * GLU.GLU_OUTLINE_POLYGON, surface, sfactors, tfactors); break; case
-     * GLU.GLU_OUTLINE_PATCH: new_ctrl.draw (this, JavaGL, GLU.GLU_OUTLINE_PATCH,
-     * surface, sfactors, tfactors); break; }
+     * switch (display_mode) { case GLU.GLU_FILL: new_ctrl.draw (this, JavaGL, GLU.GLU_FILL,
+     * surface, sfactors, tfactors); break; case GLU.GLU_OUTLINE_POLYGON: new_ctrl.draw (this,
+     * JavaGL, GLU.GLU_OUTLINE_POLYGON, surface, sfactors, tfactors); break; case
+     * GLU.GLU_OUTLINE_PATCH: new_ctrl.draw (this, JavaGL, GLU.GLU_OUTLINE_PATCH, surface, sfactors,
+     * tfactors); break; }
      */
   }
 
@@ -478,7 +478,8 @@ public class GLUnurbsObj {
   public void glu_set_sampling_matrices() {
     if (auto_load_matrix == false) {
       JavaGL.glPushAttrib(GL.GL_VIEWPORT_BIT | GL.GL_TRANSFORM_BIT);
-      JavaGL.glViewport(sampling_viewport[0], sampling_viewport[1], sampling_viewport[2], sampling_viewport[3]);
+      JavaGL.glViewport(sampling_viewport[0], sampling_viewport[1], sampling_viewport[2],
+          sampling_viewport[3]);
       JavaGL.glMatrixMode(GL.GL_PROJECTION);
       JavaGL.glPushMatrix();
       JavaGL.glLoadMatrixf(sampling_proj);
@@ -507,7 +508,8 @@ public class GLUnurbsObj {
   }
 
   public void glu_set_display_mode(int value) {
-    if (value != GLU.GLU_FILL && value != GLU.GLU_OUTLINE_POLYGON && value != GLU.GLU_OUTLINE_PATCH) {
+    if (value != GLU.GLU_FILL && value != GLU.GLU_OUTLINE_POLYGON
+        && value != GLU.GLU_OUTLINE_PATCH) {
       glu_error(GLU.GLU_INVALID_ENUM);
       return;
     }
@@ -528,41 +530,42 @@ public class GLUnurbsObj {
 
   public void glu_begin_curve() {
     switch (type) {
-    case GLU_NURBS_NONE:
-      type = GLU_NURBS_CURVE;
-      curve.geom.type = GLU.GLU_INVALID_ENUM;
-      curve.color.type = GLU.GLU_INVALID_ENUM;
-      curve.normal.type = GLU.GLU_INVALID_ENUM;
-      curve.texture.type = GLU.GLU_INVALID_ENUM;
-      break;
-    case GLU_NURBS_CURVE:
-      glu_error(GLU.GLU_NURBS_ERROR6);
+      case GLU_NURBS_NONE:
+        type = GLU_NURBS_CURVE;
+        curve.geom.type = GLU.GLU_INVALID_ENUM;
+        curve.color.type = GLU.GLU_INVALID_ENUM;
+        curve.normal.type = GLU.GLU_INVALID_ENUM;
+        curve.texture.type = GLU.GLU_INVALID_ENUM;
+        break;
+      case GLU_NURBS_CURVE:
+        glu_error(GLU.GLU_NURBS_ERROR6);
     }
   }
 
   public void glu_end_curve() {
     switch (type) {
-    case GLU_NURBS_NONE:
-      glu_error(GLU.GLU_NURBS_ERROR7);
-      break;
-    default:
-      JavaGL.glPushAttrib(GL.GL_EVAL_BIT | GL.GL_ENABLE_BIT);
-      JavaGL.glDisable(GL.GL_MAP1_VERTEX_3);
-      JavaGL.glDisable(GL.GL_MAP1_VERTEX_4);
-      JavaGL.glDisable(GL.GL_MAP1_INDEX);
-      JavaGL.glDisable(GL.GL_MAP1_COLOR_4);
-      JavaGL.glDisable(GL.GL_MAP1_NORMAL);
-      JavaGL.glDisable(GL.GL_MAP1_TEXTURE_COORD_1);
-      JavaGL.glDisable(GL.GL_MAP1_TEXTURE_COORD_2);
-      JavaGL.glDisable(GL.GL_MAP1_TEXTURE_COORD_3);
-      JavaGL.glDisable(GL.GL_MAP1_TEXTURE_COORD_4);
-      do_curve();
-      JavaGL.glPopAttrib();
-      type = GLU_NURBS_NONE;
+      case GLU_NURBS_NONE:
+        glu_error(GLU.GLU_NURBS_ERROR7);
+        break;
+      default:
+        JavaGL.glPushAttrib(GL.GL_EVAL_BIT | GL.GL_ENABLE_BIT);
+        JavaGL.glDisable(GL.GL_MAP1_VERTEX_3);
+        JavaGL.glDisable(GL.GL_MAP1_VERTEX_4);
+        JavaGL.glDisable(GL.GL_MAP1_INDEX);
+        JavaGL.glDisable(GL.GL_MAP1_COLOR_4);
+        JavaGL.glDisable(GL.GL_MAP1_NORMAL);
+        JavaGL.glDisable(GL.GL_MAP1_TEXTURE_COORD_1);
+        JavaGL.glDisable(GL.GL_MAP1_TEXTURE_COORD_2);
+        JavaGL.glDisable(GL.GL_MAP1_TEXTURE_COORD_3);
+        JavaGL.glDisable(GL.GL_MAP1_TEXTURE_COORD_4);
+        do_curve();
+        JavaGL.glPopAttrib();
+        type = GLU_NURBS_NONE;
     }
   }
 
-  public void glu_nurbs_curve(int knot_count, float knot[], int stride, float ctlarray[][], int order, int surtype) {
+  public void glu_nurbs_curve(int knot_count, float knot[], int stride, float ctlarray[][],
+      int order, int surtype) {
     if (type == GLU_NURBS_NO_TRIM || type == GLU_NURBS_TRIM || type == GLU_NURBS_TRIM_DONE) {
       if (surtype == GL.GL_MAP1_VERTEX_3 || surtype == GL.GL_MAP1_VERTEX_4) {
         glu_error(GLU.GLU_NURBS_ERROR8);
@@ -575,83 +578,83 @@ public class GLUnurbsObj {
       }
     }
     switch (surtype) {
-    case GL.GL_MAP1_VERTEX_3:
-    case GL.GL_MAP1_VERTEX_4:
-      curve.geom.fill(knot_count, knot, stride, ctlarray, order, surtype);
-      type = GLU_NURBS_NO_TRIM;
-      break;
-    case GL.GL_MAP1_INDEX:
-    case GL.GL_MAP1_COLOR_4:
-      curve.color.fill(knot_count, knot, stride, ctlarray, order, surtype);
-      break;
-    case GL.GL_MAP1_NORMAL:
-      curve.normal.fill(knot_count, knot, stride, ctlarray, order, surtype);
-      break;
-    case GL.GL_MAP1_TEXTURE_COORD_1:
-    case GL.GL_MAP1_TEXTURE_COORD_2:
-    case GL.GL_MAP1_TEXTURE_COORD_3:
-    case GL.GL_MAP1_TEXTURE_COORD_4:
-      curve.texture.fill(knot_count, knot, stride, ctlarray, order, surtype);
-      break;
-    default:
-      glu_error(GLU.GLU_INVALID_ENUM);
-      return;
+      case GL.GL_MAP1_VERTEX_3:
+      case GL.GL_MAP1_VERTEX_4:
+        curve.geom.fill(knot_count, knot, stride, ctlarray, order, surtype);
+        type = GLU_NURBS_NO_TRIM;
+        break;
+      case GL.GL_MAP1_INDEX:
+      case GL.GL_MAP1_COLOR_4:
+        curve.color.fill(knot_count, knot, stride, ctlarray, order, surtype);
+        break;
+      case GL.GL_MAP1_NORMAL:
+        curve.normal.fill(knot_count, knot, stride, ctlarray, order, surtype);
+        break;
+      case GL.GL_MAP1_TEXTURE_COORD_1:
+      case GL.GL_MAP1_TEXTURE_COORD_2:
+      case GL.GL_MAP1_TEXTURE_COORD_3:
+      case GL.GL_MAP1_TEXTURE_COORD_4:
+        curve.texture.fill(knot_count, knot, stride, ctlarray, order, surtype);
+        break;
+      default:
+        glu_error(GLU.GLU_INVALID_ENUM);
+        return;
     }
   }
 
   public void glu_begin_surface() {
     switch (type) {
-    case GLU_NURBS_NONE:
-      type = GLU_NURBS_SURFACE;
-      surface.geom.type = GLU.GLU_INVALID_ENUM;
-      surface.color.type = GLU.GLU_INVALID_ENUM;
-      surface.normal.type = GLU.GLU_INVALID_ENUM;
-      surface.texture.type = GLU.GLU_INVALID_ENUM;
-      break;
-    case GLU_NURBS_TRIM:
-      glu_error(GLU.GLU_NURBS_ERROR16);
-      break;
-    case GLU_NURBS_SURFACE:
-    case GLU_NURBS_NO_TRIM:
-    case GLU_NURBS_TRIM_DONE:
-      glu_error(GLU.GLU_NURBS_ERROR27);
-      break;
-    case GLU_NURBS_CURVE:
-      glu_error(GLU.GLU_NURBS_ERROR6);
+      case GLU_NURBS_NONE:
+        type = GLU_NURBS_SURFACE;
+        surface.geom.type = GLU.GLU_INVALID_ENUM;
+        surface.color.type = GLU.GLU_INVALID_ENUM;
+        surface.normal.type = GLU.GLU_INVALID_ENUM;
+        surface.texture.type = GLU.GLU_INVALID_ENUM;
+        break;
+      case GLU_NURBS_TRIM:
+        glu_error(GLU.GLU_NURBS_ERROR16);
+        break;
+      case GLU_NURBS_SURFACE:
+      case GLU_NURBS_NO_TRIM:
+      case GLU_NURBS_TRIM_DONE:
+        glu_error(GLU.GLU_NURBS_ERROR27);
+        break;
+      case GLU_NURBS_CURVE:
+        glu_error(GLU.GLU_NURBS_ERROR6);
     }
   }
 
   public void glu_end_surface() {
     switch (type) {
-    case GLU_NURBS_NONE:
-      glu_error(GLU.GLU_NURBS_ERROR13);
-      break;
-    case GLU_NURBS_TRIM:
-      glu_error(GLU.GLU_NURBS_ERROR12);
-      break;
-    case GLU_NURBS_NO_TRIM:
-    case GLU_NURBS_TRIM_DONE:
-      JavaGL.glPushAttrib(GL.GL_EVAL_BIT | GL.GL_ENABLE_BIT);
-      JavaGL.glDisable(GL.GL_MAP2_VERTEX_3);
-      JavaGL.glDisable(GL.GL_MAP2_VERTEX_4);
-      JavaGL.glDisable(GL.GL_MAP2_INDEX);
-      JavaGL.glDisable(GL.GL_MAP2_COLOR_4);
-      JavaGL.glDisable(GL.GL_MAP2_NORMAL);
-      JavaGL.glDisable(GL.GL_MAP2_TEXTURE_COORD_1);
-      JavaGL.glDisable(GL.GL_MAP2_TEXTURE_COORD_2);
-      JavaGL.glDisable(GL.GL_MAP2_TEXTURE_COORD_3);
-      JavaGL.glDisable(GL.GL_MAP2_TEXTURE_COORD_4);
-      do_surface();
-      JavaGL.glPopAttrib();
-      break;
-    default:
-      glu_error(GLU.GLU_NURBS_ERROR8);
+      case GLU_NURBS_NONE:
+        glu_error(GLU.GLU_NURBS_ERROR13);
+        break;
+      case GLU_NURBS_TRIM:
+        glu_error(GLU.GLU_NURBS_ERROR12);
+        break;
+      case GLU_NURBS_NO_TRIM:
+      case GLU_NURBS_TRIM_DONE:
+        JavaGL.glPushAttrib(GL.GL_EVAL_BIT | GL.GL_ENABLE_BIT);
+        JavaGL.glDisable(GL.GL_MAP2_VERTEX_3);
+        JavaGL.glDisable(GL.GL_MAP2_VERTEX_4);
+        JavaGL.glDisable(GL.GL_MAP2_INDEX);
+        JavaGL.glDisable(GL.GL_MAP2_COLOR_4);
+        JavaGL.glDisable(GL.GL_MAP2_NORMAL);
+        JavaGL.glDisable(GL.GL_MAP2_TEXTURE_COORD_1);
+        JavaGL.glDisable(GL.GL_MAP2_TEXTURE_COORD_2);
+        JavaGL.glDisable(GL.GL_MAP2_TEXTURE_COORD_3);
+        JavaGL.glDisable(GL.GL_MAP2_TEXTURE_COORD_4);
+        do_surface();
+        JavaGL.glPopAttrib();
+        break;
+      default:
+        glu_error(GLU.GLU_NURBS_ERROR8);
     }
     type = GLU_NURBS_NONE;
   }
 
-  public void glu_nurbs_surface(int sknot_count, float sknot[], int tknot_count, float tknot[], int s_stride,
-      int t_stride, float ctlarray[][][], int sorder, int torder, int surtype) {
+  public void glu_nurbs_surface(int sknot_count, float sknot[], int tknot_count, float tknot[],
+      int s_stride, int t_stride, float ctlarray[][][], int sorder, int torder, int surtype) {
     if (type == GLU_NURBS_NO_TRIM || type == GLU_NURBS_TRIM || type == GLU_NURBS_TRIM_DONE) {
       if (surtype == GL.GL_MAP2_VERTEX_3 || surtype == GL.GL_MAP2_VERTEX_4) {
         glu_error(GLU.GLU_NURBS_ERROR8);
@@ -664,29 +667,31 @@ public class GLUnurbsObj {
       }
     }
     switch (surtype) {
-    case GL.GL_MAP2_VERTEX_3:
-    case GL.GL_MAP2_VERTEX_4:
-      surface.geom.fill(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray, sorder, torder, surtype);
-      type = GLU_NURBS_NO_TRIM;
-      break;
-    case GL.GL_MAP2_INDEX:
-    case GL.GL_MAP2_COLOR_4:
-      surface.color.fill(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray, sorder, torder, surtype);
-      break;
-    case GL.GL_MAP2_NORMAL:
-      surface.normal.fill(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray, sorder, torder,
-          surtype);
-      break;
-    case GL.GL_MAP2_TEXTURE_COORD_1:
-    case GL.GL_MAP2_TEXTURE_COORD_2:
-    case GL.GL_MAP2_TEXTURE_COORD_3:
-    case GL.GL_MAP2_TEXTURE_COORD_4:
-      surface.texture.fill(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray, sorder, torder,
-          surtype);
-      break;
-    default:
-      glu_error(GLU.GLU_INVALID_ENUM);
-      return;
+      case GL.GL_MAP2_VERTEX_3:
+      case GL.GL_MAP2_VERTEX_4:
+        surface.geom.fill(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray,
+            sorder, torder, surtype);
+        type = GLU_NURBS_NO_TRIM;
+        break;
+      case GL.GL_MAP2_INDEX:
+      case GL.GL_MAP2_COLOR_4:
+        surface.color.fill(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray,
+            sorder, torder, surtype);
+        break;
+      case GL.GL_MAP2_NORMAL:
+        surface.normal.fill(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray,
+            sorder, torder, surtype);
+        break;
+      case GL.GL_MAP2_TEXTURE_COORD_1:
+      case GL.GL_MAP2_TEXTURE_COORD_2:
+      case GL.GL_MAP2_TEXTURE_COORD_3:
+      case GL.GL_MAP2_TEXTURE_COORD_4:
+        surface.texture.fill(sknot_count, sknot, tknot_count, tknot, s_stride, t_stride, ctlarray,
+            sorder, torder, surtype);
+        break;
+      default:
+        glu_error(GLU.GLU_INVALID_ENUM);
+        return;
     }
   }
 

@@ -1,9 +1,7 @@
 package examples.apps;
 /*
- *  doublebuffer.java
- *  This is a simple double buffered program.
- *  Pressing the left mouse button rotates the rectangle.
- *  Pressing the middle mouse button stops the rotation.
+ * doublebuffer.java This is a simple double buffered program. Pressing the left mouse button
+ * rotates the rectangle. Pressing the middle mouse button stops the rotation.
  */
 
 import java.awt.Frame;
@@ -65,10 +63,10 @@ public class doublebuffer extends GLCanvas {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

@@ -40,11 +40,9 @@ public class planet extends Applet implements ComponentListener, KeyListener {
     year = (year - 5) % 360;
   }
 
-  public void keyTyped(KeyEvent e) {
-  }
+  public void keyTyped(KeyEvent e) {}
 
-  public void keyReleased(KeyEvent e) {
-  }
+  public void keyReleased(KeyEvent e) {}
 
   public void keyPressed(KeyEvent e) {
     int keyCode = e.getKeyCode();
@@ -87,14 +85,11 @@ public class planet extends Applet implements ComponentListener, KeyListener {
     myGL.glShadeModel(GL.GL_FLAT);
   }
 
-  public void componentMoved(ComponentEvent e) {
-  }
+  public void componentMoved(ComponentEvent e) {}
 
-  public void componentShown(ComponentEvent e) {
-  }
+  public void componentShown(ComponentEvent e) {}
 
-  public void componentHidden(ComponentEvent e) {
-  }
+  public void componentHidden(ComponentEvent e) {}
 
   public void componentResized(ComponentEvent e) {
     // get window width and height by myself

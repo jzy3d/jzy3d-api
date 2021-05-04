@@ -1,9 +1,7 @@
 package examples.applets.glut;
 /*
- *  doublebuffer.java
- *  This is a simple double buffered program.
- *  Pressing the left mouse button rotates the rectangle.
- *  Pressing the middle mouse button stops the rotation.
+ * doublebuffer.java This is a simple double buffered program. Pressing the left mouse button
+ * rotates the rectangle. Pressing the middle mouse button stops the rotation.
  */
 
 import jgl.GL;

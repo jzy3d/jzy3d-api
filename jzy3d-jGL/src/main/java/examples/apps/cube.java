@@ -1,9 +1,7 @@
 package examples.apps;
 /*
- *  cube.java
- *  This program demonstrates a single modeling transformation,
- *  glScalef() and a single viewing transformation, gluLookAt().
- *  A wireframe cube is rendered.
+ * cube.java This program demonstrates a single modeling transformation, glScalef() and a single
+ * viewing transformation, gluLookAt(). A wireframe cube is rendered.
  */
 
 import java.awt.Frame;
@@ -42,10 +40,10 @@ public class cube extends GLCanvas {
   /* ARGSUSED1 */
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 

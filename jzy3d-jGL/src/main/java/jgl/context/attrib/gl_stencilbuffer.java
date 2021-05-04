@@ -1,19 +1,16 @@
 /*
  * @(#)gl_stencilbuffer.java 0.1 01/06/19
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 2001 Robin Bing-Yu Chen (robin@is.s.u-tokyo.ac.jp)
+ * jGL 3-D graphics library for Java Copyright (c) 2001 Robin Bing-Yu Chen
+ * (robin@is.s.u-tokyo.ac.jp)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -66,12 +63,11 @@ public class gl_stencilbuffer {
   public int Buffer[];
 
   /*
-   * public boolean Test (float a, int b) { switch (Func) { case GL.GL_NEVER:
-   * return false; case GL.GL_LESS: return (a < Buffer [b]); case GL.GL_GEQUAL:
-   * return (a >= Buffer [b]); case GL.GL_LEQUAL: return (a <= Buffer [b]); case
-   * GL.GL_GREATER: return (a > Buffer [b]); case GL.GL_NOTEQUAL: return (a !=
-   * Buffer [b]); case GL.GL_EQUAL: return (a == Buffer [b]); case GL.GL_ALWAYS:
-   * return true; } return true; }
+   * public boolean Test (float a, int b) { switch (Func) { case GL.GL_NEVER: return false; case
+   * GL.GL_LESS: return (a < Buffer [b]); case GL.GL_GEQUAL: return (a >= Buffer [b]); case
+   * GL.GL_LEQUAL: return (a <= Buffer [b]); case GL.GL_GREATER: return (a > Buffer [b]); case
+   * GL.GL_NOTEQUAL: return (a != Buffer [b]); case GL.GL_EQUAL: return (a == Buffer [b]); case
+   * GL.GL_ALWAYS: return true; } return true; }
    */
 
   public void set_buffer(int size) {
@@ -117,8 +113,8 @@ public class gl_stencilbuffer {
   }
 
   public void read_pixels(int x, int y, int width, int height, int size, Object pixels) {
-//	boolean need_scale = (CC.Pixel.Depth.Bias  != 0 ||
-//			      CC.Pixel.Depth.Scale != 1);
+    // boolean need_scale = (CC.Pixel.Depth.Bias != 0 ||
+    // CC.Pixel.Depth.Scale != 1);
     int i, j, si, sj, Pos = x + CC.Viewport.Width * y;
 
     int Val;
@@ -128,11 +124,11 @@ public class gl_stencilbuffer {
       sj = CC.Pixel.Pack.SkipPixels;
       Pos += CC.Viewport.Width - width;
       for (j = 0; j < width; j++) {
-//		if (need_scale) {
-//		    Val = CC.Pixel.Depth.apply_bias_scale (Buffer[Pos++]);
-//		} else {
+        // if (need_scale) {
+        // Val = CC.Pixel.Depth.apply_bias_scale (Buffer[Pos++]);
+        // } else {
         Val = Buffer[Pos++];
-//		}
+        // }
         if (size == 8) {
           set_pixel(si, sj, (byte[][]) pixels, Val);
         }
@@ -152,8 +148,8 @@ public class gl_stencilbuffer {
   }
 
   public void draw_pixels(int width, int height, int size, Object pixels) {
-//	boolean need_scale = (CC.Pixel.Depth.Bias  != 0 ||
-//			      CC.Pixel.Depth.Scale != 1);
+    // boolean need_scale = (CC.Pixel.Depth.Bias != 0 ||
+    // CC.Pixel.Depth.Scale != 1);
     int i, j, si, sj, Pos = 0;
 
     int Val = 0;
@@ -175,11 +171,11 @@ public class gl_stencilbuffer {
         if (size == 64) {
           Val = get_pixel(si, sj, (float[][]) pixels);
         }
-//		if (need_scale) {
-//		    Buffer[Pos++] = CC.Pixel.Depth.apply_bias_scale (Val);
-//		} else {
+        // if (need_scale) {
+        // Buffer[Pos++] = CC.Pixel.Depth.apply_bias_scale (Val);
+        // } else {
         Buffer[Pos++] = Val;
-//		}
+        // }
         sj++;
       }
       si++;

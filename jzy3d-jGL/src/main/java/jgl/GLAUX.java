@@ -1,19 +1,16 @@
 /*
  * @(#)GLAUX.java 0.2 99/06/22
  *
- * jGL 3-D graphics library for Java
- * Copyright (c) 1996-1999 Robin Bing-Yu Chen (robin@csie.ntu.edu.tw)
+ * jGL 3-D graphics library for Java Copyright (c) 1996-1999 Robin Bing-Yu Chen
+ * (robin@csie.ntu.edu.tw)
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or any later version. the GNU Lesser
- * General Public License should be included with this distribution
- * in the file LICENSE.
+ * This library is free software; you can redistribute it and/or modify it under the terms of the
+ * GNU Lesser General Public License as published by the Free Software Foundation; either version
+ * 2.1 of the License, or any later version. the GNU Lesser General Public License should be
+ * included with this distribution in the file LICENSE.
  *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * This library is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+ * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
  */
 
@@ -37,8 +34,8 @@ import jgl.glu.GLUquadricObj;
 public class GLAUX {
 
   /**
-   * Aux Functions Java is not C language, not all the auxiliary functions can be
-   * implemented, only implement some useful functions.
+   * Aux Functions Java is not C language, not all the auxiliary functions can be implemented, only
+   * implement some useful functions.
    */
 
   /** Constants of Aux */
@@ -67,8 +64,8 @@ public class GLAUX {
   /** Private Data Members */
   private GL JavaGL;
   private GLU JavaGLU;
-//    private Applet JavaApplet;
-//    private Component JavaComponent;
+  // private Applet JavaApplet;
+  // private Component JavaComponent;
 
   private MODELPTR lists[] = new MODELPTR[25];
 
@@ -81,8 +78,8 @@ public class GLAUX {
   private static final mat_t matstack[] = new mat_t[STACKDEPTH];
 
   static {
-    matstack[0] = new mat_t(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0,
-        0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
+    matstack[0] = new mat_t(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0);
   }
 
   private static final boolean identitymat = true;
@@ -169,8 +166,8 @@ public class GLAUX {
     }
   }
 
-  private void recorditem(double n1[], double n2[], double n3[], double center[], double radius, int shadeType,
-      int avnormal) {
+  private void recorditem(double n1[], double n2[], double n3[], double center[], double radius,
+      int shadeType, int avnormal) {
     double p1[] = new double[3];
     double p2[] = new double[3];
     double p3[] = new double[3];
@@ -217,8 +214,8 @@ public class GLAUX {
     JavaGL.glEnd();
   }
 
-  private void subdivide(int depth, double v0[], double v1[], double v2[], double p0[], double radius, int shadeType,
-      int avnormal) {
+  private void subdivide(int depth, double v0[], double v1[], double v2[], double p0[],
+      double radius, int shadeType, int avnormal) {
     double w0[] = new double[3];
     double w1[] = new double[3];
     double w2[] = new double[3];
@@ -281,13 +278,13 @@ public class GLAUX {
   /**
    * drawbox:
    *
-   * draws a rectangular box with the given x, y, and z ranges. The box is
-   * axis-aligned.
+   * draws a rectangular box with the given x, y, and z ranges. The box is axis-aligned.
    */
   private void drawbox(double x0, double x1, double y0, double y1, double z0, double z1, int type) {
-    double n[][] = { { -1.0, 0.0, 0.0 }, { 0.0, 1.0, 0.0 }, { 1.0, 0.0, 0.0 }, { 0.0, -1.0, 0.0 }, { 0.0, 0.0, 1.0 },
-        { 0.0, 0.0, -1.0 } };
-    int faces[][] = { { 0, 1, 2, 3 }, { 3, 2, 6, 7 }, { 7, 6, 5, 4 }, { 4, 5, 1, 0 }, { 5, 6, 2, 1 }, { 7, 4, 0, 3 } };
+    double n[][] = {{-1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {1.0, 0.0, 0.0}, {0.0, -1.0, 0.0},
+        {0.0, 0.0, 1.0}, {0.0, 0.0, -1.0}};
+    int faces[][] =
+        {{0, 1, 2, 3}, {3, 2, 6, 7}, {7, 6, 5, 4}, {4, 5, 1, 0}, {5, 6, 2, 1}, {7, 4, 0, 3}};
     double v[][] = new double[8][3];
     double tmp;
     int i;
@@ -332,8 +329,8 @@ public class GLAUX {
   /**
    * doughnut:
    *
-   * draws a doughnut, centered at (0, 0, 0) whose axis is aligned with the
-   * z-axis. The doughnut's major radius is R, and minor radius is r.
+   * draws a doughnut, centered at (0, 0, 0) whose axis is aligned with the z-axis. The doughnut's
+   * major radius is R, and minor radius is r.
    */
   private void doughnut(double r, double R, int nsides, int rings, int type) {
     int i, j;
@@ -414,15 +411,14 @@ public class GLAUX {
     int i;
 
     for (i = 0; i < 20; i++) {
-//	    drawtriangle (i, 0, 1, p0, radius, shadeType, 0);
+      // drawtriangle (i, 0, 1, p0, radius, shadeType, 0);
     }
   }
 
   /**
-   * linked lists--display lists for each different type of geometric objects. The
-   * linked list is searched, until an object of the requested size is found. If
-   * no geometric object of that size has been previously made, a new one is
-   * created.
+   * linked lists--display lists for each different type of geometric objects. The linked list is
+   * searched, until an object of the requested size is found. If no geometric object of that size
+   * has been previously made, a new one is created.
    */
   /** GLuint findList (int index, GLdouble *paramArray, int size) */
   private int findList(int index, double paramArray[], int size) {
@@ -484,13 +480,13 @@ public class GLAUX {
   }
 
   /** GLenum auxInitWindow (char *title) */
-//    public void auxInitWindow (Applet o) {
+  // public void auxInitWindow (Applet o) {
   public void auxInitWindow(Component o) {
-//	JavaApplet = o;
-//	JavaComponent = o;
+    // JavaApplet = o;
+    // JavaComponent = o;
     // call resize to make the correct size
     // WindowX and WindowY have no meanings in applet
-//	o.resize (WindowWidth, WindowHeight);
+    // o.resize (WindowWidth, WindowHeight);
     o.setSize(WindowWidth, WindowHeight);
     JavaGL.glXMakeCurrent(o, WindowX, WindowY);
     // reshape has not been used in Java2, and seems redundant here
@@ -502,13 +498,13 @@ public class GLAUX {
   }
 
   /**
-   * Render wire frame or solid sphere. If no display list with the current model
-   * size exists, create a new display list.
+   * Render wire frame or solid sphere. If no display list with the current model size exists,
+   * create a new display list.
    */
   /** void auxWireSphere (GLdouble radius) */
   public void auxWireSphere(double radius) {
     GLUquadricObj quadObj;
-    double sizeArray[] = { radius };
+    double sizeArray[] = {radius};
     int displayList = findList(SPHEREWIRE, sizeArray, 1);
 
     if (displayList == 0) {
@@ -525,7 +521,7 @@ public class GLAUX {
   /** void auxSolidSphere (GLdouble radius) */
   public void auxSolidSphere(double radius) {
     GLUquadricObj quadObj;
-    double sizeArray[] = { radius };
+    double sizeArray[] = {radius};
     int displayList = findList(SPHERESOLID, sizeArray, 1);
 
     if (displayList == 0) {
@@ -541,17 +537,18 @@ public class GLAUX {
   }
 
   /**
-   * Render wire frame or solid cube. If no display list with the current model
-   * size exists, create a new display list.
+   * Render wire frame or solid cube. If no display list with the current model size exists, create
+   * a new display list.
    */
   /** void auxWireCube (GLdouble size) */
   public void auxWireCube(double size) {
-    double sizeArray[] = { size };
+    double sizeArray[] = {size};
     int displayList = findList(CUBEWIRE, sizeArray, 1);
 
     if (displayList == 0) {
       JavaGL.glNewList(makeModelPtr(CUBEWIRE, sizeArray, 1), GL.GL_COMPILE_AND_EXECUTE);
-      drawbox(-size / 2.0, size / 2.0, -size / 2.0, size / 2.0, -size / 2.0, size / 2.0, GL.GL_LINE_LOOP);
+      drawbox(-size / 2.0, size / 2.0, -size / 2.0, size / 2.0, -size / 2.0, size / 2.0,
+          GL.GL_LINE_LOOP);
       JavaGL.glEndList();
     } else {
       JavaGL.glCallList(displayList);
@@ -560,12 +557,13 @@ public class GLAUX {
 
   /** void auxSolidCube (GLdouble size) */
   public void auxSolidCube(double size) {
-    double sizeArray[] = { size };
+    double sizeArray[] = {size};
     int displayList = findList(CUBESOLID, sizeArray, 1);
 
     if (displayList == 0) {
       JavaGL.glNewList(makeModelPtr(CUBESOLID, sizeArray, 1), GL.GL_COMPILE_AND_EXECUTE);
-      drawbox(-size / 2.0, size / 2.0, -size / 2.0, size / 2.0, -size / 2.0, size / 2.0, GL.GL_QUADS);
+      drawbox(-size / 2.0, size / 2.0, -size / 2.0, size / 2.0, -size / 2.0, size / 2.0,
+          GL.GL_QUADS);
       JavaGL.glEndList();
     } else {
       JavaGL.glCallList(displayList);
@@ -573,17 +571,18 @@ public class GLAUX {
   }
 
   /**
-   * Render wire frame or solid cube. If no display list with the current model
-   * size exists, create a new display list.
+   * Render wire frame or solid cube. If no display list with the current model size exists, create
+   * a new display list.
    */
   /** void auxWireBox (GLdouble width, GLdouble height, GLdouble depth) */
   public void auxWireBox(double width, double height, double depth) {
-    double sizeArray[] = { width, height, depth };
+    double sizeArray[] = {width, height, depth};
     int displayList = findList(BOXWIRE, sizeArray, 3);
 
     if (displayList == 0) {
       JavaGL.glNewList(makeModelPtr(BOXWIRE, sizeArray, 3), GL.GL_COMPILE_AND_EXECUTE);
-      drawbox(-width / 2.0, width / 2.0, -height / 2.0, height / 2.0, -depth / 2.0, depth / 2.0, GL.GL_LINE_LOOP);
+      drawbox(-width / 2.0, width / 2.0, -height / 2.0, height / 2.0, -depth / 2.0, depth / 2.0,
+          GL.GL_LINE_LOOP);
       JavaGL.glEndList();
     } else {
       JavaGL.glCallList(displayList);
@@ -592,12 +591,13 @@ public class GLAUX {
 
   /** void auxSolidBox (GLdouble width, GLdouble height, GLdouble depth) */
   public void auxSolidBox(double width, double height, double depth) {
-    double sizeArray[] = { width, height, depth };
+    double sizeArray[] = {width, height, depth};
     int displayList = findList(BOXSOLID, sizeArray, 3);
 
     if (displayList == 0) {
       JavaGL.glNewList(makeModelPtr(BOXSOLID, sizeArray, 3), GL.GL_COMPILE_AND_EXECUTE);
-      drawbox(-width / 2.0, width / 2.0, -height / 2.0, height / 2.0, -depth / 2.0, depth / 2.0, GL.GL_QUADS);
+      drawbox(-width / 2.0, width / 2.0, -height / 2.0, height / 2.0, -depth / 2.0, depth / 2.0,
+          GL.GL_QUADS);
       JavaGL.glEndList();
     } else {
       JavaGL.glCallList(displayList);
@@ -605,12 +605,12 @@ public class GLAUX {
   }
 
   /**
-   * Render wire frame or solid tori. If no display list with the current model
-   * size exists, create a new display list.
+   * Render wire frame or solid tori. If no display list with the current model size exists, create
+   * a new display list.
    */
   /** void auxWireTorus (GLdouble innerRadius, GLdouble outerRadius) */
   public void auxWireTorus(double innerRadius, double outerRadius) {
-    double sizeArray[] = { innerRadius, outerRadius };
+    double sizeArray[] = {innerRadius, outerRadius};
     int displayList = findList(TORUSWIRE, sizeArray, 2);
 
     if (displayList == 0) {
@@ -624,7 +624,7 @@ public class GLAUX {
 
   /** void auxSolidTorus (GLdouble innerRadius, GLdouble outerRadius) */
   public void auxSolidTorus(double innerRadius, double outerRadius) {
-    double sizeArray[] = { innerRadius, outerRadius };
+    double sizeArray[] = {innerRadius, outerRadius};
     int displayList = findList(TORUSSOLID, sizeArray, 2);
 
     if (displayList == 0) {
@@ -637,13 +637,13 @@ public class GLAUX {
   }
 
   /**
-   * Render wire frame or solid cylinders. If no display list with the current
-   * model size exists, create a new display list.
+   * Render wire frame or solid cylinders. If no display list with the current model size exists,
+   * create a new display list.
    */
   /** void auxWireCylinder (GLdouble radius, GLdouble height) */
   public void auxWireCylinder(double radius, double height) {
     GLUquadricObj quadObj;
-    double sizeArray[] = { radius, height };
+    double sizeArray[] = {radius, height};
     int displayList = findList(CYLINDERWIRE, sizeArray, 2);
 
     if (displayList == 0) {
@@ -664,7 +664,7 @@ public class GLAUX {
   /** void auxSolidCylinder (GLdouble radius, GLdouble height) */
   public void auxSolidCylinder(double radius, double height) {
     GLUquadricObj quadObj;
-    double sizeArray[] = { radius, height };
+    double sizeArray[] = {radius, height};
     int displayList = findList(CYLINDERSOLID, sizeArray, 2);
 
     if (displayList == 0) {
@@ -684,14 +684,14 @@ public class GLAUX {
   }
 
   /**
-   * Render wire frame or solid icosahedra. If no display list with the current
-   * model size exists, create a new display list.
+   * Render wire frame or solid icosahedra. If no display list with the current model size exists,
+   * create a new display list.
    */
   /** void auxWireIcosahedron (GLdouble radius) */
   public void auxWireIcosahedron(double radius) {
-    double sizeArray[] = { radius };
+    double sizeArray[] = {radius};
     int displayList = findList(ICOSAWIRE, sizeArray, 1);
-    double center[] = { 0.0, 0.0, 0.0 };
+    double center[] = {0.0, 0.0, 0.0};
 
     if (displayList == 0) {
       JavaGL.glNewList(makeModelPtr(ICOSAWIRE, sizeArray, 1), GL.GL_COMPILE_AND_EXECUTE);
@@ -704,9 +704,9 @@ public class GLAUX {
 
   /** void auxSolidIcosahedron (GLdouble radius) */
   public void auxSolidIcosahedron(double radius) {
-    double sizeArray[] = { radius };
+    double sizeArray[] = {radius};
     int displayList = findList(ICOSASOLID, sizeArray, 1);
-    double center[] = { 0.0, 0.0, 0.0 };
+    double center[] = {0.0, 0.0, 0.0};
 
     if (displayList == 0) {
       JavaGL.glNewList(makeModelPtr(ICOSASOLID, sizeArray, 1), GL.GL_COMPILE_AND_EXECUTE);
@@ -718,13 +718,13 @@ public class GLAUX {
   }
 
   /**
-   * Render wire frame or solid cones. If no display list with the current model
-   * size exists, create a new display list.
+   * Render wire frame or solid cones. If no display list with the current model size exists, create
+   * a new display list.
    */
   /** void auxWireCone (GLdouble base, GLdouble height) */
   public void auxWireCone(double base, double height) {
     GLUquadricObj quadObj;
-    double sizeArray[] = { base, height };
+    double sizeArray[] = {base, height};
     int displayList = findList(CONEWIRE, sizeArray, 2);
 
     if (displayList == 0) {
@@ -741,7 +741,7 @@ public class GLAUX {
   /** void auxSolidCone (GLdouble base, GLdouble height) */
   public void auxSolidCone(double base, double height) {
     GLUquadricObj quadObj;
-    double sizeArray[] = { base, height };
+    double sizeArray[] = {base, height};
     int displayList = findList(CONESOLID, sizeArray, 2);
 
     if (displayList == 0) {

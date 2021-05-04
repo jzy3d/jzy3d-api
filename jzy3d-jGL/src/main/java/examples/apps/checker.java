@@ -1,9 +1,7 @@
 package examples.apps;
 /*
- *  checker.java
- *  This program texture maps a checkerboard image onto
- *  two rectangles.  This program clamps the texture, if
- *  the texture coordinates fall outside 0.0 and 1.0.
+ * checker.java This program texture maps a checkerboard image onto two rectangles. This program
+ * clamps the texture, if the texture coordinates fall outside 0.0 and 1.0.
  */
 
 import java.awt.Frame;
@@ -44,8 +42,8 @@ public class checker extends GLCanvas {
 
     makeCheckImage();
     myGL.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
-    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, 3, checkImageWidth, checkImageHeight, 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
-        checkImage);
+    myGL.glTexImage2D(GL.GL_TEXTURE_2D, 0, 3, checkImageWidth, checkImageHeight, 0, GL.GL_RGB,
+        GL.GL_UNSIGNED_BYTE, checkImage);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_S, GL.GL_CLAMP);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_WRAP_T, GL.GL_CLAMP);
     myGL.glTexParameterf(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_NEAREST);
@@ -91,10 +89,10 @@ public class checker extends GLCanvas {
 
   public void keyboard(char key, int x, int y) {
     switch (key) {
-    case 27:
-      System.exit(0);
-    default:
-      break;
+      case 27:
+        System.exit(0);
+      default:
+        break;
     }
   }
 
