@@ -5,7 +5,6 @@ package examples.apps;
 
 import java.awt.Frame;
 import java.io.IOException;
-
 import jgl.GL;
 import jgl.GLCanvas;
 

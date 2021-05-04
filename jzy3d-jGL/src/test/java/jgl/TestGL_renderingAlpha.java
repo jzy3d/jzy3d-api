@@ -1,7 +1,6 @@
 package jgl;
 
 import org.junit.Test;
-
 import jgl.context.gl_context;
 import jgl.context.gl_util;
 import junit.framework.Assert;

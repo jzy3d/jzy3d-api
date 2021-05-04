@@ -7,7 +7,6 @@ import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
 // must import jgl.GL....
 import jgl.GL;
 import jgl.GLAUX;
