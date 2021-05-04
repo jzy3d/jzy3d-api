@@ -1,6 +1,7 @@
 package org.jzy3d.plot2d.rendering;
 
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
@@ -28,6 +29,17 @@ public class AWTGraphicsUtils {
       GlyphVector gv = font.createGlyphVector(frc, string);
       g2d.drawGlyphVector(gv, x, y);
     }
+  }
+  
+  public static int stringWidth(Graphics2D g2d, String string) {
+    FontMetrics fm = g2d.getFontMetrics();
+    if (fm != null) {
+      return fm.stringWidth(string);
+    }
+    else {
+      return -1;
+    }
+
   }
 
   public static void printGraphicParameters(Graphics2D g2) {
