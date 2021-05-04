@@ -486,7 +486,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   protected void paintProfileInfo(BufferedImage glImage) {
     Graphics2D g2d = glImage.createGraphics();
 
-    AWTGraphicsUtils.configureRenderingHints((Graphics2D) glImage.getGraphics());
+    AWTGraphicsUtils.configureRenderingHints(g2d);
 
     synchronized (profileInfo) {
       for (ProfileInfo profile : profileInfo) {
