@@ -17,7 +17,6 @@
 package jgl;
 
 import java.lang.reflect.InvocationTargetException;
-
 import jgl.glu.GLUnurbsObj;
 import jgl.glu.GLUquadricObj;
 

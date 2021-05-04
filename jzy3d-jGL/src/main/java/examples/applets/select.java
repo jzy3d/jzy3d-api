@@ -2,7 +2,6 @@ package examples.applets;
 
 import java.applet.Applet;
 import java.awt.Graphics;
-
 // must import jgl.GL....
 import jgl.GL;
 import jgl.GLAUX;

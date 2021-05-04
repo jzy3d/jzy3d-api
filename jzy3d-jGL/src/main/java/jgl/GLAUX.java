@@ -18,7 +18,6 @@ package jgl;
 
 import java.applet.Applet;
 import java.awt.Component;
-
 import jgl.glaux.MODELPTR;
 import jgl.glaux.mat_t;
 import jgl.glaux.teapot;

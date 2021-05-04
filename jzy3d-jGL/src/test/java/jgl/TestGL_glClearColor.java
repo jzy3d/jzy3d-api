@@ -2,7 +2,6 @@ package jgl;
 
 import org.junit.Assert;
 import org.junit.Test;
-
 import jgl.context.gl_util;
 
 public class TestGL_glClearColor {

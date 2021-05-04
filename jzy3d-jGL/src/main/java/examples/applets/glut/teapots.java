@@ -5,7 +5,6 @@ package examples.applets.glut;
  */
 
 import java.util.Date;
-
 import jgl.GL;
 import jgl.GLApplet;
 

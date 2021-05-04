@@ -200,6 +200,15 @@ public class GL {
     // we may be late of 1 image to adapt to an HiDPI change.
     if (autoAdaptToHiDPI) {
       getPixelScaleFromG2D(g2d);
+
+      if (!renderedOnce) {
+        // no event was sent has the default values
+        // are 1,1 so we force an event
+        if (pixelScaleX == 1 && pixelScaleY == 1)
+          firePixelScaleChanged(1, 1);
+        renderedOnce = true;
+      }
+
     } else {
       resetPixelScale();
       if (!renderedOnce) {
