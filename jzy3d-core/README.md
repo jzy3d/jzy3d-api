@@ -1,24 +1,21 @@
 Jzy3d - Core
 ================================
 
-DEPLOY SOURCE AND JAVADOC :
-```
-mvn clean source:jar javadoc:jar deploy
- ```
+## Javadoc schemas
 
-To install a lib locally:
+### Camera
 
-```
-mvn install:install-file -DgroupId=org.jzyio
- -DartifactId=jzyio -Dversion=0.1 -Dpackaging=jar -Dfile=./lib/misc/org.jzyio-0.1.jar
-```
+#### Model
+<img src="src/main/java/org/jzy3d/plot3d/rendering/view/doc-files/camera.png"/>
 
+#### Orthogonal projection
+<img src="src/main/java/org/jzy3d/plot3d/rendering/view/doc-files/orthogonal.png"/>
 
-To download javadocs for dependencies
+#### Perspective projection
+<img src="src/main/java/org/jzy3d/plot3d/rendering/view/doc-files/perspective.png"/>
 
-```
-mvn dependency:resolve -Dclassifier=javadoc
-```
+### Axis
 
+#### AxisLabelRotator
 
-
+<img src="src/main/java/org/jzy3d/plot3d/primitives/axis/doc-files/AxisBox-Label.png"/>

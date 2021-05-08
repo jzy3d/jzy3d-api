@@ -186,9 +186,26 @@ Jzy3d depends on the following libraries that are available on [Jzy3d Maven repo
 * [jPLY](https://github.com/jzy3d/jPLY) supports the PLY format for loading 3d objects
 * [vecmath](https://github.com/jzy3d/vecmath) is a clone of a former java package
 
+# How to add to your project
+
+The tutorial provides the code [samples you need to add the library to a Maven project](https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-tutorials#adding-dependencies).
+
+### Download sources & javadocs in IDE
+
+If you did not built the framework yourself and depend on Jzy3D Maven Repository, then you may wish to see sources and javadoc in your IDE. Simply call :
+
+```
+mvn dependency:resolve -Dclassifier=javadoc
+mvn dependency:resolve -Dclassifier=sources
+```
+
+
+
 # How to build
 
 ## From command line
+
+### Build and test all
 
 ```
 mvn clean install
@@ -198,6 +215,16 @@ The [integration tests might be disabled on purpose](https://github.com/jzy3d/jz
 sometime sensitive to thin rendering differences across computers. If they are enabled, you may have tests named ```ITTest*``` failing. In this case, you may
 * Comment it from [Surefire plugin configuration](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L168). The best is to edit the Maven pom to only disable ITTest*. If you are busy, you may simply run ```mvn install -DskipTests```
 * Skip it from [Faisafe if this plugin is currently active](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L186) in the Maven pom. To do so run ```mvn install -DskipITs```
+
+
+### Deploy source & javadocs
+```
+mvn clean source:jar javadoc:jar deploy
+ ```
+
+
+
+
 
 ## From intellij
 
@@ -211,7 +238,7 @@ Follow these steps to import in IntelliJ
 
 ## From eclipse
 
-`Import Maven project` or `Import Maven project` from SCM
+`Import Maven project` or `Import Maven project from SCM`
 
 
 # How to get help
@@ -230,6 +257,7 @@ Version 2.0 is a major refactor to allow using multiple OpenGL implementations, 
 
 | Class name in 1.* | Class name in 2.0 |
 |-------------------|-------------------|
+| Quality.Advanced, Intermediate | Quality.Advanced(), Intermediate() |
 | AbstractDrawable | Drawable |
 | AbstractWireframeable | Wireframeable |
 | AxeBox | AxisBox |
