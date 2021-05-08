@@ -18,8 +18,8 @@ import java.nio.ByteOrder;
 import org.jzy3d.painters.IPainter;
 
 /**
- * Convert AWT {@link Image}s to {@link ByteBuffer} or <code>int[]</code> pixel buffers suitable for direct
- * OpenGL rendering via {@link IPainter#glDrawPixels(int, int, int, int, Buffer)}.
+ * Convert AWT {@link Image}s to {@link ByteBuffer} or <code>int[]</code> pixel buffers suitable for
+ * direct OpenGL rendering via {@link IPainter#glDrawPixels(int, int, int, int, Buffer)}.
  * 
  * @author Martin
  */
@@ -50,7 +50,14 @@ public class AWTImageConvert {
     return convertARGBtoRGBA(px, width, height, true);
   }
 
-  /** Return the image pixels in default Java int ARGB format. */
+  /**
+   * Return the image pixels in default Java int ARGB format.
+   * 
+   * @param image
+   * @param width
+   * @param height
+   * @return
+   */
   public static int[] getImagePixels(Image image, int width, int height) {
     int[] pixels = null;
 
@@ -127,7 +134,6 @@ public class AWTImageConvert {
       g = (p >> 16) & 0xFF;
       b = (p >> 8) & 0xFF;
       a = (p >> 0) & 0xFF;
-
       bytes[j + 0] = (byte) r; // fill in bytes in RGBA order
       bytes[j + 1] = (byte) g;
       bytes[j + 2] = (byte) b;
@@ -136,7 +142,7 @@ public class AWTImageConvert {
     }
     return bytes;
   }
-  
+
   /**
    * Flip an array of pixels vertically
    * 
@@ -176,6 +182,9 @@ public class AWTImageConvert {
 
   /**
    * Return a {@link ByteBuffer} out of the image.
+   * 
+   * Not used in the framework. Look rather for {@link #getImageAsByteBuffer(Image, int, int)} that
+   * has same signature and more used implementation.
    * 
    * @param img
    * @param width
