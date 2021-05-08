@@ -81,6 +81,9 @@
 
 		<module>jzy3d-io-xls</module>
 		<module>jzy3d-io-reports</module>
+
+		<module>tests/jzy3d-tests-java9</module>
+
 	</modules>
 
 	<properties>

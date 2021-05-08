@@ -2,6 +2,7 @@ package org.jzy3d.maths;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -162,6 +163,11 @@ public class BoundingBox3d {
     for (Point p : pts)
       add(p.xyz.x, p.xyz.y, p.xyz.z);
   }
+  
+  public void add(Drawable drawable) {
+    add(drawable.getBounds());
+  }
+
 
   /**
    * Add a Point3d to the BoundingBox3d. A shortcut for: <code>add(p.x, p.y, p.z);</code>
@@ -538,5 +544,6 @@ public class BoundingBox3d {
     }
 
   }
+
 
 }
