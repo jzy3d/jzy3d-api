@@ -31,6 +31,10 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
 public class ViewAndColorbarsLayout implements IViewportLayout {
   protected float screenSeparator = 1.0f;
   protected boolean hasMeta = true;
+  
+  protected ViewportConfiguration sceneViewport;
+  protected ViewportConfiguration backgroundViewport;
+
 
   @Override
   public void update(Chart chart) {
@@ -123,9 +127,4 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   public ViewportConfiguration getBackgroundViewport() {
     return backgroundViewport;
   }
-
-
-
-  protected ViewportConfiguration sceneViewport;
-  protected ViewportConfiguration backgroundViewport;
 }

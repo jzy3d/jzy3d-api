@@ -11,13 +11,14 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import javax.imageio.ImageIO;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.image.GLImage;
+import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import jgl.GL;
@@ -353,7 +354,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
    */
   @Override
   public void glRasterPos3f(float x, float y, float z) {
-    if (!(z != 0 || Float.isNaN(z)))
+    if (!(z == 0 || Float.isNaN(z)))
       throw new NotImplementedException("z:" + z);
     else
       gl.glRasterPos2f(x, y);
@@ -419,7 +420,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
       int w = img.getWidth(null);
       int h = img.getHeight(null);
-      int[] pix = GLImage.getImagePixels(img, w, h);
+      int[] pix = AWTImageConvert.getImagePixels(img, w, h);
       int[][][] pxl = toPixels(w, h, pix);
 
       gl.glDrawPixels(w, h, format, GL.GL_INT, pxl);
@@ -611,6 +612,33 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     // glut.glutBitmapString(font, string);
 
   }
+  
+  /**
+   * A very failing implementation. SHOULD SUPPORT AWT BufferedImage in EmulGL - or reverse converse
+   */
+  @Override
+  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight,
+      Coord2d pixelZoom, Coord3d imagePosition) {
+    glPixelZoom(pixelZoom.x, pixelZoom.y);
+    glRasterPos3f(imagePosition.x, imagePosition.y, 0);
+    // painter.glRasterPos2f(xpict, ypict);
+
+    synchronized (imageBuffer) { // we don't want to draw image while it is being set by setImage
+      glDrawPixels(imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
+    }
+    
+    
+   // getGL().appendImageToDraw(legendImage, imagePosition.x, imagePosition.y);
+
+  }
+
+  // elements of GL spec picked in JOGL GL interface
+  public static final int GL_RGBA = 0x1908;
+  public static final int GL_UNSIGNED_BYTE = 0x1401;
+
+  
+  /* ****************************** TEXT *********************************/
+  
 
   /**
    * Process the given font length to further process alignement.

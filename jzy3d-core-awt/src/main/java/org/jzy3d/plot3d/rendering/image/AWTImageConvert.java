@@ -15,16 +15,31 @@ import java.awt.image.WritableRaster;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import org.jzy3d.painters.IPainter;
 
-public class GLImage {
-  public static ByteBuffer getImageAsGlByteBuffer(Image image, int width, int height) {
+/**
+ * Convert AWT images to pixel buffer suitable for direct OpenGL rendering via
+ * {@link IPainter#glDrawPixels(int, int, int, int, Buffer)}.
+ * 
+ * @author Martin
+ */
+public class AWTImageConvert {
+  /**
+   * Create a {@link ByteBuffer} containing a RGBA pixels out of an Image made of ARGB pixels.
+   * 
+   * The buffer can later be drawn by <code>
+   * GL2.glDrawPixels(imgW, imgH, GL2.GL_RGBA, GL2.GL_UNSIGNED_BYTE, byteBuffer);
+   * </code>
+   * 
+   * @param image
+   * @param width
+   * @param height
+   * @return
+   */
+  public static ByteBuffer getImageAsByteBuffer(Image image, int width, int height) {
     int[] px = getImagePixels(image, width, height);
     return convertImagePixels(px, width, height, true);
   }
-
-  // FOLLOWING CONVERTER FUNCTIONS HAVE BEEN PICKED FROM:
-  // http://www.potatoland.com/code/gl/GLImage.java
-
 
   /** Return the image pixels in default Java int ARGB format. */
   public static int[] getImagePixels(Image image, int width, int height) {
@@ -58,12 +73,10 @@ public class GLImage {
    */
   public static ByteBuffer convertImagePixels(int[] jpixels, int imgw, int imgh,
       boolean flipVertically) {
-    byte[] bytes; // will hold pixels as RGBA bytes
     if (flipVertically) {
       jpixels = flipPixels(jpixels, imgw, imgh); // flip Y axis
     }
-    bytes = convertARGBtoRGBA(jpixels);
-    return allocBytes(bytes); // convert to ByteBuffer and return
+    return allocBytes(convertARGBtoRGBA(jpixels));
   }
 
   /**

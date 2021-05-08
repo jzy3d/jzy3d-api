@@ -235,7 +235,6 @@ public class View {
     return pixelScale.clone();
   }
 
-
   /**
    * Return HiDPI status as ACTUALLY possible by the ICanvas on the current screen and computer,
    * regardless of the {@link Quality#setHiDPIEnabled(true)}.
@@ -1061,7 +1060,7 @@ public class View {
       viewbounds = new BoundingBox3d(0, 1, 0, 1, 0, 1);
     BoundingBox3d boundsScaled = new BoundingBox3d();
     boundsScaled.add(viewbounds.scale(scaling));
-
+    
     if (maintainAllObjectsInView) {
       boundsScaled.add(getSceneGraphBounds().scale(scaling));
       boundsScaled.add(axis.getWholeBounds().scale(scaling));

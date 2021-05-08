@@ -6,6 +6,7 @@ import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.IColorMap;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
@@ -17,17 +18,22 @@ import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
  */
 public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     implements AWTImageGenerator {
-  
+
   public static final int MIN_BAR_WIDTH = 110;
   public static final int MIN_BAR_HEIGHT = 100;
 
-  
   protected ColorMapper mapper;
   protected ITickProvider provider;
   protected ITickRenderer renderer;
   protected double min;
   protected double max;
-  
+
+  protected static int BAR_WIDTH_DEFAULT = 20;
+  protected int barWidth;
+  protected int textToBarHorizontalMargin = 1;
+
+  protected Coord2d pixelScale = new Coord2d(1, 1);
+
   public AWTColorbarImageGenerator(IColorMap map, float min, float max, ITickProvider provider,
       ITickRenderer renderer) {
     this(new ColorMapper(map, min, max), provider, renderer);
@@ -44,20 +50,26 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   }
 
 
-  //public 
-  
+  // public
+
   @Override
   public BufferedImage toImage(int width, int height) {
-    return toImage(width, height, 20);
+    return toImage(width, height, BAR_WIDTH_DEFAULT);
   }
 
   /** Renders the {@link AWTColorbarImageGenerator} to an image. */
   public BufferedImage toImage(int width, int height, int barWidth) {
     if (barWidth > width)
       return null;
+
+    this.barWidth = width;
+
+
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     Graphics2D graphic = image.createGraphics();
-    
+
+    // graphic.scale(pixelScale.x, pixelScale.y);
+
     AWTGraphicsUtils.configureRenderingHints(graphic);
 
     graphic.setColor(AWTColor.toAWT(Color.WHITE));
@@ -71,11 +83,29 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     return image;
   }
 
+  /**
+   * Draw a bar border. Keep a space of half text height between the top of image and top of
+   * colorbar (same for bottom) to ensure a tick label at max or min position would not be cut at
+   * image border.
+   * 
+   * The text size is given by {@link #setFont(org.jzy3d.painters.Font)}
+   * 
+   * @param height
+   * @param barWidth
+   * @param graphic
+   */
   public void drawBarContour(int height, int barWidth, Graphics2D graphic) {
     graphic.setColor(AWTColor.toAWT(foregroundColor));
     graphic.drawRect(0, textSize / 2, barWidth, height - textSize);
   }
 
+  /**
+   * Draw a bar content using the provided color mapper.
+   * 
+   * @param height
+   * @param barWidth
+   * @param graphic
+   */
   public void drawBarColors(int height, int barWidth, Graphics2D graphic) {
     for (int h = textSize / 2; h <= (height - textSize / 2); h++) {
       // Compute value & color
@@ -96,13 +126,51 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
       String txt;
       for (int t = 0; t < ticks.length; t++) {
         ypos = (int) (textSize
-            + (height - textSize - (height - textSize) * ((ticks[t] - min) / (max - min)))); 
+            + (height - textSize - (height - textSize) * ((ticks[t] - min) / (max - min))));
         txt = renderer.format(ticks[t]);
-        graphic.drawString(txt, barWidth + 1, ypos);
+        graphic.drawString(txt, barWidth + textToBarHorizontalMargin, ypos);
       }
     }
   }
 
+  public Coord2d getPixelScale() {
+    return pixelScale;
+  }
+
+  public void setPixelScale(Coord2d pixelScale) {
+    this.pixelScale = pixelScale;
+  }
+
   /* */
+
+  /**
+   * Compute the optimal image width to contain the text as defined by the tick provided and
+   * renderer.
+   */
+  public int getPreferedWidth(Graphics2D graphic) {
+    int maxWidth = getMaxTickLabelWidth(graphic);
+
+
+    return maxWidth + textToBarHorizontalMargin + barWidth;
+  }
+
+  public int getMaxTickLabelWidth(Graphics2D graphic) {
+    int maxWidth = 0;
+    if (provider != null) {
+      double[] ticks = provider.generateTicks(min, max);
+      String tickLabel;
+      for (int t = 0; t < ticks.length; t++) {
+        tickLabel = renderer.format(ticks[t]);
+        int stringWidth = graphic.getFontMetrics().stringWidth(tickLabel);
+
+        if (maxWidth < stringWidth) {
+          maxWidth = stringWidth;
+        }
+
+        // graphic.drawString(txt, barWidth + textToBarHorizontalMargin, ypos);
+      }
+    }
+    return maxWidth;
+  }
 
 }

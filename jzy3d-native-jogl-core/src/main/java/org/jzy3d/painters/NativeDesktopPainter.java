@@ -4,9 +4,11 @@ import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -356,6 +358,8 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glTexEnvi(int target, int pname, int param) {
     gl.getGL2().glTexEnvi(target, pname, param);
   }
+  
+  // DRAW IMAGES
 
   @Override
   public void glRasterPos3f(float x, float y, float z) {
@@ -395,6 +399,26 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       byte[] bitmap, int bitmap_offset) {
     gl.getGL2().glBitmap(width, height, xorig, yorig, xmove, ymove, bitmap, bitmap_offset);
   }
+  
+  
+  @Override
+  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight,
+      Coord2d pixelZoom, Coord3d imagePosition) {
+    glPixelZoom(pixelZoom.x, pixelZoom.y);
+    glRasterPos3f(imagePosition.x, imagePosition.y, imagePosition.z);
+    // painter.glRasterPos2f(xpict, ypict);
+
+    synchronized (imageBuffer) { // we don't want to draw image while it is being set by setImage
+      glDrawPixels(imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
+    }
+  }
+
+  // elements of GL spec picked in JOGL GL interface
+  public static final int GL_RGBA = 0x1908;
+  public static final int GL_UNSIGNED_BYTE = 0x1401;
+
+  
+  // STRINGS
 
   @Override
   public void glutBitmapString(int font, String string) {

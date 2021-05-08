@@ -16,7 +16,7 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.utils.LoggerUtils;
 
-public class ITTestSurfaceChart {
+public class ITTestEmulGLSurfaceChart {
   @Test
   public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
     LoggerUtils.minimal();
