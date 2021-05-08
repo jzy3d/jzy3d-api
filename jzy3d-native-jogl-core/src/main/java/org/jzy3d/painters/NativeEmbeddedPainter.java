@@ -1,9 +1,11 @@
 package org.jzy3d.painters;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
@@ -921,5 +923,12 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   public int getTextLengthInPixels(Font font, String string) {
     // TODO Auto-generated method stub
     return 0;
+  }
+
+  @Override
+  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight, Coord2d pixelZoom,
+      Coord3d imagePosition) {
+    // TODO Auto-generated method stub
+    
   }
 }

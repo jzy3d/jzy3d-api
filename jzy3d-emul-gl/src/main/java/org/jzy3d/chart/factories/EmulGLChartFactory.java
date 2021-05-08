@@ -18,7 +18,6 @@ public class EmulGLChartFactory extends ChartFactory {
     super(windowFactory);
   }
 
-
   @Override
   public Chart newChart(IChartFactory factory, Quality quality) {
     AWTChart chart = new AWTChart(factory, quality);
@@ -37,7 +36,6 @@ public class EmulGLChartFactory extends ChartFactory {
   @Override
   public CameraThreadControllerWithTime newCameraThreadController(Chart chart) {
     CameraThreadControllerWithTime controller = new CameraThreadControllerWithTime(chart, 60);
-    //controller.setRateLimiter(null);
     return controller;
   }
 
