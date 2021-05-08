@@ -18,12 +18,21 @@ import java.nio.ByteOrder;
 import org.jzy3d.painters.IPainter;
 
 /**
- * Convert AWT images to pixel buffer suitable for direct OpenGL rendering via
- * {@link IPainter#glDrawPixels(int, int, int, int, Buffer)}.
+ * Convert AWT {@link Image}s to {@link ByteBuffer} or <code>int[]</code> pixel buffers suitable for direct
+ * OpenGL rendering via {@link IPainter#glDrawPixels(int, int, int, int, Buffer)}.
  * 
  * @author Martin
  */
 public class AWTImageConvert {
+  public static ByteBuffer getImageAsByteBuffer(Image image) {
+    return getImageAsByteBuffer(image, image.getWidth(null), image.getHeight(null));
+  }
+
+  public static int[] getImagePixels(Image image) {
+    return getImagePixels(image, image.getWidth(null), image.getHeight(null));
+  }
+
+
   /**
    * Create a {@link ByteBuffer} containing a RGBA pixels out of an Image made of ARGB pixels.
    * 
@@ -38,7 +47,7 @@ public class AWTImageConvert {
    */
   public static ByteBuffer getImageAsByteBuffer(Image image, int width, int height) {
     int[] px = getImagePixels(image, width, height);
-    return convertImagePixels(px, width, height, true);
+    return convertARGBtoRGBA(px, width, height, true);
   }
 
   /** Return the image pixels in default Java int ARGB format. */
@@ -71,14 +80,63 @@ public class AWTImageConvert {
    * @param imgFilename
    * @return ByteBuffer
    */
-  public static ByteBuffer convertImagePixels(int[] jpixels, int imgw, int imgh,
+  public static ByteBuffer convertARGBtoRGBA(int[] pixels, int width, int height,
       boolean flipVertically) {
     if (flipVertically) {
-      jpixels = flipPixels(jpixels, imgw, imgh); // flip Y axis
+      pixels = flipPixels(pixels, width, height); // flip Y axis
     }
-    return allocBytes(convertARGBtoRGBA(jpixels));
+    return allocBytes(convertARGBtoRGBA(pixels));
   }
 
+  /**
+   * Convert pixels from java default ARGB int format to byte array in RGBA format.
+   * 
+   * @param pixels
+   * @return
+   */
+  public static byte[] convertARGBtoRGBA(int[] pixels) {
+    byte[] bytes = new byte[pixels.length * 4]; // will hold pixels as RGBA
+                                                // bytes
+    int p, r, g, b, a;
+    int j = 0;
+    for (int i = 0; i < pixels.length; i++) {
+      // int outPixel = 0x00000000; // AARRGGBB
+      p = pixels[i];
+      a = (p >> 24) & 0xFF; // get pixel bytes in ARGB order
+      r = (p >> 16) & 0xFF;
+      g = (p >> 8) & 0xFF;
+      b = (p >> 0) & 0xFF;
+      bytes[j + 0] = (byte) r; // fill in bytes in RGBA order
+      bytes[j + 1] = (byte) g;
+      bytes[j + 2] = (byte) b;
+      bytes[j + 3] = (byte) a;
+      j += 4;
+    }
+    return bytes;
+  }
+
+  public static byte[] getRGBABytes(int[] pixels) {
+    byte[] bytes = new byte[pixels.length * 4]; // will hold pixels as RGBA
+                                                // bytes
+    int p, r, g, b, a;
+    int j = 0;
+    for (int i = 0; i < pixels.length; i++) {
+      // int outPixel = 0x00000000; // AARRGGBB
+      p = pixels[i];
+      r = (p >> 24) & 0xFF; // get pixel bytes in RGBA order
+      g = (p >> 16) & 0xFF;
+      b = (p >> 8) & 0xFF;
+      a = (p >> 0) & 0xFF;
+
+      bytes[j + 0] = (byte) r; // fill in bytes in RGBA order
+      bytes[j + 1] = (byte) g;
+      bytes[j + 2] = (byte) b;
+      bytes[j + 3] = (byte) a;
+      j += 4;
+    }
+    return bytes;
+  }
+  
   /**
    * Flip an array of pixels vertically
    * 
@@ -100,77 +158,37 @@ public class AWTImageConvert {
     return flippedPixels;
   }
 
-  /**
-   * Convert pixels from java default ARGB int format to byte array in RGBA format.
-   * 
-   * @param jpixels
-   * @return
-   */
-  public static byte[] convertARGBtoRGBA(int[] jpixels) {
-    byte[] bytes = new byte[jpixels.length * 4]; // will hold pixels as RGBA
-                                                 // bytes
-    int p, r, g, b, a;
-    int j = 0;
-    for (int i = 0; i < jpixels.length; i++) {
-      // int outPixel = 0x00000000; // AARRGGBB
-      p = jpixels[i];
-      a = (p >> 24) & 0xFF; // get pixel bytes in ARGB order
-      r = (p >> 16) & 0xFF;
-      g = (p >> 8) & 0xFF;
-      b = (p >> 0) & 0xFF;
-      bytes[j + 0] = (byte) r; // fill in bytes in RGBA order
-      bytes[j + 1] = (byte) g;
-      bytes[j + 2] = (byte) b;
-      bytes[j + 3] = (byte) a;
-      j += 4;
-    }
-    return bytes;
-  }
-
-  public static byte[] getRGBABytes(int[] jpixels) {
-    byte[] bytes = new byte[jpixels.length * 4]; // will hold pixels as RGBA
-                                                 // bytes
-    int p, r, g, b, a;
-    int j = 0;
-    for (int i = 0; i < jpixels.length; i++) {
-      // int outPixel = 0x00000000; // AARRGGBB
-      p = jpixels[i];
-      r = (p >> 24) & 0xFF; // get pixel bytes in RGBA order
-      g = (p >> 16) & 0xFF;
-      b = (p >> 8) & 0xFF;
-      a = (p >> 0) & 0xFF;
-
-      bytes[j + 0] = (byte) r; // fill in bytes in RGBA order
-      bytes[j + 1] = (byte) g;
-      bytes[j + 2] = (byte) b;
-      bytes[j + 3] = (byte) a;
-      j += 4;
-    }
-    return bytes;
-  }
 
   /**
-   * Allocates a ByteBuffer to hold the given array of bytes.
+   * Allocates a {@link ByteBuffer} to hold the given array of bytes.
    * 
-   * @param bytearray
+   * @param byteArray
    * @return ByteBuffer containing the contents of the byte array
    */
-  public static ByteBuffer allocBytes(byte[] bytearray) {
+  public static ByteBuffer allocBytes(byte[] byteArray) {
     ByteBuffer bb =
-        ByteBuffer.allocateDirect(bytearray.length * SIZE_BYTE).order(ByteOrder.nativeOrder());
-    ((Buffer) bb.put(bytearray)).flip();
+        ByteBuffer.allocateDirect(byteArray.length * SIZE_BYTE).order(ByteOrder.nativeOrder());
+    ((Buffer) bb.put(byteArray)).flip();
     return bb;
   }
 
   protected static final int SIZE_BYTE = 1;
 
-  public static ByteBuffer toByteBuffer(Image img, int imgWidth, int imgHeight) {
+  /**
+   * Return a {@link ByteBuffer} out of the image.
+   * 
+   * @param img
+   * @param width
+   * @param height
+   * @return
+   */
+  public static ByteBuffer getByteBuffer(Image img, int width, int height) {
 
     // Create a raster with correct size,
     // and a colorModel and finally a bufImg.
     //
     WritableRaster raster =
-        Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, imgWidth, imgHeight, 4, null);
+        Raster.createInterleavedRaster(DataBuffer.TYPE_BYTE, width, height, 4, null);
     ComponentColorModel colorModel =
         new ComponentColorModel(ColorSpace.getInstance(ColorSpace.CS_sRGB), new int[] {8, 8, 8, 8},
             true, false, Transparency.TRANSLUCENT, DataBuffer.TYPE_BYTE);
@@ -183,7 +201,7 @@ public class AWTImageConvert {
     //
     Graphics2D g = bufImg.createGraphics();
     AffineTransform gt = new AffineTransform();
-    gt.translate(0, imgHeight);
+    gt.translate(0, height);
     gt.scale(1, -1d);
     g.transform(gt);
     g.drawImage(img, null, null);
