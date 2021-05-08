@@ -52,7 +52,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
     int width = canvas.getRendererWidth();
     int height = canvas.getRendererHeight();
-    
+
 
 
     if (doFixHiDPI) {
@@ -76,22 +76,27 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
       legend.setViewPort(width, height, from, to);
 
-      // legend.render(painter); // BYPASS IMAGE RENDERING THAT DOES NOT WORK WELL IN
-      // jGL
+      // BYPASS IMAGE RENDERING THAT DOES NOT WORK WELL IN jGL
+      // legend.render(painter);
 
+      // FALLBACK ON DIRECT AWT IMAGE RENDERING
       if (legend instanceof AWTColorbarLegend) {
         AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
         BufferedImage legendImage = (BufferedImage) awtLegend.getImage();
         int legendWidth = (int) (legendImage.getWidth() / emulGL.getGL().getPixelScaleX());
 
+        // ---------------------------------------
         // Processing yoffset with pixel scale
         int yOffset = 0;
-        if(emulGL.getGL().getPixelScaleY()==1) {
-          yOffset = (int)(awtLegend.getMargin().height/2f);
+        if (emulGL.getGL().getPixelScaleY() == 1) {
+          yOffset = (int) (awtLegend.getMargin().height / 2f);
+        } else {
+          yOffset =
+              (int) ((emulGL.getGL().getPixelScaleY() - 1) * awtLegend.getMargin().height) / 2;
         }
-        else {
-          yOffset = (int)((emulGL.getGL().getPixelScaleY()-1)*awtLegend.getMargin().height)/2;
-        }
+
+        // ---------------------------------------
+        // Send image rendering directly to jGL
         emulGL.getGL().appendImageToDraw(legendImage, width - legendWidth * (k), yOffset);
 
       }

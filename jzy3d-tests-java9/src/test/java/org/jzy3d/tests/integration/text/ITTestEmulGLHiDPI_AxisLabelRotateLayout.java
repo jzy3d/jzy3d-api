@@ -18,7 +18,7 @@ import org.jzy3d.plot3d.rendering.view.HiDPI;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.tests.integration.ITTest;
 
-public class ITTestAxisLabelRotateLayout {
+public class ITTestEmulGLHiDPI_AxisLabelRotateLayout {
 
   @Test
   public void whenAxisLabelOrientationNotHorizontal() {
