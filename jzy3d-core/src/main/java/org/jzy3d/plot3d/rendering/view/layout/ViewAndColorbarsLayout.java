@@ -94,6 +94,8 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(),
           left + slice * (k++), left + slice * k);
       legend.render(painter);
+      
+      
     }
   }
 

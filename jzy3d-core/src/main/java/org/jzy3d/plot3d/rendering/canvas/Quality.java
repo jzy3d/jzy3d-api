@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 import java.awt.Canvas;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.plot3d.rendering.ordering.AbstractOrderingStrategy;
+import org.jzy3d.plot3d.rendering.view.HiDPI;
 import org.jzy3d.plot3d.rendering.view.View;
 
 
@@ -201,6 +202,10 @@ public class Quality {
     return !isPreserveViewportSize();
   }
 
+  public HiDPI getHiDPI() {
+    return isHiDPIEnabled()?HiDPI.ON:HiDPI.OFF;
+  }
+
   /**
    * If true, states that the chart should make use of HiDPI or Retina capabilities to draw more
    * good looking charts due to higher number of physical pixels.
@@ -213,6 +218,10 @@ public class Quality {
    */
   public Quality setHiDPIEnabled(boolean hidpi) {
     return setPreserveViewportSize(!hidpi);
+  }
+
+  public Quality setHiDPI(HiDPI hidpi) {
+    return setHiDPIEnabled(HiDPI.ON.equals(hidpi));
   }
 
   public Quality clone() {
