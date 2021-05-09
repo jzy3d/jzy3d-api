@@ -19,7 +19,10 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.tests.integration.ITTest.WT;
 
 public class ITTest_AxisLabelRotateLayout {
-
+  public static void main(String[] args) {
+    new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON).open();
+  }
+  
   @Test
   public void whenAxisLabelOrientationNotHorizontal() {
 
@@ -28,7 +31,7 @@ public class ITTest_AxisLabelRotateLayout {
     whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.OFF);
   }
 
-  public void whenAxisLabelOrientationNotHorizontal(WT wt, HiDPI hidpi) {
+  public Chart whenAxisLabelOrientationNotHorizontal(WT wt, HiDPI hidpi) {
     // -------------
     // GIVEN
     
@@ -92,5 +95,7 @@ public class ITTest_AxisLabelRotateLayout {
     // THEN
 
     ITTest.assertChart(chart, ITTest.name(this, wt, chart.getQuality().getHiDPI()));
+    
+    return chart;
   }
 }
