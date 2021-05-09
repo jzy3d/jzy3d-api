@@ -78,6 +78,12 @@ public class ITTest {
       //sleep(300); // need to wait a little before hidpi occurs
       // or may chart.render() as well and ensure colorbar is reset
       chart.render();
+      chart.render();
+      chart.render();
+      chart.render();
+      chart.render();
+      chart.render();
+      chart.render();
     }
     
     // EMULGL
