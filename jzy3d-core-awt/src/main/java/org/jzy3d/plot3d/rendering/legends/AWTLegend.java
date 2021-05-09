@@ -70,7 +70,7 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
   public void setViewPort(int width, int height, float left, float right) {
     super.setViewPort(width, height, left, right);
 
-    int imgWidth = (int) (width * (right - left));
+    int imgWidth = getSliceWidth(width, left, right);
 
     if (imageWidth != imgWidth || imageHeight != height) {
       //imageWidth = imgWidth;

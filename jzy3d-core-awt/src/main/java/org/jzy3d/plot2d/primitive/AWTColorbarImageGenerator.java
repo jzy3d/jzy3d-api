@@ -7,6 +7,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.painters.Font;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
@@ -28,9 +30,9 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   protected double min;
   protected double max;
 
-  protected static int BAR_WIDTH_DEFAULT = 20;
+  public static int BAR_WIDTH_DEFAULT = 20;
   protected int barWidth;
-  protected int textToBarHorizontalMargin = 1;
+  protected int textToBarHorizontalMargin = 2;
 
   protected Coord2d pixelScale = new Coord2d(1, 1);
 
@@ -59,6 +61,8 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
   /** Renders the {@link AWTColorbarImageGenerator} to an image. */
   public BufferedImage toImage(int width, int height, int barWidth) {
+    
+    
     if (barWidth > width)
       return null;
 
@@ -147,21 +151,32 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
    * Compute the optimal image width to contain the text as defined by the tick provided and
    * renderer.
    */
-  public int getPreferedWidth(Graphics2D graphic) {
-    int maxWidth = getMaxTickLabelWidth(graphic);
-
-
-    return maxWidth + textToBarHorizontalMargin + barWidth;
+  public int getPreferedWidth(IPainter painter) {
+    int maxWidth = getMaxTickLabelWidth(painter);
+    return getPreferedWidth(maxWidth);
   }
 
-  public int getMaxTickLabelWidth(Graphics2D graphic) {
+  public int getPreferedWidth(int maxTextWidth) {
+    return maxTextWidth + textToBarHorizontalMargin + BAR_WIDTH_DEFAULT;
+  }
+
+  public int getTextToBarHorizontalMargin() {
+    return textToBarHorizontalMargin;
+  }
+
+  public void setTextToBarHorizontalMargin(int textToBarHorizontalMargin) {
+    this.textToBarHorizontalMargin = textToBarHorizontalMargin;
+  }
+
+  public int getMaxTickLabelWidth(IPainter painter) {
     int maxWidth = 0;
     if (provider != null) {
       double[] ticks = provider.generateTicks(min, max);
       String tickLabel;
       for (int t = 0; t < ticks.length; t++) {
         tickLabel = renderer.format(ticks[t]);
-        int stringWidth = graphic.getFontMetrics().stringWidth(tickLabel);
+        //int stringWidth = graphic.getFontMetrics().stringWidth(tickLabel);
+        int stringWidth = painter.getTextLengthInPixels(font, tickLabel);
 
         if (maxWidth < stringWidth) {
           maxWidth = stringWidth;
@@ -172,5 +187,8 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     }
     return maxWidth;
   }
+  
+  
+
 
 }

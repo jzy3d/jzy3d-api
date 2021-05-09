@@ -188,7 +188,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   }
 
 
-  protected AWTColorbarImageGenerator getImageGenerator() {
+  public AWTColorbarImageGenerator getImageGenerator() {
     return (AWTColorbarImageGenerator) imageGenerator;
   }
 
