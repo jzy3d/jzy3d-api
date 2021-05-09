@@ -21,9 +21,26 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
+import org.jzy3d.tests.integration.ITTest.WT;
 
 public class ITTest {
   static Rectangle offscreenDimension = new Rectangle(800,600);
+  
+  public enum WT{
+    EmulGL_AWT, Native_AWT
+  }
+
+  public static Chart chart(WT windowingToolkit, HiDPI hidpi) {
+    if(WT.EmulGL_AWT.equals(windowingToolkit)) {
+      return chartEmulGL(hidpi);
+    }
+    else if(WT.Native_AWT.equals(windowingToolkit)) {
+      return chartNative(hidpi);
+    }
+    else {
+      throw new IllegalArgumentException("Unsupported toolkit : " + windowingToolkit);
+    }
+  }
   
   public static Chart chartEmulGL(HiDPI hidpi) {
     ChartFactory factory = new EmulGLChartFactory();
@@ -47,8 +64,13 @@ public class ITTest {
     Chart chart = factory.newChart(q);
     return chart;
   }
-  
+
+  @SuppressWarnings("rawtypes")
   public static void assertChart(Chart chart, Class c) {
+    assertChart(chart, c.getSimpleName());
+  }
+  
+  public static void assertChart(Chart chart, String name) {
     if(chart.getQuality().isHiDPIEnabled()) {
       IPainterFactory painter = chart.getFactory().getPainterFactory();
       chart.open(painter.getOffscreenDimension().width, painter.getOffscreenDimension().height);
@@ -61,17 +83,24 @@ public class ITTest {
     // EMULGL
     if(chart.getFactory() instanceof EmulGLChartFactory) {
       ChartTester tester = new ChartTester();
-      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + c.getSimpleName() + ".png");
+      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + name + ".png");
     }
     // NATIVE
     else {
       NativeChartTester tester = new NativeChartTester();
-      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + c.getSimpleName() + ".png");
+      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + name + ".png");
     }
-    
-
   }
-  private static void sleep(int mili) {
+  
+  public static String name(Object o, WT wt, HiDPI hidpi) {
+    return name(o, wt, hidpi, null);
+  }
+  public static String name(Object o, WT wt, HiDPI hidpi, String info) {
+    return (o.getClass().getSimpleName() + ", " + wt + ", HiDPI=" + hidpi + (info!=null?", "+info:"")); 
+  }
+
+  
+  public static void sleep(int mili) {
     try {
       Thread.sleep(mili);
     } catch (InterruptedException e) {
@@ -79,11 +108,6 @@ public class ITTest {
     }
   }
   
-  /*public static void openToAllowHiDPI(IPainterFactory painter, Quality q, Chart chart) {
-    if(q.isHiDPIEnabled())
-      chart.open(painter.getOffscreenDimension().width, painter.getOffscreenDimension().height);
-  }*/
-
   public static Shape surface() {
     SurfaceBuilder builder = new SurfaceBuilder();
     
