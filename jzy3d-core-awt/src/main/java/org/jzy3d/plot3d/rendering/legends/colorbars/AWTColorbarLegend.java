@@ -19,13 +19,15 @@ import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 /**
+ * Handle a colorbar rendered as an AWT {@link BufferedImage}.
+ * 
  * <h2>Content and coloring</h2>
  * 
- * A colorbar which is configured with
+ * A colorbar is configured with
  * <ul>
  * <li>a colormap defined by the input {@link Drawable} if it is {@link IMultiColorable} and if it
  * has a {@link ColorMapper} defined.
- * <li>a set of axis ticks defined by {@link IAxisLayout}
+ * <li>a set of axis ticks defined and formated by {@link IAxisLayout}.
  * </ul>
  * 
  * <h2>Layout</h2>
@@ -34,7 +36,7 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
  * <ul>
  * <li>{@link #setViewPort(int, int, float, float)} which indicates the canvas dimension on screen
  * and the slice that the colorbar should occupy. The image width will be <code>imageWidth = width *
- * (right - left)<code>. The viewport is set by {@link ViewAndColorbarsLayout}.
+ * (right - left)</code>. The viewport is set by {@link ViewAndColorbarsLayout}.
  * </ul>
  * 
  * The position of the colorbar is defined by {@link ViewAndColorbarsLayout} which render the
@@ -42,6 +44,7 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
  * parameters).
  * 
  * <img src="doc-files/colorbar-layout.png"/>
+ * <a href="https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=F_rAt-Q~kI-~#">Schema sources</a>
  * 
  * <h2>Rendering path</h2>
  * 
