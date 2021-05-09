@@ -27,7 +27,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     // (=CLEAR COLOR?) BAND
     // that can't be overriden by legend image
     sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, 1);// screenSeparator);
-    // sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, screenSeparator);
+    //sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, screenSeparator);
 
     view.renderScene(sceneViewport);
 

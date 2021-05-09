@@ -192,4 +192,16 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     return (AWTColorbarImageGenerator) imageGenerator;
   }
 
+  @Override
+  public int getWidth() {
+    return askedWidth;
+  }
+
+  @Override
+  public int getHeight() {
+    return askedHeight;
+  }
+  
+  
+
 }

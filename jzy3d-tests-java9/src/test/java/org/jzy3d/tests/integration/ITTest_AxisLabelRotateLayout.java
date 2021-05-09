@@ -1,4 +1,4 @@
-package org.jzy3d.tests.integration.text;
+package org.jzy3d.tests.integration;
 
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
@@ -16,20 +16,28 @@ import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePo
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.tests.integration.ITTest;
+import org.jzy3d.tests.integration.ITTest.WT;
 
-public class ITTestEmulGLHiDPI_AxisLabelRotateLayout {
+public class ITTest_AxisLabelRotateLayout {
 
   @Test
   public void whenAxisLabelOrientationNotHorizontal() {
 
+    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON);
+    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.OFF);
+    whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.OFF);
+  }
+
+  public void whenAxisLabelOrientationNotHorizontal(WT wt, HiDPI hidpi) {
     // -------------
     // GIVEN
+    
+    Chart chart = ITTest.chart(wt, hidpi);
     Shape surface = ITTest.surface();
-    Chart chart = ITTest.chartEmulGL(HiDPI.ON);
 
     // -------------
     // WHEN
+
     IAxisLayout layout = chart.getAxisLayout();
     //layout.setFont(new Font("Apple Chancery", 20));
     layout.setFont(new Font("Helvetica", 20));
@@ -61,7 +69,6 @@ public class ITTestEmulGLHiDPI_AxisLabelRotateLayout {
     surface.setLegend(colorbar);
     chart.add(surface);
 
-    // --------------------------------------------------------
     // Open and enable controllers
 
     chart.getKeyboard();
@@ -69,7 +76,7 @@ public class ITTestEmulGLHiDPI_AxisLabelRotateLayout {
     
     if (chart.getFactory() instanceof EmulGLChartFactory) {
       EmulGLSkin skin = EmulGLSkin.on(chart);
-      skin.getCanvas().setProfileDisplayMethod(true);
+      //skin.getCanvas().setProfileDisplayMethod(true);
       
       AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
       policy.renderingRateLimiter = new RateLimiterAdaptsToRenderTime();
@@ -84,6 +91,6 @@ public class ITTestEmulGLHiDPI_AxisLabelRotateLayout {
     // -------------
     // THEN
 
-    ITTest.assertChart(chart, this.getClass());
+    ITTest.assertChart(chart, ITTest.name(this, wt, chart.getQuality().getHiDPI()));
   }
 }
