@@ -84,13 +84,12 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         // optimize to shrink colorbar to required width
         if(shrinkColorbar) {
           AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
-          int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * emulGL.getGL().getPixelScaleX());
+          int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
           //optimalColorbarWidth*= painter.getView().getPixelScale().x;
           
           // Random fix to avoid cutting text
           int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT;//+(int)emulGL.getGL().getPixelScaleX();
           from = 1-((1f*optimalColorbarWidth+pixelShiftFix)/(1f*width));
-          System.out.println(from);
         }
         
         legend.setViewPort(width, height, from, to);
