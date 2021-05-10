@@ -29,6 +29,12 @@ public class ITTest {
   public enum WT{
     EmulGL_AWT, Native_AWT
   }
+  
+  public static void open(Chart c) {
+    c.open(ITTest.offscreenDimension.width, ITTest.offscreenDimension.height);
+    c.getMouse();
+    c.getKeyboard();
+  }
 
   public static Chart chart(WT windowingToolkit, HiDPI hidpi) {
     if(WT.EmulGL_AWT.equals(windowingToolkit)) {
@@ -78,6 +84,10 @@ public class ITTest {
       //sleep(300); // need to wait a little before hidpi occurs
       // or may chart.render() as well and ensure colorbar is reset
       chart.render();
+      
+      // intentionnaly add a few render to verify that the margin and offset
+      // processing remain stable (I observed bugs where a margin may reduce
+      // after each rendering, hence the colorbar moves)
       chart.render();
       chart.render();
       chart.render();
@@ -113,6 +123,8 @@ public class ITTest {
       e.printStackTrace();
     }
   }
+  
+  // CONTENT
   
   public static Shape surface() {
     SurfaceBuilder builder = new SurfaceBuilder();
