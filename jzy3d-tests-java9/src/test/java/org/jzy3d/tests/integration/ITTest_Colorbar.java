@@ -57,9 +57,14 @@ public class ITTest_Colorbar extends ITTest{
     surface.setLegend(new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout()));
 
     // Then
-    assertChart(chart, name(this, "IsModifiedByCustomFont", wt, chart.getQuality().getHiDPI(), "Font=AppleChancery24"));
+    assertChart(chart, name(this, "IsModifiedByCustomFont", wt, chart.getQuality().getHiDPI()));
     
     return chart;
+  }
+  
+  public String font(Chart chart) {
+    Font f = chart.getAxisLayout().getFont();
+    return "Font"+KV+"" + f.getName().replace(" ", "") + f.getHeight();
   }
   
   /* ************************************************************************************************** */
@@ -95,7 +100,7 @@ public class ITTest_Colorbar extends ITTest{
     
 
     // Then
-    assertChart(chart, name(this, "HasMininumWidth", wt, chart.getQuality().getHiDPI(), "Width=300"));
+    assertChart(chart, name(this, "HasMinimumWidth", wt, chart.getQuality().getHiDPI()));
     
     return chart;
   }
@@ -131,13 +136,13 @@ public class ITTest_Colorbar extends ITTest{
       EmulGLViewAndColorbarsLayout layout = skin.getLayout();
       layout.setShrinkColorbar(true);
       
-      name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI(), "Shrink=ON, Font=TimesRoman_24");
+      name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI());
     }
     else {
       NativeViewAndColorbarsLayout layout  = (NativeViewAndColorbarsLayout)((ChartView)chart.getView()).getLayout();
       layout.setShrinkColorbar(true);
       
-      name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI(), "Shrink=ON, Font=TimesRoman_24");
+      name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI());
       
     }
     
@@ -177,13 +182,13 @@ public class ITTest_Colorbar extends ITTest{
       EmulGLViewAndColorbarsLayout layout = skin.getLayout();
       layout.setShrinkColorbar(true);
       
-      name = name(this, "Shrink", wt, chart.getQuality().getHiDPI(), "Shrink=ON");
+      name = name(this, "Shrink", wt, chart.getQuality().getHiDPI());
     }
     else {
       NativeViewAndColorbarsLayout layout  = (NativeViewAndColorbarsLayout)((ChartView)chart.getView()).getLayout();
       layout.setShrinkColorbar(true);
       
-      name = name(this, "Shrink", wt, chart.getQuality().getHiDPI(), "Shrink=ON");
+      name = name(this, "Shrink", wt, chart.getQuality().getHiDPI());
       
     }
     
