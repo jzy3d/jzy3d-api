@@ -88,12 +88,10 @@ public class ITTest {
       // intentionnaly add a few render to verify that the margin and offset
       // processing remain stable (I observed bugs where a margin may reduce
       // after each rendering, hence the colorbar moves)
-      chart.render();
-      chart.render();
-      chart.render();
-      chart.render();
-      chart.render();
-      chart.render();
+      int nRefresh = 6;
+      for (int i = 0; i < nRefresh; i++) {
+        chart.render();
+      }
     }
     
     // EMULGL
@@ -108,11 +106,24 @@ public class ITTest {
     }
   }
   
-  public static String name(Object o, WT wt, HiDPI hidpi) {
-    return name(o, wt, hidpi, null);
+  public static String name(Object test, WT wt, HiDPI hidpi) {
+    return name(test, null, wt, hidpi, null);
   }
-  public static String name(Object o, WT wt, HiDPI hidpi, String info) {
-    return (o.getClass().getSimpleName() + ", " + wt + ", HiDPI=" + hidpi + (info!=null?", "+info:"")); 
+
+  public static String name(Object test, String caseName, WT wt, HiDPI hidpi) {
+    return name(test, caseName, wt, hidpi, null);
+  }
+
+  public static String name(Object test, WT wt, HiDPI hidpi, String info) {
+    return name(test, null, wt, hidpi, info);
+  }
+
+  public static String name(Object test, String caseName, WT wt, HiDPI hidpi, String info) {
+    if(caseName!=null)
+      return (test.getClass().getSimpleName() + "_" + caseName+ ", " + wt + ", HiDPI=" + hidpi + (info!=null?", "+info:"")); 
+    else
+      return (test.getClass().getSimpleName() + ", " + wt + ", HiDPI=" + hidpi + (info!=null?", "+info:"")); 
+
   }
 
   

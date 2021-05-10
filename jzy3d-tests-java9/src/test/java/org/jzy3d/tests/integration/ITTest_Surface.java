@@ -3,10 +3,9 @@ package org.jzy3d.tests.integration;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
-import org.jzy3d.tests.integration.ITTest.WT;
 import org.jzy3d.utils.LoggerUtils;
 
-public class ITTest_Surface {
+public class ITTest_Surface extends ITTest{
   @Test
   public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
     LoggerUtils.minimal();
@@ -18,13 +17,13 @@ public class ITTest_Surface {
 
   private void whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT wt, HiDPI hidpi) {
     // Given
-    Chart chart = ITTest.chart(wt, hidpi);
+    Chart chart = chart(wt, hidpi);
 
     // When
-    chart.add(ITTest.surface());
+    chart.add(surface());
 
     // Then
-    ITTest.assertChart(chart, ITTest.name(this, wt, chart.getQuality().getHiDPI()));
+    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI()));
   }
 
 
