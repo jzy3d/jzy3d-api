@@ -16,11 +16,10 @@ import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePo
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.tests.integration.ITTest.WT;
 
-public class ITTest_AxisLabelRotateLayout {
+public class ITTest_AxisLabelRotateLayout extends ITTest{
   public static void main(String[] args) {
-    new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON).open();
+    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON));
   }
   
   @Test
@@ -35,15 +34,15 @@ public class ITTest_AxisLabelRotateLayout {
     // -------------
     // GIVEN
     
-    Chart chart = ITTest.chart(wt, hidpi);
-    Shape surface = ITTest.surface();
+    Chart chart = chart(wt, hidpi);
+    Shape surface = surface();
 
     // -------------
     // WHEN
 
     IAxisLayout layout = chart.getAxisLayout();
     //layout.setFont(new Font("Apple Chancery", 20));
-    layout.setFont(new Font("Helvetica", 20));
+    layout.setFont(new Font("Helvetica", 14));
     layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));
 
     layout.setXAxisLabel("My X axis label is a little long to draw");
@@ -94,7 +93,7 @@ public class ITTest_AxisLabelRotateLayout {
     // -------------
     // THEN
 
-    ITTest.assertChart(chart, ITTest.name(this, wt, chart.getQuality().getHiDPI()));
+    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI()));
     
     return chart;
   }
