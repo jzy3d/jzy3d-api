@@ -57,7 +57,7 @@ public class ITTest_Colorbar extends ITTest{
     surface.setLegend(new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout()));
 
     // Then
-    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI(), "Font=AppleChancery24"));
+    assertChart(chart, name(this, "IsModifiedByCustomFont", wt, chart.getQuality().getHiDPI(), "Font=AppleChancery24"));
     
     return chart;
   }
@@ -95,7 +95,7 @@ public class ITTest_Colorbar extends ITTest{
     
 
     // Then
-    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI(), "Width=300"));
+    assertChart(chart, name(this, "HasMininumWidth", wt, chart.getQuality().getHiDPI(), "Width=300"));
     
     return chart;
   }
@@ -131,13 +131,13 @@ public class ITTest_Colorbar extends ITTest{
       EmulGLViewAndColorbarsLayout layout = skin.getLayout();
       layout.setShrinkColorbar(true);
       
-      name = name(this, wt, chart.getQuality().getHiDPI(), "Shrink=ON, Font=TimesRoman_24");
+      name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI(), "Shrink=ON, Font=TimesRoman_24");
     }
     else {
       NativeViewAndColorbarsLayout layout  = (NativeViewAndColorbarsLayout)((ChartView)chart.getView()).getLayout();
       layout.setShrinkColorbar(true);
       
-      name = name(this, wt, chart.getQuality().getHiDPI(), "Shrink=ON, Font=TimesRoman_24");
+      name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI(), "Shrink=ON, Font=TimesRoman_24");
       
     }
     
@@ -177,13 +177,13 @@ public class ITTest_Colorbar extends ITTest{
       EmulGLViewAndColorbarsLayout layout = skin.getLayout();
       layout.setShrinkColorbar(true);
       
-      name = name(this, wt, chart.getQuality().getHiDPI(), "Shrink=ON");
+      name = name(this, "Shrink", wt, chart.getQuality().getHiDPI(), "Shrink=ON");
     }
     else {
       NativeViewAndColorbarsLayout layout  = (NativeViewAndColorbarsLayout)((ChartView)chart.getView()).getLayout();
       layout.setShrinkColorbar(true);
       
-      name = name(this, wt, chart.getQuality().getHiDPI(), "Shrink=ON");
+      name = name(this, "Shrink", wt, chart.getQuality().getHiDPI(), "Shrink=ON");
       
     }
     
