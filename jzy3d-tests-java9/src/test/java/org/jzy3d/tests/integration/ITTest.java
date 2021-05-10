@@ -28,6 +28,11 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 public class ITTest {
+  public static final String SEP_TITLE = " ";
+  public static final String SEP_PROP = "_";
+  public static final String SEP_CASE = "_";
+  public static final String KV = "=";
+
   static Rectangle offscreenDimension = new Rectangle(800,600);
   
   public enum WT{
@@ -40,34 +45,78 @@ public class ITTest {
   @Test
   public void markdownAllTests() throws IOException {
     StringBuffer sb = new StringBuffer();
-    t(sb, "jzy3d-test-java9-generated");
-    t(sb, "==========================");
-    t(sb, "This is a summary of existing baseline images for tests.");
-    t(sb, "# Surface");
-    t(sb, "<table markdown=1>");
-    t(sb, "<tr>");
-    t(sb, "<td><img src=\"src/test/resources/" + name("Surface", WT.EmulGL_AWT, HiDPI.ON) +".png\"></td>");
-    t(sb, "<td><img src=\"src/test/resources/" + name("Surface", WT.EmulGL_AWT, HiDPI.OFF) + ".png\"></td>");
-    t(sb, "<td><img src=\"src/test/resources/" + name("Surface", WT.Native_AWT, HiDPI.OFF) + ".png\"></td>");
-    t(sb, "</tr>");
-    t(sb, "<tr>");
-    t(sb, "<td>Surface EmulGL_AWT HiDPI=OFF</td>");
-    t(sb, "<td>Surface EmulGL_AWT HiDPI=ON</td>");
-    t(sb, "<td>Surface Native_AWT HiDPI=OFF</td>");
-    t(sb, "</tr>");
-    t(sb, "</table>");
-    t(sb, "# Scatter");
+    line(sb, "jzy3d-test-java9-generated");
+    line(sb, "==========================");
+    line(sb, "This is a summary of existing baseline images for tests.");
     
-    BufferedWriter bwr = new BufferedWriter(new FileWriter(new File("target/tests.md")));
+    
+    section(sb, "Surface");
+    
+    section(sb, "Scatter");
+    
+    section(sb, "Text", null, "Font=AppleChancery24");
+    section(sb, "AxisLabelRotateLayout");
+    
+    section(sb, "Colorbar", "Shrink", null);
+    section(sb, "Colorbar", "ShrinkBigFont", null);
+    section(sb, "Colorbar", "IsModifiedByCustomFont", null);
+    section(sb, "Colorbar", "HasMinimumWidth", null);
+    
+    
+    BufferedWriter bwr = new BufferedWriter(new FileWriter(new File("tests.md")));
     bwr.write(sb.toString());
     bwr.flush();
     bwr.close();
   }
-  
-  static void t(StringBuffer sb, String line) {
-    sb.append(line + "\n");
+
+  public static void section(StringBuffer sb, String testName) {
+    section(sb, testName, null, null);
   }
   
+  public static void section(StringBuffer sb, String testName, String caseName, String info) {
+    if(caseName!=null)
+      line(sb, "# " + testName + " : " + caseName);
+    else
+      line(sb, "# " + testName);
+      
+    line(sb, "<table markdown=1>");
+
+    line(sb, "<tr>");
+    line(sb, "<td>"+ title(WT.EmulGL_AWT, HiDPI.ON) +"</td>");
+    line(sb, "<td>"+ title(WT.EmulGL_AWT, HiDPI.OFF) +"</td>");
+    line(sb, "<td>"+ title(WT.Native_AWT, HiDPI.OFF) +"</td>");
+    line(sb, "</tr>");
+
+    
+    line(sb, "<tr>");
+    line(sb, "<td>" + imgTest(name(testName, caseName, WT.EmulGL_AWT, HiDPI.ON, info))+ "</td>");
+    line(sb, "<td>" + imgTest(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
+    line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
+    line(sb, "</tr>");
+    line(sb, "</table>");
+    line(sb);
+  }
+  
+  public static String imgTest(String name) {
+    return "<img src=\"src/test/resources/" + name +".png\">";
+  }
+
+  public static String title(WT wt, HiDPI hidpi) {
+    return wt + SEP_TITLE + "HiDPI:"+hidpi;
+  }
+
+  public static String title(String name, WT wt, HiDPI hidpi) {
+    return name+ SEP_TITLE + wt + SEP_TITLE + "HiDPI:"+hidpi;
+  }
+  
+  static void line(StringBuffer sb, String line) {
+    sb.append(line + "\n");
+  }
+
+  static void line(StringBuffer sb) {
+    sb.append("\n");
+  }
+
   // ---------------------------------------------------------------------------------------------- //  
   public static void open(Chart c) {
     c.open(ITTest.offscreenDimension.width, ITTest.offscreenDimension.height);
@@ -160,8 +209,17 @@ public class ITTest {
   public static String name(ITTest test, String caseName, WT wt, HiDPI hidpi) {
     return name(test, caseName, wt, hidpi, null);
   }
+  
+  public static String name(String test, String caseName, WT wt, HiDPI hidpi) {
+    return name(test, caseName, wt, hidpi, null);
+  }
+
 
   public static String name(ITTest test, WT wt, HiDPI hidpi, String info) {
+    return name(test, null, wt, hidpi, info);
+  }
+
+  public static String name(String test, WT wt, HiDPI hidpi, String info) {
     return name(test, null, wt, hidpi, info);
   }
 
@@ -179,12 +237,6 @@ public class ITTest {
   public static String hidpi(HiDPI hidpi) {
     return "HiDPI" + KV + hidpi;
   }
-
-  
-  public static final String SEP_PROP = "_";
-  public static final String SEP_CASE = "_";
-  public static final String KV = "=";
-  
   
   public static String className(Object test) {
     return test.getClass().getSimpleName().replace("ITTest_", "");
