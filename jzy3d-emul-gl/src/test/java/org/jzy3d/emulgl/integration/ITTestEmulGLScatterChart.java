@@ -12,7 +12,7 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.utils.LoggerUtils;
 
-public class ITTestScatterChart {
+public class ITTestEmulGLScatterChart {
   @Test
   public void whenScatterChart_ThenMatchBaselineImagePixelwise() {
     LoggerUtils.minimal();

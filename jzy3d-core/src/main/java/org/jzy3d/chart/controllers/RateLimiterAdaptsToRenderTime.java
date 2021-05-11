@@ -74,6 +74,8 @@ public class RateLimiterAdaptsToRenderTime extends RateLimiterByMilisecond imple
   }
 
   protected double getLastRenderingTimeFromCanvas() {
+    if(canvas==null)
+      return -1;
     return canvas.getLastRenderingTimeMs();
   }
 

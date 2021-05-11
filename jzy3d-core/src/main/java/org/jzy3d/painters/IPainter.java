@@ -1,11 +1,13 @@
 package org.jzy3d.painters;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.plot3d.primitives.Drawable;
@@ -206,7 +208,7 @@ public interface IPainter {
 
   // ----------------------------
 
-  // GL INTERFACE
+  // GL INTERFACE GENERAL
 
   public void glLoadIdentity();
 
@@ -264,11 +266,15 @@ public interface IPainter {
 
   public void glPointSize(float width);
 
+  // GL TEXTURES
+
   public void glTexCoord2f(float s, float t);
 
   public void glTexEnvf(int target, int pname, float param);
 
   public void glTexEnvi(int target, int pname, int param);
+  
+  // GL DISPLAY LISTS
 
   public int glGenLists(int range);
 
@@ -298,6 +304,13 @@ public interface IPainter {
 
   public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove,
       byte[] bitmap, int bitmap_offset);
+  
+  /** A high level and easy way of drawing images (non OpenGL). */
+  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight,
+      Coord2d pixelZoom, Coord3d imagePosition);
+  
+  
+  // GL TEXT
 
   public void glutBitmapString(int font, String string);
 
@@ -310,6 +323,7 @@ public interface IPainter {
 
   public int getTextLengthInPixels(Font font, String string);
 
+  /** A high level and easy way of drawing texts (non OpenGL). Rotation may not be supported by all {@link IPainter}*/
   public void drawText(Font font, String label, Coord3d position, Color color, float rotation);
 
 

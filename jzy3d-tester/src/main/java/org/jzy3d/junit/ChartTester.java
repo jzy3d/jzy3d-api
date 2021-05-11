@@ -27,6 +27,10 @@ public class ChartTester {
   public static int TEST_IMG_SIZE = 500;
 
   public void assertSimilar(Chart chart, String testImage) {
+    
+    if(!chart.getFactory().getPainterFactory().isOffscreen()) {
+      logger.warn("Making assertions on a non offscreen chart");
+    }
     try {
       execute(chart, testImage);
     } catch (IOException e) {
@@ -263,7 +267,7 @@ public class ChartTester {
 
     } else {
       String m = "image size differ: i1={" + i1W + "," + i1H + "} i2={" + i2W + "," + i2H + "}";
-      throw new ChartTestFailed(m);
+      throw new ChartTestFailed(m, actual, expected);
     }
   }
 

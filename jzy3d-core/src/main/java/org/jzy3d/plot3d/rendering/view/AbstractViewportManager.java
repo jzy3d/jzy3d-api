@@ -50,11 +50,16 @@ public abstract class AbstractViewportManager {
       throw new IllegalArgumentException(
           "left must be inferior to right : " + left + " | " + right);
 
-    this.screenWidth = (int) ((right - left) * width);
+    this.screenWidth = getSliceWidth(width, left, right);
     this.screenHeight = height;
     this.screenLeft = (int) (left * width);
     this.screenBottom = 0;// screenLeft + screenWidth;
   }
+  
+  public int getSliceWidth(int width, float left, float right) {
+    return (int) (width * (right - left));
+  }
+
 
   public void setViewPort(ViewportConfiguration viewport) {
     this.screenWidth = viewport.getWidth();
