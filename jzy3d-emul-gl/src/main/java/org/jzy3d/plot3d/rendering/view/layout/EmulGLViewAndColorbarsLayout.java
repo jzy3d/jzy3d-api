@@ -4,7 +4,9 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.EmulGLPainter;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
@@ -14,9 +16,7 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import jgl.GL;
 
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
-  boolean doFixHiDPI = true;
-
-  public EmulGLViewAndColorbarsLayout() {}
+  boolean fixHiDPI = true;
 
   @Override
   public void render(IPainter painter, Chart chart) {
@@ -27,7 +27,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     // (=CLEAR COLOR?) BAND
     // that can't be overriden by legend image
     sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, 1);// screenSeparator);
-    // sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, screenSeparator);
+    //sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, screenSeparator);
 
     view.renderScene(sceneViewport);
 
@@ -52,10 +52,8 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
     int width = canvas.getRendererWidth();
     int height = canvas.getRendererHeight();
-    
 
-
-    if (doFixHiDPI) {
+    if (fixHiDPI) {
       width = (int) (sceneViewport.getWidth() * emulGL.getGL().getPixelScaleX());
       height = (int) (sceneViewport.getHeight() * emulGL.getGL().getPixelScaleY());// canvas.getRendererHeight();
     }
@@ -71,26 +69,63 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       float from = left + slice * (k++);
       float to = from + slice;
 
-      legend.setFont(painter.getView().getAxis().getLayout().getFont());
+      
+      Font font = painter.getView().getAxis().getLayout().getFont();
+      legend.setFont(font);
 
 
-      legend.setViewPort(width, height, from, to);
 
-      // legend.render(painter); // BYPASS IMAGE RENDERING THAT DOES NOT WORK WELL IN
-      // jGL
-      // legend.get
-
+      // FALLBACK ON DIRECT AWT IMAGE RENDERING THROUGH jGL
       if (legend instanceof AWTColorbarLegend) {
         AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
+        
+        //awtLegend.getImageGenerator().setFont(font);
+        
+        // optimize to shrink colorbar to required width
+        if(shrinkColorbar) {
+          AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
+          int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
+          //optimalColorbarWidth*= painter.getView().getPixelScale().x;
+          
+          // Random fix to avoid cutting text
+          int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT;//+(int)emulGL.getGL().getPixelScaleX();
+          from = 1-((1f*optimalColorbarWidth+pixelShiftFix)/(1f*width));
+        }
+        
+        legend.setViewPort(width, height, from, to);
+        
         BufferedImage legendImage = (BufferedImage) awtLegend.getImage();
         int legendWidth = (int) (legendImage.getWidth() / emulGL.getGL().getPixelScaleX());
 
-        // System.out.println("leg.width=" + legendWidth + " canvas.hidpi.width=" + width + "
-        // canvas.width=" + canvas.getRendererWidth());
+        // ---------------------------------------
+        // Processing yoffset with pixel scale
+        int yOffset = 0;
+        if (emulGL.getGL().getPixelScaleY() == 1) {
+          yOffset = (int) (awtLegend.getMargin().height / 2f);
+        } else {
+          yOffset =
+              (int) ((emulGL.getGL().getPixelScaleY() - 1) * awtLegend.getMargin().height) / 2;
+        }
 
-        emulGL.getGL().appendImageToDraw(legendImage, width - legendWidth * (k), 0);
+        // ---------------------------------------
+        // Send image rendering directly to jGL
+        emulGL.getGL().appendImageToDraw(legendImage, width - legendWidth * (k), yOffset);
+
+      }
+      // BYPASSED IMAGE RENDERING THAT DOES NOT WORK WELL IN jGL BUT KEEP EXPECTED OPENGL WAY
+      // FOR MEMORY
+      else {
+        legend.setViewPort(width, height, from, to);
+        legend.render(painter);
+
       }
     }
   }
-
+  
+  public boolean isFixHiDPI() {
+    return fixHiDPI;
+  }
+  public void setFixHiDPI(boolean fixHiDPI) {
+    this.fixHiDPI = fixHiDPI;
+  }
 }

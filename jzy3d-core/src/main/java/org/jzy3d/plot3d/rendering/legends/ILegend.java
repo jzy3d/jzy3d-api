@@ -13,6 +13,8 @@ public interface ILegend extends IImageViewport {
   
   public void setFont(Font font);
   public Font getFont();
-
+  
+  public int getWidth();
+  public int getHeight();
 
 }
