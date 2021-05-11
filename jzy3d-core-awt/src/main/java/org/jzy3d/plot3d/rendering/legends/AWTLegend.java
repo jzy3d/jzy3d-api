@@ -36,11 +36,17 @@ import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
  * @author Martin Pernollet
  */
 public abstract class AWTLegend extends AWTImageViewport implements IDrawableListener, ILegend {
-
+  protected Drawable drawable;
+  protected Color foreground;
+  protected Color background;
+  protected Dimension minimumDimension;
+  protected AWTImageGenerator imageGenerator;
+  
   public AWTLegend(Drawable drawable) {
     this.drawable = drawable;
-    if (drawable != null)
+    if (drawable != null) {
       drawable.addDrawableListener(this);
+    }
   }
 
   public AWTLegend(Drawable drawable, Color foreground, Color background) {
@@ -64,10 +70,14 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
   public void setViewPort(int width, int height, float left, float right) {
     super.setViewPort(width, height, left, right);
 
-    int imgWidth = (int) (width * (right - left));
+    int imgWidth = getSliceWidth(width, left, right);
 
-    if (imageWidth != imgWidth || imageHeight != height)
+    if (imageWidth != imgWidth || imageHeight != height) {
+      //imageWidth = imgWidth;
+      //imageHeight = height;
+      //updateImage();
       setImage(toImage(imgWidth, height));
+    }
   }
 
   @Override
@@ -83,7 +93,7 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
   }
 
   public void saveImage(String filename) throws IOException {
-    AWTImageFile.savePNG(imageObj, filename);
+    AWTImageFile.savePNG(image, filename);
   }
 
 
@@ -135,12 +145,4 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
   public void setMinimumWidth(int minimumWidth) {
     this.minimumDimension.width = minimumWidth;
   }
-
-
-
-  protected Drawable drawable;
-  protected Color foreground;
-  protected Color background;
-  protected Dimension minimumDimension;
-  protected AWTImageGenerator imageGenerator;
 }

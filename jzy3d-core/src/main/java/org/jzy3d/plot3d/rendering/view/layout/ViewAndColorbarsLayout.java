@@ -32,6 +32,16 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   protected float screenSeparator = 1.0f;
   protected boolean hasMeta = true;
 
+  protected ViewportConfiguration sceneViewport;
+  protected ViewportConfiguration backgroundViewport;
+
+  /**
+   * This shrink colorbar is actually not supported by this implementation but made available and
+   * used by classes that inherit this class
+   */
+  protected boolean shrinkColorbar = false;
+  protected int colorbarRightMargin = 10;
+
   @Override
   public void update(Chart chart) {
     final ICanvas canvas = chart.getCanvas();
@@ -83,25 +93,15 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     float slice = (right - left) / legends.size();
     int k = 0;
     for (ILegend legend : legends) {
-      
+
       legend.setFont(painter.getView().getAxis().getLayout().getFont());
-      
+
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
       legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(),
           left + slice * (k++), left + slice * k);
       legend.render(painter);
     }
   }
-
-  /*
-   * public void showLayout(AWTView view) { Renderer2d layoutBorder = new Renderer2d() {
-   * 
-   * @Override public void paint(Graphics g, int canvasWidth, int canvasHeight) { if (pencil ==
-   * null) pencil = new CanvasAWT((Graphics2D) g); if (zone1.width > 0) pencil.drawRect(null,
-   * zone1.x, zone1.y, zone1.width, zone1.height, true); if (zone2.width > 0) pencil.drawRect(null,
-   * zone2.x, zone2.y, zone2.width, zone2.height, true); } CanvasAWT pencil = null; };
-   * view.addRenderer2d(layoutBorder); }
-   */
 
   protected List<ILegend> getLegends(Chart chart) {
     if (chart != null && chart.getScene() != null && chart.getScene().getGraph() != null
@@ -110,8 +110,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     else
       return new ArrayList<>();
   }
-
-
+  
   /**
    * Return the scene viewport as it was processed according to the number of legends to display.
    */
@@ -124,8 +123,19 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     return backgroundViewport;
   }
 
+  public boolean isShrinkColorbar() {
+    return shrinkColorbar;
+  }
 
+  public void setShrinkColorbar(boolean shrinkColorbar) {
+    this.shrinkColorbar = shrinkColorbar;
+  }
 
-  protected ViewportConfiguration sceneViewport;
-  protected ViewportConfiguration backgroundViewport;
+  public int getColorbarRightMargin() {
+    return colorbarRightMargin;
+  }
+
+  public void setColorbarRightMargin(int colorbarRightMargin) {
+    this.colorbarRightMargin = colorbarRightMargin;
+  }
 }

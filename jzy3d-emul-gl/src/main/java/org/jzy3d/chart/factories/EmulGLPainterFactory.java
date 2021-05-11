@@ -53,17 +53,17 @@ public class EmulGLPainterFactory implements IPainterFactory {
   }
 
   /**
-   * This override intend to use jGL image rendering fallback based on AWT as jGL hardly handles the
-   * original {@link GL#glDrawPixel()} primitives.
+   * This override intend to use jGL image rendering fallback based on AWT to render colorbar.
    * 
-   * As the View is still rendered center in the frame, we perform a hacky shift of the OpenGL image
-   * rendering in canvas to avoid the axis ticks beeing covered by the colorbar on the right.
+   * This is due to the fact that jGL hardly handles the original {@link GL#glDrawPixel()}
+   * primitives.
    * 
    * @see https://github.com/jzy3d/jGL/issues/5
    */
   @Override
   public ViewAndColorbarsLayout newViewportLayout() {
     return new EmulGLViewAndColorbarsLayout();
+    // return new ViewAndColorbarsLayout();
   }
 
   @Override
@@ -90,12 +90,11 @@ public class EmulGLPainterFactory implements IPainterFactory {
   public EmulGLCanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
     if (internalCanvas == null) {
       internalCanvas = newEmulGLCanvas(factory, scene, quality);
-      
+
       if (factory.getPainterFactory().isOffscreen()) {
         Dimension d = getOffscreenDimension();
         link(d.width, d.height);
-      }
-      else {
+      } else {
         link(DEFAULT_WIDTH, DEFAULT_HEIGHT);
       }
     }
@@ -123,33 +122,34 @@ public class EmulGLPainterFactory implements IPainterFactory {
 
   @Override
   public AWTCameraMouseController newMouseCameraController(Chart chart) {
-    //AWTCameraMouseController controller = new AWTCameraMouseController(chart);
+    // AWTCameraMouseController controller = new AWTCameraMouseController(chart);
     AdaptiveMouseController controller = new AdaptiveMouseController(chart);
-    EmulGLCanvas canvas = (EmulGLCanvas)chart.getCanvas();
+    EmulGLCanvas canvas = (EmulGLCanvas) chart.getCanvas();
     RateLimiter rateLimiter = newRateLimiter(canvas);
-    if(rateLimiter!=null) {
+    if (rateLimiter != null) {
       controller.setRateLimiter(rateLimiter);
     }
     return controller;
   }
 
   public RateLimiter newRateLimiter(Chart chart) {
-    return newRateLimiter((EmulGLCanvas)chart.getCanvas());
+    return newRateLimiter((EmulGLCanvas) chart.getCanvas());
   }
+
   public RateLimiter newRateLimiter(EmulGLCanvas canvas) {
-    //mouse.setRateLimiter(new RateLimiterByMilisecond(200));
-    //mouse.setRateLimiter(new EmulGLMouseRateLimiterLock(c));
+    // mouse.setRateLimiter(new RateLimiterByMilisecond(200));
+    // mouse.setRateLimiter(new EmulGLMouseRateLimiterLock(c));
     return new RateLimiterAdaptsToRenderTime(canvas);
-    //key.setRateLimiter(new EmulGLMouseRateLimiterAdaptsToRenderTime(c));
-    
+    // key.setRateLimiter(new EmulGLMouseRateLimiterAdaptsToRenderTime(c));
+
   }
-  
+
   @Override
   public AWTCameraKeyController newKeyboardCameraController(Chart chart) {
     AWTCameraKeyController controller = new AWTCameraKeyController(chart);
-    EmulGLCanvas canvas = (EmulGLCanvas)chart.getCanvas();
+    EmulGLCanvas canvas = (EmulGLCanvas) chart.getCanvas();
     RateLimiter rateLimiter = newRateLimiter(canvas);
-    if(rateLimiter!=null) {
+    if (rateLimiter != null) {
       controller.setRateLimiter(rateLimiter);
     }
     return controller;
@@ -190,7 +190,7 @@ public class EmulGLPainterFactory implements IPainterFactory {
     this.width = width;
     this.height = height;
   }
-  
+
   @Override
   public void setOffscreen(Rectangle rectangle) {
     setOffscreen(rectangle.width, rectangle.height);

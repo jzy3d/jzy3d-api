@@ -54,5 +54,9 @@ public class Rectangle {
       ty2 = Integer.MIN_VALUE;
     return new Rectangle(tx1, ty1, (int) tx2, (int) ty2);
   }
+  
+  public Rectangle clone() {
+    return new Rectangle (x, y, width, height);
+  }
 
 }

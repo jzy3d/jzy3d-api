@@ -1,24 +1,23 @@
 Jzy3d - Core
 ================================
 
-DEPLOY SOURCE AND JAVADOC :
-```
-mvn clean source:jar javadoc:jar deploy
- ```
+Provides the base definition of charts without the rendering backend that may be implemented by JOGL (in all module named `jzy3d-native-jogl-*`) or EmulGL (in `jzy3d-emul-gl`).
 
-To install a lib locally:
+## Javadoc schemas
 
-```
-mvn install:install-file -DgroupId=org.jzyio
- -DartifactId=jzyio -Dversion=0.1 -Dpackaging=jar -Dfile=./lib/misc/org.jzyio-0.1.jar
-```
+### Camera
 
+#### Model
+<img src="src/main/java/org/jzy3d/plot3d/rendering/view/doc-files/camera.png"/>
 
-To download javadocs for dependencies
+#### Orthogonal projection
+<img src="src/main/java/org/jzy3d/plot3d/rendering/view/doc-files/orthogonal.png"/>
 
-```
-mvn dependency:resolve -Dclassifier=javadoc
-```
+#### Perspective projection
+<img src="src/main/java/org/jzy3d/plot3d/rendering/view/doc-files/perspective.png"/>
 
+### Axis
 
+#### AxisLabelRotator
 
+<img src="src/main/java/org/jzy3d/plot3d/primitives/axis/doc-files/AxisBox-Label.png"/>

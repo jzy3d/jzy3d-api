@@ -13,6 +13,7 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator {
 
   protected int textSize;
 
+  protected boolean hasBackground = false;
   protected Color backgroundColor;
   protected Color foregroundColor = Color.BLACK;
 
@@ -28,7 +29,6 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator {
     }
   }
 
-  protected boolean hasBackground = false;
 
   @Override
   public boolean hasBackground() {

@@ -28,7 +28,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   /**
    * An optimization policy
    */
-  protected AdaptiveRenderingPolicy policy;
+  protected AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
 
   /**
    * Keep track if optimization should be triggered or not. Defined at mouse pressed.

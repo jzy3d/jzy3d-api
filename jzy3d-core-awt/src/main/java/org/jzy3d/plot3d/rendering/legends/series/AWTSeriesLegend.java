@@ -23,6 +23,12 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport {
 
   protected int margin = 25;
   protected List<Serie2d> series;
+  
+  // remember asked width to be able to reset image
+  // without processing multiple time the margin
+  protected int askedWidth;
+  protected int askedHeight;
+
 
   public AWTSeriesLegend() {
     this(new ArrayList<Serie2d>());
@@ -56,6 +62,8 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport {
     imageGenerator = new AWTAbstractImageGenerator() {
       @Override
       public BufferedImage toImage(int width, int height) {
+        askedWidth = width;
+        askedHeight = height;
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D graphic = image.createGraphics();
@@ -143,5 +151,14 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport {
     return null;
   }
 
+  @Override
+  public int getWidth() {
+    return askedWidth;
+  }
+
+  @Override
+  public int getHeight() {
+    return askedHeight;
+  }
 
 }
