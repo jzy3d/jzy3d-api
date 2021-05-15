@@ -259,7 +259,7 @@ public class ITTest {
   public static Shape surface() {
     Func3D func = new Func3D((x, y) -> x * Math.sin(x * y));
     Range range = new Range(-3, 3);
-    int steps = 80;
+    int steps = 50;
 
     Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps), func);
 
