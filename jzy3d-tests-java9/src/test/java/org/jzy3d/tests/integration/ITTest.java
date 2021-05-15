@@ -19,7 +19,7 @@ import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.builder.Mapper;
+import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Scatter;
@@ -257,19 +257,11 @@ public class ITTest {
   // CONTENT
   
   public static Shape surface() {
-    SurfaceBuilder builder = new SurfaceBuilder();
-    
-    Mapper mapper = new Mapper() {
-      @Override
-      public double f(double x, double y) {
-        return x * Math.sin(x * y);
-      }
-    };
-
+    Func3D func = new Func3D((x, y) -> x * Math.sin(x * y));
     Range range = new Range(-3, 3);
-    int steps = 50;
+    int steps = 80;
 
-    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps), mapper);
+    Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps), func);
 
     ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, 0.75f));
     surface.setColorMapper(colorMapper);
