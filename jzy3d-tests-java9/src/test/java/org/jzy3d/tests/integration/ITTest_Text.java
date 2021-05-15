@@ -9,7 +9,6 @@ import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
-import org.jzy3d.tests.integration.ITTest.WT;
 
 
 public class ITTest_Text extends ITTest{

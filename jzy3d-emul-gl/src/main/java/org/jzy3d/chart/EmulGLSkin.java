@@ -8,8 +8,6 @@ import org.jzy3d.chart.controllers.thread.camera.CameraThreadControllerWithTime;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
-import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
-import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.layout.EmulGLViewAndColorbarsLayout;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
