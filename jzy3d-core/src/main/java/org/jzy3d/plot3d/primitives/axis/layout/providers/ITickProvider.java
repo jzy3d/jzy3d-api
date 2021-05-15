@@ -5,5 +5,5 @@ public interface ITickProvider {
 
   public double[] generateTicks(double min, double max, int steps);
 
-  public int getDefaultSteps();
+  public int getSteps();
 }

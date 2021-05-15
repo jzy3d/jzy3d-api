@@ -18,7 +18,7 @@ public class StaticTickProvider extends AbstractTickProvider implements ITickPro
   }
 
   @Override
-  public int getDefaultSteps() {
+  public int getSteps() {
     return 0;
   }
 

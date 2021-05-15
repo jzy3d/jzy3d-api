@@ -25,7 +25,7 @@ public class RegularTickProvider extends AbstractTickProvider implements ITickPr
   }
 
   @Override
-  public int getDefaultSteps() {
+  public int getSteps() {
     return steps;
   }
 
