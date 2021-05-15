@@ -9,9 +9,82 @@ EmulGL relies on [jGL](https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-jGL)
 
 Native charts (using [JOGL](https://jogamp.org/jogl/www/)) remains the preferred option for fast rendering of very large geometries, volumes or rendering involving shaders. Native charts also tend to better handle alpha blending (using translucent objects).
 
+# EmulGL examples in integration tests
+
+The below image are baseline for pixel-wise non regression tests that can be found [there](src/test/java/org/jzy3d/emulgl/integration).
+<table>
+<tr>
+<td><img src="src/test/resources/ITTestEmulGLScatterChart.png"/></td>
+<td><img src="src/test/resources/ITTestEmulGLSurfaceChart.png"/></td>
+</tr>
+</table>
+
+# EmulGL code architecture
+
+Making a chart CPU based for rendering is easy :
+```java
+IPainterFactory painter = new EmulGLPainterFactory();
+ChartFactory factory = new AnyChartFactory(painter);
+Chart chart = factory.newChart();
+// then edit chart as usual
+```
+
+The base entry point for exploring EmulGL component is starting with `EmulGLPainterFactory` which handles all compatibility related objects, such as `EmulGLPainter`, `EmulGLCanvas`, `EmulGLViewOverlay`, `EmulGLViewAndColorbarsLayout`.
+
+Using `EmulGLChartFactory` is not mandatory : making a chart EmulGL based only requires passing a `EmulGLPainterFactory` to any `ChartFactory`. `EmulGLChartFactory` is usefull to get a `CameraThreadControllerWithTime` which differs to native in that it make the chart rotation speed independent of the rendering speed.
+
+To easily access implementations of EmulGL chart components without lot of downcasts, we added the below class :
+
+```java
+EmulGLSkin skin = EmulGLSkin.on(chart);
+// returns the Emulgl Canvas to call its own methods
+skin.getCanvas().setProfileDisplayMethod(true);
+// returns the EmulGL Mouse to call its own methods
+skin.getMouse().setPolicy(policy);
+```
+
+The next sections depict what is particular in EmulGL overrides of Jzy3D core.
+
+## EmulGL Canvas
+
+The below map describes how EmulGL canvas replies to all events.
+
+<img src="doc/emulgl-canvas.png">
+
+[Edit schema](https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=IG_tq9NVLe03#)
+
+
+## EmulGL EmulGLViewAndColorbarsLayout (containing images)
+
+<img src="../jzy3d-core-awt/src/main/java/org/jzy3d/plot3d/rendering/legends/colorbars/doc-files/colorbar-object-model.png"/>
+
+# High pixel density screens (HiDPI, Retina)
+
+HiDPI is supported by EmulGL on all JVM above Java 9. Until Java 8, AWT Canvas do not expose the pixel scale, so charts will simply render without HiDPI. Appart of this limitation, EmulGL will deal with multiple screens configuration on all OS whatever the pixel scales (100%, 150%, 200%, ...). It has also been tested successfully on 32' 4K screens.
+
+EmulGL has the nice property of detecting pixel scale change over time and will handle resolution change of a chart when the application change screens at runtime. This allows handling all resolution dependent items (text size, image layout and scale, 2D post rendering, etc).
+
+The below configuration asks for using HiDPI if it is available.
+
+```java
+Quality q = Quality.Advanced();
+q.setHiDPI(HiDPI.ON);
+```
+
+This allows getting the current pixel scale of the chart.
+```java
+Coord2d pixelScale = chart.getView().getPixelScale();
+```
+
+Usefull links about HiDPI and java
+* https://bugs.openjdk.java.net/browse/JDK-8055212
+* https://intellij-support.jetbrains.com/hc/en-us/articles/360007994999-HiDPI-configuration
+* https://cwiki.apache.org/confluence/display/NETBEANS/HiDPI+%28Retina%29+improvements
+
+
 # Performance
 
-Despite not exhaustive at all, I was able to have the following performance on a MacBook Pro (Retina 15 inches, 2013), 2,7 GHz Intel Core i7, RAM 16 Go 1600 MHz DDR3
+I was able to have the following performance on a MacBook Pro (Retina 15 inches, 2013), 2,7 GHz Intel Core i7, RAM 16 Go 1600 MHz DDR3
 
 [EmulGL Surface charts](https://github.com/jzy3d/jzy3d-api/blob/master/jzy3d-tutorials/src/main/java/org/jzy3d/demos/surface/SurfaceDemoEmulGL.java)
 * A 60x60 polygon 3D surface in a 500x500 pixels frame is rendered in ~30ms
@@ -31,7 +104,7 @@ The quick hints to play with performance are below, if you are willing to unders
 
 ```java
 Quality q = Quality.Advanced;
-q.setHiDPIEnabled(false); // prevent HiDPI/Retina to apply hence reduce the number of pixel to process
+q.setHiDPI(HiDPI.OFF); // prevent HiDPI/Retina to apply hence reduce the number of pixel to process
 
 Chart chart = factory.newChart(q);
 ```
@@ -49,7 +122,7 @@ This is a complex but usefull configuration as it will lower dynamically the ren
 EmulGLChartFactory factory = new EmulGLChartFactory();
 Quality q = Quality.Advanced;
 q.setAnimated(false); // enable repaint on demand to minimize CPU usage when chart do not change
-q.setHiDPIEnabled(true); // enable HiDPI if hardware provides it
+q.setHiDPI(HiDPI.ON); // enable HiDPI if hardware provides it
 
 Chart chart = factory.newChart(q);
 chart.open(1264, 812);
@@ -64,8 +137,10 @@ policy.optimizeForRenderingTimeLargerThan = 100;//ms
 policy.optimizeByDroppingFaceAndKeepingWireframeWithColor = true;
 
 // Apply this policy (or your override of this policy) to the adaptive mouse controller
-AdaptiveMouseController mouse = (AdaptiveMouseController)chart.getMouse();
-mouse.setPolicy(policy);
+EmulGLSkin skin = EmulGLSkin.on(chart);
+skin.getMouse().setPolicy(policy);
+skin.getThread().setSpeed(15);
+
 ```
 
 Which will turn the chart in the below mode if _by default_ mouse drag leads to a rendering time above  `policy.optimizeForRenderingTimeLargerThan`. In that case, rendering drops face rendering to go faster and reach ~30ms to render which lead to a fluid chart rotation.
@@ -88,7 +163,7 @@ Chart chart = factory.newChart(q);
 
 ```java
 Quality q = Quality.Advanced;
-q.setHiDPIEnabled(true); // Let HiDPI/Retina inform their pixel ratio to process GL image on more pixels
+q.setHiDPI(HiDPI.ON); // Let HiDPI/Retina inform their pixel ratio to process GL image on more pixels
 q.setAnimated(true); // the chart repaints every 100ms, without knowing if hardware can handle it
 
 // Possible liveness issue : mouse drag looks slow on large HiDPI screens as rendering is slower than usual
@@ -182,34 +257,7 @@ All windowing toolkit event are not coalesced! For example the mouse wheel event
 
 Rendering of AWT components is made with... OpenGL! But it is limited to 2D graphics only.
 
-## EmulGL canvas
 
-The below map describes how EmulGL canvas replies to all events.
-
-<img src="doc/emulgl-canvas.png">
-
-[Edit schema](https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=IG_tq9NVLe03#)
-
-
-
-
-
-
-# Remarks
-
-## HiDPI
-
-I noticed the following limitations with HiDPI on EmulGL as it is currently implemented
-* HiDPI may not trigger on Java 8, whereas it works on Java 9. Jzy3d is intentionally build for Java 8 to remain compatible with "old" software. This does not prevent a software running on Java 9 to use HiDPI automatically. This is highlighted by `ITTestHiDPI` that is kept as a program with main() rather than junit test.
-
-Will be fixed soon !
-* HiDPI in jGL is detected at runtime and that chart will properly scale to HiDPI after a first rendering. A chart configured with `chart.setAnimated(true)` and `Quality.setPreserveViewportSize(false);` will automatically turn to HiDPI at the second frame.
-* Offscreen charts currently do not seem to adapt to HiDPI automatically. This may be due to the way I do the HiDPI detection in jGL that relies on the state of the *displayed* AWT Canvas. Anyway, no offscreen HiDPI make it *impossible to create non regression tests about HiDPI* at this step. Even if this would be supported, there would be limitation with build since such kind of tests should be ignored on computer that do not have the same HiDPI capabilities than the computer used to generate the baseline image, which is not possible with current maven build.
-
-Usefull links about HiDPI and java
-* https://bugs.openjdk.java.net/browse/JDK-8055212
-* https://intellij-support.jetbrains.com/hc/en-us/articles/360007994999-HiDPI-configuration
-* https://cwiki.apache.org/confluence/display/NETBEANS/HiDPI+%28Retina%29+improvements
 
 # Further work
 
