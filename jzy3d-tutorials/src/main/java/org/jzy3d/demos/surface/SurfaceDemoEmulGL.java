@@ -63,7 +63,7 @@ public class SurfaceDemoEmulGL {
 
     Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps), func);
 
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, ALPHA_FACTOR));// 0.65f));
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, ALPHA_FACTOR));
     surface.setColorMapper(colorMapper);
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);
