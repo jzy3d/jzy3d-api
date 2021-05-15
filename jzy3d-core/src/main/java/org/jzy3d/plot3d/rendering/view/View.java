@@ -89,6 +89,7 @@ public class View {
   protected Coord3d viewpoint;
   protected Coord3d center;
   protected Coord3d scaling;
+  // the actual bounds, either auto or manual
   protected BoundingBox3d viewbounds;
   protected Chart chart;
 
@@ -819,7 +820,7 @@ public class View {
   }
 
   protected BoundingBox3d getSceneGraphBounds(Scene scene) {
-    return scene.getGraph().getBounds();
+    return squarifyGetSceneGraphBounds(scene);
   }
 
   /**
@@ -863,15 +864,15 @@ public class View {
     fireViewLifecycleHasInit(null);
   }
 
-  protected void initBounds(Scene scene, BoundingBox3d viewbounds, BoundingBox3d initBounds) {
-    if (viewbounds == null) {
+  protected void initBounds(Scene scene, BoundingBox3d manualViewBounds, BoundingBox3d initBounds) {
+    if (manualViewBounds == null) {
       if (initBounds == null)
-        setBoundManual(scene.getGraph().getBounds());
+        setBoundManual(squarifyGetSceneGraphBounds(scene));
       else
         setBoundManual(initBounds);
       // boundmode = ViewBoundMode.AUTO_FIT;
     } else {
-      lookToBox(viewbounds);
+      lookToBox(manualViewBounds);
     }
   }
 
@@ -988,14 +989,14 @@ public class View {
    * 
    * @return a scaling factor for each dimension.
    */
-  protected Coord3d squarify(Scene scene, ViewBoundMode boundmode, BoundingBox3d viewbounds,
+  protected Coord3d squarify(Scene scene, ViewBoundMode boundmode, BoundingBox3d manualViewBounds,
       SpaceTransformer spaceTransformer) {
     // Get the view bounds
     BoundingBox3d bounds;
     if (boundmode == ViewBoundMode.AUTO_FIT)
-      bounds = scene.getGraph().getBounds();
+      bounds = squarifyGetSceneGraphBounds(scene);
     else if (boundmode == ViewBoundMode.MANUAL)
-      bounds = viewbounds;
+      bounds = manualViewBounds;
     else {
       throw new RuntimeException("Unknown bounds mode");
     }
@@ -1037,6 +1038,10 @@ public class View {
 
   /* LAYOUT */
 
+  protected BoundingBox3d squarifyGetSceneGraphBounds(Scene scene) {
+    return scene.getGraph().getBounds();
+  }
+
   protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds) {
     if (spaceTransformer == null) {
       return bounds.getRange();
@@ -1073,9 +1078,9 @@ public class View {
   }
 
   public Coord3d computeSceneScaling(Scene scene, boolean squared, ViewBoundMode boundmode,
-      BoundingBox3d viewbounds, SpaceTransformer spaceTransformer) {
+      BoundingBox3d manualViewBounds, SpaceTransformer spaceTransformer) {
     if (squared)
-      return squarify(scene, boundmode, viewbounds, spaceTransformer);
+      return squarify(scene, boundmode, manualViewBounds, spaceTransformer);
     else
       return Coord3d.IDENTITY.clone();
   }
