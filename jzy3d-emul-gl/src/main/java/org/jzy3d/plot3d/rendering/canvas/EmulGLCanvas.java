@@ -136,7 +136,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   }
 
   protected boolean shouldPrintEvent(AWTEvent e) {
-    return !(e.getID() == MouseEvent.MOUSE_MOVED);
+    return true;//!(e.getID() == MouseEvent.MOUSE_MOVED);
   }
 
   /* *********************************************************************** */
@@ -260,6 +260,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
    * simply not append work to do according to the status of the canvas.
    */
   public synchronized void doRender() {
+    //System.out.println("doRender");
+    //printCallTrace();
+
     isRenderingFlag.set(true);
 
     profileDisplayTimer.tic();
@@ -304,6 +307,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     isRenderingFlag.set(false);
     // System.out.println("DONE RENDERING");
 
+  }
+
+  public void printCallTrace() {
+    StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+    for (int i = 1; i < elements.length; i++) {
+         StackTraceElement s = elements[i];
+         System.out.println("\tat " + s.getClassName() + "." + s.getMethodName() + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
+    }
   }
 
   protected double lastRenderingTimeMs = LAST_RENDER_TIME_UNDEFINED;
@@ -506,6 +517,15 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
         if(maxY < profile.y)
           maxY = profile.y;        
       }
+      
+      if(minX==Integer.MAX_VALUE)
+        minX = 0;
+      if(maxX==0)
+        maxX = 10;
+      if(minY==Integer.MAX_VALUE)
+        minY = 0;
+      if(maxY==0)
+        maxY = 10;
       
       int x = minX - PROFILE_LINE_X_START/2;
       int y = minY - profileDisplayFont.getSize() - PROFILE_LINE_HEIGHT/2;
