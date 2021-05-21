@@ -167,7 +167,7 @@ public class AxisLabelRotator {
     return i;
   }
 
-  public class TextLayout {
+  public static class TextLayout {
     public Coord2d offset;
     public float rotation;
 
@@ -175,6 +175,10 @@ public class AxisLabelRotator {
       super();
       this.offset = offset;
       this.rotation = rotation;
+    }
+    public TextLayout() {
+      this.offset = null;
+      this.rotation = 0;
     }
   }
 }

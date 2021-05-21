@@ -153,6 +153,17 @@ public class Coord2d implements Serializable {
   public Coord2d mul(float value) {
     return new Coord2d(x * value, y * value);
   }
+  
+  public Coord2d mulSelf(Coord2d c) {
+    return mulSelf(c.x, c.y);
+  }
+
+  
+  public Coord2d mulSelf(float x, float y) {
+    this.x *= x;
+    this.y *= y;
+    return this;
+  }
 
   /**
    * Divise a Coord2d to the current one and return the result in a new Coord2d.
