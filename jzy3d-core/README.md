@@ -20,4 +20,8 @@ Provides the base definition of charts without the rendering backend that may be
 
 #### AxisLabelRotator
 
+##### Cube Axis
 <img src="src/main/java/org/jzy3d/plot3d/primitives/axis/doc-files/AxisBox-Label.png"/>
+
+##### Ternary Axis
+<img src="src/main/java/org/jzy3d/plot3d/primitives/axis/doc-files/AxisBox-LabelRotate.png"/>
