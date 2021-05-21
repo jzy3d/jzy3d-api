@@ -39,6 +39,8 @@ public class ITTest {
     EmulGL_AWT, Native_AWT
   }
   
+  protected String indexFileName = "README_GENERATED.md";
+  
   // ---------------------------------------------------------------------------------------------- //
   
   /** Generate markdown summary of test expectations. */
@@ -63,7 +65,7 @@ public class ITTest {
     section(sb, "Colorbar", "HasMinimumWidth", null);
     
     
-    BufferedWriter bwr = new BufferedWriter(new FileWriter(new File("tests.md")));
+    BufferedWriter bwr = new BufferedWriter(new FileWriter(new File(indexFileName)));
     bwr.write(sb.toString());
     bwr.flush();
     bwr.close();

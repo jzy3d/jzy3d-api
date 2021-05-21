@@ -82,18 +82,30 @@ public class Triangle2d {
 
   /**
    * @return the 2D center of this triangle
-   * @see method 2 of https://fr.wikihow.com/calculer-le-centre-de-gravit%C3%A9-d%27un-triangle
+   * @see method 3 of https://fr.wikihow.com/calculer-le-centre-de-gravit%C3%A9-d%27un-triangle
    */
   public Coord2d getCenter() {
-    return Coord2d.interpolate(a, getMedianBC(), 2f / 3);
+    return a.add(b).add(c).div(3);
   }
   
+  /**
+   * @return the 2D center of this triangle
+   * @see method 2 of https://fr.wikihow.com/calculer-le-centre-de-gravit%C3%A9-d%27un-triangle
+   */
   public Coord2d getCenterAB() {
     return Coord2d.interpolate(c, getMedianAB(), 2f / 3);
   }
+  /**
+   * @return the 2D center of this triangle
+   * @see method 2 of https://fr.wikihow.com/calculer-le-centre-de-gravit%C3%A9-d%27un-triangle
+   */
   public Coord2d getCenterAC() {
     return Coord2d.interpolate(b, getMedianAC(), 2f / 3);
   }
+  /**
+   * @return the 2D center of this triangle
+   * @see method 2 of https://fr.wikihow.com/calculer-le-centre-de-gravit%C3%A9-d%27un-triangle
+   */
   public Coord2d getCenterBC() {
     return Coord2d.interpolate(a, getMedianBC(), 2f / 3);
   }
