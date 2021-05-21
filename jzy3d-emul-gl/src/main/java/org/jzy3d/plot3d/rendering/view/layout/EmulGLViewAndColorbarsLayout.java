@@ -52,6 +52,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
     int width = canvas.getRendererWidth();
     int height = canvas.getRendererHeight();
+    
 
     if (fixHiDPI) {
       width = (int) (sceneViewport.getWidth() * emulGL.getGL().getPixelScaleX());
@@ -68,12 +69,9 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
       float from = left + slice * (k++);
       float to = from + slice;
-
       
       Font font = painter.getView().getAxis().getLayout().getFont();
       legend.setFont(font);
-
-
 
       // FALLBACK ON DIRECT AWT IMAGE RENDERING THROUGH jGL
       if (legend instanceof AWTColorbarLegend) {
@@ -109,7 +107,13 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
         // ---------------------------------------
         // Send image rendering directly to jGL
-        emulGL.getGL().appendImageToDraw(legendImage, width - legendWidth * (k), yOffset);
+        
+        int xOffset = width - legendWidth * (k);
+        
+        // Display colorbar only if their remain space for plot that is wider than higher
+        //if(xOffset>height) {
+          emulGL.getGL().appendImageToDraw(legendImage, xOffset, yOffset);
+        //}
 
       }
       // BYPASSED IMAGE RENDERING THAT DOES NOT WORK WELL IN jGL BUT KEEP EXPECTED OPENGL WAY

@@ -54,8 +54,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   private static final long serialVersionUID = 980088854683562436L;
 
   /**
-   * if true if false : call full component.resize to force resize + view.render + glFlush + swap
+   * Specify actual way of forcing repaint
+   * <ul>
+   * <li>if true : manual
+   * <li>if false : trigger component.resize event to force resize + view.render + glFlush + swap
    * image
+   * </ul>
    */
   public static final boolean TO_BE_CHOOSEN_REPAINT_WITH_FLUSH = false;
 
@@ -83,7 +87,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   // Monitor (export perf to something else, e.g. an XLS file)
   protected Monitor monitor;
 
-
+  /**
+   * Initialize a canvas for rendering 3D
+   */
   public EmulGLCanvas(IChartFactory factory, Scene scene, Quality quality) {
     super();
     view = scene.newView(this, quality);
@@ -108,23 +114,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     });
   }
 
-  @Override
-  public void setPixelScale(float[] scale) {
-    Logger.getLogger(EmulGLCanvas.class)
-        .info("Not implemented. Pixel scale is driven by AWT Canvas itself and jGL adapts to it");
-  }
-
-  @Override
-  public Coord2d getPixelScale() {
-    Graphics2D g2d = (Graphics2D) getGraphics();
-    AffineTransform globalTransform = g2d.getTransform();
-    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
-  }
-
-  @Override
-  public IAnimator getAnimation() {
-    return animator;
-  }
+  /* *********************************************************************** */
+  /* ****************************** EVENTS ********************************* */
+  /* *********************************************************************** */
 
 
   @Override
@@ -136,8 +128,11 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   }
 
   protected boolean shouldPrintEvent(AWTEvent e) {
-    return true;//!(e.getID() == MouseEvent.MOUSE_MOVED);
+    if (e instanceof MouseEvent)
+      return false;
+    return true;
   }
+
 
   /* *********************************************************************** */
   /* ******************************* INIT ********************************** */
@@ -154,26 +149,49 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     view.init();
   }
 
+  /**
+   * Configure GLUT callback which yield to the below flow diagram
+   * 
+   * <img src="doc-files/emulgl-canvas.png"/>
+   */
   protected void initGLUT(int width, int height) {
+
+    // --------------------------------------------
+    // GLUT register this canvas and use its settings
+
     myUT.glutInitWindowSize(width, height);
     myUT.glutInitWindowPosition(getX(), getY());
+    myUT.glutCreateWindow(this);
 
-    myUT.glutCreateWindow(this); // this canvas GLUT register this canvas
-    myUT.glutDisplayFunc("doRender"); // on this canvas GLUT register this display method
-    myUT.glutReshapeFunc("doReshape"); // on ComponentEvent.RESIZE TODO: double render car
-                                       // GLUT.resize invoque
-                                       // reshape + display
-    // myUT.glutMotionFunc("doMotion"); // TODO : double render car GLUT.motion invoque display PUIS
-    // le listener
-    // TODO : RESIZED semble emis par le composant quand on fait un mouse dragg!!
+    // --------------------------------------------
+    // GLUT register doRender as display callback
 
+    myUT.glutDisplayFunc("doRender");
+
+    // --------------------------------------------
+    // GLUT register doReshape as resize callback
+
+    myUT.glutReshapeFunc("doReshape");
+
+    // --------------------------------------------
+    // Despite the below line being the jGL way to deal with mouse move,
+    // we do not activate it as Jzy3D already has its own way of handling
+    // mouse events
+
+    // myUT.glutMotionFunc("doMotion");
+
+    // --------------------------------------------
+    // Despite the below line being the jGL way to deal with a rendering loop
+    // we do not activate it as Jzy3D already has its own way of handling
+    // repaint (either on demand or continuously)
 
     // myUT.glutMainLoop();
 
-    // CLARIFIER comment le composant se met à jour :
-    // en autonome sur paint (quel cycle de vie?)
-    // sur demande quand on fait "updateView" dans les mouse / thread controller etc
-    // pourquoi est il nécessaire de le faire pendant mouse dragged?
+
+    // HACKY : trying to avoid missing repaint event //NOT WORK
+
+    //doRender();
+
   }
 
   /* *********************************************************************** */
@@ -223,18 +241,32 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   public void forceRepaint() {
     // This makes GLUT invoke the myReshape function
 
-    // SHOULD NOT BE CALLED IF ANIMATOR IS ACTIVE
-    if (TO_BE_CHOOSEN_REPAINT_WITH_FLUSH) {
-      painter.getGL().glFlush();
+    // ----------------------------
+    // Method 1
+    //
+    // Repaint does not work, most probably because we already are in
+    // an AWT event (e.g. mouse drag).
+    // repaint();
 
-      // This triggers copy of newly generated picture to the GLCanvas
-      // repaint();
-    } else {
-      processEvent(new ComponentEvent(this, ComponentEvent.COMPONENT_RESIZED));
-      // equivalent to view.clear(), view.render(), glFlush(), glXSwapBuffers
-    }
+    // ----------------------------
+    // Method 2
+    //
+    // Calling process event is equivalent to call
+    // view.clear(), view.render(), glFlush(), glXSwapBuffers()
+    // but ensure it will be done later
+    //processEvent(new ComponentEvent(this, ComponentEvent.COMPONENT_RESIZED));
+    //
+    // Not satisfying as we
     // INTRODUCE A UNDESIRED RESIZE EVENT (WE ARE NOT RESHAPING VIEWPORT
     // WAS JUST USED TO FORCE REPAINT
+
+    // ----------------------------
+    // Method 3
+    //
+    // Try not invoking too much events and simply invoke
+    // glFlush+repaint (which swaps image)
+    doRender();
+
   }
 
   /**
@@ -260,8 +292,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
    * simply not append work to do according to the status of the canvas.
    */
   public synchronized void doRender() {
-    //System.out.println("doRender");
-    //printCallTrace();
+    //System.out.println("doRender " + profileDisplayCount + " ");
+    //printCallTrace(2, "jzy3d");
 
     isRenderingFlag.set(true);
 
@@ -282,7 +314,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       // Ask the GLCanvas to SWAP current image with
       // the latest built with glFlush
       repaint();
-
 
       // checkAlphaChannelOfColorBuffer(painter);
 
@@ -310,10 +341,31 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   }
 
   public void printCallTrace() {
+    printCallTrace(1, null);
+  }
+
+  /**
+   * Print stack but drops any class.method name not containing the filter (in case it is not null)
+   */
+  public void printCallTrace(int from, String filterLine) {
     StackTraceElement[] elements = Thread.currentThread().getStackTrace();
-    for (int i = 1; i < elements.length; i++) {
-         StackTraceElement s = elements[i];
-         System.out.println("\tat " + s.getClassName() + "." + s.getMethodName() + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
+    for (int i = from; i < elements.length; i++) {
+      StackTraceElement s = elements[i];
+
+      String method = s.getClassName() + "." + s.getMethodName();
+
+      if (filterLine == null) {
+        System.out
+            .println("\tat " + method + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
+
+      } else {
+        if (method.contains(filterLine)) {
+          System.out
+              .println("\tat " + method + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
+        }
+
+      }
+
     }
   }
 
@@ -323,13 +375,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   public double getLastRenderingTimeMs() {
     return lastRenderingTimeMs;
   }
-
-  /*
-   * @Override public void paint(Graphics g) { synchronized(this) {
-   * System.out.println("IS RENDERING"); isRenderingFlag.set(true); //super.paint(g);
-   * myGL.glXSwapBuffers(g, this); isRenderingFlag.set(false); System.out.println("DONE RENDERING");
-   * } }
-   */
 
   public AtomicBoolean getIsRenderingFlag() {
     return isRenderingFlag;
@@ -349,7 +394,6 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
    * and {@link View} that window size changed.
    */
   public synchronized void doReshape(int w, int h) {
-    // System.out.println("doReshape " + w);
     myUT.glutInitWindowSize(w, h);
 
     if (view != null) {
@@ -359,7 +403,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   }
 
-  /* *************************** MOUSE MOTION ***************************** */
+  /* *********************************************************************** */
+  /* *************************** MOUSE MOTION ****************************** */
+  /* *********************************************************************** */
 
   /**
    * Handle mouse events emitted by GLUT. Most probably not registered as mouse already handled by
@@ -370,7 +416,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     System.out.println("EmulGLCanvas.doMotion!" + profileDisplayCount);
   }
 
-  /* *************************** SCREENSHOTS ***************************** */
+  /* *********************************************************************** */
+  /* **************************** SCREENSHOTS ****************************** */
+  /* *********************************************************************** */
 
   @Override
   public BufferedImage screenshot() {
@@ -398,7 +446,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     }
   }
 
-  /* ******************************************************* */
+  /* *********************************************************************** */
+  /* ******************************* GET/SET ******************************* */
+  /* *********************************************************************** */
 
   @Override
   public View getView() {
@@ -421,7 +471,27 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   }
 
-  // ******************* LISTENERS ******************* //
+  @Override
+  public void setPixelScale(float[] scale) {
+    Logger.getLogger(EmulGLCanvas.class)
+        .info("Not implemented. Pixel scale is driven by AWT Canvas itself and jGL adapts to it");
+  }
+
+  @Override
+  public Coord2d getPixelScale() {
+    Graphics2D g2d = (Graphics2D) getGraphics();
+    AffineTransform globalTransform = g2d.getTransform();
+    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
+  }
+
+  @Override
+  public IAnimator getAnimation() {
+    return animator;
+  }
+
+  /* *********************************************************************** */
+  /* ***************************** LISTENERS ******************************* */
+  /* *********************************************************************** */
 
   @Override
   public void addMouseController(Object o) {
@@ -497,7 +567,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     Graphics2D g2d = glImage.createGraphics();
 
     AWTGraphicsUtils.configureRenderingHints(g2d);
-    
+
     int minX = Integer.MAX_VALUE;
     int maxX = 0;
     int minY = Integer.MAX_VALUE;
@@ -507,36 +577,36 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       // Render a rectangle around profile text
       for (ProfileInfo profile : profileInfo) {
         int stringWidth = AWTGraphicsUtils.stringWidth(g2d, profile.message);
-        
-        if(minX > profile.x)
+
+        if (minX > profile.x)
           minX = profile.x;
-        if(maxX < profile.x + stringWidth)
-          maxX = profile.x + stringWidth;        
-        if(minY > profile.y)
+        if (maxX < profile.x + stringWidth)
+          maxX = profile.x + stringWidth;
+        if (minY > profile.y)
           minY = profile.y;
-        if(maxY < profile.y)
-          maxY = profile.y;        
+        if (maxY < profile.y)
+          maxY = profile.y;
       }
-      
-      if(minX==Integer.MAX_VALUE)
+
+      if (minX == Integer.MAX_VALUE)
         minX = 0;
-      if(maxX==0)
+      if (maxX == 0)
         maxX = 10;
-      if(minY==Integer.MAX_VALUE)
+      if (minY == Integer.MAX_VALUE)
         minY = 0;
-      if(maxY==0)
+      if (maxY == 0)
         maxY = 10;
-      
-      int x = minX - PROFILE_LINE_X_START/2;
-      int y = minY - profileDisplayFont.getSize() - PROFILE_LINE_HEIGHT/2;
-      int width = maxX-minX + PROFILE_LINE_X_START;
-      int height = maxY-minY + profileDisplayFont.getSize() + PROFILE_LINE_HEIGHT;
-      
+
+      int x = minX - PROFILE_LINE_X_START / 2;
+      int y = minY - profileDisplayFont.getSize() - PROFILE_LINE_HEIGHT / 2;
+      int width = maxX - minX + PROFILE_LINE_X_START;
+      int height = maxY - minY + profileDisplayFont.getSize() + PROFILE_LINE_HEIGHT;
+
       g2d.setColor(java.awt.Color.WHITE);
       g2d.fillRect(x, y, width, height);
       g2d.setColor(java.awt.Color.RED);
       g2d.drawRect(x, y, width, height);
-      
+
       // Render all text info
       for (ProfileInfo profile : profileInfo) {
         java.awt.Color awtColor = AWTColor.toAWT(profile.color);
@@ -548,14 +618,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     }
   }
-  
+
   static final int PROFILE_LINE_X_START = 10;
   static final int PROFILE_LINE_HEIGHT = 12;
 
   protected void profile(double mili) {
     int x = PROFILE_LINE_X_START;
     int y = PROFILE_LINE_HEIGHT;
-    
+
     synchronized (profileInfo) {
 
       profileClear();
@@ -588,10 +658,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       int viewportHeight = gl.getContext().Viewport.Height;
 
       profile("Viewport Size : " + viewportWidth + "x" + viewportHeight, x, y * (line++), c);
-
     }
-
-    
   }
 
   /** Draw a 2d text at the given position */
@@ -616,6 +683,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
       this.y = y;
       this.color = color;
     }
+  }
+
+  public boolean isDebugEvents() {
+    return debugEvents;
+  }
+
+  public void setDebugEvents(boolean debugEvents) {
+    this.debugEvents = debugEvents;
   }
 
   public boolean isProfileDisplayMethod() {
@@ -652,7 +727,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     painter.getGL().getPointer().geometry.countBegin = 0;
   }
 
-  /* ******************* MONITOR ********************* */
+  /* *********************************************************************** */
+  /* ******************************* MONITOR ******************************* */
+  /* *********************************************************************** */
 
   @Override
   public String getFullname() {
