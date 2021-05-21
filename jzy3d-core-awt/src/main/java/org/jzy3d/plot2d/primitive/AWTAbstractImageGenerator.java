@@ -17,7 +17,7 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator {
   protected Color backgroundColor;
   protected Color foregroundColor = Color.BLACK;
 
-  
+
   public void configureText(Graphics2D graphic) {
     graphic.setFont(awtFont); // Text for the numbers in the ColorBar is Size=12
   }
@@ -78,18 +78,16 @@ public abstract class AWTAbstractImageGenerator implements AWTImageGenerator {
   @Override
   public void setFont(Font font) {
     // reset font only if necessary
-    if(this.font==null || !this.font.equals(font)) {
+    if (this.font == null || !this.font.equals(font)) {
       this.font = font;
       this.textSize = font.getHeight();
-      
+
       setAWTFont(AWTFont.toAWT(font));
     }
-    
-
   }
+
   @Override
   public Font getFont() {
     return font;
   }
-
 }

@@ -47,6 +47,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     this.renderer = renderer;
     this.min = mapper.getMin();
     this.max = mapper.getMax();
+    
     setFont(IAxisLayout.FONT_DEFAULT);
   }
 
@@ -60,8 +61,6 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
   /** Renders the {@link AWTColorbarImageGenerator} to an image. */
   public BufferedImage toImage(int width, int height, int barWidth) {
-    
-    
     if (barWidth > width)
       return null;
 
@@ -174,20 +173,14 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
       String tickLabel;
       for (int t = 0; t < ticks.length; t++) {
         tickLabel = renderer.format(ticks[t]);
-        //int stringWidth = graphic.getFontMetrics().stringWidth(tickLabel);
+
         int stringWidth = painter.getTextLengthInPixels(font, tickLabel);
 
         if (maxWidth < stringWidth) {
           maxWidth = stringWidth;
         }
-
-        // graphic.drawString(txt, barWidth + textToBarHorizontalMargin, ypos);
       }
     }
     return maxWidth;
   }
-  
-  
-
-
 }
