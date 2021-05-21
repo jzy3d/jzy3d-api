@@ -41,9 +41,11 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
    */
   protected boolean shrinkColorbar = false;
   protected int colorbarRightMargin = 10;
+  protected Chart chart;
 
   @Override
   public void update(Chart chart) {
+    this.chart = chart;
     final ICanvas canvas = chart.getCanvas();
     final List<ILegend> list = getLegends(chart);
 
@@ -110,7 +112,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     else
       return new ArrayList<>();
   }
-  
+
   /**
    * Return the scene viewport as it was processed according to the number of legends to display.
    */
@@ -127,15 +129,39 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     return shrinkColorbar;
   }
 
+  /**
+   * If true, will let the colorbar be as thin as possible and stick to the right of the chart.
+   * 
+   * If the input value is different than internal state, then the chart will be updated to ensure
+   * the setting takes effect immediately.
+   */
   public void setShrinkColorbar(boolean shrinkColorbar) {
+    boolean updateDisplay = (shrinkColorbar != this.shrinkColorbar);
+
     this.shrinkColorbar = shrinkColorbar;
+
+    if (updateDisplay) {
+      chart.render();
+    }
   }
 
   public int getColorbarRightMargin() {
     return colorbarRightMargin;
   }
 
+  /**
+   * Set a right margin for colorbar.
+   * 
+   * If the input value is different than internal state, then the chart will be updated to ensure
+   * the setting takes effect immediately.
+   */
   public void setColorbarRightMargin(int colorbarRightMargin) {
+    boolean updateDisplay = (colorbarRightMargin != this.colorbarRightMargin);
+
     this.colorbarRightMargin = colorbarRightMargin;
+    
+    if (updateDisplay) {
+      chart.render();
+    }
   }
 }
