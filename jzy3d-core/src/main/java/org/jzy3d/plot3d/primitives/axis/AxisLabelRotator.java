@@ -19,7 +19,9 @@ public class AxisLabelRotator {
    * Compute the 2D orientation (rotation) of an axis made of 2 3D points. The 2D orientation is
    * processed according to the viewpoint on this segment.
    * 
-   * <img src="doc-files/AxisBox-Label.png">
+   * <img src="doc-files/AxisBox-Label.png"> <a href=
+   * "https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=W2-wfBk_WKus#">Schema
+   * source</a>
    * 
    * <ul>
    * <li>segment[0] : 3D world coordinates of the starting point of the axis segment.
@@ -37,7 +39,9 @@ public class AxisLabelRotator {
    * Compute the 2D orientation (rotation) of an axis as it is currently displayed to screen (which
    * may change according to camera viewpoint)
    * 
-   * <img src="doc-files/AxisBox-Label.png">
+   * <img src="doc-files/AxisBox-Label.png"> <a href=
+   * "https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=W2-wfBk_WKus#">Schema
+   * source</a>
    * 
    * @param p1 2D screen coordinates of the starting point of the axis segment.
    * @param p2 2D screen coordinates of the ending point of the axis segment.
@@ -95,10 +99,27 @@ public class AxisLabelRotator {
     }
     return rotation;
   }
-  
-  
-  
-  
+
+
+
+  /**
+   * Compute the 2D offset and rotation required to have axis label cleanly fitting <i>around</i>
+   * and axis and being parallel to the axis (as displayed in 2D on screen).
+   * 
+   * The below schema decypher the axis label rotation processing of this method :
+   * <img src="doc-files/AxisBox-LabelRotate.png"/> <a href=
+   * "https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=WdIEGukxyYCU#">Schema
+   * source</a>
+   * 
+   * @param painter
+   * @param segment3D a pair of 3D coordinates describing the axis segment.
+   * @param center3D the center of the axis collection (for a ternary axis, the center of a bottom
+   *        or top triangle).
+   * @param label3D the initial 3D position of the label that should be rotated and shifted.
+   * @param offset the expected axis-label distance in pixels.
+   * @return a pair of values indicating the (x,y) offset being either positive or negative, and a
+   *         rotation for the label to remain parallel to the input segment.
+   */
   public TextLayout computeTextLayout(IPainter painter, Coord3d[] segment3D, Coord3d center3D,
       Coord3d label3D, float offset) {
     // Project to 2D
@@ -111,8 +132,10 @@ public class AxisLabelRotator {
     float rotation = computeSegmentRotation(segment2D[0], segment2D[1]);
 
     // Compute absolute offset
-    double absoluteXOffset = Math.abs(Math.sin(rotation)) * offset * painter.getView().getPixelScale().y;
-    double absoluteYOffset = Math.abs(Math.cos(rotation)) * offset * painter.getView().getPixelScale().y;
+    double absoluteXOffset =
+        Math.abs(Math.sin(rotation)) * offset * painter.getView().getPixelScale().y;
+    double absoluteYOffset =
+        Math.abs(Math.cos(rotation)) * offset * painter.getView().getPixelScale().y;
 
 
     // Get label quadrant to process 2D offset
@@ -139,14 +162,15 @@ public class AxisLabelRotator {
     }
 
     Coord2d offset2D = new Coord2d(xOffset, yOffset);
-    
+
     TextLayout i = new TextLayout(offset2D, rotation);
     return i;
   }
-  
-  public class TextLayout{
+
+  public class TextLayout {
     public Coord2d offset;
     public float rotation;
+
     public TextLayout(Coord2d offset, float rotation) {
       super();
       this.offset = offset;
