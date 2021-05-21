@@ -175,6 +175,7 @@ public class AWTImageConvert {
     ByteBuffer bb =
         ByteBuffer.allocateDirect(byteArray.length * SIZE_BYTE).order(ByteOrder.nativeOrder());
     ((Buffer) bb.put(byteArray)).flip();
+    //formerly crashed with : bb.put(byteArray).flip();
     return bb;
   }
 
