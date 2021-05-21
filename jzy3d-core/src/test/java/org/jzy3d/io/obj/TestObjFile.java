@@ -6,6 +6,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 public class TestObjFile {
+  /**
+   * This test may fail with Java8 on a NoSuchMethodError for FloatBuffer.rewind()
+   */
   @Test
   public void loadBunny() {
     OBJFile objFile = new OBJFile();
