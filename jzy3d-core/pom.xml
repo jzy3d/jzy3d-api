@@ -20,6 +20,7 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- https://github.com/jzy3d/jPLY/tree/master/jply -->
 		<dependency>
 			<groupId>org.smurn</groupId>
 			<artifactId>jply</artifactId>
