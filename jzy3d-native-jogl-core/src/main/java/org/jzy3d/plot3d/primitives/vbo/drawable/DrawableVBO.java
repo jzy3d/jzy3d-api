@@ -174,8 +174,6 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
       gl.getGL2().glPointSize(width);
     } else if (geometry == GL.GL_LINES) {
       gl.getGL2().glLineWidth(width);
-      
-      System.out.println("GGGGGG");
     }
   }
 
