@@ -42,6 +42,19 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * 
  */
 public abstract class Drawable implements IGLRenderer, ISortableDraw {
+  protected Transform transform;
+  protected Transform transformBefore;
+  protected BoundingBox3d bbox;
+  protected ILegend legend = null;
+  protected List<IDrawableListener> listeners;
+  protected boolean hasListeners = true;
+
+  protected boolean displayed = true;
+  protected boolean legendDisplayed = false;
+  protected boolean boundingBoxDisplayed = false;
+  protected Color boundingBoxColor = Color.BLACK.clone();
+
+  protected SpaceTransformer spaceTransformer = null;
 
   /**
    * Performs all required operation to cleanup the Drawable.
@@ -257,21 +270,4 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
   public String toString(int depth) {
     return Utils.blanks(depth) + "(" + this.getClass().getSimpleName() + ")";
   }
-
-  /* */
-
-  protected Transform transform;
-  protected Transform transformBefore;
-  protected BoundingBox3d bbox;
-  protected ILegend legend = null;
-  protected List<IDrawableListener> listeners;
-  protected boolean hasListeners = true;
-
-  protected boolean displayed = true;
-  protected boolean legendDisplayed = false;
-  protected boolean boundingBoxDisplayed = false;
-  protected Color boundingBoxColor = Color.BLACK.clone();
-
-  protected SpaceTransformer spaceTransformer = null;
-
 }
