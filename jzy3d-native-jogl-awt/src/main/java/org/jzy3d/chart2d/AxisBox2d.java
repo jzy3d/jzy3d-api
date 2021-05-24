@@ -51,7 +51,10 @@ public class AxisBox2d extends AxisBox {
     return 3;
   }
 
-  /*@Override
+  
+  /*
+   * THESE TWO METHOD HAVE MOVED TO AxisLabelProcessor
+   * @Override
   public Horizontal align(Horizontal hal, int direction, Camera cam, Coord3d tickPosition) {
     if (direction == AXE_X) {
       return Horizontal.CENTER;
