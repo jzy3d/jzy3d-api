@@ -763,6 +763,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   @Override
   public void gluDisk(double inner, double outer, int slices, int loops) {
     GLUquadricObj qobj = glu.gluNewQuadric();
+    qobj.Normals = GLU.GLU_NONE; // https://github.com/jzy3d/jzy3d-api/issues/179
     glu.gluDisk(qobj, inner, outer, slices, loops);
   }
 
