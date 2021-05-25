@@ -2135,7 +2135,7 @@ public class GL {
   /** GLvoid glBegin (GLenum mode) */
   public void glBegin(int mode) {
     if (CC.Mode != None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glBegin");
+      CC.gl_error(GL_INVALID_OPERATION, "glBegin can not be called as a geometry is already in progress : " + CC.Mode);
       return;
     }
     switch (mode) {
@@ -2155,11 +2155,13 @@ public class GL {
         CC.gl_error(GL.GL_INVALID_ENUM, "glBegin(mode)");
     }
   }
+  
+  static final String NEED_GL_BEGIN = " is called while no geometry was initialized with glBegin(geom).";
 
   /** GLvoid glEnd (GLvoid) */
   public void glEnd() {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glEnd");
+      CC.gl_error(GL_INVALID_OPERATION, "glEnd" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_end();
@@ -2168,7 +2170,7 @@ public class GL {
   /** GLvoid glVertex2d (GLdouble x, GLdouble y) */
   public void glVertex2d(double x, double y) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex2d");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex2d" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex((float) x, (float) y, 0.0f, 1.0f);
@@ -2177,7 +2179,7 @@ public class GL {
   /** GLvoid glVertex2f (GLfloat x, GLfloat y) */
   public void glVertex2f(float x, float y) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex2f");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex2f" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, 0.0f, 1.0f);
@@ -2186,7 +2188,7 @@ public class GL {
   /** GLvoid glVertex2i (GLint x, GLint y) */
   public void glVertex2i(int x, int y) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex2i");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex2i" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, 0.0f, 1.0f);
@@ -2195,7 +2197,7 @@ public class GL {
   /** GLvoid glVertex2s (GLshort x, GLshort y) */
   public void glVertex2s(short x, short y) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex2s");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex2s" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, 0.0f, 1.0f);
@@ -2204,7 +2206,7 @@ public class GL {
   /** GLvoid glVertex3d (GLdouble x, GLdouble y, GLdouble z) */
   public void glVertex3d(double x, double y, double z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex3d");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex3d" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex((float) x, (float) y, (float) z, 1.0f);
@@ -2213,7 +2215,7 @@ public class GL {
   /** GLvoid glVertex3f (GLfloat x, GLfloat y, GLfloat z) */
   public void glVertex3f(float x, float y, float z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex3f");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex3f" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, z, 1.0f);
@@ -2222,7 +2224,7 @@ public class GL {
   /** GLvoid glVertex3i (GLint x, GLint y, GLint z) */
   public void glVertex3i(int x, int y, int z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex3i");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex3i" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, z, 1.0f);
@@ -2231,7 +2233,7 @@ public class GL {
   /** GLvoid glVertex3s (GLshort x, GLshort y, GLshort z) */
   public void glVertex3s(short x, short y, short z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex3s");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex3s" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, z, 1.0f);
@@ -2240,7 +2242,7 @@ public class GL {
   /** GLvoid glVertex4d (GLdouble x, GLdouble y, GLdouble z, GLdouble w) */
   public void glVertex4d(double x, double y, double z, double w) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex4d");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex4d" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex((float) x, (float) y, (float) z, (float) w);
@@ -2249,7 +2251,7 @@ public class GL {
   /** GLvoid glVertex4f (GLfloat x, GLfloat y, GLfloat z, GLfloat w) */
   public void glVertex4f(float x, float y, float z, float w) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex4f");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex4f" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, z, w);
@@ -2258,7 +2260,7 @@ public class GL {
   /** GLvoid glVertex4i (GLint x, GLint y, GLint z, GLint w) */
   public void glVertex4i(int x, int y, int z, int w) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex4i");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex4i" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, z, w);
@@ -2267,7 +2269,7 @@ public class GL {
   /** GLvoid glVertex4s (GLshort x, GLshort y, GLshort z, GLshort w) */
   public void glVertex4s(short x, short y, short z, short w) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex4s");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex4s" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(x, y, z, w);
@@ -2276,7 +2278,7 @@ public class GL {
   /** GLvoid glVertex2dv (GLdouble *v) */
   public void glVertex2dv(double v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex2dv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex2dv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex((float) v[0], (float) v[1], 0.0f, 1.0f);
@@ -2285,7 +2287,7 @@ public class GL {
   /** GLvoid glVertex2fv (GLfloat *v) */
   public void glVertex2fv(float v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex2fv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex2fv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], 0.0f, 1.0f);
@@ -2294,7 +2296,7 @@ public class GL {
   /** GLvoid glVertex2iv (GLint *v) */
   public void glVertex2iv(int v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex2iv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex2iv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], 0.0f, 1.0f);
@@ -2303,7 +2305,7 @@ public class GL {
   /** GLvoid glVertex2sv (GLshort *v) */
   public void glVertex2sv(short v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex2sv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex2sv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], 0.0f, 1.0f);
@@ -2312,7 +2314,7 @@ public class GL {
   /** GLvoid glVertex3dv (GLdouble *v) */
   public void glVertex3dv(double v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex3dv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex3dv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex((float) v[0], (float) v[1], (float) v[2], 1.0f);
@@ -2321,7 +2323,7 @@ public class GL {
   /** GLvoid glVertex3fv (GLfloat *v) */
   public void glVertex3fv(float v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex3fv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex3fv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], v[2], 1.0f);
@@ -2330,7 +2332,7 @@ public class GL {
   /** GLvoid glVertex3iv (GLint *v) */
   public void glVertex3iv(int v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex3iv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex3iv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], v[2], 1.0f);
@@ -2339,7 +2341,7 @@ public class GL {
   /** GLvoid glVertex3sv (GLshort *v) */
   public void glVertex3sv(short v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex3sv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex3sv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], v[2], 1.0f);
@@ -2348,7 +2350,7 @@ public class GL {
   /** GLvoid glVertex4dv (GLdouble *v) */
   public void glVertex4dv(double v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex4dv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex4dv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex((float) v[0], (float) v[1], (float) v[2], (float) v[3]);
@@ -2357,7 +2359,7 @@ public class GL {
   /** GLvoid glVertex4fv (GLfloat *v) */
   public void glVertex4fv(float v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex4fv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex4fv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], v[2], v[3]);
@@ -2366,7 +2368,7 @@ public class GL {
   /** GLvoid glVertex4iv (GLint *v) */
   public void glVertex4iv(int v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex4iv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex4iv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], v[2], v[3]);
@@ -2375,7 +2377,7 @@ public class GL {
   /** GLvoid glVertex4sv (GLshort *v) */
   public void glVertex4sv(short v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glVertex4sv");
+      CC.gl_error(GL_INVALID_OPERATION, "glVertex4sv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_vertex(v[0], v[1], v[2], v[3]);
@@ -2384,7 +2386,7 @@ public class GL {
   /** GLvoid glNormal3b (GLbyte x, GLbyte y, GLbyte z) */
   public void glNormal3b(byte x, byte y, byte z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3b");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3b" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal(x, y, z);
@@ -2393,7 +2395,7 @@ public class GL {
   /** GLvoid glNormal3d (GLdouble x, GLdouble y, GLdouble z) */
   public void glNormal3d(double x, double y, double z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3d");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3d" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal((float) x, (float) y, (float) z);
@@ -2402,7 +2404,7 @@ public class GL {
   /** GLvoid glNormal3f (GLfloat x, GLfloat y, GLfloat z) */
   public void glNormal3f(float x, float y, float z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3f");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3f" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal(x, y, z);
@@ -2411,7 +2413,7 @@ public class GL {
   /** GLvoid glNormal3i (GLint x, GLint y, GLint z) */
   public void glNormal3i(int x, int y, int z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3i");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3i" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal(x, y, z);
@@ -2420,7 +2422,7 @@ public class GL {
   /** GLvoid glNormal3s (GLshort x, GLshort y, GLshort z) */
   public void glNormal3s(short x, short y, short z) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3s");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3s" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal(x, y, z);
@@ -2429,7 +2431,7 @@ public class GL {
   /** GLvoid glNormal3bv (GLbyte *v) */
   public void glNormal3bv(byte v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3bv");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3bv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal(v[0], v[1], v[2]);
@@ -2438,7 +2440,7 @@ public class GL {
   /** GLvoid glNormal3dv (GLdouble *v) */
   public void glNormal3dv(double v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3dv");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3dv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal((float) v[0], (float) v[1], (float) v[2]);
@@ -2447,7 +2449,7 @@ public class GL {
   /** GLvoid glNormal3fv (GLfloat *v) */
   public void glNormal3fv(float v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3fv");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3fv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal(v[0], v[1], v[2]);
@@ -2456,7 +2458,7 @@ public class GL {
   /** GLvoid glNormal3iv (GLint *v) */
   public void glNormal3iv(int v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3iv");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3iv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal(v[0], v[1], v[2]);
@@ -2465,7 +2467,7 @@ public class GL {
   /** GLvoid glNormal3sv (GLshort *v) */
   public void glNormal3sv(short v[]) {
     if (CC.Mode == None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glNormal3sv");
+      CC.gl_error(GL_INVALID_OPERATION, "glNormal3sv" + NEED_GL_BEGIN);
       return;
     }
     CC.gl_normal(v[0], v[1], v[2]);
