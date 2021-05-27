@@ -102,8 +102,8 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
-		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
+	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository> </distributionManagement> -->
 
 	<properties>
@@ -248,7 +248,7 @@
 			</dependency>
 
 			<dependency>
-				<!-- Some modules use junit not only in their test classes but also in 
+				<!-- Some modules use junit not only in their test classes but also in
 					their main classes. Therefore manage the version in this section -->
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -414,10 +414,10 @@
 				<version>2.5.3</version>
 			</plugin>
 
-			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
-				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
-				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
-				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose> 
+			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId>
+				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose>
+				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
 				</configuration> </plugin> -->
 
 			<!-- To sign artifacts while deploying to Maven central via Sonatype -->
@@ -490,9 +490,9 @@
 			<build>
 				<plugins>
 
-					<!-- Use failsafe to run integration tests which success may depend 
+					<!-- Use failsafe to run integration tests which success may depend
 						on GPU. Run them with mvn verify -Pintegration-tests -->
-					<plugin>
+					<!--<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
 						<version>3.0.0-M5</version>
@@ -510,7 +510,23 @@
 								</goals>
 							</execution>
 						</executions>
+					</plugin>-->
+
+					<!-- Use surefire to run integration tests which success may depend
+						on GPU. Run them with mvn verify -Pintegration-tests -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.0.0-M5</version>
+						<configuration>
+							<includes>
+							    <include>**/Test*.java</include>
+							    <include>**/*Test.java</include>
+									<include>**/ITTest*.java</include>
+							</includes>
+						</configuration>
 					</plugin>
+
 
 				</plugins>
 			</build>
