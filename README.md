@@ -205,26 +205,38 @@ mvn dependency:resolve -Dclassifier=sources
 
 ## From command line
 
-### Build and test all
+### Build all
+
+#### Run unit tests only
 
 ```
 mvn clean install
 ```
 
-The [integration tests might be disabled on purpose](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L168), as they are still
-sometime sensitive to thin rendering differences across computers. If they are enabled, you may have tests named ```ITTest*``` failing. In this case, you may
-* Comment it from [Surefire plugin configuration](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L168). The best is to edit the Maven pom to only disable ITTest*. If you are busy, you may simply run ```mvn install -DskipTests```
-* Skip it from [Faisafe if this plugin is currently active](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L186) in the Maven pom. To do so run ```mvn install -DskipITs```
+#### Run unit tests and integration tests
 
+```
+mvn clean install -Pintegration-tests
+```
+
+#### Skip tests
+
+```
+mvn clean install -DskipTests
+```
 
 ### Deploy source & javadocs
 ```
 mvn clean source:jar javadoc:jar deploy
  ```
 
+### Generate javadoc site
 
+Comment module jzy3d-tutorial manually
 
-
+```
+mvn compile javadoc:javadoc javadoc:aggregate
+```
 
 ## From intellij
 
