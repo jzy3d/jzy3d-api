@@ -1,36 +1,28 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
-
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-all</artifactId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
+
 	<artifactId>jGL</artifactId>
 	<name>Jzy3d Embedded jGL</name>
 
 	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<!-- Disable Javadoc Linter -->
+		<additionalparam>-Xdoclint:none</additionalparam>
 	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
-			<type>jar</type>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.6</version>
 				<configuration>
 					<systemProperties>
 						<property>
@@ -41,117 +33,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- Configure compiler -->
-
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-
-			<!-- Help performing release (creating git branches and bumping MVN versions) -->
-
-			<plugin>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
-			</plugin>
-
-			<!-- Generate an additional Jar containing Source Code -->
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>deploy</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Generate an additional Jar containing Javadoc -->
-
-			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9</version>
-					<executions>
-							<execution>
-									<id>attach-javadocs</id>
-									<goals>
-											<goal>jar</goal>
-									</goals>
-									<configuration>
-										<failOnError>false</failOnError>
-									</configuration>
-							</execution>
-					</executions>
-			</plugin>
 		</plugins>
-
-
-		<!-- Extension to perform FTP upload of artifact -->
-
-		<extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-          <artifactId>wagon-ftp</artifactId>
-          <version>1.0-beta-6</version>
-      </extension>
-    </extensions>
 	</build>
-
-	<!-- Repositories where to get dependencies -->
-
-	<repositories>
-		<repository>
-			<id>jzy3d-snapshots</id>
-			<name>Jzy3d Snapshots</name>
-			<url>http://maven.jzy3d.org/snapshots/</url>
-		</repository>
-		<repository>
-			<id>jzy3d-releases</id>
-			<name>Jzy3d Releases</name>
-			<url>http://maven.jzy3d.org/releases/</url>
-		</repository>
-	</repositories>
-
-	<!-- Repositories where to deploy this artifact -->
-
-	<distributionManagement>
-		<repository>
-			<id>jzy3d-ftp</id>
-			<name>Jzy3d Maven Folder</name>
-			<url>ftp://ftp.cluster013.ovh.net/maven/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>jzy3d-ftp</id>
-			<name>Jzy3d Maven Folder SNAPSHOTS</name>
-			<url>ftp://ftp.cluster013.ovh.net/maven/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
-
-
-	<!-- Disable Javadoc Linter -->
-
-	<profiles>
-			<profile>
-					<id>disable-java8-doclint</id>
-					<activation>
-							<!--<jdk>[1.8,)</jdk>-->
-							<activeByDefault>true</activeByDefault>
-					</activation>
-					<properties>
-							<additionalparam>-Xdoclint:none</additionalparam>
-					</properties>
-			</profile>
-	</profiles>
-
 </project>
