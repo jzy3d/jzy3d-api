@@ -3,6 +3,7 @@ package org.jzy3d.chart.controllers.mouse.camera;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLSkin;
@@ -193,7 +194,7 @@ public class TestAdaptiveMouseController {
     Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.getWireframeDisplayed());
 
   }
-  
+ 
   @Test
   public void givenWireframeOn_whenOptimizeByDroppingFace_thenDrawableHaveWireframeDisplayed() {
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
@@ -232,7 +233,6 @@ public class TestAdaptiveMouseController {
     // Then the wireframe status is back to original value
 
     Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.getWireframeDisplayed());
-
   }
 
   // --------------------------------------------------------------------------------- //
