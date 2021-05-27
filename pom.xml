@@ -112,6 +112,7 @@
 		<version.swt>3.105.3</version.swt>
 	</properties>
 
+	<!-- Define default versions for all dependencies -->
 	<dependencyManagement>
 		<dependencies>
 
@@ -258,6 +259,7 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<!-- Define dependencies that should be used in all submodules -->
 	<dependencies>
 
 		<dependency>
@@ -288,7 +290,7 @@
 
 	</dependencies>
 
-	<!--To retrieve Jzy3d dependencies -->
+	<!-- Define the repository where Jzy3d dependencies can be found -->
 	<repositories>
 
 		<repository>
@@ -306,6 +308,7 @@
 	</repositories>
 
 	<build>
+		<!-- Define default versions for all build plugins -->
 		<pluginManagement>
 			<plugins>
 
@@ -333,8 +336,37 @@
 					<version>3.2.0</version>
 				</plugin>
 
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.2.1</version>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.3</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
+
+
+		<!-- ****************************************************************** -->
+		<!-- ********************** BUILD CONFIGURATION *********************** -->
+		<!-- ****************************************************************** -->
 
 		<plugins>
 
@@ -354,7 +386,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.2.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -371,7 +402,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.2.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -386,14 +416,16 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
 				<configuration>
 					<additionalparam>-Xdoclint:none</additionalparam>
 					<doclint>none</doclint>
 					<source>8</source>
 					<quiet>true</quiet><!-- only show warnings/errors -->
 					<failOnError>false</failOnError>
-					<stylesheetfile>doc/style/javadoc.css</stylesheetfile>
+					<!--<stylesheetfile>doc/style/javadoc.css</stylesheetfile>-->
+					<configuration>
+            <docfilessubdirs>true</docfilessubdirs>
+          </configuration>
 				</configuration>
 				<executions>
 					<execution>
@@ -403,6 +435,12 @@
 							<goal>jar</goal>
 						</goals>
 					</execution>
+          <execution>
+          <id>aggregate</id>
+          <goals>
+              <goal>aggregate</goal>
+          </goals>
+          </execution>
 				</executions>
 			</plugin>
 
@@ -411,7 +449,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.3</version>
 			</plugin>
 
 			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -420,7 +457,7 @@
 				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
 				</configuration> </plugin> -->
 
-			<!-- To sign artifacts while deploying to Maven central via Sonatype -->
+			<!-- SIGN ARTIFACT FOR DEPLOYING TO SONATYPE -->
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -489,6 +526,20 @@
 			<id>integration-tests</id>
 			<build>
 				<plugins>
+					<!-- Use surefire to run integration tests which success may depend
+						on GPU. Run them with mvn verify -Pintegration-tests -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.0.0-M5</version>
+						<configuration>
+							<includes>
+							    <include>**/Test*.java</include>
+							    <include>**/*Test.java</include>
+									<include>**/ITTest*.java</include>
+							</includes>
+						</configuration>
+					</plugin>
 
 					<!-- Use failsafe to run integration tests which success may depend
 						on GPU. Run them with mvn verify -Pintegration-tests -->
@@ -511,22 +562,6 @@
 							</execution>
 						</executions>
 					</plugin>-->
-
-					<!-- Use surefire to run integration tests which success may depend
-						on GPU. Run them with mvn verify -Pintegration-tests -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>3.0.0-M5</version>
-						<configuration>
-							<includes>
-							    <include>**/Test*.java</include>
-							    <include>**/*Test.java</include>
-									<include>**/ITTest*.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-
 
 				</plugins>
 			</build>
