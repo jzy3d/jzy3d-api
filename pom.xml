@@ -421,7 +421,7 @@
 					<source>8</source>
 					<quiet>true</quiet><!-- only show warnings/errors -->
 					<failOnError>false</failOnError>
-					<!--<stylesheetfile>doc/style/javadoc.css</stylesheetfile>-->
+					<additionalJOption>--no-module-directories</additionalJOption>
 					<configuration>
             <docfilessubdirs>true</docfilessubdirs>
           </configuration>
