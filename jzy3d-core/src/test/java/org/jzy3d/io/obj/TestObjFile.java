@@ -1,6 +1,7 @@
 package org.jzy3d.io.obj;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -10,11 +11,11 @@ public class TestObjFile {
    * This test may fail with Java8 on a NoSuchMethodError for FloatBuffer.rewind()
    */
   @Test
-  public void loadBunny() {
+  public void loadBunny() throws MalformedURLException {
     OBJFile objFile = new OBJFile();
 
     String objFilePath = "data/objfiles/bunny.obj";
-    objFile.loadModelFromFilename("file://" + new File(objFilePath).getAbsolutePath());
+    objFile.loadModelFromFilename(toFileURLString(objFilePath));
 
 
     int countVertices = objFile.getPositionCount();
@@ -37,13 +38,13 @@ public class TestObjFile {
 
   }
 
-  @Ignore /* To run me, download file indicated in data/objfiles/dragon.url */
+  @Ignore("To run me, download file indicated in data/objfiles/dragon.url")
   @Test
-  public void loadDragon() {
+  public void loadDragon() throws MalformedURLException {
     OBJFile objFile = new OBJFile();
 
     String objFilePath = "data/objfiles/dragon.obj";
-    objFile.loadModelFromFilename("file://" + new File(objFilePath).getAbsolutePath());
+    objFile.loadModelFromFilename(toFileURLString(objFilePath));
 
     int countVertices = objFile.getPositionCount();
     int indexSize = objFile.getIndexCount();
@@ -62,5 +63,9 @@ public class TestObjFile {
     Assert.assertEquals(3, dimensions);
   }
 
+  private static String toFileURLString(String objFilePath) throws MalformedURLException {
+    File absoluteFile = new File(objFilePath).getAbsoluteFile();
+    return absoluteFile.toURI().toURL().toString();
+  }
 
 }

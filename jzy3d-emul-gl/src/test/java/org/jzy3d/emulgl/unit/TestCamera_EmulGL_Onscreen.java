@@ -1,10 +1,12 @@
 package org.jzy3d.emulgl.unit;
 
+import java.awt.Insets;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
+import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -21,9 +23,8 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
-
 public class TestCamera_EmulGL_Onscreen {
-@Ignore("Unstable from command line")
+
   @Test
   public void whenViewShoot_thenCameraIsProperlySet() throws InterruptedException {
     // LoggerUtils.minimal();
@@ -71,16 +72,16 @@ public class TestCamera_EmulGL_Onscreen {
     // After opening window to a chosen size
 
     Rectangle FRAME_SIZE = new Rectangle(800, 600);
-    int APP_BAR_HEIGHT = 22;
 
-
-    chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
+    IFrame frame = chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
 
     Thread.sleep(500);
 
+    considerFrameBorder(FRAME_SIZE, (FrameAWT) frame);
+
     // Then viewport size is set to occupy the full frame
     Assert.assertEquals(FRAME_SIZE.width, cam.getLastViewPort().getWidth());
-    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, cam.getLastViewPort().getHeight());
+    Assert.assertEquals(FRAME_SIZE.height, cam.getLastViewPort().getHeight());
 
     // ----------------------------------------
     // When change canvas size and update view
@@ -118,9 +119,13 @@ public class TestCamera_EmulGL_Onscreen {
      * int sideLength = 100; Assert.assertEquals(sideLength, cam.getLastViewPort().getHeight());
      * Assert.assertEquals(sideLength, cam.getLastViewPort().getWidth());
      */
+  }
 
-
-
+  private static void considerFrameBorder(Rectangle initialFrameSize, FrameAWT frame) {
+    // consider frame border
+    Insets insets = frame.getInsets();
+    initialFrameSize.width -= insets.left + insets.right;
+    initialFrameSize.height -= insets.top + insets.bottom;
   }
 
   private static Shape surface() {

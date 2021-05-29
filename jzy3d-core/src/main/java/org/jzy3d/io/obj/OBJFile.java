@@ -39,7 +39,7 @@ public class OBJFile {
     }
 
     int m_iVal = 0;
-  };
+  }
 
   public static final int NumPrimTypes = 4;
 
@@ -64,12 +64,9 @@ public class OBJFile {
       }
       return false;
     }
-  };
+  }
 
   public boolean loadModelFromFilename(String file) {
-    // URL fileURL = getClass().getClassLoader().getResource(File.separator
-    // + file);
-
     URL fileURL = null;
     try {
       fileURL = new URL(file);
@@ -89,10 +86,8 @@ public class OBJFile {
    */
   public boolean loadModelFromURL(URL fileURL) {
     if (fileURL != null) {
-      BufferedReader input = null;
-      try {
+      try (BufferedReader input = new BufferedReader(new InputStreamReader(fileURL.openStream()))) {
 
-        input = new BufferedReader(new InputStreamReader(fileURL.openStream()));
         String line = null;
         float[] val = new float[4];
         int[][] idx = new int[3][3];
@@ -113,7 +108,7 @@ public class OBJFile {
               break;
             default:
               break;
-          };
+          }
         }
         // post-process data
         // free anything that ended up being unused
@@ -134,13 +129,6 @@ public class OBJFile {
       } catch (NumberFormatException kIO) {
         logger.error("Problem reading the shader file " + fileURL + " : NumberFormatException : "
             + kIO.getMessage());
-      } finally {
-        try {
-          if (input != null) {
-            input.close();
-          }
-        } catch (IOException closee) {
-        }
       }
     } else {
       logger.error("URL was null");
@@ -175,11 +163,11 @@ public class OBJFile {
 
         line = line.substring(line.indexOf(" ") + 1);
         // vertex, 3 or 4 components
-        val[0] = Float.valueOf(line.substring(0, line.indexOf(" ")));
+        val[0] = Float.parseFloat(line.substring(0, line.indexOf(" ")));
         line = line.substring(line.indexOf(" ") + 1);
-        val[1] = Float.valueOf(line.substring(0, line.indexOf(" ")));
+        val[1] = Float.parseFloat(line.substring(0, line.indexOf(" ")));
         line = line.substring(line.indexOf(" ") + 1);
-        val[2] = Float.valueOf(line);
+        val[2] = Float.parseFloat(line);
         positions_.add(val[0]);
         positions_.add(val[1]);
         positions_.add(val[2]);
@@ -188,11 +176,11 @@ public class OBJFile {
       case 'n':
         // normal, 3 components
         line = line.substring(line.indexOf(" ") + 1);
-        val[0] = Float.valueOf(line.substring(0, line.indexOf(" ")));
+        val[0] = Float.parseFloat(line.substring(0, line.indexOf(" ")));
         line = line.substring(line.indexOf(" ") + 1);
-        val[1] = Float.valueOf(line.substring(0, line.indexOf(" ")));
+        val[1] = Float.parseFloat(line.substring(0, line.indexOf(" ")));
         line = line.substring(line.indexOf(" ") + 1);
-        val[2] = Float.valueOf(line);
+        val[2] = Float.parseFloat(line);
         normals_.add(val[0]);
         normals_.add(val[1]);
         normals_.add(val[2]);
@@ -224,9 +212,9 @@ public class OBJFile {
 
     // If following pattern "f 9227//9524 8376//8650 8377//8649"
     if (ObjFaceFormat.vertexNormal(line)) {
-      idx[0][0] = Integer.valueOf(line.substring(0, line.indexOf("//"))).intValue();
+      idx[0][0] = Integer.parseInt(line.substring(0, line.indexOf("//")));
       line = line.substring(line.indexOf("//") + 2);
-      idx[0][1] = Integer.valueOf(line.substring(0, line.indexOf(" "))).intValue();
+      idx[0][1] = Integer.parseInt(line.substring(0, line.indexOf(" ")));
 
       {
         // This face has vertex and normal indices
@@ -239,9 +227,9 @@ public class OBJFile {
 
         // grab the second vertex to prime
         line = line.substring(line.indexOf(" ") + 1);
-        idx[1][0] = Integer.valueOf(line.substring(0, line.indexOf("//")));
+        idx[1][0] = Integer.parseInt(line.substring(0, line.indexOf("//")));
         line = line.substring(line.indexOf("//") + 2);
-        idx[1][1] = Integer.valueOf(line.substring(0, line.indexOf(" ")));
+        idx[1][1] = Integer.parseInt(line.substring(0, line.indexOf(" ")));
 
         // remap them to the right spot
         idx[1][0] = (idx[1][0] > 0) ? (idx[1][0] - 1) : (positions_.size() - idx[1][0]);
@@ -249,9 +237,9 @@ public class OBJFile {
 
         // grab the third vertex to prime
         line = line.substring(line.indexOf(" ") + 1);
-        idx[2][0] = Integer.valueOf(line.substring(0, line.indexOf("//")));
+        idx[2][0] = Integer.parseInt(line.substring(0, line.indexOf("//")));
         line = line.substring(line.indexOf("//") + 2);
-        idx[2][1] = Integer.valueOf(line);
+        idx[2][1] = Integer.parseInt(line);
         {
           // remap them to the right spot
           idx[2][0] = (idx[2][0] > 0) ? (idx[2][0] - 1) : (positions_.size() - idx[2][0]);
@@ -514,4 +502,4 @@ public class OBJFile {
   protected int nOffset_;
   protected int vtxSize_ = 0;
   protected int openEdges_;
-};
+}
