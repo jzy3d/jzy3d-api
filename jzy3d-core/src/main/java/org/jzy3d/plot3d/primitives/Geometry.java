@@ -58,7 +58,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
         applyDepthRangeForUnderlying(painter);
 
       if (wireframeDisplayed && polygonOffsetFillEnable)
-        polygonOffseFillEnable(painter);
+        polygonOffsetFillEnable(painter);
 
       callPointsForFace(painter);
 
@@ -75,7 +75,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
         applyDepthRangeForOverlying(painter);
 
       if (polygonOffsetFillEnable)
-        polygonOffseFillEnable(painter);
+        polygonOffsetFillEnable(painter);
 
       callPointForWireframe(painter);
 
