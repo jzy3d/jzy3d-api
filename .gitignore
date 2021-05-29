@@ -1,9 +1,6 @@
 # build artifcats
-dist
-build
 target/
 *.class
-dependency-reduced-pom.xml
 
 # IDE configuration files
 .classpath
@@ -20,7 +17,7 @@ hs_err_pid*
 
 # misc
 doc/javadoc
-*~
+*~/
 
 *.releaseBackup
 *.versionsBackup
