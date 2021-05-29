@@ -1,10 +1,2 @@
-dist
-build
-doc/javadoc
-target
-.settings
 data/lizard.mat
 
-.classpath
-.project
-.settings

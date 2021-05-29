@@ -1,26 +1,26 @@
+# build artifcats
 dist
 build
-doc/javadoc
-target
-.settings
-.DS_Store
+target/
+*.class
+dependency-reduced-pom.xml
+
+# IDE configuration files
 .classpath
 .project
-*.class
+.settings
+
+# OS specific folder data files
+.DS_Store
+.directory
+
+# logs
+hs_err_pid*
 *.log
-*~/
+
+# misc
+doc/javadoc
 *~
-
-**/dragon.obj
-#*.obj
-#!jzy3d-core/data/objfiles/bunny.obj
-
-*/.classpath
-*/.project
-*/.settings
-*/.DS_Store
-
-jzy3d-api/data/objfiles/dragon.obj
 
 *.releaseBackup
 *.versionsBackup
