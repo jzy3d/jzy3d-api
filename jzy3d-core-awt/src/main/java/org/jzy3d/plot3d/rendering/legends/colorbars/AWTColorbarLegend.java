@@ -70,6 +70,8 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   protected int askedWidth;
   protected int askedHeight;
   
+  protected Font font;
+  
 
   public AWTColorbarLegend(Drawable parent, Chart chart) {
     this(parent, chart.getView().getAxis().getLayout());
@@ -111,6 +113,9 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
       IMultiColorable mc = ((IMultiColorable) parent);
       if (mc.getColorMapper() != null) {
         imageGenerator = new AWTColorbarImageGenerator(mc.getColorMapper(), provider, renderer);
+      
+        if(font!=null)
+          imageGenerator.setFont(font);
       }
     }
     if (imageGenerator == null) {
@@ -180,7 +185,10 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   
   /** Update image generator font */
   public void setFont(Font font) {
-    getImageGenerator().setFont(font);
+    this.font = font;
+    
+    if(getImageGenerator()!=null)
+      getImageGenerator().setFont(font);
   }
 
   public Font getFont() {

@@ -93,7 +93,7 @@ public abstract class Wireframeable extends Drawable {
 
   /* ************ POLYGON OFFSET **************** */
 
-  protected void polygonOffseFillEnable(IPainter painter) {
+  protected void polygonOffsetFillEnable(IPainter painter) {
     painter.glEnable_PolygonOffsetFill();
     painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
   }
