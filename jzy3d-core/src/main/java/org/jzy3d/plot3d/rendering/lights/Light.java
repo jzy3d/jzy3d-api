@@ -7,6 +7,20 @@ import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 
 public class Light {
+  protected int lightId;
+  protected boolean enabled;
+  protected Color ambiantColor;
+  protected Color diffuseColor;
+  protected Color specularColor;
+  protected Coord3d position;
+  protected float positionZero[] = {0.0f, 0.0f, 0.0f, 1.0f};
+
+  protected boolean representationDisplayed;
+  protected float representationRadius = 10;
+  protected Color representationColor = new Color(0.0f, 1.0f, 1.0f);
+
+  protected static int lightCount;
+
   public static void resetCounter() {
     lightCount = 0;
   }
@@ -42,7 +56,7 @@ public class Light {
       // Light position representation (cube)
       if (representationDisplayed) {
         painter.glDisable_Lighting();
-        painter.glColor3f(0.0f, 1.0f, 1.0f);
+        painter.color(representationColor);
         painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
         painter.glutSolidCube(representationRadius);
         painter.glEnable_Lighting();
@@ -129,19 +143,4 @@ public class Light {
   public void setSpecularColor(Color specularColor) {
     this.specularColor = specularColor;
   }
-
-  /* */
-
-  protected int lightId;
-  protected boolean enabled;
-  protected Color ambiantColor;
-  protected Color diffuseColor;
-  protected Color specularColor;
-  protected Coord3d position;
-  protected float positionZero[] = {0.0f, 0.0f, 0.0f, 1.0f};
-
-  protected boolean representationDisplayed;
-  protected float representationRadius = 10;
-
-  protected static int lightCount;
 }
