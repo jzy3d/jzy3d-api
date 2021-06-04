@@ -36,21 +36,21 @@ public class Quality {
    * Enables alpha, color interpolation and antialiasing on lines, points, and polygons.
    */
   public static final Quality Nicest() {
-    return Nicest.clone().setHiDPIEnabled(true);
+    return Nicest.clone().setHiDPIEnabled(true).setAnimated(false);
   }
 
   /**
    * Enables alpha and color interpolation. Set HiDPI on by default
    */
   public static final Quality Advanced() {
-    return Advanced.clone().setHiDPIEnabled(true);
+    return Advanced.clone().setHiDPIEnabled(true).setAnimated(false);
   }
 
   /**
    * Enables color interpolation. Keep HiDPI off by default
    */
   public static final Quality Intermediate() {
-    return Intermediate.clone();
+    return Intermediate.clone().setAnimated(false);
   }
 
   /**
