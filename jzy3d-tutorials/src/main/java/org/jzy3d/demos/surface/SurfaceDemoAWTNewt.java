@@ -47,7 +47,7 @@ public class SurfaceDemoAWTNewt extends AWTAbstractAnalysis {
     // Create a chart
     IChartFactory f = new NewtChartFactory();
 
-    chart = f.newChart(Quality.Advanced());
+    chart = f.newChart(Quality.Advanced().setAnimated(false));
     chart.getScene().getGraph().add(surface);
     CameraThreadControllerWithTime t = (CameraThreadControllerWithTime)chart.getThread();
     t.setSpeed(60);

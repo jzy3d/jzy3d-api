@@ -35,8 +35,8 @@ import com.jogamp.opengl.util.texture.TextureIO;
  * 
  * Newt is supposed to be faster than any other canvas, either for AWT or Swing.
  * 
- * If a non AWT panel where required, follow the guidelines given in {@link IScreenCanvas}
- * documentation.
+ * If a non AWT panel where required, follow the guidelines given in
+ * {@link IScreenCanvas} documentation.
  */
 public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas {
   private static final long serialVersionUID = 8578690050666237742L;
@@ -53,14 +53,12 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
 
   protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
 
-
-  public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci) {
+  public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
     this(factory, scene, quality, glci, false, false);
   }
 
-  public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+  public CanvasNewtAwt(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci,
+      boolean traceGL, boolean debugGL) {
     window = GLWindow.create(glci);
     canvas = new NewtCanvasAWT(window);
     view = scene.newView(this, quality);
@@ -72,34 +70,39 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     if (quality.isPreserveViewportSize())
       setPixelScale(newPixelScaleIdentity());
 
-    if(ALLOW_WATCH_PIXEL_SCALE)
+    if (ALLOW_WATCH_PIXEL_SCALE)
       watchPixelScale();
 
-    
     // swing specific
     setFocusable(true);
     requestFocusInWindow();
     window.setAutoSwapBufferMode(quality.isAutoSwapBuffer());
+
+    // animator = factory.getPainterFactory().newAnimator((ICanvas)window);
+    animator = new NativeAnimator(window);
+
     if (quality.isAnimated()) {
-      // animator = factory.getPainterFactory().newAnimator((ICanvas)window);
-      animator = new NativeAnimator(window);
       animator.start();
+    } else {
+      animator.stop();
     }
 
     setLayout(new BorderLayout());
     add(canvas, BorderLayout.CENTER);
   }
-  
+
   protected void watchPixelScale() {
     exec.schedule(new PixelScaleWatch() {
       @Override
       public double getPixelScaleY() {
         return CanvasNewtAwt.this.getPixelScaleY();
       }
+
       @Override
       public double getPixelScaleX() {
         return CanvasNewtAwt.this.getPixelScaleX();
       }
+
       @Override
       protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
         CanvasNewtAwt.this.firePixelScaleChanged(pixelScaleX, pixelScaleY);
@@ -107,21 +110,18 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     }, 0, TimeUnit.SECONDS);
   }
 
-
   private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
-    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,
-        debugGL);
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
   }
 
   private float[] newPixelScaleIdentity() {
-    return new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE};
+    return new float[] { ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE };
   }
 
   @Override
   public double getLastRenderingTimeMs() {
     return renderer.getLastRenderingTimeMs();
   }
-
 
   @Override
   public IAnimator getAnimation() {
@@ -133,18 +133,17 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     if (scale != null)
       window.setSurfaceScale(scale);
     else
-      window.setSurfaceScale(new float[] {1f, 1f});
+      window.setSurfaceScale(new float[] { 1f, 1f });
   }
 
   /**
-   * Pixel scale is used to model the pixel ratio thay may be introduced by HiDPI or Retina
-   * displays.
+   * Pixel scale is used to model the pixel ratio thay may be introduced by HiDPI
+   * or Retina displays.
    */
   @Override
   public Coord2d getPixelScale() {
     return new Coord2d(getPixelScaleX(), getPixelScaleY());
   }
-
 
   public double getPixelScaleX() {
     return window.getSurfaceWidth() / (double) getWidth();
@@ -227,8 +226,8 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
   }
 
   /**
-   * Provide the actual renderer width for the open gl camera settings, which is obtained after a
-   * resize event.
+   * Provide the actual renderer width for the open gl camera settings, which is
+   * obtained after a resize event.
    */
   @Override
   public int getRendererWidth() {
@@ -236,8 +235,8 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
   }
 
   /**
-   * Provide the actual renderer height for the open gl camera settings, which is obtained after a
-   * resize event.
+   * Provide the actual renderer height for the open gl camera settings, which is
+   * obtained after a resize event.
    */
   @Override
   public int getRendererHeight() {
@@ -292,7 +291,6 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
   public void removeKeyController(Object o) {
     removeKeyListener((KeyListener) o);
   }
-
 
   @Override
   public void addCanvasListener(ICanvasListener listener) {
