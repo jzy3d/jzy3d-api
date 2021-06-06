@@ -16,7 +16,7 @@ public class ScatterDemoEmulGL {
     q.setHiDPIEnabled(true); // need java 9+ to enable HiDPI & Retina displays
 
     Chart chart = new EmulGLChartFactory().newChart(q);
-    chart.add(scatter(500000));
+    chart.add(scatter(50000));
     chart.open();
     chart.addMouseCameraController();
     

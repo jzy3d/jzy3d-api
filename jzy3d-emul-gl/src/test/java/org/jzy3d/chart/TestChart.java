@@ -26,6 +26,7 @@ public class TestChart {
   @Test
   public void whenChart_IS_Animated_ThenControllers_DO_NOT_UpdateViewUponRotation() {
     Quality q = Quality.Advanced();
+    q.setAnimated(true);
 
     // When
     Assert.assertTrue(q.isAnimated());
@@ -56,9 +57,9 @@ public class TestChart {
   @Test
   public void whenChart_ISNOT_Animated_ThenControllers_DO_UpdateViewUponRotation() {
     Quality q = Quality.Advanced();
+    q.setAnimated(false);
 
     // When
-    q.setAnimated(false);
     Assert.assertFalse(q.isAnimated());
     ChartFactory factory = new EmulGLChartFactory();
     Chart chart = factory.newChart(q);
@@ -82,9 +83,9 @@ public class TestChart {
   @Test
   public void whenChartAnimation_CHANGE_ThenControllersConfiguration_CHANGE() {
     Quality q = Quality.Advanced();
+    q.setAnimated(false);
 
     // When non animated chart
-    q.setAnimated(false);
     Assert.assertFalse(q.isAnimated());
     ChartFactory factory = new EmulGLChartFactory();
     Chart chart = factory.newChart(q);

@@ -217,7 +217,7 @@
 				<version>3.12.1</version>
 			</dependency>
 
-            <dependency>
+            <!-- <dependency>
                 <groupId>org.jogamp.gluegen</groupId>
                 <artifactId>gluegen-rt</artifactId>
                 <version>2.4.0-rc-20210111</version>
@@ -227,7 +227,7 @@
                 <groupId>org.jogamp.jogl</groupId>
                 <artifactId>jogl-all</artifactId>
                 <version>2.4.0-rc-20210111</version>
-            </dependency>
+            </dependency> -->
 
 
 			<dependency>
@@ -292,19 +292,17 @@
 
 	<!-- Define the repository where Jzy3d dependencies can be found -->
 	<repositories>
+        <repository>
+            <id>jzy3d-releases</id>
+            <name>Jzy3d Releases</name>
+            <url>https://maven.jzy3d.org/releases/</url>
+        </repository>
 
 		<repository>
 			<id>jzy3d-snapshots</id>
 			<name>Jzy3d Snapshots</name>
 			<url>https://maven.jzy3d.org/snapshots/</url>
 		</repository>
-
-		<repository>
-			<id>jzy3d-releases</id>
-			<name>Jzy3d Releases</name>
-			<url>https://maven.jzy3d.org/releases/</url>
-		</repository>
-
 	</repositories>
 
 	<build>
