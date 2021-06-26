@@ -19,6 +19,7 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.Wireframeable;
+import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.transform.Transform;
 import com.google.common.collect.ArrayListMultimap;
@@ -31,24 +32,64 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
 /**
  * A {@link DrawableVBO2} is able to efficiently draw a large collection of geometries.
  * 
- * @see constructor documentation for details.
  * 
- *      TODO
- *      <ul>
- *      <li>Delete / destroy data
- *      <li>Integrate to framework
- *      <li>Allow computing normals
- *      <li>Improve shared normal processing by removing distance
- *      </ul>
+ * <p>
+ * <b>Effect of repeated vertices</b><br>
  * 
- *      TODO TEST U
- *      <ul>
- *      <li>normal averaging is computed if geometry list given.
- *      <li>simple normal is computed if geometry list is null.
- *      <li>auto normal is used if parameterized that way
- *      <li>color buffer is computed if colormap is given
- *      <li>
- *      </ul>
+ * Repeated vertices make all vertice normal being processed with the only three vertices of a
+ * triangle. A collection of neighbour triangles hence have normals producing sharp light reaction
+ * as bellow.
+ * 
+ * <img src="doc-files/REPEATED_VERTEX_AND_NORMALS.png"/>
+ * 
+ * </p>
+ * 
+ * <p>
+ * <b>Shared vertices between triangles based on element index</b><br>
+ * 
+ * Sharing vertices among triangles avoid repeating data, and also allows knowing all surrounding
+ * triangles to a point, hence allowing to compute a normal based on the mean of all triangles
+ * normal. This produce a smooth light reaction at the triangle edges.
+ * 
+ * <img src="doc-files/SHARED_VERTEX_AVERAGED_NORMALS.png"/>
+ * </p>
+ * 
+ * <p>
+ * <b>Not processing normals in java</b><br>
+ * 
+ * Is faster and yield to this light reaction.
+ * 
+ * <img src="doc-files/SHARED_VERTEX_NO_NORMAL.png"/>
+ * </p>
+ * 
+ * <p>
+ * <b>Using a colormap</b><br>
+ * 
+ * <img src="doc-files/COLORMAP.png"/>
+ * </p>
+ * 
+ * <p>
+ * <b>Initializing DrawableVBO2</b></br>
+ * 
+ * <pre>
+ * <code>
+ * AWTChartFactory f = new AWTChartFactory();
+ * Chart chart = f.newChart(Quality.Intermediate());
+ *
+ * int dimensions = TestMesh.DIMENSIONS;
+ * double[] vertices = TestMesh.makeArray4();
+ * int[] elements = TestMesh.makeElementArray4();
+ * int nVertices = TestMesh.nVertices(vertices);
+ *
+ * DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions, elements, null);
+ * chart.add(vbo);
+ * chart.open();
+ * </code>
+ * </pre>
+ * </p>
+ * 
+ * @see {@link DrawableVBO2} constructor documentation for details.
+ * 
  * 
  */
 public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
@@ -91,40 +132,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /**
    * Initialize a VBO object with arrays with the following content.
    * 
-   * <p>
-   * <b>Effect of repeated vertices</b><br>
-   * 
-   * Repeated vertices make all vertice normal being processed with the only three vertices of a
-   * triangle. A collection of neighbour triangles hence have normals producing sharp light reaction
-   * as bellow :
-   * 
-   * <img src="doc-files/REPEATED_VERTEX_AND_NORMALS.png"/>
-   * 
-   * </p>
-   * 
-   * <p>
-   * <b>Shared vertices between triangles based on element index</b><br>
-   * 
-   * Sharing vertices among triangles avoid repeating data, and also allows knowing all surrounding
-   * triangles to a point, hence allowing to compute a normal based on the mean of all triangles
-   * normal. This produce a smooth light reaction at the triangle edges.
-   * 
-   * <img src="doc-files/SHARED_VERTEX_AVERAGED_NORMALS.png"/>
-   * </p>
-   * 
-   * <p>
-   * <b>Not processing normals in java</b><br>
-   * 
-   * Is faster and yield to this light reaction
-   * 
-   * <img src="doc-files/SHARED_VERTEX_NO_NORMAL.png"/>
-   * </p>
-   * 
-   * <p>
-   * <b>Using a colorbar</b><br>
-   * 
-   * <img src="doc-files/COLORMAP.png"/>
-   * </p>
    * 
    * @param points contains an array of vertices
    *        <code>[x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, ..]</code>
@@ -139,10 +146,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    *        drawn as a sequence of vertices defining elements, without sharing vertices between
    *        elements.
    * @param colormap defines how to color vertices. It may be null, in that case the object is
-   *        colored by {@link #setColor(Color)}
-   * 
-   * 
-   * 
+   *        colored by {@link #setColor(Color)} adn shaded by {@link Light}
    */
   public DrawableVBO2(double[] points, int pointDimensions, int[] elements, IColorMap colormap) {
     this(makeLoader(points, pointDimensions, elements, GEOMETRY_SIZE, colormap));
