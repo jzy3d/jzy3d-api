@@ -10,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -112,6 +113,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
         firePixelScaleChanged(pixelScaleX, pixelScaleY);
       }
     });
+    
+    // Double buffering
+    //enable AWTDoubleBufferedPanel and GL.clearBackgroundWithG2d = false
+    //super.setDoubleBuffered(true);
+    //createBufferStrategy(2);
+    //final BufferStrategy strategy = getBufferStrategy();
+    //Graphics2D current = (Graphics2D) strategy.getDrawGraphics();
+
   }
 
   /* *********************************************************************** */
