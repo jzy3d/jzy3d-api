@@ -106,7 +106,7 @@ public abstract class NativePainterFactory implements IPainterFactory {
     this.height = height;
     this.capabilities.setOnscreen(false);
   }
-  
+
   @Override
   public void setOffscreen(Rectangle rectangle) {
     setOffscreen(rectangle.width, rectangle.height);
@@ -133,7 +133,7 @@ public abstract class NativePainterFactory implements IPainterFactory {
       return GLProfile.get(GLProfile.GL2ES2);
     }
   }
-  
+
 
 
   /**
@@ -148,13 +148,24 @@ public abstract class NativePainterFactory implements IPainterFactory {
 
   private static GLCapabilities getDefaultCapabilities(GLProfile glp) {
     GLCapabilities caps = new GLCapabilities(glp);
-    caps.setHardwareAccelerated(true);
-    caps.setDoubleBuffered(false);
-    caps.setAlphaBits(8);
-    caps.setRedBits(8);
-    caps.setBlueBits(8);
-    caps.setGreenBits(8);
-    return caps;
-  }
 
+    caps.setHardwareAccelerated(true);
+
+    // false lead to not erased background 
+    // on MacOS X 10.15.3 (Catalina) but not 10.12
+    // https://github.com/jzy3d/jzy3d-api/issues/133
+    caps.setDoubleBuffered(true);
+
+    boolean fixedResolution = true;
+    
+    if (fixedResolution) {
+      caps.setAlphaBits(8);
+      caps.setRedBits(8);
+      caps.setBlueBits(8);
+      caps.setGreenBits(8);
+    }
+
+    return caps;
+
+  }
 }
