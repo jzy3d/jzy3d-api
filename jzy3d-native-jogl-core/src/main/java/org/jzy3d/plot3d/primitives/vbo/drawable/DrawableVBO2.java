@@ -91,6 +91,41 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /**
    * Initialize a VBO object with arrays with the following content.
    * 
+   * <p>
+   * <b>Effect of repeated vertices</b><br>
+   * 
+   * Repeated vertices make all vertice normal being processed with the only three vertices of a
+   * triangle. A collection of neighbour triangles hence have normals producing sharp light reaction
+   * as bellow :
+   * 
+   * <img src="doc-files/REPEATED_VERTEX_AND_NORMALS.png"/>
+   * 
+   * </p>
+   * 
+   * <p>
+   * <b>Shared vertices between triangles based on element index</b><br>
+   * 
+   * Sharing vertices among triangles avoid repeating data, and also allows knowing all surrounding
+   * triangles to a point, hence allowing to compute a normal based on the mean of all triangles
+   * normal. This produce a smooth light reaction at the triangle edges.
+   * 
+   * <img src="doc-files/SHARED_VERTEX_AVERAGED_NORMALS.png"/>
+   * </p>
+   * 
+   * <p>
+   * <b>Not processing normals in java</b><br>
+   * 
+   * Is faster and yield to this light reaction
+   * 
+   * <img src="doc-files/SHARED_VERTEX_NO_NORMAL.png"/>
+   * </p>
+   * 
+   * <p>
+   * <b>Using a colorbar</b><br>
+   * 
+   * <img src="doc-files/COLORMAP.png"/>
+   * </p>
+   * 
    * @param points contains an array of vertices
    *        <code>[x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, ..]</code>
    * @param pointDimensions indicate the number of dimension in the array for each vertex, as the
@@ -105,6 +140,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    *        elements.
    * @param colormap defines how to color vertices. It may be null, in that case the object is
    *        colored by {@link #setColor(Color)}
+   * 
+   * 
+   * 
    */
   public DrawableVBO2(double[] points, int pointDimensions, int[] elements, IColorMap colormap) {
     this(makeLoader(points, pointDimensions, elements, GEOMETRY_SIZE, colormap));
@@ -129,9 +167,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   public DrawableVBO2(double[] points, int pointDimensions) {
     this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, null));
   }
-  
+
   /**
-   * Initialize a VBO object with arrays with a colormap but no vertex sharing scheme. 
+   * Initialize a VBO object with arrays with a colormap but no vertex sharing scheme.
    * 
    * @see other constructor for detailed arguments.
    */
@@ -647,7 +685,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     return ((NativeDesktopPainter) painter).getGL();
   }
 
-  
+
   /* ***************************************************************** */
   /* **************************** BUFFERS **************************** */
   /* ***************************************************************** */
@@ -684,6 +722,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     return elementArrayIds;
   }
 
-  
-  
+
+
 }

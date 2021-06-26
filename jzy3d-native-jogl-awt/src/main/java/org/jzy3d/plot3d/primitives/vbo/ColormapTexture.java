@@ -9,6 +9,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.util.GLBuffers;
 
+
 public class ColormapTexture {
 
   private int texID;

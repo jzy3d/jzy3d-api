@@ -39,6 +39,8 @@ public abstract class NativePainterFactory implements IPainterFactory {
 
   public NativePainterFactory(GLCapabilities capabilities) {
     this.capabilities = capabilities;
+    
+    System.out.println(capabilities);
   }
 
   /** Return desired Open GL Capabilities */
@@ -149,11 +151,17 @@ public abstract class NativePainterFactory implements IPainterFactory {
   private static GLCapabilities getDefaultCapabilities(GLProfile glp) {
     GLCapabilities caps = new GLCapabilities(glp);
     caps.setHardwareAccelerated(true);
-    caps.setDoubleBuffered(false);
-    caps.setAlphaBits(8);
-    caps.setRedBits(8);
-    caps.setBlueBits(8);
-    caps.setGreenBits(8);
+
+    // false lead to not erased background on MacOS X 10.15.3 (Catalina) but not 10.12
+    caps.setDoubleBuffered(true);
+    
+    boolean fixedResolution = true;
+    if(fixedResolution) {
+      caps.setAlphaBits(8);
+      caps.setRedBits(8);
+      caps.setBlueBits(8);
+      caps.setGreenBits(8);
+    }
     return caps;
   }
 
