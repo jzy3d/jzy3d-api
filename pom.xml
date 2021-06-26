@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jzy3d</groupId>
@@ -80,8 +82,8 @@
 
 	<scm>
 		<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
-	  <tag>HEAD</tag>
-  </scm>
+		<tag>HEAD</tag>
+	</scm>
 	<issueManagement>
 		<system>Github</system>
 		<url>https://github.com/jzy3d/jzy3d-api/issues</url>
@@ -101,8 +103,8 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
 		</repository> </distributionManagement> -->
 
 	<properties>
@@ -217,17 +219,9 @@
 				<version>3.12.1</version>
 			</dependency>
 
-            <!-- <dependency>
-                <groupId>org.jogamp.gluegen</groupId>
-                <artifactId>gluegen-rt</artifactId>
-                <version>2.4.0-rc-20210111</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jogamp.jogl</groupId>
-                <artifactId>jogl-all</artifactId>
-                <version>2.4.0-rc-20210111</version>
-            </dependency> -->
+			<!-- <dependency> <groupId>org.jogamp.gluegen</groupId> <artifactId>gluegen-rt</artifactId> 
+				<version>2.4.0-rc-20210111</version> </dependency> <dependency> <groupId>org.jogamp.jogl</groupId> 
+				<artifactId>jogl-all</artifactId> <version>2.4.0-rc-20210111</version> </dependency> -->
 
 
 			<dependency>
@@ -249,7 +243,7 @@
 			</dependency>
 
 			<dependency>
-				<!-- Some modules use junit not only in their test classes but also in
+				<!-- Some modules use junit not only in their test classes but also in 
 					their main classes. Therefore manage the version in this section -->
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -292,11 +286,11 @@
 
 	<!-- Define the repository where Jzy3d dependencies can be found -->
 	<repositories>
-        <repository>
-            <id>jzy3d-releases</id>
-            <name>Jzy3d Releases</name>
-            <url>https://maven.jzy3d.org/releases/</url>
-        </repository>
+		<repository>
+			<id>jzy3d-releases</id>
+			<name>Jzy3d Releases</name>
+			<url>https://maven.jzy3d.org/releases/</url>
+		</repository>
 
 		<repository>
 			<id>jzy3d-snapshots</id>
@@ -422,8 +416,8 @@
 					<failOnError>false</failOnError>
 					<additionalJOption>--no-module-directories</additionalJOption>
 					<configuration>
-            <docfilessubdirs>true</docfilessubdirs>
-          </configuration>
+						<docfilessubdirs>true</docfilessubdirs>
+					</configuration>
 				</configuration>
 				<executions>
 					<execution>
@@ -433,12 +427,12 @@
 							<goal>jar</goal>
 						</goals>
 					</execution>
-          <execution>
-          <id>aggregate</id>
-          <goals>
-              <goal>aggregate</goal>
-          </goals>
-          </execution>
+					<execution>
+						<id>aggregate</id>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+					</execution>
 				</executions>
 			</plugin>
 
@@ -449,10 +443,10 @@
 				<artifactId>maven-release-plugin</artifactId>
 			</plugin>
 
-			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId>
-				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose>
-				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
+			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
+				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
+				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
+				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose> 
 				</configuration> </plugin> -->
 
 			<!-- SIGN ARTIFACT FOR DEPLOYING TO SONATYPE -->
@@ -524,7 +518,7 @@
 			<id>integration-tests</id>
 			<build>
 				<plugins>
-					<!-- Use surefire to run integration tests which success may depend
+					<!-- Use surefire to run integration tests which success may depend 
 						on GPU. Run them with mvn verify -Pintegration-tests -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -532,34 +526,20 @@
 						<version>3.0.0-M5</version>
 						<configuration>
 							<includes>
-							    <include>**/Test*.java</include>
-							    <include>**/*Test.java</include>
-									<include>**/ITTest*.java</include>
+								<include>**/Test*.java</include>
+								<include>**/*Test.java</include>
+								<include>**/ITTest*.java</include>
 							</includes>
 						</configuration>
 					</plugin>
 
-					<!-- Use failsafe to run integration tests which success may depend
+					<!-- Use failsafe to run integration tests which success may depend 
 						on GPU. Run them with mvn verify -Pintegration-tests -->
-					<!--<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>3.0.0-M5</version>
-						<configuration>
-							<includes>
-								<include>**/ITTest*.java</include>
-							</includes>
-						</configuration>
-						<executions>
-							<execution>
-								<id>integration-test</id>
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>-->
+					<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-failsafe-plugin</artifactId> 
+						<version>3.0.0-M5</version> <configuration> <includes> <include>**/ITTest*.java</include> 
+						</includes> </configuration> <executions> <execution> <id>integration-test</id> 
+						<goals> <goal>integration-test</goal> <goal>verify</goal> </goals> </execution> 
+						</executions> </plugin> -->
 
 				</plugins>
 			</build>

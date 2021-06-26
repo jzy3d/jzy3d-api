@@ -19,8 +19,20 @@
 			<artifactId>jzy3d-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- The way to link on JOGL 2.3.2 -->
+		
+		<!-- <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt-main</artifactId>
+        </dependency>
 
-        <!-- The way to link on JOGL once it is cleanly deployed -->
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all-main</artifactId>
+        </dependency>-->
+
+        <!-- The way to link on JOGL 2.4.0 once it is cleanly deployed -->
         <!-- <dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt-main</artifactId>
