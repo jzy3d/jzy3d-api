@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import java.awt.Insets;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.bridge.awt.FrameAWT;
@@ -47,43 +48,45 @@ public class TestCameraNative_Viewport {
     // When opening window to a chosen size
 
     Rectangle FRAME_SIZE = new Rectangle(800, 600);
-    int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
 
-    //factory.getPainterFactory().setOffscreen(FRAME_SIZE);
+    // factory.getPainterFactory().setOffscreen(FRAME_SIZE);
 
     FrameAWT frame = (FrameAWT) chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
 
     chart.render(); // ensure we have rendered one to get latest layout later
 
-    Thread.sleep(10); // let time for opening window otheriwse follwing assertions may fail
+    Thread.sleep(10); // let time for opening window otherwise following assertions may fail
 
     // Then scene viewport size is set to occupy the full frame
     ViewAndColorbarsLayout layout =
         (ViewAndColorbarsLayout) ((ChartView) chart.getView()).getLayout();
     ViewportConfiguration sceneViewport = layout.getSceneViewport();
 
+    considerFrameBorder(FRAME_SIZE, frame);
+
     Assert.assertEquals(FRAME_SIZE.width, sceneViewport.getWidth());
-    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, sceneViewport.getHeight());
+    Assert.assertEquals(FRAME_SIZE.height, sceneViewport.getHeight());
     Assert.assertEquals(0, sceneViewport.getX());
-    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, sceneViewport.getY());
+    Assert.assertEquals(FRAME_SIZE.height, sceneViewport.getY());
 
     // Then camera viewport size is set to occupy the full frame
     Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, camera.getLastViewPort().getMode());
     Assert.assertEquals(FRAME_SIZE.width, camera.getLastViewPort().getWidth());
-    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, camera.getLastViewPort().getHeight());
+    Assert.assertEquals(FRAME_SIZE.height, camera.getLastViewPort().getHeight());
 
     // ----------------------------------------
     // When change canvas size and update view
 
-    Rectangle CANVAS_SIZE_V = new Rectangle(100, 300);
+    Rectangle CANVAS_SIZE_V = new Rectangle(200, 400); // Frame may have a minimum size!
     frame.setBounds(0, 0, CANVAS_SIZE_V.width, CANVAS_SIZE_V.height);
     frame.repaint();
 
     Thread.sleep(300); // let time for resize and redraw otherwise following assertions may fail
 
+    considerFrameBorder(CANVAS_SIZE_V, frame);
+
     // Then viewport on the complete canvas
-    Assert.assertEquals(CANVAS_SIZE_V.height - APP_BAR_HEIGHT,
-        camera.getLastViewPort().getHeight());
+    Assert.assertEquals(CANVAS_SIZE_V.height, camera.getLastViewPort().getHeight());
     Assert.assertEquals(CANVAS_SIZE_V.width, camera.getLastViewPort().getWidth());
 
     // ----------------------------------------
@@ -94,8 +97,7 @@ public class TestCameraNative_Viewport {
 
     // Then viewport on the complete canvas
     Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, camera.getLastViewPort().getMode());
-    Assert.assertEquals(CANVAS_SIZE_V.height - APP_BAR_HEIGHT,
-        camera.getLastViewPort().getHeight());
+    Assert.assertEquals(CANVAS_SIZE_V.height, camera.getLastViewPort().getHeight());
     Assert.assertEquals(CANVAS_SIZE_V.width, camera.getLastViewPort().getWidth());
 
     // ----------------------------------------
@@ -107,7 +109,7 @@ public class TestCameraNative_Viewport {
     // Then viewport is SQUARE
     Assert.assertEquals(ViewportMode.SQUARE, camera.getLastViewPort().getMode());
 
-    int sideLength = 100;
+    int sideLength = CANVAS_SIZE_V.width;
     Assert.assertEquals(sideLength, camera.getLastViewPort().getHeight());
     Assert.assertEquals(sideLength, camera.getLastViewPort().getWidth());
     Assert.assertEquals(0, camera.getLastViewPort().getX());
@@ -124,7 +126,8 @@ public class TestCameraNative_Viewport {
 
     Thread.sleep(300); // let time for resize and redraw otherwise following assertions may fail
 
-    sideLength = 100 - APP_BAR_HEIGHT;
+    considerFrameBorder(CANVAS_SIZE_H, frame);
+    sideLength = CANVAS_SIZE_H.height;
     Assert.assertEquals(sideLength, camera.getLastViewPort().getHeight());
     Assert.assertEquals(sideLength, camera.getLastViewPort().getWidth());
     // check viewport is shifted to the right so that square viewport is centered
@@ -132,6 +135,12 @@ public class TestCameraNative_Viewport {
 
   }
 
+  private static void considerFrameBorder(Rectangle initialFrameSize, FrameAWT frame) {
+    // consider frame border
+    Insets insets = frame.getInsets();
+    initialFrameSize.width -= insets.left + insets.right;
+    initialFrameSize.height -= insets.top + insets.bottom;
+  }
 
   private static Shape surface() {
 
