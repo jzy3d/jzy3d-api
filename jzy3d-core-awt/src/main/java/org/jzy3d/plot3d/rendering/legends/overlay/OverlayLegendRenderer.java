@@ -82,6 +82,11 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
     // Border
     g2d.setColor(AWTColor.toAWT(layout.borderColor));
     g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
+    
+    
+    // Reset scale for other renderers
+    //g2d.scale(1/scale.x, 1/scale.y);
+
   }
 
 
