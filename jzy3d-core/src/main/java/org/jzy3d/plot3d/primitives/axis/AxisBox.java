@@ -81,6 +81,15 @@ public class AxisBox implements IAxis {
   public static final int AXE_X = 0;
   public static final int AXE_Y = 1;
   public static final int AXE_Z = 2;
+  
+  protected boolean depthRangeTrick = true;
+  
+  /**
+   * The higher the value, the more the line are far from the faces and hence
+   * no z-fighting occurs between faces and lines. In case of higher value, line
+   * will be display more often, but also lines that should be behind the polygon
+   */
+  public static float NO_OVERLAP_DEPTH_RATIO = 0.5f;
 
   protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
 
@@ -177,7 +186,8 @@ public class AxisBox implements IAxis {
     
     // Push far from camera, to ensure the axis grid
     // Will remain covered by surface
-    painter.glDepthRangef(0.5f, 1);
+    if(depthRangeTrick)
+      painter.glDepthRangef(NO_OVERLAP_DEPTH_RATIO, 1f);
 
     
     painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
@@ -199,7 +209,9 @@ public class AxisBox implements IAxis {
     
     
     // Reset depth range
-    painter.glDepthRangef(0f, 1);
+    
+    if(depthRangeTrick)
+      painter.glDepthRangef(0f, 1f);
 
   }
 

@@ -170,5 +170,5 @@ public abstract class Wireframeable extends Drawable {
    * no z-fighting occurs between faces and lines. In case of higher value, line
    * will be display more often, but also lines that should be behind the polygon
    */
-  protected float NO_OVERLAP_DEPTH_RATIO = 0.1f;//0.1f;
+  public static float NO_OVERLAP_DEPTH_RATIO = 0.1f;//0.1f;
 }
