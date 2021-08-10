@@ -81,6 +81,8 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     }
 
     // Blending : more beautifull with jGL without this
+    /** Default for SRC is 1 : {@link gl_colorbuffer.BlendSrc}*/
+    /** Default for DST is 0 : {@link gl_colorbuffer.BlendDst}*/
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
     // gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_NONE);
