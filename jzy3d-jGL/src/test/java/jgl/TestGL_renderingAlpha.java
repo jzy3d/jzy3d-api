@@ -64,11 +64,11 @@ public class TestGL_renderingAlpha {
     gl.glEnd();
 
     // SANITY CHECK : no black nor non alpha pixel
-    Assert.assertEquals(0, countBlackPixels(gl.getContext()));
-    Assert.assertEquals(0, countAlpha255Pixels(gl.getContext()));
+    Assert.assertEquals(0, count_Black_Pixels(gl.getContext()));
+    Assert.assertEquals(0, count_Alpha255_Pixels(gl.getContext()));
     
     // REAL TEST IS HERE : all pixels should have alpha 0
-    Assert.assertEquals(WIDTH*HEIGHT, countAlpha0Pixels(gl.getContext()));
+    Assert.assertEquals(WIDTH*HEIGHT, count_Alpha0_Pixels(gl.getContext()));
     
     gl.glFlush();
     gl.debugWriteImageTo("target/" + getClass().getSimpleName() + ".png");
@@ -79,7 +79,7 @@ public class TestGL_renderingAlpha {
 
   }
 
-  private int countBlackPixels(gl_context Context) {
+  private int count_Black_Pixels(gl_context Context) {
     int a0 = 0;
     int a255 = 0;
     int black = 0;
@@ -113,7 +113,7 @@ public class TestGL_renderingAlpha {
     // black + " #notBlack=" + notBlack);
   }
   
-  private int countAlpha0Pixels(gl_context Context) {
+  private int count_Alpha0_Pixels(gl_context Context) {
     int a0 = 0;
     int a255 = 0;
     int black = 0;
@@ -147,7 +147,7 @@ public class TestGL_renderingAlpha {
     // black + " #notBlack=" + notBlack);
   }
   
-  private int countAlpha255Pixels(gl_context Context) {
+  private int count_Alpha255_Pixels(gl_context Context) {
     int a0 = 0;
     int a255 = 0;
     int black = 0;
