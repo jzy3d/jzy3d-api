@@ -55,15 +55,19 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       painter.glPolygonMode(polygonMode, PolygonFill.FILL);
 
       if (wireframeDisplayed && polygonWireframeDepthTrick)
-        applyDepthRangeForUnderlying(painter); // UNDER
+        applyDepthRangeForUnderlying(painter); // ENABLE RANGE FOR UNDER
 
       if (wireframeDisplayed && polygonOffsetFillEnable)
-        polygonOffsetFillEnable(painter);
+        polygonOffsetFillEnable(painter); // ENABLE OFFSET
 
       callPointsForFace(painter);
 
       if (wireframeDisplayed && polygonOffsetFillEnable)
-        polygonOffsetFillDisable(painter);
+        polygonOffsetFillDisable(painter); // DISABLE OFFSET
+      
+      if (wireframeDisplayed && polygonWireframeDepthTrick)
+        applyDepthRangeDefault(painter); // DISAABLE RANGE FOR UNDER
+
     }
   }
 
@@ -72,7 +76,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       painter.glPolygonMode(polygonMode, PolygonFill.LINE);
 
       if (polygonWireframeDepthTrick)
-        applyDepthRangeForOverlying(painter); // OVER
+        applyDepthRangeForOverlying(painter); // OVER - enable range
 
       if (polygonOffsetFillEnable)
         polygonOffsetFillEnable(painter);
@@ -81,6 +85,10 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
       if (polygonOffsetFillEnable)
         polygonOffsetFillDisable(painter);
+      
+      if (polygonWireframeDepthTrick)
+        applyDepthRangeDefault(painter); // OVER - disable range
+
     }
   }
 
