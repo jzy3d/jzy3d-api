@@ -31,6 +31,15 @@ import jgl.context.gl_util;
 
 public class gl_blend_pixel extends gl_render_pixel {
 
+  /**
+   * https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glBlendFunc.xhtml
+   * 
+   * @param rst
+   * @param tgt
+   * @param src
+   * @param dst
+   * @param BlendFunc
+   */
   private void blend_pixel(float rst[], float tgt[], float src[], float dst[], int BlendFunc) {
     float afa;
 
@@ -123,8 +132,7 @@ public class gl_blend_pixel extends gl_render_pixel {
 
 
     // The initial 2.4 release used to compute alpha as follow, without updating the alpha channel
-    // of
-    // the output pixel, which led to complete dark pixel when input alpha are 0.
+    // of the output pixel, which led to complete dark pixel when input alpha are 0.
     //
     // So we changed the pixel setting to also write output alpha to the color buffer as of 2.5.
     //

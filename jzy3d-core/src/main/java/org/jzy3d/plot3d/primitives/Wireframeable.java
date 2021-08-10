@@ -154,10 +154,12 @@ public abstract class Wireframeable extends Drawable {
   }
 
   protected void applyDepthRangeForUnderlying(IPainter painter) {
-    painter.glDepthRangef(0.1f, 1f);
+    painter.glDepthRangef(NO_OVERLAP_DEPTH_RATIO, 1f);
   }
 
   protected void applyDepthRangeForOverlying(IPainter painter) {
-    painter.glDepthRangef(0.0f, 0.9f);
+    painter.glDepthRangef(0.0f, 1-NO_OVERLAP_DEPTH_RATIO);
   }
+  
+  protected float NO_OVERLAP_DEPTH_RATIO = 0.1f;
 }

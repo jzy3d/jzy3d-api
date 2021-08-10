@@ -9,6 +9,9 @@ public class TestGL_polygonOffsetFill {
   int WIDTH = 500;
   int HEIGHT = 500;
 
+  /**
+   * <img src="../target/TestGL_polygonOffsetFill.png"/>
+   */
   @Test
   public void whenInvokePolygon_ThenTwoTrianglesAreDrawn_BUT_Visible_WhiteDiagonal_IfNonOpaque() {
 
