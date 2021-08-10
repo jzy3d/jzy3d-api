@@ -9,8 +9,10 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
@@ -74,7 +76,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     // Activate Depth buffer
     if (quality.isDepthActivated()) {
       gl.glEnable(GL.GL_DEPTH_TEST);
-      gl.glDepthFunc(GL.GL_LEQUAL);
+      gl.glDepthFunc(GL.GL_LESS);
     } else {
       gl.glDisable(GL.GL_DEPTH_TEST);
       // gl.glDepthRangef(n, f);
@@ -942,7 +944,15 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glDepthRangef(float near, float far) {
+    //printGLDepthRange();
     gl.glDepthRange(near, far);
+  }
+
+  public void printGLDepthRange() {
+    float[] params = new float[2];
+    gl.glGetFloatv(GL.GL_DEPTH_RANGE, params);
+    //Logger.getLogger(EmulGLPainter.class).info();
+    Array.print(params);
   }
 
 

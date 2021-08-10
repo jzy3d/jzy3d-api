@@ -174,7 +174,12 @@ public class AxisBox implements IAxis {
 
   public void drawGrid(IPainter painter) {
     Color gridcolor = layout.getGridColor();
+    
+    // Push far from camera, to ensure the axis grid
+    // Will remain covered by surface
+    painter.glDepthRangef(0.5f, 1);
 
+    
     painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
     painter.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
     painter.glLineWidth(1);
@@ -191,8 +196,12 @@ public class AxisBox implements IAxis {
       if (!quadIsHidden[quad])
         drawGridOnQuad(painter, quad);
     painter.glDisable_LineStipple();
-  }
+    
+    
+    // Reset depth range
+    painter.glDepthRangef(0f, 1);
 
+  }
 
   ///////////////////////////
 
@@ -211,6 +220,7 @@ public class AxisBox implements IAxis {
 
   // Draw a grid on the desired quad.
   protected void drawGridOnQuad(IPainter painter, int quad) {
+    
     // Draw X grid along X axis
     if ((quad != 0) && (quad != 1)) {
       double[] xticks = layout.getXTicks();
