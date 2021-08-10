@@ -181,13 +181,13 @@ public class AxisBox implements IAxis {
 
     
     painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
-    painter.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
+    painter.color(gridcolor);
     painter.glLineWidth(1);
     drawCube(painter, RenderMode.RENDER);
 
     // Draw grids on non hidden quads
     painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
-    painter.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
+    painter.color(gridcolor);
     painter.glLineWidth(1);
     painter.glLineStipple(1, (short) 0xAAAA);
 
