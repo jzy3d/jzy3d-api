@@ -263,9 +263,8 @@ public class GL {
     // DEBUG
     // checkColorBuffer();
     
-    String depthBufferOutput = "target/depth.png";
-    
-    debugDepthBufferTo(depthBufferOutput);
+    //String depthBufferOutput = "target/depth.png";
+    //debugDepthBufferTo(depthBufferOutput);
 
     // ------------------------------------------
     // Create an image producer based on
