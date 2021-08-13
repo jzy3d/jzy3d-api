@@ -25,7 +25,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  *
  */
-public abstract class Composite extends Wireframeable implements ISingleColorable, IMultiColorable {
+public class Composite extends Wireframeable implements ISingleColorable, IMultiColorable {
   public Composite() {
     super();
     components = new ArrayList<Drawable>();
