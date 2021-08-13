@@ -24,6 +24,11 @@ import jgl.context.render.pixel.gl_render_pixel;
 
 /**
  * gl_render is the basic rendering class of JavaGL 2.1.
+ * 
+ * The most important method is {@link #draw_line(gl_vertex, gl_vertex)} which
+ * paints the pixel between 2 2D points. The third dimension of the vertex represents
+ * the depth of the pixel. Note that considering depth for drawing a pixel is 
+ * made in {@link gl_depth} (a subclass of {@link gl_render})
  *
  * @version 0.4, 29 Nov 1999
  * @author Robin Bing-Yu Chen
@@ -73,15 +78,18 @@ public class gl_render {
   }
 
   protected void x_inc_x() {
-    x++;
+    //x++;
+    ++x;
   }
 
   protected void x_dec_x() {
-    x--;
+    //x--;
+    --x;
   }
 
   protected void y_inc_y() {
-    y++;
+    //y++;
+    ++y;
   }
 
   protected void inc_x() {
@@ -106,10 +114,12 @@ public class gl_render {
     inc_y();
   }
 
+  /** Will color the given pixel WITHOUT verifying depth buffer (see {@link gl_depth#put_pixel()}*/
   protected void put_pixel() {
     pixel.put_pixel(x, y, color);
   }
 
+  /** Will color the given pixel WITHOUT verifying depth buffer (see {@link gl_depth#put_pixel_by_index()}*/
   protected void put_pixel_by_index() {
     pixel.put_pixel_by_index(x, color);
   }
@@ -192,10 +202,10 @@ public class gl_render {
         if (dx >= dy) {
           for (i = 1; i <= dx; i++) {
             if (err < 0) {
-              inc_x();
+              inc_x(); // also inc Z according to slope in gl_depth.
               err += dy;
             } else {
-              inc_x_inc_y();
+              inc_x_inc_y(); // also inc Z according to slope in gl_depth.
               err += dy - dx;
             }
             put_pixel();
@@ -203,10 +213,10 @@ public class gl_render {
         } else {
           for (i = 1; i <= dy; i++) {
             if (err < 0) {
-              inc_x_inc_y();
+              inc_x_inc_y(); // also inc Z according to slope in gl_depth.
               err += dy - dx;
             } else {
-              inc_y();
+              inc_y(); // also inc Z according to slope in gl_depth.
               err -= dx;
             }
             put_pixel();

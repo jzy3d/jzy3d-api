@@ -95,12 +95,6 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
     }
   }
 
-  protected void negative(Color c) {
-    c.r = 1 - c.r;
-    c.g = 1 - c.g;
-    c.b = 1 - c.b;
-  }
-
   /**
    * Set object's transformation that is applied at the beginning of a call to
    * {@link #draw(IPainter)}.
