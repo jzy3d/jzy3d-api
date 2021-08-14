@@ -1,9 +1,9 @@
 package jgl;
 
+import org.junit.Assert;
 import org.junit.Test;
 import jgl.context.gl_context;
 import jgl.context.gl_util;
-import junit.framework.Assert;
 
 public class TestGL_renderingAlpha {
   int WIDTH = 100;
@@ -63,9 +63,13 @@ public class TestGL_renderingAlpha {
     gl.glVertex3f(0.1f, 0.9f, 0);
     gl.glEnd();
 
-
-    Assert.assertEquals(0, countBlackPixels(gl.getContext()));
-
+    // SANITY CHECK : no black nor non alpha pixel
+    Assert.assertEquals(0, count_Black_Pixels(gl.getContext()));
+    Assert.assertEquals(0, count_Alpha255_Pixels(gl.getContext()));
+    
+    // REAL TEST IS HERE : all pixels should have alpha 0
+    Assert.assertEquals(WIDTH*HEIGHT, count_Alpha0_Pixels(gl.getContext()));
+    
     gl.glFlush();
     gl.debugWriteImageTo("target/" + getClass().getSimpleName() + ".png");
 
@@ -75,7 +79,7 @@ public class TestGL_renderingAlpha {
 
   }
 
-  private int countBlackPixels(gl_context Context) {
+  private int count_Black_Pixels(gl_context Context) {
     int a0 = 0;
     int a255 = 0;
     int black = 0;
@@ -105,6 +109,74 @@ public class TestGL_renderingAlpha {
     }
 
     return black;
+    // System.out.println("glFlush() #translucent = " + a0 + " #opaque = " + a255 + " #black=" +
+    // black + " #notBlack=" + notBlack);
+  }
+  
+  private int count_Alpha0_Pixels(gl_context Context) {
+    int a0 = 0;
+    int a255 = 0;
+    int black = 0;
+    int notBlack = 0;
+
+    for (int i = 0; i < Context.ColorBuffer.Buffer.length; i++) {
+      int color = Context.ColorBuffer.Buffer[i];
+      int r = gl_util.ItoR(color);
+      int g = gl_util.ItoG(color);
+      int b = gl_util.ItoB(color);
+      int a = gl_util.ItoA(color);
+
+
+      // System.out.println(color + " r:" + r + " g:" + g + " b:" + b);
+
+      // CHECK NUMBER OF BLACK PIXEL == ALPHA PIXELS
+
+      if (r == 0 && g == 0 && b == 0 && a != 0)
+        black++;
+      else
+        notBlack++;
+
+      if (a == 0)
+        a0++;
+      if (a == 255)
+        a255++;
+    }
+
+    return a0;
+    // System.out.println("glFlush() #translucent = " + a0 + " #opaque = " + a255 + " #black=" +
+    // black + " #notBlack=" + notBlack);
+  }
+  
+  private int count_Alpha255_Pixels(gl_context Context) {
+    int a0 = 0;
+    int a255 = 0;
+    int black = 0;
+    int notBlack = 0;
+
+    for (int i = 0; i < Context.ColorBuffer.Buffer.length; i++) {
+      int color = Context.ColorBuffer.Buffer[i];
+      int r = gl_util.ItoR(color);
+      int g = gl_util.ItoG(color);
+      int b = gl_util.ItoB(color);
+      int a = gl_util.ItoA(color);
+
+
+      // System.out.println(color + " r:" + r + " g:" + g + " b:" + b);
+
+      // CHECK NUMBER OF BLACK PIXEL == ALPHA PIXELS
+
+      if (r == 0 && g == 0 && b == 0 && a != 0)
+        black++;
+      else
+        notBlack++;
+
+      if (a == 0)
+        a0++;
+      if (a == 255)
+        a255++;
+    }
+
+    return a255;
     // System.out.println("glFlush() #translucent = " + a0 + " #opaque = " + a255 + " #black=" +
     // black + " #notBlack=" + notBlack);
   }

@@ -29,6 +29,13 @@ public class Transform {
     sequence.add(transformer);
 
   }
+  
+  public Transform(Transformer... transformer) {
+    sequence = new ArrayList<Transformer>();
+    for(Transformer t: transformer) {
+      sequence.add(t);
+    }
+  }
 
   /**
    * Initialize a list of Transformer with the sequence hold by the given Transform.

@@ -48,6 +48,22 @@ public class CubeGLUT extends Wireframeable implements ISingleColorable {
   public Color getColor() {
     return color;
   }
+  
+  public float getRadius() {
+    return radius;
+  }
+
+  public void setRadius(float radius) {
+    this.radius = radius;
+  }
+
+  public Coord3d getPosition() {
+    return position;
+  }
+
+  public void setPosition(Coord3d position) {
+    this.position = position;
+  }
 
   @Override
   public void draw(IPainter painter) {
