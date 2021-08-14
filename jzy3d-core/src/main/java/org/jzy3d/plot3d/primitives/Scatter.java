@@ -115,6 +115,7 @@ public class Scatter extends Drawable implements ISingleColorable {
     int k = 0;
     for (Coord3d c : coordinates)
       this.coordinates[k++] = c;
+    updateBounds();
   }
 
   @Override
