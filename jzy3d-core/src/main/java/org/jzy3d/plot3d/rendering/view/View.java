@@ -560,6 +560,11 @@ public class View {
   public ViewPositionMode getViewMode() {
     return viewmode;
   }
+  
+  /** Return the stretch ratio applied to the view */
+  public Coord3d getScaling() {
+    return scaling;
+  }
 
   /**
    * Set the viewpoint using polar coordinates relative to the target (i.e. the center of the

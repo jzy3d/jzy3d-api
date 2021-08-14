@@ -59,22 +59,41 @@ public class gl_pointer {
 
   protected gl_context CC;
 
-  protected int status = 4; // default state "000100"
 
   /**
    *
    * Current Status The status of GL about selection, point size, texturing, smooth or flat shading,
    * depth buffer, and clip-plane clipping.
    *
+   * <pre>
    * Status Select Point Texture Smooth Depth Clipping
-   * --------------------------------------------------- ??00?0 no no no ??00?1 no no yes 0?000? no
-   * no no no 0?001? no no no yes ??01?0 no yes no ??01?1 no yes yes 0?010? no no yes no 0?011? no
-   * no yes yes ??10?0 yes no no ??10?1 yes no yes 0?100? no yes no no 0?101? no yes no yes ??11?0
-   * yes yes no ??11?1 yes yes yes 0?110? no yes yes no 0?111? no yes yes yes 00???? no no 01???? no
-   * yes 1----? yes --- --- --- ---
+   * --------------------------------------------------- 
+   * ??00?0 no no no 
+   * ??00?1 no no yes 
+   * 0?000? no no no no 
+   * 0?001? no no no yes 
+   * ??01?0 no yes no 
+   * ??01?1 no yes yes 
+   * 0?010? no no yes no 
+   * 0?011? no no yes yes 
+   * ??10?0 yes no no 
+   * ??10?1 yes no yes 
+   * 0?100? no yes no no 
+   * 0?101? no yes no yes 
+   * ??11?0 yes yes no 
+   * ??11?1 yes yes yes 
+   * 0?110? no yes yes no 
+   * 0?111? no yes yes yes 
+   * 00???? no no 
+   * 01???? no yes 
+   * 1----? yes 
+   * --- --- --- ---
    *
    * where ? means independent, - means ignore.
+   * 
+   * </pre>
    */
+  protected int status = 4; // default state "000100"
 
   // set to default state, no depth, smooth shading, no texturing, no clipping,
   // no selection, no stipple
@@ -98,7 +117,9 @@ public class gl_pointer {
 
     geometry = new gl_smooth_geo(CC, this);
     render = new gl_smooth(CC);
+    //render = new gl_depth(CC);
     line = new gl_render(CC);
+    //line = new gl_smooth(CC);
 
     basic_pixel = new gl_render_pixel(CC);
     pixel = basic_pixel;

@@ -10,7 +10,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +22,7 @@ import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
+import org.jzy3d.io.AWTImageExporter;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.monitor.IMonitorable;
@@ -87,6 +87,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   // Monitor (export perf to something else, e.g. an XLS file)
   protected Monitor monitor;
+  
+  // Allow collecting all rendered image as soon as they are rendered
+  protected AWTImageExporter exporter;
 
   /**
    * Initialize a canvas for rendering 3D
@@ -319,7 +322,15 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
       // Ask opengl to provide an image for display
       myGL.glFlush();
+      
+      if(exporter!=null) {
+        BufferedImage image = myGL.getRenderedImage();
+        exporter.export(image);
+      }
 
+      
+      
+      
       // Ask the GLCanvas to SWAP current image with
       // the latest built with glFlush
       repaint();
@@ -760,5 +771,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
         new CanvasPerfMeasure(getWidth(), getHeight(), getWidth() * getHeight(), mili));
   }
 
+  public AWTImageExporter getExporter() {
+    return exporter;
+  }
+
+  public void setExporter(AWTImageExporter exporter) {
+    this.exporter = exporter;
+  }
 
 }

@@ -16,6 +16,8 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public interface IColorMap {
+  public Color getColor(double x, double y, double z, double zMin, double zMax);
+
   /**
    * Computes the color of a {@link IColorMappable} object according to the Z value of each of its
    * components.

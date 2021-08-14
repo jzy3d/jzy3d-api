@@ -53,7 +53,7 @@ public class LineStrip extends Wireframeable {
 
     addAllPoints(coords);
   }
-
+  
   public LineStrip(Point c1, Point c2) {
     this();
     add(c1);

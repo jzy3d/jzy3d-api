@@ -154,10 +154,21 @@ public abstract class Wireframeable extends Drawable {
   }
 
   protected void applyDepthRangeForUnderlying(IPainter painter) {
-    painter.glDepthRangef(0.1f, 1f);
+    painter.glDepthRangef(NO_OVERLAP_DEPTH_RATIO, 1f);
   }
 
   protected void applyDepthRangeForOverlying(IPainter painter) {
-    painter.glDepthRangef(0.0f, 0.9f);
+    painter.glDepthRangef(0.0f, 1-NO_OVERLAP_DEPTH_RATIO);
   }
+
+  protected void applyDepthRangeDefault(IPainter painter) {
+    painter.glDepthRangef(0f, 1f);
+  }
+
+  /**
+   * The higher the value, the more the line are far from the faces and hence
+   * no z-fighting occurs between faces and lines. In case of higher value, line
+   * will be display more often, but also lines that should be behind the polygon
+   */
+  public static float NO_OVERLAP_DEPTH_RATIO = 0.1f;//0.1f;
 }

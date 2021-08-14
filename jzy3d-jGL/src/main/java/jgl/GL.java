@@ -162,6 +162,40 @@ public class GL {
       e.printStackTrace();
     }
   }
+  
+  public void debugDepthBufferTo(String depthBufferOutput) {
+    // Draw depth buffer
+    
+    
+    float minDepth = Integer.MAX_VALUE;
+    float maxDepth = -Integer.MAX_VALUE;
+    
+    int [] color = new int[Context.DepthBuffer.Buffer.length];
+    for (int i = 0; i < Context.DepthBuffer.Buffer.length; i++) {
+      float depth = Context.DepthBuffer.Buffer[i];
+      color[i] = gl_util.RGBAtoI(depth, depth, depth, 1);
+      if(minDepth>depth)
+        minDepth=depth;
+      if(maxDepth<depth)
+        maxDepth=depth;
+    }
+    
+    System.out.println("Max depth" + maxDepth);
+    System.out.println("Min depth" + minDepth);
+    //Context.
+    MemoryImageSource depthBuffer = new MemoryImageSource(Context.Viewport.Width,
+        Context.Viewport.Height, color, 0, Context.Viewport.Width);
+    
+    Image jGLDepthBuffer = canvas.createImage(depthBuffer);
+    
+    BufferedImage depthOut = new BufferedImage(jGLDepthBuffer.getWidth(null), jGLDepthBuffer.getHeight(null),
+        BufferedImage.TYPE_INT_ARGB);
+
+    ( (Graphics2D) depthOut.getGraphics()).drawImage(jGLDepthBuffer, 0, 0, null);
+    //ImageIO.write(jGLDepthBuffer, "png", "target/depth.png");
+
+    debugWriteImageTo(depthBufferOutput, (RenderedImage)depthOut);
+  }
 
   /* ******************** PROVIDE IMAGE ********************/
 
@@ -228,6 +262,9 @@ public class GL {
 
     // DEBUG
     // checkColorBuffer();
+    
+    //String depthBufferOutput = "target/depth.png";
+    //debugDepthBufferTo(depthBufferOutput);
 
     // ------------------------------------------
     // Create an image producer based on
@@ -274,6 +311,8 @@ public class GL {
     // debugWriteImageTo("target/jGL.glFlush.png", (RenderedImage)JavaImage);
 
   }
+
+  
 
 
   /** Pixel scale is used to model the pixel ratio introduced by HiDPI */
