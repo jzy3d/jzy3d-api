@@ -16,7 +16,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.imageio.ImageIO;
+
 import org.apache.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
@@ -34,11 +36,12 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
+
 import jgl.GL;
 import jgl.GL.PixelScaleListener;
-import jgl.GLCanvas;
-import jgl.GLUT;
 import jgl.context.gl_pointer;
+import jgl.wt.awt.GLCanvas;
+import jgl.wt.awt.GLUT;
 
 /**
  * This canvas allows rendering charts with jGL as OpenGL backend which perform in CPU.

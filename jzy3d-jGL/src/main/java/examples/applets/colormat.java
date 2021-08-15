@@ -7,9 +7,9 @@ import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-// must import jgl.GL....
-import jgl.GL;
-import jgl.GLAUX;
+
+import jgl.wt.awt.GL;
+import jgl.wt.awt.GLAUX;
 
 public class colormat extends Applet implements ComponentListener, MouseListener {
   // must use GL to use jGL.....

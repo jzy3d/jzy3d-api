@@ -1,8 +1,12 @@
 package jgl;
 
 import org.junit.Test;
+
 import jgl.context.gl_context;
 import jgl.context.gl_util;
+import jgl.wt.awt.GLCanvas;
+import jgl.wt.awt.GLU;
+import jgl.wt.awt.GLUT;
 import junit.framework.Assert;
 
 public class TestGL_polygonOffsetFill {
@@ -71,7 +75,7 @@ public class TestGL_polygonOffsetFill {
     Assert.assertEquals(0, countBlackPixels(gl.getContext()));
 
     gl.glFlush();
-    gl.debugWriteImageTo("target/" + getClass().getSimpleName() + ".png");
+	Util.debugWriteImageTo(gl, "target/" + getClass().getSimpleName() + ".png");
 
 
     // Then there should be no BLACK pixel

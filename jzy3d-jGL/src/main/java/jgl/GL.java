@@ -16,33 +16,15 @@
 
 package jgl;
 
-import java.applet.Applet;
-import java.awt.Color;
-// import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.awt.image.MemoryImageSource;
-import java.awt.image.RenderedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
+
 import jgl.context.gl_context;
 import jgl.context.gl_list;
 import jgl.context.gl_object;
 import jgl.context.gl_pointer;
 import jgl.context.gl_util;
+import jgl.wt.awt.GLUT;
 
 /**
  * GL is the main class of jGL 2.4.
@@ -51,17 +33,16 @@ import jgl.context.gl_util;
  * @author Robin Bing-Yu Chen
  */
 
-public class GL {
+public abstract class GL<ImageType, FontType> {
+
   protected gl_context Context = new gl_context();
-  protected gl_object CC = (gl_object) Context;
+  protected gl_object CC = Context;
   protected gl_list List;
 
-  protected Component canvas;
-  protected BufferedImage glImage;
   protected int StartX = 0;
   protected int StartY = 0;
-  protected List<TextToDraw> textsToDraw = new ArrayList<>();
-  protected List<ImageToDraw> imageToDraw = new ArrayList<>();
+	protected List<TextToDraw<FontType>> textsToDraw = new ArrayList<>();
+	protected List<ImageToDraw<ImageType>> imageToDraw = new ArrayList<>();
 
   // settings
   protected int shiftHorizontally = 0;
@@ -113,10 +94,6 @@ public class GL {
     return Context.CR;
   }
 
-  public BufferedImage getRenderedImage() {
-    return glImage;
-  }
-
   public double getPixelScaleX() {
     return pixelScaleX;
   }
@@ -141,196 +118,27 @@ public class GL {
     return desiredHeight;
   }
 
-  public Component glJGetComponent() {
-    return canvas;
-  }
-
-  /* ******************** DEBUG ********************/
-
-  public void debugWriteImageTo(String file) {
-    RenderedImage image = (RenderedImage) glImage;
-    debugWriteImageTo(file, image);
-  }
-
-  private void debugWriteImageTo(String file, RenderedImage image) {
-    try {
-      // JavaImage.getGraphics().drawString("COUCOU", 200, 200);
-      // String debugImg = "target/GL.png";
-      ImageIO.write(image, "png", new File(file));
-      System.err.println("GL write image buffer to : " + file);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-  
-  public void debugDepthBufferTo(String depthBufferOutput) {
-    // Draw depth buffer
-    
-    
-    float minDepth = Integer.MAX_VALUE;
-    float maxDepth = -Integer.MAX_VALUE;
-    
-    int [] color = new int[Context.DepthBuffer.Buffer.length];
-    for (int i = 0; i < Context.DepthBuffer.Buffer.length; i++) {
-      float depth = Context.DepthBuffer.Buffer[i];
-      color[i] = gl_util.RGBAtoI(depth, depth, depth, 1);
-      if(minDepth>depth)
-        minDepth=depth;
-      if(maxDepth<depth)
-        maxDepth=depth;
-    }
-    
-    System.out.println("Max depth" + maxDepth);
-    System.out.println("Min depth" + minDepth);
-    //Context.
-    MemoryImageSource depthBuffer = new MemoryImageSource(Context.Viewport.Width,
-        Context.Viewport.Height, color, 0, Context.Viewport.Width);
-    
-    Image jGLDepthBuffer = canvas.createImage(depthBuffer);
-    
-    BufferedImage depthOut = new BufferedImage(jGLDepthBuffer.getWidth(null), jGLDepthBuffer.getHeight(null),
-        BufferedImage.TYPE_INT_ARGB);
-
-    ( (Graphics2D) depthOut.getGraphics()).drawImage(jGLDepthBuffer, 0, 0, null);
-    //ImageIO.write(jGLDepthBuffer, "png", "target/depth.png");
-
-    debugWriteImageTo(depthBufferOutput, (RenderedImage)depthOut);
-  }
-
   /* ******************** PROVIDE IMAGE ********************/
 
-  /**
-   * Draws the image buffer that was built by {@link GL#glFlush()} with the caller {@link Graphics}
-   * context
-   * 
-   * OpenGL equivalent:
-   * 
-   * <code>void glXSwapBuffers (Display *dpy, GLXDrawable drawable)</code>
-   */
-  public void glXSwapBuffers(Graphics g, ImageObserver o) {
-    g.drawImage(glImage, StartX, StartY, desiredWidth, desiredHeight, o);
-  }
+	public void glShadeModel(int mode) {
+		if(CC.Mode != None) {
+			CC.gl_error(GL_INVALID_OPERATION, "glShadeModel");
+			return;
+		}
+		CC.gl_shade_model(mode);
+	}
 
 
 
-  public void updatePixelScale(Graphics g) {
-    Graphics2D g2d = (Graphics2D) g;
-    // printGlobalScale(g2d);
-    // produce 2.0 factory on MacOS with Retina
-    // produce 1.5 factor on Win10 HiDPI on the same Apple hardware as above
-
-    // We will read pixel scale from G2D while swapping images. This means
-    // we may be late of 1 image to adapt to an HiDPI change.
-    if (autoAdaptToHiDPI) {
-      getPixelScaleFromG2D(g2d);
-
-      if (!renderedOnce) {
-        // no event was sent has the default values
-        // are 1,1 so we force an event
-        if (pixelScaleX == 1 && pixelScaleY == 1)
-          firePixelScaleChanged(1, 1);
-        renderedOnce = true;
-      }
-
-    } else {
-      resetPixelScale();
-      if (!renderedOnce) {
-        firePixelScaleChanged(1, 1);
-        renderedOnce = true;
-      }
-    }
-  }
-
-  boolean renderedOnce = false;
-
-  public void glXSwapBuffers(Graphics g, Applet o) {
-    glXSwapBuffers(g, (ImageObserver) o);
-  }
 
   /* ******************** FLUSH IN IMAGE ********************/
 
-  /**
-   * Creates a new {@link MemoryImageSource} based on the current color buffer.
-   * 
-   * This image can later be applied to a {@link Component} using
-   * {@link #glXSwapBuffers(Graphics, ImageObserver)}
-   */
-  public void glFlush() {
-    if (Context.RenderMode != GL_RENDER) {
-      return;
-    }
+  	/**
+	 * Creates a new ImageType based on the current color buffer.
+	 * 
+	 */
+	public abstract void glFlush();
 
-    // DEBUG
-    // checkColorBuffer();
-    
-    //String depthBufferOutput = "target/depth.png";
-    //debugDepthBufferTo(depthBufferOutput);
-
-    // ------------------------------------------
-    // Create an image producer based on
-    // colorbuffer into which GL draws
-    MemoryImageSource producer = new MemoryImageSource(Context.Viewport.Width,
-        Context.Viewport.Height, Context.ColorBuffer.Buffer, 0, Context.Viewport.Width);
-    // producer.setAnimated(true);
-    // producer.setFullBufferUpdates(true);
-
-    // Generates an image from the toolkit to use this producer
-    Image jGLColorBuffer = canvas.createImage(producer);
-
-    // ------------------------------------------
-    // Write GL content in a temporary image
-    // and then to the image returned to Canvas
-
-    glImage = new BufferedImage(jGLColorBuffer.getWidth(null), jGLColorBuffer.getHeight(null),
-        BufferedImage.TYPE_INT_ARGB);
-
-    Graphics2D g2d = (Graphics2D) glImage.getGraphics();
-    configureRenderingHints(g2d);
-
-    // Hack background
-    if (clearBackgroundWithG2d)
-      hackClearColorWithG2DfillRect(g2d);
-
-    // Text that should appear BEHIND the scene's polygons
-    drawTexts(g2d);
-
-    // Images that should appear BEHIND the scene's polygons
-    // drawImagesAndClearBuffer(g2d);
-    drawImages(g2d, ImageLayer.BACKGROUND);
-
-    // Color buffer
-    g2d.drawImage(jGLColorBuffer, shiftHorizontally, 0, null);
-
-    // Text that should appear ON TOP of the scene's polygons
-    // ...
-
-    // Images that should appear ON TOP of the scene's polygons
-    drawImages(g2d, ImageLayer.FOREGROUND);
-    clearImagesBuffer();
-
-    // debugWriteImageTo("target/jGL.glFlush.png", (RenderedImage)JavaImage);
-
-  }
-
-  
-
-
-  /** Pixel scale is used to model the pixel ratio introduced by HiDPI */
-  protected void getPixelScaleFromG2D(Graphics2D g2d) {
-    AffineTransform globalTransform = g2d.getTransform();
-
-    double oldPixelScaleX = pixelScaleX;
-    double oldPixelScaleY = pixelScaleY;
-    double newPixelScaleX = globalTransform.getScaleX();
-    double newPixelScaleY = globalTransform.getScaleY();
-
-    setPixelScaleX(newPixelScaleX);
-    setPixelScaleY(newPixelScaleY);
-
-    if (newPixelScaleX != oldPixelScaleX || newPixelScaleY != oldPixelScaleY) {
-      firePixelScaleChanged(newPixelScaleX, newPixelScaleY);
-    }
-  }
 
   public void addPixelScaleListener(PixelScaleListener listener) {
     pixelScaleListeners.add(listener);
@@ -373,20 +181,6 @@ public class GL {
     pixelScaleY = 1;
   }
 
-  protected void printGlobalScale(Graphics2D g2d) {
-    AffineTransform globalTransform = g2d.getTransform();
-    double globalScaleX = globalTransform.getScaleX();
-    double globalScaleY = globalTransform.getScaleY();
-
-    System.out.println("globalScaleX:" + globalScaleX + " globalScaleY:" + globalScaleY);
-  }
-
-  protected void configureRenderingHints(Graphics2D g2d) {
-    RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
-        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    g2d.setRenderingHints(rh);
-  }
-
   /**
    * Print statistics about color buffer content for debugging.
    */
@@ -422,31 +216,6 @@ public class GL {
         + " #notBlack=" + notBlack);
   }
 
-  protected void hackClearColorWithG2DfillRect(Graphics2D g2d) {
-    Color backgroundColor = getClearColorAWT();
-    g2d.setColor(backgroundColor);
-    g2d.fillRect(0, 0, Context.Viewport.Width, Context.Viewport.Height);
-  }
-
-  /**
-   * Convert a color given as an integer to an AWT Color.
-   */
-  public static Color glIntToColor(int color) {
-    float r = gl_util.ItoR(color);
-    float g = gl_util.ItoG(color);
-    float b = gl_util.ItoB(color);
-    // float a = gl_util.ItoA(color);
-    return new Color(r / 255, g / 255, b / 255);
-  }
-
-  /**
-   * @return the clear color as an AWT Color.
-   */
-  public Color getClearColorAWT() {
-    int clearColor = getContext().ColorBuffer.IntClearColor;
-    return glIntToColor(clearColor);
-  }
-
   /**
    * @see {@link #setShiftHoritontally(int)}
    */
@@ -454,12 +223,13 @@ public class GL {
     return shiftHorizontally;
   }
 
-  /**
-   * Allows shifting the image of the 3d scene and all images that have been append with
-   * {@link #appendImageToDraw(BufferedImage)}
-   * 
-   * @param shift to the right if value is positive, to the left if the value is negative.
-   */
+  	/**
+	 * Allows shifting the image of the 3d scene and all images that have been append with
+	 * {@link #appendImageToDraw(Object)}
+	 * 
+	 * @param shift
+	 *                  to the right if value is positive, to the left if the value is negative.
+	 */
   public void setShiftHorizontally(int shiftHorizontally) {
     this.shiftHorizontally = shiftHorizontally;
   }
@@ -482,10 +252,10 @@ public class GL {
     return useOSFontRendering;
   }
 
-  /**
-   * If true, will use the OS for font rendering of all texts that have been append with
-   * {@link #appendTextToDraw(Font, String, int, int)} otherwise use a JVM based font rendering.
-   */
+  	/**
+	 * If true, will use the OS for font rendering of all texts that have been append with
+	 * {@link #appendTextToDraw(Object, String, int, int)} otherwise use a JVM based font rendering.
+	 */
   public void setUseOSFontRendering(boolean useOSFontRendering) {
     this.useOSFontRendering = useOSFontRendering;
   }
@@ -509,54 +279,25 @@ public class GL {
     FOREGROUND, BACKGROUND
   }
 
-  class ImageToDraw {
-    public int x;
-    public int y;
-    public BufferedImage image;
-    public ImageLayer layer;
+	public void appendImageToDraw(ImageType image) {
 
-    public ImageToDraw(int x, int y, BufferedImage image, ImageLayer layer) {
-      super();
-      this.x = x;
-      this.y = y;
-      this.image = image;
-      this.layer = layer;
-    }
-  }
+		appendImageToDraw(image, 0, 0);
+	}
 
-  public void appendImageToDraw(BufferedImage image) {
-    appendImageToDraw(image, 0, 0);
-  }
+	public void appendImageToDraw(ImageType image, int x, int y) {
 
-  public void appendImageToDraw(BufferedImage image, int x, int y) {
-    appendImageToDraw(image, x, y, ImageLayer.BACKGROUND);
-  }
+		appendImageToDraw(image, x, y, ImageLayer.BACKGROUND);
+	}
 
-  public void appendImageToDraw(BufferedImage image, int x, int y, ImageLayer layer) {
-    synchronized (imageToDraw) {
-      imageToDraw.add(new ImageToDraw(x, y, image, layer));
-      // System.out.println(imageToDraw.size() + " images to draw");
-    }
-  }
+	public void appendImageToDraw(ImageType image, int x, int y, ImageLayer layer) {
 
-  protected void drawImagesAndClearBuffer(Graphics2D g2d) {
-    synchronized (imageToDraw) {
-      for (ImageToDraw img : imageToDraw) {
-        g2d.drawImage(img.image, img.x + shiftHorizontally, img.y, null);
-      }
-      imageToDraw.clear(); // empty image buffer
-    }
-  }
+		synchronized(imageToDraw) {
+			imageToDraw.add(new ImageToDraw<>(x, y, image, layer));
+			// System.out.println(imageToDraw.size() + " images to draw");
+		}
+	}
 
-  protected void drawImages(Graphics2D g2d, ImageLayer layer) {
-    synchronized (imageToDraw) {
-      for (ImageToDraw img : imageToDraw) {
-        if (img.layer == null || img.layer.equals(layer)) {
-          g2d.drawImage(img.image, img.x + shiftHorizontally, img.y, null);
-        }
-      }
-    }
-  }
+	public abstract ImageType getRenderedImage();
 
   protected void clearImagesBuffer() {
     synchronized (imageToDraw) {
@@ -566,135 +307,29 @@ public class GL {
 
   /* ********************** TEXT MANAGEMENT WITH AWT ************************/
 
-  /**
-   * Renders appended text to given {@link Graphics2D} context.
-   * 
-   * @param g2d
-   */
-  protected void drawTexts(Graphics2D g2d) {
+
+
+  	/**
+	 * To be called by {@link GLUT#glutBitmapString(Object, String, float, float)} to append text to a
+	 * list of text to render at {@link GL#glFlush()} step.
+	 */
+	public void appendTextToDraw(FontType font, String string, int x, int y) {
     synchronized (textsToDraw) {
-      for (TextToDraw text : textsToDraw) {
-        doDrawString(g2d, text);
-      }
-      textsToDraw.clear(); // empty text buffer
+			textsToDraw.add(new TextToDraw<>(font, string, x, y));
     }
   }
 
-  protected void doDrawString(Graphics2D g2d, TextToDraw text) {
-
-    // AffineTransform orig = g2d.getTransform();
-    // g2d.rotate(Math.PI/2);
-
-    if (text.r >= 0) {
-      g2d.setColor(new Color(text.r, text.g, text.b));
-    } else {
-      g2d.setColor(Color.BLACK);
-    }
-
-    int x = text.x + shiftHorizontally;
-    int y = text.y;
-    float rotate = text.rotate;
-
-    int textWidth = 0;
-
-
-    g2d.setFont(text.font);
-    FontMetrics fm = g2d.getFontMetrics();
-    if (fm != null) {
-      textWidth = fm.stringWidth(text.string);
-    }
-
-    preRotateFromLeftPoint(g2d, x, y, rotate, textWidth);
-
-    // rotation point / position of text
-    // g2d.fillRect(-1, -1, 2, 2);
-
-    if (useOSFontRendering) {
-      g2d.drawString(text.string, 0, 0);
-    } else {
-      FontRenderContext frc = g2d.getFontRenderContext();
-      GlyphVector gv = text.font.createGlyphVector(frc, text.string);
-      g2d.drawGlyphVector(gv, 0, 0);
-    }
-    postRotateFromLeftPoint(g2d, x, y, rotate, textWidth);
-  }
-
-  protected void preRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate, int textWidth) {
-    if (rotate != 0) {
-      g2d.translate(textWidth / 2, 0);
-    }
-
-    g2d.translate(x, y);
-
-    if (rotate != 0) {
-      g2d.rotate(rotate);
-      g2d.translate(-textWidth / 2, 0);
-    }
-
-  }
-
-  protected void postRotateFromLeftPoint(Graphics2D g2d, int x, int y, float rotate,
-      int textWidth) {
-    if (rotate != 0) {
-      g2d.translate(textWidth / 2, 0);
-      g2d.rotate(-rotate);
-    }
-
-    g2d.translate(-x, -y);
-
-    if (rotate != 0) {
-      g2d.translate(-textWidth / 2, 0);
-    }
-  }
-
-  /**
-   * To be called by {@link GLUT#glutBitmapString(Font, String, float, float)} to append text to a
-   * list of text to render at {@link GL#glFlush()} step.
-   */
-  public void appendTextToDraw(Font font, String string, int x, int y) {
-    synchronized (textsToDraw) {
-      textsToDraw.add(new TextToDraw(font, string, x, y));
-    }
-  }
-
-  /**
-   * To be called by {@link GLUT#glutBitmapString(Font, String, float, float)} to append text to a
-   * list of text to render at {@link GL#glFlush()} step.
-   */
-  public void appendTextToDraw(Font font, String string, int x, int y, float r, float g, float b,
+  	/**
+	 * To be called by {@link GLUT#glutBitmapString(Object, String, float, float)} to append text to a
+	 * list of text to render at {@link GL#glFlush()} step.
+	 */
+	public void appendTextToDraw(FontType font, String string, int x, int y, float r, float g, float b,
       float rotate) {
     synchronized (textsToDraw) {
-      textsToDraw.add(new TextToDraw(font, string, x, y, r, g, b, rotate));
+		textsToDraw.add(new TextToDraw<>(font, string, x, y, r, g, b, rotate));
     }
   }
 
-  public class TextToDraw {
-    protected Font font;
-    protected String string;
-    protected int x;
-    protected int y;
-    protected float r;
-    protected float g;
-    protected float b;
-    protected float rotate;
-
-    public TextToDraw(Font font, String string, int x, int y) {
-      this(font, string, x, y, -1, -1, -1, 0);
-    }
-
-    public TextToDraw(Font font, String string, int x, int y, float r, float g, float b,
-        float rotate) {
-      super();
-      this.font = font;
-      this.string = string;
-      this.x = x;
-      this.y = y;
-      this.r = r;
-      this.g = g;
-      this.b = b;
-      this.rotate = rotate;
-    }
-  }
 
   /**
    *
@@ -869,19 +504,19 @@ public class GL {
     switch (type) {
       case GL_BYTE:
       case GL_UNSIGNED_BYTE:
-        return (int) lists[n];
+        return lists[n];
       case GL_SHORT:
       case GL_UNSIGNED_SHORT:
       case GL_2_BYTES:
-        return (int) ((lists[n << 1]) << 8 | (lists[(n << 1) | 1]));
+        return (lists[n << 1]) << 8 | (lists[(n << 1) | 1]);
       case GL_3_BYTES:
-        return (int) ((lists[(n << 1) + n]) << 16 | (lists[(n << 1) + n + 1]) << 8
-            | (lists[(n << 1) + n + 2]));
+        return (lists[(n << 1) + n]) << 16 | (lists[(n << 1) + n + 1]) << 8
+            | (lists[(n << 1) + n + 2]);
       case GL_INT:
       case GL_UNSIGNED_INT:
       case GL_4_BYTES:
-        return (int) ((lists[n << 2]) << 24 | (lists[(n << 2) | 1]) << 16
-            | (lists[(n << 2) | 2]) << 8 | (lists[(n << 2) | 3]));
+        return (lists[n << 2]) << 24 | (lists[(n << 2) | 1]) << 16
+            | (lists[(n << 2) | 2]) << 8 | (lists[(n << 2) | 3]);
       case GL_FLOAT:
         return (int) ((lists[n << 2]) * 16777216.0f + (lists[(n << 2) | 1]) * 65536.0f
             + (lists[(n << 2) | 2]) * 256.0f + (lists[(n << 2) | 3]));
@@ -1923,10 +1558,6 @@ public class GL {
     desiredWidth = width;
     desiredHeight = height;
 
-    // Update pixel scale to guess if HiDPI
-    if (canvas != null && canvas.getGraphics() != null)
-      updatePixelScale(canvas.getGraphics());
-
     applyViewport();
   }
 
@@ -2529,12 +2160,12 @@ public class GL {
 
   /** GLvoid glIndexs (GLshort c) */
   public void glIndexs(short c) {
-    CC.gl_index((int) (c & 0xffff));
+    CC.gl_index(c & 0xffff);
   }
 
   /** GLvoid glIndexub (GLubyte c) */
   public void glIndexub(byte c) {
-    CC.gl_index((int) (c & 0xff));
+    CC.gl_index(c & 0xff);
   }
 
   /** GLvoid glIndexdv (GLdouble *c) */
@@ -2554,12 +2185,12 @@ public class GL {
 
   /** GLvoid glIndexsv (GLshort *c) */
   public void glIndexsv(short c[]) {
-    CC.gl_index((int) (c[0] & 0xffff));
+    CC.gl_index(c[0] & 0xffff);
   }
 
   /** GLvoid glIndexubv (GLubyte *c) */
   public void glIndexubv(byte c[]) {
-    CC.gl_index((int) (c[0] & 0xff));
+    CC.gl_index(c[0] & 0xff);
   }
 
   /** GLvoid glColor3b (GLbyte red, GLbyte green, GLbyte blue) */
@@ -3036,15 +2667,6 @@ public class GL {
   /**
    * Lighting
    */
-
-  /** GLvoid glShadeModel (GLenum mode) */
-  public void glShadeModel(int mode) {
-    if (CC.Mode != None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glShadeModel");
-      return;
-    }
-    CC.gl_shade_model(mode);
-  }
 
   /** GLvoid glLightf (GLenum light, GLenum pname, GLfloat param) */
   public void glLightf(int light, int pname, float param) {
@@ -3913,7 +3535,7 @@ public class GL {
       case GL_ALPHA_BIAS:
       case GL_DEPTH_SCALE:
       case GL_DEPTH_BIAS:
-        CC.gl_pixel_transfer(pname, (float) param);
+        CC.gl_pixel_transfer(pname, param);
         break;
       default:
         CC.gl_error(GL_INVALID_ENUM, "glPixelTransferi(pname)");
@@ -4307,10 +3929,10 @@ public class GL {
       case GL_EYE_PLANE:
         if ((coord == GL_S) || (coord == GL_T) || (coord == GL_R) || (coord == GL_Q)) {
           float fparams[] = new float[4];
-          fparams[0] = (float) params[0];
-          fparams[1] = (float) params[1];
-          fparams[2] = (float) params[2];
-          fparams[3] = (float) params[3];
+          fparams[0] = params[0];
+          fparams[1] = params[1];
+          fparams[2] = params[2];
+          fparams[3] = params[3];
           CC.gl_tex_gen_f(coord, pname, fparams);
         } else {
           CC.gl_error(GL_INVALID_ENUM, "glTexGeniv(coord)");
@@ -4327,16 +3949,16 @@ public class GL {
       case GL_TEXTURE_GEN_MODE:
         switch (coord) {
           case GL_S:
-            params[0] = (int) Context.Texture.CurrentS.Mode;
+            params[0] = Context.Texture.CurrentS.Mode;
             break;
           case GL_T:
-            params[0] = (int) Context.Texture.CurrentT.Mode;
+            params[0] = Context.Texture.CurrentT.Mode;
             break;
           case GL_R:
-            params[0] = (int) Context.Texture.CurrentR.Mode;
+            params[0] = Context.Texture.CurrentR.Mode;
             break;
           case GL_Q:
-            params[0] = (int) Context.Texture.CurrentQ.Mode;
+            params[0] = Context.Texture.CurrentQ.Mode;
             break;
           default:
             CC.gl_error(GL_INVALID_ENUM, "glGetTexGendv(coord)");
@@ -4345,28 +3967,28 @@ public class GL {
       case GL_OBJECT_PLANE:
         switch (coord) {
           case GL_S:
-            params[0] = (float) Context.Texture.CurrentS.ObjectLinear[0];
-            params[1] = (float) Context.Texture.CurrentS.ObjectLinear[1];
-            params[2] = (float) Context.Texture.CurrentS.ObjectLinear[2];
-            params[3] = (float) Context.Texture.CurrentS.ObjectLinear[3];
+            params[0] = Context.Texture.CurrentS.ObjectLinear[0];
+            params[1] = Context.Texture.CurrentS.ObjectLinear[1];
+            params[2] = Context.Texture.CurrentS.ObjectLinear[2];
+            params[3] = Context.Texture.CurrentS.ObjectLinear[3];
             break;
           case GL_T:
-            params[0] = (float) Context.Texture.CurrentT.ObjectLinear[0];
-            params[1] = (float) Context.Texture.CurrentT.ObjectLinear[1];
-            params[2] = (float) Context.Texture.CurrentT.ObjectLinear[2];
-            params[3] = (float) Context.Texture.CurrentT.ObjectLinear[3];
+            params[0] = Context.Texture.CurrentT.ObjectLinear[0];
+            params[1] = Context.Texture.CurrentT.ObjectLinear[1];
+            params[2] = Context.Texture.CurrentT.ObjectLinear[2];
+            params[3] = Context.Texture.CurrentT.ObjectLinear[3];
             break;
           case GL_R:
-            params[0] = (float) Context.Texture.CurrentR.ObjectLinear[0];
-            params[1] = (float) Context.Texture.CurrentR.ObjectLinear[1];
-            params[2] = (float) Context.Texture.CurrentR.ObjectLinear[2];
-            params[3] = (float) Context.Texture.CurrentR.ObjectLinear[3];
+            params[0] = Context.Texture.CurrentR.ObjectLinear[0];
+            params[1] = Context.Texture.CurrentR.ObjectLinear[1];
+            params[2] = Context.Texture.CurrentR.ObjectLinear[2];
+            params[3] = Context.Texture.CurrentR.ObjectLinear[3];
             break;
           case GL_Q:
-            params[0] = (float) Context.Texture.CurrentQ.ObjectLinear[0];
-            params[1] = (float) Context.Texture.CurrentQ.ObjectLinear[1];
-            params[2] = (float) Context.Texture.CurrentQ.ObjectLinear[2];
-            params[3] = (float) Context.Texture.CurrentQ.ObjectLinear[3];
+            params[0] = Context.Texture.CurrentQ.ObjectLinear[0];
+            params[1] = Context.Texture.CurrentQ.ObjectLinear[1];
+            params[2] = Context.Texture.CurrentQ.ObjectLinear[2];
+            params[3] = Context.Texture.CurrentQ.ObjectLinear[3];
             break;
           default:
             CC.gl_error(GL_INVALID_ENUM, "glGetTexGendv(coord)");
@@ -4375,28 +3997,28 @@ public class GL {
       case GL_EYE_PLANE:
         switch (coord) {
           case GL_S:
-            params[0] = (float) Context.Texture.CurrentS.EyeLinear[0];
-            params[1] = (float) Context.Texture.CurrentS.EyeLinear[1];
-            params[2] = (float) Context.Texture.CurrentS.EyeLinear[2];
-            params[3] = (float) Context.Texture.CurrentS.EyeLinear[3];
+            params[0] = Context.Texture.CurrentS.EyeLinear[0];
+            params[1] = Context.Texture.CurrentS.EyeLinear[1];
+            params[2] = Context.Texture.CurrentS.EyeLinear[2];
+            params[3] = Context.Texture.CurrentS.EyeLinear[3];
             break;
           case GL_T:
-            params[0] = (float) Context.Texture.CurrentT.EyeLinear[0];
-            params[1] = (float) Context.Texture.CurrentT.EyeLinear[1];
-            params[2] = (float) Context.Texture.CurrentT.EyeLinear[2];
-            params[3] = (float) Context.Texture.CurrentT.EyeLinear[3];
+            params[0] = Context.Texture.CurrentT.EyeLinear[0];
+            params[1] = Context.Texture.CurrentT.EyeLinear[1];
+            params[2] = Context.Texture.CurrentT.EyeLinear[2];
+            params[3] = Context.Texture.CurrentT.EyeLinear[3];
             break;
           case GL_R:
-            params[0] = (float) Context.Texture.CurrentR.EyeLinear[0];
-            params[1] = (float) Context.Texture.CurrentR.EyeLinear[1];
-            params[2] = (float) Context.Texture.CurrentR.EyeLinear[2];
-            params[3] = (float) Context.Texture.CurrentR.EyeLinear[3];
+            params[0] = Context.Texture.CurrentR.EyeLinear[0];
+            params[1] = Context.Texture.CurrentR.EyeLinear[1];
+            params[2] = Context.Texture.CurrentR.EyeLinear[2];
+            params[3] = Context.Texture.CurrentR.EyeLinear[3];
             break;
           case GL_Q:
-            params[0] = (float) Context.Texture.CurrentQ.EyeLinear[0];
-            params[1] = (float) Context.Texture.CurrentQ.EyeLinear[1];
-            params[2] = (float) Context.Texture.CurrentQ.EyeLinear[2];
-            params[3] = (float) Context.Texture.CurrentQ.EyeLinear[3];
+            params[0] = Context.Texture.CurrentQ.EyeLinear[0];
+            params[1] = Context.Texture.CurrentQ.EyeLinear[1];
+            params[2] = Context.Texture.CurrentQ.EyeLinear[2];
+            params[3] = Context.Texture.CurrentQ.EyeLinear[3];
             break;
           default:
             CC.gl_error(GL_INVALID_ENUM, "glGetTexGendv(coord)");
@@ -4413,16 +4035,16 @@ public class GL {
       case GL_TEXTURE_GEN_MODE:
         switch (coord) {
           case GL_S:
-            params[0] = (int) Context.Texture.CurrentS.Mode;
+            params[0] = Context.Texture.CurrentS.Mode;
             break;
           case GL_T:
-            params[0] = (int) Context.Texture.CurrentT.Mode;
+            params[0] = Context.Texture.CurrentT.Mode;
             break;
           case GL_R:
-            params[0] = (int) Context.Texture.CurrentR.Mode;
+            params[0] = Context.Texture.CurrentR.Mode;
             break;
           case GL_Q:
-            params[0] = (int) Context.Texture.CurrentQ.Mode;
+            params[0] = Context.Texture.CurrentQ.Mode;
             break;
           default:
             CC.gl_error(GL_INVALID_ENUM, "glGetTexGenfv(coord)");
@@ -4718,7 +4340,7 @@ public class GL {
     }
     switch (pname) {
       case GL_TEXTURE_ENV_MODE:
-        params[0] = (float) Context.Texture.EnvMode;
+        params[0] = Context.Texture.EnvMode;
         break;
       case GL_TEXTURE_ENV_COLOR:
         params[0] = Context.Texture.EnvColor[0];
@@ -4777,7 +4399,7 @@ public class GL {
   /** GLvoid glTexParameteri (GLenum target, GLenum pname, GLint param) */
   public void glTexParameteri(int target, int pname, int param) {
     float params[] = new float[1];
-    params[0] = (float) param;
+    params[0] = param;
     if (target == GL_TEXTURE_1D || target == GL_TEXTURE_2D || target == GL_TEXTURE_3D) {
       switch (pname) {
         case GL_TEXTURE_MIN_FILTER:
@@ -4869,7 +4491,7 @@ public class GL {
   public void glTexParameteriv(int target, int pname, int params[]) {
     int iparam = params[0];
     float fparams[] = new float[1];
-    fparams[0] = (float) params[0];
+    fparams[0] = params[0];
     if (target == GL_TEXTURE_1D || target == GL_TEXTURE_2D || target == GL_TEXTURE_3D) {
       switch (pname) {
         case GL_TEXTURE_MIN_FILTER:
@@ -4919,25 +4541,25 @@ public class GL {
       case GL_TEXTURE_1D:
         switch (pname) {
           case GL_TEXTURE_MAG_FILTER:
-            params[0] = (float) Context.Texture.Current1D.MagFilter;
+            params[0] = Context.Texture.Current1D.MagFilter;
             break;
           case GL_TEXTURE_MIN_FILTER:
-            params[0] = (float) Context.Texture.Current1D.MinFilter;
+            params[0] = Context.Texture.Current1D.MinFilter;
             break;
           case GL_TEXTURE_WRAP_S:
-            params[0] = (float) Context.Texture.Current1D.WrapS;
+            params[0] = Context.Texture.Current1D.WrapS;
             break;
           case GL_TEXTURE_WRAP_T:
-            params[0] = (float) Context.Texture.Current1D.WrapT;
+            params[0] = Context.Texture.Current1D.WrapT;
             break;
           case GL_TEXTURE_WRAP_R:
-            params[0] = (float) Context.Texture.Current1D.WrapR;
+            params[0] = Context.Texture.Current1D.WrapR;
             break;
           case GL_TEXTURE_BORDER_COLOR:
-            params[0] = ((float) Context.Texture.Current1D.BorderColor[0]) / (255.0f);
-            params[1] = ((float) Context.Texture.Current1D.BorderColor[1]) / (255.0f);
-            params[2] = ((float) Context.Texture.Current1D.BorderColor[2]) / (255.0f);
-            params[3] = ((float) Context.Texture.Current1D.BorderColor[3]) / (255.0f);
+            params[0] = (Context.Texture.Current1D.BorderColor[0]) / (255.0f);
+            params[1] = (Context.Texture.Current1D.BorderColor[1]) / (255.0f);
+            params[2] = (Context.Texture.Current1D.BorderColor[2]) / (255.0f);
+            params[3] = (Context.Texture.Current1D.BorderColor[3]) / (255.0f);
             break;
           default:
             CC.gl_error(GL_INVALID_ENUM, "glGetTexParameterfv(pname)");
@@ -4946,25 +4568,25 @@ public class GL {
       case GL_TEXTURE_2D:
         switch (pname) {
           case GL_TEXTURE_MAG_FILTER:
-            params[0] = (float) Context.Texture.Current2D.MagFilter;
+            params[0] = Context.Texture.Current2D.MagFilter;
             break;
           case GL_TEXTURE_MIN_FILTER:
-            params[0] = (float) Context.Texture.Current2D.MinFilter;
+            params[0] = Context.Texture.Current2D.MinFilter;
             break;
           case GL_TEXTURE_WRAP_S:
-            params[0] = (float) Context.Texture.Current2D.WrapS;
+            params[0] = Context.Texture.Current2D.WrapS;
             break;
           case GL_TEXTURE_WRAP_T:
-            params[0] = (float) Context.Texture.Current2D.WrapT;
+            params[0] = Context.Texture.Current2D.WrapT;
             break;
           case GL_TEXTURE_WRAP_R:
-            params[0] = (float) Context.Texture.Current2D.WrapR;
+            params[0] = Context.Texture.Current2D.WrapR;
             break;
           case GL_TEXTURE_BORDER_COLOR:
-            params[0] = ((float) Context.Texture.Current2D.BorderColor[0]) / (255.0f);
-            params[1] = ((float) Context.Texture.Current2D.BorderColor[1]) / (255.0f);
-            params[2] = ((float) Context.Texture.Current2D.BorderColor[2]) / (255.0f);
-            params[3] = ((float) Context.Texture.Current2D.BorderColor[3]) / (255.0f);
+            params[0] = (Context.Texture.Current2D.BorderColor[0]) / (255.0f);
+            params[1] = (Context.Texture.Current2D.BorderColor[1]) / (255.0f);
+            params[2] = (Context.Texture.Current2D.BorderColor[2]) / (255.0f);
+            params[3] = (Context.Texture.Current2D.BorderColor[3]) / (255.0f);
             break;
           default:
             CC.gl_error(GL_INVALID_ENUM, "glGetTexParameterfv(pname)");
@@ -4973,25 +4595,25 @@ public class GL {
       case GL_TEXTURE_3D:
         switch (pname) {
           case GL_TEXTURE_MAG_FILTER:
-            params[0] = (float) Context.Texture.Current3D.MagFilter;
+            params[0] = Context.Texture.Current3D.MagFilter;
             break;
           case GL_TEXTURE_MIN_FILTER:
-            params[0] = (float) Context.Texture.Current3D.MinFilter;
+            params[0] = Context.Texture.Current3D.MinFilter;
             break;
           case GL_TEXTURE_WRAP_S:
-            params[0] = (float) Context.Texture.Current3D.WrapS;
+            params[0] = Context.Texture.Current3D.WrapS;
             break;
           case GL_TEXTURE_WRAP_T:
-            params[0] = (float) Context.Texture.Current3D.WrapT;
+            params[0] = Context.Texture.Current3D.WrapT;
             break;
           case GL_TEXTURE_WRAP_R:
-            params[0] = (float) Context.Texture.Current3D.WrapR;
+            params[0] = Context.Texture.Current3D.WrapR;
             break;
           case GL_TEXTURE_BORDER_COLOR:
-            params[0] = ((float) Context.Texture.Current3D.BorderColor[0]) / (255.0f);
-            params[1] = ((float) Context.Texture.Current3D.BorderColor[1]) / (255.0f);
-            params[2] = ((float) Context.Texture.Current3D.BorderColor[2]) / (255.0f);
-            params[3] = ((float) Context.Texture.Current3D.BorderColor[3]) / (255.0f);
+            params[0] = (Context.Texture.Current3D.BorderColor[0]) / (255.0f);
+            params[1] = (Context.Texture.Current3D.BorderColor[1]) / (255.0f);
+            params[2] = (Context.Texture.Current3D.BorderColor[2]) / (255.0f);
+            params[3] = (Context.Texture.Current3D.BorderColor[3]) / (255.0f);
             break;
           default:
             CC.gl_error(GL_INVALID_ENUM, "glGetTexParameterfv(pname)");
@@ -6140,19 +5762,6 @@ public class GL {
    * not the same.
    */
 
-  /** Because this is for Java, use true color and double buffer default */
-  /** Bool glXMakeCurrent (Display *dpy, GLXDrawable drawable, GLXcontext ctx) */
-  // public boolean glXMakeCurrent (Applet o, int x, int y) {
-  public boolean glXMakeCurrent(Component o, int x, int y) {
-    // JavaApplet = o;
-    canvas = o;
-    StartX = x;
-    StartY = y;
-    // Context.gl_initialize_context (o.getSize().width, o.getSize().height);
-    glViewport(x, y, o.getSize().width, o.getSize().height);
-    Context.gl_initialize_context();
-    return GL_TRUE;
-  }
 
   /* ********************************************************************** */
 
@@ -6736,5 +6345,7 @@ public class GL {
   public static final int GLX_BAD_CONTEXT = 5;
   public static final int GLX_BAD_VALUE = 6;
   public static final int GLX_BAD_ENUM = 7;
+	/* Constant of GLE */
+	public static final int GL_PHONG = GL_SMOOTH + 1;
 
 }

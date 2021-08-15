@@ -17,7 +17,7 @@
 package jgl.glu;
 
 import jgl.GL;
-import jgl.GLU;
+import jgl.wt.awt.GLU;
 
 /**
  * GLUnurbsObj is NURBS object of the GLU class of JavaGL 2.1.

@@ -7,9 +7,9 @@ import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-// must import jgl.GL....
-import jgl.GL;
-import jgl.GLAUX;
+
+import jgl.wt.awt.GL;
+import jgl.wt.awt.GLAUX;
 
 // "double" is a reserved word in Java
 public class doublebuffer extends Applet implements ComponentListener, MouseListener, Runnable {

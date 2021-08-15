@@ -17,7 +17,7 @@
 package jgl.glu;
 
 import jgl.GL;
-import jgl.GLU;
+import jgl.wt.awt.GLU;
 
 /**
  * nurbs_surface is one of the GLU NURBS class of JavaGL 2.1.

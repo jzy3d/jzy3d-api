@@ -8,7 +8,8 @@ import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import jgl.GL;
+
+import jgl.wt.awt.GL;
 
 public class AdaptByDroppingHiDPI extends AbstractAdativeRenderingHandler implements AdaptiveRenderingHandler{
   protected EmulGLPainter painter;
@@ -55,11 +56,13 @@ public class AdaptByDroppingHiDPI extends AbstractAdativeRenderingHandler implem
   }
   
   
-  protected void applyOptimisation(Wireframeable w) {
+  @Override
+protected void applyOptimisation(Wireframeable w) {
     //w.setFaceDisplayed(false);
    // w.setWireframeDisplayed(true);
   }
-  protected Toggle makeToggle(Wireframeable w) {
+  @Override
+protected Toggle makeToggle(Wireframeable w) {
     return new Toggle(w);
   }
 

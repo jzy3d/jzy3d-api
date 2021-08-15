@@ -2,13 +2,15 @@ package jgl;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import jgl.context.gl_util;
+import jgl.wt.awt.GL;
 
 public class TestGL_glClearColor {
   @Test
   public void whenClearColor_thenBufferIsResetToThisColor() {
     // Given openGL
-    GL gl = new GL();
+	GL gl = new GL();
 
     gl.glEnable(GL.GL_ALPHA_TEST);
 
