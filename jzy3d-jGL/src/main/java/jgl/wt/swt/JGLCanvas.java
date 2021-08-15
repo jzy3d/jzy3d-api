@@ -17,17 +17,17 @@ import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.opengl.GLCanvas;
 import org.eclipse.swt.opengl.GLData;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
-public class JGLCanvas extends GLCanvas {
+public class JGLCanvas extends Canvas {
 
 	protected GL gl;
 
 	public JGLCanvas(Composite parent, int style, GLData data) {
 
-		super(parent, style, data);
+		super(parent, style);
 		gl = new GL(parent.getDisplay());
 		parent.addDisposeListener(e -> gl.dispose());
 		gl.setAutoAdaptToHiDPI(false);
@@ -40,7 +40,6 @@ public class JGLCanvas extends GLCanvas {
 				Point size = getSize();
 				doResize(size.x, size.y);
 			}
-
 
 			@Override
 			public void controlMoved(ControlEvent e) {
@@ -73,16 +72,14 @@ public class JGLCanvas extends GLCanvas {
 		return gl;
 	}
 
-	@Override
 	public void setCurrent() {
 
-		super.setCurrent();
+		// no-opp just for compatibility reasons
 	}
 
-	@Override
 	public void swapBuffers() {
 
-		super.swapBuffers();
+		gl.glFlush();
+		redraw();
 	}
-
 }
