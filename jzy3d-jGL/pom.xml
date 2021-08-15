@@ -15,7 +15,6 @@
 	<properties>
 		<!-- Disable Javadoc Linter -->
 		<additionalparam>-Xdoclint:none</additionalparam>
-		<swt-version>3.116.100</swt-version>
 	</properties>
 
 	<dependencies>
@@ -23,16 +22,9 @@
 			<groupId>org.eclipse.platform</groupId>
 			<artifactId>org.eclipse.swt</artifactId>
 		</dependency>
-
-
-
-
-
-
 	</dependencies>
 
 	<profiles>
-
 		<profile>
 			<id>swt-windows</id>
 			<activation>
