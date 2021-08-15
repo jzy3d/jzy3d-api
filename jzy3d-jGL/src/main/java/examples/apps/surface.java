@@ -6,10 +6,10 @@ package examples.apps;
 import java.awt.Frame;
 import java.io.IOException;
 import jgl.GL;
-import jgl.GLCanvas;
-import jgl.GLU;
-import jgl.GLUT;
 import jgl.glu.GLUnurbsObj;
+import jgl.wt.awt.GLCanvas;
+import jgl.wt.awt.GLU;
+import jgl.wt.awt.GLUT;
 
 public class surface extends GLCanvas {
 

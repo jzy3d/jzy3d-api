@@ -3,11 +3,13 @@ package jgl;
 import org.junit.Assert;
 import org.junit.Test;
 
+import jgl.wt.awt.GL;
+
 public class TestGL_HiDPI {
   @Test
   public void whenPixelScaleIsGiven_ThenActualWidthIsScaled() {
     // Given openGL
-    GL gl = new GL();
+	GL gl = new GL();
 
     int width = 200;
     int height = 100;

@@ -5,7 +5,7 @@ package examples.applets.glut;
  */
 
 import jgl.GL;
-import jgl.GLApplet;
+import jgl.wt.awt.GLApplet;
 
 public class list extends GLApplet {
 

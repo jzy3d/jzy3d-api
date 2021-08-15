@@ -13,8 +13,8 @@ package examples.applets.glut;
  */
 
 import jgl.GL;
-import jgl.GLApplet;
-import jgl.GLUT;
+import jgl.wt.awt.GLApplet;
+import jgl.wt.awt.GLUT;
 
 public class movelight extends GLApplet {
 

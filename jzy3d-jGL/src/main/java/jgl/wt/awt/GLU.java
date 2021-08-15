@@ -14,9 +14,10 @@
  * Lesser General Public License for more details.
  */
 
-package jgl;
+package jgl.wt.awt;
 
 import java.lang.reflect.InvocationTargetException;
+
 import jgl.glu.GLUnurbsObj;
 import jgl.glu.GLUquadricObj;
 
@@ -135,7 +136,7 @@ public class GLU {
 
   /** Private Data Members */
   private final boolean debug = true;
-  private GL JavaGL;
+	private GL JavaGL;
 
   /** Private Member Functions */
   private double[] mulMatrix44(double a[], double b[]) {
@@ -1308,7 +1309,7 @@ public class GLU {
    * public GLU() { System.out.println("Please call new GLU (yourGL)"); }
    */
 
-  public GLU(GL myGL) {
+	public GLU(GL myGL) {
     JavaGL = myGL;
   }
 

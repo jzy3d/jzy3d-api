@@ -2,8 +2,12 @@ package jgl;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import jgl.context.gl_context;
 import jgl.context.gl_util;
+import jgl.wt.awt.GLCanvas;
+import jgl.wt.awt.GLU;
+import jgl.wt.awt.GLUT;
 
 public class TestGL_renderingAlpha {
   int WIDTH = 100;
@@ -71,7 +75,7 @@ public class TestGL_renderingAlpha {
     Assert.assertEquals(WIDTH*HEIGHT, count_Alpha0_Pixels(gl.getContext()));
     
     gl.glFlush();
-    gl.debugWriteImageTo("target/" + getClass().getSimpleName() + ".png");
+	Util.debugWriteImageTo(gl, "target/" + getClass().getSimpleName() + ".png");
 
 
     // Then there should be no BLACK pixel

@@ -8,9 +8,9 @@ package examples.apps;
 import java.awt.Frame;
 import java.io.IOException;
 import jgl.GL;
-import jgl.GLCanvas;
-import jgl.GLU;
 import jgl.glu.GLUquadricObj;
+import jgl.wt.awt.GLCanvas;
+import jgl.wt.awt.GLU;
 
 public class quadric extends GLCanvas {
 
