@@ -4,15 +4,15 @@ import java.applet.Applet;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-// must import jgl.GL....
-import jgl.GL;
-import jgl.GLAUX;
+
+import jgl.wt.awt.GL;
+import jgl.wt.awt.GLAUX;
 
 public class drawf extends Applet implements ComponentListener {
   // must use GL to use jGL.....
   // and use GLAUX to use the aux functions.....
   // remember to give GL to initialize GLAUX
-  GL myGL = new GL();
+	GL myGL = new GL();
   GLAUX myAUX = new GLAUX(myGL);
 
   // public static final byte rasters [] = {

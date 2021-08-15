@@ -2,9 +2,9 @@ package examples.applets;
 
 import java.applet.Applet;
 import java.awt.Graphics;
-// must import jgl.GL....
-import jgl.GL;
-import jgl.GLAUX;
+
+import jgl.wt.awt.GL;
+import jgl.wt.awt.GLAUX;
 
 public class lines extends Applet {
   // must use GL to use jGL.....

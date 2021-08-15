@@ -4,9 +4,9 @@ import java.applet.Applet;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
-// must import jgl.GL....
-import jgl.GL;
-import jgl.GLAUX;
+
+import jgl.wt.awt.GL;
+import jgl.wt.awt.GLAUX;
 
 public class cube extends Applet implements ComponentListener {
   // must use GL to use jGL.....

@@ -7,10 +7,10 @@ import java.awt.event.ComponentListener;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-// must import jgl.GL....
-import jgl.GL;
-import jgl.GLAUX;
-import jgl.GLU;
+
+import jgl.wt.awt.GL;
+import jgl.wt.awt.GLAUX;
+import jgl.wt.awt.GLU;
 
 public class picksquare extends Applet implements ComponentListener, MouseListener {
   // must use GL to use jGL.....

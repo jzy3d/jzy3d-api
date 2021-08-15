@@ -8,7 +8,7 @@ package examples.apps;
 import java.awt.Frame;
 import java.io.IOException;
 import jgl.GL;
-import jgl.GLCanvas;
+import jgl.wt.awt.GLCanvas;
 
 public class planet extends GLCanvas {
 

@@ -13,11 +13,13 @@
  * Lesser General Public License for more details.
  */
 
-package jgl;
+package jgl.wt.awt;
 
 import java.applet.Applet;
 import java.awt.AWTEvent;
 import java.awt.Graphics;
+
+import jgl.wt.awt.GL;
 
 /**
  * GLApplet is the applet class of jGL 2.4.
@@ -28,7 +30,7 @@ import java.awt.Graphics;
 
 public class GLApplet extends Applet {
 
-  protected GL myGL = new GL();
+	protected GL myGL = new GL();
   protected GLU myGLU = new GLU(myGL);
   protected GLUT myUT = new GLUT(myGL);
 

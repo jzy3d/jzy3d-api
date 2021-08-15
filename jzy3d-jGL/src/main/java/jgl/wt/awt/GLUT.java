@@ -14,7 +14,7 @@
  * Lesser General Public License for more details.
  */
 
-package jgl;
+package jgl.wt.awt;
 
 import java.applet.Applet;
 import java.awt.AWTEvent;
@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+
 import jgl.glaux.teapot;
 import jgl.glu.GLUquadricObj;
 import jgl.glut.glut_menu;
@@ -43,7 +44,8 @@ import jgl.glut.glut_menu;
  */
 
 public class GLUT implements Runnable {
-  public GLUT(GL myGL) {
+
+	public GLUT(GL myGL) {
     JavaGL = myGL;
     JavaGLU = new GLU(JavaGL);
   }
@@ -51,7 +53,7 @@ public class GLUT implements Runnable {
 
 
   /** Private Data Members */
-  private GL JavaGL;
+	private GL JavaGL;
   private GLU JavaGLU;
   // private GLCanvas JavaCanvas;
 
@@ -135,7 +137,7 @@ public class GLUT implements Runnable {
     double[] win = modelToScreen(x, y, z);
 
     double winX = win[0];
-    double winY = JavaGL.Context.Viewport.Height - win[1];
+	double winY = JavaGL.getContext().Viewport.Height - win[1];
 
 
     JavaGL.appendTextToDraw(font, string, (int) winX, (int) winY, r, g, b, rotate);

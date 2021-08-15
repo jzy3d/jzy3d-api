@@ -14,10 +14,11 @@
  * Lesser General Public License for more details.
  */
 
-package jgl;
+package jgl.wt.awt;
 
 import java.applet.Applet;
 import java.awt.Component;
+
 import jgl.glaux.MODELPTR;
 import jgl.glaux.mat_t;
 import jgl.glaux.teapot;
@@ -61,7 +62,7 @@ public class GLAUX {
   private static final int CONESOLID = 19;
 
   /** Private Data Members */
-  private GL JavaGL;
+	private GL JavaGL;
   private GLU JavaGLU;
   // private Applet JavaApplet;
   // private Component JavaComponent;
@@ -769,7 +770,7 @@ public class GLAUX {
     System.out.println("Please call new GLAUX (yourGL)");
   }
 
-  public GLAUX(GL myGL) {
+	public GLAUX(GL myGL) {
     JavaGL = myGL;
     JavaGLU = new GLU(JavaGL);
   }

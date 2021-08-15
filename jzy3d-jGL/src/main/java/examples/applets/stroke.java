@@ -2,9 +2,9 @@ package examples.applets;
 
 import java.applet.Applet;
 import java.awt.Graphics;
-// must import jgl.GL....
-import jgl.GL;
-import jgl.GLAUX;
+
+import jgl.wt.awt.GL;
+import jgl.wt.awt.GLAUX;
 
 class CP {
   public float x[] = new float[2];
