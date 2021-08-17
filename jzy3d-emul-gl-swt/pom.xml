@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jzy3d</groupId>
-			<artifactId>jGL</artifactId>
+			<artifactId>jzy3d-jGL-swt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
