@@ -25,7 +25,7 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>jGL</artifactId>
+			<artifactId>jzy3d-jGL-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
