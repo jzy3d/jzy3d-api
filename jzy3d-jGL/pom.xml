@@ -24,6 +24,7 @@
 		</dependency>
 	</dependencies>
 
+
 	<profiles>
 		<profile>
 			<id>swt-windows</id>
