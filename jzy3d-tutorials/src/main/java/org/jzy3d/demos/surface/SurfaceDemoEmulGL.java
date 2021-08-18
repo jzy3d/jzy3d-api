@@ -2,6 +2,7 @@ package org.jzy3d.demos.surface;
 
 import java.io.File;
 import java.io.IOException;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
@@ -14,7 +15,6 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import jgl.GLCanvas;
 
 
 /**

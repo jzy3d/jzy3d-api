@@ -3,6 +3,7 @@
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
@@ -22,7 +23,6 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import jgl.GLCanvas;
 
 /**
  * Demo an AWT chart using jGL {@link GLCanvas} for CPU rendering (instead of GPU rendering).

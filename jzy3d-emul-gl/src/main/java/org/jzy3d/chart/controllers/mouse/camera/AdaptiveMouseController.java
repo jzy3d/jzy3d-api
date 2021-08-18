@@ -3,6 +3,7 @@ package org.jzy3d.chart.controllers.mouse.camera;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.RateLimiter;
 import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
@@ -16,7 +17,8 @@ import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import jgl.GL;
+
+import jgl.wt.awt.GL;
 
 public class AdaptiveMouseController extends AWTCameraMouseController {
   protected Quality currentQuality;
