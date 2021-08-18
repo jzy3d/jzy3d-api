@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-jGL</artifactId>
+		<version>2.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>jzy3d-jGL-swt</artifactId>
+	<name>Jzy3d Embedded jGL</name>
+
+
+	<properties>
+		<!-- Disable Javadoc Linter -->
+		<additionalparam>-Xdoclint:none</additionalparam>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-jGL-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.platform</groupId>
+			<artifactId>org.eclipse.swt</artifactId>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>swt-windows</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>swt-linux</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<name>Linux</name>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>swt-mac</id>
+			<activation>
+				<os>
+					<family>mac</family>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+</project>

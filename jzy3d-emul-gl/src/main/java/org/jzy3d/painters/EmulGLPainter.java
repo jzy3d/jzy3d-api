@@ -9,8 +9,9 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.logging.Logger;
+
 import javax.imageio.ImageIO;
+
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord2d;
@@ -23,12 +24,12 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
-import jgl.GL;
-import jgl.GLCanvas;
-import jgl.GLU;
-import jgl.GLUT;
+
 import jgl.context.gl_util;
 import jgl.glu.GLUquadricObj;
+import jgl.wt.awt.GL;
+import jgl.wt.awt.GLU;
+import jgl.wt.awt.GLUT;
 
 public class EmulGLPainter extends AbstractPainter implements IPainter {
   protected GL gl;
@@ -866,7 +867,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     double objY[] = new double[1];
     double objZ[] = new double[1];
 
-    boolean st = glu.gluUnProject((double) winX, (double) winY, (double) winZ, dbl(model),
+    boolean st = glu.gluUnProject(winX, winY, winZ, dbl(model),
         dbl(proj), view, objX, objY, objZ);
 
     objPos[0] = (float) objX[0];
@@ -908,7 +909,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     double[] winy = new double[1];
     double[] winz = new double[1];
 
-    boolean out = glu.gluProject((double) objX, (double) objY, (double) objZ, modelD, projD, view,
+    boolean out = glu.gluProject(objX, objY, objZ, modelD, projD, view,
         winx, winy, winz);
 
     // winPos[0], winPos[1], winPos[2];
