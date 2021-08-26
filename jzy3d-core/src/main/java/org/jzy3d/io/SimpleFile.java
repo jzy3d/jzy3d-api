@@ -58,7 +58,11 @@ public class SimpleFile {
     BufferedInputStream bis = new BufferedInputStream(fis);
     DataInputStream dis = new DataInputStream(bis);
     while (dis.available() != 0) {
-      sb.append((new StringBuilder()).append(dis.readLine()).append(newLineString));
+      StringBuilder sb2 = new StringBuilder().append(dis.readLine());
+      if(newLineString!=null) {
+        sb2.append(newLineString);
+      }
+      sb.append(sb2);
     }
     fis.close();
     bis.close();
