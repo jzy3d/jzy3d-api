@@ -514,6 +514,13 @@ public class Array {
     System.out.println("");
   }
 
+  public static void print(long input[]) {
+    for (int i = 0; i < input.length; i++) {
+      System.out.print(input[i] + "|");
+    }
+    System.out.println("");
+  }
+
   public static void print(char input[]) {
     for (int i = 0; i < input.length; i++) {
       System.out.print(input[i] + "|");
