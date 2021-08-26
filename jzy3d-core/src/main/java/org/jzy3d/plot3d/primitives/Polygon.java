@@ -17,6 +17,14 @@ public class Polygon extends Geometry {
   public Polygon() {
     super();
   }
+  
+  public Polygon(Point... points) {
+    super(points);
+  }
+
+  public Polygon(Color wire, Point... points) {
+    super(wire, points);
+  }
 
   public Polygon(Color wire, Color face) {
     setWireframeColor(wire);
