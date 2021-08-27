@@ -1,7 +1,9 @@
 package org.jzy3d.plot3d.primitives;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
@@ -36,6 +38,12 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     this(points);
     setWireframeColor(wireframeColor);
     setWireframeDisplayed(wireframeColor!=null);
+  }
+
+  public Geometry(Color wireframeColor, boolean wireframeDisplayed, Point... points) {
+    this(points);
+    setWireframeColor(wireframeColor);
+    setWireframeDisplayed(wireframeDisplayed);
   }
 
   /* * */
@@ -212,6 +220,16 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
   public List<Point> getPoints() {
     return points;
+  }
+  
+  public Set<Coord3d> getCoordSet(){
+    Set<Coord3d> set = new HashSet<>();
+    
+    for(Point p: points) {
+      set.add(p.xyz);
+    }
+    
+    return set;
   }
 
   public int size() {
