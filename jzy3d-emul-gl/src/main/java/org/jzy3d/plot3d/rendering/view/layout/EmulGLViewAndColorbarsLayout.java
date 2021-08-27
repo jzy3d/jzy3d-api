@@ -92,6 +92,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         legend.setViewPort(width, height, from, to);
         
         BufferedImage legendImage = (BufferedImage) awtLegend.getImage();
+        
         int legendWidth = (int) (legendImage.getWidth() / emulGL.getGL().getPixelScaleX());
 
         // ---------------------------------------

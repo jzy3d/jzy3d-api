@@ -6,6 +6,7 @@ public class Toggle {
   boolean face;
   boolean wire;
   boolean wireColor;
+  
   Wireframeable w;
 
   public Toggle(Wireframeable d) {

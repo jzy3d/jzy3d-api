@@ -238,6 +238,25 @@ public class Statistics {
       }
     return index;
   }
+  
+  
+  public static Range minmax(float[] values) {
+    if (values.length == 0)
+      throw new IllegalArgumentException("Input array must have a length greater than 0");
+
+    float minv = Float.POSITIVE_INFINITY;
+    float maxv = Float.NEGATIVE_INFINITY;
+
+    for (int i = 0; i < values.length; i++)
+      if (!Float.isNaN(values[i])) {
+        if (values[i] < minv)
+          minv = values[i];
+        if (values[i] > maxv)
+          maxv = values[i];
+      }
+    return new Range(minv, maxv);
+  }
+
 
 
   /**
