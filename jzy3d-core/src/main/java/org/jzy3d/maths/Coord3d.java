@@ -21,6 +21,10 @@ public class Coord3d implements Serializable {
    */
   private static final long serialVersionUID = -1636927109633279805L;
 
+  public float x;
+  public float y;
+  public float z;
+  
   public static List<Coord3d> list(int size) {
     return new ArrayList<Coord3d>(size);
   }
@@ -254,6 +258,13 @@ public class Coord3d implements Serializable {
     z /= c2.z;
   }
 
+  public void divSelf(float value) {
+    x /= value;
+    y /= value;
+    z /= value;
+  }
+
+  
   /**
    * Divise all components of the current Coord by the same value and return the result in a new
    * Coord3d.
@@ -376,6 +387,7 @@ public class Coord3d implements Serializable {
     return Math.sqrt(distanceSq(c));
   }
 
+  /** Compute the square distance between two coordinates. */
   public double distanceSq(Coord3d c) {
     return Math.pow(x - c.x, 2) + Math.pow(y - c.y, 2) + Math.pow(z - c.z, 2);
   }
@@ -434,7 +446,7 @@ public class Coord3d implements Serializable {
   public final Coord3d interpolateTo(Coord3d v, float f) {
     return new Coord3d(x + (v.x - x) * f, y + (v.y - y) * f, z + (v.z - z) * f);
   }
-
+  
   /**************************************************************/
 
   /** Return a string representation of this coordinate. */
@@ -605,9 +617,4 @@ public class Coord3d implements Serializable {
     return clone;
   }
 
-  /**************************************************************/
-
-  public float x;
-  public float y;
-  public float z;
 }

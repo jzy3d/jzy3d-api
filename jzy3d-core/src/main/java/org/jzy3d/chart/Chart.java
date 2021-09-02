@@ -405,6 +405,13 @@ public class Chart {
   public void remove(Drawable drawable, boolean updateViews) {
     getScene().getGraph().remove(drawable, updateViews);
   }
+  
+  public void remove(List<? extends Drawable> drawables) {
+    for (Drawable drawable : drawables) {
+      remove(drawable, false);
+    }
+    getView().updateBounds();
+  }
 
   /* ADDING LIGHTS */
 

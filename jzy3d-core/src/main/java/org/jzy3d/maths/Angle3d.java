@@ -1,10 +1,29 @@
 package org.jzy3d.maths;
 
+import java.util.List;
+import org.jzy3d.plot3d.primitives.Point;
+
 /**
  * An Angle3d stores three 3d points, considering the angle is on the second one. An instance may
  * return angle(), cos() and sin().
  */
 public class Angle3d {
+  public static final double DEGREE_90_D = Math.PI / 2;
+  public static final float DEGREE_90 = (float) DEGREE_90_D;
+
+  public static final double DEGREE_45_D = Math.PI / 4;
+  public static final float DEGREE_45 = (float) DEGREE_45_D;
+
+  protected float x1;
+  protected float x2;
+  protected float x3;
+  protected float y1;
+  protected float y2;
+  protected float y3;
+  protected float z1;
+  protected float z2;
+  protected float z3;
+
 
   /**
    * Create an angle, described by three points. The angle is supposed to be on p2
@@ -68,23 +87,96 @@ public class Angle3d {
 
   /** Computes the angle at vertex p2 between rays p1,p2 and p3,p2. Returns 0 to PI radians. */
   public float angle() {
+    return (float) angleD();
+  }
+  
+  /** Computes the angle at vertex p2 between rays p1,p2 and p3,p2. Returns 0 to PI radians. */
+  public double angleD() {
     double lenP1P3 = Math.sqrt(Math.pow(x1 - x3, 2) + Math.pow(y1 - y3, 2) + Math.pow(z1 - z3, 2));
     double lenP1P2 = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 - z2, 2));
     double lenP3P2 = Math.sqrt(Math.pow(x3 - x2, 2) + Math.pow(y3 - y2, 2) + Math.pow(z3 - z2, 2));
     double numerator = Math.pow(lenP1P2, 2) + Math.pow(lenP3P2, 2) - Math.pow(lenP1P3, 2);
     double denominator = 2 * lenP1P2 * lenP3P2;
-    return (float) Math.acos(numerator / denominator);
+    return Math.acos(numerator / denominator);
   }
+  
+  
+  /**
+   * Compute the sum of all angles in the input coordinate list.
+   * 
+   * If input contains point A, B, C, this method will compute angles ABC, BCA, CAB.
+   * 
+   * An error is thrown if there are less than 3 points.
+   * 
+   * 
+   * 
+   */
+  public static double angleSum(List<Coord3d> coords) {
+    if(coords.size()<3) {
+      throw new IllegalArgumentException("Can not compute an angle with less than 3 points");
+    }
+    
+    Angle3d[] angles = new Angle3d[coords.size()];
+    
+    for (int i = 0; i < coords.size()-2; i++) {
+      angles[i] = new Angle3d(coords.get(i), coords.get(i+1), coords.get(i+2));
+    }
+    angles[coords.size()-2] = new Angle3d(coords.get(coords.size()-2), coords.get(coords.size()-1), coords.get(0));
+    angles[coords.size()-1] = new Angle3d(coords.get(coords.size()-1), coords.get(0), coords.get(1));
 
-  /***********************************************************/
+    
+    double cumulated = 0;
+    for(Angle3d angle: angles) {
+      cumulated+=angle.angleD();
+    }
+    return cumulated;
+  }
+  
+  public static double angleSumFromPoints(List<Point> coords) {
+    if(coords.size()<3) {
+      throw new IllegalArgumentException("Can not compute an angle with less than 3 points");
+    }
+    
+    Angle3d[] angles = new Angle3d[coords.size()];
+    
+    for (int i = 0; i < coords.size()-2; i++) {
+      angles[i] = new Angle3d(coords.get(i).xyz, coords.get(i+1).xyz, coords.get(i+2).xyz);
+    }
+    angles[coords.size()-2] = new Angle3d(coords.get(coords.size()-2).xyz, coords.get(coords.size()-1).xyz, coords.get(0).xyz);
+    angles[coords.size()-1] = new Angle3d(coords.get(coords.size()-1).xyz, coords.get(0).xyz, coords.get(1).xyz);
 
-  private float x1;
-  private float x2;
-  private float x3;
-  private float y1;
-  private float y2;
-  private float y3;
-  private float z1;
-  private float z2;
-  private float z3;
+    
+    double cumulated = 0;
+    for(Angle3d angle: angles) {
+      cumulated+=angle.angleD();
+    }
+    return cumulated;
+  }
+  
+  /**
+   * Returns the expected sum of all angles of a polygon given its number of points.
+   * 
+   * The polygon is supposed to not have any edge crossing another edge.
+   * 
+   * @param n
+   * @return
+   */
+  public static double angleSumOfNonIntersectingPolygon(int n) {
+    if(n<3)
+      return 0;
+    else
+      return (n-2)*180;
+  }
+  
+  public static double angleSumOfNonIntersectingPolygonRad(int n) {
+    if(n<3)
+      return 0;
+    else
+      return (n-2)*Math.PI;
+  }
+  
+  public static boolean angleSumFromPointsOfNonIntersectingPolygon(List<Point> coords) {
+    double diff= Math.abs(angleSumFromPoints(coords)-angleSumOfNonIntersectingPolygonRad(coords.size()));
+    return diff<0.0001;
+  }
 }

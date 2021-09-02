@@ -34,6 +34,11 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     add(points);
   }
 
+  public Geometry(List<Point> points) {
+    this();
+    add(points);
+  }
+
   public Geometry(Color wireframeColor, Point... points) {
     this(points);
     setWireframeColor(wireframeColor);
@@ -182,6 +187,13 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   }
 
   public void add(Point... points) {
+    for(Point p: points) {
+      add(p, false);
+    }
+    updateBounds();
+  }
+
+  public void add(List<Point> points) {
     for(Point p: points) {
       add(p, false);
     }
