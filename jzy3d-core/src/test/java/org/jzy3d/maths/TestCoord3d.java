@@ -91,4 +91,6 @@ public class TestCoord3d {
     Assert.assertFalse(new Coord3d(Float.POSITIVE_INFINITY, 2, 3)
         .equals(new Coord3d(Float.NEGATIVE_INFINITY, 2, 3)));
   }
+  
+  
 }

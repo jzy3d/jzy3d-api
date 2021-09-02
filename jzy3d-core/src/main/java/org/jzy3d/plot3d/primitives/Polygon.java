@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
+import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.IPainter;
 
@@ -19,6 +20,10 @@ public class Polygon extends Geometry {
   }
   
   public Polygon(Point... points) {
+    super(points);
+  }
+
+  public Polygon(List<Point> points) {
     super(points);
   }
 
