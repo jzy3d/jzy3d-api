@@ -12,26 +12,19 @@ import java.util.Random;
  */
 public class Color {
 
-  /** Black color. */
   public static final Color BLACK = new Color(0.0f, 0.0f, 0.0f);
-  /** White color. */
   public static final Color WHITE = new Color(1.0f, 1.0f, 1.0f);
-  /** Gray color. */
   public static final Color GRAY = new Color(0.5f, 0.5f, 0.5f);
 
-  /** Red color. */
   public static final Color RED = new Color(1.0f, 0.0f, 0.0f);
-  /** Green color. */
   public static final Color GREEN = new Color(0.0f, 1.0f, 0.0f);
-  /** Blue color. */
   public static final Color BLUE = new Color(0.0f, 0.0f, 1.0f);
 
-  /** Yellow color. */
   public static final Color YELLOW = new Color(1.0f, 1.0f, 0.0f);
-  /** Magenta color. */
   public static final Color MAGENTA = new Color(1.0f, 0.0f, 1.0f);
-  /** Cyan color. */
   public static final Color CYAN = new Color(0.0f, 1.0f, 1.0f);
+  
+  public static final Color ORANGE = new Color(1.0f, 165.0f/255.0f, 0);
 
   public static final Color[] COLORS = {RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN};
 

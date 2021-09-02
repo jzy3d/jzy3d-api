@@ -11,7 +11,9 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
- * Experimental 3d object.
+ * A collection of coordinates rendered as dots.
+ * 
+ * Warning : dots having a width of 1 may not be visible in case HiDPI is ON.
  * 
  * @author Martin Pernollet
  * 
@@ -28,17 +30,33 @@ public class Scatter extends Drawable implements ISingleColorable {
     this(coordinates, Color.BLACK);
   }
 
+  public Scatter(List<Coord3d> coordinates) {
+    this(coordinates, Color.BLACK);
+  }
+
   public Scatter(Coord3d[] coordinates, Color rgb) {
     this(coordinates, rgb, 1.0f);
   }
 
+  public Scatter(List<Coord3d> coordinates, Color rgb) {
+    this(coordinates, rgb, 1.0f);
+  }
+
   public Scatter(Coord3d[] coordinates, Color rgb, float width) {
-    bbox = new BoundingBox3d();
+    this();
     setData(coordinates);
     setWidth(width);
     setColor(rgb);
   }
 
+  public Scatter(List<Coord3d> coordinates, Color rgb, float width) {
+    this();
+    setData(coordinates);
+    setWidth(width);
+    setColor(rgb);
+  }
+
+  
   public Scatter(Coord3ds coords) {
     this(coords.coordsArray(), coords.colorsArray());
   }
