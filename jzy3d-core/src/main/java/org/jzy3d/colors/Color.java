@@ -1,6 +1,7 @@
 package org.jzy3d.colors;
 
 import java.util.Random;
+import org.jzy3d.maths.Coord3d;
 
 /**
  * Color interface.
@@ -26,9 +27,15 @@ public class Color {
   
   public static final Color ORANGE = new Color(1.0f, 165.0f/255.0f, 0);
 
-  public static final Color[] COLORS = {RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN};
+  public static final Color[] COLORS = {RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN, ORANGE};
 
   /*************************************************************/
+  
+  public float r;
+  public float g;
+  public float b;
+  public float a;
+
 
   /** Initialize a color with an alpha channel set to 1, using input values between 0.0 and 1.0. */
   public Color(float r, float g, float b) {
@@ -123,6 +130,8 @@ public class Color {
     return this;
   }
 
+  public static Random rng = new Random();
+
   public static Color random() {
     return new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
   }
@@ -134,13 +143,16 @@ public class Color {
     return COLORS[c % COLORS.length];
   }
 
-  public static Random rng = new Random();
 
-  /*************************************************************/
+  /** Compute the distance between two coordinates. */
+  public double distance(Color c) {
+    return Math.sqrt(distanceSq(c));
+  }
 
-  public float r;
-  public float g;
-  public float b;
-  public float a;
+  /** Compute the square distance between two coordinates. */
+  public double distanceSq(Color c) {
+    return Math.pow(r - c.r, 2) + Math.pow(g - c.g, 2) + Math.pow(b - c.b, 2);
+  }
+  
 
 }
