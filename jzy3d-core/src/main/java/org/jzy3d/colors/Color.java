@@ -1,7 +1,6 @@
 package org.jzy3d.colors;
 
 import java.util.Random;
-import org.jzy3d.maths.Coord3d;
 
 /**
  * Color interface.
@@ -144,12 +143,18 @@ public class Color {
   }
 
 
-  /** Compute the distance between two coordinates. */
+  /** Compute the distance between two colors. 
+   * 
+   * @see https://en.wikipedia.org/wiki/Color_difference
+   */
   public double distance(Color c) {
     return Math.sqrt(distanceSq(c));
   }
 
-  /** Compute the square distance between two coordinates. */
+  /** Compute the square distance between two colors. 
+   * 
+   * @see https://en.wikipedia.org/wiki/Color_difference
+   */
   public double distanceSq(Color c) {
     return Math.pow(r - c.r, 2) + Math.pow(g - c.g, 2) + Math.pow(b - c.b, 2);
   }
