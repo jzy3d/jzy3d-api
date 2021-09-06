@@ -140,7 +140,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    *        z2, m2, ...]
    * @param elements contains reference to points that may be used in several elements. E.g. the
    *        array <code>[1, 3, 2, 4,
-   *        3, 2, ...]</code> indicates that the two first elements are sharing vertices 3 and 2.
+   *        3, 2, ...]</code> indicates that the two first triangles are sharing vertices 3 and 2.
    *        This assume the user of this class is aware that this class will build triangles made of
    *        3 vertices each. It may be null, in that case the <code>points</code> array will be
    *        drawn as a sequence of vertices defining elements, without sharing vertices between
@@ -154,9 +154,19 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   /**
    * Initialize a VBO object with arrays with no colormap. The object has a uniform color given by
-   * {@link #setColor(Color)}
+   * {@link #setColor(Color)}.
+   * 
+   * Providing an element array allows defining which points form a triangle without having to
+   * repeat these points. When such constructor is used, shared vertices allow computing shared
+   * normals for each point, hence each point normal is computed as a mean of the normals of all
+   * triangles that share this point. The result is smoother light transition between polygons,
+   * which differ from the light transition of repeated-vertex schemes as processed when the element
+   * array is null (or when invoking {@link DrawableVBO2(double[], int)}
+   * 
+   * <img src="doc-files/SHARED_VERTEX_AVERAGED_NORMALS.png"/>
    * 
    * @see other constructor for detailed arguments.
+   * 
    */
   public DrawableVBO2(double[] points, int pointDimensions, int[] elements) {
     this(makeLoader(points, pointDimensions, elements, GEOMETRY_SIZE, null));
@@ -164,9 +174,17 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   /**
    * Initialize a VBO object with arrays with no colormap and no vertex sharing scheme. The object
-   * has a uniform color given by {@link #setColor(Color)}
+   * has a uniform color given by {@link #setColor(Color)}.
+   * 
+   * When using a {@link Light}, the object will have edges looking sharp as shown on the picture
+   * below. One can obtain smoother edges by avoiding vertex repetitions and instead define an
+   * element array indicating which unique vertex should be used in each triangle. See
+   * {@link DrawableVBO2(double[], int, int[]).
+   * 
+   * <img src="doc-files/REPEATED_VERTEX_AND_NORMALS.png"/>
    * 
    * @see other constructor for detailed arguments.
+   * 
    */
   public DrawableVBO2(double[] points, int pointDimensions) {
     this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, null));
@@ -175,7 +193,10 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /**
    * Initialize a VBO object with arrays with a colormap but no vertex sharing scheme.
    * 
+   * <img src="doc-files/COLORMAP.png"/>
+   * 
    * @see other constructor for detailed arguments.
+   * 
    */
   public DrawableVBO2(double[] points, int pointDimensions, IColorMap colormap) {
     this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, colormap));
@@ -215,6 +236,12 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /**
    * Return a loader for this VBO that is invoked upon {@link #mount(IPainter)}, meaning after the
    * application has started.
+   * 
+   * We observed that when no normal is processed at all, there is still an automatic processing of
+   * light "somehow". This is enabled by toggling {#link {@link #COMPUTE_NORMALS_IN_JAVA} to false.
+   * In that case, the result looks like :
+   * 
+   * <img src="doc-files/SHARED_VERTEX_NO_NORMAL.png"/>
    * 
    * @see {@link DrawableVBO2} constructor for argument description.
    */
