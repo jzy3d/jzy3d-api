@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
@@ -190,12 +191,12 @@ public class LineStrip extends Wireframeable {
     add(new Point(coord3d));
   }
 
-  public void add(List<Coord3d> coords) {
+  public void add(Collection<Coord3d> coords) {
     for (Coord3d c : coords)
       add(c);
   }
 
-  public void addAll(List<Point> points) {
+  public void addAll(Collection<Point> points) {
     for (Point p : points)
       add(p);
   }
@@ -204,7 +205,7 @@ public class LineStrip extends Wireframeable {
     addAll(strip.getPoints());
   }
 
-  public void addAllPoints(List<Coord3d> coords) {
+  public void addAllPoints(Collection<Coord3d> coords) {
     for (Coord3d c : coords) {
       Point p = new Point(c);
       add(p);
