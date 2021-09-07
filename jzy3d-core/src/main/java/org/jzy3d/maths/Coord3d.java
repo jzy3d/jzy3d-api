@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A {@link Coord3d} stores a 3 dimensional coordinate for cartesian or polar mode, and provide few
@@ -31,6 +32,12 @@ public class Coord3d implements Serializable {
 
   public static List<Coord3d> list(Coord3d... coords) {
     return Arrays.asList(coords);
+  }
+
+  public static Coord3d[] array(Set<Coord3d> coords) {
+    Coord3d[] candidates = new Coord3d[coords.size()];
+    coords.toArray(candidates);
+    return candidates;
   }
 
   public static Range getZRange(List<Coord3d> coords) {
@@ -240,6 +247,12 @@ public class Coord3d implements Serializable {
     x *= c2.x;
     y *= c2.y;
     z *= c2.z;
+  }
+
+  public void mulSelf(float x, float y, float z) {
+    this.x *= x;
+    this.y *= y;
+    this.z *= z;
   }
 
   /**
