@@ -33,6 +33,13 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     this();
     add(points);
   }
+  
+  public Geometry(Color wireframeColor, Color faceColor, Coord3d... points) {
+    this();
+    add(faceColor, points);
+    setWireframeColor(wireframeColor);
+    setWireframeDisplayed(wireframeColor!=null);
+  }
 
   public Geometry(List<Point> points) {
     this();
@@ -173,6 +180,17 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   public void add(Coord3d coord) {
     add(new Point(coord, wireframeColor), true);
   }
+  
+  public void add(Coord3d coord, Color color, boolean updateBounds) {
+    add(new Point(coord, color), updateBounds);
+  }
+  
+  public void add(Color faceColor, Coord3d... coords) {
+    for(Coord3d coord: coords) {
+      add(coord, faceColor, false);
+    }
+    updateBounds();
+  }
 
   public void add(Point point) {
     add(point, true);
@@ -233,6 +251,15 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   public List<Point> getPoints() {
     return points;
   }
+  
+  public Set<Point> getPointSet(){
+    Set<Point> set = new HashSet<>();
+    for(Point p: points) {
+      set.add(p);
+    }
+    return set;
+  }
+
   
   public Set<Coord3d> getCoordSet(){
     Set<Coord3d> set = new HashSet<>();
