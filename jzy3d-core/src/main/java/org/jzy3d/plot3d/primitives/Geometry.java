@@ -236,14 +236,22 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   
   public Set<Coord3d> getCoordSet(){
     Set<Coord3d> set = new HashSet<>();
-    
     for(Point p: points) {
       set.add(p.xyz);
     }
-    
     return set;
   }
 
+  public Coord3d[] getCoordArray(){
+    Coord3d[] pts = new Coord3d[size()];
+    int k = 0;
+    for(Point p: getPoints()) {
+      pts[k++] = p.xyz;
+    }
+    return pts;
+  }
+
+  
   public int size() {
     return points.size();
   }

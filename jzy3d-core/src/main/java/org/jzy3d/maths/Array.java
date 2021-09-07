@@ -468,6 +468,84 @@ public class Array {
     }
     return order;
   }
+  
+  public enum Direction{
+    X,Y,Z;
+  }
+  
+  public static int[] sortAscending(Coord3d input[], Direction direction) {
+    int[] order = new int[input.length];
+
+    for (int i = 0; i < order.length; i++)
+      order[i] = i;
+
+    for (int i = input.length; --i >= 0;) {
+      for (int j = 0; j < i; j++) {
+        
+        boolean swap = false;
+        
+        if(Direction.X.equals(direction)) {
+          swap = input[j].x > input[j + 1].x;
+        }
+        else if(Direction.Y.equals(direction)) {
+          swap = input[j].y > input[j + 1].y;
+        }
+        else {
+          swap = input[j].z > input[j + 1].z;
+        }
+        
+        if (swap) {
+          // switch values
+          Coord3d mem = input[j];
+          input[j] = input[j + 1];
+          input[j + 1] = mem;
+
+          // switch ids
+          int id = order[j];
+          order[j] = order[j + 1];
+          order[j + 1] = id;
+        }
+      }
+    }
+    return order;
+  }
+  
+  public static int[] sortDescending(Coord3d input[], Direction direction) {
+    int[] order = new int[input.length];
+
+    for (int i = 0; i < order.length; i++)
+      order[i] = i;
+
+    for (int i = input.length; --i >= 0;) {
+      for (int j = 0; j < i; j++) {
+        
+        boolean swap = false;
+        
+        if(Direction.X.equals(direction)) {
+          swap = input[j].x < input[j + 1].x;
+        }
+        else if(Direction.Y.equals(direction)) {
+          swap = input[j].y < input[j + 1].y;
+        }
+        else {
+          swap = input[j].z < input[j + 1].z;
+        }
+        
+        if (swap) {
+          // switch values
+          Coord3d mem = input[j];
+          input[j] = input[j + 1];
+          input[j + 1] = mem;
+
+          // switch ids
+          int id = order[j];
+          order[j] = order[j + 1];
+          order[j + 1] = id;
+        }
+      }
+    }
+    return order;
+  }
 
   /*********************************************************************/
 
