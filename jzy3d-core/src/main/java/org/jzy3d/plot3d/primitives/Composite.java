@@ -273,6 +273,8 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
    */
   @Override
   public void setPolygonOffsetFillEnable(boolean polygonOffsetFillEnable) {
+    //super.setPolygonOffsetFillEnable(polygonOffsetFillEnable);
+    
     if (components != null) {
       synchronized (components) {
 
@@ -289,6 +291,8 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
 
   @Override
   public void setPolygonWireframeDepthTrick(boolean polygonOffsetFillEnable) {
+    //super.setPolygonWireframeDepthTrick(polygonOffsetFillEnable);
+    
     if (components != null) {
       synchronized (components) {
 
@@ -297,6 +301,22 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
             ((Wireframeable) d).setPolygonWireframeDepthTrick(polygonOffsetFillEnable);
           } else if (d instanceof Composite) {
             ((Composite) d).setPolygonWireframeDepthTrick(polygonOffsetFillEnable);
+          }
+        }
+      }
+    }
+  }
+  
+  @Override
+  public void setReflectLight(boolean reflectLight) {
+    super.setReflectLight(reflectLight);
+    
+    if (components != null) {
+      synchronized (components) {
+
+        for (Drawable d : components) {
+          if (d instanceof Wireframeable) {
+            ((Wireframeable) d).setReflectLight(reflectLight);
           }
         }
       }
