@@ -134,7 +134,7 @@ public class Graph {
   }
 
   public synchronized List<IGLBindedResource> getAllGLBindedResources() {
-    List<IGLBindedResource> out = new ArrayList<IGLBindedResource>();
+    List<IGLBindedResource> out = new ArrayList<>();
     for (Drawable c : components) {
       if (c instanceof IGLBindedResource) {
         out.add((IGLBindedResource) c);
@@ -215,7 +215,7 @@ public class Graph {
    * return all the current Graph primitives decomposition.
    */
   public List<Drawable> getDecomposition() {
-    ArrayList<Drawable> monotypes;
+    List<Drawable> monotypes;
     synchronized (components) {
       monotypes = Decomposition.getDecomposition(components);
     }

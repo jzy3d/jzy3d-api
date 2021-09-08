@@ -23,7 +23,7 @@ public class BarycenterAnnotation extends Composite {
     this.annotated = annotated;
     bary = new Point();
     bary.setWidth(5);
-    lines = new ArrayList<LineStrip>();
+    lines = new ArrayList<>();
 
     for (Point pt : annotated.getPoints()) {
       Point b2 = bary.clone();
@@ -54,9 +54,9 @@ public class BarycenterAnnotation extends Composite {
   }
 
   public static List<BarycenterAnnotation> annotate(Composite composite) {
-    List<BarycenterAnnotation> annotations = new ArrayList<BarycenterAnnotation>();
+    List<BarycenterAnnotation> annotations = new ArrayList<>();
 
-    ArrayList<Drawable> items = Decomposition.getDecomposition(composite);
+    List<Drawable> items = Decomposition.getDecomposition(composite);
     for (Drawable item : items) {
       if (item instanceof Geometry)
         annotations.add(new BarycenterAnnotation((Geometry) item));

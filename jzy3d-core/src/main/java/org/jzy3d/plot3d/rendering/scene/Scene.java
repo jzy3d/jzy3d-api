@@ -65,7 +65,7 @@ public class Scene {
   /***************************************************************/
 
   /** Add a list of drawable to the scene. */
-  public void add(List<Drawable> drawables) {
+  public void add(List<? extends Drawable> drawables) {
     this.graph.add(drawables);
   }
 

@@ -11,12 +11,32 @@ import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Normal;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
+  public static boolean NORMALIZE_NORMAL = true;
+  public static boolean SPLIT_IN_TRIANGLES = true;
+  
+  /** A flag to show normals for debugging lighting */
+  public static boolean SHOW_NORMALS = false;
+  public static int NORMAL_LINE_WIDTH = 2;
+  public static int NORMAL_POINT_WIDTH = 4;
+  public static Color NORMAL_END_COLOR = Color.GRAY.clone();
+  public static Color NORMAL_START_COLOR = Color.GRAY.clone(); 
+  
+  protected PolygonMode polygonMode;
+  protected ColorMapper mapper;
+  protected List<Point> points;
+  protected Color color;
+  protected Coord3d center;
+  
+   
+  
+  
   /**
    * Initializes an empty {@link Geometry} with face status defaulting to true, and wireframe status
    * defaulting to false.
@@ -66,6 +86,10 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     if (mapper != null)
       mapper.preDraw(this);
+    
+    if(isReflectLight()) {
+      applyMaterial(painter);
+    }
 
     // Draw content of polygon
     drawFace(painter);
@@ -144,25 +168,169 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     painter.glEnd();
   }
 
+  
+  
   /**
    * Drawing the point list in face mode (polygon content)
    */
   protected void callPointsForFace(IPainter painter) {
-    begin(painter);
-    for (Point p : points) {
-      if (mapper != null) {
-        Color c = mapper.getColor(p.xyz);
-        painter.color(c);
+    if(SPLIT_IN_TRIANGLES) {
+
+      int triangles = points.size()-2;
+  
+      Point p1 = points.get(0);
+  
+      for (int t = 0; t < triangles; t++) {
+        Point p2 = points.get(t+1);
+        Point p3 = points.get(t+2);
         
-        // store this color in case it should be used for drawing
-        // the wireframe as stated by setWireframeColorFrom...
-        p.rgb = c; 
-      } else {
-        painter.color(p.rgb);
+        // process normal for lights
+        Coord3d normal = null;
+        if(isReflectLight()) {
+          normal = Normal.compute(p1.xyz, p2.xyz, p3.xyz, NORMALIZE_NORMAL);
+          if(normal.z<0) {
+            normal.mulSelf(-1);
+          }
+        }
+        
+        painter.glBegin_Triangle();
+        
+  
+        applyPointOrMapperColor(painter, p2);
+        painter.vertex(p2.xyz, spaceTransformer);
+        if(normal!=null) {
+          painter.normal(normal);
+        }
+        
+        applyPointOrMapperColor(painter, p3);
+        painter.vertex(p3.xyz, spaceTransformer);
+        if(normal!=null) {
+          painter.normal(normal);
+        }
+
+        applyPointOrMapperColor(painter, p1);
+        painter.vertex(p1.xyz, spaceTransformer);
+        if(normal!=null) {
+          painter.normal(normal);
+        }
+
+        painter.glEnd();
+        
+        if(SHOW_NORMALS) {
+          drawTriangleNormal(painter, p1, p2, p3, normal);
+        }
+        
       }
-      painter.vertex(p.xyz, spaceTransformer);
     }
+    else {
+      begin(painter); 
+       
+      // process normal for lights
+      Coord3d normal = null;
+      if(isReflectLight()) {
+        normal = Normal.compute(points, NORMALIZE_NORMAL, false);
+        
+        if(normal.z<0) {
+          normal.mulSelf(-1);
+        }
+      }
+      
+      // invoke points for vertex and color
+      for (Point p : points) {
+        if (mapper != null) {
+          /*Color c = mapper.getColor(p.xyz);
+          painter.color(c);
+          
+          // store this color in case it should be used for drawing
+          // the wireframe as stated by setWireframeColorFrom...
+          p.rgb = c; */
+          applyPointOrMapperColor(painter, p);
+        } else {
+          painter.color(p.rgb);
+        }
+        painter.vertex(p.xyz, spaceTransformer);
+        
+        if(normal!=null) {
+          painter.normal(normal);
+        }
+        
+      }
+      painter.glEnd();
+      
+      if(SHOW_NORMALS) {
+        drawPolygonNormal(painter, points, normal);
+      }
+    }
+  }
+
+  protected void drawPolygonNormal(IPainter painter, List<Point> points, Coord3d normal) {
+    Coord3d mean = new Coord3d();
+    
+    for(Point p: points) {
+      mean.addSelf(p.xyz);
+    }
+    mean.divSelf(points.size());
+    
+    Coord3d end = mean.add(normal);
+    
+    // normal line
+    painter.glLineWidth(NORMAL_LINE_WIDTH);
+    painter.glBegin_Line();
+    painter.color(NORMAL_START_COLOR);
+    painter.vertex(mean, spaceTransformer);
+    painter.color(NORMAL_END_COLOR);
+    painter.vertex(end, spaceTransformer);
     painter.glEnd();
+    
+    // normal arrow
+    painter.glPointSize(NORMAL_POINT_WIDTH);
+    painter.glBegin_Point();
+    painter.color(NORMAL_START_COLOR);
+    painter.vertex(mean, spaceTransformer);
+    painter.color(NORMAL_END_COLOR);
+    painter.vertex(end, spaceTransformer);
+    painter.glEnd();
+  }
+
+  protected void drawTriangleNormal(IPainter painter, Point p1, Point p2, Point p3, Coord3d normal) {
+    Coord3d mean = new Coord3d();
+    mean.addSelf(p1.xyz);
+    mean.addSelf(p2.xyz);
+    mean.addSelf(p3.xyz);
+    mean.divSelf(3);
+    
+    Coord3d end = mean.add(normal);
+
+    // normal line
+    painter.glLineWidth(NORMAL_LINE_WIDTH);
+    painter.glBegin_Line();
+    painter.color(NORMAL_START_COLOR);
+    painter.vertex(mean, spaceTransformer);
+    painter.color(NORMAL_END_COLOR);
+    painter.vertex(end, spaceTransformer);
+    painter.glEnd();
+    
+    // normal arrows
+    painter.glPointSize(NORMAL_POINT_WIDTH);
+    painter.glBegin_Point();
+    painter.color(NORMAL_START_COLOR);
+    painter.vertex(mean, spaceTransformer);
+    painter.color(NORMAL_END_COLOR);
+    painter.vertex(end, spaceTransformer);
+    painter.glEnd();
+  }
+
+  protected void applyPointOrMapperColor(IPainter painter, Point p) {
+    if (mapper != null) {
+      Color c = mapper.getColor(p.xyz);
+      painter.color(c);
+      
+      // store this color in case it should be used for drawing
+      // the wireframe as stated by setWireframeColorFrom...
+      p.rgb = c; 
+    } else {
+      painter.color(p.rgb);
+    }
   }
 
   /**
@@ -365,12 +533,4 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     return (Utils.blanks(depth) + "(" + this.getClass().getSimpleName() + ") #points:"
         + points.size());
   }
-
-  /* */
-
-  protected PolygonMode polygonMode;
-  protected ColorMapper mapper;
-  protected List<Point> points;
-  protected Color color;
-  protected Coord3d center;
 }

@@ -6,8 +6,8 @@ import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Drawable;
 
 public class Decomposition {
-  public static ArrayList<Drawable> getDecomposition(List<Drawable> drawables) {
-    ArrayList<Drawable> monotypes = new ArrayList<Drawable>();
+  public static List<Drawable> getDecomposition(List<? extends Drawable> drawables) {
+    List<Drawable> monotypes = new ArrayList<>();
 
     for (Drawable c : drawables) {
       if (c != null && c.isDisplayed()) {
@@ -21,8 +21,8 @@ public class Decomposition {
   }
 
   /** Recursively expand all monotype Drawables from the given Composite. */
-  public static ArrayList<Drawable> getDecomposition(Composite input) {
-    ArrayList<Drawable> selection = new ArrayList<Drawable>();
+  public static List<Drawable> getDecomposition(Composite input) {
+    List<Drawable> selection = new ArrayList<>();
 
     // composite internally make use of synchronisation on its list of child, so we do so
     synchronized (input.getDrawables()) {
@@ -37,4 +37,6 @@ public class Decomposition {
     }
     return selection;
   }
+  
+  private Decomposition() {}
 }
