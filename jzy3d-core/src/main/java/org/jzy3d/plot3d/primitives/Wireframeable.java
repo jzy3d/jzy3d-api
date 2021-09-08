@@ -2,27 +2,43 @@ package org.jzy3d.plot3d.primitives;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 
 /**
- * An {@link Wireframeable} is a {@link Drawable} that has a wireframe mode for display.
+ * An {@link Wireframeable} is a {@link Drawable} that has a wireframe mode for display, i.e. almost
+ * all objects except {@link Point}.
  * 
- * Defining an object as {@link Wireframeable} means this object may have a wireframe mode status
+ * Defining an object as {@link Wireframeable} means this object will have a wireframe mode status
  * (on/off), a wireframe color, and a wireframe width. As a consequence of being
- * {@link Wireframeable}, a 3d object may have his faces displayed or not by
+ * {@link Wireframeable}, a 3d object may have its faces displayed or not by
  * {@link Wireframeable#setFaceDisplayed(boolean)}.
+ * 
+ * Wireframe coloring can either be based on the wireframe color or the geometry {@link Point}s' colors.
+ * 
+ * {@link Wireframeable} objects have faces which may reflect lights if there is any light switched on in the chart. 
  * 
  * @author Martin Pernollet
  */
 public abstract class Wireframeable extends Drawable {
+  
   protected Color wireframeColor;
   protected float wireframeWidth;
   protected boolean wireframeDisplayed;
   protected boolean wireframeColorFromPolygonPoints;
+  
   protected boolean faceDisplayed;
+  
   protected boolean polygonWireframeDepthTrick = false;
   protected boolean polygonOffsetFillEnable = true;
   protected float polygonOffsetFactor = 1.0f;
   protected float polygonOffsetUnit = 1.0f;
+  
+  protected boolean reflectLight = false;
+  protected Color materialAmbiantReflection = new Color(1, 1, 1, 1);
+  protected Color materialDiffuseReflection = new Color(1, 1, 1, 1);
+  protected Color materialSpecularReflection = new Color(1, 1, 1, 1);
+  protected Color materialEmission = new Color(1, 1, 1, 1);
+  protected float[] materialShininess = new float[1];
 
   /**
    * Initialize the wireframeable with a white color and width of 1 for wires, hidden wireframe, and
@@ -40,7 +56,7 @@ public abstract class Wireframeable extends Drawable {
     setPolygonOffsetFillEnable(true);
     setPolygonWireframeDepthTrick(false);
   }
-  
+
   public boolean isWireframeColorFromPolygonPoints() {
     return wireframeColorFromPolygonPoints;
   }
@@ -139,8 +155,15 @@ public abstract class Wireframeable extends Drawable {
     this.polygonOffsetUnit = polygonOffsetUnit;
   }
 
-  /* ************ POLYGON OFFSET **************** */
+  /* ************ DEPTH RANGE **************** */
 
+  /**
+   * The higher the value, the more the line are far from the faces and hence no z-fighting occurs
+   * between faces and lines. In case of higher value, line will be display more often, but also
+   * lines that should be behind the polygon
+   */
+  public static float NO_OVERLAP_DEPTH_RATIO = 0.1f;// 0.1f;
+  
   /**
    * May be used as alternative to {@link #setPolygonOffsetFillEnable(boolean)} in case it is not
    * supported by underlying OpenGL version (Polygon offset appears as off version 2).
@@ -158,17 +181,68 @@ public abstract class Wireframeable extends Drawable {
   }
 
   protected void applyDepthRangeForOverlying(IPainter painter) {
-    painter.glDepthRangef(0.0f, 1-NO_OVERLAP_DEPTH_RATIO);
+    painter.glDepthRangef(0.0f, 1 - NO_OVERLAP_DEPTH_RATIO);
   }
 
   protected void applyDepthRangeDefault(IPainter painter) {
     painter.glDepthRangef(0f, 1f);
   }
 
-  /**
-   * The higher the value, the more the line are far from the faces and hence
-   * no z-fighting occurs between faces and lines. In case of higher value, line
-   * will be display more often, but also lines that should be behind the polygon
-   */
-  public static float NO_OVERLAP_DEPTH_RATIO = 0.1f;//0.1f;
+  /* ************ LIGHTS **************** */  
+  
+  public boolean isReflectLight() {
+    return reflectLight;
+  }
+
+  public void setReflectLight(boolean reflectLight) {
+    this.reflectLight = reflectLight;
+  }  
+  
+  /** Applies material settings */
+  protected void applyMaterial(IPainter painter) {
+    painter.glMaterial(MaterialProperty.AMBIENT, materialAmbiantReflection, true);
+    painter.glMaterial(MaterialProperty.DIFFUSE, materialDiffuseReflection, true);
+    painter.glMaterial(MaterialProperty.SPECULAR, materialSpecularReflection, true);
+    painter.glMaterial(MaterialProperty.SHININESS, materialShininess, true);
+  }
+
+  public Color getMaterialAmbiantReflection() {
+    return materialAmbiantReflection;
+  }
+
+  public void setMaterialAmbiantReflection(Color materialAmbiantReflection) {
+    this.materialAmbiantReflection = materialAmbiantReflection;
+  }
+
+  public Color getMaterialDiffuseReflection() {
+    return materialDiffuseReflection;
+  }
+
+  public void setMaterialDiffuseReflection(Color materialDiffuseReflection) {
+    this.materialDiffuseReflection = materialDiffuseReflection;
+  }
+
+  public Color getMaterialSpecularReflection() {
+    return materialSpecularReflection;
+  }
+
+  public void setMaterialSpecularReflection(Color materialSpecularReflection) {
+    this.materialSpecularReflection = materialSpecularReflection;
+  }
+
+  public Color getMaterialEmission() {
+    return materialEmission;
+  }
+
+  public void setMaterialEmission(Color materialEmission) {
+    this.materialEmission = materialEmission;
+  }
+
+  public float getMaterialShininess() {
+    return materialShininess[0];
+  }
+
+  public void setMaterialShininess(float shininess) {
+    materialShininess[0] = shininess;
+  }
 }

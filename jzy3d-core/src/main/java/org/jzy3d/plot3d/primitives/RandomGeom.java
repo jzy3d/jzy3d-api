@@ -62,7 +62,7 @@ public class RandomGeom {
     return aFloat() * range;
   }
 
-  public List<Drawable> spinningCubes(int cubes, float spin) {
+  public List<Composite> spinningCubes(int cubes, float spin) {
     return spinningCubes(cubes, spin, 0);
   }
 
@@ -78,7 +78,7 @@ public class RandomGeom {
    * @param randomize is the factor applied to a random number generator before adding a "shaking"
    *        offset to each coordinate
    */
-  public List<Drawable> spinningCubes(int cubes, float spin, float randomize) {
+  public List<Composite> spinningCubes(int cubes, float spin, float randomize) {
     Color wf = Color.BLACK;
     Color fc = Color.BLUE;
 
@@ -89,7 +89,7 @@ public class RandomGeom {
 
     // Coord3d pt1 = new Coord3d()
 
-    List<Drawable> drawables = new ArrayList<>();
+    List<Composite> drawables = new ArrayList<>();
 
     Coord3d pt1_1 = new Coord3d(start.x + 0, start.y + 0, start.z);
     Coord3d pt2_1 = new Coord3d(start.x + i, start.y + 0, start.z);

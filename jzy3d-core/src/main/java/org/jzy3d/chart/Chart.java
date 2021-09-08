@@ -13,6 +13,8 @@ import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.colors.Color;
+import org.jzy3d.events.IViewPointChangedListener;
+import org.jzy3d.events.ViewPointChangedEvent;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
@@ -416,9 +418,13 @@ public class Chart {
   /* ADDING LIGHTS */
 
   public Light addLight(Coord3d position) {
-    return addLight(position, Color.BLUE, new Color(0.8f, 0.8f, 0.8f), Color.WHITE, 1);
+    return addLight(position, Color.BLUE, Color.WHITE, Color.WHITE);
   }
 
+  public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular) {
+    return addLight(position, ambiant, diffuse, specular, 1);
+  }
+  
   public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular,
       float radius) {
     Light light = new Light();
@@ -428,6 +434,24 @@ public class Chart {
     light.setSpecularColor(specular);
     light.setRepresentationRadius(radius);
     getScene().add(light);
+    return light;
+  }
+  
+  public Light addLightOnCamera() {
+    return addLightOnCamera(Color.WHITE, Color.WHITE, Color.WHITE);
+  }
+  
+  public Light addLightOnCamera(Color ambiant, Color diffuse, Color specular) {
+    Coord3d position = getView().getCamera().getEye();
+    Light light = addLight(position, ambiant, diffuse, specular);
+    
+    getView().addViewPointChangedListener(new IViewPointChangedListener() {
+      @Override
+      public void viewPointChanged(ViewPointChangedEvent e) {
+        light.setPosition(getView().getCamera().getEye());
+      }
+    });
+    
     return light;
   }
 
