@@ -19,7 +19,7 @@ import org.jzy3d.plot3d.transform.Transform;
 
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
   public static boolean NORMALIZE_NORMAL = true;
-  public static boolean SPLIT_IN_TRIANGLES = true;
+  public static boolean SPLIT_IN_TRIANGLES = false;
   
   /** A flag to show normals for debugging lighting */
   public static boolean SHOW_NORMALS = false;
@@ -188,32 +188,26 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
         Coord3d normal = null;
         if(isReflectLight()) {
           normal = Normal.compute(p1.xyz, p2.xyz, p3.xyz, NORMALIZE_NORMAL);
-          if(normal.z<0) {
+          /*if(normal.z<0) {
             normal.mulSelf(-1);
-          }
+          }*/
         }
-        
+
         painter.glBegin_Triangle();
-        
-  
-        applyPointOrMapperColor(painter, p2);
-        painter.vertex(p2.xyz, spaceTransformer);
-        if(normal!=null) {
-          painter.normal(normal);
-        }
-        
-        applyPointOrMapperColor(painter, p3);
-        painter.vertex(p3.xyz, spaceTransformer);
+
         if(normal!=null) {
           painter.normal(normal);
         }
 
         applyPointOrMapperColor(painter, p1);
         painter.vertex(p1.xyz, spaceTransformer);
-        if(normal!=null) {
-          painter.normal(normal);
-        }
 
+        applyPointOrMapperColor(painter, p2);
+        painter.vertex(p2.xyz, spaceTransformer);
+        
+        applyPointOrMapperColor(painter, p3);
+        painter.vertex(p3.xyz, spaceTransformer);
+        
         painter.glEnd();
         
         if(SHOW_NORMALS) {
@@ -230,9 +224,9 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       if(isReflectLight()) {
         normal = Normal.compute(points, NORMALIZE_NORMAL, false);
         
-        if(normal.z<0) {
+        /*if(normal.z<0) {
           normal.mulSelf(-1);
-        }
+        }*/
       }
       
       // invoke points for vertex and color
@@ -248,11 +242,11 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
         } else {
           painter.color(p.rgb);
         }
-        painter.vertex(p.xyz, spaceTransformer);
         
         if(normal!=null) {
           painter.normal(normal);
         }
+        painter.vertex(p.xyz, spaceTransformer);
         
       }
       painter.glEnd();
