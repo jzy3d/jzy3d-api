@@ -126,6 +126,7 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
  */
 public class Light {
   public static final Color DEFAULT_COLOR = new Color(1f,1f,1f,1f);
+  protected static final float POSITION_ZERO[] = {0.0f, 0.0f, 0.0f, 1.0f};
   
   protected int lightId;
   protected boolean enabled;
@@ -133,7 +134,6 @@ public class Light {
   protected Color diffuseColor;
   protected Color specularColor;
   protected Coord3d position;
-  protected float positionZero[] = {0.0f, 0.0f, 0.0f, 1.0f};
 
   protected boolean representationDisplayed;
   protected float representationRadius = 10;
@@ -146,11 +146,11 @@ public class Light {
   }
 
   public Light() {
-    this(lightCount++, true);
+    this(lightCount++, false);
   }
 
   public Light(int id) {
-    this(id, true);
+    this(id, false);
   }
 
   public Light(int id, boolean representationDisplayed) {
@@ -197,7 +197,7 @@ public class Light {
   }
 
   protected void configureLight(IPainter painter, int lightId) {
-    painter.glLight_Position(lightId, positionZero);
+    painter.glLight_Position(lightId, POSITION_ZERO);
     painter.glLight_Ambiant(lightId, ambiantColor);
     painter.glLight_Diffuse(lightId, diffuseColor);
     painter.glLight_Specular(lightId, specularColor);
