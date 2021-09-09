@@ -6,6 +6,9 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 
 public class LightSet {
+  protected List<Light> lights;
+  protected boolean lazyLightInit = false;
+  
   public LightSet() {
     this.lights = new ArrayList<Light>();
   }
@@ -80,6 +83,5 @@ public class LightSet {
 
   /***********************************/
 
-  protected List<Light> lights;
-  protected boolean lazyLightInit = false;
+
 }

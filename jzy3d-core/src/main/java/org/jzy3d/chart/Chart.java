@@ -417,14 +417,35 @@ public class Chart {
 
   /* ADDING LIGHTS */
 
+  
+  /**
+   * Add a light at the given position, using the {@link Light#DEFAULT_COLOR} for the three coloring settings.
+   */
   public Light addLight(Coord3d position) {
-    return addLight(position, Color.BLUE, Color.WHITE, Color.WHITE);
+    return addLight(position, Light.DEFAULT_COLOR, Light.DEFAULT_COLOR, Light.DEFAULT_COLOR);
   }
+
+  /**
+   * Add a light at the given position.
+   * 
+   * @param ambiant
+   * @param diffuse
+   * @param specular
+   * @return
+   */
 
   public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular) {
     return addLight(position, ambiant, diffuse, specular, 1);
   }
   
+  /**
+   * Add a light at the given position.
+   * 
+   * @param ambiant
+   * @param diffuse
+   * @param specular
+   * @return
+   */
   public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular,
       float radius) {
     Light light = new Light();
@@ -437,10 +458,21 @@ public class Chart {
     return light;
   }
   
+  /**
+   * Add a light that is attached to camera, which is moved as soon as the viewpoint changes, using the {@link Light#DEFAULT_COLOR} for the three coloring settings.
+   */
   public Light addLightOnCamera() {
-    return addLightOnCamera(Color.WHITE, Color.WHITE, Color.WHITE);
+    return addLightOnCamera(Light.DEFAULT_COLOR, Light.DEFAULT_COLOR, Light.DEFAULT_COLOR);
   }
   
+  /**
+   * Add a light that is attached to camera, which is moved as soon as the viewpoint changes.
+   * 
+   * @param ambiant
+   * @param diffuse
+   * @param specular
+   * @return
+   */
   public Light addLightOnCamera(Color ambiant, Color diffuse, Color specular) {
     Coord3d position = getView().getCamera().getEye();
     Light light = addLight(position, ambiant, diffuse, specular);
