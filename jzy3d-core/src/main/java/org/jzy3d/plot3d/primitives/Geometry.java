@@ -19,7 +19,7 @@ import org.jzy3d.plot3d.transform.Transform;
 
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
   public static boolean NORMALIZE_NORMAL = true;
-  public static boolean SPLIT_IN_TRIANGLES = false;
+  public static boolean SPLIT_IN_TRIANGLES = true;
   
   /** A flag to show normals for debugging lighting */
   public static boolean SHOW_NORMALS = false;
