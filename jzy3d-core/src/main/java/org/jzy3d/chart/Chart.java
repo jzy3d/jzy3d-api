@@ -175,7 +175,7 @@ public class Chart {
   }
 
   public void stopAllThreads() {
-    getMouse().getSlaveThreadController().stop();
+    getMouse().getThread().stop();
     stopAnimation();
   }
 
@@ -271,7 +271,7 @@ public class Chart {
   }
 
   public CameraThreadController getThread() {
-    return getMouse().getSlaveThreadController();
+    return getMouse().getThread();
   }
 
   public IMousePickingController getMousePicking() {
@@ -407,7 +407,7 @@ public class Chart {
   public void remove(Drawable drawable, boolean updateViews) {
     getScene().getGraph().remove(drawable, updateViews);
   }
-  
+
   public void remove(List<? extends Drawable> drawables) {
     for (Drawable drawable : drawables) {
       remove(drawable, false);
@@ -417,12 +417,18 @@ public class Chart {
 
   /* ADDING LIGHTS */
 
-  
+
   /**
-   * Add a light at the given position, using the {@link Light#DEFAULT_COLOR} for the three coloring settings.
+   * Add a light at the given position, using the {@link Light#DEFAULT_COLOR} for the three coloring
+   * settings.
+   * 
+   * Warning : The default color being white, any polygon in pure RED, pure GREEN or pure BLUE will
+   * have the exact same color when using a light. See {@link Light} documentation for this, or
+   * change the light color or object color a bit.
    */
   public Light addLight(Coord3d position) {
-    return addLight(position, Light.DEFAULT_COLOR, Light.DEFAULT_COLOR, Light.DEFAULT_COLOR);
+    return addLight(position, Light.DEFAULT_COLOR.clone(), Light.DEFAULT_COLOR.clone(),
+        Light.DEFAULT_COLOR.clone());
   }
 
   /**
@@ -437,7 +443,7 @@ public class Chart {
   public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular) {
     return addLight(position, ambiant, diffuse, specular, 1);
   }
-  
+
   /**
    * Add a light at the given position.
    * 
@@ -457,14 +463,20 @@ public class Chart {
     getScene().add(light);
     return light;
   }
-  
+
   /**
-   * Add a light that is attached to camera, which is moved as soon as the viewpoint changes, using the {@link Light#DEFAULT_COLOR} for the three coloring settings.
+   * Add a light that is attached to camera, which is moved as soon as the viewpoint changes, using
+   * the {@link Light#DEFAULT_COLOR} for the three coloring settings.
+   * 
+   * Warning : The default color being white, any polygon in pure RED, pure GREEN or pure BLUE will
+   * have the exact same color when using a light. See {@link Light} documentation for this, or
+   * change the light color or object color a bit.
    */
   public Light addLightOnCamera() {
-    return addLightOnCamera(Light.DEFAULT_COLOR, Light.DEFAULT_COLOR, Light.DEFAULT_COLOR);
+    return addLightOnCamera(Light.DEFAULT_COLOR.clone(), Light.DEFAULT_COLOR.clone(),
+        Light.DEFAULT_COLOR.clone());
   }
-  
+
   /**
    * Add a light that is attached to camera, which is moved as soon as the viewpoint changes.
    * 
@@ -476,14 +488,14 @@ public class Chart {
   public Light addLightOnCamera(Color ambiant, Color diffuse, Color specular) {
     Coord3d position = getView().getCamera().getEye();
     Light light = addLight(position, ambiant, diffuse, specular);
-    
+
     getView().addViewPointChangedListener(new IViewPointChangedListener() {
       @Override
       public void viewPointChanged(ViewPointChangedEvent e) {
         light.setPosition(getView().getCamera().getEye());
       }
     });
-    
+
     return light;
   }
 

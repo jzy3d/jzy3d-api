@@ -118,6 +118,8 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
  * 
  * @see https://glprogramming.com/red/chapter05.html
  * @see https://learnopengl.com/Lighting/Basic-Lighting
+ * @see https://www.sjbaker.org/steve/omniv/opengl_lighting.html
+ * @see https://www.sjbaker.org/steve/omniv/ten_shading_problems.html
  * 
  * @author Martin Pernollet
  *
@@ -152,7 +154,7 @@ public class Light {
   }
 
   public Light(int id, boolean representationDisplayed) {
-    this(id, true, false);
+    this(id, true, representationDisplayed);
   }
 
   public Light(int id, boolean enabled, boolean representationDisplayed) {
@@ -160,9 +162,9 @@ public class Light {
     this.enabled = enabled;
     this.representationDisplayed = representationDisplayed;
 
-    ambiantColor = Color.WHITE;
-    diffuseColor = Color.WHITE;
-    specularColor = Color.WHITE;
+    ambiantColor = DEFAULT_COLOR.clone();
+    diffuseColor = DEFAULT_COLOR.clone();
+    specularColor = DEFAULT_COLOR.clone();
   }
 
   public void apply(IPainter painter, Coord3d scale) {
