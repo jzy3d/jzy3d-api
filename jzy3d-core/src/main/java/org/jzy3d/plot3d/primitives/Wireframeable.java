@@ -194,6 +194,13 @@ public abstract class Wireframeable extends Drawable {
     return reflectLight;
   }
 
+  /**
+   * If true, drawing this object will set ambient, diffuse, specular and shininess parameters. 
+   * 
+   * If the drawable has no normal defined, then the normal will be automatically processed.
+   * 
+   * @param reflectLight
+   */
   public void setReflectLight(boolean reflectLight) {
     this.reflectLight = reflectLight;
   }  
