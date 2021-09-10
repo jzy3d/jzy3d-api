@@ -439,9 +439,12 @@ public class Chart {
    * @param specular
    * @return
    */
-
   public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular) {
     return addLight(position, ambiant, diffuse, specular, 1);
+  }
+  
+  public Light addLight(Coord3d position, Color colorForAll) {
+    return addLight(position, colorForAll, colorForAll, colorForAll);
   }
 
   /**
@@ -497,6 +500,10 @@ public class Chart {
     });
 
     return light;
+  }
+  
+  public Light addLightOnCamera(Color colorForAll) {
+    return addLightOnCamera(colorForAll, colorForAll, colorForAll);
   }
 
   /* SHORTCUTS */

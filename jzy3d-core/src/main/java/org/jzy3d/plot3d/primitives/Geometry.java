@@ -255,7 +255,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
   protected void callPointsForFace_NoSplit_NormalAuto(IPainter painter) {
     Coord3d normal = null;
-    if (isReflectLight() && normalProcessingAutomatic) {
+    if (isReflectLight()) {
       normal = computeNormalAutomatic(points);
     }
 
@@ -341,15 +341,17 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     }
 
     painter.glEnd();
+    
+    if (SHOW_NORMALS) {
+      drawTriangleNormal(painter, p1, p2, p3, normals.get(0), normals.get(1), normals.get(2));
+    }
   }
 
   private void callPointsForFace_SplitInTriangle_NormalAuto(IPainter painter, Point p1, Point p2,
       Point p3) {
     Coord3d normal = null;
     if (isReflectLight()) {
-      if (normalProcessingAutomatic) {
-        normal = computeNormalAutomatic(p1, p2, p3);
-      }
+      normal = computeNormalAutomatic(p1, p2, p3);
     }
 
     painter.glBegin_Triangle();
@@ -426,15 +428,15 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
   protected void drawTriangleNormal(IPainter painter, Point p1, Point p2, Point p3,
       Coord3d normal) {
-    Coord3d mean = new Coord3d();
-    mean.addSelf(p1.xyz);
-    mean.addSelf(p2.xyz);
-    mean.addSelf(p3.xyz);
-    mean.divSelf(3);
+    Coord3d start = new Coord3d();
+    start.addSelf(p1.xyz);
+    start.addSelf(p2.xyz);
+    start.addSelf(p3.xyz);
+    start.divSelf(3);
 
-    Coord3d end = mean.add(normal);
+    Coord3d end = start.add(normal);
 
-    drawNormal(painter, mean, end);
+    drawNormal(painter, start, end);
   }
 
   protected void drawTriangleNormal(IPainter painter, Point p1, Point p2, Point p3, Coord3d n1,
