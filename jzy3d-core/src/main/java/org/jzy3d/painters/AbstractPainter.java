@@ -3,10 +3,12 @@ package org.jzy3d.painters;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.ClipEq;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -105,6 +107,47 @@ public abstract class AbstractPainter implements IPainter {
   @Override
   public void normal(Coord3d norm) {
     glNormal3f(norm.x, norm.y, norm.z);
+  }
+  
+  @Override
+  public void clip(int plane, ClipEq equation, double value) {
+    glClipPlane(plane, equation(equation, value));
+  }
+  
+  @Override
+  public void clip(BoundingBox3d box) {
+    clip(0, ClipEq.X_INFERIOR_TO, box.getXmax());
+    clip(1, ClipEq.X_SUPERIOR_TO, box.getXmin());
+    clip(2, ClipEq.Y_INFERIOR_TO, box.getYmax());
+    clip(3, ClipEq.Y_SUPERIOR_TO, box.getYmin());
+    clip(4, ClipEq.Z_INFERIOR_TO, box.getZmax());
+    clip(5, ClipEq.Z_SUPERIOR_TO, box.getZmin());
+
+  }
+
+  @Override
+  public void clipOff() {
+    glDisable_ClipPlane(0);
+    glDisable_ClipPlane(1);
+    glDisable_ClipPlane(2);
+    glDisable_ClipPlane(3);
+    glDisable_ClipPlane(4);
+    glDisable_ClipPlane(5);
+  }
+  
+  protected double[] equation(ClipEq eq, double value) {
+    double eqValue = (value>0)?value:-value;
+    
+    switch (eq) {
+      case X_SUPERIOR_TO: return new double[]{+1, 0, 0, eqValue};
+      case X_INFERIOR_TO: return new double[]{-1, 0, 0, eqValue};
+      case Y_SUPERIOR_TO: return new double[]{0, +1, 0, eqValue};
+      case Y_INFERIOR_TO: return new double[]{0, -1, 0, eqValue};
+      case Z_SUPERIOR_TO: return new double[]{0, 0, +1, eqValue};
+      case Z_INFERIOR_TO: return new double[]{0, 0, -1, eqValue};
+      default:
+        return null;
+    }
   }
 
   @Override

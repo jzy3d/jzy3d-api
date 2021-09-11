@@ -16,6 +16,7 @@ import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
+import com.google.common.collect.Lists;
 
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
   public static boolean NORMAL_AUTO_DEFAULT = true;
@@ -53,27 +54,31 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
    * defaulting to false.
    */
   public Geometry() {
+    this(4);
+  }
+
+  public Geometry(int n) {
     super();
-    points = new ArrayList<Point>(4);
+    points = new ArrayList<>(n);
     bbox = new BoundingBox3d();
     center = new Coord3d();
     polygonMode = PolygonMode.FRONT_AND_BACK;
   }
 
   public Geometry(Point... points) {
-    this();
+    this(points.length);
     add(points);
   }
 
   public Geometry(Color wireframeColor, Color faceColor, Coord3d... points) {
-    this();
+    this(points.length);
     add(faceColor, points);
     setWireframeColor(wireframeColor);
     setWireframeDisplayed(wireframeColor != null);
   }
 
   public Geometry(List<Point> points) {
-    this();
+    this(points.size());
     add(points);
   }
 
@@ -88,7 +93,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     setWireframeColor(wireframeColor);
     setWireframeDisplayed(wireframeDisplayed);
   }
-
+  
   public void setReflectLight(boolean reflectLight) {
     this.reflectLight = reflectLight;
 
@@ -107,6 +112,8 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
    * Manually setting normals will disable automatic normal processing.
    * 
    * Not providing normals will keep the default automatic normal processing active.
+   * 
+   * You may more simply set a single normal for this geometry by calling {@link #setNormal(Coord3d)}
    * 
    * @param normals
    * @param normalPer indicate if the supplied normals are given per vertex or per geometry. The
@@ -133,6 +140,10 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     this.normals = normals;
     this.normalPer = normalPer;
     this.normalProcessingAutomatic = false;
+  }
+  
+  public void setNormal(Coord3d normals) {
+    setNormals(Lists.newArrayList(normals), NormalPer.GEOMETRY);
   }
 
   /**
@@ -241,7 +252,12 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
         painter.color(p.rgb);
       }
       if (isReflectLight()) {
-        painter.normal(normals.get(i));
+        if(NormalPer.POINT.equals(normalPer)) {
+          painter.normal(normals.get(i));
+        }
+        else /* if(NormalPer.GEOMETRY) && */ if(i==0){
+          painter.normal(normals.get(0));          
+        }
       }
       painter.vertex(p.xyz, spaceTransformer);
     }
@@ -249,7 +265,13 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     painter.glEnd();
 
     if (SHOW_NORMALS) {
-      drawPolygonNormal(painter, points, normals);
+      if(NormalPer.POINT.equals(normalPer)) {
+        drawPolygonNormal(painter, points, normals);
+      }
+      else /* if(NormalPer.GEOMETRY) && */ {
+        drawPolygonNormal(painter, points, normals.get(0));
+      }
+
     }
   }
 

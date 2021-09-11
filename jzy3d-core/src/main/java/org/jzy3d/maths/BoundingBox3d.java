@@ -285,13 +285,17 @@ public class BoundingBox3d {
 
   /** Return true if intersect b2. */
   public boolean intersect(BoundingBox3d b2) {
-    return xmin <= b2.xmin && b2.xmin <= xmax || xmin <= b2.xmax && b2.xmax <= xmax
-        || ymin <= b2.ymin && b2.ymin <= ymax || ymin <= b2.ymax && b2.ymax <= ymax
-        || zmin <= b2.zmin && b2.zmin <= zmax || zmin <= b2.zmax && b2.zmax <= zmax;
+    return ((xmin <= b2.xmin && b2.xmin <= xmax) || (xmin <= b2.xmax && b2.xmax <= xmax))
+        && ((ymin <= b2.ymin && b2.ymin <= ymax) || (ymin <= b2.ymax && b2.ymax <= ymax))
+        && ((zmin <= b2.zmin && b2.zmin <= zmax) || (zmin <= b2.zmax && b2.zmax <= zmax));
   }
 
   /*********************************************************/
 
+  /**
+   * Add a margin to max values and substract a margin to min values
+   * @return a new bounding box
+   */
   public BoundingBox3d margin(float margin) {
     BoundingBox3d b = new BoundingBox3d();
     b.xmax = xmax + margin;
@@ -300,6 +304,28 @@ public class BoundingBox3d {
     b.ymin = ymin - margin;
     b.zmax = zmax + margin;
     b.zmin = zmin - margin;
+    return b;
+  }
+
+  /**
+   * Add a margin to max values and substract a margin to min values, where the margin is ratio of the current range of each dimension.
+   * 
+   * Adding a margin of 10% for each dimension is done with {@link #marginRatio(0.1)}
+   * 
+   * @return a new bounding box
+   */
+  public BoundingBox3d marginRatio(float marginRatio) {
+    float xMargin = (xmax-xmin)*marginRatio;
+    float yMargin = (ymax-ymin)*marginRatio;
+    float zMargin = (zmax-zmin)*marginRatio;
+
+    BoundingBox3d b = new BoundingBox3d();
+    b.xmax = xmax + xMargin;
+    b.xmin = xmin - xMargin;
+    b.ymax = ymax + yMargin;
+    b.ymin = ymin - yMargin;
+    b.zmax = zmax + zMargin;
+    b.zmin = zmin - zMargin;
     return b;
   }
 
@@ -313,7 +339,19 @@ public class BoundingBox3d {
     return this;
   }
 
-  /*********************************************************/
+  public BoundingBox3d selfMarginRatio(float marginRatio) {
+    float xMargin = (xmax-xmin)*marginRatio;
+    float yMargin = (ymax-ymin)*marginRatio;
+    float zMargin = (zmax-zmin)*marginRatio;
+    
+    xmax += xMargin;
+    xmin -= xMargin;
+    ymax += yMargin;
+    ymin -= yMargin;
+    zmax += zMargin;
+    zmin -= zMargin;
+    return this;
+  }
 
   /**
    * Return range of X dimension.

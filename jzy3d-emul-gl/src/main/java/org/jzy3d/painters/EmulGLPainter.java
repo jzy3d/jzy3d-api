@@ -82,7 +82,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
       gl.glDisable(GL.GL_DEPTH_TEST);
       // gl.glDepthRangef(n, f);
     }
-
+    
     // Blending : more beautifull with jGL without this
     /** Default for SRC is 1 : {@link gl_colorbuffer.BlendSrc}*/
     /** Default for DST is 0 : {@link gl_colorbuffer.BlendDst}*/
@@ -856,7 +856,47 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   public void glViewport(int x, int y, int width, int height) {
     gl.glViewport(x, y, width, height);
   }
+  
+  @Override
+  public void glClipPlane(int plane, double[] equation) {
+    switch (plane) {
+      case 0: gl.glClipPlane(GL.GL_CLIP_PLANE0, equation); break;
+      case 1: gl.glClipPlane(GL.GL_CLIP_PLANE1, equation); break;
+      case 2: gl.glClipPlane(GL.GL_CLIP_PLANE2, equation); break;
+      case 3: gl.glClipPlane(GL.GL_CLIP_PLANE3, equation); break;
+      case 4: gl.glClipPlane(GL.GL_CLIP_PLANE4, equation); break;
+      case 5: gl.glClipPlane(GL.GL_CLIP_PLANE5, equation); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+  
+  @Override
+  public void glEnable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0: gl.glEnable(GL.GL_CLIP_PLANE0); break;
+      case 1: gl.glEnable(GL.GL_CLIP_PLANE1); break;
+      case 2: gl.glEnable(GL.GL_CLIP_PLANE2); break;
+      case 3: gl.glEnable(GL.GL_CLIP_PLANE3); break;
+      case 4: gl.glEnable(GL.GL_CLIP_PLANE4); break;
+      case 5: gl.glEnable(GL.GL_CLIP_PLANE5); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
 
+  @Override
+  public void glDisable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0: gl.glEnable(GL.GL_CLIP_PLANE0); break;
+      case 1: gl.glEnable(GL.GL_CLIP_PLANE1); break;
+      case 2: gl.glEnable(GL.GL_CLIP_PLANE2); break;
+      case 3: gl.glEnable(GL.GL_CLIP_PLANE3); break;
+      case 4: gl.glEnable(GL.GL_CLIP_PLANE4); break;
+      case 5: gl.glEnable(GL.GL_CLIP_PLANE5); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
+  
   @Override
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
