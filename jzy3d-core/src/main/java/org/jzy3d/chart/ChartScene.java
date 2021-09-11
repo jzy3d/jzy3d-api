@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  */
 public class ChartScene extends Scene {
   public ChartScene(boolean graphsort, IChartFactory factory) {
-    super(graphsort, factory);
+    super(factory, graphsort);
     this.nview = 0;
   }
 

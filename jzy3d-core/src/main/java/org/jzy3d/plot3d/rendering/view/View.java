@@ -998,14 +998,21 @@ public class View {
       SpaceTransformer spaceTransformer) {
     // Get the view bounds
     BoundingBox3d bounds;
-    if (boundmode == ViewBoundMode.AUTO_FIT)
+    if (boundmode == ViewBoundMode.AUTO_FIT) {
       bounds = squarifyGetSceneGraphBounds(scene);
-    else if (boundmode == ViewBoundMode.MANUAL)
-      bounds = manualViewBounds;
+    }
+    else if (boundmode == ViewBoundMode.MANUAL) {
+      /*if(scene.getGraph().getClipBox()!=null) {
+        bounds = squarifyGetSceneGraphBounds(scene);
+      }
+      else {*/
+        bounds = manualViewBounds;        
+      //}
+    }
     else {
       throw new RuntimeException("Unknown bounds mode");
     }
-
+    
     // Compute factors
     float xLen = 1;
     float yLen = 1;
@@ -1044,7 +1051,7 @@ public class View {
   /* LAYOUT */
 
   protected BoundingBox3d squarifyGetSceneGraphBounds(Scene scene) {
-    return scene.getGraph().getBounds();
+      return scene.getGraph().getBounds();      
   }
 
   protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds) {
@@ -1068,6 +1075,7 @@ public class View {
     // -- Compute the bounds for computing cam distance, clipping planes,
     if (viewbounds == null)
       viewbounds = new BoundingBox3d(0, 1, 0, 1, 0, 1);
+    
     BoundingBox3d boundsScaled = new BoundingBox3d();
     boundsScaled.add(viewbounds.scale(scaling));
     
