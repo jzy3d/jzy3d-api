@@ -5,4 +5,4 @@ jdk:
 #- oraclejdk7
 #- openjdk6
 before_install: openssl aes-256-cbc -K $encrypted_7d767fcac9aa_key -iv $encrypted_7d767fcac9aa_iv -in settings-obf.xml.enc -out settings-obf.xml -d
-after_success: mvn deploy --settings settings-obf.xml
+after_success: mvn -T 1C deploy --settings settings-obf.xml
