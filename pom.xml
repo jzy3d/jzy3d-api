@@ -347,6 +347,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.0.0-M5</version>
+						<configuration>
+							<parallel>classes</parallel>
+							<useUnlimitedThreads>true</useUnlimitedThreads>
+						</configuration>
+
 				</plugin>
 
 				<plugin>
@@ -563,6 +568,9 @@
 								<include>**/*Test.java</include>
 								<include>**/ITTest*.java</include>
 							</includes>
+							<parallel>classes</parallel>
+							<useUnlimitedThreads>true</useUnlimitedThreads>
+
 						</configuration>
 					</plugin>
 
