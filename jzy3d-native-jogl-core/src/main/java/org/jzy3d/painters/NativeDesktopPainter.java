@@ -96,6 +96,8 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       // gl.glDepthRangef(n, f);
     }
 
+    
+    
     // Blending
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
     
@@ -603,6 +605,38 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glViewport(int x, int y, int width, int height) {
     gl.glViewport(x, y, width, height);
   }
+  
+  @Override
+  public void glClipPlane(int plane, double[] equation) {
+    gl.getGL2().glClipPlane(plane, equation, 0);
+  }
+  
+  @Override
+  public void glEnable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0: gl.glEnable(GL2.GL_CLIP_PLANE0); break;
+      case 1: gl.glEnable(GL2.GL_CLIP_PLANE1); break;
+      case 2: gl.glEnable(GL2.GL_CLIP_PLANE2); break;
+      case 3: gl.glEnable(GL2.GL_CLIP_PLANE3); break;
+      case 4: gl.glEnable(GL2.GL_CLIP_PLANE4); break;
+      case 5: gl.glEnable(GL2.GL_CLIP_PLANE5); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
+  @Override
+  public void glDisable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0: gl.glEnable(GL2.GL_CLIP_PLANE0); break;
+      case 1: gl.glEnable(GL2.GL_CLIP_PLANE1); break;
+      case 2: gl.glEnable(GL2.GL_CLIP_PLANE2); break;
+      case 3: gl.glEnable(GL2.GL_CLIP_PLANE3); break;
+      case 4: gl.glEnable(GL2.GL_CLIP_PLANE4); break;
+      case 5: gl.glEnable(GL2.GL_CLIP_PLANE5); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
 
   @Override
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
