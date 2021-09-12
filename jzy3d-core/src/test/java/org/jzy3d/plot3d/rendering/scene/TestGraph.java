@@ -25,6 +25,7 @@ public class TestGraph {
     // Clipping is called with a margin to show the values AT the bounding box and then disabled
     BoundingBox3d expectClipBox = clipBox.marginRatio(Graph.CLIP_MARGIN_RATIO);
     Mockito.verify(p).clip(expectClipBox);
+    Mockito.verify(p).clipOn();
     Mockito.verify(p).clipOff();
     
     // ---------------------------------

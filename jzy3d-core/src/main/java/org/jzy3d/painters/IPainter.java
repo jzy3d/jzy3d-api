@@ -164,14 +164,17 @@ public interface IPainter {
   public void clip(int plane, ClipEq equation, double value);
 
   /**
-   * A convenient shortcut to glClipPlane that activate the 6 clipping planes according to the
+   * A convenient shortcut to glClipPlane that defines the 6 clipping planes according to the
    * min/max values of the bounding box.
+   * 
+   * Then requires to enable clipping with {@link #clipOn()}.
    */
   public void clip(BoundingBox3d box);
 
-  /**
-   * Disable all clipping planes
-   */
+  /** Enable all clipping planes */
+  public void clipOn();
+
+  /** Disable all clipping planes */
   public void clipOff();
 
   /**
