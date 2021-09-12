@@ -233,11 +233,16 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   }
 
   protected void callPointsForFace_NoSplit(IPainter painter) {
-    if (normalProcessingAutomatic) {
-      callPointsForFace_NoSplit_NormalAuto(painter);
-    } else {
-      callPointsForFace_NoSplit_NormalSupplied(painter);
-    }
+    //if(reflectLight) {
+      if (normalProcessingAutomatic) {
+        callPointsForFace_NoSplit_NormalAuto(painter);
+      } else {
+        callPointsForFace_NoSplit_NormalSupplied(painter);
+      }
+    /*}
+    else {
+      callPointsForFace_NoSplit_NoNormal(painter);
+    }*/
   }
 
   protected void callPointsForFace_NoSplit_NormalSupplied(IPainter painter) {
@@ -264,7 +269,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     painter.glEnd();
 
-    if (SHOW_NORMALS) {
+    if (SHOW_NORMALS & normals!=null) {
       if(NormalPer.POINT.equals(normalPer)) {
         drawPolygonNormal(painter, points, normals);
       }
@@ -301,9 +306,26 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     painter.glEnd();
 
-    if (SHOW_NORMALS) {
+    if (SHOW_NORMALS && normal != null) {
       drawPolygonNormal(painter, points, normal);
     }
+  }
+  
+  protected void callPointsForFace_NoSplit_NoNormal(IPainter painter) {
+    begin(painter);
+
+    // invoke points for vertex and color, with 1 normal per vertex
+    for (int i = 0; i < points.size(); i++) {
+      Point p = points.get(i);
+      if (mapper != null) {
+        applyPointOrMapperColor(painter, p);
+      } else {
+        painter.color(p.rgb);
+      }
+      painter.vertex(p.xyz, spaceTransformer);
+    }
+
+    painter.glEnd();
   }
 
   protected void callPointsForFace_SplitInTriangle(IPainter painter) {
@@ -323,7 +345,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     }
   }
 
-  private void callPointsForFace_SplitInTriangle_NormalSupplied(IPainter painter, Point p1,
+  protected void callPointsForFace_SplitInTriangle_NormalSupplied(IPainter painter, Point p1,
       Point p2, Point p3, int t) {
     painter.glBegin_Triangle();
 
@@ -364,12 +386,12 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     painter.glEnd();
     
-    if (SHOW_NORMALS) {
+    if (SHOW_NORMALS && normals!=null && normals.size()>=3) {
       drawTriangleNormal(painter, p1, p2, p3, normals.get(0), normals.get(1), normals.get(2));
     }
   }
 
-  private void callPointsForFace_SplitInTriangle_NormalAuto(IPainter painter, Point p1, Point p2,
+  protected void callPointsForFace_SplitInTriangle_NormalAuto(IPainter painter, Point p1, Point p2,
       Point p3) {
     Coord3d normal = null;
     if (isReflectLight()) {
@@ -393,7 +415,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     painter.glEnd();
 
-    if (SHOW_NORMALS) {
+    if (SHOW_NORMALS && normal!=null) {
       drawTriangleNormal(painter, p1, p2, p3, normal);
     }
   }

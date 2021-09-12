@@ -34,6 +34,8 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {
     Graphics2D g2d = (Graphics2D) g;
     
+    
+    //g2d.scale(2, 2);
     g2d.scale(scale.x, scale.y);
     
     AWTGraphicsUtils.configureRenderingHints(g2d);

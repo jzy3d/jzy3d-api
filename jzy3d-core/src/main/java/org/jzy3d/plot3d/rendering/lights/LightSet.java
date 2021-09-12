@@ -53,6 +53,10 @@ public class LightSet {
     return lights.get(id);
   }
 
+  public List<Light> getLights() {
+    return lights;
+  }
+
   public void add(Light light) {
     if (lights.size() == 0)
       queryLazyLightInit();

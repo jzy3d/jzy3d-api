@@ -44,7 +44,7 @@ public class Graph {
 
   protected BoundingBox3d clipBox;
   protected boolean clipIncludesLimits;
-  protected static final float CLIP_MARGIN_RATIO = 1f/10000;
+  protected static final float CLIP_MARGIN_RATIO = 1f/1000;
   
   
   public Graph(Scene scene) {
@@ -194,11 +194,16 @@ public class Graph {
   public void draw(IPainter painter) {
     // activate clipping if defined
     if(clipBox!=null) {
+      
       transform.execute(painter);
+      
       if(clipIncludesLimits)
         painter.clip(clipBox.marginRatio(CLIP_MARGIN_RATIO)); // make the box a little bigger
       else
         painter.clip(clipBox);
+      
+      painter.clipOn();
+      
     }
     
     // draw
@@ -327,6 +332,7 @@ public class Graph {
   public void setClipBox(BoundingBox3d clipBox, boolean includeLimits) {
     this.clipBox = clipBox;
     this.clipIncludesLimits = includeLimits;
+    
     viewsShoot();
   }
 
