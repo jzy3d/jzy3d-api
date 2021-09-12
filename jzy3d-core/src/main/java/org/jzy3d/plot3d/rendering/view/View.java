@@ -108,12 +108,21 @@ public class View {
   public static final float PI_div2 = (float) Math.PI / 2;
   public static final float DISTANCE_DEFAULT = 2000;
 
-  /** A nice viewpoint to start the chart */
-  public static final Coord3d VIEWPOINT_DEFAULT =
-      new Coord3d(Math.PI / 3, Math.PI / 3, DISTANCE_DEFAULT);
+
+  /** A viewpoint allowing to have min X and Y values near viewer, growing toward horizon. */
+  public static final Coord3d VIEWPOINT_X_Y_MIN_NEAR_VIEWER =
+      new Coord3d((Math.PI) + (Math.PI / 3), Math.PI / 3, DISTANCE_DEFAULT);
+
   /** A viewpoint where two corners of the axis box touch top and bottom lines of the canvas. */
   public static final Coord3d VIEWPOINT_AXIS_CORNER_TOUCH_BORDER =
       new Coord3d(Math.PI / 4, Math.PI / 3, DISTANCE_DEFAULT);
+
+  /** A nice viewpoint to start the chart */
+  public static final Coord3d VIEWPOINT_DEFAULT = VIEWPOINT_X_Y_MIN_NEAR_VIEWER;
+
+  /** A nice viewpoint to start the chart */
+  public static final Coord3d VIEWPOINT_DEFAULT_OLD =
+      new Coord3d(Math.PI / 3, Math.PI / 3, DISTANCE_DEFAULT);
 
 
 
@@ -194,7 +203,7 @@ public class View {
 
     this.spaceTransformer = new SpaceTransformer(); // apply no transform
 
-    this.pixelScale = new Coord2d(1,1);
+    this.pixelScale = new Coord2d(1, 1);
 
     // applyHiDPIToFonts(quality.isHiDPIEnabled()?HiDPI.ON:HiDPI.OFF);
     configureHiDPIListener(canvas);
@@ -221,7 +230,7 @@ public class View {
         } else {
           hidpi = HiDPI.ON;
         }
-        
+
         axis.getLayout().applyFontSizePolicy();
       }
     });
@@ -560,7 +569,7 @@ public class View {
   public ViewPositionMode getViewMode() {
     return viewmode;
   }
-  
+
   /** Return the stretch ratio applied to the view */
   public Coord3d getScaling() {
     return scaling;
@@ -707,7 +716,7 @@ public class View {
       float cameraRenderingSphereRadiusFactorOnTop) {
     this.cameraRenderingSphereRadiusFactorOnTop = cameraRenderingSphereRadiusFactorOnTop;
   }
-  
+
   public boolean isMaintainAllObjectsInView() {
     return maintainAllObjectsInView;
   }
@@ -1000,19 +1009,17 @@ public class View {
     BoundingBox3d bounds;
     if (boundmode == ViewBoundMode.AUTO_FIT) {
       bounds = squarifyGetSceneGraphBounds(scene);
-    }
-    else if (boundmode == ViewBoundMode.MANUAL) {
-      /*if(scene.getGraph().getClipBox()!=null) {
-        bounds = squarifyGetSceneGraphBounds(scene);
-      }
-      else {*/
-        bounds = manualViewBounds;        
-      //}
-    }
-    else {
+    } else if (boundmode == ViewBoundMode.MANUAL) {
+      /*
+       * if(scene.getGraph().getClipBox()!=null) { bounds = squarifyGetSceneGraphBounds(scene); }
+       * else {
+       */
+      bounds = manualViewBounds;
+      // }
+    } else {
       throw new RuntimeException("Unknown bounds mode");
     }
-    
+
     // Compute factors
     float xLen = 1;
     float yLen = 1;
@@ -1051,7 +1058,7 @@ public class View {
   /* LAYOUT */
 
   protected BoundingBox3d squarifyGetSceneGraphBounds(Scene scene) {
-      return scene.getGraph().getBounds();      
+    return scene.getGraph().getBounds();
   }
 
   protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds) {
@@ -1075,10 +1082,10 @@ public class View {
     // -- Compute the bounds for computing cam distance, clipping planes,
     if (viewbounds == null)
       viewbounds = new BoundingBox3d(0, 1, 0, 1, 0, 1);
-    
+
     BoundingBox3d boundsScaled = new BoundingBox3d();
     boundsScaled.add(viewbounds.scale(scaling));
-    
+
     if (maintainAllObjectsInView) {
       boundsScaled.add(getSceneGraphBounds().scale(scaling));
       boundsScaled.add(axis.getWholeBounds().scale(scaling));
@@ -1253,7 +1260,7 @@ public class View {
 
   protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
       ViewportConfiguration viewport) {
-    
+
   }
 
   /* AXE BOX RENDERING */
@@ -1265,12 +1272,14 @@ public class View {
   protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling,
       boolean axeBoxDisplayed) {
     if (axeBoxDisplayed) {
+
       painter.glMatrixMode_ModelView();
 
       scene.getLightSet().disable(painter);
+
       axe.setScale(scaling);
       axe.draw(painter);
-      
+
       if (displayAxisWholeBounds) { // for debug
         AxisBox abox = (AxisBox) axe;
         BoundingBox3d box = abox.getWholeBounds();
@@ -1280,7 +1289,7 @@ public class View {
         p.setWireframeDisplayed(true);
         p.draw(painter);
       }
-      
+
       scene.getLightSet().enableLightIfThereAreLights(painter);
     }
   }
