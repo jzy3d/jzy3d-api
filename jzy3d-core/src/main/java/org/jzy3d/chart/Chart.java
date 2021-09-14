@@ -476,8 +476,11 @@ public class Chart {
    * change the light color or object color a bit.
    */
   public Light addLightOnCamera() {
-    return addLightOnCamera(Light.DEFAULT_COLOR.clone(), Light.DEFAULT_COLOR.clone(),
-        Light.DEFAULT_COLOR.clone());
+    return addLightOnCamera(Light.DEFAULT_COLOR.clone());
+  }
+  
+  public Light addLightOnCamera(Color colorForAll) {
+    return addLightOnCamera(colorForAll, colorForAll, colorForAll);
   }
 
   /**
@@ -502,9 +505,56 @@ public class Chart {
     return light;
   }
   
-  public Light addLightOnCamera(Color colorForAll) {
-    return addLightOnCamera(colorForAll, colorForAll, colorForAll);
+  
+  
+  
+  public Light[] addLightPairOnCamera() {
+    return addLightPairOnCamera(Light.DEFAULT_COLOR.clone());
   }
+  
+  public Light[] addLightPairOnCamera(Color colorForAll) {
+    return addLightPairOnCamera(colorForAll, colorForAll, colorForAll);
+  }
+  
+  public Light[] addLightPairOnCamera(Color ambiant, Color diffuse, Color specular) {
+    Coord3d viewCenter = getView().getCenter(); // cartesian
+    Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
+    Coord3d lightPointUpPolar = viewPointPolar.add(0, (float)Math.PI/2, 0); // polar coords
+    Coord3d lightPointDownPolar = viewPointPolar.add( 0,-(float)Math.PI/2, 0); // polar coords
+    Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
+    Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
+    
+    Light lightUp = addLight(lightPointUp, ambiant, diffuse, specular);
+    Light lightDown = addLight(lightPointDown, ambiant, diffuse, specular);
+
+    getView().addViewPointChangedListener(new IViewPointChangedListener() {
+      @Override
+      public void viewPointChanged(ViewPointChangedEvent e) {
+        Coord3d viewCenter = getView().getCenter(); // cartesian
+        Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
+        Coord3d lightPointUpPolar = viewPointPolar.add(0, (float)Math.PI/2, 0); // polar coords
+        Coord3d lightPointDownPolar = viewPointPolar.add( 0,-(float)Math.PI/2, 0); // polar coords
+        Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
+        Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
+        
+        lightUp.setPosition(lightPointUp);
+        lightDown.setPosition(lightPointDown);
+        
+        Chart.this.lightPointUpPolar.set(lightPointUpPolar);
+        Chart.this.lightPointDownPolar.set(lightPointDownPolar);
+        
+      }
+    });
+    
+    Light[] lights = new Light[2];
+    lights[0] = lightUp;
+    lights[1] = lightDown;
+    
+    return lights;
+  }
+  
+  public final Coord3d lightPointUpPolar = new Coord3d(); 
+  public final Coord3d lightPointDownPolar = new Coord3d();
 
   /* SHORTCUTS */
 

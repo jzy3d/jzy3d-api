@@ -24,13 +24,25 @@ public class LightSet {
   public void apply(IPainter painter, Coord3d scale) {
     if (lazyLightInit) {
       initLight(painter);
-      for (Light light : lights)
-        LightSwitch.enable(painter, light.getId());
+      for (Light light : lights) {
+        painter.glEnable_Light(light.getId());
+      }
       lazyLightInit = false;
     }
     for (Light light : lights) {
       light.apply(painter, scale);
     }
+  }
+  
+  // http://www.sjbaker.org/steve/omniv/opengl_lighting.html
+  protected void initLight(IPainter painter) {
+    painter.glEnable_ColorMaterial();
+    painter.glEnable_Lighting();
+
+    // Light model
+    painter.glLightModel(LightModel.LIGHT_MODEL_TWO_SIDE, true);
+    //painter.glLightModel(LightModel.LIGHT_MODEL_LOCAL_VIEWER, false);
+    //painter.glLightModel(LightModel.LIGHT_MODEL_AMBIENT, Color.MAGENTA);
   }
 
   public void enableLightIfThereAreLights(IPainter painter) {
@@ -67,25 +79,9 @@ public class LightSet {
     lights.remove(light);
   }
 
-  /***********************************/
-
   protected void queryLazyLightInit() {
     lazyLightInit = true;
   }
-
-  // http://www.sjbaker.org/steve/omniv/opengl_lighting.html
-  protected void initLight(IPainter painter) {
-    painter.glEnable_ColorMaterial();
-    painter.glEnable_Lighting();
-
-    // Light model
-
-    painter.glLightModel(LightModel.LIGHT_MODEL_TWO_SIDE, true);
-    // painter.glLightModel(LightModel.LIGHT_MODEL_LOCAL_VIEWER, true);
-    // painter.glLightModel(LightModel.LIGHT_MODEL_LOCAL_VIEWER, false);
-  }
-
-  /***********************************/
 
 
 }

@@ -46,6 +46,8 @@ public class DebugGLChart3d {
   Point cameraUp;
   CubeComposite viewBox;
   CubeComposite axisBox;
+  
+  boolean watchCameraUp = false;
 
   Point[] lightPositions = new Point[8];
 
@@ -56,11 +58,11 @@ public class DebugGLChart3d {
 
   int axisWireframeWidth = 3;
   Color axisWireframeColor = Color.YELLOW;
-  Color axisFaceColor = Color.BLUE.alphaSelf(0.5f);
+  Color axisFaceColor = Color.YELLOW.alphaSelf(0.2f);
 
   int viewWireframeWidth = 2;
-  Color viewWireframeColor = Color.YELLOW;
-  Color viewFaceColor = Color.BLUE.alphaSelf(0.5f);
+  Color viewWireframeColor = Color.BLUE;
+  Color viewFaceColor = Color.BLUE.alphaSelf(0.2f);
 
   int lightPointWidth = 20;
   Color lightColor = Color.ORANGE;
@@ -76,7 +78,7 @@ public class DebugGLChart3d {
 
     spaceTransform = watchedChart.getView().getSpaceTransformer();
 
-    watchViewBounds();
+    //watchViewBounds();
     watchAxis();
     watchCamera();
     watchLights();
@@ -99,8 +101,8 @@ public class DebugGLChart3d {
     infos.add(new Legend("Camera.eye", cameraEyeColor));
     infos.add(new Legend("Camera.target", cameraTargetColor));
     infos.add(new Legend("Camera.up", cameraUpColor));
-    infos.add(new Legend("Axis", axisFaceColor));
-    infos.add(new Legend("View", viewFaceColor));
+    infos.add(new Legend("Axis", axisWireframeColor));
+    infos.add(new Legend("View", viewWireframeColor));
     infos.add(new Legend("Light", lightColor));
 
     OverlayLegendRenderer legend = new OverlayLegendRenderer(infos);
@@ -139,6 +141,7 @@ public class DebugGLChart3d {
       viewBounds = spaceTransform.compute(viewBounds);
     }
     viewBox = new CubeComposite(viewBounds, viewWireframeColor, viewFaceColor);
+    viewBox.setFaceDisplayed(false);
     viewBox.setWireframeWidth(viewWireframeWidth);
 
     debugChart.add(viewBox);
@@ -151,6 +154,7 @@ public class DebugGLChart3d {
     }
     System.out.println(axisBounds);
     axisBox = new CubeComposite(axisBounds, axisWireframeColor, axisFaceColor);
+    //axisBox.setFaceDisplayed(false);
     axisBox.setWireframeWidth(axisWireframeWidth);
 
     debugChart.add(axisBox);
@@ -163,12 +167,15 @@ public class DebugGLChart3d {
     cameraTarget = new Point(watchedChart.getView().getCamera().getTarget(), cameraTargetColor);
     cameraTarget.setWidth(cameraPointWidth);
 
-    cameraUp = new Point(watchedChart.getView().getCamera().getUp(), cameraUpColor);
-    cameraUp.setWidth(cameraPointWidth);
-
     debugChart.add(cameraEye);
     debugChart.add(cameraTarget);
-    debugChart.add(cameraUp);
+    
+    if(watchCameraUp) {
+      cameraUp = new Point(watchedChart.getView().getCamera().getUp(), cameraUpColor);
+      cameraUp.setWidth(cameraPointWidth);
+      debugChart.add(cameraUp);
+    }
+
   }
 
   public void watchLights() {
@@ -212,13 +219,19 @@ public class DebugGLChart3d {
   }
 
   public void watchCameraUpdate() {
+    if(watchedChart.getView().getCamera()==null)
+      return;
+    
     Coord3d eye = watchedChart.getView().getCamera().getEye();
     Coord3d target = watchedChart.getView().getCamera().getTarget();
-    Coord3d up = watchedChart.getView().getCamera().getUp();
-
+    
     cameraEye.setData(eye);
     cameraTarget.setData(target);
-    cameraUp.setData(up.add(eye));
+    
+    if(watchCameraUp) {
+      Coord3d up = watchedChart.getView().getCamera().getUp();
+      cameraUp.setData(up.add(eye));
+    }
   }
 
   public void watchLightsUpdate() {

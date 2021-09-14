@@ -15,6 +15,7 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import com.jogamp.opengl.GL;
@@ -717,6 +718,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glLightModeli(int mode, int value) {
     gl.getGL2().glLightModeli(mode, value);
   }
+  
+  @Override
+  public void glLightModelfv(int mode, float[] value) {
+    gl.getGL2().glLightModelfv(mode, value, 0);
+  }
 
   @Override
   public void glLightModel(LightModel model, boolean value) {
@@ -728,7 +734,34 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       throw new IllegalArgumentException("Unsupported model '" + model + "'");
     }
   }
+  
+  @Override
+  public void glLightModel(LightModel model, Color color) {
+    if (LightModel.LIGHT_MODEL_AMBIENT.equals(model)) {
+      glLightModelfv(GL2ES1.GL_LIGHT_MODEL_AMBIENT, color.toArray());
+    } else {
+      throw new IllegalArgumentException("Unsupported model '" + model + "'");
+    }
+  }
+  
+  @Override
+  public void glLightf(int light, Attenuation.Type attenuationType, float value) {
+    if(Attenuation.Type.CONSTANT.equals(attenuationType)) {
+      glLightf(light, GL2.GL_CONSTANT_ATTENUATION, value);
+    }
+    else if(Attenuation.Type.LINEAR.equals(attenuationType)) {
+      glLightf(light, GL2.GL_LINEAR_ATTENUATION, value);
+    }
+    else if(Attenuation.Type.QUADRATIC.equals(attenuationType)) {
+      glLightf(light, GL2.GL_QUADRATIC_ATTENUATION, value);
+    }
+  }
 
+  @Override
+  public void glLightf(int light, int pname, float value) {
+    gl.getGL2().glLightf(lightId(light), pname, value);
+  }
+  
   @Override
   public void glLightfv(int light, int pname, float[] params, int params_offset) {
     gl.getGL2().glLightfv(lightId(light), pname, params, params_offset);
