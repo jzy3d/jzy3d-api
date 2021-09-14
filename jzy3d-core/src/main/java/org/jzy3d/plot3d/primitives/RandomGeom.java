@@ -145,4 +145,46 @@ public class RandomGeom {
 
     return drawables;
   }
+
+  public Polygon poly(int x, int y, int z, boolean leftRightOrNearFar, Color color) {
+    int w = 1;
+    int h = 1;
+
+    Polygon p1 = poly(x, y, z, w, h, leftRightOrNearFar, color);
+
+    return p1;
+  }
+
+  /**
+   * Return a polygon at specified position, width and height. Width is either applied to X or Z
+   * according to the boolean parameter.
+   * 
+   * @param x
+   * @param y
+   * @param z
+   * @param w width
+   * @param h height
+   * @param leftRightOrNearFar if true, width is applied along X, otherwise along Z dimension.
+   * @param color
+   * @return
+   */
+  public Polygon poly(int x, int y, int z, int w, int h, boolean leftRightOrNearFar, Color color) {
+    Polygon p1 = new Polygon();
+
+
+
+    if (leftRightOrNearFar) {
+      p1.add(new Point(new Coord3d(x + 0, y + 0, z + 0), color));
+      p1.add(new Point(new Coord3d(x + w, y + 0, z + 0), color));
+      p1.add(new Point(new Coord3d(x + w, y + h, z + 0), color));
+      p1.add(new Point(new Coord3d(x + 0, y + h, z + 0), color));
+
+    } else {
+      p1.add(new Point(new Coord3d(x + 0, y + 0, z + 0), color));
+      p1.add(new Point(new Coord3d(x + 0, y + 0, z + w), color));
+      p1.add(new Point(new Coord3d(x + 0, y + h, z + w), color));
+      p1.add(new Point(new Coord3d(x + 0, y + h, z + 0), color));
+    }
+    return p1;
+  }
 }

@@ -19,16 +19,30 @@ import org.jzy3d.plot3d.transform.Transform;
 import com.google.common.collect.Lists;
 
 public abstract class Geometry extends Wireframeable implements ISingleColorable, IMultiColorable {
-  public static boolean NORMAL_AUTO_DEFAULT = true;
-  public static boolean SPLIT_TRIANGLE_DEFAULT = true;
 
-  public static boolean NORMALIZE_NORMAL = true;
+  /**
+   * Default setting of {@link #setNormalProcessingAutomatic(boolean)}. Can be globally changed to
+   * avoid setting it geometry-wise.
+   */
+  public static boolean NORMAL_AUTO_DEFAULT = true;
+
+  /**
+   * Default setting of {@link #setSplitInTriangles(boolean)}. Can be globally changed to avoid
+   * setting it geometry-wise.
+   */
+  public static boolean SPLIT_TRIANGLE_DEFAULT = false;
+
+  /**
+   * Default setting of {@link #setNormalizeNormals(boolean)}. Can be globally changed to avoid
+   * setting it geometry-wise.
+   */
+  public static boolean NORMALIZE_NORMAL_DEFAULT = true;
 
   /** A flag to show normals for debugging lighting */
   public static boolean SHOW_NORMALS = false;
   public static int NORMAL_LINE_WIDTH = 2;
   public static int NORMAL_POINT_WIDTH = 4;
-  public static Color NORMAL_END_COLOR = Color.GRAY.clone();
+  public static Color NORMAL_END_COLOR = Color.BLACK.clone();
   public static Color NORMAL_START_COLOR = Color.GRAY.clone();
 
   protected PolygonMode polygonMode;
@@ -41,6 +55,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
   protected boolean normalProcessingAutomatic = NORMAL_AUTO_DEFAULT;
   protected boolean splitInTriangles = SPLIT_TRIANGLE_DEFAULT;
+  protected boolean normalizeNormals = NORMALIZE_NORMAL_DEFAULT;
 
   public enum NormalPer {
     POINT, GEOMETRY;
@@ -93,7 +108,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     setWireframeColor(wireframeColor);
     setWireframeDisplayed(wireframeDisplayed);
   }
-  
+
   public void setReflectLight(boolean reflectLight) {
     this.reflectLight = reflectLight;
 
@@ -113,7 +128,8 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
    * 
    * Not providing normals will keep the default automatic normal processing active.
    * 
-   * You may more simply set a single normal for this geometry by calling {@link #setNormal(Coord3d)}
+   * You may more simply set a single normal for this geometry by calling
+   * {@link #setNormal(Coord3d)}
    * 
    * @param normals
    * @param normalPer indicate if the supplied normals are given per vertex or per geometry. The
@@ -141,7 +157,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     this.normalPer = normalPer;
     this.normalProcessingAutomatic = false;
   }
-  
+
   public void setNormal(Coord3d normals) {
     setNormals(Lists.newArrayList(normals), NormalPer.GEOMETRY);
   }
@@ -233,16 +249,15 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   }
 
   protected void callPointsForFace_NoSplit(IPainter painter) {
-    //if(reflectLight) {
-      if (normalProcessingAutomatic) {
-        callPointsForFace_NoSplit_NormalAuto(painter);
-      } else {
-        callPointsForFace_NoSplit_NormalSupplied(painter);
-      }
-    /*}
-    else {
-      callPointsForFace_NoSplit_NoNormal(painter);
-    }*/
+    // if(reflectLight) {
+    if (normalProcessingAutomatic) {
+      callPointsForFace_NoSplit_NormalAuto(painter);
+    } else {
+      callPointsForFace_NoSplit_NormalSupplied(painter);
+    }
+    /*
+     * } else { callPointsForFace_NoSplit_NoNormal(painter); }
+     */
   }
 
   protected void callPointsForFace_NoSplit_NormalSupplied(IPainter painter) {
@@ -257,11 +272,10 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
         painter.color(p.rgb);
       }
       if (isReflectLight()) {
-        if(NormalPer.POINT.equals(normalPer)) {
+        if (NormalPer.POINT.equals(normalPer)) {
           painter.normal(normals.get(i));
-        }
-        else /* if(NormalPer.GEOMETRY) && */ if(i==0){
-          painter.normal(normals.get(0));          
+        } else /* if(NormalPer.GEOMETRY) && */ if (i == 0) {
+          painter.normal(normals.get(0));
         }
       }
       painter.vertex(p.xyz, spaceTransformer);
@@ -269,11 +283,10 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     painter.glEnd();
 
-    if (SHOW_NORMALS & normals!=null) {
-      if(NormalPer.POINT.equals(normalPer)) {
+    if (SHOW_NORMALS & normals != null) {
+      if (NormalPer.POINT.equals(normalPer)) {
         drawPolygonNormal(painter, points, normals);
-      }
-      else /* if(NormalPer.GEOMETRY) && */ {
+      } else /* if(NormalPer.GEOMETRY) && */ {
         drawPolygonNormal(painter, points, normals.get(0));
       }
 
@@ -310,7 +323,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       drawPolygonNormal(painter, points, normal);
     }
   }
-  
+
   protected void callPointsForFace_NoSplit_NoNormal(IPainter painter) {
     begin(painter);
 
@@ -385,8 +398,8 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     }
 
     painter.glEnd();
-    
-    if (SHOW_NORMALS && normals!=null && normals.size()>=3) {
+
+    if (SHOW_NORMALS && normals != null && normals.size() >= 3) {
       drawTriangleNormal(painter, p1, p2, p3, normals.get(0), normals.get(1), normals.get(2));
     }
   }
@@ -415,17 +428,17 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     painter.glEnd();
 
-    if (SHOW_NORMALS && normal!=null) {
+    if (SHOW_NORMALS && normal != null) {
       drawTriangleNormal(painter, p1, p2, p3, normal);
     }
   }
 
   protected Coord3d computeNormalAutomatic(List<Point> points) {
-    return Normal.compute(points, NORMALIZE_NORMAL, false);
+    return Normal.compute(points, normalizeNormals, false);
   }
 
   protected Coord3d computeNormalAutomatic(Point p1, Point p2, Point p3) {
-    return Normal.compute(p1.xyz, p2.xyz, p3.xyz, NORMALIZE_NORMAL);
+    return Normal.compute(p1.xyz, p2.xyz, p3.xyz, normalizeNormals);
   }
 
   /**
@@ -765,6 +778,30 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
    */
   public void setSplitInTriangles(boolean splitInTriangles) {
     this.splitInTriangles = splitInTriangles;
+  }
+
+
+
+  public boolean isNormalizeNormals() {
+    return normalizeNormals;
+  }
+
+  /**
+   * Normalizing normals is usefull to ensure that polygons of different sizes will have a
+   * consistent light reflection. Indeed, a large polygon will have a high normal value compared to
+   * a small polygon.
+   * 
+   * Normalizing requires a bit more computation though.
+   * 
+   * This setting will only change something as long as
+   * <ul>
+   * <li>The object is configured to {@link #setReflectLight(true)} and if a {@link Light} is added
+   * to the chart.
+   * <li>The object is configured to {@link #setNormalProcessingAutomatic(true)}. Normals processed
+   * externally should be normalized externally.
+   */
+  public void setNormalizeNormals(boolean normalizeNormals) {
+    this.normalizeNormals = normalizeNormals;
   }
 
   @Override

@@ -84,6 +84,37 @@ public class Color {
     return this;
   }
 
+  public Color mulSelfWithAlpha(float ratio) {
+    this.r *= ratio;
+    this.g *= ratio;
+    this.b *= ratio;
+    this.a *= ratio;
+    return this;
+  }
+
+  public Color div(Color factor) {
+    this.r /= factor.r;
+    this.g /= factor.g;
+    this.b /= factor.b;
+    this.a /= factor.a;
+    return this;
+  }
+  
+  public Color divSelf(float ratio) {
+    this.r /= ratio;
+    this.g /= ratio;
+    this.b /= ratio;
+    return this;
+  }
+
+  public Color divSelfWithAlpha(float ratio) {
+    this.r /= ratio;
+    this.g /= ratio;
+    this.b /= ratio;
+    this.a /= ratio;
+    return this;
+  }
+
   public Color alphaSelf(float alpha) {
     this.a = alpha;
     return this;
@@ -161,5 +192,9 @@ public class Color {
    */
   public double distanceSq(Color c) {
     return Math.pow(r - c.r, 2) + Math.pow(g - c.g, 2) + Math.pow(b - c.b, 2);
+  }
+
+  public Color add(Color color) {
+    return new Color(r+color.r, g+color.g, b+color.b, a+color.a);
   }
 }
