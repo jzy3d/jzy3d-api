@@ -35,7 +35,7 @@ public class Normal {
    * 
    * @param points
    * @param normalize if true, will divise normal components by the length of the normal
-   * @param averageNormals if true and if points.size() > 3, will compute a normal for each triangle and then process an average normal of all triangles
+   * @param averageNormals if true and if points.size() > 3, will compute a normal for each triangle and then process an average normal of all triangles. If false, simply process normal out of the three first points, hence assuming coplanarity of the points.
    * @return
    */
   public static Coord3d compute(List<Point> points, boolean normalize, boolean averageNormals) {

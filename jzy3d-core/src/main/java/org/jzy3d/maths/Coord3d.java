@@ -479,6 +479,12 @@ public class Coord3d implements Serializable {
     float[] array = {x, y, z};
     return array;
   }
+  
+  public void toArray(float[] array, int offset) {
+    array[offset+0] = x;
+    array[offset+1] = y;
+    array[offset+2] = z;
+  }
 
   /**************************************************************/
 

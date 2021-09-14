@@ -16,6 +16,7 @@ import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -419,11 +420,19 @@ public interface IPainter {
 
   public void glShadeModel(int mode);
 
+  public void glLightf(int light, Attenuation.Type type, float value);
+  
+  public void glLightf(int light, int pname, float value);
+  
   public void glLightfv(int light, int pname, float[] params, int params_offset);
 
   public void glLightModeli(int mode, int value);
 
+  public void glLightModelfv(int mode, float[] value);
+
   public void glLightModel(LightModel model, boolean value);
+
+  public void glLightModel(LightModel model, Color color);
 
   public void glMaterialfv(int face, int pname, float[] params, int params_offset);
 
