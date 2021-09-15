@@ -145,6 +145,49 @@ public class RandomGeom {
 
     return drawables;
   }
+  
+  public List<Composite> cubes(int cubes) {
+    return spinningCubes(cubes, 0);
+  }
+  
+  /**
+   * 
+   * @param x starting point X
+   * @param y starting point Y
+   * @param z starting point Z
+   * @param w width (allows building ending point X)
+   * @param h height (allows building ending point Y)
+   * @param d depth (allows building ending point Z)
+   */
+  public Composite cube(int x, int y, int z, int w, int h, int d) {
+    Color wf = Color.BLACK;
+    Color fc = Color.BLUE;
+
+
+    Coord3d start = new Coord3d(x,y,z);
+
+
+    Coord3d pt1_1 = new Coord3d(start.x + 0, start.y + 0, start.z);
+    Coord3d pt2_1 = new Coord3d(start.x + w, start.y + 0, start.z);
+    Coord3d pt3_1 = new Coord3d(start.x + w, start.y + h, start.z);
+    Coord3d pt4_1 = new Coord3d(start.x + 0, start.y + h, start.z);
+
+    Coord3d pt1_2 = pt1_1.add(0, 0, d);
+    Coord3d pt2_2 = pt2_1.add(0, 0, d);
+    Coord3d pt3_2 = pt3_1.add(0, 0, d);
+    Coord3d pt4_2 = pt4_1.add(0, 0, d);
+
+    Composite cube = new Composite();
+
+    cube.add(new Polygon(wf, fc, pt1_1, pt2_1, pt3_1, pt4_1)); // bottom
+    cube.add(new Polygon(wf, fc, pt1_2, pt2_2, pt3_2, pt4_2)); // top
+    cube.add(new Polygon(wf, fc, pt1_1, pt2_1, pt2_2, pt1_2)); // left
+    cube.add(new Polygon(wf, fc, pt3_1, pt4_1, pt4_2, pt3_2)); // right
+    cube.add(new Polygon(wf, fc, pt2_1, pt3_1, pt3_2, pt2_2)); // far
+    cube.add(new Polygon(wf, fc, pt1_1, pt4_1, pt4_2, pt1_2)); // near
+
+    return cube;
+  }
 
   public Polygon poly(int x, int y, int z, boolean leftRightOrNearFar, Color color) {
     int w = 1;
@@ -186,5 +229,9 @@ public class RandomGeom {
       p1.add(new Point(new Coord3d(x + 0, y + h, z + 0), color));
     }
     return p1;
+  }
+  
+  public Polygon poly(int x, int y, int z, int w, int h) {
+    return poly(x, y, z, w, h, true, Color.BLUE.clone());
   }
 }
