@@ -322,8 +322,7 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
       }
     }
   }
-
-
+  
   /****************************************************************/
 
   @Override
