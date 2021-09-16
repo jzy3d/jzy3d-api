@@ -3,7 +3,6 @@ package org.jzy3d.chart.controllers.mouse.camera;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.RateLimiter;
 import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
@@ -14,12 +13,11 @@ import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppin
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingSmoothColor;
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingWireframe;
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByKeepingBoundingBoxOnly;
+import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByPerformanceKnowledge;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.primitives.Wireframeable;
-import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-
 import jgl.wt.awt.GL;
 
 public class AdaptiveMouseController extends AWTCameraMouseController {
@@ -52,6 +50,7 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   protected AdaptByDroppingHiDPI adaptByDroppingHiDPI;
   protected AdaptByDroppingSmoothColor adaptByDroppingSmoothColor;
   protected AdaptByKeepingBoundingBoxOnly adaptByKeepingBoundingBoxOnly;
+  protected AdaptByPerformanceKnowledge adaptByPerformanceKnowledge;
 
   /**
    * Keep track of drawable that have had their wireframe disabled for optimization in order to
@@ -165,9 +164,13 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
       adaptByDroppingHiDPI = new AdaptByDroppingHiDPI(chart);
     if(adaptByDroppingSmoothColor==null)
       adaptByDroppingSmoothColor = new AdaptByDroppingSmoothColor(chart);
-    if(adaptByKeepingBoundingBoxOnly==null) {
+    if(adaptByKeepingBoundingBoxOnly==null) 
       adaptByKeepingBoundingBoxOnly = new AdaptByKeepingBoundingBoxOnly(chart);
-    }
+    if(adaptByPerformanceKnowledge==null)
+      adaptByPerformanceKnowledge = new AdaptByPerformanceKnowledge(chart);
+    adaptByPerformanceKnowledge.setPerf(getLODPerf());
+    adaptByPerformanceKnowledge.setMaxRenderingTime(policy.optimizeForRenderingTimeLargerThan);
+    
   }
 
   // **************** START/STOP OPTIMISATION ***************** //
@@ -190,6 +193,11 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     
     if(policy.optimizeByDrawingBoundingBoxOnly)
       adaptByKeepingBoundingBoxOnly.apply();
+    
+    if(policy.optimizeByPerformanceKnowledge){
+      adaptByPerformanceKnowledge.apply();
+    }
+
   }
 
   protected void stopOptimizations() {
@@ -210,6 +218,10 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     
     if(policy.optimizeByDrawingBoundingBoxOnly)
       adaptByKeepingBoundingBoxOnly.revert();
+    
+    if(policy.optimizeByPerformanceKnowledge){
+      adaptByPerformanceKnowledge.revert();
+    }
 
   }
 
