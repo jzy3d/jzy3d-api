@@ -1,6 +1,7 @@
 package org.jzy3d.colors;
 
 import java.util.Random;
+import org.jzy3d.plot3d.primitives.RandomGeom;
 
 /**
  * Color interface.
@@ -68,12 +69,49 @@ public class Color {
     this.a = (float) a / 255;
   }
 
-  // TODO : return a new instance. users of method should call mulSelf instead
   public Color mul(Color factor) {
     this.r *= factor.r;
     this.g *= factor.g;
     this.b *= factor.b;
     this.a *= factor.a;
+    return this;
+  }
+  
+  public Color mulSelf(float ratio) {
+    this.r *= ratio;
+    this.g *= ratio;
+    this.b *= ratio;
+    return this;
+  }
+
+  public Color mulSelfWithAlpha(float ratio) {
+    this.r *= ratio;
+    this.g *= ratio;
+    this.b *= ratio;
+    this.a *= ratio;
+    return this;
+  }
+
+  public Color div(Color factor) {
+    this.r /= factor.r;
+    this.g /= factor.g;
+    this.b /= factor.b;
+    this.a /= factor.a;
+    return this;
+  }
+  
+  public Color divSelf(float ratio) {
+    this.r /= ratio;
+    this.g /= ratio;
+    this.b /= ratio;
+    return this;
+  }
+
+  public Color divSelfWithAlpha(float ratio) {
+    this.r /= ratio;
+    this.g /= ratio;
+    this.b /= ratio;
+    this.a /= ratio;
     return this;
   }
 
@@ -85,13 +123,6 @@ public class Color {
   public Color alpha(float alpha) {
     Color color = new Color(r, g, b, alpha);
     return color;
-  }
-
-  public Color mulSelf(float ratio) {
-    this.r *= ratio;
-    this.g *= ratio;
-    this.b *= ratio;
-    return this;
   }
 
   /** Return the hexadecimal representation of this color. */
@@ -131,6 +162,10 @@ public class Color {
 
   public static Random rng = new Random();
 
+  /**
+   * Use {@link RandomGeom#color()} instead.
+   */
+  @Deprecated
   public static Color random() {
     return new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
   }
@@ -158,6 +193,8 @@ public class Color {
   public double distanceSq(Color c) {
     return Math.pow(r - c.r, 2) + Math.pow(g - c.g, 2) + Math.pow(b - c.b, 2);
   }
-  
 
+  public Color add(Color color) {
+    return new Color(r+color.r, g+color.g, b+color.b, a+color.a);
+  }
 }

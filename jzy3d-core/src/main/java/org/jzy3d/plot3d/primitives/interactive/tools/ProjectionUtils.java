@@ -34,7 +34,7 @@ public class ProjectionUtils {
   }
 
   public static List<PolygonProjection> project(IPainter painter, Composite c) {
-    ArrayList<Drawable> monotypes = Decomposition.getDecomposition(c);
+    List<Drawable> monotypes = Decomposition.getDecomposition(c);
     return project(painter, monotypes);
   }
 
@@ -62,7 +62,7 @@ public class ProjectionUtils {
 
     // gather polygon and its colors in a data structure
     int k = 0;
-    List<PolygonProjection> polygonProjections = new ArrayList<PolygonProjection>();
+    List<PolygonProjection> polygonProjections = new ArrayList<>();
     for (ArrayList<Coord3d> p : projections) {
       polygonProjections.add(new PolygonProjection(p, colors.get(k++)));
     }

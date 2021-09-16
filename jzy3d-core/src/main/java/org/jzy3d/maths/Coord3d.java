@@ -254,6 +254,12 @@ public class Coord3d implements Serializable {
     this.y *= y;
     this.z *= z;
   }
+  
+  public void mulSelf(float value) {
+    this.x *= value;
+    this.y *= value;
+    this.z *= value;
+  }
 
   /**
    * Divise a Coord3d to the current one and return the result in a new Coord3d.
@@ -472,6 +478,12 @@ public class Coord3d implements Serializable {
   public float[] toArray() {
     float[] array = {x, y, z};
     return array;
+  }
+  
+  public void toArray(float[] array, int offset) {
+    array[offset+0] = x;
+    array[offset+1] = y;
+    array[offset+2] = z;
   }
 
   /**************************************************************/

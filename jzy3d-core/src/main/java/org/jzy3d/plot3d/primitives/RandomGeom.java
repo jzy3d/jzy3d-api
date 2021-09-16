@@ -62,7 +62,7 @@ public class RandomGeom {
     return aFloat() * range;
   }
 
-  public List<Drawable> spinningCubes(int cubes, float spin) {
+  public List<Composite> spinningCubes(int cubes, float spin) {
     return spinningCubes(cubes, spin, 0);
   }
 
@@ -78,7 +78,7 @@ public class RandomGeom {
    * @param randomize is the factor applied to a random number generator before adding a "shaking"
    *        offset to each coordinate
    */
-  public List<Drawable> spinningCubes(int cubes, float spin, float randomize) {
+  public List<Composite> spinningCubes(int cubes, float spin, float randomize) {
     Color wf = Color.BLACK;
     Color fc = Color.BLUE;
 
@@ -89,7 +89,7 @@ public class RandomGeom {
 
     // Coord3d pt1 = new Coord3d()
 
-    List<Drawable> drawables = new ArrayList<>();
+    List<Composite> drawables = new ArrayList<>();
 
     Coord3d pt1_1 = new Coord3d(start.x + 0, start.y + 0, start.z);
     Coord3d pt2_1 = new Coord3d(start.x + i, start.y + 0, start.z);
@@ -144,5 +144,94 @@ public class RandomGeom {
     }
 
     return drawables;
+  }
+  
+  public List<Composite> cubes(int cubes) {
+    return spinningCubes(cubes, 0);
+  }
+  
+  /**
+   * 
+   * @param x starting point X
+   * @param y starting point Y
+   * @param z starting point Z
+   * @param w width (allows building ending point X)
+   * @param h height (allows building ending point Y)
+   * @param d depth (allows building ending point Z)
+   */
+  public Composite cube(int x, int y, int z, int w, int h, int d) {
+    Color wf = Color.BLACK;
+    Color fc = Color.BLUE;
+
+
+    Coord3d start = new Coord3d(x,y,z);
+
+
+    Coord3d pt1_1 = new Coord3d(start.x + 0, start.y + 0, start.z);
+    Coord3d pt2_1 = new Coord3d(start.x + w, start.y + 0, start.z);
+    Coord3d pt3_1 = new Coord3d(start.x + w, start.y + h, start.z);
+    Coord3d pt4_1 = new Coord3d(start.x + 0, start.y + h, start.z);
+
+    Coord3d pt1_2 = pt1_1.add(0, 0, d);
+    Coord3d pt2_2 = pt2_1.add(0, 0, d);
+    Coord3d pt3_2 = pt3_1.add(0, 0, d);
+    Coord3d pt4_2 = pt4_1.add(0, 0, d);
+
+    Composite cube = new Composite();
+
+    cube.add(new Polygon(wf, fc, pt1_1, pt2_1, pt3_1, pt4_1)); // bottom
+    cube.add(new Polygon(wf, fc, pt1_2, pt2_2, pt3_2, pt4_2)); // top
+    cube.add(new Polygon(wf, fc, pt1_1, pt2_1, pt2_2, pt1_2)); // left
+    cube.add(new Polygon(wf, fc, pt3_1, pt4_1, pt4_2, pt3_2)); // right
+    cube.add(new Polygon(wf, fc, pt2_1, pt3_1, pt3_2, pt2_2)); // far
+    cube.add(new Polygon(wf, fc, pt1_1, pt4_1, pt4_2, pt1_2)); // near
+
+    return cube;
+  }
+
+  public Polygon poly(int x, int y, int z, boolean leftRightOrNearFar, Color color) {
+    int w = 1;
+    int h = 1;
+
+    Polygon p1 = poly(x, y, z, w, h, leftRightOrNearFar, color);
+
+    return p1;
+  }
+
+  /**
+   * Return a polygon at specified position, width and height. Width is either applied to X or Z
+   * according to the boolean parameter.
+   * 
+   * @param x
+   * @param y
+   * @param z
+   * @param w width
+   * @param h height
+   * @param leftRightOrNearFar if true, width is applied along X, otherwise along Z dimension.
+   * @param color
+   * @return
+   */
+  public Polygon poly(int x, int y, int z, int w, int h, boolean leftRightOrNearFar, Color color) {
+    Polygon p1 = new Polygon();
+
+
+
+    if (leftRightOrNearFar) {
+      p1.add(new Point(new Coord3d(x + 0, y + 0, z + 0), color));
+      p1.add(new Point(new Coord3d(x + w, y + 0, z + 0), color));
+      p1.add(new Point(new Coord3d(x + w, y + h, z + 0), color));
+      p1.add(new Point(new Coord3d(x + 0, y + h, z + 0), color));
+
+    } else {
+      p1.add(new Point(new Coord3d(x + 0, y + 0, z + 0), color));
+      p1.add(new Point(new Coord3d(x + 0, y + 0, z + w), color));
+      p1.add(new Point(new Coord3d(x + 0, y + h, z + w), color));
+      p1.add(new Point(new Coord3d(x + 0, y + h, z + 0), color));
+    }
+    return p1;
+  }
+  
+  public Polygon poly(int x, int y, int z, int w, int h) {
+    return poly(x, y, z, w, h, true, Color.BLUE.clone());
   }
 }
