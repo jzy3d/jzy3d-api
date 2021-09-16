@@ -10,12 +10,15 @@ import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Light;
+import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 public class TestChart {
@@ -156,6 +159,31 @@ public class TestChart {
     // when mouse drag, viewpoint change
     // when viewpoint change, clear picture is invoked
 
+  }
+  
+  @Test
+  public void whenViewpointChange_thenCameraLightMovesAtSamePositionThanCameraEye() {
+    // Given
+    ChartFactory f = new EmulGLChartFactory();
+    Chart c = f.newChart();
+    c.add(surface()); // need an object to have camera eye != {0,0,0}
+    Light light = c.addLightOnCamera();
+    
+    Coord3d eye1 = c.getView().getCamera().getEye();
+    
+    Assert.assertEquals(eye1, light.getPosition());
+
+    // When change polar viewpoint 
+    c.setViewPoint(View.VIEWPOINT_AXIS_CORNER_TOUCH_BORDER);
+    
+    // --------------------------
+    // Then camera cartesian eye position has changed
+    Coord3d eye2 = c.getView().getCamera().getEye();
+    Assert.assertNotEquals(eye2, eye1);
+    
+    // --------------------------
+    // Then light cartesian position has changed to the same coordinate
+    Assert.assertEquals(eye2, light.getPosition());
   }
 
   protected Shape surface() {

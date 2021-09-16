@@ -11,6 +11,7 @@ import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -509,6 +510,37 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   public void glViewport(int x, int y, int width, int height) {
     gl.getGL2().glViewport(x, y, width, height);
   }
+  
+  @Override
+  public void glClipPlane(int plane, double[] equation) {
+    gl.getGL2().glClipPlane(plane, equation, 0);
+  }
+  
+  @Override
+  public void glEnable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0: gl.glEnable(GL2.GL_CLIP_PLANE0); break;
+      case 1: gl.glEnable(GL2.GL_CLIP_PLANE1); break;
+      case 2: gl.glEnable(GL2.GL_CLIP_PLANE2); break;
+      case 3: gl.glEnable(GL2.GL_CLIP_PLANE3); break;
+      case 4: gl.glEnable(GL2.GL_CLIP_PLANE4); break;
+      case 5: gl.glEnable(GL2.GL_CLIP_PLANE5); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
+  @Override
+  public void glDisable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0: gl.glEnable(GL2.GL_CLIP_PLANE0); break;
+      case 1: gl.glEnable(GL2.GL_CLIP_PLANE1); break;
+      case 2: gl.glEnable(GL2.GL_CLIP_PLANE2); break;
+      case 3: gl.glEnable(GL2.GL_CLIP_PLANE3); break;
+      case 4: gl.glEnable(GL2.GL_CLIP_PLANE4); break;
+      case 5: gl.glEnable(GL2.GL_CLIP_PLANE5); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
 
   @Override
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
@@ -591,6 +623,24 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glLightf(int light, Attenuation.Type attenuationType, float value) {
+    if(Attenuation.Type.CONSTANT.equals(attenuationType)) {
+      glLightf(light, GL2.GL_CONSTANT_ATTENUATION, value);
+    }
+    else if(Attenuation.Type.LINEAR.equals(attenuationType)) {
+      glLightf(light, GL2.GL_LINEAR_ATTENUATION, value);
+    }
+    else if(Attenuation.Type.QUADRATIC.equals(attenuationType)) {
+      glLightf(light, GL2.GL_QUADRATIC_ATTENUATION, value);
+    }
+  }
+  
+  @Override
+  public void glLightf(int light, int pname, float value) {
+    gl.getGL2().glLightf(lightId(light), pname, value);
+  }
+  
+  @Override
   public void glLightfv(int light, int pname, float[] params, int params_offset) {
     GLES2CompatUtils.glLightfv(lightId(light), pname, params, params_offset);
   }
@@ -665,6 +715,20 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
     }
   }
 
+  @Override
+  public void glLightModelfv(int mode, float[] value) {
+    gl.getGL2().glLightModelfv(mode, value, 0);
+  }
+  
+  @Override
+  public void glLightModel(LightModel model, Color color) {
+    if (LightModel.LIGHT_MODEL_AMBIENT.equals(model)) {
+      glLightModelfv(GL2ES1.GL_LIGHT_MODEL_AMBIENT, color.toArray());
+    } else {
+      throw new IllegalArgumentException("Unsupported model '" + model + "'");
+    }
+  }
+  
   @Override
   public void glClearColor(float red, float green, float blue, float alpha) {
     gl.glClearColor(red, green, blue, alpha);

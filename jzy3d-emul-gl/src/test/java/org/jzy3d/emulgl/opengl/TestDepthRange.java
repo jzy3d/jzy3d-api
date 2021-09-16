@@ -102,6 +102,7 @@ public class TestDepthRange {
 
     // Called that way for reset
     verify(painter, atLeast(1)).glDepthRangef(0, 1);
+    
   }
 
 
