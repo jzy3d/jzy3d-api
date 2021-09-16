@@ -313,10 +313,91 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
     
     if (components != null) {
       synchronized (components) {
-
         for (Drawable d : components) {
           if (d instanceof Wireframeable) {
             ((Wireframeable) d).setReflectLight(reflectLight);
+          } else if (d instanceof Composite) {
+            ((Composite) d).setReflectLight(reflectLight);
+          }
+        }
+      }
+    }
+  }
+
+  public void setMaterialAmbiantReflection(Color materialAmbiantReflection) {
+    this.materialAmbiantReflection = materialAmbiantReflection;
+    
+    if (components != null) {
+      synchronized (components) {
+        for (Drawable d : components) {
+          if (d instanceof Wireframeable) {
+            ((Wireframeable) d).setMaterialAmbiantReflection(materialAmbiantReflection);
+          } else if (d instanceof Composite) {
+            ((Composite) d).setMaterialAmbiantReflection(materialAmbiantReflection);
+          }
+        }
+      }
+    }
+  }
+
+  public void setMaterialDiffuseReflection(Color materialDiffuseReflection) {
+    this.materialDiffuseReflection = materialDiffuseReflection;
+    
+    if (components != null) {
+      synchronized (components) {
+        for (Drawable d : components) {
+          if (d instanceof Wireframeable) {
+            ((Wireframeable) d).setMaterialDiffuseReflection(materialDiffuseReflection);
+          } else if (d instanceof Composite) {
+            ((Composite) d).setMaterialDiffuseReflection(materialDiffuseReflection);
+          }
+        }
+      }
+    }
+  }
+
+  public void setMaterialSpecularReflection(Color materialSpecularReflection) {
+    this.materialSpecularReflection = materialSpecularReflection;
+    
+    if (components != null) {
+      synchronized (components) {
+        for (Drawable d : components) {
+          if (d instanceof Wireframeable) {
+            ((Wireframeable) d).setMaterialSpecularReflection(materialSpecularReflection);
+          } else if (d instanceof Composite) {
+            ((Composite) d).setMaterialSpecularReflection(materialSpecularReflection);
+          }
+        }
+      }
+    }
+  }
+
+  public void setMaterialEmission(Color materialEmission) {
+    this.materialEmission = materialEmission;
+    
+    if (components != null) {
+      synchronized (components) {
+        for (Drawable d : components) {
+          if (d instanceof Wireframeable) {
+            ((Wireframeable) d).setMaterialEmission(materialEmission);
+          } else if (d instanceof Composite) {
+            ((Composite) d).setMaterialEmission(materialEmission);
+          }
+        }
+      }
+    }
+  }
+
+  public void setMaterialShininess(float shininess) {
+    materialShininess[0] = shininess;
+    
+    if (components != null) {
+      synchronized (components) {
+        for (Drawable d : components) {
+          if (d instanceof Wireframeable) {
+            ((Wireframeable) d).setMaterialShininess(shininess);
+          } else if (d instanceof Composite) {
+            ((Composite) d).setMaterialShininess(shininess);
           }
         }
       }
