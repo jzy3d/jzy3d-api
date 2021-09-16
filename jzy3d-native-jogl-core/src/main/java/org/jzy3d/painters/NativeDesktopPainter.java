@@ -701,6 +701,17 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glShadeModel(int mode) {
     gl.getGL2().glShadeModel(mode);
   }
+  
+  @Override
+  public void glShadeModel_Smooth() {
+    gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
+  }
+  
+  @Override
+  public void glShadeModel_Flat() {
+    gl.getGL2().glShadeModel(GL2.GL_FLAT);
+  }
+
 
   @Override
   public void glMaterialfv(int face, int pname, float[] params, int params_offset) {

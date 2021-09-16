@@ -11,51 +11,53 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 import jgl.wt.awt.GL;
 
-public class AdaptByDroppingHiDPI extends AbstractAdativeRenderingHandler implements AdaptiveRenderingHandler{
+public class AdaptByDroppingSmoothColor extends AbstractAdativeRenderingHandler
+    implements AdaptiveRenderingHandler {
   protected EmulGLPainter painter;
   protected EmulGLCanvas canvas;
 
   protected Quality currentQuality;
-  protected boolean currentHiDPI;
-  protected GL gl;
 
-  public AdaptByDroppingHiDPI(Chart chart) {
+  public AdaptByDroppingSmoothColor(Chart chart) {
     super(chart);
-    
+
     painter = (EmulGLPainter) chart.getPainter();
-    canvas = (EmulGLCanvas)chart.getCanvas();
-    gl =painter.getGL();
-
+    canvas = (EmulGLCanvas) chart.getCanvas();
   }
-  
 
-  
+
+
   @Override
   public void apply() {
     // store current quality
     currentQuality = chart.getQuality();
-    currentHiDPI = painter.getGL().isAutoAdaptToHiDPI();
 
     // edit quality to alternate setting
     Quality alternativeQuality = currentQuality.clone();
-    alternativeQuality.setHiDPIEnabled(false);
+    alternativeQuality.setSmoothColor(false);
 
     // apply alternate settings
     chart.setQuality(alternativeQuality);
-    gl.setAutoAdaptToHiDPI(false);
+    
+    applyShadeModelNow();
   }
 
 
   @Override
   public void revert() {
     chart.setQuality(currentQuality);
-    gl.setAutoAdaptToHiDPI(currentHiDPI);
-    // this force the GL image to apply the new HiDPI setting immediatly
-    gl.updatePixelScale(canvas.getGraphics());
-    gl.applyViewport();
+    
+    applyShadeModelNow();
   }
-  
-  
+
+  protected void applyShadeModelNow() {
+    if(chart.getQuality().isSmoothColor())
+      painter.glShadeModel_Smooth();
+    else
+      painter.glShadeModel_Flat();
+  }
+
+
   @Override
   protected void applyOptimisation(Wireframeable w) {
     // nothing to do drawable-wise
