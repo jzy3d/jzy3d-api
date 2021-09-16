@@ -617,7 +617,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // -----------------------------------
     // Draw faces
 
-    if (getFaceDisplayed()) {
+    if (isFaceDisplayed()) {
       gl2.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 
       if (elementSize > 0) {
@@ -632,7 +632,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // -----------------------------------
     // Draw wireframe
 
-    if (getWireframeDisplayed()) {
+    if (isWireframeDisplayed()) {
       // disable coloring to use single color
       if (hasColorBuffer) {
         gl2.glDisableClientState(GL2.GL_COLOR_ARRAY);
@@ -661,7 +661,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     gl2.glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
 
     // disable coloring if it was not done before
-    if (hasColorBuffer && !getWireframeDisplayed()) {
+    if (hasColorBuffer && !isWireframeDisplayed()) {
       gl2.glDisableClientState(GL2.GL_COLOR_ARRAY);
     }
   }

@@ -99,8 +99,8 @@ public class SurfaceBuilder {
     sls.add(s.getDrawables());
     sls.setColorMapper(new ColorMapper(DEFAULT_COLORMAP, sls.getBounds().getZmin(),
         sls.getBounds().getZmax(), DEAFAULT_COLORFACTOR));
-    sls.setFaceDisplayed(s.getFaceDisplayed());
-    sls.setWireframeDisplayed(s.getWireframeDisplayed());
+    sls.setFaceDisplayed(s.isFaceDisplayed());
+    sls.setWireframeDisplayed(s.isWireframeDisplayed());
     sls.setWireframeColor(s.getWireframeColor());
     sls.setSpaceTransformer(s.getSpaceTransformer());
     return sls;

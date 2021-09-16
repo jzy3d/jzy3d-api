@@ -13,6 +13,7 @@ public class TestToggle {
     p.setFaceDisplayed(true);
     p.setWireframeDisplayed(true);
     p.setWireframeColorFromPolygonPoints(false); // using global wireframe color
+    p.setBoundingBoxDisplayed(false);
     
     Toggle t = new Toggle(p);
     
@@ -20,13 +21,15 @@ public class TestToggle {
     p.setFaceDisplayed(false);
     p.setWireframeDisplayed(false);
     p.setWireframeColorFromPolygonPoints(true); // updated
+    p.setBoundingBoxDisplayed(true); // updated
     
     // Then reseting come back to previous settings
     t.reset();
     
-    Assert.assertTrue(p.getFaceDisplayed());
-    Assert.assertTrue(p.getWireframeDisplayed());
+    Assert.assertTrue(p.isFaceDisplayed());
+    Assert.assertTrue(p.isWireframeDisplayed());
     Assert.assertFalse(p.isWireframeColorFromPolygonPoints());
+    Assert.assertFalse(p.isBoundingBoxDisplayed());
   }
   
   @Test
@@ -46,8 +49,8 @@ public class TestToggle {
     // Then reseting come back to previous settings
     t.reset();
     
-    Assert.assertTrue(p.getFaceDisplayed());
-    Assert.assertFalse(p.getWireframeDisplayed());
+    Assert.assertTrue(p.isFaceDisplayed());
+    Assert.assertFalse(p.isWireframeDisplayed());
   }
   
   @Test
@@ -69,8 +72,8 @@ public class TestToggle {
     // Then reseting come back to previous settings
     t.reset();
     
-    Assert.assertTrue(p.getFaceDisplayed());
-    Assert.assertTrue(p.getWireframeDisplayed());
+    Assert.assertTrue(p.isFaceDisplayed());
+    Assert.assertTrue(p.isWireframeDisplayed());
     Assert.assertTrue(p.isWireframeColorFromPolygonPoints());
   }
 

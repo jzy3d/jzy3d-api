@@ -161,6 +161,9 @@ public interface IPainter {
   /** A convenient shortcut to glColor4f */
   public void color(Color color);
 
+  /** A helper to draw a bounding box. */
+  public void box(BoundingBox3d box, Color color, float width, SpaceTransformer spaceTransformer);
+
   /** A convenient shortcut to glClipPlane */
   public void clip(int plane, ClipEq equation, double value);
 
@@ -420,10 +423,14 @@ public interface IPainter {
 
   public void glShadeModel(int mode);
 
+  public void glShadeModel_Smooth();
+
+  public void glShadeModel_Flat();
+
   public void glLightf(int light, Attenuation.Type type, float value);
-  
+
   public void glLightf(int light, int pname, float value);
-  
+
   public void glLightfv(int light, int pname, float[] params, int params_offset);
 
   public void glLightModeli(int mode, int value);

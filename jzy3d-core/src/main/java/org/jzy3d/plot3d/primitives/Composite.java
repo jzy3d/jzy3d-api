@@ -30,6 +30,14 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
     super();
     components = new ArrayList<Drawable>();
   }
+  
+  /**
+   * This indicate to a scene graph if the Composite consider it is worth being decomposed or not.
+   * @return
+   */
+  public boolean canDecompose() {
+    return isFaceDisplayed();
+  }
 
   /****************************************************************/
 
@@ -106,6 +114,10 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
   public void setTransform(Transform transform) {
     this.transform = transform;
 
+    if(!canDecompose())
+      return;
+    
+    
     synchronized (components) {
       for (Drawable c : components) {
         if (c != null)
@@ -117,6 +129,9 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
   @Override
   public void setTransformBefore(Transform transform) {
     this.transformBefore = transform;
+    
+    if(!canDecompose())
+      return;
 
     synchronized (components) {
       for (Drawable c : components) {

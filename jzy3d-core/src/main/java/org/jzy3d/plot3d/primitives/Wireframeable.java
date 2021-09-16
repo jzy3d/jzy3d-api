@@ -56,7 +56,7 @@ public abstract class Wireframeable extends Drawable {
     setPolygonOffsetFillEnable(true);
     setPolygonWireframeDepthTrick(false);
   }
-
+  
   public boolean isWireframeColorFromPolygonPoints() {
     return wireframeColorFromPolygonPoints;
   }
@@ -64,8 +64,6 @@ public abstract class Wireframeable extends Drawable {
   public void setWireframeColorFromPolygonPoints(boolean wireframeColorFromPolygonPoints) {
     this.wireframeColorFromPolygonPoints = wireframeColorFromPolygonPoints;
   }
-
-
 
   /** Set the wireframe color. */
   public void setWireframeColor(Color color) {
@@ -93,7 +91,7 @@ public abstract class Wireframeable extends Drawable {
   }
 
   /** Get the wireframe display status to on or off. */
-  public boolean getWireframeDisplayed() {
+  public boolean isWireframeDisplayed() {
     return wireframeDisplayed;
   }
 
@@ -103,7 +101,7 @@ public abstract class Wireframeable extends Drawable {
   }
 
   /** Get the face display status to on or off. */
-  public boolean getFaceDisplayed() {
+  public boolean isFaceDisplayed() {
     return faceDisplayed;
   }
 
@@ -251,5 +249,11 @@ public abstract class Wireframeable extends Drawable {
 
   public void setMaterialShininess(float shininess) {
     materialShininess[0] = shininess;
+  }
+  
+  protected void doDrawBoundsIfDisplayed(IPainter painter) {
+    if (isBoundingBoxDisplayed()) {
+      painter.box(bbox, getBoundingBoxColor(), getWireframeWidth(), spaceTransformer);
+    }
   }
 }
