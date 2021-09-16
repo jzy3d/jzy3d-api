@@ -7,6 +7,7 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
@@ -15,9 +16,11 @@ import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.ClipEq;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -101,8 +104,8 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * and {@link #glutBitmapLength(int, String)} which are the base OpenGL primitives for drawing
  * strings.
  * 
- * Note that the {@link View#configureHiDPIListener} will adapt the text size according to HiDPI to ensure text does not
- * appear to small on high resolution screens.
+ * Note that the {@link View#configureHiDPIListener} will adapt the text size according to HiDPI to
+ * ensure text does not appear to small on high resolution screens.
  * 
  */
 public interface IPainter {
@@ -158,6 +161,23 @@ public interface IPainter {
   /** A convenient shortcut to glColor4f */
   public void color(Color color);
 
+  /** A convenient shortcut to glClipPlane */
+  public void clip(int plane, ClipEq equation, double value);
+
+  /**
+   * A convenient shortcut to glClipPlane that defines the 6 clipping planes according to the
+   * min/max values of the bounding box.
+   * 
+   * Then requires to enable clipping with {@link #clipOn()}.
+   */
+  public void clip(BoundingBox3d box);
+
+  /** Enable all clipping planes */
+  public void clipOn();
+
+  /** Disable all clipping planes */
+  public void clipOff();
+
   /**
    * A convenient shortcut to glColor4f which overrides the color's alpha channel
    */
@@ -196,14 +216,21 @@ public interface IPainter {
   public double[] getModelViewAsDouble();
 
   public float[] getModelViewAsFloat();
-  
+
   public Coord3d screenToModel(Coord3d screen);
+
   public Coord3d modelToScreen(Coord3d point);
+
   public Coord3d[] modelToScreen(Coord3d[] points);
+
   public Coord3d[][] modelToScreen(Coord3d[][] points);
+
   public List<Coord3d> modelToScreen(List<Coord3d> points);
+
   public ArrayList<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons);
+
   public PolygonArray modelToScreen(PolygonArray polygon);
+
   public PolygonArray[][] modelToScreen(PolygonArray[][] polygons);
 
   // ----------------------------
@@ -273,7 +300,7 @@ public interface IPainter {
   public void glTexEnvf(int target, int pname, float param);
 
   public void glTexEnvi(int target, int pname, int param);
-  
+
   // GL DISPLAY LISTS
 
   public int glGenLists(int range);
@@ -304,12 +331,12 @@ public interface IPainter {
 
   public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove,
       byte[] bitmap, int bitmap_offset);
-  
+
   /** A high level and easy way of drawing images (non OpenGL). */
-  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight,
-      Coord2d pixelZoom, Coord3d imagePosition);
-  
-  
+  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight, Coord2d pixelZoom,
+      Coord3d imagePosition);
+
+
   // GL TEXT
 
   public void glutBitmapString(int font, String string);
@@ -323,7 +350,10 @@ public interface IPainter {
 
   public int getTextLengthInPixels(Font font, String string);
 
-  /** A high level and easy way of drawing texts (non OpenGL). Rotation may not be supported by all {@link IPainter}*/
+  /**
+   * A high level and easy way of drawing texts (non OpenGL). Rotation may not be supported by all
+   * {@link IPainter}
+   */
   public void drawText(Font font, String label, Coord3d position, Color color, float rotation);
 
 
@@ -341,6 +371,12 @@ public interface IPainter {
       float centerZ, float upX, float upY, float upZ);
 
   public void glViewport(int x, int y, int width, int height);
+
+  public void glClipPlane(int plane, double[] equation);
+
+  public void glEnable_ClipPlane(int plane);
+
+  public void glDisable_ClipPlane(int plane);
 
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
@@ -384,11 +420,19 @@ public interface IPainter {
 
   public void glShadeModel(int mode);
 
+  public void glLightf(int light, Attenuation.Type type, float value);
+  
+  public void glLightf(int light, int pname, float value);
+  
   public void glLightfv(int light, int pname, float[] params, int params_offset);
 
   public void glLightModeli(int mode, int value);
 
+  public void glLightModelfv(int mode, float[] value);
+
   public void glLightModel(LightModel model, boolean value);
+
+  public void glLightModel(LightModel model, Color color);
 
   public void glMaterialfv(int face, int pname, float[] params, int params_offset);
 

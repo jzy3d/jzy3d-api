@@ -3,10 +3,12 @@ package org.jzy3d.painters;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.ClipEq;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -108,6 +110,86 @@ public abstract class AbstractPainter implements IPainter {
   }
 
   @Override
+  public void clip(BoundingBox3d box) {
+    clip(0, ClipEq.X_INFERIOR_TO, box.getXmax());
+    clip(1, ClipEq.X_SUPERIOR_TO, box.getXmin());
+    clip(2, ClipEq.Y_INFERIOR_TO, box.getYmax());
+    clip(3, ClipEq.Y_SUPERIOR_TO, box.getYmin());
+    clip(4, ClipEq.Z_INFERIOR_TO, box.getZmax());
+    clip(5, ClipEq.Z_SUPERIOR_TO, box.getZmin());
+
+  }
+  
+  @Override
+  public void clipOn() {
+    glEnable_ClipPlane(0);
+    glEnable_ClipPlane(1);
+    glEnable_ClipPlane(2);
+    glEnable_ClipPlane(3);
+    glEnable_ClipPlane(4);
+    glEnable_ClipPlane(5);
+  }
+
+  @Override
+  public void clipOff() {
+    glDisable_ClipPlane(0);
+    glDisable_ClipPlane(1);
+    glDisable_ClipPlane(2);
+    glDisable_ClipPlane(3);
+    glDisable_ClipPlane(4);
+    glDisable_ClipPlane(5);
+  }
+  
+  @Override
+  public void clip(int plane, ClipEq equation, double value) {
+    glClipPlane(plane, equation(equation, value));
+  }
+
+
+  /**
+   * The four coefs of the plane equation that are returned by this method are : Nx, Ny, Nz, D
+   * 
+   * The solve the formula : Nx*x + Ny*y + Nz*z + D = 0
+   * 
+   * where Nx, Ny and Nz are the 3 components of the normal to the plane. The x, y and z in the
+   * equation are the coordinates of any point on the plane. The variable D is the distance of the
+   * plane from the origin. A point that is being tested can give three results based on where it is
+   * with respect to the plane :
+   * 
+   * <ul>
+   * <li>The point is in front of the plane - In this case, the result obtained will be positive.
+   * The value obtained is the distance of the point from the plane being tested.
+   * <li>The point is behind the plane - In this case, the result will be negative. The value
+   * obtained is the distance of the point from the plane being tested.
+   * <li>The point is on the plane - The result will, quite obviously, be zero.
+   * </ul>
+   * 
+   * @param eq
+   * @param value
+   * @return
+   */
+  protected double[] equation(ClipEq eq, double value) {
+    double eqValue = (value >= 0) ? value : -value;
+
+    switch (eq) {
+      case X_SUPERIOR_TO:
+        return new double[] {+1, 0, 0, eqValue};
+      case X_INFERIOR_TO:
+        return new double[] {-1, 0, 0, eqValue};
+      case Y_SUPERIOR_TO:
+        return new double[] {0, +1, 0, eqValue};
+      case Y_INFERIOR_TO:
+        return new double[] {0, -1, 0, eqValue};
+      case Z_SUPERIOR_TO:
+        return new double[] {0, 0, +1, eqValue};
+      case Z_INFERIOR_TO:
+        return new double[] {0, 0, -1, eqValue};
+      default:
+        throw new IllegalArgumentException("This equation is not supported : " + eq);
+    }
+  }
+
+  @Override
   public void raster(Coord3d coord, SpaceTransformer transform) {
     if (transform == null) {
       glRasterPos3f(coord.x, coord.y, coord.z);
@@ -122,16 +204,15 @@ public abstract class AbstractPainter implements IPainter {
     glMaterialfv(face, pname, color.toArray(), 0);
   }
 
-  
-  
-  
-  
+
+
   public Coord3d screenToModel(Coord3d screen) {
     return getCamera().screenToModel(this, screen);
   }
 
   /**
    * Transform a 3d point coordinate into its screen position.
+   * 
    * @see {@link Camera#modelToScreen(IPainter, Coord3d)}
    */
   public Coord3d modelToScreen(Coord3d point) {
@@ -158,7 +239,7 @@ public abstract class AbstractPainter implements IPainter {
     return getCamera().modelToScreen(this, polygon);
   }
 
-  public PolygonArray[][] modelToScreen(PolygonArray[][] polygons){
-    return getCamera().modelToScreen(this, polygons);    
+  public PolygonArray[][] modelToScreen(PolygonArray[][] polygons) {
+    return getCamera().modelToScreen(this, polygons);
   }
 }

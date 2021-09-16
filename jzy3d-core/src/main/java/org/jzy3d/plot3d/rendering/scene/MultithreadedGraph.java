@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.rendering.scene;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -43,6 +42,7 @@ public class MultithreadedGraph extends Graph {
     executor = Executors.newFixedThreadPool(cores);
   }
 
+  @Override
   public synchronized void dispose() {
     executor.shutdownNow(); // does not await termination of tasks
     super.dispose();
@@ -56,11 +56,13 @@ public class MultithreadedGraph extends Graph {
    * defined- {@link AbstractOrderingStrategy}.
    * 
    */
+  @Override
   public void draw(IPainter painter) {
     draw(painter, components, sort);
   }
 
   // https://www.baeldung.com/java-executor-service-tutorial
+  @Override
   public synchronized void draw(IPainter painter, List<Drawable> components, boolean sort) {
 
     if(components.size()==0)
@@ -135,6 +137,7 @@ public class MultithreadedGraph extends Graph {
   }
 
   /** render all items of the graph */
+  @Override
   public void drawSimple(IPainter painter, List<Drawable> components) {
     for (Drawable d : components)
       if (d.isDisplayed())
@@ -142,6 +145,7 @@ public class MultithreadedGraph extends Graph {
   }
 
   /** render all items of the graph after decomposing all composite item into primitive drawables */
+  @Override
   public void drawDecomposition(IPainter painter) {
     List<Drawable> monotypes = getDecomposition();
     strategy.sort(monotypes, painter.getCamera());
@@ -156,8 +160,9 @@ public class MultithreadedGraph extends Graph {
    * Expand all {@link AbstractComposites} instance into a list of atomic {@link Drawable} types and
    * return all the current Graph primitives decomposition.
    */
+  @Override
   public List<Drawable> getDecomposition() {
-    ArrayList<Drawable> monotypes;
+    List<Drawable> monotypes;
     synchronized (components) {
       monotypes = Decomposition.getDecomposition(components);
     }

@@ -11,6 +11,10 @@ public class ViewPointChangedEvent extends EventObject {
     this.viewPoint = viewPoint;
   }
 
+  /**
+   * Returns the viewpoint in polar coordinates. To get viewpoint in cartesian mode, use {@link Camera#getEye()}
+   * @return
+   */
   public Coord3d getViewPoint() {
     return viewPoint;
   }

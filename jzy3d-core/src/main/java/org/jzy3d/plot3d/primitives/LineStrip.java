@@ -56,11 +56,21 @@ public class LineStrip extends Wireframeable {
   }
   
   public LineStrip(Point c1, Point c2) {
-    this();
+    this(2);
     add(c1);
     add(c2);
   }
 
+  public LineStrip(Point... points) {
+    this(2);
+    
+    for(Point p: points) {
+      add(p, false);
+    }
+    updateBounds();
+  }
+
+  
   /** Set the wireframe color. */
   @Override
   public void setWireframeColor(Color color) {
@@ -179,12 +189,18 @@ public class LineStrip extends Wireframeable {
   }
 
   public void add(Point point) {
+    add(point, true);
+  }
+
+  public void add(Point point, boolean updateBounds) {
     if (showSymbols) {
       symbolHandler.addSymbolOn(point);
     }
 
     points.add(point);
-    bbox.add(point);
+    if(updateBounds) {
+      bbox.add(point);
+    }
   }
 
   public void add(Coord3d coord3d) {

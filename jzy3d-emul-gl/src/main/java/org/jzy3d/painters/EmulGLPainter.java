@@ -9,9 +9,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import javax.imageio.ImageIO;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord2d;
@@ -22,12 +20,13 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
+import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
-
 import jgl.context.gl_util;
 import jgl.glu.GLUquadricObj;
 import jgl.wt.awt.GL;
+import jgl.wt.awt.GLCanvas;
 import jgl.wt.awt.GLU;
 import jgl.wt.awt.GLUT;
 
@@ -82,7 +81,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
       gl.glDisable(GL.GL_DEPTH_TEST);
       // gl.glDepthRangef(n, f);
     }
-
+    
     // Blending : more beautifull with jGL without this
     /** Default for SRC is 1 : {@link gl_colorbuffer.BlendSrc}*/
     /** Default for DST is 0 : {@link gl_colorbuffer.BlendDst}*/
@@ -856,7 +855,47 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   public void glViewport(int x, int y, int width, int height) {
     gl.glViewport(x, y, width, height);
   }
+  
+  @Override
+  public void glClipPlane(int plane, double[] equation) {
+    switch (plane) {
+      case 0: gl.glClipPlane(GL.GL_CLIP_PLANE0, equation); break;
+      case 1: gl.glClipPlane(GL.GL_CLIP_PLANE1, equation); break;
+      case 2: gl.glClipPlane(GL.GL_CLIP_PLANE2, equation); break;
+      case 3: gl.glClipPlane(GL.GL_CLIP_PLANE3, equation); break;
+      case 4: gl.glClipPlane(GL.GL_CLIP_PLANE4, equation); break;
+      case 5: gl.glClipPlane(GL.GL_CLIP_PLANE5, equation); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+  
+  @Override
+  public void glEnable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0: gl.glEnable(GL.GL_CLIP_PLANE0); break;
+      case 1: gl.glEnable(GL.GL_CLIP_PLANE1); break;
+      case 2: gl.glEnable(GL.GL_CLIP_PLANE2); break;
+      case 3: gl.glEnable(GL.GL_CLIP_PLANE3); break;
+      case 4: gl.glEnable(GL.GL_CLIP_PLANE4); break;
+      case 5: gl.glEnable(GL.GL_CLIP_PLANE5); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
 
+  @Override
+  public void glDisable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0: gl.glEnable(GL.GL_CLIP_PLANE0); break;
+      case 1: gl.glEnable(GL.GL_CLIP_PLANE1); break;
+      case 2: gl.glEnable(GL.GL_CLIP_PLANE2); break;
+      case 3: gl.glEnable(GL.GL_CLIP_PLANE3); break;
+      case 4: gl.glEnable(GL.GL_CLIP_PLANE4); break;
+      case 5: gl.glEnable(GL.GL_CLIP_PLANE5); break;
+      default: throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
+  
   @Override
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
@@ -988,6 +1027,24 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glLightf(int light, Attenuation.Type attenuationType, float value) {
+    if(Attenuation.Type.CONSTANT.equals(attenuationType)) {
+      glLightf(light, GL.GL_CONSTANT_ATTENUATION, value);
+    }
+    else if(Attenuation.Type.LINEAR.equals(attenuationType)) {
+      glLightf(light, GL.GL_LINEAR_ATTENUATION, value);
+    }
+    else if(Attenuation.Type.QUADRATIC.equals(attenuationType)) {
+      glLightf(light, GL.GL_QUADRATIC_ATTENUATION, value);
+    }
+  }
+  
+  @Override
+  public void glLightf(int light, int pname, float value) {
+    gl.glLightf(lightId(light), pname, value);
+  }
+  
+  @Override
   public void glLightfv(int light, int pname, float[] params, int params_offset) {
     gl.glLightfv(lightId(light), pname, params);
   }
@@ -1048,6 +1105,11 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   public void glLightModeli(int mode, int value) {
     gl.glLightModeli(mode, value);
   }
+  
+  @Override
+  public void glLightModelfv(int mode, float[] value) {
+    gl.glLightModelfv(mode, value);
+  }
 
   @Override
   public void glLightModel(LightModel model, boolean value) {
@@ -1055,6 +1117,15 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
       glLightModeli(GL.GL_LIGHT_MODEL_TWO_SIDE, value ? 1 : 0);// value?GL.GL_TRUE:GL.GL_FALSE);
     } else if (LightModel.LIGHT_MODEL_LOCAL_VIEWER.equals(model)) {
       glLightModeli(GL.GL_LIGHT_MODEL_LOCAL_VIEWER, value ? 1 : 0);// value?GL.GL_TRUE:GL.GL_FALSE);
+    } else {
+      throw new IllegalArgumentException("Unsupported model '" + model + "'");
+    }
+  }
+  
+  @Override
+  public void glLightModel(LightModel model, Color color) {
+    if (LightModel.LIGHT_MODEL_AMBIENT.equals(model)) {
+      glLightModelfv(GL.GL_LIGHT_MODEL_AMBIENT, color.toArray());
     } else {
       throw new IllegalArgumentException("Unsupported model '" + model + "'");
     }

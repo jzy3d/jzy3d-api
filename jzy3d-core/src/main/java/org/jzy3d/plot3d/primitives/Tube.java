@@ -11,9 +11,10 @@ import org.jzy3d.plot3d.transform.Transform;
 /**
  * A {@link Tube} may be used to render cylinders or pyramids, according to its input parameters.
  * <br>
- * The position and shape of a {@link Tube} is defined through its {@link setData()} method.
- * Moreover, a {@link Tube} is Wireframeable3d and support only one color that is defined trough its
- * {@link setColor()} method.
+ * The position and shape of a {@link Tube} is defined through its {@link setData()} method. A
+ * {@link Tube} is a {@link Wireframeable} and support only one color that is defined trough its
+ * {@link setColor()} method. Being backed by a GLU cylinder, its normals are automatically
+ * processed which make the object able to reflect light.
  * 
  * @author Martin Pernollet
  */
@@ -47,10 +48,29 @@ public class Tube extends Wireframeable implements ISingleColorable {
     doTransform(painter);
 
     painter.glTranslatef(x, y, z);
-    painter.glLineWidth(wireframeWidth);
 
+    drawFace(painter);
+    drawWireframe(painter);
 
-    // Draw
+    doDrawBoundsIfDisplayed(painter);
+  }
+
+  private void drawWireframe(IPainter painter) {
+    if (wireframeDisplayed) {
+      painter.glLineWidth(wireframeWidth);
+      
+      //painter.glEnable_PolygonOffsetFill();
+      //painter.glPolygonOffset(1.0f, 1.0f);
+      
+      painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
+      painter.color(wireframeColor);
+      painter.gluCylinder(radiusBottom, radiusTop, height, slices, stacks);
+      
+      //painter.glDisable_PolygonOffsetFill();
+    }
+  }
+
+  private void drawFace(IPainter painter) {
     if (faceDisplayed) {
       if (wireframeDisplayed) {
         painter.glEnable_PolygonOffsetFill();
@@ -65,14 +85,6 @@ public class Tube extends Wireframeable implements ISingleColorable {
         painter.glDisable_PolygonOffsetFill();
       }
     }
-    if (wireframeDisplayed) {
-      painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
-      painter.color(wireframeColor);
-      painter.gluCylinder(radiusBottom, radiusTop, height, slices, stacks);
-    }
-
-
-    doDrawBoundsIfDisplayed(painter);
   }
 
   @Override
