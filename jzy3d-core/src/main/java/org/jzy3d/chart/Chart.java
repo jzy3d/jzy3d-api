@@ -18,8 +18,10 @@ import org.jzy3d.events.ViewPointChangedEvent;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
+import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -27,6 +29,9 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
+import org.jzy3d.plot3d.rendering.view.lod.LODCandidates;
+import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
+import org.jzy3d.plot3d.rendering.view.lod.LODSetting;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -208,9 +213,7 @@ public class Chart {
   public ICameraMouseController addMouseCameraController() {
     if (mouse == null) {
       mouse = getFactory().getPainterFactory().newMouseCameraController(this);
-
       configureMouseWithAnimator();
-
     }
     return mouse;
   }
@@ -399,6 +402,44 @@ public class Chart {
     return this;
   }
 
+  /**
+   * Add a drawable by first evaluating its rendering performance from worse ({@link LODSetting#ON}
+   * to most good looking rendering.
+   * 
+   * A mouse is generated on the fly to register all rendering performance and later decide the best
+   * to use when rotating.
+   * 
+   * @param drawable
+   * @return
+   */
+  public Chart addProgressive(Drawable drawable) {
+    ICameraMouseController mouse = addMouseCameraController();
+    add(drawable, true);
+
+    Wireframeable w = drawable.asWireframeable();
+
+    if (w != null) {
+      LODPerf perf = new LODPerf();
+
+      TicToc t = new TicToc();
+      for (LODSetting lodSetting : perf.getCandidates().getReverseRank()) {
+        lodSetting.apply(w);
+
+        t.tic();
+        render();
+        t.toc();
+        double value = t.elapsedMilisecond();
+        perf.setScore(lodSetting, value);
+        t.tocShow(lodSetting.getName() + " took ");
+      }
+      
+      mouse.setLODPerf(perf);
+    }
+    render();
+
+    return this;
+  }
+
 
   public void remove(Drawable drawable) {
     getScene().getGraph().remove(drawable);
@@ -442,7 +483,7 @@ public class Chart {
   public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular) {
     return addLight(position, ambiant, diffuse, specular, 1);
   }
-  
+
   public Light addLight(Coord3d position, Color colorForAll) {
     return addLight(position, colorForAll, colorForAll, colorForAll);
   }
@@ -478,7 +519,7 @@ public class Chart {
   public Light addLightOnCamera() {
     return addLightOnCamera(Light.DEFAULT_COLOR.clone());
   }
-  
+
   public Light addLightOnCamera(Color colorForAll) {
     return addLightOnCamera(colorForAll, colorForAll, colorForAll);
   }
@@ -504,26 +545,25 @@ public class Chart {
 
     return light;
   }
-  
-  
-  
-  
+
+
+
   public Light[] addLightPairOnCamera() {
     return addLightPairOnCamera(Light.DEFAULT_COLOR.clone());
   }
-  
+
   public Light[] addLightPairOnCamera(Color colorForAll) {
     return addLightPairOnCamera(colorForAll, colorForAll, colorForAll);
   }
-  
+
   public Light[] addLightPairOnCamera(Color ambiant, Color diffuse, Color specular) {
     Coord3d viewCenter = getView().getCenter(); // cartesian
     Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
-    Coord3d lightPointUpPolar = viewPointPolar.add(0, (float)Math.PI/2, 0); // polar coords
-    Coord3d lightPointDownPolar = viewPointPolar.add( 0,-(float)Math.PI/2, 0); // polar coords
+    Coord3d lightPointUpPolar = viewPointPolar.add(0, (float) Math.PI / 2, 0); // polar coords
+    Coord3d lightPointDownPolar = viewPointPolar.add(0, -(float) Math.PI / 2, 0); // polar coords
     Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
     Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
-    
+
     Light lightUp = addLight(lightPointUp, ambiant, diffuse, specular);
     Light lightDown = addLight(lightPointDown, ambiant, diffuse, specular);
 
@@ -532,28 +572,29 @@ public class Chart {
       public void viewPointChanged(ViewPointChangedEvent e) {
         Coord3d viewCenter = getView().getCenter(); // cartesian
         Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
-        Coord3d lightPointUpPolar = viewPointPolar.add(0, (float)Math.PI/2, 0); // polar coords
-        Coord3d lightPointDownPolar = viewPointPolar.add( 0,-(float)Math.PI/2, 0); // polar coords
+        Coord3d lightPointUpPolar = viewPointPolar.add(0, (float) Math.PI / 2, 0); // polar coords
+        Coord3d lightPointDownPolar = viewPointPolar.add(0, -(float) Math.PI / 2, 0); // polar
+                                                                                      // coords
         Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
         Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
-        
+
         lightUp.setPosition(lightPointUp);
         lightDown.setPosition(lightPointDown);
-        
+
         Chart.this.lightPointUpPolar.set(lightPointUpPolar);
         Chart.this.lightPointDownPolar.set(lightPointDownPolar);
-        
+
       }
     });
-    
+
     Light[] lights = new Light[2];
     lights[0] = lightUp;
     lights[1] = lightDown;
-    
+
     return lights;
   }
-  
-  public final Coord3d lightPointUpPolar = new Coord3d(); 
+
+  public final Coord3d lightPointUpPolar = new Coord3d();
   public final Coord3d lightPointDownPolar = new Coord3d();
 
   /* SHORTCUTS */
@@ -662,5 +703,6 @@ public class Chart {
   public void setQuality(Quality quality) {
     this.quality = quality;
   }
+
 
 }

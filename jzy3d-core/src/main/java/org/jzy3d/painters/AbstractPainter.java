@@ -101,6 +101,9 @@ public abstract class AbstractPainter implements IPainter {
   
   @Override
   public void box(BoundingBox3d box, Color color, float width, SpaceTransformer spaceTransformer) {
+    //if(box==null)
+    //  return;
+    
     color(color);
     glLineWidth(width);
       
