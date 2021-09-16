@@ -13,6 +13,15 @@ import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
  */
 public class AdaptiveRenderingPolicy {
   protected static final boolean DEFAULT = false;
+  
+  /**
+   * If true, the drawable settings will be the best good looking according to performace evaluation.
+   * 
+   * Defaults to false
+   */
+  public boolean optimizeByPerformanceKnowledge = DEFAULT;
+
+  
   /**
    * the rate limiter will ensure the canvas do not look frozen when too much mouse events. It may
    * do it in an adaptive manner (e.g. when using {@link RateLimiterAdaptsToRenderTime}. 
