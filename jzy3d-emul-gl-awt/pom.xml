@@ -7,7 +7,7 @@
 		<version>2.0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jzy3d-emul-gl</artifactId>
+	<artifactId>jzy3d-emul-gl-awt</artifactId>
 	<name>Jzy3d EmulGL Implementation for AWT with jGL</name>
 
 	<dependencies>
