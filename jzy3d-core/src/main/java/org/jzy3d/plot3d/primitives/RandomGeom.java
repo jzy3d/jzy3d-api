@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.plot3d.rendering.view.View;
 
 public class RandomGeom {
   Random r = new Random();
@@ -27,7 +28,6 @@ public class RandomGeom {
 
   // GENERATOR
 
-
   public Coord3d coord() {
     return new Coord3d(aFloat(), aFloat(), aFloat());
   }
@@ -44,6 +44,12 @@ public class RandomGeom {
     return new Color(aFloat() * coord.x / xrange, aFloat() * coord.y / xrange,
         aFloat() * coord.x / zrange, alpha ? aFloat() : 1f);
   }
+  
+  /** generate a random viewpoint according to the expected values of {@link View#setViewPoint(Coord3d, boolean)}*/
+  public Coord3d viewpoint() {
+    return new Coord3d(aFloat() * Math.PI*2, aFloat()*Math.PI - Math.PI/2, 0);
+  }
+
 
   /**
    * Build a color based on the input coord values.
@@ -187,6 +193,18 @@ public class RandomGeom {
     cube.add(new Polygon(wf, fc, pt1_1, pt4_1, pt4_2, pt1_2)); // near
 
     return cube;
+  }
+  
+  public Composite cube(int x, int y, int z) {
+    return cube(x, y, z, 1, 1, 1);
+  }
+
+  public Composite cube(int xyz) {
+    return cube(xyz,xyz,xyz);
+  }
+
+  public Composite cube() {
+    return cube(0);
   }
 
   public Polygon poly(int x, int y, int z, boolean leftRightOrNearFar, Color color) {

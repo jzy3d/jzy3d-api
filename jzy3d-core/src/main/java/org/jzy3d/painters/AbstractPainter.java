@@ -98,6 +98,60 @@ public abstract class AbstractPainter implements IPainter {
           transform.getZ().compute(z));
     }
   }
+  
+  @Override
+  public void box(BoundingBox3d box, Color color, float width, SpaceTransformer spaceTransformer) {
+    color(color);
+    glLineWidth(width);
+      
+    // top
+    glBegin_LineLoop();
+    vertex(box.getXmin(), box.getYmin(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmin(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmax(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmin(), box.getYmax(), box.getZmax(), spaceTransformer);
+    glEnd();
+
+    // bottom
+    glBegin_LineLoop();
+    vertex(box.getXmin(), box.getYmin(), box.getZmin(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmin(), box.getZmin(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmax(), box.getZmin(), spaceTransformer);
+    vertex(box.getXmin(), box.getYmax(), box.getZmin(), spaceTransformer);
+    glEnd();
+
+    // left
+    glBegin_LineLoop();
+    vertex(box.getXmin(), box.getYmin(), box.getZmin(), spaceTransformer);
+    vertex(box.getXmin(), box.getYmin(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmin(), box.getYmax(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmin(), box.getYmax(), box.getZmin(), spaceTransformer);
+    glEnd();
+
+    // right
+    glBegin_LineLoop();
+    vertex(box.getXmax(), box.getYmin(), box.getZmin(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmin(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmax(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmax(), box.getZmin(), spaceTransformer);
+    glEnd();
+    
+    // near
+    glBegin_LineLoop();
+    vertex(box.getXmin(), box.getYmin(), box.getZmin(), spaceTransformer);
+    vertex(box.getXmin(), box.getYmin(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmin(), box.getYmax(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmin(), box.getYmax(), box.getZmin(), spaceTransformer);
+    glEnd();
+
+    // far
+    glBegin_LineLoop();
+    vertex(box.getXmax(), box.getYmin(), box.getZmin(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmin(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmax(), box.getZmax(), spaceTransformer);
+    vertex(box.getXmax(), box.getYmax(), box.getZmin(), spaceTransformer);
+    glEnd();
+  }
 
   @Override
   public void vertex(Coord3d coord) {

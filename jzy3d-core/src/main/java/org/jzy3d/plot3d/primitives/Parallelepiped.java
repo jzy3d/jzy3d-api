@@ -86,8 +86,8 @@ public class Parallelepiped extends Wireframeable implements ISingleColorable, I
   }
 
   @Override
-  public boolean getWireframeDisplayed() {
-    return quads[0].getWireframeDisplayed();
+  public boolean isWireframeDisplayed() {
+    return quads[0].isWireframeDisplayed();
   }
 
   @Override
@@ -96,8 +96,8 @@ public class Parallelepiped extends Wireframeable implements ISingleColorable, I
   }
 
   @Override
-  public boolean getFaceDisplayed() {
-    return quads[0].getFaceDisplayed();
+  public boolean isFaceDisplayed() {
+    return quads[0].isFaceDisplayed();
   }
 
   /**********************************************************************/

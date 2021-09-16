@@ -51,7 +51,7 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
  * Last, the {@link View} offers the ability to get an {@link AxisBox} for embedding the
  * {@link Scene} and getting values along axes.
  * 
- * @author Martin Pernollet
+ * @author Martin Pernollet 
  */
 public class View {
 
@@ -579,6 +579,13 @@ public class View {
    * Set the viewpoint using polar coordinates relative to the target (i.e. the center of the
    * scene). Only X and Y dimensions are required, as the distance to center will be computed
    * automatically by {@link updateCamera()}.
+   * 
+   * The input coordinate is polar and considers
+   * <ul>
+   * <li>x is azimuth in [0;2xPI]
+   * <li>y is elevation in [-PI/2;+PI/2]. Will be clamped if out of bounds
+   * <li>z is range (distance to center) but ignored there as it is processed automatically 
+   * </ul>
    */
   public void setViewPoint(Coord3d polar, boolean updateView) {
     viewpoint = polar;
@@ -592,6 +599,7 @@ public class View {
 
   /**
    * Set the viewpoint and query a view update.
+   * 
    * 
    * @see {@link setViewPoint(Coord3d polar, boolean updateView)}
    */
