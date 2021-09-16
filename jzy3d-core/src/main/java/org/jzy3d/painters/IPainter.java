@@ -539,4 +539,10 @@ public interface IPainter {
   public void glEnable_PointSmooth();
 
   public void glHint_PointSmooth_Nicest();
+  
+  public void glEnable_DepthTest();
+
+  public void glDisable_DepthTest();
+
+  public void glDepthFunc(DepthFunc func);
 }
