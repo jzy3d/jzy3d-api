@@ -57,13 +57,7 @@ public class AdaptByDroppingHiDPI extends AbstractAdativeRenderingHandler implem
   
   
   @Override
-protected void applyOptimisation(Wireframeable w) {
-    //w.setFaceDisplayed(false);
-   // w.setWireframeDisplayed(true);
+  protected void applyOptimisation(Wireframeable w) {
+    // nothing to do drawable-wise
   }
-  @Override
-protected Toggle makeToggle(Wireframeable w) {
-    return new Toggle(w);
-  }
-
 }

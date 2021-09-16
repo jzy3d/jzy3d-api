@@ -1017,6 +1017,16 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glShadeModel_Smooth() {
+    gl.glShadeModel(GL.GL_SMOOTH);
+  }
+  
+  @Override
+  public void glShadeModel_Flat() {
+    gl.glShadeModel(GL.GL_FLAT);
+  }
+
+  @Override
   public void glMaterialfv(int face, int pname, float[] params, int params_offset) {
     gl.glMaterialfv(face, pname, params);
   }
