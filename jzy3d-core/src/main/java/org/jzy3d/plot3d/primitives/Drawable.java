@@ -6,6 +6,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.BoundingBox3d.Corners;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;
@@ -88,10 +89,8 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
   protected void doDrawBoundsIfDisplayed(IPainter painter) {
     if (isBoundingBoxDisplayed()) {
-      Parallelepiped p = new Parallelepiped(getBounds());
-      p.setFaceDisplayed(false);
-      p.setWireframeColor(getBoundingBoxColor());
-      p.draw(painter);
+      int width = 2; // getWireframeWidth()
+      painter.box(bbox, getBoundingBoxColor(), 2, spaceTransformer);
     }
   }
 

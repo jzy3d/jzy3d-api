@@ -603,6 +603,16 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
     throw new NotImplementedException();
     // GLES2CompatUtils..glShadeModel(mode);
   }
+  
+  @Override
+  public void glShadeModel_Smooth() {
+    gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
+  }
+  
+  @Override
+  public void glShadeModel_Flat() {
+    gl.getGL2().glShadeModel(GL2.GL_FLAT);
+  }
 
   @Override
   public void glHint(int target, int mode) {
