@@ -11,7 +11,9 @@ import org.jzy3d.chart.controllers.mouse.camera.adaptive.AbstractAdativeRenderin
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingFaceAndKeepingWireframe;
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingFaceAndKeepingWireframeWithColor;
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingHiDPI;
+import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingSmoothColor;
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByDroppingWireframe;
+import org.jzy3d.chart.controllers.mouse.camera.adaptive.handlers.AdaptByKeepingBoundingBoxOnly;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
@@ -48,6 +50,8 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
   protected AdaptByDroppingFaceAndKeepingWireframeWithColor adaptByDroppingFaceAndColoringWire;
   protected AdaptByDroppingWireframe adaptByDroppingWireframe;
   protected AdaptByDroppingHiDPI adaptByDroppingHiDPI;
+  protected AdaptByDroppingSmoothColor adaptByDroppingSmoothColor;
+  protected AdaptByKeepingBoundingBoxOnly adaptByKeepingBoundingBoxOnly;
 
   /**
    * Keep track of drawable that have had their wireframe disabled for optimization in order to
@@ -159,6 +163,11 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
       adaptByDroppingWireframe = new AdaptByDroppingWireframe(chart);
     if(adaptByDroppingHiDPI==null)
       adaptByDroppingHiDPI = new AdaptByDroppingHiDPI(chart);
+    if(adaptByDroppingSmoothColor==null)
+      adaptByDroppingSmoothColor = new AdaptByDroppingSmoothColor(chart);
+    if(adaptByKeepingBoundingBoxOnly==null) {
+      adaptByKeepingBoundingBoxOnly = new AdaptByKeepingBoundingBoxOnly(chart);
+    }
   }
 
   // **************** START/STOP OPTIMISATION ***************** //
@@ -175,6 +184,12 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
     
     if (policy.optimizeByDroppingHiDPI)
       adaptByDroppingHiDPI.apply();
+    
+    if (policy.optimizeByDroppingSmoothColor)
+      adaptByDroppingSmoothColor.apply();
+    
+    if(policy.optimizeByDrawingBoundingBoxOnly)
+      adaptByKeepingBoundingBoxOnly.apply();
   }
 
   protected void stopOptimizations() {
@@ -189,24 +204,13 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
 
     if (policy.optimizeByDroppingHiDPI)
       adaptByDroppingHiDPI.revert();
-  }
+    
+    if (policy.optimizeByDroppingSmoothColor)
+      adaptByDroppingSmoothColor.revert();
+    
+    if(policy.optimizeByDrawingBoundingBoxOnly)
+      adaptByKeepingBoundingBoxOnly.revert();
 
-
-  // OptimizeWithHiDPI
-
-  protected void startNoHiDPI(Chart chart) {
-    Quality alternativeQuality = currentQuality.clone();
-    alternativeQuality.setPreserveViewportSize(true);
-    chart.setQuality(alternativeQuality);
-    gl.setAutoAdaptToHiDPI(false);
-  }
-
-  protected void stopNoHiDPI(Chart chart) {
-    chart.setQuality(currentQuality);
-    gl.setAutoAdaptToHiDPI(currentHiDPI);
-    // this force the GL image to apply the new HiDPI setting immediatly
-    gl.updatePixelScale(((EmulGLCanvas) canvas).getGraphics());
-    gl.applyViewport();
   }
 
   // GET / SET

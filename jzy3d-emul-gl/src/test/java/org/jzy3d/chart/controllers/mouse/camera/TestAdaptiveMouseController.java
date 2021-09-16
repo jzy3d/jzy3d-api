@@ -182,8 +182,8 @@ public class TestAdaptiveMouseController {
     mouse.mousePressed(mouseEvent(canvas, 100, 100));
     mouse.mouseDragged(mouseEvent(canvas, 100, 100));
 
-    Assert.assertTrue("Wireframe enabled during drag", surface.getWireframeDisplayed());
-    Assert.assertFalse("Face hidden during drag", surface.getFaceDisplayed());
+    Assert.assertTrue("Wireframe enabled during drag", surface.isWireframeDisplayed());
+    Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
 
     
     mouse.mouseReleased(mouseEvent(canvas, 100, 100));
@@ -191,7 +191,7 @@ public class TestAdaptiveMouseController {
     // -------------------------------------
     // Then the wireframe status is back to original value
 
-    Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.getWireframeDisplayed());
+    Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.isWireframeDisplayed());
 
   }
  
@@ -223,8 +223,8 @@ public class TestAdaptiveMouseController {
     mouse.mousePressed(mouseEvent(canvas, 100, 100));
     mouse.mouseDragged(mouseEvent(canvas, 100, 100));
 
-    Assert.assertTrue("Wireframe enabled during drag", surface.getWireframeDisplayed());
-    Assert.assertFalse("Face hidden during drag", surface.getFaceDisplayed());
+    Assert.assertTrue("Wireframe enabled during drag", surface.isWireframeDisplayed());
+    Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
 
     
     mouse.mouseReleased(mouseEvent(canvas, 100, 100));
@@ -232,7 +232,90 @@ public class TestAdaptiveMouseController {
     // -------------------------------------
     // Then the wireframe status is back to original value
 
-    Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.getWireframeDisplayed());
+    Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.isWireframeDisplayed());
+  }
+  
+  @Test
+  public void givenDrawable_whenOptimizeByDrawingBoundsOnly_thenDrawableHasFaceAndWireframeHidden() {
+    MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
+    Chart chart = mockChartWithAdaptiveMouse(false, true, mockRenderingPerf);
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    AdaptiveMouseController mouse = skin.getMouse();
+    EmulGLCanvas canvas = skin.getCanvas();
+
+    
+    // -------------------------------------
+    // Given
+
+    boolean WIREFRAME_STATUS_BEFORE_OPTIM = true;
+    
+    Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
+    surface.setWireframeDisplayed(WIREFRAME_STATUS_BEFORE_OPTIM);
+    surface.setFaceDisplayed(WIREFRAME_STATUS_BEFORE_OPTIM);
+    
+    mouse.getPolicy().optimizeByDrawingBoundingBoxOnly = true;
+
+    
+    // -------------------------------------
+    // When : slow rendering on a mouse drag sequence
+    
+    mockRenderingPerf.value = 1000;
+
+    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+
+    Assert.assertFalse("Wireframe hidden during drag", surface.isWireframeDisplayed());
+    Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
+    Assert.assertTrue("Bounds displayed during drag", surface.isBoundingBoxDisplayed());
+
+    
+    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    
+    // -------------------------------------
+    // Then the wireframe status is back to original value
+
+    Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.isWireframeDisplayed());
+    Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.isFaceDisplayed());
+    Assert.assertFalse("Bounds are not displayed any more", surface.isBoundingBoxDisplayed());
+  }
+  
+  
+  @Test
+  public void givenSmoothColoring_whenOptimizeByDroppingSmoothColoring_thenChartQualityIsReconfiguredToFlatColoring() {
+    MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
+    Chart chart = mockChartWithAdaptiveMouse(false, true, mockRenderingPerf);
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    AdaptiveMouseController mouse = skin.getMouse();
+    EmulGLCanvas canvas = skin.getCanvas();
+    
+    
+    Assert.assertTrue(chart.getQuality().isSmoothColor());
+
+    
+    // -------------------------------------
+    // Given
+
+    //Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
+    
+    mouse.getPolicy().optimizeByDroppingSmoothColor = true;
+
+    
+    // -------------------------------------
+    // When : slow rendering on a mouse drag sequence
+    
+    mockRenderingPerf.value = 1000;
+
+    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+
+    Assert.assertFalse("Chart quality is now configured for flat coloring", chart.getQuality().isSmoothColor());
+    
+    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    
+    // -------------------------------------
+    // Then the wireframe status is back to original value
+
+    Assert.assertTrue("Chart quality is now configured for smooth coloring", chart.getQuality().isSmoothColor());
   }
 
   // --------------------------------------------------------------------------------- //

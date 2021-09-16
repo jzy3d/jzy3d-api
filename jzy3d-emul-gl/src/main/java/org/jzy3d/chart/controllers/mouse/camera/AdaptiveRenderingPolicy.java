@@ -60,4 +60,19 @@ public class AdaptiveRenderingPolicy {
    * Defaults to false
    */
   public boolean optimizeByDroppingHiDPI = DEFAULT;
+  
+  /**
+   * If true, the polygon face coloring will be set to flat instead of smooth. Has no effect if the chart is configured for flat coloring.
+   * 
+   * Defaults to false
+   */
+  public boolean optimizeByDroppingSmoothColor = DEFAULT;
+  
+  /**
+   * If true, the drawable will be replaced by its bounding box for rendering.
+   * 
+   * Defaults to false
+   */
+  public boolean optimizeByDrawingBoundingBoxOnly = DEFAULT;
+
 }
