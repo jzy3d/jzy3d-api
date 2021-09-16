@@ -128,12 +128,12 @@ public class RandomGeom {
 
       Composite cube = new Composite();
 
-      cube.add(new Polygon(wf, fc, pt1_1, pt2_1, pt3_1, pt4_1)); // bottom
-      cube.add(new Polygon(wf, fc, pt1_2, pt2_2, pt3_2, pt4_2)); // top
-      cube.add(new Polygon(wf, fc, pt1_1, pt2_1, pt2_2, pt1_2)); // left
-      cube.add(new Polygon(wf, fc, pt3_1, pt4_1, pt4_2, pt3_2)); // right
-      cube.add(new Polygon(wf, fc, pt2_1, pt3_1, pt3_2, pt2_2)); // far
-      cube.add(new Polygon(wf, fc, pt1_1, pt4_1, pt4_2, pt1_2)); // near
+      cube.add(newPolygon(wf, fc, pt1_1, pt2_1, pt3_1, pt4_1)); // bottom
+      cube.add(newPolygon(wf, fc, pt1_2, pt2_2, pt3_2, pt4_2)); // top
+      cube.add(newPolygon(wf, fc, pt1_1, pt2_1, pt2_2, pt1_2)); // left
+      cube.add(newPolygon(wf, fc, pt3_1, pt4_1, pt4_2, pt3_2)); // right
+      cube.add(newPolygon(wf, fc, pt2_1, pt3_1, pt3_2, pt2_2)); // far
+      cube.add(newPolygon(wf, fc, pt1_1, pt4_1, pt4_2, pt1_2)); // near
 
       drawables.add(cube);
 
@@ -144,6 +144,13 @@ public class RandomGeom {
     }
 
     return drawables;
+  }
+
+  private Polygon newPolygon(Color wf, Color fc, Coord3d pt1_1, Coord3d pt2_1, Coord3d pt3_1,
+      Coord3d pt4_1) {
+    Polygon p = new Polygon(wf, fc, pt1_1, pt2_1, pt3_1, pt4_1);
+    p.setPolygonWireframeDepthTrick(false);
+    return p;
   }
   
   public List<Composite> cubes(int cubes) {
@@ -179,12 +186,12 @@ public class RandomGeom {
 
     Composite cube = new Composite();
 
-    cube.add(new Polygon(wf, fc, pt1_1, pt2_1, pt3_1, pt4_1)); // bottom
-    cube.add(new Polygon(wf, fc, pt1_2, pt2_2, pt3_2, pt4_2)); // top
-    cube.add(new Polygon(wf, fc, pt1_1, pt2_1, pt2_2, pt1_2)); // left
-    cube.add(new Polygon(wf, fc, pt3_1, pt4_1, pt4_2, pt3_2)); // right
-    cube.add(new Polygon(wf, fc, pt2_1, pt3_1, pt3_2, pt2_2)); // far
-    cube.add(new Polygon(wf, fc, pt1_1, pt4_1, pt4_2, pt1_2)); // near
+    cube.add(newPolygon(wf, fc, pt1_1, pt2_1, pt3_1, pt4_1)); // bottom
+    cube.add(newPolygon(wf, fc, pt1_2, pt2_2, pt3_2, pt4_2)); // top
+    cube.add(newPolygon(wf, fc, pt1_1, pt2_1, pt2_2, pt1_2)); // left
+    cube.add(newPolygon(wf, fc, pt3_1, pt4_1, pt4_2, pt3_2)); // right
+    cube.add(newPolygon(wf, fc, pt2_1, pt3_1, pt3_2, pt2_2)); // far
+    cube.add(newPolygon(wf, fc, pt1_1, pt4_1, pt4_2, pt1_2)); // near
 
     return cube;
   }

@@ -68,6 +68,7 @@ public final class GL extends jgl.GL<BufferedImage, Font> {
 		}
 		// DEBUG
 		// checkColorBuffer();
+		
 		// ------------------------------------------
 		// Create an image producer based on
 		// colorbuffer into which GL draws
@@ -75,25 +76,32 @@ public final class GL extends jgl.GL<BufferedImage, Font> {
 		// producer.setAnimated(true);
 		// producer.setFullBufferUpdates(true);
 		// Generates an image from the toolkit to use this producer
+		
 		Image jGLColorBuffer = canvas.createImage(producer);
+		
 		// ------------------------------------------
 		// Write GL content in a temporary image
 		// and then to the image returned to Canvas
 		glImage = new BufferedImage(jGLColorBuffer.getWidth(null), jGLColorBuffer.getHeight(null), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = (Graphics2D)glImage.getGraphics();
 		configureRenderingHints(g2d);
+		
 		// Hack background
 		if(clearBackgroundWithG2d)
 			hackClearColorWithG2DfillRect(g2d);
+		
 		// Text that should appear BEHIND the scene's polygons
 		drawTexts(g2d);
+		
 		// Images that should appear BEHIND the scene's polygons
 		// drawImagesAndClearBuffer(g2d);
 		drawImages(g2d, ImageLayer.BACKGROUND);
+		
 		// Color buffer
 		g2d.drawImage(jGLColorBuffer, shiftHorizontally, 0, null);
 		// Text that should appear ON TOP of the scene's polygons
 		// ...
+		
 		// Images that should appear ON TOP of the scene's polygons
 		drawImages(g2d, ImageLayer.FOREGROUND);
 		clearImagesBuffer();
