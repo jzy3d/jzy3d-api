@@ -20,7 +20,7 @@ import jgl.GL;
 import jgl.Util;
 import jgl.context.gl_context;
 
-public class DemoLightPolygonWithVariousSize {
+public class DemoPolygonsWithWireframe {
 
   public static void main(String[] args) {
     Geometry.SHOW_NORMALS = true;
@@ -29,10 +29,7 @@ public class DemoLightPolygonWithVariousSize {
     
     Quality q = Quality.Advanced();
     q.setAlphaActivated(false);
-    //q.setSmoothEdge(true);
-    //q.setSmoothPolygon(true);
-    //q.setSmoothPoint(true);
-
+    
     ChartFactory f = new EmulGLChartFactory();
     Chart chart = f.newChart(q);
 
@@ -43,41 +40,16 @@ public class DemoLightPolygonWithVariousSize {
     Color wireColor = Color.BLUE;
     
     Polygon p;
-    int n = 20;
-    for (int i = 0; i < n; i++) {
-      p = geom.poly(i, 0, 0, 1, 1, true, color); 
-      p.setWireframeDisplayed(wireframe);
-      p.setWireframeColor(wireColor);
-      polys.add(p);      
-    }
 
-    p = geom.poly(0, 1, 0, n, 1, true, color);
+    p = geom.poly(0, 1, 0, 10, 10, true, color);
     p.setWireframeDisplayed(wireframe);
     p.setWireframeColor(wireColor);
     polys.add(p);
 
-    p = geom.poly(20, 0, 0, 20, 2, true, color);
+    p = geom.poly(0, 1, 1, 10, 10, true, color);
     p.setWireframeDisplayed(wireframe);
     p.setWireframeColor(wireColor);
     polys.add(p);
-    
-    /*for (int i = 0; i < n; i++) {
-      p = geom.poly(0, 0, i, 1, 1, false, color); 
-      p.setWireframeDisplayed(wireframe);
-      p.setWireframeColor(wireColor);
-      polys.add(p);      
-    }
-
-    p = geom.poly(0, 0, 0, n, 1, false, color);
-    p.setWireframeDisplayed(wireframe);
-    p.setWireframeColor(wireColor);
-    polys.add(p);
-
-    p = geom.poly(20, 0, 0, 20, 2, false, color);
-    p.setWireframeDisplayed(wireframe);
-    p.setWireframeColor(wireColor);
-    polys.add(p);*/
-
     
     
     
@@ -98,8 +70,8 @@ public class DemoLightPolygonWithVariousSize {
       //lights[1].setType(Light.Type.DIRECTIONAL);
     
     chart.getView().setAxisDisplayed(true);
-    chart.getView().setSquared(true);
-    chart.open("Light debug | " + f.getClass().getSimpleName());
+    chart.getView().setSquared(false);
+    chart.open("Wireframe debug | " + f.getClass().getSimpleName());
     chart.addMouseCameraController();
 
     // if(reflectLight)
