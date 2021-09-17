@@ -6,9 +6,9 @@ import org.jzy3d.plot3d.primitives.Wireframeable;
 
 public class LODPerf {
   LODCandidates candidates;
-  Map<LODSetting, Double> score = new HashMap<>(); 
-  
-  
+  Map<LODSetting, Double> score = new HashMap<>();
+
+
 
   public LODPerf() {
     this(new LODCandidates());
@@ -26,19 +26,57 @@ public class LODPerf {
     score.put(setting, value);
   }
 
+  boolean otherwiseLowest = true;
+  boolean otherwiseBoundsOnlyIfCandidate = true;
+
   public LODSetting applyBestCandidateBelow(double maxMili, Wireframeable wireframeable) {
-    for(LODSetting s: candidates.getRank()) {
-      if(getScore(s)<maxMili) {
-        System.out.println("Apply to " + wireframeable + " select " + s.getName()  +" for " + maxMili + "ms for score " +getScore(s));
+    for (LODSetting s : candidates.getRank()) {
+      if (getScore(s) < maxMili) {
+        System.out.println("Apply to " + wireframeable + " select " + s.getName() + " for "
+            + maxMili + "ms for score " + getScore(s));
 
         s.apply(wireframeable);
         return s;
       }
     }
-    LODSetting s=LODCandidates.BOUNDS_ONLY;
-    s.apply(wireframeable);
-    System.out.println("Apply to " + wireframeable + " select " + s.getName()  +" for " + maxMili + "ms for score " +getScore(s));
-    return s;
+
+    if (otherwiseLowest) {
+      LODSetting s = getLowestScore();
+      if(s!=null) {
+        s.apply(wireframeable);
+      }
+      return s;
+    } 
+    
+    if(otherwiseBoundsOnlyIfCandidate) {
+      // Apply BOUNDS only if BOUNDS only is in the list, regardless it reaches the max score
+      LODSetting s = LODCandidates.BOUNDS_ONLY;
+
+      if (candidates.getRank().contains(s)) {
+        s.apply(wireframeable);
+        System.out.println("Apply to " + wireframeable + " select " + s.getName() + " for "
+            + maxMili + "ms for score " + getScore(s));
+        return s;
+      }
+
+    }
+    return null;
+
+  }
+
+  public LODSetting getLowestScore() {
+    LODSetting minLOD = null;
+    double minScore = Double.MAX_VALUE;
+
+    for (LODSetting s : getCandidates().getRank()) {
+      double score = getScore(s);
+
+      if (score < minScore) {
+        minLOD = s;
+        minScore = score;
+      }
+    }
+    return minLOD;
   }
 
   public LODCandidates getCandidates() {
