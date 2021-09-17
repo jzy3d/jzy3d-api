@@ -3,7 +3,6 @@ package org.jzy3d.chart.controllers.mouse.camera;
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLSkin;
@@ -23,12 +22,19 @@ import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
+import org.jzy3d.plot3d.rendering.view.lod.LODCandidates;
+import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
+import org.jzy3d.plot3d.rendering.view.lod.LODSetting;
+import org.jzy3d.plot3d.rendering.view.lod.LODSetting.FaceColor;
+import org.jzy3d.plot3d.rendering.view.lod.LODSetting.WireColor;
 
 /**
- * This verifies if the {@link AdaptiveMouseController} works without regression according to multiple cases
+ * This verifies if the {@link AdaptiveMouseController} works without regression according to
+ * multiple cases
  * <ul>
  * <li>Repaint continuously or on demand
- * <li>HiDPI active or not (only test case of active HiDPI to ensure it is re-activated when mouse release)
+ * <li>HiDPI active or not (only test case of active HiDPI to ensure it is re-activated when mouse
+ * release)
  * <li>Rendering has good performance or not (mocked)
  * </ul>
  * 
@@ -43,16 +49,16 @@ public class TestAdaptiveMouseController {
     // Given
     EmulGLChartFactory factory = new EmulGLChartFactory();
     Chart chart = factory.newChart();
-    
+
     // When
-    AWTCameraMouseController m = (AWTCameraMouseController)chart.addMouseCameraController();
-    AWTCameraKeyController k = (AWTCameraKeyController)chart.addKeyboardCameraController();
-    
+    AWTCameraMouseController m = (AWTCameraMouseController) chart.addMouseCameraController();
+    AWTCameraKeyController k = (AWTCameraKeyController) chart.addKeyboardCameraController();
+
     // Then
     Assert.assertNotNull(m.getRateLimiter());
     Assert.assertNotNull(k.getRateLimiter());
   }
-  
+
   @Test
   public void whenRepaintOnDemand_onHiDPIChart_ThenOptimizationTriggersIfPerformanceIsBad() {
     // Given
@@ -61,12 +67,13 @@ public class TestAdaptiveMouseController {
 
 
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
-    Chart chart = mockChartWithAdaptiveMouse(repaintContinuously, allowHiDPI, mockRenderingPerf);
-    
+    Chart chart =
+        mockChartWithAdaptiveMouse_AddSurface(repaintContinuously, allowHiDPI, mockRenderingPerf);
+
     EmulGLSkin skin = EmulGLSkin.on(chart);
     AdaptiveMouseController mouse = skin.getMouse();
     EmulGLCanvas canvas = skin.getCanvas();
-    
+
     // -------------------------------------
     // When : fast rendering
     mockRenderingPerf.value = 10;
@@ -87,11 +94,12 @@ public class TestAdaptiveMouseController {
     Assert.assertTrue(mouse.mustOptimizeMouseDrag);
 
     // Then : HiDPI is disabled DURING mouse DRAGGED
-    Assert.assertTrue("Just check test properly configured HiDPI", mouse.policy.optimizeByDroppingHiDPI);
+    Assert.assertTrue("Just check test properly configured HiDPI",
+        mouse.policy.optimizeByDroppingHiDPI);
     Assert.assertTrue("Did NOT start drag already", mouse.isFirstDrag);
-    
+
     mouse.mouseDragged(mouseEvent(canvas, 100, 100));
-    
+
     Assert.assertFalse("Did start drag already", mouse.isFirstDrag);
     Assert.assertFalse("GL properly configured", canvas.getGL().isAutoAdaptToHiDPI());
 
@@ -113,12 +121,13 @@ public class TestAdaptiveMouseController {
 
 
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
-    Chart chart = mockChartWithAdaptiveMouse(repaintContinuously, allowHiDPI, mockRenderingPerf);
+    Chart chart =
+        mockChartWithAdaptiveMouse_AddSurface(repaintContinuously, allowHiDPI, mockRenderingPerf);
 
     EmulGLSkin skin = EmulGLSkin.on(chart);
     AdaptiveMouseController mouse = skin.getMouse();
     EmulGLCanvas canvas = skin.getCanvas();
-    
+
     // -------------------------------------
     // When : fast rendering
     mockRenderingPerf.value = 10;
@@ -133,50 +142,51 @@ public class TestAdaptiveMouseController {
 
     // Then : optimization IS set to ON at MOUSE PRESS
     mouse.mousePressed(mouseEvent(canvas, 100, 100));
-    
+
     Assert.assertTrue(mouse.mustOptimizeMouseDrag);
-    
+
     // Then : HiDPI is disabled DURING mouse DRAGGED
-    Assert.assertTrue("Just check test properly configured HiDPI", mouse.policy.optimizeByDroppingHiDPI);
+    Assert.assertTrue("Just check test properly configured HiDPI",
+        mouse.policy.optimizeByDroppingHiDPI);
     Assert.assertTrue("Did NOT start drag already", mouse.isFirstDrag);
-    
+
     mouse.mouseDragged(mouseEvent(canvas, 100, 100));
-    
+
     Assert.assertFalse("Did start drag already", mouse.isFirstDrag);
     Assert.assertFalse("GL properly configured", canvas.getGL().isAutoAdaptToHiDPI());
 
-    
-    // Then : HiDPI remains configured as before 
+
+    // Then : HiDPI remains configured as before
     mouse.mouseReleased(mouseEvent(canvas, 100, 100));
 
     Assert.assertFalse(mouse.mustOptimizeMouseDrag);
     Assert.assertEquals(allowHiDPI, canvas.getGL().isAutoAdaptToHiDPI());
   }
-  
-  
+
+
   @Test
   public void givenWireframeOff_whenOptimizeByDroppingFace_thenDrawableHaveWireframeHidden() {
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
-    Chart chart = mockChartWithAdaptiveMouse(false, true, mockRenderingPerf);
+    Chart chart = mockChartWithAdaptiveMouse_AddSurface(false, true, mockRenderingPerf);
     EmulGLSkin skin = EmulGLSkin.on(chart);
     AdaptiveMouseController mouse = skin.getMouse();
     EmulGLCanvas canvas = skin.getCanvas();
 
-    
+
     // -------------------------------------
     // Given
 
     boolean WIREFRAME_STATUS_BEFORE_OPTIM = false;
-    
+
     Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
     surface.setWireframeDisplayed(WIREFRAME_STATUS_BEFORE_OPTIM);
-    
+
     mouse.getPolicy().optimizeByDroppingFaceAndKeepingWireframe = true;
 
-    
+
     // -------------------------------------
     // When : slow rendering on a mouse drag sequence
-    
+
     mockRenderingPerf.value = 1000;
 
     mouse.mousePressed(mouseEvent(canvas, 100, 100));
@@ -185,39 +195,39 @@ public class TestAdaptiveMouseController {
     Assert.assertTrue("Wireframe enabled during drag", surface.isWireframeDisplayed());
     Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
 
-    
+
     mouse.mouseReleased(mouseEvent(canvas, 100, 100));
-    
+
     // -------------------------------------
     // Then the wireframe status is back to original value
 
     Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.isWireframeDisplayed());
 
   }
- 
+
   @Test
   public void givenWireframeOn_whenOptimizeByDroppingFace_thenDrawableHaveWireframeDisplayed() {
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
-    Chart chart = mockChartWithAdaptiveMouse(false, true, mockRenderingPerf);
+    Chart chart = mockChartWithAdaptiveMouse_AddSurface(false, true, mockRenderingPerf);
     EmulGLSkin skin = EmulGLSkin.on(chart);
     AdaptiveMouseController mouse = skin.getMouse();
     EmulGLCanvas canvas = skin.getCanvas();
 
-    
+
     // -------------------------------------
     // Given
 
     boolean WIREFRAME_STATUS_BEFORE_OPTIM = true;
-    
+
     Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
     surface.setWireframeDisplayed(WIREFRAME_STATUS_BEFORE_OPTIM);
-    
+
     mouse.getPolicy().optimizeByDroppingFaceAndKeepingWireframe = true;
 
-    
+
     // -------------------------------------
     // When : slow rendering on a mouse drag sequence
-    
+
     mockRenderingPerf.value = 1000;
 
     mouse.mousePressed(mouseEvent(canvas, 100, 100));
@@ -226,39 +236,39 @@ public class TestAdaptiveMouseController {
     Assert.assertTrue("Wireframe enabled during drag", surface.isWireframeDisplayed());
     Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
 
-    
+
     mouse.mouseReleased(mouseEvent(canvas, 100, 100));
-    
+
     // -------------------------------------
     // Then the wireframe status is back to original value
 
     Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.isWireframeDisplayed());
   }
-  
+
   @Test
   public void givenDrawable_whenOptimizeByDrawingBoundsOnly_thenDrawableHasFaceAndWireframeHidden() {
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
-    Chart chart = mockChartWithAdaptiveMouse(false, true, mockRenderingPerf);
+    Chart chart = mockChartWithAdaptiveMouse_AddSurface(false, true, mockRenderingPerf);
     EmulGLSkin skin = EmulGLSkin.on(chart);
     AdaptiveMouseController mouse = skin.getMouse();
     EmulGLCanvas canvas = skin.getCanvas();
 
-    
+
     // -------------------------------------
     // Given
 
     boolean WIREFRAME_STATUS_BEFORE_OPTIM = true;
-    
+
     Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
     surface.setWireframeDisplayed(WIREFRAME_STATUS_BEFORE_OPTIM);
     surface.setFaceDisplayed(WIREFRAME_STATUS_BEFORE_OPTIM);
-    
+
     mouse.getPolicy().optimizeByDrawingBoundingBoxOnly = true;
 
-    
+
     // -------------------------------------
     // When : slow rendering on a mouse drag sequence
-    
+
     mockRenderingPerf.value = 1000;
 
     mouse.mousePressed(mouseEvent(canvas, 100, 100));
@@ -268,9 +278,9 @@ public class TestAdaptiveMouseController {
     Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
     Assert.assertTrue("Bounds displayed during drag", surface.isBoundingBoxDisplayed());
 
-    
+
     mouse.mouseReleased(mouseEvent(canvas, 100, 100));
-    
+
     // -------------------------------------
     // Then the wireframe status is back to original value
 
@@ -278,58 +288,149 @@ public class TestAdaptiveMouseController {
     Assert.assertEquals(WIREFRAME_STATUS_BEFORE_OPTIM, surface.isFaceDisplayed());
     Assert.assertFalse("Bounds are not displayed any more", surface.isBoundingBoxDisplayed());
   }
-  
-  
+
+
   @Test
   public void givenSmoothColoring_whenOptimizeByDroppingSmoothColoring_thenChartQualityIsReconfiguredToFlatColoring() {
     MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
-    Chart chart = mockChartWithAdaptiveMouse(false, true, mockRenderingPerf);
+    Chart chart = mockChartWithAdaptiveMouse_AddSurface(false, true, mockRenderingPerf);
     EmulGLSkin skin = EmulGLSkin.on(chart);
     AdaptiveMouseController mouse = skin.getMouse();
     EmulGLCanvas canvas = skin.getCanvas();
-    
-    
+
+
     Assert.assertTrue(chart.getQuality().isSmoothColor());
 
-    
+
     // -------------------------------------
     // Given
 
-    //Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
-    
+    // Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
+
     mouse.getPolicy().optimizeByDroppingSmoothColor = true;
 
-    
+
     // -------------------------------------
     // When : slow rendering on a mouse drag sequence
-    
+
     mockRenderingPerf.value = 1000;
 
     mouse.mousePressed(mouseEvent(canvas, 100, 100));
     mouse.mouseDragged(mouseEvent(canvas, 100, 100));
 
-    Assert.assertFalse("Chart quality is now configured for flat coloring", chart.getQuality().isSmoothColor());
-    
+    Assert.assertFalse("Chart quality is now configured for flat coloring",
+        chart.getQuality().isSmoothColor());
+
     mouse.mouseReleased(mouseEvent(canvas, 100, 100));
-    
+
     // -------------------------------------
     // Then the wireframe status is back to original value
 
-    Assert.assertTrue("Chart quality is now configured for smooth coloring", chart.getQuality().isSmoothColor());
+    Assert.assertTrue("Chart quality is now configured for smooth coloring",
+        chart.getQuality().isSmoothColor());
+  }
+
+  @Test
+  public void whenOptimizeAdaptiveLOD_thenChartQualityIsReconfiguredToALearnedLOD() {
+    MockRenderingTime mockRenderingPerf = new MockRenderingTime();// ms
+
+    // -------------------------------------
+    // Given - Progressive addition of surface with only two LOD
+    
+    LODCandidates c = new LODCandidates(
+        new LODSetting("0", FaceColor.SMOOTH, WireColor.OFF), 
+        LODCandidates.BOUNDS_ONLY);
+
+    Chart chart = mockChartWithAdaptiveMouse_AddProgressiveSurface(c, false, true, mockRenderingPerf);
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    AdaptiveMouseController mouse = skin.getMouse();
+    EmulGLCanvas canvas = skin.getCanvas();
+
+    // And with a force score of 1ms for rendering with bounds only, 100ms for everything
+    mouse.getLODPerf().setScore(c.getRank().get(1), 001);
+    mouse.getLODPerf().setScore(c.getRank().get(0), 100);
+    
+    // And with a configuration for enabling dynamic LOD when lag larger than 40ms
+    mouse.getPolicy().optimizeForRenderingTimeLargerThan = 40;//ms
+    mouse.getPolicy().optimizeByPerformanceKnowledge = true;
+
+    Shape surface = (Shape) chart.getScene().getGraph().getAll().get(0);
+    
+    Assert.assertFalse("Bounds NOT displayed before optimizing", surface.isBoundingBoxDisplayed());
+    
+    // -------------------------------------
+    // When : slow rendering on a mouse drag sequence
+
+    mockRenderingPerf.value = 1000;
+
+    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+
+    // Then select a configuration that is below max accepted rendering time
+
+    LODPerf perf = mouse.adaptByPerformanceKnowledge.getPerf();
+    LODSetting lodSetting = mouse.adaptByPerformanceKnowledge.getSelectedLODSetting();
+    Assert.assertNotNull(lodSetting);
+    System.out.println("LOD:" + lodSetting.getName());
+
+    double settingScore = perf.getScore(lodSetting);
+    Assert.assertTrue(settingScore < mouse.getPolicy().optimizeForRenderingTimeLargerThan);
+    Assert.assertTrue("Bounds displayed while optimizing", surface.isBoundingBoxDisplayed());
+    Assert.assertFalse("Faces NOT displayed while optimizing", surface.isFaceDisplayed());
+    //Assert.assertFalse("Wires NOT displayed while optimizing", surface.isWireframeDisplayed());
+    
+    
+    
+    // -------------------------------------
+    // When releasing mouse, then surface is configured back to original settings
+    
+    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+
+    
+    // Then the wireframe status is back to original value
+
+    Assert.assertFalse("Bounds NOT displayed after optimizing", surface.isBoundingBoxDisplayed());
+    Assert.assertTrue("Faces displayed while optimizing", surface.isFaceDisplayed());
+    //Assert.assertTrue("Wires displayed while optimizing", surface.isWireframeDisplayed());
+
   }
 
   // --------------------------------------------------------------------------------- //
   // --------------------------------------------------------------------------------- //
   // --------------------------------------------------------------------------------- //
-  
+
   class MockRenderingTime {
     double value = 10;
   }
 
+  protected Chart mockChartWithAdaptiveMouse_AddSurface(boolean repaintContinuously,
+      boolean allowHiDPI, MockRenderingTime mockRenderingPerf) {
+    Chart chart =
+        mockChartWithAdaptiveMouse_Empty(repaintContinuously, allowHiDPI, mockRenderingPerf);
+
+    Shape surface = surface();
+    chart.add(surface);
+    surface.setLegend(new AWTColorbarLegend(surface, chart));
+
+    return chart;
+  }
+
+  protected Chart mockChartWithAdaptiveMouse_AddProgressiveSurface(LODCandidates candidates,
+      boolean repaintContinuously, boolean allowHiDPI, MockRenderingTime mockRenderingPerf) {
+    Chart chart =
+        mockChartWithAdaptiveMouse_Empty(repaintContinuously, allowHiDPI, mockRenderingPerf);
+
+    Shape surface = surface();
+    chart.addProgressive(surface, candidates);
+    surface.setLegend(new AWTColorbarLegend(surface, chart));
+
+    return chart;
+  }
+
   /** Create a chart with an adaptive mouse that has a mock on canvas performance retrieval. */
-  protected Chart mockChartWithAdaptiveMouse(boolean repaintContinuously, boolean allowHiDPI,
+  protected Chart mockChartWithAdaptiveMouse_Empty(boolean repaintContinuously, boolean allowHiDPI,
       MockRenderingTime mockRenderingPerf) {
-    
+
     // --------------------------------------------------------
     // Configure quality optimization when slow rendering
 
@@ -337,12 +438,12 @@ public class TestAdaptiveMouseController {
 
       @Override
       public AdaptiveMouseController newMouseCameraController(Chart chart) {
-        
+
         // THIS IS THE OBJECT UNDER TEST!!
         AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
         policy.renderingRateLimiter =
             new RateLimiterAdaptsToRenderTime((EmulGLCanvas) chart.getCanvas()) {
-          
+
               // THIS IS EQUIVALENT TO PARTIAL MOCKING THE RENDERING OPTIMIZER
               protected double getLastRenderingTimeFromCanvas() {
                 return mockRenderingPerf.value;
@@ -354,7 +455,7 @@ public class TestAdaptiveMouseController {
         policy.optimizeByDroppingFaceAndKeepingWireframeWithColor = false;
 
         return new AdaptiveMouseController(chart, policy) {
-          
+
           // THIS IS EQUIVALENT TO PARTIAL MOCKING THE MOUSE CONTROLLER
           protected double getLastRenderingTimeFromCanvas() {
             return mockRenderingPerf.value;
@@ -375,12 +476,10 @@ public class TestAdaptiveMouseController {
     // --------------------------------------------------------
     // Configure chart content
 
-    Shape surface = surface();
 
     Chart chart = factory.newChart(q);
     chart.getAxisLayout().setZAxisSide(ZAxisSide.LEFT);
-    chart.add(surface);
-    surface.setLegend(new AWTColorbarLegend(surface, chart));
+
 
     // --------------------------------------------------------
     // Enable visible profiling

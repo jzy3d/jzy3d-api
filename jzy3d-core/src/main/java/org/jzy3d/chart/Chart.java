@@ -412,14 +412,14 @@ public class Chart {
    * @param drawable
    * @return
    */
-  public Chart addProgressive(Drawable drawable) {
+  public Chart addProgressive(Drawable drawable, LODCandidates candidates) {
     ICameraMouseController mouse = addMouseCameraController();
     add(drawable, true);
 
     Wireframeable w = drawable.asWireframeable();
 
     if (w != null) {
-      LODPerf perf = new LODPerf();
+      LODPerf perf = new LODPerf(candidates);
 
       TicToc t = new TicToc();
       for (LODSetting lodSetting : perf.getCandidates().getReverseRank()) {
