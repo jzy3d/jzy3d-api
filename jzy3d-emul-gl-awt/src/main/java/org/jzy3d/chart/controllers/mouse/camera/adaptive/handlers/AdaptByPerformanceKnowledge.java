@@ -5,10 +5,13 @@ import org.jzy3d.chart.controllers.mouse.camera.adaptive.AbstractAdativeRenderin
 import org.jzy3d.chart.controllers.mouse.camera.adaptive.AdaptiveRenderingHandler;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
+import org.jzy3d.plot3d.rendering.view.lod.LODSetting;
 
 public class AdaptByPerformanceKnowledge extends AbstractAdativeRenderingHandler implements AdaptiveRenderingHandler{
   LODPerf perf = new LODPerf();
   double maxRenderingTime = 100;
+  
+  LODSetting selectedLODSetting;
   
   public AdaptByPerformanceKnowledge(Chart chart) {
     super(chart);
@@ -16,7 +19,10 @@ public class AdaptByPerformanceKnowledge extends AbstractAdativeRenderingHandler
   
   protected void applyOptimisation(Wireframeable w) {
     if(perf!=null) {
-      perf.applyBestCandidateBelow(maxRenderingTime, w);
+      selectedLODSetting = perf.applyBestCandidateBelow(maxRenderingTime, w);
+    }
+    else {
+      //System.err.println("MISSING PERF!");
     }
   }
 
@@ -34,5 +40,9 @@ public class AdaptByPerformanceKnowledge extends AbstractAdativeRenderingHandler
 
   public void setMaxRenderingTime(double maxRenderingTime) {
     this.maxRenderingTime = maxRenderingTime;
+  }
+
+  public LODSetting getSelectedLODSetting() {
+    return selectedLODSetting;
   }
 }
