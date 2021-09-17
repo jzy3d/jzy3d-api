@@ -10,21 +10,20 @@ public class LODSetting {
   Light light;
   Bounds bounds;
 
-  enum FaceColor {
+  public enum FaceColor {
     SMOOTH, FLAT, OFF
   }
 
-  enum WireColor {
+  public enum WireColor {
     SMOOTH, FLAT, UNIFORM, OFF
   }
 
-  enum Light {
+  public enum Light {
     TWO, ONE, OFF
   }
 
-  enum Bounds {
-    /** Bounds are rendered alone without face nor wire whatever their setting */
-    OVERRIDE, ON, OFF
+  public enum Bounds {
+    ON, OFF
   }
 
 

@@ -100,6 +100,8 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
 
   @Override
   public void mouseDragged(MouseEvent e) {
+    //System.out.println("DRAG");
+
     if (isFirstDrag) {
       isFirstDrag = false;
 
@@ -109,6 +111,8 @@ public class AdaptiveMouseController extends AWTCameraMouseController {
       }
     }
     super.mouseDragged(e);
+    
+
   }
 
   @Override
