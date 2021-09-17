@@ -1,5 +1,9 @@
 package org.jzy3d.chart;
 
+import java.awt.Component;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -414,7 +418,8 @@ public class Chart {
    */
   public Chart addProgressive(Drawable drawable, LODCandidates candidates) {
     ICameraMouseController mouse = addMouseCameraController();
-    add(drawable, true);
+    add(drawable, false);
+    getView().updateBounds();
 
     Wireframeable w = drawable.asWireframeable();
 
@@ -435,10 +440,32 @@ public class Chart {
       
       mouse.setLODPerf(perf);
     }
-    render();
+    //render();
+    /*MouseListener m = (MouseListener)mouse;
+    MouseMotionListener m2 = (MouseMotionListener)mouse;
+    
+    int n = 500;
+    int i = 20;
 
+    m.mousePressed(mouseEvent((Component)getCanvas(), i, i));
+    for (i = i+1; i < n; i++) {
+      m2.mouseDragged(mouseEvent((Component)getCanvas(), i, i));
+      render();
+    }
+    m.mouseReleased(mouseEvent((Component)getCanvas(), n, n));*/
+    //mouse.
+    
+    //getCanvas().forceRepaint();
+    ((Component)getCanvas()).repaint();
+    ((Component)getCanvas()).repaint();
+    
     return this;
   }
+  
+  protected static MouseEvent mouseEvent(Component sourceCanvas, int x, int y) {
+    return new MouseEvent(sourceCanvas, 0, 0, 0, x, y, 100, 100, 1, false, 0);
+  }
+
 
 
   public void remove(Drawable drawable) {

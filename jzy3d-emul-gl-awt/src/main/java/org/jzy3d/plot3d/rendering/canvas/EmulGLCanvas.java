@@ -597,14 +597,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     TicToc t = new TicToc();
     synchronized (profileInfo) {
-      System.out.println("OK");
+      //System.out.println("OK");
 
       // Render a rectangle around profile text
       for (ProfileInfo profile : profileInfo) {
-        System.out.println("  will string width");
+        //System.out.println("  will string width");
         t.tic();
         int stringWidth = AWTGraphicsUtils.stringWidth(g2d, profile.message);
-        t.tocShow("  ok string width");
+        //t.tocShow("  ok string width");
 
         if (minX > profile.x)
           minX = profile.x;
@@ -615,12 +615,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
         if (maxY < profile.y)
           maxY = profile.y;
         
-        System.out.println("  ok string ");
-
+        //System.out.println("  ok string ");
       }
-      System.out.println("ok string");
-      
-
+      //System.out.println("ok string");
 
       if (minX == Integer.MAX_VALUE)
         minX = 0;
