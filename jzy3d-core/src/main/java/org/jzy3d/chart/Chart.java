@@ -20,6 +20,7 @@ import org.jzy3d.events.ViewPointChangedEvent;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
+import org.jzy3d.maths.Statistics;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
@@ -47,6 +48,10 @@ public class Chart {
   private static final int MOUSE_PICK_SIZE_DEFAULT = 10;
   private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";
   public static final Quality DEFAULT_QUALITY = Quality.Intermediate();
+  
+  protected static final int LOD_BOUNDS_ONLY_RENDER_TIME_MS = 30;
+  protected static final int LOD_EVAL_TRIALS = 3;
+  protected static final int LOD_EVAL_MAX_EVAL_DURATION_MS = 500; //ms
 
   protected IChartFactory factory;
 
@@ -489,20 +494,42 @@ public class Chart {
 
       TicToc t = new TicToc();
       for (LODSetting lodSetting : perf.getCandidates().getReverseRank()) {
-        lodSetting.apply(w);
+        
+        // Do not evaluate bounding box rendering which is always short
+        // so we simply keep a low constant
+        if(lodSetting.isBoundsOnly()) {
+          perf.setScore(lodSetting, LOD_BOUNDS_ONLY_RENDER_TIME_MS);
+        }
+        
+        // Evaluate other LOD config
+        else {
+          lodSetting.apply(w);
 
-        getQuality().setColorModel(lodSetting.getColorModel());
+          getQuality().setColorModel(lodSetting.getColorModel());
 
-        int trials = 2;
+          int trials = 3;
 
-        for (int i = 0; i < trials; i++) {
-          t.tic();
-          render();
-          t.toc();
-          double value = t.elapsedMilisecond();
-          perf.setScore(lodSetting, value);
-
-          // System.out.println(lodSetting.getName() + " (" + i + ") took " + value + "ms");
+          double[] values = new double[trials];
+          int k = 0;
+          
+          // Evaluate tree times and keep the mean, unless
+          // we encounter a poor rendering time 
+          for (int i = 0; i < trials; i++) {
+            t.tic();
+            render();
+            t.toc();
+            values[k++] = t.elapsedMilisecond();
+            
+            // Skip full evaluation if rendering time is too high
+            if(values[i]>LOD_EVAL_MAX_EVAL_DURATION_MS) {
+              perf.setScore(lodSetting, values[i]);
+            }
+            // System.out.println(lodSetting.getName() + " (" + i + ") took " + value + "ms");
+          }
+          
+          if(k==trials) {
+            perf.setScore(lodSetting, Statistics.median(values, true));
+          }
         }
       }
 

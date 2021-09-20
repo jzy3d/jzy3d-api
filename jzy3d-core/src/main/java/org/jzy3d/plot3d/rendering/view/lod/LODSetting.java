@@ -143,4 +143,8 @@ public class LODSetting {
   public void setColorModel(ColorModel colorModel) {
     this.colorModel = colorModel;
   }
+  
+  public boolean isBoundsOnly() {
+    return Bounds.ON.equals(bounds) && FaceColor.OFF.equals(face) && WireColor.OFF.equals(wire);
+  }
 }
