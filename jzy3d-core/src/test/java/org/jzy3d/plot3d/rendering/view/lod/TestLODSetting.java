@@ -19,10 +19,11 @@ public class TestLODSetting {
     
     s.apply(p);
     
-    
     Assert.assertTrue(p.isBoundingBoxDisplayed());
     Assert.assertFalse(p.isFaceDisplayed());
     Assert.assertFalse(p.isWireframeDisplayed());
+    
+    Assert.assertTrue(s.isBoundsOnly());
     
   }
 
@@ -37,10 +38,11 @@ public class TestLODSetting {
     
     s.apply(p);
     
-    
     Assert.assertFalse(p.isBoundingBoxDisplayed());
     Assert.assertTrue(p.isFaceDisplayed());
     Assert.assertTrue(p.isWireframeDisplayed());
+    
+    Assert.assertFalse(s.isBoundsOnly());
     
   }
 
