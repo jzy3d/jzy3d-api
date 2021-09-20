@@ -695,7 +695,18 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   // GL LIGHTS
 
-
+  @Override
+  public void glShadeModel(ColorModel colorModel) {
+    if(ColorModel.SMOOTH.equals(colorModel)) {
+      gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
+    }
+    else if(ColorModel.FLAT.equals(colorModel)) {
+      gl.getGL2().glShadeModel(GL2.GL_FLAT);
+    }
+    else {
+      throw new IllegalArgumentException("Unsupported setting : '"+colorModel + "'");
+    }
+  }
 
   @Override
   public void glShadeModel(int mode) {

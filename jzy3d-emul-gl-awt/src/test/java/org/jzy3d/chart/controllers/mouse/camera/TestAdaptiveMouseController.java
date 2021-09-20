@@ -338,7 +338,7 @@ public class TestAdaptiveMouseController {
     // Given - Progressive addition of surface with only two LOD
     
     LODCandidates c = new LODCandidates(
-        new LODSetting("0", FaceColor.SMOOTH, WireColor.OFF), 
+        new LODSetting("0", FaceColor.ON, WireColor.OFF), 
         LODCandidates.BOUNDS_ONLY);
 
     Chart chart = mockChartWithAdaptiveMouse_AddProgressiveSurface(c, false, true, mockRenderingPerf);
@@ -421,7 +421,7 @@ public class TestAdaptiveMouseController {
         mockChartWithAdaptiveMouse_Empty(repaintContinuously, allowHiDPI, mockRenderingPerf);
 
     Shape surface = surface();
-    chart.addProgressive(surface, candidates);
+    chart.add(surface, candidates);
     surface.setLegend(new AWTColorbarLegend(surface, chart));
 
     return chart;

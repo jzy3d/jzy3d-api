@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.view.lod;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.jzy3d.painters.ColorModel;
 import org.jzy3d.plot3d.rendering.view.lod.LODSetting.Bounds;
 import org.jzy3d.plot3d.rendering.view.lod.LODSetting.FaceColor;
 import org.jzy3d.plot3d.rendering.view.lod.LODSetting.WireColor;
@@ -14,15 +15,10 @@ public class LODCandidates {
   public static final LODSetting BOUNDS_ONLY = new LODSetting("BOUNDS_ONLY", Bounds.ON);
 
   public LODCandidates() {
-    rank.add(new LODSetting("0", FaceColor.SMOOTH, WireColor.OFF));
-    rank.add(new LODSetting("1", FaceColor.FLAT, WireColor.OFF));
-    rank.add(new LODSetting("2", FaceColor.OFF, WireColor.SMOOTH));
-    rank.add(new LODSetting("3", FaceColor.OFF, WireColor.FLAT));
-    rank.add(new LODSetting("4", FaceColor.OFF, WireColor.UNIFORM));
-    rank.add(BOUNDS_ONLY);
-    
-    reverseRank = new ArrayList<LODSetting>(rank);
-    Collections.reverse(reverseRank);
+    this(new LODSetting("0 [face:on, wire:off, color:smooth]", FaceColor.ON, WireColor.OFF, ColorModel.SMOOTH),
+        new LODSetting("1 [face:on, wire:off, color:flat]", FaceColor.ON, WireColor.OFF, ColorModel.FLAT),
+        new LODSetting("2 [face:off, wire:varying, color:flat]", FaceColor.OFF, WireColor.VARYING, ColorModel.FLAT),
+        BOUNDS_ONLY);
   }
   
   public LODCandidates(LODSetting... candidates) {
