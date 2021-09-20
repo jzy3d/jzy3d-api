@@ -2,8 +2,6 @@ package org.jzy3d.chart;
 
 import java.awt.Component;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +65,9 @@ public class Chart {
   protected IMousePickingController mousePicking;
   protected ICameraKeyController keyboard;
   protected IScreenshotKeyController screenshotKey;
+  
+  protected Light lightOnCamera;
+  protected Light[] lightPairOnCamera;
 
 
   public Chart(IChartFactory factory, Quality quality) {
@@ -375,6 +376,7 @@ public class Chart {
       add(drawable, false);
     }
     getView().updateBounds();
+    updateLightsOnCameraPositions();
     return this;
   }
 
@@ -403,24 +405,65 @@ public class Chart {
   public Chart add(Drawable drawable, boolean updateView) {
     drawable.setSpaceTransformer(getView().getSpaceTransformer());
     getScene().getGraph().add(drawable, updateView);
+    updateLightsOnCameraPositions();
     return this;
   }
 
   /**
-   * Add a drawable by first evaluating its rendering performance from worse ({@link LODSetting.Bounds#ON}
-   * to most good looking rendering.
+   * Add a drawable by first evaluating its rendering performance onscreen from worse
+   * ({@link LODSetting.Bounds#ON} to most good looking rendering. This method is usefull when using
+   * facing low performance rendering, e.g. because one chose the fallback EmulGL renderer over
+   * native.
    * 
-   * A mouse is generated on the fly to register all rendering performance and later decide the best
-   * to use when rotating.
+   * LOD are evaluated in reverse order and for example mesure
+   * <ul>
+   * <li>LOD 3 took 40ms
+   * <li>LOD 2 took 60ms
+   * <li>LOD 1 took 80ms
+   * <li>LOD 0 took 100ms
+   * </ul>
+   * As soon as the mouse start dragging camera, the mouse controller will seak an acceptable LOD to
+   * reach the target
+   * <ul>
+   * <li>LOD 0 took 100ms // rejected
+   * <li>LOD 1 took 80ms // rejected
+   * <li>LOD 2 took 60ms // selected
+   * <li>LOD 3 took 40ms // ignored
+   * </ul>
+   * Now if the target time is 30ms and none match the setting, then the fastest configuration is
+   * applied
+   * <ul>
+   * <li>LOD 0 took 100ms // rejected
+   * <li>LOD 1 took 80ms // rejected
+   * <li>LOD 2 took 60ms // rejected
+   * <li>LOD 3 took 40ms // selected : minimal rendering time above threshold
+   * </ul>
    * 
+   * If no LOD configuration is given in the list, then nothing will be applied.
+   * 
+   * Note that a mouse is generated on the fly to register all rendering performance and later decide the best
+   * to use when rotating. The mouse is initialized after evaluating performance to ensure the user
+   * won't try to trigger rotations before evaluation finishes.
+   * 
+   * In addition to call this method, one should enable the mouse policy allowing to use these performance evaluations.
+   * 
+   * <pre>
+   * <code>
+   * AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
+   * policy.optimizeForRenderingTimeLargerThan = 80;// ms
+   * policy.optimizeByPerformanceKnowledge = true;
+   * 
+   * EmulGLSkin skin = EmulGLSkin.on(chart);
+   * skin.getMouse().setPolicy(policy);
+   * </code>
+   * </pre>
    * @param drawable
    * @return
    */
   public Chart add(Drawable drawable, LODCandidates candidates) {
-    ICameraMouseController mouse = addMouseCameraController();
-    add(drawable, false);
-    getView().updateBounds();
-
+    add(drawable, true);
+    //getView().updateBounds();
+    
     Wireframeable w = drawable.asWireframeable();
 
     if (w != null) {
@@ -429,44 +472,45 @@ public class Chart {
       TicToc t = new TicToc();
       for (LODSetting lodSetting : perf.getCandidates().getReverseRank()) {
         lodSetting.apply(w);
-        
+
         getQuality().setColorModel(lodSetting.getColorModel());
-        
-        int trials = 3;
+
+        int trials = 2;
+
         for (int i = 0; i < trials; i++) {
           t.tic();
           render();
           t.toc();
           double value = t.elapsedMilisecond();
           perf.setScore(lodSetting, value);
-          t.tocShow(lodSetting.getName() + " (" + i + ") took ");
+
+          //System.out.println(lodSetting.getName() + " (" + i + ") took " + value + "ms");
         }
       }
-      
+
+      // Wait for the end of evaluation to add mouse.
+      ICameraMouseController mouse = addMouseCameraController();
+
       mouse.setLODPerf(perf);
     }
-    //render();
-    /*MouseListener m = (MouseListener)mouse;
-    MouseMotionListener m2 = (MouseMotionListener)mouse;
-    
-    int n = 500;
-    int i = 20;
+    /*
+     * MouseListener m = (MouseListener)mouse; MouseMotionListener m2 = (MouseMotionListener)mouse;
+     * 
+     * int n = 500; int i = 20;
+     * 
+     * m.mousePressed(mouseEvent((Component)getCanvas(), i, i)); for (i = i+1; i < n; i++) {
+     * m2.mouseDragged(mouseEvent((Component)getCanvas(), i, i)); render(); }
+     * m.mouseReleased(mouseEvent((Component)getCanvas(), n, n));
+     */
+    // mouse.
 
-    m.mousePressed(mouseEvent((Component)getCanvas(), i, i));
-    for (i = i+1; i < n; i++) {
-      m2.mouseDragged(mouseEvent((Component)getCanvas(), i, i));
-      render();
-    }
-    m.mouseReleased(mouseEvent((Component)getCanvas(), n, n));*/
-    //mouse.
-    
-    //getCanvas().forceRepaint();
-    ((Component)getCanvas()).repaint();
-    ((Component)getCanvas()).repaint();
-    
+    // getCanvas().forceRepaint();
+    ((Component) getCanvas()).repaint();
+    ((Component) getCanvas()).repaint();
+
     return this;
   }
-  
+
   protected static MouseEvent mouseEvent(Component sourceCanvas, int x, int y) {
     return new MouseEvent(sourceCanvas, 0, 0, 0, x, y, 100, 100, 1, false, 0);
   }
@@ -566,18 +610,21 @@ public class Chart {
    */
   public Light addLightOnCamera(Color ambiant, Color diffuse, Color specular) {
     Coord3d position = getView().getCamera().getEye();
-    Light light = addLight(position, ambiant, diffuse, specular);
+    lightOnCamera = addLight(position, ambiant, diffuse, specular);
 
     getView().addViewPointChangedListener(new IViewPointChangedListener() {
       @Override
       public void viewPointChanged(ViewPointChangedEvent e) {
-        light.setPosition(getView().getCamera().getEye());
+        updateLightOnCameraPosition();
       }
     });
 
-    return light;
+    return lightOnCamera;
   }
 
+  protected void updateLightOnCameraPosition() {
+    lightOnCamera.setPosition(getView().getCamera().getEye());
+  }
 
 
   public Light[] addLightPairOnCamera() {
@@ -598,37 +645,43 @@ public class Chart {
 
     Light lightUp = addLight(lightPointUp, ambiant, diffuse, specular);
     Light lightDown = addLight(lightPointDown, ambiant, diffuse, specular);
+    
+    lightPairOnCamera = new Light[2];
+    lightPairOnCamera[0] = lightUp;
+    lightPairOnCamera[1] = lightDown;
+
 
     getView().addViewPointChangedListener(new IViewPointChangedListener() {
       @Override
       public void viewPointChanged(ViewPointChangedEvent e) {
-        Coord3d viewCenter = getView().getCenter(); // cartesian
-        Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
-        Coord3d lightPointUpPolar = viewPointPolar.add(0, (float) Math.PI / 2, 0); // polar coords
-        Coord3d lightPointDownPolar = viewPointPolar.add(0, -(float) Math.PI / 2, 0); // polar
-                                                                                      // coords
-        Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
-        Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
-
-        lightUp.setPosition(lightPointUp);
-        lightDown.setPosition(lightPointDown);
-
-        Chart.this.lightPointUpPolar.set(lightPointUpPolar);
-        Chart.this.lightPointDownPolar.set(lightPointDownPolar);
-
+        updateLightPairOnCameraPosition();
       }
     });
 
-    Light[] lights = new Light[2];
-    lights[0] = lightUp;
-    lights[1] = lightDown;
+    return lightPairOnCamera;
+  }
+  
+  protected void updateLightPairOnCameraPosition() {
+    Coord3d viewCenter = getView().getCenter(); // cartesian
+    Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
+    Coord3d lightPointUpPolar = viewPointPolar.add(0, (float) Math.PI / 2, 0); // polar coords
+    Coord3d lightPointDownPolar = viewPointPolar.add(0, -(float) Math.PI / 2, 0); // polar
+                                                                                  // coords
+    Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
+    Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
 
-    return lights;
+    lightPairOnCamera[0].setPosition(lightPointUp);
+    lightPairOnCamera[1].setPosition(lightPointDown);
+  }
+  
+  protected void updateLightsOnCameraPositions() {
+    if(lightOnCamera!=null)
+      updateLightOnCameraPosition();
+    if(lightPairOnCamera!=null)
+      updateLightPairOnCameraPosition();
   }
 
-  public final Coord3d lightPointUpPolar = new Coord3d();
-  public final Coord3d lightPointDownPolar = new Coord3d();
-
+  
   /* SHORTCUTS */
 
   public void setAxeDisplayed(boolean status) {
