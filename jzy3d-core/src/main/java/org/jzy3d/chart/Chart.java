@@ -65,7 +65,7 @@ public class Chart {
   protected IMousePickingController mousePicking;
   protected ICameraKeyController keyboard;
   protected IScreenshotKeyController screenshotKey;
-  
+
   protected Light lightOnCamera;
   protected Light[] lightPairOnCamera;
 
@@ -411,18 +411,45 @@ public class Chart {
 
   /**
    * Add a drawable by first evaluating its rendering performance onscreen from worse
-   * ({@link LODSetting.Bounds#ON} to most good looking rendering. This method is usefull when using
+   * ({@link LODSetting.Bounds#ON} to most good looking rendering. This method is useful when using
    * facing low performance rendering, e.g. because one chose the fallback EmulGL renderer over
    * native.
    * 
-   * LOD are evaluated in reverse order and for example mesure
+   * <h2>Using dynamic level of details</h2>
+   * 
+   * This requires to have a properly configured {@link AdaptiveMouseController} as shown below
+   * 
+   * <pre>
+   * <code>
+   * chart.add(myDrawable, new LODCandidates());
+   * 
+   * AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
+   * policy.optimizeForRenderingTimeLargerThan = 80;// ms
+   * policy.optimizeByPerformanceKnowledge = true;
+   * 
+   * EmulGLSkin skin = EmulGLSkin.on(chart);
+   * skin.getMouse().setPolicy(policy);
+   * </code>
+   * </pre>
+   * 
+   * <h2>Algorithm</h2>
+   * 
+   * Each Level of Detail configuration is described by a {@link LODSetting}. All {@link LODSetting}
+   * are ranked in a {@link LODCandidates} instance that indicates which are the most good looking
+   * settings. We define the best with lowest ID, the worse with highest ID.
+   * 
+   * <h3>Training</h3> LOD are evaluated in reverse order, as soon as the drawable is added to the
+   * chart. Evaluation store a rendering time for each {@link LODSetting}
    * <ul>
    * <li>LOD 3 took 40ms
    * <li>LOD 2 took 60ms
    * <li>LOD 1 took 80ms
    * <li>LOD 0 took 100ms
    * </ul>
-   * As soon as the mouse start dragging camera, the mouse controller will seak an acceptable LOD to
+   * 
+   * <h3>Applying</h3>
+   * 
+   * As soon as the mouse start dragging camera, the mouse controller will seek an acceptable LOD to
    * reach the target
    * <ul>
    * <li>LOD 0 took 100ms // rejected
@@ -441,29 +468,20 @@ public class Chart {
    * 
    * If no LOD configuration is given in the list, then nothing will be applied.
    * 
-   * Note that a mouse is generated on the fly to register all rendering performance and later decide the best
-   * to use when rotating. The mouse is initialized after evaluating performance to ensure the user
-   * won't try to trigger rotations before evaluation finishes.
+   * Note that a mouse is generated on the fly to register all rendering performance and later
+   * decide the best to use when rotating. The mouse is initialized after evaluating performance to
+   * ensure the user won't try to trigger rotations before evaluation finishes.
    * 
-   * In addition to call this method, one should enable the mouse policy allowing to use these performance evaluations.
+   * In addition to call this method, one should enable the mouse policy allowing to use these
+   * performance evaluations.
    * 
-   * <pre>
-   * <code>
-   * AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
-   * policy.optimizeForRenderingTimeLargerThan = 80;// ms
-   * policy.optimizeByPerformanceKnowledge = true;
-   * 
-   * EmulGLSkin skin = EmulGLSkin.on(chart);
-   * skin.getMouse().setPolicy(policy);
-   * </code>
-   * </pre>
    * @param drawable
    * @return
    */
   public Chart add(Drawable drawable, LODCandidates candidates) {
     add(drawable, true);
-    //getView().updateBounds();
-    
+    // getView().updateBounds();
+
     Wireframeable w = drawable.asWireframeable();
 
     if (w != null) {
@@ -484,7 +502,7 @@ public class Chart {
           double value = t.elapsedMilisecond();
           perf.setScore(lodSetting, value);
 
-          //System.out.println(lodSetting.getName() + " (" + i + ") took " + value + "ms");
+          // System.out.println(lodSetting.getName() + " (" + i + ") took " + value + "ms");
         }
       }
 
@@ -645,7 +663,7 @@ public class Chart {
 
     Light lightUp = addLight(lightPointUp, ambiant, diffuse, specular);
     Light lightDown = addLight(lightPointDown, ambiant, diffuse, specular);
-    
+
     lightPairOnCamera = new Light[2];
     lightPairOnCamera[0] = lightUp;
     lightPairOnCamera[1] = lightDown;
@@ -660,7 +678,7 @@ public class Chart {
 
     return lightPairOnCamera;
   }
-  
+
   protected void updateLightPairOnCameraPosition() {
     Coord3d viewCenter = getView().getCenter(); // cartesian
     Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
@@ -673,15 +691,15 @@ public class Chart {
     lightPairOnCamera[0].setPosition(lightPointUp);
     lightPairOnCamera[1].setPosition(lightPointDown);
   }
-  
+
   protected void updateLightsOnCameraPositions() {
-    if(lightOnCamera!=null)
+    if (lightOnCamera != null)
       updateLightOnCameraPosition();
-    if(lightPairOnCamera!=null)
+    if (lightPairOnCamera != null)
       updateLightPairOnCameraPosition();
   }
 
-  
+
   /* SHORTCUTS */
 
   public void setAxeDisplayed(boolean status) {
