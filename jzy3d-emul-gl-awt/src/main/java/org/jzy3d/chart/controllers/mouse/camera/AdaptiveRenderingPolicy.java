@@ -31,7 +31,7 @@ public class AdaptiveRenderingPolicy {
    * 
    * Optimizing performance is done by other parameters.
    */
-  public RateLimiter renderingRateLimiter = null;
+  public RateLimiter renderingRateLimiter = new RateLimiterAdaptsToRenderTime();
 
   /**
    * The canvas rendering time threshold above which the mouse controller will apply the enabled

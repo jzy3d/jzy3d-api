@@ -8,6 +8,14 @@ import org.jzy3d.plot3d.rendering.view.lod.LODSetting.Bounds;
 import org.jzy3d.plot3d.rendering.view.lod.LODSetting.FaceColor;
 import org.jzy3d.plot3d.rendering.view.lod.LODSetting.WireColor;
 
+/**
+ * List of Level-Of-Details settings, ranked from most good looking to less good looking. 
+ * 
+ * @see {@link LODPerf}
+ * 
+ * @author Martin Pernollet
+ *
+ */
 public class LODCandidates {
   List<LODSetting> rank = new ArrayList<>();
   List<LODSetting> reverseRank;
