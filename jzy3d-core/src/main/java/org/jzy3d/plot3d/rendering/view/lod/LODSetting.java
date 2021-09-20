@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.rendering.view.lod;
 
+import org.jzy3d.colors.Color;
+import org.jzy3d.painters.ColorModel;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 
 public class LODSetting {
@@ -9,13 +11,14 @@ public class LODSetting {
   WireColor wire;
   Light light;
   Bounds bounds;
+  ColorModel colorModel = ColorModel.SMOOTH;
 
   public enum FaceColor {
-    SMOOTH, FLAT, OFF
+    ON, OFF
   }
 
   public enum WireColor {
-    SMOOTH, FLAT, UNIFORM, OFF
+    VARYING, UNIFORM, OFF
   }
 
   public enum Light {
@@ -30,32 +33,29 @@ public class LODSetting {
   public LODSetting() {}
 
   public LODSetting(String name, Bounds bounds) {
-    this(name, FaceColor.OFF, WireColor.OFF, Light.TWO, bounds);
+    this(name, FaceColor.OFF, WireColor.OFF, bounds);
   }
 
   public LODSetting(String name, FaceColor face, WireColor wire) {
-    this(name, face, wire, Light.TWO, Bounds.OFF);
+    this(name, face, wire, Bounds.OFF);
   }
 
-  public LODSetting(String name, FaceColor face, WireColor wire, Light light) {
-    this(name, face, wire, light, Bounds.OFF);
+  public LODSetting(String name, FaceColor face, WireColor wire, ColorModel colorModel) {
+    this(name, face, wire, Bounds.OFF);
+    setColorModel(colorModel);
   }
 
-  public LODSetting(String name, FaceColor face, WireColor wire, Light light, Bounds bounds) {
+  public LODSetting(String name, FaceColor face, WireColor wire, Bounds bounds) {
     super();
     this.name = name;
     this.face = face;
     this.wire = wire;
-    this.light = light;
     this.bounds = bounds;
   }
 
   public void apply(Wireframeable wireframeable) {
     switch (face) {
-      case SMOOTH:
-        wireframeable.setFaceDisplayed(true);
-        break;
-      case FLAT:
+      case ON:
         wireframeable.setFaceDisplayed(true);
         break;
       case OFF:
@@ -66,14 +66,14 @@ public class LODSetting {
     }
 
     switch (wire) {
-      case SMOOTH:
+      case VARYING:
         wireframeable.setWireframeDisplayed(true);
-        break;
-      case FLAT:
-        wireframeable.setWireframeDisplayed(true);
+        wireframeable.setWireframeColorFromPolygonPoints(true);
         break;
       case UNIFORM:
+        wireframeable.setWireframeColor(Color.BLACK);
         wireframeable.setWireframeDisplayed(true);
+        wireframeable.setWireframeColorFromPolygonPoints(false);
         break;
       case OFF:
         wireframeable.setWireframeDisplayed(false);
@@ -136,5 +136,11 @@ public class LODSetting {
     this.light = light;
   }
 
+  public ColorModel getColorModel() {
+    return colorModel;
+  }
 
+  public void setColorModel(ColorModel colorModel) {
+    this.colorModel = colorModel;
+  }
 }

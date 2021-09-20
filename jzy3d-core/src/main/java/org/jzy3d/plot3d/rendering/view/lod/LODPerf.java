@@ -7,7 +7,7 @@ import org.jzy3d.plot3d.primitives.Wireframeable;
 public class LODPerf {
   LODCandidates candidates;
   Map<LODSetting, Double> score = new HashMap<>();
-
+  boolean debug = false;
 
 
   public LODPerf() {
@@ -32,9 +32,10 @@ public class LODPerf {
   public LODSetting applyBestCandidateBelow(double maxMili, Wireframeable wireframeable) {
     for (LODSetting s : candidates.getRank()) {
       if (getScore(s) < maxMili) {
-        System.out.println("Apply to " + wireframeable + " select " + s.getName() + " for "
-            + maxMili + "ms for score " + getScore(s));
-
+        if (debug) {
+          System.out.println("Apply to " + wireframeable + " select " + s.getName() + " for "
+              + maxMili + "ms for score " + getScore(s));
+        }
         s.apply(wireframeable);
         return s;
       }
@@ -42,20 +43,26 @@ public class LODPerf {
 
     if (otherwiseLowest) {
       LODSetting s = getLowestScore();
-      if(s!=null) {
+      if (s != null) {
+        if (debug) {
+          System.out.println("Apply to " + wireframeable + " select " + s.getName() + " for "
+              + maxMili + "ms for score " + getScore(s));
+        }
         s.apply(wireframeable);
       }
       return s;
-    } 
-    
-    if(otherwiseBoundsOnlyIfCandidate) {
+    }
+
+    if (otherwiseBoundsOnlyIfCandidate) {
       // Apply BOUNDS only if BOUNDS only is in the list, regardless it reaches the max score
       LODSetting s = LODCandidates.BOUNDS_ONLY;
 
       if (candidates.getRank().contains(s)) {
         s.apply(wireframeable);
-        System.out.println("Apply to " + wireframeable + " select " + s.getName() + " for "
-            + maxMili + "ms for score " + getScore(s));
+        if (debug) {
+          System.out.println("Apply to " + wireframeable + " select " + s.getName() + " for "
+              + maxMili + "ms for score " + getScore(s));
+        }
         return s;
       }
 

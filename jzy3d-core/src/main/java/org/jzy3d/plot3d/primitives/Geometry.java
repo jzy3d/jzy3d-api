@@ -14,6 +14,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 import com.google.common.collect.Lists;
@@ -191,10 +192,11 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     if (mapper != null)
       mapper.preDraw(this);
 
+    
     if (isReflectLight()) {
       applyMaterial(painter);
     }
-
+    
     // Draw content of polygon
     drawFace(painter);
 
@@ -202,7 +204,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     // Draw edge of polygon
     drawWireframe(painter);
-
+    
     if (mapper != null)
       mapper.postDraw(this);
 

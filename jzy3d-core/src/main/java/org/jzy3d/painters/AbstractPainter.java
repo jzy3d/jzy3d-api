@@ -7,6 +7,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.ClipEq;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -51,6 +52,11 @@ public abstract class AbstractPainter implements IPainter {
   @Override
   public void setCamera(Camera camera) {
     this.camera = camera;
+  }
+  
+  @Override
+  public Quality getQuality() {
+    return getView().getChart().getQuality();
   }
 
   @Override
@@ -245,7 +251,7 @@ public abstract class AbstractPainter implements IPainter {
         throw new IllegalArgumentException("This equation is not supported : " + eq);
     }
   }
-
+  
   @Override
   public void raster(Coord3d coord, SpaceTransformer transform) {
     if (transform == null) {
