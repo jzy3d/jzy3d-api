@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 
+/**
+ * Hold performance results of multiple candidate {@link LODSetting} aiming at choosing an
+ * appropriate level of details according to the rendering time expectations.
+ * 
+ * @author Martin Pernollet
+ *
+ */
 public class LODPerf {
   LODCandidates candidates;
   Map<LODSetting, Double> score = new HashMap<>();
@@ -88,5 +95,12 @@ public class LODPerf {
 
   public LODCandidates getCandidates() {
     return candidates;
+  }
+
+  public void print() {
+    for (LODSetting lodSetting : getCandidates().getReverseRank()) {
+      double value = getScore(lodSetting);
+      System.out.println("LODPerf eval : " + lodSetting.getName() + " took " + value + "ms");
+    }
   }
 }
