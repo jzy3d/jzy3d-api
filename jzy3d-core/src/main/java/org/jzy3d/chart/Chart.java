@@ -621,21 +621,26 @@ public class Chart {
   /**
    * Add a light that is attached to camera, which is moved as soon as the viewpoint changes.
    * 
+   * If this light was already created, the initial instance is returned, even if the color setting
+   * do not match.
+   * 
    * @param ambiant
    * @param diffuse
    * @param specular
    * @return
    */
   public Light addLightOnCamera(Color ambiant, Color diffuse, Color specular) {
-    Coord3d position = getView().getCamera().getEye();
-    lightOnCamera = addLight(position, ambiant, diffuse, specular);
+    if (lightOnCamera == null) {
+      Coord3d position = getView().getCamera().getEye();
+      lightOnCamera = addLight(position, ambiant, diffuse, specular);
 
-    getView().addViewPointChangedListener(new IViewPointChangedListener() {
-      @Override
-      public void viewPointChanged(ViewPointChangedEvent e) {
-        updateLightOnCameraPosition();
-      }
-    });
+      getView().addViewPointChangedListener(new IViewPointChangedListener() {
+        @Override
+        public void viewPointChanged(ViewPointChangedEvent e) {
+          updateLightOnCameraPosition();
+        }
+      });
+    }
 
     return lightOnCamera;
   }
@@ -653,29 +658,42 @@ public class Chart {
     return addLightPairOnCamera(colorForAll, colorForAll, colorForAll);
   }
 
+  /**
+   * Add a light pair syncronized to camera. Top light is 45° above the camera, bottom light is 45°
+   * below the camera.
+   * 
+   * If these lights were already created, the initial instances are returned, even if the color setting
+   * do not match.
+   * 
+   * @param ambiant
+   * @param diffuse
+   * @param specular
+   * @return
+   */
+
   public Light[] addLightPairOnCamera(Color ambiant, Color diffuse, Color specular) {
-    Coord3d viewCenter = getView().getCenter(); // cartesian
-    Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
-    Coord3d lightPointUpPolar = viewPointPolar.add(0, (float) Math.PI / 2, 0); // polar coords
-    Coord3d lightPointDownPolar = viewPointPolar.add(0, -(float) Math.PI / 2, 0); // polar coords
-    Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
-    Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
+    if (lightPairOnCamera == null) {
+      Coord3d viewCenter = getView().getCenter(); // cartesian
+      Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
+      Coord3d lightPointUpPolar = viewPointPolar.add(0, (float) Math.PI / 2, 0); // polar coords
+      Coord3d lightPointDownPolar = viewPointPolar.add(0, -(float) Math.PI / 2, 0); // polar coords
+      Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
+      Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
 
-    Light lightUp = addLight(lightPointUp, ambiant, diffuse, specular);
-    Light lightDown = addLight(lightPointDown, ambiant, diffuse, specular);
+      Light lightUp = addLight(lightPointUp, ambiant, diffuse, specular);
+      Light lightDown = addLight(lightPointDown, ambiant, diffuse, specular);
 
-    lightPairOnCamera = new Light[2];
-    lightPairOnCamera[0] = lightUp;
-    lightPairOnCamera[1] = lightDown;
+      lightPairOnCamera = new Light[2];
+      lightPairOnCamera[0] = lightUp;
+      lightPairOnCamera[1] = lightDown;
 
-
-    getView().addViewPointChangedListener(new IViewPointChangedListener() {
-      @Override
-      public void viewPointChanged(ViewPointChangedEvent e) {
-        updateLightPairOnCameraPosition();
-      }
-    });
-
+      getView().addViewPointChangedListener(new IViewPointChangedListener() {
+        @Override
+        public void viewPointChanged(ViewPointChangedEvent e) {
+          updateLightPairOnCameraPosition();
+        }
+      });
+    }
     return lightPairOnCamera;
   }
 
