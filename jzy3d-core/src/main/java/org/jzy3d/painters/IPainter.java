@@ -138,6 +138,9 @@ public interface IPainter {
   public ICanvas getCanvas();
 
   public void setCanvas(ICanvas canvas);
+  
+  /** Return the Quality setting of the chart, which may be different from the one given at the {@link #configureGL(Quality)} step. */
+  public Quality getQuality();
 
   /** Apply quality settings as OpenGL commands */
   public void configureGL(Quality quality);
@@ -422,6 +425,8 @@ public interface IPainter {
   public void glNormal3f(float nx, float ny, float nz);
 
   public void glShadeModel(int mode);
+
+  public void glShadeModel(ColorModel colorModel);
 
   public void glShadeModel_Smooth();
 

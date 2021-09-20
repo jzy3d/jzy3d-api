@@ -407,7 +407,7 @@ public class Chart {
   }
 
   /**
-   * Add a drawable by first evaluating its rendering performance from worse ({@link LODSetting#ON}
+   * Add a drawable by first evaluating its rendering performance from worse ({@link LODSetting.Bounds#ON}
    * to most good looking rendering.
    * 
    * A mouse is generated on the fly to register all rendering performance and later decide the best
@@ -416,7 +416,7 @@ public class Chart {
    * @param drawable
    * @return
    */
-  public Chart addProgressive(Drawable drawable, LODCandidates candidates) {
+  public Chart add(Drawable drawable, LODCandidates candidates) {
     ICameraMouseController mouse = addMouseCameraController();
     add(drawable, false);
     getView().updateBounds();
@@ -429,13 +429,18 @@ public class Chart {
       TicToc t = new TicToc();
       for (LODSetting lodSetting : perf.getCandidates().getReverseRank()) {
         lodSetting.apply(w);
-
-        t.tic();
-        render();
-        t.toc();
-        double value = t.elapsedMilisecond();
-        perf.setScore(lodSetting, value);
-        t.tocShow(lodSetting.getName() + " took ");
+        
+        getQuality().setColorModel(lodSetting.getColorModel());
+        
+        int trials = 3;
+        for (int i = 0; i < trials; i++) {
+          t.tic();
+          render();
+          t.toc();
+          double value = t.elapsedMilisecond();
+          perf.setScore(lodSetting, value);
+          t.tocShow(lodSetting.getName() + " (" + i + ") took ");
+        }
       }
       
       mouse.setLODPerf(perf);

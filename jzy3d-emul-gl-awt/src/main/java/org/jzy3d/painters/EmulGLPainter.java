@@ -116,11 +116,8 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     }
 
     // Make smooth colors for polygons (interpolate color between points)
-    if (quality.isSmoothColor())
-      gl.glShadeModel(GL.GL_SMOOTH);
-    else
-      gl.glShadeModel(GL.GL_FLAT);
-
+    glShadeModel(quality.getColorModel());
+    
     // Make smoothing setting
     if (quality.isSmoothPolygon()) {
       gl.glEnable(GL.GL_POLYGON_SMOOTH);
@@ -1011,6 +1008,19 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
   // GL LIGHTS
 
+  @Override
+  public void glShadeModel(ColorModel colorModel) {
+    if(ColorModel.SMOOTH.equals(colorModel)) {
+      gl.glShadeModel(GL.GL_SMOOTH);
+    }
+    else if(ColorModel.FLAT.equals(colorModel)) {
+      gl.glShadeModel(GL.GL_FLAT);
+    }
+    else {
+      throw new IllegalArgumentException("Unsupported setting : '"+colorModel + "'");
+    }
+  }
+  
   @Override
   public void glShadeModel(int mode) {
     gl.glShadeModel(mode);
