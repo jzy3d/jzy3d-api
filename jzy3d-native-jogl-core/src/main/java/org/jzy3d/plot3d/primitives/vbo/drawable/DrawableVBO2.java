@@ -93,11 +93,14 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
  * 
  */
 public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
+  public static boolean COMPUTE_NORMALS_IN_JAVA = true;
+  public static boolean PRIMITIVE_RESTART = true;
+  public static int PRIMITIVE_RESTART_VALUE = 0xffff;
+
   protected IGLLoader<DrawableVBO2> loader;
 
   protected boolean hasNormalInVertexArray = false;
 
-  public static boolean COMPUTE_NORMALS_IN_JAVA = true;
 
   protected IntBuffer elements;
   protected FloatBuffer vertices;
@@ -280,246 +283,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * <li>If both colormap and colors are given, an exception is thrown.
    * </ul>
    * 
-   * 
-   * 
-   * 
    * @see {@link DrawableVBO2} constructor for argument description.
    */
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] geometries, int geometrySize, IColorMap colormap, float[] coloring, NormalMode normalMode) {
-    IGLLoader<DrawableVBO2> loader = new IGLLoader<DrawableVBO2>() {
-      @Override
-      public void load(IPainter painter, DrawableVBO2 drawable) throws Exception {
-
-        drawable.geometrySize = geometrySize;
-        if(geometrySize==TRIANGLE_SIZE) {
-          drawable.glGeometryType = GL.GL_TRIANGLES;
-        }
-        else if(geometrySize==QUAD_SIZE) {
-          drawable.glGeometryType = GL2.GL_POLYGON;
-        }
-        
-        // -------------------------------
-        // Vertices
-        FloatBuffer vertices = Buffers.newDirectFloatBuffer((points.length / pointDimensions) * 3);
-        // FloatBuffer vertices = FloatBuffer.allocate((points.length / pointDimensions) * 3);
-
-        // Temporary list, for computing color and normals later
-        List<Coord3d> verticeList = new ArrayList<>();
-
-        BoundingBox3d bounds = new BoundingBox3d();
-
-        for (int i = 0; i < points.length; i += pointDimensions) {
-          // Store values
-          vertices.put((float) points[i]);
-          vertices.put((float) points[i + 1]);
-          vertices.put((float) points[i + 2]);
-
-          // Hold bounds
-          bounds.add(points[i], points[i + 1], points[i + 2]);
-
-          // Keep for later processing
-          Coord3d c = new Coord3d(points[i], points[i + 1], points[i + 2]);
-          verticeList.add(c);
-        }
-        vertices.rewind();
-
-
-        // -------------------------------
-        // Colors
-
-        FloatBuffer colors = null;
-
-        // drawable.setColorChannels(4);
-
-        if (colormap != null && coloring != null) {
-          throw new IllegalArgumentException(
-              "Should either define colormap or colors array, or none, but not both");
-        } else if (colormap != null) {
-          // colors = FloatBuffer.allocate(verticeList.size() * drawable.colorChannels);
-          colors = Buffers.newDirectFloatBuffer(verticeList.size() * drawable.getColorChannels());
-
-          ColorMapper colorMapper = new ColorMapper(colormap, bounds.getZmin(), bounds.getZmax());
-
-          for (Coord3d c : verticeList) {
-            Color color = colorMapper.getColor(c);
-
-            colors.put(color.r);
-            colors.put(color.g);
-            colors.put(color.b);
-
-            if (drawable.getColorChannels() > 3)
-              colors.put(color.a);
-          }
-          colors.rewind();
-        } else if (coloring != null) {
-          colors = Buffers.newDirectFloatBuffer(coloring);
-        }
-
-        // -------------------------------
-        // Triangles
-
-        IntBuffer elements = null;
-
-        if (geometries != null) {
-          //elements = IntBuffer.allocate(geometries.length);
-          elements = Buffers.newDirectIntBuffer(geometries.length);
-          elements.put(geometries);
-          elements.rewind();
-        }
-
-        // -------------------------------
-        // Normals
-
-        FloatBuffer normals = null;
-
-        if (COMPUTE_NORMALS_IN_JAVA) {
-          if (geometries != null && NormalMode.SHARED.equals(normalMode)) {
-            normals = computeSharedNormals(geometries, geometrySize, verticeList);
-          } else {
-            normals = computeSimpleNormals(verticeList);
-          }
-        }
-
-
-        // -------------------------------
-        // Store data
-
-        drawable.setHasNormalInVertexArray(false);
-        drawable.setData(painter, elements, vertices, normals, colors, bounds);
-
-        // drawable.setHasNormalInVertexArray(true);
-        // drawable.setData(painter, elements, verticeAndNormals, null, colors, bounds);
-      }
-
-      public FloatBuffer computeSimpleNormals(List<Coord3d> verticeList) {
-        // FloatBuffer simpleNormals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE);
-        FloatBuffer simpleNormals = Buffers.newDirectFloatBuffer(verticeList.size() * VERTEX_SIZE);
-
-        for (int i = 0; i < verticeList.size(); i += geometrySize) {
-          // gather coordinates of a triangle
-          Coord3d c0 = verticeList.get(i + 0);
-          Coord3d c1 = verticeList.get(i + 1);
-          Coord3d c2 = verticeList.get(i + 2);
-
-          // compute normal
-          Coord3d normal = Normal.compute(c0, c1, c2);
-
-          for (int j = 0; j < geometrySize; j++) {
-            simpleNormals.put(normal.x);
-            simpleNormals.put(normal.y);
-            simpleNormals.put(normal.z);
-          }
-        }
-        simpleNormals.rewind();
-
-        return simpleNormals;
-      }
-
-      /**
-       * When vertices are shared between multiple triangles, each vertex normal should be unique
-       * and computed out of all triangles that share the vertex.
-       * 
-       * Indeed, the normal being computed out of the cross product of the three points of a face, a
-       * vertex belonging to N faces will have N normals.
-       * 
-       * Getting a single normal for a shared vertex is made by computing the mean of all the
-       * normals that may computed for this vertex, which has the great advantage of smoothing the
-       * light reflection on the border (in other word this avoid the impression of a sharp border).
-       * 
-       * In case a sharp border effect is desired for this object, then one should not share
-       * vertices between faces. To do so, do NOT provide any <code>geometry</code> array as
-       * {@link DrawableVBO2} constructor.
-       * 
-       * @param geometries
-       * @param geometrySize
-       * @param verticeList
-       * @return
-       */
-      public FloatBuffer computeSharedNormals(int[] geometries, int geometrySize,
-          List<Coord3d> verticeList) {
-
-        ArrayListMultimap<Coord3d, Coord3d> vertexNormals = ArrayListMultimap.create();
-
-        Map<Coord3d, Integer> vertexPosition = new HashMap<>();
-
-        for (int i = 0; i < geometries.length; i += geometrySize) {
-          // gather coordinates of a triangle
-          Coord3d c0 = verticeList.get(geometries[i + 0]);
-          Coord3d c1 = verticeList.get(geometries[i + 1]);
-          Coord3d c2 = verticeList.get(geometries[i + 2]);
-
-          // compute normal
-          Coord3d normal = Normal.compute(c0, c1, c2);
-
-          // append normals for each geometry
-          vertexNormals.put(c0, normal);
-          vertexNormals.put(c1, normal);
-          vertexNormals.put(c2, normal);
-
-          // Keep index of each vertex to later store the normal at appropriate position
-          vertexPosition.put(c0, geometries[i + 0]);
-          vertexPosition.put(c1, geometries[i + 1]);
-          vertexPosition.put(c2, geometries[i + 2]);
-
-        }
-
-        // average all normals that come from all triangles sharing this
-        // vertex
-
-        Coord3d[] averagedNormals = new Coord3d[vertexNormals.keySet().size()];
-
-        for (Coord3d vertex : vertexNormals.keySet()) {
-          Coord3d averagedNormal = new Coord3d();
-
-          List<Coord3d> normals = vertexNormals.get(vertex);
-
-          for (Coord3d normal : normals) {
-            averagedNormal.addSelf(normal);
-          }
-          averagedNormal.x /= normals.size();
-          averagedNormal.y /= normals.size();
-          averagedNormal.z /= normals.size();
-
-          // Get vertex position
-          int position = vertexPosition.get(vertex);
-
-          averagedNormals[position] = averagedNormal;
-        }
-
-        // FloatBuffer normals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE);
-        FloatBuffer normals = Buffers.newDirectFloatBuffer(verticeList.size() * VERTEX_SIZE);
-
-        for (Coord3d averagedNormal : averagedNormals) {
-          normals.put(averagedNormal.x);
-          normals.put(averagedNormal.y);
-          normals.put(averagedNormal.z);
-        }
-        normals.rewind();
-
-        // Build a Buffer with vertices AND normals. Nice but less readable than a separate
-        // normal buffer.
-        //
-        // FloatBuffer verticeAndNormals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE *
-        // 2);
-        // for (int j = 0; j < verticeList.size(); j++) {
-        // Coord3d v = verticeList.get(j);
-        // Coord3d n = averagedNormals[j];
-        //
-        // verticeAndNormals.put(v.x);
-        // verticeAndNormals.put(v.y);
-        // verticeAndNormals.put(v.z);
-        // verticeAndNormals.put(n.x);
-        // verticeAndNormals.put(n.y);
-        // verticeAndNormals.put(n.z);
-        // }
-        // verticeAndNormals.rewind();
-
-        return normals;
-      }
-    };
-
-    return loader;
+    return new VBOBufferLoader(points, pointDimensions, geometries, geometrySize, colormap, coloring, normalMode);
   }
 
   /**
@@ -547,6 +315,19 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
 
     GL gl = getGL(painter);
+    
+    /*if(PRIMITIVE_RESTART) {
+      if (!gl.isGL2()) {
+        throw new RuntimeException("Need a GL2 instance");
+      }
+
+      GL2 gl2 = gl.getGL2();
+      // https://stackoverflow.com/questions/26944959/opengl-separating-polygons-inside-vbo
+      gl2.glPrimitiveRestartIndex(PRIMITIVE_RESTART_VALUE);
+      gl2.glEnable(GL2.GL_PRIMITIVE_RESTART);
+      //gl2.glEnable(GL2.GL_PRIMITIVE_RESTART_FIXED_INDEX);
+    }*/
+
 
     // -----------------------------------
     // Vertices
@@ -631,6 +412,18 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     }
 
     GL2 gl2 = gl.getGL2();
+    
+    if(PRIMITIVE_RESTART) {
+      // https://www.khronos.org/opengl/wiki/Vertex_Rendering#Primitive_Restart
+      // https://stackoverflow.com/questions/4386861/opengl-jogl-multiple-triangle-fans-in-a-vertex-array
+      // https://stackoverflow.com/questions/26944959/opengl-separating-polygons-inside-vbo
+      gl2.glEnable(GL2.GL_PRIMITIVE_RESTART);
+      gl2.glPrimitiveRestartIndex(PRIMITIVE_RESTART_VALUE);
+      
+      
+      //gl2.glEnable(GL2.GL_PRIMITIVE_RESTART_FIXED_INDEX);
+    }
+
 
     // -----------------------------------
     // Prepare buffers
@@ -811,7 +604,4 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   public int[] getElementArrayIds() {
     return elementArrayIds;
   }
-
-
-
 }
