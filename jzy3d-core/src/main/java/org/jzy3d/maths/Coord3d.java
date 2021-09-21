@@ -99,6 +99,12 @@ public class Coord3d implements Serializable {
     z = c[2];
   }
 
+  public Coord3d(double[] c) {
+    x = (float)c[0];
+    y = (float)c[1];
+    z = (float)c[2];
+  }
+
   /**
    * Create a 3d coordinate. When using polar mode, x is azimuth, y is elevation, and z is range.
    */
