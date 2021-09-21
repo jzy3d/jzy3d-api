@@ -58,6 +58,8 @@ public class TestChart_DynamicLevelOfDetails {
       double value = perf.getScore(s);
       Assert.assertFalse(Double.isNaN(value));
     }
+    
+    perf.print();
   }
 
 

@@ -253,8 +253,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
         // -------------------------------
         // Vertices
-
-        FloatBuffer vertices = FloatBuffer.allocate((points.length / pointDimensions) * 3);
+        FloatBuffer vertices = Buffers.newDirectFloatBuffer((points.length / pointDimensions) * 3);
+        //FloatBuffer vertices = FloatBuffer.allocate((points.length / pointDimensions) * 3);
 
         // Temporary list, for computing color and normals later
         List<Coord3d> verticeList = new ArrayList<>();
@@ -283,8 +283,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
         // drawable.setColorChannels(4);
 
         if (colormap != null) {
-          colors = FloatBuffer.allocate(verticeList.size() * drawable.colorChannels);
-
+          //colors = FloatBuffer.allocate(verticeList.size() * drawable.colorChannels);
+          colors = Buffers.newDirectFloatBuffer(verticeList.size() * drawable.colorChannels);
+          
           ColorMapper colorMapper = new ColorMapper(colormap, bounds.getZmin(), bounds.getZmax());
 
           for (Coord3d c : verticeList) {
@@ -306,7 +307,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
         IntBuffer elements = null;
 
         if (geometries != null) {
-          elements = IntBuffer.allocate(geometries.length);
+          //elements = IntBuffer.allocate(geometries.length);
+          elements = Buffers.newDirectIntBuffer(geometries.length);
           elements.put(geometries);
           elements.rewind();
         }
@@ -336,8 +338,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       }
 
       public FloatBuffer computeSimpleNormals(List<Coord3d> verticeList) {
-        FloatBuffer simpleNormals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE);
-
+        //FloatBuffer simpleNormals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE);
+        FloatBuffer simpleNormals = Buffers.newDirectFloatBuffer(verticeList.size() * VERTEX_SIZE);
+        
         for (int i = 0; i < verticeList.size(); i += GEOMETRY_SIZE) {
           // gather coordinates of a triangle
           Coord3d c0 = verticeList.get(i + 0);
@@ -429,7 +432,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
           averagedNormals[position] = averagedNormal;
         }
 
-        FloatBuffer normals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE);
+        //FloatBuffer normals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE);
+        FloatBuffer normals = Buffers.newDirectFloatBuffer(verticeList.size() * VERTEX_SIZE);
 
         for (Coord3d averagedNormal : averagedNormals) {
           normals.put(averagedNormal.x);
