@@ -18,9 +18,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * @author martin
  */
 
-
-@Ignore // TRY TO SEE IF GITLAB CI BETTER PASS WITHOUT THIS TEST
-
+//@Ignore // TRY TO SEE IF GITLAB CI BETTER PASS WITHOUT THIS TEST
 
 public class TestDrawableVBO2 {
   

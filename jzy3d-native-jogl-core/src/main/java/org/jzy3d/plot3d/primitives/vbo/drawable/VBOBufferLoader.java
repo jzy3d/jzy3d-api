@@ -34,7 +34,62 @@ public class VBOBufferLoader implements IGLLoader<DrawableVBO2> {
   IColorMap colormap;
   float[] coloring;
   NormalMode normalMode;
+  
+  protected int[] multiGeometryStartIndices;
+  protected int[] multiGeometryLengthes;
+  
+  public VBOBufferLoader(double[] points, int pointDimensions, int[] multiGeometryStartIndices, int[] multiGeometryLengthes, int geometrySize,
+      IColorMap colormap, float[] coloring, NormalMode normalMode) {
+    super();
+    this.points = points;
+    this.pointDimensions = pointDimensions;
+    this.multiGeometryStartIndices = multiGeometryStartIndices;
+    this.multiGeometryLengthes = multiGeometryLengthes;
+    this.geometrySize = geometrySize;
+    this.colormap = colormap;
+    this.coloring = coloring;
+    this.normalMode = normalMode;
+    
+    this.geometries = null;
+  }
 
+
+  /**
+   * Return a loader for this VBO that is invoked upon {@link #mount(IPainter)}, meaning after the
+   * application has started.
+   * 
+   * Not all parameters are mandatory, so we depict the effect of providing or not some of them.
+   * 
+   * <h2>Points</h2>
+   * This holds the x,y,z coordinates and is mandatory.
+   * 
+   * <h2>Colors</h2>
+   * The loader can be given
+   * <ul>
+   * <li>A non null colormap with null colors array
+   * <li>A non null color array with null colormap
+   * <li>None of the above, in that case, the color will uniform to the whole drawable
+   * <li>If both colormap and colors are given, an exception is thrown.
+   * </ul>
+   * 
+   * <h2>Normals</h2>
+   * 
+   * We observed that when no normal is processed at all, there is still an automatic processing of
+   * light "somehow". This is enabled by toggling {#link {@link #COMPUTE_NORMALS_IN_JAVA} to false.
+   * In that case, the result looks like :
+   * 
+   * <img src="doc-files/SHARED_VERTEX_NO_NORMAL.png"/>
+   * 
+   * <h2>Geometries</h2>
+   * 
+   * <ul>
+   * <li>VBO can render without geometries defined. geometry array can be null
+   * <li>If defined, geometries array is a collection of indices refering to the points array. This avoid repeating the points but assumes that the drawn object is a STRIP or FAN, hence a single geometry.
+   * <li>If defined, 
+   * </ul>
+   * 
+   * @see {@link DrawableVBO2} constructor for argument description.
+   */
   public VBOBufferLoader(double[] points, int pointDimensions, int[] geometries, int geometrySize,
       IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
@@ -45,6 +100,9 @@ public class VBOBufferLoader implements IGLLoader<DrawableVBO2> {
     this.colormap = colormap;
     this.coloring = coloring;
     this.normalMode = normalMode;
+    
+    this.multiGeometryStartIndices = null;
+    this.multiGeometryLengthes = null;
   }
 
   @Override
@@ -59,7 +117,7 @@ public class VBOBufferLoader implements IGLLoader<DrawableVBO2> {
       throw new IllegalArgumentException("Unsupported geometry size : " + geometrySize);
     }
 
-    // -------------------------------
+    // -------------------------------------------
     // Vertices
     FloatBuffer vertices = Buffers.newDirectFloatBuffer((points.length / pointDimensions) * 3);
     // FloatBuffer vertices = FloatBuffer.allocate((points.length / pointDimensions) * 3);
@@ -85,7 +143,7 @@ public class VBOBufferLoader implements IGLLoader<DrawableVBO2> {
     vertices.rewind();
 
 
-    // -------------------------------
+    // -------------------------------------------
     // Colors
 
     FloatBuffer colors = null;
@@ -116,19 +174,34 @@ public class VBOBufferLoader implements IGLLoader<DrawableVBO2> {
       colors = Buffers.newDirectFloatBuffer(coloring);
     }
 
-    // -------------------------------
-    // Triangles
+    // -------------------------------------------
+    // Element Indices to build a single geometry
 
     IntBuffer elements = null;
 
     if (geometries != null) {
       // elements = IntBuffer.allocate(geometries.length);
-      elements = Buffers.newDirectIntBuffer(geometries.length);
-      elements.put(geometries);
+      elements = Buffers.newDirectIntBuffer(geometries);
       elements.rewind();
     }
 
-    // -------------------------------
+    // -------------------------------------------
+    // Element Indices to build a geometry list
+    
+    IntBuffer multiElementStartIndices = null;
+    IntBuffer multiElementLengthes = null;
+    
+    if (multiGeometryStartIndices != null && multiGeometryLengthes!=null) {
+      // elements = IntBuffer.allocate(geometries.length);
+      multiElementStartIndices = Buffers.newDirectIntBuffer(multiGeometryStartIndices);
+      multiElementStartIndices.rewind();
+
+      multiElementLengthes = Buffers.newDirectIntBuffer(multiGeometryStartIndices);
+      multiElementLengthes.rewind();
+    }
+    
+
+    // -------------------------------------------
     // Normals
 
     FloatBuffer normals = null;
@@ -142,12 +215,20 @@ public class VBOBufferLoader implements IGLLoader<DrawableVBO2> {
     }
 
 
-    // -------------------------------
+    // -------------------------------------------
     // Store data
 
     drawable.setHasNormalInVertexArray(false);
-    drawable.setData(painter, elements, vertices, normals, colors, bounds);
-
+    
+    if (multiElementStartIndices != null && multiElementLengthes!=null) {
+      drawable.setData(painter, multiElementStartIndices, multiElementLengthes, vertices, normals, colors, bounds);      
+    }
+    else {
+      drawable.setData(painter, elements, vertices, normals, colors, bounds);
+    }
+    
+    
+    
     // drawable.setHasNormalInVertexArray(true);
     // drawable.setData(painter, elements, verticeAndNormals, null, colors, bounds);
   }
