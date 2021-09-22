@@ -6,6 +6,7 @@ import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
 
 
 public abstract class AbstractCameraController extends AbstractController
@@ -13,6 +14,7 @@ public abstract class AbstractCameraController extends AbstractController
 
   protected CameraThreadController threadController;
   protected Coord2d prevMouse = Coord2d.ORIGIN;
+  protected LODPerf perf;
 
   
   public AbstractCameraController() {
@@ -137,4 +139,15 @@ public abstract class AbstractCameraController extends AbstractController
       threadController.start();
     }
   }
+  
+  @Override
+  public void setLODPerf(LODPerf perf) {
+    this.perf = perf;
+  }
+
+  @Override
+  public LODPerf getLODPerf() {
+    return perf;
+  }
+
 }

@@ -289,7 +289,7 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
  *
  */
 public class Light {
-  public static final Color DEFAULT_COLOR = Color.WHITE.clone();
+  public static final Color DEFAULT_COLOR = Color.GRAY.clone();
 
   public enum Type {
     DIRECTIONAL, POSITIONAL;

@@ -1,5 +1,7 @@
 package org.jzy3d.chart;
 
+import java.awt.Component;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,8 +20,11 @@ import org.jzy3d.events.ViewPointChangedEvent;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Scale;
+import org.jzy3d.maths.Statistics;
+import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -27,6 +32,9 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
+import org.jzy3d.plot3d.rendering.view.lod.LODCandidates;
+import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
+import org.jzy3d.plot3d.rendering.view.lod.LODSetting;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -40,6 +48,10 @@ public class Chart {
   private static final int MOUSE_PICK_SIZE_DEFAULT = 10;
   private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";
   public static final Quality DEFAULT_QUALITY = Quality.Intermediate();
+  
+  protected static final int LOD_BOUNDS_ONLY_RENDER_TIME_MS = 30;
+  protected static final int LOD_EVAL_TRIALS = 3;
+  protected static final int LOD_EVAL_MAX_EVAL_DURATION_MS = 500; //ms
 
   protected IChartFactory factory;
 
@@ -58,6 +70,9 @@ public class Chart {
   protected IMousePickingController mousePicking;
   protected ICameraKeyController keyboard;
   protected IScreenshotKeyController screenshotKey;
+
+  protected Light lightOnCamera;
+  protected Light[] lightPairOnCamera;
 
 
   public Chart(IChartFactory factory, Quality quality) {
@@ -208,9 +223,7 @@ public class Chart {
   public ICameraMouseController addMouseCameraController() {
     if (mouse == null) {
       mouse = getFactory().getPainterFactory().newMouseCameraController(this);
-
       configureMouseWithAnimator();
-
     }
     return mouse;
   }
@@ -368,6 +381,7 @@ public class Chart {
       add(drawable, false);
     }
     getView().updateBounds();
+    updateLightsOnCameraPositions();
     return this;
   }
 
@@ -396,8 +410,156 @@ public class Chart {
   public Chart add(Drawable drawable, boolean updateView) {
     drawable.setSpaceTransformer(getView().getSpaceTransformer());
     getScene().getGraph().add(drawable, updateView);
+    updateLightsOnCameraPositions();
     return this;
   }
+
+  /**
+   * Add a drawable by first evaluating its rendering performance onscreen from worse
+   * ({@link LODSetting.Bounds#ON} to most good looking rendering. This method is useful when using
+   * facing low performance rendering, e.g. because one chose the fallback EmulGL renderer over
+   * native.
+   * 
+   * <h2>Using dynamic level of details</h2>
+   * 
+   * This requires to have a properly configured {@link AdaptiveMouseController} as shown below
+   * 
+   * <pre>
+   * <code>
+   * chart.add(myDrawable, new LODCandidates());
+   * 
+   * AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
+   * policy.optimizeForRenderingTimeLargerThan = 80;// ms
+   * policy.optimizeByPerformanceKnowledge = true;
+   * 
+   * EmulGLSkin skin = EmulGLSkin.on(chart);
+   * skin.getMouse().setPolicy(policy);
+   * </code>
+   * </pre>
+   * 
+   * <h2>Algorithm</h2>
+   * 
+   * Each Level of Detail configuration is described by a {@link LODSetting}. All {@link LODSetting}
+   * are ranked in a {@link LODCandidates} instance that indicates which are the most good looking
+   * settings. We define the best with lowest ID, the worse with highest ID.
+   * 
+   * <h3>Training</h3> LOD are evaluated in reverse order, as soon as the drawable is added to the
+   * chart. Evaluation store a rendering time for each {@link LODSetting}
+   * <ul>
+   * <li>LOD 3 took 40ms
+   * <li>LOD 2 took 60ms
+   * <li>LOD 1 took 80ms
+   * <li>LOD 0 took 100ms
+   * </ul>
+   * 
+   * <h3>Applying</h3>
+   * 
+   * As soon as the mouse start dragging camera, the mouse controller will seek an acceptable LOD to
+   * reach the target
+   * <ul>
+   * <li>LOD 0 took 100ms // rejected
+   * <li>LOD 1 took 80ms // rejected
+   * <li>LOD 2 took 60ms // selected
+   * <li>LOD 3 took 40ms // ignored
+   * </ul>
+   * Now if the target time is 30ms and none match the setting, then the fastest configuration is
+   * applied
+   * <ul>
+   * <li>LOD 0 took 100ms // rejected
+   * <li>LOD 1 took 80ms // rejected
+   * <li>LOD 2 took 60ms // rejected
+   * <li>LOD 3 took 40ms // selected : minimal rendering time above threshold
+   * </ul>
+   * 
+   * If no LOD configuration is given in the list, then nothing will be applied.
+   * 
+   * Note that a mouse is generated on the fly to register all rendering performance and later
+   * decide the best to use when rotating. The mouse is initialized after evaluating performance to
+   * ensure the user won't try to trigger rotations before evaluation finishes.
+   * 
+   * In addition to call this method, one should enable the mouse policy allowing to use these
+   * performance evaluations.
+   * 
+   * @param drawable
+   * @return
+   */
+  public Chart add(Drawable drawable, LODCandidates candidates) {
+    add(drawable, true);
+    // getView().updateBounds();
+
+    Wireframeable w = drawable.asWireframeable();
+
+    if (w != null) {
+      LODPerf perf = new LODPerf(candidates);
+
+      TicToc t = new TicToc();
+      for (LODSetting lodSetting : perf.getCandidates().getReverseRank()) {
+        
+        // Do not evaluate bounding box rendering which is always short
+        // so we simply keep a low constant
+        if(lodSetting.isBoundsOnly()) {
+          perf.setScore(lodSetting, LOD_BOUNDS_ONLY_RENDER_TIME_MS);
+        }
+        
+        // Evaluate other LOD config
+        else {
+          lodSetting.apply(w);
+
+          getQuality().setColorModel(lodSetting.getColorModel());
+
+          int trials = 3;
+
+          double[] values = new double[trials];
+          int k = 0;
+          
+          // Evaluate tree times and keep the mean, unless
+          // we encounter a poor rendering time 
+          for (int i = 0; i < trials; i++) {
+            t.tic();
+            render();
+            t.toc();
+            values[k++] = t.elapsedMilisecond();
+            
+            // Skip full evaluation if rendering time is too high
+            if(values[i]>LOD_EVAL_MAX_EVAL_DURATION_MS) {
+              perf.setScore(lodSetting, values[i]);
+            }
+            // System.out.println(lodSetting.getName() + " (" + i + ") took " + value + "ms");
+          }
+          
+          if(k==trials) {
+            perf.setScore(lodSetting, Statistics.median(values, true));
+          }
+        }
+      }
+
+      // Wait for the end of evaluation to add mouse.
+      ICameraMouseController mouse = addMouseCameraController();
+
+      mouse.setLODPerf(perf);
+    }
+    /*
+     * MouseListener m = (MouseListener)mouse; MouseMotionListener m2 = (MouseMotionListener)mouse;
+     * 
+     * int n = 500; int i = 20;
+     * 
+     * m.mousePressed(mouseEvent((Component)getCanvas(), i, i)); for (i = i+1; i < n; i++) {
+     * m2.mouseDragged(mouseEvent((Component)getCanvas(), i, i)); render(); }
+     * m.mouseReleased(mouseEvent((Component)getCanvas(), n, n));
+     */
+    // mouse.
+
+    // getCanvas().forceRepaint();
+    ((Component) getCanvas()).repaint();
+    ((Component) getCanvas()).repaint();
+
+    return this;
+  }
+
+  protected static MouseEvent mouseEvent(Component sourceCanvas, int x, int y) {
+    return new MouseEvent(sourceCanvas, 0, 0, 0, x, y, 100, 100, 1, false, 0);
+  }
+
 
 
   public void remove(Drawable drawable) {
@@ -442,7 +604,7 @@ public class Chart {
   public Light addLight(Coord3d position, Color ambiant, Color diffuse, Color specular) {
     return addLight(position, ambiant, diffuse, specular, 1);
   }
-  
+
   public Light addLight(Coord3d position, Color colorForAll) {
     return addLight(position, colorForAll, colorForAll, colorForAll);
   }
@@ -478,7 +640,7 @@ public class Chart {
   public Light addLightOnCamera() {
     return addLightOnCamera(Light.DEFAULT_COLOR.clone());
   }
-  
+
   public Light addLightOnCamera(Color colorForAll) {
     return addLightOnCamera(colorForAll, colorForAll, colorForAll);
   }
@@ -486,75 +648,102 @@ public class Chart {
   /**
    * Add a light that is attached to camera, which is moved as soon as the viewpoint changes.
    * 
+   * If this light was already created, the initial instance is returned, even if the color setting
+   * do not match.
+   * 
    * @param ambiant
    * @param diffuse
    * @param specular
    * @return
    */
   public Light addLightOnCamera(Color ambiant, Color diffuse, Color specular) {
-    Coord3d position = getView().getCamera().getEye();
-    Light light = addLight(position, ambiant, diffuse, specular);
+    if (lightOnCamera == null) {
+      Coord3d position = getView().getCamera().getEye();
+      lightOnCamera = addLight(position, ambiant, diffuse, specular);
 
-    getView().addViewPointChangedListener(new IViewPointChangedListener() {
-      @Override
-      public void viewPointChanged(ViewPointChangedEvent e) {
-        light.setPosition(getView().getCamera().getEye());
-      }
-    });
+      getView().addViewPointChangedListener(new IViewPointChangedListener() {
+        @Override
+        public void viewPointChanged(ViewPointChangedEvent e) {
+          updateLightOnCameraPosition();
+        }
+      });
+    }
 
-    return light;
+    return lightOnCamera;
   }
-  
-  
-  
-  
+
+  protected void updateLightOnCameraPosition() {
+    lightOnCamera.setPosition(getView().getCamera().getEye());
+  }
+
+
   public Light[] addLightPairOnCamera() {
     return addLightPairOnCamera(Light.DEFAULT_COLOR.clone());
   }
-  
+
   public Light[] addLightPairOnCamera(Color colorForAll) {
     return addLightPairOnCamera(colorForAll, colorForAll, colorForAll);
   }
-  
+
+  /**
+   * Add a light pair syncronized to camera. Top light is 45° above the camera, bottom light is 45°
+   * below the camera.
+   * 
+   * If these lights were already created, the initial instances are returned, even if the color setting
+   * do not match.
+   * 
+   * @param ambiant
+   * @param diffuse
+   * @param specular
+   * @return
+   */
+
   public Light[] addLightPairOnCamera(Color ambiant, Color diffuse, Color specular) {
+    if (lightPairOnCamera == null) {
+      Coord3d viewCenter = getView().getCenter(); // cartesian
+      Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
+      Coord3d lightPointUpPolar = viewPointPolar.add(0, (float) Math.PI / 2, 0); // polar coords
+      Coord3d lightPointDownPolar = viewPointPolar.add(0, -(float) Math.PI / 2, 0); // polar coords
+      Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
+      Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
+
+      Light lightUp = addLight(lightPointUp, ambiant, diffuse, specular);
+      Light lightDown = addLight(lightPointDown, ambiant, diffuse, specular);
+
+      lightPairOnCamera = new Light[2];
+      lightPairOnCamera[0] = lightUp;
+      lightPairOnCamera[1] = lightDown;
+
+      getView().addViewPointChangedListener(new IViewPointChangedListener() {
+        @Override
+        public void viewPointChanged(ViewPointChangedEvent e) {
+          updateLightPairOnCameraPosition();
+        }
+      });
+    }
+    return lightPairOnCamera;
+  }
+
+  protected void updateLightPairOnCameraPosition() {
     Coord3d viewCenter = getView().getCenter(); // cartesian
     Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
-    Coord3d lightPointUpPolar = viewPointPolar.add(0, (float)Math.PI/2, 0); // polar coords
-    Coord3d lightPointDownPolar = viewPointPolar.add( 0,-(float)Math.PI/2, 0); // polar coords
+    Coord3d lightPointUpPolar = viewPointPolar.add(0, (float) Math.PI / 2, 0); // polar coords
+    Coord3d lightPointDownPolar = viewPointPolar.add(0, -(float) Math.PI / 2, 0); // polar
+                                                                                  // coords
     Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
     Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
-    
-    Light lightUp = addLight(lightPointUp, ambiant, diffuse, specular);
-    Light lightDown = addLight(lightPointDown, ambiant, diffuse, specular);
 
-    getView().addViewPointChangedListener(new IViewPointChangedListener() {
-      @Override
-      public void viewPointChanged(ViewPointChangedEvent e) {
-        Coord3d viewCenter = getView().getCenter(); // cartesian
-        Coord3d viewPointPolar = getView().getViewPoint(); // polar coords
-        Coord3d lightPointUpPolar = viewPointPolar.add(0, (float)Math.PI/2, 0); // polar coords
-        Coord3d lightPointDownPolar = viewPointPolar.add( 0,-(float)Math.PI/2, 0); // polar coords
-        Coord3d lightPointUp = lightPointUpPolar.cartesian().addSelf(viewCenter); // cartesian
-        Coord3d lightPointDown = lightPointDownPolar.cartesian().addSelf(viewCenter); // cartesian
-        
-        lightUp.setPosition(lightPointUp);
-        lightDown.setPosition(lightPointDown);
-        
-        Chart.this.lightPointUpPolar.set(lightPointUpPolar);
-        Chart.this.lightPointDownPolar.set(lightPointDownPolar);
-        
-      }
-    });
-    
-    Light[] lights = new Light[2];
-    lights[0] = lightUp;
-    lights[1] = lightDown;
-    
-    return lights;
+    lightPairOnCamera[0].setPosition(lightPointUp);
+    lightPairOnCamera[1].setPosition(lightPointDown);
   }
-  
-  public final Coord3d lightPointUpPolar = new Coord3d(); 
-  public final Coord3d lightPointDownPolar = new Coord3d();
+
+  protected void updateLightsOnCameraPositions() {
+    if (lightOnCamera != null)
+      updateLightOnCameraPosition();
+    if (lightPairOnCamera != null)
+      updateLightPairOnCameraPosition();
+  }
+
 
   /* SHORTCUTS */
 
@@ -662,5 +851,6 @@ public class Chart {
   public void setQuality(Quality quality) {
     this.quality = quality;
   }
+
 
 }

@@ -252,6 +252,15 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
       }
     }
   }
+  
+  public Wireframeable asWireframeable() {
+    if(this instanceof Wireframeable) {
+      return (Wireframeable)this;
+    }
+    else {
+      return null;
+    }
+  }
 
   /* */
 
