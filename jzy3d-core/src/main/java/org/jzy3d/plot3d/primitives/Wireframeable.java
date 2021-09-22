@@ -13,26 +13,28 @@ import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
  * {@link Wireframeable}, a 3d object may have its faces displayed or not by
  * {@link Wireframeable#setFaceDisplayed(boolean)}.
  * 
- * Wireframe coloring can either be based on the wireframe color or the geometry {@link Point}s' colors.
+ * Wireframe coloring can either be based on the wireframe color or the geometry {@link Point}s'
+ * colors.
  * 
- * {@link Wireframeable} objects have faces which may reflect lights if there is any light switched on in the chart. 
+ * {@link Wireframeable} objects have faces which may reflect lights if there is any light switched
+ * on in the chart.
  * 
  * @author Martin Pernollet
  */
 public abstract class Wireframeable extends Drawable {
-  
+
   protected Color wireframeColor;
   protected float wireframeWidth;
   protected boolean wireframeDisplayed;
   protected boolean wireframeColorFromPolygonPoints;
-  
+
   protected boolean faceDisplayed;
-  
+
   protected boolean polygonWireframeDepthTrick = false;
   protected boolean polygonOffsetFillEnable = true;
   protected float polygonOffsetFactor = 1.0f;
   protected float polygonOffsetUnit = 1.0f;
-  
+
   protected boolean reflectLight = false;
   protected Color materialAmbiantReflection = new Color(1, 1, 1, 1);
   protected Color materialDiffuseReflection = new Color(1, 1, 1, 1);
@@ -56,7 +58,7 @@ public abstract class Wireframeable extends Drawable {
     setPolygonOffsetFillEnable(true);
     setPolygonWireframeDepthTrick(false);
   }
-  
+
   public boolean isWireframeColorFromPolygonPoints() {
     return wireframeColorFromPolygonPoints;
   }
@@ -106,6 +108,7 @@ public abstract class Wireframeable extends Drawable {
   }
 
   /* ************ POLYGON OFFSET **************** */
+
 
   protected void polygonOffsetFillEnable(IPainter painter) {
     painter.glEnable_PolygonOffsetFill();
@@ -161,7 +164,7 @@ public abstract class Wireframeable extends Drawable {
    * lines that should be behind the polygon
    */
   public static float NO_OVERLAP_DEPTH_RATIO = 0.1f;// 0.1f;
-  
+
   /**
    * May be used as alternative to {@link #setPolygonOffsetFillEnable(boolean)} in case it is not
    * supported by underlying OpenGL version (Polygon offset appears as off version 2).
@@ -186,14 +189,14 @@ public abstract class Wireframeable extends Drawable {
     painter.glDepthRangef(0f, 1f);
   }
 
-  /* ************ LIGHTS **************** */  
-  
+  /* ************ LIGHTS **************** */
+
   public boolean isReflectLight() {
     return reflectLight;
   }
 
   /**
-   * If true, drawing this object will set ambient, diffuse, specular and shininess parameters. 
+   * If true, drawing this object will set ambient, diffuse, specular and shininess parameters.
    * 
    * If the drawable has no normal defined, then the normal will be automatically processed.
    * 
@@ -201,8 +204,8 @@ public abstract class Wireframeable extends Drawable {
    */
   public void setReflectLight(boolean reflectLight) {
     this.reflectLight = reflectLight;
-  }  
-  
+  }
+
   /** Applies material settings */
   protected void applyMaterial(IPainter painter) {
     painter.glMaterial(MaterialProperty.AMBIENT, materialAmbiantReflection, true);
@@ -250,7 +253,7 @@ public abstract class Wireframeable extends Drawable {
   public void setMaterialShininess(float shininess) {
     materialShininess[0] = shininess;
   }
-  
+
   protected void doDrawBoundsIfDisplayed(IPainter painter) {
     if (isBoundingBoxDisplayed()) {
       painter.box(bbox, getBoundingBoxColor(), getWireframeWidth(), spaceTransformer);

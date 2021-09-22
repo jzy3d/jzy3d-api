@@ -937,7 +937,7 @@ public class View {
 
   public void render() {
     fireViewLifecycleWillRender(null);
-
+    
     renderBackground(0f, 1f);
     renderScene();
     renderOverlay();
@@ -977,6 +977,9 @@ public class View {
 
     BoundingBox3d scaling = computeScaledViewBounds();
     updateCamera(viewport, scaling);
+    
+    painter.glShadeModel(quality.getColorModel());
+    
     renderAxeBox();
     renderSceneGraph();
     renderAnnotations(cam);

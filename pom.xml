@@ -52,7 +52,7 @@
 		<module>jzy3d-core-swt</module>
 
 		<module>jzy3d-jGL</module>
-		<module>jzy3d-emul-gl</module>
+		<module>jzy3d-emul-gl-awt</module>
 		<module>jzy3d-emul-gl-swt</module>
 
 		<module>jzy3d-native-jogl-core</module>
@@ -104,8 +104,8 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
-		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
+	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository> </distributionManagement> -->
 
 	<properties>
@@ -219,14 +219,14 @@
 				<optional>true</optional>
 				<version>${version.swt}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.swt.win32.win32.x86_64</artifactId>
 				<optional>true</optional>
 				<version>${version.swt}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.swt.cocoa.macosx.x86_64</artifactId>
@@ -240,10 +240,10 @@
 				<version>3.12.1</version>
 			</dependency>
 
-			<!-- <dependency> <groupId>org.jogamp.gluegen</groupId> <artifactId>gluegen-rt</artifactId> 
-				<version>2.4.0-rc-20210111</version> </dependency> <dependency> <groupId>org.jogamp.jogl</groupId> 
+			<!-- <dependency> <groupId>org.jogamp.gluegen</groupId> <artifactId>gluegen-rt</artifactId>
+				<version>2.4.0-rc-20210111</version> </dependency> <dependency> <groupId>org.jogamp.jogl</groupId>
 				<artifactId>jogl-all</artifactId> <version>2.4.0-rc-20210111</version> </dependency> -->
-				
+
 			<dependency>
                 <groupId>org.jogamp.gluegen</groupId>
                 <artifactId>gluegen-rt-main</artifactId>
@@ -276,7 +276,7 @@
 			</dependency>
 
 			<dependency>
-				<!-- Some modules use junit not only in their test classes but also in 
+				<!-- Some modules use junit not only in their test classes but also in
 					their main classes. Therefore manage the version in this section -->
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -481,10 +481,10 @@
 				<artifactId>maven-release-plugin</artifactId>
 			</plugin>
 
-			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
-				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
-				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
-				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose> 
+			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId>
+				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose>
+				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
 				</configuration> </plugin> -->
 
 			<!-- SIGN ARTIFACT FOR DEPLOYING TO SONATYPE -->
@@ -556,7 +556,7 @@
 			<id>integration-tests</id>
 			<build>
 				<plugins>
-					<!-- Use surefire to run integration tests which success may depend 
+					<!-- Use surefire to run integration tests which success may depend
 						on GPU. Run them with mvn verify -Pintegration-tests -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -574,12 +574,12 @@
 						</configuration>
 					</plugin>
 
-					<!-- Use failsafe to run integration tests which success may depend 
+					<!-- Use failsafe to run integration tests which success may depend
 						on GPU. Run them with mvn verify -Pintegration-tests -->
-					<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-failsafe-plugin</artifactId> 
-						<version>3.0.0-M5</version> <configuration> <includes> <include>**/ITTest*.java</include> 
-						</includes> </configuration> <executions> <execution> <id>integration-test</id> 
-						<goals> <goal>integration-test</goal> <goal>verify</goal> </goals> </execution> 
+					<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-failsafe-plugin</artifactId>
+						<version>3.0.0-M5</version> <configuration> <includes> <include>**/ITTest*.java</include>
+						</includes> </configuration> <executions> <execution> <id>integration-test</id>
+						<goals> <goal>integration-test</goal> <goal>verify</goal> </goals> </execution>
 						</executions> </plugin> -->
 
 				</plugins>
