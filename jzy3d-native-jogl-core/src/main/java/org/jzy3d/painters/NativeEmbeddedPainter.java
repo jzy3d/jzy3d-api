@@ -599,6 +599,12 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glShadeModel(ColorModel colorModel) {
+    throw new NotImplementedException();
+
+  }
+  
+  @Override
   public void glShadeModel(int mode) {
     throw new NotImplementedException();
     // GLES2CompatUtils..glShadeModel(mode);
