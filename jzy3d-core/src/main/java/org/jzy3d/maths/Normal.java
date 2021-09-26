@@ -4,6 +4,10 @@ import java.util.List;
 import org.jzy3d.plot3d.primitives.Point;
 
 public class Normal {
+  public enum NormalMode {
+    SHARED, PER_VERTEX
+  }
+
   /**
    * Compute the normal for the three points which is a vector perpendicular to the plane formed by the three input points.
    */
@@ -62,4 +66,6 @@ public class Normal {
       throw new IllegalArgumentException("Need at least 3 points");
     }
   }
+  
+  
 }
