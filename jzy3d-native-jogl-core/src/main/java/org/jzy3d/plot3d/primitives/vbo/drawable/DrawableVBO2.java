@@ -3,15 +3,20 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Normal.NormalMode;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
+import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Wireframeable;
+import org.jzy3d.plot3d.primitives.vbo.drawable.loaders.VBOBufferLoaderForArrays;
+import org.jzy3d.plot3d.primitives.vbo.drawable.loaders.VBOBufferLoaderForPolygons;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.transform.Transform;
@@ -117,8 +122,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   protected IntBuffer elements;
 
   /** The (non-mandatory) int buffer storing geometry indices in GPU. */
-  protected IntBuffer multiElementStartIndices;
-  protected IntBuffer multiElementGeometryLength;
+  protected IntBuffer geometryStarts;
+  protected IntBuffer geometryLength;
 
   protected int firstCoordOffset = 0;
 
@@ -139,23 +144,24 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected static int QUAD_SIZE = 4;
   protected static int TRIANGLE_SIZE = 3;
-
   /** number of vertext per geometry, 3 for triangles, 4 for quads */
   protected static int GEOMETRY_SIZE = TRIANGLE_SIZE; // triangle
 
   /** number of dimensions for vertex, 3 for {x,y,z} */
-  protected static int VERTEX_SIZE = 3; // x,y,z
+  public static int VERTEX_DIMENSIONS = 3; // x,y,z
 
   /** number of vertex per geometry */
-  protected int geometrySize = -1;
+  protected int verticesPerGeometry = -1;
 
   /** number of channels per color, 3 for {r,g,b}, 4 for {r,g,b,a} */
   protected int colorChannels = 3;
 
   /** store the Geometry type in OpenGL, GL_TRIANGLES, GL_POLYGONS, etc */
-  protected int glGeometryType; // GL_TRIANGLES, etc
+  protected int glGeometryType; 
 
   protected boolean hasColorBuffer = false;
+  
+  /** Default flat color for the complete geometry */
   protected Color color = new Color(1f, 0f, 1f, 0.75f);
 
 
@@ -165,12 +171,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * these two conditions is not fullfilled, then one normal per point is computed.
    */
   protected NormalMode normalMode = NormalMode.PER_VERTEX;
-
-
-
-  public enum NormalMode {
-    SHARED, PER_VERTEX
-  }
 
 
   /**
@@ -267,6 +267,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this(makeLoader(points, pointDimensions, elements, elementSize, null, colors,
         NormalMode.PER_VERTEX));
   }
+  
+  public DrawableVBO2(List<Polygon> polygons, int pointsPerPolygon) {
+    this(new VBOBufferLoaderForPolygons(polygons, pointsPerPolygon));
+    
+  }
 
   public DrawableVBO2(double[] points, int pointDimensions, int[] elementStart, int[] elementStop,
       int elementSize, float[] colors) {
@@ -276,6 +281,16 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   }
 
+  // cas
+  // 1-array vertex, colormap
+  // 2-array vertex, elements of various sizes, colormap
+  // 3-array vertex, elements of various sizes, color array  
+  // 4-array vertex, multiple elements of various sizes, color array  
+  
+  // compute normal 1
+  // compute normal 2
+  // compute normal 3
+  // 
 
   /* ***************************************************************** */
   /* *********************** LOAD DRAWABLE *************************** */
@@ -284,14 +299,14 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] geometries, int geometrySize, IColorMap colormap, float[] coloring,
       NormalMode normalMode) {
-    return new VBOBufferLoader(points, pointDimensions, geometries, geometrySize, colormap,
+    return new VBOBufferLoaderForArrays(points, pointDimensions, geometries, geometrySize, colormap,
         coloring, normalMode);
   }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] geometryStart, int[] geometryLength, int geometrySize, float[] coloring,
       NormalMode normalMode) {
-    return new VBOBufferLoader(points, pointDimensions, geometryStart, geometryLength, geometrySize,
+    return new VBOBufferLoaderForArrays(points, pointDimensions, geometryStart, geometryLength, geometrySize,
         null, coloring, normalMode);
   }
 
@@ -341,8 +356,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this.bbox = bounds;
     this.hasColorBuffer = this.colors != null;
 
-    this.multiElementStartIndices = null;
-    this.multiElementGeometryLength = null;
+    this.geometryStarts = null;
+    this.geometryLength = null;
 
 
     GL gl = getGL(painter);
@@ -359,11 +374,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     registerElements(gl);
   }
 
-  public void setData(IPainter painter, IntBuffer geometryStartIndices, IntBuffer geometryLengthes,
+  public void setData(IPainter painter, IntBuffer geometryStarts, IntBuffer geometryLength,
       FloatBuffer vertices, FloatBuffer normals, FloatBuffer colors, BoundingBox3d bounds) {
     this.vertices = vertices;
-    this.multiElementStartIndices = geometryStartIndices;
-    this.multiElementGeometryLength = geometryLengthes;
+    this.geometryStarts = geometryStarts;
+    this.geometryLength = geometryLength;
     this.normals = normals;
     this.colors = colors;
     this.bbox = bounds;
@@ -386,19 +401,21 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected void registerVertexAndNormalOffsets() {
     if (hasNormalInVertexArray) {
-      vertexOffset = (VERTEX_SIZE * 2) * Buffers.SIZEOF_FLOAT; // (coord+normal)
+      vertexOffset = (VERTEX_DIMENSIONS * 2) * Buffers.SIZEOF_FLOAT; // (coord+normal)
     } else {
-      vertexOffset = VERTEX_SIZE * Buffers.SIZEOF_FLOAT; // (coord only)
+      vertexOffset = VERTEX_DIMENSIONS * Buffers.SIZEOF_FLOAT; // (coord only)
     }
-    normalOffset = VERTEX_SIZE * Buffers.SIZEOF_FLOAT;
+    normalOffset = VERTEX_DIMENSIONS * Buffers.SIZEOF_FLOAT;
   }
 
   protected void registerVertices(GL gl) {
-    int vertexSize = vertices.capacity() * Buffers.SIZEOF_FLOAT;
-
-    gl.glGenBuffers(1, vertexArrayIds, 0);
-    gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexArrayIds[0]);
-    gl.glBufferData(GL.GL_ARRAY_BUFFER, vertexSize, vertices, GL.GL_STATIC_DRAW);
+    if(vertices!=null) {
+      int vertexSize = vertices.capacity() * Buffers.SIZEOF_FLOAT;
+  
+      gl.glGenBuffers(1, vertexArrayIds, 0);
+      gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexArrayIds[0]);
+      gl.glBufferData(GL.GL_ARRAY_BUFFER, vertexSize, vertices, GL.GL_STATIC_DRAW);
+    }
   }
 
   protected void registerNormals(GL gl) {
@@ -412,7 +429,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   }
 
   protected void registerColors(GL gl) {
-
     if (colors != null) {
       int colorSize = colors.capacity() * Buffers.SIZEOF_FLOAT;
 
@@ -431,7 +447,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       gl.glGenBuffers(1, elementArrayIds, 0);
       gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
       gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, elements, GL.GL_STATIC_DRAW);
-
     }
   }
 
@@ -497,7 +512,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     gl2.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexArrayIds[0]);
     gl2.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
 
-    gl2.glVertexPointer(VERTEX_SIZE, GL.GL_FLOAT, vertexOffset, firstCoordOffset);
+    gl2.glVertexPointer(VERTEX_DIMENSIONS, GL.GL_FLOAT, vertexOffset, firstCoordOffset);
     gl2.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
 
     if (normalArrayIds[0] != 0) {
@@ -540,6 +555,12 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
       doDrawGeometries(gl2);
     }
+    
+    /*for (int i = 0; i < elements.capacity(); i++) {
+      System.out.print(elements.get(i)+"|");
+    }
+    System.out.println();*/
+
 
 
     // -----------------------------------
@@ -585,20 +606,32 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
     applyPrimitiveRestartIfEnabled(gl2);
 
+    // -----------------------------------------
     // Case of simple index mode
+
     if (elementSize > 0) {
       gl2.glDrawElements(glGeometryType, elementSize, GL.GL_UNSIGNED_INT, firstCoordOffset);
     }
+    
+    // -----------------------------------------
+    // Case of indexed multi array mode
 
-    // Case of multi-index mode
-    else if (multiElementStartIndices != null && multiElementGeometryLength != null) {
-      int drawcount = multiElementStartIndices.capacity();
+    //gl2.glMultiDrawElement
 
-      gl2.glMultiDrawArrays(glGeometryType, multiElementStartIndices, multiElementGeometryLength,
+    // -----------------------------------------
+    // Case of non indexed multi array mode
+    
+    else if (geometryStarts != null && geometryLength != null) {
+      int drawcount = geometryStarts.capacity();
+      
+      //System.out.println(drawcount + " " + geometryLength.capacity());
+      gl2.glMultiDrawArrays(glGeometryType, geometryStarts, geometryLength,
           drawcount);
     }
 
+    // -----------------------------------------
     // Case of non indexed mode (no vertex index defined)
+    
     else {
       gl2.glDrawArrays(glGeometryType, 0, vertices.capacity());
     }
@@ -690,4 +723,23 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   public int[] getElementArrayIds() {
     return elementArrayIds;
   }
+
+  public int getVerticesPerGeometry() {
+    return verticesPerGeometry;
+  }
+
+  public void setVerticesPerGeometry(int geometrySize) {
+    this.verticesPerGeometry = geometrySize;
+    
+    if (geometrySize == TRIANGLE_SIZE) {
+      glGeometryType = GL.GL_TRIANGLES;
+    } else if (geometrySize == QUAD_SIZE) {
+      glGeometryType = GL2.GL_POLYGON;// FAN TIMEOUT ON GPU! GL2.GL_TRIANGLE_FAN;
+    } else {
+      throw new IllegalArgumentException("Unsupported geometry size : " + geometrySize);
+    }
+
+  }
+  
+  
 }
