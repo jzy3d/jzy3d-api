@@ -4,8 +4,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
@@ -111,7 +109,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     // Vertices
 
     FloatBuffer vertices = loadVerticesFromArray(points, pointDimensions, verticeList, bounds);
-
+System.out.println(verticeList.size());
     
     // -------------------------------------------
     // Colors

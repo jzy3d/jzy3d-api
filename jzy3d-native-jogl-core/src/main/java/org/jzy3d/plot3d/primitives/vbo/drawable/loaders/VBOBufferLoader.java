@@ -17,8 +17,9 @@ import com.google.common.collect.ArrayListMultimap;
 import com.jogamp.common.nio.Buffers;
 
 public class VBOBufferLoader {
-  
-  public FloatBuffer loadVerticesFromArray(double[] points, int pointDimensions, List<Coord3d> verticeList, BoundingBox3d bounds) {
+
+  public FloatBuffer loadVerticesFromArray(double[] points, int pointDimensions,
+      List<Coord3d> verticeList, BoundingBox3d bounds) {
     FloatBuffer vertices = Buffers.newDirectFloatBuffer((points.length / pointDimensions) * 3);
 
     for (int i = 0; i < points.length; i += pointDimensions) {
@@ -26,16 +27,16 @@ public class VBOBufferLoader {
       vertices.put((float) points[i]);
       vertices.put((float) points[i + 1]);
       vertices.put((float) points[i + 2]);
- 
+
       // Hold bounds
       bounds.add(points[i], points[i + 1], points[i + 2]);
- 
+
       // Keep for later processing
       Coord3d c = new Coord3d(points[i], points[i + 1], points[i + 2]);
       verticeList.add(c);
     }
     vertices.rewind();
-    
+
     return vertices;
   }
 
@@ -45,7 +46,7 @@ public class VBOBufferLoader {
     colors.rewind();
     return colors;
   }
-  
+
   public FloatBuffer loadColorBufferFromColormap(List<Coord3d> verticeList, BoundingBox3d bounds,
       int colorChannels, IColorMap colormap) {
 
@@ -67,12 +68,12 @@ public class VBOBufferLoader {
     return colors;
   }
 
-  public FloatBuffer computeSimpleNormals(int geometrySize, List<Coord3d> verticeList) {
+  public FloatBuffer computeSimpleNormals(int pointsPerGeometry, List<Coord3d> verticeList) {
 
     FloatBuffer normals =
         Buffers.newDirectFloatBuffer(verticeList.size() * DrawableVBO2.VERTEX_DIMENSIONS);
 
-    for (int i = 0; i < verticeList.size(); i += geometrySize) {
+    for (int i = 0; i < (verticeList.size() - pointsPerGeometry); i += pointsPerGeometry) {
       // gather coordinates of a triangle
       Coord3d c0 = verticeList.get(i + 0);
       Coord3d c1 = verticeList.get(i + 1);
@@ -81,7 +82,8 @@ public class VBOBufferLoader {
       // compute normal
       Coord3d normal = Normal.compute(c0, c1, c2);
 
-      for (int j = 0; j < geometrySize; j++) {
+      for (int j = 0; j < 3; j++) {
+        // repeat normals 3 times since we processed it for three points
         normals.put(normal.x);
         normals.put(normal.y);
         normals.put(normal.z);

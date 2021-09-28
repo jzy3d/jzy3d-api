@@ -216,8 +216,7 @@ public class TestDrawableVBO2 {
     
     Assert.assertNull(vbo.elements);
 
-    Assert.assertNull(vbo.normals);
-    //Assert.assertEquals(3 * pointsPerPolygon * polygons.size(), vbo.normals.capacity());
+    Assert.assertEquals(3 * pointsPerPolygon * polygons.size(), vbo.normals.capacity());
 
   }
 
