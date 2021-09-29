@@ -82,8 +82,9 @@ public class VBOBufferLoader {
       // compute normal
       Coord3d normal = Normal.compute(c0, c1, c2);
 
-      for (int j = 0; j < 3; j++) {
-        // repeat normals 3 times since we processed it for three points
+      for (int j = 0; j < pointsPerGeometry; j++) {
+        // repeat normals for each point of the geometry, even if the geometry
+        // has more point than the three that were used for computing the normal
         normals.put(normal.x);
         normals.put(normal.y);
         normals.put(normal.z);
