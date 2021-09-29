@@ -12,6 +12,7 @@ import org.jzy3d.maths.Normal.NormalMode;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import com.jogamp.common.nio.Buffers;
+import com.jogamp.common.nio.PointerBuffer;
 
 /**
  * A utility class to build buffers to feed a {@link DrawableVBO2}.
@@ -20,30 +21,51 @@ import com.jogamp.common.nio.Buffers;
  *
  */
 public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
-  double[] points;
-  int pointDimensions;
-  int[] geometries;
-  int verticesPerGeometry;
-  IColorMap colormap;
-  float[] coloring;
-  NormalMode normalMode;
+  protected double[] points;
+  protected int pointDimensions;
   
-  protected int[] multiGeometryStartIndices;
-  protected int[] multiGeometryLengthes;
+  protected int[] elements;
+  protected int verticesPerGeometry;
+
+  protected int[] elementsStarts;
+  protected int[] elementsLength;
+
+  protected int[] elementsCount;
+  protected int[][] elementsIndices;
+
+  protected IColorMap colormap;
+  protected float[] coloring;
+  protected NormalMode normalMode;
   
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] multiGeometryStartIndices, int[] multiGeometryLengthes, int geometrySize,
+  
+  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementStarts, int[] elementLength, int geometrySize,
       IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
     this.points = points;
     this.pointDimensions = pointDimensions;
-    this.multiGeometryStartIndices = multiGeometryStartIndices;
-    this.multiGeometryLengthes = multiGeometryLengthes;
-    this.verticesPerGeometry = geometrySize;
     this.colormap = colormap;
     this.coloring = coloring;
     this.normalMode = normalMode;
     
-    this.geometries = null;
+    this.elementsStarts = elementStarts;
+    this.elementsLength = elementLength;
+    this.verticesPerGeometry = geometrySize;
+
+  }
+
+  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementCount, int[][] elementIndices, int geometrySize,
+      IColorMap colormap, float[] coloring, NormalMode normalMode) {
+    super();
+    this.points = points;
+    this.pointDimensions = pointDimensions;
+    this.colormap = colormap;
+    this.coloring = coloring;
+    this.normalMode = normalMode;
+    
+    this.elementsCount = elementCount;
+    this.elementsIndices = elementIndices;
+    this.verticesPerGeometry = geometrySize;
+
   }
 
 
@@ -88,14 +110,15 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     super();
     this.points = points;
     this.pointDimensions = pointDimensions;
-    this.geometries = geometries;
-    this.verticesPerGeometry = verticesPerGeometry;
+    this.elements = geometries;
+    
     this.colormap = colormap;
     this.coloring = coloring;
     this.normalMode = normalMode;
     
-    this.multiGeometryStartIndices = null;
-    this.multiGeometryLengthes = null;
+    this.elementsStarts = null;
+    this.elementsLength = null;
+    this.verticesPerGeometry = verticesPerGeometry;
   }
 
   @Override
@@ -108,60 +131,78 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     // -------------------------------------------
     // Vertices
 
-    FloatBuffer vertices = loadVerticesFromArray(points, pointDimensions, verticeList, bounds);
-System.out.println(verticeList.size());
+    FloatBuffer verticeBuffer = loadVerticesFromArray(points, pointDimensions, verticeList, bounds);
     
     // -------------------------------------------
     // Colors
 
-    // drawable.setColorChannels(4);
-    
-    FloatBuffer colors = null;
+    FloatBuffer colorBuffer = null;
     
     if (colormap != null && coloring != null) {
       throw new IllegalArgumentException(
           "Should either define colormap or colors array, or none, but not both");
     } else if (colormap != null) {
-      colors = loadColorBufferFromColormap(verticeList, bounds, drawable.getColorChannels(), colormap);
+      colorBuffer = loadColorBufferFromColormap(verticeList, bounds, drawable.getColorChannels(), colormap);
     } else if (coloring != null) {
-      colors = loadColorBufferFromArray(coloring);
+      colorBuffer = loadColorBufferFromArray(coloring);
     }
 
     // -------------------------------------------
     // Element Indices to build a single geometry
 
-    IntBuffer elements = null;
+    IntBuffer elementBuffer = null;
 
-    if (geometries != null) {
-      elements = Buffers.newDirectIntBuffer(geometries);
-      elements.rewind();
+    if (elements != null) {
+      elementBuffer = Buffers.newDirectIntBuffer(elements);
+      elementBuffer.rewind();
     }
 
     // -------------------------------------------
-    // Element Indices to build a multi-geometry list
+    // Element Indices to build a multi-array VBO
     
-    IntBuffer multiElementStartIndices = null;
-    IntBuffer multiElementLengthes = null;
+    IntBuffer elementStartsBuffer = null;
+    IntBuffer elementLengthBuffer = null;
     
-    if (multiGeometryStartIndices != null && multiGeometryLengthes!=null) {
-      multiElementStartIndices = Buffers.newDirectIntBuffer(multiGeometryStartIndices);
-      multiElementStartIndices.rewind();
+    if (elementsStarts != null && elementsLength!=null) {
+      elementStartsBuffer = Buffers.newDirectIntBuffer(elementsStarts);
+      elementStartsBuffer.rewind();
 
-      multiElementLengthes = Buffers.newDirectIntBuffer(multiGeometryStartIndices);
-      multiElementLengthes.rewind();
+      elementLengthBuffer = Buffers.newDirectIntBuffer(elementsStarts);
+      elementLengthBuffer.rewind();
     }
+
+    // -------------------------------------------
+    // Element Indices to build a multi-element VBO
     
+    IntBuffer elementCountBuffer = null;
+    PointerBuffer elementIndicesBuffer = null;
+    
+    if (elementsStarts != null && elementsLength!=null) {
+      elementCountBuffer = Buffers.newDirectIntBuffer(elementsCount);
+      elementCountBuffer.rewind();
+
+      elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);//Buffers.newDirectIntBuffer(elementsStarts);
+      
+      for (int i = 0; i < elementsIndices.length; i++) {
+        for (int j = 0; j < elementsIndices[i].length; j++) {
+          elementIndicesBuffer.put(elementsIndices[i][j]);
+        }
+      }
+      
+      elementIndicesBuffer.rewind();
+    }
+
 
     // -------------------------------------------
     // Normals
 
-    FloatBuffer normals = null;
+    FloatBuffer normalBuffer = null;
 
     if (DrawableVBO2.COMPUTE_NORMALS_IN_JAVA) {
-      if (geometries != null && NormalMode.SHARED.equals(normalMode)) {
-        normals = computeSharedNormals(geometries, verticesPerGeometry, verticeList);
+      if (elements != null && NormalMode.SHARED.equals(normalMode)) {
+        normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
       } else {
-        normals = computeSimpleNormals(verticesPerGeometry, verticeList);
+        normalBuffer = computeSimpleNormals(verticesPerGeometry, verticeList);
       }
     }
 
@@ -171,12 +212,16 @@ System.out.println(verticeList.size());
 
     drawable.setHasNormalInVertexArray(false);
     drawable.setVerticesPerGeometry(verticesPerGeometry);
+    // drawable.setColorChannels(4);
 
-    if (multiElementStartIndices != null && multiElementLengthes!=null) {
-      drawable.setData(painter, multiElementStartIndices, multiElementLengthes, vertices, normals, colors, bounds);      
+    if (elementCountBuffer != null && elementIndicesBuffer!=null) {
+      drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);      
+    }
+    else if (elementStartsBuffer != null && elementLengthBuffer!=null) {
+      drawable.setData(painter, elementStartsBuffer, elementLengthBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);      
     }
     else {
-      drawable.setData(painter, elements, vertices, normals, colors, bounds);
+      drawable.setData(painter, elementBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);
     }
     
     // drawable.setHasNormalInVertexArray(true);
