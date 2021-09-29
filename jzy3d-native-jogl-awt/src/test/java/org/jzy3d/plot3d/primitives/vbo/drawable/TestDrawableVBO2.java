@@ -203,8 +203,8 @@ public class TestDrawableVBO2 {
     Assert.assertEquals(3 * pointsPerPolygon * polygons.size(), vbo.vertices.capacity());
     Assert.assertEquals(vbo.getColorChannels() * pointsPerPolygon * polygons.size(), vbo.colors.capacity());
 
-    Assert.assertEquals(polygons.size(), vbo.geometryStarts.capacity());
-    Assert.assertEquals(polygons.size(), vbo.geometryLength.capacity());
+    Assert.assertEquals(polygons.size(), vbo.elementsStarts.capacity());
+    Assert.assertEquals(polygons.size(), vbo.elementsLength.capacity());
 
     /*for (int i = 0; i < vbo.geometryStarts.capacity(); i++) {
       System.out.println(vbo.geometryStarts.get(i) + " - " + vbo.geometryLength.get(i));

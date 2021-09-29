@@ -19,7 +19,7 @@ import com.jogamp.common.nio.Buffers;
  * @author Martin Pernollet
  *
  */
-public class VBOBufferLoaderForPolygonsMultiArray extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
+public class VBOBufferLoaderForPolygons extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
   // IColorMap colormap;
   // float[] coloring;
   static int DIMENSIONS = 3;
@@ -27,7 +27,7 @@ public class VBOBufferLoaderForPolygonsMultiArray extends VBOBufferLoader implem
   protected List<Polygon> polygons;
   protected int pointsPerPolygon;
 
-  public VBOBufferLoaderForPolygonsMultiArray(List<Polygon> polygons, int pointsPerPolygon) {
+  public VBOBufferLoaderForPolygons(List<Polygon> polygons, int pointsPerPolygon) {
     super();
     this.polygons = polygons;
     this.pointsPerPolygon = pointsPerPolygon;
