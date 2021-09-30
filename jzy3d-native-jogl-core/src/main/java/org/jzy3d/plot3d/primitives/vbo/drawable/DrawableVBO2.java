@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Iterator;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
@@ -106,6 +107,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   protected boolean hasNormalInVertexArray = false;
 
   protected boolean primitiveRestart = true;
+  
+  protected boolean debug = false;
 
   // ---------------------------------------
   // Buffers to feed VBO in GPU memory
@@ -362,9 +365,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
-      int[] geometryStart, int[] geometryLength, int geometrySize, float[] coloring,
+      int[] elementStart, int[] elementLength, int geometrySize, float[] coloring,
       NormalMode normalMode) {
-    return new VBOBufferLoaderForArrays(points, pointDimensions, geometryStart, geometryLength,
+    return new VBOBufferLoaderForArrays(points, pointDimensions, elementStart, elementLength,
         geometrySize, null, coloring, normalMode);
   }
 
@@ -714,14 +717,25 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // Case of indexed multi array mode
 
     else if (elementsCount != null && elementsIndices != null) {
+      
+      if(debug)
+        debugMultiDrawElements();
+      // CHECKER POURQUOI LA DOC DEMANDE MEME TAILLE POUR COUNT ET INDICE!
+      
       gl2.glMultiDrawElements(glGeometryType, elementsCount, GL.GL_UNSIGNED_INT, elementsIndices,
-          elementsCount.capacity());
+          elementsIndices.capacity());
+      
+      
     }
 
     // -----------------------------------------
     // Case of non indexed multi array mode
 
     else if (elementsStarts != null && elementsLength != null) {
+      
+      if(debug)
+        debugMultiDrawArray();
+      
       gl2.glMultiDrawArrays(glGeometryType, elementsStarts, elementsLength,
           elementsStarts.capacity());
     }
@@ -735,6 +749,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
 
   }
+
 
   /**
    * Experimental - not working yet
@@ -883,7 +898,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       setGLGeometryType(GL.GL_TRIANGLES);
     } else if (geometrySize == QUAD_SIZE) {
       setGLGeometryType(GL2.GL_POLYGON);
-      // glGeometryType = GL2.GL_TRIANGLE_FAN;
+      //setGLGeometryType(GL2.GL_TRIANGLE_FAN);
     } else {
       throw new IllegalArgumentException("Unsupported geometry size : " + geometrySize);
     }
@@ -903,5 +918,33 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this.primitiveRestart = primitiveRestart;
   }
 
+
+  /* ***************************************************************** */
+  /* ***************************** DEBUG ***************************** */
+  /* ***************************************************************** */
+  
+  
+  protected void debugMultiDrawElements() {
+    System.out.println("glMultiDrawElements : count, {indices}");
+
+    int offset = 0;
+    for (int i = 0; i < elementsCount.capacity(); i++) {
+      System.out.print(elementsCount.get(i) + " :\t");
+      
+      for (int j = offset; j < (offset+elementsCount.get(i)); j++) {
+        System.out.print(elementsIndices.get(j) + "\t");
+      }
+      
+      System.out.println();
+      offset+=elementsCount.get(i);
+    }
+  }
+
+  protected void debugMultiDrawArray() {
+    System.out.println("glMultiDrawArray : starts, length");
+    for (int i = 0; i < elementsStarts.capacity(); i++) {
+      System.out.println(elementsStarts.get(i) + "\t:\t" + elementsLength.get(i));
+    }
+  }
 
 }
