@@ -23,7 +23,7 @@ import com.jogamp.common.nio.PointerBuffer;
 public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
   protected double[] points;
   protected int pointDimensions;
-  
+
   protected int[] elements;
   protected int verticesPerGeometry;
 
@@ -36,32 +36,36 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
   protected IColorMap colormap;
   protected float[] coloring;
   protected NormalMode normalMode;
-  
-  
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementStarts, int[] elementLength, int geometrySize,
-      IColorMap colormap, float[] coloring, NormalMode normalMode) {
+
+  protected boolean debug = true;
+
+
+  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementStarts,
+      int[] elementLength, int geometrySize, IColorMap colormap, float[] coloring,
+      NormalMode normalMode) {
     super();
     this.points = points;
     this.pointDimensions = pointDimensions;
     this.colormap = colormap;
     this.coloring = coloring;
     this.normalMode = normalMode;
-    
+
     this.elementsStarts = elementStarts;
     this.elementsLength = elementLength;
     this.verticesPerGeometry = geometrySize;
 
   }
 
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementCount, int[][] elementIndices, int geometrySize,
-      IColorMap colormap, float[] coloring, NormalMode normalMode) {
+  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementCount,
+      int[][] elementIndices, int geometrySize, IColorMap colormap, float[] coloring,
+      NormalMode normalMode) {
     super();
     this.points = points;
     this.pointDimensions = pointDimensions;
     this.colormap = colormap;
     this.coloring = coloring;
     this.normalMode = normalMode;
-    
+
     this.elementsCount = elementCount;
     this.elementsIndices = elementIndices;
     this.verticesPerGeometry = geometrySize;
@@ -75,11 +79,9 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
    * 
    * Not all parameters are mandatory, so we depict the effect of providing or not some of them.
    * 
-   * <h2>Points</h2>
-   * This holds the x,y,z coordinates and is mandatory.
+   * <h2>Points</h2> This holds the x,y,z coordinates and is mandatory.
    * 
-   * <h2>Colors</h2>
-   * The loader can be given
+   * <h2>Colors</h2> The loader can be given
    * <ul>
    * <li>A non null colormap with null colors array
    * <li>A non null color array with null colormap
@@ -99,23 +101,25 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
    * 
    * <ul>
    * <li>VBO can render without geometries defined. geometry array can be null
-   * <li>If defined, geometries array is a collection of indices refering to the points array. This avoid repeating the points but assumes that the drawn object is a STRIP or FAN, hence a single geometry.
-   * <li>If defined, 
+   * <li>If defined, geometries array is a collection of indices refering to the points array. This
+   * avoid repeating the points but assumes that the drawn object is a STRIP or FAN, hence a single
+   * geometry.
+   * <li>If defined,
    * </ul>
    * 
    * @see {@link DrawableVBO2} constructor for argument description.
    */
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] geometries, int verticesPerGeometry,
-      IColorMap colormap, float[] coloring, NormalMode normalMode) {
+  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] geometries,
+      int verticesPerGeometry, IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
     this.points = points;
     this.pointDimensions = pointDimensions;
     this.elements = geometries;
-    
+
     this.colormap = colormap;
     this.coloring = coloring;
     this.normalMode = normalMode;
-    
+
     this.elementsStarts = null;
     this.elementsLength = null;
     this.verticesPerGeometry = verticesPerGeometry;
@@ -123,7 +127,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
   @Override
   public void load(IPainter painter, DrawableVBO2 drawable) throws Exception {
-    
+
     // Temporary list, for computing color and normals later
     List<Coord3d> verticeList = new ArrayList<>();
     BoundingBox3d bounds = new BoundingBox3d();
@@ -132,17 +136,18 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     // Vertices
 
     FloatBuffer verticeBuffer = loadVerticesFromArray(points, pointDimensions, verticeList, bounds);
-    
+
     // -------------------------------------------
     // Colors
 
     FloatBuffer colorBuffer = null;
-    
+
     if (colormap != null && coloring != null) {
       throw new IllegalArgumentException(
           "Should either define colormap or colors array, or none, but not both");
     } else if (colormap != null) {
-      colorBuffer = loadColorBufferFromColormap(verticeList, bounds, drawable.getColorChannels(), colormap);
+      colorBuffer =
+          loadColorBufferFromColormap(verticeList, bounds, drawable.getColorChannels(), colormap);
     } else if (coloring != null) {
       colorBuffer = loadColorBufferFromArray(coloring);
     }
@@ -159,36 +164,49 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     // -------------------------------------------
     // Element Indices to build a multi-array VBO
-    
+
     IntBuffer elementStartsBuffer = null;
     IntBuffer elementLengthBuffer = null;
-    
-    if (elementsStarts != null && elementsLength!=null) {
+
+    if (elementsStarts != null && elementsLength != null) {
       elementStartsBuffer = Buffers.newDirectIntBuffer(elementsStarts);
       elementStartsBuffer.rewind();
 
-      elementLengthBuffer = Buffers.newDirectIntBuffer(elementsStarts);
+      elementLengthBuffer = Buffers.newDirectIntBuffer(elementsLength);
       elementLengthBuffer.rewind();
     }
 
     // -------------------------------------------
     // Element Indices to build a multi-element VBO
-    
+
     IntBuffer elementCountBuffer = null;
     PointerBuffer elementIndicesBuffer = null;
-    
-    if (elementsStarts != null && elementsLength!=null) {
+
+    if (elementsCount != null && elementsIndices != null) {
       elementCountBuffer = Buffers.newDirectIntBuffer(elementsCount);
       elementCountBuffer.rewind();
 
-      elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);//Buffers.newDirectIntBuffer(elementsStarts);
+      elementIndicesBuffer = PointerBuffer.allocateDirect(size(elementsIndices));
+
+      if (debug)
+        System.out.println("Indices: (vertice capacity:" + verticeBuffer.capacity() + ")");
+      
+      int k = 0;
       
       for (int i = 0; i < elementsIndices.length; i++) {
         for (int j = 0; j < elementsIndices[i].length; j++) {
+          
           elementIndicesBuffer.put(elementsIndices[i][j]);
+
+          if (debug)
+            System.out.print(elementIndicesBuffer.get(k) + "\t");
+            //System.out.print(elementsIndices[i][j] + "\t");
+
+          k++;
         }
+        if (debug)
+          System.out.println(" (count : " + elementsCount[i] + ")");
       }
-      
       elementIndicesBuffer.rewind();
     }
 
@@ -214,17 +232,25 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     drawable.setVerticesPerGeometry(verticesPerGeometry);
     // drawable.setColorChannels(4);
 
-    if (elementCountBuffer != null && elementIndicesBuffer!=null) {
-      drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);      
-    }
-    else if (elementStartsBuffer != null && elementLengthBuffer!=null) {
-      drawable.setData(painter, elementStartsBuffer, elementLengthBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);      
-    }
-    else {
+    if (elementCountBuffer != null && elementIndicesBuffer != null) {
+      drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, verticeBuffer,
+          normalBuffer, colorBuffer, bounds);
+    } else if (elementStartsBuffer != null && elementLengthBuffer != null) {
+      drawable.setData(painter, elementStartsBuffer, elementLengthBuffer, verticeBuffer,
+          normalBuffer, colorBuffer, bounds);
+    } else {
       drawable.setData(painter, elementBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);
     }
-    
+
     // drawable.setHasNormalInVertexArray(true);
     // drawable.setData(painter, elements, verticeAndNormals, null, colors, bounds);
+  }
+
+  public int size(int[][] array) {
+    int sz = 0;
+    for (int i = 0; i < array.length; i++) {
+      sz += array[i].length;
+    }
+    return sz;
   }
 }
