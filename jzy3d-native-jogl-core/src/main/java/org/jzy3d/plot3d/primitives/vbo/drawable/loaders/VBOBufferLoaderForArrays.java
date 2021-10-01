@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.vbo.drawable.loaders;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.io.IGLLoader;
@@ -180,33 +181,48 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     // Element Indices to build a multi-element VBO
 
     IntBuffer elementCountBuffer = null;
-    PointerBuffer elementIndicesBuffer = null;
+    IntBuffer elementDataBuffer = null; // vertex index
+    PointerBuffer elementIndicesBuffer = null; // index of index
 
     if (elementsCount != null && elementsIndices != null) {
       elementCountBuffer = Buffers.newDirectIntBuffer(elementsCount);
       elementCountBuffer.rewind();
 
-      elementIndicesBuffer = PointerBuffer.allocateDirect(size(elementsIndices));
+      elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);//size(elementsIndices));
+      
+      elementDataBuffer = Buffers.newDirectIntBuffer(size(elementsIndices));
 
+      
+      //elementIndicesBuffer.p
+      
       if (debug)
         System.out.println("Indices: (vertice capacity:" + verticeBuffer.capacity() + ")");
       
       int k = 0;
       
       for (int i = 0; i < elementsIndices.length; i++) {
+        
         for (int j = 0; j < elementsIndices[i].length; j++) {
-          
-          elementIndicesBuffer.put(elementsIndices[i][j]);
-
-          if (debug)
-            System.out.print(elementIndicesBuffer.get(k) + "\t");
-            //System.out.print(elementsIndices[i][j] + "\t");
-
-          k++;
+          elementDataBuffer.put(elementsIndices[i][j]);          
         }
+        
+        elementIndicesBuffer.referenceBuffer(k, elementDataBuffer);
+        
+        k++;
         if (debug)
           System.out.println(" (count : " + elementsCount[i] + ")");
+        
       }
+      
+      
+      /*for (int i = 0; i < elementsIndices.length; i++) {
+        for (int j = 0; j < elementsIndices[i].length; j++) {
+          elementDataBuffer.put(elementsIndices[i][j]);          
+        }
+        elementIndicesBuffer.put(i);
+      }*/
+      
+      elementDataBuffer.rewind();
       elementIndicesBuffer.rewind();
     }
 
@@ -232,13 +248,20 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     drawable.setVerticesPerGeometry(verticesPerGeometry);
     // drawable.setColorChannels(4);
 
-    if (elementCountBuffer != null && elementIndicesBuffer != null) {
-      drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, verticeBuffer,
-          normalBuffer, colorBuffer, bounds);
-    } else if (elementStartsBuffer != null && elementLengthBuffer != null) {
+    // glMultiDrawElements
+    if (elementCountBuffer != null && elementIndicesBuffer != null && elementDataBuffer!=null) {
+      drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, elementDataBuffer,
+          verticeBuffer, normalBuffer, colorBuffer, bounds);
+    } 
+    
+    // glMultiDrawArrays
+    else if (elementStartsBuffer != null && elementLengthBuffer != null) {
       drawable.setData(painter, elementStartsBuffer, elementLengthBuffer, verticeBuffer,
           normalBuffer, colorBuffer, bounds);
-    } else {
+    } 
+    
+    // glDrawElements
+    else {
       drawable.setData(painter, elementBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);
     }
 
