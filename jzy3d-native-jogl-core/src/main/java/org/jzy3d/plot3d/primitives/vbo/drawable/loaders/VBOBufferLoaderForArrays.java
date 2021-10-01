@@ -186,11 +186,8 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     if (elementsCount != null && elementsIndices != null) {
       elementCountBuffer = Buffers.newDirectIntBuffer(elementsCount);
-      elementCountBuffer.rewind();
-
-      elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);//size(elementsIndices));
-      
       elementDataBuffer = Buffers.newDirectIntBuffer(size(elementsIndices));
+      elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);//size(elementsIndices));
 
       
       //elementIndicesBuffer.p
@@ -198,21 +195,32 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
       if (debug)
         System.out.println("Indices: (vertice capacity:" + verticeBuffer.capacity() + ")");
       
-      int k = 0;
       
+      // PAR REFERENCE
+      /*int k = 0;
       for (int i = 0; i < elementsIndices.length; i++) {
-        
+        elementIndicesBuffer.referenceBuffer(elementDataBuffer);
+
         for (int j = 0; j < elementsIndices[i].length; j++) {
           elementDataBuffer.put(elementsIndices[i][j]);          
+          k++;
         }
+      }*/
+      
+      
+      for (int i = 0; i < elementsIndices.length; i++) {
+        IntBuffer elementDataBufferI =  Buffers.newDirectIntBuffer(elementsIndices[i]);
+        elementDataBufferI.rewind();
         
-        elementIndicesBuffer.referenceBuffer(k, elementDataBuffer);
         
-        k++;
-        if (debug)
-          System.out.println(" (count : " + elementsCount[i] + ")");
         
+        elementIndicesBuffer.referenceBuffer(elementDataBufferI);
+
+        /*for (int j = 0; j < elementsIndices[i].length; j++) {
+          IntBuffer elementDataBuffer.put(elementsIndices[i][j]);          
+        }*/
       }
+      
       
       
       /*for (int i = 0; i < elementsIndices.length; i++) {
@@ -222,8 +230,10 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
         elementIndicesBuffer.put(i);
       }*/
       
+      elementCountBuffer.rewind();
       elementDataBuffer.rewind();
       elementIndicesBuffer.rewind();
+
     }
 
 
