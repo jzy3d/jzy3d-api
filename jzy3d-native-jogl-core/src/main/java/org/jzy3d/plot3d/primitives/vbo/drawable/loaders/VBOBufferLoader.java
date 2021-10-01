@@ -20,7 +20,13 @@ public class VBOBufferLoader {
 
   public FloatBuffer loadVerticesFromArray(double[] points, int pointDimensions,
       List<Coord3d> verticeList, BoundingBox3d bounds) {
-    FloatBuffer vertices = Buffers.newDirectFloatBuffer((points.length / pointDimensions) * 3);
+    
+    // input points may contain extra dimensions, so we first compute the number of points, and then 
+    // define the buffer capacity which will contain exactly 3 dimension, since we will
+    // bypass possible extra dimensions
+    int capa = (points.length / pointDimensions) * 3;
+    
+    FloatBuffer vertices = Buffers.newDirectFloatBuffer(capa);
 
     for (int i = 0; i < points.length; i += pointDimensions) {
       // Store values

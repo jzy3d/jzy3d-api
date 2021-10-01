@@ -27,7 +27,7 @@ import org.jzy3d.plot3d.rendering.scene.Decomposition;
 
 // @Ignore // TRY TO SEE IF GITLAB CI BETTER PASS WITHOUT THIS TEST
 
-public class TestDrawableVBO2 {
+public class TestDrawableVBO2_glDrawElement {
 
   /* *************************************************************/
   /* ************************* NORMALS ****************************/
@@ -113,6 +113,9 @@ public class TestDrawableVBO2 {
     Assert.assertEquals("NO array ID was generated", 0, vbo.getNormalArrayIds()[0]);
     Assert.assertEquals("NO array ID was generated", 0, vbo.getElementArrayIds()[0]);
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getVertexArrayIds()[0]);
+    
+    DrawableVBO2.COMPUTE_NORMALS_IN_JAVA = true;
+
   }
 
   /* *************************************************************/
