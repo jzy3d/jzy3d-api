@@ -39,8 +39,6 @@ public abstract class NativePainterFactory implements IPainterFactory {
 
   public NativePainterFactory(GLCapabilities capabilities) {
     this.capabilities = capabilities;
-    
-    System.out.println(capabilities);
   }
 
   /** Return desired Open GL Capabilities */

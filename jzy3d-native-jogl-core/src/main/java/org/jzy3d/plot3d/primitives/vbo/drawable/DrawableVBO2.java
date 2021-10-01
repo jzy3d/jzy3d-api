@@ -204,6 +204,53 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   protected NormalMode normalMode = NormalMode.PER_VERTEX;
 
 
+
+  /* ************************* glDrawArrays ************************ */
+  /*                                                                 */
+  /*                                                                 */
+  /*                                                                 */
+  /* *************************************************************** */
+
+
+  /**
+   * Initialize a VBO object with arrays with no colormap and no vertex sharing scheme. The object
+   * has a uniform color given by {@link #setColor(Color)}.
+   * 
+   * When using a {@link Light}, the object will have edges looking sharp as shown on the picture
+   * below. One can obtain smoother edges by avoiding vertex repetitions and instead define an
+   * element array indicating which unique vertex should be used in each triangle. See
+   * {@link DrawableVBO2(double[], int, int[]).
+   * 
+   * <img src="doc-files/REPEATED_VERTEX_AND_NORMALS.png"/>
+   * 
+   * @see other constructor for detailed arguments.
+   * 
+   */
+  public DrawableVBO2(double[] points, int pointDimensions) {
+    this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, null, null,
+        NormalMode.PER_VERTEX));
+  }
+
+  /**
+   * Initialize a VBO object with arrays with a colormap but no vertex sharing scheme.
+   * 
+   * <img src="doc-files/COLORMAP.png"/>
+   * 
+   * @see other constructor for detailed arguments.
+   * 
+   */
+  public DrawableVBO2(double[] points, int pointDimensions, IColorMap colormap) {
+    this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, colormap, null,
+        NormalMode.PER_VERTEX));
+  }
+
+
+  /* *********************** glDrawElements ************************ */
+  /*                                                                 */
+  /*                                                                 */
+  /*                                                                 */
+  /* *************************************************************** */
+
   /**
    * Initialize a VBO object with arrays with the following content.
    * 
@@ -249,45 +296,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
         NormalMode.PER_VERTEX));
   }
 
-  /**
-   * Initialize a VBO object with arrays with no colormap and no vertex sharing scheme. The object
-   * has a uniform color given by {@link #setColor(Color)}.
-   * 
-   * When using a {@link Light}, the object will have edges looking sharp as shown on the picture
-   * below. One can obtain smoother edges by avoiding vertex repetitions and instead define an
-   * element array indicating which unique vertex should be used in each triangle. See
-   * {@link DrawableVBO2(double[], int, int[]).
-   * 
-   * <img src="doc-files/REPEATED_VERTEX_AND_NORMALS.png"/>
-   * 
-   * @see other constructor for detailed arguments.
-   * 
-   */
-  public DrawableVBO2(double[] points, int pointDimensions) {
-    this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, null, null,
-        NormalMode.PER_VERTEX));
-  }
-
-  /**
-   * Initialize a VBO object with arrays with a colormap but no vertex sharing scheme.
-   * 
-   * <img src="doc-files/COLORMAP.png"/>
-   * 
-   * @see other constructor for detailed arguments.
-   * 
-   */
-  public DrawableVBO2(double[] points, int pointDimensions, IColorMap colormap) {
-    this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, colormap, null,
-        NormalMode.PER_VERTEX));
-  }
-
-  /**
-   * Initialize a VBO object with a customizable loader.
-   */
-  public DrawableVBO2(IGLLoader<DrawableVBO2> loader) {
-    this.loader = loader;
-  }
-
   public DrawableVBO2(double[] points, int pointDimensions, int[] elements, IColorMap colormap,
       NormalMode normalMode) {
     this(makeLoader(points, pointDimensions, elements, GEOMETRY_SIZE, colormap, null, normalMode));
@@ -310,26 +318,53 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
         NormalMode.PER_VERTEX));
   }
 
-  public DrawableVBO2(List<Polygon> polygons, int verticesPerGeometry) {
-    this(new VBOBufferLoaderForPolygons(polygons, verticesPerGeometry));
+  /* ********************** glMultiDrawArray *********************** */
+  /*                                                                 */
+  /*                                                                 */
+  /*                                                                 */
+  /* *************************************************************** */
+
+
+  public DrawableVBO2(double[] points, int[] elementStart, int[] elementLength, float[] colors) {
+    this(points, VERTEX_DIMENSIONS, elementStart, elementLength, elementLength[0], colors);
   }
+
+  public DrawableVBO2(double[] points, int[] elementStart, int[] elementLength, int elementSize,
+      float[] colors) {
+    this(points, VERTEX_DIMENSIONS, elementStart, elementLength, elementSize, colors);
+  }
+
+
+  public DrawableVBO2(double[] points, int pointDimensions, int[] elementStart, int[] elementLength,
+      int elementSize, float[] colors) {
+    this(makeLoader(points, pointDimensions, elementStart, elementLength, elementSize, colors,
+        NormalMode.PER_VERTEX));
+  }
+
+  public DrawableVBO2(List<Polygon> polygons, int verticesPerGeometry) {
+    this(makeLoader(polygons, verticesPerGeometry));
+  }
+
 
   public static DrawableVBO2 fromComposites(List<Composite> composites, int pointsPerPolygon) {
     return new DrawableVBO2(Decomposition.getPolygonDecomposition(composites), pointsPerPolygon);
   }
 
-  /*
-   * public DrawableVBO2(List<Composite> composite, int pointsPerPolygon) { this(new
-   * VBOBufferLoaderForPolygons(polygons, pointsPerPolygon));
-   * 
-   * }
-   */
+  /* ********************* glMultiDrawElements ********************** */
+  /*                                                                 */
+  /*                                                                 */
+  /*                                                                 */
+  /* *************************************************************** */
 
-  public DrawableVBO2(double[] points, int pointDimensions, int[] elementStart, int[] elementStop,
-      int elementSize, float[] colors) {
-    this(makeLoader(points, pointDimensions, elementStart, elementStop, elementSize, colors,
-        NormalMode.PER_VERTEX));
+
+  public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors) {
+    this(points, VERTEX_DIMENSIONS, null, elementIndices, colors);
   }
+
+  public DrawableVBO2(double[] points, int[] elementCount, int[][] elementIndices, float[] colors) {
+    this(points, VERTEX_DIMENSIONS, elementCount, elementIndices, colors);
+  }
+
 
   public DrawableVBO2(double[] points, int pointDimensions, int[] elementCount,
       int[][] elementIndices, float[] colors) {
@@ -351,17 +386,30 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /* ***************************************************************** */
   /* *********************** LOAD DRAWABLE *************************** */
   /* ***************************************************************** */
+  
+  /**
+   * Initialize a VBO object with a customizable loader.
+   */
+  public DrawableVBO2(IGLLoader<DrawableVBO2> loader) {
+    this.loader = loader;
+  }
+
+
+  protected static VBOBufferLoaderForPolygons makeLoader(List<Polygon> polygons,
+      int verticesPerGeometry) {
+    return new VBOBufferLoaderForPolygons(polygons, verticesPerGeometry);
+  }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] elementCount, int[][] elementIndices, float[] colors, NormalMode perVertex) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elementCount, elementIndices,
-        pointDimensions, null, colors, perVertex);
+        -1, null, colors, perVertex);
   }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
-      int[] geometries, int geometrySize, IColorMap colormap, float[] coloring,
+      int[] elements, int elementSize, IColorMap colormap, float[] coloring,
       NormalMode normalMode) {
-    return new VBOBufferLoaderForArrays(points, pointDimensions, geometries, geometrySize, colormap,
+    return new VBOBufferLoaderForArrays(points, pointDimensions, elements, elementSize, colormap,
         coloring, normalMode);
   }
 
@@ -925,7 +973,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     if (geometrySize == TRIANGLE_SIZE) {
       setGLGeometryType(GL.GL_TRIANGLES);
     } else if (geometrySize == QUAD_SIZE) {
-      //setGLGeometryType(GL2.GL_POLYGON);
+      // setGLGeometryType(GL2.GL_POLYGON);
       setGLGeometryType(GL2.GL_TRIANGLE_FAN);
     } else {
       throw new IllegalArgumentException("Unsupported geometry size : " + geometrySize);
@@ -954,7 +1002,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected void debugMultiDrawElements() {
     System.out.println("glMultiDrawElements : count(" + elementsCount.capacity() + "), indices("
-        + elementsIndices.capacity() + "), data(" + elementsData.capacity() + ") - Vertices : " + vertices.capacity());
+        + elementsIndices.capacity() + "), data(" + elementsData.capacity() + ") - Vertices : "
+        + vertices.capacity());
 
     for (int i = 0; i < elementsCount.capacity(); i++) {
       int count = elementsCount.get(i);
