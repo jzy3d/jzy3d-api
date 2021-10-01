@@ -108,7 +108,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected boolean primitiveRestart = true;
   
-  protected boolean debug = false;
+  protected boolean debug = true;
 
   // ---------------------------------------
   // Buffers to feed VBO in GPU memory
@@ -144,6 +144,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * {@link GL#glMultiDrawElements}
    */
   protected IntBuffer elementsCount;
+  protected IntBuffer elementsData;
   protected PointerBuffer elementsIndices;
 
 
@@ -490,11 +491,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     registerVertices(gl);
     registerNormals(gl);
     registerColors(gl);
-    // register multi-element?
+    // no element to register 
   }
 
   public void setData(IPainter painter, IntBuffer elementsCount, PointerBuffer elementsIndices,
-      FloatBuffer vertices, FloatBuffer normals, FloatBuffer colors, BoundingBox3d bounds) {
+      IntBuffer elementsData, FloatBuffer vertices, FloatBuffer normals, FloatBuffer colors, BoundingBox3d bounds) {
     this.vertices = vertices;
     this.normals = normals;
     this.colors = colors;
@@ -504,6 +505,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // use multi element indexing
     this.elementsIndices = elementsIndices;
     this.elementsCount = elementsCount;
+    this.elementsData = elementsData;
+    
     this.elementsStarts = null;
     this.elementsLength = null;
     this.elements = null;
@@ -517,6 +520,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     registerVertices(gl);
     registerNormals(gl);
     registerColors(gl);
+    registerElementsData(gl);
     // register multi-element?
   }
 
@@ -562,6 +566,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     }
   }
 
+  // for glDrawElements
   protected void registerElements(GL gl) {
     if (elements != null) {
       elementSize = elements.capacity();
@@ -571,6 +576,19 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       gl.glGenBuffers(1, elementArrayIds, 0);
       gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
       gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, elements, GL.GL_STATIC_DRAW);
+    }
+  }
+
+  // for glMultiDrawElements
+  protected void registerElementsData(GL gl) {
+    if (elementsData != null) {
+      //elementsDataSize = elementsData.capacity();
+
+      int indexSize = elementsData.capacity() * Buffers.SIZEOF_INT;
+
+      gl.glGenBuffers(1, elementArrayIds, 0);
+      gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
+      gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, elementsData, GL.GL_STATIC_DRAW);
     }
   }
 
@@ -609,12 +627,20 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // -----------------------------------
     // Prepare buffers
 
+    //System.out.println("V id " + vertexArrayIds[0]);
+    //System.out.println("E id " + elementArrayIds[0]);
+    
+    // Vertex buffer
     gl2.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexArrayIds[0]);
-    gl2.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
-
     gl2.glVertexPointer(VERTEX_DIMENSIONS, GL.GL_FLOAT, vertexOffset, firstCoordOffset);
     gl2.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
 
+    // Element buffer
+    if(elementArrayIds[0] != 0) {
+      gl2.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
+    }
+    
+    // Normal buffer
     if (normalArrayIds[0] != 0) {
       // Experimental : try providing explicit normals
       gl2.glBindBuffer(GL.GL_ARRAY_BUFFER, normalArrayIds[0]);
@@ -627,11 +653,10 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       gl2.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
     }
 
-
+    // Color buffer
     if (hasColorBuffer) {
       gl2.glBindBuffer(GL.GL_ARRAY_BUFFER, colorArrayIds[0]);
-      gl2.glColorPointer(colorChannels, GL.GL_FLOAT, colorChannels * Buffers.SIZEOF_FLOAT,
-          firstCoordOffset);
+      gl2.glColorPointer(colorChannels, GL.GL_FLOAT, colorChannels * Buffers.SIZEOF_FLOAT, firstCoordOffset);
       gl2.glEnableClientState(GL2.GL_COLOR_ARRAY);
     } else {
       gl2.glColor4f(color.r, color.g, color.b, color.a);
@@ -722,8 +747,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
         debugMultiDrawElements();
       // CHECKER POURQUOI LA DOC DEMANDE MEME TAILLE POUR COUNT ET INDICE!
       
-      gl2.glMultiDrawElements(glGeometryType, elementsCount, GL.GL_UNSIGNED_INT, elementsIndices,
-          elementsIndices.capacity());
+      
+      //gl2.glMultiDrawElements(glGeometryType, elementsCount, GL.GL_UNSIGNED_INT, elementsIndices,
+      //    elementsIndices.capacity());
       
       
     }
@@ -897,8 +923,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     if (geometrySize == TRIANGLE_SIZE) {
       setGLGeometryType(GL.GL_TRIANGLES);
     } else if (geometrySize == QUAD_SIZE) {
-      setGLGeometryType(GL2.GL_POLYGON);
-      //setGLGeometryType(GL2.GL_TRIANGLE_FAN);
+      //setGLGeometryType(GL2.GL_POLYGON);
+      setGLGeometryType(GL2.GL_TRIANGLE_FAN);
     } else {
       throw new IllegalArgumentException("Unsupported geometry size : " + geometrySize);
     }
@@ -925,15 +951,23 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   
   
   protected void debugMultiDrawElements() {
-    System.out.println("glMultiDrawElements : count, {indices}");
+    System.out.println("glMultiDrawElements : count("+elementsCount.capacity()+"), indices("+elementsIndices.capacity()+"), data(" + elementsData.capacity() +")");
 
     int offset = 0;
     for (int i = 0; i < elementsCount.capacity(); i++) {
-      System.out.print(elementsCount.get(i) + " :\t");
+      int count = elementsCount.get(i);
+      long ptr = elementsIndices.get(i);
       
-      for (int j = offset; j < (offset+elementsCount.get(i)); j++) {
-        System.out.print(elementsIndices.get(j) + "\t");
+      System.out.print(count + " :"+  ptr + "\t");
+      
+      for (int j = 0; j < count; j++) {
+        System.out.print(elementsData.get(j+offset) + "\t");
       }
+      
+      
+      /*for (int j = offset; j < (offset+elementsCount.get(i)); j++) {
+        System.out.print(elementsIndices.get(j) + "\t");
+      }*/
       
       System.out.println();
       offset+=elementsCount.get(i);

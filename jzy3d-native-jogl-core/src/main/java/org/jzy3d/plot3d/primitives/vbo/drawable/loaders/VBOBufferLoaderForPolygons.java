@@ -50,14 +50,14 @@ public class VBOBufferLoaderForPolygons extends VBOBufferLoader implements IGLLo
     FloatBuffer vertices = Buffers.newDirectFloatBuffer(pointsNumber * DIMENSIONS);
     FloatBuffer colors = Buffers.newDirectFloatBuffer(pointsNumber * colorChannels);
 
-    IntBuffer geometryStarts = Buffers.newDirectIntBuffer(polygons.size());
-    IntBuffer geometryLength = Buffers.newDirectIntBuffer(polygons.size());
+    IntBuffer elementsStarts = Buffers.newDirectIntBuffer(polygons.size());
+    IntBuffer elementsLength = Buffers.newDirectIntBuffer(polygons.size());
 
     int vertexCount = 0;
 
     for (Polygon polygon : polygons) {
-      geometryStarts.put(vertexCount);
-      geometryLength.put(polygon.size());
+      elementsStarts.put(vertexCount);
+      elementsLength.put(polygon.size());
       
       vertexCount+=polygon.size();
       
@@ -86,8 +86,8 @@ public class VBOBufferLoaderForPolygons extends VBOBufferLoader implements IGLLo
     }
     vertices.rewind();
     colors.rewind();
-    geometryStarts.rewind();
-    geometryLength.rewind();
+    elementsStarts.rewind();
+    elementsLength.rewind();
     
     // -------------------------------------------
     // Normals
@@ -100,6 +100,6 @@ public class VBOBufferLoaderForPolygons extends VBOBufferLoader implements IGLLo
 
     drawable.setHasNormalInVertexArray(false);
     drawable.setVerticesPerGeometry(pointsPerPolygon);
-    drawable.setData(painter, geometryStarts, geometryLength, vertices, normals, colors, bounds);
+    drawable.setData(painter, elementsStarts, elementsLength, vertices, normals, colors, bounds);
   }
 }
