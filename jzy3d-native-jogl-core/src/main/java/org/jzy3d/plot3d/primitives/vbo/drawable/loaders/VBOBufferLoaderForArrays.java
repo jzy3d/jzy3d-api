@@ -38,7 +38,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
   protected float[] coloring;
   protected NormalMode normalMode;
 
-  protected boolean debug = true;
+  protected boolean debug = false;
 
 
   public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementStarts,
@@ -54,7 +54,6 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.elementsStarts = elementStarts;
     this.elementsLength = elementLength;
     this.verticesPerGeometry = geometrySize;
-
   }
 
   public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementCount,
@@ -70,7 +69,19 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.elementsCount = elementCount;
     this.elementsIndices = elementIndices;
     this.verticesPerGeometry = geometrySize;
+  }
 
+  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[][] elementIndices, int geometrySize, IColorMap colormap, float[] coloring,
+      NormalMode normalMode) {
+    super();
+    this.points = points;
+    this.pointDimensions = pointDimensions;
+    this.colormap = colormap;
+    this.coloring = coloring;
+    this.normalMode = normalMode;
+
+    this.elementsIndices = elementIndices;
+    this.verticesPerGeometry = geometrySize;
   }
 
 
@@ -184,51 +195,34 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     IntBuffer elementDataBuffer = null; // vertex index
     PointerBuffer elementIndicesBuffer = null; // index of index
 
-    if (elementsCount != null && elementsIndices != null) {
-      elementCountBuffer = Buffers.newDirectIntBuffer(elementsCount);
+    if (elementsIndices != null) {
       elementDataBuffer = Buffers.newDirectIntBuffer(size(elementsIndices));
       elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);//size(elementsIndices));
+      
+      if(elementsCount!=null) {
+        elementCountBuffer = Buffers.newDirectIntBuffer(elementsCount);
+      }
+      else {
+        elementCountBuffer = Buffers.newDirectIntBuffer(elementsIndices.length);
+      }
 
-      
-      //elementIndicesBuffer.p
-      
-      if (debug)
-        System.out.println("Indices: (vertice capacity:" + verticeBuffer.capacity() + ")");
-      
-      
-      // PAR REFERENCE
-      /*int k = 0;
-      for (int i = 0; i < elementsIndices.length; i++) {
-        elementIndicesBuffer.referenceBuffer(elementDataBuffer);
-
-        for (int j = 0; j < elementsIndices[i].length; j++) {
-          elementDataBuffer.put(elementsIndices[i][j]);          
-          k++;
-        }
-      }*/
-      
-      
       for (int i = 0; i < elementsIndices.length; i++) {
         IntBuffer elementDataBufferI =  Buffers.newDirectIntBuffer(elementsIndices[i]);
         elementDataBufferI.rewind();
         
-        
-        
         elementIndicesBuffer.referenceBuffer(elementDataBufferI);
-
-        /*for (int j = 0; j < elementsIndices[i].length; j++) {
-          IntBuffer elementDataBuffer.put(elementsIndices[i][j]);          
-        }*/
+        
+        if(elementsCount==null) {
+          elementCountBuffer.put(elementsIndices[i].length);
+        }
       }
       
+
+      //if (debug)
+      //  System.out.println("Indices: (vertice capacity:" + verticeBuffer.capacity() + ")");
       
       
-      /*for (int i = 0; i < elementsIndices.length; i++) {
-        for (int j = 0; j < elementsIndices[i].length; j++) {
-          elementDataBuffer.put(elementsIndices[i][j]);          
-        }
-        elementIndicesBuffer.put(i);
-      }*/
+      
       
       elementCountBuffer.rewind();
       elementDataBuffer.rewind();
@@ -236,12 +230,21 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     }
 
+    
+    if(verticesPerGeometry<0) {
+      if(elementCountBuffer!=null)
+        verticesPerGeometry = elementCountBuffer.get(0);
+      else if(elementLengthBuffer!=null)
+        verticesPerGeometry = elementLengthBuffer.get(0);
+    }
+
+    
 
     // -------------------------------------------
     // Normals
-
+    
     FloatBuffer normalBuffer = null;
-
+    
     if (DrawableVBO2.COMPUTE_NORMALS_IN_JAVA) {
       if (elements != null && NormalMode.SHARED.equals(normalMode)) {
         normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
