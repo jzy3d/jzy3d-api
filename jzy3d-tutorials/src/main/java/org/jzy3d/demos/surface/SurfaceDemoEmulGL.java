@@ -37,6 +37,7 @@ public class SurfaceDemoEmulGL {
     q.setAnimated(false); // leave CPU quiet if no need to re-render
     q.setHiDPIEnabled(true); // need java 9+ to enable HiDPI & Retina displays 
     // (tutorials built with Java 8 for backward compatibility, update your runtime to get HiDPI)
+    
     Chart chart = factory.newChart(q);
     chart.add(surface);
     
