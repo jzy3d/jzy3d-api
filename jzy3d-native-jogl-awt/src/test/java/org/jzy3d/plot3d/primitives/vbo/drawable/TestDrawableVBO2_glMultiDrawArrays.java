@@ -33,29 +33,32 @@ public class TestDrawableVBO2_glMultiDrawArrays {
   double X1 = 1;
   double Y1 = 1;
   double Z1 = 1;
-  
+
   boolean offscreen = true;
-  
+
   public static void main(String[] args) {
     new TestDrawableVBO2_glMultiDrawArrays().glMultiDrawArrays_RepeatedVertice();
   }
 
   /* *************************************************************/
 
-  /** Building VBO this way assume points are repeated and ordered correctly (no interlacing geometries) */
+  /**
+   * Building VBO this way assume points are repeated and ordered correctly (no interlacing
+   * geometries)
+   */
   @Test
   public void glMultiDrawArrays_RepeatedVertice() {
     Assert.assertTrue(DrawableVBO2.COMPUTE_NORMALS_IN_JAVA);
 
     // Given
     AWTChartFactory f = new AWTChartFactory();
-    if(offscreen)
+    if (offscreen)
       f.getPainterFactory().setOffscreen(800, 600);
-    
+
     Quality q = Quality.Advanced().setAlphaActivated(false);
     Chart chart = f.newChart(q);
-    
-    if(!offscreen) {
+
+    if (!offscreen) {
       chart.open();
       chart.addMouseCameraController();
     }
@@ -65,7 +68,7 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     // When
     double[] vertices = new double[72];
     int k = 0;
-    
+
     // bottom
     vertices[k++] = X0;
     vertices[k++] = Y0;
@@ -82,7 +85,7 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     vertices[k++] = X0;
     vertices[k++] = Y1;
     vertices[k++] = Z0;
-    
+
     // top
     vertices[k++] = X0;
     vertices[k++] = Y0;
@@ -99,7 +102,7 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     vertices[k++] = X0;
     vertices[k++] = Y1;
     vertices[k++] = Z1;
-    
+
     // left
     vertices[k++] = X0;
     vertices[k++] = Y0;
@@ -117,7 +120,7 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     vertices[k++] = Y1;
     vertices[k++] = Z0;
 
- // right
+    // right
     vertices[k++] = X1;
     vertices[k++] = Y0;
     vertices[k++] = Z0;
@@ -133,8 +136,8 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     vertices[k++] = X1;
     vertices[k++] = Y1;
     vertices[k++] = Z0;
-    
- // near
+
+    // near
     vertices[k++] = X0;
     vertices[k++] = Y0;
     vertices[k++] = Z0;
@@ -150,8 +153,8 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     vertices[k++] = X1;
     vertices[k++] = Y0;
     vertices[k++] = Z0;
-    
- // far
+
+    // far
     vertices[k++] = X0;
     vertices[k++] = Y1;
     vertices[k++] = Z0;
@@ -169,22 +172,23 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     vertices[k++] = Z0;
 
     int PTS = 4;
-    
-    //int[] elementStarts = {0,12,24,36,48,60};
-    int[] elementStarts = {0,4,8,12,16,20};
-    int[] elementLength = {PTS,PTS,PTS,PTS,PTS,PTS};
+
+    int[] elementStarts = {0, 4, 8, 12, 16, 20};
+    int[] elementLength = {PTS, PTS, PTS, PTS, PTS, PTS};
 
     float[] colors = Array.cloneFloat(vertices);
-    
-    DrawableVBO2 vbo = new DrawableVBO2(vertices, elementStarts, elementLength, colors);
-    
-    chart.add(vbo);
-    
-    Assert.assertEquals(new Coord3d(1,1,1), chart.getView().getBounds().getCorners().getXmaxYmaxZmax());
-    Assert.assertEquals(new Coord3d(0,0,0), chart.getView().getBounds().getCorners().getXminYminZmin());
 
-    
-    
+    DrawableVBO2 vbo = new DrawableVBO2(vertices, elementStarts, elementLength, colors);
+
+    chart.add(vbo);
+
+    Assert.assertEquals(new Coord3d(1, 1, 1),
+        chart.getView().getBounds().getCorners().getXmaxYmaxZmax());
+    Assert.assertEquals(new Coord3d(0, 0, 0),
+        chart.getView().getBounds().getCorners().getXminYminZmin());
+
+
+
     // -------------------------------------------
     // Then
 
@@ -193,18 +197,18 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     Assert.assertEquals(72, vbo.getNormals().capacity());
     Assert.assertEquals(6, vbo.getElementsStarts().capacity());
     Assert.assertEquals(6, vbo.getElementsLength().capacity());
-    
+
     Assert.assertNull(vbo.getElements());
     Assert.assertNull(vbo.getElementsCount());
     Assert.assertNull(vbo.getElementsIndices());
-    
+
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getVertexArrayIds()[0]);
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getNormalArrayIds()[0]);
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getColorArrayIds()[0]);
 
   }
 
-  
+
   @Test
   public void givenPolygons_WhenLoading_ThenBuffersAppropriatelyFilled() {
 
@@ -223,28 +227,30 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     DrawableVBO2 vbo = new DrawableVBO2(polygons, pointsPerPolygon);
     chart.add(vbo);
 
-    /*try {
-      chart.screenshot(new File("target/vbo-polygons.png"));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }*/
+    /*
+     * try { chart.screenshot(new File("target/vbo-polygons.png")); } catch (IOException e) {
+     * e.printStackTrace(); }
+     */
     Assert.assertTrue(vbo.isHasColorBuffer());
     Assert.assertEquals(3, vbo.getColorChannels());
 
     Assert.assertEquals(3 * pointsPerPolygon * polygons.size(), vbo.vertices.capacity());
-    Assert.assertEquals(vbo.getColorChannels() * pointsPerPolygon * polygons.size(), vbo.colors.capacity());
+    Assert.assertEquals(vbo.getColorChannels() * pointsPerPolygon * polygons.size(),
+        vbo.colors.capacity());
 
     Assert.assertEquals(polygons.size(), vbo.elementsStarts.capacity());
     Assert.assertEquals(polygons.size(), vbo.elementsLength.capacity());
 
-    /*for (int i = 0; i < vbo.geometryStarts.capacity(); i++) {
-      System.out.println(vbo.geometryStarts.get(i) + " - " + vbo.geometryLength.get(i));
-    }*/
-    
-    /*for (int i = 0; i < vbo.vertices.capacity(); i+=3) {
-      System.out.println(vbo.vertices.get(i) + ", " + vbo.vertices.get(i+1) + ", " + vbo.vertices.get(i+2));
-    }*/
-    
+    /*
+     * for (int i = 0; i < vbo.geometryStarts.capacity(); i++) {
+     * System.out.println(vbo.geometryStarts.get(i) + " - " + vbo.geometryLength.get(i)); }
+     */
+
+    /*
+     * for (int i = 0; i < vbo.vertices.capacity(); i+=3) { System.out.println(vbo.vertices.get(i) +
+     * ", " + vbo.vertices.get(i+1) + ", " + vbo.vertices.get(i+2)); }
+     */
+
     Assert.assertNull(vbo.elements);
 
     Assert.assertEquals(3 * pointsPerPolygon * polygons.size(), vbo.normals.capacity());

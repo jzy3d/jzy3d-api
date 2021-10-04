@@ -192,11 +192,11 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     if (mapper != null)
       mapper.preDraw(this);
 
-    
+
     if (isReflectLight()) {
       applyMaterial(painter);
     }
-    
+
     // Draw content of polygon
     drawFace(painter);
 
@@ -204,7 +204,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     // Draw edge of polygon
     drawWireframe(painter);
-    
+
     if (mapper != null)
       mapper.postDraw(this);
 
@@ -560,19 +560,42 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     if (!isWireframeColorFromPolygonPoints()) {
       painter.color(wireframeColor);
     }
-    painter.glLineWidth(getWireframeWidth());
-    painter.glBegin_LineLoop(); // changed for JGL as wireframe polygon are transformed to pair of
-                                // triangles
 
-    for (Point p : points) {
-      if (isWireframeColorFromPolygonPoints()) {
-        painter.color(p.rgb);
+    painter.glLineWidth(getWireframeWidth());
+
+
+    if (wireframeWithLineLoop) {
+      // changed for JGL as wireframe polygon are transformed to pair of
+      // triangles
+      painter.glBegin_LineLoop(); 
+
+      for (Point p : points) {
+        if (isWireframeColorFromPolygonPoints()) {
+          painter.color(p.rgb);
+        }
+
+        painter.vertex(p.xyz, spaceTransformer);
+      }
+      painter.glEnd();
+    }
+    else {
+      
+      // default Draw geometry
+      begin(painter);
+
+      // invoke points for vertex and color
+      for (Point p : points) {
+        if (isWireframeColorFromPolygonPoints()) {
+          painter.color(p.rgb);
+        }
+        painter.vertex(p.xyz, spaceTransformer);
       }
 
-      painter.vertex(p.xyz, spaceTransformer);
+      painter.glEnd();
     }
-    painter.glEnd();
   }
+
+  protected boolean wireframeWithLineLoop = true;
 
 
   /**
@@ -842,6 +865,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       return false;
     return true;
   }
-  
-  
+
+
 }
