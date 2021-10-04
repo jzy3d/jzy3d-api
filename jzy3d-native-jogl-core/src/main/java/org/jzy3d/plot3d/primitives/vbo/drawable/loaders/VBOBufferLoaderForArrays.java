@@ -217,17 +217,9 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
         }
       }
       
-
-      //if (debug)
-      //  System.out.println("Indices: (vertice capacity:" + verticeBuffer.capacity() + ")");
-      
-      
-      
-      
       elementCountBuffer.rewind();
       elementDataBuffer.rewind();
       elementIndicesBuffer.rewind();
-
     }
 
     

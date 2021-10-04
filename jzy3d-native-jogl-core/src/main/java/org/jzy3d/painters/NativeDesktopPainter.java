@@ -213,6 +213,8 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glMatrixMode(int mode) {
+    //gl.getGL3bc().glMatrixMode(mode);
+    //gl.getGL4bc().glMatrixMode(mode);
     gl.getGL2().glMatrixMode(mode);
   }
 

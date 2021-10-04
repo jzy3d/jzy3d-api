@@ -73,7 +73,7 @@ These are the dependencies to use to enable jGL Emulated OpenGL Charts on Jzy3d.
 <dependencies>
   <dependency>
       <groupId>org.jzy3d</groupId>
-      <artifactId>jzy3d-emul-gl</artifactId>
+      <artifactId>jzy3d-emul-gl-awt</artifactId>
       <version>2.0.0-SNAPSHOT</version>
 
   </dependency>

@@ -672,7 +672,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
     GL2 gl2 = gl.getGL2();
 
-
     // -----------------------------------
     // Prepare buffers
 
@@ -795,8 +794,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
       if (debug)
         debugMultiDrawElements();
-      // CHECKER POURQUOI LA DOC DEMANDE MEME TAILLE POUR COUNT ET INDICE!
-
 
       gl2.glMultiDrawElements(glGeometryType, elementsCount, GL.GL_UNSIGNED_INT, elementsIndices,
           elementsIndices.capacity());
