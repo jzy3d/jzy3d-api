@@ -14,13 +14,13 @@ import com.jogamp.opengl.GLProfile;
  * 
  * @author martin
  */
-public class GetOpenGLVersion {
+public class GetOpenGLVersion_Jzy3D {
   public static void main(String[] args) {
-    GLCapabilities caps = new GLCapabilities(GLProfile.get(GLProfile.GL2));
+    //GLCapabilities caps = new GLCapabilities(GLProfile.get(GLProfile.GL2));
     //GLCapabilities caps = new GLCapabilities(GLProfile.get(GLProfile.GL3));
     //GLCapabilities caps = new GLCapabilities(GLProfile.get(GLProfile.GL3bc));
     //GLCapabilities caps = new GLCapabilities(GLProfile.get(GLProfile.GL4));
-    //GLCapabilities caps = new GLCapabilities(GLProfile.getMaximum(true));
+    GLCapabilities caps = new GLCapabilities(GLProfile.getMaximum(true));
     
     IPainterFactory p = new AWTPainterFactory(caps);
     Chart chart = new AWTChartFactory(p).newChart();
