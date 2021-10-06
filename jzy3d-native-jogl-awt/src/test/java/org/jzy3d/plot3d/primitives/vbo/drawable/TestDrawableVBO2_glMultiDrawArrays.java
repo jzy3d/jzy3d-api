@@ -33,6 +33,10 @@ public class TestDrawableVBO2_glMultiDrawArrays {
   double X1 = 1;
   double Y1 = 1;
   double Z1 = 1;
+  
+  Coord3d X1Y1Z1 = new Coord3d(X1,Y1,Z1);
+  Coord3d X0Y0Z0 = new Coord3d(X0,Y0,Z0);    
+
 
   boolean offscreen = true;
 
@@ -182,10 +186,13 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     Assert.assertTrue(vbo.isComputeNormals());
     
     chart.add(vbo);
+    chart.render();
 
-    Assert.assertEquals(new Coord3d(1, 1, 1),
+    
+    
+    Assert.assertEquals(X1Y1Z1,
         chart.getView().getBounds().getCorners().getXmaxYmaxZmax());
-    Assert.assertEquals(new Coord3d(0, 0, 0),
+    Assert.assertEquals(X0Y0Z0,
         chart.getView().getBounds().getCorners().getXminYminZmin());
 
 

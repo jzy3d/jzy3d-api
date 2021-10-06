@@ -172,7 +172,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     if (elements != null) {
       elementBuffer = Buffers.newDirectIntBuffer(elements);
-      elementBuffer.rewind();
+      BufferUtil.rewind(elementBuffer);
     }
 
     // -------------------------------------------
@@ -183,10 +183,10 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     if (elementsStarts != null && elementsLength != null) {
       elementStartsBuffer = Buffers.newDirectIntBuffer(elementsStarts);
-      elementStartsBuffer.rewind();
+      BufferUtil.rewind(elementStartsBuffer);
 
       elementLengthBuffer = Buffers.newDirectIntBuffer(elementsLength);
-      elementLengthBuffer.rewind();
+      BufferUtil.rewind(elementLengthBuffer);
     }
 
     // -------------------------------------------
@@ -209,7 +209,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
       for (int i = 0; i < elementsIndices.length; i++) {
         IntBuffer elementDataBufferI =  Buffers.newDirectIntBuffer(elementsIndices[i]);
-        elementDataBufferI.rewind();
+        BufferUtil.rewind(elementDataBufferI);
         
         elementIndicesBuffer.referenceBuffer(elementDataBufferI);
         
