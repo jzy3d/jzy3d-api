@@ -10,6 +10,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
+import org.jzy3d.plot3d.primitives.vbo.drawable.BufferUtil;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import com.jogamp.common.nio.Buffers;
 
@@ -84,10 +85,12 @@ public class VBOBufferLoaderForPolygons extends VBOBufferLoader implements IGLLo
 
       }
     }
-    vertices.rewind();
-    colors.rewind();
-    elementsStarts.rewind();
-    elementsLength.rewind();
+    
+    BufferUtil.rewind(vertices);
+    BufferUtil.rewind(colors);
+    BufferUtil.rewind(elementsStarts);
+    BufferUtil.rewind(elementsLength);
+    
     
     // -------------------------------------------
     // Normals

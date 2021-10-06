@@ -11,6 +11,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal.NormalMode;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.vbo.drawable.BufferUtil;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.common.nio.PointerBuffer;
@@ -217,8 +218,8 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
         }
       }
       
-      elementCountBuffer.rewind();
-      elementDataBuffer.rewind();
+      BufferUtil.rewind(elementDataBuffer);
+      BufferUtil.rewind(elementDataBuffer);
       elementIndicesBuffer.rewind();
     }
 
@@ -237,7 +238,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     
     FloatBuffer normalBuffer = null;
     
-    if (DrawableVBO2.COMPUTE_NORMALS_IN_JAVA) {
+    if (drawable.isComputeNormals()) {
       if (elements != null && NormalMode.SHARED.equals(normalMode)) {
         normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
       } else {
