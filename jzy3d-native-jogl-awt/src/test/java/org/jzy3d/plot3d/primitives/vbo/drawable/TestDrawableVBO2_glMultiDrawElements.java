@@ -17,6 +17,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * 
  * @author martin
  */
+@Ignore // crashing JVM 11 locally !!!
 public class TestDrawableVBO2_glMultiDrawElements {
 
   double X0 = 0;
@@ -39,7 +40,6 @@ public class TestDrawableVBO2_glMultiDrawElements {
   /**
    * Building VBO this way avoid repeating geometries and allows defining an index to get them
    */
-@Ignore // crashing JVM ???!!!
   @Test
   public void givenVerticesAndIndiceArray_WhenLoading_ThenBuffersAppropriatelyFilled() {
 
