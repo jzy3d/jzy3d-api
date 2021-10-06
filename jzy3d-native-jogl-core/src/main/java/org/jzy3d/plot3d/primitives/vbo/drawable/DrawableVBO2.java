@@ -107,7 +107,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   protected boolean primitiveRestart = false;
 
   protected boolean debug = false;
-  
+
   protected boolean computeNormals = true;
 
   // ---------------------------------------
@@ -144,7 +144,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * {@link GL#glMultiDrawElements}
    */
   protected IntBuffer elementsCount;
-  protected IntBuffer elementsData;
   protected PointerBuffer elementsIndices;
 
 
@@ -315,8 +314,13 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   public DrawableVBO2(double[] points, int pointDimensions, int[] elements, int elementSize,
       float[] colors) {
     this(makeLoader(points, pointDimensions, elements, elementSize, null, colors,
-        NormalMode.PER_VERTEX));
+        NormalMode.SHARED));
   }
+
+  public DrawableVBO2(double[] points, int[] elements, int elementSize, float[] colors) {
+    this(points, VERTEX_DIMENSIONS, elements, elementSize, colors);
+  }
+
 
   /* ********************** glMultiDrawArray *********************** */
   /*                                                                 */
@@ -365,6 +369,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this(points, VERTEX_DIMENSIONS, elementCount, elementIndices, colors);
   }
 
+  public DrawableVBO2(double[] points, int[] elementCount, int[][] elementIndices, float[] colors, NormalMode normalMode) {
+    this(makeLoader(points, VERTEX_DIMENSIONS, elementCount, elementIndices, colors,
+        normalMode));
+  }
+
 
   public DrawableVBO2(double[] points, int pointDimensions, int[] elementCount,
       int[][] elementIndices, float[] colors) {
@@ -386,7 +395,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /* ***************************************************************** */
   /* *********************** LOAD DRAWABLE *************************** */
   /* ***************************************************************** */
-  
+
   /**
    * Initialize a VBO object with a customizable loader.
    */
@@ -402,8 +411,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] elementCount, int[][] elementIndices, float[] colors, NormalMode perVertex) {
-    return new VBOBufferLoaderForArrays(points, pointDimensions, elementCount, elementIndices,
-        -1, null, colors, perVertex);
+    return new VBOBufferLoaderForArrays(points, pointDimensions, elementCount, elementIndices, -1,
+        null, colors, perVertex);
   }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
@@ -543,8 +552,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   }
 
   public void setData(IPainter painter, IntBuffer elementsCount, PointerBuffer elementsIndices,
-      IntBuffer elementsData, FloatBuffer vertices, FloatBuffer normals, FloatBuffer colors,
-      BoundingBox3d bounds) {
+      FloatBuffer vertices, FloatBuffer normals, FloatBuffer colors, BoundingBox3d bounds) {
     this.vertices = vertices;
     this.normals = normals;
     this.colors = colors;
@@ -554,7 +562,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // use multi element indexing
     this.elementsIndices = elementsIndices;
     this.elementsCount = elementsCount;
-    this.elementsData = elementsData;
 
     this.elementsStarts = null;
     this.elementsLength = null;
@@ -627,20 +634,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, elements, GL.GL_STATIC_DRAW);
     }
   }
-
-  // for glMultiDrawElements
-  protected void registerElementsData(GL gl) {
-    if (elementsData != null) {
-      // elementsDataSize = elementsData.capacity();
-
-      int indexSize = elementsData.capacity() * Buffers.SIZEOF_INT;
-
-      gl.glGenBuffers(1, elementArrayIds, 0);
-      gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
-      gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, elementsData, GL.GL_STATIC_DRAW);
-    }
-  }
-
 
   /* ***************************************************************** */
   /* ********************** RENDER DRAWABLE ************************** */
@@ -990,7 +983,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   public void setPrimitiveRestart(boolean primitiveRestart) {
     this.primitiveRestart = primitiveRestart;
   }
-  
+
   public boolean isComputeNormals() {
     return computeNormals;
   }
@@ -1009,7 +1002,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected void debugMultiDrawElements() {
     System.out.println("glMultiDrawElements : count(" + elementsCount.capacity() + "), indices("
-        + elementsIndices.capacity() + "), data(" + elementsData.capacity() + ") - Vertices : "
+        + elementsIndices.capacity() + "), Vertices : "
         + vertices.capacity());
 
     for (int i = 0; i < elementsCount.capacity(); i++) {
@@ -1024,16 +1017,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       for (int j = 0; j < ib.capacity(); j++) {
         System.out.print(ib.get(j) + "\t");
       }
-
-      /*
-       * for (int j = 0; j < count; j++) { System.out.print(elementsData.get(j+offset) + "\t"); }
-       */
-
-
-      /*
-       * for (int j = offset; j < (offset+elementsCount.get(i)); j++) {
-       * System.out.print(elementsIndices.get(j) + "\t"); }
-       */
 
       System.out.println();
     }
