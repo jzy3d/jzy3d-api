@@ -1,5 +1,6 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# Select an OS (https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on)
 
 name: Java CI with Maven
 
@@ -9,9 +10,8 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  macos-10.15-jdk9:
 
-    # Select an OS (https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on)
     runs-on: macos-10.15
 
     steps:
@@ -28,8 +28,8 @@ jobs:
     - name: Surefire Report
       uses: ScaCap/action-surefire-report@v1.0.5
 
-  ubuntu:
-    runs-on: ubuntu-10.15
+  ubuntu-18.04-jdk9:
+    runs-on: ubuntu-18.04
 
     steps:
     - uses: actions/checkout@v2
@@ -39,3 +39,7 @@ jobs:
         java-version: 1.9
     - name: Build with Maven
       run: mvn -T 1C -B package --file pom.xml -Dsurefire.useFile=false
+
+      # Show surefire report
+    - name: Surefire Report
+      uses: ScaCap/action-surefire-report@v1.0.5
