@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * 
  * @author martin
  */
-@Ignore // crashing JVM 11 locally !!!
+//@Ignore // crashing JVM 11 locally !!!
 public class TestDrawableVBO2_glMultiDrawElements {
 
   double X0 = 0;

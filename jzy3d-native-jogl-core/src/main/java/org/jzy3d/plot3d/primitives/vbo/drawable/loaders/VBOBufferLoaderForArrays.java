@@ -141,7 +141,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
   @Override
   public void load(IPainter painter, DrawableVBO2 drawable) throws Exception {
 
-    // Temporary list, for computing color and normals later
+    // Temporary list, for computing colors and normals later
     List<Coord3d> verticeList = new ArrayList<>();
     BoundingBox3d bounds = new BoundingBox3d();
 
@@ -192,13 +192,11 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     // -------------------------------------------
     // Element Indices to build a multi-element VBO
 
-    IntBuffer elementCountBuffer = null;
-    IntBuffer elementDataBuffer = null; // vertex index
-    PointerBuffer elementIndicesBuffer = null; // index of index
+    IntBuffer elementCountBuffer = null; // size of each geom (4 for quads)
+    PointerBuffer elementIndicesBuffer = null; // index of index, will contain buffers
 
     if (elementsIndices != null) {
-      elementDataBuffer = Buffers.newDirectIntBuffer(size(elementsIndices));
-      elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);//size(elementsIndices));
+      elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);
       
       if(elementsCount!=null) {
         elementCountBuffer = Buffers.newDirectIntBuffer(elementsCount);
@@ -218,8 +216,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
         }
       }
       
-      BufferUtil.rewind(elementDataBuffer);
-      BufferUtil.rewind(elementDataBuffer);
+      BufferUtil.rewind(elementCountBuffer);
       elementIndicesBuffer.rewind();
     }
 
@@ -241,7 +238,11 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     if (drawable.isComputeNormals()) {
       if (elements != null && NormalMode.SHARED.equals(normalMode)) {
         normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
-      } else {
+      } 
+      /*else if(elementsIndices != null && NormalMode.SHARED.equals(normalMode)) {
+        normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
+      }*/
+      else {
         normalBuffer = computeSimpleNormals(verticesPerGeometry, verticeList);
       }
     }
@@ -255,9 +256,9 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     // drawable.setColorChannels(4);
 
     // glMultiDrawElements
-    if (elementCountBuffer != null && elementIndicesBuffer != null && elementDataBuffer!=null) {
-      drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, elementDataBuffer,
-          verticeBuffer, normalBuffer, colorBuffer, bounds);
+    if (elementCountBuffer != null && elementIndicesBuffer != null) {
+      drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, verticeBuffer,
+          normalBuffer, colorBuffer, bounds);
     } 
     
     // glMultiDrawArrays
