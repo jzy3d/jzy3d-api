@@ -94,7 +94,7 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
  * 
  */
 public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
-  public static boolean COMPUTE_NORMALS_IN_JAVA = true;
+  //public static boolean COMPUTE_NORMALS_IN_JAVA = true;
 
   /**
    * Primitive restart is NOT working for now. Kept here for further debugging
@@ -109,6 +109,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   protected boolean primitiveRestart = false;
 
   protected boolean debug = false;
+  
+  protected boolean computeNormals = true;
 
   // ---------------------------------------
   // Buffers to feed VBO in GPU memory
@@ -990,6 +992,16 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   public void setPrimitiveRestart(boolean primitiveRestart) {
     this.primitiveRestart = primitiveRestart;
   }
+  
+  public boolean isComputeNormals() {
+    return computeNormals;
+  }
+
+  /** If false, normals are not computed and light processing might depend on GPU capabilities */
+  public void setComputeNormals(boolean computeNormals) {
+    this.computeNormals = computeNormals;
+  }
+
 
 
   /* ***************************************************************** */

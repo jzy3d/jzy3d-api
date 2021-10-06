@@ -12,6 +12,7 @@ import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
+import org.jzy3d.plot3d.primitives.vbo.drawable.BufferUtil;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import com.google.common.collect.ArrayListMultimap;
 import com.jogamp.common.nio.Buffers;
@@ -41,7 +42,8 @@ public class VBOBufferLoader {
       Coord3d c = new Coord3d(points[i], points[i + 1], points[i + 2]);
       verticeList.add(c);
     }
-    vertices.rewind();
+    
+    BufferUtil.rewind(vertices);
 
     return vertices;
   }
@@ -49,7 +51,7 @@ public class VBOBufferLoader {
 
   public FloatBuffer loadColorBufferFromArray(float[] coloring) {
     FloatBuffer colors = Buffers.newDirectFloatBuffer(coloring);
-    colors.rewind();
+    BufferUtil.rewind(colors);
     return colors;
   }
 
@@ -70,7 +72,9 @@ public class VBOBufferLoader {
       if (colorChannels > 3)
         colors.put(color.a);
     }
-    colors.rewind();
+    
+    BufferUtil.rewind(colors);
+    
     return colors;
   }
 
@@ -96,7 +100,8 @@ public class VBOBufferLoader {
         normals.put(normal.z);
       }
     }
-    normals.rewind();
+    
+    BufferUtil.rewind(normals);
 
     return normals;
   }
@@ -181,7 +186,7 @@ public class VBOBufferLoader {
       normals.put(averagedNormal.y);
       normals.put(averagedNormal.z);
     }
-    normals.rewind();
+    BufferUtil.rewind(normals);
 
     // Build a Buffer with vertices AND normals. Nice but less readable than a separate
     // normal buffer.

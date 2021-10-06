@@ -37,7 +37,7 @@ public class TestDrawableVBO2_glMultiDrawArrays {
   boolean offscreen = true;
 
   public static void main(String[] args) {
-    new TestDrawableVBO2_glMultiDrawArrays().glMultiDrawArrays_RepeatedVertice();
+    new TestDrawableVBO2_glMultiDrawArrays().givenVerticesArray_WhenLoading_ThenBuffersAppropriatelyFilled();
   }
 
   /* *************************************************************/
@@ -47,8 +47,7 @@ public class TestDrawableVBO2_glMultiDrawArrays {
    * geometries)
    */
   @Test
-  public void glMultiDrawArrays_RepeatedVertice() {
-    Assert.assertTrue(DrawableVBO2.COMPUTE_NORMALS_IN_JAVA);
+  public void givenVerticesArray_WhenLoading_ThenBuffersAppropriatelyFilled() {
 
     // Given
     AWTChartFactory f = new AWTChartFactory();
@@ -180,6 +179,8 @@ public class TestDrawableVBO2_glMultiDrawArrays {
 
     DrawableVBO2 vbo = new DrawableVBO2(vertices, elementStarts, elementLength, colors);
 
+    Assert.assertTrue(vbo.isComputeNormals());
+    
     chart.add(vbo);
 
     Assert.assertEquals(new Coord3d(1, 1, 1),

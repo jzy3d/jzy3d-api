@@ -33,7 +33,7 @@ public class TestDrawableVBO2_glMultiDrawElements {
   
   public static void main(String[] args) {
     //new TestDrawableVBO2_AllDrawMethods().glMultiDrawArrays_RepeatedVertice();
-    new TestDrawableVBO2_glMultiDrawElements().glMultiDrawElements_SharedVertice();
+    new TestDrawableVBO2_glMultiDrawElements().givenVerticesAndIndiceArray_WhenLoading_ThenBuffersAppropriatelyFilled();
   }
 
   /* *************************************************************/
@@ -43,8 +43,7 @@ public class TestDrawableVBO2_glMultiDrawElements {
    * Building VBO this way avoid repeating geometries and allows defining an index to get them
    */
   @Test
-  public void glMultiDrawElements_SharedVertice() {
-    Assert.assertTrue(DrawableVBO2.COMPUTE_NORMALS_IN_JAVA);
+  public void givenVerticesAndIndiceArray_WhenLoading_ThenBuffersAppropriatelyFilled() {
 
     // -------------------------------------------
     // Given
@@ -152,6 +151,9 @@ public class TestDrawableVBO2_glMultiDrawElements {
     float[] colors = cloneFloat(vertices);
     
     DrawableVBO2 vbo = new DrawableVBO2(vertices, elementIndices, colors);
+    
+    Assert.assertTrue(vbo.isComputeNormals());
+    
     chart.add(vbo);
 
     // -------------------------------------------
