@@ -93,7 +93,7 @@ public class VBOBufferLoader {
     FloatBuffer normals =
         Buffers.newDirectFloatBuffer(verticeList.size() * DrawableVBO2.VERTEX_DIMENSIONS);
 
-    for (int i = 0; i < (verticeList.size() - pointsPerGeometry); i += pointsPerGeometry) {
+    for (int i = 0; i <= (verticeList.size() - pointsPerGeometry); i += pointsPerGeometry) {
       // gather coordinates of a triangle
       Coord3d c0 = verticeList.get(i + 0);
       Coord3d c1 = verticeList.get(i + 1);
@@ -223,14 +223,16 @@ public class VBOBufferLoader {
 
   }
 
-
+  boolean verifyUniquePoints = false;
+  
   public FloatBuffer computeSharedNormals(int[][] elementIndices, List<Coord3d> verticeList) {
     
-    
-    Set<Coord3d> uniquePoints = new HashSet<>(verticeList);
-
-    if(uniquePoints.size()!=verticeList.size()) {
-      throw new IllegalArgumentException(verticeList.size() + " points but only " + uniquePoints.size() + " are unique. Either fix the input geometry or use NormalMode." + NormalMode.PER_VERTEX);
+    if(verifyUniquePoints) {
+      Set<Coord3d> uniquePoints = new HashSet<>(verticeList);
+  
+      if(uniquePoints.size()!=verticeList.size()) {
+        throw new IllegalArgumentException(verticeList.size() + " points but only " + uniquePoints.size() + " are unique. Either fix the input geometry or use NormalMode." + NormalMode.PER_VERTEX);
+      }
     }
     
     ArrayListMultimap<Coord3d, Coord3d> vertexNormals = ArrayListMultimap.create();
@@ -270,6 +272,8 @@ public class VBOBufferLoader {
         //System.out.println("adding normal for " + j);
         vertexNormals.put(cJ, normal);
       }
+      
+      System.out.println(normal);
     }
 
     // average all normals that come from all triangles sharing this
@@ -278,12 +282,10 @@ public class VBOBufferLoader {
   }
 
 
-  private FloatBuffer computeAverageNormalsForEachVertex(List<Coord3d> verticeList,
+  protected FloatBuffer computeAverageNormalsForEachVertex(List<Coord3d> verticeList,
       ArrayListMultimap<Coord3d, Coord3d> vertexNormals) {
     Coord3d[] averagedNormals = new Coord3d[vertexNormals.keySet().size()];
 
-    System.out.println("normal map : " + vertexNormals.keySet().size());
-    System.out.println("vertice list : " + verticeList.size());
     assert vertexNormals.keySet().size() == verticeList.size();
     
     for (Coord3d vertex : vertexNormals.keySet()) {

@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 
-import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
@@ -330,25 +329,17 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
 
   public DrawableVBO2(double[] points, int[] elementStart, int[] elementLength, float[] colors) {
-    this(points, VERTEX_DIMENSIONS, elementStart, elementLength, elementLength[0], colors);
+    this(points, VERTEX_DIMENSIONS, elementStart, elementLength, colors);
   }
-
-  public DrawableVBO2(double[] points, int[] elementStart, int[] elementLength, int elementSize,
-      float[] colors) {
-    this(points, VERTEX_DIMENSIONS, elementStart, elementLength, elementSize, colors);
-  }
-
 
   public DrawableVBO2(double[] points, int pointDimensions, int[] elementStart, int[] elementLength,
-      int elementSize, float[] colors) {
-    this(makeLoader(points, pointDimensions, elementStart, elementLength, elementSize, colors,
-        NormalMode.PER_VERTEX));
+      float[] colors) {
+    this(makeLoader(points, pointDimensions, elementStart, elementLength, colors, NormalMode.PER_VERTEX));
   }
 
   public DrawableVBO2(List<Polygon> polygons, int verticesPerGeometry) {
     this(makeLoader(polygons, verticesPerGeometry));
   }
-
 
   public static DrawableVBO2 fromComposites(List<Composite> composites, int pointsPerPolygon) {
     return new DrawableVBO2(Decomposition.getPolygonDecomposition(composites), pointsPerPolygon);
@@ -360,43 +351,22 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /*                                                                 */
   /* *************************************************************** */
 
-
+  
   public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors) {
-    this(points, VERTEX_DIMENSIONS, null, elementIndices, colors);
+    this(points, VERTEX_DIMENSIONS, elementIndices, colors);
   }
 
   public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors,
       NormalMode normalMode) {
-    this(makeLoader(points, VERTEX_DIMENSIONS, null, elementIndices, colors, normalMode));
+    this(makeLoader(points, VERTEX_DIMENSIONS, elementIndices, colors, normalMode));
   }
 
 
-  public DrawableVBO2(double[] points, int[] elementCount, int[][] elementIndices, float[] colors) {
-    this(points, VERTEX_DIMENSIONS, elementCount, elementIndices, colors);
+  public DrawableVBO2(double[] points, int pointDimensions, int[][] elementIndices,
+      float[] colors) {
+    this(makeLoader(points, pointDimensions, elementIndices, colors, NormalMode.PER_VERTEX));
   }
-
-  public DrawableVBO2(double[] points, int[] elementCount, int[][] elementIndices, float[] colors,
-      NormalMode normalMode) {
-    this(makeLoader(points, VERTEX_DIMENSIONS, elementCount, elementIndices, colors, normalMode));
-  }
-
-
-  public DrawableVBO2(double[] points, int pointDimensions, int[] elementCount,
-      int[][] elementIndices, float[] colors) {
-    this(makeLoader(points, pointDimensions, elementCount, elementIndices, colors,
-        NormalMode.PER_VERTEX));
-  }
-
-  // cas
-  // 1-array vertex, colormap
-  // 2-array vertex, elements of various sizes, colormap
-  // 3-array vertex, elements of various sizes, color array
-  // 4-array vertex, multiple elements of various sizes, with repeated vertex color array
-
-  // compute normal 1
-  // compute normal 2
-  // compute normal 3
-  //
+  
 
   /* ***************************************************************** */
   /* *********************** LOAD DRAWABLE *************************** */
@@ -416,9 +386,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
-      int[] elementCount, int[][] elementIndices, float[] colors, NormalMode perVertex) {
-    return new VBOBufferLoaderForArrays(points, pointDimensions, elementCount, elementIndices, -1,
-        null, colors, perVertex);
+      int[][] elementIndices, float[] colors, NormalMode perVertex) {
+    return new VBOBufferLoaderForArrays(points, pointDimensions, elementIndices, null, colors, perVertex);
   }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
@@ -429,10 +398,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
-      int[] elementStart, int[] elementLength, int geometrySize, float[] coloring,
-      NormalMode normalMode) {
+      int[] elementStart, int[] elementLength, float[] coloring, NormalMode normalMode) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elementStart, elementLength,
-        geometrySize, null, coloring, normalMode);
+        null, coloring, normalMode);
   }
 
 
