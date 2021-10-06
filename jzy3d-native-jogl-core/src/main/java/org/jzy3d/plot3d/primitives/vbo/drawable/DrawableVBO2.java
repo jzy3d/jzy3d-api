@@ -108,7 +108,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected boolean primitiveRestart = false;
 
-  protected boolean debug = false;
+  protected boolean debug = true;
   
   protected boolean computeNormals = true;
 

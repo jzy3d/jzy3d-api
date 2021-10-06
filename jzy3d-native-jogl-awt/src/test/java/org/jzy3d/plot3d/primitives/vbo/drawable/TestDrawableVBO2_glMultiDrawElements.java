@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.Buffer;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -16,9 +17,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * 
  * @author martin
  */
-
-// @Ignore // TRY TO SEE IF GITLAB CI BETTER PASS WITHOUT THIS TEST
-
 public class TestDrawableVBO2_glMultiDrawElements {
 
   double X0 = 0;
@@ -32,7 +30,6 @@ public class TestDrawableVBO2_glMultiDrawElements {
   boolean offscreen = true;
   
   public static void main(String[] args) {
-    //new TestDrawableVBO2_AllDrawMethods().glMultiDrawArrays_RepeatedVertice();
     new TestDrawableVBO2_glMultiDrawElements().givenVerticesAndIndiceArray_WhenLoading_ThenBuffersAppropriatelyFilled();
   }
 
