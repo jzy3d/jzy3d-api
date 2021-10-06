@@ -78,6 +78,12 @@ public class VBOBufferLoader {
     return colors;
   }
 
+  /**
+   * 
+   * @param pointsPerGeometry 3 for a triangle, N for a triangle fan, 4 for a pseudo quad (a 2 triangle fans)
+   * @param verticeList
+   * @return
+   */
   public FloatBuffer computeSimpleNormals(int pointsPerGeometry, List<Coord3d> verticeList) {
 
     FloatBuffer normals =
