@@ -239,9 +239,9 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
       if (elements != null && NormalMode.SHARED.equals(normalMode)) {
         normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
       } 
-      /*else if(elementsIndices != null && NormalMode.SHARED.equals(normalMode)) {
-        normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
-      }*/
+      else if(elementsIndices != null && NormalMode.SHARED.equals(normalMode)) {
+        normalBuffer = computeSharedNormals(elementsIndices, verticeList);
+      }
       else {
         normalBuffer = computeSimpleNormals(verticesPerGeometry, verticeList);
       }
