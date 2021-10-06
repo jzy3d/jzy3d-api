@@ -94,8 +94,6 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
  * 
  */
 public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
-  //public static boolean COMPUTE_NORMALS_IN_JAVA = true;
-
   /**
    * Primitive restart is NOT working for now. Kept here for further debugging
    * https://forum.jogamp.org/Using-glPrimitiveRestartIndex-to-declare-multiple-geometries-in-the-same-VBO-td4041307.html
@@ -108,7 +106,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected boolean primitiveRestart = false;
 
-  protected boolean debug = true;
+  protected boolean debug = false;
   
   protected boolean computeNormals = true;
 
