@@ -365,13 +365,19 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this(points, VERTEX_DIMENSIONS, null, elementIndices, colors);
   }
 
+  public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors,
+      NormalMode normalMode) {
+    this(makeLoader(points, VERTEX_DIMENSIONS, null, elementIndices, colors, normalMode));
+  }
+
+
   public DrawableVBO2(double[] points, int[] elementCount, int[][] elementIndices, float[] colors) {
     this(points, VERTEX_DIMENSIONS, elementCount, elementIndices, colors);
   }
 
-  public DrawableVBO2(double[] points, int[] elementCount, int[][] elementIndices, float[] colors, NormalMode normalMode) {
-    this(makeLoader(points, VERTEX_DIMENSIONS, elementCount, elementIndices, colors,
-        normalMode));
+  public DrawableVBO2(double[] points, int[] elementCount, int[][] elementIndices, float[] colors,
+      NormalMode normalMode) {
+    this(makeLoader(points, VERTEX_DIMENSIONS, elementCount, elementIndices, colors, normalMode));
   }
 
 
@@ -1002,8 +1008,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected void debugMultiDrawElements() {
     System.out.println("glMultiDrawElements : count(" + elementsCount.capacity() + "), indices("
-        + elementsIndices.capacity() + "), Vertices : "
-        + vertices.capacity());
+        + elementsIndices.capacity() + "), Vertices : " + vertices.capacity());
 
     for (int i = 0; i < elementsCount.capacity(); i++) {
       int count = elementsCount.get(i);

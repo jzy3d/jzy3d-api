@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Normal.NormalMode;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
@@ -148,7 +149,7 @@ public class TestDrawableVBO2_glMultiDrawElements {
     
     float[] colors = cloneFloat(vertices);
     
-    DrawableVBO2 vbo = new DrawableVBO2(vertices, elementIndices, colors);
+    DrawableVBO2 vbo = new DrawableVBO2(vertices, elementIndices, colors, NormalMode.SHARED);
     
     Assert.assertTrue(vbo.isComputeNormals());
     
