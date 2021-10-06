@@ -32,7 +32,10 @@ public class TestDrawableVBO2_glMultiDrawElements {
   boolean offscreen = true;
   
   public static void main(String[] args) {
-    new TestDrawableVBO2_glMultiDrawElements().givenVerticesAndIndiceArray_WhenLoading_ThenBuffersAppropriatelyFilled();
+    TestDrawableVBO2_glMultiDrawElements t = new TestDrawableVBO2_glMultiDrawElements();
+    t.offscreen = false;
+    
+    t.givenVerticesAndIndiceArray_WhenLoading_ThenBuffersAppropriatelyFilled();
   }
 
   /* *************************************************************/
@@ -107,7 +110,6 @@ public class TestDrawableVBO2_glMultiDrawElements {
     int PTS = 4;
     int SIDES = 6;
     
-    //int[] elementCount = {PTS,PTS,PTS,PTS,PTS,PTS};
     int[][] elementIndices = new int[SIDES][PTS];
     
     // bottom side
@@ -154,6 +156,7 @@ public class TestDrawableVBO2_glMultiDrawElements {
     Assert.assertTrue(vbo.isComputeNormals());
     
     chart.add(vbo);
+    chart.addLightOnCamera();
 
     // -------------------------------------------
     // Then

@@ -681,10 +681,12 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     return points.get(p);
   }
 
+  /** Returns the list of the mutable points held by this polygon. */
   public List<Point> getPoints() {
     return points;
   }
 
+  /** Returns a set of the mutable points held by this polygon. */
   public Set<Point> getPointSet() {
     Set<Point> set = new HashSet<>();
     for (Point p : points) {
@@ -693,7 +695,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     return set;
   }
 
-
+  /** Returns a set of the mutable coordinates held by this polygon points. */
   public Set<Coord3d> getCoordSet() {
     Set<Coord3d> set = new HashSet<>();
     for (Point p : points) {
@@ -702,13 +704,23 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     return set;
   }
 
+  /** Returns a list of the mutable coordinates held by this polygon points. */
+  public List<Coord3d> getCoordList() {
+    List<Coord3d> list = new ArrayList<>();
+    for (Point p : points) {
+      list.add(p.xyz);
+    }
+    return list;
+  }
+
+  /** Returns an array of the mutable coordinates held by this polygon points. */
   public Coord3d[] getCoordArray() {
-    Coord3d[] pts = new Coord3d[size()];
+    Coord3d[] array = new Coord3d[size()];
     int k = 0;
     for (Point p : getPoints()) {
-      pts[k++] = p.xyz;
+      array[k++] = p.xyz;
     }
-    return pts;
+    return array;
   }
 
 

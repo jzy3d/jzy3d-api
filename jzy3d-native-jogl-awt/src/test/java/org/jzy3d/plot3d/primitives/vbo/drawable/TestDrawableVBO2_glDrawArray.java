@@ -33,7 +33,7 @@ public class TestDrawableVBO2_glDrawArray {
     int nVertices = TestMesh.nVertices(vertices);
 
     // When
-    DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions, null, null);
+    DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions);
     
     Assert.assertTrue(vbo.isComputeNormals());
     
@@ -63,7 +63,7 @@ public class TestDrawableVBO2_glDrawArray {
     double[] vertices = TestMesh.makeArray1();
 
     // When
-    DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions, null, null);
+    DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions);
     
     vbo.setComputeNormals(false);
     

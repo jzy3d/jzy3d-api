@@ -32,7 +32,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
   protected int[] elementsStarts;
   protected int[] elementsLength;
 
-  protected int[] elementsCount;
+  // protected int[] elementsCount;
   protected int[][] elementsIndices;
 
   protected IColorMap colormap;
@@ -41,10 +41,8 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
   protected boolean debug = false;
 
-
   public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementStarts,
-      int[] elementLength, int geometrySize, IColorMap colormap, float[] coloring,
-      NormalMode normalMode) {
+      int[] elementLength, IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
     this.points = points;
     this.pointDimensions = pointDimensions;
@@ -54,26 +52,12 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     this.elementsStarts = elementStarts;
     this.elementsLength = elementLength;
-    this.verticesPerGeometry = geometrySize;
+    this.verticesPerGeometry = -1;
   }
 
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementCount,
-      int[][] elementIndices, int geometrySize, IColorMap colormap, float[] coloring,
-      NormalMode normalMode) {
-    super();
-    this.points = points;
-    this.pointDimensions = pointDimensions;
-    this.colormap = colormap;
-    this.coloring = coloring;
-    this.normalMode = normalMode;
 
-    this.elementsCount = elementCount;
-    this.elementsIndices = elementIndices;
-    this.verticesPerGeometry = geometrySize;
-  }
-
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[][] elementIndices, int geometrySize, IColorMap colormap, float[] coloring,
-      NormalMode normalMode) {
+  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[][] elementIndices,
+      IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
     this.points = points;
     this.pointDimensions = pointDimensions;
@@ -82,7 +66,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.normalMode = normalMode;
 
     this.elementsIndices = elementIndices;
-    this.verticesPerGeometry = geometrySize;
+    this.verticesPerGeometry = -1;
   }
 
 
@@ -197,52 +181,41 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     if (elementsIndices != null) {
       elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);
-      
-      if(elementsCount!=null) {
-        elementCountBuffer = Buffers.newDirectIntBuffer(elementsCount);
-      }
-      else {
-        elementCountBuffer = Buffers.newDirectIntBuffer(elementsIndices.length);
-      }
+      elementCountBuffer = Buffers.newDirectIntBuffer(elementsIndices.length);
 
       for (int i = 0; i < elementsIndices.length; i++) {
-        IntBuffer elementDataBufferI =  Buffers.newDirectIntBuffer(elementsIndices[i]);
+        IntBuffer elementDataBufferI = Buffers.newDirectIntBuffer(elementsIndices[i]);
         BufferUtil.rewind(elementDataBufferI);
-        
+
         elementIndicesBuffer.referenceBuffer(elementDataBufferI);
-        
-        if(elementsCount==null) {
-          elementCountBuffer.put(elementsIndices[i].length);
-        }
+        elementCountBuffer.put(elementsIndices[i].length);
       }
-      
+
       BufferUtil.rewind(elementCountBuffer);
       elementIndicesBuffer.rewind();
     }
 
-    
-    if(verticesPerGeometry<0) {
-      if(elementCountBuffer!=null)
+    // guess number of vertice with input data if it was no given ahead
+    if (verticesPerGeometry < 0) {
+      if (elementCountBuffer != null)
         verticesPerGeometry = elementCountBuffer.get(0);
-      else if(elementLengthBuffer!=null)
+      else if (elementLengthBuffer != null)
         verticesPerGeometry = elementLengthBuffer.get(0);
     }
 
-    
+
 
     // -------------------------------------------
     // Normals
-    
+
     FloatBuffer normalBuffer = null;
-    
+
     if (drawable.isComputeNormals()) {
       if (elements != null && NormalMode.SHARED.equals(normalMode)) {
         normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
-      } 
-      else if(elementsIndices != null && NormalMode.SHARED.equals(normalMode)) {
+      } else if (elementsIndices != null && NormalMode.SHARED.equals(normalMode)) {
         normalBuffer = computeSharedNormals(elementsIndices, verticeList);
-      }
-      else {
+      } else {
         normalBuffer = computeSimpleNormals(verticesPerGeometry, verticeList);
       }
     }
@@ -259,28 +232,17 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     if (elementCountBuffer != null && elementIndicesBuffer != null) {
       drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, verticeBuffer,
           normalBuffer, colorBuffer, bounds);
-    } 
-    
+    }
+
     // glMultiDrawArrays
     else if (elementStartsBuffer != null && elementLengthBuffer != null) {
       drawable.setData(painter, elementStartsBuffer, elementLengthBuffer, verticeBuffer,
           normalBuffer, colorBuffer, bounds);
-    } 
-    
+    }
+
     // glDrawElements
     else {
       drawable.setData(painter, elementBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);
     }
-
-    // drawable.setHasNormalInVertexArray(true);
-    // drawable.setData(painter, elements, verticeAndNormals, null, colors, bounds);
-  }
-
-  public int size(int[][] array) {
-    int sz = 0;
-    for (int i = 0; i < array.length; i++) {
-      sz += array[i].length;
-    }
-    return sz;
   }
 }
