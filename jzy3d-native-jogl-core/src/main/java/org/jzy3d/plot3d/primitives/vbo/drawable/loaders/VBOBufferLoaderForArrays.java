@@ -4,6 +4,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
@@ -22,8 +23,12 @@ import com.jogamp.common.nio.PointerBuffer;
  *
  */
 public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
+  protected static Logger log = Logger.getLogger(VBOBufferLoaderForArrays.class);
+
   protected double[] points;
   protected int pointDimensions;
+  
+  protected float[] normals = null;
 
   // fields for glDrawElements
   protected int[] elements = null;
@@ -69,7 +74,19 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.elementsIndices = elementIndices;
   }
 
+  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[][] elementIndices,
+      IColorMap colormap, float[] coloring, float[] normals) {
+    super();
+    this.points = points;
+    this.pointDimensions = pointDimensions;
+    this.colormap = colormap;
+    this.coloring = coloring;
+    this.normals = normals;
+    
+    this.elementsIndices = elementIndices;
+  }
 
+  
   /**
    * Return a loader for this VBO that is invoked upon {@link #mount(IPainter)}, meaning after the
    * application has started.
@@ -212,15 +229,32 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     FloatBuffer normalBuffer = null;
 
     if (drawable.isComputeNormals()) {
+      
+      // Compute averaged normals
       if (NormalMode.SHARED.equals(normalMode)) {
         if (elements != null) {
           normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
         } else if (elementsIndices != null) {
           normalBuffer = computeSharedNormals(elementsIndices, verticeList);
         }
-      } else if (NormalMode.REPEATED.equals(normalMode)){
+      } 
+
+      // Compute repeated normals per geometry vertex 
+      else if (NormalMode.REPEATED.equals(normalMode)){
         normalBuffer = computeSimpleNormals(verticesPerGeometry, verticeList);
+      } 
+      
+      // Provide normals externally
+      else if(normalMode==null && normals!=null) {
+        normalBuffer = loadNormalsFromArray(normals);
       }
+      else {
+        drawable.setComputeNormals(false);
+        log.warn("No normal provided despite drawable is configured to receive processed or provided normal. Toggle normal mode of drawable to false.");
+      }
+    }
+    else {
+      // do not provide neither compute normals
     }
 
 
