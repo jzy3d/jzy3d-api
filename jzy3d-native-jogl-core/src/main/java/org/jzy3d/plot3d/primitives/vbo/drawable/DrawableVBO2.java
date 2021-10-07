@@ -225,8 +225,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * 
    */
   public DrawableVBO2(double[] points, int pointDimensions) {
-    this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, null, null,
-        NormalMode.REPEATED));
+    this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, null, null, NormalMode.REPEATED));
   }
 
   /**
@@ -334,7 +333,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   public DrawableVBO2(double[] points, int pointDimensions, int[] elementStart, int[] elementLength,
       float[] colors) {
-    this(makeLoader(points, pointDimensions, elementStart, elementLength, colors, NormalMode.REPEATED));
+    this(makeLoader(points, pointDimensions, elementStart, elementLength, colors,
+        NormalMode.REPEATED));
   }
 
   public DrawableVBO2(List<Polygon> polygons, int verticesPerGeometry) {
@@ -351,9 +351,13 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /*                                                                 */
   /* *************************************************************** */
 
-  
+
   public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors) {
     this(points, VERTEX_DIMENSIONS, elementIndices, colors);
+  }
+
+  public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors, float[] normals) {
+    this(makeLoader(points, VERTEX_DIMENSIONS, elementIndices, colors, normals));
   }
 
   public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors,
@@ -366,7 +370,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       float[] colors) {
     this(makeLoader(points, pointDimensions, elementIndices, colors, NormalMode.REPEATED));
   }
-  
+
 
   /* ***************************************************************** */
   /* *********************** LOAD DRAWABLE *************************** */
@@ -387,7 +391,14 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[][] elementIndices, float[] colors, NormalMode perVertex) {
-    return new VBOBufferLoaderForArrays(points, pointDimensions, elementIndices, null, colors, perVertex);
+    return new VBOBufferLoaderForArrays(points, pointDimensions, elementIndices, null, colors,
+        perVertex);
+  }
+
+  protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+      int[][] elementIndices, float[] colors, float[] normals) {
+    return new VBOBufferLoaderForArrays(points, pointDimensions, elementIndices, null, colors,
+        normals);
   }
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
@@ -399,8 +410,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] elementStart, int[] elementLength, float[] coloring, NormalMode normalMode) {
-    return new VBOBufferLoaderForArrays(points, pointDimensions, elementStart, elementLength,
-        null, coloring, normalMode);
+    return new VBOBufferLoaderForArrays(points, pointDimensions, elementStart, elementLength, null,
+        coloring, normalMode);
   }
 
 
