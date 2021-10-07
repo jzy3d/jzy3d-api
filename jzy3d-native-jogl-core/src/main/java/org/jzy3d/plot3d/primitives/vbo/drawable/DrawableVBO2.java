@@ -199,7 +199,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * Should be true AND the element array provided to be able to process averaged normal. If any of
    * these two conditions is not fullfilled, then one normal per point is computed.
    */
-  protected NormalMode normalMode = NormalMode.PER_VERTEX;
+  protected NormalMode normalMode = NormalMode.REPEATED;
 
 
 
@@ -226,7 +226,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    */
   public DrawableVBO2(double[] points, int pointDimensions) {
     this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, null, null,
-        NormalMode.PER_VERTEX));
+        NormalMode.REPEATED));
   }
 
   /**
@@ -239,7 +239,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    */
   public DrawableVBO2(double[] points, int pointDimensions, IColorMap colormap) {
     this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, colormap, null,
-        NormalMode.PER_VERTEX));
+        NormalMode.REPEATED));
   }
 
 
@@ -291,7 +291,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    */
   public DrawableVBO2(double[] points, int pointDimensions, int[] elements) {
     this(makeLoader(points, pointDimensions, elements, GEOMETRY_SIZE, null, null,
-        NormalMode.PER_VERTEX));
+        NormalMode.REPEATED));
   }
 
   public DrawableVBO2(double[] points, int pointDimensions, int[] elements, IColorMap colormap,
@@ -334,7 +334,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   public DrawableVBO2(double[] points, int pointDimensions, int[] elementStart, int[] elementLength,
       float[] colors) {
-    this(makeLoader(points, pointDimensions, elementStart, elementLength, colors, NormalMode.PER_VERTEX));
+    this(makeLoader(points, pointDimensions, elementStart, elementLength, colors, NormalMode.REPEATED));
   }
 
   public DrawableVBO2(List<Polygon> polygons, int verticesPerGeometry) {
@@ -364,7 +364,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   public DrawableVBO2(double[] points, int pointDimensions, int[][] elementIndices,
       float[] colors) {
-    this(makeLoader(points, pointDimensions, elementIndices, colors, NormalMode.PER_VERTEX));
+    this(makeLoader(points, pointDimensions, elementIndices, colors, NormalMode.REPEATED));
   }
   
 

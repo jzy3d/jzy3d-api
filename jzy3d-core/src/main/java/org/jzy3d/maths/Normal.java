@@ -4,8 +4,26 @@ import java.util.List;
 import org.jzy3d.plot3d.primitives.Point;
 
 public class Normal {
+  /**
+   * Indicates how the normal of a vertex is computed
+   * <ul>
+   * <li>SHARED: as a mean of all polygons that the vertex belongs to.
+   * <li>REPEATED : the normal of a point if the normal of 1 polygon it belongs to.
+   * </ul>
+   * 
+   * See also {@link NormalPer}
+   */
   public enum NormalMode {
-    SHARED, PER_VERTEX
+    SHARED, REPEATED
+  }
+
+  /**
+   * Indicate if normals are defined per point or per geometry.
+   * 
+   * See also {@link NormalMode}
+   */
+  public enum NormalPer {
+    POINT, GEOMETRY;
   }
 
   /**

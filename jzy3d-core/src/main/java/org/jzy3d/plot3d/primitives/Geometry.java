@@ -12,6 +12,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
+import org.jzy3d.maths.Normal.NormalPer;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.lights.Light;
@@ -58,9 +59,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   protected boolean splitInTriangles = SPLIT_TRIANGLE_DEFAULT;
   protected boolean normalizeNormals = NORMALIZE_NORMAL_DEFAULT;
 
-  public enum NormalPer {
-    POINT, GEOMETRY;
-  }
 
   protected NormalPer normalPer = NormalPer.GEOMETRY;
 
