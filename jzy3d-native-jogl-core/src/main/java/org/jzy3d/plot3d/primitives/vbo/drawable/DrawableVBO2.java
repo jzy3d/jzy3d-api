@@ -764,8 +764,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
       gl2.glMultiDrawElements(glGeometryType, elementsCount, GL.GL_UNSIGNED_INT, elementsIndices,
           elementsIndices.capacity());
-
-
     }
 
     // -----------------------------------------
@@ -786,7 +784,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     else {
       gl2.glDrawArrays(glGeometryType, 0, vertices.capacity());
     }
-
 
   }
 

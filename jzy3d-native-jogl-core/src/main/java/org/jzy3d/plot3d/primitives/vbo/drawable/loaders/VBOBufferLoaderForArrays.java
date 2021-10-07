@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives.vbo.drawable.loaders;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.io.IGLLoader;
@@ -26,15 +25,18 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
   protected double[] points;
   protected int pointDimensions;
 
-  protected int[] elements;
-  protected int verticesPerGeometry;
+  // fields for glDrawElements
+  protected int[] elements = null;
+  protected int verticesPerGeometry = -1;
 
-  protected int[] elementsStarts;
-  protected int[] elementsLength;
+  // fields for glMultiDrawArrays
+  protected int[] elementsStarts = null;
+  protected int[] elementsLength = null;
 
-  // protected int[] elementsCount;
-  protected int[][] elementsIndices;
+  // fields for glMultiDrawElements
+  protected int[][] elementsIndices = null;
 
+  // fields for coloring and shading
   protected IColorMap colormap;
   protected float[] coloring;
   protected NormalMode normalMode;
@@ -52,7 +54,6 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     this.elementsStarts = elementStarts;
     this.elementsLength = elementLength;
-    this.verticesPerGeometry = -1;
   }
 
 
@@ -66,7 +67,6 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.normalMode = normalMode;
 
     this.elementsIndices = elementIndices;
-    this.verticesPerGeometry = -1;
   }
 
 
@@ -111,7 +111,9 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     super();
     this.points = points;
     this.pointDimensions = pointDimensions;
+
     this.elements = geometries;
+    this.verticesPerGeometry = verticesPerGeometry;
 
     this.colormap = colormap;
     this.coloring = coloring;
@@ -119,7 +121,6 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     this.elementsStarts = null;
     this.elementsLength = null;
-    this.verticesPerGeometry = verticesPerGeometry;
   }
 
   @Override

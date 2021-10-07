@@ -143,7 +143,7 @@ public class VBOBufferLoader {
 
     Map<Coord3d, Integer> vertexPosition = new HashMap<>();
 
-    for (int i = 0; i < geometries.length; i += geometrySize) {
+    for (int i = 0; i < (geometries.length - geometrySize); i += geometrySize) {
       // gather coordinates of a triangle
       Coord3d c0 = verticeList.get(geometries[i + 0]);
       Coord3d c1 = verticeList.get(geometries[i + 1]);
@@ -164,39 +164,28 @@ public class VBOBufferLoader {
 
     }
 
-    /*// average all normals that come from all triangles sharing this
-    // vertex
-
-    Coord3d[] averagedNormals = new Coord3d[vertexNormals.keySet().size()];
-
-    for (Coord3d vertex : vertexNormals.keySet()) {
-      Coord3d averagedNormal = new Coord3d();
-
-      List<Coord3d> normals = vertexNormals.get(vertex);
-
-      for (Coord3d normal : normals) {
-        averagedNormal.addSelf(normal);
-      }
-      averagedNormal.x /= normals.size();
-      averagedNormal.y /= normals.size();
-      averagedNormal.z /= normals.size();
-
-      // Get vertex position
-      int position = vertexPosition.get(vertex);
-
-      averagedNormals[position] = averagedNormal;
-    }
-
-    // FloatBuffer normals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE);
-    FloatBuffer normals =
-        Buffers.newDirectFloatBuffer(verticeList.size() * DrawableVBO2.VERTEX_DIMENSIONS);
-
-    for (Coord3d averagedNormal : averagedNormals) {
-      normals.put(averagedNormal.x);
-      normals.put(averagedNormal.y);
-      normals.put(averagedNormal.z);
-    }
-    BufferUtil.rewind(normals);*/
+    /*
+     * // average all normals that come from all triangles sharing this // vertex
+     * 
+     * Coord3d[] averagedNormals = new Coord3d[vertexNormals.keySet().size()];
+     * 
+     * for (Coord3d vertex : vertexNormals.keySet()) { Coord3d averagedNormal = new Coord3d();
+     * 
+     * List<Coord3d> normals = vertexNormals.get(vertex);
+     * 
+     * for (Coord3d normal : normals) { averagedNormal.addSelf(normal); } averagedNormal.x /=
+     * normals.size(); averagedNormal.y /= normals.size(); averagedNormal.z /= normals.size();
+     * 
+     * // Get vertex position int position = vertexPosition.get(vertex);
+     * 
+     * averagedNormals[position] = averagedNormal; }
+     * 
+     * // FloatBuffer normals = FloatBuffer.allocate(verticeList.size() * VERTEX_SIZE); FloatBuffer
+     * normals = Buffers.newDirectFloatBuffer(verticeList.size() * DrawableVBO2.VERTEX_DIMENSIONS);
+     * 
+     * for (Coord3d averagedNormal : averagedNormals) { normals.put(averagedNormal.x);
+     * normals.put(averagedNormal.y); normals.put(averagedNormal.z); } BufferUtil.rewind(normals);
+     */
 
     // Build a Buffer with vertices AND normals. Nice but less readable than a separate
     // normal buffer.
@@ -216,7 +205,7 @@ public class VBOBufferLoader {
     // }
     // verticeAndNormals.rewind();
 
-    
+
     // average all normals that come from all triangles sharing this
     // vertex
     return computeAverageNormalsForEachVertex(verticeList, vertexNormals);
@@ -224,17 +213,19 @@ public class VBOBufferLoader {
   }
 
   boolean verifyUniquePoints = false;
-  
+
   public FloatBuffer computeSharedNormals(int[][] elementIndices, List<Coord3d> verticeList) {
-    
-    if(verifyUniquePoints) {
+
+    if (verifyUniquePoints) {
       Set<Coord3d> uniquePoints = new HashSet<>(verticeList);
-  
-      if(uniquePoints.size()!=verticeList.size()) {
-        throw new IllegalArgumentException(verticeList.size() + " points but only " + uniquePoints.size() + " are unique. Either fix the input geometry or use NormalMode." + NormalMode.REPEATED);
+
+      if (uniquePoints.size() != verticeList.size()) {
+        throw new IllegalArgumentException(verticeList.size() + " points but only "
+            + uniquePoints.size() + " are unique. Either fix the input geometry or use NormalMode."
+            + NormalMode.REPEATED);
       }
     }
-    
+
     ArrayListMultimap<Coord3d, Coord3d> vertexNormals = ArrayListMultimap.create();
 
     // For each geometry
@@ -248,10 +239,9 @@ public class VBOBufferLoader {
         throw new IllegalArgumentException(
             "Can not process normals from a geometry with less than 3 points");
       }
-      
+
       if (geometryIndex.length != 4) {
-        throw new IllegalArgumentException(
-            "Unexpected!");
+        throw new IllegalArgumentException("Unexpected!");
       }
 
       // gather coordinates of a triangle
@@ -269,11 +259,9 @@ public class VBOBufferLoader {
 
       for (int j = 3; j < geometryIndex.length; j++) {
         Coord3d cJ = verticeList.get(geometryIndex[j]);
-        //System.out.println("adding normal for " + j);
+        // System.out.println("adding normal for " + j);
         vertexNormals.put(cJ, normal);
       }
-      
-      System.out.println(normal);
     }
 
     // average all normals that come from all triangles sharing this
@@ -281,13 +269,22 @@ public class VBOBufferLoader {
     return computeAverageNormalsForEachVertex(verticeList, vertexNormals);
   }
 
-
+  /**
+   * Process the average normal of a points, based on parameter <code>vertexNormals</code> point is
+   * mapped to a list of all normals of all polygons that have this point in common.
+   * 
+   * @param verticeList provides all vertices in the order they are sent to the GPU via the VBO.
+   *        List<Coord3d> is easier to process than the original vertex FloatBuffer
+   * @param vertexNormals associate coordinate -> <normal1, normal2, ... normalN>.
+   * @return a buffer of average normals of the same size of the vertex buffer that was built at the
+   *         same time than verticeList
+   */
   protected FloatBuffer computeAverageNormalsForEachVertex(List<Coord3d> verticeList,
       ArrayListMultimap<Coord3d, Coord3d> vertexNormals) {
     Coord3d[] averagedNormals = new Coord3d[vertexNormals.keySet().size()];
 
-    assert vertexNormals.keySet().size() == verticeList.size();
-    
+    //assert vertexNormals.keySet().size() == verticeList.size();
+
     for (Coord3d vertex : vertexNormals.keySet()) {
       Coord3d averagedNormal = new Coord3d();
 
@@ -315,7 +312,7 @@ public class VBOBufferLoader {
       normals.put(averagedNormal.z);
     }
     BufferUtil.rewind(normals);
-    
+
     // Build a Buffer with vertices AND normals. Nice but less readable than a separate
     // normal buffer.
     //

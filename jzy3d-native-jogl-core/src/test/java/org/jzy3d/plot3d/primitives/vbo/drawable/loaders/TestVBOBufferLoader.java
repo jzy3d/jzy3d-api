@@ -37,9 +37,11 @@ public class TestVBOBufferLoader {
 
   /**
    * Test a non satisfying algorithm. We show why with algorithm output below
+   * 
+   * Addresses glMultiDrawElements
    */
   @Test
-  public void givenACubeWithSharedVertice_WhenProcessingSharedNormals_ThenNormalsAreAllThere() {
+  public void givenACubeWithSharedVertice_WhenProcessingSharedNormalsForVariableGeometrySize_ThenNormalsAreAllThere() {
 
     // Given a cube defined by 8 points and an index
     double X0 = 0;
@@ -124,5 +126,90 @@ public class TestVBOBufferLoader {
     Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(7));
 
   }
+  
+  /*
+   * Need a triangle case for testing shared normals
+   * 
+   * Addresses glMultiDrawArrays
+   
+  @Test
+  public void givenACubeWithSharedVertice_WhenProcessingSharedNormalsForFixedGeometrySize_ThenNormalsAreAllThere() {
+
+    // Given a cube defined by 6 faces of 4 points 
+    double X0 = 0;
+    double Y0 = 0;
+    double Z0 = 0;
+    double X1 = 1;
+    double Y1 = 1;
+    double Z1 = 1;
+
+    List<Coord3d> points = new ArrayList<>();
+    
+    // bottom
+    points.add(new Coord3d(X0, Y0, Z0));
+    points.add(new Coord3d(X1, Y0, Z0));
+    points.add(new Coord3d(X1, Y1, Z0));
+    points.add(new Coord3d(X0, Y1, Z0));
+    
+    // top
+    points.add(new Coord3d(X0, Y0, Z1));
+    points.add(new Coord3d(X1, Y0, Z1));
+    points.add(new Coord3d(X1, Y1, Z1));
+    points.add(new Coord3d(X0, Y1, Z1));
+    
+    // left
+    points.add(new Coord3d(X0, Y0, Z0));
+    points.add(new Coord3d(X0, Y0, Z1));
+    points.add(new Coord3d(X0, Y1, Z1));
+    points.add(new Coord3d(X0, Y1, Z0));
+
+    // right
+    points.add(new Coord3d(X1, Y0, Z0));
+    points.add(new Coord3d(X1, Y0, Z1));
+    points.add(new Coord3d(X1, Y1, Z1));
+    points.add(new Coord3d(X1, Y1, Z0));
+
+    // near
+    points.add(new Coord3d(X0, Y0, Z0));
+    points.add(new Coord3d(X0, Y0, Z1));
+    points.add(new Coord3d(X1, Y0, Z1));
+    points.add(new Coord3d(X1, Y0, Z0));
+
+    // far
+    points.add(new Coord3d(X0, Y1, Z0));
+    points.add(new Coord3d(X0, Y1, Z1));
+    points.add(new Coord3d(X1, Y1, Z1));
+    points.add(new Coord3d(X1, Y1, Z0));
+
+    
+    int[] elementStarts = {0, 4, 8, 12, 16, 20}; 
+    int SIZE = 4;
+
+
+    // When Computing shared normals
+    VBOBufferLoader loader = new VBOBufferLoader();
+    FloatBuffer b = loader.computeSharedNormals(elementStarts, SIZE, points);
+    List<Coord3d> normals = BufferUtil.getCoords(b);
+
+    // Then got one normal per point
+
+    Assert.assertEquals(points.size(), b.capacity() / 3);
+    Assert.assertEquals(points.size(), normals.size());
+
+    // None is along X/Y/Z axis, all are diagonals since each point is part of 3 cube side
+    
+    
+    /// BUT WE DON T WANT THESE NORMALS. THEY ALL POINT IN THE SAME DIRECTION BECAUSE WE DON T KNOW 
+    // IF A FACE IS TOWARD NORTH OR SOUTH. NEED A BETTER ALGORITHM FOR THIS
+    Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(0));
+    Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(1));
+    Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(2));
+    Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(3));
+    Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(4));
+    Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(5));
+    Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(6));
+    Assert.assertEquals(new Coord3d(0.33333334, -0.33333334, 0.33333334), normals.get(7));
+
+  }*/
 
 }
