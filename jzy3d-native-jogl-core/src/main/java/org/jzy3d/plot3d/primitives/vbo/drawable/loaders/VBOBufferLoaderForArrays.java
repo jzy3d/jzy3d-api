@@ -211,11 +211,13 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     FloatBuffer normalBuffer = null;
 
     if (drawable.isComputeNormals()) {
-      if (elements != null && NormalMode.SHARED.equals(normalMode)) {
-        normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
-      } else if (elementsIndices != null && NormalMode.SHARED.equals(normalMode)) {
-        normalBuffer = computeSharedNormals(elementsIndices, verticeList);
-      } else {
+      if (NormalMode.SHARED.equals(normalMode)) {
+        if (elements != null) {
+          normalBuffer = computeSharedNormals(elements, verticesPerGeometry, verticeList);
+        } else if (elementsIndices != null) {
+          normalBuffer = computeSharedNormals(elementsIndices, verticeList);
+        }
+      } else if (NormalMode.REPEATED.equals(normalMode)){
         normalBuffer = computeSimpleNormals(verticesPerGeometry, verticeList);
       }
     }

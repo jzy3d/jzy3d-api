@@ -231,7 +231,7 @@ public class VBOBufferLoader {
       Set<Coord3d> uniquePoints = new HashSet<>(verticeList);
   
       if(uniquePoints.size()!=verticeList.size()) {
-        throw new IllegalArgumentException(verticeList.size() + " points but only " + uniquePoints.size() + " are unique. Either fix the input geometry or use NormalMode." + NormalMode.PER_VERTEX);
+        throw new IllegalArgumentException(verticeList.size() + " points but only " + uniquePoints.size() + " are unique. Either fix the input geometry or use NormalMode." + NormalMode.REPEATED);
       }
     }
     
