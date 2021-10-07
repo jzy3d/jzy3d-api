@@ -21,7 +21,10 @@ import com.google.common.collect.ArrayListMultimap;
 import com.jogamp.common.nio.Buffers;
 
 public class VBOBufferLoader {
+  protected boolean verifyUniquePoints = false;
 
+  // *************************** VERTICES ******************************/
+  
   public FloatBuffer loadVerticesFromArray(double[] points, int pointDimensions,
       List<Coord3d> verticeList, BoundingBox3d bounds) {
 
@@ -51,6 +54,7 @@ public class VBOBufferLoader {
     return vertices;
   }
 
+  // *************************** COLORS ******************************/
 
   public FloatBuffer loadColorBufferFromArray(float[] coloring) {
     FloatBuffer colors = Buffers.newDirectFloatBuffer(coloring);
@@ -79,6 +83,12 @@ public class VBOBufferLoader {
     BufferUtil.rewind(colors);
 
     return colors;
+  }
+  
+  // *************************** NORMALS ******************************/
+  
+  public FloatBuffer loadNormalsFromArray(float[] points) {
+    return Buffers.newDirectFloatBuffer(points);
   }
 
   /**
@@ -212,18 +222,17 @@ public class VBOBufferLoader {
 
   }
 
-  boolean verifyUniquePoints = false;
 
+  /**
+   * 
+   * @param elementIndices
+   * @param verticeList
+   * @return
+   */
   public FloatBuffer computeSharedNormals(int[][] elementIndices, List<Coord3d> verticeList) {
 
     if (verifyUniquePoints) {
-      Set<Coord3d> uniquePoints = new HashSet<>(verticeList);
-
-      if (uniquePoints.size() != verticeList.size()) {
-        throw new IllegalArgumentException(verticeList.size() + " points but only "
-            + uniquePoints.size() + " are unique. Either fix the input geometry or use NormalMode."
-            + NormalMode.REPEATED);
-      }
+      verifyDoublons(verticeList);
     }
 
     ArrayListMultimap<Coord3d, Coord3d> vertexNormals = ArrayListMultimap.create();
@@ -333,5 +342,31 @@ public class VBOBufferLoader {
 
     return normals;
   }
+  
+  // ******************************************************* //
+  
+  
+  
+  protected void verifyDoublons(List<Coord3d> verticeList) {
+    Set<Coord3d> uniquePoints = new HashSet<>(verticeList);
+
+    if (uniquePoints.size() != verticeList.size()) {
+      throw new IllegalArgumentException(verticeList.size() + " points but only "
+          + uniquePoints.size() + " are unique. Either fix the input geometry or use NormalMode."
+          + NormalMode.REPEATED);
+    }
+  }
+
+
+  public boolean isVerifyUniquePoints() {
+    return verifyUniquePoints;
+  }
+
+
+  public void setVerifyUniquePoints(boolean verifyUniquePoints) {
+    this.verifyUniquePoints = verifyUniquePoints;
+  }
+
+  
 
 }
