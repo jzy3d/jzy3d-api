@@ -5,6 +5,8 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
+import org.jzy3d.plot3d.primitives.PolygonFill;
+import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.transform.Transform;
 
@@ -30,12 +32,18 @@ public class Teapot extends Wireframeable {
 
     if(faceDisplayed) {
       painter.color(color);
+      
+      painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
+      
       painter.glutSolidTeapot(scale);
     }
     
     if(wireframeDisplayed) {
       painter.color(wireframeColor);
       painter.glLineWidth(wireframeWidth);
+
+      painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
+
       painter.glutWireTeapot(scale);
     }
   }

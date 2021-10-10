@@ -21,11 +21,13 @@ public class TeapotDemo {
     teapot.setTransformBefore(transform);
     
     teapot.setFaceDisplayed(true);
-    teapot.setColor(new Color(0.3f, 0.3f, 0.9f));
+    //teapot.setColor(new Color(0.3f, 0.3f, 0.9f));
+    //teapot.setColor(new Color(0.9f, 0.9f, 0.9f));
+    teapot.setColor(Color.WHITE);
     
-    teapot.setWireframeColor(Color.BLACK);
-    teapot.setWireframeDisplayed(true);
-    teapot.setWireframeWidth(3);
+    teapot.setWireframeColor(Color.CYAN);
+    teapot.setWireframeDisplayed(false);
+    teapot.setWireframeWidth(2);
     
     teapot.setReflectLight(true);
     
@@ -47,15 +49,15 @@ public class TeapotDemo {
     
     Chart chart = factory.newChart(q);
     chart.getView().setSquared(false);
-
-    
+    chart.getView().setBackgroundColor(Color.BLACK);
+    chart.getView().getAxis().getLayout().setMainColor(Color.WHITE);
     // ---------------------------------------------
 
     chart.add(teapot);
     
-    Light light = chart.addLightOnCamera();
-    
-    
+    //Light light = chart.addLightOnCamera();
+    Light light = chart.addLight(chart.getView().getBounds().getCorners().getXmaxYmaxZmax());
+    //light.setRepresentationDisplayed(true);
     
     // ---------------------------------------------
 
