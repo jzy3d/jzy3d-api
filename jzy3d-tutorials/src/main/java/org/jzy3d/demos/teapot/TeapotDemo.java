@@ -6,10 +6,11 @@ import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.transform.Rotate;
 import org.jzy3d.plot3d.transform.Transform;
 
-public class TeapotDemoEmulGL {
+public class TeapotDemo {
 
   public static void main(String[] args) {
     
@@ -20,11 +21,14 @@ public class TeapotDemoEmulGL {
     teapot.setTransformBefore(transform);
     
     teapot.setFaceDisplayed(true);
-    teapot.setColor(Color.ORANGE);
+    teapot.setColor(new Color(0.3f, 0.3f, 0.9f));
     
     teapot.setWireframeColor(Color.BLACK);
     teapot.setWireframeDisplayed(true);
     teapot.setWireframeWidth(3);
+    
+    teapot.setReflectLight(true);
+    
     
     
     // ---------------------------------------------
@@ -35,19 +39,26 @@ public class TeapotDemoEmulGL {
     // 1-wireframe and face do not mix cleanly (polygon offset fill)
     // 2-wireframe color tend to saturate (here in green)
     
-    Quality q = Quality.Intermediate(); 
+    Quality q = Quality.Advanced(); 
     q.setDepthActivated(true);
     q.setAlphaActivated(false);
     q.setAnimated(false); 
     q.setHiDPIEnabled(true); 
     
     Chart chart = factory.newChart(q);
-    
-    chart.add(teapot);
-    chart.addLightOnCamera();
-
     chart.getView().setSquared(false);
+
     
+    // ---------------------------------------------
+
+    chart.add(teapot);
+    
+    Light light = chart.addLightOnCamera();
+    
+    
+    
+    // ---------------------------------------------
+
     chart.open();
     chart.addMouseCameraController();
 

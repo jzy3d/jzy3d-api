@@ -2,18 +2,17 @@ package org.jzy3d.demos.teapot;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.transform.Transform;
 
 public class Teapot extends Wireframeable {
-  float scale = 1;
-  Color color = Color.GRAY;
+  protected float scale = 1;
+  protected Color color = Color.GRAY;
   
   public Teapot() {
-    //bbox = new BoundingBox3d(new Coord3d(), 3);
     Range xRange = new Range(-1.50, 1.73);
     Range yRange = new Range(-0.75, 0.83);
     Range zRange = new Range(-1.00, 1.00);
@@ -22,7 +21,12 @@ public class Teapot extends Wireframeable {
   
   @Override
   public void draw(IPainter painter) {
+    
     doTransform(painter);
+    
+    if (isReflectLight()) {
+      applyMaterial(painter);
+    }
 
     if(faceDisplayed) {
       painter.color(color);
@@ -36,16 +40,6 @@ public class Teapot extends Wireframeable {
     }
   }
 
-  @Override
-  public void applyGeometryTransform(Transform transform) {
-
-  }
-
-  @Override
-  public void updateBounds() {
-
-  }
-
   public Color getColor() {
     return color;
   }
@@ -54,6 +48,15 @@ public class Teapot extends Wireframeable {
     this.color = color;
   }
   
+  @Override
+  public void updateBounds() {
+    // data is static, so bounds are as well
+    // no need to update anything
+  }
   
+  @Override
+  public void applyGeometryTransform(Transform transform) {
+    throw new NotImplementedException();
+  }
 
 }
