@@ -450,6 +450,17 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   public void glutSolidCube(float size) {
     glut.glutSolidCube(size);
   }
+  
+  @Override
+  public void glutSolidTeapot(float scale) {
+    glut.glutSolidTeapot(scale);
+  }
+  
+  @Override
+  public void glutWireTeapot(float scale) {
+    glut.glutWireTeapot(scale);
+  }
+
   // GL FEEDBACK BUFFER
 
   @Override
