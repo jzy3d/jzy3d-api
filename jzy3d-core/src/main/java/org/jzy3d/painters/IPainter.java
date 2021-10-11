@@ -396,13 +396,20 @@ public interface IPainter {
 
   public void gluDisk(double inner, double outer, int slices, int loops);
 
-  public void glutSolidSphere(double radius, int slices, int stacks);
-
   public void gluSphere(double radius, int slices, int stacks);
 
   public void gluCylinder(double base, double top, double height, int slices, int stacks);
 
+  // GLUT INTERFACE
+  
+  public void glutSolidSphere(double radius, int slices, int stacks);
+
   public void glutSolidCube(final float size);
+  
+  public void glutSolidTeapot(float scale);
+  
+  public void glutWireTeapot(float scale);
+
 
   // GL FEEDBACK BUFFER
 

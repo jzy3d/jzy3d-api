@@ -42,7 +42,7 @@ public class LoggerUtils {
   }
 
   private static PatternLayout makeConsoleLayout() {
-    return new PatternLayout("%-5p [%t][%c]: %m%n");
+    return new PatternLayout("%-5p [%t][%c][%M]: %m%n");
   }
 
   public static void minimalDated() {

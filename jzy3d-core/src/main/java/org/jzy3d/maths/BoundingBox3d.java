@@ -2,9 +2,11 @@ package org.jzy3d.maths;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
+import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
@@ -454,6 +456,24 @@ public class BoundingBox3d {
     edges.add(new Coord3d(xmax, ymax, zmax));
     edges.add(new Coord3d(xmax, ymin, zmax));
     return edges;
+  }
+  
+  public void apply(Transform transform) {
+    Corners c = getCorners();
+    
+    Coord3d min = transform.compute(c.getXminYminZmin());
+        
+    Coord3d max = transform.compute(c.getXmaxYmaxZmax());
+    
+    setXmin(min.x);
+    setXmax(max.x);
+
+    setYmin(min.y);
+    setYmax(max.y);
+
+    setZmin(min.z);
+    setZmax(max.z);
+
   }
 
   /*********************************************************/

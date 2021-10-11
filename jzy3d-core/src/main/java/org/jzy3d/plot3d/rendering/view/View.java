@@ -1335,7 +1335,9 @@ public class View {
   }
 
   public void renderOverlay(ViewportConfiguration viewportConfiguration) {
-    viewOverlay.render(this, viewportConfiguration, painter);
+    if(viewOverlay!=null) {
+      viewOverlay.render(this, viewportConfiguration, painter);
+    }
   }
 
   public void renderAnnotations(Camera camera) {

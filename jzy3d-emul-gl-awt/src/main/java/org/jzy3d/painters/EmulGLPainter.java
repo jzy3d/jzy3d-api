@@ -774,6 +774,16 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glutSolidTeapot(float scale) {
+    glut.glutSolidTeapot(scale);
+  }
+  
+  @Override
+  public void glutWireTeapot(float scale) {
+    glut.glutWireTeapot(scale);
+  }
+
+  @Override
   public void gluSphere(double radius, int slices, int stacks) {
     GLUquadricObj qobj = glu.gluNewQuadric();
     glu.gluSphere(qobj, radius, slices, stacks);
