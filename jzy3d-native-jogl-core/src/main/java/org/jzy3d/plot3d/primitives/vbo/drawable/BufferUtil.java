@@ -17,7 +17,7 @@ public class BufferUtil {
   public static void rewind(Buffer buffer) {
     buffer.rewind();
   }
-
+  
   /*public static void rewind(FloatBuffer buffer) {
     buffer.rewind();
   }
@@ -25,6 +25,19 @@ public class BufferUtil {
   public static void rewind(IntBuffer buffer) {
     buffer.rewind();
   }*/
+  
+  /** Copy content of a direct float buffer as buffer.array() is an unsupported operation */
+  public static float[] copyFloat(FloatBuffer buffer) {
+    float[] out = new float[buffer.capacity()];
+    
+    //buffer.get(out);
+    
+    for (int i = 0; i < out.length; i++) {
+      out[i] = buffer.get(i);
+    }
+    
+    return out;
+  }
   
   public static Coord3d getCoordAt(FloatBuffer buffer, int i) {
     return new Coord3d(buffer.get(i), buffer.get(i+1), buffer.get(i+2));

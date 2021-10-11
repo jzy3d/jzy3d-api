@@ -138,6 +138,9 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.elementsStarts = null;
     this.elementsLength = null;
   }
+  
+  
+  
 
   @Override
   public void load(IPainter painter, DrawableVBO2 drawable) throws Exception {
