@@ -165,11 +165,12 @@ public class EmulGLPainterFactory implements IPainterFactory {
     return null;
   }
 
-
+  @Override
   public IChartFactory getChartFactory() {
     return chartFactory;
   }
 
+  @Override
   public void setChartFactory(IChartFactory chartFactory) {
     this.chartFactory = chartFactory;
   }
