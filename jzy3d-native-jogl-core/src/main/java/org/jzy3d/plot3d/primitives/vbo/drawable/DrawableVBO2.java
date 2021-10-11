@@ -384,31 +384,37 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   }
 
 
-  protected static VBOBufferLoaderForPolygons makeLoader(List<Polygon> polygons,
+  public static VBOBufferLoaderForPolygons makeLoader(List<Polygon> polygons,
       int verticesPerGeometry) {
     return new VBOBufferLoaderForPolygons(polygons, verticesPerGeometry);
   }
 
-  protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[][] elementIndices, float[] colors, NormalMode perVertex) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elementIndices, null, colors,
         perVertex);
   }
 
-  protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[][] elementIndices, float[] colors, float[] normals) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elementIndices, null, colors,
         normals);
   }
 
-  protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] elements, int elementSize, IColorMap colormap, float[] coloring,
       NormalMode normalMode) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elements, elementSize, colormap,
         coloring, normalMode);
   }
 
-  protected static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int elementSize) {
+    return makeLoader(points, VERTEX_DIMENSIONS, null, elementSize, null, null, null);
+  }
+
+  
+
+  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] elementStart, int[] elementLength, float[] coloring, NormalMode normalMode) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elementStart, elementLength, null,
         coloring, normalMode);
@@ -944,10 +950,12 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
     if (geometrySize == TRIANGLE_SIZE) {
       setGLGeometryType(GL.GL_TRIANGLES);
-    } else if (geometrySize == QUAD_SIZE) {
-      // setGLGeometryType(GL2.GL_POLYGON);
+    } else if (geometrySize >= QUAD_SIZE) {
       setGLGeometryType(GL2.GL_TRIANGLE_FAN);
-    } else {
+    } else if (geometrySize == 2) {
+      setGLGeometryType(GL2.GL_LINE);
+    } 
+    else {
       throw new IllegalArgumentException("Unsupported geometry size : " + geometrySize);
     }
 

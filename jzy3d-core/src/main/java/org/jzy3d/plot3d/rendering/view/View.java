@@ -103,6 +103,7 @@ public class View {
   protected boolean first = true;
   protected HiDPI hidpi = HiDPI.OFF;
   protected Coord2d pixelScale;
+  protected boolean initialized = false;
 
   // constants
   public static final float PI_div2 = (float) Math.PI / 2;
@@ -884,6 +885,8 @@ public class View {
     initResources();
     initBounds(scene, viewbounds, initBounds);
     fireViewLifecycleHasInit(null);
+    
+    initialized = true;
   }
 
   protected void initBounds(Scene scene, BoundingBox3d manualViewBounds, BoundingBox3d initBounds) {
@@ -1358,4 +1361,10 @@ public class View {
   public ISquarifier getSquarifier() {
     return squarifier;
   }
+
+  public boolean isInitialized() {
+    return initialized;
+  }
+  
+  
 }

@@ -1,6 +1,7 @@
 package org.jzy3d.maths;
 
 import java.io.Serializable;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -289,6 +290,11 @@ public class Coord3d implements Serializable {
     z /= value;
   }
 
+  public void divSelf(double value) {
+    x /= value;
+    y /= value;
+    z /= value;
+  }
   
   /**
    * Divise all components of the current Coord by the same value and return the result in a new
@@ -647,5 +653,32 @@ public class Coord3d implements Serializable {
     }
     return clone;
   }
+  
+  public static List<Coord3d> getCoords(double[] array) {
+    List<Coord3d> c = new ArrayList<>(array.length/3);
+
+    for (int j = 0; j < array.length; j+=3) {
+      c.add(getCoordAt(array, j));
+    }
+    return c;
+  }
+  
+  public static Coord3d getCoordAt(double[] array, int i) {
+    return new Coord3d(array[i], array[i+1], array[i+2]);
+  }
+  
+  public static List<Coord3d> getCoords(float[] array) {
+    List<Coord3d> c = new ArrayList<>(array.length/3);
+
+    for (int j = 0; j < array.length; j+=3) {
+      c.add(getCoordAt(array, j));
+    }
+    return c;
+  }
+  
+  public static Coord3d getCoordAt(float[] array, int i) {
+    return new Coord3d(array[i], array[i+1], array[i+2]);
+  }
+
 
 }
