@@ -5,6 +5,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.io.IGLLoader;
@@ -16,6 +17,7 @@ import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.Wireframeable;
+import org.jzy3d.plot3d.primitives.vbo.drawable.loaders.VBOBufferLoader;
 import org.jzy3d.plot3d.primitives.vbo.drawable.loaders.VBOBufferLoaderForArrays;
 import org.jzy3d.plot3d.primitives.vbo.drawable.loaders.VBOBufferLoaderForPolygons;
 import org.jzy3d.plot3d.rendering.lights.Light;
@@ -124,6 +126,13 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   /** The (direct) float buffer storing colors in GPU. */
   protected FloatBuffer colors;
+
+  /**
+   * A color buffer that should replace the current one, that may have been loaded outside the
+   * rendering thread and that should be applied at the next draw loop.
+   */
+  FloatBuffer nextColorBuffer = null;
+
 
   /**
    * The (non-mandatory) int buffer storing geometry indices in GPU. If defined, will render with
@@ -412,7 +421,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     return makeLoader(points, VERTEX_DIMENSIONS, null, elementSize, null, null, null);
   }
 
-  
+
 
   public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
       int[] elementStart, int[] elementLength, float[] coloring, NormalMode normalMode) {
@@ -447,11 +456,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   public void setData(IPainter painter, FloatBuffer vertices, FloatBuffer normals,
       FloatBuffer colors, BoundingBox3d bounds) {
-    this.vertices = vertices;
-    this.normals = normals;
-    this.colors = colors;
     this.bbox = bounds;
-    this.hasColorBuffer = this.colors != null;
+    this.hasColorBuffer = colors != null;
 
     // indexing not used at all
     this.elements = null;
@@ -469,9 +475,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // Register data
 
     registerVertexAndNormalOffsets();
-    registerVertices(gl);
-    registerNormals(gl);
-    registerColors(gl);
+    registerVertices(gl, vertices);
+    registerNormals(gl, normals);
+    registerColors(gl, colors);
   }
 
   /**
@@ -487,11 +493,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    */
   public void setData(IPainter painter, IntBuffer elements, FloatBuffer vertices,
       FloatBuffer normals, FloatBuffer colors, BoundingBox3d bounds) {
-    this.vertices = vertices;
-    this.normals = normals;
-    this.colors = colors;
     this.bbox = bounds;
-    this.hasColorBuffer = this.colors != null;
+    this.hasColorBuffer = colors != null;
 
     // use single element indexing
     this.elements = elements;
@@ -509,19 +512,16 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // Register data
 
     registerVertexAndNormalOffsets();
-    registerVertices(gl);
-    registerNormals(gl);
-    registerColors(gl);
-    registerElements(gl);
+    registerVertices(gl, vertices);
+    registerNormals(gl, normals);
+    registerColors(gl, colors);
+    registerElements(gl, elements);
   }
 
   public void setData(IPainter painter, IntBuffer elementsStarts, IntBuffer elementsLength,
       FloatBuffer vertices, FloatBuffer normals, FloatBuffer colors, BoundingBox3d bounds) {
-    this.vertices = vertices;
-    this.normals = normals;
-    this.colors = colors;
     this.bbox = bounds;
-    this.hasColorBuffer = this.colors != null;
+    this.hasColorBuffer = colors != null;
 
     // use multi array drawing
     this.elementsStarts = elementsStarts;
@@ -536,9 +536,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // Register data
 
     registerVertexAndNormalOffsets();
-    registerVertices(gl);
-    registerNormals(gl);
-    registerColors(gl);
+    registerVertices(gl, vertices);
+    registerNormals(gl, normals);
+    registerColors(gl, colors);
     // no element to register
   }
 
@@ -564,9 +564,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // Register data
 
     registerVertexAndNormalOffsets();
-    registerVertices(gl);
-    registerNormals(gl);
-    registerColors(gl);
+    registerVertices(gl, vertices);
+    registerNormals(gl, normals);
+    registerColors(gl, colors);
     // registerElementsData(gl);
     // register multi-element?
   }
@@ -580,49 +580,66 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     normalOffset = VERTEX_DIMENSIONS * Buffers.SIZEOF_FLOAT;
   }
 
-  protected void registerVertices(GL gl) {
-    if (vertices != null) {
-      int vertexSize = vertices.capacity() * Buffers.SIZEOF_FLOAT;
+  protected void registerVertices(GL gl, FloatBuffer newVertices) {
+    if (newVertices != null) {
+      int vertexSize = newVertices.capacity() * Buffers.SIZEOF_FLOAT;
 
-      gl.glGenBuffers(1, vertexArrayIds, 0);
+      if(vertexArrayIds[0]==0)
+        gl.glGenBuffers(1, vertexArrayIds, 0);
+      
       gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexArrayIds[0]);
-      gl.glBufferData(GL.GL_ARRAY_BUFFER, vertexSize, vertices, GL.GL_STATIC_DRAW);
+      gl.glBufferData(GL.GL_ARRAY_BUFFER, vertexSize, newVertices, GL.GL_STATIC_DRAW);
+      
+      vertices = newVertices;
     }
   }
 
-  protected void registerNormals(GL gl) {
-    if (normals != null) {
-      int normalSize = normals.capacity() * Buffers.SIZEOF_FLOAT;
+  protected void registerNormals(GL gl, FloatBuffer newNormals) {
+    if (newNormals != null) {
+      int normalSize = newNormals.capacity() * Buffers.SIZEOF_FLOAT;
 
-      gl.glGenBuffers(1, normalArrayIds, 0);
+      if(normalArrayIds[0]==0)
+        gl.glGenBuffers(1, normalArrayIds, 0);
+      
       gl.glBindBuffer(GL.GL_ARRAY_BUFFER, normalArrayIds[0]);
-      gl.glBufferData(GL.GL_ARRAY_BUFFER, normalSize, normals, GL.GL_STATIC_DRAW);
+      gl.glBufferData(GL.GL_ARRAY_BUFFER, normalSize, newNormals, GL.GL_STATIC_DRAW);
 
       // activate light reflection for VBO filled with normals
       setReflectLight(true);
+      
+      normals = newNormals;
     }
   }
 
-  protected void registerColors(GL gl) {
-    if (colors != null) {
-      int colorSize = colors.capacity() * Buffers.SIZEOF_FLOAT;
+  protected void registerColors(GL gl, FloatBuffer newColors) {
+    if (newColors != null) {
+      int colorSize = newColors.capacity() * Buffers.SIZEOF_FLOAT;
 
-      gl.glGenBuffers(1, colorArrayIds, 0);
+      if(colorArrayIds[0]==0)
+        gl.glGenBuffers(1, colorArrayIds, 0);
+      
       gl.glBindBuffer(GL.GL_ARRAY_BUFFER, colorArrayIds[0]);
-      gl.glBufferData(GL.GL_ARRAY_BUFFER, colorSize, colors, GL.GL_STATIC_DRAW);
+      gl.glBufferData(GL.GL_ARRAY_BUFFER, colorSize, newColors, GL.GL_STATIC_DRAW);
+      
+      colors = newColors;
     }
   }
+
 
   // for glDrawElements
-  protected void registerElements(GL gl) {
-    if (elements != null) {
-      elementSize = elements.capacity();
+  protected void registerElements(GL gl, IntBuffer newElements) {
+    if (newElements != null) {
+      elementSize = newElements.capacity();
 
-      int indexSize = elements.capacity() * Buffers.SIZEOF_INT;
+      int indexSize = newElements.capacity() * Buffers.SIZEOF_INT;
 
-      gl.glGenBuffers(1, elementArrayIds, 0);
+      if(elementArrayIds[0]==0)
+        gl.glGenBuffers(1, elementArrayIds, 0);
+      
       gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
-      gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, elements, GL.GL_STATIC_DRAW);
+      gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, newElements, GL.GL_STATIC_DRAW);
+      
+      elements = newElements;
     }
   }
 
@@ -633,6 +650,12 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   @Override
   public void draw(IPainter painter) {
     if (hasMountedOnce) {
+      
+      if(nextColorBuffer!=null) {
+        registerColors(getGL(painter), nextColorBuffer);
+        nextColorBuffer = null;
+      }
+      
       doTransform(painter);
       doDrawElements(painter);
       doDrawBoundsIfDisplayed(painter);
@@ -954,8 +977,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       setGLGeometryType(GL2.GL_TRIANGLE_FAN);
     } else if (geometrySize == 2) {
       setGLGeometryType(GL2.GL_LINE);
-    } 
-    else {
+    } else {
       throw new IllegalArgumentException("Unsupported geometry size : " + geometrySize);
     }
 
@@ -981,6 +1003,19 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /** If false, normals are not computed and light processing might depend on GPU capabilities */
   public void setComputeNormals(boolean computeNormals) {
     this.computeNormals = computeNormals;
+  }
+
+  /* ***************************************************************** */
+  /* ************************ MODIFY BUFFERS ************************* */
+  /* ***************************************************************** */
+
+  /**
+   * Set the next color buffer to apply to this VBO. The color will be updated at next rendering,
+   * which may be forced with {@link Chart#render()}.
+   */
+  public void setColors(float[] colors) {
+    VBOBufferLoader colorLoader = new VBOBufferLoader();
+    nextColorBuffer = colorLoader.loadColorBufferFromArray(colors);
   }
 
 
@@ -1017,5 +1052,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       System.out.println(elementsStarts.get(i) + "\t:\t" + elementsLength.get(i));
     }
   }
+
 
 }

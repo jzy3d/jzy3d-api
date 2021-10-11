@@ -2,10 +2,10 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.Buffer;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal.NormalMode;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -62,8 +62,12 @@ public class TestDrawableVBO2_glMultiDrawElements {
     }
 
     // -------------------------------------------
-    // When
-    double[] vertices = new double[24];
+    // When loading an array
+    
+    int VERTICES = 8;
+    int DIMS = 3;
+    
+    double[] vertices = new double[VERTICES*DIMS];
     int k = 0;
     
     // 0 : bottom left near (z,x,y)
@@ -149,7 +153,7 @@ public class TestDrawableVBO2_glMultiDrawElements {
     elementIndices[5][3] = 6;
 
     
-    float[] colors = cloneFloat(vertices);
+    float[] colors = Array.cloneFloat(vertices);
     
     DrawableVBO2 vbo = new DrawableVBO2(vertices, elementIndices, colors, NormalMode.SHARED);
     
@@ -160,9 +164,9 @@ public class TestDrawableVBO2_glMultiDrawElements {
 
     // -------------------------------------------
     // Then
-    Assert.assertEquals(24, vbo.getVertices().capacity());
-    Assert.assertEquals(24, vbo.getColors().capacity());
-    Assert.assertEquals(24, vbo.getNormals().capacity());
+    Assert.assertEquals(VERTICES*DIMS, vbo.getVertices().capacity());
+    Assert.assertEquals(VERTICES*DIMS, vbo.getColors().capacity());
+    Assert.assertEquals(VERTICES*DIMS, vbo.getNormals().capacity());
     Assert.assertEquals(6, vbo.getElementsIndices().capacity());
     Assert.assertEquals(6, vbo.getElementsCount().capacity());
     
@@ -180,22 +184,31 @@ public class TestDrawableVBO2_glMultiDrawElements {
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getNormalArrayIds()[0]);
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getColorArrayIds()[0]);
     
+    Assert.assertArrayEquals("Color buffer is equal to input array", colors, BufferUtil.copyFloat(vbo.getColors()), 0.00001f);
+    
     // Elements not binded on purpose
     //Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getElementArrayIds()[0]);
     
     Assert.assertEquals(new Coord3d(1,1,1), chart.getView().getBounds().getCorners().getXmaxYmaxZmax());
     Assert.assertEquals(new Coord3d(0,0,0), chart.getView().getBounds().getCorners().getXminYminZmin());
     
-  }
+    // -------------------------------------------
+    // When editing colors and rendering again
 
-  private float[] cloneFloat(double[] vertices) {
-    float[] clone = new float[vertices.length];
-    
-    for (int i = 0; i < vertices.length; i++) {
-      clone[i] = (float)vertices[i];
+    for (int i = 0; i < colors.length; i+=3) {
+      colors[i+0] = 0.1f;
+      colors[i+1] = 0.1f;
+      colors[i+2] = 0.8f;
     }
-    return clone;
+    
+    vbo.setColors(colors);
+        
+    chart.render();
+    
+    // -------------------------------------------
+    // Then buffer is updated
+
+    Assert.assertArrayEquals("Color buffer is equal to input array", colors, BufferUtil.copyFloat(vbo.getColors()), 0.00001f);
+
   }
-
-
 }
