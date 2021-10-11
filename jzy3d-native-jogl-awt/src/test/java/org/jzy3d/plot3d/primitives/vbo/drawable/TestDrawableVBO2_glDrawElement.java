@@ -45,7 +45,7 @@ public class TestDrawableVBO2_glDrawElement {
     int nVertices = TestMesh.nVertices(vertices);
 
     // When
-    DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions, elements, null);
+    DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions, elements);
     
     Assert.assertTrue(vbo.isComputeNormals());
     
@@ -81,7 +81,7 @@ public class TestDrawableVBO2_glDrawElement {
     int nVertices = TestMesh.nVertices(vertices);
 
     // When
-    DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions, elements, null);
+    DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions, elements);
     chart.add(vbo);
 
     // Then

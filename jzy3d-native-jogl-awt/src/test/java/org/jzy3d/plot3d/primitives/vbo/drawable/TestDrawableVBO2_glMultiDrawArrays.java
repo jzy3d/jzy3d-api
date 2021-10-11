@@ -214,6 +214,28 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getVertexArrayIds()[0]);
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getNormalArrayIds()[0]);
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getColorArrayIds()[0]);
+    
+    Assert.assertArrayEquals("Color buffer is equal to input array", colors, BufferUtil.copyFloat(vbo.getColors()), 0.00001f);
+
+    
+    // -------------------------------------------
+    // When editing colors and rendering again
+
+    for (int i = 0; i < colors.length; i+=3) {
+      colors[i+0] = 0.1f;
+      colors[i+1] = 0.1f;
+      colors[i+2] = 0.8f;
+    }
+    
+    vbo.setColors(colors);
+        
+    chart.render();
+    
+    // -------------------------------------------
+    // Then buffer is updated
+
+    Assert.assertArrayEquals("Color buffer is equal to input array", colors, BufferUtil.copyFloat(vbo.getColors()), 0.00001f);
+
 
   }
 
