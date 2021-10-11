@@ -2,12 +2,14 @@ package org.jzy3d.demos.teapot;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.Wireframeable;
+import org.jzy3d.plot3d.transform.Rotate;
 import org.jzy3d.plot3d.transform.Transform;
 
 public class Teapot extends Wireframeable {
@@ -19,6 +21,10 @@ public class Teapot extends Wireframeable {
     Range yRange = new Range(-0.75, 0.83);
     Range zRange = new Range(-1.00, 1.00);
     bbox = new BoundingBox3d(xRange, yRange, zRange);
+    
+    Transform transform = new Transform();
+    transform.add(new Rotate(90, new Coord3d(1,0,0)));
+    setTransformBefore(transform);
   }
   
   @Override
