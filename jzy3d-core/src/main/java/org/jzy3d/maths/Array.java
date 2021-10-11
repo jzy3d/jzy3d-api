@@ -79,6 +79,15 @@ public class Array {
     return clone;
   }
 
+  public static double[] cloneDouble(float[] vertices) {
+    double[] clone = new double[vertices.length];
+    
+    for (int i = 0; i < vertices.length; i++) {
+      clone[i] = vertices[i];
+    }
+    return clone;
+  }
+
 
   /********************************************************************/
 
