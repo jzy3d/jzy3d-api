@@ -61,7 +61,6 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.elementsLength = elementLength;
   }
 
-
   public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[][] elementIndices,
       IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
