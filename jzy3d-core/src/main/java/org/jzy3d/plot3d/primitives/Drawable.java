@@ -121,6 +121,8 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
   }
 
   public void setTransformBefore(Transform transformBefore) {
+    getBounds().apply(transformBefore);
+    
     this.transformBefore = transformBefore;
   }
 
