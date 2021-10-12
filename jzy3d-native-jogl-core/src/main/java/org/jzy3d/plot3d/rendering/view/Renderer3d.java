@@ -62,7 +62,7 @@ public class Renderer3d implements GLEventListener {
    */
   @Override
   public void init(GLAutoDrawable canvas) {
-    if (canvas != null && canvas.getGL() != null && canvas.getGL().getGL2() != null
+    if (canvas != null && canvas.getGL() != null /*&& canvas.getGL().getGL2() != null*/
         && view != null) {
       if (debugGL)
         canvas.getGL().getContext()

@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
@@ -24,6 +25,7 @@ import org.jzy3d.maths.Statistics;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -45,6 +47,8 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class Chart {
+  protected static Logger logger = Logger.getLogger(Chart.class);
+  
   private static final int MOUSE_PICK_SIZE_DEFAULT = 10;
   private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";
   public static final Quality DEFAULT_QUALITY = Quality.Intermediate();
@@ -410,6 +414,14 @@ public class Chart {
   public Chart add(Drawable drawable, boolean updateView) {
     drawable.setSpaceTransformer(getView().getSpaceTransformer());
     getScene().getGraph().add(drawable, updateView);
+    
+    if(drawable instanceof IGLBindedResource && view.isInitialized()) {
+      logger.warn("Drawables implementing IGLBindedResource must be added to chart before the view has initialized, hence before the chart is open.");
+
+      getView().initResources(); // invoke loading GL binded resource in case this drawable requires it
+
+    }
+    
     updateLightsOnCameraPositions();
     return this;
   }
