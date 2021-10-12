@@ -2,12 +2,12 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.util.List;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.colors.colormaps.IColorMap;
+import org.jzy3d.maths.Array;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.RandomGeom;
@@ -40,7 +40,7 @@ public class TestDrawableVBO2_glDrawElement {
     Chart chart = f.newChart(Quality.Intermediate());
 
     int dimensions = TestMesh.DIMENSIONS;
-    double[] vertices = TestMesh.makeArray4();
+    float[] vertices = Array.cloneFloat(TestMesh.makeArray4());
     int[] elements = TestMesh.makeElementArray4();
     int nVertices = TestMesh.nVertices(vertices);
 
@@ -76,7 +76,7 @@ public class TestDrawableVBO2_glDrawElement {
     Chart chart = f.newChart(Quality.Intermediate());
 
     int dimensions = TestMesh.DIMENSIONS;
-    double[] vertices = TestMesh.makeArray4();
+    float[] vertices = Array.cloneFloat(TestMesh.makeArray4());
     int[] elements = TestMesh.makeElementArray4();
     int nVertices = TestMesh.nVertices(vertices);
 
@@ -103,7 +103,7 @@ public class TestDrawableVBO2_glDrawElement {
 
     IColorMap colormap = new ColorMapRainbow();
     int dimensions = TestMesh.DIMENSIONS;
-    double[] vertices = TestMesh.makeArray4();
+    float[] vertices = Array.cloneFloat(TestMesh.makeArray4());
     int[] elements = TestMesh.makeElementArray4();
     int nVertices = TestMesh.nVertices(vertices);
 
@@ -156,11 +156,11 @@ public class TestDrawableVBO2_glDrawElement {
 
     /*for (int i = 0; i < vbo.geometryStarts.capacity(); i++) {
       System.out.println(vbo.geometryStarts.get(i) + " - " + vbo.geometryLength.get(i));
-    }*/
+    }
     
     for (int i = 0; i < vbo.vertices.capacity(); i+=3) {
       System.out.println(vbo.vertices.get(i) + ", " + vbo.vertices.get(i+1) + ", " + vbo.vertices.get(i+2));
-    }
+    }*/
     
     Assert.assertNull(vbo.elements);
 

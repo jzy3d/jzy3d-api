@@ -1,10 +1,10 @@
 package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.maths.Array;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
@@ -29,7 +29,7 @@ public class TestDrawableVBO2_glDrawArray {
     Chart chart = f.newChart(Quality.Intermediate());
 
     int dimensions = TestMesh.DIMENSIONS;
-    double[] vertices = TestMesh.makeArray1();
+    float[] vertices = Array.cloneFloat(TestMesh.makeArray4());
     int nVertices = TestMesh.nVertices(vertices);
 
     // When
@@ -60,7 +60,7 @@ public class TestDrawableVBO2_glDrawArray {
     Chart chart = f.newChart(Quality.Intermediate());
 
     int dimensions = TestMesh.DIMENSIONS;
-    double[] vertices = TestMesh.makeArray1();
+    float[] vertices = Array.cloneFloat(TestMesh.makeArray1());
 
     // When
     DrawableVBO2 vbo = new DrawableVBO2(vertices, dimensions);

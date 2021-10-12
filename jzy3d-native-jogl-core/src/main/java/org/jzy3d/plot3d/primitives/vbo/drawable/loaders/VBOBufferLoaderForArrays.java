@@ -72,7 +72,7 @@ import com.jogamp.common.nio.PointerBuffer;
 public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
   protected static Logger log = Logger.getLogger(VBOBufferLoaderForArrays.class);
 
-  protected double[] points;
+  protected float[] points;
   protected int pointDimensions;
 
   protected float[] normals = null;
@@ -95,7 +95,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
   protected boolean debug = false;
 
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] elementStarts,
+  public VBOBufferLoaderForArrays(float[] points, int pointDimensions, int[] elementStarts,
       int[] elementLength, IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
     this.points = points;
@@ -108,7 +108,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.elementsLength = elementLength;
   }
 
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[][] elementIndices,
+  public VBOBufferLoaderForArrays(float[] points, int pointDimensions, int[][] elementIndices,
       IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
     this.points = points;
@@ -120,7 +120,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.elementsIndices = elementIndices;
   }
 
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[][] elementIndices,
+  public VBOBufferLoaderForArrays(float[] points, int pointDimensions, int[][] elementIndices,
       IColorMap colormap, float[] coloring, float[] normals) {
     super();
     this.points = points;
@@ -133,7 +133,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
   }
 
 
-  public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] geometries,
+  public VBOBufferLoaderForArrays(float[] points, int pointDimensions, int[] geometries,
       int verticesPerGeometry, IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
     this.points = points;

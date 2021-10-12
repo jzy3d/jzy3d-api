@@ -53,6 +53,10 @@ public class TestMesh {
     return (int) 1f * vertices.length / DIMENSIONS;
   }
 
+  public static int nVertices(float[] vertices) {
+    return (int) 1f * vertices.length / DIMENSIONS;
+  }
+
   /**
    * Concatenates 2 arrays
    * 
