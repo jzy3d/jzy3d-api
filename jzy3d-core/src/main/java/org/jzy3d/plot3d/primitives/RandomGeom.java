@@ -207,6 +207,10 @@ public class RandomGeom {
     return cube(0);
   }
 
+  public Polygon poly(int x, int y, int z) {
+    return poly(x, y, z, true, Color.BLUE);
+  }
+  
   public Polygon poly(int x, int y, int z, boolean leftRightOrNearFar, Color color) {
     int w = 1;
     int h = 1;

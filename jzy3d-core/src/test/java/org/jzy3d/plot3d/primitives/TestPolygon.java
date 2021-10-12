@@ -7,8 +7,8 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Normal.NormalPer;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot3d.primitives.Geometry.NormalPer;
 import org.mockito.Mockito;
 
 public class TestPolygon {

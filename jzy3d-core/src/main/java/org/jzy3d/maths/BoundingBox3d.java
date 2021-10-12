@@ -152,6 +152,22 @@ public class BoundingBox3d {
       zmin = z;
   }
 
+  public void add(double x, double y, double z) {
+    if (x > xmax)
+      xmax = (float) x;
+    if (x < xmin)
+      xmin = (float) x;
+    if (y > ymax)
+      ymax = (float) y;
+    if (y < ymin)
+      ymin = (float) y;
+    if (z > zmax)
+      zmax = (float) z;
+    if (z < zmin)
+      zmin = (float) z;
+  }
+
+  
   /**
    * Add a Coord3d to the BoundingBox3d. A shortcut for: <code>add(c.x, c.y, c.z);</code>
    * 

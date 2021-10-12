@@ -5,6 +5,28 @@ import org.jzy3d.plot3d.primitives.Point;
 
 public class Normal {
   /**
+   * Indicates how the normal of a vertex is computed
+   * <ul>
+   * <li>SHARED: as a mean of all polygons that the vertex belongs to.
+   * <li>REPEATED : the normal of a point if the normal of 1 polygon it belongs to.
+   * </ul>
+   * 
+   * See also {@link NormalPer}
+   */
+  public enum NormalMode {
+    SHARED, REPEATED
+  }
+
+  /**
+   * Indicate if normals are defined per point or per geometry.
+   * 
+   * See also {@link NormalMode}
+   */
+  public enum NormalPer {
+    POINT, GEOMETRY;
+  }
+
+  /**
    * Compute the normal for the three points which is a vector perpendicular to the plane formed by the three input points.
    */
   public static Coord3d compute(Coord3d p0, Coord3d p1, Coord3d p2) {
@@ -62,4 +84,6 @@ public class Normal {
       throw new IllegalArgumentException("Need at least 3 points");
     }
   }
+  
+  
 }
