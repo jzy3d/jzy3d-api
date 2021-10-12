@@ -25,7 +25,7 @@ public class VBOBufferLoader {
 
   // *************************** VERTICES ******************************/
   
-  public FloatBuffer loadVerticesFromArray(double[] points, int pointDimensions,
+  public FloatBuffer loadVerticesFromArray(float[] points, int pointDimensions,
       List<Coord3d> verticeList, BoundingBox3d bounds) {
 
     // input points may contain extra dimensions, so we first compute the number of points, and then

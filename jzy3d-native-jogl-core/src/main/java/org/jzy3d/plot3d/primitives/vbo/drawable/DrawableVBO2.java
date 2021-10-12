@@ -233,7 +233,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * @see other constructor for detailed arguments.
    * 
    */
-  public DrawableVBO2(double[] points, int pointDimensions) {
+  public DrawableVBO2(float[] points, int pointDimensions) {
     this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, null, null, NormalMode.REPEATED));
   }
 
@@ -245,7 +245,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * @see other constructor for detailed arguments.
    * 
    */
-  public DrawableVBO2(double[] points, int pointDimensions, IColorMap colormap) {
+  public DrawableVBO2(float[] points, int pointDimensions, IColorMap colormap) {
     this(makeLoader(points, pointDimensions, null, GEOMETRY_SIZE, colormap, null,
         NormalMode.REPEATED));
   }
@@ -276,7 +276,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * @param colormap defines how to color vertices. It may be null, in that case the object is
    *        colored by {@link #setColor(Color)} adn shaded by {@link Light}
    */
-  public DrawableVBO2(double[] points, int pointDimensions, int[] elements, IColorMap colormap) {
+  public DrawableVBO2(float[] points, int pointDimensions, int[] elements, IColorMap colormap) {
     this(makeLoader(points, pointDimensions, elements, GEOMETRY_SIZE, colormap, null,
         NormalMode.SHARED));
   }
@@ -297,12 +297,12 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * @see other constructor for detailed arguments.
    * 
    */
-  public DrawableVBO2(double[] points, int pointDimensions, int[] elements) {
+  public DrawableVBO2(float[] points, int pointDimensions, int[] elements) {
     this(makeLoader(points, pointDimensions, elements, GEOMETRY_SIZE, null, null,
         NormalMode.REPEATED));
   }
 
-  public DrawableVBO2(double[] points, int pointDimensions, int[] elements, IColorMap colormap,
+  public DrawableVBO2(float[] points, int pointDimensions, int[] elements, IColorMap colormap,
       NormalMode normalMode) {
     this(makeLoader(points, pointDimensions, elements, GEOMETRY_SIZE, colormap, null, normalMode));
   }
@@ -318,13 +318,13 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * @param elementSize
    * @param colors
    */
-  public DrawableVBO2(double[] points, int pointDimensions, int[] elements, int elementSize,
+  public DrawableVBO2(float[] points, int pointDimensions, int[] elements, int elementSize,
       float[] colors) {
     this(makeLoader(points, pointDimensions, elements, elementSize, null, colors,
         NormalMode.SHARED));
   }
 
-  public DrawableVBO2(double[] points, int[] elements, int elementSize, float[] colors) {
+  public DrawableVBO2(float[] points, int[] elements, int elementSize, float[] colors) {
     this(points, VERTEX_DIMENSIONS, elements, elementSize, colors);
   }
 
@@ -336,11 +336,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /* *************************************************************** */
 
 
-  public DrawableVBO2(double[] points, int[] elementStart, int[] elementLength, float[] colors) {
+  public DrawableVBO2(float[] points, int[] elementStart, int[] elementLength, float[] colors) {
     this(points, VERTEX_DIMENSIONS, elementStart, elementLength, colors);
   }
 
-  public DrawableVBO2(double[] points, int pointDimensions, int[] elementStart, int[] elementLength,
+  public DrawableVBO2(float[] points, int pointDimensions, int[] elementStart, int[] elementLength,
       float[] colors) {
     this(makeLoader(points, pointDimensions, elementStart, elementLength, colors,
         NormalMode.REPEATED));
@@ -361,21 +361,21 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /* *************************************************************** */
 
 
-  public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors) {
+  public DrawableVBO2(float[] points, int[][] elementIndices, float[] colors) {
     this(points, VERTEX_DIMENSIONS, elementIndices, colors);
   }
 
-  public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors, float[] normals) {
+  public DrawableVBO2(float[] points, int[][] elementIndices, float[] colors, float[] normals) {
     this(makeLoader(points, VERTEX_DIMENSIONS, elementIndices, colors, normals));
   }
 
-  public DrawableVBO2(double[] points, int[][] elementIndices, float[] colors,
+  public DrawableVBO2(float[] points, int[][] elementIndices, float[] colors,
       NormalMode normalMode) {
     this(makeLoader(points, VERTEX_DIMENSIONS, elementIndices, colors, normalMode));
   }
 
 
-  public DrawableVBO2(double[] points, int pointDimensions, int[][] elementIndices,
+  public DrawableVBO2(float[] points, int pointDimensions, int[][] elementIndices,
       float[] colors) {
     this(makeLoader(points, pointDimensions, elementIndices, colors, NormalMode.REPEATED));
   }
@@ -398,32 +398,32 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     return new VBOBufferLoaderForPolygons(polygons, verticesPerGeometry);
   }
 
-  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+  public static IGLLoader<DrawableVBO2> makeLoader(float[] points, int pointDimensions,
       int[][] elementIndices, float[] colors, NormalMode perVertex) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elementIndices, null, colors,
         perVertex);
   }
 
-  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+  public static IGLLoader<DrawableVBO2> makeLoader(float[] points, int pointDimensions,
       int[][] elementIndices, float[] colors, float[] normals) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elementIndices, null, colors,
         normals);
   }
 
-  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+  public static IGLLoader<DrawableVBO2> makeLoader(float[] points, int pointDimensions,
       int[] elements, int elementSize, IColorMap colormap, float[] coloring,
       NormalMode normalMode) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elements, elementSize, colormap,
         coloring, normalMode);
   }
 
-  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int elementSize) {
+  public static IGLLoader<DrawableVBO2> makeLoader(float[] points, int elementSize) {
     return makeLoader(points, VERTEX_DIMENSIONS, null, elementSize, null, null, null);
   }
 
 
 
-  public static IGLLoader<DrawableVBO2> makeLoader(double[] points, int pointDimensions,
+  public static IGLLoader<DrawableVBO2> makeLoader(float[] points, int pointDimensions,
       int[] elementStart, int[] elementLength, float[] coloring, NormalMode normalMode) {
     return new VBOBufferLoaderForArrays(points, pointDimensions, elementStart, elementLength, null,
         coloring, normalMode);
