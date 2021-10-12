@@ -18,10 +18,12 @@ public class BufferUtil {
     buffer.rewind();
   }
   
-  /*public static void rewind(FloatBuffer buffer) {
+  /*// Kept as a trick to test rewind without upcast
+  public static void rewind(FloatBuffer buffer) {
     buffer.rewind();
   }
 
+  // Kept as a trick to test rewind without upcast
   public static void rewind(IntBuffer buffer) {
     buffer.rewind();
   }*/
