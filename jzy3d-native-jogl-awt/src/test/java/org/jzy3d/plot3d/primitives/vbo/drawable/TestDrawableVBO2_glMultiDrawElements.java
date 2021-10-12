@@ -21,13 +21,13 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 //@Ignore // crashing JVM 11 locally !!!
 public class TestDrawableVBO2_glMultiDrawElements {
 
-  double X0 = 0;
-  double Y0 = 0;
-  double Z0 = 0;
+  float X0 = 0;
+  float Y0 = 0;
+  float Z0 = 0;
 
-  double X1 = 1;
-  double Y1 = 1;
-  double Z1 = 1;
+  float X1 = 1;
+  float Y1 = 1;
+  float Z1 = 1;
   
   boolean offscreen = true;
   
@@ -67,7 +67,7 @@ public class TestDrawableVBO2_glMultiDrawElements {
     int VERTICES = 8;
     int DIMS = 3;
     
-    double[] vertices = new double[VERTICES*DIMS];
+    float[] vertices = new float[VERTICES*DIMS];
     int k = 0;
     
     // 0 : bottom left near (z,x,y)
@@ -153,7 +153,7 @@ public class TestDrawableVBO2_glMultiDrawElements {
     elementIndices[5][3] = 6;
 
     
-    float[] colors = Array.cloneFloat(vertices);
+    float[] colors = Array.clone(vertices);
     
     DrawableVBO2 vbo = new DrawableVBO2(vertices, elementIndices, colors, NormalMode.SHARED);
     

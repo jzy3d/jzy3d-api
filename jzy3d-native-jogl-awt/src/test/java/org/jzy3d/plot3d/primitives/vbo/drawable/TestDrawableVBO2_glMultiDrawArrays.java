@@ -27,13 +27,13 @@ import org.jzy3d.plot3d.rendering.scene.Decomposition;
 
 public class TestDrawableVBO2_glMultiDrawArrays {
 
-  double X0 = 0;
-  double Y0 = 0;
-  double Z0 = 0;
+  float X0 = 0;
+  float Y0 = 0;
+  float Z0 = 0;
 
-  double X1 = 1;
-  double Y1 = 1;
-  double Z1 = 1;
+  float X1 = 1;
+  float Y1 = 1;
+  float Z1 = 1;
   
   Coord3d X1Y1Z1 = new Coord3d(X1,Y1,Z1);
   Coord3d X0Y0Z0 = new Coord3d(X0,Y0,Z0);    
@@ -70,7 +70,7 @@ public class TestDrawableVBO2_glMultiDrawArrays {
 
     // -------------------------------------------
     // When
-    double[] vertices = new double[72];
+    float[] vertices = new float[72];
     int k = 0;
 
     // bottom
@@ -180,7 +180,7 @@ public class TestDrawableVBO2_glMultiDrawArrays {
     int[] elementStarts = {0, 4, 8, 12, 16, 20};
     int[] elementLength = {PTS, PTS, PTS, PTS, PTS, PTS};
 
-    float[] colors = Array.cloneFloat(vertices);
+    float[] colors = Array.clone(vertices);
 
     DrawableVBO2 vbo = new DrawableVBO2(vertices, elementStarts, elementLength, colors);
 
