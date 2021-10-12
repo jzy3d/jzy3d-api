@@ -17,7 +17,54 @@ import com.jogamp.common.nio.Buffers;
 import com.jogamp.common.nio.PointerBuffer;
 
 /**
- * A utility class to build buffers to feed a {@link DrawableVBO2}.
+ * A utility class to build buffers to feed a {@link DrawableVBO2}. Reading VBO javadoc may be
+ * helpful as well
+ * 
+ * Not all parameters are mandatory, so we depict the effect of providing or not some of them.
+ * 
+ * <h2>Points</h2>
+ * 
+ * This holds the x,y,z coordinates and is mandatory.
+ * 
+ * <h2>Colors</h2>
+ * 
+ * The loader can be given
+ * <ul>
+ * <li>A non null colormap with null colors array
+ * <li>A non null color array with null colormap
+ * <li>None of the above, in that case, the color will uniform to the whole drawable
+ * <li>If both colormap and colors are given, an exception is thrown.
+ * </ul>
+ * 
+ * <h2>Normals</h2>
+ * 
+ * Normals allow processing light. There are four modes
+ * 
+ * <ul>
+ * <li>{@link NormalMode.REPEATED} lead to autonomous processing of normals where each polygon get a
+ * single normal processed for the whole geometry (but the normal is repeated for each point).
+ * <li>{@link NormalMode.SHARED} lead to autonomous processing of normals where each point get a
+ * normal processed as the average normal of all the polygons it belongs to.
+ * <li>A normal array can be provided externally to rely on other algorithms.
+ * <li>If neither {@link NormalMode} neither a normal array are provided, no normal is will be
+ * buffered in the VBO.
+ * </ul>
+ * 
+ * 
+ * We observed that when no normal is processed at all, there is still an automatic processing of
+ * light "somehow". This is enabled by toggling {@link DrawableVBO2#setComputeNormals(boolean)} to
+ * false. In that case, the result looks like :
+ * 
+ * <img src="../doc-files/SHARED_VERTEX_NO_NORMAL.png"/>
+ * 
+ * <h2>Elements</h2>
+ * 
+ * Elements are optional and are used to avoid repeating intput points. In that case, geometries are
+ * defined by the indices and the point they refer to.
+ * 
+ * @see {@link DrawableVBO2} constructor for all possible element index possibilities. See also
+ *      {@link TestDrawableVBO2_glDrawElement} and {@link TestDrawableVBO2_glMultiDrawElements} for
+ *      examples.
  * 
  * @author Martin Pernollet
  *
@@ -27,7 +74,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
   protected double[] points;
   protected int pointDimensions;
-  
+
   protected float[] normals = null;
 
   // fields for glDrawElements
@@ -81,47 +128,11 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.colormap = colormap;
     this.coloring = coloring;
     this.normals = normals;
-    
+
     this.elementsIndices = elementIndices;
   }
 
-  
-  /**
-   * Return a loader for this VBO that is invoked upon {@link #mount(IPainter)}, meaning after the
-   * application has started.
-   * 
-   * Not all parameters are mandatory, so we depict the effect of providing or not some of them.
-   * 
-   * <h2>Points</h2> This holds the x,y,z coordinates and is mandatory.
-   * 
-   * <h2>Colors</h2> The loader can be given
-   * <ul>
-   * <li>A non null colormap with null colors array
-   * <li>A non null color array with null colormap
-   * <li>None of the above, in that case, the color will uniform to the whole drawable
-   * <li>If both colormap and colors are given, an exception is thrown.
-   * </ul>
-   * 
-   * <h2>Normals</h2>
-   * 
-   * We observed that when no normal is processed at all, there is still an automatic processing of
-   * light "somehow". This is enabled by toggling {#link {@link #COMPUTE_NORMALS_IN_JAVA} to false.
-   * In that case, the result looks like :
-   * 
-   * <img src="doc-files/SHARED_VERTEX_NO_NORMAL.png"/>
-   * 
-   * <h2>Geometries</h2>
-   * 
-   * <ul>
-   * <li>VBO can render without geometries defined. geometry array can be null
-   * <li>If defined, geometries array is a collection of indices refering to the points array. This
-   * avoid repeating the points but assumes that the drawn object is a STRIP or FAN, hence a single
-   * geometry.
-   * <li>If defined,
-   * </ul>
-   * 
-   * @see {@link DrawableVBO2} constructor for argument description.
-   */
+
   public VBOBufferLoaderForArrays(double[] points, int pointDimensions, int[] geometries,
       int verticesPerGeometry, IColorMap colormap, float[] coloring, NormalMode normalMode) {
     super();
@@ -138,9 +149,8 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     this.elementsStarts = null;
     this.elementsLength = null;
   }
-  
-  
-  
+
+
 
   @Override
   public void load(IPainter painter, DrawableVBO2 drawable) throws Exception {
@@ -231,7 +241,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     FloatBuffer normalBuffer = null;
 
     if (drawable.isComputeNormals()) {
-      
+
       // Compute averaged normals
       if (NormalMode.SHARED.equals(normalMode)) {
         if (elements != null) {
@@ -239,23 +249,22 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
         } else if (elementsIndices != null) {
           normalBuffer = computeSharedNormals(elementsIndices, verticeList);
         }
-      } 
+      }
 
-      // Compute repeated normals per geometry vertex 
-      else if (NormalMode.REPEATED.equals(normalMode)){
+      // Compute repeated normals per geometry vertex
+      else if (NormalMode.REPEATED.equals(normalMode)) {
         normalBuffer = computeSimpleNormals(verticesPerGeometry, verticeList);
-      } 
-      
+      }
+
       // Provide normals externally
-      else if(normalMode==null && normals!=null) {
+      else if (normalMode == null && normals != null) {
         normalBuffer = loadNormalsFromArray(normals);
-      }
-      else {
+      } else {
         drawable.setComputeNormals(false);
-        log.warn("No normal provided despite drawable is configured to receive processed or provided normal. Toggle normal mode of drawable to false.");
+        log.warn(
+            "No normal provided despite drawable is configured to receive processed or provided normal. Toggle normal mode of drawable to false.");
       }
-    }
-    else {
+    } else {
       // do not provide neither compute normals
     }
 

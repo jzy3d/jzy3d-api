@@ -13,18 +13,18 @@ import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import com.jogamp.common.nio.Buffers;
 
 /**
- * =====================
- * WIP / Not working yet
- * =====================
+ * ===================== WIP / Not working yet =====================
+ * 
+ * Limitations of primitive restart are discussed here :
+ * https://community.khronos.org/t/using-glprimitiverestartindex-to-declare-multiple-geometries-in-the-same-vbo/107810/13
  * 
  * A utility class to build buffers to feed a {@link DrawableVBO2} using Primitive restart.
- * 
- * 
  * 
  * @author Martin Pernollet
  *
  */
-public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
+public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader
+    implements IGLLoader<DrawableVBO2> {
   // IColorMap colormap;
   // float[] coloring;
   static int DIMENSIONS = 3;
@@ -52,7 +52,8 @@ public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader 
 
     int colorChannels = drawable.getColorChannels();
 
-    FloatBuffer vertices = Buffers.newDirectFloatBuffer(pointsNumber * DIMENSIONS + polygons.size());
+    FloatBuffer vertices =
+        Buffers.newDirectFloatBuffer(pointsNumber * DIMENSIONS + polygons.size());
     FloatBuffer colors = Buffers.newDirectFloatBuffer(pointsNumber * colorChannels);
 
     for (Polygon polygon : polygons) {
@@ -63,7 +64,7 @@ public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader 
         vertices.put(point.xyz.x);
         vertices.put(point.xyz.y);
         vertices.put(point.xyz.z);
-        
+
         // Store colors
         colors.put(point.rgb.r);
         colors.put(point.rgb.g);
@@ -86,7 +87,7 @@ public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader 
     }
     vertices.rewind();
     colors.rewind();
-    
+
     // -------------------------------------------
     // Normals
 
