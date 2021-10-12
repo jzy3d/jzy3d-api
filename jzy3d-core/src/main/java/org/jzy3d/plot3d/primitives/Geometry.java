@@ -12,6 +12,7 @@ import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
+import org.jzy3d.maths.Normal.NormalPer;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.lights.Light;
@@ -58,9 +59,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   protected boolean splitInTriangles = SPLIT_TRIANGLE_DEFAULT;
   protected boolean normalizeNormals = NORMALIZE_NORMAL_DEFAULT;
 
-  public enum NormalPer {
-    POINT, GEOMETRY;
-  }
 
   protected NormalPer normalPer = NormalPer.GEOMETRY;
 
@@ -192,11 +190,11 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     if (mapper != null)
       mapper.preDraw(this);
 
-    
+
     if (isReflectLight()) {
       applyMaterial(painter);
     }
-    
+
     // Draw content of polygon
     drawFace(painter);
 
@@ -204,7 +202,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
     // Draw edge of polygon
     drawWireframe(painter);
-    
+
     if (mapper != null)
       mapper.postDraw(this);
 
@@ -560,19 +558,42 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     if (!isWireframeColorFromPolygonPoints()) {
       painter.color(wireframeColor);
     }
-    painter.glLineWidth(getWireframeWidth());
-    painter.glBegin_LineLoop(); // changed for JGL as wireframe polygon are transformed to pair of
-                                // triangles
 
-    for (Point p : points) {
-      if (isWireframeColorFromPolygonPoints()) {
-        painter.color(p.rgb);
+    painter.glLineWidth(getWireframeWidth());
+
+
+    if (wireframeWithLineLoop) {
+      // changed for JGL as wireframe polygon are transformed to pair of
+      // triangles
+      painter.glBegin_LineLoop(); 
+
+      for (Point p : points) {
+        if (isWireframeColorFromPolygonPoints()) {
+          painter.color(p.rgb);
+        }
+
+        painter.vertex(p.xyz, spaceTransformer);
+      }
+      painter.glEnd();
+    }
+    else {
+      
+      // default Draw geometry
+      begin(painter);
+
+      // invoke points for vertex and color
+      for (Point p : points) {
+        if (isWireframeColorFromPolygonPoints()) {
+          painter.color(p.rgb);
+        }
+        painter.vertex(p.xyz, spaceTransformer);
       }
 
-      painter.vertex(p.xyz, spaceTransformer);
+      painter.glEnd();
     }
-    painter.glEnd();
   }
+
+  protected boolean wireframeWithLineLoop = true;
 
 
   /**
@@ -658,10 +679,12 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     return points.get(p);
   }
 
+  /** Returns the list of the mutable points held by this polygon. */
   public List<Point> getPoints() {
     return points;
   }
 
+  /** Returns a set of the mutable points held by this polygon. */
   public Set<Point> getPointSet() {
     Set<Point> set = new HashSet<>();
     for (Point p : points) {
@@ -670,7 +693,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     return set;
   }
 
-
+  /** Returns a set of the mutable coordinates held by this polygon points. */
   public Set<Coord3d> getCoordSet() {
     Set<Coord3d> set = new HashSet<>();
     for (Point p : points) {
@@ -679,13 +702,23 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     return set;
   }
 
+  /** Returns a list of the mutable coordinates held by this polygon points. */
+  public List<Coord3d> getCoordList() {
+    List<Coord3d> list = new ArrayList<>();
+    for (Point p : points) {
+      list.add(p.xyz);
+    }
+    return list;
+  }
+
+  /** Returns an array of the mutable coordinates held by this polygon points. */
   public Coord3d[] getCoordArray() {
-    Coord3d[] pts = new Coord3d[size()];
+    Coord3d[] array = new Coord3d[size()];
     int k = 0;
     for (Point p : getPoints()) {
-      pts[k++] = p.xyz;
+      array[k++] = p.xyz;
     }
-    return pts;
+    return array;
   }
 
 
@@ -842,6 +875,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       return false;
     return true;
   }
-  
-  
+
+
 }
