@@ -380,7 +380,7 @@ public class Light {
     
     if (attenuation != null) {
       painter.glLightf(lightId, Attenuation.Type.CONSTANT, attenuation.constant);
-      painter.glLightf(lightId, Attenuation.Type.LINEAR, attenuation.constant);
+      painter.glLightf(lightId, Attenuation.Type.LINEAR, attenuation.linear);
       painter.glLightf(lightId, Attenuation.Type.QUADRATIC, attenuation.quadratic);
     }
   }
