@@ -820,6 +820,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glLight_Specular(int lightId, Color specularColor) {
     glLightfv(lightId, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
   }
+  
+  @Override
+  public void glLight_Shininess(int lightId, float value) {
+    glLightf(lightId, GLLightingFunc.GL_SHININESS, value);    
+  }
 
   @Override
   public void glEnable_Light(int light) {
