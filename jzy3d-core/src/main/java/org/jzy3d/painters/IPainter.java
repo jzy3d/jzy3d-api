@@ -452,6 +452,16 @@ public interface IPainter {
   public void glLightModel(LightModel model, boolean value);
 
   public void glLightModel(LightModel model, Color color);
+  
+  public void glLight_Position(int lightId, float[] positionZero);
+
+  public void glLight_Ambiant(int lightId, Color ambiantColor);
+
+  public void glLight_Diffuse(int lightId, Color diffuseColor);
+
+  public void glLight_Specular(int lightId, Color specularColor);
+  
+  public void glLight_Shininess(int lightId, float value);
 
   public void glMaterialfv(int face, int pname, float[] params, int params_offset);
 
@@ -544,14 +554,6 @@ public interface IPainter {
   public void glEnable_Light(int light);
 
   public void glDisable_Light(int light);
-
-  public void glLight_Position(int lightId, float[] positionZero);
-
-  public void glLight_Ambiant(int lightId, Color ambiantColor);
-
-  public void glLight_Diffuse(int lightId, Color diffuseColor);
-
-  public void glLight_Specular(int lightId, Color specularColor);
 
   public void glEnable_ColorMaterial();
 

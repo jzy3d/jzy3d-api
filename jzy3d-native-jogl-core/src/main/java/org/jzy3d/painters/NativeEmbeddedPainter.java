@@ -694,6 +694,11 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glLight_Shininess(int lightId, float value) {
+    glLightf(lightId, GLLightingFunc.GL_SHININESS, value);    
+  }
+  
+  @Override
   public void glEnable_Light(int light) {
     glEnable(lightId(light));
   }

@@ -377,7 +377,7 @@ public class Light {
     painter.glLight_Ambiant(lightId, ambiantColor);
     painter.glLight_Diffuse(lightId, diffuseColor);
     painter.glLight_Specular(lightId, specularColor);
-
+    
     if (attenuation != null) {
       painter.glLightf(lightId, Attenuation.Type.CONSTANT, attenuation.constant);
       painter.glLightf(lightId, Attenuation.Type.LINEAR, attenuation.constant);
