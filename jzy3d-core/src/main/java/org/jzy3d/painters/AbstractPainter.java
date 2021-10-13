@@ -305,4 +305,6 @@ public abstract class AbstractPainter implements IPainter {
   public PolygonArray[][] modelToScreen(PolygonArray[][] polygons) {
     return getCamera().modelToScreen(this, polygons);
   }
+  
+  
 }
