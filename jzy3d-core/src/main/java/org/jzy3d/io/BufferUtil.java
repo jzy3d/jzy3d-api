@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.primitives.vbo.drawable;
+package org.jzy3d.io;
 
 import java.nio.Buffer;
 import java.nio.FloatBuffer;

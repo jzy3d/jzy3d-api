@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
+import org.jzy3d.io.BufferUtil;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.RandomGeom;
-import org.jzy3d.plot3d.primitives.vbo.drawable.BufferUtil;
 
 public class TestVBOBufferLoader {
   @Test
