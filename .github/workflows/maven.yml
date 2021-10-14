@@ -10,7 +10,7 @@ on:
   #  branches: [ master ]
 
 jobs:
-  macos-10-15-jdk9:
+  build-and-test:
 
     #runs-on: macos-10.15
     runs-on: ${{ matrix.os }}
