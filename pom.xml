@@ -354,9 +354,7 @@
 							exception. Mainly required when running on Github CI since MacOS VM use a 
 							software implementation -->
 						<argLine>-Djogamp.common.utils.locks.Lock.timeout=20000</argLine>
-
 					</configuration>
-
 				</plugin>
 
 				<plugin>
