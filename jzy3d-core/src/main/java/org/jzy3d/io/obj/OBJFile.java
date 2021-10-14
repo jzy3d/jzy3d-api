@@ -2,8 +2,11 @@ package org.jzy3d.io.obj;
 
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.log4j.Logger;
+import org.jzy3d.io.BufferUtil;
 import org.jzy3d.maths.BoundingBox3d;
 
 /**
@@ -43,6 +47,24 @@ public class OBJFile {
 
   public static final int NumPrimTypes = 4;
 
+  /** Will calculate normals if they are missing */
+  protected boolean autoNormal = true;
+
+  protected List<Float> positions_ = new ArrayList<Float>();
+  protected List<Float> normals_ = new ArrayList<Float>();
+  protected int posSize_;
+
+  protected List<Integer> pIndex_ = new ArrayList<Integer>();
+  protected List<Integer> nIndex_ = new ArrayList<Integer>();
+
+  // data structures optimized for rendering, compiled model
+  protected IntBuffer indices_ = null;
+  protected FloatBuffer vertices_ = null;
+  protected int pOffset_;
+  protected int nOffset_;
+  protected int vtxSize_ = 0;
+  protected int openEdges_;
+
   public OBJFile() {
     posSize_ = 0;
     pOffset_ = -1;
@@ -67,9 +89,6 @@ public class OBJFile {
   };
 
   public boolean loadModelFromFilename(String file) {
-    // URL fileURL = getClass().getClassLoader().getResource(File.separator
-    // + file);
-
     URL fileURL = null;
     try {
       fileURL = new URL(file);
@@ -81,69 +100,91 @@ public class OBJFile {
     return loadModelFromURL(fileURL);
   }
 
-  /**
-   * This function attempts to determine the type of the filename passed as a parameter. If it
-   * understands that file type, it attempts to parse and load the file into its raw data
-   * structures. If the file type is recognized and successfully parsed, the function returns true,
-   * otherwise it returns false.
-   */
   public boolean loadModelFromURL(URL fileURL) {
     if (fileURL != null) {
-      BufferedReader input = null;
       try {
-
-        input = new BufferedReader(new InputStreamReader(fileURL.openStream()));
-        String line = null;
-        float[] val = new float[4];
-        int[][] idx = new int[3][3];
-        boolean hasNormals = false;
-
-        while ((line = input.readLine()) != null) {
-          if (line.isEmpty()) {
-            continue;
-          }
-          switch (line.charAt(0)) {
-            case '#':
-              break;
-            case 'v':
-              parseObjVertex(line, val);
-              break;
-            case 'f':
-              hasNormals = parseObjFace(line, idx, hasNormals);
-              break;
-            default:
-              break;
-          };
-        }
-        // post-process data
-        // free anything that ended up being unused
-        if (!hasNormals) {
-          normals_.clear();
-          nIndex_.clear();
-        }
-
-        posSize_ = 3;
-        return true;
-
+        return loadModelFromStream(fileURL.openStream());
       } catch (FileNotFoundException kFNF) {
         logger.error("Unable to find the shader file " + fileURL + " : FileNotFoundException : "
             + kFNF.getMessage());
       } catch (IOException kIO) {
         logger.error(
             "Problem reading the shader file " + fileURL + " : IOException : " + kIO.getMessage());
-      } catch (NumberFormatException kIO) {
-        logger.error("Problem reading the shader file " + fileURL + " : NumberFormatException : "
-            + kIO.getMessage());
-      } finally {
-        try {
-          if (input != null) {
-            input.close();
-          }
-        } catch (IOException closee) {
-        }
       }
     } else {
       logger.error("URL was null");
+    }
+    return false;
+
+  }
+
+  public boolean loadModelFromFile(File file) {
+    try {
+      FileInputStream fis = new FileInputStream(file);
+      return loadModelFromStream(fis);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+
+  /**
+   * This function attempts to determine the type of the filename passed as a parameter. If it
+   * understands that file type, it attempts to parse and load the file into its raw data
+   * structures. If the file type is recognized and successfully parsed, the function returns true,
+   * otherwise it returns false.
+   */
+  public boolean loadModelFromStream(InputStream inputStream) {
+    BufferedReader input = null;
+    try {
+
+      input = new BufferedReader(new InputStreamReader(inputStream));
+      String line = null;
+      float[] val = new float[4];
+      int[][] idx = new int[3][3];
+      boolean hasNormals = false;
+
+      while ((line = input.readLine()) != null) {
+        if (line.isEmpty()) {
+          continue;
+        }
+        switch (line.charAt(0)) {
+          case '#':
+            break;
+          case 'v':
+            parseObjVertex(line, val);
+            break;
+          case 'f':
+            hasNormals = parseObjFace(line, idx, hasNormals);
+            break;
+          default:
+            break;
+        };
+      }
+      // post-process data
+      // free anything that ended up being unused
+      if (!hasNormals) {
+        normals_.clear();
+        nIndex_.clear();
+      }
+
+      posSize_ = 3;
+      return true;
+
+    } catch (FileNotFoundException kFNF) {
+      logger.error("Unable to find the file : FileNotFoundException : " + kFNF.getMessage());
+    } catch (IOException kIO) {
+      logger.error("Problem reading the file : IOException : " + kIO.getMessage());
+    } catch (NumberFormatException kIO) {
+      logger.error("Problem reading the file : NumberFormatException : " + kIO.getMessage());
+    } finally {
+      try {
+        if (input != null) {
+          input.close();
+        }
+      } catch (IOException closee) {
+      }
     }
 
     return false;
@@ -303,21 +344,24 @@ public class OBJFile {
 
 
 
-      /*
-       * if(autoNormal){ Coord3d c1 = new Coord3d(x.getReal(C1, i), y.getReal(C1, i), z.getReal(C1,
-       * i)); Coord3d c2 = new Coord3d(x.getReal(C2, i), y.getReal(C2, i), z.getReal(C2, i));
-       * Coord3d c3 = new Coord3d(x.getReal(C3, i), y.getReal(C3, i), z.getReal(C3, i)); Coord3d no
-       * = Normal.compute(c1, c2, c3);
-       * 
-       * 
-       * // remap them to the right spot idx[0][1] = (idx[0][1] > 0) ? (idx[0][1] - 1) :
-       * (normals_.size() - idx[0][1]); idx[1][1] = (idx[1][1] > 0) ? (idx[1][1] - 1) :
-       * (normals_.size() - idx[1][1]); idx[2][1] = (idx[2][1] > 0) ? (idx[2][1] - 1) :
-       * (normals_.size() - idx[2][1]);
-       * 
-       * 
-       * // add the indices for (int ii = 0; ii < 3; ii++) { nIndex_.add(idx[ii][1]); } }
-       */
+      if (autoNormal) {
+//        Coord3d c1 = new Coord3d(x.getReal(C1, i), y.getReal(C1, i), z.getReal(C1, i));
+//        Coord3d c2 = new Coord3d(x.getReal(C2, i), y.getReal(C2, i), z.getReal(C2, i));
+//        Coord3d c3 = new Coord3d(x.getReal(C3, i), y.getReal(C3, i), z.getReal(C3, i));
+//        Coord3d no = Normal.compute(c1, c2, c3);
+
+        // remap them to the right spot
+        idx[0][1] = (idx[0][1] > 0) ? (idx[0][1] - 1) : (normals_.size() - idx[0][1]);
+        idx[1][1] = (idx[1][1] > 0) ? (idx[1][1] - 1) : (normals_.size() - idx[1][1]);
+        idx[2][1] = (idx[2][1] > 0) ? (idx[2][1] - 1) : (normals_.size() - idx[2][1]);
+
+
+        // add the indices
+        for (int ii = 0; ii < 3; ii++) {
+          nIndex_.add(idx[ii][1]);
+        }
+      }
+
     }
     return hasNormals;
   }
@@ -382,8 +426,9 @@ public class OBJFile {
     } else {
       nOffset_ = -1;
     }
-    vertices_.rewind();
-    indices_.rewind();
+
+    BufferUtil.rewind(vertices_);
+    BufferUtil.rewind(indices_);
   }
 
   /**
@@ -495,23 +540,4 @@ public class OBJFile {
         + "  vertexSize = " + getCompiledVertexCount() + "  byteOffset = " + getCompiledVertexSize()
         + "  normalOffset = " + getCompiledNormalOffset() + "  dimensions = " + getPositionSize();
   }
-
-
-  /** Will calculate normals if they are missing */
-  protected boolean autoNormal = true;
-
-  protected List<Float> positions_ = new ArrayList<Float>();
-  protected List<Float> normals_ = new ArrayList<Float>();
-  protected int posSize_;
-
-  protected List<Integer> pIndex_ = new ArrayList<Integer>();
-  protected List<Integer> nIndex_ = new ArrayList<Integer>();
-
-  // data structures optimized for rendering, compiled model
-  protected IntBuffer indices_ = null;
-  protected FloatBuffer vertices_ = null;
-  protected int pOffset_;
-  protected int nOffset_;
-  protected int vtxSize_ = 0;
-  protected int openEdges_;
 };

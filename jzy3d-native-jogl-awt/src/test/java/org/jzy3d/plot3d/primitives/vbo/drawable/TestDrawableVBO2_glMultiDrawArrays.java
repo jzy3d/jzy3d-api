@@ -2,10 +2,10 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.util.List;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.io.BufferUtil;
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Composite;
