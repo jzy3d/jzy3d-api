@@ -16,9 +16,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: [ '9.0.0+0' ] # , '11.0.12+7'
-        os: [ 'self-hosted'] # , 'windows-latest', windows-2016
-        # 'macos-10.15' works thanks to software renderer + JOGL timeout expansion 
+        java: [ '9.0.0+0', '11.0.12+7' ] # ,
+        os: ['self-hosted'] # , 'windows-latest', windows-2016
+        # 'macos-10.15' works thanks to software renderer + JOGL timeout expansion
         # 'windows-2016' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943151589
         # 'ubuntu-18.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943110442
 
