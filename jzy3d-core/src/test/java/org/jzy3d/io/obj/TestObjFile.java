@@ -1,6 +1,7 @@
 package org.jzy3d.io.obj;
 
 import java.io.File;
+import java.nio.file.Paths;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -14,7 +15,10 @@ public class TestObjFile {
     OBJFile objFile = new OBJFile();
 
     String objFilePath = "data/objfiles/bunny.obj";
-    objFile.loadModelFromFilename("file://" + new File(objFilePath).getAbsolutePath());
+    File f = new File("./" + objFilePath);
+    Assert.assertTrue(f.exists());
+    
+    objFile.loadModelFromFile(f);
 
 
     int countVertices = objFile.getPositionCount();
@@ -43,7 +47,12 @@ public class TestObjFile {
     OBJFile objFile = new OBJFile();
 
     String objFilePath = "data/objfiles/dragon.obj";
-    objFile.loadModelFromFilename("file://" + new File(objFilePath).getAbsolutePath());
+    File f = new File("./" + objFilePath);
+    Assert.assertTrue(f.exists());
+
+    objFile.loadModelFromFile(f);
+
+    //objFile.loadModelFromFilename("file://" + new File(objFilePath).getAbsolutePath());
 
     int countVertices = objFile.getPositionCount();
     int indexSize = objFile.getIndexCount();

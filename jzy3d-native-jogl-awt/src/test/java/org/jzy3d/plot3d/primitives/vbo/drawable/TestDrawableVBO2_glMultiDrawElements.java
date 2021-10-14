@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.io.BufferUtil;
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal.NormalMode;
