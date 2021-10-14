@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         java: [ '9.0.0+0' ] # , '11.0.12+7'
-        os: [ 'macos-10.15', 'windows-2016' ] # , 'windows-latest', windows-2016 'ubuntu-18.04'
+        os: [ 'self-hosted', 'macos-10.15', 'windows-2016' ] # , 'windows-latest', windows-2016 'ubuntu-18.04'
         # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on
         # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
 
