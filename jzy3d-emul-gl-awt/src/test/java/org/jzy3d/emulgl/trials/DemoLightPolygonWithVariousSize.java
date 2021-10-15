@@ -1,5 +1,6 @@
 package org.jzy3d.emulgl.trials;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.chart.Chart;
@@ -9,11 +10,15 @@ import org.jzy3d.chart.controllers.mouse.camera.AdaptiveRenderingPolicy;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
+import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.primitives.Geometry;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.RandomGeom;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
+import jgl.GL;
+import jgl.Util;
+import jgl.context.gl_context;
 
 public class DemoLightPolygonWithVariousSize {
 
@@ -35,35 +40,42 @@ public class DemoLightPolygonWithVariousSize {
 
     Color color = Color.ORANGE;
     boolean wireframe = true;
+    Color wireColor = Color.BLUE;
     
     Polygon p;
     int n = 20;
     for (int i = 0; i < n; i++) {
       p = geom.poly(i, 0, 0, 1, 1, true, color); 
       p.setWireframeDisplayed(wireframe);
+      p.setWireframeColor(wireColor);
       polys.add(p);      
     }
 
     p = geom.poly(0, 1, 0, n, 1, true, color);
     p.setWireframeDisplayed(wireframe);
+    p.setWireframeColor(wireColor);
     polys.add(p);
 
     p = geom.poly(20, 0, 0, 20, 2, true, color);
     p.setWireframeDisplayed(wireframe);
+    p.setWireframeColor(wireColor);
     polys.add(p);
     
     /*for (int i = 0; i < n; i++) {
       p = geom.poly(0, 0, i, 1, 1, false, color); 
       p.setWireframeDisplayed(wireframe);
+      p.setWireframeColor(wireColor);
       polys.add(p);      
     }
 
     p = geom.poly(0, 0, 0, n, 1, false, color);
     p.setWireframeDisplayed(wireframe);
+    p.setWireframeColor(wireColor);
     polys.add(p);
 
     p = geom.poly(20, 0, 0, 20, 2, false, color);
     p.setWireframeDisplayed(wireframe);
+    p.setWireframeColor(wireColor);
     polys.add(p);*/
 
     
@@ -107,6 +119,17 @@ public class DemoLightPolygonWithVariousSize {
       skin.getMouse().setPolicy(policy);
       skin.getCanvas().setProfileDisplayMethod(true);
     }
+    
+    
+    GL gl = ((EmulGLPainter)chart.getPainter()).getGL();
+    gl_context context = gl.getContext();
+    BufferedImage im = Util.debugDepthBufferToBufferedImage(gl, "target/depth.png");
+    
+    
+
+    
+    //Image jGLColorBuffer = canvas.createImage(producer);
+    
 
     // ----------------------------------
     // Debug
