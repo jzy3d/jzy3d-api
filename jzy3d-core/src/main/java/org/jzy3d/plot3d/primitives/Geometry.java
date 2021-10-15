@@ -14,6 +14,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
 import org.jzy3d.maths.Normal.NormalPer;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.painters.DepthFunc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -181,7 +182,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   }
 
   /* * */
-
+  
 
   @Override
   public void draw(IPainter painter) {
@@ -195,13 +196,23 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       applyMaterial(painter);
     }
 
+    
     // Draw content of polygon
+    if(depthFunctionChangeForWireframe)
+      painter.glDepthFunc(DepthFunc.GL_LESS);
+    
     drawFace(painter);
 
     // drawing order is important for EmulGL to cleanly render polygon edges
-
+    if(depthFunctionChangeForWireframe) {
+      painter.glDepthFunc(DepthFunc.GL_LEQUAL);
+    }
+    
     // Draw edge of polygon
     drawWireframe(painter);
+
+    if(depthFunctionChangeForWireframe)
+      painter.glDepthFunc(DepthFunc.GL_LESS);
 
     if (mapper != null)
       mapper.postDraw(this);
@@ -593,7 +604,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     }
   }
 
-  protected boolean wireframeWithLineLoop = true;
 
 
   /**
