@@ -1027,4 +1027,29 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
     // TODO Auto-generated method stub
     
   }
+  
+  @Override
+  public void glDepthFunc(DepthFunc func) {
+    switch(func) {
+      case GL_ALWAYS: gl.glDepthFunc(GL.GL_ALWAYS); break;
+      case GL_NEVER: gl.glDepthFunc(GL.GL_NEVER); break;
+      case GL_EQUAL: gl.glDepthFunc(GL.GL_EQUAL); break;
+      case GL_GEQUAL: gl.glDepthFunc(GL.GL_GEQUAL); break;
+      case GL_GREATER: gl.glDepthFunc(GL.GL_GREATER); break;
+      case GL_LEQUAL: gl.glDepthFunc(GL.GL_LEQUAL); break;
+      case GL_LESS: gl.glDepthFunc(GL.GL_LESS); break;
+      case GL_NOTEQUAL: gl.glDepthFunc(GL.GL_NOTEQUAL); break;
+    }
+  }
+  
+  @Override
+  public void glEnable_DepthTest() {
+    gl.glEnable(GL.GL_DEPTH_TEST);    
+  }
+
+  @Override
+  public void glDisable_DepthTest() {
+    gl.glDisable(GL.GL_DEPTH_TEST);    
+  }
+
 }
