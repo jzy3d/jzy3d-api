@@ -183,7 +183,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
   /* * */
   
-  boolean depthFunctionChangeForWireframe = true;
 
 
   @Override
@@ -606,7 +605,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
     }
   }
 
-  protected boolean wireframeWithLineLoop = true;
 
 
   /**
