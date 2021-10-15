@@ -413,13 +413,22 @@ public class Chart {
    */
   public Chart add(Drawable drawable, boolean updateView) {
     drawable.setSpaceTransformer(getView().getSpaceTransformer());
-    getScene().getGraph().add(drawable, updateView);
     
+    // 1. Add object
+    getScene().getGraph().add(drawable, false);
+    
+    // 2. Mount if it requires a GPU context
     if(drawable instanceof IGLBindedResource && view.isInitialized()) {
       logger.warn("Drawables implementing IGLBindedResource must be added to chart before the view has initialized, hence before the chart is open.");
 
       getView().initResources(); // invoke loading GL binded resource in case this drawable requires it
 
+    }
+
+    // 3. Update the bounds ONLY AFTER vbo have been mounted, since their bounds are only
+    // available at that time
+    if(updateView) {
+      getView().updateBounds();
     }
     
     updateLightsOnCameraPositions();
