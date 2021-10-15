@@ -30,10 +30,20 @@ public abstract class Wireframeable extends Drawable {
 
   protected boolean faceDisplayed;
 
+  // these 5 fields are different way of dealing with coplanar polygon/line rendering
+  // which work differently depending on native, emulgl, etc
+  
+  /** if true, use line loop for rendering polygon border, otherwise use polygon mode + line mode. */
+  protected boolean wireframeWithLineLoop = true;
+  /** if true, may change depth function while rendering wireframe to avoid Z-fighting with polygon face. */
+  protected boolean depthFunctionChangeForWireframe = true;
+  /** if true, may change the depth range to set lines and polygons in different spaces. Not accurate. */
   protected boolean polygonWireframeDepthTrick = false;
+  /** if true, enable polygon offset fill, which is the most clean way of handling polygon fill / line Z fighting, but only available in native mode (not emulgl)*/
   protected boolean polygonOffsetFillEnable = true;
   protected float polygonOffsetFactor = 1.0f;
   protected float polygonOffsetUnit = 1.0f;
+
 
   protected boolean reflectLight = false;
   protected Color materialAmbiantReflection = new Color(1, 1, 1, 1);
