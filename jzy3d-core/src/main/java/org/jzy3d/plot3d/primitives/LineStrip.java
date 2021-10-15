@@ -8,6 +8,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.painters.DepthFunc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -103,7 +104,16 @@ public class LineStrip extends Wireframeable {
   @Override
   public void draw(IPainter painter) {
     doTransform(painter);
+    
+    /*// drawing order is important for EmulGL to cleanly render polygon edges
+    if(depthFunctionChangeForWireframe) {
+      painter.glDepthFunc(DepthFunc.GL_LEQUAL);
+    }
+    
+    if (polygonWireframeDepthTrick)
+      applyDepthRangeForOverlying(painter); // ENABLE RANGE FOR UNDER*/
 
+    
     // Draw a line (or point if there is a single point in this line)
     if (points.size() > 1) {
       drawLine(painter);
@@ -111,6 +121,16 @@ public class LineStrip extends Wireframeable {
       drawPoints(painter);
     }
 
+    /*// reset depth buffer function
+    if(depthFunctionChangeForWireframe) {
+      painter.glDepthFunc(DepthFunc.GL_LESS);
+    }
+    
+    if (polygonWireframeDepthTrick)
+      applyDepthRangeDefault(painter); // ENABLE RANGE FOR UNDER*/
+
+    
+    // draw symbols on points
     if (showSymbols && symbolHandler != null) {
       symbolHandler.drawSymbols(painter);
     }
