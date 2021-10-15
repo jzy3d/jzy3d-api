@@ -75,11 +75,10 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   public void configureGL(Quality quality) {
     // Activate Depth buffer
     if (quality.isDepthActivated()) {
-      gl.glEnable(GL.GL_DEPTH_TEST);
-      gl.glDepthFunc(GL.GL_LESS);
+      glEnable_DepthTest();
+      glDepthFunc(DepthFunc.GL_LESS);
     } else {
-      gl.glDisable(GL.GL_DEPTH_TEST);
-      // gl.glDepthRangef(n, f);
+      glDisable_DepthTest();
     }
     
     // Blending : more beautifull with jGL without this
@@ -102,16 +101,18 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
     // Activate tranparency
     if (quality.isAlphaActivated()) {
-      gl.glEnable(GL.GL_BLEND);
+      glEnable_Blend();
       gl.glEnable(GL.GL_ALPHA_TEST);
 
       if (quality.isDisableDepthBufferWhenAlpha()) {
         // Disable depth test to keeping pixels of
         // "what's behind a polygon" when drawing with
         // alpha
-        gl.glDisable(GL.GL_DEPTH_TEST);
+        glDisable_DepthTest();
+        //gl.glDisable(GL.GL_DEPTH_TEST);
       }
     } else {
+      
       gl.glDisable(GL.GL_ALPHA_TEST);
     }
 
@@ -1427,6 +1428,31 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   @Override
   public void glHint_PointSmooth_Nicest() {
     glHint(GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+  }
+
+  @Override
+  public void glDepthFunc(DepthFunc func) {
+    switch(func) {
+      case GL_ALWAYS: gl.glDepthFunc(GL.GL_ALWAYS); break;
+      case GL_NEVER: gl.glDepthFunc(GL.GL_NEVER); break;
+      case GL_EQUAL: gl.glDepthFunc(GL.GL_EQUAL); break;
+      case GL_GEQUAL: gl.glDepthFunc(GL.GL_GEQUAL); break;
+      case GL_GREATER: gl.glDepthFunc(GL.GL_GREATER); break;
+      case GL_LEQUAL: gl.glDepthFunc(GL.GL_LEQUAL); break;
+      case GL_LESS: gl.glDepthFunc(GL.GL_LESS); break;
+      case GL_NOTEQUAL: gl.glDepthFunc(GL.GL_NOTEQUAL); break;
+      default: throw new RuntimeException("Enum value not supported : " + func);
+    }
+  }
+
+  @Override
+  public void glEnable_DepthTest() {
+    gl.glEnable(GL.GL_DEPTH_TEST);    
+  }
+
+  @Override
+  public void glDisable_DepthTest() {
+    gl.glDisable(GL.GL_DEPTH_TEST);    
   }
 
 }
