@@ -184,7 +184,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
   /* * */
   
 
-
   @Override
   public void draw(IPainter painter) {
     doTransform(painter);
