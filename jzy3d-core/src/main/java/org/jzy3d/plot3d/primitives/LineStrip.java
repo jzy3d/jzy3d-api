@@ -105,6 +105,9 @@ public class LineStrip extends Wireframeable {
   public void draw(IPainter painter) {
     doTransform(painter);
     
+    //depthFunctionChangeForWireframe = true;
+    //polygonWireframeDepthTrick = true;
+    
     /*// drawing order is important for EmulGL to cleanly render polygon edges
     if(depthFunctionChangeForWireframe) {
       painter.glDepthFunc(DepthFunc.GL_LEQUAL);
