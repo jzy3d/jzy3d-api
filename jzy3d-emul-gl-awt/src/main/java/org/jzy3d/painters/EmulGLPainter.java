@@ -832,6 +832,53 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   public void glPassThrough(float token) {
     gl.glPassThrough(token);
   }
+  
+  // GL STENCIL BUFFER
+  
+  @Override
+  public void glStencilFunc(StencilFunc func, int ref, int mask) {
+    switch(func) {
+      case GL_ALWAYS: gl.glStencilFunc(GL.GL_ALWAYS, ref, mask); break;
+      case GL_EQUAL: gl.glStencilFunc(GL.GL_EQUAL, ref, mask); break;
+      case GL_GREATER: gl.glStencilFunc(GL.GL_GREATER, ref, mask); break;
+      case GL_GEQUAL: gl.glStencilFunc(GL.GL_GEQUAL, ref, mask); break;
+      case GL_LEQUAL: gl.glStencilFunc(GL.GL_LEQUAL, ref, mask); break;
+      case GL_LESS: gl.glStencilFunc(GL.GL_LESS, ref, mask); break;
+      case GL_NEVER: gl.glStencilFunc(GL.GL_NEVER, ref, mask); break;
+      case GL_NOTEQUAL: gl.glStencilFunc(GL.GL_NOTEQUAL, ref, mask); break;
+
+      default: throw new IllegalArgumentException("Unknown enum value for StencilFunc: " + func);
+    }
+  }
+
+  @Override
+  public void glStencilMask(int mask) {
+    gl.glStencilMask(mask);
+    
+  }
+
+  @Override
+  public void glStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) {
+    gl.glStencilOp(toInt(fail), toInt(zfail), toInt(zpass));
+  }
+
+  @Override
+  public void glClearStencil(int s) {
+    gl.glClearStencil(s);
+  }
+
+  protected int toInt(StencilOp fail) {
+    switch(fail) {
+      case GL_DECR: return GL.GL_DECR;
+      case GL_INCR: return GL.GL_INCR;
+      case GL_INVERT: return GL.GL_INVERT;
+      case GL_KEEP: return GL.GL_KEEP;
+      case GL_REPLACE: return GL.GL_REPLACE;
+      case GL_ZERO: return GL.GL_ZERO;
+      default: throw new IllegalArgumentException("Unknown enum value for StencilOp: " + fail);
+    }
+  }
+
 
   // GL VIEWPOINT
 

@@ -138,8 +138,11 @@ public interface IPainter {
   public ICanvas getCanvas();
 
   public void setCanvas(ICanvas canvas);
-  
-  /** Return the Quality setting of the chart, which may be different from the one given at the {@link #configureGL(Quality)} step. */
+
+  /**
+   * Return the Quality setting of the chart, which may be different from the one given at the
+   * {@link #configureGL(Quality)} step.
+   */
   public Quality getQuality();
 
   /** Apply quality settings as OpenGL commands */
@@ -401,13 +404,13 @@ public interface IPainter {
   public void gluCylinder(double base, double top, double height, int slices, int stacks);
 
   // GLUT INTERFACE
-  
+
   public void glutSolidSphere(double radius, int slices, int stacks);
 
   public void glutSolidCube(final float size);
-  
+
   public void glutSolidTeapot(float scale);
-  
+
   public void glutWireTeapot(float scale);
 
 
@@ -426,6 +429,121 @@ public interface IPainter {
   public void glGetDoublev(int pname, double[] params, int params_offset);
 
   public void glGetFloatv(int pname, float[] data, int data_offset);
+
+  // GL STENCIL BUFFER
+
+  /**
+   * Stenciling, like depth-buffering, enables and disables drawing on a per-pixel basis. Stencil
+   * planes are first drawn into using GL drawing primitives, then geometry and images are rendered
+   * using the stencil planes to mask out portions of the screen. Stenciling is typically used in
+   * multipass rendering algorithms to achieve special effects, such as decals, outlining, and
+   * constructive solid geometry rendering.
+   * 
+   * The stencil test conditionally eliminates a pixel based on the outcome of a comparison between
+   * the reference value and the value in the stencil buffer. To enable and disable the test, call
+   * glEnable and glDisable with argument GL_STENCIL_TEST. To specify actions based on the outcome
+   * of the stencil test, call glStencilOp or glStencilOpSeparate.
+   * 
+   * There can be two separate sets of func, ref, and mask parameters; one affects back-facing
+   * polygons, and the other affects front-facing polygons as well as other non-polygon primitives.
+   * glStencilFunc sets both front and back stencil state to the same values. Use
+   * glStencilFuncSeparate to set front and back stencil state to different values.
+   * 
+   * func is a symbolic constant that determines the stencil comparison function. It accepts one of
+   * eight values, shown in the following list. ref is an integer reference value that is used in
+   * the stencil comparison. It is clamped to the range 0 2 n - 1 , where n is the number of
+   * bitplanes in the stencil buffer. mask is bitwise ANDed with both the reference value and the
+   * stored stencil value, with the ANDed values participating in the comparison.
+   * 
+   * If stencil represents the value stored in the corresponding stencil buffer location, the
+   * following list shows the effect of each comparison function that can be specified by func. Only
+   * if the comparison succeeds is the pixel passed through to the next stage in the rasterization
+   * process (see glStencilOp). All tests treat stencil values as unsigned integers in the range 0 2
+   * n - 1 , where n is the number of bitplanes in the stencil buffer.
+   * 
+   * The following values are accepted by func:
+   * 
+   * <ul>
+   * <li>GL_NEVER Always fails.
+   * <li>GL_LESS Passes if ( ref & mask ) < ( stencil & mask ).
+   * <li>GL_LEQUAL Passes if ( ref & mask ) <= ( stencil & mask ).
+   * <li>GL_GREATER Passes if ( ref & mask ) > ( stencil & mask ).
+   * <li>GL_GEQUAL Passes if ( ref & mask ) >= ( stencil & mask ).
+   * <li>GL_EQUAL Passes if ( ref & mask ) = ( stencil & mask ).
+   * <li>GL_NOTEQUAL Passes if ( ref & mask ) != ( stencil & mask ).
+   * <li>GL_ALWAYS Always passes.
+   * </ul>
+   * 
+   * @param func sets the stencil test function that determines whether a fragment passes or is
+   *        discarded. This test function is applied to the stored stencil value and the
+   *        glStencilFunc's ref value. Possible options are: GL_NEVER, GL_LESS, GL_LEQUAL,
+   *        GL_GREATER, GL_GEQUAL, GL_EQUAL, GL_NOTEQUAL and GL_ALWAYS. The semantic meaning of
+   *        these is similar to the depth buffer's functions.
+   * @param ref specifies the reference value for the stencil test. The stencil buffer's content is
+   *        compared to this value.
+   * @param mask specifies a mask that is ANDed with both the reference value and the stored stencil
+   *        value before the test compares them. Initially set to all 1s.
+   * 
+   * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glStencilFunc.xhtml
+   */
+  public void glStencilFunc(StencilFunc func, int ref, int mask);
+
+  /**
+   * glStencilMask controls the writing of individual bits in the stencil planes. The least
+   * significant n bits of mask, where n is the number of bits in the stencil buffer, specify a
+   * mask. Where a 1 appears in the mask, it's possible to write to the corresponding bit in the
+   * stencil buffer. Where a 0 appears, the corresponding bit is write-protected. Initially, all
+   * bits are enabled for writing.
+   * 
+   * There can be two separate mask writemasks; one affects back-facing polygons, and the other
+   * affects front-facing polygons as well as other non-polygon primitives. glStencilMask sets both
+   * front and back stencil writemasks to the same values. Use glStencilMaskSeparate to set front
+   * and back stencil writemasks to different values.
+   * 
+   * @param mask
+   * 
+   * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glStencilMask.xml
+   */
+  public void glStencilMask(int mask);
+
+  /**
+   * The glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass) contains three options of which we
+   * can specify for each option what action to take:
+   *
+   * @param fail action to take if the stencil test fails.
+   * @param zfail action to take if the stencil test passes, but the depth test fails.
+   * @param zpass action to take if both the stencil and the depth test pass.
+   * 
+   *        Then for each of the options you can take any of the following actions:
+   *        <ul>
+   *        <li>Action : Description
+   *        <li>GL_KEEP : The currently stored stencil value is kept.
+   *        <li>GL_ZERO : The stencil value is set to 0.
+   *        <li>GL_REPLACE : The stencil value is replaced with the reference value set with
+   *        glStencilFunc.
+   *        <li>GL_INCR : The stencil value is increased by 1 if it is lower than the maximum value.
+   *        <li>GL_INCR_WRAP : Same as GL_INCR, but wraps it back to 0 as soon as the maximum value
+   *        is exceeded.
+   *        <li>GL_DECR : The stencil value is decreased by 1 if it is higher than the minimum
+   *        value.
+   *        <li>GL_DECR_WRAP : Same as GL_DECR, but wraps it to the maximum value if it ends up
+   *        lower than 0.
+   *        <li>GL_INVERT : Bitwise inverts the current stencil buffer value.
+   *        </ul>
+   * 
+   * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glStencilOp.xml
+   */
+  public void glStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass);
+
+  /**
+   * glClearStencil specifies the index used by glClear to clear the stencil buffer. s is masked
+   * with 2 m - 1 , where m is the number of bits in the stencil buffer.
+   * 
+   * @param s
+   * 
+   * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glClearStencil.xml
+   */
+  public void glClearStencil(int s);
 
   // GL LIGHTS
 
@@ -452,7 +570,7 @@ public interface IPainter {
   public void glLightModel(LightModel model, boolean value);
 
   public void glLightModel(LightModel model, Color color);
-  
+
   public void glLight_Position(int lightId, float[] positionZero);
 
   public void glLight_Ambiant(int lightId, Color ambiantColor);
@@ -460,7 +578,7 @@ public interface IPainter {
   public void glLight_Diffuse(int lightId, Color diffuseColor);
 
   public void glLight_Specular(int lightId, Color specularColor);
-  
+
   public void glLight_Shininess(int lightId, float value);
 
   public void glMaterialfv(int face, int pname, float[] params, int params_offset);
@@ -560,7 +678,7 @@ public interface IPainter {
   public void glEnable_PointSmooth();
 
   public void glHint_PointSmooth_Nicest();
-  
+
   public void glEnable_DepthTest();
 
   public void glDisable_DepthTest();
