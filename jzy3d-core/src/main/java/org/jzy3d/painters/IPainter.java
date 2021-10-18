@@ -684,4 +684,8 @@ public interface IPainter {
   public void glDisable_DepthTest();
 
   public void glDepthFunc(DepthFunc func);
+  
+  public void glEnable_Stencil();
+  
+  public void glDisable_Stencil();
 }
