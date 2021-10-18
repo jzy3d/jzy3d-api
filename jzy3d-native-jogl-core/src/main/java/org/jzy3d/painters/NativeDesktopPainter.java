@@ -632,9 +632,19 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   @Override
   public void glStencilMask(int mask) {
     gl.glStencilMask(mask);
-
   }
 
+  @Override
+  public void glStencilMask_True() {
+    gl.glStencilMask(GL.GL_TRUE);
+  }
+
+  @Override
+  public void glStencilMask_False(){
+    gl.glStencilMask(GL.GL_FALSE);    
+  }
+
+  
   @Override
   public void glStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) {
     gl.glStencilOp(toInt(fail), toInt(zfail), toInt(zpass));
@@ -1248,12 +1258,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   
   @Override
   public void glEnable_Stencil() {
-    gl.glEnable(GL2.GL_STENCIL);
+    gl.glEnable(GL2.GL_STENCIL_TEST);
   }
   
   @Override
   public void glDisable_Stencil() {
-    gl.glDisable(GL2.GL_STENCIL);
+    gl.glDisable(GL2.GL_STENCIL_TEST);
   }
 
 

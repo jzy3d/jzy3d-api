@@ -531,7 +531,16 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   @Override
   public void glStencilMask(int mask) {
     gl.glStencilMask(mask);
+  }
 
+  @Override
+  public void glStencilMask_True() {
+    gl.glStencilMask(GL.GL_TRUE);
+  }
+
+  @Override
+  public void glStencilMask_False(){
+    gl.glStencilMask(GL.GL_FALSE);    
   }
 
   @Override
