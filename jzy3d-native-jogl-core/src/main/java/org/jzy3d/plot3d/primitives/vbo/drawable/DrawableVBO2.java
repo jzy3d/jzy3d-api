@@ -737,13 +737,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       doDrawGeometries(gl2);
     }
 
-    /*
-     * for (int i = 0; i < elements.capacity(); i++) { System.out.print(elements.get(i)+"|"); }
-     * System.out.println();
-     */
-
-
-
     // -----------------------------------
     // Draw wireframe
 
