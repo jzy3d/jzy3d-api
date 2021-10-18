@@ -878,6 +878,16 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
       default: throw new IllegalArgumentException("Unknown enum value for StencilOp: " + fail);
     }
   }
+  
+  @Override
+  public void glStencilMask_True() {
+    gl.glStencilMask(1);
+  }
+
+  @Override
+  public void glStencilMask_False(){
+    gl.glStencilMask(0);    
+  }
 
 
   // GL VIEWPOINT

@@ -649,6 +649,10 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   @Override
   public void draw(IPainter painter) {
+    if(!hasMountedOnce) {
+      mount(painter);
+    }
+    
     if (hasMountedOnce) {
       
       if(nextColorBuffer!=null) {
