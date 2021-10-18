@@ -506,6 +506,11 @@ public interface IPainter {
    */
   public void glStencilMask(int mask);
 
+  public void glStencilMask_True();
+
+  public void glStencilMask_False();
+
+  
   /**
    * The glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass) contains three options of which we
    * can specify for each option what action to take:
