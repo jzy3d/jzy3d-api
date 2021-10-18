@@ -1501,5 +1501,16 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   public void glDisable_DepthTest() {
     gl.glDisable(GL.GL_DEPTH_TEST);    
   }
+  
+  @Override
+  public void glEnable_Stencil() {
+    gl.glEnable(GL.GL_STENCIL);
+  }
+  
+  @Override
+  public void glDisable_Stencil() {
+    gl.glDisable(GL.GL_STENCIL);
+  }
+
 
 }
