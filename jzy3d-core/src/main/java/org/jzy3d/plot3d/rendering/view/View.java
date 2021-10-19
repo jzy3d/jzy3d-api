@@ -177,13 +177,15 @@ public class View {
     this.viewpoint = VIEWPOINT_DEFAULT.clone();
     this.center = sceneBounds.getCenter();
     this.scaling = Coord3d.IDENTITY.clone();
-    this.viewBounds = null;
-    //this.viewBounds = new BoundingBox3d(-1, 1, -1, 1, -1, 1);
+    //this.viewBounds = null;
+    this.viewBounds = new BoundingBox3d(-1, 1, -1, 1, -1, 1);
     this.viewMode = ViewPositionMode.FREE;
     this.boundsMode = ViewBoundMode.AUTO_FIT;
     this.cameraMode = CameraMode.ORTHOGONAL;
 
-    this.axis = factory.newAxe(sceneBounds, this);
+    //this.axis = factory.newAxe(sceneBounds, this);
+    this.axis = factory.newAxe(viewBounds, this);
+    
     this.cam = factory.newCamera(center);
     this.painter = factory.getPainterFactory().newPainter();
     this.painter.setCamera(cam);
@@ -537,8 +539,11 @@ public class View {
    * range.
    */
   public void lookToBox(BoundingBox3d box) {
-    if (box.isReset())
+    if (box.isReset()) {
       return;
+    }
+    //System.out.println("Look at box " + box);
+    
     center = box.getCenter();
     axis.setAxe(box);
     viewBounds = box;
@@ -912,6 +917,9 @@ public class View {
 
   public void initResources() {
     getScene().getGraph().mountAllGLBindedResources(painter);
+    
+    // refresh bounds as we may have mount VBO objects which NOW have bounds defined
+    updateBounds();
   }
 
   /** Clear the color and depth buffer. */
