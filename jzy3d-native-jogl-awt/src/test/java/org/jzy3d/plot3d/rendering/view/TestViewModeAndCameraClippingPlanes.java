@@ -17,20 +17,18 @@ import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 /**
- * Test behaviours of {@link View} and {@link Camera}
+ * Test behaviours of {@link View} and {@link Camera}.
  * 
+ * Especially foster on verifying that view.getBounds() always return something relevant in case of
+ * <ul>
+ * <li>Empty scene OR Scene made of geometry with known bounds OR geometry with bounds that are known later (VBO).
+ * <li>Check bounds wether object are added before or after opening an onscreen chart, or while using an offscreen one (which never opens).
+ * </ul>
  * @author martin
  *
  */
 public class TestViewModeAndCameraClippingPlanes {
-  /**
-   * WARNING!!!
-   * 
-   * This is a poor way of checking if a view is in initialized state after a call to open, since
-   * actual required wait time will depend on the computer executing the test.
-   * 
-   * We could use a CountDownLatch to test this but fear the test becomes harder to read.
-   */
+  /** Max time to wait before considering initialization failed.*/
   private static final int GL_INIT_MAX_WAIT_SECONDS = 10;
   
   /////////////////////////////////////////////////////////////////////////////////////
