@@ -346,12 +346,31 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
         NormalMode.REPEATED));
   }
 
-  public DrawableVBO2(List<Polygon> polygons, int verticesPerGeometry) {
-    this(makeLoader(polygons, verticesPerGeometry));
+  /** 
+   * Build a VBO out of simple polygons.
+   * 
+   * Assume the same number of vertices for all polygons given the list.
+   */
+  public DrawableVBO2(List<Polygon> polygons) {
+    this(makeLoader(polygons, polygons.get(0).size()));
   }
 
-  public static DrawableVBO2 fromComposites(List<Composite> composites, int pointsPerPolygon) {
-    return new DrawableVBO2(Decomposition.getPolygonDecomposition(composites), pointsPerPolygon);
+  /** 
+   * Build a VBO out of a composite made of simple polygons.
+   * 
+   * Assume the same number of vertices for all polygons given the list.
+   */
+  public DrawableVBO2(Composite composite) {
+    this(Decomposition.getPolygonDecomposition(composite));
+  }
+
+  /** 
+   * Build a VBO out of a list of composites made of simple polygons.
+   * 
+   * Assume the same number of vertices for all polygons given the list.
+   */
+  public static DrawableVBO2 fromComposites(List<Composite> composites) {
+    return new DrawableVBO2(Decomposition.getPolygonDecomposition(composites));
   }
 
   /* ********************* glMultiDrawElements ********************** */
