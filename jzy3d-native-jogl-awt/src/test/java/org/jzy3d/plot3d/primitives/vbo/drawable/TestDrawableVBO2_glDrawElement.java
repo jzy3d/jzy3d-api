@@ -137,7 +137,7 @@ public class TestDrawableVBO2_glDrawElement {
     Chart chart = f.newChart(Quality.Intermediate());
 
     // When
-    DrawableVBO2 vbo = new DrawableVBO2(polygons, pointsPerPolygon);
+    DrawableVBO2 vbo = new DrawableVBO2(polygons);
     chart.add(vbo);
 
     /*try {
