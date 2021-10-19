@@ -16,11 +16,13 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['8']
+        java: ['9.0.0+0']
         # ============================================================================================================
         # Zulu Distributions
-        # '9.0.0+0'
-        # '11.0.12+7'
+        # ok : '9.0.0+0'
+        # ok : '11.0.12+7'
+        #
+        # KO : '8' https://github.com/jzy3d/jzy3d-api/runs/3943617371?check_suite_focus=true#step:4:493
         #
         # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
 
@@ -39,7 +41,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up JDK 9
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
