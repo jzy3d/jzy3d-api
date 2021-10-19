@@ -275,9 +275,12 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     drawable.setHasNormalInVertexArray(false);
     drawable.setVerticesPerGeometry(verticesPerGeometry);
     
-    float colorVerticeRatio = (colorBuffer.capacity()/(verticeBuffer.capacity()*1f));
+    float colorVerticeRatio = 1;
     
-    log.debug("COLOR VERTICE RATIO : " + colorVerticeRatio + " - colors:" + colorBuffer.capacity() + " vertices:" + verticeBuffer.capacity());
+    if(colorBuffer!=null) {
+      colorVerticeRatio = (colorBuffer.capacity()/(verticeBuffer.capacity()*1f));
+      log.debug("COLOR VERTICE RATIO : " + colorVerticeRatio + " - colors:" + colorBuffer.capacity() + " vertices:" + verticeBuffer.capacity());
+    }
     
     if(colorVerticeRatio==1) {
       drawable.setColorChannels(3); 
