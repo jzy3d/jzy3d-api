@@ -348,8 +348,13 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.0.0-M5</version>
 					<configuration>
-						<parallel>classes</parallel>
-						<useUnlimitedThreads>true</useUnlimitedThreads>
+						<!-- Comment parallel test because of weird test results in TestViewModeAndCameraClippingPlanes. 
+							When ran from IDE sequentially no problem, when ran from console with bellow 
+							settings, some test fail, when disabling parallel build, no problem -->
+							
+						<!-- <parallel>classes</parallel> <useUnlimitedThreads>true</useUnlimitedThreads> -->
+
+
 						<!-- Configure jogl to wait up to 20 seconds before throwing a timeout 
 							exception. Mainly required when running on Github CI since MacOS VM use a 
 							software implementation -->

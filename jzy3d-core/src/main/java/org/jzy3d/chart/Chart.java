@@ -351,6 +351,15 @@ public class Chart {
     return open(DEFAULT_WINDOW_TITLE, new Rectangle(0, 0, width, height));
   }
 
+  /** A one liner to wait a bit, mainly for test purpose, when needing to have a frame opened and a chart initialized */
+  public void sleep(int mili) {
+    try {
+      Thread.sleep(mili);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+  }
+
   /**
    * Open the frame if it was not opened before
    * 
