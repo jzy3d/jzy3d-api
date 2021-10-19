@@ -101,10 +101,10 @@ public class AxisBox implements IAxis {
 
   public AxisBox(BoundingBox3d bbox, IAxisLayout layout) {
     this.layout = layout;
-    if (bbox.valid())
+    //if (bbox.valid())
       setAxe(bbox);
-    else
-      setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
+    //else
+    //  setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
     wholeBounds = new BoundingBox3d();
     textRenderer = new TextBitmapRenderer();
     rotateLabel = new AxisLabelRotator();

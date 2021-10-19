@@ -48,14 +48,14 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  */
 public class Chart {
   protected static Logger logger = Logger.getLogger(Chart.class);
-  
+
   private static final int MOUSE_PICK_SIZE_DEFAULT = 10;
   private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";
   public static final Quality DEFAULT_QUALITY = Quality.Intermediate();
-  
+
   protected static final int LOD_BOUNDS_ONLY_RENDER_TIME_MS = 30;
   protected static final int LOD_EVAL_TRIALS = 3;
-  protected static final int LOD_EVAL_MAX_EVAL_DURATION_MS = 500; //ms
+  protected static final int LOD_EVAL_MAX_EVAL_DURATION_MS = 500; // ms
 
   protected IChartFactory factory;
 
@@ -351,7 +351,10 @@ public class Chart {
     return open(DEFAULT_WINDOW_TITLE, new Rectangle(0, 0, width, height));
   }
 
-  /** A one liner to wait a bit, mainly for test purpose, when needing to have a frame opened and a chart initialized */
+  /**
+   * A one liner to wait a bit, mainly for test purpose, when needing to have a frame opened and a
+   * chart initialized
+   */
   public void sleep(int mili) {
     try {
       Thread.sleep(mili);
@@ -417,29 +420,52 @@ public class Chart {
    * 
    * @param drawable
    * @param updateView states if the view should be updated immediately. Should be false if adding
-   *        multiple drawable at the same time.
+   *        multiple drawable at the same time. The effect of not updating view is that view bounds
+   *        won't be updated as well
    * @return
    */
   public Chart add(Drawable drawable, boolean updateView) {
     drawable.setSpaceTransformer(getView().getSpaceTransformer());
-    
+
     // 1. Add object
     getScene().getGraph().add(drawable, false);
-    
-    // 2. Mount if it requires a GPU context
-    if(drawable instanceof IGLBindedResource && view.isInitialized()) {
-      logger.warn("Drawables implementing IGLBindedResource must be added to chart before the view has initialized, hence before the chart is open.");
 
-      getView().initResources(); // invoke loading GL binded resource in case this drawable requires it
+    // 2. Mount if it requires a GPU context
+    if (drawable instanceof IGLBindedResource) {
+
+      if (view.isInitialized()) {
+        logger.warn(
+            drawable + " must be added to chart before the view has initialized, hence before the chart is open.");
+
+        // We are in here in the application thread, no in AWT thread, so we have to acquire
+        // GL context, so that the drawable gets mounted with a usable GL instance
+        getPainter().acquireGL();
+
+        ((IGLBindedResource) drawable).mount(getPainter());
+
+        // And we kindly release GL to let AWT render again
+        getPainter().releaseGL();
+
+        System.out.println("Chart.add binded resource with box " + drawable.getBounds());
+
+      } else {
+        logger.warn(
+            drawable + " will be initialized later since the view is not initialized yet. "
+            + "Calling chart.getView().getBounds() won't return anything relevant until chart.open() gets called");
+
+      }
+
+      // getView().initResources(); // invoke loading GL binded resource in case this drawable
+      // requires it
 
     }
 
     // 3. Update the bounds ONLY AFTER vbo have been mounted, since their bounds are only
     // available at that time
-    if(updateView) {
+    if (updateView) {
       getView().updateBounds();
     }
-    
+
     updateLightsOnCameraPositions();
     return this;
   }
@@ -524,13 +550,13 @@ public class Chart {
 
       TicToc t = new TicToc();
       for (LODSetting lodSetting : perf.getCandidates().getReverseRank()) {
-        
+
         // Do not evaluate bounding box rendering which is always short
         // so we simply keep a low constant
-        if(lodSetting.isBoundsOnly()) {
+        if (lodSetting.isBoundsOnly()) {
           perf.setScore(lodSetting, LOD_BOUNDS_ONLY_RENDER_TIME_MS);
         }
-        
+
         // Evaluate other LOD config
         else {
           lodSetting.apply(w);
@@ -541,23 +567,23 @@ public class Chart {
 
           double[] values = new double[trials];
           int k = 0;
-          
+
           // Evaluate tree times and keep the mean, unless
-          // we encounter a poor rendering time 
+          // we encounter a poor rendering time
           for (int i = 0; i < trials; i++) {
             t.tic();
             render();
             t.toc();
             values[k++] = t.elapsedMilisecond();
-            
+
             // Skip full evaluation if rendering time is too high
-            if(values[i]>LOD_EVAL_MAX_EVAL_DURATION_MS) {
+            if (values[i] > LOD_EVAL_MAX_EVAL_DURATION_MS) {
               perf.setScore(lodSetting, values[i]);
             }
             // System.out.println(lodSetting.getName() + " (" + i + ") took " + value + "ms");
           }
-          
-          if(k==trials) {
+
+          if (k == trials) {
             perf.setScore(lodSetting, Statistics.median(values, true));
           }
         }
@@ -719,8 +745,8 @@ public class Chart {
    * Add a light pair syncronized to camera. Top light is 45° above the camera, bottom light is 45°
    * below the camera.
    * 
-   * If these lights were already created, the initial instances are returned, even if the color setting
-   * do not match.
+   * If these lights were already created, the initial instances are returned, even if the color
+   * setting do not match.
    * 
    * @param ambiant
    * @param diffuse

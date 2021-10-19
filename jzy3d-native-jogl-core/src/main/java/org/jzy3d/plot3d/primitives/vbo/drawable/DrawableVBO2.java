@@ -456,11 +456,14 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   @Override
   public void mount(IPainter painter) {
     try {
-      loader.load(painter, this);
-      hasMountedOnce = true;
+      if(!hasMountedOnce()) {
+        loader.load(painter, this);
+        hasMountedOnce = true;
+      }
     } catch (Exception e) {
-      e.printStackTrace();
       Logger.getLogger(DrawableVBO2.class).error(e, e);
+      throw new RuntimeException(e);
+      //e.printStackTrace();
     }
   }
 
