@@ -16,14 +16,25 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['9.0.0+0'] #'11.0.12+7' ,
+        java: ['8']
+        # ============================================================================================================
+        # Zulu Distributions
+        # '9.0.0+0'
+        # '11.0.12+7'
+        #
+        # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
+
         os: ['osx-10-15-3'] # , 'windows-latest', windows-2016
+        # ============================================================================================================
+        # Github virtual machine
         # 'macos-10.15' works thanks to software renderer + JOGL timeout expansion
         # 'windows-2016' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943151589
         # 'ubuntu-18.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943110442
-
+        #
+        # Self hosted physical machines
+        # 'osx-10-15-3'
+        #
         # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on
-        # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
 
     steps:
     - uses: actions/checkout@v2
@@ -51,8 +62,8 @@ jobs:
       #
       #-DskipITs
 
-    - name: Copy Jars
-      run: mkdir staging && cp target/*.jar staging
+    #- name: Copy Jars
+    #  run: mkdir staging && cp target/*.jar staging
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
