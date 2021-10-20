@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['9.0.0+0']
+        java: ['9.0.0+0', '11.0.12+7']
         # ============================================================================================================
         # Java / Zulu Distributions
         # ok : '9.0.0+0'
@@ -26,7 +26,7 @@ jobs:
         #
         # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
 
-        os: ['ubuntu-20.04'] # , 'windows-latest', windows-2016
+        os: ['osx-10-15-3'] # , 'windows-latest', windows-2016
         # ============================================================================================================
         # Github virtual machine
         # ----------------------
@@ -35,6 +35,7 @@ jobs:
         # 'macos-10.15' works thanks to software renderer + JOGL timeout expansion
         # 'windows-2016' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943151589
         # 'ubuntu-18.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943110442
+        # 'ubuntu-20.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-947641249
         #
         # Self hosted physical machines
         # -----------------------------
@@ -60,7 +61,7 @@ jobs:
 
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run: mvn -B package --file pom.xml -Djava.awt.headless=true
       # run: mvn -T 1C -B package --file pom.xml
       # run: mvn -T 1C -B -Dsurefire.useFile=false package --file pom.xml
       # -T 1C : 1 thread per cpu core
