@@ -18,7 +18,7 @@ jobs:
       matrix:
         java: ['9.0.0+0']
         # ============================================================================================================
-        # Zulu Distributions
+        # Java / Zulu Distributions
         # ok : '9.0.0+0'
         # ok : '11.0.12+7'
         #
@@ -26,17 +26,21 @@ jobs:
         #
         # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
 
-        os: ['osx-10-15-3'] # , 'windows-latest', windows-2016
+        os: ['ubuntu-20.04'] # , 'windows-latest', windows-2016
         # ============================================================================================================
         # Github virtual machine
+        # ----------------------
+        # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on
+        #
         # 'macos-10.15' works thanks to software renderer + JOGL timeout expansion
         # 'windows-2016' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943151589
         # 'ubuntu-18.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943110442
         #
         # Self hosted physical machines
+        # -----------------------------
         # 'osx-10-15-3'
         #
-        # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on
+        #
 
     steps:
     - uses: actions/checkout@v2
