@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/jzy3d-core-awt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-emul-gl-awt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-io-reports/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-io-xls/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-jGL/jzy3d-jGL-awt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-jGL/jzy3d-jGL-swt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-jdt-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-native-jogl-awt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-native-jogl-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-native-jogl-newt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-native-jogl-swing/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-native-jogl-swt/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-tester-native/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-tester/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jzy3d-tutorials/src/main/java" charset="UTF-8" />
+  </component>
+</project>

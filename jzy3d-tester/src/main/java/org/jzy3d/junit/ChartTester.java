@@ -26,8 +26,37 @@ public class ChartTester {
 
   public static int TEST_IMG_SIZE = 500;
 
+  protected boolean textInvisible = false;
+
+  protected String testCaseOutputFolder = ERROR_IMAGE_FOLDER_DEFAULT;
+  protected String testCaseInputFolder = EXPECTED_IMAGE_FOLDER;
+
+  public static final String EXPECTED_IMAGE_FOLDER = "src/test/resources/";
+  public static final String ERROR_IMAGE_FOLDER_DEFAULT = "target/";
+
+  // int bufImgType = BufferedImage.TYPE_3BYTE_BGR;// );
+  protected int WIDTH = 800;
+  protected int HEIGHT = 600;
+
+  public boolean isTextInvisible() {
+    return textInvisible;
+  }
+
+  public void setTextInvisible(boolean textInvisible) {
+    this.textInvisible = textInvisible;
+  }
+
   public void assertSimilar(Chart chart, String testImage) {
-    
+    if(isTextInvisible()){
+      chart.getAxisLayout().setXTickColor(chart.getView().getBackgroundColor());
+      chart.getAxisLayout().setYTickColor(chart.getView().getBackgroundColor());
+      chart.getAxisLayout().setZTickColor(chart.getView().getBackgroundColor());
+      chart.getAxisLayout().setXTickLabelDisplayed(false);
+      chart.getAxisLayout().setYTickLabelDisplayed(false);
+      chart.getAxisLayout().setZTickLabelDisplayed(false);
+      chart.render();
+      //chart.getAxisLayout().setMainColor(chart.getView().getBackgroundColor());
+    }
     if(!chart.getFactory().getPainterFactory().isOffscreen()) {
       logger.warn("Making assertions on a non offscreen chart");
     }
@@ -314,13 +343,5 @@ public class ChartTester {
     this.testCaseOutputFolder = testCaseOutputFolder;
   }
 
-  protected String testCaseOutputFolder = ERROR_IMAGE_FOLDER_DEFAULT;
-  protected String testCaseInputFolder = EXPECTED_IMAGE_FOLDER;
 
-  public static final String EXPECTED_IMAGE_FOLDER = "src/test/resources/";
-  public static final String ERROR_IMAGE_FOLDER_DEFAULT = "target/";
-
-  // int bufImgType = BufferedImage.TYPE_3BYTE_BGR;// );
-  protected int WIDTH = 800;
-  protected int HEIGHT = 600;
 }
