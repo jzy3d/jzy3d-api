@@ -236,6 +236,13 @@
 
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
+				<artifactId>org.eclipse.swt.cocoa.macosx.aarch64</artifactId>
+				<optional>true</optional>
+				<version>${version.swt}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.jface</artifactId>
 				<version>3.12.1</version>
 			</dependency>
