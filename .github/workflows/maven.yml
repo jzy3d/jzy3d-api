@@ -15,7 +15,7 @@ jobs:
   # ============================================================================================================
   # Main Build & Test Matrix
 
-  build-and-test:
+  macos-10-15-x86_64:
 
     #runs-on: macos-10.15
     runs-on: ${{ matrix.os }}
@@ -76,6 +76,7 @@ jobs:
       #
       #-DskipITs
 
+
     #- name: Copy Jars
     #  run: mkdir staging && cp target/*.jar staging
 
@@ -92,7 +93,7 @@ jobs:
   # ============================================================================================================
   # Testing new hardware build nodes
 
-  macos-arm64-incubation:
+  macos-11-4-arm64:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
