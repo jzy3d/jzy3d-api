@@ -20,7 +20,6 @@ import org.jzy3d.plot3d.transform.Transform;
  *
  */
 public class CoplanarityManager extends Drawable implements IGLBindedResource {
-  protected Drawable outline;
   protected List<Drawable> outlines;
   protected Drawable plane;
 
@@ -49,12 +48,12 @@ public class CoplanarityManager extends Drawable implements IGLBindedResource {
   protected void computeBounds(List<Drawable> outlines, Drawable plane) {
     this.bbox = new BoundingBox3d();
 
-    if (plane.getBounds() != null) {
+    if (plane.getBounds() != null && !plane.getBounds().isReset()) {
       bbox.add(plane.getBounds());
     }
 
     for (Drawable outline : outlines) {
-      if (outline.getBounds() != null) {
+      if (outline.getBounds() != null && !outline.getBounds().isReset()) {
         bbox.add(outline.getBounds());
       }
     }
