@@ -29,6 +29,8 @@ jobs:
         #
         # KO : '8' https://github.com/jzy3d/jzy3d-api/runs/3943617371?check_suite_focus=true#step:4:493
         #
+        # Try -Djava.awt.headless=true
+        #
         # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
 
         os: ['osx-10-15-3'] # , 'windows-latest', windows-2016
@@ -66,7 +68,7 @@ jobs:
 
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml -Djava.awt.headless=true
+      run: mvn -B package --file pom.xml
       # run: mvn -T 1C -B package --file pom.xml
       # run: mvn -T 1C -B -Dsurefire.useFile=false package --file pom.xml
       # -T 1C : 1 thread per cpu core
@@ -107,7 +109,7 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn -B package --file pom.xml -Djava.awt.headless=true
+      run: mvn -B package --file pom.xml
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
