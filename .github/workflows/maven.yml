@@ -88,6 +88,10 @@ jobs:
         name: Package
         path: surefire-reports
 
+      # Show surefire report
+    # - name: Surefire Report
+    #   uses: ScaCap/action-surefire-report@v1.0.5
+
 # TODO : Deploy on repo https://github.com/inloco/actions-setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
 
   # ============================================================================================================
@@ -120,7 +124,32 @@ jobs:
         name: Package
         path: surefire-reports
 
+  # ============================================================================================================
+  # Testing new hardware build nodes
 
-      # Show surefire report
-    # - name: Surefire Report
-    #   uses: ScaCap/action-surefire-report@v1.0.5
+  win7-x86_64:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['9.0.0+0']
+        os: ['win7-x86_64'] # , 'windows-latest', windows-2016
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        cache: maven
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports
