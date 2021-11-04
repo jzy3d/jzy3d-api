@@ -183,3 +183,33 @@ jobs:
       with:
         name: Package
         path: surefire-reports
+
+  # ============================================================================================================
+  # Testing new hardware build nodes
+
+  ubuntu-20-04-x86_64:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['9.0.0+0']
+        os: ['ubuntu-20-04'] # , 'windows-latest', windows-2016
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        cache: maven
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports
