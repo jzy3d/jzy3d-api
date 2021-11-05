@@ -23,57 +23,58 @@ import com.jogamp.opengl.awt.GLCanvas;
  */
 public class TestCameraNative_Viewport {
 
-	public static void main(String [] args) {
-	    // GIVEN
-	    AWTChartFactory factory = new AWTChartFactory();
+  public static void main(String[] args) {
+    // GIVEN
+    AWTChartFactory factory = new AWTChartFactory();
 
-	    Quality q = Quality.Advanced();
+    Quality q = Quality.Advanced();
 
-	    // ATTENTION : viewport of a retina display has double number of pixel
-	    // Also, the Y value is 600, whereas the height is 578
-	    q.setPreserveViewportSize(true);
+    // ATTENTION : viewport of a retina display has double number of pixel
+    // Also, the Y value is 600, whereas the height is 578
+    q.setPreserveViewportSize(true);
 
-	    Chart chart = factory.newChart(q);
-	    chart.add(SampleGeom.surface());
-	    Camera camera = chart.getView().getCamera();
+    Chart chart = factory.newChart(q);
+    chart.add(SampleGeom.surface());
+    Camera camera = chart.getView().getCamera();
 
-	    // ----------------------------------------
-	    // When opening window to a chosen size
+    // ----------------------------------------
+    // When opening window to a chosen size
 
-	    Rectangle FRAME_SIZE = new Rectangle(800, 600);
-	    int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
+    Rectangle FRAME_SIZE = new Rectangle(800, 600);
+    int APP_BAR_HEIGHT = 22; // pixel number of Application bar on top
 
-	    //factory.getPainterFactory().setOffscreen(FRAME_SIZE);
+    // factory.getPainterFactory().setOffscreen(FRAME_SIZE);
 
-	    FrameAWT frame = (FrameAWT) chart.open("", FRAME_SIZE);
-	    //((java.awt.Frame)frame).setUndecorated(true);
-	    //System.out.println(frame.getInsets());
-	    
-	    
-	    try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} // let time for opening window otheriwse follwing assertions may fail
-
-	    // Then scene viewport size is set to occupy the full frame
-	    ViewAndColorbarsLayout layout =
-	        (ViewAndColorbarsLayout) ((ChartView) chart.getView()).getLayout();
-	    ViewportConfiguration sceneViewport = layout.getSceneViewport();
+    FrameAWT frame = (FrameAWT) chart.open("", FRAME_SIZE);
+    // ((java.awt.Frame)frame).setUndecorated(true);
+    // System.out.println(frame.getInsets());
 
 
-	    System.out.println(chart.getCanvas().getRendererWidth() + "," + chart.getCanvas().getRendererHeight());
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } // let time for opening window otheriwse follwing assertions may fail
 
-	    GLCanvas cnv = (GLCanvas)chart.getCanvas();
-	    System.out.println(cnv.getSurfaceWidth()+","+cnv.getSurfaceHeight());
-	    
-	    
-	    
-	    //System.out.println(sceneViewport.getWidth() + "," + sceneViewport.getHeight());
-	}
-	
-	
+    // Then scene viewport size is set to occupy the full frame
+    ViewAndColorbarsLayout layout =
+        (ViewAndColorbarsLayout) ((ChartView) chart.getView()).getLayout();
+    ViewportConfiguration sceneViewport = layout.getSceneViewport();
+
+
+    System.out.println(
+        chart.getCanvas().getRendererWidth() + "," + chart.getCanvas().getRendererHeight());
+
+    GLCanvas cnv = (GLCanvas) chart.getCanvas();
+    System.out.println(cnv.getSurfaceWidth() + "," + cnv.getSurfaceHeight());
+
+
+
+    // System.out.println(sceneViewport.getWidth() + "," + sceneViewport.getHeight());
+  }
+
+
   @Test
   public void whenResize_thenCameraViewportUpdatesAccordingToMode() throws InterruptedException {
     // GIVEN
@@ -93,18 +94,17 @@ public class TestCameraNative_Viewport {
     // When opening window to a chosen size
 
     Rectangle FRAME_SIZE = new Rectangle(800, 600);
-    //int APP_BAR_HEIGHT = 22; 
-
-    //factory.getPainterFactory().setOffscreen(FRAME_SIZE);
 
     FrameAWT frame = (FrameAWT) chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
+    chart.render(); // ensure we have rendered one to get latest layout later
 
-    // number of pixel that the frame keeps for non drawing area (title bar, etc) 
+    // number of pixel that the frame keeps for non drawing area (title bar, etc)
     int HEIGHT_DEC = frame.getInsets().top + frame.getInsets().bottom;
     int WIDTH_DEC = frame.getInsets().left + frame.getInsets().right;
-    
-    
-    chart.render(); // ensure we have rendered one to get latest layout later
+
+    System.out.println("Frame size   : " + FRAME_SIZE);
+    System.out.println("Frame insets : " + frame.getInsets());
+
 
     Thread.sleep(10); // let time for opening window otheriwse follwing assertions may fail
 
@@ -113,10 +113,10 @@ public class TestCameraNative_Viewport {
         (ViewAndColorbarsLayout) ((ChartView) chart.getView()).getLayout();
     ViewportConfiguration sceneViewport = layout.getSceneViewport();
 
-    Assert.assertEquals(FRAME_SIZE.height - HEIGHT_DEC, sceneViewport.getHeight());
     Assert.assertEquals(FRAME_SIZE.width - WIDTH_DEC, sceneViewport.getWidth());
+    Assert.assertEquals(FRAME_SIZE.height - HEIGHT_DEC, sceneViewport.getHeight());
 
-    
+
     Assert.assertEquals(0, sceneViewport.getX());
     Assert.assertEquals(FRAME_SIZE.height - HEIGHT_DEC, sceneViewport.getY());
 
@@ -131,19 +131,18 @@ public class TestCameraNative_Viewport {
     Rectangle CANVAS_SIZE_V = new Rectangle(200, 300);
     frame.setBounds(0, 0, CANVAS_SIZE_V.width, CANVAS_SIZE_V.height);
     frame.repaint();
-    
+
     Thread.sleep(300); // let time for resize and redraw otherwise following assertions may fail
 
-    // number of pixel that the frame keeps for non drawing area (title bar, etc) 
+    // number of pixel that the frame keeps for non drawing area (title bar, etc)
     HEIGHT_DEC = frame.getInsets().top + frame.getInsets().bottom;
     WIDTH_DEC = frame.getInsets().left + frame.getInsets().right;
 
     System.out.println(frame.getInsets());
     System.out.println(chart.getCanvas().getPixelScale());
-    
+
     // Then viewport on the complete canvas
-    Assert.assertEquals(CANVAS_SIZE_V.height - HEIGHT_DEC,
-        camera.getLastViewPort().getHeight());
+    Assert.assertEquals(CANVAS_SIZE_V.height - HEIGHT_DEC, camera.getLastViewPort().getHeight());
     Assert.assertEquals(CANVAS_SIZE_V.width - WIDTH_DEC, camera.getLastViewPort().getWidth());
 
     // ----------------------------------------
@@ -154,8 +153,7 @@ public class TestCameraNative_Viewport {
 
     // Then viewport on the complete canvas
     Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, camera.getLastViewPort().getMode());
-    Assert.assertEquals(CANVAS_SIZE_V.height - HEIGHT_DEC,
-        camera.getLastViewPort().getHeight());
+    Assert.assertEquals(CANVAS_SIZE_V.height - HEIGHT_DEC, camera.getLastViewPort().getHeight());
     Assert.assertEquals(CANVAS_SIZE_V.width - WIDTH_DEC, camera.getLastViewPort().getWidth());
 
     // ----------------------------------------
@@ -163,10 +161,10 @@ public class TestCameraNative_Viewport {
 
     camera.setViewportMode(ViewportMode.SQUARE);
     chart.getView().shoot();
-    //chart.render();
+    // chart.render();
 
     System.out.println(camera.getLastViewPort());
-    
+
     // Then viewport is SQUARE
     Assert.assertEquals(ViewportMode.SQUARE, camera.getLastViewPort().getMode());
 
@@ -190,41 +188,32 @@ public class TestCameraNative_Viewport {
     sideLength = CANVAS_SIZE_H.height - HEIGHT_DEC;
     Assert.assertEquals(sideLength, camera.getLastViewPort().getHeight());
     Assert.assertEquals(sideLength, camera.getLastViewPort().getWidth());
-    
+
     // check viewport is shifted to the right so that square viewport is centered
-    //Assert.assertEquals(CANVAS_SIZE_H.width / 2 - sideLength / 2, camera.getLastViewPort().getX());
+    // Assert.assertEquals(CANVAS_SIZE_H.width / 2 - sideLength / 2,
+    // camera.getLastViewPort().getX());
 
   }
 
 
-  /*private static Shape surface() {
-
-    // ---------------------------
-    // DEFINE SURFACE MATHS
-    Mapper mapper = new Mapper() {
-      @Override
-      public double f(double x, double y) {
-        return x * Math.sin(x * y);
-      }
-    };
-    Range range = new Range(-3, 3);
-    int steps = 60;
-
-    // ---------------------------
-    // CUSTOMIZE SURFACE BUILDER FOR JGL
-    SurfaceBuilder builder = new SurfaceBuilder();
-
-    // ---------------------------
-    // MAKE SURFACE
-    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-    surface.setPolygonOffsetFillEnable(false);
-
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
-    surface.setColorMapper(colorMapper);
-    surface.setFaceDisplayed(true);
-    surface.setWireframeDisplayed(true);
-    surface.setWireframeColor(Color.BLACK);
-    return surface;
-  }*/
+  /*
+   * private static Shape surface() {
+   * 
+   * // --------------------------- // DEFINE SURFACE MATHS Mapper mapper = new Mapper() {
+   * 
+   * @Override public double f(double x, double y) { return x * Math.sin(x * y); } }; Range range =
+   * new Range(-3, 3); int steps = 60;
+   * 
+   * // --------------------------- // CUSTOMIZE SURFACE BUILDER FOR JGL SurfaceBuilder builder =
+   * new SurfaceBuilder();
+   * 
+   * // --------------------------- // MAKE SURFACE Shape surface = builder.orthonormal(new
+   * OrthonormalGrid(range, steps, range, steps), mapper);
+   * surface.setPolygonOffsetFillEnable(false);
+   * 
+   * ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
+   * surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
+   * surface.setColorMapper(colorMapper); surface.setFaceDisplayed(true);
+   * surface.setWireframeDisplayed(true); surface.setWireframeColor(Color.BLACK); return surface; }
+   */
 }

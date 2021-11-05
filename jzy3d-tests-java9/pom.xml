@@ -45,7 +45,7 @@
 			<artifactId>jzy3d-tester-native</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		
+
 		<dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>jzy3d-io-xls</artifactId>
@@ -57,10 +57,10 @@
 	<build>
 		<plugins>
 
-			<!-- Use failsafe to run (and skip) integration tests which success may 
+			<!-- Use failsafe to run (and skip) integration tests which success may
 				depend on GPU. Skip them with mvn install -DskipITs -->
 
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<executions>
@@ -72,7 +72,7 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>-->
 
 		</plugins>
 	</build>
