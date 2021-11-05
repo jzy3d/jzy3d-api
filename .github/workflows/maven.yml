@@ -177,7 +177,7 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Copy Surefire reports
-      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+      run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
 
     - uses: actions/upload-artifact@v2
       with:
