@@ -88,10 +88,11 @@ public class Test_OpenGLVersion {
     String ext = gl.glGetString(GL.GL_EXTENSIONS);
 
     if(ext!=null) {
-      sb.append("GL_EXTENSIONS : " + "\n");
-      for(String e: ext.split(" ")) {
+      String[] exts = ext.split(" ");
+      sb.append("GL_EXTENSIONS : (" + exts.length + ")\n");
+      /*for(String e: exts) {
         sb.append("\t" + e + "\n");
-      }
+      }*/
     }
     else {
       sb.append("GL_EXTENSIONS : null\n");      

@@ -7,6 +7,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -31,6 +32,8 @@ import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class NativeDesktopPainter extends AbstractPainter implements IPainter {
+  static Logger LOGGER = Logger.getLogger(NativeDesktopPainter.class);
+  
   protected GL gl;
   protected GLU glu = new GLU();
   protected GLUT glut = new GLUT();
@@ -137,12 +140,25 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     } else {
       gl.glDisable(GL2.GL_ALPHA_TEST);
     }
+    
+    System.out.println(gl.getGLProfile().isGL2());
 
     // Make smooth colors for polygons (interpolate color between points)
-    if (quality.isSmoothColor())
-      gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
-    else
-      gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+    if(gl.getGLProfile().isGL2()) {
+      if (quality.isSmoothColor()) 
+        gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
+      else
+        gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+    }
+    else {
+      LOGGER.warn("Did not configured shade model as we don t have a GL2 context : " + gl.getGLProfile());
+    }
+    /*else     if(gl.getGLProfile().isGL4()) {
+      if (quality.isSmoothColor()) 
+        gl.getGL4().glShadeModel(GLLightingFunc.GL_SMOOTH);
+      else
+        gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+    }*/
 
     // Make smoothing setting
     if (quality.isSmoothPolygon()) {
