@@ -47,9 +47,9 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
     surface.setWireframeColor(Color.BLACK);
 
     // Create a chart
-    GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL2));
-    IPainterFactory p = new AWTPainterFactory(c);
-    IChartFactory f = new AWTChartFactory(p);
+    //GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL3));
+    //IPainterFactory p = new AWTPainterFactory(c);
+    IChartFactory f = new AWTChartFactory();
 
     chart = f.newChart(Quality.Advanced().setHiDPIEnabled(true));
     chart.getScene().getGraph().add(surface);

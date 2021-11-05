@@ -124,7 +124,8 @@ public abstract class NativePainterFactory implements IPainterFactory {
       throw new UnsupportedOperationException(
           "Jzy3d requires an OpenGL 2 or OpenGL 2 ES 2 hardware");
     }
-
+    
+    //return GLProfile.get(GLProfile.GL2ES2);
     
     if (GLProfile.isAvailable(GLProfile.GL2)) {
       // Preferred profile = GL2
