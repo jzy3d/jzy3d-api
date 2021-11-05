@@ -204,7 +204,7 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn package --file pom.xml -DskipTests
+      run: mvn package --file pom.xml 
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
