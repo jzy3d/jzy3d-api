@@ -6,16 +6,8 @@ import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.factories.AWTChartFactory;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.builder.Mapper;
-import org.jzy3d.plot3d.builder.SurfaceBuilder;
-import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.SampleGeom;
-import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
@@ -42,7 +34,7 @@ public class TestCameraNative_Viewport {
 	    q.setPreserveViewportSize(true);
 
 	    Chart chart = factory.newChart(q);
-	    chart.add(surface());
+	    chart.add(SampleGeom.surface());
 	    Camera camera = chart.getView().getCamera();
 
 	    // ----------------------------------------
