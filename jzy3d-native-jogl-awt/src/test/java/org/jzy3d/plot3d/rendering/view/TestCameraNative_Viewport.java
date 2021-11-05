@@ -23,7 +23,7 @@ import com.jogamp.opengl.awt.GLCanvas;
  */
 public class TestCameraNative_Viewport {
 
-  private static final int WAIT_WINDOW_CHANGE_300MS = 800;
+  private static final int WAIT_WINDOW_CHANGE_300MS = 100;
 
 
   public static void main(String[] args) {
