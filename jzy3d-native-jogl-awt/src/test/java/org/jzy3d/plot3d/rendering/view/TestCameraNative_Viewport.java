@@ -23,6 +23,9 @@ import com.jogamp.opengl.awt.GLCanvas;
  */
 public class TestCameraNative_Viewport {
 
+  private static final int WAIT_WINDOW_CHANGE_300MS = 300;
+
+
   public static void main(String[] args) {
     // GIVEN
     AWTChartFactory factory = new AWTChartFactory();
@@ -51,7 +54,7 @@ public class TestCameraNative_Viewport {
 
 
     try {
-      Thread.sleep(100);
+      Thread.sleep(WAIT_WINDOW_CHANGE_300MS);
     } catch (InterruptedException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -102,11 +105,11 @@ public class TestCameraNative_Viewport {
     int HEIGHT_DEC = frame.getInsets().top + frame.getInsets().bottom;
     int WIDTH_DEC = frame.getInsets().left + frame.getInsets().right;
 
-    System.out.println("Frame size   : " + FRAME_SIZE);
+    System.out.println("Frame size   : " + FRAME_SIZE.width + "x" + FRAME_SIZE.height);
     System.out.println("Frame insets : " + frame.getInsets());
 
 
-    Thread.sleep(10); // let time for opening window otheriwse follwing assertions may fail
+    Thread.sleep(WAIT_WINDOW_CHANGE_300MS); // let time for opening window otheriwse follwing assertions may fail
 
     // Then scene viewport size is set to occupy the full frame
     ViewAndColorbarsLayout layout =
@@ -183,7 +186,7 @@ public class TestCameraNative_Viewport {
     frame.setBounds(0, 0, CANVAS_SIZE_H.width, CANVAS_SIZE_H.height);
     frame.repaint();
 
-    Thread.sleep(300); // let time for resize and redraw otherwise following assertions may fail
+    Thread.sleep(WAIT_WINDOW_CHANGE_300MS); // let time for resize and redraw otherwise following assertions may fail
 
     sideLength = CANVAS_SIZE_H.height - HEIGHT_DEC;
     Assert.assertEquals(sideLength, camera.getLastViewPort().getHeight());
@@ -194,26 +197,4 @@ public class TestCameraNative_Viewport {
     // camera.getLastViewPort().getX());
 
   }
-
-
-  /*
-   * private static Shape surface() {
-   * 
-   * // --------------------------- // DEFINE SURFACE MATHS Mapper mapper = new Mapper() {
-   * 
-   * @Override public double f(double x, double y) { return x * Math.sin(x * y); } }; Range range =
-   * new Range(-3, 3); int steps = 60;
-   * 
-   * // --------------------------- // CUSTOMIZE SURFACE BUILDER FOR JGL SurfaceBuilder builder =
-   * new SurfaceBuilder();
-   * 
-   * // --------------------------- // MAKE SURFACE Shape surface = builder.orthonormal(new
-   * OrthonormalGrid(range, steps, range, steps), mapper);
-   * surface.setPolygonOffsetFillEnable(false);
-   * 
-   * ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-   * surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
-   * surface.setColorMapper(colorMapper); surface.setFaceDisplayed(true);
-   * surface.setWireframeDisplayed(true); surface.setWireframeColor(Color.BLACK); return surface; }
-   */
 }
