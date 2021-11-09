@@ -16,15 +16,15 @@ import javax.swing.SwingUtilities;
 public class JoglContextTestCase
 {
   private static JFrame mainFrame = null;
-  
+
   private static void buildSceneAndCheckConfigurations()
   {
     GraphicsEnvironment graphEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
     GraphicsDevice[] graphDevsOrig = graphEnv.getScreenDevices();
-    
-    
+
+
     GraphicsConfiguration gcDef = graphDevsOrig[0].getDefaultConfiguration();
-    
+
     // *************************************************************************
     // NOTE: if I comment the following loop, which apparently does NOTHING
     // (except calling .getGraphicsConfigurations()), this test case
@@ -33,7 +33,7 @@ public class JoglContextTestCase
     // to CRASH!
     // The single call responsible for the "GL 1.1" issue, for some reason,
     // seems to be 'graphDevsOrig[i].getConfigurations();'
-    // *************************************************************************    
+    // *************************************************************************
     for (int i = 0; i < graphDevsOrig.length; i++)
     {
       System.out.println("Screen device # " + i + ": " + graphDevsOrig[i].getIDstring());
@@ -44,10 +44,10 @@ public class JoglContextTestCase
         System.out.println("Screen device # " + i + ", configuration # " + j + ":");
       }
     }
-    
-    buildScene(gcDef);    
+
+    buildScene(gcDef);
   }
-  
+
   private static void buildScene(GraphicsConfiguration graphConf)
   {
     GLCanvas glCanvas = new GLCanvas(new GLCapabilities(GLProfile.getMaximum(true)));
@@ -60,11 +60,11 @@ public class JoglContextTestCase
 //        System.out.println(JoglVersion.getGLInfo(gl, null));
 //        System.out.println("* Context = " + drawable.getContext().toString());
         System.out.println("* Context GL version: " + drawable.getContext().getGLVersion());
-        
+
         GraphicsConfiguration gc =   glCanvas.getGraphicsConfiguration();
-        
+
         System.out.println(gc);
-        
+
       }
 
       @Override
@@ -82,21 +82,21 @@ public class JoglContextTestCase
       {
       }
     });
-    
- 
-    
+
+
+
     // UI part
     mainFrame = new JFrame("SimpleVTK", graphConf);
     mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     mainFrame.getContentPane().setLayout(new BorderLayout());
-    
+
     mainFrame.setSize(1000, 600);
     mainFrame.setLocationRelativeTo(null);
     mainFrame.setVisible(true);
     mainFrame.getContentPane().add(glCanvas, BorderLayout.CENTER);
     glCanvas.requestFocus();
-    
-    
+
+
     System.out.println("NewFrame created in thread [" + Thread.currentThread().getId() + "], isEDT: " + SwingUtilities.isEventDispatchThread());
   }
 
