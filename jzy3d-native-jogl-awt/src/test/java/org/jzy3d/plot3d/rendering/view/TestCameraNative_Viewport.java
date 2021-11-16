@@ -14,6 +14,7 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
+import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
@@ -40,7 +41,7 @@ public class TestCameraNative_Viewport {
     q.setPreserveViewportSize(true);
 
     Chart chart = factory.newChart(q);
-    chart.add(surface());
+    chart.add(SampleGeom.surface());
     Camera camera = chart.getView().getCamera();
 
     // ----------------------------------------
@@ -133,7 +134,7 @@ public class TestCameraNative_Viewport {
   }
 
 
-  private static Shape surface() {
+  /*private static Shape surface() {
 
     // ---------------------------
     // DEFINE SURFACE MATHS
@@ -162,5 +163,5 @@ public class TestCameraNative_Viewport {
     surface.setWireframeDisplayed(true);
     surface.setWireframeColor(Color.BLACK);
     return surface;
-  }
+  }*/
 }

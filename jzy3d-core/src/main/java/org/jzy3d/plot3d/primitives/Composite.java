@@ -33,7 +33,8 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
   
   /**
    * This indicate to a scene graph if the Composite consider it is worth being decomposed or not.
-   * @return
+   * 
+   * @return will return true only if the Composite has face displayed (simply because decomposing wireframe-only drawable is useless)
    */
   public boolean canDecompose() {
     return isFaceDisplayed();
