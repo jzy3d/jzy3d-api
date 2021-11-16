@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
@@ -21,6 +22,8 @@ import com.jogamp.opengl.awt.GLCanvas;
  * 
  * @author martin
  */
+
+//@Ignore("NOT ABLE TO MAKE A CONSISTENT TEST OVER ALL OS YET")
 public class TestCameraNative_Viewport {
 
   private static final int WAIT_WINDOW_CHANGE_300MS = 1000;
