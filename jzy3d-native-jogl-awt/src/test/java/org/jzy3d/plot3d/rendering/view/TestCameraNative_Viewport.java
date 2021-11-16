@@ -17,9 +17,9 @@ import com.jogamp.opengl.awt.GLCanvas;
 /**
  * TODO : MUST ALSO TEST WITH COLORBARS TODO : MUST ALSO VERIFY APPROPRIATE LOOK_TO AND ORTHO CALL
  * OF THE CAMERA!!
- * 
+ *
  * Possible improvement : mock canvas (avoid displaying for faster test, independent from OS)
- * 
+ *
  * @author martin
  */
 
