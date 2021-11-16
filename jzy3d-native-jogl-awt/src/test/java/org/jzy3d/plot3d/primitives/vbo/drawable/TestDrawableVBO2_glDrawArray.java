@@ -20,6 +20,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class TestDrawableVBO2_glDrawArray {
 
+  
   @Test
   public void givenGivenVerticeOnly_WhenLoading_ThenSimpleNormalAreComputed() throws InterruptedException {
 

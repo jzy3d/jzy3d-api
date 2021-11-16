@@ -10,25 +10,50 @@ on:
   #  branches: [ master ]
 
 jobs:
-  build-and-test:
+
+
+  # ============================================================================================================
+  # Main Build & Test Matrix
+
+  macos-10-15-x86_64:
 
     #runs-on: macos-10.15
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['9.0.0+0'] #'11.0.12+7' ,
+        java: ['9.0.0+0', '11.0.12+7']
+        # ============================================================================================================
+        # Java / Zulu Distributions
+        # ok : '9.0.0+0'
+        # ok : '11.0.12+7'
+        #
+        # KO : '8' https://github.com/jzy3d/jzy3d-api/runs/3943617371?check_suite_focus=true#step:4:493
+        #
+        # Try -Djava.awt.headless=true
+        #
+        # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
+
         os: ['osx-10-15-3'] # , 'windows-latest', windows-2016
+        # ============================================================================================================
+        # Github virtual machine
+        # ----------------------
+        # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on
+        #
         # 'macos-10.15' works thanks to software renderer + JOGL timeout expansion
         # 'windows-2016' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943151589
         # 'ubuntu-18.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943110442
-
-        # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on
-        # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
+        # 'ubuntu-20.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-947641249
+        #
+        # Self hosted physical machines
+        # -----------------------------
+        # 'osx-10-15-3'
+        #
+        #
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Set up JDK 9
+    - name: Set up JDK
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
@@ -51,8 +76,9 @@ jobs:
       #
       #-DskipITs
 
-    - name: Copy Jars
-      run: mkdir staging && cp target/*.jar staging
+
+    #- name: Copy Jars
+    #  run: mkdir staging && cp target/*.jar staging
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
@@ -62,10 +88,98 @@ jobs:
         name: Package
         path: surefire-reports
 
-# TODO : Deploy on repo https://github.com/inloco/actions-setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
-
-
-
       # Show surefire report
     # - name: Surefire Report
     #   uses: ScaCap/action-surefire-report@v1.0.5
+
+# TODO : Deploy on repo https://github.com/inloco/actions-setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
+
+  # ============================================================================================================
+  # Testing new hardware build nodes
+
+  macos-11-4-arm64:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['9.0.0+0']
+        os: ['mac-m1-2'] # , 'windows-latest', windows-2016
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        cache: maven
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports
+
+  # ============================================================================================================
+  # Testing new hardware build nodes
+
+  win10-x86_64:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['9.0.0+0']
+        os: ['win10-x86_64'] # , 'windows-latest', windows-2016
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        cache: maven
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports
+
+  # ============================================================================================================
+  # Testing new hardware build nodes
+
+  ubuntu-20-04-x86_64:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['9.0.0+0']
+        os: ['ubuntu-20-04'] # , 'windows-latest', windows-2016
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        cache: maven
+
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports

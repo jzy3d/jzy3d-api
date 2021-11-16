@@ -79,7 +79,7 @@ public class AWTView extends ChartView {
     // complete
     BoundingBox3d newBounds = axis.getWholeBounds().scale(scaling);
 
-    if (viewmode == ViewPositionMode.TOP) {
+    if (viewMode == ViewPositionMode.TOP) {
       float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(),
           newBounds.getYmax() - newBounds.getYmin()) / 2;
       radius += (radius * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP);

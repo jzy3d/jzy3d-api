@@ -465,8 +465,8 @@ public class Camera extends AbstractViewportManager {
   protected void failedProjection(String message) {
     if (failOnException)
       throw new RuntimeException(message);
-    else
-      LOGGER.debug(message);
+    //else
+    //  LOGGER.debug(message);
   }
 
   boolean failOnException = false;

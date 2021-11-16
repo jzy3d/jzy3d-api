@@ -22,8 +22,8 @@ public class Shape extends Composite {
    * 
    * @see setData for more information on the allowTransparency flag.
    */
-  public Shape(List<Polygon> polygons) {
+  public Shape(List<? extends Drawable> drawables) {
     super();
-    add(polygons);
+    add(drawables);
   }
 }

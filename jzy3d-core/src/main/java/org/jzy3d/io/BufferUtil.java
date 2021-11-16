@@ -17,7 +17,11 @@ public class BufferUtil {
   public static void rewind(Buffer buffer) {
     buffer.rewind();
   }
-  
+
+  public static void flip(Buffer buffer) {
+    buffer.flip();
+  }
+
   /*// Kept as a trick to test rewind without upcast
   public static void rewind(FloatBuffer buffer) {
     buffer.rewind();
