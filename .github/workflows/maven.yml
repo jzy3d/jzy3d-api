@@ -58,14 +58,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-        #cache: maven
-
-
-    # - name: Set up JDK 1.9
-    #   uses: actions/setup-java@v1
-    #   with:
-    #     java-version: 1.9
-
+        #cache: maven # caching makes the post build action to fail
 
     - name: Build with Maven
       run: mvn package --file pom.xml
@@ -73,12 +66,6 @@ jobs:
       # run: mvn -T 1C -B -Dsurefire.useFile=false package --file pom.xml
       # -T 1C : 1 thread per cpu core
       # -B    : non interactive mode
-      #
-      #-DskipITs
-
-
-    #- name: Copy Jars
-    #  run: mkdir staging && cp target/*.jar staging
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
@@ -88,14 +75,12 @@ jobs:
         name: Package
         path: surefire-reports
 
-      # Show surefire report
-    # - name: Surefire Report
-    #   uses: ScaCap/action-surefire-report@v1.0.5
-
 # TODO : Deploy on repo https://github.com/inloco/actions-setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
 
   # ============================================================================================================
-  # Testing new hardware build nodes
+  # MAC OS BIG SUR (ARM)
+  # ====================================
+
 
   macos-11-4-arm64:
     runs-on: ${{ matrix.os }}
@@ -111,7 +96,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-        #cache: maven
+        #cache: maven # caching makes the post build action to fail
 
     - name: Build with Maven
       run: mvn package --file pom.xml
@@ -125,7 +110,8 @@ jobs:
         path: surefire-reports
 
   # ============================================================================================================
-  # Testing new hardware build nodes
+  # WINDOWS
+  # ====================================
 
   win10-x86_64:
     runs-on: ${{ matrix.os }}
@@ -141,7 +127,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-        #cache: maven
+        #cache: maven # caching makes the post build action to fail
 
     - name: Build with Maven
       run: mvn package --file pom.xml
@@ -155,7 +141,8 @@ jobs:
         path: surefire-reports
 
   # ============================================================================================================
-  # Testing new hardware build nodes
+  # UBUNTU
+  # ====================================
 
   ubuntu-20-04-x86_64:
     runs-on: ${{ matrix.os }}
@@ -171,7 +158,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-        #cache: maven
+        #cache: maven # caching makes the post build action to fail
 
     - name: Build with Maven
       run: mvn package --file pom.xml
