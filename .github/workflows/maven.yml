@@ -58,7 +58,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-        cache: maven
+        #cache: maven
 
 
     # - name: Set up JDK 1.9
@@ -111,7 +111,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-        cache: maven
+        #cache: maven
 
     - name: Build with Maven
       run: mvn package --file pom.xml
@@ -141,13 +141,13 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-        cache: maven
+        #cache: maven
 
     - name: Build with Maven
       run: mvn package --file pom.xml
 
     - name: Copy Surefire reports
-      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+      run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
 
     - uses: actions/upload-artifact@v2
       with:
@@ -171,7 +171,7 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: zulu
-        cache: maven
+        #cache: maven
 
     - name: Build with Maven
       run: mvn package --file pom.xml
