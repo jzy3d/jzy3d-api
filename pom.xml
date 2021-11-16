@@ -57,10 +57,15 @@
 
 		<module>jzy3d-native-jogl-core</module>
 		<module>jzy3d-native-jogl-awt</module>
-		<module>jzy3d-native-jogl-newt</module>
-		<!-- <module>jzy3d-native-jogl-javafx</module> -->
+
 		<module>jzy3d-native-jogl-swing</module>
 		<module>jzy3d-native-jogl-swt</module>
+
+		<!-- <module>jzy3d-native-jogl-newt</module>  -->
+
+		<!-- <module>jzy3d-native-jogl-javafx</module> -->
+
+
 
 		<module>jzy3d-tester</module>
 		<module>jzy3d-tester-native</module>
@@ -247,11 +252,9 @@
 				<version>3.12.1</version>
 			</dependency>
 
-			<!-- <dependency> <groupId>org.jogamp.gluegen</groupId> <artifactId>gluegen-rt</artifactId>
-				<version>2.4.0-rc-20210111</version> </dependency> <dependency> <groupId>org.jogamp.jogl</groupId>
-				<artifactId>jogl-all</artifactId> <version>2.4.0-rc-20210111</version> </dependency> -->
+			<!-- See pom.xml of jzy3d-native-jogl-core -->
 
-			<dependency>
+			<!-- <dependency>
 				<groupId>org.jogamp.gluegen</groupId>
 				<artifactId>gluegen-rt-main</artifactId>
 				<version>2.3.2</version>
@@ -261,7 +264,7 @@
 				<groupId>org.jogamp.jogl</groupId>
 				<artifactId>jogl-all-main</artifactId>
 				<version>2.3.2</version>
-			</dependency>
+			</dependency>-->
 
 
 			<dependency>
@@ -377,11 +380,8 @@
 							<include>**/Test*.java</include>
 							<include>**/*Test.java</include>
 						</includes>
-
 					</configuration>
 				</plugin>
-
-
 
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -595,7 +595,6 @@
 							<!-- Parallel tests -->
 							<parallel>classes</parallel>
 							<useUnlimitedThreads>true</useUnlimitedThreads>
-
 						</configuration>
 					</plugin>
 
