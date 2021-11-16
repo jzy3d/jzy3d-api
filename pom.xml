@@ -370,10 +370,12 @@
 							software implementation -->
 						<argLine>-Djogamp.common.utils.locks.Lock.timeout=20000</argLine>
 
-						<!--Want IT ITest to be ran only when using -Pintegration-test, so disable for default profile
+						<!--Want IT ITest to be ran only when using -Pintegration-test, so disable for default profile-->
 						<excludes>
 							<exclude>**/ITTest*.java</exclude>
-						</excludes>-->
+							<!-- This one is very sensitive to platform specific frame sizing -->
+							<exclude>**/TestCameraNative_Viewport.java</exclude>
+						</excludes>
 
 						<!-- Want to support these two test name patterns -->
 						<includes>
