@@ -102,7 +102,7 @@ jobs:
     strategy:
       matrix:
         java: ['9.0.0+0']
-        os: ['osx-11-4-m1'] # , 'windows-latest', windows-2016
+        os: ['mac-m1-2'] # , 'windows-latest', windows-2016
     steps:
     - uses: actions/checkout@v2
 
