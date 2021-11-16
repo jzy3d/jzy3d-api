@@ -8,6 +8,7 @@ The framework targets simplicity and portability across Java windowing toolkits 
 The API can be used [freely in commercial applications](license.txt). You can explore the [tutorials](jzy3d-tutorials). an then purchase the [extended developper guide](http://jzy3d.org/guide.php) to support the development effort.
 
 
+
 # How to use
 
 Refer to the [tutorial README](jzy3d-tutorials/README.md) file to get help on creating your first chart project with the help of example code.
