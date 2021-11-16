@@ -350,6 +350,7 @@
 					<configuration>
 						<parallel>classes</parallel>
 						<useUnlimitedThreads>true</useUnlimitedThreads>
+
 						<!-- Configure jogl to wait up to 20 seconds before throwing a timeout 
 							exception. Mainly required when running on Github CI since MacOS VM use a 
 							software implementation -->

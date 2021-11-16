@@ -6,18 +6,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.BoundingBox3d.Corners;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.plot3d.builder.Mapper;
-import org.jzy3d.plot3d.builder.SurfaceBuilder;
-import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
-import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
@@ -45,7 +38,7 @@ public class TestCameraNative_Projection {
     q.setPreserveViewportSize(true);
 
     Chart chart = factory.newChart(q);
-    chart.add(surface());
+    chart.add(SampleGeom.surface());
     factory.getPainterFactory().setOffscreen(CANVAS_SIZE);
     //chart.open(this.getClass().getSimpleName(), FRAME_SIZE); // requires considering OS dependent frame top bar
     //chart.addMouseCameraController();
@@ -92,51 +85,15 @@ public class TestCameraNative_Projection {
       if (corner2d.y > (FRAME_SIZE.height /*- APP_BAR_HEIGHT*/) - MAX_PIXEL_NUMBER_TO_FRAME_BORDER) {
         atLeastOneCornerNearTop = true;
       }
-
-
-      System.out.println(" 2d : " + corner2d);
+      //System.out.println(" 2d : " + corner2d);
     }
-
-    System.out.println(FRAME_SIZE.height - APP_BAR_HEIGHT);
+    //System.out.println(FRAME_SIZE.height - APP_BAR_HEIGHT);
 
     Assert.assertTrue("At least one corner is near to canvas top border (tolerance "
         + MAX_PIXEL_NUMBER_TO_FRAME_BORDER + " pixels)", atLeastOneCornerNearTop);
     Assert.assertTrue("At least one corner is near to canvas bottom border (tolerance "
         + MAX_PIXEL_NUMBER_TO_FRAME_BORDER + " pixels)", atLeastOneCornerNearBottom);
 
-
-
     p.getCurrentContext(chart.getCanvas()).release();
-  }
-
-  private static Shape surface() {
-
-    // ---------------------------
-    // DEFINE SURFACE MATHS
-    Mapper mapper = new Mapper() {
-      @Override
-      public double f(double x, double y) {
-        return x * Math.sin(x * y);
-      }
-    };
-    Range range = new Range(-3, 3);
-    int steps = 60;
-
-    // ---------------------------
-    // CUSTOMIZE SURFACE BUILDER FOR JGL
-    SurfaceBuilder builder = new SurfaceBuilder();
-
-    // ---------------------------
-    // MAKE SURFACE
-    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-    surface.setPolygonOffsetFillEnable(false);
-
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
-    surface.setColorMapper(colorMapper);
-    surface.setFaceDisplayed(true);
-    surface.setWireframeDisplayed(true);
-    surface.setWireframeColor(Color.BLACK);
-    return surface;
   }
 }

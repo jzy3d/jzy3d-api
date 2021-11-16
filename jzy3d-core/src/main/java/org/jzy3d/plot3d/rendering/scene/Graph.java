@@ -88,7 +88,7 @@ public class Graph {
    * Add a Drawable to the graph and call all views' so that they update their bounds according to
    * their mode (automatic or manual).
    * 
-   * Addition is to the graph is synchronized.
+   * Addition to the graph is synchronized.
    * 
    * @param drawable : The drawable that must be added to the scene graph.
    * @param update : should be true if you wish to have all the views updated with old bounds
@@ -304,7 +304,8 @@ public class Graph {
    */
   public synchronized BoundingBox3d getBounds() {
     if (components.size() == 0) {
-      return new BoundingBox3d(0, 0, 0, 0, 0, 0);
+      // return a non initialized bound
+      return new BoundingBox3d();
     } else {
       BoundingBox3d box = new BoundingBox3d();
 

@@ -18,7 +18,6 @@ import java.awt.Component;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -28,10 +27,9 @@ import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.IObjectPickedListener;
 import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.chart.factories.AWTChartFactory;
-import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.graphs.IGraph;
 import org.jzy3d.maths.graphs.StringGraphGenerator;
+import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.graphs.impl.PointGraph2d;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphLayout2d;
 import org.jzy3d.plot3d.primitives.selectable.SelectableScatter;
@@ -51,7 +49,7 @@ public class TestView_Interactive {
   @Test
   public void givenSelectableItem_whenProject_thenNoException() {
     // Given
-    SelectableScatter scatter = generateSelectableScatter(10);
+    SelectableScatter scatter = SampleGeom.generateSelectableScatter(10);
 
     AWTChartFactory factory = new AWTChartFactory();
     factory.getPainterFactory().setOffscreen(200, 200);
@@ -152,19 +150,5 @@ public class TestView_Interactive {
 
 
 
-  protected SelectableScatter generateSelectableScatter(int npt) {
-    Coord3d[] points = new Coord3d[npt];
-    Color[] colors = new Color[npt];
-    Random rng = new Random();
-    rng.setSeed(0);
-    for (int i = 0; i < npt; i++) {
-      colors[i] = new Color(0, 64 / 255f, 84 / 255f);
-      points[i] = new Coord3d(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
-    }
-    SelectableScatter dots = new SelectableScatter(points, colors);
-    dots.setWidth(1);
-    dots.setHighlightColor(Color.YELLOW);
-    return dots;
-  }
 
 }

@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.jzy3d.io.BufferUtil;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL2;
 
@@ -368,7 +369,7 @@ public class GLSLProgram {
       return;
     }
     ByteBuffer tShaderLog = Buffers.newDirectByteBuffer(tLogLength);
-    tReturnValue.flip();
+    BufferUtil.flip(tShaderLog);
     inGL.glGetInfoLogARB(inShaderObjectID, tLogLength, tReturnValue, tShaderLog);
     byte[] tShaderLogBytes = new byte[tLogLength];
     tShaderLog.get(tShaderLogBytes);

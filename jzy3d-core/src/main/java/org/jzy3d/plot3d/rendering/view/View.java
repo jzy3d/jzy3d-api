@@ -60,8 +60,8 @@ public class View {
 
   // view setting
   protected CameraMode cameraMode;
-  protected ViewPositionMode viewmode;
-  protected ViewBoundMode boundmode;
+  protected ViewPositionMode viewMode;
+  protected ViewBoundMode boundsMode;
   protected Color backgroundColor = Color.BLACK;
   protected boolean axisDisplayed = true;
   protected boolean squared = true;
@@ -90,7 +90,7 @@ public class View {
   protected Coord3d center;
   protected Coord3d scaling;
   // the actual bounds, either auto or manual
-  protected BoundingBox3d viewbounds;
+  protected BoundingBox3d viewBounds;
   protected Chart chart;
 
   // view listeners
@@ -134,7 +134,7 @@ public class View {
    */
   protected boolean viewDirty = false;
 
-  protected BoundingBox3d initBounds;
+  //protected BoundingBox3d initBounds;
 
   /**
    * Applies a factor to the default camera distance which is set to the radius of the scene bounds.
@@ -177,13 +177,15 @@ public class View {
     this.viewpoint = VIEWPOINT_DEFAULT.clone();
     this.center = sceneBounds.getCenter();
     this.scaling = Coord3d.IDENTITY.clone();
-    this.viewbounds = null; // sceneBounds might not be ready yet //new BoundingBox3d(0, 1, 0, 1, 0,
-                            // 1);
-    this.viewmode = ViewPositionMode.FREE;
-    this.boundmode = ViewBoundMode.AUTO_FIT;
+    //this.viewBounds = null;
+    this.viewBounds = new BoundingBox3d(-1, 1, -1, 1, -1, 1);
+    this.viewMode = ViewPositionMode.FREE;
+    this.boundsMode = ViewBoundMode.AUTO_FIT;
     this.cameraMode = CameraMode.ORTHOGONAL;
 
-    this.axis = factory.newAxe(sceneBounds, this);
+    //this.axis = factory.newAxe(sceneBounds, this);
+    this.axis = factory.newAxe(viewBounds, this);
+    
     this.cam = factory.newCamera(center);
     this.painter = factory.getPainterFactory().newPainter();
     this.painter.setCamera(cam);
@@ -537,11 +539,14 @@ public class View {
    * range.
    */
   public void lookToBox(BoundingBox3d box) {
-    if (box.isReset())
+    if (box.isReset()) {
       return;
+    }
+    //System.out.println("Look at box " + box);
+    
     center = box.getCenter();
     axis.setAxe(box);
-    viewbounds = box;
+    viewBounds = box;
   }
 
   /**
@@ -558,17 +563,17 @@ public class View {
   }
 
   public ViewBoundMode getBoundsMode() {
-    return boundmode;
+    return boundsMode;
   }
 
   /** Set the {@link ViewPositionMode} applied to this view. */
   public void setViewPositionMode(ViewPositionMode mode) {
-    this.viewmode = mode;
+    this.viewMode = mode;
   }
 
   /** Return the {@link ViewPositionMode} applied to this view. */
   public ViewPositionMode getViewMode() {
-    return viewmode;
+    return viewMode;
   }
 
   /** Return the stretch ratio applied to the view */
@@ -820,7 +825,7 @@ public class View {
    * bounding.
    */
   public void setBoundMode(ViewBoundMode mode) {
-    boundmode = mode;
+    boundsMode = mode;
     updateBounds();
   }
 
@@ -829,10 +834,10 @@ public class View {
    * {@link Camera.shoot()}.
    */
   public void updateBounds() {
-    if (boundmode == ViewBoundMode.AUTO_FIT)
+    if (boundsMode == ViewBoundMode.AUTO_FIT)
       lookToBox(getSceneGraphBounds()); // set axe and camera
-    else if (boundmode == ViewBoundMode.MANUAL)
-      lookToBox(viewbounds); // set axe and camera
+    else if (boundsMode == ViewBoundMode.MANUAL)
+      lookToBox(viewBounds); // set axe and camera
     else
       throw new RuntimeException("Unknown bounds");
     shoot();
@@ -861,7 +866,7 @@ public class View {
    * any call to {@link updateBounds()} will update view bounds to the current bounds.
    */
   public void setBoundManual(BoundingBox3d bounds) {
-    boundmode = ViewBoundMode.MANUAL;
+    boundsMode = ViewBoundMode.MANUAL;
     lookToBox(bounds);
   }
 
@@ -883,30 +888,18 @@ public class View {
     initQuality();
     initLights();
     initResources();
-    initBounds(scene, viewbounds, initBounds);
-    fireViewLifecycleHasInit(null);
+    initBounds();
     
     initialized = true;
+    
+    fireViewLifecycleHasInit(null);
   }
 
-  protected void initBounds(Scene scene, BoundingBox3d manualViewBounds, BoundingBox3d initBounds) {
-    if (manualViewBounds == null) {
-      if (initBounds == null)
-        setBoundManual(squarifyGetSceneGraphBounds(scene));
-      else
-        setBoundManual(initBounds);
-      // boundmode = ViewBoundMode.AUTO_FIT;
-    } else {
-      lookToBox(manualViewBounds);
+  protected void initBounds() {
+    if(viewBounds==null) {
+      viewBounds = squarifyGetSceneGraphBounds(scene);
     }
-  }
-
-  public BoundingBox3d getInitBounds() {
-    return initBounds;
-  }
-
-  public void setInitBounds(BoundingBox3d initBounds) {
-    this.initBounds = initBounds;
+    lookToBox(viewBounds);
   }
 
   public void initQuality() {
@@ -924,6 +917,9 @@ public class View {
 
   public void initResources() {
     getScene().getGraph().mountAllGLBindedResources(painter);
+    
+    // refresh bounds as we may have mount VBO objects which NOW have bounds defined
+    updateBounds();
   }
 
   /** Clear the color and depth buffer. */
@@ -1005,7 +1001,7 @@ public class View {
   /* SCALE PROCESSING */
 
   protected Coord3d squarify() {
-    return squarify(scene, boundmode, viewbounds, spaceTransformer);
+    return squarify(scene, boundsMode, viewBounds, spaceTransformer);
   }
 
   /**
@@ -1094,11 +1090,11 @@ public class View {
     scaling = computeSceneScaling();
 
     // -- Compute the bounds for computing cam distance, clipping planes,
-    if (viewbounds == null)
-      viewbounds = new BoundingBox3d(0, 1, 0, 1, 0, 1);
+    if (viewBounds == null)
+      viewBounds = new BoundingBox3d(0, 1, 0, 1, 0, 1);
 
     BoundingBox3d boundsScaled = new BoundingBox3d();
-    boundsScaled.add(viewbounds.scale(scaling));
+    boundsScaled.add(viewBounds.scale(scaling));
 
     if (maintainAllObjectsInView) {
       boundsScaled.add(getSceneGraphBounds().scale(scaling));
@@ -1108,7 +1104,7 @@ public class View {
   }
 
   public Coord3d computeSceneScaling() {
-    return computeSceneScaling(scene, squared, boundmode, viewbounds, spaceTransformer);
+    return computeSceneScaling(scene, squared, boundsMode, viewBounds, spaceTransformer);
   }
 
   public Coord3d computeSceneScaling(Scene scene, boolean squared, ViewBoundMode boundmode,
@@ -1128,7 +1124,7 @@ public class View {
 
   public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds,
       float sceneRadiusScaled) {
-    updateCamera(viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam, cameraMode,
+    updateCamera(viewport, bounds, sceneRadiusScaled, viewMode, viewpoint, cam, cameraMode,
         factorViewPointDistance, center, scaling);
   }
 
@@ -1185,7 +1181,7 @@ public class View {
   }
 
   protected Coord3d computeCameraEye(Coord3d target) {
-    return computeCameraEye(target, viewmode, viewpoint);
+    return computeCameraEye(target, viewMode, viewpoint);
   }
 
   protected Coord3d computeCameraTarget(Coord3d center, Coord3d scaling) {
@@ -1250,7 +1246,7 @@ public class View {
 
   public void computeCameraRenderingSphereRadius(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
-    if (viewmode == ViewPositionMode.TOP) {
+    if (viewMode == ViewPositionMode.TOP) {
       if (spaceTransformer != null)
         bounds = spaceTransformer.compute(bounds);
 
