@@ -22,7 +22,7 @@
 		
 		<!-- The way to link on JOGL 2.3.2 -->
 		
-		<dependency>
+		<!-- <dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt-main</artifactId>
         </dependency>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all-main</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- The way to link on JOGL 2.4.0 once it is cleanly deployed -->
         <!-- <dependency>
@@ -55,108 +55,108 @@
 
 		<!-- JOGL -->
 		
-		<!-- JOGL<dependency>
+		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-natives-linux-aarch64</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-natives-linux-amd64</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-natives-linux-armv6hf</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-natives-linux-i586</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-natives-macosx-universal</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-natives-windows-amd64</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-natives-windows-i586 </artifactId>
-			<version>v2.4.0-rc-20210111</version>
-		</dependency> -->
+			<version>v2.4.0-rc4</version>
+		</dependency>
 
 		<!-- GLUEGEN -->
 
-<!-- 
+
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-natives-macosx-universal</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-natives-linux-aarch64</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-natives-linux-amd64</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-natives-linux-armv6hf</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-natives-linux-i586</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-natives-macosx-universal</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-natives-windows-amd64</artifactId>
-			<version>v2.4.0-rc-20210111</version>
+			<version>v2.4.0-rc4</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-natives-windows-i586 </artifactId>
-			<version>v2.4.0-rc-20210111</version>
-		</dependency> -->
+			<version>v2.4.0-rc4</version>
+		</dependency>
 	</dependencies>
 </project>
