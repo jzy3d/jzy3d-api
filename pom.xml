@@ -57,10 +57,15 @@
 
 		<module>jzy3d-native-jogl-core</module>
 		<module>jzy3d-native-jogl-awt</module>
-		<module>jzy3d-native-jogl-newt</module>
-		<!-- <module>jzy3d-native-jogl-javafx</module> -->
+		
 		<module>jzy3d-native-jogl-swing</module>
 		<module>jzy3d-native-jogl-swt</module>
+
+		<!-- <module>jzy3d-native-jogl-newt</module>  -->
+		
+		<!-- <module>jzy3d-native-jogl-javafx</module> -->
+		
+
 
 		<module>jzy3d-tester</module>
 		<module>jzy3d-tester-native</module>
@@ -247,11 +252,9 @@
 				<version>3.12.1</version>
 			</dependency>
 
-			<!-- <dependency> <groupId>org.jogamp.gluegen</groupId> <artifactId>gluegen-rt</artifactId> 
-				<version>2.4.0-rc-20210111</version> </dependency> <dependency> <groupId>org.jogamp.jogl</groupId> 
-				<artifactId>jogl-all</artifactId> <version>2.4.0-rc-20210111</version> </dependency> -->
+			<!-- See pom.xml of jzy3d-native-jogl-core -->
 
-			<dependency>
+			<!-- <dependency>
 				<groupId>org.jogamp.gluegen</groupId>
 				<artifactId>gluegen-rt-main</artifactId>
 				<version>2.3.2</version>
@@ -261,7 +264,7 @@
 				<groupId>org.jogamp.jogl</groupId>
 				<artifactId>jogl-all-main</artifactId>
 				<version>2.3.2</version>
-			</dependency>
+			</dependency>-->
 
 
 			<dependency>
@@ -355,20 +358,29 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.0.0-M5</version>
 					<configuration>
+						<!-- Parallel tests -->
 						<parallel>classes</parallel>
 						<useUnlimitedThreads>true</useUnlimitedThreads>
 
-						<!-- Configure jogl to wait up to 20 seconds before throwing a timeout 
-							exception. Mainly required when running on Github CI since MacOS VM use a 
+						<!-- -->
+						<forkCount>1</forkCount>
+
+						<!-- Configure jogl to wait up to 20 seconds before throwing a timeout
+							exception. Mainly required when running on Github CI since MacOS VM use a
 							software implementation -->
 						<argLine>-Djogamp.common.utils.locks.Lock.timeout=20000</argLine>
-					</configuration>
-				</plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>3.0.0-M5</version>
+						<!--Want IT ITest to be ran only when using -Pintegration-test, so disable for default profile-->
+						<excludes>
+							<exclude>**/ITTest*.java</exclude>
+						</excludes>
+
+						<!-- Want to support these two test name patterns -->
+						<includes>
+							<include>**/Test*.java</include>
+							<include>**/*Test.java</include>
+						</includes>
+					</configuration>
 				</plugin>
 
 				<plugin>
@@ -579,9 +591,10 @@
 								<include>**/*Test.java</include>
 								<include>**/ITTest*.java</include>
 							</includes>
+
+							<!-- Parallel tests -->
 							<parallel>classes</parallel>
 							<useUnlimitedThreads>true</useUnlimitedThreads>
-
 						</configuration>
 					</plugin>
 

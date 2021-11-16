@@ -1,21 +1,14 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.factories.AWTChartFactory;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.builder.Mapper;
-import org.jzy3d.plot3d.builder.SurfaceBuilder;
-import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.SampleGeom;
-import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
@@ -27,6 +20,8 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
  * 
  * @author martin
  */
+
+@Ignore("NOT ABLE TO MAKE A CONSISTENT TEST OVER ALL OS YET")
 public class TestCameraNative_Viewport {
 
   @Test
@@ -132,36 +127,4 @@ public class TestCameraNative_Viewport {
     Assert.assertEquals(CANVAS_SIZE_H.width / 2 - sideLength / 2, camera.getLastViewPort().getX());
 
   }
-
-
-  /*private static Shape surface() {
-
-    // ---------------------------
-    // DEFINE SURFACE MATHS
-    Mapper mapper = new Mapper() {
-      @Override
-      public double f(double x, double y) {
-        return x * Math.sin(x * y);
-      }
-    };
-    Range range = new Range(-3, 3);
-    int steps = 60;
-
-    // ---------------------------
-    // CUSTOMIZE SURFACE BUILDER FOR JGL
-    SurfaceBuilder builder = new SurfaceBuilder();
-
-    // ---------------------------
-    // MAKE SURFACE
-    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-    surface.setPolygonOffsetFillEnable(false);
-
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
-    surface.setColorMapper(colorMapper);
-    surface.setFaceDisplayed(true);
-    surface.setWireframeDisplayed(true);
-    surface.setWireframeColor(Color.BLACK);
-    return surface;
-  }*/
 }
