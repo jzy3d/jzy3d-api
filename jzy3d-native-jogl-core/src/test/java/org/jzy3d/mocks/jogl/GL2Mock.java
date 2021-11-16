@@ -15368,7 +15368,7 @@ public class GL2Mock implements GL2 {
 
   }
 
-  @Override
+  /*@Override
   public void glPrimitiveBoundingBox(float minX, float minY, float minZ, float minW, float maxX,
       float maxY, float maxZ, float maxW) {
     // TODO Auto-generated method stub
@@ -15771,6 +15771,6 @@ public class GL2Mock implements GL2 {
   public void glHintPGI(int target, int mode) {
     // TODO Auto-generated method stub
     
-  }
+  }*/
 
 }
