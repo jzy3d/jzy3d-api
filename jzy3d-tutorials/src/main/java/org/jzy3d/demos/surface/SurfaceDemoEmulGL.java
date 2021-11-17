@@ -19,7 +19,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 
 /**
- * Demo an AWT chart using jGL {@link GLCanvas} for CPU rendering (instead of GPU rendering).
+ * Demo an AWT chart using jGL for CPU rendering (instead of GPU rendering).
  * 
  * @author martin
  *

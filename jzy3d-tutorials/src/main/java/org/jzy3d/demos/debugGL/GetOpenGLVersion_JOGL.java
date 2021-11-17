@@ -21,7 +21,8 @@ public class GetOpenGLVersion_JOGL {
     // Profile & capabilities
     
     //GLProfile glp = GLProfile.getDefault();
-    GLProfile glp = GLProfile.get(GLProfile.GL4bc);
+    //GLProfile glp = GLProfile.get(GLProfile.GL4bc);
+    GLProfile glp = GLProfile.get(GLProfile.GL2);
     //GLProfile glp = GLProfile.getMaximum(true);
 
     GLCapabilities caps = new GLCapabilities(glp);
@@ -60,9 +61,9 @@ public class GetOpenGLVersion_JOGL {
     // Try invoking something
 
     
-    //gl.getGL2().glClear(0);
+    gl.getGL2().glClear(0);
     
-    //gl.getGL4bc().glClear(0);
+    gl.getGL4bc().glClear(0);
     
 
     // ------------------------------------------------------
@@ -80,10 +81,11 @@ public class GetOpenGLVersion_JOGL {
     String ext = gl.glGetString(GL.GL_EXTENSIONS);
 
     if(ext!=null) {
-      sb.append("GL_EXTENSIONS : " + "\n");
-      for(String e: ext.split(" ")) {
+      String[] exts = ext.split(" ");
+      sb.append("GL_EXTENSIONS : (" + exts.length + ")\n");
+      /*for(String e: exts) {
         sb.append("\t" + e + "\n");
-      }
+      }*/
     }
     else {
       sb.append("GL_EXTENSIONS : null\n");      

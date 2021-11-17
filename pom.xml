@@ -57,10 +57,15 @@
 
 		<module>jzy3d-native-jogl-core</module>
 		<module>jzy3d-native-jogl-awt</module>
-		<module>jzy3d-native-jogl-newt</module>
-		<!-- <module>jzy3d-native-jogl-javafx</module> -->
+
 		<module>jzy3d-native-jogl-swing</module>
 		<module>jzy3d-native-jogl-swt</module>
+
+		<!-- <module>jzy3d-native-jogl-newt</module>  -->
+
+		<!-- <module>jzy3d-native-jogl-javafx</module> -->
+
+
 
 		<module>jzy3d-tester</module>
 		<module>jzy3d-tester-native</module>
@@ -104,8 +109,8 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
-		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
+	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository> </distributionManagement> -->
 
 	<properties>
@@ -236,15 +241,20 @@
 
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
+				<artifactId>org.eclipse.swt.cocoa.macosx.aarch64</artifactId>
+				<optional>true</optional>
+				<version>${version.swt}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.jface</artifactId>
 				<version>3.12.1</version>
 			</dependency>
 
-			<!-- <dependency> <groupId>org.jogamp.gluegen</groupId> <artifactId>gluegen-rt</artifactId> 
-				<version>2.4.0-rc-20210111</version> </dependency> <dependency> <groupId>org.jogamp.jogl</groupId> 
-				<artifactId>jogl-all</artifactId> <version>2.4.0-rc-20210111</version> </dependency> -->
+			<!-- See pom.xml of jzy3d-native-jogl-core -->
 
-			<dependency>
+			<!-- <dependency>
 				<groupId>org.jogamp.gluegen</groupId>
 				<artifactId>gluegen-rt-main</artifactId>
 				<version>2.3.2</version>
@@ -254,7 +264,7 @@
 				<groupId>org.jogamp.jogl</groupId>
 				<artifactId>jogl-all-main</artifactId>
 				<version>2.3.2</version>
-			</dependency>
+			</dependency>-->
 
 
 			<dependency>
@@ -276,7 +286,7 @@
 			</dependency>
 
 			<dependency>
-				<!-- Some modules use junit not only in their test classes but also in 
+				<!-- Some modules use junit not only in their test classes but also in
 					their main classes. Therefore manage the version in this section -->
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -348,20 +358,31 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.0.0-M5</version>
 					<configuration>
+						<!-- Parallel tests
+						DISABLE PARALLEL TEST OTHERWISE CANVAS DO NOT UPDATE PROPERLY (?!)
+
 						<parallel>classes</parallel>
 						<useUnlimitedThreads>true</useUnlimitedThreads>
+						<forkCount>1</forkCount>-->
 
-						<!-- Configure jogl to wait up to 20 seconds before throwing a timeout 
-							exception. Mainly required when running on Github CI since MacOS VM use a 
+						<!-- Configure jogl to wait up to 20 seconds before throwing a timeout
+							exception. Mainly required when running on Github CI since MacOS VM use a
 							software implementation -->
 						<argLine>-Djogamp.common.utils.locks.Lock.timeout=20000</argLine>
-					</configuration>
-				</plugin>
 
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>3.0.0-M5</version>
+						<!--Want IT ITest to be ran only when using -Pintegration-test, so disable for default profile-->
+						<excludes>
+							<exclude>**/ITTest*.java</exclude>
+							<!-- This one is very sensitive to platform specific frame sizing -->
+							<exclude>**/TestCameraNative_Viewport.java</exclude>
+						</excludes>
+
+						<!-- Want to support these two test name patterns -->
+						<includes>
+							<include>**/Test*.java</include>
+							<include>**/*Test.java</include>
+						</includes>
+					</configuration>
 				</plugin>
 
 				<plugin>
@@ -485,10 +506,10 @@
 				<artifactId>maven-release-plugin</artifactId>
 			</plugin>
 
-			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId> 
-				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId> 
-				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose> 
-				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose> 
+			<!--<plugin> <groupId>org.sonatype.plugins</groupId> <artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version> <extensions>true</extensions> <configuration> <serverId>ossrh</serverId>
+				<nexusUrl>https://oss.sonatype.org/</nexusUrl> <autoReleaseAfterClose>true</autoReleaseAfterClose>
+				TO BE COMMENTED <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
 				</configuration> </plugin> -->
 
 			<!-- SIGN ARTIFACT FOR DEPLOYING TO SONATYPE -->
@@ -560,7 +581,7 @@
 			<id>integration-tests</id>
 			<build>
 				<plugins>
-					<!-- Use surefire to run integration tests which success may depend 
+					<!-- Use surefire to run integration tests which success may depend
 						on GPU. Run them with mvn verify -Pintegration-tests -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -572,19 +593,31 @@
 								<include>**/*Test.java</include>
 								<include>**/ITTest*.java</include>
 							</includes>
-							<parallel>classes</parallel>
-							<useUnlimitedThreads>true</useUnlimitedThreads>
 
+							<!--
+							DISABLE PARALLEL TEST OTHERWISE CANVAS DO NOT UPDATE PROPERLY (?!)
+
+							Parallel tests
+							<parallel>classes</parallel>
+							<useUnlimitedThreads>true</useUnlimitedThreads>-->
 						</configuration>
 					</plugin>
 
-					<!-- Use failsafe to run integration tests which success may depend 
+					<!--
+					DO NOT USE FAILSAFE TESTS FOR RUNNING IT TESTS, BUT RATHER RUN THEM FROM
+					WITH SUREFIRE
+
+					Use failsafe to run integration tests which success may depend
 						on GPU. Run them with mvn verify -Pintegration-tests -->
-					<!--<plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-failsafe-plugin</artifactId> 
-						<version>3.0.0-M5</version> <configuration> <includes> <include>**/ITTest*.java</include> 
-						</includes> </configuration> <executions> <execution> <id>integration-test</id> 
-						<goals> <goal>integration-test</goal> <goal>verify</goal> </goals> </execution> 
-						</executions> </plugin> -->
+					<!--<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>3.0.0-M5</version>
+						<configuration> <
+							includes> <include>**/ITTest*.java</include>
+						</includes> </configuration> <executions> <execution> <id>integration-test</id>
+						<goals> <goal>integration-test</goal> <goal>verify</goal> </goals> </execution>
+					</executions> </plugin> -->
 
 				</plugins>
 			</build>
