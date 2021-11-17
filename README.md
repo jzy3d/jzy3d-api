@@ -210,18 +210,31 @@ mvn dependency:resolve -Dclassifier=sources
 
 #### Run unit tests only
 
+This will run all test named `**/Test*.java` or `**/*Test.java`.
+
 ```
 mvn clean install
 ```
 
 #### Run unit tests and integration tests
 
+Integration tests compare charts to baseline images pixel wise. They are important in te toolbelt but have the drawback of being less portable accross computers
+* Different OS have different frame insets (changing actual rendering area size) leading to chart screenshots of different size accross OS.
+* Different OS have different frame insets (changing actual rendering area size) leading to chart a different layout (colorbar position)
+* Different OS have different font rasterization (despite using the JVM font raterizer to minimize OS impact), hence text labels do not match despite having only a few pixel difference.
+* A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tests-java9` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts. 
+
+This will run all test named `**/ITTest*.java` and unit tests.
+
 ```
 mvn clean install -Pintegration-tests
 ```
 
+
+
 #### Skip tests
 
+This will skip all tests (unit and integration)
 ```
 mvn clean install -DskipTests
 ```
