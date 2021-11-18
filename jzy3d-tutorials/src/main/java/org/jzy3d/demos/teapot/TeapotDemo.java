@@ -1,9 +1,10 @@
 package org.jzy3d.demos.teapot;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
-import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
+import org.jzy3d.plot3d.primitives.Teapot;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 
@@ -22,8 +23,8 @@ public class TeapotDemo {
     
     
     // ---------------------------------------------
-    //ChartFactory factory = new AWTChartFactory();
-    ChartFactory factory = new EmulGLChartFactory();
+    ChartFactory factory = new AWTChartFactory();
+    //ChartFactory factory = new EmulGLChartFactory();
     
     // Emulgl will show limitations
     // 1-wireframe and face do not mix cleanly (polygon offset fill)
