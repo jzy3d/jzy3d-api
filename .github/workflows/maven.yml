@@ -86,7 +86,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['9.0.0+0']
+        java: ['9.0.0+0', '14']
         os: ['mac-m1-2']
     steps:
     - uses: actions/checkout@v2
