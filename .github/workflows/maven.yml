@@ -148,7 +148,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['8', '14']
+        java: ['9', '14']
         os: ['ubuntu-20-04']
     steps:
     - uses: actions/checkout@v2
