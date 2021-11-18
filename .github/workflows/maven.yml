@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['9.0.0+0']
+        java: ['9.0.0+0', '14']
         # ============================================================================================================
         # Java / Zulu Distributions
         # ok : '9.0.0+0'
@@ -87,7 +87,7 @@ jobs:
     strategy:
       matrix:
         java: ['9.0.0+0']
-        os: ['mac-m1-2'] # , 'windows-latest', windows-2016
+        os: ['mac-m1-2']
     steps:
     - uses: actions/checkout@v2
 
@@ -117,8 +117,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['9.0.0+0']
-        os: ['win10-x86_64'] # , 'windows-latest', windows-2016
+        java: ['9.0.0+0', '14']
+        os: ['win10-x86_64']
     steps:
     - uses: actions/checkout@v2
 
@@ -148,8 +148,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        java: ['9.0.0+0']
-        os: ['ubuntu-20-04'] # , 'windows-latest', windows-2016
+        java: ['8', '14']
+        os: ['ubuntu-20-04']
     steps:
     - uses: actions/checkout@v2
 
