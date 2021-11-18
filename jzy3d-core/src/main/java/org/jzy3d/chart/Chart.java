@@ -336,11 +336,11 @@ public class Chart {
   /* FRAME */
 
   public IFrame open() {
-    return open(DEFAULT_WINDOW_TITLE, new Rectangle(0, 0, 600, 600));
+    return open(DEFAULT_WINDOW_TITLE, new Rectangle(0, 0, 800, 600));
   }
 
   public IFrame open(String title) {
-    return open(title, new Rectangle(0, 0, 600, 600));
+    return open(title, new Rectangle(0, 0, 800, 600));
   }
 
   public IFrame open(String title, int width, int height) {
