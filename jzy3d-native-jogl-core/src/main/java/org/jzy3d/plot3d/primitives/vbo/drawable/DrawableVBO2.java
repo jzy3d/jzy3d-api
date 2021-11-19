@@ -437,10 +437,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   }
 
   public static IGLLoader<DrawableVBO2> makeLoader(float[] points, int elementSize) {
-    return makeLoader(points, VERTEX_DIMENSIONS, null, elementSize, null, null, null);
+    return new VBOBufferLoaderForArrays(points, VERTEX_DIMENSIONS, null, elementSize, null, null, null);
   }
-
-
 
   public static IGLLoader<DrawableVBO2> makeLoader(float[] points, int pointDimensions,
       int[] elementStart, int[] elementLength, float[] coloring, NormalMode normalMode) {
@@ -905,7 +903,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   }
 
   public void setColorChannels(int colorChannels) {
-    this.colorChannels = colorChannels;
+    this.colorChannels = colorChannels;    
   }
 
   @Override
