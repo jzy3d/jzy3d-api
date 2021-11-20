@@ -21,7 +21,7 @@ Build files
 
 Library dependencies
 --------------
-- <a href="http://jogamp.org/jogl/www/">jogl2</a>
+- <a href="https://jogamp.org/jogl/www/">jogl2</a>
 - <a href="https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-jdt-core">jdt</a> (Java Delaunay Triangulation)
 - opencsv
 - log4j

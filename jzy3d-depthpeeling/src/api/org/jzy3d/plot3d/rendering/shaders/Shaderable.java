@@ -34,7 +34,7 @@ public class Shaderable implements IShaderable {
 
   /* PROGRAM */
 
-  // http://www.opengl.org/wiki/GLSL_:_common_mistakes
+  // https://www.khronos.org/opengl/wiki/GLSL_:_common_mistakes
   protected void loadProgram(GL2 gl) {
     program = new GLSLProgram();
     program.loadAndCompileVertexShader(gl, shaders.getVertexURL());

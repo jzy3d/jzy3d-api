@@ -214,7 +214,7 @@ public class Coord2d implements Serializable {
 
   /**
    * Return a real polar value, with an angle in the range [0;2*PI]
-   * http://fr.wikipedia.org/wiki/Coordonn%C3%A9es_polaires
+   * https://en.wikipedia.org/wiki/Polar_coordinate_system
    */
   public Coord2d fullPolar() {
     double radius = Math.sqrt(x * x + y * y);
