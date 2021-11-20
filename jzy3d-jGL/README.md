@@ -1,21 +1,21 @@
 # jGL
 
-A pure Java implementation of OpenGL, still [online](http://graphics.im.ntu.edu.tw/~robin/jGL/) with [example gallery](http://graphics.im.ntu.edu.tw/~robin/jGL/Example/index.html) and an [LGPL licence](http://www.gnu.org/licenses/lgpl-3.0.html)
+A pure Java implementation of OpenGL, still [online](https://www.cmlab.csie.ntu.edu.tw/~robin/jGL/) with [example gallery](https://www.cmlab.csie.ntu.edu.tw/~robin/jGL/Example/index.html) and an [LGPL licence](https://www.gnu.org/licenses/lgpl-3.0.html)
 
 
 # History
 
-[jGL](http://www.cmlab.csie.ntu.edu.tw/~robin/jGL/) was created by Robin Bing-Yu Chen in 1996 and has been maintained up to 2006. 
+[jGL](https://www.cmlab.csie.ntu.edu.tw/~robin/jGL/) was created by Robin Bing-Yu Chen in 1996 and has been maintained up to 2006. 
 It is a pure java implementation of OpenGL 1, hence performing 3d rendering with CPU instead of GPU. 
 Some papers about jGL published by Robin have been added to the `doc/papers` folder which clarify all his work.
-It comes with [lot of OpenGL Red Book examples](http://www.cmlab.csie.ntu.edu.tw/~robin/jGL/Example-app/index.html) proving how well
+It comes with [lot of OpenGL Red Book examples](https://www.cmlab.csie.ntu.edu.tw/~robin/jGL/Example-app/index.html) proving how well
 this OpenGL implementation works. The examples are released as [AWT applications](https://github.com/jzy3d/jGL/tree/master/src/main/java/examples/apps)
 and [Applets](https://github.com/jzy3d/jGL/tree/master/src/main/java/examples/applets).
 
 
 In 2020, CPU are much more faster than in 2006 and experiments have showned that one can get very decent rendering 
 performance for simple 3D scenes showing surface or scatter point charts. Despite not exhaustive at all, I was able 
-to have the following performance on a MacBook Pro (Retina 15 pouces, début 2013), 2,7 GHz Intel Core i7, RAM 16 Go 1600 MHz DDR3
+to have the following performance on a MacBook Pro (Retina 15 pouces, début 2013), 2,7 GHz Intel Core i7, RAM 16 Go 1600 MHz DDR3
 - A 60x60 polygon 3D surface in a 500x500 pixels frame is rendered in ~30ms. 
 - A 60x60 polygon 3D surface in a 1440x800 pixel frame is rendered in ~45ms
 - A 50.000 points 3D scatter in a 500x500 pixels frame is rendered in ~10ms.
@@ -103,12 +103,12 @@ Maven artifacts are stored there (you should add this to your pom file root):
     <repository>
         <id>jzy3d-snapshots</id>
         <name>Jzy3d Snapshots</name>
-        <url>http://maven.jzy3d.org/snapshots/</url>
+        <url>https://maven.jzy3d.org/snapshots/</url>
     </repository>
     <repository>
         <id>jzy3d-releases</id>
         <name>Jzy3d Releases</name>
-        <url>http://maven.jzy3d.org/releases/</url>
+        <url>https://maven.jzy3d.org/releases/</url>
     </repository>
 </repositories>
 ```
