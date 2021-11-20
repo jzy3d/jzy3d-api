@@ -15,7 +15,7 @@
 	<licenses>
 		<license>
 			<name>The (New) BSD License</name>
-			<url>http://www.opensource.org/licenses/bsd-license.php</url>
+			<url>https://opensource.org/licenses/bsd-license.php</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -25,7 +25,7 @@
 			<id>martin.pernollet</id>
 			<name>Martin Pernollet</name>
 			<email>martin@jzy3d.org</email>
-			<url>http://twitter.com/jzy3d</url>
+			<url>https://twitter.com/jzy3d</url>
 		</developer>
 		<developer>
 			<id>nils.hoffmann</id>

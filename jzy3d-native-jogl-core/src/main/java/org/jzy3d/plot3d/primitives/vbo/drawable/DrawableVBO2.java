@@ -693,7 +693,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * 
    * @param painter holds a GL instance to invoke the GPU.
    * 
-   * @see http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
+   * @see https://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
    * @see https://github.com/opengl-tutorials/ogl/blob/master/tutorial09_vbo_indexing/tutorial09.cpp
    */
   protected void doDrawElements(IPainter painter) {

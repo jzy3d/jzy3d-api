@@ -41,7 +41,7 @@ import org.eclipse.swt.widgets.Composite;
  * </code><br>
  * <br>
  * If problems are encountered with the Bridge, it is possible to check:<br>
- * http://wiki.eclipse.org/Albireo_SWT_AWT_bugs<br>
+ * https://wiki.eclipse.org/Albireo_SWT_AWT_bugs<br>
  * http://www.eclipsezone.com/eclipse/forums/t45697.html<br>
  *
  * @author Martin Pernollet
