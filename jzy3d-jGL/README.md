@@ -85,7 +85,7 @@ rendering at all until the Paint event
 
 You should add this to your pom file dependencies node, using the latest Jzy3d version:
 
-```
+```xml
 <dependency>
     <groupId>org.jzy3d</groupId>
     <artifactId>jGL</artifactId>
@@ -98,7 +98,7 @@ Note that the repository was formerly standalone and versioned following Robin v
 
 Maven artifacts are stored there (you should add this to your pom file root):
 
-```
+```xml
 <repositories>
     <repository>
         <id>jzy3d-snapshots</id>
@@ -195,18 +195,17 @@ GL.glFlush()
 
 
 # Javadoc and UML documentation
-Javadoc with UML generated with [yFiles Doclet tool](https://www.yworks.com/downloads#yDoc).
-Configuration file in doc/yfiles.uml.options.jgl.linux
-Run ```javadoc @/Users/martin/Dev/jzy3d/public/jGL/doc/uml/yfiles.uml.options.jgl.linux```
+Javadoc with UML generated with [yFiles Doclet tool](https://www.yworks.com/downloads#yDoc).  
+Configuration file in `doc/yfiles.uml.options.jgl.linux`  
+Run `javadoc @/Users/martin/Dev/jzy3d/public/jGL/doc/uml/yfiles.uml.options.jgl.linux`
 
 
  
 # Features
 
-|Name          |Tested |Integrated in Jzy3D|Version| 
-----------------------------------------------------
-|Alpha blending|Yes    |Yes                |2.5    | 
+|Name          |Tested |Integrated in Jzy3D|Version|
+| ------------ | ----- | ----------------- | ----- |
+|Alpha blending|Yes    |Yes                |2.5    |
 |Text          |Yes    |Yes                |2.5    |
-|Lightning     |No     |No                 |2.4    | 
- 
+|Lightning     |No     |No                 |2.4    |
 
