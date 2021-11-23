@@ -19,7 +19,7 @@ public class DepthPeelingPainterFactory extends AWTPainterFactory {
 
 
   @Override
-  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+  public Renderer3d newRenderer3D(View view) {
     PeelingMethod method = ((DepthPeelingChartFactory) getChartFactory()).method;
     DepthPeelingRenderer3d r =
         new DepthPeelingRenderer3d(method, (DepthPeelingView) view, traceGL, debugGL);

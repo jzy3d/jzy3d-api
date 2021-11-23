@@ -112,8 +112,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
 
 
   private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
-    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,
-        debugGL);
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
   }
 
   private float[] newPixelScaleIdentity() {

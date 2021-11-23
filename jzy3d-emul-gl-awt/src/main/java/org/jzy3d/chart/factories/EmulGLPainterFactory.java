@@ -37,6 +37,8 @@ public class EmulGLPainterFactory implements IPainterFactory {
   protected boolean offscreen = false;
   protected int width;
   protected int height;
+  
+  protected boolean debugGL;
 
 
   @Override
@@ -90,6 +92,8 @@ public class EmulGLPainterFactory implements IPainterFactory {
   public EmulGLCanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
     if (internalCanvas == null) {
       internalCanvas = newEmulGLCanvas(factory, scene, quality);
+      
+      internalCanvas.getGL().setThrowExceptionOnGLError(debugGL);
 
       if (factory.getPainterFactory().isOffscreen()) {
         Dimension d = getOffscreenDimension();
@@ -202,5 +206,15 @@ public class EmulGLPainterFactory implements IPainterFactory {
     return new Dimension(width, height);
   }
 
+  @Override
+  public boolean isDebugGL() {
+    return debugGL;
+  }
+
+  /** If true, will let GL trigger {@link GLException} if an error occur in OpenGL which ease debugging. Default is false. */
+  @Override
+  public void setDebugGL(boolean debugGL) {
+    this.debugGL = debugGL;
+  }
 
 }
