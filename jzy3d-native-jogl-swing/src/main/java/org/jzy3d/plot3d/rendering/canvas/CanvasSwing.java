@@ -40,10 +40,6 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   
   protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
 
-  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality) {
-    this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
-  }
-
   /**
    * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.
    */
@@ -106,8 +102,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   }
 
   private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
-    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,
-        debugGL);
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
   }
 
   @Override

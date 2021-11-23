@@ -16,7 +16,7 @@ import org.jzy3d.ui.views.ImagePanel;
 
 public class FallbackPainterFactory extends AWTPainterFactory {
   @Override
-  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+  public Renderer3d newRenderer3D(View view) {
     return new AWTImageRenderer3d(view, traceGL, debugGL);
   }
 
