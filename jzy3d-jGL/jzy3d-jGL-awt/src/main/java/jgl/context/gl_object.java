@@ -32,7 +32,7 @@ public abstract class gl_object {
 
   /**
    * If true, will notify of any OpenGL error according to the configuration of
-   * {@link gl_object#exception}
+   * {@link gl_object#throwExceptionOnGLError}
    */
   protected final boolean debug = true;
   /**
@@ -40,7 +40,7 @@ public abstract class gl_object {
    * to System.err.println(). In case {@link gl_object#debug} is set to false, all OpenGL errors are
    * muted.
    */
-  protected final boolean exception = true;
+  protected boolean throwExceptionOnGLError = true;
 
   public static final float IDENTITY[] = {1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
 
@@ -154,7 +154,7 @@ public abstract class gl_object {
       // System.out.println("): " + s);
       sb.append("): " + s);
 
-      if (exception) {
+      if (throwExceptionOnGLError) {
         throw new RuntimeException(sb.toString());
       } else {
         System.err.println(sb.toString());
@@ -164,6 +164,15 @@ public abstract class gl_object {
       ErrorValue = error;
     }
   }
+  
+  public void setThrowExceptionOnGLError(boolean status) {
+    this.throwExceptionOnGLError = status;
+  }
+
+  public boolean getThrowExceptionOnGLError() {
+    return throwExceptionOnGLError;
+  }
+
 
   public void gl_eval_coord_1(float u) {
     gl_eval_map1 map;

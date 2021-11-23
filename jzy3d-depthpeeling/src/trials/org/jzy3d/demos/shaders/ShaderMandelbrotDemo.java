@@ -38,7 +38,7 @@ public class ShaderMandelbrotDemo {
 
     AWTPainterFactory painter = new AWTPainterFactory(capabilities) {
       @Override
-      public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+      public Renderer3d newRenderer3D(View view) {
         ShaderRenderer3d r = new ShaderRenderer3d(view, traceGL, debugGL, new Shaderable());
         return r;
       }

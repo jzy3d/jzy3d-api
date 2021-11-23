@@ -56,28 +56,24 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
 
   /** Provide AWT Texture loading for screenshots */
   @Override
-  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+  public Renderer3d newRenderer3D(View view) {
     return new AWTRenderer3d(view, traceGL, debugGL);
   }
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
-    boolean traceGL = false;
-    boolean debugGL = false;
 
     if (isOffscreen()) {
-      return newOffscreenCanvas(factory, scene, quality, traceGL, debugGL);
+      return newOffscreenCanvas(factory, scene, quality);
     } else {
 
-      return new CanvasAWT(factory, scene, quality, getCapabilities(), traceGL, debugGL);
+      return new CanvasAWT(factory, scene, quality, getCapabilities());
     }
   }
 
-  protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
-      boolean traceGL, boolean debugGL) {
+  protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality) {
     Dimension dim = getOffscreenDimension();
-    return new OffscreenCanvas(factory, scene, quality, getCapabilities(), dim.width, dim.height,
-        traceGL, debugGL);
+    return new OffscreenCanvas(factory, scene, quality, getCapabilities(), dim.width, dim.height);
   }
 
 
