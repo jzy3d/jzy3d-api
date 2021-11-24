@@ -659,6 +659,28 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
         throw new IllegalArgumentException("Expect a plane ID in [0;5]");
     }
   }
+  
+  /** Return the GL clip plane ID according to an ID in [0;5]*/
+  @Override
+  public int clipPlaneId(int id) {
+    switch (id) {
+      case 0:
+        return GL2.GL_CLIP_PLANE0;
+      case 1:
+        return GL2.GL_CLIP_PLANE1;
+      case 2:
+        return GL2.GL_CLIP_PLANE2;
+      case 3:
+        return GL2.GL_CLIP_PLANE3;
+      case 4:
+        return GL2.GL_CLIP_PLANE4;
+      case 5:
+        return GL2.GL_CLIP_PLANE5;
+      default:
+        throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
 
   @Override
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
