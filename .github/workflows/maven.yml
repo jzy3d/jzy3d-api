@@ -61,7 +61,7 @@ jobs:
         #cache: maven # caching makes the post build action to fail
 
     - name: Build with Maven
-      run: mvn package --file pom.xml --settings target/settings.xml
+      run: mvn package --file pom.xml
       # run: mvn -T 1C -B package --file pom.xml
       # run: mvn -T 1C -B -Dsurefire.useFile=false package --file pom.xml
       # -T 1C : 1 thread per cpu core
@@ -99,7 +99,7 @@ jobs:
         #cache: maven # caching makes the post build action to fail
 
     - name: Build with Maven
-      run: mvn package --file pom.xml --settings target/settings.xml
+      run: mvn package --file pom.xml
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
@@ -130,7 +130,7 @@ jobs:
         #cache: maven # caching makes the post build action to fail
 
     - name: Build with Maven
-      run: mvn package --file pom.xml --settings target/settings.xml
+      run: mvn package --file pom.xml
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
@@ -161,7 +161,7 @@ jobs:
         #cache: maven # caching makes the post build action to fail
 
     - name: Build with Maven
-      run: mvn package --file pom.xml --settings target/settings.xml
+      run: mvn package --file pom.xml
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
