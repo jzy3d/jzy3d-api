@@ -739,7 +739,8 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
           firstCoordOffset);
       gl2.glEnableClientState(GL2.GL_COLOR_ARRAY);
     } else {
-      gl2.glColor4f(color.r, color.g, color.b, color.a);
+      if(color!=null)
+        gl2.glColor4f(color.r, color.g, color.b, color.a);
     }
 
 
