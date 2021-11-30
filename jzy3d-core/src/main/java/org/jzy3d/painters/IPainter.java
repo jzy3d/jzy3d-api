@@ -387,6 +387,8 @@ public interface IPainter {
 
   public void glDisable_ClipPlane(int plane);
 
+  public int clipPlaneId(int id);
+  
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
       int objPos_offset);

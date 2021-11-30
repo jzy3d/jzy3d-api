@@ -651,4 +651,42 @@ public class Array {
       System.out.println();
     }
   }
+  
+  
+  
+  public static void print(String info, double input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, float input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, int input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, long input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, char input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, byte input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, Coord3d input[]) {
+    System.out.print(info);
+    print(input);
+  }
+
 }

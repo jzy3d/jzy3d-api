@@ -194,8 +194,9 @@ public class Graph {
   public void draw(IPainter painter) {
     // activate clipping if defined
     if(clipBox!=null) {
-      
+
       transform.execute(painter);
+      
       
       if(clipIncludesLimits)
         painter.clip(clipBox.marginRatio(CLIP_MARGIN_RATIO)); // make the box a little bigger
@@ -203,7 +204,7 @@ public class Graph {
         painter.clip(clipBox);
       
       painter.clipOn();
-      
+
     }
     
     // draw

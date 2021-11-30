@@ -176,8 +176,10 @@ public abstract class AbstractPainter implements IPainter {
   public void clip(BoundingBox3d box) {
     clip(0, ClipEq.X_INFERIOR_TO, box.getXmax());
     clip(1, ClipEq.X_SUPERIOR_TO, box.getXmin());
+    
     clip(2, ClipEq.Y_INFERIOR_TO, box.getYmax());
     clip(3, ClipEq.Y_SUPERIOR_TO, box.getYmin());
+    
     clip(4, ClipEq.Z_INFERIOR_TO, box.getZmax());
     clip(5, ClipEq.Z_SUPERIOR_TO, box.getZmin());
 
@@ -203,9 +205,12 @@ public abstract class AbstractPainter implements IPainter {
     glDisable_ClipPlane(5);
   }
   
+  /**
+   * A convenient shortcut to invoke a clipping plane using an ID in [0;5] instead of the original OpenGL ID value.
+   */
   @Override
   public void clip(int plane, ClipEq equation, double value) {
-    glClipPlane(plane, equation(equation, value));
+    glClipPlane(clipPlaneId(plane), equation(equation, value));
   }
 
 
@@ -232,21 +237,20 @@ public abstract class AbstractPainter implements IPainter {
    * @return
    */
   protected double[] equation(ClipEq eq, double value) {
-    double eqValue = (value >= 0) ? value : -value;
-
+    
     switch (eq) {
       case X_SUPERIOR_TO:
-        return new double[] {+1, 0, 0, eqValue};
+        return new double[] {+1, 0, 0, -value};
       case X_INFERIOR_TO:
-        return new double[] {-1, 0, 0, eqValue};
+        return new double[] {-1, 0, 0, value};
       case Y_SUPERIOR_TO:
-        return new double[] {0, +1, 0, eqValue};
+        return new double[] {0, +1, 0, -value};
       case Y_INFERIOR_TO:
-        return new double[] {0, -1, 0, eqValue};
+        return new double[] {0, -1, 0, value};
       case Z_SUPERIOR_TO:
-        return new double[] {0, 0, +1, eqValue};
+        return new double[] {0, 0, +1, -value};
       case Z_INFERIOR_TO:
-        return new double[] {0, 0, -1, eqValue};
+        return new double[] {0, 0, -1, value};
       default:
         throw new IllegalArgumentException("This equation is not supported : " + eq);
     }

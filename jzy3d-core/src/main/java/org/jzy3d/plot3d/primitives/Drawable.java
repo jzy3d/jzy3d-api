@@ -142,8 +142,8 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
    * @return the center of the bounding box, or {@link Coord3d.INVALID}.
    */
   public Coord3d getBarycentre() {
-    if (bbox != null)
-      return bbox.getCenter();
+    if (getBounds() != null)
+      return getBounds().getCenter();
     else
       return Coord3d.INVALID.clone();
   }

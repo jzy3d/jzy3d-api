@@ -50,7 +50,7 @@ public class SWTPainterFactory extends NativePainterFactory implements IPainterF
 
   /** Provide AWT Texture loading for screenshots */
   @Override
-  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+  public Renderer3d newRenderer3D(View view) {
     return new AWTRenderer3d(view, traceGL, debugGL);
   }
 
