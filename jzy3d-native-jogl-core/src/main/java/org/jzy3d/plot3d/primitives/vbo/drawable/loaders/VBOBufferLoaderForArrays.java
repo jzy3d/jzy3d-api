@@ -274,22 +274,9 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     drawable.setHasNormalInVertexArray(false);
     drawable.setVerticesPerGeometry(verticesPerGeometry);
-    
-    float colorVerticeRatio = 1;
-    
+
     if(colorBuffer!=null) {
-      colorVerticeRatio = (colorBuffer.capacity()/(verticeBuffer.capacity()*1f));
-      log.debug("COLOR VERTICE RATIO : " + colorVerticeRatio + " - colors:" + colorBuffer.capacity() + " vertices:" + verticeBuffer.capacity());
-    }
-    
-    if(colorVerticeRatio==1) {
-      drawable.setColorChannels(3); 
-    }
-    else if(colorVerticeRatio==4/3f){
-      drawable.setColorChannels(4);
-    }
-    else {
-      throw new RuntimeException("Unexpected color/vertice ratio =" + colorVerticeRatio + " - colors:" + colorBuffer.capacity() + " vertices:" + verticeBuffer.capacity());
+      verifyColorBufferSizeConsistency(drawable, verticeBuffer, colorBuffer);      
     }
 
     // glMultiDrawElements
@@ -307,6 +294,21 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     // glDrawElements
     else {
       drawable.setData(painter, elementBuffer, verticeBuffer, normalBuffer, colorBuffer, bounds);
+    }
+  }
+
+  protected void verifyColorBufferSizeConsistency(DrawableVBO2 drawable, FloatBuffer verticeBuffer,
+      FloatBuffer colorBuffer) {
+    float nColor = (1f * colorBuffer.capacity()) / (1f*drawable.getColorChannels());
+    float nVertice = verticeBuffer.capacity() / 3f;
+
+    if (nColor != nVertice) {
+      String info =
+          "Color & vertice number do not match. Check alpha channel configuration. colorBuf.size:"
+              + colorBuffer.capacity() + " channels:" + drawable.getColorChannels() + " verticeBuf.size:"
+              + verticeBuffer.capacity() + " nColor:" + nColor + " nVertice:" + nVertice;
+      throw new RuntimeException(info);
+      //log.error(info);
     }
   }
 }

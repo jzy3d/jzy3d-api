@@ -728,25 +728,25 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glEnable_ClipPlane(int plane) {
-    switch (plane) {
+    gl.glEnable(clipPlaneId(plane));
+  }
+  
+  /** Return the GL clip plane ID according to an ID in [0;5]*/
+  @Override
+  public int clipPlaneId(int id) {
+    switch (id) {
       case 0:
-        gl.glEnable(GL2.GL_CLIP_PLANE0);
-        break;
+        return GL2.GL_CLIP_PLANE0;
       case 1:
-        gl.glEnable(GL2.GL_CLIP_PLANE1);
-        break;
+        return GL2.GL_CLIP_PLANE1;
       case 2:
-        gl.glEnable(GL2.GL_CLIP_PLANE2);
-        break;
+        return GL2.GL_CLIP_PLANE2;
       case 3:
-        gl.glEnable(GL2.GL_CLIP_PLANE3);
-        break;
+        return GL2.GL_CLIP_PLANE3;
       case 4:
-        gl.glEnable(GL2.GL_CLIP_PLANE4);
-        break;
+        return GL2.GL_CLIP_PLANE4;
       case 5:
-        gl.glEnable(GL2.GL_CLIP_PLANE5);
-        break;
+        return GL2.GL_CLIP_PLANE5;
       default:
         throw new IllegalArgumentException("Expect a plane ID in [0;5]");
     }
@@ -754,28 +754,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glDisable_ClipPlane(int plane) {
-    switch (plane) {
-      case 0:
-        gl.glEnable(GL2.GL_CLIP_PLANE0);
-        break;
-      case 1:
-        gl.glEnable(GL2.GL_CLIP_PLANE1);
-        break;
-      case 2:
-        gl.glEnable(GL2.GL_CLIP_PLANE2);
-        break;
-      case 3:
-        gl.glEnable(GL2.GL_CLIP_PLANE3);
-        break;
-      case 4:
-        gl.glEnable(GL2.GL_CLIP_PLANE4);
-        break;
-      case 5:
-        gl.glEnable(GL2.GL_CLIP_PLANE5);
-        break;
-      default:
-        throw new IllegalArgumentException("Expect a plane ID in [0;5]");
-    }
+    gl.glDisable(clipPlaneId(plane));
   }
 
 

@@ -48,28 +48,18 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
 
   protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
 
-
-  public CanvasAWT(IChartFactory factory, Scene scene, Quality quality) {
-    this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
-  }
-
-  public CanvasAWT(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci) {
-    this(factory, scene, quality, glci, false, false);
-  }
-
   /**
    * Initialize a {@link CanvasAWT} attached to a {@link Scene}, with a given rendering
    * {@link Quality}.
    */
   public CanvasAWT(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+      GLCapabilitiesImmutable glci) {
     super(glci);
 
     view = scene.newView(this, quality);
     view.getPainter().setCanvas(this);
 
-    renderer = newRenderer(factory, traceGL, debugGL);
+    renderer = newRenderer(factory);
     addGLEventListener(renderer);
 
     setAutoSwapBufferMode(quality.isAutoSwapBuffer());
@@ -109,9 +99,8 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     return new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE};
   }
 
-  protected Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
-    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,
-        debugGL);
+  protected Renderer3d newRenderer(IChartFactory factory) {
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
   }
 
   @Override

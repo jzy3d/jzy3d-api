@@ -18,7 +18,6 @@ package jgl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import jgl.context.gl_context;
 import jgl.context.gl_list;
 import jgl.context.gl_object;
@@ -41,8 +40,8 @@ public abstract class GL<ImageType, FontType> {
 
   protected int StartX = 0;
   protected int StartY = 0;
-	protected List<TextToDraw<FontType>> textsToDraw = new ArrayList<>();
-	protected List<ImageToDraw<ImageType>> imageToDraw = new ArrayList<>();
+  protected List<TextToDraw<FontType>> textsToDraw = new ArrayList<>();
+  protected List<ImageToDraw<ImageType>> imageToDraw = new ArrayList<>();
 
   // settings
   protected int shiftHorizontally = 0;
@@ -85,6 +84,14 @@ public abstract class GL<ImageType, FontType> {
   protected List<PixelScaleListener> pixelScaleListeners = new ArrayList<>();
 
   public GL() {}
+  
+  public void setThrowExceptionOnGLError(boolean status) {
+    this.CC.setThrowExceptionOnGLError(status);
+  }
+
+  public boolean getThrowExceptionOnGLError() {
+    return CC.getThrowExceptionOnGLError();
+  }
 
   public gl_context getContext() {
     return Context;
@@ -120,24 +127,22 @@ public abstract class GL<ImageType, FontType> {
 
   /* ******************** PROVIDE IMAGE ********************/
 
-	public void glShadeModel(int mode) {
-		if(CC.Mode != None) {
-			CC.gl_error(GL_INVALID_OPERATION, "glShadeModel");
-			return;
-		}
-		CC.gl_shade_model(mode);
-	}
-
-
+  public void glShadeModel(int mode) {
+  	if(CC.Mode != None) {
+  	  CC.gl_error(GL_INVALID_OPERATION, "glShadeModel");
+  	  return;
+  	}
+  	CC.gl_shade_model(mode);
+  }
 
 
   /* ******************** FLUSH IN IMAGE ********************/
 
-  	/**
-	 * Creates a new ImageType based on the current color buffer.
-	 * 
-	 */
-	public abstract void glFlush();
+  /**
+   * Creates a new ImageType based on the current color buffer.
+   * 
+   */
+  public abstract void glFlush();
 
 
   public void addPixelScaleListener(PixelScaleListener listener) {
