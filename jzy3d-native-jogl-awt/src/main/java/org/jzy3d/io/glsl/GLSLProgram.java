@@ -11,6 +11,7 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 import org.jzy3d.io.BufferUtil;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL2;
@@ -76,6 +77,8 @@ public class GLSLProgram {
   public static Strictness DEFAULT_STRICTNESS = Strictness.CONSOLE;
 
   public static boolean WARN_SHOW_SHADER_SOURCE = true;
+  
+  protected static Logger log = Logger.getLogger(GLSLProgram.class);
 
 
   public GLSLProgram() {
@@ -362,20 +365,30 @@ public class GLSLProgram {
   // demoscene
   protected void checkShaderLogInfo(GL2 inGL, int inShaderObjectID) {
     IntBuffer tReturnValue = Buffers.newDirectIntBuffer(1);
+    
     inGL.glGetObjectParameterivARB(inShaderObjectID, GL2.GL_OBJECT_INFO_LOG_LENGTH_ARB,
         tReturnValue);
+    
     int tLogLength = tReturnValue.get();
     if (tLogLength <= 1) {
       return;
     }
+    
     ByteBuffer tShaderLog = Buffers.newDirectByteBuffer(tLogLength);
     BufferUtil.flip(tShaderLog);
+    
     inGL.glGetInfoLogARB(inShaderObjectID, tLogLength, tReturnValue, tShaderLog);
+    
+    log.info(tLogLength);    
+    log.info(tShaderLog.capacity());
+    
     byte[] tShaderLogBytes = new byte[tLogLength];
     tShaderLog.get(tShaderLogBytes);
+    
     String tShaderValidationLog = new String(tShaderLogBytes);
     StringReader tStringReader = new StringReader(tShaderValidationLog);
     LineNumberReader tLineNumberReader = new LineNumberReader(tStringReader);
+    
     String tCurrentLine;
     try {
       while ((tCurrentLine = tLineNumberReader.readLine()) != null) {
