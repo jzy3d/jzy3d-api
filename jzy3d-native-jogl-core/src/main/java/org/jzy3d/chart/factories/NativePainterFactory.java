@@ -25,6 +25,10 @@ public abstract class NativePainterFactory implements IPainterFactory {
   protected boolean offscreen = false;
   protected int width;
   protected int height;
+  
+  protected boolean traceGL = false;
+  protected boolean debugGL = false;
+
 
   /**
    * Initialize a factory with a default desired {@link GLCapabilities} defined by
@@ -48,14 +52,15 @@ public abstract class NativePainterFactory implements IPainterFactory {
 
   // @Override
   /** Only needed by {@link INativeCanvas} */
-  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+  /*public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
     return new Renderer3d(view, traceGL, debugGL);
-  }
+  }*/
 
   // @Override
   /** Only needed by {@link INativeCanvas} */
   public Renderer3d newRenderer3D(View view) {
-    return newRenderer3D(view, false, false);
+    return new Renderer3d(view, traceGL, debugGL);
+    //newRenderer3D(view, this.traceGL, this.traceGL);
   }
 
   @Override
@@ -164,5 +169,28 @@ public abstract class NativePainterFactory implements IPainterFactory {
     }
     return caps;
   }
+
+  public boolean isTraceGL() {
+    return traceGL;
+  }
+
+  /** If true, will enable GL code tracing in console. Default is false. */
+  public void setTraceGL(boolean traceGL) {
+    this.traceGL = traceGL;
+  }
+
+  @Override
+  public boolean isDebugGL() {
+    return debugGL;
+  }
+
+  /** If true, will let GL trigger {@link GLException} if an error occur in OpenGL which ease debugging. Default is false. */
+  @Override
+  public void setDebugGL(boolean debugGL) {
+    this.debugGL = debugGL;
+  }
+  
+  
+  
 
 }

@@ -97,4 +97,12 @@ public interface IPainterFactory {
 
   public Dimension getOffscreenDimension();
 
+  public boolean isDebugGL();
+
+  /**
+   * If true, will let GL trigger {@link GLException} if an error occur in OpenGL which ease
+   * debugging. Default is false.
+   */
+  public void setDebugGL(boolean debugGL);
+
 }

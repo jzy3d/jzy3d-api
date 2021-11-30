@@ -51,22 +51,16 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
 
   public OffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
       GLCapabilities capabilities, int width, int height) {
-    this(factory, scene, quality, capabilities, width, height, false, false);
-  }
-
-  public OffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
     this.view = scene.newView(this, quality);
     this.view.getPainter().setCanvas(this);
-    this.renderer = newRenderer(factory, traceGL, debugGL);
+    this.renderer = newRenderer(factory);
     this.capabilities = capabilities;
 
     initBuffer(capabilities, width, height);
   }
 
-  private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
-    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL,
-        debugGL);
+  private Renderer3d newRenderer(IChartFactory factory) {
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
   }
 
   /**

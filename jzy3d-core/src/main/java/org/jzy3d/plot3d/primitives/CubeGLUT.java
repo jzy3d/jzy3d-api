@@ -28,7 +28,7 @@ public class CubeGLUT extends Wireframeable implements ISingleColorable {
   public CubeGLUT(BoundingBox3d box) {
     this(box, Color.BLACK, Color.BLUE);
   }
-
+  
   public CubeGLUT(BoundingBox3d box, Color wireframe, Color face) {
     this.bbox = box;
     this.radius = box.getXRange().getRange() / 2;

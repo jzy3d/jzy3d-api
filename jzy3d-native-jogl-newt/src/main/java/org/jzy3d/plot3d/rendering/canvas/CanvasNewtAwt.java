@@ -64,7 +64,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     view = scene.newView(this, quality);
     view.getPainter().setCanvas(this);
 
-    renderer = newRenderer(factory, traceGL, debugGL);
+    renderer = newRenderer(factory);
     window.addGLEventListener(renderer);
 
     if (quality.isPreserveViewportSize())
@@ -110,8 +110,8 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     }, 0, TimeUnit.SECONDS);
   }
 
-  private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
-    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
+  private Renderer3d newRenderer(IChartFactory factory) {
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
   }
 
   private float[] newPixelScaleIdentity() {
