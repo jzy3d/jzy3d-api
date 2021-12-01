@@ -542,7 +542,6 @@ public class View {
     if (box.isReset()) {
       return;
     }
-    //System.out.println("Look at box " + box);
     
     center = box.getCenter();
     axis.setAxe(box);

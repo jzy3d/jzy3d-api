@@ -58,6 +58,7 @@ public class LizardVolumeDemo extends AWTAbstractAnalysis {
 
 
     } catch (Exception e) {
+      e.printStackTrace();
       return;
     }
 

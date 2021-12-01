@@ -15,6 +15,7 @@ import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IFrame;
+import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewPointChangedEvent;
@@ -372,7 +373,13 @@ public class Chart {
    */
   public IFrame open(String title, Rectangle rect) {
     if (frame == null) {
-      frame = getFactory().getPainterFactory().newFrame(this, rect, title);
+      IPainterFactory painterFactory = getFactory().getPainterFactory();
+      if(!painterFactory.isOffscreen()) {
+        frame = getFactory().getPainterFactory().newFrame(this, rect, title);
+      }
+      else {
+        logger.warn("Chart is configured for being offscreen. Did not open any frame. May disable call to open");
+      }
     }
 
     // start animator according to quality
@@ -446,7 +453,7 @@ public class Chart {
         // And we kindly release GL to let AWT render again
         getPainter().releaseGL();
 
-        System.out.println("Chart.add binded resource with box " + drawable.getBounds());
+        logger.warn("Chart.add binded resource with box " + drawable.getBounds());
 
       } else {
         logger.warn(
@@ -580,7 +587,7 @@ public class Chart {
             if (values[i] > LOD_EVAL_MAX_EVAL_DURATION_MS) {
               perf.setScore(lodSetting, values[i]);
             }
-            // System.out.println(lodSetting.getName() + " (" + i + ") took " + value + "ms");
+            logger.debug(lodSetting.getName() + " (" + i + ") took " + values[i] + "ms");
           }
 
           if (k == trials) {
