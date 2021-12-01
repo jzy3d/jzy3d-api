@@ -81,7 +81,9 @@ jobs:
 
 
   macos-11-4-arm64:
-    #runs-on: ${{ matrix.os }}
+    if: ${{ false }}  # disable for now
+
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         java: ['9.0.0+0', '14']
