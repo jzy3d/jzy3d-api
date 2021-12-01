@@ -25,18 +25,18 @@ import com.jogamp.opengl.math.VectorUtil;
 public class Texture3D extends Drawable implements IGLBindedResource, IMultiColorable {
 
   /** The GL texture ID. */
-  private int texID;
-  private Buffer buffer;
-  private int[] shape;
-  private boolean mounted = false;
-  private DrawableVBO shapeVBO;
-  private GLSLProgram shaderProgram;
-  private float min;
-  private float max;
-  private ColormapTexture colormapTexure;
+  protected int texID;
+  protected Buffer buffer;
+  protected int[] shape;
+  protected boolean mounted = false;
+  protected DrawableVBO shapeVBO;
+  protected GLSLProgram shaderProgram;
+  protected float min;
+  protected float max;
+  protected ColormapTexture colormapTexure;
 
-  private boolean disposed;
-  private ColorMapper mapper;
+  protected boolean disposed;
+  protected ColorMapper mapper;
 
   public Texture3D(Buffer buffer, int[] shape, float min, float max, ColorMapper mapper,
       BoundingBox3d bbox) {
@@ -106,7 +106,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
         GL2.GL_RED, GL.GL_FLOAT, buffer);
   }
 
-  private boolean validateTexID(final GL gl, final boolean throwException) {
+  protected boolean validateTexID(final GL gl, final boolean throwException) {
     gl.glActiveTexture(GL.GL_TEXTURE0);
     gl.glEnable(GL2.GL_TEXTURE_3D);
     int id = gl.getGL2().glGetUniformLocation(shaderProgram.getProgramId(), "volumeTexture");

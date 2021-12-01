@@ -13,11 +13,17 @@ public class BufferUtil {
    * https://stackoverflow.com/questions/61267495/exception-in-thread-main-java-lang-nosuchmethoderror-java-nio-bytebuffer-flip
    * 
    * Useful if compiled with Java >9 and app run with Java <9
+   * 
+   * @see {@link Buffer#rewind()}
    */
   public static void rewind(Buffer buffer) {
     buffer.rewind();
   }
 
+  /**
+   * 
+   * @see {@link Buffer#flip()}
+   */
   public static void flip(Buffer buffer) {
     buffer.flip();
   }

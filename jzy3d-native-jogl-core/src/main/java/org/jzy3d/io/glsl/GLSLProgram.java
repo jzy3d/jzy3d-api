@@ -80,7 +80,13 @@ public class GLSLProgram {
   
   protected static Logger log = Logger.getLogger(GLSLProgram.class);
 
-
+  protected Integer programId;
+  protected List<Integer> vertexShaders_ = new ArrayList<Integer>();
+  protected List<Integer> fragmentShaders_ = new ArrayList<Integer>();
+  protected StringBuffer warnBuffer;
+  protected Strictness strictness;
+  
+  
   public GLSLProgram() {
     this(DEFAULT_STRICTNESS);
   }
@@ -296,13 +302,17 @@ public class GLSLProgram {
   public void compileVertexShader(GL2 gl, URL infoURL, String content) {
     int iID = gl.glCreateShader(GL2.GL_VERTEX_SHADER);
 
-    String[] akProgramText = new String[1];
+    int count = 1;
+    
+    String[] programText = new String[1];
     // find and replace program name with "main"
-    akProgramText[0] = content;
-    int[] aiLength = new int[1];
-    aiLength[0] = akProgramText[0].length();
-    int iCount = 1;
-    gl.glShaderSource(iID, iCount, akProgramText, aiLength, 0);
+    programText[0] = content;
+    
+    int[] programLength = new int[1];
+    programLength[0] = programText[0].length();
+    
+    
+    gl.glShaderSource(iID, count, programText, programLength, 0);
     gl.glCompileShader(iID);
 
     verifyShaderCompiled(gl, infoURL, iID, content);
@@ -312,15 +322,21 @@ public class GLSLProgram {
   public void compileFragmentShader(GL2 gl, URL infoURL, String content) {
     int iID = gl.glCreateShader(GL2.GL_FRAGMENT_SHADER);
 
-    String[] akProgramText = new String[1];
+    int count = 1;
+
+    String[] programText = new String[count];
     // find and replace program name with "main"
-    akProgramText[0] = content;
-    int[] aiLength = new int[1];
-    aiLength[0] = akProgramText[0].length();
-    int iCount = 1;
-    gl.glShaderSource(iID, iCount, akProgramText, aiLength, 0);
+    programText[0] = content;
+    
+    int[] programLength = new int[count];
+    programLength[0] = programText[0].length();
+    
+    
+    gl.glShaderSource(iID, count, programText, programLength, 0);
     gl.glCompileShader(iID);
+    
     verifyShaderCompiled(gl, infoURL, iID, content);
+    
     fragmentShaders_.add(iID);
   }
 
@@ -341,6 +357,7 @@ public class GLSLProgram {
   public void verifyLinkStatus(GL2 gl, int programId) {
     int[] linkStatus = new int[] {0};
     int[] logLength = new int[] {0};
+    
     gl.glGetProgramiv(programId, GL2.GL_LINK_STATUS, linkStatus, 0);
     gl.glGetProgramiv(programId, GL2.GL_INFO_LOG_LENGTH, logLength, 0);
 
@@ -362,38 +379,42 @@ public class GLSLProgram {
     checkShaderLogInfo(gl, programId);
   }
 
-  // demoscene
-  protected void checkShaderLogInfo(GL2 inGL, int inShaderObjectID) {
-    IntBuffer tReturnValue = Buffers.newDirectIntBuffer(1);
+  /**
+   * read logs and either throw exception, print to console or append to error log according to
+   * the configured {@link Strictness}
+   */
+  protected void checkShaderLogInfo(GL2 inGL, int shaderObjectID) {
+    IntBuffer logLengthBuffer = Buffers.newDirectIntBuffer(1);
     
-    inGL.glGetObjectParameterivARB(inShaderObjectID, GL2.GL_OBJECT_INFO_LOG_LENGTH_ARB,
-        tReturnValue);
+    inGL.glGetObjectParameterivARB(shaderObjectID, GL2.GL_OBJECT_INFO_LOG_LENGTH_ARB,
+        logLengthBuffer);
     
-    int tLogLength = tReturnValue.get();
-    if (tLogLength <= 1) {
+    int logLength = logLengthBuffer.get();
+    if (logLength <= 1) {
       return;
     }
+
+    // Get logs
+    ByteBuffer shaderLogBuffer = Buffers.newDirectByteBuffer(logLength);
+    BufferUtil.flip(shaderLogBuffer);
+    shaderLogBuffer.limit(logLength);
     
-    ByteBuffer tShaderLog = Buffers.newDirectByteBuffer(tLogLength);
-    BufferUtil.flip(tShaderLog);
+    inGL.glGetInfoLogARB(shaderObjectID, logLength, logLengthBuffer, shaderLogBuffer);
     
-    inGL.glGetInfoLogARB(inShaderObjectID, tLogLength, tReturnValue, tShaderLog);
     
-    log.info(tLogLength);    
-    log.info(tShaderLog.capacity());
+    byte[] shaderLogBytes = new byte[logLength];
+    shaderLogBuffer.get(shaderLogBytes);
     
-    byte[] tShaderLogBytes = new byte[tLogLength];
-    tShaderLog.get(tShaderLogBytes);
+    // Read logs and warn
+    String shaderValidationLog = new String(shaderLogBytes);
+    StringReader reader = new StringReader(shaderValidationLog);
+    LineNumberReader lineNumberReader = new LineNumberReader(reader);
     
-    String tShaderValidationLog = new String(tShaderLogBytes);
-    StringReader tStringReader = new StringReader(tShaderValidationLog);
-    LineNumberReader tLineNumberReader = new LineNumberReader(tStringReader);
-    
-    String tCurrentLine;
+    String currentLine;
     try {
-      while ((tCurrentLine = tLineNumberReader.readLine()) != null) {
-        if (tCurrentLine.trim().length() > 0) {
-          warn("GLSL VALIDATION: " + tCurrentLine.trim(), GLSLWarnType.UNDEFINED);
+      while ((currentLine = lineNumberReader.readLine()) != null) {
+        if (currentLine.trim().length() > 0) {
+          warn("GLSL VALIDATION: " + currentLine.trim(), GLSLWarnType.UNDEFINED);
         }
       }
     } catch (Exception e) {
@@ -449,9 +470,5 @@ public class GLSLProgram {
     return programId;
   }
 
-  protected Integer programId;
-  protected List<Integer> vertexShaders_ = new ArrayList<Integer>();
-  protected List<Integer> fragmentShaders_ = new ArrayList<Integer>();
-  protected StringBuffer warnBuffer;
-  protected Strictness strictness;
+
 }
