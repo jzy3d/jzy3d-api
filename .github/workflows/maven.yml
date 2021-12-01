@@ -16,8 +16,6 @@ jobs:
   # Main Build & Test Matrix
 
   macos-10-15-x86_64:
-
-    #runs-on: macos-10.15
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -83,7 +81,7 @@ jobs:
 
 
   macos-11-4-arm64:
-    runs-on: ${{ matrix.os }}
+    #runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         java: ['9.0.0+0', '14']
