@@ -44,7 +44,7 @@ public class PeeledCubesDemo {
     GLProfile profile = GLProfile.get(GLProfile.GL2); //GL4bcImpl fail to downcast to GL2 on Mac
     GLCapabilities caps = NativePainterFactory.getDefaultCapabilities(profile);
     DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.WEIGHTED_AVERAGE_MODE);
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.WEIGHTED_SUM_MODE);
     Chart chart = f.newChart();
 
     
