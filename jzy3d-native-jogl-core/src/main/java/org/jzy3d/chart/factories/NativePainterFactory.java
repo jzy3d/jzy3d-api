@@ -153,7 +153,7 @@ public abstract class NativePainterFactory implements IPainterFactory {
     return caps;
   }
 
-  private static GLCapabilities getDefaultCapabilities(GLProfile glp) {
+  public static GLCapabilities getDefaultCapabilities(GLProfile glp) {
     GLCapabilities caps = new GLCapabilities(glp);
     caps.setHardwareAccelerated(true);
 
