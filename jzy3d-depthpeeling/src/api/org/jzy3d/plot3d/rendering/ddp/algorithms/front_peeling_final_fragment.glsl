@@ -13,5 +13,9 @@ uniform vec3 BackgroundColor;
 void main(void)
 {
 	vec4 frontColor = texture2DRect(ColorTex, gl_FragCoord.xy);
-	gl_FragColor.rgb = frontColor + BackgroundColor * frontColor.a;
+	gl_FragColor.rgb = frontColor.rgb + BackgroundColor * frontColor.a;
+
+	// initial
+	//gl_FragColor.rgb = frontColor + BackgroundColor * frontColor.a;
+
 }
