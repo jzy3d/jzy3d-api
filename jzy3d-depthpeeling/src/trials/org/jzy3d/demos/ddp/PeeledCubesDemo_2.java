@@ -16,14 +16,35 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
+/**
+ * WEIGHTED_SUM_MODE
+ * no compilation problem BUT overlapping translucent part are black
+ * 
+ * 
+ * WEIGHTED_AVERAGE_MODE
+ * extension 'ARB_draw_buffers' is not supported - despite available
+ * '-' does not operate on 'int' and 'float'
+ * 
+ * DUAL_PEELING_MODE
+ * extension 'ARB_draw_buffers' is not supported - despite available
+ * '==' does not operate on 'float' and 'int'
+ * 
+ * 
+ * F2B_PEELING_MODE
+ * '+' does not operate on 'vec4' and 'vec3'
 
+ * 
+ * 
+ * @author martin
+ *
+ */
 public class PeeledCubesDemo_2 {
   public static void main(String[] args) {
 
     GLProfile profile = GLProfile.get(GLProfile.GL4);
     GLCapabilities caps = NativePainterFactory.getOffscreenCapabilities(profile);
     DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.DUAL_PEELING_MODE);
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.WEIGHTED_SUM_MODE);
     Chart chart = f.newChart();
     chart.getView().setAxisDisplayed(false);
     // chart.setAnimated(false);

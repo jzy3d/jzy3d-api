@@ -9,8 +9,8 @@
 
 #extension ARB_draw_buffers : require
 
-uniform samplerRECT DepthBlenderTex;
-uniform samplerRECT FrontBlenderTex;
+uniform sampler2DRect DepthBlenderTex;
+uniform sampler2DRect FrontBlenderTex;
 
 #define MAX_DEPTH 1.0
 
@@ -21,8 +21,8 @@ void main(void)
 	// window-space depth interpolated linearly in screen space
 	float fragDepth = gl_FragCoord.z;
 
-	vec2 depthBlender = textureRect(DepthBlenderTex, gl_FragCoord.xy).xy;
-	vec4 forwardTemp = textureRect(FrontBlenderTex, gl_FragCoord.xy);
+	vec2 depthBlender = texture2DRect(DepthBlenderTex, gl_FragCoord.xy).xy;
+	vec4 forwardTemp = texture2DRect(FrontBlenderTex, gl_FragCoord.xy);
 	
 	// Depths and 1.0-alphaMult always increase
 	// so we can use pass-through by default with MAX blending
