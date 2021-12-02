@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot3d.rendering.ddp.AbstractDepthPeelingAlgorithm;
 import com.jogamp.opengl.GL2;
 
 public abstract class AbstractAccumlationDepthPeeling extends AbstractDepthPeelingAlgorithm {

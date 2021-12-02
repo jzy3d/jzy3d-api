@@ -3,8 +3,6 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot3d.rendering.ddp.AbstractDepthPeelingAlgorithm;
-import org.jzy3d.plot3d.rendering.ddp.IDepthPeelingAlgorithm;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.glu.GLU;
