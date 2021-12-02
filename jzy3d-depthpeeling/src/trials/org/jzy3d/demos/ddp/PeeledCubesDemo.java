@@ -16,31 +16,56 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 
 /**
  * 
+ * 
+ * 
+ * -------------------------
  * no pb avec simple polygon:
  * <li>gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
  * <li>gl.glEnable(GL2.GL_POLYGON_OFFSET_FILL);
  * 
- * Probl�me avec polygon normal > probl�me enlev� si p1.setWireframeDisplayed(false); > l'ordre dans
+ * Probleme avec polygon normal > probleme enleve si p1.setWireframeDisplayed(false); > l'ordre dans
  * le scene graph n'a pas l'air d'avoir d'impact
  * 
- * Probl�me avec simple polygon qd create stack avant ou apr�s
+ * Probleme avec simple polygon qd create stack avant ou apres
  * 
  * 
- * Dans la vue d�compos�e renderer.display, le rendering devient tr�s lent si
- * view.renderOverlay(gl); n'est pas appel�
+ * Dans la vue decomposee renderer.display, le rendering devient tres lent si
+ * view.renderOverlay(gl); n'est pas appele
  */
 public class PeeledCubesDemo {
   public static void main(String[] args) {
-    Chart chart = DepthPeelingChart.get(Quality.Fastest(), "awt", PeelingMethod.F2B_PEELING_MODE);// DUAL_PEELING_MODE);
+    Chart chart = DepthPeelingChart.get(Quality.Fastest(), "awt", PeelingMethod.WEIGHTED_SUM_MODE);
     chart.getView().setAxisDisplayed(false);
 chart.setAnimated(false);
+
+    
 
     createStack(chart, 0.01f, 0.01f, Coord3d.ORIGIN, Color.BLUE /* no alpha */, Color.BLACK);
     createStack(chart, 0.01f, 0.01f, new Coord3d(0.005f, 0.005f, 0.005f),
         new Color(1f, 0f, 0f, 0.5f), Color.BLACK);
     createStack(chart, 0.01f, 0.01f, new Coord3d(0.01f, 0.01f, 0.01f), new Color(0f, 1f, 0f, 0.5f),
         Color.BLACK);
-    ChartLauncher.openChart(chart, new Rectangle(0, 0, 600, 600));
+
+    
+    chart.open(800, 600);
+    chart.getMouse();
+    
+    String info = chart.getCanvas().getDebugInfo();
+    
+    if(!info.contains("ARB_texture_rectangle")) {
+      System.out.println(info);      
+    }
+    else {
+      System.out.println("ARB_texture_rectangle is here!!!");
+    }
+    
+    if(!info.contains("ARB_draw_buffers")) {
+      System.out.println(info);      
+    }
+    else {
+      System.out.println("ARB_draw_buffers is here!!!");
+
+    }
   }
 
   public static void createStack(Chart chart, float width, float height, Coord3d position,

@@ -30,9 +30,11 @@ public class ShaderRenderer3d extends Renderer3d {
   @Override
   public void init(GLAutoDrawable drawable) {
     GL2 gl = drawable.getGL().getGL2();
+
+    shaderable.init(view.getPainter(), gl, width, height);
+
     super.init(drawable);
     drawable.setAutoSwapBufferMode(autoSwapBuffer);
-    shaderable.init(view.getPainter(), gl, width, height);
   }
 
   public static boolean DECOMPOSE_VIEW = true;
