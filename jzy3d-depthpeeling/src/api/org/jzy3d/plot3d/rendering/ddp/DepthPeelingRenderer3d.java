@@ -61,31 +61,24 @@ public class DepthPeelingRenderer3d extends Renderer3d {
 
   @Override
   public void init(GLAutoDrawable canvas) {
-    if (canvas != null) {// && canvas.getGL() != null &&
-                         // canvas.getGL().getGL2() != null && view != null)
-                         // {
-      /*
-       * if (debugGL) canvas.getGL().getContext().setGL(GLPipelineFactory.create
-       * ("javax.media.opengl.Debug", null, canvas.getGL(), null)); if (traceGL)
-       * canvas.getGL().getContext().setGL(GLPipelineFactory.create ("javax.media.opengl.Trace",
-       * null, canvas.getGL(), new Object[] { System.err }));
-       */
-
-
+    /*if (canvas != null) {
       updatePainterWithGL(canvas);
 
       dualPeelingAlgorithm.init(view.getPainter(), getGL2(canvas), width, height);
 
       view.init();
+    }*/
+
+
+    if (canvas != null && view !=null) {
+      dualPeelingAlgorithm.init(view.getPainter(), getGL2(canvas), width, height);
     }
-
-    // super.init(drawable);
-
+    super.init(canvas);
+    
     canvas.setAutoSwapBufferMode(autoSwapBuffer);
   }
 
   protected GL2 getGL2(GLAutoDrawable drawable) {
-    //logGLContext(drawable);
     return drawable.getGL().getGL2();
   }
 

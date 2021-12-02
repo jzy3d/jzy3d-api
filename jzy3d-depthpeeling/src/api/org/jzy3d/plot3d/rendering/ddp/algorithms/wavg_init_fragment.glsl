@@ -7,6 +7,8 @@
 // Copyright (c) NVIDIA Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
 
+//#version 120
+
 #extension ARB_draw_buffers : require
 
 uniform float Alpha;
