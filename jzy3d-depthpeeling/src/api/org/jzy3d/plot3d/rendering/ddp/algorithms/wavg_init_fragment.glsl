@@ -9,7 +9,7 @@
 
 //#version 120
 
-#extension ARB_draw_buffers : require
+//#extension ARB_draw_buffers : require
 
 uniform float Alpha;
 
