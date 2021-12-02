@@ -25,5 +25,5 @@ void main(void)
 	float AvgAlpha = SumColor.a / n;
 
 	float T = pow(1.0-AvgAlpha, n);
-	gl_FragColor.rgb = AvgColor * (1 - T) + BackgroundColor * T;
+	gl_FragColor.rgb = AvgColor * (1.0 - T) + BackgroundColor * T;
 }
