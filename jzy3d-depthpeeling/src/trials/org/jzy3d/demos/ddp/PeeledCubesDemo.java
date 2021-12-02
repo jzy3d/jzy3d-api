@@ -1,19 +1,19 @@
 package org.jzy3d.demos.ddp;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.factories.DepthPeelingChartFactory;
 import org.jzy3d.factories.DepthPeelingPainterFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.PolygonMode;
+import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLProfile;
 
 /**
@@ -31,23 +31,23 @@ import com.jogamp.opengl.GLProfile;
  * 
  * 
  * F2B_PEELING_MODE
- * '+' does not operate on 'vec4' and 'vec3'
-
+ * FIXED : '+' does not operate on 'vec4' and 'vec3' 
+ * BUT : not displaying / freezing window
  * 
  * 
  * @author martin
  *
  */
 public class PeeledCubesDemo {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
 
-    /*GLProfile profile = GLProfile.get(GLProfile.GL4);
-    GLCapabilities caps = NativePainterFactory.getOffscreenCapabilities(profile);
-    DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);*/
-    
-    
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.WEIGHTED_SUM_MODE);
+    GLProfile profile = GLProfile.get(GLProfile.GL2); //GL4bcImpl fail to downcast to GL2 on Mac
+    GLCapabilities caps = NativePainterFactory.getDefaultCapabilities(profile);
+    DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.WEIGHTED_AVERAGE_MODE);
     Chart chart = f.newChart();
+
+    
     chart.getView().setAxisDisplayed(false);
     // chart.setAnimated(false);
 
@@ -57,21 +57,33 @@ public class PeeledCubesDemo {
     cube(chart, 0.01f, 0.01f, new Coord3d(0.01f, 0.01f, 0.01f), new Color(0f, 1f, 0f, 0.5f),
         Color.BLACK);
     
+
     
     chart.open(800,600);
+
+    // Wait a bit and print currently selected versions
+    Thread.sleep(100);
+    
+    GLContext context = ((CanvasAWT)chart.getCanvas()).getContext();
+    
+    System.out.println("GLSL Version : " + context.getGLSLVersionString());
+    System.out.println("GL   Version : " + context.getGLVersion());
+
     chart.getMouse();
     
     String info = chart.getCanvas().getDebugInfo();
     
     if(!info.contains("ARB_texture_rectangle")) {
-      System.out.println(info);      
+      System.err.println("ARB_texture_rectangle is MISSING");
+      System.err.println(info);      
     }
     else {
       System.out.println("ARB_texture_rectangle is here!!!");
     }
     
     if(!info.contains("ARB_draw_buffers")) {
-      System.out.println(info);      
+      System.err.println("ARB_draw_buffers is MISSING");
+      System.err.println(info);      
     }
     else {
       System.out.println("ARB_draw_buffers is here!!!");
