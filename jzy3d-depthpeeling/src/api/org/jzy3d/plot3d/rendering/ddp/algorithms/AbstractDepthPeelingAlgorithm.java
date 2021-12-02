@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.rendering.ddp;
+package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
 import java.io.File;
 import java.net.URL;
