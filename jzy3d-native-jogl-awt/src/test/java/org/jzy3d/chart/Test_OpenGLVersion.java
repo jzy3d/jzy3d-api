@@ -13,6 +13,7 @@ import com.jogamp.opengl.GLProfile;
  * 
  * It requires to invoke the JVM with -Djogl.disable.openglcore=true to work.
  * 
+ * @see https://github.com/jzy3d/jogl/issues/7
  * @see https://forum.jogamp.org/Selecting-the-highest-possible-GL-profile-at-runtime-td4041302.html
  */
 public class Test_OpenGLVersion {
@@ -81,9 +82,8 @@ public class Test_OpenGLVersion {
     // Try invoking something
 
     
-    gl.getGL2().glClear(0);
-    
-    gl.getGL4bc().glClear(0);
+    //gl.getGL2().glClear(0);
+    //gl.getGL4bc().glClear(0);
     
 
     // ------------------------------------------------------
