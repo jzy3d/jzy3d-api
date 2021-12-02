@@ -5,6 +5,7 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.DualDepthPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.FrontToBackPeelingAlgorithm;
+import org.jzy3d.plot3d.rendering.ddp.algorithms.IDepthPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedAveragePeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedSumPeelingAlgorithm;
@@ -70,7 +71,10 @@ public class DepthPeelingRenderer3d extends Renderer3d {
        * null, canvas.getGL(), new Object[] { System.err }));
        */
 
+
       updatePainterWithGL(canvas);
+
+      dualPeelingAlgorithm.init(view.getPainter(), getGL2(canvas), width, height);
 
       view.init();
     }
@@ -78,18 +82,11 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     // super.init(drawable);
 
     canvas.setAutoSwapBufferMode(autoSwapBuffer);
-    dualPeelingAlgorithm.init(view.getPainter(), getGL2(canvas), width, height);
   }
 
   protected GL2 getGL2(GLAutoDrawable drawable) {
     //logGLContext(drawable);
-
-
-    if (drawable.getGL() instanceof GL4bcImpl) {
-      return drawable.getGL().getGL2();// (GL2)drawable;//drawable.getGL().getGL2();//getGL3().getGL2();
-    } else {
-      return (GL2) drawable;// drawable.getGL().getGL2();
-    }
+    return drawable.getGL().getGL2();
   }
 
   private void logGLContext(GLAutoDrawable drawable) {

@@ -15,26 +15,40 @@ import org.jzy3d.plot3d.rendering.shaders.mandelbrot.TexSurface;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
 
 
 public class ShaderMandelbrotDemo {
 
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException {
     Chart chart = initChart(new MandelBrotShader());
 
     chart.getScene().getGraph().add(new TexSurface());
 
     chart.getView().setAxisDisplayed(false);
-    ChartLauncher.openChart(chart, new Rectangle(0, 0, 600, 600));
+    chart.open(800, 600);
+    
+    Thread.sleep(500);
+    
+    GLContext context = ((GLCanvas)chart.getCanvas()).getContext();
+    
+    System.out.println(context);
+
   }
 
 
   public static Chart initChart(final IShaderable s) {
-    GLProfile profile = GLProfile.getMaxProgrammable(true);
+    //GLProfile profile = GLProfile.get(GLProfile.GL2);
+    GLProfile profile = GLProfile.get(GLProfile.GL2);
+    //GLProfile profile = GLProfile.getMaxProgrammable(true);
     GLCapabilities capabilities = new GLCapabilities(profile);
     capabilities.setHardwareAccelerated(false);
+    
+    
+    
 
     AWTPainterFactory painter = new AWTPainterFactory(capabilities) {
       @Override
@@ -47,6 +61,8 @@ public class ShaderMandelbrotDemo {
     IChartFactory factory = new AWTChartFactory(painter);
 
     Chart chart = factory.newChart(Quality.Intermediate());
+    
+    
     chart.getView().setSquared(false);
 
     // chart.getView().setCameraMode(CameraMode.PERSPECTIVE);
