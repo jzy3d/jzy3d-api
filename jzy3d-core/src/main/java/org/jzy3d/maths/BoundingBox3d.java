@@ -83,6 +83,24 @@ public class BoundingBox3d {
     this.zmax = zRange.getMax();
   }
 
+  public BoundingBox3d(float[] bounds) {
+    this.xmin = bounds[0];
+    this.xmax = bounds[1];
+    this.ymin = bounds[2];
+    this.ymax = bounds[3];
+    this.zmin = bounds[4];
+    this.zmax = bounds[5];
+  }
+
+  public BoundingBox3d(double[] bounds) {
+    this.xmin = (float)bounds[0];
+    this.xmax = (float)bounds[1];
+    this.ymin = (float)bounds[2];
+    this.ymax = (float)bounds[3];
+    this.zmin = (float)bounds[4];
+    this.zmax = (float)bounds[5];
+  }
+  
   /*********************************************************/
 
   /**
