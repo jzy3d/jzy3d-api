@@ -62,8 +62,8 @@ public class Renderer3d implements GLEventListener {
    */
   @Override
   public void init(GLAutoDrawable canvas) {
-    if (canvas != null && canvas.getGL() != null /*&& canvas.getGL().getGL2() != null*/
-        && view != null) {
+    if (canvas != null && canvas.getGL() != null && view != null) {
+      
       if (debugGL)
         canvas.getGL().getContext()
             .setGL(GLPipelineFactory.create("com.jogamp.opengl.Debug", null, canvas.getGL(), null));
@@ -72,6 +72,7 @@ public class Renderer3d implements GLEventListener {
             canvas.getGL(), new Object[] {System.err}));
 
       updatePainterWithGL(canvas);
+      
       view.init();
     }
   }

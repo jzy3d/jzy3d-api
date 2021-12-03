@@ -22,12 +22,13 @@ import com.jogamp.opengl.GLProfile;
  * 
  * 
  * WEIGHTED_AVERAGE_MODE
- * extension 'ARB_draw_buffers' is not supported - despite available
- * '-' does not operate on 'int' and 'float'
+ * FIXED : extension 'ARB_draw_buffers' is not supported - despite available
+ * FIXED : '-' does not operate on 'int' and 'float'
+ * UNSUPPORTED (log once): POSSIBLE ISSUE: unit 1 GLD_TEXTURE_INDEX_RECTANGLE is unloadable and bound to sampler type (Float) - using zero texture because texture unloadable
  * 
  * DUAL_PEELING_MODE
- * extension 'ARB_draw_buffers' is not supported - despite available
- * '==' does not operate on 'float' and 'int'
+ * FIXED : extension 'ARB_draw_buffers' is not supported - despite available
+ * FIXED : '==' does not operate on 'float' and 'int'
  * 
  * 
  * F2B_PEELING_MODE
@@ -66,7 +67,7 @@ public class PeeledCubesDemo {
     
     GLContext context = ((CanvasAWT)chart.getCanvas()).getContext();
     
-    System.out.println("GLSL Version : " + context.getGLSLVersionString());
+    System.out.println("GLSL Version : " + context.getGLSLVersionString().replace("\n", ""));
     System.out.println("GL   Version : " + context.getGLVersion());
 
     chart.getMouse();

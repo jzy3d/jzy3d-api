@@ -7,7 +7,7 @@
 // Copyright (c) NVIDIA Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
 
-#extension ARB_draw_buffers : require
+//#extension ARB_draw_buffers : require
 
 uniform sampler2DRect DepthBlenderTex;
 uniform sampler2DRect FrontBlenderTex;
