@@ -43,10 +43,7 @@ public class DepthPeelingRenderer3d extends Renderer3d {
 
   protected IDepthPeelingAlgorithm dualPeelingAlgorithm;
   protected boolean autoSwapBuffer = false;
-  protected static boolean AXE_IN_PEELING = false;
-  protected static boolean DEBUG = false;
-
-  GLU glu = new GLU();
+  protected GLU glu = new GLU();
 
   public DepthPeelingRenderer3d(final DepthPeelingView view, boolean traceGL, boolean debugGL) {
     this(PeelingMethod.WEIGHTED_AVERAGE_MODE, view, traceGL, debugGL);
@@ -61,15 +58,6 @@ public class DepthPeelingRenderer3d extends Renderer3d {
 
   @Override
   public void init(GLAutoDrawable canvas) {
-    /*if (canvas != null) {
-      updatePainterWithGL(canvas);
-
-      dualPeelingAlgorithm.init(view.getPainter(), getGL2(canvas), width, height);
-
-      view.init();
-    }*/
-
-
     if (canvas != null && view !=null) {
       dualPeelingAlgorithm.init(view.getPainter(), getGL2(canvas), width, height);
     }
@@ -78,27 +66,7 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     canvas.setAutoSwapBufferMode(autoSwapBuffer);
   }
 
-  protected GL2 getGL2(GLAutoDrawable drawable) {
-    return drawable.getGL().getGL2();
-  }
 
-  private void logGLContext(GLAutoDrawable drawable) {
-    LOGGER.info("GL context : " + drawable.getContext());
-    LOGGER.info("GL profile : " + drawable.getGLProfile());
-    LOGGER.info("GL impl : " + drawable.getGL().getClass().getSimpleName());
-
-    LOGGER.info("isGL : " + drawable.getGL().isGL());
-    LOGGER.info("isGL2 : " + drawable.getGL().isGL2());
-    LOGGER.info("isGLES1 : " + drawable.getGL().isGL2ES1());
-    LOGGER.info("isGLES2 : " + drawable.getGL().isGL2ES2());
-    LOGGER.info("isGLES3 : " + drawable.getGL().isGL2ES3());
-    LOGGER.info("isGL2GL3 : " + drawable.getGL().isGL2GL3());
-    LOGGER.info("isGL3 : " + drawable.getGL().isGL3());
-    LOGGER.info("isGL3core : " + drawable.getGL().isGL3core());
-    LOGGER.info("isGL3ES3 : " + drawable.getGL().isGL3ES3());
-    LOGGER.info("isGL4 : " + drawable.getGL().isGL4());
-    LOGGER.info("isGL4bc : " + drawable.getGL().isGL4bc());
-  }
 
   public static boolean DECOMPOSE_VIEW = true;
 
@@ -109,7 +77,9 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     GL2 gl = getGL2(drawable);
 
     preDisplay(gl);
+    
     dualPeelingAlgorithm.display(view.getPainter(), gl, glu); // will call taskToRender
+    
     postDisplay(gl);
 
     if (!autoSwapBuffer)
@@ -154,6 +124,11 @@ public class DepthPeelingRenderer3d extends Renderer3d {
   public void dispose(GLAutoDrawable drawable) {
     dualPeelingAlgorithm.dispose(view.getPainter(), getGL2(drawable));
   }
+  
+  protected GL2 getGL2(GLAutoDrawable drawable) {
+    return drawable.getGL().getGL2();
+  }
+
 
   public static IDepthPeelingAlgorithm getDepthPeelingAlgorithm(PeelingMethod method) {
     if (method == PeelingMethod.DUAL_PEELING_MODE)
