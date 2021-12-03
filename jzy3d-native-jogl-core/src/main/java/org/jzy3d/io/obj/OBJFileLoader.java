@@ -33,6 +33,8 @@ public class OBJFileLoader implements IGLLoader<DrawableVBO> {
 
     logger.info(obj.getPositionCount() + " vertices");
     logger.info((obj.getIndexCount() / 3) + " triangles");
+    
+    
 
     int size = obj.getIndexCount();
     int indexSize = size * Buffers.SIZEOF_INT;

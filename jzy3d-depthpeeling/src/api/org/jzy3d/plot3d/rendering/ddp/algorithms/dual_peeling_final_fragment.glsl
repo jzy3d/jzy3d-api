@@ -18,7 +18,7 @@ void main(void)
 	float alphaMultiplier = 1.0 - frontColor.w;
 
 	// front + back
-	gl_FragColor.rgb = frontColor + backColor * alphaMultiplier;
+	gl_FragColor.rgb = frontColor.rgb + backColor * alphaMultiplier;
 	
 	// front blender
 	//gl_FragColor.rgb = frontColor + vec3(alphaMultiplier);
