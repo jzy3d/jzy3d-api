@@ -13,5 +13,5 @@ void main(void)
 {
 	gl_FragColor = texture2DRect(TempTex, gl_FragCoord.xy);
 	// for occlusion query
-	if (gl_FragColor.a == 0) discard;
+	if (gl_FragColor.a == 0.0) discard;
 }
