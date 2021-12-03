@@ -2,13 +2,9 @@ package org.jzy3d.demos.ddp;
 
 import java.io.File;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.factories.DepthPeelingChartFactory;
 import org.jzy3d.io.obj.OBJFileLoader;
-import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
-import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.ddp.DepthPeelingChart;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 
 /**
@@ -23,19 +19,17 @@ public class PeeledDragonDemo {
     DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.WEIGHTED_SUM_MODE);
     Chart chart = f.newChart();
 
-    String objFilePath = "data/dragon.obj";
+    String objFilePath = "src/library/models/dragon.obj";
     File file = new File("./" + objFilePath);
     
     OBJFileLoader loader = new OBJFileLoader(file);
+    DrawableVBO vbo = new DrawableVBO(loader);
     
-    
-    chart.getScene().add(new DrawableVBO(loader));
-    //chart.getScene().add(new DrawableOBJFile("data/bun_zipper.ply"));
+    chart.getScene().add(vbo);
 
-    // createStack(chart, 0.01f, 0.01f, Coord3d.ORIGIN, Color.BLUE /*no alpha*/, Color.BLACK);
-
-    
-    ChartLauncher.openChart(chart, new Rectangle(0, 0, 600, 600));
+    chart.addLightOnCamera();
+    chart.open(600, 600);
+    chart.getMouse();
   }
 
 
