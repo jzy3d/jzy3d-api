@@ -35,15 +35,11 @@ import com.jogamp.opengl.awt.GLCanvas;
 public class PeeledCubesDemo {
   public static void main(String[] args) throws InterruptedException {
 
-    GLProfile profile = GLProfile.get(GLProfile.GL2); // GL4bcImpl fail to downcast to GL2 on Mac
-    GLCapabilities caps = NativePainterFactory.getDefaultCapabilities(profile);
-    DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.DUAL_PEELING_MODE);
-    Chart chart = f.newChart(Quality.Advanced().setAlphaActivated(false));
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory();
+    Chart chart = f.newChart();
 
 
-    chart.getView().setAxisDisplayed(false);
-    // chart.setAnimated(false);
+    //chart.getView().setAxisDisplayed(false);
 
     Coord3d p1 = Coord3d.ORIGIN;
     Coord3d p2 = new Coord3d(0.005f, 0.005f, 0.005f);
@@ -64,7 +60,20 @@ public class PeeledCubesDemo {
 
   }
 
-
+  public static void cube(Chart chart, float width, Coord3d position, Color face, Color wireframe) {
+    BoundingBox3d bounds =
+        new BoundingBox3d(position.x - width / 2, position.x + width / 2, position.y - width / 2,
+            position.y + width / 2, position.z - width / 2, position.z + width / 2);
+    ParallelepipedComposite p1 = new ParallelepipedComposite(bounds, PolygonType.SIMPLE);
+    p1.setPolygonMode(PolygonMode.FRONT_AND_BACK);
+    p1.setPolygonOffsetFill(true);
+    p1.setColor(face);
+    p1.setWireframeColor(wireframe);
+    p1.setWireframeDisplayed(true);
+    chart.getScene().add(p1);
+  }
+  
+  
   private static void verifyVersions(Chart chart) throws InterruptedException {
     // Wait a bit and print currently selected versions
     Thread.sleep(100);
@@ -93,17 +102,4 @@ public class PeeledCubesDemo {
     }
   }
 
-
-  public static void cube(Chart chart, float width, Coord3d position, Color face, Color wireframe) {
-    BoundingBox3d bounds =
-        new BoundingBox3d(position.x - width / 2, position.x + width / 2, position.y - width / 2,
-            position.y + width / 2, position.z - width / 2, position.z + width / 2);
-    ParallelepipedComposite p1 = new ParallelepipedComposite(bounds, PolygonType.SIMPLE);
-    p1.setPolygonMode(PolygonMode.FRONT_AND_BACK);
-    p1.setPolygonOffsetFill(true);
-    p1.setColor(face);
-    p1.setWireframeColor(wireframe);
-    p1.setWireframeDisplayed(true);
-    chart.getScene().add(p1);
-  }
 }
