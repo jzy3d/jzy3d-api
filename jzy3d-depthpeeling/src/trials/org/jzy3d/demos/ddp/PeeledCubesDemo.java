@@ -11,6 +11,7 @@ import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLContext;
@@ -45,17 +46,17 @@ public class PeeledCubesDemo {
     GLProfile profile = GLProfile.get(GLProfile.GL2); //GL4bcImpl fail to downcast to GL2 on Mac
     GLCapabilities caps = NativePainterFactory.getDefaultCapabilities(profile);
     DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.WEIGHTED_SUM_MODE);
-    Chart chart = f.newChart();
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.DUAL_PEELING_MODE);
+    Chart chart = f.newChart(Quality.Advanced().setAlphaActivated(false));
 
     
     chart.getView().setAxisDisplayed(false);
     // chart.setAnimated(false);
 
-    cube(chart, 0.01f, 0.01f, Coord3d.ORIGIN, Color.BLUE /* no alpha */, Color.BLACK);
-    cube(chart, 0.01f, 0.01f, new Coord3d(0.005f, 0.005f, 0.005f),
-        new Color(1f, 0f, 0f, 0.5f), Color.BLACK);
-    cube(chart, 0.01f, 0.01f, new Coord3d(0.01f, 0.01f, 0.01f), new Color(0f, 1f, 0f, 0.5f),
+    cube(chart, 0.01f, Coord3d.ORIGIN, Color.BLUE /* no alpha */, Color.BLACK);
+    cube(chart, 0.01f, new Coord3d(0.005f, 0.005f, 0.005f),
+        Color.RED.alpha(.5f), Color.BLACK);
+    cube(chart, 0.01f, new Coord3d(0.01f, 0.01f, 0.01f), Color.GREEN.alpha(.5f),
         Color.BLACK);
     
 
@@ -92,11 +93,12 @@ public class PeeledCubesDemo {
 
   }
 
-  public static void cube(Chart chart, float width, float height, Coord3d position,
+  
+  public static void cube(Chart chart, float width, Coord3d position,
       Color face, Color wireframe) {
     BoundingBox3d bounds =
         new BoundingBox3d(position.x - width / 2, position.x + width / 2, position.y - width / 2,
-            position.y + width / 2, position.z - height / 2, position.z + height / 2);
+            position.y + width / 2, position.z - width / 2, position.z + width / 2);
     ParallelepipedComposite p1 = new ParallelepipedComposite(bounds, PolygonType.SIMPLE);
     p1.setPolygonMode(PolygonMode.FRONT_AND_BACK);
     p1.setPolygonOffsetFill(true);

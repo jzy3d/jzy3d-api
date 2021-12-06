@@ -7,7 +7,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
 
-public class WeightedSumPeelingAlgorithm extends AbstractAccumlationDepthPeeling
+public class WeightedSumPeelingAlgorithm extends AbstractAccumulationDepthPeeling
     implements IDepthPeelingAlgorithm {
   public GLSLProgram glslInit;
   public GLSLProgram glslFinal;

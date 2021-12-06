@@ -13,18 +13,22 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
   protected int g_drawBuffers[] = {GL2.GL_COLOR_ATTACHMENT0, GL2.GL_COLOR_ATTACHMENT1,
       GL2.GL_COLOR_ATTACHMENT2, GL2.GL_COLOR_ATTACHMENT3, GL2.GL_COLOR_ATTACHMENT4,
       GL2.GL_COLOR_ATTACHMENT5, GL2.GL_COLOR_ATTACHMENT6};
-  public int g_quadDisplayList;
-  public int g_numPasses = 1;
-  public int g_numGeoPasses = 0;
-  public boolean g_useOQ = true;
-  public float[] g_white = new float[] {1.0f, 1.0f, 1.0f};
-  public float[] g_black = new float[] {0.0f};
-  public float[] g_backgroundColor = g_white;
-  public float[] g_opacity = new float[] {0.6f};
-  public int[] g_queryId = new int[1];
+  
+  protected int g_quadDisplayList;
+  protected int g_numPasses = 1;
+  protected int g_numGeoPasses = 0;
+  
+  protected boolean g_useOQ = true;
+ 
+  protected float[] g_white = new float[] {1.0f, 1.0f, 1.0f};
+  protected float[] g_black = new float[] {0.0f};
+  protected float[] g_backgroundColor = g_white;
+  protected float[] g_opacity = new float[] {0.6f};
+  
+  protected int[] g_queryId = new int[1];
 
 
-  GLU glu = new GLU();
+  protected GLU glu = new GLU();
 
 
   public AbstractDepthPeelingAlgorithm() {}
