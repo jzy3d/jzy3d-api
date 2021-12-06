@@ -26,8 +26,8 @@ vec4 ShadeFragment()
 	vec4 color;
 	float i = floor(xWorldPos * COLOR_FREQ);
 	float j = floor(yWorldPos * ALPHA_FREQ);
-	color.rgb = (fmod(i, 2.0) == 0) ? vec3(.4,.85,.90) : vec3(1.0);
-	//color.a = (fmod(j, 2.0) == 0) ? Alpha : 0.2;
+	color.rgb = (mod(i, 2.0) == 0.0) ? vec3(.4,.85,.90) : vec3(1.0);
+	//color.a = (mod(j, 2.0) == 0.0) ? Alpha : 0.2;
 	color.a = Alpha;
 
 	color.rgb *= diffuse;
