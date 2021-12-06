@@ -9,6 +9,7 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.IDepthPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedAveragePeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedSumPeelingAlgorithm;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GL2;
@@ -37,18 +38,18 @@ import com.jogamp.opengl.glu.GLU;
  * @author Louis Bavoil - original paper and C++ code
  * @author Martin Pernollet - port to Jzy3d
  */
-public class DepthPeelingRenderer3d extends Renderer3d {
+public class DepthPeelingRenderer3d extends AWTRenderer3d {
   protected Logger LOGGER = Logger.getLogger(DepthPeelingRenderer3d.class);
 
   protected IDepthPeelingAlgorithm dualPeelingAlgorithm;
   protected boolean autoSwapBuffer = false;
   protected GLU glu = new GLU();
 
-  public DepthPeelingRenderer3d(final DepthPeelingView view, boolean traceGL, boolean debugGL) {
+  public DepthPeelingRenderer3d(final View view, boolean traceGL, boolean debugGL) {
     this(PeelingMethod.WEIGHTED_AVERAGE_MODE, view, traceGL, debugGL);
   }
 
-  public DepthPeelingRenderer3d(PeelingMethod algorithm, final DepthPeelingView view,
+  public DepthPeelingRenderer3d(PeelingMethod algorithm, final View view,
       boolean traceGL, boolean debugGL) {
     super(view, traceGL, debugGL);
     dualPeelingAlgorithm = getDepthPeelingAlgorithm(algorithm);
@@ -75,23 +76,24 @@ public class DepthPeelingRenderer3d extends Renderer3d {
 
     GL2 gl = getGL2(drawable);
 
-    preDisplay(gl);
     
-    dualPeelingAlgorithm.display(view.getPainter(), gl, glu); // will call taskToRender
-    
-    postDisplay(gl);
+    if(view!=null) {
+      view.clear();
 
-    if (!autoSwapBuffer)
-      drawable.swapBuffers();
+      dualPeelingAlgorithm.display(view.getPainter(), gl, glu); // will call taskToRender
+      
+      view.renderOverlay();
+
+      
+      renderScreenshotIfRequired(gl);
+
+      
+      if (!autoSwapBuffer)
+        drawable.swapBuffers();
+    }
+
   }
 
-  public void postDisplay(GL2 gl) {
-    view.renderOverlay();
-  }
-
-  public void preDisplay(GL2 gl) {
-    ((DepthPeelingView) view).clearPeeledView(gl, glu, width, height);
-  }
 
   public static IGLRenderer getDepthPeelingContentRenderer(final View view) {
     return new IGLRenderer() {
@@ -116,6 +118,7 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     if (this.width != width || this.height != height) {
       this.width = width;
       this.height = height;
+      
       dualPeelingAlgorithm.reshape(view.getPainter(), gl, width, height);
     }
   }

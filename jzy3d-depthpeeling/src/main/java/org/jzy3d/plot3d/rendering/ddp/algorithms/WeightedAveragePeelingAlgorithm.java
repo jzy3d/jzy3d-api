@@ -26,7 +26,7 @@ public class WeightedAveragePeelingAlgorithm extends AbstractAccumulationDepthPe
   @Override
   public void display(IPainter painter, GL2 gl, GLU glu) {
     resetNumPass();
-    renderAverageColors(painter, gl);
+    doRender(painter, gl);
   }
 
   /* */
@@ -58,7 +58,7 @@ public class WeightedAveragePeelingAlgorithm extends AbstractAccumulationDepthPe
     glslFinal.destroy(gl);
   }
 
-  protected void renderAverageColors(IPainter painter, GL2 gl) {
+  protected void doRender(IPainter painter, GL2 gl) {
     gl.glDisable(GL2.GL_DEPTH_TEST);
 
     // ---------------------------------------------------------------------
