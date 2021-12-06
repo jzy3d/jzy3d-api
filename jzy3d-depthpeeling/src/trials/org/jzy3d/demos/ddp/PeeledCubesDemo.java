@@ -16,26 +16,18 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.awt.GLCanvas;
 
 /**
- * WEIGHTED_SUM_MODE
- * no compilation problem BUT overlapping translucent part are black
- * 
- * 
- * WEIGHTED_AVERAGE_MODE
- * FIXED : extension 'ARB_draw_buffers' is not supported - despite available
- * FIXED : '-' does not operate on 'int' and 'float'
- * UNSUPPORTED (log once): POSSIBLE ISSUE: unit 1 GLD_TEXTURE_INDEX_RECTANGLE is unloadable and bound to sampler type (Float) - using zero texture because texture unloadable
- * 
- * DUAL_PEELING_MODE
- * FIXED : extension 'ARB_draw_buffers' is not supported - despite available
- * FIXED : '==' does not operate on 'float' and 'int'
- * 
- * 
- * F2B_PEELING_MODE
- * FIXED : '+' does not operate on 'vec4' and 'vec3' 
- * BUT : not displaying / freezing window
- * 
+ * Status of peeling methods
+ * <ul>
+ * <li>OK - DUAL_PEELING_MODE 
+ * <li>KO - WEIGHTED_AVERAGE_MODE : renders correctly BUT make opaque object appear translucent (e.g. the
+ * blue cube of this demo)
+ * <li>KO - WEIGHTED_SUM_MODE : no compilation problem BUT overlapping parts (translucent or opaque) are
+ * black
+ * <li>KO - F2B_PEELING_MODE : Hangs before display (reproduce with chart.get
+ * </ul>
  * 
  * @author martin
  *
@@ -43,59 +35,66 @@ import com.jogamp.opengl.GLProfile;
 public class PeeledCubesDemo {
   public static void main(String[] args) throws InterruptedException {
 
-    GLProfile profile = GLProfile.get(GLProfile.GL2); //GL4bcImpl fail to downcast to GL2 on Mac
+    GLProfile profile = GLProfile.get(GLProfile.GL2); // GL4bcImpl fail to downcast to GL2 on Mac
     GLCapabilities caps = NativePainterFactory.getDefaultCapabilities(profile);
     DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
     DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.DUAL_PEELING_MODE);
     Chart chart = f.newChart(Quality.Advanced().setAlphaActivated(false));
 
-    
+
     chart.getView().setAxisDisplayed(false);
     // chart.setAnimated(false);
 
-    cube(chart, 0.01f, Coord3d.ORIGIN, Color.BLUE /* no alpha */, Color.BLACK);
-    cube(chart, 0.01f, new Coord3d(0.005f, 0.005f, 0.005f),
-        Color.RED.alpha(.5f), Color.BLACK);
-    cube(chart, 0.01f, new Coord3d(0.01f, 0.01f, 0.01f), Color.GREEN.alpha(.5f),
-        Color.BLACK);
-    
+    Coord3d p1 = Coord3d.ORIGIN;
+    Coord3d p2 = new Coord3d(0.005f, 0.005f, 0.005f);
+    Coord3d p3 = new Coord3d(0.01f, 0.01f, 0.01f);
 
-    
-    chart.open(800,600);
+    cube(chart, 0.01f, p1, Color.BLUE /* no alpha */, Color.BLACK);
+    cube(chart, 0.01f, p2, Color.RED.alpha(.5f), Color.BLACK);
+    cube(chart, 0.01f, p3, Color.GREEN.alpha(.5f), Color.BLACK);
 
-    // Wait a bit and print currently selected versions
-    Thread.sleep(100);
-    
-    GLContext context = ((CanvasAWT)chart.getCanvas()).getContext();
-    
-    System.out.println("GLSL Version : " + context.getGLSLVersionString().replace("\n", ""));
-    System.out.println("GL   Version : " + context.getGLVersion());
 
+
+    chart.open(800, 600);
     chart.getMouse();
-    
-    String info = chart.getCanvas().getDebugInfo();
-    
-    if(!info.contains("ARB_texture_rectangle")) {
-      System.err.println("ARB_texture_rectangle is MISSING");
-      System.err.println(info);      
-    }
-    else {
-      System.out.println("ARB_texture_rectangle is here!!!");
-    }
-    
-    if(!info.contains("ARB_draw_buffers")) {
-      System.err.println("ARB_draw_buffers is MISSING");
-      System.err.println(info);      
-    }
-    else {
-      System.out.println("ARB_draw_buffers is here!!!");
-    }
+
+
+    verifyVersions(chart);
+
 
   }
 
-  
-  public static void cube(Chart chart, float width, Coord3d position,
-      Color face, Color wireframe) {
+
+  private static void verifyVersions(Chart chart) throws InterruptedException {
+    // Wait a bit and print currently selected versions
+    Thread.sleep(100);
+
+    GLContext context = ((CanvasAWT) chart.getCanvas()).getContext();
+
+    System.out.println("GLSL Version : " + context.getGLSLVersionString().replace("\n", ""));
+    System.out.println("GL   Version : " + context.getGLVersion());
+
+
+    String info = ((GLCanvas) chart.getCanvas()).getContext().getGLExtensionsString();
+
+
+    if (!info.contains("ARB_texture_rectangle")) {
+      System.err.println("ARB_texture_rectangle is MISSING");
+      System.err.println(info);
+    } else {
+      System.out.println("ARB_texture_rectangle is here!!!");
+    }
+
+    if (!info.contains("ARB_draw_buffers")) {
+      System.err.println("ARB_draw_buffers is MISSING");
+      System.err.println(info);
+    } else {
+      System.out.println("ARB_draw_buffers is here!!!");
+    }
+  }
+
+
+  public static void cube(Chart chart, float width, Coord3d position, Color face, Color wireframe) {
     BoundingBox3d bounds =
         new BoundingBox3d(position.x - width / 2, position.x + width / 2, position.y - width / 2,
             position.y + width / 2, position.z - width / 2, position.z + width / 2);

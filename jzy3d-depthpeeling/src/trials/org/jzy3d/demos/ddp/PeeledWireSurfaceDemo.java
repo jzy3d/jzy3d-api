@@ -3,10 +3,12 @@ package org.jzy3d.demos.ddp;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.factories.DepthPeelingChartFactory;
+import org.jzy3d.factories.DepthPeelingPainterFactory;
 import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.GLSLProgram.Strictness;
 import org.jzy3d.maths.Dimension;
@@ -46,22 +48,23 @@ public class PeeledWireSurfaceDemo {
     surface.setWireframeColor(Color.BLACK);
 
     // Create a chart and add surface
-    GLSLProgram.DEFAULT_STRICTNESS = Strictness.CONSOLE_NO_WARN_UNIFORM_NOT_FOUND;
-    IChartFactory factory = new DepthPeelingChartFactory(PeelingMethod.F2B_PEELING_MODE);
+    GLProfile profile = GLProfile.get(GLProfile.GL2); // GL4bcImpl fail to downcast to GL2 on Mac
+    GLCapabilities caps = NativePainterFactory.getDefaultCapabilities(profile);
+    DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.DUAL_PEELING_MODE);
+    Chart chart = f.newChart(Quality.Advanced().setAlphaActivated(false));
 
-
-    GLProfile profile = GLProfile.getMaxProgrammable(true);
-    GLCapabilities capabilities = new GLCapabilities(profile);
-    capabilities.setHardwareAccelerated(true);
-    // ATTENTION AVEC
-
-    Chart chart = new Chart(factory, Quality.Advanced());
     chart.getScene().getGraph().add(surface);
+    
+    chart.getScene().getGraph().setStrategy(null);
 
     // Setup a colorbar
     AWTColorbarLegend cbar = new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
     cbar.setMinimumSize(new Dimension(100, 600));
-    surface.setLegend(cbar);
+    //surface.setLegend(cbar);
+    
+    chart.open();
+    chart.getMouse();
 
     ChartLauncher.openChart(chart);
   }
