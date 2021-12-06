@@ -2,8 +2,9 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.factories.DepthPeelingChartFactory;
+import org.jzy3d.factories.DepthPeelingPainterFactory;
 import org.jzy3d.junit.ChartTester;
 import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.maths.BoundingBox3d;
@@ -16,7 +17,8 @@ public class TestDualDepthPeelingAlgorithm {
     @Test
     public void whenTranslucentIntersectingCube_ThenOrderIndependentAlphaIsProcessed() throws InterruptedException {
 
-      DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.DUAL_PEELING_MODE);
+      AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
+
       //f.getPainterFactory().setOffscreen(600, 600);
       Chart chart = f.newChart();
 

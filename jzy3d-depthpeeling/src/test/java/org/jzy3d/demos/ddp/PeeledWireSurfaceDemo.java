@@ -2,6 +2,7 @@ package org.jzy3d.demos.ddp;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -45,10 +46,7 @@ public class PeeledWireSurfaceDemo {
     surface.setWireframeColor(Color.BLACK);
 
     // Create a chart and add surface
-    GLProfile profile = GLProfile.get(GLProfile.GL2); // GL4bcImpl fail to downcast to GL2 on Mac
-    GLCapabilities caps = NativePainterFactory.getDefaultCapabilities(profile);
-    DepthPeelingPainterFactory p = new DepthPeelingPainterFactory(caps);
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory(p, PeelingMethod.DUAL_PEELING_MODE);
+    AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
     Chart chart = f.newChart(Quality.Advanced().setAlphaActivated(false));
 
     chart.getScene().getGraph().add(surface);

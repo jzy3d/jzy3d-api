@@ -46,7 +46,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
   @Override
   public void display(IPainter painter, GL2 gl, GLU glu) {
     resetNumPass();
-    renderFrontToBackPeeling(painter, gl);
+    doRender(painter, gl);
   }
 
   @Override
@@ -158,7 +158,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
     gl.glDeleteTextures(1, g_frontColorBlenderTexId, 0);
   }
 
-  protected void renderFrontToBackPeeling(IPainter painter, GL2 gl) {
+  protected void doRender(IPainter painter, GL2 gl) {
     // ---------------------------------------------------------------------
     // 1. Initialize Min Depth Buffer
     // ---------------------------------------------------------------------
