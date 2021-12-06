@@ -26,7 +26,7 @@ public class WeightedSumPeelingAlgorithm extends AbstractAccumulationDepthPeelin
   @Override
   public void display(IPainter painter, GL2 gl, GLU glu) {
     resetNumPass();
-    renderWeightedSum(painter, gl);
+    doRender(painter, gl);
   }
 
   @Override
@@ -54,7 +54,7 @@ public class WeightedSumPeelingAlgorithm extends AbstractAccumulationDepthPeelin
     glslFinal.destroy(gl);
   }
 
-  protected void renderWeightedSum(IPainter painter, GL2 gl) {
+  protected void doRender(IPainter painter, GL2 gl) {
     gl.glDisable(GL2.GL_DEPTH_TEST);
 
     // ---------------------------------------------------------------------

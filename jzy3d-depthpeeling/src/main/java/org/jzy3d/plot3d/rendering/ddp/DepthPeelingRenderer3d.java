@@ -97,12 +97,12 @@ public class DepthPeelingRenderer3d extends Renderer3d {
     return new IGLRenderer() {
       @Override
       public void draw(IPainter painter) {
-
-        //((DepthPeelingView) view).renderPeeledView();
         view.render();
       }
     };
   }
+  
+  
 
   /**
    * Rebuild all depth peeling buffers for the new screen size.
