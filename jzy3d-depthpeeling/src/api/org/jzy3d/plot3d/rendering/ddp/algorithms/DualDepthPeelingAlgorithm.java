@@ -124,9 +124,10 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
       // gl.glEnable( GL2.GL_PIXEL_UNPACK_BUFFER );
 
-      gl.glTexImage2D(GL2.GL_TEXTURE_RECTANGLE_ARB, 0, GL2.GL_FLOAT_RG32_NV, g_imageWidth,
+      gl.glTexImage2D(GL2.GL_TEXTURE_RECTANGLE_ARB, 0, GL2.GL_RG32F, g_imageWidth,
           g_imageHeight, 0, GL2.GL_RGB, GL2.GL_FLOAT, null);
 
+      
       gl.glBindTexture(GL2.GL_TEXTURE_RECTANGLE_ARB, g_dualFrontBlenderTexId[i]);
       gl.glTexParameteri(GL2.GL_TEXTURE_RECTANGLE_ARB, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP);
       gl.glTexParameteri(GL2.GL_TEXTURE_RECTANGLE_ARB, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP);
