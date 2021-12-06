@@ -4,6 +4,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
+import org.jzy3d.io.BufferUtil;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
@@ -43,7 +44,7 @@ public class ColormapTexture {
       image.putFloat(c.b);
       image.putFloat(c.a);
     }
-    image.rewind();
+    BufferUtil.rewind(image);
   }
 
   public void updateColormap(ColorMapper mapper) {
