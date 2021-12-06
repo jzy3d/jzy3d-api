@@ -22,6 +22,7 @@ import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.legends.overlay.OverlayLegendRenderer;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
@@ -73,9 +74,10 @@ public class DebugGLChart3d {
 
   public DebugGLChart3d(Chart watchedChart, ChartFactory debugChartFactory) {
     this.watchedChart = watchedChart;
-    this.debugChart = debugChartFactory.newChart(Quality.Advanced());
-    this.debugChart.getView().setSquared(false);
 
+    this.debugChart = debugChartFactory.newChart(Quality.Advanced().setAnimated(true));
+    this.debugChart.getView().setSquared(false);
+    
     spaceTransform = watchedChart.getView().getSpaceTransformer();
 
     //watchViewBounds();
@@ -206,7 +208,12 @@ public class DebugGLChart3d {
           watchLightsUpdate();
           
           if (debugChart.getView() != null) {
+            debugChart.getView().setBoundMode(ViewBoundMode.AUTO_FIT);
             debugChart.getView().updateBounds();
+            //debugChart.getView().setBoundManual(new BoundingBox3d(-1,1,-1,1,-1,1));
+            //debugChart.getView().set
+            //System.out.println(debugChart.getView().getBounds());
+
           }
           try {
             Thread.sleep(100);

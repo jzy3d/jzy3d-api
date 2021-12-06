@@ -3,12 +3,12 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 import org.jzy3d.painters.IPainter;
 import com.jogamp.opengl.GL2;
 
-public abstract class AbstractAccumlationDepthPeeling extends AbstractDepthPeelingAlgorithm {
+public abstract class AbstractAccumulationDepthPeeling extends AbstractDepthPeelingAlgorithm {
 
-  public int[] g_accumulationTexId = new int[2];
-  public int[] g_accumulationFboId = new int[1];
+  protected int[] g_accumulationTexId = new int[2];
+  protected int[] g_accumulationFboId = new int[1];
 
-  public AbstractAccumlationDepthPeeling() {
+  public AbstractAccumulationDepthPeeling() {
     super();
   }
 
@@ -45,7 +45,7 @@ public abstract class AbstractAccumlationDepthPeeling extends AbstractDepthPeeli
     gl.glTexParameteri(GL2.GL_TEXTURE_RECTANGLE_ARB, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP);
     gl.glTexParameteri(GL2.GL_TEXTURE_RECTANGLE_ARB, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);
     gl.glTexParameteri(GL2.GL_TEXTURE_RECTANGLE_ARB, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
-    gl.glTexImage2D(GL2.GL_TEXTURE_RECTANGLE_ARB, 0, GL2.GL_FLOAT_R32_NV, g_imageWidth,
+    gl.glTexImage2D(GL2.GL_TEXTURE_RECTANGLE_ARB, 0, GL2.GL_RG32F, g_imageWidth,
         g_imageHeight, 0, GL2.GL_RGBA, GL2.GL_FLOAT, null);
 
     // gl.glTexImage2D( GL2.GL_TEXTURE_RECTANGLE_ARB, 0, GL2.GL_RGBA16F,
