@@ -22,10 +22,10 @@ public class PeeledDragonDemo {
   public static void main(String[] args) {
     System.err.println("May require vm argument -Xmx1024m");
 
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.DUAL_PEELING_MODE);
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory();
     Chart chart = f.newChart();
 
-    String objFilePath = "src/library/models/dragon.obj";
+    String objFilePath = "data/models/dragon.obj";
     File file = new File("./" + objFilePath);
     
     OBJFileLoader loader = new OBJFileLoader(file);
@@ -33,9 +33,6 @@ public class PeeledDragonDemo {
     vbo.setColor(new Color(0f, 0f, 1f, 1f));
     
     chart.getScene().add(vbo);
-
-    //chart.addLightOnCamera();
-    //chart.addLight(new Coord3d(-0.01,0.2,0.04));
     
     Light light = chart.addLight(new Coord3d(-0.2, 0.2, 0.3), Light.DEFAULT_COLOR,
         Light.DEFAULT_COLOR, Light.DEFAULT_COLOR, 0.01f);
