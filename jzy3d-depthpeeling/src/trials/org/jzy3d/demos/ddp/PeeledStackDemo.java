@@ -1,11 +1,9 @@
 package org.jzy3d.demos.ddp;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.primitives.Cylinder;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
