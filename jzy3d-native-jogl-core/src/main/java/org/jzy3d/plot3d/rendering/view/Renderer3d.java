@@ -93,17 +93,21 @@ public class Renderer3d implements GLEventListener {
       view.clear();
       view.render();
 
-      if (doScreenshotAtNextDisplay) {
-        GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
-        screenshot.readPixels(gl, true);
-        image = screenshot.getTextureData();
-        doScreenshotAtNextDisplay = false;
-      }
+      renderScreenshotIfRequired(gl);
     }
     
     profileDisplayTimer.toc();
     lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
 
+  }
+
+  protected void renderScreenshotIfRequired(GL gl) {
+    if (doScreenshotAtNextDisplay) {
+      GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
+      screenshot.readPixels(gl, true);
+      image = screenshot.getTextureData();
+      doScreenshotAtNextDisplay = false;
+    }
   }
 
   /** Called when the {@link GLAutoDrawable} is resized. */

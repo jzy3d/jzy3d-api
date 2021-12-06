@@ -1,9 +1,8 @@
 package org.jzy3d.demos.ddp;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.factories.DepthPeelingChartFactory;
 import org.jzy3d.factories.DepthPeelingPainterFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -11,11 +10,7 @@ import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
-import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
-import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLContext;
-import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 
 /**
@@ -35,7 +30,7 @@ import com.jogamp.opengl.awt.GLCanvas;
 public class PeeledCubesDemo {
   public static void main(String[] args) throws InterruptedException {
 
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory();
+    AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
     Chart chart = f.newChart();
 
 
