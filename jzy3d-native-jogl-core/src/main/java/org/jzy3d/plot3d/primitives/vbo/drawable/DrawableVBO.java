@@ -49,6 +49,23 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
   protected int colorChannelNumber = 3;
 
   protected PolygonMode polygonMode;
+  
+  protected int byteOffset;
+  protected int normalOffset;
+  protected int dimensions;
+  protected int size;
+  protected int pointer;
+
+  protected int arrayName[] = new int[1];
+  protected int elementName[] = new int[1];
+
+  protected boolean hasMountedOnce = false;
+  protected Color color = new Color(1f, 0f, 1f, 0.75f);
+
+  protected boolean polygonOffsetFillEnable = true;
+  protected float polygonOffsetFactor = 1.0f;
+  protected float polygonOffsetUnit = 1.0f;
+
 
 
   public DrawableVBO(IGLLoader<DrawableVBO> loader) {
@@ -421,20 +438,5 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
 
   protected IGLLoader<DrawableVBO> loader;
 
-  protected int byteOffset;
-  protected int normalOffset;
-  protected int dimensions;
-  protected int size;
-  protected int pointer;
-
-  protected int arrayName[] = new int[1];
-  protected int elementName[] = new int[1];
-
-  protected boolean hasMountedOnce = false;
-  protected Color color = new Color(1f, 0f, 1f, 0.75f);
-
-  protected boolean polygonOffsetFillEnable = true;
-  protected float polygonOffsetFactor = 1.0f;
-  protected float polygonOffsetUnit = 1.0f;
 
 }
