@@ -1,0 +1,63 @@
+package org.jzy3d.plot3d.rendering.ddp;
+
+import org.apache.log4j.Logger;
+import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.factories.DepthPeelingChartFactory;
+import org.jzy3d.io.glsl.GLSLProgram;
+import org.jzy3d.io.glsl.GLSLProgram.Strictness;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
+import com.jogamp.opengl.GLProfile;
+
+public class DepthPeelingChart extends Chart {
+  public DepthPeelingChart(IChartFactory factory, Quality quality) {
+    super(factory, quality);
+  }
+
+  static Logger LOGGER = Logger.getLogger(DepthPeelingChart.class);
+
+  public static Chart get(Quality quality, String chartType) {
+    return get(quality, chartType, PeelingMethod.DUAL_PEELING_MODE);
+  }
+
+  public static Chart get(Quality quality, String chartType, PeelingMethod method) {
+    return get(quality, chartType, method, Strictness.CONSOLE_NO_WARN_UNIFORM_NOT_FOUND);
+  }
+
+  public static Chart get(Quality quality, String chartType, PeelingMethod method,
+      Strictness strictness) {
+    return get(quality, chartType, method, strictness, true);
+  }
+
+  public static Chart get(Quality quality, String chartType, final PeelingMethod method,
+      Strictness strictness, boolean editFactories) {
+    GLSLProgram.DEFAULT_STRICTNESS = strictness;
+
+    IChartFactory factory = new DepthPeelingChartFactory(method);
+
+    LOGGER.info("is available GL2 : " + GLProfile.isAvailable(GLProfile.GL2));
+    LOGGER.info("is available GL3 : " + GLProfile.isAvailable(GLProfile.GL3));
+    LOGGER.info("is available GL4 : " + GLProfile.isAvailable(GLProfile.GL4));
+
+    GLProfile profile = GLProfile.get(GLProfile.GL4);
+
+
+    // GL2
+    // GLProfile profile = GLProfile.get(GLProfile.GL2);
+    // GLSLProgram: ERROR: 0:10: 'DepthTex' : syntax error: syntax error
+
+    // GLProfile.get(GLProfile.GL4bc);
+
+
+    LOGGER.info(profile);
+
+    // GLCapabilities capabilities = new GLCapabilities(profile);
+    // capabilities.setHardwareAccelerated(true);
+
+    Chart chart = new DepthPeelingChart(factory, quality);
+    chart.getView().setSquared(false);
+    chart.getView().setAxisDisplayed(true);
+    return chart;
+  }
+}
