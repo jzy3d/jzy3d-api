@@ -32,14 +32,19 @@ public class AWTRenderer3d extends Renderer3d {
       view.clear();
       view.render();
 
-      if (doScreenshotAtNextDisplay) {
-        AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), true);
-        screenshot.readPixels(gl, true);
-        image = screenshot.getTextureData();
-        bufferedImage = screenshot.readPixelsToBufferedImage(gl, true);
+      renderScreenshotIfRequired(gl);
+    }
+  }
 
-        doScreenshotAtNextDisplay = false;
-      }
+  @Override
+  protected void renderScreenshotIfRequired(GL gl) {
+    if (doScreenshotAtNextDisplay) {
+      AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), true);
+      screenshot.readPixels(gl, true);
+      image = screenshot.getTextureData();
+      bufferedImage = screenshot.readPixelsToBufferedImage(gl, true);
+
+      doScreenshotAtNextDisplay = false;
     }
   }
 
