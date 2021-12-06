@@ -1,8 +1,10 @@
 package org.jzy3d.demos.ddp;
 
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.factories.DepthPeelingChartFactory;
+import org.jzy3d.factories.DepthPeelingPainterFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Cylinder;
@@ -20,7 +22,8 @@ public class PeeledStackDemo {
 
 
   public static void main(String[] args) {
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory();
+    AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
+
     Chart chart = f.newChart(Quality.Nicest());
 
 
