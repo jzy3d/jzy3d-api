@@ -2,6 +2,7 @@ package org.jzy3d.demos.ddp;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
+import org.jzy3d.factories.DepthPeelingChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Cylinder;
@@ -9,8 +10,6 @@ import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.ddp.DepthPeelingChart;
-import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 
 public class PeeledStackDemo {
   static Color STACK_FACE = new Color(.5f, .5f, .5f, .5f);
@@ -21,7 +20,8 @@ public class PeeledStackDemo {
 
 
   public static void main(String[] args) {
-    Chart chart = DepthPeelingChart.get(Quality.Fastest(), "awt", PeelingMethod.DUAL_PEELING_MODE);
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory();
+    Chart chart = f.newChart(Quality.Nicest());
 
 
     Coord3d c1 = new Coord3d(0, 0, -2.5);

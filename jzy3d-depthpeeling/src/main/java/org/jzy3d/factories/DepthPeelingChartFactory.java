@@ -11,6 +11,10 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class DepthPeelingChartFactory extends AWTChartFactory {
+  public DepthPeelingChartFactory() {
+    this(PeelingMethod.DUAL_PEELING_MODE);
+  }
+
   public DepthPeelingChartFactory(PeelingMethod method) {
     super(new DepthPeelingPainterFactory());
     this.method = method;
