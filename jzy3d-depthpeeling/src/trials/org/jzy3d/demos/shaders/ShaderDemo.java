@@ -85,7 +85,7 @@ public class ShaderDemo {
   }
 
   public static Chart initChart() {
-    GLProfile profile = GLProfile.getMaxProgrammable(true);
+    GLProfile profile = GLProfile.get(GLProfile.GL2);
     GLCapabilities capabilities = new GLCapabilities(profile);
     capabilities.setHardwareAccelerated(false);
 

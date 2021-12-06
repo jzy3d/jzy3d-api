@@ -25,7 +25,7 @@ public class PeeledDragonDemo {
   public static void main(String[] args) {
     System.err.println("May require vm argument -Xmx1024m");
 
-    DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.WEIGHTED_SUM_MODE);
+    DepthPeelingChartFactory f = new DepthPeelingChartFactory(PeelingMethod.DUAL_PEELING_MODE);
     Chart chart = f.newChart();
 
     String objFilePath = "src/library/models/dragon.obj";
