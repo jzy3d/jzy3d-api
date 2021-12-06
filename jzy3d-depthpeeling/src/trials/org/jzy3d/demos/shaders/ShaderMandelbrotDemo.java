@@ -1,11 +1,9 @@
 package org.jzy3d.demos.shaders;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.AWTPainterFactory;
 import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.shaders.IShaderable;
 import org.jzy3d.plot3d.rendering.shaders.ShaderRenderer3d;

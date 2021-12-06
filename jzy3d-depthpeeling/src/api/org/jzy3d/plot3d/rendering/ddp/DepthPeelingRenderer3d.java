@@ -14,7 +14,6 @@ import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
-import jogamp.opengl.gl4.GL4bcImpl;
 
 /**
  * Execute depth peeling methods in a Jzy3d {@link Renderer3d}
