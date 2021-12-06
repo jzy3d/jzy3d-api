@@ -99,7 +99,8 @@ public class DepthPeelingRenderer3d extends Renderer3d {
       @Override
       public void draw(IPainter painter) {
 
-        ((DepthPeelingView) view).renderPeeledView();
+        //((DepthPeelingView) view).renderPeeledView();
+        view.render();
       }
     };
   }
