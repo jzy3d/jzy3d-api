@@ -25,7 +25,7 @@ public class BasicVolumeDemo extends AWTAbstractAnalysis {
   @Override
   public void init() {
 
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), 0, 1, new Color(1, 1, 1, .5f));
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), 0, 1, new Color(1, 1, 1, 1.5f));
 
     ByteBuffer buffer = GLBuffers.newDirectByteBuffer(10 * 10 * 10 * 4);
     // make some kind of volume
