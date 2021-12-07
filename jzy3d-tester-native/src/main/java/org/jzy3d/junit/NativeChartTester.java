@@ -31,7 +31,7 @@ public class NativeChartTester extends ChartTester {
       AWTRenderer3d awtR = (AWTRenderer3d) ((INativeCanvas) chart.getCanvas()).getRenderer();
       return awtR.getLastScreenshotImage();
     } else {
-      // This screenshot generation performed OUT of renderer is not working as well yet
+      // This screenshot generation performed OUT of renderer is not working well yet
       //
       //
 
