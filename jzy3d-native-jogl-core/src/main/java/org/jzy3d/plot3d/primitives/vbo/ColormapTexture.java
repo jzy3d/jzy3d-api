@@ -44,6 +44,7 @@ public class ColormapTexture {
       image.putFloat(c.b);
       image.putFloat(c.a);
     }
+
     BufferUtil.rewind(image);
   }
 
@@ -61,8 +62,9 @@ public class ColormapTexture {
       image.putFloat(c.g);
       image.putFloat(c.b);
       image.putFloat(c.a);
+      
     }
-    image.rewind();
+    BufferUtil.rewind(image);
 
     isUpdate = true;
   }
