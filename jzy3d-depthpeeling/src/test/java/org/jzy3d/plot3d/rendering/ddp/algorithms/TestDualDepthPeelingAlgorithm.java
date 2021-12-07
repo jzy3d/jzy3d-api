@@ -19,7 +19,8 @@ public class TestDualDepthPeelingAlgorithm {
 
       AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
 
-      //f.getPainterFactory().setOffscreen(600, 600);
+      f.getPainterFactory().setOffscreen(600, 600);
+      
       Chart chart = f.newChart();
 
       Coord3d p1 = Coord3d.ORIGIN;
@@ -38,6 +39,7 @@ public class TestDualDepthPeelingAlgorithm {
       //chart.getScene().getGraph().
       
       NativeChartTester tester = new NativeChartTester();
+      tester.setTextInvisible(false);
       tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + TestDualDepthPeelingAlgorithm.class.getSimpleName()+".png");
 
 

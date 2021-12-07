@@ -42,7 +42,7 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
   protected Logger LOGGER = Logger.getLogger(DepthPeelingRenderer3d.class);
 
   protected IDepthPeelingAlgorithm dualPeelingAlgorithm;
-  protected boolean autoSwapBuffer = false;
+  //protected boolean autoSwapBuffer = false;
   protected GLU glu = new GLU();
 
   public DepthPeelingRenderer3d(final View view, boolean traceGL, boolean debugGL) {
@@ -57,13 +57,13 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
   }
 
   @Override
-  public void init(GLAutoDrawable canvas) {
-    if (canvas != null && view !=null) {
-      dualPeelingAlgorithm.init(view.getPainter(), getGL2(canvas), width, height);
+  public void init(GLAutoDrawable drawable) {
+    if (drawable != null && view !=null) {
+      dualPeelingAlgorithm.init(view.getPainter(), drawable.getGL().getGL2(), width, height);
     }
-    super.init(canvas);
+    super.init(drawable);
     
-    canvas.setAutoSwapBufferMode(autoSwapBuffer);
+    //drawable.setAutoSwapBufferMode(autoSwapBuffer);
   }
 
 
@@ -74,7 +74,7 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
   public void display(GLAutoDrawable drawable) {
     updatePainterWithGL(drawable);
 
-    GL2 gl = getGL2(drawable);
+    GL2 gl = drawable.getGL().getGL2();
 
     
     if(view!=null) {
@@ -88,7 +88,7 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
       renderScreenshotIfRequired(gl);
 
       
-      if (!autoSwapBuffer)
+      if (!drawable.getAutoSwapBufferMode())
         drawable.swapBuffers();
     }
 
@@ -103,8 +103,6 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
       }
     };
   }
-  
-  
 
   /**
    * Rebuild all depth peeling buffers for the new screen size.
@@ -113,7 +111,7 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
   public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     updatePainterWithGL(drawable);
 
-    GL2 gl = getGL2(drawable);
+    GL2 gl = drawable.getGL().getGL2();
 
     if (this.width != width || this.height != height) {
       this.width = width;
@@ -125,13 +123,10 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
 
   @Override
   public void dispose(GLAutoDrawable drawable) {
-    dualPeelingAlgorithm.dispose(view.getPainter(), getGL2(drawable));
+    dualPeelingAlgorithm.dispose(view.getPainter(), drawable.getGL().getGL2());
   }
   
-  protected GL2 getGL2(GLAutoDrawable drawable) {
-    return drawable.getGL().getGL2();
-  }
-
+  
 
   public static IDepthPeelingAlgorithm getDepthPeelingAlgorithm(PeelingMethod method) {
     if (method == PeelingMethod.DUAL_PEELING_MODE)
