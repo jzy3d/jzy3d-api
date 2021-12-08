@@ -155,6 +155,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     // number of voxel for width, height, depth, R float input format
     gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL.GL_R32F, shape[2], shape[1], shape[0], 1,
         GL2.GL_RED, GL.GL_FLOAT, buffer);
+
   }
 
   protected boolean validateTexID(final GL gl, final boolean throwException) {
@@ -221,8 +222,8 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     shaderProgram.setUniform(gl.getGL2(), "minMax", new float[] {min, max}, 2);
     int idt = gl.getGL2().glGetUniformLocation(shaderProgram.getProgramId(), "volumeTexture");
     int idc = gl.getGL2().glGetUniformLocation(shaderProgram.getProgramId(), "transfer");
-    gl.getGL2().glUniform1i(idt, 0);
-    gl.getGL2().glUniform1i(idc, 1);
+    gl.getGL2().glUniform1i(idt, 0); // refer to GL_TEXTURE0, the volume
+    gl.getGL2().glUniform1i(idc, 1); // refer to GL_TEXTURE1, the colormap
 
 
     gl.glEnable(GL2.GL_BLEND);
