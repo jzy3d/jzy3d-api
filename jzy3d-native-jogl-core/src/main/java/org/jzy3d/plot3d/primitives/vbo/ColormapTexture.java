@@ -110,7 +110,7 @@ public class ColormapTexture {
 
     // specify a 1 dimensional texture image with a single LOD, RGBA float internal format, 256
     // pixels, RGBA float input format
-    gl.getGL2().glTexImage1D(GL2.GL_TEXTURE_1D, 0, GL.GL_RGBA32F, 256, 0, GL2.GL_RGBA, GL.GL_FLOAT,
+    gl.getGL2().glTexImage1D(GL2.GL_TEXTURE_1D, 0, GL.GL_RGBA32F, nColors, 0, GL2.GL_RGBA, GL.GL_FLOAT,
         buffer);
     
     // gl.getGL2().glTexSubImage3D(GL2.GL_TEXTURE_3D,0,0, 0,0, shape[0], shape[1], shape[2],
