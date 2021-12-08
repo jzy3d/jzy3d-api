@@ -68,7 +68,6 @@ public class ColormapTexture {
       image.putFloat(c.g);
       image.putFloat(c.b);
       image.putFloat(c.a);
-
     }
     BufferUtil.rewind(image);
 
