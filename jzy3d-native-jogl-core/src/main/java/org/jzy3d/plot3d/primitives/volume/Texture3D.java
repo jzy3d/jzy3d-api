@@ -38,6 +38,16 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
   protected boolean disposed;
   protected ColorMapper mapper;
 
+  /**
+   * Instanciate a drawable volume.
+   * 
+   * @param buffer provides (x,y,z,V) tuples where (x,y,z) are voxel index in the volume and V the value used for coloring voxels
+   * @param shape a 3 element array indicating the number of voxels for each dimension 
+   * @param min the minimum V value provided in the input buffer which must be set consistently with the colormapper
+   * @param max the maximum V value provided in the input buffer which must be set consistently with the colormapper
+   * @param mapper the colormap handler that will apply a colormap to a value range
+   * @param bbox the real world range of each axis, since the input buffer provide tuples with index and not coordinates
+   */
   public Texture3D(Buffer buffer, int[] shape, float min, float max, ColorMapper mapper,
       BoundingBox3d bbox) {
     this.buffer = buffer;
@@ -50,16 +60,33 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     this.mapper = mapper;
   }
 
+  /**
+   * A convenient constructor that configure the volume value range based on the colormapper settings.
+   * 
+   * {@link Texture3D#Texture3D(Buffer, int[], float, float, ColorMapper, BoundingBox3d)}
+   */
+  public Texture3D(Buffer buffer, int[] shape, ColorMapper mapper,
+      BoundingBox3d bbox) {
+    this(buffer, shape, (float) mapper.getMin(), (float) mapper.getMax(), mapper, bbox);
+  }
+  
   @Override
   public void mount(IPainter painter) {
     GL gl = ((NativeDesktopPainter) painter).getGL();
+    
     if (!mounted) {
       shapeVBO.mount(painter);
       shaderProgram = new GLSLProgram();
+      
+      // load shaders handling the volume (a.k.a 3D texture)
       ShaderFilePair sfp = new ShaderFilePair(this.getClass(), "volume.vert", "volume.frag");
       shaderProgram.loadAndCompileShaders(gl.getGL2(), sfp);
       shaderProgram.link(gl.getGL2());
+      
+      
       bind(gl);
+      
+      // create the colormap as a 1D texture made of 256 pixels
       colormapTexure = new ColormapTexture(mapper, "transfer", shaderProgram.getProgramId());
       colormapTexure.bind(gl);
       mounted = true;
