@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.io.BufferUtil;
+import org.jzy3d.io.Console;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
@@ -19,12 +20,17 @@ import com.jogamp.opengl.util.GLBuffers;
  */
 public class ColormapTexture {
 
-  private int texID;
-  private ByteBuffer image;
-  private int[] shape;
-  private boolean isUpdate = false;
-  private String name = null;
-  private int id;
+  protected int id;
+  protected int texID;
+  
+  protected ByteBuffer image;
+  protected int[] shape;
+  
+  protected boolean isUpdate = false;
+  protected String name = null;
+  
+  protected int nColors = 256;
+
 
 
   public ColormapTexture(ColorMapper mapper, String name, int id) {
@@ -34,31 +40,20 @@ public class ColormapTexture {
   }
 
   public ColormapTexture(ColorMapper mapper) {
-    double min = mapper.getMin();
-    double max = mapper.getMax();
-
-    int nColors = 256;
-
     image = GLBuffers.newDirectByteBuffer(4 * nColors * 4);
-
-    double step = (max - min) / nColors;
-
-    for (int i = 0; i < nColors; i++) {
-      Color c = mapper.getColor(min + (i * step));
-      image.putFloat(c.r);
-      image.putFloat(c.g);
-      image.putFloat(c.b);
-      image.putFloat(c.a);
-    }
-
-    BufferUtil.rewind(image);
+    
+    feedBufferWithColormap(mapper);
   }
 
   public void updateColormap(ColorMapper mapper) {
+    feedBufferWithColormap(mapper);
+
+    isUpdate = true;
+  }
+  
+  protected void feedBufferWithColormap(ColorMapper mapper) {
     double min = mapper.getMin();
     double max = mapper.getMax();
-
-    int nColors = 256;
 
     double step = (max - min) / nColors;
 
@@ -68,11 +63,13 @@ public class ColormapTexture {
       image.putFloat(c.g);
       image.putFloat(c.b);
       image.putFloat(c.a);
+      
+      //Console.println(c);
     }
-    BufferUtil.rewind(image);
 
-    isUpdate = true;
+    BufferUtil.rewind(image);
   }
+
 
   public void update(GL gl) {
     if (!isUpdate)
@@ -86,7 +83,7 @@ public class ColormapTexture {
     
     gl.glEnable(GL2.GL_TEXTURE_1D);
     
-    
+    // Verify 
     validateTexID(gl, true);
     
     gl.glBindTexture(GL2.GL_TEXTURE_1D, texID);
@@ -127,7 +124,7 @@ public class ColormapTexture {
     return id;
   }
 
-  private boolean validateTexID(final GL gl, final boolean throwException) {
+  protected boolean validateTexID(final GL gl, final boolean throwException) {
     // if a variable name is given, retrieve the existing texture ID from it
     if (name != null) {
       gl.glActiveTexture(GL.GL_TEXTURE1);
