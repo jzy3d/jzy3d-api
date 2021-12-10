@@ -77,7 +77,7 @@ public class TexturedCube extends Composite implements Selectable, ITranslucent 
     bbox = new BoundingBox3d(position, width * 2);
   }
 
-  public List<Coord2d> makeXPlaneTextureMapping(Coord3d position, float width) {
+  public static List<Coord2d> makeXPlaneTextureMapping(Coord3d position, float width) {
     List<Coord2d> xmapping = new ArrayList<Coord2d>(4);
     xmapping.add(new Coord2d(position.y - width, position.z - width));
     xmapping.add(new Coord2d(position.y + width, position.z - width));
