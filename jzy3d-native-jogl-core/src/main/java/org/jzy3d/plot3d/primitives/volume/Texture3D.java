@@ -231,10 +231,13 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
     gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
     gl.glCullFace(GL.GL_BACK);
-
+    
     shapeVBO.draw(painter);
     shaderProgram.unbind(gl.getGL2());
 
+    //gl.glDisable(GL2.GL_CULL_FACE);
+
+    
     if (disposed) {
       gl.glDeleteTextures(1, new int[] {texID}, 0);
       buffer = null;
