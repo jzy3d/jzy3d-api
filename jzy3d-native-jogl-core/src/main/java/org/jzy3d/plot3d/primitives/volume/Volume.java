@@ -1,21 +1,17 @@
 package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.Buffer;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.Iterator;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
-import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.GLException;
 
 /**
@@ -45,7 +41,7 @@ public class Volume extends Drawable implements IGLBindedResource {
    * @param bbox the real world range of each axis, since the input buffer provide tuples with index
    *        and not coordinates
    */
-  public Volume(Buffer buffer, int[] shape, BoundingBox3d bbox) {
+  public Volume(FloatBuffer buffer, int[] shape, BoundingBox3d bbox) {
     this.buffer = buffer;
     this.buffer.rewind();
 
@@ -71,28 +67,28 @@ public class Volume extends Drawable implements IGLBindedResource {
 
   public void bind(final GL2 gl) throws GLException {
     gl.glEnable(GL2.GL_TEXTURE_3D);
-    gl.glActiveTexture(GL.GL_TEXTURE0);
+    //gl.glActiveTexture(GL.GL_TEXTURE0);
 
     // Generate texture
     IntBuffer ib = Buffers.newDirectIntBuffer(1);
     gl.glGenTextures(1, ib);
     texID = ib.get(0);
 
-    System.out.println("Volume : " + texID);
+    //System.out.println("Volume : " + texID);
 
     // Declare a 3D texture
     gl.glBindTexture(GL2.GL_TEXTURE_3D, texID);
 
     //gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);
 
-    /*// Will keep max or min texture value upon overflow on the X dimension
-    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
+    // Will keep max or min texture value upon overflow on the X dimension
+    /*gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
 
     // Will keep max or min texture value upon overflow on the Y dimension
-    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);*/
+    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
 
     // Will keep max or min texture value upon overflow on the Z dimension
-    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP_TO_BORDER);
+    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP_TO_EDGE);*/
     
     // Will apply linear interpolation when zooming in texture voxels
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
@@ -101,7 +97,7 @@ public class Volume extends Drawable implements IGLBindedResource {
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 
     // Define how pixels are stored in memory
-    //gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
+    gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
     //gl.glPixelStorei(GL.GL_PACK_ALIGNMENT, 1);
 
 
@@ -110,12 +106,12 @@ public class Volume extends Drawable implements IGLBindedResource {
     // Specify a 3 dimensional texture image with a single LOD, RGBA float internal format,
     // dynamical
     // number of voxel for width, height, depth, no border, RGBA float input format
-    gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL2.GL_COMPRESSED_RGBA, shape[2], shape[1], shape[0], 0,
-        GL2.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
+    gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL2.GL_RGBA, shape[0], shape[1], shape[2], 0,
+        GL2.GL_RGBA, GL.GL_FLOAT, buffer);
 
     // internal could be GL_COMPRESSED_RGBA
 
-    //gl.glBindTexture( GL2.GL_TEXTURE_3D, 0 );
+    gl.glBindTexture( GL2.GL_TEXTURE_3D, 0 );
   }
 
   @Override
@@ -139,6 +135,9 @@ public class Volume extends Drawable implements IGLBindedResource {
 
     //gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
 
+    
+    gl.glDisable(GL2.GL_CULL_FACE);
+    
     gl.glEnable(GL2.GL_ALPHA_TEST);
     //gl.getGL2().glAlphaFunc(GL.GL_GREATER, 0.03f);
 
@@ -148,7 +147,7 @@ public class Volume extends Drawable implements IGLBindedResource {
     gl.getGL2().glMatrixMode(GL.GL_TEXTURE);
 
     gl.glEnable(GL2.GL_TEXTURE_3D);
-    gl.glActiveTexture(GL.GL_TEXTURE0);
+    //gl.glActiveTexture(GL.GL_TEXTURE0);
     gl.glBindTexture(GL2.GL_TEXTURE_3D, texID);
 
 
@@ -157,41 +156,46 @@ public class Volume extends Drawable implements IGLBindedResource {
     
     
     float texXmin = 0;
-    float texXmax = 1;
+    float texXmax = shape[0];
 
     float texYmin = 0;
-    float texYmax = 1;
+    float texYmax = shape[1];
 
-    //float texZmin = 0;
-    //float texZmax = 1;
+    float texZmin = 0;
+    float texZmax = shape[2];
 
-    float zInc = bbox.getZRange().getRange() / shape[2];
+    float zIncTex = 1;///texZmax;
+    float zIncWorld = bbox.getZRange().getRange() / texZmax;
 
 
-    float texZ = 0;
-    for (float z = bbox.getZmin(); z <= bbox.getZmax(); z+=zInc) {
+    float texZCurrent = texZmin;
+    
+    for (float zWorld = bbox.getZmin(); zWorld <= bbox.getZmax(); zWorld+=zIncWorld) {
       
+      //System.out.println("texZCur:" + texZCurrent);
+
       //float texZ = z
       
-      //System.out.println(z + " > " + texZ);
+      //System.out.println(zWorld + " in world is " + texZCurrent + " in texture");
       
       gl.glBegin(GL2.GL_QUADS);
 
-      gl.glTexCoord3f(texXmin, texYmin, texZ);
-      gl.glVertex3f(bbox.getXmin(), bbox.getYmin(), z);
+      gl.glTexCoord3f(texXmin, texYmin, texZCurrent);
+      gl.glVertex3f(bbox.getXmin(), bbox.getYmin(), zWorld);
 
-      gl.glTexCoord3f(texXmax, texYmin, texZ);
-      gl.glVertex3f(bbox.getXmax(), bbox.getYmin(), z);
+      gl.glTexCoord3f(texXmax, texYmin, texZCurrent);
+      gl.glVertex3f(bbox.getXmax(), bbox.getYmin(), zWorld);
 
-      gl.glTexCoord3f(texXmax, texYmax, texZ);
-      gl.glVertex3f(bbox.getXmax(), bbox.getYmax(), z);
+      gl.glTexCoord3f(texXmax, texYmax, texZCurrent);
+      gl.glVertex3f(bbox.getXmax(), bbox.getYmax(), zWorld);
 
-      gl.glTexCoord3f(texXmin, texYmax, texZ);
-      gl.glVertex3f(bbox.getXmin(), bbox.getYmax(), z);
+      gl.glTexCoord3f(texXmin, texYmax, texZCurrent);
+      gl.glVertex3f(bbox.getXmin(), bbox.getYmax(), zWorld);
 
       gl.glEnd();
       
-      texZ+=1;
+      texZCurrent+=1;
+      
 
     }
 
@@ -200,6 +204,8 @@ public class Volume extends Drawable implements IGLBindedResource {
       gl.glDeleteTextures(1, new int[] {texID}, 0);
       buffer = null;
     }
+    
+    gl.glBindTexture( GL2.GL_TEXTURE_3D, 0 );
   }
 
   @Override

@@ -103,6 +103,10 @@ public class ColormapTexture {
     // Store texture in memory
     setTextureData(gl, image, shape /* unused */);
   }
+  
+  public void unbind(GL gl) {
+    gl.glBindTexture(GL2.GL_TEXTURE_1D, 0);
+  }
 
   public void setTextureData(final GL gl, Buffer buffer, int[] shape /* unused */) {
     // define how pixels are stored in memory

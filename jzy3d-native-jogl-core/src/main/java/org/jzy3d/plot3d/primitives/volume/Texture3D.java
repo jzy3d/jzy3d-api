@@ -138,6 +138,10 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     // Load buffer data into memory
     setTextureData(gl, buffer, shape);
   }
+  
+  public void unbind(final GL gl) {
+    gl.glBindTexture(GL2.GL_TEXTURE_3D, 0);
+  }
 
   /**
    * Load buffer data into memory
@@ -180,6 +184,9 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
 
     if (!mounted) {
       mount(painter);
+    }
+    else {
+      bind(gl);
     }
 
     colormapTexure.update(gl);
@@ -234,6 +241,9 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     
     shapeVBO.draw(painter);
     shaderProgram.unbind(gl.getGL2());
+    
+    colormapTexure.unbind(gl);
+    unbind(gl);
 
     //gl.glDisable(GL2.GL_CULL_FACE);
 
@@ -243,7 +253,6 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
       buffer = null;
       shaderProgram.destroy(gl.getGL2());
     }
-
   }
 
   @Override
