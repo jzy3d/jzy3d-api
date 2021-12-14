@@ -10,11 +10,12 @@ import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
+import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.awt.GLCanvas;
 
 /**
- * Status of peeling methods
+ * Status of peeling methods on Apple M1 (Silicon)
  * <ul>
  * <li>OK - DUAL_PEELING_MODE 
  * <li>KO - WEIGHTED_AVERAGE_MODE : renders correctly BUT make opaque object appear translucent (e.g. the
@@ -24,13 +25,24 @@ import com.jogamp.opengl.awt.GLCanvas;
  * <li>KO - F2B_PEELING_MODE : Hangs before display (reproduce with chart.get
  * </ul>
  * 
+ * Status of peeling methods on NVidia
+ * <ul>
+ * <li>OK - F2B_PEELING_MODE 
+ * <li>OK - DUAL_PEELING_MODE 
+ * <li>OK - WEIGHTED_AVERAGE_MODE
+ * <li>KO - WEIGHTED_SUM_MODE : no compilation problem BUT overlapping parts (translucent or opaque) are
+ * black
+ * </ul>
+ * 
  * @author martin
  *
  */
 public class PeeledCubesDemo {
   public static void main(String[] args) throws InterruptedException {
-
-    AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
+    DepthPeelingPainterFactory p = new DepthPeelingPainterFactory();
+    p.setPeelingMethod(PeelingMethod.WEIGHTED_SUM_MODE);
+    
+    AWTChartFactory f = new AWTChartFactory(p);
     Chart chart = f.newChart();
 
 

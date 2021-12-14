@@ -17,6 +17,25 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 
 
 public class TexturedCube extends Composite implements Selectable, ITranslucent {
+  protected Drawable north;
+  protected Drawable south;
+  protected Drawable west;
+  protected Drawable east;
+  protected Drawable near;
+  protected Drawable far;
+
+  protected Drawable northBg;
+  protected Drawable southBg;
+  protected Drawable westBg;
+  protected Drawable eastBg;
+  protected Drawable nearBg;
+  protected Drawable farBg;
+
+  protected List<Coord3d> lastProjection;
+  protected Polygon2d lastHull;
+
+  protected float alpha;
+  
   public TexturedCube(MaskPair masks) {
     this(new Coord3d(), Color.CYAN, Color.RED, masks);
   }
@@ -144,22 +163,5 @@ public class TexturedCube extends Composite implements Selectable, ITranslucent 
     ((NativeDrawableImage) far).setAlphaFactor(alpha);
   }
 
-  protected Drawable north;
-  protected Drawable south;
-  protected Drawable west;
-  protected Drawable east;
-  protected Drawable near;
-  protected Drawable far;
 
-  protected Drawable northBg;
-  protected Drawable southBg;
-  protected Drawable westBg;
-  protected Drawable eastBg;
-  protected Drawable nearBg;
-  protected Drawable farBg;
-
-  protected List<Coord3d> lastProjection;
-  protected Polygon2d lastHull;
-
-  protected float alpha;
 }
