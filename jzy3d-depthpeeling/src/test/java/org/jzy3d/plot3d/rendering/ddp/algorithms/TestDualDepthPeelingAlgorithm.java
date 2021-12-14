@@ -16,10 +16,14 @@ import org.jzy3d.plot3d.primitives.PolygonMode;
 public class TestDualDepthPeelingAlgorithm {
     @Test
     public void whenTranslucentIntersectingCube_ThenOrderIndependentAlphaIsProcessed() throws InterruptedException {
+      DepthPeelingPainterFactory p = new DepthPeelingPainterFactory();
+      p.setPeelingMethod(PeelingMethod.WEIGHTED_AVERAGE_MODE);
+      //p.setDebugGL(true);
+      
+      
+      AWTChartFactory f = new AWTChartFactory(p);
 
-      AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
-
-      f.getPainterFactory().setOffscreen(600, 600);
+      //f.getPainterFactory().setOffscreen(600, 600);
       
       Chart chart = f.newChart();
 
@@ -32,8 +36,9 @@ public class TestDualDepthPeelingAlgorithm {
       cube(chart, 0.01f, p3, Color.GREEN.alpha(.5f), Color.BLACK);
 
       chart.open(800, 600);
+      chart.render();
       
-      Thread.sleep(200);
+      //Thread.sleep(5000);
       //chart.getMouse();
 
       //chart.getScene().getGraph().
