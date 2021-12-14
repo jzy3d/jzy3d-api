@@ -16,13 +16,15 @@ import org.jzy3d.plot3d.rendering.lights.Light;
 
 /**
  * Download https://download.jzy3d.org/objfiles/dragon.obj to src/library/models/dragon.obj if not yet available.
+ * 
+ * Light & shadow not working here. See ObjFileVBODemo in the developer guide.
+ * 
+ * 
  * @author martin
  *
  */
 public class PeeledDragonDemo {
   public static void main(String[] args) {
-    System.err.println("May require vm argument -Xmx1024m");
-
     AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
 
     Chart chart = f.newChart();
