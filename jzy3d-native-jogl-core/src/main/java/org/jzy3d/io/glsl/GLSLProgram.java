@@ -397,7 +397,7 @@ public class GLSLProgram {
     // Get logs
     ByteBuffer shaderLogBuffer = Buffers.newDirectByteBuffer(logLength);
     BufferUtil.flip(shaderLogBuffer);
-    shaderLogBuffer.limit(logLength);
+    BufferUtil.limit(shaderLogBuffer, logLength);
     
     inGL.glGetInfoLogARB(shaderObjectID, logLength, logLengthBuffer, shaderLogBuffer);
     
