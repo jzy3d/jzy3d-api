@@ -28,6 +28,10 @@ public class BufferUtil {
     buffer.flip();
   }
 
+  public static void limit(Buffer buffer, int limit) {
+    buffer.limit(limit);
+  }
+
   
   /*// Kept as a trick to test rewind without upcast
   public static void rewind(FloatBuffer buffer) {
