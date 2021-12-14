@@ -85,14 +85,14 @@ public class Volume extends Drawable implements IGLBindedResource {
 
     //gl.glTexEnvi(GL2.GL_TEXTURE_ENV, GL2.GL_TEXTURE_ENV_MODE, GL2.GL_REPLACE);
 
-    /*// Will keep max or min texture value upon overflow on the X dimension
+    // Will keep max or min texture value upon overflow on the X dimension
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP_TO_EDGE);
 
     // Will keep max or min texture value upon overflow on the Y dimension
-    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);*/
+    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP_TO_EDGE);
 
     // Will keep max or min texture value upon overflow on the Z dimension
-    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP_TO_BORDER);
+    gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP_TO_EDGE);
     
     // Will apply linear interpolation when zooming in texture voxels
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
@@ -101,7 +101,7 @@ public class Volume extends Drawable implements IGLBindedResource {
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 
     // Define how pixels are stored in memory
-    //gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
+    gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
     //gl.glPixelStorei(GL.GL_PACK_ALIGNMENT, 1);
 
 
@@ -110,8 +110,8 @@ public class Volume extends Drawable implements IGLBindedResource {
     // Specify a 3 dimensional texture image with a single LOD, RGBA float internal format,
     // dynamical
     // number of voxel for width, height, depth, no border, RGBA float input format
-    gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL2.GL_COMPRESSED_RGBA, shape[2], shape[1], shape[0], 0,
-        GL2.GL_RGBA, GL.GL_UNSIGNED_BYTE, buffer);
+    gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL2.GL_RGBA8, shape[2], shape[1], shape[0], 0,
+        GL2.GL_RGBA, GL.GL_FLOAT, buffer);
 
     // internal could be GL_COMPRESSED_RGBA
 
