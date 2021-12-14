@@ -37,6 +37,7 @@ public class TestDualDepthPeelingAlgorithm {
 
       chart.open(800, 600);
       chart.render();
+      //chart.render();
       
       Thread.sleep(2000);
       //chart.getMouse();
