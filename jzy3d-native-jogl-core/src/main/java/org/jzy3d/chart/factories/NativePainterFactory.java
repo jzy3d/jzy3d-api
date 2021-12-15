@@ -25,7 +25,7 @@ public abstract class NativePainterFactory implements IPainterFactory {
   protected boolean offscreen = false;
   protected int width;
   protected int height;
-  
+
   protected boolean traceGL = false;
   protected boolean debugGL = false;
 
@@ -52,15 +52,16 @@ public abstract class NativePainterFactory implements IPainterFactory {
 
   // @Override
   /** Only needed by {@link INativeCanvas} */
-  /*public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
-    return new Renderer3d(view, traceGL, debugGL);
-  }*/
+  /*
+   * public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) { return new
+   * Renderer3d(view, traceGL, debugGL); }
+   */
 
   // @Override
   /** Only needed by {@link INativeCanvas} */
   public Renderer3d newRenderer3D(View view) {
     return new Renderer3d(view, traceGL, debugGL);
-    //newRenderer3D(view, this.traceGL, this.traceGL);
+    // newRenderer3D(view, this.traceGL, this.traceGL);
   }
 
   @Override
@@ -111,7 +112,7 @@ public abstract class NativePainterFactory implements IPainterFactory {
     this.height = height;
     this.capabilities.setOnscreen(false);
   }
-  
+
   @Override
   public void setOffscreen(Rectangle rectangle) {
     setOffscreen(rectangle.width, rectangle.height);
@@ -129,9 +130,10 @@ public abstract class NativePainterFactory implements IPainterFactory {
       throw new UnsupportedOperationException(
           "Jzy3d requires an OpenGL 2 or OpenGL 2 ES 2 hardware");
     }
-    
-    //return GLProfile.get(GLProfile.GL2ES2);
-    
+
+    // GLProfile profile = GLProfile.get(GLProfile.GL4); // GL4bcImpl fail to downcast to GL2 on Mac
+    // so won't use GLProfile.getMaximum(true) until https://github.com/jzy3d/jogl/issues/7 is fixed
+
     if (GLProfile.isAvailable(GLProfile.GL2)) {
       // Preferred profile = GL2
       return GLProfile.get(GLProfile.GL2);
@@ -140,7 +142,7 @@ public abstract class NativePainterFactory implements IPainterFactory {
       return GLProfile.get(GLProfile.GL2ES2);
     }
   }
-  
+
 
 
   /**
@@ -153,15 +155,15 @@ public abstract class NativePainterFactory implements IPainterFactory {
     return caps;
   }
 
-  private static GLCapabilities getDefaultCapabilities(GLProfile glp) {
+  public static GLCapabilities getDefaultCapabilities(GLProfile glp) {
     GLCapabilities caps = new GLCapabilities(glp);
     caps.setHardwareAccelerated(true);
 
     // false lead to not erased background on MacOS X 10.15.3 (Catalina) but not 10.12
     caps.setDoubleBuffered(true);
-    
+
     boolean fixedResolution = true;
-    if(fixedResolution) {
+    if (fixedResolution) {
       caps.setAlphaBits(8);
       caps.setRedBits(8);
       caps.setBlueBits(8);
@@ -184,13 +186,15 @@ public abstract class NativePainterFactory implements IPainterFactory {
     return debugGL;
   }
 
-  /** If true, will let GL trigger {@link GLException} if an error occur in OpenGL which ease debugging. Default is false. */
+  /**
+   * If true, will let GL trigger {@link GLException} if an error occur in OpenGL which ease
+   * debugging. Default is false.
+   */
   @Override
   public void setDebugGL(boolean debugGL) {
     this.debugGL = debugGL;
   }
-  
-  
-  
+
+
 
 }

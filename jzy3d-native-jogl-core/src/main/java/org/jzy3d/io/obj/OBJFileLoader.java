@@ -1,5 +1,6 @@
 package org.jzy3d.io.obj;
 
+import java.io.File;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import org.apache.log4j.Logger;
@@ -13,25 +14,27 @@ import com.jogamp.common.nio.Buffers;
 public class OBJFileLoader implements IGLLoader<DrawableVBO> {
   static Logger logger = Logger.getLogger(OBJFileLoader.class);
 
-  protected String filename;
+  protected File file;
   protected OBJFile obj;
 
-  public OBJFileLoader(String filename) {
-    this.filename = filename;
+  public OBJFileLoader(File file) {
+    this.file = file;
   }
 
   @Override
   public void load(IPainter painter, DrawableVBO drawable) {
     obj = new OBJFile();
 
-    logger.info("Start loading OBJ file '" + filename + "'");
-    obj.loadModelFromFilename(filename);
+    logger.info("Start loading OBJ file '" + file.getAbsolutePath() + "'");
+    obj.loadModelFromFile(file);
 
     logger.info("Start compiling mesh");
     obj.compileModel();
 
     logger.info(obj.getPositionCount() + " vertices");
     logger.info((obj.getIndexCount() / 3) + " triangles");
+    
+    
 
     int size = obj.getIndexCount();
     int indexSize = size * Buffers.SIZEOF_INT;

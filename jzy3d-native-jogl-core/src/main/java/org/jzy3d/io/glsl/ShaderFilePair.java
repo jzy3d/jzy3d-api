@@ -9,30 +9,37 @@ import java.net.URL;
  * @author Martin Pernollet
  */
 public class ShaderFilePair {
-  public ShaderFilePair(Class<?> c, String vertexName, String fragmentName) {
-    this(packageName(c.getPackage()), vertexName, fragmentName);
+  protected static char separator = '/';// File.separatorChar;
+
+
+  protected String packaje;
+  protected String vertexName;
+  protected String fragmentName;
+  
+  public ShaderFilePair(Class<?> clazz, String vertexName, String fragmentName) {
+    this(packageName(clazz.getPackage()), vertexName, fragmentName);
   }
 
-  public ShaderFilePair(Package p, String vertexName, String fragmentName) {
-    this(packageName(p), vertexName, fragmentName);
+  public ShaderFilePair(Package packaje, String vertexName, String fragmentName) {
+    this(packageName(packaje), vertexName, fragmentName);
   }
 
-  protected ShaderFilePair(String pack, String vertexName, String fragmentName) {
-    this.pack = pack;
+  protected ShaderFilePair(String packaje, String vertexName, String fragmentName) {
+    this.packaje = packaje;
     this.vertexName = vertexName;
     this.fragmentName = fragmentName;
   }
 
   public String getVertexPath() {
-    return getPath() + vertexName;
+    return getPackagePath() + vertexName;
   }
 
   public String getFragmentPath() {
-    return getPath() + fragmentName;
+    return getPackagePath() + fragmentName;
   }
 
-  public String getPath() {
-    return c + pack + c;
+  public String getPackagePath() {
+    return separator + packaje + separator;
   }
 
   public URL getVertexURL() {
@@ -51,19 +58,9 @@ public class ShaderFilePair {
     return out;
   }
 
-  /*
-   * public InputStream getVertexInputStream() { InputStream stream =
-   * getClass().getResourceAsStream(getVertexPath()); if(stream==null) throw new
-   * RuntimeException("unable to find shader InputStream for :'"+getVertexPath()+"'"); return
-   * stream; }
-   */
-
-
-
   public URL getFragmentURL() {
     // Does not work on linux?
     // URL out = Thread.currentThread().getContextClassLoader().getResource(getFragmentPath());
-
 
     URL out = ShaderFilePair.class.getResource(getFragmentPath());
     if (out == null)
@@ -102,13 +99,6 @@ public class ShaderFilePair {
   }
 
   protected static String packageName(Package p) {
-    return p.getName().replace('.', c);
+    return p.getName().replace('.', separator);
   }
-
-  protected static char c = '/';// File.separatorChar;
-
-
-  protected String pack;
-  protected String vertexName;
-  protected String fragmentName;
 }
