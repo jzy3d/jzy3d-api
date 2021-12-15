@@ -4,7 +4,6 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.IPainter;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 
 
 public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
@@ -33,7 +32,9 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
 
   @Override
-  public void init(IPainter painter, GL2 gl, int width, int height) {
+  public void init(IPainter painter, int width, int height) {
+    GL2 gl = getGL(painter);
+    
     initFrontPeelingRenderTargets(gl, width, height);
 
     gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);
@@ -44,15 +45,15 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
   }
 
   @Override
-  public void display(IPainter painter, GL2 gl, GLU glu) {
+  public void display(IPainter painter) {
     resetNumPass();
-    doRender(painter, gl);
+    doRender(painter, getGL(painter));
   }
 
   @Override
-  public void reshape(IPainter painter, GL2 gl, int width, int height) {
-    deleteFrontPeelingRenderTargets(gl);
-    initFrontPeelingRenderTargets(gl, width, height);
+  public void reshape(IPainter painter, int width, int height) {
+    deleteFrontPeelingRenderTargets(getGL(painter));
+    initFrontPeelingRenderTargets(getGL(painter), width, height);
   }
 
   /* */
@@ -174,7 +175,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
     glslInit.bind(gl);
     glslInit.setUniform(gl, "Alpha", g_opacity, 1);
 
-    tasksToRender(painter, gl);
+    tasksToRender(painter);
 
     glslInit.unbind(gl);
 
@@ -204,7 +205,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
       glslPeel.bindTextureRECT(gl, "DepthTex", g_frontDepthTexId[prevId], 0);
       glslPeel.setUniform(gl, "Alpha", g_opacity, 1);
 
-      tasksToRender(painter, gl);
+      tasksToRender(painter);
 
       glslPeel.unbind(gl);
 
