@@ -6,34 +6,16 @@ An extension of Jzy3d allowing to deploy depth peeling based charts for scene gr
 See http://www.jzy3d.org/plugins-depthpeeling.php
 
 
-# Known problem on MacOSX 10.8.5 :
-can not find an existing GLProfile compatible with GL2 and supporting ARB buffer:
+# Known problem on MacOSX 10.8.5 and beyond:
 
-/* IF TOO LOW PROFILE ON MAC */
-        // ERROR : GLSLProgram: ERROR: 0:10: '' : extension 'ARB_draw_buffers'
-        // is not supported
+Can not find an existing GLProfile compatible with GL2 and supporting ARB buffer. Did comment ARB Buffer usage in shaders and it seams OK in most demos. Using GL2 instead of maxProgrammable(true) will make things "work" (start). 
 
-        // GLProfile.getDefault(); (isGL2 true)
-        // GLProfile.getMinimum(true);
-        // GLProfile.getMaxFixedFunc(true);
 
-        /* IF TOO HIGH PROFILE ON MAC */
-        // ERROR : jogamp.opengl.gl4.GL4bcImpl.getGL2(GL4bcImpl.java:40488) :
-        // Not a GL2 implementation
 
-        // GLProfile.getMaxProgrammable(true/false);
-        // GLProfile.getMaxProgrammableCore(true/false);
-        // GLProfile.getGL2GL3();
-        // GLProfile.getGL3();
+# See also
 
-        /* IF TOO HIGH PROFILE ON MAC */
+https://forum.jogamp.org/Fail-to-run-a-depth-peeling-example-td3715480.html
+https://coderedirect.com/questions/518899/writing-a-portable-java-application-using-jogl-and-android-opengl
+https://stackoverflow.com/questions/35469370/opengl-performing-depth-peeling-in-a-scene-with-opaque-objects
 
-        // Profile XXXX is not available on
-        // MacOSXGraphicsDevice[type .macosx, connection decon, unitID 0, handle
-        // 0x0, owner false, NullToolkitLock[obj 0x5f375618]], but:
-        // [GLProfile[GL2ES1/GL2.hw], GLProfile[GL2ES2/GL3.hw],
-        // GLProfile[GL2/GL2.hw], GLProfile[GL2/GL2.hw], GLProfile[GL3/GL3.hw],
-        // GLProfile[GL2GL3/GL3.hw]]
 
-        // GLProfile.get(GLProfile.GL3bc);
-        // GLProfile.get(GLProfile.GL4bc);

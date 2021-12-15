@@ -279,7 +279,4 @@ public class NativeDrawableImage extends DrawableImage implements ITranslucent {
     Logger.getLogger(NativeDrawableImage.class).warn("not implemented");
   }
 
-  /* ****************************************** */
-
-
 }

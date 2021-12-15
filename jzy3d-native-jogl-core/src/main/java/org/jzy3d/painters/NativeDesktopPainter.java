@@ -9,6 +9,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import org.apache.log4j.Logger;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.PolygonFill;
@@ -723,6 +724,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glClipPlane(int plane, double[] equation) {
+    //Array.print("NativePainter : glClipPlane : " + plane + " : ", equation);
     gl.getGL2().glClipPlane(plane, equation, 0);
   }
 

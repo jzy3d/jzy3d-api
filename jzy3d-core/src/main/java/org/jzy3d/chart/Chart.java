@@ -441,8 +441,8 @@ public class Chart {
     if (drawable instanceof IGLBindedResource) {
 
       if (view.isInitialized()) {
-        logger.warn(
-            drawable + " must be added to chart before the view has initialized, hence before the chart is open.");
+        //logger.warn(
+        //    drawable + " must be added to chart before the view has initialized, hence before the chart is open.");
 
         // We are in here in the application thread, no in AWT thread, so we have to acquire
         // GL context, so that the drawable gets mounted with a usable GL instance
@@ -453,13 +453,12 @@ public class Chart {
         // And we kindly release GL to let AWT render again
         getPainter().releaseGL();
 
-        logger.warn("Chart.add binded resource with box " + drawable.getBounds());
+        //logger.warn("Chart.add binded resource with box " + drawable.getBounds());
 
       } else {
         logger.warn(
             drawable + " will be initialized later since the view is not initialized yet. "
             + "Calling chart.getView().getBounds() won't return anything relevant until chart.open() gets called");
-
       }
 
       // getView().initResources(); // invoke loading GL binded resource in case this drawable

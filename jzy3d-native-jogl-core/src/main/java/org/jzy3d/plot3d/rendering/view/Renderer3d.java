@@ -13,11 +13,11 @@ import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 
 /**
- * The {@link Renderer3d} object is a {@link GLEventListener}, that makes openGL calls necessary to
- * initialize and render a {@link Scene} for an {@link ICanvas}.
+ * The {@link Renderer3d} is a {@link GLEventListener} that makes handles init, display, reshape and
+ * screenshots of a {@link Scene} in a {@link ICanvas}.
  * 
- * One can activate OpenGl errors in console by setting debugGL to true in the constructor One can
- * activate OpenGl feedback in console by setting traceGL to true in the constructor
+ * One can activate OpenGl errors in console by setting debugGL to true in the constructor. One can
+ * activate OpenGl feedback in console by setting traceGL to true in the constructor.
  * 
  * @author Martin Pernollet
  */
@@ -25,11 +25,13 @@ public class Renderer3d implements GLEventListener {
   protected View view;
   protected int width = 0;
   protected int height = 0;
+
   protected boolean doScreenshotAtNextDisplay = false;
   protected TextureData image = null;
+
   protected boolean traceGL = false;
   protected boolean debugGL = false;
-  
+
   protected TicToc profileDisplayTimer = new TicToc();
   protected double lastRenderingTimeMs;
 
@@ -62,8 +64,8 @@ public class Renderer3d implements GLEventListener {
    */
   @Override
   public void init(GLAutoDrawable canvas) {
-    if (canvas != null && canvas.getGL() != null /*&& canvas.getGL().getGL2() != null*/
-        && view != null) {
+    if (canvas != null && canvas.getGL() != null && view != null) {
+
       if (debugGL)
         canvas.getGL().getContext()
             .setGL(GLPipelineFactory.create("com.jogamp.opengl.Debug", null, canvas.getGL(), null));
@@ -72,6 +74,7 @@ public class Renderer3d implements GLEventListener {
             canvas.getGL(), new Object[] {System.err}));
 
       updatePainterWithGL(canvas);
+
       view.init();
     }
   }
@@ -92,14 +95,9 @@ public class Renderer3d implements GLEventListener {
       view.clear();
       view.render();
 
-      if (doScreenshotAtNextDisplay) {
-        GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
-        screenshot.readPixels(gl, true);
-        image = screenshot.getTextureData();
-        doScreenshotAtNextDisplay = false;
-      }
+      renderScreenshotIfRequired(gl);
     }
-    
+
     profileDisplayTimer.toc();
     lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
 
@@ -142,6 +140,8 @@ public class Renderer3d implements GLEventListener {
     view = null;
   }
 
+  /********************* SCREENSHOTS ***********************/
+
   public void nextDisplayUpdateScreenshot() {
     doScreenshotAtNextDisplay = true;
   }
@@ -149,6 +149,17 @@ public class Renderer3d implements GLEventListener {
   public TextureData getLastScreenshot() {
     return image;
   }
+
+  protected void renderScreenshotIfRequired(GL gl) {
+    if (doScreenshotAtNextDisplay) {
+      GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
+      screenshot.readPixels(gl, true);
+      image = screenshot.getTextureData();
+      doScreenshotAtNextDisplay = false;
+    }
+  }
+
+
 
   /** Return the width that was given after the last resize event. */
   public int getWidth() {
@@ -163,6 +174,6 @@ public class Renderer3d implements GLEventListener {
   public double getLastRenderingTimeMs() {
     return lastRenderingTimeMs;
   }
-  
-  
+
+
 }
