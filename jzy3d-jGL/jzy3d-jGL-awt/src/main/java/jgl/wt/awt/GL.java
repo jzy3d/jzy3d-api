@@ -31,13 +31,14 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.awt.image.MemoryImageSource;
 import java.awt.image.RenderedImage;
-
+import org.apache.log4j.Logger;
 import jgl.ImageToDraw;
 import jgl.TextToDraw;
 import jgl.context.gl_util;
 
 public final class GL extends jgl.GL<BufferedImage, Font> {
-
+    Logger log = Logger.getLogger(GL.class);
+    
 	protected Component canvas;
 	protected BufferedImage glImage;
 	protected boolean renderedOnce = false;
@@ -117,8 +118,12 @@ public final class GL extends jgl.GL<BufferedImage, Font> {
 	public void applyViewport() {
 
 		// Update pixel scale to guess if HiDPI
-		if(canvas != null && canvas.getGraphics() != null)
+		if(canvas != null) { 
+		  if(canvas.getGraphics() != null)
 			updatePixelScale(canvas.getGraphics());
+		  else
+		    log.warn("Graphics is null, can't detect pixel scale");
+		}
 		super.applyViewport();
 	}
 
