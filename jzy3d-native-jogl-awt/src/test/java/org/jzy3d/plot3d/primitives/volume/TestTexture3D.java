@@ -12,6 +12,11 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import com.jogamp.opengl.util.GLBuffers;
 
+/**
+ * Requires Java > 8 to be able to use ByteBuffer.limit(...)
+ * @author martin
+ *
+ */
 public class TestTexture3D {
   @Test
   public void givenAVolume_whenOpeningChart_thenBufferIsSizedAppropriately() {

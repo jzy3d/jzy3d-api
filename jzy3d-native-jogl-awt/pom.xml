@@ -39,9 +39,6 @@
 			<type>test-jar</type>
 		</dependency>
 
-		<!-- <dependency> <groupId>com.diogonunes</groupId> <artifactId>JColor</artifactId> 
-			<version>5.1.0</version> </dependency> -->
-
 	</dependencies>
 
 	<build>

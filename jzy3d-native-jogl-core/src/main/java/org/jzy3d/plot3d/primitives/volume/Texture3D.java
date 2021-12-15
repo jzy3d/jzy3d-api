@@ -38,6 +38,20 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
   protected boolean disposed;
   protected ColorMapper mapper;
 
+  /**
+   * Instanciate a drawable volume.
+   * 
+   * @param buffer provides (x,y,z,V) tuples where (x,y,z) are voxel index in the volume and V the
+   *        value used for coloring voxels
+   * @param shape a 3 element array indicating the number of voxels for each dimension
+   * @param min the minimum V value provided in the input buffer which must be set consistently with
+   *        the colormapper
+   * @param max the maximum V value provided in the input buffer which must be set consistently with
+   *        the colormapper
+   * @param mapper the colormap handler that will apply a colormap to a value range
+   * @param bbox the real world range of each axis, since the input buffer provide tuples with index
+   *        and not coordinates
+   */
   public Texture3D(Buffer buffer, int[] shape, float min, float max, ColorMapper mapper,
       BoundingBox3d bbox) {
     this.buffer = buffer;
@@ -50,16 +64,33 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     this.mapper = mapper;
   }
 
+  /**
+   * A convenient constructor that configure the volume value range based on the colormapper
+   * settings.
+   * 
+   * {@link Texture3D#Texture3D(Buffer, int[], float, float, ColorMapper, BoundingBox3d)}
+   */
+  public Texture3D(Buffer buffer, int[] shape, ColorMapper mapper, BoundingBox3d bbox) {
+    this(buffer, shape, (float) mapper.getMin(), (float) mapper.getMax(), mapper, bbox);
+  }
+
   @Override
   public void mount(IPainter painter) {
     GL gl = ((NativeDesktopPainter) painter).getGL();
+
     if (!mounted) {
       shapeVBO.mount(painter);
       shaderProgram = new GLSLProgram();
+
+      // load shaders handling the volume (a.k.a 3D texture)
       ShaderFilePair sfp = new ShaderFilePair(this.getClass(), "volume.vert", "volume.frag");
       shaderProgram.loadAndCompileShaders(gl.getGL2(), sfp);
       shaderProgram.link(gl.getGL2());
+
+
       bind(gl);
+
+      // create the colormap as a 1D texture made of 256 pixels
       colormapTexure = new ColormapTexture(mapper, "transfer", shaderProgram.getProgramId());
       colormapTexure.bind(gl);
       mounted = true;
@@ -81,19 +112,39 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
 
   public void bind(final GL gl) throws GLException {
     gl.glEnable(GL2.GL_TEXTURE_3D);
+
+    // Verify a texture can be enabled and mapped to the shader variable name
     validateTexID(gl, true);
+
+    // Declare a 3D texture
     gl.glBindTexture(GL2.GL_TEXTURE_3D, texID);
     gl.glActiveTexture(GL.GL_TEXTURE0);
+
+    // Will keep max or min texture value upon overflow on the X dimension
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP);
+
+    // Will keep max or min texture value upon overflow on the Y dimension
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP);
+
+    // Will keep max or min texture value upon overflow on the Z dimension
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_WRAP_R, GL2.GL_CLAMP);
+
+    // Will apply linear interpolation when zooming in texture voxels
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+
+    // Will apply linear interpolation when zooming out texture voxels
     gl.glTexParameteri(GL2.GL_TEXTURE_3D, GL2.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
 
+    // Load buffer data into memory
     setTextureData(gl, buffer, shape);
+  }
+  
+  public void unbind(final GL gl) {
+    gl.glBindTexture(GL2.GL_TEXTURE_3D, 0);
   }
 
   /**
+   * Load buffer data into memory
    * 
    * @param gl
    * @param buffer texture data
@@ -101,9 +152,14 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
    * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glTexImage3D.xml
    */
   public void setTextureData(final GL gl, Buffer buffer, int[] shape) {
+    // define how pixels are stored in memory
     gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
-    gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL.GL_R32F, shape[2], shape[1], shape[0], 0,
+
+    // specify a 3 dimensional texture image with a single LOD, R float internal format, dynamical
+    // number of voxel for width, height, depth, R float input format
+    gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL.GL_R32F, shape[2], shape[1], shape[0], 1,
         GL2.GL_RED, GL.GL_FLOAT, buffer);
+
   }
 
   protected boolean validateTexID(final GL gl, final boolean throwException) {
@@ -113,6 +169,9 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
 
     if (id >= 0) {
       texID = id;
+    } else {
+      throw new GLException("Create texture ID invalid: texID " + texID + ", glerr 0x"
+          + Integer.toHexString(gl.glGetError()));
     }
 
     return 0 != texID;
@@ -125,6 +184,9 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
 
     if (!mounted) {
       mount(painter);
+    }
+    else {
+      bind(gl);
     }
 
     colormapTexure.update(gl);
@@ -167,8 +229,8 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     shaderProgram.setUniform(gl.getGL2(), "minMax", new float[] {min, max}, 2);
     int idt = gl.getGL2().glGetUniformLocation(shaderProgram.getProgramId(), "volumeTexture");
     int idc = gl.getGL2().glGetUniformLocation(shaderProgram.getProgramId(), "transfer");
-    gl.getGL2().glUniform1i(idt, 0);
-    gl.getGL2().glUniform1i(idc, 1);
+    gl.getGL2().glUniform1i(idt, 0); // refer to GL_TEXTURE0, the volume
+    gl.getGL2().glUniform1i(idc, 1); // refer to GL_TEXTURE1, the colormap
 
 
     gl.glEnable(GL2.GL_BLEND);
@@ -176,16 +238,21 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     gl.glBlendFunc(GL2.GL_SRC_ALPHA, GL2.GL_ONE_MINUS_SRC_ALPHA);
     gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
     gl.glCullFace(GL.GL_BACK);
-
+    
     shapeVBO.draw(painter);
     shaderProgram.unbind(gl.getGL2());
+    
+    colormapTexure.unbind(gl);
+    unbind(gl);
 
+    //gl.glDisable(GL2.GL_CULL_FACE);
+
+    
     if (disposed) {
       gl.glDeleteTextures(1, new int[] {texID}, 0);
       buffer = null;
       shaderProgram.destroy(gl.getGL2());
     }
-
   }
 
   @Override

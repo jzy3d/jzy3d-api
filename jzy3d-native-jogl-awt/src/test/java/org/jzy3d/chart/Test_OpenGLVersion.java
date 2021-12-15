@@ -13,6 +13,7 @@ import com.jogamp.opengl.GLProfile;
  * 
  * It requires to invoke the JVM with -Djogl.disable.openglcore=true to work.
  * 
+ * @see https://github.com/jzy3d/jogl/issues/7
  * @see https://forum.jogamp.org/Selecting-the-highest-possible-GL-profile-at-runtime-td4041302.html
  */
 public class Test_OpenGLVersion {
@@ -30,8 +31,11 @@ public class Test_OpenGLVersion {
     // ------------------------------------------------------
     // Profile & capabilities
     
-    GLProfile glp = NativePainterFactory.detectGLProfile(); // use Jzy3D profile selection
+    //GLProfile glp = NativePainterFactory.detectGLProfile(); // use Jzy3D profile selection
 
+    //GLProfile glp = GLProfile.get(GLProfile.GL4);
+    GLProfile glp = GLProfile.getMaxProgrammable(true);
+    
     GLCapabilities caps = new GLCapabilities(glp);
     caps.setOnscreen(false);
 
@@ -54,8 +58,17 @@ public class Test_OpenGLVersion {
     System.out.println("CAPS (query)  : " + caps);
     System.out.println("CAPS (found)  : " + drawable.getChosenGLCapabilities());
     
+    System.out.println("--------------------------------------------------");
     System.out.println(getDebugInfo(gl));
     
+    System.out.println("--------------------------------------------------");
+    System.out.println(drawable.getContext());
+    System.out.println();
+    System.out.println("Is compat profile : " + drawable.getContext().isGLCompatibilityProfile());
+    
+    
+    
+    System.out.println("--------------------------------------------------");
     System.out.println("GL2    : " + GLProfile.isAvailable(GLProfile.GL2));
     System.out.println("GL2GL3 : " + GLProfile.isAvailable(GLProfile.GL2GL3));
     System.out.println("GL3    : " + GLProfile.isAvailable(GLProfile.GL3));
@@ -63,13 +76,13 @@ public class Test_OpenGLVersion {
     System.out.println("GL4    : " + GLProfile.isAvailable(GLProfile.GL4));
     System.out.println("GL4ES3 : " + GLProfile.isAvailable(GLProfile.GL4ES3));
     System.out.println("GL4bc  : " + GLProfile.isAvailable(GLProfile.GL4bc));
+    
 
     // ------------------------------------------------------
     // Try invoking something
 
     
     //gl.getGL2().glClear(0);
-    
     //gl.getGL4bc().glClear(0);
     
 
