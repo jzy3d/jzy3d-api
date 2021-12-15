@@ -25,7 +25,6 @@ public class ITTest_Colorbar extends ITTest{
     //Chart c = new ITTest_Colorbar().whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.ON);
     //Chart c = new ITTest_Colorbar().whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.OFF);
     open(new ITTest_Colorbar().whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON));
-    open(new ITTest_Colorbar().whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON));
   }
   
   /* ************************************************************************************************** */
