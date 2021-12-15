@@ -5,7 +5,6 @@ import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.IPainter;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLException;
-import com.jogamp.opengl.glu.GLU;
 
 
 public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
@@ -23,7 +22,9 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
   public GLSLProgram glslFinal;
 
   @Override
-  public void init(IPainter painter, GL2 gl, int width, int height) {
+  public void init(IPainter painter, int width, int height) {
+    GL2 gl = getGL(painter);
+    
     try {
       initDualPeelingRenderTargets(gl, width, height);
     } catch (GLException e) {
@@ -38,15 +39,15 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
   }
 
   @Override
-  public void display(IPainter painter, GL2 gl, GLU glu) {
+  public void display(IPainter painter) {
     resetNumPass();
-    doRender(painter, gl);
+    doRender(painter, getGL(painter));
   }
 
   @Override
-  public void reshape(IPainter painter, GL2 gl, int width, int height) {
-    deleteDualPeelingRenderTargets(gl);
-    initDualPeelingRenderTargets(gl, width, height);
+  public void reshape(IPainter painter, int width, int height) {
+    deleteDualPeelingRenderTargets(getGL(painter));
+    initDualPeelingRenderTargets(getGL(painter), width, height);
   }
 
   /* */
@@ -215,7 +216,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
     glslInit.bind(gl);
 
-    tasksToRender(painter, gl);
+    tasksToRender(painter);
 
     glslInit.unbind(gl);
 
@@ -259,7 +260,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
       glslPeel.bindTextureRECT(gl, "FrontBlenderTex", g_dualFrontBlenderTexId[prevId], 1);
       glslPeel.setUniform(gl, "Alpha", g_opacity, 1);
 
-      tasksToRender(painter, gl);
+      tasksToRender(painter);
 
       glslPeel.unbind(gl);
 

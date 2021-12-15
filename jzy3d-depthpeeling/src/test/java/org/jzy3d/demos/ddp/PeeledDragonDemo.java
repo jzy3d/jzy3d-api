@@ -5,13 +5,11 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.debugGL.tracers.DebugGLChart3d;
-import org.jzy3d.factories.DepthPeelingChartFactory;
 import org.jzy3d.factories.DepthPeelingPainterFactory;
 import org.jzy3d.io.obj.OBJFileLoader;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
-import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import org.jzy3d.plot3d.rendering.lights.Light;
 
 /**

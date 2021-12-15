@@ -3,7 +3,6 @@ package org.jzy3d.demos.ddp;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.factories.DepthPeelingChartFactory;
 import org.jzy3d.factories.DepthPeelingPainterFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;

@@ -4,7 +4,6 @@ import org.jzy3d.io.glsl.GLSLProgram;
 import org.jzy3d.io.glsl.ShaderFilePair;
 import org.jzy3d.painters.IPainter;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 
 
 public class WeightedAveragePeelingAlgorithm extends AbstractAccumulationDepthPeeling
@@ -24,9 +23,9 @@ public class WeightedAveragePeelingAlgorithm extends AbstractAccumulationDepthPe
   }
 
   @Override
-  public void display(IPainter painter, GL2 gl, GLU glu) {
+  public void display(IPainter painter) {
     resetNumPass();
-    doRender(painter, gl);
+    doRender(painter, getGL(painter));
   }
 
   /* */
@@ -78,7 +77,7 @@ public class WeightedAveragePeelingAlgorithm extends AbstractAccumulationDepthPe
     glslInit.bind(gl);
     glslInit.setUniform(gl, "Alpha", g_opacity, 1);
 
-    tasksToRender(painter, gl);
+    tasksToRender(painter);
 
     glslInit.unbind(gl);
 

@@ -42,7 +42,6 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
   protected Logger LOGGER = Logger.getLogger(DepthPeelingRenderer3d.class);
 
   protected IDepthPeelingAlgorithm dualPeelingAlgorithm;
-  //protected boolean autoSwapBuffer = false;
   protected GLU glu = new GLU();
 
   public DepthPeelingRenderer3d(final View view, boolean traceGL, boolean debugGL) {
@@ -58,17 +57,14 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
 
   @Override
   public void init(GLAutoDrawable drawable) {
+    updatePainterWithGL(drawable);
+
     if (drawable != null && view !=null) {
-      dualPeelingAlgorithm.init(view.getPainter(), drawable.getGL().getGL2(), width, height);
+      dualPeelingAlgorithm.init(view.getPainter(), width, height);
     }
     super.init(drawable);
-    
-    //drawable.setAutoSwapBufferMode(autoSwapBuffer);
   }
 
-
-
-  public static boolean DECOMPOSE_VIEW = true;
 
   @Override
   public void display(GLAutoDrawable drawable) {
@@ -80,13 +76,18 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
     if(view!=null) {
       view.clear();
 
-      dualPeelingAlgorithm.display(view.getPainter(), gl, glu); // will call taskToRender
+      // Following line will call taskToRender, which will trigger :
+      // algo.resetNumPass()
+      // algo.doRender()
+      // - do pre rendering
+      // - view.render()
+      // - do post rendering
+      
+      dualPeelingAlgorithm.display(view.getPainter()); 
       
       view.renderOverlay();
-
       
       renderScreenshotIfRequired(gl);
-
       
       if (!drawable.getAutoSwapBufferMode())
         drawable.swapBuffers();
@@ -111,19 +112,17 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
   public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     updatePainterWithGL(drawable);
 
-    GL2 gl = drawable.getGL().getGL2();
-
     if (this.width != width || this.height != height) {
       this.width = width;
       this.height = height;
       
-      dualPeelingAlgorithm.reshape(view.getPainter(), gl, width, height);
+      dualPeelingAlgorithm.reshape(view.getPainter(), width, height);
     }
   }
 
   @Override
   public void dispose(GLAutoDrawable drawable) {
-    dualPeelingAlgorithm.dispose(view.getPainter(), drawable.getGL().getGL2());
+    dualPeelingAlgorithm.dispose(view.getPainter());
   }
   
   
