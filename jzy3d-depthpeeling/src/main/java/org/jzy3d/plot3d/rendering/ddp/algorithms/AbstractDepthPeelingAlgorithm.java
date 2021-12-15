@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 import java.io.File;
 import java.net.URL;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
@@ -92,7 +93,7 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
     this.tasksToRender = tasksToRender;
   }
 
-  protected void tasksToRender(IPainter painter, GL2 gl) {
+  protected void tasksToRender(IPainter painter) {
     tasksToRender.draw(painter);
     incrementGeoPasses();
   }
@@ -106,8 +107,8 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
   }
 
   @Override
-  public void dispose(IPainter painter, GL2 gl) {
-    destroyShaders(gl);
+  public void dispose(IPainter painter) {
+    destroyShaders(getGL(painter));
   }
 
   protected URL shader(String glsl) {
@@ -116,4 +117,14 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
             + File.separator + "rendering" + File.separator + "ddp" + File.separator + "algorithms"
             + File.separator + glsl);
   }
+  
+  
+  protected GL2 getGL(IPainter painter) {
+    return ((NativeDesktopPainter)painter).getGL().getGL2();
+  }
+
+  protected GLU getGLU(IPainter painter) {
+    return ((NativeDesktopPainter)painter).getGLU();
+  }
+
 }

@@ -3,7 +3,6 @@ package org.jzy3d.demos.ddp;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartLauncher;
 import org.jzy3d.chart.factories.AWTChartFactory;
-import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -16,10 +15,7 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLProfile;
 
 
 public class PeeledWireSurfaceDemo {
@@ -46,7 +42,8 @@ public class PeeledWireSurfaceDemo {
     surface.setWireframeColor(Color.BLACK);
 
     // Create a chart and add surface
-    AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
+    
+    AWTChartFactory f = new DepthPeelingChartFactory(new DepthPeelingPainterFactory());
     Chart chart = f.newChart(Quality.Advanced().setAlphaActivated(false));
 
     chart.getScene().getGraph().add(surface);

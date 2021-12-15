@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
+import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -14,6 +15,8 @@ import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 
 public class TestDualDepthPeelingAlgorithm {
+    Logger log = Logger.getLogger(TestDualDepthPeelingAlgorithm.class);
+    
     @Test
     public void whenTranslucentIntersectingCube_ThenOrderIndependentAlphaIsProcessed() throws InterruptedException {
       DepthPeelingPainterFactory p = new DepthPeelingPainterFactory();
@@ -39,16 +42,17 @@ public class TestDualDepthPeelingAlgorithm {
       chart.render();
       //chart.render();
       
-      Thread.sleep(2000);
+      Thread.sleep(2000); // Keep this to WATCH the test
       //chart.getMouse();
 
       //chart.getScene().getGraph().
       
       NativeChartTester tester = new NativeChartTester();
       tester.setTextInvisible(false);
-      //tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + TestDualDepthPeelingAlgorithm.class.getSimpleName()+".png");
+      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + TestDualDepthPeelingAlgorithm.class.getSimpleName()+".png");
 
-
+      
+      log.warn("Test is not doing any assumption for now. Should fix screenshot generation. See https://github.com/jzy3d/jzy3d-api/issues/222");
     }
     
     public static void cube(Chart chart, float width, Coord3d position, Color face, Color wireframe) {

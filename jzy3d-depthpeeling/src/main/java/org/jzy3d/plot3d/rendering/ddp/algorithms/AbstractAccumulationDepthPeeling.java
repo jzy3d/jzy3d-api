@@ -13,7 +13,9 @@ public abstract class AbstractAccumulationDepthPeeling extends AbstractDepthPeel
   }
 
   @Override
-  public void init(IPainter painter, GL2 gl, int width, int height) {
+  public void init(IPainter painter, int width, int height) {
+    GL2 gl = getGL(painter);
+    
     initAccumulationRenderTargets(gl, width, height);
 
     gl.glBindFramebuffer(GL2.GL_FRAMEBUFFER, 0);
@@ -24,9 +26,9 @@ public abstract class AbstractAccumulationDepthPeeling extends AbstractDepthPeel
   }
 
   @Override
-  public void reshape(IPainter painter, GL2 gl, int width, int height) {
-    deleteAccumulationRenderTargets(gl);
-    initAccumulationRenderTargets(gl, width, height);
+  public void reshape(IPainter painter, int width, int height) {
+    deleteAccumulationRenderTargets(getGL(painter));
+    initAccumulationRenderTargets(getGL(painter), width, height);
   }
 
   protected void initAccumulationRenderTargets(GL2 gl, int g_imageWidth, int g_imageHeight) {
