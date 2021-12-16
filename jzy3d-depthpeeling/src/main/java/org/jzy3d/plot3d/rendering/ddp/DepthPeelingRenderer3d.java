@@ -75,7 +75,17 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
     
     if(view!=null) {
       view.clear();
+      
+      float[] background = new float[3];
+      
+      background[0] = view.getBackgroundColor().r;
+      background[1] = view.getBackgroundColor().g;
+      background[2] = view.getBackgroundColor().b;
+      
+      dualPeelingAlgorithm.setBackground(background);
 
+      //dualPeelingAlgorithm.setOpacity(0.95f);
+      
       // Following line will call taskToRender, which will trigger :
       // algo.resetNumPass()
       // algo.doRender()

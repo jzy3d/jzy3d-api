@@ -33,6 +33,27 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
 
 
   public AbstractDepthPeelingAlgorithm() {}
+  
+  
+  public void setBackground(float[] color) {
+    if(color.length!=3) {
+      throw new IllegalArgumentException("Expect an array with three components");
+    }
+    g_backgroundColor = color;
+  }
+  
+  public float[] getBackground(){
+    return g_backgroundColor;
+  }
+  
+  public void setOpacity(float opacity){
+    g_opacity[0] = opacity;
+  }
+  
+  public float getOpacity(){
+    return g_opacity[0];
+  }
+
 
   protected abstract void buildShaders(GL2 gl);
 
