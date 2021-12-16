@@ -104,19 +104,21 @@ public class Chart {
   /* HELPERS TO PRETTIFY CHARTS */
 
   public Chart black() {
-    getView().setBackgroundColor(Color.BLACK);
-    getAxisLayout().setGridColor(Color.WHITE);
-    getAxisLayout().setMainColor(Color.WHITE);
-    return this;
+    return color(Color.BLACK, Color.WHITE);
   }
-
+  
   public Chart white() {
-    getView().setBackgroundColor(Color.WHITE);
-    getAxisLayout().setGridColor(Color.BLACK);
-    getAxisLayout().setMainColor(Color.BLACK);
+    return color(Color.WHITE, Color.BLACK);
+  }
+
+  public Chart color(Color background, Color axis) {
+    getView().setBackgroundColor(background);
+    getAxisLayout().setGridColor(axis);
+    getAxisLayout().setMainColor(axis);
     return this;
   }
 
+  
   public Chart view2d() {
     IAxisLayout axe = getAxisLayout();
     axe.setZAxeLabelDisplayed(false);
