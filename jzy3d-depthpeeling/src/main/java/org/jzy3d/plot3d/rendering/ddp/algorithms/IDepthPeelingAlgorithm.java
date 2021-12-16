@@ -21,4 +21,13 @@ public interface IDepthPeelingAlgorithm {
   public IGLRenderer getTasksToRender();
 
   public void setTasksToRender(IGLRenderer tasksToRender);
+  
+  public void setBackground(float[] color);
+  
+  public float[] getBackground();
+  
+  public void setOpacity(float opacity);
+  
+  public float getOpacity();
+
 }

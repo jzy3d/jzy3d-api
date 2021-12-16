@@ -12,6 +12,7 @@ import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewIsVerticalEvent;
 import org.jzy3d.events.ViewLifecycleEvent;
 import org.jzy3d.events.ViewPointChangedEvent;
+import org.jzy3d.io.Console;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -926,6 +927,8 @@ public class View {
     painter.clearColor(backgroundColor);
     painter.glClearDepth(1);
 
+    //Console.println("View.clear with color", backgroundColor);
+    
     if (!slave) {
       painter.glClearColorAndDepthBuffers();
     }
