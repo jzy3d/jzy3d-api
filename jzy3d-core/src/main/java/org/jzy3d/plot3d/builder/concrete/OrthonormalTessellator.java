@@ -3,7 +3,8 @@ package org.jzy3d.plot3d.builder.concrete;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.maths.Array;
@@ -47,7 +48,7 @@ import org.jzy3d.plot3d.primitives.Shape;
  *
  */
 public class OrthonormalTessellator extends Tessellator {
-  static Logger logger = Logger.getLogger(OrthonormalTessellator.class);
+  static Logger logger = LogManager.getLogger(OrthonormalTessellator.class);
 
   @Override
   public Composite build(float[] x, float[] y, float[] z) {

@@ -10,13 +10,10 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestEmulGLScatterChart {
   @Test
   public void whenScatterChart_ThenMatchBaselineImagePixelwise() {
-    LoggerUtils.minimal();
-
     // When
     EmulGLChartFactory factory = new EmulGLChartFactory();
     Chart chart = factory.newChart(Quality.Advanced().setHiDPIEnabled(false));

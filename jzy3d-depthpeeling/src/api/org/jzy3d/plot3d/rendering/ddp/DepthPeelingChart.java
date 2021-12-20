@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.factories.DepthPeelingChartFactory;
@@ -15,7 +16,7 @@ public class DepthPeelingChart extends Chart {
     super(factory, quality);
   }
 
-  static Logger LOGGER = Logger.getLogger(DepthPeelingChart.class);
+  static Logger LOGGER = LogManager.getLogger(DepthPeelingChart.class);
 
   public static Chart get(Quality quality, String chartType) {
     return get(quality, chartType, PeelingMethod.DUAL_PEELING_MODE);
