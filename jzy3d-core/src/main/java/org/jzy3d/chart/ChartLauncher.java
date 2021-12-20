@@ -2,12 +2,13 @@ package org.jzy3d.chart;
 
 import java.io.File;
 import java.io.IOException;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.maths.Rectangle;
 
 public class ChartLauncher {
-  static Logger logger = Logger.getLogger(ChartLauncher.class);
+  static Logger logger = LogManager.getLogger(ChartLauncher.class);
 
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 

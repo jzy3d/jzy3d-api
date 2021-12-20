@@ -14,11 +14,9 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.utils.LoggerUtils;
 
 public class DebugGL_Demo extends AWTAbstractAnalysis {
   public static void main(String[] args) throws Exception {
-    LoggerUtils.minimal();
     DebugGL_Demo d = new DebugGL_Demo();
     AnalysisLauncher.open(d, new Rectangle(300, 0, 800, 800));
 

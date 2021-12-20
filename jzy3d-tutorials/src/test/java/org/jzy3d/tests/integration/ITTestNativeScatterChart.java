@@ -10,13 +10,10 @@ import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestNativeScatterChart {
   @Test
   public void surfaceTest() {
-    LoggerUtils.minimal();
-
     // When
     AWTChartFactory factory = new AWTChartFactory();
     factory.getPainterFactory().setOffscreen(700, 600);

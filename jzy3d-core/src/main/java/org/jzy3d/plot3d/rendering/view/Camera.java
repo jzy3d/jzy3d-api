@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.function.Predicate;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
@@ -40,7 +41,7 @@ import org.jzy3d.plot3d.transform.Transform;
  * @author Martin Pernollet
  */
 public class Camera extends AbstractViewportManager {
-  private static final Logger LOGGER = Logger.getLogger(Camera.class);
+  private static final Logger LOGGER = LogManager.getLogger(Camera.class);
 
   /** The polar default view point, i.e. Coord3d(Math.PI/3,Math.PI/5,500). */
   public static final Coord3d DEFAULT_VIEW = new Coord3d(Math.PI / 3, Math.PI / 5, 500);

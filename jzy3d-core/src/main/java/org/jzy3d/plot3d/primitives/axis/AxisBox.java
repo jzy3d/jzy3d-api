@@ -2,7 +2,8 @@ package org.jzy3d.plot3d.primitives.axis;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -31,7 +32,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class AxisBox implements IAxis {
-  static Logger LOGGER = Logger.getLogger(AxisBox.class);
+  static Logger LOGGER = LogManager.getLogger(AxisBox.class);
   
 
   protected static final int PRECISION = 6;

@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.image.BufferedImage;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.painters.IPainter;
@@ -42,12 +42,12 @@ public class EmulGLDrawableImage extends DrawableImage {
 
   @Override
   public void applyGeometryTransform(Transform transform) {
-    Logger.getLogger(EmulGLDrawableImage.class).warn("not implemented");
+    LogManager.getLogger(EmulGLDrawableImage.class).warn("not implemented");
   }
 
   @Override
   public void updateBounds() {
-    Logger.getLogger(EmulGLDrawableImage.class).warn("not implemented");
+    LogManager.getLogger(EmulGLDrawableImage.class).warn("not implemented");
   }
 
   public Coord3d getPosition() {
