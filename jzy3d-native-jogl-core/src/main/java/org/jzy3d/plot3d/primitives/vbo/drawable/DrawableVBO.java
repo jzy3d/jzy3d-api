@@ -2,7 +2,8 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
@@ -67,7 +68,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
       hasMountedOnce = true;
     } catch (Exception e) {
       e.printStackTrace();
-      Logger.getLogger(DrawableVBO.class).error(e, e);
+      LogManager.getLogger(DrawableVBO.class).error(e, e);
     }
   }
 
@@ -307,12 +308,12 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     /*
      * Coord3d c = transform.compute(new Coord3d(x,y, z)); x = c.x; y = c.y; z = c.z;
      */
-    Logger.getLogger(DrawableVBO.class).warn("not implemented");
+    LogManager.getLogger(DrawableVBO.class).warn("not implemented");
   }
 
   @Override
   public void updateBounds() { // requires smart reload
-    Logger.getLogger(DrawableVBO.class).warn("not implemented");
+    LogManager.getLogger(DrawableVBO.class).warn("not implemented");
   }
 
   /** To be called by the VBOBuilder */

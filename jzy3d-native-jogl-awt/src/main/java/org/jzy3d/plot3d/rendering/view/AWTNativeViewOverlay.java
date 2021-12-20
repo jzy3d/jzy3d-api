@@ -1,7 +1,8 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.Graphics2D;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
@@ -14,7 +15,7 @@ import org.jzy3d.plot3d.rendering.tooltips.Tooltip;
 import com.jogamp.opengl.util.awt.Overlay;
 
 public class AWTNativeViewOverlay implements IViewOverlay {
-  protected static Logger LOGGER = Logger.getLogger(AWTNativeViewOverlay.class);
+  protected static Logger LOGGER = LogManager.getLogger(AWTNativeViewOverlay.class);
 
   protected Overlay overlay;
   protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
