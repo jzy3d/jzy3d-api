@@ -15,7 +15,8 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.io.BufferUtil;
 import org.jzy3d.maths.BoundingBox3d;
 
@@ -31,7 +32,7 @@ import org.jzy3d.maths.BoundingBox3d;
  * Copyright (c) NVIDIA Corporation. All rights reserved.
  */
 public class OBJFile {
-  static Logger logger = Logger.getLogger(OBJFile.class);
+  static Logger logger = LogManager.getLogger(OBJFile.class);
 
   /** Enumeration of primitive types */
   public enum PrimType {

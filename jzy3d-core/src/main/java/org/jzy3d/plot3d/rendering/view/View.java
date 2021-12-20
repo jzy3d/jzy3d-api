@@ -2,7 +2,8 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
@@ -12,7 +13,6 @@ import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewIsVerticalEvent;
 import org.jzy3d.events.ViewLifecycleEvent;
 import org.jzy3d.events.ViewPointChangedEvent;
-import org.jzy3d.io.Console;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -56,7 +56,7 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
  */
 public class View {
 
-  protected static Logger LOGGER = Logger.getLogger(View.class);
+  protected static Logger LOGGER = LogManager.getLogger(View.class);
 
 
   // view setting

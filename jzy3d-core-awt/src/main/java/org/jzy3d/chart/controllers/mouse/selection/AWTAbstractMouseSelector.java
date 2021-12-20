@@ -5,7 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
@@ -18,7 +19,7 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMotionListener {
-  static Logger LOGGER = Logger.getLogger(AWTAbstractMouseSelector.class);
+  static Logger LOGGER = LogManager.getLogger(AWTAbstractMouseSelector.class);
   
   protected Chart chart;
   protected ICanvas canvas;
