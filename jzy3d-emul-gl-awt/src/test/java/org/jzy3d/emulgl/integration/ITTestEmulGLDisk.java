@@ -8,12 +8,10 @@ import org.jzy3d.junit.ChartTester;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Disk;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestEmulGLDisk {
   @Test
   public void whenDiskChart_ThenMatchBaselineImagePixelwise() {
-    LoggerUtils.minimal();
 
     // Given
     EmulGLChartFactory factory = new EmulGLChartFactory();

@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
@@ -48,7 +49,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class Chart {
-  protected static Logger logger = Logger.getLogger(Chart.class);
+  protected static Logger logger = LogManager.getLogger(Chart.class);
 
   private static final int MOUSE_PICK_SIZE_DEFAULT = 10;
   private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";

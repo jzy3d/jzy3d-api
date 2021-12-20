@@ -7,9 +7,9 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.PolygonFill;
@@ -33,7 +33,7 @@ import com.jogamp.opengl.glu.GLUquadric;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class NativeDesktopPainter extends AbstractPainter implements IPainter {
-  static Logger LOGGER = Logger.getLogger(NativeDesktopPainter.class);
+  static Logger LOGGER = LogManager.getLogger(NativeDesktopPainter.class);
   
   protected GL gl;
   protected GLU glu = new GLU();
