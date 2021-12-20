@@ -1,7 +1,8 @@
 package org.jzy3d.chart.graphs;
 
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
@@ -10,7 +11,7 @@ import org.jzy3d.chart.controllers.mouse.picking.PickingSupport;
 import org.jzy3d.chart.factories.AWTPainterFactory;
 
 public class GraphWindowFactory extends AWTPainterFactory {
-  static Logger logger = Logger.getLogger(GraphChartFactory.class);
+  static Logger logger = LogManager.getLogger(GraphChartFactory.class);
 
   @Override
   public ICameraMouseController newMouseCameraController(Chart chart) {

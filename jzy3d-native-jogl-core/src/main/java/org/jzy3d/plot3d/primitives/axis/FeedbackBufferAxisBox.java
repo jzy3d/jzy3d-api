@@ -1,7 +1,8 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import java.nio.FloatBuffer;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
@@ -17,7 +18,7 @@ import com.jogamp.opengl.GL2;
  * @author Martin Pernollet
  */
 public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
-  static Logger logger = Logger.getLogger(FeedbackBufferAxisBox.class);
+  static Logger logger = LogManager.getLogger(FeedbackBufferAxisBox.class);
 
   public FeedbackBufferAxisBox(BoundingBox3d bbox) {
     super(bbox);

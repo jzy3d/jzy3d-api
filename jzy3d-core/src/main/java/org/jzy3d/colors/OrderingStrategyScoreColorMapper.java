@@ -1,7 +1,8 @@
 package org.jzy3d.colors;
 
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Statistics;
@@ -27,7 +28,7 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
  *
  */
 public class OrderingStrategyScoreColorMapper extends ColorMapper {
-  static Logger logger = Logger.getLogger(OrderingStrategyScoreColorMapper.class);
+  static Logger logger = LogManager.getLogger(OrderingStrategyScoreColorMapper.class);
 
   public OrderingStrategyScoreColorMapper(IColorMap colormap, IColorMapperUpdatePolicy policy,
       Graph sceneGraph, Color factor) {

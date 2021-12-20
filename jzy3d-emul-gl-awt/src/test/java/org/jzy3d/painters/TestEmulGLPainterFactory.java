@@ -17,12 +17,10 @@ import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.utils.LoggerUtils;
 
 public class TestEmulGLPainterFactory {
   @Test
   public void whenOffscreenSizeDefined_ThenChartTesterProduceImageAtThisSize() throws IOException {
-    LoggerUtils.minimal();
 
     // --------------------------------
     // Given 

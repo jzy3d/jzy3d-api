@@ -17,14 +17,12 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.utils.LoggerUtils;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
 public class ITTestNativeSurfaceChart {
   @Test
   public void surfaceTest() {
-    LoggerUtils.minimal();
 
     // When
     GLCapabilities c = new GLCapabilities(GLProfile.get(GLProfile.GL2));

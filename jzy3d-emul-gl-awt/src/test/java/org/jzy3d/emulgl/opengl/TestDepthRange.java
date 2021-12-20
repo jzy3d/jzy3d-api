@@ -1,5 +1,9 @@
 package org.jzy3d.emulgl.opengl;
 
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
@@ -15,8 +19,6 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.utils.LoggerUtils;
-import static org.mockito.Mockito.*;
 
 /**
  * {@AxisBox} and 
@@ -26,7 +28,6 @@ import static org.mockito.Mockito.*;
 public class TestDepthRange {
   @Test
   public void whenRenderAxis_DepthRangeModifiedByAxis() {
-    LoggerUtils.minimal();
 
     // When
     EmulGLChartFactory factory = new EmulGLChartFactory();
@@ -59,7 +60,6 @@ public class TestDepthRange {
   
   @Test
   public void whenRenderSurface_DepthRangeModifiedBySurface() {
-    LoggerUtils.minimal();
 
     // When
     EmulGLChartFactory factory = new EmulGLChartFactory();
