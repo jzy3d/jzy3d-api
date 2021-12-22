@@ -9,7 +9,8 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
@@ -41,7 +42,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
 public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas {
   private static final long serialVersionUID = 8578690050666237742L;
 
-  static Logger LOGGER = Logger.getLogger(CanvasNewtAwt.class);
+  static Logger LOGGER = LogManager.getLogger(CanvasNewtAwt.class);
 
   protected View view;
   protected Renderer3d renderer;

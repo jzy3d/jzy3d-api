@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.DualDepthPeelingAlgorithm;
@@ -39,7 +40,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet - port to Jzy3d
  */
 public class DepthPeelingRenderer3d extends AWTRenderer3d {
-  protected Logger LOGGER = Logger.getLogger(DepthPeelingRenderer3d.class);
+  protected Logger LOGGER = LogManager.getLogger(DepthPeelingRenderer3d.class);
 
   protected IDepthPeelingAlgorithm dualPeelingAlgorithm;
   protected GLU glu = new GLU();
@@ -75,7 +76,17 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
     
     if(view!=null) {
       view.clear();
+      
+      float[] background = new float[3];
+      
+      background[0] = view.getBackgroundColor().r;
+      background[1] = view.getBackgroundColor().g;
+      background[2] = view.getBackgroundColor().b;
+      
+      dualPeelingAlgorithm.setBackground(background);
 
+      //dualPeelingAlgorithm.setOpacity(0.95f);
+      
       // Following line will call taskToRender, which will trigger :
       // algo.resetNumPass()
       // algo.doRender()

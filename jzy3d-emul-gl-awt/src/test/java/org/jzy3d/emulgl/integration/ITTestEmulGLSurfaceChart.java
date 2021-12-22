@@ -14,12 +14,10 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.utils.LoggerUtils;
 
 public class ITTestEmulGLSurfaceChart {
   @Test
   public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
-    LoggerUtils.minimal();
 
     // When
     EmulGLChartFactory factory = new EmulGLChartFactory();

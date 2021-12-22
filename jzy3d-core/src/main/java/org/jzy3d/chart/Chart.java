@@ -6,7 +6,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
@@ -48,7 +49,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class Chart {
-  protected static Logger logger = Logger.getLogger(Chart.class);
+  protected static Logger logger = LogManager.getLogger(Chart.class);
 
   private static final int MOUSE_PICK_SIZE_DEFAULT = 10;
   private static final String DEFAULT_WINDOW_TITLE = "Jzy3d";
@@ -104,19 +105,21 @@ public class Chart {
   /* HELPERS TO PRETTIFY CHARTS */
 
   public Chart black() {
-    getView().setBackgroundColor(Color.BLACK);
-    getAxisLayout().setGridColor(Color.WHITE);
-    getAxisLayout().setMainColor(Color.WHITE);
-    return this;
+    return color(Color.BLACK, Color.WHITE);
   }
-
+  
   public Chart white() {
-    getView().setBackgroundColor(Color.WHITE);
-    getAxisLayout().setGridColor(Color.BLACK);
-    getAxisLayout().setMainColor(Color.BLACK);
+    return color(Color.WHITE, Color.BLACK);
+  }
+
+  public Chart color(Color background, Color axis) {
+    getView().setBackgroundColor(background);
+    getAxisLayout().setGridColor(axis);
+    getAxisLayout().setMainColor(axis);
     return this;
   }
 
+  
   public Chart view2d() {
     IAxisLayout axe = getAxisLayout();
     axe.setZAxeLabelDisplayed(false);

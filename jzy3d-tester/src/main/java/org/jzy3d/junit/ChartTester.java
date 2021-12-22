@@ -8,7 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.IntegerCoord2d;
@@ -22,7 +23,7 @@ import org.jzy3d.maths.IntegerCoord2d;
  * @author martin
  */
 public class ChartTester {
-  private static Logger logger = Logger.getLogger(ChartTester.class);
+  private static Logger logger = LogManager.getLogger(ChartTester.class);
 
   public static int TEST_IMG_SIZE = 500;
 

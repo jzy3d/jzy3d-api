@@ -2,7 +2,8 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -19,7 +20,7 @@ import jgl.GL;
  *
  */
 public class EmulGLViewOverlay implements IViewOverlay {
-	protected static Logger LOGGER = Logger.getLogger(EmulGLViewOverlay.class);
+	protected static Logger LOGGER = LogManager.getLogger(EmulGLViewOverlay.class);
 
 	protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
 
