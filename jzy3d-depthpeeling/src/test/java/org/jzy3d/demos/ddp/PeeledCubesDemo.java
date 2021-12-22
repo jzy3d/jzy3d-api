@@ -54,6 +54,8 @@ public class PeeledCubesDemo {
     cube(chart, 0.01f, p2, Color.RED.alpha(.5f), Color.BLACK);
     cube(chart, 0.01f, p3, Color.GREEN.alpha(.5f), Color.BLACK);
 
+    chart.color(new Color(43/255f, 43/255f, 43/255f), new Color(169/255f, 183/255f, 198/255f));
+
     chart.open(800, 600);
     chart.getMouse();
 
