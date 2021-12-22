@@ -1,6 +1,6 @@
 package org.jzy3d.chart2d;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -110,7 +110,7 @@ public class AxisBox2d extends AxisBox {
       try {
         posReal = painter.getCamera().screenToModel(painter, screenAligned);
       } catch (RuntimeException e) {
-        Logger.getLogger(TextBitmapRenderer.class)
+        LogManager.getLogger(TextBitmapRenderer.class)
             .error("TextBitmap.drawText(): could not process text position: " + screen + " "
                 + screenAligned);
         return new BoundingBox3d();

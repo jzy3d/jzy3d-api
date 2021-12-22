@@ -2,7 +2,7 @@ package org.jzy3d.io.matlab;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -86,7 +86,7 @@ public class MatlabVBOLoader implements IGLLoader<DrawableVBO> {
     // Store in GPU
     drawable.setData(((NativeDesktopPainter) painter).getGL(), indices, vertices, bounds);
 
-    Logger.getLogger(MatlabVBOLoader.class).info("done loading " + filename);
+    LogManager.getLogger(MatlabVBOLoader.class).info("done loading " + filename);
   }
 
 

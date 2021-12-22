@@ -2,7 +2,8 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
@@ -55,7 +56,7 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
  */
 public class View {
 
-  protected static Logger LOGGER = Logger.getLogger(View.class);
+  protected static Logger LOGGER = LogManager.getLogger(View.class);
 
 
   // view setting
@@ -926,6 +927,8 @@ public class View {
     painter.clearColor(backgroundColor);
     painter.glClearDepth(1);
 
+    //Console.println("View.clear with color", backgroundColor);
+    
     if (!slave) {
       painter.glClearColorAndDepthBuffers();
     }
