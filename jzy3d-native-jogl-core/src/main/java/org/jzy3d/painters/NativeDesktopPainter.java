@@ -142,8 +142,6 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       gl.glDisable(GL2.GL_ALPHA_TEST);
     }
     
-    System.out.println(gl.getGLProfile().isGL2());
-
     // Make smooth colors for polygons (interpolate color between points)
     if(gl.getGLProfile().isGL2()) {
       if (quality.isSmoothColor()) 
