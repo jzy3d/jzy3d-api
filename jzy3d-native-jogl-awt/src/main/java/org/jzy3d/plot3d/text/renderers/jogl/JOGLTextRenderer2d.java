@@ -8,6 +8,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.AWTFont;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
@@ -16,6 +17,7 @@ import org.jzy3d.plot3d.text.align.AWTTextLayout;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.jogl.style.DefaultTextStyle;
+import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.awt.TextRenderer.RenderDelegate;
 
@@ -72,14 +74,14 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
     // Reset to a polygon mode suitable for rendering the texture handling the text
     painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
-    drawText2D(painter, font, s, position, color, horizontal, vertical);
+    drawText2D(painter, font, s, position, color, rotation, horizontal, vertical);
 
     return null;
   }
 
   /** Draws a 2D text (facing camera) at the specified 3D position. */
   protected void drawText2D(IPainter painter, Font font, String text, Coord3d position,
-      Color color, Horizontal horizontal, Vertical vertical) {
+      Color color, float rotation, Horizontal horizontal, Vertical vertical) {
 
     // Canvas size
     int width = painter.getView().getCanvas().getRendererWidth();
@@ -90,14 +92,42 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
     Coord2d textSize = layout.getBounds(text, awtFont, renderer.getFontRenderContext());
     screen = layout.align(textSize.x, textSize.y, horizontal, vertical, screen);
 
+    
+    GL2 gl = ((NativeDesktopPainter)painter).getGL().getGL2();
+    
+
+    
     // Render text
     renderer.setColor(color.r, color.g, color.b, color.a);
     renderer.beginRendering(width, height);
+
     
+    gl.glMatrixMode(GL2.GL_MODELVIEW);
+    gl.glPushMatrix();
     
-    renderer.draw(text, (int) screen.x, (int) screen.y);
-    renderer.flush();
+    rotation = (float)(360*rotation / (2*Math.PI));
+    //rotation = 90;
+    gl.glTranslatef(screen.x, screen.y, 0);
+    gl.glRotatef(rotation, 0, 0, 1);
+    
+
+    
+    //System.out.println(rotation);
+    
+    int x =0, y = 0;
+    
+    /*if(Math.abs(rotation)==90) {
+      x = (int)(textSize.y / 2);
+      y = (int)(textSize.x / 2);
+    }*/
+    
+    renderer.draw(text, x, y);
+    //renderer.draw(text, (int) screen.x, (int) screen.y);
     renderer.endRendering();
+    renderer.flush();
+
+    gl.glPopMatrix();
+
   }
   
   
