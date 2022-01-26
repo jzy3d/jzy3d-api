@@ -708,6 +708,13 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
         color.b, 0);
   }
   
+  /**
+   * Render 2D text at the given 3D position.
+   * 
+   * The {@link Font} can be any font name and size supported by AWT.
+   * 
+   * Rotation is in radian and is applied at the center of the text to avoid messing up text layout.
+   */
   @Override
   public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
     glut.glutBitmapString(toAWT(font), label, position.x, position.y, position.z, color.r, color.g,
