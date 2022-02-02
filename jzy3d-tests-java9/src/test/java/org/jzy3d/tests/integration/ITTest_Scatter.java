@@ -5,6 +5,11 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 public class ITTest_Scatter extends ITTest{
+  public static void main(String[] args) {
+    new ITTest_Scatter().whenScatterChart_ThenMatchBaselineImagePixelwise(WT.EmulGL_AWT, HiDPI.ON);
+    
+  }
+  
   @Test
   public void whenScatterChart_ThenMatchBaselineImagePixelwise() {
 
