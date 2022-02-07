@@ -1,88 +1,49 @@
-package org.jzy3d.tests.integration;
+package org.jzy3d.plot3d.text.renderers;
+
 
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.colors.Color;
+import org.jzy3d.colors.ColorMapper;
+import org.jzy3d.colors.colormaps.ColorMapRainbow;
+import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Rectangle;
+import org.jzy3d.maths.Range;
 import org.jzy3d.painters.Font;
+import org.jzy3d.plot3d.builder.Mapper;
+import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
-import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
-import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.drawable.DrawableText;
 
-
-public class ITTest_Text extends ITTest{
-  /** This main method is here to test manually a chart and keep it open until one close it explicitely. */
+/**
+ * Test text layout.
+ * 
+ * @author Martin
+ *
+ */
+public class TestTextRenderer {
+  //@Test
   public static void main(String[] args) {
-    //open(new ITTest_Text().whenCustomFont(WT.EmulGL_AWT, HiDPI.ON));
-    open(new ITTest_Text().whenDrawableTextRenderer(WT.EmulGL_AWT, HiDPI.OFF));
-  }
-  
-  /* ************************************************************************************************** */
+    Quality q = Quality.Advanced();
+    q.setHiDPI(HiDPI.OFF);
 
-  /**
-   * <img src="src/test/resources/"/>
-   */
-  @Test
-  public void whenColorbar_IsModifiedByCustomFont() {
-    System.out.println("ITTest : whenColorbar_IsModifiedByCustomFont");
-
-    whenCustomFont(WT.Native_AWT, HiDPI.ON);
-    whenCustomFont(WT.Native_AWT, HiDPI.OFF);
-
-    whenCustomFont(WT.EmulGL_AWT, HiDPI.ON);
-    whenCustomFont(WT.EmulGL_AWT, HiDPI.OFF);
-  }
-
-  public Chart whenCustomFont(WT wt, HiDPI hidpi) {
-    // Given
-    Chart chart = chart(wt, hidpi);
-    Shape surface = surface();
-    chart.add(surface);
     
-    // When
-    AxisLayout layout = (AxisLayout)chart.getAxisLayout();
-    layout.setZAxisSide(ZAxisSide.LEFT);
-    layout.setFont(new Font("Apple Chancery", 24)); 
-    layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));
-
-    surface.setLegend(new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout()));
-
-    // Then
-    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI(), "Font=AppleChancery24"));
-    
-    // For manual tests
-    return chart;
-  }
-  
-  /* ************************************************************************************************** */
-
-  @Test
-  public void whenDrawableTextRenderer() {
-    System.out.println("ITTest : whenDrawableTextRenderer");
-
-    whenDrawableTextRenderer(WT.Native_AWT, HiDPI.ON);
-    whenDrawableTextRenderer(WT.Native_AWT, HiDPI.OFF);
-
-    whenDrawableTextRenderer(WT.EmulGL_AWT, HiDPI.ON);
-    whenDrawableTextRenderer(WT.EmulGL_AWT, HiDPI.OFF);
-  }
-  
-  public Chart whenDrawableTextRenderer(WT wt, HiDPI hidpi) {
-    Chart chart = chart(wt, hidpi, new Rectangle(1200,600));
-
+    //ChartFactory factory = new EmulGLChartFactory();
+    ChartFactory factory = new AWTChartFactory();
+    Chart chart = factory.newChart(q);
+    chart.addMouse();
+    //chart.setViewMode(ViewPositionMode.TOP);
+    //chart.view2d();
+    chart.open(1200,600);
     
     // Given : a custom font
     
@@ -136,13 +97,8 @@ public class ITTest_Text extends ITTest{
     position = new Coord3d(-1,0,2);
     createDrawableText(chart, font, position, textColor, positionColor, Horizontal.LEFT, Vertical.TOP);
   
-    
-    
+  
     // Then
-    assertChart(chart, name(this, "whenDrawableTextRenderer", wt, chart.getQuality().getHiDPI()));
-    
-    // For manual tests
-    return chart;
     
   }
 
@@ -157,5 +113,25 @@ public class ITTest_Text extends ITTest{
     
     chart.add(t1);
     chart.add(p1);
+  }
+
+  private Shape surface() {
+    Mapper mapper = new Mapper() {
+      @Override
+      public double f(double x, double y) {
+        return x * Math.sin(x * y);
+      }
+    };
+
+    Range range = new Range(-3, 3);
+    int steps = 80;
+
+    final Shape surface = new SurfaceBuilder().orthonormal(mapper, range, steps);
+    surface
+        .setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .5f)));
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.WHITE);
+    return surface;
   }
 }

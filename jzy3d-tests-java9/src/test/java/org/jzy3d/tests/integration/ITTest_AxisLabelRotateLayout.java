@@ -19,15 +19,18 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class ITTest_AxisLabelRotateLayout extends ITTest{
   public static void main(String[] args) {
-    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON));
+    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.OFF));
   }
   
   @Test
   public void whenAxisLabelOrientationNotHorizontal() {
+    System.out.println("ITTest : whenAxisLabelOrientationNotHorizontal");
 
-    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON);
-    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.OFF);
+    whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON);
     whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.OFF);
+
+    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.OFF);
+    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON);
   }
 
   public Chart whenAxisLabelOrientationNotHorizontal(WT wt, HiDPI hidpi) {

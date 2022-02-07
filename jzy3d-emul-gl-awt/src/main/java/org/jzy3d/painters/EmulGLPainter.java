@@ -3,6 +3,7 @@ package org.jzy3d.painters;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
@@ -680,19 +681,34 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
    */
   @Override
   public int getTextLengthInPixels(Font font, String string) {
+    if(font==null) {
+      throw new NullPointerException("Font is null");
+    }
+    Graphics g = null;
+    
+    // Try getting an onscreen canvas graphics
     EmulGLCanvas c = (EmulGLCanvas) getCanvas();
     if (c != null) {
-      Graphics g = c.getGraphics();
-      if (g != null && font != null) {
-        g.setFont(toAWT(font)); // TODO : cache?
+      g = c.getGraphics();
+    }
 
-        FontMetrics fm = g.getFontMetrics();
-        if (fm != null) {
-          return fm.stringWidth(string);
-        }
+    // Try getting an offscreen image graphics
+    if(g==null) {
+      BufferedImage image = getGL().getRenderedImage();
+      g = image.getGraphics();
+    }
+    
+    // Hope to have a graphics and process string width
+    if (g != null) {
+      g.setFont(toAWT(font)); // TODO : cache?
+
+      FontMetrics fm = g.getFontMetrics();
+      if (fm != null) {
+        return fm.stringWidth(string);
       }
     }
-    // fallback on glut
+
+    // Fallback on glut
     return glutBitmapLength(font.getCode(), string);
   }
 

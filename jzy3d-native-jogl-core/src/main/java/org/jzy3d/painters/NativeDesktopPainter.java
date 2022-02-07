@@ -3,6 +3,8 @@ package org.jzy3d.painters;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -487,32 +489,25 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     // System.out.println(label + "\t" + screen);
     // Console.print(label + "\t" + screen, color);
 
+    // Pre-shift text to make it rotate from center
+    // of string and not from left point
     int xPreShift = 0, yPreShift = 0;
 
-
-    if (rotation != 0) {
-      // xPreShift = (int)(Math.cos(rotation)*getTextLengthInPixels(font, label));
-      // yPreShift = (int)(Math.sin(rotation)*font.getHeight());
+    if (rotationD != 0) {
       xPreShift = getTextLengthInPixels(font, label) / 2;
-      yPreShift = 0;
+      yPreShift = font.getHeight()/2;
     }
-
 
     GL2 gl = getGL2();
     gl.glMatrixMode(GL2.GL_MODELVIEW);
     gl.glPushMatrix();
     gl.glTranslatef(screen.x + xPreShift, screen.y + yPreShift, 0);
+    gl.glScalef(1, 1, 1);
     gl.glRotatef(rotationD, 0, 0, 1);
 
     // Shifting text to deal with rotation
-    int xPostShift = 0, yPostShift = 0;
-
-    if (rotation != 0) {
-      xPostShift = (int) (Math.cos(rotation) * getTextLengthInPixels(font, label));
-      yPostShift = (int) (Math.sin(rotation) * font.getHeight());
-      xPostShift = -xPreShift;// getTextLengthInPixels(font, label)/2;
-      yPostShift = -yPreShift;
-    }
+    int xPostShift = -xPreShift;
+    int yPostShift = -yPreShift;
 
     renderer.draw(label, xPostShift, yPostShift);
     renderer.endRendering();
@@ -566,7 +561,8 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public int getTextLengthInPixels(Font font, String string) {
-
+    System.out.println(font.getName() + " " + font.getHeight() + " " + string);
+    // Try to get text width using onscreen graphics
     ICanvas c = getCanvas();
     if (c instanceof Component) {
       Graphics g = ((Component) c).getGraphics();
@@ -579,8 +575,18 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
         }
       }
     }
+    
+    // Try to get text width using text renderer offscreen
+   // else {
+      TextRenderer renderer = getOrCreateTextRenderer(font);
+      Rectangle2D r =   renderer.getBounds(string);
+System.err.println("Painter get text length from renderer");
+      return (int)r.getWidth();
+    //}
+    
+    
     // fallback on glut
-    return glutBitmapLength(font.getCode(), string);
+    //return glutBitmapLength(font.getCode(), string);
   }
 
   private java.awt.Font toAWT(Font font) {

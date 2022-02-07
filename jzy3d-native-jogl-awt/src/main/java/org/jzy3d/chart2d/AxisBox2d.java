@@ -12,7 +12,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 public class AxisBox2d extends AxisBox {
   public AxisBox2d(BoundingBox3d bbox, IAxisLayout layout) {
@@ -21,7 +21,7 @@ public class AxisBox2d extends AxisBox {
 
   public AxisBox2d(BoundingBox3d bbox) {
     super(bbox);
-    textRenderer = new TextBitmapRenderer();
+    textRenderer = new TextRenderer();
     // txt = new JOGLTextRenderer(new DefaultTextStyle(java.awt.Color.BLACK));// ATTENTION AWT!!
   }
 
@@ -91,7 +91,7 @@ public class AxisBox2d extends AxisBox {
 
   /* ROTATED TEXT BITMAP RENDERER NOT WORKING PROPERLY */
 
-  public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
+  public class RotatedTextBitmapRenderer extends TextRenderer {
     @Override
     public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
         float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
@@ -110,7 +110,7 @@ public class AxisBox2d extends AxisBox {
       try {
         posReal = painter.getCamera().screenToModel(painter, screenAligned);
       } catch (RuntimeException e) {
-        LogManager.getLogger(TextBitmapRenderer.class)
+        LogManager.getLogger(TextRenderer.class)
             .error("TextBitmap.drawText(): could not process text position: " + screen + " "
                 + screenAligned);
         return new BoundingBox3d();

@@ -140,7 +140,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
 
     this.shrinkColorbar = shrinkColorbar;
 
-    if (updateDisplay) {
+    if (updateDisplay && chart!=null) {
       chart.render();
     }
   }
