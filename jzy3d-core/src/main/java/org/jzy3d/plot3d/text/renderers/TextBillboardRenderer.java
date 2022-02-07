@@ -40,6 +40,7 @@ import org.jzy3d.plot3d.text.align.Vertical;
  * 
  * @author Martin Pernollet
  */
+@Deprecated()
 public class TextBillboardRenderer extends AbstractTextRenderer implements ITextRenderer {
   /**
    * The TextBillboard class provides support for drawing ASCII characters Any non ascii caracter
