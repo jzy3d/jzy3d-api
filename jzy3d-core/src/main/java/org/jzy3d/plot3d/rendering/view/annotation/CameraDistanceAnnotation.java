@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 /**
  * Draws the distance of every scene graph drawable object to camera eye.
@@ -104,5 +104,5 @@ public class CameraDistanceAnnotation extends Point {
   }
 
   protected View view;
-  protected ITextRenderer txt = new TextBitmapRenderer();
+  protected ITextRenderer txt = new TextRenderer();
 }

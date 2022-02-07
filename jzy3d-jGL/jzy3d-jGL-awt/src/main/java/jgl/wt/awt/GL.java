@@ -113,10 +113,28 @@ public final class GL extends jgl.GL<BufferedImage, Font> {
 
   @Override
   public void applyViewport() {
-
+    Graphics g = null;
+    
+    // Try to get grpahics from an onscreen canvas
+    if (canvas != null && canvas.getGraphics() != null) {
+      g = canvas.getGraphics();
+    }
+    
+    // Try to get graphics from the offscreen GL image
+    if (g == null && glImage!=null) {
+      g = glImage.getGraphics();
+    }
+    
+    // Try to get graphics from any image if offscreen does not exist yet
+    if (g == null) {
+      g = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).getGraphics();
+    }
+    
+    
     // Update pixel scale to guess if HiDPI
-    if (canvas != null && canvas.getGraphics() != null)
-      updatePixelScale(canvas.getGraphics());
+    if(g!=null)
+      updatePixelScale(g);
+    
     super.applyViewport();
   }
 
@@ -143,6 +161,7 @@ public final class GL extends jgl.GL<BufferedImage, Font> {
     // printGlobalScale(g2d);
     // produce 2.0 factory on MacOS with Retina
     // produce 1.5 factor on Win10 HiDPI on the same Apple hardware as above
+    
     // We will read pixel scale from G2D while swapping images. This means
     // we may be late of 1 image to adapt to an HiDPI change.
     if (autoAdaptToHiDPI) {

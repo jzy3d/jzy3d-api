@@ -228,7 +228,15 @@ public class Chart {
 
   /* CONTROLLERS */
 
+  /** 
+   * use {@link #addMouse()} instead.
+   */
+  @Deprecated
   public ICameraMouseController addMouseCameraController() {
+    return addMouse();
+  }
+
+  public ICameraMouseController addMouse() {
     if (mouse == null) {
       mouse = getFactory().getPainterFactory().newMouseCameraController(this);
       configureMouseWithAnimator();
@@ -258,7 +266,15 @@ public class Chart {
     return mousePicking;
   }
 
+  /** 
+   * use {@link #addKeyboard()} instead.
+   */
+  @Deprecated
   public ICameraKeyController addKeyboardCameraController() {
+    return addKeyboard();
+  }
+
+  public ICameraKeyController addKeyboard() {
     if (keyboard == null) {
       keyboard = getFactory().getPainterFactory().newKeyboardCameraController(this);
 
@@ -286,7 +302,7 @@ public class Chart {
 
   public ICameraMouseController getMouse() {
     if (mouse == null)
-      return addMouseCameraController();
+      return addMouse();
     else
       return mouse;
   }
@@ -304,7 +320,7 @@ public class Chart {
 
   public ICameraKeyController getKeyboard() {
     if (keyboard == null)
-      return addKeyboardCameraController();
+      return addKeyboard();
     else
       return keyboard;
   }

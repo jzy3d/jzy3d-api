@@ -38,10 +38,13 @@ public class ITTest_Colorbar extends ITTest{
    */
   @Test
   public void whenColorbar_IsModifiedByCustomFont() {
+    System.out.println("ITTest : whenColorbar_IsModifiedByCustomFont");
+
+    whenColorbar_IsModifiedByCustomFont(WT.Native_AWT, HiDPI.OFF);
+    whenColorbar_IsModifiedByCustomFont(WT.Native_AWT, HiDPI.ON);
+
     whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON);
     whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.OFF);
-    whenColorbar_IsModifiedByCustomFont(WT.Native_AWT, HiDPI.OFF);
-    //whenColorbarIsModifiedByCustomFont(WT.Native_AWT, HiDPI.ON);
   }
 
   public Chart whenColorbar_IsModifiedByCustomFont(WT wt, HiDPI hidpi) {
@@ -71,6 +74,11 @@ public class ITTest_Colorbar extends ITTest{
   
   @Test
   public void whenColorbar_HasMininumWidth() {
+    System.out.println("ITTest : whenColorbar_HasMininumWidth");
+
+    whenColorbar_HasMininumWidth(WT.Native_AWT, HiDPI.OFF);
+    whenColorbar_HasMininumWidth(WT.Native_AWT, HiDPI.ON);
+
     
     whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.ON);
     
@@ -79,7 +87,6 @@ public class ITTest_Colorbar extends ITTest{
     // properly to the right
     whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.OFF);
     
-    whenColorbar_HasMininumWidth(WT.Native_AWT, HiDPI.OFF);
   }
 
   public Chart whenColorbar_HasMininumWidth(WT wt, HiDPI hidpi) {
@@ -109,7 +116,12 @@ public class ITTest_Colorbar extends ITTest{
   
   @Test
   public void whenColorbar_ShrinkBigFont() {
+    System.out.println("ITTest : whenColorbar_ShrinkBigFont");
+
     whenColorbar_ShrinkBigFont(WT.Native_AWT, HiDPI.OFF);
+    whenColorbar_ShrinkBigFont(WT.Native_AWT, HiDPI.ON);
+
+    
     whenColorbar_ShrinkBigFont(WT.EmulGL_AWT, HiDPI.ON);
     whenColorbar_ShrinkBigFont(WT.EmulGL_AWT, HiDPI.OFF);
   }
@@ -156,9 +168,13 @@ public class ITTest_Colorbar extends ITTest{
   
   @Test
   public void whenColorbar_Shrink() {
+    System.out.println("ITTest : whenColorbar_Shrink");
+
     whenColorbar_Shrink(WT.Native_AWT, HiDPI.OFF);
-    whenColorbar_Shrink(WT.EmulGL_AWT, HiDPI.ON);
+    whenColorbar_Shrink(WT.Native_AWT, HiDPI.ON);
+    
     whenColorbar_Shrink(WT.EmulGL_AWT, HiDPI.OFF);
+    whenColorbar_Shrink(WT.EmulGL_AWT, HiDPI.ON);
   }
 
 

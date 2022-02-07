@@ -4,12 +4,12 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 /**
  * This is the greatest {@link IFontSizePolicy} since it scale base font with current pixel scale.
  * 
- * This is only suitable for EmulGL chart, as Native chart often rely on {@link TextBitmapRenderer}
+ * This is only suitable for EmulGL chart, as Native chart often rely on {@link TextRenderer}
  * which does not support more font than {@link Font} defaults. Using a {@link JOGLTextRenderer}
  * instead allows more font size and styles.
  * 

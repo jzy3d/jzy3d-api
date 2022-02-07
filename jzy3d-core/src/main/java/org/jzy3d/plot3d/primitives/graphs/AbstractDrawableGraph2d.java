@@ -12,7 +12,7 @@ import org.jzy3d.plot3d.primitives.graphs.layout.DefaultGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphLayout2d;
 import org.jzy3d.plot3d.primitives.pickable.Pickable;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 
 /**
@@ -156,7 +156,7 @@ public abstract class AbstractDrawableGraph2d<V, E> extends Drawable
   protected static float Z = 0;
 
 
-  protected TextBitmapRenderer txt = new TextBitmapRenderer();
+  protected TextRenderer txt = new TextRenderer();
   // protected TextRenderer txtRenderer;
 
 
