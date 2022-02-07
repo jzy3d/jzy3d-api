@@ -15,12 +15,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/Surface_Native_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/Surface_Native_AWT_HiDPI=OFF.png"></td>
 </tr>
-<tr>
-<td><img src="target/error-Surface_EmulGL_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Surface_EmulGL_AWT_HiDPI=OFF#DIFF#.png"></td>
-<td><img src="target/error-Surface_Native_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Surface_Native_AWT_HiDPI=OFF#DIFF#.png"></td>
-</tr>
 </table>
 
 # Scatter
@@ -36,12 +30,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/Scatter_EmulGL_AWT_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/Scatter_Native_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/Scatter_Native_AWT_HiDPI=OFF.png"></td>
-</tr>
-<tr>
-<td><img src="target/error-Scatter_EmulGL_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Scatter_EmulGL_AWT_HiDPI=OFF#DIFF#.png"></td>
-<td><img src="target/error-Scatter_Native_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Scatter_Native_AWT_HiDPI=OFF#DIFF#.png"></td>
 </tr>
 </table>
 
@@ -59,12 +47,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/Text_Native_AWT_HiDPI=ON_Font=AppleChancery24.png"></td>
 <td><img src="src/test/resources/Text_Native_AWT_HiDPI=OFF_Font=AppleChancery24.png"></td>
 </tr>
-<tr>
-<td><img src="target/error-Text_EmulGL_AWT_HiDPI=ON_Font=AppleChancery24#DIFF#.png"></td>
-<td><img src="target/error-Text_EmulGL_AWT_HiDPI=OFF_Font=AppleChancery24#DIFF#.png"></td>
-<td><img src="target/error-Text_Native_AWT_HiDPI=ON_Font=AppleChancery24#DIFF#.png"></td>
-<td><img src="target/error-Text_Native_AWT_HiDPI=OFF_Font=AppleChancery24#DIFF#.png"></td>
-</tr>
 </table>
 
 # Text : whenDrawableTextRenderer
@@ -80,12 +62,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/Text_whenDrawableTextRenderer_EmulGL_AWT_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/Text_whenDrawableTextRenderer_Native_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/Text_whenDrawableTextRenderer_Native_AWT_HiDPI=OFF.png"></td>
-</tr>
-<tr>
-<td><img src="target/error-Text_whenDrawableTextRenderer_EmulGL_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Text_whenDrawableTextRenderer_EmulGL_AWT_HiDPI=OFF#DIFF#.png"></td>
-<td><img src="target/error-Text_whenDrawableTextRenderer_Native_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Text_whenDrawableTextRenderer_Native_AWT_HiDPI=OFF#DIFF#.png"></td>
 </tr>
 </table>
 
@@ -103,12 +79,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/AxisLabelRotateLayout_Native_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/AxisLabelRotateLayout_Native_AWT_HiDPI=OFF.png"></td>
 </tr>
-<tr>
-<td><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=OFF#DIFF#.png"></td>
-<td><img src="target/error-AxisLabelRotateLayout_Native_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-AxisLabelRotateLayout_Native_AWT_HiDPI=OFF#DIFF#.png"></td>
-</tr>
 </table>
 
 # Colorbar : Shrink
@@ -124,12 +94,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/Colorbar_Shrink_EmulGL_AWT_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/Colorbar_Shrink_Native_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/Colorbar_Shrink_Native_AWT_HiDPI=OFF.png"></td>
-</tr>
-<tr>
-<td><img src="target/error-Colorbar_Shrink_EmulGL_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_Shrink_EmulGL_AWT_HiDPI=OFF#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_Shrink_Native_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_Shrink_Native_AWT_HiDPI=OFF#DIFF#.png"></td>
 </tr>
 </table>
 
@@ -147,12 +111,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/Colorbar_ShrinkBigFont_Native_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/Colorbar_ShrinkBigFont_Native_AWT_HiDPI=OFF.png"></td>
 </tr>
-<tr>
-<td><img src="target/error-Colorbar_ShrinkBigFont_EmulGL_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_ShrinkBigFont_EmulGL_AWT_HiDPI=OFF#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_ShrinkBigFont_Native_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_ShrinkBigFont_Native_AWT_HiDPI=OFF#DIFF#.png"></td>
-</tr>
 </table>
 
 # Colorbar : IsModifiedByCustomFont
@@ -169,12 +127,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/Colorbar_IsModifiedByCustomFont_Native_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/Colorbar_IsModifiedByCustomFont_Native_AWT_HiDPI=OFF.png"></td>
 </tr>
-<tr>
-<td><img src="target/error-Colorbar_IsModifiedByCustomFont_EmulGL_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_IsModifiedByCustomFont_EmulGL_AWT_HiDPI=OFF#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_IsModifiedByCustomFont_Native_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_IsModifiedByCustomFont_Native_AWT_HiDPI=OFF#DIFF#.png"></td>
-</tr>
 </table>
 
 # Colorbar : HasMinimumWidth
@@ -190,12 +142,6 @@ This is a summary of existing baseline images for tests.
 <td><img src="src/test/resources/Colorbar_HasMinimumWidth_EmulGL_AWT_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/Colorbar_HasMinimumWidth_Native_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/Colorbar_HasMinimumWidth_Native_AWT_HiDPI=OFF.png"></td>
-</tr>
-<tr>
-<td><img src="target/error-Colorbar_HasMinimumWidth_EmulGL_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_HasMinimumWidth_EmulGL_AWT_HiDPI=OFF#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_HasMinimumWidth_Native_AWT_HiDPI=ON#DIFF#.png"></td>
-<td><img src="target/error-Colorbar_HasMinimumWidth_Native_AWT_HiDPI=OFF#DIFF#.png"></td>
 </tr>
 </table>
 
