@@ -471,20 +471,21 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     // OLD WAY
     //glutBitmapString(font, label, position, color);
 
+    int[] viewport = getViewPortAsInt();
+    int width = viewport[2];
+    int height = viewport[3];
 
     // Reset to a polygon mode suitable for rendering the texture handling the text
     glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
-
+    
     // Geometric processing for text layout
-    int width = getCanvas().getRendererWidth();
-    int height = getCanvas().getRendererHeight();
     float rotationD = -(float) (360 * rotation / (2 * Math.PI));
     Coord3d screen = modelToScreen(position);
 
-
     TextRenderer renderer = getOrCreateTextRenderer(font);
     renderer.setColor(color.r, color.g, color.b, color.a);
-    renderer.beginRendering(width, height);
+    // indicates current viewport (which may be smaller than canvas)
+    renderer.beginRendering(width, height); 
 
     // System.out.println(label + "\t" + screen);
     // Console.print(label + "\t" + screen, color);
@@ -561,7 +562,8 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public int getTextLengthInPixels(Font font, String string) {
-    System.out.println(font.getName() + " " + font.getHeight() + " " + string);
+    //System.out.println(font.getName() + " " + font.getHeight() + " " + string);
+    
     // Try to get text width using onscreen graphics
     ICanvas c = getCanvas();
     if (c instanceof Component) {

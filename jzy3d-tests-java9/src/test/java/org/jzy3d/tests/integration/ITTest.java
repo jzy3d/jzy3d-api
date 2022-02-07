@@ -106,13 +106,14 @@ public class ITTest {
     line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
     line(sb, "</tr>");
 
-    line(sb, "<tr>");
-    line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.ON, info))+ "</td>");
-    line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
-    line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.ON, info))+ "</td>");
-    line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
-    line(sb, "</tr>");
-
+    if(false) {
+      line(sb, "<tr>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.ON, info))+ "</td>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.ON, info))+ "</td>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
+      line(sb, "</tr>");
+    }
     
     line(sb, "</table>");
     line(sb);
