@@ -34,7 +34,7 @@ import jgl.ImageToDraw;
 import jgl.TextToDraw;
 import jgl.context.gl_util;
 
-public final class GL extends jgl.GL<BufferedImage, Font> {
+public class GL extends jgl.GL<BufferedImage, Font> {
 
   protected Component canvas;
   protected BufferedImage glImage;
@@ -115,7 +115,7 @@ public final class GL extends jgl.GL<BufferedImage, Font> {
   public void applyViewport() {
     Graphics g = null;
     
-    // Try to get grpahics from an onscreen canvas
+    // Try to get graphics from an onscreen canvas
     if (canvas != null && canvas.getGraphics() != null) {
       g = canvas.getGraphics();
     }
@@ -187,19 +187,30 @@ public final class GL extends jgl.GL<BufferedImage, Font> {
     AffineTransform globalTransform = g2d.getTransform();
     double oldPixelScaleX = pixelScaleX;
     double oldPixelScaleY = pixelScaleY;
-    double newPixelScaleX = globalTransform.getScaleX();
-    double newPixelScaleY = globalTransform.getScaleY();
+    double newPixelScaleX = getPixelScaleX(globalTransform);
+    double newPixelScaleY = getPixelScaleY(globalTransform);
+    
     setPixelScaleX(newPixelScaleX);
     setPixelScaleY(newPixelScaleY);
+    
     if (newPixelScaleX != oldPixelScaleX || newPixelScaleY != oldPixelScaleY) {
       firePixelScaleChanged(newPixelScaleX, newPixelScaleY);
     }
   }
 
+  protected double getPixelScaleX(AffineTransform globalTransform) {
+    return globalTransform.getScaleX();
+  }
+
+  protected double getPixelScaleY(AffineTransform globalTransform) {
+    return globalTransform.getScaleY();
+  }
+
+
   protected void printGlobalScale(Graphics2D g2d) {
     AffineTransform globalTransform = g2d.getTransform();
-    double globalScaleX = globalTransform.getScaleX();
-    double globalScaleY = globalTransform.getScaleY();
+    double globalScaleX = getPixelScaleX(globalTransform);
+    double globalScaleY = getPixelScaleY(globalTransform);
     System.out.println("globalScaleX:" + globalScaleX + " globalScaleY:" + globalScaleY);
   }
 
