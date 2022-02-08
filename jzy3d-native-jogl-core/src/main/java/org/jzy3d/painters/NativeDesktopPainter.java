@@ -468,9 +468,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
    */
   @Override
   public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
-    // OLD WAY
-    //glutBitmapString(font, label, position, color);
-
+    // Get viewport (and not canvas) dimensions
     int[] viewport = getViewPortAsInt();
     int width = viewport[2];
     int height = viewport[3];
@@ -486,9 +484,6 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     renderer.setColor(color.r, color.g, color.b, color.a);
     // indicates current viewport (which may be smaller than canvas)
     renderer.beginRendering(width, height); 
-
-    // System.out.println(label + "\t" + screen);
-    // Console.print(label + "\t" + screen, color);
 
     // Pre-shift text to make it rotate from center
     // of string and not from left point
@@ -562,8 +557,6 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public int getTextLengthInPixels(Font font, String string) {
-    //System.out.println(font.getName() + " " + font.getHeight() + " " + string);
-    
     // Try to get text width using onscreen graphics
     ICanvas c = getCanvas();
     if (c instanceof Component) {
@@ -579,16 +572,9 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     }
     
     // Try to get text width using text renderer offscreen
-   // else {
-      TextRenderer renderer = getOrCreateTextRenderer(font);
-      Rectangle2D r =   renderer.getBounds(string);
-System.err.println("Painter get text length from renderer");
-      return (int)r.getWidth();
-    //}
-    
-    
-    // fallback on glut
-    //return glutBitmapLength(font.getCode(), string);
+    TextRenderer renderer = getOrCreateTextRenderer(font);
+    Rectangle2D r =   renderer.getBounds(string);
+    return (int)r.getWidth();
   }
 
   private java.awt.Font toAWT(Font font) {
