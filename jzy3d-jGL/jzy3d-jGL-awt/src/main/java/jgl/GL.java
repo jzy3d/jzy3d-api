@@ -117,12 +117,24 @@ public abstract class GL<ImageType, FontType> {
     return StartY;
   }
 
+  /** Return the width configured for this GL */
   public int getDesiredWidth() {
     return desiredWidth;
   }
 
+  /** Return the height configured for this GL */
   public int getDesiredHeight() {
     return desiredHeight;
+  }
+
+  /** Return the actual width, which is {@link #getDesiredWidth()} multiplied by {@link #getPixelScaleX()}*/
+  public int getActualWidth() {
+    return actualWidth;
+  }
+
+  /** Return the actual width, which is {@link #getDesiredHeight()} multiplied by {@link #getPixelScaleY()}*/
+  public int getActualHeight() {
+    return actualHeight;
   }
 
   /* ******************** PROVIDE IMAGE ********************/
