@@ -1,4 +1,4 @@
-package org.jzy3d.chart;
+package jogl;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;

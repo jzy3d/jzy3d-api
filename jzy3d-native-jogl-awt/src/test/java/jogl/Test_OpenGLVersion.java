@@ -1,4 +1,4 @@
-package org.jzy3d.chart;
+package jogl;
 
 import org.junit.Test;
 import org.jzy3d.chart.factories.NativePainterFactory;

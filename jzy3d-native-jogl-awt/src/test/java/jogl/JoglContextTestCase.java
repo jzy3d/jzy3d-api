@@ -1,4 +1,4 @@
-package org.jzy3d.chart;
+package jogl;
 import java.awt.BorderLayout;
 import java.awt.BufferCapabilities;
 import java.awt.GraphicsConfiguration;
