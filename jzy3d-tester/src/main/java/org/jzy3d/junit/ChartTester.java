@@ -170,12 +170,25 @@ public class ChartTester {
           getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#DIFF#.");
 
       BufferedImage diffImage = copyImage(expected);
-      pixelHighlight(diffImage, e.getDiffCoordinates(), Highlight.RED);
+      highlightPixel(diffImage, e.getDiffCoordinates(), Highlight.RED);
+      
+      
+      if (!e.isSameImageSize()) {
+        String m = e.getImageSizeDifferenceMessage();
+        
+        logger.error(m);
+        
+        m+= " - Diff will only show expected image. See the actual image separately";
+        
+        highlightSize(diffImage, m);
+      }
+
 
       ImageIO.write(diffImage, "png", new File(diffFile));
       logger.error("DIFF IMAGE : " + diffFile);
 
       // LET TEST FAIL
+      
       
       fail("Chart test failed: " + e.getMessage() + " see " + diffFile);
 
@@ -185,6 +198,17 @@ public class ChartTester {
 
       fail("IOException: " + e.getMessage() + " for " + testImage);
     }
+  }
+
+  private void highlightSize(BufferedImage diffImage, String m) {
+    Graphics g = diffImage.createGraphics();
+    
+    int fontSize = 16;
+    
+    g.setColor(java.awt.Color.RED);
+    g.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, fontSize));
+    g.drawString(m, 10, 10+fontSize);
+    g.dispose();
   }
 
   protected BufferedImage copyImage(BufferedImage source) {
@@ -198,7 +222,7 @@ public class ChartTester {
   /**
    * Invert the pixel color identified by the input coordinates.
    */
-  protected void pixelHighlight(BufferedImage expected, List<IntegerCoord2d> diffs,
+  protected void highlightPixel(BufferedImage expected, List<IntegerCoord2d> diffs,
       Highlight highlight) {
     for (IntegerCoord2d diff : diffs) {
       pixelHighlight(expected, diff, highlight);
@@ -296,7 +320,7 @@ public class ChartTester {
       }
 
     } else {
-      String m = "image size differ: i1={" + i1W + "," + i1H + "} i2={" + i2W + "," + i2H + "}";
+      String m = "image size differ: actual={" + i1W + "," + i1H + "} expected={" + i2W + "," + i2H + "}";
       throw new ChartTestFailed(m, actual, expected);
     }
   }

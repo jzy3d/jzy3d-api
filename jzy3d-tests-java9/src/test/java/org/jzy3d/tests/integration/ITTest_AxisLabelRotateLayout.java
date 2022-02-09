@@ -19,15 +19,18 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class ITTest_AxisLabelRotateLayout extends ITTest{
   public static void main(String[] args) {
-    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON));
+    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON));
   }
   
   @Test
   public void whenAxisLabelOrientationNotHorizontal() {
+    System.out.println("ITTest : whenAxisLabelOrientationNotHorizontal");
 
-    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON);
-    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.OFF);
+    whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON);
     whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.OFF);
+
+    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.OFF);
+    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON);
   }
 
   public Chart whenAxisLabelOrientationNotHorizontal(WT wt, HiDPI hidpi) {
@@ -65,12 +68,19 @@ public class ITTest_AxisLabelRotateLayout extends ITTest{
     //view.setDisplayAxisWholeBounds(true);
     //view.setMaintainAllObjectsInView(true);
     view.setCameraRenderingSphereRadiusFactor(1.1f);
+    
+    
 
     AWTColorbarLegend colorbar = new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
     colorbar.setMinimumWidth(200);
     surface.setLegend(colorbar);
     chart.add(surface);
-
+    
+    //view.getCamera().setScreenGridDisplayed(true);
+    //surface.setLegendDisplayed(false);
+    //colorbar.setScreenGridDisplayed(true);
+    
+    
     // Open and enable controllers
 
     chart.getKeyboard();

@@ -3,10 +3,14 @@ package org.jzy3d.painters;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.Rectangle2D;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
@@ -30,17 +34,22 @@ import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
+import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   static Logger LOGGER = LogManager.getLogger(NativeDesktopPainter.class);
-  
+
   protected GL gl;
   protected GLU glu = new GLU();
   protected GLUT glut = new GLUT();
 
   public GL getGL() {
     return gl;
+  }
+
+  public GL2 getGL2() {
+    return getGL().getGL2();
   }
 
   public void setGL(GL gl) {
@@ -141,23 +150,22 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     } else {
       gl.glDisable(GL2.GL_ALPHA_TEST);
     }
-    
+
     // Make smooth colors for polygons (interpolate color between points)
-    if(gl.getGLProfile().isGL2()) {
-      if (quality.isSmoothColor()) 
+    if (gl.getGLProfile().isGL2()) {
+      if (quality.isSmoothColor())
         gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
       else
         gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+    } else {
+      LOGGER.warn(
+          "Did not configured shade model as we don t have a GL2 context : " + gl.getGLProfile());
     }
-    else {
-      LOGGER.warn("Did not configured shade model as we don t have a GL2 context : " + gl.getGLProfile());
-    }
-    /*else     if(gl.getGLProfile().isGL4()) {
-      if (quality.isSmoothColor()) 
-        gl.getGL4().glShadeModel(GLLightingFunc.GL_SMOOTH);
-      else
-        gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
-    }*/
+    /*
+     * else if(gl.getGLProfile().isGL4()) { if (quality.isSmoothColor())
+     * gl.getGL4().glShadeModel(GLLightingFunc.GL_SMOOTH); else
+     * gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT); }
+     */
 
     // Make smoothing setting
     if (quality.isSmoothPolygon()) {
@@ -448,11 +456,86 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     glut.glutBitmapString(font, string);
   }
 
+  /**
+   * Render 2D text at the given 3D position.
+   * 
+   * The {@link Font} can be any font name and size supported by AWT.
+   * 
+   * Rotation is in radian and is applied at the center of the text to avoid messing up text layout.
+   * 
+   * @see {@link #glutBitmapString(int, String)}, an alternative way of rendering text with simpler
+   *      parameters and smaller font name and size set.
+   */
   @Override
   public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
-    glutBitmapString(font, label, position, color);
+    // Get viewport (and not canvas) dimensions
+    int[] viewport = getViewPortAsInt();
+    int width = viewport[2];
+    int height = viewport[3];
+
+    // Reset to a polygon mode suitable for rendering the texture handling the text
+    glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
+    
+    // Geometric processing for text layout
+    float rotationD = -(float) (360 * rotation / (2 * Math.PI));
+    Coord3d screen = modelToScreen(position);
+
+    TextRenderer renderer = getOrCreateTextRenderer(font);
+    renderer.setColor(color.r, color.g, color.b, color.a);
+    // indicates current viewport (which may be smaller than canvas)
+    renderer.beginRendering(width, height); 
+
+    // Pre-shift text to make it rotate from center
+    // of string and not from left point
+    int xPreShift = 0, yPreShift = 0;
+
+    if (rotationD != 0) {
+      xPreShift = getTextLengthInPixels(font, label) / 2;
+      yPreShift = font.getHeight()/2;
+    }
+
+    GL2 gl = getGL2();
+    gl.glMatrixMode(GL2.GL_MODELVIEW);
+    gl.glPushMatrix();
+    gl.glTranslatef(screen.x + xPreShift, screen.y + yPreShift, 0);
+    gl.glScalef(1, 1, 1);
+    gl.glRotatef(rotationD, 0, 0, 1);
+
+    // Shifting text to deal with rotation
+    int xPostShift = -xPreShift;
+    int yPostShift = -yPreShift;
+
+    renderer.draw(label, xPostShift, yPostShift);
+    renderer.endRendering();
+    renderer.flush();
+
+    gl.glPopMatrix();
+
   }
 
+  protected TextRenderer getOrCreateTextRenderer(Font font) {
+    TextRenderer renderer = txtRendererMap.get(font);
+
+    if (renderer == null) {
+      renderer = new TextRenderer(toAWT(font), true, true, null);
+      // renderer.setSmoothing(false);// some GPU do not handle smoothing well
+      // renderer.setUseVertexArrays(false); // some GPU do not handle VBO properly
+      txtRendererMap.put(font, renderer);
+    }
+    return renderer;
+  }
+
+  protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
+
+  // protected TextLayout layout = new TextLayout();
+
+
+  /**
+   * Render 2D text at the given 3D position using a font as supported by
+   * {@link #glutBitmapString(int, String)}.
+   * 
+   * @see {@link Font} to know the set of font name and size supported by this method.
+   */
   @Override
   public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c) {
     color(c);
@@ -474,7 +557,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public int getTextLengthInPixels(Font font, String string) {
-
+    // Try to get text width using onscreen graphics
     ICanvas c = getCanvas();
     if (c instanceof Component) {
       Graphics g = ((Component) c).getGraphics();
@@ -487,8 +570,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
         }
       }
     }
-    // fallback on glut
-    return glutBitmapLength(font.getCode(), string);
+    
+    // Try to get text width using text renderer offscreen
+    TextRenderer renderer = getOrCreateTextRenderer(font);
+    Rectangle2D r =   renderer.getBounds(string);
+    return (int)r.getWidth();
   }
 
   private java.awt.Font toAWT(Font font) {
@@ -655,11 +741,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
-  public void glStencilMask_False(){
-    gl.glStencilMask(GL.GL_FALSE);    
+  public void glStencilMask_False() {
+    gl.glStencilMask(GL.GL_FALSE);
   }
 
-  
+
   @Override
   public void glStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) {
     gl.glStencilOp(toInt(fail), toInt(zfail), toInt(zpass));
@@ -722,7 +808,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glClipPlane(int plane, double[] equation) {
-    //Array.print("NativePainter : glClipPlane : " + plane + " : ", equation);
+    // Array.print("NativePainter : glClipPlane : " + plane + " : ", equation);
     gl.getGL2().glClipPlane(plane, equation, 0);
   }
 
@@ -730,8 +816,8 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glEnable_ClipPlane(int plane) {
     gl.glEnable(clipPlaneId(plane));
   }
-  
-  /** Return the GL clip plane ID according to an ID in [0;5]*/
+
+  /** Return the GL clip plane ID according to an ID in [0;5] */
   @Override
   public int clipPlaneId(int id) {
     switch (id) {
@@ -1250,12 +1336,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glDisable_DepthTest() {
     gl.glDisable(GL.GL_DEPTH_TEST);
   }
-  
+
   @Override
   public void glEnable_Stencil() {
     gl.glEnable(GL2.GL_STENCIL_TEST);
   }
-  
+
   @Override
   public void glDisable_Stencil() {
     gl.glDisable(GL2.GL_STENCIL_TEST);

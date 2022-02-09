@@ -7,10 +7,13 @@ import org.jzy3d.plot3d.rendering.view.HiDPI;
 public class ITTest_Surface extends ITTest{
   @Test
   public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
+    System.out.println("ITTest : whenSurfaceChart_ThenMatchBaselineImagePixelwise");
+    
+    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.ON);
+    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.OFF);
 
     whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.EmulGL_AWT, HiDPI.ON);
     whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.EmulGL_AWT, HiDPI.OFF);
-    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.OFF);
   }
 
   private void whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT wt, HiDPI hidpi) {
