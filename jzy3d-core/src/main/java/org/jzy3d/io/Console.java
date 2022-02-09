@@ -7,6 +7,9 @@ import com.diogonunes.jcolor.Attribute;
 /**
  * A console output helper able to add coloring in console.
  * 
+ * It require the console to have an ANSI interpreter, e.g. Eclipse needs something like
+ * <a href="https://marketplace.eclipse.org/content/ansi-escape-console">this</a>.
+ * 
  * @author Martin Pernollet
  *
  */
@@ -28,6 +31,7 @@ public class Console {
   }
 
   public static Attribute toBackground(Color background) {
-    return Attribute.BACK_COLOR((int)(background.r*255), (int)(background.g*255), (int)(background.b*255));
+    return Attribute.BACK_COLOR((int) (background.r * 255), (int) (background.g * 255),
+        (int) (background.b * 255));
   }
 }

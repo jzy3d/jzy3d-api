@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.text.renderers;
 
-import java.awt.Graphics2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
@@ -16,19 +15,9 @@ import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
- * The {@link ITextRenderer} is able to draw basic OpenGL font as supported by
- * {@link IPainter#glutBitmapString(Font, String, Coord3d, Color)}.
- * 
- * Concrete painters might rely on
- * <ul>
- * <li>EmulGL : AWT Font rendering by {@link Graphics2D#drawString(String, float, float)} by using
- * jGL AWT helpers.
- * <li>Native : GLUT.glutBitmapString(Font, String, Coord3d, Color)
- * </ul>
- * 
- * As EmulGL painter relies on AWT, much more font than the base OpenGL one can be used as it is
- * backed by AWT.
+ * Use instead {@link TextRenderer}.
  */
+@Deprecated
 public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRenderer {
   protected static Logger LOGGER = LogManager.getLogger(TextBitmapRenderer.class);
 
@@ -40,11 +29,12 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
    */
   @Override
   public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
-      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
-    if(text==null) {
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset,
+      Coord3d sceneOffset) {
+    if (text == null) {
       return null;
     }
-    
+
     painter.color(color);
 
     // compute a corrected 3D position according to the 2D layout on screen
@@ -65,23 +55,13 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     positionAligned = positionAligned.add(sceneOffset);
 
     // Draws actual string
-    //painter.glutBitmapString(font, text, positionAligned, color);
-    
-    painter.drawText(font, text, positionAligned, color, rotation);
+    painter.glutBitmapString(font, text, positionAligned, color);
     
     // Return text bounds
     return computeTextBounds(painter, font, screenAligned, textWidth);
   }
 
-  /** Left as a helper for subclasses. TODO delete me and subclass */
-  protected void glRasterPos(IPainter painter, Coord3d sceneOffset,
-      Coord3d screenPositionAligned3d) {
-    if (spaceTransformer != null) {
-      screenPositionAligned3d = spaceTransformer.compute(screenPositionAligned3d);
-    }
-
-    painter.raster(screenPositionAligned3d.add(sceneOffset), null);
-  }
+  
 
   /** Convert a 2D screen position to 3D world coordinate */
   protected Coord3d to3D(IPainter painter, Coord3d screen) {
@@ -96,8 +76,8 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     return model;
   }
 
-  protected BoundingBox3d computeTextBounds(IPainter painter, Font font,
-      Coord3d posScreenShifted, float strlen) {
+  protected BoundingBox3d computeTextBounds(IPainter painter, Font font, Coord3d posScreenShifted,
+      float strlen) {
     Coord3d botLeft = new Coord3d();
     Coord3d topRight = new Coord3d();
     botLeft.x = posScreenShifted.x;
@@ -112,6 +92,4 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     txtBounds.add(painter.getCamera().screenToModel(painter, topRight));
     return txtBounds;
   }
-
-
 }
