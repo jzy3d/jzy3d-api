@@ -17,6 +17,7 @@ import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.junit.ChartTester;
 import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.builder.Func3D;
@@ -34,6 +35,10 @@ public class ITTest {
   public static final String KV = "=";
 
   static Rectangle offscreenDimension = new Rectangle(800,600);
+  
+  // running offscreen may prevent to get a HiDPI image
+  // hence not testing HiDPI/text layout
+  static boolean runOffscreen = false;
   
   public enum WT{
     EmulGL_AWT, Native_AWT
@@ -57,6 +62,9 @@ public class ITTest {
     section(sb, "Scatter");
     
     section(sb, "Text", null, "Font=AppleChancery24");
+    section(sb, "Text", "whenDrawableTextRenderer", null);
+    
+    
     section(sb, "AxisLabelRotateLayout");
     
     section(sb, "Colorbar", "Shrink", null);
@@ -86,6 +94,7 @@ public class ITTest {
     line(sb, "<tr>");
     line(sb, "<td>"+ title(WT.EmulGL_AWT, HiDPI.ON) +"</td>");
     line(sb, "<td>"+ title(WT.EmulGL_AWT, HiDPI.OFF) +"</td>");
+    line(sb, "<td>"+ title(WT.Native_AWT, HiDPI.ON) +"</td>");
     line(sb, "<td>"+ title(WT.Native_AWT, HiDPI.OFF) +"</td>");
     line(sb, "</tr>");
 
@@ -93,14 +102,29 @@ public class ITTest {
     line(sb, "<tr>");
     line(sb, "<td>" + imgTest(name(testName, caseName, WT.EmulGL_AWT, HiDPI.ON, info))+ "</td>");
     line(sb, "<td>" + imgTest(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
+    line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_AWT, HiDPI.ON, info))+ "</td>");
     line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
     line(sb, "</tr>");
+
+    if(false) {
+      line(sb, "<tr>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.ON, info))+ "</td>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.ON, info))+ "</td>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
+      line(sb, "</tr>");
+    }
+    
     line(sb, "</table>");
     line(sb);
   }
   
   public static String imgTest(String name) {
     return "<img src=\"src/test/resources/" + name +".png\">";
+  }
+
+  public static String imgDiff(String name) {
+    return "<img src=\"target/error-" + name +"#DIFF#.png\">";
   }
 
   public static String title(WT wt, HiDPI hidpi) {
@@ -127,20 +151,31 @@ public class ITTest {
   }
 
   public static Chart chart(WT windowingToolkit, HiDPI hidpi) {
+    return chart(windowingToolkit, hidpi, offscreenDimension);
+  }
+  
+  public static Chart chart(WT windowingToolkit, HiDPI hidpi, Rectangle offscreenDimension) {
+    System.out.println(" ITTest : " + windowingToolkit + " " + hidpi);
+    
     if(WT.EmulGL_AWT.equals(windowingToolkit)) {
-      return chartEmulGL(hidpi);
+      return chartEmulGL(hidpi, offscreenDimension);
     }
     else if(WT.Native_AWT.equals(windowingToolkit)) {
-      return chartNative(hidpi);
+      return chartNative(hidpi, offscreenDimension);
     }
     else {
       throw new IllegalArgumentException("Unsupported toolkit : " + windowingToolkit);
     }
   }
   
-  public static Chart chartEmulGL(HiDPI hidpi) {
+  public static Chart chartEmulGL(HiDPI hidpi, Rectangle offscreenDimension) {
     ChartFactory factory = new EmulGLChartFactory();
-    factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
+    
+    if(runOffscreen) {
+      factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
+      System.err.println(" ITTest will run offscreen, which may not enable HiDPI hence produce inaccurate layout with texts");
+
+    }
     Quality q = quality(hidpi);
     Chart chart = factory.newChart(q);
     return chart;
@@ -153,9 +188,12 @@ public class ITTest {
     return q;
   }
   
-  public static Chart chartNative(HiDPI hidpi) {
+  public static Chart chartNative(HiDPI hidpi, Rectangle offscreenDimension) {
     AWTChartFactory factory = new AWTChartFactory();
-    factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
+    
+    if(runOffscreen)
+      factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
+    
     Quality q = quality(hidpi);
     Chart chart = factory.newChart(q);
     return chart;
@@ -169,22 +207,34 @@ public class ITTest {
   }
   
   public static void assertChart(Chart chart, String name) {
-    if(chart.getQuality().isHiDPIEnabled()) {
-      IPainterFactory painter = chart.getFactory().getPainterFactory();
-      chart.open(painter.getOffscreenDimension().width, painter.getOffscreenDimension().height);
+    IPainterFactory painter = chart.getFactory().getPainterFactory();
 
-      //sleep(300); // need to wait a little before hidpi occurs
-      // or may chart.render() as well and ensure colorbar is reset
-      chart.render();
-      
-      // intentionnaly add a few render to verify that the margin and offset
-      // processing remain stable (I observed bugs where a margin may reduce
-      // after each rendering, hence the colorbar moves)
-      int nRefresh = 6;
-      for (int i = 0; i < nRefresh; i++) {
-        chart.render();
-      }
+    Dimension dim ;
+    
+    if(painter.isOffscreen()) {
+      dim = painter.getOffscreenDimension();
+      //System.out.println(" ITTest.assertChart OFFSCREEN " + dim.width + "x"+ dim.height);
     }
+    else {
+      dim = new Dimension(offscreenDimension.width, offscreenDimension.height);
+      //System.out.println(" ITTest.assertChart OPEN frame " + dim.width + "x"+ dim.height);
+    }
+
+    chart.open(name, dim.width, dim.height);
+
+    
+    // trigger a first render since the first generated may not consider the appropriate
+    // pixel ratio
+    chart.render();
+    
+    // intentionnaly add a few render to verify that the margin and offset
+    // processing remain stable (I observed bugs where a margin may reduce
+    // after each rendering, hence the colorbar moves)
+    int nRefresh = 6;
+    for (int i = 0; i < nRefresh; i++) {
+      chart.render();
+    }
+
     
     // EMULGL
     if(chart.getFactory() instanceof EmulGLChartFactory) {

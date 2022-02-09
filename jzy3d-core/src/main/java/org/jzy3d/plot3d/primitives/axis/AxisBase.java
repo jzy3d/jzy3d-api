@@ -7,7 +7,7 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.text.ITextRenderer;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
@@ -21,7 +21,7 @@ public class AxisBase implements IAxis {
   protected IAxisLayout layout;
   protected SpaceTransformer spaceTransformer;
 
-  protected ITextRenderer textRenderer = new TextBitmapRenderer();
+  protected ITextRenderer textRenderer = new TextRenderer();
 
 
   /** Create a simple axe centered on (0,0,0), with a dimension of 1. */

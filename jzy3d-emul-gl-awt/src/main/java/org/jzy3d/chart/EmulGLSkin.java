@@ -9,7 +9,7 @@ import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.view.layout.EmulGLViewAndColorbarsLayout;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 /**
  * {@link EmulGLSkin} is a chart facade that returns known subtypes of chart components already downcasted.
@@ -98,8 +98,8 @@ public class EmulGLSkin {
     return getSlaveThreadController(getMouse());
   }
   
-  public TextBitmapRenderer getAxisTextRenderer() {
-    return ((TextBitmapRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer());
+  public TextRenderer getAxisTextRenderer() {
+    return ((TextRenderer)((AxisBox)chart.getView().getAxis()).getTextRenderer());
 
   }
 

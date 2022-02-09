@@ -16,7 +16,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 
 /**
@@ -25,8 +25,8 @@ import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
  * The {@link AWTTextOverlay} allows computing the 2d position of a text in the window, according to
  * its required position in the 3d environment (using appenText method). As a 2nd pass, it might be
  * rendered into a java {@link Graphics} context. The interesting thing, compared to the currently
- * used {@link TextBitmapRenderer}, is that the user may select any java Font, whereas the
- * {@link TextBitmapRenderer} only relies on Helvetica font provided by opengl.
+ * used {@link TextRenderer}, is that the user may select any java Font, whereas the
+ * {@link TextRenderer} only relies on Helvetica font provided by opengl.
  * 
  * Actually no need to urgently correct these following todo: due to the problems related to
  * post/pre rendering (blinking), this text Renderer is not used. An alternative would be to render

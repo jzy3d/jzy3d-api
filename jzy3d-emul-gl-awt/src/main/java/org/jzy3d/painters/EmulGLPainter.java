@@ -3,6 +3,7 @@ package org.jzy3d.painters;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.Buffer;
@@ -680,19 +681,34 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
    */
   @Override
   public int getTextLengthInPixels(Font font, String string) {
+    if(font==null) {
+      throw new NullPointerException("Font is null");
+    }
+    Graphics g = null;
+    
+    // Try getting an onscreen canvas graphics
     EmulGLCanvas c = (EmulGLCanvas) getCanvas();
     if (c != null) {
-      Graphics g = c.getGraphics();
-      if (g != null && font != null) {
-        g.setFont(toAWT(font)); // TODO : cache?
+      g = c.getGraphics();
+    }
 
-        FontMetrics fm = g.getFontMetrics();
-        if (fm != null) {
-          return fm.stringWidth(string);
-        }
+    // Try getting an offscreen image graphics
+    if(g==null) {
+      BufferedImage image = getGL().getRenderedImage();
+      g = image.getGraphics();
+    }
+    
+    // Hope to have a graphics and process string width
+    if (g != null) {
+      g.setFont(toAWT(font)); // TODO : cache?
+
+      FontMetrics fm = g.getFontMetrics();
+      if (fm != null) {
+        return fm.stringWidth(string);
       }
     }
-    // fallback on glut
+
+    // Fallback on glut
     return glutBitmapLength(font.getCode(), string);
   }
 
@@ -708,6 +724,13 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
         color.b, 0);
   }
   
+  /**
+   * Render 2D text at the given 3D position.
+   * 
+   * The {@link Font} can be any font name and size supported by AWT.
+   * 
+   * Rotation is in radian and is applied at the center of the text to avoid messing up text layout.
+   */
   @Override
   public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
     glut.glutBitmapString(toAWT(font), label, position.x, position.y, position.z, color.r, color.g,

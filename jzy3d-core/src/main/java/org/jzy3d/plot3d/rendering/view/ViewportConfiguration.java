@@ -78,7 +78,7 @@ public class ViewportConfiguration {
 
   @Override
   public String toString() {
-    return "(ViewPort) width=" + width + " height=" + height + " x=" + x + " y=" + y;
+    return "(ViewPort) width=" + width + " height=" + height + " x=" + x + " y=" + y + " mode=" + mode;
   }
 
   protected int width;

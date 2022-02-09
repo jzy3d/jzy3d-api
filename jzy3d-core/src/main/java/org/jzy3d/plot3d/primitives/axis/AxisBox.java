@@ -22,7 +22,7 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 
@@ -107,7 +107,7 @@ public class AxisBox implements IAxis {
     //else
     //  setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
     wholeBounds = new BoundingBox3d();
-    textRenderer = new TextBitmapRenderer();
+    textRenderer = new TextRenderer();
     rotateLabel = new AxisLabelRotator();
     labels = new AxisLabelProcessor(this);
     ticks = new AxisTickProcessor(this);

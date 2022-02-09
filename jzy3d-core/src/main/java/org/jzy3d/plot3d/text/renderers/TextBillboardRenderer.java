@@ -13,6 +13,10 @@ import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
+ * Use instead {@link TextRenderer}.
+ * 
+ *  
+ *  
  * A {@link TextBillboardRenderer} allows writing 2d text always facing the Camera of a 3d Scene.
  * <br>
  * 
@@ -40,6 +44,7 @@ import org.jzy3d.plot3d.text.align.Vertical;
  * 
  * @author Martin Pernollet
  */
+@Deprecated()
 public class TextBillboardRenderer extends AbstractTextRenderer implements ITextRenderer {
   /**
    * The TextBillboard class provides support for drawing ASCII characters Any non ascii caracter
