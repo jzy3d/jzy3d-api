@@ -11,6 +11,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.NativeAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
@@ -153,6 +154,12 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
   public double getPixelScaleY() {
     return window.getSurfaceHeight() / (double) getHeight();
   }
+  
+  @Override
+  public Coord2d getPixelScaleJVM() {
+    return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
+  }
+
 
   public GLWindow getWindow() {
     return window;
