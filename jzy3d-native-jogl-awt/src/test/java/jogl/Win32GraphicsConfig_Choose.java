@@ -5,7 +5,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 
 import jogamp.nativewindow.jawt.windows.Win32SunJDKReflection;
-import sun.awt.Win32GraphicsConfig;
+//import sun.awt.Win32GraphicsConfig;
 
 /**
  * Analyzing 
@@ -20,12 +20,12 @@ public class Win32GraphicsConfig_Choose {
 
 		getPixelFormatByReflection();
 
-		getPixelFormat();
+		//getPixelFormat();
 
 	}
 
 	// Unsastified link if it is called first. OK if reflective calls is made before
-	private static void getPixelFormat() {
+	/*private static void getPixelFormat() {
 		System.out.println("=== getPixelFormat ===");
 		sun.awt.Win32GraphicsDevice d = new sun.awt.Win32GraphicsDevice(0);
 
@@ -39,7 +39,7 @@ public class Win32GraphicsConfig_Choose {
 		// reproduce what is found in Win32SunJDKReflection.graphicsConfigurationGetPixelFormatID
 		
 		int pfdId = c.getVisual();
-	}
+	}*/
 	
 	private static void getPixelFormatByReflection() {
 		System.out.println("=== getPixelFormatByReflection ===");
