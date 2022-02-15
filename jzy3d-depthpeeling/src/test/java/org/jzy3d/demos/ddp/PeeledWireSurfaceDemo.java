@@ -16,6 +16,7 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 
 public class PeeledWireSurfaceDemo {
@@ -49,6 +50,10 @@ public class PeeledWireSurfaceDemo {
     chart.getScene().getGraph().add(surface);
     
     chart.getScene().getGraph().setStrategy(null);
+    
+    // depth peeling shaders do not mix correctly with 2.0.1 TextRenderer
+    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
+
 
     // Setup a colorbar
     AWTColorbarLegend cbar = new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
