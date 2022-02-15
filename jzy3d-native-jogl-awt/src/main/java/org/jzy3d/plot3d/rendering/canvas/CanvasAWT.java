@@ -78,8 +78,6 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     
     if (quality.isPreserveViewportSize())
       setPixelScale(newPixelScaleIdentity());
-    else
-      setPixelScale(getPixelScale());
   }
 
   protected void watchPixelScale() {

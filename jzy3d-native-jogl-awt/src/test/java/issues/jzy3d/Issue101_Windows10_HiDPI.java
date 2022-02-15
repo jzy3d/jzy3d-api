@@ -36,7 +36,7 @@ public class Issue101_Windows10_HiDPI extends AWTAbstractAnalysis {
     
     FrameAWT f = ((FrameAWT)frame);
     
-    CanvasAWT canvas = (CanvasAWT)d.getChart().getCanvas();
+    /*CanvasAWT canvas = (CanvasAWT)d.getChart().getCanvas();
     
     float[] result = new float[2];
     canvas.getCurrentSurfaceScale(result);
@@ -44,7 +44,7 @@ public class Issue101_Windows10_HiDPI extends AWTAbstractAnalysis {
     Array.print(result);
 
     float[] test = {2.0f, 2.0f};
-    canvas.setPixelScale(test);
+    //canvas.setPixelScale(test);
     
     canvas.getCurrentSurfaceScale(result);
     
@@ -52,7 +52,7 @@ public class Issue101_Windows10_HiDPI extends AWTAbstractAnalysis {
     
     System.out.println(canvas.getPixelScale());
     
-    canvas.setPixelScale(canvas.getPixelScale());
+    canvas.setPixelScale(canvas.getPixelScale());*/
 
     
     Rectangle r = f.getBounds();
