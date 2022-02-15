@@ -91,13 +91,15 @@ public abstract class AbstractViewportManager {
     Coord2d scaleHardware = painter.getCanvas().getPixelScale(); 
     Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM(); 
     
-    if(scaleJVM.x > scaleHardware.x || scaleJVM.y > scaleHardware.y) {
+    boolean isHiDPIEnabled = painter.getQuality().isHiDPIEnabled();
+    
+    if(isHiDPIEnabled && isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
       // Workaround for https://github.com/jzy3d/jogl/issues/8
       Coord2d scale = scaleJVM.div(scaleHardware);
       
-      //System.out.println("Hardware : " + scaleHardware);
-      //System.out.println("JVM      : " + scaleJVM);
-      //System.out.println("Scale    : " + scale);
+      System.out.println("Hardware : " + scaleHardware);
+      System.out.println("JVM      : " + scaleJVM);
+      System.out.println("Scale    : " + scale);
       
       screenWidth = (int)(screenWidth*scale.x);
       screenHeight = (int)(screenHeight*scale.y);
@@ -136,6 +138,10 @@ public abstract class AbstractViewportManager {
       renderSubScreenGrid(painter);
 
     return lastViewPort;
+  }
+
+  private boolean isJVMScaleLargerThanNativeScale(Coord2d scaleHardware, Coord2d scaleJVM) {
+    return scaleJVM.x > scaleHardware.x || scaleJVM.y > scaleHardware.y;
   }
 
   /**
