@@ -90,10 +90,18 @@ public abstract class AbstractViewportManager {
     // can't guess it (which is the case for Windows 10).
     Coord2d scaleHardware = painter.getCanvas().getPixelScale(); 
     Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM(); 
-    Coord2d scale = scaleJVM.div(scaleHardware);
     
-    screenWidth = (int)(screenWidth*scale.x);
-    screenHeight = (int)(screenHeight*scale.y);
+    if(scaleJVM.x > scaleHardware.x || scaleJVM.y > scaleHardware.y) {
+      // Workaround for https://github.com/jzy3d/jogl/issues/8
+      Coord2d scale = scaleJVM.div(scaleHardware);
+      
+      //System.out.println("Hardware : " + scaleHardware);
+      //System.out.println("JVM      : " + scaleJVM);
+      //System.out.println("Scale    : " + scale);
+      
+      screenWidth = (int)(screenWidth*scale.x);
+      screenHeight = (int)(screenHeight*scale.y);
+    }
 	  
     // Stretch projection on the whole viewport
     if (ViewportMode.STRETCH_TO_FILL.equals(mode)
