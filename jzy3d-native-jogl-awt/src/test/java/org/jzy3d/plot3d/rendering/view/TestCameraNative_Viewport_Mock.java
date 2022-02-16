@@ -6,6 +6,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
@@ -39,7 +40,7 @@ public class TestCameraNative_Viewport_Mock {
 
     CheckViewport check = new CheckViewport();
 
-    NativeDesktopPainter painter = mockWithViewportCheck(q, scaleGPU, scaleJVM, check);
+    NativeDesktopPainter painter = mockWithViewportCheck("Windows 10", scaleGPU, scaleJVM, check);
 
     // -----------------------------------------------
     // Given no pixel scale
@@ -63,7 +64,7 @@ public class TestCameraNative_Viewport_Mock {
 
     scaleGPU.set(1, 1);
     scaleJVM.set(PIXEL_RATIO, PIXEL_RATIO);
-    q.setHiDPI(HiDPI.ON);
+    //q.setHiDPI(HiDPI.ON);
 
     // When applying viewport parameters (due to window size)
     camera.setViewPort(frameWidth, frameHeight, 0, 1);
@@ -74,15 +75,19 @@ public class TestCameraNative_Viewport_Mock {
     Assert.assertEquals(frameHeight * PIXEL_RATIO, check.height);
 
     // -----------------------------------------------
-    // Given : JVM has a pixel scale but not the JOGL canvas, but HiDPI disabled
+    // Given : the same on macOS : nothing applied
+    
+    painter = mockWithViewportCheck("Mac OS X", scaleGPU, scaleJVM, check);
 
-    q.setHiDPI(HiDPI.OFF);
+    scaleGPU.set(1, 1);
+    scaleJVM.set(PIXEL_RATIO, PIXEL_RATIO);
+    //q.setHiDPI(HiDPI.ON);
 
     // When applying viewport parameters (due to window size)
     camera.setViewPort(frameWidth, frameHeight, 0, 1);
     camera.applyViewport(painter);
 
-    // Then no hack scale applied
+    // Then hack scale IS applied
     Assert.assertEquals(frameWidth, check.width);
     Assert.assertEquals(frameHeight, check.height);
 
@@ -106,14 +111,14 @@ public class TestCameraNative_Viewport_Mock {
   }
 
 
-  protected NativeDesktopPainter mockWithViewportCheck(Quality q, Coord2d scaleHard,
+  protected NativeDesktopPainter mockWithViewportCheck(String osName, Coord2d scaleHard,
       Coord2d scaleVM, CheckViewport check) {
     NativeDesktopPainter painter = new NativeDesktopPainter() {
       @Override
-      public Quality getQuality() {
-        return q;
+      public OperatingSystem getOS() {
+        return new OperatingSystem(osName);
       }
-
+      
       @Override
       public void glViewport(int x, int y, int width, int height) {
         check.x = x;
