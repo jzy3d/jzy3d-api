@@ -97,9 +97,9 @@ public abstract class AbstractViewportManager {
       // Workaround for https://github.com/jzy3d/jogl/issues/8
       Coord2d scale = scaleJVM.div(scaleHardware);
       
-      System.out.println("Hardware : " + scaleHardware);
-      System.out.println("JVM      : " + scaleJVM);
-      System.out.println("Scale    : " + scale);
+      //System.out.println("Hardware : " + scaleHardware);
+      //System.out.println("JVM      : " + scaleJVM);
+      //System.out.println("Scale    : " + scale);
       
       screenWidth = (int)(screenWidth*scale.x);
       screenHeight = (int)(screenHeight*scale.y);
