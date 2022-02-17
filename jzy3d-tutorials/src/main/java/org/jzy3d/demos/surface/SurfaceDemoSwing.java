@@ -40,8 +40,10 @@ public class SurfaceDemoSwing extends AbstractAnalysis {
     final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps), func);
     surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .5f)));
     surface.setFaceDisplayed(true);
-    surface.setWireframeDisplayed(false);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
 
+    
     // Create a chart
     chart = new SwingChartFactory().newChart(Quality.Advanced());
     chart.add(surface);
