@@ -142,7 +142,7 @@ public class Renderer3d implements GLEventListener {
 
   @Override
   public void dispose(GLAutoDrawable arg0) {
-    view = null;
+    //view = null;
   }
 
   /********************* SCREENSHOTS ***********************/
