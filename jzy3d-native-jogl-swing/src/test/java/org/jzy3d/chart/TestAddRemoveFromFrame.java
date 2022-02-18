@@ -24,7 +24,7 @@ public class TestAddRemoveFromFrame {
     Chart chart = factory.newChart(q);
     chart.add(SampleGeom.surface());
     
-//    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
+    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
 
     Frame frame = new Frame();
     frame.add((java.awt.Component)chart.getCanvas());
