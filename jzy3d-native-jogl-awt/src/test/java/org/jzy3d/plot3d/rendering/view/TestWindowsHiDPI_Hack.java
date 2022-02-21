@@ -12,7 +12,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public class TestCameraNative_Viewport_Mock {
+public class TestWindowsHiDPI_Hack {
   @Test
   public void test() {
 
