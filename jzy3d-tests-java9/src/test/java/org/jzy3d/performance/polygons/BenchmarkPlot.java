@@ -36,6 +36,9 @@ public class BenchmarkPlot implements BenchmarkXLS{
     int stepMin = 2; // min number of steps for surface
     int stepMax = 100; // max number of steps for surface
     String info = "emulgl-hidpi"; // HiDPI setting during benchmark
+    //String info = "native"; // HiDPI setting during benchmark
+    
+    int timeMax = 250;
 
     
     String file = BenchmarkUtils.getExcelFilename(outputFolder, stepMin, stepMax, info);
@@ -88,7 +91,7 @@ public class BenchmarkPlot implements BenchmarkXLS{
     c.getAxisLayout().setFont(Font.Helvetica_18);
     c.getAxisLayout().setXTickRenderer(new IntegerTickRenderer(true));
     
-    c.getView().setBoundManual(new BoundingBox3d(0, (float)maxX, 0, 400, -10, 10));
+    c.getView().setBoundManual(new BoundingBox3d(0, (float)maxX, 0, timeMax, -10, 10));
     
     c.open(file, 1024, 768);
     

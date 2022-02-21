@@ -12,6 +12,7 @@ import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.awt.GLCanvas;
 
@@ -45,6 +46,9 @@ public class PeeledCubesDemo {
 
     AWTChartFactory f = new AWTChartFactory(p);
     Chart chart = f.newChart();
+ 
+    // depth peeling shaders do not mix correctly with 2.0.1 TextRenderer
+    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
 
     Coord3d p1 = Coord3d.ORIGIN;
     Coord3d p2 = new Coord3d(0.005f, 0.005f, 0.005f);

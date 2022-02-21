@@ -25,6 +25,8 @@ public class Win32GraphicsConfig_Choose {
 	}
 
 	// Unsastified link if it is called first. OK if reflective calls is made before
+	//
+	// Will only work on Windows!
 	/*private static void getPixelFormat() {
 		System.out.println("=== getPixelFormat ===");
 		sun.awt.Win32GraphicsDevice d = new sun.awt.Win32GraphicsDevice(0);
