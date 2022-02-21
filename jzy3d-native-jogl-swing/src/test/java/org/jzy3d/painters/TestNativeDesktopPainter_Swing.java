@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;
 
-public class TestNativeDesktopPainter {
+public class TestNativeDesktopPainter_Swing {
   @Test
   public void detectSwing() {
     NativeDesktopPainter p = new NativeDesktopPainter();
