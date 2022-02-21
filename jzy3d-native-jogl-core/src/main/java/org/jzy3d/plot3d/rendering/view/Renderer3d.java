@@ -138,11 +138,11 @@ public class Renderer3d implements GLEventListener {
     painter.setGL(canvas.getGL());
   }
 
-  // protected boolean first = true;
-
   @Override
   public void dispose(GLAutoDrawable arg0) {
-    //view = null;
+    // do not loose reference to view since the init/display/dispose may be called
+    // several time during the lifetime of this renderer and canvas, especially if the
+    // chart is embedded in dockable windows that involve parent component change.
   }
 
   /********************* SCREENSHOTS ***********************/
