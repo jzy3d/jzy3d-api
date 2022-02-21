@@ -83,11 +83,11 @@
 		</profile>
 
 		<profile>
-			<id>MacOS x86</id>
+			<id>MacOS x86_64</id>
 			<activation>
 				<os>
 					<family>mac</family>
-					<arch>x86</arch>
+					<arch>x86_64</arch>
 				</os>
 			</activation>
 			<dependencies>
