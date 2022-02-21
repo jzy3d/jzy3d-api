@@ -7,6 +7,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.os.OperatingSystem;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
@@ -40,7 +41,7 @@ public class TestWindowsHiDPI_Hack {
 
     CheckViewport check = new CheckViewport();
 
-    NativeDesktopPainter painter = mockWithViewportCheck("Windows 10", scaleGPU, scaleJVM, check);
+    NativeDesktopPainter painter = mockPainter("Windows 10", WindowingToolkit.AWT, scaleGPU, scaleJVM, check);
 
     // -----------------------------------------------
     // Given no pixel scale
@@ -73,11 +74,30 @@ public class TestWindowsHiDPI_Hack {
     // Then hack scale IS applied
     Assert.assertEquals(frameWidth * PIXEL_RATIO, check.width);
     Assert.assertEquals(frameHeight * PIXEL_RATIO, check.height);
+    
+    // -----------------------------------------------
+    // Ensure this does not apply to Swing chart
+
+    painter = mockPainter("Windows 10", WindowingToolkit.Swing, scaleGPU, scaleJVM, check);
+
+    
+    scaleGPU.set(1, 1);
+    scaleJVM.set(PIXEL_RATIO, PIXEL_RATIO);
+    //q.setHiDPI(HiDPI.ON);
+
+    // When applying viewport parameters (due to window size)
+    camera.setViewPort(frameWidth, frameHeight, 0, 1);
+    camera.applyViewport(painter);
+
+    // Then hack scale IS applied
+    Assert.assertEquals(frameWidth * 1, check.width); // not PIXEL_RATIO!
+    Assert.assertEquals(frameHeight * 1, check.height);
+
 
     // -----------------------------------------------
     // Given : the same on macOS : nothing applied
     
-    painter = mockWithViewportCheck("Mac OS X", scaleGPU, scaleJVM, check);
+    painter = mockPainter("Mac OS X", WindowingToolkit.AWT, scaleGPU, scaleJVM, check);
 
     scaleGPU.set(1, 1);
     scaleJVM.set(PIXEL_RATIO, PIXEL_RATIO);
@@ -111,12 +131,17 @@ public class TestWindowsHiDPI_Hack {
   }
 
 
-  protected NativeDesktopPainter mockWithViewportCheck(String osName, Coord2d scaleHard,
+  protected NativeDesktopPainter mockPainter(String osName, WindowingToolkit wt, Coord2d scaleHard,
       Coord2d scaleVM, CheckViewport check) {
     NativeDesktopPainter painter = new NativeDesktopPainter() {
       @Override
       public OperatingSystem getOS() {
         return new OperatingSystem(osName);
+      }
+      
+      @Override
+      public WindowingToolkit getWindowingToolkit() {
+        return wt;
       }
       
       @Override
