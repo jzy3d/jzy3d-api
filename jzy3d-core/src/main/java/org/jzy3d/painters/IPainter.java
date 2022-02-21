@@ -12,6 +12,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.os.OperatingSystem;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -141,6 +142,8 @@ public interface IPainter {
   public void setCanvas(ICanvas canvas);
   
   public OperatingSystem getOS();
+
+  public WindowingToolkit getWindowingToolkit();
 
   /**
    * Return the Quality setting of the chart, which may be different from the one given at the
