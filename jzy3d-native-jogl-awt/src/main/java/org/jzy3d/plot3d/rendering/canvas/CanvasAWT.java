@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
+import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
@@ -121,6 +123,10 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
       setSurfaceScale(new float[] {1f, 1f});
   }
 
+  public void setPixelScale(Coord2d scale) {
+	  setPixelScale(scale.toArray());
+  }
+  
   /**
    * Pixel scale is used to model the pixel ratio thay may be introduced by HiDPI or Retina
    * displays.
@@ -129,14 +135,24 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
   public Coord2d getPixelScale() {
     return new Coord2d(getPixelScaleX(), getPixelScaleY());
   }
-
+  
+  @Override
+  public Coord2d getPixelScaleJVM() {
+    return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
+  }
 
   public double getPixelScaleX() {
-    return getSurfaceWidth() / (double) getWidth();
+	double scale = getSurfaceWidth() / (double) getWidth();
+	return scale;
+	//double scale2 = AWTHelper.getPixelScaleX(this);
+	//return Math.max(scale, scale2);
   }
 
   public double getPixelScaleY() {
-    return getSurfaceHeight() / (double) getHeight();
+    double scale = getSurfaceHeight() / (double) getHeight();
+	return scale;
+    //double scale2 = AWTHelper.getPixelScaleY(this);
+	//return Math.max(scale, scale2);
   }
 
 

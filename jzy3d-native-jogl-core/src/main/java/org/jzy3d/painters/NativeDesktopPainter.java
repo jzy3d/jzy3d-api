@@ -3,7 +3,6 @@ package org.jzy3d.painters;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.font.FontRenderContext;
 import java.awt.geom.Rectangle2D;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
@@ -16,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -185,6 +185,24 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
     } else
       gl.glDisable(GL2.GL_POINT_SMOOTH);
+  }
+  
+  @Override
+  public WindowingToolkit getWindowingToolkit() {
+    String name = getCanvas().getClass().getSimpleName();
+    if(name.indexOf("CanvasAWT")>=0) {
+      return WindowingToolkit.AWT;
+    }
+    else if(name.indexOf("CanvasSwing")>=0) {
+      return WindowingToolkit.Swing;
+    }
+    else if(name.indexOf("CanvasNewtSWT")>=0) {
+      return WindowingToolkit.SWT;
+    }
+    else if(name.indexOf("OffscreenCanvas")>=0) {
+      return WindowingToolkit.Offscreen;
+    }
+    return WindowingToolkit.UNKOWN;
   }
 
   @Override
