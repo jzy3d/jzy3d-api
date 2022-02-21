@@ -11,6 +11,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.lights.Light;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 /**
  * Download https://download.jzy3d.org/objfiles/dragon.obj to src/library/models/dragon.obj if not yet available.
@@ -26,6 +27,10 @@ public class PeeledDragonDemo {
     AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
 
     Chart chart = f.newChart();
+    
+    // depth peeling shaders do not mix correctly with 2.0.1 TextRenderer
+    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
+
 
     String objFilePath = "data/models/dragon.obj";
     File file = new File("./" + objFilePath);

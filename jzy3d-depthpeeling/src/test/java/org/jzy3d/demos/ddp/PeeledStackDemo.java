@@ -11,6 +11,7 @@ import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
 public class PeeledStackDemo {
   static Color STACK_FACE = new Color(.5f, .5f, .5f, .5f);
@@ -24,6 +25,9 @@ public class PeeledStackDemo {
     AWTChartFactory f = new AWTChartFactory(new DepthPeelingPainterFactory());
 
     Chart chart = f.newChart(Quality.Nicest());
+
+    // depth peeling shaders do not mix correctly with 2.0.1 TextRenderer
+    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
 
 
     Coord3d c1 = new Coord3d(0, 0, -2.5);
