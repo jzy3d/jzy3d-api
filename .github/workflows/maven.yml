@@ -58,8 +58,11 @@ jobs:
         distribution: zulu
         #cache: maven # caching makes the post build action to fail
 
+    - name: Get Maven OS detection info
+      run: mvn enforcer:display-info
+
     - name: Build with Maven
-      run: mvn package --file pom.xml -Pintegration-tests
+      run: mvn package --file pom.xml
       # run: mvn -T 1C -B package --file pom.xml
       # run: mvn -T 1C -B -Dsurefire.useFile=false package --file pom.xml
       # -T 1C : 1 thread per cpu core
@@ -98,6 +101,9 @@ jobs:
         distribution: zulu
         #cache: maven # caching makes the post build action to fail
 
+    - name: Get Maven OS detection info
+      run: mvn enforcer:display-info
+
     - name: Build with Maven
       run: mvn package --file pom.xml
 
@@ -129,8 +135,11 @@ jobs:
         distribution: zulu
         #cache: maven # caching makes the post build action to fail
 
+    - name: Get Maven OS detection info
+      run: mvn enforcer:display-info
+
     - name: Build with Maven
-      run: mvn package --file pom.xml -Pintegration-tests
+      run: mvn package --file pom.xml
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
@@ -160,8 +169,11 @@ jobs:
         distribution: zulu
         #cache: maven # caching makes the post build action to fail
 
+    - name: Get Maven OS detection info
+      run: mvn enforcer:display-info
+
     - name: Build with Maven
-      run: mvn package --file pom.xml
+      run: mvn clean package --file pom.xml
 
     - name: Copy Surefire reports
       run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
