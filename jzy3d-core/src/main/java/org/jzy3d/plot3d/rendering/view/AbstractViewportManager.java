@@ -98,7 +98,7 @@ public abstract class AbstractViewportManager {
     //System.out.println("GPU   : " + scaleHardware);
     //System.out.println("JVM   : " + scaleJVM);
 
-    if(painter.getOS().getName().equals("windows 10")) {
+    if(painter.getOS().isWindows()) {
       if (isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
         // Workaround for https://github.com/jzy3d/jogl/issues/8
         Coord2d scale = scaleJVM.div(scaleHardware);

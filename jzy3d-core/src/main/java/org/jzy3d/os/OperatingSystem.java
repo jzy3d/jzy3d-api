@@ -14,8 +14,8 @@ public class OperatingSystem {
   }
   
   /** Mainly for test purpose.*/
-  public OperatingSystem(String name) {
-    this.name = name.toLowerCase();
+  public OperatingSystem(String osName) {
+    this.name = osName.toLowerCase();
     
     this.windows = (name.indexOf("win") >= 0);
     this.mac = (name.indexOf("mac") >= 0);
