@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.AWTColor;
@@ -499,10 +500,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   @Override
   public Coord2d getPixelScale() {
-    Graphics2D g2d = (Graphics2D) getGraphics();
-    AffineTransform globalTransform = g2d.getTransform();
-    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
+    return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
   }
+  
+  @Override
+  public Coord2d getPixelScaleJVM() {
+    return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
+  }
+
 
   @Override
   public IAnimator getAnimation() {

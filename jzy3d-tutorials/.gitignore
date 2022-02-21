@@ -8,3 +8,4 @@ data/lizard.mat
 .classpath
 .project
 .settings
+/bin/
