@@ -44,22 +44,13 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   /**
    * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.
    */
-  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci) {
-    this(factory, scene, quality, glci, false, false);
-  }
-
-  /**
-   * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.
-   */
-  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
     super(glci);
 
     view = scene.newView(this, quality);
     view.getPainter().setCanvas(this);
 
-    renderer = newRenderer(factory, traceGL, debugGL);
+    renderer = newRenderer(factory);
     addGLEventListener(renderer);
 
     // swing specific
@@ -104,7 +95,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     return new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE};
   }
 
-  private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
+  private Renderer3d newRenderer(IChartFactory factory) {
     return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
   }
 
