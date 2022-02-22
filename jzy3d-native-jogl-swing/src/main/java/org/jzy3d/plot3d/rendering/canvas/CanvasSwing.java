@@ -38,7 +38,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   protected Renderer3d renderer;
   protected IAnimator animator;
   protected List<ICanvasListener> canvasListeners = new ArrayList<>();
-  
+
   protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
 
   /**
@@ -72,24 +72,26 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     if (quality.isAnimated()) {
       animator.start();
     }
-    
-    if(ALLOW_WATCH_PIXEL_SCALE)
+
+    if (ALLOW_WATCH_PIXEL_SCALE)
       watchPixelScale();
 
     if (quality.isPreserveViewportSize())
       setPixelScale(newPixelScaleIdentity());
   }
-  
+
   protected void watchPixelScale() {
     exec.schedule(new PixelScaleWatch() {
       @Override
       public double getPixelScaleY() {
         return CanvasSwing.this.getPixelScaleY();
       }
+
       @Override
       public double getPixelScaleX() {
         return CanvasSwing.this.getPixelScaleX();
       }
+
       @Override
       protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
         CanvasSwing.this.firePixelScaleChanged(pixelScaleX, pixelScaleY);
@@ -196,9 +198,26 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 
   @Override
   public TextureData screenshot() {
+
+    // setupPrint(1, 1, 1, getRendererWidth(), getRendererHeight());
+
+    if (!isVisible() || !isRealized()) {
+      throw new RuntimeException(
+          "Can't make a screenshot out of a Swing canvas without making it visible. "
+          + "Either call chart.open(), add chart.getCanvas() to an application, or use an OffscreenChartFactory");
+      // because the display() method of GLJPanel skip invocation of renderer.display() if
+      // the panel is not visible.s
+    }
+
+
+
     renderer.nextDisplayUpdateScreenshot();
     display();
-    return renderer.getLastScreenshot();
+    TextureData screenshot = renderer.getLastScreenshot();
+
+    // releasePrint();
+
+    return screenshot;
   }
 
   /* */
