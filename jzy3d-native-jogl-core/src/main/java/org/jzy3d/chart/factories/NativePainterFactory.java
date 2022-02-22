@@ -52,16 +52,8 @@ public abstract class NativePainterFactory implements IPainterFactory {
 
   // @Override
   /** Only needed by {@link INativeCanvas} */
-  /*
-   * public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) { return new
-   * Renderer3d(view, traceGL, debugGL); }
-   */
-
-  // @Override
-  /** Only needed by {@link INativeCanvas} */
   public Renderer3d newRenderer3D(View view) {
     return new Renderer3d(view, traceGL, debugGL);
-    // newRenderer3D(view, this.traceGL, this.traceGL);
   }
 
   @Override
