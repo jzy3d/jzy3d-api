@@ -16,6 +16,15 @@ public class TestAddRemoveFromFrame {
   int RENDER_LOOP = 300;
   int FRAME_SIZE = 500;
   
+  public static void main(String[] args) {
+    AWTChartFactory factory = new AWTChartFactory();
+    
+    Frame awtFrame = new Frame();
+    
+    new TestAddRemoveFromFrame().addRemove_FromFrame_Scenario(factory, awtFrame, "addRemove_FromAWTFrame_AWTCanvas");
+    
+  }
+  
   @Test
   public void addRemove_FromAWTFrame_AWTCanvas() {
 
@@ -72,6 +81,7 @@ public class TestAddRemoveFromFrame {
     
     Chart chart = factory.newChart(q);
     chart.add(SampleGeom.surface());
+    chart.addMouse();
     
     //chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
 
