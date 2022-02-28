@@ -124,7 +124,11 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
         .info("getPixelScale() not implemented. Will return {1,1}");
     return new Coord2d(1, 1);
   }
-
+  
+  @Override
+  public Coord2d getPixelScaleJVM() {
+    return getPixelScale();
+  }
 
   @Override
   public GLOffscreenAutoDrawable getDrawable() {

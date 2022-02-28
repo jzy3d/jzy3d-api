@@ -543,8 +543,6 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
 
   protected void drawWireframe(IPainter painter) {
     if (wireframeDisplayed) {
-      painter.glPolygonMode(polygonMode, PolygonFill.LINE);
-
       if (polygonWireframeDepthTrick)
         applyDepthRangeForOverlying(painter); // OVER - enable range
 
@@ -588,6 +586,9 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
       painter.glEnd();
     }
     else {
+      
+      painter.glPolygonMode(polygonMode, PolygonFill.LINE);
+
       
       // default Draw geometry
       begin(painter);
