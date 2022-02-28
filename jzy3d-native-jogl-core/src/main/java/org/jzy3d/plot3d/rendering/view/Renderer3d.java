@@ -88,15 +88,19 @@ public class Renderer3d implements GLEventListener {
   public void display(GLAutoDrawable canvas) {
     profileDisplayTimer.tic();
 
-    GL gl = canvas.getGL();
-
-    updatePainterWithGL(canvas);
-
     if (view != null) {
-      view.clear();
-      view.render();
-
-      renderScreenshotIfRequired(gl);
+      if(canvas!=null && canvas.getGL()!=null) {
+  
+        updatePainterWithGL(canvas);
+  
+        if (view != null) {
+          view.clear();
+          view.render();
+  
+          renderScreenshotIfRequired(canvas.getGL());
+        }
+        
+      }
     }
 
     profileDisplayTimer.toc();
@@ -131,14 +135,15 @@ public class Renderer3d implements GLEventListener {
    * @param canvas
    */
   protected void updatePainterWithGL(GLAutoDrawable canvas) {
-    ((NativeDesktopPainter) view.getPainter()).setGL(canvas.getGL());
+    NativeDesktopPainter painter = ((NativeDesktopPainter) view.getPainter());
+    painter.setGL(canvas.getGL());
   }
-
-  // protected boolean first = true;
 
   @Override
   public void dispose(GLAutoDrawable arg0) {
-    view = null;
+    // do not loose reference to view since the init/display/dispose may be called
+    // several time during the lifetime of this renderer and canvas, especially if the
+    // chart is embedded in dockable windows that involve parent component change.
   }
 
   /********************* SCREENSHOTS ***********************/
