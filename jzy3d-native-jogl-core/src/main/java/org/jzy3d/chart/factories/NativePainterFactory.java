@@ -168,7 +168,10 @@ public abstract class NativePainterFactory implements IPainterFactory {
     return traceGL;
   }
 
-  /** If true, will enable GL code tracing in console. Default is false. */
+  /** If true, will enable GL code tracing in console. Default is false. 
+   * 
+   * This is equivalent to enabling the JVM flag <code>-Djogl.debug.TraceGLGL</code>
+   * */
   public void setTraceGL(boolean traceGL) {
     this.traceGL = traceGL;
   }
@@ -181,6 +184,8 @@ public abstract class NativePainterFactory implements IPainterFactory {
   /**
    * If true, will let GL trigger {@link GLException} if an error occur in OpenGL which ease
    * debugging. Default is false.
+   * 
+   * This is equivalent to enabling the JVM flag <code>-Djogl.debug.DebugGL</code>
    */
   @Override
   public void setDebugGL(boolean debugGL) {
