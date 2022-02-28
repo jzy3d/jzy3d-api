@@ -1,17 +1,20 @@
 package org.jzy3d.chart;
 
 import java.awt.Frame;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.SwingChartFactory;
+import org.jzy3d.maths.Utils;
 import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class TestAddRemoveFromFrame {
-
+  Logger logger = Logger.getLogger(TestAddRemoveFromFrame.class.getSimpleName());
+  
   int PAUSE_MS = 500;
   int RENDER_LOOP = 300;
   int FRAME_SIZE = 500;
@@ -71,7 +74,8 @@ public class TestAddRemoveFromFrame {
 
   }
 
-  private void addRemove_Scenario(ChartFactory factory, Frame frame, String title) {
+  public void addRemove_Scenario(ChartFactory factory, Frame frame, String title) {
+    info("-------------------------------------------------");
 
     // -------------------------------------------------
     // Given : a chart added to an application frame
@@ -95,14 +99,14 @@ public class TestAddRemoveFromFrame {
     // to achieve it before we start removing the component
 
     chart.render();
-    System.out.println("Should appear");
+    info(title + " : Should appear. Now waiting " + PAUSE_MS + " ms");
     chart.sleep(PAUSE_MS);
 
     // -------------------------------------------------
     // When : removing chart from the application frame
 
     frame.remove((java.awt.Component) chart.getCanvas());
-    System.out.println("Should disappear");
+    info(title + " : Should disappear. Now waiting " + PAUSE_MS + " ms");
 
     for (int i = 0; i < RENDER_LOOP; i++) {
       chart.render();
@@ -116,15 +120,20 @@ public class TestAddRemoveFromFrame {
     // When adding the chart again
 
     frame.add((java.awt.Component) chart.getCanvas());
-    System.out.println("Should re-appear");
+    info(title + " : Should re-appear. Now waiting " + PAUSE_MS + " ms");
 
     for (int i = 0; i < RENDER_LOOP; i++) {
       chart.render();
       // ((GLCanvas)chart.getCanvas()).display();
     }
     chart.sleep(PAUSE_MS);
+    
+    chart.dispose();
   }
 
-
+  public void info(String info) {
+    System.out.println(Utils.dat2str("H:mm:ss:SSS") + "\t" + info );
+    //logger.info(info);
+  }
 
 }
