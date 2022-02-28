@@ -43,11 +43,20 @@ public class Utils {
 
   /*************************************************************/
 
+  public static String dat2str() {
+    return dat2str(new Date());
+  }
+  
+  
   /** Convert a date to the format "dd/MM/yyyy HH:mm:ss". */
   public static String dat2str(Date date) {
     return dat2str(date, "dd/MM/yyyy HH:mm:ss");
   }
 
+  public static String dat2str(String format) {
+    return dat2str(new Date(), format);
+  }
+  
   /**
    * Some example format dd.MM.yy 09.04.98 yyyy.MM.dd G 'at' hh:mm:ss z 1998.04.09 AD at 06:15:55
    * PDT EEE, MMM d, ''yy Thu, Apr 9, '98 h:mm a 6:15 PM H:mm 18:15 H:mm:ss:SSS 18:15:55:624 K:mm
