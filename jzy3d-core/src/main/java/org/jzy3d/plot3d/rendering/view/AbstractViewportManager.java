@@ -1,9 +1,11 @@
 package org.jzy3d.plot3d.rendering.view;
 
 
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 
 /**
  * An {@link AbstractViewportManager} describes an element that occupies the whole rendering
@@ -55,7 +57,7 @@ public abstract class AbstractViewportManager {
     this.screenLeft = (int) (left * width);
     this.screenBottom = 0;// screenLeft + screenWidth;
   }
-  
+
   public int getSliceWidth(int width, float left, float right) {
     return (int) (width * (right - left));
   }
@@ -82,11 +84,39 @@ public abstract class AbstractViewportManager {
    * </ul>
    */
   public ViewportConfiguration applyViewport(IPainter painter) {
+
+    // We here scale the viewport by either 1 or by the ratio indicated by the JVM
+    // if only the JVM is able to detect the pixel ratio and if JOGL
+    // can't guess it (which is the case for Windows 10).
+    Coord2d scaleHardware = painter.getCanvas().getPixelScale();
+    Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM();
+
+    //boolean isHiDPIEnabled = painter.getQuality().isHiDPIEnabled();
+
+    
+    //System.out.println("HiDPI : " + isHiDPIEnabled);
+    //System.out.println("GPU   : " + scaleHardware);
+    //System.out.println("JVM   : " + scaleJVM);
+
+    if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
+      if (isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
+        // Workaround for https://github.com/jzy3d/jogl/issues/8
+        Coord2d scale = scaleJVM.div(scaleHardware);
+
+        //System.out.println("Scale : " + scale);
+
+        screenWidth = (int) (screenWidth * scale.x);
+        screenHeight = (int) (screenHeight * scale.y);
+      }
+    }
+    
+    
     // Stretch projection on the whole viewport
     if (ViewportMode.STRETCH_TO_FILL.equals(mode)
         || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) {
       screenXOffset = screenLeft;
       screenYOffset = 0;
+
 
       painter.glViewport(screenXOffset, screenYOffset, screenWidth, screenHeight);
 
@@ -103,7 +133,8 @@ public abstract class AbstractViewportManager {
 
       painter.glViewport(screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
 
-      lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim, screenXOffset, screenYOffset);
+      lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim, screenXOffset,
+          screenYOffset);
       lastViewPort.setMode(mode);
     } else {
       throw new IllegalArgumentException("unknown mode " + mode);
@@ -114,6 +145,10 @@ public abstract class AbstractViewportManager {
       renderSubScreenGrid(painter);
 
     return lastViewPort;
+  }
+
+  private boolean isJVMScaleLargerThanNativeScale(Coord2d scaleHardware, Coord2d scaleJVM) {
+    return scaleJVM.x > scaleHardware.x || scaleJVM.y > scaleHardware.y;
   }
 
   /**

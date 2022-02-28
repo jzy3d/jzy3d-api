@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
@@ -149,6 +150,11 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     return new Coord2d(getPixelScaleX(), getPixelScaleY());
   }
 
+  @Override
+  public Coord2d getPixelScaleJVM() {
+    return getPixelScale();
+  }
+  
 
   public double getPixelScaleX() {
     return window.getSurfaceWidth() / (double) getSize().x;

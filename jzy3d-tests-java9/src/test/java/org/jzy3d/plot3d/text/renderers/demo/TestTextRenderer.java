@@ -1,4 +1,4 @@
-package org.jzy3d.plot3d.text.renderers;
+package org.jzy3d.plot3d.text.renderers.demo;
 
 
 import org.junit.Test;

@@ -17,11 +17,8 @@ public class SwingPainterFactory extends AWTPainterFactory {
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
-    boolean traceGL = false;
-    boolean debugGL = false;
-
     return new CanvasSwing(factory, scene, quality,
-        ((NativePainterFactory) factory.getPainterFactory()).getCapabilities(), traceGL, debugGL);
+        ((NativePainterFactory) factory.getPainterFactory()).getCapabilities());
   }
 
   @Override

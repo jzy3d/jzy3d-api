@@ -105,6 +105,12 @@ public interface ICanvas {
    */
   public Coord2d getPixelScale();
   
+  
+  /**
+   * Provide pixel scale as considered feasible by the JVM.
+   */
+  public Coord2d getPixelScaleJVM();
+  
   public double getLastRenderingTimeMs();
   
   public static final double LAST_RENDER_TIME_UNDEFINED = -1;
