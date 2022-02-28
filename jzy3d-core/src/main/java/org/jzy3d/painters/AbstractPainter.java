@@ -6,6 +6,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
+import org.jzy3d.os.OperatingSystem;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -19,11 +21,24 @@ public abstract class AbstractPainter implements IPainter {
   protected Camera camera;
   protected View view;
   protected ICanvas canvas;
+  protected OperatingSystem os = new OperatingSystem();
 
   public AbstractPainter() {
     super();
   }
+  
+  @Override
+  public OperatingSystem getOS() {
+    return os;
+  }
+  
+  @Override
+  public WindowingToolkit getWindowingToolkit() {
+    return WindowingToolkit.UNKOWN;
+  }
 
+  
+  
   @Override
   public View getView() {
     return view;

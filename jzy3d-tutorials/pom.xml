@@ -144,14 +144,10 @@
 	</build>
 
 	<profiles>
-
 		<profile>
 			<id>integration-tests</id>
 			<build>
 				<plugins>
-
-					<!-- Use failsafe to run integration tests which success may depend 
-						on GPU. Run them with mvn verify -Pintegration-tests -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-failsafe-plugin</artifactId>
@@ -166,10 +162,8 @@
 							</execution>
 						</executions>
 					</plugin>
-
 				</plugins>
 			</build>
 		</profile>
-
 	</profiles>
 </project>

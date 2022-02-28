@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
@@ -37,28 +38,19 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   protected Renderer3d renderer;
   protected IAnimator animator;
   protected List<ICanvasListener> canvasListeners = new ArrayList<>();
-  
+
   protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
 
   /**
    * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.
    */
-  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci) {
-    this(factory, scene, quality, glci, false, false);
-  }
-
-  /**
-   * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.
-   */
-  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
     super(glci);
 
     view = scene.newView(this, quality);
     view.getPainter().setCanvas(this);
 
-    renderer = newRenderer(factory, traceGL, debugGL);
+    renderer = newRenderer(factory);
     addGLEventListener(renderer);
 
     // swing specific
@@ -71,24 +63,26 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     if (quality.isAnimated()) {
       animator.start();
     }
-    
-    if(ALLOW_WATCH_PIXEL_SCALE)
+
+    if (ALLOW_WATCH_PIXEL_SCALE)
       watchPixelScale();
 
     if (quality.isPreserveViewportSize())
       setPixelScale(newPixelScaleIdentity());
   }
-  
+
   protected void watchPixelScale() {
     exec.schedule(new PixelScaleWatch() {
       @Override
       public double getPixelScaleY() {
         return CanvasSwing.this.getPixelScaleY();
       }
+
       @Override
       public double getPixelScaleX() {
         return CanvasSwing.this.getPixelScaleX();
       }
+
       @Override
       protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
         CanvasSwing.this.firePixelScaleChanged(pixelScaleX, pixelScaleY);
@@ -101,7 +95,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     return new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE};
   }
 
-  private Renderer3d newRenderer(IChartFactory factory, boolean traceGL, boolean debugGL) {
+  private Renderer3d newRenderer(IChartFactory factory) {
     return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
   }
 
@@ -124,6 +118,10 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     return new Coord2d(getPixelScaleX(), getPixelScaleY());
   }
 
+  @Override
+  public Coord2d getPixelScaleJVM() {
+    return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
+  }
 
   public double getPixelScaleX() {
     return getSurfaceWidth() / (double) getWidth();
@@ -191,9 +189,26 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 
   @Override
   public TextureData screenshot() {
+
+    // setupPrint(1, 1, 1, getRendererWidth(), getRendererHeight());
+
+    if (!isVisible() || !isRealized()) {
+      throw new RuntimeException(
+          "Can't make a screenshot out of a Swing canvas without making it visible. "
+          + "Either call chart.open(), add chart.getCanvas() to an application, or use an OffscreenChartFactory");
+      // because the display() method of GLJPanel skip invocation of renderer.display() if
+      // the panel is not visible.s
+    }
+
+
+
     renderer.nextDisplayUpdateScreenshot();
     display();
-    return renderer.getLastScreenshot();
+    TextureData screenshot = renderer.getLastScreenshot();
+
+    // releasePrint();
+
+    return screenshot;
   }
 
   /* */

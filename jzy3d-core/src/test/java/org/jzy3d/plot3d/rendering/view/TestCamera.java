@@ -71,5 +71,4 @@ public class TestCamera {
     Assert.assertTrue(camera.side(onRight));
 
   }
-
 }
