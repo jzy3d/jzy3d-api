@@ -90,7 +90,7 @@ jobs:
     strategy:
       matrix:
         java: ['9.0.0+0', '14']
-        os: ['mac-m1-2']
+        os: ['mac-m1']
     steps:
     - uses: actions/checkout@v2
 
