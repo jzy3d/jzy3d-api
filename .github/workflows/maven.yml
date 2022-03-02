@@ -84,13 +84,13 @@ jobs:
 
 
   macos-11-4-arm64:
-    if: ${{ false }}  # disable for now
+    #if: ${{ false }}  # disable for now
 
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         java: ['9.0.0+0', '14']
-        os: ['mac-m1-2']
+        os: ['mac-m1']
     steps:
     - uses: actions/checkout@v2
 
