@@ -31,6 +31,7 @@ public class ITTestNativeSurfaceChart_Swing {
 
     FrameSwing f = (FrameSwing)chart.open(800,600);
 
+    chart.render();
     
     // We want to ensure that we won't start baseline image
     // comparison before the canvas is (1) displayed 

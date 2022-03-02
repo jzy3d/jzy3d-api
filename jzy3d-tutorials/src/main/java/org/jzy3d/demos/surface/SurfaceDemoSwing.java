@@ -41,7 +41,9 @@ public class SurfaceDemoSwing extends AbstractAnalysis {
     surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .5f)));
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
 
+    
     // Create a chart
     chart = new SwingChartFactory().newChart(Quality.Advanced());
     chart.add(surface);

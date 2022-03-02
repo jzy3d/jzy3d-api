@@ -186,20 +186,17 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     } else
       gl.glDisable(GL2.GL_POINT_SMOOTH);
   }
-  
+
   @Override
   public WindowingToolkit getWindowingToolkit() {
     String name = getCanvas().getClass().getSimpleName();
-    if(name.indexOf("CanvasAWT")>=0) {
+    if (name.indexOf("CanvasAWT") >= 0) {
       return WindowingToolkit.AWT;
-    }
-    else if(name.indexOf("CanvasSwing")>=0) {
+    } else if (name.indexOf("CanvasSwing") >= 0) {
       return WindowingToolkit.Swing;
-    }
-    else if(name.indexOf("CanvasNewtSWT")>=0) {
+    } else if (name.indexOf("CanvasNewtSWT") >= 0) {
       return WindowingToolkit.SWT;
-    }
-    else if(name.indexOf("OffscreenCanvas")>=0) {
+    } else if (name.indexOf("OffscreenCanvas") >= 0) {
       return WindowingToolkit.Offscreen;
     }
     return WindowingToolkit.UNKOWN;
@@ -481,6 +478,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
    * 
    * Rotation is in radian and is applied at the center of the text to avoid messing up text layout.
    * 
+   * 
    * @see {@link #glutBitmapString(int, String)}, an alternative way of rendering text with simpler
    *      parameters and smaller font name and size set.
    */
@@ -493,7 +491,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
     // Reset to a polygon mode suitable for rendering the texture handling the text
     glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
-    
+
     // Geometric processing for text layout
     float rotationD = -(float) (360 * rotation / (2 * Math.PI));
     Coord3d screen = modelToScreen(position);
@@ -501,7 +499,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     TextRenderer renderer = getOrCreateTextRenderer(font);
     renderer.setColor(color.r, color.g, color.b, color.a);
     // indicates current viewport (which may be smaller than canvas)
-    renderer.beginRendering(width, height); 
+    renderer.beginRendering(width, height);
 
     // Pre-shift text to make it rotate from center
     // of string and not from left point
@@ -509,7 +507,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
     if (rotationD != 0) {
       xPreShift = getTextLengthInPixels(font, label) / 2;
-      yPreShift = font.getHeight()/2;
+      yPreShift = font.getHeight() / 2;
     }
 
     GL2 gl = getGL2();
@@ -532,20 +530,31 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   }
 
   protected TextRenderer getOrCreateTextRenderer(Font font) {
-    TextRenderer renderer = txtRendererMap.get(font);
+    // See discussion
+    //
+    // https://forum.jogamp.org/TextRenderer-crash-the-JVM-after-removing-then-adding-a-canvas-from-a-AWT-or-Swing-layout-td4041660.html
+    //
+    // Despite not efficient, the need to deal with removing/adding a canvas requires not keeping a
+    // cache of the already defined strings. Indeed, in case the GLContext get destroyed, the
+    // inherent textures are lost and text is replaced by black pixels. 
+    //
+    // As there is no way to invalidate the TextRenderer cache (stringLocations is private), we simply re-create
+    // a new TextRenderer as soon as we want draw a text.
+
+    TextRenderer renderer = null;
+    // TextRenderer renderer = txtRendererMap.get(font);
 
     if (renderer == null) {
       renderer = new TextRenderer(toAWT(font), true, true, null);
       // renderer.setSmoothing(false);// some GPU do not handle smoothing well
       // renderer.setUseVertexArrays(false); // some GPU do not handle VBO properly
-      txtRendererMap.put(font, renderer);
+
+      //txtRendererMap.put(font, renderer);
     }
     return renderer;
   }
 
-  protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
-
-  // protected TextLayout layout = new TextLayout();
+  //protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
 
 
   /**
@@ -588,11 +597,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
         }
       }
     }
-    
+
     // Try to get text width using text renderer offscreen
     TextRenderer renderer = getOrCreateTextRenderer(font);
-    Rectangle2D r =   renderer.getBounds(string);
-    return (int)r.getWidth();
+    Rectangle2D r = renderer.getBounds(string);
+    return (int) r.getWidth();
   }
 
   private java.awt.Font toAWT(Font font) {
