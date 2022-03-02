@@ -1,7 +1,7 @@
 package jogl;
 
 import org.junit.Test;
-import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.os.OperatingSystem;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -19,6 +19,19 @@ import com.jogamp.opengl.GLProfile;
 public class Test_OpenGLVersion {
   @Test
   public void openGLversion() throws Exception {
+    System.out.println("=============================================================");
+    System.out.println("");
+    System.out.println("");
+    System.out.println("                   OS & JVM VERSION INFO                     ");
+    System.out.println("");
+    System.out.println("");
+    System.out.println("=============================================================");
+    
+    OperatingSystem os = new OperatingSystem();
+    
+    System.out.println(os);
+    
+    
     System.out.println("=============================================================");
     System.out.println("");
     System.out.println("");
