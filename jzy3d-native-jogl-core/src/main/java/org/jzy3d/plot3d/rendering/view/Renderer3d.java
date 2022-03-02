@@ -7,6 +7,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLPipelineFactory;
 import com.jogamp.opengl.util.GLReadBufferUtil;
@@ -66,12 +67,12 @@ public class Renderer3d implements GLEventListener {
   public void init(GLAutoDrawable canvas) {
     if (canvas != null && canvas.getGL() != null && view != null) {
 
+      GLContext context = canvas.getGL().getContext();
+      
       if (debugGL)
-        canvas.getGL().getContext()
-            .setGL(GLPipelineFactory.create("com.jogamp.opengl.Debug", null, canvas.getGL(), null));
+        context.setGL(GLPipelineFactory.create("com.jogamp.opengl.Debug", null, canvas.getGL(), null));
       if (traceGL)
-        canvas.getGL().getContext().setGL(GLPipelineFactory.create("com.jogamp.opengl.Trace", null,
-            canvas.getGL(), new Object[] {System.err}));
+        context.setGL(GLPipelineFactory.create("com.jogamp.opengl.Trace", null, canvas.getGL(), new Object[] {System.err}));
 
       updatePainterWithGL(canvas);
 
@@ -87,15 +88,19 @@ public class Renderer3d implements GLEventListener {
   public void display(GLAutoDrawable canvas) {
     profileDisplayTimer.tic();
 
-    GL gl = canvas.getGL();
-
-    updatePainterWithGL(canvas);
-
     if (view != null) {
-      view.clear();
-      view.render();
-
-      renderScreenshotIfRequired(gl);
+      if(canvas!=null && canvas.getGL()!=null) {
+  
+        updatePainterWithGL(canvas);
+  
+        if (view != null) {
+          view.clear();
+          view.render();
+  
+          renderScreenshotIfRequired(canvas.getGL());
+        }
+        
+      }
     }
 
     profileDisplayTimer.toc();
@@ -130,14 +135,15 @@ public class Renderer3d implements GLEventListener {
    * @param canvas
    */
   protected void updatePainterWithGL(GLAutoDrawable canvas) {
-    ((NativeDesktopPainter) view.getPainter()).setGL(canvas.getGL());
+    NativeDesktopPainter painter = ((NativeDesktopPainter) view.getPainter());
+    painter.setGL(canvas.getGL());
   }
-
-  // protected boolean first = true;
 
   @Override
   public void dispose(GLAutoDrawable arg0) {
-    view = null;
+    // do not loose reference to view since the init/display/dispose may be called
+    // several time during the lifetime of this renderer and canvas, especially if the
+    // chart is embedded in dockable windows that involve parent component change.
   }
 
   /********************* SCREENSHOTS ***********************/

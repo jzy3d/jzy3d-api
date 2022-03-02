@@ -26,7 +26,7 @@ public class SurfaceDemoFallback {
     chart.getScene().getGraph().add(surface);
 
 
-    chart.addMouseCameraController();
+    chart.addMouse();
     chart.open();
   }
 
