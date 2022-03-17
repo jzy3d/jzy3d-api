@@ -19,7 +19,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class ITTest_AxisLabelRotateLayout extends ITTest{
   public static void main(String[] args) {
-    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.OFF));
+    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON));
   }
   
   @Test
