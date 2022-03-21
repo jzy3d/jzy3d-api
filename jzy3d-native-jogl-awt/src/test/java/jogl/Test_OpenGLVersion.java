@@ -52,6 +52,10 @@ public class Test_OpenGLVersion {
     GLCapabilities caps = new GLCapabilities(glp);
     caps.setOnscreen(false);
 
+    createGLContextAndPrintInfo(glp, caps);
+  }
+
+  public static void createGLContextAndPrintInfo(GLProfile glp, GLCapabilities caps) {
     // ------------------------------------------------------
     // Drawable to get a GL context
 
