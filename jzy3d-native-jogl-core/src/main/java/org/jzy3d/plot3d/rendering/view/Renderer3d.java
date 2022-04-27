@@ -108,41 +108,8 @@ public class Renderer3d implements GLEventListener {
 
     profileDisplayTimer.toc();
     lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
-    
-    /*synchronized(Renderer3d.this) {
-      if(mustRepeat.get()) {
-        
-        // Schedule a repeated rendering , intended to executed OUT and AFTER the current rendering 
-        // 
-        executor.submit(new Runnable() {
-          @Override
-          public void run() {
-            
-            mustRepeat.set(false);
-            
-            try {
-              Thread.sleep(1000);
-            } catch (InterruptedException e) {
-              e.printStackTrace();
-            }
-            
-            synchronized(Renderer3d.this) {
-              //view.render();
-            }
-          }
-        });
-      }
-    }*/
   }
   
-  /*public void repeatRepaint() {
-    mustRepeat.set(true);
-  }
-  
-  protected AtomicBoolean mustRepeat = new AtomicBoolean(false);
-  protected ExecutorService executor = Executors.newFixedThreadPool(1);*/
-  
-
   /** Called when the {@link GLAutoDrawable} is resized. */
   @Override
   public void reshape(GLAutoDrawable canvas, int x, int y, int width, int height) {
