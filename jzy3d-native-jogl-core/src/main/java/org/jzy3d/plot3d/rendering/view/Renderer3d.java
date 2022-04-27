@@ -1,5 +1,8 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
@@ -105,8 +108,40 @@ public class Renderer3d implements GLEventListener {
 
     profileDisplayTimer.toc();
     lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
-
+    
+    /*synchronized(Renderer3d.this) {
+      if(mustRepeat.get()) {
+        
+        // Schedule a repeated rendering , intended to executed OUT and AFTER the current rendering 
+        // 
+        executor.submit(new Runnable() {
+          @Override
+          public void run() {
+            
+            mustRepeat.set(false);
+            
+            try {
+              Thread.sleep(1000);
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+            
+            synchronized(Renderer3d.this) {
+              //view.render();
+            }
+          }
+        });
+      }
+    }*/
   }
+  
+  /*public void repeatRepaint() {
+    mustRepeat.set(true);
+  }
+  
+  protected AtomicBoolean mustRepeat = new AtomicBoolean(false);
+  protected ExecutorService executor = Executors.newFixedThreadPool(1);*/
+  
 
   /** Called when the {@link GLAutoDrawable} is resized. */
   @Override

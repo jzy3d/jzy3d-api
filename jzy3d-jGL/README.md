@@ -88,8 +88,8 @@ You should add this to your pom file dependencies node, using the latest Jzy3d v
 ```
 <dependency>
     <groupId>org.jzy3d</groupId>
-    <artifactId>jGL</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <artifactId>jzy3d-jGL</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -103,12 +103,12 @@ Maven artifacts are stored there (you should add this to your pom file root):
     <repository>
         <id>jzy3d-snapshots</id>
         <name>Jzy3d Snapshots</name>
-        <url>http://maven.jzy3d.org/snapshots/</url>
+        <url>https://maven.jzy3d.org/snapshots/</url>
     </repository>
     <repository>
         <id>jzy3d-releases</id>
         <name>Jzy3d Releases</name>
-        <url>http://maven.jzy3d.org/releases/</url>
+        <url>https://maven.jzy3d.org/releases/</url>
     </repository>
 </repositories>
 ```
