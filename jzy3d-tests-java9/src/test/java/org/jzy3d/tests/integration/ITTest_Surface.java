@@ -8,7 +8,10 @@ public class ITTest_Surface extends ITTest{
   @Test
   public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
     System.out.println("ITTest : whenSurfaceChart_ThenMatchBaselineImagePixelwise");
-    
+
+    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_Swing, HiDPI.ON);
+    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_Swing, HiDPI.OFF);
+
     whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.ON);
     whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.OFF);
 
