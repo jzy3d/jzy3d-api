@@ -33,4 +33,6 @@ public interface IScreenCanvas extends ICanvas {
   public void display();
 
   public IAnimator getAnimation();
+
+  //public void repeatRepaint();
 }

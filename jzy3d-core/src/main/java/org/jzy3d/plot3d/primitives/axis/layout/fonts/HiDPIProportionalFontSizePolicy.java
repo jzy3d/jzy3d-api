@@ -4,18 +4,16 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 /**
  * This is the greatest {@link IFontSizePolicy} since it scale base font with current pixel scale.
  * 
- * This is only suitable for EmulGL chart, as Native chart often rely on {@link TextRenderer}
- * which does not support more font than {@link Font} defaults. Using a {@link JOGLTextRenderer}
- * instead allows more font size and styles.
+ * This is mainly useful to keep the same text size visually when a chart is moved from a HiDPI
+ * screen to a non HiDPI screen.
  * 
- * If base font has not been set, it will be based on default {@link IAxisLayout#getFont()}
+ * The base font is based on {@link IAxisLayout#getFont()}.
  * 
- * @author martin
+ * @author Martin Pernollet
  */
 public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
   protected View view;
@@ -25,6 +23,10 @@ public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
     this.view = view;
   }
 
+  /**
+   * Modifies the {@link IAxisLayout} font according to the pixel scale returned by the {@link View}
+   * and the font that was returned by {@link IAxisLayout} at the first call to this method.
+   */
   @Override
   public Font apply(IAxisLayout layout) {
     // Fix base font if not defined
@@ -34,20 +36,14 @@ public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
 
     // Scale base font
     Coord2d scale = view.getPixelScale();
-    font.setHeight((int) (font.getHeight() * scale.getY()));
+
+    if (!Float.isNaN(scale.getY())) {
+      int height = (int) (font.getHeight() * scale.getY());
+      font.setHeight(height);
+    }
 
     // Set and return
     layout.setFont(font);
     return layout.getFont();
   }
-
-  public Font getBaseFont() {
-    return baseFont;
-  }
-
-  public void setBaseFont(Font baseFont) {
-    this.baseFont = baseFont;
-  }
-
-
 }

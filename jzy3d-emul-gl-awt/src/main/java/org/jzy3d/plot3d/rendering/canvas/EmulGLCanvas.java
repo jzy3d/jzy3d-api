@@ -2,19 +2,24 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.AWTEvent;
 import java.awt.Canvas;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
@@ -89,9 +94,11 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   // Monitor (export perf to something else, e.g. an XLS file)
   protected Monitor monitor;
-  
+
   // Allow collecting all rendered image as soon as they are rendered
   protected AWTImageExporter exporter;
+
+  protected ExecutorService executor = Executors.newFixedThreadPool(1);
 
   /**
    * Initialize a canvas for rendering 3D
@@ -106,25 +113,30 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     animator = factory.getPainterFactory().newAnimator(this);
 
+    // Configure HiDPI detection
     if (quality.isHiDPIEnabled()) {
       myGL.setAutoAdaptToHiDPI(true);
     } else {
       myGL.setAutoAdaptToHiDPI(false);
     }
 
+    // Listen if pixel scale change, which is known after GL.glFlush()
     myGL.addPixelScaleListener(new PixelScaleListener() {
       @Override
       public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
         firePixelScaleChanged(pixelScaleX, pixelScaleY);
       }
     });
-    
-    // Double buffering
-    //enable AWTDoubleBufferedPanel and GL.clearBackgroundWithG2d = false
-    //super.setDoubleBuffered(true);
-    //createBufferStrategy(2);
-    //final BufferStrategy strategy = getBufferStrategy();
-    //Graphics2D current = (Graphics2D) strategy.getDrawGraphics();
+
+    // Check if current screen change to trigger repaint in case hiDPI support is different
+    // Going from HiDPI to non HiDPI screen lead to poor picture and bigger font otherwise
+    CurrentScreenWatch screenWatch = new CurrentScreenWatch(this) {
+      @Override
+      protected void fireScreenChange(double screenWidth, double screenHeight) {
+        EmulGLCanvas.this.forceRepaint();
+      }
+    };
+    executor.submit(screenWatch);
 
   }
 
@@ -204,7 +216,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     // HACKY : trying to avoid missing repaint event //NOT WORK
 
-    //doRender();
+    // doRender();
 
   }
 
@@ -268,7 +280,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     // Calling process event is equivalent to call
     // view.clear(), view.render(), glFlush(), glXSwapBuffers()
     // but ensure it will be done later
-    //processEvent(new ComponentEvent(this, ComponentEvent.COMPONENT_RESIZED));
+    // processEvent(new ComponentEvent(this, ComponentEvent.COMPONENT_RESIZED));
     //
     // Not satisfying as we
     // INTRODUCE A UNDESIRED RESIZE EVENT (WE ARE NOT RESHAPING VIEWPORT
@@ -306,8 +318,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
    * simply not append work to do according to the status of the canvas.
    */
   public synchronized void doRender() {
-    //System.out.println("doRender " + profileDisplayCount + " ");
-    //printCallTrace(2, "jzy3d");
+    // System.out.println("doRender " + profileDisplayCount + " ");
+    // printCallTrace(2, "jzy3d");
 
     isRenderingFlag.set(true);
 
@@ -324,15 +336,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
       // Ask opengl to provide an image for display
       myGL.glFlush();
-      
-      if(exporter!=null) {
+
+      if (exporter != null) {
         BufferedImage image = myGL.getRenderedImage();
         exporter.export(image);
       }
 
-      
-      
-      
       // Ask the GLCanvas to SWAP current image with
       // the latest built with glFlush
       repaint();
@@ -357,7 +366,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     }
 
     isRenderingFlag.set(false);
-    //System.out.println("DONE RENDERING " + lastRenderingTimeMs);
+    // System.out.println("DONE RENDERING " + lastRenderingTimeMs);
 
   }
 
@@ -502,7 +511,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   public Coord2d getPixelScale() {
     return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
   }
-  
+
   @Override
   public Coord2d getPixelScaleJVM() {
     return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
@@ -600,14 +609,14 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     TicToc t = new TicToc();
     synchronized (profileInfo) {
-      //System.out.println("OK");
+      // System.out.println("OK");
 
       // Render a rectangle around profile text
       for (ProfileInfo profile : profileInfo) {
-        //System.out.println("  will string width");
+        // System.out.println(" will string width");
         t.tic();
         int stringWidth = AWTGraphicsUtils.stringWidth(g2d, profile.message);
-        //t.tocShow("  ok string width");
+        // t.tocShow(" ok string width");
 
         if (minX > profile.x)
           minX = profile.x;
@@ -617,10 +626,10 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
           minY = profile.y;
         if (maxY < profile.y)
           maxY = profile.y;
-        
-        //System.out.println("  ok string ");
+
+        // System.out.println(" ok string ");
       }
-      //System.out.println("ok string");
+      // System.out.println("ok string");
 
       if (minX == Integer.MAX_VALUE)
         minX = 0;
