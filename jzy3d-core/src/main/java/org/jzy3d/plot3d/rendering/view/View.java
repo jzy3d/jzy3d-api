@@ -52,7 +52,7 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
  * Last, the {@link View} offers the ability to get an {@link AxisBox} for embedding the
  * {@link Scene} and getting values along axes.
  * 
- * @author Martin Pernollet 
+ * @author Martin Pernollet
  */
 public class View {
 
@@ -135,7 +135,7 @@ public class View {
    */
   protected boolean viewDirty = false;
 
-  //protected BoundingBox3d initBounds;
+  // protected BoundingBox3d initBounds;
 
   /**
    * Applies a factor to the default camera distance which is set to the radius of the scene bounds.
@@ -178,15 +178,15 @@ public class View {
     this.viewpoint = VIEWPOINT_DEFAULT.clone();
     this.center = sceneBounds.getCenter();
     this.scaling = Coord3d.IDENTITY.clone();
-    //this.viewBounds = null;
+    // this.viewBounds = null;
     this.viewBounds = new BoundingBox3d(-1, 1, -1, 1, -1, 1);
     this.viewMode = ViewPositionMode.FREE;
     this.boundsMode = ViewBoundMode.AUTO_FIT;
     this.cameraMode = CameraMode.ORTHOGONAL;
 
-    //this.axis = factory.newAxe(sceneBounds, this);
+    // this.axis = factory.newAxe(sceneBounds, this);
     this.axis = factory.newAxe(viewBounds, this);
-    
+
     this.cam = factory.newCamera(center);
     this.painter = factory.getPainterFactory().newPainter();
     this.painter.setCamera(cam);
@@ -226,19 +226,26 @@ public class View {
     canvas.addCanvasListener(new ICanvasListener() {
       @Override
       public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        
+        // Store current pixel scale
         pixelScale.x = (float) pixelScaleX;
         pixelScale.y = (float) pixelScaleY;
+        
+        //System.out.println("View : pixel scale changed to " + pixelScale);
 
+        // Convert pixel scale to HiDPI status
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
         } else {
           hidpi = HiDPI.ON;
         }
-
+        
         axis.getLayout().applyFontSizePolicy();
       }
     });
   }
+
+
 
   /**
    * Return a copy of the currently known pixel scale as notified by the canvas.
@@ -543,7 +550,7 @@ public class View {
     if (box.isReset()) {
       return;
     }
-    
+
     center = box.getCenter();
     axis.setAxe(box);
     viewBounds = box;
@@ -590,7 +597,7 @@ public class View {
    * <ul>
    * <li>x is azimuth in [0;2xPI]
    * <li>y is elevation in [-PI/2;+PI/2]. Will be clamped if out of bounds
-   * <li>z is range (distance to center) but ignored there as it is processed automatically 
+   * <li>z is range (distance to center) but ignored there as it is processed automatically
    * </ul>
    */
   public void setViewPoint(Coord3d polar, boolean updateView) {
@@ -889,14 +896,14 @@ public class View {
     initLights();
     initResources();
     initBounds();
-    
+
     initialized = true;
-    
+
     fireViewLifecycleHasInit(null);
   }
 
   protected void initBounds() {
-    if(viewBounds==null) {
+    if (viewBounds == null) {
       viewBounds = squarifyGetSceneGraphBounds(scene);
     }
     lookToBox(viewBounds);
@@ -917,7 +924,7 @@ public class View {
 
   public void initResources() {
     getScene().getGraph().mountAllGLBindedResources(painter);
-    
+
     // refresh bounds as we may have mount VBO objects which NOW have bounds defined
     updateBounds();
   }
@@ -927,8 +934,8 @@ public class View {
     painter.clearColor(backgroundColor);
     painter.glClearDepth(1);
 
-    //Console.println("View.clear with color", backgroundColor);
-    
+    // Console.println("View.clear with color", backgroundColor);
+
     if (!slave) {
       painter.glClearColorAndDepthBuffers();
     }
@@ -938,7 +945,7 @@ public class View {
 
   public void render() {
     fireViewLifecycleWillRender(null);
-    
+
     renderBackground(0f, 1f);
     renderScene();
     renderOverlay();
@@ -978,9 +985,9 @@ public class View {
 
     BoundingBox3d scaling = computeScaledViewBounds();
     updateCamera(viewport, scaling);
-    
+
     painter.glShadeModel(quality.getColorModel());
-    
+
     renderAxeBox();
     renderSceneGraph();
     renderAnnotations(cam);
@@ -1333,7 +1340,7 @@ public class View {
   }
 
   public void renderOverlay(ViewportConfiguration viewportConfiguration) {
-    if(viewOverlay!=null) {
+    if (viewOverlay != null) {
       viewOverlay.render(this, viewportConfiguration, painter);
     }
   }
@@ -1365,6 +1372,6 @@ public class View {
   public boolean isInitialized() {
     return initialized;
   }
-  
-  
+
+
 }
