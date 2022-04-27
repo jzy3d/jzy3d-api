@@ -41,7 +41,7 @@ public class ITTest {
   static boolean runOffscreen = false;
   
   public enum WT{
-    EmulGL_AWT, Native_AWT
+    EmulGL_AWT, Native_AWT, Native_Swing
   }
   
   protected String indexFileName = "README_GENERATED.md";
@@ -96,6 +96,8 @@ public class ITTest {
     line(sb, "<td>"+ title(WT.EmulGL_AWT, HiDPI.OFF) +"</td>");
     line(sb, "<td>"+ title(WT.Native_AWT, HiDPI.ON) +"</td>");
     line(sb, "<td>"+ title(WT.Native_AWT, HiDPI.OFF) +"</td>");
+    line(sb, "<td>"+ title(WT.Native_Swing, HiDPI.ON) +"</td>");
+    line(sb, "<td>"+ title(WT.Native_Swing, HiDPI.OFF) +"</td>");
     line(sb, "</tr>");
 
     
@@ -104,6 +106,8 @@ public class ITTest {
     line(sb, "<td>" + imgTest(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
     line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_AWT, HiDPI.ON, info))+ "</td>");
     line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
+    line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_Swing, HiDPI.ON, info))+ "</td>");
+    line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_Swing, HiDPI.OFF, info))+ "</td>");
     line(sb, "</tr>");
 
     if(false) {
@@ -112,6 +116,8 @@ public class ITTest {
       line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
       line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.ON, info))+ "</td>");
       line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_Swing, HiDPI.ON, info))+ "</td>");
+      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_Swing, HiDPI.OFF, info))+ "</td>");
       line(sb, "</tr>");
     }
     
@@ -158,19 +164,26 @@ public class ITTest {
     System.out.println(" ITTest : " + windowingToolkit + " " + hidpi);
     
     if(WT.EmulGL_AWT.equals(windowingToolkit)) {
-      return chartEmulGL(hidpi, offscreenDimension);
+      return chart(new EmulGLChartFactory(), hidpi, offscreenDimension);
     }
     else if(WT.Native_AWT.equals(windowingToolkit)) {
-      return chartNative(hidpi, offscreenDimension);
+      return chart(new AWTChartFactory(), hidpi, offscreenDimension);//chartNative(hidpi, offscreenDimension);
+    }
+    else if(WT.Native_Swing.equals(windowingToolkit)) {
+      return chart(new AWTChartFactory(), hidpi, offscreenDimension);//chartNative(hidpi, offscreenDimension);
     }
     else {
       throw new IllegalArgumentException("Unsupported toolkit : " + windowingToolkit);
     }
   }
   
-  public static Chart chartEmulGL(HiDPI hidpi, Rectangle offscreenDimension) {
+  /*public static Chart chartEmulGL(HiDPI hidpi, Rectangle offscreenDimension) {
     ChartFactory factory = new EmulGLChartFactory();
     
+    return chart(factory, hidpi, offscreenDimension);
+  }*/
+
+  public static Chart chart(ChartFactory factory, HiDPI hidpi, Rectangle offscreenDimension) {
     if(runOffscreen) {
       factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
       System.err.println(" ITTest will run offscreen, which may not enable HiDPI hence produce inaccurate layout with texts");
@@ -180,6 +193,19 @@ public class ITTest {
     Chart chart = factory.newChart(q);
     return chart;
   }
+  
+  /*public static Chart chartNative(HiDPI hidpi, Rectangle offscreenDimension) {
+    AWTChartFactory factory = new AWTChartFactory();
+    
+    if(runOffscreen) {
+      factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
+      System.err.println(" ITTest will run offscreen, which may not enable HiDPI hence produce inaccurate layout with texts");
+    }
+    
+    Quality q = quality(hidpi);
+    Chart chart = factory.newChart(q);
+    return chart;
+  }*/
 
   public static Quality quality(HiDPI hidpi) {
     Quality q = Quality.Advanced(); 
@@ -187,18 +213,7 @@ public class ITTest {
     q.setAnimated(false);
     return q;
   }
-  
-  public static Chart chartNative(HiDPI hidpi, Rectangle offscreenDimension) {
-    AWTChartFactory factory = new AWTChartFactory();
-    
-    if(runOffscreen)
-      factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
-    
-    Quality q = quality(hidpi);
-    Chart chart = factory.newChart(q);
-    return chart;
-  }
-  
+
   // ---------------------------------------------------------------------------------------------- //
 
   @SuppressWarnings("rawtypes")

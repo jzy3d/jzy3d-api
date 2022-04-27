@@ -43,6 +43,9 @@ public class ITTest_Colorbar extends ITTest{
     whenColorbar_IsModifiedByCustomFont(WT.Native_AWT, HiDPI.OFF);
     whenColorbar_IsModifiedByCustomFont(WT.Native_AWT, HiDPI.ON);
 
+    whenColorbar_IsModifiedByCustomFont(WT.Native_Swing, HiDPI.OFF);
+    whenColorbar_IsModifiedByCustomFont(WT.Native_Swing, HiDPI.ON);
+
     whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON);
     whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.OFF);
   }
@@ -78,6 +81,9 @@ public class ITTest_Colorbar extends ITTest{
 
     whenColorbar_HasMininumWidth(WT.Native_AWT, HiDPI.OFF);
     whenColorbar_HasMininumWidth(WT.Native_AWT, HiDPI.ON);
+
+    whenColorbar_HasMininumWidth(WT.Native_Swing, HiDPI.OFF);
+    whenColorbar_HasMininumWidth(WT.Native_Swing, HiDPI.ON);
 
     
     whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.ON);
@@ -120,6 +126,9 @@ public class ITTest_Colorbar extends ITTest{
 
     whenColorbar_ShrinkBigFont(WT.Native_AWT, HiDPI.OFF);
     whenColorbar_ShrinkBigFont(WT.Native_AWT, HiDPI.ON);
+
+    whenColorbar_ShrinkBigFont(WT.Native_Swing, HiDPI.OFF);
+    whenColorbar_ShrinkBigFont(WT.Native_Swing, HiDPI.ON);
 
     
     whenColorbar_ShrinkBigFont(WT.EmulGL_AWT, HiDPI.ON);
@@ -172,7 +181,10 @@ public class ITTest_Colorbar extends ITTest{
 
     whenColorbar_Shrink(WT.Native_AWT, HiDPI.OFF);
     whenColorbar_Shrink(WT.Native_AWT, HiDPI.ON);
-    
+
+    whenColorbar_Shrink(WT.Native_Swing, HiDPI.OFF);
+    whenColorbar_Shrink(WT.Native_Swing, HiDPI.ON);
+
     whenColorbar_Shrink(WT.EmulGL_AWT, HiDPI.OFF);
     whenColorbar_Shrink(WT.EmulGL_AWT, HiDPI.ON);
   }

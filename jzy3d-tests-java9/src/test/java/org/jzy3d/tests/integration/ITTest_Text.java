@@ -42,6 +42,9 @@ public class ITTest_Text extends ITTest{
     whenCustomFont(WT.Native_AWT, HiDPI.ON);
     whenCustomFont(WT.Native_AWT, HiDPI.OFF);
 
+    whenCustomFont(WT.Native_Swing, HiDPI.ON);
+    whenCustomFont(WT.Native_Swing, HiDPI.OFF);
+
     whenCustomFont(WT.EmulGL_AWT, HiDPI.ON);
     whenCustomFont(WT.EmulGL_AWT, HiDPI.OFF);
   }
@@ -75,6 +78,9 @@ public class ITTest_Text extends ITTest{
 
     whenDrawableTextRenderer(WT.Native_AWT, HiDPI.ON);
     whenDrawableTextRenderer(WT.Native_AWT, HiDPI.OFF);
+
+    whenDrawableTextRenderer(WT.Native_Swing, HiDPI.ON);
+    whenDrawableTextRenderer(WT.Native_Swing, HiDPI.OFF);
 
     whenDrawableTextRenderer(WT.EmulGL_AWT, HiDPI.ON);
     whenDrawableTextRenderer(WT.EmulGL_AWT, HiDPI.OFF);
