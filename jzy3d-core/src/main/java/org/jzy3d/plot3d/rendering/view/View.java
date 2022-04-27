@@ -129,13 +129,12 @@ public class View {
 
 
   protected boolean dimensionDirty = false;
+
   /**
    * can be set to true by the Renderer3d so that the View knows it is rendering due to a canvas
    * size change
    */
   protected boolean viewDirty = false;
-
-  // protected BoundingBox3d initBounds;
 
   /**
    * Applies a factor to the default camera distance which is set to the radius of the scene bounds.
@@ -178,15 +177,12 @@ public class View {
     this.viewpoint = VIEWPOINT_DEFAULT.clone();
     this.center = sceneBounds.getCenter();
     this.scaling = Coord3d.IDENTITY.clone();
-    // this.viewBounds = null;
     this.viewBounds = new BoundingBox3d(-1, 1, -1, 1, -1, 1);
     this.viewMode = ViewPositionMode.FREE;
     this.boundsMode = ViewBoundMode.AUTO_FIT;
     this.cameraMode = CameraMode.ORTHOGONAL;
 
-    // this.axis = factory.newAxe(sceneBounds, this);
     this.axis = factory.newAxe(viewBounds, this);
-
     this.cam = factory.newCamera(center);
     this.painter = factory.getPainterFactory().newPainter();
     this.painter.setCamera(cam);
@@ -226,20 +222,18 @@ public class View {
     canvas.addCanvasListener(new ICanvasListener() {
       @Override
       public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
-        
         // Store current pixel scale
         pixelScale.x = (float) pixelScaleX;
         pixelScale.y = (float) pixelScaleY;
         
-        //System.out.println("View : pixel scale changed to " + pixelScale);
-
         // Convert pixel scale to HiDPI status
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
         } else {
           hidpi = HiDPI.ON;
         }
-        
+
+        // Edit font size accordingly
         axis.getLayout().applyFontSizePolicy();
       }
     });
