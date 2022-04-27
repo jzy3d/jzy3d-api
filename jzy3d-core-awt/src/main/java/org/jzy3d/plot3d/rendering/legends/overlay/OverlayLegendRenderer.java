@@ -30,13 +30,13 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
   @Override
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {
     Graphics2D g2d = (Graphics2D) g;
-    
+
     AWTGraphicsUtils.configureRenderingHints(g2d);
 
     if (layout.font != null) {
       g2d.setFont(layout.font);
     }
-    
+
     FontMetrics fm = g.getFontMetrics();
     int textHeight = fm.getHeight();
     int textWidthMax = maxStringWidth(fm);
@@ -62,10 +62,6 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
       g2d.fillRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
     }
 
-    //System.out.println("OverlayLegendRenderer : Canvas " + canvasWidth + " x " + canvasHeight);
-    //System.out.println("OverlayLegendRenderer : Font size " + layout.font.getSize());
-
-
     // Text position
     int xTextPos = xBoxPos + layout.txtMarginX;
     int yTextPos = yBoxPos + layout.txtMarginY + textHeight;
@@ -80,7 +76,7 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
     // Border
     g2d.setColor(AWTColor.toAWT(layout.borderColor));
     g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
-    
+
   }
 
 
@@ -141,12 +137,4 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
   public void setLayout(LegendLayout layout) {
     this.layout = layout;
   }
-
-  /*public Coord2d getScale() {
-    return scale;
-  }
-
-  public void setScale(Coord2d scale) {
-    this.scale = scale;
-  }*/
 }

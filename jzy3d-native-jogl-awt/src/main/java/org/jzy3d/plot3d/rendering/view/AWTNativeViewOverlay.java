@@ -67,8 +67,7 @@ public class AWTNativeViewOverlay implements IViewOverlay {
           Coord2d pixelScale = view.getPixelScale();
           g2d.scale(pixelScale.x, pixelScale.y);
 
-          //System.out.println("AWTNAtiveViewOverlay pixScale : " + pixelScale);
-          
+          // Draw
           g2d.setBackground(overlayBackground);
           g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
