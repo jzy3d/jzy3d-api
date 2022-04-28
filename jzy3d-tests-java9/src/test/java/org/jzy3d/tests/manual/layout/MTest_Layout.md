@@ -21,3 +21,13 @@ When moving chart windows from primary to secondary monitor (screen).
 
 ### To indicate
 - Context (OS, Chip)
+
+
+## Results
+
+| Canvas | OS |  Visual Text scale is unchanged when screen change | Resize Window | Info |
+|-----|-----|-----|-----|-----|
+| EmuGL | Windows | OK | yes | |
+| Native | Windows | x | yes | |
+| EmuGL | MacOS | OK | no | Colorbar JUMP|
+| Native | MacOS | OK | no |             |
