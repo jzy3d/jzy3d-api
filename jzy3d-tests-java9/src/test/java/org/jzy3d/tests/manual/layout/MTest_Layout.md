@@ -27,7 +27,7 @@ When moving chart windows from primary to secondary monitor (screen).
 
 | Canvas | OS |  Visual Text scale is unchanged when screen change | Resize Window | Info |
 |-----|-----|-----|-----|-----|
-| EmuGL | Windows | OK | yes | Parfaite colorbar (no shrink text, correctly on right side, no bar width change) |
+| EmuGL | Windows | OK | yes | Parfaite colorbar (no shrink text, correctly on right side, no bar width change, MAIS la bande colorée devient plus LARGE sur 2e écran ) |
 | Native | Windows | x | yes | Colorbar mal placée sur premier ecran (ok sur second, mais rogne un peu le texte) |
-| EmuGL | MacOS | OK | no | Colorbar bien placée, pas coupée, mais la bande colorée change de largeur quand on change d'écran + bordure noire invisible sur no HiDPI |
+| EmuGL | MacOS | OK | no | Colorbar bien placée, pas coupée, mais la bande colorée devient plus LARGE sur 2e écran + bordure noire invisible sur no HiDPI |
 | Native | MacOS | OK | no | Colorbar bien placée mais très coupée 1er écran, un peu coupé 2e écran            |
