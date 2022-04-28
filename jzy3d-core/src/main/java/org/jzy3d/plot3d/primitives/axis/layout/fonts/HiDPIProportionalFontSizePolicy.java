@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.axis.layout.fonts;
 
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.Font;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.rendering.view.View;
 
@@ -18,6 +19,8 @@ import org.jzy3d.plot3d.rendering.view.View;
 public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
   protected View view;
   protected Font baseFont;
+
+  protected boolean apply_WindowsHiDPI_Workaround = false;
 
   public HiDPIProportionalFontSizePolicy(View view) {
     this.view = view;
@@ -37,7 +40,33 @@ public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
     // Scale base font
     Coord2d scale = view.getPixelScale();
 
+    if (apply_WindowsHiDPI_Workaround) {
+      IPainter painter = view.getPainter();
+
+      // Workaround for https://github.com/jzy3d/jogl/issues/8
+      if (painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
+        // We here scale the viewport by either 1 or by the ratio indicated by the JVM
+        // if only the JVM is able to detect the pixel ratio and if JOGL
+        // can't guess it (which is the case for Windows 10).
+        Coord2d scaleHardware = painter.getCanvas().getPixelScale();
+        Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM();
+
+        // System.out.println("HiDPI : " + isHiDPIEnabled);
+        System.out.println("GPU   : " + scaleHardware);
+        System.out.println("JVM   : " + scaleJVM);
+
+        if (painter.isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
+
+          scale = scaleJVM.div(scaleHardware);
+          
+          System.out.println("Processed scale" + scale.y);
+        }
+      }
+    }
+
+    // Only if scale known
     if (!Float.isNaN(scale.getY())) {
+
       int height = (int) (font.getHeight() * scale.getY());
       font.setHeight(height);
     }

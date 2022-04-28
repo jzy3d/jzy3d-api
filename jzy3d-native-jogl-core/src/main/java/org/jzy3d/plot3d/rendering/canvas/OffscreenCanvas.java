@@ -226,4 +226,10 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
       listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
     }
   }
+  
+  @Override
+  public boolean isNative() {
+    return true;
+  }
+
 }

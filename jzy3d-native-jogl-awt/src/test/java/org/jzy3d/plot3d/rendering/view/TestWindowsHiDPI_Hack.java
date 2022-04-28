@@ -1,16 +1,12 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.mocks.jzy3d.Mocks;
 import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 public class TestWindowsHiDPI_Hack {
@@ -153,88 +149,9 @@ public class TestWindowsHiDPI_Hack {
       }
     };
 
-    painter.setCanvas(mockCanvas(scaleHard, scaleVM));
+    painter.setCanvas(Mocks.Canvas(scaleHard, scaleVM));
     return painter;
   }
 
 
-
-  protected ICanvas mockCanvas(Coord2d scaleHard, Coord2d scaleVM) {
-    return new ICanvas() {
-      @Override
-      public View getView() {
-        return null;
-      }
-
-      @Override
-      public int getRendererWidth() {
-        return 0;
-      }
-
-      @Override
-      public int getRendererHeight() {
-        return 0;
-      }
-
-      @Override
-      public void screenshot(File file) throws IOException {}
-
-      @Override
-      public Object screenshot() {
-        return null;
-      }
-
-      @Override
-      public void forceRepaint() {}
-
-      @Override
-      public void dispose() {}
-
-      @Override
-      public void addMouseController(Object o) {}
-
-      @Override
-      public void addKeyController(Object o) {}
-
-      @Override
-      public void removeMouseController(Object o) {}
-
-      @Override
-      public void removeKeyController(Object o) {}
-
-      @Override
-      public String getDebugInfo() {
-        return null;
-      }
-
-      @Override
-      public void setPixelScale(float[] scale) {}
-
-      @Override
-      public Coord2d getPixelScale() {
-        return scaleHard;
-      }
-
-      @Override
-      public Coord2d getPixelScaleJVM() {
-        return scaleVM;
-      }
-
-      @Override
-      public double getLastRenderingTimeMs() {
-        return 0;
-      }
-
-      @Override
-      public void addCanvasListener(ICanvasListener listener) {}
-
-      @Override
-      public void removeCanvasListener(ICanvasListener listener) {}
-
-      @Override
-      public List<ICanvasListener> getCanvasListeners() {
-        return null;
-      }
-    };
-  }
 }

@@ -129,6 +129,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     CurrentScreenWatch screenWatch = new CurrentScreenWatch(this) {
       @Override
       protected void fireScreenChange(double screenWidth, double screenHeight) {
+        if(debugEvents) {
+          System.err.println("EmulGLCanvas.ScreenChanged to " + screenWidth + " x " + screenHeight);
+        }
         EmulGLCanvas.this.forceRepaint();
       }
     };
@@ -795,6 +798,11 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   public void setExporter(AWTImageExporter exporter) {
     this.exporter = exporter;
+  }
+  
+  @Override
+  public boolean isNative() {
+    return false;
   }
 
 }

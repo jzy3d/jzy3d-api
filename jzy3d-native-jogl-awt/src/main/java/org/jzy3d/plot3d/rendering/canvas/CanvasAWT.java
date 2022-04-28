@@ -347,5 +347,11 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
   public int getRendererHeight() {
     return (renderer != null ? renderer.getHeight() : 0);
   }
+  
+  @Override
+  public boolean isNative() {
+    return true;
+  }
+
 
 }
