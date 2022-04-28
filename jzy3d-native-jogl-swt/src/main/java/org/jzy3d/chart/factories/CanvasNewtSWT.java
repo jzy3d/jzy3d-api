@@ -302,5 +302,10 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
       listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
     }
   }
+  
+  @Override
+  public boolean isNative() {
+    return true;
+  }
 
 }

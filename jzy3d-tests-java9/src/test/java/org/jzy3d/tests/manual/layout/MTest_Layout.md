@@ -14,7 +14,7 @@ This tests allows verifying that the layout of the chart remains unchanged while
 
 ### To be verified
 When moving chart windows from primary to secondary monitor (screen).
-- [ ] Axis text labels have the same size.
+- [ ] Axis text labels have the same size (Hint : moving the middle of the frame around the jonction of the two monitors will toggle HiDPI/No HiDPI for the complete frame).
 - [ ] Legend text labels have the same size.
 - [ ] Colorbar text labels have the same size.
 - [ ] Colorbar position remains the same.

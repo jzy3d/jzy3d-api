@@ -701,4 +701,9 @@ public interface IPainter {
   public void glEnable_Stencil();
   
   public void glDisable_Stencil();
+
+  public boolean isJVMScaleLargerThanNativeScale(Coord2d scaleHardware, Coord2d scaleJVM);
+  
+  /** Verify if pixel scale of JVM is different than the one return by the canvas */
+  public boolean isJVMScaleLargerThanNativeScale();
 }

@@ -23,12 +23,10 @@ public class OperatingSystem {
   
   /** Mainly for test purpose.*/
   public OperatingSystem(String osName, String osVersion) {
-    this.name = osName.toLowerCase();
-    
+    this.name = formatName(osName);
     this.version = osVersion;
     
     this.arch = System.getProperty("os.arch");
-    
     this.jvm = System.getProperty("java.version");
     
     this.windows = (name.indexOf("win") >= 0);
@@ -36,6 +34,21 @@ public class OperatingSystem {
     this.unix =
         (name.indexOf("nix") >= 0 || name.indexOf("nux") >= 0 || name.indexOf("aix") > 0);
     this.solaris = (name.indexOf("sunos") >= 0);    
+  }
+
+  protected String formatName(String osName) {
+    return osName.toLowerCase();
+  }
+  
+  public OperatingSystem(String osName, String osVersion, String arch, String java, boolean windows, boolean mac, boolean unix, boolean solaris) {
+    this.name = formatName(osName);
+    this.version = osVersion;
+    this.arch = arch;
+    this.jvm = java;
+    this.windows = windows;
+    this.mac = mac;
+    this.unix = unix;
+    this.solaris = solaris;    
   }
   
   public String getName() {

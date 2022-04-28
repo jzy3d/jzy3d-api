@@ -18,6 +18,28 @@ import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
  * @author Martin Pernollet
  */
 public abstract class AbstractViewportManager {
+  private static final float AREA_LEFT = -100;
+  private static final float AREA_RIGHT = +100;
+  private static final float AREA_TOP = +100;
+  private static final float AREA_DOWN = -100;
+  private static final float GRID_STEPS = 10;
+  private static final float OFFSET = 0.1f;
+
+  protected int screenLeft = 0;
+  protected int screenBottom = 0;
+  protected int screenXOffset = 0;
+  protected int screenYOffset = 0;
+  protected int screenWidth = 0;
+  protected int screenHeight = 0;
+  protected int screenSquaredDim = 0;
+
+  protected boolean screenGridDisplayed = false;
+  protected ViewportMode mode = ViewportMode.RECTANGLE_NO_STRETCH;
+
+  protected float ratioWidth;
+  protected float ratioHeight;
+  
+  protected boolean apply_WindowsHiDPI_Workaround = true;
 
   /**
    * Set the view port (size of the renderer).
@@ -85,31 +107,27 @@ public abstract class AbstractViewportManager {
    */
   public ViewportConfiguration applyViewport(IPainter painter) {
 
-    // We here scale the viewport by either 1 or by the ratio indicated by the JVM
-    // if only the JVM is able to detect the pixel ratio and if JOGL
-    // can't guess it (which is the case for Windows 10).
-    Coord2d scaleHardware = painter.getCanvas().getPixelScale();
-    Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM();
-
-    //boolean isHiDPIEnabled = painter.getQuality().isHiDPIEnabled();
-
-    
-    //System.out.println("HiDPI : " + isHiDPIEnabled);
-    //System.out.println("GPU   : " + scaleHardware);
-    //System.out.println("JVM   : " + scaleJVM);
-
-    if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
-      if (isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
-        // Workaround for https://github.com/jzy3d/jogl/issues/8
-        Coord2d scale = scaleJVM.div(scaleHardware);
-
-        //System.out.println("Scale : " + scale);
-
-        screenWidth = (int) (screenWidth * scale.x);
-        screenHeight = (int) (screenHeight * scale.y);
+    // Workaround for https://github.com/jzy3d/jogl/issues/8
+    if(apply_WindowsHiDPI_Workaround) {
+      if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
+        // We here scale the viewport by either 1 or by the ratio indicated by the JVM
+        // if only the JVM is able to detect the pixel ratio and if JOGL
+        // can't guess it (which is the case for Windows 10).
+        Coord2d scaleHardware = painter.getCanvas().getPixelScale();
+        Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM();
+  
+        //System.out.println("HiDPI : " + isHiDPIEnabled);
+        //System.out.println("GPU   : " + scaleHardware);
+        //System.out.println("JVM   : " + scaleJVM);
+        
+        if (painter.isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
+          Coord2d scale = scaleJVM.div(scaleHardware);
+          //System.out.println("Scale : " + scale);
+          screenWidth = (int) (screenWidth * scale.x);
+          screenHeight = (int) (screenHeight * scale.y);
+        }
       }
     }
-    
     
     // Stretch projection on the whole viewport
     if (ViewportMode.STRETCH_TO_FILL.equals(mode)
@@ -147,9 +165,7 @@ public abstract class AbstractViewportManager {
     return lastViewPort;
   }
 
-  private boolean isJVMScaleLargerThanNativeScale(Coord2d scaleHardware, Coord2d scaleJVM) {
-    return scaleJVM.x > scaleHardware.x || scaleJVM.y > scaleHardware.y;
-  }
+  
 
   /**
    * Returns the (x,y) offset that was applied to make this {@link AbstractViewportManager} stand in
@@ -275,27 +291,6 @@ public abstract class AbstractViewportManager {
     return screenGridDisplayed;
   }
 
-  private static final float AREA_LEFT = -100;
-  private static final float AREA_RIGHT = +100;
-  private static final float AREA_TOP = +100;
-  private static final float AREA_DOWN = -100;
-  private static final float GRID_STEPS = 10;
-  private static final float OFFSET = 0.1f;
-
-  /********************************************************************************/
-
-  protected int screenLeft = 0;
-  protected int screenBottom = 0;
-  protected int screenXOffset = 0;
-  protected int screenYOffset = 0;
-  protected int screenWidth = 0;
-  protected int screenHeight = 0;
-  protected int screenSquaredDim = 0;
-
-  protected boolean screenGridDisplayed = false;
-  protected ViewportMode mode = ViewportMode.RECTANGLE_NO_STRETCH;
-
-  protected float ratioWidth;
-  protected float ratioHeight;
+  
 
 }
