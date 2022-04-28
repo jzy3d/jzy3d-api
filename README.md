@@ -196,7 +196,7 @@ This will run all test named `**/Test*.java` or `**/*Test.java`.
 mvn clean install
 ```
 
-#### Run unit tests and integration tests
+#### Run unit tests and automated integration tests
 
 Integration tests compare charts to baseline images pixel wise. They are important in te toolbelt but have the drawback of being less portable accross computers
 * Different OS have different frame insets (changing actual rendering area size) leading to chart screenshots of different size accross OS.
@@ -210,14 +210,16 @@ This will run all test named `**/ITTest*.java` and unit tests.
 mvn clean install -Pintegration-tests
 ```
 
-
-
-#### Skip tests
+#### Skip automated tests
 
 This will skip all tests (unit and integration)
 ```
 mvn clean install -DskipTests
 ```
+
+#### Manual tests
+
+Some [test require a manual verification](jzy3d-tests-java9/src/test/java/org/jzy3d/tests/manual).
 
 ### Deploy source & javadocs
 ```
