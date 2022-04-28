@@ -120,6 +120,9 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     myGL.addPixelScaleListener(new PixelScaleListener() {
       @Override
       public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        if(debugEvents) {
+          System.err.println("EmulGLCanvas.PixelScale to " + pixelScaleX + " x " + pixelScaleY);
+        }
         firePixelScaleChanged(pixelScaleX, pixelScaleY);
       }
     });
@@ -132,6 +135,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
         if(debugEvents) {
           System.err.println("EmulGLCanvas.ScreenChanged to " + screenWidth + " x " + screenHeight);
         }
+        //else
+        //  System.err.println("Disabled");
         EmulGLCanvas.this.forceRepaint();
       }
     };
