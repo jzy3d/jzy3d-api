@@ -88,7 +88,7 @@ You should add this to your pom file dependencies node, using the latest Jzy3d v
 ```
 <dependency>
     <groupId>org.jzy3d</groupId>
-    <artifactId>jzy3d-jGL</artifactId>
+    <artifactId>jzy3d-jGL-awt</artifactId>
     <version>2.0.1-SNAPSHOT</version>
 </dependency>
 ```
