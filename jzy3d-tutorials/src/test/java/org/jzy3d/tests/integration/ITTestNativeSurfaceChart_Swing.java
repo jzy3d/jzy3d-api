@@ -29,28 +29,27 @@ public class ITTestNativeSurfaceChart_Swing {
 
     chart.add(surface());
 
-    FrameSwing f = (FrameSwing)chart.open(800,600);
+    FrameSwing f = (FrameSwing) chart.open(800, 600);
 
     chart.render();
-    
+
     // We want to ensure that we won't start baseline image
-    // comparison before the canvas is (1) displayed 
+    // comparison before the canvas is (1) displayed
     // and (2) having the good image size.
-    CanvasSwing canvas = (CanvasSwing)chart.getCanvas();
-    
-    while(!f.isVisible() || !canvas.isRealized()) {
+    CanvasSwing canvas = (CanvasSwing) chart.getCanvas();
+
+    while (!f.isVisible() || !canvas.isRealized()) {
       int waitTimeMs = 1500;
       System.out.println("Waiting " + waitTimeMs);
-      
+
       chart.sleep(waitTimeMs);
-      //canvas.forceRepaint();
+      // canvas.forceRepaint();
     }
-    
-    
+
+
     // Then
     ChartTester tester = new NativeChartTester();
-    tester.assertSimilar(chart,
-        ChartTester.EXPECTED_IMAGE_FOLDER + this.getClass().getSimpleName() + ".png");
+    tester.assertSimilar(chart, tester.path(this));
   }
 
 
@@ -62,7 +61,8 @@ public class ITTestNativeSurfaceChart_Swing {
 
     // Create the object to represent the function over the given range.
     final Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps), func);
-    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .5f)));
+    surface
+        .setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .5f)));
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);
     return surface;

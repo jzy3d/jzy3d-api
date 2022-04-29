@@ -121,9 +121,12 @@ public class gl_colorbuffer {
 
   public void clear_buffer(int size) {
     // System.err.println("gl_colorbuffer.clear_buffer " + size + " pixels");
-
     // gl_render_pixel.debug_color_to_console(IntClearColor);
 
+    if(size>=Buffer.length) {
+      size = Buffer.length;
+    }
+    
     for (int i = 0; i < size; i++) {
       Buffer[i] = IntClearColor;
     }
