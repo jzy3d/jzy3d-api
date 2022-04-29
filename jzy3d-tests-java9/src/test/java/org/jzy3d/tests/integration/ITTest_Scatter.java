@@ -17,8 +17,12 @@ public class ITTest_Scatter extends ITTest{
     whenScatterChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.OFF);
     whenScatterChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.ON);
 
+    whenScatterChart_ThenMatchBaselineImagePixelwise(WT.Native_Swing, HiDPI.OFF);
+    whenScatterChart_ThenMatchBaselineImagePixelwise(WT.Native_Swing, HiDPI.ON);
+
     whenScatterChart_ThenMatchBaselineImagePixelwise(WT.EmulGL_AWT, HiDPI.ON);
     whenScatterChart_ThenMatchBaselineImagePixelwise(WT.EmulGL_AWT, HiDPI.OFF);
+
   }
 
   private Chart whenScatterChart_ThenMatchBaselineImagePixelwise(WT wt, HiDPI hidpi) {

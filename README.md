@@ -158,27 +158,7 @@ Extensions
 * <a href="https://github.com/jzy3d/bigpicture">jzy3d-bigpicture</a> : drivers to few big data storage to draw massive amount of points
 
 
-## Architecture
 
-Creating a chart implies building and wiring the below high-level components.
-
-<img src="doc/Components.png"/>
-
-
-### Customize chart with factories
-
-The ```IChartFactory``` builds all objects that will define how the chart will look (```Axis```, ```View```, ```Camera```, ```Chart```).
-
-The ```IPainterFactory``` builds every objects that allow compatibility across windowing toolkits and GPU/CPU. The chart factories and drawable have no knowledge of concrete AWT, SWT, Swing, etc. This is all powered by the painter factory introduced in Jzy3d 2.0.
-
-The ```Drawable``` class hierarchy defines geometries able to use a ```IPainter``` to draw something.
-
-<img src="doc/Factories.png"/>
-
-
-### Native and emulated elements
-
-<img src="doc/Interop.png"/>
 
 ## Dependent libraries
 
@@ -216,13 +196,13 @@ This will run all test named `**/Test*.java` or `**/*Test.java`.
 mvn clean install
 ```
 
-#### Run unit tests and integration tests
+#### Run unit tests and automated integration tests
 
 Integration tests compare charts to baseline images pixel wise. They are important in te toolbelt but have the drawback of being less portable accross computers
 * Different OS have different frame insets (changing actual rendering area size) leading to chart screenshots of different size accross OS.
 * Different OS have different frame insets (changing actual rendering area size) leading to chart a different layout (colorbar position)
 * Different OS have different font rasterization (despite using the JVM font raterizer to minimize OS impact), hence text labels do not match despite having only a few pixel difference.
-* A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tests-java9` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts. 
+* A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tests-java9` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts.
 
 This will run all test named `**/ITTest*.java` and unit tests.
 
@@ -230,14 +210,16 @@ This will run all test named `**/ITTest*.java` and unit tests.
 mvn clean install -Pintegration-tests
 ```
 
-
-
-#### Skip tests
+#### Skip automated tests
 
 This will skip all tests (unit and integration)
 ```
 mvn clean install -DskipTests
 ```
+
+#### Manual tests
+
+Some [test require a manual verification](jzy3d-tests-java9/src/test/java/org/jzy3d/tests/manual).
 
 ### Deploy source & javadocs
 ```

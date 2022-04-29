@@ -306,4 +306,9 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
       listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
     }
   }
+  
+  @Override
+  public boolean isNative() {
+    return true;
+  }
 }

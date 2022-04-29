@@ -320,4 +320,9 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
       listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
     }
   }
+  
+  @Override
+  public boolean isNative() {
+    return true;
+  }
 }

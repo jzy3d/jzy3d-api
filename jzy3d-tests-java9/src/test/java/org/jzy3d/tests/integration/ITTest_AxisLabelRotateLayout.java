@@ -29,6 +29,9 @@ public class ITTest_AxisLabelRotateLayout extends ITTest{
     whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON);
     whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.OFF);
 
+    whenAxisLabelOrientationNotHorizontal(WT.Native_Swing, HiDPI.ON);
+    whenAxisLabelOrientationNotHorizontal(WT.Native_Swing, HiDPI.OFF);
+
     whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.OFF);
     whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON);
   }
