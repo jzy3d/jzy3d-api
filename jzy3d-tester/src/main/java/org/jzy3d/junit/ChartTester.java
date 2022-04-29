@@ -29,15 +29,30 @@ public class ChartTester {
 
   protected boolean textInvisible = false;
 
-  protected String testCaseOutputFolder = ERROR_IMAGE_FOLDER_DEFAULT;
-  protected String testCaseInputFolder = EXPECTED_IMAGE_FOLDER;
+  protected String testCaseOutputFolder = MAVEN_TARGET_PATH;
+  protected String testCaseInputFolder = MAVEN_TEST_RESOURCES_PATH;
 
-  public static final String EXPECTED_IMAGE_FOLDER = "src/test/resources/";
-  public static final String ERROR_IMAGE_FOLDER_DEFAULT = "target/";
+  private static final String MAVEN_TEST_RESOURCES_PATH = "src/test/resources/";
+  public static final String MAVEN_TARGET_PATH = "target/";
 
   // int bufImgType = BufferedImage.TYPE_3BYTE_BGR;// );
   protected int WIDTH = 800;
   protected int HEIGHT = 600;
+
+  public String path(Object obj) {
+    return path(obj.getClass());
+  }
+
+  public String path(Class<?> clazz) {
+    return path(clazz.getSimpleName());
+  }
+
+  public String path(String filename) {
+    if (!filename.contains("."))
+      return testCaseInputFolder + filename + ".png";
+    else
+      return testCaseInputFolder + filename;
+  }
 
   public boolean isTextInvisible() {
     return textInvisible;
@@ -48,7 +63,7 @@ public class ChartTester {
   }
 
   public void assertSimilar(Chart chart, String testImage) {
-    if(isTextInvisible()){
+    if (isTextInvisible()) {
       chart.getAxisLayout().setXTickColor(chart.getView().getBackgroundColor());
       chart.getAxisLayout().setYTickColor(chart.getView().getBackgroundColor());
       chart.getAxisLayout().setZTickColor(chart.getView().getBackgroundColor());
@@ -56,9 +71,9 @@ public class ChartTester {
       chart.getAxisLayout().setYTickLabelDisplayed(false);
       chart.getAxisLayout().setZTickLabelDisplayed(false);
       chart.render();
-      //chart.getAxisLayout().setMainColor(chart.getView().getBackgroundColor());
+      // chart.getAxisLayout().setMainColor(chart.getView().getBackgroundColor());
     }
-    if(!chart.getFactory().getPainterFactory().isOffscreen()) {
+    if (!chart.getFactory().getPainterFactory().isOffscreen()) {
       logger.warn("Making assertions on a non offscreen chart");
     }
     try {
@@ -171,15 +186,15 @@ public class ChartTester {
 
       BufferedImage diffImage = copyImage(expected);
       highlightPixel(diffImage, e.getDiffCoordinates(), Highlight.RED);
-      
-      
+
+
       if (!e.isSameImageSize()) {
         String m = e.getImageSizeDifferenceMessage();
-        
+
         logger.error(m);
-        
-        m+= " - Diff will only show expected image. See the actual image separately";
-        
+
+        m += " - Diff will only show expected image. See the actual image separately";
+
         highlightSize(diffImage, m);
       }
 
@@ -188,8 +203,8 @@ public class ChartTester {
       logger.error("DIFF IMAGE : " + diffFile);
 
       // LET TEST FAIL
-      
-      
+
+
       fail("Chart test failed: " + e.getMessage() + " see " + diffFile);
 
     } catch (IOException e) {
@@ -202,12 +217,12 @@ public class ChartTester {
 
   private void highlightSize(BufferedImage diffImage, String m) {
     Graphics g = diffImage.createGraphics();
-    
+
     int fontSize = 16;
-    
+
     g.setColor(java.awt.Color.RED);
     g.setFont(new java.awt.Font("Arial", java.awt.Font.PLAIN, fontSize));
-    g.drawString(m, 10, 10+fontSize);
+    g.drawString(m, 10, 10 + fontSize);
     g.dispose();
   }
 
@@ -320,7 +335,8 @@ public class ChartTester {
       }
 
     } else {
-      String m = "image size differ: actual={" + i1W + "," + i1H + "} expected={" + i2W + "," + i2H + "}";
+      String m =
+          "image size differ: actual={" + i1W + "," + i1H + "} expected={" + i2W + "," + i2H + "}";
       throw new ChartTestFailed(m, actual, expected);
     }
   }

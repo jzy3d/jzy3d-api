@@ -23,8 +23,7 @@ public class ITTestEmulGLDisk {
 
     // Then
     ChartTester tester = new ChartTester();
-    tester.assertSimilar(chart,
-        ChartTester.EXPECTED_IMAGE_FOLDER + this.getClass().getSimpleName() + ".png");
+    tester.assertSimilar(chart, tester.path(this));
   }
 
 }

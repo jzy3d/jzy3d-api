@@ -22,8 +22,8 @@ public class ITTestEmulGLSurfaceChart {
     // When
     EmulGLChartFactory factory = new EmulGLChartFactory();
     Chart chart = factory.newChart(Quality.Advanced());
-    
-    //System.out.println(chart.getQuality().isAlphaActivated());
+
+    // System.out.println(chart.getQuality().isAlphaActivated());
 
     EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
     c.setProfileDisplayMethod(false);
@@ -33,8 +33,7 @@ public class ITTestEmulGLSurfaceChart {
 
     // Then
     ChartTester tester = new ChartTester();
-    tester.assertSimilar(chart,
-        ChartTester.EXPECTED_IMAGE_FOLDER + this.getClass().getSimpleName() + ".png");
+    tester.assertSimilar(chart, tester.path(this));
   }
 
 

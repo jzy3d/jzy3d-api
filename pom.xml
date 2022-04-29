@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jzy3d</groupId>
@@ -61,10 +59,9 @@
 		<module>jzy3d-native-jogl-swing</module>
 		<module>jzy3d-native-jogl-swt</module>
 
-		<!-- <module>jzy3d-native-jogl-newt</module> -->
+		<module>jzy3d-native-jogl-newt</module>
 
 		<!-- <module>jzy3d-native-jogl-javafx</module> -->
-
 
 
 		<module>jzy3d-tester</module>
@@ -221,6 +218,13 @@
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+				<optional>true</optional>
+				<version>${version.swt}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.eclipse.platform</groupId>
+				<artifactId>org.eclipse.swt.gtk.linux.aarch64</artifactId>
 				<optional>true</optional>
 				<version>${version.swt}</version>
 			</dependency>
@@ -479,7 +483,7 @@
 					<additionalparam>-Xdoclint:none</additionalparam>
 					<doclint>none</doclint>
 					<source>8</source>
-					<quiet>true</quiet><!-- only show warnings/errors -->
+					<quiet>true</quiet> <!-- only show warnings/errors -->
 					<failOnError>false</failOnError>
 					<additionalJOption>--no-module-directories</additionalJOption>
 					<configuration>

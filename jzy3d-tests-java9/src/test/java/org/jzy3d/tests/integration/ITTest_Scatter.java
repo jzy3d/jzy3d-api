@@ -7,7 +7,7 @@ import org.jzy3d.tests.integration.ITTest.WT;
 
 public class ITTest_Scatter extends ITTest{
   public static void main(String[] args) {
-    open(new ITTest_Scatter().whenScatterChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.OFF));
+    open(new ITTest_Scatter().whenScatterChart_ThenMatchBaselineImagePixelwise(WT.EmulGL_AWT, HiDPI.ON));
   }
   
   @Test

@@ -9,14 +9,13 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -203,30 +202,10 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     GLCapabilitiesImmutable caps = getChosenGLCapabilities();
     
     GL gl = (GL) painter.acquireGL();
-    
-    StringBuffer sb = new StringBuffer();
-    sb.append("Capabilities  : " + caps + "\n");
-    sb.append("GL_VENDOR     : " + gl.glGetString(GL.GL_VENDOR) + "\n");
-    sb.append("GL_RENDERER   : " + gl.glGetString(GL.GL_RENDERER) + "\n");
-    sb.append("GL_VERSION    : " + gl.glGetString(GL.GL_VERSION) + "\n");
-    
-    String ext = gl.glGetString(GL.GL_EXTENSIONS);
-
-    if(ext!=null) {
-      sb.append("GL_EXTENSIONS : " + "\n");
-      for(String e: ext.split(" ")) {
-        sb.append("\t" + e + "\n");
-      }
-    }
-    else {
-      sb.append("GL_EXTENSIONS : null\n");      
-    }
-    
-    // sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
-    
+    GPUInfo info = GPUInfo.load(gl);
     painter.releaseGL();
     
-    return sb.toString();
+    return "Capabilities  : " + caps + "\n" + info.toString();
   }
 
   @Override
@@ -262,7 +241,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
   @Override
   public void screenshot(File file) throws IOException {
     if (!file.getParentFile().exists())
-      file.mkdirs();
+      file.getParentFile().mkdirs();
     TextureData screen = screenshot();
     TextureIO.write(screen, file);
   }
