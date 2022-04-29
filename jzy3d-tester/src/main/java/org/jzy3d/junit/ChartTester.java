@@ -30,9 +30,9 @@ public class ChartTester {
   protected boolean textInvisible = false;
 
   protected String testCaseOutputFolder = ERROR_IMAGE_FOLDER_DEFAULT;
-  protected String testCaseInputFolder = EXPECTED_IMAGE_FOLDER;
+  protected String testCaseInputFolder = MAVEN_TEST_RESOURCES;
 
-  private static final String EXPECTED_IMAGE_FOLDER = "src/test/resources/";
+  private static final String MAVEN_TEST_RESOURCES = "src/test/resources/";
   public static final String ERROR_IMAGE_FOLDER_DEFAULT = "target/";
 
   // int bufImgType = BufferedImage.TYPE_3BYTE_BGR;// );
@@ -49,10 +49,9 @@ public class ChartTester {
 
   public String path(String filename) {
     if (!filename.contains("."))
-      return ChartTester.EXPECTED_IMAGE_FOLDER + filename + ".png";
+      return testCaseInputFolder + filename + ".png";
     else
-      return ChartTester.EXPECTED_IMAGE_FOLDER + filename;
-
+      return testCaseInputFolder + filename;
   }
 
   public boolean isTextInvisible() {
