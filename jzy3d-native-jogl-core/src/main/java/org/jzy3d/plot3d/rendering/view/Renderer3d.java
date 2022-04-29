@@ -14,7 +14,7 @@ import com.jogamp.opengl.util.GLReadBufferUtil;
 import com.jogamp.opengl.util.texture.TextureData;
 
 /**
- * The {@link Renderer3d} is a {@link GLEventListener} that makes handles init, display, reshape and
+ * The {@link Renderer3d} is a {@link GLEventListener} that handles init, display, reshape and
  * screenshots of a {@link Scene} in a {@link ICanvas}.
  * 
  * One can activate OpenGl errors in console by setting debugGL to true in the constructor. One can
@@ -105,9 +105,8 @@ public class Renderer3d implements GLEventListener {
 
     profileDisplayTimer.toc();
     lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
-
   }
-
+  
   /** Called when the {@link GLAutoDrawable} is resized. */
   @Override
   public void reshape(GLAutoDrawable canvas, int x, int y, int width, int height) {

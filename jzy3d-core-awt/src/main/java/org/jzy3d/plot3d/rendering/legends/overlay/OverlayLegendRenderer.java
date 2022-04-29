@@ -6,7 +6,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.util.List;
 import org.jzy3d.colors.AWTColor;
-import org.jzy3d.maths.Coord2d;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
@@ -23,8 +22,6 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
   protected List<Legend> info;
   protected LegendLayout layout = new LegendLayout();
 
-  Coord2d scale = new Coord2d(1,1);
-
   public OverlayLegendRenderer(List<Legend> info) {
     super();
     this.info = info;
@@ -33,15 +30,12 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
   @Override
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {
     Graphics2D g2d = (Graphics2D) g;
-    
-    
-    //g2d.scale(2, 2);
-    g2d.scale(scale.x, scale.y);
-    
+
     AWTGraphicsUtils.configureRenderingHints(g2d);
 
-    if (layout.font != null)
+    if (layout.font != null) {
       g2d.setFont(layout.font);
+    }
 
     FontMetrics fm = g.getFontMetrics();
     int textHeight = fm.getHeight();
@@ -68,7 +62,6 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
       g2d.fillRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
     }
 
-
     // Text position
     int xTextPos = xBoxPos + layout.txtMarginX;
     int yTextPos = yBoxPos + layout.txtMarginY + textHeight;
@@ -80,17 +73,11 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
       yTextPos += (layout.txtInterline + textHeight);
     }
 
-
     // Border
     g2d.setColor(AWTColor.toAWT(layout.borderColor));
     g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
-    
-    
-    // Reset scale for other renderers
-    //g2d.scale(1/scale.x, 1/scale.y);
 
   }
-
 
 
   public void paintLegend(Graphics2D g2d, int textHeight, int textWidthMax, int xTextPos,
@@ -149,13 +136,5 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
 
   public void setLayout(LegendLayout layout) {
     this.layout = layout;
-  }
-
-  public Coord2d getScale() {
-    return scale;
-  }
-
-  public void setScale(Coord2d scale) {
-    this.scale = scale;
   }
 }

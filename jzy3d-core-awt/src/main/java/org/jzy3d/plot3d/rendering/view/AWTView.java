@@ -39,32 +39,7 @@ public class AWTView extends ChartView {
     super.dispose();
     renderers.clear();
   }
-
-  // DON T KNOW WHY THE HELL IT IS THERE. MOVED TO SUPER CLASS 
-  /*@Override
-  protected void renderAxeBox(IAxis axe, Scene scene, Camera camera, Coord3d scaling,
-      boolean axeBoxDisplayed) {
-    if (axeBoxDisplayed) {
-      painter.glMatrixMode_ModelView();
-
-      scene.getLightSet().disable(painter);
-
-      axe.setScale(scaling);
-      axe.draw(painter);
-      
-      if (displayAxisWholeBounds) { // for debug
-        AxisBox abox = (AxisBox) axe;
-        BoundingBox3d box = abox.getWholeBounds();
-        Parallelepiped p = new Parallelepiped(box);
-        p.setFaceDisplayed(false);
-        p.setWireframeColor(Color.MAGENTA);
-        p.setWireframeDisplayed(true);
-        p.draw(painter);
-      }
-
-      scene.getLightSet().enableLightIfThereAreLights(painter);
-    }
-  }*/
+  
 
   // MOVE TO SUPER CLASS THAT HAS EMPTY IMPLEMENTATION FOR FORGOTTEN REASON
   @Override
