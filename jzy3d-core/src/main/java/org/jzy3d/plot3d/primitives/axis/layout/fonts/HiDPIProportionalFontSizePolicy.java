@@ -44,7 +44,7 @@ public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
       IPainter painter = view.getPainter();
 
       // Workaround for https://github.com/jzy3d/jogl/issues/8
-      if (painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()){// && painter.getCanvas().isNative()) {
+      if (painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT() && painter.getCanvas().isNative()) {
         // We here scale the viewport by either 1 or by the ratio indicated by the JVM
         // if only the JVM is able to detect the pixel ratio and if JOGL
         // can't guess it (which is the case for Windows 10).
