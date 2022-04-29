@@ -29,11 +29,11 @@ public class ChartTester {
 
   protected boolean textInvisible = false;
 
-  protected String testCaseOutputFolder = ERROR_IMAGE_FOLDER_DEFAULT;
-  protected String testCaseInputFolder = MAVEN_TEST_RESOURCES;
+  protected String testCaseOutputFolder = MAVEN_TARGET_PATH;
+  protected String testCaseInputFolder = MAVEN_TEST_RESOURCES_PATH;
 
-  private static final String MAVEN_TEST_RESOURCES = "src/test/resources/";
-  public static final String ERROR_IMAGE_FOLDER_DEFAULT = "target/";
+  private static final String MAVEN_TEST_RESOURCES_PATH = "src/test/resources/";
+  public static final String MAVEN_TARGET_PATH = "target/";
 
   // int bufImgType = BufferedImage.TYPE_3BYTE_BGR;// );
   protected int WIDTH = 800;
