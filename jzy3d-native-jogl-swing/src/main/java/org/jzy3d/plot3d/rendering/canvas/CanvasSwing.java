@@ -16,7 +16,9 @@ import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -249,17 +251,17 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 
   @Override
   public String getDebugInfo() {
-    GL gl = ((NativeDesktopPainter) getView().getPainter()).getCurrentGL(this);
-
-    StringBuffer sb = new StringBuffer();
-    sb.append("Chosen GLCapabilities: " + getChosenGLCapabilities() + "\n");
-    sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
-    sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
-    sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
-    // sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
-    return sb.toString();
+    IPainter painter = getView().getPainter();
+    
+    GLCapabilitiesImmutable caps = getChosenGLCapabilities();
+    
+    GL gl = (GL) painter.acquireGL();
+    GPUInfo info = GPUInfo.load(gl);
+    painter.releaseGL();
+    
+    return "Capabilities  : " + caps + "\n" + info.toString();
   }
-
+  
   @Override
   public void addMouseController(Object o) {
     addMouseListener((MouseListener) o);

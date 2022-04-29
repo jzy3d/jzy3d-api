@@ -13,7 +13,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -201,17 +203,18 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     TextureData screen = screenshot();
     TextureIO.write(screen, file);
   }
-
+  
   @Override
   public String getDebugInfo() {
-    GL gl = ((NativeDesktopPainter) getView().getPainter()).getCurrentGL(this);
-
-    StringBuilder sb = new StringBuilder();
-    sb.append("Chosen GLCapabilities: " + window.getChosenGLCapabilities() + "\n");
-    sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
-    sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
-    sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
-    return sb.toString();
+    IPainter painter = getView().getPainter();
+    
+    GLCapabilitiesImmutable caps = window.getChosenGLCapabilities();
+    
+    GL gl = (GL) painter.acquireGL();
+    GPUInfo info = GPUInfo.load(gl);
+    painter.releaseGL();
+    
+    return "Capabilities  : " + caps + "\n" + info.toString();
   }
 
   /**
