@@ -8,7 +8,9 @@ import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -21,6 +23,7 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 public class NativeChartTester extends ChartTester {
+
   protected BufferedImage getBufferedImage(Chart chart) throws IOException {
     if (classicScreenshotGen) {
       // This screenshot generation is working well

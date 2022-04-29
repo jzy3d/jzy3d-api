@@ -16,6 +16,7 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.junit.ChartTester;
 import org.jzy3d.junit.NativeChartTester;
+import org.jzy3d.junit.NativePlatform;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Range;
@@ -34,6 +35,8 @@ public class ITTest {
   public static final String SEP_CASE = "_";
   public static final String KV = "=";
 
+  static NativePlatform platform = new NativePlatform();
+
   static Rectangle offscreenDimension = new Rectangle(800,600);
   
   // running offscreen may prevent to get a HiDPI image
@@ -44,7 +47,8 @@ public class ITTest {
     EmulGL_AWT, Native_AWT, Native_Swing
   }
   
-  protected String indexFileName = "README_GENERATED.md";
+  
+  protected String indexFileName = "BASELINE_" + platform.getLabel() + ".md";
   
   // ---------------------------------------------------------------------------------------------- //
   
@@ -54,8 +58,13 @@ public class ITTest {
     StringBuffer sb = new StringBuffer();
     line(sb, "jzy3d-test-java9-generated");
     line(sb, "==========================");
-    line(sb, "This is a summary of existing baseline images for tests.");
-    
+    line(sb, "This is a summary of existing baseline images for tests, which was generated on ");
+    line(sb, "* OS Name : " + platform.getOs().getName());
+    line(sb, "* OS Version : " + platform.getOs().getVersion());
+    line(sb, "* Java Version : " + platform.getOs().getJavaVersion());
+    line(sb, "* CPU : " + platform.getOs().getArch());
+    line(sb, "* GPU : " + platform.getGpuName());
+    line(sb, "");
     
     section(sb, "Surface");
     
@@ -126,7 +135,7 @@ public class ITTest {
   }
   
   public static String imgTest(String name) {
-    return "<img src=\"src/test/resources/" + name +".png\">";
+    return "<img src=\"src/test/resources/" + platform.getLabel() + "/" +name +".png\">";
   }
 
   public static String imgDiff(String name) {
@@ -177,12 +186,6 @@ public class ITTest {
     }
   }
   
-  /*public static Chart chartEmulGL(HiDPI hidpi, Rectangle offscreenDimension) {
-    ChartFactory factory = new EmulGLChartFactory();
-    
-    return chart(factory, hidpi, offscreenDimension);
-  }*/
-
   public static Chart chart(ChartFactory factory, HiDPI hidpi, Rectangle offscreenDimension) {
     if(runOffscreen) {
       factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
@@ -194,19 +197,6 @@ public class ITTest {
     return chart;
   }
   
-  /*public static Chart chartNative(HiDPI hidpi, Rectangle offscreenDimension) {
-    AWTChartFactory factory = new AWTChartFactory();
-    
-    if(runOffscreen) {
-      factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
-      System.err.println(" ITTest will run offscreen, which may not enable HiDPI hence produce inaccurate layout with texts");
-    }
-    
-    Quality q = quality(hidpi);
-    Chart chart = factory.newChart(q);
-    return chart;
-  }*/
-
   public static Quality quality(HiDPI hidpi) {
     Quality q = Quality.Advanced(); 
     q.setHiDPIEnabled(HiDPI.ON.equals(hidpi)?true:false); // Enable HiDPI if available on computer
@@ -250,17 +240,17 @@ public class ITTest {
       chart.render();
     }
 
+    // Verify
+    ChartTester tester = new ChartTester();
     
-    // EMULGL
-    if(chart.getFactory() instanceof EmulGLChartFactory) {
-      ChartTester tester = new ChartTester();
-      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + name + ".png");
+    if(!(chart.getFactory() instanceof EmulGLChartFactory)) {
+      tester = new NativeChartTester();
     }
-    // NATIVE
-    else {
-      NativeChartTester tester = new NativeChartTester();
-      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + name + ".png");
-    }
+    
+    tester.setTestCaseInputFolder("src/test/resources/" + new NativePlatform().getLabel() + "/");
+
+    
+    tester.assertSimilar(chart, tester.path(name));
   }
   
   // ---------------------------------------------------------------------------------------------- //

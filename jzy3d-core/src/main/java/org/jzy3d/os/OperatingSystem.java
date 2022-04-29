@@ -59,6 +59,10 @@ public class OperatingSystem {
     return version;
   }
 
+  public String getJavaVersion() {
+    return jvm;
+  }
+
   public String getArch() {
     return arch;
   }
