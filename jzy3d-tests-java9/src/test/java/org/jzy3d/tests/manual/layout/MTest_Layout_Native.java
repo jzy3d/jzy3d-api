@@ -1,5 +1,6 @@
 package org.jzy3d.tests.manual.layout;
 
+import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 
 /**
@@ -20,11 +21,15 @@ public class MTest_Layout_Native {
   static final float ALPHA_FACTOR = 0.55f;// .61f;
 
   public static void main(String[] args) {
-    MTest_Layout_EmulGL d = new MTest_Layout_EmulGL();
+    MTest_Layout d = new MTest_Layout();
     d.setFactory(new AWTChartFactory());
     d.init();
     
-    d.getChart().open(1264, 812);
+    Chart chart = d.getChart();
+    chart.open(800, 600);
+    
+    DoubleScreenManualScenario scenario = new DoubleScreenManualScenario(chart, MTest_Layout_Native.class.getSimpleName());
+    scenario.start();
   }
 
 
