@@ -2,6 +2,7 @@ package jogl;
 
 import org.junit.Test;
 import org.jzy3d.os.OperatingSystem;
+import org.jzy3d.plot3d.GPUInfo;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -76,7 +77,7 @@ public class Test_OpenGLVersion {
     System.out.println("CAPS (found)  : " + drawable.getChosenGLCapabilities());
     
     System.out.println("--------------------------------------------------");
-    System.out.println(getDebugInfo(gl));
+    System.out.println(GPUInfo.load(gl));
     
     System.out.println("--------------------------------------------------");
     System.out.println(drawable.getContext());
