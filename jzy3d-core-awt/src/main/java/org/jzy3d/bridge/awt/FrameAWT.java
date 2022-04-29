@@ -47,11 +47,13 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
     this.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing(WindowEvent e) {
-        FrameAWT.this.remove((java.awt.Component) FrameAWT.this.chart.getCanvas());
-        FrameAWT.this.chart.stopAllThreads();
-        FrameAWT.this.chart.dispose();
-        FrameAWT.this.chart = null;
-        FrameAWT.this.dispose();
+        if(FrameAWT.this.chart!=null) {
+          FrameAWT.this.remove((java.awt.Component) FrameAWT.this.chart.getCanvas());
+          FrameAWT.this.chart.stopAllThreads();
+          FrameAWT.this.chart.dispose();
+          FrameAWT.this.chart = null;
+          FrameAWT.this.dispose();
+        }
       }
     });
   }

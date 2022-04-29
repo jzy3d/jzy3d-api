@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -52,21 +53,21 @@ public class AWTNativeViewOverlay implements IViewOverlay {
       this.overlay = new Overlay(nCanvas.getDrawable());
 
     // TODO: don't know why needed to allow working with Overlay!!!????
-
     painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
     painter.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
 
     if (overlay != null && viewport.width > 0 && viewport.height > 0) {
-
       try {
         if (nCanvas.getDrawable().getSurfaceWidth() > 0
             && nCanvas.getDrawable().getSurfaceHeight() > 0) {
           Graphics2D g2d = overlay.createGraphics();
           
           // make overlay HiDPI aware
-          g2d.scale(view.getPixelScale().x, view.getPixelScale().y);
+          Coord2d pixelScale = view.getPixelScale();
+          g2d.scale(pixelScale.x, pixelScale.y);
 
+          // Draw
           g2d.setBackground(overlayBackground);
           g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
 
@@ -88,7 +89,5 @@ public class AWTNativeViewOverlay implements IViewOverlay {
         LOGGER.error(e, e);
       }
     }
-
   }
-
 }
