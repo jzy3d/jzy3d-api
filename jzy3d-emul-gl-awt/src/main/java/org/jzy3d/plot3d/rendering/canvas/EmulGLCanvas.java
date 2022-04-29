@@ -129,6 +129,8 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
     // Check if current screen change to trigger repaint in case hiDPI support is different
     // Going from HiDPI to non HiDPI screen lead to poor picture and bigger font otherwise
+    //
+    // This code is mainly useful on macOS as the JVM do not receive OS order to repaint after monitor change (windows does)
     CurrentScreenWatch screenWatch = new CurrentScreenWatch(this) {
       @Override
       protected void fireScreenChange(double screenWidth, double screenHeight) {
