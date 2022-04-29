@@ -6,7 +6,7 @@ public class NativePlatform extends Platform{
   protected GPUInfo info = GPUInfo.load();
   
   public NativePlatform() {
-    gpuName = info.getRenderer().replace(" ", "").replace("(R)", "");
+    gpuName = info.getRenderer().replace(" ", "").replace("(R)", "").replace("(TM)", "");
   }
   
   
