@@ -47,8 +47,7 @@ public class ITTestNativeSurfaceChart {
 
     // Then
     ChartTester tester = new NativeChartTester();
-    tester.assertSimilar(chart,
-        ChartTester.EXPECTED_IMAGE_FOLDER + this.getClass().getSimpleName() + ".png");
+    tester.assertSimilar(chart, tester.path(this));
   }
 
 

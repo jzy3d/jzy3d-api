@@ -588,7 +588,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   @Override
   public String getDebugInfo() {
-    return null;
+    return "EmulGL (CPU rendering)";
   }
 
 

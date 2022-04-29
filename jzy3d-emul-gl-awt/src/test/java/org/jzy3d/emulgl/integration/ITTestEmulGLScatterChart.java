@@ -21,14 +21,13 @@ public class ITTestEmulGLScatterChart {
 
     EmulGLCanvas c = (EmulGLCanvas) chart.getCanvas();
     c.setProfileDisplayMethod(false);
-    //c.getGL().setAutoAdaptToHiDPI(false);
+    // c.getGL().setAutoAdaptToHiDPI(false);
 
     chart.add(scatter());
 
     // Then
     ChartTester tester = new ChartTester();
-    tester.assertSimilar(chart,
-        ChartTester.EXPECTED_IMAGE_FOLDER + this.getClass().getSimpleName() + ".png");
+    tester.assertSimilar(chart, tester.path(this));
   }
 
   private static Scatter scatter() {

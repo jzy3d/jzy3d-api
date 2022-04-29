@@ -250,17 +250,14 @@ public class ITTest {
       chart.render();
     }
 
+    // Verify
+    ChartTester tester = new ChartTester();
     
-    // EMULGL
-    if(chart.getFactory() instanceof EmulGLChartFactory) {
-      ChartTester tester = new ChartTester();
-      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + name + ".png");
+    if(!(chart.getFactory() instanceof EmulGLChartFactory)) {
+      tester = new NativeChartTester();
     }
-    // NATIVE
-    else {
-      NativeChartTester tester = new NativeChartTester();
-      tester.assertSimilar(chart, ChartTester.EXPECTED_IMAGE_FOLDER + name + ".png");
-    }
+    
+    tester.assertSimilar(chart, tester.path(name));
   }
   
   // ---------------------------------------------------------------------------------------------- //
