@@ -84,31 +84,15 @@ public class GPUInfo {
     return vendor;
   }
 
-  public void setVendor(String vendor) {
-    this.vendor = vendor;
-  }
-
   public String getRenderer() {
     return renderer;
-  }
-
-  public void setRenderer(String renderer) {
-    this.renderer = renderer;
   }
 
   public String getVersion() {
     return version;
   }
 
-  public void setVersion(String version) {
-    this.version = version;
-  }
-
   public List<String> getExtensions() {
     return extensions;
-  }
-
-  public void setExtensions(List<String> extensions) {
-    this.extensions = extensions;
   }
 }
