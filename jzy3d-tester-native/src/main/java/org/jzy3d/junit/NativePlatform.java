@@ -8,4 +8,6 @@ public class NativePlatform extends Platform{
   public NativePlatform() {
     gpuName = info.getRenderer().replace(" ", "");
   }
+  
+  
 }

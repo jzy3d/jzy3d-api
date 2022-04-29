@@ -16,6 +16,12 @@ public class Platform {
   protected String clean(String s) {
     return s.toLowerCase().replace(" ", "");
   }
-  
-  
+
+  public OperatingSystem getOs() {
+    return os;
+  }
+
+  public String getGpuName() {
+    return gpuName;
+  }
 }
