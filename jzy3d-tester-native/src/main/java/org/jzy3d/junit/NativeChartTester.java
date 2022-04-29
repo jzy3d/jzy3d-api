@@ -78,20 +78,4 @@ public class NativeChartTester extends ChartTester {
       chart.add(d);
     return chart;
   }
-
-  /* *********************************************************************** */
-
-  public TextureData loadTextureData(String filename, GL gl) throws IOException {
-    TextureData i2 = TextureIO.newTextureData(gl.getGLProfile(), new File(filename), true, null);
-    return i2;
-  }
-
-  public void screenshot(TextureData image, String testImage) throws IOException {
-    File output = new File(testImage);
-    if (!output.getParentFile().exists())
-      output.getParentFile().mkdirs();
-    TextureIO.write(image, output);
-  }
-
-
 }
