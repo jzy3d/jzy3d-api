@@ -465,7 +465,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   @Override
   public void screenshot(File file) throws IOException {
     if (!file.getParentFile().exists())
-      file.mkdirs();
+      file.getParentFile().mkdirs();
     ImageIO.write(screenshot(), "png", file);
   }
 
