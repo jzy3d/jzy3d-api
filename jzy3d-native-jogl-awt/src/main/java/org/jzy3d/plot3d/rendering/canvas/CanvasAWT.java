@@ -241,7 +241,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
   @Override
   public void screenshot(File file) throws IOException {
     if (!file.getParentFile().exists())
-      file.mkdirs();
+      file.getParentFile().mkdirs();
     TextureData screen = screenshot();
     TextureIO.write(screen, file);
   }
