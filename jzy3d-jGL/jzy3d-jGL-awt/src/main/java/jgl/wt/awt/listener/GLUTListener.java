@@ -1,4 +1,4 @@
-package jgl.wt.awt;
+package jgl.wt.awt.listener;
 
 import java.awt.*;
 
