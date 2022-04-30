@@ -44,6 +44,7 @@ import jgl.wt.awt.listener.callbacks.KeyboardCallback;
 import jgl.wt.awt.listener.callbacks.MotionCallback;
 import jgl.wt.awt.listener.callbacks.MouseCallback;
 import jgl.wt.awt.listener.callbacks.ReshapeCallback;
+import sun.jvm.hotspot.runtime.JavaThread;
 
 /**
  * GLUT is the glut class of jGL 2.4.
@@ -89,6 +90,20 @@ public class GLUT implements Runnable {
    * @param listener Listener that receives callbacks on GL events.
    */
   public void glutSetListener(GLUTListener listener) {
+    // By default - enable everything possible
+    glut_enable_events(AWTEvent.COMPONENT_EVENT_MASK, true);
+    if (listener.hasKeyboardCallback()) {
+      glut_enable_events(AWTEvent.KEY_EVENT_MASK, true);
+    }
+    if (listener.hasMouseCallback()) {
+      glut_enable_events(AWTEvent.MOUSE_EVENT_MASK, true);
+      glut_enable_events(AWTEvent.MOUSE_MOTION_EVENT_MASK, true);
+    }
+    if (JavaThread == null || !JavaThread.isAlive()) {
+      JavaThread = new Thread(this);
+      JavaThread.start();
+    }
+
     this.glutListener = listener;
   }
 
