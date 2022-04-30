@@ -36,9 +36,14 @@ import java.util.function.Consumer;
 import jgl.glaux.teapot;
 import jgl.glu.GLUquadricObj;
 import jgl.glut.glut_menu;
+import jgl.wt.awt.listener.GLUTLambdaCallbackListener;
 import jgl.wt.awt.listener.GLUTListener;
 import jgl.wt.awt.listener.GLUTNoopListener;
 import jgl.wt.awt.listener.GLUTReflectiveCallbackListener;
+import jgl.wt.awt.listener.callbacks.KeyboardCallback;
+import jgl.wt.awt.listener.callbacks.MotionCallback;
+import jgl.wt.awt.listener.callbacks.MouseCallback;
+import jgl.wt.awt.listener.callbacks.ReshapeCallback;
 
 /**
  * GLUT is the glut class of jGL 2.4.
@@ -839,6 +844,10 @@ public class GLUT implements Runnable {
     }
   }
 
+  public void glutDisplayFunc(Consumer<Component> displayFunc) {
+    requireLambdaBasedCallbackListenerOrNewIfNone().setDisplayMethod(displayFunc);
+  }
+
   /**
    * Register the name of the {@link JavaComponent} method that should be called upon component
    * resize events.
@@ -865,6 +874,11 @@ public class GLUT implements Runnable {
     }
   }
 
+  public void glutReshapeFunc(ReshapeCallback reshapeFunc) {
+    glut_enable_events(AWTEvent.COMPONENT_EVENT_MASK, reshapeFunc != null);
+    requireLambdaBasedCallbackListenerOrNewIfNone().setReshapeMethod(reshapeFunc);
+  }
+
   /** void glutKeyboardFunc (void (*func)(unsigned char key, int x, int y)) */
   @Deprecated
   public void glutKeyboardFunc(String func) {
@@ -882,6 +896,11 @@ public class GLUT implements Runnable {
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, false);
       requireStringBasedCallbackListenerOrNewIfNone().setKeyMethod(null);
     }
+  }
+
+  public void glutKeyboardFunc(KeyboardCallback keyboardFunc) {
+    glutEnableOrDisableKeyEvents(keyboardFunc);
+    requireLambdaBasedCallbackListenerOrNewIfNone().setKeyMethod(keyboardFunc);
   }
 
   /** void glutKeyboardUpFunc (void (*func)(unsigned char key, int x, int y)) */
@@ -903,6 +922,11 @@ public class GLUT implements Runnable {
     }
   }
 
+  public void glutKeyboardUpFunc(KeyboardCallback keyboardFunc) {
+    glutEnableOrDisableKeyEvents(keyboardFunc);
+    requireLambdaBasedCallbackListenerOrNewIfNone().setKeyUpMethod(keyboardFunc);
+  }
+
   @Deprecated
   public void glutSpecialFunc(String func) {
     if (func != null) {
@@ -919,6 +943,11 @@ public class GLUT implements Runnable {
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, false);
       requireStringBasedCallbackListenerOrNewIfNone().setSpecialKeyMethod(null);
     }
+  }
+
+  public void glutSpecialFunc(KeyboardCallback keyboardFunc) {
+    glutEnableOrDisableKeyEvents(keyboardFunc);
+    requireLambdaBasedCallbackListenerOrNewIfNone().setSpecialKeyMethod(keyboardFunc);
   }
 
   /** void glutSpecialUpFunc (void (*func)(unsigned char key, int x, int y)) */
@@ -938,6 +967,11 @@ public class GLUT implements Runnable {
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, false);
       requireStringBasedCallbackListenerOrNewIfNone().setSpecialKeyUpMethod(null);
     }
+  }
+
+  public void glutSpecialUpFunc(KeyboardCallback keyboardFunc) {
+    glutEnableOrDisableKeyEvents(keyboardFunc);
+    requireLambdaBasedCallbackListenerOrNewIfNone().setSpecialKeyUpMethod(keyboardFunc);
   }
 
   /**
@@ -965,6 +999,16 @@ public class GLUT implements Runnable {
     }
   }
 
+  public void glutMouseFunc(MouseCallback mouseFunc) {
+    if (mouseFunc != null) {
+      glut_enable_events(AWTEvent.MOUSE_EVENT_MASK, true);
+    } else if (JavaMenuButton == -1) {
+      glut_enable_events(AWTEvent.MOUSE_EVENT_MASK, false);
+    }
+
+    requireLambdaBasedCallbackListenerOrNewIfNone().setMouseMethod(mouseFunc);
+  }
+
   /**
    * Register the name of the {@link JavaComponent} method that should be called upon mouse motion.
    * 
@@ -989,6 +1033,11 @@ public class GLUT implements Runnable {
     }
   }
 
+  public void glutMotionFunc(MotionCallback motionFunc) {
+    glut_enable_events(AWTEvent.MOUSE_MOTION_EVENT_MASK, motionFunc != null);
+    requireLambdaBasedCallbackListenerOrNewIfNone().setMotionMethod(motionFunc);
+  }
+
   /** void glutPassiveMotionFunc (void (*func)(int x, int y)) */
   /** void glutEntryFunc (void (*func)(int state)) */
   /** void glutVisibilityFunc (void (*func)(int state)) */
@@ -1011,6 +1060,18 @@ public class GLUT implements Runnable {
       JavaThread = null;
       requireStringBasedCallbackListenerOrNewIfNone().setIdleMethod(null);
     }
+  }
+
+  public void glutIdleFunc(Consumer<Component> idleFunc) {
+    if (idleFunc != null) {
+      if (JavaThread == null || !JavaThread.isAlive()) {
+        JavaThread = new Thread(this);
+        JavaThread.start();
+      }
+    } else {
+      JavaThread = null;
+    }
+    requireLambdaBasedCallbackListenerOrNewIfNone().setIdleMethod(idleFunc);
   }
 
   public void run() {
@@ -1062,6 +1123,13 @@ public class GLUT implements Runnable {
     return keyModifiers;
   }
 
+  private void glutEnableOrDisableKeyEvents(KeyboardCallback keyboardFunc) {
+    if (keyboardFunc != null) {
+      glut_enable_events(AWTEvent.KEY_EVENT_MASK, true);
+    } else if (!listenerOrNoOp().hasKeyboardCallback()) {
+      glut_enable_events(AWTEvent.KEY_EVENT_MASK, false);
+    }
+  }
 
   /* ********************************************************************** */
 
@@ -1121,7 +1189,25 @@ public class GLUT implements Runnable {
       glutListener = new GLUTReflectiveCallbackListener();
     }
 
-    return (GLUTReflectiveCallbackListener) glutListener;
+    try {
+      return (GLUTReflectiveCallbackListener) glutListener;
+    } catch (ClassCastException e) {
+      System.err.println("It is impossible to use different types of callback listeners");
+      throw e;
+    }
+  }
+
+  private GLUTLambdaCallbackListener requireLambdaBasedCallbackListenerOrNewIfNone() {
+    if (null == glutListener) {
+      glutListener = new GLUTReflectiveCallbackListener();
+    }
+
+    try {
+      return (GLUTLambdaCallbackListener) glutListener;
+    } catch (ClassCastException e) {
+      System.err.println("It is impossible to use different types of callback listeners");
+      throw e;
+    }
   }
 
   private GLUTListener listenerOrNoOp() {
