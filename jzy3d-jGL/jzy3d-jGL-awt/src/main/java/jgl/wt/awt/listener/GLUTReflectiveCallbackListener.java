@@ -45,8 +45,8 @@ public class GLUTReflectiveCallbackListener implements GLUTListener {
     }
 
     @Override
-    public void onSpecialUp(Component target, char key, int x, int y) {
-        GLUTListener.super.onSpecialUp(target, key, x, y);
+    public void onSpecialKeyUp(Component target, char key, int x, int y) {
+        GLUTListener.super.onSpecialKeyUp(target, key, x, y);
     }
 
     @Override
@@ -72,6 +72,16 @@ public class GLUTReflectiveCallbackListener implements GLUTListener {
     @Override
     public void onIdle(Component target) {
         GLUTListener.super.onIdle(target);
+    }
+
+    @Override
+    public boolean hasMouseCallback() {
+        return mouseMethod != null;
+    }
+
+    @Override
+    public boolean hasKeyboardCallback() {
+        return (keyUpMethod != null) || (specialKeyMethod != null) || (specialKeyUpMethod != null);
     }
 
     /*
