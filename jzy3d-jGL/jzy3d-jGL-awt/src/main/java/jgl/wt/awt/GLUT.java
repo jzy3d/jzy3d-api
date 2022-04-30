@@ -35,6 +35,8 @@ import java.util.Vector;
 import jgl.glaux.teapot;
 import jgl.glu.GLUquadricObj;
 import jgl.glut.glut_menu;
+import jgl.wt.awt.listener.GLUTListener;
+import jgl.wt.awt.listener.GLUTReflectiveCallbackListener;
 
 /**
  * GLUT is the glut class of jGL 2.4.
@@ -64,15 +66,7 @@ public class GLUT implements Runnable {
 
   private GLUquadricObj quadObj;
 
-  private Method reshapeMethod = null;
-  private Method mouseMethod = null;
-  private Method motionMethod = null;
-  private Method keyMethod = null;
-  private Method keyUpMethod = null;
-  private Method specialKeyMethod = null;
-  private Method specialKeyUpMethod = null;
-  private Method displayMethod = null;
-  private Method idleMethod = null;
+  private GLUTListener glutListener;
   private Thread JavaThread = null;
   private Component JavaComponent = null;
 
@@ -360,17 +354,7 @@ public class GLUT implements Runnable {
 
   /** void glutMainLoop () */
   public void glutMainLoop() {
-    if (displayMethod != null) {
-      try {
-        displayMethod.invoke(JavaComponent, (Object[]) null);
-      } catch (IllegalAccessException e) {
-        System.out.println("IllegalAccessException while DisplayFunc");
-        e.printStackTrace();
-      } catch (InvocationTargetException e) {
-        System.out.println("InvocationTargetException while DisplayFunc");
-        e.printStackTrace();
-      }
-    }
+    listenerOrNoOp().onDisplay(JavaComponent);
   }
 
   /**
@@ -390,18 +374,7 @@ public class GLUT implements Runnable {
 
   /** void glutPostRedisplay () */
   public void glutPostRedisplay() {
-    try {
-      displayMethod.invoke(JavaComponent, (Object[]) null);
-    } catch (IllegalAccessException e) {
-      System.out.println("IllegalAccessException while DisplayFunc");
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      System.out.println("InvocationTargetException while DisplayFunc");
-      e.printStackTrace();
-    } catch (NullPointerException ee) {
-      ee.printStackTrace();
-      // ignore
-    }
+    listenerOrNoOp().onDisplay(JavaComponent);
     JavaComponent.repaint();
   }
 
@@ -688,32 +661,8 @@ public class GLUT implements Runnable {
     int id = e.getID();
     switch (id) {
       case ComponentEvent.COMPONENT_RESIZED:
-        Object[] arguments = new Object[] {new Integer(JavaComponent.getSize().width),
-            new Integer(JavaComponent.getSize().height)};
-        try {
-          reshapeMethod.invoke(JavaComponent, arguments);
-          try {
-            displayMethod.invoke(JavaComponent, (Object[]) null);
-          } catch (IllegalAccessException ee) {
-            System.out.println("IllegalAccessException while DisplayFunc");
-            ee.printStackTrace();
-          } catch (InvocationTargetException ee) {
-            System.out.println("InvocationTargetException while DisplayFunc");
-            ee.printStackTrace();
-          } catch (NullPointerException ee) {
-            // ignore
-            ee.printStackTrace();
-          }
-        } catch (IllegalAccessException ee) {
-          System.out.println("IllegalAccessException while ReshapeFunc");
-          ee.printStackTrace();
-        } catch (InvocationTargetException ee) {
-          System.out.println("InvocationTargetException while ReshapeFunc");
-          ee.printStackTrace();
-        } catch (NullPointerException ee) {
-          // ignore
-          ee.printStackTrace();
-        }
+        listenerOrNoOp().onReshape(JavaComponent, JavaComponent.getSize().width, JavaComponent.getSize().height);
+        listenerOrNoOp().onDisplay(JavaComponent);
         break;
     }
   }
@@ -839,19 +788,7 @@ public class GLUT implements Runnable {
       // if ((button == JavaMenuButton) && (state == GLUT_DOWN)) {
       // JavaMenu.show (e.getComponent (), e.getX (), e.getY ());
       // } else {
-      Object[] arguments = new Object[] {new Integer(button), new Integer(state),
-          new Integer(e.getX()), new Integer(e.getY())};
-      try {
-        mouseMethod.invoke(JavaComponent, arguments);
-      } catch (IllegalAccessException ee) {
-        System.out.println("IllegalAccessException while MouseFunc");
-        ee.printStackTrace();
-      } catch (InvocationTargetException ee) {
-        System.out.println("InvocationTargetException while MouseFunc");
-        ee.printStackTrace();
-      } catch (NullPointerException ee) {
-        ee.printStackTrace();
-      }
+      listenerOrNoOp().onMouse(JavaComponent, button, state, e.getX(), e.getY());
     }
     // }
   }
@@ -885,18 +822,7 @@ public class GLUT implements Runnable {
     switch (id) {
       case MouseEvent.MOUSE_MOVED:
       case MouseEvent.MOUSE_DRAGGED:
-        Object[] arguments = new Object[] {new Integer(e.getX()), new Integer(e.getY())};
-        try {
-          motionMethod.invoke(JavaComponent, arguments);
-        } catch (IllegalAccessException ee) {
-          System.out.println("IllegalAccessException while MouseMotionFunc");
-          ee.printStackTrace();
-        } catch (InvocationTargetException ee) {
-          System.out.println("InvocationTargetException while MouseMotionFunc");
-          ee.printStackTrace();
-        } catch (NullPointerException ee) {
-          ee.printStackTrace();
-        }
+        listenerOrNoOp().onMotion(JavaComponent, e.getX(), e.getY());
         break;
     }
   }
@@ -923,16 +849,17 @@ public class GLUT implements Runnable {
    * 
    * void glutDisplayFunc (void (*func)(void))
    */
+  @Deprecated
   public void glutDisplayFunc(String func) {
     if (func != null) {
       try {
-        displayMethod = JavaComponent.getClass().getMethod(func, (Class[]) null);
+        requireStringBasedCallbackListenerOrNewIfNone().setDisplayMethod(JavaComponent.getClass().getMethod(func, (Class[]) null));
       } catch (NoSuchMethodException e) {
         System.out.println("No method named " + func);
         e.printStackTrace();
       }
     } else {
-      displayMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setDisplayMethod(null);
     }
   }
 
@@ -944,37 +871,31 @@ public class GLUT implements Runnable {
    * 
    * void glutReshapeFunc (void (*func)(int width, int height))
    */
+  @Deprecated
   public void glutReshapeFunc(String func) {
     if (func != null) {
       Class[] parameterTypes = new Class[] {int.class, int.class};
-      Object[] arguments = new Object[] {new Integer(JavaComponent.getSize().width),
-          new Integer(JavaComponent.getSize().height)};
       try {
-        reshapeMethod = JavaComponent.getClass().getMethod(func, parameterTypes);
-        reshapeMethod.invoke(JavaComponent, arguments);
+        requireStringBasedCallbackListenerOrNewIfNone().setReshapeMethod(JavaComponent.getClass().getMethod(func, parameterTypes));
+        listenerOrNoOp().onReshape(JavaComponent, JavaComponent.getSize().width, JavaComponent.getSize().height);
         glut_enable_events(AWTEvent.COMPONENT_EVENT_MASK, true);
       } catch (NoSuchMethodException e) {
         System.out.println("No method named " + func);
         e.printStackTrace();
-      } catch (IllegalAccessException e) {
-        System.out.println("IllegalAccessException while ReshapeFunc");
-        e.printStackTrace();
-      } catch (InvocationTargetException e) {
-        System.out.println("InvocationTargetException while ReshapeFunc");
-        e.printStackTrace();
       }
     } else {
       glut_enable_events(AWTEvent.COMPONENT_EVENT_MASK, false);
-      reshapeMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setReshapeMethod(null);
     }
   }
 
   /** void glutKeyboardFunc (void (*func)(unsigned char key, int x, int y)) */
+  @Deprecated
   public void glutKeyboardFunc(String func) {
     if (func != null) {
       Class[] parameterTypes = new Class[] {char.class, int.class, int.class};
       try {
-        keyMethod = JavaComponent.getClass().getMethod(func, parameterTypes);
+        requireStringBasedCallbackListenerOrNewIfNone().setKeyMethod(JavaComponent.getClass().getMethod(func, parameterTypes));
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, true);
       } catch (NoSuchMethodException e) {
         System.out.println("No method named " + func);
@@ -983,16 +904,17 @@ public class GLUT implements Runnable {
     } else {
       if ((keyUpMethod == null) && (specialKeyMethod == null) && (specialKeyUpMethod == null))
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, false);
-      keyMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setKeyMethod(null);
     }
   }
 
   /** void glutKeyboardUpFunc (void (*func)(unsigned char key, int x, int y)) */
+  @Deprecated
   public void glutKeyboardUpFunc(String func) {
     if (func != null) {
       Class[] parameterTypes = new Class[] {char.class, int.class, int.class};
       try {
-        keyUpMethod = JavaComponent.getClass().getMethod(func, parameterTypes);
+        requireStringBasedCallbackListenerOrNewIfNone().setKeyUpMethod(JavaComponent.getClass().getMethod(func, parameterTypes));
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, true);
       } catch (NoSuchMethodException e) {
         System.out.println("No method named " + func);
@@ -1001,15 +923,16 @@ public class GLUT implements Runnable {
     } else {
       if ((keyMethod == null) && (specialKeyMethod == null) && (specialKeyUpMethod == null))
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, false);
-      keyUpMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setKeyUpMethod(null);
     }
   }
 
+  @Deprecated
   public void glutSpecialFunc(String func) {
     if (func != null) {
       Class[] parameterTypes = new Class[] {char.class, int.class, int.class};
       try {
-        specialKeyMethod = JavaComponent.getClass().getMethod(func, parameterTypes);
+        requireStringBasedCallbackListenerOrNewIfNone().setSpecialKeyMethod(JavaComponent.getClass().getMethod(func, parameterTypes));
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, true);
       } catch (NoSuchMethodException e) {
         System.out.println("No method named " + func);
@@ -1018,16 +941,17 @@ public class GLUT implements Runnable {
     } else {
       if ((keyMethod == null) && (keyUpMethod == null) && (specialKeyUpMethod == null))
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, false);
-      specialKeyMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setSpecialKeyMethod(null);
     }
   }
 
   /** void glutSpecialUpFunc (void (*func)(unsigned char key, int x, int y)) */
+  @Deprecated
   public void glutSpecialUpFunc(String func) {
     if (func != null) {
       Class[] parameterTypes = new Class[] {char.class, int.class, int.class};
       try {
-        specialKeyUpMethod = JavaComponent.getClass().getMethod(func, parameterTypes);
+        requireStringBasedCallbackListenerOrNewIfNone().setSpecialKeyUpMethod(JavaComponent.getClass().getMethod(func, parameterTypes));
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, true);
       } catch (NoSuchMethodException e) {
         System.out.println("No method named " + func);
@@ -1036,7 +960,7 @@ public class GLUT implements Runnable {
     } else {
       if ((keyMethod == null) && (keyUpMethod == null) && (specialKeyMethod == null))
         glut_enable_events(AWTEvent.KEY_EVENT_MASK, false);
-      specialKeyUpMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setSpecialKeyUpMethod(null);
     }
   }
 
@@ -1047,11 +971,12 @@ public class GLUT implements Runnable {
    * 
    * void glutMouseFunc (void (*func)(int button, int state, int x, int y))
    */
+  @Deprecated
   public void glutMouseFunc(String func) {
     if (func != null) {
       Class[] parameterTypes = new Class[] {int.class, int.class, int.class, int.class};
       try {
-        mouseMethod = JavaComponent.getClass().getMethod(func, parameterTypes);
+        requireStringBasedCallbackListenerOrNewIfNone().setMouseMethod(JavaComponent.getClass().getMethod(func, parameterTypes));
         glut_enable_events(AWTEvent.MOUSE_EVENT_MASK, true);
       } catch (NoSuchMethodException e) {
         System.out.println("No method named " + func);
@@ -1060,7 +985,7 @@ public class GLUT implements Runnable {
     } else {
       if (JavaMenuButton == -1)
         glut_enable_events(AWTEvent.MOUSE_EVENT_MASK, false);
-      mouseMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setMouseMethod(null);
     }
   }
 
@@ -1071,11 +996,12 @@ public class GLUT implements Runnable {
    * 
    * void glutMotionFunc (void (*func)(int x, int y))
    */
+  @Deprecated
   public void glutMotionFunc(String func) {
     if (func != null) {
       Class[] parameterTypes = new Class[] {int.class, int.class};
       try {
-        motionMethod = JavaComponent.getClass().getMethod(func, parameterTypes);
+        requireStringBasedCallbackListenerOrNewIfNone().setMotionMethod(JavaComponent.getClass().getMethod(func, parameterTypes));
         glut_enable_events(AWTEvent.MOUSE_MOTION_EVENT_MASK, true);
       } catch (NoSuchMethodException e) {
         System.out.println("No method named " + func);
@@ -1083,7 +1009,7 @@ public class GLUT implements Runnable {
       }
     } else {
       glut_enable_events(AWTEvent.MOUSE_MOTION_EVENT_MASK, false);
-      motionMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setMotionMethod(null);
     }
   }
 
@@ -1092,10 +1018,11 @@ public class GLUT implements Runnable {
   /** void glutVisibilityFunc (void (*func)(int state)) */
 
   /** void glutIdleFunc (void (*func)(void)) */
+  @Deprecated
   public void glutIdleFunc(String func) {
     if (func != null) {
       try {
-        idleMethod = JavaComponent.getClass().getMethod(func, (Class[]) null);
+        requireStringBasedCallbackListenerOrNewIfNone().setIdleMethod(JavaComponent.getClass().getMethod(func, (Class[]) null));
         if (JavaThread == null || !JavaThread.isAlive()) {
           JavaThread = new Thread(this);
           JavaThread.start();
@@ -1106,7 +1033,7 @@ public class GLUT implements Runnable {
       }
     } else {
       JavaThread = null;
-      idleMethod = null;
+      requireStringBasedCallbackListenerOrNewIfNone().setIdleMethod(null);
     }
   }
 
@@ -1114,16 +1041,12 @@ public class GLUT implements Runnable {
     Thread myThread = Thread.currentThread();
     while (JavaThread == myThread) {
       try {
-        idleMethod.invoke(JavaComponent, (Object[]) null);
+        listenerOrNoOp().onIdle(JavaComponent);
         try {
           Thread.sleep(200);
         } catch (InterruptedException e) {
           System.out.println(e);
         }
-      } catch (IllegalAccessException e) {
-        System.out.println("IllegalAccessException while IdleFunc");
-      } catch (InvocationTargetException e) {
-        System.out.println("InvocationTargetException while IdleFunc");
       }
     }
   }
@@ -1215,4 +1138,19 @@ public class GLUT implements Runnable {
   public static final int GLUT_KEY_END = 107;
   public static final int GLUT_KEY_INSERT = 108;
 
+  private GLUTReflectiveCallbackListener requireStringBasedCallbackListenerOrNewIfNone() {
+    if (null == glutListener) {
+      glutListener = new GLUTReflectiveCallbackListener();
+    }
+
+    return (GLUTReflectiveCallbackListener) glutListener;
+  }
+
+  private GLUTListener listenerOrNoOp() {
+    if (null == glutListener) {
+      return new GLUTListener() {};
+    }
+
+    return glutListener;
+  }
 }
