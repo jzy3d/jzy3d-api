@@ -37,6 +37,7 @@ import jgl.glaux.teapot;
 import jgl.glu.GLUquadricObj;
 import jgl.glut.glut_menu;
 import jgl.wt.awt.listener.GLUTListener;
+import jgl.wt.awt.listener.GLUTNoopListener;
 import jgl.wt.awt.listener.GLUTReflectiveCallbackListener;
 
 /**
@@ -76,6 +77,15 @@ public class GLUT implements Runnable {
   private glut_menu currentMenu = null;
   private int JavaMenuButton = -1;
   private int keyModifiers = 0;
+
+
+  /**
+   * Sets listener for scene rendering pipeline.
+   * @param listener Listener that receives callbacks on GL events.
+   */
+  public void glutSetListener(GLUTListener listener) {
+    this.glutListener = listener;
+  }
 
   /**
    * Print string at the specified 2d position.
@@ -1116,7 +1126,7 @@ public class GLUT implements Runnable {
 
   private GLUTListener listenerOrNoOp() {
     if (null == glutListener) {
-      return new GLUTListener() {};
+      return GLUTNoopListener.INSTANCE;
     }
 
     return glutListener;
