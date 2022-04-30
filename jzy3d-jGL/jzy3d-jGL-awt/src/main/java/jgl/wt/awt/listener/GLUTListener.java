@@ -108,7 +108,9 @@ public interface GLUTListener {
   /**
    * Indicates where the listener has usable {@link this#onMouse(Component, int, int, int, int)}
    */
-  boolean hasMouseCallback();
+  default boolean hasMouseCallback() {
+    return true;
+  }
 
   /**
    * Indicates where the listener has any of usable
@@ -116,5 +118,7 @@ public interface GLUTListener {
    * {@link this#onSpecialKey(Component, char, int, int)}
    * {@link this#onSpecialKeyUp(Component, char, int, int)} (Component, char, int, int)}
    */
-  boolean hasKeyboardCallback();
+  default boolean hasKeyboardCallback() {
+    return true;
+  }
 }
