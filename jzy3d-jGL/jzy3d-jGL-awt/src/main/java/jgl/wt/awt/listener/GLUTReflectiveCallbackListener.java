@@ -21,57 +21,47 @@ public class GLUTReflectiveCallbackListener implements GLUTListener {
 
     @Override
     public void onMouse(Component target, int button, int state, int x, int y) {
-        GLUTListener.super.onMouse(target, button, state, x, y);
+        invokeReflectively(target, mouseMethod, new Object[] {button, state, x, y}, "MouseFunc");
     }
 
     @Override
     public void onMotion(Component target, int x, int y) {
-        GLUTListener.super.onMotion(target, x, y);
+        invokeReflectively(target, motionMethod, new Object[] {x, y}, "MotionFunc");
     }
 
     @Override
     public void onKeyboard(Component target, char key, int x, int y) {
-        GLUTListener.super.onKeyboard(target, key, x, y);
+        invokeReflectively(target, keyMethod, new Object[] {key, x, y}, "KeyFunc");
     }
 
     @Override
     public void onKeyboardUp(Component target, char key, int x, int y) {
-        GLUTListener.super.onKeyboardUp(target, key, x, y);
+        invokeReflectively(target, keyUpMethod, new Object[] {key, x, y}, "KeyUpFunc");
     }
 
     @Override
     public void onSpecialKey(Component target, char key, int x, int y) {
-        GLUTListener.super.onSpecialKey(target, key, x, y);
+        invokeReflectively(target, specialKeyMethod, new Object[] {key, x, y}, "SpecialKeyFunc");
     }
 
     @Override
     public void onSpecialKeyUp(Component target, char key, int x, int y) {
-        GLUTListener.super.onSpecialKeyUp(target, key, x, y);
+        invokeReflectively(target, specialKeyUpMethod, new Object[] {key, x, y}, "SpecialKeyUpFunc");
     }
 
     @Override
     public void onDisplay(Component target) {
-        if (displayMethod != null) {
-            try {
-                displayMethod.invoke(target, (Object[]) null);
-            } catch (IllegalAccessException e) {
-                System.out.println("IllegalAccessException while DisplayFunc");
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                System.out.println("InvocationTargetException while DisplayFunc");
-                e.printStackTrace();
-            }
-        }
+        invokeReflectively(target, displayMethod, null, "DisplayFunc");
     }
 
     @Override
     public void onReshape(Component target, int width, int height) {
-        GLUTListener.super.onReshape(target, width, height);
+        invokeReflectively(target, reshapeMethod, new Object[] {width, height}, "ReshapeFunc");
     }
 
     @Override
     public void onIdle(Component target) {
-        GLUTListener.super.onIdle(target);
+        invokeReflectively(target, idleMethod, null, "IdleFunc");
     }
 
     @Override
@@ -82,6 +72,22 @@ public class GLUTReflectiveCallbackListener implements GLUTListener {
     @Override
     public boolean hasKeyboardCallback() {
         return (keyUpMethod != null) || (specialKeyMethod != null) || (specialKeyUpMethod != null);
+    }
+
+    private void invokeReflectively(Component target, Method method, Object[] arguments, String methodNameIfError) {
+        if (method == null) {
+            return;
+        }
+
+        try {
+            method.invoke(target, arguments);
+        } catch (IllegalAccessException e) {
+            System.out.println("IllegalAccessException while " + methodNameIfError);
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            System.out.println("InvocationTargetException while " + methodNameIfError);
+            e.printStackTrace();
+        }
     }
 
     /*
