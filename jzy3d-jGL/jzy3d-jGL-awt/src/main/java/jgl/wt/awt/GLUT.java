@@ -16,23 +16,6 @@
 
 package jgl.wt.awt;
 
-import java.applet.Applet;
-import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.event.ComponentEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.image.ImageObserver;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.Vector;
-import java.util.function.Consumer;
-
 import jgl.glaux.teapot;
 import jgl.glu.GLUquadricObj;
 import jgl.glut.glut_menu;
@@ -44,7 +27,19 @@ import jgl.wt.awt.listener.callbacks.KeyboardCallback;
 import jgl.wt.awt.listener.callbacks.MotionCallback;
 import jgl.wt.awt.listener.callbacks.MouseCallback;
 import jgl.wt.awt.listener.callbacks.ReshapeCallback;
-import sun.jvm.hotspot.runtime.JavaThread;
+
+import java.applet.Applet;
+import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.image.ImageObserver;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.Vector;
+import java.util.function.Consumer;
 
 /**
  * GLUT is the glut class of jGL 2.4.
