@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.emulgl.opengl.TestDepthRange;
-import org.jzy3d.maths.Array;
 import org.jzy3d.mocks.jgl.GLMock_DepthRange;
 import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.Shape;
@@ -45,8 +44,8 @@ public class TestAxisBox {
     double[] configForAxis = {AxisBox.NO_OVERLAP_DEPTH_RATIO, 1};
     double[] configForNothing = {0, 1};
 
-    Array.print(glMock.verify_glDepthRange().get(0));
-    Array.print(glMock.verify_glDepthRange().get(1));
+    // Array.print(glMock.verify_glDepthRange().get(0));
+    // Array.print(glMock.verify_glDepthRange().get(1));
     // Array.print(glMock.verify_glDepthRange().get(2));
     // Array.print("configForFace:", configForFace);
 
