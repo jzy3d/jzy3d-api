@@ -13,144 +13,144 @@ import java.util.function.Consumer;
  */
 public class GLUTLambdaCallbackListener implements GLUTListener {
 
-    private ReshapeCallback reshapeMethod;
-    private MouseCallback mouseMethod;
-    private MotionCallback motionMethod;
-    private KeyboardCallback keyMethod;
-    private KeyboardCallback keyUpMethod;
-    private KeyboardCallback specialKeyMethod;
-    private KeyboardCallback specialKeyUpMethod;
-    private Consumer<Component> displayMethod;
-    private Consumer<Component> idleMethod;
+  private ReshapeCallback reshapeMethod;
+  private MouseCallback mouseMethod;
+  private MotionCallback motionMethod;
+  private KeyboardCallback keyMethod;
+  private KeyboardCallback keyUpMethod;
+  private KeyboardCallback specialKeyMethod;
+  private KeyboardCallback specialKeyUpMethod;
+  private Consumer<Component> displayMethod;
+  private Consumer<Component> idleMethod;
 
-    @Override
-    public void onMouse(Component target, int button, int state, int x, int y) {
-        if (null == mouseMethod) {
-            return;
-        }
-
-        mouseMethod.onMouse(target, button, state, x, y);
+  @Override
+  public void onMouse(Component target, int button, int state, int x, int y) {
+    if (null == mouseMethod) {
+      return;
     }
 
-    @Override
-    public void onMotion(Component target, int x, int y) {
-        if (null == motionMethod) {
-            return;
-        }
+    mouseMethod.onMouse(target, button, state, x, y);
+  }
 
-        motionMethod.onMotion(target, x, y);
+  @Override
+  public void onMotion(Component target, int x, int y) {
+    if (null == motionMethod) {
+      return;
     }
 
-    @Override
-    public void onKeyboard(Component target, char key, int x, int y) {
-        if (null == keyMethod) {
-            return;
-        }
+    motionMethod.onMotion(target, x, y);
+  }
 
-        keyMethod.onKeyboard(target, key, x, y);
+  @Override
+  public void onKeyboard(Component target, char key, int x, int y) {
+    if (null == keyMethod) {
+      return;
     }
 
-    @Override
-    public void onKeyboardUp(Component target, char key, int x, int y) {
-        if (null == keyUpMethod) {
-            return;
-        }
+    keyMethod.onKeyboard(target, key, x, y);
+  }
 
-        keyUpMethod.onKeyboard(target, key, x, y);
+  @Override
+  public void onKeyboardUp(Component target, char key, int x, int y) {
+    if (null == keyUpMethod) {
+      return;
     }
 
-    @Override
-    public void onSpecialKey(Component target, char key, int x, int y) {
-        if (null == specialKeyMethod) {
-            return;
-        }
+    keyUpMethod.onKeyboard(target, key, x, y);
+  }
 
-        specialKeyMethod.onKeyboard(target, key, x, y);
+  @Override
+  public void onSpecialKey(Component target, char key, int x, int y) {
+    if (null == specialKeyMethod) {
+      return;
     }
 
-    @Override
-    public void onSpecialKeyUp(Component target, char key, int x, int y) {
-        if (null == specialKeyUpMethod) {
-            return;
-        }
+    specialKeyMethod.onKeyboard(target, key, x, y);
+  }
 
-        specialKeyUpMethod.onKeyboard(target, key, x, y);
+  @Override
+  public void onSpecialKeyUp(Component target, char key, int x, int y) {
+    if (null == specialKeyUpMethod) {
+      return;
     }
 
-    @Override
-    public void onDisplay(Component target) {
-        if (null == displayMethod) {
-            return;
-        }
+    specialKeyUpMethod.onKeyboard(target, key, x, y);
+  }
 
-        displayMethod.accept(target);
+  @Override
+  public void onDisplay(Component target) {
+    if (null == displayMethod) {
+      return;
     }
 
-    @Override
-    public void onReshape(Component target, int width, int height) {
-        if (null == reshapeMethod) {
-            return;
-        }
+    displayMethod.accept(target);
+  }
 
-        reshapeMethod.onReshape(target, width, height);
+  @Override
+  public void onReshape(Component target, int width, int height) {
+    if (null == reshapeMethod) {
+      return;
     }
 
-    @Override
-    public void onIdle(Component target) {
-        if (null == idleMethod) {
-            return;
-        }
+    reshapeMethod.onReshape(target, width, height);
+  }
 
-        idleMethod.accept(target);
+  @Override
+  public void onIdle(Component target) {
+    if (null == idleMethod) {
+      return;
     }
 
-    @Override
-    public boolean hasMouseCallback() {
-        return mouseMethod != null;
-    }
+    idleMethod.accept(target);
+  }
 
-    @Override
-    public boolean hasKeyboardCallback() {
-        return (keyUpMethod != null) || (specialKeyMethod != null) || (specialKeyUpMethod != null);
-    }
+  @Override
+  public boolean hasMouseCallback() {
+    return mouseMethod != null;
+  }
 
-    /*
-     * Setters boilerplate below, can be replaced with Lombok.
-     */
+  @Override
+  public boolean hasKeyboardCallback() {
+    return (keyUpMethod != null) || (specialKeyMethod != null) || (specialKeyUpMethod != null);
+  }
 
-    public void setReshapeMethod(ReshapeCallback reshapeMethod) {
-        this.reshapeMethod = reshapeMethod;
-    }
+  /*
+   * Setters boilerplate below, can be replaced with Lombok.
+   */
 
-    public void setMouseMethod(MouseCallback mouseMethod) {
-        this.mouseMethod = mouseMethod;
-    }
+  public void setReshapeMethod(ReshapeCallback reshapeMethod) {
+    this.reshapeMethod = reshapeMethod;
+  }
 
-    public void setMotionMethod(MotionCallback motionMethod) {
-        this.motionMethod = motionMethod;
-    }
+  public void setMouseMethod(MouseCallback mouseMethod) {
+    this.mouseMethod = mouseMethod;
+  }
 
-    public void setKeyMethod(KeyboardCallback keyMethod) {
-        this.keyMethod = keyMethod;
-    }
+  public void setMotionMethod(MotionCallback motionMethod) {
+    this.motionMethod = motionMethod;
+  }
 
-    public void setKeyUpMethod(KeyboardCallback keyUpMethod) {
-        this.keyUpMethod = keyUpMethod;
-    }
+  public void setKeyMethod(KeyboardCallback keyMethod) {
+    this.keyMethod = keyMethod;
+  }
 
-    public void setSpecialKeyMethod(KeyboardCallback specialKeyMethod) {
-        this.specialKeyMethod = specialKeyMethod;
-    }
+  public void setKeyUpMethod(KeyboardCallback keyUpMethod) {
+    this.keyUpMethod = keyUpMethod;
+  }
 
-    public void setSpecialKeyUpMethod(KeyboardCallback specialKeyUpMethod) {
-        this.specialKeyUpMethod = specialKeyUpMethod;
-    }
+  public void setSpecialKeyMethod(KeyboardCallback specialKeyMethod) {
+    this.specialKeyMethod = specialKeyMethod;
+  }
 
-    public void setDisplayMethod(Consumer<Component> displayMethod) {
-        this.displayMethod = displayMethod;
-    }
+  public void setSpecialKeyUpMethod(KeyboardCallback specialKeyUpMethod) {
+    this.specialKeyUpMethod = specialKeyUpMethod;
+  }
 
-    public void setIdleMethod(Consumer<Component> idleMethod) {
-        this.idleMethod = idleMethod;
-    }
+  public void setDisplayMethod(Consumer<Component> displayMethod) {
+    this.displayMethod = displayMethod;
+  }
+
+  public void setIdleMethod(Consumer<Component> idleMethod) {
+    this.idleMethod = idleMethod;
+  }
 }
