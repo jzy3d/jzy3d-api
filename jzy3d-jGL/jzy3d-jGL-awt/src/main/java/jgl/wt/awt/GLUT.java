@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+import java.util.function.Consumer;
 
 import jgl.glaux.teapot;
 import jgl.glu.GLUquadricObj;
@@ -666,78 +667,60 @@ public class GLUT implements Runnable {
       keyModifiers |= GLUT_ACTIVE_SHIFT;
   }
 
-  private void invokeKeyMethod(Method met, char ret) {
-    Object[] arguments = new Object[] {new Character(ret), new Integer(0), new Integer(0)};
-    try {
-      met.invoke(JavaComponent, arguments);
-    } catch (IllegalAccessException ee) {
-      System.out.println("IllegalAccessException while Calling Keyboard Related Functions");
-      ee.printStackTrace();
-    } catch (InvocationTargetException ee) {
-      System.out.println("InvocationTargetException while Calling Keyboard Related Functions");
-      ee.printStackTrace();
-    } catch (NullPointerException ee) {
-      // ignore
-      ee.printStackTrace();
+  private void processKey(Consumer<Character> met, char key) {
+    if ((key < 128) && (key != 0)) {
+      met.accept(key);
     }
   }
 
-  private void processKey(Method met, char key) {
-    if ((key < 128) && (key != 0))
-      invokeKeyMethod(met, key);
-  }
-
-  private void processSpecialKey(Method met, int code) {
+  private void processSpecialKey(Consumer<Character> met, int code) {
     switch (code) {
       case KeyEvent.VK_PAGE_UP:
-        invokeKeyMethod(met, (char) GLUT_KEY_PAGE_UP);
+        met.accept((char) GLUT_KEY_PAGE_UP);
         break;
       case KeyEvent.VK_PAGE_DOWN:
-        invokeKeyMethod(met, (char) GLUT_KEY_PAGE_DOWN);
+        met.accept((char) GLUT_KEY_PAGE_DOWN);
         break;
       case KeyEvent.VK_END:
-        invokeKeyMethod(met, (char) GLUT_KEY_END);
+        met.accept((char) GLUT_KEY_END);
         break;
       case KeyEvent.VK_HOME:
-        invokeKeyMethod(met, (char) GLUT_KEY_HOME);
+        met.accept((char) GLUT_KEY_HOME);
         break;
       case KeyEvent.VK_LEFT:
-        invokeKeyMethod(met, (char) GLUT_KEY_LEFT);
+        met.accept((char) GLUT_KEY_LEFT);
         break;
       case KeyEvent.VK_UP:
-        invokeKeyMethod(met, (char) GLUT_KEY_UP);
+        met.accept((char) GLUT_KEY_UP);
         break;
       case KeyEvent.VK_RIGHT:
-        invokeKeyMethod(met, (char) GLUT_KEY_RIGHT);
+        met.accept((char) GLUT_KEY_RIGHT);
         break;
       case KeyEvent.VK_DOWN:
-        invokeKeyMethod(met, (char) GLUT_KEY_DOWN);
+        met.accept((char) GLUT_KEY_DOWN);
         break;
       case KeyEvent.VK_INSERT:
-        invokeKeyMethod(met, (char) GLUT_KEY_INSERT);
+        met.accept((char) GLUT_KEY_INSERT);
         break;
       default:
         if ((code >= KeyEvent.VK_F1) && (code <= KeyEvent.VK_F12))
-          invokeKeyMethod(met, (char) (code - KeyEvent.VK_F1 + GLUT_KEY_F1));
+          met.accept((char) (code - KeyEvent.VK_F1 + GLUT_KEY_F1));
         break;
     }
   }
 
   public void processKeyEvent(KeyEvent e) {
+    GLUTListener listener = listenerOrNoOp();
     switch (e.getID()) {
       case KeyEvent.KEY_PRESSED:
         processKeyModifiers(e.getModifiers());
-        if (keyMethod != null)
-          processKey(keyMethod, (char) e.getKeyChar());
-        if (specialKeyMethod != null)
-          processSpecialKey(specialKeyMethod, e.getKeyCode());
+        processKey((chr) -> listener.onKeyboard(JavaComponent, chr, 0, 0), e.getKeyChar());
+        processSpecialKey((chr) -> listener.onSpecialKey(JavaComponent, chr, 0, 0), e.getKeyCode());
         break;
       case KeyEvent.KEY_RELEASED:
         processKeyModifiers(e.getModifiers());
-        if (keyUpMethod != null)
-          processKey(keyUpMethod, (char) e.getKeyChar());
-        if (specialKeyUpMethod != null)
-          processSpecialKey(specialKeyUpMethod, e.getKeyCode());
+        processKey((chr) -> listener.onKeyboardUp(JavaComponent, chr, 0, 0), e.getKeyChar());
+        processSpecialKey((chr) -> listener.onSpecialKeyUp(JavaComponent, chr, 0, 0), e.getKeyCode());
         break;
       /*
        * case KeyEvent.KEY_TYPED: invokeKeyMethod (keyMethod, (char)e.getKeyChar()); break;
