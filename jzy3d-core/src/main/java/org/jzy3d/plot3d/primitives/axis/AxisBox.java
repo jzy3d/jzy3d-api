@@ -115,7 +115,7 @@ public class AxisBox implements IAxis {
   }
 
   /**
-   * Draws the AxeBox. The camera is used to determine which axis is closest to the ur point ov
+   * Draws the AxisBox. The camera is used to determine which axis is closest to the ur point ov
    * view, in order to decide for an axis on which to diplay the tick values.
    */
   @Override
@@ -144,8 +144,6 @@ public class AxisBox implements IAxis {
 
   /**
    * reset to identity and apply scaling
-   * 
-   * @param painter TODO
    */
   public void doTransform(IPainter painter) {
     painter.glLoadIdentity();

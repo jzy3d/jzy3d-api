@@ -1,13 +1,12 @@
 package org.jzy3d.emulgl.unit;
 
 import static org.mockito.Mockito.atLeast;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import java.awt.event.ComponentEvent;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.colors.Color;
@@ -32,6 +31,7 @@ import org.mockito.Mockito;
  * 
  * @author martin
  */
+@Ignore("Ignore this test since may take 20seconds to execute!")
 public class TestContinuousAndOnDemandRendering {
   @Test
   public void whenComponentResizeWithoutAnimator_thenViewRender() {
@@ -60,17 +60,20 @@ public class TestContinuousAndOnDemandRendering {
 
     Quality q = Quality.Nicest();
     q.setAlphaActivated(true);
+    
+    Assert.assertFalse(q.isAnimated());
+    
 
     Chart chart = factory.newChart(q);
     chart.add(surface());
 
-    CameraThreadController rotation = new CameraThreadController(chart);
+    /*CameraThreadController rotation = new CameraThreadController(chart);
     rotation.setStep(0.005f);
     rotation.setUpdateViewDefault(true);
 
     AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
     mouse.setUpdateViewDefault(true);
-    mouse.addSlaveThreadController(rotation);
+    mouse.addSlaveThreadController(rotation);*/
 
     // -----------------------------------
     // When Trigger canvas
