@@ -1201,7 +1201,7 @@ public class GLUT implements Runnable {
 
   private GLUTReflectiveCallbackListener requireStringBasedCallbackListenerOrNewIfNone() {
     if (null == glutListener) {
-      glutListener = new GLUTReflectiveCallbackListener();
+      glutSetListener(new GLUTReflectiveCallbackListener());
     }
 
     try {
@@ -1214,7 +1214,7 @@ public class GLUT implements Runnable {
 
   private GLUTLambdaCallbackListener requireLambdaBasedCallbackListenerOrNewIfNone() {
     if (null == glutListener) {
-      glutListener = new GLUTReflectiveCallbackListener();
+      glutSetListener(new GLUTLambdaCallbackListener());
     }
 
     try {
