@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -180,12 +181,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     // --------------------------------------------
     // GLUT register doRender as display callback
 
-    myUT.glutDisplayFunc("doRender");
+    myUT.glutDisplayFunc(c -> doRender());
 
     // --------------------------------------------
     // GLUT register doReshape as resize callback
 
-    myUT.glutReshapeFunc("doReshape");
+    myUT.glutReshapeFunc((c, w, h) -> doReshape(w, h));
 
     // --------------------------------------------
     // Despite the below line being the jGL way to deal with mouse move,
@@ -286,7 +287,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   /**
    * Triggers an atomic rendering of a frame, measure rendering performance and update the status of
    * rendering (active or not). This method is callback registered in with
-   * {@link GLUT#glutDisplayFunc(String)} which will be called when OpenGL need to update display.
+   * {@link GLUT#glutDisplayFunc(Consumer)} which will be called when OpenGL need to update display.
    * OpenGL updates as soon as the component that GLUT listen to (which is this {@link EmulGLCanvas}
    * triggers a {@link ComponentEvent.COMPONENT_RESIZED} event.
    * 
