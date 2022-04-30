@@ -67,7 +67,7 @@ public interface GLUTListener {
      * @param x Window relative coordinate x of mouse when event has occurred
      * @param y Window relative coordinate y of mouse when event has occurred
      */
-    default void onSpecialUp(Component target, char key, int x, int y) {
+    default void onSpecialKeyUp(Component target, char key, int x, int y) {
     }
 
     /**
@@ -94,5 +94,22 @@ public interface GLUTListener {
      * @param target Rendering target component
      */
     default void onIdle(Component target) {
+    }
+
+    /**
+     * Indicates where the listener has usable {@link this#onMouse(Component, int, int, int, int)}
+     */
+    default boolean hasMouseCallback() {
+        return false;
+    }
+
+    /**
+     * Indicates where the listener has any of usable
+     * {@link this#onKeyboard(Component, char, int, int)}
+     * {@link this#onSpecialKey(Component, char, int, int)}
+     * {@link this#onSpecialKeyUp(Component, char, int, int)} (Component, char, int, int)}
+     */
+    default boolean hasKeyboardCallback() {
+        return false;
     }
 }
