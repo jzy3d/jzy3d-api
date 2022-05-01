@@ -106,14 +106,14 @@ public interface GLUTListener {
   }
 
   /**
-   * Indicates where the listener has usable {@link this#onMouse(Component, int, int, int, int)}
+   * Indicates whether the listener has usable {@link this#onMouse(Component, int, int, int, int)}
    */
   default boolean hasMouseCallback() {
     return true;
   }
 
   /**
-   * Indicates where the listener has any of usable
+   * Indicates whether the listener has any of usable
    * {@link this#onKeyboard(Component, char, int, int)}
    * {@link this#onSpecialKey(Component, char, int, int)}
    * {@link this#onSpecialKeyUp(Component, char, int, int)} (Component, char, int, int)}
