@@ -9,15 +9,15 @@ import java.lang.reflect.Method;
  */
 public class GLUTReflectiveCallbackListener implements GLUTListener {
 
-  private Method reshapeMethod;
-  private Method mouseMethod;
-  private Method motionMethod;
-  private Method keyMethod;
-  private Method keyUpMethod;
-  private Method specialKeyMethod;
-  private Method specialKeyUpMethod;
-  private Method displayMethod;
-  private Method idleMethod;
+  protected Method reshapeMethod;
+  protected Method mouseMethod;
+  protected Method motionMethod;
+  protected Method keyMethod;
+  protected Method keyUpMethod;
+  protected Method specialKeyMethod;
+  protected Method specialKeyUpMethod;
+  protected Method displayMethod;
+  protected Method idleMethod;
 
   @Override
   public void onMouse(Component target, int button, int state, int x, int y) {
