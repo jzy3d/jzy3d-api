@@ -181,12 +181,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
     // --------------------------------------------
     // GLUT register doRender as display callback
 
-    myUT.glutDisplayFunc(c -> doRender());
+    myUT.glutDisplayFunc(component -> doRender());
 
     // --------------------------------------------
     // GLUT register doReshape as resize callback
 
-    myUT.glutReshapeFunc((c, w, h) -> doReshape(w, h));
+    myUT.glutReshapeFunc((component, newWidth, newHeight) -> doReshape(newWidth, newHeight));
 
     // --------------------------------------------
     // Despite the below line being the jGL way to deal with mouse move,
