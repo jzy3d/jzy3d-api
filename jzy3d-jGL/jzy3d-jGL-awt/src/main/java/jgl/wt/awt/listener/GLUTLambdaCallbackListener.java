@@ -13,15 +13,15 @@ import java.util.function.Consumer;
  */
 public class GLUTLambdaCallbackListener implements GLUTListener {
 
-  private ReshapeCallback reshapeMethod;
-  private MouseCallback mouseMethod;
-  private MotionCallback motionMethod;
-  private KeyboardCallback keyMethod;
-  private KeyboardCallback keyUpMethod;
-  private KeyboardCallback specialKeyMethod;
-  private KeyboardCallback specialKeyUpMethod;
-  private Consumer<Component> displayMethod;
-  private Consumer<Component> idleMethod;
+  protected ReshapeCallback reshapeMethod;
+  protected MouseCallback mouseMethod;
+  protected MotionCallback motionMethod;
+  protected KeyboardCallback keyMethod;
+  protected KeyboardCallback keyUpMethod;
+  protected KeyboardCallback specialKeyMethod;
+  protected KeyboardCallback specialKeyUpMethod;
+  protected Consumer<Component> displayMethod;
+  protected Consumer<Component> idleMethod;
 
   @Override
   public void onMouse(Component target, int button, int state, int x, int y) {
