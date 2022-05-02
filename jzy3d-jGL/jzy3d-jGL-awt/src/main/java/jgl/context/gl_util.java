@@ -41,68 +41,108 @@ public final class gl_util {
 
   public static float[] mulMatrix44(float a[], float b[]) {
     // assume a = 4x4, b = 4x4
-    float temp[] = new float[16];
-    int i, j, k, x, y, z;
-    for (i = 0; i < 4; i++) {
-      for (j = 0; j < 4; j++) {
-        z = (j << 2) | i;
-        for (k = 0; k < 4; k++) {
-          x = (k << 2) | i;
-          y = (j << 2) | k;
-          if (a[x] != 0 && b[y] != 0) {
-            if (a[x] == 1) {
-              temp[z] += b[y];
-            } else if (b[y] == 1) {
-              temp[z] += a[x];
-            } else {
-              temp[z] += a[x] * b[y];
-            }
-          }
-        }
-      }
-    }
+    float[] temp = new float[16];
+    temp[0] += a[0] * b[0];
+    temp[0] += a[4] * b[1];
+    temp[0] += a[8] * b[2];
+    temp[0] += a[12] * b[3];
+    temp[1] += a[1] * b[0];
+    temp[1] += a[5] * b[1];
+    temp[1] += a[9] * b[2];
+    temp[1] += a[13] * b[3];
+    temp[2] += a[2] * b[0];
+    temp[2] += a[6] * b[1];
+    temp[2] += a[10] * b[2];
+    temp[2] += a[14] * b[3];
+    temp[3] += a[3] * b[0];
+    temp[3] += a[7] * b[1];
+    temp[3] += a[11] * b[2];
+    temp[3] += a[15] * b[3];
+    temp[4] += a[0] * b[4];
+    temp[4] += a[4] * b[5];
+    temp[4] += a[8] * b[6];
+    temp[4] += a[12] * b[7];
+    temp[5] += a[1] * b[4];
+    temp[5] += a[5] * b[5];
+    temp[5] += a[9] * b[6];
+    temp[5] += a[13] * b[7];
+    temp[6] += a[2] * b[4];
+    temp[6] += a[6] * b[5];
+    temp[6] += a[10] * b[6];
+    temp[6] += a[14] * b[7];
+    temp[7] += a[3] * b[4];
+    temp[7] += a[7] * b[5];
+    temp[7] += a[11] * b[6];
+    temp[7] += a[15] * b[7];
+    temp[8] += a[0] * b[8];
+    temp[8] += a[4] * b[9];
+    temp[8] += a[8] * b[10];
+    temp[8] += a[12] * b[11];
+    temp[9] += a[1] * b[8];
+    temp[9] += a[5] * b[9];
+    temp[9] += a[9] * b[10];
+    temp[9] += a[13] * b[11];
+    temp[10] += a[2] * b[8];
+    temp[10] += a[6] * b[9];
+    temp[10] += a[10] * b[10];
+    temp[10] += a[14] * b[11];
+    temp[11] += a[3] * b[8];
+    temp[11] += a[7] * b[9];
+    temp[11] += a[11] * b[10];
+    temp[11] += a[15] * b[11];
+    temp[12] += a[0] * b[12];
+    temp[12] += a[4] * b[13];
+    temp[12] += a[8] * b[14];
+    temp[12] += a[12] * b[15];
+    temp[13] += a[1] * b[12];
+    temp[13] += a[5] * b[13];
+    temp[13] += a[9] * b[14];
+    temp[13] += a[13] * b[15];
+    temp[14] += a[2] * b[12];
+    temp[14] += a[6] * b[13];
+    temp[14] += a[10] * b[14];
+    temp[14] += a[14] * b[15];
+    temp[15] += a[3] * b[12];
+    temp[15] += a[7] * b[13];
+    temp[15] += a[11] * b[14];
+    temp[15] += a[15] * b[15];
     return temp;
   }
 
   public static float[] mulMatrix41(float a[], float b[]) {
     // assume a = 4x4, b = 4x1
-    float temp[] = new float[4];
-    int i, j, x;
-    for (i = 0; i < 4; i++) {
-      for (j = 0; j < 4; j++) {
-        x = j << 2 | i;
-        if (a[x] != 0 && b[j] != 0) {
-          if (a[x] == 1) {
-            temp[i] += b[j];
-          } else if (b[j] == 1) {
-            temp[i] += a[x];
-          } else {
-            temp[i] += a[x] * b[j];
-          }
-        }
-      }
-    }
+    float[] temp = new float[4];
+    temp[0] += a[0] * b[0];
+    temp[0] += a[4] * b[1];
+    temp[0] += a[8] * b[2];
+    temp[0] += a[12] * b[3];
+    temp[1] += a[1] * b[0];
+    temp[1] += a[5] * b[1];
+    temp[1] += a[9] * b[2];
+    temp[1] += a[13] * b[3];
+    temp[2] += a[2] * b[0];
+    temp[2] += a[6] * b[1];
+    temp[2] += a[10] * b[2];
+    temp[2] += a[14] * b[3];
+    temp[3] += a[3] * b[0];
+    temp[3] += a[7] * b[1];
+    temp[3] += a[11] * b[2];
+    temp[3] += a[15] * b[3];
     return temp;
   }
 
   public static float[] mulMatrix31(float a[], float b[]) {
     // assume a = 4x4, b = 3x1
-    float temp[] = new float[3];
-    int i, j, x;
-    for (i = 0; i < 3; i++) {
-      for (j = 0; j < 3; j++) {
-        x = j << 2 | i;
-        if (a[x] != 0 && b[j] != 0) {
-          if (a[x] == 1) {
-            temp[i] += b[j];
-          } else if (b[j] == 1) {
-            temp[i] += a[x];
-          } else {
-            temp[i] += a[x] * b[j];
-          }
-        }
-      }
-    }
+    float[] temp = new float[3];
+    temp[0] += a[0] * b[0];
+    temp[0] += a[4] * b[1];
+    temp[0] += a[8] * b[2];
+    temp[1] += a[1] * b[0];
+    temp[1] += a[5] * b[1];
+    temp[1] += a[9] * b[2];
+    temp[2] += a[2] * b[0];
+    temp[2] += a[6] * b[1];
+    temp[2] += a[10] * b[2];
     return temp;
   }
 
@@ -115,12 +155,12 @@ public final class gl_util {
   }
 
   public static float det33(float a1, float a2, float a3, float b1, float b2, float b3, float c1,
-      float c2, float c3) {
+                            float c2, float c3) {
     return (a1 * det22(b2, b3, c2, c3) - b1 * det22(a2, a3, c2, c3) + c1 * det22(a2, a3, b2, b3));
   }
 
   public static float det44(float a1, float a2, float a3, float a4, float b1, float b2, float b3,
-      float b4, float c1, float c2, float c3, float c4, float d1, float d2, float d3, float d4) {
+                            float b4, float c1, float c2, float c3, float c4, float d1, float d2, float d3, float d4) {
     return (a1 * det33(b2, b3, b4, c2, c3, c4, d2, d3, d4)
         - b1 * det33(a2, a3, a4, c2, c3, c4, d2, d3, d4)
         + c1 * det33(a2, a3, a4, b2, b3, b4, d2, d3, d4)
