@@ -60,5 +60,4 @@ public class TestShape {
     Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(2), configForWireframe));
     Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(3), configForNothing));
   }
-
 }
