@@ -15,9 +15,6 @@ import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
  */
 public class AWTImageViewport extends AbstractViewportManager implements IImageViewport {
   protected static final float IMAGE_Z = 0;// -0.75f;
-  //protected static final int MARGIN_HEIGHT = 25;
-  //protected static final int MARGIN_WIDTH = 25;
-  
 
   protected ByteBuffer imageData = null;
   protected Image image;
