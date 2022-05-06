@@ -91,7 +91,7 @@ public class alpha3D extends GLApplet {
 
   public void animate() {
     if (solidZ <= MINZ || transparentZ >= MAXZ)
-      myUT.glutIdleFunc(null);
+      myUT.glutIdleFunc((String) null);
     else {
       solidZ -= ZINC;
       transparentZ += ZINC;
