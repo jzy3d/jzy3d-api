@@ -53,7 +53,7 @@ public class doublebuffer extends GLApplet {
       }
     } else if (button == GLUT.GLUT_MIDDLE_BUTTON) {
       if (state == GLUT.GLUT_DOWN) {
-        myUT.glutIdleFunc(null);
+        myUT.glutIdleFunc((String) null);
       }
     }
   }
