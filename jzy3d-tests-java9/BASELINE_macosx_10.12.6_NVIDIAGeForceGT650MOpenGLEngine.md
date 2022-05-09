@@ -25,6 +25,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Surface_Native_Swing_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Surface_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
 </table>
 
 # Scatter
@@ -44,6 +52,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Scatter_Native_AWT_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Scatter_Native_Swing_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Scatter_Native_Swing_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </table>
 
@@ -65,6 +81,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Text_Native_Swing_HiDPI=ON_Font=AppleChancery24.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Text_Native_Swing_HiDPI=OFF_Font=AppleChancery24.png"></td>
 </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
 </table>
 
 # Text : whenDrawableTextRenderer
@@ -84,6 +108,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Text_whenDrawableTextRenderer_Native_AWT_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Text_whenDrawableTextRenderer_Native_Swing_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Text_whenDrawableTextRenderer_Native_Swing_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </table>
 
@@ -105,6 +137,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/AxisLabelRotateLayout_Native_Swing_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/AxisLabelRotateLayout_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
 </table>
 
 # Colorbar : Shrink
@@ -124,6 +164,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_Native_AWT_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_Native_Swing_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_Native_Swing_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </table>
 
@@ -145,6 +193,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_ShrinkBigFont_Native_Swing_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_ShrinkBigFont_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
 </table>
 
 # Colorbar : IsModifiedByCustomFont
@@ -165,6 +221,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_IsModifiedByCustomFont_Native_Swing_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_IsModifiedByCustomFont_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
 </table>
 
 # Colorbar : HasMinimumWidth
@@ -184,6 +248,14 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_HasMinimumWidth_Native_AWT_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_HasMinimumWidth_Native_Swing_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_HasMinimumWidth_Native_Swing_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </table>
 
