@@ -25,6 +25,10 @@ import org.jzy3d.maths.IntegerCoord2d;
 public class ChartTester {
   private static Logger logger = LogManager.getLogger(ChartTester.class);
 
+  public static final String FILE_LABEL_ACTUAL = "_ACTUAL";
+  public static final String FILE_LABEL_EXPECT = "_EXPECT";
+  public static final String FILE_LABEL_DIFF = "_DIFF";
+  
   public static int TEST_IMG_SIZE = 500;
 
   protected boolean textInvisible = false;
@@ -141,6 +145,7 @@ public class ChartTester {
     return new File(testImage).exists();
   }
 
+  
   /**
    * Perform a chart comparison to image and output 3 images in case of failure
    * <ul>
@@ -165,7 +170,7 @@ public class ChartTester {
       // Writing ACTUAL file
 
       String actualFile =
-          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#ACTUAL#.");
+          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", FILE_LABEL_ACTUAL+".");
       chart.screenshot(new File(actualFile));
       logger.error("ACTUAL IMAGE : " + actualFile);
 
@@ -173,7 +178,7 @@ public class ChartTester {
       // Writing EXPECTED file
 
       String expectFile =
-          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#EXPECT#.");
+          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", FILE_LABEL_EXPECT+".");
       BufferedImage expected = e.getExpectedImage();
       ImageIO.write(expected, "png", new File(expectFile));
       logger.error("EXPECTED IMAGE : " + expectFile);
@@ -182,7 +187,7 @@ public class ChartTester {
       // Writing DIFF file
 
       String diffFile =
-          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", "#DIFF#.");
+          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", FILE_LABEL_DIFF+".");
 
       BufferedImage diffImage = copyImage(expected);
       highlightPixel(diffImage, e.getDiffCoordinates(), Highlight.RED);
