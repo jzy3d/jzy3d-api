@@ -4,6 +4,7 @@ import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
@@ -21,10 +22,10 @@ import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
- * {@AxisBox} and 
  * @author martin
  *
  */
+@Ignore("This test is replaced by TestShape and TestAxisBox which handle mocking more efficiently")
 public class TestDepthRange {
   @Test
   public void whenRenderAxis_DepthRangeModifiedByAxis() {
