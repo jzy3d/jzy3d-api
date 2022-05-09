@@ -15,16 +15,15 @@ import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
  */
 public class AWTImageViewport extends AbstractViewportManager implements IImageViewport {
   protected static final float IMAGE_Z = 0;// -0.75f;
-  protected static final int MARGIN_HEIGHT = 25;
-  protected static final int MARGIN_WIDTH = 25;
-  
 
   protected ByteBuffer imageData = null;
   protected Image image;
   protected int imageHeight;
   protected int imageWidth;
   
-  protected Dimension margin = new Dimension(MARGIN_WIDTH, MARGIN_HEIGHT);
+  // margin only used, and is poorly handled by colorbar (https://github.com/jzy3d/jzy3d-api/issues/249)
+  // disabling it is the easiest fix
+  protected Dimension margin = new Dimension(0,0);//MARGIN_WIDTH, MARGIN_HEIGHT);
   protected Coord2d pixelScale = new Coord2d(1,1); // assume default pixel scale
 
   public AWTImageViewport() {

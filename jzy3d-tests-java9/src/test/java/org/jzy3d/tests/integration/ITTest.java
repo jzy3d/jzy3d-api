@@ -119,7 +119,7 @@ public class ITTest {
     line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_Swing, HiDPI.OFF, info))+ "</td>");
     line(sb, "</tr>");
 
-    if(false) {
+    if(true) {
       line(sb, "<tr>");
       line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.ON, info))+ "</td>");
       line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
@@ -139,8 +139,18 @@ public class ITTest {
   }
 
   public static String imgDiff(String name) {
-    return "<img src=\"target/error-" + name +"#DIFF#.png\">";
+    String path = "target/error-" + name + ChartTester.FILE_LABEL_DIFF + ".png";
+    
+    if(new File(path).exists()) {
+      return "<img src=\""+path+"\">";      
+    }
+    else {
+      
+      return "";//"<img src=\""+OKFLAG_ICON+"\">";
+    }
   }
+  
+  static String OKFLAG_ICON = "src/test/resources/icons/greentick.jpg";
 
   public static String title(WT wt, HiDPI hidpi) {
     return wt + SEP_TITLE + "HiDPI:"+hidpi;
