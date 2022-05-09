@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class Mocks {
+public class Mockitos {
   public static View ViewAndPainter(float viewScale) {
     return ViewAndPainter(viewScale, "macos", "10", null, null);
   }

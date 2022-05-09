@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.rendering.view;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.maths.Coord2d;
-import org.jzy3d.mocks.jzy3d.Mocks;
+import org.jzy3d.mocks.jzy3d.Mockitos;
 import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.painters.NativeDesktopPainter;
@@ -149,7 +149,7 @@ public class TestWindowsHiDPI_Hack {
       }
     };
 
-    painter.setCanvas(Mocks.Canvas(scaleHard, scaleVM));
+    painter.setCanvas(Mockitos.Canvas(scaleHard, scaleVM));
     return painter;
   }
 
