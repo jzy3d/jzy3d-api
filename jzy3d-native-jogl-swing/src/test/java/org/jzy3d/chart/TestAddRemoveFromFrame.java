@@ -15,8 +15,8 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 public class TestAddRemoveFromFrame {
   Logger logger = Logger.getLogger(TestAddRemoveFromFrame.class.getSimpleName());
   
-  int PAUSE_MS = 500;
-  int RENDER_LOOP = 300;
+  int PAUSE_MS = 200;
+  int RENDER_LOOP = 1;
   int FRAME_SIZE = 500;
 
   public static void main(String[] args) {
@@ -106,12 +106,14 @@ public class TestAddRemoveFromFrame {
     // When : removing chart from the application frame
 
     frame.remove((java.awt.Component) chart.getCanvas());
-    info(title + " : Should disappear. Now waiting " + PAUSE_MS + " ms");
+    info(title + " : Should disappear. Now rendering " + RENDER_LOOP + " times");
 
     for (int i = 0; i < RENDER_LOOP; i++) {
       chart.render();
-      // ((GLCanvas)chart.getCanvas()).display();
     }
+    
+    info(title + " : Should disappear. Now waiting " + PAUSE_MS + " ms");
+
     chart.sleep(PAUSE_MS);
 
     // Then no exception should occur
@@ -120,15 +122,21 @@ public class TestAddRemoveFromFrame {
     // When adding the chart again
 
     frame.add((java.awt.Component) chart.getCanvas());
-    info(title + " : Should re-appear. Now waiting " + PAUSE_MS + " ms");
+    info(title + " : Should re-appear. Now rendering " + RENDER_LOOP + " times");
 
     for (int i = 0; i < RENDER_LOOP; i++) {
       chart.render();
-      // ((GLCanvas)chart.getCanvas()).display();
     }
+    
+    info(title + " : Should re-appear. Now waiting " + PAUSE_MS + " ms");
+
     chart.sleep(PAUSE_MS);
     
+    info(title + " : done");
+
     chart.dispose();
+    
+    info(title + " : disposed");
   }
 
   public void info(String info) {

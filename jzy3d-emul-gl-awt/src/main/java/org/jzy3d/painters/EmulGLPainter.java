@@ -695,7 +695,9 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     // Try getting an offscreen image graphics
     if(g==null) {
       BufferedImage image = getGL().getRenderedImage();
-      g = image.getGraphics();
+      if(image!=null) {
+        g = image.getGraphics();
+      }
     }
     
     // Hope to have a graphics and process string width

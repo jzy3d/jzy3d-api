@@ -523,7 +523,7 @@ public class Camera extends AbstractViewportManager {
   public void doShoot(IPainter painter, CameraMode projection) {
     // Set viewport
     ViewportConfiguration viewport = applyViewport(painter);
-
+    
     // Set projection
     if (projection == CameraMode.PERSPECTIVE) {
       projectionPerspective(painter, viewport);
