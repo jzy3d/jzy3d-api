@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.maths.Coord2d;
-import org.jzy3d.mocks.jzy3d.Mocks;
+import org.jzy3d.mocks.jzy3d.Mockitos;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -22,7 +22,7 @@ public class TestHiDPIProportionalFontSizePolicy {
     Coord2d jvmScale = new Coord2d(1,1);
     Coord2d gpuScale = new Coord2d(1.5,1.5);
     
-    View view = Mocks.ViewAndPainter(viewScale, os, version, jvmScale, gpuScale);
+    View view = Mockitos.ViewAndPainter(viewScale, os, version, jvmScale, gpuScale);
 
     
     /*ICanvas canvas = mock(ICanvas.class);
@@ -61,7 +61,7 @@ public class TestHiDPIProportionalFontSizePolicy {
     Coord2d jvmScale = new Coord2d(1.5,1.5);
     Coord2d gpuScale = new Coord2d(1,1);
     
-    View view = Mocks.ViewAndPainter(viewScale, os, version, jvmScale, gpuScale);
+    View view = Mockitos.ViewAndPainter(viewScale, os, version, jvmScale, gpuScale);
     
     // Given a layout with a known font height
     AxisLayout layout = new AxisLayout();
@@ -87,7 +87,7 @@ public class TestHiDPIProportionalFontSizePolicy {
     float viewScale = Float.NaN;
 
     // Given a view with undefined pixel scale
-    View view = Mocks.ViewAndPainter(viewScale);
+    View view = Mockitos.ViewAndPainter(viewScale);
     
     // Given a layout with a known font height
     AxisLayout layout = new AxisLayout();
