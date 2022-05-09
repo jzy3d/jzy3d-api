@@ -43,7 +43,7 @@ public class TestContinuousAndOnDemandRendering {
     // When Resize
     int nShootBeforeResize = cam.counter_doShoot;
     frame.setSize(654, 321);
-    chart.sleep(200); // let time for resize to happen
+    chart.sleep(500); // let time for resize to happen
     int nShootAfterResize = cam.counter_doShoot;
 
     // Then camera updates
