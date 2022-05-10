@@ -23,10 +23,7 @@ public class Mocks {
     View view = mock(View.class);
     when(view.getPixelScale()).thenReturn(new Coord2d(viewScale, viewScale));
 
-    IPainter painter = mock(IPainter.class);
-
-    when(painter.getOS()).thenReturn(new OperatingSystem(os, version));
-    when(painter.getWindowingToolkit()).thenReturn(WindowingToolkit.AWT);
+    IPainter painter = Painter(os, version);
 
     ICanvas canvas = mock(ICanvas.class);
     
@@ -38,6 +35,23 @@ public class Mocks {
     when(painter.getCanvas()).thenReturn(canvas);
     when(view.getPainter()).thenReturn(painter);
     return view;
+  }
+
+  public static IPainter Painter(String os, String version) {
+    IPainter painter = Painter();
+
+    when(painter.getOS()).thenReturn(new OperatingSystem(os, version));
+    when(painter.getWindowingToolkit()).thenReturn(WindowingToolkit.AWT);
+    return painter;
+  }
+
+  public static IPainter Painter() {
+    IPainter painter = mock(IPainter.class);
+
+    when(painter.getOS()).thenReturn(new OperatingSystem("macos", "10.12"));
+    when(painter.getWindowingToolkit()).thenReturn(WindowingToolkit.AWT);
+
+    return painter;
   }
   
 

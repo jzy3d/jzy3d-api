@@ -27,7 +27,7 @@ public class BoundingBox2d {
     this.xmin = xmin;
     this.xmax = xmax;
     this.ymin = ymin;
-    this.xmax = xmax;
+    this.ymax = ymax;
   }
 
   /*********************************************************/
@@ -158,6 +158,15 @@ public class BoundingBox2d {
     return xmax;
   }
 
+  public float xrange() {
+    return xmax-xmin;
+  }
+
+  public float yrange() {
+    return ymax-ymin;
+  }
+
+  
   /**
    * Return the minimum y value.
    * 
