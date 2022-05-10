@@ -7,24 +7,17 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
-import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.chart2d.View2d;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.xls.ExcelBuilder;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
-import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.IntegerTickRenderer;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.scene.Scene;
-import org.jzy3d.plot3d.rendering.view.AWTView;
-import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
-import org.jzy3d.plot3d.rendering.view.ViewportMode;
+import org.jzy3d.plot3d.rendering.view.View2DLayout;
 
 /*
  * // PB1 : avec 200 ou 500 samples, view2D calcule une camera qui n'affiche rien
@@ -85,7 +78,7 @@ public class BenchmarkPlot implements BenchmarkXLS {
     // Collect benchmark data
 
     int stepMin = 2; // min number of steps for surface
-    int stepMax = 500; // max number of steps for surface
+    int stepMax = 100; // max number of steps for surface
     String info = "emulgl-hidpi"; // HiDPI setting during benchmark
     // String info = "native"; // HiDPI setting during benchmark
 
@@ -162,7 +155,14 @@ public class BenchmarkPlot implements BenchmarkXLS {
 
     // PB : MUST BE DONE BEFORE OPENING chart
     c.view2d();
-
+    
+    View2DLayout layout = c.getView().getLayout_2D();
+    layout.setMarginHorizontal(20);
+    layout.setMarginVertical(20);
+    
+    //layout.setMarginRight(30);
+    //layout.setMarginTop(60);
+    //layout.setKeepTextVisible(false);
 
     c.render();
 
