@@ -18,7 +18,6 @@ import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
@@ -279,15 +278,15 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsX(IPainter painter) {
-    if (xrange > 0 && layout.isXTickLabelDisplayed()) {
+    if (xrange > 0 && layout.isXTickLabelDisplayed() && view != null) {
 
-      // If we are on top, we make direct axe placement
-      if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
+      // 2D case
+      if (view.is2D()) {
         BoundingBox3d bbox =
             ticks.drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
         wholeBounds.add(bbox);
       }
-      // otherwise computed placement
+      // 3D case
       else {
         int xselect = findClosestXaxe(painter.getCamera());
         if (xselect >= 0) {
@@ -305,12 +304,17 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsY(IPainter painter) {
-    if (yrange > 0 && layout.isYTickLabelDisplayed()) {
-      if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
+    if (yrange > 0 && layout.isYTickLabelDisplayed() && view != null) {
+      
+      //2D case
+      if (view.is2D()) {
         BoundingBox3d bbox =
             ticks.drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
         wholeBounds.add(bbox);
-      } else {
+      } 
+      
+      // 3D case
+      else {
         int yselect = findClosestYaxe(painter.getCamera());
         if (yselect >= 0) {
           BoundingBox3d bbox = ticks.drawTicks(painter, yselect, AXE_Y, layout.getYTickColor());
@@ -327,16 +331,17 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsZ(IPainter painter) {
-    if (zrange > 0 && layout.isZTickLabelDisplayed()) {
-      if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
-
-      } else {
+    if (zrange > 0 && layout.isZTickLabelDisplayed() && view != null) {
+      // 3D case only
+      if (view.is3D()) {
         int zselect = findClosestZaxe(painter.getCamera());
         if (zselect >= 0) {
           BoundingBox3d bbox = ticks.drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
           wholeBounds.add(bbox);
         }
       }
+      
+      // Do not render Z ticks in 2D
     }
   }
 

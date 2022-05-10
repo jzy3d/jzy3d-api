@@ -67,13 +67,13 @@ public class View {
   protected Color backgroundColor = Color.BLACK;
   protected boolean axisDisplayed = true;
   protected boolean squared = true;
-  
+
   /** Settings for the layout of a 2D chart */
-  protected View2DLayout view2DLayout = new View2DLayout();
+  protected View2DLayout view2DLayout = new View2DLayout(this);
 
   protected float cameraRenderingSphereRadiusFactor = 1f;
-  //protected float cameraRenderingSphereRadiusFactorOnTop = 0.1f;// 00000000000001f;
-  
+  // protected float cameraRenderingSphereRadiusFactorOnTop = 0.1f;// 00000000000001f;
+
 
   /**
    * force to have all object maintained in screen, meaning axebox won't always keep the same size.
@@ -269,7 +269,7 @@ public class View {
   public HiDPI getHiDPI() {
     return hidpi;
   }
-  
+
   public View2DLayout getLayout_2D() {
     return view2DLayout;
   }
@@ -588,6 +588,14 @@ public class View {
     return viewMode;
   }
 
+  public boolean is2D() {
+    return ViewPositionMode.TOP.equals(getViewMode());
+  }
+
+  public boolean is3D() {
+    return !is2D();
+  }
+
   /** Return the stretch ratio applied to the view */
   public Coord3d getScaling() {
     return scaling;
@@ -704,9 +712,6 @@ public class View {
   }
 
 
-  // public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP = 0.25f;
-
-
   /**
    * @see setter
    */
@@ -726,20 +731,6 @@ public class View {
   public void setCameraRenderingSphereRadiusFactor(float cameraRenderingSphereRadiusFactor) {
     this.cameraRenderingSphereRadiusFactor = cameraRenderingSphereRadiusFactor;
   }
-
-  
-  /*public float getCameraRenderingSphereRadiusFactorOnTop() {
-    return cameraRenderingSphereRadiusFactorOnTop;
-  }
-
-  /**
-   * This allows stretching the camera rendering sphere when the camera is on top of the scene
-   * (meaning we are drawing in 2D).
-   *
-  public void setCameraRenderingSphereRadiusFactorOnTop(
-      float cameraRenderingSphereRadiusFactorOnTop) {
-    this.cameraRenderingSphereRadiusFactorOnTop = cameraRenderingSphereRadiusFactorOnTop;
-  }*/
 
   public boolean isMaintainAllObjectsInView() {
     return maintainAllObjectsInView;
@@ -1152,7 +1143,7 @@ public class View {
     Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
 
     // Force the up vector of the camera to grow along Y axis
-    if (ViewPositionMode.TOP.equals(viewmode)) {
+    if (is2D()) {
       cameraUp = new Coord3d(0.0, 1.0, 0.0);
     }
 
@@ -1278,9 +1269,9 @@ public class View {
 
     // -----------------------
     // 2D case
-    if (viewMode == ViewPositionMode.TOP) {
+    if (is2D()) {
       computeCamera2D_RenderingSquare(cam, bounds);
-      
+
       if (view2DLayout.keepTextVisible)
         correctCameraPositionForIncludingTextLabels(painter, viewport);
 
@@ -1292,7 +1283,7 @@ public class View {
       computeCamera3D_RenderingSphere(cam, bounds);
     }
   }
-  
+
   /**
    * Only used for top/2D views. Performs a rendering to get the whole bounds occupied by the Axis
    * Box and its text labels.
@@ -1320,7 +1311,7 @@ public class View {
     cam.setPosition(eye, target);
 
     // 2D case
-    if (viewMode == ViewPositionMode.TOP) {
+    if (is2D()) {
       computeCamera2D_RenderingSquare(cam, newBounds);
     }
 
@@ -1332,6 +1323,7 @@ public class View {
 
   /**
    * Camera clipping planes configuration for a rendering sphere (3D)
+   * 
    * @param cam
    * @param bounds
    */
@@ -1352,14 +1344,14 @@ public class View {
     float ydiam = bounds.getYRange().getRange();
 
     // compute the world distance covered by a pixel
-    float screenToModelRatioX = xdiam / getCanvas().getRendererWidth();
-    float screenToModelRatioY = ydiam / getCanvas().getRendererHeight();
+    float modelToScreenRatioX = xdiam / getCanvas().getRendererWidth();
+    float modelToScreenRatioY = ydiam / getCanvas().getRendererHeight();
 
     // to convert pixel margin to world coordinate space to add
-    float marginLeftModel = view2DLayout.marginLeft * screenToModelRatioX;
-    float marginRightModel = view2DLayout.marginRight * screenToModelRatioX;
-    float marginTopModel = view2DLayout.marginTop * screenToModelRatioY;
-    float marginBottomModel = view2DLayout.marginBottom * screenToModelRatioY;
+    float marginLeftModel = view2DLayout.marginLeft * modelToScreenRatioX;
+    float marginRightModel = view2DLayout.marginRight * modelToScreenRatioX;
+    float marginTopModel = view2DLayout.marginTop * modelToScreenRatioY;
+    float marginBottomModel = view2DLayout.marginBottom * modelToScreenRatioY;
 
     BoundingBox2d renderingSquare = new BoundingBox2d(-xdiam / 2 - marginLeftModel,
         xdiam / 2 + marginRightModel, -ydiam / 2 - marginBottomModel, ydiam / 2 + marginTopModel);
@@ -1367,6 +1359,27 @@ public class View {
     cam.setRenderingSquare(renderingSquare);
   }
 
+  /**
+   * Compute the world distance covered by a pixel, w.r.t to current canvas size and scene bounding
+   * box
+   * 
+   * E.g. the occupation of three pixels in the model is getModelToScreenRatio().x * 3 along the X
+   * dimension (width) and getModelToScreenRatio().y * 3 along the Y dimension (height)
+   */
+  public Coord2d getModelToScreenRatio() {
+    return getModelToScreenRatio(getSceneGraphBounds());
+  }
+
+  public Coord2d getModelToScreenRatio(BoundingBox3d bounds) {
+    float xdiam = bounds.getXRange().getRange();
+    float ydiam = bounds.getYRange().getRange();
+
+    // compute the world distance covered by a pixel
+    float screenToModelRatioX = xdiam / getCanvas().getRendererWidth();
+    float screenToModelRatioY = ydiam / getCanvas().getRendererHeight();
+
+    return new Coord2d(screenToModelRatioX, screenToModelRatioY);
+  }
 
 
 
