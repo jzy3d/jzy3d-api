@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.axis.layout;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.IFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.StaticFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
@@ -76,6 +77,8 @@ public class AxisLayout implements IAxisLayout {
   protected int axisLabelOffsetMargin = 0;
 
   protected float tickLengthRatio = 20f;
+  
+  protected float axisLabelDistance = 2.5f;
 
   /** Default AxeBox layout */
   public AxisLayout() {
@@ -121,6 +124,45 @@ public class AxisLayout implements IAxisLayout {
   public Color getMainColor() {
     return mainColor;
   }
+  
+  /** 
+   * Return the maximum text length in pixel as displayed on screen, given the current ticks and renderer
+   */
+  @Override
+  public int getMaxXTickLabelWidth(IPainter painter) {
+    int maxWidth = 0;
+    
+    for(double t: getXTicks()) {
+      String label = getXTickRenderer().format(t);
+      
+      int width = painter.getTextLengthInPixels(font, label);
+      if(width > maxWidth) {
+        maxWidth = width;
+      }
+    }
+    return maxWidth;
+
+  }
+
+  /** 
+   * Return the maximum text length in pixel as displayed on screen, given the current ticks and renderer
+   */
+  @Override
+  public int getMaxYTickLabelWidth(IPainter painter) {
+    int maxWidth = 0;
+    
+    for(double t: getYTicks()) {
+      String label = getYTickRenderer().format(t);
+      
+      int width = painter.getTextLengthInPixels(font, label);
+      if(width > maxWidth) {
+        maxWidth = width;
+      }
+    }
+    return maxWidth;
+
+  }
+
 
   // ********************* TICKS PROPERTIES ************************ //
 
@@ -543,6 +585,7 @@ public class AxisLayout implements IAxisLayout {
     // return font;
   }
 
+  @Override
   public float getTickLengthRatio() {
     return tickLengthRatio;
   }
@@ -553,8 +596,20 @@ public class AxisLayout implements IAxisLayout {
    * If scene bounding box range is 100 and tickLengthRatio is 20, then the actual tick length on
    * screen will be of 5 pixels.
    */
+  @Override
   public void setTickLengthRatio(float tickLengthRatio) {
     this.tickLengthRatio = tickLengthRatio;
+  }
+  
+  @Override
+  public float getAxisLabelDistance() {
+    return axisLabelDistance;
+  }
+
+
+  @Override
+  public void setAxisLabelDistance(float axisLabelDistance) {
+    this.axisLabelDistance = axisLabelDistance;
   }
 
 

@@ -1272,8 +1272,8 @@ public class View {
     if (is2D()) {
       computeCamera2D_RenderingSquare(cam, bounds);
 
-      if (view2DLayout.keepTextVisible)
-        correctCameraPositionForIncludingTextLabels(painter, viewport);
+      // if (view2DLayout.keepTextVisible)
+      // correctCameraPositionForIncludingTextLabels(painter, viewport);
 
     }
 
@@ -1347,11 +1347,31 @@ public class View {
     float modelToScreenRatioX = xdiam / getCanvas().getRendererWidth();
     float modelToScreenRatioY = ydiam / getCanvas().getRendererHeight();
 
-    // to convert pixel margin to world coordinate space to add
-    float marginLeftModel = view2DLayout.marginLeft * modelToScreenRatioX;
-    float marginRightModel = view2DLayout.marginRight * modelToScreenRatioX;
-    float marginTopModel = view2DLayout.marginTop * modelToScreenRatioY;
-    float marginBottomModel = view2DLayout.marginBottom * modelToScreenRatioY;
+    // consider everything adding a margin computed in pixel
+    float txtHorizontal = 0;
+    float txtVertical = 0;
+
+    if (view2DLayout.keepTextVisible) {
+      txtHorizontal = axis.getLayout().getMaxYTickLabelWidth(getPainter());
+      txtVertical = axis.getLayout().getFont().getHeight();
+    }
+
+    float marginLeft =
+        view2DLayout.marginLeft + view2DLayout.yAxisTickLabelsDistance + txtHorizontal;
+    float marginRight = view2DLayout.marginRight + view2DLayout.yAxisTickLabelsDistance;
+    float marginTop = view2DLayout.marginTop + view2DLayout.xAxisTickLabelsDistance;
+    float marginBottom =
+        view2DLayout.marginBottom + view2DLayout.xAxisTickLabelsDistance + txtVertical;
+
+
+    // convert pixel margin to world coordinate to add compute the additional 3D space to grasp with
+    // the camera
+    float marginLeftModel = marginLeft * modelToScreenRatioX;
+    float marginRightModel = marginRight * modelToScreenRatioX;
+    float marginTopModel = marginTop * modelToScreenRatioY;
+    float marginBottomModel = marginBottom * modelToScreenRatioY;
+
+
 
     BoundingBox2d renderingSquare = new BoundingBox2d(-xdiam / 2 - marginLeftModel,
         xdiam / 2 + marginRightModel, -ydiam / 2 - marginBottomModel, ydiam / 2 + marginTopModel);
