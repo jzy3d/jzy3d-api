@@ -75,6 +75,8 @@ public class AxisLayout implements IAxisLayout {
 
   protected int axisLabelOffsetMargin = 0;
 
+  protected float tickLengthRatio = 20f;
+
   /** Default AxeBox layout */
   public AxisLayout() {
     setXAxisLabel("X");
@@ -103,7 +105,7 @@ public class AxisLayout implements IAxisLayout {
     setZAxisSide(ZAxisSide.LEFT);
   }
 
-  
+
 
   @Override
   public void setMainColor(Color color) {
@@ -119,7 +121,7 @@ public class AxisLayout implements IAxisLayout {
   public Color getMainColor() {
     return mainColor;
   }
-  
+
   // ********************* TICKS PROPERTIES ************************ //
 
 
@@ -231,8 +233,8 @@ public class AxisLayout implements IAxisLayout {
     zTickRenderer = tickRenderer;
   }
 
-  // TICK COLORS 
-  
+  // TICK COLORS
+
   @Override
   public Color getXTickColor() {
     return xTickColor;
@@ -262,9 +264,9 @@ public class AxisLayout implements IAxisLayout {
   public void setZTickColor(Color tickColor) {
     zTickColor = tickColor;
   }
-  
+
   // TICK LABELS
-  
+
   @Override
   public boolean isXTickLabelDisplayed() {
     return xTickLabelDisplayed;
@@ -329,13 +331,14 @@ public class AxisLayout implements IAxisLayout {
   public void setAxisLabelOffsetAuto(boolean isAuto) {
     this.axisLabelOffsetAuto = isAuto;
   }
-  
+
   public int getAxisLabelOffsetMargin() {
     return axisLabelOffsetMargin;
   }
+
   /**
-   * When {@link #setAxisLabelOffsetAuto(true)}, use this margin
-   * to define the horizontal margin to let between the ticks and the axis labels
+   * When {@link #setAxisLabelOffsetAuto(true)}, use this margin to define the horizontal margin to
+   * let between the ticks and the axis labels
    */
   public void setAxisLabelOffsetMargin(int margin) {
     this.axisLabelOffsetMargin = margin;
@@ -371,7 +374,7 @@ public class AxisLayout implements IAxisLayout {
   public void setZAxisLabel(String axeLabel) {
     zAxeLabel = axeLabel;
   }
-  
+
   @Override
   public boolean isXAxeLabelDisplayed() {
     return xAxeLabelDisplayed;
@@ -401,7 +404,7 @@ public class AxisLayout implements IAxisLayout {
   public void setZAxeLabelDisplayed(boolean axeLabelDisplayed) {
     zAxeLabelDisplayed = axeLabelDisplayed;
   }
-  
+
   @Override
   public LabelOrientation getXAxisLabelOrientation() {
     return xAxisLabelOrientation;
@@ -431,7 +434,7 @@ public class AxisLayout implements IAxisLayout {
   public void setZAxisLabelOrientation(LabelOrientation zAxisLabelOrientation) {
     this.zAxisLabelOrientation = zAxisLabelOrientation;
   }
-  
+
   @Override
   public ZAxisSide getZAxisSide() {
     return zAxisSide;
@@ -476,7 +479,7 @@ public class AxisLayout implements IAxisLayout {
     this.gridColor = gridColor;
   }
 
-  
+
 
   // ************************* FONT *********************** //
 
@@ -496,7 +499,7 @@ public class AxisLayout implements IAxisLayout {
       fontSizePolicy.apply(this);
     }
   }
-  
+
   @Override
   public Font getFont() {
     return font;
@@ -538,6 +541,20 @@ public class AxisLayout implements IAxisLayout {
     }
     return null;
     // return font;
+  }
+
+  public float getTickLengthRatio() {
+    return tickLengthRatio;
+  }
+
+  /**
+   * Set the length of ticks, given as a ratio of the scene bounds.
+   * 
+   * If scene bounding box range is 100 and tickLengthRatio is 20, then the actual tick length on
+   * screen will be of 5 pixels.
+   */
+  public void setTickLengthRatio(float tickLengthRatio) {
+    this.tickLengthRatio = tickLengthRatio;
   }
 
 

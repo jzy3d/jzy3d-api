@@ -4,10 +4,13 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 
@@ -37,9 +40,12 @@ public class AxisTickProcessor {
       Horizontal hal, Vertical val) {
     int quad_0;
     int quad_1;
-    float tickLength = 20.0f; // with respect to range
     float axeLabelDist = 2.5f;
     BoundingBox3d ticksTxtBounds = new BoundingBox3d();
+    
+
+    float tickLength = getTickLength3D_OrComputeTickLength2D(painter, dimension);
+    
 
     // Retrieve the quads that intersect and create the selected axe
     if (this.axis.isX(dimension)) {
@@ -72,7 +78,7 @@ public class AxisTickProcessor {
     String axisLabel = labels.axisLabel(dimension);
     float rotation = labels.axisLabelRotation(painter, dimension, info.axisSegment);
     Coord3d labelPosition = labels.axisLabelPosition(dimension, tickLength, axeLabelDist, pos, dir);
-
+    
 
     // --------------------------------------------------------------
     // Verify if needs a left/right offset to avoid covering tick labels
@@ -109,6 +115,38 @@ public class AxisTickProcessor {
         rotation, offset2D);
 
     return ticksTxtBounds;
+  }
+
+  protected float getTickLength3D_OrComputeTickLength2D(IPainter painter, int dimension) {
+    View view = painter.getView();
+
+    // 3D case, tick length given as a ratio of scene bounds
+    float tickLength = view.getAxis().getLayout().getTickLengthRatio(); 
+
+    
+    // Process tick length for the particular 2D case
+    if(view.is2D() && !this.axis.isZ(dimension)) {
+      View2DLayout layout2D = view.getLayout_2D();
+      
+      Coord2d modelToScreen = view.getModelToScreenRatio(this.axis.getBounds());
+      
+      Font font = this.axis.getLayout().getFont();
+      
+      if (this.axis.isX(dimension)) {
+        
+        float worldTickLen = (layout2D.getxAxisTickLabelsDistance() + font.getHeight()) * modelToScreen.y;
+        
+        tickLength = this.axis.getBounds().getXRange().getRange()/worldTickLen;
+
+      }
+      else if (this.axis.isY(dimension)) {
+        float worldTickLen = layout2D.getyAxisTickLabelsDistance() * modelToScreen.x;
+        
+        tickLength = this.axis.getBounds().getYRange().getRange()/worldTickLen;
+      }
+      
+    }
+    return tickLength;
   }
 
   public AxisRenderingInfo drawAxisTicks(IPainter painter, int dimension, Color color,
