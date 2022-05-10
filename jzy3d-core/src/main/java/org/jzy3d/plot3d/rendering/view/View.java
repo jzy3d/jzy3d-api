@@ -67,7 +67,9 @@ public class View {
   protected boolean axisDisplayed = true;
   protected boolean squared = true;
   protected float cameraRenderingSphereRadiusFactor = 1f;
-  protected float cameraRenderingSphereRadiusFactorOnTop = 0.25f;
+  protected float cameraRenderingSphereRadiusFactorOnTop = 0.1f;//00000000000001f;
+  protected boolean moveCameraToKeepTextInBounds = true;
+  
   /**
    * force to have all object maintained in screen, meaning axebox won't always keep the same size.
    */
@@ -225,7 +227,7 @@ public class View {
         // Store current pixel scale
         pixelScale.x = (float) pixelScaleX;
         pixelScale.y = (float) pixelScaleY;
-        
+
         // Convert pixel scale to HiDPI status
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
@@ -693,7 +695,7 @@ public class View {
   }
 
 
-  public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP = 0.25f;
+  //public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP = 0.25f;
 
 
   /**
@@ -1139,12 +1141,23 @@ public class View {
 
     Coord3d cameraTarget = computeCameraTarget(center, scaling);
     Coord3d cameraUp = computeCameraUp(viewpoint);
+    // Coord3d cameraUp = new Coord3d(0.0, 0.0, 1.0);
     Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
+
+    // Force the up vector of the camera to grow along Y axis
+    if (ViewPositionMode.TOP.equals(viewmode)) {
+      cameraUp = new Coord3d(0.0, 1.0, 0.0);
+    }
+
     cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
 
     triggerCameraUpEvents(viewpoint);
 
     computeCameraRenderingSphereRadius(cam, viewport, bounds);
+
+    // System.out.println("View.bounds = " + bounds);
+    // System.out.println("View.cam = " + cam);
+    // System.out.println("View.viewpoint = " + viewpoint);
 
     cam.setViewPort(viewport);
     cam.shoot(painter, cameraMode);
@@ -1202,6 +1215,12 @@ public class View {
       throw new RuntimeException("Unsupported ViewMode: " + viewmode);
   }
 
+  /**
+   * 
+   * @param viewpoint
+   * @param target
+   * @see {@link #VIEWPOINT_X_Y_MIN_NEAR_VIEWER}
+   */
   protected Coord3d computeCameraEyeProfile(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
     eye.y = 0;
@@ -1257,10 +1276,14 @@ public class View {
       float ydiam = bounds.getYRange().getRange();
       float radius = Math.max(xdiam, ydiam) / 2;
 
-      radius += (radius * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP);
+      radius += (radius * cameraRenderingSphereRadiusFactorOnTop);
 
       cam.setRenderingSphereRadius(radius);
-      correctCameraPositionForIncludingTextLabels(painter, viewport);
+      
+      if(moveCameraToKeepTextInBounds)
+        correctCameraPositionForIncludingTextLabels(painter, viewport);
+      
+      
     } else {
       if (spaceTransformer != null) {
         bounds = spaceTransformer.compute(bounds);
@@ -1271,11 +1294,44 @@ public class View {
     }
   }
 
+  /**
+   * Only used for top/2D views. Performs a rendering to get the whole bounds occupied by the Axis Box and its text labels.
+   * 
+   * Then edit the camera position to fit within this new bounds AND modify the clipping planes.
+   * 
+   * @param painter
+   * @param viewport
+   */
+  
   protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
       ViewportConfiguration viewport) {
+    cam.setViewPort(viewport);
+    cam.shoot(painter, cameraMode);
+    axis.draw(painter);
+    clear();
+
+    // Base camera radius on {@link AxisBox#getWholeBounds} to ensure we display text labels
+    // complete
+    BoundingBox3d newBounds = axis.getWholeBounds().scale(scaling);
+    
+    // Compute camera position based on whole bounds
+    Coord3d target = newBounds.getCenter();
+    Coord3d eye = viewpoint.cartesian().add(target);
+    cam.setPosition(eye, target);
+
+    // Update rendering sphere
+    if (viewMode == ViewPositionMode.TOP) {
+      float radius = Math.max(newBounds.getXmax() - newBounds.getXmin(),
+          newBounds.getYmax() - newBounds.getYmin()) / 2;
+      radius += (radius * cameraRenderingSphereRadiusFactorOnTop);
+      cam.setRenderingSphereRadius(radius);
+    } else {
+      cam.setRenderingSphereRadius(
+          (float) newBounds.getRadius() * cameraRenderingSphereRadiusFactor);
+    }
+
 
   }
-
   /* AXE BOX RENDERING */
 
   protected void renderAxeBox() {

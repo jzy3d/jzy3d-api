@@ -16,6 +16,8 @@
 
 package jgl;
 
+import java.awt.Font;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import jgl.context.gl_context;
@@ -316,7 +318,7 @@ public abstract class GL<ImageType, FontType> {
 
 	public abstract ImageType getRenderedImage();
 
-  protected void clearImagesBuffer() {
+  public void clearImagesBuffer() {
     synchronized (imageToDraw) {
       imageToDraw.clear(); // empty image buffer
     }
@@ -346,6 +348,12 @@ public abstract class GL<ImageType, FontType> {
 		textsToDraw.add(new TextToDraw<>(font, string, x, y, r, g, b, rotate));
     }
   }
+	
+	public void clearTextToDraw() {
+	    synchronized (textsToDraw) {
+	      textsToDraw.clear(); // empty text buffer
+	    }
+	  }
 
 
   /**
