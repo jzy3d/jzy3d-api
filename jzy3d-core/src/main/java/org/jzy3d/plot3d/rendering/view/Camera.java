@@ -668,8 +668,8 @@ public class Camera extends AbstractViewportManager {
   protected String toString(Coord3d eye, Coord3d target, Coord3d up) {
     String output = "(Camera)";
     output += (" lookFrom  = {" + eye.x + ", " + eye.y + ", " + eye.z + "}");
-    output += (" lookTo    = {" + target.x + ", " + target.y + ", " + target.z + "}");
-    output += (" topToward = {" + up.x + ", " + up.y + ", " + up.z + "}");
+    output += ("  lookTo = {" + target.x + ", " + target.y + ", " + target.z + "}");
+    output += ("  topToward = {" + up.x + ", " + up.y + ", " + up.z + "}");
     return output;
   }
 
@@ -709,7 +709,9 @@ public class Camera extends AbstractViewportManager {
     public void apply(IPainter painter) {
       if (left != 0 && right != 0 && bottom != 0 && top != 0 && near != 0 && far != 0) {
         painter.glOrtho(left, right, bottom, top, near, far);
+        //System.out.println("Camera.glOrtho("+left+","+ right+","+ bottom+","+ top +","+ near+","+ far + ")");
       }
+      
     }
 
     @Override

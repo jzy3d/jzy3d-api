@@ -1264,10 +1264,10 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glClearColorAndDepthBuffers() {
-    // glClear(GL.GL_COLOR_BUFFER_BIT);
-    // gl.glClear(GL.GL_COLOR_BUFFER_BIT);
-
     glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+    
+    gl.clearTextToDraw(); // erase text buffer
+    gl.clearImagesBuffer();
   }
 
   // GL PICKING
