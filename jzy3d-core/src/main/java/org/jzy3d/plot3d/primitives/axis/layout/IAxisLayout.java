@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.axis.layout;
 
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.IFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
@@ -14,6 +15,15 @@ public interface IAxisLayout {
   public float getTickLengthRatio();
   
   public void setTickLengthRatio(float tickLengthRatio);
+  
+  public float getAxisLabelDistance();
+  
+  public void setAxisLabelDistance(float axisLabelDistance);
+  
+  public int getMaxXTickLabelWidth(IPainter painter);
+
+  public int getMaxYTickLabelWidth(IPainter painter);
+
   
   public void setMainColor(Color color);
 

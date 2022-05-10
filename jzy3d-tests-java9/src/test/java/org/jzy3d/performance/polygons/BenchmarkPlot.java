@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.poi.ss.usermodel.Cell;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
-import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.xls.ExcelBuilder;
 import org.jzy3d.maths.BoundingBox3d;
@@ -14,6 +14,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Scatter;
+import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.IntegerTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -26,8 +27,8 @@ public class BenchmarkPlot implements BenchmarkXLS {
 
     // -------------------------------
     // Chart configuration for plotting
-    // ChartFactory f = new AWTChartFactory() ;
-    ChartFactory f = new EmulGLChartFactory();
+    ChartFactory f = new AWTChartFactory() ;
+    //ChartFactory f = new EmulGLChartFactory();
     Quality q = Quality.Advanced();
     // q.setHiDPI(HiDPI.OFF);
 
@@ -71,12 +72,8 @@ public class BenchmarkPlot implements BenchmarkXLS {
 
       line++;
 
-      // System.out.println("x " + x + " y " + y +" max " + maxX );
-      // System.out.println("c");
     }
 
-
-    System.out.println("pouet");
     System.out.println("loaded " + line + " XLS lines");
 
 
@@ -87,40 +84,46 @@ public class BenchmarkPlot implements BenchmarkXLS {
 
     Chart c = f.newChart(q);
 
-
-    // Thread.sleep(1000);
-
-
-
     c.add(scatter);
     c.add(line(40, maxX, Color.GREEN, 2));
     c.add(line(60, maxX, Color.ORANGE, 2));
-
-
-
     c.add(line(80, maxX, Color.RED, 2));
-    c.getAxisLayout()
+    
+    // Axis layout
+    IAxisLayout alayout = c.getAxisLayout();
+    
+    alayout
         .setXAxisLabel("Number of polygons (polygons all together cover the same surface)");
-    c.getAxisLayout().setYAxisLabel("Rendering time (ms)");
-    c.getAxisLayout().setYAxisLabelOrientation(LabelOrientation.PARALLEL_TO_AXIS);
-    c.getAxisLayout().setFont(Font.Helvetica_18);
-    c.getAxisLayout().setXTickRenderer(new IntegerTickRenderer(true));
+    alayout.setXTickRenderer(new IntegerTickRenderer(true));
+    alayout.setYAxisLabel("Rendering time (ms)");
+    alayout.setYAxisLabelOrientation(LabelOrientation.PARALLEL_TO_AXIS);
 
+    alayout.setFont(Font.Helvetica_18);
+
+    alayout.setAxisLabelOffsetAuto(true);
+    alayout.setAxisLabelOffsetMargin(20);
+
+    
+    // View layout
+    c.view2d();
+    
+    View2DLayout layout = c.getView().getLayout_2D();
+    layout.setMargin(20);
+    
+    //layout.setMarginRight(30);
+    //layout.setMarginTop(60);
+    //layout.setKeepTextVisible(false);
+    
+    
     c.getView().setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -10, 10));
 
 
     c.open(file, 1024, 768);
 
-    // PB : MUST BE DONE BEFORE OPENING chart
-    c.view2d();
     
-    View2DLayout layout = c.getView().getLayout_2D();
-    layout.setMarginHorizontal(20);
-    layout.setMarginVertical(20);
     
-    //layout.setMarginRight(30);
-    //layout.setMarginTop(60);
-    //layout.setKeepTextVisible(false);
+
+    
 
     c.render();
 
