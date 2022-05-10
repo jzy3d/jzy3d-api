@@ -493,6 +493,10 @@ public class BoundingBox3d {
     setZmax(max.z);
 
   }
+  
+  public BoundingBox2d getBounds_XY() {
+    return new BoundingBox2d(xmin, xmax, ymin, ymax);
+  }
 
   /*********************************************************/
 
