@@ -40,11 +40,15 @@ public class AxisTickProcessor {
       Horizontal hal, Vertical val) {
     int quad_0;
     int quad_1;
-    float axeLabelDist = 2.5f;
+
     BoundingBox3d ticksTxtBounds = new BoundingBox3d();
     
-
+    // Distance of tick to axis
     float tickLength = getTickLength3D_OrComputeTickLength2D(painter, dimension);
+
+    // Distance of axe label to axis given in factor of (bounds/tickLength)
+    float axeLabelDist = this.axis.getLayout().getAxisLabelDistance();
+
     
 
     // Retrieve the quads that intersect and create the selected axe
@@ -117,6 +121,9 @@ public class AxisTickProcessor {
     return ticksTxtBounds;
   }
 
+  /**
+   * Compute tick length, returned as a ratio of the scene bounds.
+   */
   protected float getTickLength3D_OrComputeTickLength2D(IPainter painter, int dimension) {
     View view = painter.getView();
 
@@ -132,17 +139,19 @@ public class AxisTickProcessor {
       
       Font font = this.axis.getLayout().getFont();
       
+      // Compute occupation of X tick labels according to Y range, canvas height and font height
       if (this.axis.isX(dimension)) {
         
         float worldTickLen = (layout2D.getxAxisTickLabelsDistance() + font.getHeight()) * modelToScreen.y;
         
-        tickLength = this.axis.getBounds().getXRange().getRange()/worldTickLen;
+        tickLength = this.axis.getBounds().getYRange().getRange()/worldTickLen;
 
       }
+      // Compute occupation of Y tick labels according to X range, canvas width and font width
       else if (this.axis.isY(dimension)) {
         float worldTickLen = layout2D.getyAxisTickLabelsDistance() * modelToScreen.x;
         
-        tickLength = this.axis.getBounds().getYRange().getRange()/worldTickLen;
+        tickLength = this.axis.getBounds().getXRange().getRange()/worldTickLen;
       }
       
     }

@@ -207,18 +207,17 @@ public class AxisLabelProcessor {
     double zlab;
 
     // Draw the label for axis
-    int dist = 1;
     if (axis.isX(direction)) {
       xlab = axis.center.x;
-      ylab = axeLabelDist * (axis.yrange / tickLength) * dist * dir.y + pos.y;
-      zlab = axeLabelDist * (axis.zrange / tickLength) * dist * dir.z + pos.z;
+      ylab = axeLabelDist * (axis.yrange / tickLength) * dir.y + pos.y;
+      zlab = axeLabelDist * (axis.zrange / tickLength) * dir.z + pos.z;
     } else if (axis.isY(direction)) {
-      xlab = axeLabelDist * (axis.xrange / tickLength) * dist * dir.x + pos.x;
+      xlab = axeLabelDist * (axis.xrange / tickLength) * dir.x + pos.x;
       ylab = axis.center.y;
-      zlab = axeLabelDist * (axis.zrange / tickLength) * dist * dir.z + pos.z;
+      zlab = axeLabelDist * (axis.zrange / tickLength) * dir.z + pos.z;
     } else {
-      xlab = axeLabelDist * (axis.xrange / tickLength) * dist * dir.x + pos.x;
-      ylab = axeLabelDist * (axis.yrange / tickLength) * dist * dir.y + pos.y;
+      xlab = axeLabelDist * (axis.xrange / tickLength) * dir.x + pos.x;
+      ylab = axeLabelDist * (axis.yrange / tickLength) * dir.y + pos.y;
       zlab = axis.center.z;
     }
 

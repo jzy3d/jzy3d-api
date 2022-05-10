@@ -1,7 +1,9 @@
 package org.jzy3d.plot3d.rendering.view;
 
 
-/*
+/**
+ * <img src="doc-files/layout2D.png"/> 
+ * 
  * // PB1 : avec 200 ou 500 samples, view2D calcule une camera qui n'affiche rien
  * 
  * 
@@ -31,6 +33,8 @@ package org.jzy3d.plot3d.rendering.view;
  * - Y axis rotate / or not
  * - negative values
  * 
+ * Take values with x range != y range, include negative and positive values
+ * 
  *
  */
 public class View2DLayout {
@@ -41,10 +45,10 @@ public class View2DLayout {
   protected float marginTop = 0;      
   protected float marginBottom = 0;
   
-  protected float xAxisTickLabelsDistance = 10;
+  protected float xAxisTickLabelsDistance = 0;
   protected float xAxisNameLabelsDistance = -1;
 
-  protected float yAxisTickLabelsDistance = 10;
+  protected float yAxisTickLabelsDistance = 0;
   protected float yAxisNameLabelsDistance = -1;
 
   protected boolean keepTextVisible = true;
@@ -54,6 +58,12 @@ public class View2DLayout {
     
     setMarginHorizontal(10);
     setMarginVertical(10);
+    setTickLabelDistance(10);
+  }
+  
+  public void setTickLabelDistance(float dist) {
+    setxAxisTickLabelsDistance(dist);
+    setyAxisTickLabelsDistance(dist);
   }
 
   public void setMargin(float margin) {

@@ -379,6 +379,7 @@ public class AxisBox implements IAxis {
     else
       return layout.getZTicks();
   }
+  
 
   /* ************************************************/
   /* ************** AXIS SELECTION ******************/
