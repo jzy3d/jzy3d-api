@@ -23,32 +23,15 @@ import org.jzy3d.plot3d.rendering.view.View2DLayout;
  * // PB1 : avec 200 ou 500 samples, view2D calcule une camera qui n'affiche rien
  * 
  * 
- * PB2 : si view2D est lancé APRES open, le layout est de l'axe est merdique. (axe label en haut et
- * à droite, il semble qu'on regarde par en dessous). Se remet dans le bon sens au prochain render.
- * Semble du au fait que le TOP vector n'est pas mis à jour du premier coup, seulement au render
- * d'apres.
+ * DONE : changement 2D/3D applique la modif immédiatement, même si animation stop
  * 
- *
- *
  * ------------------------
  * DONE : axe en double sur emulGL, ajoute un fix sur le delete texte (should delete image also if ledend)
  * 
  * ------------------------
- * PB4 : la fonction View.correct est très radicale. Si on la bypass, le chart est bien positionné
- * avec margin d'axe à 0. Pouvoir configurer le correctCameraPosition pour inclure texte mais avec
- * une marge
+ * DONE : configurer la vue avec des paramètres 2D
  * 
- * Le radius de la rendering sphere est très utilié pour appeler ORTHO2D
- * 
- * glOrtho(-radius, +radius, -radius, +radius, near, far);
- * 
- * computeCameraRenderingSphereRadius doit donc s'adapter pour ne plus configurer la Camera par
- * rapport à un radius impréci, mais plutôt configurer avec précision glOrtho en fonction 
- * - des bounds des données
- * - d'une marge de blanc exprimée en % du panneau complet. Pouvoir exprimer en pixel et calculer le ratio dynamiquement
- * - d'une taille de texte qu'il faut pouvoir prendre en compte à la demande.
- * 
- * Pouvoir configurer en 2D l'espacement du label de texte 
+ * TODO : considérer la taille des textes.
  * 
  * 
  * ------------------------

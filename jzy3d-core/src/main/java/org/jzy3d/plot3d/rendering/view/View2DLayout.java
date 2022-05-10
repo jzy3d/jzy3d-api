@@ -7,6 +7,11 @@ public class View2DLayout {
   protected float marginBottom = 0; 
   
   protected boolean keepTextVisible = true;
+  
+  public View2DLayout() {
+    setMarginHorizontal(10);
+    setMarginVertical(10);
+  }
 
   public void setMarginHorizontal(float margin) {
     setMarginLeft(margin);
