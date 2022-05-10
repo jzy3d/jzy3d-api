@@ -129,9 +129,31 @@ public class Chart {
     view.setViewPositionMode(ViewPositionMode.TOP);
     view.setSquared(true);
     view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
+    
+    if(!getQuality().isAnimated()) {
+      render();
+    }
     return this;
   }
 
+  public Chart view3d() {
+    IAxisLayout axe = getAxisLayout();
+    axe.setZAxeLabelDisplayed(true);
+    axe.setTickLineDisplayed(true);
+
+    View view = getView();
+    view.setViewPositionMode(ViewPositionMode.FREE);
+    //view.setSquared(true);
+    //view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
+    
+    if(!getQuality().isAnimated()) {
+      render();
+    }
+
+    return this;
+  }
+
+  
   /** Alias for {@link display()} */
   public IFrame show(Rectangle rectangle, String title) {
     return display(rectangle, title);
