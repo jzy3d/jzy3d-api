@@ -1151,7 +1151,7 @@ public class View {
 
     triggerCameraUpEvents(viewpoint);
 
-    computeCameraRenderingSphereRadius(cam, viewport, bounds);
+    computeCameraRenderingArea(cam, viewport, bounds);
 
     cam.setViewPort(viewport);
     cam.shoot(painter, cameraMode);
@@ -1177,7 +1177,7 @@ public class View {
 
     triggerCameraUpEvents(viewpoint);
 
-    computeCameraRenderingSphereRadius(cam, viewport, bounds);
+    computeCameraRenderingArea(cam, viewport, bounds);
   }
 
 
@@ -1260,7 +1260,7 @@ public class View {
     }
   }
 
-  public void computeCameraRenderingSphereRadius(Camera cam, ViewportConfiguration viewport,
+  protected void computeCameraRenderingArea(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
 
     if (spaceTransformer != null) {
@@ -1343,6 +1343,12 @@ public class View {
     float modelToScreenRatioX = xdiam / getCanvas().getRendererWidth();
     float modelToScreenRatioY = ydiam / getCanvas().getRendererHeight();
 
+    // compute addition of all margins in pixels
+    float marginLeft = view2DLayout.marginLeft;
+    float marginRight = view2DLayout.marginRight;
+    float marginTop = view2DLayout.marginTop;
+    float marginBottom = view2DLayout.marginBottom;
+
     // consider everything adding a margin computed in pixel
     float txtHorizontal = 0;
     float txtVertical = 0;
@@ -1352,12 +1358,15 @@ public class View {
       txtVertical = axis.getLayout().getFont().getHeight();
     }
 
-    float marginLeft =
-        view2DLayout.marginLeft + view2DLayout.yAxisTickLabelsDistance + txtHorizontal;
-    float marginRight = view2DLayout.marginRight;
-    float marginTop = view2DLayout.marginTop;
-    float marginBottom =
-        view2DLayout.marginBottom + view2DLayout.xAxisTickLabelsDistance + txtVertical;
+    // add tick label distance
+    marginLeft +=
+        view2DLayout.yTickLabelsDistance + txtHorizontal + view2DLayout.yAxisLabelsDistance;
+    marginLeft += getPainter().getTextLengthInPixels(axis.getLayout().getFont(),
+        axis.getLayout().getYAxisLabel());
+
+    marginBottom +=
+        view2DLayout.xTickLabelsDistance + txtVertical + view2DLayout.xAxisLabelsDistance;
+    marginBottom+= axis.getLayout().getFont().getHeight();
 
 
     // convert pixel margin to world coordinate to add compute the additional 3D space to grasp with
