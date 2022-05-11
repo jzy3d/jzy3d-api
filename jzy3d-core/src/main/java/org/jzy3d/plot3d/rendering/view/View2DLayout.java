@@ -39,19 +39,27 @@ package org.jzy3d.plot3d.rendering.view;
  */
 public class View2DLayout {
   protected View view;
-  
-  protected float marginLeft = 0;
-  protected float marginRight = 0;
-  protected float marginTop = 0;      
-  protected float marginBottom = 0;
-  
-  protected float xAxisTickLabelsDistance = 0;
-  protected float xAxisNameLabelsDistance = -1;
-
-  protected float yAxisTickLabelsDistance = 0;
-  protected float yAxisNameLabelsDistance = -1;
 
   protected boolean textAddMargin = true;
+
+  /** Distance between axis and tick labels (hence, length of the tick) */
+  protected float xTickLabelsDistance = 0;
+  /** Distance between tick labels and axis label */
+  protected float xAxisLabelsDistance = 0;
+  /** Distance between axis and tick labels (hence, length of the tick) */
+  protected float yTickLabelsDistance = 0;
+  /** Distance between tick labels and axis label */
+  protected float yAxisLabelsDistance = 0;
+
+  /** Extra margin */
+  protected float marginLeft = 0;
+  /** Extra margin */
+  protected float marginRight = 0;
+  /** Extra margin */
+  protected float marginTop = 0;      
+  /** Extra margin */
+  protected float marginBottom = 0;
+
   
   public View2DLayout(View view) {
     this.view = view;
@@ -59,11 +67,17 @@ public class View2DLayout {
     setMarginHorizontal(10);
     setMarginVertical(10);
     setTickLabelDistance(10);
+    setAxisLabelDistance(10);
   }
   
   public void setTickLabelDistance(float dist) {
-    setxAxisTickLabelsDistance(dist);
-    setyAxisTickLabelsDistance(dist);
+    setxTickLabelsDistance(dist);
+    setyTickLabelsDistance(dist);
+  }
+
+  public void setAxisLabelDistance(float dist) {
+    setxAxisLabelsDistance(dist);
+    setyAxisLabelsDistance(dist);
   }
 
   public void setMargin(float margin) {
@@ -129,36 +143,36 @@ public class View2DLayout {
   
   
 
-  public float getxAxisTickLabelsDistance() {
-    return xAxisTickLabelsDistance;
+  public float getxTickLabelsDistance() {
+    return xTickLabelsDistance;
   }
 
-  public void setxAxisTickLabelsDistance(float xAxisTickLabelsDistance) {
-    this.xAxisTickLabelsDistance = xAxisTickLabelsDistance;
+  public void setxTickLabelsDistance(float xAxisTickLabelsDistance) {
+    this.xTickLabelsDistance = xAxisTickLabelsDistance;
   }
 
-  public float getxAxisNameLabelsDistance() {
-    return xAxisNameLabelsDistance;
+  public float getxAxisLabelsDistance() {
+    return xAxisLabelsDistance;
   }
 
-  public void setxAxisNameLabelsDistance(float xAxisNameLabelsDistance) {
-    this.xAxisNameLabelsDistance = xAxisNameLabelsDistance;
+  public void setxAxisLabelsDistance(float xAxisNameLabelsDistance) {
+    this.xAxisLabelsDistance = xAxisNameLabelsDistance;
   }
 
-  public float getyAxisTickLabelsDistance() {
-    return yAxisTickLabelsDistance;
+  public float getyTickLabelsDistance() {
+    return yTickLabelsDistance;
   }
 
-  public void setyAxisTickLabelsDistance(float yAxisTickLabelsDistance) {
-    this.yAxisTickLabelsDistance = yAxisTickLabelsDistance;
+  public void setyTickLabelsDistance(float yAxisTickLabelsDistance) {
+    this.yTickLabelsDistance = yAxisTickLabelsDistance;
   }
 
-  public float getyAxisNameLabelsDistance() {
-    return yAxisNameLabelsDistance;
+  public float getyAxisLabelsDistance() {
+    return yAxisLabelsDistance;
   }
 
-  public void setyAxisNameLabelsDistance(float yAxisNameLabelsDistance) {
-    this.yAxisNameLabelsDistance = yAxisNameLabelsDistance;
+  public void setyAxisLabelsDistance(float yAxisNameLabelsDistance) {
+    this.yAxisLabelsDistance = yAxisNameLabelsDistance;
   }
 
   public void apply() {
