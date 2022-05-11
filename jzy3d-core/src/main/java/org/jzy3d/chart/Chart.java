@@ -29,7 +29,7 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.Wireframeable;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -121,7 +121,7 @@ public class Chart {
 
   
   public Chart view2d() {
-    IAxisLayout axe = getAxisLayout();
+    AxisLayout axe = getAxisLayout();
     axe.setZAxeLabelDisplayed(false);
     axe.setTickLineDisplayed(false);
 
@@ -137,7 +137,7 @@ public class Chart {
   }
 
   public Chart view3d() {
-    IAxisLayout axe = getAxisLayout();
+    AxisLayout axe = getAxisLayout();
     axe.setZAxeLabelDisplayed(true);
     axe.setTickLineDisplayed(true);
 
@@ -937,7 +937,7 @@ public class Chart {
     return canvas;
   }
 
-  public IAxisLayout getAxisLayout() {
+  public AxisLayout getAxisLayout() {
     return getView().getAxis().getLayout();
   }
 

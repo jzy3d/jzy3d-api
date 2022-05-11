@@ -14,7 +14,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Scatter;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.IntegerTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -90,7 +90,7 @@ public class BenchmarkPlot implements BenchmarkXLS {
     c.add(line(80, maxX, Color.RED, 2));
     
     // Axis layout
-    IAxisLayout alayout = c.getAxisLayout();
+    AxisLayout alayout = c.getAxisLayout();
     
     alayout
         .setXAxisLabel("Number of polygons (polygons all together cover the same surface)");

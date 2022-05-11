@@ -4,7 +4,7 @@ import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
@@ -36,12 +36,12 @@ public class AWTChart extends Chart {
         AWTColorbarImageGenerator.MIN_BAR_HEIGHT), getView().getAxis().getLayout());
   }
 
-  public AWTColorbarLegend colorbar(Drawable drawable, IAxisLayout layout) {
+  public AWTColorbarLegend colorbar(Drawable drawable, AxisLayout layout) {
     return colorbar(drawable, new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
         AWTColorbarImageGenerator.MIN_BAR_HEIGHT), layout);
   }
 
-  public AWTColorbarLegend colorbar(Drawable drawable, Dimension d, IAxisLayout layout) {
+  public AWTColorbarLegend colorbar(Drawable drawable, Dimension d, AxisLayout layout) {
     AWTColorbarLegend cbar = new AWTColorbarLegend(drawable, layout);
     cbar.setMinimumSize(d);
     drawable.setLegend(cbar);
