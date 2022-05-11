@@ -3,7 +3,7 @@ jzy3d-test-java9-generated
 This is a summary of existing baseline images for tests, which was generated on 
 * OS Name : mac os x
 * OS Version : 11.4
-* Java Version : 17.0.1
+* Java Version : 11.0.13
 * CPU : aarch64
 * GPU : AppleM1
 
