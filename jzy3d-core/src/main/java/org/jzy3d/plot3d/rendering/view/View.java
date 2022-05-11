@@ -1271,10 +1271,6 @@ public class View {
     // 2D case
     if (is2D()) {
       computeCamera2D_RenderingSquare(cam, bounds);
-
-      // if (view2DLayout.keepTextVisible)
-      // correctCameraPositionForIncludingTextLabels(painter, viewport);
-
     }
 
     // -----------------------
@@ -1293,7 +1289,7 @@ public class View {
    * @param painter
    * @param viewport
    */
-
+  @Deprecated
   protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
       ViewportConfiguration viewport) {
     cam.setViewPort(viewport);
@@ -1358,8 +1354,8 @@ public class View {
 
     float marginLeft =
         view2DLayout.marginLeft + view2DLayout.yAxisTickLabelsDistance + txtHorizontal;
-    float marginRight = view2DLayout.marginRight + view2DLayout.yAxisTickLabelsDistance;
-    float marginTop = view2DLayout.marginTop + view2DLayout.xAxisTickLabelsDistance;
+    float marginRight = view2DLayout.marginRight;
+    float marginTop = view2DLayout.marginTop;
     float marginBottom =
         view2DLayout.marginBottom + view2DLayout.xAxisTickLabelsDistance + txtVertical;
 
