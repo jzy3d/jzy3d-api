@@ -4,7 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Random;
+import java.util.stream.Collectors;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -39,6 +41,8 @@ public class ITTest {
 
   static NativePlatform platform = new NativePlatform();
 
+  protected String indexFileName = "BASELINE_" + platform.getLabel() + ".md";
+
   static Rectangle offscreenDimension = new Rectangle(800,600);
   
   // running offscreen may prevent to get a HiDPI image
@@ -49,13 +53,13 @@ public class ITTest {
     EmulGL_AWT, Native_AWT, Native_Swing
   }
   
-  
-  protected String indexFileName = "BASELINE_" + platform.getLabel() + ".md";
-  
   protected WT[] toolkits = {WT.EmulGL_AWT, WT.Native_AWT, WT.Native_Swing};
   protected HiDPI[] resolutions = {HiDPI.ON, HiDPI.OFF};
   
-  protected void applyToAllTookitAndResolutions(ITTestInstance task) {
+  /**
+   * Run a test for each possible registered toolkit and resolution.
+   */
+  protected void forEach(ITTestInstance task) {
     for(WT toolkit: toolkits) {
       for(HiDPI resolution: resolutions) {
         task.run(toolkit, resolution);
@@ -102,84 +106,102 @@ public class ITTest {
     // 2D tests
     line(sb, "# 2D Layout");
     
-    ITTest_2D.forAll_2D_Parameters(new ITTest2DInstance() {
+    ITTest_2D.forEach(new ITTest2DInstance() {
       @Override
       public void run(int margin, int tickLabel, boolean textVisible) {
         String properties = ITTest_2D.properties(margin, tickLabel, textVisible);
         section(1, sb, className(ITTest_2D.class), null, properties);
       }
     });
-    
-    
 
-    
+    // Export in a markdown file
     BufferedWriter bwr = new BufferedWriter(new FileWriter(new File(indexFileName)));
     bwr.write(sb.toString());
     bwr.flush();
     bwr.close();
   }
 
-  public static void section(StringBuffer sb, String testName) {
+  public  void section(StringBuffer sb, String testName) {
     section(sb, testName, null, null);
   }
 
-  public static void section(StringBuffer sb, String testName, String caseName, String info) {
+  public void section(StringBuffer sb, String testName, String caseName, String info) {
     section(0, sb, testName, caseName, info);
   }
   
-  public static void section(int level, StringBuffer sb, String testName, String caseName, String info) {
+  public void section(int level, StringBuffer sb, String testName, String caseName, String info) {
+    
+    // -------------------------------
     // Write section name with markdown header style
     
-    String header = "#".repeat(level+1);
+    String header = Collections.nCopies(level+1,"#").stream().collect(Collectors.joining());//.repeat(level+1);
     if(caseName!=null)
       line(sb, header + " " + testName + " : " + caseName);
     else
       line(sb, header + " " + testName);
     
+    // -------------------------------
+    // May show parameters as bullet point list
+    
     if(info!=null) {
       multiline(sb, info);
     }
+    
+    // -------------------------------
+    // Initiate baseline table
+    
     line(sb, "<table markdown=1>");
 
-    line(sb, "<tr>");
-    line(sb, "<td>"+ title(WT.EmulGL_AWT, HiDPI.ON) +"</td>");
-    line(sb, "<td>"+ title(WT.EmulGL_AWT, HiDPI.OFF) +"</td>");
-    line(sb, "<td>"+ title(WT.Native_AWT, HiDPI.ON) +"</td>");
-    line(sb, "<td>"+ title(WT.Native_AWT, HiDPI.OFF) +"</td>");
-    line(sb, "<td>"+ title(WT.Native_Swing, HiDPI.ON) +"</td>");
-    line(sb, "<td>"+ title(WT.Native_Swing, HiDPI.OFF) +"</td>");
-    line(sb, "</tr>");
-
+    // -------------------------------
+    // Table header with toolkit and resolution
     
     line(sb, "<tr>");
-    line(sb, "<td>" + imgTest(name(testName, caseName, WT.EmulGL_AWT, HiDPI.ON, info))+ "</td>");
-    line(sb, "<td>" + imgTest(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
-    line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_AWT, HiDPI.ON, info))+ "</td>");
-    line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
-    line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_Swing, HiDPI.ON, info))+ "</td>");
-    line(sb, "<td>" + imgTest(name(testName, caseName, WT.Native_Swing, HiDPI.OFF, info))+ "</td>");
+    
+    forEach(new ITTestInstance(){
+      public void run(WT toolkit, HiDPI resolution) {
+        line(sb, "<td>"+ title(toolkit, resolution) +"</td>");
+      }
+    });
     line(sb, "</tr>");
 
+    // -------------------------------
+    // First line with baseline image for each toolkit and resolution
+    
+    line(sb, "<tr>");
+
+    forEach(new ITTestInstance(){
+      public void run(WT toolkit, HiDPI resolution) {
+        line(sb, "<td>" + imgTest(name(testName, caseName, toolkit, resolution, info))+ "</td>");
+      }
+    });
+    line(sb, "</tr>");
+
+    // -------------------------------
+    // Second line with diff image displayed if an error is triggered
+    
     if(true) {
       line(sb, "<tr>");
-      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.ON, info))+ "</td>");
-      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.EmulGL_AWT, HiDPI.OFF, info))+ "</td>");
-      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.ON, info))+ "</td>");
-      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_AWT, HiDPI.OFF, info))+ "</td>");
-      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_Swing, HiDPI.ON, info))+ "</td>");
-      line(sb, "<td>" + imgDiff(name(testName, caseName, WT.Native_Swing, HiDPI.OFF, info))+ "</td>");
+      
+      forEach(new ITTestInstance(){
+        public void run(WT toolkit, HiDPI resolution) {
+          line(sb, "<td>" + imgDiff(name(testName, caseName, toolkit, resolution, info))+ "</td>");
+        }
+      });
       line(sb, "</tr>");
     }
+    
+    // -------------------------------
+    // End baseline table
     
     line(sb, "</table>");
     line(sb);
   }
   
-  public static String imgTest(String name) {
+  public String imgTest(String name) {
     return "<img src=\"src/test/resources/" + platform.getLabel() + "/" +name +".png\">";
   }
 
-  public static String imgDiff(String name) {
+  public String imgDiff(String name) {
     String path = "target/error-" + name + ChartTester.FILE_LABEL_DIFF + ".png";
     
     if(new File(path).exists()) {
@@ -193,23 +215,23 @@ public class ITTest {
   
   static String OKFLAG_ICON = "src/test/resources/icons/greentick.jpg";
 
-  public static String title(WT wt, HiDPI hidpi) {
+  public String title(WT wt, HiDPI hidpi) {
     return wt + SEP_TITLE + "HiDPI:"+hidpi;
   }
 
-  public static String title(String name, WT wt, HiDPI hidpi) {
+  public String title(String name, WT wt, HiDPI hidpi) {
     return name+ SEP_TITLE + wt + SEP_TITLE + "HiDPI:"+hidpi;
   }
   
-  static void line(StringBuffer sb, String line) {
+  public void line(StringBuffer sb, String line) {
     sb.append(line + "\n");
   }
 
-  static void line(StringBuffer sb) {
+  public void line(StringBuffer sb) {
     sb.append("\n");
   }
 
-  static void multiline(StringBuffer sb, String properties) {
+  public void multiline(StringBuffer sb, String properties) {
     for(String property: properties.split(SEP_PROP)) {
       line(sb, "* " + property);
     }
