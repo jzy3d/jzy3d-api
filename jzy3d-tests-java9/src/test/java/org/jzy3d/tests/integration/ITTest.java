@@ -11,6 +11,7 @@ import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.chart.factories.IPainterFactory;
+import org.jzy3d.chart.factories.SwingChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -28,6 +29,7 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
+import org.jzy3d.tests.integration.ITTest_2D.ITTest2DInstance;
 
 public class ITTest {
   public static final String SEP_TITLE = " ";
@@ -50,6 +52,22 @@ public class ITTest {
   
   protected String indexFileName = "BASELINE_" + platform.getLabel() + ".md";
   
+  protected WT[] toolkits = {WT.EmulGL_AWT, WT.Native_AWT, WT.Native_Swing};
+  protected HiDPI[] resolutions = {HiDPI.ON, HiDPI.OFF};
+  
+  protected void applyToAllTookitAndResolutions(ITTestInstance task) {
+    for(WT toolkit: toolkits) {
+      for(HiDPI resolution: resolutions) {
+        task.run(toolkit, resolution);
+      }
+    }
+  }
+  
+  public static interface ITTestInstance{
+    public void run(WT toolkit, HiDPI resolution);
+  }
+  
+  
   // ---------------------------------------------------------------------------------------------- //
   
   /** Generate markdown summary of test expectations. */
@@ -66,21 +84,34 @@ public class ITTest {
     line(sb, "* GPU : " + platform.getGpuName());
     line(sb, "");
     
+    // Content test
     section(sb, "Surface");
-    
     section(sb, "Scatter");
-    
+
+    // Text and layout tests
     section(sb, "Text", null, "Font=AppleChancery24");
     section(sb, "Text", "whenDrawableTextRenderer", null);
-    
-    
     section(sb, "AxisLabelRotateLayout");
     
+    // Colorbar tests
     section(sb, "Colorbar", "Shrink", null);
     section(sb, "Colorbar", "ShrinkBigFont", null);
     section(sb, "Colorbar", "IsModifiedByCustomFont", null);
     section(sb, "Colorbar", "HasMinimumWidth", null);
     
+    // 2D tests
+    line(sb, "# 2D Layout");
+    
+    ITTest_2D.forAll_2D_Parameters(new ITTest2DInstance() {
+      @Override
+      public void run(int margin, int tickLabel, boolean textVisible) {
+        String properties = ITTest_2D.properties(margin, tickLabel, textVisible);
+        section(1, sb, className(ITTest_2D.class), null, properties);
+      }
+    });
+    
+    
+
     
     BufferedWriter bwr = new BufferedWriter(new FileWriter(new File(indexFileName)));
     bwr.write(sb.toString());
@@ -91,13 +122,23 @@ public class ITTest {
   public static void section(StringBuffer sb, String testName) {
     section(sb, testName, null, null);
   }
-  
+
   public static void section(StringBuffer sb, String testName, String caseName, String info) {
+    section(0, sb, testName, caseName, info);
+  }
+  
+  public static void section(int level, StringBuffer sb, String testName, String caseName, String info) {
+    // Write section name with markdown header style
+    
+    String header = "#".repeat(level+1);
     if(caseName!=null)
-      line(sb, "# " + testName + " : " + caseName);
+      line(sb, header + " " + testName + " : " + caseName);
     else
-      line(sb, "# " + testName);
-      
+      line(sb, header + " " + testName);
+    
+    if(info!=null) {
+      multiline(sb, info);
+    }
     line(sb, "<table markdown=1>");
 
     line(sb, "<tr>");
@@ -168,7 +209,15 @@ public class ITTest {
     sb.append("\n");
   }
 
+  static void multiline(StringBuffer sb, String properties) {
+    for(String property: properties.split(SEP_PROP)) {
+      line(sb, "* " + property);
+    }
+  }
+
+  
   // ---------------------------------------------------------------------------------------------- //  
+  
   public static void open(Chart c) {
     c.open(ITTest.offscreenDimension.width, ITTest.offscreenDimension.height);
     c.getMouse();
@@ -186,10 +235,10 @@ public class ITTest {
       return chart(new EmulGLChartFactory(), hidpi, offscreenDimension);
     }
     else if(WT.Native_AWT.equals(windowingToolkit)) {
-      return chart(new AWTChartFactory(), hidpi, offscreenDimension);//chartNative(hidpi, offscreenDimension);
+      return chart(new AWTChartFactory(), hidpi, offscreenDimension);
     }
     else if(WT.Native_Swing.equals(windowingToolkit)) {
-      return chart(new AWTChartFactory(), hidpi, offscreenDimension);//chartNative(hidpi, offscreenDimension);
+      return chart(new SwingChartFactory(), hidpi, offscreenDimension);
     }
     else {
       throw new IllegalArgumentException("Unsupported toolkit : " + windowingToolkit);
@@ -306,8 +355,14 @@ public class ITTest {
   }
   
   public static String className(Object test) {
-    return test.getClass().getSimpleName().replace("ITTest_", "");
+    return className(test.getClass());//.getSimpleName().replace("ITTest_", "");
   }
+
+  public static String className(Class<?> test) {
+    return test.getSimpleName().replace("ITTest_", "");
+  }
+
+  
 
   // ---------------------------------------------------------------------------------------------- //
   
