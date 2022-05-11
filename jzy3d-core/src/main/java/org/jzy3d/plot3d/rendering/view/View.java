@@ -1347,7 +1347,7 @@ public class View {
     float txtHorizontal = 0;
     float txtVertical = 0;
 
-    if (view2DLayout.keepTextVisible) {
+    if (view2DLayout.textAddMargin) {
       txtHorizontal = axis.getLayout().getMaxYTickLabelWidth(getPainter());
       txtVertical = axis.getLayout().getFont().getHeight();
     }

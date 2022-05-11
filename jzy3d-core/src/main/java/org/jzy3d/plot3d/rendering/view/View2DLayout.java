@@ -51,7 +51,7 @@ public class View2DLayout {
   protected float yAxisTickLabelsDistance = 0;
   protected float yAxisNameLabelsDistance = -1;
 
-  protected boolean keepTextVisible = true;
+  protected boolean textAddMargin = true;
   
   public View2DLayout(View view) {
     this.view = view;
@@ -119,12 +119,12 @@ public class View2DLayout {
     this.marginBottom = marginBottom;
   }
 
-  public boolean isKeepTextVisible() {
-    return keepTextVisible;
+  public boolean isTextAddMargin() {
+    return textAddMargin;
   }
 
-  public void setKeepTextVisible(boolean keepTextVisible) {
-    this.keepTextVisible = keepTextVisible;
+  public void setTextAddMargin(boolean keepTextVisible) {
+    this.textAddMargin = keepTextVisible;
   }
   
   
