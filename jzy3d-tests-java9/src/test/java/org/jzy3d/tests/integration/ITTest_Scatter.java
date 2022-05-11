@@ -13,11 +13,8 @@ public class ITTest_Scatter extends ITTest{
   public void whenScatterChart_ThenMatchBaselineImagePixelwise() {
     System.out.println("ITTest : whenScatterChart_ThenMatchBaselineImagePixelwise");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenScatterChart_ThenMatchBaselineImagePixelwise(toolkit, resolution);
-      }
-    });
+    forEach((toolkit, resolution) -> 
+        whenScatterChart_ThenMatchBaselineImagePixelwise(toolkit, resolution));
   }
 
   private Chart whenScatterChart_ThenMatchBaselineImagePixelwise(WT wt, HiDPI hidpi) {

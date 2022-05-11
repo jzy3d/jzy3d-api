@@ -40,11 +40,7 @@ public class ITTest_Colorbar extends ITTest{
   public void whenColorbar_IsModifiedByCustomFont() {
     System.out.println("ITTest : whenColorbar_IsModifiedByCustomFont");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenColorbar_IsModifiedByCustomFont(toolkit, resolution);
-      }
-    });
+    forEach((toolkit, resolution) -> whenColorbar_IsModifiedByCustomFont(toolkit, resolution));
   }
 
   public Chart whenColorbar_IsModifiedByCustomFont(WT wt, HiDPI hidpi) {
@@ -81,11 +77,7 @@ public class ITTest_Colorbar extends ITTest{
     // properly to the right
     //whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.OFF);
     
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenColorbar_HasMininumWidth(toolkit, resolution);
-      }
-    });
+    forEach((WT toolkit, HiDPI resolution)->whenColorbar_HasMininumWidth(toolkit, resolution));
   }
 
   public Chart whenColorbar_HasMininumWidth(WT wt, HiDPI hidpi) {
@@ -117,11 +109,7 @@ public class ITTest_Colorbar extends ITTest{
   public void whenColorbar_ShrinkBigFont() {
     System.out.println("ITTest : whenColorbar_ShrinkBigFont");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenColorbar_ShrinkBigFont(toolkit, resolution);
-      }
-    });
+    forEach((toolkit, resolution) -> whenColorbar_ShrinkBigFont(toolkit, resolution));
   }
 
 
@@ -168,11 +156,7 @@ public class ITTest_Colorbar extends ITTest{
   public void whenColorbar_Shrink() {
     System.out.println("ITTest : whenColorbar_Shrink");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenColorbar_Shrink(toolkit, resolution);
-      }
-    });
+    forEach((WT toolkit, HiDPI resolution) -> whenColorbar_Shrink(toolkit, resolution));
   }
 
 
