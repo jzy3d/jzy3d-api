@@ -9,7 +9,7 @@ import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
@@ -39,7 +39,7 @@ public class ITTest_AxisLabelRotateLayout extends ITTest{
     // -------------
     // WHEN
 
-    IAxisLayout layout = chart.getAxisLayout();
+    AxisLayout layout = chart.getAxisLayout();
     //layout.setFont(new Font("Apple Chancery", 20));
     layout.setFont(new Font("Helvetica", 14));
     layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));

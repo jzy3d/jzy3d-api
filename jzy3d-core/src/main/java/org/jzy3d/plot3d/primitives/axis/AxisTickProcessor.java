@@ -6,7 +6,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -22,7 +22,7 @@ import org.jzy3d.plot3d.text.align.Vertical;
  */
 public class AxisTickProcessor {
   protected AxisBox axis;
-  protected IAxisLayout layout;
+  protected AxisLayout layout;
   protected AxisLabelProcessor labels;
 
   public AxisTickProcessor(AxisBox axis) {

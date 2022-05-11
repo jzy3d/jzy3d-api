@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives.axis.layout.fonts;
 
 import org.jzy3d.painters.Font;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 
 /**
  * Does nothing but returning{@link IAxisLayout#getFont()}.
@@ -11,7 +11,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
  */
 public class StaticFontSizePolicy implements IFontSizePolicy{
   @Override
-  public Font apply(IAxisLayout layout) {
+  public Font apply(AxisLayout layout) {
     return layout.getFont();
   }
 }
