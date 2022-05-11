@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives.axis.layout.fonts;
 
 import org.jzy3d.painters.Font;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 import org.jzy3d.plot3d.rendering.view.View;
 
@@ -22,7 +22,7 @@ public class HiDPITwoFontSizesPolicy implements IFontSizePolicy{
   }
 
   @Override
-  public Font apply(IAxisLayout layout) {
+  public Font apply(AxisLayout layout) {
     HiDPI hidpi = view.getHiDPI();
     
     

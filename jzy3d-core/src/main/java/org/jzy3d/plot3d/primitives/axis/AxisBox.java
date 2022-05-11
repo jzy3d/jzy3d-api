@@ -14,7 +14,6 @@ import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -43,7 +42,7 @@ public class AxisBox implements IAxis {
   protected AxisLabelRotator rotateLabel;
   protected AxisLabelProcessor labels;
   protected AxisTickProcessor ticks;
-  protected IAxisLayout layout;
+  protected AxisLayout layout;
 
   protected BoundingBox3d boxBounds;
   protected BoundingBox3d wholeBounds;
@@ -99,7 +98,7 @@ public class AxisBox implements IAxis {
     this(bbox, new AxisLayout());
   }
 
-  public AxisBox(BoundingBox3d bbox, IAxisLayout layout) {
+  public AxisBox(BoundingBox3d bbox, AxisLayout layout) {
     this.layout = layout;
     //if (bbox.valid())
       setAxe(bbox);
@@ -856,7 +855,7 @@ public class AxisBox implements IAxis {
   }
 
   @Override
-  public IAxisLayout getLayout() {
+  public AxisLayout getLayout() {
     return layout;
   }
 

@@ -3,7 +3,7 @@ package org.jzy3d.plot3d.primitives.axis.layout.fonts;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.view.View;
 
 /**
@@ -31,7 +31,7 @@ public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
    * and the font that was returned by {@link IAxisLayout} at the first call to this method.
    */
   @Override
-  public Font apply(IAxisLayout layout) {
+  public Font apply(AxisLayout layout) {
     // Fix base font if not defined
     if (baseFont == null)
       baseFont = layout.getFont().clone();

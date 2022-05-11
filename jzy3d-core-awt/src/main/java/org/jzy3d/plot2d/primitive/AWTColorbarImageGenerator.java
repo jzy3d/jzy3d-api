@@ -9,7 +9,7 @@ import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 
@@ -48,7 +48,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     this.min = mapper.getMin();
     this.max = mapper.getMax();
     
-    setFont(IAxisLayout.FONT_DEFAULT);
+    setFont(AxisLayout.FONT_DEFAULT);
   }
 
 

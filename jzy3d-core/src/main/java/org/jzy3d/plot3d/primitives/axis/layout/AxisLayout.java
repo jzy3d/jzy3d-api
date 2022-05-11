@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.axis.layout;
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout.FontType;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.IFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.StaticFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
@@ -12,8 +13,14 @@ import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 
-public class AxisLayout implements IAxisLayout {
-  protected boolean tickLineDisplayed = true;
+public class AxisLayout {
+  public static enum FontType{
+    Major,Minor
+  }
+
+
+
+  public static final Font FONT_DEFAULT = Font.Helvetica_12;
 
   protected IFontSizePolicy fontSizePolicy = new StaticFontSizePolicy();
 
@@ -35,6 +42,8 @@ public class AxisLayout implements IAxisLayout {
   protected boolean xAxeLabelDisplayed;
   protected boolean yAxeLabelDisplayed;
   protected boolean zAxeLabelDisplayed;
+
+  protected boolean tickLineDisplayed = true;
 
   protected double xTicks[];
   protected double yTicks[];
@@ -77,7 +86,7 @@ public class AxisLayout implements IAxisLayout {
   protected int axisLabelOffsetMargin = 0;
 
   protected float tickLengthRatio = 20f;
-  
+
   protected float axisLabelDistance = 2.5f;
 
   /** Default AxeBox layout */
@@ -110,7 +119,7 @@ public class AxisLayout implements IAxisLayout {
 
 
 
-  @Override
+  
   public void setMainColor(Color color) {
     mainColor = color;
     setXTickColor(color);
@@ -120,23 +129,24 @@ public class AxisLayout implements IAxisLayout {
     setQuadColor(color.negative());
   }
 
-  @Override
+  
   public Color getMainColor() {
     return mainColor;
   }
-  
-  /** 
-   * Return the maximum text length in pixel as displayed on screen, given the current ticks and renderer
+
+  /**
+   * Return the maximum text length in pixel as displayed on screen, given the current ticks and
+   * renderer
    */
-  @Override
+  
   public int getMaxXTickLabelWidth(IPainter painter) {
     int maxWidth = 0;
-    
-    for(double t: getXTicks()) {
+
+    for (double t : getXTicks()) {
       String label = getXTickRenderer().format(t);
-      
+
       int width = painter.getTextLengthInPixels(font, label);
-      if(width > maxWidth) {
+      if (width > maxWidth) {
         maxWidth = width;
       }
     }
@@ -144,18 +154,19 @@ public class AxisLayout implements IAxisLayout {
 
   }
 
-  /** 
-   * Return the maximum text length in pixel as displayed on screen, given the current ticks and renderer
+  /**
+   * Return the maximum text length in pixel as displayed on screen, given the current ticks and
+   * renderer
    */
-  @Override
+  
   public int getMaxYTickLabelWidth(IPainter painter) {
     int maxWidth = 0;
-    
-    for(double t: getYTicks()) {
+
+    for (double t : getYTicks()) {
       String label = getYTickRenderer().format(t);
-      
+
       int width = painter.getTextLengthInPixels(font, label);
-      if(width > maxWidth) {
+      if (width > maxWidth) {
         maxWidth = width;
       }
     }
@@ -167,7 +178,7 @@ public class AxisLayout implements IAxisLayout {
   // ********************* TICKS PROPERTIES ************************ //
 
 
-  @Override
+  
   public double[] getXTicks(double min, double max) {
     lastXmin = min;
     lastXmax = max;
@@ -175,7 +186,7 @@ public class AxisLayout implements IAxisLayout {
     return xTicks;
   }
 
-  @Override
+  
   public double[] getYTicks(double min, double max) {
     lastYmin = min;
     lastYmax = max;
@@ -183,7 +194,7 @@ public class AxisLayout implements IAxisLayout {
     return yTicks;
   }
 
-  @Override
+  
   public double[] getZTicks(double min, double max) {
     lastZmin = min;
     lastZmax = max;
@@ -191,27 +202,27 @@ public class AxisLayout implements IAxisLayout {
     return zTicks;
   }
 
-  @Override
+  
   public double[] getXTicks() {
     return xTicks;
   }
 
-  @Override
+  
   public double[] getYTicks() {
     return yTicks;
   }
 
-  @Override
+  
   public double[] getZTicks() {
     return zTicks;
   }
 
-  @Override
+  
   public ITickProvider getXTickProvider() {
     return xTickProvider;
   }
 
-  @Override
+  
   public void setXTickProvider(ITickProvider tickProvider) {
     xTickProvider = tickProvider;
 
@@ -219,12 +230,12 @@ public class AxisLayout implements IAxisLayout {
       getXTicks(lastXmin, lastXmax);
   }
 
-  @Override
+  
   public ITickProvider getYTickProvider() {
     return yTickProvider;
   }
 
-  @Override
+  
   public void setYTickProvider(ITickProvider tickProvider) {
     yTickProvider = tickProvider;
 
@@ -232,12 +243,12 @@ public class AxisLayout implements IAxisLayout {
       getYTicks(lastYmin, lastYmax);
   }
 
-  @Override
+  
   public ITickProvider getZTickProvider() {
     return zTickProvider;
   }
 
-  @Override
+  
   public void setZTickProvider(ITickProvider tickProvider) {
     zTickProvider = tickProvider;
 
@@ -245,71 +256,71 @@ public class AxisLayout implements IAxisLayout {
       getZTicks(lastZmin, lastZmax);
   }
 
-  @Override
+  
   public ITickRenderer getXTickRenderer() {
     return xTickRenderer;
   }
 
-  @Override
+  
   public void setXTickRenderer(ITickRenderer tickRenderer) {
     xTickRenderer = tickRenderer;
   }
 
-  @Override
+  
   public ITickRenderer getYTickRenderer() {
     return yTickRenderer;
   }
 
-  @Override
+  
   public void setYTickRenderer(ITickRenderer tickRenderer) {
     yTickRenderer = tickRenderer;
   }
 
-  @Override
+  
   public ITickRenderer getZTickRenderer() {
     return zTickRenderer;
   }
 
-  @Override
+  
   public void setZTickRenderer(ITickRenderer tickRenderer) {
     zTickRenderer = tickRenderer;
   }
 
   // TICK COLORS
 
-  @Override
+  
   public Color getXTickColor() {
     return xTickColor;
   }
 
-  @Override
+  
   public void setXTickColor(Color tickColor) {
     xTickColor = tickColor;
   }
 
-  @Override
+  
   public Color getYTickColor() {
     return yTickColor;
   }
 
-  @Override
+  
   public void setYTickColor(Color tickColor) {
     yTickColor = tickColor;
   }
 
-  @Override
+  
   public Color getZTickColor() {
     return zTickColor;
   }
 
-  @Override
+  
   public void setZTickColor(Color tickColor) {
     zTickColor = tickColor;
   }
 
   // TICK LABELS
 
-  @Override
+  
   public boolean isXTickLabelDisplayed() {
     return xTickLabelDisplayed;
   }
@@ -317,12 +328,12 @@ public class AxisLayout implements IAxisLayout {
   /**
    * Supported by EmulGL only
    */
-  @Override
+  
   public void setXTickLabelDisplayed(boolean tickLabelDisplayed) {
     xTickLabelDisplayed = tickLabelDisplayed;
   }
 
-  @Override
+  
   public boolean isYTickLabelDisplayed() {
     return yTickLabelDisplayed;
   }
@@ -330,12 +341,12 @@ public class AxisLayout implements IAxisLayout {
   /**
    * Supported by EmulGL only
    */
-  @Override
+  
   public void setYTickLabelDisplayed(boolean tickLabelDisplayed) {
     yTickLabelDisplayed = tickLabelDisplayed;
   }
 
-  @Override
+  
   public boolean isZTickLabelDisplayed() {
     return zTickLabelDisplayed;
   }
@@ -343,24 +354,24 @@ public class AxisLayout implements IAxisLayout {
   /**
    * Supported by EmulGL only
    */
-  @Override
+  
   public void setZTickLabelDisplayed(boolean tickLabelDisplayed) {
     zTickLabelDisplayed = tickLabelDisplayed;
   }
 
-  @Override
+  
   public boolean isTickLineDisplayed() {
     return tickLineDisplayed;
   }
 
-  @Override
+  
   public void setTickLineDisplayed(boolean tickLineDisplayed) {
     this.tickLineDisplayed = tickLineDisplayed;
   }
 
   // ********************* AXIS LABELS ************************ //
 
-  @Override
+  
   public boolean isAxisLabelOffsetAuto() {
     return axisLabelOffsetAuto;
   }
@@ -369,7 +380,7 @@ public class AxisLayout implements IAxisLayout {
    * When enabled, the axis will have the X, Y and Z axis label shifted to avoid covering the tick
    * labels.
    */
-  @Override
+  
   public void setAxisLabelOffsetAuto(boolean isAuto) {
     this.axisLabelOffsetAuto = isAuto;
   }
@@ -387,102 +398,102 @@ public class AxisLayout implements IAxisLayout {
   }
 
 
-  @Override
+  
   public String getXAxisLabel() {
     return xAxeLabel;
   }
 
-  @Override
+  
   public void setXAxisLabel(String axeLabel) {
     xAxeLabel = axeLabel;
   }
 
-  @Override
+  
   public String getYAxisLabel() {
     return yAxeLabel;
   }
 
-  @Override
+  
   public void setYAxisLabel(String axeLabel) {
     yAxeLabel = axeLabel;
   }
 
-  @Override
+  
   public String getZAxisLabel() {
     return zAxeLabel;
   }
 
-  @Override
+  
   public void setZAxisLabel(String axeLabel) {
     zAxeLabel = axeLabel;
   }
 
-  @Override
+  
   public boolean isXAxeLabelDisplayed() {
     return xAxeLabelDisplayed;
   }
 
-  @Override
+  
   public void setXAxeLabelDisplayed(boolean axeLabelDisplayed) {
     xAxeLabelDisplayed = axeLabelDisplayed;
   }
 
-  @Override
+  
   public boolean isYAxeLabelDisplayed() {
     return yAxeLabelDisplayed;
   }
 
-  @Override
+  
   public void setYAxeLabelDisplayed(boolean axeLabelDisplayed) {
     yAxeLabelDisplayed = axeLabelDisplayed;
   }
 
-  @Override
+  
   public boolean isZAxeLabelDisplayed() {
     return zAxeLabelDisplayed;
   }
 
-  @Override
+  
   public void setZAxeLabelDisplayed(boolean axeLabelDisplayed) {
     zAxeLabelDisplayed = axeLabelDisplayed;
   }
 
-  @Override
+  
   public LabelOrientation getXAxisLabelOrientation() {
     return xAxisLabelOrientation;
   }
 
-  @Override
+  
   public void setXAxisLabelOrientation(LabelOrientation xAxisLabelOrientation) {
     this.xAxisLabelOrientation = xAxisLabelOrientation;
   }
 
-  @Override
+  
   public LabelOrientation getYAxisLabelOrientation() {
     return yAxisLabelOrientation;
   }
 
-  @Override
+  
   public void setYAxisLabelOrientation(LabelOrientation yAxisLabelOrientation) {
     this.yAxisLabelOrientation = yAxisLabelOrientation;
   }
 
-  @Override
+  
   public LabelOrientation getZAxisLabelOrientation() {
     return zAxisLabelOrientation;
   }
 
-  @Override
+  
   public void setZAxisLabelOrientation(LabelOrientation zAxisLabelOrientation) {
     this.zAxisLabelOrientation = zAxisLabelOrientation;
   }
 
-  @Override
+  
   public ZAxisSide getZAxisSide() {
     return zAxisSide;
   }
 
-  @Override
+  
   public void setZAxisSide(ZAxisSide zAxisSide) {
     this.zAxisSide = zAxisSide;
   }
@@ -491,32 +502,32 @@ public class AxisLayout implements IAxisLayout {
   // ********************************************* //
 
 
-  @Override
+  
   public boolean isFaceDisplayed() {
     return faceDisplayed;
   }
 
-  @Override
+  
   public void setFaceDisplayed(boolean faceDisplayed) {
     this.faceDisplayed = faceDisplayed;
   }
 
-  @Override
+  
   public Color getQuadColor() {
     return quadColor;
   }
 
-  @Override
+  
   public void setQuadColor(Color quadColor) {
     this.quadColor = quadColor;
   }
 
-  @Override
+  
   public Color getGridColor() {
     return gridColor;
   }
 
-  @Override
+  
   public void setGridColor(Color gridColor) {
     this.gridColor = gridColor;
   }
@@ -525,29 +536,29 @@ public class AxisLayout implements IAxisLayout {
 
   // ************************* FONT *********************** //
 
-  @Override
+  
   public IFontSizePolicy getFontSizePolicy() {
     return fontSizePolicy;
   }
 
-  @Override
+  
   public void setFontSizePolicy(IFontSizePolicy fontSizePolicy) {
     this.fontSizePolicy = fontSizePolicy;
   }
 
-  @Override
+  
   public void applyFontSizePolicy() {
     if (fontSizePolicy != null) {
       fontSizePolicy.apply(this);
     }
   }
 
-  @Override
+  
   public Font getFont() {
     return font;
   }
 
-  @Override
+  
   public void setFont(Font font) {
     this.font = font;
   }
@@ -559,8 +570,8 @@ public class AxisLayout implements IAxisLayout {
    * @param hidpi the HiDPI context for this font, allowing to define bigger fonts in case screen
    *        resolution is high (and text small)
    */
-  @Override
-  public Font getFont(FontType type, HiDPI hidpi) {
+  
+  public Font getFont(AxisLayout.FontType type, HiDPI hidpi) {
     if (type == null) {
       // most frequent case so keep first in this selection
       if (HiDPI.ON.equals(hidpi)) {
@@ -568,13 +579,13 @@ public class AxisLayout implements IAxisLayout {
       } else if (HiDPI.OFF.equals(hidpi)) {
         return fontMajorNoHiDPI;
       }
-    } else if (FontType.Major.equals(type)) {
+    } else if (AxisLayout.FontType.Major.equals(type)) {
       if (HiDPI.ON.equals(hidpi)) {
         return fontMajorHiDPI;
       } else if (HiDPI.OFF.equals(hidpi)) {
         return fontMajorNoHiDPI;
       }
-    } else if (FontType.Minor.equals(type)) {
+    } else if (AxisLayout.FontType.Minor.equals(type)) {
       if (HiDPI.ON.equals(hidpi)) {
         return fontMinorHiDPI;
       } else if (HiDPI.OFF.equals(hidpi)) {
@@ -585,7 +596,7 @@ public class AxisLayout implements IAxisLayout {
     // return font;
   }
 
-  @Override
+  
   public float getTickLengthRatio() {
     return tickLengthRatio;
   }
@@ -596,18 +607,18 @@ public class AxisLayout implements IAxisLayout {
    * If scene bounding box range is 100 and tickLengthRatio is 20, then the actual tick length on
    * screen will be of 5 pixels.
    */
-  @Override
+  
   public void setTickLengthRatio(float tickLengthRatio) {
     this.tickLengthRatio = tickLengthRatio;
   }
+
   
-  @Override
   public float getAxisLabelDistance() {
     return axisLabelDistance;
   }
 
 
-  @Override
+  
   public void setAxisLabelDistance(float axisLabelDistance) {
     this.axisLabelDistance = axisLabelDistance;
   }
@@ -622,15 +633,15 @@ public class AxisLayout implements IAxisLayout {
    * @param hidpi the HiDPI context for this font, allowing to define bigger fonts in case screen
    *        resolution is high (and text small)
    */
-  @Override
-  public void setFont(Font font, FontType type, HiDPI hidpi) {
-    if (FontType.Major.equals(type)) {
+  
+  public void setFont(Font font, AxisLayout.FontType type, HiDPI hidpi) {
+    if (AxisLayout.FontType.Major.equals(type)) {
       if (HiDPI.ON.equals(hidpi)) {
         fontMajorHiDPI = font;
       } else if (HiDPI.OFF.equals(hidpi)) {
         fontMajorNoHiDPI = font;
       }
-    } else if (FontType.Minor.equals(type)) {
+    } else if (AxisLayout.FontType.Minor.equals(type)) {
       if (HiDPI.ON.equals(hidpi)) {
         fontMinorHiDPI = font;
       } else if (HiDPI.OFF.equals(hidpi)) {

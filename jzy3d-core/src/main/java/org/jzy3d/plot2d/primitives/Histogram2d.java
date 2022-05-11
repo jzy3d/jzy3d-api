@@ -8,7 +8,7 @@ import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.StaticTickProvider;
 
 public class Histogram2d {
@@ -29,7 +29,7 @@ public class Histogram2d {
 
   /** Set global chart view settings to best draw this histogram. */
   public void layout(Chart chart) {
-    IAxisLayout layout = chart.getAxisLayout();
+    AxisLayout layout = chart.getAxisLayout();
     int ymax = getModel().computeMaxCount();
     double[] ticks = {0, ymax / 4, ymax / 2, ymax / 2 + ymax / 4, ymax};
     layout.setYTickProvider(new StaticTickProvider(ticks));
