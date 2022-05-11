@@ -34,6 +34,7 @@ public class ITTest_2D extends ITTest{
         layout.setMargin(margin);
         layout.setTickLabelDistance(tickLabelDist);
         layout.setTextAddMargin(textAddMargin);
+        layout.setAxisLabelDistance(0);
         
         // Then
         assertChart(chart, name(ITTest_2D.this, null, wt, chart.getQuality().getHiDPI(), properties(margin, tickLabelDist, textAddMargin)));

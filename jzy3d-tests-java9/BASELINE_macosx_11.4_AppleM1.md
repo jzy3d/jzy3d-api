@@ -3,7 +3,7 @@ jzy3d-test-java9-generated
 This is a summary of existing baseline images for tests, which was generated on 
 * OS Name : mac os x
 * OS Version : 11.4
-* Java Version : 11.0.13
+* Java Version : 17.0.1
 * CPU : aarch64
 * GPU : AppleM1
 
@@ -283,7 +283,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_TextAddMargin=false.png"></td>
 </tr>
 <tr>
-<td></td>
+<td><img src="target/error-2D_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_TextAddMargin=false_DIFF.png"></td>
 <td></td>
 <td></td>
 <td></td>
