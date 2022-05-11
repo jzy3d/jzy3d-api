@@ -1350,23 +1350,30 @@ public class View {
     float marginBottom = view2DLayout.marginBottom;
 
     // consider everything adding a margin computed in pixel
-    float txtHorizontal = 0;
-    float txtVertical = 0;
+    float tickTextHorizontal = 0;
+    float tickTextVertical = 0;
+    float axisTextHorizontal = 0;
+    float axisTextVertical = 0;
 
     if (view2DLayout.textAddMargin) {
-      txtHorizontal = axis.getLayout().getMaxYTickLabelWidth(getPainter());
-      txtVertical = axis.getLayout().getFont().getHeight();
+      tickTextHorizontal = axis.getLayout().getMaxYTickLabelWidth(getPainter());
+      tickTextVertical = axis.getLayout().getFont().getHeight();
+      axisTextHorizontal = getPainter().getTextLengthInPixels(axis.getLayout().getFont(),
+          axis.getLayout().getYAxisLabel());
+      axisTextVertical = axis.getLayout().getFont().getHeight();
     }
 
-    // add tick label distance
-    marginLeft +=
-        view2DLayout.yTickLabelsDistance + txtHorizontal + view2DLayout.yAxisLabelsDistance;
-    marginLeft += getPainter().getTextLengthInPixels(axis.getLayout().getFont(),
-        axis.getLayout().getYAxisLabel());
+    // add space for text to the left margin
+    marginLeft += view2DLayout.yTickLabelsDistance; // add tick label distance
+    marginLeft += tickTextHorizontal; // add maximum Y tick label width
+    marginLeft += view2DLayout.yAxisLabelsDistance; // add axis label distance
+    marginLeft += axisTextHorizontal; // add text width of axis label
 
-    marginBottom +=
-        view2DLayout.xTickLabelsDistance + txtVertical + view2DLayout.xAxisLabelsDistance;
-    marginBottom+= axis.getLayout().getFont().getHeight();
+    // add space for text to the bottom margin
+    marginBottom += view2DLayout.xTickLabelsDistance;
+    marginBottom += tickTextVertical;
+    marginBottom += view2DLayout.xAxisLabelsDistance;
+    marginBottom += axisTextVertical;
 
 
     // convert pixel margin to world coordinate to add compute the additional 3D space to grasp with
@@ -1378,10 +1385,10 @@ public class View {
 
 
 
-    BoundingBox2d renderingSquare = new BoundingBox2d(-xdiam / 2 - marginLeftModel,
+    BoundingBox2d square = new BoundingBox2d(-xdiam / 2 - marginLeftModel,
         xdiam / 2 + marginRightModel, -ydiam / 2 - marginBottomModel, ydiam / 2 + marginTopModel);
 
-    cam.setRenderingSquare(renderingSquare);
+    cam.setRenderingSquare(square);
   }
 
   /**
