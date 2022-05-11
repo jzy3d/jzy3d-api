@@ -26,12 +26,7 @@ public class ITTest_AxisLabelRotateLayout extends ITTest{
   public void whenAxisLabelOrientationNotHorizontal() {
     System.out.println("ITTest : whenAxisLabelOrientationNotHorizontal");
     
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenAxisLabelOrientationNotHorizontal(toolkit, resolution);
-      }
-    });
-
+    forEach((toolkit, resolution) -> whenAxisLabelOrientationNotHorizontal(toolkit, resolution));
   }
 
   public Chart whenAxisLabelOrientationNotHorizontal(WT wt, HiDPI hidpi) {

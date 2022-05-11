@@ -11,19 +11,13 @@ public class ITTest_2D extends ITTest{
   protected static int[] tickLabelDists = {0, 10};
   protected static boolean[] textAddMargin = {false, true};
   
-  public static interface ITTest2DInstance{
-    public void run(int margin, int tickLabel, boolean textVisible);
-  }
 
+  
   @Test
   public void when2DChart_ThenApplyMargins() {
     System.out.println("ITTest : when2DChart_ThenApplyMargins");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        when2DChart_ThenApplyMargins(toolkit, resolution);
-      }
-    });
+    forEach((toolkit, resolution)-> when2DChart_ThenApplyMargins(toolkit, resolution));
   }
 
   private void when2DChart_ThenApplyMargins(WT wt, HiDPI hidpi) {
@@ -33,9 +27,7 @@ public class ITTest_2D extends ITTest{
 
 
     // For each layout property
-    forEach(new ITTest2DInstance() {
-      @Override
-      public void run(int margin, int tickLabelDist, boolean textAddMargin) {
+    forEach((margin, tickLabelDist, textAddMargin)-> {
         
         // When : no margin, no text
         View2DLayout layout = chart.view2d().getView().getLayout_2D();
@@ -45,11 +37,21 @@ public class ITTest_2D extends ITTest{
         
         // Then
         assertChart(chart, name(ITTest_2D.this, null, wt, chart.getQuality().getHiDPI(), properties(margin, tickLabelDist, textAddMargin)));
-
-      }
     });    
   }
   
+  
+
+  public static String properties(int margin, int tickLabel, boolean textAddMargin) {
+    return "BorderMargin" + KV + margin + SEP_PROP + "TickLabel" + KV + tickLabel + SEP_PROP + "TextAddMargin" + KV + textAddMargin;
+  }
+
+
+  
+  public static interface ITTest2DInstance{
+    public void run(int margin, int tickLabel, boolean textVisible);
+  }
+
   public static void forEach(ITTest2DInstance runner) {
     for(int margin: margins) {
       for(int tickLabelDist: tickLabelDists) {
@@ -59,11 +61,5 @@ public class ITTest_2D extends ITTest{
       }
     }
   }
-  
-
-  public static String properties(int margin, int tickLabel, boolean textAddMargin) {
-    return "BorderMargin" + KV + margin + SEP_PROP + "TickLabel" + KV + tickLabel + SEP_PROP + "TextAddMargin" + KV + textAddMargin;
-  }
-
 
 }

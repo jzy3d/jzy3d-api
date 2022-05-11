@@ -53,6 +53,9 @@ public class ITTest {
     EmulGL_AWT, Native_AWT, Native_Swing
   }
   
+  // ---------------------------------------------------------------------------------------------- //
+  // Toolkit and resolutions to apply to all tests using the forEach operator
+  
   protected WT[] toolkits = {WT.EmulGL_AWT, WT.Native_AWT, WT.Native_Swing};
   protected HiDPI[] resolutions = {HiDPI.ON, HiDPI.OFF};
   
@@ -74,7 +77,9 @@ public class ITTest {
   
   // ---------------------------------------------------------------------------------------------- //
   
-  /** Generate markdown summary of test expectations. */
+  /** 
+   * Generate markdown summary of test expectations.
+   */
   @Test
   public void markdownAllTests() throws IOException {
     StringBuffer sb = new StringBuffer();

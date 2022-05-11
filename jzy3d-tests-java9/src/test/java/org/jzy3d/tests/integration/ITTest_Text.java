@@ -36,12 +36,7 @@ public class ITTest_Text extends ITTest{
   public void whenColorbar_IsModifiedByCustomFont() {
     System.out.println("ITTest : whenColorbar_IsModifiedByCustomFont");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenCustomFont(toolkit, resolution);
-      }
-    });
-
+    forEach((toolkit, resolution) -> whenCustomFont(toolkit, resolution));
   }
 
   public Chart whenCustomFont(WT wt, HiDPI hidpi) {
@@ -71,11 +66,7 @@ public class ITTest_Text extends ITTest{
   public void whenDrawableTextRenderer() {
     System.out.println("ITTest : whenDrawableTextRenderer");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenDrawableTextRenderer(toolkit, resolution);
-      }
-    });
+    forEach((toolkit, resolution) -> whenDrawableTextRenderer(toolkit, resolution));
   }
   
   public Chart whenDrawableTextRenderer(WT wt, HiDPI hidpi) {
