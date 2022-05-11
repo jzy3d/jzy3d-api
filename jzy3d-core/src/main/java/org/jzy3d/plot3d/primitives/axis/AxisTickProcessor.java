@@ -44,12 +44,7 @@ public class AxisTickProcessor {
     BoundingBox3d ticksTxtBounds = new BoundingBox3d();
     
     // Distance of tick to axis
-    float tickLength = getTickLength3D_OrComputeTickLength2D(painter, dimension);
-
-    // Distance of axe label to axis given in factor of (bounds/tickLength)
-    float axeLabelDist = this.axis.getLayout().getAxisLabelDistance();
-
-    
+    float tickLength = getTickLength3D_OrComputeTickLength2D(painter, dimension);    
 
     // Retrieve the quads that intersect and create the selected axe
     if (this.axis.isX(dimension)) {
@@ -62,7 +57,19 @@ public class AxisTickProcessor {
       quad_0 = this.axis.axeZquads[axis][0];
       quad_1 = this.axis.axeZquads[axis][1];
     }
-
+    
+    // Override tick labels alignment when 2D so that they appear centered
+    if(this.axis.getView().is2D()) {
+      if (this.axis.isX(dimension)) {
+        hal = Horizontal.CENTER;
+        //val = Vertical.GROUND;
+      }
+      else if(this.axis.isY(dimension)) {
+        val = Vertical.CENTER;
+       // hal = Horizontal.LEFT;
+      }
+    }
+    
     // --------------------------------------------------------------
     // Computes POSition of ticks lying on the selected axe (i.e. 1st point of the tick line)
 
@@ -81,8 +88,7 @@ public class AxisTickProcessor {
 
     String axisLabel = labels.axisLabel(dimension);
     float rotation = labels.axisLabelRotation(painter, dimension, info.axisSegment);
-    Coord3d labelPosition = labels.axisLabelPosition(dimension, tickLength, axeLabelDist, pos, dir);
-    
+    Coord3d labelPosition = labels.axisLabelPosition(dimension, tickLength, pos, dir);
 
     // --------------------------------------------------------------
     // Verify if needs a left/right offset to avoid covering tick labels
@@ -142,14 +148,14 @@ public class AxisTickProcessor {
       // Compute occupation of X tick labels according to Y range, canvas height and font height
       if (this.axis.isX(dimension)) {
         
-        float worldTickLen = (layout2D.getxAxisTickLabelsDistance() + font.getHeight()) * modelToScreen.y;
+        float worldTickLen = (layout2D.getxTickLabelsDistance() + font.getHeight()) * modelToScreen.y;
         
         tickLength = this.axis.getBounds().getYRange().getRange()/worldTickLen;
 
       }
       // Compute occupation of Y tick labels according to X range, canvas width and font width
       else if (this.axis.isY(dimension)) {
-        float worldTickLen = layout2D.getyAxisTickLabelsDistance() * modelToScreen.x;
+        float worldTickLen = layout2D.getyTickLabelsDistance() * modelToScreen.x;
         
         tickLength = this.axis.getBounds().getXRange().getRange()/worldTickLen;
       }
