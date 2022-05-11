@@ -2,8 +2,6 @@ package org.jzy3d.tests.integration;
 
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.AWTChartFactory;
-import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
@@ -15,7 +13,6 @@ import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
-import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 import org.jzy3d.plot3d.text.align.Horizontal;
@@ -39,14 +36,12 @@ public class ITTest_Text extends ITTest{
   public void whenColorbar_IsModifiedByCustomFont() {
     System.out.println("ITTest : whenColorbar_IsModifiedByCustomFont");
 
-    whenCustomFont(WT.Native_AWT, HiDPI.ON);
-    whenCustomFont(WT.Native_AWT, HiDPI.OFF);
+    forEach(new ITTestInstance(){
+      public void run(WT toolkit, HiDPI resolution) {
+        whenCustomFont(toolkit, resolution);
+      }
+    });
 
-    whenCustomFont(WT.Native_Swing, HiDPI.ON);
-    whenCustomFont(WT.Native_Swing, HiDPI.OFF);
-
-    whenCustomFont(WT.EmulGL_AWT, HiDPI.ON);
-    whenCustomFont(WT.EmulGL_AWT, HiDPI.OFF);
   }
 
   public Chart whenCustomFont(WT wt, HiDPI hidpi) {
@@ -76,19 +71,15 @@ public class ITTest_Text extends ITTest{
   public void whenDrawableTextRenderer() {
     System.out.println("ITTest : whenDrawableTextRenderer");
 
-    whenDrawableTextRenderer(WT.Native_AWT, HiDPI.ON);
-    whenDrawableTextRenderer(WT.Native_AWT, HiDPI.OFF);
-
-    whenDrawableTextRenderer(WT.Native_Swing, HiDPI.ON);
-    whenDrawableTextRenderer(WT.Native_Swing, HiDPI.OFF);
-
-    whenDrawableTextRenderer(WT.EmulGL_AWT, HiDPI.ON);
-    whenDrawableTextRenderer(WT.EmulGL_AWT, HiDPI.OFF);
+    forEach(new ITTestInstance(){
+      public void run(WT toolkit, HiDPI resolution) {
+        whenDrawableTextRenderer(toolkit, resolution);
+      }
+    });
   }
   
   public Chart whenDrawableTextRenderer(WT wt, HiDPI hidpi) {
     Chart chart = chart(wt, hidpi, new Rectangle(1200,600));
-
     
     // Given : a custom font
     

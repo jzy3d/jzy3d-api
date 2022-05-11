@@ -9,14 +9,12 @@ public class ITTest_Surface extends ITTest{
   public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
     System.out.println("ITTest : whenSurfaceChart_ThenMatchBaselineImagePixelwise");
 
-    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_Swing, HiDPI.ON);
-    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_Swing, HiDPI.OFF);
+    forEach(new ITTestInstance(){
+      public void run(WT toolkit, HiDPI resolution) {
+        whenSurfaceChart_ThenMatchBaselineImagePixelwise(toolkit, resolution);
+      }
+    });
 
-    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.ON);
-    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.Native_AWT, HiDPI.OFF);
-
-    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.EmulGL_AWT, HiDPI.ON);
-    whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT.EmulGL_AWT, HiDPI.OFF);
   }
 
   private void whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT wt, HiDPI hidpi) {
