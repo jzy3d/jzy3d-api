@@ -13,17 +13,22 @@ import org.jzy3d.plot3d.primitives.selectable.SelectableScatter;
 
 public class SampleGeom {
   public static Shape surface() {
+    Range range = new Range(-3, 3);
+
+    return surface(range, range);
+  }
+
+  public static Shape surface(Range xRange, Range yRange) {
     Mapper mapper = new Mapper() {
       @Override
       public double f(double x, double y) {
         return x * Math.sin(x * y);
       }
     };
-    Range range = new Range(-3, 3);
     int steps = 50;
 
     Shape surface =
-        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
+        new SurfaceBuilder().orthonormal(new OrthonormalGrid(xRange, steps, yRange, steps), mapper);
     ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
         surface.getBounds().getZmax(), new Color(1, 1, 1, .5f));
     surface.setColorMapper(colorMapper);
