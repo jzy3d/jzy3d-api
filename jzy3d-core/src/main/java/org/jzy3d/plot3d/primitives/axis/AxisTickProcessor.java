@@ -92,10 +92,14 @@ public class AxisTickProcessor {
 
     // --------------------------------------------------------------
     // Verify if needs a left/right offset to avoid covering tick labels
+    // which makes no sense for 2D rendering since axis label placement is thought
+    // to avoid covering labels
 
     Coord2d offset2D = null;
 
-    if (layout.isAxisLabelOffsetAuto()) {
+    if (layout.isAxisLabelOffsetAuto() && !this.axis.getView().is2D()) {
+      
+      // Z DIMENSION
       if (this.axis.isZ(dimension)) {
         if (LabelOrientation.VERTICAL.equals(layout.getZAxisLabelOrientation())) {
           offset2D = labels.axisLabelOffsetVertical(painter, info, labelPosition,
@@ -104,11 +108,17 @@ public class AxisTickProcessor {
           offset2D = labels.axisLabelOffset(painter, info, labelPosition,
               layout.getAxisLabelOffsetMargin());
         }
-      } else if (this.axis.isX(dimension)
+      } 
+      
+      // X DIMENSION
+      else if (this.axis.isX(dimension)
           && !LabelOrientation.HORIZONTAL.equals(layout.getXAxisLabelOrientation())) {
         offset2D =
             labels.axisLabelOffset(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
-      } else if (this.axis.isY(dimension)
+      } 
+      
+      // Y DIMENSION
+      else if (this.axis.isY(dimension)
           && !LabelOrientation.HORIZONTAL.equals(layout.getYAxisLabelOrientation())) {
         offset2D =
             labels.axisLabelOffset(painter, info, labelPosition, layout.getAxisLabelOffsetMargin());
