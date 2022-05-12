@@ -18,11 +18,14 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
+import org.jzy3d.plot3d.primitives.axis.AxisLabelProcessor;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
@@ -72,7 +75,6 @@ public class View {
   protected View2DLayout view2DLayout = new View2DLayout(this);
 
   protected float cameraRenderingSphereRadiusFactor = 1f;
-  // protected float cameraRenderingSphereRadiusFactorOnTop = 0.1f;// 00000000000001f;
 
 
   /**
@@ -1151,7 +1153,7 @@ public class View {
 
     triggerCameraUpEvents(viewpoint);
 
-    computeCameraRenderingArea(cam, viewport, bounds);
+    computeCameraRenderingVolume(cam, viewport, bounds);
 
     cam.setViewPort(viewport);
     cam.shoot(painter, cameraMode);
@@ -1177,7 +1179,7 @@ public class View {
 
     triggerCameraUpEvents(viewpoint);
 
-    computeCameraRenderingArea(cam, viewport, bounds);
+    computeCameraRenderingVolume(cam, viewport, bounds);
   }
 
 
@@ -1260,7 +1262,15 @@ public class View {
     }
   }
 
-  protected void computeCameraRenderingArea(Camera cam, ViewportConfiguration viewport,
+  /**
+   * Configure the camera so that it will capture a given volume in the scene.
+   * 
+   * Rendering in 3D requires capturing a sphere defined by the bounding box radius.
+   * 
+   * Rendering in 2D requires capturing a square defined by the bounding box with additional white
+   * space for labels and margins.
+   */
+  protected void computeCameraRenderingVolume(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
 
     if (spaceTransformer != null) {
@@ -1320,8 +1330,8 @@ public class View {
   /**
    * Camera clipping planes configuration for a rendering sphere (3D)
    * 
-   * @param cam
-   * @param bounds
+   * Assume that axis labels are positioned accordingly
+   * ({@link AxisLabelProcessor#axisLabelPosition_3D()}
    */
   protected void computeCamera3D_RenderingSphere(Camera cam, BoundingBox3d bounds) {
     double radius = bounds.getRadius();
@@ -1331,9 +1341,9 @@ public class View {
 
   /**
    * Camera clipping planes configuration for a rendering plane (2D)
-   *
-   * @param cam
-   * @param bounds
+   * 
+   * Assume that axis labels are positioned accordingly
+   * ({@link AxisLabelProcessor#axisLabelPosition_2D()}
    */
   protected void computeCamera2D_RenderingSquare(Camera cam, BoundingBox3d bounds) {
     float xdiam = bounds.getXRange().getRange();
@@ -1343,24 +1353,37 @@ public class View {
     float modelToScreenRatioX = xdiam / getCanvas().getRendererWidth();
     float modelToScreenRatioY = ydiam / getCanvas().getRendererHeight();
 
-    // compute addition of all margins in pixels
+    // initialize all margins according to configuration
     float marginLeft = view2DLayout.marginLeft;
     float marginRight = view2DLayout.marginRight;
     float marginTop = view2DLayout.marginTop;
     float marginBottom = view2DLayout.marginBottom;
 
-    // consider everything adding a margin computed in pixel
+    // compute pixel occupation of ticks and axis labels
     float tickTextHorizontal = 0;
     float tickTextVertical = 0;
     float axisTextHorizontal = 0;
     float axisTextVertical = 0;
 
     if (view2DLayout.textAddMargin) {
-      tickTextHorizontal = axis.getLayout().getMaxYTickLabelWidth(getPainter());
-      tickTextVertical = axis.getLayout().getFont().getHeight();
-      axisTextHorizontal = getPainter().getTextLengthInPixels(axis.getLayout().getFont(),
-          axis.getLayout().getYAxisLabel());
-      axisTextVertical = axis.getLayout().getFont().getHeight();
+      AxisLayout axisLayout = axis.getLayout();
+      Font font = axisLayout.getFont();
+
+      // consider space occupied by tick labels
+      tickTextHorizontal = axisLayout.getMaxYTickLabelWidth(getPainter());
+      tickTextVertical = font.getHeight();
+
+      // consider space occupied by the Y axis label
+      if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
+        // horizontal Y axis involves considering the axis label width
+        axisTextHorizontal = getPainter().getTextLengthInPixels(font, axisLayout.getYAxisLabel());
+      } else {
+        // vertical Y axis involves considering the axis label font height
+        axisTextHorizontal = font.getHeight();
+      }
+
+      // consider space occupied by the X axis label, which is always horizontal
+      axisTextVertical = font.getHeight();
     }
 
     // add space for text to the left margin
@@ -1374,6 +1397,14 @@ public class View {
     marginBottom += tickTextVertical;
     marginBottom += view2DLayout.xAxisLabelsDistance;
     marginBottom += axisTextVertical;
+    
+    if(view2DLayout.isSymetricHorizontalMargin()) {
+      marginRight = marginLeft;
+    }
+
+    if(view2DLayout.isSymetricVerticalMargin()) {
+      marginTop = marginBottom;
+    }
 
 
     // convert pixel margin to world coordinate to add compute the additional 3D space to grasp with
@@ -1383,12 +1414,13 @@ public class View {
     float marginTopModel = marginTop * modelToScreenRatioY;
     float marginBottomModel = marginBottom * modelToScreenRatioY;
 
+    float xmin = -xdiam / 2 - marginLeftModel;
+    float xmax = +xdiam / 2 + marginRightModel;
+    float ymin = -ydiam / 2 - marginBottomModel;
+    float ymax = +ydiam / 2 + marginTopModel;
 
-
-    BoundingBox2d square = new BoundingBox2d(-xdiam / 2 - marginLeftModel,
-        xdiam / 2 + marginRightModel, -ydiam / 2 - marginBottomModel, ydiam / 2 + marginTopModel);
-
-    cam.setRenderingSquare(square);
+    // configure camera rendering volume
+    cam.setRenderingSquare(new BoundingBox2d(xmin, xmax, ymin, ymax));
   }
 
   /**
@@ -1399,6 +1431,7 @@ public class View {
    * dimension (width) and getModelToScreenRatio().y * 3 along the Y dimension (height)
    */
   public Coord2d getModelToScreenRatio() {
+    //return getModelToScreenRatio(squarifyGetSceneGraphBounds(scene));
     return getModelToScreenRatio(getSceneGraphBounds());
   }
 
