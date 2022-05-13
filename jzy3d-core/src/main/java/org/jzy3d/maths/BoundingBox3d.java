@@ -561,7 +561,7 @@ public class BoundingBox3d {
   public BoundingBox3d clone() {
     return new BoundingBox3d(xmin, xmax, ymin, ymax, zmin, zmax);
   }
-
+  
   /**
    * Clone bounding box and apply transform to it
    * 
