@@ -37,7 +37,7 @@ public class AxisLabelProcessor {
         || axis.isYAxeLabelDisplayed(direction) || axis.isZAxeLabelDisplayed(direction);
 
     if (shouldDisplayLabel) {
-   
+
       TextAlign align = getAxisLabelTextAlign(direction);
 
       BoundingBox3d labelBounds = axis.textRenderer.drawText(painter, layout.getFont(), label,
@@ -54,7 +54,7 @@ public class AxisLabelProcessor {
       // X axis label
       if (axis.isX(direction)) {
         return new TextAlign(Horizontal.CENTER, Vertical.BOTTOM);
-      } 
+      }
       // Y axis label
       else if (axis.isY(direction)) {
         return new TextAlign(Horizontal.LEFT, Vertical.CENTER);
@@ -63,8 +63,8 @@ public class AxisLabelProcessor {
       else {
         return new TextAlign(Horizontal.CENTER, Vertical.CENTER);
       }
-    } 
-    
+    }
+
     // 3D case
     else {
       return new TextAlign(Horizontal.CENTER, Vertical.CENTER);
@@ -264,10 +264,6 @@ public class AxisLabelProcessor {
     View view = axis.getView();
     IPainter painter = view.getPainter();
     View2DLayout layout2D = view.getLayout_2D();
-    
-    // Convert pixel/2D shift into 3D world distance
-    Coord2d modelToScreenRatio = view.getModelToScreenRatio();
-
 
     // Compute space in pixel of the tick labels for X and Y axis
     int tickTextHorizontal = axisLayout.getMaxYTickLabelWidth(painter);
@@ -276,17 +272,22 @@ public class AxisLabelProcessor {
     float axisTextHorizontal = 0;
     float axisTextVertical = 0;
 
-    // consider space occupied by the Y axis label
-    if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
-      // horizontal Y axis involves considering the axis label width
-      axisTextHorizontal = 0;//painter.getTextLengthInPixels(font, axisLayout.getYAxisLabel());
-    } else {
-      // vertical Y axis involves considering the axis label font height
-      axisTextHorizontal = /*font.getHeight()*/ - painter.getTextLengthInPixels(font, axisLayout.getYAxisLabel())/2;
+    boolean axisLabel = true;
+
+    if (axisLabel) {
+      // consider space occupied by the Y axis label
+      if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
+        // horizontal Y axis involves considering the axis label width
+        axisTextHorizontal = 0;// painter.getTextLengthInPixels(font, axisLayout.getYAxisLabel());
+      } else {
+        // vertical Y axis involves considering the axis label font height
+        axisTextHorizontal =  -font.getHeight()/2 - painter.getTextLengthInPixels(font, axisLayout.getYAxisLabel()) / 2;
+            //font.getHeight();
+      }
     }
 
     // consider space occupied by the X axis label, which is always horizontal
-    axisTextVertical = font.getHeight();
+    axisTextVertical = 0;//font.getHeight(); No need to shift since already using Vertical.BOTTOM
 
     // Get total shift to axis for the label, given in pixel distance
 
@@ -294,19 +295,25 @@ public class AxisLabelProcessor {
     float xShiftPx = layout2D.getyTickLabelsDistance();
     xShiftPx += tickTextHorizontal;
     xShiftPx += layout2D.getyAxisLabelsDistance();
-    xShiftPx += axisTextHorizontal; // should not shift, starting point for draw remains the same (LEFT ALIGN)
+    xShiftPx += axisTextHorizontal; // should not shift, starting point for draw remains the same
+    // (LEFT ALIGN)
 
-    System.out.println("X Shift 2D for Y label : " + xShiftPx);
-    
+    //System.out.println("AxisLabelProc : X Shift 2D for Y label : " + xShiftPx);
+
     // for X axis label, we do a shift along Y dimension
     float yShiftPx = layout2D.getxTickLabelsDistance();
     yShiftPx += tickTextVertical;
     yShiftPx += layout2D.getxAxisLabelsDistance();
+    //yShiftPx += axisTextVertical;
+    
+    Coord2d modelToScreenRatio = view.getModelToScreenRatio(view.margin);
+
 
     float xShift = xShiftPx * modelToScreenRatio.x;
     float yShift = yShiftPx * modelToScreenRatio.y;
 
-    System.out.println("X Shift 3D for Y label : " + xShift);
+
+    //System.out.println("AxisLabelProc : X Shift 3D for Y label : " + xShift);
     // LE MODEL TO SCREEN VARIE QUAND ON CHANGE LA TAILLE DE L'ECRAN
     // POS EGALEMENT, CAR ON DEPLACE l'AXE
     //
@@ -325,9 +332,9 @@ public class AxisLabelProcessor {
       xlab = pos.x - xShift;
       ylab = axis.center.y;
       zlab = pos.z;
-      
-      System.out.println("X POS for Y label : " + xlab);
-      
+
+      //System.out.println("AxisLabelProc : X POS for Y label : " + xlab);
+
     }
     return new Coord3d(xlab, ylab, zlab);
   }

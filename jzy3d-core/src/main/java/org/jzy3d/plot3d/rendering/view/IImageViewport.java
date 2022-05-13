@@ -10,8 +10,6 @@ public interface IImageViewport {
    * 
    * If the picture is bigger than the viewport, it is simply centered in it, otherwise, it is
    * scaled in order to fit into the viewport.
-   * 
-   * @param painter TODO
    */
   public abstract void render(IPainter painter);
 
@@ -24,7 +22,7 @@ public interface IImageViewport {
 
   public void setViewPort(int width, int height);
 
-  public ViewportMode getMode();
+  public ViewportMode getViewportMode();
 
   public void setViewportMode(ViewportMode mode);
 

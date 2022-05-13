@@ -6,11 +6,7 @@ package org.jzy3d.plot3d.rendering.view;
  * 
  * <img src="doc-files/layout2D.png"/>
  * 
- * DONE : changement 2D/3D applique la modif immédiatement, même si animation stop
- * ------------------------ DONE : axe en double sur emulGL, ajoute un fix sur le delete texte
- * (should delete image also if ledend) ------------------------ DONE : configurer la vue avec des
- * paramètres 2D ------------------------ DONE : considérer la taille des textes.
- * ------------------------ PB5 : native prend en compte la colorbar sur le côté, mais pas emulgl
+ * PB5 : native prend en compte la colorbar sur le côté, mais pas emulgl
  * qui a un viewport qui s'étale sur toute la longueur.
  * 
  * >> soit on évite d'appliquer le stretch qui force la vue 2D à étaler jusqu'au bord de l'écran >>
