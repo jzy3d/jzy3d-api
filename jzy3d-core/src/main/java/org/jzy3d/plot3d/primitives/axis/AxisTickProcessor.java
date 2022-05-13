@@ -62,11 +62,9 @@ public class AxisTickProcessor {
     if(this.axis.getView().is2D()) {
       if (this.axis.isX(dimension)) {
         hal = Horizontal.CENTER;
-        //val = Vertical.GROUND;
       }
       else if(this.axis.isY(dimension)) {
         val = Vertical.CENTER;
-       // hal = Horizontal.LEFT;
       }
     }
     
@@ -151,7 +149,9 @@ public class AxisTickProcessor {
     if(view.is2D() && !this.axis.isZ(dimension)) {
       View2DLayout layout2D = view.getLayout_2D();
       
-      Coord2d modelToScreen = view.getModelToScreenRatio(this.axis.getBounds());
+      //Coord2d modelToScreen = view.getModelToScreenRatio(this.axis.getBounds());
+      
+      Coord2d modelToScreen = view.getModelToScreenRatio(view.margin);
       
       Font font = this.axis.getLayout().getFont();
       
