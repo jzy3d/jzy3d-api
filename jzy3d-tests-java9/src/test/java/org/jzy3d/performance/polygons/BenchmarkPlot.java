@@ -8,6 +8,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.colors.Color;
+import org.jzy3d.debug.View2DLayout_Debug;
 import org.jzy3d.io.xls.ExcelBuilder;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -18,6 +19,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.IntegerTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
 
 
@@ -112,23 +114,25 @@ public class BenchmarkPlot implements BenchmarkXLS {
 
     
     // View layout
+    AWTView view = (AWTView)c.getView();
     c.view2d();
     
-    View2DLayout layout = c.getView().get2DLayout();
-    //layout.setMargin(20);
-    
-    //layout.setMarginRight(30);
-    //layout.setMarginTop(60);
+    View2DLayout layout = view.get2DLayout();
+    layout.setMargin(20);
+    layout.setTickLabelDistance(20);
+    layout.setAxisLabelDistance(20);
     //layout.setKeepTextVisible(false);
     
     
-    c.getView().setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -1, 1));
+    view.setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -1, 1));
+    view.addRenderer2d(new View2DLayout_Debug(view));
 
+    //view.setSquared(false);
 
     c.open(file, 1024, 768);
 
     
-    
+
 
     
 

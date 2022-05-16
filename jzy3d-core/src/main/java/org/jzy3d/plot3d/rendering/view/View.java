@@ -678,6 +678,9 @@ public class View {
 
   public void setSquared(boolean status) {
     this.squared = status;
+    
+    if(is2D() && status)
+      LOGGER.info("View.setSquared : Setting a 2D chart squared may break the tick and axis label layout! Keep it to false for 2D charts");
   }
 
   public boolean isAxisDisplayed() {
