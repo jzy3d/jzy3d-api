@@ -57,6 +57,7 @@ public class BenchmarkPlot implements BenchmarkXLS {
     Cell cellPoly = xls.getCell(line, POLYGONS);
 
     double maxX = 0;
+    double maxY = 0;
 
     while (cellTime != null && cellPoly != null) {
       double x = cellPoly.getNumericCellValue();
@@ -64,6 +65,9 @@ public class BenchmarkPlot implements BenchmarkXLS {
 
       if (x > maxX)
         maxX = x;
+
+      if (y > maxY)
+        maxY = y;
 
       data.add(new Coord3d(x, y, 0));
 
@@ -75,6 +79,9 @@ public class BenchmarkPlot implements BenchmarkXLS {
     }
 
     System.out.println("loaded " + line + " XLS lines");
+    System.out.println("TIME MAX : " + timeMax);
+    System.out.println("X MAX : " + maxX);
+    System.out.println("Y MAX : " + maxY);
 
 
     // -------------------------------
@@ -98,7 +105,7 @@ public class BenchmarkPlot implements BenchmarkXLS {
     alayout.setYAxisLabel("Rendering time (ms)");
     alayout.setYAxisLabelOrientation(LabelOrientation.PARALLEL_TO_AXIS);
 
-    //alayout.setFont(Font.Helvetica_18);
+    alayout.setFont(Font.Helvetica_18);
 
     alayout.setAxisLabelOffsetAuto(true);
     alayout.setAxisLabelOffsetMargin(20);
@@ -108,17 +115,15 @@ public class BenchmarkPlot implements BenchmarkXLS {
     c.view2d();
     
     View2DLayout layout = c.getView().get2DLayout();
-    layout.setMargin(20);
+    //layout.setMargin(20);
     
     //layout.setMarginRight(30);
     //layout.setMarginTop(60);
     //layout.setKeepTextVisible(false);
     
     
-    c.getView().setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -10, 10));
+    c.getView().setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -1, 1));
 
-    System.out.println("TIME MAX : " + timeMax);
-    System.out.println("X MAX : " + maxX);
 
     c.open(file, 1024, 768);
 
