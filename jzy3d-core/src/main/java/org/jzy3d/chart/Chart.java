@@ -146,12 +146,12 @@ public class Chart {
     //view.setSquared(true);
     view.getCamera().setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
     
+    view.setViewPoint(View.VIEWPOINT_DEFAULT, false);
+
     if(!getQuality().isAnimated()) {
       render();
     }
     
-    view.setViewPoint(View.VIEWPOINT_DEFAULT);
-
     return this;
   }
 
