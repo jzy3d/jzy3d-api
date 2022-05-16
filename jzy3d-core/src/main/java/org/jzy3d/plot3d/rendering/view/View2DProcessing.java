@@ -25,6 +25,8 @@ import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
  * Processing margins relies on the computation of {@link #getModelToScreenRatio(Area, Area, Area)}
  * which has an extended documentation providing mathematical demonstration.
  * 
+ * @see {@link View2DLayout_Debug} 2D post renderer to print the margins.
+ * 
  * @author Martin Pernollet
  *
  */
@@ -132,6 +134,7 @@ public class View2DProcessing {
 
     margin = new Area(marginLeftPx + marginRightPx, marginTopPx + marginBottomPx);
 
+    //bounds = view.getSceneGraphBounds();
     modelToScreen = getModelToScreenRatio(bounds, viewport, margin);
 
 

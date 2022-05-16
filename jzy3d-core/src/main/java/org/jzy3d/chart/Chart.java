@@ -107,7 +107,7 @@ public class Chart {
   public Chart black() {
     return color(Color.BLACK, Color.WHITE);
   }
-  
+
   public Chart white() {
     return color(Color.WHITE, Color.BLACK);
   }
@@ -119,7 +119,12 @@ public class Chart {
     return this;
   }
 
-  
+  /**
+   * Toggle the chart for 2D rendering.
+   * 
+   * Warning : when using 2D rendering, one should not try to set a squared view to avoid messing a
+   * tick and axis labels.
+   */
   public Chart view2d() {
     AxisLayout axe = getAxisLayout();
     axe.setZAxeLabelDisplayed(false);
@@ -127,10 +132,10 @@ public class Chart {
 
     View view = getView();
     view.setViewPositionMode(ViewPositionMode.TOP);
-    view.setSquared(true); 
+    view.setSquared(false);
     view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
-    
-    if(!getQuality().isAnimated()) {
+
+    if (!getQuality().isAnimated()) {
       render();
     }
     return this;
@@ -143,19 +148,19 @@ public class Chart {
 
     View view = getView();
     view.setViewPositionMode(ViewPositionMode.FREE);
-    //view.setSquared(true);
+    // view.setSquared(true);
     view.getCamera().setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
-    
+
     view.setViewPoint(View.VIEWPOINT_DEFAULT, false);
 
-    if(!getQuality().isAnimated()) {
+    if (!getQuality().isAnimated()) {
       render();
     }
-    
+
     return this;
   }
 
-  
+
   /** Alias for {@link display()} */
   public IFrame show(Rectangle rectangle, String title) {
     return display(rectangle, title);
@@ -252,7 +257,7 @@ public class Chart {
 
   /* CONTROLLERS */
 
-  /** 
+  /**
    * use {@link #addMouse()} instead.
    */
   @Deprecated
@@ -290,7 +295,7 @@ public class Chart {
     return mousePicking;
   }
 
-  /** 
+  /**
    * use {@link #addKeyboard()} instead.
    */
   @Deprecated
@@ -417,11 +422,11 @@ public class Chart {
   public IFrame open(String title, Rectangle rect) {
     if (frame == null) {
       IPainterFactory painterFactory = getFactory().getPainterFactory();
-      if(!painterFactory.isOffscreen()) {
+      if (!painterFactory.isOffscreen()) {
         frame = getFactory().getPainterFactory().newFrame(this, rect, title);
-      }
-      else {
-        logger.warn("Chart is configured for being offscreen. Did not open any frame. May disable call to open");
+      } else {
+        logger.warn(
+            "Chart is configured for being offscreen. Did not open any frame. May disable call to open");
       }
     }
 
@@ -484,8 +489,9 @@ public class Chart {
     if (drawable instanceof IGLBindedResource) {
 
       if (view.isInitialized()) {
-        //logger.warn(
-        //    drawable + " must be added to chart before the view has initialized, hence before the chart is open.");
+        // logger.warn(
+        // drawable + " must be added to chart before the view has initialized, hence before the
+        // chart is open.");
 
         // We are in here in the application thread, no in AWT thread, so we have to acquire
         // GL context, so that the drawable gets mounted with a usable GL instance
@@ -496,11 +502,10 @@ public class Chart {
         // And we kindly release GL to let AWT render again
         getPainter().releaseGL();
 
-        //logger.warn("Chart.add binded resource with box " + drawable.getBounds());
+        // logger.warn("Chart.add binded resource with box " + drawable.getBounds());
 
       } else {
-        logger.warn(
-            drawable + " will be initialized later since the view is not initialized yet. "
+        logger.warn(drawable + " will be initialized later since the view is not initialized yet. "
             + "Calling chart.getView().getBounds() won't return anything relevant until chart.open() gets called");
       }
 

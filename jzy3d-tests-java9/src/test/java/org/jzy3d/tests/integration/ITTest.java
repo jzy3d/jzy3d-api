@@ -213,10 +213,14 @@ public class ITTest {
   }
 
   public String imgDiff(String name) {
-    String path = "target/error-" + name + ChartTester.FILE_LABEL_DIFF + ".png";
+    String pathDiff = "target/error-" + name + ChartTester.FILE_LABEL_DIFF + ".png";
+    String pathErr = "target/error-" + name + ChartTester.FILE_LABEL_ACTUAL + ".png";
+    String pathZoom = "target/error-" + name + ChartTester.FILE_LABEL_ZOOM + ".png";
 
-    if (new File(path).exists()) {
-      return "<img src=\"" + path + "\">";
+    boolean exists = new File(pathDiff).exists();
+    
+    if (exists) {
+      return "<img src=\"" + pathDiff + "\">" + "<br>" + "<img src=\"" + pathErr + "\">" + "<br>" + "<img src=\"" + pathZoom + "\">";
     } else {
 
       return "";// "<img src=\""+OKFLAG_ICON+"\">";
