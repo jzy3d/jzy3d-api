@@ -46,8 +46,6 @@ public class AxisTickProcessor {
     // Distance of tick to axis
     float tickLength = getTickLength3D_OrComputeTickLength2D(painter, dimension);    
 
-    System.out.println("AxisTickProcessor : " + tickLength + " is X : " + this.axis.isX(dimension));
-    
     // Retrieve the quads that intersect and create the selected axe
     if (this.axis.isX(dimension)) {
       quad_0 = this.axis.axeXquads[axis][0];
@@ -159,8 +157,6 @@ public class AxisTickProcessor {
       if (this.axis.isX(dimension)) {
         float worldTickLen = (layout2D.getxTickLabelsDistance() + font.getHeight()) * modelToScreen.y;
         float range = this.axis.getBounds().getYRange().getRange();
-        
-        System.out.println("WorldTickLen : " + worldTickLen + " model2screen.y : " + modelToScreen.y);
         return range/worldTickLen;
       }
       
@@ -171,7 +167,6 @@ public class AxisTickProcessor {
       else if (this.axis.isY(dimension)) {
         float worldTickLen = layout2D.getyTickLabelsDistance() * modelToScreen.x;
         float range = this.axis.getBounds().getXRange().getRange();
-        System.out.println("WorldTickLen : " + worldTickLen + " model2screen.x : " + modelToScreen.x);
         return range/worldTickLen;
       }
       
@@ -234,8 +229,6 @@ public class AxisTickProcessor {
           ylab = (axis.yrange / tickLength) * ydir + ypos;
           zlab = (axis.zrange / tickLength) * zdir + zpos;
           
-          System.out.println("YLAB : " + ylab + " YPOS : " + ypos + " YDIR : " + ydir);
-
           // Tick label
           tickLabel = layout.getXTickRenderer().format(ticks[t]);
 

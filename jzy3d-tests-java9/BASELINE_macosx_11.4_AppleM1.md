@@ -284,7 +284,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
 </tr>
 <tr>
-<td><img src="target/error-2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false_DIFF.png"></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -793,7 +793,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
 </tr>
 <tr>
-<td></td>
+<td><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_DIFF.png"><br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ACTUAL.png"><br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ZOOM.png"></td>
 <td></td>
 <td></td>
 <td></td>
