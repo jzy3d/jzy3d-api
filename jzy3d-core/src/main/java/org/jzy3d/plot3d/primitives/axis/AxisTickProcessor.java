@@ -233,6 +233,8 @@ public class AxisTickProcessor {
           xlab = xpos;
           ylab = (axis.yrange / tickLength) * ydir + ypos;
           zlab = (axis.zrange / tickLength) * zdir + zpos;
+          
+          System.out.println("YLAB : " + ylab + " YPOS : " + ypos + " YDIR : " + ydir);
 
           // Tick label
           tickLabel = layout.getXTickRenderer().format(ticks[t]);

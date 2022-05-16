@@ -1149,24 +1149,9 @@ public class View {
       float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
       CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
 
-    /*
-     * viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
-     * 
-     * Coord3d cameraTarget = computeCameraTarget(center, scaling); Coord3d cameraUp =
-     * computeCameraUp(viewpoint); // Coord3d cameraUp = new Coord3d(0.0, 0.0, 1.0); Coord3d
-     * cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
-     * 
-     * // Force the up vector of the camera to grow along Y axis if (is2D()) { cameraUp = new
-     * Coord3d(0.0, 1.0, 0.0); }
-     * 
-     * cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
-     * 
-     * 
-     * computeCameraRenderingVolume(cam, viewport, bounds);
-     */
-
     updateCameraWithoutShooting(viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam,
         factorViewPointDistance, center, scaling);
+
 
 
     triggerCameraUpEvents(viewpoint);
@@ -1337,11 +1322,10 @@ public class View {
   protected void computeCamera2D_RenderingSquare(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
 
-    
-    
-    
+    //bounds = getSceneGraphBounds();
+
     view2DProcessing.apply(viewport, bounds);
-    
+
 
     // The rendering squared dimension will be applied at the current camera position
     float xrange = bounds.getXRange().getRange();
@@ -1360,12 +1344,12 @@ public class View {
   /**
    * @see {@link #getModelToScreenRatio(Area, Area, Area)}
    */
-  /*public Coord2d getModelToScreenRatio(Area margin) {
-    return getModelToScreenRatio(getSceneGraphBounds(), getCamera().getLastViewPort(), margin);
-  }*/
+  /*
+   * public Coord2d getModelToScreenRatio(Area margin) { return
+   * getModelToScreenRatio(getSceneGraphBounds(), getCamera().getLastViewPort(), margin); }
+   */
 
 
-  
 
   /**
    * Only used for top/2D views. Performs a rendering to get the whole bounds occupied by the Axis
