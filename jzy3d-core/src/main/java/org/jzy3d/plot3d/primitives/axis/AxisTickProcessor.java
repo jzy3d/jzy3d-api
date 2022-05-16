@@ -46,6 +46,8 @@ public class AxisTickProcessor {
     // Distance of tick to axis
     float tickLength = getTickLength3D_OrComputeTickLength2D(painter, dimension);    
 
+    System.out.println("AxisTickProcessor : " + tickLength + " is X : " + this.axis.isX(dimension));
+    
     // Retrieve the quads that intersect and create the selected axe
     if (this.axis.isX(dimension)) {
       quad_0 = this.axis.axeXquads[axis][0];
@@ -141,37 +143,53 @@ public class AxisTickProcessor {
   protected float getTickLength3D_OrComputeTickLength2D(IPainter painter, int dimension) {
     View view = painter.getView();
 
-    // 3D case, tick length given as a ratio of scene bounds
-    float tickLength = view.getAxis().getLayout().getTickLengthRatio(); 
-
-    
+    // -------------------------------------------------------
     // Process tick length for the particular 2D case
-    if(view.is2D() && !this.axis.isZ(dimension)) {
-      View2DLayout layout2D = view.getLayout_2D();
-      
-      //Coord2d modelToScreen = view.getModelToScreenRatio(this.axis.getBounds());
-      
-      Coord2d modelToScreen = view.getModelToScreenRatio(view.margin);
-      
-      Font font = this.axis.getLayout().getFont();
-      
-      // Compute occupation of X tick labels according to Y range, canvas height and font height
-      if (this.axis.isX(dimension)) {
-        
-        float worldTickLen = (layout2D.getxTickLabelsDistance() + font.getHeight()) * modelToScreen.y;
-        
-        tickLength = this.axis.getBounds().getYRange().getRange()/worldTickLen;
+    
+    if(view.is2D()) {
 
+      Font font = this.axis.getLayout().getFont();
+      View2DLayout layout2D = view.get2DLayout();
+      Coord2d modelToScreen = view.get2DProcessing().getModelToScreen();
+      
+      // -------------------------------
+      // Occupation of X tick labels 
+      // according to Y range, canvas height and font height
+      
+      if (this.axis.isX(dimension)) {
+        float worldTickLen = (layout2D.getxTickLabelsDistance() + font.getHeight()) * modelToScreen.y;
+        float range = this.axis.getBounds().getYRange().getRange();
+        
+        System.out.println("WorldTickLen : " + worldTickLen + " model2screen.y : " + modelToScreen.y);
+        return range/worldTickLen;
       }
-      // Compute occupation of Y tick labels according to X range, canvas width and font width
+      
+      // -------------------------------
+      // Occupation of Y tick labels 
+      // according to X range, canvas width and font width
+      
       else if (this.axis.isY(dimension)) {
         float worldTickLen = layout2D.getyTickLabelsDistance() * modelToScreen.x;
-        
-        tickLength = this.axis.getBounds().getXRange().getRange()/worldTickLen;
+        float range = this.axis.getBounds().getXRange().getRange();
+        System.out.println("WorldTickLen : " + worldTickLen + " model2screen.x : " + modelToScreen.x);
+        return range/worldTickLen;
+      }
+      
+      // -------------------------------
+      // Z case should never occur in 2D
+      else {
+        return 1;
       }
       
     }
-    return tickLength;
+    
+    // -------------------------------------------------------
+    // 3D case, tick length given as a ratio of scene bounds
+    
+    else {
+      return view.getAxis().getLayout().getTickLengthRatio();
+    }
+    
   }
 
   public AxisRenderingInfo drawAxisTicks(IPainter painter, int dimension, Color color,

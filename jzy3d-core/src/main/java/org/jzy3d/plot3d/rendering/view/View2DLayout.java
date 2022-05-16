@@ -5,24 +5,6 @@ package org.jzy3d.plot3d.rendering.view;
  * Allows configuring the layout of a view when the chart enters a 2D rendering mode.
  * 
  * <img src="doc-files/layout2D.png"/>
- * 
- * PB5 : native prend en compte la colorbar sur le côté, mais pas emulgl
- * qui a un viewport qui s'étale sur toute la longueur.
- * 
- * >> soit on évite d'appliquer le stretch qui force la vue 2D à étaler jusqu'au bord de l'écran >>
- * soit on adapte NativeGL pour que la colorbar s'affiche au dessus comme EmulGL >> soit on adapte
- * EmulGL pour pouvoir composer le viewport avec la colorbar sur le côté, en s'appuyant sur la
- * formule PIX x (bounds/canvas) c'est pratique de pouvoir stretch la 3D sans réfléchir à la
- * position de la colorbar et avoir garantie de non débordement. >> soit on adapte EmuLGL pour
- * prendre des bounds plus grand qui vont permettre de créer un décallage à droite
- * 
- *
- *
- * TO BE TESTED - Y axis rotate / or not - negative values
- * 
- * Take values with x range != y range, include negative and positive values
- * 
- *
  */
 public class View2DLayout {
   protected View view;

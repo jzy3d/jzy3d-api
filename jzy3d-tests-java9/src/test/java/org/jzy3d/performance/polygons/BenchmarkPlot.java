@@ -98,7 +98,7 @@ public class BenchmarkPlot implements BenchmarkXLS {
     alayout.setYAxisLabel("Rendering time (ms)");
     alayout.setYAxisLabelOrientation(LabelOrientation.PARALLEL_TO_AXIS);
 
-    alayout.setFont(Font.Helvetica_18);
+    //alayout.setFont(Font.Helvetica_18);
 
     alayout.setAxisLabelOffsetAuto(true);
     alayout.setAxisLabelOffsetMargin(20);
@@ -107,7 +107,7 @@ public class BenchmarkPlot implements BenchmarkXLS {
     // View layout
     c.view2d();
     
-    View2DLayout layout = c.getView().getLayout_2D();
+    View2DLayout layout = c.getView().get2DLayout();
     layout.setMargin(20);
     
     //layout.setMarginRight(30);
@@ -117,6 +117,8 @@ public class BenchmarkPlot implements BenchmarkXLS {
     
     c.getView().setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -10, 10));
 
+    System.out.println("TIME MAX : " + timeMax);
+    System.out.println("X MAX : " + maxX);
 
     c.open(file, 1024, 768);
 

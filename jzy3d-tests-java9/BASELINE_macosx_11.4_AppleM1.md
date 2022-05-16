@@ -261,7 +261,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </table>
 
 # 2D Layout
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=0
 * AxisLabel=0
@@ -276,15 +276,15 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
 </tr>
 <tr>
-<td></td>
+<td><img src="target/error-2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false_DIFF.png"></td>
 <td></td>
 <td></td>
 <td></td>
@@ -293,7 +293,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=0
 * AxisLabel=0
@@ -308,12 +308,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -325,7 +325,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=0
 * AxisLabel=10
@@ -340,12 +340,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -357,7 +357,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=0
 * AxisLabel=10
@@ -372,12 +372,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -389,7 +389,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=10
 * AxisLabel=0
@@ -404,12 +404,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -421,7 +421,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=10
 * AxisLabel=0
@@ -436,12 +436,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -453,7 +453,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=10
 * AxisLabel=10
@@ -468,12 +468,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -485,7 +485,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=10
 * AxisLabel=10
@@ -500,12 +500,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -517,7 +517,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=20
 * TickLabel=0
 * AxisLabel=0
@@ -532,12 +532,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -549,7 +549,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=20
 * TickLabel=0
 * AxisLabel=0
@@ -564,12 +564,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -581,7 +581,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=20
 * TickLabel=0
 * AxisLabel=10
@@ -596,12 +596,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -613,7 +613,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=20
 * TickLabel=0
 * AxisLabel=10
@@ -628,12 +628,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -645,7 +645,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=20
 * TickLabel=10
 * AxisLabel=0
@@ -660,12 +660,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -677,7 +677,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=20
 * TickLabel=10
 * AxisLabel=0
@@ -692,12 +692,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -709,7 +709,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=20
 * TickLabel=10
 * AxisLabel=10
@@ -724,12 +724,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -741,7 +741,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : when2DChart_ThenApplyMargins
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=20
 * TickLabel=10
 * AxisLabel=10
@@ -756,12 +756,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DChart_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -773,7 +773,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : whenYAxisRotated_ThenApplyMargins
+## 2D : whenAxisRotated_ThenApplyMargins
 * yAxisOrientation=VERTICAL
 <table markdown=1>
 <tr>
@@ -785,12 +785,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -802,7 +802,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : whenYAxisRotated_ThenApplyMargins
+## 2D : whenAxisRotated_ThenApplyMargins
 * yAxisOrientation=HORIZONTAL
 <table markdown=1>
 <tr>
@@ -814,12 +814,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -831,7 +831,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D : whenYAxisRotated_ThenApplyMargins
+## 2D : whenAxisRotated_ThenApplyMargins
 * yAxisOrientation=PARALLEL
 * TO
 * AXIS
@@ -845,12 +845,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenYAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
 </tr>
 <tr>
 <td></td>

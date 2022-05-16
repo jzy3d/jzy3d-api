@@ -40,7 +40,7 @@ public class ITTest_2D extends ITTest {
     forEach((margin, tickLabelDist, axisLabelDist, textAddMargin) -> {
 
       // When : no margin, no text
-      View2DLayout layout = chart.view2d().getView().getLayout_2D();
+      View2DLayout layout = chart.view2d().getView().get2DLayout();
       layout.setMargin(margin);
       layout.setTickLabelDistance(tickLabelDist);
       layout.setAxisLabelDistance(axisLabelDist);

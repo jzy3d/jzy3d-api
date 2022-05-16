@@ -4,13 +4,13 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
+import org.jzy3d.plot3d.rendering.view.View2DProcessing;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.TextAlign;
 import org.jzy3d.plot3d.text.align.Vertical;
@@ -258,67 +258,33 @@ public class AxisLabelProcessor {
     // X : position axis + margin + tick Label Height + axis Label Margin
     // Y : position axis + margin + tick Label Height OR Width (rotation) + axis Label Margin
 
-
-    AxisLayout axisLayout = axis.getLayout();
-    Font font = axisLayout.getFont();
     View view = axis.getView();
-    IPainter painter = view.getPainter();
-    View2DLayout layout2D = view.getLayout_2D();
-
-    // Compute space in pixel of the tick labels for X and Y axis
-    int tickTextHorizontal = axisLayout.getMaxYTickLabelWidth(painter);
-    int tickTextVertical = font.getHeight();
-
-    float axisTextHorizontal = 0;
-    float axisTextVertical = 0;
-
-    boolean axisLabel = true;
-
-    if (axisLabel) {
-      // consider space occupied by the Y axis label
-      if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
-        // horizontal Y axis involves considering the axis label width
-        axisTextHorizontal = 0;// painter.getTextLengthInPixels(font, axisLayout.getYAxisLabel());
-      } else {
-        // vertical Y axis involves considering the axis label font height
-        axisTextHorizontal =  -font.getHeight()/2 - painter.getTextLengthInPixels(font, axisLayout.getYAxisLabel()) / 2;
-            //font.getHeight();
-      }
-    }
-
-    // consider space occupied by the X axis label, which is always horizontal
-    axisTextVertical = 0;//font.getHeight(); No need to shift since already using Vertical.BOTTOM
-
-    // Get total shift to axis for the label, given in pixel distance
+    AxisLayout axisLayout = view.getAxis().getLayout();
+    View2DLayout layout2D = view.get2DLayout();
+    View2DProcessing processing2D = view.get2DProcessing();
 
     // for Y axis label, we do a shift along X dimension
     float xShiftPx = layout2D.getyTickLabelsDistance();
-    xShiftPx += tickTextHorizontal;
+    xShiftPx += processing2D.getTickTextHorizontal();
     xShiftPx += layout2D.getyAxisLabelsDistance();
-    xShiftPx += axisTextHorizontal; // should not shift, starting point for draw remains the same
-    // (LEFT ALIGN)
-
-    //System.out.println("AxisLabelProc : X Shift 2D for Y label : " + xShiftPx);
+    
+    if(!LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
+      xShiftPx -= view.getPainter().getTextLengthInPixels(axisLayout.getFont(), axisLayout.getYAxisLabel())/2;
+      xShiftPx += axisLayout.getFont().getHeight()/2;
+    }
+    
 
     // for X axis label, we do a shift along Y dimension
     float yShiftPx = layout2D.getxTickLabelsDistance();
-    yShiftPx += tickTextVertical;
+    yShiftPx += processing2D.getTickTextVertical();
     yShiftPx += layout2D.getxAxisLabelsDistance();
-    //yShiftPx += axisTextVertical;
     
-    Coord2d modelToScreenRatio = view.getModelToScreenRatio(view.margin);
-
+    
+    
+    Coord2d modelToScreenRatio = view.get2DProcessing().getModelToScreen();
 
     float xShift = xShiftPx * modelToScreenRatio.x;
     float yShift = yShiftPx * modelToScreenRatio.y;
-
-
-    //System.out.println("AxisLabelProc : X Shift 3D for Y label : " + xShift);
-    // LE MODEL TO SCREEN VARIE QUAND ON CHANGE LA TAILLE DE L'ECRAN
-    // POS EGALEMENT, CAR ON DEPLACE l'AXE
-    //
-    // ATTENTION, L OFFSET 2D DU LABEL QUAND LabelOrientation.VERTICAL NE DOIT PAS ETRE
-    // EFFECTUE CAR IL SERT UNIQUEMENT LE CAS 3D
 
     double xlab = 0;
     double ylab = 0;
@@ -332,9 +298,6 @@ public class AxisLabelProcessor {
       xlab = pos.x - xShift;
       ylab = axis.center.y;
       zlab = pos.z;
-
-      //System.out.println("AxisLabelProc : X POS for Y label : " + xlab);
-
     }
     return new Coord3d(xlab, ylab, zlab);
   }
