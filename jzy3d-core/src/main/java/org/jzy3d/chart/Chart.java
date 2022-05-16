@@ -127,7 +127,7 @@ public class Chart {
 
     View view = getView();
     view.setViewPositionMode(ViewPositionMode.TOP);
-    view.setSquared(true); // not compulsory
+    view.setSquared(true); 
     view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
     
     if(!getQuality().isAnimated()) {
