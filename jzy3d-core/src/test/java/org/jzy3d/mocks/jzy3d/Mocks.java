@@ -9,11 +9,42 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.axis.AxisBox;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.mockito.Mockito;
+import org.smurn.jply.util.Axis;
 
 public class Mocks {
+  public static AxisLayout AxisLayout() {
+    return mock(AxisLayout.class);
+  }
+  
+  public static AxisBox Axis() {
+    return mock(AxisBox.class);
+  }
+
+  public static AxisBox Axis(AxisLayout layout) {
+    AxisBox axis = Axis();
+    when(axis.getLayout()).thenReturn(layout);
+    return axis;
+  }
+  
+  public static View View() {
+    return Mockito.mock(View.class);
+  }
+
+  public static View View(AxisBox axis, IPainter painter) {
+    View view = View();
+    when(view.getAxis()).thenReturn(axis);
+    when(view.getPainter()).thenReturn(painter);
+
+    return view;
+  }
+
+  
   public static View ViewAndPainter(float viewScale) {
     return ViewAndPainter(viewScale, "macos", "10", null, null);
   }
@@ -53,8 +84,6 @@ public class Mocks {
 
     return painter;
   }
-  
-
 
   public static ICanvas Canvas(Coord2d scaleHard, Coord2d scaleVM) {
     return new ICanvas() {
@@ -139,4 +168,5 @@ public class Mocks {
       }
     };
   }
+
 }
