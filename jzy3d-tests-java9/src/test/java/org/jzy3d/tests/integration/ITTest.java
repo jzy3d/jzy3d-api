@@ -218,12 +218,13 @@ public class ITTest {
     String pathZoom = "target/error-" + name + ChartTester.FILE_LABEL_ZOOM + ".png";
 
     boolean exists = new File(pathDiff).exists();
-    
-    if (exists) {
-      return "<img src=\"" + pathDiff + "\">" + "<br>" + "<img src=\"" + pathErr + "\">" + "<br>" + "<img src=\"" + pathZoom + "\">";
-    } else {
 
-      return "";// "<img src=\""+OKFLAG_ICON+"\">";
+    if (exists) {
+      return "Diff chart:<br><img src=\"" + pathDiff + "\">" + "<br>Actual chart:<br>"
+          + "<img src=\"" + pathErr + "\">" + "<br>Zoom on error:<br>" + "<img src=\"" + pathZoom
+          + "\"><br>Following tests of the same section have been skipped.";
+    } else {
+      return "";
     }
   }
 

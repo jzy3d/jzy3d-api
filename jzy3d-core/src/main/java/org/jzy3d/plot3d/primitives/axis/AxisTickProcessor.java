@@ -144,7 +144,7 @@ public class AxisTickProcessor {
     // -------------------------------------------------------
     // Process tick length for the particular 2D case
     
-    if(view.is2D()) {
+    if(view != null && view.is2D()) {
 
       Font font = this.axis.getLayout().getFont();
       View2DLayout layout2D = view.get2DLayout();
@@ -182,7 +182,7 @@ public class AxisTickProcessor {
     // 3D case, tick length given as a ratio of scene bounds
     
     else {
-      return view.getAxis().getLayout().getTickLengthRatio();
+      return this.layout.getTickLengthRatio();
     }
     
   }

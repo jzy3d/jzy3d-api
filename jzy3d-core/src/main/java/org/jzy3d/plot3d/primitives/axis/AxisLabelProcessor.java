@@ -259,7 +259,7 @@ public class AxisLabelProcessor {
     // Y : position axis + margin + tick Label Height OR Width (rotation) + axis Label Margin
 
     View view = axis.getView();
-    AxisLayout axisLayout = view.getAxis().getLayout();
+    AxisLayout axisLayout = axis.getLayout();
     View2DLayout layout2D = view.get2DLayout();
     View2DProcessing processing2D = view.get2DProcessing();
 
