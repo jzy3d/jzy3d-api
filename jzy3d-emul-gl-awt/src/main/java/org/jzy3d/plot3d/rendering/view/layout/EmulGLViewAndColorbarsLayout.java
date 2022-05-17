@@ -17,7 +17,7 @@ import jgl.GL;
 
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
   boolean fixHiDPI = true;
-
+  
   @Override
   public void render(IPainter painter, Chart chart) {
     View view = chart.getView();
@@ -58,6 +58,8 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       width = (int) (sceneViewport.getWidth() * emulGL.getGL().getPixelScaleX());
       height = (int) (sceneViewport.getHeight() * emulGL.getGL().getPixelScaleY());// canvas.getRendererHeight();
     }
+    
+    legendsWidth = (right-left)*width;
 
     // ---------------------------------------
 

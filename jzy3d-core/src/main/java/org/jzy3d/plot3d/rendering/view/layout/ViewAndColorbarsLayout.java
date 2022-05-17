@@ -35,6 +35,10 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   protected ViewportConfiguration sceneViewport;
   protected ViewportConfiguration backgroundViewport;
 
+  // stored at render time for later layout processing
+  protected float legendsWidth = 0;
+
+
   /**
    * This shrink colorbar is actually not supported by this implementation but made available and
    * used by classes that inherit this class
@@ -54,7 +58,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     backgroundViewport = new ViewportConfiguration(canvas);
   }
 
-  public void computeSeparator(final ICanvas canvas, final List<ILegend> list) {
+  protected void computeSeparator(final ICanvas canvas, final List<ILegend> list) {
     hasMeta = list.size() > 0;
     if (hasMeta) {
       int minwidth = 0;
@@ -71,19 +75,36 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   @Override
   public void render(IPainter painter, Chart chart) {
     View view = chart.getView();
+    
+    // Background
     view.renderBackground(backgroundViewport);
+
+    // Underlay
+    //if(view.getCamera().getLastViewPort()!=null)
+    //  view.renderOverlay(view.getCamera().getLastViewPort());
+
+    // Scene
     view.renderScene(sceneViewport);
 
+    // Legend
     renderLegends(painter, chart);
 
-
-    // fix overlay on top of chart
-    view.renderOverlay(view.getCamera().getLastViewPort());
+    // Overlay
+    if(view.getCamera().getLastViewPort()!=null) {
+      view.renderOverlay(view.getCamera().getLastViewPort());
+    }
+    else {
+      view.renderOverlay(); // ignore colorbar      
+    }
   }
 
   protected void renderLegends(IPainter painter, Chart chart) {
     if (hasMeta) {
+      legendsWidth = screenSeparator * chart.getCanvas().getRendererWidth();
       renderLegends(painter, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
+    }
+    else {
+      legendsWidth = 0;
     }
   }
 
@@ -164,4 +185,10 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       chart.render();
     }
   }
+
+  public float getLegendsWidth() {
+    return legendsWidth;
+  }
+  
+  
 }

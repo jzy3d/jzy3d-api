@@ -31,7 +31,6 @@ import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
-import org.jzy3d.tests.integration.ITTest_2D.ITTest2D_Margin_Instance;
 
 public class ITTest {
   public static final String SEP_TITLE = " ";
@@ -124,6 +123,15 @@ public class ITTest {
       String properties = ITTest_2D.properties(yOrientation);
       section(1, sb, className(ITTest_2D.class), ITTest_2D.caseAxisRotated, properties);
     });
+    
+    // OVerlay tests
+    line(sb, "# Overlays");
+    
+    ITTest_Overlay.forEach((cornerSet)->{
+      String properties = ITTest_Overlay.properties(cornerSet);      
+      section(1, sb, className(ITTest_Overlay.class), null, properties);
+
+    });
 
     // Export in a markdown file
     BufferedWriter bwr = new BufferedWriter(new FileWriter(new File(indexFileName)));
@@ -145,7 +153,7 @@ public class ITTest {
     // -------------------------------
     // Write section name with markdown header style
 
-    String header = Collections.nCopies(level + 1, "#").stream().collect(Collectors.joining());// .repeat(level+1);
+    String header = Collections.nCopies(level + 1, "#").stream().collect(Collectors.joining());
     if (caseName != null)
       line(sb, header + " " + testName + " : " + caseName);
     else
