@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.primitives.CubeComposite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.overlay.Legend;
-import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout;
+import org.jzy3d.plot3d.rendering.legends.overlay.LineLegendLayout;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.legends.overlay.OverlayLegendRenderer;
 import org.jzy3d.plot3d.rendering.lights.Light;
@@ -90,8 +90,8 @@ public class DebugGLChart3d {
     // ((AWTView) debugChart.getView()).addRenderer2d(renderer);
 
     OverlayLegendRenderer legend = watchedItemsColorLegend();
-    LegendLayout layout = new LegendLayout();
-    layout.corner = Corner.TOP_LEFT;
+    LineLegendLayout layout = new LineLegendLayout();
+    layout.setCorner(Corner.TOP_LEFT);
 
     legend.setLayout(layout);
     ((AWTChart) debugChart).addRenderer(legend);
@@ -194,7 +194,7 @@ public class DebugGLChart3d {
 
   public void open(Rectangle rectangle) {
     debugChart.open("GL Debug", rectangle);
-    debugChart.addMouseCameraController();
+    debugChart.addMouse();
 
     startUpdater();
   }
