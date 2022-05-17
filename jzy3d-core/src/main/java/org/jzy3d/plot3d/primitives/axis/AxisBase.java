@@ -5,7 +5,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.renderers.TextRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -18,7 +18,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 public class AxisBase implements IAxis {
   protected Coord3d scale;
   protected BoundingBox3d boundingBox;
-  protected IAxisLayout layout;
+  protected AxisLayout layout;
   protected SpaceTransformer spaceTransformer;
 
   protected ITextRenderer textRenderer = new TextRenderer();
@@ -85,7 +85,7 @@ public class AxisBase implements IAxis {
   }
 
   @Override
-  public IAxisLayout getLayout() {
+  public AxisLayout getLayout() {
     return layout;
   }
 

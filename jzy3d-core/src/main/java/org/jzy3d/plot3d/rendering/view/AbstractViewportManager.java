@@ -51,7 +51,7 @@ public abstract class AbstractViewportManager {
     setViewPort(width, height, 0, 1);
   }
 
-  public ViewportMode getMode() {
+  public ViewportMode getViewportMode() {
     return mode;
   }
 

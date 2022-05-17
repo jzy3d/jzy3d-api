@@ -98,4 +98,20 @@ public class TestBoundingBox3d {
     Assert.assertEquals(11f, bb.zmax, delta);
     Assert.assertEquals(-1f, bb.zmin, delta);
   }
+  
+  @Test
+  public void shift() {
+    BoundingBox3d bb = new BoundingBox3d(0,10,0,10,0,10);
+    bb = bb.shift(new Coord3d(5,10,15));
+    
+    float delta = 0.00001f;
+    
+    Assert.assertEquals(5f, bb.xmin, delta);
+    Assert.assertEquals(15f, bb.xmax, delta);
+    Assert.assertEquals(10f, bb.ymin, delta);
+    Assert.assertEquals(20f, bb.ymax, delta);
+    Assert.assertEquals(15f, bb.zmin, delta);
+    Assert.assertEquals(25f, bb.zmax, delta);
+  }
+
 }

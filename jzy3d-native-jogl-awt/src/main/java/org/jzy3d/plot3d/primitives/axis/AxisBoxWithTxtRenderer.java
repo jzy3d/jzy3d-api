@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.text.overlay.AWTTextOverlay;
 
@@ -11,7 +11,7 @@ import org.jzy3d.plot3d.text.overlay.AWTTextOverlay;
  * @author Martin Pernollet
  */
 public class AxisBoxWithTxtRenderer extends AxisBox implements IAxis {
-  public AxisBoxWithTxtRenderer(BoundingBox3d bbox, IAxisLayout layout) {
+  public AxisBoxWithTxtRenderer(BoundingBox3d bbox, AxisLayout layout) {
     super(bbox, layout);
   }
 

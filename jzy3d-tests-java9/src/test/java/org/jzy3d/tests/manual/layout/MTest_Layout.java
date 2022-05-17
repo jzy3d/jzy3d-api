@@ -1,8 +1,6 @@
 package org.jzy3d.tests.manual.layout;
 
-import java.util.Scanner;
 import org.jzy3d.analysis.AWTAbstractAnalysis;
-import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.controllers.RateLimiterAdaptsToRenderTime;
 import org.jzy3d.chart.controllers.mouse.camera.AdaptiveRenderingPolicy;
@@ -10,15 +8,13 @@ import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.junit.ChartTester;
-import org.jzy3d.junit.NativePlatform;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
@@ -82,7 +78,7 @@ public class MTest_Layout extends AWTAbstractAnalysis {
       ((ViewAndColorbarsLayout) ((AWTView) chart.getView()).getLayout()).setShrinkColorbar(true);
     }
 
-    IAxisLayout layout = chart.getAxisLayout();
+    AxisLayout layout = chart.getAxisLayout();
     // layout.setFont(new Font("Apple Chancery", 20));
     layout.setFont(new Font("Helvetica", 20));
     layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));

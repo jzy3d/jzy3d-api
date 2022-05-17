@@ -6,6 +6,7 @@ import java.util.Vector;
 import java.util.function.Predicate;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox2d;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.painters.IPainter;
@@ -25,8 +26,10 @@ import org.jzy3d.plot3d.transform.Transform;
  * centering on.
  * <li>{@link Camera#eye} indicates the position of the lens of the camera.
  * <li>{@link Camera#up} indicates the direction of the top of the camera.
- * <li>{@link Camera#renderingSphereRadius} indicates the width of the field of view when working
- * with {@link CameraMode#ORTHOGONAL} projections
+ * <li>{@link Camera#setRenderingSphereRadius(float)} allows defining the volume to capture with the
+ * camera. Alternatively, a 2D view will use {@link Camera#setRenderingSquare(BoundingBox2d)} to
+ * define the volume to capture with the camera. They are used to define the width of the field of
+ * view.
  * <li>{@link Camera#near} defines the distance from which a 3d item is visible by camera.
  * <li>{@link Camera#far} defines the distance up to which a 3d item is visible by camera.
  * </ul>
@@ -37,6 +40,8 @@ import org.jzy3d.plot3d.transform.Transform;
  * source</a> <br>
  * 
  * All camera settings are in cartesian coordinates.
+ * 
+ * @see http://www.songho.ca/opengl/gl_transform.html for explanations on the maths being 3D to 2D projection.
  * 
  * @author Martin Pernollet
  */
@@ -87,10 +92,10 @@ public class Camera extends AbstractViewportManager {
   /** The distance between the camera eye and the far clipping plane. */
   protected float far;
 
-
+  /**
+   * 
+   */
   protected BoundingBox2d renderingSquare;
-
-
 
   /**
    * The configuration used to make orthogonal rendering.
@@ -247,7 +252,7 @@ public class Camera extends AbstractViewportManager {
   public void setRenderingSphereRadius(float radius) {
     this.renderingSphereRadius = radius;
     this.projectionMode = ProjectionMode.Projection3D;
-    
+
     setNearFarClippingPlanesWithRadius(radius);
   }
 
@@ -266,10 +271,10 @@ public class Camera extends AbstractViewportManager {
   public void setRenderingSquare(BoundingBox2d renderingSquare) {
     this.renderingSquare = renderingSquare;
     this.projectionMode = ProjectionMode.Projection2D;
-    
+
     // derive general 3D case
-    float radius = Math.max(renderingSquare.xrange(), renderingSquare.yrange())/2;
-    
+    float radius = Math.max(renderingSquare.xrange(), renderingSquare.yrange()) / 2;
+
     setNearFarClippingPlanesWithRadius(radius);
   }
 
@@ -386,6 +391,8 @@ public class Camera extends AbstractViewportManager {
    *         {@link #failOnException} is false, a DEBUG log is sent to the {@link #LOGGER}.
    */
   public Coord3d modelToScreen(IPainter painter, Coord3d point) {
+    
+    
     int viewport[] = painter.getViewPortAsInt();
 
     float screenCoord[] = new float[3];// wx, wy, wz;// returned xyz coords
@@ -576,6 +583,12 @@ public class Camera extends AbstractViewportManager {
     doShoot(painter, projection);
   }
 
+  /**
+   * Apply camera position and orientation and performs projection of the visible volume either in
+   * perspective or orthogonal mode.
+   * 
+   * The orthogonal mode support 2D/3D.
+   */
   public void doShoot(IPainter painter, CameraMode projection) {
     // Set viewport
     ViewportConfiguration viewport = applyViewport(painter);
@@ -590,6 +603,7 @@ public class Camera extends AbstractViewportManager {
 
     // Set camera position
     doLookAt(painter);
+
   }
 
   /**
@@ -614,6 +628,8 @@ public class Camera extends AbstractViewportManager {
   }
 
   public void doLookAt(IPainter painter) {
+    //System.out.println("Camera.LookAt : " + target + " FROM " + eye);
+    
     painter.gluLookAt(eye.x, eye.y, eye.z, target.x, target.y, target.z, up.x, up.y, up.z);
   }
 
@@ -636,36 +652,49 @@ public class Camera extends AbstractViewportManager {
 
     // Case of 3D charts
     if (ProjectionMode.Projection3D.equals(projectionMode)) {
-
-      // Case of a viewport stretched to fill the canvas or of a square viewport
-      if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode()) || ViewportMode.SQUARE.equals(viewport.getMode())) {
-        ortho.update(-renderingSphereRadius, +renderingSphereRadius, -renderingSphereRadius,
-            +renderingSphereRadius, near, far);
-      }
-
-      // Case of a rectangle viewport not stretched
-      else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode())) {
-        ortho.update(-renderingSphereRadius * viewport.ratio(),
-            +renderingSphereRadius * viewport.ratio(), -renderingSphereRadius,
-            +renderingSphereRadius, near, far);
-      }
+      projectionOrtho3D(viewport);
     }
-
     // Case of 2D charts
     else if (ProjectionMode.Projection2D.equals(projectionMode)) {
-      ortho.update(renderingSquare.xmin(), renderingSquare.xmax(), renderingSquare.ymin(),
-          renderingSquare.ymax(), near, far);
-      
+      projectionOrtho2D();
     }
-
     // Undefined
     else {
       throw new IllegalArgumentException("Unexpected value : " + projectionMode);
     }
 
-    
     // Apply
     ortho.apply(painter);
+  }
+
+  protected void projectionOrtho2D() {
+    ortho.update(renderingSquare.xmin(), renderingSquare.xmax(), renderingSquare.ymin(),
+        renderingSquare.ymax(), near, far);
+    
+    //painter.glOrtho(left, right, bottom, top, near, far);
+
+    
+    //BoundingBox2d b2 = renderingSquare.shift(new Coord2d(target.x, target.y));
+    //System.out.println("Camera : 2D capturing at : " + eye);
+    //System.out.println("Camera : 2D capturing sq : " + b2);
+
+    
+  }
+
+  protected void projectionOrtho3D(ViewportConfiguration viewport) {
+    // Case of a viewport stretched to fill the canvas or of a square viewport
+    if (ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode())
+        || ViewportMode.SQUARE.equals(viewport.getMode())) {
+      ortho.update(-renderingSphereRadius, +renderingSphereRadius, -renderingSphereRadius,
+          +renderingSphereRadius, near, far);
+    }
+
+    // Case of a rectangle viewport not stretched
+    else if (ViewportMode.RECTANGLE_NO_STRETCH.equals(viewport.getMode())) {
+      ortho.update(-renderingSphereRadius * viewport.ratio(),
+          +renderingSphereRadius * viewport.ratio(), -renderingSphereRadius,
+          +renderingSphereRadius, near, far);
+    }
   }
 
   /**
@@ -770,8 +799,6 @@ public class Camera extends AbstractViewportManager {
     /** the latest value used to invoke glOrtho */
     public double far;
 
-    public Ortho() {}
-
     public void update(double left, double right, double bottom, double top, double near,
         double far) {
       this.left = left;
@@ -788,6 +815,7 @@ public class Camera extends AbstractViewportManager {
     public void apply(IPainter painter) {
       if (left != 0 && right != 0 && bottom != 0 && top != 0 && near != 0 && far != 0) {
         painter.glOrtho(left, right, bottom, top, near, far);
+        //painter.gluOrtho2D(left, right, bottom, top);
         // System.out.println("Camera.glOrtho("+left+","+ right+","+ bottom+","+ top +","+ near+","+
         // far + ")");
       }

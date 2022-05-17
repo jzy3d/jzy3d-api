@@ -34,7 +34,6 @@ public class GPUInfo {
     GL gl = drawable.getContext().getGL();
 
     //System.out.println(drawable.getContext().getGLVendorVersionNumber());
-
     
     GPUInfo gpu = load(gl);
     
