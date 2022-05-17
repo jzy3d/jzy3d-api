@@ -3,8 +3,8 @@ jzy3d-test-java9-generated
 This is a summary of existing baseline images for tests, which was generated on 
 * OS Name : mac os x
 * OS Version : 11.4
-* Java Version : 17.0.1
-* CPU : aarch64
+* Java Version : 17-panama
+* CPU : x86_64
 * GPU : AppleM1
 
 # Surface
@@ -111,7 +111,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_11.4_AppleM1/Text_whenDrawableTextRenderer_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-Text_whenDrawableTextRenderer_EmulGL_AWT_HiDPI=ON_DIFF.png"><br>Actual chart:<br><img src="target/error-Text_whenDrawableTextRenderer_EmulGL_AWT_HiDPI=ON_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-Text_whenDrawableTextRenderer_EmulGL_AWT_HiDPI=ON_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
@@ -139,7 +139,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_11.4_AppleM1/AxisLabelRotateLayout_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_DIFF.png"><br>Actual chart:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
@@ -793,7 +793,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_11.4_AppleM1/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
 </tr>
 <tr>
-<td><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_DIFF.png"><br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ACTUAL.png"><br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ZOOM.png"></td>
+<td>Diff chart:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_DIFF.png"><br>Actual chart:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
