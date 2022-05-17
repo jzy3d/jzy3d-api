@@ -19,6 +19,10 @@ public class SampleGeom {
   }
 
   public static Shape surface(Range xRange, Range yRange) {
+    return surface(xRange, yRange, 0.5f);
+  }
+  
+  public static Shape surface(Range xRange, Range yRange, float alpha) {
     Mapper mapper = new Mapper() {
       @Override
       public double f(double x, double y) {
@@ -30,11 +34,37 @@ public class SampleGeom {
     Shape surface =
         new SurfaceBuilder().orthonormal(new OrthonormalGrid(xRange, steps, yRange, steps), mapper);
     ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f));
+        surface.getBounds().getZmax(), new Color(1, 1, 1, alpha));
     surface.setColorMapper(colorMapper);
     return surface;
   }
   
+  public static Scatter scatter(int size, int width) {
+    float x;
+    float y;
+    float z;
+    float a;
+
+    Coord3d[] points = new Coord3d[size];
+    Color[] colors = new Color[size];
+
+    Random r = new Random();
+    r.setSeed(0);
+
+    for (int i = 0; i < size; i++) {
+      x = r.nextFloat() - 0.5f;
+      y = r.nextFloat() - 0.5f;
+      z = r.nextFloat() - 0.5f;
+      points[i] = new Coord3d(x, y, z);
+      a = 0.75f;
+      colors[i] = new Color(x, y, z, a);
+    }
+
+    Scatter scatter = new Scatter(points, colors);
+    scatter.setWidth(width);
+    return scatter;
+  }
+
   public static SelectableScatter generateSelectableScatter(int npt) {
     Coord3d[] points = new Coord3d[npt];
     Color[] colors = new Color[npt];
