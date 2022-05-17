@@ -66,7 +66,6 @@ public class AWTView extends ChartView {
     // when stretched, applyViewport() is cheaper to compute, and this does
     // not change
     // the picture rendering.
-    // bgViewport.setScreenGridDisplayed(true);
   }
 
   public BufferedImage getBackgroundImage() {
