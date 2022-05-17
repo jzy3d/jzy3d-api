@@ -8,16 +8,18 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.colors.Color;
+import org.jzy3d.debug.View2DLayout_Debug;
 import org.jzy3d.io.xls.ExcelBuilder;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.LineStrip;
 import org.jzy3d.plot3d.primitives.Scatter;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.IntegerTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
 
 
@@ -57,6 +59,7 @@ public class BenchmarkPlot implements BenchmarkXLS {
     Cell cellPoly = xls.getCell(line, POLYGONS);
 
     double maxX = 0;
+    double maxY = 0;
 
     while (cellTime != null && cellPoly != null) {
       double x = cellPoly.getNumericCellValue();
@@ -64,6 +67,9 @@ public class BenchmarkPlot implements BenchmarkXLS {
 
       if (x > maxX)
         maxX = x;
+
+      if (y > maxY)
+        maxY = y;
 
       data.add(new Coord3d(x, y, 0));
 
@@ -75,6 +81,9 @@ public class BenchmarkPlot implements BenchmarkXLS {
     }
 
     System.out.println("loaded " + line + " XLS lines");
+    System.out.println("TIME MAX : " + timeMax);
+    System.out.println("X MAX : " + maxX);
+    System.out.println("Y MAX : " + maxY);
 
 
     // -------------------------------
@@ -90,7 +99,7 @@ public class BenchmarkPlot implements BenchmarkXLS {
     c.add(line(80, maxX, Color.RED, 2));
     
     // Axis layout
-    IAxisLayout alayout = c.getAxisLayout();
+    AxisLayout alayout = c.getAxisLayout();
     
     alayout
         .setXAxisLabel("Number of polygons (polygons all together cover the same surface)");
@@ -105,23 +114,25 @@ public class BenchmarkPlot implements BenchmarkXLS {
 
     
     // View layout
+    AWTView view = (AWTView)c.getView();
     c.view2d();
     
-    View2DLayout layout = c.getView().getLayout_2D();
+    View2DLayout layout = view.get2DLayout();
     layout.setMargin(20);
-    
-    //layout.setMarginRight(30);
-    //layout.setMarginTop(60);
+    layout.setTickLabelDistance(20);
+    layout.setAxisLabelDistance(20);
     //layout.setKeepTextVisible(false);
     
     
-    c.getView().setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -10, 10));
+    view.setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -1, 1));
+    view.addRenderer2d(new View2DLayout_Debug(view));
 
+    //view.setSquared(false);
 
     c.open(file, 1024, 768);
 
     
-    
+
 
     
 

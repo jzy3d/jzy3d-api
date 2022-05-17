@@ -7,7 +7,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
@@ -31,7 +31,7 @@ public class DrawableTextWrapper extends Drawable {
 
   protected ITextRenderer renderer;
 
-  protected IAxisLayout axisLayout;
+  protected AxisLayout axisLayout;
   protected Font defaultFont = Font.Helvetica_12;
 
   public DrawableTextWrapper(ITextRenderer renderer) {
@@ -138,7 +138,7 @@ public class DrawableTextWrapper extends Drawable {
 
 
 
-  public IAxisLayout getAxisLayout() {
+  public AxisLayout getAxisLayout() {
     return axisLayout;
   }
 
@@ -149,7 +149,7 @@ public class DrawableTextWrapper extends Drawable {
    * To for this drawable text to use a given font, set this to null and configure
    * {@link #setDefaultFont(Font)}
    */
-  public void setAxisLayout(IAxisLayout axisLayout) {
+  public void setAxisLayout(AxisLayout axisLayout) {
     this.axisLayout = axisLayout;
   }
 

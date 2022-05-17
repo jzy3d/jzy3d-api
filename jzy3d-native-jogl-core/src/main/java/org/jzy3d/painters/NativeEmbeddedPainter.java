@@ -580,6 +580,12 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
       double far_val) {
     gl.getGL2().glOrtho(left, right, bottom, top, near_val, far_val);
   }
+  
+  @Override
+  public void gluOrtho2D(double left, double right, double bottom, double top) {
+    glu.gluOrtho2D(left, right, bottom, top);
+  }
+
 
   @Override
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {

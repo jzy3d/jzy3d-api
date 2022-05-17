@@ -7,6 +7,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.TextAlign;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -27,6 +28,10 @@ public abstract class AbstractTextRenderer implements ITextRenderer {
     this.spaceTransformer = transformer;
   }
 
+  @Override
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position, float rotation, TextAlign align, Color color, Coord2d screenOffset) {
+    return drawText(painter, font, s, position, rotation, align.horizontal(), align.vertical(), color, screenOffset);
+  }
 
   @Override
   public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,

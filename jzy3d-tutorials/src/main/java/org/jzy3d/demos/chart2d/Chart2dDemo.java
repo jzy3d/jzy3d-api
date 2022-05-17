@@ -16,7 +16,7 @@ import org.jzy3d.chart2d.Chart2d;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.ConcurrentLineStrip;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.PitchTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.PitchTickRenderer;
 import org.jzy3d.ui.LookAndFeel;
@@ -99,7 +99,7 @@ public class Chart2dDemo {
       pitchChart = new Chart2d();
       pitchChart.asTimeChart(timeMax, 0, freqMax, "Time", "Frequency");
 
-      IAxisLayout axe = pitchChart.getAxisLayout();
+      AxisLayout axe = pitchChart.getAxisLayout();
       axe.setYTickProvider(new PitchTickProvider(nOctave));
       axe.setYTickRenderer(new PitchTickRenderer());
 
