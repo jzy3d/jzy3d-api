@@ -277,10 +277,10 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsX(IPainter painter) {
-    if (xrange > 0 && layout.isXTickLabelDisplayed() && view != null) {
+    if (xrange > 0 && layout.isXTickLabelDisplayed()) {
 
       // 2D case
-      if (view.is2D()) {
+      if (view != null && view.is2D()) {
         BoundingBox3d bbox =
             ticks.drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
         wholeBounds.add(bbox);
@@ -303,10 +303,10 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsY(IPainter painter) {
-    if (yrange > 0 && layout.isYTickLabelDisplayed() && view != null) {
+    if (yrange > 0 && layout.isYTickLabelDisplayed()) {
       
       //2D case
-      if (view.is2D()) {
+      if (view != null && view.is2D()) {
         BoundingBox3d bbox =
             ticks.drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
         wholeBounds.add(bbox);
@@ -330,9 +330,9 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsZ(IPainter painter) {
-    if (zrange > 0 && layout.isZTickLabelDisplayed() && view != null) {
+    if (zrange > 0 && layout.isZTickLabelDisplayed()) {
       // 3D case only
-      if (view.is3D()) {
+      if (view != null && view.is3D()) {
         int zselect = findClosestZaxe(painter.getCamera());
         if (zselect >= 0) {
           BoundingBox3d bbox = ticks.drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
