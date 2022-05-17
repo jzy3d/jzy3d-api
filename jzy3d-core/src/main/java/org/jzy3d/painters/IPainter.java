@@ -376,6 +376,8 @@ public interface IPainter {
 
   public void glOrtho(double left, double right, double bottom, double top, double near_val,
       double far_val);
+  
+  public void gluOrtho2D(double left, double right, double bottom, double top);
 
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar);
 

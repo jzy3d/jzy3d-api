@@ -29,6 +29,7 @@ public class MockTextBitmapRenderer extends TextRenderer {
     args.put("screenOffset", screenOffset);
     args.put("sceneOffset", sceneOffset);
 
+    //System.out.println("MockTextBitmapRenderer.drawText : " + text + " at " + position);
 
     callArguments.add(args);
 

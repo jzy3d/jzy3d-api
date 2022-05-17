@@ -14,7 +14,6 @@ import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -43,7 +42,7 @@ public class AxisBox implements IAxis {
   protected AxisLabelRotator rotateLabel;
   protected AxisLabelProcessor labels;
   protected AxisTickProcessor ticks;
-  protected IAxisLayout layout;
+  protected AxisLayout layout;
 
   protected BoundingBox3d boxBounds;
   protected BoundingBox3d wholeBounds;
@@ -99,7 +98,7 @@ public class AxisBox implements IAxis {
     this(bbox, new AxisLayout());
   }
 
-  public AxisBox(BoundingBox3d bbox, IAxisLayout layout) {
+  public AxisBox(BoundingBox3d bbox, AxisLayout layout) {
     this.layout = layout;
     //if (bbox.valid())
       setAxe(bbox);
@@ -278,10 +277,10 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsX(IPainter painter) {
-    if (xrange > 0 && layout.isXTickLabelDisplayed() && view != null) {
+    if (xrange > 0 && layout.isXTickLabelDisplayed()) {
 
       // 2D case
-      if (view.is2D()) {
+      if (view != null && view.is2D()) {
         BoundingBox3d bbox =
             ticks.drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
         wholeBounds.add(bbox);
@@ -304,10 +303,10 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsY(IPainter painter) {
-    if (yrange > 0 && layout.isYTickLabelDisplayed() && view != null) {
+    if (yrange > 0 && layout.isYTickLabelDisplayed()) {
       
       //2D case
-      if (view.is2D()) {
+      if (view != null && view.is2D()) {
         BoundingBox3d bbox =
             ticks.drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
         wholeBounds.add(bbox);
@@ -331,9 +330,9 @@ public class AxisBox implements IAxis {
   }
 
   public void drawTicksAndLabelsZ(IPainter painter) {
-    if (zrange > 0 && layout.isZTickLabelDisplayed() && view != null) {
+    if (zrange > 0 && layout.isZTickLabelDisplayed()) {
       // 3D case only
-      if (view.is3D()) {
+      if (view != null && view.is3D()) {
         int zselect = findClosestZaxe(painter.getCamera());
         if (zselect >= 0) {
           BoundingBox3d bbox = ticks.drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
@@ -856,7 +855,7 @@ public class AxisBox implements IAxis {
   }
 
   @Override
-  public IAxisLayout getLayout() {
+  public AxisLayout getLayout() {
     return layout;
   }
 

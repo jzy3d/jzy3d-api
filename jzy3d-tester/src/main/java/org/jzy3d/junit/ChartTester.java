@@ -3,6 +3,8 @@ package org.jzy3d.junit;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,6 +30,7 @@ public class ChartTester {
   public static final String FILE_LABEL_ACTUAL = "_ACTUAL";
   public static final String FILE_LABEL_EXPECT = "_EXPECT";
   public static final String FILE_LABEL_DIFF = "_DIFF";
+  public static final String FILE_LABEL_ZOOM = "_ZOOM";
   
   public static int TEST_IMG_SIZE = 500;
 
@@ -184,6 +187,16 @@ public class ChartTester {
       logger.error("EXPECTED IMAGE : " + expectFile);
 
       // -----------------------------
+      // Writing ZOOM file
+
+      String zoomFile =
+          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", FILE_LABEL_ZOOM+".");
+
+      BufferedImage zoom = getErroneousArea(expected, e.getDiffCoordinates());
+      ImageIO.write(zoom, "png", new File(zoomFile));
+
+      
+      // -----------------------------
       // Writing DIFF file
 
       String diffFile =
@@ -208,9 +221,9 @@ public class ChartTester {
       logger.error("DIFF IMAGE : " + diffFile);
 
       // LET TEST FAIL
+      
 
-
-      fail("Chart test failed: " + e.getMessage() + " see " + diffFile);
+      fail("Chart test failed: " + e.getMessage() + " see " + diffFile + "\n" + e.getDiffCoordinates().size() + " pixel(s) differ");
 
     } catch (IOException e) {
       // -----------------------------
@@ -244,9 +257,59 @@ public class ChartTester {
    */
   protected void highlightPixel(BufferedImage expected, List<IntegerCoord2d> diffs,
       Highlight highlight) {
+    
+    int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE; 
+    int maxX = -1, maxY = -1;
+    
     for (IntegerCoord2d diff : diffs) {
+      
+      if(minX > diff.x)
+        minX = diff.x;
+      if(maxX < diff.x)
+        maxX = diff.x;
+      if(minY > diff.y)
+        minY = diff.y;
+      if(maxY < diff.y)
+        maxY = diff.y;
+      
       pixelHighlight(expected, diff, highlight);
     }
+    
+    
+    
+    expected.getSubimage(minX, minY, maxX-minX, maxY-minY);
+    
+    Graphics2D g2d = (Graphics2D)expected.createGraphics();
+    g2d.setColor(java.awt.Color.RED);
+    g2d.setStroke(new BasicStroke(1f));
+    g2d.drawRect(minX, minY, maxX-minX, maxY-minY);
+    
+    System.err.println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
+    
+    
+  }
+  
+  protected BufferedImage getErroneousArea(BufferedImage expected, List<IntegerCoord2d> diffs) {
+    
+    int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE; 
+    int maxX = -1, maxY = -1;
+    
+    for (IntegerCoord2d diff : diffs) {
+      
+      if(minX > diff.x)
+        minX = diff.x;
+      if(maxX < diff.x)
+        maxX = diff.x;
+      if(minY > diff.y)
+        minY = diff.y;
+      if(maxY < diff.y)
+        maxY = diff.y;
+    }
+    
+    System.err.println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
+    
+    return expected.getSubimage(minX, minY, maxX-minX, maxY-minY);
+    
   }
 
   /**

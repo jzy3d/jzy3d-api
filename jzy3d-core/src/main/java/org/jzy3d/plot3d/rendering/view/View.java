@@ -21,6 +21,7 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
+import org.jzy3d.plot3d.primitives.axis.AxisLabelProcessor;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
@@ -70,9 +71,9 @@ public class View {
 
   /** Settings for the layout of a 2D chart */
   protected View2DLayout view2DLayout = new View2DLayout(this);
+  protected View2DProcessing view2DProcessing = new View2DProcessing(this);
 
   protected float cameraRenderingSphereRadiusFactor = 1f;
-  // protected float cameraRenderingSphereRadiusFactorOnTop = 0.1f;// 00000000000001f;
 
 
   /**
@@ -147,7 +148,7 @@ public class View {
    * Applies a factor to the default camera distance which is set to the radius of the scene bounds.
    * Changing this value also change the camera clipping planes.
    */
-  protected float factorViewPointDistance = 2;
+  protected float factorViewPointDistance = 1;
 
   /** A slave view won't clear its color and depth buffer before rendering */
   protected boolean slave = false;
@@ -270,8 +271,17 @@ public class View {
     return hidpi;
   }
 
-  public View2DLayout getLayout_2D() {
+  /** Return the configuration of a 2D layout */
+  public View2DLayout get2DLayout() {
     return view2DLayout;
+  }
+
+  /**
+   * Return the result of processing a 2D layout using the layout configured with the instance
+   * returned by {@link #get2DLayout()}
+   */
+  public View2DProcessing get2DProcessing() {
+    return view2DProcessing;
   }
 
   public IPainter getPainter() {
@@ -668,6 +678,9 @@ public class View {
 
   public void setSquared(boolean status) {
     this.squared = status;
+    
+    if(is2D() && status)
+      LOGGER.info("View.setSquared : Setting a 2D chart squared may break the tick and axis label layout! Keep it to false for 2D charts");
   }
 
   public boolean isAxisDisplayed() {
@@ -709,6 +722,10 @@ public class View {
       this.cam.setViewportMode(ViewportMode.STRETCH_TO_FILL);
     else
       this.cam.setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
+  }
+
+  public boolean isMaximized() {
+    return ViewportMode.STRETCH_TO_FILL.equals(this.cam.getViewportMode());
   }
 
 
@@ -844,7 +861,7 @@ public class View {
     shoot();
   }
 
-  protected BoundingBox3d getSceneGraphBounds() {
+  public BoundingBox3d getSceneGraphBounds() {
     return getSceneGraphBounds(scene);
   }
 
@@ -1135,23 +1152,12 @@ public class View {
       float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
       CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
 
-    viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
+    updateCameraWithoutShooting(viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam,
+        factorViewPointDistance, center, scaling);
 
-    Coord3d cameraTarget = computeCameraTarget(center, scaling);
-    Coord3d cameraUp = computeCameraUp(viewpoint);
-    // Coord3d cameraUp = new Coord3d(0.0, 0.0, 1.0);
-    Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
 
-    // Force the up vector of the camera to grow along Y axis
-    if (is2D()) {
-      cameraUp = new Coord3d(0.0, 1.0, 0.0);
-    }
-
-    cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
 
     triggerCameraUpEvents(viewpoint);
-
-    computeCameraRenderingSphereRadius(cam, viewport, bounds);
 
     cam.setViewPort(viewport);
     cam.shoot(painter, cameraMode);
@@ -1173,11 +1179,17 @@ public class View {
     Coord3d cameraTarget = computeCameraTarget(center, scaling);
     Coord3d cameraUp = computeCameraUp(viewpoint);
     Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
+
+    // Force the up vector of the camera to grow along Y axis
+    if (is2D()) {
+      cameraUp = new Coord3d(0.0, 1.0, 0.0);
+    }
+
+
     cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
 
-    triggerCameraUpEvents(viewpoint);
 
-    computeCameraRenderingSphereRadius(cam, viewport, bounds);
+    computeCameraRenderingVolume(cam, viewport, bounds);
   }
 
 
@@ -1190,12 +1202,12 @@ public class View {
     return computeCameraTarget(center, scaling);
   }
 
-  protected Coord3d computeCameraEye(Coord3d target) {
-    return computeCameraEye(target, viewMode, viewpoint);
-  }
-
   protected Coord3d computeCameraTarget(Coord3d center, Coord3d scaling) {
     return center.mul(scaling);
+  }
+
+  protected Coord3d computeCameraEye(Coord3d target) {
+    return computeCameraEye(target, viewMode, viewpoint);
   }
 
   protected Coord3d computeCameraEye(Coord3d target, ViewPositionMode viewmode, Coord3d viewpoint) {
@@ -1260,7 +1272,15 @@ public class View {
     }
   }
 
-  public void computeCameraRenderingSphereRadius(Camera cam, ViewportConfiguration viewport,
+  /**
+   * Configure the camera so that it will capture a given volume in the scene.
+   * 
+   * Rendering in 3D requires capturing a sphere defined by the bounding box radius.
+   * 
+   * Rendering in 2D requires capturing a square defined by the bounding box with additional white
+   * space for labels and margins.
+   */
+  protected void computeCameraRenderingVolume(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
 
     if (spaceTransformer != null) {
@@ -1270,15 +1290,69 @@ public class View {
     // -----------------------
     // 2D case
     if (is2D()) {
-      computeCamera2D_RenderingSquare(cam, bounds);
+      computeCamera2D_RenderingSquare(cam, viewport, bounds);
     }
 
     // -----------------------
     // 3D case
     else {
-      computeCamera3D_RenderingSphere(cam, bounds);
+      computeCamera3D_RenderingSphere(cam, viewport, bounds);
     }
   }
+
+
+
+  /**
+   * Camera clipping planes configuration for a rendering sphere (3D)
+   * 
+   * Assume that axis labels are positioned accordingly
+   * ({@link AxisLabelProcessor#axisLabelPosition_3D()}
+   * 
+   * @param viewport TODO
+   */
+  protected void computeCamera3D_RenderingSphere(Camera cam, ViewportConfiguration viewport,
+      BoundingBox3d bounds) {
+    double radius = bounds.getRadius();
+
+    cam.setRenderingSphereRadius((float) radius * cameraRenderingSphereRadiusFactor);
+  }
+
+  /**
+   * Camera clipping planes configuration for a rendering plane (2D)
+   * 
+   * @see {@link View2DProcessing} and {@link View2DLayout}
+   */
+  protected void computeCamera2D_RenderingSquare(Camera cam, ViewportConfiguration viewport,
+      BoundingBox3d bounds) {
+
+    //bounds = getSceneGraphBounds();
+
+    view2DProcessing.apply(viewport, bounds);
+
+
+    // The rendering squared dimension will be applied at the current camera position
+    float xrange = bounds.getXRange().getRange();
+    float yrange = bounds.getYRange().getRange();
+
+    float xmin = -xrange / 2 - view2DProcessing.marginLeftModel;
+    float xmax = +xrange / 2 + view2DProcessing.marginRightModel;
+    float ymin = -yrange / 2 - view2DProcessing.marginBottomModel;
+    float ymax = +yrange / 2 + view2DProcessing.marginTopModel;
+
+    // configure camera rendering volume
+    BoundingBox2d sq = new BoundingBox2d(xmin, xmax, ymin, ymax);
+    cam.setRenderingSquare(sq);
+  }
+
+  /**
+   * @see {@link #getModelToScreenRatio(Area, Area, Area)}
+   */
+  /*
+   * public Coord2d getModelToScreenRatio(Area margin) { return
+   * getModelToScreenRatio(getSceneGraphBounds(), getCamera().getLastViewPort(), margin); }
+   */
+
+
 
   /**
    * Only used for top/2D views. Performs a rendering to get the whole bounds occupied by the Axis
@@ -1308,93 +1382,13 @@ public class View {
 
     // 2D case
     if (is2D()) {
-      computeCamera2D_RenderingSquare(cam, newBounds);
+      computeCamera2D_RenderingSquare(cam, viewport, newBounds);
     }
 
     // 3D case
     else {
-      computeCamera3D_RenderingSphere(cam, newBounds);
+      computeCamera3D_RenderingSphere(cam, viewport, newBounds);
     }
-  }
-
-  /**
-   * Camera clipping planes configuration for a rendering sphere (3D)
-   * 
-   * @param cam
-   * @param bounds
-   */
-  protected void computeCamera3D_RenderingSphere(Camera cam, BoundingBox3d bounds) {
-    double radius = bounds.getRadius();
-
-    cam.setRenderingSphereRadius((float) radius * cameraRenderingSphereRadiusFactor);
-  }
-
-  /**
-   * Camera clipping planes configuration for a rendering plane (2D)
-   *
-   * @param cam
-   * @param bounds
-   */
-  protected void computeCamera2D_RenderingSquare(Camera cam, BoundingBox3d bounds) {
-    float xdiam = bounds.getXRange().getRange();
-    float ydiam = bounds.getYRange().getRange();
-
-    // compute the world distance covered by a pixel
-    float modelToScreenRatioX = xdiam / getCanvas().getRendererWidth();
-    float modelToScreenRatioY = ydiam / getCanvas().getRendererHeight();
-
-    // consider everything adding a margin computed in pixel
-    float txtHorizontal = 0;
-    float txtVertical = 0;
-
-    if (view2DLayout.textAddMargin) {
-      txtHorizontal = axis.getLayout().getMaxYTickLabelWidth(getPainter());
-      txtVertical = axis.getLayout().getFont().getHeight();
-    }
-
-    float marginLeft =
-        view2DLayout.marginLeft + view2DLayout.yAxisTickLabelsDistance + txtHorizontal;
-    float marginRight = view2DLayout.marginRight;
-    float marginTop = view2DLayout.marginTop;
-    float marginBottom =
-        view2DLayout.marginBottom + view2DLayout.xAxisTickLabelsDistance + txtVertical;
-
-
-    // convert pixel margin to world coordinate to add compute the additional 3D space to grasp with
-    // the camera
-    float marginLeftModel = marginLeft * modelToScreenRatioX;
-    float marginRightModel = marginRight * modelToScreenRatioX;
-    float marginTopModel = marginTop * modelToScreenRatioY;
-    float marginBottomModel = marginBottom * modelToScreenRatioY;
-
-
-
-    BoundingBox2d renderingSquare = new BoundingBox2d(-xdiam / 2 - marginLeftModel,
-        xdiam / 2 + marginRightModel, -ydiam / 2 - marginBottomModel, ydiam / 2 + marginTopModel);
-
-    cam.setRenderingSquare(renderingSquare);
-  }
-
-  /**
-   * Compute the world distance covered by a pixel, w.r.t to current canvas size and scene bounding
-   * box
-   * 
-   * E.g. the occupation of three pixels in the model is getModelToScreenRatio().x * 3 along the X
-   * dimension (width) and getModelToScreenRatio().y * 3 along the Y dimension (height)
-   */
-  public Coord2d getModelToScreenRatio() {
-    return getModelToScreenRatio(getSceneGraphBounds());
-  }
-
-  public Coord2d getModelToScreenRatio(BoundingBox3d bounds) {
-    float xdiam = bounds.getXRange().getRange();
-    float ydiam = bounds.getYRange().getRange();
-
-    // compute the world distance covered by a pixel
-    float screenToModelRatioX = xdiam / getCanvas().getRendererWidth();
-    float screenToModelRatioY = ydiam / getCanvas().getRendererHeight();
-
-    return new Coord2d(screenToModelRatioX, screenToModelRatioY);
   }
 
 

@@ -9,7 +9,6 @@ import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
@@ -36,12 +35,7 @@ public class ITTest_Text extends ITTest{
   public void whenColorbar_IsModifiedByCustomFont() {
     System.out.println("ITTest : whenColorbar_IsModifiedByCustomFont");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenCustomFont(toolkit, resolution);
-      }
-    });
-
+    forEach((toolkit, resolution) -> whenCustomFont(toolkit, resolution));
   }
 
   public Chart whenCustomFont(WT wt, HiDPI hidpi) {
@@ -71,11 +65,7 @@ public class ITTest_Text extends ITTest{
   public void whenDrawableTextRenderer() {
     System.out.println("ITTest : whenDrawableTextRenderer");
 
-    forEach(new ITTestInstance(){
-      public void run(WT toolkit, HiDPI resolution) {
-        whenDrawableTextRenderer(toolkit, resolution);
-      }
-    });
+    forEach((toolkit, resolution) -> whenDrawableTextRenderer(toolkit, resolution));
   }
   
   public Chart whenDrawableTextRenderer(WT wt, HiDPI hidpi) {
@@ -86,7 +76,7 @@ public class ITTest_Text extends ITTest{
     Font font = new Font("Apple Chancery", 20);
     
     // Given : a custom axis box text setting
-    IAxisLayout layout = chart.getView().getAxis().getLayout();
+    AxisLayout layout = chart.getView().getAxis().getLayout();
     layout.setFont(font);
     layout.setXTickColor(Color.RED);
     layout.setYTickColor(Color.GREEN);

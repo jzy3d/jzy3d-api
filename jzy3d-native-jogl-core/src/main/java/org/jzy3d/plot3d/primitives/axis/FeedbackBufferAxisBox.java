@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL2;
 
@@ -24,7 +24,7 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
     super(bbox);
   }
 
-  public FeedbackBufferAxisBox(BoundingBox3d bbox, IAxisLayout layout) {
+  public FeedbackBufferAxisBox(BoundingBox3d bbox, AxisLayout layout) {
     super(bbox, layout);
   }
   
