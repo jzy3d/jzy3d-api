@@ -125,7 +125,7 @@ public class AxisTickProcessor {
    * Compute tick length, returned as a ratio of the scene bounds.
    */
   protected float getTickLength3D_OrComputeTickLength2D(IPainter painter, int dimension) {
-    View view = painter.getView();
+    View view = axis.getView();//painter.getView();
 
     // 3D case, tick length given as a ratio of scene bounds
     float tickLength = view.getAxis().getLayout().getTickLengthRatio(); 

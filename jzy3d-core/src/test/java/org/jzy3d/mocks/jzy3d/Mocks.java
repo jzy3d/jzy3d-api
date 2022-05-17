@@ -139,4 +139,10 @@ public class Mocks {
       }
     };
   }
+
+  public static View View2D() {
+    View view = mock(View.class);
+    when(view.is2D()).thenReturn(true);
+    return view;
+  }
 }
