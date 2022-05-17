@@ -261,9 +261,10 @@ This is a summary of existing baseline images for tests, which was generated on
 </table>
 
 # 2D Layout
-## 2D
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=0
+* AxisLabel=0
 * TextAddMargin=false
 <table markdown=1>
 <tr>
@@ -275,12 +276,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -292,9 +293,10 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=0
+* AxisLabel=0
 * TextAddMargin=true
 <table markdown=1>
 <tr>
@@ -306,12 +308,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -323,9 +325,10 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
-* TickLabel=10
+* TickLabel=0
+* AxisLabel=10
 * TextAddMargin=false
 <table markdown=1>
 <tr>
@@ -337,12 +340,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -354,40 +357,42 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=0
+* TickLabel=0
+* AxisLabel=10
+* TextAddMargin=true
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
 * BorderMargin=0
 * TickLabel=10
-* TextAddMargin=true
-<table markdown=1>
-<tr>
-<td>EmulGL_AWT HiDPI:ON</td>
-<td>EmulGL_AWT HiDPI:OFF</td>
-<td>Native_AWT HiDPI:ON</td>
-<td>Native_AWT HiDPI:OFF</td>
-<td>Native_Swing HiDPI:ON</td>
-<td>Native_Swing HiDPI:OFF</td>
-</tr>
-<tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_TextAddMargin=true.png"></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</table>
-
-## 2D
-* BorderMargin=20
-* TickLabel=0
+* AxisLabel=0
 * TextAddMargin=false
 <table markdown=1>
 <tr>
@@ -399,12 +404,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -416,9 +421,10 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D
-* BorderMargin=20
-* TickLabel=0
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=0
+* TickLabel=10
+* AxisLabel=0
 * TextAddMargin=true
 <table markdown=1>
 <tr>
@@ -430,12 +436,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -447,9 +453,10 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D
-* BorderMargin=20
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=0
 * TickLabel=10
+* AxisLabel=10
 * TextAddMargin=false
 <table markdown=1>
 <tr>
@@ -461,12 +468,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_TextAddMargin=false.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -478,9 +485,10 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-## 2D
-* BorderMargin=20
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=0
 * TickLabel=10
+* AxisLabel=10
 * TextAddMargin=true
 <table markdown=1>
 <tr>
@@ -492,12 +500,357 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_TextAddMargin=true.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=20
+* TickLabel=0
+* AxisLabel=0
+* TextAddMargin=false
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=false.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=20
+* TickLabel=0
+* AxisLabel=0
+* TextAddMargin=true
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=20
+* TickLabel=0
+* AxisLabel=10
+* TextAddMargin=false
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=false.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=20
+* TickLabel=0
+* AxisLabel=10
+* TextAddMargin=true
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=20
+* TickLabel=10
+* AxisLabel=0
+* TextAddMargin=false
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=false.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=20
+* TickLabel=10
+* AxisLabel=0
+* TextAddMargin=true
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=20
+* TickLabel=10
+* AxisLabel=10
+* TextAddMargin=false
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=false.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : when2DLayoutConfig_ThenApplyMargins
+* BorderMargin=20
+* TickLabel=10
+* AxisLabel=10
+* TextAddMargin=true
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : whenAxisRotated_ThenApplyMargins
+* yAxisOrientation=VERTICAL
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : whenAxisRotated_ThenApplyMargins
+* yAxisOrientation=HORIZONTAL
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+## 2D : whenAxisRotated_ThenApplyMargins
+* yAxisOrientation=PARALLEL
+* TO
+* AXIS
+<table markdown=1>
+<tr>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
+<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=PARALLEL_TO_AXIS.png"></td>
 </tr>
 <tr>
 <td></td>
