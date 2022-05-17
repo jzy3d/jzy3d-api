@@ -20,7 +20,7 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
  */
 public class OverlayLegendRenderer implements AWTRenderer2d {
   protected List<Legend> info;
-  protected LegendLayout layout = new LegendLayout();
+  protected LineLegendLayout layout = new LineLegendLayout();
 
   public OverlayLegendRenderer(List<Legend> info) {
     super();
@@ -130,11 +130,11 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
     this.info = info;
   }
 
-  public LegendLayout getLayout() {
+  public LineLegendLayout getLayout() {
     return layout;
   }
 
-  public void setLayout(LegendLayout layout) {
+  public void setLayout(LineLegendLayout layout) {
     this.layout = layout;
   }
 }

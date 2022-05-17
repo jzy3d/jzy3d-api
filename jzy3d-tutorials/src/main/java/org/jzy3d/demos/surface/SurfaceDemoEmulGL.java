@@ -44,12 +44,6 @@ public class SurfaceDemoEmulGL {
 
     chart.open();
     chart.addMouse();
-
-    try {
-      chart.screenshot(new File("target/" + SurfaceDemoEmulGL.class.getSimpleName() + ".png"));
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
 

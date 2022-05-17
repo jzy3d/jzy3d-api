@@ -672,6 +672,11 @@ public class View {
     return axis;
   }
 
+  public AxisLayout getAxisLayout() {
+    return axis.getLayout();
+  }
+
+  
   public boolean getSquared() {
     return this.squared;
   }
