@@ -156,7 +156,7 @@ public class View {
   private ISquarifier squarifier;
 
   protected IViewOverlay viewOverlay;
-  
+
   /**
    * Create a view attached to a Scene, with its own Camera and Axe. The initial view point is set
    * at {@link View.DEFAULT_VIEW}.
@@ -678,9 +678,10 @@ public class View {
 
   public void setSquared(boolean status) {
     this.squared = status;
-    
-    if(is2D() && status)
-      LOGGER.info("View.setSquared : Setting a 2D chart squared may break the tick and axis label layout! Keep it to false for 2D charts");
+
+    if (is2D() && status)
+      LOGGER.info(
+          "View.setSquared : Setting a 2D chart squared may break the tick and axis label layout! Keep it to false for 2D charts");
   }
 
   public boolean isAxisDisplayed() {
@@ -987,20 +988,23 @@ public class View {
 
   public void renderScene(ViewportConfiguration viewport) {
 
-    // synchronized(this) {
     if (first) {
       fireViewFirstRenderStarts();
       first = false;
     }
-    // }
 
     BoundingBox3d scaling = computeScaledViewBounds();
     updateCamera(viewport, scaling);
 
     painter.glShadeModel(quality.getColorModel());
 
-    renderAxeBox();
-    renderSceneGraph();
+    if (is3D()) {
+      renderAxeBox();
+      renderSceneGraph();
+    } else {
+      renderSceneGraph();
+      renderAxeBox();
+    }
     renderAnnotations(cam);
   }
 
@@ -1325,7 +1329,7 @@ public class View {
   protected void computeCamera2D_RenderingSquare(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
 
-    //bounds = getSceneGraphBounds();
+    // bounds = getSceneGraphBounds();
 
     view2DProcessing.apply(viewport, bounds);
 

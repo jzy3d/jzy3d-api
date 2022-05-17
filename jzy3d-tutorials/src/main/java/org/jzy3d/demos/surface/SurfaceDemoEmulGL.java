@@ -2,14 +2,12 @@ package org.jzy3d.demos.surface;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
@@ -45,7 +43,7 @@ public class SurfaceDemoEmulGL {
     skin.getCanvas().setProfileDisplayMethod(true);
 
     chart.open();
-    chart.addMouseCameraController();
+    chart.addMouse();
 
     try {
       chart.screenshot(new File("target/" + SurfaceDemoEmulGL.class.getSimpleName() + ".png"));
