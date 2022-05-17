@@ -155,7 +155,7 @@ public class View {
   private ISquarifier squarifier;
 
   protected IViewOverlay viewOverlay;
-
+  
   /**
    * Create a view attached to a Scene, with its own Camera and Axe. The initial view point is set
    * at {@link View.DEFAULT_VIEW}.
