@@ -5,7 +5,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
@@ -26,6 +29,7 @@ import org.jzy3d.maths.Scale;
 import org.jzy3d.maths.Statistics;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.Wireframeable;
@@ -79,6 +83,9 @@ public class Chart {
 
   protected Light lightOnCamera;
   protected Light[] lightPairOnCamera;
+  
+  protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
+
 
 
   public Chart(IChartFactory factory, Quality quality) {
@@ -595,7 +602,6 @@ public class Chart {
    */
   public Chart add(Drawable drawable, LODCandidates candidates) {
     add(drawable, true);
-    // getView().updateBounds();
 
     Wireframeable w = drawable.asWireframeable();
 
@@ -669,8 +675,48 @@ public class Chart {
   protected static MouseEvent mouseEvent(Component sourceCanvas, int x, int y) {
     return new MouseEvent(sourceCanvas, 0, 0, 0, x, y, 100, 100, 1, false, 0);
   }
+  
+
+  public void add(Serie2d serie) {
+    series.put(serie.getName(), serie);
+    
+    add(serie.getDrawable());
+  }
+
+  public void add(Collection<Serie2d> series) {
+    for (Serie2d serie : series) {
+      add(serie);
+    }
+  }
+
+  public void add(Map<String, Serie2d> series) {
+    this.series.putAll(series);
+  }
+  
+  public Serie2d getSerie(String name, Serie2d.Type type) {
+    Serie2d serie = null;
+    if (!series.keySet().contains(name)) {
+      serie = factory.newSerie(name, type);
+      add(serie);
+      series.put(name, serie);
+    } else {
+      serie = series.get(name);
+    }
+    return serie;
+  }
 
 
+  public Serie2d removeSerie(String name, Serie2d.Type type) {
+    Serie2d serie = getSerie(name, type);
+    if(serie!=null) {
+      remove(serie);
+    }
+    return serie;
+  }
+
+  public void remove(Serie2d serie) {
+    remove(serie.getDrawable());
+  }
 
   public void remove(Drawable drawable) {
     getScene().getGraph().remove(drawable);

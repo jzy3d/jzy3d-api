@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import org.jzy3d.chart.ChartView;
 import org.jzy3d.maths.Area;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -9,6 +10,8 @@ import org.jzy3d.plot3d.primitives.axis.AxisLabelProcessor;
 import org.jzy3d.plot3d.primitives.axis.AxisTickProcessor;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 /**
  * Process and store the layout of a 2D view having margins and axis labels defined by the
@@ -129,6 +132,18 @@ public class View2DProcessing {
 
     if (view2DLayout.isSymetricVerticalMargin()) {
       marginTopPx = marginBottomPx;
+    }
+    
+    //marginRightPx += 100; // colorbar
+    
+    // Hack to avoid covering colorbar with emulgl
+    if(!view.getCanvas().isNative()) {
+      if(view instanceof ChartView) {
+        IViewportLayout layout = ((ChartView)view).getLayout();
+        if(layout instanceof ViewAndColorbarsLayout) {
+          marginRightPx += ((ViewAndColorbarsLayout)layout).getLegendsWidth();
+        }
+      }
     }
 
 
