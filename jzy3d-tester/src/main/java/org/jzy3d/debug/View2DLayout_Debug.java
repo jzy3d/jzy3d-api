@@ -140,8 +140,8 @@ public class View2DLayout_Debug implements AWTRenderer2d{
     g2d.drawString("Chart border (" + x + ")", x, lineHeight*5);
 
 
-
-    x = (int)(width-layout.getMarginRight());
+    x = (int)(view.getCamera().getLastViewPort().getWidth()-layout.getMarginRight());
+    
     g2d.drawLine(x, 0, x, height);
     
     g2d.drawString("Margin (" + x + ")", x, lineHeight*6);

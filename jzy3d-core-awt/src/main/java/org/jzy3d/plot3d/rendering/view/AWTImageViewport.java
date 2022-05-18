@@ -137,4 +137,11 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     return new Dimension(1, 1);
   }
 
+  public Dimension getMargin() {
+    return margin;
+  }
+
+  public void setMargin(Dimension margin) {
+    this.margin = margin;
+  }
 }
