@@ -82,7 +82,7 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
 
     if (imageWidth != imgWidth || imageHeight != height) {
             
-      System.out.println("AWTLegend width:" + imgWidth + " height:" + height + " mode:" + getViewportMode());
+      //System.out.println("AWTLegend width:" + imgWidth + " height:" + height + " mode:" + getViewportMode());
       setImage(toImage(imgWidth, height));
     }
   }

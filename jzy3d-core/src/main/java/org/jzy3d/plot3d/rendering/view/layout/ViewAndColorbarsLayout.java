@@ -82,8 +82,8 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   public void render(IPainter painter, Chart chart) {
     View view = chart.getView();
 
-    System.out.println("ViewAndColorbarLayout w:" + chart.getCanvas().getRendererWidth() + " h:"
-        + chart.getCanvas().getRendererHeight());
+    //System.out.println("ViewAndColorbarLayout w:" + chart.getCanvas().getRendererWidth() + " h:"
+    //    + chart.getCanvas().getRendererHeight());
 
     // Background
     view.renderBackground(backgroundViewport);
