@@ -41,12 +41,17 @@ public class Mocks {
   public static View View() {
     return Mockito.mock(View.class);
   }
-
+  
   public static View View(AxisBox axis, IPainter painter) {
+    return View(axis, painter, null);
+  }
+
+
+  public static View View(AxisBox axis, IPainter painter, ICanvas canvas) {
     View view = View();
     when(view.getAxis()).thenReturn(axis);
     when(view.getPainter()).thenReturn(painter);
-
+    when(view.getCanvas()).thenReturn(canvas);
     return view;
   }
 
@@ -91,6 +96,12 @@ public class Mocks {
     return painter;
   }
 
+  public static ICanvas Canvas(boolean isNative) {
+    ICanvas canvas = mock(ICanvas.class);
+    when(canvas.isNative()).thenReturn(isNative);
+    return canvas;
+  }
+  
   public static ICanvas Canvas(Coord2d scaleHard, Coord2d scaleVM) {
     return new ICanvas() {
       @Override

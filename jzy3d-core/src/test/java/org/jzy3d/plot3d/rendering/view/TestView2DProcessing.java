@@ -10,6 +10,7 @@ import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 public class TestView2DProcessing {
 
@@ -47,8 +48,10 @@ public class TestView2DProcessing {
       when(axisLayout.getYAxisLabel()).thenReturn(yAxisLabel);
       when(axisLayout.getMaxYTickLabelWidth(painter)).thenReturn(Y_TICK_MAX_WIDTH);
       
-      // Given a view with settings
-      View view = Mocks.View(Mocks.Axis(axisLayout), painter);
+      // Given a view with axis, painter and native canvas
+      View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
+      
+      
       
       View2DLayout layout = new View2DLayout(view);
       layout.setMargin(MARGIN);
@@ -145,7 +148,7 @@ public class TestView2DProcessing {
       when(axisLayout.getMaxYTickLabelWidth(painter)).thenReturn(Y_TICK_MAX_WIDTH);
       
       // Given a view with settings
-      View view = Mocks.View(Mocks.Axis(axisLayout), painter);
+      View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
       
       View2DLayout layout = new View2DLayout(view);
       layout.setMargin(MARGIN);
@@ -214,7 +217,7 @@ public class TestView2DProcessing {
       when(axisLayout.getMaxYTickLabelWidth(painter)).thenReturn(Y_TICK_MAX_WIDTH);
       
       // Given a view with settings
-      View view = Mocks.View(Mocks.Axis(axisLayout), painter);
+      View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
       
       View2DLayout layout = new View2DLayout(view);
       layout.setMargin(MARGIN);

@@ -74,7 +74,7 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
 
         drawBackground(width, LEGEND_BORDER_HEIGHT, graphic);
         drawSerieLineAndNameAtY(color, text, graphic, y);
-        drawLegendBorder(graphic, width, LEGEND_BORDER_HEIGHT);
+        drawBorder(graphic, width, LEGEND_BORDER_HEIGHT);
         return image;
       }
 

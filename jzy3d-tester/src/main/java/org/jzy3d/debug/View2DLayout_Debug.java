@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
+import org.jzy3d.painters.AWTFont;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
@@ -30,6 +31,11 @@ public class View2DLayout_Debug implements AWTRenderer2d{
     Graphics2D g2d = (Graphics2D) g;
     
     g2d.setColor(AWTColor.toAWT(Color.BLUE));
+    g2d.setFont(AWTFont.toAWT(axisLayout.getFont()));
+    
+    // Cancel the HiDPI scaling consideration to draw debug stuff properly
+    if(view.getCanvas().isNative())
+      g2d.scale(1/view.getPixelScale().x, 1/view.getPixelScale().y);
 
     AWTGraphicsUtils.configureRenderingHints(g2d);
 

@@ -87,7 +87,7 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport {
 
 
         // draw legend border
-        drawLegendBorder(graphic, width, legendBorderHeight);
+        drawBorder(graphic, width, legendBorderHeight);
         return image;
       }
 
