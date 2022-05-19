@@ -9,7 +9,7 @@ public interface IColorbarLegend {
 
   public void drawableChanged(DrawableChangedEvent e);
 
-  public Dimension getMinimumSize();
+  public Dimension getMinimumDimension();
 
-  public void setMinimumSize(Dimension dimension);
+  public void setMinimumDimension(Dimension dimension);
 }

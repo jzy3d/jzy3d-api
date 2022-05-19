@@ -43,7 +43,7 @@ public class AWTChart extends Chart {
 
   public AWTColorbarLegend colorbar(Drawable drawable, Dimension d, AxisLayout layout) {
     AWTColorbarLegend cbar = new AWTColorbarLegend(drawable, layout);
-    cbar.setMinimumSize(d);
+    cbar.setMinimumDimension(d);
     drawable.setLegend(cbar);
     return cbar;
   }

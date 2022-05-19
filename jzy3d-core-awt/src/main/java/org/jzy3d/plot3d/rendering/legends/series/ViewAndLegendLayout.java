@@ -37,8 +37,7 @@ public class ViewAndLegendLayout implements IViewportLayout {
     if (hasMeta) {
       int minwidth = 0;
       for (ILegend data : list) {
-        minwidth += data.getMinimumSize().width;
-        break;
+        minwidth += data.getMinimumDimension().width;
       }
       screenSeparator =
           ((float) (canvas.getRendererWidth() - minwidth)) / ((float) canvas.getRendererWidth());

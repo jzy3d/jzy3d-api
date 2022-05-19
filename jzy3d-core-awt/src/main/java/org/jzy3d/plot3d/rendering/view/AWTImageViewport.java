@@ -33,7 +33,6 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
   @Override
   public void render(IPainter painter) {
     updatePixelScale(painter.getView().getPixelScale());
-    // gl.glDisable(GL2.GL_LIGHTING);
 
     // Set viewport and projection
     painter.glMatrixMode_Projection();
@@ -62,27 +61,31 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     if (imageBuffer == null)
       return;
 
-    float xratio = 1;
-    float yratio = 1;
-    int xpict = 0;
-    int ypict = 0;
+    float xZoom = 1;
+    float yZoom = 1;
+    int xPosition = 0;
+    int yPosition = 0;
 
     if (imageWidth < screenWidth)
-      xpict = (int) ((float) screenWidth / 2 - (float) imageWidth / 2);
+      xPosition = (int) ((float) screenWidth / 2 - (float) imageWidth / 2);
     else
-      xratio = ((float) screenWidth) / ((float) imageWidth);
+      xZoom = ((float) screenWidth) / ((float) imageWidth);
 
     if (imageHeight < screenHeight)
-      ypict = (int) ((float) screenHeight / 2 - (float) imageHeight / 2);
+      yPosition = (int) ((float) screenHeight / 2 - (float) imageHeight / 2);
     else
-      yratio = ((float) screenHeight) / ((float) imageHeight);
+      yZoom = ((float) screenHeight) / ((float) imageHeight);
 
+    System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
+    System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
+    System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
+    
     // Draw
     
-    Coord2d pixelZoom = new Coord2d(xratio, yratio);
-    Coord3d imagePosition = new Coord3d(xpict, ypict, z);
+    Coord2d zoom = new Coord2d(xZoom, yZoom);
+    Coord3d position = new Coord3d(xPosition, yPosition, z);
     
-    painter.drawImage(imageBuffer, imageWidth, imageHeight, pixelZoom, imagePosition);
+    painter.drawImage(imageBuffer, imageWidth, imageHeight, zoom, position);
   }
 
   
@@ -127,14 +130,8 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
 
   /** Return the minimum size for this graphic. */
   @Override
-  public Dimension getMinimumSize() {
+  public Dimension getMinimumDimension() {
     return new Dimension(0, 0);
-  }
-
-  /** Return the prefered size for this graphic. */
-  @Override
-  public Dimension getPreferedSize() {
-    return new Dimension(1, 1);
   }
 
   public Dimension getMargin() {

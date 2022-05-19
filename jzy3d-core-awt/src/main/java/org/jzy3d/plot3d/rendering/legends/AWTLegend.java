@@ -12,6 +12,7 @@ import org.jzy3d.plot2d.primitive.AWTImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
 /**
  * A {@link AWTLegend} represent information concerning a {@link Drawable} that may be displayed as
@@ -48,6 +49,8 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
   protected AWTImageGenerator imageGenerator;
 
   public AWTLegend(Drawable drawable) {
+    super();
+    
     this.drawable = drawable;
     if (drawable != null) {
       drawable.addDrawableListener(this);
@@ -78,9 +81,8 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     int imgWidth = getSliceWidth(width, left, right);
 
     if (imageWidth != imgWidth || imageHeight != height) {
-      // imageWidth = imgWidth;
-      // imageHeight = height;
-      // updateImage();
+            
+      System.out.println("AWTLegend width:" + imgWidth + " height:" + height + " mode:" + getViewportMode());
       setImage(toImage(imgWidth, height));
     }
   }
@@ -103,13 +105,18 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
 
 
   @Override
-  public Dimension getMinimumSize() {
+  public Dimension getMinimumDimension() {
     return minimumDimension;
   }
 
-  public void setMinimumSize(Dimension dimension) {
+  public void setMinimumDimension(Dimension dimension) {
     minimumDimension = dimension;
   }
+  
+  public void setMinimumWidth(int minimumWidth) {
+    this.minimumDimension.width = minimumWidth;
+  }
+
 
   public void setGeneratorColors() {
     if (foreground != null)
@@ -139,15 +146,4 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     this.background = background;
   }
 
-  public Dimension getMinimumDimension() {
-    return minimumDimension;
-  }
-
-  public void setMinimumDimension(Dimension minimumDimension) {
-    this.minimumDimension = minimumDimension;
-  }
-
-  public void setMinimumWidth(int minimumWidth) {
-    this.minimumDimension.width = minimumWidth;
-  }
 }
