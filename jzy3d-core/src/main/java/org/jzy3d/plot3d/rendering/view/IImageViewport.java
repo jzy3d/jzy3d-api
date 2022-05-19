@@ -14,10 +14,8 @@ public interface IImageViewport {
   public abstract void render(IPainter painter);
 
   /** Return the minimum size for this graphic. */
-  public abstract Dimension getMinimumSize();
+  public abstract Dimension getMinimumDimension();
 
-  /** Return the prefered size for this graphic. */
-  public abstract Dimension getPreferedSize();
 
 
   public void setViewPort(int width, int height);

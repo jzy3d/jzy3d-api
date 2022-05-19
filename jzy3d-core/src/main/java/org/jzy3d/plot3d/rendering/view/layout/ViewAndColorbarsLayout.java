@@ -8,17 +8,23 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
+import org.jzy3d.plot3d.rendering.view.AbstractViewportManager;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportBuilder;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
 /**
- * This class handles the layout of multiple OpenGL viewports
+ * This class handles the layout of a main 3D plot on the left with additional legends (colorbars) on the right
+ * side.
+ * 
+ * The canvas is composed of two {@link AbstractViewportManager}
  * <ul>
  * <li>The {@link View} which handles its viewport with the {@link Camera}. If the view is and
- * {@link AWTView} or children, it has its own overlay
+ * {@link AWTView} or children, it also allows defining 2D {@link IViewOverlay} that can span on the
+ * left 3D side only or on the full canvas (hence also covering the 2D right side).
  * <li>The {@link ILegend} objects which handle their viewport on their own. They are added to the
  * right of the chart according to the number of {@link Drawable} having a {@link ILegend} set such
  * as {@link AWTColorbarLegend}
@@ -63,7 +69,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     if (hasMeta) {
       int minwidth = 0;
       for (ILegend data : list) {
-        minwidth += data.getMinimumSize().width;
+        minwidth += data.getMinimumDimension().width;
       }
       screenSeparator =
           ((float) (canvas.getRendererWidth() - minwidth)) / ((float) canvas.getRendererWidth());/// 0.7f;
@@ -75,13 +81,16 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   @Override
   public void render(IPainter painter, Chart chart) {
     View view = chart.getView();
-    
+
+    System.out.println("ViewAndColorbarLayout w:" + chart.getCanvas().getRendererWidth() + " h:"
+        + chart.getCanvas().getRendererHeight());
+
     // Background
     view.renderBackground(backgroundViewport);
 
     // Underlay
-    //if(view.getCamera().getLastViewPort()!=null)
-    //  view.renderOverlay(view.getCamera().getLastViewPort());
+    // if(view.getCamera().getLastViewPort()!=null)
+    // view.renderOverlay(view.getCamera().getLastViewPort());
 
     // Scene
     view.renderScene(sceneViewport);
@@ -90,11 +99,10 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     renderLegends(painter, chart);
 
     // Overlay
-    if(view.getCamera().getLastViewPort()!=null) {
+    if (view.getCamera().getLastViewPort() != null) {
       view.renderOverlay(view.getCamera().getLastViewPort());
-    }
-    else {
-      view.renderOverlay(); // ignore colorbar      
+    } else {
+      view.renderOverlay(); // ignore colorbar
     }
   }
 
@@ -102,8 +110,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     if (hasMeta) {
       legendsWidth = screenSeparator * chart.getCanvas().getRendererWidth();
       renderLegends(painter, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
-    }
-    else {
+    } else {
       legendsWidth = 0;
     }
   }
@@ -161,7 +168,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
 
     this.shrinkColorbar = shrinkColorbar;
 
-    if (updateDisplay && chart!=null) {
+    if (updateDisplay && chart != null) {
       chart.render();
     }
   }
@@ -180,7 +187,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     boolean updateDisplay = (colorbarRightMargin != this.colorbarRightMargin);
 
     this.colorbarRightMargin = colorbarRightMargin;
-    
+
     if (updateDisplay) {
       chart.render();
     }
@@ -189,6 +196,6 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   public float getLegendsWidth() {
     return legendsWidth;
   }
-  
-  
+
+
 }

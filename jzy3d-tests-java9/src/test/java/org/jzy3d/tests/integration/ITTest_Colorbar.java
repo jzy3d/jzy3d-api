@@ -16,15 +16,11 @@ import org.jzy3d.plot3d.rendering.view.layout.NativeViewAndColorbarsLayout;
 
 
 /**
- * Test non reg of colorbar and text layout with HiDPI EmulGL charts.
+ * Test non reg of colorbar and text layout.
  */
 public class ITTest_Colorbar extends ITTest{
   /** This main method is here to test manually a chart and keep it open until one close it explicitely. */
   public static void main(String[] args) {
-    //Chart c = new ITTest_Colorbar().whenColorbar_ShrinkBigFont(WT.EmulGL_AWT, HiDPI.ON);
-    //Chart c = new ITTest_Colorbar().whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.ON);
-    //Chart c = new ITTest_Colorbar().whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.OFF);
-    open(new ITTest_Colorbar().whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON));
     open(new ITTest_Colorbar().whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON));
   }
   
