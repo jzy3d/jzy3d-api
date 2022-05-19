@@ -143,7 +143,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     if (provider != null) {
       double[] ticks = provider.generateTicks(min, max);
       
-      System.out.println("AWTColorbarImageGen : min=" + min + " max=" + max);
+      //System.out.println("AWTColorbarImageGen : min=" + min + " max=" + max);
 
       int xpos = barWidth + textToBarHorizontalMargin;
       

@@ -21,9 +21,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
   protected int imageHeight;
   protected int imageWidth;
   
-  // margin only used, and is poorly handled by colorbar (https://github.com/jzy3d/jzy3d-api/issues/249)
-  // disabling it is the easiest fix
-  protected Dimension margin = new Dimension(0,0);//MARGIN_WIDTH, MARGIN_HEIGHT);
+  protected Dimension margin = new Dimension(0,0); // no margin by default
   protected Coord2d pixelScale = new Coord2d(1,1); // assume default pixel scale
 
   public AWTImageViewport() {
@@ -76,9 +74,9 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     else
       yZoom = ((float) screenHeight) / ((float) imageHeight);
 
-    System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
-    System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
-    System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
+    //System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
+    //System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
+    //System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
     
     // Draw
     

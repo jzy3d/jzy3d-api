@@ -34,6 +34,7 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -133,33 +134,68 @@ public class Chart {
    * tick and axis labels.
    */
   public Chart view2d() {
-    AxisLayout axe = getAxisLayout();
-    axe.setZAxeLabelDisplayed(false);
-    axe.setTickLineDisplayed(false);
-
+    AxisLayout axisLayout = getAxisLayout();
     View view = getView();
+
+    // Remember 3D layout
+    axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
+    axisYLabelOrientation = axisLayout.getYAxisLabelOrientation();
+    axisZLabelDisplayed = axisLayout.isZAxeLabelDisplayed();
+    isTickLineDisplayed = axisLayout.isTickLineDisplayed();
+    
+    isSquaredViewActive = view.getSquared();
+    viewPositionMode = view.getViewMode();
+    viewportMode = view.getCamera().getViewportMode();
+    viewpoint = view.getViewPoint();
+    
+    // Apply 2D layout to axis
+    axisLayout.setTickLineDisplayed(false);
+    axisLayout.setZAxeLabelDisplayed(false);
+    axisLayout.setZTickLabelDisplayed(false);
+    axisLayout.setYAxisLabelOrientation(LabelOrientation.VERTICAL);
+
+    // Apply 2D layout to view
     view.setViewPositionMode(ViewPositionMode.TOP);
     view.setSquared(false);
     view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
 
+    // Update if needed
     if (!getQuality().isAnimated()) {
       render();
     }
     return this;
   }
-
+  
+  // memory of 3D settings before switching to 2D
+  protected LabelOrientation axisYLabelOrientation = null;
+  protected boolean axisZLabelDisplayed = true;
+  protected boolean axisZTickLabelDisplayed = true;
+  protected boolean isTickLineDisplayed = true;
+  protected boolean isSquaredViewActive = true;
+  protected ViewPositionMode viewPositionMode = ViewPositionMode.FREE;
+  protected ViewportMode viewportMode = ViewportMode.RECTANGLE_NO_STRETCH;
+  protected Coord3d viewpoint = View.VIEWPOINT_DEFAULT;
+  
   public Chart view3d() {
-    AxisLayout axe = getAxisLayout();
-    axe.setZAxeLabelDisplayed(true);
-    axe.setTickLineDisplayed(true);
-
+    AxisLayout axisLayout = getAxisLayout();
+    
+    // Restore 3D layout to axis
+    if(axisYLabelOrientation!=null){
+      axisLayout.setYAxisLabelOrientation(axisYLabelOrientation);
+    }
+    
+    axisLayout.setZAxeLabelDisplayed(axisZLabelDisplayed);
+    axisLayout.setZTickLabelDisplayed(axisZTickLabelDisplayed);
+    axisLayout.setTickLineDisplayed(isTickLineDisplayed);
+    
+    // Restore 3D layout to view
     View view = getView();
-    view.setViewPositionMode(ViewPositionMode.FREE);
-    // view.setSquared(true);
-    view.getCamera().setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
+    view.setViewPoint(viewpoint, false);
+    view.setViewPositionMode(viewPositionMode);
+    view.setSquared(isSquaredViewActive);
+    view.getCamera().setViewportMode(viewportMode);
 
-    view.setViewPoint(View.VIEWPOINT_DEFAULT, false);
-
+    // Update if needed
     if (!getQuality().isAnimated()) {
       render();
     }
