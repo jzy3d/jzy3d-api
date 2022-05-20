@@ -14,7 +14,7 @@ import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
  * @author Martin Pernollet
  */
 public class AWTImageViewport extends AbstractViewportManager implements IImageViewport {
-  protected static final float IMAGE_Z = 0;// -0.75f;
+  protected static final float IMAGE_Z = 0;
 
   protected ByteBuffer imageData = null;
   protected Image image;

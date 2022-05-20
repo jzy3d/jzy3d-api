@@ -182,20 +182,19 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
 
   @Override
   public void updateImage() {
-    setImage(toImage(askedWidth, askedHeight));
+    setImage(toImage(askedWidth, askedHeight, margin, pixelScale));
   }
 
-  public Dimension getMargin() {
-    return margin;
-  }
-
+  /**
+   * Update image according to new margin.
+   */
+  @Override
   public void setMargin(Dimension margin) {
-    if (image != null) {
-      // updateImage();
-      setImage(toImage(askedWidth, askedHeight, margin, pixelScale));
-
+    super.setMargin(margin);
+    
+    if(getImageGenerator()!=null) {
+      updateImage();
     }
-    this.margin = margin;
   }
 
   /** Update the image with pixel scale if scale changed */
@@ -203,21 +202,34 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   protected void updatePixelScale(Coord2d pixelScale) {
     if (!this.pixelScale.equals(pixelScale)) {
       this.pixelScale = pixelScale;
-      getImageGenerator().setPixelScale(pixelScale);
-      setImage(toImage(askedWidth, askedHeight, margin, pixelScale));
+      
+      if(getImageGenerator()!=null) {
+        getImageGenerator().setPixelScale(pixelScale);
+        updateImage();
+      }
     }
   }
   
   /** Update image generator font */
   public void setFont(Font font) {
-    this.font = font;
-    
-    if(getImageGenerator()!=null)
-      getImageGenerator().setFont(font);
+    if(!font.equals(this.getFont())) {
+      this.font = font;
+      
+      if(getImageGenerator()!=null) {
+        getImageGenerator().setFont(font);
+        updateImage();
+      }
+
+    }
   }
 
   public Font getFont() {
-    return getImageGenerator().getFont();
+    if(getImageGenerator()!=null) {
+      return getImageGenerator().getFont();
+    }
+    else {
+      return null;
+    }
   }
 
 
