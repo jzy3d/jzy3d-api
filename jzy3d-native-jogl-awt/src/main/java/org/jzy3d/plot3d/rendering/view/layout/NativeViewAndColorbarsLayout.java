@@ -42,18 +42,7 @@ public class NativeViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
         // optimize to shrink colorbar to required width
         if (shrinkColorbar) {
-          /*int optimalColorbarWidth = awtLegend.getImageGenerator().getPreferedWidth(painter)
-              + 1000;
-          
-          from = 1 - ((1f * optimalColorbarWidth) / (1f * width));*/
-          
-          AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
-          int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
-          //optimalColorbarWidth*= painter.getView().getPixelScale().x;
-          
-          // Random fix to avoid cutting text
-          int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT+(int)painter.getView().getPixelScale().x;
-          from = 1-((1f*optimalColorbarWidth+pixelShiftFix)/(1f*width));
+          from = updateFromValueToShrinkColorbar(painter, width, awtLegend);
 
         }
 
@@ -67,6 +56,24 @@ public class NativeViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     }
   }
 
+
+  protected float updateFromValueToShrinkColorbar(IPainter painter, int width,
+      AWTColorbarLegend awtLegend) {
+    float from;
+    /*int optimalColorbarWidth = awtLegend.getImageGenerator().getPreferedWidth(painter)
+        + 1000;
+    
+    from = 1 - ((1f * optimalColorbarWidth) / (1f * width));*/
+    
+    AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
+    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
+    //optimalColorbarWidth*= painter.getView().getPixelScale().x;
+    
+    // Random fix to avoid cutting text
+    int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT+(int)painter.getView().getPixelScale().x;
+    from = 1-((1f*optimalColorbarWidth+pixelShiftFix)/(1f*width));
+    return from;
+  }
 
 
 }

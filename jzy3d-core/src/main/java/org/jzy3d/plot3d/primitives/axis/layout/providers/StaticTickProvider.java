@@ -19,7 +19,7 @@ public class StaticTickProvider extends AbstractTickProvider implements ITickPro
 
   @Override
   public int getSteps() {
-    return 0;
+    return values.length;
   }
 
   protected double[] values;

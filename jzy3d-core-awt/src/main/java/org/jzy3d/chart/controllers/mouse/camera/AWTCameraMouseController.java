@@ -21,7 +21,7 @@ public class AWTCameraMouseController extends AbstractCameraController
 
   public AWTCameraMouseController(Chart chart) {
     register(chart);
-    addSlaveThreadController(chart.getFactory().newCameraThreadController(chart));
+    addThread(chart.getFactory().newCameraThreadController(chart));
   }
   
   public AWTCameraMouseController(Chart chart, RateLimiter limiter) {
@@ -57,7 +57,10 @@ public class AWTCameraMouseController extends AbstractCameraController
    */
   @Override
   public void mousePressed(MouseEvent e) {
-    //
+    if(getChart().getView().is2D()) {
+      return;
+    }
+    
     if (handleSlaveThread(e))
       return;
 
@@ -70,6 +73,10 @@ public class AWTCameraMouseController extends AbstractCameraController
   /** Compute shift or rotate */
   @Override
   public void mouseDragged(MouseEvent e) {
+    if(getChart().getView().is2D()) {
+      return;
+    }
+      
     // Check if mouse rate limiter wish to forbid this mouse drag instruction
     if(rateLimiter!=null && !rateLimiter.rateLimitCheck()) {
       return;
@@ -96,6 +103,10 @@ public class AWTCameraMouseController extends AbstractCameraController
   /** Compute zoom */
   @Override
   public void mouseWheelMoved(MouseWheelEvent e) {
+    if(getChart().getView().is2D()) {
+      return;
+    }
+    
     // Check if mouse rate limiter wish to forbid this mouse drag instruction
     if(rateLimiter!=null && !rateLimiter.rateLimitCheck()) {
       return;
