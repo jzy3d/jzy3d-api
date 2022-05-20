@@ -12,7 +12,6 @@ import org.jzy3d.plot2d.primitive.AWTImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
-import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
 /**
  * A {@link AWTLegend} represent information concerning a {@link Drawable} that may be displayed as
@@ -103,7 +102,6 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     AWTImageFile.savePNG(image, filename);
   }
 
-
   @Override
   public Dimension getMinimumDimension() {
     return minimumDimension;
@@ -116,7 +114,6 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
   public void setMinimumWidth(int minimumWidth) {
     this.minimumDimension.width = minimumWidth;
   }
-
 
   public void setGeneratorColors() {
     if (foreground != null)
@@ -145,5 +142,4 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
   public void setBackground(Color background) {
     this.background = background;
   }
-
 }

@@ -83,12 +83,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         
         // optimize to shrink colorbar to required width
         if(shrinkColorbar) {
-          AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
-          int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
-          
-          // Random fix to avoid cutting text
-          int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT;
-          from = 1-((1f*optimalColorbarWidth+pixelShiftFix)/(1f*width));
+          from = updateFromValueToShrinkColorbar(painter, width, awtLegend);
         }
         
         legend.setViewPort(width, height, from, to);
@@ -126,6 +121,18 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
       }
     }
+  }
+
+  protected float updateFromValueToShrinkColorbar(IPainter painter, int width,
+      AWTColorbarLegend awtLegend) {
+    float from;
+    AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
+    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
+    
+    // Random fix to avoid cutting text
+    int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT;
+    from = 1-((1f*optimalColorbarWidth+pixelShiftFix)/(1f*width));
+    return from;
   }
   
   public boolean isFixHiDPI() {

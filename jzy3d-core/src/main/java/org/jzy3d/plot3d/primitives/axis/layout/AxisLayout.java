@@ -33,9 +33,9 @@ public class AxisLayout {
 
   // protected Font hiDPIMajourFont
 
-  protected LabelOrientation xAxisLabelOrientation;
-  protected LabelOrientation yAxisLabelOrientation;
-  protected LabelOrientation zAxisLabelOrientation;
+  protected LabelOrientation xAxisLabelOrientation = LabelOrientation.HORIZONTAL;
+  protected LabelOrientation yAxisLabelOrientation = LabelOrientation.HORIZONTAL;
+  protected LabelOrientation zAxisLabelOrientation = LabelOrientation.HORIZONTAL;
   protected String xAxeLabel;
   protected String yAxeLabel;
   protected String zAxeLabel;

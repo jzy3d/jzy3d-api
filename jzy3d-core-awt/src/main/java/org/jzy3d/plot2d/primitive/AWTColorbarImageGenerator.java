@@ -173,6 +173,15 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   }
 
   /* */
+  
+  protected int getScaledBarWidth() {
+    if(pixelScale!=null) {
+      return (int)(barWidth * pixelScale.x);
+    }
+    else {
+      return barWidth;
+    }
+  }
 
   /**
    * Compute the optimal image width to contain the text as defined by the tick provided and
@@ -183,7 +192,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     return getPreferedWidth(maxWidth);
   }
 
-  public int getPreferedWidth(int maxTextWidth) {
+  protected int getPreferedWidth(int maxTextWidth) {
     return maxTextWidth + textToBarHorizontalMargin + BAR_WIDTH_DEFAULT;
   }
 

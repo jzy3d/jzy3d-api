@@ -86,8 +86,6 @@ public class TestAWTColorbarLegend {
     // Then image size is doubled
     Assert.assertEquals(expectWidth * 2, legend.getImage().getWidth(null), DELTA);
 
-
-    // But the [EmulGL]+ViewAndColorbarLayout will fix the layout due to pixel scale
   }
 
   public void whenViewportSmallerThanMinWidth_ThenImageIsSizedAtMinWidth() {
@@ -108,12 +106,8 @@ public class TestAWTColorbarLegend {
     // Then generated image has predefined min width
     Assert.assertEquals(MIN_WIDTH, legend.getMinimumDimension().width);
     
-    
     int actualWidth = legend.getImage().getWidth(null);
     Assert.assertEquals(MIN_WIDTH, actualWidth);
-    
-    
-    //legend.setM
     
   }
 
