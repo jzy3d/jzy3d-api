@@ -18,10 +18,11 @@ import org.jzy3d.plot3d.rendering.view.IImageViewport;
 public class AWTSerieLegend extends AWTLegend implements IImageViewport {
   private static final int LINE_HEIGHT = 15;
   private static final int INTERLINE_HEIGHT = 5;
-  private static final int FONT_HEIGHT = 12;
 
   private static final int LEGEND_BORDER_HEIGHT = 30;
 
+  private static final int DEFAULT_MIN_DIM = 40;
+  
   protected int margin = 25;
 
   protected Serie2d serie;
@@ -45,8 +46,7 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
 
   public AWTSerieLegend(Drawable drawable, Color foreground, Color background) {
     super(drawable, foreground, background);
-    this.minimumDimension = new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
-        AWTColorbarImageGenerator.MIN_BAR_HEIGHT);
+    this.minimumDimension = new Dimension(DEFAULT_MIN_DIM,DEFAULT_MIN_DIM);
 
     drawable.setLegend(this);
     initImageGenerator();

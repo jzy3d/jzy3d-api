@@ -9,6 +9,7 @@ import org.jzy3d.colors.AWTColor;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 
 /**
  * 
@@ -18,7 +19,7 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
  * @author Martin Pernollet
  *
  */
-public class OverlayLegendRenderer implements AWTRenderer2d {
+public class OverlayLegendRenderer extends AbstractAWTRenderer2d implements AWTRenderer2d {
   protected List<Legend> info;
   protected LineLegendLayout layout = new LineLegendLayout();
 

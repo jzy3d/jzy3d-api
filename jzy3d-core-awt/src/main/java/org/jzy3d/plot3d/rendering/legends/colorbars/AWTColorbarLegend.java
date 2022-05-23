@@ -75,6 +75,8 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   
   protected boolean usePixelScale = false;
   
+  protected static final int DEFAULT_MARGIN_HEIGHT = 20;
+  
 
   public AWTColorbarLegend(Drawable parent, Chart chart) {
     this(parent, chart.getView().getAxis().getLayout());
@@ -107,7 +109,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     this.minimumDimension = new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
         AWTColorbarImageGenerator.MIN_BAR_HEIGHT);
     
-    this.margin.height = 20;
+    this.margin.height = DEFAULT_MARGIN_HEIGHT;
 
     initImageGenerator(parent, provider, renderer);
   }
