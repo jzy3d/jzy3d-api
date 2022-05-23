@@ -31,6 +31,14 @@ public class OverlayLegendRenderer extends AbstractAWTRenderer2d implements AWTR
   @Override
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {
     Graphics2D g2d = (Graphics2D) g;
+    
+    // Ensure native overlay will place image at the appropriate location
+    // Since native and emulgl deal differently with overlay when hiDPI
+    if(view!=null && view.getCanvas().isNative()) {
+      canvasHeight /= view.getPixelScale().y;
+      canvasWidth /= view.getPixelScale().x;
+    }
+
 
     AWTGraphicsUtils.configureRenderingHints(g2d);
 

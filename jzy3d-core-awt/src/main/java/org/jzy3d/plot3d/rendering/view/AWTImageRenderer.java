@@ -47,8 +47,6 @@ public class AWTImageRenderer extends AbstractAWTRenderer2d implements AWTRender
     } else if (Corner.BOTTOM_LEFT.equals(layout.getCorner())) {
       x = layout.getBoxMarginX();
       y = canvasHeight - imageHeight - layout.getBoxMarginY();
-      
-      
     } else if (Corner.BOTTOM_RIGHT.equals(layout.getCorner())) {
       x = canvasWidth - imageWidth - layout.getBoxMarginX();
       y = canvasHeight - imageHeight - layout.getBoxMarginY();
