@@ -126,6 +126,7 @@ public class Chart2dDemo {
   public static class TimeChartWindow extends JFrame {
     private static final long serialVersionUID = 7519209038396190502L;
 
+    @SuppressWarnings("deprecation")
     public TimeChartWindow(List<Chart> charts) throws IOException {
       LookAndFeel.apply();
       String lines = "[300px]";
