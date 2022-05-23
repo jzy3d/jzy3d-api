@@ -17,8 +17,8 @@ import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
 /**
- * This class handles the layout of a main 3D plot on the left with additional legends (colorbars) on the right
- * side.
+ * This class handles the layout of a main 3D plot on the left with additional legends (colorbars)
+ * on the right side.
  * 
  * The canvas is composed of two {@link AbstractViewportManager}
  * <ul>
@@ -64,6 +64,8 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     backgroundViewport = new ViewportConfiguration(canvas);
   }
 
+  // Separator only used for native since emulgl can not have two viewport side by side,
+  // only a single viewport with images rendered on top
   protected void computeSeparator(final ICanvas canvas, final List<ILegend> list) {
     hasMeta = list.size() > 0;
     if (hasMeta) {
@@ -71,19 +73,28 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       for (ILegend data : list) {
         minwidth += data.getMinimumDimension().width;
       }
+      
+      minwidth *= chart.getView().getPixelScale().x;
+
+      
       screenSeparator =
           ((float) (canvas.getRendererWidth() - minwidth)) / ((float) canvas.getRendererWidth());/// 0.7f;
+    
+    
     } else {
       screenSeparator = 1.0f;
     }
   }
 
+  /**
+   * Once rendered, this layout knows the colorbar width which can be retrieved with {@link #getLegendsWidth()}
+   */
   @Override
   public void render(IPainter painter, Chart chart) {
     View view = chart.getView();
 
-    //System.out.println("ViewAndColorbarLayout w:" + chart.getCanvas().getRendererWidth() + " h:"
-    //    + chart.getCanvas().getRendererHeight());
+    // System.out.println("ViewAndColorbarLayout w:" + chart.getCanvas().getRendererWidth() + " h:"
+    // + chart.getCanvas().getRendererHeight());
 
     // Background
     view.renderBackground(backgroundViewport);
@@ -109,6 +120,9 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   protected void renderLegends(IPainter painter, Chart chart) {
     if (hasMeta) {
       legendsWidth = screenSeparator * chart.getCanvas().getRendererWidth();
+      
+      //legendsWidth /= chart.getView().getPixelScale().x;
+      
       renderLegends(painter, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
     } else {
       legendsWidth = 0;
@@ -124,11 +138,14 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     int k = 0;
     for (ILegend legend : legends) {
 
-      legend.setFont(painter.getView().getAxis().getLayout().getFont());
+      int width = canvas.getRendererWidth();
+      int height = canvas.getRendererHeight();
+      float theLeft = left + slice * (k++);
+      float theRight = left + slice * k;
 
+      legend.setFont(painter.getView().getAxis().getLayout().getFont());
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-      legend.setViewPort(canvas.getRendererWidth(), canvas.getRendererHeight(),
-          left + slice * (k++), left + slice * k);
+      legend.setViewPort(width, height, theLeft, theRight);
       legend.render(painter);
     }
   }
@@ -193,9 +210,12 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     }
   }
 
+  /**
+   * Return the legend width as it was processed at the rendering stage. Hence this value is defined
+   * after a first rendering. It is used for processing the remaining part of the layout (other
+   * viewport needing the colorbar width information).
+   */
   public float getLegendsWidth() {
     return legendsWidth;
   }
-
-
 }

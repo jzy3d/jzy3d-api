@@ -17,8 +17,8 @@ import com.jogamp.opengl.util.awt.Overlay;
 /**
  * Renders all {@link Tooltip}s and {@link AWTRenderer2d}s on top of the scene.
  * 
- * The current pixel scale is taken into account so that all {@link AWTRenderer2d} 
- * do not have to worry about it.
+ * The current pixel scale is taken into account so that all {@link AWTRenderer2d} do not have to
+ * worry about it.
  * 
  * @see {@link #setUseFullCanvas(boolean)}
  */
@@ -62,7 +62,7 @@ public class AWTNativeViewOverlay implements IViewOverlay {
 
         // Consider HiDPI and viewports not occupying full canvas
         configureG2DScale(view, viewport, canvas, g2d);
-        
+
         // Draw
         g2d.setBackground(overlayBackground);
         g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
@@ -74,6 +74,7 @@ public class AWTNativeViewOverlay implements IViewOverlay {
 
         // Renderers
         for (AWTRenderer2d renderer : awtView.getRenderers2d()) {
+          renderer.setView(awtView);
           renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
         }
 
@@ -94,12 +95,12 @@ public class AWTNativeViewOverlay implements IViewOverlay {
     // make overlay HiDPI aware so that legend and its text content
     // remain the same size than axis text and constant over
     // different screen
-    
+
     boolean scaled = false;
-    
+
     Coord2d pixelScale = view.getPixelScale();
-    
-    if(pixelScale.x !=1 || pixelScale.y != 1) {
+
+    if (pixelScale.x != 1 || pixelScale.y != 1) {
       g2d.scale(pixelScale.x, pixelScale.y);
       scaled = true;
     }
@@ -119,11 +120,9 @@ public class AWTNativeViewOverlay implements IViewOverlay {
     }
 
     // enable antialiasing and clean interpolation
-    if(unstretched || scaled) {
-      g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-          RenderingHints.VALUE_ANTIALIAS_ON);
-      g2d.setRenderingHint(RenderingHints.KEY_RENDERING,
-          RenderingHints.VALUE_RENDER_QUALITY);
+    if (unstretched || scaled) {
+      g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
       g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
           RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     }

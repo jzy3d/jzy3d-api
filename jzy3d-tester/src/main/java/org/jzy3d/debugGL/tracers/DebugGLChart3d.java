@@ -17,11 +17,12 @@ import org.jzy3d.plot3d.primitives.CubeComposite;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.overlay.Legend;
-import org.jzy3d.plot3d.rendering.legends.overlay.LineLegendLayout;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
+import org.jzy3d.plot3d.rendering.legends.overlay.LineLegendLayout;
 import org.jzy3d.plot3d.rendering.legends.overlay.OverlayLegendRenderer;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -112,7 +113,7 @@ public class DebugGLChart3d {
   }
 
   protected AWTRenderer2d watchedItemsTextOverlay(Chart watchedChart) {
-    AWTRenderer2d renderer = new AWTRenderer2d() {
+    AWTRenderer2d renderer = new AbstractAWTRenderer2d() {
       @Override
       public void paint(Graphics g, int canvasWidth, int canvasHeight) {
 

@@ -69,23 +69,25 @@ public class View2DProcessing {
 
   /**
    * Apply current view's {@link View2DLayout} and process all margins in 3D.
-   * 
-   * 
-   * 
    */
   public void apply(ViewportConfiguration viewport, BoundingBox3d bounds) {
     IPainter painter = view.getPainter();
-    View2DLayout view2DLayout = view.get2DLayout();
+    Coord2d pixelScale = view.getPixelScale();
     AxisLayout axisLayout = view.getAxis().getLayout();
+    View2DLayout view2DLayout = view.get2DLayout();
+
     Font font = axisLayout.getFont();
 
-
+    // ---------------------------------------------------
     // initialize all margins according to configuration
+    
     marginLeftPx = view2DLayout.marginLeft;
     marginRightPx = view2DLayout.marginRight;
     marginTopPx = view2DLayout.marginTop;
     marginBottomPx = view2DLayout.marginBottom;
 
+
+    // ---------------------------------------------------
     // compute pixel occupation of ticks and axis labels
 
     if (view2DLayout.textAddMargin) {
@@ -106,15 +108,29 @@ public class View2DProcessing {
 
       // consider space occupied by the X axis label, which is always horizontal
       axisTextVertical = font.getHeight();
-    }
-    else {
+    } else {
       tickTextHorizontal = 0;
       tickTextVertical = 0;
       axisTextHorizontal = 0;
       axisTextVertical = 0;
     }
 
+    // ------------------------------------------------
+    // Handling a difference between native and emulGL
+    // The text in the EmulGL case must be considered smaller 
+    // according to pixel scale
+    // ------------------------------------------------
+
+    if (!view.getCanvas().isNative()) {
+      tickTextVertical /= pixelScale.y;
+      axisTextVertical /= pixelScale.y;
+      tickTextHorizontal /= pixelScale.x;
+      axisTextHorizontal /= pixelScale.x;
+    }
+
+    // ---------------------------------------------------
     // add space for text to the left margin
+    
     marginLeftPx += view2DLayout.yTickLabelsDistance; // add tick label distance
     marginLeftPx += tickTextHorizontal; // add maximum Y tick label width
     marginLeftPx += view2DLayout.yAxisLabelsDistance; // add axis label distance
@@ -126,6 +142,9 @@ public class View2DProcessing {
     marginBottomPx += view2DLayout.xAxisLabelsDistance;
     marginBottomPx += axisTextVertical;
 
+    // ---------------------------------------------------
+    // case of a symetric layout requirement
+    
     if (view2DLayout.isSymetricHorizontalMargin()) {
       marginRightPx = marginLeftPx;
     }
@@ -133,25 +152,33 @@ public class View2DProcessing {
     if (view2DLayout.isSymetricVerticalMargin()) {
       marginTopPx = marginBottomPx;
     }
-    
-    //marginRightPx += 100; // colorbar
-    
+
+    // ------------------------------------------------
     // Hack to avoid covering colorbar with emulgl
-    if(!view.getCanvas().isNative()) {
-      if(view instanceof ChartView) {
-        IViewportLayout layout = ((ChartView)view).getLayout();
-        if(layout instanceof ViewAndColorbarsLayout) {
-          marginRightPx += ((ViewAndColorbarsLayout)layout).getLegendsWidth();
+    // EmulGL main viewport can not occupy anything else than full canvas,
+    // so the chart view need to leave a white space on the right to be covered
+    // by the colorbar displayed ON TOP.
+    // In the native case, the colorbar is displayed ON THE RIGHT of the chart
+    // view's viewport
+    // ------------------------------------------------
+    
+    if (!view.getCanvas().isNative()) {
+      if (view instanceof ChartView) {
+        IViewportLayout layout = ((ChartView) view).getLayout();
+        if (layout instanceof ViewAndColorbarsLayout) {
+          float legendWidth = ((ViewAndColorbarsLayout) layout).getLegendsWidth();
+          legendWidth /= pixelScale.x;
+          marginRightPx += legendWidth;
         }
       }
     }
 
-
+    // ---------------------------------------------------
+    // The actual processing of margin
+    
     margin = new Area(marginLeftPx + marginRightPx, marginTopPx + marginBottomPx);
 
-    //bounds = view.getSceneGraphBounds();
     modelToScreen = getModelToScreenRatio(bounds, viewport, margin);
-
 
     // convert pixel margin to world coordinate to add compute the additional 3D space to grasp with
     // the camera
@@ -271,22 +298,22 @@ public class View2DProcessing {
    */
   public Coord2d getModelToScreenRatio(Area space, Area canvas, Area margins) {
     float x = 1;
-    
-    
-    if(margin.width!=0 && (canvas.width!=margins.width)){
+
+
+    if (margin.width != 0 && (canvas.width != margins.width)) {
       x = (((space.width * canvas.width) / (canvas.width - margins.width)) - space.width)
           / margins.width;
     }
-    
+
     float y = 1;
-    
-    if(margin.height!=0 && (canvas.height!=margins.height)){
+
+    if (margin.height != 0 && (canvas.height != margins.height)) {
       y = (((space.height * canvas.height) / (canvas.height - margins.height)) - space.height)
           / margins.height;
 
     }
-    
-    
+
+
     return new Coord2d(x, y);
   }
 

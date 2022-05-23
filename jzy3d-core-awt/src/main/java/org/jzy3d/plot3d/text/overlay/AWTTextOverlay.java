@@ -14,6 +14,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.TextRenderer;
@@ -37,7 +38,7 @@ import org.jzy3d.plot3d.text.renderers.TextRenderer;
  * 1<->N relation TextRenderer<->Canvas won't work because TextRenderer has only one target
  * Component.
  */
-public class AWTTextOverlay implements AWTRenderer2d {
+public class AWTTextOverlay extends AbstractAWTRenderer2d implements AWTRenderer2d {
   public AWTTextOverlay(ICanvas canvas) {
     init(canvas);
   }

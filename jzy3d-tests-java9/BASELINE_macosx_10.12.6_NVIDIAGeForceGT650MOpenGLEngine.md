@@ -139,7 +139,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/AxisLabelRotateLayout_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_DIFF.png"><br>Actual chart:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
@@ -223,7 +223,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_IsModifiedByCustomFont_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-Colorbar_IsModifiedByCustomFont_EmulGL_AWT_HiDPI=ON_DIFF.png"><br>Actual chart:<br><img src="target/error-Colorbar_IsModifiedByCustomFont_EmulGL_AWT_HiDPI=ON_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-Colorbar_IsModifiedByCustomFont_EmulGL_AWT_HiDPI=ON_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
@@ -251,7 +251,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_HasMinimumWidth_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-Colorbar_HasMinimumWidth_EmulGL_AWT_HiDPI=ON_DIFF.png"><br>Actual chart:<br><img src="target/error-Colorbar_HasMinimumWidth_EmulGL_AWT_HiDPI=ON_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-Colorbar_HasMinimumWidth_EmulGL_AWT_HiDPI=ON_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
@@ -316,7 +316,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true_DIFF.png"><br>Actual chart:<br><img src="target/error-2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
@@ -793,7 +793,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_DIFF.png"><br>Actual chart:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
@@ -886,7 +886,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Overlay_Native_Swing_HiDPI=OFF_Corner1=TOP_LEFT_Corner2=TOP_RIGHT.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-Overlay_EmulGL_AWT_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_DIFF.png"><br>Actual chart:<br><img src="target/error-Overlay_EmulGL_AWT_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-Overlay_EmulGL_AWT_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>

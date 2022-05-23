@@ -32,19 +32,20 @@ public class AWTChart extends Chart {
   }
 
   public AWTColorbarLegend colorbar(Drawable drawable) {
-    return colorbar(drawable, new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
-        AWTColorbarImageGenerator.MIN_BAR_HEIGHT), getView().getAxis().getLayout());
+    return colorbar(drawable, null, getView().getAxis().getLayout());
   }
 
   public AWTColorbarLegend colorbar(Drawable drawable, AxisLayout layout) {
-    return colorbar(drawable, new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
-        AWTColorbarImageGenerator.MIN_BAR_HEIGHT), layout);
+    return colorbar(drawable, null, layout);
   }
 
-  public AWTColorbarLegend colorbar(Drawable drawable, Dimension d, AxisLayout layout) {
-    AWTColorbarLegend cbar = new AWTColorbarLegend(drawable, layout);
-    cbar.setMinimumDimension(d);
-    drawable.setLegend(cbar);
-    return cbar;
+  public AWTColorbarLegend colorbar(Drawable drawable, Dimension minDimension, AxisLayout layout) {
+    AWTColorbarLegend colorbar = new AWTColorbarLegend(drawable, layout);
+    
+    if(minDimension!=null)
+      colorbar.setMinimumDimension(minDimension);
+    
+    drawable.setLegend(colorbar);
+    return colorbar;
   }
 }

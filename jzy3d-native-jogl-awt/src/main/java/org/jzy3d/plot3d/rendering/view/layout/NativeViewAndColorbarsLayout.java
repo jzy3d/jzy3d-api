@@ -41,7 +41,7 @@ public class NativeViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
 
         // optimize to shrink colorbar to required width
-        if (shrinkColorbar) {
+        if (isShrinkColorbar()) {
           from = updateFromValueToShrinkColorbar(painter, width, awtLegend);
 
         }
