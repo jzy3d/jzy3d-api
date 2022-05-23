@@ -2,6 +2,7 @@ package org.jzy3d.plot2d.rendering;
 
 import java.awt.Font;
 import java.awt.FontMetrics;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
@@ -32,6 +33,15 @@ public class AWTGraphicsUtils {
 
     return out;
   }
+  
+  public static BufferedImage copy(BufferedImage source) {
+    BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
+    Graphics g = b.createGraphics();
+    g.drawImage(source, 0, 0, null);
+    g.dispose();
+    return b;
+  }
+
 
   /** Force text to be anti-aliased. */
   public static void configureRenderingHints(Graphics2D g2d) {
