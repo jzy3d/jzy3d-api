@@ -2,9 +2,9 @@ package org.jzy3d.junit;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.BasicStroke;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.colors.Color;
+import org.jzy3d.colors.ColorMapper;
+import org.jzy3d.colors.colormaps.IColorMap;
+import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.IntegerCoord2d;
+import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
+import org.jzy3d.plot3d.primitives.axis.layout.providers.StaticTickProvider;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 
 /**
  * Primitives for chart tests.
@@ -31,7 +40,7 @@ public class ChartTester {
   public static final String FILE_LABEL_EXPECT = "_EXPECT";
   public static final String FILE_LABEL_DIFF = "_DIFF";
   public static final String FILE_LABEL_ZOOM = "_ZOOM";
-  
+
   public static int TEST_IMG_SIZE = 500;
 
   protected boolean textInvisible = false;
@@ -42,32 +51,23 @@ public class ChartTester {
   private static final String MAVEN_TEST_RESOURCES_PATH = "src/test/resources/";
   public static final String MAVEN_TARGET_PATH = "target/";
 
-  // int bufImgType = BufferedImage.TYPE_3BYTE_BGR;// );
+  protected Dimension colorbarDimension = new Dimension(200, 600);
+
   protected int WIDTH = 800;
   protected int HEIGHT = 600;
 
-  public String path(Object obj) {
-    return path(obj.getClass());
-  }
+  // ----------------------------------------------------------------------------------- //
+  //
+  // THE ASSERTION METHODS ALLOW TO
+  //
+  // (1) CLEAN
+  // (2) GENERATE A REFERENCE IMAGE IF IS MISSING
+  // (3) COMPARE A CHART TO A REFERENCE IMAGE
+  // (4) GENERATE REPORTS TO SHOW ERRORS (DIFF, ACTUAL, EXPECTED, ZOOM)
+  //
+  // ----------------------------------------------------------------------------------- //
 
-  public String path(Class<?> clazz) {
-    return path(clazz.getSimpleName());
-  }
 
-  public String path(String filename) {
-    if (!filename.contains("."))
-      return testCaseInputFolder + filename + ".png";
-    else
-      return testCaseInputFolder + filename;
-  }
-
-  public boolean isTextInvisible() {
-    return textInvisible;
-  }
-
-  public void setTextInvisible(boolean textInvisible) {
-    this.textInvisible = textInvisible;
-  }
 
   public void assertSimilar(Chart chart, String testImage) {
     if (isTextInvisible()) {
@@ -148,13 +148,14 @@ public class ChartTester {
     return new File(testImage).exists();
   }
 
-  
+
   /**
-   * Perform a chart comparison to image and output 3 images in case of failure
+   * Perform a chart comparison to image and output multiple diagnostic images in case of failure
    * <ul>
    * <li>Expected image
    * <li>Actual image
    * <li>Diff image
+   * <li>Zoom image
    * </ul>
    * 
    * @param chart
@@ -172,16 +173,14 @@ public class ChartTester {
       // -----------------------------
       // Writing ACTUAL file
 
-      String actualFile =
-          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", FILE_LABEL_ACTUAL+".");
+      String actualFile = getActualFilename(testImage);
       chart.screenshot(new File(actualFile));
       logger.error("ACTUAL IMAGE : " + actualFile);
 
       // -----------------------------
       // Writing EXPECTED file
 
-      String expectFile =
-          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", FILE_LABEL_EXPECT+".");
+      String expectFile = getExpectedFilename(testImage);
       BufferedImage expected = e.getExpectedImage();
       ImageIO.write(expected, "png", new File(expectFile));
       logger.error("EXPECTED IMAGE : " + expectFile);
@@ -189,23 +188,21 @@ public class ChartTester {
       // -----------------------------
       // Writing ZOOM file
 
-      String zoomFile =
-          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", FILE_LABEL_ZOOM+".");
-
+      String zoomFile = getZoomFilename(testImage);
       BufferedImage zoom = getErroneousArea(expected, e.getDiffCoordinates());
       ImageIO.write(zoom, "png", new File(zoomFile));
+      logger.error("ZOOM IMAGE : " + zoomFile);
 
-      
+
       // -----------------------------
       // Writing DIFF file
 
-      String diffFile =
-          getTestCaseFailedFileName() + new File(testImage).getName().replace(".", FILE_LABEL_DIFF+".");
-
-      BufferedImage diffImage = copyImage(expected);
+      String diffFile = getDiffFilename(testImage);
+      BufferedImage diffImage = copy(expected);
       highlightPixel(diffImage, e.getDiffCoordinates(), Highlight.RED);
 
 
+      // Case of different image size written to DIFF
       if (!e.isSameImageSize()) {
         String m = e.getImageSizeDifferenceMessage();
 
@@ -220,20 +217,92 @@ public class ChartTester {
       ImageIO.write(diffImage, "png", new File(diffFile));
       logger.error("DIFF IMAGE : " + diffFile);
 
+      // -----------------------------
       // LET TEST FAIL
-      
 
-      fail("Chart test failed: " + e.getMessage() + " see " + diffFile + "\n" + e.getDiffCoordinates().size() + " pixel(s) differ");
+      fail("Chart test failed: " + e.getMessage() + " see " + diffFile + "\n"
+          + e.getDiffCoordinates().size() + " pixel(s) differ");
 
     } catch (IOException e) {
+
       // -----------------------------
       // OTHER FAILURES
 
       fail("IOException: " + e.getMessage() + " for " + testImage);
     }
   }
+  
+  
+  
+  public void assertSimilar(IColorMap colormap, String testImage) {
+    try {
+      execute(colormap, testImage);
+    } catch (IOException e) {
+      e.printStackTrace();
+      Assert.fail(e.getMessage());
+    }
+    assertTrue(testImage, true);
+  }
 
-  private void highlightSize(BufferedImage diffImage, String m) {
+  public void execute(IColorMap colormap, String testImage) throws IOException {
+    clean(getTestCaseFailedFileName());
+
+    if (!isBuilt(testImage))
+      build(colormap, testImage);
+    test(colormap, testImage);
+  }
+
+  public void execute(IColorMap chart) throws IOException {
+    execute(chart, getTestCaseFileName());
+  }
+
+  public void build(IColorMap colormap, String testImage) throws IOException {
+    logger.warn(
+        "building the screenshot to assert later as no test image is available: " + testImage);
+
+    BufferedImage b = getBufferedImage(getImageGenerator(colormap));
+
+    ImageIO.write(b, "png", new File(testImage));
+  }
+
+
+
+  /**
+   * Perform a chart comparison to image and output multiple diagnostic images in case of failure
+   * <ul>
+   * <li>Expected image
+   * <li>Actual image
+   * <li>Diff image
+   * <li>Zoom image
+   * </ul>
+   * 
+   * @param chart
+   * @param testImage
+   * @throws IOException
+   */
+  public void test(IColorMap chart, String testImage) throws IOException {
+    try {
+      logger.info("compare chart with " + testImage);
+      compare(chart, testImage);
+      logger.info("compared chart OK  " + testImage);
+
+    } catch (ChartTestFailed e) {
+
+      fail("ChartTestFailed: " + e.getMessage() + " for " + testImage);
+      
+    } catch (IOException e) {
+
+      fail("IOException: " + e.getMessage() + " for " + testImage);
+    }
+  }
+  
+  // -----------------------------------------------------------------//
+  //
+  // HIGHLIGHT ERRORS
+  //
+  //
+
+  protected void highlightSize(BufferedImage diffImage, String m) {
     Graphics g = diffImage.createGraphics();
 
     int fontSize = 16;
@@ -244,7 +313,7 @@ public class ChartTester {
     g.dispose();
   }
 
-  protected BufferedImage copyImage(BufferedImage source) {
+  protected BufferedImage copy(BufferedImage source) {
     BufferedImage b = new BufferedImage(source.getWidth(), source.getHeight(), source.getType());
     Graphics g = b.createGraphics();
     g.drawImage(source, 0, 0, null);
@@ -257,65 +326,40 @@ public class ChartTester {
    */
   protected void highlightPixel(BufferedImage expected, List<IntegerCoord2d> diffs,
       Highlight highlight) {
-    
-    int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE; 
+
+    int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
     int maxX = -1, maxY = -1;
-    
+
     for (IntegerCoord2d diff : diffs) {
-      
-      if(minX > diff.x)
+
+      if (minX > diff.x)
         minX = diff.x;
-      if(maxX < diff.x)
+      if (maxX < diff.x)
         maxX = diff.x;
-      if(minY > diff.y)
+      if (minY > diff.y)
         minY = diff.y;
-      if(maxY < diff.y)
+      if (maxY < diff.y)
         maxY = diff.y;
-      
-      pixelHighlight(expected, diff, highlight);
+
+      doHighlightPixels(expected, diff, highlight);
     }
-    
-    
-    
-    expected.getSubimage(minX, minY, maxX-minX, maxY-minY);
-    
-    Graphics2D g2d = (Graphics2D)expected.createGraphics();
+
+    expected.getSubimage(minX, minY, maxX - minX, maxY - minY);
+
+    Graphics2D g2d = (Graphics2D) expected.createGraphics();
     g2d.setColor(java.awt.Color.RED);
     g2d.setStroke(new BasicStroke(1f));
-    g2d.drawRect(minX, minY, maxX-minX, maxY-minY);
-    
-    System.err.println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
-    
-    
+    g2d.drawRect(minX, minY, maxX - minX, maxY - minY);
+
+    System.err
+        .println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
   }
-  
-  protected BufferedImage getErroneousArea(BufferedImage expected, List<IntegerCoord2d> diffs) {
-    
-    int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE; 
-    int maxX = -1, maxY = -1;
-    
-    for (IntegerCoord2d diff : diffs) {
-      
-      if(minX > diff.x)
-        minX = diff.x;
-      if(maxX < diff.x)
-        maxX = diff.x;
-      if(minY > diff.y)
-        minY = diff.y;
-      if(maxY < diff.y)
-        maxY = diff.y;
-    }
-    
-    System.err.println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
-    
-    return expected.getSubimage(minX, minY, maxX-minX, maxY-minY);
-    
-  }
+
 
   /**
    * Invert the pixel color identified by the input coordinates ({@link IntegerCoord2d})
    */
-  protected void pixelHighlight(BufferedImage expected, IntegerCoord2d diffs, Highlight highlight) {
+  protected void doHighlightPixels(BufferedImage expected, IntegerCoord2d diffs, Highlight highlight) {
     int rgb = expected.getRGB(diffs.x, diffs.y);
 
     int alpha = ((rgb >> 24) & 0xff);
@@ -335,8 +379,37 @@ public class ChartTester {
   enum Highlight {
     INVERT, RED
   }
+  
+  protected BufferedImage getErroneousArea(BufferedImage expected, List<IntegerCoord2d> diffs) {
+    int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
+    int maxX = -1, maxY = -1;
 
-  /* */
+    for (IntegerCoord2d diff : diffs) {
+      if (minX > diff.x)
+        minX = diff.x;
+      if (maxX < diff.x)
+        maxX = diff.x;
+      if (minY > diff.y)
+        minY = diff.y;
+      if (maxY < diff.y)
+        maxY = diff.y;
+    }
+
+    System.err
+        .println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
+
+    return expected.getSubimage(minX, minY, maxX - minX, maxY - minY);
+
+  }
+
+
+
+  // ----------------------------------------------------------------------------------- //
+  //
+  // THE COMPARISON METHODS SIMPLY CHECK THE DIFFERENCE BETWEEN AN ELEMENT AND ITS IMAGE //
+  //
+  // ----------------------------------------------------------------------------------- //
+
 
   /**
    * Compare the image displayed by the chart with an image given by filename.
@@ -352,6 +425,55 @@ public class ChartTester {
     BufferedImage expected = loadBufferedImage(filename);
 
     compare(actual, expected);
+  }
+
+  /**
+   * Compare a colorbar image with a reference image given by filename.
+   * 
+   * @param chart
+   * @param filename
+   * @throws IOException
+   * @throws ChartTestFailed is thrown if at least one pixel differ. The exception holds all pixel
+   *         coordinates where a difference exists.
+   */
+  public void compare(AWTColorbarImageGenerator colorbar, String filename)
+      throws IOException, ChartTestFailed {
+    BufferedImage actual = getBufferedImage(colorbar);
+    BufferedImage expected = loadBufferedImage(filename);
+
+    compare(actual, expected);
+  }
+
+  public void compare(IColorMap colormap, String filename) throws IOException, ChartTestFailed {
+    compare(getImageGenerator(colormap), filename);
+  }
+
+
+  // --------------------------------------------
+
+  protected AWTColorbarImageGenerator getImageGenerator(IColorMap colormap) throws IOException {
+
+    // Configuration
+    colormap.setDirection(false);
+
+
+    double[] values = {-2, -1, 0, 1, 2};
+
+    // Tools
+    ITickRenderer r = new DefaultDecimalTickRenderer();
+    StaticTickProvider p = new StaticTickProvider(values);
+    ColorMapper mapper = new ColorMapper(colormap, -2, 2);
+
+    // Generator
+    AWTColorbarImageGenerator g = new AWTColorbarImageGenerator(mapper, p, r);
+    g.setBackgroundColor(Color.BLUE);
+    g.setHasBackground(true);
+    g.setPixelScale(new Coord2d(3, 3));
+    return g;
+  }
+  
+  protected BufferedImage getBufferedImage(AWTColorbarImageGenerator colorbar) throws IOException {
+    return colorbar.toImage(colorbarDimension.width, colorbarDimension.height);
   }
 
   protected BufferedImage getBufferedImage(Chart chart) throws IOException {
@@ -378,10 +500,12 @@ public class ChartTester {
     int i2W = expected.getWidth();
     int i2H = expected.getHeight();
 
+    // if same size
     if (i1W == i2W && i1H == i2H) {
-      ChartTestFailed potentialFailure = new ChartTestFailed("pixel diff", actual, expected);
+      ChartTestFailed chartFailure = new ChartTestFailed("pixel diff", actual, expected);
       boolean ok = true;
 
+      // check difference pixel-wise
       for (int i = 0; i < i1W; i++) {
         for (int j = 0; j < i1H; j++) {
           int p1rgb = actual.getRGB(i, j);
@@ -389,28 +513,72 @@ public class ChartTester {
 
           if (p1rgb != p2rgb) {
             ok = false;
-            potentialFailure.addDiffCoordinates(i, j);
-            potentialFailure.setActualPixel(p1rgb);
-            potentialFailure.setExpectedPixel(p2rgb);
-            // String m = "pixel diff start @(" + i + "," + j + ")";
-            // throw new ChartTestFailed(m, i1, i2);
+            chartFailure.addDiffCoordinates(i, j);
           }
         }
       }
 
       if (!ok) {
-        throw potentialFailure;
+        throw chartFailure;
       }
+    }
 
-    } else {
+    // if size differ
+    else {
       String m =
           "image size differ: actual={" + i1W + "," + i1H + "} expected={" + i2W + "," + i2H + "}";
       throw new ChartTestFailed(m, actual, expected);
     }
   }
 
+  // ----------------------------------------------------------------------------------- //
+  //
+  // PATH BUILDER //
+  //
+  // ----------------------------------------------------------------------------------- //
 
-  /* */
+
+  public String path(Object obj) {
+    return path(obj.getClass());
+  }
+
+  public String path(Class<?> clazz) {
+    return path(clazz.getSimpleName());
+  }
+
+  public String path(String filename) {
+    if (!filename.contains("."))
+      return testCaseInputFolder + filename + ".png";
+    else
+      return testCaseInputFolder + filename;
+  }
+
+
+  private String getDiffFilename(String image) {
+    return getTestCaseFailedFileName()
+        + new File(image).getName().replace(".", FILE_LABEL_DIFF + ".");
+  }
+
+  private String getZoomFilename(String image) {
+    return getTestCaseFailedFileName()
+        + new File(image).getName().replace(".", FILE_LABEL_ZOOM + ".");
+  }
+
+  private String getExpectedFilename(String image) {
+    return getTestCaseFailedFileName()
+        + new File(image).getName().replace(".", FILE_LABEL_EXPECT + ".");
+  }
+
+  private String getActualFilename(String image) {
+    return getTestCaseFailedFileName()
+        + new File(image).getName().replace(".", FILE_LABEL_ACTUAL + ".");
+  }
+
+  // ----------------------------------------------------------------------------------- //
+  //
+  // CUSTOMIZE TESTER //
+  //
+  // ----------------------------------------------------------------------------------- //
 
   public File getTestCaseFile() {
     return new File(getTestCaseFileName());
@@ -450,6 +618,14 @@ public class ChartTester {
 
   public void setTestCaseOutputFolder(String testCaseOutputFolder) {
     this.testCaseOutputFolder = testCaseOutputFolder;
+  }
+
+  public boolean isTextInvisible() {
+    return textInvisible;
+  }
+
+  public void setTextInvisible(boolean textInvisible) {
+    this.textInvisible = textInvisible;
   }
 
 

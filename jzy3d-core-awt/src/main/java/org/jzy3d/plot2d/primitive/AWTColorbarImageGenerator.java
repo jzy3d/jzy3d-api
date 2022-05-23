@@ -65,7 +65,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     if (barWidth > width)
       return null;
 
-    this.barWidth = width;
+    this.barWidth = barWidth;
 
 
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -75,9 +75,9 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
     configureText(graphic);
     drawBackground(width, height, graphic);
-    drawBarColors(height, barWidth, graphic);
-    drawBarContour(height, barWidth, graphic);
-    drawTextAnnotations(height, barWidth, graphic);
+    drawBarColors(height, this.barWidth/*getScaledBarWidth()*/, graphic);
+    drawBarContour(height, this.barWidth/*getScaledBarWidth()*/, graphic);
+    drawTextAnnotations(height, this.barWidth/*getScaledBarWidth()*/, graphic);
     return image;
   }
 
