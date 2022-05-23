@@ -2,22 +2,26 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+import java.awt.Shape;
+import org.jzy3d.colors.AWTColor;
+import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 
 /** An AWT post renderer able to render an image on top of a chart according to a legend */
-public class AWTImageRenderer extends AbstractAWTRenderer2d implements AWTRenderer2d {
-  protected BufferedImage image;
+public class AWTShapeRenderer extends AbstractAWTRenderer2d implements AWTRenderer2d {
+  protected Shape shape;
   protected LegendLayout layout = new LegendLayout();
+  protected Color color;
 
-  protected int imageWidth;
-  protected int imageHeight;
+  protected int shapeWidth;
+  protected int shapeHeight;
 
-  public AWTImageRenderer(BufferedImage image) {
-    this.image = image;
-    this.imageWidth = image.getWidth(null);
-    this.imageHeight = image.getHeight(null);
+  public AWTShapeRenderer(Shape shape) {
+    this.shape = shape;
+    
+    this.shapeWidth = (int)shape.getBounds2D().getWidth();
+    this.shapeHeight = (int)shape.getBounds2D().getHeight();
   }
 
   @Override
@@ -38,22 +42,22 @@ public class AWTImageRenderer extends AbstractAWTRenderer2d implements AWTRender
     int y = 0;
 
     if (Corner.TOP_LEFT.equals(layout.getCorner())) {
-      x = layout.getBoxMarginX();
+      x = layout.getBoxMarginX() + shapeWidth/2;
       y = layout.getBoxMarginY();
     } else if (Corner.TOP_RIGHT.equals(layout.getCorner())) {
-      x = canvasWidth - imageWidth - layout.getBoxMarginX();
+      x = canvasWidth - shapeWidth/2 - layout.getBoxMarginX();
       y = layout.getBoxMarginY();
     } else if (Corner.BOTTOM_LEFT.equals(layout.getCorner())) {
-      x = layout.getBoxMarginX();
-      y = canvasHeight - imageHeight - layout.getBoxMarginY();
+      x = layout.getBoxMarginX() + shapeWidth/2;
+      y = canvasHeight - shapeHeight/2 - layout.getBoxMarginY();
     } else if (Corner.BOTTOM_RIGHT.equals(layout.getCorner())) {
-      x = canvasWidth - imageWidth - layout.getBoxMarginX();
-      y = canvasHeight - imageHeight - layout.getBoxMarginY();
+      x = canvasWidth - shapeWidth/2 - layout.getBoxMarginX();
+      y = canvasHeight - shapeHeight/2 - layout.getBoxMarginY();
     }
     
-    
-
-    g2d.drawImage(image, x, y, null);
+    g2d.setColor(AWTColor.toAWT(color));
+    g2d.translate(x, y);
+    g2d.draw(shape);
   }
 
   public LegendLayout getLayout() {
@@ -62,5 +66,13 @@ public class AWTImageRenderer extends AbstractAWTRenderer2d implements AWTRender
 
   public void setLayout(LegendLayout layout) {
     this.layout = layout;
+  }
+
+  public Color getColor() {
+    return color;
+  }
+
+  public void setColor(Color color) {
+    this.color = color;
   }
 }

@@ -68,6 +68,14 @@ public class Color {
     this.b = (float) b / 255;
     this.a = (float) a / 255;
   }
+  
+  public Color(double r, double g, double b) {
+    this((float)r,(float)g,(float)b);
+  }
+
+  public Color(double r, double g, double b, double a) {
+    this((float)r,(float)g,(float)b,(float)a);
+  }
 
   public Color mul(Color factor) {
     this.r *= factor.r;
