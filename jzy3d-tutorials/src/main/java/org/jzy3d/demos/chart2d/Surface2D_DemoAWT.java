@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * @author Martin Pernollet
  *
  */
-public class Surface2DAWT {
+public class Surface2D_DemoAWT {
   public static void main(String[] args) throws Exception {
     Shape surface = SampleGeom.surface(new Range (-3, 1), new Range(-1, 3), 1);
     surface.setWireframeDisplayed(false);

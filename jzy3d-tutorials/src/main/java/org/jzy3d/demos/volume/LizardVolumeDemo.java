@@ -10,6 +10,7 @@ import org.jzy3d.colors.colormaps.ColorMapGrayscale;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.volume.Texture3D;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import com.jmatio.io.MatFileReader;
 import com.jmatio.types.MLNumericArray;
 import com.jogamp.opengl.util.GLBuffers;
@@ -80,10 +81,10 @@ public class LizardVolumeDemo extends AWTAbstractAnalysis {
     // Create a chart
     chart = AWTChartFactory.chart(Quality.Intermediate());
     chart.getScene().getGraph().add(volume);
-    // chart.getView().setBackgroundColor(new Color(0, 0, 0));
-    // IAxeLayout axeLayout = chart.getAxeLayout();
-    // axeLayout.setMainColor(new Color(0.7f, 0.7f, 0.7f));
     chart.getView().setSquared(false);
-    chart.getView();
+
+    // Keep former text renderer as the new one does not work properly with shaders
+    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
+
   }
 }

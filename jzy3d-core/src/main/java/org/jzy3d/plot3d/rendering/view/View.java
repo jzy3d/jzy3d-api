@@ -1164,8 +1164,6 @@ public class View {
     updateCameraWithoutShooting(viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam,
         factorViewPointDistance, center, scaling);
 
-
-
     triggerCameraUpEvents(viewpoint);
 
     cam.setViewPort(viewport);
@@ -1194,9 +1192,7 @@ public class View {
       cameraUp = new Coord3d(0.0, 1.0, 0.0);
     }
 
-
     cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
-
 
     computeCameraRenderingVolume(cam, viewport, bounds);
   }
@@ -1316,8 +1312,6 @@ public class View {
    * 
    * Assume that axis labels are positioned accordingly
    * ({@link AxisLabelProcessor#axisLabelPosition_3D()}
-   * 
-   * @param viewport TODO
    */
   protected void computeCamera3D_RenderingSphere(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
@@ -1352,15 +1346,6 @@ public class View {
     BoundingBox2d sq = new BoundingBox2d(xmin, xmax, ymin, ymax);
     cam.setRenderingSquare(sq);
   }
-
-  /**
-   * @see {@link #getModelToScreenRatio(Area, Area, Area)}
-   */
-  /*
-   * public Coord2d getModelToScreenRatio(Area margin) { return
-   * getModelToScreenRatio(getSceneGraphBounds(), getCamera().getLastViewPort(), margin); }
-   */
-
 
 
   /**
