@@ -125,16 +125,9 @@ public class BenchmarkPlot implements BenchmarkXLS {
     
     
     view.setBoundManual(new BoundingBox3d(0, (float) maxX, 0, timeMax, -1, 1));
-    view.addRenderer2d(new View2DLayout_Debug(view));
-
-    //view.setSquared(false);
+    view.addRenderer2d(new View2DLayout_Debug());
 
     c.open(file, 1024, 768);
-
-    
-
-
-    
 
     c.render();
 

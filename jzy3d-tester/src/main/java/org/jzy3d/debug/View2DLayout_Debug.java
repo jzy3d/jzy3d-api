@@ -10,21 +10,27 @@ import org.jzy3d.painters.AWTFont;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
 
 public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRenderer2d{
 
-  View view;
   View2DLayout layout;
   AxisLayout axisLayout;
   
-  public View2DLayout_Debug(View view) {
-    this.view = view;
+  public View2DLayout_Debug() {
+  }
+  
+  @Override
+  public void setView(AWTView view) {
+    super.setView(view);
+
     this.layout = view.get2DLayout();
     this.axisLayout = view.getAxis().getLayout();
   }
+
 
   @Override
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {

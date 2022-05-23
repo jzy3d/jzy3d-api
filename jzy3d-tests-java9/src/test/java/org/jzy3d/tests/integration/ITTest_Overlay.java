@@ -25,9 +25,12 @@ public class ITTest_Overlay extends ITTest {
 
   protected static String caseOverlayMove = "OverlayMove";
   
+  //protected static Corner[][] corners =
+  //    {{Corner.TOP_RIGHT, Corner.BOTTOM_RIGHT}};
+
   protected static Corner[][] corners =
-      {{Corner.TOP_LEFT, Corner.TOP_RIGHT}, {Corner.TOP_RIGHT, Corner.BOTTOM_RIGHT},
-          {Corner.BOTTOM_RIGHT, Corner.BOTTOM_LEFT}, {Corner.BOTTOM_LEFT, Corner.TOP_LEFT}};
+    {{Corner.TOP_LEFT, Corner.TOP_RIGHT}, {Corner.TOP_RIGHT, Corner.BOTTOM_RIGHT},
+        {Corner.BOTTOM_RIGHT, Corner.BOTTOM_LEFT}, {Corner.BOTTOM_LEFT, Corner.TOP_LEFT}};
 
   @Test
   public void whenOverlayAreMoved() {

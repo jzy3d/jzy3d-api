@@ -232,7 +232,7 @@ public class TestChart {
     Assert.assertNotEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
     Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, view.getCamera().getViewportMode());
 
-    Assert.assertFalse(view.getSquared());
+    Assert.assertFalse("View should not be squared for accurate 2D layout", view.getSquared());
 
     
     // ---------------------------
