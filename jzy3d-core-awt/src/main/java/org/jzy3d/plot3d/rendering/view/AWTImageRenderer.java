@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.rendering.view;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 
@@ -51,6 +50,8 @@ public class AWTImageRenderer extends AbstractAWTRenderer2d implements AWTRender
       x = canvasWidth - imageWidth - layout.getBoxMarginX();
       y = canvasHeight - imageHeight - layout.getBoxMarginY();
     }
+    
+    
 
     g2d.drawImage(image, x, y, null);
   }
