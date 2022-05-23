@@ -269,8 +269,23 @@ public class AxisLabelProcessor {
     xShiftPx += layout2D.getyAxisLabelsDistance();
     
     if(!LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
-      xShiftPx -= view.getPainter().getTextLengthInPixels(axisLayout.getFont(), axisLayout.getYAxisLabel())/2;
-      xShiftPx += axisLayout.getFont().getHeight()/2;
+      
+      // consider the rotation & offset due to vertical text 
+      int textLength = view.getPainter().getTextLengthInPixels(axisLayout.getFont(), axisLayout.getYAxisLabel());
+      
+      // hack the emulgl vertical Y axis case 
+      if(!view.getCanvas().isNative())
+      textLength /= view.getPixelScale().y;
+      
+      xShiftPx -= textLength/2;
+      
+      int textHeight = axisLayout.getFont().getHeight();
+      
+      // hack the emulgl vertical Y axis case 
+      if(!view.getCanvas().isNative())
+        textHeight /= view.getPixelScale().x;
+
+      xShiftPx += textHeight/2;
     }
     
 

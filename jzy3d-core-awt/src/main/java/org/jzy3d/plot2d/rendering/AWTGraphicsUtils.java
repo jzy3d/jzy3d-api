@@ -1,12 +1,14 @@
 package org.jzy3d.plot2d.rendering;
 
 import java.awt.Font;
-import java.awt.image.BufferedImage;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import org.jzy3d.maths.Coord2d;
 
 public class AWTGraphicsUtils {
 
@@ -85,5 +87,10 @@ public class AWTGraphicsUtils {
     // g2.getRenderingHint(RenderingHints.KEY_TEXT_LCD_CONTRAST));
     System.out
         .println("KEY_STROKE_CONTROL=" + g2.getRenderingHint(RenderingHints.KEY_STROKE_CONTROL));
+  }
+  
+  public static Coord2d getPixelScale(Graphics2D g2d) {
+    AffineTransform globalTransform = g2d.getTransform();
+    return new Coord2d(globalTransform.getScaleX(), globalTransform.getScaleY());
   }
 }

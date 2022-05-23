@@ -26,7 +26,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     // Here we force the scene to be rendered on the entire screen to avoid a GRAY
     // (=CLEAR COLOR?) BAND
     // that can't be overriden by legend image
-    sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, 1);// screenSeparator);
+    sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0,  1);
     //sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, screenSeparator);
 
     view.renderScene(sceneViewport);
@@ -82,7 +82,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         //awtLegend.getImageGenerator().setFont(font);
         
         // optimize to shrink colorbar to required width
-        if(shrinkColorbar) {
+        if(isShrinkColorbar()) {
           from = updateFromValueToShrinkColorbar(painter, width, awtLegend);
         }
         
