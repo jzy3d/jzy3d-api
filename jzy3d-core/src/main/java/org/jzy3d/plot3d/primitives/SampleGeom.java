@@ -36,6 +36,12 @@ public class SampleGeom {
     ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
         surface.getBounds().getZmax(), new Color(1, 1, 1, alpha));
     surface.setColorMapper(colorMapper);
+    
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    surface.setWireframeWidth(1);
+    
     return surface;
   }
   

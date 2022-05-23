@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * 
  * @author Martin Pernollet
  */
-public class Scatter2DAWT {
+public class Scatter2D_DemoAWT {
   public static void main(String[] args)  {
     Chart chart = new AWTChartFactory().newChart(Quality.Advanced());
     chart.add(SampleGeom.scatter(20000, 2));

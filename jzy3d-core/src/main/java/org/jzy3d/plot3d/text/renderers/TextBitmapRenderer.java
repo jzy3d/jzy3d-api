@@ -16,6 +16,8 @@ import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
  * Use instead {@link TextRenderer}.
+ * 
+ * Keep this text renderer for compatibility issues, e.g. there are issues when using shaders with text renderer (depth peeling, volume viz, etc)
  */
 @Deprecated
 public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRenderer {
