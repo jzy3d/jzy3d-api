@@ -84,7 +84,7 @@
 	</modules>
 
 	<scm>
-		<connection>scm:git:https://github.com/jzy3d/jzy3d-api</connection>
+		<connection>scm:git:git@github.com:jzy3d/jzy3d-api.git</connection>
 		<tag>jzy3d-all-2.1.0</tag>
 	</scm>
 	<issueManagement>
