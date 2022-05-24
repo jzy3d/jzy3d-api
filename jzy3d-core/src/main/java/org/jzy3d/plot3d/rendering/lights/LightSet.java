@@ -34,7 +34,7 @@ public class LightSet {
     }
   }
   
-  // http://www.sjbaker.org/steve/omniv/opengl_lighting.html
+  // https://www.sjbaker.org/steve/omniv/opengl_lighting.html
   protected void initLight(IPainter painter) {
     painter.glEnable_ColorMaterial();
     painter.glEnable_Lighting();
