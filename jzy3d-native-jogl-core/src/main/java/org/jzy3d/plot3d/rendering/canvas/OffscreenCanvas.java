@@ -2,15 +2,22 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.maths.Coord2d;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLCapabilitiesImmutable;
 import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLFBODrawable;
 import com.jogamp.opengl.GLOffscreenAutoDrawable;
@@ -42,20 +49,21 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   protected Renderer3d renderer;
   protected GLOffscreenAutoDrawable offscreenDrawable;
   protected GLCapabilities capabilities;
+  protected List<ICanvasListener> canvasListeners = new ArrayList<>();
+
 
   public OffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
       GLCapabilities capabilities, int width, int height) {
-    this(factory, scene, quality, capabilities, width, height, false, false);
-  }
-
-  public OffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilities capabilities, int width, int height, boolean traceGL, boolean debugGL) {
     this.view = scene.newView(this, quality);
-    this.renderer =
-        ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
+    this.view.getPainter().setCanvas(this);
+    this.renderer = newRenderer(factory);
     this.capabilities = capabilities;
 
     initBuffer(capabilities, width, height);
+  }
+
+  private Renderer3d newRenderer(IChartFactory factory) {
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
   }
 
   /**
@@ -71,14 +79,15 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
    * @param height image width
    */
   public void initBuffer(GLCapabilities capabilities, int width, int height) {
-    if(capabilities.isOnscreen()) {
-      System.err.println(this.getClass().getSimpleName() + " : The provided capabilities should be set to setOnscreen(false). Forcing this configuration");
+    if (capabilities.isOnscreen()) {
+      System.err.println(this.getClass().getSimpleName()
+          + " : The provided capabilities should be set to setOnscreen(false). Forcing this configuration");
       capabilities.setOnscreen(false);
       // capabilities.setDoubleBuffered(false);
       // capabilities.setPBuffer(true);
 
     }
-    
+
     GLProfile profile = capabilities.getGLProfile();
     GLDrawableFactory factory = GLDrawableFactory.getFactory(profile);
 
@@ -90,15 +99,38 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
       offscreenDrawable.destroy();
       // glpBuffer.setSurfaceSize(width, height);
     }
-    offscreenDrawable = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), capabilities, null, width, height);
+    offscreenDrawable = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(),
+        capabilities, null, width, height);
     offscreenDrawable.addGLEventListener(renderer);
 
   }
+
+  public GLCapabilities getCapabilities() {
+    return capabilities;
+  }
+
+  @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
+
 
   /* NOT IMPLEMENTED */
   @Override
   public void setPixelScale(float[] scale) {
     throw new NotImplementedException();
+  }
+
+  @Override
+  public Coord2d getPixelScale() {
+    LogManager.getLogger(OffscreenCanvas.class)
+        .info("getPixelScale() not implemented. Will return {1,1}");
+    return new Coord2d(1, 1);
+  }
+  
+  @Override
+  public Coord2d getPixelScaleJVM() {
+    return getPixelScale();
   }
 
   @Override
@@ -152,18 +184,20 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   public Renderer3d getRenderer() {
     return renderer;
   }
-
+  
   @Override
   public String getDebugInfo() {
-    GL gl = ((NativeDesktopPainter) getView().getPainter()).getCurrentGL(this);
-
-    StringBuffer sb = new StringBuffer();
-    sb.append("Chosen GLCapabilities: " + offscreenDrawable.getChosenGLCapabilities() + "\n");
-    sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
-    sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
-    sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
-    return sb.toString();
+    IPainter painter = getView().getPainter();
+    
+    GLCapabilitiesImmutable caps = offscreenDrawable.getChosenGLCapabilities();
+    
+    GL gl = (GL) painter.acquireGL();
+    GPUInfo info = GPUInfo.load(gl);
+    painter.releaseGL();
+    
+    return "Capabilities  : " + caps + "\n" + info.toString();
   }
+
 
   @Override
   public void addMouseController(Object o) {}
@@ -177,7 +211,30 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   @Override
   public void removeKeyController(Object o) {}
 
-  public GLCapabilities getCapabilities() {
-    return capabilities;
+  @Override
+  public void addCanvasListener(ICanvasListener listener) {
+    canvasListeners.add(listener);
   }
+
+  @Override
+  public void removeCanvasListener(ICanvasListener listener) {
+    canvasListeners.remove(listener);
+  }
+
+  @Override
+  public List<ICanvasListener> getCanvasListeners() {
+    return canvasListeners;
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
+  }
+  
+  @Override
+  public boolean isNative() {
+    return true;
+  }
+
 }

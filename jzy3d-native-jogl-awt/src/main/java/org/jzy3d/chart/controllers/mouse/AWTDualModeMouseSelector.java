@@ -3,13 +3,13 @@ package org.jzy3d.chart.controllers.mouse;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.selection.AWTAbstractMouseSelector;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 
 
 /**
@@ -90,7 +90,7 @@ public class AWTDualModeMouseSelector {
   }
 
   public AWTRenderer2d buildMessageRenderer() {
-    return new AWTRenderer2d() {
+    return new AbstractAWTRenderer2d() {
       @Override
       public void paint(Graphics g, int canvasWidth, int canvasHeight) {
         if (displayMessage && message != null) {

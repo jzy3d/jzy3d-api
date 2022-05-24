@@ -31,7 +31,10 @@ import org.jzy3d.plot3d.transform.Transform;
  * 
  */
 public class Point extends Drawable implements ISingleColorable {
-
+  public Coord3d xyz;
+  public Color rgb;
+  public float width;
+  
   /** Intialize a point at the origin, with a white color and a width of 1. */
   public Point() {
     this(Coord3d.ORIGIN, Color.WHITE, 1.0f);
@@ -146,8 +149,4 @@ public class Point extends Drawable implements ISingleColorable {
   public void setCoord(Coord3d xyz) {
     this.xyz = xyz;
   }
-
-  public Coord3d xyz;
-  public Color rgb;
-  public float width;
 }

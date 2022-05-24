@@ -3,14 +3,13 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
-import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.GLBuffers;
@@ -25,7 +24,7 @@ import com.jogamp.opengl.util.GLBuffers;
  * 
  * This is true when Quality.setAlphaActivated(false), in other word for Quality.Advanced.
  * 
- * @uthor David Eck inspired this class with http://math.hws.edu/graphicsbook/source/jogl/ColorCubeOfSpheres.java
+ * @uthor David Eck inspired this class with https://math.hws.edu/graphicsbook/source/jogl/ColorCubeOfSpheres.java
  * @author Martin Pernollet
  */
 public class SphereVBO extends DrawableVBO {
@@ -80,13 +79,13 @@ public class SphereVBO extends DrawableVBO {
       hasMountedOnce = true;
     } catch (Exception e) {
       e.printStackTrace();
-      Logger.getLogger(DrawableVBO.class).error(e, e);
+      LogManager.getLogger(DrawableVBO.class).error(e, e);
     }
   }
 
   // element array buffer is an index:
   // @see
-  // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
+  // https://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
   @Override
   public void draw(IPainter painter) {
     if (hasMountedOnce) {

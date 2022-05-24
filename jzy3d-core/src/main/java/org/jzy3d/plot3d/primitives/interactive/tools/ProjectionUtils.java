@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
@@ -20,7 +20,7 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 
 
 public class ProjectionUtils {
-  static Logger logger = Logger.getLogger(ProjectionUtils.class);
+  static Logger logger = LogManager.getLogger(ProjectionUtils.class);
 
   public static List<PolygonProjection> project(Chart chart) {
     return project(chart.getView().getPainter(), chart.getScene().getGraph());
@@ -35,7 +35,7 @@ public class ProjectionUtils {
   }
 
   public static List<PolygonProjection> project(IPainter painter, Composite c) {
-    ArrayList<Drawable> monotypes = Decomposition.getDecomposition(c);
+    List<Drawable> monotypes = Decomposition.getDecomposition(c);
     return project(painter, monotypes);
   }
 
@@ -63,7 +63,7 @@ public class ProjectionUtils {
 
     // gather polygon and its colors in a data structure
     int k = 0;
-    List<PolygonProjection> polygonProjections = new ArrayList<PolygonProjection>();
+    List<PolygonProjection> polygonProjections = new ArrayList<>();
     for (ArrayList<Coord3d> p : projections) {
       polygonProjections.add(new PolygonProjection(p, colors.get(k++)));
     }

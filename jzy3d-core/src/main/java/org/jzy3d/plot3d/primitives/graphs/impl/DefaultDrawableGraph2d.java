@@ -1,10 +1,11 @@
 package org.jzy3d.plot3d.primitives.graphs.impl;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.graphs.AbstractDrawableGraph2d;
 import org.jzy3d.plot3d.text.align.Horizontal;
@@ -60,7 +61,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
   protected void drawVertexLabel(IPainter painter, V v, Coord2d coord, Color color) {
     Coord3d textPosition = new Coord3d(coord, Z);
-    txt.drawText(painter, v.toString(), textPosition, Horizontal.CENTER, Vertical.BOTTOM, color);
+    txt.drawText(painter, Font.Helvetica_12, v.toString(), textPosition, Horizontal.CENTER, Vertical.BOTTOM, color);
   }
 
   protected void drawEdge(IPainter painter, E e, Coord2d c1, Coord2d c2, Color color) {
@@ -73,12 +74,12 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
   @Override
   public void applyGeometryTransform(Transform transform) {
-    Logger.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
+    LogManager.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
   }
 
   @Override
   public void updateBounds() {
-    Logger.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
+    LogManager.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
   }
 
 }

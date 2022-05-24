@@ -1,21 +1,23 @@
 package org.jzy3d.plot3d.text.renderers.jogl;
 
-import java.awt.Font;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.AWTFont;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.AWTTextLayout;
 import org.jzy3d.plot3d.text.align.Horizontal;
-import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.jogl.style.DefaultTextStyle;
+import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.awt.TextRenderer.RenderDelegate;
 
@@ -38,7 +40,7 @@ import com.jogamp.opengl.util.awt.TextRenderer.RenderDelegate;
  * @author Martin Pernollet
  */
 public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRenderer {
-  protected Font font;
+  protected java.awt.Font awtFont;
   protected TextRenderer renderer;
   protected TextRenderer.RenderDelegate renderDelegate;
   protected float scaleFactor = 0.01f;
@@ -46,7 +48,7 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
   protected AWTTextLayout layout = new AWTTextLayout();
 
   public JOGLTextRenderer2d() {
-    this(new Font("Arial", Font.PLAIN, 16));
+    this(new Font("Arial", 16));
   }
 
   public JOGLTextRenderer2d(Font font) {
@@ -58,28 +60,28 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
    * @param renderDelegate may be null if no particular custom styling should be applied.
    */
   public JOGLTextRenderer2d(Font font, RenderDelegate renderDelegate) {
-    this.font = font;
-    this.renderer = new TextRenderer(font, true, true, renderDelegate);
+    this.awtFont = AWTFont.toAWT(font);
+    this.renderer = new TextRenderer(awtFont, true, true, renderDelegate);
     this.renderDelegate = renderDelegate;
   }
 
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal horizontal,
-      Vertical vertical, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      float rotation, Horizontal horizontal, Vertical vertical, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     // configureRenderer();
     resetTextColor(color);
 
     // Reset to a polygon mode suitable for rendering the texture handling the text
     painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
-    drawText2D(painter, s, position, color, horizontal, vertical);
+    drawText2D(painter, font, s, position, color, rotation, horizontal, vertical);
 
     return null;
   }
 
-  /** Draws a 2D text (facing camera) at the specified 3D position */
-  protected void drawText2D(IPainter painter, String text, Coord3d position, Color color,
-      Horizontal horizontal, Vertical vertical) {
+  /** Draws a 2D text (facing camera) at the specified 3D position. */
+  protected void drawText2D(IPainter painter, Font font, String text, Coord3d position,
+      Color color, float rotation, Horizontal horizontal, Vertical vertical) {
 
     // Canvas size
     int width = painter.getView().getCanvas().getRendererWidth();
@@ -87,16 +89,48 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
 
     // Text screen position
     Coord3d screen = painter.getCamera().modelToScreen(painter, position);
-    Coord2d textSize = layout.getBounds(text, font, renderer.getFontRenderContext());
+    Coord2d textSize = layout.getBounds(text, awtFont, renderer.getFontRenderContext());
     screen = layout.align(textSize.x, textSize.y, horizontal, vertical, screen);
 
+    
+    GL2 gl = ((NativeDesktopPainter)painter).getGL().getGL2();
+    
+
+    
     // Render text
     renderer.setColor(color.r, color.g, color.b, color.a);
     renderer.beginRendering(width, height);
-    renderer.draw(text, (int) screen.x, (int) screen.y);
-    renderer.flush();
+
+    
+    gl.glMatrixMode(GL2.GL_MODELVIEW);
+    gl.glPushMatrix();
+    
+    rotation = (float)(360*rotation / (2*Math.PI));
+    //rotation = 90;
+    gl.glTranslatef(screen.x, screen.y, 0);
+    gl.glRotatef(rotation, 0, 0, 1);
+    
+
+    
+    //System.out.println(rotation);
+    
+    int x =0, y = 0;
+    
+    /*if(Math.abs(rotation)==90) {
+      x = (int)(textSize.y / 2);
+      y = (int)(textSize.x / 2);
+    }*/
+    
+    renderer.draw(text, x, y);
+    //renderer.draw(text, (int) screen.x, (int) screen.y);
     renderer.endRendering();
+    renderer.flush();
+
+    gl.glPopMatrix();
+
   }
+  
+  
 
 
 
@@ -107,7 +141,7 @@ public class JOGLTextRenderer2d extends AbstractTextRenderer implements ITextRen
       if (renderDelegate != null) {
         if (renderDelegate instanceof DefaultTextStyle) {
           ((DefaultTextStyle) renderDelegate).setColor(AWTColor.toAWT(color));
-          renderer = new TextRenderer(font, true, true, renderDelegate);
+          renderer = new TextRenderer(awtFont, true, true, renderDelegate);
         }
       }
     }

@@ -40,7 +40,7 @@ public class Chart2dFactory extends AWTChartFactory {
   /* */
 
   public static Chart2d chart() {
-    return chart(Quality.Intermediate);
+    return chart(Quality.Intermediate());
   }
 
   public static Chart2d chart(Quality quality) {

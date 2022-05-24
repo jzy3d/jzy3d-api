@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.scene;
 
 import java.util.List;
 import java.util.Vector;
-
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -26,12 +25,24 @@ import org.jzy3d.plot3d.rendering.view.View;
  * @author Martin Pernollet
  */
 public class Scene {
-  public Scene(boolean graphsort, IChartFactory factory) {
+  protected Vector<View> views;
+  protected Graph graph;
+  protected LightSet lightSet;
+  protected IChartFactory factory;
+
+  public Scene(IChartFactory factory, boolean graphsort) {
     this.graph = factory.newGraph(this, factory.newOrderingStrategy(), graphsort);
     this.lightSet = new LightSet();
     this.views = new Vector<View>();
     this.factory = factory;
   }
+  
+  protected Scene(Graph graph) {
+    this.graph = graph;
+    this.lightSet = new LightSet();
+    this.views = new Vector<View>();
+  }
+
 
   /** Handles disposing of the Graph as well as all views pointing to this Graph. */
   public void dispose() {
@@ -66,7 +77,7 @@ public class Scene {
   /***************************************************************/
 
   /** Add a list of drawable to the scene. */
-  public void add(List<Drawable> drawables) {
+  public void add(List<? extends Drawable> drawables) {
     this.graph.add(drawables);
   }
 
@@ -114,19 +125,10 @@ public class Scene {
     view.dispose();
   }
 
-  /***************************************************************/
-
   /** Return the scene {@link Graph} string representation. */
   @Override
   public String toString() {
     return graph.toString();
   }
-
-  /***************************************************************/
-
-  protected Vector<View> views;
-  protected Graph graph;
-  protected LightSet lightSet;
-  protected IChartFactory factory;
 
 }

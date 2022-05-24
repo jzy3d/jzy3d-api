@@ -8,7 +8,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.newt.opengl.GLWindow;
 
 public class SWTChartFactory extends ChartFactory {
@@ -31,7 +30,7 @@ public class SWTChartFactory extends ChartFactory {
 
   public static Chart chart(Composite parent) {
     SWTChartFactory f = new SWTChartFactory(parent);
-    return f.newChart(Quality.Intermediate);
+    return f.newChart(Quality.Intermediate());
   }
 
   public static Chart chart(Composite parent, Quality quality) {

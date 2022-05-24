@@ -1,7 +1,6 @@
 package org.jzy3d.painters;
 
 import java.nio.Buffer;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.util.ImmModeSink;
@@ -231,14 +230,14 @@ public class GLES2CompatUtils {
   public static void glVertex3d(double d, float f, float g) {
     throw new UnsupportedOperationException();
     // FIXME ANDROID OPEN7 GL ES
-    // cf http://pandorawiki.org/Porting_to_GLES_from_GL
+    // cf https://pandorawiki.org/Porting_to_GLES_from_GL
   }
 
   public static void glLineStipple(int i, short s) {
     throw new UnsupportedOperationException();
     // FIXME ANDROID OPEN GL ES
     // cf
-    // http://stackoverflow.com/questions/1806028/how-to-draw-a-dotted-line-using-opengl-es-1
+    // https://stackoverflow.com/questions/1806028/how-to-draw-a-dotted-line-using-opengl-es-1
 
   }
 

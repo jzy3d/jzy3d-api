@@ -1,37 +1,55 @@
 package org.jzy3d.painters;
 
+import java.awt.Component;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.geom.Rectangle2D;
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
+import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLContext;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
+import com.jogamp.opengl.util.awt.TextRenderer;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 public class NativeDesktopPainter extends AbstractPainter implements IPainter {
+  static Logger LOGGER = LogManager.getLogger(NativeDesktopPainter.class);
+
   protected GL gl;
   protected GLU glu = new GLU();
   protected GLUT glut = new GLUT();
 
   public GL getGL() {
     return gl;
+  }
+
+  public GL2 getGL2() {
+    return getGL().getGL2();
   }
 
   public void setGL(GL gl) {
@@ -55,12 +73,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
-  public Object acquireGL(ICanvas canvas) {
+  public Object acquireGL() {
     return getCurrentGL(canvas);
   }
 
   @Override
-  public void releaseGL(ICanvas canvas) {
+  public void releaseGL() {
     getCurrentContext(canvas).release();
   }
 
@@ -71,18 +89,22 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
    * {@link GLEventListener}, e.g. when clicking the frame with mouse.
    */
   public GL getCurrentGL(ICanvas canvas) {
-    getCurrentContext(canvas).makeCurrent();
-    return getCurrentContext(canvas).getGL();
+    GLContext context = getCurrentContext(canvas);
+    context.makeCurrent();
+    return context.getGL();
   }
 
   public GLContext getCurrentContext(ICanvas canvas) {
-    return ((INativeCanvas) canvas).getDrawable().getContext();
+    GLAutoDrawable d = ((INativeCanvas) canvas).getDrawable();
+    return d.getContext();
   }
 
   @Override
   public void configureGL(Quality quality) {
     // Activate Depth buffer
     if (quality.isDepthActivated()) {
+
+
       gl.glEnable(GL.GL_DEPTH_TEST);
       gl.glDepthFunc(GL.GL_LEQUAL);
     } else {
@@ -90,10 +112,30 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       // gl.glDepthRangef(n, f);
     }
 
+
+
     // Blending
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+    // KEEP THIS DOC!!
+    // gl.glBlendFunc(GL.GL_DST_ALPHA, GL.GL_ONE);
+    // ONE : make a white screen
+    // NONE : make surface look opaque
+    // GL_ONE_MINUS_DST_ALPHA : make surface look opaque
+    // GL_ONE_MINUS_SRC_ALPHA : make surface look translucent but change coloring
+    // GL_SRC_ALPHA : make surface look translucent but change coloring + no wireframe
+    // GL_DST_ALPHA : make a white screen
+    // glBlendFunc(GL.GL_ONE_MINUS_DST_ALPHA,GL.GL_DST_ALPHA);
+
+    // gl.glBlen
+    // ByteBuffer byteBuffer = ByteBuffer.allocate(10);
+    // IntBuffer ib = byteBuffer.asIntBuffer();
+    // gl.glGetIntegerv(GL.GL_BLEND_SRC_ALPHA, ib);
+    // gl.glGetIntegerv(GL.GL_BLEND_DST_ALPHA, ib);
+    // System.out.println(ib.array());
+
     // on/off is handled by each viewport (camera or image)
-    
+
     // Activate tranparency
     if (quality.isAlphaActivated()) {
       gl.glEnable(GL.GL_BLEND);
@@ -110,10 +152,20 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     }
 
     // Make smooth colors for polygons (interpolate color between points)
-    if (quality.isSmoothColor())
-      gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
-    else
-      gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+    if (gl.getGLProfile().isGL2()) {
+      if (quality.isSmoothColor())
+        gl.getGL2().glShadeModel(GLLightingFunc.GL_SMOOTH);
+      else
+        gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT);
+    } else {
+      LOGGER.warn(
+          "Did not configured shade model as we don t have a GL2 context : " + gl.getGLProfile());
+    }
+    /*
+     * else if(gl.getGLProfile().isGL4()) { if (quality.isSmoothColor())
+     * gl.getGL4().glShadeModel(GLLightingFunc.GL_SMOOTH); else
+     * gl.getGL2().glShadeModel(GLLightingFunc.GL_FLAT); }
+     */
 
     // Make smoothing setting
     if (quality.isSmoothPolygon()) {
@@ -129,10 +181,25 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       gl.glDisable(GL.GL_LINE_SMOOTH);
 
     if (quality.isSmoothPoint()) {
-      gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
-      gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
+      gl.glEnable(GL2.GL_POINT_SMOOTH);
+      gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
     } else
-      gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
+      gl.glDisable(GL2.GL_POINT_SMOOTH);
+  }
+
+  @Override
+  public WindowingToolkit getWindowingToolkit() {
+    String name = getCanvas().getClass().getSimpleName();
+    if (name.indexOf("CanvasAWT") >= 0) {
+      return WindowingToolkit.AWT;
+    } else if (name.indexOf("CanvasSwing") >= 0) {
+      return WindowingToolkit.Swing;
+    } else if (name.indexOf("CanvasNewtSWT") >= 0) {
+      return WindowingToolkit.SWT;
+    } else if (name.indexOf("OffscreenCanvas") >= 0) {
+      return WindowingToolkit.Offscreen;
+    }
+    return WindowingToolkit.UNKOWN;
   }
 
   @Override
@@ -186,6 +253,8 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glMatrixMode(int mode) {
+    // gl.getGL3bc().glMatrixMode(mode);
+    // gl.getGL4bc().glMatrixMode(mode);
     gl.getGL2().glMatrixMode(mode);
   }
 
@@ -335,6 +404,8 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     gl.getGL2().glTexEnvi(target, pname, param);
   }
 
+  // DRAW IMAGES
+
   @Override
   public void glRasterPos3f(float x, float y, float z) {
     gl.getGL2().glRasterPos3f(x, y, z);
@@ -360,11 +431,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     switch (store) {
       case PACK_ALIGNMENT:
         gl.glPixelStorei(GL.GL_PACK_ALIGNMENT, param);
-        break; 
+        break;
       case UNPACK_ALIGNMENT:
         gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, param);
         break;
-      default: throw new IllegalArgumentException("Unsupported mode '" + store + "'");
+      default:
+        throw new IllegalArgumentException("Unsupported mode '" + store + "'");
     }
   }
 
@@ -374,12 +446,123 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     gl.getGL2().glBitmap(width, height, xorig, yorig, xmove, ymove, bitmap, bitmap_offset);
   }
 
+
+  @Override
+  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight, Coord2d pixelZoom,
+      Coord3d imagePosition) {
+    glPixelZoom(pixelZoom.x, pixelZoom.y);
+    glRasterPos3f(imagePosition.x, imagePosition.y, imagePosition.z);
+    // painter.glRasterPos2f(xpict, ypict);
+
+    synchronized (imageBuffer) { // we don't want to draw image while it is being set by setImage
+      glDrawPixels(imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
+    }
+  }
+
+  // elements of GL spec picked in JOGL GL interface
+  public static final int GL_RGBA = 0x1908;
+  public static final int GL_UNSIGNED_BYTE = 0x1401;
+
+
+  // STRINGS
+
   @Override
   public void glutBitmapString(int font, String string) {
     glut.glutBitmapString(font, string);
   }
 
-  /** JGL only. Will throw exception */
+  /**
+   * Render 2D text at the given 3D position.
+   * 
+   * The {@link Font} can be any font name and size supported by AWT.
+   * 
+   * Rotation is in radian and is applied at the center of the text to avoid messing up text layout.
+   * 
+   * 
+   * @see {@link #glutBitmapString(int, String)}, an alternative way of rendering text with simpler
+   *      parameters and smaller font name and size set.
+   */
+  @Override
+  public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
+    // Get viewport (and not canvas) dimensions
+    int[] viewport = getViewPortAsInt();
+    int width = viewport[2];
+    int height = viewport[3];
+
+    // Reset to a polygon mode suitable for rendering the texture handling the text
+    glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
+
+    // Geometric processing for text layout
+    float rotationD = -(float) (360 * rotation / (2 * Math.PI));
+    Coord3d screen = modelToScreen(position);
+
+    TextRenderer renderer = getOrCreateTextRenderer(font);
+    renderer.setColor(color.r, color.g, color.b, color.a);
+    // indicates current viewport (which may be smaller than canvas)
+    renderer.beginRendering(width, height);
+
+    // Pre-shift text to make it rotate from center
+    // of string and not from left point
+    int xPreShift = 0, yPreShift = 0;
+
+    if (rotationD != 0) {
+      xPreShift = getTextLengthInPixels(font, label) / 2;
+      yPreShift = font.getHeight() / 2;
+    }
+
+    GL2 gl = getGL2();
+    gl.glMatrixMode(GL2.GL_MODELVIEW);
+    gl.glPushMatrix();
+    gl.glTranslatef(screen.x + xPreShift, screen.y + yPreShift, 0);
+    gl.glScalef(1, 1, 1);
+    gl.glRotatef(rotationD, 0, 0, 1);
+
+    // Shifting text to deal with rotation
+    int xPostShift = -xPreShift;
+    int yPostShift = -yPreShift;
+
+    renderer.draw(label, xPostShift, yPostShift);
+    renderer.endRendering();
+    renderer.flush();
+
+    gl.glPopMatrix();
+
+  }
+
+  protected TextRenderer getOrCreateTextRenderer(Font font) {
+    // See discussion
+    //
+    // https://forum.jogamp.org/TextRenderer-crash-the-JVM-after-removing-then-adding-a-canvas-from-a-AWT-or-Swing-layout-td4041660.html
+    //
+    // Despite not efficient, the need to deal with removing/adding a canvas requires not keeping a
+    // cache of the already defined strings. Indeed, in case the GLContext get destroyed, the
+    // inherent textures are lost and text is replaced by black pixels. 
+    //
+    // As there is no way to invalidate the TextRenderer cache (stringLocations is private), we simply re-create
+    // a new TextRenderer as soon as we want draw a text.
+
+    TextRenderer renderer = null;
+    // TextRenderer renderer = txtRendererMap.get(font);
+
+    if (renderer == null) {
+      renderer = new TextRenderer(toAWT(font), true, true, null);
+      // renderer.setSmoothing(false);// some GPU do not handle smoothing well
+      // renderer.setUseVertexArrays(false); // some GPU do not handle VBO properly
+
+      //txtRendererMap.put(font, renderer);
+    }
+    return renderer;
+  }
+
+  //protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
+
+
+  /**
+   * Render 2D text at the given 3D position using a font as supported by
+   * {@link #glutBitmapString(int, String)}.
+   * 
+   * @see {@link Font} to know the set of font name and size supported by this method.
+   */
   @Override
   public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c) {
     color(c);
@@ -390,6 +573,39 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   @Override
   public int glutBitmapLength(int font, String string) {
     return glut.glutBitmapLength(font, string);
+  }
+
+  @Override
+  public int getTextLengthInPixels(int font, String string) {
+    Font fnt = Font.getById(font);
+
+    return getTextLengthInPixels(fnt, string);
+  }
+
+  @Override
+  public int getTextLengthInPixels(Font font, String string) {
+    // Try to get text width using onscreen graphics
+    ICanvas c = getCanvas();
+    if (c instanceof Component) {
+      Graphics g = ((Component) c).getGraphics();
+      if (g != null && font != null) {
+        g.setFont(toAWT(font));
+
+        FontMetrics fm = g.getFontMetrics();
+        if (fm != null) {
+          return fm.stringWidth(string);
+        }
+      }
+    }
+
+    // Try to get text width using text renderer offscreen
+    TextRenderer renderer = getOrCreateTextRenderer(font);
+    Rectangle2D r = renderer.getBounds(string);
+    return (int) r.getWidth();
+  }
+
+  private java.awt.Font toAWT(Font font) {
+    return new java.awt.Font(font.getName(), java.awt.Font.PLAIN, font.getHeight());
   }
 
   // GL LISTS
@@ -464,6 +680,16 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     glut.glutSolidCube(size);
   }
 
+  @Override
+  public void glutSolidTeapot(float scale) {
+    glut.glutSolidTeapot(scale);
+  }
+
+  @Override
+  public void glutWireTeapot(float scale) {
+    glut.glutWireTeapot(scale);
+  }
+
 
   // GL FEEDBACK BUFER
 
@@ -496,6 +722,87 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     gl.getGL2().glPassThrough(token);
   }
 
+  // GL STENCIL BUFFER
+
+  @Override
+  public void glStencilFunc(StencilFunc func, int ref, int mask) {
+    switch (func) {
+      case GL_ALWAYS:
+        gl.glStencilFunc(GL.GL_ALWAYS, ref, mask);
+        break;
+      case GL_EQUAL:
+        gl.glStencilFunc(GL.GL_EQUAL, ref, mask);
+        break;
+      case GL_GREATER:
+        gl.glStencilFunc(GL.GL_GREATER, ref, mask);
+        break;
+      case GL_GEQUAL:
+        gl.glStencilFunc(GL.GL_GEQUAL, ref, mask);
+        break;
+      case GL_LEQUAL:
+        gl.glStencilFunc(GL.GL_LEQUAL, ref, mask);
+        break;
+      case GL_LESS:
+        gl.glStencilFunc(GL.GL_LESS, ref, mask);
+        break;
+      case GL_NEVER:
+        gl.glStencilFunc(GL.GL_NEVER, ref, mask);
+        break;
+      case GL_NOTEQUAL:
+        gl.glStencilFunc(GL.GL_NOTEQUAL, ref, mask);
+        break;
+
+      default:
+        throw new IllegalArgumentException("Unknown enum value for StencilFunc: " + func);
+    }
+  }
+
+  @Override
+  public void glStencilMask(int mask) {
+    gl.glStencilMask(mask);
+  }
+
+  @Override
+  public void glStencilMask_True() {
+    gl.glStencilMask(GL.GL_TRUE);
+  }
+
+  @Override
+  public void glStencilMask_False() {
+    gl.glStencilMask(GL.GL_FALSE);
+  }
+
+
+  @Override
+  public void glStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) {
+    gl.glStencilOp(toInt(fail), toInt(zfail), toInt(zpass));
+  }
+
+  @Override
+  public void glClearStencil(int s) {
+    gl.glClearStencil(s);
+  }
+
+  protected int toInt(StencilOp fail) {
+    switch (fail) {
+      case GL_DECR:
+        return GL.GL_DECR;
+      case GL_INCR:
+        return GL.GL_INCR;
+      case GL_INVERT:
+        return GL.GL_INVERT;
+      case GL_KEEP:
+        return GL.GL_KEEP;
+      case GL_REPLACE:
+        return GL.GL_REPLACE;
+      case GL_ZERO:
+        return GL.GL_ZERO;
+      default:
+        throw new IllegalArgumentException("Unknown enum value for StencilOp: " + fail);
+    }
+  }
+
+
   // GL VIEWPOINT
 
   @Override
@@ -503,14 +810,22 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       double far_val) {
     gl.getGL2().glOrtho(left, right, bottom, top, near_val, far_val);
   }
+  
+  @Override
+  public void gluOrtho2D(double left, double right, double bottom, double top) {
+    glu.gluOrtho2D(left, right, bottom, top);
+  }
+  
+  
 
   @Override
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {
     glu.gluPerspective(fovy, aspect, zNear, zFar);
   }
-  
+
   @Override
-  public void glFrustum(double left, double right, double bottom, double top, double zNear, double zFar) {
+  public void glFrustum(double left, double right, double bottom, double top, double zNear,
+      double zFar) {
     gl.getGL2().glFrustum(left, right, bottom, top, zNear, zFar);
   }
 
@@ -524,6 +839,44 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glViewport(int x, int y, int width, int height) {
     gl.glViewport(x, y, width, height);
   }
+
+  @Override
+  public void glClipPlane(int plane, double[] equation) {
+    // Array.print("NativePainter : glClipPlane : " + plane + " : ", equation);
+    gl.getGL2().glClipPlane(plane, equation, 0);
+  }
+
+  @Override
+  public void glEnable_ClipPlane(int plane) {
+    gl.glEnable(clipPlaneId(plane));
+  }
+
+  /** Return the GL clip plane ID according to an ID in [0;5] */
+  @Override
+  public int clipPlaneId(int id) {
+    switch (id) {
+      case 0:
+        return GL2.GL_CLIP_PLANE0;
+      case 1:
+        return GL2.GL_CLIP_PLANE1;
+      case 2:
+        return GL2.GL_CLIP_PLANE2;
+      case 3:
+        return GL2.GL_CLIP_PLANE3;
+      case 4:
+        return GL2.GL_CLIP_PLANE4;
+      case 5:
+        return GL2.GL_CLIP_PLANE5;
+      default:
+        throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
+  @Override
+  public void glDisable_ClipPlane(int plane) {
+    gl.glDisable(clipPlaneId(plane));
+  }
+
 
   @Override
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
@@ -581,12 +934,32 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   // GL LIGHTS
 
-
+  @Override
+  public void glShadeModel(ColorModel colorModel) {
+    if (ColorModel.SMOOTH.equals(colorModel)) {
+      gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
+    } else if (ColorModel.FLAT.equals(colorModel)) {
+      gl.getGL2().glShadeModel(GL2.GL_FLAT);
+    } else {
+      throw new IllegalArgumentException("Unsupported setting : '" + colorModel + "'");
+    }
+  }
 
   @Override
   public void glShadeModel(int mode) {
     gl.getGL2().glShadeModel(mode);
   }
+
+  @Override
+  public void glShadeModel_Smooth() {
+    gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
+  }
+
+  @Override
+  public void glShadeModel_Flat() {
+    gl.getGL2().glShadeModel(GL2.GL_FLAT);
+  }
+
 
   @Override
   public void glMaterialfv(int face, int pname, float[] params, int params_offset) {
@@ -606,6 +979,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glLightModelfv(int mode, float[] value) {
+    gl.getGL2().glLightModelfv(mode, value, 0);
+  }
+
+  @Override
   public void glLightModel(LightModel model, boolean value) {
     if (LightModel.LIGHT_MODEL_TWO_SIDE.equals(model)) {
       glLightModeli(GL2ES1.GL_LIGHT_MODEL_TWO_SIDE, value ? GL.GL_TRUE : GL.GL_FALSE);
@@ -614,6 +992,31 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     } else {
       throw new IllegalArgumentException("Unsupported model '" + model + "'");
     }
+  }
+
+  @Override
+  public void glLightModel(LightModel model, Color color) {
+    if (LightModel.LIGHT_MODEL_AMBIENT.equals(model)) {
+      glLightModelfv(GL2ES1.GL_LIGHT_MODEL_AMBIENT, color.toArray());
+    } else {
+      throw new IllegalArgumentException("Unsupported model '" + model + "'");
+    }
+  }
+
+  @Override
+  public void glLightf(int light, Attenuation.Type attenuationType, float value) {
+    if (Attenuation.Type.CONSTANT.equals(attenuationType)) {
+      glLightf(light, GL2.GL_CONSTANT_ATTENUATION, value);
+    } else if (Attenuation.Type.LINEAR.equals(attenuationType)) {
+      glLightf(light, GL2.GL_LINEAR_ATTENUATION, value);
+    } else if (Attenuation.Type.QUADRATIC.equals(attenuationType)) {
+      glLightf(light, GL2.GL_QUADRATIC_ATTENUATION, value);
+    }
+  }
+
+  @Override
+  public void glLightf(int light, int pname, float value) {
+    gl.getGL2().glLightf(lightId(light), pname, value);
   }
 
   @Override
@@ -639,6 +1042,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   @Override
   public void glLight_Specular(int lightId, Color specularColor) {
     glLightfv(lightId, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
+  }
+
+  @Override
+  public void glLight_Shininess(int lightId, float value) {
+    glLightf(lightId, GLLightingFunc.GL_SHININESS, value);
   }
 
   @Override
@@ -920,4 +1328,58 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   public void glHint_PointSmooth_Nicest() {
     glHint(GL2.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
   }
+
+  @Override
+  public void glDepthFunc(DepthFunc func) {
+    switch (func) {
+      case GL_ALWAYS:
+        gl.glDepthFunc(GL.GL_ALWAYS);
+        break;
+      case GL_NEVER:
+        gl.glDepthFunc(GL.GL_NEVER);
+        break;
+      case GL_EQUAL:
+        gl.glDepthFunc(GL.GL_EQUAL);
+        break;
+      case GL_GEQUAL:
+        gl.glDepthFunc(GL.GL_GEQUAL);
+        break;
+      case GL_GREATER:
+        gl.glDepthFunc(GL.GL_GREATER);
+        break;
+      case GL_LEQUAL:
+        gl.glDepthFunc(GL.GL_LEQUAL);
+        break;
+      case GL_LESS:
+        gl.glDepthFunc(GL.GL_LESS);
+        break;
+      case GL_NOTEQUAL:
+        gl.glDepthFunc(GL.GL_NOTEQUAL);
+        break;
+      default:
+        throw new RuntimeException("Enum value not supported : " + func);
+    }
+  }
+
+  @Override
+  public void glEnable_DepthTest() {
+    gl.glEnable(GL.GL_DEPTH_TEST);
+  }
+
+  @Override
+  public void glDisable_DepthTest() {
+    gl.glDisable(GL.GL_DEPTH_TEST);
+  }
+
+  @Override
+  public void glEnable_Stencil() {
+    gl.glEnable(GL2.GL_STENCIL_TEST);
+  }
+
+  @Override
+  public void glDisable_Stencil() {
+    gl.glDisable(GL2.GL_STENCIL_TEST);
+  }
+
+
 }

@@ -1,19 +1,28 @@
 package org.jzy3d.painters;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.PolygonArray;
+import org.jzy3d.os.OperatingSystem;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.ClipEq;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
@@ -24,6 +33,8 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * It draws things by providing a generalization of the OpenGL interface to allow any
  * {@link Drawable} to be painted. The painter methods are named to both match the OpenGL function
  * naming and also match the Jzy3d primitives (Coord3d, Color, etc)
+ * 
+ * <h1>OpenGL naming conventions</h1>
  * 
  * Traditional OpenGL methods mapping
  * <ul>
@@ -44,7 +55,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * {@link IPainter#glMaterial(MaterialProperty, Color, boolean)}
  * </ul>
  * 
- * Jzy3d model mapping
+ * <h1>Jzy3d naming conventions</h1>
  * <ul>
  * <li>GL.glNormal3f(x,y,z) -> {@link IPainter#normal(Coord3d)}
  * <li>GL.glVertex3f(x,y,z) -> {@link IPainter#vertex(Coord3d)}
@@ -55,6 +66,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * {@link IPainter#color(Color)} and {@link IPainter#glColor4f(float, float, float, float)} are both
  * available.
  * 
+ * <h1>Native GL and Emulated GL</h1>
  * 
  * Implementations of this interface may use native rendering ({@link NativeDeskopPainter}) or rely
  * on pure java emulation of OpenGL1 ({@link EmulGLPainter}). They are instanciated by their
@@ -82,119 +94,40 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * <li>GLU glu = {@link NativeDeskopPainter#getGLU()}; // JOGL GLU interface
  * <li>GLUT glut = {@link NativeDeskopPainter#getGLUT()}; // JOGL GLUT interface
  * </ul>
+ * 
+ * <h1>Text</h1>
+ * 
+ * The {@link #drawText(Font, String, Coord3d, Color, float)} and
+ * {@link #getTextLengthInPixels(Font, String)} are not OpenGL related and specific to
+ * {@link IPainter}. They allows to draw 2D text easily and enabling rotation, which may not be
+ * supported by all {@link IPainter} implementations (currently only supported with EmulGL).
+ * 
+ * Beside this, all implementation will provide support on {@link #glutBitmapString(int, String)}
+ * and {@link #glutBitmapLength(int, String)} which are the base OpenGL primitives for drawing
+ * strings.
+ * 
+ * Note that the {@link View#configureHiDPIListener} will adapt the text size according to HiDPI to
+ * ensure text does not appear to small on high resolution screens.
+ * 
  */
 public interface IPainter {
-  /**
-   * A Font subset supported both by OpenGL 1 and AWT. These fonts can be used both for charts based
-   * on native OpenGL and charts based on raw AWT.
-   * 
-   * Painters such as {@link NativeDesktopPainter} use OpenGL for font rendering and address a font
-   * name AND size through a font ID (e.g {@link IPainter#BITMAP_HELVETICA_10},
-   * {@link IPainter#BITMAP_HELVETICA_12}, etc).
-   * 
-   * Painters such as {@link EmulGLPainter} use AWT for font rendering and may support more font
-   * names and size than those provided as default to fit OpenGL 1 spec. To use other fonts than the
-   * defaults (e.g. {@link Font#Helvetica_12}), simply build them as follow
-   * 
-   * <code>
-   * Font font = new org.jzy3d.painters.Painter.Font("Arial", 11);
-   * </code>
-   * 
-   * Font names not supported by OpenGL 1 will be ignored. Instead, the default font
-   * {@link IPainter#BITMAP_HELVETICA_12} will apply.
-   */
-  public enum Font {
-    Helvetica_10(BITMAP_HELVETICA_10, 10), 
-    Helvetica_12(BITMAP_HELVETICA_12, 12), 
-    Helvetica_18(BITMAP_HELVETICA_18, 18), 
-    TimesRoman_10(BITMAP_TIMES_ROMAN_10, 10), 
-    TimesRoman_24(BITMAP_TIMES_ROMAN_24, 24);
 
-    private static final String TIMES_NEW_ROMAN = "Times New Roman";
-    private static final String HELVETICA = "Helvetica";
-
-    Font(int code, int height) {
-      this.code = code;
-      this.height = height;
-
-      if (code == BITMAP_HELVETICA_10 || code == BITMAP_HELVETICA_12
-          || code == BITMAP_HELVETICA_18) {
-        this.name = HELVETICA;
-      } else if (code == BITMAP_TIMES_ROMAN_10 || code == BITMAP_TIMES_ROMAN_24) {
-        this.name = TIMES_NEW_ROMAN;
-      }
-    }
-
-    Font(String name, int height) {
-      this.name = name;
-      this.height = height;
-
-      if (HELVETICA.toLowerCase().equals(name.toLowerCase())) {
-        switch (height) {
-          case 10:
-            code = BITMAP_HELVETICA_10;
-            break;
-          case 12:
-            code = BITMAP_HELVETICA_12;
-            break;
-          case 18:
-            code = BITMAP_HELVETICA_18;
-            break;
-          default:
-            code = BITMAP_HELVETICA_12;
-            break;
-        }
-      } else if (TIMES_NEW_ROMAN.toLowerCase().equals(name.toLowerCase())) {
-        switch (height) {
-          case 10:
-            code = BITMAP_TIMES_ROMAN_10;
-            break;
-          case 24:
-            code = BITMAP_TIMES_ROMAN_24;
-            break;
-          default:
-            code = BITMAP_TIMES_ROMAN_10;
-            break;
-        }
-      } else { // default
-        code = BITMAP_HELVETICA_12;
-      }
-    }
-
-    public String getName() {
-      return name;
-    }
-
-    public int getCode() {
-      return code;
-    }
-
-    public int getHeight() {
-      return height;
-    }
-
-    protected String name;
-    protected int code;
-    protected int height;
-
-  }
-
-  // Font constants below are picked from GLU object in JOGL
-  public static final int STROKE_ROMAN = 0;
-  public static final int STROKE_MONO_ROMAN = 1;
-  public static final int BITMAP_9_BY_15 = 2;
-  public static final int BITMAP_8_BY_13 = 3;
-  public static final int BITMAP_TIMES_ROMAN_10 = 4;
-  public static final int BITMAP_TIMES_ROMAN_24 = 5;
-  public static final int BITMAP_HELVETICA_10 = 6;
-  public static final int BITMAP_HELVETICA_12 = 7;
-  public static final int BITMAP_HELVETICA_18 = 8;
 
   /* ****************************************** */
 
-  public Object acquireGL(ICanvas canvas);
+  /**
+   * In the context of a multithreaded application, this method allows retrieving the GL context for
+   * the calling thread. Once work is done the caller should call {@link #releaseGL()}
+   */
+  public Object acquireGL();
 
-  public void releaseGL(ICanvas canvas);
+  /**
+   * In the context of a multithreaded application, this method allows releasing the GL context by
+   * the calling thread to let other thread use it.
+   * 
+   * {@link #acquireGL()}
+   */
+  public void releaseGL();
 
   public Camera getCamera();
 
@@ -203,6 +136,20 @@ public interface IPainter {
   public View getView();
 
   public void setView(View view);
+
+  public ICanvas getCanvas();
+
+  public void setCanvas(ICanvas canvas);
+  
+  public OperatingSystem getOS();
+
+  public WindowingToolkit getWindowingToolkit();
+
+  /**
+   * Return the Quality setting of the chart, which may be different from the one given at the
+   * {@link #configureGL(Quality)} step.
+   */
+  public Quality getQuality();
 
   /** Apply quality settings as OpenGL commands */
   public void configureGL(Quality quality);
@@ -225,6 +172,26 @@ public interface IPainter {
 
   /** A convenient shortcut to glColor4f */
   public void color(Color color);
+
+  /** A helper to draw a bounding box. */
+  public void box(BoundingBox3d box, Color color, float width, SpaceTransformer spaceTransformer);
+
+  /** A convenient shortcut to glClipPlane */
+  public void clip(int plane, ClipEq equation, double value);
+
+  /**
+   * A convenient shortcut to glClipPlane that defines the 6 clipping planes according to the
+   * min/max values of the bounding box.
+   * 
+   * Then requires to enable clipping with {@link #clipOn()}.
+   */
+  public void clip(BoundingBox3d box);
+
+  /** Enable all clipping planes */
+  public void clipOn();
+
+  /** Disable all clipping planes */
+  public void clipOff();
 
   /**
    * A convenient shortcut to glColor4f which overrides the color's alpha channel
@@ -265,9 +232,25 @@ public interface IPainter {
 
   public float[] getModelViewAsFloat();
 
+  public Coord3d screenToModel(Coord3d screen);
+
+  public Coord3d modelToScreen(Coord3d point);
+
+  public Coord3d[] modelToScreen(Coord3d[] points);
+
+  public Coord3d[][] modelToScreen(Coord3d[][] points);
+
+  public List<Coord3d> modelToScreen(List<Coord3d> points);
+
+  public ArrayList<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons);
+
+  public PolygonArray modelToScreen(PolygonArray polygon);
+
+  public PolygonArray[][] modelToScreen(PolygonArray[][] polygons);
+
   // ----------------------------
 
-  // GL INTERFACE
+  // GL INTERFACE GENERAL
 
   public void glLoadIdentity();
 
@@ -325,11 +308,15 @@ public interface IPainter {
 
   public void glPointSize(float width);
 
+  // GL TEXTURES
+
   public void glTexCoord2f(float s, float t);
 
   public void glTexEnvf(int target, int pname, float param);
 
   public void glTexEnvi(int target, int pname, int param);
+
+  // GL DISPLAY LISTS
 
   public int glGenLists(int range);
 
@@ -360,6 +347,13 @@ public interface IPainter {
   public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove,
       byte[] bitmap, int bitmap_offset);
 
+  /** A high level and easy way of drawing images (non OpenGL). */
+  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight, Coord2d pixelZoom,
+      Coord3d imagePosition);
+
+
+  // GL TEXT
+
   public void glutBitmapString(int font, String string);
 
   public int glutBitmapLength(int font, String string);
@@ -367,20 +361,42 @@ public interface IPainter {
   /** An interface for AWT user, jGL only @since 2.0.0 */
   public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c);
 
+  public int getTextLengthInPixels(int font, String string);
+
+  public int getTextLengthInPixels(Font font, String string);
+
+  /**
+   * A high level and easy way of drawing texts (non OpenGL). Rotation may not be supported by all
+   * {@link IPainter}
+   */
+  public void drawText(Font font, String label, Coord3d position, Color color, float rotation);
+
+
   // GL VIEWPOINT
 
   public void glOrtho(double left, double right, double bottom, double top, double near_val,
       double far_val);
+  
+  public void gluOrtho2D(double left, double right, double bottom, double top);
 
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar);
 
-  public void glFrustum(double left, double right, double bottom, double top, double zNear, double zFar);
-  
+  public void glFrustum(double left, double right, double bottom, double top, double zNear,
+      double zFar);
+
   public void gluLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY,
       float centerZ, float upX, float upY, float upZ);
 
   public void glViewport(int x, int y, int width, int height);
 
+  public void glClipPlane(int plane, double[] equation);
+
+  public void glEnable_ClipPlane(int plane);
+
+  public void glDisable_ClipPlane(int plane);
+
+  public int clipPlaneId(int id);
+  
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
       int objPos_offset);
@@ -393,13 +409,20 @@ public interface IPainter {
 
   public void gluDisk(double inner, double outer, int slices, int loops);
 
-  public void glutSolidSphere(double radius, int slices, int stacks);
-
   public void gluSphere(double radius, int slices, int stacks);
 
   public void gluCylinder(double base, double top, double height, int slices, int stacks);
 
+  // GLUT INTERFACE
+
+  public void glutSolidSphere(double radius, int slices, int stacks);
+
   public void glutSolidCube(final float size);
+
+  public void glutSolidTeapot(float scale);
+
+  public void glutWireTeapot(float scale);
+
 
   // GL FEEDBACK BUFFER
 
@@ -417,17 +440,161 @@ public interface IPainter {
 
   public void glGetFloatv(int pname, float[] data, int data_offset);
 
+  // GL STENCIL BUFFER
+
+  /**
+   * Stenciling, like depth-buffering, enables and disables drawing on a per-pixel basis. Stencil
+   * planes are first drawn into using GL drawing primitives, then geometry and images are rendered
+   * using the stencil planes to mask out portions of the screen. Stenciling is typically used in
+   * multipass rendering algorithms to achieve special effects, such as decals, outlining, and
+   * constructive solid geometry rendering.
+   * 
+   * The stencil test conditionally eliminates a pixel based on the outcome of a comparison between
+   * the reference value and the value in the stencil buffer. To enable and disable the test, call
+   * glEnable and glDisable with argument GL_STENCIL_TEST. To specify actions based on the outcome
+   * of the stencil test, call glStencilOp or glStencilOpSeparate.
+   * 
+   * There can be two separate sets of func, ref, and mask parameters; one affects back-facing
+   * polygons, and the other affects front-facing polygons as well as other non-polygon primitives.
+   * glStencilFunc sets both front and back stencil state to the same values. Use
+   * glStencilFuncSeparate to set front and back stencil state to different values.
+   * 
+   * func is a symbolic constant that determines the stencil comparison function. It accepts one of
+   * eight values, shown in the following list. ref is an integer reference value that is used in
+   * the stencil comparison. It is clamped to the range 0 2 n - 1 , where n is the number of
+   * bitplanes in the stencil buffer. mask is bitwise ANDed with both the reference value and the
+   * stored stencil value, with the ANDed values participating in the comparison.
+   * 
+   * If stencil represents the value stored in the corresponding stencil buffer location, the
+   * following list shows the effect of each comparison function that can be specified by func. Only
+   * if the comparison succeeds is the pixel passed through to the next stage in the rasterization
+   * process (see glStencilOp). All tests treat stencil values as unsigned integers in the range 0 2
+   * n - 1 , where n is the number of bitplanes in the stencil buffer.
+   * 
+   * The following values are accepted by func:
+   * 
+   * <ul>
+   * <li>GL_NEVER Always fails.
+   * <li>GL_LESS Passes if ( ref & mask ) < ( stencil & mask ).
+   * <li>GL_LEQUAL Passes if ( ref & mask ) <= ( stencil & mask ).
+   * <li>GL_GREATER Passes if ( ref & mask ) > ( stencil & mask ).
+   * <li>GL_GEQUAL Passes if ( ref & mask ) >= ( stencil & mask ).
+   * <li>GL_EQUAL Passes if ( ref & mask ) = ( stencil & mask ).
+   * <li>GL_NOTEQUAL Passes if ( ref & mask ) != ( stencil & mask ).
+   * <li>GL_ALWAYS Always passes.
+   * </ul>
+   * 
+   * @param func sets the stencil test function that determines whether a fragment passes or is
+   *        discarded. This test function is applied to the stored stencil value and the
+   *        glStencilFunc's ref value. Possible options are: GL_NEVER, GL_LESS, GL_LEQUAL,
+   *        GL_GREATER, GL_GEQUAL, GL_EQUAL, GL_NOTEQUAL and GL_ALWAYS. The semantic meaning of
+   *        these is similar to the depth buffer's functions.
+   * @param ref specifies the reference value for the stencil test. The stencil buffer's content is
+   *        compared to this value.
+   * @param mask specifies a mask that is ANDed with both the reference value and the stored stencil
+   *        value before the test compares them. Initially set to all 1s.
+   * 
+   * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glStencilFunc.xhtml
+   */
+  public void glStencilFunc(StencilFunc func, int ref, int mask);
+
+  /**
+   * glStencilMask controls the writing of individual bits in the stencil planes. The least
+   * significant n bits of mask, where n is the number of bits in the stencil buffer, specify a
+   * mask. Where a 1 appears in the mask, it's possible to write to the corresponding bit in the
+   * stencil buffer. Where a 0 appears, the corresponding bit is write-protected. Initially, all
+   * bits are enabled for writing.
+   * 
+   * There can be two separate mask writemasks; one affects back-facing polygons, and the other
+   * affects front-facing polygons as well as other non-polygon primitives. glStencilMask sets both
+   * front and back stencil writemasks to the same values. Use glStencilMaskSeparate to set front
+   * and back stencil writemasks to different values.
+   * 
+   * @param mask
+   * 
+   * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glStencilMask.xml
+   */
+  public void glStencilMask(int mask);
+
+  public void glStencilMask_True();
+
+  public void glStencilMask_False();
+
+  
+  /**
+   * The glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass) contains three options of which we
+   * can specify for each option what action to take:
+   *
+   * @param fail action to take if the stencil test fails.
+   * @param zfail action to take if the stencil test passes, but the depth test fails.
+   * @param zpass action to take if both the stencil and the depth test pass.
+   * 
+   *        Then for each of the options you can take any of the following actions:
+   *        <ul>
+   *        <li>Action : Description
+   *        <li>GL_KEEP : The currently stored stencil value is kept.
+   *        <li>GL_ZERO : The stencil value is set to 0.
+   *        <li>GL_REPLACE : The stencil value is replaced with the reference value set with
+   *        glStencilFunc.
+   *        <li>GL_INCR : The stencil value is increased by 1 if it is lower than the maximum value.
+   *        <li>GL_INCR_WRAP : Same as GL_INCR, but wraps it back to 0 as soon as the maximum value
+   *        is exceeded.
+   *        <li>GL_DECR : The stencil value is decreased by 1 if it is higher than the minimum
+   *        value.
+   *        <li>GL_DECR_WRAP : Same as GL_DECR, but wraps it to the maximum value if it ends up
+   *        lower than 0.
+   *        <li>GL_INVERT : Bitwise inverts the current stencil buffer value.
+   *        </ul>
+   * 
+   * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glStencilOp.xml
+   */
+  public void glStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass);
+
+  /**
+   * glClearStencil specifies the index used by glClear to clear the stencil buffer. s is masked
+   * with 2 m - 1 , where m is the number of bits in the stencil buffer.
+   * 
+   * @param s
+   * 
+   * @see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glClearStencil.xml
+   */
+  public void glClearStencil(int s);
+
   // GL LIGHTS
 
   public void glNormal3f(float nx, float ny, float nz);
 
   public void glShadeModel(int mode);
 
+  public void glShadeModel(ColorModel colorModel);
+
+  public void glShadeModel_Smooth();
+
+  public void glShadeModel_Flat();
+
+  public void glLightf(int light, Attenuation.Type type, float value);
+
+  public void glLightf(int light, int pname, float value);
+
   public void glLightfv(int light, int pname, float[] params, int params_offset);
 
   public void glLightModeli(int mode, int value);
 
+  public void glLightModelfv(int mode, float[] value);
+
   public void glLightModel(LightModel model, boolean value);
+
+  public void glLightModel(LightModel model, Color color);
+
+  public void glLight_Position(int lightId, float[] positionZero);
+
+  public void glLight_Ambiant(int lightId, Color ambiantColor);
+
+  public void glLight_Diffuse(int lightId, Color diffuseColor);
+
+  public void glLight_Specular(int lightId, Color specularColor);
+
+  public void glLight_Shininess(int lightId, float value);
 
   public void glMaterialfv(int face, int pname, float[] params, int params_offset);
 
@@ -521,17 +688,24 @@ public interface IPainter {
 
   public void glDisable_Light(int light);
 
-  public void glLight_Position(int lightId, float[] positionZero);
-
-  public void glLight_Ambiant(int lightId, Color ambiantColor);
-
-  public void glLight_Diffuse(int lightId, Color diffuseColor);
-
-  public void glLight_Specular(int lightId, Color specularColor);
-
   public void glEnable_ColorMaterial();
 
   public void glEnable_PointSmooth();
 
   public void glHint_PointSmooth_Nicest();
+
+  public void glEnable_DepthTest();
+
+  public void glDisable_DepthTest();
+
+  public void glDepthFunc(DepthFunc func);
+  
+  public void glEnable_Stencil();
+  
+  public void glDisable_Stencil();
+
+  public boolean isJVMScaleLargerThanNativeScale(Coord2d scaleHardware, Coord2d scaleJVM);
+  
+  /** Verify if pixel scale of JVM is different than the one return by the canvas */
+  public boolean isJVMScaleLargerThanNativeScale();
 }

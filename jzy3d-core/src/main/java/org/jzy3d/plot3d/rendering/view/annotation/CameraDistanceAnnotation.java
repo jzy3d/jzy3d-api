@@ -4,6 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Geometry;
@@ -16,7 +17,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 /**
  * Draws the distance of every scene graph drawable object to camera eye.
@@ -67,8 +68,8 @@ public class CameraDistanceAnnotation extends Point {
     // System.out.println(drawable.getBarycentre() );
 
     txt.setSpaceTransformer(drawable.getSpaceTransformer());
-    txt.drawText(painter, Utils.num2str(d, 4), drawable.getBarycentre(), h, v, colorBary,
-        screenOffset);
+    txt.drawText(painter, Font.Helvetica_12, Utils.num2str(d, 4), drawable.getBarycentre(), h, v,
+        colorBary, screenOffset);
   }
 
   private void drawPolygonPointsDistanceToCamera(IPainter painter, Horizontal h, Vertical v,
@@ -83,7 +84,7 @@ public class CameraDistanceAnnotation extends Point {
         // System.out.println(pt.xyz);
 
         txt.setSpaceTransformer(pt.getSpaceTransformer());
-        txt.drawText(painter, Utils.num2str(d, 4), pt.getCoord(), h, v, colorPt, screenOffset);
+        txt.drawText(painter, Font.Helvetica_12, Utils.num2str(d, 4), pt.getCoord(), h, v, colorPt, screenOffset);
       }
     }
   }
@@ -103,5 +104,5 @@ public class CameraDistanceAnnotation extends Point {
   }
 
   protected View view;
-  protected ITextRenderer txt = new TextBitmapRenderer();
+  protected ITextRenderer txt = new TextRenderer();
 }

@@ -6,9 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.Collection;
-
 import javax.swing.JFrame;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;

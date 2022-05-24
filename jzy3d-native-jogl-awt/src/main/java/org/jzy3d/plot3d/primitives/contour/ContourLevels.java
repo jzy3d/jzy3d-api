@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives.contour;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.jzy3d.plot3d.primitives.LineStrip;
 
 

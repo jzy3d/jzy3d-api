@@ -3,7 +3,6 @@ package org.jzy3d.chart2d;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.jzy3d.plot2d.primitives.LineSerie2d;
 import org.jzy3d.plot2d.primitives.ScatterPointSerie2d;
 import org.jzy3d.plot2d.primitives.ScatterSerie2d;

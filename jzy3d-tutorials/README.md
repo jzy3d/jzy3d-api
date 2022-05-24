@@ -19,12 +19,12 @@ See [pom.xml](pom.xml) file as an example.
   <repository>
     <id>jzy3d-snapshots</id>
     <name>Jzy3d Snapshots</name>
-    <url>http://maven.jzy3d.org/snapshots/</url>
+    <url>https://maven.jzy3d.org/snapshots/</url>
   </repository>
   <repository>
     <id>jzy3d-releases</id>
     <name>Jzy3d Releases</name>
-    <url>http://maven.jzy3d.org/releases/</url>
+    <url>https://maven.jzy3d.org/releases/</url>
   </repository>
 </repositories>
 ```
@@ -73,7 +73,7 @@ These are the dependencies to use to enable jGL Emulated OpenGL Charts on Jzy3d.
 <dependencies>
   <dependency>
       <groupId>org.jzy3d</groupId>
-      <artifactId>jzy3d-emul-gl</artifactId>
+      <artifactId>jzy3d-emul-gl-awt</artifactId>
       <version>2.0.0-SNAPSHOT</version>
 
   </dependency>

@@ -1,7 +1,6 @@
 package org.instantsvm;
 
 import org.instantsvm.utils.LibSvmConsole;
-
 import libsvm.svm_parameter;
 
 /**

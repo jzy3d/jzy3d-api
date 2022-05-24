@@ -6,10 +6,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Arrays;
 import java.util.Collection;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.ui.LookAndFeel;
 

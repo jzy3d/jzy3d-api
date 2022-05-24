@@ -2,13 +2,14 @@ package org.jzy3d.plot3d.rendering.legends.series;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.primitive.AWTAbstractImageGenerator;
+import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
@@ -17,9 +18,20 @@ import org.jzy3d.plot3d.rendering.view.IImageViewport;
 public class AWTSerieLegend extends AWTLegend implements IImageViewport {
   private static final int LINE_HEIGHT = 15;
   private static final int INTERLINE_HEIGHT = 5;
-  private static final int FONT_HEIGHT = 12;
 
   private static final int LEGEND_BORDER_HEIGHT = 30;
+
+  private static final int DEFAULT_MIN_DIM = 40;
+  
+  protected int margin = 25;
+
+  protected Serie2d serie;
+  
+  // remember asked width to be able to reset image
+  // without processing multiple time the margin
+  protected int askedWidth;
+  protected int askedHeight;
+
 
 
 
@@ -34,13 +46,12 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
 
   public AWTSerieLegend(Drawable drawable, Color foreground, Color background) {
     super(drawable, foreground, background);
-    this.minimumDimension = new Dimension(AWTAbstractImageGenerator.MIN_BAR_WIDTH,
-        AWTAbstractImageGenerator.MIN_BAR_HEIGHT);
+    this.minimumDimension = new Dimension(DEFAULT_MIN_DIM,DEFAULT_MIN_DIM);
 
     drawable.setLegend(this);
     initImageGenerator();
     imageGenerator.setHasBackground(true);
-    imageGenerator.setFont(new java.awt.Font("Helvetica", 0, 12));
+    imageGenerator.setAWTFont(new java.awt.Font("Helvetica", 0, 12));
     setGeneratorColors();
 
   }
@@ -49,6 +60,9 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
     imageGenerator = new AWTAbstractImageGenerator() {
       @Override
       public BufferedImage toImage(int width, int height) {
+        askedWidth = width;
+        askedHeight = height;
+
         Color color = getSerieColor();
         String text = getSerieText();
 
@@ -60,7 +74,7 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
 
         drawBackground(width, LEGEND_BORDER_HEIGHT, graphic);
         drawSerieLineAndNameAtY(color, text, graphic, y);
-        drawLegendBorder(graphic, width, LEGEND_BORDER_HEIGHT);
+        drawBorder(graphic, width, LEGEND_BORDER_HEIGHT);
         return image;
       }
 
@@ -92,6 +106,17 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
   }
 
   @Override
+  public void setFont(Font font) {
+    imageGenerator.setFont(font);
+  }
+
+  @Override
+  public Font getFont() {
+    return imageGenerator.getFont();
+  }
+
+
+  @Override
   public void render(IPainter painter) {
     painter.glEnable_Blend();
     super.render(painter);
@@ -108,8 +133,16 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
     }
     return null;
   }
+  
+  @Override
+  public int getWidth() {
+    return askedWidth;
+  }
 
-  protected int margin = 25;
+  @Override
+  public int getHeight() {
+    return askedHeight;
+  }
 
-  protected Serie2d serie;
+
 }

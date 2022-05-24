@@ -5,9 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 import org.instantsvm.regression.RegressionInputs;
-
 import au.com.bytecode.opencsv.CSVReader;
 import libsvm.svm;
 import libsvm.svm_model;

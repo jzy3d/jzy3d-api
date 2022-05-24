@@ -2,7 +2,6 @@ package org.jzy3d.bridge.awt;
 
 import java.awt.Graphics;
 import java.awt.Panel;
-
 import org.jzy3d.bridge.BufferedPanel;
 
 

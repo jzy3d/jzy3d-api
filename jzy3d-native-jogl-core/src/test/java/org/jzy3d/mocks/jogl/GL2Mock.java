@@ -9,10 +9,8 @@ import java.nio.LongBuffer;
 import java.nio.ShortBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.rendering.view.Camera.Ortho;
-
 import com.jogamp.common.nio.PointerBuffer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -3770,13 +3768,6 @@ public class GL2Mock implements GL2 {
   @Override
   public void glGetnUniformuiv(int program, int location, int bufSize, int[] params,
       int params_offset) {
-
-
-  }
-
-  @Override
-  public void glPrimitiveBoundingBox(float minX, float minY, float minZ, float minW, float maxX,
-      float maxY, float maxZ, float maxW) {
 
 
   }
@@ -8507,351 +8498,7 @@ public class GL2Mock implements GL2 {
     return false;
   }
 
-  @Override
-  public void glUniform1i64ARB(int location, long x) {
 
-
-  }
-
-  @Override
-  public void glUniform2i64ARB(int location, long x, long y) {
-
-
-  }
-
-  @Override
-  public void glUniform3i64ARB(int location, long x, long y, long z) {
-
-
-  }
-
-  @Override
-  public void glUniform4i64ARB(int location, long x, long y, long z, long w) {
-
-
-  }
-
-  @Override
-  public void glUniform1i64vARB(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform1i64vARB(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform2i64vARB(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform2i64vARB(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform3i64vARB(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform3i64vARB(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform4i64vARB(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform4i64vARB(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform1ui64ARB(int location, long x) {
-
-
-  }
-
-  @Override
-  public void glUniform2ui64ARB(int location, long x, long y) {
-
-
-  }
-
-  @Override
-  public void glUniform3ui64ARB(int location, long x, long y, long z) {
-
-
-  }
-
-  @Override
-  public void glUniform4ui64ARB(int location, long x, long y, long z, long w) {
-
-
-  }
-
-  @Override
-  public void glUniform1ui64vARB(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform1ui64vARB(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform2ui64vARB(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform2ui64vARB(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform3ui64vARB(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform3ui64vARB(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform4ui64vARB(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform4ui64vARB(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glGetUniformi64vARB(int program, int location, LongBuffer params) {
-
-
-  }
-
-  @Override
-  public void glGetUniformi64vARB(int program, int location, long[] params, int params_offset) {
-
-
-  }
-
-  @Override
-  public void glGetUniformui64vARB(int program, int location, LongBuffer params) {
-
-
-  }
-
-  @Override
-  public void glGetUniformui64vARB(int program, int location, long[] params, int params_offset) {
-
-
-  }
-
-  @Override
-  public void glGetnUniformi64vARB(int program, int location, int bufSize, LongBuffer params) {
-
-
-  }
-
-  @Override
-  public void glGetnUniformi64vARB(int program, int location, int bufSize, long[] params,
-      int params_offset) {
-
-
-  }
-
-  @Override
-  public void glGetnUniformui64vARB(int program, int location, int bufSize, LongBuffer params) {
-
-
-  }
-
-  @Override
-  public void glGetnUniformui64vARB(int program, int location, int bufSize, long[] params,
-      int params_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1i64ARB(int program, int location, long x) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2i64ARB(int program, int location, long x, long y) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3i64ARB(int program, int location, long x, long y, long z) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4i64ARB(int program, int location, long x, long y, long z, long w) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1i64vARB(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1i64vARB(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2i64vARB(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2i64vARB(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3i64vARB(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3i64vARB(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4i64vARB(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4i64vARB(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1ui64ARB(int program, int location, long x) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2ui64ARB(int program, int location, long x, long y) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3ui64ARB(int program, int location, long x, long y, long z) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4ui64ARB(int program, int location, long x, long y, long z, long w) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1ui64vARB(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1ui64vARB(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2ui64vARB(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2ui64vARB(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3ui64vARB(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3ui64vARB(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4ui64vARB(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4ui64vARB(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
 
   @Override
   public void glColorTable(int target, int internalformat, int width, int format, int type,
@@ -9246,44 +8893,7 @@ public class GL2Mock implements GL2 {
 
   }
 
-  @Override
-  public void glMaxShaderCompilerThreadsARB(int count) {
 
-
-  }
-
-  @Override
-  public void glFramebufferSampleLocationsfvARB(int target, int start, int count, FloatBuffer v) {
-
-
-  }
-
-  @Override
-  public void glFramebufferSampleLocationsfvARB(int target, int start, int count, float[] v,
-      int v_offset) {
-
-
-  }
-
-  @Override
-  public void glNamedFramebufferSampleLocationsfvARB(int framebuffer, int start, int count,
-      FloatBuffer v) {
-
-
-  }
-
-  @Override
-  public void glNamedFramebufferSampleLocationsfvARB(int framebuffer, int start, int count,
-      float[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glEvaluateDepthValuesARB() {
-
-
-  }
 
   @Override
   public void glDeleteObjectARB(long obj) {
@@ -13683,13 +13293,6 @@ public class GL2Mock implements GL2 {
   }
 
   @Override
-  public void glBlendFuncSeparateINGR(int sfactorRGB, int dfactorRGB, int sfactorAlpha,
-      int dfactorAlpha) {
-
-
-  }
-
-  @Override
   public void glSyncTextureINTEL(int texture) {
 
 
@@ -15720,12 +15323,6 @@ public class GL2Mock implements GL2 {
   }
 
   @Override
-  public void glHintPGI(int target, int mode) {
-
-
-  }
-
-  @Override
   public void glFinishTextureSUNX() {
 
 
@@ -15770,5 +15367,6 @@ public class GL2Mock implements GL2 {
 
 
   }
+
 
 }

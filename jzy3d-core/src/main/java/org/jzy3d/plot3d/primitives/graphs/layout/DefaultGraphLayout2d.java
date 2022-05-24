@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.graphs.layout;
 
 import java.util.HashMap;
-
 import org.jzy3d.maths.Coord2d;
 
 public class DefaultGraphLayout2d<V> extends HashMap<V, Coord2d> implements IGraphLayout2d<V> {

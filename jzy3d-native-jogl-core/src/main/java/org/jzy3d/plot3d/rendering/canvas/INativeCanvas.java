@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
-
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.util.texture.TextureData;
 

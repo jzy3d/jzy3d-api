@@ -1,0 +1,62 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-all</artifactId>
+		<version>2.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>jzy3d-io-reports</artifactId>
+	<name>Jzy3D Reports</name>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-io-xls</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-native-jogl-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency> <!-- For a single demo, remove me! -->
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-native-jogl-swing</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-native-jogl-newt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-emul-gl-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-tester-native</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.miglayout</groupId>
+			<artifactId>miglayout</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+		</dependency>
+
+	</dependencies>
+</project>

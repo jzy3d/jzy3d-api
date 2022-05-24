@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.BoundingBox3d;

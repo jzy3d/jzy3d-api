@@ -3,7 +3,6 @@ package org.jzy3d.junit;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.maths.IntegerCoord2d;
 
 
@@ -12,6 +11,7 @@ public class ChartTestFailed extends Exception {
 
   protected BufferedImage actual;
   protected BufferedImage expected;
+  
   protected List<IntegerCoord2d> diffs = new ArrayList<IntegerCoord2d>();
 
 
@@ -51,6 +51,24 @@ public class ChartTestFailed extends Exception {
 
   public List<IntegerCoord2d> getDiffCoordinates() {
     return diffs;
+  }
+
+  public boolean isSameImageSize() {
+    int i1W = getActualImage().getWidth();
+    int i1H = getActualImage().getHeight();
+    int i2W = getExpectedImage().getWidth();
+    int i2H = getExpectedImage().getHeight();
+    
+    return (i1W == i2W && i1H == i2H);
+  }
+  
+  public String getImageSizeDifferenceMessage() {
+    int i1W = getActualImage().getWidth();
+    int i1H = getActualImage().getHeight();
+    int i2W = getExpectedImage().getWidth();
+    int i2H = getExpectedImage().getHeight();
+
+    return "image size differ: actual={" + i1W + "," + i1H + "} expected={" + i2W + "," + i2H + "}";
   }
 
 }

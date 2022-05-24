@@ -1,7 +1,6 @@
 package org.jzy3d.maths.algorithms.interpolation.algorithms;
 
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.algorithms.interpolation.IInterpolator;
 

@@ -2,8 +2,8 @@ package org.jzy3d.plot3d.primitives.axis;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -12,16 +12,15 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
-import org.jzy3d.plot3d.primitives.axis.layout.AxisBoxLayout;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 
@@ -31,30 +30,94 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  */
 public class AxisBox implements IAxis {
-  static Logger LOGGER = Logger.getLogger(AxisBox.class);
+  static Logger LOGGER = LogManager.getLogger(AxisBox.class);
+  
+
+  protected static final int PRECISION = 6;
+
+  protected View view;
+
+  // use this text renderer to get occupied volume by text
+  protected ITextRenderer textRenderer;
+  protected AxisLabelRotator rotateLabel;
+  protected AxisLabelProcessor labels;
+  protected AxisTickProcessor ticks;
+  protected AxisLayout layout;
+
+  protected BoundingBox3d boxBounds;
+  protected BoundingBox3d wholeBounds;
+  protected Coord3d center;
+  protected Coord3d scale;
+
+  protected float xrange;
+  protected float yrange;
+  protected float zrange;
+
+  protected float quadx[][];
+  protected float quady[][];
+  protected float quadz[][];
+
+  protected float normx[];
+  protected float normy[];
+  protected float normz[];
+
+  protected float axeXx[][];
+  protected float axeXy[][];
+  protected float axeXz[][];
+  protected float axeYx[][];
+  protected float axeYy[][];
+  protected float axeYz[][];
+  protected float axeZx[][];
+  protected float axeZy[][];
+  protected float axeZz[][];
+
+  protected int axeXquads[][];
+  protected int axeYquads[][];
+  protected int axeZquads[][];
+
+  protected boolean quadIsHidden[];
+
+  public static final int AXE_X = 0;
+  public static final int AXE_Y = 1;
+  public static final int AXE_Z = 2;
+  
+  protected boolean depthRangeTrick = true;
+  
+  /**
+   * The higher the value, the more the line are far from the faces and hence
+   * no z-fighting occurs between faces and lines. In case of higher value, line
+   * will be display more often, but also lines that should be behind the polygon
+   */
+  public static float NO_OVERLAP_DEPTH_RATIO = 0.5f;
+
+  protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
+
+  protected SpaceTransformer spaceTransformer;
 
   public AxisBox(BoundingBox3d bbox) {
-    this(bbox, new AxisBoxLayout());
+    this(bbox, new AxisLayout());
   }
 
-  public AxisBox(BoundingBox3d bbox, IAxisLayout layout) {
+  public AxisBox(BoundingBox3d bbox, AxisLayout layout) {
     this.layout = layout;
-    if (bbox.valid())
+    //if (bbox.valid())
       setAxe(bbox);
-    else
-      setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
+    //else
+    //  setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
     wholeBounds = new BoundingBox3d();
-    textRenderer = new TextBitmapRenderer(layout.getFont());
+    textRenderer = new TextRenderer();
+    rotateLabel = new AxisLabelRotator();
+    labels = new AxisLabelProcessor(this);
+    ticks = new AxisTickProcessor(this);
     init();
   }
 
   /**
-   * Draws the AxeBox. The camera is used to determine which axis is closest to the ur point ov
+   * Draws the AxisBox. The camera is used to determine which axis is closest to the ur point ov
    * view, in order to decide for an axis on which to diplay the tick values.
    */
   @Override
   public void draw(IPainter painter) {
-    cullingEnable(painter);
     updateHiddenQuads(painter);
 
     doTransform(painter);
@@ -63,26 +126,22 @@ public class AxisBox implements IAxis {
     doTransform(painter);
     drawGrid(painter);
 
-    cullingDisable(painter);
+    drawAnnotations(painter);
 
-    
+    doTransform(painter);
+    drawTicksAndLabels(painter);
+  }
+
+  protected void drawAnnotations(IPainter painter) {
     synchronized (annotations) {
       for (AxeAnnotation a : annotations) {
         a.draw(painter, this);
       }
     }
-
-    
-    doTransform(painter);
-    drawTicksAndLabels(painter);
-
-
   }
 
   /**
    * reset to identity and apply scaling
-   * 
-   * @param painter TODO
    */
   public void doTransform(IPainter painter) {
     painter.glLoadIdentity();
@@ -103,6 +162,8 @@ public class AxisBox implements IAxis {
 
   /* DRAW AXEBOX ELEMENTS */
 
+  // FORMER NATIVE PRIMITIVE
+
   public void drawFace(IPainter painter) {
     if (layout.isFaceDisplayed()) {
       Color quadcolor = layout.getQuadColor();
@@ -119,15 +180,21 @@ public class AxisBox implements IAxis {
 
   public void drawGrid(IPainter painter) {
     Color gridcolor = layout.getGridColor();
+    
+    // Push far from camera, to ensure the axis grid
+    // Will remain covered by surface
+    if(depthRangeTrick)
+      painter.glDepthRangef(NO_OVERLAP_DEPTH_RATIO, 1f);
 
+    
     painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
-    painter.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
+    painter.color(gridcolor);
     painter.glLineWidth(1);
     drawCube(painter, RenderMode.RENDER);
 
     // Draw grids on non hidden quads
     painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
-    painter.glColor4f(gridcolor.r, gridcolor.g, gridcolor.b, gridcolor.a);
+    painter.color(gridcolor);
     painter.glLineWidth(1);
     painter.glLineStipple(1, (short) 0xAAAA);
 
@@ -136,99 +203,33 @@ public class AxisBox implements IAxis {
       if (!quadIsHidden[quad])
         drawGridOnQuad(painter, quad);
     painter.glDisable_LineStipple();
+    
+    
+    // Reset depth range
+    
+    if(depthRangeTrick)
+      painter.glDepthRangef(0f, 1f);
+
   }
 
-  public void drawTicksAndLabels(IPainter painter) {
-    wholeBounds.reset();
-    wholeBounds.add(boxBounds);
+  ///////////////////////////
 
-    drawTicksAndLabelsX(painter);
-    drawTicksAndLabelsY(painter);
-    drawTicksAndLabelsZ(painter);
-  }
-
-  public void drawTicksAndLabelsX(IPainter painter) {
-    if (xrange > 0 && layout.isXTickLabelDisplayed()) {
-
-      // If we are on top, we make direct axe placement
-      if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
-        BoundingBox3d bbox =
-            drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
-        wholeBounds.add(bbox);
-      }
-      // otherwise computed placement
-      else {
-        int xselect = findClosestXaxe(painter.getCamera());
-        if (xselect >= 0) {
-          BoundingBox3d bbox = drawTicks(painter, xselect, AXE_X, layout.getXTickColor());
-          wholeBounds.add(bbox);
-        } else {
-          // HACK: handles "on top" view, when all face of cube are
-          // drawn, which forbid to select an axe automatically
-          BoundingBox3d bbox =
-              drawTicks(painter, 2, AXE_X, layout.getXTickColor(), Horizontal.CENTER, Vertical.TOP);
-          wholeBounds.add(bbox);
-        }
-      }
-    }
-  }
-
-  public void drawTicksAndLabelsY(IPainter painter) {
-    if (yrange > 0 && layout.isYTickLabelDisplayed()) {
-      if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
-        BoundingBox3d bbox =
-            drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
-        wholeBounds.add(bbox);
-      } else {
-        int yselect = findClosestYaxe(painter.getCamera());
-        if (yselect >= 0) {
-          BoundingBox3d bbox = drawTicks(painter, yselect, AXE_Y, layout.getYTickColor());
-          wholeBounds.add(bbox);
-        } else {
-          // HACK: handles "on top" view, when all face of cube are
-          // drawn, which forbid to select an axe automatically
-          BoundingBox3d bbox =
-              drawTicks(painter, 1, AXE_Y, layout.getYTickColor(), Horizontal.RIGHT, Vertical.GROUND);
-          wholeBounds.add(bbox);
-        }
-      }
-    }
-  }
-
-  public void drawTicksAndLabelsZ(IPainter painter) {
-    if (zrange > 0 && layout.isZTickLabelDisplayed()) {
-      if (view != null && view.getViewMode().equals(ViewPositionMode.TOP)) {
-
-      } else {
-        int zselect = findClosestZaxe(painter.getCamera());
-        if (zselect >= 0) {
-          BoundingBox3d bbox = drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
-          wholeBounds.add(bbox);
-        }
-      }
-    }
-  }
-
-  /**
-   * Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from
-   * 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK
-   */
   protected void drawCube(IPainter painter, RenderMode mode) {
     for (int q = 0; q < 6; q++) {
-      if (mode == RenderMode.FEEDBACK)
-        painter.glPassThrough(q);
-      painter.glBegin_Quad();
-      for (int v = 0; v < 4; v++) {
-        painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
+      if (!getQuadIsHidden()[q]) { // makes culling useless!
+
+        painter.glBegin_LineLoop();
+        for (int v = 0; v < 4; v++) {
+          painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
+        }
+        painter.glEnd();
       }
-      painter.glEnd();
     }
   }
 
-  /**
-   * Draw a grid on the desired quad.
-   */
+  // Draw a grid on the desired quad.
   protected void drawGridOnQuad(IPainter painter, int quad) {
+    
     // Draw X grid along X axis
     if ((quad != 0) && (quad != 1)) {
       double[] xticks = layout.getXTicks();
@@ -261,119 +262,97 @@ public class AxisBox implements IAxis {
     }
   }
 
-  protected BoundingBox3d drawTicks(IPainter painter, int axis, int direction, Color color) {
-    return drawTicks(painter, axis, direction, color, null, null);
+  ///////////////////////////
+
+
+  public void drawTicksAndLabels(IPainter painter) {
+    wholeBounds.reset();
+    wholeBounds.add(boxBounds);
+
+    drawTicksAndLabelsX(painter);
+    drawTicksAndLabelsY(painter);
+    drawTicksAndLabelsZ(painter);
   }
 
-  /** Draws axis labels, tick lines and tick label */
-  protected BoundingBox3d drawTicks(IPainter painter, int axis, int direction, Color color,
-      Horizontal hal, Vertical val) {
-    int quad_0;
-    int quad_1;
-    float tickLength = 20.0f; // with respect to range
-    float axeLabelDist = 2.5f;
-    BoundingBox3d ticksTxtBounds = new BoundingBox3d();
+  public void drawTicksAndLabelsX(IPainter painter) {
+    if (xrange > 0 && layout.isXTickLabelDisplayed()) {
 
-    // Retrieve the quads that intersect and create the selected axe
-    if (isX(direction)) {
-      quad_0 = axeXquads[axis][0];
-      quad_1 = axeXquads[axis][1];
-    } else if (isY(direction)) {
-      quad_0 = axeYquads[axis][0];
-      quad_1 = axeYquads[axis][1];
-    } else { // (axis==AXE_Z)
-      quad_0 = axeZquads[axis][0];
-      quad_1 = axeZquads[axis][1];
-    }
-
-    // Computes POSition of ticks lying on the selected axe
-    // (i.e. 1st point of the tick line)
-    double xpos = 0;
-    double ypos = 0;
-    double zpos = 0;
-
-    if (spaceTransformer == null) {
-      xpos = normx[quad_0] + normx[quad_1];
-      ypos = normy[quad_0] + normy[quad_1];
-      zpos = normz[quad_0] + normz[quad_1];
-    } else {
-      xpos = spaceTransformer.getX().compute(normx[quad_0])
-          + spaceTransformer.getX().compute(normx[quad_1]);
-      ypos = spaceTransformer.getY().compute(normy[quad_0])
-          + spaceTransformer.getY().compute(normy[quad_1]);
-      zpos = spaceTransformer.getZ().compute(normz[quad_0])
-          + spaceTransformer.getZ().compute(normz[quad_1]);
-    }
-
-    // TODO : HERE SHOULD OVERRIDE IF TRANSFORM
-
-    // Computes the DIRection of the ticks
-    // assuming initial vector point is the center
-    float xdir = (normx[quad_0] + normx[quad_1]) - center.x;
-    float ydir = (normy[quad_0] + normy[quad_1]) - center.y;
-    float zdir = (normz[quad_0] + normz[quad_1]) - center.z;
-    xdir = xdir == 0 ? 0 : xdir / Math.abs(xdir); // so that direction has length 1
-    ydir = ydir == 0 ? 0 : ydir / Math.abs(ydir);
-    zdir = zdir == 0 ? 0 : zdir / Math.abs(zdir);
-
-    // Variables for storing the position of the LABel position
-    // (2nd point on the tick line)
-    double xlab;
-    double ylab;
-    double zlab;
-
-    // Draw the label for axis
-    String axeLabel;
-    int dist = 1;
-    if (isX(direction)) {
-      xlab = center.x;
-      ylab = axeLabelDist * (yrange / tickLength) * dist * ydir + ypos;
-      zlab = axeLabelDist * (zrange / tickLength) * dist * zdir + zpos;
-      axeLabel = layout.getXAxisLabel();
-    } else if (isY(direction)) {
-      xlab = axeLabelDist * (xrange / tickLength) * dist * xdir + xpos;
-      ylab = center.y;
-      zlab = axeLabelDist * (zrange / tickLength) * dist * zdir + zpos;
-      axeLabel = layout.getYAxisLabel();
-    } else {
-      xlab = axeLabelDist * (xrange / tickLength) * dist * xdir + xpos;
-      ylab = axeLabelDist * (yrange / tickLength) * dist * ydir + ypos;
-      zlab = center.z;
-      axeLabel = layout.getZAxisLabel();
-    }
-
-    drawAxisLabel(painter, direction, color, ticksTxtBounds, xlab, ylab, zlab, axeLabel);
-    drawAxisTicks(painter, direction, color, hal, val, tickLength, ticksTxtBounds, xpos, ypos, zpos,
-        xdir, ydir, zdir, getAxisTicks(direction));
-    return ticksTxtBounds;
-  }
-
-  protected void drawAxisLabel(IPainter painter, int direction, Color color,
-      BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
-    if (isXDisplayed(direction) || isYDisplayed(direction) || isZDisplayed(direction)) {
-      Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
-
-      // not fully relevant
-      /*
-       * if(spaceTransformer!=null){ labelPosition = spaceTransformer.compute(labelPosition); }
-       */
-
-      BoundingBox3d labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition,
-          Horizontal.CENTER, Vertical.CENTER, color);
-      if (labelBounds != null)
-        ticksTxtBounds.add(labelBounds);
+      // 2D case
+      if (view != null && view.is2D()) {
+        BoundingBox3d bbox =
+            ticks.drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
+        wholeBounds.add(bbox);
+      }
+      // 3D case
+      else {
+        int xselect = findClosestXaxe(painter.getCamera());
+        if (xselect >= 0) {
+          BoundingBox3d bbox = ticks.drawTicks(painter, xselect, AXE_X, layout.getXTickColor());
+          wholeBounds.add(bbox);
+        } else {
+          // HACK: handles "on top" view, when all face of cube are
+          // drawn, which forbid to select an axe automatically
+          BoundingBox3d bbox =
+              ticks.drawTicks(painter, 2, AXE_X, layout.getXTickColor(), Horizontal.CENTER, Vertical.TOP);
+          wholeBounds.add(bbox);
+        }
+      }
     }
   }
 
-  protected boolean isZDisplayed(int direction) {
+  public void drawTicksAndLabelsY(IPainter painter) {
+    if (yrange > 0 && layout.isYTickLabelDisplayed()) {
+      
+      //2D case
+      if (view != null && view.is2D()) {
+        BoundingBox3d bbox =
+            ticks.drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
+        wholeBounds.add(bbox);
+      } 
+      
+      // 3D case
+      else {
+        int yselect = findClosestYaxe(painter.getCamera());
+        if (yselect >= 0) {
+          BoundingBox3d bbox = ticks.drawTicks(painter, yselect, AXE_Y, layout.getYTickColor());
+          wholeBounds.add(bbox);
+        } else {
+          // HACK: handles "on top" view, when all face of cube are
+          // drawn, which forbid to select an axe automatically
+          BoundingBox3d bbox = ticks.drawTicks(painter, 1, AXE_Y, layout.getYTickColor(),
+              Horizontal.RIGHT, Vertical.GROUND);
+          wholeBounds.add(bbox);
+        }
+      }
+    }
+  }
+
+  public void drawTicksAndLabelsZ(IPainter painter) {
+    if (zrange > 0 && layout.isZTickLabelDisplayed()) {
+      // 3D case only
+      if (view != null && view.is3D()) {
+        int zselect = findClosestZaxe(painter.getCamera());
+        if (zselect >= 0) {
+          BoundingBox3d bbox = ticks.drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
+          wholeBounds.add(bbox);
+        }
+      }
+      
+      // Do not render Z ticks in 2D
+    }
+  }
+
+  ///////////////////////////
+
+  protected boolean isZAxeLabelDisplayed(int direction) {
     return isZ(direction) && layout.isZAxeLabelDisplayed();
   }
 
-  protected boolean isYDisplayed(int direction) {
+  protected boolean isYAxeLabelDisplayed(int direction) {
     return isY(direction) && layout.isYAxeLabelDisplayed();
   }
 
-  protected boolean isXDisplayed(int direction) {
+  protected boolean isXAxeLabelDisplayed(int direction) {
     return isX(direction) && layout.isXAxeLabelDisplayed();
   }
 
@@ -390,169 +369,18 @@ public class AxisBox implements IAxis {
   }
 
   protected double[] getAxisTicks(int direction) {
-    double ticks[];
     if (isX(direction))
-      ticks = layout.getXTicks();
+      return layout.getXTicks();
     else if (isY(direction))
-      ticks = layout.getYTicks();
+      return layout.getYTicks();
     else
-      // (axis==AXE_Z)
-      ticks = layout.getZTicks();
-    return ticks;
+      return layout.getZTicks();
   }
+  
 
-  /**
-   * Draw an array of ticks on the given axis indicated by direction field.
-   */
-  protected void drawAxisTicks(IPainter painter, int direction, Color color, Horizontal hal, Vertical val,
-      float tickLength, BoundingBox3d ticksTxtBounds, double xpos, double ypos, double zpos,
-      float xdir, float ydir, float zdir, double[] ticks) {
-    double xlab;
-    double ylab;
-    double zlab;
-    String tickLabel = "";
-
-    for (int t = 0; t < ticks.length; t++) {
-      // Shift the tick vector along the selected axis
-      // and set the tick length
-      if (spaceTransformer == null) {
-        if (isX(direction)) {
-
-          // Tick position
-          xpos = ticks[t];
-          xlab = xpos;
-          ylab = (yrange / tickLength) * ydir + ypos;
-          zlab = (zrange / tickLength) * zdir + zpos;
-
-          // Tick label
-          tickLabel = layout.getXTickRenderer().format(ticks[t]);
-
-        } else if (isY(direction)) {
-
-          // Tick position
-          ypos = ticks[t];
-          xlab = (xrange / tickLength) * xdir + xpos;
-          ylab = ypos;
-          zlab = (zrange / tickLength) * zdir + zpos;
-
-          // Tick label
-          tickLabel = layout.getYTickRenderer().format(ticks[t]);
-
-        } else { // (axis==AXE_Z)
-
-          // Tick position
-          zpos = ticks[t];
-          xlab = (xrange / tickLength) * xdir + xpos;
-          ylab = (yrange / tickLength) * ydir + ypos;
-          zlab = zpos;
-
-          // Tick label
-          tickLabel = layout.getZTickRenderer().format(ticks[t]);
-        }
-      } else {
-        // use space transform shift if we have a space transformer
-        if (isX(direction)) {
-          xpos = spaceTransformer.getX().compute((float) ticks[t]);
-          xlab = xpos;
-          ylab = Math.signum(tickLength * ydir)
-              * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength)))
-              * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
-          zlab = Math.signum(tickLength * ydir)
-              * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength)))
-              * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
-          tickLabel = layout.getXTickRenderer().format(ticks[t]);
-        } else if (isY(direction)) {
-          ypos = spaceTransformer.getY().compute((float) ticks[t]);
-          xlab = Math.signum(tickLength * xdir)
-              * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength)))
-              * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
-          ylab = ypos;
-          zlab = Math.signum(tickLength * zdir)
-              * (zrange / spaceTransformer.getZ().compute(Math.abs(tickLength)))
-              * spaceTransformer.getZ().compute(Math.abs(zdir)) + zpos;
-          tickLabel = layout.getYTickRenderer().format(ticks[t]);
-        } else { // (axis==AXE_Z)
-          zpos = spaceTransformer.getZ().compute((float) ticks[t]);
-          xlab = Math.signum(tickLength * xdir)
-              * (xrange / spaceTransformer.getX().compute(Math.abs(tickLength)))
-              * spaceTransformer.getX().compute(Math.abs(xdir)) + xpos;
-          ylab = Math.signum(tickLength * ydir)
-              * (yrange / spaceTransformer.getY().compute(Math.abs(tickLength)))
-              * spaceTransformer.getY().compute(Math.abs(ydir)) + ypos;
-          zlab = zpos;
-          tickLabel = layout.getZTickRenderer().format(ticks[t]);
-        }
-      }
-      Coord3d tickPosition = new Coord3d(xlab, ylab, zlab);
-
-      if (layout.isTickLineDisplayed()) {
-        drawTickLine(painter, color, xpos, ypos, zpos, xlab, ylab, zlab);
-      }
-
-      // Select the alignement of the tick label
-      Horizontal hAlign = layoutHorizontal(direction, painter.getCamera(), hal, tickPosition);
-      Vertical vAlign = layoutVertical(direction, val, zdir);
-
-      // Draw the text label of the current tick
-      drawAxisTickNumericLabel(painter, direction, color, hAlign, vAlign, ticksTxtBounds, tickLabel, tickPosition);
-    }
-  }
-
-  protected void drawAxisTickNumericLabel(IPainter painter, int direction, Color color, Horizontal hAlign,
-      Vertical vAlign, BoundingBox3d ticksTxtBounds, String tickLabel, Coord3d tickPosition) {
-    // doTransform(gl);
-    painter.glLoadIdentity();
-    painter.glScalef(scale.x, scale.y, scale.z);
-
-    BoundingBox3d tickBounds =
-        textRenderer.drawText(painter, tickLabel, tickPosition, hAlign, vAlign, color);
-    if (tickBounds != null)
-      ticksTxtBounds.add(tickBounds);
-  }
-
-  protected Vertical layoutVertical(int direction, Vertical val, float zdir) {
-    Vertical vAlign;
-    if (val == null) {
-      if (isZ(direction))
-        vAlign = Vertical.CENTER;
-      else {
-        if (zdir > 0)
-          vAlign = Vertical.TOP;
-        else
-          vAlign = Vertical.BOTTOM;
-      }
-    } else
-      vAlign = val;
-    return vAlign;
-  }
-
-  protected Horizontal layoutHorizontal(int direction, Camera cam, Horizontal hal, Coord3d tickPosition) {
-    Horizontal hAlign;
-    if (hal == null)
-      hAlign = cam.side(tickPosition) ? Horizontal.LEFT : Horizontal.RIGHT;
-    else
-      hAlign = hal;
-    return hAlign;
-  }
-
-  protected void drawTickLine(IPainter painter, Color color, double xpos, double ypos, double zpos,
-      double xlab, double ylab, double zlab) {
-    painter.glLoadIdentity();
-    painter.glScalef(scale.x, scale.y, scale.z);
-    
-    painter.color(color);
-    painter.glLineWidth(1);
-
-    // Draw the tick line
-    painter.glBegin_Line();
-    painter.glVertex3d(xpos, ypos, zpos);
-    painter.glVertex3d(xlab, ylab, zlab);
-    painter.glEnd();
-  }
-
-  /* */
-
-  /* AXIS SELECTION */
+  /* ************************************************/
+  /* ************** AXIS SELECTION ******************/
+  /* ************************************************/
 
   /**
    * Selects the closest displayable X axe from camera
@@ -629,25 +457,22 @@ public class AxisBox implements IAxis {
       if (distAxeZ[a] < Double.MAX_VALUE) {
         Coord3d axeCenter = new Coord3d((axeZx[a][0] + axeZx[a][1]) / 2,
             (axeZy[a][0] + axeZy[a][1]) / 2, (axeZz[a][0] + axeZz[a][1]) / 2);
-        
 
-        if(ZAxisSide.LEFT.equals(layout.getZAxisSide())) {
+
+        if (ZAxisSide.LEFT.equals(layout.getZAxisSide())) {
           if (cam.side(axeCenter))
             distAxeZ[a] *= -1;
-        }
-        else {
+        } else {
           if (!cam.side(axeCenter))
             distAxeZ[a] *= -1;
         }
-        
+
       }
     }
 
     return min(distAxeZ);
   }
-  
-  
-  
+
   /**
    * Return the index of the minimum value contained in the input array of doubles. If no value is
    * smaller than Double.MAX_VALUE, the returned index is -1.
@@ -674,8 +499,6 @@ public class AxisBox implements IAxis {
 
   /**
    * Computes the visibility of each cube face.
-   * 
-   * @param painter TODO
    */
   protected boolean[] getHiddenQuads(IPainter painter) {
     Coord3d scaledEye = painter.getCamera().getEye().div(scale);
@@ -709,7 +532,9 @@ public class AxisBox implements IAxis {
     return status;
   }
 
-  /* */
+  /* ************************************************/
+  /* ************** CONFIGURE AXIS ******************/
+  /* ************************************************/
 
   /**
    * Set the parameters and data of the AxeBox.
@@ -995,6 +820,11 @@ public class AxisBox implements IAxis {
      * 5);6
      */
   }
+  
+  /* ************************************************/
+  /* ************ AXIS GETTER/SETTER ****************/
+  /* ************************************************/
+
 
   protected void init() {
     setScale(new Coord3d(1.0f, 1.0f, 1.0f));
@@ -1018,12 +848,12 @@ public class AxisBox implements IAxis {
   }
 
   @Override
-  public BoundingBox3d getBoxBounds() {
+  public BoundingBox3d getBounds() {
     return boxBounds;
   }
 
   @Override
-  public IAxisLayout getLayout() {
+  public AxisLayout getLayout() {
     return layout;
   }
 
@@ -1097,60 +927,6 @@ public class AxisBox implements IAxis {
     }
   }
 
-
-
-  /* */
-
-  protected static final int PRECISION = 6;
-
-  protected View view;
-
-  // use this text renderer to get occupied volume by text
-  protected ITextRenderer textRenderer;
-
-  protected IAxisLayout layout;
-
-  protected BoundingBox3d boxBounds;
-  protected BoundingBox3d wholeBounds;
-  protected Coord3d center;
-  protected Coord3d scale;
-
-  protected float xrange;
-  protected float yrange;
-  protected float zrange;
-
-  protected float quadx[][];
-  protected float quady[][];
-  protected float quadz[][];
-
-  protected float normx[];
-  protected float normy[];
-  protected float normz[];
-
-  protected float axeXx[][];
-  protected float axeXy[][];
-  protected float axeXz[][];
-  protected float axeYx[][];
-  protected float axeYy[][];
-  protected float axeYz[][];
-  protected float axeZx[][];
-  protected float axeZy[][];
-  protected float axeZz[][];
-
-  protected int axeXquads[][];
-  protected int axeYquads[][];
-  protected int axeZquads[][];
-
-  protected boolean quadIsHidden[];
-
-  public static final int AXE_X = 0;
-  public static final int AXE_Y = 1;
-  public static final int AXE_Z = 2;
-
-  protected List<AxeAnnotation> annotations = new ArrayList<AxeAnnotation>();
-
-  protected SpaceTransformer spaceTransformer;
-
   public float[][] getQuadX() {
     return quadx;
   }
@@ -1168,7 +944,7 @@ public class AxisBox implements IAxis {
   }
 
   public BoundingBox3d.Corners getCorners() {
-    return getBoxBounds().getCorners();
+    return getBounds().getCorners();
   }
 
 }

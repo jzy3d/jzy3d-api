@@ -1,8 +1,8 @@
 package org.jzy3d.chart.factories;
 
 import java.util.Date;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
@@ -29,13 +29,12 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
-
 import com.jogamp.opengl.GLCapabilities;
 
 public class AWTPainterFactory extends NativePainterFactory implements IPainterFactory {
 
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-  static Logger logger = Logger.getLogger(AWTPainterFactory.class);
+  static Logger logger = LogManager.getLogger(AWTPainterFactory.class);
 
   public AWTPainterFactory() {
     super();
@@ -52,33 +51,30 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
 
   @Override
   public IViewportLayout newViewportLayout() {
+    //return new NativeViewAndColorbarsLayout();
     return new ViewAndColorbarsLayout();
   }
 
   /** Provide AWT Texture loading for screenshots */
   @Override
-  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+  public Renderer3d newRenderer3D(View view) {
     return new AWTRenderer3d(view, traceGL, debugGL);
   }
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
-    boolean traceGL = false;
-    boolean debugGL = false;
 
     if (isOffscreen()) {
-      return newOffscreenCanvas(factory, scene, quality, traceGL, debugGL);
+      return newOffscreenCanvas(factory, scene, quality);
     } else {
 
-      return new CanvasAWT(factory, scene, quality, getCapabilities(), traceGL, debugGL);
+      return new CanvasAWT(factory, scene, quality, getCapabilities());
     }
   }
 
-  protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality,
-      boolean traceGL, boolean debugGL) {
+  protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality) {
     Dimension dim = getOffscreenDimension();
-    return new OffscreenCanvas(factory, scene, quality, getCapabilities(), dim.width, dim.height,
-        traceGL, debugGL);
+    return new OffscreenCanvas(factory, scene, quality, getCapabilities(), dim.width, dim.height);
   }
 
 

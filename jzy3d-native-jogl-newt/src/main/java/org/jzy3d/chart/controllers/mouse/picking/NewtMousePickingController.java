@@ -3,14 +3,13 @@ package org.jzy3d.chart.controllers.mouse.picking;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.chart.controllers.thread.camera.AbstractCameraThreadController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
 import com.jogamp.opengl.GL;
@@ -168,6 +167,6 @@ public class NewtMousePickingController extends AbstractCameraController
   protected Chart chart;
 
   protected Coord2d prevMouse;
-  protected CameraThreadController threadController;
+  protected AbstractCameraThreadController threadController;
 
 }

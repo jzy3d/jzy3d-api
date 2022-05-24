@@ -5,7 +5,6 @@ import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.javafx.controllers.JavaFXChartController;
 import org.jzy3d.maths.Coord2d;
-
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Node;

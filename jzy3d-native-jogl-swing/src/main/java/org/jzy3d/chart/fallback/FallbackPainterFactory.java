@@ -3,7 +3,6 @@ package org.jzy3d.chart.fallback;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.util.ArrayList;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
@@ -17,7 +16,7 @@ import org.jzy3d.ui.views.ImagePanel;
 
 public class FallbackPainterFactory extends AWTPainterFactory {
   @Override
-  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+  public Renderer3d newRenderer3D(View view) {
     return new AWTImageRenderer3d(view, traceGL, debugGL);
   }
 

@@ -3,13 +3,13 @@ package org.jzy3d.plot3d.rendering.legends.overlay;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import java.util.List;
-
 import org.jzy3d.colors.AWTColor;
+import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 
 /**
  * 
@@ -19,9 +19,9 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
  * @author Martin Pernollet
  *
  */
-public class OverlayLegendRenderer implements AWTRenderer2d {
+public class OverlayLegendRenderer extends AbstractAWTRenderer2d implements AWTRenderer2d {
   protected List<Legend> info;
-  protected LegendLayout layout = new LegendLayout();
+  protected LineLegendLayout layout = new LineLegendLayout();
 
   public OverlayLegendRenderer(List<Legend> info) {
     super();
@@ -31,10 +31,20 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
   @Override
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {
     Graphics2D g2d = (Graphics2D) g;
-    configureRenderingHints(g2d);
+    
+    // Ensure native overlay will place image at the appropriate location
+    // Since native and emulgl deal differently with overlay when hiDPI
+    if(view!=null && view.getCanvas().isNative()) {
+      canvasHeight /= view.getPixelScale().y;
+      canvasWidth /= view.getPixelScale().x;
+    }
 
-    if (layout.font != null)
+
+    AWTGraphicsUtils.configureRenderingHints(g2d);
+
+    if (layout.font != null) {
       g2d.setFont(layout.font);
+    }
 
     FontMetrics fm = g.getFontMetrics();
     int textHeight = fm.getHeight();
@@ -61,7 +71,6 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
       g2d.fillRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
     }
 
-
     // Text position
     int xTextPos = xBoxPos + layout.txtMarginX;
     int yTextPos = yBoxPos + layout.txtMarginY + textHeight;
@@ -73,16 +82,10 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
       yTextPos += (layout.txtInterline + textHeight);
     }
 
-
     // Border
     g2d.setColor(AWTColor.toAWT(layout.borderColor));
     g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
-  }
 
-  protected void configureRenderingHints(Graphics2D g2d) {
-    RenderingHints rh = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING,
-        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    g2d.setRenderingHints(rh);
   }
 
 
@@ -136,12 +139,11 @@ public class OverlayLegendRenderer implements AWTRenderer2d {
     this.info = info;
   }
 
-  public LegendLayout getLayout() {
+  public LineLegendLayout getLayout() {
     return layout;
   }
 
-  public void setLayout(LegendLayout layout) {
+  public void setLayout(LineLegendLayout layout) {
     this.layout = layout;
   }
-
 }

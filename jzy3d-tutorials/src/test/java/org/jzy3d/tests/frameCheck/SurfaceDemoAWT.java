@@ -1,7 +1,6 @@
 package org.jzy3d.tests.frameCheck;
 
 import java.io.IOException;
-
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
@@ -18,7 +17,6 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.tests.frameCheck.Frame;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
@@ -74,7 +72,7 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
     IPainterFactory p = new AWTPainterFactory(c);
     IChartFactory f = new AWTChartFactory(p);
 
-    chart = f.newChart(Quality.Advanced);
+    chart = f.newChart(Quality.Advanced());
     chart.getScene().getGraph().add(surface);
   }
 }
