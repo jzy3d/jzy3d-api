@@ -15,13 +15,12 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.mockito.Mockito;
-import org.smurn.jply.util.Axis;
 
 public class Mocks {
   public static AxisLayout AxisLayout() {
     return mock(AxisLayout.class);
   }
-  
+
   public static AxisBox Axis() {
     return mock(AxisBox.class);
   }
@@ -31,17 +30,17 @@ public class Mocks {
     when(axis.getLayout()).thenReturn(layout);
     return axis;
   }
-  
+
   public static View View2D() {
     View view = mock(View.class);
     when(view.is2D()).thenReturn(true);
     return view;
   }
-  
+
   public static View View() {
     return Mockito.mock(View.class);
   }
-  
+
   public static View View(AxisBox axis, IPainter painter) {
     return View(axis, painter, null);
   }
@@ -55,7 +54,7 @@ public class Mocks {
     return view;
   }
 
-  
+
   public static View ViewAndPainter(float viewScale) {
     return ViewAndPainter(viewScale, "macos", "10", null, null);
   }
@@ -68,7 +67,7 @@ public class Mocks {
     IPainter painter = Painter(os, version);
 
     ICanvas canvas = mock(ICanvas.class);
-    
+
     if (gpuScale != null)
       when(canvas.getPixelScale()).thenReturn(gpuScale);
     if (jvmScale != null)
@@ -101,7 +100,7 @@ public class Mocks {
     when(canvas.isNative()).thenReturn(isNative);
     return canvas;
   }
-  
+
   public static ICanvas Canvas(Coord2d scaleHard, Coord2d scaleVM) {
     return new ICanvas() {
       @Override
@@ -178,7 +177,7 @@ public class Mocks {
       public List<ICanvasListener> getCanvasListeners() {
         return null;
       }
-      
+
       @Override
       public boolean isNative() {
         return true;

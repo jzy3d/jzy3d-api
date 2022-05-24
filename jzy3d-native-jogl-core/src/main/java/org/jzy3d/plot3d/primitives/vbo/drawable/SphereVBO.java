@@ -24,7 +24,7 @@ import com.jogamp.opengl.util.GLBuffers;
  * 
  * This is true when Quality.setAlphaActivated(false), in other word for Quality.Advanced.
  * 
- * @uthor David Eck inspired this class with http://math.hws.edu/graphicsbook/source/jogl/ColorCubeOfSpheres.java
+ * @uthor David Eck inspired this class with https://math.hws.edu/graphicsbook/source/jogl/ColorCubeOfSpheres.java
  * @author Martin Pernollet
  */
 public class SphereVBO extends DrawableVBO {
@@ -85,7 +85,7 @@ public class SphereVBO extends DrawableVBO {
 
   // element array buffer is an index:
   // @see
-  // http://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
+  // https://www.opengl-tutorial.org/intermediate-tutorials/tutorial-9-vbo-indexing/
   @Override
   public void draw(IPainter painter) {
     if (hasMountedOnce) {
