@@ -9,7 +9,7 @@ import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
@@ -19,21 +19,15 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class ITTest_AxisLabelRotateLayout extends ITTest{
   public static void main(String[] args) {
-    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON));
+    open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON));
+    //open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON));
   }
   
   @Test
   public void whenAxisLabelOrientationNotHorizontal() {
     System.out.println("ITTest : whenAxisLabelOrientationNotHorizontal");
-
-    whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON);
-    whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.OFF);
-
-    whenAxisLabelOrientationNotHorizontal(WT.Native_Swing, HiDPI.ON);
-    whenAxisLabelOrientationNotHorizontal(WT.Native_Swing, HiDPI.OFF);
-
-    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.OFF);
-    whenAxisLabelOrientationNotHorizontal(WT.EmulGL_AWT, HiDPI.ON);
+    
+    forEach((toolkit, resolution) -> whenAxisLabelOrientationNotHorizontal(toolkit, resolution));
   }
 
   public Chart whenAxisLabelOrientationNotHorizontal(WT wt, HiDPI hidpi) {
@@ -46,7 +40,7 @@ public class ITTest_AxisLabelRotateLayout extends ITTest{
     // -------------
     // WHEN
 
-    IAxisLayout layout = chart.getAxisLayout();
+    AxisLayout layout = chart.getAxisLayout();
     //layout.setFont(new Font("Apple Chancery", 20));
     layout.setFont(new Font("Helvetica", 14));
     layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));

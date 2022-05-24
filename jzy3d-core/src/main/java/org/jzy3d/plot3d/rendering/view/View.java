@@ -13,6 +13,7 @@ import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewIsVerticalEvent;
 import org.jzy3d.events.ViewLifecycleEvent;
 import org.jzy3d.events.ViewPointChangedEvent;
+import org.jzy3d.maths.BoundingBox2d;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -20,6 +21,7 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
+import org.jzy3d.plot3d.primitives.axis.AxisLabelProcessor;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.selectable.Selectable;
@@ -66,8 +68,14 @@ public class View {
   protected Color backgroundColor = Color.BLACK;
   protected boolean axisDisplayed = true;
   protected boolean squared = true;
+
+  /** Settings for the layout of a 2D chart */
+  protected View2DLayout view2DLayout = new View2DLayout(this);
+  protected View2DProcessing view2DProcessing = new View2DProcessing(this);
+
   protected float cameraRenderingSphereRadiusFactor = 1f;
-  protected float cameraRenderingSphereRadiusFactorOnTop = 0.25f;
+
+
   /**
    * force to have all object maintained in screen, meaning axebox won't always keep the same size.
    */
@@ -140,7 +148,7 @@ public class View {
    * Applies a factor to the default camera distance which is set to the radius of the scene bounds.
    * Changing this value also change the camera clipping planes.
    */
-  protected float factorViewPointDistance = 2;
+  protected float factorViewPointDistance = 1;
 
   /** A slave view won't clear its color and depth buffer before rendering */
   protected boolean slave = false;
@@ -225,7 +233,7 @@ public class View {
         // Store current pixel scale
         pixelScale.x = (float) pixelScaleX;
         pixelScale.y = (float) pixelScaleY;
-        
+
         // Convert pixel scale to HiDPI status
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
@@ -261,6 +269,19 @@ public class View {
    */
   public HiDPI getHiDPI() {
     return hidpi;
+  }
+
+  /** Return the configuration of a 2D layout */
+  public View2DLayout get2DLayout() {
+    return view2DLayout;
+  }
+
+  /**
+   * Return the result of processing a 2D layout using the layout configured with the instance
+   * returned by {@link #get2DLayout()}
+   */
+  public View2DProcessing get2DProcessing() {
+    return view2DProcessing;
   }
 
   public IPainter getPainter() {
@@ -577,6 +598,14 @@ public class View {
     return viewMode;
   }
 
+  public boolean is2D() {
+    return ViewPositionMode.TOP.equals(getViewMode());
+  }
+
+  public boolean is3D() {
+    return !is2D();
+  }
+
   /** Return the stretch ratio applied to the view */
   public Coord3d getScaling() {
     return scaling;
@@ -643,12 +672,21 @@ public class View {
     return axis;
   }
 
+  public AxisLayout getAxisLayout() {
+    return axis.getLayout();
+  }
+
+  
   public boolean getSquared() {
     return this.squared;
   }
 
   public void setSquared(boolean status) {
     this.squared = status;
+
+    if (is2D() && status)
+      LOGGER.info(
+          "View.setSquared : Setting a 2D chart squared may break the tick and axis label layout! Keep it to false for 2D charts");
   }
 
   public boolean isAxisDisplayed() {
@@ -692,8 +730,9 @@ public class View {
       this.cam.setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
   }
 
-
-  public static float CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP = 0.25f;
+  public boolean isMaximized() {
+    return ViewportMode.STRETCH_TO_FILL.equals(this.cam.getViewportMode());
+  }
 
 
   /**
@@ -714,22 +753,6 @@ public class View {
    */
   public void setCameraRenderingSphereRadiusFactor(float cameraRenderingSphereRadiusFactor) {
     this.cameraRenderingSphereRadiusFactor = cameraRenderingSphereRadiusFactor;
-  }
-
-  /**
-   * @see setter
-   */
-  public float getCameraRenderingSphereRadiusFactorOnTop() {
-    return cameraRenderingSphereRadiusFactorOnTop;
-  }
-
-  /**
-   * This allows stretching the camera rendering sphere when the camera is on top of the scene
-   * (meaning we are drawing in 2D).
-   */
-  public void setCameraRenderingSphereRadiusFactorOnTop(
-      float cameraRenderingSphereRadiusFactorOnTop) {
-    this.cameraRenderingSphereRadiusFactorOnTop = cameraRenderingSphereRadiusFactorOnTop;
   }
 
   public boolean isMaintainAllObjectsInView() {
@@ -844,7 +867,7 @@ public class View {
     shoot();
   }
 
-  protected BoundingBox3d getSceneGraphBounds() {
+  public BoundingBox3d getSceneGraphBounds() {
     return getSceneGraphBounds(scene);
   }
 
@@ -970,20 +993,23 @@ public class View {
 
   public void renderScene(ViewportConfiguration viewport) {
 
-    // synchronized(this) {
     if (first) {
       fireViewFirstRenderStarts();
       first = false;
     }
-    // }
 
     BoundingBox3d scaling = computeScaledViewBounds();
     updateCamera(viewport, scaling);
 
     painter.glShadeModel(quality.getColorModel());
 
-    renderAxeBox();
-    renderSceneGraph();
+    if (is3D()) {
+      renderAxeBox();
+      renderSceneGraph();
+    } else {
+      renderSceneGraph();
+      renderAxeBox();
+    }
     renderAnnotations(cam);
   }
 
@@ -1135,16 +1161,10 @@ public class View {
       float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
       CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
 
-    viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
-
-    Coord3d cameraTarget = computeCameraTarget(center, scaling);
-    Coord3d cameraUp = computeCameraUp(viewpoint);
-    Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
-    cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
+    updateCameraWithoutShooting(viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam,
+        factorViewPointDistance, center, scaling);
 
     triggerCameraUpEvents(viewpoint);
-
-    computeCameraRenderingSphereRadius(cam, viewport, bounds);
 
     cam.setViewPort(viewport);
     cam.shoot(painter, cameraMode);
@@ -1166,11 +1186,15 @@ public class View {
     Coord3d cameraTarget = computeCameraTarget(center, scaling);
     Coord3d cameraUp = computeCameraUp(viewpoint);
     Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
+
+    // Force the up vector of the camera to grow along Y axis
+    if (is2D()) {
+      cameraUp = new Coord3d(0.0, 1.0, 0.0);
+    }
+
     cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
 
-    triggerCameraUpEvents(viewpoint);
-
-    computeCameraRenderingSphereRadius(cam, viewport, bounds);
+    computeCameraRenderingVolume(cam, viewport, bounds);
   }
 
 
@@ -1183,12 +1207,12 @@ public class View {
     return computeCameraTarget(center, scaling);
   }
 
-  protected Coord3d computeCameraEye(Coord3d target) {
-    return computeCameraEye(target, viewMode, viewpoint);
-  }
-
   protected Coord3d computeCameraTarget(Coord3d center, Coord3d scaling) {
     return center.mul(scaling);
+  }
+
+  protected Coord3d computeCameraEye(Coord3d target) {
+    return computeCameraEye(target, viewMode, viewpoint);
   }
 
   protected Coord3d computeCameraEye(Coord3d target, ViewPositionMode viewmode, Coord3d viewpoint) {
@@ -1202,6 +1226,12 @@ public class View {
       throw new RuntimeException("Unsupported ViewMode: " + viewmode);
   }
 
+  /**
+   * 
+   * @param viewpoint
+   * @param target
+   * @see {@link #VIEWPOINT_X_Y_MIN_NEAR_VIEWER}
+   */
   protected Coord3d computeCameraEyeProfile(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
     eye.y = 0;
@@ -1247,34 +1277,115 @@ public class View {
     }
   }
 
-  public void computeCameraRenderingSphereRadius(Camera cam, ViewportConfiguration viewport,
+  /**
+   * Configure the camera so that it will capture a given volume in the scene.
+   * 
+   * Rendering in 3D requires capturing a sphere defined by the bounding box radius.
+   * 
+   * Rendering in 2D requires capturing a square defined by the bounding box with additional white
+   * space for labels and margins.
+   */
+  protected void computeCameraRenderingVolume(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
-    if (viewMode == ViewPositionMode.TOP) {
-      if (spaceTransformer != null)
-        bounds = spaceTransformer.compute(bounds);
 
-      float xdiam = bounds.getXRange().getRange();
-      float ydiam = bounds.getYRange().getRange();
-      float radius = Math.max(xdiam, ydiam) / 2;
+    if (spaceTransformer != null) {
+      bounds = spaceTransformer.compute(bounds);
+    }
 
-      radius += (radius * CAMERA_RENDERING_SPHERE_RADIUS_FACTOR_VIEW_ON_TOP);
+    // -----------------------
+    // 2D case
+    if (is2D()) {
+      computeCamera2D_RenderingSquare(cam, viewport, bounds);
+    }
 
-      cam.setRenderingSphereRadius(radius);
-      correctCameraPositionForIncludingTextLabels(painter, viewport);
-    } else {
-      if (spaceTransformer != null) {
-        bounds = spaceTransformer.compute(bounds);
-      }
-      double radius = bounds.getRadius();
-
-      cam.setRenderingSphereRadius((float) radius * cameraRenderingSphereRadiusFactor);
+    // -----------------------
+    // 3D case
+    else {
+      computeCamera3D_RenderingSphere(cam, viewport, bounds);
     }
   }
 
+
+
+  /**
+   * Camera clipping planes configuration for a rendering sphere (3D)
+   * 
+   * Assume that axis labels are positioned accordingly
+   * ({@link AxisLabelProcessor#axisLabelPosition_3D()}
+   */
+  protected void computeCamera3D_RenderingSphere(Camera cam, ViewportConfiguration viewport,
+      BoundingBox3d bounds) {
+    double radius = bounds.getRadius();
+
+    cam.setRenderingSphereRadius((float) radius * cameraRenderingSphereRadiusFactor);
+  }
+
+  /**
+   * Camera clipping planes configuration for a rendering plane (2D)
+   * 
+   * @see {@link View2DProcessing} and {@link View2DLayout}
+   */
+  protected void computeCamera2D_RenderingSquare(Camera cam, ViewportConfiguration viewport,
+      BoundingBox3d bounds) {
+
+    // bounds = getSceneGraphBounds();
+
+    view2DProcessing.apply(viewport, bounds);
+
+
+    // The rendering squared dimension will be applied at the current camera position
+    float xrange = bounds.getXRange().getRange();
+    float yrange = bounds.getYRange().getRange();
+
+    float xmin = -xrange / 2 - view2DProcessing.marginLeftModel;
+    float xmax = +xrange / 2 + view2DProcessing.marginRightModel;
+    float ymin = -yrange / 2 - view2DProcessing.marginBottomModel;
+    float ymax = +yrange / 2 + view2DProcessing.marginTopModel;
+
+    // configure camera rendering volume
+    BoundingBox2d sq = new BoundingBox2d(xmin, xmax, ymin, ymax);
+    cam.setRenderingSquare(sq);
+  }
+
+
+  /**
+   * Only used for top/2D views. Performs a rendering to get the whole bounds occupied by the Axis
+   * Box and its text labels.
+   * 
+   * Then edit the camera position to fit within this new bounds AND modify the clipping planes.
+   * 
+   * @param painter
+   * @param viewport
+   */
+  @Deprecated
   protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
       ViewportConfiguration viewport) {
+    cam.setViewPort(viewport);
+    cam.shoot(painter, cameraMode);
+    axis.draw(painter);
+    clear();
 
+    // Base camera radius on {@link AxisBox#getWholeBounds} to ensure we display text labels
+    // complete
+    BoundingBox3d newBounds = axis.getWholeBounds().scale(scaling);
+
+    // Compute camera position based on whole bounds
+    Coord3d target = newBounds.getCenter();
+    Coord3d eye = viewpoint.cartesian().add(target);
+    cam.setPosition(eye, target);
+
+    // 2D case
+    if (is2D()) {
+      computeCamera2D_RenderingSquare(cam, viewport, newBounds);
+    }
+
+    // 3D case
+    else {
+      computeCamera3D_RenderingSphere(cam, viewport, newBounds);
+    }
   }
+
+
 
   /* AXE BOX RENDERING */
 

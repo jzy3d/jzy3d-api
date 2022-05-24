@@ -16,15 +16,11 @@ import org.jzy3d.plot3d.rendering.view.layout.NativeViewAndColorbarsLayout;
 
 
 /**
- * Test non reg of colorbar and text layout with HiDPI EmulGL charts.
+ * Test non reg of colorbar and text layout.
  */
 public class ITTest_Colorbar extends ITTest{
   /** This main method is here to test manually a chart and keep it open until one close it explicitely. */
   public static void main(String[] args) {
-    //Chart c = new ITTest_Colorbar().whenColorbar_ShrinkBigFont(WT.EmulGL_AWT, HiDPI.ON);
-    //Chart c = new ITTest_Colorbar().whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.ON);
-    //Chart c = new ITTest_Colorbar().whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.OFF);
-    open(new ITTest_Colorbar().whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON));
     open(new ITTest_Colorbar().whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON));
   }
   
@@ -40,14 +36,7 @@ public class ITTest_Colorbar extends ITTest{
   public void whenColorbar_IsModifiedByCustomFont() {
     System.out.println("ITTest : whenColorbar_IsModifiedByCustomFont");
 
-    whenColorbar_IsModifiedByCustomFont(WT.Native_AWT, HiDPI.OFF);
-    whenColorbar_IsModifiedByCustomFont(WT.Native_AWT, HiDPI.ON);
-
-    whenColorbar_IsModifiedByCustomFont(WT.Native_Swing, HiDPI.OFF);
-    whenColorbar_IsModifiedByCustomFont(WT.Native_Swing, HiDPI.ON);
-
-    whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.ON);
-    whenColorbar_IsModifiedByCustomFont(WT.EmulGL_AWT, HiDPI.OFF);
+    forEach((toolkit, resolution) -> whenColorbar_IsModifiedByCustomFont(toolkit, resolution));
   }
 
   public Chart whenColorbar_IsModifiedByCustomFont(WT wt, HiDPI hidpi) {
@@ -78,21 +67,13 @@ public class ITTest_Colorbar extends ITTest{
   @Test
   public void whenColorbar_HasMininumWidth() {
     System.out.println("ITTest : whenColorbar_HasMininumWidth");
-
-    whenColorbar_HasMininumWidth(WT.Native_AWT, HiDPI.OFF);
-    whenColorbar_HasMininumWidth(WT.Native_AWT, HiDPI.ON);
-
-    whenColorbar_HasMininumWidth(WT.Native_Swing, HiDPI.OFF);
-    whenColorbar_HasMininumWidth(WT.Native_Swing, HiDPI.ON);
-
-    
-    whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.ON);
-    
+        
     // this show the colorbar almost in the middle of the chart which is normal
     // with the tested configuration (which yielded to letting the colorbar shrink
     // properly to the right
-    whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.OFF);
+    //whenColorbar_HasMininumWidth(WT.EmulGL_AWT, HiDPI.OFF);
     
+    forEach((WT toolkit, HiDPI resolution)->whenColorbar_HasMininumWidth(toolkit, resolution));
   }
 
   public Chart whenColorbar_HasMininumWidth(WT wt, HiDPI hidpi) {
@@ -124,15 +105,7 @@ public class ITTest_Colorbar extends ITTest{
   public void whenColorbar_ShrinkBigFont() {
     System.out.println("ITTest : whenColorbar_ShrinkBigFont");
 
-    whenColorbar_ShrinkBigFont(WT.Native_AWT, HiDPI.OFF);
-    whenColorbar_ShrinkBigFont(WT.Native_AWT, HiDPI.ON);
-
-    whenColorbar_ShrinkBigFont(WT.Native_Swing, HiDPI.OFF);
-    whenColorbar_ShrinkBigFont(WT.Native_Swing, HiDPI.ON);
-
-    
-    whenColorbar_ShrinkBigFont(WT.EmulGL_AWT, HiDPI.ON);
-    whenColorbar_ShrinkBigFont(WT.EmulGL_AWT, HiDPI.OFF);
+    forEach((toolkit, resolution) -> whenColorbar_ShrinkBigFont(toolkit, resolution));
   }
 
 
@@ -179,14 +152,7 @@ public class ITTest_Colorbar extends ITTest{
   public void whenColorbar_Shrink() {
     System.out.println("ITTest : whenColorbar_Shrink");
 
-    whenColorbar_Shrink(WT.Native_AWT, HiDPI.OFF);
-    whenColorbar_Shrink(WT.Native_AWT, HiDPI.ON);
-
-    whenColorbar_Shrink(WT.Native_Swing, HiDPI.OFF);
-    whenColorbar_Shrink(WT.Native_Swing, HiDPI.ON);
-
-    whenColorbar_Shrink(WT.EmulGL_AWT, HiDPI.OFF);
-    whenColorbar_Shrink(WT.EmulGL_AWT, HiDPI.ON);
+    forEach((WT toolkit, HiDPI resolution) -> whenColorbar_Shrink(toolkit, resolution));
   }
 
 

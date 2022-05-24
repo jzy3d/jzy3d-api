@@ -28,7 +28,7 @@ import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
-import org.jzy3d.plot3d.rendering.view.layout.NativeViewAndColorbarsLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import com.jogamp.opengl.GLCapabilities;
 
 public class AWTPainterFactory extends NativePainterFactory implements IPainterFactory {
@@ -51,8 +51,8 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
 
   @Override
   public IViewportLayout newViewportLayout() {
-    return new NativeViewAndColorbarsLayout();
-    //return new ViewAndColorbarsLayout();
+    //return new NativeViewAndColorbarsLayout();
+    return new ViewAndColorbarsLayout();
   }
 
   /** Provide AWT Texture loading for screenshots */
