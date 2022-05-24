@@ -1,87 +1,69 @@
 package org.jzy3d.io;
 
-import java.io.BufferedInputStream;
-import java.io.DataInputStream;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SimpleFile {
-  public static void write(String content, String file) throws Exception {
-    createParentFoldersIfNotExist(file);
-    Writer out = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
-    out.write(content);
-    out.close();
+
+  private SimpleFile() {}
+
+  public static void write(String content, String file) throws IOException {
+    Path path = Paths.get(file);
+    createParentFoldersIfNotExist(path.toFile());
+    try (BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {
+      writer.write(content);
+    }
   }
 
   public static void createParentFoldersIfNotExist(String file) {
-    File parent = (new File(file)).getParentFile();
-    if (parent != null && !parent.exists())
+    createParentFoldersIfNotExist(new File(file));
+  }
+
+  public static void createParentFoldersIfNotExist(File file) {
+    File parent = file.getAbsoluteFile().getParentFile();
+    if (parent != null && !parent.exists()) {
       parent.mkdirs();
+    }
   }
 
   public static List<String> readFile(File file) throws IOException {
-    return read(file.getAbsolutePath());
+    return Files.readAllLines(file.toPath());
   }
 
   public static List<String> read(String filename) throws IOException {
-    List<String> output = new ArrayList<String>();
-    File file = new File(filename);
-    FileInputStream fis = new FileInputStream(file);
-    BufferedInputStream bis = new BufferedInputStream(fis);
-    DataInputStream dis = new DataInputStream(bis);
-
-    while (dis.available() != 0) {
-      output.add(dis.readLine());
-    }
-
-
-    fis.close();
-    bis.close();
-    dis.close();
-    return output;
+    return readFile(new File(filename));
   }
 
-  public static String readAsString(String filename) throws Exception {
+  public static String readAsString(String filename) throws IOException {
     return readAsString(filename, "\n");
   }
 
   public static String readAsString(String filename, String newLineString) throws IOException {
-    StringBuffer sb = new StringBuffer();
-    File file = new File(filename);
-    FileInputStream fis = new FileInputStream(file);
-    BufferedInputStream bis = new BufferedInputStream(fis);
-    DataInputStream dis = new DataInputStream(bis);
-    while (dis.available() != 0) {
-      StringBuilder sb2 = new StringBuilder().append(dis.readLine());
-      if(newLineString!=null) {
-        sb2.append(newLineString);
-      }
-      sb.append(sb2);
-    }
-    fis.close();
-    bis.close();
-    dis.close();
-    return sb.toString();
+    return Files.readAllLines(Paths.get(filename)).stream()
+        .collect(Collectors.joining(newLineString));
   }
 
   /**
    * Return true if file1 is younger than file2, meaning it was last modified after file2. Always
    * return false if file2 does not exist. Always return true if file1 does not exist.
    */
-  public static boolean isYounger(String file1, String file2) throws IOException {
+  public static boolean isYounger(String file1, String file2) {
     File f1 = new File(file1);
     File f2 = new File(file2);
-    if (!f2.exists())
+    if (!f2.exists()) {
       return false;
-    if (!f1.exists())
+    }
+    if (!f1.exists()) {
       return true;
-    else
+    } else {
       return f1.lastModified() > f2.lastModified();
+    }
   }
 }

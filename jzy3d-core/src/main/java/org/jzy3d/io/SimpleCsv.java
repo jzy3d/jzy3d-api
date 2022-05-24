@@ -1,58 +1,49 @@
 package org.jzy3d.io;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.function.Function;
 import au.com.bytecode.opencsv.CSVWriter;
 
 public class SimpleCsv {
+
+  private SimpleCsv() {}
+
+  /**
+   * @deprecated use {@link #write(List, String, char, Function)} instead
+   */
+  @Deprecated(since = "2.0.0", forRemoval = true)
   public static <T> void write(List<T> entities, String file, char separator, ToLine<T> toLine)
       throws IOException {
-    File parent = (new File(file)).getParentFile();
-    if (parent != null && !parent.exists())
-      parent.mkdirs();
-    FileWriter fw = new FileWriter(file);
-    CSVWriter writer = new CSVWriter(fw, separator);
-    for (T entity : entities) {
-      writer.writeNext(toLine.toLine(entity));
+    write(entities, file, separator, toLine::toLine);
+  }
+
+  public static <T> void write(List<T> entities, String file, char separator,
+      Function<T, String[]> toLine) throws IOException {
+    try (CSVWriter writer = createWriter(file, separator)) {
+      for (T entity : entities) {
+        writer.writeNext(toLine.apply(entity));
+      }
     }
-    writer.close();
   }
 
-  /* */
-
-  public static void write(List lines, String file, char separator) throws IOException {
-    File parent = (new File(file)).getParentFile();
-    if (parent != null && !parent.exists())
-      parent.mkdirs();
-    FileWriter fw = new FileWriter(file);
-    CSVWriter writer = new CSVWriter(fw, separator);
-    writer.writeAll(lines);
-    writer.close();
-  }
-
-  public static void writeLines(List lines, String file, char separator) throws IOException {
-    File parent = (new File(file)).getParentFile();
-    if (parent != null && !parent.exists())
-      parent.mkdirs();
-    FileWriter fw = new FileWriter(file);
-    CSVWriter writer = new CSVWriter(fw, separator);
-    writer.writeAll(convert(lines));
-    writer.close();
-  }
-
-  protected static List convert(List lines) {
-    List out = new ArrayList(lines.size());
-    String content[];
-    for (Iterator i$ = lines.iterator(); i$.hasNext(); out.add(content)) {
-      String line = (String) i$.next();
-      content = new String[1];
-      content[0] = line;
+  public static void write(List<String[]> lines, String file, char separator) throws IOException {
+    try (CSVWriter writer = createWriter(file, separator)) {
+      writer.writeAll(lines);
     }
+  }
 
-    return out;
+  public static void writeLines(List<String> lines, String file, char separator)
+      throws IOException {
+    write(lines, file, separator, s -> new String[] {s});
+  }
+
+  private static CSVWriter createWriter(String file, char separator) throws IOException {
+    Path path = Paths.get(file);
+    SimpleFile.createParentFoldersIfNotExist(path.toFile());
+    return new CSVWriter(Files.newBufferedWriter(path), separator);
   }
 }
