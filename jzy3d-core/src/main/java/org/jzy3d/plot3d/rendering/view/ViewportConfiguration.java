@@ -7,7 +7,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
  * 
  * It is define by a width and height, and support an X and Y offset
  * 
- * @see http://www.opengl.org/sdk/docs/man/xhtml/glViewport.xml
+ * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glViewport.xhtml
  * @author Martin Pernollet
  */
 public class ViewportConfiguration {

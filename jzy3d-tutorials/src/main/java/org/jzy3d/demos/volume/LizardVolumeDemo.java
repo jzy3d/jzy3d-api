@@ -15,7 +15,7 @@ import com.jmatio.types.MLNumericArray;
 import com.jogamp.opengl.util.GLBuffers;
 
 /**
- * Get lizard file from http://download.jzy3d.org/objfiles/lizard.mat
+ * Get lizard file from https://download.jzy3d.org/objfiles/lizard.mat
  * 
  * @author Jacok Filik
  *
