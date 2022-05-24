@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-all</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>jzy3d-native-jogl-swt</artifactId>
@@ -24,15 +24,15 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- The org.eclipse.platform::org.eclipse.swt artifact is only an empty 
-			hull for SWT (the jar does not contain any class-files). The actual class 
-			files are contained in platform-specific artifacts. This is due to the design 
-			of the SWT project with one org.eclipse.swt Eclipse plug-in and multiple 
-			fragments one for each platform containing the native code/adjustments. In 
-			order to get the jar for a certain platform a dependency for the artifact 
-			for that platform must be declared. In order to not declare a compile time 
-			dependency to all specific platforms referenced below the dependencies are 
-			marked as optional and are therefore only present when developing jzy3d. 
+		<!-- The org.eclipse.platform::org.eclipse.swt artifact is only an empty
+			hull for SWT (the jar does not contain any class-files). The actual class
+			files are contained in platform-specific artifacts. This is due to the design
+			of the SWT project with one org.eclipse.swt Eclipse plug-in and multiple
+			fragments one for each platform containing the native code/adjustments. In
+			order to get the jar for a certain platform a dependency for the artifact
+			for that platform must be declared. In order to not declare a compile time
+			dependency to all specific platforms referenced below the dependencies are
+			marked as optional and are therefore only present when developing jzy3d.
 			It is assumed that the platforms chosen below are the main dev-platforms. -->
 		<dependency>
 			<groupId>org.eclipse.platform</groupId>
@@ -47,7 +47,7 @@
 	</dependencies>
 
 	<profiles>
-		<!-- https://maven.apache.org/guides/introduction/introduction-to-profiles.html 
+		<!-- https://maven.apache.org/guides/introduction/introduction-to-profiles.html
 			https://stackoverflow.com/questions/19023109/values-for-os-family-in-maven-profile-activation-condition -->
 
 		<profile>
