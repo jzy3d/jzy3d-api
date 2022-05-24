@@ -3,7 +3,7 @@
 
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-all</artifactId>
-	<version>2.1.0</version>
+	<version>2.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>Jzy3d Master Project</name>

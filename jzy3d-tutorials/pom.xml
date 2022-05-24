@@ -4,7 +4,7 @@
 
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-tutorials</artifactId>
-	<version>2.1.0</version>
+	<version>2.1.1-SNAPSHOT</version>
 
 	<name>Jzy3d Tutorials</name>
 
@@ -25,15 +25,15 @@
 
 	</repositories>
 
-	<!-- <repositories> <repository> <id>Sonatype-snapshots</id> <name>Sonatyp 
-		Snapshots</name> <url>https://oss.sonatype.org/content/groups/public</url> 
-		</repository> <repository> <id>Sonatype-releases-staging</id> <name>Sonatype 
-		Releases Staging</name> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url> 
+	<!-- <repositories> <repository> <id>Sonatype-snapshots</id> <name>Sonatyp
+		Snapshots</name> <url>https://oss.sonatype.org/content/groups/public</url>
+		</repository> <repository> <id>Sonatype-releases-staging</id> <name>Sonatype
+		Releases Staging</name> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
 		</repository> </repositories> -->
 
 
-	<!--To deploy tutorials: 1) this project does not references master to be 
-		able to be build alone 2) master still reference this project to build it 
+	<!--To deploy tutorials: 1) this project does not references master to be
+		able to be build alone 2) master still reference this project to build it
 		with the API involve being deployable by mvn deploy -->
 	<distributionManagement>
 		<repository>
@@ -48,8 +48,8 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<!-- <distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
-		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
+	<!-- <distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 		</repository> </distributionManagement> -->
 
 	<properties>

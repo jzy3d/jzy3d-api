@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.jzy3d</groupId>
 		<artifactId>jzy3d-all</artifactId>
-		<version>2.1.0</version>
+		<version>2.1.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>jzy3d-native-jogl-awt</artifactId>
@@ -36,7 +36,7 @@
 			<version>${project.version}</version>
 			<type>test-jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-core</artifactId>
@@ -52,7 +52,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<!-- This is necessary for JOGL to properly retrieve the OPENGL version 
+					<!-- This is necessary for JOGL to properly retrieve the OPENGL version
 						information that we output in test to ease multiplatform debugging https://forum.jogamp.org/Selecting-the-highest-possible-GL-profile-at-runtime-td4041302.html -->
 					<argLine>-Djogl.disable.openglcore=true</argLine>
 
