@@ -1,5 +1,6 @@
 package org.jzy3d.demos.volume;
 
+import java.io.File;
 import java.nio.ByteBuffer;
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
@@ -36,7 +37,15 @@ public class LizardVolumeDemo extends AWTAbstractAnalysis {
     float min = Float.POSITIVE_INFINITY;
 
     try {
-      MatFileReader mfr = new MatFileReader("data/lizard.mat");
+      String fileName = "data/lizard.mat";
+      if (!new File(fileName).exists()) {
+        System.err.println(
+            "You need to download http://download.jzy3d.org/objfiles/lizard.mat and save it as "
+                + fileName);
+        System.exit(1);
+      }
+
+      MatFileReader mfr = new MatFileReader(fileName);
       MLNumericArray<Integer> data = (MLNumericArray<Integer>) mfr.getMLArray("data");
       shape = data.getDimensions();
       int size = data.getSize();
@@ -73,11 +82,11 @@ public class LizardVolumeDemo extends AWTAbstractAnalysis {
     Texture3D volume = new Texture3D(buffer, shape, (float) min + ((max - min) / 10),
         (float) max - ((max - min) / 10), colorMapper,
         new BoundingBox3d(0, shape[2], 0, shape[1], 0, shape[0]));
-    
-    //Transform transform = new Transform();
-    //transform.add(new Rotate(90, new Coord3d(0,1,0)));
-    //volume.setTransformBefore(transform);
-    
+
+    // Transform transform = new Transform();
+    // transform.add(new Rotate(90, new Coord3d(0,1,0)));
+    // volume.setTransformBefore(transform);
+
     // Create a chart
     chart = AWTChartFactory.chart(Quality.Intermediate());
     chart.getScene().getGraph().add(volume);
