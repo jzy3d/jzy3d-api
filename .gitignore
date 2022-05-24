@@ -1,26 +1,32 @@
-dist
-build
-doc/javadoc
-target
-.settings
-.DS_Store
+
+# build artifcats
+target/
+*.class
+
+# IDE configuration files
 .classpath
 .project
-*.class
+.settings
+.idea/
+**/.idea/
+
+
+# OS specific folder data files
+.DS_Store
+.directory
+
+# logs
+hs_err_pid*
 *.log
+
+# Also ignoring some sample data file as they should be downloaded from https://download.jzy3d.org/objfiles/
+*.obj
+*.mat
+
+# misc
+doc/javadoc
 *~/
-*~
 
-**/dragon.obj
-#*.obj
-#!jzy3d-core/data/objfiles/bunny.obj
-
-*/.classpath
-*/.project
-*/.settings
-*/.DS_Store
-
-jzy3d-api/data/objfiles/dragon.obj
-
+# Maven temporary files
 *.releaseBackup
 *.versionsBackup

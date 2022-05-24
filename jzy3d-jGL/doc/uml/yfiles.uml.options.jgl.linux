@@ -1,0 +1,19 @@
+-d doc/api
+-source 1.8
+-sourcepath /Users/martin/Dev/jzy3d/public/jGL/src/main/java/
+-breakiterator
+-author
+-umlautogen
+-generic
+-docletpath ./lib/ydoc.jar:./resources:./doc
+-doclet ydoc.doclets.YStandard
+-filterpath ./lib/ydoc.jar
+-filter ydoc.filters.ExcludeFilter
+-tag y.precondition
+-tag y.postcondition
+-tag y.complexity
+-tag param
+-tag return
+-tag see
+-tag y.uml
+-subpackages jgl

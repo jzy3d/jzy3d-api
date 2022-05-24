@@ -80,10 +80,29 @@ public interface IPainterFactory {
 
   public void setOffscreenDisabled();
 
+  /**
+   * The size of the offscreen chart dimension.
+   * 
+   * Native implementation will really make the chart offscreen. EmulGL will configure the chart for
+   * offscreen rendering but won't prevent to open the chart. Note that if the chart is opened on an
+   * HiDPI screen, further screenshot may be bigger than expected due to pixel scale capabilities
+   * discovered only once the component is rendered on a screen.
+   * 
+   * @param width
+   * @param height
+   */
   public void setOffscreen(int width, int height);
-  
+
   public void setOffscreen(Rectangle rectangle);
 
   public Dimension getOffscreenDimension();
+
+  public boolean isDebugGL();
+
+  /**
+   * If true, will let GL trigger {@link GLException} if an error occur in OpenGL which ease
+   * debugging. Default is false.
+   */
+  public void setDebugGL(boolean debugGL);
 
 }

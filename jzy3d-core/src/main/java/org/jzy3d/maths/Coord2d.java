@@ -43,6 +43,10 @@ public class Coord2d implements Serializable {
     y = (float) yi;
   }
 
+  public Coord2d(double xi) {
+    this(xi, 0);
+  }
+
   /** Return a duplicate of this 3d coordinate. */
   @Override
   public Coord2d clone() {
@@ -149,6 +153,17 @@ public class Coord2d implements Serializable {
   public Coord2d mul(float value) {
     return new Coord2d(x * value, y * value);
   }
+  
+  public Coord2d mulSelf(Coord2d c) {
+    return mulSelf(c.x, c.y);
+  }
+
+  
+  public Coord2d mulSelf(float x, float y) {
+    this.x *= x;
+    this.y *= y;
+    return this;
+  }
 
   /**
    * Divise a Coord2d to the current one and return the result in a new Coord2d.
@@ -199,7 +214,7 @@ public class Coord2d implements Serializable {
 
   /**
    * Return a real polar value, with an angle in the range [0;2*PI]
-   * http://fr.wikipedia.org/wiki/Coordonn%C3%A9es_polaires
+   * https://en.wikipedia.org/wiki/Polar_coordinate_system
    */
   public Coord2d fullPolar() {
     double radius = Math.sqrt(x * x + y * y);
@@ -255,6 +270,10 @@ public class Coord2d implements Serializable {
     mean.x = a.x * weigthA + b.x * weightB;
     mean.y = a.y * weigthA + b.y * weightB;
     return mean;
+  }
+
+  public static Coord2d interpolate(Coord2d a, Coord2d b, float weigthA) {
+    return addWeighted(a, b, weigthA, 1f - weigthA);
   }
 
   /** Return a string representation of this coordinate. */

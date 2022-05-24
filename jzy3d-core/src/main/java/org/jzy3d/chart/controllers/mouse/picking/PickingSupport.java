@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.TicToc;
@@ -31,6 +30,13 @@ import org.jzy3d.plot3d.transform.Transform;
 public class PickingSupport {
   public static int BRUSH_SIZE = 10;
   public static int BUFFER_SIZE = 2048;
+  
+  protected static int pickId = 0;
+  protected Map<Integer, Pickable> pickables = new HashMap<>();
+  protected List<IObjectPickedListener> verticesListener = new ArrayList<>(1);
+  protected Map<Pickable, Object> pickableTargets = new HashMap<>();
+  protected int brushSize;
+  protected int bufferSize;
 
   public PickingSupport() {
     this(BRUSH_SIZE);
@@ -86,13 +92,10 @@ public class PickingSupport {
   public void pickObjects(IPainter painter, View view, Graph graph, IntegerCoord2d pickPoint) {
     perf.tic();
 
-    int viewport[] = new int[4];
-    int selectBuf[] = new int[bufferSize]; // TODO: move @ construction
     IntBuffer selectBuffer = newDirectIntBuffer(bufferSize);
 
     // Prepare selection data
-    viewport = painter.getViewPortAsInt();
-    // painter.glGetIntegerv(GL.GL_VIEWPORT, viewport, 0);
+    int[] viewport = painter.getViewPortAsInt();
     painter.glSelectBuffer(bufferSize, selectBuffer);
     painter.glRenderMode(RenderMode.SELECT);
     painter.glInitNames();
@@ -103,15 +106,23 @@ public class PickingSupport {
     CameraMode cMode = view.getCameraMode();
     Coord3d viewScaling = view.getLastViewScaling();
     Transform viewTransform = new Transform(new Scale(viewScaling));
-    double xpick = pickPoint.x;
-    double ypick = pickPoint.y;
+    IntegerCoord2d pickPointHiDPI = pickPoint;//.div(painter.getCanvas().getPixelScale());
+    double xpick = pickPointHiDPI.x;
+    double ypick = pickPointHiDPI.y;
+    
+    //System.out.println(pickPoint + " " + pickPointHiDPI);
+    //System.out.println(painter.getCanvas().getPixelScale());
+    
+    painter.acquireGL();
 
+    
     // Setup projection matrix
     painter.glMatrixMode_Projection();
     painter.glPushMatrix();
     {
       painter.glLoadIdentity();
 
+      
       // Setup picking matrix, and update view frustrum
       painter.gluPickMatrix(xpick, ypick, brushSize, brushSize, viewport, 0);
       camera.doShoot(painter, cMode);
@@ -128,6 +139,7 @@ public class PickingSupport {
         }
       }
 
+
       // Back to projection matrix
       painter.glMatrixMode_Projection();
     }
@@ -136,18 +148,23 @@ public class PickingSupport {
 
     // Process hits
     int hits = painter.glRenderMode(RenderMode.RENDER);
+    
+    int[] selectBuf = new int[bufferSize]; 
     selectBuffer.get(selectBuf);
     List<Pickable> picked = processHits(hits, selectBuf);
 
     // Trigger an event
-    List<Object> clickedObjects = new ArrayList<Object>(hits);
+    List<Object> clickedObjects = new ArrayList<>(hits);
     for (Pickable pickable : picked) {
       Object vertex = pickableTargets.get(pickable);
       clickedObjects.add(vertex);
     }
     perf.toc();
-
+    
     fireObjectPicked(clickedObjects);
+    
+    //painter.releaseGL();
+
   }
 
   /** Picked from JOGL Buffers class. */
@@ -224,12 +241,4 @@ public class PickingSupport {
     pickableTargets.clear();
   }
 
-  /*********************/
-
-  protected static int pickId = 0;
-  protected Map<Integer, Pickable> pickables = new HashMap<Integer, Pickable>();
-  protected List<IObjectPickedListener> verticesListener = new ArrayList<IObjectPickedListener>(1);
-  protected Map<Pickable, Object> pickableTargets = new HashMap<Pickable, Object>();
-  protected int brushSize;
-  protected int bufferSize;
 }

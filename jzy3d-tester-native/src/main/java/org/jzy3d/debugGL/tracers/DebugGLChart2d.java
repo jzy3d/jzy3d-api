@@ -3,7 +3,6 @@ package org.jzy3d.debugGL.tracers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart2d.Chart2d;
 import org.jzy3d.chart2d.Chart2dFactory;
@@ -13,7 +12,7 @@ import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Timer;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot2d.primitives.Serie2d.Type;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ElapsedTimeTickRenderer;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -33,7 +32,7 @@ public class DebugGLChart2d {
   Chart watchedChart;
 
   // WatcherFactory wf = new WatcherFactory();
-  Chart2d debugChart = new Chart2dFactory().newChart(Quality.Advanced);
+  Chart2d debugChart = new Chart2dFactory().newChart(Quality.Advanced());
   Timer timer = new Timer();
 
   public DebugGLChart2d(Chart watchedChart) {
@@ -42,7 +41,7 @@ public class DebugGLChart2d {
 
     timer.start();
     // debugChart.asTimeChart(120f, 0f, (float)Math.PI*2, "X", "Y");
-    IAxisLayout axe = debugChart.getAxisLayout();
+    AxisLayout axe = debugChart.getAxisLayout();
     debugChart.getView().setBoundManual(new BoundingBox3d(0, 120f, 0, 1, -1, 1));
     debugChart.getView().setBoundMode(ViewBoundMode.AUTO_FIT);
     axe.setXTickRenderer(new ElapsedTimeTickRenderer());

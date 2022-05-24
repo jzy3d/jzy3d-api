@@ -17,9 +17,6 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public interface IChartFactory {
-  public IPainterFactory getPainterFactory();
-
-  public void setPainterFactory(IPainterFactory painterFactory);
 
   public View newView(Scene scene, ICanvas canvas, Quality quality);
 
@@ -54,6 +51,19 @@ public interface IChartFactory {
 
   public IBoundingPolicy newBoundingPolicy();
 
+  // *************************************************************** //
+  // 
+  // SUB-FACTORIES 
+  // 
+  // *************************************************************** //
+
+  public IPainterFactory getPainterFactory();
+
+  public void setPainterFactory(IPainterFactory painterFactory);
+
+  //public IDrawableFactory getDrawableFactory();
+
+  //public void setDrawableFactory(IDrawableFactory drawableFactory);
 
 
   /**

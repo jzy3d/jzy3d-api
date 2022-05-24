@@ -8,17 +8,15 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapGrayscale;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.volume.Texture3D;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.transform.Rotate;
-import org.jzy3d.plot3d.transform.Transform;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import com.jmatio.io.MatFileReader;
 import com.jmatio.types.MLNumericArray;
 import com.jogamp.opengl.util.GLBuffers;
 
 /**
- * Get lizard file from http://download.jzy3d.org/objfiles/lizard.mat
+ * Get lizard file from https://download.jzy3d.org/objfiles/lizard.mat
  * 
  * @author Jacok Filik
  *
@@ -61,6 +59,7 @@ public class LizardVolumeDemo extends AWTAbstractAnalysis {
 
 
     } catch (Exception e) {
+      e.printStackTrace();
       return;
     }
 
@@ -80,12 +79,12 @@ public class LizardVolumeDemo extends AWTAbstractAnalysis {
     //volume.setTransformBefore(transform);
     
     // Create a chart
-    chart = AWTChartFactory.chart(Quality.Intermediate);
+    chart = AWTChartFactory.chart(Quality.Intermediate());
     chart.getScene().getGraph().add(volume);
-    // chart.getView().setBackgroundColor(new Color(0, 0, 0));
-    // IAxeLayout axeLayout = chart.getAxeLayout();
-    // axeLayout.setMainColor(new Color(0.7f, 0.7f, 0.7f));
     chart.getView().setSquared(false);
-    chart.getView();
+
+    // Keep former text renderer as the new one does not work properly with shaders
+    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
+
   }
 }

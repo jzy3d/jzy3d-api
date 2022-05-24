@@ -2,7 +2,6 @@ package org.jzy3d.bridge.awt;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;
@@ -48,12 +47,14 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
     this.addWindowListener(new WindowAdapter() {
       @Override
       public void windowClosing(WindowEvent e) {
-        FrameAWT.this.remove((java.awt.Component) FrameAWT.this.chart.getCanvas());
-        FrameAWT.this.chart.dispose();
-        FrameAWT.this.chart = null;
-        FrameAWT.this.dispose();
+        if(FrameAWT.this.chart!=null) {
+          FrameAWT.this.remove((java.awt.Component) FrameAWT.this.chart.getCanvas());
+          FrameAWT.this.chart.stopAllThreads();
+          FrameAWT.this.chart.dispose();
+          FrameAWT.this.chart = null;
+          FrameAWT.this.dispose();
+        }
       }
     });
   }
-
 }

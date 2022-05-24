@@ -2,11 +2,9 @@ package org.jzy3d.plot3d.rendering.textures;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLException;
 import com.jogamp.opengl.util.texture.Texture;
@@ -14,6 +12,15 @@ import com.jogamp.opengl.util.texture.TextureCoords;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 public class SharedTexture implements IGLBindedResource {
+  protected Texture texture;
+  protected String file;
+  protected TextureCoords coords;
+  protected float halfWidth;
+  protected float halfHeight;
+  protected boolean useMipMap = false;
+  protected int textureMagnificationFilter = GL.GL_NEAREST;
+  protected int textureMinificationFilter = GL.GL_NEAREST;
+
   protected SharedTexture() {
     this.texture = null;
   }
@@ -125,12 +132,4 @@ public class SharedTexture implements IGLBindedResource {
     this.textureMinificationFilter = textureMinificationFilter;
   }
 
-  protected Texture texture;
-  protected String file;
-  protected TextureCoords coords;
-  protected float halfWidth;
-  protected float halfHeight;
-  protected boolean useMipMap = false;
-  protected int textureMagnificationFilter = GL.GL_NEAREST;
-  protected int textureMinificationFilter = GL.GL_NEAREST;
 }

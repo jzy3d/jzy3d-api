@@ -4,11 +4,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.chart.controllers.thread.camera.AbstractCameraThreadController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
@@ -26,7 +25,7 @@ public class AWTMousePickingController extends AbstractCameraController
   protected Chart chart;
 
   protected Coord2d prevMouse;
-  protected CameraThreadController threadController;
+  protected AbstractCameraThreadController threadController;
 
 
   public AWTMousePickingController() {

@@ -18,6 +18,8 @@ import org.jzy3d.colors.Color;
 * 0               0.5               1
 * </code>
  * </pre>
+ * 
+ * @see {@link ColorMapRainbowNoBorder}
  */
 public class ColorMapRainbow extends AbstractColorMap implements IColorMap {
   public ColorMapRainbow() {

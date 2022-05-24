@@ -1,11 +1,11 @@
 package org.jzy3d.plot3d.text.drawable.cells;
 
-import java.awt.Font;
-import java.util.List;
 
+import java.util.List;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.PlaneAxis;
+import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.pickable.PickableTexture;
 import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
@@ -39,7 +39,7 @@ public class DrawableTextCell extends PickableTexture {
   /******************************/
   // default image generation @ construction
 
-  protected static Font DEFAULT_FONT = new Font("Serif", Font.PLAIN, 16);
+  protected static Font DEFAULT_FONT = new Font("Serif", 16);
 
   protected static BufferedImageTexture makeImage(int n, String text) {
     return new TextCellRenderer(n, text, DEFAULT_FONT).getImage();

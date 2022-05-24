@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.textured;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.ConvexHull;
@@ -18,6 +17,25 @@ import org.jzy3d.plot3d.rendering.view.Camera;
 
 
 public class TexturedCube extends Composite implements Selectable, ITranslucent {
+  protected Drawable north;
+  protected Drawable south;
+  protected Drawable west;
+  protected Drawable east;
+  protected Drawable near;
+  protected Drawable far;
+
+  protected Drawable northBg;
+  protected Drawable southBg;
+  protected Drawable westBg;
+  protected Drawable eastBg;
+  protected Drawable nearBg;
+  protected Drawable farBg;
+
+  protected List<Coord3d> lastProjection;
+  protected Polygon2d lastHull;
+
+  protected float alpha;
+  
   public TexturedCube(MaskPair masks) {
     this(new Coord3d(), Color.CYAN, Color.RED, masks);
   }
@@ -78,7 +96,7 @@ public class TexturedCube extends Composite implements Selectable, ITranslucent 
     bbox = new BoundingBox3d(position, width * 2);
   }
 
-  public List<Coord2d> makeXPlaneTextureMapping(Coord3d position, float width) {
+  public static List<Coord2d> makeXPlaneTextureMapping(Coord3d position, float width) {
     List<Coord2d> xmapping = new ArrayList<Coord2d>(4);
     xmapping.add(new Coord2d(position.y - width, position.z - width));
     xmapping.add(new Coord2d(position.y + width, position.z - width));
@@ -145,22 +163,5 @@ public class TexturedCube extends Composite implements Selectable, ITranslucent 
     ((NativeDrawableImage) far).setAlphaFactor(alpha);
   }
 
-  protected Drawable north;
-  protected Drawable south;
-  protected Drawable west;
-  protected Drawable east;
-  protected Drawable near;
-  protected Drawable far;
 
-  protected Drawable northBg;
-  protected Drawable southBg;
-  protected Drawable westBg;
-  protected Drawable eastBg;
-  protected Drawable nearBg;
-  protected Drawable farBg;
-
-  protected List<Coord3d> lastProjection;
-  protected Polygon2d lastHull;
-
-  protected float alpha;
 }

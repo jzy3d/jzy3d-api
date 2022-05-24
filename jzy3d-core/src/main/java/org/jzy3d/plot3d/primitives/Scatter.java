@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives;
 
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ISingleColorable;
 import org.jzy3d.events.DrawableChangedEvent;
@@ -12,7 +11,9 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
- * Experimental 3d object.
+ * A collection of coordinates rendered as dots.
+ * 
+ * Warning : dots having a width of 1 may not be visible in case HiDPI is ON.
  * 
  * @author Martin Pernollet
  * 
@@ -29,17 +30,33 @@ public class Scatter extends Drawable implements ISingleColorable {
     this(coordinates, Color.BLACK);
   }
 
+  public Scatter(List<Coord3d> coordinates) {
+    this(coordinates, Color.BLACK);
+  }
+
   public Scatter(Coord3d[] coordinates, Color rgb) {
     this(coordinates, rgb, 1.0f);
   }
 
+  public Scatter(List<Coord3d> coordinates, Color rgb) {
+    this(coordinates, rgb, 1.0f);
+  }
+
   public Scatter(Coord3d[] coordinates, Color rgb, float width) {
-    bbox = new BoundingBox3d();
+    this();
     setData(coordinates);
     setWidth(width);
     setColor(rgb);
   }
 
+  public Scatter(List<Coord3d> coordinates, Color rgb, float width) {
+    this();
+    setData(coordinates);
+    setWidth(width);
+    setColor(rgb);
+  }
+
+  
   public Scatter(Coord3ds coords) {
     this(coords.coordsArray(), coords.colorsArray());
   }
@@ -77,9 +94,9 @@ public class Scatter extends Drawable implements ISingleColorable {
     if (colors == null)
       painter.color(rgb);
 
-    if (coordinates != null) {
+    if (getData() != null) {
       int k = 0;
-      for (Coord3d c : coordinates) {
+      for (Coord3d c : getData()) {
         if (colors != null) {
           painter.color(colors[k]);
           k++;
@@ -116,6 +133,7 @@ public class Scatter extends Drawable implements ISingleColorable {
     int k = 0;
     for (Coord3d c : coordinates)
       this.coordinates[k++] = c;
+    updateBounds();
   }
 
   @Override

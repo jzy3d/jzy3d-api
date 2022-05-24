@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.transform;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 
@@ -29,6 +28,13 @@ public class Transform {
     sequence = new ArrayList<Transformer>();
     sequence.add(transformer);
 
+  }
+  
+  public Transform(Transformer... transformer) {
+    sequence = new ArrayList<Transformer>();
+    for(Transformer t: transformer) {
+      sequence.add(t);
+    }
   }
 
   /**

@@ -2,7 +2,6 @@ package org.jzy3d.maths;
 
 import java.util.Deque;
 import java.util.List;
-
 import org.jzy3d.maths.algorithms.convexhull.ConvexHullFunction;
 import org.jzy3d.maths.algorithms.convexhull.GrahamScan;
 

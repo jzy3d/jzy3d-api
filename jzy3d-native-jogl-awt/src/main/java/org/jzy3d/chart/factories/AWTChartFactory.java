@@ -1,6 +1,7 @@
 package org.jzy3d.chart.factories;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -11,7 +12,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class AWTChartFactory extends ChartFactory {
   public static Chart chart() {
-    return chart(Quality.Intermediate);
+    return chart(Quality.Intermediate());
   }
 
   public static Chart chart(Quality quality) {
@@ -21,7 +22,7 @@ public class AWTChartFactory extends ChartFactory {
 
   /* *************************************************** */
 
-  static Logger logger = Logger.getLogger(AWTChartFactory.class);
+  static Logger logger = LogManager.getLogger(AWTChartFactory.class);
 
   public AWTChartFactory() {
     super(new AWTPainterFactory());

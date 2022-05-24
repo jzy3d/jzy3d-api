@@ -1,10 +1,12 @@
 package org.jzy3d.chart.factories;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
+import org.jzy3d.chart.controllers.thread.camera.CameraThreadControllerWithTime;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IBoundingPolicy;
@@ -29,10 +31,10 @@ import org.jzy3d.plot3d.rendering.view.View;
  * 
  * @see {@link AWTChartFactory} for a working implementation
  */
-public abstract class ChartFactory implements IChartFactory {
+public class ChartFactory implements IChartFactory {
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
-  static Logger logger = Logger.getLogger(ChartFactory.class);
+  static Logger logger = LogManager.getLogger(ChartFactory.class);
 
   IPainterFactory painterFactory;
 
@@ -61,7 +63,7 @@ public abstract class ChartFactory implements IChartFactory {
 
   @Override
   public Chart newChart() {
-    return newChart(Quality.Advanced);
+    return newChart(Quality.Advanced());
   }
 
   @Override
@@ -132,7 +134,8 @@ public abstract class ChartFactory implements IChartFactory {
 
   @Override
   public CameraThreadController newCameraThreadController(Chart chart) {
-    return new CameraThreadController(chart);
+    //return new CameraThreadController(chart);
+    return new CameraThreadControllerWithTime(chart, 10);
   }
 
   /*

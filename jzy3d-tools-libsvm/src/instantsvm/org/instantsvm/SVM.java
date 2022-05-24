@@ -3,10 +3,8 @@ package org.instantsvm;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
-
 import org.instantsvm.utils.LibSvmConsole;
 import org.instantsvm.utils.LibSvmIO;
-
 import libsvm.svm;
 import libsvm.svm_model;
 import libsvm.svm_node;

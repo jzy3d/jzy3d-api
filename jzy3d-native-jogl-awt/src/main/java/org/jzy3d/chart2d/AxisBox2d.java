@@ -1,27 +1,27 @@
 package org.jzy3d.chart2d;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Horizontal;
-import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 public class AxisBox2d extends AxisBox {
-  public AxisBox2d(BoundingBox3d bbox, IAxisLayout layout) {
+  public AxisBox2d(BoundingBox3d bbox, AxisLayout layout) {
     super(bbox, layout);
   }
 
   public AxisBox2d(BoundingBox3d bbox) {
     super(bbox);
-    textRenderer = new TextBitmapRenderer();
+    textRenderer = new TextRenderer();
     // txt = new JOGLTextRenderer(new DefaultTextStyle(java.awt.Color.BLACK));// ATTENTION AWT!!
   }
 
@@ -51,8 +51,11 @@ public class AxisBox2d extends AxisBox {
     return 3;
   }
 
-  @Override
-  public Horizontal layoutHorizontal(int direction, Camera cam, Horizontal hal, Coord3d tickPosition) {
+  
+  /*
+   * THESE TWO METHOD HAVE MOVED TO AxisLabelProcessor
+   * @Override
+  public Horizontal align(Horizontal hal, int direction, Camera cam, Coord3d tickPosition) {
     if (direction == AXE_X) {
       return Horizontal.CENTER;
     } else if (direction == AXE_Y) {
@@ -62,27 +65,25 @@ public class AxisBox2d extends AxisBox {
     }
   }
 
-  /** Draws Y axis label vertically. */
   @Override
   public void drawAxisLabel(IPainter painter, int direction, Color color,
-      BoundingBox3d ticksTxtBounds, double xlab, double ylab, double zlab, String axeLabel) {
-    Coord3d labelPosition = new Coord3d(xlab, ylab, zlab);
+      BoundingBox3d ticksTxtBounds, Coord3d labelPosition, String axeLabel, float rotation, Coord2d offset) {
     BoundingBox3d labelBounds = null;
 
-    if (isXDisplayed(direction)) {
+    if (isXAxeLabelDisplayed(direction)) {
       // doTransform(gl);
-      labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Horizontal.CENTER,
-          Vertical.CENTER, color);
-    } else if (isYDisplayed(direction)) {
-      labelBounds = textRenderer.drawText(painter, axeLabel, labelPosition, Horizontal.CENTER,
-          Vertical.CENTER, color);
+      labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
+          labelPosition, Horizontal.CENTER, Vertical.CENTER, color);
+    } else if (isYAxeLabelDisplayed(direction)) {
+      labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
+          labelPosition, Horizontal.CENTER, Vertical.CENTER, color);
       // labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER,
       // Valign.CENTER, color);
     }
     if (labelBounds != null)
       ticksTxtBounds.add(labelBounds);
     doTransform(painter);
-  }
+  }*/
 
   /* VERTICAL ROTATION */
 
@@ -90,10 +91,10 @@ public class AxisBox2d extends AxisBox {
 
   /* ROTATED TEXT BITMAP RENDERER NOT WORKING PROPERLY */
 
-  public class RotatedTextBitmapRenderer extends TextBitmapRenderer {
+  public class RotatedTextBitmapRenderer extends TextRenderer {
     @Override
-    public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Horizontal halign,
-        Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+    public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
+        float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
       painter.color(color);
 
       // compute a corrected position according to layout
@@ -109,7 +110,7 @@ public class AxisBox2d extends AxisBox {
       try {
         posReal = painter.getCamera().screenToModel(painter, screenAligned);
       } catch (RuntimeException e) {
-        Logger.getLogger(TextBitmapRenderer.class)
+        LogManager.getLogger(TextRenderer.class)
             .error("TextBitmap.drawText(): could not process text position: " + screen + " "
                 + screenAligned);
         return new BoundingBox3d();
@@ -122,7 +123,7 @@ public class AxisBox2d extends AxisBox {
       glRasterPos(painter, sceneOffset, Coord3d.ORIGIN);
       painter.glutBitmapString(font.getCode(), text);
 
-      return computeTextBounds(painter, screenAligned, textWidth);
+      return computeTextBounds(painter, font, screenAligned, textWidth);
     }
 
     // CUSTOM ROTATION

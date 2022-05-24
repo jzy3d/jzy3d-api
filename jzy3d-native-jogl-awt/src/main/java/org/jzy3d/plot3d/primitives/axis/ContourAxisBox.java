@@ -3,8 +3,8 @@ package org.jzy3d.plot3d.primitives.axis;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -13,7 +13,7 @@ import org.jzy3d.maths.PlaneAxis;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.LineStrip;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.contour.ContourLevel;
 import org.jzy3d.plot3d.primitives.contour.ContourMesh;
 import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
@@ -29,9 +29,9 @@ import org.jzy3d.plot3d.text.align.Vertical;
  * @author Martin Pernollet
  */
 public class ContourAxisBox extends AxisBox {
-  static Logger logger = Logger.getLogger(ContourAxisBox.class);
+  static Logger logger = LogManager.getLogger(ContourAxisBox.class);
 
-  public ContourAxisBox(BoundingBox3d bbox, IAxisLayout layout) {
+  public ContourAxisBox(BoundingBox3d bbox, AxisLayout layout) {
     super(bbox, layout);
   }
 
@@ -125,8 +125,8 @@ public class ContourAxisBox extends AxisBox {
       if (label != null && level != null) {
         for (LineStrip strip : contour.getLines()) {
           Coord3d position = strip.get(strip.size() / 2).xyz;
-          textRenderer.drawText(painter, label, position, Horizontal.CENTER, Vertical.CENTER,
-              Color.BLACK);
+          textRenderer.drawText(painter, getLayout().getFont(), label, position,
+              Horizontal.CENTER, Vertical.CENTER, Color.BLACK);
         }
       }
     }

@@ -28,7 +28,7 @@ public class TestSwingChartControllers {
     Assert.assertEquals(0, canvas.getMouseMotionListeners().length);
 
     // When
-    chart.addMouseCameraController();
+    chart.addMouse();
 
     // Then
     Assert.assertEquals(1, canvas.getMouseListeners().length);
@@ -68,7 +68,7 @@ public class TestSwingChartControllers {
     Assert.assertEquals(0, canvas.getKeyListeners().length);
 
     // When
-    chart.addKeyboardCameraController();
+    chart.addKeyboard();
 
     // Then
     Assert.assertEquals(1, canvas.getKeyListeners().length);

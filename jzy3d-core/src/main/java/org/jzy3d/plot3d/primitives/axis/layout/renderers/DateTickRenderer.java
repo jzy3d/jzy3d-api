@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.axis.layout.renderers;
 
 import java.util.Date;
-
 import org.jzy3d.maths.Utils;
 
 

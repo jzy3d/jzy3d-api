@@ -1,13 +1,10 @@
 package org.jzy3d.javafx;
 
 import java.awt.image.BufferedImage;
-
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
-
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 

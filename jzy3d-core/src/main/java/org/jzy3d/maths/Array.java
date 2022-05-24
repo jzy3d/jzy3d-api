@@ -69,6 +69,25 @@ public class Array {
 
     return copy;
   }
+  
+  public static float[] cloneFloat(double[] vertices) {
+    float[] clone = new float[vertices.length];
+    
+    for (int i = 0; i < vertices.length; i++) {
+      clone[i] = (float)vertices[i];
+    }
+    return clone;
+  }
+
+  public static double[] cloneDouble(float[] vertices) {
+    double[] clone = new double[vertices.length];
+    
+    for (int i = 0; i < vertices.length; i++) {
+      clone[i] = vertices[i];
+    }
+    return clone;
+  }
+
 
   /********************************************************************/
 
@@ -236,6 +255,17 @@ public class Array {
     double[] output = new double[input.length];
     for (int i = 0; i < input.length; i++) {
       output[i] = input[i];
+    }
+    return output;
+  }
+  
+  public static float[] toFloat(double[] input) {
+    if (input == null) {
+      return null;
+    }
+    float[] output = new float[input.length];
+    for (int i = 0; i < input.length; i++) {
+      output[i] = (float)input[i];
     }
     return output;
   }
@@ -457,12 +487,99 @@ public class Array {
     }
     return order;
   }
+  
+  public enum Direction{
+    X,Y,Z;
+  }
+  
+  public static int[] sortAscending(Coord3d input[], Direction direction) {
+    int[] order = new int[input.length];
+
+    for (int i = 0; i < order.length; i++)
+      order[i] = i;
+
+    for (int i = input.length; --i >= 0;) {
+      for (int j = 0; j < i; j++) {
+        
+        boolean swap = false;
+        
+        if(Direction.X.equals(direction)) {
+          swap = input[j].x > input[j + 1].x;
+        }
+        else if(Direction.Y.equals(direction)) {
+          swap = input[j].y > input[j + 1].y;
+        }
+        else {
+          swap = input[j].z > input[j + 1].z;
+        }
+        
+        if (swap) {
+          // switch values
+          Coord3d mem = input[j];
+          input[j] = input[j + 1];
+          input[j + 1] = mem;
+
+          // switch ids
+          int id = order[j];
+          order[j] = order[j + 1];
+          order[j + 1] = id;
+        }
+      }
+    }
+    return order;
+  }
+  
+  public static int[] sortDescending(Coord3d input[], Direction direction) {
+    int[] order = new int[input.length];
+
+    for (int i = 0; i < order.length; i++)
+      order[i] = i;
+
+    for (int i = input.length; --i >= 0;) {
+      for (int j = 0; j < i; j++) {
+        
+        boolean swap = false;
+        
+        if(Direction.X.equals(direction)) {
+          swap = input[j].x < input[j + 1].x;
+        }
+        else if(Direction.Y.equals(direction)) {
+          swap = input[j].y < input[j + 1].y;
+        }
+        else {
+          swap = input[j].z < input[j + 1].z;
+        }
+        
+        if (swap) {
+          // switch values
+          Coord3d mem = input[j];
+          input[j] = input[j + 1];
+          input[j + 1] = mem;
+
+          // switch ids
+          int id = order[j];
+          order[j] = order[j + 1];
+          order[j + 1] = id;
+        }
+      }
+    }
+    return order;
+  }
 
   /*********************************************************************/
 
   public static void print(Coord3d[] input) {
     for (int i = 0; i < input.length; i++) {
       System.out.println(input[i]);
+    }
+  }
+
+  public static void print(Coord3d[][] input) {
+    for (int i = 0; i < input.length; i++) {
+      for (int j = 0; j < input[i].length; j++) {
+        System.out.print(input[i][j] + "\t");
+      }
+      System.out.println();
     }
   }
 
@@ -488,6 +605,13 @@ public class Array {
   }
 
   public static void print(int input[]) {
+    for (int i = 0; i < input.length; i++) {
+      System.out.print(input[i] + "|");
+    }
+    System.out.println("");
+  }
+
+  public static void print(long input[]) {
     for (int i = 0; i < input.length; i++) {
       System.out.print(input[i] + "|");
     }
@@ -527,4 +651,42 @@ public class Array {
       System.out.println();
     }
   }
+  
+  
+  
+  public static void print(String info, double input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, float input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, int input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, long input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, char input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, byte input[]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(String info, Coord3d input[]) {
+    System.out.print(info);
+    print(input);
+  }
+
 }

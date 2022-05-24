@@ -2,7 +2,6 @@ package org.jzy3d.tests.emulgl;
 
 import java.io.File;
 import java.io.IOException;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
@@ -26,7 +25,7 @@ public class SurfaceDemoEmulGL_Coplanar {
 
   public static void main(String[] args) {
     EmulGLChartFactory factory = new EmulGLChartFactory();
-    Quality q = Quality.Advanced;
+    Quality q = Quality.Advanced();
 
     Shape surface = surface();
 

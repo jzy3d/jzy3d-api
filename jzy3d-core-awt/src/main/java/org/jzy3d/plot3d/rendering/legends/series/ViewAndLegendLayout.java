@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.legends.series;
 
 import java.awt.Rectangle;
 import java.util.List;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -17,6 +16,11 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 public class ViewAndLegendLayout implements IViewportLayout {
   protected float screenSeparator = 1.0f;
   protected boolean hasMeta = true;
+  
+  protected Rectangle zone1 = new Rectangle(0, 0, 0, 0);
+  protected Rectangle zone2 = new Rectangle(0, 0, 0, 0);
+  protected ViewportConfiguration sceneViewPort;
+  protected ViewportConfiguration backgroundViewPort;
 
   @Override
   public void update(Chart chart) {
@@ -33,8 +37,7 @@ public class ViewAndLegendLayout implements IViewportLayout {
     if (hasMeta) {
       int minwidth = 0;
       for (ILegend data : list) {
-        minwidth += data.getMinimumSize().width;
-        break;
+        minwidth += data.getMinimumDimension().width;
       }
       screenSeparator =
           ((float) (canvas.getRendererWidth() - minwidth)) / ((float) canvas.getRendererWidth());
@@ -46,8 +49,11 @@ public class ViewAndLegendLayout implements IViewportLayout {
   @Override
   public void render(IPainter painter, Chart chart) {
     View view = chart.getView();
+
     view.renderBackground(backgroundViewPort);
+    
     view.renderScene(sceneViewPort);
+    
     List<ILegend> legends = chart.getScene().getGraph().getLegends();
     if (hasMeta)
       renderLegends(painter, screenSeparator, 1.0f, legends, chart.getCanvas());
@@ -77,8 +83,5 @@ public class ViewAndLegendLayout implements IViewportLayout {
    * CanvasAWT pencil = null; }; view.addRenderer2d(layoutBorder); }
    */
 
-  protected Rectangle zone1 = new Rectangle(0, 0, 0, 0);
-  protected Rectangle zone2 = new Rectangle(0, 0, 0, 0);
-  protected ViewportConfiguration sceneViewPort;
-  protected ViewportConfiguration backgroundViewPort;
+
 }

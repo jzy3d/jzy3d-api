@@ -4,6 +4,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.PixelStore;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
@@ -12,6 +13,10 @@ import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
+ * Use instead {@link TextRenderer}.
+ * 
+ *  
+ *  
  * A {@link TextBillboardRenderer} allows writing 2d text always facing the Camera of a 3d Scene.
  * <br>
  * 
@@ -39,6 +44,7 @@ import org.jzy3d.plot3d.text.align.Vertical;
  * 
  * @author Martin Pernollet
  */
+@Deprecated()
 public class TextBillboardRenderer extends AbstractTextRenderer implements ITextRenderer {
   /**
    * The TextBillboard class provides support for drawing ASCII characters Any non ascii caracter
@@ -51,8 +57,8 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
    * according to the current Camera configuration.
    */
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     glRaster(painter, position, color);
 
     BillBoardSize dims = printString(painter, s, halign, valign);

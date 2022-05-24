@@ -6,15 +6,22 @@ import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.maths.Coord2d;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -32,29 +39,20 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   protected View view;
   protected Renderer3d renderer;
   protected IAnimator animator;
+  protected List<ICanvasListener> canvasListeners = new ArrayList<>();
 
-  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality) {
-    this(factory, scene, quality, org.jzy3d.chart.Settings.getInstance().getGLCapabilities());
-  }
-
-  /**
-   * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.
-   */
-  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci) {
-    this(factory, scene, quality, glci, false, false);
-  }
+  protected ScheduledExecutorService exec = new ScheduledThreadPoolExecutor(1);
 
   /**
    * Initialize a Canvas3d attached to a {@link Scene}, with a given rendering {@link Quality}.
    */
-  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality,
-      GLCapabilitiesImmutable glci, boolean traceGL, boolean debugGL) {
+  public CanvasSwing(IChartFactory factory, Scene scene, Quality quality, GLCapabilitiesImmutable glci) {
     super(glci);
 
     view = scene.newView(this, quality);
-    renderer =
-        ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view, traceGL, debugGL);
+    view.getPainter().setCanvas(this);
+
+    renderer = newRenderer(factory);
     addGLEventListener(renderer);
 
     // swing specific
@@ -68,10 +66,71 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
       animator.start();
     }
 
-    if (quality.isPreserveViewportSize())
-      setPixelScale(
-          new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE});
+    if (ALLOW_WATCH_PIXEL_SCALE)
+      watchPixelScale();
 
+    if (quality.isPreserveViewportSize())
+      setPixelScale(newPixelScaleIdentity());
+  }
+
+  protected void watchPixelScale() {
+    exec.schedule(new PixelScaleWatch() {
+      @Override
+      public double getPixelScaleY() {
+        return CanvasSwing.this.getPixelScaleY();
+      }
+
+      @Override
+      public double getPixelScaleX() {
+        return CanvasSwing.this.getPixelScaleX();
+      }
+
+      @Override
+      protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+        CanvasSwing.this.firePixelScaleChanged(pixelScaleX, pixelScaleY);
+      }
+    }, 0, TimeUnit.SECONDS);
+  }
+
+
+  private float[] newPixelScaleIdentity() {
+    return new float[] {ScalableSurface.IDENTITY_PIXELSCALE, ScalableSurface.IDENTITY_PIXELSCALE};
+  }
+
+  private Renderer3d newRenderer(IChartFactory factory) {
+    return ((NativePainterFactory) factory.getPainterFactory()).newRenderer3D(view);
+  }
+
+  @Override
+  public double getLastRenderingTimeMs() {
+    return renderer.getLastRenderingTimeMs();
+  }
+
+  @Override
+  public void setPixelScale(float[] scale) {
+    setSurfaceScale(scale);
+  }
+
+  /**
+   * Pixel scale is used to model the pixel ratio thay may be introduced by HiDPI or Retina
+   * displays.
+   */
+  @Override
+  public Coord2d getPixelScale() {
+    return new Coord2d(getPixelScaleX(), getPixelScaleY());
+  }
+
+  @Override
+  public Coord2d getPixelScaleJVM() {
+    return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
+  }
+
+  public double getPixelScaleX() {
+    return getSurfaceWidth() / (double) getWidth();
+  }
+
+  public double getPixelScaleY() {
+    return getSurfaceHeight() / (double) getHeight();
   }
 
   @Override
@@ -124,7 +183,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   @Override
   public void screenshot(File file) throws IOException {
     if (!file.getParentFile().exists())
-      file.mkdirs();
+      file.getParentFile().mkdirs();
 
     TextureData screen = screenshot();
     TextureIO.write(screen, file);
@@ -132,9 +191,26 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 
   @Override
   public TextureData screenshot() {
+
+    // setupPrint(1, 1, 1, getRendererWidth(), getRendererHeight());
+
+    if (!isVisible() || !isRealized()) {
+      throw new RuntimeException(
+          "Can't make a screenshot out of a Swing canvas without making it visible. "
+          + "Either call chart.open(), add chart.getCanvas() to an application, or use an OffscreenChartFactory");
+      // because the display() method of GLJPanel skip invocation of renderer.display() if
+      // the panel is not visible.s
+    }
+
+
+
     renderer.nextDisplayUpdateScreenshot();
     display();
-    return renderer.getLastScreenshot();
+    TextureData screenshot = renderer.getLastScreenshot();
+
+    // releasePrint();
+
+    return screenshot;
   }
 
   /* */
@@ -175,17 +251,17 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
 
   @Override
   public String getDebugInfo() {
-    GL gl = ((NativeDesktopPainter) getView().getPainter()).getCurrentGL(this);
-
-    StringBuffer sb = new StringBuffer();
-    sb.append("Chosen GLCapabilities: " + getChosenGLCapabilities() + "\n");
-    sb.append("GL_VENDOR: " + gl.glGetString(GL.GL_VENDOR) + "\n");
-    sb.append("GL_RENDERER: " + gl.glGetString(GL.GL_RENDERER) + "\n");
-    sb.append("GL_VERSION: " + gl.glGetString(GL.GL_VERSION) + "\n");
-    // sb.append("INIT GL IS: " + gl.getClass().getName() + "\n");
-    return sb.toString();
+    IPainter painter = getView().getPainter();
+    
+    GLCapabilitiesImmutable caps = getChosenGLCapabilities();
+    
+    GL gl = (GL) painter.acquireGL();
+    GPUInfo info = GPUInfo.load(gl);
+    painter.releaseGL();
+    
+    return "Capabilities  : " + caps + "\n" + info.toString();
   }
-
+  
   @Override
   public void addMouseController(Object o) {
     addMouseListener((MouseListener) o);
@@ -211,8 +287,30 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     removeKeyListener((KeyListener) o);
   }
 
+
   @Override
-  public void setPixelScale(float[] scale) {
-    setSurfaceScale(scale);
+  public void addCanvasListener(ICanvasListener listener) {
+    canvasListeners.add(listener);
+  }
+
+  @Override
+  public void removeCanvasListener(ICanvasListener listener) {
+    canvasListeners.remove(listener);
+  }
+
+  @Override
+  public List<ICanvasListener> getCanvasListeners() {
+    return canvasListeners;
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
+  }
+  
+  @Override
+  public boolean isNative() {
+    return true;
   }
 }

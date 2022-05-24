@@ -3,8 +3,10 @@ package org.jzy3d.maths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
+import org.jzy3d.plot3d.transform.Transform;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 /**
@@ -44,13 +46,13 @@ public class BoundingBox3d {
       add(c);
   }
 
-  public BoundingBox3d(Coord3d center, float edgeLength) {
-    this.xmin = center.x - edgeLength / 2;
-    this.xmax = center.x + edgeLength / 2;
-    this.ymin = center.y - edgeLength / 2;
-    this.ymax = center.y + edgeLength / 2;
-    this.zmin = center.z - edgeLength / 2;
-    this.zmax = center.z + edgeLength / 2;
+  public BoundingBox3d(Coord3d center, float diameter) {
+    this.xmin = center.x - diameter / 2;
+    this.xmax = center.x + diameter / 2;
+    this.ymin = center.y - diameter / 2;
+    this.ymax = center.y + diameter / 2;
+    this.zmin = center.z - diameter / 2;
+    this.zmax = center.z + diameter / 2;
   }
 
   public BoundingBox3d(BoundingBox3d box) {
@@ -81,6 +83,24 @@ public class BoundingBox3d {
     this.zmax = zRange.getMax();
   }
 
+  public BoundingBox3d(float[] bounds) {
+    this.xmin = bounds[0];
+    this.xmax = bounds[1];
+    this.ymin = bounds[2];
+    this.ymax = bounds[3];
+    this.zmin = bounds[4];
+    this.zmax = bounds[5];
+  }
+
+  public BoundingBox3d(double[] bounds) {
+    this.xmin = (float)bounds[0];
+    this.xmax = (float)bounds[1];
+    this.ymin = (float)bounds[2];
+    this.ymax = (float)bounds[3];
+    this.zmin = (float)bounds[4];
+    this.zmax = (float)bounds[5];
+  }
+  
   /*********************************************************/
 
   /**
@@ -150,6 +170,22 @@ public class BoundingBox3d {
       zmin = z;
   }
 
+  public void add(double x, double y, double z) {
+    if (x > xmax)
+      xmax = (float) x;
+    if (x < xmin)
+      xmin = (float) x;
+    if (y > ymax)
+      ymax = (float) y;
+    if (y < ymin)
+      ymin = (float) y;
+    if (z > zmax)
+      zmax = (float) z;
+    if (z < zmin)
+      zmin = (float) z;
+  }
+
+  
   /**
    * Add a Coord3d to the BoundingBox3d. A shortcut for: <code>add(c.x, c.y, c.z);</code>
    * 
@@ -163,6 +199,11 @@ public class BoundingBox3d {
     for (Point p : pts)
       add(p.xyz.x, p.xyz.y, p.xyz.z);
   }
+  
+  public void add(Drawable drawable) {
+    add(drawable.getBounds());
+  }
+
 
   /**
    * Add a Point3d to the BoundingBox3d. A shortcut for: <code>add(p.x, p.y, p.z);</code>
@@ -280,13 +321,17 @@ public class BoundingBox3d {
 
   /** Return true if intersect b2. */
   public boolean intersect(BoundingBox3d b2) {
-    return xmin <= b2.xmin && b2.xmin <= xmax || xmin <= b2.xmax && b2.xmax <= xmax
-        || ymin <= b2.ymin && b2.ymin <= ymax || ymin <= b2.ymax && b2.ymax <= ymax
-        || zmin <= b2.zmin && b2.zmin <= zmax || zmin <= b2.zmax && b2.zmax <= zmax;
+    return ((xmin <= b2.xmin && b2.xmin <= xmax) || (xmin <= b2.xmax && b2.xmax <= xmax))
+        && ((ymin <= b2.ymin && b2.ymin <= ymax) || (ymin <= b2.ymax && b2.ymax <= ymax))
+        && ((zmin <= b2.zmin && b2.zmin <= zmax) || (zmin <= b2.zmax && b2.zmax <= zmax));
   }
 
   /*********************************************************/
 
+  /**
+   * Add a margin to max values and substract a margin to min values
+   * @return a new bounding box
+   */
   public BoundingBox3d margin(float margin) {
     BoundingBox3d b = new BoundingBox3d();
     b.xmax = xmax + margin;
@@ -295,6 +340,28 @@ public class BoundingBox3d {
     b.ymin = ymin - margin;
     b.zmax = zmax + margin;
     b.zmin = zmin - margin;
+    return b;
+  }
+
+  /**
+   * Add a margin to max values and substract a margin to min values, where the margin is ratio of the current range of each dimension.
+   * 
+   * Adding a margin of 10% for each dimension is done with {@link #marginRatio(0.1)}
+   * 
+   * @return a new bounding box
+   */
+  public BoundingBox3d marginRatio(float marginRatio) {
+    float xMargin = (xmax-xmin)*marginRatio;
+    float yMargin = (ymax-ymin)*marginRatio;
+    float zMargin = (zmax-zmin)*marginRatio;
+
+    BoundingBox3d b = new BoundingBox3d();
+    b.xmax = xmax + xMargin;
+    b.xmin = xmin - xMargin;
+    b.ymax = ymax + yMargin;
+    b.ymin = ymin - yMargin;
+    b.zmax = zmax + zMargin;
+    b.zmin = zmin - zMargin;
     return b;
   }
 
@@ -308,7 +375,19 @@ public class BoundingBox3d {
     return this;
   }
 
-  /*********************************************************/
+  public BoundingBox3d selfMarginRatio(float marginRatio) {
+    float xMargin = (xmax-xmin)*marginRatio;
+    float yMargin = (ymax-ymin)*marginRatio;
+    float zMargin = (zmax-zmin)*marginRatio;
+    
+    xmax += xMargin;
+    xmin -= xMargin;
+    ymax += yMargin;
+    ymin -= yMargin;
+    zmax += zMargin;
+    zmin -= zMargin;
+    return this;
+  }
 
   /**
    * Return range of X dimension.
@@ -396,6 +475,28 @@ public class BoundingBox3d {
     edges.add(new Coord3d(xmax, ymin, zmax));
     return edges;
   }
+  
+  public void apply(Transform transform) {
+    Corners c = getCorners();
+    
+    Coord3d min = transform.compute(c.getXminYminZmin());
+        
+    Coord3d max = transform.compute(c.getXmaxYmaxZmax());
+    
+    setXmin(min.x);
+    setXmax(max.x);
+
+    setYmin(min.y);
+    setYmax(max.y);
+
+    setZmin(min.z);
+    setZmax(max.z);
+
+  }
+  
+  public BoundingBox2d getBounds_XY() {
+    return new BoundingBox2d(xmin, xmax, ymin, ymax);
+  }
 
   /*********************************************************/
 
@@ -460,7 +561,7 @@ public class BoundingBox3d {
   public BoundingBox3d clone() {
     return new BoundingBox3d(xmin, xmax, ymin, ymax, zmin, zmax);
   }
-
+  
   /**
    * Clone bounding box and apply transform to it
    * 
@@ -539,5 +640,6 @@ public class BoundingBox3d {
     }
 
   }
+
 
 }

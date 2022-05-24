@@ -18,7 +18,7 @@ public class ColoredWireframePolygon extends Polygon {
       painter.glPolygonMode(polygonMode, PolygonFill.FILL);
 
       if (wireframeDisplayed && polygonOffsetFillEnable)
-        polygonOffseFillEnable(painter);
+        polygonOffsetFillEnable(painter);
       callPointsForFace(painter);
       if (wireframeDisplayed && polygonOffsetFillEnable)
         polygonOffsetFillDisable(painter);

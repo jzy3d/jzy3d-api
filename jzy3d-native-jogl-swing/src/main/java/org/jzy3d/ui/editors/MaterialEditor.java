@@ -1,12 +1,10 @@
 package org.jzy3d.ui.editors;
 
 import java.awt.GridLayout;
-
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.primitives.enlightables.AbstractEnlightable;

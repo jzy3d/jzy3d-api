@@ -2,12 +2,13 @@ package org.jzy3d.plot3d.primitives;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
+import org.jzy3d.painters.DepthFunc;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.view.Camera;
@@ -24,7 +25,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * 
  * Dotted line are built using
  * 
- * http://www.glprogramming.com/red/images/Image35.gif
+ * https://www.glprogramming.com/red/images/Image35.gif
  * 
  * @author Martin Pernollet
  */
@@ -54,13 +55,23 @@ public class LineStrip extends Wireframeable {
 
     addAllPoints(coords);
   }
-
+  
   public LineStrip(Point c1, Point c2) {
-    this();
+    this(2);
     add(c1);
     add(c2);
   }
 
+  public LineStrip(Point... points) {
+    this(2);
+    
+    for(Point p: points) {
+      add(p, false);
+    }
+    updateBounds();
+  }
+
+  
   /** Set the wireframe color. */
   @Override
   public void setWireframeColor(Color color) {
@@ -93,7 +104,19 @@ public class LineStrip extends Wireframeable {
   @Override
   public void draw(IPainter painter) {
     doTransform(painter);
+    
+    //depthFunctionChangeForWireframe = true;
+    //polygonWireframeDepthTrick = true;
+    
+    /*// drawing order is important for EmulGL to cleanly render polygon edges
+    if(depthFunctionChangeForWireframe) {
+      painter.glDepthFunc(DepthFunc.GL_LEQUAL);
+    }
+    
+    if (polygonWireframeDepthTrick)
+      applyDepthRangeForOverlying(painter); // ENABLE RANGE FOR UNDER*/
 
+    
     // Draw a line (or point if there is a single point in this line)
     if (points.size() > 1) {
       drawLine(painter);
@@ -101,6 +124,16 @@ public class LineStrip extends Wireframeable {
       drawPoints(painter);
     }
 
+    /*// reset depth buffer function
+    if(depthFunctionChangeForWireframe) {
+      painter.glDepthFunc(DepthFunc.GL_LESS);
+    }
+    
+    if (polygonWireframeDepthTrick)
+      applyDepthRangeDefault(painter); // ENABLE RANGE FOR UNDER*/
+
+    
+    // draw symbols on points
     if (showSymbols && symbolHandler != null) {
       symbolHandler.drawSymbols(painter);
     }
@@ -179,24 +212,30 @@ public class LineStrip extends Wireframeable {
   }
 
   public void add(Point point) {
+    add(point, true);
+  }
+
+  public void add(Point point, boolean updateBounds) {
     if (showSymbols) {
       symbolHandler.addSymbolOn(point);
     }
 
     points.add(point);
-    bbox.add(point);
+    if(updateBounds) {
+      bbox.add(point);
+    }
   }
 
   public void add(Coord3d coord3d) {
     add(new Point(coord3d));
   }
 
-  public void add(List<Coord3d> coords) {
+  public void add(Collection<Coord3d> coords) {
     for (Coord3d c : coords)
       add(c);
   }
 
-  public void addAll(List<Point> points) {
+  public void addAll(Collection<Point> points) {
     for (Point p : points)
       add(p);
   }
@@ -205,7 +244,7 @@ public class LineStrip extends Wireframeable {
     addAll(strip.getPoints());
   }
 
-  public void addAllPoints(List<Coord3d> coords) {
+  public void addAllPoints(Collection<Coord3d> coords) {
     for (Coord3d c : coords) {
       Point p = new Point(c);
       add(p);
@@ -277,7 +316,7 @@ public class LineStrip extends Wireframeable {
   /**
    * Indicates if stippled rendering is enabled for this line.
    * 
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public boolean isStipple() {
     return stipple;
@@ -286,7 +325,7 @@ public class LineStrip extends Wireframeable {
   /**
    * Enable or disable stippled rendering.
    * 
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public void setStipple(boolean stipple) {
     this.stipple = stipple;
@@ -295,8 +334,8 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line factor.
    * 
-   * @see http://www.glprogramming.com/red/images/Image35.gif
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public int getStippleFactor() {
     return stippleFactor;
@@ -305,8 +344,8 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line factor.
    * 
-   * @see http://www.glprogramming.com/red/images/Image35.gif
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public void setStippleFactor(int stippleFactor) {
     this.stippleFactor = stippleFactor;
@@ -315,8 +354,8 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line pattern.
    * 
-   * @see http://www.glprogramming.com/red/images/Image35.gif
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public short getStipplePattern() {
     return stipplePattern;
@@ -325,8 +364,8 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line pattern.
    * 
-   * @see http://www.glprogramming.com/red/images/Image35.gif
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public void setStipplePattern(short stipplePattern) {
     this.stipplePattern = stipplePattern;

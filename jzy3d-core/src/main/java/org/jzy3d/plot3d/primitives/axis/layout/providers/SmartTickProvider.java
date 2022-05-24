@@ -49,7 +49,7 @@ public class SmartTickProvider extends AbstractTickProvider implements ITickProv
   }
 
   @Override
-  public int getDefaultSteps() {
+  public int getSteps() {
     return steps;
   }
 

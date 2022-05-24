@@ -1,12 +1,14 @@
 package org.jzy3d.plot3d.text.renderers.jogl;
 
-import java.awt.Font;
+
 import java.awt.geom.Rectangle2D;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.AWTFont;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -39,7 +41,7 @@ import com.jogamp.opengl.util.awt.TextRenderer;
  * @author Martin Pernollet
  */
 public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRenderer {
-  protected Font font;
+  protected java.awt.Font awtFont;
   protected TextRenderer renderer;
   protected TextRenderer.RenderDelegate renderDelegate;
   protected float scaleFactor = 0.01f;
@@ -50,7 +52,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
 
 
   public JOGLTextRenderer3d() {
-    this(new Font("Arial", Font.PLAIN, 16));
+    this(new Font("Arial", 16));
   }
 
   public JOGLTextRenderer3d(Font font) {
@@ -64,14 +66,14 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
    * @param is3D the text will be facing camera if false.
    */
   public JOGLTextRenderer3d(Font font, TextRenderer.RenderDelegate renderDelegate) {
-    this.font = font;
-    this.renderer = new TextRenderer(font, true, true, renderDelegate);
+    this.awtFont = AWTFont.toAWT(font);
+    this.renderer = new TextRenderer(awtFont, true, true, renderDelegate);
     this.renderDelegate = renderDelegate;
   }
 
   @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
     // configureRenderer();
     resetTextColor(color);
 
@@ -138,7 +140,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
   // work in progress, used to compute bounding box of the text
   protected void drawText3DWithLayout(IPainter painter, String s, Coord3d position,
       Coord3d sceneOffset) {
-    Rectangle2D d = renderDelegate.getBounds(s, font, renderer.getFontRenderContext());
+    Rectangle2D d = renderDelegate.getBounds(s, awtFont, renderer.getFontRenderContext());
     Coord3d left2d = painter.getCamera().modelToScreen(painter, position);
     Coord2d right2d =
         new Coord2d(left2d.x + (float) d.getWidth(), left2d.y + (float) d.getHeight());
@@ -168,7 +170,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
       if (renderDelegate != null) {
         if (renderDelegate instanceof DefaultTextStyle) {
           ((DefaultTextStyle) renderDelegate).setColor(AWTColor.toAWT(color));
-          renderer = new TextRenderer(font, true, true, renderDelegate);
+          renderer = new TextRenderer(awtFont, true, true, renderDelegate);
         }
       }
     }

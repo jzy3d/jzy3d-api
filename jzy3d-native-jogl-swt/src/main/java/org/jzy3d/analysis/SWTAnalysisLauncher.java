@@ -1,7 +1,6 @@
 package org.jzy3d.analysis;
 
 import java.awt.Component;
-
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;

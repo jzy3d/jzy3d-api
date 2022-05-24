@@ -1,9 +1,11 @@
 package org.jzy3d.plot3d.rendering.view;
 
 
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 
 /**
  * An {@link AbstractViewportManager} describes an element that occupies the whole rendering
@@ -16,6 +18,28 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
  * @author Martin Pernollet
  */
 public abstract class AbstractViewportManager {
+  private static final float AREA_LEFT = -100;
+  private static final float AREA_RIGHT = +100;
+  private static final float AREA_TOP = +100;
+  private static final float AREA_DOWN = -100;
+  private static final float GRID_STEPS = 10;
+  private static final float OFFSET = 0.1f;
+
+  protected int screenLeft = 0;
+  protected int screenBottom = 0;
+  protected int screenXOffset = 0;
+  protected int screenYOffset = 0;
+  protected int screenWidth = 0;
+  protected int screenHeight = 0;
+  protected int screenSquaredDim = 0;
+
+  protected boolean screenGridDisplayed = false;
+  protected ViewportMode mode = ViewportMode.RECTANGLE_NO_STRETCH;
+
+  protected float ratioWidth;
+  protected float ratioHeight;
+  
+  protected boolean apply_WindowsHiDPI_Workaround = true;
 
   /**
    * Set the view port (size of the renderer).
@@ -27,7 +51,7 @@ public abstract class AbstractViewportManager {
     setViewPort(width, height, 0, 1);
   }
 
-  public ViewportMode getMode() {
+  public ViewportMode getViewportMode() {
     return mode;
   }
 
@@ -50,11 +74,16 @@ public abstract class AbstractViewportManager {
       throw new IllegalArgumentException(
           "left must be inferior to right : " + left + " | " + right);
 
-    this.screenWidth = (int) ((right - left) * width);
+    this.screenWidth = getSliceWidth(width, left, right);
     this.screenHeight = height;
     this.screenLeft = (int) (left * width);
     this.screenBottom = 0;// screenLeft + screenWidth;
   }
+
+  public int getSliceWidth(int width, float left, float right) {
+    return (int) (width * (right - left));
+  }
+
 
   public void setViewPort(ViewportConfiguration viewport) {
     this.screenWidth = viewport.getWidth();
@@ -72,18 +101,40 @@ public abstract class AbstractViewportManager {
   /**
    * Build and return a {@link ViewportConfiguration}. Uses gl to
    * <ul>
-   * <li>apply viewport
+   * <li>apply viewport with {@link IPainter#glViewport(int, int, int, int)}
    * <li>optionnaly to render the viewport debug grid
    * </ul>
-   * 
-   * @param painter TODO
    */
-  protected ViewportConfiguration applyViewport(IPainter painter) {
+  public ViewportConfiguration applyViewport(IPainter painter) {
+
+    // Workaround for https://github.com/jzy3d/jogl/issues/8
+    if(apply_WindowsHiDPI_Workaround) {
+      if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
+        // We here scale the viewport by either 1 or by the ratio indicated by the JVM
+        // if only the JVM is able to detect the pixel ratio and if JOGL
+        // can't guess it (which is the case for Windows 10).
+        Coord2d scaleHardware = painter.getCanvas().getPixelScale();
+        Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM();
+  
+        //System.out.println("HiDPI : " + isHiDPIEnabled);
+        //System.out.println("GPU   : " + scaleHardware);
+        //System.out.println("JVM   : " + scaleJVM);
+        
+        if (painter.isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
+          Coord2d scale = scaleJVM.div(scaleHardware);
+          //System.out.println("Scale : " + scale);
+          screenWidth = (int) (screenWidth * scale.x);
+          screenHeight = (int) (screenHeight * scale.y);
+        }
+      }
+    }
+    
     // Stretch projection on the whole viewport
     if (ViewportMode.STRETCH_TO_FILL.equals(mode)
         || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) {
       screenXOffset = screenLeft;
       screenYOffset = 0;
+
 
       painter.glViewport(screenXOffset, screenYOffset, screenWidth, screenHeight);
 
@@ -113,6 +164,8 @@ public abstract class AbstractViewportManager {
 
     return lastViewPort;
   }
+
+  
 
   /**
    * Returns the (x,y) offset that was applied to make this {@link AbstractViewportManager} stand in
@@ -238,27 +291,6 @@ public abstract class AbstractViewportManager {
     return screenGridDisplayed;
   }
 
-  private static final float AREA_LEFT = -100;
-  private static final float AREA_RIGHT = +100;
-  private static final float AREA_TOP = +100;
-  private static final float AREA_DOWN = -100;
-  private static final float GRID_STEPS = 10;
-  private static final float OFFSET = 0.1f;
-
-  /********************************************************************************/
-
-  protected int screenLeft = 0;
-  protected int screenBottom = 0;
-  protected int screenXOffset = 0;
-  protected int screenYOffset = 0;
-  protected int screenWidth = 0;
-  protected int screenHeight = 0;
-  protected int screenSquaredDim = 0;
-
-  protected boolean screenGridDisplayed = false;
-  protected ViewportMode mode = ViewportMode.RECTANGLE_NO_STRETCH;
-
-  protected float ratioWidth;
-  protected float ratioHeight;
+  
 
 }
