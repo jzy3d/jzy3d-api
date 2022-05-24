@@ -1,6 +1,7 @@
 package org.jzy3d.chart;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.factories.NewtChartFactory;
 import org.jzy3d.colors.Color;
@@ -13,6 +14,7 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.CanvasNewtAwt;
 
+@Ignore("Ignored from build to avoid JDK 17 crash https://github.com/jzy3d/jzy3d-api/issues/257")
 public class TestNewtChartControllers {
 
   @Test

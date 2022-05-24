@@ -3,14 +3,13 @@ package org.jzy3d.maths.algorithms.interpolation.algorithms;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 
 /**
  * <p>
  * This is a generic 3D B-Spline class for curves of arbitrary length, control handles and patches
  * are created and joined automatically as described here:
- * <a href="http://www.ibiblio.org/e-notes/Splines/Bint.htm">ibiblio.org/e-notes/
+ * <a href="https://www.ibiblio.org/e-notes/Splines/Bint.htm">ibiblio.org/e-notes/
  * Splines/Bint.htm</a>
  * </p>
  * 

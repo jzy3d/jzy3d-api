@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.builder.delaunay;
 
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Polygon;
-
 import il.ac.idc.jdt.Point;
 import il.ac.idc.jdt.Triangle;
 

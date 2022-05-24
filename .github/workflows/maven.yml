@@ -1,24 +1,184 @@
 # This workflow will build a Java project with Maven
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+#
+# Configure Maven : https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
 name: Java CI with Maven
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  #pull_request:
+  #  branches: [ master ]
 
 jobs:
-  build:
 
-    runs-on: macos-latest
+
+  # ============================================================================================================
+  # Main Build & Test Matrix
+
+  macos-10-15-x86_64:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['9.0.0+0', '14']
+        # ============================================================================================================
+        # Java / Zulu Distributions
+        # ok : '9.0.0+0'
+        # ok : '11.0.12+7'
+        #
+        # KO : '8' https://github.com/jzy3d/jzy3d-api/runs/3943617371?check_suite_focus=true#step:4:493
+        #
+        # Try -Djava.awt.headless=true
+        #
+        # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
+
+        os: ['osx-10-15-3'] # , 'windows-latest', windows-2016
+        # ============================================================================================================
+        # Github virtual machine
+        # ----------------------
+        # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on
+        #
+        # 'macos-10.15' works thanks to software renderer + JOGL timeout expansion
+        # 'windows-2016' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943151589
+        # 'ubuntu-18.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943110442
+        # 'ubuntu-20.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-947641249
+        #
+        # Self hosted physical machines
+        # -----------------------------
+        # 'osx-10-15-3'
+        #
+        #
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up JDK 1.9
-      uses: actions/setup-java@v1
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
       with:
-        java-version: 1.9
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        #cache: maven # caching makes the post build action to fail
+
+    - name: Get Maven OS detection info
+      run: mvn enforcer:display-info
+
     - name: Build with Maven
-      run: mvn -B package --file pom.xml -DskipITs
+      run: mvn package --file pom.xml
+      # run: mvn -T 1C -B package --file pom.xml
+      # run: mvn -T 1C -B -Dsurefire.useFile=false package --file pom.xml
+      # -T 1C : 1 thread per cpu core
+      # -B    : non interactive mode
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports
+
+# TODO : Deploy on repo https://github.com/inloco/actions-setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
+
+  # ============================================================================================================
+  # MAC OS BIG SUR (ARM)
+  # ====================================
+
+
+  macos-11-4-arm64:
+    if: ${{ false }}  # disable for now
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['9.0.0+0', '14']
+        os: ['mac-m1']
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        #cache: maven # caching makes the post build action to fail
+
+    - name: Get Maven OS detection info
+      run: mvn enforcer:display-info
+
+    - name: Build with Maven
+      run: mvn package --file pom.xml
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports
+
+  # ============================================================================================================
+  # WINDOWS
+  # ====================================
+
+  win10-x86_64:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['9.0.0+0', '14']
+        os: ['win10-x86_64']
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        #cache: maven # caching makes the post build action to fail
+
+    - name: Get Maven OS detection info
+      run: mvn enforcer:display-info
+
+    - name: Build with Maven
+      run: mvn package --file pom.xml
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports
+
+  # ============================================================================================================
+  # UBUNTU
+  # ====================================
+
+  ubuntu-20-04-x86_64:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        java: ['14', '11']
+        os: ['ubuntu-20-04']
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        java-version: ${{ matrix.java }}
+        distribution: zulu
+        #cache: maven # caching makes the post build action to fail
+
+    - name: Get Maven OS detection info
+      run: mvn enforcer:display-info
+
+    - name: Build with Maven
+      run: mvn clean package --file pom.xml
+
+    - name: Copy Surefire reports
+      run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Package
+        path: surefire-reports

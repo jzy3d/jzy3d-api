@@ -1,7 +1,6 @@
 package org.jzy3d.demos.javafx;
 
 import java.util.List;
-
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.IObjectPickedListener;
@@ -19,7 +18,6 @@ import org.jzy3d.plot3d.primitives.graphs.layout.IGraphFormatter;
 import org.jzy3d.plot3d.primitives.graphs.layout.IGraphLayout2d;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -88,7 +86,7 @@ public class DemoPickableGraphFX extends Application {
     formatter.setHighlightedVertexColor(new Color(247 / 255f, 79 / 255f, 119 / 255f));
 
     // Setup a chart
-    Quality quality = Quality.Advanced;
+    Quality quality = Quality.Advanced();
     // quality.setDepthActivated(false);
 
 

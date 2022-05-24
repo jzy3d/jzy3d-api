@@ -1,12 +1,13 @@
 package org.jzy3d.plot3d.text.renderers;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.IPainter.Font;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
@@ -14,49 +15,33 @@ import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
- * could enhance using http://www.angelcode.com/products/bmfont/
+ * Use instead {@link TextRenderer}.
  * 
- * @author Martin
+ * Keep this text renderer for compatibility issues, e.g. there are issues when using shaders with text renderer (depth peeling, volume viz, etc)
  */
+@Deprecated
 public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRenderer {
-  protected static Logger LOGGER = Logger.getLogger(TextBitmapRenderer.class);
-
-  protected Font font;
+  protected static Logger LOGGER = LogManager.getLogger(TextBitmapRenderer.class);
 
   protected TextLayout layout = new TextLayout();
-
-  /**
-   * The TextBitmap class provides support for drawing ASCII characters Any non ascii caracter will
-   * be replaced by a square.
-   */
-  public TextBitmapRenderer() {
-    this(Font.Helvetica_10);
-  }
-
-  public TextBitmapRenderer(Font font) {
-    this.font = font;
-  }
-
-  public Font getFont() {
-    return font;
-  }
-
-  public void setFont(Font font) {
-    this.font = font;
-  }
 
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string
    * according to the current Camera configuration.
    */
   @Override
-  public BoundingBox3d drawText(IPainter painter, String text, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord2d screenOffset, Coord3d sceneOffset) {
+  public BoundingBox3d drawText(IPainter painter, Font font, String text, Coord3d position,
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset,
+      Coord3d sceneOffset) {
+    if (text == null) {
+      return null;
+    }
+
     painter.color(color);
 
     // compute a corrected 3D position according to the 2D layout on screen
     float textHeight = font.getHeight();
-    float textWidth = painter.glutBitmapLength(font.getCode(), text);
+    float textWidth = painter.getTextLengthInPixels(font, text);
 
     Coord3d screen = painter.getCamera().modelToScreen(painter, position);
     Coord3d screenAligned =
@@ -73,20 +58,12 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
 
     // Draws actual string
     painter.glutBitmapString(font, text, positionAligned, color);
-
+    
     // Return text bounds
-    return computeTextBounds(painter, screenAligned, textWidth);
+    return computeTextBounds(painter, font, screenAligned, textWidth);
   }
 
-  /** Left as a helper for subclasses. TODO delete me and subclass */
-  protected void glRasterPos(IPainter painter, Coord3d sceneOffset,
-      Coord3d screenPositionAligned3d) {
-    if (spaceTransformer != null) {
-      screenPositionAligned3d = spaceTransformer.compute(screenPositionAligned3d);
-    }
-
-    painter.raster(screenPositionAligned3d.add(sceneOffset), null);
-  }
+  
 
   /** Convert a 2D screen position to 3D world coordinate */
   protected Coord3d to3D(IPainter painter, Coord3d screen) {
@@ -101,7 +78,7 @@ public class TextBitmapRenderer extends AbstractTextRenderer implements ITextRen
     return model;
   }
 
-  protected BoundingBox3d computeTextBounds(IPainter painter, Coord3d posScreenShifted,
+  protected BoundingBox3d computeTextBounds(IPainter painter, Font font, Coord3d posScreenShifted,
       float strlen) {
     Coord3d botLeft = new Coord3d();
     Coord3d topRight = new Coord3d();

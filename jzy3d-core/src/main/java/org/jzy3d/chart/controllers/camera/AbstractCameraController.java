@@ -6,10 +6,17 @@ import org.jzy3d.chart.controllers.ControllerType;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
 
 
 public abstract class AbstractCameraController extends AbstractController
     implements ICameraMouseController {
+
+  protected CameraThreadController threadController;
+  protected Coord2d prevMouse = Coord2d.ORIGIN;
+  protected LODPerf perf;
+
+  
   public AbstractCameraController() {
     super();
   }
@@ -36,6 +43,10 @@ public abstract class AbstractCameraController extends AbstractController
 
   protected boolean updateViewDefault = false;
 
+  protected void rotate(double azimuth) {
+    rotate(new Coord2d(azimuth, 0));
+  }
+  
   protected void rotate(final Coord2d move) {
     rotate(move, updateViewDefault);
   }
@@ -87,11 +98,28 @@ public abstract class AbstractCameraController extends AbstractController
   }
 
 
-
+  @Deprecated
   @Override
   public void addSlaveThreadController(CameraThreadController controller) {
+   addThread(controller);
+  }
+  
+
+  @Deprecated
+  @Override
+  public CameraThreadController getSlaveThreadController() {
+    return getThread();
+  }
+
+  @Override
+  public void addThread(CameraThreadController controller) {
     removeSlaveThreadController();
     this.threadController = controller;
+  }
+  
+  @Override
+  public CameraThreadController getThread() {
+    return this.threadController;
   }
 
   public void removeSlaveThreadController() {
@@ -111,9 +139,15 @@ public abstract class AbstractCameraController extends AbstractController
       threadController.start();
     }
   }
+  
+  @Override
+  public void setLODPerf(LODPerf perf) {
+    this.perf = perf;
+  }
 
-  protected CameraThreadController threadController;
-
-  protected Coord2d prevMouse = Coord2d.ORIGIN;
+  @Override
+  public LODPerf getLODPerf() {
+    return perf;
+  }
 
 }

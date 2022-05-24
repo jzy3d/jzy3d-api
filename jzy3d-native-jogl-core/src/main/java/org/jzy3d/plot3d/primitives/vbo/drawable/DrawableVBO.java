@@ -2,8 +2,8 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
@@ -19,14 +19,12 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.transform.Rotate;
 import org.jzy3d.plot3d.transform.Rotator;
 import org.jzy3d.plot3d.transform.Transform;
-
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.fixedfunc.GLPointerFunc;
-import com.jogamp.opengl.glu.GLU;
 
 /**
  * A {@link DrawableVBO} is able to efficiently draw a large collection of geometries.
@@ -47,11 +45,28 @@ import com.jogamp.opengl.glu.GLU;
 public class DrawableVBO extends Drawable implements IGLBindedResource {
   protected int geometry = GL.GL_TRIANGLES;
   protected float width = 1;
-  protected Quality quality = Quality.Nicest;
+  protected Quality quality = Quality.Nicest();
 
   protected int colorChannelNumber = 3;
 
   protected PolygonMode polygonMode;
+  
+  protected int byteOffset;
+  protected int normalOffset;
+  protected int dimensions;
+  protected int size;
+  protected int pointer;
+
+  protected int arrayName[] = new int[1];
+  protected int elementName[] = new int[1];
+
+  protected boolean hasMountedOnce = false;
+  protected Color color = new Color(1f, 0f, 1f, 0.75f);
+
+  protected boolean polygonOffsetFillEnable = true;
+  protected float polygonOffsetFactor = 1.0f;
+  protected float polygonOffsetUnit = 1.0f;
+
 
 
   public DrawableVBO(IGLLoader<DrawableVBO> loader) {
@@ -70,7 +85,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
       hasMountedOnce = true;
     } catch (Exception e) {
       e.printStackTrace();
-      Logger.getLogger(DrawableVBO.class).error(e, e);
+      LogManager.getLogger(DrawableVBO.class).error(e, e);
     }
   }
 
@@ -310,12 +325,12 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     /*
      * Coord3d c = transform.compute(new Coord3d(x,y, z)); x = c.x; y = c.y; z = c.z;
      */
-    Logger.getLogger(DrawableVBO.class).warn("not implemented");
+    LogManager.getLogger(DrawableVBO.class).warn("not implemented");
   }
 
   @Override
   public void updateBounds() { // requires smart reload
-    Logger.getLogger(DrawableVBO.class).warn("not implemented");
+    LogManager.getLogger(DrawableVBO.class).warn("not implemented");
   }
 
   /** To be called by the VBOBuilder */
@@ -424,20 +439,5 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
 
   protected IGLLoader<DrawableVBO> loader;
 
-  protected int byteOffset;
-  protected int normalOffset;
-  protected int dimensions;
-  protected int size;
-  protected int pointer;
-
-  protected int arrayName[] = new int[1];
-  protected int elementName[] = new int[1];
-
-  protected boolean hasMountedOnce = false;
-  protected Color color = new Color(1f, 0f, 1f, 0.75f);
-
-  protected boolean polygonOffsetFillEnable = true;
-  protected float polygonOffsetFactor = 1.0f;
-  protected float polygonOffsetUnit = 1.0f;
 
 }

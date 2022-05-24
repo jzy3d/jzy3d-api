@@ -11,7 +11,7 @@ import org.jzy3d.painters.IPainter;
  * 
  * @author Martin Pernollet
  */
-interface Transformer {
+public interface Transformer {
   /**
    * Execute the transformation to the current GL context.
    * 

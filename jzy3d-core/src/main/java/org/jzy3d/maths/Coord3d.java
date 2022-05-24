@@ -1,9 +1,11 @@
 package org.jzy3d.maths;
 
 import java.io.Serializable;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 /**
  * A {@link Coord3d} stores a 3 dimensional coordinate for cartesian or polar mode, and provide few
@@ -21,12 +23,22 @@ public class Coord3d implements Serializable {
    */
   private static final long serialVersionUID = -1636927109633279805L;
 
+  public float x;
+  public float y;
+  public float z;
+  
   public static List<Coord3d> list(int size) {
     return new ArrayList<Coord3d>(size);
   }
 
   public static List<Coord3d> list(Coord3d... coords) {
     return Arrays.asList(coords);
+  }
+
+  public static Coord3d[] array(Set<Coord3d> coords) {
+    Coord3d[] candidates = new Coord3d[coords.size()];
+    coords.toArray(candidates);
+    return candidates;
   }
 
   public static Range getZRange(List<Coord3d> coords) {
@@ -86,6 +98,12 @@ public class Coord3d implements Serializable {
     x = c[0];
     y = c[1];
     z = c[2];
+  }
+
+  public Coord3d(double[] c) {
+    x = (float)c[0];
+    y = (float)c[1];
+    z = (float)c[2];
   }
 
   /**
@@ -238,6 +256,18 @@ public class Coord3d implements Serializable {
     z *= c2.z;
   }
 
+  public void mulSelf(float x, float y, float z) {
+    this.x *= x;
+    this.y *= y;
+    this.z *= z;
+  }
+  
+  public void mulSelf(float value) {
+    this.x *= value;
+    this.y *= value;
+    this.z *= value;
+  }
+
   /**
    * Divise a Coord3d to the current one and return the result in a new Coord3d.
    * 
@@ -254,6 +284,18 @@ public class Coord3d implements Serializable {
     z /= c2.z;
   }
 
+  public void divSelf(float value) {
+    x /= value;
+    y /= value;
+    z /= value;
+  }
+
+  public void divSelf(double value) {
+    x /= value;
+    y /= value;
+    z /= value;
+  }
+  
   /**
    * Divise all components of the current Coord by the same value and return the result in a new
    * Coord3d.
@@ -376,6 +418,7 @@ public class Coord3d implements Serializable {
     return Math.sqrt(distanceSq(c));
   }
 
+  /** Compute the square distance between two coordinates. */
   public double distanceSq(Coord3d c) {
     return Math.pow(x - c.x, 2) + Math.pow(y - c.y, 2) + Math.pow(z - c.z, 2);
   }
@@ -434,7 +477,7 @@ public class Coord3d implements Serializable {
   public final Coord3d interpolateTo(Coord3d v, float f) {
     return new Coord3d(x + (v.x - x) * f, y + (v.y - y) * f, z + (v.z - z) * f);
   }
-
+  
   /**************************************************************/
 
   /** Return a string representation of this coordinate. */
@@ -447,6 +490,12 @@ public class Coord3d implements Serializable {
   public float[] toArray() {
     float[] array = {x, y, z};
     return array;
+  }
+  
+  public void toArray(float[] array, int offset) {
+    array[offset+0] = x;
+    array[offset+1] = y;
+    array[offset+2] = z;
   }
 
   /**************************************************************/
@@ -604,10 +653,32 @@ public class Coord3d implements Serializable {
     }
     return clone;
   }
+  
+  public static List<Coord3d> getCoords(double[] array) {
+    List<Coord3d> c = new ArrayList<>(array.length/3);
 
-  /**************************************************************/
+    for (int j = 0; j < array.length; j+=3) {
+      c.add(getCoordAt(array, j));
+    }
+    return c;
+  }
+  
+  public static Coord3d getCoordAt(double[] array, int i) {
+    return new Coord3d(array[i], array[i+1], array[i+2]);
+  }
+  
+  public static List<Coord3d> getCoords(float[] array) {
+    List<Coord3d> c = new ArrayList<>(array.length/3);
 
-  public float x;
-  public float y;
-  public float z;
+    for (int j = 0; j < array.length; j+=3) {
+      c.add(getCoordAt(array, j));
+    }
+    return c;
+  }
+  
+  public static Coord3d getCoordAt(float[] array, int i) {
+    return new Coord3d(array[i], array[i+1], array[i+2]);
+  }
+
+
 }

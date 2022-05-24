@@ -5,8 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
@@ -14,12 +14,22 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
+import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AbstractViewportManager;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMotionListener {
-  static Logger LOGGER = Logger.getLogger(AWTAbstractMouseSelector.class);
+  static Logger LOGGER = LogManager.getLogger(AWTAbstractMouseSelector.class);
+  
+  protected Chart chart;
+  protected ICanvas canvas;
+
+  protected boolean dragging = false;
+  protected IntegerCoord2d in;
+  protected IntegerCoord2d out;
+  protected IntegerCoord2d last;
+  protected AWTRenderer2d selectionRenderer;
 
   public AWTAbstractMouseSelector() {
     in = new IntegerCoord2d(-1, -1);
@@ -34,10 +44,12 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
   public void register(Chart chart) {
     this.chart = chart;
     this.chart.getCanvas().addMouseController(this);
-    final ICanvas c = chart.getCanvas();
-    selectionRenderer = initRenderer2d(c);
-    if (chart.getView() instanceof AWTView)
+    this.canvas = chart.getCanvas();
+    
+    if (chart.getView() instanceof AWTView) {
+      this.selectionRenderer = initRenderer2d(canvas);
       ((AWTView) this.chart.getView()).addRenderer2d(selectionRenderer);
+    }
   }
 
   public void unregister() {
@@ -49,7 +61,7 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
   }
 
   protected AWTRenderer2d initRenderer2d(final ICanvas c) {
-    return new AWTRenderer2d() {
+    return new AbstractAWTRenderer2d() {
       @Override
       public void paint(Graphics g, int canvasWidth, int canvasHeight) {
         drawSelection((Graphics2D) g, c.getRendererWidth(), c.getRendererHeight());
@@ -225,14 +237,4 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
 
   @Override
   public void mouseClicked(MouseEvent e) {}
-
-  /*****************************************/
-
-  protected Chart chart;
-  protected boolean dragging = false;
-  protected IntegerCoord2d in;
-  protected IntegerCoord2d out;
-  protected IntegerCoord2d last;
-
-  protected AWTRenderer2d selectionRenderer;
 }

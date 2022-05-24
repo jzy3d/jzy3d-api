@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.graphs.layout;
 
 import java.util.Collection;
-
 import org.jzy3d.maths.Coord2d;
 
 public interface IGraphLayout2d<V> {

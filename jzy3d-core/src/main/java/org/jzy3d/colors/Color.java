@@ -1,6 +1,7 @@
 package org.jzy3d.colors;
 
 import java.util.Random;
+import org.jzy3d.plot3d.primitives.RandomGeom;
 
 /**
  * Color interface.
@@ -12,30 +13,29 @@ import java.util.Random;
  */
 public class Color {
 
-  /** Black color. */
   public static final Color BLACK = new Color(0.0f, 0.0f, 0.0f);
-  /** White color. */
   public static final Color WHITE = new Color(1.0f, 1.0f, 1.0f);
-  /** Gray color. */
   public static final Color GRAY = new Color(0.5f, 0.5f, 0.5f);
 
-  /** Red color. */
   public static final Color RED = new Color(1.0f, 0.0f, 0.0f);
-  /** Green color. */
   public static final Color GREEN = new Color(0.0f, 1.0f, 0.0f);
-  /** Blue color. */
   public static final Color BLUE = new Color(0.0f, 0.0f, 1.0f);
 
-  /** Yellow color. */
   public static final Color YELLOW = new Color(1.0f, 1.0f, 0.0f);
-  /** Magenta color. */
   public static final Color MAGENTA = new Color(1.0f, 0.0f, 1.0f);
-  /** Cyan color. */
   public static final Color CYAN = new Color(0.0f, 1.0f, 1.0f);
+  
+  public static final Color ORANGE = new Color(1.0f, 165.0f/255.0f, 0);
 
-  public static final Color[] COLORS = {RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN};
+  public static final Color[] COLORS = {RED, GREEN, BLUE, YELLOW, MAGENTA, CYAN, ORANGE};
 
   /*************************************************************/
+  
+  public float r;
+  public float g;
+  public float b;
+  public float a;
+
 
   /** Initialize a color with an alpha channel set to 1, using input values between 0.0 and 1.0. */
   public Color(float r, float g, float b) {
@@ -68,13 +68,58 @@ public class Color {
     this.b = (float) b / 255;
     this.a = (float) a / 255;
   }
+  
+  public Color(double r, double g, double b) {
+    this((float)r,(float)g,(float)b);
+  }
 
-  // TODO : return a new instance. users of method should call mulSelf instead
+  public Color(double r, double g, double b, double a) {
+    this((float)r,(float)g,(float)b,(float)a);
+  }
+
   public Color mul(Color factor) {
     this.r *= factor.r;
     this.g *= factor.g;
     this.b *= factor.b;
     this.a *= factor.a;
+    return this;
+  }
+  
+  public Color mulSelf(float ratio) {
+    this.r *= ratio;
+    this.g *= ratio;
+    this.b *= ratio;
+    return this;
+  }
+
+  public Color mulSelfWithAlpha(float ratio) {
+    this.r *= ratio;
+    this.g *= ratio;
+    this.b *= ratio;
+    this.a *= ratio;
+    return this;
+  }
+
+  public Color div(Color factor) {
+    this.r /= factor.r;
+    this.g /= factor.g;
+    this.b /= factor.b;
+    this.a /= factor.a;
+    return this;
+  }
+  
+  public Color divSelf(float ratio) {
+    this.r /= ratio;
+    this.g /= ratio;
+    this.b /= ratio;
+    return this;
+  }
+
+  public Color divSelfWithAlpha(float ratio) {
+    this.r /= ratio;
+    this.g /= ratio;
+    this.b /= ratio;
+    this.a /= ratio;
     return this;
   }
 
@@ -86,13 +131,6 @@ public class Color {
   public Color alpha(float alpha) {
     Color color = new Color(r, g, b, alpha);
     return color;
-  }
-
-  public Color mulSelf(float ratio) {
-    this.r *= ratio;
-    this.g *= ratio;
-    this.b *= ratio;
-    return this;
   }
 
   /** Return the hexadecimal representation of this color. */
@@ -130,6 +168,12 @@ public class Color {
     return this;
   }
 
+  public static Random rng = new Random();
+
+  /**
+   * Use {@link RandomGeom#color()} instead.
+   */
+  @Deprecated
   public static Color random() {
     return new Color(rng.nextFloat(), rng.nextFloat(), rng.nextFloat());
   }
@@ -141,13 +185,24 @@ public class Color {
     return COLORS[c % COLORS.length];
   }
 
-  public static Random rng = new Random();
 
-  /*************************************************************/
+  /** Compute the distance between two colors. 
+   * 
+   * @see https://en.wikipedia.org/wiki/Color_difference
+   */
+  public double distance(Color c) {
+    return Math.sqrt(distanceSq(c));
+  }
 
-  public float r;
-  public float g;
-  public float b;
-  public float a;
+  /** Compute the square distance between two colors. 
+   * 
+   * @see https://en.wikipedia.org/wiki/Color_difference
+   */
+  public double distanceSq(Color c) {
+    return Math.pow(r - c.r, 2) + Math.pow(g - c.g, 2) + Math.pow(b - c.b, 2);
+  }
 
+  public Color add(Color color) {
+    return new Color(r+color.r, g+color.g, b+color.b, a+color.a);
+  }
 }

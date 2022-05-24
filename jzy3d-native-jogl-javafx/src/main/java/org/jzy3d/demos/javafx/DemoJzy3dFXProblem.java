@@ -4,11 +4,9 @@ import static java.lang.Math.E;
 import static java.lang.Math.cos;
 import static java.lang.Math.pow;
 import static java.lang.Math.sin;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.colors.Color;
@@ -25,7 +23,6 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.vbo.builders.VBOBuilderListCoord3d;
 import org.jzy3d.plot3d.primitives.vbo.drawable.ScatterVBO;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
@@ -85,7 +82,7 @@ public class DemoJzy3dFXProblem extends Application {
 
     // -------------------------------
     // Create a chart
-    Quality quality = Quality.Advanced;
+    Quality quality = Quality.Advanced();
     // quality.setSmoothPolygon(true);
     // quality.setAnimated(true);
 
@@ -118,7 +115,7 @@ public class DemoJzy3dFXProblem extends Application {
 
     // -------------------------------
     // Create a chart
-    Quality quality = Quality.Advanced;
+    Quality quality = Quality.Advanced();
     // quality.setSmoothPolygon(true);
     // quality.setAnimated(true);
 

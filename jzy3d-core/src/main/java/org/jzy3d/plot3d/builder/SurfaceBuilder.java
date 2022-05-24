@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.builder;
 
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -100,8 +99,8 @@ public class SurfaceBuilder {
     sls.add(s.getDrawables());
     sls.setColorMapper(new ColorMapper(DEFAULT_COLORMAP, sls.getBounds().getZmin(),
         sls.getBounds().getZmax(), DEAFAULT_COLORFACTOR));
-    sls.setFaceDisplayed(s.getFaceDisplayed());
-    sls.setWireframeDisplayed(s.getWireframeDisplayed());
+    sls.setFaceDisplayed(s.isFaceDisplayed());
+    sls.setWireframeDisplayed(s.isWireframeDisplayed());
     sls.setWireframeColor(s.getWireframeColor());
     sls.setSpaceTransformer(s.getSpaceTransformer());
     return sls;

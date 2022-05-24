@@ -1,11 +1,11 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import java.util.List;
-
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -22,11 +22,11 @@ public interface IAxis {
 
   public Coord3d getScale();
 
-  public BoundingBox3d getBoxBounds();
+  public BoundingBox3d getBounds();
 
   public Coord3d getCenter();
 
-  public IAxisLayout getLayout();
+  public AxisLayout getLayout();
 
   public List<AxeAnnotation> getAnnotations();
 

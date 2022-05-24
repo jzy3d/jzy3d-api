@@ -2,12 +2,11 @@ package org.jzy3d.javafx.controllers.mouse;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
-
 import javafx.application.Platform;
 
 /**
  * Trying to get rid of an exception
- * http://stackoverflow.com/questions/860187/access-restriction-on-class-due-to-restriction-on-required-library-rt-jar
+ * https://stackoverflow.com/questions/860187/access-restriction-on-class-due-to-restriction-on-required-library-rt-jar
  * 
  * @author Martin Pernollet
  *

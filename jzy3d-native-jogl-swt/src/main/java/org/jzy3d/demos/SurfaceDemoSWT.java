@@ -17,11 +17,11 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-
 import com.jogamp.newt.swt.NewtCanvasSWT;
 
 /**
  * Demo an AWT chart using JOGL {@link NewtCanvasSWT} wrapped in a SWT {@link Composite}.
+ * 
  * 
  * @author martin
  */
@@ -56,8 +56,10 @@ public class SurfaceDemoSWT {
     shell.setLayout(new FillLayout());
 
     SWTChartFactory f = new SWTChartFactory(shell);
-    Chart chart = f.newChart(Quality.Advanced);
-
+    Quality q = Quality.Advanced();
+    q.setHiDPIEnabled(true);
+    Chart chart = f.newChart(q);
+    
     // Chart chart = SWTChartFactory.chart(shell);
     chart.getScene().getGraph().add(surface);
 
@@ -72,6 +74,7 @@ public class SurfaceDemoSWT {
         display.sleep();
       }
     }
+    chart.stopAnimation();
     display.dispose();
   }
 }

@@ -1,13 +1,11 @@
 package il.ac.idc.jdt;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
-
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;

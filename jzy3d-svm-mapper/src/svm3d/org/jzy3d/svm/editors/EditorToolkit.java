@@ -1,7 +1,6 @@
 package org.jzy3d.svm.editors;
 
 import java.awt.Component;
-
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 

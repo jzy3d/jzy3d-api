@@ -3,7 +3,6 @@ package org.jzy3d.bridge.swt;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.Frame;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.layout.GridData;
@@ -42,7 +41,7 @@ import org.eclipse.swt.widgets.Composite;
  * </code><br>
  * <br>
  * If problems are encountered with the Bridge, it is possible to check:<br>
- * http://wiki.eclipse.org/Albireo_SWT_AWT_bugs<br>
+ * https://wiki.eclipse.org/Albireo_SWT_AWT_bugs<br>
  * http://www.eclipsezone.com/eclipse/forums/t45697.html<br>
  *
  * @author Martin Pernollet

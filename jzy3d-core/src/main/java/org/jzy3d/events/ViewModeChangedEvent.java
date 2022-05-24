@@ -1,7 +1,6 @@
 package org.jzy3d.events;
 
 import java.util.EventObject;
-
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 

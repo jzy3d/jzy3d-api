@@ -1,21 +1,21 @@
 package org.jzy3d.painters;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
-
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
@@ -87,13 +87,13 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
-  public Object acquireGL(ICanvas canvas) {
+  public Object acquireGL() {
     // return getCurrentGL(canvas);
     return null;
   }
 
   @Override
-  public void releaseGL(ICanvas canvas) {
+  public void releaseGL() {
     // getCurrentContext(canvas).release();
   }
 
@@ -363,6 +363,11 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
+    throw new NotImplementedException();
+  }
+
+  @Override
   public int glutBitmapLength(int font, String string) {
     return glut.glutBitmapLength(font, string);
   }
@@ -445,6 +450,17 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   public void glutSolidCube(float size) {
     glut.glutSolidCube(size);
   }
+
+  @Override
+  public void glutSolidTeapot(float scale) {
+    glut.glutSolidTeapot(scale);
+  }
+
+  @Override
+  public void glutWireTeapot(float scale) {
+    glut.glutWireTeapot(scale);
+  }
+
   // GL FEEDBACK BUFFER
 
   @Override
@@ -477,6 +493,86 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
     GLES2CompatUtils.glPassThrough(token);
   }
 
+  // GL STENCIL BUFFER
+
+  @Override
+  public void glStencilFunc(StencilFunc func, int ref, int mask) {
+    switch (func) {
+      case GL_ALWAYS:
+        gl.glStencilFunc(GL.GL_ALWAYS, ref, mask);
+        break;
+      case GL_EQUAL:
+        gl.glStencilFunc(GL.GL_EQUAL, ref, mask);
+        break;
+      case GL_GREATER:
+        gl.glStencilFunc(GL.GL_GREATER, ref, mask);
+        break;
+      case GL_GEQUAL:
+        gl.glStencilFunc(GL.GL_GEQUAL, ref, mask);
+        break;
+      case GL_LEQUAL:
+        gl.glStencilFunc(GL.GL_LEQUAL, ref, mask);
+        break;
+      case GL_LESS:
+        gl.glStencilFunc(GL.GL_LESS, ref, mask);
+        break;
+      case GL_NEVER:
+        gl.glStencilFunc(GL.GL_NEVER, ref, mask);
+        break;
+      case GL_NOTEQUAL:
+        gl.glStencilFunc(GL.GL_NOTEQUAL, ref, mask);
+        break;
+
+      default:
+        throw new IllegalArgumentException("Unknown enum value for StencilFunc: " + func);
+    }
+  }
+
+  @Override
+  public void glStencilMask(int mask) {
+    gl.glStencilMask(mask);
+  }
+
+  @Override
+  public void glStencilMask_True() {
+    gl.glStencilMask(GL.GL_TRUE);
+  }
+
+  @Override
+  public void glStencilMask_False(){
+    gl.glStencilMask(GL.GL_FALSE);    
+  }
+
+  @Override
+  public void glStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) {
+    gl.glStencilOp(toInt(fail), toInt(zfail), toInt(zpass));
+  }
+
+  @Override
+  public void glClearStencil(int s) {
+    gl.glClearStencil(s);
+  }
+
+  protected int toInt(StencilOp fail) {
+    switch (fail) {
+      case GL_DECR:
+        return GL.GL_DECR;
+      case GL_INCR:
+        return GL.GL_INCR;
+      case GL_INVERT:
+        return GL.GL_INVERT;
+      case GL_KEEP:
+        return GL.GL_KEEP;
+      case GL_REPLACE:
+        return GL.GL_REPLACE;
+      case GL_ZERO:
+        return GL.GL_ZERO;
+      default:
+        throw new IllegalArgumentException("Unknown enum value for StencilOp: " + fail);
+    }
+  }
+
+
   // GL VIEWPOINT
 
   @Override
@@ -484,14 +580,21 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
       double far_val) {
     gl.getGL2().glOrtho(left, right, bottom, top, near_val, far_val);
   }
+  
+  @Override
+  public void gluOrtho2D(double left, double right, double bottom, double top) {
+    glu.gluOrtho2D(left, right, bottom, top);
+  }
+
 
   @Override
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {
     glu.gluPerspective(fovy, aspect, zNear, zFar);
   }
-  
+
   @Override
-  public void glFrustum(double left, double right, double bottom, double top, double zNear, double zFar) {
+  public void glFrustum(double left, double right, double bottom, double top, double zNear,
+      double zFar) {
     gl.getGL2().glFrustum(left, right, bottom, top, zNear, zFar);
   }
 
@@ -505,6 +608,85 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   public void glViewport(int x, int y, int width, int height) {
     gl.getGL2().glViewport(x, y, width, height);
   }
+
+  @Override
+  public void glClipPlane(int plane, double[] equation) {
+    gl.getGL2().glClipPlane(plane, equation, 0);
+  }
+
+  @Override
+  public void glEnable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0:
+        gl.glEnable(GL2.GL_CLIP_PLANE0);
+        break;
+      case 1:
+        gl.glEnable(GL2.GL_CLIP_PLANE1);
+        break;
+      case 2:
+        gl.glEnable(GL2.GL_CLIP_PLANE2);
+        break;
+      case 3:
+        gl.glEnable(GL2.GL_CLIP_PLANE3);
+        break;
+      case 4:
+        gl.glEnable(GL2.GL_CLIP_PLANE4);
+        break;
+      case 5:
+        gl.glEnable(GL2.GL_CLIP_PLANE5);
+        break;
+      default:
+        throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
+  @Override
+  public void glDisable_ClipPlane(int plane) {
+    switch (plane) {
+      case 0:
+        gl.glEnable(GL2.GL_CLIP_PLANE0);
+        break;
+      case 1:
+        gl.glEnable(GL2.GL_CLIP_PLANE1);
+        break;
+      case 2:
+        gl.glEnable(GL2.GL_CLIP_PLANE2);
+        break;
+      case 3:
+        gl.glEnable(GL2.GL_CLIP_PLANE3);
+        break;
+      case 4:
+        gl.glEnable(GL2.GL_CLIP_PLANE4);
+        break;
+      case 5:
+        gl.glEnable(GL2.GL_CLIP_PLANE5);
+        break;
+      default:
+        throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+  
+  /** Return the GL clip plane ID according to an ID in [0;5]*/
+  @Override
+  public int clipPlaneId(int id) {
+    switch (id) {
+      case 0:
+        return GL2.GL_CLIP_PLANE0;
+      case 1:
+        return GL2.GL_CLIP_PLANE1;
+      case 2:
+        return GL2.GL_CLIP_PLANE2;
+      case 3:
+        return GL2.GL_CLIP_PLANE3;
+      case 4:
+        return GL2.GL_CLIP_PLANE4;
+      case 5:
+        return GL2.GL_CLIP_PLANE5;
+      default:
+        throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+    }
+  }
+
 
   @Override
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
@@ -563,9 +745,25 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glShadeModel(ColorModel colorModel) {
+    throw new NotImplementedException();
+
+  }
+
+  @Override
   public void glShadeModel(int mode) {
     throw new NotImplementedException();
     // GLES2CompatUtils..glShadeModel(mode);
+  }
+
+  @Override
+  public void glShadeModel_Smooth() {
+    gl.getGL2().glShadeModel(GL2.GL_SMOOTH);
+  }
+
+  @Override
+  public void glShadeModel_Flat() {
+    gl.getGL2().glShadeModel(GL2.GL_FLAT);
   }
 
   @Override
@@ -584,6 +782,22 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   @Override
   public void glNormal3f(float nx, float ny, float nz) {
     GLES2CompatUtils.glNormal3f(nx, ny, nz);
+  }
+
+  @Override
+  public void glLightf(int light, Attenuation.Type attenuationType, float value) {
+    if (Attenuation.Type.CONSTANT.equals(attenuationType)) {
+      glLightf(light, GL2.GL_CONSTANT_ATTENUATION, value);
+    } else if (Attenuation.Type.LINEAR.equals(attenuationType)) {
+      glLightf(light, GL2.GL_LINEAR_ATTENUATION, value);
+    } else if (Attenuation.Type.QUADRATIC.equals(attenuationType)) {
+      glLightf(light, GL2.GL_QUADRATIC_ATTENUATION, value);
+    }
+  }
+
+  @Override
+  public void glLightf(int light, int pname, float value) {
+    gl.getGL2().glLightf(lightId(light), pname, value);
   }
 
   @Override
@@ -610,6 +824,11 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   @Override
   public void glLight_Specular(int lightId, Color specularColor) {
     glLightfv(lightId, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
+  }
+
+  @Override
+  public void glLight_Shininess(int lightId, float value) {
+    glLightf(lightId, GLLightingFunc.GL_SHININESS, value);
   }
 
   @Override
@@ -656,6 +875,20 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
       glLightModeli(GL2ES1.GL_LIGHT_MODEL_TWO_SIDE, value ? GL.GL_TRUE : GL.GL_FALSE);
     } else if (LightModel.LIGHT_MODEL_LOCAL_VIEWER.equals(model)) {
       glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, value ? GL.GL_TRUE : GL.GL_FALSE);
+    } else {
+      throw new IllegalArgumentException("Unsupported model '" + model + "'");
+    }
+  }
+
+  @Override
+  public void glLightModelfv(int mode, float[] value) {
+    gl.getGL2().glLightModelfv(mode, value, 0);
+  }
+
+  @Override
+  public void glLightModel(LightModel model, Color color) {
+    if (LightModel.LIGHT_MODEL_AMBIENT.equals(model)) {
+      glLightModelfv(GL2ES1.GL_LIGHT_MODEL_AMBIENT, color.toArray());
     } else {
       throw new IllegalArgumentException("Unsupported model '" + model + "'");
     }
@@ -908,4 +1141,75 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   public void glHint_PointSmooth_Nicest() {
     glHint(GL2.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
   }
+
+  @Override
+  public int getTextLengthInPixels(int font, String string) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public int getTextLengthInPixels(Font font, String string) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight, Coord2d pixelZoom,
+      Coord3d imagePosition) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void glDepthFunc(DepthFunc func) {
+    switch (func) {
+      case GL_ALWAYS:
+        gl.glDepthFunc(GL.GL_ALWAYS);
+        break;
+      case GL_NEVER:
+        gl.glDepthFunc(GL.GL_NEVER);
+        break;
+      case GL_EQUAL:
+        gl.glDepthFunc(GL.GL_EQUAL);
+        break;
+      case GL_GEQUAL:
+        gl.glDepthFunc(GL.GL_GEQUAL);
+        break;
+      case GL_GREATER:
+        gl.glDepthFunc(GL.GL_GREATER);
+        break;
+      case GL_LEQUAL:
+        gl.glDepthFunc(GL.GL_LEQUAL);
+        break;
+      case GL_LESS:
+        gl.glDepthFunc(GL.GL_LESS);
+        break;
+      case GL_NOTEQUAL:
+        gl.glDepthFunc(GL.GL_NOTEQUAL);
+        break;
+    }
+  }
+
+  @Override
+  public void glEnable_DepthTest() {
+    gl.glEnable(GL.GL_DEPTH_TEST);
+  }
+
+  @Override
+  public void glDisable_DepthTest() {
+    gl.glDisable(GL.GL_DEPTH_TEST);
+  }
+  
+  @Override
+  public void glEnable_Stencil() {
+    gl.glEnable(GL2.GL_STENCIL);
+  }
+  
+  @Override
+  public void glDisable_Stencil() {
+    gl.glDisable(GL2.GL_STENCIL);
+  }
+
+
 }

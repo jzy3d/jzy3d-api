@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.contour;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.contour.MapperContourPictureGenerator;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Drawable;

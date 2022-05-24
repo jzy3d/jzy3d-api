@@ -7,12 +7,10 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;
@@ -39,6 +37,7 @@ public class FrameSwing extends JFrame implements IFrame {
       @Override
       public void windowClosing(WindowEvent e) {
         FrameSwing.this.remove((java.awt.Component) FrameSwing.this.chart.getCanvas());
+        FrameSwing.this.chart.stopAllThreads();
         FrameSwing.this.chart.dispose();
         FrameSwing.this.chart = null;
         FrameSwing.this.dispose();

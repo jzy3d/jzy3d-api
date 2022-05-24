@@ -1,14 +1,12 @@
 package org.jzy3d.svm.tesselation;
 
 import java.util.Vector;
-
 import org.instantsvm.Parameters;
 import org.instantsvm.SVM;
 import org.instantsvm.regression.RegressionSVM;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.svm.utils.Conversion;
-
 import libsvm.svm_node;
 
 

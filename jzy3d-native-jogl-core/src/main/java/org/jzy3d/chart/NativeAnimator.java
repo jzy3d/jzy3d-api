@@ -20,4 +20,8 @@ public class NativeAnimator implements IAnimator {
   public void stop() {
     animator.stop();
   }
+  
+  public FPSAnimator getAnimator() {
+    return (FPSAnimator)animator;
+  }
 }

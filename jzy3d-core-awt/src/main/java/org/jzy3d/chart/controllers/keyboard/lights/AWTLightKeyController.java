@@ -2,7 +2,6 @@ package org.jzy3d.chart.controllers.keyboard.lights;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.lights.Light;
 

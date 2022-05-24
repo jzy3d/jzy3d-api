@@ -2,11 +2,11 @@ package org.jzy3d.plot3d.primitives;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.colors.Color;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.BoundingBox3d.Corners;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;
@@ -43,6 +43,19 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * 
  */
 public abstract class Drawable implements IGLRenderer, ISortableDraw {
+  protected Transform transform;
+  protected Transform transformBefore;
+  protected BoundingBox3d bbox;
+  protected ILegend legend = null;
+  protected List<IDrawableListener> listeners;
+  protected boolean hasListeners = true;
+
+  protected boolean displayed = true;
+  protected boolean legendDisplayed = false;
+  protected boolean boundingBoxDisplayed = false;
+  protected Color boundingBoxColor = Color.BLACK.clone();
+
+  protected SpaceTransformer spaceTransformer = null;
 
   /**
    * Performs all required operation to cleanup the Drawable.
@@ -76,17 +89,9 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
   protected void doDrawBoundsIfDisplayed(IPainter painter) {
     if (isBoundingBoxDisplayed()) {
-      Parallelepiped p = new Parallelepiped(getBounds());
-      p.setFaceDisplayed(false);
-      p.setWireframeColor(getBoundingBoxColor());
-      p.draw(painter);
+      int width = 2; // getWireframeWidth()
+      painter.box(bbox, getBoundingBoxColor(), 2, spaceTransformer);
     }
-  }
-
-  protected void negative(Color c) {
-    c.r = 1 - c.r;
-    c.g = 1 - c.g;
-    c.b = 1 - c.b;
   }
 
   /**
@@ -116,6 +121,8 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
   }
 
   public void setTransformBefore(Transform transformBefore) {
+    getBounds().apply(transformBefore);
+    
     this.transformBefore = transformBefore;
   }
 
@@ -135,8 +142,8 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
    * @return the center of the bounding box, or {@link Coord3d.INVALID}.
    */
   public Coord3d getBarycentre() {
-    if (bbox != null)
-      return bbox.getCenter();
+    if (getBounds() != null)
+      return getBounds().getCenter();
     else
       return Coord3d.INVALID.clone();
   }
@@ -175,8 +182,8 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
 
   /* */
 
-  public void setLegend(ILegend face) {
-    this.legend = face;
+  public void setLegend(ILegend legend) {
+    this.legend = legend;
     legendDisplayed = true;
     fireDrawableChanged(DrawableChangedEvent.FIELD_METADATA);
   }
@@ -247,6 +254,15 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
       }
     }
   }
+  
+  public Wireframeable asWireframeable() {
+    if(this instanceof Wireframeable) {
+      return (Wireframeable)this;
+    }
+    else {
+      return null;
+    }
+  }
 
   /* */
 
@@ -258,21 +274,4 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
   public String toString(int depth) {
     return Utils.blanks(depth) + "(" + this.getClass().getSimpleName() + ")";
   }
-
-  /* */
-
-  protected Transform transform;
-  protected Transform transformBefore;
-  protected BoundingBox3d bbox;
-  protected ILegend legend = null;
-  protected List<IDrawableListener> listeners;
-  protected boolean hasListeners = true;
-
-  protected boolean displayed = true;
-  protected boolean legendDisplayed = false;
-  protected boolean boundingBoxDisplayed = false;
-  protected Color boundingBoxColor = Color.BLACK.clone();
-
-  protected SpaceTransformer spaceTransformer = null;
-
 }

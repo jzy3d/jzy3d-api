@@ -3,9 +3,7 @@ package org.jzy3d.plot3d.rendering.textures;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.jzy3d.painters.IPainter;
-
 import com.jogamp.opengl.GL;
 
 public class TextureFactory {

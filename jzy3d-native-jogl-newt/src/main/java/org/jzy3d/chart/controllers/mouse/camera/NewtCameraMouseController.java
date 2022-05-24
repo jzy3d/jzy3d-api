@@ -5,9 +5,7 @@ package org.jzy3d.chart.controllers.mouse.camera;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.NewtMouseUtilities;
-import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.Coord2d;
-
 import com.jogamp.newt.event.InputEvent;
 import com.jogamp.newt.event.MouseEvent;
 import com.jogamp.newt.event.MouseListener;
@@ -20,7 +18,7 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
 
   public NewtCameraMouseController(Chart chart) {
     register(chart);
-    addSlaveThreadController(new CameraThreadController(chart));
+    addSlaveThreadController(chart.getFactory().newCameraThreadController(chart));
   }
 
   @Override

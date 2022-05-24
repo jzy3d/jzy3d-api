@@ -1,7 +1,6 @@
 package org.jzy3d.maths;
 
 import java.util.List;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -80,16 +79,22 @@ public class TestCoord3d {
   @Test
   public void equals() {
     Assert.assertTrue(new Coord3d(1, 2, 3).equals(new Coord3d(1, 2, 3)));
+    
     Assert.assertFalse(new Coord3d(1, 2, 3).equals(new Coord3d(2, 1, 3)));
 
     Assert.assertTrue(new Coord3d(-0, 2, 3).equals(new Coord3d(0, 2, 3)));
+    
     Assert.assertTrue(new Coord3d(Float.NaN, 2, 3).equals(new Coord3d(Float.NaN, 2, 3)));
+    
     Assert.assertTrue(new Coord3d(Float.POSITIVE_INFINITY, 2, 3)
         .equals(new Coord3d(Float.POSITIVE_INFINITY, 2, 3)));
+    
     Assert.assertTrue(new Coord3d(Float.NEGATIVE_INFINITY, 2, 3)
         .equals(new Coord3d(Float.NEGATIVE_INFINITY, 2, 3)));
 
     Assert.assertFalse(new Coord3d(Float.POSITIVE_INFINITY, 2, 3)
         .equals(new Coord3d(Float.NEGATIVE_INFINITY, 2, 3)));
   }
+  
+  
 }

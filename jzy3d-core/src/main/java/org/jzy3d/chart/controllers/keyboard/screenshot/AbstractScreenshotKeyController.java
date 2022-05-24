@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.AbstractController;
 

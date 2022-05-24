@@ -1,7 +1,6 @@
 package org.instantsvm.demos.regression;
 
 import java.io.IOException;
-
 import org.instantsvm.regression.RegressionInputs;
 import org.instantsvm.regression.RegressionParameters;
 import org.instantsvm.regression.RegressionSVM;

@@ -2,7 +2,6 @@ package org.jzy3d.maths.parameq;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.jzy3d.maths.Coord3d;
 
 public abstract class ParametricEquation {

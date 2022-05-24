@@ -1,7 +1,6 @@
 package org.instantsvm.utils;
 
 import java.util.Vector;
-
 import libsvm.svm_node;
 
 public class Conversion {

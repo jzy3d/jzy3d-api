@@ -8,6 +8,7 @@ The framework targets simplicity and portability across Java windowing toolkits 
 The API can be used [freely in commercial applications](license.txt). You can explore the [tutorials](jzy3d-tutorials). an then purchase the [extended developper guide](http://jzy3d.org/guide.php) to support the development effort.
 
 
+
 # How to use
 
 Refer to the [tutorial README](jzy3d-tutorials/README.md) file to get help on creating your first chart project with the help of example code.
@@ -157,27 +158,7 @@ Extensions
 * <a href="https://github.com/jzy3d/bigpicture">jzy3d-bigpicture</a> : drivers to few big data storage to draw massive amount of points
 
 
-## Architecture
 
-Creating a chart implies building and wiring the below high-level components.
-
-<img src="doc/Components.png"/>
-
-
-### Customize chart with factories
-
-The ```IChartFactory``` builds all objects that will define how the chart will look (```Axis```, ```View```, ```Camera```, ```Chart```).
-
-The ```IPainterFactory``` builds every objects that allow compatibility across windowing toolkits and GPU/CPU. The chart factories and drawable have no knowledge of concrete AWT, SWT, Swing, etc. This is all powered by the painter factory introduced in Jzy3d 2.0.
-
-The ```Drawable``` class hierarchy defines geometries able to use a ```IPainter``` to draw something.
-
-<img src="doc/Factories.png"/>
-
-
-### Native and emulated elements
-
-<img src="doc/Interop.png"/>
 
 ## Dependent libraries
 
@@ -186,16 +167,86 @@ Jzy3d depends on the following libraries that are available on [Jzy3d Maven repo
 * [jPLY](https://github.com/jzy3d/jPLY) supports the PLY format for loading 3d objects
 * [vecmath](https://github.com/jzy3d/vecmath) is a clone of a former java package
 
+# How to add to your project
+
+The tutorial provides the code [samples you need to add the library to a Maven project](https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-tutorials#adding-dependencies).
+
+### Download sources & javadocs in IDE
+
+If you did not built the framework yourself and depend on Jzy3D Maven Repository, then you may wish to see sources and javadoc in your IDE. Simply call :
+
+```
+mvn dependency:resolve -Dclassifier=javadoc
+mvn dependency:resolve -Dclassifier=sources
+```
+
+
+
 # How to build
+
+## From command line
+
+### Build all
+
+#### Run unit tests only
+
+This will run all test named `**/Test*.java` or `**/*Test.java`.
 
 ```
 mvn clean install
 ```
 
-The [integration tests might be disabled on purpose](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L168), as they are still
-sometime sensitive to thin rendering differences across computers. If they are enabled, you may have tests named ```ITTest*``` failing. In this case, you may
-* Comment it from [Surefire plugin configuration](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L168). The best is to edit the Maven pom to only disable ITTest*. If you are busy, you may simply run ```mvn install -DskipTests```
-* Skip it from [Faisafe if this plugin is currently active](https://github.com/jzy3d/jzy3d-api/blob/master/pom.xml#L186) in the Maven pom. To do so run ```mvn install -DskipITs```
+#### Run unit tests and automated integration tests
+
+Integration tests compare charts to baseline images pixel wise. They are important in te toolbelt but have the drawback of being less portable accross computers
+* Different OS have different frame insets (changing actual rendering area size) leading to chart screenshots of different size accross OS.
+* Different OS have different frame insets (changing actual rendering area size) leading to chart a different layout (colorbar position)
+* Different OS have different font rasterization (despite using the JVM font raterizer to minimize OS impact), hence text labels do not match despite having only a few pixel difference.
+* A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tests-java9` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts.
+
+This will run all test named `**/ITTest*.java` and unit tests.
+
+```
+mvn clean install -Pintegration-tests
+```
+
+#### Skip automated tests
+
+This will skip all tests (unit and integration)
+```
+mvn clean install -DskipTests
+```
+
+#### Manual tests
+
+Some [test require a manual verification](jzy3d-tests-java9/src/test/java/org/jzy3d/tests/manual).
+
+### Deploy source & javadocs
+```
+mvn clean source:jar javadoc:jar deploy
+ ```
+
+### Generate javadoc site
+
+Comment module jzy3d-tutorial manually
+
+```
+mvn compile javadoc:javadoc javadoc:aggregate
+```
+
+## From intellij
+
+Follow these steps to import in IntelliJ
+* open an existing unrelated project
+* file->new project from version control
+* close the imported project window
+* from the unrelated project ->file-> new project from existing sources -> select the new projects location
+* from new project select top -> file -> add framework-> maven
+* file -> set module language level
+
+## From eclipse
+
+`Import Maven project` or `Import Maven project from SCM`
 
 
 # How to get help
@@ -214,6 +265,7 @@ Version 2.0 is a major refactor to allow using multiple OpenGL implementations, 
 
 | Class name in 1.* | Class name in 2.0 |
 |-------------------|-------------------|
+| Quality.Advanced, Intermediate | Quality.Advanced(), Intermediate() |
 | AbstractDrawable | Drawable |
 | AbstractWireframeable | Wireframeable |
 | AxeBox | AxisBox |

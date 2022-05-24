@@ -4,38 +4,19 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.TextAlign;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
 public abstract class AbstractTextRenderer implements ITextRenderer {
+  protected static final int NO_ROTATION = 0;
+  protected static final Coord2d NO_SCREEN_OFFSET = new Coord2d();
+  protected static final Coord3d NO_SCENE_OFFSET = new Coord3d();
+
   protected SpaceTransformer spaceTransformer;
-  protected Coord2d defScreenOffset;
-  protected Coord3d defSceneOffset;
-
-  public AbstractTextRenderer() {
-    defScreenOffset = new Coord2d();
-    defSceneOffset = new Coord3d();
-  }
-
-  @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color) {
-    return drawText(painter, s, position, halign, valign, color, defScreenOffset, defSceneOffset);
-  }
-
-  @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord2d screenOffset) {
-    return drawText(painter, s, position, halign, valign, color, screenOffset, defSceneOffset);
-  }
-
-  @Override
-  public BoundingBox3d drawText(IPainter painter, String s, Coord3d position, Horizontal halign,
-      Vertical valign, Color color, Coord3d sceneOffset) {
-    return drawText(painter, s, position, halign, valign, color, defScreenOffset, sceneOffset);
-  }
 
   @Override
   public SpaceTransformer getSpaceTransformer() {
@@ -45,5 +26,42 @@ public abstract class AbstractTextRenderer implements ITextRenderer {
   @Override
   public void setSpaceTransformer(SpaceTransformer transformer) {
     this.spaceTransformer = transformer;
+  }
+
+  @Override
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position, float rotation, TextAlign align, Color color, Coord2d screenOffset) {
+    return drawText(painter, font, s, position, rotation, align.horizontal(), align.vertical(), color, screenOffset);
+  }
+
+  @Override
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      Horizontal halign, Vertical valign, Color color) {
+    return drawText(painter, font, s, position, NO_ROTATION, halign, valign, color, NO_SCREEN_OFFSET, NO_SCENE_OFFSET);
+  }
+  
+  @Override
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      float rotation, Horizontal halign, Vertical valign, Color color) {
+    return drawText(painter, font, s, position, rotation, halign, valign, color, NO_SCREEN_OFFSET, NO_SCENE_OFFSET);
+  }
+  
+  @Override
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      float rotation, Horizontal halign, Vertical valign, Color color, Coord2d screenOffset) {
+    return drawText(painter, font, s, position, rotation, halign, valign, color, screenOffset, NO_SCENE_OFFSET);
+  }
+
+
+
+  @Override
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      Horizontal halign, Vertical valign, Color color, Coord2d screenOffset) {
+    return drawText(painter, font, s, position, NO_ROTATION, halign, valign, color, screenOffset, NO_SCENE_OFFSET);
+  }
+
+  @Override
+  public BoundingBox3d drawText(IPainter painter, Font font, String s, Coord3d position,
+      Horizontal halign, Vertical valign, Color color, Coord3d sceneOffset) {
+    return drawText(painter, font, s, position, NO_ROTATION, halign, valign, color, NO_SCREEN_OFFSET, sceneOffset);
   }
 }

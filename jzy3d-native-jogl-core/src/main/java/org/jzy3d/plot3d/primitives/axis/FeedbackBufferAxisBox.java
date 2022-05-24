@@ -1,13 +1,12 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import java.nio.FloatBuffer;
-
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
-
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL2;
 
@@ -19,14 +18,34 @@ import com.jogamp.opengl.GL2;
  * @author Martin Pernollet
  */
 public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
-  static Logger logger = Logger.getLogger(FeedbackBufferAxisBox.class);
+  static Logger logger = LogManager.getLogger(FeedbackBufferAxisBox.class);
 
   public FeedbackBufferAxisBox(BoundingBox3d bbox) {
     super(bbox);
   }
 
-  public FeedbackBufferAxisBox(BoundingBox3d bbox, IAxisLayout layout) {
+  public FeedbackBufferAxisBox(BoundingBox3d bbox, AxisLayout layout) {
     super(bbox, layout);
+  }
+  
+  /** Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from
+   * 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK */
+  protected void drawCube(IPainter painter, RenderMode mode) {
+    for (int q = 0; q < 6; q++) {
+      if (!getQuadIsHidden()[q]) { // makes culling useless!
+        
+        // the below check to passtrough is made for feedback buffer axis box
+        if (mode == RenderMode.FEEDBACK)
+          painter.glPassThrough(q);
+        
+        //painter.glBegin_Quad();
+        painter.glBegin_LineLoop();
+        for (int v = 0; v < 4; v++) {
+          painter.vertex(quadx[q][v], quady[q][v], quadz[q][v], spaceTransformer);
+        }
+        painter.glEnd();
+      }
+    }
   }
 
   /**

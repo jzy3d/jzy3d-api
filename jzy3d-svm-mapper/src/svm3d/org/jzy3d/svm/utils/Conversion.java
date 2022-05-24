@@ -2,12 +2,10 @@ package org.jzy3d.svm.utils;
 
 import java.util.List;
 import java.util.Vector;
-
 import org.instantsvm.regression.RegressionInputs;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
-
 import libsvm.svm_node;
 
 /** Helpers to convert Jzy3d datatypes to libsvm datatypes */
