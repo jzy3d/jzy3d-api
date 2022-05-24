@@ -15,7 +15,7 @@ public class SimpleCsv {
   /**
    * @deprecated use {@link #write(List, String, char, Function)} instead
    */
-  @Deprecated(since = "2.0.0", forRemoval = true)
+  @Deprecated//(since = "2.0.0", forRemoval = true)
   public static <T> void write(List<T> entities, String file, char separator, ToLine<T> toLine)
       throws IOException {
     write(entities, file, separator, toLine::toLine);
