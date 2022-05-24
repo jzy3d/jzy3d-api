@@ -25,7 +25,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * 
  * Dotted line are built using
  * 
- * http://www.glprogramming.com/red/images/Image35.gif
+ * https://www.glprogramming.com/red/images/Image35.gif
  * 
  * @author Martin Pernollet
  */
@@ -316,7 +316,7 @@ public class LineStrip extends Wireframeable {
   /**
    * Indicates if stippled rendering is enabled for this line.
    * 
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public boolean isStipple() {
     return stipple;
@@ -325,7 +325,7 @@ public class LineStrip extends Wireframeable {
   /**
    * Enable or disable stippled rendering.
    * 
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public void setStipple(boolean stipple) {
     this.stipple = stipple;
@@ -334,8 +334,8 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line factor.
    * 
-   * @see http://www.glprogramming.com/red/images/Image35.gif
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public int getStippleFactor() {
     return stippleFactor;
@@ -344,8 +344,8 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line factor.
    * 
-   * @see http://www.glprogramming.com/red/images/Image35.gif
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public void setStippleFactor(int stippleFactor) {
     this.stippleFactor = stippleFactor;
@@ -354,8 +354,8 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line pattern.
    * 
-   * @see http://www.glprogramming.com/red/images/Image35.gif
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public short getStipplePattern() {
     return stipplePattern;
@@ -364,8 +364,8 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line pattern.
    * 
-   * @see http://www.glprogramming.com/red/images/Image35.gif
-   * @see http://www.glprogramming.com/red/chapter02.html (Stippled line section)
+   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public void setStipplePattern(short stipplePattern) {
     this.stipplePattern = stipplePattern;

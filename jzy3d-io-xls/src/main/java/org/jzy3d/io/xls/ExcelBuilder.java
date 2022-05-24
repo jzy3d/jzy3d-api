@@ -47,8 +47,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  *
  * To add new excel features, see
  *
- * @see http://poi.apache.org/spreadsheet/quick-guide.html (or a copy in /doc)
- * @see http://svn.apache.org/repos/asf/poi/trunk/src/examples/src/org/apache/poi/xssf/usermodel/examples/
+ * @see https://poi.apache.org/components/spreadsheet/quick-guide.html (or a copy in /doc)
+ * @see https://svn.apache.org/repos/asf/poi/trunk/poi-examples/src/main/java/org/apache/poi/examples/xssf/usermodel/
  */
 public class ExcelBuilder implements IExcelBuilder {
   static Log log = LogFactory.getLog(ExcelBuilder.class);
