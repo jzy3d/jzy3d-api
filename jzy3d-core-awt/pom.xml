@@ -17,6 +17,6 @@
 			<artifactId>jzy3d-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-
 	</dependencies>
+	 
 </project>

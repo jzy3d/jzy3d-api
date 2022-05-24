@@ -17,7 +17,7 @@ import jgl.GL;
 
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
   boolean fixHiDPI = true;
-
+  
   @Override
   public void render(IPainter painter, Chart chart) {
     View view = chart.getView();
@@ -26,7 +26,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     // Here we force the scene to be rendered on the entire screen to avoid a GRAY
     // (=CLEAR COLOR?) BAND
     // that can't be overriden by legend image
-    sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, 1);// screenSeparator);
+    sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0,  1);
     //sceneViewport = ViewportBuilder.column(chart.getCanvas(), 0, screenSeparator);
 
     view.renderScene(sceneViewport);
@@ -58,6 +58,8 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       width = (int) (sceneViewport.getWidth() * emulGL.getGL().getPixelScaleX());
       height = (int) (sceneViewport.getHeight() * emulGL.getGL().getPixelScaleY());// canvas.getRendererHeight();
     }
+    
+    legendsWidth = (right-left)*width;
 
     // ---------------------------------------
 
@@ -80,13 +82,8 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         //awtLegend.getImageGenerator().setFont(font);
         
         // optimize to shrink colorbar to required width
-        if(shrinkColorbar) {
-          AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
-          int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
-          
-          // Random fix to avoid cutting text
-          int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT;
-          from = 1-((1f*optimalColorbarWidth+pixelShiftFix)/(1f*width));
+        if(isShrinkColorbar()) {
+          from = updateFromValueToShrinkColorbar(painter, width, awtLegend);
         }
         
         legend.setViewPort(width, height, from, to);
@@ -124,6 +121,18 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
       }
     }
+  }
+
+  protected float updateFromValueToShrinkColorbar(IPainter painter, int width,
+      AWTColorbarLegend awtLegend) {
+    float from;
+    AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
+    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
+    
+    // Random fix to avoid cutting text
+    int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT;
+    from = 1-((1f*optimalColorbarWidth+pixelShiftFix)/(1f*width));
+    return from;
   }
   
   public boolean isFixHiDPI() {

@@ -7,7 +7,7 @@ import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.SmartTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.IntegerTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -39,7 +39,7 @@ public class WorldMapDemo extends AWTAbstractAnalysis {
     chart.getScene().getGraph().add(worldMap.lineStrips);
 
     // Set axis labels for chart
-    IAxisLayout axeLayout = chart.getAxisLayout();
+    AxisLayout axeLayout = chart.getAxisLayout();
     axeLayout.setXAxisLabel("Longitude (deg)");
     axeLayout.setYAxisLabel("Latitude (deg)");
     axeLayout.setZAxisLabel("Altitude (km)");

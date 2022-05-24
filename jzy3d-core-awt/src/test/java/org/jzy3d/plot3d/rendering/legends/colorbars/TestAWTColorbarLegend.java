@@ -2,126 +2,104 @@ package org.jzy3d.plot3d.rendering.legends.colorbars;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
-import org.jzy3d.maths.Range;
-import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
-import org.jzy3d.plot3d.builder.Mapper;
-import org.jzy3d.plot3d.builder.SurfaceBuilder;
-import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
-import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 
 /**
-//tester toute l'api
-//dimension
-//size
-//
-//legend.getBackground()
-//legend.setFont(font);
+ * //tester toute l'api //dimension //size // //legend.getBackground() //legend.setFont(font);
  * 
- *     // Tester si taille viewport trop petite
-    
-    
-    // Bazard entre imageWidth, minDimension, 
-
-// 
- * comportements
- * - generate image once with setViewport, but not 2 times 
- * -
+ * // Tester si taille viewport trop petite
+ * 
+ * 
+ * // Bazard entre imageWidth, minDimension,
+ * 
+ * // comportements - generate image once with setViewport, but not 2 times -
  */
 public class TestAWTColorbarLegend {
   private static final double DELTA = 0.1;
 
 
   @Test
-  public void whenViewport_then() {
-    // Given
-    AWTColorbarLegend legend = new AWTColorbarLegend(surface(), new AxisLayout());
+  public void whenLegendViewportDimensionSet_ThenDisplayedImageIsSmallerAccordingToViewportMargin() {
+
+    // Given a colorbar
+    AWTColorbarLegend legend = new AWTColorbarLegend(SampleGeom.surface(), new AxisLayout());
+
+
+    // When setting viewport to a size and having a non 0 margin
     Dimension margin = legend.getMargin();
-    
-    // When setting viewport to a size
+    margin.width = 2;
+    margin.height = 2;
+
     int width = 300;
     int height = 600;
     float left = 0.8f;
     float right = 1f;
-    legend.setViewPort(width, height, left, right);
-    
-    
-    // Then 
-    int expectWidth = (int)(width * (right-left)) - margin.width;
-    Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
 
+    legend.setViewPort(width, height, left, right);
+
+    // Then actual image width is smaller according to horizontal margin
+    int actualImageWidth = legend.getImage().getWidth(null);
+    int expectWidth = (int) (width * (right - left)) - margin.width;
+    Assert.assertEquals(expectWidth, actualImageWidth, DELTA);
+
+    // ------------------------
     // When update image
+
     legend.updateImage();
 
     // Then size remain the same
     Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
 
-    // When update pixel scale
-    legend.updatePixelScale(new Coord2d(2,2));
+    // ------------------------
+    // By default, configuration states to ignore pixel scale
 
-    // Then pixel scale remains the same otherwise it is awfull (for native charts only
-    // has the image size is doubled size, then probably shrinked, then expanded again)
+    Assert.assertFalse(legend.isUsePixelScale());
+
+    // ------------------------
+    // When updating pixel scale with an ignored pixel scale
+
+    legend.updatePixelScale(new Coord2d(2, 2));
+    legend.updateImage();
+
+    // Then image size remains the same
     Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
-    
-    // But the [EmulGL]+ViewAndColorbarLayout will fix the layout due to pixel scale
-  }
-  
-  public void whenMinimumDimension_Then() {
-    AWTColorbarLegend legend = new AWTColorbarLegend(surface(), new AxisLayout());
-    Dimension margin = legend.getMargin();
-    
-    Assert.assertEquals(AWTColorbarImageGenerator.MIN_BAR_WIDTH, legend.getMinimumDimension().width);
-    Assert.assertEquals(AWTColorbarImageGenerator.MIN_BAR_HEIGHT, legend.getMinimumDimension().height);
-    
-    // When
-    legend.setMinimumWidth(200); 
-    // devrait être setPreferedWidth - 
-    // minWidth doit ne jamais être violée
-    // AutoWidth doit tout de même permettre de savoir 
-    
-    // Then
-    Assert.assertEquals(200, legend.getMinimumDimension().width);
 
+    // ------------------------
+    // When updating pixel scale
+
+    legend.setUsePixelScale(true);
+    legend.updatePixelScale(new Coord2d(2, 2));
+    legend.updateImage();
+
+    // Then image size is doubled
+    Assert.assertEquals(expectWidth * 2, legend.getImage().getWidth(null), DELTA);
+
+  }
+
+  public void whenViewportSmallerThanMinWidth_ThenImageIsSizedAtMinWidth() {
     
-    // When setting viewport to a size
-    int width = 300;
+    // Given a colorbar
+    AWTColorbarLegend legend = new AWTColorbarLegend(SampleGeom.surface(), new AxisLayout());
+   
+    // When setting viewport to size smaller than min width
+    int MIN_WIDTH = 200;
+    int width = MIN_WIDTH/2; 
     int height = 600;
     float left = 0.8f;
     float right = 1f;
+    
+    legend.setMinimumWidth(MIN_WIDTH);
     legend.setViewPort(width, height, left, right);
 
+    // Then generated image has predefined min width
+    Assert.assertEquals(MIN_WIDTH, legend.getMinimumDimension().width);
     
-    // Then / VIOLATE MINIMUM DIMENSION!!!
-    int expectWidth = (int)(width * (right-left)) - margin.width;
-    Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), 0.1);
-
+    int actualWidth = legend.getImage().getWidth(null);
+    Assert.assertEquals(MIN_WIDTH, actualWidth);
+    
   }
-  
-  
-  private static Shape surface() {
-    Mapper mapper = new Mapper() {
-      @Override
-      public double f(double x, double y) {
-        return x * Math.sin(x * y);
-      }
-    };
-    Range range = new Range(-3, 3);
-    int steps = 50;
 
-    SurfaceBuilder builder = new SurfaceBuilder();
-    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1));
-    surface.setColorMapper(colorMapper);
-    surface.setFaceDisplayed(true);
-    surface.setWireframeDisplayed(true);
-    surface.setWireframeColor(Color.BLACK);
-    return surface;
-  }
 }

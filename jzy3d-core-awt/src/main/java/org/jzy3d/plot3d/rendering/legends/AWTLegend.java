@@ -11,10 +11,12 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot2d.primitive.AWTImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 
 /**
  * A {@link AWTLegend} represent information concerning a {@link Drawable} that may be displayed as
- * a metadata in the {@link ChartView}.
+ * a metadata in the {@link ChartView}. {@link ChartView} renders legend on the right side of the
+ * chart, hence avoiding superposition of legend and chart.
  * 
  * The constructor of a {@link AWTLegend} registers itself as listener of its parent
  * {@link Drawable}, and unregister itself when it is disposed.
@@ -33,6 +35,9 @@ import org.jzy3d.plot3d.rendering.view.AWTImageViewport;
  * <li>computing a new image only if the required {@link AWTLegend} dimensions changed.
  * </ul>
  * 
+ * @see {@link AWTRenderer2d} which is another way of rendering legend on TOP of a chart instead of
+ *      on the RIGHT SIDE of a chart
+ * 
  * @author Martin Pernollet
  */
 public abstract class AWTLegend extends AWTImageViewport implements IDrawableListener, ILegend {
@@ -41,8 +46,10 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
   protected Color background;
   protected Dimension minimumDimension;
   protected AWTImageGenerator imageGenerator;
-  
+
   public AWTLegend(Drawable drawable) {
+    super();
+    
     this.drawable = drawable;
     if (drawable != null) {
       drawable.addDrawableListener(this);
@@ -73,9 +80,8 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     int imgWidth = getSliceWidth(width, left, right);
 
     if (imageWidth != imgWidth || imageHeight != height) {
-      //imageWidth = imgWidth;
-      //imageHeight = height;
-      //updateImage();
+            
+      //System.out.println("AWTLegend width:" + imgWidth + " height:" + height + " mode:" + getViewportMode());
       setImage(toImage(imgWidth, height));
     }
   }
@@ -96,14 +102,17 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     AWTImageFile.savePNG(image, filename);
   }
 
-
   @Override
-  public Dimension getMinimumSize() {
+  public Dimension getMinimumDimension() {
     return minimumDimension;
   }
 
-  public void setMinimumSize(Dimension dimension) {
+  public void setMinimumDimension(Dimension dimension) {
     minimumDimension = dimension;
+  }
+  
+  public void setMinimumWidth(int minimumWidth) {
+    this.minimumDimension.width = minimumWidth;
   }
 
   public void setGeneratorColors() {
@@ -132,17 +141,5 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
 
   public void setBackground(Color background) {
     this.background = background;
-  }
-
-  public Dimension getMinimumDimension() {
-    return minimumDimension;
-  }
-
-  public void setMinimumDimension(Dimension minimumDimension) {
-    this.minimumDimension = minimumDimension;
-  }
-
-  public void setMinimumWidth(int minimumWidth) {
-    this.minimumDimension.width = minimumWidth;
   }
 }

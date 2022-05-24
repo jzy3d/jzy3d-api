@@ -10,6 +10,10 @@ import java.util.List;
  * @author Martin Pernollet
  */
 public class BoundingBox2d {
+  protected float xmin;
+  protected float xmax;
+  protected float ymin;
+  protected float ymax;
 
   /** Initialize a BoundingBox by calling its reset method. */
   public BoundingBox2d() {
@@ -27,7 +31,14 @@ public class BoundingBox2d {
     this.xmin = xmin;
     this.xmax = xmax;
     this.ymin = ymin;
-    this.xmax = xmax;
+    this.ymax = ymax;
+  }
+
+  public BoundingBox2d(double xmin, double xmax, double ymin, double ymax) {
+    this.xmin = (float)xmin;
+    this.xmax = (float)xmax;
+    this.ymin = (float)ymin;
+    this.ymax = (float)ymax;
   }
 
   /*********************************************************/
@@ -110,7 +121,7 @@ public class BoundingBox2d {
    * 
    * @return the scaled bounding box
    */
-  public BoundingBox2d scale(Coord3d scale) {
+  public BoundingBox2d scale(Coord2d scale) {
     BoundingBox2d b = new BoundingBox2d();
     b.xmax = xmax * scale.x;
     b.xmin = xmin * scale.x;
@@ -118,6 +129,16 @@ public class BoundingBox2d {
     b.ymin = ymin * scale.y;
     return b;
   }
+  
+  public BoundingBox2d shift(Coord2d offset) {
+    BoundingBox2d b = new BoundingBox2d();
+    b.xmax = xmax + offset.x;
+    b.xmin = xmin + offset.x;
+    b.ymax = ymax + offset.y;
+    b.ymin = ymin + offset.y;
+    return b;
+  }
+
 
   /**
    * Return true if b2 is contained by this box. Note: if b1.contains(b2), then b1.intersect(b2) as
@@ -134,9 +155,10 @@ public class BoundingBox2d {
 
   /** Return true if intersect b2. */
   public boolean intersect(BoundingBox2d b2) {
-    return xmin <= b2.xmin && b2.xmin <= xmax || xmin <= b2.xmax && b2.xmax <= xmax
-        || ymin <= b2.ymin && b2.ymin <= ymax || ymin <= b2.ymax && b2.ymax <= ymax;
+    return ((xmin <= b2.xmin && b2.xmin <= xmax) || (xmin <= b2.xmax && b2.xmax <= xmax))
+        && ((ymin <= b2.ymin && b2.ymin <= ymax) || (ymin <= b2.ymax && b2.ymax <= ymax));
   }
+
 
   /*********************************************************/
 
@@ -158,6 +180,15 @@ public class BoundingBox2d {
     return xmax;
   }
 
+  public float xrange() {
+    return xmax-xmin;
+  }
+
+  public float yrange() {
+    return ymax-ymin;
+  }
+
+  
   /**
    * Return the minimum y value.
    * 
@@ -175,7 +206,17 @@ public class BoundingBox2d {
   public float ymax() {
     return ymax;
   }
+  
+  public Range getXRange() {
+    return new Range(xmin, xmax);
+  }
 
+  public Range getYRange() {
+    return new Range(ymin, ymax);
+  }
+
+
+  
   /*********************************************************/
 
   @Override
@@ -187,11 +228,4 @@ public class BoundingBox2d {
     return Utils.blanks(depth) + "(BoundingBox2d)" + xmin + "<=x<=" + xmax + " | " + ymin + "<=y<="
         + ymax;
   }
-
-  /*********************************************************/
-
-  private float xmin;
-  private float xmax;
-  private float ymin;
-  private float ymax;
 }

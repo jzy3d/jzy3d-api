@@ -5,7 +5,10 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
@@ -26,10 +29,12 @@ import org.jzy3d.maths.Scale;
 import org.jzy3d.maths.Statistics;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.Wireframeable;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -79,6 +84,9 @@ public class Chart {
 
   protected Light lightOnCamera;
   protected Light[] lightPairOnCamera;
+  
+  protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
+
 
 
   public Chart(IChartFactory factory, Quality quality) {
@@ -107,7 +115,7 @@ public class Chart {
   public Chart black() {
     return color(Color.BLACK, Color.WHITE);
   }
-  
+
   public Chart white() {
     return color(Color.WHITE, Color.BLACK);
   }
@@ -119,18 +127,82 @@ public class Chart {
     return this;
   }
 
-  
+  /**
+   * Toggle the chart for 2D rendering.
+   * 
+   * Warning : when using 2D rendering, one should not try to set a squared view to avoid messing a
+   * tick and axis labels.
+   */
   public Chart view2d() {
-    IAxisLayout axe = getAxisLayout();
-    axe.setZAxeLabelDisplayed(false);
-    axe.setTickLineDisplayed(false);
-
+    AxisLayout axisLayout = getAxisLayout();
     View view = getView();
+
+    // Remember 3D layout
+    axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
+    axisYLabelOrientation = axisLayout.getYAxisLabelOrientation();
+    axisZLabelDisplayed = axisLayout.isZAxeLabelDisplayed();
+    isTickLineDisplayed = axisLayout.isTickLineDisplayed();
+    
+    isSquaredViewActive = view.getSquared();
+    viewPositionMode = view.getViewMode();
+    viewportMode = view.getCamera().getViewportMode();
+    viewpoint = view.getViewPoint();
+    
+    // Apply 2D layout to axis
+    axisLayout.setTickLineDisplayed(false);
+    axisLayout.setZAxeLabelDisplayed(false);
+    axisLayout.setZTickLabelDisplayed(false);
+    axisLayout.setYAxisLabelOrientation(LabelOrientation.VERTICAL);
+
+    // Apply 2D layout to view
     view.setViewPositionMode(ViewPositionMode.TOP);
-    view.setSquared(true);
+    view.setSquared(false);
     view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
+
+    // Update if needed
+    if (!getQuality().isAnimated()) {
+      render();
+    }
     return this;
   }
+  
+  // memory of 3D settings before switching to 2D
+  protected LabelOrientation axisYLabelOrientation = null;
+  protected boolean axisZLabelDisplayed = true;
+  protected boolean axisZTickLabelDisplayed = true;
+  protected boolean isTickLineDisplayed = true;
+  protected boolean isSquaredViewActive = true;
+  protected ViewPositionMode viewPositionMode = ViewPositionMode.FREE;
+  protected ViewportMode viewportMode = ViewportMode.RECTANGLE_NO_STRETCH;
+  protected Coord3d viewpoint = View.VIEWPOINT_DEFAULT;
+  
+  public Chart view3d() {
+    AxisLayout axisLayout = getAxisLayout();
+    
+    // Restore 3D layout to axis
+    if(axisYLabelOrientation!=null){
+      axisLayout.setYAxisLabelOrientation(axisYLabelOrientation);
+    }
+    
+    axisLayout.setZAxeLabelDisplayed(axisZLabelDisplayed);
+    axisLayout.setZTickLabelDisplayed(axisZTickLabelDisplayed);
+    axisLayout.setTickLineDisplayed(isTickLineDisplayed);
+    
+    // Restore 3D layout to view
+    View view = getView();
+    view.setViewPoint(viewpoint, false);
+    view.setViewPositionMode(viewPositionMode);
+    view.setSquared(isSquaredViewActive);
+    view.getCamera().setViewportMode(viewportMode);
+
+    // Update if needed
+    if (!getQuality().isAnimated()) {
+      render();
+    }
+
+    return this;
+  }
+
 
   /** Alias for {@link display()} */
   public IFrame show(Rectangle rectangle, String title) {
@@ -228,7 +300,7 @@ public class Chart {
 
   /* CONTROLLERS */
 
-  /** 
+  /**
    * use {@link #addMouse()} instead.
    */
   @Deprecated
@@ -266,7 +338,7 @@ public class Chart {
     return mousePicking;
   }
 
-  /** 
+  /**
    * use {@link #addKeyboard()} instead.
    */
   @Deprecated
@@ -393,11 +465,11 @@ public class Chart {
   public IFrame open(String title, Rectangle rect) {
     if (frame == null) {
       IPainterFactory painterFactory = getFactory().getPainterFactory();
-      if(!painterFactory.isOffscreen()) {
+      if (!painterFactory.isOffscreen()) {
         frame = getFactory().getPainterFactory().newFrame(this, rect, title);
-      }
-      else {
-        logger.warn("Chart is configured for being offscreen. Did not open any frame. May disable call to open");
+      } else {
+        logger.warn(
+            "Chart is configured for being offscreen. Did not open any frame. May disable call to open");
       }
     }
 
@@ -460,8 +532,9 @@ public class Chart {
     if (drawable instanceof IGLBindedResource) {
 
       if (view.isInitialized()) {
-        //logger.warn(
-        //    drawable + " must be added to chart before the view has initialized, hence before the chart is open.");
+        // logger.warn(
+        // drawable + " must be added to chart before the view has initialized, hence before the
+        // chart is open.");
 
         // We are in here in the application thread, no in AWT thread, so we have to acquire
         // GL context, so that the drawable gets mounted with a usable GL instance
@@ -472,11 +545,10 @@ public class Chart {
         // And we kindly release GL to let AWT render again
         getPainter().releaseGL();
 
-        //logger.warn("Chart.add binded resource with box " + drawable.getBounds());
+        // logger.warn("Chart.add binded resource with box " + drawable.getBounds());
 
       } else {
-        logger.warn(
-            drawable + " will be initialized later since the view is not initialized yet. "
+        logger.warn(drawable + " will be initialized later since the view is not initialized yet. "
             + "Calling chart.getView().getBounds() won't return anything relevant until chart.open() gets called");
       }
 
@@ -566,7 +638,6 @@ public class Chart {
    */
   public Chart add(Drawable drawable, LODCandidates candidates) {
     add(drawable, true);
-    // getView().updateBounds();
 
     Wireframeable w = drawable.asWireframeable();
 
@@ -640,8 +711,48 @@ public class Chart {
   protected static MouseEvent mouseEvent(Component sourceCanvas, int x, int y) {
     return new MouseEvent(sourceCanvas, 0, 0, 0, x, y, 100, 100, 1, false, 0);
   }
+  
+
+  public void add(Serie2d serie) {
+    series.put(serie.getName(), serie);
+    
+    add(serie.getDrawable());
+  }
+
+  public void add(Collection<Serie2d> series) {
+    for (Serie2d serie : series) {
+      add(serie);
+    }
+  }
+
+  public void add(Map<String, Serie2d> series) {
+    this.series.putAll(series);
+  }
+  
+  public Serie2d getSerie(String name, Serie2d.Type type) {
+    Serie2d serie = null;
+    if (!series.keySet().contains(name)) {
+      serie = factory.newSerie(name, type);
+      add(serie);
+      series.put(name, serie);
+    } else {
+      serie = series.get(name);
+    }
+    return serie;
+  }
 
 
+  public Serie2d removeSerie(String name, Serie2d.Type type) {
+    Serie2d serie = getSerie(name, type);
+    if(serie!=null) {
+      remove(serie);
+    }
+    return serie;
+  }
+
+  public void remove(Serie2d serie) {
+    remove(serie.getDrawable());
+  }
 
   public void remove(Drawable drawable) {
     getScene().getGraph().remove(drawable);
@@ -913,7 +1024,7 @@ public class Chart {
     return canvas;
   }
 
-  public IAxisLayout getAxisLayout() {
+  public AxisLayout getAxisLayout() {
     return getView().getAxis().getLayout();
   }
 

@@ -8,14 +8,14 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.TextRenderer;
 
 public class AxisBox2d extends AxisBox {
-  public AxisBox2d(BoundingBox3d bbox, IAxisLayout layout) {
+  public AxisBox2d(BoundingBox3d bbox, AxisLayout layout) {
     super(bbox, layout);
   }
 

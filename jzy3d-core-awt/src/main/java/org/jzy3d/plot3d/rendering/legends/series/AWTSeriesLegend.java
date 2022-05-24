@@ -20,6 +20,8 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport {
   private static final int LINE_HEIGHT = 15;
   private static final int INTERLINE_HEIGHT = 5;
   private static final int FONT_HEIGHT = 12;
+  
+  private static final int DEFAULT_MIN_DIM = 40;
 
   protected int margin = 25;
   protected List<Serie2d> series;
@@ -45,8 +47,7 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport {
   public AWTSeriesLegend(List<Serie2d> series, Color foreground, Color background) {
     super(null, foreground, background);
     this.series = new ArrayList<>();
-    this.minimumDimension = new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
-        AWTColorbarImageGenerator.MIN_BAR_HEIGHT);
+    this.minimumDimension = new Dimension(DEFAULT_MIN_DIM, DEFAULT_MIN_DIM);
     for (Serie2d serie : series) {
       addSerie(serie);
     }
@@ -87,7 +88,7 @@ public class AWTSeriesLegend extends AWTLegend implements IImageViewport {
 
 
         // draw legend border
-        drawLegendBorder(graphic, width, legendBorderHeight);
+        drawBorder(graphic, width, legendBorderHeight);
         return image;
       }
 

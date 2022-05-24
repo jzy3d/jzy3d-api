@@ -10,6 +10,7 @@ import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.primitives.volume.Texture3D;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 import com.jogamp.opengl.util.GLBuffers;
 
 /**
@@ -36,6 +37,8 @@ public class BasicVolumeDemo extends AWTAbstractAnalysis {
         }
       }
     }
+    
+
 
     Texture3D volume = new Texture3D(buffer, new int[] {10, 10, 10}, (float) 0, (float) 1,
         colorMapper, new BoundingBox3d(1, 10, 1, 10, 1, 10));
@@ -43,6 +46,8 @@ public class BasicVolumeDemo extends AWTAbstractAnalysis {
     // Create a chart
     chart = new AWTChartFactory().newChart(Quality.Intermediate());
     chart.getScene().getGraph().add(volume);
-    chart.getView();
+    
+    // Keep former text renderer as the new one does not work properly with shaders
+    chart.getView().getAxis().setTextRenderer(new TextBitmapRenderer());
   }
 }
