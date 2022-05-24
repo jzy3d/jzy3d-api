@@ -40,7 +40,7 @@ public class FileDataset {
   /**********************************************/
 
 
-  @Deprecated(forRemoval = true)
+  @Deprecated//(forRemoval = true)
   protected static int readNLines(String filename) throws IOException {
     try (CSVReader reader = new CSVReader(new FileReader(filename))) {
       int n = 0;

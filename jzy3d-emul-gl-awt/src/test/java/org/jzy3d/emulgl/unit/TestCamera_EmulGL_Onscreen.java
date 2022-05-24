@@ -79,7 +79,7 @@ public class TestCamera_EmulGL_Onscreen {
 
     IFrame frame = chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
 
-    Thread.sleep(500);
+    Thread.sleep(1000);
 
     considerFrameBorder(FRAME_SIZE, (FrameAWT) frame);
 
