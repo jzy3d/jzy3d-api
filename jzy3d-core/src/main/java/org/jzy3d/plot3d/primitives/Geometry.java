@@ -243,7 +243,7 @@ public abstract class Geometry extends Wireframeable implements ISingleColorable
         polygonOffsetFillDisable(painter); // DISABLE OFFSET
 
       if (wireframeDisplayed && polygonWireframeDepthTrick)
-        applyDepthRangeDefault(painter); // DISAABLE RANGE FOR UNDER
+        applyDepthRangeDefault(painter); // DISABLE RANGE FOR UNDER
 
     }
   }
