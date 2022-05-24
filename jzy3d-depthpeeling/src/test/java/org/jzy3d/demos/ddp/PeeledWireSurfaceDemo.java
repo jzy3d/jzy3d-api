@@ -57,7 +57,7 @@ public class PeeledWireSurfaceDemo {
 
     // Setup a colorbar
     AWTColorbarLegend cbar = new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
-    cbar.setMinimumSize(new Dimension(100, 600));
+    cbar.setMinimumDimension(new Dimension(100, 600));
     //surface.setLegend(cbar);
     
     chart.open();

@@ -113,6 +113,22 @@ public class TestView {
     Assert.assertEquals(10, chart.getAxisLayout().getFont().getHeight());
 
   }
+  
+  
+  /*@Test
+  public void whenPixelScaleChange_ThenTextFont_ofAxisAndColorbar_Changes() {
+    // Given
+    ChartFactory f = new EmulGLChartFactory();
+    AWTChart chart = (AWTChart)f.newChart();
+    Shape surface = surface();
+    chart.add(surface);
+    
+    // -----------------------------------
+    // When
+    chart.view2d();
+
+
+  }*/
 
   
   protected Shape surface() {

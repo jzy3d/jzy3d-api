@@ -14,6 +14,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
+import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AbstractViewportManager;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -60,7 +61,7 @@ public abstract class AWTAbstractMouseSelector implements MouseListener, MouseMo
   }
 
   protected AWTRenderer2d initRenderer2d(final ICanvas c) {
-    return new AWTRenderer2d() {
+    return new AbstractAWTRenderer2d() {
       @Override
       public void paint(Graphics g, int canvasWidth, int canvasHeight) {
         drawSelection((Graphics2D) g, c.getRendererWidth(), c.getRendererHeight());

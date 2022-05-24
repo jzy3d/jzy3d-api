@@ -7,7 +7,7 @@ import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot2d.primitives.Serie2d;
-import org.jzy3d.plot3d.primitives.axis.layout.IAxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ElapsedTimeTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -25,7 +25,7 @@ public class Chart2d extends AWTNativeChart {
   protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
 
   public void layout2d() {
-    IAxisLayout axe = getAxisLayout();
+    AxisLayout axe = getAxisLayout();
     axe.setZAxeLabelDisplayed(false);
     axe.setTickLineDisplayed(false);
 
@@ -36,7 +36,7 @@ public class Chart2d extends AWTNativeChart {
   }
 
   public void asTimeChart(float timeMax, float ymin, float ymax, String xlabel, String ylabel) {
-    IAxisLayout axe = getAxisLayout();
+    AxisLayout axe = getAxisLayout();
     axe.setYAxisLabel(ylabel);
     axe.setXAxisLabel(xlabel);
     axe.setXTickRenderer(new ElapsedTimeTickRenderer());

@@ -3,9 +3,7 @@ package org.jzy3d.demos.surface;
 import org.jzy3d.analysis.AWTAbstractAnalysis;
 import org.jzy3d.analysis.AnalysisLauncher;
 import org.jzy3d.chart.factories.AWTChartFactory;
-import org.jzy3d.chart.factories.AWTPainterFactory;
 import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -15,8 +13,6 @@ import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 
 /**

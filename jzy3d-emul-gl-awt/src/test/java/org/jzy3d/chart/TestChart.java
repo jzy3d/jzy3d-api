@@ -7,19 +7,16 @@ import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Range;
-import org.jzy3d.plot3d.builder.Mapper;
-import org.jzy3d.plot3d.builder.SurfaceBuilder;
-import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
-import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.SampleGeom;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
+import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 public class TestChart {
   /**
@@ -40,14 +37,14 @@ public class TestChart {
     Assert.assertTrue("Check chart is animated", chart.getQuality().isAnimated());
 
     // When
-    ICameraMouseController mouse = chart.addMouseCameraController();
+    ICameraMouseController mouse = chart.addMouse();
     // Then
     Assert.assertFalse(mouse.isUpdateViewDefault());
     Assert.assertFalse(mouse.getThread().isUpdateViewDefault());
 
 
     // When
-    ICameraKeyController key = chart.addKeyboardCameraController();
+    ICameraKeyController key = chart.addKeyboard();
     // Then
     Assert.assertFalse(key.isUpdateViewDefault());
 
@@ -71,13 +68,13 @@ public class TestChart {
     Assert.assertFalse("Check chart is NOT animated", chart.getQuality().isAnimated());
 
     // When
-    ICameraMouseController mouse = chart.addMouseCameraController();
+    ICameraMouseController mouse = chart.addMouse();
     // Then
     Assert.assertTrue(mouse.isUpdateViewDefault());
     Assert.assertTrue(mouse.getThread().isUpdateViewDefault());
 
     // When
-    ICameraKeyController key = chart.addKeyboardCameraController();
+    ICameraKeyController key = chart.addKeyboard();
     // Then
     Assert.assertTrue(key.isUpdateViewDefault());
 
@@ -93,8 +90,8 @@ public class TestChart {
     ChartFactory factory = new EmulGLChartFactory();
     Chart chart = factory.newChart(q);
 
-    ICameraMouseController mouse = chart.addMouseCameraController();
-    ICameraKeyController key = chart.addKeyboardCameraController();
+    ICameraMouseController mouse = chart.addMouse();
+    ICameraKeyController key = chart.addKeyboard();
 
     // Then animated controllers
     Assert.assertFalse("Check chart is NOT animated", chart.getQuality().isAnimated());
@@ -123,7 +120,7 @@ public class TestChart {
     // --------------------------
     // When
 
-    chart.add(surface());
+    chart.add(SampleGeom.surface());
 
     // --------------------------
     // Then
@@ -140,7 +137,7 @@ public class TestChart {
     ChartFactory factory = new EmulGLChartFactory();
     factory.getPainterFactory().setOffscreen(500, 500);
     Chart chart = factory.newChart();
-    chart.add(surface());
+    chart.add(SampleGeom.surface());
 
     // --------------------------
     // When
@@ -166,7 +163,7 @@ public class TestChart {
     // Given
     ChartFactory f = new EmulGLChartFactory();
     Chart c = f.newChart();
-    c.add(surface()); // need an object to have camera eye != {0,0,0}
+    c.add(SampleGeom.surface()); // need an object to have camera eye != {0,0,0}
     Light light = c.addLightOnCamera();
     
     Coord3d eye1 = c.getView().getCamera().getEye();
@@ -186,27 +183,80 @@ public class TestChart {
     Assert.assertEquals(eye2, light.getPosition());
   }
 
-  protected Shape surface() {
-    Mapper mapper = new Mapper() {
-      @Override
-      public double f(double x, double y) {
-        return x * Math.sin(x * y);
-      }
-    };
-    Range range = new Range(-3, 3);
-    int steps = 50;
+  @Test
+  public void whenToggling_3Dto2Dto3D_thenAxisSettingsAreRestored() {
+    
+    // Given
+    ChartFactory f = new EmulGLChartFactory();
+    Chart c = f.newChart();
+    c.add(SampleGeom.surface());
+    c.render();
 
-    Shape surface =
-        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-    surface.setPolygonOffsetFillEnable(false);
+    // ---------------------------
+    // When
+    AxisLayout axisLayout = c.getAxisLayout();
+    axisLayout.setXAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+    axisLayout.setYAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+    axisLayout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
+    
+    View view = c.getView();
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
+    Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(true, axisLayout.isZAxeLabelDisplayed());
+    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
 
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f));
+    
+    Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
+    Assert.assertEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+    Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, view.getCamera().getViewportMode());
+    
+    Assert.assertTrue(view.getSquared());
+    
+    // ---------------------------
+    // When Switch to 2D
+    
+    c.view2d();
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getYAxisLabelOrientation());
+    Assert.assertEquals(false, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(false, axisLayout.isZAxeLabelDisplayed());
+    Assert.assertEquals(false, axisLayout.isZTickLabelDisplayed());
 
-    surface.setColorMapper(colorMapper);
-    surface.setFaceDisplayed(true);
-    surface.setWireframeDisplayed(true);
-    surface.setWireframeColor(Color.BLACK);
-    return surface;
+    Assert.assertEquals(ViewPositionMode.TOP, view.getViewMode());
+    Assert.assertNotEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+    Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, view.getCamera().getViewportMode());
+
+    Assert.assertFalse("View should not be squared for accurate 2D layout", view.getSquared());
+
+    
+    // ---------------------------
+    // When Switch back to 3D
+    
+    c.view3d();
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
+    Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(true, axisLayout.isZAxeLabelDisplayed());
+    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
+
+
+    // azimuth & elevation restored / should % with PI for a polar viewpoint
+    //Assert.assertEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+
+    Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
+    Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, view.getCamera().getViewportMode());
+
+    Assert.assertTrue(view.getSquared());
+    
+    
   }
 }

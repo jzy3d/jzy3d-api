@@ -1,93 +1,145 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
-import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.tooltips.ITooltipRenderer;
 import org.jzy3d.plot3d.rendering.tooltips.Tooltip;
 import com.jogamp.opengl.util.awt.Overlay;
 
+/**
+ * Renders all {@link Tooltip}s and {@link AWTRenderer2d}s on top of the scene.
+ * 
+ * The current pixel scale is taken into account so that all {@link AWTRenderer2d} do not have to
+ * worry about it.
+ * 
+ * @see {@link #setUseFullCanvas(boolean)}
+ */
 public class AWTNativeViewOverlay implements IViewOverlay {
   protected static Logger LOGGER = LogManager.getLogger(AWTNativeViewOverlay.class);
 
   protected Overlay overlay;
   protected java.awt.Color overlayBackground = new java.awt.Color(0, 0, 0, 0);
 
-  /**
-   * Renders all provided {@link Tooltip}s and {@link AWTRenderer2d}s on top of the scene.
-   * 
-   * Due to the behaviour of the {@link Overlay} implementation, Java2d geometries must be drawn
-   * relative to the {@link Chart}'s {@link IScreenCanvas}, BUT will then be stretched to fit in the
-   * {@link Camera}'s viewport. This bug is very important to consider, since the Camera's viewport
-   * may not occupy the full {@link IScreenCanvas}. Indeed, when View is not maximized (like the
-   * default behaviour), the viewport remains square and centered in the canvas, meaning the Overlay
-   * won't cover the full canvas area.
-   * 
-   * In other words, the following piece of code draws a border around the {@link View}, and not
-   * around the complete chart canvas, although queried to occupy chart canvas dimensions:
-   * 
-   * g2d.drawRect(1, 1, chart.getCanvas().getRendererWidth()-2,
-   * chart.getCanvas().getRendererHeight()-2);
-   * 
-   * {@link renderOverlay()} must be called while the OpenGL2 context for the drawable is current,
-   * and after the OpenGL2 scene has been rendered.
-   */
+  protected boolean useFullCanvas = true;
+
   @Override
   public void render(View view, ViewportConfiguration viewport, IPainter painter) {
     AWTView awtView = ((AWTView) view);
     ICanvas canvas = view.getCanvas();
     INativeCanvas nCanvas = (INativeCanvas) canvas;
 
-    if (!awtView.hasOverlayStuffs())
+    if (!awtView.hasOverlayStuffs() || !(viewport.width > 0 && viewport.height > 0))
       return;
 
     if (overlay == null)
       this.overlay = new Overlay(nCanvas.getDrawable());
 
-    // TODO: don't know why needed to allow working with Overlay!!!????
+    // Reset the polygon mode to let the Overlay util work properly
     painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
-    painter.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+    // Define the canvas area to use
+    if (useFullCanvas) {
+      painter.glViewport(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+    } else {
+      // Only work on canvas section that relates to camera (not colorbar)
+      painter.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
+    }
 
-    if (overlay != null && viewport.width > 0 && viewport.height > 0) {
-      try {
-        if (nCanvas.getDrawable().getSurfaceWidth() > 0
-            && nCanvas.getDrawable().getSurfaceHeight() > 0) {
-          Graphics2D g2d = overlay.createGraphics();
-          
-          // make overlay HiDPI aware
-          Coord2d pixelScale = view.getPixelScale();
-          g2d.scale(pixelScale.x, pixelScale.y);
+    // Perform rendering
+    try {
+      if (nCanvas.getDrawable().getSurfaceWidth() > 0
+          && nCanvas.getDrawable().getSurfaceHeight() > 0) {
 
-          // Draw
-          g2d.setBackground(overlayBackground);
-          g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+        Graphics2D g2d = overlay.createGraphics();
 
-          // Tooltips
-          for (ITooltipRenderer t : awtView.getTooltips())
-            t.render(g2d);
+        // Consider HiDPI and viewports not occupying full canvas
+        configureG2DScale(view, viewport, canvas, g2d);
 
-          // Renderers
-          for (AWTRenderer2d renderer : awtView.getRenderers2d()) {
-            
-            renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
-          }
-          overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
-          overlay.drawAll();
-          g2d.dispose();
+        // Draw
+        g2d.setBackground(overlayBackground);
+        g2d.clearRect(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+
+        // Tooltips
+        for (ITooltipRenderer t : awtView.getTooltips()) {
+          t.render(g2d);
         }
 
-      } catch (Exception e) {
-        LOGGER.error(e, e);
+        // Renderers
+        for (AWTRenderer2d renderer : awtView.getRenderers2d()) {
+          renderer.setView(awtView);
+          renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
+        }
+
+        // Render all
+        overlay.markDirty(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+        overlay.drawAll();
+
+        g2d.dispose();
+      }
+
+    } catch (Exception e) {
+      LOGGER.error(e, e);
+    }
+  }
+
+  protected void configureG2DScale(View view, ViewportConfiguration viewport, ICanvas canvas,
+      Graphics2D g2d) {
+    // make overlay HiDPI aware so that legend and its text content
+    // remain the same size than axis text and constant over
+    // different screen
+
+    boolean scaled = false;
+
+    Coord2d pixelScale = view.getPixelScale();
+
+    if (pixelScale.x != 1 || pixelScale.y != 1) {
+      g2d.scale(pixelScale.x, pixelScale.y);
+      scaled = true;
+    }
+
+    // avoid a stretch effect when viewport does not occupy full canvas
+    // (occurs when adding a colorbar for native charts)
+
+    boolean unstretched = false;
+    if (!useFullCanvas) {
+      float xUnstretch = 1f * canvas.getRendererWidth() / viewport.width;
+      float yUnstretch = 1f * canvas.getRendererHeight() / viewport.height;
+
+      if (xUnstretch != 1 || yUnstretch != 1) {
+        g2d.scale(xUnstretch, yUnstretch);
+        unstretched = true;
       }
     }
+
+    // enable antialiasing and clean interpolation
+    if (unstretched || scaled) {
+      g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+      g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+          RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+    }
+  }
+
+  public boolean isUseFullCanvas() {
+    return useFullCanvas;
+  }
+
+  /**
+   * If true, the overlay will occupy the full canvas. If false, it will only occupy the viewport
+   * used by the {@Camera}, hence won't overlay on the colorbar.
+   * 
+   * If not occupying full canvas, a scale is applied to the Graphics2D instance of the overlay with
+   * additional rendering hints to avoid aliasing of the anti-stretch effect.
+   */
+  public void setUseFullCanvas(boolean useFullCanvas) {
+    this.useFullCanvas = useFullCanvas;
   }
 }

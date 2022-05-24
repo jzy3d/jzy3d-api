@@ -12,7 +12,6 @@ import org.jzy3d.junit.ChartTester;
 import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.Func3D;
-import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;

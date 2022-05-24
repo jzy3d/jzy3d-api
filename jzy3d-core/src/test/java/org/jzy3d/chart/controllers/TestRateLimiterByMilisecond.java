@@ -17,7 +17,7 @@ public class TestRateLimiterByMilisecond {
     Assert.assertFalse("Can't ask a second autorisation", rl.rateLimitCheck());
     
     // When / Then
-    Thread.sleep(milisecondRateLimit);
+    Thread.sleep(milisecondRateLimit+10);
     Assert.assertTrue("Rate limit elapsed allow to ask again", rl.rateLimitCheck());
   }
 
