@@ -30,3 +30,4 @@ doc/javadoc
 # Maven temporary files
 *.releaseBackup
 *.versionsBackup
+release.properties
