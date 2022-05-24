@@ -1,29 +1,23 @@
 package org.jzy3d.emulgl.unit;
 
+import java.awt.Insets;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
+import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.Range;
 import org.jzy3d.maths.Rectangle;
-import org.jzy3d.plot3d.builder.Mapper;
-import org.jzy3d.plot3d.builder.SurfaceBuilder;
-import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
-import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
-
 public class TestCamera_EmulGL_Onscreen {
-@Ignore("Unstable from command line")
+
   @Test
   public void whenViewShoot_thenCameraIsProperlySet() throws InterruptedException {
     // LoggerUtils.minimal();
@@ -46,7 +40,7 @@ public class TestCamera_EmulGL_Onscreen {
 
     Chart chart = factory.newChart(q);
     chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
-    chart.add(surface());
+    chart.add(SampleGeom.surface());
 
 
     // -----------------------------------
@@ -71,16 +65,16 @@ public class TestCamera_EmulGL_Onscreen {
     // After opening window to a chosen size
 
     Rectangle FRAME_SIZE = new Rectangle(800, 600);
-    int APP_BAR_HEIGHT = 22;
 
-
-    chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
+    IFrame frame = chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
 
     Thread.sleep(500);
 
+    considerFrameBorder(FRAME_SIZE, (FrameAWT) frame);
+
     // Then viewport size is set to occupy the full frame
     Assert.assertEquals(FRAME_SIZE.width, cam.getLastViewPort().getWidth());
-    Assert.assertEquals(FRAME_SIZE.height - APP_BAR_HEIGHT, cam.getLastViewPort().getHeight());
+    Assert.assertEquals(FRAME_SIZE.height, cam.getLastViewPort().getHeight());
 
     // ----------------------------------------
     // When change canvas size and update view
@@ -118,39 +112,12 @@ public class TestCamera_EmulGL_Onscreen {
      * int sideLength = 100; Assert.assertEquals(sideLength, cam.getLastViewPort().getHeight());
      * Assert.assertEquals(sideLength, cam.getLastViewPort().getWidth());
      */
-
-
-
   }
 
-  private static Shape surface() {
-
-    // ---------------------------
-    // DEFINE SURFACE MATHS
-    Mapper mapper = new Mapper() {
-      @Override
-      public double f(double x, double y) {
-        return x * Math.sin(x * y);
-      }
-    };
-    Range range = new Range(-3, 3);
-    int steps = 60;
-
-    // ---------------------------
-    // CUSTOMIZE SURFACE BUILDER FOR JGL
-    SurfaceBuilder builder = new SurfaceBuilder();
-
-    // ---------------------------
-    // MAKE SURFACE
-    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-    surface.setPolygonOffsetFillEnable(false);
-
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, 0.650f));
-    surface.setColorMapper(colorMapper);
-    surface.setFaceDisplayed(true);
-    surface.setWireframeDisplayed(true);
-    surface.setWireframeColor(Color.BLACK);
-    return surface;
+  private static void considerFrameBorder(Rectangle initialFrameSize, FrameAWT frame) {
+    // consider frame border
+    Insets insets = frame.getInsets();
+    initialFrameSize.width -= insets.left + insets.right;
+    initialFrameSize.height -= insets.top + insets.bottom;
   }
 }
