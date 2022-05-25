@@ -22,6 +22,8 @@ import org.jzy3d.plot3d.text.align.Vertical;
  * applied after the initial layout is processed according to the settings, the text length, the
  * font size and the text position.
  * 
+ * It supports Unicode characters and all fonts made available by {@link java.awt.Font}.
+ * 
  * Rendering text relies on {@link IPainter#drawText(Font, String, Coord3d, Color, float)} which was
  * introduced as of Jzy3D 2.0 and offers much more flexibility than the initial simple
  * {@link IPainter#glutBitmapString(int, String)} which only support two fonts.
@@ -100,16 +102,5 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     txtBounds.add(painter.getCamera().screenToModel(painter, botLeft));
     txtBounds.add(painter.getCamera().screenToModel(painter, topRight));
     return txtBounds;
-  }
-
-
-  /** Left as a helper for subclasses. TODO delete me and subclass */
-  protected void glRasterPos(IPainter painter, Coord3d sceneOffset,
-      Coord3d screenPositionAligned3d) {
-    if (spaceTransformer != null) {
-      screenPositionAligned3d = spaceTransformer.compute(screenPositionAligned3d);
-    }
-
-    painter.raster(screenPositionAligned3d.add(sceneOffset), null);
   }
 }

@@ -256,9 +256,18 @@ public class Camera extends AbstractViewportManager {
     setNearFarClippingPlanesWithRadius(radius);
   }
 
-  protected void setNearFarClippingPlanesWithRadius(float radius) {
-    this.near = (float) eye.distance(target) - radius * 2;
-    this.far = (float) eye.distance(target) + radius * 2;
+  /**
+   * Set the boundaries of the model space that should be visible by the camera, for a 2D chart
+   * having only X and Y boundaries.
+   * 
+   * After calling this method, {@link #getProjectionMode()} returns
+   * {@link ProjectionMode.Projection2D}.
+   */
+  public void setRenderingSquare(BoundingBox2d renderingSquare, float zNear, float zFar) {
+    this.renderingSquare = renderingSquare;
+    this.projectionMode = ProjectionMode.Projection2D;
+    this.near = zNear;
+    this.far = zFar;
   }
 
   /**
@@ -276,6 +285,11 @@ public class Camera extends AbstractViewportManager {
     float radius = Math.max(renderingSquare.xrange(), renderingSquare.yrange()) / 2;
 
     setNearFarClippingPlanesWithRadius(radius);
+  }
+  
+  protected void setNearFarClippingPlanesWithRadius(float radius) {
+    this.near = (float) eye.distance(target) - radius * 2;
+    this.far = (float) eye.distance(target) + radius * 2;
   }
 
 
