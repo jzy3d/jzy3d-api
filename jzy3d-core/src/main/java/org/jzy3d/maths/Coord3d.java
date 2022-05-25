@@ -250,6 +250,10 @@ public class Coord3d implements Serializable {
     return new Coord3d(x * value, y * value, z * value);
   }
 
+  public Coord3d mul(double value) {
+    return mul((float)value);
+  }
+  
   public void mulSelf(Coord3d c2) {
     x *= c2.x;
     y *= c2.y;

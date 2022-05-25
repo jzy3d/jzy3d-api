@@ -56,15 +56,11 @@ public class Vector3d {
   /**
    * Compute the dot product (a.k.a scalar product) between the current and given vector.
    * 
-   * Remind that the dot product is:
-   * <ul>
-   * <li>0 if vectors are perpendicular
-   * <li>
-   * <li>
-   * </ul>
+   * Remind that the dot product is 0 if vectors are perpendicular
    * 
    * @param v input vector
    * @return the dot product
+   * @see https://en.wikipedia.org/wiki/Dot_product
    */
   public float dot(Vector3d v) {
     Coord3d v1 = vector();
@@ -75,6 +71,10 @@ public class Vector3d {
   /**
    * Computes the vectorial product of the current and the given vector. The result is a vector
    * defined as a Coord3d, that is perpendicular to the plan induced by current vector and vector V.
+   * 
+   * <img src="doc-files/cross-product.png"/>
+   * 
+   * @see https://en.wikipedia.org/wiki/Cross_product
    */
   public Coord3d cross(Vector3d v) {
     Coord3d v1 = this.vector();
