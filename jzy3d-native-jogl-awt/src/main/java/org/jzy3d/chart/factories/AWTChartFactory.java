@@ -45,6 +45,17 @@ public class AWTChartFactory extends ChartFactory {
   public AWTNativeChart newChart(IChartFactory factory, Quality quality) {
     return new AWTNativeChart(factory, quality);
   }
+  
+  @Override
+  public AWTNativeChart newChart() {
+    return newChart(Quality.Advanced());
+  }
+
+  @Override
+  public AWTNativeChart newChart(Quality quality) {
+    return newChart(getFactory(), quality);
+  }
+
 
   @Override
   public IChartFactory getFactory() {
