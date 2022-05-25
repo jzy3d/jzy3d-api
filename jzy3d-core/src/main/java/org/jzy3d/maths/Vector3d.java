@@ -18,6 +18,24 @@ public class Vector3d {
     this.z2 = z2;
   }
 
+  public Vector3d(float x2, float y2, float z2) {
+    this.x1 = 0;
+    this.x2 = x2;
+    this.y1 = 0;
+    this.y2 = y2;
+    this.z1 = 0;
+    this.z2 = z2;
+  }
+
+  public Vector3d(double x2, double y2, double z2) {
+    this.x1 = 0;
+    this.x2 = (float)x2;
+    this.y1 = 0;
+    this.y2 = (float)y2;
+    this.z1 = 0;
+    this.z2 = (float)z2;
+  }
+
   /** Create a vector, described by two coordinates. */
   public Vector3d(Coord3d p1, Coord3d p2) {
     x1 = p1.x;
@@ -36,9 +54,9 @@ public class Vector3d {
   }
 
   /**
-   * Compute the dot product between and current and given vector.
+   * Compute the dot product (a.k.a scalar product) between the current and given vector.
    * 
-   * Reminnd that the dot product is:
+   * Remind that the dot product is:
    * <ul>
    * <li>0 if vectors are perpendicular
    * <li>

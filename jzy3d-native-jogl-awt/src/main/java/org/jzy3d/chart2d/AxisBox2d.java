@@ -51,39 +51,6 @@ public class AxisBox2d extends AxisBox {
     return 3;
   }
 
-  
-  /*
-   * THESE TWO METHOD HAVE MOVED TO AxisLabelProcessor
-   * @Override
-  public Horizontal align(Horizontal hal, int direction, Camera cam, Coord3d tickPosition) {
-    if (direction == AXE_X) {
-      return Horizontal.CENTER;
-    } else if (direction == AXE_Y) {
-      return Horizontal.LEFT;
-    } else {
-      return Horizontal.LEFT;
-    }
-  }
-
-  @Override
-  public void drawAxisLabel(IPainter painter, int direction, Color color,
-      BoundingBox3d ticksTxtBounds, Coord3d labelPosition, String axeLabel, float rotation, Coord2d offset) {
-    BoundingBox3d labelBounds = null;
-
-    if (isXAxeLabelDisplayed(direction)) {
-      // doTransform(gl);
-      labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
-          labelPosition, Horizontal.CENTER, Vertical.CENTER, color);
-    } else if (isYAxeLabelDisplayed(direction)) {
-      labelBounds = textRenderer.drawText(painter, getLayout().getFont(), axeLabel,
-          labelPosition, Horizontal.CENTER, Vertical.CENTER, color);
-      // labelBounds = txtRotation.drawText(gl, glu, cam, axeLabel, labelPosition, Halign.CENTER,
-      // Valign.CENTER, color);
-    }
-    if (labelBounds != null)
-      ticksTxtBounds.add(labelBounds);
-    doTransform(painter);
-  }*/
 
   /* VERTICAL ROTATION */
 
@@ -147,6 +114,14 @@ public class AxisBox2d extends AxisBox {
     }
   }
 
+  protected void glRasterPos(IPainter painter, Coord3d sceneOffset,
+      Coord3d screenPositionAligned3d) {
+    if (spaceTransformer != null) {
+      screenPositionAligned3d = spaceTransformer.compute(screenPositionAligned3d);
+    }
+
+    painter.raster(screenPositionAligned3d.add(sceneOffset), null);
+  }
 
   /*
    * public void vertical(GL gl, Coord3d currentPosition, int direction) { translateTo(gl,

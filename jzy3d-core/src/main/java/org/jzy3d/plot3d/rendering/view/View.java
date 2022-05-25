@@ -1342,9 +1342,16 @@ public class View {
     float ymin = -yrange / 2 - view2DProcessing.marginBottomModel;
     float ymax = +yrange / 2 + view2DProcessing.marginTopModel;
 
+    BoundingBox2d xySquare = new BoundingBox2d(xmin, xmax, ymin, ymax);
+
+    
+    // Z range
+    float dist = (float)cam.getEye().distance(cam.getTarget());
+    float zmax = dist - bounds.getZRange().getMax() ; 
+    float zmin = dist - bounds.getZRange().getMin()+1 ;
+    
     // configure camera rendering volume
-    BoundingBox2d sq = new BoundingBox2d(xmin, xmax, ymin, ymax);
-    cam.setRenderingSquare(sq);
+    cam.setRenderingSquare(xySquare, zmax, zmin);
   }
 
 
