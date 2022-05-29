@@ -1,0 +1,59 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-all</artifactId>
+		<version>2.1.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>jzy3d-native-lwjgl</artifactId>
+	<name>Jzy3d Native Implementation with LWJGL</name>
+
+	<properties>
+		<lwjgl.version>3.3.1</lwjgl.version>
+		<lwjgl.natives>natives-macos</lwjgl.natives>
+	</properties>
+
+	<dependencyManagement>
+			<dependencies>
+				<dependency>
+					<groupId>org.lwjgl</groupId>
+					<artifactId>lwjgl-bom</artifactId>
+					<version>${lwjgl.version}</version>
+					<scope>import</scope>
+					<type>pom</type>
+				</dependency>
+			</dependencies>
+		</dependencyManagement>
+
+	<dependencies>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.lwjglx</groupId>
+			<artifactId>lwjgl3-awt</artifactId>
+			<version>0.1.8</version>
+			<!--<version>0.1.9-SNAPSHOT</version>-->
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-opengl</artifactId>
+			<!--<optional>true</optional>-->
+		</dependency>
+		<dependency>
+			<groupId>org.lwjgl</groupId>
+			<artifactId>lwjgl-opengl</artifactId>
+			<classifier>${lwjgl.natives}</classifier>
+			<!--<optional>true</optional>-->
+		</dependency>
+
+	</dependencies>
+</project>
