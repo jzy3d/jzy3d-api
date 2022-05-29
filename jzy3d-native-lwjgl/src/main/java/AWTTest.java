@@ -10,8 +10,24 @@ import javax.swing.SwingUtilities;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+/**
+ * -Djava.library.path=./lib
+ * 
+ * @author Martin
+ *
+ */
 public class AWTTest {
     public static void main(String[] args) {
+    	ClassLoader cl = ClassLoader.getSystemClassLoader();
+
+        URL[] urls = ((URLClassLoader)cl).getURLs();
+
+        for(URL url: urls){
+        	System.out.println(url.getFile());
+        }
+        
     	int width = 600;
     	int height = 600;
     	
