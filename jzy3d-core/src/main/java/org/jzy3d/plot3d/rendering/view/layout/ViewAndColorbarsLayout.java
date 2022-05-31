@@ -70,21 +70,24 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     hasColorbars = list.size() > 0;
     
     if (hasColorbars) {
-      int minwidth = 0;
+      
+      int minWidth = 0;
+      
       for (ILegend data : list) {
-        minwidth += data.getMinimumDimension().width;
+        minWidth += data.getMinimumDimension().width;
       }
-      
-      minwidth *= chart.getView().getPixelScale().x;
+      minWidth *= chart.getView().getPixelScale().x;
 
-      
-      screenSeparator =
-          ((float) (canvas.getRendererWidth() - minwidth)) / ((float) canvas.getRendererWidth());/// 0.7f;
+      screenSeparator = computeSeparator(canvas, minWidth);
     
     
     } else {
       screenSeparator = 1.0f;
     }
+  }
+
+  protected float computeSeparator(final ICanvas canvas, int minWidth) {
+    return ((float) (canvas.getRendererWidth() - minWidth)) / ((float) canvas.getRendererWidth());
   }
 
   /**
@@ -120,9 +123,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
 
   protected void renderLegends(IPainter painter, Chart chart) {
     if (hasColorbars) {
-      legendsWidth = screenSeparator * chart.getCanvas().getRendererWidth();
-      
-      //legendsWidth /= chart.getView().getPixelScale().x;
+      updateLegendsWidth(chart);
       
       renderLegends(painter, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
     } else {
@@ -130,8 +131,13 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     }
   }
 
+  protected void updateLegendsWidth(Chart chart) {
+    legendsWidth = (1-screenSeparator) * chart.getCanvas().getRendererWidth();
+    //legendsWidth /= chart.getView().getPixelScale().x;
+  }
+
   /**
-   * Renders the legend within the screen slice given by the left and right parameters.
+   * Renders the legends within the screen slice given by the left and right parameters.
    */
   protected void renderLegends(IPainter painter, float left, float right, List<ILegend> legends,
       ICanvas canvas) {

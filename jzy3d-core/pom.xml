@@ -47,7 +47,6 @@
 		<dependency>
 			<groupId>com.diogonunes</groupId>
 			<artifactId>JColor</artifactId>
-			<version>5.2.0</version>
 		</dependency>
 
 

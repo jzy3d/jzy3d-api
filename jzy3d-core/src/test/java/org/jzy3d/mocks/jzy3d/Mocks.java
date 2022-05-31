@@ -1,6 +1,7 @@
 package org.jzy3d.mocks.jzy3d;
 
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
@@ -102,7 +103,6 @@ public class Mocks {
 
     // Axis
     AxisLayout axisLayout = new AxisLayout();
-    System.out.println(axisLayout.getFont());
     
     IAxis axis = mock(IAxis.class);
     when(axis.getLayout()).thenReturn(axisLayout);
