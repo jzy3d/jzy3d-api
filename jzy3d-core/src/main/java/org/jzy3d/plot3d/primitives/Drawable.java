@@ -6,7 +6,6 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.events.DrawableChangedEvent;
 import org.jzy3d.events.IDrawableListener;
 import org.jzy3d.maths.BoundingBox3d;
-import org.jzy3d.maths.BoundingBox3d.Corners;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.IPainter;

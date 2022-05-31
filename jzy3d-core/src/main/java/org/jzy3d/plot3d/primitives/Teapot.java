@@ -6,9 +6,6 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
-import org.jzy3d.plot3d.primitives.PolygonFill;
-import org.jzy3d.plot3d.primitives.PolygonMode;
-import org.jzy3d.plot3d.primitives.Wireframeable;
 import org.jzy3d.plot3d.transform.Rotate;
 import org.jzy3d.plot3d.transform.Transform;
 
