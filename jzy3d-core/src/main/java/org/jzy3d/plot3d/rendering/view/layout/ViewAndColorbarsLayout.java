@@ -36,7 +36,7 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
  */
 public class ViewAndColorbarsLayout implements IViewportLayout {
   protected float screenSeparator = 1.0f;
-  protected boolean hasMeta = true;
+  protected boolean hasColorbars = true;
 
   protected ViewportConfiguration sceneViewport;
   protected ViewportConfiguration backgroundViewport;
@@ -67,8 +67,9 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   // Separator only used for native since emulgl can not have two viewport side by side,
   // only a single viewport with images rendered on top
   protected void computeSeparator(final ICanvas canvas, final List<ILegend> list) {
-    hasMeta = list.size() > 0;
-    if (hasMeta) {
+    hasColorbars = list.size() > 0;
+    
+    if (hasColorbars) {
       int minwidth = 0;
       for (ILegend data : list) {
         minwidth += data.getMinimumDimension().width;
@@ -118,7 +119,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   }
 
   protected void renderLegends(IPainter painter, Chart chart) {
-    if (hasMeta) {
+    if (hasColorbars) {
       legendsWidth = screenSeparator * chart.getCanvas().getRendererWidth();
       
       //legendsWidth /= chart.getView().getPixelScale().x;

@@ -10,7 +10,6 @@ import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
-import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 
 public class TestView2DProcessing {
 
