@@ -16,13 +16,13 @@ public abstract class AbstractRemapTask implements Runnable {
   protected SingleParameterMapper mapper;
   protected String info;
   protected TicToc time = new TicToc();
-  
+
   protected int sleepTimeMs = 1;
-  
+
   protected OnRemap onRemap;
 
   protected double remapTimeMs = 0;
-  
+
 
   public AbstractRemapTask(Shape surface, SingleParameterMapper mapper) {
     this.surface = surface;
@@ -40,16 +40,22 @@ public abstract class AbstractRemapTask implements Runnable {
       try {
         Thread.sleep(sleepTimeMs);
       } catch (InterruptedException e) {
+        e.printStackTrace();
       }
       time.tic();
-      remap();
+
+      try {
+        remap();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
       time.toc();
-      
+
       remapTimeMs = time.elapsedMilisecond();
 
-      info = Utils.num2str(remapTimeMs*1000, 4) + "s to remap surface";
-      
-      if(onRemap!=null) {
+      info = Utils.num2str(remapTimeMs) + "ms to remap surface";
+
+      if (onRemap != null) {
         onRemap.onRemap();
       }
     }
@@ -86,11 +92,11 @@ public abstract class AbstractRemapTask implements Runnable {
   public void setSleepTimeMs(int sleepTimeMs) {
     this.sleepTimeMs = sleepTimeMs;
   }
-  
-  
-  
+
+
+
   // -----------------
-  
+
   public double getRemapTimeMs() {
     return remapTimeMs;
   }
@@ -103,10 +109,10 @@ public abstract class AbstractRemapTask implements Runnable {
     this.onRemap = onRemap;
   }
 
-  
-  public static interface OnRemap{
+
+  public static interface OnRemap {
     public void onRemap();
   }
-  
-  
+
+
 }
