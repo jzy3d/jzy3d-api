@@ -10,7 +10,13 @@ public class TestEmulGLViewAndColorbarsLayout extends TestViewAndColorbarsLayout
     // TODO :REMOVE ME!!
     layout.fixHiDPI = false;
     
-    //TestViewAndColorbarsLayout t = new TestViewAndColorbarsLayout();
     whenColorbars_ThenScreenSeparatorIsProcessed(layout);
+    
+    layout.setShrinkColorbar(false);
+    whenColorbars_ThenScreenSeparatorIsProcessed(layout);
+
+    layout.setShrinkColorbar(true);
+    whenColorbars_ThenScreenSeparatorIsProcessed(layout);
+
   }
 }

@@ -55,7 +55,14 @@ public class TestViewAndColorbarsLayout {
 
   @Test
   public void whenColorbars_ThenScreenSeparatorIsProcessed() {
-    whenColorbars_ThenScreenSeparatorIsProcessed(new ViewAndColorbarsLayout());
+    ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
+
+    layout.setShrinkColorbar(false);
+    whenColorbars_ThenScreenSeparatorIsProcessed(layout);
+
+    layout.setShrinkColorbar(true);
+    whenColorbars_ThenScreenSeparatorIsProcessed(layout);
+
   }
   
   public void whenColorbars_ThenScreenSeparatorIsProcessed(ViewAndColorbarsLayout layout) {
@@ -69,10 +76,9 @@ public class TestViewAndColorbarsLayout {
     int numberOfColorbars = 2; // multiple colorbars
 
     // --------------------------------
-    // Object under test
+    // Check object under test
 
-    //ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
-
+    //Assert.assertFalse(layout.isShrinkColorbar());
 
     // --------------------------------
     // Given a chart with colorbars
@@ -122,15 +128,6 @@ public class TestViewAndColorbarsLayout {
     Assert.assertNotEquals(1, expectSeparator);
     Assert.assertEquals(expectSeparator, layout.screenSeparator, 0.1);
 
-    // --------------------------------
-    // When not rendered already
-
-    // DO NOTHING
-
-    // --------------------------------
-    // Then legend width is not known yet
-
-    Assert.assertEquals(0, layout.legendsWidth, 0);
 
     // --------------------------------
     // When rendering
