@@ -39,6 +39,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
+import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.lod.LODCandidates;
@@ -67,7 +68,7 @@ public class Chart {
   protected IChartFactory factory;
 
   protected Quality quality;
-  protected ChartScene scene;
+  protected Scene scene;
   protected View view;
   protected ICanvas canvas;
 
@@ -211,11 +212,6 @@ public class Chart {
 
   public IFrame display(Rectangle rectangle, String title) {
     return getFactory().getPainterFactory().newFrame(this, rectangle, title);
-  }
-
-  public void clear() {
-    scene.clear();
-    view.shoot();
   }
 
   public void dispose() {
@@ -1016,7 +1012,7 @@ public class Chart {
     return view;
   }
 
-  public ChartScene getScene() {
+  public Scene getScene() {
     return scene;
   }
 

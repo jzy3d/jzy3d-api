@@ -124,7 +124,7 @@ public class Scene {
     views.remove(view);
     view.dispose();
   }
-
+  
   /** Return the scene {@link Graph} string representation. */
   @Override
   public String toString() {

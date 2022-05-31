@@ -5,18 +5,56 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
+import org.jzy3d.plot3d.primitives.axis.IAxis;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
+import org.jzy3d.plot3d.rendering.scene.Graph;
+import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.mockito.Mockito;
 
 public class Mocks {
+
+  public static Chart Chart(int width, int height, float viewScale) {
+    // Scene graph mocks
+    Graph graph = mock(Graph.class);
+
+    Scene scene = mock(Scene.class);
+    when(scene.getGraph()).thenReturn(graph);
+    
+    
+    // View, canvas and painter mocks
+    View view = Mocks.ViewAndPainter(viewScale);
+    
+    ICanvas canvas = view.getCanvas();
+    when(canvas.getRendererWidth()).thenReturn(width);
+    when(canvas.getRendererHeight()).thenReturn(height);
+    
+    IPainter painter = view.getPainter();
+    
+    
+    //Chart mock
+    Chart chart = Mockito.mock(Chart.class);
+    
+    when(chart.getView()).thenReturn(view);
+    when(chart.getScene()).thenReturn(scene);
+    when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getPainter()).thenReturn(painter);
+    
+    return chart;
+  }
+
+  
+  // ---------------------------------------
+  
   public static AxisLayout AxisLayout() {
     return mock(AxisLayout.class);
   }
@@ -61,11 +99,29 @@ public class Mocks {
 
   public static View ViewAndPainter(float viewScale, String os, String version, Coord2d jvmScale,
       Coord2d gpuScale) {
+
+    // Axis
+    AxisLayout axisLayout = new AxisLayout();
+    System.out.println(axisLayout.getFont());
+    
+    IAxis axis = mock(IAxis.class);
+    when(axis.getLayout()).thenReturn(axisLayout);
+    
+    
+    // Camera
+    Camera camera = mock(Camera.class);
+    
+    // View
     View view = mock(View.class);
+
+    when(view.getAxis()).thenReturn(axis);
+    when(view.getCamera()).thenReturn(camera);
     when(view.getPixelScale()).thenReturn(new Coord2d(viewScale, viewScale));
 
+    // Painter
     IPainter painter = Painter(os, version);
 
+    // Canvas
     ICanvas canvas = mock(ICanvas.class);
 
     if (gpuScale != null)
@@ -73,8 +129,13 @@ public class Mocks {
     if (jvmScale != null)
       when(canvas.getPixelScaleJVM()).thenReturn(jvmScale);
 
+    // All cross references
+    when(painter.getView()).thenReturn(view);
     when(painter.getCanvas()).thenReturn(canvas);
+    
+    when(view.getCanvas()).thenReturn(canvas);
     when(view.getPainter()).thenReturn(painter);
+    
     return view;
   }
 

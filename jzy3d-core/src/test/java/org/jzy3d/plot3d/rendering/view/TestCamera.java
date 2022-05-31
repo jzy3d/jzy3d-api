@@ -177,7 +177,7 @@ public class TestCamera {
     // ------------------------------------
     // When configure a rendering square
     
-    float CLIP_DIST = 1;
+    //float CLIP_DIST = 1;
     BoundingBox2d SQUARE = new BoundingBox2d(-5, +5, -5, +5);
     
     camera.setRenderingSquare(SQUARE);
