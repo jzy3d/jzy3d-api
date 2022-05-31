@@ -889,7 +889,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>Diff chart:<br><img src="target/error-Overlay_Native_AWT_HiDPI=OFF_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_DIFF.png"><br>Actual chart:<br><img src="target/error-Overlay_Native_AWT_HiDPI=OFF_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-Overlay_Native_AWT_HiDPI=OFF_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 </tr>
