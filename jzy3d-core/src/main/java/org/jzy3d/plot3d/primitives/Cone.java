@@ -45,6 +45,5 @@ public class Cone extends Composite {
     
     setWireframeDisplayed(isWireframeDisplayed());
 
-    //setWireframeDisplayed(false);
   }
 }
