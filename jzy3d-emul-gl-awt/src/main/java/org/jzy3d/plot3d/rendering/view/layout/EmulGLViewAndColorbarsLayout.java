@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.rendering.view.layout;
 import java.awt.image.BufferedImage;
 import java.util.List;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
@@ -48,18 +49,22 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
   @Override
   protected void renderLegends(IPainter painter, float left, float right, List<ILegend> legends,
       ICanvas canvas) {
-    EmulGLPainter emulGL = (EmulGLPainter) painter;
 
     int width = canvas.getRendererWidth();
     int height = canvas.getRendererHeight();
+
     
+    View view = chart.getView();
+    Coord2d pixelScale = view.getPixelScale();
 
     if (fixHiDPI) {
-      width = (int) (sceneViewport.getWidth() * emulGL.getGL().getPixelScaleX());
-      height = (int) (sceneViewport.getHeight() * emulGL.getGL().getPixelScaleY());// canvas.getRendererHeight();
+      width = (int) (sceneViewport.getWidth() * pixelScale.x);
+      height = (int) (sceneViewport.getHeight() * pixelScale.y);
     }
     
-    legendsWidth = (right-left)*width;
+    
+    updateLegendsWidth(chart);
+
 
     // ---------------------------------------
 
@@ -90,16 +95,16 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         
         BufferedImage legendImage = (BufferedImage) awtLegend.getImage();
         
-        int legendWidth = (int) (legendImage.getWidth() / emulGL.getGL().getPixelScaleX());
+        int legendWidth = (int) (legendImage.getWidth() / pixelScale.x);
 
         // ---------------------------------------
         // Processing yoffset with pixel scale
         int yOffset = 0;
-        if (emulGL.getGL().getPixelScaleY() == 1) {
+        if (pixelScale.y == 1) {
           yOffset = (int) (awtLegend.getMargin().height / 2f);
         } else {
           yOffset =
-              (int) ((emulGL.getGL().getPixelScaleY() - 1) * awtLegend.getMargin().height) / 2;
+              (int) ((pixelScale.y - 1) * awtLegend.getMargin().height) / 2;
         }
 
         // ---------------------------------------
@@ -108,9 +113,8 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         int xOffset = width - legendWidth * (k);
         
         // Display colorbar only if their remain space for plot that is wider than higher
-        //if(xOffset>height) {
-          emulGL.getGL().appendImageToDraw(legendImage, xOffset, yOffset);
-        //}
+        EmulGLPainter emulGL = (EmulGLPainter) painter;
+        emulGL.getGL().appendImageToDraw(legendImage, xOffset, yOffset);
 
       }
       // BYPASSED IMAGE RENDERING THAT DOES NOT WORK WELL IN jGL BUT KEEP EXPECTED OPENGL WAY
