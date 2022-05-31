@@ -10,11 +10,11 @@
 * Run ITTests of the extension APIs (macOS 10.12)
 
 ## Deploy
-* Generate and upload Javadoc
-* Deploy JARs
+* Generate and upload Javadoc `mvn javadoc:aggregate`
+* Deploy JARs `mvn deploy`
 
 ## Prepare next version
-* Bump all projects version to next version
+* Bump all projects version to next version `mvn release:prepare`
 
 ## Publish
 * Update website with this new version content
