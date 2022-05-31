@@ -1,7 +1,6 @@
 package org.jzy3d.chart.factories;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -30,7 +29,7 @@ public interface IChartFactory {
 
   public Chart newChart(IChartFactory factory, Quality quality);
 
-  public ChartScene newScene(boolean sort);
+  public Scene newScene(boolean sort);
 
   public Graph newGraph(Scene scene, AbstractOrderingStrategy strategy, boolean sort);
 
