@@ -1,6 +1,8 @@
 package org.jzy3d.plot3d.rendering.view.layout;
 
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +12,8 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.mocks.jzy3d.Mocks;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
+import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
 public class TestViewAndColorbarsLayout {
 
@@ -50,7 +54,11 @@ public class TestViewAndColorbarsLayout {
   }
 
   @Test
-  public void whenColorbarThenScreenSeparatorIsProcessed() {
+  public void whenColorbars_ThenScreenSeparatorIsProcessed() {
+    whenColorbars_ThenScreenSeparatorIsProcessed(new ViewAndColorbarsLayout());
+  }
+  
+  public void whenColorbars_ThenScreenSeparatorIsProcessed(ViewAndColorbarsLayout layout) {
     int WIDTH = 800;
     int HEIGHT = 600;
     float SCALE = 1.5f; // pixel ratio not 1
@@ -63,7 +71,7 @@ public class TestViewAndColorbarsLayout {
     // --------------------------------
     // Object under test
 
-    ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
+    //ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
 
 
     // --------------------------------
@@ -72,11 +80,18 @@ public class TestViewAndColorbarsLayout {
     Chart chart = Mocks.Chart(WIDTH, HEIGHT, SCALE);
 
 
-    ILegend legend = mock(ILegend.class);
-    List<ILegend> legends = colorbars(numberOfColorbars, legend);
-
+    //AWTColorbarLegend legend1 = new AWTC
+    //ILegend legend = mock(ILegend.class);
+    ILegend legend = spy(ILegend.class);
     when(legend.getMinimumDimension()).thenReturn(new Dimension(CBAR_WIDTH, CBAR_HEIGHT));
-    when(chart.getScene().getGraph().getLegends()).thenReturn(legends);
+    
+    //List<ILegend> legends = colorbars(numberOfColorbars, legend);
+    
+    Camera camera = spy(Camera.class);
+
+    when(chart.getView().getCamera()).thenReturn(camera);
+    
+    when(chart.getScene().getGraph().getLegends()).thenReturn(colorbars(numberOfColorbars, legend));
 
 
     // --------------------------------
@@ -86,15 +101,16 @@ public class TestViewAndColorbarsLayout {
 
 
     // --------------------------------
-    // Then layout configured for ONE colorbar
-    // and scene will occupy full canvas
+    // Then layout configured for TWO colorbar
 
     int expectRightSideWidth = (int) (CBAR_WIDTH * SCALE * numberOfColorbars);
     int expectLeftSideWidth = WIDTH - expectRightSideWidth;
 
+    // with scene occupying the whole the canvas MINUS the colorbar widths
     Assert.assertEquals(expectLeftSideWidth, layout.sceneViewport.getWidth());
     Assert.assertEquals(HEIGHT, layout.sceneViewport.getHeight());
 
+    // with background occupying full canvas
     Assert.assertEquals(WIDTH, layout.backgroundViewport.getWidth());
     Assert.assertEquals(HEIGHT, layout.backgroundViewport.getHeight());
 
@@ -106,8 +122,13 @@ public class TestViewAndColorbarsLayout {
     Assert.assertNotEquals(1, expectSeparator);
     Assert.assertEquals(expectSeparator, layout.screenSeparator, 0.1);
 
-
+    // --------------------------------
     // When not rendered already
+
+    // DO NOTHING
+
+    // --------------------------------
+    // Then legend width is not known yet
 
     Assert.assertEquals(0, layout.legendsWidth, 0);
 
@@ -116,16 +137,26 @@ public class TestViewAndColorbarsLayout {
 
     layout.render(chart.getPainter(), chart);
 
-    float expectLegendWidth = expectSeparator * WIDTH;
-
-
-    // C EST FAUX !!!!!!!
-    // C EST FAUX !!!!!!!
-
+    
+    // --------------------------------
+    // Then legend width processed is known
+    
+    float expectLegendWidth = expectRightSideWidth;
     Assert.assertEquals(expectLegendWidth, layout.legendsWidth, 0);
 
-    // Assert.assertEquals(expectRightSideWidth, layout.legendsWidth, 0);
 
+    // --------------------------------
+    // Then colorbars had their viewport defined
+    
+    float from = expectSeparator;
+    float mid = from + (1-expectSeparator)/2;
+    float to = 1;
+
+    verify(legend).setViewPort(800, 600, from, mid);
+    verify(legend).setViewPort(800, 600, mid, to);
+
+    verify(legend, times(2)).setViewportMode(ViewportMode.STRETCH_TO_FILL);
+    
   }
 
 
