@@ -108,7 +108,7 @@
 		</snapshotRepository>
 	</distributionManagement>
 
-	<!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
+    <!--<distributionManagement> <snapshotRepository> <id>ossrh</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
 		</snapshotRepository> <repository> <id>ossrh</id> <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url> 
 		</repository> </distributionManagement> -->
 
@@ -604,7 +604,7 @@
 				<plugins>
 					<!-- Use surefire to run integration tests which success may depend 
 						on GPU. Run them with mvn verify -Pintegration-tests -->
-					<plugin>
+    				<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<version>3.0.0-M5</version>

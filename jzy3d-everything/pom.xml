@@ -1,0 +1,105 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-all</artifactId>
+		<version>2.1.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>jzy3d-everything</artifactId>
+	<name>All Jzy3D module (except SWT)</name>
+
+	<properties>
+		<version.java>1.8</version.java>
+	</properties>
+
+	<dependencies>
+
+		<!-- JOGL -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-native-jogl-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency> <!-- For a single demo, remove me! -->
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-native-jogl-swing</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-native-jogl-newt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- <dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-native-jogl-swt</artifactId>
+			<version>${project.version}</version>
+		</dependency>-->
+
+		<!-- EmulGL -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-emul-gl-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- <dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-emul-gl-swt</artifactId>
+			<version>${project.version}</version>
+		</dependency>-->
+
+		<!-- Test tools -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-tester-native</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<!-- Reporting -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-io-xls</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+	</build>
+
+	<profiles>
+		<profile>
+			<id>integration-tests</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>3.0.0-M5</version>
+						<executions>
+							<execution>
+								<id>integration-test</id>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

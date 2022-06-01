@@ -41,6 +41,9 @@ public class MTest_Layout extends AWTAbstractAnalysis {
   public MTest_Layout() {
     factory = new EmulGLChartFactory();
   }
+  
+  Shape surface;
+  AWTColorbarLegend colorbar;
 
   @Override
   public void init() {
@@ -104,7 +107,7 @@ public class MTest_Layout extends AWTAbstractAnalysis {
     // view.setMaintainAllObjectsInView(true);
     view.setCameraRenderingSphereRadiusFactor(1.1f);
 
-    AWTColorbarLegend colorbar =
+    colorbar =
         new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
     surface.setLegend(colorbar);
     chart.add(surface);

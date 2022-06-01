@@ -842,6 +842,13 @@ public class View {
       vp.viewWillRender(e);
   }
 
+  protected void fireViewLifecycleHasRendered(ViewLifecycleEvent e) {
+    for (IViewLifecycleEventListener vp : viewLifecycleListeners)
+      vp.viewHasRendered(e);
+  }
+
+  
+
   /* */
 
   /**
@@ -969,6 +976,9 @@ public class View {
 
     if (dimensionDirty)
       dimensionDirty = false;
+    
+    fireViewLifecycleHasRendered(null);
+
   }
 
   /**

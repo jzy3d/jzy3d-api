@@ -4,4 +4,6 @@ public interface IViewLifecycleEventListener {
   public void viewHasInit(ViewLifecycleEvent e);
 
   public void viewWillRender(ViewLifecycleEvent e);
+
+  public void viewHasRendered(ViewLifecycleEvent e);
 }
