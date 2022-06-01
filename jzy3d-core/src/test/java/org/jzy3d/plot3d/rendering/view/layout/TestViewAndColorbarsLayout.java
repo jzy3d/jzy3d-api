@@ -13,8 +13,27 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.mocks.jzy3d.Mocks;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.view.Camera;
+import org.jzy3d.plot3d.rendering.view.TestView2DProcessing;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
+/**
+ * This verify that the {@link ViewAndColorbarsLayout} is able to split the canvas
+ * in two area, the view area on the left and the colorbar area on the right.
+ * 
+ * Other tests relating to layout can be found at
+ * <ul>
+ * <li>core/{@link TestView2DProcessing}
+ * <li>core/TestCamera_EmulGL_Onscreen
+ * <li>core-awt/TestAWTColorbarLegend
+ * <li>emulgl-awt/ITTestAWTColorbarLegend
+ * <li>emulgl-awt/TestCamera_EmulGL_Offscreen
+ * <li>emulgl-awt/TestCameraNative_Viewport
+ * <li>native-jogl-core/TestCameraNative_Projection
+ * </ul>
+ * 
+ * @author Martin
+ *
+ */
 public class TestViewAndColorbarsLayout {
 
   @Test

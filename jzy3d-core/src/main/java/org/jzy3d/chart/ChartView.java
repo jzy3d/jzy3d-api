@@ -47,6 +47,9 @@ public class ChartView extends View {
       if (dimensionDirty)
         dimensionDirty = false;
     }
+    
+    fireViewLifecycleHasRendered(null);
+
   }
 
 

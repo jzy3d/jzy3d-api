@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.GPUInfo;
@@ -184,6 +185,17 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
   public Renderer3d getRenderer() {
     return renderer;
   }
+  
+  @Override
+  public Dimension getDimension() {
+    if(renderer!=null) {
+      return new Dimension(renderer.getWidth(), renderer.getHeight());
+    }
+    else {
+      return new Dimension(0, 0);
+    }
+  }
+
   
   @Override
   public String getDebugInfo() {

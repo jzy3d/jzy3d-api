@@ -12,17 +12,23 @@ import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
-import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
 
 public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRenderer2d{
 
   View2DLayout layout;
   AxisLayout axisLayout;
+  Color color = Color.BLUE;
   
   public View2DLayout_Debug() {
   }
   
+  public View2DLayout_Debug(Color color) {
+    this.color = color;
+  }
+
+
+
   @Override
   public void setView(AWTView view) {
     super.setView(view);
@@ -52,7 +58,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
       font = new Font(font.getName(), font.getStyle(), newSize);
     }
 
-    g2d.setColor(AWTColor.toAWT(Color.BLUE));
+    g2d.setColor(AWTColor.toAWT(color));
     g2d.setFont(font);
 
     // Text and aliasing settings
@@ -188,4 +194,11 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     g2d.drawString(txt, x - fm.stringWidth(txt), lineHeight*6);
   }
 
+  public Color getColor() {
+    return color;
+  }
+
+  public void setColor(Color color) {
+    this.color = color;
+  }
 }

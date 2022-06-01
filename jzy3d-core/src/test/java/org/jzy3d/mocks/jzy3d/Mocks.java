@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.painters.IPainter;
@@ -178,6 +179,12 @@ public class Mocks {
       public int getRendererHeight() {
         return 0;
       }
+      
+      @Override
+      public Dimension getDimension() {
+        return new Dimension(0, 0);
+      }
+
 
       @Override
       public void screenshot(File file) throws IOException {}

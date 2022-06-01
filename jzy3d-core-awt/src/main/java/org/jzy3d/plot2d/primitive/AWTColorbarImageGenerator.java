@@ -30,8 +30,10 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   protected double max;
 
   public static int BAR_WIDTH_DEFAULT = 20;
+  
   protected int barWidth;
   protected int textToBarHorizontalMargin = 2;
+  protected int maxTextWidth;
   
   protected boolean addTextHeightToVerticalMargin = false;
 
@@ -183,18 +185,10 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     }
   }
 
-  /**
-   * Compute the optimal image width to contain the text as defined by the tick provided and
-   * renderer.
-   */
-  public int getPreferedWidth(IPainter painter) {
-    int maxWidth = getMaxTickLabelWidth(painter);
-    return getPreferedWidth(maxWidth);
+  public int getBarWidth() {
+      return barWidth;
   }
 
-  protected int getPreferedWidth(int maxTextWidth) {
-    return maxTextWidth + textToBarHorizontalMargin + BAR_WIDTH_DEFAULT;
-  }
 
   public int getTextToBarHorizontalMargin() {
     return textToBarHorizontalMargin;
@@ -202,6 +196,26 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
   public void setTextToBarHorizontalMargin(int textToBarHorizontalMargin) {
     this.textToBarHorizontalMargin = textToBarHorizontalMargin;
+  }
+
+  /**
+   * Compute the optimal image width to contain the text as defined by the tick provided and
+   * renderer.
+   */
+  public int getPreferedWidth(IPainter painter) {
+    maxTextWidth = getMaxTickLabelWidth(painter);
+    return getPreferedWidth(maxTextWidth);
+  }
+
+  protected int getPreferedWidth(int maxTextWidth) {
+    return maxTextWidth + getTextToBarHorizontalMargin() + getBarWidth();
+  }
+  /**
+   * Only valid after a call to {@link #getPreferedWidth(IPainter)}
+   * @return
+   */
+  public int getMaxTextWidth() {
+    return maxTextWidth;
   }
 
   protected int getMaxTickLabelWidth(IPainter painter) {

@@ -10,4 +10,9 @@ public class ViewLifecycleAdapter implements IViewLifecycleEventListener{
   public void viewWillRender(ViewLifecycleEvent e) {
   }
 
+  @Override
+  public void viewHasRendered(ViewLifecycleEvent e) {
+    
+  }
+
 }
