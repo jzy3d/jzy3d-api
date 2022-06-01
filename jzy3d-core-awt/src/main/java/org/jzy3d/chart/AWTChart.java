@@ -9,6 +9,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
+import org.jzy3d.plot3d.rendering.view.View;
 
 public class AWTChart extends Chart {
   public AWTChart(IChartFactory components, Quality quality) {
@@ -20,15 +21,11 @@ public class AWTChart extends Chart {
   }
 
   public void addRenderer(AWTRenderer2d renderer2d) {
-    getAWTView().addRenderer2d(renderer2d);
+    getView().addRenderer2d(renderer2d);
   }
 
   public void removeRenderer(AWTRenderer2d renderer2d) {
-    getAWTView().removeRenderer2d(renderer2d);
-  }
-
-  public AWTView getAWTView() {
-    return (AWTView) view;
+    getView().removeRenderer2d(renderer2d);
   }
 
   public AWTColorbarLegend colorbar(Drawable drawable) {
@@ -40,7 +37,7 @@ public class AWTChart extends Chart {
   }
 
   public AWTColorbarLegend colorbar(Drawable drawable, Dimension minDimension, AxisLayout layout) {
-    AWTColorbarLegend colorbar = new AWTColorbarLegend(drawable, layout);
+    AWTColorbarLegend colorbar = new AWTColorbarLegend(drawable, layout, layout.getMainColor(), view.getBackgroundColor());
     
     if(minDimension!=null)
       colorbar.setMinimumDimension(minDimension);
@@ -48,4 +45,11 @@ public class AWTChart extends Chart {
     drawable.setLegend(colorbar);
     return colorbar;
   }
+
+  
+  @Override
+  public AWTView getView() {
+    return (AWTView)super.getView();
+  }
 }
+

@@ -11,6 +11,12 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
  * @author Martin Pernollet
  */
 public class ViewportConfiguration {
+  protected int width;
+  protected int height;
+  protected int x;
+  protected int y;
+  protected ViewportMode mode;
+
   public ViewportConfiguration(int width, int height) {
     this.width = width;
     this.height = height;
@@ -78,12 +84,6 @@ public class ViewportConfiguration {
 
   @Override
   public String toString() {
-    return "(ViewPort) width=" + width + " height=" + height + " x=" + x + " y=" + y + " mode=" + mode;
+    return "width=" + width + " height=" + height + " x=" + x + " y=" + y + " mode=" + mode;
   }
-
-  protected int width;
-  protected int height;
-  protected int x;
-  protected int y;
-  protected ViewportMode mode;
 }

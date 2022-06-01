@@ -1,6 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -17,7 +17,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
   protected static final float IMAGE_Z = 0;
 
   protected ByteBuffer imageData = null;
-  protected Image image;
+  protected BufferedImage image;
   protected int imageHeight;
   protected int imageWidth;
   
@@ -97,7 +97,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
    * 
    * @param image
    */
-  public void setImage(Image image, int width, int height) {
+  public void setImage(BufferedImage image, int width, int height) {
     if (image != null) {
       synchronized (image) {
         ByteBuffer b = AWTImageConvert.getImageAsByteBuffer(image, width, height);
@@ -106,14 +106,14 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     }
   }
 
-  public void setImage(Image image, int width, int height, ByteBuffer buffer) {
+  public void setImage(BufferedImage image, int width, int height, ByteBuffer buffer) {
     this.image = image;
     this.imageHeight = height;
     this.imageWidth = width;
     this.imageData = buffer;
   }
 
-  public void setImage(Image image) {
+  public void setImage(BufferedImage image) {
     if (image != null) {
       setImage(image, image.getWidth(null), image.getHeight(null));
     }
@@ -122,7 +122,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
   /**
    * Return the image rendered by the {@link AWTImageViewport}
    */
-  public Image getImage() {
+  public BufferedImage getImage() {
     return image;
   }
 

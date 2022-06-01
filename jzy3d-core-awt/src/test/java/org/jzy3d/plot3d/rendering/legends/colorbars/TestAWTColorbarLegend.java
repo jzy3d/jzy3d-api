@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 
@@ -101,5 +102,4 @@ public class TestAWTColorbarLegend {
     Assert.assertEquals(MIN_WIDTH, actualWidth);
     
   }
-
 }
