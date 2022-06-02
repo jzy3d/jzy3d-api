@@ -73,7 +73,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   
   protected Font font;
   
-  protected boolean usePixelScale = false;
+  protected boolean usePixelScale = true;
   
   protected static final int DEFAULT_MARGIN_HEIGHT = 20;
   
@@ -163,8 +163,10 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
       // which leads to a visually thinner bar a smaller tick labels for the colorbar
       
       if(usePixelScale) {
-        choosenWidth = (int)((width - margin.getWidth()) * pixelScale.x);
-        choosenHeight = (int)((height - margin.getHeight()) * pixelScale.y);
+        choosenWidth = (int)(width - (margin.getWidth() * pixelScale.x));
+        choosenHeight = (int)(height - (margin.getHeight() * pixelScale.y));
+        //choosenWidth = (int)((width - margin.getWidth()) * pixelScale.x);
+        //choosenHeight = (int)((height - margin.getHeight()) * pixelScale.y);
       }
       else {
         choosenWidth = (int) (width - margin.getWidth());

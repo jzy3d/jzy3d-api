@@ -112,8 +112,9 @@ public class MTest_Layout_Native_Open {
   
     
     view.addRenderer2d(new View2DLayout_Debug(Color.GREEN));
-    view.getCamera().setScreenGridDisplayed(true);
-    colorbar.setScreenGridDisplayed(true);
+    
+    /*view.getCamera().setScreenGridDisplayed(true);
+    colorbar.setScreenGridDisplayed(true);*/
     
     
     view.addViewLifecycleChangedListener(new IViewLifecycleEventListener() {
