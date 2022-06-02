@@ -76,8 +76,8 @@ public class ITTest_Overlay extends ITTest {
     infos.add(new Legend(line3.getName(), Color.GREEN));
 
     OverlayLegendRenderer legend = new OverlayLegendRenderer(infos);
-    legend.getLayout().setBoxMarginX(10);
-    legend.getLayout().setBoxMarginY(10);
+    legend.getLayout().getMargin().setWidth(10);
+    legend.getLayout().getMargin().setHeight(10);
     legend.getLayout().setBackgroundColor(Color.WHITE);
     legend.getLayout().setFont(new java.awt.Font("Helvetica", java.awt.Font.PLAIN, 11));
     chart.addRenderer(legend);

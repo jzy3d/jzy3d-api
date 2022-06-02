@@ -3,8 +3,7 @@ package org.jzy3d.plot3d.rendering.legends.colorbars;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.maths.Coord2d;
-import org.jzy3d.maths.Dimension;
-import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
+import org.jzy3d.maths.Margin;
 import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 
@@ -30,9 +29,8 @@ public class TestAWTColorbarLegend {
 
 
     // When setting viewport to a size and having a non 0 margin
-    Dimension margin = legend.getMargin();
-    margin.width = 2;
-    margin.height = 2;
+    Margin margin = legend.getMargin();
+    margin.set(2,2); // 1 pixel margin each side
 
     int width = 300;
     int height = 600;
@@ -43,7 +41,7 @@ public class TestAWTColorbarLegend {
 
     // Then actual image width is smaller according to horizontal margin
     int actualImageWidth = legend.getImage().getWidth(null);
-    int expectWidth = (int) (width * (right - left)) - margin.width;
+    int expectWidth = Math.round(width * (right - left) - margin.getWidth());
     Assert.assertEquals(expectWidth, actualImageWidth, DELTA);
 
     // ------------------------
