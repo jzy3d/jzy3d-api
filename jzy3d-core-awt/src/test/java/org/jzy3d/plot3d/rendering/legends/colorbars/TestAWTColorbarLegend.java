@@ -55,27 +55,31 @@ public class TestAWTColorbarLegend {
     // ------------------------
     // By default, configuration states to ignore pixel scale
 
-    Assert.assertFalse(legend.isUsePixelScale());
-
+    
+    
     // ------------------------
     // When updating pixel scale with an ignored pixel scale
 
+    legend.setUsePixelScale(false);
     legend.updatePixelScale(new Coord2d(2, 2));
     legend.updateImage();
 
     // Then image size remains the same
+    //expectWidth = Math.round(width * (right - left) - margin.getWidth());
+
     Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
 
     // ------------------------
-    // When updating pixel scale
+    // When updating pixel scale with a NON ignored pixel scale
 
     legend.setUsePixelScale(true);
     legend.updatePixelScale(new Coord2d(2, 2));
     legend.updateImage();
 
-    // Then image size is doubled
-    Assert.assertEquals(expectWidth * 2, legend.getImage().getWidth(null), DELTA);
-
+    // Then image size is a bit smaller since margin is multiplied by pixel scale
+    expectWidth = Math.round(width * (right - left) - margin.getWidth()*2);
+    Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
+    
   }
 
   public void whenViewportSmallerThanMinWidth_ThenImageIsSizedAtMinWidth() {

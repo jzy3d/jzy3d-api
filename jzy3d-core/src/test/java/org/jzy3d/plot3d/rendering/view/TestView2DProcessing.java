@@ -66,6 +66,7 @@ public class TestView2DProcessing {
       
       View2DProcessing processing = new View2DProcessing(view);
       
+      // -----------------------------------------------------------------
       // ----------------------------------------
       // When processing margins with a vertical Y AXIS, pixel scale = 1
       
@@ -91,9 +92,30 @@ public class TestView2DProcessing {
       Assert.assertEquals(xpectWidth, processing.getMargin().width, 0.1);
       Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
       
+      
+      // ----------------------------------------
+      // When processing margins with a vertical Y AXIS, pixel scale = 2
+      
+      pixScale = 2;
+      when(view.getPixelScale()).thenReturn(new Coord2d(pixScale,pixScale));
+
+      processing.apply(viewport, bounds);
+
+      // ----------------------------------------
+      // Then margins are larger
+
+      xpectWidth = 2*MARGIN*2 + 2*TICK_DIST + Y_TICK_MAX_WIDTH + 2*AXIS_DIST + FONT_HEIGHT;
+      xpectHeight = 2*MARGIN*2 + 2*TICK_DIST + FONT_HEIGHT + 2*AXIS_DIST + FONT_HEIGHT;
+
+      Assert.assertEquals(xpectWidth, processing.getMargin().width, 0.1);
+      Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
+
+      // -----------------------------------------------------------------
       // ----------------------------------------
       // When processing margins with a horizontal Y AXIS, pixel scale = 1
       
+      pixScale = 1;
+
       when(view.getPixelScale()).thenReturn(new Coord2d(pixScale,pixScale));
       when(axisLayout.getYAxisLabelOrientation()).thenReturn(LabelOrientation.HORIZONTAL);
       
@@ -108,10 +130,28 @@ public class TestView2DProcessing {
 
       
       xpectWidth = MARGIN*2 + TICK_DIST + Y_TICK_MAX_WIDTH + AXIS_DIST + Y_AXIS_WIDTH;
+      xpectHeight = MARGIN*2 + TICK_DIST + FONT_HEIGHT + AXIS_DIST + FONT_HEIGHT;
 
       Assert.assertEquals(xpectWidth, processing.getMargin().width, 0.1);
       Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
+      
+      // ----------------------------------------
+      // When processing margins with a horizontal Y AXIS, pixel scale = 2
+      
+      pixScale = 2;
 
+      when(view.getPixelScale()).thenReturn(new Coord2d(pixScale,pixScale));
+      
+      processing.apply(viewport, bounds);
+
+      // ----------------------------------------
+      // Then margins are larger
+
+      xpectWidth = 2*MARGIN*2 + 2*TICK_DIST + Y_TICK_MAX_WIDTH + 2*AXIS_DIST + Y_AXIS_WIDTH;
+      xpectHeight = 2*MARGIN*2 + 2*TICK_DIST + FONT_HEIGHT + 2*AXIS_DIST + FONT_HEIGHT;
+
+      Assert.assertEquals(xpectWidth, processing.getMargin().width, 0.1);
+      Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
     }
     
     
