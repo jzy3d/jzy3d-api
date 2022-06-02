@@ -81,15 +81,15 @@ public class View2DProcessing {
     // ---------------------------------------------------
     // initialize all margins according to configuration
     
-    /*marginLeftPx = view2DLayout.getMargin().getLeft() * pixelScale.x;
+    marginLeftPx = view2DLayout.getMargin().getLeft() * pixelScale.x;
     marginRightPx = view2DLayout.getMargin().getRight() * pixelScale.x;
     marginTopPx = view2DLayout.getMargin().getTop() * pixelScale.y;
-    marginBottomPx = view2DLayout.getMargin().getBottom() * pixelScale.y;*/
+    marginBottomPx = view2DLayout.getMargin().getBottom() * pixelScale.y;
 
-    marginLeftPx = view2DLayout.getMargin().getLeft();
+    /*marginLeftPx = view2DLayout.getMargin().getLeft();
     marginRightPx = view2DLayout.getMargin().getRight();
     marginTopPx = view2DLayout.getMargin().getTop();
-    marginBottomPx = view2DLayout.getMargin().getBottom();
+    marginBottomPx = view2DLayout.getMargin().getBottom();*/
 
     // ---------------------------------------------------
     // compute pixel occupation of ticks and axis labels
@@ -135,15 +135,15 @@ public class View2DProcessing {
     // ---------------------------------------------------
     // add space for text to the left margin
     
-    marginLeftPx += view2DLayout.yTickLabelsDistance; // add tick label distance
+    marginLeftPx += view2DLayout.yTickLabelsDistance * pixelScale.x; // add tick label distance
     marginLeftPx += tickTextHorizontal; // add maximum Y tick label width
-    marginLeftPx += view2DLayout.yAxisLabelsDistance; // add axis label distance
+    marginLeftPx += view2DLayout.yAxisLabelsDistance * pixelScale.x; // add axis label distance
     marginLeftPx += axisTextHorizontal; // add text width of axis label
 
     // add space for text to the bottom margin
-    marginBottomPx += view2DLayout.xTickLabelsDistance;
+    marginBottomPx += view2DLayout.xTickLabelsDistance * pixelScale.y;
     marginBottomPx += tickTextVertical;
-    marginBottomPx += view2DLayout.xAxisLabelsDistance;
+    marginBottomPx += view2DLayout.xAxisLabelsDistance * pixelScale.y;
     marginBottomPx += axisTextVertical;
 
     // ---------------------------------------------------
