@@ -262,11 +262,13 @@ public class AxisLabelProcessor {
     AxisLayout axisLayout = axis.getLayout();
     View2DLayout layout2D = view.get2DLayout();
     View2DProcessing processing2D = view.get2DProcessing();
+    
+    Coord2d pixelScale = view.getPixelScale();
 
     // for Y axis label, we do a shift along X dimension
-    float xShiftPx = layout2D.getyTickLabelsDistance();
+    float xShiftPx = layout2D.getyTickLabelsDistance()*pixelScale.x;
     xShiftPx += processing2D.getTickTextHorizontal();
-    xShiftPx += layout2D.getyAxisLabelsDistance();
+    xShiftPx += layout2D.getyAxisLabelsDistance()*pixelScale.x;
     
     if(!LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
       
@@ -275,7 +277,7 @@ public class AxisLabelProcessor {
       
       // hack the emulgl vertical Y axis case 
       if(!view.getCanvas().isNative())
-      textLength /= view.getPixelScale().y;
+        textLength /= pixelScale.y;
       
       xShiftPx -= textLength/2;
       
@@ -283,16 +285,16 @@ public class AxisLabelProcessor {
       
       // hack the emulgl vertical Y axis case 
       if(!view.getCanvas().isNative())
-        textHeight /= view.getPixelScale().x;
+        textHeight /= pixelScale.x;
 
       xShiftPx += textHeight/2;
     }
     
 
     // for X axis label, we do a shift along Y dimension
-    float yShiftPx = layout2D.getxTickLabelsDistance();
+    float yShiftPx = layout2D.getxTickLabelsDistance()*pixelScale.y;
     yShiftPx += processing2D.getTickTextVertical();
-    yShiftPx += layout2D.getxAxisLabelsDistance();
+    yShiftPx += layout2D.getxAxisLabelsDistance()*pixelScale.y;
     
     
     
