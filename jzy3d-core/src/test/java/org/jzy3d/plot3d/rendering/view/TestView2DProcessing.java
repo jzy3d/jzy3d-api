@@ -24,10 +24,13 @@ public class TestView2DProcessing {
       int VIEWPORT_WIDTH = 1000;
       int VIEWPORT_HEIGHT = VIEWPORT_WIDTH/2;
 
+      // scale
+      int pixScale = 1;
+      
       // layout
-      int MARGIN = 10;
-      int TICK_DIST = 20;
-      int AXIS_DIST = 30;
+      int MARGIN = 10; // distance to canvas border
+      int TICK_DIST = 20; // tick distance to axis border
+      int AXIS_DIST = 30; // axis label distance to tick label
       
       
       String yAxisLabel = "yLabel_100px_Width";
@@ -51,7 +54,6 @@ public class TestView2DProcessing {
       View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
       
       
-      
       View2DLayout layout = new View2DLayout(view);
       layout.setMargin(MARGIN);
       layout.setTickLabelDistance(TICK_DIST);
@@ -65,8 +67,9 @@ public class TestView2DProcessing {
       View2DProcessing processing = new View2DProcessing(view);
       
       // ----------------------------------------
-      // When processing margins with a vertical Y AXIS
+      // When processing margins with a vertical Y AXIS, pixel scale = 1
       
+      when(view.getPixelScale()).thenReturn(new Coord2d(pixScale,pixScale));
       when(axisLayout.getYAxisLabelOrientation()).thenReturn(LabelOrientation.VERTICAL);
 
       ViewportConfiguration viewport = new ViewportConfiguration(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, 0, 0);
@@ -75,7 +78,7 @@ public class TestView2DProcessing {
       processing.apply(viewport, bounds);
      
       // ----------------------------------------
-      // Then
+      // Then margin appropriately processed
       
       Coord2d ratio = new Coord2d(0.02265006, 0.049261093);
       
@@ -89,8 +92,9 @@ public class TestView2DProcessing {
       Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
       
       // ----------------------------------------
-      // When processing margins with a horizontal Y AXIS
+      // When processing margins with a horizontal Y AXIS, pixel scale = 1
       
+      when(view.getPixelScale()).thenReturn(new Coord2d(pixScale,pixScale));
       when(axisLayout.getYAxisLabelOrientation()).thenReturn(LabelOrientation.HORIZONTAL);
       
       processing.apply(viewport, bounds);
@@ -148,7 +152,8 @@ public class TestView2DProcessing {
       
       // Given a view with settings
       View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
-      
+      when(view.getPixelScale()).thenReturn(new Coord2d(1,1));
+
       View2DLayout layout = new View2DLayout(view);
       layout.setMargin(MARGIN);
       layout.setTickLabelDistance(TICK_DIST);
@@ -217,7 +222,8 @@ public class TestView2DProcessing {
       
       // Given a view with settings
       View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
-      
+      when(view.getPixelScale()).thenReturn(new Coord2d(1,1));
+
       View2DLayout layout = new View2DLayout(view);
       layout.setMargin(MARGIN);
       layout.setTickLabelDistance(TICK_DIST);
@@ -242,7 +248,7 @@ public class TestView2DProcessing {
      
       // ----------------------------------------
       // Then
-      System.out.println(processing.getModelToScreen());
+      //System.out.println(processing.getModelToScreen());
       Assert.assertTrue(Float.isFinite(processing.getModelToScreen().x));
       Assert.assertTrue(Float.isFinite(processing.getModelToScreen().y));
 

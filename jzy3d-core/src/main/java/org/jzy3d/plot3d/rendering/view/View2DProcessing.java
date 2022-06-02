@@ -81,11 +81,15 @@ public class View2DProcessing {
     // ---------------------------------------------------
     // initialize all margins according to configuration
     
-    marginLeftPx = view2DLayout.marginLeft;
-    marginRightPx = view2DLayout.marginRight;
-    marginTopPx = view2DLayout.marginTop;
-    marginBottomPx = view2DLayout.marginBottom;
+    /*marginLeftPx = view2DLayout.getMargin().getLeft() * pixelScale.x;
+    marginRightPx = view2DLayout.getMargin().getRight() * pixelScale.x;
+    marginTopPx = view2DLayout.getMargin().getTop() * pixelScale.y;
+    marginBottomPx = view2DLayout.getMargin().getBottom() * pixelScale.y;*/
 
+    marginLeftPx = view2DLayout.getMargin().getLeft();
+    marginRightPx = view2DLayout.getMargin().getRight();
+    marginTopPx = view2DLayout.getMargin().getTop();
+    marginBottomPx = view2DLayout.getMargin().getBottom();
 
     // ---------------------------------------------------
     // compute pixel occupation of ticks and axis labels

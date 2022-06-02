@@ -49,8 +49,8 @@ public class Line2D_DemoAWT {
     OverlayLegendRenderer legend = new OverlayLegendRenderer(infos);
     LineLegendLayout layout = legend.getLayout();
     
-    layout.setBoxMarginX(10);
-    layout.setBoxMarginY(10);
+    layout.getMargin().setWidth(10);
+    layout.getMargin().setHeight(10);
     layout.setBackgroundColor(Color.WHITE);
     layout.setFont(new java.awt.Font("Helvetica", java.awt.Font.PLAIN, 11));
     

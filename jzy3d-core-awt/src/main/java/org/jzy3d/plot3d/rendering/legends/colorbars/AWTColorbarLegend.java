@@ -8,6 +8,7 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.maths.Margin;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
@@ -108,7 +109,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     this.minimumDimension = new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
         AWTColorbarImageGenerator.MIN_BAR_HEIGHT);
     
-    this.margin.height = DEFAULT_MARGIN_HEIGHT;
+    this.margin.setHeight(DEFAULT_MARGIN_HEIGHT);
 
     initImageGenerator(parent, provider, renderer);
   }
@@ -146,7 +147,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
    * 
    * If running on a HiDPI screen, width and height parameter will grow.
    */
-  protected BufferedImage toImage(int width, int height, Dimension margin, Coord2d pixelScale) {
+  protected BufferedImage toImage(int width, int height, Margin margin, Coord2d pixelScale) {
 
     if (imageGenerator != null) {
       setGeneratorColors();
@@ -162,12 +163,12 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
       // which leads to a visually thinner bar a smaller tick labels for the colorbar
       
       if(usePixelScale) {
-        choosenWidth = (int)((width - margin.width) * pixelScale.x);
-        choosenHeight = (int)((height - margin.height) * pixelScale.y);
+        choosenWidth = (int)((width - margin.getWidth()) * pixelScale.x);
+        choosenHeight = (int)((height - margin.getHeight()) * pixelScale.y);
       }
       else {
-        choosenWidth = (int) (width - margin.width);
-        choosenHeight = (int) (height - margin.height);
+        choosenWidth = (int) (width - margin.getWidth());
+        choosenHeight = (int) (height - margin.getHeight());
       }
       
       //System.out.println("AWTColorbarLegend : asked.w:" + width + " asked.h:" + height + " m.w:" + margin.width + " m.h:" + margin.height + " pixScale:" + pixelScale);
@@ -190,7 +191,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
    * Update image according to new margin.
    */
   @Override
-  public void setMargin(Dimension margin) {
+  public void setMargin(Margin margin) {
     super.setMargin(margin);
     
     if(getImageGenerator()!=null) {

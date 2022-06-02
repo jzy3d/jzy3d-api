@@ -51,18 +51,29 @@ public class OverlayLegendRenderer extends AbstractAWTRenderer2d implements AWTR
     int textWidthMax = maxStringWidth(fm);
 
     // Box dimensions
-    int xBoxPos = layout.boxMarginX;
-    int yBoxPos = layout.boxMarginY;
+    
     int boxWidth = layout.txtMarginX + textWidthMax + layout.sampleLineMargin
         + layout.sampleLineLength + layout.txtMarginX;
     int boxHeight = layout.txtMarginY + (textHeight + layout.txtInterline) * (info.size() - 1)
         + textHeight + layout.txtMarginY;
 
+    
+    // Box offset to apply margins
+    
+    // horizontal left
+    int xBoxPos = Math.round(layout.getMargin().getLeft());
+    
+    // horizontal right
     if (Corner.TOP_RIGHT.equals(layout.corner) || Corner.BOTTOM_RIGHT.equals(layout.corner)) {
-      xBoxPos = canvasWidth - layout.boxMarginX - boxWidth;
+      xBoxPos = Math.round(canvasWidth - layout.getMargin().getRight() - boxWidth);
     }
+    
+    // vertical top
+    int yBoxPos = Math.round(layout.getMargin().getTop());
+
+    // vertical bottom
     if (Corner.BOTTOM_LEFT.equals(layout.corner) || Corner.BOTTOM_RIGHT.equals(layout.corner)) {
-      yBoxPos = canvasHeight - layout.boxMarginY - boxHeight;
+      yBoxPos = Math.round(canvasHeight - layout.getMargin().getBottom() - boxHeight);
     }
 
     // Background

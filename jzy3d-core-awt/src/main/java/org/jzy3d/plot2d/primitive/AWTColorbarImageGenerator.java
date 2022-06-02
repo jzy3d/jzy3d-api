@@ -64,8 +64,8 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
   /** Renders the colorbar to an image. */
   public BufferedImage toImage(int width, int height, int barWidth) {
-    if (barWidth > width)
-      return null;
+    //if (barWidth > width)
+    //  return null;
 
     this.barWidth = barWidth;
 
@@ -77,9 +77,9 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
     configureText(graphic);
     drawBackground(width, height, graphic);
-    drawBarColors(height, this.barWidth/*getScaledBarWidth()*/, graphic);
-    drawBarContour(height, this.barWidth/*getScaledBarWidth()*/, graphic);
-    drawTextAnnotations(height, this.barWidth/*getScaledBarWidth()*/, graphic);
+    drawBarColors(height, getScaledBarWidth(), graphic);
+    drawBarContour(height, getScaledBarWidth(), graphic);
+    drawTextAnnotations(height, getScaledBarWidth(), graphic);
     return image;
   }
 
@@ -97,7 +97,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   protected void drawBarContour(int height, int barWidth, Graphics2D graphic) {
     
     int finalY = 0;
-    int finalH = height;
+    int finalH = height-1; // let bottom contour appear in the image
     
     // add little space to avoid cutting the text 
     // on top and bottom of colorbar
@@ -120,7 +120,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   protected void drawBarColors(int height, int barWidth, Graphics2D graphic) {
     
     int finalFrom = 0;
-    int finalTo = height;
+    int finalTo = height-1;
     
     // add little space to avoid cutting the text 
     // on top and bottom of colorbar

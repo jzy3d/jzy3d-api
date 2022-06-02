@@ -1,10 +1,12 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.maths.Margin;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
 
@@ -21,7 +23,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
   protected int imageHeight;
   protected int imageWidth;
   
-  protected Dimension margin = new Dimension(0,0); // no margin by default
+  protected Margin margin = new Margin(0,0,0,0); // no margin by default
   protected Coord2d pixelScale = new Coord2d(1,1); // assume default pixel scale
 
   public AWTImageViewport() {
@@ -132,11 +134,11 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     return new Dimension(0, 0);
   }
 
-  public Dimension getMargin() {
+  public Margin getMargin() {
     return margin;
   }
 
-  public void setMargin(Dimension margin) {
+  public void setMargin(Margin margin) {
     this.margin = margin;
   }
 }
