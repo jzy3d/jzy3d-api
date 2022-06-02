@@ -3,6 +3,8 @@ package org.jzy3d.tests.manual.layout;
 import java.awt.image.BufferedImage;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.ChartFactory;
+import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.debug.View2DLayout_Debug;
 import org.jzy3d.events.IViewLifecycleEventListener;
@@ -38,13 +40,15 @@ public class MTest_Layout_Native_Open {
   static final float ALPHA_FACTOR = 0.55f;// .61f;
 
   public static void main(String[] args) throws InterruptedException {
-    new MTest_Layout_Native_Open().go();
+    AWTChartFactory factory = new AWTChartFactory();
+    //EmulGLChartFactory factory = new EmulGLChartFactory();
+
+    new MTest_Layout_Native_Open().go(factory);
   
     
   }
 
-  private  void go() throws InterruptedException {
-    AWTChartFactory factory = new AWTChartFactory();
+  private  void go(ChartFactory factory) throws InterruptedException {
     Quality q = Quality.Advanced();
     q.setAnimated(false);
     q.setHiDPIEnabled(true);
@@ -55,10 +59,10 @@ public class MTest_Layout_Native_Open {
 
     Shape surface = SampleGeom.surface();
 
-    AWTChart chart = factory.newChart(q);
+    AWTChart chart = (AWTChart)factory.newChart(q);
     AWTView view = chart.getView();
 
-((ViewAndColorbarsLayout) chart.getView().getLayout()).setShrinkColorbar(true);
+//((ViewAndColorbarsLayout) chart.getView().getLayout()).setShrinkColorbar(true);
 
     AxisLayout layout = chart.getAxisLayout();
     // layout.setFont(new Font("Apple Chancery", 20));
@@ -107,15 +111,10 @@ public class MTest_Layout_Native_Open {
     
   
     
-    //view.addRenderer2d(new View2DLayout_Debug(Color.GREEN));
+    view.addRenderer2d(new View2DLayout_Debug(Color.GREEN));
     view.getCamera().setScreenGridDisplayed(true);
     colorbar.setScreenGridDisplayed(true);
     
-    /*chart.getView().addViewEventListener(()->{
-      
-    });*/
-
-
     
     view.addViewLifecycleChangedListener(new IViewLifecycleEventListener() {
       @Override
@@ -123,7 +122,6 @@ public class MTest_Layout_Native_Open {
       }
       @Override
       public void viewHasInit(ViewLifecycleEvent e) {
-        //info(chart, view, colorbar);
       }
       @Override
       public void viewHasRendered(ViewLifecycleEvent e) {
@@ -146,15 +144,20 @@ public class MTest_Layout_Native_Open {
     //System.out.println("Canvas.bounds   : " + ((Component)chart.getCanvas()).getBounds());
     System.out.println("---------------------------------");
     System.out.println("Canvas.dims        : " + chart.getCanvas().getDimension());
+    System.out.println("---");
     System.out.println("View.cam.viewport  : " + view.getCamera().getLastViewPort());
     System.out.println("View.scale         : " + view.getPixelScale());
+    System.out.println("---");
     
     BufferedImage i = colorbar.getImage();
-    System.out.println("Colorbar.image     : " + i.getWidth(null) + " x " + i.getHeight(null));
-    System.out.println("Colorbar.margins   : " + colorbar.getMargin() + "add left/right, top/bottom");
+
+    System.out.println("Colorbar.askedDim  : " + colorbar.getWidth() + " x " + colorbar.getHeight());
     System.out.println("Colorbar.viewport  : " + colorbar.getLastViewPort());
+    System.out.println("Colorbar.margins   : " + colorbar.getMargin());
+    System.out.println("Colorbar.image     : " + i.getWidth(null) + " x " + i.getHeight(null));
     System.out.println("Colorbar.minDim    : " + colorbar.getMinimumDimension());
-    
+    System.out.println("---");
+
     
     AWTColorbarImageGenerator gen = colorbar.getImageGenerator();
     System.out.println("Colorbar.gen.scale       : " + gen.getPixelScale());

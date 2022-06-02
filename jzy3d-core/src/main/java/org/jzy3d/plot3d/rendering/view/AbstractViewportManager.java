@@ -35,10 +35,9 @@ public abstract class AbstractViewportManager {
 
   protected boolean screenGridDisplayed = false;
   protected ViewportMode mode = ViewportMode.RECTANGLE_NO_STRETCH;
-
-  protected float ratioWidth;
-  protected float ratioHeight;
   
+  protected ViewportConfiguration lastViewPort;
+
   protected boolean apply_WindowsHiDPI_Workaround = true;
 
   /**
@@ -77,11 +76,11 @@ public abstract class AbstractViewportManager {
     this.screenWidth = getSliceWidth(width, left, right);
     this.screenHeight = height;
     this.screenLeft = (int) (left * width);
-    this.screenBottom = 0;// screenLeft + screenWidth;
+    this.screenBottom = 0;
   }
 
   public int getSliceWidth(int width, float left, float right) {
-    return (int) (width * (right - left));
+    return Math.round(width * (right - left));
   }
 
 
@@ -96,7 +95,6 @@ public abstract class AbstractViewportManager {
     return lastViewPort;
   }
 
-  protected ViewportConfiguration lastViewPort;
 
   /**
    * Build and return a {@link ViewportConfiguration}. Uses gl to

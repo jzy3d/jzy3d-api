@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import org.apache.commons.collections4.Get;
+import org.jzy3d.maths.Margin;
 
 /**
  * Allows configuring the layout of a view when the chart enters a 2D rendering mode.
@@ -32,14 +34,7 @@ public class View2DLayout {
   /** Distance between tick labels and axis label */
   protected float yAxisLabelsDistance = 0;
 
-  /** Extra margin */
-  protected float marginLeft = 0;
-  /** Extra margin */
-  protected float marginRight = 0;
-  /** Extra margin */
-  protected float marginTop = 0;
-  /** Extra margin */
-  protected float marginBottom = 0;
+  protected Margin margin = new Margin();
 
 
   public View2DLayout(View view) {
@@ -67,59 +62,43 @@ public class View2DLayout {
     setyAxisLabelsDistance(dist);
   }
 
+  /**
+   * A convenient shortcut to set the same margin to left, right, bottom and right canvas borders.
+   * 
+   * @see {@link #getMargin()}
+   */
   public void setMargin(float margin) {
     setMarginHorizontal(margin);
     setMarginVertical(margin);
   }
 
   /**
-   * Set the same margin to left and right canvas borders
+   * A convenient shortcut to set the same margin to left and right canvas borders.
+   * 
+   * @see {@link #getMargin()}
    */
   public void setMarginHorizontal(float margin) {
-    setMarginLeft(margin);
-    setMarginRight(margin);
+    this.margin.setWidth(margin*2);
   }
 
   /**
-   * Set the same margin to top and bottom canvas borders
+   * A convenient shortcut to set the same margin to top and bottom canvas borders.
+   * 
+   * @see {@link #getMargin()}
    */
   public void setMarginVertical(float margin) {
-    setMarginTop(margin);
-    setMarginBottom(margin);
+    this.margin.setHeight(margin*2);
   }
 
-  public float getMarginLeft() {
-    return marginLeft;
+
+  public Margin getMargin() {
+    return margin;
   }
 
-  public void setMarginLeft(float marginLeft) {
-    this.marginLeft = marginLeft;
+  public void setMargin(Margin margin) {
+    this.margin = margin;
   }
-
-  public float getMarginRight() {
-    return marginRight;
-  }
-
-  public void setMarginRight(float marginRight) {
-    this.marginRight = marginRight;
-  }
-
-  public float getMarginTop() {
-    return marginTop;
-  }
-
-  public void setMarginTop(float marginTop) {
-    this.marginTop = marginTop;
-  }
-
-  public float getMarginBottom() {
-    return marginBottom;
-  }
-
-  public void setMarginBottom(float marginBottom) {
-    this.marginBottom = marginBottom;
-  }
-
+  
   public boolean isTextAddMargin() {
     return textAddMargin;
   }

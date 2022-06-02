@@ -101,10 +101,10 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         // Processing yoffset with pixel scale
         int yOffset = 0;
         if (pixelScale.y == 1) {
-          yOffset = (int) (awtLegend.getMargin().height / 2f);
+          yOffset = (int) (awtLegend.getMargin().getHeight() / 2f);
         } else {
           yOffset =
-              (int) ((pixelScale.y - 1) * awtLegend.getMargin().height) / 2;
+              (int) ((pixelScale.y - 1) * awtLegend.getMargin().getHeight()) / 2;
         }
 
         // ---------------------------------------

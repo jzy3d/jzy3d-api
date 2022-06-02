@@ -96,10 +96,10 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     int x;
     int y;
     // under axis label
-    y = height-(int)layout.getMarginBottom();
+    y = height-(int)layout.getMargin().getBottom();
     g2d.drawLine(0, y, width, y);
     
-    x = (int)layout.getMarginLeft();
+    x = (int)layout.getMargin().getLeft();
    
     String info = "Axis Label Bottom";
     g2d.drawString(info, x, y);
@@ -107,7 +107,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
 
     // up to axis label
-    y = height-(int)(layout.getMarginBottom()+txtSize);
+    y = height-(int)(layout.getMargin().getBottom()+txtSize);
     g2d.drawLine(0, y, width, y);
 
     info = "Axis Label Top";
@@ -115,7 +115,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     shift += fm.stringWidth(info);
     
     // down to tick label
-    y = height-(int)(layout.getMarginBottom()+txtSize+layout.getxAxisLabelsDistance());
+    y = height-(int)(layout.getMargin().getBottom()+txtSize+layout.getxAxisLabelsDistance());
     g2d.drawLine(0, y, width, y);
 
     info = "Tick Label Bottom";
@@ -123,7 +123,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     shift += fm.stringWidth(info);
     
     // up to tick label
-    y = height-(int)(layout.getMarginBottom()+txtSize+layout.getxAxisLabelsDistance()+txtSize);
+    y = height-(int)(layout.getMargin().getBottom()+txtSize+layout.getxAxisLabelsDistance()+txtSize);
     g2d.drawLine(0, y, width, y);
     
     info = "Tick Label Top";
@@ -131,7 +131,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     shift += fm.stringWidth(info);
 
     // up to tick label margin
-    y = height-(int)(layout.getMarginBottom()+txtSize+layout.getxAxisLabelsDistance()+txtSize+layout.getxTickLabelsDistance());
+    y = height-(int)(layout.getMargin().getBottom()+txtSize+layout.getxAxisLabelsDistance()+txtSize+layout.getxTickLabelsDistance());
     g2d.drawLine(0, y, width, y);
 
     info = "Chart bottom border";
@@ -139,7 +139,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     shift += fm.stringWidth(info);
 
     // Horizontal top margin
-    y = (int)layout.getMarginTop();
+    y = (int)layout.getMargin().getTop();
     g2d.drawLine(0, y, width, y);
     
     info = "Chart top border";
@@ -154,13 +154,13 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
     int x;
     // left to axis label
-    x = (int)layout.getMarginLeft();
+    x = (int)layout.getMargin().getLeft();
     g2d.drawLine(x, 0, x, height);
 
     g2d.drawString("Axis Label Left Side / Left Margin (" + x + ")", x, lineHeight*1);
 
     // right to axis label
-    x = (int)(layout.getMarginLeft()+view.get2DProcessing().getAxisTextHorizontal());
+    x = (int)(layout.getMargin().getLeft()+view.get2DProcessing().getAxisTextHorizontal());
     g2d.drawLine(x, 0, x, height);
 
     g2d.drawString("Axis Label Right Side (" + x + ")", x, lineHeight*2);
@@ -185,7 +185,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     
     g2d.drawString("Chart left border (" + x + ")", x, lineHeight*5);
 
-    x = (int)(view.getCamera().getLastViewPort().getWidth()-layout.getMarginRight());
+    x = (int)(view.getCamera().getLastViewPort().getWidth()-layout.getMargin().getRight());
     
     g2d.drawLine(x, 0, x, height);
     

@@ -149,6 +149,9 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       int height = canvas.getRendererHeight();
       float theLeft = left + slice * (k++);
       float theRight = left + slice * k;
+      
+      //System.out.println("ViewAndColorbars : width:" + width + " height:" + height);
+      //System.out.println("ViewAndColorbars : TheLeft:" + theLeft + " TheRight:" + theRight);
 
       legend.setFont(painter.getView().getAxis().getLayout().getFont());
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
