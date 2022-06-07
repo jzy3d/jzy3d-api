@@ -173,8 +173,8 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
         choosenHeight = (int) (height - margin.getHeight());
       }
       
-      //System.out.println("AWTColorbarLegend : asked.w:" + width + " asked.h:" + height + " m.w:" + margin.width + " m.h:" + margin.height + " pixScale:" + pixelScale);
-      //System.out.println("AWTColorbarLegend : choosen.w:" + choosenWidth + " choosen.h:" + choosenHeight + " m.w:" + margin.width + " m.h:" + margin.height + " pixScale:" + pixelScale);
+      System.out.println("AWTColorbarLegend : asked.w:" + width + " asked.h:" + height + " m.w:" + margin.getWidth() + " m.h:" + margin.getHeight() + " pixScale:" + pixelScale);
+      System.out.println("AWTColorbarLegend : choosen.w:" + choosenWidth + " choosen.h:" + choosenHeight + " m.w:" + margin.getWidth() + " m.h:" + margin.getHeight() + " pixScale:" + pixelScale);
       
 
       askedWidth = width;
