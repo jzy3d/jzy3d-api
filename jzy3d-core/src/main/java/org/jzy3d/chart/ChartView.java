@@ -17,7 +17,7 @@ import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
  * @author Martin Pernollet
  */
 public class ChartView extends View {
-  protected IViewportLayout layout;
+  //protected IViewportLayout layout;
   
   public ChartView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
     super(factory, scene, canvas, quality);
@@ -55,13 +55,7 @@ public class ChartView extends View {
 
   /* */
 
-  public IViewportLayout getLayout() {
-    return layout;
-  }
 
-  public void setLayout(IViewportLayout layout) {
-    this.layout = layout;
-  }
 
 
 

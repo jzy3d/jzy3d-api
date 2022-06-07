@@ -66,13 +66,31 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     int xPosition = 0;
     int yPosition = 0;
 
-    if (imageWidth < screenWidth)
-      xPosition = (int) ((float) screenWidth / 2 - (float) imageWidth / 2);
+    if (imageWidth < screenWidth) {
+      if(margin.getLeft()!=margin.getRight()) {
+        xPosition = Math.round(screenWidth / 2f - (imageWidth / 2f + margin.getWidth()));
+
+      }
+      else {
+      xPosition = Math.round((float) screenWidth / 2 - (float) imageWidth / 2);
+      }
+    }
     else
       xZoom = ((float) screenWidth) / ((float) imageWidth);
 
-    if (imageHeight < screenHeight)
-      yPosition = (int) ((float) screenHeight / 2 - (float) imageHeight / 2);
+    if (imageHeight < screenHeight) {
+      //int shiftForMargin = 0;
+      
+      // TODO : clarify this
+      
+      if(margin.getTop()!=margin.getBottom()) {
+        //shiftForMargin = Math.round(margin.getHeight()/2);
+        yPosition = Math.round(screenHeight / 2f - (imageHeight / 2f - margin.getHeight()/2f) /*margin.getTop())*/);
+      }
+      else {
+        yPosition = Math.round((float) screenHeight / 2 - ((float) imageHeight / 2));        
+      }
+    }
     else
       yZoom = ((float) screenHeight) / ((float) imageHeight);
 

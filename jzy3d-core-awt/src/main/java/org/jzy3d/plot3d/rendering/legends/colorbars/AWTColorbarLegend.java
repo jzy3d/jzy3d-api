@@ -71,6 +71,10 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   protected int askedWidth;
   protected int askedHeight;
   
+  protected int choosenWidth;
+  protected int choosenHeight;
+
+  
   protected Font font;
   
   protected boolean usePixelScale = true;
@@ -120,7 +124,6 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
       IMultiColorable mc = ((IMultiColorable) parent);
       if (mc.getColorMapper() != null) {
         imageGenerator = new AWTColorbarImageGenerator(mc.getColorMapper(), provider, renderer);
-      
         if(font!=null)
           imageGenerator.setFont(font);
       }
@@ -130,9 +133,29 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
           "Passed a drawable object that is not IMultiColorable or has no ColorMapper defined");
     }
   }
+  
+  @Override
+  public Dimension getMinimumDimension() {
+    return minimumDimension;
+  }
+
 
   @Override
   public void render(IPainter painter) {
+    AWTColorbarImageGenerator gen = getImageGenerator();
+    
+    int b =gen.getBarWidth();
+    int t = (int)(gen.getMaxTickLabelWidth(painter)/pixelScale.x);
+    int m = (int)(margin.getWidth());//*pixelScale.x);
+    
+    //System.out.println(t);
+    int w = Math.round(b + gen.getTextToBarHorizontalMargin() + t + m );
+    //return minimumDimension;
+    
+    minimumDimension.width = w;
+    //minimumDimension.width = 100;
+
+    
     painter.glEnable_Blend();
     super.render(painter);
   }
@@ -152,8 +175,6 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     if (imageGenerator != null) {
       setGeneratorColors();
       
-      int choosenWidth;
-      int choosenHeight;
       
       // We here ignore pixel scale as considering it
       // 1. does not improve the final appearance of the 
@@ -249,6 +270,16 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   @Override
   public int getHeight() {
     return askedHeight;
+  }
+  
+  
+
+  public int getChoosenWidth() {
+    return choosenWidth;
+  }
+
+  public int getChoosenHeight() {
+    return choosenHeight;
   }
 
   public boolean isUsePixelScale() {
