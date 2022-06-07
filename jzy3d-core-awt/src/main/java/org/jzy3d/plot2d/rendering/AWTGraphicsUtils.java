@@ -67,6 +67,11 @@ public class AWTGraphicsUtils {
     }
   }
 
+  public static int stringWidth(String string) {
+    BufferedImage i = new BufferedImage(0,0, BufferedImage.TYPE_4BYTE_ABGR);
+    
+    return stringWidth(i.createGraphics(), string);
+  }
   public static int stringWidth(Graphics2D g2d, String string) {
     FontMetrics fm = g2d.getFontMetrics();
     if (fm != null) {

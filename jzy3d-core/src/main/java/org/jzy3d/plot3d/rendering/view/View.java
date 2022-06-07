@@ -32,6 +32,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.LightSet;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -101,6 +102,10 @@ public class View {
   // the actual bounds, either auto or manual
   protected BoundingBox3d viewBounds;
   protected Chart chart;
+
+  // layout, for mixing this chart view with other viewports (e.g. colorbars on the side)
+  protected IViewportLayout layout;
+
 
   // view listeners
   protected List<IViewPointChangedListener> viewPointChangedListeners;
@@ -196,6 +201,7 @@ public class View {
     this.painter.setCamera(cam);
     this.painter.setView(this);
     this.viewOverlay = factory.getPainterFactory().newViewOverlay();
+    this.layout = factory.getPainterFactory().newViewportLayout();
 
     this.scene = scene;
     this.canvas = canvas;
@@ -248,61 +254,6 @@ public class View {
   }
 
 
-
-  /**
-   * Return a copy of the currently known pixel scale as notified by the canvas.
-   * 
-   * If the View received no pixel scale change event, the pixel scale will be 0.
-   */
-  public Coord2d getPixelScale() {
-    return pixelScale.clone();
-  }
-
-  /**
-   * Return HiDPI status as ACTUALLY possible by the ICanvas on the current screen and computer,
-   * regardless of the {@link Quality#setHiDPIEnabled(true)}.
-   * 
-   * Will always return {@link HiDPI.OFF} is chart is set to {@link Quality#setHiDPIEnabled(false)}
-   * as this forces the canvas to NOT make use of HiDPI.
-   * 
-   * @return
-   */
-  public HiDPI getHiDPI() {
-    return hidpi;
-  }
-
-  /** Return the configuration of a 2D layout */
-  public View2DLayout get2DLayout() {
-    return view2DLayout;
-  }
-
-  /**
-   * Return the result of processing a 2D layout using the layout configured with the instance
-   * returned by {@link #get2DLayout()}
-   */
-  public View2DProcessing get2DProcessing() {
-    return view2DProcessing;
-  }
-
-  public IPainter getPainter() {
-    return painter;
-  }
-
-  public Chart getChart() {
-    return chart;
-  }
-
-  public void setChart(Chart chart) {
-    this.chart = chart;
-  }
-
-  public boolean isSlave() {
-    return slave;
-  }
-
-  public void setSlave(boolean slave) {
-    this.slave = slave;
-  }
 
   public void dispose() {
     axis.dispose();
@@ -571,284 +522,6 @@ public class View {
     viewBounds = box;
   }
 
-  /**
-   * Return the central point of the view scene, that is the last bounding box center set by
-   * {@link lookToBox(BoundingBox3d box)}
-   */
-  public Coord3d getCenter() {
-    return center;
-  }
-
-  /** Get the {@link AxisBox}'s {@link BoundingBox3d} */
-  public BoundingBox3d getBounds() {
-    return axis.getBounds();
-  }
-
-  public ViewBoundMode getBoundsMode() {
-    return boundsMode;
-  }
-
-  /** Set the {@link ViewPositionMode} applied to this view. */
-  public void setViewPositionMode(ViewPositionMode mode) {
-    this.viewMode = mode;
-  }
-
-  /** Return the {@link ViewPositionMode} applied to this view. */
-  public ViewPositionMode getViewMode() {
-    return viewMode;
-  }
-
-  public boolean is2D() {
-    return ViewPositionMode.TOP.equals(getViewMode());
-  }
-
-  public boolean is3D() {
-    return !is2D();
-  }
-
-  /** Return the stretch ratio applied to the view */
-  public Coord3d getScaling() {
-    return scaling;
-  }
-
-  /**
-   * Set the viewpoint using polar coordinates relative to the target (i.e. the center of the
-   * scene). Only X and Y dimensions are required, as the distance to center will be computed
-   * automatically by {@link updateCamera()}.
-   * 
-   * The input coordinate is polar and considers
-   * <ul>
-   * <li>x is azimuth in [0;2xPI]
-   * <li>y is elevation in [-PI/2;+PI/2]. Will be clamped if out of bounds
-   * <li>z is range (distance to center) but ignored there as it is processed automatically
-   * </ul>
-   */
-  public void setViewPoint(Coord3d polar, boolean updateView) {
-    viewpoint = polar;
-    viewpoint.y = viewpoint.y < -PI_div2 ? -PI_div2 : viewpoint.y;
-    viewpoint.y = viewpoint.y > PI_div2 ? PI_div2 : viewpoint.y;
-    if (updateView)
-      shoot();
-
-    fireViewPointChangedEvent(new ViewPointChangedEvent(this, polar));
-  }
-
-  /**
-   * Set the viewpoint and query a view update.
-   * 
-   * 
-   * @see {@link setViewPoint(Coord3d polar, boolean updateView)}
-   */
-  public void setViewPoint(Coord3d polar) {
-    setViewPoint(polar, true);
-  }
-
-  /**
-   * Get the viewpoint. The Z dimension is the one defined by {@link updateCamera()}, which depends
-   * on the view scaling.
-   * 
-   * @see {@link setViewPoint(Coord3d polar, boolean updateView)}
-   */
-  public Coord3d getViewPoint() {
-    return viewpoint;
-  }
-
-  /**
-   * Return the last used view scaling that was set according to the {@link setSquared(boolean v)}
-   * status.
-   */
-  public Coord3d getLastViewScaling() {
-    return scaling;
-  }
-
-  /* CONTROLS ANNOTATIONS & GENERAL RENDERING */
-
-  public void setAxis(IAxis axis) {
-    this.axis = axis;
-    updateBounds();
-  }
-
-  public IAxis getAxis() {
-    return axis;
-  }
-
-  public AxisLayout getAxisLayout() {
-    return axis.getLayout();
-  }
-
-  
-  public boolean getSquared() {
-    return this.squared;
-  }
-
-  public void setSquared(boolean status) {
-    this.squared = status;
-
-    if (is2D() && status)
-      LOGGER.info(
-          "View.setSquared : Setting a 2D chart squared may break the tick and axis label layout! Keep it to false for 2D charts");
-  }
-
-  public boolean isAxisDisplayed() {
-    return axisDisplayed;
-  }
-
-  public void setAxisDisplayed(boolean axisDisplayed) {
-    this.axisDisplayed = axisDisplayed;
-  }
-
-  public void setBackgroundColor(Color color) {
-    backgroundColor = color;
-  }
-
-  public Color getBackgroundColor() {
-    return backgroundColor;
-  }
-
-  public Camera getCamera() {
-    return cam;
-  }
-
-  /**
-   * Set the projection of this view, either Camera.ORTHOGONAL or Camera.PERSPECTIVE.
-   */
-  public void setCameraMode(CameraMode mode) {
-    this.cameraMode = mode;
-  }
-
-  /**
-   * Get the projection of this view, either CameraMode.ORTHOGONAL or CameraMode.PERSPECTIVE.
-   */
-  public CameraMode getCameraMode() {
-    return cameraMode;
-  }
-
-  public void setMaximized(boolean status) {
-    if (status)
-      this.cam.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-    else
-      this.cam.setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
-  }
-
-  public boolean isMaximized() {
-    return ViewportMode.STRETCH_TO_FILL.equals(this.cam.getViewportMode());
-  }
-
-
-  /**
-   * @see setter
-   */
-  public float getCameraRenderingSphereRadiusFactor() {
-    return cameraRenderingSphereRadiusFactor;
-  }
-
-  /**
-   * This allows zooming the 3d scene by editing the camera rendering sphere.
-   * <ul>
-   * <li>A value of 1 allows having an AxisBox with corners touching the top/bottom part of the
-   * canvas.
-   * <li>A value greater than 1 makes the rendering sphere bigger, hence the AxisBox appears
-   * smaller.
-   * </ul>
-   */
-  public void setCameraRenderingSphereRadiusFactor(float cameraRenderingSphereRadiusFactor) {
-    this.cameraRenderingSphereRadiusFactor = cameraRenderingSphereRadiusFactor;
-  }
-
-  public boolean isMaintainAllObjectsInView() {
-    return maintainAllObjectsInView;
-  }
-
-  public void setMaintainAllObjectsInView(boolean maintainAllObjectsInView) {
-    this.maintainAllObjectsInView = maintainAllObjectsInView;
-  }
-
-  public boolean isDisplayAxisWholeBounds() {
-    return displayAxisWholeBounds;
-  }
-
-  public void setDisplayAxisWholeBounds(boolean displayAxisWholeBounds) {
-    this.displayAxisWholeBounds = displayAxisWholeBounds;
-  }
-
-  public Scene getScene() {
-    return scene;
-  }
-
-  public Rectangle getSceneViewportRectangle() {
-    return cam.getRectangle();
-  }
-
-  public ICanvas getCanvas() {
-    return canvas;
-  }
-
-  public Graph getAnnotations() {
-    return annotations.getGraph();
-  }
-
-  public boolean addViewEventListener(IViewEventListener listener) {
-    return viewEventListeners.add(listener);
-  }
-
-  public boolean removeViewOnTopEventListener(IViewEventListener listener) {
-    return viewEventListeners.remove(listener);
-  }
-
-  protected void fireViewOnTopEvent(boolean isOnTop) {
-    ViewIsVerticalEvent e = new ViewIsVerticalEvent(this);
-
-    if (isOnTop)
-      for (IViewEventListener listener : viewEventListeners)
-        listener.viewVerticalReached(e);
-    else
-      for (IViewEventListener listener : viewEventListeners)
-        listener.viewVerticalLeft(e);
-  }
-
-  protected void fireViewFirstRenderStarts() {
-    for (IViewEventListener listener : viewEventListeners)
-      listener.viewFirstRenderStarts();
-  }
-
-  public boolean addViewPointChangedListener(IViewPointChangedListener listener) {
-    return viewPointChangedListeners.add(listener);
-  }
-
-  public boolean removeViewPointChangedListener(IViewPointChangedListener listener) {
-    return viewPointChangedListeners.remove(listener);
-  }
-
-  protected void fireViewPointChangedEvent(ViewPointChangedEvent e) {
-    for (IViewPointChangedListener vp : viewPointChangedListeners)
-      vp.viewPointChanged(e);
-  }
-
-  public boolean addViewLifecycleChangedListener(IViewLifecycleEventListener listener) {
-    return viewLifecycleListeners.add(listener);
-  }
-
-  public boolean removeViewLifecycleChangedListener(IViewLifecycleEventListener listener) {
-    return viewLifecycleListeners.remove(listener);
-  }
-
-  protected void fireViewLifecycleHasInit(ViewLifecycleEvent e) {
-    for (IViewLifecycleEventListener vp : viewLifecycleListeners)
-      vp.viewHasInit(e);
-  }
-
-  protected void fireViewLifecycleWillRender(ViewLifecycleEvent e) {
-    for (IViewLifecycleEventListener vp : viewLifecycleListeners)
-      vp.viewWillRender(e);
-  }
-
-  protected void fireViewLifecycleHasRendered(ViewLifecycleEvent e) {
-    for (IViewLifecycleEventListener vp : viewLifecycleListeners)
-      vp.viewHasRendered(e);
-  }
-
-  
-
   /* */
 
   /**
@@ -967,7 +640,35 @@ public class View {
 
   /* RENDERING */
 
+  /**
+   * Trigger layout rendering which in turns invoke this {@link #renderView()}
+   */
   public void render() {
+    fireViewLifecycleWillRender(null);
+
+    if (layout != null && getChart() != null) {
+      layout.update(getChart());
+      layout.render(painter, getChart());
+
+      // renderOverlay(gl);
+      if (dimensionDirty)
+        dimensionDirty = false;
+    }
+
+    fireViewLifecycleHasRendered(null);
+
+
+  }
+
+  /**
+   * Default view render implementation.
+   * 
+   * Triggering View rendering is performer {@link IViewportLayout}. The layout implementation may
+   * either call renderView() or
+   * 
+   * Render background, scene and overlay Mark dimension dirty false Trigger view events
+   */
+  public void renderView() {
     fireViewLifecycleWillRender(null);
 
     renderBackground(0f, 1f);
@@ -976,9 +677,8 @@ public class View {
 
     if (dimensionDirty)
       dimensionDirty = false;
-    
-    fireViewLifecycleHasRendered(null);
 
+    fireViewLifecycleHasRendered(null);
   }
 
   /**
@@ -1354,12 +1054,12 @@ public class View {
 
     BoundingBox2d xySquare = new BoundingBox2d(xmin, xmax, ymin, ymax);
 
-    
+
     // Z range
-    float dist = (float)cam.getEye().distance(cam.getTarget());
-    float zmax = dist - bounds.getZRange().getMax()-1; 
-    float zmin = dist - bounds.getZRange().getMin()+1 ;
-    
+    float dist = (float) cam.getEye().distance(cam.getTarget());
+    float zmax = dist - bounds.getZRange().getMax() - 1;
+    float zmin = dist - bounds.getZRange().getMin() + 1;
+
     // configure camera rendering volume
     cam.setRenderingSquare(xySquare, zmax, zmin);
   }
@@ -1473,7 +1173,63 @@ public class View {
     annotations.getGraph().draw(painter);
   }
 
-  /* */
+  //
+  /* GETTERS & SETTERS */
+
+  /**
+   * Return a copy of the currently known pixel scale as notified by the canvas.
+   * 
+   * If the View received no pixel scale change event, the pixel scale will be 0.
+   */
+  public Coord2d getPixelScale() {
+    return pixelScale.clone();
+  }
+
+  /**
+   * Return HiDPI status as ACTUALLY possible by the ICanvas on the current screen and computer,
+   * regardless of the {@link Quality#setHiDPIEnabled(true)}.
+   * 
+   * Will always return {@link HiDPI.OFF} is chart is set to {@link Quality#setHiDPIEnabled(false)}
+   * as this forces the canvas to NOT make use of HiDPI.
+   * 
+   * @return
+   */
+  public HiDPI getHiDPI() {
+    return hidpi;
+  }
+
+  /** Return the configuration of a 2D layout */
+  public View2DLayout get2DLayout() {
+    return view2DLayout;
+  }
+
+  /**
+   * Return the result of processing a 2D layout using the layout configured with the instance
+   * returned by {@link #get2DLayout()}
+   */
+  public View2DProcessing get2DProcessing() {
+    return view2DProcessing;
+  }
+
+  public IPainter getPainter() {
+    return painter;
+  }
+
+  public Chart getChart() {
+    return chart;
+  }
+
+  public void setChart(Chart chart) {
+    this.chart = chart;
+  }
+
+  public boolean isSlave() {
+    return slave;
+  }
+
+  public void setSlave(boolean slave) {
+    this.slave = slave;
+  }
 
   public SpaceTransformer getSpaceTransformer() {
     return spaceTransformer;
@@ -1495,5 +1251,287 @@ public class View {
     return initialized;
   }
 
+  public IViewportLayout getLayout() {
+    return layout;
+  }
 
+  public void setLayout(IViewportLayout layout) {
+    this.layout = layout;
+  }
+
+  /**
+   * Return the central point of the view scene, that is the last bounding box center set by
+   * {@link lookToBox(BoundingBox3d box)}
+   */
+  public Coord3d getCenter() {
+    return center;
+  }
+
+  /** Get the {@link AxisBox}'s {@link BoundingBox3d} */
+  public BoundingBox3d getBounds() {
+    return axis.getBounds();
+  }
+
+  public ViewBoundMode getBoundsMode() {
+    return boundsMode;
+  }
+
+  /** Set the {@link ViewPositionMode} applied to this view. */
+  public void setViewPositionMode(ViewPositionMode mode) {
+    this.viewMode = mode;
+  }
+
+  /** Return the {@link ViewPositionMode} applied to this view. */
+  public ViewPositionMode getViewMode() {
+    return viewMode;
+  }
+
+  public boolean is2D() {
+    return ViewPositionMode.TOP.equals(getViewMode());
+  }
+
+  public boolean is3D() {
+    return !is2D();
+  }
+
+  /** Return the stretch ratio applied to the view */
+  public Coord3d getScaling() {
+    return scaling;
+  }
+
+  /**
+   * Set the viewpoint using polar coordinates relative to the target (i.e. the center of the
+   * scene). Only X and Y dimensions are required, as the distance to center will be computed
+   * automatically by {@link updateCamera()}.
+   * 
+   * The input coordinate is polar and considers
+   * <ul>
+   * <li>x is azimuth in [0;2xPI]
+   * <li>y is elevation in [-PI/2;+PI/2]. Will be clamped if out of bounds
+   * <li>z is range (distance to center) but ignored there as it is processed automatically
+   * </ul>
+   */
+  public void setViewPoint(Coord3d polar, boolean updateView) {
+    viewpoint = polar;
+    viewpoint.y = viewpoint.y < -PI_div2 ? -PI_div2 : viewpoint.y;
+    viewpoint.y = viewpoint.y > PI_div2 ? PI_div2 : viewpoint.y;
+    if (updateView)
+      shoot();
+
+    fireViewPointChangedEvent(new ViewPointChangedEvent(this, polar));
+  }
+
+  /**
+   * Set the viewpoint and query a view update.
+   * 
+   * 
+   * @see {@link setViewPoint(Coord3d polar, boolean updateView)}
+   */
+  public void setViewPoint(Coord3d polar) {
+    setViewPoint(polar, true);
+  }
+
+  /**
+   * Get the viewpoint. The Z dimension is the one defined by {@link updateCamera()}, which depends
+   * on the view scaling.
+   * 
+   * @see {@link setViewPoint(Coord3d polar, boolean updateView)}
+   */
+  public Coord3d getViewPoint() {
+    return viewpoint;
+  }
+
+  /**
+   * Return the last used view scaling that was set according to the {@link setSquared(boolean v)}
+   * status.
+   */
+  public Coord3d getLastViewScaling() {
+    return scaling;
+  }
+
+  /* CONTROLS ANNOTATIONS & GENERAL RENDERING */
+
+  public void setAxis(IAxis axis) {
+    this.axis = axis;
+    updateBounds();
+  }
+
+  public IAxis getAxis() {
+    return axis;
+  }
+
+  public AxisLayout getAxisLayout() {
+    return axis.getLayout();
+  }
+
+
+  public boolean getSquared() {
+    return this.squared;
+  }
+
+  public void setSquared(boolean status) {
+    this.squared = status;
+
+    if (is2D() && status)
+      LOGGER.info(
+          "View.setSquared : Setting a 2D chart squared may break the tick and axis label layout! Keep it to false for 2D charts");
+  }
+
+  public boolean isAxisDisplayed() {
+    return axisDisplayed;
+  }
+
+  public void setAxisDisplayed(boolean axisDisplayed) {
+    this.axisDisplayed = axisDisplayed;
+  }
+
+  public void setBackgroundColor(Color color) {
+    backgroundColor = color;
+  }
+
+  public Color getBackgroundColor() {
+    return backgroundColor;
+  }
+
+  public Camera getCamera() {
+    return cam;
+  }
+
+  /**
+   * Set the projection of this view, either Camera.ORTHOGONAL or Camera.PERSPECTIVE.
+   */
+  public void setCameraMode(CameraMode mode) {
+    this.cameraMode = mode;
+  }
+
+  /**
+   * Get the projection of this view, either CameraMode.ORTHOGONAL or CameraMode.PERSPECTIVE.
+   */
+  public CameraMode getCameraMode() {
+    return cameraMode;
+  }
+
+  public void setMaximized(boolean status) {
+    if (status)
+      this.cam.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+    else
+      this.cam.setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
+  }
+
+  public boolean isMaximized() {
+    return ViewportMode.STRETCH_TO_FILL.equals(this.cam.getViewportMode());
+  }
+
+
+  /**
+   * @see setter
+   */
+  public float getCameraRenderingSphereRadiusFactor() {
+    return cameraRenderingSphereRadiusFactor;
+  }
+
+  /**
+   * This allows zooming the 3d scene by editing the camera rendering sphere.
+   * <ul>
+   * <li>A value of 1 allows having an AxisBox with corners touching the top/bottom part of the
+   * canvas.
+   * <li>A value greater than 1 makes the rendering sphere bigger, hence the AxisBox appears
+   * smaller.
+   * </ul>
+   */
+  public void setCameraRenderingSphereRadiusFactor(float cameraRenderingSphereRadiusFactor) {
+    this.cameraRenderingSphereRadiusFactor = cameraRenderingSphereRadiusFactor;
+  }
+
+  public boolean isMaintainAllObjectsInView() {
+    return maintainAllObjectsInView;
+  }
+
+  public void setMaintainAllObjectsInView(boolean maintainAllObjectsInView) {
+    this.maintainAllObjectsInView = maintainAllObjectsInView;
+  }
+
+  public boolean isDisplayAxisWholeBounds() {
+    return displayAxisWholeBounds;
+  }
+
+  public void setDisplayAxisWholeBounds(boolean displayAxisWholeBounds) {
+    this.displayAxisWholeBounds = displayAxisWholeBounds;
+  }
+
+  public Scene getScene() {
+    return scene;
+  }
+
+  public Rectangle getSceneViewportRectangle() {
+    return cam.getRectangle();
+  }
+
+  public ICanvas getCanvas() {
+    return canvas;
+  }
+
+  public Graph getAnnotations() {
+    return annotations.getGraph();
+  }
+
+  public boolean addViewEventListener(IViewEventListener listener) {
+    return viewEventListeners.add(listener);
+  }
+
+  public boolean removeViewOnTopEventListener(IViewEventListener listener) {
+    return viewEventListeners.remove(listener);
+  }
+
+  protected void fireViewOnTopEvent(boolean isOnTop) {
+    ViewIsVerticalEvent e = new ViewIsVerticalEvent(this);
+
+    if (isOnTop)
+      for (IViewEventListener listener : viewEventListeners)
+        listener.viewVerticalReached(e);
+    else
+      for (IViewEventListener listener : viewEventListeners)
+        listener.viewVerticalLeft(e);
+  }
+
+  protected void fireViewFirstRenderStarts() {
+    for (IViewEventListener listener : viewEventListeners)
+      listener.viewFirstRenderStarts();
+  }
+
+  public boolean addViewPointChangedListener(IViewPointChangedListener listener) {
+    return viewPointChangedListeners.add(listener);
+  }
+
+  public boolean removeViewPointChangedListener(IViewPointChangedListener listener) {
+    return viewPointChangedListeners.remove(listener);
+  }
+
+  protected void fireViewPointChangedEvent(ViewPointChangedEvent e) {
+    for (IViewPointChangedListener vp : viewPointChangedListeners)
+      vp.viewPointChanged(e);
+  }
+
+  public boolean addViewLifecycleChangedListener(IViewLifecycleEventListener listener) {
+    return viewLifecycleListeners.add(listener);
+  }
+
+  public boolean removeViewLifecycleChangedListener(IViewLifecycleEventListener listener) {
+    return viewLifecycleListeners.remove(listener);
+  }
+
+  protected void fireViewLifecycleHasInit(ViewLifecycleEvent e) {
+    for (IViewLifecycleEventListener vp : viewLifecycleListeners)
+      vp.viewHasInit(e);
+  }
+
+  protected void fireViewLifecycleWillRender(ViewLifecycleEvent e) {
+    for (IViewLifecycleEventListener vp : viewLifecycleListeners)
+      vp.viewWillRender(e);
+  }
+
+  protected void fireViewLifecycleHasRendered(ViewLifecycleEvent e) {
+    for (IViewLifecycleEventListener vp : viewLifecycleListeners)
+      vp.viewHasRendered(e);
+  }
 }

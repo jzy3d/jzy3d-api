@@ -1,5 +1,6 @@
 package org.jzy3d.debug;
 
+import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -7,19 +8,28 @@ import java.awt.Graphics2D;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Margin;
 import org.jzy3d.painters.AWTFont;
+import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
+import org.jzy3d.plot3d.rendering.legends.ILegend;
+import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
+import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRenderer2d{
 
   View2DLayout layout;
   AxisLayout axisLayout;
-  Color color = Color.BLUE;
+  ViewAndColorbarsLayout viewportLayout;
+  Color color = Color.CYAN;
+  Color color2 = Color.MAGENTA;
+  
   int interlinePx = 8;
   
   public View2DLayout_Debug() {
@@ -37,35 +47,118 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
     this.layout = view.get2DLayout();
     this.axisLayout = view.getAxis().getLayout();
+    this.viewportLayout = (ViewAndColorbarsLayout)view.getLayout();
+    //((AWTChart)view.getChart()).getV;
   }
 
 
   @Override
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {
     Graphics2D g2d = (Graphics2D) g;
+    Coord2d pixelScale = view.getPixelScale();
     
-    Coord2d ps = view.getPixelScale();
     
-    // Cancel the HiDPI scaling consideration to draw debug stuff properly
-    //
+    configureFontAndHiDPI(g2d, pixelScale);
+    AWTGraphicsUtils.configureRenderingHints(g2d); // Text and aliasing settings
+
+
+    drawViewMargins(g2d, pixelScale);
+    drawColorbarMargins(g2d, pixelScale);
+  }
+
+  protected void drawColorbarMargins(Graphics2D g2d, Coord2d pixelScale) {
+    g2d.setColor(AWTColor.toAWT(color2));
+
+    //viewportLayout.getColorbarRightMargin();
+    viewportLayout.getLegendsWidth();
     
+    for(ILegend legend : viewportLayout.getLegends()) {
+      if(legend instanceof AWTColorbarLegend) {
+        AWTColorbarLegend colorbar = (AWTColorbarLegend)legend;
+        colorbar.getRectangle();
+        
+        ViewportConfiguration viewport = colorbar.getLastViewPort();
+        
+        int x = viewport.getX();
+        int y = viewport.getY();
+        int w = viewport.getWidth()-1;
+        int h = viewport.getHeight()-1;
+        
+        int lineHeight = getLineHeigth(pixelScale, 0);
+
+        g2d.drawString("Colorbar.Viewport", x, y+lineHeight);
+
+        
+        g2d.drawRect(x, y, w, h);
+
+        //System.out.println("H=" + h);
+        Margin margin = colorbar.getMargin();
+        x+=margin.getLeft()*pixelScale.x;
+        w-=margin.getWidth()*pixelScale.x;
+        y+=margin.getTop()*pixelScale.y;
+        h-=margin.getHeight()*pixelScale.y;
+        
+        g2d.drawString("Colorbar.Margins", x, y);
+        g2d.drawRect(x, y, w, h);
+        
+        colorbar.getImage().getWidth();
+        
+        
+        AWTColorbarImageGenerator gen = colorbar.getImageGenerator();
+
+        // Bar
+        w = gen.getScaledBarWidth();
+        g2d.drawRect(x, y, w, h);
+        
+        int yBar = y+lineHeight;
+        g2d.drawString("Colorbar.Bar", x, yBar);
+        
+        // MinDim
+        g2d.setColor(AWTColor.toAWT(Color.ORANGE));
+        
+        x= viewport.getX();
+        int yminDim= yBar+lineHeight;
+        w =Math.round(colorbar.getMinimumDimension().width*pixelScale.getX());
+        h = Math.round(colorbar.getMinimumDimension().height+pixelScale.getY());
+
+        g2d.setStroke(new BasicStroke(2));
+        g2d.drawRect(x, yminDim, w-1, h);
+        
+        //maxTextWidth = 
+        
+        g2d.drawString("Colorbar.MinDim", x, yminDim);
+
+        g2d.setStroke(new BasicStroke(1));
+       
+        
+        
+        //System.out.println("H=" + h + " (" +margin.getBottom());
+        
+      }
+    }
+    
+    
+  }
+
+  /** Cancel the HiDPI scaling consideration to draw debug stuff properly on either EmulGL or Native*/
+  protected void configureFontAndHiDPI(Graphics2D g2d, Coord2d pixelScale) {
     Font font = AWTFont.toAWT(axisLayout.getFont());
 
     // Native 
     if(view.getCanvas().isNative()) {
-      g2d.scale(1/ps.x, 1/ps.y);
+      g2d.scale(1/pixelScale.x, 1/pixelScale.y);
     }
     // EmulGL
     else {
-      int newSize = (int)(font.getSize() / ps.y);
+      int newSize = (int)(font.getSize() / pixelScale.y);
       font = new Font(font.getName(), font.getStyle(), newSize);
     }
-
-    g2d.setColor(AWTColor.toAWT(color));
     g2d.setFont(font);
+  }
 
-    // Text and aliasing settings
-    AWTGraphicsUtils.configureRenderingHints(g2d);
+  protected void drawViewMargins(Graphics2D g2d, Coord2d pixelScale) {
+    
+    g2d.setColor(AWTColor.toAWT(color));
 
     
     // ------------------------
@@ -79,21 +172,31 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
     int txtSize = axisLayout.getFont().getHeight();
     
-    drawHorizontalLines(g2d, height, width, txtSize);
+    drawViewMarginsHorizontalLines(g2d, height, width, txtSize);
     
     
     // ------------------------
     // Vertical lines
 
-    int lineHeight = Math.round(txtSize + 8*ps.y);
+    int lineHeight = getLineHeigth(pixelScale);
 
-    drawVerticalLines(g2d, height, lineHeight);
+    drawViewMarginsVerticalLines(g2d, height, lineHeight);
+  }
 
+  private int getLineHeigth(Coord2d pixelScale) {
+    int topMargin = 8;
+    
+    return getLineHeigth(pixelScale, topMargin);
+  }
+
+  private int getLineHeigth(Coord2d pixelScale, int topMargin) {
+    int txtSize = axisLayout.getFont().getHeight();
+    return Math.round(txtSize + topMargin*pixelScale.y);
   }
 
 
 
-  private void drawHorizontalLines(Graphics2D g2d, int height, int width, int txtSize) {
+  protected void drawViewMarginsHorizontalLines(Graphics2D g2d, int height, int width, int txtSize) {
     FontMetrics fm = g2d.getFontMetrics();
     
     Coord2d ps = view.getPixelScale();
@@ -154,7 +257,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
 
 
-  private void drawVerticalLines(Graphics2D g2d, int height, int lineHeight) {
+  protected void drawViewMarginsVerticalLines(Graphics2D g2d, int height, int lineHeight) {
     FontMetrics fm = g2d.getFontMetrics();
 
     Coord2d ps = view.getPixelScale();
