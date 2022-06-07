@@ -108,10 +108,12 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     return minimumDimension;
   }
 
+  @Deprecated
   public void setMinimumDimension(Dimension dimension) {
     minimumDimension = dimension;
   }
   
+  @Deprecated
   public void setMinimumWidth(int minimumWidth) {
     this.minimumDimension.width = minimumWidth;
   }

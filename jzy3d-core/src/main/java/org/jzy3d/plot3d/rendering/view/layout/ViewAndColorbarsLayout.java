@@ -50,7 +50,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
    * used by classes that inherit this class
    */
   protected boolean shrinkColorbar = false;
-  protected int colorbarRightMargin = 10;
+  //protected int colorbarRightMargin = 10;
   protected Chart chart;
 
   @Override
@@ -73,12 +73,14 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       
       int minWidth = 0;
       
+      float xScale = chart.getView().getPixelScale().x;
+      
       for (ILegend data : list) {
-        minWidth += data.getMinimumDimension().width;
+        minWidth += data.getMinimumDimension().width * xScale;
         
-        System.out.println("ViewAndColorbarLayout : legend.minDim : " + data.getMinimumDimension());
+        System.out.println("ViewAndColorbarLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
       }
-      minWidth *= chart.getView().getPixelScale().x;
+      //minWidth *= ;
 
       screenSeparator = computeSeparator(canvas, minWidth);
     
@@ -168,6 +170,10 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     }
   }
 
+  public List<ILegend> getLegends() {
+    return getLegends(chart);
+  }
+
   protected List<ILegend> getLegends(Chart chart) {
     if (chart != null && chart.getScene() != null && chart.getScene().getGraph() != null
         && chart.getScene().getGraph().getLegends() != null)
@@ -188,6 +194,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     return backgroundViewport;
   }
 
+  @Deprecated
   public boolean isShrinkColorbar() {
     return shrinkColorbar;
   }
@@ -198,6 +205,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
    * If the input value is different than internal state, then the chart will be updated to ensure
    * the setting takes effect immediately.
    */
+  @Deprecated
   public void setShrinkColorbar(boolean shrinkColorbar) {
     boolean updateDisplay = (shrinkColorbar != this.shrinkColorbar);
 
@@ -208,9 +216,9 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     }
   }
 
-  public int getColorbarRightMargin() {
+  /*public int getColorbarRightMargin() {
     return colorbarRightMargin;
-  }
+  }*/
 
   /**
    * Set a right margin for colorbar.
@@ -218,7 +226,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
    * If the input value is different than internal state, then the chart will be updated to ensure
    * the setting takes effect immediately.
    */
-  public void setColorbarRightMargin(int colorbarRightMargin) {
+  /*public void setColorbarRightMargin(int colorbarRightMargin) {
     boolean updateDisplay = (colorbarRightMargin != this.colorbarRightMargin);
 
     this.colorbarRightMargin = colorbarRightMargin;
@@ -226,7 +234,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     if (updateDisplay) {
       chart.render();
     }
-  }
+  }*/
 
   /**
    * Return the legend width as it was processed at the rendering stage. Hence this value is defined

@@ -138,7 +138,6 @@ public class AxisLayout {
    * Return the maximum text length in pixel as displayed on screen, given the current ticks and
    * renderer
    */
-  
   public int getMaxXTickLabelWidth(IPainter painter) {
     int maxWidth = 0;
 
@@ -151,6 +150,13 @@ public class AxisLayout {
       }
     }
     return maxWidth;
+
+  }
+  
+  public int getRightMostXTickLabelWidth(IPainter painter) {
+    double t = getXTicks()[getXTicks().length-1];
+    String label = getXTickRenderer().format(t);
+    return painter.getTextLengthInPixels(font, label);
 
   }
 
