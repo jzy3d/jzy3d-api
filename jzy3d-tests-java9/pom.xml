@@ -18,37 +18,7 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-native-jogl-awt</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency> <!-- For a single demo, remove me! -->
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-native-jogl-swing</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-native-jogl-newt</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-emul-gl-awt</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-tester-native</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-io-xls</artifactId>
+			<artifactId>jzy3d-everything</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 

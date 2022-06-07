@@ -75,6 +75,8 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       
       for (ILegend data : list) {
         minWidth += data.getMinimumDimension().width;
+        
+        System.out.println("ViewAndColorbarLayout : legend.minDim : " + data.getMinimumDimension());
       }
       minWidth *= chart.getView().getPixelScale().x;
 
@@ -95,6 +97,10 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
    */
   @Override
   public void render(IPainter painter, Chart chart) {
+    renderView(painter, chart);
+  }
+
+  protected void renderView(IPainter painter, Chart chart) {
     View view = chart.getView();
 
     // System.out.println("ViewAndColorbarLayout w:" + chart.getCanvas().getRendererWidth() + " h:"
@@ -150,13 +156,15 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       float theLeft = left + slice * (k++);
       float theRight = left + slice * k;
       
-      //System.out.println("ViewAndColorbars : width:" + width + " height:" + height);
+      System.out.println("ViewAndColorbars : width:" + width + " height:" + height);
       //System.out.println("ViewAndColorbars : TheLeft:" + theLeft + " TheRight:" + theRight);
 
       legend.setFont(painter.getView().getAxis().getLayout().getFont());
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
       legend.setViewPort(width, height, theLeft, theRight);
       legend.render(painter);
+      
+      
     }
   }
 
