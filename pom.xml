@@ -78,9 +78,14 @@
 		<module>jzy3d-svm-mapper</module>
 		<module>jzy3d-tools-libsvm</module>
 
+		<!-- Report -->
 		<module>jzy3d-io-xls</module>
 		<module>jzy3d-io-reports</module>
 
+		<!-- Bundle -->
+		<module>jzy3d-everything</module>
+
+		<!-- Integration tests -->
 		<module>jzy3d-tests-java9</module>
 
 	</modules>

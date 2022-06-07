@@ -56,7 +56,7 @@ public class ITTest {
   // //
   // Toolkit and resolutions to apply to all tests using the forEach operator
 
-  protected WT[] toolkits = {WT.EmulGL_AWT, WT.Native_AWT, WT.Native_Swing};
+  protected WT[] toolkits = {WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT};
   protected HiDPI[] resolutions = {HiDPI.ON, HiDPI.OFF};
 
   /**
