@@ -233,6 +233,12 @@ public class Chart {
     view.shoot();
   }
 
+  public void render(int n) {
+    for (int i = 0; i < n; i++) {
+      render();
+    }
+  }
+
   public void setAnimated(boolean status) {
     getQuality().setAnimated(status);
 

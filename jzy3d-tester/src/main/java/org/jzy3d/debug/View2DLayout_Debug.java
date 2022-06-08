@@ -79,6 +79,10 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         
         ViewportConfiguration viewport = colorbar.getLastViewPort();
         
+        if(viewport==null) {
+          return;
+        }
+        
         int x = viewport.getX();
         int y = viewport.getY();
         int w = viewport.getWidth()-1;
@@ -290,7 +294,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     g2d.drawString("Tick Label Right Side (" + x + ")", x, lineHeight*4);
     
     // on chart border
-    x = Math.round(x+layout.getxTickLabelsDistance()*ps.x);
+    x = Math.round(x+layout.getyTickLabelsDistance()*ps.x);
     g2d.drawLine(x, 0, x, height);
     
     g2d.drawString("Chart left border (" + x + ")", x, lineHeight*5);
