@@ -36,7 +36,7 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
  */
 public class ViewAndColorbarsLayout implements IViewportLayout {
   protected float screenSeparator = 1.0f;
-  protected boolean hasColorbars = true;
+  protected boolean hasColorbars = false;
 
   protected ViewportConfiguration sceneViewport;
   protected ViewportConfiguration backgroundViewport;
@@ -78,7 +78,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       for (ILegend data : list) {
         minWidth += data.getMinimumDimension().width * xScale;
         
-        System.out.println("ViewAndColorbarLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
+        //System.out.println("ViewAndColorbarsLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
       }
       //minWidth *= ;
 
@@ -158,7 +158,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       float theLeft = left + slice * (k++);
       float theRight = left + slice * k;
       
-      System.out.println("ViewAndColorbars : width:" + width + " height:" + height);
+      //System.out.println("ViewAndColorbars : width:" + width + " height:" + height);
       //System.out.println("ViewAndColorbars : TheLeft:" + theLeft + " TheRight:" + theRight);
 
       legend.setFont(painter.getView().getAxis().getLayout().getFont());
