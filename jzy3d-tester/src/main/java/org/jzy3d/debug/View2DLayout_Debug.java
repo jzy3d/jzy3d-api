@@ -68,19 +68,45 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     drawViewMargins(g2d, pixelScale);
     drawColorbarMargins(g2d, pixelScale);
   }
+  
+  /** Cancel the HiDPI scaling consideration to draw debug stuff properly on either EmulGL or Native*/
+  protected void configureFontAndHiDPI(Graphics2D g2d, Coord2d pixelScale) {
+    Font font = AWTFont.toAWT(axisLayout.getFont());
+
+    // Native 
+    if(view.getCanvas().isNative()) {
+      g2d.scale(1/pixelScale.x, 1/pixelScale.y);
+    }
+    // EmulGL
+    else {
+      int newSize = (int)(font.getSize() / pixelScale.y);
+      font = new Font(font.getName(), font.getStyle(), newSize);
+    }
+    g2d.setFont(font);
+  }
 
   protected void drawColorbarMargins(Graphics2D g2d, Coord2d pixelScale) {
     g2d.setColor(AWTColor.toAWT(color2));
 
     //viewportLayout.getColorbarRightMargin();
+    
+    // print me
     viewportLayout.getLegendsWidth();
     
     for(ILegend legend : viewportLayout.getLegends()) {
       if(legend instanceof AWTColorbarLegend) {
         AWTColorbarLegend colorbar = (AWTColorbarLegend)legend;
+        
+        // print me
         colorbar.getRectangle();
         
+        // for native
         ViewportConfiguration viewport = colorbar.getLastViewPort();
+        
+        
+        /*if(!view.getCanvas().isNative()) {
+          EmulGLCanvas c = view.getCanvas();
+        }*/
         
         if(viewport==null) {
           return;
@@ -105,7 +131,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         y+=margin.getTop()*pixelScale.y;
         h-=margin.getHeight()*pixelScale.y;
         
-        g2d.drawString("Colorbar.Margins", x, y);
+        g2d.drawString("Colorbar.Margins (" + margin.getWidth() + "," + margin.getHeight() + ")", x, y);
         g2d.drawRect(x, y, w, h);
         
         colorbar.getImage().getWidth();
@@ -147,21 +173,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     
   }
 
-  /** Cancel the HiDPI scaling consideration to draw debug stuff properly on either EmulGL or Native*/
-  protected void configureFontAndHiDPI(Graphics2D g2d, Coord2d pixelScale) {
-    Font font = AWTFont.toAWT(axisLayout.getFont());
 
-    // Native 
-    if(view.getCanvas().isNative()) {
-      g2d.scale(1/pixelScale.x, 1/pixelScale.y);
-    }
-    // EmulGL
-    else {
-      int newSize = (int)(font.getSize() / pixelScale.y);
-      font = new Font(font.getName(), font.getStyle(), newSize);
-    }
-    g2d.setFont(font);
-  }
 
   protected void drawViewMargins(Graphics2D g2d, Coord2d pixelScale) {
     
@@ -216,7 +228,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     
     x = Math.round(layout.getMargin().getLeft()*ps.x);
    
-    String info = "Axis Label Bottom";
+    String info = "Axis Label Bottom (" + y + ")";
     g2d.drawString(info, x, y);
     int shift = fm.stringWidth(info);
 
@@ -225,31 +237,31 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize);
     g2d.drawLine(0, y, width, y);
 
-    info = "Axis Label Top";
+    info = "Axis Label Top (" + y + ")";
     g2d.drawString(info, shift, y);
     shift += fm.stringWidth(info);
     
     // down to tick label
-    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getxAxisLabelsDistance()*ps.y);
+    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getHorizontalAxisLabelsDistance()*ps.y);
     g2d.drawLine(0, y, width, y);
 
-    info = "Tick Label Bottom";
+    info = "Tick Label Bottom ("  + y + ")";
     g2d.drawString(info, shift, y);
     shift += fm.stringWidth(info);
     
     // up to tick label
-    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getxAxisLabelsDistance()*ps.y+txtSize);
+    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getHorizontalAxisLabelsDistance()*ps.y+txtSize);
     g2d.drawLine(0, y, width, y);
     
-    info = "Tick Label Top";
+    info = "Tick Label Top (" + y + ")";
     g2d.drawString(info, shift, y);
     shift += fm.stringWidth(info);
 
     // up to tick label margin
-    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getxAxisLabelsDistance()*ps.y+txtSize+layout.getxTickLabelsDistance()*ps.y);
+    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getHorizontalAxisLabelsDistance()*ps.y+txtSize+layout.getHorizontalTickLabelsDistance()*ps.y);
     g2d.drawLine(0, y, width, y);
 
-    info = "Chart bottom border";
+    info = "Chart bottom border (" + y + ")";
     g2d.drawString(info, shift, y);
     shift += fm.stringWidth(info);
 
@@ -257,7 +269,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     y = Math.round(layout.getMargin().getTop()*ps.y);
     g2d.drawLine(0, y, width, y);
     
-    info = "Chart top border";
+    info = "Chart top border (" + y + ")";
     g2d.drawString(info, shift, y);
 
   }
@@ -284,7 +296,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
     
     // left to tick label
-    x = Math.round(x+layout.getyAxisLabelsDistance()*ps.x);
+    x = Math.round(x+layout.getVerticalAxisLabelsDistance()*ps.x);
     g2d.drawLine(x, 0, x, height);
 
     g2d.drawString("Tick Label Left Side ("  + x + ")", x, lineHeight*3);
@@ -297,7 +309,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     g2d.drawString("Tick Label Right Side (" + x + ")", x, lineHeight*4);
     
     // on chart border
-    x = Math.round(x+layout.getyTickLabelsDistance()*ps.x);
+    x = Math.round(x+layout.getVerticalTickLabelsDistance()*ps.x);
     g2d.drawLine(x, 0, x, height);
     
     g2d.drawString("Chart left border (" + x + ")", x, lineHeight*5);
