@@ -67,7 +67,7 @@ public class View2DLayout {
    * 
    * @see {@link #getMargin()}
    */
-  public void setMargin(float margin) {
+  public void setMargin(int margin) {
     setMarginHorizontal(margin);
     setMarginVertical(margin);
   }
@@ -77,7 +77,7 @@ public class View2DLayout {
    * 
    * @see {@link #getMargin()}
    */
-  public void setMarginHorizontal(float margin) {
+  public void setMarginHorizontal(int margin) {
     this.margin.setWidth(margin*2);
   }
 
@@ -86,7 +86,7 @@ public class View2DLayout {
    * 
    * @see {@link #getMargin()}
    */
-  public void setMarginVertical(float margin) {
+  public void setMarginVertical(int margin) {
     this.margin.setHeight(margin*2);
   }
 

@@ -139,15 +139,17 @@ public class Chart {
     View view = getView();
 
     // Remember 3D layout
-    axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
-    axisYLabelOrientation = axisLayout.getYAxisLabelOrientation();
-    axisZLabelDisplayed = axisLayout.isZAxeLabelDisplayed();
-    isTickLineDisplayed = axisLayout.isTickLineDisplayed();
-    
-    isSquaredViewActive = view.getSquared();
-    viewPositionMode = view.getViewMode();
-    viewportMode = view.getCamera().getViewportMode();
-    viewpoint = view.getViewPoint();
+    if(view.is3D()) {
+      axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
+      axisYLabelOrientation = axisLayout.getYAxisLabelOrientation();
+      axisZLabelDisplayed = axisLayout.isZAxeLabelDisplayed();
+      isTickLineDisplayed = axisLayout.isTickLineDisplayed();
+
+      isSquaredViewActive = view.getSquared();
+      viewPositionMode = view.getViewMode();
+      viewportMode = view.getCamera().getViewportMode();
+      viewpoint = view.getViewPoint().clone();
+    }
     
     // Apply 2D layout to axis
     axisLayout.setTickLineDisplayed(false);
@@ -175,7 +177,7 @@ public class Chart {
   protected boolean isSquaredViewActive = true;
   protected ViewPositionMode viewPositionMode = ViewPositionMode.FREE;
   protected ViewportMode viewportMode = ViewportMode.RECTANGLE_NO_STRETCH;
-  protected Coord3d viewpoint = View.VIEWPOINT_DEFAULT;
+  protected Coord3d viewpoint = View.VIEWPOINT_DEFAULT.clone();
   
   public Chart view3d() {
     AxisLayout axisLayout = getAxisLayout();

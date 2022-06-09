@@ -107,6 +107,10 @@ public interface ICanvas {
    * 
    */
   public void setPixelScale(float[] scale);
+  
+  default void setPixelScale(Coord2d scale) {
+    setPixelScale(scale.toArray());
+  }
 
   /**
    * Provide pixel scale as feasible by the Hardware, OS, and JVM, independently of what was asked
