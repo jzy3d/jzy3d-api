@@ -151,7 +151,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         
         x= viewport.getX();
         int yminDim= yBar+lineHeight;
-        w =Math.round(colorbar.getMinimumDimension().width*pixelScale.getX());
+        w = Math.round(colorbar.getMinimumDimension().width*pixelScale.getX());
         h = Math.round(colorbar.getMinimumDimension().height+pixelScale.getY());
 
         g2d.setStroke(new BasicStroke(2));
@@ -160,6 +160,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         //maxTextWidth = 
         
         g2d.drawString("Colorbar.MinDim", x, yminDim);
+        g2d.drawString(colorbar.getMinimumDimension().toString(), x, yminDim+g2d.getFont().getSize()+1);
 
         g2d.setStroke(new BasicStroke(1));
        
