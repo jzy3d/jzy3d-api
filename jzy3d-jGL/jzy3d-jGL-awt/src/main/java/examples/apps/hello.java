@@ -47,6 +47,7 @@ public class hello extends GLCanvas {
     /* initialize viewing values */
     myGL.glMatrixMode(GL.GL_PROJECTION);
     myGL.glLoadIdentity();
+    
     myGL.glOrtho(0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f);
   }
 
