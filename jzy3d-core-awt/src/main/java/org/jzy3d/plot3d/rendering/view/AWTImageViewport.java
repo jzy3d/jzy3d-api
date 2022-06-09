@@ -66,7 +66,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     int xPosition = 0;
     int yPosition = 0;
 
-    System.out.println("AWTImageViewport : im : " + imageWidth + " screen : " + screenWidth + " margin : " + margin.getWidth());
+    //System.out.println("AWTImageViewport : im : " + imageWidth + " screen : " + screenWidth + " margin : " + margin.getWidth());
     
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageWidth < screenWidth) {
@@ -77,10 +77,11 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
         xPosition += (margin.getLeft() - margin.getRight());
       }
     }
-    // If image is bigger than viewport, unzoom it a bit to let it fit the dimensions
+    // Else if image is bigger than viewport, unzoom it a bit to let it fit the dimensions
     else if(imageWidth > screenWidth){
       xZoom = ((float) screenWidth) / ((float) imageWidth);
     }
+    // If exact fit, keep default value
     
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageHeight < screenHeight) {
@@ -96,6 +97,8 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     else if(imageWidth > screenWidth) {
       yZoom = ((float) screenHeight) / ((float) imageHeight);
     }
+    // If exact fit, keep default value
+    
     //System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
     //System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
     //System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);

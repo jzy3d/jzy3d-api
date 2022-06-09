@@ -75,6 +75,11 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       
       float xScale = chart.getView().getPixelScale().x;
       
+      // scale may be 0 while reloading canvas and changing pixel scale
+      if(xScale==0) {
+        xScale = 1;
+      }
+      
       for (ILegend data : list) {
         minWidth += data.getMinimumDimension().width * xScale;
         
@@ -91,7 +96,10 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   }
 
   protected float computeSeparator(final ICanvas canvas, int minWidth) {
-    return ((float) (canvas.getRendererWidth() - minWidth)) / ((float) canvas.getRendererWidth());
+    int width = canvas.getRendererWidth();
+    if(width==0)
+      width=600; // POURQUOI EN RECHARGEANT, LE CANVAS EST PAS ENCORE PRET??
+    return ((float) (width - minWidth)) / width;
   }
 
   /**

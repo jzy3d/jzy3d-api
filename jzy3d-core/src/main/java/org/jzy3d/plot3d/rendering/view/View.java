@@ -268,8 +268,14 @@ public class View {
    * Current view selection into the mother Scene, and call to target canvas rendering.
    */
   public void shoot() {
-    if (canvas != null)
-      canvas.forceRepaint();
+    if (canvas != null) {
+      if(canvas.getRendererWidth()>0 && canvas.getRendererHeight()>0) {
+        canvas.forceRepaint();
+      }
+      else {
+        System.err.println("Canvas must have a non zero size");
+      }
+    }
   }
 
   /**
