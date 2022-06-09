@@ -156,7 +156,7 @@ public class AxisTickProcessor {
       // according to Y range, canvas height and font height
       
       if (this.axis.isX(dimension)) {
-        float worldTickLen = (layout2D.getxTickLabelsDistance()*pixelScale.y + font.getHeight()) * modelToScreen.y;
+        float worldTickLen = (layout2D.getHorizontalTickLabelsDistance()*pixelScale.y + font.getHeight()) * modelToScreen.y;
         float range = this.axis.getBounds().getYRange().getRange();
         return range/worldTickLen;
       }
@@ -166,7 +166,7 @@ public class AxisTickProcessor {
       // according to X range, canvas width and font width
       
       else if (this.axis.isY(dimension)) {
-        float worldTickLen = layout2D.getyTickLabelsDistance()*pixelScale.x * modelToScreen.x;
+        float worldTickLen = layout2D.getVerticalTickLabelsDistance()*pixelScale.x * modelToScreen.x;
         float range = this.axis.getBounds().getXRange().getRange();
         return range/worldTickLen;
       }

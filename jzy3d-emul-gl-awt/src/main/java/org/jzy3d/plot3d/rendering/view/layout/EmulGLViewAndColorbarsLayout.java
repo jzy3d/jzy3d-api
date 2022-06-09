@@ -82,7 +82,15 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
 
       // FALLBACK ON DIRECT AWT IMAGE RENDERING THROUGH jGL
       if (legend instanceof AWTColorbarLegend) {
+        
         AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
+
+        
+        // not necessary for below processing but need a viewport
+        // to draw colorbar margins in debug mode
+        //awtLegend.setViewPort(width, height, from, to);
+        //awtLegend.applyViewport(painter);
+
         
         //awtLegend.getImageGenerator().setFont(font);
         
