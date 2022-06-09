@@ -66,34 +66,36 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     int xPosition = 0;
     int yPosition = 0;
 
+    System.out.println("AWTImageViewport : im : " + imageWidth + " screen : " + screenWidth + " margin : " + margin.getWidth());
+    
+    // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageWidth < screenWidth) {
-      if(margin.getLeft()!=margin.getRight()) {
-        xPosition = Math.round(screenWidth / 2f - (imageWidth / 2f + margin.getWidth()));
-
-      }
-      else {
       xPosition = Math.round((float) screenWidth / 2 - (float) imageWidth / 2);
+
+      // If margin are asymetric, shift by taking them into account
+      if(margin.getLeft()!=margin.getRight()) {
+        xPosition += (margin.getLeft() - margin.getRight());
       }
     }
-    else
+    // If image is bigger than viewport, unzoom it a bit to let it fit the dimensions
+    else if(imageWidth > screenWidth){
       xZoom = ((float) screenWidth) / ((float) imageWidth);
-
+    }
+    
+    // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageHeight < screenHeight) {
-      //int shiftForMargin = 0;
-      
-      // TODO : clarify this
-      
+      yPosition = Math.round((float) screenHeight / 2 - ((float) imageHeight / 2));        
+
       if(margin.getTop()!=margin.getBottom()) {
-        //shiftForMargin = Math.round(margin.getHeight()/2);
-        yPosition = Math.round(screenHeight / 2f - (imageHeight / 2f - margin.getHeight()/2f) /*margin.getTop())*/);
+        yPosition += (margin.getBottom()-margin.getTop());
       }
       else {
-        yPosition = Math.round((float) screenHeight / 2 - ((float) imageHeight / 2));        
       }
     }
-    else
+    // If image is bigger than viewport, unzoom it a bit to let it fit the dimensions
+    else if(imageWidth > screenWidth) {
       yZoom = ((float) screenHeight) / ((float) imageHeight);
-
+    }
     //System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
     //System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
     //System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
