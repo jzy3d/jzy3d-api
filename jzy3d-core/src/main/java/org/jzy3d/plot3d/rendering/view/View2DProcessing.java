@@ -4,6 +4,7 @@ import org.jzy3d.chart.ChartView;
 import org.jzy3d.maths.Area;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Margin;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.AxisLabelProcessor;
@@ -56,7 +57,7 @@ public class View2DProcessing {
 
 
   // the overall margins on the width and height, summing all margin of each dimension
-  protected Area margin;
+  protected Area area;
 
   protected Coord2d modelToScreen;
 
@@ -172,6 +173,8 @@ public class View2DProcessing {
         if (layout instanceof ViewAndColorbarsLayout) {
           float legendWidth = ((ViewAndColorbarsLayout) layout).getLegendsWidth();
           legendWidth /= pixelScale.x;
+          
+          System.err.println("View2DProcessing expand right margin at " + legendWidth);
           marginRightPx += legendWidth;
         }
       }
@@ -180,9 +183,9 @@ public class View2DProcessing {
     // ---------------------------------------------------
     // The actual processing of margin
     
-    margin = new Area(marginLeftPx + marginRightPx, marginTopPx + marginBottomPx);
+    area = new Area(marginLeftPx + marginRightPx, marginTopPx + marginBottomPx);
 
-    modelToScreen = getModelToScreenRatio(bounds, viewport, margin);
+    modelToScreen = getModelToScreenRatio(bounds, viewport, area);
 
     // convert pixel margin to world coordinate to add compute the additional 3D space to grasp with
     // the camera
@@ -304,14 +307,14 @@ public class View2DProcessing {
     float x = 1;
 
 
-    if (margin.width != 0 && (canvas.width != margins.width)) {
+    if (area.width != 0 && (canvas.width != margins.width)) {
       x = (((space.width * canvas.width) / (canvas.width - margins.width)) - space.width)
           / margins.width;
     }
 
     float y = 1;
 
-    if (margin.height != 0 && (canvas.height != margins.height)) {
+    if (area.height != 0 && (canvas.height != margins.height)) {
       y = (((space.height * canvas.height) / (canvas.height - margins.height)) - space.height)
           / margins.height;
 
@@ -343,8 +346,8 @@ public class View2DProcessing {
    * Return the overall margin that was processed at the latest call to {@link #apply()} according
    * to the axis and view layout settings
    */
-  public Area getMargin() {
-    return new Area(margin);
+  public Area getArea() {
+    return new Area(area);
   }
 
   /**
@@ -384,6 +387,10 @@ public class View2DProcessing {
    */
   public Coord2d getModelToScreen() {
     return modelToScreen;
+  }
+  
+  public Margin getMarginPx() {
+    return new Margin(marginLeftPx, marginRightPx, marginTopPx, marginBottomPx);
   }
 
 }

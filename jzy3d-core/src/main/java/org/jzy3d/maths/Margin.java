@@ -18,7 +18,11 @@ public class Margin {
   public Margin(int left, int right, int top, int bottom) {
     set(left, right, top, bottom);
   }
-  
+
+  public Margin(float left, float right, float top, float bottom) {
+    set(Math.round(left), Math.round(right), Math.round(top), Math.round(bottom));
+  }
+
   /**
    * Set left and right margin to width/2, top and bottom margin to height/2.
    */
