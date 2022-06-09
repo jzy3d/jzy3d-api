@@ -97,8 +97,11 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
 
   protected float computeSeparator(final ICanvas canvas, int minWidth) {
     int width = canvas.getRendererWidth();
+    
     if(width==0)
-      width=600; // POURQUOI EN RECHARGEANT, LE CANVAS EST PAS ENCORE PRET??
+      throw new IllegalArgumentException("Canvas has no width");
+
+      //  width=600; // POURQUOI EN RECHARGEANT, LE CANVAS EST PAS ENCORE PRET??
     return ((float) (width - minWidth)) / width;
   }
 
