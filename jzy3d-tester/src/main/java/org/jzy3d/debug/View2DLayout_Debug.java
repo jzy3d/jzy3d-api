@@ -19,12 +19,14 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
+import org.jzy3d.plot3d.rendering.view.View2DProcessing;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRenderer2d{
 
   View2DLayout layout;
+  View2DProcessing processing;
   AxisLayout axisLayout;
   ViewAndColorbarsLayout viewportLayout;
   Color color = Color.CYAN;
@@ -46,6 +48,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     super.setView(view);
 
     this.layout = view.get2DLayout();
+    this.processing = view.get2DProcessing();
     this.axisLayout = view.getAxis().getLayout();
     this.viewportLayout = (ViewAndColorbarsLayout)view.getLayout();
     //((AWTChart)view.getChart()).getV;
@@ -300,6 +303,10 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     g2d.drawString("Chart left border (" + x + ")", x, lineHeight*5);
 
     x = Math.round(view.getCamera().getLastViewPort().getWidth()-layout.getMargin().getRight()*ps.x);
+    
+    // Using the processed right margin that differs between Native and EmulGL 
+    // because of the different colobar management
+    x = view.getCamera().getLastViewPort().getWidth()-processing.getMarginPx().getRight();
     
     g2d.drawLine(x, 0, x, height);
     

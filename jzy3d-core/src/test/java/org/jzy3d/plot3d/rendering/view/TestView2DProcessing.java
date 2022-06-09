@@ -89,8 +89,8 @@ public class TestView2DProcessing {
       float xpectWidth = MARGIN*2 + TICK_DIST + Y_TICK_MAX_WIDTH + AXIS_DIST + FONT_HEIGHT;
       float xpectHeight = MARGIN*2 + TICK_DIST + FONT_HEIGHT + AXIS_DIST + FONT_HEIGHT;
       
-      Assert.assertEquals(xpectWidth, processing.getMargin().width, 0.1);
-      Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
+      Assert.assertEquals(xpectWidth, processing.getArea().width, 0.1);
+      Assert.assertEquals(xpectHeight, processing.getArea().height, 0.1);
       
       
       // ----------------------------------------
@@ -107,8 +107,8 @@ public class TestView2DProcessing {
       xpectWidth = 2*MARGIN*2 + 2*TICK_DIST + Y_TICK_MAX_WIDTH + 2*AXIS_DIST + FONT_HEIGHT;
       xpectHeight = 2*MARGIN*2 + 2*TICK_DIST + FONT_HEIGHT + 2*AXIS_DIST + FONT_HEIGHT;
 
-      Assert.assertEquals(xpectWidth, processing.getMargin().width, 0.1);
-      Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
+      Assert.assertEquals(xpectWidth, processing.getArea().width, 0.1);
+      Assert.assertEquals(xpectHeight, processing.getArea().height, 0.1);
 
       // -----------------------------------------------------------------
       // ----------------------------------------
@@ -132,8 +132,8 @@ public class TestView2DProcessing {
       xpectWidth = MARGIN*2 + TICK_DIST + Y_TICK_MAX_WIDTH + AXIS_DIST + Y_AXIS_WIDTH;
       xpectHeight = MARGIN*2 + TICK_DIST + FONT_HEIGHT + AXIS_DIST + FONT_HEIGHT;
 
-      Assert.assertEquals(xpectWidth, processing.getMargin().width, 0.1);
-      Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
+      Assert.assertEquals(xpectWidth, processing.getArea().width, 0.1);
+      Assert.assertEquals(xpectHeight, processing.getArea().height, 0.1);
       
       // ----------------------------------------
       // When processing margins with a horizontal Y AXIS, pixel scale = 2
@@ -150,8 +150,8 @@ public class TestView2DProcessing {
       xpectWidth = 2*MARGIN*2 + 2*TICK_DIST + Y_TICK_MAX_WIDTH + 2*AXIS_DIST + Y_AXIS_WIDTH;
       xpectHeight = 2*MARGIN*2 + 2*TICK_DIST + FONT_HEIGHT + 2*AXIS_DIST + FONT_HEIGHT;
 
-      Assert.assertEquals(xpectWidth, processing.getMargin().width, 0.1);
-      Assert.assertEquals(xpectHeight, processing.getMargin().height, 0.1);
+      Assert.assertEquals(xpectWidth, processing.getArea().width, 0.1);
+      Assert.assertEquals(xpectHeight, processing.getArea().height, 0.1);
     }
     
     
@@ -221,8 +221,8 @@ public class TestView2DProcessing {
       
       Assert.assertEquals(1f, processing.getModelToScreen().x, 0.1);
       Assert.assertEquals(1f, processing.getModelToScreen().y, 0.1);
-      Assert.assertEquals(0, processing.getMargin().width, 0.1);
-      Assert.assertEquals(0, processing.getMargin().height, 0.1);
+      Assert.assertEquals(0, processing.getArea().width, 0.1);
+      Assert.assertEquals(0, processing.getArea().height, 0.1);
     }
     
     @Test
