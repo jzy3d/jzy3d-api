@@ -273,7 +273,7 @@ public class View {
         canvas.forceRepaint();
       }
       else {
-        System.err.println("Canvas must have a non zero size");
+        System.err.println("View : Canvas must have a non zero size");
       }
     }
   }

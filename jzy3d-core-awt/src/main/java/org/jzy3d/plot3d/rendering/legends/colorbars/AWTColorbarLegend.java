@@ -153,7 +153,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
 
     int b =gen.getBarWidth();
     int t = (int)(gen.getMaxTickLabelWidth(painter)/pixelScale.x);
-    int m = (int)(margin.getWidth());//*pixelScale.x);
+    int m = (int)(margin.getWidth()/pixelScale.x);
     
     //System.out.println(t);
     int w = Math.round(b + gen.getTextToBarHorizontalMargin() + t + m );

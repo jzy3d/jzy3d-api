@@ -65,6 +65,8 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     float yZoom = 1;
     int xPosition = 0;
     int yPosition = 0;
+    
+    Coord2d scale = painter.getCanvas().getPixelScale();
 
     //System.out.println("AWTImageViewport : im : " + imageWidth + " screen : " + screenWidth + " margin : " + margin.getWidth());
     
