@@ -68,15 +68,20 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     
     Coord2d scale = painter.getCanvas().getPixelScale();
 
-    //System.out.println("AWTImageViewport : im : " + imageWidth + " screen : " + screenWidth + " margin : " + margin.getWidth());
     
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageWidth < screenWidth) {
       xPosition = Math.round((float) screenWidth / 2 - (float) imageWidth / 2);
 
+      
+      
       // If margin are asymetric, shift by taking them into account
       if(margin.getLeft()!=margin.getRight()) {
-        xPosition += (margin.getLeft() - margin.getRight());
+        float offset = (margin.getLeft() - margin.getRight());
+        //float offset = Math.abs(margin.getLeft() - margin.getRight());
+        //System.out.println("AWTImageViewport : im : " + imageWidth + " screen : " + screenWidth + " margin : " + margin.getWidth() + " offset : " + offset);
+
+        xPosition += offset;
       }
     }
     // Else if image is bigger than viewport, unzoom it a bit to let it fit the dimensions

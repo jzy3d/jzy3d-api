@@ -138,7 +138,6 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     return minimumDimension;
   }
 
-
   @Override
   public void render(IPainter painter) {
     
@@ -152,14 +151,14 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     AWTColorbarImageGenerator gen = getImageGenerator();
 
     int b =gen.getBarWidth();
-    int t = (int)(gen.getMaxTickLabelWidth(painter)/pixelScale.x);
-    int m = (int)(margin.getWidth()/pixelScale.x);
+    int t = Math.round(gen.getMaxTickLabelWidth(painter)/pixelScale.x);
+    int m = Math.round(margin.getWidth());
     
     //System.out.println(t);
     int w = Math.round(b + gen.getTextToBarHorizontalMargin() + t + m );
     //return minimumDimension;
     
-    minimumDimension.width = w;
+    minimumDimension.width = w;//Math.round(w * pixelScale.x);
     //minimumDimension.width = 100;
   }
 
