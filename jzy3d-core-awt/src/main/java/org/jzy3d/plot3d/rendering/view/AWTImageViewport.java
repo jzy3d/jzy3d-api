@@ -71,18 +71,16 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageWidth < screenWidth) {
-      xPosition = Math.round((float) screenWidth / 2 - (float) imageWidth / 2);
-
       
-      
-      // If margin are asymetric, shift by taking them into account
-      if(margin.getLeft()!=margin.getRight()) {
-        float offset = (margin.getLeft() - margin.getRight());
-        //float offset = Math.abs(margin.getLeft() - margin.getRight());
-        //System.out.println("AWTImageViewport : im : " + imageWidth + " screen : " + screenWidth + " margin : " + margin.getWidth() + " offset : " + offset);
+      /*x+=margin.getLeft()*pixelScale.x;
+      w-=margin.getWidth()*pixelScale.x;
+      y+=margin.getTop()*pixelScale.y;
+      h-=margin.getHeight()*pixelScale.y;*/
 
-        xPosition += offset;
-      }
+      // inspired by View2DLayout_Debug which is accurate
+      xPosition = Math.round((screenWidth-(imageWidth+(margin.getWidth()*scale.x))) / 2f);
+      xPosition+= (margin.getLeft()*scale.x);
+      
     }
     // Else if image is bigger than viewport, unzoom it a bit to let it fit the dimensions
     else if(imageWidth > screenWidth){
@@ -92,13 +90,9 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageHeight < screenHeight) {
-      yPosition = Math.round((float) screenHeight / 2 - ((float) imageHeight / 2));        
-
-      if(margin.getTop()!=margin.getBottom()) {
-        yPosition += (margin.getBottom()-margin.getTop());
-      }
-      else {
-      }
+      
+      yPosition = Math.round((screenHeight-(imageHeight+(margin.getHeight()*scale.y))) / 2f);
+      yPosition+= (margin.getBottom()*scale.y);
     }
     // If image is bigger than viewport, unzoom it a bit to let it fit the dimensions
     else if(imageWidth > screenWidth) {
