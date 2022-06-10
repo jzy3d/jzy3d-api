@@ -128,7 +128,7 @@ public class TestViewAndColorbarsLayout {
     // --------------------------------
     // Then layout configured for TWO colorbar
 
-    int expectRightSideWidth = (int) (CBAR_WIDTH * SCALE * numberOfColorbars);
+    int expectRightSideWidth = Math.round(CBAR_WIDTH * numberOfColorbars);
     int expectLeftSideWidth = WIDTH - expectRightSideWidth;
 
     // with scene occupying the whole the canvas MINUS the colorbar widths
