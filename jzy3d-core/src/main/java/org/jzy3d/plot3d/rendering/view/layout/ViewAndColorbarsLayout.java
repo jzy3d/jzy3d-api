@@ -81,7 +81,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       }
       
       for (ILegend data : list) {
-        minWidth += data.getMinimumDimension().width * xScale;
+        minWidth += data.getMinimumDimension().width;// * xScale;
         
         //System.out.println("ViewAndColorbarsLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
       }

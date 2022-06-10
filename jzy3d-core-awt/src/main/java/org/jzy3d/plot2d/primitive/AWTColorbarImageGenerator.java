@@ -204,7 +204,15 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
    */
   public int getPreferedWidth(IPainter painter) {
     maxTextWidth = getMaxTickLabelWidth(painter);
-    return getPreferedWidth(maxTextWidth);
+    
+    // we unscale it : we here use a graphics2D context that consider
+    // text scale by itself. As font is globally magnified, mainly for JOGL
+    // text renderer, we will unscale it for processing the width
+    int maxTextActual = Math.round(maxTextWidth / pixelScale.x);
+    
+    
+    
+    return getPreferedWidth(Math.round(maxTextActual));
   }
 
   protected int getPreferedWidth(int maxTextWidth) {
