@@ -147,18 +147,23 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     super.render(painter);
   }
 
-  public void updateMinimumDimensionAuto(IPainter painter) {
+  /** pre process an ideal width for the colorbar */
+  protected void updateMinimumDimensionAuto(IPainter painter) {
     AWTColorbarImageGenerator gen = getImageGenerator();
 
-    int b =gen.getBarWidth();
-    int t = Math.round(gen.getMaxTickLabelWidth(painter)/pixelScale.x);
+    // We add the margin width because margin is handled by this viewport
+    // and not included inside the generated image.
+    int w = gen.getPreferedWidth(painter) + margin.getWidth();
+    
+    /*int b = getBarWidth();
+    int t = Math.round(getMaxTickLabelWidth(painter)/pixelScale.x);
     int m = Math.round(margin.getWidth());
     
     //System.out.println(t);
-    int w = Math.round(b + gen.getTextToBarHorizontalMargin() + t + m );
-    //return minimumDimension;
+    int w = Math.round(b + gen.getTextToBarHorizontalMargin() + t + m );*/
+
     
-    minimumDimension.width = w;//Math.round(w * pixelScale.x);
+    minimumDimension.width = Math.round(w * pixelScale.x);
     //minimumDimension.width = 100;
   }
 

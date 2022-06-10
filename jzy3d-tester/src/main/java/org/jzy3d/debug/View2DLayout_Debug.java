@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
@@ -31,6 +32,8 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   ViewAndColorbarsLayout viewportLayout;
   Color color = Color.CYAN;
   Color color2 = Color.MAGENTA;
+  
+  String info = "";
   
   int interlinePx = 8;
   
@@ -64,6 +67,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     configureFontAndHiDPI(g2d, pixelScale);
     AWTGraphicsUtils.configureRenderingHints(g2d); // Text and aliasing settings
 
+    // Draw viewport info
     ViewportConfiguration v = view.getCamera().getLastViewPort();
     String info = "Viewport (" + v.getWidth() + "," + v.getHeight() + ")";
     g2d.setColor(java.awt.Color.black);
@@ -71,6 +75,12 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     
     drawViewMargins(g2d, pixelScale);
     drawColorbarMargins(g2d, pixelScale);
+    
+    // draw other debug info
+    if(this.info!=null) {
+      g2d.setColor(java.awt.Color.white);
+      g2d.drawString(this.info, canvasWidth/2, canvasHeight/2);
+    }
   }
   
   /** Cancel the HiDPI scaling consideration to draw debug stuff properly on either EmulGL or Native*/
@@ -136,11 +146,15 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         y+=margin.getTop()*pixelScale.y;
         h-=margin.getHeight()*pixelScale.y;
         
-        info = "Colorbar.Margins (" + margin.getWidth() + "," + margin.getHeight() + ")";
+        //info = "Colorbar.Margins (" + margin.getWidth() + "," + margin.getHeight() + ")";
+        
+        BufferedImage image = colorbar.getImage();
+
+        
+        info = "Colorbar.Image (" + image.getWidth() + "," + image.getHeight() + ")";
         g2d.drawString(info, x, y);
         g2d.drawRect(x, y, w, h);
         
-        colorbar.getImage().getWidth();
         
         
         AWTColorbarImageGenerator gen = colorbar.getImageGenerator();
@@ -158,7 +172,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         x= viewport.getX();
         int yminDim= yBar+lineHeight+100;
         w = Math.round(colorbar.getMinimumDimension().width*pixelScale.getX());
-        h = Math.round(colorbar.getMinimumDimension().height+pixelScale.getY());
+        h = Math.round(colorbar.getMinimumDimension().height*pixelScale.getY());
 
         g2d.setStroke(new BasicStroke(2));
         g2d.drawRect(x, yminDim, w-1, h);
@@ -340,5 +354,9 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
   public void setColor(Color color) {
     this.color = color;
+  }
+
+  public void setInfo(String info) {
+    this.info = info;
   }
 }
