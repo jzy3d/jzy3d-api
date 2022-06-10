@@ -189,7 +189,7 @@ public class View2DProcessing {
         IViewportLayout layout = ((ChartView) view).getLayout();
         if (layout instanceof ViewAndColorbarsLayout) {
           float legendWidth = ((ViewAndColorbarsLayout) layout).getLegendsWidth();
-          legendWidth /= pixelScale.x;
+          //legendWidth /= pixelScale.x;
           
           //System.err.println("View2DProcessing expand right margin at " + legendWidth);
           marginRightPx += legendWidth;
