@@ -269,12 +269,12 @@ public class View {
    */
   public void shoot() {
     if (canvas != null) {
-      if(canvas.getRendererWidth()>0 && canvas.getRendererHeight()>0) {
+      //if(canvas.getRendererWidth()>0 && canvas.getRendererHeight()>0) {
         canvas.forceRepaint();
-      }
+      /*}
       else {
         System.err.println("View : Canvas must have a non zero size");
-      }
+      }*/
     }
   }
 
