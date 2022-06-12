@@ -73,19 +73,13 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       
       int minWidth = 0;
       
-      float xScale = chart.getView().getPixelScale().x;
-      
-      // scale may be 0 while reloading canvas and changing pixel scale
-      if(xScale==0) {
-        xScale = 1;
-      }
-      
       for (ILegend data : list) {
-        minWidth += data.getMinimumDimension().width;// * xScale;
+        // here we don't need to consider pixel scale as the colorbar
+        // is already returning a dimension considering pixel scale.
+        minWidth += data.getMinimumDimension().width;
         
         //System.out.println("ViewAndColorbarsLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
       }
-      //minWidth *= ;
 
       screenSeparator = computeSeparator(canvas, minWidth);
     

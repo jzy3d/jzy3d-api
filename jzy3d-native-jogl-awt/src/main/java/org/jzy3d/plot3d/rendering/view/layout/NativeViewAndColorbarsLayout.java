@@ -12,6 +12,7 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
  * This implementation allows to shrink colorbar, assuming it is an AWT implementation from which we
  * can read image width
  */
+@Deprecated
 public class NativeViewAndColorbarsLayout extends ViewAndColorbarsLayout {
   boolean BYPASS_NATIVE_IMPLEMENTATION_HERE = true;
   
