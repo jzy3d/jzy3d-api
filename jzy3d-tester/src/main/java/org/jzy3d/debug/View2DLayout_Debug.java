@@ -170,7 +170,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         g2d.setColor(AWTColor.toAWT(Color.ORANGE));
         
         x= viewport.getX();
-        int yminDim= yBar+lineHeight+100;
+        int yminDim= Math.round((yBar+lineHeight+100) * pixelScale.y);
         w = Math.round(colorbar.getMinimumDimension().width*pixelScale.getX());
         h = Math.round(colorbar.getMinimumDimension().height*pixelScale.getY());
 

@@ -216,5 +216,10 @@ public class EmulGLPainterFactory implements IPainterFactory {
   public void setDebugGL(boolean debugGL) {
     this.debugGL = debugGL;
   }
+  
+  public void dispose() {
+    internalPainter = null;
+    internalCanvas = null;
+  }
 
 }
