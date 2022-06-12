@@ -7,6 +7,7 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
+import org.jzy3d.plot3d.rendering.legends.colorbars.IColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -44,6 +45,12 @@ public class AWTChart extends Chart {
     
     drawable.setLegend(colorbar);
     return colorbar;
+  }
+  
+  @Override
+  public AWTColorbarLegend getColorbar() {
+    AWTColorbarLegend bar = (AWTColorbarLegend)super.getColorbar();
+    return bar;
   }
 
   

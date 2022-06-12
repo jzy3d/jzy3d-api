@@ -38,10 +38,14 @@ import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.legends.ILegend;
+import org.jzy3d.plot3d.rendering.legends.colorbars.IColorbarLegend;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.lod.LODCandidates;
 import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
 import org.jzy3d.plot3d.rendering.view.lod.LODSetting;
@@ -1048,5 +1052,16 @@ public class Chart {
     this.quality = quality;
   }
 
-
+  /** Return the first available colorbar in the view layout, or null if none was created */
+  public IColorbarLegend getColorbar() {
+    IColorbarLegend colorbar = null;
+    ViewAndColorbarsLayout viewportLayout = (ViewAndColorbarsLayout) getView().getLayout();
+    //IViewportLayout viewportLayout =  getView().getLayout();
+    for(ILegend legend : viewportLayout.getLegends()) {
+      if(legend instanceof IColorbarLegend) {
+        return (IColorbarLegend)legend;
+      }
+    }
+    return colorbar;
+  }
 }
