@@ -1054,7 +1054,20 @@ public class Chart {
 
   /** Return the first available colorbar in the view layout, or null if none was created */
   public IColorbarLegend getColorbar() {
-    for(ILegend legend : getLegends()) {
+    ViewAndColorbarsLayout viewportLayout = (ViewAndColorbarsLayout) getView().getLayout();
+
+    if(viewportLayout.getChart()==null) {
+      viewportLayout.setChart(this);
+    }
+    
+    List<ILegend> legends = getLegends();
+    
+    /*if(legends.size()==0) {
+      view.getLayout().update(this);
+      legends = getLegends();
+    }*/
+    
+    for(ILegend legend : legends) {
       if(legend instanceof IColorbarLegend) {
         return (IColorbarLegend)legend;
       }
