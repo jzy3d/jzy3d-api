@@ -640,6 +640,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
   }
 
+
   // elements of GL spec picked in JOGL GL interface
   public static final int GL_RGBA = 0x1908;
   public static final int GL_UNSIGNED_BYTE = 0x1401;

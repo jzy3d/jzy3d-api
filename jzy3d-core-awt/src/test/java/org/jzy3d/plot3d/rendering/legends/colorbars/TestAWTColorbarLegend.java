@@ -58,33 +58,16 @@ public class TestAWTColorbarLegend {
     Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
 
     // ------------------------
-    // By default, configuration states to ignore pixel scale
-
-    
-    
-    // ------------------------
-    // When updating pixel scale with an ignored pixel scale
-
-    legend.setUsePixelScale(false);
-    legend.updatePixelScale(new Coord2d(2, 2));
-    legend.updateImage();
-
-    // Then image size remains the same
-    //expectWidth = Math.round(width * (right - left) - margin.getWidth());
-
-    Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
-
-    // ------------------------
     // When updating pixel scale with a NON ignored pixel scale
     
+    int SCALE = 2;
 
-
-    legend.setUsePixelScale(true);
-    legend.updatePixelScale(new Coord2d(2, 2));
+    //legend.setUsePixelScale(true);
+    legend.updatePixelScale(new Coord2d(SCALE, SCALE));
     legend.updateImage();
 
     // Then image size is a bit smaller since margin is multiplied by pixel scale
-    expectWidth = Math.round(width * (right - left) - margin.getWidth()*2);
+    expectWidth = Math.round(width * (right - left) - margin.getWidth()*SCALE);
     Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
     
 
@@ -99,20 +82,16 @@ public class TestAWTColorbarLegend {
 
     int TEXT_WIDTH = 20;
 
-    expectWidth = 68;//+= TEXT_WIDTH;
+    expectWidth = 68;
 
-    View v = Mocks.ViewAndPainter(2);
+    View v = Mocks.ViewAndPainter(SCALE);
     IPainter painter = v.getPainter();
     Mockito.when(painter.getTextLengthInPixels(Mockito.any(), Mockito.any())).thenReturn(TEXT_WIDTH);
 
 
     // Then min dim is updated
-    legend.render(v.getPainter());
+    legend.updateMinimumDimension(painter);
     Assert.assertEquals(expectWidth, legend.getMinimumDimension().width);
-    
-    // TODO !! SHOULD UPDATE DIMENSION BEFORE RENDERING
-    // TO REQUIRE LESS RENDER CYCLE
-    
     
   }
 
