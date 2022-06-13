@@ -202,7 +202,7 @@ public class View {
     this.painter.setView(this);
     this.viewOverlay = factory.getPainterFactory().newViewOverlay();
     this.layout = factory.getPainterFactory().newViewportLayout();
-
+    
     this.scene = scene;
     this.canvas = canvas;
     this.quality = quality;
