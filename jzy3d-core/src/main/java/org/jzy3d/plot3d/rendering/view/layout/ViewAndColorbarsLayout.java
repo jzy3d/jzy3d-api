@@ -44,13 +44,6 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   // stored at render time for later layout processing
   protected float legendsWidth = 0;
 
-
-  /**
-   * This shrink colorbar is actually not supported by this implementation but made available and
-   * used by classes that inherit this class
-   */
-  protected boolean shrinkColorbar = false;
-  //protected int colorbarRightMargin = 10;
   protected Chart chart;
   
   public Chart getChart() {
@@ -216,28 +209,6 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   /** Return the scene viewport as it was processed to cover the whole canvas. */
   public ViewportConfiguration getBackgroundViewport() {
     return backgroundViewport;
-  }
-
-  @Deprecated
-  public boolean isShrinkColorbar() {
-    return shrinkColorbar;
-  }
-
-  /**
-   * If true, will let the colorbar be as thin as possible and stick to the right of the chart.
-   * 
-   * If the input value is different than internal state, then the chart will be updated to ensure
-   * the setting takes effect immediately.
-   */
-  @Deprecated
-  public void setShrinkColorbar(boolean shrinkColorbar) {
-    boolean updateDisplay = (shrinkColorbar != this.shrinkColorbar);
-
-    this.shrinkColorbar = shrinkColorbar;
-
-    if (updateDisplay && chart != null) {
-      chart.render();
-    }
   }
 
   /**

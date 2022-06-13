@@ -76,10 +76,6 @@ public class TestViewAndColorbarsLayout {
   public void whenColorbars_ThenScreenSeparatorIsProcessed() {
     ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
 
-    layout.setShrinkColorbar(false);
-    whenColorbars_ThenScreenSeparatorIsProcessed(layout);
-
-    layout.setShrinkColorbar(true);
     whenColorbars_ThenScreenSeparatorIsProcessed(layout);
 
   }

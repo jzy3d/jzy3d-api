@@ -128,16 +128,11 @@ public class ITTest_Colorbar extends ITTest{
     if(WT.EmulGL_AWT.equals(wt)) {
       EmulGLSkin skin = EmulGLSkin.on(chart);
       EmulGLViewAndColorbarsLayout layout = skin.getLayout();
-      layout.setShrinkColorbar(true);
       
       name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI());
     }
     else {
-      NativeViewAndColorbarsLayout layout  = (NativeViewAndColorbarsLayout)((ChartView)chart.getView()).getLayout();
-      layout.setShrinkColorbar(true);
-      
       name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI());
-      
     }
     
     // Then
@@ -174,16 +169,11 @@ public class ITTest_Colorbar extends ITTest{
     if(WT.EmulGL_AWT.equals(wt)) {
       EmulGLSkin skin = EmulGLSkin.on(chart);
       EmulGLViewAndColorbarsLayout layout = skin.getLayout();
-      layout.setShrinkColorbar(true);
       
       name = name(this, "Shrink", wt, chart.getQuality().getHiDPI());
     }
     else {
-      NativeViewAndColorbarsLayout layout  = (NativeViewAndColorbarsLayout)((ChartView)chart.getView()).getLayout();
-      layout.setShrinkColorbar(true);
-      
       name = name(this, "Shrink", wt, chart.getQuality().getHiDPI());
-      
     }
     
     // Then
