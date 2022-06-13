@@ -44,8 +44,9 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
  * prepared image at the layout given position for this colorbar (which is defined with left/right
  * parameters).
  * 
- * <img src="doc-files/colorbar-layout.png"/>
- * <a href="https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=F_rAt-Q~kI-~#">Schema sources</a>
+ * <img src="doc-files/colorbar-layout.png"/> <a href=
+ * "https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=F_rAt-Q~kI-~#">Schema
+ * sources</a>
  * 
  * <h2>Rendering path</h2>
  * 
@@ -60,7 +61,9 @@ import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
  * 
  * <img src="doc-files/colorbar-object-model.png"/>
  * 
- * <a href="https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=_q-Nux3~IiKx#">Schema sources</a>
+ * <a href=
+ * "https://lucid.app/lucidchart/78ec260b-d2d1-430d-a363-a95089dae86d/edit?page=_q-Nux3~IiKx#">Schema
+ * sources</a>
  */
 public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   protected ITickProvider provider;
@@ -70,16 +73,16 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   // without processing multiple time the margin
   protected int askedWidth;
   protected int askedHeight;
-  
+
   protected int choosenWidth;
   protected int choosenHeight;
-  
+
   protected Font font;
-  
-  protected boolean usePixelScale = true;
-  
+
+  //protected boolean usePixelScale = true;
+
   protected static final int DEFAULT_MARGIN_HEIGHT = 20;
-  
+
 
   public AWTColorbarLegend(Drawable parent, Chart chart) {
     this(parent, chart.getView().getAxis().getLayout());
@@ -94,8 +97,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), foreground, null);
   }
 
-  public AWTColorbarLegend(Drawable parent, AxisLayout layout, Color foreground,
-      Color background) {
+  public AWTColorbarLegend(Drawable parent, AxisLayout layout, Color foreground, Color background) {
     this(parent, layout.getZTickProvider(), layout.getZTickRenderer(), foreground, background);
   }
 
@@ -111,7 +113,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     this.renderer = renderer;
     this.minimumDimension = new Dimension(AWTColorbarImageGenerator.MIN_BAR_WIDTH,
         AWTColorbarImageGenerator.MIN_BAR_HEIGHT);
-    
+
     this.margin.setHeight(DEFAULT_MARGIN_HEIGHT);
 
     initImageGenerator(parent, provider, renderer);
@@ -123,7 +125,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
       IMultiColorable mc = ((IMultiColorable) parent);
       if (mc.getColorMapper() != null) {
         imageGenerator = new AWTColorbarImageGenerator(mc.getColorMapper(), provider, renderer);
-        if(font!=null)
+        if (font != null)
           imageGenerator.setFont(font);
       }
     }
@@ -132,7 +134,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
           "Passed a drawable object that is not IMultiColorable or has no ColorMapper defined");
     }
   }
-  
+
   @Override
   public Dimension getMinimumDimension() {
     return minimumDimension;
@@ -140,32 +142,33 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
 
   @Override
   public void render(IPainter painter) {
-    
-    updateMinimumDimensionAuto(painter);
-    
     painter.glEnable_Blend();
     super.render(painter);
   }
 
-  /** pre process an ideal width for the colorbar */
-  protected void updateMinimumDimensionAuto(IPainter painter) {
+  /** Pre process an ideal width for the colorbar based on text width and other settings */
+  public void updateMinimumDimension(IPainter painter) {
     AWTColorbarImageGenerator gen = getImageGenerator();
 
     // We add the margin width because margin is handled by this viewport
     // and not included inside the generated image.
     int w = gen.getPreferredWidth(painter) + margin.getWidth();
-    
-    /*int b = getBarWidth();
-    int t = Math.round(getMaxTickLabelWidth(painter)/pixelScale.x);
-    int m = Math.round(margin.getWidth());
-    
-    //System.out.println(t);
-    int w = Math.round(b + gen.getTextToBarHorizontalMargin() + t + m );*/
 
+    //if (usePixelScale)
+      minimumDimension.width = Math.round(w * pixelScale.x);
+    /*else
+      minimumDimension.width = w;
+
+    System.out.println("AWTCbar : " + pixelScale);*/
     
-    minimumDimension.width = Math.round(w * pixelScale.x);
-    //minimumDimension.width = 100;
+    // a trick to get a correct emulgl layout
+    if(emulGLUnscale) {
+      minimumDimension.width /= pixelScale.x; 
+    }
+    //System.out.println("AWTColorbar = " + minimumDimension.width);
   }
+  
+  boolean emulGLUnscale = false;
 
   @Override
   public BufferedImage toImage(int width, int height) {
@@ -181,29 +184,28 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
 
     if (imageGenerator != null) {
       setGeneratorColors();
-      
-      
+
       // We here ignore pixel scale as considering it
-      // 1. does not improve the final appearance of the 
-      // colorbar since the Graphics2D instance is already rendering with the 
-      // expected pixel scale. 
+      // 1. does not improve the final appearance of the
+      // colorbar since the Graphics2D instance is already rendering with the
+      // expected pixel scale.
       // 2. will lead to a larger image that will be rescaled to fit the area
       // which leads to a visually thinner bar a smaller tick labels for the colorbar
-      
-      if(usePixelScale) {
-        choosenWidth = (int)(width - (margin.getWidth() * pixelScale.x));
-        choosenHeight = (int)(height - (margin.getHeight() * pixelScale.y));
-        //choosenWidth = (int)((width - margin.getWidth()) * pixelScale.x);
-        //choosenHeight = (int)((height - margin.getHeight()) * pixelScale.y);
-      }
-      else {
+
+      //if (usePixelScale) {
+        choosenWidth = (int) (width - (margin.getWidth() * pixelScale.x));
+        choosenHeight = (int) (height - (margin.getHeight() * pixelScale.y));
+      /*} else {
         choosenWidth = (int) (width - margin.getWidth());
         choosenHeight = (int) (height - margin.getHeight());
-      }
-      
-      //System.out.println("AWTColorbarLegend : asked.w:" + width + " asked.h:" + height + " m.w:" + margin.getWidth() + " m.h:" + margin.getHeight() + " pixScale:" + pixelScale);
-      //System.out.println("AWTColorbarLegend : choosen.w:" + choosenWidth + " choosen.h:" + choosenHeight + " m.w:" + margin.getWidth() + " m.h:" + margin.getHeight() + " pixScale:" + pixelScale);
-      
+      }*/
+
+      // System.out.println("AWTColorbarLegend : asked.w:" + width + " asked.h:" + height + " m.w:"
+      // + margin.getWidth() + " m.h:" + margin.getHeight() + " pixScale:" + pixelScale);
+      // System.out.println("AWTColorbarLegend : choosen.w:" + choosenWidth + " choosen.h:" +
+      // choosenHeight + " m.w:" + margin.getWidth() + " m.h:" + margin.getHeight() + " pixScale:" +
+      // pixelScale);
+
 
       askedWidth = width;
       askedHeight = height;
@@ -223,31 +225,31 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   @Override
   public void setMargin(Margin margin) {
     super.setMargin(margin);
-    
-    if(getImageGenerator()!=null) {
+
+    if (getImageGenerator() != null) {
       updateImage();
     }
   }
 
   /** Update the image with pixel scale if scale changed */
   @Override
-  protected void updatePixelScale(Coord2d pixelScale) {
+  public void updatePixelScale(Coord2d pixelScale) {
     if (!this.pixelScale.equals(pixelScale)) {
       this.pixelScale = pixelScale;
-      
-      if(getImageGenerator()!=null) {
+
+      if (getImageGenerator() != null) {
         getImageGenerator().setPixelScale(pixelScale);
         updateImage();
       }
     }
   }
-  
+
   /** Update image generator font */
   public void setFont(Font font) {
-    if(!font.equals(this.getFont())) {
+    if (!font.equals(this.getFont())) {
       this.font = font;
-      
-      if(getImageGenerator()!=null) {
+
+      if (getImageGenerator() != null) {
         getImageGenerator().setFont(font);
         updateImage();
       }
@@ -256,10 +258,9 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   }
 
   public Font getFont() {
-    if(getImageGenerator()!=null) {
+    if (getImageGenerator() != null) {
       return getImageGenerator().getFont();
-    }
-    else {
+    } else {
       return null;
     }
   }
@@ -278,8 +279,8 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   public int getHeight() {
     return askedHeight;
   }
-  
-  
+
+
 
   public int getChoosenWidth() {
     return choosenWidth;
@@ -289,11 +290,21 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     return choosenHeight;
   }
 
-  public boolean isUsePixelScale() {
+  public boolean isEmulGLUnscale() {
+    return emulGLUnscale;
+  }
+
+  public void setEmulGLUnscale(boolean emulGLUnscale) {
+    this.emulGLUnscale = emulGLUnscale;
+  }
+  
+  
+
+  /*public boolean isUsePixelScale() {
     return usePixelScale;
   }
 
   public void setUsePixelScale(boolean usePixelScale) {
     this.usePixelScale = usePixelScale;
-  }
+  }*/
 }

@@ -65,7 +65,7 @@ public class EmulGLPainterFactory implements IPainterFactory {
   @Override
   public ViewAndColorbarsLayout newViewportLayout() {
     return new EmulGLViewAndColorbarsLayout();
-    // return new ViewAndColorbarsLayout();
+    //return new ViewAndColorbarsLayout();
   }
 
   @Override

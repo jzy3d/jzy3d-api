@@ -14,6 +14,8 @@ public interface IColorbarLegend {
 
   public void setMinimumDimension(Dimension dimension);
   
+  
+  
   public Margin getMargin();
 
   public void setMargin(Margin margin);
