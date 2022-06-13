@@ -26,7 +26,7 @@ public class Chart2d extends AWTNativeChart {
 
   public void layout2d() {
     AxisLayout axe = getAxisLayout();
-    axe.setZAxeLabelDisplayed(false);
+    axe.setZAxisLabelDisplayed(false);
     axe.setTickLineDisplayed(false);
 
     View view = getView();

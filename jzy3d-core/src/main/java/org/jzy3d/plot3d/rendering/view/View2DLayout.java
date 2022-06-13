@@ -71,7 +71,7 @@ public class View2DLayout {
     setMarginHorizontal(margin);
     setMarginVertical(margin);
   }
-
+  
   /**
    * A convenient shortcut to set the same margin to left and right canvas borders.
    * 
@@ -162,5 +162,32 @@ public class View2DLayout {
 
   public void apply() {
     view.getChart().render();
+  }
+  
+  public View2DLayout clone() {
+    View2DLayout to = new View2DLayout(view);
+    return copy(this, to);
+  }
+
+  public void applySettings(View2DLayout source) {
+    copy(source, this);
+  }
+
+  protected View2DLayout copy(View2DLayout from, View2DLayout to) {
+    
+    to.setHorizontalAxisLabelsDistance(from.getHorizontalAxisLabelsDistance());
+    to.setVerticalAxisLabelsDistance(from.getVerticalAxisLabelsDistance());
+
+    to.setHorizontalTickLabelsDistance(from.getHorizontalTickLabelsDistance());
+    to.setVerticalTickLabelsDistance(from.getVerticalTickLabelsDistance());
+
+    to.setSymetricHorizontalMargin(from.isSymetricHorizontalMargin());
+    to.setSymetricVerticalMargin(from.isSymetricVerticalMargin());
+    
+    to.setTextAddMargin(from.isTextAddMargin());
+    
+    to.setMargin(from.getMargin());
+    
+    return to;
   }
 }

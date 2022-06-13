@@ -35,6 +35,8 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   
   String info = "";
   
+  boolean enabled = true;
+  
   int interlinePx = 8;
   
   public View2DLayout_Debug() {
@@ -43,8 +45,6 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   public View2DLayout_Debug(Color color) {
     this.color = color;
   }
-
-
 
   @Override
   public void setView(AWTView view) {
@@ -60,6 +60,9 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
   @Override
   public void paint(Graphics g, int canvasWidth, int canvasHeight) {
+    if(!enabled)
+      return;
+    
     Graphics2D g2d = (Graphics2D) g;
     Coord2d pixelScale = view.getPixelScale();
     
@@ -358,5 +361,13 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
   public void setInfo(String info) {
     this.info = info;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 }

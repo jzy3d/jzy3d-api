@@ -146,7 +146,7 @@ public class Chart {
     if(view.is3D()) {
       axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
       axisYLabelOrientation = axisLayout.getYAxisLabelOrientation();
-      axisZLabelDisplayed = axisLayout.isZAxeLabelDisplayed();
+      axisZLabelDisplayed = axisLayout.isZAxisLabelDisplayed();
       isTickLineDisplayed = axisLayout.isTickLineDisplayed();
 
       isSquaredViewActive = view.getSquared();
@@ -157,7 +157,7 @@ public class Chart {
     
     // Apply 2D layout to axis
     axisLayout.setTickLineDisplayed(false);
-    axisLayout.setZAxeLabelDisplayed(false);
+    axisLayout.setZAxisLabelDisplayed(false);
     axisLayout.setZTickLabelDisplayed(false);
     axisLayout.setYAxisLabelOrientation(LabelOrientation.VERTICAL);
 
@@ -191,7 +191,7 @@ public class Chart {
       axisLayout.setYAxisLabelOrientation(axisYLabelOrientation);
     }
     
-    axisLayout.setZAxeLabelDisplayed(axisZLabelDisplayed);
+    axisLayout.setZAxisLabelDisplayed(axisZLabelDisplayed);
     axisLayout.setZTickLabelDisplayed(axisZTickLabelDisplayed);
     axisLayout.setTickLineDisplayed(isTickLineDisplayed);
     
