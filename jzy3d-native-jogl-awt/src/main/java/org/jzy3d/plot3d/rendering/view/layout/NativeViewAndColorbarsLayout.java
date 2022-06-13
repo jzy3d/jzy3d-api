@@ -67,7 +67,7 @@ public class NativeViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     from = 1 - ((1f * optimalColorbarWidth) / (1f * width));*/
     
     AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
-    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)/*+colorbarRightMargin*/) * painter.getView().getPixelScale().x);
+    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferredWidth(painter)/*+colorbarRightMargin*/) * painter.getView().getPixelScale().x);
     //optimalColorbarWidth*= painter.getView().getPixelScale().x;
     
     // Random fix to avoid cutting text

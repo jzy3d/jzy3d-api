@@ -153,7 +153,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
 
     // We add the margin width because margin is handled by this viewport
     // and not included inside the generated image.
-    int w = gen.getPreferedWidth(painter) + margin.getWidth();
+    int w = gen.getPreferredWidth(painter) + margin.getWidth();
     
     /*int b = getBarWidth();
     int t = Math.round(getMaxTickLabelWidth(painter)/pixelScale.x);

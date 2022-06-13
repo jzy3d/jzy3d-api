@@ -139,7 +139,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       AWTColorbarLegend awtLegend) {
     float from;
     AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
-    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)/*+colorbarRightMargin*/) * painter.getView().getPixelScale().x);
+    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferredWidth(painter)/*+colorbarRightMargin*/) * painter.getView().getPixelScale().x);
     
     // Random fix to avoid cutting text
     int pixelShiftFix = 1+AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT;

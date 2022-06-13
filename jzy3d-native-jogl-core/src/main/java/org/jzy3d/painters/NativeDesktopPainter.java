@@ -583,9 +583,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public int getTextLengthInPixels(int font, String string) {
-    Font fnt = Font.getById(font);
-
-    return getTextLengthInPixels(fnt, string);
+    return getTextLengthInPixels(Font.getById(font), string);
   }
 
   @Override
