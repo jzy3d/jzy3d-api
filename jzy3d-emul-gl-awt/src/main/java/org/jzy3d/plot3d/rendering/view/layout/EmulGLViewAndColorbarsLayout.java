@@ -66,12 +66,9 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       height = (int) (sceneViewport.getHeight() * pixelScale.y);
     }
     
-    
-    System.out.println("EmulGLViewAndColorbar : legendWidth " + legendsWidth);
-
+    //System.out.println("EmulGLViewAndColorbar : legendWidth " + legendsWidth);
 
     // ---------------------------------------
-
 
     float slice = (right - left) / legends.size();
     int k = 0;
@@ -89,30 +86,22 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         
         AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
         awtLegend.setViewPort(width, height, from, to);
-
         
         BufferedImage legendImage = (BufferedImage) awtLegend.getImage();
         
-        
-        //int legendWidth = (int) (legendImage.getWidth() / pixelScale.x);
         int legendWidth = legendImage.getWidth();
         
         // ---------------------------------------
         // Processing image offset with pixel scale
        
-        int xOffset = width - legendWidth * (k);
-        xOffset += Math.round (pixelScale.x * awtLegend.getMargin().getLeft());
-        xOffset -= Math.round (pixelScale.x * awtLegend.getMargin().getRight());
-
         Margin margin = awtLegend.getMargin();
-        Coord2d scale = painter.getView().getPixelScale();
         
-        //xOffset = width  - 
-         //   Math.round(legendWidth-(margin.getWidth()/2) * scale.x);
-        //xOffset += (margin.getLeft() * scale.x);
-        
+        int xOffset = width - legendWidth * (k);
+        xOffset += Math.round (pixelScale.x * margin.getLeft());
+        xOffset -= Math.round (pixelScale.x * margin.getRight());
+
         int yOffset = 0;
-        yOffset += Math.round (pixelScale.y * awtLegend.getMargin().getTop());
+        yOffset += Math.round (pixelScale.y * margin.getTop());
         
         // ---------------------------------------
         // Send image rendering directly to jGL
