@@ -71,12 +71,6 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageWidth < screenWidth) {
-      
-      /*x+=margin.getLeft()*pixelScale.x;
-      w-=margin.getWidth()*pixelScale.x;
-      y+=margin.getTop()*pixelScale.y;
-      h-=margin.getHeight()*pixelScale.y;*/
-
       // inspired by View2DLayout_Debug which is accurate
       xPosition = Math.round((screenWidth-(imageWidth+(margin.getWidth()*scale.x))) / 2f);
       xPosition+= (margin.getLeft()*scale.x);
@@ -86,11 +80,10 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     else if(imageWidth > screenWidth){
       xZoom = ((float) screenWidth) / ((float) imageWidth);
     }
-    // If exact fit, keep default value
+    // If exact fit, keep default values
     
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageHeight < screenHeight) {
-      
       yPosition = Math.round((screenHeight-(imageHeight+(margin.getHeight()*scale.y))) / 2f);
       yPosition+= (margin.getBottom()*scale.y);
     }
@@ -105,7 +98,6 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     //System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
     
     // Draw
-    
     Coord2d zoom = new Coord2d(xZoom, yZoom);
     Coord3d position = new Coord3d(xPosition, yPosition, z);
     

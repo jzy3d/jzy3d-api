@@ -52,12 +52,21 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   protected boolean shrinkColorbar = false;
   //protected int colorbarRightMargin = 10;
   protected Chart chart;
+  
+  public Chart getChart() {
+    return chart;
+  }
+
+  public void setChart(Chart chart) {
+    this.chart = chart;
+  }
 
   @Override
   public void update(Chart chart) {
     this.chart = chart;
+    
     final ICanvas canvas = chart.getCanvas();
-    final List<ILegend> list = getLegends(chart);
+    final List<ILegend> list = getLegends();
 
     computeSeparator(canvas, list);
     sceneViewport = ViewportBuilder.column(canvas, 0, screenSeparator);
@@ -95,7 +104,6 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     if(width==0)
       throw new IllegalArgumentException("Canvas has no width");
 
-      //  width=600; // POURQUOI EN RECHARGEANT, LE CANVAS EST PAS ENCORE PRET??
     return ((float) (width - minWidth)) / width;
   }
 
@@ -138,7 +146,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     if (hasColorbars) {
       updateLegendsWidth(chart);
       
-      renderLegends(painter, screenSeparator, 1.0f, getLegends(chart), chart.getCanvas());
+      renderLegends(painter, screenSeparator, 1.0f, getLegends(), chart.getCanvas());
     } else {
       legendsWidth = 0;
     }
@@ -146,7 +154,6 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
 
   protected void updateLegendsWidth(Chart chart) {
     legendsWidth = (1-screenSeparator) * chart.getCanvas().getRendererWidth();
-    //legendsWidth /= chart.getView().getPixelScale().x;
   }
 
   /**
@@ -171,20 +178,24 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       legend.setViewPort(width, height, theLeft, theRight);
       legend.render(painter);
       
-      
     }
   }
-
+  
   public List<ILegend> getLegends() {
     return getLegends(chart);
   }
-
+  
   protected List<ILegend> getLegends(Chart chart) {
-    if (chart != null && chart.getScene() != null && chart.getScene().getGraph() != null
-        && chart.getScene().getGraph().getLegends() != null)
-      return chart.getScene().getGraph().getLegends();
-    else
-      return new ArrayList<>();
+    
+    List<ILegend> legends = null;
+    
+    if(chart != null && chart.getScene() != null && chart.getScene().getGraph() != null
+        && chart.getScene().getGraph().getLegends() != null) {
+      legends = chart.getScene().getGraph().getLegends();
+    }else
+      legends = new ArrayList<>();
+    
+    return legends;
   }
 
   /**
@@ -220,26 +231,6 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       chart.render();
     }
   }
-
-  /*public int getColorbarRightMargin() {
-    return colorbarRightMargin;
-  }*/
-
-  /**
-   * Set a right margin for colorbar.
-   * 
-   * If the input value is different than internal state, then the chart will be updated to ensure
-   * the setting takes effect immediately.
-   */
-  /*public void setColorbarRightMargin(int colorbarRightMargin) {
-    boolean updateDisplay = (colorbarRightMargin != this.colorbarRightMargin);
-
-    this.colorbarRightMargin = colorbarRightMargin;
-
-    if (updateDisplay) {
-      chart.render();
-    }
-  }*/
 
   /**
    * Return the legend width as it was processed at the rendering stage. Hence this value is defined
