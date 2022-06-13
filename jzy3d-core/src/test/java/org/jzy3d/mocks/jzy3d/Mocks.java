@@ -125,8 +125,13 @@ public class Mocks {
     // Canvas
     ICanvas canvas = mock(ICanvas.class);
 
-    if (gpuScale != null)
+    if (gpuScale != null) {
       when(canvas.getPixelScale()).thenReturn(gpuScale);
+    }
+    else {
+      when(canvas.getPixelScale()).thenReturn(new Coord2d(viewScale, viewScale));
+    }
+    
     if (jvmScale != null)
       when(canvas.getPixelScaleJVM()).thenReturn(jvmScale);
 
