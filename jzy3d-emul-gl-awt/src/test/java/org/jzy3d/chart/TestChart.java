@@ -206,7 +206,7 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
     Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(true, axisLayout.isZAxeLabelDisplayed());
+    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
     Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
 
     
@@ -225,7 +225,7 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getYAxisLabelOrientation());
     Assert.assertEquals(false, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(false, axisLayout.isZAxeLabelDisplayed());
+    Assert.assertEquals(false, axisLayout.isZAxisLabelDisplayed());
     Assert.assertEquals(false, axisLayout.isZTickLabelDisplayed());
 
     Assert.assertEquals(ViewPositionMode.TOP, view.getViewMode());
@@ -245,7 +245,7 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
     Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(true, axisLayout.isZAxeLabelDisplayed());
+    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
     Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
 
 

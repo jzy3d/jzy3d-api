@@ -95,9 +95,9 @@ public class AxisLayout {
     setYAxisLabel("Y");
     setZAxisLabel("Z");
 
-    setXAxeLabelDisplayed(true);
-    setYAxeLabelDisplayed(true);
-    setZAxeLabelDisplayed(true);
+    setXAxisLabelDisplayed(true);
+    setYAxisLabelDisplayed(true);
+    setZAxisLabelDisplayed(true);
 
     setXTickProvider(new SmartTickProvider(5));
     setYTickProvider(new SmartTickProvider(5));
@@ -435,32 +435,32 @@ public class AxisLayout {
   }
 
   
-  public boolean isXAxeLabelDisplayed() {
+  public boolean isXAxisLabelDisplayed() {
     return xAxeLabelDisplayed;
   }
 
   
-  public void setXAxeLabelDisplayed(boolean axeLabelDisplayed) {
+  public void setXAxisLabelDisplayed(boolean axeLabelDisplayed) {
     xAxeLabelDisplayed = axeLabelDisplayed;
   }
 
   
-  public boolean isYAxeLabelDisplayed() {
+  public boolean isYAxisLabelDisplayed() {
     return yAxeLabelDisplayed;
   }
 
   
-  public void setYAxeLabelDisplayed(boolean axeLabelDisplayed) {
+  public void setYAxisLabelDisplayed(boolean axeLabelDisplayed) {
     yAxeLabelDisplayed = axeLabelDisplayed;
   }
 
   
-  public boolean isZAxeLabelDisplayed() {
+  public boolean isZAxisLabelDisplayed() {
     return zAxeLabelDisplayed;
   }
 
   
-  public void setZAxeLabelDisplayed(boolean axeLabelDisplayed) {
+  public void setZAxisLabelDisplayed(boolean axeLabelDisplayed) {
     zAxeLabelDisplayed = axeLabelDisplayed;
   }
 
@@ -654,5 +654,69 @@ public class AxisLayout {
         fontMinorNoHiDPI = font;
       }
     }
+  }
+  
+  public AxisLayout clone() {
+    AxisLayout to = new AxisLayout();
+    AxisLayout from = this;
+    return copy(from, to);
+  }
+
+  public void applySettings(AxisLayout from) {
+    copy(from, this);
+  }
+
+
+
+  protected AxisLayout copy(AxisLayout from, AxisLayout to) {
+    // font
+    to.setFont(from.getFont());
+    to.setFontSizePolicy(from.getFontSizePolicy());
+    to.fontMajorHiDPI = from.fontMajorHiDPI;
+    to.fontMinorHiDPI = from.fontMinorHiDPI;
+    to.fontMajorNoHiDPI = from.fontMajorNoHiDPI;
+    to.fontMinorNoHiDPI = from.fontMinorNoHiDPI;
+    
+    // color
+    to.setMainColor(from.getMainColor());
+    to.setGridColor(from.getGridColor());
+    to.setQuadColor(from.getQuadColor());
+
+    to.setFaceDisplayed(from.isFaceDisplayed());
+
+    // axis
+    to.setAxisLabelDistance(from.getAxisLabelDistance());
+    to.setAxisLabelOffsetAuto(from.isAxisLabelOffsetAuto());
+    to.setAxisLabelOffsetMargin(from.getAxisLabelOffsetMargin());
+    
+    // ticks
+    to.setTickLengthRatio(from.getTickLengthRatio());
+    to.setTickLineDisplayed(from.isTickLineDisplayed());
+    
+    // x
+    to.setXAxisLabelDisplayed(from.isXAxisLabelDisplayed());
+    to.setXAxisLabel(from.getXAxisLabel());
+    to.setXAxisLabelOrientation(from.getXAxisLabelOrientation());
+    to.setXTickColor(from.getXTickColor());
+    to.setXTickProvider(from.getXTickProvider());
+    to.setXTickRenderer(from.getXTickRenderer());
+
+    // y
+    to.setYAxisLabelDisplayed(from.isYAxisLabelDisplayed());
+    to.setYAxisLabel(from.getYAxisLabel());
+    to.setYAxisLabelOrientation(from.getYAxisLabelOrientation());
+    to.setYTickColor(from.getYTickColor());
+    to.setYTickProvider(from.getYTickProvider());
+    to.setYTickRenderer(from.getYTickRenderer());
+
+    // z
+    to.setZAxisLabelDisplayed(from.isZAxisLabelDisplayed());
+    to.setZAxisLabel(from.getZAxisLabel());
+    to.setZAxisLabelOrientation(from.getZAxisLabelOrientation());
+    to.setZTickColor(from.getZTickColor());
+    to.setZTickProvider(from.getZTickProvider());
+    to.setZTickRenderer(from.getZTickRenderer());
+    
+    return to;
   }
 }
