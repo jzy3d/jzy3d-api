@@ -65,17 +65,19 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   public void update(Chart chart) {
     this.chart = chart;
     
-    final ICanvas canvas = chart.getCanvas();
-    final List<ILegend> list = getLegends();
+    IPainter painter = chart.getPainter();
+    ICanvas canvas = chart.getCanvas();
+    List<ILegend> list = getLegends();
 
-    computeSeparator(canvas, list);
+    computeSeparator(painter, canvas, list);
+    
     sceneViewport = ViewportBuilder.column(canvas, 0, screenSeparator);
     backgroundViewport = new ViewportConfiguration(canvas);
   }
 
   // Separator only used for native since emulgl can not have two viewport side by side,
   // only a single viewport with images rendered on top
-  protected void computeSeparator(final ICanvas canvas, final List<ILegend> list) {
+  protected void computeSeparator(IPainter painter, ICanvas canvas, List<ILegend> list) {
     hasColorbars = list.size() > 0;
     
     if (hasColorbars) {
@@ -83,9 +85,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       int minWidth = 0;
       
       for (ILegend data : list) {
-        // here we don't need to consider pixel scale as the colorbar
-        // is already returning a dimension considering pixel scale.
-        minWidth += data.getMinimumDimension().width;
+        minWidth += updateAndGetMinDimensions(painter, data);
         
         //System.out.println("ViewAndColorbarsLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
       }
@@ -98,11 +98,19 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     }
   }
 
+  protected int updateAndGetMinDimensions(IPainter painter, ILegend data) {
+    // here we don't need to consider pixel scale as the colorbar
+    // is already returning a dimension considering pixel scale.
+    data.updateMinimumDimension(painter);
+    
+    return data.getMinimumDimension().width;
+  }
+
   protected float computeSeparator(final ICanvas canvas, int minWidth) {
     int width = canvas.getRendererWidth();
     
     if(width==0)
-      throw new IllegalArgumentException("Canvas has no width");
+      throw new IllegalArgumentException("Canvas has no width!");
 
     return ((float) (width - minWidth)) / width;
   }

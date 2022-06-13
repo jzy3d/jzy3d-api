@@ -30,23 +30,15 @@ public class AWTChart extends Chart {
   }
 
   public AWTColorbarLegend colorbar(Drawable drawable) {
-    return colorbar(drawable, null, getView().getAxis().getLayout());
+    return colorbar(drawable, getView().getAxis().getLayout());
   }
 
   public AWTColorbarLegend colorbar(Drawable drawable, AxisLayout layout) {
-    return colorbar(drawable, null, layout);
-  }
-
-  public AWTColorbarLegend colorbar(Drawable drawable, Dimension minDimension, AxisLayout layout) {
     AWTColorbarLegend colorbar = new AWTColorbarLegend(drawable, layout, layout.getMainColor(), view.getBackgroundColor());
-    
-    if(minDimension!=null)
-      colorbar.setMinimumDimension(minDimension);
-    
     drawable.setLegend(colorbar);
     return colorbar;
   }
-  
+
   @Override
   public AWTColorbarLegend getColorbar() {
     AWTColorbarLegend bar = (AWTColorbarLegend)super.getColorbar();

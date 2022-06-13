@@ -209,13 +209,15 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     // text scale by itself. As font is globally magnified, mainly for JOGL
     // text renderer, we will unscale it for processing the width
     int maxTextActual = Math.round(maxTextWidth / pixelScale.x);
+    //int maxTextActual = maxTextWidth;
     
-    return getPreferredWidth(Math.round(maxTextActual));
+    return getPreferredWidth(maxTextActual);
   }
-
+  
   protected int getPreferredWidth(int maxTextWidth) {
     return maxTextWidth + getTextToBarHorizontalMargin() + getBarWidth();
   }
+  
   /**
    * Only valid after a call to {@link #getPreferredWidth(IPainter)}
    * @return

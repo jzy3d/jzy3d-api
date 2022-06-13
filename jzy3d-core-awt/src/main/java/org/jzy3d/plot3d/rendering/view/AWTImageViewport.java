@@ -16,15 +16,14 @@ import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
  * @author Martin Pernollet
  */
 public class AWTImageViewport extends AbstractViewportManager implements IImageViewport {
-  protected static final float IMAGE_Z = 0;
 
   protected ByteBuffer imageData = null;
   protected BufferedImage image;
   protected int imageHeight;
   protected int imageWidth;
-  
-  protected Margin margin = new Margin(0,0,0,0); // no margin by default
-  protected Coord2d pixelScale = new Coord2d(1,1); // assume default pixel scale
+
+  protected Margin margin = new Margin(0, 0, 0, 0); // no margin by default
+  protected Coord2d pixelScale = new Coord2d(1, 1); // assume default pixel scale
 
   public AWTImageViewport() {
     setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
@@ -46,68 +45,81 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     painter.glPushMatrix();
     painter.glLoadIdentity();
 
-    renderImage(painter, imageData, imageWidth, imageHeight, screenWidth,
-        screenHeight, IMAGE_Z);
+    renderImage(painter);
 
     // Restore matrices state
     painter.glPopMatrix();
     painter.glMatrixMode_Projection();
     painter.glPopMatrix();
   }
-  
 
-  protected void renderImage(IPainter painter, ByteBuffer imageBuffer, int imageWidth, int imageHeight,
-      int screenWidth, int screenHeight, float z) {
-    if (imageBuffer == null)
+
+  protected void renderImage(IPainter painter) {
+    if (imageData == null)
       return;
 
-    float xZoom = 1;
-    float yZoom = 1;
-    int xPosition = 0;
-    int yPosition = 0;
-    
-    Coord2d scale = painter.getCanvas().getPixelScale();
+    ImageLayout iLayout = computeLayout(painter);
 
-    
+    // Draw
+
+    painter.drawImage(imageData, imageWidth, imageHeight, iLayout.zoom, iLayout.position);
+  }
+
+  /**
+   * Compute the position of the image in this viewport based on the image dimensions, the viewport
+   * dimensions and the margin.
+   */
+  protected ImageLayout computeLayout(IPainter painter) {
+    Coord2d scale = painter.getCanvas().getPixelScale();
+    ImageLayout iLayout = new ImageLayout();
+
+
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageWidth < screenWidth) {
       // inspired by View2DLayout_Debug which is accurate
-      xPosition = Math.round((screenWidth-(imageWidth+(margin.getWidth()*scale.x))) / 2f);
-      xPosition+= (margin.getLeft()*scale.x);
-      
+      iLayout.position.x =
+          Math.round((screenWidth - (imageWidth + (margin.getWidth() * scale.x))) / 2f);
+      iLayout.position.x += (margin.getLeft() * scale.x);
+
     }
     // Else if image is bigger than viewport, unzoom it a bit to let it fit the dimensions
-    else if(imageWidth > screenWidth){
-      xZoom = ((float) screenWidth) / ((float) imageWidth);
+    else if (imageWidth > screenWidth) {
+      iLayout.zoom.x = ((float) screenWidth) / ((float) imageWidth);
     }
     // If exact fit, keep default values
-    
+
     // If image is smaller than viewport, move it a bit to let it appear in the center
     if (imageHeight < screenHeight) {
-      yPosition = Math.round((screenHeight-(imageHeight+(margin.getHeight()*scale.y))) / 2f);
-      yPosition+= (margin.getBottom()*scale.y);
+      iLayout.position.y =
+          Math.round((screenHeight - (imageHeight + (margin.getHeight() * scale.y))) / 2f);
+      iLayout.position.y += (margin.getBottom() * scale.y);
     }
     // If image is bigger than viewport, unzoom it a bit to let it fit the dimensions
-    else if(imageWidth > screenWidth) {
-      yZoom = ((float) screenHeight) / ((float) imageHeight);
+    else if (imageWidth > screenWidth) {
+      iLayout.zoom.y = ((float) screenHeight) / ((float) imageHeight);
     }
     // If exact fit, keep default value
-    
-    //System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
-    //System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
-    //System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
-    
-    // Draw
-    Coord2d zoom = new Coord2d(xZoom, yZoom);
-    Coord3d position = new Coord3d(xPosition, yPosition, z);
-    
-    painter.drawImage(imageBuffer, imageWidth, imageHeight, zoom, position);
+
+    // System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
+    // System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
+    // System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
+    return iLayout;
   }
 
-  
-  /** Update internal pixel scale knowledge. Called by render loop and provided by painter's view. May be overrided to update the image. */
-  protected void updatePixelScale(Coord2d pixelScale) {
-    this.pixelScale = pixelScale ;
+  public class ImageLayout {
+    protected static final float IMAGE_Z = 0;
+
+    public Coord2d zoom = new Coord2d(1, 1);
+    public Coord3d position = new Coord3d(0, 0, IMAGE_Z);
+  }
+
+
+  /**
+   * Update internal pixel scale knowledge. Called by render loop and provided by painter's view.
+   * May be overrided to update the image.
+   */
+  public void updatePixelScale(Coord2d pixelScale) {
+    this.pixelScale = pixelScale;
   }
 
   /**
