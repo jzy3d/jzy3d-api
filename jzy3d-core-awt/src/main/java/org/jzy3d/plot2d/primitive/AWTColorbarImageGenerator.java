@@ -202,7 +202,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
    * Compute the optimal image width to contain the text as defined by the tick provided and
    * renderer.
    */
-  public int getPreferedWidth(IPainter painter) {
+  public int getPreferredWidth(IPainter painter) {
     maxTextWidth = getMaxTickLabelWidth(painter);
     
     // we unscale it : we here use a graphics2D context that consider
@@ -210,16 +210,14 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     // text renderer, we will unscale it for processing the width
     int maxTextActual = Math.round(maxTextWidth / pixelScale.x);
     
-    
-    
-    return getPreferedWidth(Math.round(maxTextActual));
+    return getPreferredWidth(Math.round(maxTextActual));
   }
 
-  protected int getPreferedWidth(int maxTextWidth) {
+  protected int getPreferredWidth(int maxTextWidth) {
     return maxTextWidth + getTextToBarHorizontalMargin() + getBarWidth();
   }
   /**
-   * Only valid after a call to {@link #getPreferedWidth(IPainter)}
+   * Only valid after a call to {@link #getPreferredWidth(IPainter)}
    * @return
    */
   public int getMaxTextWidth() {

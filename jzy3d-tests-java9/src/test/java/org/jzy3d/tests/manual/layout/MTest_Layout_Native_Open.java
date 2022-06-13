@@ -162,7 +162,7 @@ public class MTest_Layout_Native_Open {
     
     AWTColorbarImageGenerator gen = colorbar.getImageGenerator();
     System.out.println("Colorbar.gen.scale       : " + gen.getPixelScale());
-    System.out.println("Colorbar.gen.prefWidth   : " + gen.getPreferedWidth(chart.getPainter()));
+    System.out.println("Colorbar.gen.prefWidth   : " + gen.getPreferredWidth(chart.getPainter()));
     System.out.println("Colorbar.gen.bar         : " + gen.getBarWidth());
     System.out.println("Colorbar.gen.txt2bar     : " + gen.getTextToBarHorizontalMargin());
     System.out.println("Colorbar.gen.maxTxtWidth : " + gen.getMaxTextWidth());

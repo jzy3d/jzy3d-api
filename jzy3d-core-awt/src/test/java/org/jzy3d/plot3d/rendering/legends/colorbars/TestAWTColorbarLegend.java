@@ -4,8 +4,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Margin;
+import org.jzy3d.mocks.jzy3d.Mocks;
+import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
+import org.jzy3d.plot3d.rendering.view.View;
+import org.mockito.Mockito;
 
 /**
  * //tester toute l'api //dimension //size // //legend.getBackground() //legend.setFont(font);
@@ -71,6 +76,8 @@ public class TestAWTColorbarLegend {
 
     // ------------------------
     // When updating pixel scale with a NON ignored pixel scale
+    
+
 
     legend.setUsePixelScale(true);
     legend.updatePixelScale(new Coord2d(2, 2));
@@ -79,6 +86,33 @@ public class TestAWTColorbarLegend {
     // Then image size is a bit smaller since margin is multiplied by pixel scale
     expectWidth = Math.round(width * (right - left) - margin.getWidth()*2);
     Assert.assertEquals(expectWidth, legend.getImage().getWidth(null), DELTA);
+    
+
+    // ------------------------
+    // When getting legend min dim before rendering
+    // Then dimension is default
+    
+    Assert.assertEquals(AWTColorbarImageGenerator.MIN_BAR_WIDTH, legend.getMinimumDimension().width);
+
+    // ------------------------
+    // When rendering with a painter computing static text width
+
+    int TEXT_WIDTH = 20;
+
+    expectWidth = 68;//+= TEXT_WIDTH;
+
+    View v = Mocks.ViewAndPainter(2);
+    IPainter painter = v.getPainter();
+    Mockito.when(painter.getTextLengthInPixels(Mockito.any(), Mockito.any())).thenReturn(TEXT_WIDTH);
+
+
+    // Then min dim is updated
+    legend.render(v.getPainter());
+    Assert.assertEquals(expectWidth, legend.getMinimumDimension().width);
+    
+    // TODO !! SHOULD UPDATE DIMENSION BEFORE RENDERING
+    // TO REQUIRE LESS RENDER CYCLE
+    
     
   }
 
