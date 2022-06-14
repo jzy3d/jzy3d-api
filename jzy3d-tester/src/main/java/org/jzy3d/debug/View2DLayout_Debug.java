@@ -73,6 +73,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     // Draw viewport info
     ViewportConfiguration v = view.getCamera().getLastViewPort();
     String info = "Viewport (" + v.getWidth() + "," + v.getHeight() + ")";
+   
     g2d.setColor(java.awt.Color.black);
     g2d.drawString(info, 0, view.getAxisLayout().getFont().getHeight());
     
@@ -313,7 +314,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     g2d.drawString("Axis Label Left Side / Left Margin (" + x + ")", x, lineHeight*1);
 
     // right to axis label
-    x = Math.round(layout.getMargin().getLeft()*ps.x+view.get2DProcessing().getAxisTextHorizontal());
+    x = Math.round(layout.getMargin().getLeft()*ps.x+view.get2DProcessing().getAxisTextWidth());
     g2d.drawLine(x, 0, x, height);
 
     g2d.drawString("Axis Label Right Side (" + x + ")", x, lineHeight*2);
@@ -327,7 +328,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
     
     // right to tick label
-    x = Math.round(x+view.get2DProcessing().getTickTextHorizontal());
+    x = Math.round(x+view.get2DProcessing().getTickTextWidth());
     g2d.drawLine(x, 0, x, height);
 
     g2d.drawString("Tick Label Right Side (" + x + ")", x, lineHeight*4);

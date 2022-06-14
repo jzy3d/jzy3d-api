@@ -152,23 +152,35 @@ public class AxisTickProcessor {
       Coord2d pixelScale = view.getPixelScale();
       
       // -------------------------------
-      // Occupation of X tick labels 
+      // Distance of X tick labels to tick axis
       // according to Y range, canvas height and font height
       
       if (this.axis.isX(dimension)) {
-        float worldTickLen = (layout2D.getHorizontalTickLabelsDistance()*pixelScale.y + font.getHeight()) * modelToScreen.y;
+        //float scale = painter.getCanvas().isNative()? pixelScale.y : 1;
+        float scale = pixelScale.y;
+        float worldTickLen = (layout2D.getHorizontalTickLabelsDistance()*scale + font.getHeight()) * modelToScreen.y;
         float range = this.axis.getBounds().getYRange().getRange();
-        return range/worldTickLen;
+        float magic = range/worldTickLen;
+        System.err.println("AxisTickProcessor : X tick dist in 2D : " + magic);
+        return magic;
       }
       
       // -------------------------------
-      // Occupation of Y tick labels 
+      // Distance of Y tick labels to tick axis
       // according to X range, canvas width and font width
       
       else if (this.axis.isY(dimension)) {
-        float worldTickLen = layout2D.getVerticalTickLabelsDistance()*pixelScale.x * modelToScreen.x;
-        float range = this.axis.getBounds().getXRange().getRange();
-        return range/worldTickLen;
+        /*if(layout2D.getVerticalTickLabelsDistance()==0) {
+          return 0;
+        }
+        else {*/
+          float scale = painter.getCanvas().isNative()? pixelScale.x : 1;
+          float worldTickLen = layout2D.getVerticalTickLabelsDistance()*scale * modelToScreen.x;
+          float range = this.axis.getBounds().getXRange().getRange();
+          float magic = range/worldTickLen;
+          System.err.println("AxisTickProcessor : Y tick dist in 2D : " + magic);
+          return magic;          
+        //}
       }
       
       // -------------------------------

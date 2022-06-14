@@ -48,6 +48,13 @@ public class View2DProcessing {
   protected float horizontalAxisDistance;
   protected float verticalTickDistance;
   protected float verticalAxisDistance;
+  
+  // each margin given in pixels
+  protected float borderLeft = 0;
+  protected float borderRight = 0;
+  protected float borderTop = 0;
+  protected float borderBottom = 0;
+
 
   // each margin given in pixels
   protected float marginLeftPx = 0;
@@ -84,14 +91,29 @@ public class View2DProcessing {
     View2DLayout view2DLayout = view.get2DLayout();
 
     Font font = axisLayout.getFont();
+    
+    
+    boolean isEmulGL = !view.getCanvas().isNative();
+    //if(isEmulGL)
+    //  pixelScale.y = 1;
 
     // ---------------------------------------------------
     // initialize all margins according to configuration
     
-    marginLeftPx = view2DLayout.getMargin().getLeft() * pixelScale.x;
+    /*marginLeftPx = view2DLayout.getMargin().getLeft() * pixelScale.x;
     marginRightPx = view2DLayout.getMargin().getRight() * pixelScale.x;
     marginTopPx = view2DLayout.getMargin().getTop() * pixelScale.y;
-    marginBottomPx = view2DLayout.getMargin().getBottom() * pixelScale.y;
+    marginBottomPx = view2DLayout.getMargin().getBottom() * pixelScale.y;*/
+    
+    borderLeft = view2DLayout.getMargin().getLeft() * pixelScale.x;
+    borderRight = view2DLayout.getMargin().getRight() * pixelScale.x;
+    borderTop = view2DLayout.getMargin().getTop() * pixelScale.y;
+    borderBottom = view2DLayout.getMargin().getBottom() * pixelScale.y;
+    
+    marginLeftPx = borderLeft;
+    marginRightPx = borderRight;
+    marginTopPx = borderTop;
+    marginBottomPx = borderBottom;
     
     //System.err.println("View2DP : Margin : " + view2DLayout.getMargin());
 
@@ -103,7 +125,6 @@ public class View2DProcessing {
       // consider space occupied by tick labels
       tickTextWidth = axisLayout.getMaxYTickLabelWidth(painter);
       tickTextHeight = font.getHeight();
-
 
       // consider space occupied by the Y axis label
       if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
@@ -130,15 +151,17 @@ public class View2DProcessing {
     // according to pixel scale
     // ------------------------------------------------
 
-    if (!view.getCanvas().isNative()) {
+    if (isEmulGL) {
       
-      // Deal with "clean" Vertical axis layout
+      // Deal with accurate Vertical axis layout
       tickTextWidth /= pixelScale.x;
       axisTextWidth /= pixelScale.x;
       
       // Would mangle the Horizontal axis layout
-      //tickTextHeight /= pixelScale.y;
-      //axisTextHeight /= pixelScale.y;
+      tickTextHeight /= (pixelScale.y);
+      axisTextHeight /= (pixelScale.y);
+      
+      //if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
     }
 
     // ---------------------------------------------------
@@ -161,8 +184,8 @@ public class View2DProcessing {
     marginBottomPx += horizontalAxisDistance;
     marginBottomPx += axisTextHeight;
     
-    //System.err.println("V2DProc : axisTextHeight : " + axisTextHeight + " tickHeight " + tickTextHeight);
-    //System.err.println("V2DProc : axisTextWidth  : " + axisTextWidth + "  tickWidth  " + tickTextWidth);
+    System.err.println("V2DProc : axisTextHeight : " + axisTextHeight + " tickHeight " + tickTextHeight + " H tick " + horizontalTickDistance + " H axis " + horizontalAxisDistance + " BOTTOM = " + marginBottomPx);
+    System.err.println("V2DProc : axisTextWidth  : " + axisTextWidth + "  tickWidth  " + tickTextWidth);
 
     // ---------------------------------------------------
     // case of a symetric layout requirement
@@ -184,7 +207,7 @@ public class View2DProcessing {
     // view's viewport
     // ------------------------------------------------
     
-    if (!view.getCanvas().isNative()) {
+    if (isEmulGL) {
       if (view instanceof ChartView) {
         IViewportLayout layout = ((ChartView) view).getLayout();
         if (layout instanceof ViewAndColorbarsLayout) {
@@ -371,7 +394,7 @@ public class View2DProcessing {
    * Return the tick label width in pixel that was processed at the latest call to {@link #apply()}
    * according to the axis and view layout settings
    */
-  public float getTickTextHorizontal() {
+  public float getTickTextWidth() {
     return tickTextWidth;
   }
 
@@ -379,7 +402,7 @@ public class View2DProcessing {
    * Return the tick label height in pixel that was processed at the latest call to {@link #apply()}
    * according to the axis and view layout settings
    */
-  public float getTickTextVertical() {
+  public float getTickTextHeight() {
     return tickTextHeight;
   }
 
@@ -387,7 +410,7 @@ public class View2DProcessing {
    * Return the axis label width in pixel that was processed at the latest call to {@link #apply()}
    * according to the axis and view layout settings
    */
-  public float getAxisTextHorizontal() {
+  public float getAxisTextWidth() {
     return axisTextWidth;
   }
 
@@ -395,7 +418,7 @@ public class View2DProcessing {
    * Return the axis label height in pixel that was processed at the latest call to {@link #apply()}
    * according to the axis and view layout settings
    */
-  public float getAxisTextVertical() {
+  public float getAxisTextHeight() {
     return axisTextHeight;
   }
 
