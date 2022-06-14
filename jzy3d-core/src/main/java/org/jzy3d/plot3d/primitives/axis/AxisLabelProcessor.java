@@ -266,9 +266,9 @@ public class AxisLabelProcessor {
     Coord2d pixelScale = view.getPixelScale();
 
     // for Y axis label, we do a shift along X dimension
-    float xShiftPx = layout2D.getVerticalTickLabelsDistance()*pixelScale.x;
-    xShiftPx += processing2D.getTickTextHorizontal();
-    xShiftPx += layout2D.getVerticalAxisLabelsDistance()*pixelScale.x;
+    float xShiftPx = layout2D.getVerticalTickLabelsDistance() * pixelScale.x;
+    xShiftPx += processing2D.getTickTextWidth();
+    xShiftPx += layout2D.getVerticalAxisLabelsDistance() * pixelScale.x;
     
     if(!LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
       
@@ -292,9 +292,9 @@ public class AxisLabelProcessor {
     
 
     // for X axis label, we do a shift along Y dimension
-    float yShiftPx = layout2D.getHorizontalTickLabelsDistance()*pixelScale.y;
-    yShiftPx += processing2D.getTickTextVertical();
-    yShiftPx += layout2D.getHorizontalAxisLabelsDistance()*pixelScale.y;
+    float yShiftPx = layout2D.getHorizontalTickLabelsDistance() * pixelScale.y;
+    yShiftPx += processing2D.getTickTextHeight();
+    yShiftPx += layout2D.getHorizontalAxisLabelsDistance() * pixelScale.y;
     
     
     

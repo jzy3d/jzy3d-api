@@ -249,6 +249,17 @@ public class View {
 
         // Edit font size accordingly
         axis.getLayout().applyFontSizePolicy();
+        
+        // --------------------------
+        // Trigger new render for different reasons
+        // EmulGL need this to layout colorbar properly
+        // Native need this to /sometime/ get the good resolution 
+        
+        //if(!canvas.isNative()) {
+          chart.render(10);
+        //}
+          
+          System.out.println("View :update pix scale");
       }
     });
   }
