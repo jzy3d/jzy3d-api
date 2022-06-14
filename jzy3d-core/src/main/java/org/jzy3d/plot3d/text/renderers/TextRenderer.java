@@ -8,6 +8,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.text.AbstractTextRenderer;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
@@ -32,6 +33,8 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
   protected static Logger LOGGER = LogManager.getLogger(TextRenderer.class);
 
   protected TextLayout layout = new TextLayout();
+  
+  protected boolean showPositionDebug = true;
 
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string
@@ -68,6 +71,11 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     painter.drawText(font, text, positionAligned, color, rotation);
     // Formerly : painter.glutBitmapString(font, text, positionAligned, color);
     
+    if(showPositionDebug) {
+      Point p = new Point(position, Color.RED);
+      p.setWidth(5);
+      p.draw(painter);
+    }    
     // Return text bounds
     return computeTextBounds(painter, font, screenAligned, textWidth);
   }

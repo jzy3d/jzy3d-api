@@ -2,7 +2,6 @@ package org.jzy3d.chart.factories;
 
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.EmulGLChart;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadControllerWithTime;
 import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
@@ -35,7 +34,6 @@ public class EmulGLChartFactory extends ChartFactory {
   @Override
   public AWTChart newChart(IChartFactory factory, Quality quality) {
     AWTChart chart = new AWTChart(factory, quality);
-    //EmulGLChart chart = new EmulGLChart(factory, quality);
     chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // EMULGL NEEDS AUTO_FIT!!!
     return chart;
   }
