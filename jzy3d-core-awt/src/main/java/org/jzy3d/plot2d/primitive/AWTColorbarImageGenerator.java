@@ -30,9 +30,10 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   protected double max;
 
   public static int BAR_WIDTH_DEFAULT = 20;
+  public static int TEXT_TO_BAR_DEFAULT = 2;
   
   protected int barWidth;
-  protected int textToBarHorizontalMargin = 2;
+  protected int textToBarHorizontalMargin = TEXT_TO_BAR_DEFAULT;
   protected int maxTextWidth;
   
   protected boolean addTextHeightToVerticalMargin = false;
