@@ -79,10 +79,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
 
   protected Font font;
 
-  //protected boolean usePixelScale = true;
-
   protected static final int DEFAULT_MARGIN_HEIGHT = 20;
-
 
   public AWTColorbarLegend(Drawable parent, Chart chart) {
     this(parent, chart.getView().getAxis().getLayout());
@@ -154,18 +151,12 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     // and not included inside the generated image.
     int w = gen.getPreferredWidth(painter) + margin.getWidth();
 
-    //if (usePixelScale)
       minimumDimension.width = Math.round(w * pixelScale.x);
-    /*else
-      minimumDimension.width = w;
-
-    System.out.println("AWTCbar : " + pixelScale);*/
     
     // a trick to get a correct emulgl layout
     if(emulGLUnscale) {
       minimumDimension.width /= pixelScale.x; 
     }
-    //System.out.println("AWTColorbar = " + minimumDimension.width);
   }
   
   boolean emulGLUnscale = false;

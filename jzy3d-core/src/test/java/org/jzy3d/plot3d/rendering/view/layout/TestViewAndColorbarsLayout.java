@@ -17,8 +17,8 @@ import org.jzy3d.plot3d.rendering.view.TestView2DProcessing;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
 /**
- * This verify that the {@link ViewAndColorbarsLayout} is able to split the canvas
- * in two area, the view area on the left and the colorbar area on the right.
+ * This verify that the {@link ViewAndColorbarsLayout} is able to split the canvas in two area, the
+ * view area on the left and the colorbar area on the right.
  * 
  * Other tests relating to layout can be found at
  * <ul>
@@ -76,11 +76,12 @@ public class TestViewAndColorbarsLayout {
   public void whenColorbars_ThenScreenSeparatorIsProcessed() {
     ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
 
-    whenColorbars_ThenScreenSeparatorIsProcessed(layout);
+    whenColorbars_ThenScreenSeparatorIsProcessed(layout, false);
 
   }
-  
-  public void whenColorbars_ThenScreenSeparatorIsProcessed(ViewAndColorbarsLayout layout) {
+
+  public void whenColorbars_ThenScreenSeparatorIsProcessed(ViewAndColorbarsLayout layout,
+      boolean isEmulGL) {
     int WIDTH = 800;
     int HEIGHT = 600;
     float SCALE = 1.5f; // pixel ratio not 1
@@ -93,7 +94,7 @@ public class TestViewAndColorbarsLayout {
     // --------------------------------
     // Check object under test
 
-    //Assert.assertFalse(layout.isShrinkColorbar());
+    // Assert.assertFalse(layout.isShrinkColorbar());
 
     // --------------------------------
     // Given a chart with colorbars
@@ -101,17 +102,17 @@ public class TestViewAndColorbarsLayout {
     Chart chart = Mocks.Chart(WIDTH, HEIGHT, SCALE);
 
 
-    //AWTColorbarLegend legend1 = new AWTC
-    //ILegend legend = mock(ILegend.class);
+    // AWTColorbarLegend legend1 = new AWTC
+    // ILegend legend = mock(ILegend.class);
     ILegend legend = spy(ILegend.class);
     when(legend.getMinimumDimension()).thenReturn(new Dimension(CBAR_WIDTH, CBAR_HEIGHT));
-    
-    //List<ILegend> legends = colorbars(numberOfColorbars, legend);
-    
+
+    // List<ILegend> legends = colorbars(numberOfColorbars, legend);
+
     Camera camera = spy(Camera.class);
 
     when(chart.getView().getCamera()).thenReturn(camera);
-    
+
     when(chart.getScene().getGraph().getLegends()).thenReturn(colorbars(numberOfColorbars, legend));
 
 
@@ -125,7 +126,13 @@ public class TestViewAndColorbarsLayout {
     // Then layout configured for TWO colorbar
 
     int expectRightSideWidth = Math.round(CBAR_WIDTH * numberOfColorbars);
-    int expectLeftSideWidth = WIDTH - expectRightSideWidth;
+    int expectLeftSideWidth;
+
+    if (isEmulGL) {
+      expectLeftSideWidth = WIDTH;
+    } else {
+      expectLeftSideWidth = WIDTH - expectRightSideWidth;
+    }
 
     // with scene occupying the whole the canvas MINUS the colorbar widths
     Assert.assertEquals(expectLeftSideWidth, layout.sceneViewport.getWidth());
@@ -138,7 +145,7 @@ public class TestViewAndColorbarsLayout {
     Assert.assertTrue(layout.hasColorbars);
 
 
-    float expectSeparator = 1f * expectLeftSideWidth / WIDTH;
+    float expectSeparator = 1f * (WIDTH - expectRightSideWidth) / WIDTH;
 
     Assert.assertNotEquals(1, expectSeparator);
     Assert.assertEquals(expectSeparator, layout.screenSeparator, 0.1);
@@ -149,26 +156,30 @@ public class TestViewAndColorbarsLayout {
 
     layout.render(chart.getPainter(), chart);
 
-    
+
     // --------------------------------
     // Then legend width processed is known
-    
+
     float expectLegendWidth = expectRightSideWidth;
     Assert.assertEquals(expectLegendWidth, layout.legendsWidth, 0);
 
 
     // --------------------------------
     // Then colorbars had their viewport defined
-    
+
     float from = expectSeparator;
-    float mid = from + (1-expectSeparator)/2;
+    float mid = from + (1 - expectSeparator) / 2;
     float to = 1;
 
-    verify(legend).setViewPort(800, 600, from, mid);
-    verify(legend).setViewPort(800, 600, mid, to);
+    if (isEmulGL) {
+      verify(legend).setViewPort(1200, 900, from, mid);
+      verify(legend).setViewPort(1200, 900, mid, to);
+    } else {
+      verify(legend).setViewPort(800, 600, from, mid);
+      verify(legend).setViewPort(800, 600, mid, to);
+    }
 
     verify(legend, times(2)).setViewportMode(ViewportMode.STRETCH_TO_FILL);
-    
   }
 
 

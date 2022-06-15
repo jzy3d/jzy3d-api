@@ -1,13 +1,17 @@
 package org.jzy3d.emulgl.unit;
 
+import java.awt.Component;
+import java.awt.Frame;
 import java.awt.Insets;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.concurrent.CountDownLatch;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.chart.factories.IFrame;
-import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.plot3d.primitives.SampleGeom;
@@ -15,13 +19,12 @@ import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
-import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 public class TestCamera_EmulGL_Onscreen {
 
   @Test
   public void whenViewShoot_thenCameraIsProperlySet() throws InterruptedException {
-    if(new OperatingSystem().isUnix()) {
+    /*if (new OperatingSystem().isUnix()) {
       System.out.println("  !!!   ");
       System.out.println("  !!!   ");
       System.out.println("  !!!   ");
@@ -31,37 +34,24 @@ public class TestCamera_EmulGL_Onscreen {
       System.out.println("  !!!   ");
       System.out.println("-------------------------------------------");
       return;
-    }
+    }*/
     // LoggerUtils.minimal();
 
     // ---------------------
     // JZY3D CONTENT
 
-    EmulGLChartFactory factory = new EmulGLChartFactory() {
-      @Override
-      public Camera newCamera(Coord3d center) {
-        // Camera camera = Mockito.spy((Camera) super.newCamera(center));
-        Camera camera = new Camera(center);
-        return camera;
-      }
-
-    };
+    EmulGLChartFactory factory = new EmulGLChartFactory();
 
     Quality q = Quality.Advanced();
 
     Chart chart = factory.newChart(q);
-    chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // INVESTIGUER POURQUOI AUTO_FIT!!!
     chart.add(SampleGeom.surface());
-
 
     // -----------------------------------
     // When Trigger canvas
+
+
     EmulGLCanvas canvas = (EmulGLCanvas) chart.getCanvas();
-
-    /// needed 7-10 sec up to there
-
-
-
     Camera cam = chart.getView().getCamera();
 
     // ----------------------------------------
@@ -77,36 +67,54 @@ public class TestCamera_EmulGL_Onscreen {
 
     Rectangle FRAME_SIZE = new Rectangle(800, 600);
 
+    ResizeBarrier resizeBarrier = new ResizeBarrier(canvas);
+
     IFrame frame = chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
-
-    Thread.sleep(1000);
-
-    considerFrameBorder(FRAME_SIZE, (FrameAWT) frame);
-
-    //chart.render();
-    //chart.render();
-    //System.out.println(cam.getLastViewPort());
+    Frame awtFrame = (Frame) frame;
     
+    // let time to resize from default 500 to 800 before testing
+    resizeBarrier.await(); 
+
+    Rectangle CANVAS_SIZE = FRAME_SIZE.clone();
+    sub(CANVAS_SIZE, awtFrame.getInsets());
+
+
     // Then viewport size is set to occupy the full frame
-    Assert.assertEquals(FRAME_SIZE.width, cam.getLastViewPort().getWidth());
-    Assert.assertEquals(FRAME_SIZE.height, cam.getLastViewPort().getHeight());
+    Assert.assertEquals(CANVAS_SIZE.width, cam.getLastViewPort().getWidth());
+    Assert.assertEquals(CANVAS_SIZE.height, cam.getLastViewPort().getHeight());
 
     // ----------------------------------------
     // When change canvas size and update view
 
-    Rectangle CANVAS_SIZE = new Rectangle(100, 300);
-    canvas.setSize(CANVAS_SIZE.width, CANVAS_SIZE.height);
-    chart.getView().shoot();
+    CANVAS_SIZE = new Rectangle(100, 300);
+    FRAME_SIZE = CANVAS_SIZE.clone();
+    add(FRAME_SIZE, awtFrame.getInsets());
+
+    resizeBarrier = new ResizeBarrier(canvas);
+
+    awtFrame.setBounds(0, 0, FRAME_SIZE.width, FRAME_SIZE.height);
+
+    // let time to resize from default 500 to 800 before testing
+    resizeBarrier.await();
+    chart.render();
+    Thread.sleep(100); 
+
+
+    // Coord2d scale = chart.getView().getPixelScale();
+    // System.out.println("TestCamEmulGLOnScreen : viewport : " + cam.getLastViewPort());
+    // System.out.println("TestCamEmulGLOnScreen : scale : " + scale);
 
     // Then viewport on the complete canvas
-    Assert.assertEquals(CANVAS_SIZE.height, cam.getLastViewPort().getHeight());
+    Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, cam.getLastViewPort().getMode());
     Assert.assertEquals(CANVAS_SIZE.width, cam.getLastViewPort().getWidth());
+    Assert.assertEquals(CANVAS_SIZE.height, cam.getLastViewPort().getHeight());
 
     // ----------------------------------------
-    // When set STRETCH_TO_FILL
+    // When set STRETCH_TO_FILL, results must similar
 
     cam.setViewportMode(ViewportMode.STRETCH_TO_FILL);
-    chart.getView().shoot();
+    chart.render();
+
 
     // Then viewport on the complete canvas
     Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, cam.getLastViewPort().getMode());
@@ -118,24 +126,46 @@ public class TestCamera_EmulGL_Onscreen {
 
     // SQUARE MODE NOT SUPPORTED YET
 
-    /*
-     * cam.setViewportMode(ViewportMode.SQUARE); chart.getView().shoot();
-     * 
-     * // Then viewport is SQUARE Assert.assertEquals(ViewportMode.SQUARE,
-     * cam.getLastViewPort().getMode());
-     * 
-     * int sideLength = 100; Assert.assertEquals(sideLength, cam.getLastViewPort().getHeight());
-     * Assert.assertEquals(sideLength, cam.getLastViewPort().getWidth());
-     */
   }
 
-  private static void considerFrameBorder(Rectangle initialFrameSize, FrameAWT frame) {
-    // consider frame border
-    Insets insets = frame.getInsets();
-    
-    System.out.println("TestCamera_EmulGL_OnScreen : Insets : L:" + insets.left + ", R:" + insets.right + " T:" + insets.top  + " B:" + insets.bottom);
-    
+  private static void add(Rectangle initialFrameSize, Insets insets) {
+    initialFrameSize.width += insets.left + insets.right;
+    initialFrameSize.height += insets.top + insets.bottom;
+  }
+
+  private static void sub(Rectangle initialFrameSize, Insets insets) {
     initialFrameSize.width -= insets.left + insets.right;
     initialFrameSize.height -= insets.top + insets.bottom;
   }
+
+  /** A helper allowing to pause code execution until a canvas resize is finished. */
+  class ResizeBarrier {
+    protected Component canvas;
+    protected CountDownLatch latch;
+
+    ComponentAdapter resizeBarrier;
+
+    public ResizeBarrier(Component canvas) {
+      this.canvas = canvas;
+      this.latch = new CountDownLatch(1);
+
+      this.resizeBarrier = new ComponentAdapter() {
+        @Override
+        public void componentResized(ComponentEvent e) {
+          System.out.println("TestCamera_EmulGL_Onscreen:Resized! Going ahead");
+          latch.countDown();
+          canvas.removeComponentListener(resizeBarrier);
+          System.out.println("TestCamera_EmulGL_Onscreen:Removed listener");
+        }
+      };
+
+      this.canvas.addComponentListener(resizeBarrier);
+    }
+
+    public void await() throws InterruptedException {
+      System.out.println("TestCamera_EmulGL_Onscreen:Now waiting on the latch");
+      latch.await();
+    }
+  }
+
 }
