@@ -11,6 +11,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
+import org.jzy3d.plot3d.rendering.view.View2DProcessing;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 
@@ -24,11 +25,14 @@ public class AxisTickProcessor {
   protected AxisBox axis;
   protected AxisLayout layout;
   protected AxisLabelProcessor labels;
-
+  
+  protected View2DProcessing view2D;
+  
   public AxisTickProcessor(AxisBox axis) {
     this.axis = axis;
     this.layout = axis.getLayout();
     this.labels = axis.labels;
+    
   }
 
   public BoundingBox3d drawTicks(IPainter painter, int axis, int dimension, Color color) {
@@ -146,23 +150,18 @@ public class AxisTickProcessor {
     
     if(view != null && view.is2D()) {
 
-      Font font = this.axis.getLayout().getFont();
-      View2DLayout layout2D = view.get2DLayout();
-      Coord2d modelToScreen = view.get2DProcessing().getModelToScreen();
-      Coord2d pixelScale = view.getPixelScale();
+      View2DProcessing processing2D = view.get2DProcessing();
+      Coord2d modelToScreen = processing2D.getModelToScreen();
       
       // -------------------------------
       // Distance of X tick labels to tick axis
       // according to Y range, canvas height and font height
       
       if (this.axis.isX(dimension)) {
-        //float scale = painter.getCanvas().isNative()? pixelScale.y : 1;
-        float scale = pixelScale.y;
-        float fontHeight = painter.getCanvas().isNative()? font.getHeight():font.getHeight()/pixelScale.y;
-        float worldTickLen = (layout2D.getHorizontalTickLabelsDistance()*scale + fontHeight) * modelToScreen.y;
+        float fontHeight = processing2D.getTickTextHeight();
+        float worldTickLen = (processing2D.getHorizontalTickDistance() + fontHeight) * modelToScreen.y;
         float range = this.axis.getBounds().getYRange().getRange();
         float magic = range/worldTickLen;
-        //System.err.println("AxisTickProcessor : X tick dist in 2D : " + magic);
         return magic;
       }
       
@@ -171,10 +170,9 @@ public class AxisTickProcessor {
       // according to X range, canvas width and font width
       
       else if (this.axis.isY(dimension)) {
-        float worldTickLen = layout2D.getVerticalTickLabelsDistance() * pixelScale.x * modelToScreen.x;
+        float worldTickLen = processing2D.getVerticalTickDistance() * modelToScreen.x;
         float range = this.axis.getBounds().getXRange().getRange();
         float magic = range/worldTickLen;
-        //System.err.println("AxisTickProcessor : Y tick dist in 2D : " + magic);
         return magic;          
       }
       
@@ -222,8 +220,6 @@ public class AxisTickProcessor {
     info.tickValues = ticks;
     info.tickLabels = new String[ticks.length];
     info.tickLabelPositions = new Coord3d[ticks.length];
-
-    // Coord3d[] axisSegment = new Coord3d[2];
 
     for (int t = 0; t < ticks.length; t++) {
       // Shift the tick vector along the selected axis

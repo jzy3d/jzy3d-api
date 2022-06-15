@@ -50,10 +50,10 @@ public class View2DProcessing {
   protected float verticalAxisDistance;
   
   // each margin given in pixels
-  protected float borderLeft = 0;
-  protected float borderRight = 0;
-  protected float borderTop = 0;
-  protected float borderBottom = 0;
+  protected float marginLeftPxScaled = 0;
+  protected float marginRightPxScaled = 0;
+  protected float marginTopPxScaled = 0;
+  protected float marginBottomPxScaled = 0;
 
 
   // each margin given in pixels
@@ -92,28 +92,27 @@ public class View2DProcessing {
 
     Font font = axisLayout.getFont();
     
-    
     boolean isEmulGL = !view.getCanvas().isNative();
-    //if(isEmulGL)
-    //  pixelScale.y = 1;
 
     // ---------------------------------------------------
     // initialize all margins according to configuration
     
-    /*marginLeftPx = view2DLayout.getMargin().getLeft() * pixelScale.x;
-    marginRightPx = view2DLayout.getMargin().getRight() * pixelScale.x;
-    marginTopPx = view2DLayout.getMargin().getTop() * pixelScale.y;
-    marginBottomPx = view2DLayout.getMargin().getBottom() * pixelScale.y;*/
+    marginLeftPxScaled = view2DLayout.getMargin().getLeft() * pixelScale.x;
+    marginRightPxScaled = view2DLayout.getMargin().getRight() * pixelScale.x;
+    marginTopPxScaled = view2DLayout.getMargin().getTop() * pixelScale.y;
+    marginBottomPxScaled = view2DLayout.getMargin().getBottom() * pixelScale.y;
     
-    borderLeft = view2DLayout.getMargin().getLeft() * pixelScale.x;
-    borderRight = view2DLayout.getMargin().getRight() * pixelScale.x;
-    borderTop = view2DLayout.getMargin().getTop() * pixelScale.y;
-    borderBottom = view2DLayout.getMargin().getBottom() * pixelScale.y;
+    if(isEmulGL) {
+      marginLeftPxScaled /= pixelScale.x;
+      marginRightPxScaled /= pixelScale.x;
+      marginTopPxScaled /= pixelScale.y;
+      marginBottomPxScaled /= pixelScale.y;
+    }
     
-    marginLeftPx = borderLeft;
-    marginRightPx = borderRight;
-    marginTopPx = borderTop;
-    marginBottomPx = borderBottom;
+    marginLeftPx = marginLeftPxScaled;
+    marginRightPx = marginRightPxScaled;
+    marginTopPx = marginTopPxScaled;
+    marginBottomPx = marginBottomPxScaled;
     
     //System.err.println("View2DP : Margin : " + view2DLayout.getMargin());
 
@@ -153,15 +152,13 @@ public class View2DProcessing {
 
     if (isEmulGL) {
       
-      // Deal with accurate Vertical axis layout
+      // Accurate Vertical axis layout
       tickTextWidth /= pixelScale.x;
       axisTextWidth /= pixelScale.x;
       
-      // Would mangle the Horizontal axis layout
+      // Accurate Horizontal axis layout
       tickTextHeight /= (pixelScale.y);
       axisTextHeight /= (pixelScale.y);
-      //axisTextHeight*= 2;
-      //if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
     }
 
     // ---------------------------------------------------
@@ -172,6 +169,14 @@ public class View2DProcessing {
     
     horizontalTickDistance = view2DLayout.horizontalTickLabelsDistance * pixelScale.y;
     horizontalAxisDistance = view2DLayout.horizontalAxisLabelsDistance * pixelScale.y;
+    
+    if(isEmulGL) {
+      verticalTickDistance /= pixelScale.x;
+      verticalAxisDistance /= pixelScale.x;
+      horizontalTickDistance /= pixelScale.y;
+      horizontalAxisDistance /= pixelScale.y;
+    }
+    
     
     marginLeftPx += verticalTickDistance; // add tick label distance
     marginLeftPx += tickTextWidth; // add maximum Y tick label width
@@ -212,9 +217,7 @@ public class View2DProcessing {
         IViewportLayout layout = ((ChartView) view).getLayout();
         if (layout instanceof ViewAndColorbarsLayout) {
           float legendWidth = ((ViewAndColorbarsLayout) layout).getLegendsWidth();
-          //legendWidth /= pixelScale.x;
           
-          //System.err.println("View2DProcessing expand right margin at " + legendWidth);
           marginRightPx += legendWidth;
         }
       }
@@ -429,8 +432,36 @@ public class View2DProcessing {
     return modelToScreen;
   }
   
+  /** Return the margin in pixels, as defined in settings */
   public Margin getMarginPx() {
     return new Margin(marginLeftPx, marginRightPx, marginTopPx, marginBottomPx);
   }
 
+  /** Return the margin in pixels, already scaled according to pixel scale */
+  public Margin getMarginPxScaled() {
+    return new Margin(marginLeftPxScaled, marginRightPxScaled, marginTopPxScaled, marginBottomPxScaled);
+  }
+
+  /** Return the distance of tick labels to axis, already scaled according to pixel scale */
+  public float getHorizontalTickDistance() {
+    return horizontalTickDistance;
+  }
+
+  /** Return the distance of axis label to tick labels, already scaled according to pixel scale */
+  public float getHorizontalAxisDistance() {
+    return horizontalAxisDistance;
+  }
+
+  /** Return the distance of tick labels to axis, already scaled according to pixel scale */
+  public float getVerticalTickDistance() {
+    return verticalTickDistance;
+  }
+
+  /** Return the distance of axis label to tick labels, already scaled according to pixel scale */
+  public float getVerticalAxisDistance() {
+    return verticalAxisDistance;
+  }
+
+  
+  
 }

@@ -108,14 +108,12 @@ public class View2DLayout {
     this.textAddMargin = keepTextVisible;
   }
 
-
-
   public float getHorizontalTickLabelsDistance() {
     return horizontalTickLabelsDistance;
   }
 
-  public void setHorizontalTickLabelsDistance(float xAxisTickLabelsDistance) {
-    this.horizontalTickLabelsDistance = xAxisTickLabelsDistance;
+  public void setHorizontalTickLabelsDistance(float horizontalAxisLabelsDistance) {
+    this.horizontalTickLabelsDistance = horizontalAxisLabelsDistance;
   }
 
   public float getHorizontalAxisLabelsDistance() {
@@ -123,16 +121,16 @@ public class View2DLayout {
   }
 
   /** Distance between tick labels and axis label */
-  public void setHorizontalAxisLabelsDistance(float xAxisNameLabelsDistance) {
-    this.horizontalAxisLabelsDistance = xAxisNameLabelsDistance;
+  public void setHorizontalAxisLabelsDistance(float horizontalAxisLabelsDistance) {
+    this.horizontalAxisLabelsDistance = horizontalAxisLabelsDistance;
   }
 
   public float getVerticalTickLabelsDistance() {
     return verticalTickLabelsDistance;
   }
 
-  public void setVerticalTickLabelsDistance(float yAxisTickLabelsDistance) {
-    this.verticalTickLabelsDistance = yAxisTickLabelsDistance;
+  public void setVerticalTickLabelsDistance(float verticalAxisLabelsDistance) {
+    this.verticalTickLabelsDistance = verticalAxisLabelsDistance;
   }
 
   public float getVerticalAxisLabelsDistance() {
@@ -140,8 +138,8 @@ public class View2DLayout {
   }
 
   /** Distance between tick labels and axis label */
-  public void setVerticalAxisLabelsDistance(float yAxisNameLabelsDistance) {
-    this.verticalAxisLabelsDistance = yAxisNameLabelsDistance;
+  public void setVerticalAxisLabelsDistance(float verticalAxisLabelsDistance) {
+    this.verticalAxisLabelsDistance = verticalAxisLabelsDistance;
   }
   
   public boolean isSymetricHorizontalMargin() {
