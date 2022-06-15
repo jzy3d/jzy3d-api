@@ -176,27 +176,8 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     if (imageGenerator != null) {
       setGeneratorColors();
 
-      // We here ignore pixel scale as considering it
-      // 1. does not improve the final appearance of the
-      // colorbar since the Graphics2D instance is already rendering with the
-      // expected pixel scale.
-      // 2. will lead to a larger image that will be rescaled to fit the area
-      // which leads to a visually thinner bar a smaller tick labels for the colorbar
-
-      //if (usePixelScale) {
-        choosenWidth = (int) (width - (margin.getWidth() * pixelScale.x));
-        choosenHeight = (int) (height - (margin.getHeight() * pixelScale.y));
-      /*} else {
-        choosenWidth = (int) (width - margin.getWidth());
-        choosenHeight = (int) (height - margin.getHeight());
-      }*/
-
-      // System.out.println("AWTColorbarLegend : asked.w:" + width + " asked.h:" + height + " m.w:"
-      // + margin.getWidth() + " m.h:" + margin.getHeight() + " pixScale:" + pixelScale);
-      // System.out.println("AWTColorbarLegend : choosen.w:" + choosenWidth + " choosen.h:" +
-      // choosenHeight + " m.w:" + margin.getWidth() + " m.h:" + margin.getHeight() + " pixScale:" +
-      // pixelScale);
-
+      choosenWidth = (int) (width - (margin.getWidth() * pixelScale.x));
+      choosenHeight = (int) (height - (margin.getHeight() * pixelScale.y));
 
       askedWidth = width;
       askedHeight = height;
@@ -271,8 +252,6 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     return askedHeight;
   }
 
-
-
   public int getChoosenWidth() {
     return choosenWidth;
   }
@@ -288,14 +267,4 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
   public void setEmulGLUnscale(boolean emulGLUnscale) {
     this.emulGLUnscale = emulGLUnscale;
   }
-  
-  
-
-  /*public boolean isUsePixelScale() {
-    return usePixelScale;
-  }
-
-  public void setUsePixelScale(boolean usePixelScale) {
-    this.usePixelScale = usePixelScale;
-  }*/
 }

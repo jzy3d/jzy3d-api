@@ -260,15 +260,14 @@ public class AxisLabelProcessor {
 
     View view = axis.getView();
     AxisLayout axisLayout = axis.getLayout();
-    View2DLayout layout2D = view.get2DLayout();
     View2DProcessing processing2D = view.get2DProcessing();
     
     Coord2d pixelScale = view.getPixelScale();
 
     // for Y axis label, we do a shift along X dimension
-    float xShiftPx = layout2D.getVerticalTickLabelsDistance() * pixelScale.x;
+    float xShiftPx = processing2D.getVerticalTickDistance();
     xShiftPx += processing2D.getTickTextWidth();
-    xShiftPx += layout2D.getVerticalAxisLabelsDistance() * pixelScale.x;
+    xShiftPx += processing2D.getVerticalAxisDistance();
     
     if(!LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
       
@@ -292,13 +291,13 @@ public class AxisLabelProcessor {
     
 
     // for X axis label, we do a shift along Y dimension
-    float yShiftPx = layout2D.getHorizontalTickLabelsDistance() * pixelScale.y;
+    float yShiftPx = processing2D.getHorizontalTickDistance();
     yShiftPx += processing2D.getTickTextHeight();
-    yShiftPx += layout2D.getHorizontalAxisLabelsDistance() * pixelScale.y;
+    yShiftPx += processing2D.getHorizontalAxisDistance();
     
     
     
-    Coord2d modelToScreenRatio = view.get2DProcessing().getModelToScreen();
+    Coord2d modelToScreenRatio = processing2D.getModelToScreen();
 
     float xShift = xShiftPx * modelToScreenRatio.x;
     float yShift = yShiftPx * modelToScreenRatio.y;
