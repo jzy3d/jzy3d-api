@@ -151,7 +151,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
     // and not included inside the generated image.
     int w = gen.getPreferredWidth(painter) + margin.getWidth();
 
-      minimumDimension.width = Math.round(w * pixelScale.x);
+    minimumDimension.width = Math.round(w * pixelScale.x);
     
     // a trick to get a correct emulgl layout
     if(emulGLUnscale) {
