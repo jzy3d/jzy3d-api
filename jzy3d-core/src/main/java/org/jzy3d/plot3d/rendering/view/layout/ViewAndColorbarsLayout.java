@@ -91,12 +91,12 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     }
   }
 
-  protected int updateAndGetMinDimensions(IPainter painter, ILegend data) {
+  protected int updateAndGetMinDimensions(IPainter painter, ILegend legend) {
     // here we don't need to consider pixel scale as the colorbar
     // is already returning a dimension considering pixel scale.
-    data.updateMinimumDimension(painter);
+    legend.updateMinimumDimension(painter);
     
-    return data.getMinimumDimension().width;
+    return legend.getMinimumDimension().width;
   }
 
   protected float computeSeparator(final ICanvas canvas, int minWidth) {
