@@ -78,20 +78,32 @@ public class TestAWTColorbarLegend {
     Assert.assertEquals(AWTColorbarImageGenerator.MIN_BAR_WIDTH, legend.getMinimumDimension().width);
 
     // ------------------------
-    // When rendering with a painter computing static text width
+    // Given a 20 px text width
 
     int TEXT_WIDTH = 20;
-
-    expectWidth = 68;
 
     View v = Mocks.ViewAndPainter(SCALE);
     IPainter painter = v.getPainter();
     Mockito.when(painter.getTextLengthInPixels(Mockito.any(), Mockito.any())).thenReturn(TEXT_WIDTH);
 
-
-    // Then min dim is updated
+    // When rendering with a painter computing static text width
+    legend.setEmulGLUnscale(false);
     legend.updateMinimumDimension(painter);
-    Assert.assertEquals(expectWidth, legend.getMinimumDimension().width);
+
+    // Then min dim is updated according to pixel scale
+    expectWidth = AWTColorbarImageGenerator.BAR_WIDTH_DEFAULT; // 30
+    expectWidth += AWTColorbarImageGenerator.TEXT_TO_BAR_DEFAULT; // 2
+    expectWidth += TEXT_WIDTH / SCALE;
+    expectWidth += margin.getWidth();
+
+    Assert.assertEquals(expectWidth * SCALE, legend.getMinimumDimension().width);
+    
+    // When rendering for EmulGL
+    legend.setEmulGLUnscale(true);
+    legend.updateMinimumDimension(painter);
+    
+    // Then min dim is updated without considering pixel scale
+    Assert.assertEquals(expectWidth * 1, legend.getMinimumDimension().width);
     
   }
 
