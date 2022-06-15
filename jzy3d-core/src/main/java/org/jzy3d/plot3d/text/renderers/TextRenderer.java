@@ -34,7 +34,7 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
 
   protected TextLayout layout = new TextLayout();
   
-  protected boolean showPositionDebug = true;
+  protected boolean showPositionDebug = false;
 
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string

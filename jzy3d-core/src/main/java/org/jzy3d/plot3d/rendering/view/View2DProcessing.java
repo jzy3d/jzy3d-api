@@ -160,7 +160,7 @@ public class View2DProcessing {
       // Would mangle the Horizontal axis layout
       tickTextHeight /= (pixelScale.y);
       axisTextHeight /= (pixelScale.y);
-      
+      //axisTextHeight*= 2;
       //if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
     }
 
@@ -184,8 +184,8 @@ public class View2DProcessing {
     marginBottomPx += horizontalAxisDistance;
     marginBottomPx += axisTextHeight;
     
-    System.err.println("V2DProc : axisTextHeight : " + axisTextHeight + " tickHeight " + tickTextHeight + " H tick " + horizontalTickDistance + " H axis " + horizontalAxisDistance + " BOTTOM = " + marginBottomPx);
-    System.err.println("V2DProc : axisTextWidth  : " + axisTextWidth + "  tickWidth  " + tickTextWidth);
+    //System.err.println("V2DProc : axisTextHeight : " + axisTextHeight + " tickHeight " + tickTextHeight + " H tick " + horizontalTickDistance + " H axis " + horizontalAxisDistance + " BOTTOM = " + marginBottomPx);
+    //System.err.println("V2DProc : axisTextWidth  : " + axisTextWidth + "  tickWidth  " + tickTextWidth);
 
     // ---------------------------------------------------
     // case of a symetric layout requirement
