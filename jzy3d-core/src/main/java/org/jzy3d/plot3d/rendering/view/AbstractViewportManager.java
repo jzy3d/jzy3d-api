@@ -130,28 +130,12 @@ public abstract class AbstractViewportManager {
     // Stretch projection on the whole viewport
     if (ViewportMode.STRETCH_TO_FILL.equals(mode)
         || ViewportMode.RECTANGLE_NO_STRETCH.equals(mode)) {
-      screenXOffset = screenLeft;
-      screenYOffset = 0;
-
-
-      painter.glViewport(screenXOffset, screenYOffset, screenWidth, screenHeight);
-
-      lastViewPort =
-          new ViewportConfiguration(screenWidth, screenHeight, screenXOffset, screenYOffset);
-      lastViewPort.setMode(mode);
+      applyViewportRectangle(painter);
     }
     // Set the projection into the largest square area centered in the
     // window slice
     else if (ViewportMode.SQUARE.equals(mode)) {
-      screenSquaredDim = Math.min(screenWidth, screenHeight);
-      screenXOffset = screenLeft + screenWidth / 2 - screenSquaredDim / 2;
-      screenYOffset = screenBottom + screenHeight / 2 - screenSquaredDim / 2;
-
-      painter.glViewport(screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
-
-      lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim, screenXOffset,
-          screenYOffset);
-      lastViewPort.setMode(mode);
+      applyViewportSquared(painter);
     } else {
       throw new IllegalArgumentException("unknown mode " + mode);
     }
@@ -161,6 +145,31 @@ public abstract class AbstractViewportManager {
       renderSubScreenGrid(painter);
 
     return lastViewPort;
+  }
+
+
+  private void applyViewportRectangle(IPainter painter) {
+    screenXOffset = screenLeft;
+    screenYOffset = 0;
+
+
+    painter.glViewport(screenXOffset, screenYOffset, screenWidth, screenHeight);
+
+    lastViewPort =
+        new ViewportConfiguration(screenWidth, screenHeight, screenXOffset, screenYOffset);
+    lastViewPort.setMode(mode);
+  }
+
+  private void applyViewportSquared(IPainter painter) {
+    screenSquaredDim = Math.min(screenWidth, screenHeight);
+    screenXOffset = screenLeft + screenWidth / 2 - screenSquaredDim / 2;
+    screenYOffset = screenBottom + screenHeight / 2 - screenSquaredDim / 2;
+
+    painter.glViewport(screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
+
+    lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim, screenXOffset,
+        screenYOffset);
+    lastViewPort.setMode(mode);
   }
 
   

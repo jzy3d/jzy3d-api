@@ -232,8 +232,6 @@ public class ChartTester {
     }
   }
   
-  
-  
   public void assertSimilar(IColorMap colormap, String testImage) {
     try {
       execute(colormap, testImage);
