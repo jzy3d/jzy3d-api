@@ -259,7 +259,7 @@ public class View {
           chart.render(10);
         //}
           
-          System.out.println("View :update pix scale");
+          //System.out.println("View :update pix scale");
       }
     });
   }
