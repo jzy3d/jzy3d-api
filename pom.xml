@@ -559,7 +559,10 @@
 			
 			<!-- TEST EVALUATION -->
 			
-			<!-- mvn test-compile org.pitest:pitest-maven:mutationCoverage -Dverbose -DjvmArgs=java.awt.headless=false -->
+			<!-- mvn test-compile org.pitest:pitest-maven:mutationCoverage -DjvmArgs=-Djava.awt.headless=false -->
+			<!-- 
+			https://stackoverflow.com/questions/49691927/proper-setup-for-pitest-maven-report-aggregate-goal
+			-->
 			<plugin>
 			    <groupId>org.pitest</groupId>
 			    <artifactId>pitest-maven</artifactId>
