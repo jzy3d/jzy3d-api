@@ -255,9 +255,7 @@ public class View {
         // EmulGL need this to layout colorbar properly
         // Native need this to /sometime/ get the good resolution 
         
-        //if(!canvas.isNative()) {
-          chart.render(10);
-        //}
+        //chart.render(10);
           
           //System.out.println("View :update pix scale");
       }
