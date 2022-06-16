@@ -80,7 +80,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       for (ILegend data : list) {
         minWidth += updateAndGetMinDimensions(painter, data);
         
-        System.out.println("ViewAndColorbarsLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
+        //System.out.println("ViewAndColorbarsLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
       }
 
       screenSeparator = computeSeparator(canvas, minWidth);

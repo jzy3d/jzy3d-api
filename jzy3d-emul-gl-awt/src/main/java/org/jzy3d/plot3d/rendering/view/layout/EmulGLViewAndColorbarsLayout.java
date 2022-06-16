@@ -17,7 +17,6 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import jgl.GL;
 
 public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
-  boolean fixHiDPI = true;
   
   @Override
   public void update(Chart chart) {
@@ -53,55 +52,55 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
   @Override
   protected void renderLegends(IPainter painter, float left, float right, List<ILegend> legends,
       ICanvas canvas) {
-
-    int width = canvas.getRendererWidth();
-    int height = canvas.getRendererHeight();
-
     
-    View view = chart.getView();
-    Coord2d pixelScale = view.getPixelScale();
+    Coord2d scale = chart.getView().getPixelScale();
 
-    if (fixHiDPI) {
-      width = (int) (sceneViewport.getWidth() * pixelScale.x);
-      height = (int) (sceneViewport.getHeight() * pixelScale.y);
-    }
+    int width = Math.round(sceneViewport.getWidth() * scale.x);
+    int height = Math.round(sceneViewport.getHeight() * scale.y);
     
     //System.out.println("EmulGLViewAndColorbar : legendWidth " + legendsWidth);
+
+    Font font = painter.getView().getAxis().getLayout().getFont();
 
     // ---------------------------------------
 
     float slice = (right - left) / legends.size();
     int k = 0;
     for (ILegend legend : legends) {
-      legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
 
       float from = left + slice * (k++);
       float to = from + slice;
       
-      Font font = painter.getView().getAxis().getLayout().getFont();
-      legend.setFont(font);
+      //System.out.println("EmulGLViewLayout left " + from + " to " + to);
 
       // FALLBACK ON DIRECT AWT IMAGE RENDERING THROUGH jGL
       if (legend instanceof AWTColorbarLegend) {
         
         AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
         awtLegend.setViewPort(width, height, from, to);
+        awtLegend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+        awtLegend.setFont(font);
+        awtLegend.updateImage();
+        
+        //System.out.println("EmulGLViewLayout " + awtLegend.getViewPort());
         
         BufferedImage legendImage = (BufferedImage) awtLegend.getImage();
-        
         int legendWidth = legendImage.getWidth();
+        int legendHeight = legendImage.getHeight();
         
         // ---------------------------------------
         // Processing image offset with pixel scale
        
         Margin margin = awtLegend.getMargin();
         
-        int xOffset = width - legendWidth * (k);
-        xOffset += Math.round (pixelScale.x * margin.getLeft());
-        xOffset -= Math.round (pixelScale.x * margin.getRight());
+        // inspired from AWTImageViewport.computeLayout
+        int xOffset = Math.round(width - (legendWidth + (margin.getWidth() * scale.x)));
+        xOffset += (margin.getLeft() * scale.x);
+        
+        int yOffset =
+            Math.round((height - (legendHeight + (margin.getHeight() * scale.y))) / 2f);
+        yOffset += (margin.getBottom() * scale.y);
 
-        int yOffset = 0;
-        yOffset += Math.round (pixelScale.y * margin.getTop());
         
         // ---------------------------------------
         // Send image rendering directly to jGL
@@ -122,10 +121,10 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     }
   }
 
-  public boolean isFixHiDPI() {
+  /*public boolean isFixHiDPI() {
     return fixHiDPI;
   }
   public void setFixHiDPI(boolean fixHiDPI) {
     this.fixHiDPI = fixHiDPI;
-  }
+  }*/
 }
