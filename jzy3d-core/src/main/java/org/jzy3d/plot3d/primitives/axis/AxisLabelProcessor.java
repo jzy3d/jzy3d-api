@@ -265,30 +265,45 @@ public class AxisLabelProcessor {
     Coord2d pixelScale = view.getPixelScale();
 
     // for Y axis label, we do a shift along X dimension
+    // the shift will be from the Y axis segment center, 
+    // hence a positive shift is equivalent to moving the 
+    // label to the left
+    
     float xShiftPx = processing2D.getVerticalTickDistance();
     xShiftPx += processing2D.getTickTextWidth();
     xShiftPx += processing2D.getVerticalAxisDistance();
     
-    if(!LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
-      
+    // A non horizontal - hence rotated - text needs to be offset
+    // Non horizontal being either vertical or parallel to axis, we always
+    // consider it as a 90° rotation.
+    // see https://github.com/jzy3d/jzy3d-api/issues/283
+    
+    boolean isVertical = !LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation());
+    boolean isEmulGL = !view.getCanvas().isNative();
+    
+    if(isVertical) {
       // consider the rotation & offset due to vertical text 
       int textLength = view.getPainter().getTextLengthInPixels(axisLayout.getFont(), axisLayout.getYAxisLabel());
       
-      // hack the emulgl vertical Y axis case 
-      if(!view.getCanvas().isNative())
+      // hack the emulgl vertical Y axis case by ignoring pixel scale for text
+      if(isEmulGL)
         textLength /= pixelScale.y;
       
+      // move the text next to its anchor point, since it has been rotated
+      // from the text center and not from the anchor point that is on the 
+      // right most letter side.
       xShiftPx -= textLength/2;
       
       int textHeight = axisLayout.getFont().getHeight();
       
-      // hack the emulgl vertical Y axis case 
-      if(!view.getCanvas().isNative())
-        textHeight /= pixelScale.x;
-
-      xShiftPx += textHeight/2;
+      // hack the emulgl vertical Y axis case by ignoring pixel scale for text
+      if(isEmulGL) {
+        textHeight /= (pixelScale.x*2);
+        // I can't explain why we need this x2 factor for emulglGL vertical text
+      }
+      
+      xShiftPx += (textHeight/2);
     }
-    
 
     // for X axis label, we do a shift along Y dimension
     float yShiftPx = processing2D.getHorizontalTickDistance();
@@ -296,7 +311,8 @@ public class AxisLabelProcessor {
     yShiftPx += processing2D.getHorizontalAxisDistance();
     
     
-    
+    // Now convert this pixel shift into real world coordinates
+    // shift
     Coord2d modelToScreenRatio = processing2D.getModelToScreen();
 
     float xShift = xShiftPx * modelToScreenRatio.x;
@@ -306,6 +322,7 @@ public class AxisLabelProcessor {
     double ylab = 0;
     double zlab = 0;
 
+    // Build the axis label position
     if (axis.isX(direction)) {
       xlab = axis.center.x;
       ylab = pos.y - yShift;
