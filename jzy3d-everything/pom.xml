@@ -38,11 +38,8 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- <dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-native-jogl-swt</artifactId>
-			<version>${project.version}</version>
-		</dependency>-->
+		<!-- <dependency> <groupId>${project.groupId}</groupId> <artifactId>jzy3d-native-jogl-swt</artifactId>
+			<version>${project.version}</version> </dependency> -->
 
 		<!-- EmulGL -->
 		<dependency>
@@ -51,11 +48,8 @@
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- <dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-emul-gl-swt</artifactId>
-			<version>${project.version}</version>
-		</dependency>-->
+		<!-- <dependency> <groupId>${project.groupId}</groupId> <artifactId>jzy3d-emul-gl-swt</artifactId>
+			<version>${project.version}</version> </dependency> -->
 
 		<!-- Test tools -->
 
@@ -74,5 +68,21 @@
 		</dependency>
 
 	</dependencies>
+	<build>
+	  <plugins>
+	    <plugin>
+	      <groupId>org.pitest</groupId>
+	      <artifactId>pitest-maven</artifactId>
+	      <executions>
+	        <execution>
+	          <id>put-it-together</id>
+	          <goals>
+	            <goal>report-aggregate</goal>
+	          </goals>
+	        </execution>
+	      </executions>
+	    </plugin>
+	  </plugins>
+	</build>
 
 </project>
