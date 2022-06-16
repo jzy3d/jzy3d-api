@@ -7,9 +7,6 @@ public class TestEmulGLViewAndColorbarsLayout extends TestViewAndColorbarsLayout
   public void whenColorbars_ThenScreenSeparatorIsProcessed() {
     EmulGLViewAndColorbarsLayout layout = new EmulGLViewAndColorbarsLayout();
     
-    // TODO :REMOVE ME!!
-    //layout.fixHiDPI = false;
-    
     whenColorbars_ThenScreenSeparatorIsProcessed(layout, true);
     
   }
