@@ -174,12 +174,13 @@ public class TestViewAndColorbarsLayout {
     if (isEmulGL) {
       verify(legend).setViewPort(1200, 900, from, mid);
       verify(legend).setViewPort(1200, 900, mid, to);
+      //verify(legend, times(1)).setViewportMode(ViewportMode.STRETCH_TO_FILL);
     } else {
       verify(legend).setViewPort(800, 600, from, mid);
       verify(legend).setViewPort(800, 600, mid, to);
+      verify(legend, times(2)).setViewportMode(ViewportMode.STRETCH_TO_FILL);
     }
 
-    verify(legend, times(2)).setViewportMode(ViewportMode.STRETCH_TO_FILL);
   }
 
 
