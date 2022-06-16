@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>jzy3d-everything</artifactId>
-	<name>All Jzy3D module (except SWT)</name>
+	<name>Jzy3D Bundle Module (except SWT)</name>
 
 	<properties>
 		<version.java>1.8</version.java>
@@ -68,7 +68,7 @@
 		</dependency>
 
 	</dependencies>
-	<build>
+	<!-- <build>
 	  <plugins>
 	    <plugin>
 	      <groupId>org.pitest</groupId>
@@ -83,6 +83,6 @@
 	      </executions>
 	    </plugin>
 	  </plugins>
-	</build>
+	</build>-->
 
 </project>
