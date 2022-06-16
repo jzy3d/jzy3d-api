@@ -17,7 +17,8 @@ import org.jzy3d.plot3d.text.align.Vertical;
 
 /**
  * The {@link ITextRenderer} computes text layout according to {@link Horizontal}, {@link Vertical}
- * settings, text length, font size and text position. This is achieved with the help of {@link TextLayout} processor.
+ * settings, text length, font size and text position. This is achieved with the help of
+ * {@link TextLayout} processor.
  * 
  * It can be given a 2D offset in screen coordinates and a 3D offset in world coordinates that are
  * applied after the initial layout is processed according to the settings, the text length, the
@@ -28,12 +29,19 @@ import org.jzy3d.plot3d.text.align.Vertical;
  * Rendering text relies on {@link IPainter#drawText(Font, String, Coord3d, Color, float)} which was
  * introduced as of Jzy3D 2.0 and offers much more flexibility than the initial simple
  * {@link IPainter#glutBitmapString(int, String)} which only support two fonts.
+ * 
+ * Rotation of a text is always made from the center of the text, whatever the LEFT/CENTER/RIGHT
+ * layout of the text, which lead to all these possible layouts.
+ * 
+ * <p><img src="doc-files/text-rotation.png"></p>
+ * 
+ * This image was generated with {@link ITTest_Text#main()}
  */
 public class TextRenderer extends AbstractTextRenderer implements ITextRenderer {
   protected static Logger LOGGER = LogManager.getLogger(TextRenderer.class);
 
   protected TextLayout layout = new TextLayout();
-  
+
   protected boolean showPositionDebug = false;
 
   /**
@@ -70,17 +78,17 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     // Draws actual string
     painter.drawText(font, text, positionAligned, color, rotation);
     // Formerly : painter.glutBitmapString(font, text, positionAligned, color);
-    
-    if(showPositionDebug) {
+
+    if (showPositionDebug) {
       Point p = new Point(position, Color.RED);
       p.setWidth(5);
       p.draw(painter);
-    }    
+    }
     // Return text bounds
     return computeTextBounds(painter, font, screenAligned, textWidth);
   }
 
-  
+
 
   /** Convert a 2D screen position to 3D world coordinate */
   protected Coord3d to3D(IPainter painter, Coord3d screen) {
