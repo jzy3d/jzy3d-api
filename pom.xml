@@ -556,6 +556,16 @@
 					</execution>
 				</executions>
 			</plugin>
+			
+			<!-- TEST EVALUATION -->
+			
+			<!-- mvn test-compile org.pitest:pitest-maven:mutationCoverage -Dverbose -DjvmArgs=java.awt.headless=false -->
+			<plugin>
+			    <groupId>org.pitest</groupId>
+			    <artifactId>pitest-maven</artifactId>
+			    <version>1.8.0</version>
+			 </plugin>
+			
 
 		</plugins>
 
