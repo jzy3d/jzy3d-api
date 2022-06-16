@@ -90,7 +90,15 @@ public abstract class AbstractViewportManager {
     this.screenLeft = viewport.getX();
     this.screenBottom = viewport.getY();
   }
+  
+  public ViewportConfiguration getViewPort() {
+    ViewportConfiguration vp =
+        new ViewportConfiguration(screenWidth, screenHeight, screenXOffset, screenYOffset);
+    vp.setMode(mode);
+    return vp;
+  }
 
+  /** Return the viewport as it was invoked at last rendering. */
   public ViewportConfiguration getLastViewPort() {
     return lastViewPort;
   }
@@ -148,7 +156,7 @@ public abstract class AbstractViewportManager {
   }
 
 
-  private void applyViewportRectangle(IPainter painter) {
+  protected void applyViewportRectangle(IPainter painter) {
     screenXOffset = screenLeft;
     screenYOffset = 0;
 
@@ -160,7 +168,7 @@ public abstract class AbstractViewportManager {
     lastViewPort.setMode(mode);
   }
 
-  private void applyViewportSquared(IPainter painter) {
+  protected void applyViewportSquared(IPainter painter) {
     screenSquaredDim = Math.min(screenWidth, screenHeight);
     screenXOffset = screenLeft + screenWidth / 2 - screenSquaredDim / 2;
     screenYOffset = screenBottom + screenHeight / 2 - screenSquaredDim / 2;
@@ -170,9 +178,7 @@ public abstract class AbstractViewportManager {
     lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim, screenXOffset,
         screenYOffset);
     lastViewPort.setMode(mode);
-  }
-
-  
+  }  
 
   /**
    * Returns the (x,y) offset that was applied to make this {@link AbstractViewportManager} stand in
