@@ -1,4 +1,4 @@
-package org.jzy3d.debug;
+package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.BasicStroke;
 import java.awt.Font;
@@ -11,6 +11,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Margin;
 import org.jzy3d.painters.AWTFont;
+import org.jzy3d.painters.EmulGLPainter;
 import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
@@ -19,14 +20,12 @@ import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
-import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.View2DProcessing;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRenderer2d{
 
-  View2DLayout layout;
   View2DProcessing processing;
   AxisLayout axisLayout;
   ViewAndColorbarsLayout viewportLayout;
@@ -36,6 +35,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   String info = "";
   
   boolean enabled = true;
+  boolean showText = false;
   
   int interlinePx = 8;
   
@@ -50,11 +50,9 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   public void setView(AWTView view) {
     super.setView(view);
 
-    this.layout = view.get2DLayout();
     this.processing = view.get2DProcessing();
     this.axisLayout = view.getAxis().getLayout();
     this.viewportLayout = (ViewAndColorbarsLayout)view.getLayout();
-    //((AWTChart)view.getChart()).getV;
   }
 
 
@@ -73,9 +71,20 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     // Draw viewport info
     ViewportConfiguration v = view.getCamera().getLastViewPort();
     String info = "Viewport (" + v.getWidth() + "," + v.getHeight() + ")";
-   
+    
+    if(!view.getCanvas().isNative()) {
+      EmulGLPainter p = (EmulGLPainter)view.getPainter();
+      BufferedImage i = p.getGL().getRenderedImage();
+      
+      if(i!=null) {
+        info += " img:" + i.getWidth() + "," + i.getHeight();
+      }
+    }
+    
     g2d.setColor(java.awt.Color.black);
-    g2d.drawString(info, 0, view.getAxisLayout().getFont().getHeight());
+    
+    if(showText)
+      g2d.drawString(info, 0, view.getAxisLayout().getFont().getHeight());
     
     drawViewMargins(g2d, pixelScale);
     drawColorbarMargins(g2d, pixelScale);
@@ -121,6 +130,7 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         // for native
         ViewportConfiguration viewport = colorbar.getLastViewPort();
         
+        //System.out.println("View2DLayout_Debug : CBar viewport " + viewport);
         
         /*if(!view.getCanvas().isNative()) {
           EmulGLCanvas c = view.getCanvas();
@@ -138,7 +148,8 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         int lineHeight = getLineHeigth(pixelScale, 0);
 
         String info = "Colorbar.Viewport (" + viewport.getWidth()+","+viewport.getHeight()+")";
-        g2d.drawString(info, x, y+lineHeight);
+        if(showText)
+          g2d.drawString(info, x, y+lineHeight);
 
         
         g2d.drawRect(x, y, w, h);
@@ -156,7 +167,8 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
 
         
         info = "Colorbar.Image (" + image.getWidth() + "," + image.getHeight() + ")";
-        g2d.drawString(info, x, y);
+        if(showText)
+          g2d.drawString(info, x, y);
         g2d.drawRect(x, y, w, h);
         
         
@@ -168,7 +180,8 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         g2d.drawRect(x, y, w, h);
         
         int yBar = y+lineHeight;
-        g2d.drawString("Colorbar.Bar", x, yBar);
+        if(showText)
+          g2d.drawString("Colorbar.Bar", x, yBar);
         
         // MinDim
         g2d.setColor(AWTColor.toAWT(Color.ORANGE));
@@ -183,19 +196,16 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
         
         //maxTextWidth = 
         
-        g2d.drawString("Colorbar.MinDim", x, yminDim);
-        g2d.drawString(colorbar.getMinimumDimension().toString(), x, yminDim+g2d.getFont().getSize()+1);
-
-        g2d.setStroke(new BasicStroke(1));
-       
+        if(showText) {
+          g2d.drawString("Colorbar.MinDim", x, yminDim);
+          g2d.drawString(colorbar.getMinimumDimension().toString(), x, yminDim+g2d.getFont().getSize()+1);
+        }
         
+        g2d.setStroke(new BasicStroke(1));
         
         //System.out.println("H=" + h + " (" +margin.getBottom());
-        
       }
     }
-    
-    
   }
 
 
@@ -243,59 +253,77 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   protected void drawViewMarginsHorizontalLines(Graphics2D g2d, int height, int width, int txtSize) {
     FontMetrics fm = g2d.getFontMetrics();
     
-    Coord2d ps = view.getPixelScale();
+    
+    boolean isEmulGL = !view.getCanvas().isNative();
 
+    if (isEmulGL) {
+      txtSize /= view.getPixelScale().y;
+    }
+    
     int x;
     int y;
+    
+
+    x = processing.getMarginPxScaled().getLeft();
+
+    
+    // ---------------------------
     // under axis label
-    y = height-Math.round(layout.getMargin().getBottom()*ps.y);
+    
+    y = height - processing.getMarginPxScaled().getBottom();
     g2d.drawLine(0, y, width, y);
     
-    x = Math.round(layout.getMargin().getLeft()*ps.x);
-   
     String info = "Axis Label Bottom (" + y + ")";
-    g2d.drawString(info, x, y);
+    if(showText)
+      g2d.drawString(info, x, y);
     int shift = fm.stringWidth(info);
 
 
     // up to axis label
-    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize);
+    y = height-(processing.getMarginPxScaled().getBottom()+txtSize);
     g2d.drawLine(0, y, width, y);
 
     info = "Axis Label Top (" + y + ")";
-    g2d.drawString(info, shift, y);
+    if(showText)
+      g2d.drawString(info, shift, y);
     shift += fm.stringWidth(info);
     
+    // ---------------------------
     // down to tick label
-    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getHorizontalAxisLabelsDistance()*ps.y);
+    y = height-Math.round(processing.getMarginPxScaled().getBottom()+txtSize+processing.getHorizontalAxisDistance());
     g2d.drawLine(0, y, width, y);
 
     info = "Tick Label Bottom ("  + y + ")";
-    g2d.drawString(info, shift, y);
+    if(showText)
+      g2d.drawString(info, shift, y);
     shift += fm.stringWidth(info);
     
     // up to tick label
-    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getHorizontalAxisLabelsDistance()*ps.y+txtSize);
+    y = height-Math.round(processing.getMarginPxScaled().getBottom()+txtSize+processing.getHorizontalAxisDistance()+txtSize);
     g2d.drawLine(0, y, width, y);
     
     info = "Tick Label Top (" + y + ")";
-    g2d.drawString(info, shift, y);
+    if(showText)
+      g2d.drawString(info, shift, y);
     shift += fm.stringWidth(info);
 
+    // ---------------------------
     // up to tick label margin
-    y = height-Math.round(layout.getMargin().getBottom()*ps.y+txtSize+layout.getHorizontalAxisLabelsDistance()*ps.y+txtSize+layout.getHorizontalTickLabelsDistance()*ps.y);
+    y = height-Math.round(processing.getMarginPxScaled().getBottom()+txtSize+processing.getHorizontalAxisDistance()+txtSize+processing.getHorizontalTickDistance());
     g2d.drawLine(0, y, width, y);
 
     info = "Chart bottom border (" + y + ")";
-    g2d.drawString(info, shift, y);
+    if(showText)
+      g2d.drawString(info, shift, y);
     shift += fm.stringWidth(info);
 
     // Horizontal top margin
-    y = Math.round(layout.getMargin().getTop()*ps.y);
+    y = processing.getMarginPxScaled().getTop();
     g2d.drawLine(0, y, width, y);
     
     info = "Chart top border (" + y + ")";
-    g2d.drawString(info, shift, y);
+    if(showText)
+      g2d.drawString(info, shift, y);
 
   }
 
@@ -304,42 +332,45 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   protected void drawViewMarginsVerticalLines(Graphics2D g2d, int height, int lineHeight) {
     FontMetrics fm = g2d.getFontMetrics();
 
-    Coord2d ps = view.getPixelScale();
-
     int x;
     // left to axis label
-    x = Math.round(layout.getMargin().getLeft()*ps.x);
+    x = processing.getMarginPxScaled().getLeft();
     g2d.drawLine(x, 0, x, height);
 
-    g2d.drawString("Axis Label Left Side / Left Margin (" + x + ")", x, lineHeight*1);
+    if(showText)
+      g2d.drawString("Axis Label Left Side / Left Margin (" + x + ")", x, lineHeight*1);
 
     // right to axis label
-    x = Math.round(layout.getMargin().getLeft()*ps.x+view.get2DProcessing().getAxisTextWidth());
+    x = Math.round(processing.getMarginPxScaled().getLeft() + processing.getAxisTextWidth());
     g2d.drawLine(x, 0, x, height);
 
-    g2d.drawString("Axis Label Right Side (" + x + ")", x, lineHeight*2);
+    if(showText)
+      g2d.drawString("Axis Label Right Side (" + x + ")", x, lineHeight*2);
 
     
     // left to tick label
-    x = Math.round(x+layout.getVerticalAxisLabelsDistance()*ps.x);
+    x = Math.round(x+processing.getVerticalAxisDistance());
     g2d.drawLine(x, 0, x, height);
 
-    g2d.drawString("Tick Label Left Side ("  + x + ")", x, lineHeight*3);
+    if(showText)
+      g2d.drawString("Tick Label Left Side ("  + x + ")", x, lineHeight*3);
 
     
     // right to tick label
-    x = Math.round(x+view.get2DProcessing().getTickTextWidth());
+    x = Math.round(x+processing.getTickTextWidth());
     g2d.drawLine(x, 0, x, height);
 
-    g2d.drawString("Tick Label Right Side (" + x + ")", x, lineHeight*4);
+    if(showText)
+      g2d.drawString("Tick Label Right Side (" + x + ")", x, lineHeight*4);
     
     // on chart border
-    x = Math.round(x+layout.getVerticalTickLabelsDistance()*ps.x);
+    x = Math.round(x+processing.getVerticalTickDistance());
     g2d.drawLine(x, 0, x, height);
     
-    g2d.drawString("Chart left border (" + x + ")", x, lineHeight*5);
+    if(showText)
+      g2d.drawString("Chart left border (" + x + ")", x, lineHeight*5);
 
-    x = Math.round(view.getCamera().getLastViewPort().getWidth()-layout.getMargin().getRight()*ps.x);
+    x = Math.round(view.getCamera().getLastViewPort().getWidth()-processing.getMarginPxScaled().getRight());
     
     // Using the processed right margin that differs between Native and EmulGL 
     // because of the different colobar management
@@ -349,7 +380,8 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     
     String txt = "Chart right border (" + x + ")";
     
-    g2d.drawString(txt, x - fm.stringWidth(txt), lineHeight*6);
+    if(showText)
+      g2d.drawString(txt, x - fm.stringWidth(txt), lineHeight*6);
   }
 
   public Color getColor() {

@@ -158,13 +158,16 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     return getPixelScale();
   }
   
-
   public double getPixelScaleX() {
-    return window.getSurfaceWidth() / (double) getSize().x;
+    float[] scale = new float[2];
+    window.getCurrentSurfaceScale(scale);
+    return scale[0];
   }
 
   public double getPixelScaleY() {
-    return window.getSurfaceHeight() / (double) getSize().y;
+    float[] scale = new float[2];
+    window.getCurrentSurfaceScale(scale);
+    return scale[1];
   }
   
   public GLWindow getWindow() {

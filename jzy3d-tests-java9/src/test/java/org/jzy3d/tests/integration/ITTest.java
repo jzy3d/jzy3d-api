@@ -107,7 +107,9 @@ public class ITTest {
     section(sb, "Colorbar", "Shrink", null);
     section(sb, "Colorbar", "ShrinkBigFont", null);
     section(sb, "Colorbar", "IsModifiedByCustomFont", null);
-    section(sb, "Colorbar", "HasMinimumWidth", null);
+    //section(sb, "Colorbar", "HasMinimumWidth", null);
+
+    section(sb, "2D_Colorbar");
 
     // 2D tests
     line(sb, "# 2D Layout");
@@ -302,8 +304,7 @@ public class ITTest {
 
   public static Quality quality(HiDPI hidpi) {
     Quality q = Quality.Advanced();
-    q.setHiDPIEnabled(HiDPI.ON.equals(hidpi) ? true : false); // Enable HiDPI if available on
-                                                              // computer
+    q.setHiDPI(hidpi);
     q.setAnimated(false);
     return q;
   }
@@ -340,9 +341,7 @@ public class ITTest {
     // processing remain stable (I observed bugs where a margin may reduce
     // after each rendering, hence the colorbar moves)
     int nRefresh = 6;
-    for (int i = 0; i < nRefresh; i++) {
-      chart.render();
-    }
+    chart.render(nRefresh);
 
     // Verify
     ChartTester tester = new ChartTester();

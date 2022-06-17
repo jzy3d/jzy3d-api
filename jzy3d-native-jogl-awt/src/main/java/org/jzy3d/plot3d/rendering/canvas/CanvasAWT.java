@@ -142,17 +142,15 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
   }
 
   public double getPixelScaleX() {
-	double scale = getSurfaceWidth() / (double) getWidth();
-	return scale;
-	//double scale2 = AWTHelper.getPixelScaleX(this);
-	//return Math.max(scale, scale2);
+    float[] scale = new float[2];
+    getCurrentSurfaceScale(scale);
+    return scale[0];
   }
 
   public double getPixelScaleY() {
-    double scale = getSurfaceHeight() / (double) getHeight();
-	return scale;
-    //double scale2 = AWTHelper.getPixelScaleY(this);
-	//return Math.max(scale, scale2);
+    float[] scale = new float[2];
+    getCurrentSurfaceScale(scale);
+    return scale[1];
   }
 
 
