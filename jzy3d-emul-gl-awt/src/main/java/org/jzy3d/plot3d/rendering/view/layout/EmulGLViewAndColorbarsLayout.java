@@ -31,6 +31,7 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     
     if (legend instanceof AWTColorbarLegend) {
       AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
+      //System.out.println("EMulGLView " + painter.getView().getPixelScale());
       awtLegend.updatePixelScale(painter.getView().getPixelScale());
       awtLegend.setEmulGLUnscale(true);
     }    
