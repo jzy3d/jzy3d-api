@@ -100,7 +100,7 @@ Thread.sleep(500);
     resizeBarrier.await();
     chart.render();
     
-Thread.sleep(100); 
+Thread.sleep(500); 
 
 
     // Coord2d scale = chart.getView().getPixelScale();
