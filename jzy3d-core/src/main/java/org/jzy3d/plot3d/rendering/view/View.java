@@ -29,6 +29,7 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.lights.LightSet;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -255,14 +256,22 @@ public class View {
         // Edit font size accordingly
         axis.getLayout().applyFontSizePolicy();
 
+        
+        //getLayout().update(chart);
+        
+        for(ILegend legend : scene.getGraph().getLegends()) {
+          legend.updatePixelScale(pixelScale);
+          //legend.updateMinimumDimension(painter);
+        }
+        
         // --------------------------
         // Trigger new render for different reasons
         // EmulGL need this to layout colorbar properly
         // Native need this to /sometime/ get the good resolution
 
-        chart.render(10);
+        //chart.render(2);
 
-        // System.out.println("View :update pix scale");
+        //System.out.println("View :update pix scale");
       }
     });
   }

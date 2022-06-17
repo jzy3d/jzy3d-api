@@ -118,8 +118,14 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
    * Update internal pixel scale knowledge. Called by render loop and provided by painter's view.
    * May be overrided to update the image.
    */
+  @Override
   public void updatePixelScale(Coord2d pixelScale) {
     this.pixelScale = pixelScale;
+  }
+  
+  @Override
+  public Coord2d getPixelScale() {
+    return this.pixelScale;
   }
 
   /**

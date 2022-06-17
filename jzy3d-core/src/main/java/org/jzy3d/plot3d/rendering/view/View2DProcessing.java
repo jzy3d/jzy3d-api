@@ -1,9 +1,10 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import org.jzy3d.chart.ChartView;
+import java.util.List;
 import org.jzy3d.maths.Area;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Margin;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
@@ -11,7 +12,7 @@ import org.jzy3d.plot3d.primitives.axis.AxisLabelProcessor;
 import org.jzy3d.plot3d.primitives.axis.AxisTickProcessor;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 
 /**
@@ -213,10 +214,13 @@ public class View2DProcessing {
     // ------------------------------------------------
     
     if (isEmulGL) {
-      if (view.getLayout() instanceof ViewAndColorbarsLayout) {
-        float legendWidth = ((ViewAndColorbarsLayout) view.getLayout()).getLegendsWidth();
-        
-        marginRightPx += legendWidth;
+      List<ILegend> legends = view.getChart().getScene().getGraph().getLegends();
+      
+      for(ILegend legend: legends) {
+        legend.updateMinimumDimension(painter);
+        Dimension minDim = legend.getMinimumDimension();
+        //System.out.println("View2DProcessing minDim " + minDim.width);
+        marginRightPx += minDim.width;
       }
     }
 

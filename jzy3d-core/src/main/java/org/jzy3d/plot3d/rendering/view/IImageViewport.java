@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 
@@ -41,5 +42,9 @@ public interface IImageViewport {
   public void setViewPort(ViewportConfiguration viewport);
 
   public ViewportConfiguration getLastViewPort();
+  
+  public void updatePixelScale(Coord2d pixelScale);
+
+  public Coord2d getPixelScale();
 
 }
