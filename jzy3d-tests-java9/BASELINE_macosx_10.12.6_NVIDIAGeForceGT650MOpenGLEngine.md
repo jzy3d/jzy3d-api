@@ -3,7 +3,7 @@ jzy3d-test-java9-generated
 This is a summary of existing baseline images for tests, which was generated on 
 * OS Name : mac os x
 * OS Version : 10.12.6
-* Java Version : 17-panama
+* Java Version : 11.0.7
 * CPU : x86_64
 * GPU : NVIDIAGeForceGT650MOpenGLEngine
 
@@ -85,7 +85,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <tr>
 <td></td>
 <td></td>
-<td>Diff chart:<br><img src="target/error-Text_Native_Swing_HiDPI=ON_Font=AppleChancery24_DIFF.png"><br>Actual chart:<br><img src="target/error-Text_Native_Swing_HiDPI=ON_Font=AppleChancery24_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-Text_Native_Swing_HiDPI=ON_Font=AppleChancery24_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -137,62 +137,6 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/AxisLabelRotateLayout_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/AxisLabelRotateLayout_EmulGL_AWT_HiDPI=OFF.png"></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</table>
-
-# Colorbar : Shrink
-<table markdown=1>
-<tr>
-<td>Native_AWT HiDPI:ON</td>
-<td>Native_AWT HiDPI:OFF</td>
-<td>Native_Swing HiDPI:ON</td>
-<td>Native_Swing HiDPI:OFF</td>
-<td>EmulGL_AWT HiDPI:ON</td>
-<td>EmulGL_AWT HiDPI:OFF</td>
-</tr>
-<tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_Native_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_Native_AWT_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_Native_Swing_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_Native_Swing_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_EmulGL_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_Shrink_EmulGL_AWT_HiDPI=OFF.png"></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</table>
-
-# Colorbar : ShrinkBigFont
-<table markdown=1>
-<tr>
-<td>Native_AWT HiDPI:ON</td>
-<td>Native_AWT HiDPI:OFF</td>
-<td>Native_Swing HiDPI:ON</td>
-<td>Native_Swing HiDPI:OFF</td>
-<td>EmulGL_AWT HiDPI:ON</td>
-<td>EmulGL_AWT HiDPI:OFF</td>
-</tr>
-<tr>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_ShrinkBigFont_Native_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_ShrinkBigFont_Native_AWT_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_ShrinkBigFont_Native_Swing_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_ShrinkBigFont_Native_Swing_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_ShrinkBigFont_EmulGL_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_10.12.6_NVIDIAGeForceGT650MOpenGLEngine/Colorbar_ShrinkBigFont_EmulGL_AWT_HiDPI=OFF.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -539,7 +483,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <tr>
 <td></td>
 <td></td>
-<td>Diff chart:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=VERTICAL_DIFF.png"><br>Actual chart:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=VERTICAL_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=VERTICAL_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -601,7 +545,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <tr>
 <td></td>
 <td></td>
-<td>Diff chart:<br><img src="target/error-Overlay_Native_Swing_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_DIFF.png"><br>Actual chart:<br><img src="target/error-Overlay_Native_Swing_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-Overlay_Native_Swing_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
