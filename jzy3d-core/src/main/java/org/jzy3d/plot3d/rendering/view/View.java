@@ -245,8 +245,6 @@ public class View {
         if(pixelScale.y<=0)
           pixelScale.y = 1;
         
-        System.out.println("View updatePixelScale " + pixelScale);
-
         // Convert pixel scale to HiDPI status
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;

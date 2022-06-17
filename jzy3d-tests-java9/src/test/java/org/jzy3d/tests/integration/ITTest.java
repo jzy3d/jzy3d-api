@@ -104,8 +104,8 @@ public class ITTest {
     section(sb, "AxisLabelRotateLayout");
 
     // Colorbar tests
-    section(sb, "Colorbar", "Shrink", null);
-    section(sb, "Colorbar", "ShrinkBigFont", null);
+    //section(sb, "Colorbar", "Shrink", null);
+    //section(sb, "Colorbar", "ShrinkBigFont", null);
     section(sb, "Colorbar", "IsModifiedByCustomFont", null);
     //section(sb, "Colorbar", "HasMinimumWidth", null);
 
