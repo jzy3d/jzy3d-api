@@ -218,16 +218,6 @@ public class View2DProcessing {
         
         marginRightPx += legendWidth;
       }
-      
-      
-      /*if (view instanceof ChartView) {
-        IViewportLayout layout = ((ChartView) view).getLayout();
-        if (layout instanceof ViewAndColorbarsLayout) {
-          float legendWidth = ((ViewAndColorbarsLayout) layout).getLegendsWidth();
-          
-          marginRightPx += legendWidth;
-        }
-      }*/
     }
 
     // ---------------------------------------------------
