@@ -127,11 +127,15 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   }
 
   public double getPixelScaleX() {
-    return getSurfaceWidth() / (double) getWidth();
+    float[] scale = new float[2];
+    getCurrentSurfaceScale(scale);
+    return scale[0];
   }
 
   public double getPixelScaleY() {
-    return getSurfaceHeight() / (double) getHeight();
+    float[] scale = new float[2];
+    getCurrentSurfaceScale(scale);
+    return scale[1];
   }
 
   @Override

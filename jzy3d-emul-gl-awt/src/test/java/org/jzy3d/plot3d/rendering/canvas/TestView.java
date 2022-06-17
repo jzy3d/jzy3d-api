@@ -3,13 +3,16 @@ package org.jzy3d.plot3d.rendering.canvas;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.AWTChart;
+import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Range;
+import org.jzy3d.mocks.jzy3d.Mocks;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
@@ -111,6 +114,66 @@ public class TestView {
     
     // Then
     Assert.assertEquals(10, chart.getAxisLayout().getFont().getHeight());
+
+  }
+  
+  @Test
+  public void whenPixelScaleIsNan_ThenViewKeepsPixelScaleAt1() {
+    
+    // Given
+    ChartFactory f = new EmulGLChartFactory();
+    AWTChart chart = (AWTChart)f.newChart();
+    EmulGLSkin skin = EmulGLSkin.on(chart);
+    EmulGLCanvas canvas = skin.getCanvas();
+    
+    
+    // -----------------------------------
+    // When init
+
+    // Then
+    Assert.assertEquals(new Coord2d(1,1), chart.getView().getPixelScale());
+    
+    // -----------------------------------
+    // When NAN
+    canvas.firePixelScaleChanged(Double.NaN, Double.NaN); 
+
+    // Then
+    Assert.assertEquals(new Coord2d(1,1), chart.getView().getPixelScale());
+
+    // -----------------------------------
+    // When NAN partial
+    canvas.firePixelScaleChanged(2, Double.NaN); 
+
+    // Then
+    Assert.assertEquals(new Coord2d(2,1), chart.getView().getPixelScale());
+    
+    // -----------------------------------
+    // When NAN partial
+    canvas.firePixelScaleChanged(Double.NaN, 2); 
+
+    // Then
+    Assert.assertEquals(new Coord2d(1,2), chart.getView().getPixelScale());
+
+    // -----------------------------------
+    // When 0
+    canvas.firePixelScaleChanged(0, 0); 
+
+    // Then
+    Assert.assertEquals(new Coord2d(1,1), chart.getView().getPixelScale());
+
+    // -----------------------------------
+    // When 0 partial
+    canvas.firePixelScaleChanged(0, 2); 
+
+    // Then
+    Assert.assertEquals(new Coord2d(1,2), chart.getView().getPixelScale());
+
+    // -----------------------------------
+    // When 0 partial
+    canvas.firePixelScaleChanged(2, 0); 
+
+    // Then
+    Assert.assertEquals(new Coord2d(2,1), chart.getView().getPixelScale());
 
   }
   

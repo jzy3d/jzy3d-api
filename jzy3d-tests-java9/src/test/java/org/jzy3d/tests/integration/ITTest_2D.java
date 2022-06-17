@@ -19,7 +19,7 @@ public class ITTest_2D extends ITTest {
   protected static int[] margins = {0, 20};
   protected static int[] tickLabelDists = {0, 10};
   protected static int[] axisLabelDists = {0, 10};
-  protected static boolean[] textAddMargin = {false, true};
+  protected static boolean[] textAddMargin = {true};
 
   /** Toolkit and resolution iterator */
   @Test
@@ -82,7 +82,7 @@ public class ITTest_2D extends ITTest {
   static String caseAxisRotated = "whenAxisRotated_ThenApplyMargins";
   
   protected static LabelOrientation[] yOrientations =
-      {LabelOrientation.VERTICAL, LabelOrientation.HORIZONTAL, LabelOrientation.PARALLEL_TO_AXIS};
+      {LabelOrientation.VERTICAL, LabelOrientation.HORIZONTAL};
   
   
   /** Toolkit and resolution iterator */

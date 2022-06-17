@@ -4,9 +4,7 @@ import java.awt.image.BufferedImage;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
-import org.jzy3d.chart.factories.EmulGLChartFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.debug.View2DLayout_Debug;
 import org.jzy3d.events.IViewLifecycleEventListener;
 import org.jzy3d.events.ViewLifecycleEvent;
 import org.jzy3d.painters.Font;
@@ -20,7 +18,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePo
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTView;
-import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+import org.jzy3d.plot3d.rendering.view.View2DLayout_Debug;
 
 /**
  * QTP
