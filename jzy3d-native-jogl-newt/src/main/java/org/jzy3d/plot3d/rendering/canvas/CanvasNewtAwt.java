@@ -151,11 +151,15 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
   }
 
   public double getPixelScaleX() {
-    return window.getSurfaceWidth() / (double) getWidth();
+    float[] scale = new float[2];
+    window.getCurrentSurfaceScale(scale);
+    return scale[0];
   }
 
   public double getPixelScaleY() {
-    return window.getSurfaceHeight() / (double) getHeight();
+    float[] scale = new float[2];
+    window.getCurrentSurfaceScale(scale);
+    return scale[1];
   }
   
   @Override

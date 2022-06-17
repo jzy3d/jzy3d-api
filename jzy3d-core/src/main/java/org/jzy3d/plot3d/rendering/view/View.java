@@ -202,7 +202,7 @@ public class View {
     this.painter.setView(this);
     this.viewOverlay = factory.getPainterFactory().newViewOverlay();
     this.layout = factory.getPainterFactory().newViewportLayout();
-    
+
     this.scene = scene;
     this.canvas = canvas;
     this.quality = quality;
@@ -237,8 +237,15 @@ public class View {
       @Override
       public void pixelScaleChanged(double pixelScaleX, double pixelScaleY) {
         // Store current pixel scale
-        pixelScale.x = (float) pixelScaleX;
-        pixelScale.y = (float) pixelScaleY;
+        pixelScale.x = Double.isNaN(pixelScaleX) ? 1 : (float) pixelScaleX;
+        pixelScale.y = Double.isNaN(pixelScaleY) ? 1 : (float) pixelScaleY;
+        
+        if(pixelScale.x<=0)
+          pixelScale.x = 1;
+        if(pixelScale.y<=0)
+          pixelScale.y = 1;
+        
+        System.out.println("View updatePixelScale " + pixelScale);
 
         // Convert pixel scale to HiDPI status
         if (pixelScaleX <= 1) {
@@ -249,15 +256,15 @@ public class View {
 
         // Edit font size accordingly
         axis.getLayout().applyFontSizePolicy();
-        
+
         // --------------------------
         // Trigger new render for different reasons
         // EmulGL need this to layout colorbar properly
-        // Native need this to /sometime/ get the good resolution 
-        
+        // Native need this to /sometime/ get the good resolution
+
         chart.render(10);
-          
-          //System.out.println("View :update pix scale");
+
+        // System.out.println("View :update pix scale");
       }
     });
   }

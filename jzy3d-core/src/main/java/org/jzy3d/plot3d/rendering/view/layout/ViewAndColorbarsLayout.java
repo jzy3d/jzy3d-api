@@ -70,17 +70,17 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
 
   // Separator only used for native since emulgl can not have two viewport side by side,
   // only a single viewport with images rendered on top
-  protected void computeSeparator(IPainter painter, ICanvas canvas, List<ILegend> list) {
-    hasColorbars = list.size() > 0;
+  protected void computeSeparator(IPainter painter, ICanvas canvas, List<ILegend> legends) {
+    hasColorbars = legends.size() > 0;
     
     if (hasColorbars) {
       
       int minWidth = 0;
       
-      for (ILegend data : list) {
-        minWidth += updateAndGetMinDimensions(painter, data);
+      for (ILegend legend : legends) {
+        minWidth += updateAndGetMinDimensions(painter, legend);
         
-        //System.out.println("ViewAndColorbarsLayout : legend.minDim : " + data.getMinimumDimension() + " minWidth:" +minWidth );
+        //System.out.println("ViewAndColorbarsLayout : legend.minDim : " + legend.getMinimumDimension() + " minWidth:" +minWidth );
       }
 
       screenSeparator = computeSeparator(canvas, minWidth);

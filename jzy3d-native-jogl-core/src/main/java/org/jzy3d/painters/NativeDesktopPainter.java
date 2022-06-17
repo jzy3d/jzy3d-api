@@ -588,7 +588,17 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public int getTextLengthInPixels(Font font, String string) {
-    // Try to get text width using onscreen graphics
+    
+
+    // Try to get text width using text renderer offscreen
+    if (gl != null && gl.getContext().isCurrent()) {
+
+      TextRenderer renderer = getOrCreateTextRenderer(font);
+      Rectangle2D r = renderer.getBounds(string);
+      return (int) r.getWidth();
+    } 
+    
+ // Try to get text width using onscreen graphics
     ICanvas c = getCanvas();
     if (c instanceof Component) {
       Graphics g = ((Component) c).getGraphics();
@@ -601,27 +611,19 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
         }
       }
     }
-
-    // Try to get text width using text renderer offscreen
-    if (gl != null && gl.getContext().isCurrent()) {
-
-      TextRenderer renderer = getOrCreateTextRenderer(font);
-      Rectangle2D r = renderer.getBounds(string);
-      return (int) r.getWidth();
-    } 
     
     // Otherwise use a fallback image to get a graphic context
-    else {
-      if (textLengthFallbackImage == null) {
-        textLengthFallbackImage = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
-        fontMetricsFallback = textLengthFallbackImage.createGraphics().getFontMetrics();
-      }
-      if (fontMetricsFallback != null) {
-        return fontMetricsFallback.stringWidth(string);
-      } else {
-        return -1;
-      }
+    
+    if (textLengthFallbackImage == null) {
+      textLengthFallbackImage = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
+      fontMetricsFallback = textLengthFallbackImage.createGraphics().getFontMetrics();
     }
+    if (fontMetricsFallback != null) {
+      return fontMetricsFallback.stringWidth(string);
+    } else {
+      return -1;
+    }
+    
   }
 
 

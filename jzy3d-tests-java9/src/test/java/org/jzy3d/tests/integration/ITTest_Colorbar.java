@@ -64,7 +64,7 @@ public class ITTest_Colorbar extends ITTest{
   
   /* ************************************************************************************************** */
   
-  @Test
+  /*@Test
   public void whenColorbar_HasMininumWidth() {
     System.out.println("ITTest : whenColorbar_HasMininumWidth");
         
@@ -97,11 +97,11 @@ public class ITTest_Colorbar extends ITTest{
     assertChart(chart, name(this, "HasMinimumWidth", wt, chart.getQuality().getHiDPI()));
     
     return chart;
-  }
+  }*/
   
   /* ************************************************************************************************** */
   
-  @Test
+  /*@Test
   public void whenColorbar_ShrinkBigFont() {
     System.out.println("ITTest : whenColorbar_ShrinkBigFont");
 
@@ -121,7 +121,6 @@ public class ITTest_Colorbar extends ITTest{
     
     AWTColorbarLegend legend = new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
     surface.setLegend(legend);
-    //legend.setMinimumWidth(300);    
     
     String name;
     
@@ -139,11 +138,11 @@ public class ITTest_Colorbar extends ITTest{
     assertChart(chart, name);
     
     return chart;
-  }
+  }*/
   
   /* ************************************************************************************************** */
   
-  @Test
+  /*@Test
   public void whenColorbar_Shrink() {
     System.out.println("ITTest : whenColorbar_Shrink");
 
@@ -180,7 +179,7 @@ public class ITTest_Colorbar extends ITTest{
     assertChart(chart, name);
     
     return chart;
-  }
+  }*/
 
 
 }
