@@ -213,14 +213,21 @@ public class View2DProcessing {
     // ------------------------------------------------
     
     if (isEmulGL) {
-      if (view instanceof ChartView) {
+      if (view.getLayout() instanceof ViewAndColorbarsLayout) {
+        float legendWidth = ((ViewAndColorbarsLayout) view.getLayout()).getLegendsWidth();
+        
+        marginRightPx += legendWidth;
+      }
+      
+      
+      /*if (view instanceof ChartView) {
         IViewportLayout layout = ((ChartView) view).getLayout();
         if (layout instanceof ViewAndColorbarsLayout) {
           float legendWidth = ((ViewAndColorbarsLayout) layout).getLegendsWidth();
           
           marginRightPx += legendWidth;
         }
-      }
+      }*/
     }
 
     // ---------------------------------------------------
