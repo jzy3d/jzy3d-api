@@ -98,8 +98,8 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
         xOffset += (margin.getLeft() * scale.x);
         
         int yOffset =
-            Math.round((height - (legendHeight + (margin.getHeight() * scale.y))) / 2f);
-        yOffset += (margin.getBottom() * scale.y);
+            Math.round((height - (legendHeight + (margin.getHeight() * scale.y))) /*/ 2f*/);
+        yOffset += (margin.getTop() * scale.y);
 
         
         // ---------------------------------------
