@@ -206,6 +206,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
         
         //System.out.println("ViewAndColorbars : hackOffset:" + yOffset);
         legendViewportHack.setScreenYOffset(yOffset);
+        // NEED TO COMMENT AbstractViewportManager.applyViewportRectangle / screenYOffset = 0
       }
 
       legend.setViewPort(width, height, theLeft, theRight);
