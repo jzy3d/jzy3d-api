@@ -4,6 +4,7 @@ import java.util.ArrayList;
 // import java.awt.Rectangle;
 import java.util.List;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -100,7 +101,7 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
   }
 
   protected float computeSeparator(final ICanvas canvas, int minWidth) {
-    int width = canvas.getRendererWidth();
+    int width = Math.round(canvas.getRendererWidth());
     
     if(width==0)
       throw new IllegalArgumentException("Canvas has no width!");
@@ -165,9 +166,22 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     float slice = (right - left) / legends.size();
     int k = 0;
     for (ILegend legend : legends) {
-
+      
       int width = canvas.getRendererWidth();
       int height = canvas.getRendererHeight();
+
+      // This workaround for Windows+AWT (only) allow scaling viewport to
+      // fix a pixel scale error. It must be taken into account to get
+      // a colorbar properly scaled
+      
+      Coord2d s = AbstractViewportManager.getWindowsHiDPIScale_Workaround(painter);
+      //System.out.println("ViewAndColorbars : hackScale:" + s);
+      if(hackWindowsAWTColorbarWidth) {
+        width = Math.round(canvas.getRendererWidth()*s.x);
+      }
+      if(hackWindowsAWTColorbarHeight) {
+        height = Math.round(canvas.getRendererHeight()*s.y);
+      }
       
       // create left/right per legend
       float theLeft = left + slice * (k++);
@@ -175,14 +189,34 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
       
       //System.out.println("ViewAndColorbars : width:" + width + " height:" + height);
       //System.out.println("ViewAndColorbars : TheLeft:" + theLeft + " TheRight:" + theRight);
-
+      
+      //((AbstractViewportManager)legend).setApplyWindowsHiDPIWorkaround(true);
+      
       legend.setFont(painter.getView().getAxis().getLayout().getFont());
       legend.setViewportMode(ViewportMode.STRETCH_TO_FILL);
+      
+      if(hackWindowsAWTColorbarHeight && s.y>1) {
+        // We can not find a good yOffset so we keep this for later
+        AbstractViewportManager legendViewportHack = (AbstractViewportManager)legend;
+        
+        int yOffset = Math.round(-canvas.getRendererHeight()/(s.y*2));
+        
+        //int yOffset = Math.round(-(canvas.getRendererHeight()+legend.getMargin().getBottom()/2f)/(s.y*2));
+        //int yOffset = Math.round(-(canvas.getRendererHeight()-legend.getMargin().getTop()*s.y*2)/(s.y*2));
+        
+        //System.out.println("ViewAndColorbars : hackOffset:" + yOffset);
+        legendViewportHack.setScreenYOffset(yOffset);
+      }
+
       legend.setViewPort(width, height, theLeft, theRight);
+
       legend.render(painter);
       
     }
   }
+
+  boolean hackWindowsAWTColorbarWidth = true;
+  boolean hackWindowsAWTColorbarHeight = false;
   
   public List<ILegend> getLegends() {
     return getLegends(chart);
