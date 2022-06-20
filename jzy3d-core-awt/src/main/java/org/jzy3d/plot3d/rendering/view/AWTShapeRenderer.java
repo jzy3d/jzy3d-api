@@ -42,18 +42,19 @@ public class AWTShapeRenderer extends AbstractAWTRenderer2d implements AWTRender
     int y = 0;
 
     if (Corner.TOP_LEFT.equals(layout.getCorner())) {
-      x = layout.getBoxMarginX() + shapeWidth/2;
-      y = layout.getBoxMarginY();
+      x = layout.getMargin().getLeft();
+      y = layout.getMargin().getTop();
     } else if (Corner.TOP_RIGHT.equals(layout.getCorner())) {
-      x = canvasWidth - shapeWidth/2 - layout.getBoxMarginX();
-      y = layout.getBoxMarginY();
+      x = canvasWidth - shapeWidth/2 - layout.getMargin().getRight();
+      y = layout.getMargin().getTop();
     } else if (Corner.BOTTOM_LEFT.equals(layout.getCorner())) {
-      x = layout.getBoxMarginX() + shapeWidth/2;
-      y = canvasHeight - shapeHeight/2 - layout.getBoxMarginY();
+      x = layout.getMargin().getLeft();
+      y = canvasHeight - shapeHeight/2 - layout.getMargin().getBottom();
     } else if (Corner.BOTTOM_RIGHT.equals(layout.getCorner())) {
-      x = canvasWidth - shapeWidth/2 - layout.getBoxMarginX();
-      y = canvasHeight - shapeHeight/2 - layout.getBoxMarginY();
+      x = canvasWidth - shapeWidth/2 - layout.getMargin().getRight();
+      y = canvasHeight - shapeHeight/2 - layout.getMargin().getBottom();
     }
+
     
     g2d.setColor(AWTColor.toAWT(color));
     g2d.translate(x, y);

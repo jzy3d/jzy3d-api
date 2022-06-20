@@ -308,11 +308,15 @@ public class GL extends jgl.GL<BufferedImage, Font> {
     
     // Render text
     if (useOSFontRendering) {
+      //g2d.scale(1/pixelScaleX, 1/pixelScaleY);
       g2d.drawString(text.string, 0, 0);
+      //g2d.scale(pixelScaleX, pixelScaleY);
     } else {
       FontRenderContext frc = g2d.getFontRenderContext();
       GlyphVector gv = text.font.createGlyphVector(frc, text.string);
+      //g2d.scale(1/pixelScaleX, 1/pixelScaleY);
       g2d.drawGlyphVector(gv, 0, 0);
+      //g2d.scale(pixelScaleX, pixelScaleY);
     }
     
     // Reset rotation from context

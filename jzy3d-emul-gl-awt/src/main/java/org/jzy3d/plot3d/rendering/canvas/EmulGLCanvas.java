@@ -28,6 +28,7 @@ import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.AWTImageExporter;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.monitor.IMonitorable;
 import org.jzy3d.monitor.Measure.CanvasPerfMeasure;
@@ -501,6 +502,12 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
   public int getRendererHeight() {
     return this.getHeight();
   }
+  
+  @Override
+  public Dimension getDimension() {
+    return new Dimension(getWidth(), getHeight());
+  }
+
 
 
   @Override

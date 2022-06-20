@@ -58,5 +58,10 @@ public class Rectangle {
   public Rectangle clone() {
     return new Rectangle (x, y, width, height);
   }
+  
+  public String toString() {
+    return "x:" + x + " y:" + y + " width:" + width + " height:" + height;
+  }
+
 
 }

@@ -35,6 +35,11 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   protected GL gl;
   protected GLU glu;
   protected GLUT glut;
+  
+  /** A 1x1 image used for processing text length in pixel if no context is available */
+  protected BufferedImage textLengthFallbackImage;
+  protected FontMetrics fontMetricsFallback;
+
 
   public GL getGL() {
     return gl;
@@ -635,6 +640,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
   }
 
+
   // elements of GL spec picked in JOGL GL interface
   public static final int GL_RGBA = 0x1908;
   public static final int GL_UNSIGNED_BYTE = 0x1401;
@@ -707,6 +713,19 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
       FontMetrics fm = g.getFontMetrics();
       if (fm != null) {
         return fm.stringWidth(string);
+      }
+    }
+    
+    // Fallback on an image
+    else {
+      if (textLengthFallbackImage == null) {
+        textLengthFallbackImage = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
+        fontMetricsFallback = textLengthFallbackImage.createGraphics().getFontMetrics();
+      }
+      if (fontMetricsFallback != null) {
+        return fontMetricsFallback.stringWidth(string);
+      } else {
+        return -1;
       }
     }
 

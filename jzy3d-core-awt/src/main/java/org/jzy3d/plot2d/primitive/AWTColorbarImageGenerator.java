@@ -24,14 +24,17 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   public static final int MIN_BAR_HEIGHT = 100;
 
   protected ColorMapper mapper;
-  protected ITickProvider provider;
-  protected ITickRenderer renderer;
+  protected ITickProvider tickProvider;
+  protected ITickRenderer tickRenderer;
   protected double min;
   protected double max;
 
   public static int BAR_WIDTH_DEFAULT = 20;
+  public static int TEXT_TO_BAR_DEFAULT = 2;
+  
   protected int barWidth;
-  protected int textToBarHorizontalMargin = 2;
+  protected int textToBarHorizontalMargin = TEXT_TO_BAR_DEFAULT;
+  protected int maxTextWidth;
   
   protected boolean addTextHeightToVerticalMargin = false;
 
@@ -45,8 +48,8 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   public AWTColorbarImageGenerator(ColorMapper mapper, ITickProvider provider,
       ITickRenderer renderer) {
     this.mapper = mapper;
-    this.provider = provider;
-    this.renderer = renderer;
+    this.tickProvider = provider;
+    this.tickRenderer = renderer;
     this.min = mapper.getMin();
     this.max = mapper.getMax();
     
@@ -62,8 +65,8 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
   /** Renders the colorbar to an image. */
   public BufferedImage toImage(int width, int height, int barWidth) {
-    if (barWidth > width)
-      return null;
+    //if (barWidth > width)
+    //  return null;
 
     this.barWidth = barWidth;
 
@@ -75,9 +78,9 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
     configureText(graphic);
     drawBackground(width, height, graphic);
-    drawBarColors(height, this.barWidth/*getScaledBarWidth()*/, graphic);
-    drawBarContour(height, this.barWidth/*getScaledBarWidth()*/, graphic);
-    drawTextAnnotations(height, this.barWidth/*getScaledBarWidth()*/, graphic);
+    drawBarColors(height, getScaledBarWidth(), graphic);
+    drawBarContour(height, getScaledBarWidth(), graphic);
+    drawTextAnnotations(height, getScaledBarWidth(), graphic);
     return image;
   }
 
@@ -95,7 +98,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   protected void drawBarContour(int height, int barWidth, Graphics2D graphic) {
     
     int finalY = 0;
-    int finalH = height;
+    int finalH = height-1; // let bottom contour appear in the image
     
     // add little space to avoid cutting the text 
     // on top and bottom of colorbar
@@ -118,7 +121,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   protected void drawBarColors(int height, int barWidth, Graphics2D graphic) {
     
     int finalFrom = 0;
-    int finalTo = height;
+    int finalTo = height-1;
     
     // add little space to avoid cutting the text 
     // on top and bottom of colorbar
@@ -140,8 +143,8 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
   }
 
  protected void drawTextAnnotations(int height, int barWidth, Graphics2D graphic) {
-    if (provider != null) {
-      double[] ticks = provider.generateTicks(min, max);
+    if (tickProvider != null) {
+      double[] ticks = tickProvider.generateTicks(min, max);
       
       //System.out.println("AWTColorbarImageGen : min=" + min + " max=" + max);
 
@@ -158,7 +161,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
         int ypos = (int) (height - (heightNoText * ratioOfRange));
             
         
-        String txt = renderer.format(ticks[t]);
+        String txt = tickRenderer.format(ticks[t]);
         graphic.drawString(txt, xpos, ypos);
       }
     }
@@ -174,7 +177,7 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
 
   /* */
   
-  protected int getScaledBarWidth() {
+  public int getScaledBarWidth() {
     if(pixelScale!=null) {
       return (int)(barWidth * pixelScale.x);
     }
@@ -183,18 +186,10 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     }
   }
 
-  /**
-   * Compute the optimal image width to contain the text as defined by the tick provided and
-   * renderer.
-   */
-  public int getPreferedWidth(IPainter painter) {
-    int maxWidth = getMaxTickLabelWidth(painter);
-    return getPreferedWidth(maxWidth);
+  public int getBarWidth() {
+      return barWidth;
   }
 
-  protected int getPreferedWidth(int maxTextWidth) {
-    return maxTextWidth + textToBarHorizontalMargin + BAR_WIDTH_DEFAULT;
-  }
 
   public int getTextToBarHorizontalMargin() {
     return textToBarHorizontalMargin;
@@ -204,21 +199,72 @@ public class AWTColorbarImageGenerator extends AWTAbstractImageGenerator
     this.textToBarHorizontalMargin = textToBarHorizontalMargin;
   }
 
-  protected int getMaxTickLabelWidth(IPainter painter) {
+  /**
+   * Compute the optimal image width to contain the text as defined by the tick provided and
+   * renderer.
+   */
+  public int getPreferredWidth(IPainter painter) {
+    maxTextWidth = getMaxTickLabelWidth(painter);
+    
+    //System.out.println("AWTColorbarImageGen : max txt width " + maxTextWidth);
+    
+    // we unscale it : we here use a graphics2D context that consider
+    // text scale by itself. As font is globally magnified, mainly for JOGL
+    // text renderer, we will unscale it for processing the width
+    
+    int maxTextActual = maxTextWidth;
+    
+    if(pixelScale.x>0)
+      maxTextActual = Math.round(maxTextWidth / pixelScale.x);
+
+    //System.out.println("AWTColorbarImageGen : max txt act " + maxTextActual + " " + pixelScale);
+    
+    return getPreferredWidth(maxTextActual);
+  }
+  
+  protected int getPreferredWidth(int maxTextWidth) {
+    return maxTextWidth + getTextToBarHorizontalMargin() + getBarWidth();
+  }
+  
+  /**
+   * Only valid after a call to {@link #getPreferredWidth(IPainter)}
+   * @return
+   */
+  public int getMaxTextWidth() {
+    return maxTextWidth;
+  }
+
+  public int getMaxTickLabelWidth(IPainter painter) {
     int maxWidth = 0;
-    if (provider != null) {
-      double[] ticks = provider.generateTicks(min, max);
+    if (tickProvider != null) {
+      double[] ticks = tickProvider.generateTicks(min, max);
       String tickLabel;
       for (int t = 0; t < ticks.length; t++) {
-        tickLabel = renderer.format(ticks[t]);
+        tickLabel = tickRenderer.format(ticks[t]);
 
         int stringWidth = painter.getTextLengthInPixels(font, tickLabel);
-
+        //System.out.println("Gen : " + stringWidth + " for " + tickLabel);
         if (maxWidth < stringWidth) {
           maxWidth = stringWidth;
         }
       }
     }
     return maxWidth;
+  }
+
+  public ITickProvider getTickProvider() {
+    return tickProvider;
+  }
+
+  public void setTickProvider(ITickProvider tickProvider) {
+    this.tickProvider = tickProvider;
+  }
+
+  public ITickRenderer getTickRenderer() {
+    return tickRenderer;
+  }
+
+  public void setTickRenderer(ITickRenderer tickRenderer) {
+    this.tickRenderer = tickRenderer;
   }
 }

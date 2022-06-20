@@ -18,6 +18,9 @@ public class Coord2d implements Serializable {
   private static final long serialVersionUID = 3968428005200709871L;
   /** The origin is a Coord2d having value 0 for each dimension. */
   public static final Coord2d ORIGIN = new Coord2d(0.0f, 0.0f);
+  
+  public static final Coord2d IDENTITY = new Coord2d(1.0f, 1.0f);
+
   /** An invalid Coord2d has value NaN for each dimension. */
   public static final Coord2d INVALID = new Coord2d(Float.NaN, Float.NaN);
 

@@ -51,8 +51,8 @@ public class TestAdaptiveMouseController {
     Chart chart = factory.newChart();
 
     // When
-    AWTCameraMouseController m = (AWTCameraMouseController) chart.addMouseCameraController();
-    AWTCameraKeyController k = (AWTCameraKeyController) chart.addKeyboardCameraController();
+    AWTCameraMouseController m = (AWTCameraMouseController) chart.addMouse();
+    AWTCameraKeyController k = (AWTCameraKeyController) chart.addKeyboard();
 
     // Then
     Assert.assertNotNull(m.getRateLimiter());

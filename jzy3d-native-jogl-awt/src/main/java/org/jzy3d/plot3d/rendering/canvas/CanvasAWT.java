@@ -14,6 +14,7 @@ import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -141,17 +142,15 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
   }
 
   public double getPixelScaleX() {
-	double scale = getSurfaceWidth() / (double) getWidth();
-	return scale;
-	//double scale2 = AWTHelper.getPixelScaleX(this);
-	//return Math.max(scale, scale2);
+    float[] scale = new float[2];
+    getCurrentSurfaceScale(scale);
+    return scale[0];
   }
 
   public double getPixelScaleY() {
-    double scale = getSurfaceHeight() / (double) getHeight();
-	return scale;
-    //double scale2 = AWTHelper.getPixelScaleY(this);
-	//return Math.max(scale, scale2);
+    float[] scale = new float[2];
+    getCurrentSurfaceScale(scale);
+    return scale[1];
   }
 
 
@@ -314,6 +313,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
    * resize event.
    */
   @Override
+  @Deprecated // use getDimension() instead
   public int getRendererWidth() {
     return (renderer != null ? renderer.getWidth() : 0);
   }
@@ -323,8 +323,19 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
    * resize event.
    */
   @Override
+  @Deprecated // use getDimension() instead
   public int getRendererHeight() {
     return (renderer != null ? renderer.getHeight() : 0);
+  }
+  
+  @Override
+  public Dimension getDimension() {
+    if(renderer!=null) {
+      return new Dimension(renderer.getWidth(), renderer.getHeight());
+    }
+    else {
+      return new Dimension(0, 0);
+    }
   }
   
   @Override
