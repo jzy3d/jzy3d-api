@@ -5,7 +5,6 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
-import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 
 /**
  * An {@link AbstractViewportManager} describes an element that occupies the whole rendering
@@ -38,7 +37,7 @@ public abstract class AbstractViewportManager {
   
   protected ViewportConfiguration lastViewPort;
 
-  protected boolean apply_WindowsHiDPI_Workaround = true;
+  protected boolean applyWindowsHiDPIWorkaround = true;
 
   /**
    * Set the view port (size of the renderer).
@@ -114,25 +113,11 @@ public abstract class AbstractViewportManager {
   public ViewportConfiguration applyViewport(IPainter painter) {
 
     // Workaround for https://github.com/jzy3d/jogl/issues/8
-    if(apply_WindowsHiDPI_Workaround) {
-      if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
-        // We here scale the viewport by either 1 or by the ratio indicated by the JVM
-        // if only the JVM is able to detect the pixel ratio and if JOGL
-        // can't guess it (which is the case for Windows 10).
-        Coord2d scaleHardware = painter.getCanvas().getPixelScale();
-        Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM();
-  
-        //System.out.println("HiDPI : " + isHiDPIEnabled);
-        //System.out.println("GPU   : " + scaleHardware);
-        //System.out.println("JVM   : " + scaleJVM);
-        
-        if (painter.isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
-          Coord2d scale = scaleJVM.div(scaleHardware);
-          //System.out.println("Scale : " + scale);
-          screenWidth = (int) (screenWidth * scale.x);
-          screenHeight = (int) (screenHeight * scale.y);
-        }
-      }
+    if(applyWindowsHiDPIWorkaround) {
+      Coord2d screen = apply_WindowsHiDPI_Workaround(painter, screenWidth, screenHeight);
+      
+      screenWidth = (int) screen.x;
+      screenHeight = (int) screen.y;
     }
     
     // Stretch projection on the whole viewport
@@ -155,11 +140,56 @@ public abstract class AbstractViewportManager {
     return lastViewPort;
   }
 
+  public static Coord2d apply_WindowsHiDPI_Workaround(IPainter painter, int width, int height) {
+    return apply_WindowsHiDPI_Workaround(painter, new Coord2d(width, height));
+  }
+  
+  public static Coord2d apply_WindowsHiDPI_Workaround(IPainter painter, Coord2d viewport) {
+    if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
+      // We here scale the viewport by either 1 or by the ratio indicated by the JVM
+      // if only the JVM is able to detect the pixel ratio and if JOGL
+      // can't guess it (which is the case for Windows 10).
+      Coord2d scaleHardware = painter.getCanvas().getPixelScale();
+      Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM();
+
+      //System.out.println("AbstractViewportManager.HiDPI : " + isHiDPIEnabled);
+      //System.out.println("AbstractViewportManager.GPU   : " + scaleHardware);
+      //System.out.println("AbstractViewportManager.JVM   : " + scaleJVM);
+      
+      if (painter.isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
+        Coord2d scale = scaleJVM.div(scaleHardware);
+        //System.out.println("AbstractViewportManager.Scale : " + scale);
+        return new Coord2d (viewport.x * scale.x, viewport.y * scale.y);
+      }
+    }
+    
+    return viewport;
+  }
+  
+  public static Coord2d getWindowsHiDPIScale_Workaround(IPainter painter) {
+    if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
+      // We here scale the viewport by either 1 or by the ratio indicated by the JVM
+      // if only the JVM is able to detect the pixel ratio and if JOGL
+      // can't guess it (which is the case for Windows 10).
+      Coord2d scaleHardware = painter.getCanvas().getPixelScale();
+      Coord2d scaleJVM = painter.getCanvas().getPixelScaleJVM();
+
+      //System.out.println("AbstractViewportManager.HiDPI : " + isHiDPIEnabled);
+      //System.out.println("AbstractViewportManager.GPU   : " + scaleHardware);
+      //System.out.println("AbstractViewportManager.JVM   : " + scaleJVM);
+      
+      if (painter.isJVMScaleLargerThanNativeScale(scaleHardware, scaleJVM)) {
+        return scaleJVM.div(scaleHardware);
+      }
+    }
+    return Coord2d.IDENTITY.clone();
+  }
+
 
   protected void applyViewportRectangle(IPainter painter) {
     screenXOffset = screenLeft;
-    screenYOffset = 0;
-
+    //screenYOffset = 0;
+    //System.out.println("AbstractViewportManager: yoffset " + screenYOffset);
 
     painter.glViewport(screenXOffset, screenYOffset, screenWidth, screenHeight);
 
@@ -304,6 +334,19 @@ public abstract class AbstractViewportManager {
     return screenGridDisplayed;
   }
 
-  
+  public boolean isApplyWindowsHiDPIWorkaround() {
+    return applyWindowsHiDPIWorkaround;
+  }
 
+  public void setApplyWindowsHiDPIWorkaround(boolean applyWindowsHiDPIWorkaround) {
+    this.applyWindowsHiDPIWorkaround = applyWindowsHiDPIWorkaround;
+  }
+
+  public void setScreenXOffset(int screenXOffset) {
+    this.screenXOffset = screenXOffset;
+  }
+
+  public void setScreenYOffset(int screenYOffset) {
+    this.screenYOffset = screenYOffset;
+  }
 }
