@@ -75,15 +75,15 @@ public class TestCamera_EmulGL_Onscreen {
     // let time to resize from default 500 to 800 before testing
     resizeBarrier.await(); 
     
-Thread.sleep(500);
-
+    // Check target size was reached
     Rectangle CANVAS_SIZE = FRAME_SIZE.clone();
     sub(CANVAS_SIZE, awtFrame.getInsets());
+    Assert.assertEquals(FRAME_SIZE.width, awtFrame.getSize().width);
+    Assert.assertEquals(FRAME_SIZE.height, awtFrame.getSize().height);
 
-
-    // Then viewport size is set to occupy the full frame
-    Assert.assertEquals(CANVAS_SIZE.width, cam.getLastViewPort().getWidth());
-    Assert.assertEquals(CANVAS_SIZE.height, cam.getLastViewPort().getHeight());
+    // Then viewport size is set to occupy the full canvas
+    Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
+    Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
 
     // ----------------------------------------
     // When change canvas size and update view
@@ -92,25 +92,27 @@ Thread.sleep(500);
     FRAME_SIZE = CANVAS_SIZE.clone();
     add(FRAME_SIZE, awtFrame.getInsets());
 
+    // prepare a new latch
     resizeBarrier = new ResizeBarrier(canvas);
 
+    // perform resize
     awtFrame.setBounds(0, 0, FRAME_SIZE.width, FRAME_SIZE.height);
 
     // let time to resize from default 500 to 800 before testing
     resizeBarrier.await();
-    chart.render();
-    
-Thread.sleep(500); 
 
-
-    // Coord2d scale = chart.getView().getPixelScale();
-    // System.out.println("TestCamEmulGLOnScreen : viewport : " + cam.getLastViewPort());
-    // System.out.println("TestCamEmulGLOnScreen : scale : " + scale);
+    // print debug info
+    System.out.println("TestCamEmulGLOnScreen : viewport : " + cam.getLastViewPort());
+    System.out.println("TestCamEmulGLOnScreen : scale : " + chart.getView().getPixelScale());
+    System.out.println("TestCamEmulGLOnScreen : frame.bounds : " + awtFrame.getBounds());
+    System.out.println("TestCamEmulGLOnScreen : frame.insets : " + awtFrame.getInsets());
+    System.out.println("TestCamEmulGLOnScreen : canvas.size : " + canvas.getSize());
+    System.out.println("TestCamEmulGLOnScreen : viewport.size : " + cam.getLastViewPort());
 
     // Then viewport on the complete canvas
     Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, cam.getLastViewPort().getMode());
-    Assert.assertEquals(CANVAS_SIZE.width, cam.getLastViewPort().getWidth());
-    Assert.assertEquals(CANVAS_SIZE.height, cam.getLastViewPort().getHeight());
+    Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
+    Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
 
     // ----------------------------------------
     // When set STRETCH_TO_FILL, results must similar
@@ -121,8 +123,8 @@ Thread.sleep(500);
 
     // Then viewport on the complete canvas
     Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, cam.getLastViewPort().getMode());
-    Assert.assertEquals(CANVAS_SIZE.height, cam.getLastViewPort().getHeight());
-    Assert.assertEquals(CANVAS_SIZE.width, cam.getLastViewPort().getWidth());
+    Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
+    Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
 
     // ----------------------------------------
     // When set SQUARE
@@ -155,10 +157,10 @@ Thread.sleep(500);
       this.resizeBarrier = new ComponentAdapter() {
         @Override
         public void componentResized(ComponentEvent e) {
-          System.out.println("TestCamera_EmulGL_Onscreen:Resized! Going ahead");
+          System.out.println("TestCamera_EmulGL_Onscreen : Resized! Going ahead");
           latch.countDown();
           canvas.removeComponentListener(resizeBarrier);
-          System.out.println("TestCamera_EmulGL_Onscreen:Removed listener");
+          System.out.println("TestCamera_EmulGL_Onscreen : Removed listener");
         }
       };
 
@@ -166,7 +168,7 @@ Thread.sleep(500);
     }
 
     public void await() throws InterruptedException {
-      System.out.println("TestCamera_EmulGL_Onscreen:Now waiting on the latch");
+      System.out.println("TestCamera_EmulGL_Onscreen : Now waiting on the resize latch");
       latch.await();
     }
   }
