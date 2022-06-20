@@ -75,7 +75,7 @@ public class TestCamera_EmulGL_Onscreen {
     // let time to resize from default 500 to 800 before testing
     resizeBarrier.await(); 
     
-Thread.sleep(500);
+Thread.sleep(1000);
 
     Rectangle CANVAS_SIZE = FRAME_SIZE.clone();
     sub(CANVAS_SIZE, awtFrame.getInsets());
@@ -100,7 +100,7 @@ Thread.sleep(500);
     resizeBarrier.await();
     chart.render();
     
-Thread.sleep(500); 
+Thread.sleep(1000); 
 
 
     // Coord2d scale = chart.getView().getPixelScale();
