@@ -188,7 +188,7 @@ public abstract class AbstractViewportManager {
 
   protected void applyViewportRectangle(IPainter painter) {
     screenXOffset = screenLeft;
-    //screenYOffset = 0;
+    screenYOffset = 0;
     //System.out.println("AbstractViewportManager: yoffset " + screenYOffset);
 
     painter.glViewport(screenXOffset, screenYOffset, screenWidth, screenHeight);
