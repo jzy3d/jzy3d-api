@@ -12,6 +12,7 @@ import org.jzy3d.plot3d.rendering.view.ViewportMode;
  * This implementation allows to shrink colorbar, assuming it is an AWT implementation from which we
  * can read image width
  */
+@Deprecated
 public class NativeViewAndColorbarsLayout extends ViewAndColorbarsLayout {
   boolean BYPASS_NATIVE_IMPLEMENTATION_HERE = true;
   
@@ -40,12 +41,6 @@ public class NativeViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       if (legend instanceof AWTColorbarLegend) {
         AWTColorbarLegend awtLegend = (AWTColorbarLegend) legend;
 
-        // optimize to shrink colorbar to required width
-        if (isShrinkColorbar()) {
-          from = updateFromValueToShrinkColorbar(painter, width, awtLegend);
-
-        }
-
         legend.setViewPort(width, height, from, to);
 
       } else {
@@ -66,7 +61,7 @@ public class NativeViewAndColorbarsLayout extends ViewAndColorbarsLayout {
     from = 1 - ((1f * optimalColorbarWidth) / (1f * width));*/
     
     AWTColorbarImageGenerator gen =  awtLegend.getImageGenerator();
-    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferedWidth(painter)+colorbarRightMargin) * painter.getView().getPixelScale().x);
+    int optimalColorbarWidth = (int)Math.ceil((gen.getPreferredWidth(painter)/*+colorbarRightMargin*/) * painter.getView().getPixelScale().x);
     //optimalColorbarWidth*= painter.getView().getPixelScale().x;
     
     // Random fix to avoid cutting text

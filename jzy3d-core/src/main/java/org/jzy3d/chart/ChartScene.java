@@ -15,6 +15,7 @@ import org.jzy3d.plot3d.rendering.view.View;
  * 
  * @author Martin Pernollet
  */
+@Deprecated
 public class ChartScene extends Scene {
   public ChartScene(boolean graphsort, IChartFactory factory) {
     super(factory, graphsort);

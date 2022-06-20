@@ -27,9 +27,6 @@ public class MTest_Layout_Native {
     
     Chart chart = d.getChart();
     chart.open(800, 600);
-    
-    DoubleScreenManualScenario scenario = new DoubleScreenManualScenario(chart, MTest_Layout_Native.class.getSimpleName());
-    scenario.start();
   }
 
 

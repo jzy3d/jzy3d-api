@@ -50,9 +50,10 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
   }
 
   @Override
-  public IViewportLayout newViewportLayout() {
+  public ViewAndColorbarsLayout newViewportLayout() {
     //return new NativeViewAndColorbarsLayout();
-    return new ViewAndColorbarsLayout();
+    ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
+    return layout;
   }
 
   /** Provide AWT Texture loading for screenshots */

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -33,6 +34,8 @@ public interface ICanvas {
 
   /** Returns the renderer's height, i.e. the display height. */
   public int getRendererHeight();
+  
+  public Dimension getDimension();
 
   // Only defined for Native (JOGL) canvas
   // public Renderer3d getRenderer();
@@ -104,6 +107,10 @@ public interface ICanvas {
    * 
    */
   public void setPixelScale(float[] scale);
+  
+  default void setPixelScale(Coord2d scale) {
+    setPixelScale(scale.toArray());
+  }
 
   /**
    * Provide pixel scale as feasible by the Hardware, OS, and JVM, independently of what was asked

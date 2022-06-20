@@ -38,9 +38,14 @@ import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.legends.ILegend;
+import org.jzy3d.plot3d.rendering.legends.colorbars.IColorbarLegend;
 import org.jzy3d.plot3d.rendering.lights.Light;
+import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.lod.LODCandidates;
 import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
 import org.jzy3d.plot3d.rendering.view.lod.LODSetting;
@@ -67,7 +72,7 @@ public class Chart {
   protected IChartFactory factory;
 
   protected Quality quality;
-  protected ChartScene scene;
+  protected Scene scene;
   protected View view;
   protected ICanvas canvas;
 
@@ -138,19 +143,21 @@ public class Chart {
     View view = getView();
 
     // Remember 3D layout
-    axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
-    axisYLabelOrientation = axisLayout.getYAxisLabelOrientation();
-    axisZLabelDisplayed = axisLayout.isZAxeLabelDisplayed();
-    isTickLineDisplayed = axisLayout.isTickLineDisplayed();
-    
-    isSquaredViewActive = view.getSquared();
-    viewPositionMode = view.getViewMode();
-    viewportMode = view.getCamera().getViewportMode();
-    viewpoint = view.getViewPoint();
+    if(view.is3D()) {
+      axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
+      axisYLabelOrientation = axisLayout.getYAxisLabelOrientation();
+      axisZLabelDisplayed = axisLayout.isZAxisLabelDisplayed();
+      isTickLineDisplayed = axisLayout.isTickLineDisplayed();
+
+      isSquaredViewActive = view.getSquared();
+      viewPositionMode = view.getViewMode();
+      viewportMode = view.getCamera().getViewportMode();
+      viewpoint = view.getViewPoint().clone();
+    }
     
     // Apply 2D layout to axis
     axisLayout.setTickLineDisplayed(false);
-    axisLayout.setZAxeLabelDisplayed(false);
+    axisLayout.setZAxisLabelDisplayed(false);
     axisLayout.setZTickLabelDisplayed(false);
     axisLayout.setYAxisLabelOrientation(LabelOrientation.VERTICAL);
 
@@ -174,7 +181,7 @@ public class Chart {
   protected boolean isSquaredViewActive = true;
   protected ViewPositionMode viewPositionMode = ViewPositionMode.FREE;
   protected ViewportMode viewportMode = ViewportMode.RECTANGLE_NO_STRETCH;
-  protected Coord3d viewpoint = View.VIEWPOINT_DEFAULT;
+  protected Coord3d viewpoint = View.VIEWPOINT_DEFAULT.clone();
   
   public Chart view3d() {
     AxisLayout axisLayout = getAxisLayout();
@@ -184,7 +191,7 @@ public class Chart {
       axisLayout.setYAxisLabelOrientation(axisYLabelOrientation);
     }
     
-    axisLayout.setZAxeLabelDisplayed(axisZLabelDisplayed);
+    axisLayout.setZAxisLabelDisplayed(axisZLabelDisplayed);
     axisLayout.setZTickLabelDisplayed(axisZTickLabelDisplayed);
     axisLayout.setTickLineDisplayed(isTickLineDisplayed);
     
@@ -213,11 +220,6 @@ public class Chart {
     return getFactory().getPainterFactory().newFrame(this, rectangle, title);
   }
 
-  public void clear() {
-    scene.clear();
-    view.shoot();
-  }
-
   public void dispose() {
     setAnimated(false);
 
@@ -235,6 +237,12 @@ public class Chart {
    */
   public void render() {
     view.shoot();
+  }
+
+  public void render(int n) {
+    for (int i = 0; i < n; i++) {
+      render();
+    }
   }
 
   public void setAnimated(boolean status) {
@@ -1016,7 +1024,7 @@ public class Chart {
     return view;
   }
 
-  public ChartScene getScene() {
+  public Scene getScene() {
     return scene;
   }
 
@@ -1044,5 +1052,31 @@ public class Chart {
     this.quality = quality;
   }
 
+  /** Return the first available colorbar in the view layout, or null if none was created */
+  public IColorbarLegend getColorbar() {
+    ViewAndColorbarsLayout viewportLayout = (ViewAndColorbarsLayout) getView().getLayout();
 
+    if(viewportLayout.getChart()==null) {
+      viewportLayout.setChart(this);
+    }
+    
+    List<ILegend> legends = getLegends();
+    
+    /*if(legends.size()==0) {
+      view.getLayout().update(this);
+      legends = getLegends();
+    }*/
+    
+    for(ILegend legend : legends) {
+      if(legend instanceof IColorbarLegend) {
+        return (IColorbarLegend)legend;
+      }
+    }
+    return null;
+  }
+  
+  public List<ILegend> getLegends() {
+    ViewAndColorbarsLayout viewportLayout = (ViewAndColorbarsLayout) getView().getLayout();
+    return viewportLayout.getLegends();
+  }
 }

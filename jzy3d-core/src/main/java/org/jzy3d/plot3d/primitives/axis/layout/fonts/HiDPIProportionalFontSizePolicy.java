@@ -25,6 +25,16 @@ public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
   public HiDPIProportionalFontSizePolicy(View view) {
     this.view = view;
   }
+  
+  public Font getBaseFont() {
+    return baseFont;
+  }
+
+  public void setBaseFont(Font baseFont) {
+    this.baseFont = baseFont;
+  }
+
+
 
   /**
    * Modifies the {@link IAxisLayout} font according to the pixel scale returned by the {@link View}
@@ -67,10 +77,12 @@ public class HiDPIProportionalFontSizePolicy implements IFontSizePolicy {
     // Only if scale known
     if (!Float.isNaN(scale.getY())) {
 
-      int height = (int) (font.getHeight() * scale.getY());
+      int height = Math.round(font.getHeight() * scale.getY());
       font.setHeight(height);
     }
 
+    //System.out.println("HiDPIPropPolicy : " + font.getHeight());
+    
     // Set and return
     layout.setFont(font);
     return layout.getFont();

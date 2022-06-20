@@ -22,7 +22,17 @@ public class EmulGLChartFactory extends ChartFactory {
   }
 
   @Override
-  public Chart newChart(IChartFactory factory, Quality quality) {
+  public AWTChart newChart() {
+    return newChart(Quality.Advanced());
+  }
+
+  @Override
+  public AWTChart newChart(Quality quality) {
+    return newChart(getFactory(), quality);
+  }
+  
+  @Override
+  public AWTChart newChart(IChartFactory factory, Quality quality) {
     AWTChart chart = new AWTChart(factory, quality);
     chart.getView().setBoundMode(ViewBoundMode.AUTO_FIT); // EMULGL NEEDS AUTO_FIT!!!
     return chart;

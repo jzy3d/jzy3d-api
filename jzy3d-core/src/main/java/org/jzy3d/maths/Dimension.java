@@ -14,4 +14,8 @@ public class Dimension {
     this.width = width;
     this.height = height;
   }
+  
+  public String toString() {
+    return "width:" + width + " height:" + height;
+  }
 }

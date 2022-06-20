@@ -1,7 +1,9 @@
 package org.jzy3d.plot3d.rendering.legends;
 
 import org.jzy3d.events.DrawableChangedEvent;
+import org.jzy3d.maths.Margin;
 import org.jzy3d.painters.Font;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.IImageViewport;
 
 public interface ILegend extends IImageViewport {
@@ -16,5 +18,9 @@ public interface ILegend extends IImageViewport {
   
   public int getWidth();
   public int getHeight();
+  
+  public Margin getMargin();
+  
+  public void updateMinimumDimension(IPainter painter);
 
 }

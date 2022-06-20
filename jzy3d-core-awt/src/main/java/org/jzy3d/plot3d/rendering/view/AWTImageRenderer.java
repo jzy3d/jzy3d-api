@@ -38,20 +38,18 @@ public class AWTImageRenderer extends AbstractAWTRenderer2d implements AWTRender
     int y = 0;
 
     if (Corner.TOP_LEFT.equals(layout.getCorner())) {
-      x = layout.getBoxMarginX();
-      y = layout.getBoxMarginY();
+      x = layout.getMargin().getLeft();
+      y = layout.getMargin().getTop();
     } else if (Corner.TOP_RIGHT.equals(layout.getCorner())) {
-      x = canvasWidth - imageWidth - layout.getBoxMarginX();
-      y = layout.getBoxMarginY();
+      x = canvasWidth - imageWidth - layout.getMargin().getRight();
+      y = layout.getMargin().getTop();
     } else if (Corner.BOTTOM_LEFT.equals(layout.getCorner())) {
-      x = layout.getBoxMarginX();
-      y = canvasHeight - imageHeight - layout.getBoxMarginY();
+      x = layout.getMargin().getLeft();
+      y = canvasHeight - imageHeight - layout.getMargin().getBottom();
     } else if (Corner.BOTTOM_RIGHT.equals(layout.getCorner())) {
-      x = canvasWidth - imageWidth - layout.getBoxMarginX();
-      y = canvasHeight - imageHeight - layout.getBoxMarginY();
+      x = canvasWidth - imageWidth - layout.getMargin().getRight();
+      y = canvasHeight - imageHeight - layout.getMargin().getBottom();
     }
-    
-    
 
     g2d.drawImage(image, x, y, null);
   }

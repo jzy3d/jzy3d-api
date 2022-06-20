@@ -41,6 +41,9 @@ public class MTest_Layout extends AWTAbstractAnalysis {
   public MTest_Layout() {
     factory = new EmulGLChartFactory();
   }
+  
+  Shape surface;
+  AWTColorbarLegend colorbar;
 
   @Override
   public void init() {
@@ -64,8 +67,6 @@ public class MTest_Layout extends AWTAbstractAnalysis {
       //skin.getCanvas().setProfileDisplayMethod(true);
       //skin.getCanvas().setDebugEvents(true);
 
-      skin.getLayout().setShrinkColorbar(true);
-
       AdaptiveRenderingPolicy policy = new AdaptiveRenderingPolicy();
       policy.renderingRateLimiter = new RateLimiterAdaptsToRenderTime();
       policy.optimizeForRenderingTimeLargerThan = 130;// ms
@@ -74,10 +75,8 @@ public class MTest_Layout extends AWTAbstractAnalysis {
       skin.getMouse().setPolicy(policy);
 
       skin.getThread().setSpeed(15);
-    } else {
-      ((ViewAndColorbarsLayout) ((AWTView) chart.getView()).getLayout()).setShrinkColorbar(true);
-    }
-
+    } 
+    
     AxisLayout layout = chart.getAxisLayout();
     // layout.setFont(new Font("Apple Chancery", 20));
     layout.setFont(new Font("Helvetica", 20));
@@ -104,7 +103,7 @@ public class MTest_Layout extends AWTAbstractAnalysis {
     // view.setMaintainAllObjectsInView(true);
     view.setCameraRenderingSphereRadiusFactor(1.1f);
 
-    AWTColorbarLegend colorbar =
+    colorbar =
         new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
     surface.setLegend(colorbar);
     chart.add(surface);

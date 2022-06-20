@@ -7,8 +7,10 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
+import org.jzy3d.plot3d.rendering.legends.colorbars.IColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
+import org.jzy3d.plot3d.rendering.view.View;
 
 public class AWTChart extends Chart {
   public AWTChart(IChartFactory components, Quality quality) {
@@ -20,32 +22,33 @@ public class AWTChart extends Chart {
   }
 
   public void addRenderer(AWTRenderer2d renderer2d) {
-    getAWTView().addRenderer2d(renderer2d);
+    getView().addRenderer2d(renderer2d);
   }
 
   public void removeRenderer(AWTRenderer2d renderer2d) {
-    getAWTView().removeRenderer2d(renderer2d);
-  }
-
-  public AWTView getAWTView() {
-    return (AWTView) view;
+    getView().removeRenderer2d(renderer2d);
   }
 
   public AWTColorbarLegend colorbar(Drawable drawable) {
-    return colorbar(drawable, null, getView().getAxis().getLayout());
+    return colorbar(drawable, getView().getAxis().getLayout());
   }
 
   public AWTColorbarLegend colorbar(Drawable drawable, AxisLayout layout) {
-    return colorbar(drawable, null, layout);
-  }
-
-  public AWTColorbarLegend colorbar(Drawable drawable, Dimension minDimension, AxisLayout layout) {
-    AWTColorbarLegend colorbar = new AWTColorbarLegend(drawable, layout);
-    
-    if(minDimension!=null)
-      colorbar.setMinimumDimension(minDimension);
-    
+    AWTColorbarLegend colorbar = new AWTColorbarLegend(drawable, layout, layout.getMainColor(), view.getBackgroundColor());
     drawable.setLegend(colorbar);
     return colorbar;
   }
+
+  @Override
+  public AWTColorbarLegend getColorbar() {
+    AWTColorbarLegend bar = (AWTColorbarLegend)super.getColorbar();
+    return bar;
+  }
+
+  
+  @Override
+  public AWTView getView() {
+    return (AWTView)super.getView();
+  }
 }
+

@@ -81,7 +81,8 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
 
     if (imageWidth != imgWidth || imageHeight != height) {
             
-      //System.out.println("AWTLegend width:" + imgWidth + " height:" + height + " mode:" + getViewportMode());
+      //System.out.println("AWTLegend left:" + left + " right:" + right);
+      //System.out.println("AWTLegend imgWidth:" + imgWidth + " width:" + width + " height:" + height + " mode:" + getViewportMode());
       setImage(toImage(imgWidth, height));
     }
   }
@@ -107,10 +108,16 @@ public abstract class AWTLegend extends AWTImageViewport implements IDrawableLis
     return minimumDimension;
   }
 
+  /**
+   * Now overriden by automatic processing of minimum dimension
+   * @param dimension
+   */
+  @Deprecated
   public void setMinimumDimension(Dimension dimension) {
     minimumDimension = dimension;
   }
   
+  @Deprecated
   public void setMinimumWidth(int minimumWidth) {
     this.minimumDimension.width = minimumWidth;
   }

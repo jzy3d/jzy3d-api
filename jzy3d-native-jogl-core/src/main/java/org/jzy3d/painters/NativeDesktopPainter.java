@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -43,6 +44,10 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   protected GL gl;
   protected GLU glu = new GLU();
   protected GLUT glut = new GLUT();
+
+  /** A 1x1 image used for processing text length in pixel if no context is available */
+  protected BufferedImage textLengthFallbackImage;
+  protected FontMetrics fontMetricsFallback;
 
   public GL getGL() {
     return gl;
@@ -536,9 +541,10 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     //
     // Despite not efficient, the need to deal with removing/adding a canvas requires not keeping a
     // cache of the already defined strings. Indeed, in case the GLContext get destroyed, the
-    // inherent textures are lost and text is replaced by black pixels. 
+    // inherent textures are lost and text is replaced by black pixels.
     //
-    // As there is no way to invalidate the TextRenderer cache (stringLocations is private), we simply re-create
+    // As there is no way to invalidate the TextRenderer cache (stringLocations is private), we
+    // simply re-create
     // a new TextRenderer as soon as we want draw a text.
 
     TextRenderer renderer = null;
@@ -549,12 +555,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       // renderer.setSmoothing(false);// some GPU do not handle smoothing well
       // renderer.setUseVertexArrays(false); // some GPU do not handle VBO properly
 
-      //txtRendererMap.put(font, renderer);
+      // txtRendererMap.put(font, renderer);
     }
     return renderer;
   }
 
-  //protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
+  // protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
 
 
   /**
@@ -577,13 +583,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public int getTextLengthInPixels(int font, String string) {
-    Font fnt = Font.getById(font);
-
-    return getTextLengthInPixels(fnt, string);
+    return getTextLengthInPixels(Font.getById(font), string);
   }
 
   @Override
   public int getTextLengthInPixels(Font font, String string) {
+    
     // Try to get text width using onscreen graphics
     ICanvas c = getCanvas();
     if (c instanceof Component) {
@@ -597,12 +602,28 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
         }
       }
     }
-
+    
     // Try to get text width using text renderer offscreen
-    TextRenderer renderer = getOrCreateTextRenderer(font);
-    Rectangle2D r = renderer.getBounds(string);
-    return (int) r.getWidth();
+    if (gl != null && gl.getContext().isCurrent()) {
+      TextRenderer renderer = getOrCreateTextRenderer(font);
+      Rectangle2D r = renderer.getBounds(string);
+      return (int) r.getWidth();
+    } 
+
+    // Otherwise use a fallback image to get a graphic context
+    
+    if (textLengthFallbackImage == null) {
+      textLengthFallbackImage = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
+      fontMetricsFallback = textLengthFallbackImage.createGraphics().getFontMetrics();
+    }
+    if (fontMetricsFallback != null) {
+      return fontMetricsFallback.stringWidth(string);
+    } else {
+      return -1;
+    }
+    
   }
+
 
   private java.awt.Font toAWT(Font font) {
     return new java.awt.Font(font.getName(), java.awt.Font.PLAIN, font.getHeight());
@@ -810,13 +831,13 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
       double far_val) {
     gl.getGL2().glOrtho(left, right, bottom, top, near_val, far_val);
   }
-  
+
   @Override
   public void gluOrtho2D(double left, double right, double bottom, double top) {
     glu.gluOrtho2D(left, right, bottom, top);
   }
-  
-  
+
+
 
   @Override
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {

@@ -3,7 +3,6 @@ package org.jzy3d.chart.factories;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.ChartScene;
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadControllerWithTime;
@@ -77,8 +76,8 @@ public class ChartFactory implements IChartFactory {
   }
 
   @Override
-  public ChartScene newScene(boolean sort) {
-    return new ChartScene(sort, getFactory());
+  public Scene newScene(boolean sort) {
+    return new Scene(getFactory(), sort);
   }
 
   @Override

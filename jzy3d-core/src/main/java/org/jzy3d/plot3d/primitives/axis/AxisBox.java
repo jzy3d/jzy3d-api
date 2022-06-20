@@ -345,15 +345,15 @@ public class AxisBox implements IAxis {
   ///////////////////////////
 
   protected boolean isZAxeLabelDisplayed(int direction) {
-    return isZ(direction) && layout.isZAxeLabelDisplayed();
+    return isZ(direction) && layout.isZAxisLabelDisplayed();
   }
 
   protected boolean isYAxeLabelDisplayed(int direction) {
-    return isY(direction) && layout.isYAxeLabelDisplayed();
+    return isY(direction) && layout.isYAxisLabelDisplayed();
   }
 
   protected boolean isXAxeLabelDisplayed(int direction) {
-    return isX(direction) && layout.isXAxeLabelDisplayed();
+    return isX(direction) && layout.isXAxisLabelDisplayed();
   }
 
   protected boolean isZ(int direction) {
