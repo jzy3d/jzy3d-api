@@ -9,7 +9,7 @@ target/
 .settings
 .idea/
 **/.idea/
-
+**/bin/
 
 # OS specific folder data files
 .DS_Store
