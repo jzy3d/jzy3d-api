@@ -86,4 +86,10 @@ public class ViewportConfiguration {
   public String toString() {
     return "width=" + width + " height=" + height + " x=" + x + " y=" + y + " mode=" + mode;
   }
+  
+  public ViewportConfiguration clone() {
+    ViewportConfiguration vc = new ViewportConfiguration(x, y, width, height);
+    vc.setMode(mode);
+    return vc;
+  }
 }

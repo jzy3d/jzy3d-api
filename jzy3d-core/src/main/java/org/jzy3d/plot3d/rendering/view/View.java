@@ -1063,7 +1063,12 @@ public class View {
       BoundingBox3d bounds) {
 
     // bounds = getSceneGraphBounds();
-
+    Coord2d c = AbstractViewportManager.apply_WindowsHiDPI_Workaround(getPainter(), viewport.width, viewport.height);
+    
+    viewport = viewport.clone(); 
+    viewport.width = (int)c.x; 
+    viewport.height = (int)c.y; 
+    
     view2DProcessing.apply(viewport, bounds);
 
 
