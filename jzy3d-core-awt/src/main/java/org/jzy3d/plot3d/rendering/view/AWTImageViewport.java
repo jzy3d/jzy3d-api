@@ -1,10 +1,12 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.nio.ByteBuffer;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.maths.Margin;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
 
@@ -14,15 +16,14 @@ import org.jzy3d.plot3d.rendering.image.AWTImageConvert;
  * @author Martin Pernollet
  */
 public class AWTImageViewport extends AbstractViewportManager implements IImageViewport {
-  protected static final float IMAGE_Z = 0;
 
   protected ByteBuffer imageData = null;
-  protected Image image;
+  protected BufferedImage image;
   protected int imageHeight;
   protected int imageWidth;
-  
-  protected Dimension margin = new Dimension(0,0); // no margin by default
-  protected Coord2d pixelScale = new Coord2d(1,1); // assume default pixel scale
+
+  protected Margin margin = new Margin(0, 0, 0, 0); // no margin by default
+  protected Coord2d pixelScale = new Coord2d(1, 1); // assume default pixel scale
 
   public AWTImageViewport() {
     setViewportMode(ViewportMode.RECTANGLE_NO_STRETCH);
@@ -44,52 +45,87 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     painter.glPushMatrix();
     painter.glLoadIdentity();
 
-    renderImage(painter, imageData, imageWidth, imageHeight, screenWidth,
-        screenHeight, IMAGE_Z);
+    renderImage(painter);
 
     // Restore matrices state
     painter.glPopMatrix();
     painter.glMatrixMode_Projection();
     painter.glPopMatrix();
   }
-  
 
-  protected void renderImage(IPainter painter, ByteBuffer imageBuffer, int imageWidth, int imageHeight,
-      int screenWidth, int screenHeight, float z) {
-    if (imageBuffer == null)
+
+  protected void renderImage(IPainter painter) {
+    if (imageData == null)
       return;
 
-    float xZoom = 1;
-    float yZoom = 1;
-    int xPosition = 0;
-    int yPosition = 0;
+    ImageLayout iLayout = computeLayout(painter);
 
-    if (imageWidth < screenWidth)
-      xPosition = (int) ((float) screenWidth / 2 - (float) imageWidth / 2);
-    else
-      xZoom = ((float) screenWidth) / ((float) imageWidth);
-
-    if (imageHeight < screenHeight)
-      yPosition = (int) ((float) screenHeight / 2 - (float) imageHeight / 2);
-    else
-      yZoom = ((float) screenHeight) / ((float) imageHeight);
-
-    //System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
-    //System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
-    //System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
-    
     // Draw
-    
-    Coord2d zoom = new Coord2d(xZoom, yZoom);
-    Coord3d position = new Coord3d(xPosition, yPosition, z);
-    
-    painter.drawImage(imageBuffer, imageWidth, imageHeight, zoom, position);
+
+    painter.drawImage(imageData, imageWidth, imageHeight, iLayout.zoom, iLayout.position);
   }
 
+  /**
+   * Compute the position of the image in this viewport based on the image dimensions, the viewport
+   * dimensions and the margin.
+   */
+  protected ImageLayout computeLayout(IPainter painter) {
+    Coord2d scale = painter.getCanvas().getPixelScale();
+    ImageLayout iLayout = new ImageLayout();
+
+
+    // If image is smaller than viewport, move it a bit to let it appear in the center
+    if (imageWidth < screenWidth) {
+      // inspired by View2DLayout_Debug which is accurate
+      iLayout.position.x =
+          Math.round((screenWidth - (imageWidth + (margin.getWidth() * scale.x))) / 2f);
+      iLayout.position.x += (margin.getLeft() * scale.x);
+
+    }
+    // Else if image is bigger than viewport, unzoom it a bit to let it fit the dimensions
+    else if (imageWidth > screenWidth) {
+      iLayout.zoom.x = ((float) screenWidth) / ((float) imageWidth);
+    }
+    // If exact fit, keep default values
+
+    // If image is smaller than viewport, move it a bit to let it appear in the center
+    if (imageHeight < screenHeight) {
+      iLayout.position.y =
+          Math.round((screenHeight - (imageHeight + (margin.getHeight() * scale.y))) / 2f);
+      iLayout.position.y += (margin.getBottom() * scale.y);
+    }
+    // If image is bigger than viewport, unzoom it a bit to let it fit the dimensions
+    else if (imageWidth > screenWidth) {
+      iLayout.zoom.y = ((float) screenHeight) / ((float) imageHeight);
+    }
+    // If exact fit, keep default value
+
+    // System.out.println("AWTImageViewport posi.x:" + xPosition + " posi.y:" + xPosition);
+    // System.out.println("AWTImageViewport zoom.x:" + xZoom + " zoom.y:" + yZoom);
+    // System.out.println("AWTImageViewport size.x:" + imageWidth + " size.y:" + imageHeight);
+    return iLayout;
+  }
+
+  public class ImageLayout {
+    protected static final float IMAGE_Z = 0;
+
+    public Coord2d zoom = new Coord2d(1, 1);
+    public Coord3d position = new Coord3d(0, 0, IMAGE_Z);
+  }
+
+
+  /**
+   * Update internal pixel scale knowledge. Called by render loop and provided by painter's view.
+   * May be overrided to update the image.
+   */
+  @Override
+  public void updatePixelScale(Coord2d pixelScale) {
+    this.pixelScale = pixelScale;
+  }
   
-  /** Update internal pixel scale knowledge. Called by render loop and provided by painter's view. May be overrided to update the image. */
-  protected void updatePixelScale(Coord2d pixelScale) {
-    this.pixelScale = pixelScale ;
+  @Override
+  public Coord2d getPixelScale() {
+    return this.pixelScale;
   }
 
   /**
@@ -97,7 +133,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
    * 
    * @param image
    */
-  public void setImage(Image image, int width, int height) {
+  public void setImage(BufferedImage image, int width, int height) {
     if (image != null) {
       synchronized (image) {
         ByteBuffer b = AWTImageConvert.getImageAsByteBuffer(image, width, height);
@@ -106,14 +142,14 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     }
   }
 
-  public void setImage(Image image, int width, int height, ByteBuffer buffer) {
+  public void setImage(BufferedImage image, int width, int height, ByteBuffer buffer) {
     this.image = image;
     this.imageHeight = height;
     this.imageWidth = width;
     this.imageData = buffer;
   }
 
-  public void setImage(Image image) {
+  public void setImage(BufferedImage image) {
     if (image != null) {
       setImage(image, image.getWidth(null), image.getHeight(null));
     }
@@ -122,7 +158,7 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
   /**
    * Return the image rendered by the {@link AWTImageViewport}
    */
-  public Image getImage() {
+  public BufferedImage getImage() {
     return image;
   }
 
@@ -132,11 +168,11 @@ public class AWTImageViewport extends AbstractViewportManager implements IImageV
     return new Dimension(0, 0);
   }
 
-  public Dimension getMargin() {
+  public Margin getMargin() {
     return margin;
   }
 
-  public void setMargin(Dimension margin) {
+  public void setMargin(Margin margin) {
     this.margin = margin;
   }
 }

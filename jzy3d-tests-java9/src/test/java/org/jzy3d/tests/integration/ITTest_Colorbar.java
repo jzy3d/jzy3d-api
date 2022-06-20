@@ -64,7 +64,7 @@ public class ITTest_Colorbar extends ITTest{
   
   /* ************************************************************************************************** */
   
-  @Test
+  /*@Test
   public void whenColorbar_HasMininumWidth() {
     System.out.println("ITTest : whenColorbar_HasMininumWidth");
         
@@ -97,11 +97,11 @@ public class ITTest_Colorbar extends ITTest{
     assertChart(chart, name(this, "HasMinimumWidth", wt, chart.getQuality().getHiDPI()));
     
     return chart;
-  }
+  }*/
   
   /* ************************************************************************************************** */
   
-  @Test
+  /*@Test
   public void whenColorbar_ShrinkBigFont() {
     System.out.println("ITTest : whenColorbar_ShrinkBigFont");
 
@@ -121,34 +121,28 @@ public class ITTest_Colorbar extends ITTest{
     
     AWTColorbarLegend legend = new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout());
     surface.setLegend(legend);
-    //legend.setMinimumWidth(300);    
     
     String name;
     
     if(WT.EmulGL_AWT.equals(wt)) {
       EmulGLSkin skin = EmulGLSkin.on(chart);
       EmulGLViewAndColorbarsLayout layout = skin.getLayout();
-      layout.setShrinkColorbar(true);
       
       name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI());
     }
     else {
-      NativeViewAndColorbarsLayout layout  = (NativeViewAndColorbarsLayout)((ChartView)chart.getView()).getLayout();
-      layout.setShrinkColorbar(true);
-      
       name = name(this, "ShrinkBigFont", wt, chart.getQuality().getHiDPI());
-      
     }
     
     // Then
     assertChart(chart, name);
     
     return chart;
-  }
+  }*/
   
   /* ************************************************************************************************** */
   
-  @Test
+  /*@Test
   public void whenColorbar_Shrink() {
     System.out.println("ITTest : whenColorbar_Shrink");
 
@@ -174,23 +168,18 @@ public class ITTest_Colorbar extends ITTest{
     if(WT.EmulGL_AWT.equals(wt)) {
       EmulGLSkin skin = EmulGLSkin.on(chart);
       EmulGLViewAndColorbarsLayout layout = skin.getLayout();
-      layout.setShrinkColorbar(true);
       
       name = name(this, "Shrink", wt, chart.getQuality().getHiDPI());
     }
     else {
-      NativeViewAndColorbarsLayout layout  = (NativeViewAndColorbarsLayout)((ChartView)chart.getView()).getLayout();
-      layout.setShrinkColorbar(true);
-      
       name = name(this, "Shrink", wt, chart.getQuality().getHiDPI());
-      
     }
     
     // Then
     assertChart(chart, name);
     
     return chart;
-  }
+  }*/
 
 
 }

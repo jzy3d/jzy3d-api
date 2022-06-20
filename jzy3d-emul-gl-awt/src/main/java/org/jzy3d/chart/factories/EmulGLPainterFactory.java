@@ -65,7 +65,7 @@ public class EmulGLPainterFactory implements IPainterFactory {
   @Override
   public ViewAndColorbarsLayout newViewportLayout() {
     return new EmulGLViewAndColorbarsLayout();
-    // return new ViewAndColorbarsLayout();
+    //return new ViewAndColorbarsLayout();
   }
 
   @Override
@@ -215,6 +215,11 @@ public class EmulGLPainterFactory implements IPainterFactory {
   @Override
   public void setDebugGL(boolean debugGL) {
     this.debugGL = debugGL;
+  }
+  
+  public void dispose() {
+    internalPainter = null;
+    internalCanvas = null;
   }
 
 }

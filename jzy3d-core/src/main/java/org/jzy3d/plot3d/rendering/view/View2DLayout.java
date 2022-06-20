@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.rendering.view;
 
+import org.apache.commons.collections4.Get;
+import org.jzy3d.maths.Margin;
 
 /**
  * Allows configuring the layout of a view when the chart enters a 2D rendering mode.
@@ -24,22 +26,15 @@ public class View2DLayout {
   protected boolean symetricVerticalMargin = false;
 
   /** Distance between axis and tick labels (hence, length of the tick) */
-  protected float xTickLabelsDistance = 0;
+  protected float horizontalTickLabelsDistance = 0;
   /** Distance between tick labels and axis label */
-  protected float xAxisLabelsDistance = 0;
+  protected float horizontalAxisLabelsDistance = 0;
   /** Distance between axis and tick labels (hence, length of the tick) */
-  protected float yTickLabelsDistance = 0;
+  protected float verticalTickLabelsDistance = 0;
   /** Distance between tick labels and axis label */
-  protected float yAxisLabelsDistance = 0;
+  protected float verticalAxisLabelsDistance = 0;
 
-  /** Extra margin */
-  protected float marginLeft = 0;
-  /** Extra margin */
-  protected float marginRight = 0;
-  /** Extra margin */
-  protected float marginTop = 0;
-  /** Extra margin */
-  protected float marginBottom = 0;
+  protected Margin margin = new Margin();
 
 
   public View2DLayout(View view) {
@@ -58,68 +53,52 @@ public class View2DLayout {
 
 
   public void setTickLabelDistance(float dist) {
-    setxTickLabelsDistance(dist);
-    setyTickLabelsDistance(dist);
+    setHorizontalTickLabelsDistance(dist);
+    setVerticalTickLabelsDistance(dist);
   }
 
   public void setAxisLabelDistance(float dist) {
-    setxAxisLabelsDistance(dist);
-    setyAxisLabelsDistance(dist);
+    setHorizontalAxisLabelsDistance(dist);
+    setVerticalAxisLabelsDistance(dist);
   }
 
-  public void setMargin(float margin) {
+  /**
+   * A convenient shortcut to set the same margin to left, right, bottom and right canvas borders.
+   * 
+   * @see {@link #getMargin()}
+   */
+  public void setMargin(int margin) {
     setMarginHorizontal(margin);
     setMarginVertical(margin);
   }
+  
+  /**
+   * A convenient shortcut to set the same margin to left and right canvas borders.
+   * 
+   * @see {@link #getMargin()}
+   */
+  public void setMarginHorizontal(int margin) {
+    this.margin.setWidth(margin*2);
+  }
 
   /**
-   * Set the same margin to left and right canvas borders
+   * A convenient shortcut to set the same margin to top and bottom canvas borders.
+   * 
+   * @see {@link #getMargin()}
    */
-  public void setMarginHorizontal(float margin) {
-    setMarginLeft(margin);
-    setMarginRight(margin);
+  public void setMarginVertical(int margin) {
+    this.margin.setHeight(margin*2);
   }
 
-  /**
-   * Set the same margin to top and bottom canvas borders
-   */
-  public void setMarginVertical(float margin) {
-    setMarginTop(margin);
-    setMarginBottom(margin);
+
+  public Margin getMargin() {
+    return margin;
   }
 
-  public float getMarginLeft() {
-    return marginLeft;
+  public void setMargin(Margin margin) {
+    this.margin = margin;
   }
-
-  public void setMarginLeft(float marginLeft) {
-    this.marginLeft = marginLeft;
-  }
-
-  public float getMarginRight() {
-    return marginRight;
-  }
-
-  public void setMarginRight(float marginRight) {
-    this.marginRight = marginRight;
-  }
-
-  public float getMarginTop() {
-    return marginTop;
-  }
-
-  public void setMarginTop(float marginTop) {
-    this.marginTop = marginTop;
-  }
-
-  public float getMarginBottom() {
-    return marginBottom;
-  }
-
-  public void setMarginBottom(float marginBottom) {
-    this.marginBottom = marginBottom;
-  }
-
+  
   public boolean isTextAddMargin() {
     return textAddMargin;
   }
@@ -129,40 +108,38 @@ public class View2DLayout {
     this.textAddMargin = keepTextVisible;
   }
 
-
-
-  public float getxTickLabelsDistance() {
-    return xTickLabelsDistance;
+  public float getHorizontalTickLabelsDistance() {
+    return horizontalTickLabelsDistance;
   }
 
-  public void setxTickLabelsDistance(float xAxisTickLabelsDistance) {
-    this.xTickLabelsDistance = xAxisTickLabelsDistance;
+  public void setHorizontalTickLabelsDistance(float horizontalAxisLabelsDistance) {
+    this.horizontalTickLabelsDistance = horizontalAxisLabelsDistance;
   }
 
-  public float getxAxisLabelsDistance() {
-    return xAxisLabelsDistance;
-  }
-
-  /** Distance between tick labels and axis label */
-  public void setxAxisLabelsDistance(float xAxisNameLabelsDistance) {
-    this.xAxisLabelsDistance = xAxisNameLabelsDistance;
-  }
-
-  public float getyTickLabelsDistance() {
-    return yTickLabelsDistance;
-  }
-
-  public void setyTickLabelsDistance(float yAxisTickLabelsDistance) {
-    this.yTickLabelsDistance = yAxisTickLabelsDistance;
-  }
-
-  public float getyAxisLabelsDistance() {
-    return yAxisLabelsDistance;
+  public float getHorizontalAxisLabelsDistance() {
+    return horizontalAxisLabelsDistance;
   }
 
   /** Distance between tick labels and axis label */
-  public void setyAxisLabelsDistance(float yAxisNameLabelsDistance) {
-    this.yAxisLabelsDistance = yAxisNameLabelsDistance;
+  public void setHorizontalAxisLabelsDistance(float horizontalAxisLabelsDistance) {
+    this.horizontalAxisLabelsDistance = horizontalAxisLabelsDistance;
+  }
+
+  public float getVerticalTickLabelsDistance() {
+    return verticalTickLabelsDistance;
+  }
+
+  public void setVerticalTickLabelsDistance(float verticalAxisLabelsDistance) {
+    this.verticalTickLabelsDistance = verticalAxisLabelsDistance;
+  }
+
+  public float getVerticalAxisLabelsDistance() {
+    return verticalAxisLabelsDistance;
+  }
+
+  /** Distance between tick labels and axis label */
+  public void setVerticalAxisLabelsDistance(float verticalAxisLabelsDistance) {
+    this.verticalAxisLabelsDistance = verticalAxisLabelsDistance;
   }
   
   public boolean isSymetricHorizontalMargin() {
@@ -183,5 +160,32 @@ public class View2DLayout {
 
   public void apply() {
     view.getChart().render();
+  }
+  
+  public View2DLayout clone() {
+    View2DLayout to = new View2DLayout(view);
+    return copy(this, to);
+  }
+
+  public void applySettings(View2DLayout source) {
+    copy(source, this);
+  }
+
+  protected View2DLayout copy(View2DLayout from, View2DLayout to) {
+    
+    to.setHorizontalAxisLabelsDistance(from.getHorizontalAxisLabelsDistance());
+    to.setVerticalAxisLabelsDistance(from.getVerticalAxisLabelsDistance());
+
+    to.setHorizontalTickLabelsDistance(from.getHorizontalTickLabelsDistance());
+    to.setVerticalTickLabelsDistance(from.getVerticalTickLabelsDistance());
+
+    to.setSymetricHorizontalMargin(from.isSymetricHorizontalMargin());
+    to.setSymetricVerticalMargin(from.isSymetricVerticalMargin());
+    
+    to.setTextAddMargin(from.isTextAddMargin());
+    
+    to.setMargin(from.getMargin());
+    
+    return to;
   }
 }

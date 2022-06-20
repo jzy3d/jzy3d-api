@@ -8,7 +8,6 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.colors.Color;
-import org.jzy3d.debug.View2DLayout_Debug;
 import org.jzy3d.io.xls.ExcelBuilder;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -21,6 +20,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.renderers.IntegerTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
+import org.jzy3d.plot3d.rendering.view.View2DLayout_Debug;
 
 
 public class BenchmarkPlot implements BenchmarkXLS {

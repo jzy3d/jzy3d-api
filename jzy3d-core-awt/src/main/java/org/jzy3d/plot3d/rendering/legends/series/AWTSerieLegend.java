@@ -144,5 +144,10 @@ public class AWTSerieLegend extends AWTLegend implements IImageViewport {
     return askedHeight;
   }
 
+  @Override
+  public void updateMinimumDimension(IPainter painter) {
+    
+  }
+
 
 }

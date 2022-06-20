@@ -16,6 +16,7 @@ import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.GPUInfo;
@@ -126,11 +127,15 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   }
 
   public double getPixelScaleX() {
-    return getSurfaceWidth() / (double) getWidth();
+    float[] scale = new float[2];
+    getCurrentSurfaceScale(scale);
+    return scale[0];
   }
 
   public double getPixelScaleY() {
-    return getSurfaceHeight() / (double) getHeight();
+    float[] scale = new float[2];
+    getCurrentSurfaceScale(scale);
+    return scale[1];
   }
 
   @Override
@@ -243,6 +248,17 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
   public int getRendererHeight() {
     return (renderer != null ? renderer.getHeight() : 0);
   }
+  
+  @Override
+  public Dimension getDimension() {
+    if(renderer!=null) {
+      return new Dimension(renderer.getWidth(), renderer.getHeight());
+    }
+    else {
+      return new Dimension(0, 0);
+    }
+  }
+
 
   @Override
   public Renderer3d getRenderer() {

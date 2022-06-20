@@ -1,11 +1,11 @@
 package org.jzy3d.plot3d.rendering.legends.overlay;
 
+import org.jzy3d.maths.Margin;
+
 public class LegendLayout {
 
-  /** External margin : distance between legend border canvas border. */
-  protected int boxMarginX = 5;
-  /** External margin : distance between legend border canvas border. */
-  protected int boxMarginY = 5;
+  protected Margin margin = new Margin(10,10);
+  
   /** Legend position. */
   protected Corner corner = Corner.TOP_LEFT;
 
@@ -13,20 +13,12 @@ public class LegendLayout {
     TOP_LEFT, TOP_RIGHT, BOTTOM_LEFT, BOTTOM_RIGHT
   }
 
-  public int getBoxMarginX() {
-    return boxMarginX;
+  public Margin getMargin() {
+    return margin;
   }
 
-  public void setBoxMarginX(int boxMarginX) {
-    this.boxMarginX = boxMarginX;
-  }
-
-  public int getBoxMarginY() {
-    return boxMarginY;
-  }
-
-  public void setBoxMarginY(int boxMarginY) {
-    this.boxMarginY = boxMarginY;
+  public void setMargin(Margin margin) {
+    this.margin = margin;
   }
 
   public Corner getCorner() {
