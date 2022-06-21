@@ -30,6 +30,11 @@ public class Disk extends Wireframeable implements ISingleColorable {
     setSlicing(slices, loops);
     setColor(color);
   }
+  
+  public Disk(Coord3d position, float radiusOuter, int slices, int loops,
+      Color color) {
+    this(position, 0, radiusOuter, slices, loops, color);
+  }
 
   /* */
 
