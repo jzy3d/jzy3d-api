@@ -333,7 +333,10 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line factor.
    * 
-   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * <img src="doc-files/stipple-pattern.gif"/>
+   * @see {@link #getStipplePattern()}
+   * @see {@link #getStipple()}
+   * 
    * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public int getStippleFactor() {
@@ -343,7 +346,10 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line factor.
    * 
-   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * <img src="doc-files/stipple-pattern.gif"/>
+   * @see {@link #setStipplePattern()}
+   * @see {@link #setStipple()}
+   * 
    * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public void setStippleFactor(int stippleFactor) {
@@ -353,7 +359,10 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line pattern.
    * 
-   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * <img src="doc-files/stipple-pattern.gif"/>
+   * @see {@link #getStippleFactor()}
+   * @see {@link #getStipple()}
+   * 
    * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public short getStipplePattern() {
@@ -363,7 +372,10 @@ public class LineStrip extends Wireframeable {
   /**
    * Stippled line pattern.
    * 
-   * @see https://www.glprogramming.com/red/images/Image35.gif
+   * <img src="doc-files/stipple-pattern.gif"/>
+   * @see {@link #setStippleFactor(int)}
+   * @see {@link #setStipple()}
+   * 
    * @see https://www.glprogramming.com/red/chapter02.html (Stippled line section)
    */
   public void setStipplePattern(short stipplePattern) {
