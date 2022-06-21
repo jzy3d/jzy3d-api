@@ -2,11 +2,16 @@ package org.jzy3d.plot3d.rendering.legends.overlay;
 
 import java.awt.Shape;
 import org.jzy3d.colors.Color;
+import org.jzy3d.plot2d.primitives.Serie2d;
 
 public class Legend {
   public String label;
   public Color color;
   public Shape shape;
+  
+  public Legend(Serie2d serie) {
+    this(serie.getName(), serie.getColor());
+  }
 
   public Legend(String label, Color color, Shape shape) {
     super();
