@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.jzy3d.colors.Color;
+import org.jzy3d.io.BufferUtil;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -274,8 +275,8 @@ public class SphereVBO extends DrawableVBO {
         sphereNormalArray[i] = sphereNormalBuffer.get(i);
       }
 
-      sphereVertexBuffer.rewind();
-      sphereNormalBuffer.rewind();
+      BufferUtil.rewind(sphereVertexBuffer);
+      BufferUtil.rewind(sphereNormalBuffer);
 
       int[] bufferIDs = new int[2];
       gl.glGenBuffers(2, bufferIDs, 0);
