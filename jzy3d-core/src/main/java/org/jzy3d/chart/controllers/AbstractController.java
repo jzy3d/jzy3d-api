@@ -31,7 +31,9 @@ public class AbstractController {
   }
 
   public Chart getChart() {
-    return targets.get(0);
+	if(targets.size()!=0)
+	  return targets.get(0);
+	return null;
   }
 
   public List<Chart> getCharts() {
