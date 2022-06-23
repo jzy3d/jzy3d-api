@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
@@ -17,6 +18,7 @@ import org.jzy3d.maths.BoundingBox2d;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
@@ -310,9 +312,21 @@ public class View {
   /** Perform the 3d projection of a 2d coordinate. */
   public Coord3d projectMouse(int x, int y) {
     painter.acquireGL();
-    Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, 0));
+    
+    float averageDistance = cam.getNear() + (cam.getFar() - cam.getNear())/2;
+    
+    //System.out.println("Near : " + cam.getNear() + " Far : " + cam.getFar() + " D : " + averageDistance);
+    Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, averageDistance));
     painter.releaseGL();
     return p;
+  }
+  
+  public Coord3d projectMouse(Coord2d mouse) {
+	  return projectMouse((int)mouse.x, (int)mouse.y);
+  }
+
+  public Coord3d projectMouse(IntegerCoord2d mouse) {
+	  return projectMouse(mouse.x, mouse.y);
   }
 
   /**
