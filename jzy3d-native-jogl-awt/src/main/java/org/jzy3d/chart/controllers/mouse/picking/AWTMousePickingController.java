@@ -2,8 +2,10 @@ package org.jzy3d.chart.controllers.mouse.picking;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
@@ -15,7 +17,7 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class AWTMousePickingController extends AbstractCameraController
-    implements MouseListener, MouseWheelListener, IMousePickingController {
+    implements MouseListener, MouseMotionListener, MouseWheelListener, IMousePickingController {
   protected float factor = 1;
   protected float lastInc;
   protected Coord3d mouse3d;
@@ -94,6 +96,7 @@ public class AWTMousePickingController extends AbstractCameraController
   @Override
   public void mouseReleased(MouseEvent e) {}
 
+  @Override
   public void mouseDragged(MouseEvent e) {}
 
   /** Compute zoom */
