@@ -311,12 +311,14 @@ public class View {
 
   /** Perform the 3d projection of a 2d coordinate. */
   public Coord3d projectMouse(int x, int y) {
+    Coord3d screen = new Coord3d(x, y, 0.5f);
+    return projectMouse(screen);
+  }
+
+  /** Perform the 3d projection of a 2d coordinate. The z component of the screen coordinate should be between 0 and 1, representing the position in the depth range*/
+  public Coord3d projectMouse(Coord3d screen) {
     painter.acquireGL();
-    
-    float averageDistance = cam.getNear() + (cam.getFar() - cam.getNear())/2;
-    
-    //System.out.println("Near : " + cam.getNear() + " Far : " + cam.getFar() + " D : " + averageDistance);
-    Coord3d p = cam.screenToModel(painter, new Coord3d(x, y, averageDistance));
+    Coord3d p = cam.screenToModel(painter, screen);
     painter.releaseGL();
     return p;
   }
