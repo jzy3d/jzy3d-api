@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.util.List;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.maths.Lists;
+import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout.Corner;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
