@@ -43,8 +43,8 @@ import org.jzy3d.plot3d.rendering.legends.colorbars.IColorbarLegend;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.View2D;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.lod.LODCandidates;
 import org.jzy3d.plot3d.rendering.view.lod.LODPerf;
@@ -139,6 +139,10 @@ public class Chart {
    * tick and axis labels.
    */
   public Chart view2d() {
+    return view2d(View2D.XY);
+  }
+  
+  public Chart view2d(View2D view2D) {
     AxisLayout axisLayout = getAxisLayout();
     View view = getView();
 
