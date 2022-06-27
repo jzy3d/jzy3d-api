@@ -113,4 +113,14 @@ public class TestCoord3d {
 
 
   }
+  
+  @Test
+  public void testValid() throws Exception {
+    Assert.assertFalse(new Coord3d(0,0,Float.NaN).isValid());
+    Assert.assertFalse(new Coord3d(0,Float.POSITIVE_INFINITY, 0).isValid());
+    Assert.assertFalse(new Coord3d(Float.NEGATIVE_INFINITY, 0, 0).isValid());
+    Assert.assertTrue(Coord3d.ORIGIN.isValid());
+  
+  }
+
 }

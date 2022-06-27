@@ -1102,8 +1102,8 @@ public class View {
 
     // Z range
     float dist = (float) cam.getEye().distance(cam.getTarget());
-    float zmax = dist - bounds.getZRange().getMax() - 1;
-    float zmin = dist - bounds.getZRange().getMin() + 1;
+    float zmax = dist - bounds.getZRange().getMax() - 10;
+    float zmin = dist - bounds.getZRange().getMin() + 10;
 
     // configure camera rendering volume
     cam.setRenderingSquare(xySquare, zmax, zmin);
