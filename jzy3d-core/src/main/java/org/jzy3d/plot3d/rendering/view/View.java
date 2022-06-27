@@ -968,12 +968,18 @@ public class View {
   protected Coord3d computeCameraEye(Coord3d target, ViewPositionMode viewmode, Coord3d viewpoint) {
     if (viewmode == ViewPositionMode.FREE) {
       return computeCameraEyeFree(viewpoint, target);
-    } else if (viewmode == ViewPositionMode.TOP) {
-      return computeCameraEyeTop(viewpoint, target);
     } else if (viewmode == ViewPositionMode.PROFILE) {
       return computeCameraEyeProfile(viewpoint, target);
+    } else if (viewmode == ViewPositionMode.TOP) {
+      return computeCameraEyeTop(viewpoint, target);
+    } else if (viewmode == ViewPositionMode.YZ) {
+      return computeCameraEyeYZ(viewpoint, target);
     } else
       throw new RuntimeException("Unsupported ViewMode: " + viewmode);
+  }
+
+  protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
+    return viewpoint.cartesian().add(target);
   }
 
   /**
@@ -997,9 +1003,22 @@ public class View {
     return eye;
   }
 
-  protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
-    return viewpoint.cartesian().add(target);
+  protected Coord3d computeCameraEyeYZ(Coord3d viewpoint, Coord3d target) {
+    Coord3d eye = viewpoint;
+    eye.x = (float) Math.PI / 2; // facing Y
+    eye.y = 0; // on side
+    eye = eye.cartesian().add(target);
+    return eye;
   }
+
+  protected Coord3d computeCameraEyeXZ(Coord3d viewpoint, Coord3d target) {
+    Coord3d eye = viewpoint;
+    eye.x = 0; // facing X
+    eye.y = 0; // on side
+    eye = eye.cartesian().add(target);
+    return eye;
+  }
+
 
   protected void triggerCameraUpEvents(Coord3d viewpoint) {
     if (Math.abs(viewpoint.y) == PI_div2) { // handle "on-top" events
