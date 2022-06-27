@@ -6,8 +6,10 @@ import org.jzy3d.maths.Utils;
  * Render ticks as multiple of π if the input value to be formated is not further to a multiple of π
  * than delta.
  * 
- * @author Martin Pernollet
+ * 
+ * <img src="doc-files/trigonometric-circle.png"/>
  *
+ * @author Martin Pernollet
  */
 public class TrigonometricTickRenderer implements ITickRenderer {
   static final double PI = Math.PI;
@@ -46,10 +48,6 @@ public class TrigonometricTickRenderer implements ITickRenderer {
   protected void autoDelta(int maxDenominator) {
     delta = (Math.PI/maxDenominator)/10;
   }
-
-  /*
-   * public static void main(String[] args) { System.out.println(π); }
-   */
 
   @Override
   public String format(double value) {
