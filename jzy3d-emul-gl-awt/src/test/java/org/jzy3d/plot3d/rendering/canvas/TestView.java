@@ -6,20 +6,17 @@ import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
-import org.jzy3d.colors.Color;
-import org.jzy3d.colors.ColorMapper;
-import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Coord2d;
-import org.jzy3d.maths.Range;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
-import org.jzy3d.plot3d.builder.Mapper;
-import org.jzy3d.plot3d.builder.SurfaceBuilder;
-import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPITwoFontSizesPolicy;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
+import org.jzy3d.plot3d.rendering.view.AWTView;
+import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 public class TestView {
   @Test
@@ -30,7 +27,7 @@ public class TestView {
     // Given
     ChartFactory f = new EmulGLChartFactory();
     AWTChart chart = (AWTChart)f.newChart();
-    Shape surface = surface();
+    Shape surface = SampleGeom.surface();
     chart.add(surface);
     AWTColorbarLegend legend = chart.colorbar(surface);
     EmulGLSkin skin = EmulGLSkin.on(chart);
@@ -104,7 +101,7 @@ public class TestView {
     // Given
     ChartFactory f = new EmulGLChartFactory();
     AWTChart chart = (AWTChart)f.newChart();
-    Shape surface = surface();
+    Shape surface = SampleGeom.surface();
     chart.add(surface);
     EmulGLSkin skin = EmulGLSkin.on(chart);
     EmulGLCanvas canvas = skin.getCanvas();
@@ -156,55 +153,56 @@ public class TestView {
     AWTChart chart = (AWTChart)f.newChart();
     EmulGLSkin skin = EmulGLSkin.on(chart);
     EmulGLCanvas canvas = skin.getCanvas();
-    
+    AWTView view = chart.getView();
+
     
     // -----------------------------------
     // When init
 
     // Then
-    Assert.assertEquals(new Coord2d(1,1), chart.getView().getPixelScale());
+    Assert.assertEquals(new Coord2d(1,1), view.getPixelScale());
     
     // -----------------------------------
     // When NAN
     canvas.firePixelScaleChanged(Double.NaN, Double.NaN); 
 
     // Then
-    Assert.assertEquals(new Coord2d(1,1), chart.getView().getPixelScale());
+    Assert.assertEquals(new Coord2d(1,1), view.getPixelScale());
 
     // -----------------------------------
     // When NAN partial
     canvas.firePixelScaleChanged(2, Double.NaN); 
 
     // Then
-    Assert.assertEquals(new Coord2d(2,1), chart.getView().getPixelScale());
+    Assert.assertEquals(new Coord2d(2,1), view.getPixelScale());
     
     // -----------------------------------
     // When NAN partial
     canvas.firePixelScaleChanged(Double.NaN, 2); 
 
     // Then
-    Assert.assertEquals(new Coord2d(1,2), chart.getView().getPixelScale());
+    Assert.assertEquals(new Coord2d(1,2), view.getPixelScale());
 
     // -----------------------------------
     // When 0
     canvas.firePixelScaleChanged(0, 0); 
 
     // Then
-    Assert.assertEquals(new Coord2d(1,1), chart.getView().getPixelScale());
+    Assert.assertEquals(new Coord2d(1,1), view.getPixelScale());
 
     // -----------------------------------
     // When 0 partial
     canvas.firePixelScaleChanged(0, 2); 
 
     // Then
-    Assert.assertEquals(new Coord2d(1,2), chart.getView().getPixelScale());
+    Assert.assertEquals(new Coord2d(1,2), view.getPixelScale());
 
     // -----------------------------------
     // When 0 partial
     canvas.firePixelScaleChanged(2, 0); 
 
     // Then
-    Assert.assertEquals(new Coord2d(2,1), chart.getView().getPixelScale());
+    Assert.assertEquals(new Coord2d(2,1), view.getPixelScale());
 
   }
   
@@ -223,33 +221,69 @@ public class TestView {
 
 
   }*/
-
   
-  protected Shape surface() {
-    Mapper mapper = new Mapper() {
-      @Override
-      public double f(double x, double y) {
-        return x * Math.sin(x * y);
-      }
-    };
+  @Test
+  public void whenViewModeChange_ThenCameraSettingAreUpdatedAccordingly() {
     
-    //Mapper mapper = (x,y)->{return x * Math.sin(x * y);};
     
-    Range range = new Range(-3, 3);
-    int steps = 50;
+    // Given
+    ChartFactory f = new EmulGLChartFactory();
+    AWTChart chart = (AWTChart)f.newChart();
+    Shape surface = SampleGeom.surface();
+    chart.add(surface);
 
-    Shape surface =
-        new SurfaceBuilder().orthonormal(new OrthonormalGrid(range, steps, range, steps), mapper);
-    surface.setPolygonOffsetFillEnable(false);
+    AWTView view = chart.getView();
 
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, .5f));
+    // -----------------------------------------------------------
+    // When 2D XY
+    view.setViewPositionMode(ViewPositionMode.TOP);
+    view.shoot();
 
-    surface.setColorMapper(colorMapper);
-    surface.setFaceDisplayed(true);
-    surface.setWireframeDisplayed(true);
-    surface.setWireframeColor(Color.BLACK);
-    return surface;
+    // Then
+    Assert.assertEquals(new Coord3d(0,1,0), view.getCamera().getUp());
+
+    // When 2D XZ
+    view.setViewPositionMode(ViewPositionMode.XZ);
+    view.shoot();
+    
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
+
+    // When 2D YZ
+    view.setViewPositionMode(ViewPositionMode.YZ);
+    view.shoot();
+
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
+
+    // -----------------------------------------------------------
+    // When 3D
+    view.setViewPositionMode(ViewPositionMode.FREE);
+    view.shoot();
+    
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
+
+    // When 3D on top
+    view.setViewPositionMode(ViewPositionMode.FREE);
+    Coord3d viewpoint = view.getViewPoint().clone();
+    viewpoint.y = View.PI_div2;
+    view.setViewPoint(viewpoint);
+    
+    // Then
+    Coord2d dir = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
+    Assert.assertEquals(new Coord3d(-dir.x,-dir.y,0), view.getCamera().getUp());
+
+    // When 3D on bottom
+    view.setViewPositionMode(ViewPositionMode.FREE);
+    viewpoint = view.getViewPoint().clone();
+    viewpoint.y = -View.PI_div2;
+    view.setViewPoint(viewpoint);
+    
+    // Then
+    dir = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
+    Assert.assertEquals(new Coord3d(dir.x,dir.y,0), view.getCamera().getUp());
+
   }
 
 }
