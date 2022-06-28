@@ -14,6 +14,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Light;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.View2D;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
@@ -184,7 +185,7 @@ public class TestChart {
   }
 
   @Test
-  public void whenToggling_3Dto2Dto3D_thenAxisSettingsAreRestored() {
+  public void whenToggling_3Dto_2D_XY_to3D_thenAxisSettingsAreRestored() {
     
     // Given
     ChartFactory f = new EmulGLChartFactory();
@@ -228,6 +229,8 @@ public class TestChart {
     Assert.assertEquals(false, axisLayout.isZAxisLabelDisplayed());
     Assert.assertEquals(false, axisLayout.isZTickLabelDisplayed());
 
+    Assert.assertTrue(view.is2D());
+    Assert.assertTrue(view.is2D_XY());
     Assert.assertEquals(ViewPositionMode.TOP, view.getViewMode());
     Assert.assertNotEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
     Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, view.getCamera().getViewportMode());
@@ -252,6 +255,171 @@ public class TestChart {
     // azimuth & elevation restored / should % with PI for a polar viewpoint
     //Assert.assertEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
 
+    Assert.assertFalse(view.is2D());
+    Assert.assertTrue(view.is3D());
+
+    Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
+    Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, view.getCamera().getViewportMode());
+
+    Assert.assertTrue(view.getSquared());
+    
+    
+  }
+  
+  @Test
+  public void whenToggling_3Dto_2D_XZ_to3D_thenAxisSettingsAreRestored() {
+    
+    // Given
+    ChartFactory f = new EmulGLChartFactory();
+    Chart c = f.newChart();
+    c.add(SampleGeom.surface());
+    c.render();
+
+    // ---------------------------
+    // When
+    AxisLayout axisLayout = c.getAxisLayout();
+    axisLayout.setXAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+    axisLayout.setYAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+    axisLayout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
+    
+    View view = c.getView();
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
+    Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
+    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
+
+    
+    Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
+    Assert.assertEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+    Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, view.getCamera().getViewportMode());
+    
+    Assert.assertTrue(view.getSquared());
+    
+    // ---------------------------
+    // When Switch to 2D
+    
+    c.view2d(View2D.XZ);
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
+    Assert.assertEquals(false, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(false, axisLayout.isYAxisLabelDisplayed());
+    Assert.assertEquals(false, axisLayout.isYTickLabelDisplayed());
+
+    Assert.assertTrue(view.is2D());
+    Assert.assertTrue(view.is2D_XZ());
+    Assert.assertEquals(ViewPositionMode.XZ, view.getViewMode());
+    Assert.assertNotEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+    Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, view.getCamera().getViewportMode());
+
+    Assert.assertFalse("View should not be squared for accurate 2D layout", view.getSquared());
+
+    
+    // ---------------------------
+    // When Switch back to 3D
+    
+    c.view3d();
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
+    Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
+    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
+
+
+    // azimuth & elevation restored / should % with PI for a polar viewpoint
+    //Assert.assertEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+
+    Assert.assertFalse(view.is2D());
+    Assert.assertTrue(view.is3D());
+    Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
+    Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, view.getCamera().getViewportMode());
+
+    Assert.assertTrue(view.getSquared());
+    
+    
+  }
+  
+  @Test
+  public void whenToggling_3Dto_2D_YZ_to3D_thenAxisSettingsAreRestored() {
+    
+    // Given
+    ChartFactory f = new EmulGLChartFactory();
+    Chart c = f.newChart();
+    c.add(SampleGeom.surface());
+    c.render();
+
+    // ---------------------------
+    // When
+    AxisLayout axisLayout = c.getAxisLayout();
+    axisLayout.setXAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+    axisLayout.setYAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+    axisLayout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
+    
+    View view = c.getView();
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
+    Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
+    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
+
+    
+    Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
+    Assert.assertEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+    Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, view.getCamera().getViewportMode());
+    
+    Assert.assertTrue(view.getSquared());
+    
+    // ---------------------------
+    // When Switch to 2D
+    
+    c.view2d(View2D.YZ);
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
+    Assert.assertEquals(false, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(false, axisLayout.isXAxisLabelDisplayed());
+    Assert.assertEquals(false, axisLayout.isXTickLabelDisplayed());
+
+    Assert.assertTrue(view.is2D());
+    Assert.assertTrue(view.is2D_YZ());
+    Assert.assertEquals(ViewPositionMode.YZ, view.getViewMode());
+    Assert.assertNotEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+    Assert.assertEquals(ViewportMode.STRETCH_TO_FILL, view.getCamera().getViewportMode());
+
+    Assert.assertFalse("View should not be squared for accurate 2D layout", view.getSquared());
+
+    
+    // ---------------------------
+    // When Switch back to 3D
+    
+    c.view3d();
+    
+    // Then
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
+    Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
+    Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
+    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
+    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
+
+
+    // azimuth & elevation restored / should % with PI for a polar viewpoint
+    //Assert.assertEquals(View.VIEWPOINT_DEFAULT.getXY(), view.getViewPoint().getXY());
+
+    Assert.assertFalse(view.is2D());
+    Assert.assertTrue(view.is3D());
     Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
     Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, view.getCamera().getViewportMode());
 

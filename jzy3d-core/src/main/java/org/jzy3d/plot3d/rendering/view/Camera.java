@@ -685,6 +685,8 @@ public class Camera extends AbstractViewportManager {
     ortho.update(renderingSquare.xmin(), renderingSquare.xmax(), renderingSquare.ymin(),
         renderingSquare.ymax(), near, far);
     
+    //System.out.println("Camera:" + ortho.toString());
+    //System.out.println("Camera:" + up);
     //painter.glOrtho(left, right, bottom, top, near, far);
 
     
