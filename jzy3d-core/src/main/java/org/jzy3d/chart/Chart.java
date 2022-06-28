@@ -159,14 +159,57 @@ public class Chart {
       viewpoint = view.getViewPoint().clone();
     }
     
-    // Apply 2D layout to axis
-    axisLayout.setTickLineDisplayed(false);
-    axisLayout.setZAxisLabelDisplayed(false);
-    axisLayout.setZTickLabelDisplayed(false);
-    axisLayout.setYAxisLabelOrientation(LabelOrientation.VERTICAL);
+    if(View2D.XY.equals(view2D)) {
+      // Apply 2D layout to axis
+      axisLayout.setXAxisLabelDisplayed(true);
+      axisLayout.setXTickLabelDisplayed(true);
+      axisLayout.setYAxisLabelDisplayed(true);
+      axisLayout.setYTickLabelDisplayed(true);
+      axisLayout.setZAxisLabelDisplayed(false);
+      axisLayout.setZTickLabelDisplayed(false);
 
-    // Apply 2D layout to view
-    view.setViewPositionMode(ViewPositionMode.TOP);
+      axisLayout.setXAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+      axisLayout.setYAxisLabelOrientation(LabelOrientation.VERTICAL);
+
+      // Apply 2D layout to view
+      view.setViewPositionMode(ViewPositionMode.TOP);
+    }
+    else if(View2D.XZ.equals(view2D)) {
+      // Apply 2D layout to axis
+      axisLayout.setXAxisLabelDisplayed(true);
+      axisLayout.setXTickLabelDisplayed(true);
+      axisLayout.setYAxisLabelDisplayed(false);
+      axisLayout.setYTickLabelDisplayed(false);
+      axisLayout.setZAxisLabelDisplayed(true);
+      axisLayout.setZTickLabelDisplayed(true);
+
+      axisLayout.setXAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+      axisLayout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
+
+      // Apply 2D layout to view
+      view.setViewPositionMode(ViewPositionMode.XZ);
+    }
+
+    else if(View2D.YZ.equals(view2D)) {
+      // Apply 2D layout to axis
+      axisLayout.setXAxisLabelDisplayed(false);
+      axisLayout.setXTickLabelDisplayed(false);
+      axisLayout.setYAxisLabelDisplayed(true);
+      axisLayout.setYTickLabelDisplayed(true);
+      axisLayout.setZAxisLabelDisplayed(true);
+      axisLayout.setZTickLabelDisplayed(true);
+
+      axisLayout.setYAxisLabelOrientation(LabelOrientation.HORIZONTAL);
+      axisLayout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
+
+      // Apply 2D layout to view
+      view.setViewPositionMode(ViewPositionMode.YZ);
+    }
+
+    // General 2D axis layout
+    axisLayout.setTickLineDisplayed(false);
+    
+    // General 2D view settings
     view.setSquared(false);
     view.getCamera().setViewportMode(ViewportMode.STRETCH_TO_FILL);
 
