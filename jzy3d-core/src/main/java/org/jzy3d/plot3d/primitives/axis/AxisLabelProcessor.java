@@ -42,6 +42,7 @@ public class AxisLabelProcessor {
 
       BoundingBox3d labelBounds = axis.textRenderer.drawText(painter, layout.getFont(), label,
           position, rotation, align, color, offset);
+      
       if (labelBounds != null)
         ticksTxtBounds.add(labelBounds);
     }
@@ -49,27 +50,49 @@ public class AxisLabelProcessor {
 
   protected TextAlign getAxisLabelTextAlign(int direction) {
 
-    // 2D case
-    if (axis.getView().is2D()) {
-      // X axis label
-      if (axis.isX(direction)) {
-        return new TextAlign(Horizontal.CENTER, Vertical.BOTTOM);
-      }
-      // Y axis label
-      else if (axis.isY(direction)) {
-        return new TextAlign(Horizontal.LEFT, Vertical.CENTER);
-      }
-      // Z axis label : should be hidden
-      else {
-        return new TextAlign(Horizontal.CENTER, Vertical.CENTER);
-      }
-    }
-
     // 3D case
-    else {
+    if(axis.getView().is3D()) {
       return new TextAlign(Horizontal.CENTER, Vertical.CENTER);
     }
 
+    // 2D case XY
+    else if (axis.getView().is2D_XY()) {
+      // horizontal axis
+      if (axis.isX(direction)) {
+        return new TextAlign(Horizontal.CENTER, Vertical.BOTTOM);
+      }
+      // vertical axis
+      else if (axis.isY(direction)) {
+        return new TextAlign(Horizontal.LEFT, Vertical.CENTER);
+      }
+    }
+
+    // 2D case XZ
+    else if (axis.getView().is2D_XZ()) {
+      // horizontal axis
+      if (axis.isX(direction)) {
+        return new TextAlign(Horizontal.CENTER, Vertical.BOTTOM);
+      }
+      // vertical axis
+      else if (axis.isZ(direction)) {
+        return new TextAlign(Horizontal.LEFT, Vertical.CENTER);
+      }
+    }
+
+    // 2D case XZ
+    else if (axis.getView().is2D_YZ()) {
+      // horizontal axis
+      if (axis.isY(direction)) {
+        return new TextAlign(Horizontal.CENTER, Vertical.BOTTOM);
+      }
+      // vertical axis
+      else if (axis.isZ(direction)) {
+        return new TextAlign(Horizontal.LEFT, Vertical.CENTER);
+      }
+    }
+
+    // Default
+    return new TextAlign(Horizontal.CENTER, Vertical.CENTER);
   }
 
 
@@ -278,7 +301,16 @@ public class AxisLabelProcessor {
     // consider it as a 90° rotation.
     // see https://github.com/jzy3d/jzy3d-api/issues/283
     
-    boolean isVertical = !LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation());
+    
+    LabelOrientation verticalAxisLayout = null;
+    
+    if(view.is2D_XY()) {
+      verticalAxisLayout = axisLayout.getYAxisLabelOrientation();  
+    } else if(view.is2D_XZ() || view.is2D_YZ()) {
+      verticalAxisLayout = axisLayout.getZAxisLabelOrientation();  
+    }
+    
+    boolean isVertical = !LabelOrientation.HORIZONTAL.equals(verticalAxisLayout);
     boolean isEmulGL = !view.getCanvas().isNative();
     
     if(isVertical) {
@@ -322,17 +354,45 @@ public class AxisLabelProcessor {
     double ylab = 0;
     double zlab = 0;
 
-    // Build the axis label position
-    if (axis.isX(direction)) {
-      xlab = axis.center.x;
-      ylab = pos.y - yShift;
-      zlab = pos.z;
-    } else if (axis.isY(direction)) {
-      xlab = pos.x - xShift;
-      ylab = axis.center.y;
-      zlab = pos.z;
+    // Build the axis label position for each 2D chart projection
+    
+    if(view.is2D_XY()) {
+      
+      if (axis.isX(direction)) {
+        xlab = axis.center.x;
+        ylab = pos.y - yShift;
+        zlab = pos.z;
+      } else if (axis.isY(direction)) {
+        xlab = pos.x - xShift;
+        ylab = axis.center.y;
+        zlab = pos.z;
+      }
     }
+    else if(view.is2D_XZ()) {
+      if (axis.isX(direction)) {
+        xlab = axis.center.x;
+        ylab = pos.y - yShift;
+        zlab = pos.z;
+      } else if (axis.isZ(direction)) {
+        xlab = pos.x;
+        ylab = pos.y - xShift;
+        zlab = axis.center.z;
+      }
+    }
+    else if(view.is2D_YZ()) {
+      if (axis.isY(direction)) {
+        xlab = pos.x - yShift;
+        ylab = axis.center.y;
+        zlab = pos.z;
+      } else if (axis.isZ(direction)) {
+        xlab = pos.x;
+        ylab = pos.y - xShift;
+        zlab = axis.center.z;
+      }
+    }
+
     return new Coord3d(xlab, ylab, zlab);
+
   }
 
   /**
