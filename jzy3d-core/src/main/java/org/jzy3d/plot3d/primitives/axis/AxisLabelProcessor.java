@@ -42,16 +42,17 @@ public class AxisLabelProcessor {
 
       BoundingBox3d labelBounds = axis.textRenderer.drawText(painter, layout.getFont(), label,
           position, rotation, align, color, offset);
-      
+
       if (labelBounds != null)
         ticksTxtBounds.add(labelBounds);
     }
   }
 
+  /** Return an axis label alignment suitable for the type of chart : 3D, 2D XY, 2D XZ, 2D YZ */
   protected TextAlign getAxisLabelTextAlign(int direction) {
 
     // 3D case
-    if(axis.getView().is3D()) {
+    if (axis.getView().is3D()) {
       return new TextAlign(Horizontal.CENTER, Vertical.CENTER);
     }
 
@@ -97,9 +98,10 @@ public class AxisLabelProcessor {
 
 
   /**
-   * Compute the offset to apply to a vertical Z label to avoid covering the tick labels.
+   * Computes the offset to apply to a vertical Z label to avoid covering the tick labels in the case
+   * of a 3D chart.
    * 
-   * Retrieve pixel scale in view to adapt margin
+   * Retrieves pixel scale in view to adapt margin.
    * 
    * @param painter
    * @param info
@@ -150,7 +152,7 @@ public class AxisLabelProcessor {
   }
 
   /**
-   * Offset for oblique labels
+   * Offset for oblique labels.
    * 
    * @param painter
    * @param info
@@ -259,14 +261,10 @@ public class AxisLabelProcessor {
    * 
    */
   protected Coord3d axisLabelPosition(int direction, float tickLength, Coord3d pos, Coord3d dir) {
-
-
     if (axis.getView().is3D()) {
-
       return axisLabelPosition_3D(direction, tickLength, pos, dir);
     } else {
       return axisLabelPosition_2D(direction, pos);
-
     }
   }
 
@@ -284,65 +282,68 @@ public class AxisLabelProcessor {
     View view = axis.getView();
     AxisLayout axisLayout = axis.getLayout();
     View2DProcessing processing2D = view.get2DProcessing();
-    
+
     Coord2d pixelScale = view.getPixelScale();
 
     // for Y axis label, we do a shift along X dimension
-    // the shift will be from the Y axis segment center, 
-    // hence a positive shift is equivalent to moving the 
+    // the shift will be from the Y axis segment center,
+    // hence a positive shift is equivalent to moving the
     // label to the left
-    
+
     float xShiftPx = processing2D.getVerticalTickDistance();
     xShiftPx += processing2D.getTickTextWidth();
     xShiftPx += processing2D.getVerticalAxisDistance();
-    
+
     // A non horizontal - hence rotated - text needs to be offset
     // Non horizontal being either vertical or parallel to axis, we always
     // consider it as a 90° rotation.
     // see https://github.com/jzy3d/jzy3d-api/issues/283
-    
-    
+
+    String verticalAxisLabel = null;
     LabelOrientation verticalAxisLayout = null;
-    
-    if(view.is2D_XY()) {
-      verticalAxisLayout = axisLayout.getYAxisLabelOrientation();  
-    } else if(view.is2D_XZ() || view.is2D_YZ()) {
-      verticalAxisLayout = axisLayout.getZAxisLabelOrientation();  
+
+    if (view.is2D_XY()) {
+      verticalAxisLabel = axisLayout.getYAxisLabel();
+      verticalAxisLayout = axisLayout.getYAxisLabelOrientation();
+    } else if (view.is2D_XZ() || view.is2D_YZ()) {
+      verticalAxisLabel = axisLayout.getZAxisLabel();
+      verticalAxisLayout = axisLayout.getZAxisLabelOrientation();
     }
-    
+
     boolean isVertical = !LabelOrientation.HORIZONTAL.equals(verticalAxisLayout);
     boolean isEmulGL = !view.getCanvas().isNative();
-    
-    if(isVertical) {
-      // consider the rotation & offset due to vertical text 
-      int textLength = view.getPainter().getTextLengthInPixels(axisLayout.getFont(), axisLayout.getYAxisLabel());
-      
+
+    if (isVertical) {
+      // consider the rotation & offset due to vertical text
+      int textLength =
+          view.getPainter().getTextLengthInPixels(axisLayout.getFont(), verticalAxisLabel);
+
       // hack the emulgl vertical Y axis case by ignoring pixel scale for text
-      if(isEmulGL)
+      if (isEmulGL)
         textLength /= pixelScale.y;
-      
+
       // move the text next to its anchor point, since it has been rotated
-      // from the text center and not from the anchor point that is on the 
+      // from the text center and not from the anchor point that is on the
       // right most letter side.
-      xShiftPx -= textLength/2;
-      
+      xShiftPx -= textLength / 2;
+
       int textHeight = axisLayout.getFont().getHeight();
-      
+
       // hack the emulgl vertical Y axis case by ignoring pixel scale for text
-      if(isEmulGL) {
-        textHeight /= (pixelScale.x*2);
+      if (isEmulGL) {
+        textHeight /= (pixelScale.x * 2);
         // I can't explain why we need this x2 factor for emulglGL vertical text
       }
-      
-      xShiftPx += (textHeight/2);
+
+      xShiftPx += (textHeight / 2);
     }
 
     // for X axis label, we do a shift along Y dimension
     float yShiftPx = processing2D.getHorizontalTickDistance();
     yShiftPx += processing2D.getTickTextHeight();
     yShiftPx += processing2D.getHorizontalAxisDistance();
-    
-    
+
+
     // Now convert this pixel shift into real world coordinates
     // shift
     Coord2d modelToScreenRatio = processing2D.getModelToScreen();
@@ -355,9 +356,9 @@ public class AxisLabelProcessor {
     double zlab = 0;
 
     // Build the axis label position for each 2D chart projection
-    
-    if(view.is2D_XY()) {
-      
+
+    if (view.is2D_XY()) {
+
       if (axis.isX(direction)) {
         xlab = axis.center.x;
         ylab = pos.y - yShift;
@@ -367,23 +368,21 @@ public class AxisLabelProcessor {
         ylab = axis.center.y;
         zlab = pos.z;
       }
-    }
-    else if(view.is2D_XZ()) {
+    } else if (view.is2D_XZ()) {
       if (axis.isX(direction)) {
         xlab = axis.center.x;
-        ylab = pos.y - yShift;
-        zlab = pos.z;
+        ylab = pos.y;
+        zlab = pos.z - yShift;
       } else if (axis.isZ(direction)) {
-        xlab = pos.x;
-        ylab = pos.y - xShift;
+        xlab = pos.x - xShift;
+        ylab = pos.y;
         zlab = axis.center.z;
       }
-    }
-    else if(view.is2D_YZ()) {
+    } else if (view.is2D_YZ()) {
       if (axis.isY(direction)) {
-        xlab = pos.x - yShift;
+        xlab = pos.x;
         ylab = axis.center.y;
-        zlab = pos.z;
+        zlab = pos.z - yShift;
       } else if (axis.isZ(direction)) {
         xlab = pos.x;
         ylab = pos.y - xShift;
