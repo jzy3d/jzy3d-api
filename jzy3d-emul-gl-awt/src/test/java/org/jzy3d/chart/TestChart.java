@@ -226,8 +226,6 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getYAxisLabelOrientation());
     Assert.assertEquals(false, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(false, axisLayout.isZAxisLabelDisplayed());
-    Assert.assertEquals(false, axisLayout.isZTickLabelDisplayed());
 
     Assert.assertTrue(view.is2D());
     Assert.assertTrue(view.is2D_XY());
@@ -289,8 +287,6 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
     Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
-    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
 
     
     Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
@@ -308,8 +304,6 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
     Assert.assertEquals(false, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(false, axisLayout.isYAxisLabelDisplayed());
-    Assert.assertEquals(false, axisLayout.isYTickLabelDisplayed());
 
     Assert.assertTrue(view.is2D());
     Assert.assertTrue(view.is2D_XZ());
@@ -330,8 +324,6 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
     Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
-    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
 
 
     // azimuth & elevation restored / should % with PI for a polar viewpoint
@@ -370,8 +362,6 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
     Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
-    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
 
     
     Assert.assertEquals(ViewPositionMode.FREE, view.getViewMode());
@@ -389,8 +379,6 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getXAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
     Assert.assertEquals(false, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(false, axisLayout.isXAxisLabelDisplayed());
-    Assert.assertEquals(false, axisLayout.isXTickLabelDisplayed());
 
     Assert.assertTrue(view.is2D());
     Assert.assertTrue(view.is2D_YZ());
@@ -411,8 +399,6 @@ public class TestChart {
     Assert.assertEquals(LabelOrientation.HORIZONTAL, axisLayout.getYAxisLabelOrientation());
     Assert.assertEquals(LabelOrientation.VERTICAL, axisLayout.getZAxisLabelOrientation());
     Assert.assertEquals(true, axisLayout.isTickLineDisplayed());
-    Assert.assertEquals(true, axisLayout.isZAxisLabelDisplayed());
-    Assert.assertEquals(true, axisLayout.isZTickLabelDisplayed());
 
 
     // azimuth & elevation restored / should % with PI for a polar viewpoint
