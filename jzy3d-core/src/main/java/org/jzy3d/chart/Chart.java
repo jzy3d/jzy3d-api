@@ -148,9 +148,9 @@ public class Chart {
 
     // Remember 3D layout
     if(view.is3D()) {
-      axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
       axisYLabelOrientation = axisLayout.getYAxisLabelOrientation();
-      axisZLabelDisplayed = axisLayout.isZAxisLabelDisplayed();
+      //axisZTickLabelDisplayed = axisLayout.isZTickLabelDisplayed();
+      //axisZLabelDisplayed = axisLayout.isZAxisLabelDisplayed();
       isTickLineDisplayed = axisLayout.isTickLineDisplayed();
 
       isSquaredViewActive = view.getSquared();
@@ -161,12 +161,12 @@ public class Chart {
     
     if(View2D.XY.equals(view2D)) {
       // Apply 2D layout to axis
-      axisLayout.setXAxisLabelDisplayed(true);
+      /*axisLayout.setXAxisLabelDisplayed(true);
       axisLayout.setXTickLabelDisplayed(true);
       axisLayout.setYAxisLabelDisplayed(true);
       axisLayout.setYTickLabelDisplayed(true);
       axisLayout.setZAxisLabelDisplayed(false);
-      axisLayout.setZTickLabelDisplayed(false);
+      axisLayout.setZTickLabelDisplayed(false);*/
 
       axisLayout.setXAxisLabelOrientation(LabelOrientation.HORIZONTAL);
       axisLayout.setYAxisLabelOrientation(LabelOrientation.VERTICAL);
@@ -176,12 +176,12 @@ public class Chart {
     }
     else if(View2D.XZ.equals(view2D)) {
       // Apply 2D layout to axis
-      axisLayout.setXAxisLabelDisplayed(true);
+      /*axisLayout.setXAxisLabelDisplayed(true);
       axisLayout.setXTickLabelDisplayed(true);
       axisLayout.setYAxisLabelDisplayed(false);
       axisLayout.setYTickLabelDisplayed(false);
       axisLayout.setZAxisLabelDisplayed(true);
-      axisLayout.setZTickLabelDisplayed(true);
+      axisLayout.setZTickLabelDisplayed(true);*/
 
       axisLayout.setXAxisLabelOrientation(LabelOrientation.HORIZONTAL);
       axisLayout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
@@ -192,12 +192,12 @@ public class Chart {
 
     else if(View2D.YZ.equals(view2D)) {
       // Apply 2D layout to axis
-      axisLayout.setXAxisLabelDisplayed(false);
+      /*axisLayout.setXAxisLabelDisplayed(false);
       axisLayout.setXTickLabelDisplayed(false);
       axisLayout.setYAxisLabelDisplayed(true);
       axisLayout.setYTickLabelDisplayed(true);
       axisLayout.setZAxisLabelDisplayed(true);
-      axisLayout.setZTickLabelDisplayed(true);
+      axisLayout.setZTickLabelDisplayed(true);*/
 
       axisLayout.setYAxisLabelOrientation(LabelOrientation.HORIZONTAL);
       axisLayout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
@@ -238,9 +238,9 @@ public class Chart {
       axisLayout.setYAxisLabelOrientation(axisYLabelOrientation);
     }
     
-    axisLayout.setZAxisLabelDisplayed(axisZLabelDisplayed);
+    /*axisLayout.setZAxisLabelDisplayed(axisZLabelDisplayed);
     axisLayout.setZTickLabelDisplayed(axisZTickLabelDisplayed);
-    axisLayout.setTickLineDisplayed(isTickLineDisplayed);
+    axisLayout.setTickLineDisplayed(isTickLineDisplayed);*/
     
     // Restore 3D layout to view
     View view = getView();
