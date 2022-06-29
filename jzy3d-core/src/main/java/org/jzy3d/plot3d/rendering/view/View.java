@@ -1474,7 +1474,28 @@ public class View {
   public void setViewPoint(Coord3d polar) {
     setViewPoint(polar, true);
   }
+  
+  /**
+   * Set the viewpoint using polar coordinates relative to the target (i.e. the center of the
+   * scene). Only X and Y dimensions are required, as the distance to center will be computed
+   * automatically by {@link updateCamera()}.
+   * 
+   * The input coordinate is polar and considers
+   * <ul>
+   * <li>azimuth in [0;2xPI]
+   * <li>elevation in [-PI/2;+PI/2]. Will be clamped if out of bounds
+   * </ul>
+   * 
+   */
+  public void setViewPoint(double azimuth, double elevation, boolean updateView) {
+    setViewPoint(new Coord3d(azimuth, elevation, 0), updateView);
+  }
 
+  public void setViewPoint(double azimuth, double elevation) {
+    setViewPoint(new Coord3d(azimuth, elevation, 0), true);
+  }
+
+  
   /**
    * Get the viewpoint. The Z dimension is the one defined by {@link updateCamera()}, which depends
    * on the view scaling.

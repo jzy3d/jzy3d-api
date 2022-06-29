@@ -137,28 +137,21 @@ public class View2DProcessing {
         tickTextWidth = axisLayout.getMaxZTickLabelWidth(painter);
       }
       
-      // consider space occupied by the Y axis label
+      // consider space occupied by the vertical axis label
+      String leftAxisLabel = null;
       LabelOrientation leftAxisOrientation = null;
       
       if(isXY()) {
+        leftAxisLabel = axisLayout.getYAxisLabel();
         leftAxisOrientation = axisLayout.getYAxisLabelOrientation();
       } else if(isXZ() || isYZ()) {
+        leftAxisLabel = axisLayout.getZAxisLabel();
         leftAxisOrientation = axisLayout.getZAxisLabelOrientation();
-      }
-        
-        
-      String verticalAxisLabel = null;
-      
-      if(isXY()) {
-        verticalAxisLabel = axisLayout.getYAxisLabel();
-      }
-      else if(isXZ() || isYZ()) {
-        verticalAxisLabel = axisLayout.getZAxisLabel();
       }
       
       if (LabelOrientation.HORIZONTAL.equals(leftAxisOrientation)) {
         // horizontal Y axis involves considering the axis label width
-        axisTextWidth = painter.getTextLengthInPixels(font, verticalAxisLabel);
+        axisTextWidth = painter.getTextLengthInPixels(font, leftAxisLabel);
       } else {
         // vertical Y axis involves considering the axis label font height
         axisTextWidth = font.getHeight();
