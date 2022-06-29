@@ -64,16 +64,6 @@ public class AxisTickProcessor {
       quad_1 = this.axis.axeZquads[axis][1];
     }
     
-    // Override tick labels alignment when 2D so that they appear centered
-    /*if(this.axis.getView().is2D()) {
-      if (this.axis.isX(dimension)) {
-        hal = Horizontal.CENTER;
-      }
-      else if(this.axis.isY(dimension)) {
-        val = Vertical.CENTER;
-      }
-    }*/
-    
     // --------------------------------------------------------------
     // Computes POSition of ticks lying on the selected axe (i.e. 1st point of the tick line)
 
