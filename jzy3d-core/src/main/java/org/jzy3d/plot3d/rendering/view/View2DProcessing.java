@@ -81,10 +81,10 @@ public class View2DProcessing {
 
   protected Coord2d modelToScreen;
 
-
+  public View2DProcessing() {
+  }
 
   public View2DProcessing(View view) {
-    super();
     this.view = view;
   }
 
@@ -511,6 +511,11 @@ public class View2DProcessing {
     return verticalAxisDistance;
   }
 
-  
-  
+  public View getView() {
+    return view;
+  }
+
+  public void setView(View view) {
+    this.view = view;
+  }
 }
