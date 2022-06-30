@@ -1162,7 +1162,9 @@ public class View {
   protected void computeCamera2D_RenderingSquare(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
 
-    // bounds = getSceneGraphBounds();
+    // -----------------------------------------------
+    // Hack Windows HiDPI issue on AWT
+    
     Coord2d c = AbstractViewportManager.apply_WindowsHiDPI_Workaround(getPainter(), viewport.width,
         viewport.height);
 
@@ -1170,6 +1172,9 @@ public class View {
     viewport.width = (int) c.x;
     viewport.height = (int) c.y;
 
+    // -----------------------------------------------
+    // Computes the 2D layout 
+    
     view2DProcessing.apply(viewport, bounds);
 
     // -----------------------------------------------
@@ -1215,48 +1220,11 @@ public class View {
 
     BoundingBox2d xySquare = new BoundingBox2d(hmin, hmax, vmin, vmax);
     
-    // configure camera rendering volume
+    // -----------------------------------------------
+    // Configure camera rendering volume
+
     cam.setRenderingSquare(xySquare, near, far);
   }
-
-
-  /**
-   * Only used for top/2D views. Performs a rendering to get the whole bounds occupied by the Axis
-   * Box and its text labels.
-   * 
-   * Then edit the camera position to fit within this new bounds AND modify the clipping planes.
-   * 
-   * @param painter
-   * @param viewport
-   */
-  @Deprecated
-  protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
-      ViewportConfiguration viewport) {
-    cam.setViewPort(viewport);
-    cam.shoot(painter, cameraMode);
-    axis.draw(painter);
-    clear();
-
-    // Base camera radius on {@link AxisBox#getWholeBounds} to ensure we display text labels
-    // complete
-    BoundingBox3d newBounds = axis.getWholeBounds().scale(scaling);
-
-    // Compute camera position based on whole bounds
-    Coord3d target = newBounds.getCenter();
-    Coord3d eye = viewpoint.cartesian().add(target);
-    cam.setPosition(eye, target);
-
-    // 2D case
-    if (is2D()) {
-      computeCamera2D_RenderingSquare(cam, viewport, newBounds);
-    }
-
-    // 3D case
-    else {
-      computeCamera3D_RenderingSphere(cam, viewport, newBounds);
-    }
-  }
-
 
 
   /* AXE BOX RENDERING */
