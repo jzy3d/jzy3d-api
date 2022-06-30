@@ -1181,35 +1181,33 @@ public class View {
     float far = 0; // min depth
     float hrange = 0; // horizontal range of 2D chart
     float vrange = 0; // vertical range of 2D chart
+    float drange = 0; // depth range of 2D chart
+    float offset = 1; // expand the clipping plane to ensure we do not cut the axis
 
     if(is2D_XY()) {
       // Z range for processing camera clipping planes
-      near = dist - bounds.getZRange().getMax() - 10;
-      far = dist - bounds.getZRange().getMin() + 10;
-
+      drange = bounds.getZRange().getRange();
       // X/Y range for processing rendering square
       hrange = bounds.getXRange().getRange();
       vrange = bounds.getYRange().getRange();
     }
     else if(is2D_XZ()) {
-      // Z range for processing camera clipping planes
-      near = dist - bounds.getYRange().getMax() - 10;
-      far = dist - bounds.getYRange().getMin() + 10;
-
+      // Y range for processing camera clipping planes
+      drange = bounds.getYRange().getRange();
       // X/Z range for processing rendering square
       hrange = bounds.getXRange().getRange();
       vrange = bounds.getZRange().getRange();
     } else if(is2D_YZ()) {
-      // Z range for processing camera clipping planes
-      near = dist - bounds.getXRange().getMax() - 10;
-      far = dist - bounds.getXRange().getMin() + 10;
-
+      // X range for processing camera clipping planes
+      drange = bounds.getXRange().getRange();
       // Y/Z range for processing rendering square
       hrange = bounds.getYRange().getRange();
       vrange = bounds.getZRange().getRange();
     }
-    //System.out.println("View.near : " + near);
-    //System.out.println("View.far : " + far);
+    
+    near = dist - drange/2 - offset;
+    far = dist + drange/2 + offset;
+
     float hmin = -hrange / 2 - view2DProcessing.marginLeftModel;
     float hmax = +hrange / 2 + view2DProcessing.marginRightModel;
     float vmin = -vrange / 2 - view2DProcessing.marginBottomModel;
