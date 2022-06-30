@@ -68,7 +68,8 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
 
     // process the aligned position in 3D coordinates
     Coord3d positionAligned = to3D(painter, screenAligned);
-
+    
+    
     // process space stransform if any (log, etc)
     if (spaceTransformer != null) {
       positionAligned = spaceTransformer.compute(positionAligned);

@@ -212,8 +212,6 @@ public class View2DProcessing {
     marginBottomPx += horizontalAxisDistance;
     marginBottomPx += axisTextHeight;
     
-    //System.err.println("V2DProc : axisTextHeight : " + axisTextHeight + " tickHeight " + tickTextHeight + " H tick " + horizontalTickDistance + " H axis " + horizontalAxisDistance + " BOTTOM = " + marginBottomPx);
-    //System.err.println("V2DProc : axisTextWidth  : " + axisTextWidth + "  tickWidth  " + tickTextWidth);
 
     // ---------------------------------------------------
     // case of a symetric layout requirement
@@ -241,7 +239,6 @@ public class View2DProcessing {
       for(ILegend legend: legends) {
         legend.updateMinimumDimension(painter);
         Dimension minDim = legend.getMinimumDimension();
-        //System.out.println("View2DProcessing minDim " + minDim.width);
         marginRightPx += minDim.width;
       }
     }

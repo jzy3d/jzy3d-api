@@ -154,6 +154,7 @@ public class GLUT implements Runnable {
    */
   public void glutBitmapString(Font font, String string, float x, float y, float z, float r,
       float g, float b, float rotate) {
+    //System.out.println("GLUT.glutBimap " + x + " " + y + " " + z);
     double[] win = modelToScreen(x, y, z);
 
     double winX = win[0];
@@ -171,10 +172,11 @@ public class GLUT implements Runnable {
     double winz[] = new double[1];
 
     if (!JavaGLU.gluProject(x, y, z, getModelViewAsDouble(), getProjectionAsDouble(), viewport,
-        winx, winy, winz))
+        winx, winy, winz)) {
       System.err.println("GLUT.modelToScreen : Could not retrieve model coordinates in screen for "
           + x + ", " + y + ", " + z);
-
+    }
+    
     double[] win = new double[3];
     win[0] = winx[0];
     win[1] = winy[0];

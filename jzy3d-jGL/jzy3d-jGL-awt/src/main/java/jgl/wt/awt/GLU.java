@@ -17,7 +17,7 @@
 package jgl.wt.awt;
 
 import java.lang.reflect.InvocationTargetException;
-
+import java.util.Arrays;
 import jgl.glu.GLUnurbsObj;
 import jgl.glu.GLUquadricObj;
 
@@ -203,6 +203,21 @@ public class GLU {
         - d1 * det33(a2, a3, a4, b2, b3, b4, c2, c3, c4));
   }
 
+  private double det44_row(double[] m) {
+    return det44(m[0], m[1], m[2], m[3],
+        m[4], m[5], m[6], m[7],
+        m[8], m[9], m[10], m[11],
+        m[12], m[13], m[14], m[15]);
+  }
+
+  private double det44_col(double[] m) {
+    return det44(m[0], m[4], m[8], m[12],
+        m[1], m[5], m[9], m[13],
+        m[2], m[6], m[10], m[14],
+        m[3], m[7], m[11], m[15]);
+  }
+
+  
   private double[] adjoint44(double a[]) {
     double m[] = new double[16];
     m[0] = det33(a[5], a[6], a[7], a[9], a[10], a[11], a[13], a[14], a[15]);
@@ -233,12 +248,22 @@ public class GLU {
     for (int i = 0; i < 4; i++) {
       out[4 * i + i] = 1;
     }
+    
+    //print("Identity:", out, 4);
 
-    for (int i = 0; i < 4; i++) {
-      double d = a[4 * i + i];
+    // over rows
+    for (int i = 0; i < 4; i++) { 
+      
+      // diagonal element : (0,0), (1,1), (2,2) or (3,3)
+      double d = a[4 * i + i]; 
+      
+      //System.out.println(" inversing : with d=" + d);
+      
       if (d != 1) {
         for (int j = 0; j < 4; j++) {
+          
           out[4 * i + j] /= d;
+          
           a[4 * i + j] /= d;
         }
       }
@@ -250,12 +275,14 @@ public class GLU {
             for (int k = 0; k < 4; k++) {
               a[4 * j + k] -= mult * a[4 * i + k];
               out[4 * j + k] -= mult * out[4 * i + k];
+
             }
           }
         }
-
       }
     }
+    
+    //print("Inversed:", out, 4);
     return out;
   }
 
@@ -271,6 +298,39 @@ public class GLU {
     }
     return temp;
   }
+  
+  public static void print(double input[][]) {
+    for (int i = 0; i < input.length; i++) {
+      for (int j = 0; j < input[i].length; j++) {
+        System.out.print(input[i][j] + "\t");
+      }
+      System.out.println();
+    }
+  }
+
+  public static void print(String info, double input[][]) {
+    System.out.print(info);
+    print(input);
+  }
+  
+  public static void print(double input[], int width) {
+    int k=0;
+    for (int i = 0; i < input.length; i++) {
+        System.out.print(input[i] + "\t");
+        k++;
+        if(k%width==0) {
+          System.out.println();
+      }
+      //System.out.println();
+    }
+  }
+
+  public static void print(String info, double input[], int width) {
+    System.out.println(info);
+    print(input, width);
+  }
+
+
 
   public GL gluGetGL() {
     return JavaGL;
@@ -384,6 +444,11 @@ public class GLU {
     A = mulMatrix44(proj, model);
     m = inverseMatrix44(A);
 
+    // Culprit: this result may contains NaN values
+    // https://github.com/jzy3d/jzy3d-api/issues/286
+    //
+    //print("m = inverse(A)", m, 4);
+    
     out = mulMatrix41(m, in);
     if (out[3] == 0)
       return false;
@@ -391,6 +456,7 @@ public class GLU {
     objx[0] = out[0] / out[3];
     objy[0] = out[1] / out[3];
     objz[0] = out[2] / out[3];
+        
     return true;
   }
 

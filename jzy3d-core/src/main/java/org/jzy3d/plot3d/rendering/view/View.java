@@ -992,6 +992,16 @@ public class View {
     } else
       throw new RuntimeException("Unsupported ViewMode: " + viewmode);
   }
+  
+  /*protected Coord3d computeCameraEyeXZ_DEBUG(Coord3d viewpoint, Coord3d target) {
+    Coord3d eye = viewpoint;
+    //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
+    eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
+    eye.y = ELEVATION_0 + 0.0001f; // on side
+    eye = eye.cartesian().add(target);
+    return eye;
+  }*/
+
 
   protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
     return viewpoint.cartesian().add(target);
@@ -1023,6 +1033,13 @@ public class View {
     //eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
     eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value decrease
     eye.y = ELEVATION_0; // on side
+    
+    // see https://github.com/jzy3d/jzy3d-api/issues/286
+    if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
+      eye.x += 0.01f;
+      eye.y += 0.01f;
+    }
+    
     eye = eye.cartesian().add(target);
     return eye;
   }
@@ -1032,9 +1049,17 @@ public class View {
     //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
     eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
     eye.y = ELEVATION_0; // on side
+    
+    // see https://github.com/jzy3d/jzy3d-api/issues/286
+    if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
+      eye.y += 0.0001f;
+    }
+    
     eye = eye.cartesian().add(target);
     return eye;
   }
+  
+  protected boolean JGL_INVERSE_MATRIX_WORKAROUND = true;
 
 
   protected void triggerCameraUpEvents(Coord3d viewpoint) {
