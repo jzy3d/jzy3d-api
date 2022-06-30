@@ -329,6 +329,8 @@ public class AxisTickProcessor {
       drawAxisTickNumericLabel(painter, dimension, color, hAlign, vAlign, ticksTxtBounds, tickLabel,
           tickLabelPosition);
 
+      //System.out.println(tickLabelPosition);
+      
       // Draw the tick line
       if (layout.isTickLineDisplayed()) {
         drawTickLine(painter, color, tickStartPosition, tickLabelPosition);

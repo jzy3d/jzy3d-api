@@ -319,9 +319,10 @@ public class AxisLabelProcessor {
           view.getPainter().getTextLengthInPixels(axisLayout.getFont(), verticalAxisLabel);
 
       // hack the emulgl vertical Y axis case by ignoring pixel scale for text
-      if (isEmulGL)
+      if (isEmulGL) {
         textLength /= pixelScale.y;
-
+      }
+      
       // move the text next to its anchor point, since it has been rotated
       // from the text center and not from the anchor point that is on the
       // right most letter side.

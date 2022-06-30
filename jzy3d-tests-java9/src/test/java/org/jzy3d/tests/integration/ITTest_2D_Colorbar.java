@@ -14,23 +14,21 @@ import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
-import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.RegularTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
-import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.legends.overlay.LegendLayout;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
+import org.jzy3d.plot3d.rendering.view.View2D;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.View2DLayout_Debug;
-import org.jzy3d.tests.integration.ITTest.WT;
 
 public class ITTest_2D_Colorbar extends ITTest {
   public static void main(String[] args) {
-    open(new ITTest_2D_Colorbar().when2DChartWithColorbarAndMargins(WT.EmulGL_AWT, HiDPI.ON));
+    open(new ITTest_2D_Colorbar().when2DChartWithColorbarAndMargins(WT.EmulGL_AWT, HiDPI.ON, View2D.XY));
     //open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON));
   }
 
@@ -38,49 +36,27 @@ public class ITTest_2D_Colorbar extends ITTest {
   // ----------------------------------------------------
   // TEST MULTIPLE AXIS ORIENTATION SETTINGS
   // ----------------------------------------------------
-
-  //static String caseAxisRotated = "whenAxisRotated_ThenApplyMargins";
   
-  /*protected static LabelOrientation[] yOrientations =
-      {LabelOrientation.VERTICAL, LabelOrientation.HORIZONTAL};
-  
-  
-  @Test
-  public void whenAxisRotated_ThenApplyMargins() {
-    System.out.println("ITTest : " + caseAxisRotated);
-
-    forEach((toolkit, resolution) -> whenAxisRotated_ThenApplyMargins(toolkit, resolution));
-  }*/
+  View2D[] views = {View2D.XY, View2D.XZ, View2D.YZ};
   
   @Test
   public void when2DChartWithColorbarAndMargins() {
     System.out.println("ITTest : when2DChartWithColorbarAndMargins");
 
-    forEach((toolkit, resolution) -> when2DChartWithColorbarAndMargins(toolkit, resolution));
+    forEach((toolkit, resolution) -> {
+      for(View2D view2d: views) {
+        when2DChartWithColorbarAndMargins(toolkit, resolution, view2d);
+      }
+    });
   }
 
 
 
-  protected Chart when2DChartWithColorbarAndMargins(WT wt, HiDPI hidpi) {
+  protected Chart when2DChartWithColorbarAndMargins(WT wt, HiDPI hidpi, View2D viewMode) {
     // Given a chart with long Y axis name
     AWTChart chart = (AWTChart)chart(wt, hidpi);
-    //chart.add(surface());
-    //chart.view2d();
-
-    //AxisLayout axisLayout = chart.getAxisLayout();
-    //axisLayout.setYAxisLabel("Y axis longer than usual");
     
-    /*forEach((yOrientation)->{
-      // When : vertical orientation
-      axisLayout.setYAxisLabelOrientation(yOrientation);
-
-      // Then
-      assertChart(chart, name(ITTest_2D_Colorbar.this, caseAxisRotated, wt, hidpi, properties(yOrientation)));
-      
-    });*/
-    
-    
- // ---------------------------------------
+    // ---------------------------------------
     // CHART CONTENT
     // ---------------------------------------
 
@@ -201,13 +177,13 @@ public class ITTest_2D_Colorbar extends ITTest {
 
     
     // Enable 2D mode
-    chart.view2d();
+    chart.view2d(viewMode);
     
     
     
     
     // Then
-    assertChart(chart, name(ITTest_2D_Colorbar.this, null, wt, hidpi));
+    assertChart(chart, name(ITTest_2D_Colorbar.this, "View"+KV+viewMode, wt, hidpi));
     
     return chart;
   }
