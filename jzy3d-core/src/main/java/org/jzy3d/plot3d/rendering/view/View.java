@@ -128,14 +128,14 @@ public class View {
   public static final float PI_div2 = (float)Math.PI/2;
   public static final float DISTANCE_DEFAULT = 2000;
 
-  private static final float AZIMUTH_FACING_X_DECREASING = PI_div2;
-  private static final float AZIMUTH_FACING_X_INCREASING = -PI_div2;
-  private static final float AZIMUTH_FACING_Y_DECREASING = PI;
-  private static final float AZIMUTH_FACING_Y_INCREASING = 0;
+  public static final float AZIMUTH_FACING_X_DECREASING = PI_div2;
+  public static final float AZIMUTH_FACING_X_INCREASING = -PI_div2;
+  public static final float AZIMUTH_FACING_Y_DECREASING = PI;
+  public static final float AZIMUTH_FACING_Y_INCREASING = 0;
 
-  private static final float ELEVATION_ON_TOP = PI_div2;
-  private static final float ELEVATION_0 = 0;
-  private static final float ELEVATION_ON_BOTTOM = -PI_div2;
+  public static final float ELEVATION_ON_TOP = PI_div2;
+  public static final float ELEVATION_0 = 0;
+  public static final float ELEVATION_ON_BOTTOM = -PI_div2;
 
   
   /** A viewpoint allowing to have min X and Y values near viewer, growing toward horizon. */
@@ -984,7 +984,7 @@ public class View {
     } else if (viewmode == ViewPositionMode.PROFILE) {
       return computeCameraEyeProfile(viewpoint, target);
     } else if (viewmode == ViewPositionMode.TOP) {
-      return computeCameraEyeTop(viewpoint, target);
+      return computeCameraEyeXY(viewpoint, target);
     } else if (viewmode == ViewPositionMode.XZ) {
       return computeCameraEyeXZ(viewpoint, target);
     } else if (viewmode == ViewPositionMode.YZ) {
@@ -1020,10 +1020,20 @@ public class View {
     return eye;
   }
 
-  protected Coord3d computeCameraEyeTop(Coord3d viewpoint, Coord3d target) {
+  protected Coord3d computeCameraEyeXY(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    eye.x = AZIMUTH_FACING_X_INCREASING; // on x
-    eye.y = ELEVATION_ON_TOP; // on top
+    
+    // watching X so that it increase from left to right
+    if(!view2DLayout.isHorizontalAxisFlip()) {
+      eye.x = AZIMUTH_FACING_X_INCREASING; 
+      eye.y = ELEVATION_ON_TOP; // on top
+    }
+    // watching X so that it decrease from left to right
+    else {
+      eye.x = AZIMUTH_FACING_X_DECREASING; 
+      eye.y = ELEVATION_ON_BOTTOM; // on top
+    }
+    
     eye = eye.cartesian().add(target);
     return eye;
   }
