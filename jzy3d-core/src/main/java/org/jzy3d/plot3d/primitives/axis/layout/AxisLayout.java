@@ -162,14 +162,32 @@ public class AxisLayout {
 
   /**
    * Return the maximum text length in pixel as displayed on screen, given the current ticks and
-   * renderer
+   * renderer on the Y axis
    */
-  
   public int getMaxYTickLabelWidth(IPainter painter) {
     int maxWidth = 0;
 
     for (double t : getYTicks()) {
       String label = getYTickRenderer().format(t);
+
+      int width = painter.getTextLengthInPixels(font, label);
+      if (width > maxWidth) {
+        maxWidth = width;
+      }
+    }
+    return maxWidth;
+
+  }
+
+  /**
+   * Return the maximum text length in pixel as displayed on screen, given the current ticks and
+   * renderer on the Z axis
+   */
+  public int getMaxZTickLabelWidth(IPainter painter) {
+    int maxWidth = 0;
+
+    for (double t : getZTicks()) {
+      String label = getZTickRenderer().format(t);
 
       int width = painter.getTextLengthInPixels(font, label);
       if (width > maxWidth) {

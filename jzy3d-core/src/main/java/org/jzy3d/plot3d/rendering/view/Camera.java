@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.function.Predicate;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox2d;
-import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.painters.IPainter;
@@ -372,10 +372,19 @@ public class Camera extends AbstractViewportManager {
     int viewport[] = painter.getViewPortAsInt();
     float modelView[] = painter.getModelViewAsFloat();
     float projection[] = painter.getProjectionAsFloat();
+    
+    //Array.print("Camera.screenToModel : viewport   : ", viewport);
+    //Array.print("Camera.screenToModel : modelView  : ", modelView);
+    //Array.print("Camera.screenToModel : projection : ", projection);
+
+    //double modelView[] = painter.getModelViewAsDouble();
+    //double projection[] = painter.getProjectionAsDouble();
     float worldcoord[] = new float[3];// wx, wy, wz;// returned xyz coords
 
     boolean s = painter.gluUnProject(screen.x, screen.y, screen.z, modelView, 0, projection, 0,
         viewport, 0, worldcoord, 0);
+
+    
     if (!s)
       failedProjection("Could not retrieve screen coordinates in model.");
 
@@ -685,6 +694,8 @@ public class Camera extends AbstractViewportManager {
     ortho.update(renderingSquare.xmin(), renderingSquare.xmax(), renderingSquare.ymin(),
         renderingSquare.ymax(), near, far);
     
+    //System.out.println("Camera:" + ortho.toString());
+    //System.out.println("Camera:" + up);
     //painter.glOrtho(left, right, bottom, top, near, far);
 
     

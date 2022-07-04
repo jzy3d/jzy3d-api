@@ -684,5 +684,9 @@ public class Coord3d implements Serializable {
     return new Coord3d(array[i], array[i+1], array[i+2]);
   }
 
+  public boolean isValid() {
+    return Float.isFinite(x) && Float.isFinite(y) && Float.isFinite(z);
+  }
+
 
 }

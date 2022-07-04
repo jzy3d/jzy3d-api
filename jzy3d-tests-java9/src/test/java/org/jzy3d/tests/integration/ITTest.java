@@ -109,7 +109,9 @@ public class ITTest {
     section(sb, "Colorbar", "IsModifiedByCustomFont", null);
     //section(sb, "Colorbar", "HasMinimumWidth", null);
 
-    section(sb, "2D_Colorbar");
+    section(sb, "2D_Colorbar", "View"+KV+"XY", null);
+    section(sb, "2D_Colorbar", "View"+KV+"XZ", null);
+    section(sb, "2D_Colorbar", "View"+KV+"YZ", null);
 
     // 2D tests
     line(sb, "# 2D Layout");
