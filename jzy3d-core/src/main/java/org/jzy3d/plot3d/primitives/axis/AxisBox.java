@@ -31,7 +31,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  */
 public class AxisBox implements IAxis {
   static Logger LOGGER = LogManager.getLogger(AxisBox.class);
-  
+
 
   protected static final int PRECISION = 6;
 
@@ -80,13 +80,18 @@ public class AxisBox implements IAxis {
   public static final int AXE_X = 0;
   public static final int AXE_Y = 1;
   public static final int AXE_Z = 2;
-  
+
+  public static final int EDGE_0 = 0;
+  public static final int EDGE_1 = 1;
+  public static final int EDGE_2 = 2;
+  public static final int EDGE_3 = 3;
+
   protected boolean depthRangeTrick = true;
-  
+
   /**
-   * The higher the value, the more the line are far from the faces and hence
-   * no z-fighting occurs between faces and lines. In case of higher value, line
-   * will be display more often, but also lines that should be behind the polygon
+   * The higher the value, the more the line are far from the faces and hence no z-fighting occurs
+   * between faces and lines. In case of higher value, line will be display more often, but also
+   * lines that should be behind the polygon
    */
   public static float NO_OVERLAP_DEPTH_RATIO = 0.5f;
 
@@ -94,22 +99,26 @@ public class AxisBox implements IAxis {
 
   protected SpaceTransformer spaceTransformer;
 
+  public AxisBox() {
+    this(null);
+  }
+
   public AxisBox(BoundingBox3d bbox) {
     this(bbox, new AxisLayout());
   }
 
   public AxisBox(BoundingBox3d bbox, AxisLayout layout) {
     this.layout = layout;
-    //if (bbox.valid())
-      setAxe(bbox);
-    //else
-    //  setAxe(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
-    wholeBounds = new BoundingBox3d();
-    textRenderer = new TextRenderer();
-    rotateLabel = new AxisLabelRotator();
-    labels = new AxisLabelProcessor(this);
-    ticks = new AxisTickProcessor(this);
+    this.wholeBounds = new BoundingBox3d();
+    this.textRenderer = new TextRenderer();
+    this.rotateLabel = new AxisLabelRotator();
+    this.labels = new AxisLabelProcessor(this);
+    this.ticks = new AxisTickProcessor(this);
+
     init();
+
+    if (bbox != null)
+      setAxe(bbox);
   }
 
   /**
@@ -180,13 +189,13 @@ public class AxisBox implements IAxis {
 
   public void drawGrid(IPainter painter) {
     Color gridcolor = layout.getGridColor();
-    
+
     // Push far from camera, to ensure the axis grid
     // Will remain covered by surface
-    if(depthRangeTrick)
+    if (depthRangeTrick)
       painter.glDepthRangef(NO_OVERLAP_DEPTH_RATIO, 1f);
 
-    
+
     painter.glPolygonMode(PolygonMode.BACK, PolygonFill.LINE);
     painter.color(gridcolor);
     painter.glLineWidth(1);
@@ -203,11 +212,11 @@ public class AxisBox implements IAxis {
       if (!quadIsHidden[quad])
         drawGridOnQuad(painter, quad);
     painter.glDisable_LineStipple();
-    
-    
+
+
     // Reset depth range
-    
-    if(depthRangeTrick)
+
+    if (depthRangeTrick)
       painter.glDepthRangef(0f, 1f);
 
   }
@@ -229,7 +238,7 @@ public class AxisBox implements IAxis {
 
   // Draw a grid on the desired quad.
   protected void drawGridOnQuad(IPainter painter, int quad) {
-    
+
     // Draw X grid along X axis
     if ((quad != 0) && (quad != 1)) {
       double[] xticks = layout.getXTicks();
@@ -264,7 +273,7 @@ public class AxisBox implements IAxis {
 
   ///////////////////////////
 
-
+  /** Trigger all axis ticks and labels rendering if conditions are met. */
   public void drawTicksAndLabels(IPainter painter) {
     wholeBounds.reset();
     wholeBounds.add(boxBounds);
@@ -274,75 +283,143 @@ public class AxisBox implements IAxis {
     drawTicksAndLabelsZ(painter);
   }
 
+  /**
+   * Select an X axis for ticks and labels rendering if conditions are met (range > 0 and axis
+   * layout configured to display this axis)
+   */
   public void drawTicksAndLabelsX(IPainter painter) {
     if (xrange > 0 && layout.isXTickLabelDisplayed()) {
 
+      BoundingBox3d textBounds = null;
+
       // 2D case
-      if (view != null && view.is2D()) {
-        BoundingBox3d bbox =
-            ticks.drawTicks(painter, 1, AXE_X, layout.getXTickColor(), Horizontal.LEFT, Vertical.TOP);
-        wholeBounds.add(bbox);
+      if (is2DWithX()) {
+        textBounds = ticks.drawTicks(painter, EDGE_1, AXE_X, layout.getXTickColor(),
+            Horizontal.CENTER, Vertical.GROUND);
       }
       // 3D case
-      else {
-        int xselect = findClosestXaxe(painter.getCamera());
-        if (xselect >= 0) {
-          BoundingBox3d bbox = ticks.drawTicks(painter, xselect, AXE_X, layout.getXTickColor());
-          wholeBounds.add(bbox);
+      else if (is3D()) {
+
+        int edgeId = findClosestXaxe(painter.getCamera());
+
+        if (edgeId >= 0) {
+
+          textBounds = ticks.drawTicks(painter, edgeId, AXE_X, layout.getXTickColor());
         } else {
-          // HACK: handles "on top" view, when all face of cube are
-          // drawn, which forbid to select an axe automatically
-          BoundingBox3d bbox =
-              ticks.drawTicks(painter, 2, AXE_X, layout.getXTickColor(), Horizontal.CENTER, Vertical.TOP);
-          wholeBounds.add(bbox);
+          // handles "on top" view, when all face of cube are drawn, which forbid to select an axe
+          // automatically
+          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_X, layout.getXTickColor(),
+              Horizontal.CENTER, Vertical.TOP);
         }
       }
+
+      // Keep track of text occupation for layout
+      if (textBounds != null)
+        wholeBounds.add(textBounds);
+
     }
   }
 
+  /**
+   * Select an Y axis for ticks and labels rendering if conditions are met (range > 0 and axis
+   * layout configured to display this axis)
+   */
   public void drawTicksAndLabelsY(IPainter painter) {
     if (yrange > 0 && layout.isYTickLabelDisplayed()) {
-      
-      //2D case
-      if (view != null && view.is2D()) {
-        BoundingBox3d bbox =
-            ticks.drawTicks(painter, 2, AXE_Y, layout.getYTickColor(), Horizontal.LEFT, Vertical.GROUND);
-        wholeBounds.add(bbox);
-      } 
-      
-      // 3D case
-      else {
-        int yselect = findClosestYaxe(painter.getCamera());
-        if (yselect >= 0) {
-          BoundingBox3d bbox = ticks.drawTicks(painter, yselect, AXE_Y, layout.getYTickColor());
-          wholeBounds.add(bbox);
-        } else {
-          // HACK: handles "on top" view, when all face of cube are
-          // drawn, which forbid to select an axe automatically
-          BoundingBox3d bbox = ticks.drawTicks(painter, 1, AXE_Y, layout.getYTickColor(),
-              Horizontal.RIGHT, Vertical.GROUND);
-          wholeBounds.add(bbox);
+
+      BoundingBox3d textBounds = null;
+
+      // 2D case
+      if (is2DWithY()) {
+        if (view.is2D_XY()) {
+          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
+              Horizontal.LEFT, Vertical.CENTER);
+        } else if (view.is2D_YZ()) {
+          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
+              Horizontal.CENTER, Vertical.GROUND);
         }
       }
+
+      // 3D case
+      else if (is3D()) {
+
+        int edgeId = findClosestYaxe(painter.getCamera());
+
+        if (edgeId >= 0) {
+
+          textBounds = ticks.drawTicks(painter, edgeId, AXE_Y, layout.getYTickColor());
+        } else {
+          // handles "on top" view, when all face of cube are drawn, which forbid to select an axe
+          // automatically
+          textBounds = ticks.drawTicks(painter, EDGE_1, AXE_Y, layout.getYTickColor(),
+              Horizontal.RIGHT, Vertical.GROUND);
+        }
+      }
+
+      // Keep track of text occupation for layout
+      if (textBounds != null)
+        wholeBounds.add(textBounds);
     }
   }
 
+  /**
+   * Select a Z axis for ticks and labels rendering if conditions are met (range > 0 and axis
+   * layout configured to display this axis)
+   */
   public void drawTicksAndLabelsZ(IPainter painter) {
     if (zrange > 0 && layout.isZTickLabelDisplayed()) {
-      // 3D case only
-      if (view != null && view.is3D()) {
-        int zselect = findClosestZaxe(painter.getCamera());
-        if (zselect >= 0) {
-          BoundingBox3d bbox = ticks.drawTicks(painter, zselect, AXE_Z, layout.getZTickColor());
-          wholeBounds.add(bbox);
+
+      BoundingBox3d textBounds = null;
+
+      // 2D case
+      if (is2DWithZ()) {
+        if (view.is2D_XZ()) {
+          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Z, layout.getZTickColor(),
+              Horizontal.LEFT, Vertical.GROUND);
+        } else if (view.is2D_YZ()) {
+          textBounds = ticks.drawTicks(painter, EDGE_3, AXE_Z, layout.getZTickColor(),
+              Horizontal.LEFT, Vertical.GROUND);
         }
       }
-      
-      // Do not render Z ticks in 2D
+
+      // 3D case only
+      else if (is3D()) {
+
+        int edgeId = findClosestZaxe(painter.getCamera());
+
+        if (edgeId >= 0) {
+          textBounds = ticks.drawTicks(painter, edgeId, AXE_Z, layout.getZTickColor());
+        }
+      }
+
+      // Keep track of text occupation for layout
+      if (textBounds != null)
+        wholeBounds.add(textBounds);
+
     }
   }
 
   ///////////////////////////
+
+  /** returns true if view is configured for a 3D chart where all axes are visible. */
+  protected boolean is3D() {
+    return view != null && view.is3D();
+  }
+
+  /** returns true if view is configured for a 2D chart where X is a visible axis. */
+  protected boolean is2DWithX() {
+    return view != null && (view.is2D_XY() || view.is2D_XZ());
+  }
+
+  /** returns true if view is configured for a 2D chart where Y is a visible axis. */
+  protected boolean is2DWithY() {
+    return view != null && (view.is2D_XY() || view.is2D_YZ());
+  }
+
+  /** returns true if view is configured for a 2D chart where Z is a visible axis. */
+  protected boolean is2DWithZ() {
+    return view != null && (view.is2D_XZ() || view.is2D_YZ());
+  }
 
   protected boolean isZAxeLabelDisplayed(int direction) {
     return isZ(direction) && layout.isZAxisLabelDisplayed();
@@ -376,7 +453,7 @@ public class AxisBox implements IAxis {
     else
       return layout.getZTicks();
   }
-  
+
 
   /* ************************************************/
   /* ************** AXIS SELECTION ******************/
@@ -820,7 +897,7 @@ public class AxisBox implements IAxis {
      * 5);6
      */
   }
-  
+
   /* ************************************************/
   /* ************ AXIS GETTER/SETTER ****************/
   /* ************************************************/
@@ -946,5 +1023,30 @@ public class AxisBox implements IAxis {
   public BoundingBox3d.Corners getCorners() {
     return getBounds().getCorners();
   }
+
+  public AxisLabelRotator getLabelRotator() {
+    return rotateLabel;
+  }
+
+  public void setLabelRotator(AxisLabelRotator rotateLabel) {
+    this.rotateLabel = rotateLabel;
+  }
+
+  public AxisLabelProcessor getLabelProcessor() {
+    return labels;
+  }
+
+  public void setLabelProcessor(AxisLabelProcessor labels) {
+    this.labels = labels;
+  }
+
+  public AxisTickProcessor getTickProcessor() {
+    return ticks;
+  }
+
+  public void setTickProcessor(AxisTickProcessor ticks) {
+    this.ticks = ticks;
+  }
+
 
 }

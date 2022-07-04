@@ -10,6 +10,7 @@ import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
+import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 public class TestView2DProcessing {
 
@@ -71,6 +72,8 @@ public class TestView2DProcessing {
       // When processing margins with a vertical Y AXIS, pixel scale = 1
       
       when(view.getPixelScale()).thenReturn(new Coord2d(pixScale,pixScale));
+      when(view.getViewMode()).thenReturn(ViewPositionMode.TOP);
+
       when(axisLayout.getYAxisLabelOrientation()).thenReturn(LabelOrientation.VERTICAL);
 
       ViewportConfiguration viewport = new ViewportConfiguration(VIEWPORT_WIDTH, VIEWPORT_HEIGHT, 0, 0);
@@ -98,6 +101,7 @@ public class TestView2DProcessing {
       
       pixScale = 2;
       when(view.getPixelScale()).thenReturn(new Coord2d(pixScale,pixScale));
+      when(view.getViewMode()).thenReturn(ViewPositionMode.TOP);
 
       processing.apply(viewport, bounds);
 
@@ -193,6 +197,7 @@ public class TestView2DProcessing {
       // Given a view with settings
       View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
       when(view.getPixelScale()).thenReturn(new Coord2d(1,1));
+      when(view.getViewMode()).thenReturn(ViewPositionMode.TOP);
 
       View2DLayout layout = new View2DLayout(view);
       layout.setMargin(MARGIN);
@@ -263,6 +268,7 @@ public class TestView2DProcessing {
       // Given a view with settings
       View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
       when(view.getPixelScale()).thenReturn(new Coord2d(1,1));
+      when(view.getViewMode()).thenReturn(ViewPositionMode.TOP);
 
       View2DLayout layout = new View2DLayout(view);
       layout.setMargin(MARGIN);

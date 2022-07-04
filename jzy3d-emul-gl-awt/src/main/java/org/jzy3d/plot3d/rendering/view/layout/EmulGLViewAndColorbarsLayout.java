@@ -121,11 +121,4 @@ public class EmulGLViewAndColorbarsLayout extends ViewAndColorbarsLayout {
       }
     }
   }
-
-  /*public boolean isFixHiDPI() {
-    return fixHiDPI;
-  }
-  public void setFixHiDPI(boolean fixHiDPI) {
-    this.fixHiDPI = fixHiDPI;
-  }*/
 }

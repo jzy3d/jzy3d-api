@@ -86,7 +86,7 @@ public abstract class GL<ImageType, FontType> {
   protected List<PixelScaleListener> pixelScaleListeners = new ArrayList<>();
 
   public GL() {}
-  
+
   public void setThrowExceptionOnGLError(boolean status) {
     this.CC.setThrowExceptionOnGLError(status);
   }
@@ -129,12 +129,18 @@ public abstract class GL<ImageType, FontType> {
     return desiredHeight;
   }
 
-  /** Return the actual width, which is {@link #getDesiredWidth()} multiplied by {@link #getPixelScaleX()}*/
+  /**
+   * Return the actual width, which is {@link #getDesiredWidth()} multiplied by
+   * {@link #getPixelScaleX()}
+   */
   public int getActualWidth() {
     return actualWidth;
   }
 
-  /** Return the actual width, which is {@link #getDesiredHeight()} multiplied by {@link #getPixelScaleY()}*/
+  /**
+   * Return the actual width, which is {@link #getDesiredHeight()} multiplied by
+   * {@link #getPixelScaleY()}
+   */
   public int getActualHeight() {
     return actualHeight;
   }
@@ -142,11 +148,11 @@ public abstract class GL<ImageType, FontType> {
   /* ******************** PROVIDE IMAGE ********************/
 
   public void glShadeModel(int mode) {
-  	if(CC.Mode != None) {
-  	  CC.gl_error(GL_INVALID_OPERATION, "glShadeModel");
-  	  return;
-  	}
-  	CC.gl_shade_model(mode);
+    if (CC.Mode != None) {
+      CC.gl_error(GL_INVALID_OPERATION, "glShadeModel");
+      return;
+    }
+    CC.gl_shade_model(mode);
   }
 
 
@@ -242,13 +248,12 @@ public abstract class GL<ImageType, FontType> {
     return shiftHorizontally;
   }
 
-  	/**
-	 * Allows shifting the image of the 3d scene and all images that have been append with
-	 * {@link #appendImageToDraw(Object)}
-	 * 
-	 * @param shift
-	 *                  to the right if value is positive, to the left if the value is negative.
-	 */
+  /**
+   * Allows shifting the image of the 3d scene and all images that have been append with
+   * {@link #appendImageToDraw(Object)}
+   * 
+   * @param shift to the right if value is positive, to the left if the value is negative.
+   */
   public void setShiftHorizontally(int shiftHorizontally) {
     this.shiftHorizontally = shiftHorizontally;
   }
@@ -271,10 +276,10 @@ public abstract class GL<ImageType, FontType> {
     return useOSFontRendering;
   }
 
-  	/**
-	 * If true, will use the OS for font rendering of all texts that have been append with
-	 * {@link #appendTextToDraw(Object, String, int, int)} otherwise use a JVM based font rendering.
-	 */
+  /**
+   * If true, will use the OS for font rendering of all texts that have been append with
+   * {@link #appendTextToDraw(Object, String, int, int)} otherwise use a JVM based font rendering.
+   */
   public void setUseOSFontRendering(boolean useOSFontRendering) {
     this.useOSFontRendering = useOSFontRendering;
   }
@@ -298,25 +303,24 @@ public abstract class GL<ImageType, FontType> {
     FOREGROUND, BACKGROUND
   }
 
-	public void appendImageToDraw(ImageType image) {
+  public void appendImageToDraw(ImageType image) {
 
-		appendImageToDraw(image, 0, 0);
-	}
+    appendImageToDraw(image, 0, 0);
+  }
 
-	public void appendImageToDraw(ImageType image, int x, int y) {
+  public void appendImageToDraw(ImageType image, int x, int y) {
+    appendImageToDraw(image, x, y, ImageLayer.BACKGROUND);
+  }
 
-		appendImageToDraw(image, x, y, ImageLayer.BACKGROUND);
-	}
+  public void appendImageToDraw(ImageType image, int x, int y, ImageLayer layer) {
 
-	public void appendImageToDraw(ImageType image, int x, int y, ImageLayer layer) {
+    synchronized (imageToDraw) {
+      imageToDraw.add(new ImageToDraw<>(x, y, image, layer));
+      // System.out.println(imageToDraw.size() + " images to draw");
+    }
+  }
 
-		synchronized(imageToDraw) {
-			imageToDraw.add(new ImageToDraw<>(x, y, image, layer));
-			// System.out.println(imageToDraw.size() + " images to draw");
-		}
-	}
-
-	public abstract ImageType getRenderedImage();
+  public abstract ImageType getRenderedImage();
 
   public void clearImagesBuffer() {
     synchronized (imageToDraw) {
@@ -328,32 +332,34 @@ public abstract class GL<ImageType, FontType> {
 
 
 
-  	/**
-	 * To be called by {@link GLUT#glutBitmapString(Object, String, float, float)} to append text to a
-	 * list of text to render at {@link GL#glFlush()} step.
-	 */
-	public void appendTextToDraw(FontType font, String string, int x, int y) {
+  /**
+   * To be called by {@link GLUT#glutBitmapString(Object, String, float, float)} to append text to a
+   * list of text to render at {@link GL#glFlush()} step.
+   */
+  public void appendTextToDraw(FontType font, String string, int x, int y) {
     synchronized (textsToDraw) {
-			textsToDraw.add(new TextToDraw<>(font, string, x, y));
+      //System.out.println("GL:appendText : " + x+ " " + y);
+
+      textsToDraw.add(new TextToDraw<>(font, string, x, y));
     }
   }
 
-  	/**
-	 * To be called by {@link GLUT#glutBitmapString(Object, String, float, float)} to append text to a
-	 * list of text to render at {@link GL#glFlush()} step.
-	 */
-	public void appendTextToDraw(FontType font, String string, int x, int y, float r, float g, float b,
-      float rotate) {
+  /**
+   * To be called by {@link GLUT#glutBitmapString(Object, String, float, float)} to append text to a
+   * list of text to render at {@link GL#glFlush()} step.
+   */
+  public void appendTextToDraw(FontType font, String string, int x, int y, float r, float g,
+      float b, float rotate) {
     synchronized (textsToDraw) {
-		textsToDraw.add(new TextToDraw<>(font, string, x, y, r, g, b, rotate));
+      textsToDraw.add(new TextToDraw<>(font, string, x, y, r, g, b, rotate));
     }
   }
-	
-	public void clearTextToDraw() {
-	    synchronized (textsToDraw) {
-	      textsToDraw.clear(); // empty text buffer
-	    }
-	  }
+
+  public void clearTextToDraw() {
+    synchronized (textsToDraw) {
+      textsToDraw.clear(); // empty text buffer
+    }
+  }
 
 
   /**
@@ -540,8 +546,8 @@ public abstract class GL<ImageType, FontType> {
       case GL_INT:
       case GL_UNSIGNED_INT:
       case GL_4_BYTES:
-        return (lists[n << 2]) << 24 | (lists[(n << 2) | 1]) << 16
-            | (lists[(n << 2) | 2]) << 8 | (lists[(n << 2) | 3]);
+        return (lists[n << 2]) << 24 | (lists[(n << 2) | 1]) << 16 | (lists[(n << 2) | 2]) << 8
+            | (lists[(n << 2) | 3]);
       case GL_FLOAT:
         return (int) ((lists[n << 2]) * 16777216.0f + (lists[(n << 2) | 1]) * 65536.0f
             + (lists[(n << 2) | 2]) * 256.0f + (lists[(n << 2) | 3]));
@@ -1830,7 +1836,8 @@ public abstract class GL<ImageType, FontType> {
   /** GLvoid glBegin (GLenum mode) */
   public void glBegin(int mode) {
     if (CC.Mode != None) {
-      CC.gl_error(GL_INVALID_OPERATION, "glBegin can not be called as a geometry is already in progress : " + CC.Mode);
+      CC.gl_error(GL_INVALID_OPERATION,
+          "glBegin can not be called as a geometry is already in progress : " + CC.Mode);
       return;
     }
     switch (mode) {
@@ -1850,8 +1857,9 @@ public abstract class GL<ImageType, FontType> {
         CC.gl_error(GL.GL_INVALID_ENUM, "glBegin(mode)");
     }
   }
-  
-  static final String NEED_GL_BEGIN = " is called while no geometry was initialized with glBegin(geom).";
+
+  static final String NEED_GL_BEGIN =
+      " is called while no geometry was initialized with glBegin(geom).";
 
   /** GLvoid glEnd (GLvoid) */
   public void glEnd() {
@@ -6370,7 +6378,7 @@ public abstract class GL<ImageType, FontType> {
   public static final int GLX_BAD_CONTEXT = 5;
   public static final int GLX_BAD_VALUE = 6;
   public static final int GLX_BAD_ENUM = 7;
-	/* Constant of GLE */
-	public static final int GL_PHONG = GL_SMOOTH + 1;
+  /* Constant of GLE */
+  public static final int GL_PHONG = GL_SMOOTH + 1;
 
 }

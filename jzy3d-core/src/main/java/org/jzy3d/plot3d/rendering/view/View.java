@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
@@ -61,6 +60,8 @@ import org.jzy3d.plot3d.transform.squarifier.ISquarifier;
  * @author Martin Pernollet
  */
 public class View {
+
+
 
   protected static Logger LOGGER = LogManager.getLogger(View.class);
 
@@ -123,13 +124,23 @@ public class View {
   protected boolean initialized = false;
 
   // constants
-  public static final float PI_div2 = (float) Math.PI / 2;
+  public static final float PI = (float)Math.PI;
+  public static final float PI_div2 = (float)Math.PI/2;
   public static final float DISTANCE_DEFAULT = 2000;
 
+  private static final float AZIMUTH_FACING_X_DECREASING = PI_div2;
+  private static final float AZIMUTH_FACING_X_INCREASING = -PI_div2;
+  private static final float AZIMUTH_FACING_Y_DECREASING = PI;
+  private static final float AZIMUTH_FACING_Y_INCREASING = 0;
 
+  private static final float ELEVATION_ON_TOP = PI_div2;
+  private static final float ELEVATION_0 = 0;
+  private static final float ELEVATION_ON_BOTTOM = -PI_div2;
+
+  
   /** A viewpoint allowing to have min X and Y values near viewer, growing toward horizon. */
   public static final Coord3d VIEWPOINT_X_Y_MIN_NEAR_VIEWER =
-      new Coord3d((Math.PI) + (Math.PI / 3), Math.PI / 3, DISTANCE_DEFAULT);
+      new Coord3d(PI + (Math.PI / 3), Math.PI / 3, DISTANCE_DEFAULT);
 
   /** A viewpoint where two corners of the axis box touch top and bottom lines of the canvas. */
   public static final Coord3d VIEWPOINT_AXIS_CORNER_TOUCH_BORDER =
@@ -242,12 +253,12 @@ public class View {
         // Store current pixel scale
         pixelScale.x = Double.isNaN(pixelScaleX) ? 1 : (float) pixelScaleX;
         pixelScale.y = Double.isNaN(pixelScaleY) ? 1 : (float) pixelScaleY;
-        
-        if(pixelScale.x<=0)
+
+        if (pixelScale.x <= 0)
           pixelScale.x = 1;
-        if(pixelScale.y<=0)
+        if (pixelScale.y <= 0)
           pixelScale.y = 1;
-        
+
         // Convert pixel scale to HiDPI status
         if (pixelScaleX <= 1) {
           hidpi = HiDPI.OFF;
@@ -258,22 +269,22 @@ public class View {
         // Edit font size accordingly
         axis.getLayout().applyFontSizePolicy();
 
-        
-        //getLayout().update(chart);
-        
-        for(ILegend legend : scene.getGraph().getLegends()) {
+
+        // getLayout().update(chart);
+
+        for (ILegend legend : scene.getGraph().getLegends()) {
           legend.updatePixelScale(pixelScale);
-          //legend.updateMinimumDimension(painter);
+          // legend.updateMinimumDimension(painter);
         }
-        
+
         // --------------------------
         // Trigger new render for different reasons
         // EmulGL need this to layout colorbar properly
         // Native need this to /sometime/ get the good resolution
 
-        //chart.render(2);
+        // chart.render(2);
 
-        //System.out.println("View :update pix scale");
+        // System.out.println("View :update pix scale");
       }
     });
   }
@@ -315,20 +326,23 @@ public class View {
     return projectMouse(screen);
   }
 
-  /** Perform the 3d projection of a 2d coordinate. The z component of the screen coordinate should be between 0 and 1, representing the position in the depth range*/
+  /**
+   * Perform the 3d projection of a 2d coordinate. The z component of the screen coordinate should
+   * be between 0 and 1, representing the position in the depth range
+   */
   public Coord3d projectMouse(Coord3d screen) {
     painter.acquireGL();
     Coord3d p = cam.screenToModel(painter, screen);
     painter.releaseGL();
     return p;
   }
-  
+
   public Coord3d projectMouse(Coord2d mouse) {
-	  return projectMouse((int)mouse.x, (int)mouse.y);
+    return projectMouse((int) mouse.x, (int) mouse.y);
   }
 
   public Coord3d projectMouse(IntegerCoord2d mouse) {
-	  return projectMouse(mouse.x, mouse.y);
+    return projectMouse(mouse.x, mouse.y);
   }
 
   /**
@@ -937,11 +951,6 @@ public class View {
     Coord3d cameraUp = computeCameraUp(viewpoint);
     Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
 
-    // Force the up vector of the camera to grow along Y axis
-    if (is2D()) {
-      cameraUp = new Coord3d(0.0, 1.0, 0.0);
-    }
-
     cam.setPosition(cameraEye, cameraTarget, cameraUp, scaling);
 
     computeCameraRenderingVolume(cam, viewport, bounds);
@@ -965,15 +974,37 @@ public class View {
     return computeCameraEye(target, viewMode, viewpoint);
   }
 
+  /**
+   * Compute the camera's eye position in cartesian coordinates based on viewmode, target, and a
+   * viewpoint given in polar coordinates around the target
+   */
   protected Coord3d computeCameraEye(Coord3d target, ViewPositionMode viewmode, Coord3d viewpoint) {
     if (viewmode == ViewPositionMode.FREE) {
       return computeCameraEyeFree(viewpoint, target);
-    } else if (viewmode == ViewPositionMode.TOP) {
-      return computeCameraEyeTop(viewpoint, target);
     } else if (viewmode == ViewPositionMode.PROFILE) {
       return computeCameraEyeProfile(viewpoint, target);
+    } else if (viewmode == ViewPositionMode.TOP) {
+      return computeCameraEyeTop(viewpoint, target);
+    } else if (viewmode == ViewPositionMode.XZ) {
+      return computeCameraEyeXZ(viewpoint, target);
+    } else if (viewmode == ViewPositionMode.YZ) {
+      return computeCameraEyeYZ(viewpoint, target);
     } else
       throw new RuntimeException("Unsupported ViewMode: " + viewmode);
+  }
+  
+  /*protected Coord3d computeCameraEyeXZ_DEBUG(Coord3d viewpoint, Coord3d target) {
+    Coord3d eye = viewpoint;
+    //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
+    eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
+    eye.y = ELEVATION_0 + 0.0001f; // on side
+    eye = eye.cartesian().add(target);
+    return eye;
+  }*/
+
+
+  protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
+    return viewpoint.cartesian().add(target);
   }
 
   /**
@@ -984,25 +1015,55 @@ public class View {
    */
   protected Coord3d computeCameraEyeProfile(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    eye.y = 0;
+    eye.y = ELEVATION_0;
     eye = eye.cartesian().add(target);
     return eye;
   }
 
   protected Coord3d computeCameraEyeTop(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    eye.x = -(float) Math.PI / 2; // on x
-    eye.y = (float) Math.PI / 2; // on top
+    eye.x = AZIMUTH_FACING_X_INCREASING; // on x
+    eye.y = ELEVATION_ON_TOP; // on top
     eye = eye.cartesian().add(target);
     return eye;
   }
 
-  protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
-    return viewpoint.cartesian().add(target);
+  protected Coord3d computeCameraEyeYZ(Coord3d viewpoint, Coord3d target) {
+    Coord3d eye = viewpoint;
+    //eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
+    eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value decrease
+    eye.y = ELEVATION_0; // on side
+    
+    // see https://github.com/jzy3d/jzy3d-api/issues/286
+    if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
+      eye.x += 0.01f;
+      eye.y += 0.01f;
+    }
+    
+    eye = eye.cartesian().add(target);
+    return eye;
   }
 
+  protected Coord3d computeCameraEyeXZ(Coord3d viewpoint, Coord3d target) {
+    Coord3d eye = viewpoint;
+    //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
+    eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
+    eye.y = ELEVATION_0; // on side
+    
+    // see https://github.com/jzy3d/jzy3d-api/issues/286
+    if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
+      eye.y += 0.0001f;
+    }
+    
+    eye = eye.cartesian().add(target);
+    return eye;
+  }
+  
+  protected boolean JGL_INVERSE_MATRIX_WORKAROUND = true;
+
+
   protected void triggerCameraUpEvents(Coord3d viewpoint) {
-    if (Math.abs(viewpoint.y) == PI_div2) { // handle "on-top" events
+    if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) { // handle "on-top" events
       if (!wasOnTopAtLastRendering) {
         wasOnTopAtLastRendering = true;
         fireViewOnTopEvent(true);
@@ -1014,16 +1075,39 @@ public class View {
     }
   }
 
+  /** 
+   * Compute the direction of the top of the camera relative to its center.
+   * 
+   * Coord3d(0, 0, 1) means a vector parallel to Z axis, so camera is looking horizontally
+   * Coord3d(0, 1, 0) means a vector parallel to Y axis, so camera is looking vertically
+   */
   protected Coord3d computeCameraUp(Coord3d viewpoint) {
-    if (Math.abs(viewpoint.y) == PI_div2) { // handle on top
-      Coord2d direction = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
-      if (viewpoint.y > 0) {
-        return new Coord3d(-direction.x, -direction.y, 0);
-      } else {
-        return new Coord3d(direction.x, direction.y, 0);
+    
+    // 2D cases
+    if (is2D_XY()) { 
+      return new Coord3d(0, 1, 0); // use y axis as up vector
+    } 
+    else if(is2D_XZ() || is2D_YZ()) {
+      return new Coord3d(0, 0, 1); // use z axis as up vector  
+    }
+    
+    // --------
+    // 3D case
+    else  { 
+      // handle "on top" or "on bottom" 3D view
+      if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) { 
+        Coord2d direction = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
+        if (viewpoint.y > 0) {
+          return new Coord3d(-direction.x, -direction.y, 0);
+        } else {
+          return new Coord3d(direction.x, direction.y, 0);
+        }
       }
-    } else {
-      return new Coord3d(0, 0, 1); // use z axis as up vector, if not on top
+      // handle standard 3D view
+      else {
+        // use z axis as up vector, if not on top or bottom of the axis
+        return new Coord3d(0, 0, 1); 
+      }
     }
   }
 
@@ -1078,75 +1162,69 @@ public class View {
   protected void computeCamera2D_RenderingSquare(Camera cam, ViewportConfiguration viewport,
       BoundingBox3d bounds) {
 
-    // bounds = getSceneGraphBounds();
-    Coord2d c = AbstractViewportManager.apply_WindowsHiDPI_Workaround(getPainter(), viewport.width, viewport.height);
+    // -----------------------------------------------
+    // Hack Windows HiDPI issue on AWT
     
-    viewport = viewport.clone(); 
-    viewport.width = (int)c.x; 
-    viewport.height = (int)c.y; 
+    Coord2d c = AbstractViewportManager.apply_WindowsHiDPI_Workaround(getPainter(), viewport.width,
+        viewport.height);
+
+    viewport = viewport.clone();
+    viewport.width = (int) c.x;
+    viewport.height = (int) c.y;
+
+    // -----------------------------------------------
+    // Computes the 2D layout 
     
     view2DProcessing.apply(viewport, bounds);
 
+    // -----------------------------------------------
+    // The rendering squared dimension will be applied
+    // at the current camera position
 
-    // The rendering squared dimension will be applied at the current camera position
-    float xrange = bounds.getXRange().getRange();
-    float yrange = bounds.getYRange().getRange();
-
-    float xmin = -xrange / 2 - view2DProcessing.marginLeftModel;
-    float xmax = +xrange / 2 + view2DProcessing.marginRightModel;
-    float ymin = -yrange / 2 - view2DProcessing.marginBottomModel;
-    float ymax = +yrange / 2 + view2DProcessing.marginTopModel;
-
-    BoundingBox2d xySquare = new BoundingBox2d(xmin, xmax, ymin, ymax);
-
-
-    // Z range
     float dist = (float) cam.getEye().distance(cam.getTarget());
-    float zmax = dist - bounds.getZRange().getMax() - 1;
-    float zmin = dist - bounds.getZRange().getMin() + 1;
+    float near = 0; // max depth
+    float far = 0; // min depth
+    float hrange = 0; // horizontal range of 2D chart
+    float vrange = 0; // vertical range of 2D chart
+    float drange = 0; // depth range of 2D chart
+    float offset = 1; // expand the clipping plane to ensure we do not cut the axis
 
-    // configure camera rendering volume
-    cam.setRenderingSquare(xySquare, zmax, zmin);
-  }
-
-
-  /**
-   * Only used for top/2D views. Performs a rendering to get the whole bounds occupied by the Axis
-   * Box and its text labels.
-   * 
-   * Then edit the camera position to fit within this new bounds AND modify the clipping planes.
-   * 
-   * @param painter
-   * @param viewport
-   */
-  @Deprecated
-  protected void correctCameraPositionForIncludingTextLabels(IPainter painter,
-      ViewportConfiguration viewport) {
-    cam.setViewPort(viewport);
-    cam.shoot(painter, cameraMode);
-    axis.draw(painter);
-    clear();
-
-    // Base camera radius on {@link AxisBox#getWholeBounds} to ensure we display text labels
-    // complete
-    BoundingBox3d newBounds = axis.getWholeBounds().scale(scaling);
-
-    // Compute camera position based on whole bounds
-    Coord3d target = newBounds.getCenter();
-    Coord3d eye = viewpoint.cartesian().add(target);
-    cam.setPosition(eye, target);
-
-    // 2D case
-    if (is2D()) {
-      computeCamera2D_RenderingSquare(cam, viewport, newBounds);
+    if(is2D_XY()) {
+      // Z range for processing camera clipping planes
+      drange = bounds.getZRange().getRange();
+      // X/Y range for processing rendering square
+      hrange = bounds.getXRange().getRange();
+      vrange = bounds.getYRange().getRange();
     }
-
-    // 3D case
-    else {
-      computeCamera3D_RenderingSphere(cam, viewport, newBounds);
+    else if(is2D_XZ()) {
+      // Y range for processing camera clipping planes
+      drange = bounds.getYRange().getRange();
+      // X/Z range for processing rendering square
+      hrange = bounds.getXRange().getRange();
+      vrange = bounds.getZRange().getRange();
+    } else if(is2D_YZ()) {
+      // X range for processing camera clipping planes
+      drange = bounds.getXRange().getRange();
+      // Y/Z range for processing rendering square
+      hrange = bounds.getYRange().getRange();
+      vrange = bounds.getZRange().getRange();
     }
-  }
+    
+    near = dist - drange/2 - offset;
+    far = dist + drange/2 + offset;
 
+    float hmin = -hrange / 2 - view2DProcessing.marginLeftModel;
+    float hmax = +hrange / 2 + view2DProcessing.marginRightModel;
+    float vmin = -vrange / 2 - view2DProcessing.marginBottomModel;
+    float vmax = +vrange / 2 + view2DProcessing.marginTopModel;
+
+    BoundingBox2d xySquare = new BoundingBox2d(hmin, hmax, vmin, vmax);
+    
+    // -----------------------------------------------
+    // Configure camera rendering volume
+
+    cam.setRenderingSquare(xySquare, near, far);
+  }
 
 
   /* AXE BOX RENDERING */
@@ -1332,7 +1410,19 @@ public class View {
   }
 
   public boolean is2D() {
+    return is2D_XY() || is2D_XZ() || is2D_YZ();
+  }
+
+  public boolean is2D_XY() {
     return ViewPositionMode.TOP.equals(getViewMode());
+  }
+
+  public boolean is2D_XZ() {
+    return ViewPositionMode.XZ.equals(getViewMode());
+  }
+
+  public boolean is2D_YZ() {
+    return ViewPositionMode.YZ.equals(getViewMode());
   }
 
   public boolean is3D() {
@@ -1375,7 +1465,28 @@ public class View {
   public void setViewPoint(Coord3d polar) {
     setViewPoint(polar, true);
   }
+  
+  /**
+   * Set the viewpoint using polar coordinates relative to the target (i.e. the center of the
+   * scene). Only X and Y dimensions are required, as the distance to center will be computed
+   * automatically by {@link updateCamera()}.
+   * 
+   * The input coordinate is polar and considers
+   * <ul>
+   * <li>azimuth in [0;2xPI]
+   * <li>elevation in [-PI/2;+PI/2]. Will be clamped if out of bounds
+   * </ul>
+   * 
+   */
+  public void setViewPoint(double azimuth, double elevation, boolean updateView) {
+    setViewPoint(new Coord3d(azimuth, elevation, 0), updateView);
+  }
 
+  public void setViewPoint(double azimuth, double elevation) {
+    setViewPoint(new Coord3d(azimuth, elevation, 0), true);
+  }
+
+  
   /**
    * Get the viewpoint. The Z dimension is the one defined by {@link updateCamera()}, which depends
    * on the view scaling.
