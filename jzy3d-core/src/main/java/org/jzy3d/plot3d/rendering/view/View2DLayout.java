@@ -35,6 +35,9 @@ public class View2DLayout {
   protected float verticalAxisLabelsDistance = 0;
 
   protected Margin margin = new Margin();
+  
+  protected boolean horizontalAxisFlip = false;
+  protected boolean verticalAxisFlip = false;
 
 
   public View2DLayout(View view) {
@@ -157,6 +160,22 @@ public class View2DLayout {
   public void setSymetricVerticalMargin(boolean symetricVerticalMargin) {
     this.symetricVerticalMargin = symetricVerticalMargin;
   }
+  
+  public boolean isHorizontalAxisFlip() {
+    return horizontalAxisFlip;
+  }
+
+  public void setHorizontalAxisFlip(boolean horizontalAxisFlip) {
+    this.horizontalAxisFlip = horizontalAxisFlip;
+  }
+
+  public boolean isVerticalAxisFlip() {
+    return verticalAxisFlip;
+  }
+
+  public void setVerticalAxisFlip(boolean verticalAxisFlip) {
+    this.verticalAxisFlip = verticalAxisFlip;
+  }
 
   public void apply() {
     view.getChart().render();
@@ -185,7 +204,10 @@ public class View2DLayout {
     to.setTextAddMargin(from.isTextAddMargin());
     
     to.setMargin(from.getMargin());
-    
+
+    to.setHorizontalAxisFlip(from.isHorizontalAxisFlip());
+    to.setVerticalAxisFlip(from.isVerticalAxisFlip());
+
     return to;
   }
 }

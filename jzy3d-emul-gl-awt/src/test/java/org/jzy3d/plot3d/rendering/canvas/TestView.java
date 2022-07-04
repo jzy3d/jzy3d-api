@@ -16,6 +16,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPITwoFontSizesPolicy;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 public class TestView {
@@ -233,22 +234,41 @@ public class TestView {
     chart.add(surface);
 
     AWTView view = chart.getView();
+    View2DLayout viewLayout = view.get2DLayout();
 
     // -----------------------------------------------------------
     // When 2D XY
+    viewLayout.setHorizontalAxisFlip(true);    
     view.setViewPositionMode(ViewPositionMode.TOP);
+    view.shoot();
+    
+    // Then
+    Assert.assertEquals(new Coord3d(0,1,0), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_INCREASING, view.getViewPoint().x, 0.001);
+    Assert.assertEquals(View.ELEVATION_ON_TOP, view.getViewPoint().y, 0.001);
+
+    
+    // When 2D XY, with decreasing X
+    viewLayout.setHorizontalAxisFlip(true);    
     view.shoot();
 
     // Then
-    Assert.assertEquals(new Coord3d(0,1,0), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_DECREASING, view.getViewPoint().x, 0.001);
+    Assert.assertEquals(View.ELEVATION_ON_TOP, view.getViewPoint().y, 0.001);
 
+    
+    // -----------------------------------------------------------
     // When 2D XZ
     view.setViewPositionMode(ViewPositionMode.XZ);
     view.shoot();
     
+    System.out.println(view.getViewPoint());
+    
+    
     // Then
     Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
 
+    // -----------------------------------------------------------
     // When 2D YZ
     view.setViewPositionMode(ViewPositionMode.YZ);
     view.shoot();
@@ -264,6 +284,7 @@ public class TestView {
     // Then
     Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
 
+    // -----------------------------------------------------------
     // When 3D on top
     view.setViewPositionMode(ViewPositionMode.FREE);
     Coord3d viewpoint = view.getViewPoint().clone();

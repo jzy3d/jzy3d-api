@@ -332,8 +332,19 @@ public class AxisBox implements IAxis {
       // 2D case
       if (is2DWithY()) {
         if (view.is2D_XY()) {
-          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
-              Horizontal.LEFT, Vertical.CENTER);
+          
+          // Standard XY without flip
+          if(!view.get2DLayout().isHorizontalAxisFlip()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
+                Horizontal.LEFT, Vertical.CENTER);
+          }
+          // Flip X axis only
+          else if(view.get2DLayout().isHorizontalAxisFlip()) {
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
+                Horizontal.LEFT, Vertical.CENTER);
+          }
+
+          
         } else if (view.is2D_YZ()) {
           textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
               Horizontal.CENTER, Vertical.GROUND);
