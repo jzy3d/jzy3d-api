@@ -25,15 +25,17 @@ public class AxisTickProcessor {
   protected AxisBox axis;
   protected AxisLayout layout;
   protected AxisLabelProcessor labels;
-  
+
   protected View2DProcessing view2D;
-  
-  public AxisTickProcessor(AxisBox axis) {
-    this.axis = axis;
-    this.layout = axis.getLayout();
-    this.labels = axis.labels;
-    
+
+  public AxisTickProcessor() {
   }
+
+  public AxisTickProcessor(AxisBox axis) {
+    setAxis(axis);
+  }
+
+  
 
   public BoundingBox3d drawTicks(IPainter painter, int axis, int dimension, Color color) {
     return drawTicks(painter, axis, dimension, color, null, null);
@@ -60,16 +62,6 @@ public class AxisTickProcessor {
     } else { // (axis==AXE_Z)
       quad_0 = this.axis.axeZquads[axis][0];
       quad_1 = this.axis.axeZquads[axis][1];
-    }
-    
-    // Override tick labels alignment when 2D so that they appear centered
-    if(this.axis.getView().is2D()) {
-      if (this.axis.isX(dimension)) {
-        hal = Horizontal.CENTER;
-      }
-      else if(this.axis.isY(dimension)) {
-        val = Vertical.CENTER;
-      }
     }
     
     // --------------------------------------------------------------
@@ -153,35 +145,69 @@ public class AxisTickProcessor {
       View2DProcessing processing2D = view.get2DProcessing();
       Coord2d modelToScreen = processing2D.getModelToScreen();
       
-      // -------------------------------
-      // Distance of X tick labels to tick axis
-      // according to Y range, canvas height and font height
+      float fontHeight = processing2D.getTickTextHeight();
+      float horizontalTickLen = (processing2D.getHorizontalTickDistance() + fontHeight) * modelToScreen.y;
+      float verticalTickLen = processing2D.getVerticalTickDistance() * modelToScreen.x;
+
       
-      if (this.axis.isX(dimension)) {
-        float fontHeight = processing2D.getTickTextHeight();
-        float worldTickLen = (processing2D.getHorizontalTickDistance() + fontHeight) * modelToScreen.y;
-        float range = this.axis.getBounds().getYRange().getRange();
-        float magic = range/worldTickLen;
-        return magic;
+      if(view.is2D_XY()) {
+        // -------------------------------
+        // Distance of X tick labels to tick axis
+        // according to Y range, canvas height and font height
+        
+        if (this.axis.isX(dimension)) {
+          return this.axis.getBounds().getYRange().getRange()/horizontalTickLen;
+        }
+        
+        // -------------------------------
+        // Distance of Y tick labels to tick axis
+        // according to X range, canvas width and font width
+        
+        else if (this.axis.isY(dimension)) {
+          return this.axis.getBounds().getXRange().getRange()/verticalTickLen;
+        }
+      
+      } else if(view.is2D_XZ()) {
+
+        // -------------------------------
+        // Distance of X tick labels to tick axis
+        // according to Z range, canvas height and font height
+        
+        if (this.axis.isX(dimension)) {
+          return this.axis.getBounds().getZRange().getRange()/horizontalTickLen;
+        }
+        
+        // -------------------------------
+        // Distance of Z tick labels to tick axis
+        // according to X range, canvas width and font width
+        
+        else if (this.axis.isZ(dimension)) {
+          return this.axis.getBounds().getXRange().getRange()/verticalTickLen;
+        }
+
+      } else if(view.is2D_YZ()) {
+
+        // -------------------------------
+        // Distance of X tick labels to tick axis
+        // according to Z range, canvas height and font height
+        
+        if (this.axis.isY(dimension)) {
+          return this.axis.getBounds().getZRange().getRange()/horizontalTickLen;
+        }
+        
+        // -------------------------------
+        // Distance of Z tick labels to tick axis
+        // according to X range, canvas width and font width
+        
+        else if (this.axis.isZ(dimension)) {
+          return this.axis.getBounds().getYRange().getRange()/verticalTickLen;
+        }
+
       }
-      
-      // -------------------------------
-      // Distance of Y tick labels to tick axis
-      // according to X range, canvas width and font width
-      
-      else if (this.axis.isY(dimension)) {
-        float worldTickLen = processing2D.getVerticalTickDistance() * modelToScreen.x;
-        float range = this.axis.getBounds().getXRange().getRange();
-        float magic = range/worldTickLen;
-        return magic;          
-      }
-      
-      // -------------------------------
-      // Z case should never occur in 2D
-      else {
-        return 1;
-      }
-      
+
+
+      return Float.NaN;
+
     }
     
     // -------------------------------------------------------
@@ -303,6 +329,8 @@ public class AxisTickProcessor {
       drawAxisTickNumericLabel(painter, dimension, color, hAlign, vAlign, ticksTxtBounds, tickLabel,
           tickLabelPosition);
 
+      //System.out.println(tickLabelPosition);
+      
       // Draw the tick line
       if (layout.isTickLineDisplayed()) {
         drawTickLine(painter, color, tickStartPosition, tickLabelPosition);
@@ -415,5 +443,17 @@ public class AxisTickProcessor {
     zdir = zdir == 0 ? 0 : zdir / Math.abs(zdir);
 
     return new Coord3d(xdir, ydir, zdir);
+  }
+  
+  ////////////////////////////
+  
+  public void setAxis(AxisBox axis) {
+    this.axis = axis;
+    this.layout = axis.getLayout();
+    this.labels = axis.labels;
+  }
+  
+  public AxisBox getAxis() {
+    return axis;
   }
 }

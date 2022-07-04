@@ -1016,9 +1016,32 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     double objX[] = new double[1];
     double objY[] = new double[1];
     double objZ[] = new double[1];
+    
+    //Array.print("EmulGL Painter : ", proj);
+    //Array.print("EmulGL Painter : ", dbl(proj));
 
     boolean st = glu.gluUnProject(winX, winY, winZ, dbl(model),
         dbl(proj), view, objX, objY, objZ);
+
+    objPos[0] = (float) objX[0];
+    objPos[1] = (float) objY[0];
+    objPos[2] = (float) objZ[0];
+
+    return st;
+  }
+
+  //@Override
+  public boolean gluUnProject(float winX, float winY, float winZ, double[] model, int model_offset,
+      double[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
+      int objPos_offset) {
+    // throw new NotImplementedException();
+
+    double objX[] = new double[1];
+    double objY[] = new double[1];
+    double objZ[] = new double[1];
+
+    boolean st = glu.gluUnProject(winX, winY, winZ, model,
+        proj, view, objX, objY, objZ);
 
     objPos[0] = (float) objX[0];
     objPos[1] = (float) objY[0];

@@ -94,6 +94,9 @@ public class Mocks {
     return view;
   }
 
+  public static View ViewAndPainter() {
+    return ViewAndPainter(1);
+  }
 
   public static View ViewAndPainter(float viewScale) {
     return ViewAndPainter(viewScale, "macos", "10", null, null);

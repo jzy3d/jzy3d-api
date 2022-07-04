@@ -14,6 +14,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 /**
  * Process and store the layout of a 2D view having margins and axis labels defined by the
@@ -71,14 +72,19 @@ public class View2DProcessing {
 
 
   // the overall margins on the width and height, summing all margin of each dimension
-  protected Area area;
+  protected Area marginArea;
+  // the bounds of the two dimensions of the 3D space that are currently viewed
+  protected Area spaceArea;
+  // the viewport dimensions
+  protected Area screenArea;
+
 
   protected Coord2d modelToScreen;
 
-
+  public View2DProcessing() {
+  }
 
   public View2DProcessing(View view) {
-    super();
     this.view = view;
   }
 
@@ -123,13 +129,29 @@ public class View2DProcessing {
     if (view2DLayout.textAddMargin) {
 
       // consider space occupied by tick labels
-      tickTextWidth = axisLayout.getMaxYTickLabelWidth(painter);
       tickTextHeight = font.getHeight();
 
-      // consider space occupied by the Y axis label
-      if (LabelOrientation.HORIZONTAL.equals(axisLayout.getYAxisLabelOrientation())) {
+      if(isXY()) {
+        tickTextWidth = axisLayout.getMaxYTickLabelWidth(painter);
+      } else if(isXZ() || isYZ()) {
+        tickTextWidth = axisLayout.getMaxZTickLabelWidth(painter);
+      }
+      
+      // consider space occupied by the vertical axis label
+      String leftAxisLabel = null;
+      LabelOrientation leftAxisOrientation = null;
+      
+      if(isXY()) {
+        leftAxisLabel = axisLayout.getYAxisLabel();
+        leftAxisOrientation = axisLayout.getYAxisLabelOrientation();
+      } else if(isXZ() || isYZ()) {
+        leftAxisLabel = axisLayout.getZAxisLabel();
+        leftAxisOrientation = axisLayout.getZAxisLabelOrientation();
+      }
+      
+      if (LabelOrientation.HORIZONTAL.equals(leftAxisOrientation)) {
         // horizontal Y axis involves considering the axis label width
-        axisTextWidth = painter.getTextLengthInPixels(font, axisLayout.getYAxisLabel());
+        axisTextWidth = painter.getTextLengthInPixels(font, leftAxisLabel);
       } else {
         // vertical Y axis involves considering the axis label font height
         axisTextWidth = font.getHeight();
@@ -190,8 +212,6 @@ public class View2DProcessing {
     marginBottomPx += horizontalAxisDistance;
     marginBottomPx += axisTextHeight;
     
-    //System.err.println("V2DProc : axisTextHeight : " + axisTextHeight + " tickHeight " + tickTextHeight + " H tick " + horizontalTickDistance + " H axis " + horizontalAxisDistance + " BOTTOM = " + marginBottomPx);
-    //System.err.println("V2DProc : axisTextWidth  : " + axisTextWidth + "  tickWidth  " + tickTextWidth);
 
     // ---------------------------------------------------
     // case of a symetric layout requirement
@@ -219,7 +239,6 @@ public class View2DProcessing {
       for(ILegend legend: legends) {
         legend.updateMinimumDimension(painter);
         Dimension minDim = legend.getMinimumDimension();
-        //System.out.println("View2DProcessing minDim " + minDim.width);
         marginRightPx += minDim.width;
       }
     }
@@ -227,16 +246,47 @@ public class View2DProcessing {
     // ---------------------------------------------------
     // The actual processing of margin
     
-    area = new Area(marginLeftPx + marginRightPx, marginTopPx + marginBottomPx);
+    marginArea = new Area(marginLeftPx + marginRightPx, marginTopPx + marginBottomPx);
+    screenArea = new Area(viewport.getWidth(), viewport.getHeight());
+    
+    
+    // XY 2D view
+    if(isXY()) {
+      spaceArea = new Area(bounds.getXRange().getRange(), bounds.getYRange().getRange());
+    }
+    // XZ 2D view
+    else if(isXZ()){
+      spaceArea = new Area(bounds.getXRange().getRange(), bounds.getZRange().getRange());
+    }
+    // YX 2D view
+    else if(isYZ()){
+      spaceArea = new Area(bounds.getYRange().getRange(), bounds.getZRange().getRange());
+    }
+    else {
+      throw new IllegalArgumentException("Irrelevant view mode : '" + view.getViewMode() + "'");
+    }
+    
+    modelToScreen = getModelToScreenRatio(spaceArea, screenArea, marginArea);
 
-    modelToScreen = getModelToScreenRatio(bounds, viewport, area);
-
+    
     // convert pixel margin to world coordinate to add compute the additional 3D space to grasp with
     // the camera
     marginLeftModel = marginLeftPx * modelToScreen.x;
     marginRightModel = marginRightPx * modelToScreen.x;
     marginTopModel = marginTopPx * modelToScreen.y;
     marginBottomModel = marginBottomPx * modelToScreen.y;
+  }
+
+  protected boolean isYZ() {
+    return ViewPositionMode.YZ.equals(view.getViewMode());
+  }
+
+  protected boolean isXZ() {
+    return ViewPositionMode.XZ.equals(view.getViewMode());
+  }
+
+  protected boolean isXY() {
+    return ViewPositionMode.TOP.equals(view.getViewMode());
   }
 
 
@@ -351,14 +401,14 @@ public class View2DProcessing {
     float x = 1;
 
 
-    if (area.width != 0 && (canvas.width != margins.width)) {
+    if (marginArea.width != 0 && (canvas.width != margins.width)) {
       x = (((space.width * canvas.width) / (canvas.width - margins.width)) - space.width)
           / margins.width;
     }
 
     float y = 1;
 
-    if (area.height != 0 && (canvas.height != margins.height)) {
+    if (marginArea.height != 0 && (canvas.height != margins.height)) {
       y = (((space.height * canvas.height) / (canvas.height - margins.height)) - space.height)
           / margins.height;
 
@@ -367,18 +417,6 @@ public class View2DProcessing {
 
     return new Coord2d(x, y);
   }
-
-  /**
-   * @see {@link #getModelToScreenRatio(Area, Area, Area)}
-   */
-  public Coord2d getModelToScreenRatio(BoundingBox3d bounds, ViewportConfiguration viewport,
-      Area margin) {
-    Area space = new Area(bounds.getXRange().getRange(), bounds.getYRange().getRange());
-    Area screen = new Area(viewport.getWidth(), viewport.getHeight());
-    return getModelToScreenRatio(space, screen, margin);
-  }
-
-
 
   // -------------------------------------
   //
@@ -391,7 +429,7 @@ public class View2DProcessing {
    * to the axis and view layout settings
    */
   public Area getArea() {
-    return new Area(area);
+    return new Area(marginArea);
   }
 
   /**
@@ -463,6 +501,11 @@ public class View2DProcessing {
     return verticalAxisDistance;
   }
 
-  
-  
+  public View getView() {
+    return view;
+  }
+
+  public void setView(View view) {
+    this.view = view;
+  }
 }
