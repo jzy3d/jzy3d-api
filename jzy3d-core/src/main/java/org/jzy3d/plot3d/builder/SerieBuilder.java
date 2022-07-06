@@ -10,17 +10,35 @@ import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot2d.primitives.Serie2d.Type;
 
 public class SerieBuilder {
+  
   public Serie2d line(String name, Func2D func, Range xRange, int steps) {
-    Serie2d serie = newSerie(name, Type.LINE);
-    serie.setColor(Color.BLACK);
-    return apply(func, xRange, steps, serie);
+    return line(name, func, xRange, steps, true, true);
   }
 
-  public Serie2d apply(Func2D func, Range xRange, int steps, Serie2d serie) {
+  public Serie2d line(String name, Func2D func, Range xRange, int steps, boolean includeXMin, boolean includeXMax) {
+    Serie2d serie = newSerie(name, Type.LINE);
+    serie.setColor(Color.BLACK);
+    return apply(serie, func, xRange, steps, includeXMin, includeXMax);
+  }
+
+  public Serie2d apply(Serie2d serie, Func2D func, Range xRange, int steps, boolean includeXMin, boolean includeXMax) {
     double step = xRange.getRange() / steps;
 
+    
+    
     for (double x = xRange.getMin(); x <= xRange.getMax(); x += step) {
-      serie.add(x, func.f(x));
+      // shift lower bound 
+      if(!includeXMin && x==xRange.getMin()) {
+        serie.add(x+Double.MIN_VALUE, func.f(x+Double.MIN_VALUE));
+      }
+      // shift upper bound
+      else if(!includeXMax && x==xRange.getMax()) {
+        serie.add(x-Double.MIN_VALUE, func.f(x-Double.MIN_VALUE));
+      }
+      else {
+        serie.add(x, func.f(x));
+      }
+
     }
     return serie;
   }
