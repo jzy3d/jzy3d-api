@@ -75,7 +75,7 @@ public class View {
   protected boolean squared = true;
 
   /** Settings for the layout of a 2D chart */
-  protected View2DLayout view2DLayout = new View2DLayout(this);
+  protected View2DLayout view2DLayout = new View2DLayout();
   protected View2DProcessing view2DProcessing = new View2DProcessing(this);
 
   protected float cameraRenderingSphereRadiusFactor = 1f;
@@ -1024,14 +1024,19 @@ public class View {
     Coord3d eye = viewpoint;
     
     // watching X so that it increase from left to right
-    if(!view2DLayout.isHorizontalAxisFlip()) {
+    if(view2DLayout.isAxisFlippedNone()) {
       eye.x = AZIMUTH_FACING_X_INCREASING; 
       eye.y = ELEVATION_ON_TOP; // on top
     }
     // watching X so that it decrease from left to right
-    else {
+    else if(view2DLayout.isAxisFlippedHorizontalOnly()){
       eye.x = AZIMUTH_FACING_X_DECREASING; 
       eye.y = ELEVATION_ON_BOTTOM; // on top
+    }
+    // watching X so that it decrease from left to right
+    else if(view2DLayout.isAxisFlippedVerticalOnly()){
+      eye.x = AZIMUTH_FACING_X_DECREASING; 
+      eye.y = ELEVATION_ON_TOP; // on top
     }
     
     eye = eye.cartesian().add(target);

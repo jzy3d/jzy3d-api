@@ -9,8 +9,7 @@ import org.jzy3d.maths.Margin;
  * <img src="doc-files/layout2D.png"/>
  */
 public class View2DLayout {
-  protected View view;
-
+  
   protected boolean textAddMargin = true;
 
   /**
@@ -40,9 +39,7 @@ public class View2DLayout {
   protected boolean verticalAxisFlip = false;
 
 
-  public View2DLayout(View view) {
-    this.view = view;
-
+  public View2DLayout() {
     setMarginHorizontal(10);
     setMarginVertical(10);
     setTickLabelDistance(10);
@@ -160,7 +157,23 @@ public class View2DLayout {
   public void setSymetricVerticalMargin(boolean symetricVerticalMargin) {
     this.symetricVerticalMargin = symetricVerticalMargin;
   }
-  
+
+  public boolean isAxisFlippedNone() {
+    return !isHorizontalAxisFlip() && !isVerticalAxisFlip();
+  }
+
+  public boolean isAxisFlippedBoth() {
+    return isHorizontalAxisFlip() && isVerticalAxisFlip();
+  }
+
+  public boolean isAxisFlippedHorizontalOnly() {
+    return isHorizontalAxisFlip() && !isVerticalAxisFlip();
+  }
+
+  public boolean isAxisFlippedVerticalOnly() {
+    return !isHorizontalAxisFlip() && isVerticalAxisFlip();
+  }
+
   public boolean isHorizontalAxisFlip() {
     return horizontalAxisFlip;
   }
@@ -176,13 +189,9 @@ public class View2DLayout {
   public void setVerticalAxisFlip(boolean verticalAxisFlip) {
     this.verticalAxisFlip = verticalAxisFlip;
   }
-
-  public void apply() {
-    view.getChart().render();
-  }
   
   public View2DLayout clone() {
-    View2DLayout to = new View2DLayout(view);
+    View2DLayout to = new View2DLayout();
     return copy(this, to);
   }
 
