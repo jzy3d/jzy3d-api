@@ -280,6 +280,7 @@ public class AxisLabelProcessor {
     // Y : position axis + margin + tick Label Height OR Width (rotation) + axis Label Margin
 
     View view = axis.getView();
+    View2DLayout viewLayout = view.get2DLayout();
     AxisLayout axisLayout = axis.getLayout();
     View2DProcessing processing2D = view.get2DProcessing();
 
@@ -365,7 +366,14 @@ public class AxisLabelProcessor {
         ylab = pos.y - yShift;
         zlab = pos.z;
       } else if (axis.isY(direction)) {
-        xlab = pos.x - xShift;
+        // if X axis is flipped, Y axis label should appear the other side
+        if(!viewLayout.isHorizontalAxisFlip()) {
+          xlab = pos.x - xShift;
+        }
+        else {
+          xlab = pos.x + xShift;
+        }
+        
         ylab = axis.center.y;
         zlab = pos.z;
       }

@@ -238,7 +238,9 @@ public class TestView {
 
     // -----------------------------------------------------------
     // When 2D XY
-    viewLayout.setHorizontalAxisFlip(true);    
+    
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(false);    
     view.setViewPositionMode(ViewPositionMode.TOP);
     view.shoot();
     
@@ -250,11 +252,21 @@ public class TestView {
     
     // When 2D XY, with decreasing X
     viewLayout.setHorizontalAxisFlip(true);    
+    viewLayout.setVerticalAxisFlip(false);    
     view.shoot();
 
     // Then
     Assert.assertEquals(View.AZIMUTH_FACING_X_DECREASING, view.getViewPoint().x, 0.001);
-    Assert.assertEquals(View.ELEVATION_ON_TOP, view.getViewPoint().y, 0.001);
+    Assert.assertEquals(View.ELEVATION_ON_BOTTOM, view.getViewPoint().y, 0.001);
+
+    // When 2D XY, with decreasing Y
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(true);    
+    view.shoot();
+
+    // Then
+    Assert.assertEquals(View.AZIMUTH_FACING_X_INCREASING, view.getViewPoint().x, 0.001);
+    Assert.assertEquals(View.ELEVATION_ON_BOTTOM, view.getViewPoint().y, 0.001);
 
     
     // -----------------------------------------------------------
@@ -262,7 +274,6 @@ public class TestView {
     view.setViewPositionMode(ViewPositionMode.XZ);
     view.shoot();
     
-    System.out.println(view.getViewPoint());
     
     
     // Then
