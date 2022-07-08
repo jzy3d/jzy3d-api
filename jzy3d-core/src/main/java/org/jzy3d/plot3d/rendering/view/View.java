@@ -1023,29 +1023,25 @@ public class View {
   protected Coord3d computeCameraEyeXY(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
     
-    // watching X so that it increase from left to right
+    // No axis flip
     if(view2DLayout.isAxisFlippedNone()) {
       eye.x = AZIMUTH_FACING_X_INCREASING; 
       eye.y = ELEVATION_ON_TOP; // on top
     }
-    // watching X so that it decrease from left to right
-    else if(view2DLayout.isAxisFlippedHorizontalOnly()){
+    // Flip horzontal only
+    else if(view2DLayout.isHorizontalFlipOnly()){
       eye.x = AZIMUTH_FACING_X_DECREASING; 
       eye.y = ELEVATION_ON_BOTTOM; // on top
-
-      //eye.y = ELEVATION_ON_TOP; // on to
     }
-    // watching X so that it decrease from left to right
-    else if(view2DLayout.isAxisFlippedVerticalOnly()){
+    // Flip vertical only
+    // see camera vector "up" reverse direction for vertical flip
+    else if(view2DLayout.isVerticalFlipOnly()){
       eye.x = AZIMUTH_FACING_X_INCREASING; 
       eye.y = ELEVATION_ON_BOTTOM; // on top
     }
-    // watching X so that it decrease from left to right
+    // Flip both 
+    // see camera vector "up" reverse direction for vertical flip
     else if(view2DLayout.isAxisFlippedBoth()){
-      //eye.x = AZIMUTH_FACING_X_DECREASING; 
-      //eye.y = ELEVATION_ON_BOTTOM; // on top
-      
-      // relate to camera up
       eye.x = AZIMUTH_FACING_X_INCREASING; 
       eye.y = ELEVATION_ON_TOP; // on top
 
@@ -1058,9 +1054,31 @@ public class View {
 
   protected Coord3d computeCameraEyeYZ(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    //eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
-    eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value decrease
-    eye.y = ELEVATION_0; // on side
+    
+    // No axis flip
+    if(view2DLayout.isAxisFlippedNone()) {
+      eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value decrease
+      eye.y = ELEVATION_0; // on side
+
+    }
+    // Flip horzontal only
+    else if(view2DLayout.isHorizontalFlipOnly()){
+      eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip vertical only
+    // see camera vector "up" reverse direction for vertical flip
+    else if(view2DLayout.isVerticalFlipOnly()){
+      eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value decrease
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip both 
+    // see camera vector "up" reverse direction for vertical flip
+    else if(view2DLayout.isAxisFlippedBoth()){
+      eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
+      eye.y = ELEVATION_0; // on side
+
+    }
     
     // see https://github.com/jzy3d/jzy3d-api/issues/286
     if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
@@ -1074,9 +1092,31 @@ public class View {
 
   protected Coord3d computeCameraEyeXZ(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
-    eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
-    eye.y = ELEVATION_0; // on side
+    
+    
+    // No axis flip
+    if(view2DLayout.isAxisFlippedNone()) {
+      eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip horizontal only
+    else if(view2DLayout.isHorizontalFlipOnly()){
+      eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value increase
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip vertical only
+    // see camera vector "up" reverse direction for vertical flip
+    else if(view2DLayout.isVerticalFlipOnly()){
+      eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value increase
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip both 
+    // see camera vector "up" reverse direction for vertical flip
+    else if(view2DLayout.isAxisFlippedBoth()){
+      eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
+      eye.y = ELEVATION_0; // on side
+    }
+
     
     // see https://github.com/jzy3d/jzy3d-api/issues/286
     if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
@@ -1102,16 +1142,23 @@ public class View {
       
       // watching X so that it decrease from left to right
       if(view2DLayout.isVerticalAxisFlip()){
-      //  eye.x = AZIMUTH_FACING_X_DECREASING; 
-      //  eye.y = ELEVATION_ON_BOTTOM; // on top
         return new Coord3d(0, -1, 0); // use y axis as up vector
-
       }
-
-      return new Coord3d(0, 1, 0); // use y axis as up vector
+      else {
+        return new Coord3d(0, 1, 0); // use y axis as up vector
+      }
     } 
     else if(is2D_XZ() || is2D_YZ()) {
-      return new Coord3d(0, 0, 1); // use z axis as up vector  
+
+      // watching X so that it decrease from left to right
+      if(view2DLayout.isVerticalAxisFlip()){
+        return new Coord3d(0, 0, -1); // use z axis as up vector  
+      }
+      else {
+        return new Coord3d(0, 0, 1); // use z axis as up vector  
+        
+      }
+      
     }
     
     // --------

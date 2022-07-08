@@ -35,6 +35,8 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   String info = "";
   
   boolean enabled = true;
+  boolean enableColorMarginDebug = true;
+  boolean enableViewMarginDebug = true;
   boolean showText = false;
   
   int interlinePx = 8;
@@ -85,9 +87,12 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
     
     if(showText)
       g2d.drawString(info, 0, view.getAxisLayout().getFont().getHeight());
+
+    if(enableViewMarginDebug)
+      drawViewMargins(g2d, pixelScale);
     
-    drawViewMargins(g2d, pixelScale);
-    drawColorbarMargins(g2d, pixelScale);
+    if(enableColorMarginDebug)
+      drawColorbarMargins(g2d, pixelScale);
     
     // draw other debug info
     if(this.info!=null) {
@@ -403,4 +408,22 @@ public class View2DLayout_Debug extends AbstractAWTRenderer2d implements AWTRend
   public void setEnabled(boolean enabled) {
     this.enabled = enabled;
   }
+
+  public boolean isEnableColorMarginDebug() {
+    return enableColorMarginDebug;
+  }
+
+  public void setEnableColorMarginDebug(boolean enableColorMarginDebug) {
+    this.enableColorMarginDebug = enableColorMarginDebug;
+  }
+
+  public boolean isEnableViewMarginDebug() {
+    return enableViewMarginDebug;
+  }
+
+  public void setEnableViewMarginDebug(boolean enableViewMarginDebug) {
+    this.enableViewMarginDebug = enableViewMarginDebug;
+  }
+  
+  
 }

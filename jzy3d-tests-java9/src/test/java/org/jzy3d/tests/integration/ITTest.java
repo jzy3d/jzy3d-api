@@ -59,10 +59,21 @@ public class ITTest {
   protected WT[] toolkits = {WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT};
   protected HiDPI[] resolutions = {HiDPI.ON, HiDPI.OFF};
 
+  protected WT[] toolkitsAWT = {WT.Native_AWT, WT.EmulGL_AWT};
+
   /**
    * Run a test for each possible registered toolkit and resolution.
    */
   protected void forEach(ITTestInstance task) {
+    /*for (WT toolkit : toolkits) {
+      for (HiDPI resolution : resolutions) {
+        task.run(toolkit, resolution);
+      }
+    }*/
+    forEach(task, toolkits);
+  }
+
+  protected void forEach(ITTestInstance task, WT[] toolkits) {
     for (WT toolkit : toolkits) {
       for (HiDPI resolution : resolutions) {
         task.run(toolkit, resolution);
@@ -70,6 +81,7 @@ public class ITTest {
     }
   }
 
+  
   public static interface ITTestInstance {
     public void run(WT toolkit, HiDPI resolution);
   }
@@ -109,10 +121,26 @@ public class ITTest {
     section(sb, "Colorbar", "IsModifiedByCustomFont", null);
     //section(sb, "Colorbar", "HasMinimumWidth", null);
 
-    section(sb, "2D_Colorbar", "View"+KV+"XY", null);
-    section(sb, "2D_Colorbar", "View"+KV+"XZ", null);
-    section(sb, "2D_Colorbar", "View"+KV+"YZ", null);
+    //section(sb, "2D_Colorbar", "View"+KV+"XY", null);
+    //section(sb, "2D_Colorbar", "View"+KV+"XZ", null);
+    //section(sb, "2D_Colorbar", "View"+KV+"YZ", null);
 
+    section(sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"None", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"X", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"Y", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"Both", null);
+
+    section(sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"None", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"X", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"Y", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"Both", null);
+
+    section(sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"None", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"X", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"Y", null);
+    section(sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"Both", null);
+
+    
     // 2D tests
     line(sb, "# 2D Layout");
 
