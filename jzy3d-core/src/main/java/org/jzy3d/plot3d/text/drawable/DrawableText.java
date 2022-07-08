@@ -10,7 +10,7 @@ public class DrawableText extends DrawableTextWrapper {
     setPositionColor(color);
   }
   
-  protected TextRenderer getRenderer() {
+  public TextRenderer getRenderer() {
     return (TextRenderer) renderer;
   }
   

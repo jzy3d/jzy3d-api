@@ -45,7 +45,10 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
   protected boolean showPosition = false;
   protected Color positionColor = Color.BLACK;
   protected float positionWidth = 3;
+  
+  protected boolean useGlutBitmap = false;
 
+  
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string
    * according to the current Camera configuration.
@@ -79,8 +82,13 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     positionAligned = positionAligned.add(sceneOffset);
 
     // Draws actual string
-    painter.drawText(font, text, positionAligned, color, rotation);
-    // Formerly : painter.glutBitmapString(font, text, positionAligned, color);
+    if(!useGlutBitmap) {
+      painter.drawText(font, text, positionAligned, color, rotation);
+    }
+    else {
+      // Fallback on former way of rendering text
+      painter.glutBitmapString(font, text, positionAligned, color); 
+    }
 
     if (showPosition) {
       Point p = new Point(position, positionColor);
@@ -145,5 +153,13 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
 
   public void setPositionWidth(float positionWidth) {
     this.positionWidth = positionWidth;
+  }
+
+  public boolean isUseGlutBitmap() {
+    return useGlutBitmap;
+  }
+
+  public void setUseGlutBitmap(boolean useGlutBitmap) {
+    this.useGlutBitmap = useGlutBitmap;
   }
 }
