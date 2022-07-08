@@ -388,20 +388,64 @@ public class AxisLabelProcessor {
       if (axis.isX(direction)) {
         xlab = axis.center.x;
         ylab = pos.y;
-        zlab = pos.z - yShift;
+        //zlab = pos.z - yShift;
+        if(viewLayout.isVerticalAxisFlip()) {
+          zlab = pos.z + yShift;
+        }
+        else {
+          zlab = pos.z - yShift;
+        }
+
       } else if (axis.isZ(direction)) {
-        xlab = pos.x - xShift;
+        
+        if(viewLayout.isAxisFlippedNone()) {
+          xlab = pos.x - xShift;          
+        }
+        else if(viewLayout.isVerticalFlipOnly()) {
+          xlab = pos.x - xShift;
+        }
+        else if(viewLayout.isVerticalAxisFlip()) {
+          xlab = pos.x + xShift;
+        }
+        
+        else {
+          xlab = pos.x + xShift;
+        }
+        
         ylab = pos.y;
         zlab = axis.center.z;
+
+
       }
     } else if (view.is2D_YZ()) {
       if (axis.isY(direction)) {
         xlab = pos.x;
         ylab = axis.center.y;
-        zlab = pos.z - yShift;
+
+        if(viewLayout.isVerticalAxisFlip()) {
+          zlab = pos.z + yShift;
+        }
+        else {
+          zlab = pos.z - yShift;
+        }
+
       } else if (axis.isZ(direction)) {
         xlab = pos.x;
-        ylab = pos.y - xShift;
+
+        if(viewLayout.isAxisFlippedNone()) {
+          ylab = pos.y - xShift;
+        }
+        else if(viewLayout.isHorizontalFlipOnly()) {
+          ylab = pos.y + xShift;
+        }
+        else if(viewLayout.isVerticalFlipOnly()) {
+          ylab = pos.y + xShift;
+        }
+        else {
+          ylab = pos.y - xShift;
+        }
+
+        
         zlab = axis.center.z;
       }
     }
