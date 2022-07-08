@@ -364,15 +364,22 @@ public class AxisLabelProcessor {
       if (axis.isX(direction)) {
         xlab = axis.center.x;
         ylab = pos.y - yShift;
+        
+        if(viewLayout.isVerticalAxisFlip()) {
+          ylab = pos.y + yShift;
+        }
         zlab = pos.z;
       } else if (axis.isY(direction)) {
         // if X axis is flipped, Y axis label should appear the other side
-        if(!viewLayout.isHorizontalAxisFlip()) {
-          xlab = pos.x - xShift;
-        }
-        else {
+        if(viewLayout.isHorizontalAxisFlip()) {
           xlab = pos.x + xShift;
         }
+        else {
+          xlab = pos.x - xShift;
+        }
+        /*if(viewLayout.isVerticalAxisFlip()) {
+          xlab = pos.x - xShift;
+        }*/
         
         ylab = axis.center.y;
         zlab = pos.z;
