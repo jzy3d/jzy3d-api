@@ -21,9 +21,18 @@ public class AWTChart extends Chart {
     super();
   }
 
+  public void add(AWTRenderer2d renderer2d) {
+    addRenderer(renderer2d);
+  }
+
   public void addRenderer(AWTRenderer2d renderer2d) {
     getView().addRenderer2d(renderer2d);
   }
+  
+  public void remove(AWTRenderer2d renderer2d) {
+    removeRenderer(renderer2d);
+  }
+
 
   public void removeRenderer(AWTRenderer2d renderer2d) {
     getView().removeRenderer2d(renderer2d);
