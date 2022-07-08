@@ -1032,12 +1032,25 @@ public class View {
     else if(view2DLayout.isAxisFlippedHorizontalOnly()){
       eye.x = AZIMUTH_FACING_X_DECREASING; 
       eye.y = ELEVATION_ON_BOTTOM; // on top
+
+      //eye.y = ELEVATION_ON_TOP; // on to
     }
     // watching X so that it decrease from left to right
     else if(view2DLayout.isAxisFlippedVerticalOnly()){
-      eye.x = AZIMUTH_FACING_X_DECREASING; 
-      eye.y = ELEVATION_ON_TOP; // on top
+      eye.x = AZIMUTH_FACING_X_INCREASING; 
+      eye.y = ELEVATION_ON_BOTTOM; // on top
     }
+    // watching X so that it decrease from left to right
+    else if(view2DLayout.isAxisFlippedBoth()){
+      //eye.x = AZIMUTH_FACING_X_DECREASING; 
+      //eye.y = ELEVATION_ON_BOTTOM; // on top
+      
+      // relate to camera up
+      eye.x = AZIMUTH_FACING_X_INCREASING; 
+      eye.y = ELEVATION_ON_TOP; // on top
+
+    }
+    
     
     eye = eye.cartesian().add(target);
     return eye;
@@ -1076,20 +1089,6 @@ public class View {
   
   protected boolean JGL_INVERSE_MATRIX_WORKAROUND = true;
 
-
-  protected void triggerCameraUpEvents(Coord3d viewpoint) {
-    if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) { // handle "on-top" events
-      if (!wasOnTopAtLastRendering) {
-        wasOnTopAtLastRendering = true;
-        fireViewOnTopEvent(true);
-      }
-    } else // handle "on-top" events
-    if (wasOnTopAtLastRendering) {
-      wasOnTopAtLastRendering = false;
-      fireViewOnTopEvent(false);
-    }
-  }
-
   /** 
    * Compute the direction of the top of the camera relative to its center.
    * 
@@ -1100,6 +1099,15 @@ public class View {
     
     // 2D cases
     if (is2D_XY()) { 
+      
+      // watching X so that it decrease from left to right
+      if(view2DLayout.isVerticalAxisFlip()){
+      //  eye.x = AZIMUTH_FACING_X_DECREASING; 
+      //  eye.y = ELEVATION_ON_BOTTOM; // on top
+        return new Coord3d(0, -1, 0); // use y axis as up vector
+
+      }
+
       return new Coord3d(0, 1, 0); // use y axis as up vector
     } 
     else if(is2D_XZ() || is2D_YZ()) {
@@ -1125,6 +1133,20 @@ public class View {
       }
     }
   }
+  
+  protected void triggerCameraUpEvents(Coord3d viewpoint) {
+    if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) { // handle "on-top" events
+      if (!wasOnTopAtLastRendering) {
+        wasOnTopAtLastRendering = true;
+        fireViewOnTopEvent(true);
+      }
+    } else // handle "on-top" events
+    if (wasOnTopAtLastRendering) {
+      wasOnTopAtLastRendering = false;
+      fireViewOnTopEvent(false);
+    }
+  }
+
 
   /**
    * Configure the camera so that it will capture a given volume in the scene.

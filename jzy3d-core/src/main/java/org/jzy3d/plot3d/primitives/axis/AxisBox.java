@@ -303,7 +303,7 @@ public class AxisBox implements IAxis {
         }
         // Flip the non X axis only
         else if(view.get2DLayout().isVerticalAxisFlip()) {
-          textBounds = ticks.drawTicks(painter, EDGE_0, AXE_X, layout.getXTickColor(),
+          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_X, layout.getXTickColor(),
               Horizontal.CENTER, Vertical.GROUND);
 
         }
@@ -345,16 +345,38 @@ public class AxisBox implements IAxis {
       // 2D case
       if (is2DWithY()) {
         if (view.is2D_XY()) {
-          
           // Standard XY without flip
-          if(!view.get2DLayout().isHorizontalAxisFlip()) {
+          if(view.get2DLayout().isAxisFlippedNone()) {
             textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
                 Horizontal.LEFT, Vertical.CENTER);
-          }
+          }          
           // Flip X axis only
-          else if(view.get2DLayout().isHorizontalAxisFlip()) {
+          else if(view.get2DLayout().isAxisFlippedHorizontalOnly()) {
+              textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
+                  Horizontal.LEFT, Vertical.CENTER);
+          }
+          // Flip Y axis only
+          else if(view.get2DLayout().isAxisFlippedVerticalOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
+                Horizontal.LEFT, Vertical.CENTER);
+            
+          }
+          else if(view.get2DLayout().isAxisFlippedBoth()) {
             textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
                 Horizontal.LEFT, Vertical.CENTER);
+            
+          }
+          //
+          else if(!view.get2DLayout().isHorizontalAxisFlip()) {
+            if(view.get2DLayout().isVerticalAxisFlip()) {
+              textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
+                  Horizontal.LEFT, Vertical.CENTER);
+            }
+            else {
+              textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
+                  Horizontal.LEFT, Vertical.CENTER);
+            }
+
           }
 
           
