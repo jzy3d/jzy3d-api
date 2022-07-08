@@ -3,8 +3,8 @@ jzy3d-test-java9-generated
 This is a summary of existing baseline images for tests, which was generated on 
 * OS Name : mac os x
 * OS Version : 11.4
-* Java Version : 17-panama
-* CPU : x86_64
+* Java Version : 17.0.1
+* CPU : aarch64
 * GPU : AppleM1
 
 # Surface
@@ -176,7 +176,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-# 2D_Colorbar : View=XY
+# 2D_FlipAxis : View=XY_Flip=None
 <table markdown=1>
 <tr>
 <td>Native_AWT HiDPI:ON</td>
@@ -187,12 +187,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>EmulGL_AWT HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XY_Native_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XY_Native_AWT_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XY_Native_Swing_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XY_Native_Swing_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XY_EmulGL_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XY_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=None_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=None_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=None_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=None_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=None_EmulGL_AWT_HiDPI=OFF.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -204,7 +204,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-# 2D_Colorbar : View=XZ
+# 2D_FlipAxis : View=XY_Flip=X
 <table markdown=1>
 <tr>
 <td>Native_AWT HiDPI:ON</td>
@@ -215,12 +215,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>EmulGL_AWT HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XZ_Native_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XZ_Native_AWT_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XZ_Native_Swing_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XZ_Native_Swing_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XZ_EmulGL_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=XZ_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=X_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=X_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=X_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=X_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=X_EmulGL_AWT_HiDPI=OFF.png"></td>
 </tr>
 <tr>
 <td></td>
@@ -232,7 +232,7 @@ This is a summary of existing baseline images for tests, which was generated on
 </tr>
 </table>
 
-# 2D_Colorbar : View=YZ
+# 2D_FlipAxis : View=XY_Flip=Y
 <table markdown=1>
 <tr>
 <td>Native_AWT HiDPI:ON</td>
@@ -243,12 +243,264 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>EmulGL_AWT HiDPI:OFF</td>
 </tr>
 <tr>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=YZ_Native_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=YZ_Native_AWT_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=YZ_Native_Swing_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=YZ_Native_Swing_HiDPI=OFF.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=YZ_EmulGL_AWT_HiDPI=ON.png"></td>
-<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_Colorbar_View=YZ_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Y_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Y_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Y_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Y_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Y_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=XY_Flip=Both
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Both_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Both_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Both_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Both_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XY_Flip=Both_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=YZ_Flip=None
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=None_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=None_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=None_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=None_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=None_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=YZ_Flip=X
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=X_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=X_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=X_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=X_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=X_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=YZ_Flip=Y
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Y_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Y_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Y_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Y_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Y_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=YZ_Flip=Both
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Both_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Both_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Both_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Both_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=YZ_Flip=Both_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=XZ_Flip=None
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=None_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=None_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=None_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=None_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=None_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=XZ_Flip=X
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=X_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=X_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=X_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=X_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=X_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=XZ_Flip=Y
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Y_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Y_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Y_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Y_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Y_EmulGL_AWT_HiDPI=OFF.png"></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</table>
+
+# 2D_FlipAxis : View=XZ_Flip=Both
+<table markdown=1>
+<tr>
+<td>Native_AWT HiDPI:ON</td>
+<td>Native_AWT HiDPI:OFF</td>
+<td>Native_Swing HiDPI:ON</td>
+<td>Native_Swing HiDPI:OFF</td>
+<td>EmulGL_AWT HiDPI:ON</td>
+<td>EmulGL_AWT HiDPI:OFF</td>
+</tr>
+<tr>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Both_Native_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Both_Native_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Both_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Both_EmulGL_AWT_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_11.4_AppleM1/2D_FlipAxis_View=XZ_Flip=Both_EmulGL_AWT_HiDPI=OFF.png"></td>
 </tr>
 <tr>
 <td></td>

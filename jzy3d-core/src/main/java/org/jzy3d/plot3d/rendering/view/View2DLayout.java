@@ -166,11 +166,11 @@ public class View2DLayout {
     return isHorizontalAxisFlip() && isVerticalAxisFlip();
   }
 
-  public boolean isAxisFlippedHorizontalOnly() {
+  public boolean isHorizontalFlipOnly() {
     return isHorizontalAxisFlip() && !isVerticalAxisFlip();
   }
 
-  public boolean isAxisFlippedVerticalOnly() {
+  public boolean isVerticalFlipOnly() {
     return !isHorizontalAxisFlip() && isVerticalAxisFlip();
   }
 
@@ -189,7 +189,12 @@ public class View2DLayout {
   public void setVerticalAxisFlip(boolean verticalAxisFlip) {
     this.verticalAxisFlip = verticalAxisFlip;
   }
-  
+
+  public void setBothAxisFlip(boolean axisFlip) {
+    setHorizontalAxisFlip(axisFlip);
+    setVerticalAxisFlip(axisFlip);
+  }
+
   public View2DLayout clone() {
     View2DLayout to = new View2DLayout();
     return copy(this, to);

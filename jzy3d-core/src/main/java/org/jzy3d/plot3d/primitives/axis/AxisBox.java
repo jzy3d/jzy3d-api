@@ -294,22 +294,40 @@ public class AxisBox implements IAxis {
 
       // 2D case
       if (is2DWithX()) {
-        
-        
-        // Standard X* without flip
-        if(!view.get2DLayout().isVerticalAxisFlip()) {
-          textBounds = ticks.drawTicks(painter, EDGE_1, AXE_X, layout.getXTickColor(),
-              Horizontal.CENTER, Vertical.GROUND);
-        }
-        // Flip the non X axis only
-        else if(view.get2DLayout().isVerticalAxisFlip()) {
-          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_X, layout.getXTickColor(),
-              Horizontal.CENTER, Vertical.GROUND);
+
+        if (view.is2D_XY()) {
+
+          // Standard X* without flip
+          if (!view.get2DLayout().isVerticalAxisFlip()) {
+            textBounds = ticks.drawTicks(painter, EDGE_1, AXE_X, layout.getXTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+          }
+          // Flip the non X axis only
+          else if (view.get2DLayout().isVerticalAxisFlip()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_X, layout.getXTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+
+          }
+        } else if (view.is2D_XZ()) {
+          // Standard X* without flip
+          if (view.get2DLayout().isAxisFlippedNone()) {
+            textBounds = ticks.drawTicks(painter, EDGE_1, AXE_X, layout.getXTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+          } else if (view.get2DLayout().isVerticalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_3, AXE_X, layout.getXTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+          } else if (view.get2DLayout().isHorizontalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_1, AXE_X, layout.getXTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+          } else if (view.get2DLayout().isAxisFlippedBoth()) {
+            textBounds = ticks.drawTicks(painter, EDGE_3, AXE_X, layout.getXTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+          }
 
         }
 
-        
       }
+
       // 3D case
       else if (is3D()) {
 
@@ -329,9 +347,11 @@ public class AxisBox implements IAxis {
       // Keep track of text occupation for layout
       if (textBounds != null)
         wholeBounds.add(textBounds);
-
     }
+
   }
+
+
 
   /**
    * Select an Y axis for ticks and labels rendering if conditions are met (range > 0 and axis
@@ -344,45 +364,58 @@ public class AxisBox implements IAxis {
 
       // 2D case
       if (is2DWithY()) {
+
+        // XY View
         if (view.is2D_XY()) {
           // Standard XY without flip
-          if(view.get2DLayout().isAxisFlippedNone()) {
+          if (view.get2DLayout().isAxisFlippedNone()) {
             textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
                 Horizontal.LEFT, Vertical.CENTER);
-          }          
-          // Flip X axis only
-          else if(view.get2DLayout().isAxisFlippedHorizontalOnly()) {
-              textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
-                  Horizontal.LEFT, Vertical.CENTER);
           }
-          // Flip Y axis only
-          else if(view.get2DLayout().isAxisFlippedVerticalOnly()) {
-            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
-                Horizontal.LEFT, Vertical.CENTER);
-            
-          }
-          else if(view.get2DLayout().isAxisFlippedBoth()) {
+          // Flip horizontal axis only
+          else if (view.get2DLayout().isHorizontalFlipOnly()) {
             textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
                 Horizontal.LEFT, Vertical.CENTER);
-            
           }
-          //
-          else if(!view.get2DLayout().isHorizontalAxisFlip()) {
-            if(view.get2DLayout().isVerticalAxisFlip()) {
-              textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
-                  Horizontal.LEFT, Vertical.CENTER);
-            }
-            else {
-              textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
-                  Horizontal.LEFT, Vertical.CENTER);
-            }
+          // Flip vertical axis only
+          else if (view.get2DLayout().isVerticalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
+                Horizontal.LEFT, Vertical.CENTER);
+          }
+          // Flip both
+          else if (view.get2DLayout().isAxisFlippedBoth()) {
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
+                Horizontal.LEFT, Vertical.CENTER);
 
           }
 
-          
-        } else if (view.is2D_YZ()) {
-          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
-              Horizontal.CENTER, Vertical.GROUND);
+
+        }
+
+        // YZ View
+
+        else if (view.is2D_YZ()) {
+          // Standard XY without flip
+          if (view.get2DLayout().isAxisFlippedNone()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+          }
+          // Flip horizontal axis only
+          else if (view.get2DLayout().isHorizontalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+          }
+          // Flip vertical axis only
+          else if (view.get2DLayout().isVerticalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+          }
+          // Flip both
+          else if (view.get2DLayout().isAxisFlippedBoth()) {
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Y, layout.getYTickColor(),
+                Horizontal.CENTER, Vertical.GROUND);
+
+          }
         }
       }
 
@@ -409,8 +442,8 @@ public class AxisBox implements IAxis {
   }
 
   /**
-   * Select a Z axis for ticks and labels rendering if conditions are met (range > 0 and axis
-   * layout configured to display this axis)
+   * Select a Z axis for ticks and labels rendering if conditions are met (range > 0 and axis layout
+   * configured to display this axis)
    */
   public void drawTicksAndLabelsZ(IPainter painter) {
     if (zrange > 0 && layout.isZTickLabelDisplayed()) {
@@ -420,11 +453,47 @@ public class AxisBox implements IAxis {
       // 2D case
       if (is2DWithZ()) {
         if (view.is2D_XZ()) {
-          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Z, layout.getZTickColor(),
-              Horizontal.LEFT, Vertical.GROUND);
+
+          // Standard XZ without flip
+          if (view.get2DLayout().isAxisFlippedNone()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Z, layout.getZTickColor(),
+                Horizontal.LEFT, Vertical.GROUND);
+          }
+          // Flip horizontal axis only
+          else if (view.get2DLayout().isHorizontalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Z, layout.getZTickColor(),
+                Horizontal.LEFT, Vertical.GROUND);
+          }
+          // Flip vertical axis only
+          else if (view.get2DLayout().isVerticalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Z, layout.getZTickColor(),
+                Horizontal.LEFT, Vertical.GROUND);
+          } else if (view.get2DLayout().isAxisFlippedBoth()) {
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Z, layout.getZTickColor(),
+                Horizontal.LEFT, Vertical.GROUND);
+          }
+
         } else if (view.is2D_YZ()) {
-          textBounds = ticks.drawTicks(painter, EDGE_3, AXE_Z, layout.getZTickColor(),
-              Horizontal.LEFT, Vertical.GROUND);
+          // Standard YZ without flip
+          if (view.get2DLayout().isAxisFlippedNone()) {
+            textBounds = ticks.drawTicks(painter, EDGE_3, AXE_Z, layout.getZTickColor(),
+                Horizontal.LEFT, Vertical.GROUND);
+          }
+          // Flip horizontal axis only
+          else if (view.get2DLayout().isHorizontalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Z, layout.getZTickColor(),
+                Horizontal.LEFT, Vertical.GROUND);
+          }
+          // Flip vertical axis only
+          else if (view.get2DLayout().isVerticalFlipOnly()) {
+            textBounds = ticks.drawTicks(painter, EDGE_1, AXE_Z, layout.getZTickColor(),
+                Horizontal.LEFT, Vertical.GROUND);
+
+          } else if (view.get2DLayout().isAxisFlippedBoth()) {
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Z, layout.getZTickColor(),
+                Horizontal.LEFT, Vertical.GROUND);
+
+          }
         }
       }
 
