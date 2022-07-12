@@ -411,10 +411,10 @@ public class AxisLabelProcessor {
       // Vertical axis
       else if (axis.isZ(direction)) {
         
-        if(viewLayout.isAxisFlippedNone()) {
+        if(viewLayout.isNoAxisFlipped()) {
           xlab = pos.x - xShift;          
         }
-        else if(viewLayout.isVerticalFlipOnly()) {
+        else if(viewLayout.isVerticalAxisFlipOnly()) {
           xlab = pos.x - xShift;
         }
         else if(viewLayout.isVerticalAxisFlip()) {
@@ -450,13 +450,13 @@ public class AxisLabelProcessor {
       else if (axis.isZ(direction)) {
         xlab = pos.x;
 
-        if(viewLayout.isAxisFlippedNone()) {
+        if(viewLayout.isNoAxisFlipped()) {
           ylab = pos.y - xShift;
         }
-        else if(viewLayout.isHorizontalFlipOnly()) {
+        else if(viewLayout.isHorizontalAxisFlipOnly()) {
           ylab = pos.y + xShift;
         }
-        else if(viewLayout.isVerticalFlipOnly()) {
+        else if(viewLayout.isVerticalAxisFlipOnly()) {
           ylab = pos.y - xShift;
         }
         else {

@@ -17,13 +17,11 @@ public class View2DLayout {
    * the embedding axis to appear horizontally centered in the canvas.
    */
   protected boolean symetricHorizontalMargin = false;
-
   /**
    * When true, the global left margin (including text) will equal the global right margin. Allows
    * the embedding axis to appear horizontally centered in the canvas.
    */
   protected boolean symetricVerticalMargin = false;
-
   /** Distance between axis and tick labels (hence, length of the tick) */
   protected float horizontalTickLabelsDistance = 0;
   /** Distance between tick labels and axis label */
@@ -32,10 +30,11 @@ public class View2DLayout {
   protected float verticalTickLabelsDistance = 0;
   /** Distance between tick labels and axis label */
   protected float verticalAxisLabelsDistance = 0;
-
+  /** Distance between canvas content and canvas border (i.e. empty borders dimension) */
   protected Margin margin = new Margin();
-  
+  /** If true, reverse direction of horizontal axis */
   protected boolean horizontalAxisFlip = false;
+  /** If true, reverse direction of vertical axis */  
   protected boolean verticalAxisFlip = false;
 
 
@@ -158,19 +157,19 @@ public class View2DLayout {
     this.symetricVerticalMargin = symetricVerticalMargin;
   }
 
-  public boolean isAxisFlippedNone() {
+  public boolean isNoAxisFlipped() {
     return !isHorizontalAxisFlip() && !isVerticalAxisFlip();
   }
 
-  public boolean isAxisFlippedBoth() {
+  public boolean isBothAxisFlipped() {
     return isHorizontalAxisFlip() && isVerticalAxisFlip();
   }
 
-  public boolean isHorizontalFlipOnly() {
+  public boolean isHorizontalAxisFlipOnly() {
     return isHorizontalAxisFlip() && !isVerticalAxisFlip();
   }
 
-  public boolean isVerticalFlipOnly() {
+  public boolean isVerticalAxisFlipOnly() {
     return !isHorizontalAxisFlip() && isVerticalAxisFlip();
   }
 
