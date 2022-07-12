@@ -353,23 +353,32 @@ public class AxisLabelProcessor {
     float xShift = xShiftPx * modelToScreenRatio.x;
     float yShift = yShiftPx * modelToScreenRatio.y;
 
+
+    // -----------------------------------------------------------
+    // Build the axis label position for each 2D chart projection
+
     double xlab = 0;
     double ylab = 0;
     double zlab = 0;
 
-    // Build the axis label position for each 2D chart projection
-
+    // 2D XY charts
     if (view.is2D_XY()) {
-
+      
+      // Horizontal axis
       if (axis.isX(direction)) {
         xlab = axis.center.x;
-        ylab = pos.y - yShift;
         
         if(viewLayout.isVerticalAxisFlip()) {
           ylab = pos.y + yShift;
+        } else {
+          ylab = pos.y - yShift;
         }
+        
         zlab = pos.z;
-      } else if (axis.isY(direction)) {
+      } 
+      
+      // Vertical axis
+      else if (axis.isY(direction)) {
         // if X axis is flipped, Y axis label should appear the other side
         if(viewLayout.isHorizontalAxisFlip()) {
           xlab = pos.x + xShift;
@@ -377,26 +386,30 @@ public class AxisLabelProcessor {
         else {
           xlab = pos.x - xShift;
         }
-        /*if(viewLayout.isVerticalAxisFlip()) {
-          xlab = pos.x - xShift;
-        }*/
         
         ylab = axis.center.y;
         zlab = pos.z;
       }
-    } else if (view.is2D_XZ()) {
+    } 
+    
+    // 2D XZ charts
+    else if (view.is2D_XZ()) {
+      
+      // Horizontal axis
       if (axis.isX(direction)) {
         xlab = axis.center.x;
         ylab = pos.y;
-        //zlab = pos.z - yShift;
+
         if(viewLayout.isVerticalAxisFlip()) {
           zlab = pos.z + yShift;
         }
         else {
           zlab = pos.z - yShift;
         }
-
-      } else if (axis.isZ(direction)) {
+      } 
+      
+      // Vertical axis
+      else if (axis.isZ(direction)) {
         
         if(viewLayout.isAxisFlippedNone()) {
           xlab = pos.x - xShift;          
@@ -407,17 +420,19 @@ public class AxisLabelProcessor {
         else if(viewLayout.isVerticalAxisFlip()) {
           xlab = pos.x + xShift;
         }
-        
         else {
           xlab = pos.x + xShift;
         }
         
         ylab = pos.y;
         zlab = axis.center.z;
-
-
       }
-    } else if (view.is2D_YZ()) {
+    } 
+    
+    // 2D YZ charts
+    else if (view.is2D_YZ()) {
+
+      // Horizontal axis
       if (axis.isY(direction)) {
         xlab = pos.x;
         ylab = axis.center.y;
@@ -429,7 +444,10 @@ public class AxisLabelProcessor {
           zlab = pos.z - yShift;
         }
 
-      } else if (axis.isZ(direction)) {
+      } 
+      
+      // Vertical axis
+      else if (axis.isZ(direction)) {
         xlab = pos.x;
 
         if(viewLayout.isAxisFlippedNone()) {
