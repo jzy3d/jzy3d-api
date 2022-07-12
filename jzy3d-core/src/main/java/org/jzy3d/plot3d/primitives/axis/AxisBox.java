@@ -294,20 +294,51 @@ public class AxisBox implements IAxis {
 
       // 2D case
       if (is2DWithX()) {
-        textBounds = ticks.drawTicks(painter, EDGE_1, AXE_X, layout.getXTickColor(),
-            Horizontal.CENTER, Vertical.GROUND);
+        
+        // layout
+        Horizontal h = Horizontal.CENTER;
+        Vertical v = Vertical.GROUND;
+
+        // choose one of the 4 possible edges - 2 are good, 2 are wrong
+        int edgeId = -1;
+
+
+        if (view.is2D_XY()) {
+
+          // Standard X* without flip
+          if (!view.get2DLayout().isVerticalAxisFlip()) 
+            edgeId = EDGE_1;
+          // Flip the non X axis only
+          else 
+            edgeId = EDGE_2;
+        } 
+        
+        else if (view.is2D_XZ()) {
+          
+          if (view.get2DLayout().isNoAxisFlipped()) 
+            edgeId = 1;
+          else if (view.get2DLayout().isHorizontalAxisFlipOnly()) 
+            edgeId = 1;
+          else if (view.get2DLayout().isVerticalAxisFlipOnly()) 
+            edgeId = 3;
+          else if (view.get2DLayout().isBothAxisFlipped()) 
+            edgeId = 3;
+        }
+        textBounds = ticks.drawTicks(painter, edgeId, AXE_X, layout.getXTickColor(), h, v);
+
       }
+
       // 3D case
       else if (is3D()) {
 
         int edgeId = findClosestXaxe(painter.getCamera());
 
         if (edgeId >= 0) {
-
           textBounds = ticks.drawTicks(painter, edgeId, AXE_X, layout.getXTickColor());
         } else {
           // handles "on top" view, when all face of cube are drawn, which forbid to select an axe
           // automatically
+          
           textBounds = ticks.drawTicks(painter, EDGE_2, AXE_X, layout.getXTickColor(),
               Horizontal.CENTER, Vertical.TOP);
         }
@@ -316,9 +347,11 @@ public class AxisBox implements IAxis {
       // Keep track of text occupation for layout
       if (textBounds != null)
         wholeBounds.add(textBounds);
-
     }
+
   }
+
+
 
   /**
    * Select an Y axis for ticks and labels rendering if conditions are met (range > 0 and axis
@@ -331,13 +364,46 @@ public class AxisBox implements IAxis {
 
       // 2D case
       if (is2DWithY()) {
+
+        // layout
+        Horizontal h = Horizontal.LEFT;
+        Vertical v = Vertical.GROUND;
+
+        // choose one of the 4 possible edges - 2 are good, 2 are wrong
+        int edgeId = -1;
+
+        // XY View
         if (view.is2D_XY()) {
-          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
-              Horizontal.LEFT, Vertical.CENTER);
-        } else if (view.is2D_YZ()) {
-          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Y, layout.getYTickColor(),
-              Horizontal.CENTER, Vertical.GROUND);
+          h = Horizontal.LEFT;
+          v = Vertical.CENTER;
+
+          if (view.get2DLayout().isNoAxisFlipped())
+            edgeId = 2;
+          else if (view.get2DLayout().isHorizontalAxisFlipOnly())
+            edgeId = 0;
+          else if (view.get2DLayout().isVerticalAxisFlipOnly())
+            edgeId = 2;
+          else if (view.get2DLayout().isBothAxisFlipped())
+            edgeId = 0;
         }
+
+        // YZ View
+        else if (view.is2D_YZ()) {
+          h = Horizontal.CENTER;
+          v = Vertical.GROUND;
+
+          if (view.get2DLayout().isNoAxisFlipped())
+            edgeId = 2;
+          else if (view.get2DLayout().isHorizontalAxisFlipOnly())
+            edgeId = 2;
+          else if (view.get2DLayout().isVerticalAxisFlipOnly())
+            edgeId = 0;
+          else if (view.get2DLayout().isBothAxisFlipped())
+            edgeId = 0;
+        }
+
+        textBounds = ticks.drawTicks(painter, edgeId, AXE_Y, layout.getYTickColor(), h, v);
+
       }
 
       // 3D case
@@ -363,8 +429,8 @@ public class AxisBox implements IAxis {
   }
 
   /**
-   * Select a Z axis for ticks and labels rendering if conditions are met (range > 0 and axis
-   * layout configured to display this axis)
+   * Select a Z axis for ticks and labels rendering if conditions are met (range > 0 and axis layout
+   * configured to display this axis)
    */
   public void drawTicksAndLabelsZ(IPainter painter) {
     if (zrange > 0 && layout.isZTickLabelDisplayed()) {
@@ -373,13 +439,38 @@ public class AxisBox implements IAxis {
 
       // 2D case
       if (is2DWithZ()) {
+
+        // layout
+        Horizontal h = Horizontal.LEFT;
+        Vertical v = Vertical.GROUND;
+
+        // choose one of the 4 possible edges - 2 are good, 2 are wrong
+        int edgeId = -1;
+
         if (view.is2D_XZ()) {
-          textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Z, layout.getZTickColor(),
-              Horizontal.LEFT, Vertical.GROUND);
-        } else if (view.is2D_YZ()) {
-          textBounds = ticks.drawTicks(painter, EDGE_3, AXE_Z, layout.getZTickColor(),
-              Horizontal.LEFT, Vertical.GROUND);
+          if (view.get2DLayout().isNoAxisFlipped())
+            edgeId = EDGE_2;
+          else if (view.get2DLayout().isHorizontalAxisFlipOnly())
+            edgeId = EDGE_0;
+          else if (view.get2DLayout().isVerticalAxisFlipOnly())
+            edgeId = EDGE_2;
+          else if (view.get2DLayout().isBothAxisFlipped())
+            edgeId = EDGE_0;
         }
+
+        else if (view.is2D_YZ()) {
+          if (view.get2DLayout().isNoAxisFlipped())
+            edgeId = EDGE_0;
+          else if (view.get2DLayout().isHorizontalAxisFlipOnly())
+            edgeId = EDGE_1;
+          else if (view.get2DLayout().isVerticalAxisFlipOnly())
+            edgeId = EDGE_0;
+          else if (view.get2DLayout().isBothAxisFlipped())
+            edgeId = EDGE_1;
+
+        }
+
+        textBounds = ticks.drawTicks(painter, edgeId, AXE_Z, layout.getZTickColor(), h, v);
       }
 
       // 3D case only
@@ -421,15 +512,15 @@ public class AxisBox implements IAxis {
     return view != null && (view.is2D_XZ() || view.is2D_YZ());
   }
 
-  protected boolean isZAxeLabelDisplayed(int direction) {
+  protected boolean isZAxisLabelDisplayed(int direction) {
     return isZ(direction) && layout.isZAxisLabelDisplayed();
   }
 
-  protected boolean isYAxeLabelDisplayed(int direction) {
+  protected boolean isYAxisLabelDisplayed(int direction) {
     return isY(direction) && layout.isYAxisLabelDisplayed();
   }
 
-  protected boolean isXAxeLabelDisplayed(int direction) {
+  protected boolean isXAxisLabelDisplayed(int direction) {
     return isX(direction) && layout.isXAxisLabelDisplayed();
   }
 

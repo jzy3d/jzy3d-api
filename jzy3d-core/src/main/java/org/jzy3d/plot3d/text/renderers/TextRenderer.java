@@ -42,8 +42,13 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
 
   protected TextLayout layout = new TextLayout();
 
-  protected boolean showPositionDebug = false;
+  protected boolean showPosition = false;
+  protected Color positionColor = Color.BLACK;
+  protected float positionWidth = 3;
+  
+  protected boolean useGlutBitmap = false;
 
+  
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string
    * according to the current Camera configuration.
@@ -77,12 +82,17 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     positionAligned = positionAligned.add(sceneOffset);
 
     // Draws actual string
-    painter.drawText(font, text, positionAligned, color, rotation);
-    // Formerly : painter.glutBitmapString(font, text, positionAligned, color);
+    if(!useGlutBitmap) {
+      painter.drawText(font, text, positionAligned, color, rotation);
+    }
+    else {
+      // Fallback on former way of rendering text
+      painter.glutBitmapString(font, text, positionAligned, color); 
+    }
 
-    if (showPositionDebug) {
-      Point p = new Point(position, Color.RED);
-      p.setWidth(5);
+    if (showPosition) {
+      Point p = new Point(position, positionColor);
+      p.setWidth(positionWidth);
       p.draw(painter);
     }
     // Return text bounds
@@ -119,5 +129,37 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     txtBounds.add(painter.getCamera().screenToModel(painter, botLeft));
     txtBounds.add(painter.getCamera().screenToModel(painter, topRight));
     return txtBounds;
+  }
+
+  public boolean isShowPosition() {
+    return showPosition;
+  }
+
+  public void setShowPosition(boolean showPosition) {
+    this.showPosition = showPosition;
+  }
+
+  public Color getPositionColor() {
+    return positionColor;
+  }
+
+  public void setPositionColor(Color positionColor) {
+    this.positionColor = positionColor;
+  }
+
+  public float getPositionWidth() {
+    return positionWidth;
+  }
+
+  public void setPositionWidth(float positionWidth) {
+    this.positionWidth = positionWidth;
+  }
+
+  public boolean isUseGlutBitmap() {
+    return useGlutBitmap;
+  }
+
+  public void setUseGlutBitmap(boolean useGlutBitmap) {
+    this.useGlutBitmap = useGlutBitmap;
   }
 }

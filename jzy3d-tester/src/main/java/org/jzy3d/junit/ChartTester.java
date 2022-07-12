@@ -342,15 +342,17 @@ public class ChartTester {
       doHighlightPixels(expected, diff, highlight);
     }
 
-    expected.getSubimage(minX, minY, maxX - minX, maxY - minY);
-
-    Graphics2D g2d = (Graphics2D) expected.createGraphics();
-    g2d.setColor(java.awt.Color.RED);
-    g2d.setStroke(new BasicStroke(1f));
-    g2d.drawRect(minX, minY, maxX - minX, maxY - minY);
-
-    System.err
-        .println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
+    if(minX<=maxX && minY<=maxY) {
+      //expected.getSubimage(minX, minY, maxX - minX, maxY - minY);
+  
+      Graphics2D g2d = (Graphics2D) expected.createGraphics();
+      g2d.setColor(java.awt.Color.RED);
+      g2d.setStroke(new BasicStroke(1f));
+      g2d.drawRect(minX, minY, maxX - minX, maxY - minY);
+  
+      System.err
+          .println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
+    }
   }
 
 
@@ -393,10 +395,17 @@ public class ChartTester {
         maxY = diff.y;
     }
 
-    System.err
-        .println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
-
-    return expected.getSubimage(minX, minY, maxX - minX, maxY - minY);
+    
+    if(minX<=maxX && minY<=maxY) {
+    
+      System.err
+          .println("Erroneous Area : x[" + minX + ", " + maxX + "] y[" + minY + " " + maxY + "]");
+  
+      return expected.getSubimage(minX, minY, maxX - minX, maxY - minY);
+    }
+    else {
+      return expected;
+    }
 
   }
 

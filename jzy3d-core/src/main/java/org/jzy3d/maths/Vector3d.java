@@ -46,8 +46,31 @@ public class Vector3d {
     z2 = p2.z;
   }
 
+  public Vector3d( Coord3d p2) {
+    x1 = 0;
+    x2 = p2.x;
+    y1 = 0;
+    y2 = p2.y;
+    z1 = 0;
+    z2 = p2.z;
+  }
+
   /***********************************************************/
 
+  public Coord3d coord2() {
+    return new Coord3d(x2, y2, z2);
+  }
+
+  public Coord3d coord1() {
+    return new Coord3d(x1, y1, z1);
+  }
+  
+  public Coord3d[] coords() {
+    Coord3d[] c = {coord1(), coord2()};
+    return c;
+  }
+
+  
   /** Return the vector induced by this set of coordinates. */
   public Coord3d vector() {
     return new Coord3d(x2 - x1, y2 - y1, z2 - z1);
