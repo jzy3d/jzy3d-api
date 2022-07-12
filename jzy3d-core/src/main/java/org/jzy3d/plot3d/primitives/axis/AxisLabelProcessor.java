@@ -439,10 +439,10 @@ public class AxisLabelProcessor {
           ylab = pos.y + xShift;
         }
         else if(viewLayout.isVerticalFlipOnly()) {
-          ylab = pos.y + xShift;
+          ylab = pos.y - xShift;
         }
         else {
-          ylab = pos.y - xShift;
+          ylab = pos.y + xShift;
         }
 
         
