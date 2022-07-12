@@ -77,6 +77,12 @@ public class Coord3d implements Serializable {
     y = yi;
     z = zi;
   }
+  
+  public Coord3d(float xi, float yi) {
+    x = xi;
+    y = yi;
+    z = 0;
+  }
 
   public Coord3d(Coord2d c, float zi) {
     x = c.x;
@@ -113,6 +119,12 @@ public class Coord3d implements Serializable {
     x = (float) xi;
     y = (float) yi;
     z = (float) zi;
+  }
+
+  public Coord3d(double xi, double yi) {
+    x = (float) xi;
+    y = (float) yi;
+    z = 0;
   }
 
   public Coord3d set(Coord3d c2) {

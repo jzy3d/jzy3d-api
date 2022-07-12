@@ -1,6 +1,9 @@
 package org.jzy3d.plot3d.builder;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot2d.primitives.LineSerie2d;
 import org.jzy3d.plot2d.primitives.LineSerie2dSplitted;
@@ -55,4 +58,33 @@ public class SerieBuilder {
     else
       throw new IllegalArgumentException("Unsupported serie type " + type);
   }
+
+  public List<Coord3d> apply(Func2D func, Range xRange, int steps) {
+    return apply(func, xRange, steps, true, true);
+  }
+  
+  public List<Coord3d> apply(Func2D func, Range xRange, int steps, boolean includeXMin, boolean includeXMax) {
+    List<Coord3d> out = new ArrayList<>();
+    
+    double step = xRange.getRange() / steps;
+
+    
+    
+    for (double x = xRange.getMin(); x <= xRange.getMax(); x += step) {
+      // shift lower bound 
+      if(!includeXMin && x==xRange.getMin()) {
+        out.add(new Coord3d(x+Double.MIN_VALUE, func.f(x+Double.MIN_VALUE)));
+      }
+      // shift upper bound
+      else if(!includeXMax && x==xRange.getMax()) {
+        out.add(new Coord3d(x-Double.MIN_VALUE, func.f(x-Double.MIN_VALUE)));
+      }
+      else {
+        out.add(new Coord3d(x, func.f(x)));
+      }
+
+    }
+    return out;
+  }
+
 }

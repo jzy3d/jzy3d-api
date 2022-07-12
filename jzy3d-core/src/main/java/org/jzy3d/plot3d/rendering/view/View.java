@@ -911,22 +911,16 @@ public class View {
   /* CAMERA PROCESSING */
 
   public void updateCamera(ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
-    float sceneRadius = (float) boundsScaled.getRadius() * factorViewPointDistance;
-    updateCamera(viewport, boundsScaled, sceneRadius);
+    updateCamera(viewport, boundsScaled, viewMode, viewpoint, cam, cameraMode, factorViewPointDistance,
+        center, scaling);
   }
 
   public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds,
-      float sceneRadiusScaled) {
-    updateCamera(viewport, bounds, sceneRadiusScaled, viewMode, viewpoint, cam, cameraMode,
-        factorViewPointDistance, center, scaling);
-  }
+      ViewPositionMode viewmode, Coord3d viewpoint, Camera cam, CameraMode cameraMode,
+      float factorViewPointDistance, Coord3d center, Coord3d scaling) {
 
-  public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds,
-      float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
-      CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
-
-    updateCameraWithoutShooting(viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam,
-        factorViewPointDistance, center, scaling);
+    updateCameraWithoutShooting(viewport, bounds, viewmode, viewpoint, cam, factorViewPointDistance,
+        center, scaling);
 
     triggerCameraUpEvents(viewpoint);
 
@@ -942,11 +936,12 @@ public class View {
    * that are invoked by shoot method.
    */
   public void updateCameraWithoutShooting(ViewportConfiguration viewport, BoundingBox3d bounds,
-      float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
-      float factorViewPointDistance, Coord3d center, Coord3d scaling) {
+      ViewPositionMode viewmode, Coord3d viewpoint, Camera cam, float factorViewPointDistance,
+      Coord3d center, Coord3d scaling) {
 
-    viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
+    viewpoint.z = computeViewpointDistance(bounds, factorViewPointDistance);
 
+    
     Coord3d cameraTarget = computeCameraTarget(center, scaling);
     Coord3d cameraUp = computeCameraUp(viewpoint);
     Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
@@ -957,9 +952,16 @@ public class View {
   }
 
 
-  public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled,
+  public float computeViewpointDistance(BoundingBox3d bounds, 
       float factorViewPointDistance) {
-    return (float) spaceTransformer.compute(bounds).getRadius();
+    float v;
+    if (spaceTransformer == null) {
+      v = (float) bounds.getRadius();
+    } else {
+      v = (float) spaceTransformer.compute(bounds).getRadius();
+    }
+    
+    return v * factorViewPointDistance;
   }
 
   protected Coord3d computeCameraTarget() {
@@ -1004,6 +1006,8 @@ public class View {
 
 
   protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
+    //System.out.println("View : " + viewpoint.z);
+
     return viewpoint.cartesian().add(target);
   }
 
@@ -1685,6 +1689,14 @@ public class View {
 
   public boolean isMaintainAllObjectsInView() {
     return maintainAllObjectsInView;
+  }
+  
+  public float getFactorViewPointDistance() {
+    return factorViewPointDistance;
+  }
+
+  public void setFactorViewPointDistance(float factorViewPointDistance) {
+    this.factorViewPointDistance = factorViewPointDistance;
   }
 
   public void setMaintainAllObjectsInView(boolean maintainAllObjectsInView) {
