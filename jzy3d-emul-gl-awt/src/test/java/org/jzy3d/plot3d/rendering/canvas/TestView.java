@@ -253,34 +253,43 @@ public class TestView {
     // When 2D XY, with decreasing X
     viewLayout.setHorizontalAxisFlip(true);    
     viewLayout.setVerticalAxisFlip(false);    
+    view.setViewPositionMode(ViewPositionMode.TOP);
     view.shoot();
 
     // Then
+    Assert.assertEquals(new Coord3d(0,1,0), view.getCamera().getUp());
     Assert.assertEquals(View.AZIMUTH_FACING_X_DECREASING, view.getViewPoint().x, 0.001);
     Assert.assertEquals(View.ELEVATION_ON_BOTTOM, view.getViewPoint().y, 0.001);
 
     // When 2D XY, with decreasing Y
     viewLayout.setHorizontalAxisFlip(false);    
-    viewLayout.setVerticalAxisFlip(true);    
+    viewLayout.setVerticalAxisFlip(true); 
+    view.setViewPositionMode(ViewPositionMode.TOP);
     view.shoot();
 
     // Then
+    Assert.assertEquals(new Coord3d(0,-1,0), view.getCamera().getUp());
     Assert.assertEquals(View.AZIMUTH_FACING_X_INCREASING, view.getViewPoint().x, 0.001);
     Assert.assertEquals(View.ELEVATION_ON_BOTTOM, view.getViewPoint().y, 0.001);
 
     
     // -----------------------------------------------------------
     // When 2D XZ
+    
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(false); 
     view.setViewPositionMode(ViewPositionMode.XZ);
     view.shoot();
-    
-    
     
     // Then
     Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
 
     // -----------------------------------------------------------
     // When 2D YZ
+
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(false);    
+
     view.setViewPositionMode(ViewPositionMode.YZ);
     view.shoot();
 

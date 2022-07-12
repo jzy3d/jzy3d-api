@@ -76,7 +76,7 @@ public class CoplanarityManager extends Drawable implements IGLBindedResource {
     // Set stencil op to set 1 if depth passes, 0 if it fails
     painter.glStencilOp(StencilOp.GL_KEEP, StencilOp.GL_ZERO, StencilOp.GL_REPLACE);
 
-    // Draw the base polygons
+    // Draw the base polygons that should be covered by outlines
     plane.draw(painter);
 
     // Set stencil function to pass when stencil is 1
