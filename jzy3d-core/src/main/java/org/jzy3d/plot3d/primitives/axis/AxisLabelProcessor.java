@@ -33,8 +33,8 @@ public class AxisLabelProcessor {
       BoundingBox3d ticksTxtBounds, Coord3d position, String label, float rotation,
       Coord2d offset) {
 
-    boolean shouldDisplayLabel = axis.isXAxeLabelDisplayed(direction)
-        || axis.isYAxeLabelDisplayed(direction) || axis.isZAxeLabelDisplayed(direction);
+    boolean shouldDisplayLabel = axis.isXAxisLabelDisplayed(direction)
+        || axis.isYAxisLabelDisplayed(direction) || axis.isZAxisLabelDisplayed(direction);
 
     if (shouldDisplayLabel) {
 

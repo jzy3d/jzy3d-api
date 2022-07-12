@@ -3,8 +3,8 @@ jzy3d-test-java9-generated
 This is a summary of existing baseline images for tests, which was generated on 
 * OS Name : mac os x
 * OS Version : 11.4
-* Java Version : 17.0.1
-* CPU : aarch64
+* Java Version : 17-panama
+* CPU : x86_64
 * GPU : AppleM1
 
 # Surface
@@ -199,7 +199,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>Diff chart:<br><img src="target/error-2D_FlipAxis_View=XY_Flip=None_EmulGL_AWT_HiDPI=ON_DIFF.png"><br>Actual chart:<br><img src="target/error-2D_FlipAxis_View=XY_Flip=None_EmulGL_AWT_HiDPI=ON_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-2D_FlipAxis_View=XY_Flip=None_EmulGL_AWT_HiDPI=ON_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 </tr>
 </table>
@@ -632,7 +632,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_11.4_AppleM1/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
-<td></td>
+<td>Diff chart:<br><img src="target/error-2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true_DIFF.png"><br>Actual chart:<br><img src="target/error-2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
