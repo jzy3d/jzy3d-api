@@ -476,21 +476,21 @@ public class AxisBox implements IAxis {
         } else if (view.is2D_YZ()) {
           // Standard YZ without flip
           if (view.get2DLayout().isAxisFlippedNone()) {
-            textBounds = ticks.drawTicks(painter, EDGE_3, AXE_Z, layout.getZTickColor(),
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Z, layout.getZTickColor(),
                 Horizontal.LEFT, Vertical.GROUND);
           }
           // Flip horizontal axis only
           else if (view.get2DLayout().isHorizontalFlipOnly()) {
-            textBounds = ticks.drawTicks(painter, EDGE_2, AXE_Z, layout.getZTickColor(),
+            textBounds = ticks.drawTicks(painter, EDGE_1, AXE_Z, layout.getZTickColor(),
                 Horizontal.LEFT, Vertical.GROUND);
           }
           // Flip vertical axis only
           else if (view.get2DLayout().isVerticalFlipOnly()) {
-            textBounds = ticks.drawTicks(painter, EDGE_1, AXE_Z, layout.getZTickColor(),
+            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Z, layout.getZTickColor(),
                 Horizontal.LEFT, Vertical.GROUND);
 
           } else if (view.get2DLayout().isAxisFlippedBoth()) {
-            textBounds = ticks.drawTicks(painter, EDGE_0, AXE_Z, layout.getZTickColor(),
+            textBounds = ticks.drawTicks(painter, EDGE_1, AXE_Z, layout.getZTickColor(),
                 Horizontal.LEFT, Vertical.GROUND);
 
           }
