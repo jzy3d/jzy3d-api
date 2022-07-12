@@ -1,11 +1,11 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
+import org.jzy3d.junit.Assert;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
@@ -16,9 +16,13 @@ import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPITwoFontSizesPolicy;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 public class TestView {
+  private static final double tolerance = 0.001;
+
+
   @Test
   public void whenPixelScaleChange_ThenTextFont_ofAxisAndColorbar_Changes() {
     
@@ -233,38 +237,179 @@ public class TestView {
     chart.add(surface);
 
     AWTView view = chart.getView();
+    
+    //View view = Mocks.View();
+    View2DLayout viewLayout = view.get2DLayout();
 
     // -----------------------------------------------------------
     // When 2D XY
+    
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(false);    
+    view.setViewPositionMode(ViewPositionMode.TOP);
+    view.shoot();
+    
+    // Then
+    Assert.assertEquals(new Coord3d(0,1,0), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_INCREASING, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_ON_TOP, view.getViewPoint().y, tolerance);
+
+    
+    // When 2D XY, with decreasing X
+    viewLayout.setHorizontalAxisFlip(true);    
+    viewLayout.setVerticalAxisFlip(false);    
     view.setViewPositionMode(ViewPositionMode.TOP);
     view.shoot();
 
     // Then
     Assert.assertEquals(new Coord3d(0,1,0), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_DECREASING, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_ON_BOTTOM, view.getViewPoint().y, tolerance);
 
+    // When 2D XY, with decreasing Y
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(true); 
+    view.setViewPositionMode(ViewPositionMode.TOP);
+    view.shoot();
+
+    // Then
+    Assert.assertEquals(new Coord3d(0,-1,0), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_INCREASING, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_ON_BOTTOM, view.getViewPoint().y, tolerance);
+
+    // When 2D XY, both decreasing 
+    viewLayout.setHorizontalAxisFlip(true);    
+    viewLayout.setVerticalAxisFlip(true); 
+    view.setViewPositionMode(ViewPositionMode.TOP);
+    view.shoot();
+
+    // Then
+    Assert.assertEquals(new Coord3d(0,-1,0), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_INCREASING, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_ON_TOP, view.getViewPoint().y, tolerance);
+
+    
+    // -----------------------------------------------------------
     // When 2D XZ
+    
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(false); 
     view.setViewPositionMode(ViewPositionMode.XZ);
     view.shoot();
     
     // Then
     Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_INCREASING, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_0, view.getViewPoint().y, tolerance);
 
+    // When 2D XZ, X decreasing
+    
+    viewLayout.setHorizontalAxisFlip(true);    
+    viewLayout.setVerticalAxisFlip(false); 
+    view.setViewPositionMode(ViewPositionMode.XZ);
+    view.shoot();
+    
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_DECREASING, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_0, view.getViewPoint().y, tolerance);
+
+    // When 2D XZ, Z decreasing
+    
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(true); 
+    view.setViewPositionMode(ViewPositionMode.XZ);
+    view.shoot();
+    
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,-1), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_DECREASING, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_0, view.getViewPoint().y, tolerance);
+
+    // When 2D XZ, both decreasing
+    
+    viewLayout.setHorizontalAxisFlip(true);    
+    viewLayout.setVerticalAxisFlip(true); 
+    view.setViewPositionMode(ViewPositionMode.XZ);
+    view.shoot();
+    
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,-1), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_X_INCREASING, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_0, view.getViewPoint().y, tolerance);
+
+    // -----------------------------------------------------------
     // When 2D YZ
+
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(false);    
+
     view.setViewPositionMode(ViewPositionMode.YZ);
     view.shoot();
 
     // Then
     Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_Y_INCREASING+View.JGL_CORRECT_YZ, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_0+View.JGL_CORRECT_YZ, view.getViewPoint().y, tolerance);
+    // ! include verification of jGL workaround
 
+    
+    // When 2D YZ, Y decreasing
+
+    viewLayout.setHorizontalAxisFlip(true);    
+    viewLayout.setVerticalAxisFlip(false);    
+
+    view.setViewPositionMode(ViewPositionMode.YZ);
+    view.shoot();
+
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_Y_DECREASING+View.JGL_CORRECT_YZ, view.getViewPoint().x, tolerance);
+    Assert.assertEquals(View.ELEVATION_0+View.JGL_CORRECT_YZ, view.getViewPoint().y, tolerance);
+    // ! include verification of jGL workaround
+
+    // When 2D YZ, Z decreasing
+
+    viewLayout.setHorizontalAxisFlip(false);    
+    viewLayout.setVerticalAxisFlip(true);    
+
+    view.setViewPositionMode(ViewPositionMode.YZ);
+    view.shoot();
+
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,-1), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_Y_DECREASING+View.JGL_CORRECT_YZ, view.getViewPoint().x, tolerance);
+    Assert.assertAngleEquals(View.ELEVATION_0+View.JGL_CORRECT_YZ, view.getViewPoint().y, tolerance);
+    // ! include verification of jGL workaround
+
+    // When 2D YZ, both decreasing
+
+    viewLayout.setHorizontalAxisFlip(true);    
+    viewLayout.setVerticalAxisFlip(true);    
+
+    view.setViewPositionMode(ViewPositionMode.YZ);
+    view.shoot();
+
+    // Then
+    Assert.assertEquals(new Coord3d(0,0,-1), view.getCamera().getUp());
+    Assert.assertEquals(View.AZIMUTH_FACING_Y_INCREASING+View.JGL_CORRECT_YZ, view.getViewPoint().x, tolerance);
+    Assert.assertAngleEquals(View.ELEVATION_0+View.JGL_CORRECT_YZ, view.getViewPoint().y, tolerance);
+    // ! include verification of jGL workaround
+    
+    
+    // -----------------------------------------------------------
     // -----------------------------------------------------------
     // When 3D
+    
     view.setViewPositionMode(ViewPositionMode.FREE);
     view.shoot();
     
     // Then
     Assert.assertEquals(new Coord3d(0,0,1), view.getCamera().getUp());
 
+    // -----------------------------------------------------------
     // When 3D on top
+    
     view.setViewPositionMode(ViewPositionMode.FREE);
     Coord3d viewpoint = view.getViewPoint().clone();
     viewpoint.y = View.PI_div2;

@@ -9,8 +9,7 @@ import org.jzy3d.maths.Margin;
  * <img src="doc-files/layout2D.png"/>
  */
 public class View2DLayout {
-  protected View view;
-
+  
   protected boolean textAddMargin = true;
 
   /**
@@ -18,13 +17,11 @@ public class View2DLayout {
    * the embedding axis to appear horizontally centered in the canvas.
    */
   protected boolean symetricHorizontalMargin = false;
-
   /**
    * When true, the global left margin (including text) will equal the global right margin. Allows
    * the embedding axis to appear horizontally centered in the canvas.
    */
   protected boolean symetricVerticalMargin = false;
-
   /** Distance between axis and tick labels (hence, length of the tick) */
   protected float horizontalTickLabelsDistance = 0;
   /** Distance between tick labels and axis label */
@@ -33,13 +30,15 @@ public class View2DLayout {
   protected float verticalTickLabelsDistance = 0;
   /** Distance between tick labels and axis label */
   protected float verticalAxisLabelsDistance = 0;
-
+  /** Distance between canvas content and canvas border (i.e. empty borders dimension) */
   protected Margin margin = new Margin();
+  /** If true, reverse direction of horizontal axis */
+  protected boolean horizontalAxisFlip = false;
+  /** If true, reverse direction of vertical axis */  
+  protected boolean verticalAxisFlip = false;
 
 
-  public View2DLayout(View view) {
-    this.view = view;
-
+  public View2DLayout() {
     setMarginHorizontal(10);
     setMarginVertical(10);
     setTickLabelDistance(10);
@@ -158,12 +157,45 @@ public class View2DLayout {
     this.symetricVerticalMargin = symetricVerticalMargin;
   }
 
-  public void apply() {
-    view.getChart().render();
+  public boolean isNoAxisFlipped() {
+    return !isHorizontalAxisFlip() && !isVerticalAxisFlip();
   }
-  
+
+  public boolean isBothAxisFlipped() {
+    return isHorizontalAxisFlip() && isVerticalAxisFlip();
+  }
+
+  public boolean isHorizontalAxisFlipOnly() {
+    return isHorizontalAxisFlip() && !isVerticalAxisFlip();
+  }
+
+  public boolean isVerticalAxisFlipOnly() {
+    return !isHorizontalAxisFlip() && isVerticalAxisFlip();
+  }
+
+  public boolean isHorizontalAxisFlip() {
+    return horizontalAxisFlip;
+  }
+
+  public void setHorizontalAxisFlip(boolean horizontalAxisFlip) {
+    this.horizontalAxisFlip = horizontalAxisFlip;
+  }
+
+  public boolean isVerticalAxisFlip() {
+    return verticalAxisFlip;
+  }
+
+  public void setVerticalAxisFlip(boolean verticalAxisFlip) {
+    this.verticalAxisFlip = verticalAxisFlip;
+  }
+
+  public void setBothAxisFlip(boolean axisFlip) {
+    setHorizontalAxisFlip(axisFlip);
+    setVerticalAxisFlip(axisFlip);
+  }
+
   public View2DLayout clone() {
-    View2DLayout to = new View2DLayout(view);
+    View2DLayout to = new View2DLayout();
     return copy(this, to);
   }
 
@@ -185,7 +217,10 @@ public class View2DLayout {
     to.setTextAddMargin(from.isTextAddMargin());
     
     to.setMargin(from.getMargin());
-    
+
+    to.setHorizontalAxisFlip(from.isHorizontalAxisFlip());
+    to.setVerticalAxisFlip(from.isVerticalAxisFlip());
+
     return to;
   }
 }

@@ -40,6 +40,7 @@ import org.jzy3d.plot3d.primitives.axis.AxisTickProcessor;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.View2DProcessing;
 
 /**
@@ -112,8 +113,12 @@ public class TestAxisBox {
     View2DProcessing proc = spy(View2DProcessing.class);
     when(proc.getModelToScreen()).thenReturn(new Coord2d(1,1));
 
+    // Config
+    View2DLayout layout = new View2DLayout();
+    
     // Mock
     View view = Mocks.View();
+    when(view.get2DLayout()).thenReturn(layout);
     when(view.get2DProcessing()).thenReturn(proc);
     when(view.getCanvas()).thenReturn(canvas);
     
@@ -140,14 +145,31 @@ public class TestAxisBox {
     when(view.is2D_XY()).thenReturn(true);
     when(view.is3D()).thenReturn(false);
     
+    layout.setHorizontalAxisFlip(false);
+    
     axis.draw(painter);
 
 
     // Then
     
-    verify(tickProcessor, atLeast(1)).drawTicks(any(), anyInt(), eq(AxisBox.AXE_X), any(), any(), any());
-    verify(tickProcessor, atLeast(1)).drawTicks(any(), anyInt(), eq(AxisBox.AXE_Y), any(), any(), any());
+    verify(tickProcessor, times(1)).drawTicks(any(), anyInt(), eq(AxisBox.AXE_X), any(), any(), any());
+    verify(tickProcessor, times(1)).drawTicks(any(), eq(AxisBox.EDGE_2), eq(AxisBox.AXE_Y), any(), any(), any());
     verify(tickProcessor, times(0)).drawTicks(any(), anyInt(), eq(AxisBox.AXE_Z), any(), any(), any());
+    
+    // -------------------
+    // When 2D XY with flipped X axis, selected edge will change
+    
+    layout.setHorizontalAxisFlip(true);
+    
+    axis.draw(painter);
+
+
+    // Then
+    
+    verify(tickProcessor, times(2)).drawTicks(any(), anyInt(), eq(AxisBox.AXE_X), any(), any(), any());
+    verify(tickProcessor, times(1)).drawTicks(any(), eq(AxisBox.EDGE_0), eq(AxisBox.AXE_Y), any(), any(), any());
+    verify(tickProcessor, times(0)).drawTicks(any(), anyInt(), eq(AxisBox.AXE_Z), any(), any(), any());
+
   }
   
   @Test
@@ -164,8 +186,12 @@ public class TestAxisBox {
     View2DProcessing proc = spy(View2DProcessing.class);
     when(proc.getModelToScreen()).thenReturn(new Coord2d(1,1));
 
+    // Config
+    View2DLayout layout = new View2DLayout();
+
     // Mock
     View view = Mocks.View();
+    when(view.get2DLayout()).thenReturn(layout);
     when(view.get2DProcessing()).thenReturn(proc);
     when(view.getCanvas()).thenReturn(canvas);
     
@@ -216,8 +242,12 @@ public class TestAxisBox {
     View2DProcessing proc = spy(View2DProcessing.class);
     when(proc.getModelToScreen()).thenReturn(new Coord2d(1,1));
 
+    // Config
+    View2DLayout layout = new View2DLayout();
+
     // Mock
     View view = Mocks.View();
+    when(view.get2DLayout()).thenReturn(layout);
     when(view.get2DProcessing()).thenReturn(proc);
     when(view.getCanvas()).thenReturn(canvas);
     

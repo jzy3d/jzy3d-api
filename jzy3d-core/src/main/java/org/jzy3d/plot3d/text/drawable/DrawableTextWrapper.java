@@ -11,6 +11,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
+import org.jzy3d.plot3d.text.renderers.TextRenderer;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**

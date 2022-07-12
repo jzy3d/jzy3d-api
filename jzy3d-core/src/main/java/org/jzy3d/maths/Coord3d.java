@@ -77,6 +77,12 @@ public class Coord3d implements Serializable {
     y = yi;
     z = zi;
   }
+  
+  public Coord3d(float xi, float yi) {
+    x = xi;
+    y = yi;
+    z = 0;
+  }
 
   public Coord3d(Coord2d c, float zi) {
     x = c.x;
@@ -113,6 +119,12 @@ public class Coord3d implements Serializable {
     x = (float) xi;
     y = (float) yi;
     z = (float) zi;
+  }
+
+  public Coord3d(double xi, double yi) {
+    x = (float) xi;
+    y = (float) yi;
+    z = 0;
   }
 
   public Coord3d set(Coord3d c2) {
@@ -448,10 +460,26 @@ public class Coord3d implements Serializable {
     return this;
   }
 
+  /**
+   * Compute the dot product (a.k.a scalar product) between the current and given vector.
+   * 
+   * Remind that the dot product is 0 if vectors are perpendicular
+   * 
+   * @param v input vector
+   * @see https://en.wikipedia.org/wiki/Dot_product
+   */
   public final float dot(Coord3d v) {
     return x * v.x + y * v.y + z * v.z;
   }
 
+  /**
+   * Computes the vectorial product of the current and the given vector. 
+   * 
+   * The result is a vector defined as a Coord3d, that is perpendicular to the plan induced by current vector and vector V.
+   * 
+   * @param v input vector
+   * @see https://en.wikipedia.org/wiki/Cross_product
+   */
   public final Coord3d cross(Coord3d v) {
     return new Coord3d(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
   }

@@ -55,7 +55,7 @@ public class TestView2DProcessing {
       View view = Mocks.View(Mocks.Axis(axisLayout), painter, Mocks.Canvas(true));
       
       
-      View2DLayout layout = new View2DLayout(view);
+      View2DLayout layout = new View2DLayout();
       layout.setMargin(MARGIN);
       layout.setTickLabelDistance(TICK_DIST);
       layout.setAxisLabelDistance(AXIS_DIST);
@@ -199,7 +199,7 @@ public class TestView2DProcessing {
       when(view.getPixelScale()).thenReturn(new Coord2d(1,1));
       when(view.getViewMode()).thenReturn(ViewPositionMode.TOP);
 
-      View2DLayout layout = new View2DLayout(view);
+      View2DLayout layout = new View2DLayout();
       layout.setMargin(MARGIN);
       layout.setTickLabelDistance(TICK_DIST);
       layout.setAxisLabelDistance(AXIS_DIST);
@@ -270,7 +270,7 @@ public class TestView2DProcessing {
       when(view.getPixelScale()).thenReturn(new Coord2d(1,1));
       when(view.getViewMode()).thenReturn(ViewPositionMode.TOP);
 
-      View2DLayout layout = new View2DLayout(view);
+      View2DLayout layout = new View2DLayout();
       layout.setMargin(MARGIN);
       layout.setTickLabelDistance(TICK_DIST);
       layout.setAxisLabelDistance(AXIS_DIST);

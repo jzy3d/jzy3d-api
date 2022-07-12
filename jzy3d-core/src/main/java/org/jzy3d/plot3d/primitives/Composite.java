@@ -31,6 +31,16 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
     components = new ArrayList<Drawable>();
   }
   
+  public Composite(List<Drawable> drawables) {
+    this();
+    add(drawables);
+  }
+
+  public Composite(Drawable... drawables) {
+    this();
+    add(drawables);
+  }
+
   /**
    * This indicate to a scene graph if the Composite consider it is worth being decomposed or not.
    * 
@@ -49,6 +59,15 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
     }
   }
 
+  public void add(Drawable[] drawables) {
+    synchronized (components) {
+      for(Drawable d: drawables) {
+        components.add(d);
+      }
+    }
+  }
+
+  
   /** Clear the list of Drawables from this composite. */
   public void clear() {
     synchronized (components) {
