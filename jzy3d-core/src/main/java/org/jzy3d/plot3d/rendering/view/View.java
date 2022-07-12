@@ -1048,9 +1048,7 @@ public class View {
     else if(view2DLayout.isAxisFlippedBoth()){
       eye.x = AZIMUTH_FACING_X_INCREASING; 
       eye.y = ELEVATION_ON_TOP; // on top
-
     }
-    
     
     eye = eye.cartesian().add(target);
     return eye;
@@ -1063,7 +1061,6 @@ public class View {
     if(view2DLayout.isAxisFlippedNone()) {
       eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value increase
       eye.y = ELEVATION_0; // on side
-
     }
     // Flip horizontal only
     else if(view2DLayout.isHorizontalFlipOnly()){
@@ -1081,18 +1078,19 @@ public class View {
     else if(view2DLayout.isAxisFlippedBoth()){
       eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value increase
       eye.y = ELEVATION_0; // on side
-
     }
     
     // see https://github.com/jzy3d/jzy3d-api/issues/286
     if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
-      eye.x += 0.01f;
-      eye.y += 0.01f;
+      eye.x += JGL_CORRECT_YZ;
+      eye.y += JGL_CORRECT_YZ;
     }
     
     eye = eye.cartesian().add(target);
     return eye;
   }
+  
+  public static float JGL_CORRECT_YZ = 0.01f;
 
   protected Coord3d computeCameraEyeXZ(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
@@ -1120,18 +1118,19 @@ public class View {
       eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
       eye.y = ELEVATION_0; // on side
     }
-
     
     // see https://github.com/jzy3d/jzy3d-api/issues/286
     if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
-      eye.y += 0.0001f;
+      eye.y += JGL_CORRECT_XZ;
     }
     
     eye = eye.cartesian().add(target);
     return eye;
   }
   
-  protected boolean JGL_INVERSE_MATRIX_WORKAROUND = true;
+  public static float JGL_CORRECT_XZ = 0.0001f;
+
+  protected static boolean JGL_INVERSE_MATRIX_WORKAROUND = true;
 
   /** 
    * Compute the direction of the top of the camera relative to its center.
@@ -1160,9 +1159,7 @@ public class View {
       }
       else {
         return new Coord3d(0, 0, 1); // use z axis as up vector  
-        
       }
-      
     }
     
     // --------
