@@ -28,8 +28,8 @@ import org.jzy3d.plot3d.rendering.view.View2DLayout_Debug;
 
 public class ITTest_2D_FlipAxis extends ITTest {
   public static void main(String[] args) {
-    open(new ITTest_2D_FlipAxis().when2DChartWithFlip(WT.Native_AWT, HiDPI.ON, View2D.XZ,
-        FlipAxis.FLIP_BOTH));
+    open(new ITTest_2D_FlipAxis().when2DChartWithFlip(WT.Native_AWT, HiDPI.ON, View2D.YZ,
+        FlipAxis.FLIP_H));
     // open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT,
     // HiDPI.ON));
   }
@@ -39,29 +39,18 @@ public class ITTest_2D_FlipAxis extends ITTest {
   // TEST MULTIPLE AXIS ORIENTATION SETTINGS
   // ----------------------------------------------------
 
-  View2D[] views = {View2D.XY, View2D.XZ, View2D.YZ};
+  //View2D[] views = {View2D.XY, View2D.XZ, View2D.YZ};
 
-  /*
-   * class FlipAxis{ boolean vertical = false; boolean horizontal = false;
-   * 
-   * public FlipAxis(boolean vertical, boolean horizontal) { this.vertical = vertical;
-   * this.horizontal = horizontal; }
-   * 
-   * 
-   * }
-   */
   enum FlipAxis {
     FLIP_NONE, FLIP_H, FLIP_V, FLIP_BOTH;
   }
-
-  FlipAxis[] flips = {};
 
   @Test
   public void when2DChartWithColorbarAndMargins() {
     System.out.println("ITTest : when2DChartWithColorbarAndMargins");
 
     forEach((toolkit, resolution) -> {
-      for (View2D view2d : views) {
+      for (View2D view2d : View2D.values()) {
         for (FlipAxis flip : FlipAxis.values()) {
           when2DChartWithFlip(toolkit, resolution, view2d, flip);
         }
@@ -82,7 +71,6 @@ public class ITTest_2D_FlipAxis extends ITTest {
     // ---------------------------------------
 
     // Create a chart
-    // AWTChart chart = (AWTChart) f.newChart(Quality.Advanced().setHiDPI(hidpi));
     AWTView view = (AWTView) chart.getView();
 
     // Surface
@@ -105,7 +93,6 @@ public class ITTest_2D_FlipAxis extends ITTest {
     try {
       logo = ImageIO.read(new File("src/test/resources/icons/martin.jpeg"));
     } catch (IOException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     }
     logo = AWTGraphicsUtils.scale(logo, .25f, .25f);

@@ -1061,11 +1061,11 @@ public class View {
     
     // No axis flip
     if(view2DLayout.isAxisFlippedNone()) {
-      eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value decrease
+      eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value increase
       eye.y = ELEVATION_0; // on side
 
     }
-    // Flip horzontal only
+    // Flip horizontal only
     else if(view2DLayout.isHorizontalFlipOnly()){
       eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
       eye.y = ELEVATION_0; // on side
@@ -1073,13 +1073,13 @@ public class View {
     // Flip vertical only
     // see camera vector "up" reverse direction for vertical flip
     else if(view2DLayout.isVerticalFlipOnly()){
-      eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value decrease
+      eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
       eye.y = ELEVATION_0; // on side
     }
     // Flip both 
     // see camera vector "up" reverse direction for vertical flip
     else if(view2DLayout.isAxisFlippedBoth()){
-      eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
+      eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value increase
       eye.y = ELEVATION_0; // on side
 
     }
