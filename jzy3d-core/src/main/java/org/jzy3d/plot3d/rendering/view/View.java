@@ -75,7 +75,7 @@ public class View {
   protected boolean squared = true;
 
   /** Settings for the layout of a 2D chart */
-  protected View2DLayout view2DLayout = new View2DLayout(this);
+  protected View2DLayout view2DLayout = new View2DLayout();
   protected View2DProcessing view2DProcessing = new View2DProcessing(this);
 
   protected float cameraRenderingSphereRadiusFactor = 1f;
@@ -128,14 +128,14 @@ public class View {
   public static final float PI_div2 = (float)Math.PI/2;
   public static final float DISTANCE_DEFAULT = 2000;
 
-  private static final float AZIMUTH_FACING_X_DECREASING = PI_div2;
-  private static final float AZIMUTH_FACING_X_INCREASING = -PI_div2;
-  private static final float AZIMUTH_FACING_Y_DECREASING = PI;
-  private static final float AZIMUTH_FACING_Y_INCREASING = 0;
+  public static final float AZIMUTH_FACING_X_DECREASING = PI_div2;
+  public static final float AZIMUTH_FACING_X_INCREASING = -PI_div2;
+  public static final float AZIMUTH_FACING_Y_DECREASING = PI;
+  public static final float AZIMUTH_FACING_Y_INCREASING = 0;
 
-  private static final float ELEVATION_ON_TOP = PI_div2;
-  private static final float ELEVATION_0 = 0;
-  private static final float ELEVATION_ON_BOTTOM = -PI_div2;
+  public static final float ELEVATION_ON_TOP = PI_div2;
+  public static final float ELEVATION_0 = 0;
+  public static final float ELEVATION_ON_BOTTOM = -PI_div2;
 
   
   /** A viewpoint allowing to have min X and Y values near viewer, growing toward horizon. */
@@ -911,22 +911,16 @@ public class View {
   /* CAMERA PROCESSING */
 
   public void updateCamera(ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
-    float sceneRadius = (float) boundsScaled.getRadius() * factorViewPointDistance;
-    updateCamera(viewport, boundsScaled, sceneRadius);
+    updateCamera(viewport, boundsScaled, viewMode, viewpoint, cam, cameraMode, factorViewPointDistance,
+        center, scaling);
   }
 
   public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds,
-      float sceneRadiusScaled) {
-    updateCamera(viewport, bounds, sceneRadiusScaled, viewMode, viewpoint, cam, cameraMode,
-        factorViewPointDistance, center, scaling);
-  }
+      ViewPositionMode viewmode, Coord3d viewpoint, Camera cam, CameraMode cameraMode,
+      float factorViewPointDistance, Coord3d center, Coord3d scaling) {
 
-  public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds,
-      float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
-      CameraMode cameraMode, float factorViewPointDistance, Coord3d center, Coord3d scaling) {
-
-    updateCameraWithoutShooting(viewport, bounds, sceneRadiusScaled, viewmode, viewpoint, cam,
-        factorViewPointDistance, center, scaling);
+    updateCameraWithoutShooting(viewport, bounds, viewmode, viewpoint, cam, factorViewPointDistance,
+        center, scaling);
 
     triggerCameraUpEvents(viewpoint);
 
@@ -942,11 +936,12 @@ public class View {
    * that are invoked by shoot method.
    */
   public void updateCameraWithoutShooting(ViewportConfiguration viewport, BoundingBox3d bounds,
-      float sceneRadiusScaled, ViewPositionMode viewmode, Coord3d viewpoint, Camera cam,
-      float factorViewPointDistance, Coord3d center, Coord3d scaling) {
+      ViewPositionMode viewmode, Coord3d viewpoint, Camera cam, float factorViewPointDistance,
+      Coord3d center, Coord3d scaling) {
 
-    viewpoint.z = computeViewpointDistance(bounds, sceneRadiusScaled, factorViewPointDistance);
+    viewpoint.z = computeViewpointDistance(bounds, factorViewPointDistance);
 
+    
     Coord3d cameraTarget = computeCameraTarget(center, scaling);
     Coord3d cameraUp = computeCameraUp(viewpoint);
     Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
@@ -957,9 +952,16 @@ public class View {
   }
 
 
-  public float computeViewpointDistance(BoundingBox3d bounds, float sceneRadiusScaled,
+  public float computeViewpointDistance(BoundingBox3d bounds, 
       float factorViewPointDistance) {
-    return (float) spaceTransformer.compute(bounds).getRadius();
+    float v;
+    if (spaceTransformer == null) {
+      v = (float) bounds.getRadius();
+    } else {
+      v = (float) spaceTransformer.compute(bounds).getRadius();
+    }
+    
+    return v * factorViewPointDistance;
   }
 
   protected Coord3d computeCameraTarget() {
@@ -984,7 +986,7 @@ public class View {
     } else if (viewmode == ViewPositionMode.PROFILE) {
       return computeCameraEyeProfile(viewpoint, target);
     } else if (viewmode == ViewPositionMode.TOP) {
-      return computeCameraEyeTop(viewpoint, target);
+      return computeCameraEyeXY(viewpoint, target);
     } else if (viewmode == ViewPositionMode.XZ) {
       return computeCameraEyeXZ(viewpoint, target);
     } else if (viewmode == ViewPositionMode.YZ) {
@@ -1004,6 +1006,8 @@ public class View {
 
 
   protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
+    //System.out.println("View : " + viewpoint.z);
+
     return viewpoint.cartesian().add(target);
   }
 
@@ -1020,60 +1024,113 @@ public class View {
     return eye;
   }
 
-  protected Coord3d computeCameraEyeTop(Coord3d viewpoint, Coord3d target) {
+  protected Coord3d computeCameraEyeXY(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    eye.x = AZIMUTH_FACING_X_INCREASING; // on x
-    eye.y = ELEVATION_ON_TOP; // on top
+    
+    // No axis flip
+    if(view2DLayout.isNoAxisFlipped()) {
+      eye.x = AZIMUTH_FACING_X_INCREASING; 
+      eye.y = ELEVATION_ON_TOP;
+    }
+    // Flip horzontal only
+    else if(view2DLayout.isHorizontalAxisFlipOnly()){
+      eye.x = AZIMUTH_FACING_X_DECREASING; 
+      eye.y = ELEVATION_ON_BOTTOM; 
+    }
+    // Flip vertical only
+    // see computeCameraUp() reverse direction for vertical flip
+    else if(view2DLayout.isVerticalAxisFlipOnly()){
+      eye.x = AZIMUTH_FACING_X_INCREASING; 
+      eye.y = ELEVATION_ON_BOTTOM;
+    }
+    // Flip both 
+    // see computeCameraUp() reverse direction for vertical flip
+    else if(view2DLayout.isBothAxisFlipped()){
+      eye.x = AZIMUTH_FACING_X_INCREASING; 
+      eye.y = ELEVATION_ON_TOP; 
+    }
+    
     eye = eye.cartesian().add(target);
     return eye;
   }
 
   protected Coord3d computeCameraEyeYZ(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    //eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
-    eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value decrease
-    eye.y = ELEVATION_0; // on side
     
-    // see https://github.com/jzy3d/jzy3d-api/issues/286
-    if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
-      eye.x += 0.01f;
-      eye.y += 0.01f;
+    // No axis flip
+    if(view2DLayout.isNoAxisFlipped()) {
+      eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value increase
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip horizontal only
+    else if(view2DLayout.isHorizontalAxisFlipOnly()){
+      eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip vertical only
+    // see computeCameraUp() reverse direction for vertical flip
+    else if(view2DLayout.isVerticalAxisFlipOnly()){
+      eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip both 
+    // see computeCameraUp() reverse direction for vertical flip
+    else if(view2DLayout.isBothAxisFlipped()){
+      eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value increase
+      eye.y = ELEVATION_0; // on side
     }
     
-    eye = eye.cartesian().add(target);
-    return eye;
-  }
-
-  protected Coord3d computeCameraEyeXZ(Coord3d viewpoint, Coord3d target) {
-    Coord3d eye = viewpoint;
-    //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
-    eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
-    eye.y = ELEVATION_0; // on side
-    
     // see https://github.com/jzy3d/jzy3d-api/issues/286
     if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
-      eye.y += 0.0001f;
+      eye.x += JGL_CORRECT_YZ;
+      eye.y += JGL_CORRECT_YZ;
     }
     
     eye = eye.cartesian().add(target);
     return eye;
   }
   
-  protected boolean JGL_INVERSE_MATRIX_WORKAROUND = true;
+  public static float JGL_CORRECT_YZ = 0.01f;
 
-
-  protected void triggerCameraUpEvents(Coord3d viewpoint) {
-    if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) { // handle "on-top" events
-      if (!wasOnTopAtLastRendering) {
-        wasOnTopAtLastRendering = true;
-        fireViewOnTopEvent(true);
-      }
-    } else // handle "on-top" events
-    if (wasOnTopAtLastRendering) {
-      wasOnTopAtLastRendering = false;
-      fireViewOnTopEvent(false);
+  protected Coord3d computeCameraEyeXZ(Coord3d viewpoint, Coord3d target) {
+    Coord3d eye = viewpoint;
+    
+    
+    // No axis flip
+    if(view2DLayout.isNoAxisFlipped()) {
+      eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
+      eye.y = ELEVATION_0; // on side
     }
+    // Flip horizontal only
+    else if(view2DLayout.isHorizontalAxisFlipOnly()){
+      eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip vertical only
+    // see computeCameraUp() reverse direction for vertical flip
+    else if(view2DLayout.isVerticalAxisFlipOnly()){
+      eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
+      eye.y = ELEVATION_0; // on side
+    }
+    // Flip both 
+    // see computeCameraUp() reverse direction for vertical flip
+    else if(view2DLayout.isBothAxisFlipped()){
+      eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
+      eye.y = ELEVATION_0; // on side
+    }
+    
+    // see https://github.com/jzy3d/jzy3d-api/issues/286
+    if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
+      eye.y += JGL_CORRECT_XZ;
+    }
+    
+    eye = eye.cartesian().add(target);
+    return eye;
   }
+  
+  public static float JGL_CORRECT_XZ = 0.0001f;
+
+  protected static boolean JGL_INVERSE_MATRIX_WORKAROUND = true;
 
   /** 
    * Compute the direction of the top of the camera relative to its center.
@@ -1085,10 +1142,26 @@ public class View {
     
     // 2D cases
     if (is2D_XY()) { 
-      return new Coord3d(0, 1, 0); // use y axis as up vector
+      
+      // watching up side down
+      if(view2DLayout.isVerticalAxisFlip()){
+        return new Coord3d(0, -1, 0); // use y axis as up vector
+      }
+      // watching normally
+      else {
+        return new Coord3d(0, 1, 0); // use y axis as up vector
+      }
     } 
     else if(is2D_XZ() || is2D_YZ()) {
-      return new Coord3d(0, 0, 1); // use z axis as up vector  
+
+      // watching up side down
+      if(view2DLayout.isVerticalAxisFlip()){
+        return new Coord3d(0, 0, -1); // use z axis as up vector  
+      }
+      // watching normally
+      else {
+        return new Coord3d(0, 0, 1); // use z axis as up vector  
+      }
     }
     
     // --------
@@ -1110,6 +1183,20 @@ public class View {
       }
     }
   }
+  
+  protected void triggerCameraUpEvents(Coord3d viewpoint) {
+    if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) { // handle "on-top" events
+      if (!wasOnTopAtLastRendering) {
+        wasOnTopAtLastRendering = true;
+        fireViewOnTopEvent(true);
+      }
+    } else // handle "on-top" events
+    if (wasOnTopAtLastRendering) {
+      wasOnTopAtLastRendering = false;
+      fireViewOnTopEvent(false);
+    }
+  }
+
 
   /**
    * Configure the camera so that it will capture a given volume in the scene.
@@ -1601,6 +1688,14 @@ public class View {
 
   public boolean isMaintainAllObjectsInView() {
     return maintainAllObjectsInView;
+  }
+  
+  public float getFactorViewPointDistance() {
+    return factorViewPointDistance;
+  }
+
+  public void setFactorViewPointDistance(float factorViewPointDistance) {
+    this.factorViewPointDistance = factorViewPointDistance;
   }
 
   public void setMaintainAllObjectsInView(boolean maintainAllObjectsInView) {

@@ -640,16 +640,29 @@ public class Camera extends AbstractViewportManager {
    * @see {@link #projectionOrtho(IPainter, ViewportConfiguration)}
    */
   public void projectionPerspective(IPainter painter, ViewportConfiguration viewport) {
-    boolean stretchToFill = ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode());
-    double fov = computeFieldOfView(renderingSphereRadius * 2, eye.distance(target));
-    float aspect = stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1;
-    float nearCorrected = near <= 0 ? 0.000000000000000000000000000000000000001f : near;
+ 
+    // easier perspective processing
+    if(perspectiveProjectionUseFrustrum) {
+      float r = renderingSphereRadius / (painter.getView().getFactorViewPointDistance());
+    
+      painter.glFrustum(-r, r, -r, r, near, far);
+    }
+    
+    // former perspective processing
+    else {
+      boolean stretchToFill = ViewportMode.STRETCH_TO_FILL.equals(viewport.getMode());
+      double fov = computeFieldOfView(renderingSphereRadius * 4, eye.distance(target));
+      float aspect = stretchToFill ? ((float) screenWidth) / ((float) screenHeight) : 1;
+      float nearCorrected = near <= 0 ? Float.MIN_VALUE : near;
 
-    painter.gluPerspective(fov / 1, aspect * 0.55, nearCorrected, far);
-
-    // painter.glFrustum(-radius*3, radius*3, -radius*3, radius*3, near, far);
+      painter.gluPerspective(fov / 1, aspect * 0.55, nearCorrected, far);      
+    }
   }
+  
+  protected boolean perspectiveProjectionUseFrustrum = true;
 
+  
+  
   public void doLookAt(IPainter painter) {
     //System.out.println("Camera.LookAt : " + target + " FROM " + eye);
     

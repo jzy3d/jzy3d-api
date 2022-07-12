@@ -104,8 +104,10 @@ public class OverlayLegendRenderer extends AbstractAWTRenderer2d implements AWTR
     }
 
     // Border
-    g2d.setColor(AWTColor.toAWT(layout.borderColor));
-    g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
+    if(layout.borderColor!=null) {
+      g2d.setColor(AWTColor.toAWT(layout.borderColor));
+      g2d.drawRect(xBoxPos, yBoxPos, boxWidth, boxHeight);
+    }
 
   }
 
@@ -117,10 +119,14 @@ public class OverlayLegendRenderer extends AbstractAWTRenderer2d implements AWTR
     g2d.drawString(line.label, xTextPos, yTextPos);
 
     // Line sample
+
     int xLineStart = xTextPos + textWidthMax + layout.sampleLineMargin;
-    g2d.setColor(AWTColor.toAWT(line.color));
-    g2d.drawLine(xLineStart, yTextPos - textHeight / 2, xLineStart + layout.sampleLineLength,
-        yTextPos - textHeight / 2);
+
+    if(line.color!=null) {
+      g2d.setColor(AWTColor.toAWT(line.color));
+      g2d.drawLine(xLineStart, yTextPos - textHeight / 2, xLineStart + layout.sampleLineLength,
+          yTextPos - textHeight / 2);
+    }
 
     // Symbol
     if (line.shape != null) {

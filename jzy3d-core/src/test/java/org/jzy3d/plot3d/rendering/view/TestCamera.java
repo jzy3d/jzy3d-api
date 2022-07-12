@@ -10,6 +10,7 @@ import org.jzy3d.mocks.jzy3d.Mocks;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.rendering.view.modes.ProjectionMode;
+import org.mockito.Mockito;
 
 public class TestCamera {
   Random r = new Random();
@@ -95,6 +96,7 @@ public class TestCamera {
     camera.setUp(camera.getEye().add(0, 0, 1));
     
     IPainter painter = Mocks.Painter();
+    Mockito.when(painter.getView()).thenReturn(Mocks.View());
 
     // --------------------------------------------
     // When configuring a rendering sphere
