@@ -112,7 +112,7 @@ public class AxisLayout {
     setYTickLabelDisplayed(true);
     setZTickLabelDisplayed(true);
 
-    setMainColor(Color.BLACK);
+    setMainColor(Color.BLACK.clone());
 
     setZAxisSide(ZAxisSide.LEFT);
   }
