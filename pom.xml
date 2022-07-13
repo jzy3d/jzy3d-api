@@ -53,7 +53,8 @@
 
 		<module>jzy3d-jGL</module>
 		<module>jzy3d-emul-gl-awt</module>
-		<module>jzy3d-emul-gl-swt</module>
+		
+		<!-- <module>jzy3d-emul-gl-swt</module> -->
 
 		<module>jzy3d-native-jogl-core</module>
 		<module>jzy3d-native-jogl-awt</module>
