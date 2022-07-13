@@ -44,12 +44,15 @@ public class SampleGeom {
     
     return surface;
   }
-  
+
   public static Scatter scatter(int size, int width) {
+    return scatter(size, width, 0.75f);
+  }
+  
+  public static Scatter scatter(int size, int width, float alpha) {
     float x;
     float y;
     float z;
-    float a;
 
     Coord3d[] points = new Coord3d[size];
     Color[] colors = new Color[size];
@@ -62,8 +65,7 @@ public class SampleGeom {
       y = r.nextFloat() - 0.5f;
       z = r.nextFloat() - 0.5f;
       points[i] = new Coord3d(x, y, z);
-      a = 0.75f;
-      colors[i] = new Color(x, y, z, a);
+      colors[i] = new Color(x, y, z, alpha);
     }
 
     Scatter scatter = new Scatter(points, colors);

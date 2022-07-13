@@ -13,6 +13,11 @@ public class IntegerCoord2d {
     this.y = y;
   }
 
+  public IntegerCoord2d(Coord3d c) {
+    this.x = Math.round(c.x);
+    this.y = Math.round(c.y);
+  }
+
   @Override
   public String toString() {
     return "(IntegerCoord2d) " + x + "," + y;

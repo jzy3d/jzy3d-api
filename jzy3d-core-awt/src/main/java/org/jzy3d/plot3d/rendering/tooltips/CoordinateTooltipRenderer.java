@@ -8,6 +8,20 @@ import org.jzy3d.maths.IntegerCoord2d;
 
 
 public class CoordinateTooltipRenderer implements ITooltipRenderer {
+  protected String xUnit;
+  protected String yUnit;
+  protected String zUnit;
+  protected boolean renderX;
+  protected boolean renderY;
+  protected boolean renderZ;
+
+  protected Coord3d target = Coord3d.INVALID;
+  protected IntegerCoord2d screenLocation = new IntegerCoord2d();
+  protected Rectangle lastBounds;
+
+  protected boolean newLineAfterEachDim;
+
+  
   public CoordinateTooltipRenderer() {
     this(null);
   }
@@ -57,10 +71,8 @@ public class CoordinateTooltipRenderer implements ITooltipRenderer {
     this.renderZ = renderZ;
     this.newLineAfterEachDim = newLineAfterEachDim;
 
-    if (screen != null)
-      screenLocation = screen;
-    if (target != null)
-      this.target = target;
+    this.screenLocation = screen;
+    this.target = target;
   }
 
   @Override
@@ -80,7 +92,8 @@ public class CoordinateTooltipRenderer implements ITooltipRenderer {
       g2d.drawString(xcontent, screenLocation.x, screenLocation.y);
       g2d.drawString(ycontent, screenLocation.x, screenLocation.y + 16);
       g2d.drawString(zcontent, screenLocation.x, screenLocation.y + 32);
-    } else {
+    } 
+    else {
       String content = format(target);
       lastBounds = new Rectangle(screenLocation.x - 10, screenLocation.y - 13,
           10 + content.length() * 6, 16);
@@ -113,16 +126,4 @@ public class CoordinateTooltipRenderer implements ITooltipRenderer {
     return out;
   }
 
-  protected String xUnit;
-  protected String yUnit;
-  protected String zUnit;
-  protected boolean renderX;
-  protected boolean renderY;
-  protected boolean renderZ;
-
-  protected Coord3d target = Coord3d.INVALID;
-  protected IntegerCoord2d screenLocation = new IntegerCoord2d();
-  protected Rectangle lastBounds;
-
-  protected boolean newLineAfterEachDim;
 }
