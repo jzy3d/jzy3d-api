@@ -26,21 +26,26 @@ public class SerieBuilder {
 
   public Serie2d apply(Serie2d serie, Func2D func, Range xRange, int steps, boolean includeXMin, boolean includeXMax) {
     double step = xRange.getRange() / steps;
-
-    
     
     for (double x = xRange.getMin(); x <= xRange.getMax(); x += step) {
+      double v;
+      
       // shift lower bound 
       if(!includeXMin && x==xRange.getMin()) {
-        serie.add(x+Double.MIN_VALUE, func.f(x+Double.MIN_VALUE));
+        v = func.f(x+Double.MIN_VALUE);
       }
       // shift upper bound
       else if(!includeXMax && x==xRange.getMax()) {
-        serie.add(x-Double.MIN_VALUE, func.f(x-Double.MIN_VALUE));
+        v = func.f(x-Double.MIN_VALUE);
       }
+      // get raw value
       else {
-        serie.add(x, func.f(x));
+        v = func.f(x);
       }
+      
+      //System.out.println(x + ", " + v);
+      
+      serie.add(x, v);
 
     }
     return serie;
