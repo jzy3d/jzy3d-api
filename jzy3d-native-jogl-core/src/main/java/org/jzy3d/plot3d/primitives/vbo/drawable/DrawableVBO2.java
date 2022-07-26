@@ -41,7 +41,7 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
  * 
  * Repeated vertices make all vertice normal being processed with the only three vertices of a
  * triangle. A collection of neighbour triangles hence have normals producing sharp light reaction
- * as bellow.
+ * as bellow.<br>
  * 
  * <img src="doc-files/REPEATED_VERTEX_AND_NORMALS.png"/>
  * 
@@ -52,7 +52,7 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
  * 
  * Sharing vertices among triangles avoid repeating data, and also allows knowing all surrounding
  * triangles to a point, hence allowing to compute a normal based on the mean of all triangles
- * normal. This produce a smooth light reaction at the triangle edges.
+ * normal. This produce a smooth light reaction at the triangle edges.<br>
  * 
  * <img src="doc-files/SHARED_VERTEX_AVERAGED_NORMALS.png"/>
  * </p>
@@ -60,7 +60,7 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
  * <p>
  * <b>Not processing normals in java</b><br>
  * 
- * Is faster and yield to this light reaction.
+ * Is faster and yield to this light reaction.<br>
  * 
  * <img src="doc-files/SHARED_VERTEX_NO_NORMAL.png"/>
  * </p>
@@ -231,6 +231,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * element array indicating which unique vertex should be used in each triangle. See
    * {@link DrawableVBO2(double[], int, int[]).
    * 
+   * <br>
    * <img src="doc-files/REPEATED_VERTEX_AND_NORMALS.png"/>
    * 
    * @see other constructor for detailed arguments.
@@ -243,6 +244,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /**
    * Initialize a VBO object with arrays with a colormap but no vertex sharing scheme.
    * 
+   * <br>
    * <img src="doc-files/COLORMAP.png"/>
    * 
    * @see other constructor for detailed arguments.
@@ -295,6 +297,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * which differ from the light transition of repeated-vertex schemes as processed when the element
    * array is null (or when invoking {@link DrawableVBO2(double[], int)}
    * 
+   * <br>
    * <img src="doc-files/SHARED_VERTEX_AVERAGED_NORMALS.png"/>
    * 
    * @see other constructor for detailed arguments.
