@@ -2,10 +2,10 @@ package org.jzy3d.plot3d.builder;
 
 import java.util.function.Function;
 
-public class Func2D extends Mapper2D{
-  Function<Double,Double> function;
-  
-  public Func2D(Function<Double,Double> function) {
+public class Func2D extends Mapper2D {
+  Function<Double, Double> function;
+
+  public Func2D(Function<Double, Double> function) {
     this.function = function;
   }
 
