@@ -279,6 +279,8 @@ public abstract class AbstractViewportManager {
       float x = i;
       if (x == AREA_LEFT)
         x += OFFSET;
+      else if (x == AREA_RIGHT)
+        x -= OFFSET;
 
       painter.glBegin_Line();
       painter.glVertex3f(x, AREA_DOWN, 1);
@@ -291,6 +293,8 @@ public abstract class AbstractViewportManager {
       float y = j;
       if (y == AREA_TOP)
         y -= OFFSET;
+      else if (y == AREA_DOWN)
+        y += OFFSET;
 
       painter.glBegin_Line();
       painter.glVertex3f(AREA_LEFT, y, 1);
