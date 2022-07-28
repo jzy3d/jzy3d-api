@@ -1,31 +1,93 @@
 package org.jzy3d.lwjgl;
-import static org.lwjgl.opengl.GL11.*;
-
-import static org.lwjgl.opengl.GL11.GL_DEPTH;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
 import static org.lwjgl.opengl.GL11.GL_ALPHA_TEST;
+import static org.lwjgl.opengl.GL11.GL_ALWAYS;
+import static org.lwjgl.opengl.GL11.GL_AMBIENT;
+import static org.lwjgl.opengl.GL11.GL_BACK;
+import static org.lwjgl.opengl.GL11.GL_BLEND;
+import static org.lwjgl.opengl.GL11.GL_CCW;
 import static org.lwjgl.opengl.GL11.GL_CLIP_PLANE0;
 import static org.lwjgl.opengl.GL11.GL_CLIP_PLANE1;
 import static org.lwjgl.opengl.GL11.GL_CLIP_PLANE2;
 import static org.lwjgl.opengl.GL11.GL_CLIP_PLANE3;
 import static org.lwjgl.opengl.GL11.GL_CLIP_PLANE4;
 import static org.lwjgl.opengl.GL11.GL_CLIP_PLANE5;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_COLOR_MATERIAL;
 import static org.lwjgl.opengl.GL11.GL_COMPILE;
 import static org.lwjgl.opengl.GL11.GL_COMPILE_AND_EXECUTE;
 import static org.lwjgl.opengl.GL11.GL_CONSTANT_ATTENUATION;
+import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
+import static org.lwjgl.opengl.GL11.GL_DECR;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_TEST;
+import static org.lwjgl.opengl.GL11.GL_DIFFUSE;
+import static org.lwjgl.opengl.GL11.GL_EQUAL;
+import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL11.GL_FEEDBACK;
+import static org.lwjgl.opengl.GL11.GL_FILL;
 import static org.lwjgl.opengl.GL11.GL_FLAT;
+import static org.lwjgl.opengl.GL11.GL_FRONT;
+import static org.lwjgl.opengl.GL11.GL_FRONT_AND_BACK;
+import static org.lwjgl.opengl.GL11.GL_GEQUAL;
+import static org.lwjgl.opengl.GL11.GL_GREATER;
+import static org.lwjgl.opengl.GL11.GL_INCR;
+import static org.lwjgl.opengl.GL11.GL_INVERT;
+import static org.lwjgl.opengl.GL11.GL_KEEP;
+import static org.lwjgl.opengl.GL11.GL_LEQUAL;
+import static org.lwjgl.opengl.GL11.GL_LESS;
+import static org.lwjgl.opengl.GL11.GL_LIGHT0;
+import static org.lwjgl.opengl.GL11.GL_LIGHT1;
+import static org.lwjgl.opengl.GL11.GL_LIGHT2;
+import static org.lwjgl.opengl.GL11.GL_LIGHT3;
+import static org.lwjgl.opengl.GL11.GL_LIGHT4;
+import static org.lwjgl.opengl.GL11.GL_LIGHT5;
+import static org.lwjgl.opengl.GL11.GL_LIGHT6;
+import static org.lwjgl.opengl.GL11.GL_LIGHT7;
+import static org.lwjgl.opengl.GL11.GL_LIGHTING;
+import static org.lwjgl.opengl.GL11.GL_LIGHT_MODEL_AMBIENT;
 import static org.lwjgl.opengl.GL11.GL_LIGHT_MODEL_LOCAL_VIEWER;
+import static org.lwjgl.opengl.GL11.GL_LIGHT_MODEL_TWO_SIDE;
+import static org.lwjgl.opengl.GL11.GL_LINE;
 import static org.lwjgl.opengl.GL11.GL_LINEAR_ATTENUATION;
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_LINE_LOOP;
+import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_LINE_SMOOTH_HINT;
 import static org.lwjgl.opengl.GL11.GL_LINE_STIPPLE;
+import static org.lwjgl.opengl.GL11.GL_LINE_STRIP;
 import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW_MATRIX;
+import static org.lwjgl.opengl.GL11.GL_NEVER;
+import static org.lwjgl.opengl.GL11.GL_NICEST;
+import static org.lwjgl.opengl.GL11.GL_NOTEQUAL;
+import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_PACK_ALIGNMENT;
+import static org.lwjgl.opengl.GL11.GL_POINTS;
 import static org.lwjgl.opengl.GL11.GL_POINT_SMOOTH;
 import static org.lwjgl.opengl.GL11.GL_POINT_SMOOTH_HINT;
 import static org.lwjgl.opengl.GL11.GL_POLYGON;
+import static org.lwjgl.opengl.GL11.GL_POLYGON_OFFSET_FILL;
+import static org.lwjgl.opengl.GL11.GL_POLYGON_OFFSET_LINE;
+import static org.lwjgl.opengl.GL11.GL_POLYGON_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_POLYGON_SMOOTH_HINT;
+import static org.lwjgl.opengl.GL11.GL_POSITION;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION_MATRIX;
 import static org.lwjgl.opengl.GL11.GL_QUADRATIC_ATTENUATION;
+import static org.lwjgl.opengl.GL11.GL_QUADS;
 import static org.lwjgl.opengl.GL11.GL_RENDER;
+import static org.lwjgl.opengl.GL11.GL_REPLACE;
 import static org.lwjgl.opengl.GL11.GL_SELECT;
+import static org.lwjgl.opengl.GL11.GL_SHININESS;
 import static org.lwjgl.opengl.GL11.GL_SMOOTH;
+import static org.lwjgl.opengl.GL11.GL_SPECULAR;
+import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
+import static org.lwjgl.opengl.GL11.GL_STENCIL_TEST;
+import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
+import static org.lwjgl.opengl.GL11.GL_TRUE;
+import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
+import static org.lwjgl.opengl.GL11.GL_VIEWPORT;
+import static org.lwjgl.opengl.GL11.GL_ZERO;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -51,6 +113,7 @@ import org.jzy3d.painters.PixelStore;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.painters.StencilFunc;
 import org.jzy3d.painters.StencilOp;
+import org.jzy3d.plot3d.primitives.Cylinder;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -59,7 +122,6 @@ import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.jzy3d.plot3d.text.renderers.TextRenderer;
-import org.lwjgl.opengl.GL11;
 
 
 public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
@@ -182,8 +244,8 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
     }*/
     /*
      * else if(getGLProfile().isGL4()) { if (quality.isSmoothColor())
-     * getGL4().glShadeModel(GLLightingFunc.GL_SMOOTH); else
-     * glShadeModel(GLLightingFunc.GL_FLAT); }
+     * getGL4().glShadeModel(GL_SMOOTH); else
+     * glShadeModel(GL_FLAT); }
      */
 
     // Make smoothing setting
@@ -487,7 +549,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public void glutBitmapString(int font, String string) {
-    glut.glutBitmapString(font, string);
+    //glutBitmapString(font, string);
   }
 
   /**
@@ -515,10 +577,10 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
     float rotationD = -(float) (360 * rotation / (2 * Math.PI));
     Coord3d screen = modelToScreen(position);
 
-    TextRenderer renderer = getOrCreateTextRenderer(font);
-    renderer.setColor(color.r, color.g, color.b, color.a);
+    //TextRenderer renderer = getOrCreateTextRenderer(font);
+    //renderer.setColor(color.r, color.g, color.b, color.a);
     // indicates current viewport (which may be smaller than canvas)
-    renderer.beginRendering(width, height);
+    //renderer.beginRendering(width, height);
 
     // Pre-shift text to make it rotate from center
     // of string and not from left point
@@ -529,7 +591,6 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
       yPreShift = font.getHeight() / 2;
     }
 
-    GL2 gl = getGL2();
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
     glTranslatef(screen.x + xPreShift, screen.y + yPreShift, 0);
@@ -540,15 +601,15 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
     int xPostShift = -xPreShift;
     int yPostShift = -yPreShift;
 
-    renderer.draw(label, xPostShift, yPostShift);
+    /*renderer.draw(label, xPostShift, yPostShift);
     renderer.endRendering();
-    renderer.flush();
+    renderer.flush();*/
 
     glPopMatrix();
 
   }
 
-  protected TextRenderer getOrCreateTextRenderer(Font font) {
+  /*protected TextRenderer getOrCreateTextRenderer(Font font) {
     // See discussion
     //
     // https://forum.jogamp.org/TextRenderer-crash-the-JVM-after-removing-then-adding-a-canvas-from-a-AWT-or-Swing-layout-td4041660.html
@@ -572,7 +633,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
       // txtRendererMap.put(font, renderer);
     }
     return renderer;
-  }
+  }*/
 
   // protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
 
@@ -592,7 +653,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public int glutBitmapLength(int font, String string) {
-    return glut.glutBitmapLength(font, string);
+    return 0;//glutBitmapLength(font, string);
   }
 
   @Override
@@ -618,11 +679,11 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
     }
     
     // Try to get text width using text renderer offscreen
-    if (gl != null && getContext().isCurrent()) {
-      TextRenderer renderer = getOrCreateTextRenderer(font);
-      Rectangle2D r = renderer.getBounds(string);
-      return (int) r.getWidth();
-    } 
+    //if (gl != null && getContext().isCurrent()) {
+    //  TextRenderer renderer = getOrCreateTextRenderer(font);
+    //  Rectangle2D r = renderer.getBounds(string);
+    //  return (int) r.getWidth();
+    //} 
 
     // Otherwise use a fallback image to get a graphic context
     
@@ -689,40 +750,40 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public void gluDisk(double inner, double outer, int slices, int loops) {
-    GLUquadric qobj = glu.gluNewQuadric();
-    glu.gluDisk(qobj, inner, outer, slices, loops);
+    //GLUquadric qobj = gluNewQuadric();
+    //gluDisk(qobj, inner, outer, slices, loops);
   }
 
   @Override
   public void glutSolidSphere(double radius, int slices, int stacks) {
-    glut.glutSolidSphere(radius, slices, stacks);
+    //glutSolidSphere(radius, slices, stacks);
   }
 
   @Override
   public void gluSphere(double radius, int slices, int stacks) {
-    GLUquadric qobj = glu.gluNewQuadric();
-    glu.gluSphere(qobj, radius, slices, stacks);
+    //GLUquadric qobj = gluNewQuadric();
+   // gluSphere(qobj, radius, slices, stacks);
   }
 
   @Override
   public void gluCylinder(double base, double top, double height, int slices, int stacks) {
-    GLUquadric qobj = glu.gluNewQuadric();
-    glu.gluCylinder(qobj, base, top, height, slices, stacks);
+    //Cylinder qobj = new Cylinder();
+    //gluCylinder(null, base, top, height, slices, stacks);
   }
 
   @Override
   public void glutSolidCube(float size) {
-    glut.glutSolidCube(size);
+    //glutSolidCube(size);
   }
 
   @Override
   public void glutSolidTeapot(float scale) {
-    glut.glutSolidTeapot(scale);
+    glutSolidTeapot(scale);
   }
 
   @Override
   public void glutWireTeapot(float scale) {
-    glut.glutWireTeapot(scale);
+    glutWireTeapot(scale);
   }
 
 
@@ -763,28 +824,28 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   public void glStencilFunc(StencilFunc func, int ref, int mask) {
     switch (func) {
       case GL_ALWAYS:
-        glStencilFunc(GL_ALWAYS, ref, mask);
+        org.lwjgl.opengl.GL11.glStencilFunc(GL_ALWAYS, ref, mask);
         break;
       case GL_EQUAL:
-        glStencilFunc(GL_EQUAL, ref, mask);
+        org.lwjgl.opengl.GL11.glStencilFunc(GL_EQUAL, ref, mask);
         break;
       case GL_GREATER:
-        glStencilFunc(GL_GREATER, ref, mask);
+        org.lwjgl.opengl.GL11.glStencilFunc(GL_GREATER, ref, mask);
         break;
       case GL_GEQUAL:
-        glStencilFunc(GL_GEQUAL, ref, mask);
+        org.lwjgl.opengl.GL11.glStencilFunc(GL_GEQUAL, ref, mask);
         break;
       case GL_LEQUAL:
-        glStencilFunc(GL_LEQUAL, ref, mask);
+        org.lwjgl.opengl.GL11.glStencilFunc(GL_LEQUAL, ref, mask);
         break;
       case GL_LESS:
-        glStencilFunc(GL_LESS, ref, mask);
+        org.lwjgl.opengl.GL11.glStencilFunc(GL_LESS, ref, mask);
         break;
       case GL_NEVER:
-        glStencilFunc(GL_NEVER, ref, mask);
+        org.lwjgl.opengl.GL11.glStencilFunc(GL_NEVER, ref, mask);
         break;
       case GL_NOTEQUAL:
-        glStencilFunc(GL_NOTEQUAL, ref, mask);
+        org.lwjgl.opengl.GL11.glStencilFunc(GL_NOTEQUAL, ref, mask);
         break;
 
       default:
@@ -810,7 +871,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public void glStencilOp(StencilOp fail, StencilOp zfail, StencilOp zpass) {
-    glStencilOp(toInt(fail), toInt(zfail), toInt(zpass));
+    org.lwjgl.opengl.GL11.glStencilOp(toInt(fail), toInt(zfail), toInt(zpass));
   }
 
   @Override
@@ -848,14 +909,14 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public void gluOrtho2D(double left, double right, double bottom, double top) {
-    glu.gluOrtho2D(left, right, bottom, top);
+    gluOrtho2D(left, right, bottom, top);
   }
 
 
 
   @Override
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {
-    glu.gluPerspective(fovy, aspect, zNear, zFar);
+    gluPerspective(fovy, aspect, zNear, zFar);
   }
 
   @Override
@@ -867,7 +928,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   @Override
   public void gluLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY,
       float centerZ, float upX, float upY, float upZ) {
-    glu.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+    gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
   }
 
   @Override
@@ -878,7 +939,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   @Override
   public void glClipPlane(int plane, double[] equation) {
     // Array.print("NativePainter : glClipPlane : " + plane + " : ", equation);
-    glClipPlane(plane, equation, 0);
+    org.lwjgl.opengl.GL11.glClipPlane(plane, equation);
   }
 
   @Override
@@ -917,7 +978,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
       int objPos_offset) {
-    return glu.gluUnProject(winX, winY, winZ, model, model_offset, proj, proj_offset, view,
+    return gluUnProject(winX, winY, winZ, model, model_offset, proj, proj_offset, view,
         view_offset, objPos, objPos_offset);
   }
 
@@ -925,7 +986,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   public boolean gluProject(float objX, float objY, float objZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] winPos,
       int winPos_offset) {
-    return glu.gluProject(objX, objY, objZ, model, model_offset, proj, proj_offset, view,
+    return gluProject(objX, objY, objZ, model, model_offset, proj, proj_offset, view,
         view_offset, winPos, winPos_offset);
   }
 
@@ -1015,13 +1076,13 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public void glLightModelfv(int mode, float[] value) {
-    glLightModelfv(mode, value, 0);
+    org.lwjgl.opengl.GL11.glLightModelfv(mode, value);
   }
 
   @Override
   public void glLightModel(LightModel model, boolean value) {
     if (LightModel.LIGHT_MODEL_TWO_SIDE.equals(model)) {
-      glLightModeli(GL2ES1.GL_LIGHT_MODEL_TWO_SIDE, value ? GL_TRUE : GL_FALSE);
+      glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, value ? GL_TRUE : GL_FALSE);
     } else if (LightModel.LIGHT_MODEL_LOCAL_VIEWER.equals(model)) {
       glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, value ? GL_TRUE : GL_FALSE);
     } else {
@@ -1032,7 +1093,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   @Override
   public void glLightModel(LightModel model, Color color) {
     if (LightModel.LIGHT_MODEL_AMBIENT.equals(model)) {
-      glLightModelfv(GL2ES1.GL_LIGHT_MODEL_AMBIENT, color.toArray());
+      glLightModelfv(GL_LIGHT_MODEL_AMBIENT, color.toArray());
     } else {
       throw new IllegalArgumentException("Unsupported model '" + model + "'");
     }
@@ -1061,27 +1122,27 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public void glLight_Position(int lightId, float[] positionZero) {
-    glLightfv(lightId, GLLightingFunc.GL_POSITION, positionZero, 0);
+    glLightfv(lightId, GL_POSITION, positionZero, 0);
   }
 
   @Override
   public void glLight_Ambiant(int lightId, Color ambiantColor) {
-    glLightfv(lightId, GLLightingFunc.GL_AMBIENT, ambiantColor.toArray(), 0);
+    glLightfv(lightId, GL_AMBIENT, ambiantColor.toArray(), 0);
   }
 
   @Override
   public void glLight_Diffuse(int lightId, Color diffuseColor) {
-    glLightfv(lightId, GLLightingFunc.GL_DIFFUSE, diffuseColor.toArray(), 0);
+    glLightfv(lightId, GL_DIFFUSE, diffuseColor.toArray(), 0);
   }
 
   @Override
   public void glLight_Specular(int lightId, Color specularColor) {
-    glLightfv(lightId, GLLightingFunc.GL_SPECULAR, specularColor.toArray(), 0);
+    glLightfv(lightId, GL_SPECULAR, specularColor.toArray(), 0);
   }
 
   @Override
   public void glLight_Shininess(int lightId, float value) {
-    glLightf(lightId, GLLightingFunc.GL_SHININESS, value);
+    glLightf(lightId, GL_SHININESS, value);
   }
 
   @Override
@@ -1097,21 +1158,21 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   protected int lightId(int id) {
     switch (id) {
       case 0:
-        return GLLightingFunc.GL_LIGHT0;
+        return GL_LIGHT0;
       case 1:
-        return GLLightingFunc.GL_LIGHT1;
+        return GL_LIGHT1;
       case (2):
-        return GLLightingFunc.GL_LIGHT2;
+        return GL_LIGHT2;
       case 3:
-        return GLLightingFunc.GL_LIGHT3;
+        return GL_LIGHT3;
       case 4:
-        return GLLightingFunc.GL_LIGHT4;
+        return GL_LIGHT4;
       case 5:
-        return GLLightingFunc.GL_LIGHT5;
+        return GL_LIGHT5;
       case 6:
-        return GLLightingFunc.GL_LIGHT6;
+        return GL_LIGHT6;
       case 7:
-        return GLLightingFunc.GL_LIGHT7;
+        return GL_LIGHT7;
     }
     throw new IllegalArgumentException("Unsupported light ID '" + id + "'");
   }
@@ -1170,7 +1231,7 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   @Override
   public void gluPickMatrix(double x, double y, double delX, double delY, int[] viewport,
       int viewport_offset) {
-    glu.gluPickMatrix(x, y, delX, delY, viewport, viewport_offset);
+    gluPickMatrix(x, y, delX, delY, viewport, viewport_offset);
   }
 
   @Override
@@ -1230,12 +1291,12 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public void glMatrixMode_ModelView() {
-    glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW);
   }
 
   @Override
   public void glMatrixMode_Projection() {
-    glMatrixMode(GLMatrixFunc.GL_PROJECTION);
+    glMatrixMode(GL_PROJECTION);
   }
 
   @Override
@@ -1306,17 +1367,17 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
 
   @Override
   public void glDisable_Lighting() {
-    glDisable(GLLightingFunc.GL_LIGHTING);
+    glDisable(GL_LIGHTING);
   }
 
   @Override
   public void glEnable_Lighting() {
-    glEnable(GLLightingFunc.GL_LIGHTING);
+    glEnable(GL_LIGHTING);
   }
 
   @Override
   public void glEnable_ColorMaterial() {
-    glEnable(GLLightingFunc.GL_COLOR_MATERIAL);
+    glEnable(GL_COLOR_MATERIAL);
   }
 
 
@@ -1342,13 +1403,13 @@ public class AWTPainter_LWJGL extends AbstractPainter implements IPainter {
   protected int materialProperty(MaterialProperty material) {
     switch (material) {
       case AMBIENT:
-        return GLLightingFunc.GL_AMBIENT;
+        return GL_AMBIENT;
       case DIFFUSE:
-        return GLLightingFunc.GL_DIFFUSE;
+        return GL_DIFFUSE;
       case SPECULAR:
-        return GLLightingFunc.GL_SPECULAR;
+        return GL_SPECULAR;
       case SHININESS:
-        return GLLightingFunc.GL_SHININESS;
+        return GL_SHININESS;
     }
     throw new IllegalArgumentException("Unsupported property '" + material + "'");
   }
