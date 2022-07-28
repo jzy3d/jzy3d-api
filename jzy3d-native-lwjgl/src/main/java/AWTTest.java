@@ -20,13 +20,13 @@ import java.net.URLClassLoader;
  */
 public class AWTTest {
     public static void main(String[] args) {
-    	ClassLoader cl = ClassLoader.getSystemClassLoader();
+    	/*ClassLoader cl = ClassLoader.getSystemClassLoader();
 
         URL[] urls = ((URLClassLoader)cl).getURLs();
 
         for(URL url: urls){
         	System.out.println(url.getFile());
-        }
+        }*/
         
     	int width = 600;
     	int height = 600;
