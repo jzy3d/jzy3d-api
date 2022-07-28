@@ -226,6 +226,8 @@ public class Chart {
     }
     
     // Restore 3D layout to view
+    //viewPositionMode = ViewPositionMode.FREE;
+    
     View view = getView();
     view.setViewPoint(viewpoint, false);
     view.setViewPositionMode(viewPositionMode);
