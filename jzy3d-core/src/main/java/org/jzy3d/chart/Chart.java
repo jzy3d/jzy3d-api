@@ -196,6 +196,11 @@ public class Chart {
     // Update if needed
     if (!getQuality().isAnimated()) {
       render();
+
+      // Hack for swing : https://github.com/jzy3d/jzy3d-api/issues/293
+      if(getPainter().getWindowingToolkit().isSwing()) {
+        render();
+      }
     }
     return this;
   }
@@ -237,6 +242,11 @@ public class Chart {
     // Update if needed
     if (!getQuality().isAnimated()) {
       render();
+      
+      // Hack for swing : https://github.com/jzy3d/jzy3d-api/issues/293
+      if(getPainter().getWindowingToolkit().isSwing()) {
+        render();
+      }
     }
 
     return this;
