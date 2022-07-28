@@ -109,7 +109,6 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     // Activate Depth buffer
     if (quality.isDepthActivated()) {
 
-
       gl.glEnable(GL.GL_DEPTH_TEST);
       gl.glDepthFunc(GL.GL_LEQUAL);
     } else {
