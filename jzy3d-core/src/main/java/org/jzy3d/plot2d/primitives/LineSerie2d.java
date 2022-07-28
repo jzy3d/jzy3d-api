@@ -15,6 +15,8 @@ public class LineSerie2d implements Serie2d {
   public LineSerie2d(String name) {
     this.name = name;
     this.line = new ConcurrentLineStrip();
+    
+    setColor(Color.GRAY);
   }
 
   @Override
