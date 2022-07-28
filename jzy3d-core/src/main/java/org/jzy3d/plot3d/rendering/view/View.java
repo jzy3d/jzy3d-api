@@ -70,7 +70,7 @@ public class View {
   protected CameraMode cameraMode;
   protected ViewPositionMode viewMode;
   protected ViewBoundMode boundsMode;
-  protected Color backgroundColor = Color.BLACK;
+  protected Color backgroundColor = Color.WHITE.clone();
   protected boolean axisDisplayed = true;
   protected boolean squared = true;
 
@@ -682,8 +682,13 @@ public class View {
 
   /** Clear the color and depth buffer. */
   public void clear() {
+    //System.err.println("View.Clear : " + backgroundColor);
+    //System.err.println("View.clear : " + Color.WHITE + " for white");
+    
     painter.clearColor(backgroundColor);
     painter.glClearDepth(1);
+    
+    
 
     // Console.println("View.clear with color", backgroundColor);
 

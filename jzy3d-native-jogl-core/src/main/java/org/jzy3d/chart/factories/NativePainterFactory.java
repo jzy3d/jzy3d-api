@@ -151,10 +151,12 @@ public abstract class NativePainterFactory implements IPainterFactory {
     GLCapabilities caps = new GLCapabilities(glp);
     caps.setHardwareAccelerated(true);
 
-    // false lead to not erased background on MacOS X 10.15.3 (Catalina) but not 10.12
+    // false lead to not erased background on MacOS 10.15.3 (Catalina) 
+    // but not on MacOS 10.12
     caps.setDoubleBuffered(true);
 
     boolean fixedResolution = true;
+    
     if (fixedResolution) {
       caps.setAlphaBits(8);
       caps.setRedBits(8);
