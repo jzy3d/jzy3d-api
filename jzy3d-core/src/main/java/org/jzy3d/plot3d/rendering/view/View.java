@@ -70,7 +70,7 @@ public class View {
   protected CameraMode cameraMode;
   protected ViewPositionMode viewMode;
   protected ViewBoundMode boundsMode;
-  protected Color backgroundColor = Color.WHITE.clone();
+  protected Color backgroundColor = Color./*BLACK;*/WHITE.clone();
   protected boolean axisDisplayed = true;
   protected boolean squared = true;
 
