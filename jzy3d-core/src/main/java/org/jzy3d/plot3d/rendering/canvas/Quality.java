@@ -130,9 +130,17 @@ public class Quality {
     return smoothLine;
   }
 
-  public Quality setSmoothEdge(boolean smoothLine) {
+  public Quality setSmoothLine(boolean smoothLine) {
     this.smoothLine = smoothLine;
     return this;
+  }
+
+  /**
+   * Use setSmoothLine instead
+   */
+  @Deprecated
+  public Quality setSmoothEdge(boolean smoothLine) {
+    return setSmoothLine(smoothLine);
   }
 
   public boolean isSmoothPoint() {
