@@ -199,7 +199,7 @@ public class Chart {
 
       // Hack for swing : https://github.com/jzy3d/jzy3d-api/issues/293
       if(getPainter().getWindowingToolkit().isSwing()) {
-        render();
+        render(2);
       }
     }
     return this;
@@ -245,7 +245,7 @@ public class Chart {
       
       // Hack for swing : https://github.com/jzy3d/jzy3d-api/issues/293
       if(getPainter().getWindowingToolkit().isSwing()) {
-        render();
+        render(2);
       }
     }
 
