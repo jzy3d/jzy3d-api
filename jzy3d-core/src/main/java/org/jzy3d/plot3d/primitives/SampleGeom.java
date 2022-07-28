@@ -33,10 +33,10 @@ public class SampleGeom {
 
     Shape surface =
         new SurfaceBuilder().orthonormal(new OrthonormalGrid(xRange, steps, yRange, steps), mapper);
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, alpha));
-    surface.setColorMapper(colorMapper);
     
+    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, alpha));
+
+    surface.setColorMapper(colorMapper);
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);
     surface.setWireframeColor(Color.BLACK);
