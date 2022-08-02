@@ -154,7 +154,11 @@ public abstract class NativePainterFactory implements IPainterFactory {
     // false lead to not erased background on MacOS 10.15.3 (Catalina) 
     // but not on MacOS 10.12
     caps.setDoubleBuffered(true);
+    
+    //caps.setBackgroundOpaque(false);
 
+
+    
     boolean fixedResolution = true;
     
     if (fixedResolution) {

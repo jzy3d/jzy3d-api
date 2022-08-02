@@ -299,10 +299,14 @@ public class Chart {
     if (getCanvas() instanceof IScreenCanvas) {
       IScreenCanvas screenCanvas = (IScreenCanvas) getCanvas();
 
-      if (getQuality().isAnimated()) {
-        screenCanvas.getAnimation().start();
-      } else {
-        screenCanvas.getAnimation().stop();
+      IAnimator animator = screenCanvas.getAnimation();
+      
+      if(animator!=null) {
+        if (getQuality().isAnimated()) {
+          animator.start();
+        } else {
+          animator.stop();
+        }
       }
     }
 
@@ -320,7 +324,10 @@ public class Chart {
   }
 
   public void stopAllThreads() {
-    getMouse().getThread().stop();
+    ICameraMouseController m = getMouse();
+    if(m!=null) {
+      m.getThread().stop();
+    }
     stopAnimation();
   }
 
