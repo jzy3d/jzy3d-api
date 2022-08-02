@@ -36,6 +36,13 @@
 		</dependency>
 
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>vecmath</artifactId>
+			<version>1.6.2</version>
+		</dependency>
+
+
+		<dependency>
 			<groupId>org.lwjglx</groupId>
 			<artifactId>lwjgl3-awt</artifactId>
 			<version>${lwjglawt.version}</version>
