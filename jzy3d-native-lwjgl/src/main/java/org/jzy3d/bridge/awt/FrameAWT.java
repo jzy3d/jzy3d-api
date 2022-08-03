@@ -1,27 +1,35 @@
-package org.jzy3d.lwjgl;
+package org.jzy3d.bridge.awt;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 
-public class FrameAWT extends java.awt.Frame implements IFrame {
+public class FrameAWT extends JFrame implements IFrame {
   private static final long serialVersionUID = -4482149010771554002L;
 
   protected Chart chart;
+  
+  protected AWTGLCanvas canvas;
 
   // public constructor for easier construction by reflexion
-  public FrameAWT() {}
+  public FrameAWT() {
+    super();
+  }
 
   public FrameAWT(Chart chart, Rectangle bounds, String title) {
+    super();
     initialize(chart, bounds, title);
   }
 
   public FrameAWT(Chart chart, Rectangle bounds, String title, String message) {
+    super();
     initialize(chart, bounds, title, message);
   }
 
@@ -40,15 +48,18 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
       this.setTitle(title);
     }
 
-    //this.setLayout(new BorderLayout());
+    this.setLayout(new BorderLayout());
+    this.setPreferredSize(new Dimension(bounds.width, bounds.height));
 
-    AWTGLCanvas canvas = (AWTGLCanvas) chart.getCanvas();
-    this.add(canvas);//, BorderLayout.CENTER);
+    this.canvas = (AWTGLCanvas) chart.getCanvas();
+    this.add(canvas, BorderLayout.CENTER);
     this.pack();
     this.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
 
+    //System.out.println(bounds);
+    
     this.setVisible(true);
-    //this.transferFocus();
+    this.transferFocus();
 
 
     this.addWindowListener(new WindowAdapter() {
@@ -64,6 +75,12 @@ public class FrameAWT extends java.awt.Frame implements IFrame {
       }
     });
 
+
+    startLoop();
+  }
+  
+  
+  public void startLoop() {
     // Render loop differ from other 
     Runnable renderLoop = new Runnable() {
       public void run() {

@@ -1,4 +1,4 @@
-package org.jzy3d.lwjgl;
+package org.jzy3d.painters;
 import static org.lwjgl.opengl.GL11.GL_ALPHA_TEST;
 import static org.lwjgl.opengl.GL11.GL_ALWAYS;
 import static org.lwjgl.opengl.GL11.GL_AMBIENT;
@@ -121,7 +121,7 @@ import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.lwjgl.opengl.GL11;
-import opengl.glu.GLU;
+import org.lwjglx.util.glu.GLU;
 
 
 public class LWJGLPainterAWT extends AbstractPainter implements IPainter {
