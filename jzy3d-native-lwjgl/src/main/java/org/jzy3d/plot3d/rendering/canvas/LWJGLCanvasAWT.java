@@ -46,8 +46,8 @@ public class LWJGLCanvasAWT extends AWTGLCanvas implements IScreenCanvas{
   
   boolean sample = false;
   
-  protected double pixelScaleX;
-  protected double pixelScaleY;
+  protected double pixelScaleX = 1;
+  protected double pixelScaleY = 1;
   protected View view;
   //protected Renderer3d renderer;
   protected IAnimator animator;
@@ -178,8 +178,7 @@ public class LWJGLCanvasAWT extends AWTGLCanvas implements IScreenCanvas{
 
   @Override
   public void forceRepaint() {
-    // TODO Auto-generated method stub
-    
+    repaint();
   }
 
   @Override
@@ -230,20 +229,17 @@ public class LWJGLCanvasAWT extends AWTGLCanvas implements IScreenCanvas{
 
   @Override
   public Coord2d getPixelScale() {
-    // TODO Auto-generated method stub
-    return null;
+    return new Coord2d(pixelScaleX, pixelScaleY);
   }
 
   @Override
   public Coord2d getPixelScaleJVM() {
-    // TODO Auto-generated method stub
-    return null;
+    return getPixelScale();
   }
 
   @Override
   public double getLastRenderingTimeMs() {
-    // TODO Auto-generated method stub
-    return 0;
+    return -1;
   }
 
   @Override
@@ -266,13 +262,11 @@ public class LWJGLCanvasAWT extends AWTGLCanvas implements IScreenCanvas{
 
   @Override
   public void display() {
-    // TODO Auto-generated method stub
-    
+    repaint();
   }
 
   @Override
   public IAnimator getAnimation() {
-    // TODO Auto-generated method stub
     return null;
   }
 
