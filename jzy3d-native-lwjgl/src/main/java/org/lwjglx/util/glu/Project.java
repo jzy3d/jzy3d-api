@@ -29,13 +29,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package opengl.glu;
+package org.lwjglx.util.glu;
 
 import static org.lwjgl.opengl.GL11.glMultMatrixf;
 import static org.lwjgl.opengl.GL11.glScalef;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import org.jzy3d.maths.Array;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 
@@ -56,9 +57,7 @@ public class Project extends Util {
 			0.0f, 0.0f, 1.0f, 0.0f,
 			0.0f, 0.0f, 0.0f, 1.0f };
 
-    private static final FloatBuffer matrix = FloatBuffer.allocate(16);
-        //.createFloatBuffer(16);
-	//private static final FloatBuffer matrix = BufferUtils.createFloatBuffer(16);
+    private static final FloatBuffer matrix = BufferUtils.createFloatBuffer(16);
 	private static final FloatBuffer finalMatrix = BufferUtils.createFloatBuffer(16);
 
 	private static final FloatBuffer tempMatrix = BufferUtils.createFloatBuffer(16);
@@ -265,6 +264,7 @@ public class Project extends Util {
 		cross(side, forward, up);
 
 		__gluMakeIdentityf(matrix);
+		
 		matrix.put(0 * 4 + 0, side[0]);
 		matrix.put(1 * 4 + 0, side[1]);
 		matrix.put(2 * 4 + 0, side[2]);
@@ -277,6 +277,8 @@ public class Project extends Util {
 		matrix.put(1 * 4 + 2, -forward[1]);
 		matrix.put(2 * 4 + 2, -forward[2]);
 
+	//matrix.rewind();
+		
 		glMultMatrixf(matrix);
 		glTranslatef(-eyex, -eyey, -eyez);
 	}

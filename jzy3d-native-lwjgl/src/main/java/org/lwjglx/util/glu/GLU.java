@@ -29,7 +29,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package opengl.glu;
+package org.lwjglx.util.glu;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;

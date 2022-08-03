@@ -1,5 +1,6 @@
+import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.lwjgl.LWJGLChartFactory;
+import org.jzy3d.factories.LWJGLChartFactory;
 import org.jzy3d.plot3d.primitives.SampleGeom;
 
 public class LWJGLChart {
@@ -10,8 +11,7 @@ public class LWJGLChart {
     Chart c = f.newChart();
     c.add(SampleGeom.surface());
     c.open();
-    
-    
+    c.addMouse();
   }
 
 }

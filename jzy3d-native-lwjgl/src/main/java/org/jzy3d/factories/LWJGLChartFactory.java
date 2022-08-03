@@ -1,4 +1,4 @@
-package org.jzy3d.lwjgl;
+package org.jzy3d.factories;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -30,22 +30,6 @@ public class LWJGLChartFactory extends ChartFactory{
   public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
     return new View(factory, scene, canvas, quality);
   }
-
-  /*@Override
-  public Chart newChart(IChartFactory factory, Quality quality) {
-    return new Chart(factory, quality);
-  }
-  
-  @Override
-  public Chart newChart() {
-    return newChart(Quality.Advanced());
-  }
-
-  @Override
-  public Chart newChart(Quality quality) {
-    return newChart(getFactory(), quality);
-  }*/
-
 
   @Override
   public IChartFactory getFactory() {

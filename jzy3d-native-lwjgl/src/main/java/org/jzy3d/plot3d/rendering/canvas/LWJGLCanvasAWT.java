@@ -1,4 +1,4 @@
-package org.jzy3d.lwjgl;
+package org.jzy3d.plot3d.rendering.canvas;
 
 import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
@@ -10,6 +10,8 @@ import static org.lwjgl.opengl.GL11.glColor3f;
 import static org.lwjgl.opengl.GL11.glEnd;
 import static org.lwjgl.opengl.GL11.glVertex2f;
 import static org.lwjgl.opengl.GL11.glViewport;
+import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,6 +22,7 @@ import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
+import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -39,54 +42,7 @@ public class LWJGLCanvasAWT extends AWTGLCanvas implements IScreenCanvas{
    */
   private static final long serialVersionUID = -1185158326104909667L;
 
-  @Override
-  public void initGL() {
-    System.out.println("LWJGLCanvasAWT : OpenGL version: " + effective.majorVersion + "." + effective.minorVersion
-        + " (Profile: " + effective.profile + ")");
-    
-    GLCapabilities glc = createCapabilities();
-    
-    System.out.println("LWJGLCanvasAWT : Caps : " + glc);
-    
-    if(sample) {
-      glClearColor(0.3f, 0.4f, 0.5f, 1);
-    }
-    else {
-      view.init();
-           
-    }
-    
-  }
-
-  @Override
-  public void paintGL() {
-    // int w = getFramebufferWidth();
-    // int h = getFramebufferHeight();
-
-    if(sample) {
-      int w = width;
-      int h = height;
   
-      float aspect = (float) w / h;
-      double now = System.currentTimeMillis() * 0.001;
-      float width = (float) Math.abs(Math.sin(now * 0.3));
-      glClear(GL_COLOR_BUFFER_BIT);
-      glViewport(0, 0, w, h);
-      glBegin(GL_QUADS);
-      glColor3f(0.4f, 0.6f, 0.8f);
-      glVertex2f(-0.75f * width / aspect, 0.0f);
-      glVertex2f(0, -0.75f);
-      glVertex2f(+0.75f * width / aspect, 0);
-      glVertex2f(0, +0.75f);
-      glEnd();
-    }
-    else {
-      view.clear();
-      view.render();      
-    }
-    
-    swapBuffers();
-  }
   
   boolean sample = false;
   
@@ -128,6 +84,61 @@ public class LWJGLCanvasAWT extends AWTGLCanvas implements IScreenCanvas{
     //  setPixelScale(newPixelScaleIdentity());
     
   }
+  
+  @Override
+  public void initGL() {
+    System.out.println("LWJGLCanvasAWT : OpenGL version: " + effective.majorVersion + "." + effective.minorVersion
+        + " (Profile: " + effective.profile + ")");
+    
+    GLCapabilities glc = createCapabilities();
+    
+    System.out.println("LWJGLCanvasAWT : Caps : " + glc);
+    
+    if(sample) {
+      glClearColor(0.3f, 0.4f, 0.5f, 1);
+    }
+    else {
+      view.init();
+           
+    }
+    
+  }
+
+  @Override
+  public void paintGL() {
+    // int w = getFramebufferWidth();
+    // int h = getFramebufferHeight();
+
+    if(sample) {
+      int w = width;
+      int h = height;
+  
+      float aspect = (float) w / h;
+      double now = System.currentTimeMillis() * 0.001;
+      float width = (float) Math.abs(Math.sin(now * 0.3));
+      glClear(GL_COLOR_BUFFER_BIT);
+      glViewport(0, 0, w, h);
+      glBegin(GL_QUADS);
+      glColor3f(0.4f, 0.6f, 0.8f);
+      glVertex2f(-0.75f * width / aspect, 0.0f);
+      glVertex2f(0, -0.75f);
+      glVertex2f(+0.75f * width / aspect, 0);
+      glVertex2f(0, +0.75f);
+      glEnd();
+      
+
+    }
+    else {
+      view.clear();
+      view.render(); 
+      
+
+    }
+    swapBuffers();
+    
+  }
+  
+  
 
   @Override
   public boolean isNative() {
@@ -141,32 +152,28 @@ public class LWJGLCanvasAWT extends AWTGLCanvas implements IScreenCanvas{
 
   @Override
   public int getRendererWidth() {
-    // TODO Auto-generated method stub
-    return 0;
+    return getWidth();
   }
 
   @Override
   public int getRendererHeight() {
-    // TODO Auto-generated method stub
-    return 0;
+    return getHeight();
   }
 
   @Override
   public Dimension getDimension() {
-    // TODO Auto-generated method stub
-    return null;
+    return new Dimension(getWidth(), getHeight());
   }
 
   @Override
   public void screenshot(File file) throws IOException {
-    // TODO Auto-generated method stub
+    throw new NotImplementedException();
     
   }
 
   @Override
   public Object screenshot() {
-    // TODO Auto-generated method stub
-    return null;
+    throw new NotImplementedException();
   }
 
   @Override
@@ -183,26 +190,30 @@ public class LWJGLCanvasAWT extends AWTGLCanvas implements IScreenCanvas{
 
   @Override
   public void addMouseController(Object o) {
-    // TODO Auto-generated method stub
-    
+    addMouseListener((java.awt.event.MouseListener) o);
+    if (o instanceof MouseWheelListener)
+      addMouseWheelListener((MouseWheelListener) o);
+    if (o instanceof MouseMotionListener)
+      addMouseMotionListener((MouseMotionListener) o);
   }
 
   @Override
   public void addKeyController(Object o) {
-    // TODO Auto-generated method stub
-    
+    addKeyListener((java.awt.event.KeyListener) o);
   }
 
   @Override
   public void removeMouseController(Object o) {
-    // TODO Auto-generated method stub
-    
+    removeMouseListener((java.awt.event.MouseListener) o);
+    if (o instanceof MouseWheelListener)
+      removeMouseWheelListener((MouseWheelListener) o);
+    if (o instanceof MouseMotionListener)
+      removeMouseMotionListener((MouseMotionListener) o);
   }
 
   @Override
   public void removeKeyController(Object o) {
-    // TODO Auto-generated method stub
-    
+    removeKeyListener((java.awt.event.KeyListener) o);
   }
 
   @Override
