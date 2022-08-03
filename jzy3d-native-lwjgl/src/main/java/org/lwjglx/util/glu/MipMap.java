@@ -29,14 +29,14 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-package opengl.glu;
+package org.lwjglx.util.glu;
 
 import java.nio.ByteBuffer;
 
 import org.lwjgl.BufferUtils;
 
 import static org.lwjgl.opengl.GL11.*;
-import static opengl.glu.GLU.*;
+import static org.lwjglx.util.glu.GLU.*;
 
 /**
  * MipMap.java

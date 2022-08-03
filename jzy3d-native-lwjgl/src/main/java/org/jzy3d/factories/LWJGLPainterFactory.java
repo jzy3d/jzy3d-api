@@ -1,9 +1,12 @@
-package org.jzy3d.lwjgl;
+package org.jzy3d.factories;
 
+import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.IAnimator;
+import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
+import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.factories.IChartFactory;
@@ -12,8 +15,10 @@ import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.LWJGLPainterAWT;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.LWJGLCanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 import org.jzy3d.plot3d.rendering.scene.Scene;
@@ -56,17 +61,17 @@ public class LWJGLPainterFactory implements IPainterFactory{
 
   @Override
   public ICameraMouseController newMouseCameraController(Chart chart) {
-    return null;
+    return new AWTCameraMouseController(chart);
   }
 
   @Override
   public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-    return null;
+    return null;//new AWTMousePickingController(chart, clickWidth);
   }
 
   @Override
   public ICameraKeyController newKeyboardCameraController(Chart chart) {
-    return null;
+    return new AWTCameraKeyController(chart);
   }
 
   @Override

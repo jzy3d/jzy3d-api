@@ -37,8 +37,8 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>vecmath</artifactId>
-			<version>1.6.2</version>
+			<artifactId>jzy3d-core-awt</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 

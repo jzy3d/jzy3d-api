@@ -35,7 +35,7 @@
 * All rights reserved.
 */
 
-package opengl.glu;
+package org.lwjglx.util.glu;
 
 /**
  * <b>GLUtessellatorCallback</b> interface provides methods that the user will
