@@ -127,7 +127,6 @@ public class AWTNativeViewOverlay implements IViewOverlay {
           RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     }
     
-    // always enable antialiasing for text
     g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
   }
