@@ -47,9 +47,18 @@ public class AWTNativeViewOverlay implements IViewOverlay {
 
     // Define the canvas area to use
     if (useFullCanvas) {
-      painter.glViewport(0, 0, canvas.getRendererWidth(), canvas.getRendererHeight());
+      int width = canvas.getRendererWidth();
+      int height = canvas.getRendererHeight();
+      
+      /*if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
+        Coord2d pixelScale = canvas.getPixelScaleJVM();
+        width = (int)(width*pixelScale.x);
+        height = (int)(height*pixelScale.y);
+      }*/
+      
+      painter.glViewport(0, 0, width, height);
     } else {
-      // Only work on canvas section that relates to camera (not colorbar)
+      // Only work on canvas section that relates to camera (excludes the colorbar part)
       painter.glViewport(viewport.x, viewport.y, viewport.width, viewport.height);
     }
 
@@ -99,7 +108,7 @@ public class AWTNativeViewOverlay implements IViewOverlay {
     boolean scaled = false;
 
     Coord2d pixelScale = view.getPixelScale();
-
+    
     if (pixelScale.x != 1 || pixelScale.y != 1) {
       g2d.scale(pixelScale.x, pixelScale.y);
       scaled = true;
