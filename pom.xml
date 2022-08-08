@@ -1,11 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jzy3d</groupId>
 	<artifactId>jzy3d-all</artifactId>
-	<version>2.1.1-SNAPSHOT</version>
+	<version>2.2.0</version>
 	<packaging>pom</packaging>
 
 	<name>Jzy3d Master Project</name>
@@ -93,7 +91,7 @@
 
 	<scm>
 		<connection>scm:git:git@github.com:jzy3d/jzy3d-api.git</connection>
-		<tag>jzy3d-all-2.1.0</tag>
+		<tag>jzy3d-all-2.2.0</tag>
 	</scm>
 	<issueManagement>
 		<system>Github</system>
