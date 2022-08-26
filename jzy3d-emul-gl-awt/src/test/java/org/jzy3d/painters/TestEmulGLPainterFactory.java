@@ -1,5 +1,6 @@
 package org.jzy3d.painters;
 
+import static org.mockito.Mockito.mock;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -13,10 +14,12 @@ import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.junit.ChartTester;
 import org.jzy3d.maths.Range;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 
 public class TestEmulGLPainterFactory {
   @Test
@@ -66,5 +69,15 @@ public class TestEmulGLPainterFactory {
     Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps), mapper);
     surface.setFaceDisplayed(true);
     return surface;
+  }
+  
+  @Test
+  public void detectAWT() {
+    IPainterFactory p = new EmulGLPainterFactory();
+    IPainter painter = p.newPainter();
+    
+    painter.setCanvas(mock(EmulGLCanvas.class));
+    
+    Assert.assertEquals(WindowingToolkit.AWT, painter.getWindowingToolkit());
   }
 }
