@@ -257,6 +257,7 @@ public class Quality {
         smoothPolygon, disableDepthTestWhenAlpha);
     copy.isAnimated = isAnimated;
     copy.isAutoSwapBuffer = isAutoSwapBuffer;
+    copy.preserveViewportSize = preserveViewportSize;
     return copy;
   }
 

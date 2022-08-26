@@ -15,6 +15,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -39,6 +40,16 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   /** A 1x1 image used for processing text length in pixel if no context is available */
   protected BufferedImage textLengthFallbackImage;
   protected FontMetrics fontMetricsFallback;
+  
+  @Override
+  public WindowingToolkit getWindowingToolkit() {
+    String name = getCanvas().getClass().getSimpleName();
+
+    if (name.indexOf("EmulGLCanvas") >= 0) {
+      return WindowingToolkit.AWT;
+    } 
+    return WindowingToolkit.UNKOWN;
+  }
 
 
   public GL getGL() {
