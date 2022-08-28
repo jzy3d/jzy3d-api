@@ -14,11 +14,13 @@ import com.jogamp.newt.event.MouseListener;
 
 public class NewtCameraMouseController extends AbstractCameraController implements MouseListener {
 
+  protected Coord2d prevMouse = Coord2d.ORIGIN;
+  
   public NewtCameraMouseController() {}
 
   public NewtCameraMouseController(Chart chart) {
     register(chart);
-    addSlaveThreadController(chart.getFactory().newCameraThreadController(chart));
+    addThread(chart.getFactory().newCameraThreadController(chart));
   }
 
   @Override

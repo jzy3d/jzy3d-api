@@ -13,7 +13,6 @@ public abstract class AbstractCameraController extends AbstractController
     implements ICameraMouseController {
 
   protected CameraThreadController threadController;
-  protected Coord2d prevMouse = Coord2d.ORIGIN;
   protected LODPerf perf;
 
   

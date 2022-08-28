@@ -626,11 +626,16 @@ public class View {
    * Set a manual bounding box and switch the bounding mode to {ViewBoundMode.MANUAL}, meaning that
    * any call to {@link updateBounds()} will update view bounds to the current bounds.
    */
-  public void setBoundManual(BoundingBox3d bounds) {
+  public void setBoundsManual(BoundingBox3d bounds) {
     boundsMode = ViewBoundMode.MANUAL;
     lookToBox(bounds);
   }
 
+  @Deprecated
+  public void setBoundManual(BoundingBox3d bounds) {
+    
+  }
+  
   /* GL */
 
   /**
