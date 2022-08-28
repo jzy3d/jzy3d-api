@@ -9,13 +9,21 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.RateLimiter;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
+import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.rendering.view.View;
 
 
 public class AWTCameraMouseController extends AbstractCameraController
     implements MouseListener, MouseWheelListener, MouseMotionListener {
 
   protected RateLimiter rateLimiter;
+  
+  protected Coord2d prevMouse = Coord2d.ORIGIN;
+  protected Coord2d startMouse = Coord2d.ORIGIN;
+  
 
   public AWTCameraMouseController() {}
 
@@ -68,6 +76,10 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     prevMouse.x = x(e);
     prevMouse.y = y(e);
+    startMouse = prevMouse.clone();
+    
+    System.out.println("Pressed " + e);
+
   }
 
 
@@ -75,12 +87,15 @@ public class AWTCameraMouseController extends AbstractCameraController
   /** Compute shift or rotate */
   @Override
   public void mouseDragged(MouseEvent e) {
-	if(getChart()!=null) {
+	boolean is3D = true;
+    
+    if(getChart()!=null) {
       if(getChart().getView().is2D()) {
-        return;
+        is3D = false;
       }
 	}
-      
+    
+
     // Check if mouse rate limiter wish to forbid this mouse drag instruction
     if(rateLimiter!=null && !rateLimiter.rateLimitCheck()) {
       return;
@@ -89,20 +104,84 @@ public class AWTCameraMouseController extends AbstractCameraController
     // Apply mouse drag
     Coord2d mouse = xy(e);
 
-    // Rotate if left button down
-    if (AWTMouseUtilities.isLeftDown(e)) {
-      Coord2d move = mouse.sub(prevMouse).div(100);
-      rotate(move);
-    }
+    // 3D mode
+    if(is3D) {
+      // Rotate if left button down
+      if (AWTMouseUtilities.isLeftDown(e)) {
+        Coord2d move = mouse.sub(prevMouse).div(100);
+        rotate(move);
+      }
 
-    // Shift if right button down
-    else if (AWTMouseUtilities.isRightDown(e)) {
-      Coord2d move = mouse.sub(prevMouse);
-      if (move.y != 0)
-        shift(move.y / 500);
+      // Shift if right button down
+      else if (AWTMouseUtilities.isRightDown(e)) {
+        Coord2d move = mouse.sub(prevMouse);
+        if (move.y != 0)
+          shift(move.y / 500);
+      }
+      
     }
+    
+    // 2D mode
+    else {
+    }
+	
     prevMouse = mouse;
   }
+  
+  @Override
+  public void mouseReleased(MouseEvent e) {
+    System.out.println("Release " + e);
+    
+    boolean is2D = true;
+    
+    if(getChart()!=null) {
+      if(getChart().getView().is2D()) {
+        is2D = true;
+      }
+    }
+    
+    if(is2D) {
+      View view = getChart().getView();
+      IPainter painter = view.getPainter();
+      
+      Coord3d start = painter.screenToModel(new Coord3d(startMouse));
+      Coord3d stop = painter.screenToModel(new Coord3d(xy(e)));
+      BoundingBox3d bounds = view.getBounds();
+      
+      System.out.println(start);
+      System.out.println(stop);
+      System.out.println(bounds);
+      
+      if(view.is2D_XY()) {
+        if(view.get2DLayout().isHorizontalAxisFlip()) {
+          bounds.setXmin(stop.x);
+          bounds.setXmax(start.x);                    
+        }
+        else {
+          bounds.setXmin(start.x);
+          bounds.setXmax(stop.x);          
+        }
+        
+        if(view.get2DLayout().isVerticalAxisFlip()) {
+          bounds.setYmin(stop.y);
+          bounds.setYmax(start.y);
+        }
+        else {
+          bounds.setYmin(start.y);
+          bounds.setYmax(stop.y);
+        }
+        
+      }
+      
+      System.out.println(bounds);
+
+      view.setBoundsManual(bounds);
+      view.shoot();
+      
+    }
+  }
+
+
 
   /** Compute zoom */
   @Override
@@ -132,8 +211,6 @@ public class AWTCameraMouseController extends AbstractCameraController
   @Override
   public void mouseExited(MouseEvent e) {}
 
-  @Override
-  public void mouseReleased(MouseEvent e) {}
 
   @Override
   public void mouseMoved(MouseEvent e) {}

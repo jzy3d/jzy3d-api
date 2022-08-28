@@ -19,6 +19,9 @@ import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.view.View;
 
 public class TestAWTCameraMouseController {
+  
+  // 3D interactions
+  
   @Test
   public void given3DView_WhenMouseDragWithLeftButton_ThenViewRotate() {
     
@@ -115,4 +118,41 @@ public class TestAWTCameraMouseController {
     verify(view, times(2)).zoomZ(eq(2f), eq(false));
     
   }
+  
+  // 3D interactions
+  
+  @Test
+  public void given2DView_WhenMouseDragWithLeftButton_ThenViewRotate() {
+    
+    // Given
+    View view = spy(View.class);
+    when(view.is2D()).thenReturn(true); // 3D mode
+    when(view.getViewPoint()).thenReturn(new Coord3d(0,0,10));
+    
+    IScreenCanvas canvas = mock(IScreenCanvas.class);
+    
+    IChartFactory factory = mock(IChartFactory.class);
+    when(factory.newCameraThreadController(null)).thenReturn(null);
+    
+    Chart chart = mock(Chart.class);
+    when(chart.getView()).thenReturn(view);
+    when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getFactory()).thenReturn(factory);
+    
+    AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
+    
+    // When mouse click, drag and release
+    mouse.mousePressed(MouseMock.event(10, 10, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseDragged(MouseMock.event(15, 15, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseDragged(MouseMock.event(20, 20, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseReleased(MouseMock.event(25, 25, InputEvent.BUTTON1_DOWN_MASK));
+    
+    // Then two rotations are invoked
+    //verify(view, times(2)).rotate(eq(new Coord2d(0.05, 0.05)), eq(false));
+    
+    verify(view, times(1)).setBoundsManual(eq(new BoundingBox3d(0,1,0,1,0,1)));//, eq(false));
+    
+    
+  }
+
 }
