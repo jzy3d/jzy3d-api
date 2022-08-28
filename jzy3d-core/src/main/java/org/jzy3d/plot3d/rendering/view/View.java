@@ -112,9 +112,9 @@ public class View {
 
 
   // view listeners
-  protected List<IViewPointChangedListener> viewPointChangedListeners;
-  protected List<IViewEventListener> viewEventListeners;
-  protected List<IViewLifecycleEventListener> viewLifecycleListeners;
+  protected List<IViewPointChangedListener> viewPointChangedListeners =  new ArrayList<>();
+  protected List<IViewLifecycleEventListener> viewLifecycleListeners = new ArrayList<>();
+  protected List<IViewEventListener> viewEventListeners = new ArrayList<>();
   protected boolean wasOnTopAtLastRendering;
 
   // view states
@@ -186,6 +186,12 @@ public class View {
   public View(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
     initInstance(factory, scene, canvas, quality);
   }
+  
+  /**
+   * An empty constructor to allow creating spied mocks
+   */
+  protected View() {
+  }
 
   /**
    * Initialize a view object. Invoked by constructor
@@ -222,9 +228,6 @@ public class View {
     this.quality = quality;
     this.annotations = factory.newScene(false);
 
-    this.viewEventListeners = new ArrayList<>();
-    this.viewPointChangedListeners = new ArrayList<>();
-    this.viewLifecycleListeners = new ArrayList<>();
     this.wasOnTopAtLastRendering = false;
 
     this.scene.getGraph().getStrategy().setView(this);
