@@ -1,7 +1,5 @@
 package org.jzy3d.chart.controllers.mouse.camera;
 
-import java.awt.Component;
-import java.awt.event.MouseEvent;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
@@ -14,6 +12,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Range;
+import org.jzy3d.mocks.jzy3d.MouseMock;
 import org.jzy3d.plot3d.builder.Mapper;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
@@ -79,10 +78,10 @@ public class TestAdaptiveMouseController {
     mockRenderingPerf.value = 10;
 
     // Then : no optimization triggered
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
     Assert.assertFalse(mouse.mustOptimizeMouseDrag);
 
-    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    mouse.mouseReleased(MouseMock.event(canvas, 100, 100));
 
 
     // -------------------------------------
@@ -90,7 +89,7 @@ public class TestAdaptiveMouseController {
     mockRenderingPerf.value = 1000;
 
     // Then : optimization IS set to ON at MOUSE PRESS
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
     Assert.assertTrue(mouse.mustOptimizeMouseDrag);
 
     // Then : HiDPI is disabled DURING mouse DRAGGED
@@ -98,13 +97,13 @@ public class TestAdaptiveMouseController {
         mouse.policy.optimizeByDroppingHiDPI);
     Assert.assertTrue("Did NOT start drag already", mouse.isFirstDrag);
 
-    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+    mouse.mouseDragged(MouseMock.event(canvas, 100, 100));
 
     Assert.assertFalse("Did start drag already", mouse.isFirstDrag);
     Assert.assertFalse("GL properly configured", canvas.getGL().isAutoAdaptToHiDPI());
 
     // Then : HiDPI is reset to intial state (true) AFTER mouse RELEASED
-    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    mouse.mouseReleased(MouseMock.event(canvas, 100, 100));
 
     Assert.assertEquals(false, chart.getQuality().isPreserveViewportSize());
     Assert.assertEquals(allowHiDPI, canvas.getGL().isAutoAdaptToHiDPI());
@@ -131,7 +130,7 @@ public class TestAdaptiveMouseController {
     // -------------------------------------
     // When : fast rendering
     mockRenderingPerf.value = 10;
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
 
     // Then : no optimization triggered
     Assert.assertFalse(mouse.mustOptimizeMouseDrag);
@@ -141,7 +140,7 @@ public class TestAdaptiveMouseController {
     mockRenderingPerf.value = 1000;
 
     // Then : optimization IS set to ON at MOUSE PRESS
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
 
     Assert.assertTrue(mouse.mustOptimizeMouseDrag);
 
@@ -150,14 +149,14 @@ public class TestAdaptiveMouseController {
         mouse.policy.optimizeByDroppingHiDPI);
     Assert.assertTrue("Did NOT start drag already", mouse.isFirstDrag);
 
-    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+    mouse.mouseDragged(MouseMock.event(canvas, 100, 100));
 
     Assert.assertFalse("Did start drag already", mouse.isFirstDrag);
     Assert.assertFalse("GL properly configured", canvas.getGL().isAutoAdaptToHiDPI());
 
 
     // Then : HiDPI remains configured as before
-    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    mouse.mouseReleased(MouseMock.event(canvas, 100, 100));
 
     Assert.assertFalse(mouse.mustOptimizeMouseDrag);
     Assert.assertEquals(allowHiDPI, canvas.getGL().isAutoAdaptToHiDPI());
@@ -189,14 +188,14 @@ public class TestAdaptiveMouseController {
 
     mockRenderingPerf.value = 1000;
 
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
-    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
+    mouse.mouseDragged(MouseMock.event(canvas, 100, 100));
 
     Assert.assertTrue("Wireframe enabled during drag", surface.isWireframeDisplayed());
     Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
 
 
-    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    mouse.mouseReleased(MouseMock.event(canvas, 100, 100));
 
     // -------------------------------------
     // Then the wireframe status is back to original value
@@ -230,14 +229,14 @@ public class TestAdaptiveMouseController {
 
     mockRenderingPerf.value = 1000;
 
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
-    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
+    mouse.mouseDragged(MouseMock.event(canvas, 100, 100));
 
     Assert.assertTrue("Wireframe enabled during drag", surface.isWireframeDisplayed());
     Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
 
 
-    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    mouse.mouseReleased(MouseMock.event(canvas, 100, 100));
 
     // -------------------------------------
     // Then the wireframe status is back to original value
@@ -271,15 +270,15 @@ public class TestAdaptiveMouseController {
 
     mockRenderingPerf.value = 1000;
 
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
-    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
+    mouse.mouseDragged(MouseMock.event(canvas, 100, 100));
 
     Assert.assertFalse("Wireframe hidden during drag", surface.isWireframeDisplayed());
     Assert.assertFalse("Face hidden during drag", surface.isFaceDisplayed());
     Assert.assertTrue("Bounds displayed during drag", surface.isBoundingBoxDisplayed());
 
 
-    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    mouse.mouseReleased(MouseMock.event(canvas, 100, 100));
 
     // -------------------------------------
     // Then the wireframe status is back to original value
@@ -315,13 +314,13 @@ public class TestAdaptiveMouseController {
 
     mockRenderingPerf.value = 1000;
 
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
-    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
+    mouse.mouseDragged(MouseMock.event(canvas, 100, 100));
 
     Assert.assertFalse("Chart quality is now configured for flat coloring",
         chart.getQuality().isSmoothColor());
 
-    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    mouse.mouseReleased(MouseMock.event(canvas, 100, 100));
 
     // -------------------------------------
     // Then the wireframe status is back to original value
@@ -363,8 +362,8 @@ public class TestAdaptiveMouseController {
 
     mockRenderingPerf.value = 1000;
 
-    mouse.mousePressed(mouseEvent(canvas, 100, 100));
-    mouse.mouseDragged(mouseEvent(canvas, 100, 100));
+    mouse.mousePressed(MouseMock.event(canvas, 100, 100));
+    mouse.mouseDragged(MouseMock.event(canvas, 100, 100));
 
     // Then select a configuration that is below max accepted rendering time
 
@@ -384,7 +383,7 @@ public class TestAdaptiveMouseController {
     // -------------------------------------
     // When releasing mouse, then surface is configured back to original settings
     
-    mouse.mouseReleased(mouseEvent(canvas, 100, 100));
+    mouse.mouseReleased(MouseMock.event(canvas, 100, 100));
 
     
     // Then the wireframe status is back to original value
@@ -494,9 +493,6 @@ public class TestAdaptiveMouseController {
     return chart;
   }
 
-  protected static MouseEvent mouseEvent(Component sourceCanvas, int x, int y) {
-    return new MouseEvent(sourceCanvas, 0, 0, 0, x, y, 100, 100, 1, false, 0);
-  }
 
 
   protected static Shape surface() {
