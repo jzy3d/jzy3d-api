@@ -19,6 +19,8 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
+import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 public class TestAWTCameraMouseController {
@@ -130,13 +132,15 @@ public class TestAWTCameraMouseController {
     
   
   @Test
-  public void given2DView_WhenMouseDragWithLeftButton_ThenViewRotate() {
+  public void given2DView_WhenMouseDragWithLeftButton_ThenZoom2D() {
     
     // Given
+    ViewAndColorbarsLayout viewportLayout = mock(ViewAndColorbarsLayout.class);
     View2DLayout layout = mock(View2DLayout.class);
 
     View view = mock(View.class);
     when(view.get2DLayout()).thenReturn(layout);
+    when(view.getLayout()).thenReturn(viewportLayout);
     
     IScreenCanvas canvas = mock(IScreenCanvas.class);
     
@@ -160,12 +164,15 @@ public class TestAWTCameraMouseController {
 
     when(layout.isHorizontalAxisFlip()).thenReturn(false);
     when(layout.isVerticalAxisFlip()).thenReturn(false);
+    when(viewportLayout.getSceneViewport()).thenReturn(new ViewportConfiguration(800, 600, 0, 0));
 
+    
     // Given a painter behavior, returning predefined mouse 2D projections to 3D
-    when(painter.screenToModel(new Coord3d(10,10,0))).thenReturn(new Coord3d(1,11,0)); 
-    when(painter.screenToModel(new Coord3d(15,15,0))).thenReturn(new Coord3d(2,22,0));
-    when(painter.screenToModel(new Coord3d(20,20,0))).thenReturn(new Coord3d(3,33,0));
-    when(painter.screenToModel(new Coord3d(25,25,0))).thenReturn(new Coord3d(4,44,0));
+    // We pre flip Y component since implementation will flip the received Y component
+    when(painter.screenToModel(new Coord3d(10,-10,0))).thenReturn(new Coord3d(1,11,0)); 
+    when(painter.screenToModel(new Coord3d(15,-15,0))).thenReturn(new Coord3d(2,22,0));
+    when(painter.screenToModel(new Coord3d(20,-20,0))).thenReturn(new Coord3d(3,33,0));
+    when(painter.screenToModel(new Coord3d(25,-25,0))).thenReturn(new Coord3d(4,44,0));
 
     
     // Given a mouse controller UNDER TEST
