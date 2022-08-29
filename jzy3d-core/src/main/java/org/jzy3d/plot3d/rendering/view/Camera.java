@@ -380,7 +380,7 @@ public class Camera extends AbstractViewportManager {
     float modelView[] = painter.getModelViewAsFloat();
     float projection[] = painter.getProjectionAsFloat();
 
-    Array.print("Camera.screenToModel : viewport : ", viewport);
+    //Array.print("Camera.screenToModel : viewport : ", viewport);
     // Array.print("Camera.screenToModel : modelView : ", modelView);
     // Array.print("Camera.screenToModel : projection : ", projection);
 

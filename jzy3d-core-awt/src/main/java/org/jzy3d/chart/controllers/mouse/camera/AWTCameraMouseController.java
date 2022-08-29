@@ -15,6 +15,7 @@ import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -166,6 +167,7 @@ public class AWTCameraMouseController extends AbstractCameraController
     // Apply mouse drag
     Coord2d mouse = xy(e);
 
+    // ----------------------------
     // 3D mode
     if (is3D) {
       // Rotate if left button down
@@ -183,11 +185,12 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     }
 
+    // ----------------------------
     // 2D mode
     else {
       View view = getChart().getView();
 
-      mouseSelection.stop2D = xy(e);
+      mouseSelection.stop2D = mouse;
       mouseSelection.stop3D = screenToModel(e);
 
       view.shoot();
@@ -375,19 +378,69 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     IViewportLayout layout = getChart().getView().getLayout();
 
+    
+    int viewport[] = new int[4];
+    
     if (layout instanceof ViewAndColorbarsLayout) {
       ViewAndColorbarsLayout viewLayout = (ViewAndColorbarsLayout) layout;
-      ViewportConfiguration viewport = viewLayout.getSceneViewport();
+      ViewportConfiguration viewportConf = viewLayout.getSceneViewport();
 
-      if (viewport.getHeight() < mouse.y || viewport.getWidth() < mouse.x)
+      if (viewportConf.getHeight() < mouse.y || viewportConf.getWidth() < mouse.x)
         return null;
+      
+      // Get real viewport, i.e. bypass colorbar
+      viewport[0] = 0;//viewportConf.getX();
+      viewport[1] = 0;//viewportConf.getY();
+      viewport[2] = viewportConf.getWidth();
+      viewport[3] = viewportConf.getHeight();
     }
 
     painter.acquireGL();
-    Coord3d model = painter.screenToModel(mouse);
+
+    float modelView[] = painter.getModelViewAsFloat();
+    float projection[] = painter.getProjectionAsFloat();
+
+    Coord3d model = screenToModel(painter, mouse, viewport, modelView, projection);
+
     painter.releaseGL();
+    
     return model;
   }
+  
+  public Coord3d screenToModel(IPainter painter, Coord3d screen) {
+    int viewport[] = painter.getViewPortAsInt();
+    float modelView[] = painter.getModelViewAsFloat();
+    float projection[] = painter.getProjectionAsFloat();
+
+    return screenToModel(painter, screen, viewport, modelView, projection);
+  }
+
+  private Coord3d screenToModel(IPainter painter, Coord3d screen, int[] viewport, float[] modelView,
+      float[] projection) {
+    Array.print("Mouse.screenToModel : viewport : ", viewport);
+    // Array.print("Camera.screenToModel : modelView : ", modelView);
+    // Array.print("Camera.screenToModel : projection : ", projection);
+
+    // double modelView[] = painter.getModelViewAsDouble();
+    // double projection[] = painter.getProjectionAsDouble();
+    float worldcoord[] = new float[3];// wx, wy, wz;// returned xyz coords
+
+    boolean s = painter.gluUnProject(screen.x, screen.y, screen.z, modelView, 0, projection, 0,
+        viewport, 0, worldcoord, 0);
+
+
+    if (s) {
+      return new Coord3d(worldcoord[0], worldcoord[1], worldcoord[2]);
+    } 
+    else {
+      System.out.println("NULL Coord");
+      //Array.print("viewport : ", viewport);
+      //Array.print("modelview : ", modelView);
+      //Array.print("projection : ", projection);
+      return null;
+    }
+  }
+
 
   // ----------------------------------------------------------------------------
   // SHOW MOUSE MOVES WITH TOOLTIP
