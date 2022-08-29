@@ -333,6 +333,17 @@ public abstract class AbstractPainter implements IPainter {
   public PolygonArray[][] modelToScreen(PolygonArray[][] polygons) {
     return getCamera().modelToScreen(this, polygons);
   }
+  
+  @Override
+  public boolean gluUnProject(float winX, float winY, float winZ, float[] model, float[] proj, int[] view, float[] objPos) {
+    return gluUnProject(winX, winY, winZ, model, 0, proj, 0, view, 0, objPos, 0);
+    
+  }
+
+  @Override
+  public boolean gluProject(float objX, float objY, float objZ, float[] model, float[] proj, int[] view, float[] winPos) {
+    return gluProject(objX, objY, objZ, model, 0, proj, 0, view, 0, winPos, 0);
+  }
 
   @Override
   public boolean isJVMScaleLargerThanNativeScale(Coord2d scaleHardware, Coord2d scaleJVM) {
