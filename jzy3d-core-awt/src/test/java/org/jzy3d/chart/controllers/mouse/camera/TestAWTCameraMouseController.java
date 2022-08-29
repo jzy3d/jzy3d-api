@@ -130,6 +130,9 @@ public class TestAWTCameraMouseController {
   // ------------------------------------------------------------------
   // 2D interactions
     
+  // TODO TEST : when mouse goes on colorbar : do not continue to drag
+  // TODO TEST : when mouse release out of canvas
+  
   
   @Test
   public void given2DView_WhenMouseDragWithLeftButton_ThenZoom2D() {
@@ -200,8 +203,6 @@ public class TestAWTCameraMouseController {
     // Then bounds are reset to auto bounds
     verify(view, times(1)).setBoundMode(eq(ViewBoundMode.AUTO_FIT));
 
-    
-    
   }
 
 }
