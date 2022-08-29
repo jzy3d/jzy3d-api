@@ -4,7 +4,6 @@ import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -24,6 +23,9 @@ import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 
@@ -38,7 +40,7 @@ public class AWTCameraMouseController extends AbstractCameraController
   MouseMoveRenderer moveRenderer = new MouseMoveRenderer();
   MouseDragRenderer dragRenderer = new MouseDragRenderer();
   
-  MouseSelection selection = new MouseSelection();
+  MouseSelection mouseSelection = new MouseSelection();
   MousePosition mousePosition = new MousePosition();
   
   MouseSelectionSettings selectionSettings = new MouseSelectionSettings();
@@ -70,8 +72,8 @@ public class AWTCameraMouseController extends AbstractCameraController
     chart.getCanvas().addMouseController(this);
 
 
-    //((AWTView)chart.getView()).addRenderer2d(moveRenderer);
     if(chart.getView() instanceof AWTView) {
+      ((AWTView)chart.getView()).addRenderer2d(moveRenderer);
       ((AWTView)chart.getView()).addRenderer2d(dragRenderer);
     }
 
@@ -80,8 +82,8 @@ public class AWTCameraMouseController extends AbstractCameraController
   public void unregister(Chart chart) {
     super.unregister(chart);
     
-    //((AWTView)chart.getView()).removeRenderer2d(moveRenderer);
     if(chart.getView() instanceof AWTView) {
+      ((AWTView)chart.getView()).removeRenderer2d(moveRenderer);
       ((AWTView)chart.getView()).removeRenderer2d(dragRenderer);
     }
   }
@@ -119,15 +121,43 @@ public class AWTCameraMouseController extends AbstractCameraController
 	    }	  
 	}
 	else {
-	  selection.start2D = startMouse;
+	  // stop displaying mouse position on roll over
+	  mousePosition = new MousePosition();
 	  
-      IPainter painter = getChart().getPainter();
-      painter.acquireGL();
-      selection.start3D = painter.screenToModel(new Coord3d(startMouse));
-      painter.releaseGL();
+	  // start creating a selection
+	  mouseSelection.start2D = startMouse;
+      mouseSelection.start3D = screenToModel(e);
 	}
     
 
+  }
+  
+  protected Coord3d screenToModel(MouseEvent e) {
+    // Flip the Y axis
+    int y = getChart().getCanvas().getRendererHeight() - y(e);
+    Coord3d mouse = new Coord3d(x(e), y, 0);
+
+    // Project to 3D
+    return screenToModel(mouse);
+  }
+  
+  protected Coord3d screenToModel(Coord3d mouse) {
+    IPainter painter = getChart().getPainter();
+    
+    IViewportLayout layout = getChart().getView().getLayout();
+    
+    if(layout instanceof ViewAndColorbarsLayout) {
+      ViewAndColorbarsLayout viewLayout = (ViewAndColorbarsLayout)layout;
+      ViewportConfiguration viewport = viewLayout.getSceneViewport();
+      
+      if(viewport.getHeight()<mouse.y || viewport.getWidth()<mouse.x)
+        return null;
+    }
+    
+    painter.acquireGL();
+    Coord3d model = painter.screenToModel(mouse);
+    painter.releaseGL();
+    return model;
   }
 
 
@@ -170,15 +200,9 @@ public class AWTCameraMouseController extends AbstractCameraController
     // 2D mode
     else {
       View view = getChart().getView();
-      IPainter painter = getChart().getPainter();
-      Coord2d stop2D = xy(e);
-      
-      painter.acquireGL();
-      Coord3d stop3D = painter.screenToModel(new Coord3d(stop2D));
-      painter.releaseGL();
-      
-      selection.stop3D = stop3D;
-      selection.stop2D = stop2D;
+
+      mouseSelection.stop2D = xy(e);
+      mouseSelection.stop3D = screenToModel(e);
       
       view.shoot();
       
@@ -201,9 +225,13 @@ public class AWTCameraMouseController extends AbstractCameraController
       View view = getChart().getView();
       //IPainter painter = view.getPainter();
       
+      if(!mouseSelection.complete()) {
+        return;
+      }
+      
       
       // Reset selection
-      if(!selection.growing()) {
+      if(!mouseSelection.growing()) {
         //getChart().getScene().getGraph().setClipBox(null);
 
         view.setBoundMode(ViewBoundMode.AUTO_FIT);
@@ -214,26 +242,26 @@ public class AWTCameraMouseController extends AbstractCameraController
 
         if(view.is2D_XY()) {
           if(view.get2DLayout().isHorizontalAxisFlip()) {
-            bounds.setXmin(selection.stop3D.x);
-            bounds.setXmax(selection.start3D.x);                    
+            bounds.setXmin(mouseSelection.stop3D.x);
+            bounds.setXmax(mouseSelection.start3D.x);                    
           }
           else {
-            bounds.setXmin(selection.start3D.x);
-            bounds.setXmax(selection.stop3D.x);          
+            bounds.setXmin(mouseSelection.start3D.x);
+            bounds.setXmax(mouseSelection.stop3D.x);          
           }
           
           if(view.get2DLayout().isVerticalAxisFlip()) {
-            bounds.setYmin(selection.stop3D.y);
-            bounds.setYmax(selection.start3D.y);
+            bounds.setYmin(mouseSelection.stop3D.y);
+            bounds.setYmax(mouseSelection.start3D.y);
           }
           else {
-            bounds.setYmin(selection.start3D.y);
-            bounds.setYmax(selection.stop3D.y);
+            bounds.setYmin(mouseSelection.start3D.y);
+            bounds.setYmax(mouseSelection.stop3D.y);
           }
         }
         
         //System.out.println("2D select on " + bounds);
-        selection = new MouseSelection();
+        mouseSelection = new MouseSelection();
         view.setBoundsManual(bounds);
         
         //getChart().getScene().getGraph().setClipBox(bounds);
@@ -280,9 +308,10 @@ public class AWTCameraMouseController extends AbstractCameraController
   @Override
   public void mouseExited(MouseEvent e) {
     
-    mousePosition.e = null;
-    mousePosition.projection = null;
+    // Reset mouse position memory as mouse exit the canvas
+    mousePosition = new MousePosition();
     
+    // Update display
     if(getChart()!=null) {
       getChart().getView().shoot();
       
@@ -292,21 +321,16 @@ public class AWTCameraMouseController extends AbstractCameraController
 
   @Override
   public void mouseMoved(MouseEvent e) {
-    
     View view = getChart().getView();
-    IPainter painter = view.getPainter();
     
     
     Coord2d mouse = new Coord2d(x(e), getChart().getCanvas().getRendererHeight()-y(e));
     
-    painter.acquireGL(); // other it is null
-    Coord3d mous3 = painter.screenToModel(new Coord3d(mouse));
-    painter.releaseGL();
     
-    //System.out.println("Moved : " + mouse + "  " + mous3);
+    //mouseSelection.stop2D = xy(e);
     
     mousePosition.e = e;
-    mousePosition.projection = mous3;
+    mousePosition.projection = screenToModel(new Coord3d(mouse));
     view.shoot();
     
   }
@@ -352,8 +376,11 @@ public class AWTCameraMouseController extends AbstractCameraController
     public void paint(Graphics g, int canvasWidth, int canvasHeight) {
       Graphics2D g2d = (Graphics2D)g;
       
-      g2d.setColor(java.awt.Color.BLACK);
+      //g2d.setColor(java.awt.Color.BLACK);
 
+      selectionSettings.apply(g2d);
+
+      
       if(mousePosition.e!=null) {
         g2d.drawLine(mousePosition.e.getX()-1, mousePosition.e.getY(), mousePosition.e.getX()+1, mousePosition.e.getY());
         g2d.drawLine(mousePosition.e.getX(), mousePosition.e.getY()-1, mousePosition.e.getX(), mousePosition.e.getY()+1);
@@ -364,7 +391,7 @@ public class AWTCameraMouseController extends AbstractCameraController
           //g2d.drawString(projection.toString(), e.getX(), e.getY());
           g2d.drawString("x=" + mousePosition.projection.x, mousePosition.e.getX(), mousePosition.e.getY());
           g2d.drawString("y=" + mousePosition.projection.y, mousePosition.e.getX(), mousePosition.e.getY() + space);
-          g2d.drawString("z=" + mousePosition.projection.z, mousePosition.e.getX(), mousePosition.e.getY() + space * 2);
+          //g2d.drawString("z=" + mousePosition.projection.z, mousePosition.e.getX(), mousePosition.e.getY() + space * 2);
 
         }
       }
@@ -378,19 +405,21 @@ public class AWTCameraMouseController extends AbstractCameraController
   }
 
   
+  // MODEL AND RENDERER FOR RECTANGULAR SELECTION IN 2D
+  
   class MouseDragRenderer extends AbstractAWTRenderer2d{
     
     @Override
     public void paint(Graphics g, int canvasWidth, int canvasHeight) {
-      if(selection==null) {
+      if(mouseSelection==null) {
         return;
       }
       // Do not render selection if start or stop point is missing
-      if(!selection.complete()) {
+      if(!mouseSelection.complete()) {
         return;
       }
       // Do not render selection if a diagonal was drawn
-      if(!selection.growing()) {
+      if(!mouseSelection.growing()) {
         return;
       }
 
@@ -398,38 +427,33 @@ public class AWTCameraMouseController extends AbstractCameraController
       Graphics2D g2d = (Graphics2D)g;
       
       // COnfigure G2D with selection drawing settings
-      g2d.setColor(AWTColor.toAWT(selectionSettings.color));
-
-      String name = g2d.getFont().getFontName();
-      int size = g2d.getFont().getSize();
-      Font f = new Font(name, Font.PLAIN, (int)(size*selectionSettings.fontSizeFactor));
-      g2d.setFont(f);
-      g2d.setStroke(selectionSettings.stroke);
+      selectionSettings.apply(g2d);
 
       // Draws rectangular selection      
-      int x = (int)selection.start2D.x;
-      int y = (int)selection.start2D.y;
-      int w = (int)(selection.stop2D.x-x);
-      int h = (int)(selection.stop2D.y-y);
+      int x = (int)mouseSelection.start2D.x;
+      int y = (int)mouseSelection.start2D.y;
+      int w = (int)(mouseSelection.stop2D.x-x);
+      int h = (int)(mouseSelection.stop2D.y-y);
       
       g2d.drawRect(x, y, w, h);
 
       // Draw start coordinates on the top left corner
-      if(selection.start3D!=null) {
+      if(mouseSelection.start3D!=null) {
         
-        String d1 = "x=" + selection.start3D.x;
-        String d2 = "y=" + selection.start3D.y;
         
-        drawCoord(g2d, selection.start2D, selectionSettings.interline, d1, d2, true);
+        String d1 = "x=" + mouseSelection.start3D.x;
+        String d2 = "y=" + mouseSelection.start3D.y;
+        
+        drawCoord(g2d, mouseSelection.start2D, selectionSettings.interline, d1, d2, true);
       }
 
       // Draw stop coordinates on the bottom right corner
-      if(selection.stop3D!=null) {
+      if(mouseSelection.stop3D!=null) {
         
-        String d1 = "x=" + selection.stop3D.x;
-        String d2 = "y=" + selection.stop3D.y;
+        String d1 = "x=" + mouseSelection.stop3D.x;
+        String d2 = "y=" + mouseSelection.stop3D.y;
         
-        drawCoord(g2d, selection.stop2D, selectionSettings.interline, d1, d2, false);
+        drawCoord(g2d, mouseSelection.stop2D, selectionSettings.interline, d1, d2, false);
       }
     }
 
@@ -466,7 +490,7 @@ public class AWTCameraMouseController extends AbstractCameraController
     }
     
     boolean complete() {
-      return start2D!=null && stop2D!=null;
+      return start2D!=null && stop2D!=null;// && start3D!=null && stop3D!=null;
     }
   }
   
@@ -475,6 +499,7 @@ public class AWTCameraMouseController extends AbstractCameraController
     float fontSizeFactor = 1f;
     
     float[] dash1 = { 2f, 0f, 2f };
+    
     BasicStroke stroke = new BasicStroke(1, 
         BasicStroke.CAP_BUTT, 
         BasicStroke.JOIN_ROUND, 
@@ -483,6 +508,20 @@ public class AWTCameraMouseController extends AbstractCameraController
         2f);
     
     int interline = 2;
+    
+    public void apply(Graphics2D g2d) {
+      // COnfigure G2D with selection drawing settings
+      g2d.setColor(AWTColor.toAWT(color));
+
+      String name = g2d.getFont().getFontName();
+      int size = g2d.getFont().getSize();
+      Font f = new Font(name, Font.PLAIN, (int)(size*fontSizeFactor));
+      g2d.setFont(f);
+      g2d.setStroke(stroke);
+
+    }
+
 
   }
+  
 }
