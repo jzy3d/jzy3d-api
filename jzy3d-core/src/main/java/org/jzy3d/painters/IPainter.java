@@ -397,13 +397,23 @@ public interface IPainter {
 
   public int clipPlaneId(int id);
   
+  /** Project 2D (screen) coordinates in the 3D world */
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
       int objPos_offset);
 
+  /** Project 3D (world) coordinates in the 2D screen */
   public boolean gluProject(float objX, float objY, float objZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] winPos,
       int winPos_offset);
+  
+  /** Project 2D (screen) coordinates in the 3D world */
+  public boolean gluUnProject(float winX, float winY, float winZ, float[] model,
+      float[] proj, int[] view, float[] objPos);
+
+  /** Project 3D (world) coordinates in the 2D screen */
+  public boolean gluProject(float objX, float objY, float objZ, float[] model,
+      float[] proj, int[] view, float[] winPos);
 
   // GLU INTERFACE
 
