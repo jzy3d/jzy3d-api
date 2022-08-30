@@ -376,31 +376,7 @@ public class Camera extends AbstractViewportManager {
    * @see
    */
   public Coord3d screenToModel(IPainter painter, Coord3d screen) {
-    int viewport[] = painter.getViewPortAsInt();
-    float modelView[] = painter.getModelViewAsFloat();
-    float projection[] = painter.getProjectionAsFloat();
-
-    //Array.print("Camera.screenToModel : viewport : ", viewport);
-    // Array.print("Camera.screenToModel : modelView : ", modelView);
-    // Array.print("Camera.screenToModel : projection : ", projection);
-
-    // double modelView[] = painter.getModelViewAsDouble();
-    // double projection[] = painter.getProjectionAsDouble();
-    float worldcoord[] = new float[3];// wx, wy, wz;// returned xyz coords
-
-    boolean s = painter.gluUnProject(screen.x, screen.y, screen.z, modelView, 0, projection, 0,
-        viewport, 0, worldcoord, 0);
-
-
-    if (s) {
-      return new Coord3d(worldcoord[0], worldcoord[1], worldcoord[2]);
-    } 
-    else {
-      //Array.print("viewport : ", viewport);
-      //Array.print("modelview : ", modelView);
-      //Array.print("projection : ", projection);
-      return null;
-    }
+    return painter.screenToModel(screen);
   }
 
   /**
@@ -424,141 +400,9 @@ public class Camera extends AbstractViewportManager {
    * A null coordinate can be returned if the projection could not be performed for some reasons.
    */
   public Coord3d modelToScreen(IPainter painter, Coord3d point) {
-    int viewport[] = painter.getViewPortAsInt();
-    float modelView[] = painter.getModelViewAsFloat();
-    float projection[] = painter.getProjectionAsFloat();
-    float screenCoord[] = new float[3];// wx, wy, wz;// returned xyz coords
-
-    boolean s = painter.gluProject(point.x, point.y, point.z, modelView, projection, viewport,
-        screenCoord);
-
-    if (s) {
-      return new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]);
-    } else {
-      return null;
-    }
+    return painter.modelToScreen(point);
   }
 
-  public Coord3d[] modelToScreen(IPainter painter, Coord3d[] points) {
-    int viewport[] = painter.getViewPortAsInt();
-
-    float screenCoord[] = new float[3];
-
-    Coord3d[] projection = new Coord3d[points.length];
-
-    for (int i = 0; i < points.length; i++) {
-      boolean s = painter.gluProject(points[i].x, points[i].y, points[i].z, painter.getModelViewAsFloat(),
-          painter.getProjectionAsFloat(), viewport, screenCoord);
-      if (s)
-        projection[i] = new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]);
-    }
-    return projection;
-  }
-
-  public Coord3d[][] modelToScreen(IPainter painter, Coord3d[][] points) {
-    int viewport[] = painter.getViewPortAsInt();
-
-    float screenCoord[] = new float[3];
-
-    Coord3d[][] projection = new Coord3d[points.length][points[0].length];
-
-    for (int i = 0; i < points.length; i++) {
-      for (int j = 0; j < points[i].length; j++) {
-        boolean s = painter.gluProject(points[i][j].x, points[i][j].y, points[i][j].z,
-            painter.getModelViewAsFloat(), painter.getProjectionAsFloat(), viewport, screenCoord);
-        if (s)
-          projection[i][j] = new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]);
-      }
-    }
-    return projection;
-  }
-
-  public List<Coord3d> modelToScreen(IPainter painter, List<Coord3d> points) {
-    int viewport[] = painter.getViewPortAsInt();
-
-    float screenCoord[] = new float[3];
-
-    List<Coord3d> projection = new Vector<Coord3d>();
-
-    for (Coord3d point : points) {
-      boolean s = painter.gluProject(point.x, point.y, point.z, painter.getModelViewAsFloat(), painter.getProjectionAsFloat(), viewport, screenCoord);
-      if (s)
-        projection.add(new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]));
-    }
-    return projection;
-  }
-
-  public ArrayList<ArrayList<Coord3d>> modelToScreen(IPainter painter,
-      ArrayList<ArrayList<Coord3d>> polygons) {
-    int viewport[] = painter.getViewPortAsInt();
-
-    float screenCoord[] = new float[3];
-
-    ArrayList<ArrayList<Coord3d>> projections = new ArrayList<ArrayList<Coord3d>>(polygons.size());
-
-    for (ArrayList<Coord3d> polygon : polygons) {
-      ArrayList<Coord3d> projection = new ArrayList<Coord3d>(polygon.size());
-      for (Coord3d point : polygon) {
-        boolean s = painter.gluProject(point.x, point.y, point.z, painter.getModelViewAsFloat(), 
-            painter.getProjectionAsFloat(), viewport, screenCoord);
-        if (s)
-          projection.add(new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]));
-      }
-      projections.add(projection);
-    }
-    return projections;
-  }
-
-  public PolygonArray modelToScreen(IPainter painter, PolygonArray polygon) {
-    int viewport[] = painter.getViewPortAsInt();
-
-    float screenCoord[] = new float[3];
-
-    int len = polygon.length();
-
-    float[] x = new float[len];
-    float[] y = new float[len];
-    float[] z = new float[len];
-
-    for (int i = 0; i < len; i++) {
-      boolean s = painter.gluProject(polygon.x[i], polygon.y[i], polygon.z[i],
-          painter.getModelViewAsFloat(), painter.getProjectionAsFloat(), viewport, screenCoord);
-      if (s) {
-        x[i] = screenCoord[0];
-        y[i] = screenCoord[1];
-        z[i] = screenCoord[2];
-      }
-    }
-    return new PolygonArray(x, y, z);
-  }
-
-  public PolygonArray[][] modelToScreen(IPainter painter, PolygonArray[][] polygons) {
-    int viewport[] = painter.getViewPortAsInt();
-    float screencoord[] = new float[3];
-
-    PolygonArray[][] projections = new PolygonArray[polygons.length][polygons[0].length];
-    for (int i = 0; i < polygons.length; i++) {
-      for (int j = 0; j < polygons[i].length; j++) {
-        PolygonArray polygon = polygons[i][j];
-        int len = polygon.length();
-        float[] x = new float[len];
-        float[] y = new float[len];
-        float[] z = new float[len];
-
-        for (int k = 0; k < len; k++) {
-          boolean s = painter.gluProject(polygon.x[k], polygon.y[k], polygon.z[k],
-              painter.getModelViewAsFloat(), painter.getProjectionAsFloat(), viewport, screencoord);
-          if (s) {
-            x[k] = screencoord[0];
-            y[k] = screencoord[1];
-            z[k] = screencoord[2];
-          }
-        }
-        projections[i][j] = new PolygonArray(x, y, z);
-      }
-    }
-    return projections;
-  }
 
   /*******************************************************************/
 

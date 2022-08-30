@@ -2,7 +2,9 @@ package org.jzy3d.painters;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -123,8 +125,8 @@ public abstract class AbstractPainter implements IPainter {
 
   @Override
   public void box(BoundingBox3d box, Color color, float width, SpaceTransformer spaceTransformer) {
-    //if(box==null)
-    //  return;
+    // if(box==null)
+    // return;
 
     color(color);
     glLineWidth(width);
@@ -222,7 +224,8 @@ public abstract class AbstractPainter implements IPainter {
   }
 
   /**
-   * A convenient shortcut to invoke a clipping plane using an ID in [0;5] instead of the original OpenGL ID value.
+   * A convenient shortcut to invoke a clipping plane using an ID in [0;5] instead of the original
+   * OpenGL ID value.
    */
   @Override
   public void clip(int plane, ClipEq equation, double value) {
@@ -288,60 +291,251 @@ public abstract class AbstractPainter implements IPainter {
   }
 
 
-
+  /**
+   * Transform a 2d screen coordinate into a 3d coordinate. The z component of the screen coordinate
+   * indicates a depth value between the near and far clipping plane of the {@link Camera}.
+   * 
+   * A null coordinate can be returned if the projection could not be performed for some reasons.
+   * This may occur if projection or modelview matrices are not invertible or if these matrices
+   * where unavailable (hence resulting to zero matrices) while invoking this method. Zero matrices
+   * can be avoided by ensuring the GL context is current using {@link IPainter#acquireGL()}
+   * 
+   * @see {@link IPainter#gluUnProject(float, float, float, float[], int, float[], int, int[], int, float[], int)}
+   */
   @Override
   public Coord3d screenToModel(Coord3d screen) {
-    return getCamera().screenToModel(this, screen);
+    int viewport[] = getViewPortAsInt();
+    float modelView[] = getModelViewAsFloat();
+    float projection[] = getProjectionAsFloat();
+
+    return screenToModel(screen, viewport, modelView, projection);
+  }
+
+  /**
+   * Transform a 2d screen coordinate into a 3d coordinate.
+   * 
+   * Allow to pass custom viewport, modelview matrix and projection matrix. To use current one,
+   * invoke {@link AbstractPainter#screenToModel(Coord3d)}
+   */
+  @Override
+  public Coord3d screenToModel(Coord3d screen, int[] viewport, float[] modelView,
+      float[] projection) {
+    // Array.print("Painter.screenToModel : viewport : ", viewport);
+    // Array.print("Camera.screenToModel : modelView : ", modelView);
+    // Array.print("Camera.screenToModel : projection : ", projection);
+
+    // double modelView[] = painter.getModelViewAsDouble();
+    // double projection[] = painter.getProjectionAsDouble();
+    float worldcoord[] = new float[3];// wx, wy, wz;// returned xyz coords
+
+    boolean s =
+        gluUnProject(screen.x, screen.y, screen.z, modelView, projection, viewport, worldcoord);
+
+
+    if (s) {
+      return new Coord3d(worldcoord[0], worldcoord[1], worldcoord[2]);
+    } else {
+      // System.out.println("NULL Coord");
+      // Array.print("viewport : ", viewport);
+      // Array.print("modelview : ", modelView);
+      // Array.print("projection : ", projection);
+      return null;
+    }
   }
 
   /**
    * Transform a 3d point coordinate into its screen position.
-   *
-   * @see {@link Camera#modelToScreen(IPainter, Coord3d)}
+   * 
+   * This method requires the GL context to be current. If not called inside a rendering loop, that
+   * method may not apply correctly and output {0,0,0}. In that case and if the chart is based on
+   * JOGL (native), one may force the context to be current using
+   * 
+   * <pre>
+   * <code>
+   * NativeDesktopPainter p = (NativeDesktopPainter)chart.getPainter();
+   * p.getCurrentContext(chart.getCanvas()).makeCurrent(); // make context current
+   * 
+   * Coord3d screen2dCoord = camera.modelToScreen(chart.getPainter(), world3dCoord);
+   * 
+   * p.getCurrentContext(chart.getCanvas()).release(); // release context to let other use it
+   * </code>
+   * </pre>
+   * 
+   * A null coordinate can be returned if the projection could not be performed for some reasons.
    */
   @Override
   public Coord3d modelToScreen(Coord3d point) {
-    return getCamera().modelToScreen(this, point);
+    int viewport[] = getViewPortAsInt();
+    float modelView[] = getModelViewAsFloat();
+    float projection[] = getProjectionAsFloat();
+    float screenCoord[] = new float[3];// wx, wy, wz;// returned xyz coords
+
+    boolean s = gluProject(point.x, point.y, point.z, modelView, projection, viewport,
+        screenCoord);
+
+    if (s) {
+      return new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]);
+    } else {
+      return null;
+    }
   }
 
+  /**
+   * Transform a 3d point coordinate into its screen position.
+   * 
+   * This method requires the GL context to be current. If not called inside a rendering loop, that
+   * method may not apply correctly and output {0,0,0}. In that case and if the chart is based on
+   * JOGL (native), one may force the context to be current using
+   * 
+   * <pre>
+   * <code>
+   * NativeDesktopPainter p = (NativeDesktopPainter)chart.getPainter();
+   * p.getCurrentContext(chart.getCanvas()).makeCurrent(); // make context current
+   * 
+   * Coord3d screen2dCoord = camera.modelToScreen(chart.getPainter(), world3dCoord);
+   * 
+   * p.getCurrentContext(chart.getCanvas()).release(); // release context to let other use it
+   * </code>
+   * </pre>
+   * 
+   * A null coordinate can be returned if the projection could not be performed for some reasons.
+   */
   @Override
   public Coord3d[] modelToScreen(Coord3d[] points) {
-    return getCamera().modelToScreen(this, points);
+    int viewport[] = getViewPortAsInt();
+
+    float screenCoord[] = new float[3];
+
+    Coord3d[] projection = new Coord3d[points.length];
+
+    for (int i = 0; i < points.length; i++) {
+      boolean s = gluProject(points[i].x, points[i].y, points[i].z, getModelViewAsFloat(),
+          getProjectionAsFloat(), viewport, screenCoord);
+      if (s)
+        projection[i] = new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]);
+    }
+    return projection;
   }
 
   @Override
   public Coord3d[][] modelToScreen(Coord3d[][] points) {
-    return getCamera().modelToScreen(this, points);
+    int viewport[] = getViewPortAsInt();
+
+    float screenCoord[] = new float[3];
+
+    Coord3d[][] projection = new Coord3d[points.length][points[0].length];
+
+    for (int i = 0; i < points.length; i++) {
+      for (int j = 0; j < points[i].length; j++) {
+        boolean s = gluProject(points[i][j].x, points[i][j].y, points[i][j].z,
+            getModelViewAsFloat(), getProjectionAsFloat(), viewport, screenCoord);
+        if (s)
+          projection[i][j] = new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]);
+      }
+    }
+    return projection;
   }
 
   @Override
   public List<Coord3d> modelToScreen(List<Coord3d> points) {
-    return getCamera().modelToScreen(this, points);
+    int viewport[] = getViewPortAsInt();
+
+    float screenCoord[] = new float[3];
+
+    List<Coord3d> projection = new Vector<Coord3d>();
+
+    for (Coord3d point : points) {
+      boolean s = gluProject(point.x, point.y, point.z, getModelViewAsFloat(), getProjectionAsFloat(), viewport, screenCoord);
+      if (s)
+        projection.add(new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]));
+    }
+    return projection;
   }
 
   @Override
-  public ArrayList<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons) {
-    return getCamera().modelToScreen(this, polygons);
+  public List<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons) {
+    int viewport[] = getViewPortAsInt();
+
+    float screenCoord[] = new float[3];
+
+    ArrayList<ArrayList<Coord3d>> projections = new ArrayList<ArrayList<Coord3d>>(polygons.size());
+
+    for (ArrayList<Coord3d> polygon : polygons) {
+      ArrayList<Coord3d> projection = new ArrayList<Coord3d>(polygon.size());
+      for (Coord3d point : polygon) {
+        boolean s = gluProject(point.x, point.y, point.z, getModelViewAsFloat(), 
+            getProjectionAsFloat(), viewport, screenCoord);
+        if (s)
+          projection.add(new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]));
+      }
+      projections.add(projection);
+    }
+    return projections;
   }
 
   @Override
   public PolygonArray modelToScreen(PolygonArray polygon) {
-    return getCamera().modelToScreen(this, polygon);
+    int viewport[] = getViewPortAsInt();
+
+    float screenCoord[] = new float[3];
+
+    int len = polygon.length();
+
+    float[] x = new float[len];
+    float[] y = new float[len];
+    float[] z = new float[len];
+
+    for (int i = 0; i < len; i++) {
+      boolean s = gluProject(polygon.x[i], polygon.y[i], polygon.z[i],
+          getModelViewAsFloat(), getProjectionAsFloat(), viewport, screenCoord);
+      if (s) {
+        x[i] = screenCoord[0];
+        y[i] = screenCoord[1];
+        z[i] = screenCoord[2];
+      }
+    }
+    return new PolygonArray(x, y, z);
   }
 
   @Override
   public PolygonArray[][] modelToScreen(PolygonArray[][] polygons) {
-    return getCamera().modelToScreen(this, polygons);
-  }
-  
-  @Override
-  public boolean gluUnProject(float winX, float winY, float winZ, float[] model, float[] proj, int[] view, float[] objPos) {
-    return gluUnProject(winX, winY, winZ, model, 0, proj, 0, view, 0, objPos, 0);
-    
+    int viewport[] = getViewPortAsInt();
+    float screencoord[] = new float[3];
+
+    PolygonArray[][] projections = new PolygonArray[polygons.length][polygons[0].length];
+    for (int i = 0; i < polygons.length; i++) {
+      for (int j = 0; j < polygons[i].length; j++) {
+        PolygonArray polygon = polygons[i][j];
+        int len = polygon.length();
+        float[] x = new float[len];
+        float[] y = new float[len];
+        float[] z = new float[len];
+
+        for (int k = 0; k < len; k++) {
+          boolean s = gluProject(polygon.x[k], polygon.y[k], polygon.z[k],
+              getModelViewAsFloat(), getProjectionAsFloat(), viewport, screencoord);
+          if (s) {
+            x[k] = screencoord[0];
+            y[k] = screencoord[1];
+            z[k] = screencoord[2];
+          }
+        }
+        projections[i][j] = new PolygonArray(x, y, z);
+      }
+    }
+    return projections;
   }
 
   @Override
-  public boolean gluProject(float objX, float objY, float objZ, float[] model, float[] proj, int[] view, float[] winPos) {
+  public boolean gluUnProject(float winX, float winY, float winZ, float[] model, float[] proj,
+      int[] view, float[] objPos) {
+    return gluUnProject(winX, winY, winZ, model, 0, proj, 0, view, 0, objPos, 0);
+
+  }
+
+  @Override
+  public boolean gluProject(float objX, float objY, float objZ, float[] model, float[] proj,
+      int[] view, float[] winPos) {
     return gluProject(objX, objY, objZ, model, 0, proj, 0, view, 0, winPos, 0);
   }
 
@@ -349,10 +543,11 @@ public abstract class AbstractPainter implements IPainter {
   public boolean isJVMScaleLargerThanNativeScale(Coord2d scaleHardware, Coord2d scaleJVM) {
     return scaleJVM.x > scaleHardware.x || scaleJVM.y > scaleHardware.y;
   }
-  
+
   @Override
   public boolean isJVMScaleLargerThanNativeScale() {
-    return isJVMScaleLargerThanNativeScale(getCanvas().getPixelScale(), getCanvas().getPixelScaleJVM());
+    return isJVMScaleLargerThanNativeScale(getCanvas().getPixelScale(),
+        getCanvas().getPixelScaleJVM());
   }
 
 }

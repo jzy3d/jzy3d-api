@@ -130,7 +130,7 @@ public class TexturedCube extends Composite implements Selectable, ITranslucent 
 
   @Override
   public void project(IPainter painter, Camera cam) {
-    lastProjection = cam.modelToScreen(painter, getBounds().getVertices());
+    lastProjection = painter.modelToScreen(getBounds().getVertices());
     lastHull = ConvexHull.hull(lastProjection);
   }
 

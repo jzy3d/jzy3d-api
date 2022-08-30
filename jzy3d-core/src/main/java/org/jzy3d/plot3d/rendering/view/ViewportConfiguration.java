@@ -92,4 +92,9 @@ public class ViewportConfiguration {
     vc.setMode(mode);
     return vc;
   }
+  
+  public int[] toArray() {
+    int[] a = {x, y, width, height};
+    return a;
+  }
 }
