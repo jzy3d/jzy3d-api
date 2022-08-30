@@ -1,5 +1,6 @@
 package org.jzy3d.chart.controllers.mouse.camera;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -7,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.awt.event.InputEvent;
+import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IChartFactory;
@@ -16,6 +18,10 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Scale;
 import org.jzy3d.mocks.jzy3d.MouseMock;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.plot3d.primitives.axis.Axis;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.ScientificNotationTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
@@ -132,6 +138,7 @@ public class TestAWTCameraMouseController {
     
   // TODO TEST : when mouse goes on colorbar : do not continue to drag
   // TODO TEST : when mouse release out of canvas
+  // TODO TEST : valider que le mouse move ne provoque pas de display dans le cas d'une vue 3D.
   
   
   @Test
@@ -160,6 +167,8 @@ public class TestAWTCameraMouseController {
     
     // -------------------------------------------------------------------------
     // Given a view behavior
+    
+    
     when(view.is2D()).thenReturn(true); // 2D mode
     when(view.is2D_XY()).thenReturn(true);
     when(view.getViewPoint()).thenReturn(new Coord3d(0,0,10));
@@ -167,18 +176,29 @@ public class TestAWTCameraMouseController {
 
     when(layout.isHorizontalAxisFlip()).thenReturn(false);
     when(layout.isVerticalAxisFlip()).thenReturn(false);
-    when(viewportLayout.getSceneViewport()).thenReturn(new ViewportConfiguration(800, 600, 0, 0));
+    
+    ViewportConfiguration viewport = new ViewportConfiguration(800, 600, 0, 0);
+    when(viewportLayout.getSceneViewport()).thenReturn(viewport);
 
     
     // Given a painter behavior, returning predefined mouse 2D projections to 3D
-    // We pre flip Y component since implementation will flip the received Y component
-    when(painter.screenToModel(new Coord3d(10,-10,0))).thenReturn(new Coord3d(1,11,0)); 
-    when(painter.screenToModel(new Coord3d(15,-15,0))).thenReturn(new Coord3d(2,22,0));
-    when(painter.screenToModel(new Coord3d(20,-20,0))).thenReturn(new Coord3d(3,33,0));
-    when(painter.screenToModel(new Coord3d(25,-25,0))).thenReturn(new Coord3d(4,44,0));
-
+    // We pre flip Y component since mouse implementation will flip the received Y component
+    // We provide the viewport that will be provided to the painter, which should not be the
+    // complete canvas one if a legend is activated
     
-    // Given a mouse controller UNDER TEST
+    // Mock painter to answer to a Zoom gesture
+    // (otherwise the mock painter will return null coords, leading to an error)
+    
+    when(painter.screenToModel(eq(new Coord3d(10,-10,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(1,11,0)); 
+    when(painter.screenToModel(eq(new Coord3d(15,-15,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(2,22,0));
+    when(painter.screenToModel(eq(new Coord3d(20,-20,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(3,33,0));
+    when(painter.screenToModel(eq(new Coord3d(25,-25,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(4,44,0));
+    
+    // Mock painter to answer to an UnZoom gesture
+    when(painter.screenToModel(eq(new Coord3d(50,50,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(4,44,0));
+    when(painter.screenToModel(eq(new Coord3d(45,-45,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(4,44,0));
+    
+    // Given a mouse controller UNDER TEST, finally <<<<<<<<<<<<<<<
     AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
 
     // -------------------------------------------------------------------------
@@ -202,6 +222,95 @@ public class TestAWTCameraMouseController {
     
     // Then bounds are reset to auto bounds
     verify(view, times(1)).setBoundMode(eq(ViewBoundMode.AUTO_FIT));
+    
+    
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Verify it still works if layout is not of type ViewAndColorbarLayout
+    // i.e. when use default painter.getViewPortAsInt()
+
+    // Disable layout mock
+    when(view.getLayout()).thenReturn(null);
+    
+    // Mock painter to return the default viewport
+    int [] defViewport = {0, 0, 400, 200};
+    when(painter.getViewPortAsInt()).thenReturn(defViewport); 
+
+    // Mock painter to return the match this viewport 
+    // (otherwise the mock painter will return null coords, leading to an error)
+    // we use different return value to ensure the later verify on view can not depend on the previous 
+    // test
+    when(painter.screenToModel(eq(new Coord3d(10,-10,0)), eq(defViewport), any(), any())).thenReturn(new Coord3d(10,1100,0)); 
+    when(painter.screenToModel(eq(new Coord3d(15,-15,0)), eq(defViewport), any(), any())).thenReturn(new Coord3d(20,2200,0));
+    when(painter.screenToModel(eq(new Coord3d(20,-20,0)), eq(defViewport), any(), any())).thenReturn(new Coord3d(30,3300,0));
+    when(painter.screenToModel(eq(new Coord3d(25,-25,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(40,4400,0));
+
+    // -------------------------------------------------------------------------
+    // When mouse click, drag and release
+    
+    mouse.mousePressed(MouseMock.event(10, 10, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseDragged(MouseMock.event(15, 15, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseDragged(MouseMock.event(20, 20, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseReleased(MouseMock.event(25, 25, InputEvent.BUTTON1_DOWN_MASK));
+    
+    // Then selection is performed on the following bounding box
+    verify(view, times(1)).setBoundsManual(eq(new BoundingBox3d(10,30,1100,3300,0,1)));
+
+    
+  }
+  
+  @Test
+  public void testFormat() {
+ // Given
+    
+    AxisLayout layout = mock(AxisLayout.class);
+    /*IAxis axis = mock(IAxis.class);
+    View view = mock(View.class);
+
+    when(axis.getLayout()).thenReturn(layout);
+    when(view.getAxis()).thenReturn(axis);*/
+    
+    IScreenCanvas canvas = mock(IScreenCanvas.class);
+    
+    IChartFactory factory = mock(IChartFactory.class);
+    when(factory.newCameraThreadController(null)).thenReturn(null);
+
+    Chart chart = mock(Chart.class);
+   // when(chart.getView()).thenReturn(view);
+    when(chart.getAxisLayout()).thenReturn(layout);
+    when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getFactory()).thenReturn(factory);
+    
+    // -----------------------------------
+    // When no specific config for axis
+    AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
+
+    Assert.assertEquals("x=1.2345678", mouse.format(Axis.X, 1.2345678f));
+    Assert.assertEquals("y=2.2345679", mouse.format(Axis.Y, 2.2345678f)); 
+    Assert.assertEquals("z=3.2345679", mouse.format(Axis.Z, 3.2345678f));
+    // watch expected value string without formatter, differ from input!!
+    
+    // -----------------------------------
+    // When specific axis names
+    when(layout.getXAxisLabel()).thenReturn("The X axis");
+    when(layout.getYAxisLabel()).thenReturn("The Y axis");
+    when(layout.getZAxisLabel()).thenReturn("The Z axis");
+
+    Assert.assertEquals("The X axis=1.2345678", mouse.format(Axis.X, 1.2345678f));
+    Assert.assertEquals("The Y axis=2.2345679", mouse.format(Axis.Y, 2.2345678f));
+    Assert.assertEquals("The Z axis=3.2345679", mouse.format(Axis.Z, 3.2345678f));
+    // watch expected value string without formatter, differ from input!!
+
+    // -----------------------------------
+    // When specific tick renderer
+    
+    when(layout.getXTickRenderer()).thenReturn(new DefaultDecimalTickRenderer(3));
+    when(layout.getYTickRenderer()).thenReturn(new ScientificNotationTickRenderer());
+    when(layout.getZTickRenderer()).thenReturn(new ScientificNotationTickRenderer());
+
+    Assert.assertEquals("The X axis=1,23", mouse.format(Axis.X, 1.2345678f));
+    Assert.assertEquals("The Y axis=2,2e+00", mouse.format(Axis.Y, 2.2345678f));
+    Assert.assertEquals("The Z axis=3,2e+00", mouse.format(Axis.Z, 3.2345678f));
 
   }
 

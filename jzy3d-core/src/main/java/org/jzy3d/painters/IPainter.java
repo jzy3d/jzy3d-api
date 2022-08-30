@@ -222,6 +222,9 @@ public interface IPainter {
   // public void lights(boolean status);
   // public void polygonOffset(boolean status);
 
+  // ----------------------------
+  // OpenGL matrices 
+  
   public int[] getViewPortAsInt();
 
   public double[] getProjectionAsDouble();
@@ -232,7 +235,12 @@ public interface IPainter {
 
   public float[] getModelViewAsFloat();
 
+  // ----------------------------
+  // Utilities to project from 2D to 3D or 3D to 2D
+  
   public Coord3d screenToModel(Coord3d screen);
+  
+  public Coord3d screenToModel(Coord3d screen, int[] viewport, float[] modelView, float[] projection);
 
   public Coord3d modelToScreen(Coord3d point);
 
@@ -242,7 +250,7 @@ public interface IPainter {
 
   public List<Coord3d> modelToScreen(List<Coord3d> points);
 
-  public ArrayList<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons);
+  public List<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons);
 
   public PolygonArray modelToScreen(PolygonArray polygon);
 
