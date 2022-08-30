@@ -56,8 +56,8 @@ public class ProjectionUtils {
 
     // project
     t.tic();
-    ArrayList<ArrayList<Coord3d>> projections =
-        painter.getCamera().modelToScreen(painter, polygons);
+    List<ArrayList<Coord3d>> projections =
+        painter.modelToScreen(polygons);
     t.toc();
     report += " Projections :" + t.elapsedMilisecond();
 

@@ -15,12 +15,13 @@ import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot2d.rendering.AWTGraphicsUtils;
+import org.jzy3d.plot3d.primitives.axis.Axis;
+import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -136,6 +137,10 @@ public class AWTCameraMouseController extends AbstractCameraController
       // start creating a selection
       mouseSelection.start2D = startMouse;
       mouseSelection.start3D = screenToModel(e);
+      
+      if(mouseSelection.stop3D==null)
+        System.err.println("Mouse.onMousePressed projeciton is null ");
+
     }
 
 
@@ -192,7 +197,7 @@ public class AWTCameraMouseController extends AbstractCameraController
 
       mouseSelection.stop2D = mouse;
       mouseSelection.stop3D = screenToModel(e);
-
+      
       view.shoot();
 
     }
@@ -370,7 +375,13 @@ public class AWTCameraMouseController extends AbstractCameraController
     Coord3d mouse = new Coord3d(x(e), y, 0);
 
     // Project to 3D
-    return screenToModel(mouse);
+    Coord3d model = screenToModel(mouse);
+    
+    if(model==null) {
+      System.err.println("MouseEvent can not be projected for " + mouse);
+    }
+    
+    return model;
   }
 
   protected Coord3d screenToModel(Coord3d mouse) {
@@ -381,6 +392,8 @@ public class AWTCameraMouseController extends AbstractCameraController
     
     int viewport[] = new int[4];
     
+    // If there is a layout that allows something else than the 3D view to be displayed
+    // (e.g. a colorbar), then we only get the viewport of this part
     if (layout instanceof ViewAndColorbarsLayout) {
       ViewAndColorbarsLayout viewLayout = (ViewAndColorbarsLayout) layout;
       ViewportConfiguration viewportConf = viewLayout.getSceneViewport();
@@ -394,52 +407,24 @@ public class AWTCameraMouseController extends AbstractCameraController
       viewport[2] = viewportConf.getWidth();
       viewport[3] = viewportConf.getHeight();
     }
+    // Otherwise we simply use the default viewport
+    else {
+      viewport = painter.getViewPortAsInt();
+    }
 
     painter.acquireGL();
 
     float modelView[] = painter.getModelViewAsFloat();
     float projection[] = painter.getProjectionAsFloat();
 
-    Coord3d model = screenToModel(painter, mouse, viewport, modelView, projection);
+    Coord3d model = painter.screenToModel(mouse, viewport, modelView, projection);
 
     painter.releaseGL();
     
     return model;
   }
   
-  public Coord3d screenToModel(IPainter painter, Coord3d screen) {
-    int viewport[] = painter.getViewPortAsInt();
-    float modelView[] = painter.getModelViewAsFloat();
-    float projection[] = painter.getProjectionAsFloat();
-
-    return screenToModel(painter, screen, viewport, modelView, projection);
-  }
-
-  private Coord3d screenToModel(IPainter painter, Coord3d screen, int[] viewport, float[] modelView,
-      float[] projection) {
-    Array.print("Mouse.screenToModel : viewport : ", viewport);
-    // Array.print("Camera.screenToModel : modelView : ", modelView);
-    // Array.print("Camera.screenToModel : projection : ", projection);
-
-    // double modelView[] = painter.getModelViewAsDouble();
-    // double projection[] = painter.getProjectionAsDouble();
-    float worldcoord[] = new float[3];// wx, wy, wz;// returned xyz coords
-
-    boolean s = painter.gluUnProject(screen.x, screen.y, screen.z, modelView, 0, projection, 0,
-        viewport, 0, worldcoord, 0);
-
-
-    if (s) {
-      return new Coord3d(worldcoord[0], worldcoord[1], worldcoord[2]);
-    } 
-    else {
-      System.out.println("NULL Coord");
-      //Array.print("viewport : ", viewport);
-      //Array.print("modelview : ", modelView);
-      //Array.print("projection : ", projection);
-      return null;
-    }
-  }
+  
 
 
   // ----------------------------------------------------------------------------
@@ -447,13 +432,6 @@ public class AWTCameraMouseController extends AbstractCameraController
   // ----------------------------------------------------------------------------
 
   class MouseMoveRenderer extends AbstractAWTRenderer2d {
-    // MouseEvent e;
-    // Coord3d projection;
-
-    class MouseProjection {
-
-    }
-
     @Override
     public void paint(Graphics g, int canvasWidth, int canvasHeight) {
       Graphics2D g2d = (Graphics2D) g;
@@ -473,9 +451,9 @@ public class AWTCameraMouseController extends AbstractCameraController
           int interline = 2;
           int space = interline + g2d.getFont().getSize();
           // g2d.drawString(projection.toString(), e.getX(), e.getY());
-          g2d.drawString("x=" + mousePosition.projection.x, mousePosition.event.getX(),
+          g2d.drawString(format(Axis.X, mousePosition.projection.x), mousePosition.event.getX(),
               mousePosition.event.getY());
-          g2d.drawString("y=" + mousePosition.projection.y, mousePosition.event.getX(),
+          g2d.drawString(format(Axis.Y, mousePosition.projection.y), mousePosition.event.getX(),
               mousePosition.event.getY() + space);
           // g2d.drawString("z=" + mousePosition.projection.z, mousePosition.e.getX(),
           // mousePosition.e.getY() + space * 2);
@@ -483,7 +461,52 @@ public class AWTCameraMouseController extends AbstractCameraController
         }
       }
     }
-
+  }
+  
+  protected String format(Axis axis, float value) {
+    String label;
+    ITickRenderer renderer;
+    
+    switch(axis) {
+      
+      case X: 
+        label = getChart().getAxisLayout().getXAxisLabel();
+        renderer = getChart().getAxisLayout().getXTickRenderer();
+        
+        if(label==null)
+          label = "x";
+        
+        if(renderer==null)
+          return label + "=" + value;
+        else
+          return label + "=" + renderer.format(value);
+        
+      case Y: 
+        label = getChart().getAxisLayout().getYAxisLabel();
+        renderer = getChart().getAxisLayout().getYTickRenderer();
+        
+        if(label==null)
+          label = "y";
+        
+        if(renderer==null)
+          return label + "=" + value;
+        else
+          return label + "=" + renderer.format(value);
+        
+      case Z: 
+        label = getChart().getAxisLayout().getZAxisLabel();
+        renderer = getChart().getAxisLayout().getZTickRenderer();
+        
+        if(label==null)
+          label = "z";
+        
+        if(renderer==null)
+          return label + "=" + value;
+        else
+          return label + "=" + renderer.format(value);
+      default : 
+        return "" + value;
+    }
   }
 
   class MousePosition {

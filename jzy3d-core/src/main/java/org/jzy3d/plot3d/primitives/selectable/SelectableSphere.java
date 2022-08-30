@@ -33,7 +33,7 @@ public class SelectableSphere extends Sphere implements Selectable {
 
   @Override
   public void project(IPainter painter, Camera cam) {
-    projection = cam.modelToScreen(painter, anchors);
+    projection = painter.modelToScreen(anchors);
   }
 
   public List<Coord3d> getProjection() {
