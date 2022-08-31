@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Vector3d;
@@ -127,6 +128,17 @@ public class AxisBox implements IAxis {
    */
   @Override
   public void draw(IPainter painter) {
+    
+    /*int[] clipPlaneStatus = new int[6];
+    painter.glGetIntegerv(12288, clipPlaneStatus, 0);
+    painter.glGetIntegerv(12289, clipPlaneStatus, 1);
+    painter.glGetIntegerv(12290, clipPlaneStatus, 2);
+    painter.glGetIntegerv(12291, clipPlaneStatus, 3);
+    painter.glGetIntegerv(12292, clipPlaneStatus, 4);
+    painter.glGetIntegerv(12293, clipPlaneStatus, 5);
+    
+    Array.print("Axis: clipping status", clipPlaneStatus);*/
+
     updateHiddenQuads(painter);
 
     doTransform(painter);
@@ -403,7 +415,6 @@ public class AxisBox implements IAxis {
         }
 
         textBounds = ticks.drawTicks(painter, edgeId, AXE_Y, layout.getYTickColor(), h, v);
-
       }
 
       // 3D case

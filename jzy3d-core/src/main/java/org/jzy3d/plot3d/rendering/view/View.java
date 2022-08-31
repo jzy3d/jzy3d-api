@@ -13,6 +13,7 @@ import org.jzy3d.events.IViewPointChangedListener;
 import org.jzy3d.events.ViewIsVerticalEvent;
 import org.jzy3d.events.ViewLifecycleEvent;
 import org.jzy3d.events.ViewPointChangedEvent;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox2d;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -793,11 +794,20 @@ public class View {
     painter.glShadeModel(quality.getColorModel());
 
     if (is3D()) {
+      // Rendering axis before ensure it appears as background
+      // in specific cases where depth buffer is desactivated
       renderAxeBox();
       renderSceneGraph();
     } else {
+      // Rendering axis after make it appear for sure
+      // which allow making internal axis line visible 
+      // (stay on top of content)
       renderSceneGraph();
+      
       renderAxeBox();
+      
+      
+
     }
     renderAnnotations(cam);
   }
