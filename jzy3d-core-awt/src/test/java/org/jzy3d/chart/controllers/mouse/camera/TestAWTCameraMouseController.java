@@ -78,15 +78,23 @@ public class TestAWTCameraMouseController {
     IChartFactory factory = mock(IChartFactory.class);
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
+    IPainter painter = mock(IPainter.class);
+    
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getCanvas()).thenReturn(canvas);
     when(chart.getFactory()).thenReturn(factory);
+    when(chart.getPainter()).thenReturn(painter);
     
     // Given a view behavior 
-    when(view.is2D()).thenReturn(false); // 3D mode
+    when(view.is3D()).thenReturn(true); // 3D mode
     when(view.getBounds()).thenReturn(new BoundingBox3d(0,1,0,1,0,1));
     when(view.getScale()).thenReturn(new Scale(0,1));
+    
+    // Mock painter to return the default viewport
+    int [] defViewport = {0, 0, 400, 200};
+    when(painter.getViewPortAsInt()).thenReturn(defViewport); 
+
 
     // Given a mouse controller UNDER TEST
     AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
@@ -131,6 +139,38 @@ public class TestAWTCameraMouseController {
     // Then two rotations are invoked
     verify(view, times(2)).zoomZ(eq(2f), eq(false));
     
+  }
+  
+  @Test
+  public void given3DView_WhenMouseMove_ThenNoMousePositionIsStored() {
+    // Given a set of mocked classes
+    View view = mock(View.class);
+    
+    IScreenCanvas canvas = mock(IScreenCanvas.class);
+    
+    IChartFactory factory = mock(IChartFactory.class);
+    when(factory.newCameraThreadController(null)).thenReturn(null);
+    
+    Chart chart = mock(Chart.class);
+    when(chart.getView()).thenReturn(view);
+    when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getFactory()).thenReturn(factory);
+
+    // Given a view behavior 
+    when(view.is3D()).thenReturn(true); // 3D mode
+    
+    // Given a mouse controller UNDER TEST
+    AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
+    
+    // When mouse click, drag and release
+    mouse.mouseMoved(MouseMock.event(10, 10));
+    mouse.mouseMoved(MouseMock.event(10, 12));
+    
+    // Then two rotations are invoked
+    //verify(view, times(2)).zoomZ(eq(2f), eq(false));
+
+    Assert.assertNull(mouse.mousePosition.event);
+    Assert.assertNull(mouse.mousePosition.projection);    
   }
   
   // ------------------------------------------------------------------
@@ -261,8 +301,7 @@ public class TestAWTCameraMouseController {
   
   @Test
   public void testFormat() {
- // Given
-    
+    // Given
     AxisLayout layout = mock(AxisLayout.class);
     /*IAxis axis = mock(IAxis.class);
     View view = mock(View.class);

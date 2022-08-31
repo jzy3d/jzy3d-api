@@ -328,14 +328,20 @@ public class Graph {
   }
 
   public void setClipBox(BoundingBox3d clipBox) {
-    setClipBox(clipBox, true);
+    setClipBox(clipBox, true, true);
   }
 
-  public void setClipBox(BoundingBox3d clipBox, boolean includeLimits) {
+  /**
+   * Configure clipping plane according to the input bounding box.
+   * 
+   * Update view according to settings
+   */
+  public void setClipBox(BoundingBox3d clipBox, boolean includeLimits, boolean updateView) {
     this.clipBox = clipBox;
     this.clipIncludesLimits = includeLimits;
     
-    viewsShoot();
+    if(updateView)
+      viewsShoot();
   }
 
   /**

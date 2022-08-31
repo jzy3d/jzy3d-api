@@ -99,10 +99,9 @@ public class AWTCameraMouseController extends AbstractCameraController
     super.dispose();
   }
 
-  /**
-   * Handles toggle between mouse rotation/auto rotation: double-click starts the animated rotation,
-   * while simple click stops it.
-   */
+  // ----------------------------------------------------------------------------
+  // MOUSE EVENT LISTENERS SECTION
+  // ----------------------------------------------------------------------------
   
   /** 
    * When a mouse button is pressed
@@ -120,17 +119,15 @@ public class AWTCameraMouseController extends AbstractCameraController
     prevMouse.y = y(e);
     startMouse = prevMouse.clone();
 
-    boolean is3D = true;
-
-    if (getChart() != null) {
-      is3D = !getChart().getView().is2D();
-    }
-
-    if (is3D) {
+    // 3D mode
+    if (getChart().getView().is3D()) {
       if (handleSlaveThread(e)) {
         return;
       }
-    } else {
+    } 
+    
+    // 2D mode
+    else {
       // stop displaying mouse position on roll over
       mousePosition = new MousePosition();
 
@@ -157,12 +154,6 @@ public class AWTCameraMouseController extends AbstractCameraController
    */
   @Override
   public void mouseDragged(MouseEvent e) {
-    boolean is3D = true;
-
-    if (getChart() != null) {
-      is3D = !getChart().getView().is2D();
-    }
-
 
     // Check if mouse rate limiter wish to forbid this mouse drag instruction
     if (rateLimiter != null && !rateLimiter.rateLimitCheck()) {
@@ -172,9 +163,8 @@ public class AWTCameraMouseController extends AbstractCameraController
     // Apply mouse drag
     Coord2d mouse = xy(e);
 
-    // ----------------------------
     // 3D mode
-    if (is3D) {
+    if (getChart().getView().is3D()) {
       // Rotate if left button down
       if (AWTMouseUtilities.isLeftDown(e)) {
         Coord2d move = mouse.sub(prevMouse).div(100);
@@ -190,7 +180,6 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     }
 
-    // ----------------------------
     // 2D mode
     else {
       View view = getChart().getView();
@@ -215,78 +204,27 @@ public class AWTCameraMouseController extends AbstractCameraController
    */
   @Override
   public void mouseReleased(MouseEvent e) {
-    // System.out.println("Release " + e);
 
-    boolean is2D = true;
-
-    if (getChart() != null) {
-      is2D = getChart().getView().is2D();
-    }
-
-    if (is2D) {
+    // 2D mode
+    if (getChart().getView().is2D()) {
       View view = getChart().getView();
-      // IPainter painter = view.getPainter();
-
-      if (!mouseSelection.complete()) {
-        return;
-      }
-
-
-      // Reset selection
-      if (!mouseSelection.growing()) {
-        // getChart().getScene().getGraph().setClipBox(null);
-
-        view.setBoundMode(ViewBoundMode.AUTO_FIT);
-      }
-      // Or apply selection
-      else {
-        BoundingBox3d bounds = view.getBounds().clone();
-
-        if (view.is2D_XY()) {
-          if (view.get2DLayout().isHorizontalAxisFlip()) {
-            bounds.setXmin(mouseSelection.stop3D.x);
-            bounds.setXmax(mouseSelection.start3D.x);
-          } else {
-            bounds.setXmin(mouseSelection.start3D.x);
-            bounds.setXmax(mouseSelection.stop3D.x);
-          }
-
-          if (view.get2DLayout().isVerticalAxisFlip()) {
-            bounds.setYmin(mouseSelection.stop3D.y);
-            bounds.setYmax(mouseSelection.start3D.y);
-          } else {
-            bounds.setYmin(mouseSelection.start3D.y);
-            bounds.setYmax(mouseSelection.stop3D.y);
-          }
-        }
-
-        // System.out.println("2D select on " + bounds);
-        mouseSelection = new MouseSelection();
-        view.setBoundsManual(bounds);
-
-        // getChart().getScene().getGraph().setClipBox(bounds);
-      }
-
-      // Update display
-
-      view.shoot();
-
+      applyMouse2DSelection(view);
     }
   }
-
-
 
   /** 
    * When mouse wheel rotates
    * 
-   * Update Z scale
+   * <ul>
+   * <li>In 3D, Update Z scale
+   * <li>In 2D, does nothing
+   * </ul>  
+   * 
    */
   @Override
   public void mouseWheelMoved(MouseWheelEvent e) {
-    if (getChart() != null) {
-      if (getChart().getView().is2D()) {
-        return;
-      }
+    if (getChart().getView().is2D()) {
+      return;
     }
 
     // Check if mouse rate limiter wish to forbid this mouse drag instruction
@@ -310,14 +248,26 @@ public class AWTCameraMouseController extends AbstractCameraController
   public void mouseEntered(MouseEvent e) {}
 
 
-  /** When mouse moves on the canvas */
+  /** 
+   * When mouse moves on the canvas 
+   * <ul>
+   * <li>In 3D, drop mouse position as it should not be displayed
+   * <li>In 2D, store mouse position to overlay coordinates
+   * </ul>  
+   */
   @Override
   public void mouseMoved(MouseEvent e) {
     View view = getChart().getView();
 
-
-    mousePosition.event = e;
-    mousePosition.projection = screenToModel(e);
+    //
+    if(getChart().getView().is3D()) {
+      mousePosition.event = null;
+      mousePosition.projection = null;
+    }
+    else {
+      mousePosition.event = e;
+      mousePosition.projection = screenToModel(e);      
+    }
     view.shoot();
 
   }
@@ -335,11 +285,72 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     }
   }
+  
+  // ----------------------------------------------------------------------------
+  // MOUSE 2D PROCESSING
+  // ----------------------------------------------------------------------------
+  
+  protected void applyMouse2DSelection(View view) {
+    if (!mouseSelection.complete()) {
+      return;
+    }
+
+
+    // Reset selection
+    if (!mouseSelection.growing()) {
+      // getChart().getScene().getGraph().setClipBox(null);
+
+      view.setBoundMode(ViewBoundMode.AUTO_FIT);
+      
+      getChart().getScene().getGraph().setClipBox(null);
+
+    }
+    // Or apply selection
+    else {
+      BoundingBox3d bounds = view.getBounds().clone();
+
+      if (view.is2D_XY()) {
+        if (view.get2DLayout().isHorizontalAxisFlip()) {
+          bounds.setXmin(mouseSelection.stop3D.x);
+          bounds.setXmax(mouseSelection.start3D.x);
+        } else {
+          bounds.setXmin(mouseSelection.start3D.x);
+          bounds.setXmax(mouseSelection.stop3D.x);
+        }
+
+        if (view.get2DLayout().isVerticalAxisFlip()) {
+          bounds.setYmin(mouseSelection.stop3D.y);
+          bounds.setYmax(mouseSelection.start3D.y);
+        } else {
+          bounds.setYmin(mouseSelection.start3D.y);
+          bounds.setYmax(mouseSelection.stop3D.y);
+        }
+      }
+
+      // System.out.println("2D select on " + bounds);
+      mouseSelection = new MouseSelection();
+
+      getChart().getScene().getGraph().setClipBox(bounds);
+
+      view.setBoundsManual(bounds);
+      
+      System.out.println("Bounds : " + bounds);
+
+    }
+
+    // Update display
+
+    view.shoot();
+  }
 
   // ----------------------------------------------------------------------------
   // TRIGGER SLAVE THREAD
   // ----------------------------------------------------------------------------
 
+  /**
+   * Handles toggle between mouse rotation/auto rotation: double-click starts the animated rotation,
+   * while simple click stops it.
+   */
   protected boolean handleSlaveThread(MouseEvent e) {
     if (AWTMouseUtilities.isDoubleClick(e)) {
       if (threadController != null) {
@@ -384,6 +395,9 @@ public class AWTCameraMouseController extends AbstractCameraController
     return model;
   }
 
+  /**
+   * Perform screen to model projection smartly, considering the effect of colorbar.
+   */
   protected Coord3d screenToModel(Coord3d mouse) {
     IPainter painter = getChart().getPainter();
 
@@ -424,45 +438,10 @@ public class AWTCameraMouseController extends AbstractCameraController
     return model;
   }
   
-  
-
-
   // ----------------------------------------------------------------------------
-  // SHOW MOUSE MOVES WITH TOOLTIP
+  // VALUE LABEL FORMAT AND DRAW
   // ----------------------------------------------------------------------------
 
-  class MouseMoveRenderer extends AbstractAWTRenderer2d {
-    @Override
-    public void paint(Graphics g, int canvasWidth, int canvasHeight) {
-      Graphics2D g2d = (Graphics2D) g;
-
-      // g2d.setColor(java.awt.Color.BLACK);
-
-      selectionSettings.apply(g2d);
-
-
-      if (mousePosition.event != null) {
-        g2d.drawLine(mousePosition.event.getX() - 1, mousePosition.event.getY(), mousePosition.event.getX() + 1,
-            mousePosition.event.getY());
-        g2d.drawLine(mousePosition.event.getX(), mousePosition.event.getY() - 1, mousePosition.event.getX(),
-            mousePosition.event.getY() + 1);
-
-        if (mousePosition.projection != null) {
-          int interline = 2;
-          int space = interline + g2d.getFont().getSize();
-          // g2d.drawString(projection.toString(), e.getX(), e.getY());
-          g2d.drawString(format(Axis.X, mousePosition.projection.x), mousePosition.event.getX(),
-              mousePosition.event.getY());
-          g2d.drawString(format(Axis.Y, mousePosition.projection.y), mousePosition.event.getX(),
-              mousePosition.event.getY() + space);
-          // g2d.drawString("z=" + mousePosition.projection.z, mousePosition.e.getX(),
-          // mousePosition.e.getY() + space * 2);
-
-        }
-      }
-    }
-  }
-  
   protected String format(Axis axis, float value) {
     String label;
     ITickRenderer renderer;
@@ -508,7 +487,69 @@ public class AWTCameraMouseController extends AbstractCameraController
         return "" + value;
     }
   }
+  
+  /**
+   * Drawing primitive for mouse tooltips. Will format according to axis tick renderers and labels.
+   * 
+   * @param g2d
+   * @param screenPosition
+   * @param modelPosition
+   * @param interline
+   * @param leftAlign
+   */
+  protected void drawCoord(Graphics2D g2d, Coord2d screenPosition, Coord3d modelPosition, int interline, boolean leftAlign) {
+    String d1 = format(Axis.X, modelPosition.x);
+    String d2 = format(Axis.Y, modelPosition.y);
 
+    drawCoord(g2d, screenPosition, interline, d1, d2, leftAlign);
+  }  
+  
+  protected void drawCoord(Graphics2D g2d, Coord2d screenPosition, int interline, String d1,
+      String d2, boolean leftAlign) {
+    int d1W = AWTGraphicsUtils.stringWidth(g2d, d1);
+    int d2W = AWTGraphicsUtils.stringWidth(g2d, d2);
+
+    int offsetX = 0;
+
+    if (leftAlign)
+      offsetX = Math.max(d1W, d2W);
+
+    int space = interline + g2d.getFont().getSize();
+
+
+    g2d.drawString(d1, screenPosition.x - offsetX, screenPosition.y);
+    g2d.drawString(d2, screenPosition.x - offsetX, screenPosition.y + space);
+  }
+
+
+  // ----------------------------------------------------------------------------
+  // SHOW MOUSE MOVES WITH TOOLTIP
+  // ----------------------------------------------------------------------------
+
+  class MouseMoveRenderer extends AbstractAWTRenderer2d {
+    @Override
+    public void paint(Graphics g, int canvasWidth, int canvasHeight) {
+      Graphics2D g2d = (Graphics2D) g;
+
+      // g2d.setColor(java.awt.Color.BLACK);
+
+      selectionSettings.apply(g2d);
+
+
+      if (mousePosition.event != null) {
+        g2d.drawLine(mousePosition.event.getX() - 1, mousePosition.event.getY(), mousePosition.event.getX() + 1,
+            mousePosition.event.getY());
+        g2d.drawLine(mousePosition.event.getX(), mousePosition.event.getY() - 1, mousePosition.event.getX(),
+            mousePosition.event.getY() + 1);
+
+        if (mousePosition.projection != null) {
+
+          drawCoord(g2d, xy(mousePosition.event), mousePosition.projection, selectionSettings.interline, false);
+        }
+      }
+    }
+  }
+  
   class MousePosition {
     MouseEvent event;
     Coord3d projection;
@@ -550,43 +591,19 @@ public class AWTCameraMouseController extends AbstractCameraController
 
       // Draw start coordinates on the top left corner
       if (mouseSelection.start3D != null) {
-
-
-        String d1 = "x=" + mouseSelection.start3D.x;
-        String d2 = "y=" + mouseSelection.start3D.y;
-
-        drawCoord(g2d, mouseSelection.start2D, selectionSettings.interline, d1, d2, true);
+        drawCoord(g2d, mouseSelection.start2D, mouseSelection.start3D, selectionSettings.interline, true);
       }
 
       // Draw stop coordinates on the bottom right corner
       if (mouseSelection.stop3D != null) {
-
-        String d1 = "x=" + mouseSelection.stop3D.x;
-        String d2 = "y=" + mouseSelection.stop3D.y;
-
-        drawCoord(g2d, mouseSelection.stop2D, selectionSettings.interline, d1, d2, false);
+        drawCoord(g2d, mouseSelection.stop2D, mouseSelection.stop3D, selectionSettings.interline, false);
       }
     }
-
-    private void drawCoord(Graphics2D g2d, Coord2d screenPosition, int interline, String d1,
-        String d2, boolean leftAlign) {
-      int d1W = AWTGraphicsUtils.stringWidth(g2d, d1);
-      int d2W = AWTGraphicsUtils.stringWidth(g2d, d2);
-
-      int offsetX = 0;
-
-      if (leftAlign)
-        offsetX = Math.max(d1W, d2W);
-
-      int space = interline + g2d.getFont().getSize();
-
-
-      g2d.drawString(d1, screenPosition.x - offsetX, screenPosition.y);
-      g2d.drawString(d2, screenPosition.x - offsetX, screenPosition.y + space);
-    }
-
   }
-
+  
+  /**
+   * Model for a mouse selection in progress
+   */
   class MouseSelection {
     Coord3d start3D;
     Coord3d stop3D;
@@ -610,7 +627,9 @@ public class AWTCameraMouseController extends AbstractCameraController
   // SETTINGS FOR MOUSE ROLLOVER RENDERING
   // ----------------------------------------------------------------------------
 
-
+  /**
+   * Renderering setting of mouse hover
+   */
   class MouseSelectionSettings {
     Color color = Color.GRAY.clone();
     float fontSizeFactor = 1f;
@@ -631,9 +650,7 @@ public class AWTCameraMouseController extends AbstractCameraController
       Font f = new Font(name, Font.PLAIN, (int) (size * fontSizeFactor));
       g2d.setFont(f);
       g2d.setStroke(stroke);
-
     }
-
 
   }
 
