@@ -329,7 +329,7 @@ public class AxisTickProcessor {
       drawAxisTickNumericLabel(painter, dimension, color, hAlign, vAlign, ticksTxtBounds, tickLabel,
           tickLabelPosition);
 
-      //System.out.println(tickLabelPosition);
+      System.out.println("AxisTickProcessor : " + dimension + " = " + tickLabel + " AT " + tickLabelPosition);
       
       // Draw the tick line
       if (layout.isTickLineDisplayed()) {
