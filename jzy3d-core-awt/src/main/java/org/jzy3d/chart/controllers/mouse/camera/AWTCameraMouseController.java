@@ -302,7 +302,7 @@ public class AWTCameraMouseController extends AbstractCameraController
 
       view.setBoundMode(ViewBoundMode.AUTO_FIT);
       
-      getChart().getScene().getGraph().setClipBox(null);
+      //getChart().getScene().getGraph().setClipBox(null);
 
     }
     // Or apply selection
@@ -310,31 +310,22 @@ public class AWTCameraMouseController extends AbstractCameraController
       BoundingBox3d bounds = view.getBounds().clone();
 
       if (view.is2D_XY()) {
-        if (view.get2DLayout().isHorizontalAxisFlip()) {
-          bounds.setXmin(mouseSelection.stop3D.x);
-          bounds.setXmax(mouseSelection.start3D.x);
-        } else {
-          bounds.setXmin(mouseSelection.start3D.x);
-          bounds.setXmax(mouseSelection.stop3D.x);
-        }
-
-        if (view.get2DLayout().isVerticalAxisFlip()) {
-          bounds.setYmin(mouseSelection.stop3D.y);
-          bounds.setYmax(mouseSelection.start3D.y);
-        } else {
-          bounds.setYmin(mouseSelection.start3D.y);
-          bounds.setYmax(mouseSelection.stop3D.y);
-        }
+        bounds.setXmin(mouseSelection.min3DX());
+        bounds.setXmax(mouseSelection.max3DX());
+        bounds.setYmin(mouseSelection.min3DY());
+        bounds.setYmax(mouseSelection.max3DY());
       }
 
       // System.out.println("2D select on " + bounds);
       mouseSelection = new MouseSelection();
 
-      getChart().getScene().getGraph().setClipBox(bounds);
-
-      view.setBoundsManual(bounds);
       
-      System.out.println("Bounds : " + bounds);
+      //BoundingBox3d fullBounds = getChart().getScene().getGraph().getBounds();
+      //getChart().getScene().getGraph().setClipBox(bounds, true, false);
+
+      view.setBoundsManual(bounds);//, false);
+      
+      System.out.println("Mouse.Bounds : " + bounds);
 
     }
 
@@ -621,6 +612,20 @@ public class AWTCameraMouseController extends AbstractCameraController
     boolean complete() {
       return start2D != null && stop2D != null;// && start3D!=null && stop3D!=null;
     }
+    
+    public float min3DX() {
+      return Math.min(mouseSelection.stop3D.x, mouseSelection.start3D.x);
+    }
+    public float max3DX() {
+      return Math.max(mouseSelection.stop3D.x, mouseSelection.start3D.x);
+    }
+    public float min3DY() {
+      return Math.min(mouseSelection.stop3D.y, mouseSelection.start3D.y);
+    }
+    public float max3DY() {
+      return Math.max(mouseSelection.stop3D.y, mouseSelection.start3D.y);
+    }
+
   }
 
   // ----------------------------------------------------------------------------

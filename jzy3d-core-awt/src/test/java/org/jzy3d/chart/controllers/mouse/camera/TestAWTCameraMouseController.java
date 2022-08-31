@@ -180,9 +180,17 @@ public class TestAWTCameraMouseController {
   // TODO TEST : when mouse release out of canvas
   // TODO TEST : valider que le mouse move ne provoque pas de display dans le cas d'une vue 3D.
   
-  
+  /**
+   * Perform a sequence of mouse gesture and verify mouse properly invoke the view.
+   * 
+   * <ul>
+   * <li>Drag toward bottom right to make a zoom
+   * <li>Drag toward top left to revert to default zoom
+   * <li>Drag again toward bottom right by disabling colorbar for viewport config side effects
+   * </ul>
+   */
   @Test
-  public void given2DView_WhenMouseDragWithLeftButton_ThenZoom2D() {
+  public void given2D_XY_View_WhenMouseDragWithLeftButton_ThenZoom2D() {
     
     // Given
     ViewAndColorbarsLayout viewportLayout = mock(ViewAndColorbarsLayout.class);
@@ -251,7 +259,7 @@ public class TestAWTCameraMouseController {
     
     // Then selection is performed on the following bounding box
     verify(view, times(1)).setBoundsManual(eq(new BoundingBox3d(1,3,11,33,0,1)));
-    
+
 
     // -------------------------------------------------------------------------
     // When mouse click, drag and release from bottom right to top left
@@ -262,6 +270,32 @@ public class TestAWTCameraMouseController {
     
     // Then bounds are reset to auto bounds
     verify(view, times(1)).setBoundMode(eq(ViewBoundMode.AUTO_FIT));
+    
+
+    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // Verify if we can deal with FLIPPED AXIS, 
+    
+    when(layout.isHorizontalAxisFlip()).thenReturn(true);
+    when(layout.isVerticalAxisFlip()).thenReturn(true);
+
+    // using new coordinates for different
+    // bounds hence test independence
+    when(painter.screenToModel(eq(new Coord3d(80,-10,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(8,11,0)); 
+    when(painter.screenToModel(eq(new Coord3d(85,-15,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(9,22,0));
+    when(painter.screenToModel(eq(new Coord3d(90,-20,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(10,33,0));
+    when(painter.screenToModel(eq(new Coord3d(95,-25,0)), eq(viewport.toArray()), any(), any())).thenReturn(new Coord3d(11,44,0));
+
+    // When
+    mouse.mousePressed(MouseMock.event(80, 10, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseDragged(MouseMock.event(85, 15, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseDragged(MouseMock.event(90, 20, InputEvent.BUTTON1_DOWN_MASK));
+    mouse.mouseReleased(MouseMock.event(95, 25, InputEvent.BUTTON1_DOWN_MASK));
+    
+    // Then selection is performed on the following bounding box
+    verify(view, times(1)).setBoundsManual(eq(new BoundingBox3d(8,10,11,33,0,1)));
+
+    
     
     
     // -------------------------------------------------------------------------
