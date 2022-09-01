@@ -16,6 +16,7 @@ import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController.MouseSelectionSettings.ZoomAreaStyle;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -161,8 +162,8 @@ public class AWTCameraMouseController extends AbstractCameraController
       mouseSelection.start2D = startMouse;
       mouseSelection.start3D = screenToModel(e);
 
-      if (mouseSelection.stop3D == null)
-        System.err.println("Mouse.onMousePressed projeciton is null ");
+      if (mouseSelection.start3D == null)
+        System.err.println("Mouse.onMousePressed projection is null ");
 
     }
 
@@ -450,8 +451,8 @@ public class AWTCameraMouseController extends AbstractCameraController
       ViewAndColorbarsLayout viewLayout = (ViewAndColorbarsLayout) layout;
       ViewportConfiguration viewportConf = viewLayout.getSceneViewport();
 
-      if (viewportConf.getHeight() < mouse.y || viewportConf.getWidth() < mouse.x)
-        return null;
+      //if (viewportConf.getHeight() < mouse.y || viewportConf.getWidth() < mouse.x)
+      //  return null;
 
       // Get real viewport, i.e. bypass colorbar
       viewport[0] = 0;
@@ -470,6 +471,13 @@ public class AWTCameraMouseController extends AbstractCameraController
     float projection[] = painter.getProjectionAsFloat();
 
     Coord3d model = painter.screenToModel(mouse, viewport, modelView, projection);
+    
+    /*if(model==null) {
+      System.err.println("Mouse.screenToModel : output is null");
+      Array.print("Viewport", viewport);
+      Array.print("Modelview", modelView);
+      Array.print("Projection", projection);
+    }*/
 
     painter.releaseGL();
 
