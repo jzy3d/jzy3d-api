@@ -193,6 +193,9 @@ public interface IPainter {
   /** Disable all clipping planes */
   public void clipOff();
 
+  /** Indicates status of clipping planes (on/off) */
+  public boolean[] clipStatus();
+
   /**
    * A convenient shortcut to glColor4f which overrides the color's alpha channel
    */
