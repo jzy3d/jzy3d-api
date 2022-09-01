@@ -625,6 +625,13 @@ public class Array {
     System.out.println("");
   }
 
+  public static void print(boolean input[]) {
+    for (int i = 0; i < input.length; i++) {
+      System.out.print(input[i] + "|");
+    }
+    System.out.println("");
+  }
+
   public static void print(double input[][]) {
     for (int i = 0; i < input.length; i++) {
       for (int j = 0; j < input[i].length; j++) {
@@ -663,7 +670,12 @@ public class Array {
     System.out.print(info);
     print(input);
   }
-  
+
+  public static void print(String info, boolean input[]) {
+    System.out.print(info);
+    print(input);
+  }
+
   public static void print(String info, int input[]) {
     System.out.print(info);
     print(input);

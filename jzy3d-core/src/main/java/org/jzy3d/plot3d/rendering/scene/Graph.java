@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.rendering.scene;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Composite;
@@ -204,6 +205,8 @@ public class Graph {
       
       painter.clipOn();
     }
+    
+    //Array.print("Clipping planes : ", painter.clipStatus());
     
     // draw
     draw(painter, components, sort);
