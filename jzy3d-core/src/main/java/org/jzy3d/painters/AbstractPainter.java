@@ -222,6 +222,20 @@ public abstract class AbstractPainter implements IPainter {
     glDisable_ClipPlane(4);
     glDisable_ClipPlane(5);
   }
+  
+  @Override
+  public boolean[] clipStatus() {
+    boolean[] status = new boolean[6];
+    
+    int[] v = {-1};
+    
+    for(int i=0; i<6; i++) {
+      glGetIntegerv(clipPlaneId(i), v, 0);
+      status[i] = (v[0]==1);
+    }
+    return status;
+  }
+
 
   /**
    * A convenient shortcut to invoke a clipping plane using an ID in [0;5] instead of the original

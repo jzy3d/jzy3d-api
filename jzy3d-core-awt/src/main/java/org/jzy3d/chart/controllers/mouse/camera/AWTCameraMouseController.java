@@ -47,8 +47,7 @@ public class AWTCameraMouseController extends AbstractCameraController
   MousePosition mousePosition = new MousePosition();
 
   MouseSelectionSettings selectionSettings = new MouseSelectionSettings();
-
-
+  
   public AWTCameraMouseController() {}
 
   public AWTCameraMouseController(Chart chart) {
@@ -154,6 +153,7 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     // 2D mode
     else {
+      
       // stop displaying mouse position on roll over
       mousePosition = new MousePosition();
 
@@ -344,9 +344,10 @@ public class AWTCameraMouseController extends AbstractCameraController
       mouseSelection = new MouseSelection();
 
       // Crop and zoom
-      if (allowCrop)
-        getChart().getScene().getGraph().setClipBox(bounds, true, false);
-
+      if (allowCrop) {
+        boolean includeLimits = false; // to avoid inacurrate box scale
+        getChart().getScene().getGraph().setClipBox(bounds, includeLimits, false);
+      }
       view.setBoundsManual(bounds);
 
 
