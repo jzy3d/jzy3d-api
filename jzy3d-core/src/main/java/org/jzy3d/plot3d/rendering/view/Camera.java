@@ -1,14 +1,9 @@
 package org.jzy3d.plot3d.rendering.view;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Vector;
 import java.util.function.Predicate;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
@@ -261,6 +256,11 @@ public class Camera extends AbstractViewportManager {
    * Set the boundaries of the model space that should be visible by the camera, for a 2D chart
    * having only X and Y boundaries.
    * 
+   * The values describe an area relative to the camera settings (eye, target, up), the actual visible region 
+   * of space is then made of the rendering square centered at the eye/target axis.
+   * 
+   * @see {@link #projectionOrtho(IPainter, ViewportConfiguration)}
+   * 
    * After calling this method, {@link #getProjectionMode()} returns
    * {@link ProjectionMode.Projection2D}.
    */
@@ -274,6 +274,11 @@ public class Camera extends AbstractViewportManager {
   /**
    * Set the boundaries of the model space that should be visible by the camera, for a 2D chart
    * having only X and Y boundaries.
+   * 
+   * The values describe an area relative to the camera settings (eye, target, up), the actual visible region 
+   * of space is then made of the rendering square centered at the eye/target axis.
+   * 
+   * @see {@link #projectionOrtho(IPainter, ViewportConfiguration)}
    * 
    * After calling this method, {@link #getProjectionMode()} returns
    * {@link ProjectionMode.Projection2D}.
@@ -699,9 +704,8 @@ public class Camera extends AbstractViewportManager {
     public void apply(IPainter painter) {
       if (left != 0 && right != 0 && bottom != 0 && top != 0 && near != 0 && far != 0) {
         painter.glOrtho(left, right, bottom, top, near, far);
-        // painter.gluOrtho2D(left, right, bottom, top);
-        // System.out.println("Camera.glOrtho("+left+","+ right+","+ bottom+","+ top +","+ near+","+
-        // far + ")");
+         //System.out.println("Camera.glOrtho("+left+","+ right+","+ bottom+","+ top +","+ near+","+
+         //far + ")");
       }
 
     }

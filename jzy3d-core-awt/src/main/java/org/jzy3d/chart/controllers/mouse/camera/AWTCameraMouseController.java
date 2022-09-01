@@ -13,6 +13,7 @@ import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.RateLimiter;
 import org.jzy3d.chart.controllers.camera.AbstractCameraController;
 import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
+import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController.MouseSelectionSettings.ZoomAreaStyle;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
@@ -60,14 +61,6 @@ public class AWTCameraMouseController extends AbstractCameraController
     setRateLimiter(limiter);
   }
 
-  public RateLimiter getRateLimiter() {
-    return rateLimiter;
-  }
-
-  public void setRateLimiter(RateLimiter rateLimiter) {
-    this.rateLimiter = rateLimiter;
-  }
-
   @Override
   public void register(Chart chart) {
     super.register(chart);
@@ -90,19 +83,53 @@ public class AWTCameraMouseController extends AbstractCameraController
     }
   }
 
-
   @Override
   public void dispose() {
     for (Chart chart : targets) {
-      chart.getCanvas().removeMouseController(this);
+      unregister(chart);
+      //chart.getCanvas().removeMouseController(this);
     }
     super.dispose();
   }
+
+  /** 
+   * Get the rate limiter to only consider mouse events at a given rate. 
+   * 
+   * Mainly useful for EmulGL to deal with liveness effect.
+   * 
+   * @see https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-emul-gl-awt#integrating-in-awt
+   */
+  public RateLimiter getRateLimiter() {
+    return rateLimiter;
+  }
+
+  /** 
+   * Provide a rate limiter to only consider mouse events at a given rate. 
+   * 
+   * Mainly useful for EmulGL to deal with liveness effect.
+   * 
+   * @see https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-emul-gl-awt#integrating-in-awt
+   */
+  public void setRateLimiter(RateLimiter rateLimiter) {
+    this.rateLimiter = rateLimiter;
+  }
+
+  /** Get the rendering settings of the mouse annotations (2D) */
+  public MouseSelectionSettings getSelectionSettings() {
+    return selectionSettings;
+  }
+
+  /** Set all rendering settings of the mouse annotations (2D) at once */
+  public void setSelectionSettings(MouseSelectionSettings selectionSettings) {
+    this.selectionSettings = selectionSettings;
+  }
+  
 
   // ----------------------------------------------------------------------------
   // MOUSE EVENT LISTENERS SECTION
   // ----------------------------------------------------------------------------
   
+
   /** 
    * When a mouse button is pressed
    * 
@@ -291,21 +318,25 @@ public class AWTCameraMouseController extends AbstractCameraController
   // ----------------------------------------------------------------------------
   
   protected void applyMouse2DSelection(View view) {
+    
+    boolean allowCrop = true;
+    
     if (!mouseSelection.complete()) {
       return;
     }
 
 
-    // Reset selection
+    // Reset selection to UNZOOM
     if (!mouseSelection.growing()) {
       // getChart().getScene().getGraph().setClipBox(null);
 
+      if(allowCrop)
+        getChart().getScene().getGraph().setClipBox(null);
+
       view.setBoundMode(ViewBoundMode.AUTO_FIT);
-      
-      //getChart().getScene().getGraph().setClipBox(null);
 
     }
-    // Or apply selection
+    // Or apply selection to ZOOM
     else {
       BoundingBox3d bounds = view.getBounds().clone();
 
@@ -316,22 +347,20 @@ public class AWTCameraMouseController extends AbstractCameraController
         bounds.setYmax(mouseSelection.max3DY());
       }
 
-      // System.out.println("2D select on " + bounds);
+      // Reset mouse selection
       mouseSelection = new MouseSelection();
 
-      
-      //BoundingBox3d fullBounds = getChart().getScene().getGraph().getBounds();
-      //getChart().getScene().getGraph().setClipBox(bounds, true, false);
+      // Crop and zoom
+      if(allowCrop)
+        getChart().getScene().getGraph().setClipBox(bounds, true, false);
 
-      view.setBoundsManual(bounds);//, false);
+      view.setBoundsManual(bounds);
       
-      System.out.println("Mouse.Bounds : " + bounds);
-
     }
 
     // Update display
 
-    view.shoot();
+    //view.shoot();
   }
 
   // ----------------------------------------------------------------------------
@@ -416,6 +445,8 @@ public class AWTCameraMouseController extends AbstractCameraController
     else {
       viewport = painter.getViewPortAsInt();
     }
+    
+    //Array.print("Mouse:viewport: ", viewport);
 
     painter.acquireGL();
 
@@ -535,7 +566,7 @@ public class AWTCameraMouseController extends AbstractCameraController
 
         if (mousePosition.projection != null) {
 
-          drawCoord(g2d, xy(mousePosition.event), mousePosition.projection, selectionSettings.interline, false);
+          drawCoord(g2d, xy(mousePosition.event), mousePosition.projection, selectionSettings.annotationInterline, false);
         }
       }
     }
@@ -578,16 +609,25 @@ public class AWTCameraMouseController extends AbstractCameraController
       int w = (int) (mouseSelection.stop2D.x - x);
       int h = (int) (mouseSelection.stop2D.y - y);
 
-      g2d.drawRect(x, y, w, h);
+      if(ZoomAreaStyle.BORDER.equals(selectionSettings.zoomStyle)){
+        g2d.drawRect(x, y, w, h);
+      }
+      else if(ZoomAreaStyle.FILL.equals(selectionSettings.zoomStyle)){
+        Color rectColor = selectionSettings.color.alpha(selectionSettings.zoomRectangleAlpha);
+        
+        g2d.setColor(AWTColor.toAWT(rectColor));
+        g2d.fillRect(x, y, w, h);
+        g2d.setColor(AWTColor.toAWT(selectionSettings.color));
+      }
 
       // Draw start coordinates on the top left corner
-      if (mouseSelection.start3D != null) {
-        drawCoord(g2d, mouseSelection.start2D, mouseSelection.start3D, selectionSettings.interline, true);
+      if (mouseSelection.start3D != null && selectionSettings.annotateWithValues) {
+        drawCoord(g2d, mouseSelection.start2D, mouseSelection.start3D, selectionSettings.annotationInterline, true);
       }
 
       // Draw stop coordinates on the bottom right corner
-      if (mouseSelection.stop3D != null) {
-        drawCoord(g2d, mouseSelection.stop2D, mouseSelection.stop3D, selectionSettings.interline, false);
+      if (mouseSelection.stop3D != null && selectionSettings.annotateWithValues) {
+        drawCoord(g2d, mouseSelection.stop2D, mouseSelection.stop3D, selectionSettings.annotationInterline, false);
       }
     }
   }
@@ -635,26 +675,41 @@ public class AWTCameraMouseController extends AbstractCameraController
   /**
    * Renderering setting of mouse hover
    */
-  class MouseSelectionSettings {
-    Color color = Color.GRAY.clone();
-    float fontSizeFactor = 1f;
+  static class MouseSelectionSettings {
+    public static enum ZoomAreaStyle{
+      BORDER, FILL
+    }
+    
+    
+    protected Color color = Color.GRAY.clone();
+    protected float zoomRectangleAlpha = 0.5f;
+    
+    // Zoom
+    ZoomAreaStyle zoomStyle = ZoomAreaStyle.FILL;
 
-    float[] dash1 = {2f, 0f, 2f};
+    // Border
+    protected float[] borderDashPattern = {2f, 0f, 2f};
+    protected BasicStroke borderStroke =
+        new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, borderDashPattern, 2f);
 
-    BasicStroke stroke =
-        new BasicStroke(1, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1.0f, dash1, 2f);
-
-    int interline = 2;
+    // Text
+    protected boolean annotateWithValues = true;
+    protected float annotationFontSizeFactor = 1f;
+    protected int annotationInterline = 2;
 
     public void apply(Graphics2D g2d) {
-      // COnfigure G2D with selection drawing settings
+      
+      // Configure G2D with selection drawing settings
       g2d.setColor(AWTColor.toAWT(color));
 
+      // Text
       String name = g2d.getFont().getFontName();
       int size = g2d.getFont().getSize();
-      Font f = new Font(name, Font.PLAIN, (int) (size * fontSizeFactor));
+      Font f = new Font(name, Font.PLAIN, (int) (size * annotationFontSizeFactor));
       g2d.setFont(f);
-      g2d.setStroke(stroke);
+      
+      // Stroke
+      g2d.setStroke(borderStroke);
     }
 
   }
