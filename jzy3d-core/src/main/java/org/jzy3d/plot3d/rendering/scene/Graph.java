@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.rendering.scene;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Composite;
@@ -198,24 +197,12 @@ public class Graph {
 
       transform.execute(painter);
       
-      
       if(clipIncludesLimits)
         painter.clip(clipBox.marginRatio(CLIP_MARGIN_RATIO)); // make the box a little bigger
       else
         painter.clip(clipBox);
       
       painter.clipOn();
-      
-      /*int[] clipPlaneStatus = new int[6];
-      painter.glGetIntegerv(12288, clipPlaneStatus, 0);
-      painter.glGetIntegerv(12289, clipPlaneStatus, 1);
-      painter.glGetIntegerv(12290, clipPlaneStatus, 2);
-      painter.glGetIntegerv(12291, clipPlaneStatus, 3);
-      painter.glGetIntegerv(12292, clipPlaneStatus, 4);
-      painter.glGetIntegerv(12293, clipPlaneStatus, 5);
-      
-      Array.print("Graph: clipping status", clipPlaneStatus);*/
-
     }
     
     // draw
@@ -224,26 +211,8 @@ public class Graph {
     // reset clipping if defined
     if(clipBox!=null) {
       painter.clipOff();
-      /*System.out.println("Graph: Disabled clipping");
-      
-      int[] clipPlaneStatus = new int[6];
-      painter.glGetIntegerv(12288, clipPlaneStatus, 0);
-      painter.glGetIntegerv(12289, clipPlaneStatus, 1);
-      painter.glGetIntegerv(12290, clipPlaneStatus, 2);
-      painter.glGetIntegerv(12291, clipPlaneStatus, 3);
-      painter.glGetIntegerv(12292, clipPlaneStatus, 4);
-      painter.glGetIntegerv(12293, clipPlaneStatus, 5);
-      
-      Array.print("Graph: clipping status", clipPlaneStatus);
-      
-      painter.glDisable_Stencil();*/
-
     }
   }
-  
-  
-  
-
 
   public synchronized void draw(IPainter painter, List<Drawable> components, boolean sort) {
     painter.glMatrixMode_ModelView();

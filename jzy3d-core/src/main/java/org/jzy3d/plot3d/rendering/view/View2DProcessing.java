@@ -13,7 +13,6 @@ import org.jzy3d.plot3d.primitives.axis.AxisTickProcessor;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.LabelOrientation;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
-import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
 /**
