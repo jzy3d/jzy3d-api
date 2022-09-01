@@ -11,6 +11,7 @@ import java.awt.event.InputEvent;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController.MouseSelection;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -341,22 +342,14 @@ public class TestAWTCameraMouseController {
   }
   
   @Test
-  public void testFormat() {
+  public void givenAxisLayout_WhenAnnotateZoom_ThenLabelsApplyAxisLabelAndTickRenderer() {
     // Given
     AxisLayout layout = mock(AxisLayout.class);
-    /*IAxis axis = mock(IAxis.class);
-    View view = mock(View.class);
-
-    when(axis.getLayout()).thenReturn(layout);
-    when(view.getAxis()).thenReturn(axis);*/
-    
     IScreenCanvas canvas = mock(IScreenCanvas.class);
-    
     IChartFactory factory = mock(IChartFactory.class);
     when(factory.newCameraThreadController(null)).thenReturn(null);
 
     Chart chart = mock(Chart.class);
-   // when(chart.getView()).thenReturn(view);
     when(chart.getAxisLayout()).thenReturn(layout);
     when(chart.getCanvas()).thenReturn(canvas);
     when(chart.getFactory()).thenReturn(factory);
@@ -392,6 +385,136 @@ public class TestAWTCameraMouseController {
     Assert.assertEquals("The Y axis=2,2e+00", mouse.format(Axis.Y, 2.2345678f));
     Assert.assertEquals("The Z axis=3,2e+00", mouse.format(Axis.Z, 3.2345678f));
 
+  }
+  
+  @Test
+  public void given_XY_XZ_or_YZ_View_WhenZoom_ThenUpdateBoundsProperly() {
+    float min_H = -1f;
+    float max_H = +1f;
+    float min_V = -10f;
+    float max_V = +10f;
+    float min = -100f;
+    float max = -100f;
+    
+    // Given a mouse selection
+    MouseSelection selection = mock(MouseSelection.class);
+    
+    // Given XY view
+    View view = mock(View.class);
+    
+    // Given a chart with related factory
+    IScreenCanvas canvas = mock(IScreenCanvas.class);
+    IChartFactory factory = mock(IChartFactory.class);
+    when(factory.newCameraThreadController(null)).thenReturn(null);
+
+    Chart chart = mock(Chart.class);
+    when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getFactory()).thenReturn(factory);
+
+    // Argument to mouse later
+    BoundingBox3d existingBounds;
+
+    // Given a mouse controller UNDER TEST
+    AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
+
+    // --------------------------
+    // When XY
+
+    when(view.is2D_XY()).thenReturn(true); // <<
+    when(view.is2D_XZ()).thenReturn(false);
+    when(view.is2D_YZ()).thenReturn(false);
+    
+    when(selection.min3DX()).thenReturn(min_H);
+    when(selection.max3DX()).thenReturn(max_H);
+    when(selection.min3DY()).thenReturn(min_V);
+    when(selection.max3DY()).thenReturn(max_V);
+
+
+    existingBounds = new BoundingBox3d(min, max, min, max, min, max);
+
+    mouse.configureZoomAccordingTo2DView(view, existingBounds, selection);
+    
+    // Then
+    
+    BoundingBox3d expectedZoom = new BoundingBox3d(min_H, max_H, min_V, max_V, min, max);
+    Assert.assertEquals(expectedZoom, existingBounds);
+    
+    // --------------------------
+    // When XZ
+
+    when(view.is2D_XY()).thenReturn(false);
+    when(view.is2D_XZ()).thenReturn(true); // <<
+    when(view.is2D_YZ()).thenReturn(false);
+    
+    when(selection.min3DX()).thenReturn(min_H); // on X
+    when(selection.max3DX()).thenReturn(max_H);
+    when(selection.min3DZ()).thenReturn(min_V); // on Z
+    when(selection.max3DZ()).thenReturn(max_V);
+
+    
+    existingBounds = new BoundingBox3d(min, max, min, max, min, max);
+
+    mouse.configureZoomAccordingTo2DView(view, existingBounds, selection);
+    
+    // Then
+    
+    expectedZoom = new BoundingBox3d(min_H, max_H, min, max, min_V, max_V);
+    Assert.assertEquals(expectedZoom, existingBounds);
+    
+    // --------------------------
+    // When YZ
+
+    when(view.is2D_XY()).thenReturn(false);
+    when(view.is2D_XZ()).thenReturn(false);
+    when(view.is2D_YZ()).thenReturn(true); // <<
+    
+    when(selection.min3DY()).thenReturn(min_H); // on Y
+    when(selection.max3DY()).thenReturn(max_H);
+    when(selection.min3DZ()).thenReturn(min_V); // on Z
+    when(selection.max3DZ()).thenReturn(max_V);
+
+    
+    existingBounds = new BoundingBox3d(min, max, min, max, min, max);
+
+    mouse.configureZoomAccordingTo2DView(view, existingBounds, selection);
+    
+    // Then
+    
+    expectedZoom = new BoundingBox3d(min, max, min_H, max_H, min_V, max_V);
+    Assert.assertEquals(expectedZoom, existingBounds);
+    
+  }
+  
+  @Test
+  public void testMouseSelection() {
+    float minX = -1;
+    float maxX = +1;
+    float minY = -10;
+    float maxY = +10;
+    float minZ = -100;
+    float maxZ = +100;
+    float delta = 0.1f;
+    
+    MouseSelection select = new AWTCameraMouseController.MouseSelection();
+    
+    // mix min and max in start and stop position of selection
+    select.start2D = new Coord2d(maxX, minY);
+    select.stop2D = new Coord2d(minX, maxY);
+    select.start3D = new Coord3d(maxX, minY, maxZ);
+    select.stop3D = new Coord3d(minX, maxY, minZ);
+
+    // to later verify we really get min/max and not start/stop
+    Assert.assertEquals(minX, select.min2DX(), delta);
+    Assert.assertEquals(maxX, select.max2DX(), delta);
+    Assert.assertEquals(minY, select.min2DY(), delta);
+    Assert.assertEquals(maxY, select.max2DY(), delta);
+    
+    Assert.assertEquals(minX, select.min3DX(), delta);
+    Assert.assertEquals(maxX, select.max3DX(), delta);
+    Assert.assertEquals(minY, select.min3DY(), delta);
+    Assert.assertEquals(maxY, select.max3DY(), delta);
+    Assert.assertEquals(minZ, select.min3DZ(), delta);
+    Assert.assertEquals(maxZ, select.max3DZ(), delta);
   }
 
 }
