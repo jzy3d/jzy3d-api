@@ -23,6 +23,8 @@ import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ScientificNotationTickRenderer;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
+import org.jzy3d.plot3d.rendering.scene.Graph;
+import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
@@ -200,6 +202,10 @@ public class TestAWTCameraMouseController {
     when(view.get2DLayout()).thenReturn(layout);
     when(view.getLayout()).thenReturn(viewportLayout);
     
+    Graph graph = mock(Graph.class);
+    Scene scene = mock(Scene.class);
+    when(scene.getGraph()).thenReturn(graph);
+    
     IScreenCanvas canvas = mock(IScreenCanvas.class);
     
     IChartFactory factory = mock(IChartFactory.class);
@@ -209,6 +215,7 @@ public class TestAWTCameraMouseController {
     
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
+    when(chart.getScene()).thenReturn(scene);
     when(chart.getCanvas()).thenReturn(canvas);
     when(chart.getFactory()).thenReturn(factory);
     when(chart.getPainter()).thenReturn(painter);

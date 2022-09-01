@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Vector3d;
@@ -169,7 +168,7 @@ public class AxisBox implements IAxis {
     painter.glScalef(scale.x, scale.y, scale.z);
   }
 
-  public void cullingDisable(IPainter painter) {
+  /*public void cullingDisable(IPainter painter) {
     painter.glDisable_CullFace();
   }
 
@@ -177,7 +176,7 @@ public class AxisBox implements IAxis {
     painter.glEnable_CullFace();
     painter.glFrontFace_ClockWise();
     painter.glCullFace_Front();
-  }
+  }*/
 
   /* */
 
