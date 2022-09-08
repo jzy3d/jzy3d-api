@@ -256,7 +256,9 @@ public class TestAWTCameraMouseController {
     
     // Given a mouse controller UNDER TEST, finally <<<<<<<<<<<<<<<
     AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
-
+    
+    mouse.maintainInAxis = false; // disable this processing to simplify mocking
+    
     // -------------------------------------------------------------------------
     // When mouse click, drag and release
     
@@ -515,6 +517,97 @@ public class TestAWTCameraMouseController {
     Assert.assertEquals(maxY, select.max3DY(), delta);
     Assert.assertEquals(minZ, select.min3DZ(), delta);
     Assert.assertEquals(maxZ, select.max3DZ(), delta);
+  }
+  
+  @Test
+  public void whenMouseClickOutsideAxis_ThenSelectionIsCropped() {
+    
+    int HEIGHT = 600;
+    int WIDTH = 800;
+    int MARGIN = 10;
+    
+    // Given
+    View view = mock(View.class);
+    
+    IScreenCanvas canvas = mock(IScreenCanvas.class);
+    when(canvas.getRendererHeight()).thenReturn(HEIGHT);
+    
+    IChartFactory factory = mock(IChartFactory.class);
+    when(factory.newCameraThreadController(null)).thenReturn(null);
+    
+    IPainter painter = mock(IPainter.class);
+    
+    Chart chart = mock(Chart.class);
+    when(chart.getView()).thenReturn(view);
+    when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getFactory()).thenReturn(factory);
+    when(chart.getPainter()).thenReturn(painter);
+    
+    // -------------------------------------------------------------------------
+    // Given a view behavior
+    
+    BoundingBox3d bounds = new BoundingBox3d(0,1,0,1,0,1);
+    
+    when(view.is2D()).thenReturn(true); // 2D mode
+    when(view.is2D_XY()).thenReturn(true);
+    when(view.getBounds()).thenReturn(bounds);
+    
+    // Projection of bounds on canvas corners
+    when(painter.modelToScreen(eq(bounds.getCorners().getXminYminZmin()))).thenReturn(new Coord3d(MARGIN, MARGIN));
+    when(painter.modelToScreen(eq(bounds.getCorners().getXmaxYmaxZmin()))).thenReturn(new Coord3d(WIDTH-MARGIN, HEIGHT-MARGIN));
+
+    
+    
+    AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
+    
+    
+    // -----------------------------------------
+    // When click outside axis (TOP LEFT)
+    Coord2d click = new Coord2d(1, 1);
+    
+    mouse.maintainInAxis(click);
+    
+    // Then coordinate is modified to stand inside axis
+    Assert.assertEquals(new Coord2d(10, 10), click);
+
+    
+    // -----------------------------------------
+    // When click outside axis (BOTTOM RIGHT)
+    click = new Coord2d(799, 599);
+    
+    mouse.maintainInAxis(click);
+    
+    // Then coordinate is modified to stand inside axis
+    Assert.assertEquals(new Coord2d(790, 590), click);
+
+    
+    // -----------------------------------------
+    // When click outside axis (BOTTOM LEFT)
+    click = new Coord2d(800, 1);
+    
+    mouse.maintainInAxis(click);
+
+    // Then coordinate is modified to stand inside axis
+    Assert.assertEquals(new Coord2d(790, 10), click);
+
+    // -----------------------------------------
+    // When click outside axis (TOP RIGHT)
+    click = new Coord2d(1, 599);
+    
+    mouse.maintainInAxis(click);
+    
+    // Then coordinate is modified to stand inside axis
+    Assert.assertEquals(new Coord2d(10, 590), click);
+
+    // -----------------------------------------
+    // When click inside axis (MIDDLE)
+    click = new Coord2d(400, 300);
+    
+    mouse.maintainInAxis(click);
+    
+    // Then coordinates is kept as is
+    Assert.assertEquals(new Coord2d(400, 300), click);
+
   }
 
 }
