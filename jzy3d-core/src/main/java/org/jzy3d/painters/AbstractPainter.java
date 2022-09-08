@@ -329,14 +329,14 @@ public abstract class AbstractPainter implements IPainter {
    * Transform a 2d screen coordinate into a 3d coordinate.
    * 
    * Allow to pass custom viewport, modelview matrix and projection matrix. To use current one,
-   * invoke {@link AbstractPainter#screenToModel(Coord3d)}
+   * invoke {@link #screenToModel(Coord3d)}
    */
   @Override
   public Coord3d screenToModel(Coord3d screen, int[] viewport, float[] modelView,
       float[] projection) {
     // Array.print("Painter.screenToModel : viewport : ", viewport);
-    // Array.print("Camera.screenToModel : modelView : ", modelView);
-    // Array.print("Camera.screenToModel : projection : ", projection);
+    // Array.print("Painter.screenToModel : modelView : ", modelView);
+    // Array.print("Painter.screenToModel : projection : ", projection);
 
     // double modelView[] = painter.getModelViewAsDouble();
     // double projection[] = painter.getProjectionAsDouble();
@@ -366,12 +366,9 @@ public abstract class AbstractPainter implements IPainter {
    * 
    * <pre>
    * <code>
-   * NativeDesktopPainter p = (NativeDesktopPainter)chart.getPainter();
-   * p.getCurrentContext(chart.getCanvas()).makeCurrent(); // make context current
-   * 
-   * Coord3d screen2dCoord = camera.modelToScreen(chart.getPainter(), world3dCoord);
-   * 
-   * p.getCurrentContext(chart.getCanvas()).release(); // release context to let other use it
+   * painter.acquireGL(); // make context current
+   * Coord3d screen2dCoord = painter.modelToScreen(world3dCoord);
+   * painter.releaseGL(); // release context to let other use it
    * </code>
    * </pre>
    * 
@@ -382,10 +379,26 @@ public abstract class AbstractPainter implements IPainter {
     int viewport[] = getViewPortAsInt();
     float modelView[] = getModelViewAsFloat();
     float projection[] = getProjectionAsFloat();
+    
+    //Array.print("Painter.modelToScreen : viewport : ", viewport);
+    //Array.print("Painter.modelToScreen : modelView : ", modelView);
+    //Array.print("Painter.modelToScreen : projection : ", projection);
+
+
+    return modelToScreen(point, viewport, modelView, projection);
+  }
+
+  /**
+   * Transform a 3d coordinate to 2D screen coordinate.
+   * 
+   * Allow to pass custom viewport, modelview matrix and projection matrix. To use current one,
+   * invoke {@link #modelToScreen(Coord3d)}
+   */
+  @Override
+  public Coord3d modelToScreen(Coord3d point, int[] viewport, float[] modelView, float[] projection) {
     float screenCoord[] = new float[3];// wx, wy, wz;// returned xyz coords
 
-    boolean s = gluProject(point.x, point.y, point.z, modelView, projection, viewport,
-        screenCoord);
+    boolean s = gluProject(point.x, point.y, point.z, modelView, projection, viewport, screenCoord);
 
     if (s) {
       return new Coord3d(screenCoord[0], screenCoord[1], screenCoord[2]);
@@ -395,24 +408,9 @@ public abstract class AbstractPainter implements IPainter {
   }
 
   /**
-   * Transform a 3d point coordinate into its screen position.
+   * Project an array of coordinates.
    * 
-   * This method requires the GL context to be current. If not called inside a rendering loop, that
-   * method may not apply correctly and output {0,0,0}. In that case and if the chart is based on
-   * JOGL (native), one may force the context to be current using
-   * 
-   * <pre>
-   * <code>
-   * NativeDesktopPainter p = (NativeDesktopPainter)chart.getPainter();
-   * p.getCurrentContext(chart.getCanvas()).makeCurrent(); // make context current
-   * 
-   * Coord3d screen2dCoord = camera.modelToScreen(chart.getPainter(), world3dCoord);
-   * 
-   * p.getCurrentContext(chart.getCanvas()).release(); // release context to let other use it
-   * </code>
-   * </pre>
-   * 
-   * A null coordinate can be returned if the projection could not be performed for some reasons.
+   * @see {@link #modelToScreen(Coord3d)}
    */
   @Override
   public Coord3d[] modelToScreen(Coord3d[] points) {
@@ -431,6 +429,11 @@ public abstract class AbstractPainter implements IPainter {
     return projection;
   }
 
+  /**
+   * Project an array of coordinates.
+   * 
+   * @see {@link #modelToScreen(Coord3d)}
+   */
   @Override
   public Coord3d[][] modelToScreen(Coord3d[][] points) {
     int viewport[] = getViewPortAsInt();
@@ -450,6 +453,11 @@ public abstract class AbstractPainter implements IPainter {
     return projection;
   }
 
+  /**
+   * Project a list of coordinates.
+   * 
+   * @see {@link #modelToScreen(Coord3d)}
+   */
   @Override
   public List<Coord3d> modelToScreen(List<Coord3d> points) {
     int viewport[] = getViewPortAsInt();
@@ -466,6 +474,11 @@ public abstract class AbstractPainter implements IPainter {
     return projection;
   }
 
+  /**
+   * Project a list of lists of coordinates.
+   * 
+   * @see {@link #modelToScreen(Coord3d)}
+   */
   @Override
   public List<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons) {
     int viewport[] = getViewPortAsInt();

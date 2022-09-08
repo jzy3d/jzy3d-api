@@ -16,7 +16,7 @@ import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController.MouseSelectionSettings.ZoomAreaStyle;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Array;
+import org.jzy3d.maths.BoundingBox2d;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -39,7 +39,6 @@ public class AWTCameraMouseController extends AbstractCameraController
   protected RateLimiter rateLimiter;
 
   protected Coord2d prevMouse = Coord2d.ORIGIN;
-  protected Coord2d startMouse = Coord2d.ORIGIN;
 
   MouseMoveRenderer moveRenderer = new MouseMoveRenderer();
   MouseDragRenderer dragRenderer = new MouseDragRenderer();
@@ -48,6 +47,11 @@ public class AWTCameraMouseController extends AbstractCameraController
   MousePosition mousePosition = new MousePosition();
 
   MouseSelectionSettings selectionSettings = new MouseSelectionSettings();
+  
+//Behaviour
+  
+  protected boolean maintainInAxis = true;
+  
   
   public AWTCameraMouseController() {}
 
@@ -143,7 +147,6 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     prevMouse.x = x(e);
     prevMouse.y = y(e);
-    startMouse = prevMouse.clone();
 
     // 3D mode
     if (getChart().getView().is3D()) {
@@ -154,21 +157,68 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     // 2D mode
     else {
+
+      Coord2d startMouse = prevMouse.clone();
+
+      if(maintainInAxis)
+        maintainInAxis(startMouse);
+
+      
       
       // stop displaying mouse position on roll over
       mousePosition = new MousePosition();
 
       // start creating a selection
       mouseSelection.start2D = startMouse;
-      mouseSelection.start3D = screenToModel(e);
+      mouseSelection.start3D = screenToModel(startMouse.x, startMouse.y);
 
       if (mouseSelection.start3D == null)
         System.err.println("Mouse.onMousePressed projection is null ");
+      
+      
+      //screenToModel(bounds3d.getCorners())
 
     }
-
-
   }
+
+  /** 
+   * Modify the input coord2D to ensure the mouse value never stand outside 
+   * of the axis bounds.
+   */
+  protected void maintainInAxis(Coord2d mouse) {
+    BoundingBox3d bounds3d = getChart().getView().getBounds();
+    
+    Coord3d cornerMin = null;
+    Coord3d cornerMax = null;
+    
+    
+    if(getChart().getView().is2D_XY()) {
+      cornerMin = modelToScreen(bounds3d.getCorners().getXminYminZmin());
+      cornerMax = modelToScreen(bounds3d.getCorners().getXmaxYmaxZmin());
+    }
+    
+    //System.out.println("Corner min : " + cornerMin);
+    //System.out.println("Corner max : " + cornerMax);
+    //System.out.println("Mouse.maintainInAxis " + mouse);
+    
+    // Crop on X bounds
+    if(mouse.x < cornerMin.x)
+      mouse.x = cornerMin.x;
+    if(mouse.x > cornerMax.x)
+      mouse.x = cornerMax.x;
+
+    int height = getChart().getCanvas().getRendererHeight();
+
+    float flipedCornerMinY = height - cornerMin.y;
+    float flipedCornerMaxY = height - cornerMax.y;      
+    float flipedMouseY = height - mouse.y;
+    
+    if(flipedMouseY < cornerMin.y)
+      mouse.y = flipedCornerMinY;
+    if(flipedMouseY > cornerMax.y)
+      mouse.y = flipedCornerMaxY;
+  }
+  
 
   /**
    * When mouse is dragged
@@ -210,8 +260,14 @@ public class AWTCameraMouseController extends AbstractCameraController
     // 2D mode
     else {
       // Record the mouse selection in progress
-      mouseSelection.stop2D = mouse;
-      mouseSelection.stop3D = screenToModel(e);
+      Coord2d dragMouse = xy(e);
+      
+      if(maintainInAxis)
+        maintainInAxis(dragMouse);
+
+      
+      mouseSelection.stop2D = dragMouse;
+      mouseSelection.stop3D = screenToModel(dragMouse.x, dragMouse.y);
 
       getChart().getView().shoot();
 
@@ -417,11 +473,27 @@ public class AWTCameraMouseController extends AbstractCameraController
   protected int x(MouseEvent e) {
     return e.getX();
   }
+  
+  protected Coord3d modelToScreen(Coord3d model) {
+    IPainter painter = getChart().getPainter();
+    
+    painter.acquireGL();
+    Coord3d screen = painter.modelToScreen(model);
+    painter.releaseGL();
+    
+    return screen;
+  }
 
   protected Coord3d screenToModel(MouseEvent e) {
+    int x = x(e);
+    int y = y(e);
+
+    return screenToModel(x, y);
+  }
+
+  protected Coord3d screenToModel(float x, float y) {
     // Flip the Y axis
-    int y = getChart().getCanvas().getRendererHeight() - y(e);
-    Coord3d mouse = new Coord3d(x(e), y, 0);
+    Coord3d mouse = new Coord3d(x, getChart().getCanvas().getRendererHeight() - y, 0);
 
     // Project to 3D
     Coord3d model = screenToModel(mouse);
@@ -779,7 +851,8 @@ public class AWTCameraMouseController extends AbstractCameraController
       BORDER, FILL
     }
 
-
+    
+    // Colors
     protected Color color = Color.GRAY.clone();
     protected float zoomRectangleAlpha = 0.5f;
 
