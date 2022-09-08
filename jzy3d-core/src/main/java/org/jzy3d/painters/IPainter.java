@@ -246,6 +246,8 @@ public interface IPainter {
   public Coord3d screenToModel(Coord3d screen, int[] viewport, float[] modelView, float[] projection);
 
   public Coord3d modelToScreen(Coord3d point);
+  
+  public Coord3d modelToScreen(Coord3d point, int[] viewport, float[] modelView, float[] projection);
 
   public Coord3d[] modelToScreen(Coord3d[] points);
 
