@@ -754,5 +754,53 @@ public class TestAWTCameraMouseController {
     Assert.assertEquals(new Coord2d(400, 300), click);
     
   }
+  
+  @Test
+  public void whenZoomHasRangeZero_ThenDoNotApplyBounds() {
+    // Given
+    View view = mock(View.class);
+    when(view.is2D()).thenReturn(true); // 2D mode
+    
+    Graph graph = mock(Graph.class);
+    Scene scene = mock(Scene.class);
+    when(scene.getGraph()).thenReturn(graph);
+    
+    IScreenCanvas canvas = mock(IScreenCanvas.class);
+    
+    IChartFactory factory = mock(IChartFactory.class);
+    when(factory.newCameraThreadController(null)).thenReturn(null);
+    
+    IPainter painter = mock(IPainter.class);
+    
+    Chart chart = mock(Chart.class);
+    when(chart.getView()).thenReturn(view);
+    when(chart.getScene()).thenReturn(scene);
+    when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getFactory()).thenReturn(factory);
+    when(chart.getPainter()).thenReturn(painter);
+    
+
+    // Mouse controller UNDER TEST <<<<<<<<
+    AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
+
+    // --------------------------------------------------------------
+    // When non relevant Z bounds, do NOT set bounds
+
+    BoundingBox3d bounds = new BoundingBox3d(0,1,0,1,0.5f,0.5f);
+
+    when(view.getBounds()).thenReturn(bounds);
+    when(view.is2D_XY()).thenReturn(true); // XY
+    
+    MouseSelection selection = mock(MouseSelection.class);
+    when(selection.growing()).thenReturn(true);
+    when(selection.complete()).thenReturn(true);
+    
+    mouse.mouseSelection = selection;
+    
+    
+    mouse.applyMouse2DSelection(view);
+    
+    verify(view, times(0)).setBoundsManual(any());
+  }
 
 }
