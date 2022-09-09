@@ -16,7 +16,6 @@ import org.jzy3d.chart.controllers.mouse.AWTMouseUtilities;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController.MouseSelectionSettings.ZoomAreaStyle;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.BoundingBox2d;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -27,6 +26,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
@@ -180,45 +180,6 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     }
   }
-
-  /** 
-   * Modify the input coord2D to ensure the mouse value never stand outside 
-   * of the axis bounds.
-   */
-  protected void maintainInAxis(Coord2d mouse) {
-    BoundingBox3d bounds3d = getChart().getView().getBounds();
-    
-    Coord3d cornerMin = null;
-    Coord3d cornerMax = null;
-    
-    
-    if(getChart().getView().is2D_XY()) {
-      cornerMin = modelToScreen(bounds3d.getCorners().getXminYminZmin());
-      cornerMax = modelToScreen(bounds3d.getCorners().getXmaxYmaxZmin());
-    }
-    
-    //System.out.println("Corner min : " + cornerMin);
-    //System.out.println("Corner max : " + cornerMax);
-    //System.out.println("Mouse.maintainInAxis " + mouse);
-    
-    // Crop on X bounds
-    if(mouse.x < cornerMin.x)
-      mouse.x = cornerMin.x;
-    if(mouse.x > cornerMax.x)
-      mouse.x = cornerMax.x;
-
-    int height = getChart().getCanvas().getRendererHeight();
-
-    float flipedCornerMinY = height - cornerMin.y;
-    float flipedCornerMaxY = height - cornerMax.y;      
-    float flipedMouseY = height - mouse.y;
-    
-    if(flipedMouseY < cornerMin.y)
-      mouse.y = flipedCornerMinY;
-    if(flipedMouseY > cornerMax.y)
-      mouse.y = flipedCornerMaxY;
-  }
-  
 
   /**
    * When mouse is dragged
@@ -436,6 +397,122 @@ public class AWTCameraMouseController extends AbstractCameraController
 
     // System.out.println("Mouse.Bounds : " + bounds);
   }
+  
+  /** 
+   * Modify the input coord2D to ensure the mouse value never stand outside 
+   * of the axis bounds.
+   */
+  protected void maintainInAxis(Coord2d mouse) {
+    View view = getChart().getView();
+    View2DLayout layout = view.get2DLayout();
+    
+    BoundingBox3d bounds3d = getChart().getView().getBounds();
+    
+    
+    
+
+    // Get corners
+    Coord3d cornerMin3D = null;
+    Coord3d cornerMax3D = null;
+    
+    
+    if(view.is2D_XY()) {
+      // no flip : take X min for bottom left corner
+      if(layout.isNoAxisFlipped()) { 
+        cornerMin3D = bounds3d.getCorners().getXminYminZmin();
+        cornerMax3D = bounds3d.getCorners().getXmaxYmaxZmax();
+      } 
+      // horizontal flip : take X max for bottom left corner
+      else if(layout.isHorizontalAxisFlipOnly()){ 
+        cornerMin3D = bounds3d.getCorners().getXmaxYminZmin();
+        cornerMax3D = bounds3d.getCorners().getXminYmaxZmax();
+      }
+      // vertical flip : take Y max for bottom left corner
+      else if(layout.isVerticalAxisFlipOnly()){ 
+        cornerMin3D = bounds3d.getCorners().getXminYmaxZmin();
+        cornerMax3D = bounds3d.getCorners().getXmaxYminZmax();
+      }
+      // both of the two above
+      else if(layout.isBothAxisFlipped()){ 
+        cornerMin3D = bounds3d.getCorners().getXmaxYmaxZmin();
+        cornerMax3D = bounds3d.getCorners().getXminYminZmax();
+      }
+    }
+    
+    else if(view.is2D_XZ()) {
+      // no flip : take X min for bottom left corner
+      if(layout.isNoAxisFlipped()) { 
+        cornerMin3D = bounds3d.getCorners().getXminYminZmin();
+        cornerMax3D = bounds3d.getCorners().getXmaxYmaxZmax();
+      } 
+      // horizontal flip : take X max for bottom left corner
+      else if(layout.isHorizontalAxisFlipOnly()){ 
+        cornerMin3D = bounds3d.getCorners().getXmaxYminZmin();
+        cornerMax3D = bounds3d.getCorners().getXminYmaxZmax();
+      }
+      // vertical flip : take Y max for bottom left corner
+      else if(layout.isVerticalAxisFlipOnly()){ 
+        cornerMin3D = bounds3d.getCorners().getXminYminZmax();
+        cornerMax3D = bounds3d.getCorners().getXmaxYmaxZmin();
+      }
+      // both of the two above
+      else if(layout.isBothAxisFlipped()){ 
+        cornerMin3D = bounds3d.getCorners().getXmaxYminZmax();
+        cornerMax3D = bounds3d.getCorners().getXminYmaxZmin();
+      }
+    }
+    
+    else if(view.is2D_YZ()) {
+      // no flip : take X min for bottom left corner
+      if(layout.isNoAxisFlipped()) { 
+        cornerMin3D = bounds3d.getCorners().getXminYminZmin();
+        cornerMax3D = bounds3d.getCorners().getXmaxYmaxZmax();
+      } 
+      // horizontal flip : take X max for bottom left corner
+      else if(layout.isHorizontalAxisFlipOnly()){ 
+        cornerMin3D = bounds3d.getCorners().getXminYmaxZmin();
+        cornerMax3D = bounds3d.getCorners().getXmaxYminZmax();
+      }
+      // vertical flip : take Y max for bottom left corner
+      else if(layout.isVerticalAxisFlipOnly()){ 
+        cornerMin3D = bounds3d.getCorners().getXminYminZmax();
+        cornerMax3D = bounds3d.getCorners().getXmaxYmaxZmin();
+      }
+      // both of the two above
+      else if(layout.isBothAxisFlipped()){ 
+        cornerMin3D = bounds3d.getCorners().getXminYmaxZmax();
+        cornerMax3D = bounds3d.getCorners().getXmaxYminZmin();
+      }
+    }
+    
+    //System.out.println("Corner min 3D : " + cornerMin3D);
+    //System.out.println("Corner max 3D : " + cornerMax3D);
+    
+    // Project 3D bounds to 2D
+    Coord3d cornerMin2D = modelToScreen(cornerMin3D); // bottom left
+    Coord3d cornerMax2D = modelToScreen(cornerMax3D); // top right
+    
+    
+    //System.out.println("Corner min 2D : " + cornerMin);
+    //System.out.println("Corner max 2D : " + cornerMax);
+    
+    // Crop on X bounds
+    if(mouse.x < cornerMin2D.x)
+      mouse.x = cornerMin2D.x;
+    if(mouse.x > cornerMax2D.x)
+      mouse.x = cornerMax2D.x;
+
+    int height = getChart().getCanvas().getRendererHeight();
+
+    float flipedCornerMinY = height - cornerMin2D.y;
+    float flipedCornerMaxY = height - cornerMax2D.y;      
+    float flipedMouseY = height - mouse.y;
+    
+    if(flipedMouseY < cornerMin2D.y)
+      mouse.y = flipedCornerMinY;
+    if(flipedMouseY > cornerMax2D.y)
+      mouse.y = flipedCornerMaxY;
+  }
 
   // ----------------------------------------------------------------------------
   // TRIGGER SLAVE THREAD
@@ -474,11 +551,20 @@ public class AWTCameraMouseController extends AbstractCameraController
     return e.getX();
   }
   
+  /**
+   * Perform model to screen projection smartly, considering the effect of a colorbar on the actual
+   * viewport.
+   */
   protected Coord3d modelToScreen(Coord3d model) {
     IPainter painter = getChart().getPainter();
     
     painter.acquireGL();
-    Coord3d screen = painter.modelToScreen(model);
+    
+    int[] viewport = getViewportExcludingColorbar();
+    float modelView[] = painter.getModelViewAsFloat();
+    float projection[] = painter.getProjectionAsFloat();
+
+    Coord3d screen = painter.modelToScreen(model, viewport, modelView, projection);
     painter.releaseGL();
     
     return screen;
@@ -512,33 +598,9 @@ public class AWTCameraMouseController extends AbstractCameraController
   protected Coord3d screenToModel(Coord3d mouse) {
     IPainter painter = getChart().getPainter();
 
-    IViewportLayout layout = getChart().getView().getLayout();
-
-
-    int viewport[] = new int[4];
-
-    // If there is a layout that allows something else than the 3D view to be displayed
-    // (e.g. a colorbar), then we only get the viewport of this part
-    if (layout instanceof ViewAndColorbarsLayout) {
-      ViewAndColorbarsLayout viewLayout = (ViewAndColorbarsLayout) layout;
-      ViewportConfiguration viewportConf = viewLayout.getSceneViewport();
-
-      //if (viewportConf.getHeight() < mouse.y || viewportConf.getWidth() < mouse.x)
-      //  return null;
-
-      // Get real viewport, i.e. bypass colorbar
-      viewport[0] = 0;
-      viewport[1] = 0;
-      viewport[2] = viewportConf.getWidth();
-      viewport[3] = viewportConf.getHeight();
-    }
-    // Otherwise we simply use the default viewport
-    else {
-      viewport = painter.getViewPortAsInt();
-    }
-
     painter.acquireGL();
 
+    int[] viewport = getViewportExcludingColorbar();
     float modelView[] = painter.getModelViewAsFloat();
     float projection[] = painter.getProjectionAsFloat();
 
@@ -554,6 +616,36 @@ public class AWTCameraMouseController extends AbstractCameraController
     painter.releaseGL();
 
     return model;
+  }
+
+  protected int[] getViewportExcludingColorbar() {
+    
+    int viewport[] = new int[4];
+
+    // If there is a layout that allows something else than the 3D view to be displayed
+    // (e.g. a colorbar), then we only get the viewport of this part
+    
+    IViewportLayout layout = getChart().getView().getLayout();
+
+    if (layout instanceof ViewAndColorbarsLayout) {
+      ViewAndColorbarsLayout viewLayout = (ViewAndColorbarsLayout) layout;
+      ViewportConfiguration viewportConf = viewLayout.getSceneViewport();
+
+      //if (viewportConf.getHeight() < mouse.y || viewportConf.getWidth() < mouse.x)
+      //  return null;
+
+      // Get real viewport, i.e. bypass colorbar
+      viewport[0] = 0;
+      viewport[1] = 0;
+      viewport[2] = viewportConf.getWidth();
+      viewport[3] = viewportConf.getHeight();
+    }
+    // Otherwise we simply use the default viewport
+    else {
+      IPainter painter = getChart().getPainter();
+      viewport = painter.getViewPortAsInt();
+    }
+    return viewport;
   }
 
   // ----------------------------------------------------------------------------
