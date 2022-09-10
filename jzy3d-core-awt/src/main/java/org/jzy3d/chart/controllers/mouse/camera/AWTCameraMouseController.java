@@ -367,7 +367,7 @@ public class AWTCameraMouseController extends AbstractCameraController
        || bounds.getZRange().getRange() <= 0)
         return;
 
-      System.out.println("Will zoom to " + bounds);
+      //System.out.println("Will zoom to " + bounds);
 
       // Crop and zoom
       if (allowCrop) {
@@ -498,6 +498,14 @@ public class AWTCameraMouseController extends AbstractCameraController
     Coord3d cornerMin2D = modelToScreen(cornerMin3D); // bottom left
     Coord3d cornerMax2D = modelToScreen(cornerMax3D); // top right
 
+    Coord2d scale = getChart().getView().getPixelScale();
+    
+    cornerMin2D.x /= scale.x; 
+    cornerMin2D.y /= scale.y; 
+    cornerMax2D.x /= scale.x; 
+    cornerMax2D.y /= scale.y; 
+    
+    // System.out.println(mouse + " corner min " + cornerMin2D + " corner max " + cornerMax2D);
 
     // System.out.println("Corner min 2D : " + cornerMin);
     // System.out.println("Corner max 2D : " + cornerMax);
@@ -508,7 +516,8 @@ public class AWTCameraMouseController extends AbstractCameraController
     if (mouse.x > cornerMax2D.x)
       mouse.x = cornerMax2D.x;
 
-    int height = getChart().getCanvas().getRendererHeight();
+    // Crop on Y bounds
+    int height = (int)(getChart().getCanvas().getRendererHeight() / scale.y);
 
     float flipedCornerMinY = height - cornerMin2D.y;
     float flipedCornerMaxY = height - cornerMax2D.y;
@@ -584,9 +593,19 @@ public class AWTCameraMouseController extends AbstractCameraController
   }
 
   protected Coord3d screenToModel(float x, float y) {
-    // Flip the Y axis
-    Coord3d mouse = new Coord3d(x, getChart().getCanvas().getRendererHeight() - y, 0);
+    
+    Coord2d scale = getChart().getView().getPixelScale();
+    
+    // Flip the Y axis, cancelling the effect of hidpi to later get accurate mouse
+    // position
+    int height = (int)(getChart().getCanvas().getRendererHeight() / scale.y);
+    Coord3d mouse = new Coord3d(x, height - y, 0);
 
+    // Now scale according to HiDPI
+    mouse.x *= scale.x;
+    mouse.y *= scale.y;
+
+    
     // Project to 3D
     Coord3d model = screenToModel(mouse);
 
