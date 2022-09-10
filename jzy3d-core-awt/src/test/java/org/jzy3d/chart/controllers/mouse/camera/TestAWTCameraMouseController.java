@@ -229,7 +229,8 @@ public class TestAWTCameraMouseController {
     when(view.is2D_XY()).thenReturn(true);
     when(view.getViewPoint()).thenReturn(new Coord3d(0,0,10));
     when(view.getBounds()).thenReturn(new BoundingBox3d(0,1,0,1,0,1));
-
+    when(view.getPixelScale()).thenReturn(new Coord2d(1,1));
+    
     when(layout.isHorizontalAxisFlip()).thenReturn(false);
     when(layout.isVerticalAxisFlip()).thenReturn(false);
     
@@ -559,6 +560,8 @@ public class TestAWTCameraMouseController {
 
     when(view.getBounds()).thenReturn(bounds);
     
+    when(view.getPixelScale()).thenReturn(new Coord2d(1,1));
+    
     when(view.is2D_XY()).thenReturn(true); // XY
     when(view.is2D_XZ()).thenReturn(false);
     when(view.is2D_YZ()).thenReturn(false);
@@ -752,6 +755,104 @@ public class TestAWTCameraMouseController {
     
     // Then coordinates is kept as is
     Assert.assertEquals(new Coord2d(400, 300), click);
+    
+  }
+  
+  @Test
+  public void whenMouseClickOutsideAxis_WithPixelScale_ThenSelectionIsCropped() {
+    
+    int HEIGHT = 600;
+    int WIDTH = 800;
+    int MARGIN = 10;
+    
+    // Given
+    View2DLayout layout = mock(View2DLayout.class);
+
+    View view = mock(View.class);
+    when(view.get2DLayout()).thenReturn(layout);
+    when(view.is2D()).thenReturn(true); // 2D mode
+    
+    IScreenCanvas canvas = mock(IScreenCanvas.class);
+    when(canvas.getRendererHeight()).thenReturn(HEIGHT);
+    
+    IChartFactory factory = mock(IChartFactory.class);
+    when(factory.newCameraThreadController(null)).thenReturn(null);
+    
+    IPainter painter = mock(IPainter.class);
+    
+    Chart chart = mock(Chart.class);
+    when(chart.getView()).thenReturn(view);
+    when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getFactory()).thenReturn(factory);
+    when(chart.getPainter()).thenReturn(painter);
+    
+
+    // Mouse controller UNDER TEST <<<<<<<<
+    AWTCameraMouseController mouse = new AWTCameraMouseController(chart);
+
+    // --------------------------------------------------------------
+    // When 2D XY View, with no axis flipped, we have the following 
+    // projection of bounds on canvas corners
+
+    BoundingBox3d bounds = new BoundingBox3d(0,1,0,1,0,1);
+
+    when(view.getBounds()).thenReturn(bounds);
+    
+    // IMPORTANT CHANGE HERE!
+    when(view.getPixelScale()).thenReturn(new Coord2d(2,2));
+    
+    when(view.is2D_XY()).thenReturn(true); // XY
+    when(view.is2D_XZ()).thenReturn(false);
+    when(view.is2D_YZ()).thenReturn(false);
+    
+    when(layout.isNoAxisFlipped()).thenReturn(true);
+    when(layout.isHorizontalAxisFlipOnly()).thenReturn(false);
+    when(layout.isVerticalAxisFlipOnly()).thenReturn(false);
+    when(layout.isBothAxisFlipped()).thenReturn(false); 
+
+
+    // bottom left corner
+    when(painter.modelToScreen(eq(bounds.getCorners().getXminYminZmin()), any(), any(), any())).thenReturn(new Coord3d(MARGIN, MARGIN));
+    // top right corner
+    when(painter.modelToScreen(eq(bounds.getCorners().getXmaxYmaxZmax()), any(), any(), any())).thenReturn(new Coord3d(WIDTH-MARGIN, HEIGHT-MARGIN));
+    
+    // -----------------------------------------
+    // When click outside axis (TOP LEFT)
+    Coord2d click = new Coord2d(1, 1);
+
+    mouse.maintainInAxis(click);
+    
+    // Then coordinate is modified to stand inside axis
+    Assert.assertEquals(new Coord2d(5, 5), click);
+
+    
+    // -----------------------------------------
+    // When click outside axis (BOTTOM RIGHT)
+    click = new Coord2d(799, 599);
+    
+    mouse.maintainInAxis(click);
+    
+    // Then coordinate is modified to stand inside axis
+    Assert.assertEquals(new Coord2d(197.5, 297.5), click);
+
+    
+    // -----------------------------------------
+    // When click outside axis (BOTTOM RIGHT)
+    click = new Coord2d(800, 1);
+    
+    mouse.maintainInAxis(click);
+
+    // Then coordinate is modified to stand inside axis
+    Assert.assertEquals(new Coord2d(98.75, 226.25), click);
+
+    // -----------------------------------------
+    // When click outside axis (TOP LEFT)
+    click = new Coord2d(1, 599);
+    
+    mouse.maintainInAxis(click);
+    
+    // Then coordinate is modified to stand inside axis
+    Assert.assertEquals(new Coord2d(1, 299.375), click);
     
   }
   

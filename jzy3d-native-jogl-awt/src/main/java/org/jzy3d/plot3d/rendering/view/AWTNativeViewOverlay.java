@@ -49,13 +49,13 @@ public class AWTNativeViewOverlay implements IViewOverlay {
     if (useFullCanvas) {
       int width = canvas.getRendererWidth();
       int height = canvas.getRendererHeight();
-      
-      /*if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
-        Coord2d pixelScale = canvas.getPixelScaleJVM();
-        width = (int)(width*pixelScale.x);
-        height = (int)(height*pixelScale.y);
-      }*/
-      
+
+      /*
+       * if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) { Coord2d
+       * pixelScale = canvas.getPixelScaleJVM(); width = (int)(width*pixelScale.x); height =
+       * (int)(height*pixelScale.y); }
+       */
+
       painter.glViewport(0, 0, width, height);
     } else {
       // Only work on canvas section that relates to camera (excludes the colorbar part)
@@ -99,16 +99,24 @@ public class AWTNativeViewOverlay implements IViewOverlay {
     }
   }
 
+  /**
+   * Enable multiple stuff for HiDPI
+   * <ul>
+   * <li>make overlay HiDPI aware so that legend and its text content remain the same size than axis
+   * text and constant over different screen.
+   * <li>avoid a stretch effect when viewport does not occupy full canvas (occurs when adding a
+   * colorbar for native charts)
+   * <li>enable antialiasing and clean interpolation
+   * </ul>
+   */
   protected void configureG2DScale(View view, ViewportConfiguration viewport, ICanvas canvas,
       Graphics2D g2d) {
-    // make overlay HiDPI aware so that legend and its text content
-    // remain the same size than axis text and constant over
-    // different screen
 
     boolean scaled = false;
 
     Coord2d pixelScale = view.getPixelScale();
-    
+
+    // Apply pixel scale
     if (pixelScale.x != 1 || pixelScale.y != 1) {
       g2d.scale(pixelScale.x, pixelScale.y);
       scaled = true;
@@ -135,8 +143,9 @@ public class AWTNativeViewOverlay implements IViewOverlay {
       g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
           RenderingHints.VALUE_INTERPOLATION_BILINEAR);
     }
-    
-    g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+    g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
   }
 
