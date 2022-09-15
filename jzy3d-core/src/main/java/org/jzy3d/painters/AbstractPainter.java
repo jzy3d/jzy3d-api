@@ -264,6 +264,9 @@ public abstract class AbstractPainter implements IPainter {
    * obtained is the distance of the point from the plane being tested.
    * <li>The point is on the plane - The result will, quite obviously, be zero.
    * </ul>
+   * 
+   * A good explanation on vector form of a plane equation : 
+   * @see https://www.youtube.com/watch?v=4GJiz6jxOac&list=PLkZjai-2JcxnYmkg6fpzz4WFumGVl7MOa&index=7
    *
    * @param eq
    * @param value
