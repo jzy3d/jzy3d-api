@@ -2,17 +2,11 @@ package org.jzy3d.tests.integration;
 
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.ChartView;
-import org.jzy3d.chart.EmulGLSkin;
 import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.primitives.Shape;
-import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.ZAxisSide;
-import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
-import org.jzy3d.plot3d.rendering.view.layout.EmulGLViewAndColorbarsLayout;
-import org.jzy3d.plot3d.rendering.view.layout.NativeViewAndColorbarsLayout;
 
 
 /**

@@ -51,7 +51,9 @@ public class AWTCameraMouseController extends AbstractCameraController
   // Behaviour
 
   protected boolean maintainInAxis = true;
-
+  
+  protected boolean scaled = false;
+  
 
   public AWTCameraMouseController() {}
 
@@ -70,6 +72,10 @@ public class AWTCameraMouseController extends AbstractCameraController
     super.register(chart);
     chart.getCanvas().addMouseController(this);
 
+    // This allows dealing with a difference
+    // between emulgl and native
+    // 
+    scaled = !chart.getCanvas().isNative();
 
     if (chart.getView() instanceof AWTView) {
       ((AWTView) chart.getView()).addRenderer2d(moveRenderer);
@@ -498,7 +504,7 @@ public class AWTCameraMouseController extends AbstractCameraController
     Coord3d cornerMin2D = modelToScreen(cornerMin3D); // bottom left
     Coord3d cornerMax2D = modelToScreen(cornerMax3D); // top right
 
-    Coord2d scale = getChart().getView().getPixelScale();
+    Coord2d scale = scaled?new Coord2d(1,1):getChart().getView().getPixelScale();
     
     cornerMin2D.x /= scale.x; 
     cornerMin2D.y /= scale.y; 
@@ -594,7 +600,7 @@ public class AWTCameraMouseController extends AbstractCameraController
 
   protected Coord3d screenToModel(float x, float y) {
     
-    Coord2d scale = getChart().getView().getPixelScale();
+    Coord2d scale = scaled?new Coord2d(1,1):getChart().getView().getPixelScale();
     
     // Flip the Y axis, cancelling the effect of hidpi to later get accurate mouse
     // position

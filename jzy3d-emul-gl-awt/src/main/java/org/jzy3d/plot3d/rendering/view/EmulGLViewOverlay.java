@@ -48,7 +48,7 @@ public class EmulGLViewOverlay implements IViewOverlay {
         Graphics2D g2d = image.createGraphics();
 
         // make overlay HiDPI aware
-        g2d.scale(view.getPixelScale().x, view.getPixelScale().y);
+        configureG2DScale(view, g2d);
 
         // Draw
         g2d.setBackground(overlayBackground);
@@ -63,6 +63,8 @@ public class EmulGLViewOverlay implements IViewOverlay {
         for (AWTRenderer2d renderer : awtView.getRenderers2d()) {
           renderer.setView(awtView);
           renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
+          
+          //System.out.println("EmulGLViewOverlay : width : " + canvas.getRendererWidth());
         }
 
         g2d.dispose();
@@ -74,6 +76,10 @@ public class EmulGLViewOverlay implements IViewOverlay {
         LOGGER.error(e, e);
       }
     }
+  }
+
+  private void configureG2DScale(View view, Graphics2D g2d) {
+    g2d.scale(view.getPixelScale().x, view.getPixelScale().y);
   }
 
 }
