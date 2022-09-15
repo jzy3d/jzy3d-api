@@ -87,7 +87,6 @@
 			<groupId>org.jzy3d</groupId>
 			<artifactId>jzy3d-tester-native</artifactId>
 			<version>${project.version}</version>
-			<scope>test</scope>
 		</dependency>
 
 		<dependency>
