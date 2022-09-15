@@ -48,13 +48,14 @@ public class ChartTester {
   protected String testCaseOutputFolder = MAVEN_TARGET_PATH;
   protected String testCaseInputFolder = MAVEN_TEST_RESOURCES_PATH;
 
-  private static final String MAVEN_TEST_RESOURCES_PATH = "src/test/resources/";
+  public static final String MAVEN_TEST_RESOURCES_PATH = "src/test/resources/";
   public static final String MAVEN_TARGET_PATH = "target/";
 
   protected Dimension colorbarDimension = new Dimension(200, 600);
 
   protected int WIDTH = 800;
   protected int HEIGHT = 600;
+  
 
   // ----------------------------------------------------------------------------------- //
   //

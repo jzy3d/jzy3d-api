@@ -16,6 +16,8 @@ jobs:
   # Main Build & Test Matrix
 
   macos-10-15-x86_64:
+    if: ${{ false }}  # disable for now
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -120,6 +122,8 @@ jobs:
   # ====================================
 
   win10-x86_64:
+    if: ${{ false }}  # disable for now
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -154,6 +158,8 @@ jobs:
   # ====================================
 
   ubuntu-20-04-x86_64:
+    if: ${{ false }}  # disable for now
+
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:

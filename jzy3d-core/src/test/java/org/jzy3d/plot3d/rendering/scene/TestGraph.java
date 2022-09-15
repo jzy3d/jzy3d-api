@@ -30,7 +30,7 @@ public class TestGraph {
     
     // ---------------------------------
     // When drawing with a clipping box
-    g.setClipBox(clipBox, false);
+    g.setClipBox(clipBox, false, false);
     
     g.draw(p);
     

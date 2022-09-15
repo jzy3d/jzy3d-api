@@ -70,7 +70,7 @@ public class View {
   protected CameraMode cameraMode;
   protected ViewPositionMode viewMode;
   protected ViewBoundMode boundsMode;
-  protected Color backgroundColor = Color./*BLACK;*/WHITE.clone();
+  protected Color backgroundColor = Color./* BLACK; */WHITE.clone();
   protected boolean axisDisplayed = true;
   protected boolean squared = true;
 
@@ -112,9 +112,9 @@ public class View {
 
 
   // view listeners
-  protected List<IViewPointChangedListener> viewPointChangedListeners;
-  protected List<IViewEventListener> viewEventListeners;
-  protected List<IViewLifecycleEventListener> viewLifecycleListeners;
+  protected List<IViewPointChangedListener> viewPointChangedListeners = new ArrayList<>();
+  protected List<IViewLifecycleEventListener> viewLifecycleListeners = new ArrayList<>();
+  protected List<IViewEventListener> viewEventListeners = new ArrayList<>();
   protected boolean wasOnTopAtLastRendering;
 
   // view states
@@ -124,8 +124,8 @@ public class View {
   protected boolean initialized = false;
 
   // constants
-  public static final float PI = (float)Math.PI;
-  public static final float PI_div2 = (float)Math.PI/2;
+  public static final float PI = (float) Math.PI;
+  public static final float PI_div2 = (float) Math.PI / 2;
   public static final float DISTANCE_DEFAULT = 2000;
 
   public static final float AZIMUTH_FACING_X_DECREASING = PI_div2;
@@ -137,7 +137,7 @@ public class View {
   public static final float ELEVATION_0 = 0;
   public static final float ELEVATION_ON_BOTTOM = -PI_div2;
 
-  
+
   /** A viewpoint allowing to have min X and Y values near viewer, growing toward horizon. */
   public static final Coord3d VIEWPOINT_X_Y_MIN_NEAR_VIEWER =
       new Coord3d(PI + (Math.PI / 3), Math.PI / 3, DISTANCE_DEFAULT);
@@ -188,6 +188,11 @@ public class View {
   }
 
   /**
+   * An empty constructor to allow creating spied mocks
+   */
+  protected View() {}
+
+  /**
    * Initialize a view object. Invoked by constructor
    * 
    * Method name is made clear to avoid confusion with {@link View#init()} which initialize open GL
@@ -222,9 +227,6 @@ public class View {
     this.quality = quality;
     this.annotations = factory.newScene(false);
 
-    this.viewEventListeners = new ArrayList<>();
-    this.viewPointChangedListeners = new ArrayList<>();
-    this.viewLifecycleListeners = new ArrayList<>();
     this.wasOnTopAtLastRendering = false;
 
     this.scene.getGraph().getStrategy().setView(this);
@@ -606,7 +608,7 @@ public class View {
   }
 
   protected BoundingBox3d getSceneGraphBounds(Scene scene) {
-    return squarifyGetSceneGraphBounds(scene);
+    return scene.getGraph().getBounds();
   }
 
   /**
@@ -623,9 +625,26 @@ public class View {
    * Set a manual bounding box and switch the bounding mode to {ViewBoundMode.MANUAL}, meaning that
    * any call to {@link updateBounds()} will update view bounds to the current bounds.
    */
-  public void setBoundManual(BoundingBox3d bounds) {
+  public void setBoundsManual(BoundingBox3d bounds, boolean updateView) {
     boundsMode = ViewBoundMode.MANUAL;
     lookToBox(bounds);
+
+    if (updateView)
+      shoot();
+  }
+
+  /**
+   * Set bounds and immediately refresh the view
+   * 
+   * @see {@link #setBoundsManual(BoundingBox3d, boolean)}
+   */
+  public void setBoundsManual(BoundingBox3d bounds) {
+    setBoundsManual(bounds, true);
+  }
+
+  @Deprecated
+  public void setBoundManual(BoundingBox3d bounds) {
+    setBoundsManual(bounds);
   }
 
   /* GL */
@@ -655,7 +674,7 @@ public class View {
 
   protected void initBounds() {
     if (viewBounds == null) {
-      viewBounds = squarifyGetSceneGraphBounds(scene);
+      viewBounds = scene.getGraph().getBounds();
     }
     lookToBox(viewBounds);
   }
@@ -682,13 +701,13 @@ public class View {
 
   /** Clear the color and depth buffer. */
   public void clear() {
-    //System.err.println("View.Clear : " + backgroundColor);
-    //System.err.println("View.clear : " + Color.WHITE + " for white");
-    
+    // System.err.println("View.Clear : " + backgroundColor);
+    // System.err.println("View.clear : " + Color.WHITE + " for white");
+
     painter.clearColor(backgroundColor);
     painter.glClearDepth(1);
-    
-    
+
+
 
     // Console.println("View.clear with color", backgroundColor);
 
@@ -767,17 +786,27 @@ public class View {
       first = false;
     }
 
-    BoundingBox3d scaling = computeScaledViewBounds();
-    updateCamera(viewport, scaling);
+    // Configure camera
+    updateCamera(viewport, computeScaledViewBounds());
 
+    // Update color shading model in case of
     painter.glShadeModel(quality.getColorModel());
 
     if (is3D()) {
+      // Rendering axis before ensure it appears as background
+      // in specific cases where depth buffer is desactivated
       renderAxeBox();
       renderSceneGraph();
     } else {
+      // Rendering axis after make it appear for sure
+      // which allow making internal axis line visible
+      // (stay on top of content)
       renderSceneGraph();
+
       renderAxeBox();
+
+
+
     }
     renderAnnotations(cam);
   }
@@ -816,7 +845,7 @@ public class View {
     // Get the view bounds
     BoundingBox3d bounds;
     if (boundmode == ViewBoundMode.AUTO_FIT) {
-      bounds = squarifyGetSceneGraphBounds(scene);
+      bounds = scene.getGraph().getBounds();
     } else if (boundmode == ViewBoundMode.MANUAL) {
       /*
        * if(scene.getGraph().getClipBox()!=null) { bounds = squarifyGetSceneGraphBounds(scene); }
@@ -865,10 +894,6 @@ public class View {
 
   /* LAYOUT */
 
-  protected BoundingBox3d squarifyGetSceneGraphBounds(Scene scene) {
-    return scene.getGraph().getBounds();
-  }
-
   protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds) {
     if (spaceTransformer == null) {
       return bounds.getRange();
@@ -916,8 +941,8 @@ public class View {
   /* CAMERA PROCESSING */
 
   public void updateCamera(ViewportConfiguration viewport, BoundingBox3d boundsScaled) {
-    updateCamera(viewport, boundsScaled, viewMode, viewpoint, cam, cameraMode, factorViewPointDistance,
-        center, scaling);
+    updateCamera(viewport, boundsScaled, viewMode, viewpoint, cam, cameraMode,
+        factorViewPointDistance, center, scaling);
   }
 
   public void updateCamera(ViewportConfiguration viewport, BoundingBox3d bounds,
@@ -946,7 +971,7 @@ public class View {
 
     viewpoint.z = computeViewpointDistance(bounds, factorViewPointDistance);
 
-    
+
     Coord3d cameraTarget = computeCameraTarget(center, scaling);
     Coord3d cameraUp = computeCameraUp(viewpoint);
     Coord3d cameraEye = computeCameraEye(cameraTarget, viewmode, viewpoint);
@@ -957,15 +982,14 @@ public class View {
   }
 
 
-  public float computeViewpointDistance(BoundingBox3d bounds, 
-      float factorViewPointDistance) {
+  public float computeViewpointDistance(BoundingBox3d bounds, float factorViewPointDistance) {
     float v;
     if (spaceTransformer == null) {
       v = (float) bounds.getRadius();
     } else {
       v = (float) spaceTransformer.compute(bounds).getRadius();
     }
-    
+
     return v * factorViewPointDistance;
   }
 
@@ -999,19 +1023,17 @@ public class View {
     } else
       throw new RuntimeException("Unsupported ViewMode: " + viewmode);
   }
-  
-  /*protected Coord3d computeCameraEyeXZ_DEBUG(Coord3d viewpoint, Coord3d target) {
-    Coord3d eye = viewpoint;
-    //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
-    eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
-    eye.y = ELEVATION_0 + 0.0001f; // on side
-    eye = eye.cartesian().add(target);
-    return eye;
-  }*/
+
+  /*
+   * protected Coord3d computeCameraEyeXZ_DEBUG(Coord3d viewpoint, Coord3d target) { Coord3d eye =
+   * viewpoint; //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease eye.x =
+   * AZIMUTH_FACING_X_INCREASING; // facing X so that value increase eye.y = ELEVATION_0 + 0.0001f;
+   * // on side eye = eye.cartesian().add(target); return eye; }
+   */
 
 
   protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
-    //System.out.println("View : " + viewpoint.z);
+    // System.out.println("View : " + viewpoint.z);
 
     return viewpoint.cartesian().add(target);
   }
@@ -1031,149 +1053,148 @@ public class View {
 
   protected Coord3d computeCameraEyeXY(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    
+
     // No axis flip
-    if(view2DLayout.isNoAxisFlipped()) {
-      eye.x = AZIMUTH_FACING_X_INCREASING; 
+    if (view2DLayout.isNoAxisFlipped()) {
+      eye.x = AZIMUTH_FACING_X_INCREASING;
       eye.y = ELEVATION_ON_TOP;
     }
     // Flip horzontal only
-    else if(view2DLayout.isHorizontalAxisFlipOnly()){
-      eye.x = AZIMUTH_FACING_X_DECREASING; 
-      eye.y = ELEVATION_ON_BOTTOM; 
+    else if (view2DLayout.isHorizontalAxisFlipOnly()) {
+      eye.x = AZIMUTH_FACING_X_DECREASING;
+      eye.y = ELEVATION_ON_BOTTOM;
     }
     // Flip vertical only
     // see computeCameraUp() reverse direction for vertical flip
-    else if(view2DLayout.isVerticalAxisFlipOnly()){
-      eye.x = AZIMUTH_FACING_X_INCREASING; 
+    else if (view2DLayout.isVerticalAxisFlipOnly()) {
+      eye.x = AZIMUTH_FACING_X_INCREASING;
       eye.y = ELEVATION_ON_BOTTOM;
     }
-    // Flip both 
+    // Flip both
     // see computeCameraUp() reverse direction for vertical flip
-    else if(view2DLayout.isBothAxisFlipped()){
-      eye.x = AZIMUTH_FACING_X_INCREASING; 
-      eye.y = ELEVATION_ON_TOP; 
+    else if (view2DLayout.isBothAxisFlipped()) {
+      eye.x = AZIMUTH_FACING_X_INCREASING;
+      eye.y = ELEVATION_ON_TOP;
     }
-    
+
     eye = eye.cartesian().add(target);
     return eye;
   }
 
   protected Coord3d computeCameraEyeYZ(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    
+
     // No axis flip
-    if(view2DLayout.isNoAxisFlipped()) {
+    if (view2DLayout.isNoAxisFlipped()) {
       eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value increase
       eye.y = ELEVATION_0; // on side
     }
     // Flip horizontal only
-    else if(view2DLayout.isHorizontalAxisFlipOnly()){
+    else if (view2DLayout.isHorizontalAxisFlipOnly()) {
       eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
       eye.y = ELEVATION_0; // on side
     }
     // Flip vertical only
     // see computeCameraUp() reverse direction for vertical flip
-    else if(view2DLayout.isVerticalAxisFlipOnly()){
+    else if (view2DLayout.isVerticalAxisFlipOnly()) {
       eye.x = AZIMUTH_FACING_Y_DECREASING; // facing Y so that value decrease
       eye.y = ELEVATION_0; // on side
     }
-    // Flip both 
+    // Flip both
     // see computeCameraUp() reverse direction for vertical flip
-    else if(view2DLayout.isBothAxisFlipped()){
+    else if (view2DLayout.isBothAxisFlipped()) {
       eye.x = AZIMUTH_FACING_Y_INCREASING; // facing Y so that value increase
       eye.y = ELEVATION_0; // on side
     }
-    
+
     // see https://github.com/jzy3d/jzy3d-api/issues/286
-    if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
+    if (!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
       eye.x += JGL_CORRECT_YZ;
       eye.y += JGL_CORRECT_YZ;
     }
-    
+
     eye = eye.cartesian().add(target);
     return eye;
   }
-  
+
   public static float JGL_CORRECT_YZ = 0.01f;
 
   protected Coord3d computeCameraEyeXZ(Coord3d viewpoint, Coord3d target) {
     Coord3d eye = viewpoint;
-    
-    
+
+
     // No axis flip
-    if(view2DLayout.isNoAxisFlipped()) {
+    if (view2DLayout.isNoAxisFlipped()) {
       eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
       eye.y = ELEVATION_0; // on side
     }
     // Flip horizontal only
-    else if(view2DLayout.isHorizontalAxisFlipOnly()){
+    else if (view2DLayout.isHorizontalAxisFlipOnly()) {
       eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
       eye.y = ELEVATION_0; // on side
     }
     // Flip vertical only
     // see computeCameraUp() reverse direction for vertical flip
-    else if(view2DLayout.isVerticalAxisFlipOnly()){
+    else if (view2DLayout.isVerticalAxisFlipOnly()) {
       eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease
       eye.y = ELEVATION_0; // on side
     }
-    // Flip both 
+    // Flip both
     // see computeCameraUp() reverse direction for vertical flip
-    else if(view2DLayout.isBothAxisFlipped()){
+    else if (view2DLayout.isBothAxisFlipped()) {
       eye.x = AZIMUTH_FACING_X_INCREASING; // facing X so that value increase
       eye.y = ELEVATION_0; // on side
     }
-    
+
     // see https://github.com/jzy3d/jzy3d-api/issues/286
-    if(!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
+    if (!canvas.isNative() && JGL_INVERSE_MATRIX_WORKAROUND) {
       eye.y += JGL_CORRECT_XZ;
     }
-    
+
     eye = eye.cartesian().add(target);
     return eye;
   }
-  
+
   public static float JGL_CORRECT_XZ = 0.0001f;
 
   protected static boolean JGL_INVERSE_MATRIX_WORKAROUND = true;
 
-  /** 
+  /**
    * Compute the direction of the top of the camera relative to its center.
    * 
    * Coord3d(0, 0, 1) means a vector parallel to Z axis, so camera is looking horizontally
    * Coord3d(0, 1, 0) means a vector parallel to Y axis, so camera is looking vertically
    */
   protected Coord3d computeCameraUp(Coord3d viewpoint) {
-    
+
     // 2D cases
-    if (is2D_XY()) { 
-      
+    if (is2D_XY()) {
+
       // watching up side down
-      if(view2DLayout.isVerticalAxisFlip()){
+      if (view2DLayout.isVerticalAxisFlip()) {
         return new Coord3d(0, -1, 0); // use y axis as up vector
       }
       // watching normally
       else {
         return new Coord3d(0, 1, 0); // use y axis as up vector
       }
-    } 
-    else if(is2D_XZ() || is2D_YZ()) {
+    } else if (is2D_XZ() || is2D_YZ()) {
 
       // watching up side down
-      if(view2DLayout.isVerticalAxisFlip()){
-        return new Coord3d(0, 0, -1); // use z axis as up vector  
+      if (view2DLayout.isVerticalAxisFlip()) {
+        return new Coord3d(0, 0, -1); // use z axis as up vector
       }
       // watching normally
       else {
-        return new Coord3d(0, 0, 1); // use z axis as up vector  
+        return new Coord3d(0, 0, 1); // use z axis as up vector
       }
     }
-    
+
     // --------
     // 3D case
-    else  { 
+    else {
       // handle "on top" or "on bottom" 3D view
-      if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) { 
+      if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) {
         Coord2d direction = new Coord2d(viewpoint.x, viewpoint.z).cartesian();
         if (viewpoint.y > 0) {
           return new Coord3d(-direction.x, -direction.y, 0);
@@ -1184,11 +1205,11 @@ public class View {
       // handle standard 3D view
       else {
         // use z axis as up vector, if not on top or bottom of the axis
-        return new Coord3d(0, 0, 1); 
+        return new Coord3d(0, 0, 1);
       }
     }
   }
-  
+
   protected void triggerCameraUpEvents(Coord3d viewpoint) {
     if (Math.abs(viewpoint.y) == ELEVATION_ON_TOP) { // handle "on-top" events
       if (!wasOnTopAtLastRendering) {
@@ -1256,7 +1277,7 @@ public class View {
 
     // -----------------------------------------------
     // Hack Windows HiDPI issue on AWT
-    
+
     Coord2d c = AbstractViewportManager.apply_WindowsHiDPI_Workaround(getPainter(), viewport.width,
         viewport.height);
 
@@ -1265,8 +1286,8 @@ public class View {
     viewport.height = (int) c.y;
 
     // -----------------------------------------------
-    // Computes the 2D layout 
-    
+    // Computes the 2D layout
+
     view2DProcessing.apply(viewport, bounds);
 
     // -----------------------------------------------
@@ -1281,37 +1302,40 @@ public class View {
     float drange = 0; // depth range of 2D chart
     float offset = 1; // expand the clipping plane to ensure we do not cut the axis
 
-    if(is2D_XY()) {
+    if (is2D_XY()) {
       // Z range for processing camera clipping planes
       drange = bounds.getZRange().getRange();
       // X/Y range for processing rendering square
       hrange = bounds.getXRange().getRange();
       vrange = bounds.getYRange().getRange();
-    }
-    else if(is2D_XZ()) {
+    } else if (is2D_XZ()) {
       // Y range for processing camera clipping planes
       drange = bounds.getYRange().getRange();
       // X/Z range for processing rendering square
       hrange = bounds.getXRange().getRange();
       vrange = bounds.getZRange().getRange();
-    } else if(is2D_YZ()) {
+    } else if (is2D_YZ()) {
       // X range for processing camera clipping planes
       drange = bounds.getXRange().getRange();
       // Y/Z range for processing rendering square
       hrange = bounds.getYRange().getRange();
       vrange = bounds.getZRange().getRange();
     }
-    
-    near = dist - drange/2 - offset;
-    far = dist + drange/2 + offset;
 
+    near = dist - drange / 2 - offset;
+    far = dist + drange / 2 + offset;
+
+    // We here compute the width and height of the camera field of
+    // view, so it does not need to fit the actual bounds of the chart
+    // it however needs to be shifted a bit on each side to keep a
+    // white space for margins
     float hmin = -hrange / 2 - view2DProcessing.marginLeftModel;
     float hmax = +hrange / 2 + view2DProcessing.marginRightModel;
     float vmin = -vrange / 2 - view2DProcessing.marginBottomModel;
     float vmax = +vrange / 2 + view2DProcessing.marginTopModel;
 
     BoundingBox2d xySquare = new BoundingBox2d(hmin, hmax, vmin, vmax);
-    
+
     // -----------------------------------------------
     // Configure camera rendering volume
 
@@ -1329,6 +1353,7 @@ public class View {
       boolean axeBoxDisplayed) {
     if (axeBoxDisplayed) {
 
+      // Ensure we leave projection matrix mode and work on the model view
       painter.glMatrixMode_ModelView();
 
       scene.getLightSet().disable(painter);
@@ -1361,6 +1386,11 @@ public class View {
   }
 
   public void renderSceneGraph(boolean light, Camera camera, Scene scene, Coord3d scaling) {
+
+    // Ensure we leave projection matrix mode and work on the model view
+    painter.glMatrixMode_ModelView();
+
+
     if (light) {
       scene.getLightSet().apply(painter, scaling);
     }
@@ -1557,7 +1587,7 @@ public class View {
   public void setViewPoint(Coord3d polar) {
     setViewPoint(polar, true);
   }
-  
+
   /**
    * Set the viewpoint using polar coordinates relative to the target (i.e. the center of the
    * scene). Only X and Y dimensions are required, as the distance to center will be computed
@@ -1578,7 +1608,7 @@ public class View {
     setViewPoint(new Coord3d(azimuth, elevation, 0), true);
   }
 
-  
+
   /**
    * Get the viewpoint. The Z dimension is the one defined by {@link updateCamera()}, which depends
    * on the view scaling.
@@ -1694,7 +1724,7 @@ public class View {
   public boolean isMaintainAllObjectsInView() {
     return maintainAllObjectsInView;
   }
-  
+
   public float getFactorViewPointDistance() {
     return factorViewPointDistance;
   }

@@ -193,6 +193,9 @@ public interface IPainter {
   /** Disable all clipping planes */
   public void clipOff();
 
+  /** Indicates status of clipping planes (on/off) */
+  public boolean[] clipStatus();
+
   /**
    * A convenient shortcut to glColor4f which overrides the color's alpha channel
    */
@@ -222,6 +225,9 @@ public interface IPainter {
   // public void lights(boolean status);
   // public void polygonOffset(boolean status);
 
+  // ----------------------------
+  // OpenGL matrices 
+  
   public int[] getViewPortAsInt();
 
   public double[] getProjectionAsDouble();
@@ -232,9 +238,16 @@ public interface IPainter {
 
   public float[] getModelViewAsFloat();
 
+  // ----------------------------
+  // Utilities to project from 2D to 3D or 3D to 2D
+  
   public Coord3d screenToModel(Coord3d screen);
+  
+  public Coord3d screenToModel(Coord3d screen, int[] viewport, float[] modelView, float[] projection);
 
   public Coord3d modelToScreen(Coord3d point);
+  
+  public Coord3d modelToScreen(Coord3d point, int[] viewport, float[] modelView, float[] projection);
 
   public Coord3d[] modelToScreen(Coord3d[] points);
 
@@ -242,7 +255,7 @@ public interface IPainter {
 
   public List<Coord3d> modelToScreen(List<Coord3d> points);
 
-  public ArrayList<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons);
+  public List<ArrayList<Coord3d>> modelToScreen(ArrayList<ArrayList<Coord3d>> polygons);
 
   public PolygonArray modelToScreen(PolygonArray polygon);
 
@@ -397,13 +410,23 @@ public interface IPainter {
 
   public int clipPlaneId(int id);
   
+  /** Project 2D (screen) coordinates in the 3D world */
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
       int objPos_offset);
 
+  /** Project 3D (world) coordinates in the 2D screen */
   public boolean gluProject(float objX, float objY, float objZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] winPos,
       int winPos_offset);
+  
+  /** Project 2D (screen) coordinates in the 3D world */
+  public boolean gluUnProject(float winX, float winY, float winZ, float[] model,
+      float[] proj, int[] view, float[] objPos);
+
+  /** Project 3D (world) coordinates in the 2D screen */
+  public boolean gluProject(float objX, float objY, float objZ, float[] model,
+      float[] proj, int[] view, float[] winPos);
 
   // GLU INTERFACE
 

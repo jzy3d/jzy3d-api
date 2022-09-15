@@ -28,9 +28,7 @@ public class AWTCameraKeyController extends AbstractCameraController
 
   @Override
   public void dispose() {
-    for (Chart c : targets) {
-      c.getCanvas().removeKeyController(this);
-    }
+    getChart().getCanvas().removeKeyController(this);
 
     super.dispose(); // i.e. target=null
   }

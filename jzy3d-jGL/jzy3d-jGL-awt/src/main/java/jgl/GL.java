@@ -1323,6 +1323,14 @@ public abstract class GL<ImageType, FontType> {
       case GL_MAX_CLIP_PLANES:
         params[0] = Context.MAX_CLIP_PLANES;
         break;
+      case GL_CLIP_PLANE0:
+      case GL_CLIP_PLANE1:
+      case GL_CLIP_PLANE2:
+      case GL_CLIP_PLANE3:
+      case GL_CLIP_PLANE4:
+      case GL_CLIP_PLANE5:
+        params[0] = Context.Transform.ClipEnable[pname - GL_CLIP_PLANE0]?1:0;
+        break;
       case GL_MAX_MODELVIEW_STACK_DEPTH:
       case GL_MAX_PROJECTION_STACK_DEPTH:
       case GL_MAX_TEXTURE_STACK_DEPTH:

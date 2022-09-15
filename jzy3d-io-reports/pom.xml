@@ -46,6 +46,7 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-tester-native</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
