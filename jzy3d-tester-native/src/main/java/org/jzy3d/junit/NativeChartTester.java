@@ -23,6 +23,9 @@ import com.jogamp.opengl.util.texture.TextureData;
 import com.jogamp.opengl.util.texture.TextureIO;
 
 public class NativeChartTester extends ChartTester {
+  public NativeChartTester() {
+    setTestCaseInputFolder(MAVEN_TEST_RESOURCES_PATH + new NativePlatform().getLabel() + "/");
+  }
 
   protected BufferedImage getBufferedImage(Chart chart) throws IOException {
     if (classicScreenshotGen) {
