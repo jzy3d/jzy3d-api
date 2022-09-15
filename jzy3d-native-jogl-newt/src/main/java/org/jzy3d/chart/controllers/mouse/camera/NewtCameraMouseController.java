@@ -31,9 +31,7 @@ public class NewtCameraMouseController extends AbstractCameraController implemen
 
   @Override
   public void dispose() {
-    for (Chart c : targets) {
-      c.getCanvas().removeMouseController(this);
-    }
+    getChart().getCanvas().removeMouseController(this);
     super.dispose();
   }
 
