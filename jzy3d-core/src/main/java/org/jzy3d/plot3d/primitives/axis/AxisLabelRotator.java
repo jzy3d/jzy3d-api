@@ -31,7 +31,7 @@ public class AxisLabelRotator {
    * @return
    */
   public float computeSegmentRotation2D(IPainter painter, Coord3d[] axisSegment) {
-    Coord3d[] axs = painter.getCamera().modelToScreen(painter, axisSegment);
+    Coord3d[] axs = painter.modelToScreen(axisSegment);
     return computeSegmentRotation(axs[0], axs[1]);
   }
 

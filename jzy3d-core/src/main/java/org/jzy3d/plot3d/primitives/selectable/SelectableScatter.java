@@ -50,7 +50,7 @@ public class SelectableScatter extends Scatter implements ISingleColorable, Sele
 
   @Override
   public void project(IPainter painter, Camera cam) {
-    projection = cam.modelToScreen(painter, getData());
+    projection = painter.modelToScreen(getData());
   }
 
   public Coord3d[] getProjection() {

@@ -40,16 +40,13 @@ public class NewtMousePickingController extends AbstractCameraController
   @Override
   public void register(Chart chart) {
     super.register(chart);
-    this.chart = chart;
     this.prevMouse = Coord2d.ORIGIN;
     chart.getCanvas().addMouseController(this);
   }
 
   @Override
   public void dispose() {
-    for (Chart c : targets) {
-      c.getCanvas().removeMouseController(this);
-    }
+    getChart().getCanvas().removeMouseController(this);
 
     if (threadController != null)
       threadController.stop();
@@ -105,7 +102,7 @@ public class NewtMousePickingController extends AbstractCameraController
     float factor = NewtMouseUtilities.convertWheelRotation(e, 1.0f, 10.0f);
     zoomX(factor);
     zoomY(factor);
-    chart.getView().shoot();
+    getChart().getView().shoot();
   }
 
   @Override
@@ -128,19 +125,19 @@ public class NewtMousePickingController extends AbstractCameraController
   }
 
   protected void pick(int x, int y) {
-    int yflip = -y + targets.get(0).getCanvas().getRendererHeight();
+    int yflip = -y + getChart().getCanvas().getRendererHeight();
     prevMouse.x = x;
     prevMouse.y = y;// yflip;
-    View view = targets.get(0).getView();
+    View view = getChart().getView();
     prevMouse3d = view.projectMouse(x, yflip);
 
-    GL gl = ((NativeDesktopPainter) chart.getView().getPainter()).getCurrentGL(chart.getCanvas());
+    //GL gl = ((NativeDesktopPainter) getChart().getPainter()).getCurrentGL(getChart().getCanvas());
 
     Graph graph = getChart().getScene().getGraph();
 
     // will trigger vertex selection event to those subscribing to
     // PickingSupport.
-    picking.pickObjects(chart.getView().getPainter(), view, graph, new IntegerCoord2d(x, yflip));
+    picking.pickObjects(getChart().getPainter(), view, graph, new IntegerCoord2d(x, yflip));
   }
 
   public boolean handleSlaveThread(MouseEvent e) {
@@ -163,8 +160,6 @@ public class NewtMousePickingController extends AbstractCameraController
   protected Coord3d prevMouse3d;
   protected PickingSupport picking;
   protected GLU glu = new GLU();
-
-  protected Chart chart;
 
   protected Coord2d prevMouse;
   protected AbstractCameraThreadController threadController;

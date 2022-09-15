@@ -35,7 +35,8 @@ public class AWTDualModeMouseSelector {
     // Create and add controllers
     threadCamera = new CameraThreadController(chart);
     mouseCamera = new AWTCameraMouseController(chart);
-    mouseCamera.addSlaveThreadController(threadCamera);
+    mouseCamera.addThread(threadCamera);
+    
     chart.getCanvas().addKeyController(buildToggleKeyListener(chart));
     releaseCam(); // default mode is selection
 
