@@ -983,7 +983,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
   
   @Override
   public void glClipPlane(int plane, double[] equation) {
-    gl.glClipPlane(GL.GL_CLIP_PLANE0, equation); 
+    gl.glClipPlane(plane, equation); 
   }
   
   @Override
@@ -1013,10 +1013,10 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
       case 5:
         return GL.GL_CLIP_PLANE5;
       default:
-        throw new IllegalArgumentException("Expect a plane ID in [0;5]");
+        throw new IllegalArgumentException("Expect a plane ID in [0;5], received " + id);
     }
   }
-
+  
   
   @Override
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,

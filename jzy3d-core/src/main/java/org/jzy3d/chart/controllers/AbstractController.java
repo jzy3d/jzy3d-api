@@ -6,11 +6,11 @@ import java.util.Vector;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.events.ControllerEvent;
 import org.jzy3d.events.ControllerEventListener;
+import org.jzy3d.maths.Lists;
 
 public class AbstractController {
-  protected List<Chart> targets;
-  protected Vector<ControllerEventListener> controllerListeners =
-      new Vector<ControllerEventListener>(1);
+  protected Chart target;
+  protected List<ControllerEventListener> controllerListeners = new ArrayList<ControllerEventListener>(1);
 
   public AbstractController() {}
 
@@ -19,29 +19,24 @@ public class AbstractController {
   }
 
   public void register(Chart chart) {
-    if (targets == null)
-      targets = new ArrayList<Chart>(1);
-    targets.add(chart);
+    target = chart;
   }
 
   public void unregister(Chart chart) {
-    if (targets != null) {
-      targets.remove(chart);
-    }
+    target = null;
   }
 
   public Chart getChart() {
-	if(targets.size()!=0)
-	  return targets.get(0);
-	return null;
+	return target;
   }
 
+  @Deprecated
   public List<Chart> getCharts() {
-    return targets;
+    return Lists.of(target);
   }
 
   public void dispose() {
-    targets.clear();
+    unregister(target);
     controllerListeners.clear();
   }
 

@@ -1,6 +1,9 @@
 package org.jzy3d.os;
 
 public class OperatingSystem {
+  public static OperatingSystem MACOS = new OperatingSystem("macos"); 
+  public static OperatingSystem WINDOWS = new OperatingSystem("windows"); 
+  public static OperatingSystem UNIX = new OperatingSystem("unix"); 
 
   protected String name;
   protected String version;

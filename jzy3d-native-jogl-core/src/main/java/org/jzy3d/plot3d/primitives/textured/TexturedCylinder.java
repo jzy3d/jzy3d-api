@@ -99,7 +99,7 @@ public class TexturedCylinder extends Composite implements Selectable, ITransluc
 
   @Override
   public void project(IPainter painter, Camera cam) {
-    lastProjection = cam.modelToScreen(painter, getBounds().getVertices());
+    lastProjection = painter.modelToScreen(getBounds().getVertices());
     lastHull = ConvexHull.hull(lastProjection);
   }
 

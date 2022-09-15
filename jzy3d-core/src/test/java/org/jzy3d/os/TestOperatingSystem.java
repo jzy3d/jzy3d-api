@@ -15,6 +15,20 @@ public class TestOperatingSystem {
 
     Assert.assertTrue(new OperatingSystem("mac os x").isMac());
     Assert.assertFalse(new OperatingSystem("mac os x").isWindows());
-
+    
+    Assert.assertTrue(OperatingSystem.WINDOWS.isWindows());
+  }
+  
+  @Test
+  public void macos() {
+    Assert.assertTrue(new OperatingSystem("mac os x").isMac());
+    Assert.assertFalse(new OperatingSystem("mac os x").isWindows());
+    
+    Assert.assertTrue(OperatingSystem.MACOS.isMac());
+  }
+  
+  @Test
+  public void unix() {
+    Assert.assertTrue(OperatingSystem.UNIX.isUnix());
   }
 }

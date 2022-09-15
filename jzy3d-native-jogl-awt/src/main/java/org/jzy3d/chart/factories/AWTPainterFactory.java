@@ -51,7 +51,6 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
 
   @Override
   public ViewAndColorbarsLayout newViewportLayout() {
-    //return new NativeViewAndColorbarsLayout();
     ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
     return layout;
   }

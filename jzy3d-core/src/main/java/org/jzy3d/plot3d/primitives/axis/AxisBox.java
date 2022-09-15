@@ -157,7 +157,7 @@ public class AxisBox implements IAxis {
     painter.glScalef(scale.x, scale.y, scale.z);
   }
 
-  public void cullingDisable(IPainter painter) {
+  /*public void cullingDisable(IPainter painter) {
     painter.glDisable_CullFace();
   }
 
@@ -165,7 +165,7 @@ public class AxisBox implements IAxis {
     painter.glEnable_CullFace();
     painter.glFrontFace_ClockWise();
     painter.glCullFace_Front();
-  }
+  }*/
 
   /* */
 
@@ -403,7 +403,6 @@ public class AxisBox implements IAxis {
         }
 
         textBounds = ticks.drawTicks(painter, edgeId, AXE_Y, layout.getYTickColor(), h, v);
-
       }
 
       // 3D case
