@@ -112,10 +112,8 @@ public class AWTCameraMouseController extends AbstractCameraController
 
   @Override
   public void dispose() {
-    for (Chart chart : targets) {
-      unregister(chart);
+    unregister(target);
       // chart.getCanvas().removeMouseController(this);
-    }
     super.dispose();
   }
 

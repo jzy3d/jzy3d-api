@@ -25,9 +25,7 @@ public class FallbackPainterFactory extends AWTPainterFactory {
     return new AWTCameraMouseController(chart) {
       @Override
       public void register(Chart chart) {
-        if (targets == null)
-          targets = new ArrayList<Chart>(1);
-        targets.add(chart);
+        super.register(chart);
 
         // TODO : CREATE FallbackCanvas wrapping/extending
         // ImagePanel, rather than injecting in FallbackChart
