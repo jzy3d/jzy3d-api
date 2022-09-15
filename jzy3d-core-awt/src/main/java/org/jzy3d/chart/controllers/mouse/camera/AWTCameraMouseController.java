@@ -25,6 +25,7 @@ import org.jzy3d.plot3d.primitives.axis.Axis;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.AbstractAWTRenderer2d;
+import org.jzy3d.plot3d.rendering.view.AbstractViewportManager;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
@@ -72,16 +73,32 @@ public class AWTCameraMouseController extends AbstractCameraController
     super.register(chart);
     chart.getCanvas().addMouseController(this);
 
-    // This allows dealing with a difference
-    // between emulgl and native
-    // 
-    scaled = !chart.getCanvas().isNative();
-
+    configureScaler(chart);
+    
+    //if(AbstractViewportManager.apply_WindowsHiDPI_Workaround(null, prevMouse))
+    
     if (chart.getView() instanceof AWTView) {
       ((AWTView) chart.getView()).addRenderer2d(moveRenderer);
       ((AWTView) chart.getView()).addRenderer2d(dragRenderer);
     }
 
+  }
+
+  /** This deal with HiDPI, EMulGL and Windows+AWT */
+  protected void configureScaler(Chart chart) {
+    // This allows dealing with a difference
+    // between emulgl and native
+    // TODO : https://github.com/jzy3d/jzy3d-api/issues/304
+    scaled = !chart.getCanvas().isNative();
+
+    // This allows dealing with a difference
+    // between Win+AWT and the other cases when 
+    // using HiDPI monitors
+    // https://github.com/jzy3d/jzy3d-api/issues/101
+    IPainter painter = chart.getPainter();
+    if(painter.getOS().isWindows() && painter.getWindowingToolkit().isAWT()) {
+      scaled = true;
+    }
   }
 
   public void unregister(Chart chart) {
