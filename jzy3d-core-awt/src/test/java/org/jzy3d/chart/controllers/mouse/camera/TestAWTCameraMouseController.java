@@ -18,6 +18,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Scale;
 import org.jzy3d.mocks.jzy3d.MouseMock;
+import org.jzy3d.os.OperatingSystem;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.Axis;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
@@ -47,9 +48,13 @@ public class TestAWTCameraMouseController {
     IChartFactory factory = mock(IChartFactory.class);
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
+    IPainter painter = mock(IPainter.class);
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+    
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getPainter()).thenReturn(painter);
     when(chart.getFactory()).thenReturn(factory);
     
     // Given a view behavior 
@@ -82,7 +87,8 @@ public class TestAWTCameraMouseController {
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
     IPainter painter = mock(IPainter.class);
-    
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getCanvas()).thenReturn(canvas);
@@ -124,9 +130,13 @@ public class TestAWTCameraMouseController {
     IChartFactory factory = mock(IChartFactory.class);
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
+    IPainter painter = mock(IPainter.class);
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getCanvas()).thenReturn(canvas);
+    when(chart.getPainter()).thenReturn(painter);
     when(chart.getFactory()).thenReturn(factory);
 
     // Given a view behavior 
@@ -154,11 +164,15 @@ public class TestAWTCameraMouseController {
     IChartFactory factory = mock(IChartFactory.class);
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
+    IPainter painter = mock(IPainter.class);
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getCanvas()).thenReturn(canvas);
     when(chart.getFactory()).thenReturn(factory);
-
+    when(chart.getPainter()).thenReturn(painter);
+    
     // Given a view behavior 
     when(view.is3D()).thenReturn(true); // 3D mode
     
@@ -213,7 +227,8 @@ public class TestAWTCameraMouseController {
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
     IPainter painter = mock(IPainter.class);
-    
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getScene()).thenReturn(scene);
@@ -352,10 +367,14 @@ public class TestAWTCameraMouseController {
     IChartFactory factory = mock(IChartFactory.class);
     when(factory.newCameraThreadController(null)).thenReturn(null);
 
+    IPainter painter = mock(IPainter.class);
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getAxisLayout()).thenReturn(layout);
     when(chart.getCanvas()).thenReturn(canvas);
     when(chart.getFactory()).thenReturn(factory);
+    when(chart.getPainter()).thenReturn(painter);
     
     // -----------------------------------
     // When no specific config for axis
@@ -410,10 +429,14 @@ public class TestAWTCameraMouseController {
     IChartFactory factory = mock(IChartFactory.class);
     when(factory.newCameraThreadController(null)).thenReturn(null);
 
+    IPainter painter = mock(IPainter.class);
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getCanvas()).thenReturn(canvas);
     when(chart.getFactory()).thenReturn(factory);
-
+    when(chart.getPainter()).thenReturn(painter);
+    
     // Argument to mouse later
     BoundingBox3d existingBounds;
 
@@ -541,7 +564,8 @@ public class TestAWTCameraMouseController {
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
     IPainter painter = mock(IPainter.class);
-    
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getCanvas()).thenReturn(canvas);
@@ -780,7 +804,8 @@ public class TestAWTCameraMouseController {
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
     IPainter painter = mock(IPainter.class);
-    
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getCanvas()).thenReturn(canvas);
@@ -873,7 +898,8 @@ public class TestAWTCameraMouseController {
     when(factory.newCameraThreadController(null)).thenReturn(null);
     
     IPainter painter = mock(IPainter.class);
-    
+    when(painter.getOS()).thenReturn(OperatingSystem.MACOS);
+
     Chart chart = mock(Chart.class);
     when(chart.getView()).thenReturn(view);
     when(chart.getScene()).thenReturn(scene);
