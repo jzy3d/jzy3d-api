@@ -774,6 +774,7 @@ public class TestAWTCameraMouseController {
     
     IScreenCanvas canvas = mock(IScreenCanvas.class);
     when(canvas.getRendererHeight()).thenReturn(HEIGHT);
+    when(canvas.isNative()).thenReturn(true); // otherwise change calculation
     
     IChartFactory factory = mock(IChartFactory.class);
     when(factory.newCameraThreadController(null)).thenReturn(null);
