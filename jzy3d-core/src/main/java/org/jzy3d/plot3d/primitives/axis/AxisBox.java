@@ -127,17 +127,6 @@ public class AxisBox implements IAxis {
    */
   @Override
   public void draw(IPainter painter) {
-    
-    /*int[] clipPlaneStatus = new int[6];
-    painter.glGetIntegerv(12288, clipPlaneStatus, 0);
-    painter.glGetIntegerv(12289, clipPlaneStatus, 1);
-    painter.glGetIntegerv(12290, clipPlaneStatus, 2);
-    painter.glGetIntegerv(12291, clipPlaneStatus, 3);
-    painter.glGetIntegerv(12292, clipPlaneStatus, 4);
-    painter.glGetIntegerv(12293, clipPlaneStatus, 5);
-    
-    Array.print("Axis: clipping status", clipPlaneStatus);*/
-
     updateHiddenQuads(painter);
 
     doTransform(painter);
