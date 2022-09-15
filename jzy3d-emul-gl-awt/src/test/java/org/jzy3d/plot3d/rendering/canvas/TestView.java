@@ -19,6 +19,9 @@ import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.View2DLayout;
 import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 
+/**
+ * Integration test
+ */
 public class TestView {
   private static final double tolerance = 0.001;
 
@@ -430,5 +433,6 @@ public class TestView {
     Assert.assertEquals(new Coord3d(dir.x,dir.y,0), view.getCamera().getUp());
 
   }
+  
 
 }

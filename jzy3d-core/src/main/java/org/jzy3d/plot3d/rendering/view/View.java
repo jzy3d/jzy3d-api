@@ -608,7 +608,7 @@ public class View {
   }
 
   protected BoundingBox3d getSceneGraphBounds(Scene scene) {
-    return squarifyGetSceneGraphBounds(scene);
+    return scene.getGraph().getBounds();
   }
 
   /**
@@ -674,7 +674,7 @@ public class View {
 
   protected void initBounds() {
     if (viewBounds == null) {
-      viewBounds = squarifyGetSceneGraphBounds(scene);
+      viewBounds = scene.getGraph().getBounds();
     }
     lookToBox(viewBounds);
   }
@@ -845,7 +845,7 @@ public class View {
     // Get the view bounds
     BoundingBox3d bounds;
     if (boundmode == ViewBoundMode.AUTO_FIT) {
-      bounds = squarifyGetSceneGraphBounds(scene);
+      bounds = scene.getGraph().getBounds();
     } else if (boundmode == ViewBoundMode.MANUAL) {
       /*
        * if(scene.getGraph().getClipBox()!=null) { bounds = squarifyGetSceneGraphBounds(scene); }
@@ -893,10 +893,6 @@ public class View {
   }
 
   /* LAYOUT */
-
-  protected BoundingBox3d squarifyGetSceneGraphBounds(Scene scene) {
-    return scene.getGraph().getBounds();
-  }
 
   protected Coord3d squarifyComputeBoundsRanges(BoundingBox3d bounds) {
     if (spaceTransformer == null) {
