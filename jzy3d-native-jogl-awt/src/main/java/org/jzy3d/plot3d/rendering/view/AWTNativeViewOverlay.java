@@ -85,6 +85,8 @@ public class AWTNativeViewOverlay implements IViewOverlay {
         for (AWTRenderer2d renderer : awtView.getRenderers2d()) {
           renderer.setView(awtView);
           renderer.paint(g2d, canvas.getRendererWidth(), canvas.getRendererHeight());
+          
+          //System.out.println("AWTNativeViewOverlay - width : " + canvas.getRendererWidth());
         }
 
         // Render all
