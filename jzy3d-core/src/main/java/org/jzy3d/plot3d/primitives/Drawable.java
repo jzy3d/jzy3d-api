@@ -89,7 +89,7 @@ public abstract class Drawable implements IGLRenderer, ISortableDraw {
   protected void doDrawBoundsIfDisplayed(IPainter painter) {
     if (isBoundingBoxDisplayed()) {
       int width = 2; // getWireframeWidth()
-      painter.box(bbox, getBoundingBoxColor(), 2, spaceTransformer);
+      painter.box(bbox, getBoundingBoxColor(), width, spaceTransformer);
     }
   }
 
