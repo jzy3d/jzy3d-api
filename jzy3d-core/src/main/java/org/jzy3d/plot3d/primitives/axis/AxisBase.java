@@ -1,8 +1,11 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import java.util.List;
+import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
@@ -65,7 +68,7 @@ public class AxisBase implements IAxis {
   public void draw(IPainter painter) {
     painter.glLoadIdentity();
     painter.glScalef(scale.x, scale.y, scale.z);
-    painter.glLineWidth(2);
+    painter.glLineWidth(1);
 
 
     float x = 0, y = 0, z = 0;
@@ -104,12 +107,52 @@ public class AxisBase implements IAxis {
     Horizontal h = Horizontal.CENTER;
     Vertical v = Vertical.CENTER;
 
-    textRenderer.drawText(painter, layout.getFont(), layout.getXAxisLabel(), xLabel, h, v,
-        layout.getXTickColor());
-    textRenderer.drawText(painter, layout.getFont(), layout.getYAxisLabel(), yLabel, h, v,
-        layout.getYTickColor());
-    textRenderer.drawText(painter, layout.getFont(), layout.getZAxisLabel(), zLabel, h, v,
-        layout.getZTickColor());
+    Font f = layout.getFont();
+
+    Color xcolor = layout.getXTickColor();
+    Color ycolor = layout.getYTickColor();
+    Color zcolor = layout.getZTickColor();
+
+    if (layout.isXAxisLabelDisplayed())
+      textRenderer.drawText(painter, f, layout.getXAxisLabel(), xLabel, h, v, xcolor);
+
+    if (layout.isYAxisLabelDisplayed())
+      textRenderer.drawText(painter, f, layout.getYAxisLabel(), yLabel, h, v, ycolor);
+
+    if (layout.isZAxisLabelDisplayed())
+      textRenderer.drawText(painter, f, layout.getZAxisLabel(), zLabel, h, v, zcolor);
+
+    
+    if (layout.isXTickLabelDisplayed()) {
+      String xmax = layout.getXTickRenderer().format(boundingBox.getXmax());
+      xLabel = new Coord3d(boundingBox.getXmax(), y, z);
+      
+      Coord2d offset = new Coord2d(-5, 0);
+
+      textRenderer.drawText(painter, f, xmax, xLabel, Horizontal.LEFT, v, xcolor, offset);
+
+    }
+
+    if (layout.isYTickLabelDisplayed()) {
+      String ymax = layout.getYTickRenderer().format(boundingBox.getYmax());
+      yLabel = new Coord3d(x, boundingBox.getYmax(), z);
+      
+      Coord2d offset = new Coord2d(-5, 0);
+
+      textRenderer.drawText(painter, f, ymax, yLabel, Horizontal.LEFT, v, ycolor, offset);
+
+    }
+
+    if (layout.isZTickLabelDisplayed()) {
+      String zmax = layout.getZTickRenderer().format(boundingBox.getZmax());
+      zLabel = new Coord3d(x, y, boundingBox.getZmax());
+      
+      Coord2d offset = new Coord2d(0, -5);
+
+      textRenderer.drawText(painter, f, zmax, zLabel, Horizontal.LEFT, v, ycolor, offset);
+
+    }
+
   }
 
   /**
