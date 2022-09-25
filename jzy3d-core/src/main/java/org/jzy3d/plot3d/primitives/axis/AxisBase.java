@@ -7,6 +7,8 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.axis.annotations.AxeAnnotation;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.text.ITextRenderer;
+import org.jzy3d.plot3d.text.align.Horizontal;
+import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.text.renderers.TextRenderer;
 import org.jzy3d.plot3d.transform.space.SpaceTransformer;
 
@@ -23,17 +25,30 @@ public class AxisBase implements IAxis {
 
   protected ITextRenderer textRenderer = new TextRenderer();
 
+  protected float exceedFactor = 0.1f;
+  protected float textShiftFactor = 0.1f;
+
+  enum AxePassThrough {
+    ZERO, MIN;
+  }
+
+  protected AxePassThrough passThrough = AxePassThrough.ZERO;
+
 
   /** Create a simple axe centered on (0,0,0), with a dimension of 1. */
   public AxisBase() {
-    setAxe(new BoundingBox3d(0, 1, 0, 1, 0, 1));
-    setScale(new Coord3d(1.0f, 1.0f, 1.0f));
+    this(new BoundingBox3d(0, 1, 0, 1, 0, 1));
   }
 
   /** Create a simple axe centered on (box.xmin, box.ymin, box.zmin) */
   public AxisBase(BoundingBox3d box) {
+    this(box, new AxisLayout());
+  }
+
+  public AxisBase(BoundingBox3d box, AxisLayout layout) {
     setAxe(box);
     setScale(new Coord3d(1.0f, 1.0f, 1.0f));
+    this.layout = layout;
   }
 
   @Override
@@ -52,17 +67,49 @@ public class AxisBase implements IAxis {
     painter.glScalef(scale.x, scale.y, scale.z);
     painter.glLineWidth(2);
 
+
+    float x = 0, y = 0, z = 0;
+    if (AxePassThrough.MIN.equals(passThrough)) {
+      x = boundingBox.getXmin();
+      y = boundingBox.getYmin();
+      z = boundingBox.getZmin();
+    }
+
+    float xExceed = exceedFactor * boundingBox.getRange().x;
+    float yExceed = exceedFactor * boundingBox.getRange().y;
+    float zExceed = exceedFactor * boundingBox.getRange().z;
+
     painter.glBegin_Line();
-    painter.glColor3f(1.0f, 0.0f, 0.0f); // R
-    painter.glVertex3f(boundingBox.getXmin(), boundingBox.getYmin(), boundingBox.getZmin());
-    painter.glVertex3f(boundingBox.getXmax(), 0, 0);
-    painter.glColor3f(0.0f, 1.0f, 0.0f); // G
-    painter.glVertex3f(boundingBox.getXmin(), boundingBox.getYmin(), boundingBox.getZmin());
-    painter.glVertex3f(0, boundingBox.getYmax(), 0);
-    painter.glColor3f(0.0f, 0.0f, 1.0f); // B
-    painter.glVertex3f(boundingBox.getXmin(), boundingBox.getYmin(), boundingBox.getZmin());
-    painter.glVertex3f(0, 0, boundingBox.getZmax());
+
+    // X AXIS
+    painter.color(layout.getGridColor());
+    painter.glVertex3f(boundingBox.getXmin() - xExceed, y, z);
+    painter.glVertex3f(boundingBox.getXmax() + xExceed, y, z);
+
+    // painter.color(Color.GREEN);
+    painter.glVertex3f(x, boundingBox.getYmin() - yExceed, z);
+    painter.glVertex3f(x, boundingBox.getYmax() + yExceed, z);
+
+    // painter.color(Color.BLUE);
+    painter.glVertex3f(x, y, boundingBox.getZmin() - zExceed);
+    painter.glVertex3f(x, y, boundingBox.getZmax() + zExceed);
     painter.glEnd();
+
+
+    // Label
+    Coord3d xLabel = new Coord3d(boundingBox.getXmax() + xExceed * 2, y, z);
+    Coord3d yLabel = new Coord3d(x, boundingBox.getYmax() + yExceed * 2, z);
+    Coord3d zLabel = new Coord3d(x, y, boundingBox.getZmax() + zExceed * 2);
+
+    Horizontal h = Horizontal.CENTER;
+    Vertical v = Vertical.CENTER;
+
+    textRenderer.drawText(painter, layout.getFont(), layout.getXAxisLabel(), xLabel, h, v,
+        layout.getXTickColor());
+    textRenderer.drawText(painter, layout.getFont(), layout.getYAxisLabel(), yLabel, h, v,
+        layout.getYTickColor());
+    textRenderer.drawText(painter, layout.getFont(), layout.getZAxisLabel(), zLabel, h, v,
+        layout.getZTickColor());
   }
 
   /**
