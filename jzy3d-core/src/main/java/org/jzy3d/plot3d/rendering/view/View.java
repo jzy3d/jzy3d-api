@@ -21,6 +21,7 @@ import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Parallelepiped;
+import org.jzy3d.plot3d.primitives.axis.Axis;
 import org.jzy3d.plot3d.primitives.axis.AxisBox;
 import org.jzy3d.plot3d.primitives.axis.AxisLabelProcessor;
 import org.jzy3d.plot3d.primitives.axis.IAxis;
@@ -103,6 +104,9 @@ public class View {
   protected Coord3d viewpoint;
   protected Coord3d center;
   protected Coord3d scaling;
+  protected Coord3d upVector = UP_VECTOR_Z;
+  protected boolean hasViewpointLimits = true;
+  
   // the actual bounds, either auto or manual
   protected BoundingBox3d viewBounds;
   protected Chart chart;
@@ -136,6 +140,10 @@ public class View {
   public static final float ELEVATION_ON_TOP = PI_div2;
   public static final float ELEVATION_0 = 0;
   public static final float ELEVATION_ON_BOTTOM = -PI_div2;
+  
+  public static final Coord3d UP_VECTOR_X = new Coord3d(1, 0, 0);
+  public static final Coord3d UP_VECTOR_Y = new Coord3d(0, 1, 0);
+  public static final Coord3d UP_VECTOR_Z = new Coord3d(0, 0, 1);
 
 
   /** A viewpoint allowing to have min X and Y values near viewer, growing toward horizon. */
@@ -364,11 +372,29 @@ public class View {
   }
 
   public void rotate(final Coord2d move, boolean updateView) {
-    Coord3d eye = getViewPoint();
-    eye.x -= move.x;
-    eye.y += move.y;
+    Coord3d viewpoint = getViewPoint();
+    
+    if(UP_VECTOR_Z.equals(upVector)) {
+      hasViewpointLimits = true;
+      
+      viewpoint.x -= move.x;
+      viewpoint.y += move.y;
+    }
+    else if(UP_VECTOR_X.equals(upVector)) {
+      hasViewpointLimits = false;
+      
+      viewpoint.y += move.x;
+      viewpoint.x += move.y;
+    }
+    else if(UP_VECTOR_Y.equals(upVector)) {
+      hasViewpointLimits = false;
+      
+      viewpoint.y -= move.x;
+      viewpoint.x -= move.y;
+    }
 
-    setViewPoint(eye, updateView);
+      
+    setViewPoint(viewpoint, updateView);
     // fireControllerEvent(ControllerType.ROTATE, eye);
   }
 
@@ -1024,17 +1050,7 @@ public class View {
       throw new RuntimeException("Unsupported ViewMode: " + viewmode);
   }
 
-  /*
-   * protected Coord3d computeCameraEyeXZ_DEBUG(Coord3d viewpoint, Coord3d target) { Coord3d eye =
-   * viewpoint; //eye.x = AZIMUTH_FACING_X_DECREASING; // facing X so that value decrease eye.x =
-   * AZIMUTH_FACING_X_INCREASING; // facing X so that value increase eye.y = ELEVATION_0 + 0.0001f;
-   * // on side eye = eye.cartesian().add(target); return eye; }
-   */
-
-
   protected Coord3d computeCameraEyeFree(Coord3d viewpoint, Coord3d target) {
-    // System.out.println("View : " + viewpoint.z);
-
     return viewpoint.cartesian().add(target);
   }
 
@@ -1204,8 +1220,8 @@ public class View {
       }
       // handle standard 3D view
       else {
-        // use z axis as up vector, if not on top or bottom of the axis
-        return new Coord3d(0, 0, 1);
+        // use (by default) z axis as up vector, if not on top or bottom of the axis
+        return upVector;
       }
     }
   }
@@ -1570,8 +1586,12 @@ public class View {
    */
   public void setViewPoint(Coord3d polar, boolean updateView) {
     viewpoint = polar;
-    viewpoint.y = viewpoint.y < -PI_div2 ? -PI_div2 : viewpoint.y;
-    viewpoint.y = viewpoint.y > PI_div2 ? PI_div2 : viewpoint.y;
+    
+    if(hasViewpointLimits) {
+      viewpoint.y = viewpoint.y < -PI_div2 ? -PI_div2 : viewpoint.y;
+      viewpoint.y = viewpoint.y > PI_div2 ? PI_div2 : viewpoint.y;
+    }
+    
     if (updateView)
       shoot();
 
@@ -1700,6 +1720,24 @@ public class View {
     return ViewportMode.STRETCH_TO_FILL.equals(this.cam.getViewportMode());
   }
 
+  public Coord3d getUpVector() {
+    return upVector;
+  }
+
+  public void setUpVector(Coord3d upVector) {
+    this.upVector = upVector;
+  }
+
+  public void setUpVector(Axis axis) {
+    if(axis.equals(Axis.X))
+      this.upVector = UP_VECTOR_X;
+    else if(axis.equals(Axis.Y))
+      this.upVector = UP_VECTOR_Y;
+    else if(axis.equals(Axis.Z))
+      this.upVector = UP_VECTOR_Z;
+    else
+      throw new IllegalArgumentException("Unsupported axis " + axis);
+  }
 
   /**
    * @see setter
