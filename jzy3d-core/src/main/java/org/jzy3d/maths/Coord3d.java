@@ -168,6 +168,10 @@ public class Coord3d implements Serializable {
     return new Coord3d(this.x + x, this.y + y, this.z + z);
   }
 
+  public Coord3d add(double x, double y, double z) {
+    return add((float)x, (float)y, (float)z);
+  }
+  
   public Coord3d addSelf(Coord3d c2) {
     x += c2.x;
     y += c2.y;
