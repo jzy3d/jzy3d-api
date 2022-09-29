@@ -60,9 +60,14 @@ public class TrigonometricTickRenderer implements ITickRenderer {
       if (eq(value, PI)) {
         return π;
       }
-      // 2*π
-      else if (eq(value, PI_MUL_2)) {
-        return "2" + π;
+      // 2*π or above integer multiple of π
+      else if (value >= PI_MUL_2){
+        int nPi = (int)Math.round(value / PI);
+        double remainder = value-(nPi*PI);
+        double remainderAbs = Math.abs(remainder);
+        if(remainderAbs<delta) {
+          return nPi + π;
+        }
       }
       // fraction
       else {
@@ -92,10 +97,17 @@ public class TrigonometricTickRenderer implements ITickRenderer {
       if (eq(value, -PI)) {
         return "-" + π;
       }
-      // -2π
-      else if (eq(value, -PI_MUL_2)) {
-        return "-2" + π;
+      // -2π or above integer multiple of π
+      else if (value <= -PI_MUL_2){
+        int nPi = (int)Math.round(value / PI);
+        double remainder = value-(nPi*PI);
+        double remainderAbs = Math.abs(remainder);
+        if(remainderAbs<delta) {
+          return nPi + π;
+        }
       }
+
+      
       // fraction
       else {
         for (int i = 2; i <= maxDenominator; i++) {
