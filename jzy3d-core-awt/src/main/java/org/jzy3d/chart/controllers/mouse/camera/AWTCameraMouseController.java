@@ -71,6 +71,7 @@ public class AWTCameraMouseController extends AbstractCameraController
   @Override
   public void register(Chart chart) {
     super.register(chart);
+    
     chart.getCanvas().addMouseController(this);
 
     configureScaler(chart);
@@ -103,6 +104,8 @@ public class AWTCameraMouseController extends AbstractCameraController
 
   public void unregister(Chart chart) {
     super.unregister(chart);
+    
+    chart.getCanvas().removeMouseController(this);
 
     if (chart.getView() instanceof AWTView) {
       ((AWTView) chart.getView()).removeRenderer2d(moveRenderer);
