@@ -48,4 +48,10 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
       System.out.println("GifExporter : Saved " + outputFile.getAbsolutePath());
 
   }
+
+  public File getOutputFile() {
+    return outputFile;
+  }
+  
+  
 }
