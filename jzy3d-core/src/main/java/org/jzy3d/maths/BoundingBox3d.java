@@ -74,6 +74,10 @@ public class BoundingBox3d {
     this.zmax = zmax;
   }
 
+  public BoundingBox3d(double xmin, double xmax, double ymin, double ymax, double zmin, double zmax) {
+    this((float)xmin, (float)xmax, (float)ymin, (float)ymax, (float)zmin, (float)zmax);
+  }
+  
   public BoundingBox3d(Range xRange, Range yRange, Range zRange) {
     this.xmin = xRange.getMin();
     this.xmax = xRange.getMax();
