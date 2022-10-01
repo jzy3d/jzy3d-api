@@ -97,9 +97,10 @@ public class Renderer3d implements GLEventListener {
           view.clear();
           view.render();
   
+          exportImageIfRequired(canvas.getGL());
+
           renderScreenshotIfRequired(canvas.getGL());
         }
-        
       }
     }
 
@@ -107,6 +108,7 @@ public class Renderer3d implements GLEventListener {
     lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
   }
   
+
   /** Called when the {@link GLAutoDrawable} is resized. */
   @Override
   public void reshape(GLAutoDrawable canvas, int x, int y, int width, int height) {
@@ -163,6 +165,11 @@ public class Renderer3d implements GLEventListener {
       doScreenshotAtNextDisplay = false;
     }
   }
+  
+  protected void exportImageIfRequired(GL gl) {
+    
+  }
+
 
 
 

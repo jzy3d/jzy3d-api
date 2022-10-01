@@ -142,5 +142,7 @@ public interface ICanvas {
    */
   @Deprecated
   public static boolean ALLOW_WATCH_PIXEL_SCALE = true;
+  
+
 
 }

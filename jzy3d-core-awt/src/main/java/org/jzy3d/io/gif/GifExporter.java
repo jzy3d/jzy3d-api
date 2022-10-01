@@ -10,6 +10,8 @@ import org.jzy3d.maths.TicToc;
 public class GifExporter extends AbstractImageExporter implements AWTImageExporter {
   protected File outputFile;
   protected AnimatedGifEncoder encoder;
+  
+  protected TicToc timer = new TicToc();
 
   public GifExporter(File outputFile) {
     this(outputFile, DEFAULT_FRAME_RATE_MS); // 1 frame per sec
@@ -25,14 +27,24 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
     this.encoder.setDelay(gifFrameRateMs);
     this.encoder.setRepeat(1000);
     this.encoder.setQuality(8);
+    
+    this.timer.tic();
   }
 
+  @Override
   protected void doAddFrameByRunnable(BufferedImage image, boolean isLastImage) {
-    if (debug)
-      System.out.println("GifExporter : Adding image to GIF " + numberSubmittedImages.get());
-
+    
+    if (debug) {
+      timer.toc();
+      System.out.println("GifExporter : Adding image to GIF " + numberSubmittedImages.get() + " at " + timer.elapsedSecond());
+    }
 
     encoder.addFrame(image);
+
+    if (debug) {
+      timer.toc();
+      System.out.println("GifExporter : Adding image to GIF " + numberSubmittedImages.get() + " at " + timer.elapsedSecond());
+    }
 
     if (isLastImage) {
       closeOutput();
@@ -41,6 +53,7 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
     numberOfSavedImages.incrementAndGet();
   }
 
+  @Override
   protected void closeOutput() {
     encoder.finish();
 
