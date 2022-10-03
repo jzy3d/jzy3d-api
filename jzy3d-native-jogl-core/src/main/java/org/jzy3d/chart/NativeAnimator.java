@@ -5,10 +5,12 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 public class NativeAnimator implements IAnimator {
   protected com.jogamp.opengl.util.AnimatorBase animator;
+  
+  public static final int DEFAULT_FRAME_PER_SECOND = 10;
 
   public NativeAnimator(GLAutoDrawable canvas) {
     // animator = new com.jogamp.opengl.util.Animator(canvas);
-    animator = new FPSAnimator(canvas, 10);
+    animator = new FPSAnimator(canvas, DEFAULT_FRAME_PER_SECOND);
   }
 
   @Override
@@ -21,7 +23,11 @@ public class NativeAnimator implements IAnimator {
     animator.stop();
   }
   
-  public FPSAnimator getAnimator() {
-    return (FPSAnimator)animator;
+  public com.jogamp.opengl.util.AnimatorBase getAnimator() {
+    return animator;
+  }
+  
+  public void setAnimator(com.jogamp.opengl.util.Animator animator) {
+    this.animator = animator;
   }
 }
