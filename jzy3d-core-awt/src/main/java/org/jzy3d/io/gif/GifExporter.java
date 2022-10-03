@@ -1,15 +1,29 @@
 package org.jzy3d.io.gif;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.concurrent.Executors;
+import java.io.IOException;
 import org.jzy3d.io.AWTImageExporter;
 import org.jzy3d.io.AbstractImageExporter;
 import org.jzy3d.maths.TicToc;
+import org.jzy3d.maths.Utils;
 
+/**
+ * An image exporter able to create a gif animation out of frame exported by a renderer.
+ * 
+ * Delay between frames should remain superior to 50 miliseconds.
+ * 
+ * @see {@link AbstractImageExporter}
+ * 
+ * @author Martin Pernollet
+ *
+ */
 public class GifExporter extends AbstractImageExporter implements AWTImageExporter {
   protected File outputFile;
   protected AnimatedGifEncoder encoder;
+  
+  protected boolean applyWhiteBackground = true;
   
   protected TicToc timer = new TicToc();
 
@@ -21,6 +35,10 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
     super(gifFrameRateMs);
 
     this.outputFile = outputFile;
+    
+    if(!outputFile.getParentFile().exists()) {
+      outputFile.getParentFile().mkdirs();
+    }
 
     this.encoder = new AnimatedGifEncoder();
     this.encoder.start(outputFile.getAbsolutePath());
@@ -32,14 +50,25 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   }
 
   @Override
-  protected void doAddFrameByRunnable(BufferedImage image, boolean isLastImage) {
+  protected void doAddFrameByRunnable(BufferedImage image, boolean isLastImage) throws IOException {
     
     if (debug) {
       timer.toc();
       System.out.println("GifExporter : Adding image to GIF " + numberSubmittedImages.get() + " at " + timer.elapsedSecond());
     }
 
-    encoder.addFrame(image);
+    if(applyWhiteBackground) {
+      BufferedImage imageWithBg = new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+      Graphics2D g = (Graphics2D)imageWithBg.getGraphics();
+      g.fillRect(0, 0, image.getWidth(), image.getHeight());
+      g.drawImage(image, 0, 0, null);
+      g.dispose();
+      encoder.addFrame(imageWithBg);
+    }
+    else {
+      encoder.addFrame(image);
+    }
+
 
     if (debug) {
       timer.toc();
@@ -54,7 +83,7 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   }
 
   @Override
-  protected void closeOutput() {
+  protected void closeOutput() throws IOException {
     encoder.finish();
 
     if (debug)
@@ -64,6 +93,21 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
 
   public File getOutputFile() {
     return outputFile;
+  }
+
+  public double progress() {
+    int submit = getNumberSubmittedImages().intValue();
+    int saved = getNumberOfSavedImages().intValue();
+    return  100f * saved / submit;
+  }
+  
+  public void progressToConsole() {
+    int submit = getNumberSubmittedImages().intValue();
+    int saved = getNumberOfSavedImages().intValue();
+    double progress = 100f * saved / submit;
+
+    System.out.println(Utils.num2str(progress, 3) + " % progress : " + saved + " saved " + submit + " submit");
+
   }
   
   
