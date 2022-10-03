@@ -3,6 +3,7 @@ package org.jzy3d.io;
 
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -152,11 +153,13 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
 
   protected void scheduleImageExport(BufferedImage image, boolean isLastImage) {
     // try {
+
+    numberSubmittedImages.incrementAndGet();
+
     executor.execute(new Runnable() {
       @Override
       public void run() {
 
-        numberSubmittedImages.incrementAndGet();
         numberOfPendingImages.incrementAndGet();
 
         // System.out.println("Adding image to GIF (pending tasks " + pendingTasks.get() + ")");
@@ -170,8 +173,12 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
          * image.getHeight()-20); graphics.dispose();
          */
 
-        doAddFrameByRunnable(image, isLastImage);
-
+        try {
+          doAddFrameByRunnable(image, isLastImage);
+        }
+        catch(Exception e) {
+          throw new RuntimeException(e);
+        }
         numberOfPendingImages.decrementAndGet();
 
       }
@@ -183,9 +190,9 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
      */
   }
 
-  protected abstract void doAddFrameByRunnable(BufferedImage image, boolean isLastImage);
+  protected abstract void doAddFrameByRunnable(BufferedImage image, boolean isLastImage) throws IOException;
 
-  protected abstract void closeOutput();
+  protected abstract void closeOutput() throws IOException;
 
   public TicToc getTimer() {
     return timer;

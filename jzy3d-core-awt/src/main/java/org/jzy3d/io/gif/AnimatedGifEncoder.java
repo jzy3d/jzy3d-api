@@ -176,21 +176,23 @@ public class AnimatedGifEncoder {
   /**
    * Flushes any pending data and closes output file. If writing to an
    * OutputStream, the stream is not closed.
+   * @throws IOException 
    */
-  public boolean finish() {
+  public boolean finish() throws IOException {
     if (!started)
       return false;
     boolean ok = true;
     started = false;
-    try {
+    
+    //try {
       out.write(0x3b); // gif trailer
       out.flush();
       if (closeStream) {
         out.close();
       }
-    } catch (IOException e) {
-      ok = false;
-    }
+    //} catch (IOException e) {
+    //  ok = false;
+    //}
 
     // reset for subsequent use
     transIndex = 0;
