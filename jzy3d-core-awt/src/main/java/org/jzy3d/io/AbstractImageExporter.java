@@ -36,43 +36,52 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
   protected AtomicInteger numberOfSkippedImages = new AtomicInteger(0);
   protected AtomicInteger numberOfSavedImages = new AtomicInteger(0);
 
-  protected int frameRateMs;
+  protected int frameDelayMs;
 
   protected boolean debug = false;
 
 
   // protected int numberOfSubmittedImages = 0;
 
-  public AbstractImageExporter(int frameRateMs) {
-    this.frameRateMs = frameRateMs;
+  public AbstractImageExporter(int frameDelayMs) {
+    this.frameDelayMs = frameDelayMs;
     this.timer = new TicToc();
     this.executor = Executors.newSingleThreadExecutor();
   }
 
   @Override
   public void export(BufferedImage image) {
-    // init timer
+    
     if (previousImage == null) {
+      // ---------------------------------------------------------------
+      // init timer
+      
       timer.tic();
 
       scheduleImageExport(image);
     }
 
-    // or check time spent since image changed
     else {
+      // ---------------------------------------------------------------
+      // ... or check time spent since image changed
+      
       timer.toc();
       double elapsed = timer.elapsedMilisecond();
-      // System.out.println("ELAPSED : " + elapsed);
-      int elapsedGifFrames = (int) Math.floor(elapsed / frameRateMs);
+      int elapsedGifFrames = (int) Math.floor(elapsed / frameDelayMs);
 
-      // Image pops too early
+      // ---------------------------------------------------------------
+      // Image pops too early, skip it
+      
       if (elapsedGifFrames == 0) {
         previousImage = image;
 
         numberOfSkippedImages.incrementAndGet();
+        
       }
 
-      // Image is in [gifFrameRateMs; 2*gifFrameRateMs]
+      // ---------------------------------------------------------------
+      // Image is in [gifFrameRateMs; 2*gifFrameRateMs], schedule export
+      
       else if (elapsedGifFrames == 1) {
         scheduleImageExport(previousImage);
 
@@ -80,7 +89,13 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
 
         timer.tic();
 
-      } else {
+      } 
+      
+      // ---------------------------------------------------------------
+      // Time as elapsed for more than 1 image, schedule multiple export 
+      // of the same image to fill the gap
+      
+      else {
         for (int i = 0; i < elapsedGifFrames; i++) {
           scheduleImageExport(previousImage);
         }
@@ -132,20 +147,11 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
         return true;
       }
 
-
     } catch (InterruptedException e1) {
       e1.printStackTrace();
       return false;
     }
   }
-
-  /**
-   * Wait for the process to finish and return when done.
-   * 
-   * @return
-   *
-   *         public boolean awaitTermination() { return terminate(0, null); }
-   */
 
   protected void scheduleImageExport(BufferedImage image) {
     scheduleImageExport(image, false);
@@ -159,8 +165,6 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
     executor.execute(new Runnable() {
       @Override
       public void run() {
-
-        numberOfPendingImages.incrementAndGet();
 
         // System.out.println("Adding image to GIF (pending tasks " + pendingTasks.get() + ")");
         // pendingTasks.incrementAndGet();
@@ -179,7 +183,6 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
         catch(Exception e) {
           throw new RuntimeException(e);
         }
-        numberOfPendingImages.decrementAndGet();
 
       }
 
@@ -200,10 +203,6 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
 
   public AtomicInteger getNumberSubmittedImages() {
     return numberSubmittedImages;
-  }
-
-  public AtomicInteger getNumberOfPendingImages() {
-    return numberOfPendingImages;
   }
 
   public AtomicInteger getNumberOfSkippedImages() {
