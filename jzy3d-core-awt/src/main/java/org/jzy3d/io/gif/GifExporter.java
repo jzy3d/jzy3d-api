@@ -4,6 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import org.jzy3d.colors.AWTColor;
+import org.jzy3d.colors.Color;
 import org.jzy3d.io.AWTImageExporter;
 import org.jzy3d.io.AbstractImageExporter;
 import org.jzy3d.maths.TicToc;
@@ -23,7 +25,8 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   protected File outputFile;
   protected AnimatedGifEncoder encoder;
 
-  protected boolean applyWhiteBackground = true;
+  protected Color backgroundColor = null;
+//  protected boolean applyWhiteBackground = true;
 
   protected TicToc timer = new TicToc();
 
@@ -31,8 +34,8 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
     this(outputFile, DEFAULT_FRAME_RATE_MS); // 1 frame per sec
   }
 
-  public GifExporter(File outputFile, int gifFrameRateMs) {
-    super(gifFrameRateMs);
+  public GifExporter(File outputFile, int gifFrameDelayMs) {
+    super(gifFrameDelayMs);
 
     this.outputFile = outputFile;
 
@@ -42,7 +45,7 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
 
     this.encoder = new AnimatedGifEncoder();
     this.encoder.start(outputFile.getAbsolutePath());
-    this.encoder.setDelay(gifFrameRateMs);
+    this.encoder.setDelay(gifFrameDelayMs);
     this.encoder.setRepeat(1000);
     this.encoder.setQuality(8);
 
@@ -69,17 +72,24 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
           + timer.elapsedSecond());
     }
 
-    if (applyWhiteBackground) {
+    // If a background color is defined, create an image with this background color before export
+    if (backgroundColor!=null) {
+      java.awt.Color awtColor = AWTColor.toAWT(backgroundColor);
+      
       BufferedImage imageWithBg =
           new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
+      
       Graphics2D g = (Graphics2D) imageWithBg.getGraphics();
+      g.setColor(awtColor);
       g.fillRect(0, 0, image.getWidth(), image.getHeight());
       g.drawImage(image, 0, 0, null);
       g.dispose();
-      encoder.addFrame(imageWithBg);
-    } else {
-      encoder.addFrame(image);
-    }
+      
+      image = imageWithBg;
+    } 
+
+    // Do export as animated gif frame
+    encoder.addFrame(image);
 
 
     if (debug) {
@@ -88,10 +98,12 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
           + timer.elapsedSecond());
     }
 
+    // Close output if this is our last image
     if (isLastImage) {
       closeOutput();
     }
 
+    // Update counters to monitor task progress
     numberOfSavedImages.incrementAndGet();
   }
 
@@ -123,6 +135,16 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
         + " submitted");
 
   }
+
+  public Color getBackgroundColor() {
+    return backgroundColor;
+  }
+
+  public void setBackgroundColor(Color backgroundColor) {
+    this.backgroundColor = backgroundColor;
+  }
+  
+  
 
 
 }
