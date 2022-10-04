@@ -152,10 +152,10 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
   }
 
   protected void scheduleImageExport(BufferedImage image, boolean isLastImage) {
-    // try {
-
+    // Record number of submitted images
     numberSubmittedImages.incrementAndGet();
 
+    // Execute - as soon as possible - the addition of the frame to the output file
     executor.execute(new Runnable() {
       @Override
       public void run() {
@@ -184,10 +184,6 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
       }
 
     });
-    /*
-     * } catch (RejectedExecutionException e) { System.err.
-     * println("AbstractImageExporter : should stop appending image (unregister me from canvas!"); }
-     */
   }
 
   protected abstract void doAddFrameByRunnable(BufferedImage image, boolean isLastImage) throws IOException;
