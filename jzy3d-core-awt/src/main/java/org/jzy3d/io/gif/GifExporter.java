@@ -14,12 +14,36 @@ import org.jzy3d.maths.Utils;
 /**
  * An image exporter able to create a gif animation out of frame exported by a renderer.
  * 
- * Delay between frames should remain superior to 50 miliseconds.
+ * The interframe delay is globally configured (1 second default value).
+ * 
+ * 
+ * Once initialized, the exporter is ready to receive images. It will start counting time as soon as 
+ * a first image is received via a call to {@link #export(BufferedImage)}. Following calls to
+ * {@link #export(BufferedImage)} will arrange a regular image registration : if the second (and following)
+ * image is exported too early w.r.t. to the global delay, it will be skipped. If the it arrives too late,
+ * the previously submitted image will be used for export. If it arrives more than 2 times the expected delay,
+ * it will repeated to fill the gaps.
+ * 
+ * Once the export is finished, one should invoke {@link #terminate(long, java.util.concurrent.TimeUnit)}
+ * where the parameters indicate how long time you accept to wait before timeout. Indeed, depending on the number
+ * and size of exported images, a stack of save tasks may be still be pending. 
+ * <ul>
+ * <li>If save completes before timeout, then everything is ok.
+ * <li>If timeout is reached before the file is saved, then the file is in an unknown state (maybe readable but at least incomplete). 
+ * </ul>
+ * 
+ * To get information about the remaining work, call {@link #progress()} or {@link #progressToConsole()}.
+ * 
+ * 
+ * Sizing forecasts :
+ * <ul>
+ * <li>10 seconds at 40 FPS (hence 25ms per frame) on 800x600 and no HiDPI lead to approx 26MB.
+ * <li>10 seconds at 10 FPS (hence 100ms per frame) on 800x600 and no HiDPI lead to approx 7MB
+ * </ul>
  * 
  * @see {@link AbstractImageExporter}
  * 
  * @author Martin Pernollet
- *
  */
 public class GifExporter extends AbstractImageExporter implements AWTImageExporter {
   protected File outputFile;
