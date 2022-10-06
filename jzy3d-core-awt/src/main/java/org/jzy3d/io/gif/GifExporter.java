@@ -17,22 +17,25 @@ import org.jzy3d.maths.Utils;
  * The interframe delay is globally configured (1 second default value).
  * 
  * 
- * Once initialized, the exporter is ready to receive images. It will start counting time as soon as 
+ * Once initialized, the exporter is ready to receive images. It will start counting time as soon as
  * a first image is received via a call to {@link #export(BufferedImage)}. Following calls to
- * {@link #export(BufferedImage)} will arrange a regular image registration : if the second (and following)
- * image is exported too early w.r.t. to the global delay, it will be skipped. If the it arrives too late,
- * the previously submitted image will be used for export. If it arrives more than 2 times the expected delay,
- * it will repeated to fill the gaps.
+ * {@link #export(BufferedImage)} will arrange a regular image registration : if the second (and
+ * following) image is exported too early w.r.t. to the global delay, it will be skipped. If the it
+ * arrives too late, the previously submitted image will be used for export. If it arrives more than
+ * 2 times the expected delay, it will repeated to fill the gaps.
  * 
- * Once the export is finished, one should invoke {@link #terminate(long, java.util.concurrent.TimeUnit)}
- * where the parameters indicate how long time you accept to wait before timeout. Indeed, depending on the number
- * and size of exported images, a stack of save tasks may be still be pending. 
+ * Once the export is finished, one should invoke
+ * {@link #terminate(long, java.util.concurrent.TimeUnit)} where the parameters indicate how long
+ * time you accept to wait before timeout. Indeed, depending on the number and size of exported
+ * images, a stack of save tasks may be still be pending.
  * <ul>
  * <li>If save completes before timeout, then everything is ok.
- * <li>If timeout is reached before the file is saved, then the file is in an unknown state (maybe readable but at least incomplete). 
+ * <li>If timeout is reached before the file is saved, then the file is in an unknown state (maybe
+ * readable but at least incomplete).
  * </ul>
  * 
- * To get information about the remaining work, call {@link #progress()} or {@link #progressToConsole()}.
+ * To get information about the remaining work, call {@link #progress()} or
+ * {@link #progressToConsole()}.
  * 
  * 
  * Sizing forecasts :
@@ -40,6 +43,14 @@ import org.jzy3d.maths.Utils;
  * <li>10 seconds at 40 FPS (hence 25ms per frame) on 800x600 and no HiDPI lead to approx 26MB.
  * <li>10 seconds at 10 FPS (hence 100ms per frame) on 800x600 and no HiDPI lead to approx 7MB
  * </ul>
+ * 
+ * The exporter supports a background color which can be defined to ensure a translucent object
+ * won't be altered by the background color of the gif viewer. Setting this background to the
+ * chart's background color is the best choice.
+ * 
+ * Warning : Number of image show that timing is not accurate! 1sec of real time is replayed a bit
+ * faster than 1 sec (approx 10%). This may depend on timing to execute the screenshot, hence on the
+ * user computer.
  * 
  * @see {@link AbstractImageExporter}
  * 
@@ -50,7 +61,7 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   protected AnimatedGifEncoder encoder;
 
   protected Color backgroundColor = null;
-//  protected boolean applyWhiteBackground = true;
+  // protected boolean applyWhiteBackground = true;
 
   protected TicToc timer = new TicToc();
 
@@ -90,6 +101,19 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   protected synchronized void doAddFrameByRunnable(BufferedImage image, boolean isLastImage)
       throws IOException {
 
+    addFrameToEncoder(image, isLastImage);
+  }
+  
+  @Override
+  protected synchronized void doAddFrameByRunnable(BufferedImage image, int interframeDelay, boolean isLastImage)
+      throws IOException {
+
+    encoder.setDelay(interframeDelay);
+    
+    addFrameToEncoder(image, isLastImage);
+  }
+
+  protected void addFrameToEncoder(BufferedImage image, boolean isLastImage) throws IOException {
     if (debug) {
       timer.toc();
       System.out.println("GifExporter : Adding image to GIF " + numberSubmittedImages.get() + " at "
@@ -97,20 +121,20 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
     }
 
     // If a background color is defined, create an image with this background color before export
-    if (backgroundColor!=null) {
+    if (backgroundColor != null) {
       java.awt.Color awtColor = AWTColor.toAWT(backgroundColor);
-      
+
       BufferedImage imageWithBg =
           new BufferedImage(image.getWidth(), image.getHeight(), image.getType());
-      
+
       Graphics2D g = (Graphics2D) imageWithBg.getGraphics();
       g.setColor(awtColor);
       g.fillRect(0, 0, image.getWidth(), image.getHeight());
       g.drawImage(image, 0, 0, null);
       g.dispose();
-      
+
       image = imageWithBg;
-    } 
+    }
 
     // Do export as animated gif frame
     encoder.addFrame(image);
@@ -168,7 +192,13 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
     this.backgroundColor = backgroundColor;
   }
   
+  /** Return the delay in milisecond as currently set on the encoder. */
+  public int getDelay() {
+    return encoder.getDelay() * 10;
+  }
   
+  
+
 
 
 }
