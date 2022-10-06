@@ -14,8 +14,18 @@ import org.jzy3d.maths.Utils;
 /**
  * An image exporter able to create a gif animation out of frame exported by a renderer.
  * 
- * The interframe delay is globally configured (1 second default value).
+ * Can work in two modes
+ * <ul>
+ * <li>Export GIF with a regular - user defined - frame rate, in order to deal with high frame rate
+ * animations without generating too large GIF files. Frames should be either skipped or repeated if
+ * they aren't generated exactly at GIF frame rate.
+ * <li>Export GIF with a variable frame rate, in order to deal with variable frame rate animations
+ * without skipping or repeating frames.
+ * </ul>
  * 
+ * 
+ * <h2>Export with global frame rate</h2> The interframe delay is globally configured from
+ * constructor.
  * 
  * Once initialized, the exporter is ready to receive images. It will start counting time as soon as
  * a first image is received via a call to {@link #export(BufferedImage)}. Following calls to
@@ -23,6 +33,13 @@ import org.jzy3d.maths.Utils;
  * following) image is exported too early w.r.t. to the global delay, it will be skipped. If the it
  * arrives too late, the previously submitted image will be used for export. If it arrives more than
  * 2 times the expected delay, it will repeated to fill the gaps.
+ * 
+ * <h2>Export with frame-wise duration</h2>
+ *
+ * Here there is no image interpolation. All images are exported and we simply write the inter-frame
+ * delay for each frame.
+ *
+ * <h2>Terminating export</h2>
  * 
  * Once the export is finished, one should invoke
  * {@link #terminate(long, java.util.concurrent.TimeUnit)} where the parameters indicate how long
@@ -103,13 +120,13 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
 
     addFrameToEncoder(image, isLastImage);
   }
-  
+
   @Override
-  protected synchronized void doAddFrameByRunnable(BufferedImage image, int interframeDelay, boolean isLastImage)
-      throws IOException {
+  protected synchronized void doAddFrameByRunnable(BufferedImage image, int interframeDelay,
+      boolean isLastImage) throws IOException {
 
     encoder.setDelay(interframeDelay);
-    
+
     addFrameToEncoder(image, isLastImage);
   }
 
@@ -191,13 +208,11 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   public void setBackgroundColor(Color backgroundColor) {
     this.backgroundColor = backgroundColor;
   }
-  
+
   /** Return the delay in milisecond as currently set on the encoder. */
   public int getDelay() {
     return encoder.getDelay() * 10;
   }
-  
-  
 
 
 
