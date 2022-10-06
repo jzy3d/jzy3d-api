@@ -1,10 +1,12 @@
 package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.image.BufferedImage;
+import org.jzy3d.io.AWTImageExporter;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
+import jogamp.newt.driver.awt.ScreenDriver;
 
 /**
  * This {@link GLEventListener} overrides {@link Renderer3d} for the sole purpose of generating a {@link BufferedImage}.
@@ -14,6 +16,8 @@ import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
 public class AWTRenderer3d extends Renderer3d {
   
   protected BufferedImage bufferedImage;
+  protected AWTImageExporter exporter;
+  protected AWTGLReadBufferUtil screenshotMaker;
 
   public AWTRenderer3d() {
     super();
@@ -25,6 +29,9 @@ public class AWTRenderer3d extends Renderer3d {
 
   public AWTRenderer3d(View view, boolean traceGL, boolean debugGL) {
     super(view, traceGL, debugGL);
+    
+    screenshotMaker = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), true);
+
   }
 
   /********************* SCREENSHOTS ***********************/
@@ -36,13 +43,34 @@ public class AWTRenderer3d extends Renderer3d {
   @Override
   protected void renderScreenshotIfRequired(GL gl) {
     if (doScreenshotAtNextDisplay) {
-      AWTGLReadBufferUtil screenshot = new AWTGLReadBufferUtil(GLProfile.getGL2GL3(), true);
-      screenshot.readPixels(gl, true);
-      image = screenshot.getTextureData();
-      bufferedImage = screenshot.readPixelsToBufferedImage(gl, true);
+      // Get JOGL Image
+      screenshotMaker.readPixels(gl, true);
+      image = screenshotMaker.getTextureData();
+      
+      // Get AWT Image
+      bufferedImage = screenshotMaker.readPixelsToBufferedImage(gl, true);
 
       doScreenshotAtNextDisplay = false;
     }
   }
+  
+  @Override
+  protected void exportImageIfRequired(GL gl) {
+    if(exporter!=null) {
+      //synchronized(this) {
+        BufferedImage image = screenshotMaker.readPixelsToBufferedImage(gl, /*0, 0, width, height, */true);
+        exporter.export(image);
+      //}
+    }
+  }
+  
+  public AWTImageExporter getExporter() {
+    return exporter;
+  }
+
+  public void setExporter(AWTImageExporter exporter) {
+    this.exporter = exporter;
+  }
+
 
 }

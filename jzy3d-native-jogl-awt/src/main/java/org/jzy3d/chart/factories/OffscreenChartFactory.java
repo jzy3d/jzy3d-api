@@ -9,6 +9,10 @@ public class OffscreenChartFactory extends AWTChartFactory {
   int width;
   int height;
 
+  public OffscreenChartFactory() {
+    this(800,600);
+  }
+  
   public OffscreenChartFactory(int width, int height) {
     super(new OffscreenWindowFactory());
     this.width = width;
