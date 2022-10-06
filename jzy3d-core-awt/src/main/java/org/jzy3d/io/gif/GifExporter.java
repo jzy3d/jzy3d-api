@@ -126,6 +126,10 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   protected synchronized void doAddFrameByRunnable(BufferedImage image, int interframeDelay,
       boolean isLastImage) throws IOException {
 
+    if (debug) {
+      System.out.println("Update delay to " + interframeDelay);
+    }
+
     encoder.setDelay(interframeDelay);
 
     addFrameToEncoder(image, isLastImage);
