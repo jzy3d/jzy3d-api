@@ -140,6 +140,7 @@ public class ITTest_Text extends ITTest{
     t1.setDefaultFont(font);
     t1.setHalign(h);
     t1.setValign(v);
+    
     //t1.setRotation(45);
     Point p1 = new Point(position, positionColor);
     p1.setWidth(5);

@@ -34,6 +34,12 @@ import org.jzy3d.maths.Utils;
  * arrives too late, the previously submitted image will be used for export. If it arrives more than
  * 2 times the expected delay, it will repeated to fill the gaps.
  * 
+ * Sizing examples :
+ * <ul>
+ * <li>10 seconds at 40 FPS (hence 25ms per frame) on 800x600 and no HiDPI lead to approx 26MB.
+ * <li>10 seconds at 10 FPS (hence 100ms per frame) on 800x600 and no HiDPI lead to approx 7MB
+ * </ul>
+ * 
  * <h2>Export with frame-wise duration</h2>
  *
  * Here there is no image interpolation. All images are exported and we simply write the inter-frame
@@ -54,12 +60,7 @@ import org.jzy3d.maths.Utils;
  * To get information about the remaining work, call {@link #progress()} or
  * {@link #progressToConsole()}.
  * 
- * 
- * Sizing forecasts :
- * <ul>
- * <li>10 seconds at 40 FPS (hence 25ms per frame) on 800x600 and no HiDPI lead to approx 26MB.
- * <li>10 seconds at 10 FPS (hence 100ms per frame) on 800x600 and no HiDPI lead to approx 7MB
- * </ul>
+ * <h2>Background color</h2>
  * 
  * The exporter supports a background color which can be defined to ensure a translucent object
  * won't be altered by the background color of the gif viewer. Setting this background to the
