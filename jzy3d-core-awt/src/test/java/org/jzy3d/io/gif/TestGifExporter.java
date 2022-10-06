@@ -110,6 +110,17 @@ public class TestGifExporter {
     Assert.assertTrue("Could flush all gif images before timeout", success);
     Assert.assertTrue(outputFile.exists());
 
+    // ------------------------------------
+    // When re-open GIF
+
+    int durationMs = readGifAndCalculateDurationInMs(outputFile);
+
+    // Then timing is relevant
+    int time = gifFrameDelayMs * (gif.getNumberSubmittedImages().intValue());
+    
+    Assert.assertEquals(time, durationMs);
+    
+
   }
 
   @Test
@@ -130,47 +141,50 @@ public class TestGifExporter {
     // ------------------------------------
     // When append the first image
 
+    int time1 = 0;
     BufferedImage i = makeBufferedImage("1");
     ImageIO.write(i, "png", new File(path + "-1.png"));
 
-    when(timer.elapsedMilisecond()).thenReturn(new Double(0));
+    when(timer.elapsedMilisecond()).thenReturn(new Double(time1));
     gif.export(i);
 
     // Then number of submitted image grows after a short delay
     sleep(50);
-    Assert.assertEquals(0, gif.getDelay());
+    Assert.assertEquals(time1, gif.getDelay());
     Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); // current not exported yet
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
     // ------------------------------------
     // When append a second image after 10 ms
 
+    int time2 = 100;
     i = makeBufferedImage("2");
     ImageIO.write(i, "png", new File(path + "-2.png"));
 
-    when(timer.elapsedMilisecond()).thenReturn(new Double(100)); // elapsed 10ms
+    when(timer.elapsedMilisecond()).thenReturn(new Double(time2)); // elapsed 10ms
     gif.export(i);
 
     // Then number of submitted image did not grow after a short delay
     sleep(50);
 
-    Assert.assertEquals(100, gif.getDelay());
+    Assert.assertEquals(time2, gif.getDelay());
     Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); // current not exported yet
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
     // ------------------------------------
     // When append a second image after 50 ms
 
+    int time3 = 500;
     i = makeBufferedImage("3");
     ImageIO.write(i, "png", new File(path + "-3.png"));
 
-    when(timer.elapsedMilisecond()).thenReturn(new Double(500));
+    when(timer.elapsedMilisecond()).thenReturn(new Double(time3));
     gif.export(i);
 
     // Then number of submitted image did not grow after a short delay
     sleep(50);
 
-    Assert.assertEquals(500, gif.getDelay());
+    Assert.assertEquals(time3, gif.getDelay());
     Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue()); // current not exported yet
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
@@ -178,15 +192,16 @@ public class TestGifExporter {
     // When append a fourth image way too long after the gifFrameRate
     // then the image is repeated to keep the frame rate constant
 
+    int time4 = 3000;
     i = makeBufferedImage("4");
     ImageIO.write(i, "png", new File(path + "-4.png"));
 
-    when(timer.elapsedMilisecond()).thenReturn(new Double(3000));
+    when(timer.elapsedMilisecond()).thenReturn(new Double(time4));
     gif.export(i);
 
     // Then number of submitted image did not grow after a short delay
     sleep(50);
-    Assert.assertEquals(3000, gif.getDelay());
+    Assert.assertEquals(time4, gif.getDelay());
     Assert.assertEquals(4, gif.getNumberSubmittedImages().intValue()); // current not exported yet
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
@@ -202,7 +217,19 @@ public class TestGifExporter {
     // Then, Can properly flush all image and get a file
     Assert.assertTrue("Could flush all gif images before timeout", success);
     Assert.assertTrue(outputFile.exists());
+    
 
+    // ------------------------------------
+    // When re-open GIF
+
+    int durationMs = readGifAndCalculateDurationInMs(outputFile);
+
+    // Then timing is relevant
+    int time = time1+time2+time3+time4;
+    
+    time+=time4; //hack
+    Assert.assertEquals(time, durationMs);
+    
   }
 
   @Test
@@ -241,6 +268,20 @@ public class TestGifExporter {
     g2d.dispose();
 
     return i;
+  }
+  
+  protected int readGifAndCalculateDurationInMs(File file) {
+    GifDecoder d = new GifDecoder();
+    d.read(file.getAbsolutePath());
+    int duration = 0;
+
+    for (int i = 0; i < d.getFrameCount(); i++) {
+      int t = d.getDelay(i); 
+      duration += t;
+    }
+    
+    return duration;
+
   }
 
   private void sleep(long mili) {
