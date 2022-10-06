@@ -6,6 +6,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
+import jogamp.newt.driver.awt.ScreenDriver;
 
 /**
  * This {@link GLEventListener} overrides {@link Renderer3d} for the sole purpose of generating a {@link BufferedImage}.
@@ -42,8 +43,11 @@ public class AWTRenderer3d extends Renderer3d {
   @Override
   protected void renderScreenshotIfRequired(GL gl) {
     if (doScreenshotAtNextDisplay) {
+      // Get JOGL Image
       screenshotMaker.readPixels(gl, true);
       image = screenshotMaker.getTextureData();
+      
+      // Get AWT Image
       bufferedImage = screenshotMaker.readPixelsToBufferedImage(gl, true);
 
       doScreenshotAtNextDisplay = false;
@@ -53,14 +57,12 @@ public class AWTRenderer3d extends Renderer3d {
   @Override
   protected void exportImageIfRequired(GL gl) {
     if(exporter!=null) {
-      
-      screenshotMaker.readPixels(gl, true);
-      
-      exporter.export(screenshotMaker.readPixelsToBufferedImage(gl, true));
+      //synchronized(this) {
+        BufferedImage image = screenshotMaker.readPixelsToBufferedImage(gl, /*0, 0, width, height, */true);
+        exporter.export(image);
+      //}
     }
   }
-
-  
   
   public AWTImageExporter getExporter() {
     return exporter;

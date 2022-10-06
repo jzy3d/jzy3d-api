@@ -116,7 +116,8 @@ public class AWTPainterFactory extends NativePainterFactory implements IPainterF
         SCREENSHOT_FOLDER + "capture-" + Utils.dat2str(new Date(), "yyyy-MM-dd-HH-mm-ss") + ".png";
 
     IScreenshotKeyController screenshot = new AWTScreenshotKeyController(chart, file);
-
+    //screenshot.re
+    
     screenshot.addListener(new IScreenshotEventListener() {
       @Override
       public void failedScreenshot(String file, Exception e) {
