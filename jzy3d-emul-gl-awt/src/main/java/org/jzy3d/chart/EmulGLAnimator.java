@@ -3,7 +3,7 @@ package org.jzy3d.chart;
 import org.jzy3d.plot3d.rendering.canvas.EmulGLCanvas;
 
 public class EmulGLAnimator implements IAnimator {
-  private static final int RENDERING_LOOP_PAUSE = 100;
+  private static final int RENDERING_LOOP_PAUSE = 1000/DEFAULT_FRAME_PER_SECOND;
   protected EmulGLCanvas canvas;
   protected Thread t;
   protected boolean loop = false;

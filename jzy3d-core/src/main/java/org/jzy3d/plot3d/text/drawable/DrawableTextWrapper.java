@@ -7,11 +7,11 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
+import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.jzy3d.plot3d.text.renderers.TextRenderer;
 import org.jzy3d.plot3d.transform.Transform;
 
 /**
@@ -34,6 +34,12 @@ public class DrawableTextWrapper extends Drawable {
 
   protected AxisLayout axisLayout;
   protected Font defaultFont = Font.Helvetica_12;
+  
+  protected boolean pointDisplayed = false;
+  protected Point point;
+
+  protected boolean flipHorizontalAlignWithViewpoint = false;
+
 
   public DrawableTextWrapper(ITextRenderer renderer) {
     this("", new Coord3d(), Color.BLACK, renderer);
@@ -42,8 +48,14 @@ public class DrawableTextWrapper extends Drawable {
   public DrawableTextWrapper(String txt, Coord3d position, Color color, ITextRenderer renderer) {
     super();
     this.renderer = renderer;
+    this.point = new Point();
+    
     configure(txt, position, color, Horizontal.CENTER, Vertical.CENTER);
+    
+
   }
+  
+  
 
   /*******************************************************************************************/
 
@@ -56,12 +68,34 @@ public class DrawableTextWrapper extends Drawable {
       font = axisLayout.getFont();
     }
     
-    BoundingBox3d box = renderer.drawText(painter, font, txt, position, rotation, halign, valign,
+    
+    Horizontal fixedHAlign = flipHorizontalAlignIfEnabled(painter);
+    //Coord3d fixedSceneOffset = flipHorizontalAlignWithViewpoint?sceneOffset/*.mul(-1)*/:sceneOffset;
+    
+    BoundingBox3d box = renderer.drawText(painter, font, txt, position, rotation, fixedHAlign, valign,
         color, screenOffset, sceneOffset);
     if (box != null)
       bbox = box.scale(new Coord3d(1 / 10, 1 / 10, 1 / 10));
     else
       bbox = null;
+    
+    point.draw(painter);
+  }
+
+  public Horizontal flipHorizontalAlignIfEnabled(IPainter painter) {
+    boolean left = painter.getCamera().side(position);
+    
+    Horizontal fixedHAlign = halign;
+    if(left && flipHorizontalAlignWithViewpoint) {
+      if(halign==Horizontal.LEFT) {
+        fixedHAlign = Horizontal.RIGHT;
+      }
+      else if(halign==Horizontal.RIGHT) {
+        fixedHAlign = Horizontal.LEFT;
+      }
+
+    }
+    return fixedHAlign;
   }
 
   @Override
@@ -87,6 +121,7 @@ public class DrawableTextWrapper extends Drawable {
 
   public void setPosition(Coord3d position) {
     this.position = position;
+    this.point.setCoord(position);
   }
 
   public Coord3d getPosition() {
@@ -95,6 +130,14 @@ public class DrawableTextWrapper extends Drawable {
 
   public void setColor(Color color) {
     this.color = color;
+  }
+  
+  public boolean isFlipHorizontalAlignWithViewpoint() {
+    return flipHorizontalAlignWithViewpoint;
+  }
+
+  public void setFlipHorizontalAlignWithViewpoint(boolean flipHorizontalAlignWithViewpoint) {
+    this.flipHorizontalAlignWithViewpoint = flipHorizontalAlignWithViewpoint;
   }
 
   public Horizontal getHalign() {
@@ -160,6 +203,18 @@ public class DrawableTextWrapper extends Drawable {
 
   public void setDefaultFont(Font defaultFont) {
     this.defaultFont = defaultFont;
+  }
+  
+  public Point getPoint() {
+    return point;
+  }
+  
+  public boolean isPointDisplayed() {
+    return pointDisplayed;
+  }
+
+  public void setPointDisplayed(boolean pointDisplayed) {
+    this.pointDisplayed = pointDisplayed;
   }
 
   @Override

@@ -191,11 +191,7 @@ public class MultiChartPanel extends JPanel {
   }
 
   public JPanel getChartScreenshotAsComponent(Chart chart) {
-    try {
       chart.screenshot();
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
     AWTRenderer3d renderer = (AWTRenderer3d) ((INativeCanvas) chart.getCanvas()).getRenderer();
     BufferedImage i = renderer.getLastScreenshotImage();
     JPanel component = new ImagePanel(i);

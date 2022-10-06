@@ -332,7 +332,7 @@ public class Chart {
     canvas.screenshot(file);
   }
 
-  public Object screenshot() throws IOException {
+  public Object screenshot() {
     return canvas.screenshot();
   }
 

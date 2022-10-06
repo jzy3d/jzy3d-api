@@ -12,6 +12,8 @@ import org.jzy3d.painters.IPainter;
  * @author Martin Pernollet
  */
 public class Rotate implements Transformer {
+  protected float angle;
+  protected Coord3d rotate;
 
   /**
    * Initialize a Rotation of angle degrees around the vector (x,y,z)
@@ -62,7 +64,4 @@ public class Rotate implements Transformer {
   public void setRotate(Coord3d rotate) {
     this.rotate = rotate;
   }
-
-  private float angle;
-  private Coord3d rotate;
 }
