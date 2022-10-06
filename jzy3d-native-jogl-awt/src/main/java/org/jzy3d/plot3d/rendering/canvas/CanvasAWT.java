@@ -13,11 +13,13 @@ import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
+import org.jzy3d.io.AWTImageExporter;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.nativewindow.ScalableSurface;
@@ -343,5 +345,20 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     return true;
   }
 
+  public AWTImageExporter getExporter() {
+    if(renderer!=null && renderer instanceof AWTRenderer3d) {
+      AWTRenderer3d r = (AWTRenderer3d)renderer;
+      return r.getExporter();
+    }
+    else {
+      return null;
+    }
+  }
 
+  public void setExporter(AWTImageExporter exporter) {
+    if(renderer!=null && renderer instanceof AWTRenderer3d) {
+      AWTRenderer3d r = (AWTRenderer3d)renderer;
+      r.setExporter(exporter);
+    }
+  }
 }
