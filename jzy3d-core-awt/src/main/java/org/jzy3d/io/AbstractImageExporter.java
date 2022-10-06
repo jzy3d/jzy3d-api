@@ -192,8 +192,13 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
   public boolean terminate(long timeout, TimeUnit unit) {
     try {
       // Export last image
-      scheduleImageExport(previousImage, true);
-
+      if(isGlobalDelay()) {
+        scheduleImageExport(previousImage, true);
+      }
+      else {
+        scheduleImageExport(previousImage, 0, true);        
+      }
+      
       if (debug)
         System.err.println("AbstractImageExporter : Stop accepting new export request, and wait "
             + timeout + " " + unit + " before forcing the termination");
