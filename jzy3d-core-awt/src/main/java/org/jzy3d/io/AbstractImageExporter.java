@@ -27,6 +27,7 @@ import org.jzy3d.maths.TicToc;
  */
 public abstract class AbstractImageExporter implements AWTImageExporter {
   protected static int DEFAULT_FRAME_RATE_MS = 1000;
+  protected static int NO_FRAME_RATE = -1;
 
   protected BufferedImage previousImage = null;
   protected TicToc timer;
