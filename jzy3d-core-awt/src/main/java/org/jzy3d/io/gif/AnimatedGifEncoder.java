@@ -83,6 +83,10 @@ public class AnimatedGifEncoder {
   public void setDelay(int ms) {
     delay = Math.round(ms / 10.0f);
   }
+  
+  public int getDelay() {
+    return delay;
+  }
 
   /**
    * Sets the GIF frame disposal code for the last added frame and any
