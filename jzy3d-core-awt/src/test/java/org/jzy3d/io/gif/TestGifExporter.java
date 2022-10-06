@@ -227,7 +227,6 @@ public class TestGifExporter {
     // Then timing is relevant
     int time = time1+time2+time3+time4;
     
-    time+=time4; //hack
     Assert.assertEquals(time, durationMs);
     
   }
