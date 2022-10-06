@@ -84,7 +84,7 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   protected TicToc timer = new TicToc();
 
   public GifExporter(File outputFile) {
-    this(outputFile, DEFAULT_FRAME_RATE_MS); // 1 frame per sec
+    this(outputFile, NO_FRAME_RATE); // 1 frame per sec
   }
 
   public GifExporter(File outputFile, int gifFrameDelayMs) {
@@ -214,7 +214,14 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   public int getDelay() {
     return encoder.getDelay() * 10;
   }
+  
+  /** Set the delay in milisecond between frames. To use adaptive delay, set with a negative value */
+  public void setDelay(int frameDelayMs) {
+    this.encoder.setDelay(frameDelayMs);
+  }
 
-
+  public void setDelayAdaptive() {
+    setDelay(NO_FRAME_RATE);
+  }
 
 }
