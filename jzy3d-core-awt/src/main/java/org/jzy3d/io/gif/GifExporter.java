@@ -89,8 +89,8 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
     this(outputFile, FrameRate.VariableRate(DEFAULT_MAX_FPS)); 
   }
 
-  public GifExporter(File outputFile, FrameRate frameRate) {
-    super(frameRate);
+  public GifExporter(File outputFile, FrameRate outputFrameRate) {
+    super(outputFrameRate);
 
     this.outputFile = outputFile;
 
@@ -100,7 +100,7 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
 
     this.encoder = new AnimatedGifEncoder();
     this.encoder.start(outputFile.getAbsolutePath());
-    this.encoder.setDelay((int)frameRate.getDuration());
+    this.encoder.setDelay((int)outputFrameRate.getDuration());
     this.encoder.setRepeat(1000);
     this.encoder.setQuality(8);
 
