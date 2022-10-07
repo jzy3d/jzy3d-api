@@ -31,7 +31,7 @@ public class TestGifExporter {
     // ------------------------------------
     // Given an exporter with a global inter-frame delay
 
-    GifExporter gif = new GifExporter(outputFile, gifFrameDelayMs);
+    GifExporter gif = new GifExporter(outputFile, FrameRate.ContinuousDuration(gifFrameDelayMs));
     gif.setTimer(timer);
 
     Assert.assertTrue(gif.isGlobalDelay());
@@ -133,7 +133,7 @@ public class TestGifExporter {
 
     // ------------------------------------
     // Given an exporter with no global inter frame delay
-    GifExporter gif = new GifExporter(outputFile, -1);
+    GifExporter gif = new GifExporter(outputFile, FrameRate.VariableDuration(10));
     gif.setTimer(timer);
 
     Assert.assertFalse(gif.isGlobalDelay());
@@ -237,7 +237,7 @@ public class TestGifExporter {
     int gifFrameRateMs = 100; // ms
 
     File outputFile = new File("./target/TestGifExporter.gif");
-    GifExporter gif = new GifExporter(outputFile, gifFrameRateMs);
+    GifExporter gif = new GifExporter(outputFile, FrameRate.ContinuousDuration(gifFrameRateMs));
 
     gif.export(makeBufferedImage("1"));
 
