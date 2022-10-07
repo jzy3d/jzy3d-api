@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.jzy3d.io.gif.FrameRate;
 import org.jzy3d.maths.TicToc;
 
 /**
@@ -26,26 +27,23 @@ import org.jzy3d.maths.TicToc;
  *
  */
 public abstract class AbstractImageExporter implements AWTImageExporter {
-  protected static int DEFAULT_FRAME_RATE_MS = 1000;
-  protected static int NO_FRAME_RATE = -1;
 
   protected BufferedImage previousImage = null;
   protected TicToc timer;
-  protected ExecutorService executor;
+
   protected AtomicInteger numberSubmittedImages = new AtomicInteger(0);
   protected AtomicInteger numberOfPendingImages = new AtomicInteger(0);
   protected AtomicInteger numberOfSkippedImages = new AtomicInteger(0);
   protected AtomicInteger numberOfSavedImages = new AtomicInteger(0);
 
-  protected int frameDelayMs;
+  protected ExecutorService executor;
 
+  protected FrameRate outputFrameRate;
+  
   protected boolean debug = false;
 
-
-  // protected int numberOfSubmittedImages = 0;
-
-  public AbstractImageExporter(int frameDelayMs) {
-    this.frameDelayMs = frameDelayMs;
+  public AbstractImageExporter(FrameRate outputFrameRate) {
+    this.outputFrameRate = outputFrameRate;
     this.timer = new TicToc();
     this.executor = Executors.newSingleThreadExecutor();
   }
@@ -56,7 +54,7 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
     
       // -----------------------------
       // Case of regular delay
-      if (isGlobalDelay()) {
+      if (isContinuousFrameRate()) {
         
         // Export first image
         if (previousImage == null) {
@@ -74,7 +72,7 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
         
         // Export following image
         else {
-          exportWithGlobalDelay(image);
+          exportWithContinuousFrameRate(image);
         }
       } 
       
@@ -89,42 +87,55 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
           // Start counting time
           timer.tic();
 
-          scheduleImageExport(image, 0);
+          // Will add image next time to know the elapsed time
+          // with its following image
+          //scheduleImageExport(image, 0);
 
           // Remember this first image
           previousImage = image;
-
-          // Will actually export it once we receive the next one
-          // with elapsed time info OR when we shutdown export.
         }
         
         // Export following image
         else {
-          exportWithInterframeDelay(image);
+          exportWithVariableFrameRate(image);
         }
       }
   }
 
-  protected void exportWithInterframeDelay(BufferedImage image) {
+  protected void exportWithVariableFrameRate(BufferedImage image) {
 
     // Check time spent since image changed
 
     timer.toc();
     double elapsed = timer.elapsedMilisecond();
-
-    //updateElapsedTime(elapsed);
     
-    // Since the elapsed time is about the previous frame duration,
-    // we export the previous frame NOW and provide it the elapsed time
-    //scheduleImageExport(previousImage, (int)elapsed);
-    scheduleImageExport(image, (int)elapsed);
+    // ---------------------------------------------------
+    // If more time than minimum duration has elapsed
+    
+    if(elapsed<outputFrameRate.getDuration()) {
+      previousImage = image;
 
-    // The current frame is stored and will be exported at next frame
-    // OR at export termination.
-    previousImage = image;
+      numberOfSkippedImages.incrementAndGet();
+    }
+    
+    // ---------------------------------------------------
+    //
+    
+    else {
+      // Since the elapsed time is about the previous frame duration,
+      // we export the previous frame NOW and provide it the elapsed time
+      //scheduleImageExport(previousImage, (int)elapsed);
+      scheduleImageExport(previousImage, (int)elapsed);
 
-    // Reset counter
-    timer.tic();
+      // The current frame is stored and will be exported at next frame
+      // OR at export termination.
+      previousImage = image;
+
+      // Reset counter
+      timer.tic();
+      
+    }
+
   }
 
   /**
@@ -135,14 +146,14 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
    * 
    * @param image
    */
-  protected void exportWithGlobalDelay(BufferedImage image) {
+  protected void exportWithContinuousFrameRate(BufferedImage image) {
 
     // ---------------------------------------------------------------
     // Check time spent since image changed
 
     timer.toc();
     double elapsed = timer.elapsedMilisecond();
-    int elapsedGifFrames = (int) Math.floor(elapsed / frameDelayMs);
+    int elapsedGifFrames = (int) Math.floor(elapsed / outputFrameRate.getDuration());
 
     // ---------------------------------------------------------------
     // Image pops too early, skip it
@@ -182,6 +193,72 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
     }
   }
 
+
+
+  // -----------------------------------------------------------------------
+  // EXPORT IMAGES WITH CONTINUOUS FRAME RATE
+  
+  protected void scheduleImageExport(BufferedImage image) {
+    scheduleImageExport(image, false);
+  }
+
+  protected void scheduleImageExport(BufferedImage image, boolean isLastImage) {
+    // Record number of submitted images
+    numberSubmittedImages.incrementAndGet();
+
+    // Execute - as soon as possible - the addition of the frame to the output file
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+
+        // System.out.println("Adding image to GIF (pending tasks " + pendingTasks.get() + ")");
+        // pendingTasks.incrementAndGet();
+        try {
+          doAddFrameByRunnable(image, isLastImage);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }
+    });
+  }
+  
+  protected abstract void doAddFrameByRunnable(BufferedImage image, boolean isLastImage)
+      throws IOException;
+
+  // -----------------------------------------------------------------------
+  // EXPORT IMAGES WITH VARIABLE FRAME RATE
+
+  protected void scheduleImageExport(BufferedImage image, int interFrameDelay) {
+    scheduleImageExport(image, interFrameDelay, false);
+  }
+
+  protected void scheduleImageExport(BufferedImage image, int interFrameDelay, boolean isLastImage) {
+    // Record number of submitted images
+    numberSubmittedImages.incrementAndGet();
+
+    // Execute - as soon as possible - the addition of the frame to the output file
+    executor.execute(new Runnable() {
+      @Override
+      public void run() {
+
+        // System.out.println("Adding image to GIF (pending tasks " + pendingTasks.get() + ")");
+        // pendingTasks.incrementAndGet();
+        try {
+          doAddFrameByRunnable(image, interFrameDelay, isLastImage);
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+        }
+      }
+    });
+  }
+
+
+  protected abstract void doAddFrameByRunnable(BufferedImage image, int interFrameDelay, boolean isLastImage)
+      throws IOException;
+
+  
+  // -----------------------------------------------------------------------
+  
   /**
    * Await completion of all image addition, add the last image, and finish the file.
    * 
@@ -193,7 +270,7 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
   public boolean terminate(long timeout, TimeUnit unit) {
     try {
       // Export last image
-      if(isGlobalDelay()) {
+      if(isContinuousFrameRate()) {
         scheduleImageExport(previousImage, true);
       }
       else {
@@ -229,70 +306,6 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
       return false;
     }
   }
-
-  // -----------------------------------------------------------------------
-  // EXPORT IMAGES REGULARLY
-  
-  protected void scheduleImageExport(BufferedImage image) {
-    scheduleImageExport(image, false);
-  }
-
-  protected void scheduleImageExport(BufferedImage image, boolean isLastImage) {
-    // Record number of submitted images
-    numberSubmittedImages.incrementAndGet();
-
-    // Execute - as soon as possible - the addition of the frame to the output file
-    executor.execute(new Runnable() {
-      @Override
-      public void run() {
-
-        // System.out.println("Adding image to GIF (pending tasks " + pendingTasks.get() + ")");
-        // pendingTasks.incrementAndGet();
-        try {
-          doAddFrameByRunnable(image, isLastImage);
-        } catch (Exception e) {
-          throw new RuntimeException(e);
-        }
-      }
-    });
-  }
-  
-  protected abstract void doAddFrameByRunnable(BufferedImage image, boolean isLastImage)
-      throws IOException;
-
-  // -----------------------------------------------------------------------
-  // EXPORT IMAGES WITH FRAME-WISE TIMER
-
-  protected void scheduleImageExport(BufferedImage image, int interFrameDelay) {
-    scheduleImageExport(image, interFrameDelay, false);
-  }
-
-  protected void scheduleImageExport(BufferedImage image, int interFrameDelay, boolean isLastImage) {
-    // Record number of submitted images
-    numberSubmittedImages.incrementAndGet();
-
-    // Execute - as soon as possible - the addition of the frame to the output file
-    executor.execute(new Runnable() {
-      @Override
-      public void run() {
-
-        // System.out.println("Adding image to GIF (pending tasks " + pendingTasks.get() + ")");
-        // pendingTasks.incrementAndGet();
-        try {
-          doAddFrameByRunnable(image, interFrameDelay, isLastImage);
-        } catch (Exception e) {
-          throw new RuntimeException(e);
-        }
-      }
-    });
-  }
-
-
-  protected abstract void doAddFrameByRunnable(BufferedImage image, int interFrameDelay, boolean isLastImage)
-      throws IOException;
-
-  
-  // -----------------------------------------------------------------------
   
   protected abstract void closeOutput() throws IOException;
 
@@ -303,8 +316,8 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
    * Returns true if the delay is set globally or if it is defined per frame.
    * 
    */
-  public boolean isGlobalDelay() {
-    return frameDelayMs > 0;
+  public boolean isContinuousFrameRate() {
+    return outputFrameRate.isContinuous();
   }
 
   public TicToc getTimer() {
