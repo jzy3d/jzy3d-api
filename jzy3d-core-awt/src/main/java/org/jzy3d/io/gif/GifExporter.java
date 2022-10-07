@@ -75,6 +75,8 @@ import org.jzy3d.maths.Utils;
  * @author Martin Pernollet
  */
 public class GifExporter extends AbstractImageExporter implements AWTImageExporter {
+  protected static int DEFAULT_MAX_FPS = 10;
+
   protected File outputFile;
   protected AnimatedGifEncoder encoder;
 
@@ -84,11 +86,11 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   protected TicToc timer = new TicToc();
 
   public GifExporter(File outputFile) {
-    this(outputFile, NO_FRAME_RATE); // 1 frame per sec
+    this(outputFile, FrameRate.VariableRate(DEFAULT_MAX_FPS)); 
   }
 
-  public GifExporter(File outputFile, int gifFrameDelayMs) {
-    super(gifFrameDelayMs);
+  public GifExporter(File outputFile, FrameRate frameRate) {
+    super(frameRate);
 
     this.outputFile = outputFile;
 
@@ -98,7 +100,7 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
 
     this.encoder = new AnimatedGifEncoder();
     this.encoder.start(outputFile.getAbsolutePath());
-    this.encoder.setDelay(gifFrameDelayMs);
+    this.encoder.setDelay((int)frameRate.getDuration());
     this.encoder.setRepeat(1000);
     this.encoder.setQuality(8);
 
@@ -218,14 +220,4 @@ public class GifExporter extends AbstractImageExporter implements AWTImageExport
   public int getDelay() {
     return encoder.getDelay() * 10;
   }
-  
-  /** Set the delay in milisecond between frames. To use adaptive delay, set with a negative value */
-  public void setDelay(int frameDelayMs) {
-    this.encoder.setDelay(frameDelayMs);
-  }
-
-  public void setDelayAdaptive() {
-    setDelay(NO_FRAME_RATE);
-  }
-
 }
