@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.jzy3d.io.gif.FrameRate;
 import org.jzy3d.maths.TicToc;
 
 /**
@@ -26,26 +27,26 @@ import org.jzy3d.maths.TicToc;
  *
  */
 public abstract class AbstractImageExporter implements AWTImageExporter {
-  protected static int DEFAULT_FRAME_RATE_MS = 1000;
-  protected static int NO_FRAME_RATE = -1;
 
   protected BufferedImage previousImage = null;
   protected TicToc timer;
-  protected ExecutorService executor;
+
   protected AtomicInteger numberSubmittedImages = new AtomicInteger(0);
   protected AtomicInteger numberOfPendingImages = new AtomicInteger(0);
   protected AtomicInteger numberOfSkippedImages = new AtomicInteger(0);
   protected AtomicInteger numberOfSavedImages = new AtomicInteger(0);
 
-  protected int frameDelayMs;
+  protected ExecutorService executor;
 
+  protected FrameRate frameRate;
+  
   protected boolean debug = false;
 
 
   // protected int numberOfSubmittedImages = 0;
 
-  public AbstractImageExporter(int frameDelayMs) {
-    this.frameDelayMs = frameDelayMs;
+  public AbstractImageExporter(FrameRate frameRate) {
+    this.frameRate = frameRate;
     this.timer = new TicToc();
     this.executor = Executors.newSingleThreadExecutor();
   }
@@ -142,7 +143,7 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
 
     timer.toc();
     double elapsed = timer.elapsedMilisecond();
-    int elapsedGifFrames = (int) Math.floor(elapsed / frameDelayMs);
+    int elapsedGifFrames = (int) Math.floor(elapsed / frameRate.getDuration());
 
     // ---------------------------------------------------------------
     // Image pops too early, skip it
@@ -304,7 +305,7 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
    * 
    */
   public boolean isGlobalDelay() {
-    return frameDelayMs > 0;
+    return frameRate.isContinuous();
   }
 
   public TicToc getTimer() {
