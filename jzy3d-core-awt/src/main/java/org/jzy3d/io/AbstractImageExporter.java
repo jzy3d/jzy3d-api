@@ -87,7 +87,9 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
           // Start counting time
           timer.tic();
 
-          scheduleImageExport(image, 0);
+          // Will add image next time to know the elapsed time
+          // with its following image
+          //scheduleImageExport(image, 0);
 
           // Remember this first image
           previousImage = image;
@@ -123,7 +125,7 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
       // Since the elapsed time is about the previous frame duration,
       // we export the previous frame NOW and provide it the elapsed time
       //scheduleImageExport(previousImage, (int)elapsed);
-      scheduleImageExport(image, (int)elapsed);
+      scheduleImageExport(previousImage, (int)elapsed);
 
       // The current frame is stored and will be exported at next frame
       // OR at export termination.
