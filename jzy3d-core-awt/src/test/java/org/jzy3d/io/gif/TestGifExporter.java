@@ -150,8 +150,8 @@ public class TestGifExporter {
 
     // Then number of submitted image grows after a short delay
     sleep(50);
-    Assert.assertEquals(time1, gif.getDelay());
-    Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
+    //Assert.assertEquals(0, gif.getDelay());
+    Assert.assertEquals(0, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
     // ------------------------------------
@@ -168,7 +168,7 @@ public class TestGifExporter {
     sleep(50);
 
     Assert.assertEquals(time2, gif.getDelay());
-    Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); 
+    Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
     // ------------------------------------
@@ -185,7 +185,7 @@ public class TestGifExporter {
     sleep(50);
 
     Assert.assertEquals(time3, gif.getDelay());
-    Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue()); 
+    Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
     // ------------------------------------
@@ -202,7 +202,7 @@ public class TestGifExporter {
     // Then number of submitted image did not grow after a short delay
     sleep(50);
     Assert.assertEquals(time4, gif.getDelay());
-    Assert.assertEquals(4, gif.getNumberSubmittedImages().intValue()); 
+    Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
 
@@ -212,7 +212,7 @@ public class TestGifExporter {
     boolean success = gif.terminate(100, TimeUnit.MILLISECONDS);
 
     // Then the last submited image is added (for implementation reasons)
-    Assert.assertEquals(4+1 , gif.getNumberSubmittedImages().intValue());
+    Assert.assertEquals(4, gif.getNumberSubmittedImages().intValue());
 
     // Then, Can properly flush all image and get a file
     Assert.assertTrue("Could flush all gif images before timeout", success);
@@ -260,8 +260,8 @@ public class TestGifExporter {
 
     // Then number of submitted image grows after a short delay
     sleep(50);
-    Assert.assertEquals(time1, gif.getDelay());
-    Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
+    //Assert.assertEquals(time1, gif.getDelay());
+    Assert.assertEquals(0, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
     // ------------------------------------
@@ -278,7 +278,7 @@ public class TestGifExporter {
     // Then number of submitted image did not grow after a short delay
     sleep(50);
 
-    Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
+    Assert.assertEquals(0, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(1, gif.getNumberOfSkippedImages().intValue());
 
     // ------------------------------------
@@ -295,7 +295,7 @@ public class TestGifExporter {
     sleep(50);
 
     Assert.assertEquals(time3, gif.getDelay());
-    Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); 
+    Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(1, gif.getNumberOfSkippedImages().intValue());
 
     // ------------------------------------
@@ -312,7 +312,7 @@ public class TestGifExporter {
     // Then number of submitted image did not grow after a short delay
     sleep(50);
     Assert.assertEquals(time4, gif.getDelay());
-    Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue()); 
+    Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(1, gif.getNumberOfSkippedImages().intValue());
 
 
@@ -322,7 +322,7 @@ public class TestGifExporter {
     boolean success = gif.terminate(100, TimeUnit.MILLISECONDS);
 
     // Then the last submited image is added (for implementation reasons)
-    Assert.assertEquals(4 , gif.getNumberSubmittedImages().intValue());
+    Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue());
 
     // Then, Can properly flush all image and get a file
     Assert.assertTrue("Could flush all gif images before timeout", success);
