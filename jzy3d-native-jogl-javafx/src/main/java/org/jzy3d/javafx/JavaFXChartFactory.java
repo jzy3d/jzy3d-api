@@ -1,7 +1,8 @@
 package org.jzy3d.javafx;
 
 import java.awt.image.BufferedImage;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
@@ -24,7 +25,8 @@ import javafx.scene.image.ImageView;
 @SuppressWarnings("restriction")
 /* Disable JavaFX access restriction warnings */
 public class JavaFXChartFactory extends AWTChartFactory {
-  static Logger LOGGER = Logger.getLogger(JavaFXChartFactory.class);
+  protected static Logger LOGGER = LogManager.getLogger(JavaFXChartFactory.class);
+
 
   public static Chart chart(Quality quality, String toolkit) {
     JavaFXChartFactory f = new JavaFXChartFactory();

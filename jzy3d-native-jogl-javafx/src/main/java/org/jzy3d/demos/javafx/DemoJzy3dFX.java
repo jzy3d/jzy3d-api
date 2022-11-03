@@ -42,7 +42,7 @@ public class DemoJzy3dFX extends Application {
 
     // Jzy3d
     JavaFXChartFactory factory = new JavaFXChartFactory();
-    AWTNativeChart chart = getDemoChart(factory, "offscreen");
+    AWTNativeChart chart = getDemoChart(factory);
     ImageView imageView = factory.bindImageView(chart);
 
     // JavaFX
@@ -58,7 +58,7 @@ public class DemoJzy3dFX extends Application {
     stage.setHeight(500);
   }
 
-  private AWTNativeChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
+  private AWTNativeChart getDemoChart(JavaFXChartFactory factory) {
     // -------------------------------
     // Define a function to plot
     Mapper mapper = new Mapper() {
@@ -86,6 +86,7 @@ public class DemoJzy3dFX extends Application {
     // quality.setAnimated(true);
 
     // let factory bind mouse and keyboard controllers to JavaFX node
+    factory.getPainterFactory().setOffscreen(800, 600);
     AWTNativeChart chart = (AWTNativeChart) factory.newChart(quality);
     chart.getScene().getGraph().add(surface);
     return chart;
