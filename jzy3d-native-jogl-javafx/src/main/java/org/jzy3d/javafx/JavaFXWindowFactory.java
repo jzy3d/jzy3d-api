@@ -18,7 +18,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 public class JavaFXWindowFactory extends AWTPainterFactory {
   @Override
-  public Renderer3d newRenderer3D(View view, boolean traceGL, boolean debugGL) {
+  public Renderer3d newRenderer3D(View view) {
     return new JavaFXRenderer3d(view, traceGL, debugGL);
   }
 
