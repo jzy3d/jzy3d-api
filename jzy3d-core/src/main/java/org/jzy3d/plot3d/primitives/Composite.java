@@ -25,7 +25,7 @@ import org.jzy3d.plot3d.transform.space.SpaceTransformer;
  * @author Martin Pernollet
  *
  */
-public class Composite extends Wireframeable implements ISingleColorable, IMultiColorable {
+public class Composite extends Wireframeable implements ISingleColorable, IMultiColorable, IGLBindedResource  {
   public Composite() {
     super();
     components = new ArrayList<Drawable>();
@@ -48,6 +48,25 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
    */
   public boolean canDecompose() {
     return isFaceDisplayed();
+  }
+  
+  @Override
+  public void mount(IPainter painter) {
+    if(!hasMountedOnce) {
+      for (Drawable c : components) {
+        if (c instanceof IGLBindedResource) {
+          ((IGLBindedResource)c).mount(painter);
+        }
+      }
+      hasMountedOnce = true;
+    }
+  }
+  
+  protected boolean hasMountedOnce = false;
+
+  @Override
+  public boolean hasMountedOnce() {
+    return hasMountedOnce;
   }
 
   /****************************************************************/
@@ -535,4 +554,5 @@ public class Composite extends Wireframeable implements ISingleColorable, IMulti
   protected ColorMapper mapper;
   protected Color color;
   protected boolean detailedToString = false;
+  
 }
