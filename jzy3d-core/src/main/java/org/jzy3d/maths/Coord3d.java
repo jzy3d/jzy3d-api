@@ -83,6 +83,12 @@ public class Coord3d implements Serializable {
     y = yi;
     z = 0;
   }
+  
+  public Coord3d(Coord3d c) {
+    x = c.x;
+    y = c.y;
+    z = c.z;
+  }
 
   public Coord3d(Coord2d c, float zi) {
     x = c.x;
