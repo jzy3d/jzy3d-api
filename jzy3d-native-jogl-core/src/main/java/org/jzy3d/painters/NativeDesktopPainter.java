@@ -205,6 +205,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     }
     return WindowingToolkit.UNKOWN;
   }
+  
+  @Override
+  public void clearCache() {
+    txtRendererMap.clear();
+  }
+
 
   @Override
   public int[] getViewPortAsInt() {
@@ -546,20 +552,25 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     // simply re-create
     // a new TextRenderer as soon as we want draw a text.
 
-    TextRenderer renderer = null;
-    // TextRenderer renderer = txtRendererMap.get(font);
+    
+    boolean allowReuse = true; 
+    // false = no cache hence invalidate JOGL internal cache at each frame
+    // true = cache, must be cleared when GLEventRenderer get disposed
+    
+    TextRenderer renderer = allowReuse ? txtRendererMap.get(font) : null;
 
     if (renderer == null) {
       renderer = new TextRenderer(toAWT(font), true, true, null);
       // renderer.setSmoothing(false);// some GPU do not handle smoothing well
       // renderer.setUseVertexArrays(false); // some GPU do not handle VBO properly
 
-      // txtRendererMap.put(font, renderer);
+      if(allowReuse)
+        txtRendererMap.put(font, renderer);
     }
     return renderer;
   }
 
-  // protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
+  protected Map<Font, TextRenderer> txtRendererMap = new HashMap<>();
 
 
   /**
