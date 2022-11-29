@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import org.jzy3d.colors.Color;
-import org.jzy3d.maths.Array;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
@@ -27,7 +26,6 @@ public abstract class AbstractPainter implements IPainter {
   protected OperatingSystem os = new OperatingSystem();
 
   public AbstractPainter() {
-    super();
   }
 
   @Override
@@ -39,8 +37,10 @@ public abstract class AbstractPainter implements IPainter {
   public WindowingToolkit getWindowingToolkit() {
     return WindowingToolkit.UNKOWN;
   }
-
-
+  
+  @Override
+  public void clearCache() {
+  }
 
   @Override
   public View getView() {
