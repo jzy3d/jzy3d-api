@@ -128,6 +128,8 @@ public interface IPainter {
    * {@link #acquireGL()}
    */
   public void releaseGL();
+  
+  public void clearCache();
 
   public Camera getCamera();
 
@@ -731,4 +733,6 @@ public interface IPainter {
   
   /** Verify if pixel scale of JVM is different than the one return by the canvas */
   public boolean isJVMScaleLargerThanNativeScale();
+
+
 }
