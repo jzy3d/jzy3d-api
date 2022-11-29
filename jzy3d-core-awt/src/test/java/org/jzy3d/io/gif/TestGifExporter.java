@@ -386,7 +386,12 @@ public class TestGifExporter {
 
     for (int i = 0; i < d.getFrameCount(); i++) {
       int t = d.getDelay(i); 
+      System.out.println(t);
       duration += t;
+    }
+    
+    if(d.getFrameCount()==0) {
+      System.err.println("WARNING : there was no image in the file " + file.getAbsolutePath());
     }
     
     return duration;
