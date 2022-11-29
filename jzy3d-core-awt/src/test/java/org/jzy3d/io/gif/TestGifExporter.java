@@ -381,12 +381,17 @@ public class TestGifExporter {
   
   protected int readGifAndCalculateDurationInMs(File file) {
     GifDecoder d = new GifDecoder();
-    d.read(file.getAbsolutePath());
+    int status = d.read(file.getAbsolutePath());
+    
+    if(status!=GifDecoder.STATUS_OK) {
+      throw new RuntimeException("Read error on : " + file.getAbsolutePath());
+    }
+    
     int duration = 0;
 
     for (int i = 0; i < d.getFrameCount(); i++) {
       int t = d.getDelay(i); 
-      System.out.println(t);
+      //System.out.println(t);
       duration += t;
     }
     
