@@ -23,9 +23,13 @@ public class TestAddRemoveFromFrame {
     AWTChartFactory factory = new AWTChartFactory();
 
     Frame awtFrame = new Frame();
+    
 
-    new TestAddRemoveFromFrame().addRemove_Scenario(factory, awtFrame,
-        "addRemove_AWTCanvas_FromAWTFrame");
+
+    TestAddRemoveFromFrame t = new TestAddRemoveFromFrame();
+    t.PAUSE_MS = 2000;
+    t.RENDER_LOOP = 3;
+    t.addRemove_Scenario(factory, awtFrame, "addRemove_AWTCanvas_FromAWTFrame");
 
   }
 

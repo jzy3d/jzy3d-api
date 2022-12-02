@@ -6,7 +6,6 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
-import jogamp.newt.driver.awt.ScreenDriver;
 
 /**
  * This {@link GLEventListener} overrides {@link Renderer3d} for the sole purpose of generating a {@link BufferedImage}.
