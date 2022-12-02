@@ -145,6 +145,13 @@ public class Renderer3d implements GLEventListener {
     // do not loose reference to view since the init/display/dispose may be called
     // several time during the lifetime of this renderer and canvas, especially if the
     // chart is embedded in dockable windows that involve parent component change.
+    
+    
+    // free possible resource, especially usefull to clear text renderer cache
+    // and deal with 
+    // https://forum.jogamp.org/TextRenderer-crash-the-JVM-after-removing-then-adding-a-canvas-from-a-AWT-or-Swing-layout-td4041660.html
+    
+    view.getPainter().clearCache();
   }
 
   /********************* SCREENSHOTS ***********************/
