@@ -1,11 +1,8 @@
 package org.jzy3d.demos.javafx;
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import com.jogamp.newt.NewtFactory;
+import com.jogamp.newt.Screen;
+import com.jogamp.newt.javafx.NewtCanvasJFX;
+import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
@@ -15,13 +12,14 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.fixedfunc.GLLightingFunc;
 import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.newt.NewtFactory;
-import com.jogamp.newt.Screen;
-import com.jogamp.newt.javafx.NewtCanvasJFX;
-import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.Animator;
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public class JOGL_JFX_App extends Application {
+public class DemoJavaFX_NewtCanvasJFX extends Application {
 
     @Override
     public void start(Stage stage) {

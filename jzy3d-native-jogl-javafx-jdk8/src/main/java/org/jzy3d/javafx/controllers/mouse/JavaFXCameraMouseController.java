@@ -25,6 +25,10 @@ public class JavaFXCameraMouseController extends AbstractCameraController
     register(node);
   }
 
+  public JavaFXCameraMouseController(Chart chart) {
+    this(chart, null);
+  }
+  
   public JavaFXCameraMouseController(Chart chart, Node node) {
     super(chart);
     register(node);

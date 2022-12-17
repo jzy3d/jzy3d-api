@@ -99,11 +99,15 @@ public class GLSLProgram {
       warnBuffer = new StringBuffer();
   }
 
+  public void link(GL2 gl) {
+    link(gl, true);
+  }
+  
   /**
    * Create a program and attach previously loaded and compiled shaders. Performs validation and
    * warn according to program strictness.
    */
-  public void link(GL2 gl) {
+  public void link(GL2 gl, boolean validateImmediatly) {
     programId = gl.glCreateProgram();
     for (int i = 0; i < vertexShaders_.size(); i++) {
       gl.glAttachShader(programId, vertexShaders_.get(i));
@@ -117,7 +121,8 @@ public class GLSLProgram {
     verifyLinkStatus(gl, programId);
 
     // validation
-    validateProgram(gl);
+    if(validateImmediatly)
+      validateProgram(gl);
   }
 
   public void bind(GL2 gl) {
@@ -349,7 +354,8 @@ public class GLSLProgram {
 
     gl.glGetShaderiv(programId, GL2.GL_COMPILE_STATUS, compileStatus, 0);
     gl.glGetShaderiv(programId, GL2.GL_INFO_LOG_LENGTH, logLength, 0);
-
+    //System.out.println(content); 
+    
     if (compileStatus[0] != GL2.GL_TRUE) {
       warnScript(gl, fileURL, readErrors(gl, programId), compileStatus[0], logLength[0], content);
     }

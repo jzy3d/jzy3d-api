@@ -48,7 +48,7 @@ import org.jzy3d.plot3d.primitives.Shape;
  *
  */
 public class OrthonormalTessellator extends Tessellator {
-  static Logger logger = LogManager.getLogger(OrthonormalTessellator.class);
+  //static Logger logger = LogManager.getLogger(OrthonormalTessellator.class);
 
   @Override
   public Composite build(float[] x, float[] y, float[] z) {
@@ -129,7 +129,7 @@ public class OrthonormalTessellator extends Tessellator {
     float last = Float.NaN;
     for (int i = 0; i < copy.length; i++) {
       if (Float.isNaN(copy[i])) {
-        logger.info("Ignoring NaN value at " + i);
+        //logger.info("Ignoring NaN value at " + i);
       } else if (copy[i] != last) {
         nunique++;
         last = copy[i];
@@ -142,7 +142,7 @@ public class OrthonormalTessellator extends Tessellator {
     int r = 0;
     for (int d = 0; d < copy.length; d++) {
       if (Float.isNaN(copy[d])) {
-        logger.info("Ignoring NaN value at " + d);
+        //logger.info("Ignoring NaN value at " + d);
       } else if (copy[d] != last) {
         result[r] = copy[d];
         last = copy[d];

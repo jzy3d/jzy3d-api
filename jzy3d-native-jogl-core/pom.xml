@@ -26,16 +26,18 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- The way to link on JOGL 2.3.2 -->
+		<!-- The way to link on JOGL 2.3.2 
 
-		<!-- <dependency>
+		<dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt-main</artifactId>
+            <version>2.3.2</version>
         </dependency>
 
         <dependency>
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all-main</artifactId>
+            <version>2.3.2</version>
         </dependency>-->
 
         <!-- The way to link on JOGL 2.4.0 once it is cleanly deployed -->
