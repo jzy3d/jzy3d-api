@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.Buffer;
+import java.nio.IntBuffer;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.io.glsl.GLSLProgram;
@@ -85,8 +86,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
       // load shaders handling the volume (a.k.a 3D texture)
       ShaderFilePair sfp = new ShaderFilePair(this.getClass(), "volume.vert", "volume.frag");
       shaderProgram.loadAndCompileShaders(gl.getGL2(), sfp);
-      shaderProgram.link(gl.getGL2());
-
+      shaderProgram.link(gl.getGL2(), validateAtMount);
 
       bind(gl);
 
@@ -96,6 +96,8 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
       mounted = true;
     }
   }
+  
+  boolean validateAtMount = false;
 
   public void setMin(Number min) {
     this.min = min.floatValue();
@@ -111,12 +113,18 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
   }
 
   public void bind(final GL gl) throws GLException {
+
     gl.glEnable(GL2.GL_TEXTURE_3D);
+    
+    //gl.getGL2().glEnd();
 
     // Verify a texture can be enabled and mapped to the shader variable name
     validateTexID(gl, true);
 
     // Declare a 3D texture
+    //IntBuffer b = IntBuffer.allocate(32880);
+    //gl.glGenTextures(1, b);
+    //System.out.println(texID);
     gl.glBindTexture(GL2.GL_TEXTURE_3D, texID);
     gl.glActiveTexture(GL.GL_TEXTURE0);
 
@@ -154,12 +162,11 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
   public void setTextureData(final GL gl, Buffer buffer, int[] shape) {
     // define how pixels are stored in memory
     gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 1);
-
+    
     // specify a 3 dimensional texture image with a single LOD, R float internal format, dynamical
     // number of voxel for width, height, depth, R float input format
     gl.getGL2().glTexImage3D(GL2.GL_TEXTURE_3D, 0, GL.GL_R32F, shape[2], shape[1], shape[0], 1,
         GL2.GL_RED, GL.GL_FLOAT, buffer);
-
   }
 
   protected boolean validateTexID(final GL gl, final boolean throwException) {
@@ -188,6 +195,11 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     else {
       bind(gl);
     }
+    
+    // validation
+    if(!validateAtMount)
+      shaderProgram.validateProgram(gl.getGL2());
+
 
     colormapTexure.update(gl);
 

@@ -10,6 +10,7 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.GLBuffers;
 
 /**
@@ -20,6 +21,8 @@ import com.jogamp.opengl.util.GLBuffers;
 public class TestTexture3D {
   @Test
   public void givenAVolume_whenOpeningChart_thenBufferIsSizedAppropriately() {
+GLProfile.initSingleton();
+
 
     // -------------------------------
     // Given a volume defined as a Texture3D object
@@ -50,6 +53,8 @@ public class TestTexture3D {
     
     AWTChartFactory f = new AWTChartFactory();
     f.getPainterFactory().setOffscreen(800, 600);
+    f.getPainterFactory().setDebugGL(true); // trigger exception if error
+
     Chart chart = f.newChart(Quality.Intermediate());
     
     chart.add(volume);
@@ -62,6 +67,9 @@ public class TestTexture3D {
     Assert.assertTrue(volume.shapeVBO.hasMountedOnce());
     Assert.assertNotNull(volume.shaderProgram);
     Assert.assertNotNull(volume.colormapTexure);
+    
+    System.out.println(volume.shaderProgram.getProgramId());
+    //System.out.println(volume.colormapTexure.);
     
   }
 }
