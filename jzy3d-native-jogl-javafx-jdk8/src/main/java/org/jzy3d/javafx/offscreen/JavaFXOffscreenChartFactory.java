@@ -25,6 +25,8 @@ public class JavaFXOffscreenChartFactory extends AWTChartFactory {
     getPainterFactory().setOffscreen(DEFAULT_DIMENSION);
   }
   
+  
+  
   public ImageView bindImageView(AWTNativeChart chart) {
     return binding.bindImageView(chart);
   }

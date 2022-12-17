@@ -43,27 +43,11 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Map;
-
-import com.jogamp.nativewindow.AbstractGraphicsDevice;
-import com.jogamp.nativewindow.AbstractGraphicsScreen;
-import com.jogamp.nativewindow.NativeWindowException;
-import com.jogamp.nativewindow.NativeWindowFactory;
-import com.jogamp.nativewindow.ToolkitLock;
-import com.jogamp.nativewindow.awt.AWTGraphicsScreen;
-
-import jogamp.common.os.PlatformPropsImpl;
-import jogamp.nativewindow.Debug;
-import jogamp.nativewindow.NWJNILibLoader;
-import jogamp.nativewindow.jawt.x11.X11SunJDKReflection;
-import jogamp.nativewindow.macosx.OSXUtil;
-import jogamp.nativewindow.x11.X11Lib;
-
 import com.jogamp.common.ExceptionUtils;
 import com.jogamp.common.os.Platform;
 import com.jogamp.common.util.PropertyAccess;
@@ -71,8 +55,20 @@ import com.jogamp.common.util.UnsafeUtil;
 import com.jogamp.common.util.VersionNumber;
 import com.jogamp.common.util.locks.LockFactory;
 import com.jogamp.common.util.locks.RecursiveLock;
+import com.jogamp.nativewindow.AbstractGraphicsDevice;
+import com.jogamp.nativewindow.AbstractGraphicsScreen;
+import com.jogamp.nativewindow.NativeWindowException;
+import com.jogamp.nativewindow.NativeWindowFactory;
+import com.jogamp.nativewindow.ToolkitLock;
+import com.jogamp.nativewindow.awt.AWTGraphicsScreen;
+import jogamp.common.os.PlatformPropsImpl;
+import jogamp.nativewindow.Debug;
+import jogamp.nativewindow.NWJNILibLoader;
+import jogamp.nativewindow.jawt.x11.X11SunJDKReflection;
+import jogamp.nativewindow.macosx.OSXUtil;
+import jogamp.nativewindow.x11.X11Lib;
 
-public class JAWTUtil_ {
+public class JAWTUtil {
   public static final boolean DEBUG = Debug.debug("JAWT");
 
   private static final boolean SKIP_AWT_HIDPI;
