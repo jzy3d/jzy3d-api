@@ -1,116 +1,88 @@
-package org.jzy3d.javafx;
+package org.jzy3d.javafx.offscreen;
 
-import java.awt.image.BufferedImage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.AWTChartFactory;
-import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.javafx.controllers.keyboard.JavaFXCameraKeyController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
-import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
-import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-@SuppressWarnings("restriction")
-/* Disable JavaFX access restriction warnings */
-public class JavaFXChartFactory extends AWTChartFactory {
-  protected static Logger LOGGER = LogManager.getLogger(JavaFXChartFactory.class);
+public class JavaFXOffscreenBinding {
+  protected static Logger LOGGER = LogManager.getLogger(JavaFXOffscreenChartFactory.class);
 
-
-  public static Chart chart(Quality quality, String toolkit) {
-    JavaFXChartFactory f = new JavaFXChartFactory();
-    return f.newChart(quality);
-  }
-
-  /* ******************************************** */
-
-  public JavaFXChartFactory() {
-    super(new JavaFXWindowFactory());
-  }
-
-  public JavaFXChartFactory(IPainterFactory windowFactory) {
-    super(windowFactory);
-  }
-
-
-  public Image getScreenshotAsJavaFXImage(AWTNativeChart chart) {
-    chart.screenshot();
-    AWTRenderer3d renderer = (AWTRenderer3d) ((INativeCanvas) chart.getCanvas()).getRenderer();
-    BufferedImage i = renderer.getLastScreenshotImage();
-    if (i != null) {
-      Image image = SwingFXUtils.toFXImage(i, null);
-      return image;
-    } else {
-      // LOGGER.error(this.getClass() + " SCREENSHOT NULL");
-      return null;
-    }
-  }
+  
+  /* ********************************************************** */
+  /* GET A JAVAFX IMAGE VIEW BINDED TO CHART
+  /* ********************************************************** */
 
   /**
    * Return an {@link ImageView} from an {@link AWTChart} expected to render offscreen and to use a
-   * {@link JavaFXRenderer3d} poping Images when the chart is redrawn.
+   * {@link JavaFXOffscreenRenderer3d} poping Images when the chart is redrawn.
+   * 
+   * Also attaches a {@link JavaFXCameraMouseController} and {@link JavaFXCameraKeyController} to the 
+   * returned {@link ImageView}.
    * 
    * @param chart
-   * @return
+   * @return an {@link ImageView} displaying the chart content interactively
    */
   public ImageView bindImageView(AWTNativeChart chart) {
     ImageView imageView = new ImageView();
-    imageView.fitHeightProperty();
-    imageView.fitWidthProperty();
+    //imageView.fitHeightProperty();
+    //imageView.fitWidthProperty();
 
     bind(imageView, chart);
 
     // Initialize imageView
-    Image image = getScreenshotAsJavaFXImage(chart);
+    /*Image image = getScreenshotAsJavaFXImage(chart);
     if (image != null) {
       System.out.println("setting image at init");
       imageView.setImage(image);
     } else {
       // LOGGER.error("image is null at init");
-    }
+    }*/
 
-    JavaFXCameraMouseController jfxMouse =
-        (JavaFXCameraMouseController) chart.addMouseCameraController();
+    JavaFXCameraMouseController jfxMouse = (JavaFXCameraMouseController) chart.addMouse();
     jfxMouse.setNode(imageView);
     // JavaFXNodeMouse.makeDraggable(stage, imgView);
 
-    JavaFXCameraKeyController jfxKey =
-        (JavaFXCameraKeyController) chart.addKeyboardCameraController();
+    JavaFXCameraKeyController jfxKey = (JavaFXCameraKeyController) chart.addKeyboard();
     jfxKey.setNode(imageView);
     imageView.setFocusTraversable(true);
     return imageView;
   }
 
-  /* ########################################### */
 
   /**
    * Register for renderer notifications with a new JavaFX Image
+   *
+   * @param imageView
+   * @param chart
    */
-  public void bind(final ImageView imageView, AWTChart chart) {
-    if (!(((INativeCanvas) chart.getCanvas()).getRenderer() instanceof JavaFXRenderer3d)) {
-      LOGGER.error("NOT BINDING IMAGE VIEW TO CHART AS NOT A JAVAFX RENDERER");
-      return;
-    }
+  protected void bind(final ImageView imageView, AWTChart chart) {
+
+    // Downcast renderer
+    JavaFXOffscreenRenderer3d renderer = getRenderer(chart);
 
     // Set listener on renderer to update imageView
-    JavaFXRenderer3d renderer =
-        (JavaFXRenderer3d) ((INativeCanvas) chart.getCanvas()).getRenderer();
     renderer.addDisplayListener(new DisplayListener() {
       @Override
       public void onDisplay(Object image) {
         if (image != null) {
-          imageView.setImage((javafx.scene.image.Image) image);
+          javafx.scene.image.Image img = (javafx.scene.image.Image) image;
+
+          //System.out.println("JavaFXOffscreenBinding.bind receives an image of size "
+          //    + img.getWidth() + " x " + img.getHeight());
+
+          imageView.setImage(img);
+
         } else {
           LOGGER.error("image is null while listening to renderer");
         }
@@ -118,7 +90,23 @@ public class JavaFXChartFactory extends AWTChartFactory {
     });
   }
 
+  protected JavaFXOffscreenRenderer3d getRenderer(AWTChart chart) {
+    return (JavaFXOffscreenRenderer3d) ((INativeCanvas) chart.getCanvas()).getRenderer();
+  }
+  
+  /* ********************************************************** */
+  /* A RESIZE LISTENER
+  /* ********************************************************** */
+
+
+  /**
+   * Listen to scene size change in order to reset offscreen chart dimensions.
+   * 
+   * @param chart
+   * @param scene
+   */
   public void addSceneSizeChangedListener(Chart chart, Scene scene) {
+
     scene.widthProperty().addListener(new ChangeListener<Number>() {
       @Override
       public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
@@ -128,6 +116,7 @@ public class JavaFXChartFactory extends AWTChartFactory {
         // System.out.println("resize ok");
       }
     });
+
     scene.heightProperty().addListener(new ChangeListener<Number>() {
       @Override
       public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
@@ -143,13 +132,12 @@ public class JavaFXChartFactory extends AWTChartFactory {
     if (chart.getCanvas() instanceof OffscreenCanvas) {
       OffscreenCanvas canvas = (OffscreenCanvas) chart.getCanvas();
 
-      // System.out.println("will init");
-      canvas.initBuffer(canvas.getCapabilities(), (int) width, (int) height);
-      // LOGGER.error("done initBuffer");
-      chart.render();
-      // LOGGER.error("done render");
+      //System.out.println("JavaFXOffscreenChartFactory.resetTo " + width + " x " + height);
+      //canvas.initBuffer(canvas.getCapabilities(), (int) width, (int) height);
+      canvas.resize((int) width, (int) height);
+      
     } else {
-      LOGGER.error("NOT AN OFFSCREEN CANVAS!");
+      throw new RuntimeException("Expect the chart to have an offscreen canvas. Here we have a " + chart.getCanvas());
     }
   }
 }

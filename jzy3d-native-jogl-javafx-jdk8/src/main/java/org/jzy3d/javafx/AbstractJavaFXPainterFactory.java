@@ -9,18 +9,28 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController.
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.chart.factories.AWTPainterFactory;
+import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.javafx.controllers.keyboard.JavaFXCameraKeyController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXMousePickingController;
+import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Utils;
-import org.jzy3d.plot3d.rendering.view.Renderer3d;
-import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.scene.Scene;
 
-public class JavaFXWindowFactory extends AWTPainterFactory {
+public class AbstractJavaFXPainterFactory extends AWTPainterFactory {
+  
   @Override
-  public Renderer3d newRenderer3D(View view) {
-    return new JavaFXRenderer3d(view, traceGL, debugGL);
+  public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    Dimension dim = getOffscreenDimension();
+    return new OffscreenCanvas(factory, scene, quality,
+        ((NativePainterFactory) factory.getPainterFactory()).getCapabilities(), dim.width,
+        dim.height);
   }
+
 
   @Override
   public ICameraMouseController newMouseCameraController(Chart chart) {
