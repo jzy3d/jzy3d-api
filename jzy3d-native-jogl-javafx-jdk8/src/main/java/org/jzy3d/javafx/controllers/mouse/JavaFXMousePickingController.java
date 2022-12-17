@@ -78,9 +78,7 @@ public class JavaFXMousePickingController extends AbstractCameraController
 
   @Override
   public void dispose() {
-    for (Chart c : targets) {
-      c.getCanvas().removeMouseController(this);
-    }
+    getChart().getCanvas().removeMouseController(this);
 
     if (threadController != null)
       threadController.stop();
@@ -132,10 +130,10 @@ public class JavaFXMousePickingController extends AbstractCameraController
   }
 
   public void pick(MouseEvent e) {
-    int yflip = -(int) e.getY() + targets.get(0).getCanvas().getRendererHeight();
+    int yflip = -(int) e.getY() + getChart().getCanvas().getRendererHeight();
     prevMouse.x = (int) e.getX();
     prevMouse.y = (int) e.getY();// yflip;
-    View view = targets.get(0).getView();
+    View view = getChart().getView();
     prevMouse3d = view.projectMouse((int) e.getX(), yflip);
 
     GL gl = ((NativeDesktopPainter) chart.getView().getPainter()).getCurrentGL(chart.getCanvas());

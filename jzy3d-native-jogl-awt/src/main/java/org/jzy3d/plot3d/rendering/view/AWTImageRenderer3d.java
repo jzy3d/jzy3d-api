@@ -22,6 +22,7 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
     public void onDisplay(Object image);
   }
 
+  protected AWTGLReadBufferUtil screenshot = null;
   protected List<DisplayListener> listeners = new ArrayList<DisplayListener>();
 
   public AWTImageRenderer3d() {
@@ -49,7 +50,6 @@ public class AWTImageRenderer3d extends AWTRenderer3d {
     }
   }
 
-  AWTGLReadBufferUtil screenshot = null;
 
   protected BufferedImage makeScreenshotAsBufferedImage(GL gl) {
     AWTGLReadBufferUtil screenshot = makeScreenshot(gl);
