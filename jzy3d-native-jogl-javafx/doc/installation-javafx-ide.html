@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<!-- saved from url=(0047)https://cs108.epfl.ch/archive/20/g/openjfx.html -->
+<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- 2020-08-05 Mer 09:40 -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Utiliser JavaFX dans IntelliJ et Eclipse</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Michel Schinz">
+<link rel="stylesheet" href="./installation-javafx-ide_files/cs108.css" type="text/css">
+<link rel="stylesheet" href="./installation-javafx-ide_files/github.css" type="text/css">
+<script src="./installation-javafx-ide_files/highlight.pack.js"></script>
+<script>
+hljs.configure({ languages: [ 'java' ] });
+function orgHighlight() {
+  var blocks = document.querySelectorAll('pre.src');
+  Array.prototype.forEach.call(blocks, hljs.highlightBlock);
+}
+addEventListener('DOMContentLoaded', orgHighlight, false);
+addEventListener('load', orgHighlight, false);
+</script>
+</head>
+<body>
+<div id="content">
+<header>
+<h1 class="title">Utiliser JavaFX dans IntelliJ et Eclipse</h1>
+</header>
+<div id="outline-container-org1d7dc2e" class="outline-2">
+<h2 id="org1d7dc2e">Introduction</h2>
+<div class="outline-text-2" id="text-org1d7dc2e">
+<p>
+JavaFX est une bibliothèque Java de création d'interfaces utilisateur graphiques. JavaFX faisait initialement partie de la bibliothèque standard Java, mais est devenu par la suite un projet séparé. Pour cette raison, il est nécessaire d'installer JavaFX avant de pouvoir l'utiliser dans un projet, et ce document décrit la marche à suivre.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2372ede" class="outline-2">
+<h2 id="org2372ede">Installation de JavaFX</h2>
+<div class="outline-text-2" id="text-org2372ede">
+<p>
+Pour installer JavaFX, il faut commencer par télécharger l'archive Zip contenant la version correspondant à votre système d'exploitation (Windows, macOS ou Linux). En cliquant sur le lien ci-dessous correspondant à votre système, vous devriez pouvoir directement télécharger la bonne version de JavaFX :
+</p>
+
+<ul class="org-ul">
+<li><a href="https://gluonhq.com/download/javafx-11-0-2-sdk-windows/">Windows</a></li>
+<li><a href="https://gluonhq.com/download/javafx-11-0-2-sdk-mac/">Mac</a></li>
+<li><a href="https://gluonhq.com/download/javafx-11-0-2-sdk-linux/">Linux</a></li>
+</ul>
+
+<p>
+Si le lien ne fonctionne pas, rendez-vous sur <a href="https://gluonhq.com/products/javafx/">la page de téléchargement de OpenJFX</a> et cliquez sur le lien de téléchargement (<i>Download</i>) du SDK correspondant à votre système.
+</p>
+
+<p>
+Une fois l'archive téléchargée, décompressez-la dans un dossier de votre choix. Si vous avez déjà un dossier contenant tous les projets liés à ce cours (séries d'exercices, projet principal, etc.), il est conseillé d'y placer également JavaFX, afin de garder de l'ordre.
+</p>
+
+<p>
+La décompression de l'archive devrait créer un dossier nommé <code>javafx-sdk-11.0.2</code> contenant au moins deux sous-dossiers nommés <code>legal</code> et <code>lib</code>. Sur Windows, un sous-dossier <code>bin</code> existe également.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org5890ab6" class="outline-2">
+<h2 id="org5890ab6">Configuration d'IntelliJ</h2>
+<div class="outline-text-2" id="text-org5890ab6">
+<p>
+Une fois l'archive décompressée, il faut encore configurer IntelliJ pour qu'il ait connaissance de cette bibliothèque, puis ajouter la bibliothèque à tous les projets qui l'utilisent.
+</p>
+</div>
+
+<div id="outline-container-orgb810422" class="outline-3">
+<h3 id="orgb810422">Ajout de la bibliothèque</h3>
+<div class="outline-text-3" id="text-orgb810422">
+<p>
+Afin qu'il soit possible d'utiliser JavaFX dans des projets depuis IntelliJ, il faut l'ajouter à IntelliJ sous la forme d'une bibliothèque globale (<i>global library</i>), de la manière suivante :
+</p>
+
+<ol class="org-ol">
+<li>dans le menu <i>File</i>, choisissez <i>Other Settings</i> puis <i>Structure for New Projects…</i>,</li>
+
+<li>dans la partie de gauche, cliquez sur <i>Global Libraries</i> dans la section nommée <i>Platform Settings</i>,</li>
+
+<li>dans la partie centrale, cliquez sur le bouton <code>+</code> en haut, puis choisissez <i>Java</i> dans le menu <i>New Global Library</i> qui s'ouvre,</li>
+
+<li>naviguez vers le dossier <code>lib</code> créé lors de la décompression de l'archive et sélectionnez <b>tous les fichiers</b> qu'il contient (ceci est très important),</li>
+
+<li>cliquez sur <i>Open</i> (ou équivalent),</li>
+
+<li>vérifiez que, dans la fenêtre <i>Detected Roots</i> qui s'ouvre, tous les sept éléments affichés (<code>javafx.base</code>, <code>javafx.controls</code>, etc.) sont cochés et cliquez sur <i>OK</i>,</li>
+
+<li>changez le nom de la bibliothèque ainsi créée en <code>OpenJFX 11</code>.</li>
+</ol>
+
+<p>
+Une fois ces opérations effectuées, la fenêtre devrait avoir l'apparence suivante (les rectangles violets masquent la partie des chemins qui dépendent de votre système) :
+</p>
+
+
+<figure>
+<a href="./installation-javafx-ide_files/intellij-openjfx.png" class="shadowed" width="95%"><img src="./installation-javafx-ide_files/intellij-openjfx.png" alt="intellij-openjfx.png" class="shadowed" width="95%"></a>
+
+</figure>
+
+<p>
+Vous pouvez alors fermer la fenêtre en cliquant sur <i>OK</i>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgd8e0a7c" class="outline-3">
+<h3 id="orgd8e0a7c">Utilisation de JavaFX dans un projet</h3>
+<div class="outline-text-3" id="text-orgd8e0a7c">
+<p>
+Une fois la bibliothèque ajoutée à IntelliJ, il est possible de l'utiliser dans un projet quelconque de la manière suivante :
+</p>
+
+<ol class="org-ol">
+<li>dans le menu <i>File</i>, choisissez <i>Project Structure…</i>,</li>
+
+<li>dans la partie de gauche, cliquez sur <i>Modules</i> dans la section nommée <i>Project Settings</i>,</li>
+
+<li>dans la partie de droite, sélectionnez l'onglet <i>Dependencies</i>,</li>
+
+<li>dans la partie de droite toujours, cliquez sur le bouton <code>+</code> (en bas sur Mac, à droite sur Linux et Windows), puis choisissez l'entrée <i>Library…</i> du menu qui s'ouvre,</li>
+
+<li>dans la fenêtre qui s'ouvre, choisissez <i>OpenJFX 11</i>, puis cliquez sur <i>Add Selected</i>.</li>
+</ol>
+
+<p>
+Une fois ces opérations effectuées, la fenêtre devrait avoir l'apparence suivante :
+</p>
+
+
+<figure>
+<a href="./installation-javafx-ide_files/intellij-openjfx-proj.png" class="shadowed" width="95%"><img src="./installation-javafx-ide_files/intellij-openjfx-proj.png" alt="intellij-openjfx-proj.png" class="shadowed" width="95%"></a>
+
+</figure>
+
+<p>
+Vous pouvez alors fermer la fenêtre en cliquant sur <i>OK</i>, et JavaFX devrait être utilisable dans votre projet. Pour le vérifier, vous pouvez y ajouter temporairement le programme suivant :
+</p>
+<div class="org-src-container">
+<pre class="src src-java hljs"><span class="hljs-keyword"><span class="hljs-keyword">import</span></span> javafx.scene.paint.Color;
+
+<span class="hljs-keyword"><span class="hljs-keyword">public</span></span> <span class="hljs-keyword"><span class="hljs-keyword">final</span></span> <span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">class</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">CheckJavaFx</span></span></span><span class="hljs-class"> </span></span>{
+  <span class="hljs-function"><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">public</span></span></span><span class="hljs-function"> </span><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">static</span></span></span><span class="hljs-function"> </span><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">void</span></span></span><span class="hljs-function"> </span><span class="hljs-title"><span class="hljs-function"><span class="hljs-title">main</span></span></span><span class="hljs-params"><span class="hljs-function"><span class="hljs-params">(String[] args)</span></span></span><span class="hljs-function"> </span></span>{
+    Color c = Color.RED;
+    System.out.println(c.getRed());
+  }
+}
+</pre>
+</div>
+
+<p>
+Si vous arrivez à l'exécuter et qu'il affiche <code>1.0</code>, cela signifie que JavaFX est correctement installé.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org87da4fe" class="outline-3">
+<h3 id="org87da4fe">Problèmes</h3>
+<div class="outline-text-3" id="text-org87da4fe">
+<p>
+Il est possible que lors de l'exécution de certains programmes JavaFX, l'erreur suivante s'affiche au démarrage :
+</p>
+
+<blockquote>
+<p>
+Erreur : des composants d'exécution JavaFX obligatoires pour exécuter cette application sont manquants.
+</p>
+</blockquote>
+
+<p>
+Pour le résoudre, il faut encore effectuer la manipulation suivante :
+</p>
+
+<ol class="org-ol">
+<li>dans le menu <i>Run</i>, choisissez <i>Edit Configurations…</i>,</li>
+
+<li>dans le champ intitulé <i>VM options</i>, ajoutez la ligne suivante, où <code>&lt;chemin&gt;</code> est le chemin complet du répertoire <code>lib</code> contenant JavaFX :</li>
+</ol>
+
+<pre class="example">--module-path &lt;chemin&gt; --add-modules javafx.controls
+</pre>
+
+
+<p>
+Pour connaître le chemin en question, vous pouvez réouvrir la fenêtre dans laquelle la bibliothèque OpenJFX est définie (<i>File</i> &gt; <i>Other Settings</i> &gt; <i>Structure for New Projects…</i> puis <i>Global Libraries</i>) et regarder le chemin donné pour les fichiers dont le nom se termine par <code>.jar</code>. Le chemin à utiliser ci-dessus est ce chemin-là, mais uniquement jusqu'au répertoire <code>lib</code>. Sur Windows, ce chemin commence probablement par <code>C:\</code>, tandis que sur Linux et macOS, il commence probablement par <code>/</code>.
+</p>
+
+<p>
+Attention : si ce chemin contient au moins une espace, il faut impérativement le mettre entre guillemets (<code>"</code>).
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org5b8ab01" class="outline-2">
+<h2 id="org5b8ab01">Configuration d'Eclipse</h2>
+<div class="outline-text-2" id="text-org5b8ab01">
+<p>
+Une fois l'archive décompressée, il faut encore configurer Eclipse pour qu'il ait connaissance de cette bibliothèque, puis ajouter la bibliothèque à tous les projets qui l'utilisent.
+</p>
+</div>
+
+<div id="outline-container-org07ea0ef" class="outline-3">
+<h3 id="org07ea0ef">Ajout de la bibliothèque</h3>
+<div class="outline-text-3" id="text-org07ea0ef">
+<p>
+Afin de pouvoir utiliser JavaFX dans des projets Eclipse, il faut l'ajouter sous la forme d'une bibliothèque utilisateur (<i>user library</i>), de la manière suivante :
+</p>
+
+<ol class="org-ol">
+<li>dans le menu <i>Eclipse</i> (sur Mac) ou <i>Window</i> (autre), sélectionnez l'entrée <i>Preferences</i>,</li>
+
+<li>dans la fenêtre qui s'ouvre, déroulez l'onglet <i>Java</i> puis <i>Build Path</i> puis sélectionnez <i>User Libraries</i>,</li>
+
+<li>cliquez sur le bouton <i>New…</i> et entrez <code>OpenJFX 11</code> comme nom, avant de cliquer sur <i>OK</i>,</li>
+
+<li>cliquez sur le bouton <i>Add External JARs…</i>,</li>
+
+<li>naviguez vers le dossier <code>lib</code> créé lors de la décompression de l'archive et sélectionnez <b>tous les fichiers .jar</b> qu'il contient,</li>
+
+<li>cliquez sur <i>Open</i> (ou équivalent),</li>
+
+<li>sélectionnez l'élément <i>Source attachment</i> du premier des fichiers <code>.jar</code> (probablement <code>javafx-swt.jar</code>) puis cliquez sur le bouton <i>Edit…</i>,</li>
+
+<li>dans la fenêtre qui s'ouvre, sélectionnez <i>External location</i> puis cliquez sur <i>External File…</i>,</li>
+
+<li>naviguez vers le dossier <code>lib</code> créé lors de la décompression de l'archive, sélectionnez le fichier <code>src.zip</code> qu'il contient et cliquez sur <i>Open</i> (ou équivalent),</li>
+
+<li>cliquez sur <i>OK</i> pour fermer la fenêtre <i>Source Attachment Configuration</i>,</li>
+
+<li>répétez les points 7 à 10 pour tous les autres fichiers <code>.jar</code> de JavaFX.</li>
+</ol>
+
+<p>
+Une fois ces opérations effectuées, la fenêtre devrait avoir l'apparence suivante (les rectangles violets masquent la partie des chemins qui dépendent de votre système) :
+</p>
+
+
+<figure>
+<a href="./installation-javafx-ide_files/eclipse-openjfx.png" class="shadowed" width="95%"><img src="./installation-javafx-ide_files/eclipse-openjfx.png" alt="eclipse-openjfx.png" class="shadowed" width="95%"></a>
+
+</figure>
+</div>
+</div>
+
+<div id="outline-container-org9497280" class="outline-3">
+<h3 id="org9497280">Utilisation de JavaFX dans un projet</h3>
+<div class="outline-text-3" id="text-org9497280">
+<p>
+Une fois la bibliothèque ajoutée à Eclipse, il est possible de l'utiliser dans un projet quelconque de la manière suivante :
+</p>
+
+<ol class="org-ol">
+<li>dans le menu <i>Project</i>, choisissez <i>Properties</i>,</li>
+
+<li>sélectionnez <i>Java Build Path</i> dans la liste à gauche,</li>
+
+<li>cliquez sur l'onglet <i>Libraries</i>,</li>
+
+<li>sélectionnez <i>Classpath</i>, puis cliquez sur <i>Add Library…</i>,</li>
+
+<li>choisissez <i>User Library</i> puis cliquez sur <i>Next</i>,</li>
+
+<li>sélectionnez la bibliothèque <code>OpenJFX 11</code> puis cliquez sur <i>Finish</i>.</li>
+</ol>
+
+<p>
+Pour vérifier que JavaFX est bien utilisable dans votre projet, vous pouvez y ajouter temporairement le programme suivant :
+</p>
+<div class="org-src-container">
+<pre class="src src-java hljs"><span class="hljs-keyword"><span class="hljs-keyword">import</span></span> javafx.scene.paint.Color;
+
+<span class="hljs-keyword"><span class="hljs-keyword">public</span></span> <span class="hljs-keyword"><span class="hljs-keyword">final</span></span> <span class="hljs-class"><span class="hljs-keyword"><span class="hljs-class"><span class="hljs-keyword">class</span></span></span><span class="hljs-class"> </span><span class="hljs-title"><span class="hljs-class"><span class="hljs-title">CheckJavaFx</span></span></span><span class="hljs-class"> </span></span>{
+  <span class="hljs-function"><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">public</span></span></span><span class="hljs-function"> </span><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">static</span></span></span><span class="hljs-function"> </span><span class="hljs-keyword"><span class="hljs-function"><span class="hljs-keyword">void</span></span></span><span class="hljs-function"> </span><span class="hljs-title"><span class="hljs-function"><span class="hljs-title">main</span></span></span><span class="hljs-params"><span class="hljs-function"><span class="hljs-params">(String[] args)</span></span></span><span class="hljs-function"> </span></span>{
+    Color c = Color.RED;
+    System.out.println(c.getRed());
+  }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8736f66" class="outline-3">
+<h3 id="org8736f66">Problèmes</h3>
+<div class="outline-text-3" id="text-org8736f66">
+<p>
+Il est possible que lors de l'exécution de certains programmes JavaFX, l'erreur suivante s'affiche au démarrage :
+</p>
+
+<blockquote>
+<p>
+Erreur : des composants d'exécution JavaFX obligatoires pour exécuter cette application sont manquants.
+</p>
+</blockquote>
+
+<p>
+Pour le résoudre, il faut encore effectuer la manipulation suivante :
+</p>
+
+<ol class="org-ol">
+<li>dans l'explorateur de paquetages (<i>Package Explorer</i>), faites un clic droit sur la classe principale de votre application, puis sélectionnez l'entrée <i>Run Configurations…</i> du sous-menu <i>Run As</i>,</li>
+
+<li>dans la fenêtre qui s'ouvre, sélectionnez l'onglet <i>Arguments</i>,</li>
+
+<li>décochez la case <i>Use the -XstartOnFirstThread argument when launching with SWT</i>,</li>
+
+<li>dans le champ intitulé <i>VM arguments</i>, ajoutez la ligne suivante, où <code>&lt;chemin&gt;</code> est le chemin complet du répertoire <code>lib</code> contenant JavaFX :</li>
+</ol>
+
+<pre class="example">--module-path &lt;chemin&gt; --add-modules javafx.controls
+</pre>
+
+
+<p>
+Pour connaître le chemin en question, vous pouvez réouvrir la fenêtre dans laquelle la bibliothèque OpenJFX est définie (<i>Preferences</i> &gt; <i>Java</i> &gt; <i>Build Path</i> &gt; <i>User Libraries</i>) et regarder le chemin donné pour les fichiers dont le nom se termine par <code>.jar</code>. Le chemin à utiliser ci-dessus est ce chemin-là, mais uniquement jusqu'au répertoire <code>lib</code>. Sur Windows, ce chemin commence probablement par <code>C:\</code>, tandis que sur Linux et macOS, il commence probablement par <code>/</code>.
+</p>
+
+<p>
+Attention : si ce chemin contient au moins une espace, il faut impérativement le mettre entre guillemets (<code>"</code>).
+</p>
+</div>
+</div>
+</div>
+</div>
+
+
+</body></html>

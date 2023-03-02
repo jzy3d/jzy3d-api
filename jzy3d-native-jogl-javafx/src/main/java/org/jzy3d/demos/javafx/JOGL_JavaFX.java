@@ -20,7 +20,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 // --module-path /Users/martin/Dev/javafx-sdk-19/lib --add-modules javafx.controls --add-opens javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED --add-opens javafx.graphics/javafx.stage=ALL-UNNAMED --add-opens javafx.graphics/com.sun.javafx.tk.quantum=ALL-UNNAMED --add-opens javafx.graphics/com.sun.glass.ui=ALL-UNNAMED
-public class App extends Application {
+public class JOGL_JavaFX extends Application {
 
     private Animator animator;
 
