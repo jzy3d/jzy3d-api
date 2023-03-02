@@ -83,7 +83,7 @@ public class DemoJavaFX_Offscreen_Gluon19 extends Application {
     // Create a chart
     Quality quality = Quality.Advanced();
     // quality.setSmoothPolygon(true);
-    // quality.setAnimated(true);
+    //quality.setAnimated(true);
 
     // let factory bind mouse and keyboard controllers to JavaFX node
     factory.getPainterFactory().setOffscreen(800, 600);
