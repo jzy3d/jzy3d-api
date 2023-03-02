@@ -90,8 +90,7 @@ public class DemoJavaFX_Offscreen_OpenJDK8 extends Application {
 
     // Create the object to represent the function over the given range.
     final Shape surface = new SurfaceBuilder().orthonormal(mapper, range, steps);
-    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface.getBounds().getZmin(),
-        surface.getBounds().getZmax(), new Color(1, 1, 1, .95f)));
+    surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .75f)));
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(false);
 

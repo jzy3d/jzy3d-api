@@ -68,6 +68,12 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     float textWidth = painter.getTextLengthInPixels(font, text);
 
     Coord3d screen = painter.getCamera().modelToScreen(painter, position);
+    
+    if(screen==null)
+      return null;
+    //else
+    //  System.err.println("can not project " + position);
+    
     Coord3d screenAligned =
         layout.align(textWidth, textHeight, halign, valign, screenOffset, screen);
 
