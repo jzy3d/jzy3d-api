@@ -20,10 +20,26 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
+/*
+--module-path /Users/martin/Dev/javafx-sdk-19/lib --add-modules javafx.controls,javafx.graphics 
+--add-opens javafx.graphics/com.sun.javafx.tk=ALL-UNNAMED
+--add-opens javafx.controls/com.sun.javafx.charts=ALL-UNNAMED
+--add-opens javafx.controls/com.sun.javafx.scene.control.inputmap=ALL-UNNAMED
+--add-opens javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED
+--add-opens javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED
+--add-opens javafx.graphics/com.sun.javafx.css=ALL-UNNAMED
+--add-opens javafx.base/com.sun.javafx.runtime=ALL-UNNAMED
+-Dnativewindow.debug.JAWT --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+ */
+
+// --add-modules javafx.graphics,javafx.controls 
+// --add-opens javafx.graphics com.sun.javafx.tk=ALL-UNNAMED
 public class DemoJavaFX_NewtCanvasJFX extends Application {
 
   @Override
   public void start(Stage stage) {
+    
     Platform.setImplicitExit(false);
     final Group g = new Group();
     Scene scene = new Scene(g, 800, 600);
