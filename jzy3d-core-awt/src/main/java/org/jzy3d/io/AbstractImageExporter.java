@@ -233,6 +233,10 @@ public abstract class AbstractImageExporter implements AWTImageExporter {
   }
 
   protected void scheduleImageExport(BufferedImage image, int interFrameDelay, boolean isLastImage) {
+    // Sip image addition if it is shutdown by a call to terminate
+    if(executor.isShutdown())
+      return;
+    
     // Record number of submitted images
     numberSubmittedImages.incrementAndGet();
 
