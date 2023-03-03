@@ -19,22 +19,22 @@ import org.jzy3d.plot3d.text.align.Vertical;
  * The {@link ITextRenderer} computes text layout according to {@link Horizontal}, {@link Vertical}
  * settings, text length, font size and text position. This is achieved with the help of
  * {@link TextLayout} processor.
- * 
+ *
  * It can be given a 2D offset in screen coordinates and a 3D offset in world coordinates that are
  * applied after the initial layout is processed according to the settings, the text length, the
  * font size and the text position.
- * 
+ *
  * It supports Unicode characters and all fonts made available by {@link java.awt.Font}.
- * 
+ *
  * Rendering text relies on {@link IPainter#drawText(Font, String, Coord3d, Color, float)} which was
  * introduced as of Jzy3D 2.0 and offers much more flexibility than the initial simple
  * {@link IPainter#glutBitmapString(int, String)} which only support two fonts.
- * 
+ *
  * Rotation of a text is always made from the center of the text, whatever the LEFT/CENTER/RIGHT
  * layout of the text, which lead to all these possible layouts.
- * 
+ *
  * <p><img src="doc-files/text-rotation.png"></p>
- * 
+ *
  * This image was generated with {@link ITTest_Text#main()}
  */
 public class TextRenderer extends AbstractTextRenderer implements ITextRenderer {
@@ -45,10 +45,10 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
   protected boolean showPosition = false;
   protected Color positionColor = Color.BLACK;
   protected float positionWidth = 3;
-  
+
   protected boolean useGlutBitmap = false;
 
-  
+
   /**
    * Draw a string at the specified position and return the 3d volume occupied by the string
    * according to the current Camera configuration.
@@ -68,19 +68,19 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     float textWidth = painter.getTextLengthInPixels(font, text);
 
     Coord3d screen = painter.getCamera().modelToScreen(painter, position);
-    
-    if(screen==null) {
-      LOGGER.debug("Could not project model to screen!");
+
+    if(screen==null)
       return null;
-    }
-    
+    //else
+    //  System.err.println("can not project " + position);
+
     Coord3d screenAligned =
         layout.align(textWidth, textHeight, halign, valign, screenOffset, screen);
 
     // process the aligned position in 3D coordinates
     Coord3d positionAligned = to3D(painter, screenAligned);
-    
-    
+
+
     // process space stransform if any (log, etc)
     if (spaceTransformer != null) {
       positionAligned = spaceTransformer.compute(positionAligned);
@@ -93,7 +93,7 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     }
     else {
       // Fallback on former way of rendering text
-      painter.glutBitmapString(font, text, positionAligned, color); 
+      painter.glutBitmapString(font, text, positionAligned, color);
     }
 
     if (showPosition) {

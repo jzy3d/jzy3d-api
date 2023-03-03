@@ -12,9 +12,9 @@ import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
-import org.jzy3d.javafx.JavaFXChartFactory;
-import org.jzy3d.javafx.JavaFXRenderer3d;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
+import org.jzy3d.javafx.offscreen.JavaFXOffscreenChartFactory;
+import org.jzy3d.javafx.offscreen.JavaFXOffscreenRenderer3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot3d.builder.Mapper;
@@ -32,8 +32,8 @@ import javafx.stage.Stage;
 /**
  * Showing how to pipe an offscreen Jzy3d chart image to a JavaFX ImageView.
  * 
- * {@link JavaFXChartFactory} delivers dedicated {@link JavaFXCameraMouseController} and
- * {@link JavaFXRenderer3d}
+ * {@link JavaFXOffscreenChartFactory} delivers dedicated {@link JavaFXCameraMouseController} and
+ * {@link JavaFXOffscreenRenderer3d}
  * 
  * Support Rotation control with left mouse button hold+drag Scaling scene using mouse wheel
  * Animation (camera rotation with thread)
@@ -52,7 +52,7 @@ public class DemoJzy3dFXProblem extends Application {
     stage.setTitle(DemoJzy3dFXProblem.class.getSimpleName());
 
     // Jzy3d
-    JavaFXChartFactory factory = new JavaFXChartFactory();
+    JavaFXOffscreenChartFactory factory = new JavaFXOffscreenChartFactory();
     AWTNativeChart chart = getDemoChartVBO(factory, "offscreen");
     ImageView imageView = factory.bindImageView(chart);
 
@@ -72,7 +72,7 @@ public class DemoJzy3dFXProblem extends Application {
 
   public static int MILION = 1000000;
 
-  private AWTNativeChart getDemoChartVBO(JavaFXChartFactory factory, String toolkit) {
+  private AWTNativeChart getDemoChartVBO(JavaFXOffscreenChartFactory factory, String toolkit) {
     float ratio = 1.0f;
     int size = (int) (ratio * MILION);
 
@@ -92,7 +92,7 @@ public class DemoJzy3dFXProblem extends Application {
     return chart;
   }
 
-  private AWTChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
+  private AWTChart getDemoChart(JavaFXOffscreenChartFactory factory, String toolkit) {
     // -------------------------------
     // Define a function to plot
     Mapper mapper = new Mapper() {

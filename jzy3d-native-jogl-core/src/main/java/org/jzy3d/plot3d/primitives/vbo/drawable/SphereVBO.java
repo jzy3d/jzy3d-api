@@ -25,7 +25,7 @@ import com.jogamp.opengl.util.GLBuffers;
  * 
  * This is true when Quality.setAlphaActivated(false), in other word for Quality.Advanced.
  * 
- * @uthor David Eck inspired this class with https://math.hws.edu/graphicsbook/source/jogl/ColorCubeOfSpheres.java
+ * @author David Eck inspired this class with https://math.hws.edu/graphicsbook/source/jogl/ColorCubeOfSpheres.java
  * @author Martin Pernollet
  */
 public class SphereVBO extends DrawableVBO {
