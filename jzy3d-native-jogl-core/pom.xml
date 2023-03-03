@@ -26,9 +26,22 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- The way to link on JOGL 2.3.2
+
+		<dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt-main</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all-main</artifactId>
+            <version>2.3.2</version>
+        </dependency>-->
 
         <!-- The way to link on JOGL 2.4.0 once it is cleanly deployed -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt-main</artifactId>
             <version>2.4.0</version>
@@ -38,7 +51,7 @@
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all-main</artifactId>
             <version>2.4.0</version>
-        </dependency>
+        </dependency>-->
 
         <!--
         A home made distribution of JOGL 2.4 performed with https://github.com/jzy3d/jogl-maven-deployer
@@ -50,7 +63,7 @@
 
 		<!-- JOGL -->
 
-		<!--<dependency>
+		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all</artifactId>
 			<version>v2.4.0-rc4</version>
@@ -96,11 +109,9 @@
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-natives-windows-i586 </artifactId>
 			<version>v2.4.0-rc4</version>
-		</dependency>-->
-
-		<!-- GLUEGEN -->
-
-<!--
+		</dependency>
+		
+		
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt</artifactId>
@@ -154,6 +165,6 @@
 			<version>v2.4.0-rc4</version>
 		</dependency>
 
-	-->
+
 	</dependencies>
 </project>
