@@ -7,6 +7,11 @@ public class SwingChartFactory extends AWTChartFactory {
   public SwingChartFactory() {
     super(new SwingPainterFactory());
   }
+  
+  public SwingChartFactory(IPainterFactory painterFactory) {
+    super(painterFactory);
+  }
+
 
   /* */
 

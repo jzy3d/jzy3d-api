@@ -15,6 +15,9 @@ public class JavaFXCameraMouseController extends AbstractCameraController
     implements JavaFXChartController {
 
   protected Node node;
+  
+  protected Coord2d prevMouse = Coord2d.ORIGIN;
+
 
   public JavaFXCameraMouseController(Node node) {
     super();
@@ -22,6 +25,10 @@ public class JavaFXCameraMouseController extends AbstractCameraController
     register(node);
   }
 
+  public JavaFXCameraMouseController(Chart chart) {
+    this(chart, null);
+  }
+  
   public JavaFXCameraMouseController(Chart chart, Node node) {
     super(chart);
     register(node);
@@ -88,14 +95,14 @@ public class JavaFXCameraMouseController extends AbstractCameraController
 
   protected void mouseDragged(MouseEvent e) {
     Coord2d mouse = new Coord2d(e.getX(), e.getY());
+    
     // Rotate
     if (isLeftDown(e)) {
       Coord2d move = mouse.sub(prevMouse).div(100);
       rotate(move);
-      for (Chart chart : targets) {
-        chart.render();
-      }
+      getChart().render();
     }
+    
     // Shift
     else if (isRightDown(e)) {
       Coord2d move = mouse.sub(prevMouse);

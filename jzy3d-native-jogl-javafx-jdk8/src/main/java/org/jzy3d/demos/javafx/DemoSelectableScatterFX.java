@@ -5,9 +5,9 @@ import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.controllers.mouse.AWTDualModeMouseSelector;
 import org.jzy3d.chart.controllers.mouse.selection.AWTScatterMouseSelector;
 import org.jzy3d.colors.Color;
-import org.jzy3d.javafx.JavaFXChartFactory;
-import org.jzy3d.javafx.JavaFXRenderer3d;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
+import org.jzy3d.javafx.offscreen.JavaFXOffscreenChartFactory;
+import org.jzy3d.javafx.offscreen.JavaFXOffscreenRenderer3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.selectable.SelectableScatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
@@ -20,8 +20,8 @@ import javafx.stage.Stage;
 /**
  * Showing how to pipe an offscreen Jzy3d chart image to a JavaFX ImageView.
  * 
- * {@link JavaFXChartFactory} delivers dedicated {@link JavaFXCameraMouseController} and
- * {@link JavaFXRenderer3d}
+ * {@link JavaFXOffscreenChartFactory} delivers dedicated {@link JavaFXCameraMouseController} and
+ * {@link JavaFXOffscreenRenderer3d}
  * 
  * Support Rotation control with left mouse button hold+drag Scaling scene using mouse wheel
  * Keyboard (rotate/shift, etc) Animation (camera rotation with thread)
@@ -42,7 +42,7 @@ public class DemoSelectableScatterFX extends Application {
     stage.setTitle(DemoSelectableScatterFX.class.getSimpleName());
 
     // Jzy3d
-    JavaFXChartFactory factory = new JavaFXChartFactory();
+    JavaFXOffscreenChartFactory factory = new JavaFXOffscreenChartFactory();
     AWTNativeChart chart = getDemoChart(factory, "offscreen");
     ImageView imageView = factory.bindImageView(chart);
 
@@ -59,7 +59,7 @@ public class DemoSelectableScatterFX extends Application {
     stage.setHeight(500);
   }
 
-  private AWTNativeChart getDemoChart(JavaFXChartFactory factory, String toolkit) {
+  private AWTNativeChart getDemoChart(JavaFXOffscreenChartFactory factory, String toolkit) {
     Quality quality = Quality.Advanced();
     int POINTS = 1000;
     SelectableScatter scatter = generateScatter(POINTS);

@@ -103,9 +103,12 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
     offscreenDrawable = factory.createOffscreenAutoDrawable(factory.getDefaultDevice(),
         capabilities, null, width, height);
     offscreenDrawable.addGLEventListener(renderer);
-
   }
 
+  public void resize(int width, int height) {
+    offscreenDrawable.setSurfaceSize(width, height);
+  }
+  
   public GLCapabilities getCapabilities() {
     return capabilities;
   }
