@@ -3,7 +3,7 @@ jzy3d-test-java9-generated
 This is a summary of existing baseline images for tests, which was generated on 
 * OS Name : mac os x
 * OS Version : 11.4
-* Java Version : 17.0.1
+* Java Version : 19.0.2
 * CPU : aarch64
 * GPU : AppleM1
 
@@ -139,11 +139,11 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_11.4_AppleM1/AxisLabelRotateLayout_EmulGL_AWT_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td>Diff chart:<br><img src="target/error-AxisLabelRotateLayout_Native_AWT_HiDPI=ON_DIFF.png"><br>Actual chart:<br><img src="target/error-AxisLabelRotateLayout_Native_AWT_HiDPI=ON_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-AxisLabelRotateLayout_Native_AWT_HiDPI=ON_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 <td></td>
 <td></td>
-<td></td>
-<td></td>
+<td>Diff chart:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_DIFF.png"><br>Actual chart:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 </tr>
 </table>
@@ -793,7 +793,7 @@ This is a summary of existing baseline images for tests, which was generated on
 <td></td>
 <td></td>
 <td></td>
-<td></td>
+<td>Diff chart:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_DIFF.png"><br>Actual chart:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ACTUAL.png"><br>Zoom on error:<br><img src="target/error-2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL_ZOOM.png"><br>Following tests of the same section have been skipped.</td>
 <td></td>
 </tr>
 </table>

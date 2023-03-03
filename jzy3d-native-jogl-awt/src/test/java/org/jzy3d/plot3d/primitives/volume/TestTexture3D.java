@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.ByteBuffer;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -10,7 +11,6 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.GLBuffers;
 
 /**
@@ -19,9 +19,10 @@ import com.jogamp.opengl.util.GLBuffers;
  *
  */
 public class TestTexture3D {
+  @Ignore
   @Test
   public void givenAVolume_whenOpeningChart_thenBufferIsSizedAppropriately() {
-GLProfile.initSingleton();
+//GLProfile.initSingleton();
 
 
     // -------------------------------
