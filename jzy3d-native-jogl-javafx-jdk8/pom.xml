@@ -31,5 +31,29 @@
 
 	</dependencies>
 	
-	
+	<build>
+		<plugins>
+			<!--Override settings for JOGL (avoid add-export not supported by JDK 8) -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- Ensure stack trace get displayed -->
+					<trimStackTrace>false</trimStackTrace>
+
+					<!-- Configure jogl to wait up to 20 seconds before throwing a timeout
+						exception. Mainly required when running on Github CI since MacOS VM use a
+						software implementation -->
+					<argLine>-Djogamp.common.utils.locks.Lock.timeout=20000</argLine>
+
+					<!-- Want to support these two test name patterns -->
+					<includes>
+						<include>**/Test*.java</include>
+						<include>**/*Test.java</include>
+					</includes>
+
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>

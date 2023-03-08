@@ -10,12 +10,12 @@
 	<!--<groupId>org.jzy3d</groupId>
 	<version>2.2.1-SNAPSHOT</version>-->
 
-	<artifactId>jzy3d-native-jogl-javafx</artifactId>
+	<artifactId>jzy3d-native-jogl-javafx-jdk19</artifactId>
 	<name>Jzy3d Native Implementation for JavaFX with JOGL</name>
 	
 	<properties>
 		<openjfx.version>19</openjfx.version>
-		<java.version>17</java.version>
+		<java.version>19</java.version>
 	</properties>
 
 	<dependencies>
