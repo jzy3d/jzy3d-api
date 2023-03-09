@@ -12,6 +12,7 @@ import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
 import javafx.scene.image.ImageView;
 
