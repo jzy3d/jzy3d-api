@@ -62,8 +62,8 @@
 
 		<module>jzy3d-native-jogl-newt</module>
 
-		<module>jzy3d-native-jogl-javafx-jdk19</module>
-		
+		<module>jzy3d-native-jogl-javafx-jdk17</module>
+
 		<!--Build and deploy me separately (usually JDK >> 8 in path) -->
 		<!--<module>jzy3d-native-jogl-javafx-jdk8</module>-->
 
