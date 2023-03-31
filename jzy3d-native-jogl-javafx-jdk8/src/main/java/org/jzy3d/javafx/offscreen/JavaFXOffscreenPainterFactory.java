@@ -22,8 +22,18 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
 
 public class JavaFXOffscreenPainterFactory extends AWTPainterFactory {
+  public JavaFXOffscreenPainterFactory() {
+    super();
+  }
+  
+  public JavaFXOffscreenPainterFactory(GLCapabilities capabilities) {
+    super(capabilities);
+  }
+  
   @Override
   public Renderer3d newRenderer3D(View view) {
     return new JavaFXOffscreenRenderer3d(view, traceGL, debugGL);
