@@ -82,6 +82,7 @@ public class JavaFXOffscreenBinding {
           //System.out.println("JavaFXOffscreenBinding.bind receives an image of size "
           //    + img.getWidth() + " x " + img.getHeight());
 
+          //imageView.setStyle("-fx-background-color: WHITE");
           imageView.setImage(img);
 
         } else {
