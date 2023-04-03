@@ -274,7 +274,7 @@ Version 2.0 is a major refactor to allow using multiple OpenGL implementations, 
 | _IChartComponentFactory_ | _IChartFactory_ |
 | AWTChartComponentFactory | AWTChartFactory |
 | NewtChartComponentFactory | NewtChartFactory |
-| JavaFXChartComponentFactory | :exclamation: JavaFXChartFactory |
+| JavaFXChartComponentFactory | JavaFXChartFactory |
 | SwingChartComponentFactory | SwingChartFactory |
 | SWTChartComponentFactory | SWTChartFactory |
 |  | FallbackChartFactory |
@@ -285,7 +285,6 @@ Version 2.0 is a major refactor to allow using multiple OpenGL implementations, 
 | Valign | Vertical |
 | Surface | SurfaceBuilder |
 
-:exclamation: work in progress.
 
 SurfaceBuilder is not static anymore to be overridable.
 
