@@ -40,8 +40,7 @@
             <version>2.3.2</version>
         </dependency>-->
 
-        <!-- The way to link on JOGL 2.4.0 once it is cleanly deployed -->
-        <!--<dependency>
+        <dependency>
             <groupId>org.jogamp.gluegen</groupId>
             <artifactId>gluegen-rt-main</artifactId>
             <version>2.4.0</version>
@@ -51,120 +50,7 @@
             <groupId>org.jogamp.jogl</groupId>
             <artifactId>jogl-all-main</artifactId>
             <version>2.4.0</version>
-        </dependency>-->
-
-        <!--
-        A home made distribution of JOGL 2.4 performed with https://github.com/jzy3d/jogl-maven-deployer
-
-        To be replaced later by official JOGL release.
-
-        To let the version look unofficial I kept the v in version name as I presume the real one won't have this.
-        -->
-
-		<!-- JOGL -->
-
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-natives-linux-aarch64</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-natives-linux-amd64</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-natives-linux-armv6hf</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-natives-linux-i586</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-natives-macosx-universal</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-natives-windows-amd64</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.jogl</groupId>
-			<artifactId>jogl-all-natives-windows-i586 </artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-		
-		
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-natives-macosx-universal</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-natives-linux-aarch64</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-natives-linux-amd64</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-natives-linux-armv6hf</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-natives-linux-i586</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-natives-macosx-universal</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-natives-windows-amd64</artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.jogamp.gluegen</groupId>
-			<artifactId>gluegen-rt-natives-windows-i586 </artifactId>
-			<version>v2.4.0-rc4</version>
-		</dependency>
-
+        </dependency>
 
 	</dependencies>
 </project>
