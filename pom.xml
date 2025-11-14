@@ -497,34 +497,33 @@
 			<!-- JAVADOC JAR -->
 
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<additionalparam>-Xdoclint:none</additionalparam>
-					<doclint>none</doclint>
-					<source>8</source>
-					<quiet>true</quiet> <!-- only show warnings/errors -->
-					<failOnError>false</failOnError>
-					<additionalJOption>--no-module-directories</additionalJOption>
-					<configuration>
-						<docfilessubdirs>true</docfilessubdirs>
-					</configuration>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>aggregate</id>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-					</execution>
-				</executions>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-javadoc-plugin</artifactId>
+			  <version>3.6.3</version>
+			  <configuration>
+			    <javadocExecutable>${java.home}/bin/javadoc</javadocExecutable>
+			    <docfilessubdirs>true</docfilessubdirs>
+			    <additionalparam>-Xdoclint:none</additionalparam>
+			    <doclint>none</doclint>
+			    <source>8</source>
+			    <quiet>true</quiet>        <!-- only show warnings/errors -->
+			    <failOnError>false</failOnError>
+			  </configuration>
+			  <executions>
+			    <execution>
+			      <id>attach-javadocs</id>
+			      <phase>verify</phase>
+			      <goals>
+			        <goal>jar</goal>
+			      </goals>
+			    </execution>
+			    <execution>
+			      <id>aggregate</id>
+			      <goals>
+			        <goal>aggregate</goal>
+			      </goals>
+			    </execution>
+			  </executions>
 			</plugin>
 
 			<!-- RELEASE -->
