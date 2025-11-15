@@ -31,3 +31,9 @@ doc/javadoc
 *.releaseBackup
 *.versionsBackup
 release.properties
+
+# Local IDE & temp
+**/.factorypath
+**/*.bak
+.DS_Store
+tools/*.local.sh

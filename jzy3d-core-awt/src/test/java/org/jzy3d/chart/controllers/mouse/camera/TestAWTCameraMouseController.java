@@ -403,11 +403,25 @@ public class TestAWTCameraMouseController {
     when(layout.getYTickRenderer()).thenReturn(new ScientificNotationTickRenderer());
     when(layout.getZTickRenderer()).thenReturn(new ScientificNotationTickRenderer());
 
-    Assert.assertEquals("The X axis=1,23", mouse.format(Axis.X, 1.2345678f));
-    Assert.assertEquals("The Y axis=2,2e+00", mouse.format(Axis.Y, 2.2345678f));
-    Assert.assertEquals("The Z axis=3,2e+00", mouse.format(Axis.Z, 3.2345678f));
+    
+    
+    Assert.assertEquals("The X axis=1.23", 	  normDecSep(mouse.format(Axis.X, 1.2345678f)));
+    Assert.assertEquals("The Y axis=2.2e+00", normDecSep(mouse.format(Axis.Y, 2.2345678f)));
+    Assert.assertEquals("The Z axis=3.2e+00", normDecSep(mouse.format(Axis.Z, 3.2345678f)));
 
   }
+  
+  /** 
+   * Normalize decimal separators so that 1,23 and 1.23 compare equally. 
+   */
+  private String normDecSep(String input) {
+      if (input == null) {
+          return null;
+      }
+      // Replace commas with dots to unify representation
+      return input.replace(',', '.');
+  }
+
   
   @Test
   public void given_XY_XZ_or_YZ_View_WhenZoom_ThenUpdateBoundsProperly() {
