@@ -36,3 +36,8 @@ release.properties
 **/.factorypath
 **/*.bak
 .DS_Store
+
+# Local IDE & temp
+**/.factorypath
+**/*.bak
+.DS_Store
