@@ -380,8 +380,7 @@ public class ITTest {
       tester = new NativeChartTester();
     }
 
-    tester.setTestCaseInputFolder("src/test/resources/" + new NativePlatform().getLabel() + "/");
-
+    tester.setTestCaseInputFolder("src/test/resources/" + platform.getLabel() + "/");
 
     tester.assertSimilar(chart, tester.path(name));
   }
