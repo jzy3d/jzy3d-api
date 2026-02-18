@@ -97,6 +97,9 @@ public class WorldMapLoader {
       e.printStackTrace();
       System.out.println("WARNING: World map file not found");
 
+    } catch (com.opencsv.exceptions.CsvValidationException e) {
+      e.printStackTrace();
+
     } catch (IOException e) {
       e.printStackTrace();
     }
