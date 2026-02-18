@@ -1,9 +1,11 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.awt.EventQueue;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -185,15 +187,21 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
 
   @Override
   public void dispose() {
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        if (animator != null)
-          animator.stop();
-        renderer = null;
-        view = null;
+    if (animator != null)
+      animator.stop();
+    try {
+      if (EventQueue.isDispatchThread()) {
+        destroy();
+      } else {
+        EventQueue.invokeAndWait(this::destroy);
       }
-    }).start();
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } catch (InvocationTargetException e) {
+      // best effort cleanup
+    }
+    renderer = null;
+    view = null;
   }
 
   @Override
@@ -244,13 +252,25 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     if (!file.getParentFile().exists())
       file.getParentFile().mkdirs();
     TextureData screen = screenshot();
+    if (screen == null)
+      throw new IOException("Screenshot capture returned null TextureData - GL context may not be ready");
     TextureIO.write(screen, file);
   }
 
   @Override
   public TextureData screenshot() {
     renderer.nextDisplayUpdateScreenshot();
-    display();
+    if (EventQueue.isDispatchThread()) {
+      display();
+    } else {
+      try {
+        EventQueue.invokeAndWait(this::display);
+      } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+      } catch (InvocationTargetException e) {
+        // display threw an exception; screenshot will be null
+      }
+    }
     return renderer.getLastScreenshot();
   }
 

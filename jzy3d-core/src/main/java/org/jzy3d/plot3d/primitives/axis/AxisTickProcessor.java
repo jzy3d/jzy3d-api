@@ -144,7 +144,7 @@ public class AxisTickProcessor {
 
       View2DProcessing processing2D = view.get2DProcessing();
       Coord2d modelToScreen = processing2D.getModelToScreen();
-      
+
       float fontHeight = processing2D.getTickTextHeight();
       float horizontalTickLen = (processing2D.getHorizontalTickDistance() + fontHeight) * modelToScreen.y;
       float verticalTickLen = processing2D.getVerticalTickDistance() * modelToScreen.x;
