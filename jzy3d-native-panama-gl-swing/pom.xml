@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-all</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>jzy3d-native-panama-gl-swing</artifactId>
+	<name>Jzy3d Native Implementation for Swing with PanamaGL</name>
+
+	<properties>
+		<version.java>22</version.java>
+	</properties>
+
+
+	<dependencies>
+		<!-- PUBLIC CORE JZY3D MODULES -->
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-core-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>panama-gl-ui-awt</artifactId>
+			<version>1.2.0-SNAPSHOT</version>
+		</dependency>
+				<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>panama-gl-ui-swing</artifactId>
+			<version>1.2.0-SNAPSHOT</version>
+		</dependency>
+		<!-- <dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>panama-gl-ui-javafx</artifactId>
+			<version>${panama-gl.version}</version>
+		</dependency>-->
+
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<!-- COMPILER AND JAVA VERSION CONFIGURATION -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${version.java}</source>
+					<target>${version.java}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
