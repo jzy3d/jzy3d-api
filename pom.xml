@@ -61,6 +61,7 @@
 		<module>jzy3d-native-jogl-newt</module>
 		<module>jzy3d-native-jogl-javafx</module>
 
+		<module>jzy3d-native-panama-gl-swing</module>
 
 		<module>jzy3d-tester</module>
 		<module>jzy3d-tester-native</module>
