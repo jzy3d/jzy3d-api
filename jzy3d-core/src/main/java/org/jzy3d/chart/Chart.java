@@ -266,12 +266,11 @@ public class Chart {
     setAnimated(false);
 
     clearControllerList();
+
     if (canvas != null)
       canvas.dispose();
     if (scene != null)
       scene.dispose(); // view is disposed by scene
-    canvas = null;
-    scene = null;
   }
 
   /**

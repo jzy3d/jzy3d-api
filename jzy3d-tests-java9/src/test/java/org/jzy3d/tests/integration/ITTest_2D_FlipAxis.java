@@ -52,10 +52,8 @@ public class ITTest_2D_FlipAxis extends ITTest {
     forEach((toolkit, resolution) -> {
       for (View2D view2d : View2D.values()) {
         for (FlipAxis flip : FlipAxis.values()) {
-          when2DChartWithFlip(toolkit, resolution, view2d, flip);
+          when2DChartWithFlip(toolkit, resolution, view2d, flip).dispose();
         }
-
-
       }
     }, toolkitsAWT);
   }
