@@ -16,8 +16,6 @@
 
 package jgl;
 
-import java.awt.Font;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 import jgl.context.gl_context;
