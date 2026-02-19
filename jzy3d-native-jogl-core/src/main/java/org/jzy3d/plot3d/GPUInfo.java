@@ -6,6 +6,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLDrawableFactory;
+import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 
 public class GPUInfo {
@@ -28,18 +29,23 @@ public class GPUInfo {
     GLDrawableFactory factory = GLDrawableFactory.getFactory(glp);
     GLAutoDrawable drawable =
         factory.createOffscreenAutoDrawable(factory.getDefaultDevice(), caps, null, 1, 1);
+
+    final GPUInfo[] gpuHolder = new GPUInfo[1];
+
+    drawable.addGLEventListener(new GLEventListener() {
+      @Override
+      public void init(GLAutoDrawable d) {
+        gpuHolder[0] = load(d.getGL());
+      }
+      @Override public void display(GLAutoDrawable d) {}
+      @Override public void reshape(GLAutoDrawable d, int x, int y, int w, int h) {}
+      @Override public void dispose(GLAutoDrawable d) {}
+    });
+
     drawable.display();
-    drawable.getContext().makeCurrent();
+    drawable.destroy();
 
-    GL gl = drawable.getContext().getGL();
-
-    //System.out.println(drawable.getContext().getGLVendorVersionNumber());
-    
-    GPUInfo gpu = load(gl);
-    
-    drawable.getContext().release();
-    
-    return gpu;
+    return gpuHolder[0];
   }
 
   /** Use an existing GL context to query GPU information */

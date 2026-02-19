@@ -104,15 +104,15 @@ public class ITTest_Overlay extends ITTest {
       // When
       legend.getLayout().setCorner(cornerSet[0]);
       renderer.getLayout().setCorner(cornerSet[1]);
-      
+
       //chart.render();
 
       // Then
       assertChart(chart, name(this, wt, chart.getQuality().getHiDPI(), properties(cornerSet)));
-      
-    });
-    
 
+    });
+
+    chart.dispose();
     return chart;
   }
   
