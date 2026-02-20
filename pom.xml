@@ -48,10 +48,10 @@
 		<module>jzy3d-core</module>
 		<module>jzy3d-core-awt</module>
 		<module>jzy3d-core-swt</module>
+		<module>jzy3d-core-swing</module>
 
 		<module>jzy3d-jGL</module>
 		<module>jzy3d-emul-gl-awt</module>
-
 		<module>jzy3d-emul-gl-swt</module>
 
 		<module>jzy3d-native-jogl-core</module>
