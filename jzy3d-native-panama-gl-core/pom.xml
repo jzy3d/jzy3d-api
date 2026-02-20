@@ -7,8 +7,8 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jzy3d-native-panama-gl-swing</artifactId>
-	<name>Jzy3d Native Implementation with PanamaGL for Swing</name>
+	<artifactId>jzy3d-native-panama-gl-core</artifactId>
+	<name>Jzy3d Native Implementation with PanamaGL</name>
 
 	<properties>
 		<version.java>22</version.java>
@@ -20,33 +20,25 @@
 		<!-- PUBLIC CORE JZY3D MODULES -->
 		<dependency>
 			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-core-swing</artifactId>
+			<artifactId>jzy3d-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-core-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jzy3d</groupId>
-			<artifactId>jzy3d-native-panama-gl-core</artifactId>
-			<version>${project.version}</version>
+			<artifactId>panama-gl-api</artifactId>
+			<version>${version.panamagl}</version>
 		</dependency>
-
-
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>panama-gl-ui-awt</artifactId>
 			<version>${version.panamagl}</version>
 		</dependency>
-				<dependency>
-			<groupId>org.jzy3d</groupId>
-			<artifactId>panama-gl-ui-swing</artifactId>
-			<version>${version.panamagl}</version>
-		</dependency>
-		<!-- <dependency>
-			<groupId>org.jzy3d</groupId>
-			<artifactId>panama-gl-ui-javafx</artifactId>
-			<version>${panama-gl.version}</version>
-		</dependency>-->
-
 	</dependencies>
 
 	<build>
