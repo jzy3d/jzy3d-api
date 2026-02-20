@@ -257,50 +257,8 @@ Follow these steps to import in IntelliJ
 * If you are looking for professional services related to 3d rendering, contact [me](martin@jzy3d.org)
 
 
-# Changes in 2.0 version
+# Troublshoot
 
-Version 2.0 is a major refactor to allow using multiple OpenGL implementations, which opened the door to EmulGL. To ease porting your 1.* charts, we add the following cheatsheet.
+JDK Mission Control
 
-## Renamings
-
-| Class name in 1.* | Class name in 2.0 |
-|-------------------|-------------------|
-| Quality.Advanced, Intermediate | Quality.Advanced(), Intermediate() |
-| AbstractDrawable | Drawable |
-| AbstractWireframeable | Wireframeable |
-| AxeBox | AxisBox |
-| DrawableTexture | NativeDrawableImage & EmulGLDrawableImage |
-|||
-| _IChartComponentFactory_ | _IChartFactory_ |
-| AWTChartComponentFactory | AWTChartFactory |
-| NewtChartComponentFactory | NewtChartFactory |
-| JavaFXChartComponentFactory | JavaFXChartFactory |
-| SwingChartComponentFactory | SwingChartFactory |
-| SWTChartComponentFactory | SWTChartFactory |
-|  | FallbackChartFactory |
-|||
-| ColorbarViewportLayout | ViewAndColorbarsLayout |
-| ViewMouseController | NewtViewCameraController |
-| Halign | Horizontal |
-| Valign | Vertical |
-| Surface | SurfaceBuilder |
-
-
-SurfaceBuilder is not static anymore to be overridable.
-
-
-## Additions
-
-* `IPainter`
-* `IPainterFactory`
-* `EmulGLPainterFactory`
-* `IAnimator`
-* `IImageWrapper` and `SymbolHandler`
-
-
-## Deletions
-
-
-
-
-<!--Travis build status : [![Build Status](https://travis-ci.org/jzy3d/jzy3d-api.svg?branch=master)](https://travis-ci.org/jzy3d/jzy3d-api)-->
+-XX:StartFlightRecording=filename=slow-init.jfr,dumponexit=true
