@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>jzy3d-native-jogl-awt</artifactId>
-	<name>Jzy3d Native Implementation for AWT with JOGL</name>
+	<name>Jzy3d Native Implementation with JOGL for AWT</name>
 
 	<dependencies>
 

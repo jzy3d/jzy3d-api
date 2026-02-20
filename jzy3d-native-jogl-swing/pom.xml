@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>jzy3d-native-jogl-swing</artifactId>
-	<name>Jzy3d Native Implementation for Swing with JOGL</name>
+	<name>Jzy3d Native Implementation with JOGL for Swing</name>
 
 	<dependencies>
 
