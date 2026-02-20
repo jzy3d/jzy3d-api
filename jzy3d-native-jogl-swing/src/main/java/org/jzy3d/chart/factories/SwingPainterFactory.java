@@ -2,7 +2,6 @@ package org.jzy3d.chart.factories;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.plot3d.rendering.canvas.CanvasSwing;

@@ -1,8 +1,8 @@
 package org.jzy3d.tests.integration;
 
 import org.junit.Test;
-import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.FrameSwing;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.SwingChartFactory;
 import org.jzy3d.colors.Color;
