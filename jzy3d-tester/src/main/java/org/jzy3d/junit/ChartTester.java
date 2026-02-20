@@ -10,8 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
@@ -24,6 +22,8 @@ import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.axis.layout.providers.StaticTickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.DefaultDecimalTickRenderer;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Primitives for chart tests.
@@ -34,7 +34,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
  * @author martin
  */
 public class ChartTester {
-  private static Logger logger = LogManager.getLogger(ChartTester.class);
+  private static Logger logger = LoggerFactory.getLogger(ChartTester.class);
 
   public static final String FILE_LABEL_ACTUAL = "_ACTUAL";
   public static final String FILE_LABEL_EXPECT = "_EXPECT";

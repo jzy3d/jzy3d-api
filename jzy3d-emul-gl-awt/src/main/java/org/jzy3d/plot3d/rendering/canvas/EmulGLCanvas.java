@@ -18,9 +18,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.logging.LogManager;
 import javax.imageio.ImageIO;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.factories.IChartFactory;
@@ -39,6 +38,8 @@ import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jgl.GL;
 import jgl.GL.PixelScaleListener;
 import jgl.context.gl_pointer;
@@ -55,7 +56,7 @@ import jgl.wt.awt.GLUT;
  * @author Martin Pernollet
  */
 public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorable {
-  Logger log = LogManager.getLogger(EmulGLCanvas.class);
+  Logger log = LoggerFactory.getLogger(EmulGLCanvas.class);
 
   private static final long serialVersionUID = 980088854683562436L;
 
@@ -517,7 +518,7 @@ public class EmulGLCanvas extends GLCanvas implements IScreenCanvas, IMonitorabl
 
   @Override
   public void setPixelScale(float[] scale) {
-    LogManager.getLogger(EmulGLCanvas.class)
+    LoggerFactory.getLogger(EmulGLCanvas.class)
         .info("Not implemented. Pixel scale is driven by AWT Canvas itself and jGL adapts to it");
   }
 

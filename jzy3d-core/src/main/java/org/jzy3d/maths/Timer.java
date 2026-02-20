@@ -1,7 +1,7 @@
 package org.jzy3d.maths;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 
@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
  * @author Martin Pernollet
  */
 public class Timer {
-  static Logger logger = LogManager.getLogger(Timer.class);
+  static Logger logger = LoggerFactory.getLogger(Timer.class);
 
   public static double TEN_POW_9 = 1000000000.0;
   public static double TEN_POW_6 = 1000000.0;

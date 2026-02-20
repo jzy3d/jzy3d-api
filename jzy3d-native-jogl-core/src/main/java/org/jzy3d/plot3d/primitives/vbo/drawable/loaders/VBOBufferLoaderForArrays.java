@@ -4,8 +4,6 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.io.BufferUtil;
 import org.jzy3d.io.IGLLoader;
@@ -14,6 +12,8 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal.NormalMode;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.common.nio.PointerBuffer;
 
@@ -71,7 +71,7 @@ import com.jogamp.common.nio.PointerBuffer;
  *
  */
 public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
-  protected static Logger log = LogManager.getLogger(VBOBufferLoaderForArrays.class);
+  protected static Logger log = LoggerFactory.getLogger(VBOBufferLoaderForArrays.class);
 
   protected float[] points;
   protected int pointDimensions;

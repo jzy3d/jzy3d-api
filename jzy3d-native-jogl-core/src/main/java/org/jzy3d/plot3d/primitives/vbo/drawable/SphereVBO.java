@@ -3,7 +3,6 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.logging.log4j.LogManager;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.BufferUtil;
 import org.jzy3d.io.IGLLoader;
@@ -11,6 +10,7 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
+import org.slf4j.LoggerFactory;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.GLBuffers;
@@ -80,7 +80,7 @@ public class SphereVBO extends DrawableVBO {
       hasMountedOnce = true;
     } catch (Exception e) {
       e.printStackTrace();
-      LogManager.getLogger(DrawableVBO.class).error(e, e);
+      LoggerFactory.getLogger(DrawableVBO.class).error(e.getMessage());
     }
   }
 

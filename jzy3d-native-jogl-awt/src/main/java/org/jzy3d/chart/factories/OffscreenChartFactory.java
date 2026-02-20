@@ -1,10 +1,10 @@
 package org.jzy3d.chart.factories;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class OffscreenChartFactory extends AWTChartFactory {
-  static Logger logger = LogManager.getLogger(OffscreenChartFactory.class);
+  static Logger logger = LoggerFactory.getLogger(OffscreenChartFactory.class);
 
   int width;
   int height;

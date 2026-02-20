@@ -2,18 +2,18 @@ package org.jzy3d.plot3d.rendering.view;
 
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.maths.IntegerCoord2d;
 import org.jzy3d.maths.PolygonArray;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Statistics;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /** Helps understanding how overlay is actually performed by JOGL2. */
 public class OverlayUtils {
-  static Logger logger = LogManager.getLogger(OverlayUtils.class);
+  static Logger logger = LoggerFactory.getLogger(OverlayUtils.class);
 
   public void drawSelection(Graphics2D g2d, IntegerCoord2d in, int width, int height) {
     // shows mouse pointer

@@ -16,7 +16,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
-import org.apache.logging.log4j.LogManager;
+import java.util.logging.LogManager;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.junit.replay.events.ComponentEventLog;
 import org.jzy3d.junit.replay.events.IComponentEventLog.ComponentEventType;
@@ -27,6 +27,7 @@ import org.jzy3d.junit.replay.events.IWindowEventLog.WindowEventType;
 import org.jzy3d.junit.replay.events.KeyEventLog;
 import org.jzy3d.junit.replay.events.MouseEventLog;
 import org.jzy3d.junit.replay.events.WindowEventLog;
+import org.slf4j.LoggerFactory;
 
 public class EventRecorder extends Timestamped implements MouseListener, MouseMotionListener,
     MouseWheelListener, KeyListener, ComponentListener, WindowListener {
@@ -74,7 +75,7 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
     try {
       scenario.save();
     } catch (Exception e) {
-      logger.error(e);
+      logger.error(e.toString());
     }
   }
 
@@ -101,7 +102,7 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
 
   protected void screenshot(Chart chart, String filename) throws IOException {
     chart.screenshot(new File(filename));
-    LogManager.getLogger(EventRecorder.class).info("screenshot:" + filename);
+    LoggerFactory.getLogger(EventRecorder.class).info("screenshot:" + filename);
   }
 
   /* MOUSE */
@@ -187,7 +188,7 @@ public class EventRecorder extends Timestamped implements MouseListener, MouseMo
       try {
         screenshot(chart, screenshotFile(nScreenshot));
       } catch (IOException e1) {
-        LogManager.getLogger(EventRecorder.class).error(screenshotFile(nScreenshot), e1);
+        LoggerFactory.getLogger(EventRecorder.class).error(screenshotFile(nScreenshot), e1);
       }
       nScreenshot++;
     } else if (isExit(e)) {

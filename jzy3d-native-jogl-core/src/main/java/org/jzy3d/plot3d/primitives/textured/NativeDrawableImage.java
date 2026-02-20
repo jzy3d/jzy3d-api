@@ -2,8 +2,7 @@ package org.jzy3d.plot3d.primitives.textured;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.LogManager;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox2d;
 import org.jzy3d.maths.BoundingBox3d;
@@ -15,6 +14,8 @@ import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.DrawableImage;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
 import org.jzy3d.plot3d.transform.Transform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GL2GL3;
@@ -37,7 +38,7 @@ import com.jogamp.opengl.util.texture.TextureCoords;
  * 
  */
 public class NativeDrawableImage extends DrawableImage implements ITranslucent {
-  static Logger logger = LogManager.getLogger(NativeDrawableImage.class);
+  static Logger logger = LoggerFactory.getLogger(NativeDrawableImage.class);
 
   protected SharedTexture resource;
   protected PlaneAxis orientation;
@@ -165,7 +166,7 @@ public class NativeDrawableImage extends DrawableImage implements ITranslucent {
   public void debugMapping() {
     logger.info("mapping");
     for (Coord2d c : mapping) {
-      logger.info(c);
+      logger.info(c.toString());
     }
   }
 
@@ -272,12 +273,12 @@ public class NativeDrawableImage extends DrawableImage implements ITranslucent {
 
   @Override
   public void applyGeometryTransform(Transform transform) {
-    LogManager.getLogger(NativeDrawableImage.class).warn("not implemented");
+    LoggerFactory.getLogger(NativeDrawableImage.class).warn("not implemented");
   }
 
   @Override
   public void updateBounds() {
-    LogManager.getLogger(NativeDrawableImage.class).warn("not implemented");
+    LoggerFactory.getLogger(NativeDrawableImage.class).warn("not implemented");
   }
 
 }

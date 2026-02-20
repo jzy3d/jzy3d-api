@@ -5,15 +5,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.maths.Coord3d;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.smurn.jply.Element;
 import org.smurn.jply.ElementReader;
 import org.smurn.jply.PlyReaderFile;
 
 public class Ply {
-  static Logger LOGGER = LogManager.getLogger(Ply.class);
+  static Logger LOGGER = LoggerFactory.getLogger(Ply.class);
 
   public static List<Coord3d> read(String filename) throws IOException {
     return read(new FileInputStream(filename));
