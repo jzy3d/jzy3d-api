@@ -1,4 +1,4 @@
-package org.jzy3d.bridge.swing;
+package org.jzy3d.chart.factories;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -12,7 +12,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.maths.Rectangle;
 
 public class FrameSwing extends JFrame implements IFrame {

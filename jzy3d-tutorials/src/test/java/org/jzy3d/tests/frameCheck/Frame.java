@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.jzy3d.bridge.awt.FrameAWT;
-import org.jzy3d.bridge.swing.FrameSwing;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.FrameSwing;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.awt.GLJPanel;
 
