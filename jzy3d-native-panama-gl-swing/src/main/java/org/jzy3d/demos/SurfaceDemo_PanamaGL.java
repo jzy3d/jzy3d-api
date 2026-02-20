@@ -35,6 +35,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import panamagl.utils.GraphicsUtils;
+import panamagl.utils.TicToc;
 
 /**
  * Demo an surface chart made with PanamaGL.
@@ -51,17 +52,16 @@ import panamagl.utils.GraphicsUtils;
  *
  * @author Martin Pernollet
  */
-// DO NOT USE -XstartOnFirstThread!!
-// Making context current in MacOSXCGLContext line 1474 
 public class SurfaceDemo_PanamaGL {
   static final float ALPHA_FACTOR = 0.75f;// .61f;
 
   public static void main(String[] args) throws InterruptedException {
-//Thread.sleep(5000);
+    
     ChartFactory factory = new PanamaGLChartFactory();
 
     Quality q = Quality.Advanced().setAnimated(false);
     Chart chart = factory.newChart(q);
+
     chart.add(surface());
 
     AxisLayout layout = chart.getAxisLayout();

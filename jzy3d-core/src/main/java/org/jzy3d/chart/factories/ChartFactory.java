@@ -33,7 +33,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 public class ChartFactory implements IChartFactory {
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
 
-  static Logger logger = LogManager.getLogger(ChartFactory.class);
+  //static Logger logger = LogManager.getLogger(ChartFactory.class);
 
   IPainterFactory painterFactory;
 
