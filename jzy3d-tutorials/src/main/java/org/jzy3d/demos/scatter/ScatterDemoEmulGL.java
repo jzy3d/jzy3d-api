@@ -18,7 +18,7 @@ public class ScatterDemoEmulGL {
     Chart chart = new EmulGLChartFactory().newChart(q);
     chart.add(scatter(50000));
     chart.open();
-    chart.addMouseCameraController();
+    chart.addMouse();
     
     EmulGLSkin skin = EmulGLSkin.on(chart);
     skin.getCanvas().setProfileDisplayMethod(true);

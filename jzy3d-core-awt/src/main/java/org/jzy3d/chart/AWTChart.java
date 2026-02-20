@@ -1,16 +1,12 @@
 package org.jzy3d.chart;
 
 import org.jzy3d.chart.factories.IChartFactory;
-import org.jzy3d.maths.Dimension;
-import org.jzy3d.plot2d.primitive.AWTColorbarImageGenerator;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.legends.colorbars.AWTColorbarLegend;
-import org.jzy3d.plot3d.rendering.legends.colorbars.IColorbarLegend;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.AWTView;
-import org.jzy3d.plot3d.rendering.view.View;
 
 public class AWTChart extends Chart {
   public AWTChart(IChartFactory components, Quality quality) {

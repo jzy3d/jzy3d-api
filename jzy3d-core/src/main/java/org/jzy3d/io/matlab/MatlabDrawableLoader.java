@@ -2,14 +2,14 @@ package org.jzy3d.io.matlab;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.LogManager;
 import org.jzy3d.io.ILoader;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.TicToc;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.enlightables.EnlightablePolygon;
+import org.slf4j.LoggerFactory;
 import com.jmatio.io.MatFileReader;
 import com.jmatio.types.MLNumericArray;
 
@@ -38,8 +38,8 @@ public class MatlabDrawableLoader implements ILoader {
     TicToc t = new TicToc();
     t.tic();
     MatFileReader mfr = new MatFileReader(filename);
-    LogManager.getLogger(MatlabDrawableLoader.class).info(t.toc() + " to read " + filename);
-    LogManager.getLogger(MatlabDrawableLoader.class)
+    LoggerFactory.getLogger(MatlabDrawableLoader.class).info(t.toc() + " to read " + filename);
+    LoggerFactory.getLogger(MatlabDrawableLoader.class)
         .info("Containing arrays: " + mfr.getContent().keySet());
 
     MLNumericArray<Float> x = (MLNumericArray<Float>) mfr.getMLArray("X");
@@ -73,7 +73,7 @@ public class MatlabDrawableLoader implements ILoader {
         throw new Exception("failed at line " + i + "/" + n, e);
       }
     }
-    LogManager.getLogger(MatlabDrawableLoader.class).info(t.toc() + " to build polygon list");
+    LoggerFactory.getLogger(MatlabDrawableLoader.class).info(t.toc() + " to build polygon list");
     return polygons;
   }
 }

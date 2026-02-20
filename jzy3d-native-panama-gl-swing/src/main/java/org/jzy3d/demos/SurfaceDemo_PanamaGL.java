@@ -26,7 +26,6 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Range;
 import org.jzy3d.painters.Font;
-import org.jzy3d.painters.PanamaGLPainter;
 import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
@@ -34,6 +33,7 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.slf4j.LoggerFactory;
 import panamagl.utils.GraphicsUtils;
 import panamagl.utils.TicToc;
 
@@ -56,11 +56,15 @@ public class SurfaceDemo_PanamaGL {
   static final float ALPHA_FACTOR = 0.75f;// .61f;
 
   public static void main(String[] args) throws InterruptedException {
+    LoggerFactory.getLogger(Chart.class);
     
+    TicToc.tick();
+        
     ChartFactory factory = new PanamaGLChartFactory();
-
+    
     Quality q = Quality.Advanced().setAnimated(false);
     Chart chart = factory.newChart(q);
+    TicToc.tockShow("Panama");
 
     chart.add(surface());
 
@@ -91,13 +95,7 @@ public class SurfaceDemo_PanamaGL {
     frame.setSize(800, 600);
     System.out.println("pixel ratio: " + GraphicsUtils.getPixelScaleX(frame));
 
-    chart.addMouse();    
-    
-    PanamaGLPainter painter = (PanamaGLPainter)chart.getPainter();
-    
-    
-    System.out.println(painter.getContext().getProfile());
-    
+    chart.addMouse();        
   }
 
 

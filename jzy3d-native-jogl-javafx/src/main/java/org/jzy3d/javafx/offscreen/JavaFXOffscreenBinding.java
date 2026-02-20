@@ -1,7 +1,5 @@
 package org.jzy3d.javafx.offscreen;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
@@ -11,6 +9,8 @@ import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.OffscreenCanvas;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
@@ -18,7 +18,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.image.ImageView;
 
 public class JavaFXOffscreenBinding {
-  protected static Logger LOGGER = LogManager.getLogger(JavaFXOffscreenChartFactory.class);
+  protected static Logger LOGGER = LoggerFactory.getLogger(JavaFXOffscreenChartFactory.class);
 
   /* ********************************* */
   /* GET A CANVAS VIEW BINDED TO CHART */

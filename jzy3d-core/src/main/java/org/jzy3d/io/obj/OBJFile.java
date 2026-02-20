@@ -15,10 +15,10 @@ import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.io.BufferUtil;
 import org.jzy3d.maths.BoundingBox3d;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Translated from C++ Version: nvModel.h - Model support class
@@ -32,7 +32,7 @@ import org.jzy3d.maths.BoundingBox3d;
  * Copyright (c) NVIDIA Corporation. All rights reserved.
  */
 public class OBJFile {
-  static Logger logger = LogManager.getLogger(OBJFile.class);
+  static Logger logger = LoggerFactory.getLogger(OBJFile.class);
 
   /** Enumeration of primitive types */
   public enum PrimType {
@@ -94,7 +94,7 @@ public class OBJFile {
     try {
       fileURL = new URL(file);
     } catch (MalformedURLException e) {
-      logger.error(e);
+      logger.error(e.getLocalizedMessage());
       return false;
     }
 
