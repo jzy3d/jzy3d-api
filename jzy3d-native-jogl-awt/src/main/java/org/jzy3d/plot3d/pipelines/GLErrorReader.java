@@ -1,7 +1,7 @@
 package org.jzy3d.plot3d.pipelines;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2ES1;
 import com.jogamp.opengl.GL2ES2;
@@ -14,7 +14,7 @@ import com.jogamp.opengl.GL2ES2;
  * @author Martin Pernollet
  */
 public class GLErrorReader {
-  static Logger logger = LogManager.getLogger(GLErrorReader.class);
+  static Logger logger = LoggerFactory.getLogger(GLErrorReader.class);
 
   /**
    * If an error occured, print it and add an information string at the following line.

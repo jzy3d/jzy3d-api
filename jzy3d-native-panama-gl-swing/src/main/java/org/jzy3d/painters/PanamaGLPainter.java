@@ -27,8 +27,6 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import javax.swing.JPanel;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Array;
@@ -42,6 +40,8 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import panamagl.canvas.GLCanvas;
 import panamagl.opengl.AGL;
 import panamagl.opengl.GL;
@@ -51,7 +51,7 @@ import panamagl.renderers.text.TextRenderer;
 import panamagl.utils.ForeignMemoryUtils;
 
 public class PanamaGLPainter extends AbstractPainter {
-  static Logger logger = LogManager.getLogger(PanamaGLPainter.class);
+  static Logger logger = LoggerFactory.getLogger(PanamaGLPainter.class);
 
   protected GL gl;
   protected GLContext context;

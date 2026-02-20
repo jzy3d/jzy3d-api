@@ -1,7 +1,5 @@
 package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -13,9 +11,11 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite;
 import org.jzy3d.plot3d.primitives.ParallelepipedComposite.PolygonType;
 import org.jzy3d.plot3d.primitives.PolygonMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TestDualDepthPeelingAlgorithm {
-    Logger log = LogManager.getLogger(TestDualDepthPeelingAlgorithm.class);
+    Logger log = LoggerFactory.getLogger(TestDualDepthPeelingAlgorithm.class);
     
     @Test
     public void whenTranslucentIntersectingCube_ThenOrderIndependentAlphaIsProcessed() throws InterruptedException {

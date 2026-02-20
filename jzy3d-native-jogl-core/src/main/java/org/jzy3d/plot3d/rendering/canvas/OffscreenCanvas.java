@@ -4,18 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.slf4j.LoggerFactory;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLCapabilitiesImmutable;
@@ -127,7 +126,7 @@ public class OffscreenCanvas implements ICanvas, INativeCanvas {
 
   @Override
   public Coord2d getPixelScale() {
-    LogManager.getLogger(OffscreenCanvas.class)
+    LoggerFactory.getLogger(OffscreenCanvas.class)
         .info("getPixelScale() not implemented. Will return {1,1}");
     return new Coord2d(1, 1);
   }

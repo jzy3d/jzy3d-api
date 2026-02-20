@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.awt.AWTHelper;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.NativeAnimator;
@@ -19,11 +17,12 @@ import org.jzy3d.chart.factories.NativePainterFactory;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.nativewindow.ScalableSurface;
 import com.jogamp.newt.awt.NewtCanvasAWT;
 import com.jogamp.newt.event.KeyListener;
@@ -46,7 +45,7 @@ import com.jogamp.opengl.util.texture.TextureIO;
 public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas {
   private static final long serialVersionUID = 8578690050666237742L;
 
-  static Logger LOGGER = LogManager.getLogger(CanvasNewtAwt.class);
+  static Logger LOGGER = LoggerFactory.getLogger(CanvasNewtAwt.class);
 
   protected View view;
   protected Renderer3d renderer;

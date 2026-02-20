@@ -1,13 +1,13 @@
 package org.jzy3d.junit.replay;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.junit.replay.events.IEventLog;
 import org.jzy3d.maths.TicToc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** To be enhanced (wrapper tictoc) */
 public class Timestamped {
-  static Logger logger = LogManager.getLogger(Timestamped.class);
+  static Logger logger = LoggerFactory.getLogger(Timestamped.class);
 
   protected TicToc t = new TicToc();
 

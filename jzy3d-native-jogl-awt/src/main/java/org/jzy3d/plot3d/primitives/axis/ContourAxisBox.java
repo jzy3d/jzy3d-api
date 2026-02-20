@@ -3,8 +3,6 @@ package org.jzy3d.plot3d.primitives.axis;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -20,6 +18,8 @@ import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
 import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -29,7 +29,7 @@ import org.jzy3d.plot3d.text.align.Vertical;
  * @author Martin Pernollet
  */
 public class ContourAxisBox extends AxisBox {
-  static Logger logger = LogManager.getLogger(ContourAxisBox.class);
+  static Logger logger = LoggerFactory.getLogger(ContourAxisBox.class);
 
   public ContourAxisBox(BoundingBox3d bbox, AxisLayout layout) {
     super(bbox, layout);
