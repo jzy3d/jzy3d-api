@@ -6,7 +6,7 @@
 		<version>3.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>jzy3d-emul-gl-swt</artifactId>
-	<name>Jzy3d EmulGL Implementation for SWT with jGL</name>
+	<name>Jzy3d EmulGL Implementation with jGL for SWT</name>
 	<properties>
 		<swt-version>3.116.100</swt-version>
 	</properties>
