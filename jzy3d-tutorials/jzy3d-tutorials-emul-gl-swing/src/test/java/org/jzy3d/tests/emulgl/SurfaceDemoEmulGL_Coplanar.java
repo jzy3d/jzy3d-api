@@ -46,7 +46,7 @@ public class SurfaceDemoEmulGL_Coplanar {
     rotation.setStep(0.025f);
     rotation.setUpdateViewDefault(true);
 
-    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouseCameraController();
+    AWTCameraMouseController mouse = (AWTCameraMouseController) chart.addMouse();
     mouse.addSlaveThreadController(rotation);
     rotation.setUpdateViewDefault(true);
     mouse.setUpdateViewDefault(false); // keep to false otherwise double rendering
