@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>jzy3d-emul-gl-awt</artifactId>
-	<name>Jzy3d EmulGL Implementation for AWT with jGL</name>
+	<name>Jzy3d EmulGL Implementation with jGL for AWT</name>
 
 	<dependencies>
 		<dependency>
@@ -68,7 +68,7 @@
 					</systemProperties>
 				</configuration>
 			</plugin>
-			
+
 		</plugins>
 	</build>
 </project>

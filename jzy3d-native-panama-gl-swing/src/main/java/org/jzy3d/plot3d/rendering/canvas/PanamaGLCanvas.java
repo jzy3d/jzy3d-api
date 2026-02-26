@@ -54,8 +54,7 @@ public class PanamaGLCanvas extends JPanel implements IScreenCanvas{
     
     this.glCanvas = glCanvas;
     
-    setLayout(new GridLayout(0, 1));
-    add(glCanvas);
+    inLayout(glCanvas);
 
     view = scene.newView(this, quality);
     view.getPainter().setCanvas(this);
@@ -78,6 +77,11 @@ public class PanamaGLCanvas extends JPanel implements IScreenCanvas{
     
     //if (quality.isPreserveViewportSize())
     //  setPixelScale(newPixelScaleIdentity());
+  }
+
+  private void inLayout(GLCanvasSwing glCanvas) {
+    setLayout(new GridLayout(0, 1));
+    add(glCanvas);
   }
   
   public GLCanvas getGLCanvas() {
