@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="https://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -16,6 +15,7 @@
 	<properties>
 		<version.java>22</version.java>
 		<version.panamagl>1.3.0-SNAPSHOT</version.panamagl>
+		<native.lib.path.windows>C:\Windows\system32;C:\Users\Martin\Dev\panama-gl\freeglut\bin\x64\</native.lib.path.windows>
 	</properties>
 
 	<dependencies>
