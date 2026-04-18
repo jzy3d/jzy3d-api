@@ -12,7 +12,7 @@
 
 	<properties>
 		<version.java>22</version.java>
-		<version.panamagl>1.3.0-SNAPSHOT</version.panamagl>
+		<version.panamagl>1.3.0</version.panamagl>
 	</properties>
 
 
@@ -36,17 +36,11 @@
 			<artifactId>panama-gl-ui-awt</artifactId>
 			<version>${version.panamagl}</version>
 		</dependency>
-				<dependency>
+		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>panama-gl-ui-swing</artifactId>
 			<version>${version.panamagl}</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.jzy3d</groupId>
-			<artifactId>panama-gl-ui-javafx</artifactId>
-			<version>${panama-gl.version}</version>
-		</dependency>-->
-
 	</dependencies>
 
 	<build>
