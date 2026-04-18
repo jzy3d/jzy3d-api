@@ -20,8 +20,8 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.GLException;
-import com.jogamp.math.FloatUtil;
-import com.jogamp.math.VectorUtil;
+import com.jogamp.opengl.math.FloatUtil;
+import com.jogamp.opengl.math.VectorUtil;
 
 public class Texture3D extends Drawable implements IGLBindedResource, IMultiColorable {
 
