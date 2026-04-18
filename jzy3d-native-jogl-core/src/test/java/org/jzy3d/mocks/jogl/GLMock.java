@@ -1050,9 +1050,4 @@ public class GLMock implements GL {
 
 	}
 
-	@Override
-	public int getDefaultDrawBuffer() {
-		return 0;
-	}
-
 }
