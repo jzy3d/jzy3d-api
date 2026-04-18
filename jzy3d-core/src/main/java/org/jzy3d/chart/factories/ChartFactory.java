@@ -1,5 +1,7 @@
 package org.jzy3d.chart.factories;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.ChartView;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
@@ -30,6 +32,8 @@ import org.jzy3d.plot3d.rendering.view.View;
  */
 public class ChartFactory implements IChartFactory {
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
+
+  static Logger logger = LogManager.getLogger(ChartFactory.class);
 
   IPainterFactory painterFactory;
 

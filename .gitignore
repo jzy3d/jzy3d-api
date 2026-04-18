@@ -8,7 +8,6 @@ target/
 .project
 .settings
 .idea/
-.claude/
 **/.idea/
 **/bin/
 

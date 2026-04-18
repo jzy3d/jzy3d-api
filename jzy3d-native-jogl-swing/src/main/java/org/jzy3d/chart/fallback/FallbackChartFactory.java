@@ -4,6 +4,8 @@ import java.awt.Component;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -17,11 +19,9 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d;
 import org.jzy3d.plot3d.rendering.view.AWTImageRenderer3d.DisplayListener;
 import org.jzy3d.ui.views.ImagePanel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FallbackChartFactory extends AWTChartFactory {
-  static Logger LOGGER = LoggerFactory.getLogger(FallbackChartFactory.class);
+  static Logger LOGGER = LogManager.getLogger(FallbackChartFactory.class);
 
   @Override
   public FallbackChart newChart(IChartFactory factory, Quality quality) {

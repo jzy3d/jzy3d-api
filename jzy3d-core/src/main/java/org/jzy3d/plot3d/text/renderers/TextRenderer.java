@@ -1,5 +1,7 @@
 package org.jzy3d.plot3d.text.renderers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -12,8 +14,6 @@ import org.jzy3d.plot3d.text.ITextRenderer;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.TextLayout;
 import org.jzy3d.plot3d.text.align.Vertical;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * The {@link ITextRenderer} computes text layout according to {@link Horizontal}, {@link Vertical}
@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * This image was generated with {@link ITTest_Text#main()}
  */
 public class TextRenderer extends AbstractTextRenderer implements ITextRenderer {
-  protected static Logger LOGGER = LoggerFactory.getLogger(TextRenderer.class);
+  protected static Logger LOGGER = LogManager.getLogger(TextRenderer.class);
 
   protected TextLayout layout = new TextLayout();
 
