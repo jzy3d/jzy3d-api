@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.primitives.graphs.impl;
 
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
@@ -10,7 +11,6 @@ import org.jzy3d.plot3d.primitives.graphs.AbstractDrawableGraph2d;
 import org.jzy3d.plot3d.text.align.Horizontal;
 import org.jzy3d.plot3d.text.align.Vertical;
 import org.jzy3d.plot3d.transform.Transform;
-import org.slf4j.LoggerFactory;
 
 public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> {
   public DefaultDrawableGraph2d() {
@@ -74,12 +74,12 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
   @Override
   public void applyGeometryTransform(Transform transform) {
-    LoggerFactory.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
+    LogManager.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
   }
 
   @Override
   public void updateBounds() {
-    LoggerFactory.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
+    LogManager.getLogger(DefaultDrawableGraph2d.class).warn("not implemented");
   }
 
 }

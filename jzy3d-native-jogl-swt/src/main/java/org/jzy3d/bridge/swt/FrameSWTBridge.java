@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.IFrame;
+import org.jzy3d.demos.SurfaceDemoSWTAWTBridge;
 import org.jzy3d.maths.Rectangle;
 
 public class FrameSWTBridge implements IFrame {
@@ -57,7 +58,7 @@ public class FrameSWTBridge implements IFrame {
 
       @Override
       public void run() {
-        print("target/" + FrameSWTBridge.class.getSimpleName() + ".png");
+        print("target/" + SurfaceDemoSWTAWTBridge.class.getSimpleName() + ".png");
       }
     };
 

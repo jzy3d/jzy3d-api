@@ -14,6 +14,8 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Iterator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.junit.replay.events.IComponentEventLog;
 import org.jzy3d.junit.replay.events.IComponentEventLog.ComponentEventType;
 import org.jzy3d.junit.replay.events.IEventLog;
@@ -22,11 +24,9 @@ import org.jzy3d.junit.replay.events.IKeyEventLog.KeyEventType;
 import org.jzy3d.junit.replay.events.IMouseEventLog;
 import org.jzy3d.junit.replay.events.IMouseEventLog.MouseEventType;
 import org.jzy3d.junit.replay.events.IWindowEventLog;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class EventReplay extends Timestamped {
-  static Logger logger = LoggerFactory.getLogger(EventReplay.class);
+  static Logger logger = LogManager.getLogger(EventReplay.class);
 
   protected Component component;
   protected Frame frame;

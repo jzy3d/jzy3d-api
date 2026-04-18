@@ -1,6 +1,7 @@
 package org.jzy3d.plot3d.rendering.legends.colorbars;
 
 import java.awt.image.BufferedImage;
+import org.apache.logging.log4j.LogManager;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
@@ -17,7 +18,6 @@ import org.jzy3d.plot3d.primitives.axis.layout.providers.ITickProvider;
 import org.jzy3d.plot3d.primitives.axis.layout.renderers.ITickRenderer;
 import org.jzy3d.plot3d.rendering.legends.AWTLegend;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
-import org.slf4j.LoggerFactory;
 
 /**
  * Handle a colorbar rendered as an AWT {@link BufferedImage}.
@@ -127,7 +127,7 @@ public class AWTColorbarLegend extends AWTLegend implements IColorbarLegend {
       }
     }
     if (imageGenerator == null) {
-      LoggerFactory.getLogger(this.getClass()).info(
+      LogManager.getLogger(this.getClass()).info(
           "Passed a drawable object that is not IMultiColorable or has no ColorMapper defined");
     }
   }

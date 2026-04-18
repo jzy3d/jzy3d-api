@@ -1,7 +1,7 @@
 Jzy3d - Core AWT
 ================================
 
-Provides AWT components at the core level, meaning independent of the rendering backend.
+Provides AWT components at the core level, meaning independent of JOGL or EmulGL.
 
 * Mouse and keyboard controllers implemented with AWT `MouseListener` and `KeyListener`)
 * Image rendering (based on AWT `BufferedImage`)

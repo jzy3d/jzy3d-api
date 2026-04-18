@@ -3,6 +3,8 @@ package org.jzy3d.chart.factories;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
@@ -10,8 +12,6 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Still using some AWT components
@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class NewtChartFactory extends ChartFactory {
-  static Logger logger = LoggerFactory.getLogger(NewtChartFactory.class);
+  static Logger logger = LogManager.getLogger(NewtChartFactory.class);
 
   public static Chart chart() {
     return chart(Quality.Intermediate());
