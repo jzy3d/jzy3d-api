@@ -1,8 +1,6 @@
 package org.jzy3d.chart.factories;
 
 import java.util.Date;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.ICameraKeyController;
 import org.jzy3d.chart.controllers.keyboard.camera.NewtCameraKeyController;
@@ -25,11 +23,13 @@ import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.opengl.GLCapabilities;
 
 public class SWTPainterFactory extends NativePainterFactory implements IPainterFactory {
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-  static Logger logger = LogManager.getLogger(SWTPainterFactory.class);
+  static Logger logger = LoggerFactory.getLogger(SWTPainterFactory.class);
 
   public SWTPainterFactory() {
     super();

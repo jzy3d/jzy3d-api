@@ -1,7 +1,5 @@
 package org.jzy3d.plot3d.rendering.ddp;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.DualDepthPeelingAlgorithm;
@@ -13,6 +11,8 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedSumPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.glu.GLU;
@@ -40,7 +40,7 @@ import com.jogamp.opengl.glu.GLU;
  * @author Martin Pernollet - port to Jzy3d
  */
 public class DepthPeelingRenderer3d extends AWTRenderer3d {
-  protected Logger LOGGER = LogManager.getLogger(DepthPeelingRenderer3d.class);
+  protected Logger LOGGER = LoggerFactory.getLogger(DepthPeelingRenderer3d.class);
 
   protected IDepthPeelingAlgorithm dualPeelingAlgorithm;
   protected GLU glu = new GLU();

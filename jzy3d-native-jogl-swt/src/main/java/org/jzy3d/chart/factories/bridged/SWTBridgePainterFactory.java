@@ -1,8 +1,6 @@
 package org.jzy3d.chart.factories.bridged;
 
 import java.util.Date;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.bridge.swt.FrameSWTBridge;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
@@ -25,11 +23,13 @@ import org.jzy3d.plot3d.rendering.canvas.CanvasAWT;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.opengl.GLCapabilities;
 
 public class SWTBridgePainterFactory extends SWTPainterFactory implements IPainterFactory {
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-  static Logger logger = LogManager.getLogger(SWTBridgePainterFactory.class);
+  static Logger logger = LoggerFactory.getLogger(SWTBridgePainterFactory.class);
 
   public SWTBridgePainterFactory() {
     super();

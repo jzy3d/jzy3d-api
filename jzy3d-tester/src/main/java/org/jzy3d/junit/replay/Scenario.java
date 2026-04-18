@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.io.SimpleFile;
 import org.jzy3d.junit.replay.events.EventParser;
 import org.jzy3d.junit.replay.events.IEventLog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Scenario {
-  static Logger logger = LogManager.getLogger(Scenario.class);
+  static Logger logger = LoggerFactory.getLogger(Scenario.class);
 
   protected List<IEventLog> events;
   protected String name;
@@ -22,7 +22,7 @@ public class Scenario {
   }
 
   public void register(IEventLog event) {
-    logger.info(event);
+    logger.info(event.toString());
     events.add(event);
   }
 

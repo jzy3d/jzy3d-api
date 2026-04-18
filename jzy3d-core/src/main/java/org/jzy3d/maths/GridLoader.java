@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.IColorMappable;
 import org.jzy3d.colors.colormaps.IColorMap;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 
@@ -45,7 +45,7 @@ import org.jzy3d.plot3d.primitives.Polygon;
  */
 @Deprecated
 public class GridLoader implements IColorMappable {
-  static Logger logger = LogManager.getLogger(GridLoader.class);
+  static Logger logger = LoggerFactory.getLogger(GridLoader.class);
 
   /**
    * Initialize a GridLoader by parsing the square grid directly. When the grid is parsed, the

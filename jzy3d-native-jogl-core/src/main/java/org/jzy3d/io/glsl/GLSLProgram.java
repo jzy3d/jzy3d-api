@@ -11,9 +11,9 @@ import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.io.BufferUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL2;
 
@@ -79,7 +79,7 @@ public class GLSLProgram {
 
   public static boolean WARN_SHOW_SHADER_SOURCE = true;
   
-  protected static Logger log = LogManager.getLogger(GLSLProgram.class);
+  protected static Logger log = LoggerFactory.getLogger(GLSLProgram.class);
 
   protected Integer programId;
   protected List<Integer> vertexShaders_ = new ArrayList<Integer>();

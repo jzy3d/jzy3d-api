@@ -2,8 +2,7 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import java.util.logging.LogManager;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
@@ -19,6 +18,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.transform.Rotate;
 import org.jzy3d.plot3d.transform.Rotator;
 import org.jzy3d.plot3d.transform.Transform;
+import org.slf4j.LoggerFactory;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
@@ -85,7 +85,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
       hasMountedOnce = true;
     } catch (Exception e) {
       e.printStackTrace();
-      LogManager.getLogger(DrawableVBO.class).error(e, e);
+      LoggerFactory.getLogger(DrawableVBO.class).error(e.getMessage());
     }
   }
 
@@ -325,12 +325,12 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     /*
      * Coord3d c = transform.compute(new Coord3d(x,y, z)); x = c.x; y = c.y; z = c.z;
      */
-    LogManager.getLogger(DrawableVBO.class).warn("not implemented");
+    LoggerFactory.getLogger(DrawableVBO.class).warn("not implemented");
   }
 
   @Override
   public void updateBounds() { // requires smart reload
-    LogManager.getLogger(DrawableVBO.class).warn("not implemented");
+    LoggerFactory.getLogger(DrawableVBO.class).warn("not implemented");
   }
 
   /** To be called by the VBOBuilder */

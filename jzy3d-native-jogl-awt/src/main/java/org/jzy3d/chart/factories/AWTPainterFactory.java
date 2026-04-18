@@ -1,8 +1,6 @@
 package org.jzy3d.chart.factories;
 
 import java.util.Date;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jzy3d.bridge.awt.FrameAWT;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.controllers.keyboard.camera.AWTCameraKeyController;
@@ -27,14 +25,15 @@ import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import com.jogamp.opengl.GLCapabilities;
 
 public class AWTPainterFactory extends NativePainterFactory implements IPainterFactory {
 
   public static String SCREENSHOT_FOLDER = "./data/screenshots/";
-  static Logger logger = LogManager.getLogger(AWTPainterFactory.class);
+  static Logger logger = LoggerFactory.getLogger(AWTPainterFactory.class);
 
   public AWTPainterFactory() {
     super();
