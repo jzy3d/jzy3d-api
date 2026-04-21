@@ -51,7 +51,32 @@ public class PanamaGLJavaFXCanvas extends BorderPane implements IPanamaGLCanvas 
 
   public PanamaGLJavaFXCanvas(IChartFactory factory, Scene scene, Quality quality,
       PanamaGLFactory panamaGLFactory) {
-    this(factory, scene, quality, new ResizableCanvas(), panamaGLFactory);
+    this(factory, scene, quality, newInitiallySizedCanvas(), panamaGLFactory);
+  }
+
+  /**
+   * Build a {@link ResizableCanvas} already sized to 1x1 (not 0x0 as the JavaFX default).
+   *
+   * <p>Fixes <b>{@code Incomplete framebuffer: GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT (36054)}</b>
+   * raised by {@code panamagl.platform.macos.FBO_macOS.prepare} on the very first JavaFX layout
+   * pass.
+   *
+   * <p><b>Root cause.</b> {@link GLCanvasJFX} attaches two independent listeners on the inner
+   * JavaFX {@link javafx.scene.canvas.Canvas} {@code widthProperty()} and
+   * {@code heightProperty()}. JavaFX layout calls {@link ResizableCanvas#resize(double, double)},
+   * which in turn calls {@code setWidth} and {@code setHeight} sequentially. With a zero-sized
+   * canvas, the first notification fires with a non-zero width but a still-zero height, so the
+   * offscreen renderer prepares a FBO with a zero dimension — attachment check fails.
+   *
+   * <p><b>Workaround.</b> Starting the canvas at 1x1 guarantees that every intermediate
+   * notification seen by {@link GLCanvasJFX}'s {@code ResizeHandler} has strictly positive
+   * width <i>and</i> height, so every FBO preparation passes the completeness check.
+   */
+  private static ResizableCanvas newInitiallySizedCanvas() {
+    ResizableCanvas c = new ResizableCanvas();
+    c.setWidth(1);
+    c.setHeight(1);
+    return c;
   }
 
   private PanamaGLJavaFXCanvas(IChartFactory factory, Scene scene, Quality quality,
