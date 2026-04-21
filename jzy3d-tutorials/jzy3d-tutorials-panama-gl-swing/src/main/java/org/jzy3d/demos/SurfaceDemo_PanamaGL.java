@@ -20,7 +20,7 @@ package org.jzy3d.demos;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.FrameSwing;
-import org.jzy3d.chart.factories.PanamaGLChartFactory;
+import org.jzy3d.chart.factories.PanamaGLSwingChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -60,7 +60,7 @@ public class SurfaceDemo_PanamaGL {
     
     TicToc.tick();
         
-    ChartFactory factory = new PanamaGLChartFactory();
+    ChartFactory factory = new PanamaGLSwingChartFactory();
     
     Quality q = Quality.Advanced().setAnimated(false);
     Chart chart = factory.newChart(q);
