@@ -15,15 +15,22 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
  *******************************************************************************/
-package org.jzy3d.chart.factories;
+package org.jzy3d.plot3d.rendering.canvas;
 
-public class PanamaGLChartFactory extends ChartFactory {
+import panamagl.GLEventListener;
+import panamagl.canvas.GLCanvas;
 
-  public PanamaGLChartFactory() {
-    super(new PanamaGLPainterFactory());
-  }
+/**
+ * Common contract of every Jzy3D canvas backed by a PanamaGL {@link GLCanvas},
+ * regardless of the hosting windowing toolkit (Swing, JavaFX, SWT, ...).
+ *
+ * This interface lets toolkit-agnostic code (e.g. {@link org.jzy3d.painters.PanamaGLPainter})
+ * retrieve the underlying PanamaGL canvas without casting to a toolkit-specific class.
+ */
+public interface IPanamaGLCanvas extends IScreenCanvas {
+  GLCanvas getGLCanvas();
 
-  public PanamaGLChartFactory(IPainterFactory painterFactory) {
-    super(painterFactory);
-  }
+  GLEventListener getGLEventListener();
+
+  void setGLEventListener(GLEventListener listener);
 }
