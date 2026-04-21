@@ -18,9 +18,7 @@
 package org.jzy3d.demos;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.ChartFactory;
-import org.jzy3d.chart.factories.FrameSwing;
-import org.jzy3d.chart.factories.PanamaGLSwingChartFactory;
+import org.jzy3d.chart.factories.PanamaGLJavaFXChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -32,72 +30,67 @@ import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
+import org.jzy3d.plot3d.rendering.canvas.PanamaGLJavaFXCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.slf4j.LoggerFactory;
-import panamagl.utils.GraphicsUtils;
-import panamagl.utils.TicToc;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
- * Demo an surface chart made with PanamaGL.
+ * A surface chart rendered with PanamaGL and embedded in a JavaFX Stage.
  *
- * VM ARGS : --enable-native-access=ALL-UNNAMED 
- * 
+ * VM ARGS: --enable-native-access=ALL-UNNAMED
+ *
  * -Djava.library.path=.:/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries/
- * 
+ *
  * or
  * -Djava.library.path=.:/usr/lib/x86_64-linux-gnu/
- * 
+ *
  * or
  * -Djava.library.path="C:\Windows\system32;C:\Users\Martin\Downloads\freeglut-MSVC-3.0.0-2.mp\freeglut\bin\x64"
  *
  * @author Martin Pernollet
  */
-public class SurfaceDemo_PanamaGL {
-  static final float ALPHA_FACTOR = 0.75f;// .61f;
+//--module-path /Library/Java/JavaVirtualMachines/javafx-sdk-19.0.2.1/lib --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+//--module-path /Users/martin/Dev/javafx-sdk-17/lib --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+//--module-path "C:\Program Files\Java\javafx-sdk-17.0.6\lib"  --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+public class SurfaceDemo_PanamaGL_JavaFX {
+  static final float ALPHA_FACTOR = 0.75f;
 
-  public static void main(String[] args) throws InterruptedException {
-    LoggerFactory.getLogger(Chart.class);
-    
-    TicToc.tick();
-        
-    ChartFactory factory = new PanamaGLSwingChartFactory();
-    
-    Quality q = Quality.Advanced().setAnimated(false);
-    Chart chart = factory.newChart(q);
-    TicToc.tockShow("Panama");
-
-    chart.add(surface());
-
-    AxisLayout layout = chart.getAxisLayout();
-    //layout.setFont(new Font("Apple Chancery", 20));
-    layout.setFont(new Font("Courrier", 16));
-    layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));
-
-    /*layout.setXAxisLabel("My X axis label is a little long to draw");
-    layout.setYAxisLabel("My Y axis label is a little long to draw");
-    layout.setZAxisLabel("My Z axis label is a little long to draw");*/
-
-    /*layout.setZAxisSide(ZAxisSide.LEFT);
-    layout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
-    layout.setYAxisLabelOrientation(LabelOrientation.PARALLEL_TO_AXIS);
-    layout.setXAxisLabelOrientation(LabelOrientation.PARALLEL_TO_AXIS);*/
-    
-    //layout.setAxisLabelOffsetAuto(true);
-    //layout.setAxisLabelOffsetMargin(20);
-    
-    layout.setXTickColor(Color.RED);
-    layout.setYTickColor(Color.GREEN);
-    layout.setZTickColor(Color.BLUE);
-    
-    System.out.println("Before open");
-    FrameSwing frame = (FrameSwing)chart.open(800,600);
-    System.out.println("After open");
-    frame.setSize(800, 600);
-    System.out.println("pixel ratio: " + GraphicsUtils.getPixelScaleX(frame));
-
-    chart.addMouse();        
+  public static void main(String[] args) {
+    // Application.launch() is called from a non-Application class so the JavaFX launcher
+    // check ("JavaFX runtime components are missing") is bypassed when JavaFX lives on
+    // the classpath rather than the module-path (default setup in Eclipse + Maven).
+    Application.launch(App.class, args);
   }
 
+  public static class App extends Application {
+    @Override
+    public void start(Stage stage) {
+      PanamaGLJavaFXChartFactory factory = new PanamaGLJavaFXChartFactory();
+
+      Quality q = Quality.Advanced().setAnimated(false);
+      Chart chart = factory.newChart(q);
+      chart.add(surface());
+
+      AxisLayout layout = chart.getAxisLayout();
+      layout.setFont(new Font("Courrier", 16));
+      layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));
+
+      layout.setXTickColor(Color.RED);
+      layout.setYTickColor(Color.GREEN);
+      layout.setZTickColor(Color.BLUE);
+
+      PanamaGLJavaFXCanvas canvas = (PanamaGLJavaFXCanvas) chart.getCanvas();
+      Scene scene = new Scene(canvas, 800, 600);
+
+      stage.setTitle("Jzy3d - PanamaGL - JavaFX - Surface");
+      stage.setScene(scene);
+      stage.show();
+
+      chart.addMouse();
+    }
+  }
 
   private static Shape surface() {
     SurfaceBuilder builder = new SurfaceBuilder();
@@ -108,7 +101,8 @@ public class SurfaceDemo_PanamaGL {
 
     Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps), func);
 
-    ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, ALPHA_FACTOR));
+    ColorMapper colorMapper =
+        new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, ALPHA_FACTOR));
     surface.setColorMapper(colorMapper);
     surface.setFaceDisplayed(true);
     surface.setWireframeDisplayed(true);
@@ -116,5 +110,4 @@ public class SurfaceDemo_PanamaGL {
     surface.setWireframeWidth(1);
     return surface;
   }
-
 }

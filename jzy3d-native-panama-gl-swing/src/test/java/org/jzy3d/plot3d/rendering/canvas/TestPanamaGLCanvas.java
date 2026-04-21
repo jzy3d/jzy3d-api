@@ -25,8 +25,8 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.junit.Test;
-import org.jzy3d.chart.factories.PanamaGLChartFactory;
-import org.jzy3d.chart.factories.PanamaGLPainterFactory;
+import org.jzy3d.chart.factories.PanamaGLSwingChartFactory;
+import org.jzy3d.chart.factories.PanamaGLSwingPainterFactory;
 import panamagl.canvas.GLCanvasSwing;
 import panamagl.factory.PanamaGLFactory;
 import panamagl.offscreen.AOffscreenRenderer;
@@ -38,33 +38,34 @@ import panamagl.opengl.GLContext;
 public class TestPanamaGLCanvas {
   @Test
   public void forceRepaint() {
-    
+
     // Mock panamaGL factory
     PanamaGLFactory f = mock(PanamaGLFactory.class);
     when(f.newOffscreenRenderer(any())).thenReturn(new AOffscreenRenderer(f, new FBOReader_AWT()));
     when(f.newGL()).thenReturn(mock(GL.class));
     when(f.newGLContext()).thenReturn(mock(GLContext.class));
-    when(f.newFBO(anyInt(),anyInt())).thenReturn(mock(FBO.class));
-    
+    when(f.newFBO(anyInt(), anyInt())).thenReturn(mock(FBO.class));
+
     // Add this mock factory to the chart painter factory
-    PanamaGLChartFactory factory = new PanamaGLChartFactory();
-    PanamaGLPainterFactory p = (PanamaGLPainterFactory)factory.getPainterFactory();
+    PanamaGLSwingChartFactory factory = new PanamaGLSwingChartFactory();
+    PanamaGLSwingPainterFactory p = (PanamaGLSwingPainterFactory) factory.getPainterFactory();
     p.setPanamaGLFactory(f);
 
 
     // Spy the component on which we will perform tests
     GLCanvasSwing glCanvas = spy(GLCanvasSwing.class);
     glCanvas.setOffscreenRenderer(f.newOffscreenRenderer(new FBOReader_AWT()));
-    
+
     // Given
-    PanamaGLCanvas c = new PanamaGLCanvas(factory, factory.newScene(false), Quality.Advanced(), glCanvas);
-    
+    PanamaGLSwingCanvas c =
+        new PanamaGLSwingCanvas(factory, factory.newScene(false), Quality.Advanced(), glCanvas);
+
     // Then
     verify(glCanvas, times(0)).display();
-    
+
     // When
-    c.forceRepaint();// check invoke GLCanvas.update and 
-    
+    c.forceRepaint();// check invoke GLCanvas.update and
+
     // Then
     verify(glCanvas, times(1)).display();
   }

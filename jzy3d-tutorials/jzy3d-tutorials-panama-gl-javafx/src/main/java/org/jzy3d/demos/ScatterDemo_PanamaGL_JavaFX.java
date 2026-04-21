@@ -19,64 +19,48 @@ package org.jzy3d.demos;
 
 import java.util.Random;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.ChartFactory;
-import org.jzy3d.chart.factories.FrameSwing;
-import org.jzy3d.chart.factories.PanamaGLSwingChartFactory;
+import org.jzy3d.chart.factories.PanamaGLJavaFXChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
+import org.jzy3d.plot3d.rendering.canvas.PanamaGLJavaFXCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import panamagl.utils.GraphicsUtils;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
- * Demo an scatter chart made with PanamaGL.
+ * A scatter chart rendered with PanamaGL and embedded in a JavaFX Stage.
  *
- * VM ARGS : --enable-native-access=ALL-UNNAMED 
- * 
- * -Djava.library.path=.:/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries/
- * 
- * or
- * -Djava.library.path=.:/usr/lib/x86_64-linux-gnu/
- * 
- * or
- * -Djava.library.path="C:\Windows\system32;C:\Users\Martin\Downloads\freeglut-MSVC-3.0.0-2.mp\freeglut\bin\x64"
+ * VM ARGS: --enable-native-access=ALL-UNNAMED
  *
  * @author Martin Pernollet
  */
-// DO NOT USE -XstartOnFirstThread!!
-// Making context current in MacOSXCGLContext line 1474 
-public class ScatterDemo_PanamaGL {
+public class ScatterDemo_PanamaGL_JavaFX {
   static final float ALPHA_FACTOR = 0.25f;
 
   public static void main(String[] args) {
+    Application.launch(App.class, args);
+  }
 
-    ChartFactory factory = new PanamaGLSwingChartFactory();
+  public static class App extends Application {
+    @Override
+    public void start(Stage stage) {
+      PanamaGLJavaFXChartFactory factory = new PanamaGLJavaFXChartFactory();
 
-    //ChartFactory factory = new SwingChartFacto
+      Quality q = Quality.Advanced().setAnimated(false);
+      Chart chart = factory.newChart(q);
+      chart.add(scatter());
 
-    Quality q = Quality.Advanced().setAnimated(false);
-    Chart chart = factory.newChart(q);
-    chart.add(scatter());
-    
-    
-    Runnable open = new Runnable() {
-      @Override
-      public void run() {
-        System.out.println("Before open");
-        FrameSwing frame = (FrameSwing)chart.open(800,600);
-        System.out.println("After open");
-        frame.setSize(800, 600);
-        
-        System.out.println("pixel ratio: " + GraphicsUtils.getPixelScaleX(frame));
+      PanamaGLJavaFXCanvas canvas = (PanamaGLJavaFXCanvas) chart.getCanvas();
+      Scene scene = new Scene(canvas, 800, 600);
 
-      }
-    };
+      stage.setTitle("Jzy3d - PanamaGL - JavaFX - Scatter");
+      stage.setScene(scene);
+      stage.show();
 
-    // Lock at unsafe.park
-    open.run();
-    
-    chart.addMouse();  
-    
+      chart.addMouse();
+    }
   }
 
   private static Scatter scatter() {
@@ -103,5 +87,4 @@ public class ScatterDemo_PanamaGL {
 
     return new Scatter(points, colors);
   }
-
 }
