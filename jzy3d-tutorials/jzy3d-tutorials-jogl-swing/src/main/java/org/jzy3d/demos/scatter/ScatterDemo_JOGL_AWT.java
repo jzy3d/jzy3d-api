@@ -16,9 +16,9 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
 
-public class ScatterDemoAWT extends AWTAbstractAnalysis {
+public class ScatterDemo_JOGL_AWT extends AWTAbstractAnalysis {
   public static void main(String[] args) throws Exception {
-    AnalysisLauncher.open(new ScatterDemoAWT());
+    AnalysisLauncher.open(new ScatterDemo_JOGL_AWT());
   }
 
   @Override

@@ -20,9 +20,9 @@ import com.jogamp.opengl.awt.GLCanvas;
  * 
  * @author martin
  */
-public class SurfaceDemoAWT extends AWTAbstractAnalysis {
+public class SurfaceDemo_JOGL_AWT extends AWTAbstractAnalysis {
   public static void main(String[] args) throws Exception {
-    SurfaceDemoAWT d = new SurfaceDemoAWT();
+    SurfaceDemo_JOGL_AWT d = new SurfaceDemo_JOGL_AWT();
     AnalysisLauncher.open(d);
   }
 

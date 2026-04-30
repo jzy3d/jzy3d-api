@@ -13,13 +13,13 @@ import com.jogamp.opengl.awt.GLJPanel;
  * 
  * @author martin
  */
-public class SurfaceDemoSwing extends AbstractAnalysis {
-  public SurfaceDemoSwing() {
+public class SurfaceDemo_JOGL_Swing extends AbstractAnalysis {
+  public SurfaceDemo_JOGL_Swing() {
     super(new SwingChartFactory());
   }
 
   public static void main(String[] args) throws Exception {
-    SurfaceDemoSwing d = new SurfaceDemoSwing();
+    SurfaceDemo_JOGL_Swing d = new SurfaceDemo_JOGL_Swing();
     AnalysisLauncher.open(d);
   }
 

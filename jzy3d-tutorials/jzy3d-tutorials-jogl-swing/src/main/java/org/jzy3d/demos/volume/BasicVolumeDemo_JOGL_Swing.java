@@ -20,7 +20,7 @@ import com.jogamp.opengl.util.GLBuffers;
  * Initially https://github.com/jzy3d/jzy3d-api/commit/3e60619ea519b9062e24cac2f0963a1d64757600#diff-73f8bb09427965a3c8c5e9bc658f29bde9b677e45c850404f03cfff0c998b435
  *
  */
-public class BasicVolumeDemo  {
+public class BasicVolumeDemo_JOGL_Swing  {
   public static void main(String[] args) throws Exception {
 
     ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), 0, 1, new Color(1, 1, 1, .5f));

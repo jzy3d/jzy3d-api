@@ -36,7 +36,7 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
   private static void openAndPrintFrame(SurfaceDemoAWT d) throws InterruptedException, IOException {
     d.init();
     Chart chart = d.getChart();
-    chart.addMouseCameraController();
+    chart.addMouse();
     FrameAWT f = (FrameAWT) chart.open();
     // Thread.sleep(1000);
     String file = "./target/" + d.getClass().getSimpleName() + ".png";

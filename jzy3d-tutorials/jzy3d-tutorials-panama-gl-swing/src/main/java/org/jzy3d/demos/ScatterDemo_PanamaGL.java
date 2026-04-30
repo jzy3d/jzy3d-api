@@ -21,14 +21,11 @@ import java.util.Random;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
-import org.jzy3d.chart.factories.FrameSwing;
 import org.jzy3d.chart.factories.PanamaGLSwingPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-
-import panamagl.utils.GraphicsUtils;
 
 /**
  * Demo an scatter chart made with PanamaGL.
