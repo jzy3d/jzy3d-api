@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * @author martin
  *
  */
-public class SurfaceDemoEmulGL {
+public class SurfaceDemo_EmulGL_Swing {
 
   static final float ALPHA_FACTOR = 0.55f;// .61f;
 
