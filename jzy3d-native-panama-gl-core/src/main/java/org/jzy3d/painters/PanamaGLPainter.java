@@ -26,7 +26,6 @@ import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import javax.swing.JPanel;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Array;
@@ -35,7 +34,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
-import org.jzy3d.plot3d.rendering.canvas.PanamaGLCanvas;
+import org.jzy3d.plot3d.rendering.canvas.IPanamaGLCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.lights.Attenuation;
 import org.jzy3d.plot3d.rendering.lights.LightModel;
@@ -106,7 +105,7 @@ public class PanamaGLPainter extends AbstractPainter {
   public MemorySegment alloc(String value) {
     return arena.allocateFrom(value);
   }
-  
+
   protected double[] dbl(float[] values) {
     double[] dbl = new double[values.length];
     for (int i = 0; i < values.length; i++) {
@@ -139,15 +138,6 @@ public class PanamaGLPainter extends AbstractPainter {
     ((AGL)gl).glGetFloatv(pname, data);
   }
 
-  /*
-   * protected static MouseEvent mouseEvent(int x, int y, int modifiers) { return
-   * mouseEvent(x,y,modifiers,1); }
-   * 
-   * protected static MouseEvent mouseEvent(int x, int y, int modifiers, int clickCount) { return
-   * new MouseEvent(dummy, 0, 0, modifiers, x, y, 100, 100, clickCount, false, 0); }
-   */
-  static Component dummy = new JPanel();
-
   protected StringBuffer version() {
     return version(true);
   }
@@ -155,7 +145,6 @@ public class PanamaGLPainter extends AbstractPainter {
   protected StringBuffer version(boolean showExtensions) {
     StringBuffer sb = new StringBuffer();
     sb.append("GL_VENDOR     : " + glGetString(GL.GL_VENDOR) + "\n");
-    // sb.append("GL_RENDERER : " + glGetString(GL.GL_RENDERBUFFER) + "\n");
     sb.append("GL_VERSION    : " + glGetString(GL.GL_VERSION) + "\n");
 
     String ext = glGetString(GL.GL_EXTENSIONS);
@@ -193,7 +182,7 @@ public class PanamaGLPainter extends AbstractPainter {
   @Override
   public void configureGL(Quality quality) {
     // store reference to context in painter!!
-    GLCanvas glcanvas = ((PanamaGLCanvas) getCanvas()).getGLCanvas();
+    GLCanvas glcanvas = ((IPanamaGLCanvas) getCanvas()).getGLCanvas();
     setContext(glcanvas.getContext());
 
     // Activate Depth buffer
@@ -207,9 +196,6 @@ public class PanamaGLPainter extends AbstractPainter {
     // Blending : more beautifull with jGL without this
     gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
-    // GL_SRC_ALPHA_SATURATE
-    // on/off is handled by each viewport (camera or image)
-
     // Activate tranparency
     if (quality.isAlphaActivated()) {
       gl.glEnable(GL.GL_BLEND);
@@ -217,8 +203,7 @@ public class PanamaGLPainter extends AbstractPainter {
 
       if (quality.isDisableDepthBufferWhenAlpha()) {
         // Disable depth test to keeping pixels of
-        // "what's behind a polygon" when drawing with
-        // alpha
+        // "what's behind a polygon" when drawing with alpha
         gl.glDisable(GL.GL_DEPTH_TEST);
       }
     } else {
@@ -423,8 +408,7 @@ public class PanamaGLPainter extends AbstractPainter {
    */
   @Override
   public void glPolygonOffset(float factor, float units) {
-    // throw new NotImplementedException(OFFSET_FILL_NOT_IMPLEMENTED);
-    // opengl.gl.glPolygonOffset(factor, units); // handle stippling
+    // not implemented
   }
 
   String OFFSET_FILL_NOT_IMPLEMENTED = "not in jopengl.gl. \n"
@@ -469,14 +453,7 @@ public class PanamaGLPainter extends AbstractPainter {
     MemorySegment pixSegment = ((ForeignMemoryUtils) gl).alloc(((IntBuffer) pixels).array());
 
     gl.glDrawPixels(width, height, format, type, pixSegment);
-
-
-    // gl.glDraw
-    // opengl.gl.glDrawPixels(width, height, format, type, pixels.array());
   }
-
-  // MOVE FOLLOWING TO GLImage
-
 
   /**
    * glPixelZoom is not implemented by GL. This method will do nothing but triggering a
@@ -487,7 +464,6 @@ public class PanamaGLPainter extends AbstractPainter {
   public void glPixelZoom(float xfactor, float yfactor) {
     if (xfactor != 1 || yfactor != 1)
       throw new NotImplementedException("x:" + xfactor + "y:" + yfactor);
-    // opengl.gl.glPixelZoom(xfactor, yfactor);
   }
 
   @Override
@@ -512,8 +488,6 @@ public class PanamaGLPainter extends AbstractPainter {
   public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove,
       byte[] bitmap, int bitmap_offset) {
     throw new NotImplementedException();
-    // opengl.gl.glBitmap(width, height, xorig, yorig, xmove, ymove, bitmap,
-    // bitmap_offset);
   }
 
   /**
@@ -524,14 +498,10 @@ public class PanamaGLPainter extends AbstractPainter {
       Coord3d imagePosition) {
     glPixelZoom(pixelZoom.x, pixelZoom.y);
     glRasterPos3f(imagePosition.x, imagePosition.y, 0);
-    // painter.glRasterPos2f(xpict, ypict);
 
-    synchronized (imageBuffer) { // we don't want to draw image while it is being set by setImage
+    synchronized (imageBuffer) {
       glDrawPixels(imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
     }
-
-    // getGL().appendImageToDraw(legendImage, imagePosition.x, imagePosition.y);
-
   }
 
   // elements of GL spec picked in JOGL GL interface
@@ -549,12 +519,6 @@ public class PanamaGLPainter extends AbstractPainter {
    */
   @Override
   public int glutBitmapLength(int font, String string) {
-    /*
-     * if (font == Font.BITMAP_HELVETICA_12) { return 6 * string.length(); } else if (font ==
-     * Font.BITMAP_HELVETICA_18) { return 9 * string.length(); } else if (font ==
-     * Font.BITMAP_TIMES_ROMAN_10) { return 5 * string.length(); } else if (font ==
-     * Font.BITMAP_TIMES_ROMAN_24) { return 12 * string.length(); } return 6 * string.length();
-     */
     throw new RuntimeException("not implemented");
   }
 
@@ -568,50 +532,49 @@ public class PanamaGLPainter extends AbstractPainter {
   }
 
   /**
-   * Text length processing based on AWT {@link FontMetrics} obtained by retrieving the graphic
-   * context of the GLCanvas. In case no graphics is available
+   * Text length processing based on AWT {@link FontMetrics}.
+   *
+   * Prefers the live {@link Graphics} of the canvas when it is an AWT {@link Component}
+   * (Swing backend) because it reflects the actual display's font rendering. Otherwise
+   * (JavaFX, SWT, ...) falls back to a headless {@link java.awt.image.BufferedImage}
+   * context that is still able to resolve the same AWT {@link FontMetrics}.
    */
   @Override
   public int getTextLengthInPixels(Font font, String string) {
-    Component c = (Component) getCanvas();
-    if (c != null) {
-      Graphics g = c.getGraphics();
-      if (g != null && font != null) {
-        g.setFont(toAWT(font)); // TODO : cache?
+    if (font == null) {
+      return 0;
+    }
+    java.awt.Font awtFont = toAWT(font);
 
+    Object canvas = getCanvas();
+    if (canvas instanceof Component) {
+      Graphics g = ((Component) canvas).getGraphics();
+      if (g != null) {
+        g.setFont(awtFont);
         FontMetrics fm = g.getFontMetrics();
         if (fm != null) {
           return fm.stringWidth(string);
         }
       }
     }
-    // fallback on glut
-    return glutBitmapLength(font.getCode(), string);
-  }
 
-  /**
-   * Replace {@link #glutBitmapString(int, String) which is the official OpenGL interface.
-   * 
-   * This alternative interface allows rendering text based on AWT Fonts which are drawn on top of
-   * the GL Image.
-   */
-  /*
-   * @Override public void glutBitmapString(Font font, String label, Coord3d position, Color color)
-   * { opengl.gl.glutBitmapString(toAWT(font), label, position.x, position.y, position.z, color.r,
-   * color.g, color.b, 0); }
-   * 
-   * @Override public void drawText(Font font, String label, Coord3d position, Color color, float
-   * rotation) { opengl.gl.glutBitmapString(toAWT(font), label, position.x, position.y, position.z,
-   * color.r, color.g, color.b, rotation); }
-   */
+    // Headless fallback: a 1x1 BufferedImage is enough to obtain AWT FontMetrics that
+    // matches the font the renderer will use to draw text.
+    java.awt.image.BufferedImage img =
+        new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
+    Graphics g = img.getGraphics();
+    try {
+      g.setFont(awtFont);
+      FontMetrics fm = g.getFontMetrics();
+      return fm.stringWidth(string);
+    } finally {
+      g.dispose();
+    }
+  }
 
   @Override
   public void glutBitmapString(int font, String string) {
     // logger.error("glutBitmapString : not available in generated code");
-    // opengl.gl.glutBitmapString(font, alloc(string));
-
-    // Use freeglut
-    /// opt/X11/include/GL/freeglut.h
   }
 
   @Override
@@ -669,7 +632,7 @@ public class PanamaGLPainter extends AbstractPainter {
   @Override
   public boolean glIsList(int list) {
     logger.error("to be implemented");
-    return false;// opengl.gl.glIsList(list);
+    return false;
   }
 
   @Override
@@ -682,10 +645,6 @@ public class PanamaGLPainter extends AbstractPainter {
   @Override
   public void gluDisk(double inner, double outer, int slices, int loops) {
     logger.error("to be implemented");
-
-    // GLUquadricObj qobj = opengl.gl.gluNewQuadric();
-    // qobj.Normals = opengl.gl.GLU_NONE(); // https://github.com/jzy3d/jzy3d-api/issues/179
-    // opengl.gl.gluDisk(qobj, inner, outer, slices, loops);
   }
 
   @Override
@@ -706,22 +665,16 @@ public class PanamaGLPainter extends AbstractPainter {
   @Override
   public void gluSphere(double radius, int slices, int stacks) {
     logger.error("to be implemented");
-    // GLUquadricObj qobj = opengl.gl.gluNewQuadric();
-    // opengl.gl.gluSphere(qobj, radius, slices, stacks);
   }
 
   @Override
   public void gluCylinder(double base, double top, double height, int slices, int stacks) {
     logger.error("to be implemented");
-
-    // GLUquadricObj qobj = opengl.gl.gluNewQuadric();
-    // opengl.gl.gluCylinder(qobj, base, top, height, slices, stacks);
   }
 
   @Override
   public void glutSolidCube(float size) {
     gl.glutSolidCube(size);
-
   }
 
   // GL FEEDBACK BUFER
@@ -1163,9 +1116,6 @@ public class PanamaGLPainter extends AbstractPainter {
   public void glMap2f(int target, float u1, float u2, int ustride, int uorder, float v1, float v2,
       int vstride, int vorder, FloatBuffer points) {
     throw new NotImplementedException("NEED TO CONVERT FloatBuffer to float[][][]");
-    // opengl.gl.glMap2f(target, u1, u2, ustride, uorder, v1, v2, vstride,
-    // vorder, points);
-    // (target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, points);
   }
 
   @Override
