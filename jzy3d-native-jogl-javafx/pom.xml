@@ -36,6 +36,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-core-javafx</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx</artifactId>
 			<version>${openjfx.version}</version>
