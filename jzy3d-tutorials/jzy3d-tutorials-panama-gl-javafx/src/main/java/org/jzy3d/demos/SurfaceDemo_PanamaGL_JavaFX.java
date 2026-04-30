@@ -18,7 +18,8 @@
 package org.jzy3d.demos;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.PanamaGLJavaFXChartFactory;
+import org.jzy3d.chart.factories.ChartFactory;
+import org.jzy3d.chart.factories.PanamaGLJavaFXPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -32,6 +33,7 @@ import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.rendering.canvas.PanamaGLJavaFXCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -58,16 +60,13 @@ public class SurfaceDemo_PanamaGL_JavaFX {
   static final float ALPHA_FACTOR = 0.75f;
 
   public static void main(String[] args) {
-    // Application.launch() is called from a non-Application class so the JavaFX launcher
-    // check ("JavaFX runtime components are missing") is bypassed when JavaFX lives on
-    // the classpath rather than the module-path (default setup in Eclipse + Maven).
     Application.launch(App.class, args);
   }
 
   public static class App extends Application {
     @Override
     public void start(Stage stage) {
-      PanamaGLJavaFXChartFactory factory = new PanamaGLJavaFXChartFactory();
+      ChartFactory factory = new ChartFactory(new PanamaGLJavaFXPainterFactory());
 
       Quality q = Quality.Advanced().setAnimated(false);
       Chart chart = factory.newChart(q);

@@ -18,8 +18,10 @@
 package org.jzy3d.demos;
 
 import java.util.List;
+
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.PanamaGLJavaFXChartFactory;
+import org.jzy3d.chart.factories.ChartFactory;
+import org.jzy3d.chart.factories.PanamaGLJavaFXPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Geometry;
@@ -27,6 +29,7 @@ import org.jzy3d.plot3d.primitives.RandomGeom;
 import org.jzy3d.plot3d.rendering.canvas.PanamaGLJavaFXCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -38,6 +41,9 @@ import javafx.stage.Stage;
  *
  * @author Martin Pernollet
  */
+//--module-path /Library/Java/JavaVirtualMachines/javafx-sdk-19.0.2.1/lib --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+//--module-path /Users/martin/Dev/javafx-sdk-17/lib --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+//--module-path "C:\Program Files\Java\javafx-sdk-17.0.6\lib"  --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
 public class SpinningCubesDemo_PanamaGL_JavaFX {
 
   public static void main(String[] args) {
@@ -59,7 +65,9 @@ public class SpinningCubesDemo_PanamaGL_JavaFX {
         c.setColor(Color.ORANGE);
       }
 
-      PanamaGLJavaFXChartFactory factory = new PanamaGLJavaFXChartFactory();
+      
+      ChartFactory factory = new ChartFactory(new PanamaGLJavaFXPainterFactory());
+      
       Chart chart = factory.newChart(q);
       chart.add(drawables);
       chart.addMouse();
