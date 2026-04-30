@@ -16,7 +16,7 @@ import org.jzy3d.plot3d.rendering.canvas.Quality;
  * This is usefull to address layout issues. For example one can better mix JOGL and MigLayout on
  * MacOSX which proved to not be able to downsize properly.
  */
-public class SurfaceDemoFallback {
+public class SurfaceDemo_JOGL_Fallback {
   public static void main(String[] args) {
     Shape surface = surface();
 
