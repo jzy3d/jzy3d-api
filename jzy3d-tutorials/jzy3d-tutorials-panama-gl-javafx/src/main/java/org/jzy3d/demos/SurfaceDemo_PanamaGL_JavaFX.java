@@ -73,9 +73,6 @@ public class SurfaceDemo_PanamaGL_JavaFX {
       chart.add(surface());
 
       AxisLayout layout = chart.getAxisLayout();
-      layout.setFont(new Font("Courrier", 16));
-      layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));
-
       layout.setXTickColor(Color.RED);
       layout.setYTickColor(Color.GREEN);
       layout.setZTickColor(Color.BLUE);

@@ -18,14 +18,16 @@
 package org.jzy3d.demos;
 
 import java.util.Random;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.FrameSwing;
-import org.jzy3d.chart.factories.PanamaGLSwingChartFactory;
+import org.jzy3d.chart.factories.PanamaGLSwingPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+
 import panamagl.utils.GraphicsUtils;
 
 /**
@@ -50,31 +52,13 @@ public class ScatterDemo_PanamaGL {
 
   public static void main(String[] args) {
 
-    ChartFactory factory = new PanamaGLSwingChartFactory();
-
-    //ChartFactory factory = new SwingChartFacto
+    ChartFactory factory = new ChartFactory(new PanamaGLSwingPainterFactory());
 
     Quality q = Quality.Advanced().setAnimated(false);
     Chart chart = factory.newChart(q);
     chart.add(scatter());
-    
-    
-    Runnable open = new Runnable() {
-      @Override
-      public void run() {
-        System.out.println("Before open");
-        FrameSwing frame = (FrameSwing)chart.open(800,600);
-        System.out.println("After open");
-        frame.setSize(800, 600);
-        
-        System.out.println("pixel ratio: " + GraphicsUtils.getPixelScaleX(frame));
 
-      }
-    };
-
-    // Lock at unsafe.park
-    open.run();
-    
+    chart.open("Jzy3d - PanamaGL - Swing - Scatter", 800, 600);
     chart.addMouse();  
     
   }
