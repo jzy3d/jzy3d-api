@@ -18,10 +18,11 @@
 package org.jzy3d.demos;
 
 import java.util.List;
+
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.FrameSwing;
-import org.jzy3d.chart.factories.PanamaGLSwingChartFactory;
+import org.jzy3d.chart.factories.PanamaGLSwingPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Geometry;
@@ -60,19 +61,16 @@ public class SpinningCubesDemo_PanamaGL {
       c.setColor(Color.ORANGE);
     }
 
-    //ChartFactory factory = new AWTChartFactory();
-    ChartFactory factory = new PanamaGLSwingChartFactory();
+    ChartFactory factory = new ChartFactory(new PanamaGLSwingPainterFactory());
+
     Chart chart = factory.newChart(q);
     chart.add(drawables);
     chart.addMouse();
     chart.addLightOnCamera();
     chart.getView().setAxisDisplayed(false);
-    //chart.getView().setViewPositionMode(ViewPositionMode.PROFILE);
-    Geometry.SHOW_NORMALS = false;
+    //Geometry.SHOW_NORMALS = false;
     
-    
-    ((FrameSwing)chart.open(800,600)).setSize(800,600);
-    
+    chart.open("Jzy3d - PanamaGL - Swing - Spinning Cube", 800,600);
     
   }
 }

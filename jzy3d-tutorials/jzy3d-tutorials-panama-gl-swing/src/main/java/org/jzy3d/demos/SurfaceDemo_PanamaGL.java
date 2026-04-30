@@ -20,7 +20,7 @@ package org.jzy3d.demos;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.FrameSwing;
-import org.jzy3d.chart.factories.PanamaGLSwingChartFactory;
+import org.jzy3d.chart.factories.PanamaGLSwingPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -29,11 +29,13 @@ import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
+import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.slf4j.LoggerFactory;
+
 import panamagl.utils.GraphicsUtils;
 import panamagl.utils.TicToc;
 
@@ -58,44 +60,21 @@ public class SurfaceDemo_PanamaGL {
   public static void main(String[] args) throws InterruptedException {
     LoggerFactory.getLogger(Chart.class);
     
-    TicToc.tick();
-        
-    ChartFactory factory = new PanamaGLSwingChartFactory();
-    
-    Quality q = Quality.Advanced().setAnimated(false);
-    Chart chart = factory.newChart(q);
-    TicToc.tockShow("Panama");
-
-    chart.add(surface());
-
-    AxisLayout layout = chart.getAxisLayout();
-    //layout.setFont(new Font("Apple Chancery", 20));
-    layout.setFont(new Font("Courrier", 16));
-    layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));
-
-    /*layout.setXAxisLabel("My X axis label is a little long to draw");
-    layout.setYAxisLabel("My Y axis label is a little long to draw");
-    layout.setZAxisLabel("My Z axis label is a little long to draw");*/
-
-    /*layout.setZAxisSide(ZAxisSide.LEFT);
-    layout.setZAxisLabelOrientation(LabelOrientation.VERTICAL);
-    layout.setYAxisLabelOrientation(LabelOrientation.PARALLEL_TO_AXIS);
-    layout.setXAxisLabelOrientation(LabelOrientation.PARALLEL_TO_AXIS);*/
-    
-    //layout.setAxisLabelOffsetAuto(true);
-    //layout.setAxisLabelOffsetMargin(20);
-    
-    layout.setXTickColor(Color.RED);
-    layout.setYTickColor(Color.GREEN);
-    layout.setZTickColor(Color.BLUE);
-    
-    System.out.println("Before open");
-    FrameSwing frame = (FrameSwing)chart.open(800,600);
-    System.out.println("After open");
-    frame.setSize(800, 600);
-    System.out.println("pixel ratio: " + GraphicsUtils.getPixelScaleX(frame));
-
-    chart.addMouse();        
+	ChartFactory factory = new ChartFactory(new PanamaGLSwingPainterFactory());
+	
+	Quality q = Quality.Advanced().setAnimated(false);
+	Chart chart = factory.newChart(q);
+	
+	chart.add(surface());
+	
+	AxisLayout layout = chart.getAxisLayout();
+	layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));
+	layout.setXTickColor(Color.RED);
+	layout.setYTickColor(Color.GREEN);
+	layout.setZTickColor(Color.BLUE);
+	
+	chart.open("Jzy3d - PanamaGL - Swing - Surface", 800,600);
+	chart.addMouse();        
   }
 
 
