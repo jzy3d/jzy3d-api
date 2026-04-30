@@ -1,14 +1,13 @@
 package org.jzy3d.demos.teapot;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
+import org.jzy3d.chart.factories.SwingPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.primitives.Teapot;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
-import org.jzy3d.plot3d.rendering.lights.Light;
 
-public class TeapotDemo {
+public class TeapotDemo_JOGL_Swing {
 
   public static void main(String[] args) {
     
@@ -23,8 +22,8 @@ public class TeapotDemo {
     
     
     // ---------------------------------------------
-    ChartFactory factory = new AWTChartFactory();
-    //ChartFactory factory = new EmulGLChartFactory();
+    ChartFactory factory = new ChartFactory(new SwingPainterFactory());
+    // ChartFactory factory = new EmulGLChartFactory();
     
     // Emulgl will show limitations
     // 1-wireframe and face do not mix cleanly (polygon offset fill)
@@ -45,13 +44,13 @@ public class TeapotDemo {
     chart.add(teapot);
     
     //Light light = chart.addLightOnCamera();
-    Light light = chart.addLight(chart.getView().getBounds().getCorners().getXmaxYmaxZmax());
+    chart.addLight(chart.getView().getBounds().getCorners().getXmaxYmaxZmax());
     //light.setRepresentationDisplayed(true);
     
     // ---------------------------------------------
 
     chart.open();
-    chart.addMouseCameraController();
+    chart.addMouse();
 
   }
 }

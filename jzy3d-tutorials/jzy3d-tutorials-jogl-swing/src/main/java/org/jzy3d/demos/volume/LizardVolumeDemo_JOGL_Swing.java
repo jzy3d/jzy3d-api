@@ -22,9 +22,9 @@ import com.jogamp.opengl.util.GLBuffers;
  * @author Jacok Filik
  *
  */
-public class LizardVolumeDemo extends AWTAbstractAnalysis {
+public class LizardVolumeDemo_JOGL_Swing extends AWTAbstractAnalysis {
   public static void main(String[] args) throws Exception {
-    AnalysisLauncher.open(new LizardVolumeDemo());
+    AnalysisLauncher.open(new LizardVolumeDemo_JOGL_Swing());
   }
 
   @SuppressWarnings("unchecked")
