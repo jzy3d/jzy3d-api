@@ -1,0 +1,112 @@
+/*******************************************************************************
+ * Copyright (c) 2022, 2023 Martin Pernollet & contributors.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
+ *******************************************************************************/
+package org.jzy3d.demos;
+
+import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.ChartFactory;
+import org.jzy3d.chart.factories.PanamaGLJavaFXPainterFactory;
+import org.jzy3d.colors.Color;
+import org.jzy3d.colors.ColorMapper;
+import org.jzy3d.colors.colormaps.ColorMapRainbow;
+import org.jzy3d.maths.Range;
+import org.jzy3d.painters.Font;
+import org.jzy3d.plot3d.builder.Func3D;
+import org.jzy3d.plot3d.builder.SurfaceBuilder;
+import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
+import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
+import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
+import org.jzy3d.plot3d.rendering.canvas.PanamaGLJavaFXCanvas;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
+
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+/**
+ * A surface chart rendered with PanamaGL and embedded in a JavaFX Stage.
+ *
+ * VM ARGS: --enable-native-access=ALL-UNNAMED
+ *
+ * -Djava.library.path=.:/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries/
+ *
+ * or
+ * -Djava.library.path=.:/usr/lib/x86_64-linux-gnu/
+ *
+ * or
+ * -Djava.library.path="C:\Windows\system32;C:\Users\Martin\Downloads\freeglut-MSVC-3.0.0-2.mp\freeglut\bin\x64"
+ *
+ * @author Martin Pernollet
+ */
+//--module-path /Library/Java/JavaVirtualMachines/javafx-sdk-19.0.2.1/lib --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+//--module-path /Users/martin/Dev/javafx-sdk-17/lib --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+//--module-path "C:\Program Files\Java\javafx-sdk-17.0.6\lib"  --add-modules javafx.controls --add-exports=java.desktop/sun.awt=ALL-UNNAMED
+public class SurfaceDemo_PanamaGL_JavaFX {
+  static final float ALPHA_FACTOR = 0.75f;
+
+  public static void main(String[] args) {
+    Application.launch(App.class, args);
+  }
+
+  public static class App extends Application {
+    @Override
+    public void start(Stage stage) {
+      ChartFactory factory = new ChartFactory(new PanamaGLJavaFXPainterFactory());
+
+      Quality q = Quality.Advanced().setAnimated(false);
+      Chart chart = factory.newChart(q);
+      chart.add(surface());
+
+      AxisLayout layout = chart.getAxisLayout();
+      layout.setFont(new Font("Courrier", 16));
+      layout.setFontSizePolicy(new HiDPIProportionalFontSizePolicy(chart.getView()));
+
+      layout.setXTickColor(Color.RED);
+      layout.setYTickColor(Color.GREEN);
+      layout.setZTickColor(Color.BLUE);
+
+      PanamaGLJavaFXCanvas canvas = (PanamaGLJavaFXCanvas) chart.getCanvas();
+      Scene scene = new Scene(canvas, 800, 600);
+
+      stage.setTitle("Jzy3d - PanamaGL - JavaFX - Surface");
+      stage.setScene(scene);
+      stage.show();
+
+      chart.addMouse();
+    }
+  }
+
+  private static Shape surface() {
+    SurfaceBuilder builder = new SurfaceBuilder();
+
+    Func3D func = new Func3D((x, y) -> x * Math.sin(x * y));
+    Range range = new Range(-3, 3);
+    int steps = 50;
+
+    Shape surface = builder.orthonormal(new OrthonormalGrid(range, steps), func);
+
+    ColorMapper colorMapper =
+        new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, ALPHA_FACTOR));
+    surface.setColorMapper(colorMapper);
+    surface.setFaceDisplayed(true);
+    surface.setWireframeDisplayed(true);
+    surface.setWireframeColor(Color.BLACK);
+    surface.setWireframeWidth(1);
+    return surface;
+  }
+}

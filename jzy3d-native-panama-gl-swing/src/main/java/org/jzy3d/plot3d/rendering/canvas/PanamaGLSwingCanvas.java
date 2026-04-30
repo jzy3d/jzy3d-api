@@ -37,67 +37,36 @@ import panamagl.GLEventListener;
 import panamagl.canvas.GLCanvas;
 import panamagl.canvas.GLCanvasSwing;
 
-public class PanamaGLCanvas extends JPanel implements IScreenCanvas{
+public class PanamaGLSwingCanvas extends JPanel implements IPanamaGLCanvas {
   private static final long serialVersionUID = 2488043741850146830L;
-  
-  protected double pixelScaleX;
-  protected double pixelScaleY;
-  protected View view;
-  protected Renderer3D renderer;
-  protected IAnimator animator;
+
+  protected PanamaGLCanvasSupport support;
   protected List<ICanvasListener> canvasListeners = new ArrayList<>();
-  
-  protected GLCanvas glCanvas;
 
-  public PanamaGLCanvas(IChartFactory factory, Scene scene, Quality quality, GLCanvasSwing glCanvas) {
+  public PanamaGLSwingCanvas(IChartFactory factory, Scene scene, Quality quality,
+      GLCanvasSwing glCanvas) {
     super();
-    
-    this.glCanvas = glCanvas;
-    
-    inLayout(glCanvas);
-
-    view = scene.newView(this, quality);
-    view.getPainter().setCanvas(this);
-
-    renderer = new Renderer3D(view);
-    glCanvas.setGLEventListener(renderer);
-    //addGLEventListener(renderer);
-
-    //setAutoSwapBufferMode(quality.isAutoSwapBuffer());
-
-    animator = factory.getPainterFactory().newAnimator(this);
-    if (quality.isAnimated()) {
-      animator.start();
-    } else {
-      animator.stop();
-    }
-
-    //if(ALLOW_WATCH_PIXEL_SCALE)
-    //  watchPixelScale();
-    
-    //if (quality.isPreserveViewportSize())
-    //  setPixelScale(newPixelScaleIdentity());
-  }
-
-  private void inLayout(GLCanvasSwing glCanvas) {
     setLayout(new GridLayout(0, 1));
     add(glCanvas);
-  }
-  
-  public GLCanvas getGLCanvas() {
-    return glCanvas;
-  }
-  
-  //@Override
-  public GLEventListener getGLEventListener() {
-    return glCanvas.getGLEventListener();
+
+    this.support = new PanamaGLCanvasSupport(this, factory, scene, quality, glCanvas);
   }
 
-  //@Override
-  public void setGLEventListener(GLEventListener glEvents) {
-    this.glCanvas.setGLEventListener(glEvents);
+  @Override
+  public GLCanvas getGLCanvas() {
+    return support.getGLCanvas();
   }
-  
+
+  @Override
+  public GLEventListener getGLEventListener() {
+    return support.getGLEventListener();
+  }
+
+  @Override
+  public void setGLEventListener(GLEventListener listener) {
+    support.setGLEventListener(listener);
+  }
+
   @Override
   public boolean isNative() {
     return true;
@@ -105,7 +74,7 @@ public class PanamaGLCanvas extends JPanel implements IScreenCanvas{
 
   @Override
   public View getView() {
-    return view;
+    return support.getView();
   }
 
   @Override
@@ -121,35 +90,26 @@ public class PanamaGLCanvas extends JPanel implements IScreenCanvas{
   @Override
   public void screenshot(File file) throws IOException {
     // TODO Auto-generated method stub
-    
   }
 
   @Override
   public Object screenshot() {
-    return glCanvas.getScreenshot();
+    return support.screenshot();
   }
 
   @Override
   public void display() {
-    //repaint();
-    glCanvas.display();
+    support.display();
   }
-  
+
   @Override
   public void forceRepaint() {
-    /*SwingUtilities.invokeLater(new Runnable() {
-      @Override
-      public void run() {*/
-        //glCanvas.repaint();
-        glCanvas.display();
-        /*System.out.println("Embedded.repaint()");
-      }
-    });*/
+    support.forceRepaint();
   }
 
   @Override
   public void dispose() {
-    
+    support.dispose();
   }
 
   @Override
@@ -159,14 +119,13 @@ public class PanamaGLCanvas extends JPanel implements IScreenCanvas{
       addMouseWheelListener((MouseWheelListener) o);
     if (o instanceof MouseMotionListener)
       addMouseMotionListener((MouseMotionListener) o);
-    
   }
 
   @Override
   public void addKeyController(Object o) {
     addKeyListener((java.awt.event.KeyListener) o);
-    
   }
+
   @Override
   public void removeMouseController(Object o) {
     removeMouseListener((java.awt.event.MouseListener) o);
@@ -181,17 +140,15 @@ public class PanamaGLCanvas extends JPanel implements IScreenCanvas{
     removeKeyListener((java.awt.event.KeyListener) o);
   }
 
-
   @Override
   public String getDebugInfo() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   @Override
   public void setPixelScale(float[] scale) {
-    LoggerFactory.getLogger(PanamaGLCanvas.class)
-    .info("Not implemented. Pixel scale is driven by AWT Canvas itself and Panama adapts to it");
+    LoggerFactory.getLogger(PanamaGLSwingCanvas.class)
+        .info("Not implemented. Pixel scale is driven by AWT Canvas itself and Panama adapts to it");
   }
 
   @Override
@@ -206,38 +163,31 @@ public class PanamaGLCanvas extends JPanel implements IScreenCanvas{
 
   @Override
   public double getLastRenderingTimeMs() {
-    // TODO Auto-generated method stub
     return 0;
   }
 
   @Override
   public void addCanvasListener(ICanvasListener listener) {
-    // TODO Auto-generated method stub
-    
+    canvasListeners.add(listener);
   }
 
   @Override
   public void removeCanvasListener(ICanvasListener listener) {
-    // TODO Auto-generated method stub
-    
+    canvasListeners.remove(listener);
   }
 
   @Override
   public List<ICanvasListener> getCanvasListeners() {
-    // TODO Auto-generated method stub
-    return null;
+    return canvasListeners;
   }
-
-  
 
   @Override
   public IAnimator getAnimation() {
-    return animator;
+    return support.getAnimator();
   }
 
   @Override
   public Dimension getDimension() {
     return new Dimension(getRendererWidth(), getRendererHeight());
   }
-
 }

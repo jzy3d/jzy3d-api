@@ -31,7 +31,6 @@ public class Renderer3D implements GLEventListener{
   protected int height = 0;
 
   protected boolean doScreenshotAtNextDisplay = false;
-  //protected TextureData image = null;
 
   protected boolean traceGL = false;
   protected boolean debugGL = false;
@@ -39,7 +38,7 @@ public class Renderer3D implements GLEventListener{
   protected TicToc profileDisplayTimer = new TicToc();
   protected double lastRenderingTimeMs;
 
-  
+
   /** Initialize a Renderer attached to the given View. */
   public Renderer3D(View view) {
     this(view, false, false);
@@ -61,27 +60,10 @@ public class Renderer3D implements GLEventListener{
   /**
    * Called when the {@link GLCanvas} is rendered for the first time. When one calls
    * Scene.init() function, this function is called and makes the OpenGL buffers initialization.
-   * 
-   * Note: in this implementation, GL Exceptions are not triggered. To do so, make te following call
-   * at the beginning of the init() body: <code>
-   * canvas.setGL( new DebugGL(canvas.getGL()) );
-   * </code>
    */
   @Override
   public void init(GL canvas) {
-    //if (canvas != null && canvas.getGL() != null && view != null) {
-
-      /*GLContext context = canvas.getGL().getContext();
-      
-      if (debugGL)
-        context.setGL(GLPipelineFactory.create("com.jogamp.opengl.Debug", null, canvas.getGL(), null));
-      if (traceGL)
-        context.setGL(GLPipelineFactory.create("com.jogamp.opengl.Trace", null, canvas.getGL(), new Object[] {System.err}));
-
-      updatePainterWithGL(canvas);*/
-
-      view.init();
-    //}
+    view.init();
   }
 
   /**
@@ -94,16 +76,9 @@ public class Renderer3D implements GLEventListener{
 
     if (view != null) {
       if(canvas!=null) {
-  
-        //updatePainterWithGL(canvas);
-  
         if (view != null) {
           view.clear();
           view.render();
-  
-          //exportImageIfRequired(canvas.getGL());
-
-          //renderScreenshotIfRequired(canvas.getGL());
         }
       }
     }
@@ -111,7 +86,7 @@ public class Renderer3D implements GLEventListener{
     profileDisplayTimer.toc();
     lastRenderingTimeMs = profileDisplayTimer.elapsedMilisecond();
   }
-  
+
 
   /** Called when the {@link GLCanvas} is resized. */
   @Override
@@ -120,12 +95,7 @@ public class Renderer3D implements GLEventListener{
     this.height = height;
 
     if (view != null) {
-      //view.dimensionDirty = true;
-
       if (canvas != null) {
-
-        //updatePainterWithGL(canvas);
-
         view.clear();
         view.render();
       }
@@ -136,7 +106,7 @@ public class Renderer3D implements GLEventListener{
    * This method allows configuring the {@link IPainter} with the current {@link GL} context
    * provided by the {@link GLCanvas}. This may be usefull to override in case of a mocking GL
    * (to avoid having the mock replaced by a real GL Context).
-   * 
+   *
    * @param canvas
    */
   protected void updatePainterWithGL(GL canvas) {
@@ -144,31 +114,9 @@ public class Renderer3D implements GLEventListener{
     painter.setGL(canvas);
   }
 
-  /********************* SCREENSHOTS ***********************/
-
   public void nextDisplayUpdateScreenshot() {
     doScreenshotAtNextDisplay = true;
   }
-
-  /*public TextureData getLastScreenshot() {
-    return image;
-  }
-
-  protected void renderScreenshotIfRequired(GL gl) {
-    if (doScreenshotAtNextDisplay) {
-      GLReadBufferUtil screenshot = new GLReadBufferUtil(false, false);
-      screenshot.readPixels(gl, true);
-      image = screenshot.getTextureData();
-      doScreenshotAtNextDisplay = false;
-    }
-  }
-  
-  protected void exportImageIfRequired(GL gl) {
-    
-  }*/
-
-
-
 
   /** Return the width that was given after the last resize event. */
   public int getWidth() {
@@ -187,6 +135,6 @@ public class Renderer3D implements GLEventListener{
   @Override
   public void dispose(GL gl) {
     // TODO Auto-generated method stub
-    
+
   }
 }
