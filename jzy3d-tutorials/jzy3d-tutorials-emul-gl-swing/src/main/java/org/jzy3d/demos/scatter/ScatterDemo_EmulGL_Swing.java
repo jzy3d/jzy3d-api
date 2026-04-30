@@ -9,7 +9,7 @@ import org.jzy3d.maths.Coord3d;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
-public class ScatterDemoEmulGL {
+public class ScatterDemo_EmulGL_Swing {
   public static void main(String[] args) throws Exception {
     Quality q = Quality.Advanced();
     q.setAnimated(false);
