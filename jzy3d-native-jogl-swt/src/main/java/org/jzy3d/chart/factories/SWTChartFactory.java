@@ -10,7 +10,7 @@ import org.jzy3d.plot3d.rendering.view.AWTView;
 import org.jzy3d.plot3d.rendering.view.View;
 import com.jogamp.newt.opengl.GLWindow;
 
-public class SWTChartFactory extends ChartFactory {
+public class SWTChartFactory extends ChartFactory implements ISWTChartFactory {
   // private static final Logger logger = Logger.getLogger(SWTChartFactory.class);
 
   protected Composite canvas;
