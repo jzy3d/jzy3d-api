@@ -46,6 +46,8 @@ public class ScatterDemo_PanamaGL_SWT {
     Quality q = Quality.Advanced().setAnimated(false);
     Chart chart = new PanamaGLSWTChartFactory(shell).newChart(q);
     chart.add(scatter());
+    
+    chart.addMouse();
 
     shell.setText("Jzy3d - PanamaGL - SWT - Scatter");
     shell.setSize(800, 600);
