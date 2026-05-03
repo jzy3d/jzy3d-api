@@ -64,7 +64,6 @@ public class SWTPainterFactory extends NativePainterFactory implements IPainterF
         ((NativePainterFactory) factory.getPainterFactory()).getCapabilities(), traceGL, debugGL);
   }
 
-
   @Override
   public ICameraMouseController newMouseCameraController(Chart chart) {
     return new NewtCameraMouseController(chart);
