@@ -22,7 +22,9 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.PanamaGLSWTChartFactory;
+import org.jzy3d.chart.factories.PanamaGLSWTPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.Geometry;
@@ -56,11 +58,15 @@ public class SpinningCubesDemo_PanamaGL_SWT {
       c.setColor(Color.ORANGE);
     }
 
+    //ChartFactory factory = new ChartFactory(new PanamaGLSWTPainterFactory());
     Chart chart = new PanamaGLSWTChartFactory(shell).newChart(q);
     chart.add(drawables);
     chart.addLightOnCamera();
     chart.getView().setAxisDisplayed(false);
     Geometry.SHOW_NORMALS = false;
+    
+    chart.addMouse();
+
 
     shell.setText("Jzy3d - PanamaGL - SWT - Spinning Cubes");
     shell.setSize(800, 600);
