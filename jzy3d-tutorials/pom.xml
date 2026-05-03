@@ -18,6 +18,7 @@
 		<module>jzy3d-tutorials-jogl-newt</module>
 		<module>jzy3d-tutorials-panama-gl-swing</module>
 		<module>jzy3d-tutorials-panama-gl-javafx</module>
+		<module>jzy3d-tutorials-panama-gl-swt</module>
 	</modules>
 
 	<!--To retrieve Jzy3d dependencies -->
