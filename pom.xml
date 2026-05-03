@@ -69,6 +69,7 @@
 		<module>jzy3d-native-panama-gl-core</module>
 		<module>jzy3d-native-panama-gl-swing</module>
 		<module>jzy3d-native-panama-gl-javafx</module>
+		<module>jzy3d-native-panama-gl-swt</module>
 
 		<!-- Test tools -->
 		<module>jzy3d-tester</module>

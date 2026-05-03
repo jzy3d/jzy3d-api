@@ -6,12 +6,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.jzy3d.bridge.swt.SWT_AWT_Bridge;
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.Settings;
 
 public class SWTAnalysisLauncher extends AnalysisLauncher {
 
   public static void openStaticSWT(IAnalysis demo) throws Exception {
-    Settings.getInstance().setHardwareAccelerated(true);
     Chart chart = demo.getChart();
 
     Display display = new Display();
