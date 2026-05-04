@@ -32,7 +32,6 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.slf4j.LoggerFactory;
 import panamagl.GLEventListener;
 import panamagl.canvas.GLCanvas;
 import panamagl.canvas.GLCanvasSwing;
@@ -50,6 +49,18 @@ public class PanamaGLSwingCanvas extends JPanel implements IPanamaGLCanvas {
     add(glCanvas);
 
     this.support = new PanamaGLCanvasSupport(this, factory, scene, quality, glCanvas);
+
+    // Forward PanamaGL pixel scale changes to Jzy3D ICanvasListener.pixelScaleChanged.
+    // View.configureHiDPIListener listens for that event to drive HiDPI font resize and
+    // colorbar/legend update.
+    glCanvas.addPixelScaleListener(
+        (oldScale, newScale) -> firePixelScaleChanged(newScale.x(), newScale.y()));
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
   }
 
   @Override
@@ -145,15 +156,21 @@ public class PanamaGLSwingCanvas extends JPanel implements IPanamaGLCanvas {
     return null;
   }
 
+  /**
+   * Map Jzy3D's JOGL-style {@code setPixelScale} to PanamaGL's {@code setHiDPIEnabled}: passing
+   * {@code [1, 1]} (a.k.a. {@code Quality.preserveViewportSize=true}) disables HiDPI so the FBO is
+   * dimensioned in logical pixels; any other value enables it.
+   */
   @Override
   public void setPixelScale(float[] scale) {
-    LoggerFactory.getLogger(PanamaGLSwingCanvas.class)
-        .info("Not implemented. Pixel scale is driven by AWT Canvas itself and Panama adapts to it");
+    boolean wantIdentity = scale != null && scale.length >= 2 && scale[0] == 1f && scale[1] == 1f;
+    support.getGLCanvas().setHiDPIEnabled(!wantIdentity);
   }
 
   @Override
   public Coord2d getPixelScale() {
-    return new Coord2d(AWTHelper.getPixelScaleX(this), AWTHelper.getPixelScaleY(this));
+    panamagl.canvas.PixelScale s = support.getGLCanvas().getPixelScale();
+    return new Coord2d(s.x(), s.y());
   }
 
   @Override
