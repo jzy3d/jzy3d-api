@@ -11,7 +11,7 @@ import org.jzy3d.plot3d.rendering.legends.overlay.Legend;
 import org.jzy3d.plot3d.rendering.legends.overlay.LineLegendLayout;
 import org.jzy3d.plot3d.rendering.legends.overlay.OverlayLegendRenderer;
 
-public class Line2D_DemoAWT {
+public class DemoLine2D_JOGL_AWT {
 
   public static void main(String[] args) {
     AWTChartFactory f = new AWTChartFactory();
