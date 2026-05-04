@@ -88,14 +88,25 @@ public class PanamaGLSwingCanvas extends JPanel implements IPanamaGLCanvas {
     return support.getView();
   }
 
+  /**
+   * Renderer dimensions are reported in <b>physical pixels</b>, matching the FBO size that the
+   * underlying {@link GLCanvasSwing} allocates. {@link org.jzy3d.plot3d.rendering.view.View}
+   * uses these values to build the {@link org.jzy3d.plot3d.rendering.view.ViewportConfiguration}
+   * that drives {@code glViewport}; on a Retina display the FBO is {@code 2W x 2H} so we must
+   * return {@code 2W} and {@code 2H} here, otherwise {@code glViewport(0, 0, W, H)} only fills
+   * the bottom-left quadrant of the FBO.
+   *
+   * <p>When HiDPI is disabled (Jzy3D's {@code Quality.preserveViewportSize=true}), the FBO is
+   * already in logical pixels and {@code getPhysicalWidth()} returns {@code getWidth()}.
+   */
   @Override
   public int getRendererWidth() {
-    return getWidth();
+    return support.getGLCanvas().getPhysicalWidth();
   }
 
   @Override
   public int getRendererHeight() {
-    return getHeight();
+    return support.getGLCanvas().getPhysicalHeight();
   }
 
   @Override
