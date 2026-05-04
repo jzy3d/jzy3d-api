@@ -33,6 +33,7 @@ import org.jzy3d.chart.factories.PanamaGLJavaFXChartFactory;
 import org.jzy3d.chart.factories.PanamaGLJavaFXPainterFactory;
 import org.jzy3d.javafx.canvas.ResizableCanvas;
 import org.jzy3d.maths.Coord2d;
+import org.jzy3d.maths.Coord2d;
 import panamagl.canvas.GLCanvasJFX;
 import panamagl.canvas.PixelScale;
 import panamagl.factory.PanamaGLFactory;
@@ -144,5 +145,39 @@ public class TestPanamaGLJavaFXCanvas_HiDPI {
     Assert.assertNotNull("ICanvasListener should have received an event", r);
     Assert.assertEquals(2.0, r[0], 0.0);
     Assert.assertEquals(2.0, r[1], 0.0);
+  }
+
+  /**
+   * Regression guard: {@link PanamaGLJavaFXCanvas#getRendererWidth} and
+   * {@link PanamaGLJavaFXCanvas#getRendererHeight} must report <b>physical</b> pixels (matching
+   * the FBO size) so {@code View.renderScene} configures {@code glViewport} at the FBO's
+   * resolution. Returning logical pixels here on a Retina display caused only the bottom-left
+   * quarter of the scene to be rendered.
+   */
+  @Test
+  public void getRendererSize_returnsPhysicalPixelsFromGLCanvas() throws Exception {
+    PanamaGLFactory f = newMockPanamaGLFactory();
+    PanamaGLJavaFXChartFactory factory = new PanamaGLJavaFXChartFactory();
+    ((PanamaGLJavaFXPainterFactory) factory.getPainterFactory()).setPanamaGLFactory(f);
+
+    runOnFxThreadAndWait(() -> {
+      ResizableCanvas fxCanvas = new ResizableCanvas();
+      GLCanvasJFX glCanvas = spy(new GLCanvasJFX(f, fxCanvas));
+      when(glCanvas.getPhysicalWidth()).thenReturn(400);
+      when(glCanvas.getPhysicalHeight()).thenReturn(300);
+      glCanvas.setOffscreenRenderer(f.newOffscreenRenderer(new FBOReader_JFX()));
+
+      PanamaGLJavaFXCanvas c = new PanamaGLJavaFXCanvas(factory, factory.newScene(false),
+          Quality.Advanced(), fxCanvas, glCanvas);
+
+      Assert.assertEquals(400, c.getRendererWidth());
+      Assert.assertEquals(300, c.getRendererHeight());
+
+      // Sanity: getPixelScale still forwards properly when stubbed independently.
+      when(glCanvas.getPixelScale()).thenReturn(new PixelScale(2.0, 2.0));
+      Coord2d scale = c.getPixelScale();
+      Assert.assertEquals(2.0, scale.x, 0.0);
+      Assert.assertEquals(2.0, scale.y, 0.0);
+    });
   }
 }
