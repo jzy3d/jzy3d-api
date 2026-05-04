@@ -19,25 +19,19 @@ package org.jzy3d.demos;
 
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.ChartFactory;
-import org.jzy3d.chart.factories.FrameSwing;
 import org.jzy3d.chart.factories.PanamaGLSwingPainterFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.maths.Range;
-import org.jzy3d.painters.Font;
 import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.builder.SurfaceBuilder;
 import org.jzy3d.plot3d.builder.concrete.OrthonormalGrid;
-import org.jzy3d.plot3d.primitives.SampleGeom;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.plot3d.primitives.axis.layout.fonts.HiDPIProportionalFontSizePolicy;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.slf4j.LoggerFactory;
-
-import panamagl.utils.GraphicsUtils;
-import panamagl.utils.TicToc;
 
 /**
  * Demo an surface chart made with PanamaGL.
@@ -54,7 +48,7 @@ import panamagl.utils.TicToc;
  *
  * @author Martin Pernollet
  */
-public class SurfaceDemo_PanamaGL {
+public class SurfaceDemo_PanamaGL_Swing {
   static final float ALPHA_FACTOR = 0.75f;// .61f;
 
   public static void main(String[] args) throws InterruptedException {
