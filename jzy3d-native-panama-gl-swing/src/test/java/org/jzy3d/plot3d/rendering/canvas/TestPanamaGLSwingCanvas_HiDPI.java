@@ -108,4 +108,23 @@ public class TestPanamaGLSwingCanvas_HiDPI {
     Assert.assertEquals(2.0, r[0], 0.0);
     Assert.assertEquals(2.0, r[1], 0.0);
   }
+
+  /**
+   * Regression guard: {@link PanamaGLSwingCanvas#getRendererWidth} and
+   * {@link PanamaGLSwingCanvas#getRendererHeight} must report <b>physical</b> pixels (matching
+   * the FBO size) so {@code View.renderScene} configures {@code glViewport} at the FBO's
+   * resolution. Returning logical pixels here on a Retina display caused only the bottom-left
+   * quarter of the scene to be rendered.
+   */
+  @Test
+  public void getRendererSize_returnsPhysicalPixelsFromGLCanvas() {
+    GLCanvasSwing glCanvas = spy(GLCanvasSwing.class);
+    when(glCanvas.getPhysicalWidth()).thenReturn(400);
+    when(glCanvas.getPhysicalHeight()).thenReturn(300);
+
+    PanamaGLSwingCanvas c = newCanvas(glCanvas);
+
+    Assert.assertEquals(400, c.getRendererWidth());
+    Assert.assertEquals(300, c.getRendererHeight());
+  }
 }
