@@ -138,14 +138,25 @@ public class PanamaGLJavaFXCanvas extends BorderPane implements IPanamaGLCanvas 
     return support.getView();
   }
 
+  /**
+   * Renderer dimensions are reported in <b>physical pixels</b>, matching the FBO size that the
+   * underlying {@link GLCanvasJFX} allocates. {@link org.jzy3d.plot3d.rendering.view.View} uses
+   * these values to build the {@link org.jzy3d.plot3d.rendering.view.ViewportConfiguration}
+   * that drives {@code glViewport}; on a Retina display the FBO is {@code 2W x 2H} so we must
+   * return {@code 2W} and {@code 2H} here, otherwise {@code glViewport(0, 0, W, H)} only fills
+   * the bottom-left quadrant of the FBO.
+   *
+   * <p>When HiDPI is disabled (Jzy3D's {@code Quality.preserveViewportSize=true}), the FBO is
+   * already in logical pixels and {@code getPhysicalWidth()} returns the logical width.
+   */
   @Override
   public int getRendererWidth() {
-    return (int) Math.round(getWidth());
+    return support.getGLCanvas().getPhysicalWidth();
   }
 
   @Override
   public int getRendererHeight() {
-    return (int) Math.round(getHeight());
+    return support.getGLCanvas().getPhysicalHeight();
   }
 
   @Override
