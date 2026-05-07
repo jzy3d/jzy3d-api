@@ -346,4 +346,32 @@ public class TestPanamaGLSWTCanvas {
 
     assertSame(glCanvas, c.getGLCanvas());
   }
+
+  /**
+   * Regression guard: {@link PanamaGLSWTCanvas#getRendererWidth} and
+   * {@link PanamaGLSWTCanvas#getRendererHeight} must report <b>physical</b> pixels (matching the
+   * FBO size) so {@code View.renderScene} configures {@code glViewport} at the FBO's resolution.
+   * Returning logical pixels here on a Retina display caused only the bottom-left quarter of the
+   * scene to be rendered.
+   */
+  @Test
+  public void getRendererSize_returnsPhysicalPixelsFromGLCanvas() {
+    PanamaGLFactory panamaGL = newMockPanamaGLFactory();
+
+    PanamaGLSWTChartFactory chartFactory = new PanamaGLSWTChartFactory(shell);
+    ((PanamaGLSWTPainterFactory) chartFactory.getPainterFactory()).setPanamaGLFactory(panamaGL);
+
+    // Subclass to override getPhysicalWidth/Height without spying (which breaks the dispose
+    // listener — see CountingGLCanvasSWT for the rationale).
+    GLCanvasSWT glCanvas = new GLCanvasSWT(shell, SWT.NONE, panamaGL) {
+      @Override public int getPhysicalWidth() { return 400; }
+      @Override public int getPhysicalHeight() { return 300; }
+    };
+
+    PanamaGLSWTCanvas c = new PanamaGLSWTCanvas(chartFactory, chartFactory.newScene(false),
+        Quality.Advanced(), shell, glCanvas);
+
+    assertEquals(400, c.getRendererWidth());
+    assertEquals(300, c.getRendererHeight());
+  }
 }

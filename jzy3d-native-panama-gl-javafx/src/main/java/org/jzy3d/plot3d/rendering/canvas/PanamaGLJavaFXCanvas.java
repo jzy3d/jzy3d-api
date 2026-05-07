@@ -28,7 +28,6 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.slf4j.LoggerFactory;
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 import panamagl.GLEventListener;
@@ -98,6 +97,15 @@ public class PanamaGLJavaFXCanvas extends BorderPane implements IPanamaGLCanvas 
     setCenter(fxCanvas);
 
     this.support = new PanamaGLCanvasSupport(this, factory, scene, quality, glCanvas);
+
+    glCanvas.addPixelScaleListener(
+        (oldScale, newScale) -> firePixelScaleChanged(newScale.x(), newScale.y()));
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
   }
 
   /** Return the underlying JavaFX {@link Node} that actually displays the 3D scene. */
@@ -130,14 +138,25 @@ public class PanamaGLJavaFXCanvas extends BorderPane implements IPanamaGLCanvas 
     return support.getView();
   }
 
+  /**
+   * Renderer dimensions are reported in <b>physical pixels</b>, matching the FBO size that the
+   * underlying {@link GLCanvasJFX} allocates. {@link org.jzy3d.plot3d.rendering.view.View} uses
+   * these values to build the {@link org.jzy3d.plot3d.rendering.view.ViewportConfiguration}
+   * that drives {@code glViewport}; on a Retina display the FBO is {@code 2W x 2H} so we must
+   * return {@code 2W} and {@code 2H} here, otherwise {@code glViewport(0, 0, W, H)} only fills
+   * the bottom-left quadrant of the FBO.
+   *
+   * <p>When HiDPI is disabled (Jzy3D's {@code Quality.preserveViewportSize=true}), the FBO is
+   * already in logical pixels and {@code getPhysicalWidth()} returns the logical width.
+   */
   @Override
   public int getRendererWidth() {
-    return (int) Math.round(getWidth());
+    return support.getGLCanvas().getPhysicalWidth();
   }
 
   @Override
   public int getRendererHeight() {
-    return (int) Math.round(getHeight());
+    return support.getGLCanvas().getPhysicalHeight();
   }
 
   @Override
@@ -196,20 +215,22 @@ public class PanamaGLJavaFXCanvas extends BorderPane implements IPanamaGLCanvas 
     return null;
   }
 
+  /** @see PanamaGLSwingCanvas#setPixelScale(float[]) */
   @Override
   public void setPixelScale(float[] scale) {
-    LoggerFactory.getLogger(PanamaGLJavaFXCanvas.class)
-        .info("Not implemented. Pixel scale is driven by JavaFX itself and Panama adapts to it");
+    boolean wantIdentity = scale != null && scale.length >= 2 && scale[0] == 1f && scale[1] == 1f;
+    support.getGLCanvas().setHiDPIEnabled(!wantIdentity);
   }
 
   @Override
   public Coord2d getPixelScale() {
-    return new Coord2d(1, 1);
+    panamagl.canvas.PixelScale s = support.getGLCanvas().getPixelScale();
+    return new Coord2d(s.x(), s.y());
   }
 
   @Override
   public Coord2d getPixelScaleJVM() {
-    return new Coord2d(1, 1);
+    return getPixelScale();
   }
 
   @Override
