@@ -30,7 +30,6 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
-import org.slf4j.LoggerFactory;
 import panamagl.GLEventListener;
 import panamagl.canvas.GLCanvas;
 import panamagl.canvas.swt.GLCanvasSWT;
@@ -57,6 +56,7 @@ public class PanamaGLSWTCanvas extends Composite implements IPanamaGLCanvas {
     preSizeToOnePixel(this.glCanvas);
     this.support = new PanamaGLCanvasSupport(this, factory, scene, quality, glCanvas);
 
+    wirePixelScaleForwarding();
     installFirstRealLayoutRenderer(this.glCanvas);
     addDisposeListener(e -> support.dispose());
   }
@@ -77,8 +77,24 @@ public class PanamaGLSWTCanvas extends Composite implements IPanamaGLCanvas {
     preSizeToOnePixel(glCanvas);
     this.support = new PanamaGLCanvasSupport(this, factory, scene, quality, glCanvas);
 
+    wirePixelScaleForwarding();
     installFirstRealLayoutRenderer(glCanvas);
     addDisposeListener(e -> support.dispose());
+  }
+
+  /**
+   * Forward PanamaGL pixel-scale changes to Jzy3D's {@link ICanvasListener#pixelScaleChanged}.
+   * View.configureHiDPIListener listens for that event to drive font resize and legend update.
+   */
+  private void wirePixelScaleForwarding() {
+    glCanvas.addPixelScaleListener(
+        (oldScale, newScale) -> firePixelScaleChanged(newScale.x(), newScale.y()));
+  }
+
+  protected void firePixelScaleChanged(double pixelScaleX, double pixelScaleY) {
+    for (ICanvasListener listener : canvasListeners) {
+      listener.pixelScaleChanged(pixelScaleX, pixelScaleY);
+    }
   }
 
   /**
@@ -188,14 +204,25 @@ public class PanamaGLSWTCanvas extends Composite implements IPanamaGLCanvas {
     return support.getView();
   }
 
+  /**
+   * Renderer dimensions are reported in <b>physical pixels</b>, matching the FBO size that the
+   * underlying {@link GLCanvasSWT} allocates. {@link org.jzy3d.plot3d.rendering.view.View} uses
+   * these values to build the {@link org.jzy3d.plot3d.rendering.view.ViewportConfiguration} that
+   * drives {@code glViewport}; on a Retina display the FBO is {@code 2W x 2H} so we must return
+   * {@code 2W} and {@code 2H} here, otherwise {@code glViewport(0, 0, W, H)} only fills the
+   * bottom-left quadrant of the FBO.
+   *
+   * <p>When HiDPI is disabled (Jzy3D's {@code Quality.preserveViewportSize=true}), the FBO is
+   * already in logical pixels and {@code getPhysicalWidth()} returns the logical width.
+   */
   @Override
   public int getRendererWidth() {
-    return getBounds().width;
+    return glCanvas.getPhysicalWidth();
   }
 
   @Override
   public int getRendererHeight() {
-    return getBounds().height;
+    return glCanvas.getPhysicalHeight();
   }
 
   @Override
@@ -293,20 +320,22 @@ public class PanamaGLSWTCanvas extends Composite implements IPanamaGLCanvas {
     return null;
   }
 
+  /** @see PanamaGLSwingCanvas#setPixelScale(float[]) */
   @Override
   public void setPixelScale(float[] scale) {
-    LoggerFactory.getLogger(PanamaGLSWTCanvas.class)
-        .info("Not implemented. Pixel scale is driven by SWT itself and Panama adapts to it");
+    boolean wantIdentity = scale != null && scale.length >= 2 && scale[0] == 1f && scale[1] == 1f;
+    glCanvas.setHiDPIEnabled(!wantIdentity);
   }
 
   @Override
   public Coord2d getPixelScale() {
-    return new Coord2d(1, 1);
+    panamagl.canvas.PixelScale s = glCanvas.getPixelScale();
+    return new Coord2d(s.x(), s.y());
   }
 
   @Override
   public Coord2d getPixelScaleJVM() {
-    return new Coord2d(1, 1);
+    return getPixelScale();
   }
 
   @Override
