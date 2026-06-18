@@ -85,6 +85,11 @@ public class TextRenderer extends AbstractTextRenderer implements ITextRenderer 
     if (spaceTransformer != null) {
       positionAligned = spaceTransformer.compute(positionAligned);
     }
+
+    if (positionAligned == null) {
+        return null;
+    }
+
     positionAligned = positionAligned.add(sceneOffset);
 
     // Draws actual string

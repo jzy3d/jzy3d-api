@@ -263,7 +263,7 @@
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
 				<artifactId>org.eclipse.jface</artifactId>
-				<version>3.12.1</version>
+				<version>3.31.0</version>
 			</dependency>
 
 			<!-- See pom.xml of jzy3d-native-jogl-core -->
