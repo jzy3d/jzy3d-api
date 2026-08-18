@@ -223,6 +223,27 @@ public class Quality {
    * setPreserveViewportSize(!hidpi)
    * </code>
    * 
+   * <p><b>Backend support of the {@code false} case (a.k.a. {@link HiDPI#OFF}).</b> Asking for
+   * HiDPI is honoured everywhere; asking to switch it <i>off</i> is not:
+   * <table border="1">
+   * <caption>HiDPI OFF support per rendering backend</caption>
+   * <tr><th>Backend</th><th>HiDPI OFF</th><th>Detail</th></tr>
+   * <tr><td>EmulGL (jGL)</td><td>supported</td><td>renders to its own image buffer</td></tr>
+   * <tr><td>JOGL AWT / JOGL Swing</td><td><b>not supported since JOGL 2.6.0</b></td>
+   *     <td>JOGL made {@code setSurfaceScale} a no-op on AWT widgets, "pixelScale is dictated by
+   *     AWT mechanisms" (commit 900c35c6, 2023-05-15). Workaround: start the JVM with
+   *     {@code -Dsun.java2d.uiScale=1}, which is global and must precede AWT initialization.</td></tr>
+   * <tr><td>JOGL NEWT</td><td>likely supported</td>
+   *     <td>{@code canSetSurfaceScale()} still returns true, not verified end to end</td></tr>
+   * <tr><td>PanamaGL</td><td>supported by the canvas, not wired yet</td>
+   *     <td>the canvas sizes its own FBO and honours {@code setPixelScale([1,1])}, but its
+   *     constructor does not read this flag yet</td></tr>
+   * </table>
+   *
+   * <p>This setting is therefore a request, not a guarantee. Read back
+   * {@link org.jzy3d.plot3d.rendering.canvas.ICanvas#getPixelScale()} if the effective scale
+   * matters to your code.
+   * 
    * @param hidpi
    */
   public Quality setHiDPIEnabled(boolean hidpi) {
