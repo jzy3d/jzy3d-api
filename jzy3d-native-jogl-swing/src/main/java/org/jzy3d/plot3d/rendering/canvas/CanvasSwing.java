@@ -109,6 +109,37 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     return renderer.getLastRenderingTimeMs();
   }
 
+  /**
+   * Requests a pixel scale on the underlying JOGL drawable.
+   *
+   * <p><b>No longer effective on this canvas since JOGL 2.6.0.</b> JOGL commit 900c35c6
+   * (2023-05-15, "No setSurfaceScale(), have AWT toolkit define pixelScale only") made
+   * {@code GLJPanel.setSurfaceScale(float[])} and {@code GLJPanel.canSetSurfaceScale()} return a
+   * hardcoded {@code false}, because, as its javadoc puts it, "pixelScale is dictated by AWT
+   * mechanisms". JOGL now reads the scale from the AWT {@code GraphicsConfiguration} instead of
+   * imposing its own, so this call is silently ignored and {@link #getPixelScale()} keeps
+   * reporting the screen scale.
+   *
+   * <p>Practical consequence: {@link Quality#setHiDPI(org.jzy3d.plot3d.rendering.view.HiDPI)} with {@link org.jzy3d.plot3d.rendering.view.HiDPI#OFF} has no effect
+   * here. The chart always renders at the physical pixel density of the screen.
+   *
+   * <p>The remaining way to get a 1:1 surface is to lower the scale AWT itself reports, with
+   * {@code -Dsun.java2d.uiScale=1}. That property is JVM-global, must be set before AWT is
+   * initialized, and was verified to work on macOS from JDK 11 through JDK 26.
+   *
+   * <p>Support of {@link org.jzy3d.plot3d.rendering.view.HiDPI#OFF} across backends:
+   * <ul>
+   * <li>EmulGL (jGL) : supported
+   * <li>JOGL AWT (CanvasAWT) and JOGL Swing (CanvasSwing) : <b>not supported</b> since
+   * JOGL 2.6.0
+   * <li>JOGL NEWT : {@code canSetSurfaceScale()} still returns true, but this was not verified
+   * end to end
+   * <li>PanamaGL : supported by the canvas, which renders to an FBO it sizes itself, but not
+   * wired to {@link Quality} yet
+   * </ul>
+   *
+   * @see <a href="https://github.com/jzy3d/jzy3d-api/pull/320">jzy3d-api PR #320</a>
+   */
   @Override
   public void setPixelScale(float[] scale) {
     setSurfaceScale(scale);

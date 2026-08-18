@@ -15,7 +15,6 @@
  */
 package jgl.wt.awt;
 
-import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -50,10 +49,6 @@ public class GL extends jgl.GL<BufferedImage, Font> {
    */
   public void glXSwapBuffers(Graphics g, ImageObserver o) {
     g.drawImage(glImage, StartX, StartY, desiredWidth, desiredHeight, o);
-  }
-
-  public void glXSwapBuffers(Graphics g, Applet o) {
-    glXSwapBuffers(g, (ImageObserver) o);
   }
 
   @Override
@@ -140,7 +135,6 @@ public class GL extends jgl.GL<BufferedImage, Font> {
 
   /** Because this is for Java, use true color and double buffer default */
   /** Bool glXMakeCurrent (Display *dpy, GLXDrawable drawable, GLXcontext ctx) */
-  // public boolean glXMakeCurrent (Applet o, int x, int y) {
   public boolean glXMakeCurrent(Component o, int x, int y) {
     canvas = o;
     StartX = x;
