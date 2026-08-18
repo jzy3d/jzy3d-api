@@ -1,6 +1,7 @@
 package examples.apps;
 
-import java.applet.Applet;
+import java.awt.Canvas;
+import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
@@ -8,11 +9,11 @@ import java.awt.event.ComponentListener;
 import jgl.wt.awt.GL;
 import jgl.wt.awt.GLAUX;
 
-public class drawf extends Applet implements ComponentListener {
+public class drawf extends Canvas implements ComponentListener {
   // must use GL to use jGL.....
   // and use GLAUX to use the aux functions.....
   // remember to give GL to initialize GLAUX
-	GL myGL = new GL();
+  GL myGL = new GL();
   GLAUX myAUX = new GLAUX(myGL);
 
   // public static final byte rasters [] = {
@@ -77,5 +78,14 @@ public class drawf extends Applet implements ComponentListener {
 
     // call display as call auxMainLoop(display);
     display();
+  }
+
+  static public void main(String args[]) {
+    Frame mainFrame = new Frame();
+    mainFrame.setSize(508, 527);
+    drawf mainCanvas = new drawf();
+    mainCanvas.init();
+    mainFrame.add(mainCanvas);
+    mainFrame.setVisible(true);
   }
 }

@@ -28,7 +28,6 @@ import jgl.wt.awt.listener.callbacks.MotionCallback;
 import jgl.wt.awt.listener.callbacks.MouseCallback;
 import jgl.wt.awt.listener.callbacks.ReshapeCallback;
 
-import java.applet.Applet;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
@@ -396,10 +395,6 @@ public class GLUT implements Runnable {
     JavaComponent = o;
   }
 
-  public void glutCreateWindow(Applet o) {
-    glutCreateWindow((Component) o);
-  }
-
   /** void glutPostRedisplay () */
   public void glutPostRedisplay() {
     listenerOrNoOp().onDisplay(JavaComponent);
@@ -409,10 +404,6 @@ public class GLUT implements Runnable {
   /** void glutSwapBuffers () */
   public void glutSwapBuffers(Graphics g, ImageObserver o) {
     JavaGL.glXSwapBuffers(g, o);
-  }
-
-  public void glutSwapBuffers(Graphics g, Applet o) {
-    glutSwapBuffers(g, (ImageObserver) o);
   }
 
   private void QUAD_OBJ_INIT() {
@@ -823,8 +814,6 @@ public class GLUT implements Runnable {
   private void glut_enable_events(long cap, boolean state) {
     if (JavaComponent instanceof GLCanvas) {
       ((GLCanvas) JavaComponent).glut_enable_events(cap, state);
-    } else if (JavaComponent instanceof GLApplet) {
-      ((GLApplet) JavaComponent).glut_enable_events(cap, state);
     }
   }
 
