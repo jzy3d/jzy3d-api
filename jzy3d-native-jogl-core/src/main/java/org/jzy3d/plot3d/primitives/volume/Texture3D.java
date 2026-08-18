@@ -1,7 +1,6 @@
 package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.Buffer;
-import java.nio.IntBuffer;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.IMultiColorable;
 import org.jzy3d.io.glsl.GLSLProgram;
@@ -16,12 +15,12 @@ import org.jzy3d.plot3d.primitives.vbo.ColormapTexture;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.transform.Transform;
+import com.jogamp.math.FloatUtil;
+import com.jogamp.math.VectorUtil;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2GL3;
 import com.jogamp.opengl.GLException;
-import com.jogamp.opengl.math.FloatUtil;
-import com.jogamp.opengl.math.VectorUtil;
 
 public class Texture3D extends Drawable implements IGLBindedResource, IMultiColorable {
 
