@@ -10057,314 +10057,6 @@ public class GL2Mock implements GL2 {
   }
 
   @Override
-  public void glUniform1i64NV(int location, long x) {
-
-
-  }
-
-  @Override
-  public void glUniform2i64NV(int location, long x, long y) {
-
-
-  }
-
-  @Override
-  public void glUniform3i64NV(int location, long x, long y, long z) {
-
-
-  }
-
-  @Override
-  public void glUniform4i64NV(int location, long x, long y, long z, long w) {
-
-
-  }
-
-  @Override
-  public void glUniform1i64vNV(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform1i64vNV(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform2i64vNV(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform2i64vNV(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform3i64vNV(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform3i64vNV(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform4i64vNV(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform4i64vNV(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform1ui64NV(int location, long x) {
-
-
-  }
-
-  @Override
-  public void glUniform2ui64NV(int location, long x, long y) {
-
-
-  }
-
-  @Override
-  public void glUniform3ui64NV(int location, long x, long y, long z) {
-
-
-  }
-
-  @Override
-  public void glUniform4ui64NV(int location, long x, long y, long z, long w) {
-
-
-  }
-
-  @Override
-  public void glUniform1ui64vNV(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform1ui64vNV(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform2ui64vNV(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform2ui64vNV(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform3ui64vNV(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform3ui64vNV(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glUniform4ui64vNV(int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glUniform4ui64vNV(int location, int count, long[] value, int value_offset) {
-
-
-  }
-
-  @Override
-  public void glGetUniformi64vNV(int program, int location, LongBuffer params) {
-
-
-  }
-
-  @Override
-  public void glGetUniformi64vNV(int program, int location, long[] params, int params_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1i64NV(int program, int location, long x) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2i64NV(int program, int location, long x, long y) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3i64NV(int program, int location, long x, long y, long z) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4i64NV(int program, int location, long x, long y, long z, long w) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1i64vNV(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1i64vNV(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2i64vNV(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2i64vNV(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3i64vNV(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3i64vNV(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4i64vNV(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4i64vNV(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1ui64NV(int program, int location, long x) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2ui64NV(int program, int location, long x, long y) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3ui64NV(int program, int location, long x, long y, long z) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4ui64NV(int program, int location, long x, long y, long z, long w) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1ui64vNV(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform1ui64vNV(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2ui64vNV(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform2ui64vNV(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3ui64vNV(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform3ui64vNV(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4ui64vNV(int program, int location, int count, LongBuffer value) {
-
-
-  }
-
-  @Override
-  public void glProgramUniform4ui64vNV(int program, int location, int count, long[] value,
-      int value_offset) {
-
-
-  }
-
-  @Override
   public void glVertexAttribParameteriAMD(int index, int pname, int param) {
 
 
@@ -10402,132 +10094,6 @@ public class GL2Mock implements GL2 {
 
   @Override
   public void glQueryObjectParameteruiAMD(int target, int id, int pname, int param) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorGroupsAMD(IntBuffer numGroups, int groupsSize, IntBuffer groups) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorGroupsAMD(int[] numGroups, int numGroups_offset, int groupsSize,
-      int[] groups, int groups_offset) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorCountersAMD(int group, IntBuffer numCounters,
-      IntBuffer maxActiveCounters, int counterSize, IntBuffer counters) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorCountersAMD(int group, int[] numCounters, int numCounters_offset,
-      int[] maxActiveCounters, int maxActiveCounters_offset, int counterSize, int[] counters,
-      int counters_offset) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorGroupStringAMD(int group, int bufSize, IntBuffer length,
-      ByteBuffer groupString) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorGroupStringAMD(int group, int bufSize, int[] length,
-      int length_offset, byte[] groupString, int groupString_offset) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorCounterStringAMD(int group, int counter, int bufSize,
-      IntBuffer length, ByteBuffer counterString) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorCounterStringAMD(int group, int counter, int bufSize, int[] length,
-      int length_offset, byte[] counterString, int counterString_offset) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorCounterInfoAMD(int group, int counter, int pname, Buffer data) {
-
-
-  }
-
-  @Override
-  public void glGenPerfMonitorsAMD(int n, IntBuffer monitors) {
-
-
-  }
-
-  @Override
-  public void glGenPerfMonitorsAMD(int n, int[] monitors, int monitors_offset) {
-
-
-  }
-
-  @Override
-  public void glDeletePerfMonitorsAMD(int n, IntBuffer monitors) {
-
-
-  }
-
-  @Override
-  public void glDeletePerfMonitorsAMD(int n, int[] monitors, int monitors_offset) {
-
-
-  }
-
-  @Override
-  public void glSelectPerfMonitorCountersAMD(int monitor, boolean enable, int group,
-      int numCounters, IntBuffer counterList) {
-
-
-  }
-
-  @Override
-  public void glSelectPerfMonitorCountersAMD(int monitor, boolean enable, int group,
-      int numCounters, int[] counterList, int counterList_offset) {
-
-
-  }
-
-  @Override
-  public void glBeginPerfMonitorAMD(int monitor) {
-
-
-  }
-
-  @Override
-  public void glEndPerfMonitorAMD(int monitor) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorCounterDataAMD(int monitor, int pname, int dataSize, IntBuffer data,
-      IntBuffer bytesWritten) {
-
-
-  }
-
-  @Override
-  public void glGetPerfMonitorCounterDataAMD(int monitor, int pname, int dataSize, int[] data,
-      int data_offset, int[] bytesWritten, int bytesWritten_offset) {
 
 
   }
@@ -13643,12 +13209,6 @@ public class GL2Mock implements GL2 {
   }
 
   @Override
-  public void glSubpixelPrecisionBiasNV(int xbits, int ybits) {
-
-
-  }
-
-  @Override
   public void glConservativeRasterParameterfNV(int pname, float value) {
 
 
@@ -13783,12 +13343,6 @@ public class GL2Mock implements GL2 {
 
   @Override
   public void glTexRenderbufferNV(int target, int renderbuffer) {
-
-
-  }
-
-  @Override
-  public void glFragmentCoverageColorNV(int color) {
 
 
   }
@@ -14606,45 +14160,6 @@ public class GL2Mock implements GL2 {
   }
 
   @Override
-  public void glFramebufferSampleLocationsfvNV(int target, int start, int count, FloatBuffer v) {
-
-
-  }
-
-  @Override
-  public void glFramebufferSampleLocationsfvNV(int target, int start, int count, float[] v,
-      int v_offset) {
-
-
-  }
-
-  @Override
-  public void glNamedFramebufferSampleLocationsfvNV(int framebuffer, int start, int count,
-      FloatBuffer v) {
-
-
-  }
-
-  @Override
-  public void glNamedFramebufferSampleLocationsfvNV(int framebuffer, int start, int count,
-      float[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glResolveDepthValuesNV() {
-
-
-  }
-
-  @Override
-  public void glTextureBarrierNV() {
-
-
-  }
-
-  @Override
   public void glBindTransformFeedbackNV(int target, int id) {
 
 
@@ -14957,228 +14472,6 @@ public class GL2Mock implements GL2 {
   }
 
   @Override
-  public void glVertexAttribI1iEXT(int index, int x) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI2iEXT(int index, int x, int y) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI3iEXT(int index, int x, int y, int z) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4iEXT(int index, int x, int y, int z, int w) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI1uiEXT(int index, int x) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI2uiEXT(int index, int x, int y) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI3uiEXT(int index, int x, int y, int z) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4uiEXT(int index, int x, int y, int z, int w) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI1ivEXT(int index, IntBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI1ivEXT(int index, int[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI2ivEXT(int index, IntBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI2ivEXT(int index, int[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI3ivEXT(int index, IntBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI3ivEXT(int index, int[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4ivEXT(int index, IntBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4ivEXT(int index, int[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI1uivEXT(int index, IntBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI1uivEXT(int index, int[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI2uivEXT(int index, IntBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI2uivEXT(int index, int[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI3uivEXT(int index, IntBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI3uivEXT(int index, int[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4uivEXT(int index, IntBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4uivEXT(int index, int[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4bvEXT(int index, ByteBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4bvEXT(int index, byte[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4svEXT(int index, ShortBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4svEXT(int index, short[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4ubvEXT(int index, ByteBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4ubvEXT(int index, byte[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4usvEXT(int index, ShortBuffer v) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribI4usvEXT(int index, short[] v, int v_offset) {
-
-
-  }
-
-  @Override
-  public void glVertexAttribIPointerEXT(int index, int size, int type, int stride, Buffer pointer) {
-
-
-  }
-
-  @Override
-  public void glGetVertexAttribIivEXT(int index, int pname, IntBuffer params) {
-
-
-  }
-
-  @Override
-  public void glGetVertexAttribIivEXT(int index, int pname, int[] params, int params_offset) {
-
-
-  }
-
-  @Override
-  public void glGetVertexAttribIuivEXT(int index, int pname, IntBuffer params) {
-
-
-  }
-
-  @Override
-  public void glGetVertexAttribIuivEXT(int index, int pname, int[] params, int params_offset) {
-
-
-  }
-
-  @Override
   public void glBeginVideoCaptureNV(int video_capture_slot) {
 
 
@@ -15368,5 +14661,725 @@ public class GL2Mock implements GL2 {
 
   }
 
+  @Override
+  public int getDefaultDrawBuffer() {
 
+	return 0;
+  }
+
+  @Override
+  public void glMaxShaderCompilerThreadsKHR(int aCount) {
+
+	
+  }
+
+  @Override
+  public void glRenderbufferStorageMultisampleAdvancedAMD(int aTarget, int aSamples, int aStorageSamples,
+		int aInternalformat, int aWidth, int aHeight) {
+
+	
+  }
+
+  @Override
+  public void glNamedRenderbufferStorageMultisampleAdvancedAMD(int aRenderbuffer, int aSamples, int aStorageSamples,
+		int aInternalformat, int aWidth, int aHeight) {
+
+	
+  }
+
+  @Override
+  public void glFramebufferFetchBarrierEXT() {
+
+	
+  }
+
+  @Override
+  public void glWindowRectanglesEXT(int aMode, int aCount, IntBuffer aBox) {
+
+	
+  }
+
+  @Override
+  public void glWindowRectanglesEXT(int aMode, int aCount, int[] aBox, int aBox_offset) {
+
+	
+  }
+
+  @Override
+  public void glNamedFramebufferTextureMultiviewOVR(int aFramebuffer, int aAttachment, int aTexture, int aLevel,
+		int aBaseViewIndex, int aNumViews) {
+
+	
+  }
+
+  @Override
+  public void glGetUnsignedBytevEXT(int aPname, ByteBuffer aData) {
+
+	
+  }
+
+  @Override
+  public void glGetUnsignedBytevEXT(int aPname, byte[] aData, int aData_offset) {
+
+	
+  }
+
+  @Override
+  public void glGetUnsignedBytei_vEXT(int aTarget, int aIndex, ByteBuffer aData) {
+
+	
+  }
+
+  @Override
+  public void glGetUnsignedBytei_vEXT(int aTarget, int aIndex, byte[] aData, int aData_offset) {
+
+	
+  }
+
+  @Override
+  public void glDeleteMemoryObjectsEXT(int aN, IntBuffer aMemoryObjects) {
+
+	
+  }
+
+  @Override
+  public void glDeleteMemoryObjectsEXT(int aN, int[] aMemoryObjects, int aMemoryObjects_offset) {
+
+	
+  }
+
+  @Override
+  public boolean glIsMemoryObjectEXT(int aMemoryObject) {
+
+	return false;
+  }
+
+  @Override
+  public void glCreateMemoryObjectsEXT(int aN, IntBuffer aMemoryObjects) {
+
+	
+  }
+
+  @Override
+  public void glCreateMemoryObjectsEXT(int aN, int[] aMemoryObjects, int aMemoryObjects_offset) {
+
+	
+  }
+
+  @Override
+  public void glMemoryObjectParameterivEXT(int aMemoryObject, int aPname, IntBuffer aParams) {
+
+	
+  }
+
+  @Override
+  public void glMemoryObjectParameterivEXT(int aMemoryObject, int aPname, int[] aParams, int aParams_offset) {
+
+	
+  }
+
+  @Override
+  public void glGetMemoryObjectParameterivEXT(int aMemoryObject, int aPname, IntBuffer aParams) {
+
+	
+  }
+
+  @Override
+  public void glGetMemoryObjectParameterivEXT(int aMemoryObject, int aPname, int[] aParams, int aParams_offset) {
+
+	
+  }
+
+  @Override
+  public void glTexStorageMem2DEXT(int aTarget, int aLevels, int aInternalFormat, int aWidth, int aHeight, int aMemory,
+		long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glTexStorageMem2DMultisampleEXT(int aTarget, int aSamples, int aInternalFormat, int aWidth, int aHeight,
+		boolean aFixedSampleLocations, int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glTexStorageMem3DEXT(int aTarget, int aLevels, int aInternalFormat, int aWidth, int aHeight, int aDepth,
+		int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glTexStorageMem3DMultisampleEXT(int aTarget, int aSamples, int aInternalFormat, int aWidth, int aHeight,
+		int aDepth, boolean aFixedSampleLocations, int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glBufferStorageMemEXT(int aTarget, long aSize, int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glTextureStorageMem2DEXT(int aTexture, int aLevels, int aInternalFormat, int aWidth, int aHeight,
+		int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glTextureStorageMem2DMultisampleEXT(int aTexture, int aSamples, int aInternalFormat, int aWidth,
+		int aHeight, boolean aFixedSampleLocations, int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glTextureStorageMem3DEXT(int aTexture, int aLevels, int aInternalFormat, int aWidth, int aHeight,
+		int aDepth, int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glTextureStorageMem3DMultisampleEXT(int aTexture, int aSamples, int aInternalFormat, int aWidth,
+		int aHeight, int aDepth, boolean aFixedSampleLocations, int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glNamedBufferStorageMemEXT(int aBuffer, long aSize, int aMemory, long aOffset) {
+
+	
+  }
+
+  @Override
+  public void glImportMemoryFdEXT(int aMemory, long aSize, int aHandleType, int aFd) {
+
+	
+  }
+
+  @Override
+  public void glGenSemaphoresEXT(int aN, IntBuffer aSemaphores) {
+
+	
+  }
+
+  @Override
+  public void glGenSemaphoresEXT(int aN, int[] aSemaphores, int aSemaphores_offset) {
+
+	
+  }
+
+  @Override
+  public void glDeleteSemaphoresEXT(int aN, IntBuffer aSemaphores) {
+
+	
+  }
+
+  @Override
+  public void glDeleteSemaphoresEXT(int aN, int[] aSemaphores, int aSemaphores_offset) {
+
+	
+  }
+
+  @Override
+  public boolean glIsSemaphoreEXT(int aSemaphore) {
+
+	return false;
+  }
+
+  @Override
+  public void glSemaphoreParameterui64vEXT(int aSemaphore, int aPname, LongBuffer aParams) {
+
+	
+  }
+
+  @Override
+  public void glSemaphoreParameterui64vEXT(int aSemaphore, int aPname, long[] aParams, int aParams_offset) {
+
+	
+  }
+
+  @Override
+  public void glGetSemaphoreParameterui64vEXT(int aSemaphore, int aPname, LongBuffer aParams) {
+
+	
+  }
+
+  @Override
+  public void glGetSemaphoreParameterui64vEXT(int aSemaphore, int aPname, long[] aParams, int aParams_offset) {
+
+	
+  }
+
+  @Override
+  public void glWaitSemaphoreEXT(int aSemaphore, int aNumBufferBarriers, IntBuffer aBuffers, int aNumTextureBarriers,
+		IntBuffer aTextures, IntBuffer aSrcLayouts) {
+
+	
+  }
+
+  @Override
+  public void glWaitSemaphoreEXT(int aSemaphore, int aNumBufferBarriers, int[] aBuffers, int aBuffers_offset,
+		int aNumTextureBarriers, int[] aTextures, int aTextures_offset, int[] aSrcLayouts, int aSrcLayouts_offset) {
+
+	
+  }
+
+  @Override
+  public void glSignalSemaphoreEXT(int aSemaphore, int aNumBufferBarriers, IntBuffer aBuffers, int aNumTextureBarriers,
+		IntBuffer aTextures, IntBuffer aDstLayouts) {
+
+	
+  }
+
+  @Override
+  public void glSignalSemaphoreEXT(int aSemaphore, int aNumBufferBarriers, int[] aBuffers, int aBuffers_offset,
+		int aNumTextureBarriers, int[] aTextures, int aTextures_offset, int[] aDstLayouts, int aDstLayouts_offset) {
+
+	
+  }
+
+  @Override
+  public void glImportSemaphoreFdEXT(int aSemaphore, int aHandleType, int aFd) {
+
+	
+  }
+
+  @Override
+  public void glGetInteger64v(int aPname, LongBuffer aData) {
+
+	
+  }
+
+  @Override
+  public void glGetInteger64v(int aPname, long[] aData, int aData_offset) {
+
+	
+  }
+
+  @Override
+  public void glConservativeRasterParameteriNV(int aPname, int aParam) {
+
+	
+  }
+
+  @Override
+  public void glFramebufferSamplePositionsfvAMD(int aTarget, int aNumsamples, int aPixelindex, FloatBuffer aValues) {
+
+	
+  }
+
+  @Override
+  public void glFramebufferSamplePositionsfvAMD(int aTarget, int aNumsamples, int aPixelindex, float[] aValues,
+		int aValues_offset) {
+
+	
+  }
+
+  @Override
+  public void glNamedFramebufferSamplePositionsfvAMD(int aFramebuffer, int aNumsamples, int aPixelindex,
+		FloatBuffer aValues) {
+
+	
+  }
+
+  @Override
+  public void glNamedFramebufferSamplePositionsfvAMD(int aFramebuffer, int aNumsamples, int aPixelindex, float[] aValues,
+		int aValues_offset) {
+
+	
+  }
+
+  @Override
+  public void glGetFramebufferParameterfvAMD(int aTarget, int aPname, int aNumsamples, int aPixelindex, int aSize,
+		FloatBuffer aValues) {
+
+	
+  }
+
+  @Override
+  public void glGetFramebufferParameterfvAMD(int aTarget, int aPname, int aNumsamples, int aPixelindex, int aSize,
+		float[] aValues, int aValues_offset) {
+
+	
+  }
+
+  @Override
+  public void glGetNamedFramebufferParameterfvAMD(int aFramebuffer, int aPname, int aNumsamples, int aPixelindex,
+		int aSize, FloatBuffer aValues) {
+
+	
+  }
+
+  @Override
+  public void glGetNamedFramebufferParameterfvAMD(int aFramebuffer, int aPname, int aNumsamples, int aPixelindex,
+		int aSize, float[] aValues, int aValues_offset) {
+
+	
+  }
+
+  @Override
+  public void glBufferStorageExternalEXT(int aTarget, long aOffset, long aSize, Buffer aClientBuffer, int aFlags) {
+
+	
+  }
+
+  @Override
+  public void glNamedBufferStorageExternalEXT(int aBuffer, long aOffset, long aSize, Buffer aClientBuffer, int aFlags) {
+
+	
+  }
+
+  @Override
+  public void glBlitFramebufferLayersEXT(int aSrcX0, int aSrcY0, int aSrcX1, int aSrcY1, int aDstX0, int aDstY0,
+		int aDstX1, int aDstY1, int aMask, int aFilter) {
+
+	
+  }
+
+  @Override
+  public void glBlitFramebufferLayerEXT(int aSrcX0, int aSrcY0, int aSrcX1, int aSrcY1, int aSrcLayer, int aDstX0,
+		int aDstY0, int aDstX1, int aDstY1, int aDstLayer, int aMask, int aFilter) {
+
+	
+  }
+
+  @Override
+  public boolean glAcquireKeyedMutexWin32EXT(int aMemory, long aKey, int aTimeout) {
+
+	return false;
+  }
+
+  @Override
+  public boolean glReleaseKeyedMutexWin32EXT(int aMemory, long aKey) {
+
+	return false;
+  }
+
+  @Override
+  public void glUploadGpuMaskNVX(int aMask) {
+
+	
+  }
+
+  @Override
+  public void glMulticastViewportArrayvNVX(int aGpu, int aFirst, int aCount, FloatBuffer aV) {
+
+	
+  }
+
+  @Override
+  public void glMulticastViewportArrayvNVX(int aGpu, int aFirst, int aCount, float[] aV, int aV_offset) {
+
+	
+  }
+
+  @Override
+  public void glMulticastViewportPositionWScaleNVX(int aGpu, int aIndex, float aXcoeff, float aYcoeff) {
+
+	
+  }
+
+  @Override
+  public void glMulticastScissorArrayvNVX(int aGpu, int aFirst, int aCount, IntBuffer aV) {
+
+	
+  }
+
+  @Override
+  public void glMulticastScissorArrayvNVX(int aGpu, int aFirst, int aCount, int[] aV, int aV_offset) {
+
+	
+  }
+
+  @Override
+  public int glAsyncCopyBufferSubDataNVX(int aWaitSemaphoreCount, IntBuffer aWaitSemaphoreArray,
+		LongBuffer aFenceValueArray, int aReadGpu, int aWriteGpuMask, int aReadBuffer, int aWriteBuffer,
+		long aReadOffset, long aWriteOffset, long aSize, int aSignalSemaphoreCount, IntBuffer aSignalSemaphoreArray,
+		LongBuffer aSignalValueArray) {
+
+	return 0;
+  }
+
+  @Override
+  public int glAsyncCopyBufferSubDataNVX(int aWaitSemaphoreCount, int[] aWaitSemaphoreArray,
+		int aWaitSemaphoreArray_offset, long[] aFenceValueArray, int aFenceValueArray_offset, int aReadGpu,
+		int aWriteGpuMask, int aReadBuffer, int aWriteBuffer, long aReadOffset, long aWriteOffset, long aSize,
+		int aSignalSemaphoreCount, int[] aSignalSemaphoreArray, int aSignalSemaphoreArray_offset,
+		long[] aSignalValueArray, int aSignalValueArray_offset) {
+
+	return 0;
+  }
+
+  @Override
+  public int glAsyncCopyImageSubDataNVX(int aWaitSemaphoreCount, IntBuffer aWaitSemaphoreArray,
+		LongBuffer aWaitValueArray, int aSrcGpu, int aDstGpuMask, int aSrcName, int aSrcTarget, int aSrcLevel,
+		int aSrcX, int aSrcY, int aSrcZ, int aDstName, int aDstTarget, int aDstLevel, int aDstX, int aDstY, int aDstZ,
+		int aSrcWidth, int aSrcHeight, int aSrcDepth, int aSignalSemaphoreCount, IntBuffer aSignalSemaphoreArray,
+		LongBuffer aSignalValueArray) {
+
+	return 0;
+  }
+
+  @Override
+  public int glAsyncCopyImageSubDataNVX(int aWaitSemaphoreCount, int[] aWaitSemaphoreArray,
+		int aWaitSemaphoreArray_offset, long[] aWaitValueArray, int aWaitValueArray_offset, int aSrcGpu,
+		int aDstGpuMask, int aSrcName, int aSrcTarget, int aSrcLevel, int aSrcX, int aSrcY, int aSrcZ, int aDstName,
+		int aDstTarget, int aDstLevel, int aDstX, int aDstY, int aDstZ, int aSrcWidth, int aSrcHeight, int aSrcDepth,
+		int aSignalSemaphoreCount, int[] aSignalSemaphoreArray, int aSignalSemaphoreArray_offset,
+		long[] aSignalValueArray, int aSignalValueArray_offset) {
+
+	return 0;
+  }
+
+  @Override
+  public void glLGPUNamedBufferSubDataNVX(int aGpuMask, int aBuffer, long aOffset, long aSize, Buffer aData) {
+
+	
+  }
+
+  @Override
+  public void glLGPUCopyImageSubDataNVX(int aSourceGpu, int aDestinationGpuMask, int aSrcName, int aSrcTarget,
+		int aSrcLevel, int aSrcX, int aSrxY, int aSrcZ, int aDstName, int aDstTarget, int aDstLevel, int aDstX,
+		int aDstY, int aDstZ, int aWidth, int aHeight, int aDepth) {
+
+	
+  }
+
+  @Override
+  public void glLGPUInterlockNVX() {
+
+	
+  }
+
+  @Override
+  public int glCreateProgressFenceNVX() {
+
+	return 0;
+  }
+
+  @Override
+  public void glSignalSemaphoreui64NVX(int aSignalGpu, int aFenceObjectCount, IntBuffer aSemaphoreArray,
+		LongBuffer aFenceValueArray) {
+
+	
+  }
+
+  @Override
+  public void glSignalSemaphoreui64NVX(int aSignalGpu, int aFenceObjectCount, int[] aSemaphoreArray,
+		int aSemaphoreArray_offset, long[] aFenceValueArray, int aFenceValueArray_offset) {
+
+	
+  }
+
+  @Override
+  public void glWaitSemaphoreui64NVX(int aWaitGpu, int aFenceObjectCount, IntBuffer aSemaphoreArray,
+		LongBuffer aFenceValueArray) {
+
+	
+  }
+
+  @Override
+  public void glWaitSemaphoreui64NVX(int aWaitGpu, int aFenceObjectCount, int[] aSemaphoreArray,
+		int aSemaphoreArray_offset, long[] aFenceValueArray, int aFenceValueArray_offset) {
+
+	
+  }
+
+  @Override
+  public void glClientWaitSemaphoreui64NVX(int aFenceObjectCount, IntBuffer aSemaphoreArray,
+		LongBuffer aFenceValueArray) {
+
+	
+  }
+
+  @Override
+  public void glClientWaitSemaphoreui64NVX(int aFenceObjectCount, int[] aSemaphoreArray, int aSemaphoreArray_offset,
+		long[] aFenceValueArray, int aFenceValueArray_offset) {
+
+	
+  }
+
+  @Override
+  public void glAlphaToCoverageDitherControlNV(int aMode) {
+
+	
+  }
+
+  @Override
+  public void glRenderGpuMaskNV(int aMask) {
+
+	
+  }
+
+  @Override
+  public void glMulticastBufferSubDataNV(int aGpuMask, int aBuffer, long aOffset, long aSize, Buffer aData) {
+
+	
+  }
+
+  @Override
+  public void glMulticastCopyBufferSubDataNV(int aReadGpu, int aWriteGpuMask, int aReadBuffer, int aWriteBuffer,
+		long aReadOffset, long aWriteOffset, long aSize) {
+
+	
+  }
+
+  @Override
+  public void glMulticastCopyImageSubDataNV(int aSrcGpu, int aDstGpuMask, int aSrcName, int aSrcTarget, int aSrcLevel,
+		int aSrcX, int aSrcY, int aSrcZ, int aDstName, int aDstTarget, int aDstLevel, int aDstX, int aDstY, int aDstZ,
+		int aSrcWidth, int aSrcHeight, int aSrcDepth) {
+
+	
+  }
+
+  @Override
+  public void glMulticastBlitFramebufferNV(int aSrcGpu, int aDstGpu, int aSrcX0, int aSrcY0, int aSrcX1, int aSrcY1,
+		int aDstX0, int aDstY0, int aDstX1, int aDstY1, int aMask, int aFilter) {
+
+	
+  }
+
+  @Override
+  public void glMulticastFramebufferSampleLocationsfvNV(int aGpu, int aFramebuffer, int aStart, int aCount,
+		FloatBuffer aV) {
+
+	
+  }
+
+  @Override
+  public void glMulticastFramebufferSampleLocationsfvNV(int aGpu, int aFramebuffer, int aStart, int aCount, float[] aV,
+		int aV_offset) {
+
+	
+  }
+
+  @Override
+  public void glMulticastBarrierNV() {
+
+	
+  }
+
+  @Override
+  public void glMulticastWaitSyncNV(int aSignalGpu, int aWaitGpuMask) {
+
+	
+  }
+
+  @Override
+  public void glMulticastGetQueryObjectivNV(int aGpu, int aId, int aPname, IntBuffer aParams) {
+
+	
+  }
+
+  @Override
+  public void glMulticastGetQueryObjectivNV(int aGpu, int aId, int aPname, int[] aParams, int aParams_offset) {
+
+	
+  }
+
+  @Override
+  public void glMulticastGetQueryObjectuivNV(int aGpu, int aId, int aPname, IntBuffer aParams) {
+
+	
+  }
+
+  @Override
+  public void glMulticastGetQueryObjectuivNV(int aGpu, int aId, int aPname, int[] aParams, int aParams_offset) {
+
+	
+  }
+
+  @Override
+  public void glMulticastGetQueryObjecti64vNV(int aGpu, int aId, int aPname, LongBuffer aParams) {
+
+	
+  }
+
+  @Override
+  public void glMulticastGetQueryObjecti64vNV(int aGpu, int aId, int aPname, long[] aParams, int aParams_offset) {
+
+	
+  }
+
+  @Override
+  public void glMulticastGetQueryObjectui64vNV(int aGpu, int aId, int aPname, LongBuffer aParams) {
+
+	
+  }
+
+  @Override
+  public void glMulticastGetQueryObjectui64vNV(int aGpu, int aId, int aPname, long[] aParams, int aParams_offset) {
+
+	
+  }
+
+  @Override
+  public int glQueryResourceNV(int aQueryType, int aTagId, int aCount, IntBuffer aBuffer) {
+
+	return 0;
+  }
+
+  @Override
+  public int glQueryResourceNV(int aQueryType, int aTagId, int aCount, int[] aBuffer, int aBuffer_offset) {
+
+	return 0;
+  }
+
+  @Override
+  public void glGenQueryResourceTagNV(int aN, IntBuffer aTagIds) {
+
+	
+  }
+
+  @Override
+  public void glGenQueryResourceTagNV(int aN, int[] aTagIds, int aTagIds_offset) {
+
+	
+  }
+
+  @Override
+  public void glDeleteQueryResourceTagNV(int aN, IntBuffer aTagIds) {
+
+	
+  }
+
+  @Override
+  public void glDeleteQueryResourceTagNV(int aN, int[] aTagIds, int aTagIds_offset) {
+
+	
+  }
+
+  @Override
+  public void glQueryResourceTagNV(int aTagId, ByteBuffer aTagString) {
+
+	
+  }
+
+  @Override
+  public void glQueryResourceTagNV(int aTagId, byte[] aTagString, int aTagString_offset) {
+
+	
+  }
+
+  @Override
+  public long glVDPAURegisterVideoSurfaceWithPictureStructureNV(Buffer aVdpSurface, int aTarget, int aNumTextureNames,
+		IntBuffer aTextureNames, boolean aIsFrameStructure) {
+
+	return 0;
+  }
+
+  @Override
+  public long glVDPAURegisterVideoSurfaceWithPictureStructureNV(Buffer aVdpSurface, int aTarget, int aNumTextureNames,
+		int[] aTextureNames, int aTextureNames_offset, boolean aIsFrameStructure) {
+
+	return 0;
+  }
 }
