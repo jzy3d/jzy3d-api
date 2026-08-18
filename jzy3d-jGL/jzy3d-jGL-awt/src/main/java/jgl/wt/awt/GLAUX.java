@@ -16,7 +16,6 @@
 
 package jgl.wt.awt;
 
-import java.applet.Applet;
 import java.awt.Component;
 
 import jgl.glaux.MODELPTR;
@@ -64,8 +63,6 @@ public class GLAUX {
   /** Private Data Members */
 	private GL JavaGL;
   private GLU JavaGLU;
-  // private Applet JavaApplet;
-  // private Component JavaComponent;
 
   private MODELPTR lists[] = new MODELPTR[25];
 
@@ -480,21 +477,12 @@ public class GLAUX {
   }
 
   /** GLenum auxInitWindow (char *title) */
-  // public void auxInitWindow (Applet o) {
   public void auxInitWindow(Component o) {
-    // JavaApplet = o;
-    // JavaComponent = o;
     // call resize to make the correct size
-    // WindowX and WindowY have no meanings in applet
-    // o.resize (WindowWidth, WindowHeight);
     o.setSize(WindowWidth, WindowHeight);
     JavaGL.glXMakeCurrent(o, WindowX, WindowY);
     // reshape has not been used in Java2, and seems redundant here
     // o.reshape (WindowX, WindowY, WindowWidth, WindowHeight);
-  }
-
-  public void auxInitWindow(Applet o) {
-    auxInitWindow((Component) o);
   }
 
   /**

@@ -1,3 +1,0 @@
-#!/bin/sh
-
-/usr/local/j2sdk1_3_1/bin/appletviewer $1.html
