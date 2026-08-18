@@ -510,9 +510,7 @@
 					<source>8</source>
 					<quiet>true</quiet> <!-- only show warnings/errors -->
 					<failOnError>false</failOnError>
-					<configuration>
-						<docfilessubdirs>true</docfilessubdirs>
-					</configuration>
+					<docfilessubdirs>true</docfilessubdirs>
 				</configuration>
 				<executions>
 					<execution>
