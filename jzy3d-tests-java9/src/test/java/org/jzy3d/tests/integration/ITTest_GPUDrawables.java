@@ -1,5 +1,6 @@
 package org.jzy3d.tests.integration;
 
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,12 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
 import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.maths.PlaneAxis;
+import org.jzy3d.plot3d.primitives.textured.MaskPair;
+import org.jzy3d.plot3d.primitives.textured.NativeDrawableImage;
+import org.jzy3d.plot3d.primitives.textured.TexturedCube;
 import org.jzy3d.plot3d.primitives.vbo.ShaderMeshDrawableVBO;
 import org.jzy3d.plot3d.primitives.vbo.ShaderMeshVBOBuilder;
 import org.jzy3d.plot3d.primitives.vbo.ShaderWaterfallDrawableVBO;
@@ -30,6 +36,7 @@ import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import org.jzy3d.plot3d.primitives.vbo.drawable.ScatterVBO;
 import org.jzy3d.plot3d.primitives.vbo.drawable.SphereVBO;
 import org.jzy3d.plot3d.primitives.volume.Texture3D;
+import org.jzy3d.plot3d.rendering.textures.BufferedImageTexture;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
 import org.jzy3d.plot3d.text.renderers.TextBitmapRenderer;
 
@@ -168,7 +175,49 @@ public class ITTest_GPUDrawables extends ITTest {
     });
   }
 
+  @Test
+  public void whenTexturedImage_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("TexturedImage", chart -> {
+      List<Coord2d> mapping = new ArrayList<>();
+      mapping.add(new Coord2d(-1, -1));
+      mapping.add(new Coord2d(1, -1));
+      mapping.add(new Coord2d(1, 1));
+      mapping.add(new Coord2d(-1, 1));
+
+      chart.add(new NativeDrawableImage(new BufferedImageTexture(image(Color.BLUE)), PlaneAxis.Z,
+          0, mapping));
+      chart.getView().setBoundsManual(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
+    });
+  }
+
+  @Test
+  public void whenTexturedCube_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("TexturedCube", chart -> {
+      MaskPair masks = new MaskPair(new BufferedImageTexture(image(Color.WHITE)),
+          new BufferedImageTexture(image(Color.RED)));
+      chart.add(new TexturedCube(new Coord3d(), Color.CYAN, Color.RED, masks, 1f));
+      chart.getView().setBoundsManual(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
+    });
+  }
+
   // ---------------------------------------------------------------------------------------------
+
+  /**
+   * An asymmetric image (a disk in the top left corner, a bar at the bottom) to verify texture
+   * orientation.
+   */
+  protected BufferedImage image(Color color) {
+    BufferedImage image = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = image.createGraphics();
+    g.setColor(java.awt.Color.YELLOW);
+    g.fillRect(0, 0, 64, 64);
+    g.setColor(new java.awt.Color(color.r, color.g, color.b));
+    g.fillOval(4, 4, 24, 24);
+    g.setColor(java.awt.Color.BLACK);
+    g.fillRect(0, 52, 64, 12);
+    g.dispose();
+    return image;
+  }
 
   /** A grid of 30x20 points for mesh and waterfall shaders */
   protected float[][] grid() {
