@@ -34,6 +34,9 @@ env:
   # Leave empty to use the published release.
   PANAMAGL_REF: feature/gl-function-loader
 
+  # Integration tests rendering the same charts with JOGL and PanamaGL
+  PANAMAGL_IT: ITTest_PanamaGLParity,ITTest_GPUDrawables,ITTest_DepthPeeling,ITTest_Picking
+
 jobs:
 
   # ============================================================================================================
@@ -156,6 +159,24 @@ jobs:
         run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml
 
       # -------------------------------------------------------
+      # Integration tests comparing JOGL and PanamaGL renderings
+      # on the same runner, hence independent of baseline images.
+      # -------------------------------------------------------
+      - name: PanamaGL integration tests (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
+            mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
+              -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false
+
+      - name: PanamaGL integration tests (macOS, Windows)
+        if: runner.os != 'Linux'
+        shell: bash
+        run: |
+          mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
+            -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false
+
+      # -------------------------------------------------------
       # Print JVM crash details (forked test JVM killed by a native
       # crash) as artifacts can't always be inspected easily.
       # -------------------------------------------------------
@@ -179,6 +200,7 @@ jobs:
         run: |
           mkdir -p surefire-reports
           find . -path "*/target/surefire-reports/*" -type f -exec cp {} surefire-reports/ \;
+          find . -path "*/target/panamagl-*/*.png" -exec cp {} surefire-reports/ \; || true
 
       - name: Collect Surefire reports (Windows)
         if: runner.os == 'Windows' && always()
