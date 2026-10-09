@@ -47,7 +47,7 @@ jobs:
           - ubuntu-latest    # Linux x86_64
           - macos-latest     # macOS ARM (Apple Silicon)
           - macos-15-intel   # macOS Intel x86_64 (last x86_64 image; GitHub Actions drops x86_64 ~Aug 2027)
-          - windows-latest   # Windows x86_64
+          #- windows-latest  # Windows x86_64 : disabled, too painful to get OpenGL working (see panama-gl)
 
     steps:
       - uses: actions/checkout@v5
