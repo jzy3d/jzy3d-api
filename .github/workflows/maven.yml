@@ -1,190 +1,214 @@
-# This workflow will build a Java project with Maven
+# Build and test Jzy3d on Linux, macOS (ARM + Intel) and Windows, then deploy
+# SNAPSHOT artifacts to the Jzy3d Maven repository when master is updated.
 #
-# Configure Maven : https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# Inspired by https://github.com/panama-gl/panama-gl/tree/main/.github/workflows
+# https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 
 name: Java CI with Maven
 
 on:
   push:
-  #pull_request:
-  #  branches: [ master ]
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      deploy:
+        description: 'Deploy SNAPSHOT artifacts after a successful build (whatever the branch)'
+        type: boolean
+        default: false
+
+# Cancel superseded runs on branches and PRs, but let every master build complete
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+permissions:
+  contents: read
+
+env:
+  # JDK 22+ is required by the PanamaGL modules (Foreign Function & Memory API)
+  JAVA_VERSION: '25'
+  JAVA_DISTRIBUTION: temurin
 
 jobs:
 
-
   # ============================================================================================================
-  # Main Build & Test Matrix
+  # Build & Test Matrix
+  # ============================================================================================================
 
-  macos-10-15-x86_64:
-    if: ${{ false }}  # disable for now
-
+  build:
+    name: Build & Test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java: ['9.0.0+0', '14']
-        # ============================================================================================================
-        # Java / Zulu Distributions
-        # ok : '9.0.0+0'
-        # ok : '11.0.12+7'
-        #
-        # KO : '8' https://github.com/jzy3d/jzy3d-api/runs/3943617371?check_suite_focus=true#step:4:493
-        #
-        # Try -Djava.awt.headless=true
-        #
-        # https://github.com/inloco/actions-setup-java/blob/main/README.md#Supported-distributions
 
-        os: ['osx-10-15-3'] # , 'windows-latest', windows-2016
-        # ============================================================================================================
-        # Github virtual machine
-        # ----------------------
-        # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#jobsjob_idruns-on
-        #
-        # 'macos-10.15' works thanks to software renderer + JOGL timeout expansion
-        # 'windows-2016' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943151589
-        # 'ubuntu-18.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-943110442
-        # 'ubuntu-20.04' don't work https://github.com/jzy3d/jzy3d-api/issues/205#issuecomment-947641249
-        #
-        # Self hosted physical machines
-        # -----------------------------
-        # 'osx-10-15-3'
-        #
-        #
+    strategy:
+      # Don't cancel other jobs if one platform fails
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest    # Linux x86_64
+          - macos-latest     # macOS ARM (Apple Silicon)
+          - macos-15-intel   # macOS Intel x86_64 (last x86_64 image; GitHub Actions drops x86_64 ~Aug 2027)
+          - windows-latest   # Windows x86_64
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: ${{ matrix.java }}
-        distribution: zulu
-        #cache: maven # caching makes the post build action to fail
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: maven
 
-    - name: Get Maven OS detection info
-      run: mvn enforcer:display-info
+      # -------------------------------------------------------
+      # Linux: install Mesa OpenGL (software llvmpipe renderer),
+      # GLUT (used by PanamaGL) and a virtual X display.
+      # -------------------------------------------------------
+      - name: Install OpenGL, GLUT and Xvfb (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev xvfb
 
-    - name: Build with Maven
-      run: mvn package --file pom.xml
-      # run: mvn -T 1C -B package --file pom.xml
-      # run: mvn -T 1C -B -Dsurefire.useFile=false package --file pom.xml
-      # -T 1C : 1 thread per cpu core
-      # -B    : non interactive mode
+      # -------------------------------------------------------
+      # Windows: the system opengl32.dll only supports OpenGL 1.1
+      # without a GPU, which is not enough for JOGL nor PanamaGL.
+      # Install Mesa llvmpipe (software OpenGL 4.5) next to java.exe:
+      # Windows searches the application directory before System32
+      # when loading a DLL, so every JVM started from this JDK (Maven
+      # and Surefire forks) picks Mesa instead of the system stub.
+      # -------------------------------------------------------
+      - name: Install Mesa software OpenGL (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $headers = @{ Authorization = "Bearer $env:GITHUB_TOKEN" }
+          $release = Invoke-RestMethod `
+            "https://api.github.com/repos/mmozeiko/build-mesa/releases/latest" `
+            -Headers $headers
+          $asset = $release.assets `
+            | Where-Object { $_.name -like "mesa-llvmpipe-x64-*.7z" } `
+            | Select-Object -First 1
+          if (-not $asset) { Write-Error "Could not find mesa-llvmpipe-x64 asset"; exit 1 }
+          Write-Host "Downloading $($asset.name)"
+          Invoke-WebRequest -Uri $asset.browser_download_url -OutFile mesa.7z
+          7z x mesa.7z -omesa -y | Out-Null
+          $dlls = Get-ChildItem -Path "mesa" -Recurse -Filter "*.dll"
+          if (-not ($dlls | Where-Object { $_.Name -eq "opengl32.dll" })) {
+            Write-Error "opengl32.dll not found in Mesa archive"; exit 1
+          }
+          $javaBin = Join-Path $env:JAVA_HOME "bin"
+          $dlls | Copy-Item -Destination $javaBin -Force
+          Write-Host "Installed Mesa DLLs to $javaBin : $($dlls.Name -join ', ')"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Copy Surefire reports
-      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
+      # -------------------------------------------------------
+      # Windows: freeglut (used by PanamaGL) has no Chocolatey
+      # package, download the pre-built MSVC binaries instead.
+      # -------------------------------------------------------
+      - name: Install freeglut MSVC x64 (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Invoke-WebRequest `
+            -Uri "https://www.transmissionzero.co.uk/files/software/development/GLUT/freeglut-MSVC.zip" `
+            -OutFile "freeglut-MSVC.zip"
+          Expand-Archive -Path "freeglut-MSVC.zip" -DestinationPath "C:\freeglut"
+          $dll = Get-ChildItem -Path "C:\freeglut" -Recurse -Filter "freeglut.dll" `
+            | Where-Object { $_.FullName -like "*x64*" } `
+            | Select-Object -First 1
+          Copy-Item -Path $dll.FullName -Destination "C:\Windows\System32\freeglut.dll"
+          Copy-Item -Path $dll.FullName -Destination (Join-Path $env:JAVA_HOME "bin")
+          Write-Host "Installed freeglut.dll from $($dll.FullName)"
 
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Package
-        path: surefire-reports
+      - name: Get Maven OS detection info
+        run: mvn --batch-mode --no-transfer-progress enforcer:display-info
 
-# TODO : Deploy on repo https://github.com/inloco/actions-setup-java/blob/main/docs/advanced-usage.md#Publishing-using-Apache-Maven
+      # -------------------------------------------------------
+      # Build & Test
+      # Linux uses xvfb-run for the virtual display required by
+      # AWT/Swing/SWT/JavaFX components during tests.
+      # -------------------------------------------------------
+      - name: Build and test with Maven (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
+            mvn --batch-mode --no-transfer-progress package --file pom.xml
+
+      - name: Build and test with Maven (macOS, Windows)
+        if: runner.os != 'Linux'
+        run: mvn --batch-mode --no-transfer-progress package --file pom.xml
+
+      # -------------------------------------------------------
+      # Collect Surefire reports (always, even on test failure)
+      # -------------------------------------------------------
+      - name: Collect Surefire reports (Unix)
+        if: runner.os != 'Windows' && always()
+        run: |
+          mkdir -p surefire-reports
+          find . -path "*/target/surefire-reports/*" -type f -exec cp {} surefire-reports/ \;
+
+      - name: Collect Surefire reports (Windows)
+        if: runner.os == 'Windows' && always()
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path surefire-reports | Out-Null
+          Get-ChildItem -Path . -Recurse -File |
+            Where-Object { $_.FullName -like "*\target\surefire-reports\*" } |
+            Copy-Item -Destination surefire-reports
+
+      - name: Upload Surefire reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: surefire-reports-${{ matrix.os }}
+          path: surefire-reports
+          if-no-files-found: ignore
 
   # ============================================================================================================
-  # MAC OS BIG SUR (ARM)
-  # ====================================
-
-
-  macos-11-4-arm64:
-    if: ${{ false }}  # disable for now
-
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java: ['9.0.0+0', '14']
-        os: ['mac-m1']
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: ${{ matrix.java }}
-        distribution: zulu
-        #cache: maven # caching makes the post build action to fail
-
-    - name: Get Maven OS detection info
-      run: mvn enforcer:display-info
-
-    - name: Build with Maven
-      run: mvn package --file pom.xml
-
-    - name: Copy Surefire reports
-      run: mkdir surefire-reports && cp */target/surefire-reports/* surefire-reports
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Package
-        path: surefire-reports
-
+  # Deploy SNAPSHOT to the Jzy3d Maven FTP repository (see distributionManagement in pom.xml).
+  #
+  # Runs after all platforms passed, either on push to master or when manually triggered with
+  # 'deploy' checked. Never runs on pull requests. Release versions are never deployed from CI.
+  #
+  # Requires the FTP_USERNAME and FTP_PASSWORD secrets, defined at repository level or in the
+  # "jzy3d-ftp-env" environment.
   # ============================================================================================================
-  # WINDOWS
-  # ====================================
 
-  win10-x86_64:
-    if: ${{ false }}  # disable for now
+  deploy:
+    name: Deploy SNAPSHOT
+    runs-on: ubuntu-latest
+    needs: build
+    if: >-
+      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
+      (github.event_name == 'workflow_dispatch' && inputs.deploy)
+    environment: jzy3d-ftp-env
 
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java: ['9.0.0+0', '14']
-        os: ['win10-x86_64']
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: ${{ matrix.java }}
-        distribution: zulu
-        #cache: maven # caching makes the post build action to fail
+      # Writes ~/.m2/settings.xml with credentials for the server id used in distributionManagement
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: maven
+          server-id: jzy3d-ftp
+          server-username: FTP_USERNAME
+          server-password: FTP_PASSWORD
 
-    - name: Get Maven OS detection info
-      run: mvn enforcer:display-info
+      - name: Check version is a SNAPSHOT
+        run: |
+          VERSION=$(mvn --batch-mode --no-transfer-progress help:evaluate -Dexpression=project.version -q -DforceStdout)
+          echo "Project version: $VERSION"
+          if [[ "$VERSION" != *-SNAPSHOT ]]; then
+            echo "::error::Version $VERSION is not a SNAPSHOT, refusing to deploy a release from CI"
+            exit 1
+          fi
 
-    - name: Build with Maven
-      run: mvn package --file pom.xml
-
-    - name: Copy Surefire reports
-      run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Package
-        path: surefire-reports
-
-  # ============================================================================================================
-  # UBUNTU
-  # ====================================
-
-  ubuntu-20-04-x86_64:
-    if: ${{ false }}  # disable for now
-
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        java: ['14', '11']
-        os: ['ubuntu-20-04']
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up JDK
-      uses: actions/setup-java@v2
-      with:
-        java-version: ${{ matrix.java }}
-        distribution: zulu
-        #cache: maven # caching makes the post build action to fail
-
-    - name: Get Maven OS detection info
-      run: mvn enforcer:display-info
-
-    - name: Build with Maven
-      run: mvn clean package --file pom.xml
-
-    - name: Copy Surefire reports
-      run: mkdir surefire-reports; cp */target/surefire-reports/* surefire-reports
-
-    - uses: actions/upload-artifact@v2
-      with:
-        name: Package
-        path: surefire-reports
+      - name: Deploy
+        run: mvn --batch-mode --no-transfer-progress deploy -DskipTests
+        env:
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
