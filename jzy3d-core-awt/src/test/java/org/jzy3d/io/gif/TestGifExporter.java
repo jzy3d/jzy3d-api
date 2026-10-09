@@ -168,6 +168,7 @@ public class TestGifExporter {
     // Then number of submitted image grow after a short delay
     sleep(50);
 
+    waitForDelay(gif, time2);
     Assert.assertEquals(time2, gif.getDelay());
     Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
@@ -185,6 +186,7 @@ public class TestGifExporter {
     // Then number of submitted image grow after a short delay
     sleep(50);
 
+    waitForDelay(gif, time3);
     Assert.assertEquals(time3, gif.getDelay());
     Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
@@ -202,6 +204,7 @@ public class TestGifExporter {
 
     // Then number of submitted image did not grow after a short delay
     sleep(50);
+    waitForDelay(gif, time4);
     Assert.assertEquals(time4, gif.getDelay());
     Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
@@ -296,6 +299,7 @@ public class TestGifExporter {
     // Then number of submitted image did not grow after a short delay
     sleep(50);
 
+    waitForDelay(gif, time3);
     Assert.assertEquals(time3, gif.getDelay());
     Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(1, gif.getNumberOfSkippedImages().intValue());
@@ -313,6 +317,7 @@ public class TestGifExporter {
 
     // Then number of submitted image did not grow after a short delay
     sleep(50);
+    waitForDelay(gif, time4);
     Assert.assertEquals(time4, gif.getDelay());
     Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(1, gif.getNumberOfSkippedImages().intValue());
@@ -404,6 +409,17 @@ public class TestGifExporter {
     
     return duration;
 
+  }
+
+  /**
+   * The delay of a frame is applied by the export task running in the exporter's thread : wait for
+   * it rather than for a fixed duration, which may be too short on slow computers.
+   */
+  private void waitForDelay(GifExporter gif, int expectedDelay) {
+    long end = System.currentTimeMillis() + 10000;
+    while (gif.getDelay() != expectedDelay && System.currentTimeMillis() < end) {
+      sleep(10);
+    }
   }
 
   private void sleep(long mili) {
