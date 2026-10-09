@@ -37,5 +37,12 @@
             <artifactId>jogl-all-main</artifactId>
         </dependency>
 
+		<!-- painter conformance checks -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-tester</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 </project>
