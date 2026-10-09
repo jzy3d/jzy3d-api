@@ -17,12 +17,19 @@
  *******************************************************************************/
 package org.jzy3d.plot3d.rendering.canvas;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import org.jzy3d.chart.IAnimator;
+import org.jzy3d.painters.PanamaGLPainter;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import panamagl.GLEventListener;
+import panamagl.Image;
 import panamagl.canvas.GLCanvas;
+import panamagl.offscreen.OffscreenRenderer;
 
 /**
  * Toolkit-agnostic composition helper shared by all {@link IPanamaGLCanvas}
@@ -91,9 +98,59 @@ public class PanamaGLCanvasSupport {
     glCanvas.display();
   }
 
+  /**
+   * Return the last rendered image, once renderings requested before this call are done.
+   * 
+   * @return a {@link java.awt.image.BufferedImage} for AWT based canvases, or null if nothing was
+   *         rendered yet.
+   */
   public Object screenshot() {
-    return glCanvas.getScreenshot();
+    waitForPendingRendering();
+
+    Image<?> image = glCanvas.getScreenshot();
+    return image == null ? null : image.getImage();
   }
+
+  /** Write the last rendered image to a PNG file. */
+  public void screenshot(File file) throws IOException {
+    waitForPendingRendering();
+
+    Image<?> image = glCanvas.getScreenshot();
+    if (image == null) {
+      throw new IOException("Nothing was rendered yet, can't write " + file);
+    }
+    if (file.getAbsoluteFile().getParentFile() != null) {
+      file.getAbsoluteFile().getParentFile().mkdirs();
+    }
+    image.save(file.getAbsolutePath());
+  }
+
+  /**
+   * Wait until the renderings that were requested before this call are done, by queuing a task on
+   * the thread rendering the canvas. Return immediately if called from that thread.
+   */
+  public void waitForPendingRendering() {
+    if (view.getPainter() instanceof PanamaGLPainter
+        && ((PanamaGLPainter) view.getPainter()).isGLThread()) {
+      return;
+    }
+
+    OffscreenRenderer offscreen = glCanvas.getOffscreenRenderer();
+    if (offscreen == null || offscreen.getThreadRedirect() == null) {
+      return;
+    }
+
+    CountDownLatch rendered = new CountDownLatch(1);
+    offscreen.getThreadRedirect().run(rendered::countDown);
+
+    try {
+      rendered.await(PENDING_RENDERING_TIMEOUT_MS, TimeUnit.MILLISECONDS);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    }
+  }
+
+  protected static final long PENDING_RENDERING_TIMEOUT_MS = 5000;
 
   public void dispose() {
     if (animator != null) {
