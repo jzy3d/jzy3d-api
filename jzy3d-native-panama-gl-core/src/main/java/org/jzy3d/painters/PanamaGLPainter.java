@@ -2171,6 +2171,11 @@ public class PanamaGLPainter extends AbstractPainter {
   }
 
   @Override
+  public void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
+    gl.glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+  }
+
+  @Override
   public int glGetError() {
     return gl.glGetError();
   }

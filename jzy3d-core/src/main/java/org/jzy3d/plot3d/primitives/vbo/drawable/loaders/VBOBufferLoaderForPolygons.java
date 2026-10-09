@@ -1,8 +1,10 @@
 package org.jzy3d.plot3d.primitives.vbo.drawable.loaders;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.jzy3d.io.BufferUtil;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -10,21 +12,14 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
-import com.jogamp.common.nio.Buffers;
 
 /**
- * ===================== WIP / Not working yet =====================
- * 
- * Limitations of primitive restart are discussed here :
- * https://community.khronos.org/t/using-glprimitiverestartindex-to-declare-multiple-geometries-in-the-same-vbo/107810/13
- * 
- * A utility class to build buffers to feed a {@link DrawableVBO2} using Primitive restart.
+ * A utility class to build buffers to feed a {@link DrawableVBO2}.
  * 
  * @author Martin Pernollet
  *
  */
-public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader
-    implements IGLLoader<DrawableVBO2> {
+public class VBOBufferLoaderForPolygons extends VBOBufferLoader implements IGLLoader<DrawableVBO2> {
   // IColorMap colormap;
   // float[] coloring;
   static int DIMENSIONS = 3;
@@ -32,7 +27,7 @@ public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader
   protected List<Polygon> polygons;
   protected int pointsPerPolygon;
 
-  public VBOBufferLoaderForPolygonsPrimitiveRestart(List<Polygon> polygons, int pointsPerPolygon) {
+  public VBOBufferLoaderForPolygons(List<Polygon> polygons, int pointsPerPolygon) {
     super();
     this.polygons = polygons;
     this.pointsPerPolygon = pointsPerPolygon;
@@ -52,12 +47,20 @@ public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader
 
     int colorChannels = drawable.getColorChannels();
 
-    FloatBuffer vertices =
-        Buffers.newDirectFloatBuffer(pointsNumber * DIMENSIONS + polygons.size());
-    FloatBuffer colors = Buffers.newDirectFloatBuffer(pointsNumber * colorChannels);
+    FloatBuffer vertices = BufferUtil.newDirectFloatBuffer(pointsNumber * DIMENSIONS);
+    FloatBuffer colors = BufferUtil.newDirectFloatBuffer(pointsNumber * colorChannels);
+
+    IntBuffer elementsStarts = BufferUtil.newDirectIntBuffer(polygons.size());
+    IntBuffer elementsLength = BufferUtil.newDirectIntBuffer(polygons.size());
+
+    int vertexCount = 0;
 
     for (Polygon polygon : polygons) {
-
+      elementsStarts.put(vertexCount);
+      elementsLength.put(polygon.size());
+      
+      vertexCount+=polygon.size();
+      
       for (Point point : polygon.getPoints()) {
 
         // Store coordinates
@@ -80,14 +83,14 @@ public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader
         verticeList.add(point.xyz);
 
       }
-
-      // indicate that geometry is done and drawing should restart
-      vertices.put(DrawableVBO2.PRIMITIVE_RESTART_VALUE);
-
     }
-    vertices.rewind();
-    colors.rewind();
-
+    
+    BufferUtil.rewind(vertices);
+    BufferUtil.rewind(colors);
+    BufferUtil.rewind(elementsStarts);
+    BufferUtil.rewind(elementsLength);
+    
+    
     // -------------------------------------------
     // Normals
 
@@ -98,8 +101,7 @@ public class VBOBufferLoaderForPolygonsPrimitiveRestart extends VBOBufferLoader
     // Store data
 
     drawable.setHasNormalInVertexArray(false);
-    drawable.setPrimitiveRestart(true);
     drawable.setVerticesPerGeometry(pointsPerPolygon);
-    drawable.setData(painter, vertices, normals, colors, bounds);
+    drawable.setData(painter, elementsStarts, elementsLength, vertices, normals, colors, bounds);
   }
 }
