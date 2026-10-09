@@ -82,6 +82,7 @@ public class TestCamera_EmulGL_Onscreen {
     Assert.assertEquals(FRAME_SIZE.height, awtFrame.getSize().height);
 
     // Then viewport size is set to occupy the full canvas
+    waitForViewport(cam, canvas);
     Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
     Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
 
@@ -110,6 +111,7 @@ public class TestCamera_EmulGL_Onscreen {
     System.out.println("TestCamEmulGLOnScreen : viewport.size : " + cam.getLastViewPort());
 
     // Then viewport on the complete canvas
+    waitForViewport(cam, canvas);
     Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, cam.getLastViewPort().getMode());
     Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
     Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
@@ -131,6 +133,19 @@ public class TestCamera_EmulGL_Onscreen {
 
     // SQUARE MODE NOT SUPPORTED YET
 
+  }
+
+  /**
+   * The canvas is resized before the view renders with the new size, in the rendering thread :
+   * wait for the camera viewport to fit the canvas, which may take a while on slow computers.
+   */
+  private static void waitForViewport(Camera cam, Component canvas) throws InterruptedException {
+    long end = System.currentTimeMillis() + 10000;
+    while ((cam.getLastViewPort().getWidth() != canvas.getSize().width
+        || cam.getLastViewPort().getHeight() != canvas.getSize().height)
+        && System.currentTimeMillis() < end) {
+      Thread.sleep(10);
+    }
   }
 
   private static void add(Rectangle initialFrameSize, Insets insets) {
