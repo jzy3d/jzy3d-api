@@ -13,6 +13,16 @@ import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
+import org.jzy3d.chart.factories.ContourChartFactory;
+import org.jzy3d.chart2d.Chart2d;
+import org.jzy3d.chart2d.Chart2dFactory;
+import org.jzy3d.colors.Color;
+import org.jzy3d.contour.DefaultContourColoringPolicy;
+import org.jzy3d.contour.MapperContourMeshGenerator;
+import org.jzy3d.maths.Range;
+import org.jzy3d.plot2d.primitives.Serie2d;
+import org.jzy3d.plot3d.builder.Func3D;
+import org.jzy3d.plot3d.primitives.axis.ContourAxisBox;
 import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
@@ -38,6 +48,11 @@ public class ITTest_PanamaGLParity extends ITTest {
   static final double MAX_DIFF_RATIO = 0.01;
 
   static final String OUTPUT = "target/panamagl-parity/";
+
+  static final String PANAMAGL_CHART2D_FACTORY = "org.jzy3d.chart2d.PanamaGLChart2dFactory";
+
+  static final String PANAMAGL_CONTOUR_FACTORY =
+      "org.jzy3d.chart.factories.PanamaGLContourChartFactory";
 
   @Test
   public void whenSurface_ThenPanamaGLMatchesJOGL() throws IOException {
@@ -96,26 +111,64 @@ public class ITTest_PanamaGLParity extends ITTest {
 
   @Test
   public void whenOffscreen_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertFactoryParity("Offscreen", new AWTChartFactory(), PANAMAGL_SWING_FACTORY,
+        chart -> chart.add(surface()));
+  }
+
+  @Test
+  public void whenChart2d_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertFactoryParity("Chart2d", new Chart2dFactory(), PANAMAGL_CHART2D_FACTORY, chart -> {
+      Serie2d serie = ((Chart2d) chart).getSerie("sine", Serie2d.Type.LINE);
+      serie.setColor(Color.BLUE);
+      for (int i = 0; i < 100; i++) {
+        serie.add(i, Math.sin(i / 10.0));
+      }
+    });
+  }
+
+  @Test
+  public void whenContour_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertFactoryParity("Contour", new ContourChartFactory(), PANAMAGL_CONTOUR_FACTORY, chart -> {
+      Shape surface = surface();
+      chart.add(surface);
+
+      Range range = new Range(-3, 3);
+      MapperContourMeshGenerator contour = new MapperContourMeshGenerator(
+          new Func3D((x, y) -> x * Math.sin(x * y)), range, range);
+      ContourAxisBox axis = (ContourAxisBox) chart.getView().getAxis();
+      axis.setContourMesh(contour.getContourMesh(
+          new DefaultContourColoringPolicy(surface.getColorMapper()), 200, 200, 10, 0, false));
+    });
+  }
+
+  /**
+   * Render the same content offscreen with a JOGL chart factory and a PanamaGL one, loaded by
+   * name, and verify both images are nearly identical.
+   */
+  protected void assertFactoryParity(String name, ChartFactory joglFactory,
+      String panamaFactoryClass, Consumer<Chart> content) throws IOException {
     Assume.assumeTrue("PanamaGL is not in classpath", isPanamaGLAvailable());
 
-    BufferedImage jogl = renderOffscreen(new AWTChartFactory());
-    BufferedImage panama = renderOffscreen(newChartFactory(PANAMAGL_SWING_FACTORY));
+    BufferedImage jogl = renderOffscreen(joglFactory, content);
+    BufferedImage panama = renderOffscreen(newChartFactory(panamaFactoryClass), content);
 
     double ratio = diffRatio(jogl, panama);
 
     if (ratio > MAX_DIFF_RATIO) {
       new File(OUTPUT).mkdirs();
-      ImageIO.write(jogl, "png", new File(OUTPUT + "Offscreen_JOGL.png"));
-      ImageIO.write(panama, "png", new File(OUTPUT + "Offscreen_PanamaGL.png"));
+      ImageIO.write(jogl, "png", new File(OUTPUT + name + "_JOGL.png"));
+      ImageIO.write(panama, "png", new File(OUTPUT + name + "_PanamaGL.png"));
     }
 
-    Assert.assertTrue("Offscreen : " + (100 * ratio) + "% of pixels differ", ratio <= MAX_DIFF_RATIO);
+    Assert.assertTrue(name + " : " + (100 * ratio) + "% of pixels differ between JOGL and PanamaGL",
+        ratio <= MAX_DIFF_RATIO);
   }
 
-  protected BufferedImage renderOffscreen(ChartFactory factory) throws IOException {
+  protected BufferedImage renderOffscreen(ChartFactory factory, Consumer<Chart> content)
+      throws IOException {
     factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
     Chart chart = factory.newChart(quality(HiDPI.OFF));
-    chart.add(surface());
+    content.accept(chart);
 
     try {
       if (isPanamaGL(chart)) {
