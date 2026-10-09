@@ -20,9 +20,9 @@ public class CroppableLineStrip extends LineStrip implements Croppable {
 
   @Override
   public void drawLine(IPainter painter) {
-    painter.glBegin_LineStrip();
-
     painter.glLineWidth(wireframeWidth);
+
+    painter.glBegin_LineStrip();
 
     if (filter == null)
       doDrawAllLines(painter);
