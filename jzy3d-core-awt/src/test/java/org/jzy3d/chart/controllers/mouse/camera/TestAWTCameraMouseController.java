@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import java.awt.event.InputEvent;
+import java.util.Locale;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
@@ -403,9 +404,16 @@ public class TestAWTCameraMouseController {
     when(layout.getYTickRenderer()).thenReturn(new ScientificNotationTickRenderer());
     when(layout.getZTickRenderer()).thenReturn(new ScientificNotationTickRenderer());
 
-    Assert.assertEquals("The X axis=1,23", mouse.format(Axis.X, 1.2345678f));
-    Assert.assertEquals("The Y axis=2,2e+00", mouse.format(Axis.Y, 2.2345678f));
-    Assert.assertEquals("The Z axis=3,2e+00", mouse.format(Axis.Z, 3.2345678f));
+    // tick renderers format with the default locale, so pin it to get a stable decimal separator
+    Locale defaultLocale = Locale.getDefault();
+    try {
+      Locale.setDefault(Locale.FRANCE);
+      Assert.assertEquals("The X axis=1,23", mouse.format(Axis.X, 1.2345678f));
+      Assert.assertEquals("The Y axis=2,2e+00", mouse.format(Axis.Y, 2.2345678f));
+      Assert.assertEquals("The Z axis=3,2e+00", mouse.format(Axis.Z, 3.2345678f));
+    } finally {
+      Locale.setDefault(defaultLocale);
+    }
 
   }
   
