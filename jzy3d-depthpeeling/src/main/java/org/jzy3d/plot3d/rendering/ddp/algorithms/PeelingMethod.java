@@ -25,4 +25,20 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
  */
 public enum PeelingMethod {
   DUAL_PEELING_MODE, F2B_PEELING_MODE, WEIGHTED_AVERAGE_MODE, WEIGHTED_SUM_MODE;
+
+  /** A new instance of the algorithm implementing this method. */
+  public IDepthPeelingAlgorithm newAlgorithm() {
+    switch (this) {
+      case DUAL_PEELING_MODE:
+        return new DualDepthPeelingAlgorithm();
+      case F2B_PEELING_MODE:
+        return new FrontToBackPeelingAlgorithm();
+      case WEIGHTED_AVERAGE_MODE:
+        return new WeightedAveragePeelingAlgorithm();
+      case WEIGHTED_SUM_MODE:
+        return new WeightedSumPeelingAlgorithm();
+      default:
+        throw new IllegalArgumentException("Unknown method:" + this);
+    }
+  }
 }
