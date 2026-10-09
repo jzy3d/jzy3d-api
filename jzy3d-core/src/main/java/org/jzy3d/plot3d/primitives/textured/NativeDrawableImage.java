@@ -9,18 +9,14 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.PlaneAxis;
+import org.jzy3d.painters.GLConstants;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.DrawableImage;
 import org.jzy3d.plot3d.rendering.textures.SharedTexture;
+import org.jzy3d.plot3d.rendering.textures.TextureCoords;
 import org.jzy3d.plot3d.transform.Transform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2ES1;
-import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureCoords;
 
 /**
  * A {@link NativeDrawableImage} can only mount its texture while the GL2 thread is current, so the
@@ -199,18 +195,16 @@ public class NativeDrawableImage extends DrawableImage implements ITranslucent {
     if (textureScale != null)
       textureScale.execute(painter, false);
 
-    // Retrieve resource content
-    Texture texture = resource.getTexture(painter);
+    // Bind texture (loading it if required) & set color filter
+    resource.bind(painter);
     TextureCoords coords = resource.getCoords();
 
-    // Bind texture & set color filter
-    texture.bind(((NativeDesktopPainter) painter).getGL());
     painter.colorAlphaFactor(filter, alpha);
 
     // Draw
     before(painter);
 
-    painter.glBegin_Quad();// (GL2GL3.GL_QUADS);
+    painter.glBegin_Quad();// (GLConstants.GL_QUADS);
 
     if (orientation == PlaneAxis.X) {
       painter.glTexCoord2f(coords.left(), coords.bottom());
@@ -252,14 +246,17 @@ public class NativeDrawableImage extends DrawableImage implements ITranslucent {
 
   protected void before(IPainter painter) {
     painter.glPushMatrix();
-    painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-    painter.glEnable(GL.GL_TEXTURE_2D);
-    painter.glTexEnvf(GL.GL_TEXTURE_2D, GL2ES1.GL_TEXTURE_ENV_MODE, GL.GL_REPLACE);
+    painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_FILL);
+    painter.glEnable(GLConstants.GL_TEXTURE_2D);
+    // texture colors are modulated by the color filter. This used to be an invalid
+    // glTexEnvf(GL_TEXTURE_2D, GL_TEXTURE_ENV_MODE, GL_REPLACE) call, which GL ignored, leaving the
+    // default GL_MODULATE mode
+    painter.glTexEnvi(GLConstants.GL_TEXTURE_ENV, GLConstants.GL_TEXTURE_ENV_MODE, GLConstants.GL_MODULATE);
   }
 
   protected void after(IPainter painter) {
-    painter.glDisable(GL.GL_TEXTURE_2D);
-    painter.glTexEnvi(GL2ES1.GL_TEXTURE_ENV, GL2ES1.GL_TEXTURE_ENV_MODE, GL2ES1.GL_MODULATE);
+    painter.glDisable(GLConstants.GL_TEXTURE_2D);
+    painter.glTexEnvi(GLConstants.GL_TEXTURE_ENV, GLConstants.GL_TEXTURE_ENV_MODE, GLConstants.GL_MODULATE);
     painter.glPopMatrix();
   }
 

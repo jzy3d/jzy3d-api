@@ -9,12 +9,12 @@ import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
+import org.jzy3d.painters.GLConstants;
 import org.jzy3d.plot3d.primitives.vbo.buffers.FloatVBO;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jzy3d.painters.GLConstants;
 
 /**
  * The {@link VBOBuilder} is responsible for sizing a {@link FloatVBO}, filling it with vertex

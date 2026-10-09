@@ -130,6 +130,7 @@ public interface GLConstants {
   public static final int GL_TEXTURE_2D = 0x0DE1;
   public static final int GL_TEXTURE_3D = 0x806F;
   public static final int GL_TEXTURE_BINDING_2D = 0x8069;
+  public static final int GL_GENERATE_MIPMAP = 0x8191;
   public static final int GL_TEXTURE_ENV = 0x2300;
   public static final int GL_TEXTURE_ENV_MODE = 0x2200;
   public static final int GL_TEXTURE_MAG_FILTER = 0x2800;
