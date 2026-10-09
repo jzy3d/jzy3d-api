@@ -138,6 +138,22 @@ jobs:
         run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml
 
       # -------------------------------------------------------
+      # Print JVM crash details (forked test JVM killed by a native
+      # crash) as artifacts can't always be inspected easily.
+      # -------------------------------------------------------
+      - name: Print JVM crash dumps (Unix)
+        if: runner.os != 'Windows' && failure()
+        run: |
+          for f in $(find . -path "*/target/surefire-reports/*" -name "*.dumpstream") $(find . -name "hs_err_pid*.log"); do
+            echo "::group::$f"; cat "$f"; echo "::endgroup::"
+          done
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            for f in $(ls ~/Library/Logs/DiagnosticReports/java* 2>/dev/null); do
+              echo "::group::$f"; head -c 20000 "$f"; echo "::endgroup::"
+            done
+          fi
+
+      # -------------------------------------------------------
       # Collect Surefire reports (always, even on test failure)
       # -------------------------------------------------------
       - name: Collect Surefire reports (Unix)
