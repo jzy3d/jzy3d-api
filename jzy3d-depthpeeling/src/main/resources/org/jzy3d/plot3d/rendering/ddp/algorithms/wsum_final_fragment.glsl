@@ -24,6 +24,8 @@ uniform vec3 BackgroundColor; // Java : g_backgroundColor
 // Sum(A_i * C_i) + C_bg * (1 - Sum(A_i))
 void main(void)
 {
+	// the final image is opaque : define its alpha, otherwise left to the GL implementation
+	gl_FragColor.a = 1.0;
 	// Use the texture coordinate gl_FragCoord.xy to do a texture lookup in the
     // rectangle texture currently bound to sampler
 	vec4 S = texture2DRect(ColorTex, gl_FragCoord.xy);
