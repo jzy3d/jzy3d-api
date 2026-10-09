@@ -29,6 +29,7 @@ import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import org.jzy3d.colors.AWTColor;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Array;
@@ -166,11 +167,9 @@ public class PanamaGLPainter extends AbstractPainter {
     return dbl;
   }
 
+  @Override
   public String glGetString(int stringID) {
-    MemorySegment segment = gl.glGetString(stringID);
-    if(segment!=null)
-      return segment.getString(0);
-    return null;
+    return string(gl.glGetString(stringID));
   }
 
   // GL GET
@@ -1742,5 +1741,452 @@ public class PanamaGLPainter extends AbstractPainter {
   @Override
   public void glDisable_Stencil() {
     gl.glDisable(GL.GL_STENCIL_TEST);
+  }
+
+  /* ******************************************************************************************* */
+  /* GPU RESOURCES                                                                               */
+  /* ******************************************************************************************* */
+
+  /** Native memory for n ints. */
+  protected MemorySegment ints(int n) {
+    return arena.allocate(ValueLayout.JAVA_INT, Math.max(1, n));
+  }
+
+  /** Native memory holding n ints of the array, starting at offset. */
+  protected MemorySegment ints(int[] values, int offset, int n) {
+    MemorySegment segment = ints(n);
+    MemorySegment.copy(values, offset, segment, ValueLayout.JAVA_INT, 0, n);
+    return segment;
+  }
+
+  /** Copy n ints of the native memory to the array, starting at offset. */
+  protected void copy(MemorySegment segment, int[] values, int offset, int n) {
+    MemorySegment.copy(segment, ValueLayout.JAVA_INT, 0, values, offset, n);
+  }
+
+  /** Native memory holding n floats of the array, starting at offset. */
+  protected MemorySegment floats(float[] values, int offset, int n) {
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_FLOAT, Math.max(1, n));
+    MemorySegment.copy(values, offset, segment, ValueLayout.JAVA_FLOAT, 0, n);
+    return segment;
+  }
+
+  /** A buffer as native memory, or NULL if the buffer is null. */
+  protected MemorySegment segmentOrNull(Buffer buffer) {
+    return buffer == null ? MemorySegment.NULL : segment(buffer);
+  }
+
+  /** An offset in a bound buffer object, given to GL as a pointer value. */
+  protected MemorySegment offset(long offset) {
+    return MemorySegment.ofAddress(offset);
+  }
+
+  /** Read a C string returned by GL. */
+  protected String string(MemorySegment string) {
+    if (string == null || MemorySegment.NULL.equals(string)) {
+      return null;
+    }
+    return string.reinterpret(Long.MAX_VALUE).getString(0);
+  }
+
+  // Buffer objects
+
+  @Override
+  public void glGenBuffers(int n, int[] buffers, int offset) {
+    MemorySegment ids = ints(n);
+    gl.glGenBuffers(n, ids);
+    copy(ids, buffers, offset, n);
+  }
+
+  @Override
+  public void glDeleteBuffers(int n, int[] buffers, int offset) {
+    gl.glDeleteBuffers(n, ints(buffers, offset, n));
+  }
+
+  @Override
+  public void glBindBuffer(int target, int buffer) {
+    gl.glBindBuffer(target, buffer);
+  }
+
+  @Override
+  public void glBufferData(int target, long size, Buffer data, int usage) {
+    gl.glBufferData(target, size, segmentOrNull(data), usage);
+  }
+
+  @Override
+  public void glBufferSubData(int target, long offset, long size, Buffer data) {
+    gl.glBufferSubData(target, offset, size, segmentOrNull(data));
+  }
+
+  // Vertex arrays
+
+  @Override
+  public void glEnableClientState(int array) {
+    gl.glEnableClientState(array);
+  }
+
+  @Override
+  public void glDisableClientState(int array) {
+    gl.glDisableClientState(array);
+  }
+
+  @Override
+  public void glVertexPointer(int size, int type, int stride, long pointerOffset) {
+    gl.glVertexPointer(size, type, stride, offset(pointerOffset));
+  }
+
+  @Override
+  public void glNormalPointer(int type, int stride, long pointerOffset) {
+    gl.glNormalPointer(type, stride, offset(pointerOffset));
+  }
+
+  @Override
+  public void glColorPointer(int size, int type, int stride, long pointerOffset) {
+    gl.glColorPointer(size, type, stride, offset(pointerOffset));
+  }
+
+  @Override
+  public void glTexCoordPointer(int size, int type, int stride, long pointerOffset) {
+    gl.glTexCoordPointer(size, type, stride, offset(pointerOffset));
+  }
+
+  // Drawing
+
+  @Override
+  public void glDrawArrays(int mode, int first, int count) {
+    gl.glDrawArrays(mode, first, count);
+  }
+
+  @Override
+  public void glDrawElements(int mode, int count, int type, long indicesOffset) {
+    gl.glDrawElements(mode, count, type, offset(indicesOffset));
+  }
+
+  @Override
+  public void glMultiDrawArrays(int mode, IntBuffer first, IntBuffer count, int drawcount) {
+    gl.glMultiDrawArrays(mode, segment(first), segment(count), drawcount);
+  }
+
+  @Override
+  public void glMultiDrawElements(int mode, IntBuffer count, int type, LongBuffer indicesOffsets,
+      int drawcount) {
+    // an array of pointers, each being an offset in the bound element buffer
+    MemorySegment indices = arena.allocate(ValueLayout.ADDRESS, Math.max(1, drawcount));
+    for (int i = 0; i < drawcount; i++) {
+      indices.setAtIndex(ValueLayout.ADDRESS, i,
+          offset(indicesOffsets.get(indicesOffsets.position() + i)));
+    }
+    gl.glMultiDrawElements(mode, segment(count), type, indices, drawcount);
+  }
+
+  @Override
+  public void glPrimitiveRestartIndex(int index) {
+    gl.glPrimitiveRestartIndex(index);
+  }
+
+  // Shaders
+
+  @Override
+  public int glCreateShader(int type) {
+    return gl.glCreateShader(type);
+  }
+
+  @Override
+  public void glShaderSource(int shader, String[] sources) {
+    MemorySegment strings = arena.allocate(ValueLayout.ADDRESS, Math.max(1, sources.length));
+    for (int i = 0; i < sources.length; i++) {
+      strings.setAtIndex(ValueLayout.ADDRESS, i, arena.allocateFrom(sources[i]));
+    }
+    gl.glShaderSource(shader, sources.length, strings, MemorySegment.NULL);
+  }
+
+  @Override
+  public void glCompileShader(int shader) {
+    gl.glCompileShader(shader);
+  }
+
+  @Override
+  public void glGetShaderiv(int shader, int pname, int[] params, int offset) {
+    MemorySegment out = ints(1);
+    gl.glGetShaderiv(shader, pname, out);
+    copy(out, params, offset, 1);
+  }
+
+  @Override
+  public String glGetShaderInfoLog(int shader) {
+    int[] length = new int[1];
+    glGetShaderiv(shader, GL.GL_INFO_LOG_LENGTH, length, 0);
+    if (length[0] <= 0) {
+      return "";
+    }
+    MemorySegment log = arena.allocate(length[0]);
+    gl.glGetShaderInfoLog(shader, length[0], MemorySegment.NULL, log);
+    return log.getString(0);
+  }
+
+  @Override
+  public void glDeleteShader(int shader) {
+    gl.glDeleteShader(shader);
+  }
+
+  @Override
+  public int glCreateProgram() {
+    return gl.glCreateProgram();
+  }
+
+  @Override
+  public void glAttachShader(int program, int shader) {
+    gl.glAttachShader(program, shader);
+  }
+
+  @Override
+  public void glDetachShader(int program, int shader) {
+    gl.glDetachShader(program, shader);
+  }
+
+  @Override
+  public void glLinkProgram(int program) {
+    gl.glLinkProgram(program);
+  }
+
+  @Override
+  public void glValidateProgram(int program) {
+    gl.glValidateProgram(program);
+  }
+
+  @Override
+  public void glGetProgramiv(int program, int pname, int[] params, int offset) {
+    MemorySegment out = ints(1);
+    gl.glGetProgramiv(program, pname, out);
+    copy(out, params, offset, 1);
+  }
+
+  @Override
+  public String glGetProgramInfoLog(int program) {
+    int[] length = new int[1];
+    glGetProgramiv(program, GL.GL_INFO_LOG_LENGTH, length, 0);
+    if (length[0] <= 0) {
+      return "";
+    }
+    MemorySegment log = arena.allocate(length[0]);
+    gl.glGetProgramInfoLog(program, length[0], MemorySegment.NULL, log);
+    return log.getString(0);
+  }
+
+  @Override
+  public void glUseProgram(int program) {
+    gl.glUseProgram(program);
+  }
+
+  @Override
+  public void glDeleteProgram(int program) {
+    gl.glDeleteProgram(program);
+  }
+
+  @Override
+  public int glGetUniformLocation(int program, String name) {
+    return gl.glGetUniformLocation(program, arena.allocateFrom(name));
+  }
+
+  @Override
+  public void glUniform1i(int location, int v0) {
+    gl.glUniform1i(location, v0);
+  }
+
+  @Override
+  public void glUniform1f(int location, float v0) {
+    gl.glUniform1f(location, v0);
+  }
+
+  @Override
+  public void glUniform1fv(int location, int count, float[] value, int offset) {
+    gl.glUniform1fv(location, count, floats(value, offset, count));
+  }
+
+  @Override
+  public void glUniform2fv(int location, int count, float[] value, int offset) {
+    gl.glUniform2fv(location, count, floats(value, offset, 2 * count));
+  }
+
+  @Override
+  public void glUniform3fv(int location, int count, float[] value, int offset) {
+    gl.glUniform3fv(location, count, floats(value, offset, 3 * count));
+  }
+
+  @Override
+  public void glUniform4fv(int location, int count, float[] value, int offset) {
+    gl.glUniform4fv(location, count, floats(value, offset, 4 * count));
+  }
+
+  @Override
+  public void glUniformMatrix4fv(int location, int count, boolean transpose, float[] value,
+      int offset) {
+    gl.glUniformMatrix4fv(location, count, (byte) (transpose ? 1 : 0),
+        floats(value, offset, 16 * count));
+  }
+
+  // Textures
+
+  @Override
+  public void glGenTextures(int n, int[] textures, int offset) {
+    MemorySegment ids = ints(n);
+    gl.glGenTextures(n, ids);
+    copy(ids, textures, offset, n);
+  }
+
+  @Override
+  public void glDeleteTextures(int n, int[] textures, int offset) {
+    gl.glDeleteTextures(n, ints(textures, offset, n));
+  }
+
+  @Override
+  public void glBindTexture(int target, int texture) {
+    gl.glBindTexture(target, texture);
+  }
+
+  @Override
+  public void glActiveTexture(int texture) {
+    gl.glActiveTexture(texture);
+  }
+
+  @Override
+  public void glTexParameteri(int target, int pname, int param) {
+    gl.glTexParameteri(target, pname, param);
+  }
+
+  @Override
+  public void glTexImage1D(int target, int level, int internalFormat, int width, int border,
+      int format, int type, Buffer pixels) {
+    gl.glTexImage1D(target, level, internalFormat, width, border, format, type,
+        segmentOrNull(pixels));
+  }
+
+  @Override
+  public void glTexImage2D(int target, int level, int internalFormat, int width, int height,
+      int border, int format, int type, Buffer pixels) {
+    gl.glTexImage2D(target, level, internalFormat, width, height, border, format, type,
+        segmentOrNull(pixels));
+  }
+
+  @Override
+  public void glTexImage3D(int target, int level, int internalFormat, int width, int height,
+      int depth, int border, int format, int type, Buffer pixels) {
+    gl.glTexImage3D(target, level, internalFormat, width, height, depth, border, format, type,
+        segmentOrNull(pixels));
+  }
+
+  @Override
+  public void glTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset,
+      int width, int height, int depth, int format, int type, Buffer pixels) {
+    gl.glTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format,
+        type, segmentOrNull(pixels));
+  }
+
+  @Override
+  public void glTexCoord3f(float s, float t, float r) {
+    gl.glTexCoord3f(s, t, r);
+  }
+
+  // Framebuffer objects
+
+  @Override
+  public void glGenFramebuffers(int n, int[] framebuffers, int offset) {
+    MemorySegment ids = ints(n);
+    gl.glGenFramebuffers(n, ids);
+    copy(ids, framebuffers, offset, n);
+  }
+
+  @Override
+  public void glDeleteFramebuffers(int n, int[] framebuffers, int offset) {
+    gl.glDeleteFramebuffers(n, ints(framebuffers, offset, n));
+  }
+
+  @Override
+  public void glBindFramebuffer(int target, int framebuffer) {
+    gl.glBindFramebuffer(target, framebuffer);
+  }
+
+  @Override
+  public void glFramebufferTexture2D(int target, int attachment, int textarget, int texture,
+      int level) {
+    gl.glFramebufferTexture2D(target, attachment, textarget, texture, level);
+  }
+
+  @Override
+  public int glCheckFramebufferStatus(int target) {
+    return gl.glCheckFramebufferStatus(target);
+  }
+
+  @Override
+  public void glDrawBuffer(int mode) {
+    gl.glDrawBuffer(mode);
+  }
+
+  @Override
+  public void glDrawBuffers(int n, int[] buffers, int offset) {
+    gl.glDrawBuffers(n, ints(buffers, offset, n));
+  }
+
+  // Queries
+
+  @Override
+  public void glGenQueries(int n, int[] ids, int offset) {
+    MemorySegment out = ints(n);
+    gl.glGenQueries(n, out);
+    copy(out, ids, offset, n);
+  }
+
+  @Override
+  public void glDeleteQueries(int n, int[] ids, int offset) {
+    gl.glDeleteQueries(n, ints(ids, offset, n));
+  }
+
+  @Override
+  public void glBeginQuery(int target, int id) {
+    gl.glBeginQuery(target, id);
+  }
+
+  @Override
+  public void glEndQuery(int target) {
+    gl.glEndQuery(target);
+  }
+
+  @Override
+  public void glGetQueryObjectuiv(int id, int pname, int[] params, int offset) {
+    MemorySegment out = ints(1);
+    gl.glGetQueryObjectuiv(id, pname, out);
+    copy(out, params, offset, 1);
+  }
+
+  // Other
+
+  @Override
+  public void glAlphaFunc(int func, float ref) {
+    gl.glAlphaFunc(func, ref);
+  }
+
+  @Override
+  public void glBlendEquation(int mode) {
+    gl.glBlendEquation(mode);
+  }
+
+  @Override
+  public int glGetError() {
+    return gl.glGetError();
+  }
+
+  @Override
+  public void glReadPixels(int x, int y, int width, int height, int format, int type,
+      Buffer pixels) {
+    MemorySegment target = MemorySegment.ofBuffer(pixels);
+
+    if (target.isNative()) {
+      gl.glReadPixels(x, y, width, height, format, type, target);
+    } else {
+      // heap buffers : read in native memory, then copy
+      MemorySegment out = arena.allocate(target.byteSize());
+      gl.glReadPixels(x, y, width, height, format, type, out);
+      target.copyFrom(out);
+    }
   }
 }
