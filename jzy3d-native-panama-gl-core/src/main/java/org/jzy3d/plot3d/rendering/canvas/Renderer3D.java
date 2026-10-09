@@ -63,6 +63,7 @@ public class Renderer3D implements GLEventListener{
    */
   @Override
   public void init(GL canvas) {
+    bindPainterToCurrentThread();
     view.init();
   }
 
@@ -73,6 +74,8 @@ public class Renderer3D implements GLEventListener{
   @Override
   public void display(GL canvas) {
     profileDisplayTimer.tic();
+
+    bindPainterToCurrentThread();
 
     if (view != null) {
       if(canvas!=null) {
@@ -94,6 +97,8 @@ public class Renderer3D implements GLEventListener{
     this.width = width;
     this.height = height;
 
+    bindPainterToCurrentThread();
+
     if (view != null) {
       if (canvas != null) {
         view.clear();
@@ -112,6 +117,16 @@ public class Renderer3D implements GLEventListener{
   protected void updatePainterWithGL(GL canvas) {
     PanamaGLPainter painter = ((PanamaGLPainter) view.getPainter());
     painter.setGL(canvas);
+  }
+
+  /**
+   * Let the painter know the thread on which the GL context is current, so that
+   * {@link PanamaGLPainter#acquireGL()} only returns GL on this thread.
+   */
+  protected void bindPainterToCurrentThread() {
+    if (view != null && view.getPainter() instanceof PanamaGLPainter) {
+      ((PanamaGLPainter) view.getPainter()).setGLThread(Thread.currentThread());
+    }
   }
 
   public void nextDisplayUpdateScreenshot() {

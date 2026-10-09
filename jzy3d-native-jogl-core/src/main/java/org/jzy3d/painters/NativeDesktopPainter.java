@@ -656,8 +656,10 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     switch (mode) {
       case COMPILE:
         glNewList(list, GL2.GL_COMPILE);
+        break;
       case COMPILE_AND_EXECUTE:
         glNewList(list, GL2.GL_COMPILE_AND_EXECUTE);
+        break;
     }
   }
 
@@ -1087,7 +1089,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glDisable_Light(int light) {
-    glEnable(lightId(light));
+    glDisable(lightId(light));
   }
 
   protected int lightId(int id) {
