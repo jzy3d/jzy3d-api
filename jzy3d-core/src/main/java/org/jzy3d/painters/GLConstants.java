@@ -49,6 +49,7 @@ public interface GLConstants {
   public static final int GL_FRAGMENT_SHADER = 0x8B30;
   public static final int GL_FRAMEBUFFER = 0x8D40;
   public static final int GL_FRAMEBUFFER_BINDING = 0x8CA6;
+  public static final int GL_DRAW_BUFFER = 0x0C01;
   public static final int GL_FRAMEBUFFER_COMPLETE = 0x8CD5;
   public static final int GL_FRONT = 0x0404;
   public static final int GL_FRONT_AND_BACK = 0x0408;

@@ -33,9 +33,11 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
   @Override
   public void init(IPainter painter, int width, int height) {
+    saveTargetFramebuffer(painter);
+
     initFrontPeelingRenderTargets(painter, width, height);
 
-    painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, 0);
+    bindTargetFramebuffer(painter);
 
     buildShaders(painter);
     buildFullScreenQuad(painter);
@@ -44,14 +46,17 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
   @Override
   public void display(IPainter painter) {
+    saveTargetFramebuffer(painter);
     resetNumPass();
     doRender(painter);
   }
 
   @Override
   public void reshape(IPainter painter, int width, int height) {
+    saveTargetFramebuffer(painter);
     deleteFrontPeelingRenderTargets(painter);
     initFrontPeelingRenderTargets(painter, width, height);
+    bindTargetFramebuffer(painter);
   }
 
   /* */
@@ -240,8 +245,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
     // 3. Final Pass
     // ---------------------------------------------------------------------
 
-    painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, 0);
-    painter.glDrawBuffer(GLConstants.GL_BACK);
+    bindTargetFramebufferAndDrawBuffer(painter);
     painter.glDisable(GLConstants.GL_DEPTH_TEST);
 
     glslFinal.bind(painter);

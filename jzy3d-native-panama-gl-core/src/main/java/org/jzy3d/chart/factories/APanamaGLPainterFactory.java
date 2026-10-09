@@ -29,10 +29,12 @@ import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.PanamaGLOffscreenCanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.canvas.Renderer3D;
 import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 import org.jzy3d.plot3d.rendering.view.PanamaGLViewOverlay;
+import org.jzy3d.plot3d.rendering.view.View;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import panamagl.factory.PanamaGLFactory;
@@ -84,6 +86,23 @@ public abstract class APanamaGLPainterFactory implements IPainterFactory {
    */
   protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality) {
     return new PanamaGLOffscreenCanvas(factory, scene, quality, panamaGLFactory, width, height);
+  }
+
+  /**
+   * The renderer drawing the view in a canvas. Override to customize rendering, e.g. to render
+   * with depth peeling.
+   */
+  public Renderer3D newRenderer3D(View view) {
+    return new Renderer3D(view);
+  }
+
+  /** The renderer of a chart created by this chart factory. */
+  public static Renderer3D newRenderer3D(IChartFactory factory, View view) {
+    if (factory != null && factory.getPainterFactory() instanceof APanamaGLPainterFactory) {
+      return ((APanamaGLPainterFactory) factory.getPainterFactory()).newRenderer3D(view);
+    } else {
+      return new Renderer3D(view);
+    }
   }
 
   @Override

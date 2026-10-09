@@ -2,12 +2,8 @@ package org.jzy3d.plot3d.rendering.ddp;
 
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
-import org.jzy3d.plot3d.rendering.ddp.algorithms.DualDepthPeelingAlgorithm;
-import org.jzy3d.plot3d.rendering.ddp.algorithms.FrontToBackPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.IDepthPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
-import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedAveragePeelingAlgorithm;
-import org.jzy3d.plot3d.rendering.ddp.algorithms.WeightedSumPeelingAlgorithm;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -139,15 +135,7 @@ public class DepthPeelingRenderer3d extends AWTRenderer3d {
   
 
   public static IDepthPeelingAlgorithm getDepthPeelingAlgorithm(PeelingMethod method) {
-    if (method == PeelingMethod.DUAL_PEELING_MODE)
-      return new DualDepthPeelingAlgorithm();
-    else if (method == PeelingMethod.F2B_PEELING_MODE)
-      return new FrontToBackPeelingAlgorithm();
-    else if (method == PeelingMethod.WEIGHTED_AVERAGE_MODE)
-      return new WeightedAveragePeelingAlgorithm();
-    else if (method == PeelingMethod.WEIGHTED_SUM_MODE)
-      return new WeightedSumPeelingAlgorithm();
-    else
-      throw new RuntimeException("Unknown method:" + method);
+    return method.newAlgorithm();
   }
+
 }

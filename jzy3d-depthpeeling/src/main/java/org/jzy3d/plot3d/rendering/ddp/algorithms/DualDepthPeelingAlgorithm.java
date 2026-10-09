@@ -22,13 +22,15 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
   @Override
   public void init(IPainter painter, int width, int height) {
+    saveTargetFramebuffer(painter);
+
     try {
       initDualPeelingRenderTargets(painter, width, height);
     } catch (RuntimeException e) {
       throw new RuntimeException(e);
     }
 
-    painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, 0);
+    bindTargetFramebuffer(painter);
 
     buildShaders(painter);
     buildFullScreenQuad(painter);
@@ -37,14 +39,17 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
   @Override
   public void display(IPainter painter) {
+    saveTargetFramebuffer(painter);
     resetNumPass();
     doRender(painter);
   }
 
   @Override
   public void reshape(IPainter painter, int width, int height) {
+    saveTargetFramebuffer(painter);
     deleteDualPeelingRenderTargets(painter);
     initDualPeelingRenderTargets(painter, width, height);
+    bindTargetFramebuffer(painter);
   }
 
   /* */
@@ -292,8 +297,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
     // 3. Final Pass
     // ---------------------------------------------------------------------
 
-    painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, 0);
-    painter.glDrawBuffer(GLConstants.GL_BACK);
+    bindTargetFramebufferAndDrawBuffer(painter);
 
     glslFinal.bind(painter);
     glslFinal.bindTextureRECT(painter, "FrontBlenderTex", g_dualFrontBlenderTexId[currId], 1);

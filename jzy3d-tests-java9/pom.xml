@@ -36,6 +36,12 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-depthpeeling</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
 
 	</dependencies>
 
@@ -54,6 +60,11 @@
 				<dependency>
 					<groupId>${project.groupId}</groupId>
 					<artifactId>jzy3d-native-panama-gl-swing</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>jzy3d-depthpeeling-panamagl</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 			</dependencies>

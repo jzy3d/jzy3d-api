@@ -14,9 +14,11 @@ public abstract class AbstractAccumulationDepthPeeling extends AbstractDepthPeel
 
   @Override
   public void init(IPainter painter, int width, int height) {
+    saveTargetFramebuffer(painter);
+
     initAccumulationRenderTargets(painter, width, height);
 
-    painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, 0);
+    bindTargetFramebuffer(painter);
 
     buildShaders(painter);
     buildFullScreenQuad(painter);
@@ -25,8 +27,10 @@ public abstract class AbstractAccumulationDepthPeeling extends AbstractDepthPeel
 
   @Override
   public void reshape(IPainter painter, int width, int height) {
+    saveTargetFramebuffer(painter);
     deleteAccumulationRenderTargets(painter);
     initAccumulationRenderTargets(painter, width, height);
+    bindTargetFramebuffer(painter);
   }
 
   protected void initAccumulationRenderTargets(IPainter painter, int g_imageWidth, int g_imageHeight) {

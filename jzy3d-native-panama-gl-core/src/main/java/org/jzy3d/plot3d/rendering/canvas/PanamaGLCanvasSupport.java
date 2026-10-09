@@ -23,6 +23,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.painters.PanamaGLPainter;
+import org.jzy3d.chart.factories.APanamaGLPainterFactory;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -57,7 +58,7 @@ public class PanamaGLCanvasSupport {
     view = scene.newView(owner, quality);
     view.getPainter().setCanvas(owner);
 
-    renderer = new Renderer3D(view);
+    renderer = APanamaGLPainterFactory.newRenderer3D(factory, view);
     glCanvas.setGLEventListener(renderer);
 
     animator = factory.getPainterFactory().newAnimator(owner);

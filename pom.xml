@@ -82,6 +82,7 @@
 
 		<!-- Rendering -->
 		<module>jzy3d-depthpeeling</module>
+		<module>jzy3d-depthpeeling-panamagl</module>
 
 		<!-- Report -->
 		<module>jzy3d-io-xls</module>
