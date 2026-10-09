@@ -64,7 +64,12 @@ public class Renderer3D implements GLEventListener{
   @Override
   public void init(GL canvas) {
     bindPainterToCurrentThread();
-    view.init();
+    beginRendering();
+    try {
+      view.init();
+    } finally {
+      endRendering();
+    }
   }
 
   /**
@@ -76,14 +81,15 @@ public class Renderer3D implements GLEventListener{
     profileDisplayTimer.tic();
 
     bindPainterToCurrentThread();
+    beginRendering();
 
-    if (view != null) {
-      if(canvas!=null) {
-        if (view != null) {
-          view.clear();
-          view.render();
-        }
+    try {
+      if (view != null && canvas != null) {
+        view.clear();
+        view.render();
       }
+    } finally {
+      endRendering();
     }
 
     profileDisplayTimer.toc();
@@ -98,12 +104,15 @@ public class Renderer3D implements GLEventListener{
     this.height = height;
 
     bindPainterToCurrentThread();
+    beginRendering();
 
-    if (view != null) {
-      if (canvas != null) {
+    try {
+      if (view != null && canvas != null) {
         view.clear();
         view.render();
       }
+    } finally {
+      endRendering();
     }
   }
 
@@ -126,6 +135,18 @@ public class Renderer3D implements GLEventListener{
   protected void bindPainterToCurrentThread() {
     if (view != null && view.getPainter() instanceof PanamaGLPainter) {
       ((PanamaGLPainter) view.getPainter()).setGLThread(Thread.currentThread());
+    }
+  }
+
+  protected void beginRendering() {
+    if (view != null && view.getPainter() instanceof PanamaGLPainter) {
+      ((PanamaGLPainter) view.getPainter()).beginRendering();
+    }
+  }
+
+  protected void endRendering() {
+    if (view != null && view.getPainter() instanceof PanamaGLPainter) {
+      ((PanamaGLPainter) view.getPainter()).endRendering();
     }
   }
 

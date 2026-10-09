@@ -400,6 +400,38 @@ public class TestPanamaGLPainter_GL {
   }
 
   @Test
+  public void acquireGLBindsCanvasFBOOutOfRendering() {
+    panamagl.offscreen.FBO fbo = mock(panamagl.offscreen.FBO.class);
+    panamagl.offscreen.OffscreenRenderer offscreen =
+        mock(panamagl.offscreen.OffscreenRenderer.class);
+    when(offscreen.getFBO()).thenReturn(fbo);
+    panamagl.canvas.GLCanvas glCanvas = mock(panamagl.canvas.GLCanvas.class);
+    when(glCanvas.getOffscreenRenderer()).thenReturn(offscreen);
+    org.jzy3d.plot3d.rendering.canvas.IPanamaGLCanvas canvas =
+        mock(org.jzy3d.plot3d.rendering.canvas.IPanamaGLCanvas.class);
+    when(canvas.getGLCanvas()).thenReturn(glCanvas);
+
+    painter.setCanvas(canvas);
+    painter.setGLThread(Thread.currentThread());
+
+    // Out of rendering, the canvas FBO is bound then unbound
+    painter.acquireGL();
+    painter.releaseGL();
+
+    verify(fbo, times(1)).bind(gl);
+    verify(fbo, times(1)).unbind(gl);
+
+    // During rendering, the FBO is already bound by the renderer
+    painter.beginRendering();
+    painter.acquireGL();
+    painter.releaseGL();
+    painter.endRendering();
+
+    verify(fbo, times(1)).bind(gl);
+    verify(fbo, times(1)).unbind(gl);
+  }
+
+  @Test
   public void paintFromAnotherThreadThanTheOneThatBuiltThePainter() throws Exception {
     AtomicReference<Throwable> error = new AtomicReference<>();
 
