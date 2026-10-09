@@ -20,11 +20,13 @@ package org.jzy3d.plot3d.rendering.canvas;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.clearInvocations;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import java.awt.EventQueue;
 import java.util.concurrent.CountDownLatch;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -88,19 +90,31 @@ public class TestPanamaGLJavaFXCanvas {
     PanamaGLJavaFXChartFactory factory = new PanamaGLJavaFXChartFactory();
     ((PanamaGLJavaFXPainterFactory) factory.getPainterFactory()).setPanamaGLFactory(f);
 
-    // Build a spyable GLCanvasJFX around a ResizableCanvas on the JavaFX thread, then assert
-    // that forceRepaint() triggers GLCanvas.display().
+    // Build a spyable GLCanvasJFX around a ResizableCanvas on the JavaFX thread
+    GLCanvasJFX[] glCanvas = new GLCanvasJFX[1];
+    PanamaGLJavaFXCanvas[] c = new PanamaGLJavaFXCanvas[1];
+
     runOnFxThreadAndWait(() -> {
       ResizableCanvas fxCanvas = new ResizableCanvas();
-      GLCanvasJFX glCanvas = spy(new GLCanvasJFX(f, fxCanvas));
-      glCanvas.setOffscreenRenderer(f.newOffscreenRenderer(new FBOReader_JFX()));
+      glCanvas[0] = spy(new GLCanvasJFX(f, fxCanvas));
+      glCanvas[0].setOffscreenRenderer(f.newOffscreenRenderer(new FBOReader_JFX()));
 
-      PanamaGLJavaFXCanvas c = new PanamaGLJavaFXCanvas(factory, factory.newScene(false),
-          Quality.Advanced(), fxCanvas, glCanvas);
+      c[0] = new PanamaGLJavaFXCanvas(factory, factory.newScene(false), Quality.Advanced(),
+          fxCanvas, glCanvas[0]);
+    });
 
-      verify(glCanvas, times(0)).display();
-      c.forceRepaint();
-      verify(glCanvas, times(1)).display();
+    // The canvas constructor posts the GL context initialization to the AWT thread, where
+    // View.init() ends up calling display() through View.shoot(). Wait for this task to
+    // complete before counting display() invocations, otherwise the test depends on which
+    // thread wins the race.
+    EventQueue.invokeAndWait(() -> {});
+    clearInvocations(glCanvas[0]);
+
+    // Assert that forceRepaint() triggers GLCanvas.display()
+    runOnFxThreadAndWait(() -> {
+      verify(glCanvas[0], times(0)).display();
+      c[0].forceRepaint();
+      verify(glCanvas[0], times(1)).display();
     });
   }
 
