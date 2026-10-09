@@ -227,12 +227,12 @@ public class PanamaGLSWTCanvas extends Composite implements IPanamaGLCanvas {
 
   @Override
   public void screenshot(File file) throws IOException {
-    // TODO Auto-generated method stub
+    support.screenshot(file);
   }
 
   @Override
   public Object screenshot() {
-    return glCanvas.getScreenshot();
+    return support.screenshot();
   }
 
   @Override

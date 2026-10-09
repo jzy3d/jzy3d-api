@@ -141,6 +141,51 @@ public class TestPanamaGLPainter_NativeGL {
   }
 
   @Test
+  public void drawTextPartiallyOutOfViewport() {
+    // Text starting 10 pixels at the left of the viewport : the visible part must be drawn
+    painter.drawText(Font.Helvetica_18, "HHHHHH", new Coord3d(-1 - 10f / (WIDTH / 2), 0, 0),
+        Color.WHITE, 0);
+
+    assertNoGLError();
+    assertTrue("text should have white pixels", countPixels(255, 255, 255) > 0);
+  }
+
+  @Test
+  public void drawTextRotated() {
+    painter.drawText(Font.Helvetica_18, "HHHH", new Coord3d(0, 0, 0), Color.WHITE,
+        (float) (Math.PI / 2));
+
+    assertNoGLError();
+
+    int[] box = whiteBoundingBox();
+    int width = box[2] - box[0];
+    int height = box[3] - box[1];
+    assertTrue("rotated text should be taller (" + height + ") than wide (" + width + ")",
+        height > width);
+  }
+
+  /** Bounding box of white pixels : xmin, ymin, xmax, ymax */
+  protected int[] whiteBoundingBox() {
+    int[] box = {WIDTH, HEIGHT, -1, -1};
+    try (Arena arena = Arena.ofConfined()) {
+      MemorySegment pixels = arena.allocate(WIDTH * HEIGHT * 4);
+      gl.glReadPixels(0, 0, WIDTH, HEIGHT, GL.GL_RGBA, GL.GL_UNSIGNED_BYTE, pixels);
+
+      for (int y = 0; y < HEIGHT; y++) {
+        for (int x = 0; x < WIDTH; x++) {
+          if ((pixels.get(ValueLayout.JAVA_BYTE, (y * WIDTH + x) * 4L) & 0xFF) > 128) {
+            box[0] = Math.min(box[0], x);
+            box[1] = Math.min(box[1], y);
+            box[2] = Math.max(box[2], x);
+            box[3] = Math.max(box[3], y);
+          }
+        }
+      }
+    }
+    return box;
+  }
+
+  @Test
   public void selectBufferReturnsHits() {
     IntBuffer select = ByteBuffer.allocateDirect(64 * Integer.BYTES)
         .order(ByteOrder.nativeOrder()).asIntBuffer();

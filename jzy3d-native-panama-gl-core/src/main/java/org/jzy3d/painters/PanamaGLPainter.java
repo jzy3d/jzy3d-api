@@ -48,8 +48,6 @@ import panamagl.canvas.GLCanvas;
 import panamagl.opengl.AGL;
 import panamagl.opengl.GL;
 import panamagl.opengl.GLContext;
-import panamagl.renderers.text.BasicTextRenderer;
-import panamagl.renderers.text.TextRenderer;
 
 public class PanamaGLPainter extends AbstractPainter {
   static Logger logger = LoggerFactory.getLogger(PanamaGLPainter.class);
@@ -737,13 +735,98 @@ public class PanamaGLPainter extends AbstractPainter {
     return Math.max(0, Math.min(1, v));
   }
 
+  /**
+   * Render 2D text at the given 3D position, as {@link NativeDesktopPainter} does with JOGL's
+   * TextRenderer : the text is drawn with AWT in a texture mapped on a quad in screen coordinates,
+   * hence any AWT font can be used, text can be rotated, and text partially out of the viewport is
+   * partially drawn.
+   * 
+   * Rotation is in radian and is applied at the center of the text.
+   */
   @Override
   public void drawText(Font font, String label, Coord3d position, Color color, float rotation) {
-    txt.draw(getGL(), toAWT(font), label, position.x, position.y, position.z, AWTColor.toAWT(color),
-        rotation);
-  }
+    if (font == null || label == null || label.isEmpty()) {
+      return;
+    }
 
-  TextRenderer txt = new BasicTextRenderer();
+    // Get viewport (and not canvas) dimensions
+    int[] viewport = getViewPortAsInt();
+    int width = viewport[2];
+    int height = viewport[3];
+
+    // Geometric processing for text layout
+    float rotationD = -(float) (360 * rotation / (2 * Math.PI));
+    Coord3d screen = modelToScreen(position);
+
+    TextImage text = textImage(toAWT(font), label, AWTColor.toAWT(color));
+
+    // Pre-shift text to make it rotate from center of string and not from left point
+    int xPreShift = 0, yPreShift = 0;
+
+    if (rotationD != 0) {
+      xPreShift = text.advance / 2;
+      yPreShift = font.getHeight() / 2;
+    }
+
+    gl.glPushAttrib(GL.GL_ENABLE_BIT | GL.GL_TEXTURE_BIT | GL.GL_COLOR_BUFFER_BIT
+        | GL.GL_POLYGON_BIT | GL.GL_CURRENT_BIT | GL.GL_TRANSFORM_BIT);
+
+    gl.glMatrixMode(GL.GL_PROJECTION);
+    gl.glPushMatrix();
+    gl.glLoadIdentity();
+    gl.glOrtho(0, width, 0, height, -1, 1);
+
+    gl.glMatrixMode(GL.GL_MODELVIEW);
+    gl.glPushMatrix();
+    gl.glLoadIdentity();
+    gl.glTranslatef(screen.x + xPreShift, screen.y + yPreShift, 0);
+    gl.glRotatef(rotationD, 0, 0, 1);
+
+    gl.glDisable(GL.GL_LIGHTING);
+    gl.glDisable(GL.GL_DEPTH_TEST);
+    gl.glDisable(GL.GL_CULL_FACE);
+    gl.glEnable(GL.GL_BLEND);
+    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+    gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
+    gl.glEnable(GL.GL_TEXTURE_2D);
+
+    MemorySegment textureId = arena.allocate(ValueLayout.JAVA_INT);
+    gl.glGenTextures(1, textureId);
+    gl.glBindTexture(GL.GL_TEXTURE_2D, textureId.get(ValueLayout.JAVA_INT, 0));
+    gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
+    gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
+    gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE);
+    gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 4);
+    gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, text.width, text.height, 0, GL.GL_RGBA,
+        GL.GL_UNSIGNED_BYTE, text.pixels);
+
+    // Text baseline is at the origin, shifted to deal with rotation
+    float x0 = -xPreShift;
+    float y0 = -yPreShift - text.descent;
+    float x1 = x0 + text.width;
+    float y1 = y0 + text.height;
+
+    gl.glColor4f(1, 1, 1, 1);
+    gl.glBegin(GL.GL_QUADS);
+    gl.glTexCoord2f(0, 0);
+    gl.glVertex2f(x0, y0);
+    gl.glTexCoord2f(1, 0);
+    gl.glVertex2f(x1, y0);
+    gl.glTexCoord2f(1, 1);
+    gl.glVertex2f(x1, y1);
+    gl.glTexCoord2f(0, 1);
+    gl.glVertex2f(x0, y1);
+    gl.glEnd();
+
+    gl.glDeleteTextures(1, textureId);
+
+    gl.glMatrixMode(GL.GL_MODELVIEW);
+    gl.glPopMatrix();
+    gl.glMatrixMode(GL.GL_PROJECTION);
+    gl.glPopMatrix();
+
+    gl.glPopAttrib();
+  }
 
 
   @Override

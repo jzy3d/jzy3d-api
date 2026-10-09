@@ -36,7 +36,7 @@ public class ITTest_Overlay extends ITTest {
   public void whenOverlayAreMoved() {
     System.out.println("ITTest : " + caseOverlayMove);
 
-    forEach((toolkit, resolution) -> whenOverlayAreMoved(toolkit, resolution));
+    forEach((toolkit, resolution) -> whenOverlayAreMoved(toolkit, resolution), toolkitsAWTChart);
 
   }
   

@@ -44,6 +44,21 @@
 	</build>
 
 	<profiles>
+		<!-- PanamaGL requires Java 22+ : run integration tests with PanamaGL as well when available -->
+		<profile>
+			<id>panamagl</id>
+			<activation>
+				<jdk>[22,)</jdk>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>${project.groupId}</groupId>
+					<artifactId>jzy3d-native-panama-gl-swing</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+		</profile>
+
 		<profile>
 			<id>integration-tests</id>
 			<build>
