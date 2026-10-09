@@ -11,11 +11,8 @@ import org.jzy3d.javafx.controllers.JavaFXChartController;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.IntegerCoord2d;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.View;
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.glu.GLU;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -65,7 +62,8 @@ public class JavaFXMousePickingController extends AbstractCameraController
     if (node == null)
       return;
 
-    node.setOnMousePressed(this);
+    // add a handler instead of setting it, so that camera mouse controllers keep working
+    node.addEventHandler(MouseEvent.MOUSE_PRESSED, this);
   }
 
   @Override
@@ -136,8 +134,6 @@ public class JavaFXMousePickingController extends AbstractCameraController
     View view = getChart().getView();
     prevMouse3d = view.projectMouse((int) e.getX(), yflip);
 
-    GL gl = ((NativeDesktopPainter) chart.getView().getPainter()).getCurrentGL(chart.getCanvas());
-
     Graph graph = getChart().getScene().getGraph();
 
     // will trigger vertex selection event to those subscribing to
@@ -162,7 +158,6 @@ public class JavaFXMousePickingController extends AbstractCameraController
   protected Coord3d mouse3d;
   protected Coord3d prevMouse3d;
   protected PickingSupport picking;
-  protected GLU glu = new GLU();
 
   protected Chart chart;
 

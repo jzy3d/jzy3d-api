@@ -186,6 +186,16 @@ public class TestPanamaGLPainter_NativeGL {
   }
 
   @Test
+  public void debugGLThrowsOnRealError() {
+    try {
+      PanamaGLDebug.debug(gl).glEnable(0x1234);
+      org.junit.Assert.fail("expect an exception");
+    } catch (PanamaGLDebug.GLErrorException e) {
+      assertEquals(GL.GL_INVALID_ENUM, e.getError());
+    }
+  }
+
+  @Test
   public void selectBufferReturnsHits() {
     IntBuffer select = ByteBuffer.allocateDirect(64 * Integer.BYTES)
         .order(ByteOrder.nativeOrder()).asIntBuffer();

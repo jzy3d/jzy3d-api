@@ -27,9 +27,11 @@ import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 import panamagl.GLEventListener;
+import panamagl.GLProfile;
 import panamagl.Image;
 import panamagl.canvas.GLCanvas;
 import panamagl.offscreen.OffscreenRenderer;
+import panamagl.opengl.GLContext;
 
 /**
  * Toolkit-agnostic composition helper shared by all {@link IPanamaGLCanvas}
@@ -151,6 +153,17 @@ public class PanamaGLCanvasSupport {
   }
 
   protected static final long PENDING_RENDERING_TIMEOUT_MS = 5000;
+
+  /** OpenGL version, vendor and renderer of the canvas context, or null before initialization. */
+  public String getDebugInfo() {
+    GLContext context = glCanvas.getContext();
+    if (context == null || context.getProfile() == null) {
+      return null;
+    }
+    GLProfile profile = context.getProfile();
+    return "OpenGL " + profile.getVersion() + " / " + profile.getVendor() + " / "
+        + profile.getRenderer();
+  }
 
   public void dispose() {
     if (animator != null) {
