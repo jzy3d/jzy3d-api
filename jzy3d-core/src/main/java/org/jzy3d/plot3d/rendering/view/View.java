@@ -123,6 +123,7 @@ public class View {
   protected HiDPI hidpi = HiDPI.OFF;
   protected Coord2d pixelScale;
   protected boolean initialized = false;
+  protected boolean resourcesMountRequested = false;
 
   // constants
   public static final float PI = (float) Math.PI;
@@ -722,6 +723,28 @@ public class View {
     updateBounds();
   }
 
+  /**
+   * Request {@link org.jzy3d.plot3d.primitives.IGLBindedResource}s that are not mounted yet to be
+   * mounted at next rendering. This is used when a resource is added from a thread on which the
+   * painter can not acquire GL.
+   */
+  public void requestResourcesMount() {
+    resourcesMountRequested = true;
+  }
+
+  /** Mount resources requested by {@link #requestResourcesMount()}, from the rendering thread. */
+  protected void mountRequestedResources() {
+    if (resourcesMountRequested) {
+      resourcesMountRequested = false;
+
+      getScene().getGraph().mountAllGLBindedResources(painter);
+
+      // refresh bounds as we may have mount VBO objects which NOW have bounds defined
+      if (boundsMode == ViewBoundMode.AUTO_FIT)
+        lookToBox(getSceneGraphBounds());
+    }
+  }
+
   /** Clear the color and depth buffer. */
   public void clear() {
     // System.err.println("View.Clear : " + backgroundColor);
@@ -745,6 +768,8 @@ public class View {
    * Trigger layout rendering which in turns invoke this {@link #renderView()}
    */
   public void render() {
+    mountRequestedResources();
+
     fireViewLifecycleWillRender(null);
 
     if (layout != null && getChart() != null) {
