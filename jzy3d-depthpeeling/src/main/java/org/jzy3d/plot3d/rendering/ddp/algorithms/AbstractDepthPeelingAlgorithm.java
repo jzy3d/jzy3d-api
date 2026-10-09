@@ -28,7 +28,32 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
 
 
 
+  /**
+   * The framebuffer and draw buffer the algorithm renders the final image to, which were bound
+   * before the algorithm executes. This is the default framebuffer for an onscreen canvas, or the
+   * canvas framebuffer for an offscreen canvas.
+   */
+  protected int[] targetFramebuffer = new int[] {0};
+  protected int[] targetDrawBuffer = new int[] {GLConstants.GL_BACK};
+
   public AbstractDepthPeelingAlgorithm() {}
+
+  /** Remember the framebuffer and draw buffer the algorithm must render the final image to. */
+  protected void saveTargetFramebuffer(IPainter painter) {
+    painter.glGetIntegerv(GLConstants.GL_FRAMEBUFFER_BINDING, targetFramebuffer, 0);
+    painter.glGetIntegerv(GLConstants.GL_DRAW_BUFFER, targetDrawBuffer, 0);
+  }
+
+  /** Bind the framebuffer the algorithm must render the final image to. */
+  protected void bindTargetFramebuffer(IPainter painter) {
+    painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, targetFramebuffer[0]);
+  }
+
+  /** Bind the framebuffer and draw buffer the algorithm must render the final image to. */
+  protected void bindTargetFramebufferAndDrawBuffer(IPainter painter) {
+    bindTargetFramebuffer(painter);
+    painter.glDrawBuffer(targetDrawBuffer[0]);
+  }
   
   
   public void setBackground(float[] color) {

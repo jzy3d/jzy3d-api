@@ -24,6 +24,7 @@ public class WeightedAveragePeelingAlgorithm extends AbstractAccumulationDepthPe
 
   @Override
   public void display(IPainter painter) {
+    saveTargetFramebuffer(painter);
     resetNumPass();
     doRender(painter);
   }
@@ -87,8 +88,7 @@ public class WeightedAveragePeelingAlgorithm extends AbstractAccumulationDepthPe
     // 2. Approximate Blending
     // ---------------------------------------------------------------------
 
-    painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, 0);
-    painter.glDrawBuffer(GLConstants.GL_BACK);
+    bindTargetFramebufferAndDrawBuffer(painter);
 
     glslFinal.bind(painter);
     glslFinal.setUniform(painter, "BackgroundColor", g_backgroundColor, 3);

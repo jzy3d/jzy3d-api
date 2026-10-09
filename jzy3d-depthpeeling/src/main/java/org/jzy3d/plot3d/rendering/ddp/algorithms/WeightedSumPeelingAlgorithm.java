@@ -24,6 +24,7 @@ public class WeightedSumPeelingAlgorithm extends AbstractAccumulationDepthPeelin
 
   @Override
   public void display(IPainter painter) {
+    saveTargetFramebuffer(painter);
     resetNumPass();
     doRender(painter);
   }
@@ -83,8 +84,7 @@ public class WeightedSumPeelingAlgorithm extends AbstractAccumulationDepthPeelin
     // 2. Weighted Sum
     // ---------------------------------------------------------------------
 
-    painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, 0);
-    painter.glDrawBuffer(GLConstants.GL_BACK);
+    bindTargetFramebufferAndDrawBuffer(painter);
 
     glslFinal.bind(painter);
     glslFinal.setUniform(painter, "BackgroundColor", g_backgroundColor, 3);
