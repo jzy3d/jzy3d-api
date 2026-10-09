@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.vbo.drawable.loaders;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import org.jzy3d.io.BufferUtil;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
@@ -10,7 +11,6 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Polygon;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
-import org.jzy3d.io.BufferUtil;
 
 /**
  * ===================== WIP / Not working yet =====================

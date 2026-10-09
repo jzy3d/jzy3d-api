@@ -1,13 +1,13 @@
 package org.jzy3d.plot3d.primitives.vbo;
 
-import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.GLConstants;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.io.BufferUtil;
 import org.jzy3d.io.Console;
+import org.jzy3d.painters.GLConstants;
+import org.jzy3d.painters.IPainter;
 
 
 /**
