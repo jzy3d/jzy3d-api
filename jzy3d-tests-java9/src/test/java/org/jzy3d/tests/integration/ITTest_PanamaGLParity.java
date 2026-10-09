@@ -11,6 +11,8 @@ import org.junit.Test;
 import java.awt.Graphics;
 import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
+import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
@@ -90,6 +92,44 @@ public class ITTest_PanamaGLParity extends ITTest {
         }
       });
     });
+  }
+
+  @Test
+  public void whenOffscreen_ThenPanamaGLMatchesJOGL() throws IOException {
+    Assume.assumeTrue("PanamaGL is not in classpath", isPanamaGLAvailable());
+
+    BufferedImage jogl = renderOffscreen(new AWTChartFactory());
+    BufferedImage panama = renderOffscreen(newChartFactory(PANAMAGL_SWING_FACTORY));
+
+    double ratio = diffRatio(jogl, panama);
+
+    if (ratio > MAX_DIFF_RATIO) {
+      new File(OUTPUT).mkdirs();
+      ImageIO.write(jogl, "png", new File(OUTPUT + "Offscreen_JOGL.png"));
+      ImageIO.write(panama, "png", new File(OUTPUT + "Offscreen_PanamaGL.png"));
+    }
+
+    Assert.assertTrue("Offscreen : " + (100 * ratio) + "% of pixels differ", ratio <= MAX_DIFF_RATIO);
+  }
+
+  protected BufferedImage renderOffscreen(ChartFactory factory) throws IOException {
+    factory.getPainterFactory().setOffscreen(offscreenDimension.clone());
+    Chart chart = factory.newChart(quality(HiDPI.OFF));
+    chart.add(surface());
+
+    try {
+      if (isPanamaGL(chart)) {
+        return (BufferedImage) chart.screenshot();
+      } else {
+        return new NativeChartTester() {
+          public BufferedImage image(Chart c) throws IOException {
+            return getBufferedImage(c);
+          }
+        }.image(chart);
+      }
+    } finally {
+      chart.dispose();
+    }
   }
 
   // ---------------------------------------------------------------------------------------------

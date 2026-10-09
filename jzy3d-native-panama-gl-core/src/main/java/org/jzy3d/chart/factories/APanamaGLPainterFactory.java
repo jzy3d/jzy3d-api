@@ -27,10 +27,13 @@ import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.PanamaGLOffscreenCanvas;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.image.IImageWrapper;
+import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
-import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.PanamaGLViewOverlay;
+import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import panamagl.factory.PanamaGLFactory;
 
@@ -63,6 +66,14 @@ public abstract class APanamaGLPainterFactory implements IPainterFactory {
     PanamaGLPainter p = new PanamaGLPainter();
     p.setGL(panamaGLFactory.newGL());
     return p;
+  }
+
+  /**
+   * A canvas rendering in an offscreen buffer without window, used instead of the toolkit canvas
+   * when {@link #setOffscreen(int, int)} was invoked.
+   */
+  protected ICanvas newOffscreenCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    return new PanamaGLOffscreenCanvas(factory, scene, quality, panamaGLFactory, width, height);
   }
 
   @Override
