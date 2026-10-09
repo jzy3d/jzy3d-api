@@ -19,6 +19,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -59,7 +60,7 @@ public class TestPanamaGLSwingCanvas_HiDPI {
   @Test
   public void getPixelScale_forwardsToGLCanvas() {
     GLCanvasSwing glCanvas = spy(GLCanvasSwing.class);
-    when(glCanvas.getPixelScale()).thenReturn(new PixelScale(2.0, 2.0));
+    doReturn(new PixelScale(2.0, 2.0)).when(glCanvas).getPixelScale();
 
     PanamaGLSwingCanvas c = newCanvas(glCanvas);
 
@@ -119,8 +120,8 @@ public class TestPanamaGLSwingCanvas_HiDPI {
   @Test
   public void getRendererSize_returnsPhysicalPixelsFromGLCanvas() {
     GLCanvasSwing glCanvas = spy(GLCanvasSwing.class);
-    when(glCanvas.getPhysicalWidth()).thenReturn(400);
-    when(glCanvas.getPhysicalHeight()).thenReturn(300);
+    doReturn(400).when(glCanvas).getPhysicalWidth();
+    doReturn(300).when(glCanvas).getPhysicalHeight();
 
     PanamaGLSwingCanvas c = newCanvas(glCanvas);
 
