@@ -88,6 +88,12 @@ jobs:
         run: |
           sudo apt-get update -q
           sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev xvfb
+          # Temurin's default java.library.path misses the multiarch folder where PanamaGL finds libGL
+          echo "JAVA_TOOL_OPTIONS=-Djava.library.path=/usr/lib/x86_64-linux-gnu:/usr/lib" >> $GITHUB_ENV
+
+      - name: Configure OpenGL library path (macOS)
+        if: runner.os == 'macOS'
+        run: echo "JAVA_TOOL_OPTIONS=-Djava.library.path=.:/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries/" >> $GITHUB_ENV
 
       # -------------------------------------------------------
       # Windows: the system opengl32.dll only supports OpenGL 1.1
