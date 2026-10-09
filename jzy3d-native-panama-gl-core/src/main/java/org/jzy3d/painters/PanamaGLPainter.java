@@ -978,9 +978,7 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public void gluDisk(double inner, double outer, int slices, int loops) {
-    MemorySegment quadric = gl.gluNewQuadric();
-    gl.gluDisk(quadric, inner, outer, slices, loops);
-    gl.gluDeleteQuadric(quadric);
+    PanamaGLU.disk(gl, inner, outer, slices, loops);
   }
 
   @Override
@@ -1000,16 +998,12 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public void gluSphere(double radius, int slices, int stacks) {
-    MemorySegment quadric = gl.gluNewQuadric();
-    gl.gluSphere(quadric, radius, slices, stacks);
-    gl.gluDeleteQuadric(quadric);
+    PanamaGLU.sphere(gl, radius, slices, stacks);
   }
 
   @Override
   public void gluCylinder(double base, double top, double height, int slices, int stacks) {
-    MemorySegment quadric = gl.gluNewQuadric();
-    gl.gluCylinder(quadric, base, top, height, slices, stacks);
-    gl.gluDeleteQuadric(quadric);
+    PanamaGLU.cylinder(gl, base, top, height, slices, stacks);
   }
 
   @Override
@@ -1163,12 +1157,12 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public void gluOrtho2D(double left, double right, double bottom, double top) {
-    gl.gluOrtho2D(left, right, bottom, top);
+    PanamaGLU.ortho2D(gl, left, right, bottom, top);
   }
 
   @Override
   public void gluPerspective(double fovy, double aspect, double zNear, double zFar) {
-    gl.gluPerspective(fovy, aspect, zNear, zFar);
+    PanamaGLU.perspective(gl, fovy, aspect, zNear, zFar);
   }
 
   @Override
@@ -1180,7 +1174,7 @@ public class PanamaGLPainter extends AbstractPainter {
   @Override
   public void gluLookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY,
       float centerZ, float upX, float upY, float upZ) {
-    gl.gluLookAt(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+    PanamaGLU.lookAt(gl, eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
   }
 
   @Override
@@ -1510,7 +1504,7 @@ public class PanamaGLPainter extends AbstractPainter {
   @Override
   public void gluPickMatrix(double x, double y, double delX, double delY, int[] viewport,
       int viewport_offset) {
-    gl.gluPickMatrix(x, y, delX, delY, alloc(viewport));
+    PanamaGLU.pickMatrix(gl, x, y, delX, delY, viewport, viewport_offset);
   }
 
   @Override
