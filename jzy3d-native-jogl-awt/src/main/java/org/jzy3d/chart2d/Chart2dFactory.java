@@ -1,15 +1,31 @@
 package org.jzy3d.chart2d;
 
 import org.jzy3d.chart.Chart;
-import org.jzy3d.chart.factories.AWTChartFactory;
+import org.jzy3d.chart.factories.AWTPainterFactory;
+import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.IChartFactory;
+import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.View;
 
-public class Chart2dFactory extends AWTChartFactory {
+/**
+ * Build {@link Chart2d} rendered with JOGL in AWT.
+ * 
+ * Extends {@link ChartFactory} rather than AWTChartFactory, which builds AWTNativeChart, since
+ * {@link Chart2d} is not bound to JOGL.
+ */
+public class Chart2dFactory extends ChartFactory {
+  public Chart2dFactory() {
+    super(new AWTPainterFactory());
+  }
+
+  public Chart2dFactory(IPainterFactory painterFactory) {
+    super(painterFactory);
+  }
+
   @Override
   public IChartFactory getFactory() {
     return this;
@@ -23,6 +39,11 @@ public class Chart2dFactory extends AWTChartFactory {
   @Override
   public Chart2d newChart(Quality quality) {
     return new Chart2d(getFactory(), quality);
+  }
+
+  @Override
+  public Chart2d newChart() {
+    return newChart(Quality.Advanced());
   }
 
   @Override
