@@ -2,6 +2,7 @@ package org.jzy3d.plot3d.primitives.vbo.drawable.loaders;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.colors.colormaps.IColorMap;
@@ -14,8 +15,6 @@ import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.jogamp.common.nio.Buffers;
-import com.jogamp.common.nio.PointerBuffer;
 
 /**
  * A utility class to build buffers to feed a {@link DrawableVBO2}. Reading VBO javadoc may be
@@ -186,7 +185,7 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     IntBuffer elementBuffer = null;
 
     if (elements != null) {
-      elementBuffer = Buffers.newDirectIntBuffer(elements);
+      elementBuffer = BufferUtil.newDirectIntBuffer(elements);
       BufferUtil.rewind(elementBuffer);
     }
 
@@ -197,10 +196,10 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     IntBuffer elementLengthBuffer = null;
 
     if (elementsStarts != null && elementsLength != null) {
-      elementStartsBuffer = Buffers.newDirectIntBuffer(elementsStarts);
+      elementStartsBuffer = BufferUtil.newDirectIntBuffer(elementsStarts);
       BufferUtil.rewind(elementStartsBuffer);
 
-      elementLengthBuffer = Buffers.newDirectIntBuffer(elementsLength);
+      elementLengthBuffer = BufferUtil.newDirectIntBuffer(elementsLength);
       BufferUtil.rewind(elementLengthBuffer);
     }
 
@@ -208,22 +207,28 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
     // Element Indices to build a multi-element VBO
 
     IntBuffer elementCountBuffer = null; // size of each geom (4 for quads)
-    PointerBuffer elementIndicesBuffer = null; // index of index, will contain buffers
+    LongBuffer elementOffsetBuffer = null; // offset in bytes of each geom in index buffer
+    IntBuffer elementIndicesBuffer = null; // indices of all geometries
 
     if (elementsIndices != null) {
-      elementIndicesBuffer = PointerBuffer.allocateDirect(elementsIndices.length);
-      elementCountBuffer = Buffers.newDirectIntBuffer(elementsIndices.length);
+      int total = 0;
+      for (int i = 0; i < elementsIndices.length; i++) {
+        total += elementsIndices[i].length;
+      }
+
+      elementCountBuffer = BufferUtil.newDirectIntBuffer(elementsIndices.length);
+      elementOffsetBuffer = BufferUtil.newDirectLongBuffer(elementsIndices.length);
+      elementIndicesBuffer = BufferUtil.newDirectIntBuffer(total);
 
       for (int i = 0; i < elementsIndices.length; i++) {
-        IntBuffer elementDataBufferI = Buffers.newDirectIntBuffer(elementsIndices[i]);
-        BufferUtil.rewind(elementDataBufferI);
-
-        elementIndicesBuffer.referenceBuffer(elementDataBufferI);
+        elementOffsetBuffer.put((long) elementIndicesBuffer.position() * Integer.BYTES);
         elementCountBuffer.put(elementsIndices[i].length);
+        elementIndicesBuffer.put(elementsIndices[i]);
       }
 
       BufferUtil.rewind(elementCountBuffer);
-      elementIndicesBuffer.rewind();
+      BufferUtil.rewind(elementOffsetBuffer);
+      BufferUtil.rewind(elementIndicesBuffer);
     }
 
     // guess number of vertice with input data if it was no given ahead
@@ -282,8 +287,8 @@ public class VBOBufferLoaderForArrays extends VBOBufferLoader implements IGLLoad
 
     // glMultiDrawElements
     if (elementCountBuffer != null && elementIndicesBuffer != null) {
-      drawable.setData(painter, elementCountBuffer, elementIndicesBuffer, verticeBuffer,
-          normalBuffer, colorBuffer, bounds);
+      drawable.setData(painter, elementCountBuffer, elementOffsetBuffer, elementIndicesBuffer,
+          verticeBuffer, normalBuffer, colorBuffer, bounds);
     }
 
     // glMultiDrawArrays

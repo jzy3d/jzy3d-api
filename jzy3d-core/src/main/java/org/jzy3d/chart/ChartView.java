@@ -35,6 +35,8 @@ public class ChartView extends View {
    */
   @Override
   public void render() {
+    mountRequestedResources();
+
     fireViewLifecycleWillRender(null);
 
     if (layout != null && getChart() != null) {

@@ -2,7 +2,6 @@ package org.jzy3d.plot3d.primitives.volume;
 
 import java.nio.ByteBuffer;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -19,7 +18,6 @@ import com.jogamp.opengl.util.GLBuffers;
  *
  */
 public class TestTexture3D {
-  @Ignore
   @Test
   public void givenAVolume_whenOpeningChart_thenBufferIsSizedAppropriately() {
 //GLProfile.initSingleton();
@@ -37,6 +35,8 @@ public class TestTexture3D {
         }
       }
     }
+    // GL reads the texture from the buffer position
+    buffer.rewind();
 
     ColorMapper colorMapper = new ColorMapper(new ColorMapRainbow(), 0, 1, new Color(1, 1, 1, .5f));
 

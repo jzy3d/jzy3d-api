@@ -2,18 +2,16 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
 
 import java.io.File;
 import java.net.URL;
+import org.jzy3d.painters.GLConstants;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.IGLRenderer;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.glu.GLU;
 
 public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgorithm {
   public final static float MAX_DEPTH = 1.0f;
 
-  protected int g_drawBuffers[] = {GL2.GL_COLOR_ATTACHMENT0, GL2.GL_COLOR_ATTACHMENT1,
-      GL2.GL_COLOR_ATTACHMENT2, GL2.GL_COLOR_ATTACHMENT3, GL2.GL_COLOR_ATTACHMENT4,
-      GL2.GL_COLOR_ATTACHMENT5, GL2.GL_COLOR_ATTACHMENT6};
+  protected int g_drawBuffers[] = {GLConstants.GL_COLOR_ATTACHMENT0, GLConstants.GL_COLOR_ATTACHMENT1,
+      GLConstants.GL_COLOR_ATTACHMENT2, GLConstants.GL_COLOR_ATTACHMENT3, GLConstants.GL_COLOR_ATTACHMENT4,
+      GLConstants.GL_COLOR_ATTACHMENT5, GLConstants.GL_COLOR_ATTACHMENT6};
   
   protected int g_quadDisplayList;
   protected int g_numPasses = 1;
@@ -28,8 +26,6 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
   
   protected int[] g_queryId = new int[1];
 
-
-  protected GLU glu = new GLU();
 
 
   public AbstractDepthPeelingAlgorithm() {}
@@ -55,44 +51,42 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
   }
 
 
-  protected abstract void buildShaders(GL2 gl);
+  protected abstract void buildShaders(IPainter painter);
 
-  protected abstract void destroyShaders(GL2 gl);
+  protected abstract void destroyShaders(IPainter painter);
 
-  protected void reloadShaders(GL2 gl) {
-    destroyShaders(gl);
-    buildShaders(gl);
+  protected void reloadShaders(IPainter painter) {
+    destroyShaders(painter);
+    buildShaders(painter);
   }
 
-  protected void buildFullScreenQuad(GL2 gl) {
-    GLU glu = GLU.createGLU(gl);
+  protected void buildFullScreenQuad(IPainter painter) {
+    g_quadDisplayList = painter.glGenLists(1);
+    painter.glNewList(g_quadDisplayList, GLConstants.GL_COMPILE);
 
-    g_quadDisplayList = gl.glGenLists(1);
-    gl.glNewList(g_quadDisplayList, GL2.GL_COMPILE);
-
-    gl.glMatrixMode(GL2.GL_MODELVIEW);
-    gl.glPushMatrix();
-    gl.glLoadIdentity();
-    glu.gluOrtho2D(0.0f, 1.0f, 0.0f, 1.0f);
-    gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-    gl.glBegin(GL2.GL_QUADS);
+    painter.glMatrixMode(GLConstants.GL_MODELVIEW);
+    painter.glPushMatrix();
+    painter.glLoadIdentity();
+    painter.gluOrtho2D(0.0f, 1.0f, 0.0f, 1.0f);
+    painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_FILL);
+    painter.glBegin(GLConstants.GL_QUADS);
     {
-      gl.glVertex2f(0.0f, 0.0f);
-      gl.glVertex2f(1.0f, 0.0f);
-      gl.glVertex2f(1.0f, 1.0f);
-      gl.glVertex2f(0.0f, 1.0f);
+      painter.glVertex3f(0.0f, 0.0f, 0.0f);
+      painter.glVertex3f(1.0f, 0.0f, 0.0f);
+      painter.glVertex3f(1.0f, 1.0f, 0.0f);
+      painter.glVertex3f(0.0f, 1.0f, 0.0f);
     }
-    gl.glEnd();
-    gl.glPopMatrix();
+    painter.glEnd();
+    painter.glPopMatrix();
 
-    gl.glEndList();
+    painter.glEndList();
   }
 
-  public void buildFinish(GL2 gl) {
-    gl.glDisable(GL2.GL_CULL_FACE);
-    gl.glDisable(GL2.GL_LIGHTING);
-    gl.glDisable(GL2.GL_NORMALIZE);
-    gl.glGenQueries(1, g_queryId, 0);
+  public void buildFinish(IPainter painter) {
+    painter.glDisable(GLConstants.GL_CULL_FACE);
+    painter.glDisable(GLConstants.GL_LIGHTING);
+    painter.glDisable(GLConstants.GL_NORMALIZE);
+    painter.glGenQueries(1, g_queryId, 0);
   }
 
   /* ACTUAL RENDERING */
@@ -129,7 +123,7 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
 
   @Override
   public void dispose(IPainter painter) {
-    destroyShaders(getGL(painter));
+    destroyShaders(painter);
   }
 
   protected URL shader(String glsl) {
@@ -140,12 +134,5 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
   }
   
   
-  protected GL2 getGL(IPainter painter) {
-    return ((NativeDesktopPainter)painter).getGL().getGL2();
-  }
-
-  protected GLU getGLU(IPainter painter) {
-    return ((NativeDesktopPainter)painter).getGLU();
-  }
 
 }
