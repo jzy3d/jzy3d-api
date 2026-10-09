@@ -24,6 +24,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javax.imageio.ImageIO;
+import org.jzy3d.chart.factories.APanamaGLPainterFactory;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
@@ -81,7 +82,7 @@ public class PanamaGLOffscreenCanvas implements ICanvas {
 
     this.view = scene.newView(this, quality);
     this.view.getPainter().setCanvas(this);
-    this.renderer = new Renderer3D(view);
+    this.renderer = APanamaGLPainterFactory.newRenderer3D(chartFactory, view);
 
     runOnGLThread(() -> {
       context = factory.newGLContext();
