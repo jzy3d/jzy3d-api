@@ -155,6 +155,11 @@ public abstract class NativePainterFactory implements IPainterFactory {
     // but not on MacOS 10.12
     caps.setDoubleBuffered(true);
 
+    // JOGL requests 16 bits by default, which Windows drivers grant exactly : close points or
+    // polygons then fail or pass the depth test depending on the platform. 24 bits are available
+    // everywhere, are what Linux drivers grant anyway, and what PanamaGL uses.
+    caps.setDepthBits(24);
+
     boolean fixedResolution = true;
     
     if (fixedResolution) {
