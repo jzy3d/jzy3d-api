@@ -118,6 +118,14 @@ public class GLES2CompatUtils {
 
   }
 
+  public static void glDisableClientState(int glVertexArray) {
+    gl2es1.glDisableClientState(glVertexArray);
+  }
+
+  public static void glColorPointer(int size, int glFloat, int byteOffset, int pointer) {
+    gl2es1.glColorPointer(size, glFloat, byteOffset, pointer);
+  }
+
   public static void glDrawElements(int geometry, int size, int glUnsignedInt, int pointer) {
     gl2es1.glDrawElements(geometry, size, glUnsignedInt, pointer);
 

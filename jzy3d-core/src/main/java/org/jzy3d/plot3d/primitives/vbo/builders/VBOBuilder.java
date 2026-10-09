@@ -14,7 +14,7 @@ import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.jogamp.opengl.GL;
+import org.jzy3d.painters.GLConstants;
 
 /**
  * The {@link VBOBuilder} is responsible for sizing a {@link FloatVBO}, filling it with vertex
@@ -177,11 +177,11 @@ public abstract class VBOBuilder implements IGLLoader<DrawableVBO> {
   }
 
   protected int geometryTypeToMultiplier(int geometrySize) {
-    if (geometrySize == GL.GL_POINTS) {
+    if (geometrySize == GLConstants.GL_POINTS) {
       return 1;
-    } else if (geometrySize == GL.GL_LINES) {
+    } else if (geometrySize == GLConstants.GL_LINES) {
       return 2;
-    } else if (geometrySize == GL.GL_TRIANGLES) {
+    } else if (geometrySize == GLConstants.GL_TRIANGLES) {
       return 3;
     }
     return 1;
@@ -220,14 +220,14 @@ public abstract class VBOBuilder implements IGLLoader<DrawableVBO> {
   /* */
   protected int computeVerticeBufferSize(int type, int n, int dim, int geometrySize,
       boolean hasNormal, boolean hasColor) {
-    if (type == GL.GL_LINES) {
+    if (type == GLConstants.GL_LINES) {
       if (hasColor) {
         return n * (dim * 2 * 2) * geometrySize;// *2 points for lines,
                                                 // *2 for having a color
       } else {
         return n * (dim * 2) * geometrySize;// *2 lines
       }
-    } else if (type == GL.GL_LINE_STRIP) {
+    } else if (type == GLConstants.GL_LINE_STRIP) {
       if (hasColor) {
         return n * (dim * 2) * geometrySize; // *2 for having a color
       } else {
@@ -246,12 +246,12 @@ public abstract class VBOBuilder implements IGLLoader<DrawableVBO> {
   }
 
   protected int computeGeometrySize(DrawableVBO drawable) {
-    if (drawable.getGeometry() == GL.GL_POINTS) {
+    if (drawable.getGeometry() == GLConstants.GL_POINTS) {
       return 1;
     }
-    if (drawable.getGeometry() == GL.GL_LINES) {
+    if (drawable.getGeometry() == GLConstants.GL_LINES) {
       return 2;
-    } else if (drawable.getGeometry() == GL.GL_TRIANGLES) {
+    } else if (drawable.getGeometry() == GLConstants.GL_TRIANGLES) {
       return 3;
     }
     return 2;

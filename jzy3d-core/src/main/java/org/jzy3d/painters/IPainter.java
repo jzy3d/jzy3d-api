@@ -895,6 +895,8 @@ public interface IPainter {
 
   public void glBlendEquation(int mode);
 
+  public void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha);
+
   public int glGetError();
 
   public String glGetString(int name);

@@ -501,6 +501,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     int width = viewport[2];
     int height = viewport[3];
 
+    // Nothing visible in an empty viewport, e.g. at the first rendering of a not yet sized canvas.
+    // Text renderer would otherwise invoke glOrtho(0,0,0,0) which is a GL error
+    if (width <= 0 || height <= 0) {
+      return;
+    }
+
     // Reset to a polygon mode suitable for rendering the texture handling the text
     glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
@@ -1766,6 +1772,11 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
   @Override
   public void glBlendEquation(int mode) {
     gl.getGL2().glBlendEquation(mode);
+  }
+
+  @Override
+  public void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
+    gl.getGL2().glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
   }
 
   @Override

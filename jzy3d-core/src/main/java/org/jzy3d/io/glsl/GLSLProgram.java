@@ -7,15 +7,12 @@ import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import org.jzy3d.io.BufferUtil;
+import org.jzy3d.painters.GLConstants;
+import org.jzy3d.painters.IPainter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.jogamp.common.nio.Buffers;
-import com.jogamp.opengl.GL2;
 
 /**
  * Below is description of the GLSL program lifecycle, with Jzy3d methods, and underlying OpenGL
@@ -29,7 +26,7 @@ import com.jogamp.opengl.GL2;
  * <li>glGetShaderiv (verify status)
  * <li>glGetShaderInfoLog (log errors)
  * </ul>
- * <li>link(gl) links the compiled shaders
+ * <li>link(painter) links the compiled shaders
  * <ul>
  * <li>glCreateProgram
  * <li>glAttachShader
@@ -38,16 +35,16 @@ import com.jogamp.opengl.GL2;
  * <li>glGetProgramInfoLog (log errors)
  * <li>glValidateProgram
  * </ul>
- * <li>bind(gl) mount the program @ rendering
+ * <li>bind(painter) mount the program @ rendering
  * <ul>
  * <li>glUseProgram
  * </ul>
- * <li>{@link bindTextureRECT(gl)}
- * <li>unbind(gl) unmount the program @ rendering
+ * <li>{@link bindTextureRECT(painter)}
+ * <li>unbind(painter) unmount the program @ rendering
  * <ul>
  * <li>glUseProgram(0)
  * </ul>
- * <li>destroy(gl)
+ * <li>destroy(painter)
  * <ul>
  * <li>glDeleteShader
  * <li>glDeleteProgram
@@ -99,128 +96,128 @@ public class GLSLProgram {
       warnBuffer = new StringBuffer();
   }
 
-  public void link(GL2 gl) {
-    link(gl, true);
+  public void link(IPainter painter) {
+    link(painter, true);
   }
   
   /**
    * Create a program and attach previously loaded and compiled shaders. Performs validation and
    * warn according to program strictness.
    */
-  public void link(GL2 gl, boolean validateImmediatly) {
-    programId = gl.glCreateProgram();
+  public void link(IPainter painter, boolean validateImmediatly) {
+    programId = painter.glCreateProgram();
     for (int i = 0; i < vertexShaders_.size(); i++) {
-      gl.glAttachShader(programId, vertexShaders_.get(i));
+      painter.glAttachShader(programId, vertexShaders_.get(i));
     }
 
     for (int i = 0; i < fragmentShaders_.size(); i++) {
-      gl.glAttachShader(programId, fragmentShaders_.get(i));
+      painter.glAttachShader(programId, fragmentShaders_.get(i));
     }
 
-    gl.glLinkProgram(programId);
-    verifyLinkStatus(gl, programId);
+    painter.glLinkProgram(programId);
+    verifyLinkStatus(painter, programId);
 
     // validation
     if(validateImmediatly)
-      validateProgram(gl);
+      validateProgram(painter);
   }
 
-  public void bind(GL2 gl) {
-    gl.glUseProgram(programId);
+  public void bind(IPainter painter) {
+    painter.glUseProgram(programId);
   }
 
-  public void unbind(GL2 gl) {
-    gl.glUseProgram(0);
+  public void unbind(IPainter painter) {
+    painter.glUseProgram(0);
   }
 
-  public void destroy(GL2 gl) {
+  public void destroy(IPainter painter) {
     for (int i = 0; i < vertexShaders_.size(); i++) {
-      gl.glDeleteShader(vertexShaders_.get(i));
+      painter.glDeleteShader(vertexShaders_.get(i));
     }
     for (int i = 0; i < fragmentShaders_.size(); i++) {
-      gl.glDeleteShader(fragmentShaders_.get(i));
+      painter.glDeleteShader(fragmentShaders_.get(i));
     }
     if (programId != 0) {
-      gl.glDeleteProgram(programId);
+      painter.glDeleteProgram(programId);
     }
   }
 
   /* UNIFORM SETTING */
 
-  public void setUniform(GL2 gl, String name, float value) {
-    int id = gl.glGetUniformLocation(programId, name);
-    gl.glUniform1f(id, value);
+  public void setUniform(IPainter painter, String name, float value) {
+    int id = painter.glGetUniformLocation(programId, name);
+    painter.glUniform1f(id, value);
   }
 
-  public void setUniform(GL2 gl, String name, float[] values, int count) {
-    int id = gl.glGetUniformLocation(programId, name);
+  public void setUniform(IPainter painter, String name, float[] values, int count) {
+    int id = painter.glGetUniformLocation(programId, name);
     if (id == -1) {
       warn("Uniform parameter not found in program: " + name, GLSLWarnType.UNIFORM_NOT_FOUND);
       return;
     }
     switch (count) {
       case 1:
-        gl.glUniform1fv(id, 1, values, 0);
+        painter.glUniform1fv(id, 1, values, 0);
         break;
       case 2:
-        gl.glUniform2fv(id, 1, values, 0);
+        painter.glUniform2fv(id, 1, values, 0);
         break;
       case 3:
-        gl.glUniform3fv(id, 1, values, 0);
+        painter.glUniform3fv(id, 1, values, 0);
         break;
       case 4:
-        gl.glUniform4fv(id, 1, values, 0);
+        painter.glUniform4fv(id, 1, values, 0);
         break;
     }
   }
 
   /* TEXTURES */
 
-  public void setTextureUnit(GL2 gl, String texname, int texunit) {
+  public void setTextureUnit(IPainter painter, String texname, int texunit) {
     int[] params = new int[] {0};
-    gl.glGetProgramiv(programId, GL2.GL_LINK_STATUS, params, 0);
+    painter.glGetProgramiv(programId, GLConstants.GL_LINK_STATUS, params, 0);
     if (params[0] != 1) {
       throw new RuntimeException("Error: setTextureUnit needs program to be linked.");
     }
-    int id = gl.glGetUniformLocation(programId, texname);
+    int id = painter.glGetUniformLocation(programId, texname);
     if (id == -1) {
       warn("Invalid texture " + texname, GLSLWarnType.UNDEFINED);
       return;
     }
-    gl.glUniform1i(id, texunit);
+    painter.glUniform1i(id, texunit);
   }
 
-  public void bindTexture(GL2 gl, int target, String texname, int texid, int texunit) {
-    gl.glActiveTexture(GL2.GL_TEXTURE0 + texunit);
-    gl.glBindTexture(target, texid);
-    setTextureUnit(gl, texname, texunit);
-    gl.glActiveTexture(GL2.GL_TEXTURE0);
+  public void bindTexture(IPainter painter, int target, String texname, int texid, int texunit) {
+    painter.glActiveTexture(GLConstants.GL_TEXTURE0 + texunit);
+    painter.glBindTexture(target, texid);
+    setTextureUnit(painter, texname, texunit);
+    painter.glActiveTexture(GLConstants.GL_TEXTURE0);
   }
 
-  public void bindTexture2D(GL2 gl, String texname, int texid, int texunit) {
-    bindTexture(gl, GL2.GL_TEXTURE_2D, texname, texid, texunit);
+  public void bindTexture2D(IPainter painter, String texname, int texid, int texunit) {
+    bindTexture(painter, GLConstants.GL_TEXTURE_2D, texname, texid, texunit);
   }
 
-  public void bindTexture3D(GL2 gl, String texname, int texid, int texunit) {
-    bindTexture(gl, GL2.GL_TEXTURE_3D, texname, texid, texunit);
+  public void bindTexture3D(IPainter painter, String texname, int texid, int texunit) {
+    bindTexture(painter, GLConstants.GL_TEXTURE_3D, texname, texid, texunit);
   }
 
-  public void bindTextureRECT(GL2 gl, String texname, int texid, int texunit) {
-    bindTexture(gl, GL2.GL_TEXTURE_RECTANGLE_ARB, texname, texid, texunit);
+  public void bindTextureRECT(IPainter painter, String texname, int texid, int texunit) {
+    bindTexture(painter, GLConstants.GL_TEXTURE_RECTANGLE_ARB, texname, texid, texunit);
   }
 
   /* LOAD */
 
-  public void loadAndCompileShaders(GL2 gl, ShaderFilePair files) {
-    loadAndCompileVertexShader(gl, files.getVertexStream(), files.getVertexURL());
-    loadAndCompileFragmentShader(gl, files.getFragmentStream(), files.getFragmentURL());
+  public void loadAndCompileShaders(IPainter painter, ShaderFilePair files) {
+    loadAndCompileVertexShader(painter, files.getVertexStream(), files.getVertexURL());
+    loadAndCompileFragmentShader(painter, files.getFragmentStream(), files.getFragmentURL());
   }
 
-  public void loadAndCompileVertexShader(GL2 gl, URL fileURL) {
+  public void loadAndCompileVertexShader(IPainter painter, URL fileURL) {
     if (fileURL != null) {
       try {
         InputStream stream = fileURL.openStream();
-        loadAndCompileVertexShader(gl, stream, fileURL);
+        loadAndCompileVertexShader(painter, stream, fileURL);
       } catch (IOException e) {
         throw new RuntimeException("Problem reading the shader file " + fileURL.getPath());
       }
@@ -229,17 +226,17 @@ public class GLSLProgram {
     }
   }
 
-  public void loadAndCompileVertexShader(GL2 gl, InputStream stream) {
-    loadAndCompileVertexShader(gl, stream, null);
+  public void loadAndCompileVertexShader(IPainter painter, InputStream stream) {
+    loadAndCompileVertexShader(painter, stream, null);
   }
 
   /**
    * 
-   * @param gl
+   * @param painter
    * @param stream shader source code ressource
    * @param infoURL only used as information for warnings if shader does not compile properly
    */
-  public void loadAndCompileVertexShader(GL2 gl, InputStream stream, URL infoURL) {
+  public void loadAndCompileVertexShader(IPainter painter, InputStream stream, URL infoURL) {
     String content = "";
     BufferedReader input = new BufferedReader(new InputStreamReader(stream));
     String line = null;
@@ -258,15 +255,15 @@ public class GLSLProgram {
       } catch (IOException closee) {
       }
     }
-    compileVertexShader(gl, infoURL, content);
+    compileVertexShader(painter, infoURL, content);
   }
 
-  public void loadAndCompileFragmentShader(GL2 gl, URL fileURL) {
+  public void loadAndCompileFragmentShader(IPainter painter, URL fileURL) {
     if (fileURL != null) {
       InputStream stream;
       try {
         stream = fileURL.openStream();
-        loadAndCompileFragmentShader(gl, stream, fileURL);
+        loadAndCompileFragmentShader(painter, stream, fileURL);
       } catch (IOException e) {
         throw new RuntimeException(e);
       }
@@ -276,11 +273,11 @@ public class GLSLProgram {
     }
   }
 
-  public void loadAndCompileFragmentShader(GL2 gl, InputStream stream) {
-    loadAndCompileFragmentShader(gl, stream, null);
+  public void loadAndCompileFragmentShader(IPainter painter, InputStream stream) {
+    loadAndCompileFragmentShader(painter, stream, null);
   }
 
-  public void loadAndCompileFragmentShader(GL2 gl, InputStream stream, URL infoURL) {
+  public void loadAndCompileFragmentShader(IPainter painter, InputStream stream, URL infoURL) {
     String content = "";
     BufferedReader input = new BufferedReader(new InputStreamReader(stream));
     String line = null;
@@ -300,120 +297,86 @@ public class GLSLProgram {
       }
     }
 
-    compileFragmentShader(gl, infoURL, content);
+    compileFragmentShader(painter, infoURL, content);
   }
 
   /* COMPILE */
 
-  public void compileVertexShader(GL2 gl, URL infoURL, String content) {
-    int iID = gl.glCreateShader(GL2.GL_VERTEX_SHADER);
+  public void compileVertexShader(IPainter painter, URL infoURL, String content) {
+    int iID = painter.glCreateShader(GLConstants.GL_VERTEX_SHADER);
 
-    int count = 1;
-    
-    String[] programText = new String[1];
-    // find and replace program name with "main"
-    programText[0] = content;
-    
-    int[] programLength = new int[1];
-    programLength[0] = programText[0].length();
-    
-    
-    gl.glShaderSource(iID, count, programText, programLength, 0);
-    gl.glCompileShader(iID);
+    painter.glShaderSource(iID, new String[] {content});
+    painter.glCompileShader(iID);
 
-    verifyShaderCompiled(gl, infoURL, iID, content);
+    verifyShaderCompiled(painter, infoURL, iID, content);
     vertexShaders_.add(iID);
   }
 
-  public void compileFragmentShader(GL2 gl, URL infoURL, String content) {
-    int iID = gl.glCreateShader(GL2.GL_FRAGMENT_SHADER);
+  public void compileFragmentShader(IPainter painter, URL infoURL, String content) {
+    int iID = painter.glCreateShader(GLConstants.GL_FRAGMENT_SHADER);
 
-    int count = 1;
-
-    String[] programText = new String[count];
-    // find and replace program name with "main"
-    programText[0] = content;
+    painter.glShaderSource(iID, new String[] {content});
+    painter.glCompileShader(iID);
     
-    int[] programLength = new int[count];
-    programLength[0] = programText[0].length();
-    
-    
-    gl.glShaderSource(iID, count, programText, programLength, 0);
-    gl.glCompileShader(iID);
-    
-    verifyShaderCompiled(gl, infoURL, iID, content);
+    verifyShaderCompiled(painter, infoURL, iID, content);
     
     fragmentShaders_.add(iID);
   }
 
   /* VERIFICATIONS */
 
-  public void verifyShaderCompiled(GL2 gl, URL fileURL, int programId, String content) {
+  public void verifyShaderCompiled(IPainter painter, URL fileURL, int programId, String content) {
     int[] compileStatus = new int[] {0};
     int[] logLength = new int[] {0};
 
-    gl.glGetShaderiv(programId, GL2.GL_COMPILE_STATUS, compileStatus, 0);
-    gl.glGetShaderiv(programId, GL2.GL_INFO_LOG_LENGTH, logLength, 0);
+    painter.glGetShaderiv(programId, GLConstants.GL_COMPILE_STATUS, compileStatus, 0);
+    painter.glGetShaderiv(programId, GLConstants.GL_INFO_LOG_LENGTH, logLength, 0);
     //System.out.println(content); 
     
-    if (compileStatus[0] != GL2.GL_TRUE) {
-      warnScript(gl, fileURL, readErrors(gl, programId), compileStatus[0], logLength[0], content);
+    if (compileStatus[0] != GLConstants.GL_TRUE) {
+      warnScript(painter, fileURL, readErrors(painter, programId), compileStatus[0], logLength[0], content);
     }
   }
 
-  public void verifyLinkStatus(GL2 gl, int programId) {
+  public void verifyLinkStatus(IPainter painter, int programId) {
     int[] linkStatus = new int[] {0};
     int[] logLength = new int[] {0};
     
-    gl.glGetProgramiv(programId, GL2.GL_LINK_STATUS, linkStatus, 0);
-    gl.glGetProgramiv(programId, GL2.GL_INFO_LOG_LENGTH, logLength, 0);
+    painter.glGetProgramiv(programId, GLConstants.GL_LINK_STATUS, linkStatus, 0);
+    painter.glGetProgramiv(programId, GLConstants.GL_INFO_LOG_LENGTH, logLength, 0);
 
     if (linkStatus[0] != 1) {
-      warnLink(gl, readErrors(gl, programId), linkStatus[0], logLength[0]);
+      warnLink(painter, readProgramErrors(painter, programId), linkStatus[0], logLength[0]);
     }
   }
 
-  public String readErrors(GL2 gl, int iID) {
-    int ERROR_BUFFER_SIZE = 8192;
-    byte[] errorBuffer = new byte[ERROR_BUFFER_SIZE];
-    int[] messageLength = new int[1];
-    gl.glGetShaderInfoLog(iID, ERROR_BUFFER_SIZE, messageLength, 0, errorBuffer, 0);
-    return new String(errorBuffer);
+  public String readErrors(IPainter painter, int iID) {
+    return painter.glGetShaderInfoLog(iID);
   }
 
-  public void validateProgram(GL2 gl) {
-    gl.glValidateProgram(programId);
-    checkShaderLogInfo(gl, programId);
+  public String readProgramErrors(IPainter painter, int programId) {
+    return painter.glGetProgramInfoLog(programId);
+  }
+
+  public void validateProgram(IPainter painter) {
+    painter.glValidateProgram(programId);
+    checkShaderLogInfo(painter, programId);
   }
 
   /**
    * read logs and either throw exception, print to console or append to error log according to
    * the configured {@link Strictness}
    */
-  protected void checkShaderLogInfo(GL2 inGL, int shaderObjectID) {
-    IntBuffer logLengthBuffer = Buffers.newDirectIntBuffer(1);
-    
-    inGL.glGetObjectParameterivARB(shaderObjectID, GL2.GL_OBJECT_INFO_LOG_LENGTH_ARB,
-        logLengthBuffer);
-    
-    int logLength = logLengthBuffer.get();
-    if (logLength <= 1) {
+  protected void checkShaderLogInfo(IPainter painter, int programObjectID) {
+    int[] logLength = new int[] {0};
+    painter.glGetProgramiv(programObjectID, GLConstants.GL_INFO_LOG_LENGTH, logLength, 0);
+
+    if (logLength[0] <= 1) {
       return;
     }
 
-    // Get logs
-    ByteBuffer shaderLogBuffer = Buffers.newDirectByteBuffer(logLength);
-    BufferUtil.flip(shaderLogBuffer);
-    BufferUtil.limit(shaderLogBuffer, logLength);
-    
-    inGL.glGetInfoLogARB(shaderObjectID, logLength, logLengthBuffer, shaderLogBuffer);
-    
-    
-    byte[] shaderLogBytes = new byte[logLength];
-    shaderLogBuffer.get(shaderLogBytes);
-    
     // Read logs and warn
-    String shaderValidationLog = new String(shaderLogBytes);
+    String shaderValidationLog = painter.glGetProgramInfoLog(programObjectID);
     StringReader reader = new StringReader(shaderValidationLog);
     LineNumberReader lineNumberReader = new LineNumberReader(reader);
     
@@ -431,14 +394,14 @@ public class GLSLProgram {
 
   /* WARNINGS */
 
-  protected void warnScript(GL2 gl, URL fileURL, String error, int compileStatus, int logLength,
+  protected void warnScript(IPainter painter, URL fileURL, String error, int compileStatus, int logLength,
       String content) {
     if (fileURL != null)
       warn(fileURL.getPath(), GLSLWarnType.UNDEFINED);
     else
       warn("unknown file", GLSLWarnType.UNDEFINED);
-    warn("compile status: " + compileStatus + " (GL_TRUE=" + GL2.GL_TRUE + ", GL_FALSE="
-        + GL2.GL_FALSE + ")", GLSLWarnType.UNDEFINED);
+    warn("compile status: " + compileStatus + " (GL_TRUE=" + GLConstants.GL_TRUE + ", GL_FALSE="
+        + GLConstants.GL_FALSE + ")", GLSLWarnType.UNDEFINED);
     warn("log length: " + logLength, GLSLWarnType.UNDEFINED);
     warn(error, GLSLWarnType.UNDEFINED);
 
@@ -446,7 +409,7 @@ public class GLSLProgram {
       warn(content, GLSLWarnType.UNDEFINED);
   }
 
-  protected void warnLink(GL2 gl, String error, int linkStatus, int logLength) {
+  protected void warnLink(IPainter painter, String error, int linkStatus, int logLength) {
     warn("link status: " + linkStatus, GLSLWarnType.UNDEFINED);
     warn("log length: " + logLength, GLSLWarnType.UNDEFINED);
     warn(error, GLSLWarnType.UNDEFINED);

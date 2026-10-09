@@ -7,7 +7,6 @@ import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Normal;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.slf4j.LoggerFactory;
 import com.jmatio.io.MatFileReader;
@@ -84,7 +83,7 @@ public class MatlabVBOLoader implements IGLLoader<DrawableVBO> {
     indices.rewind();
 
     // Store in GPU
-    drawable.setData(((NativeDesktopPainter) painter).getGL(), indices, vertices, bounds);
+    drawable.setData(painter, indices, vertices, bounds);
 
     LoggerFactory.getLogger(MatlabVBOLoader.class).info("done loading " + filename);
   }
