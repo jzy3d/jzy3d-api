@@ -161,6 +161,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
     painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, g_dualBackBlenderFboId[0]);
     painter.glFramebufferTexture2D(GLConstants.GL_FRAMEBUFFER, GLConstants.GL_COLOR_ATTACHMENT0,
         GLConstants.GL_TEXTURE_RECTANGLE_ARB, g_dualBackBlenderTexId[0], 0);
+    checkFramebuffer(painter, "back blender");
 
     painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, g_dualPeelingSingleFboId[0]);
 
@@ -182,6 +183,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
     painter.glFramebufferTexture2D(GLConstants.GL_FRAMEBUFFER, GLConstants.GL_COLOR_ATTACHMENT6,
         GLConstants.GL_TEXTURE_RECTANGLE_ARB, g_dualBackBlenderTexId[0], 0);
+    checkFramebuffer(painter, "dual peeling");
   }
 
   protected void deleteDualPeelingRenderTargets(IPainter painter) {

@@ -49,6 +49,20 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
     painter.glBindFramebuffer(GLConstants.GL_FRAMEBUFFER, targetFramebuffer[0]);
   }
 
+  /**
+   * Verify the framebuffer currently bound can be rendered to. A GL implementation not supporting
+   * the format of one of its attachments would otherwise silently render nothing.
+   * 
+   * @throws IllegalStateException if the framebuffer is incomplete.
+   */
+  protected void checkFramebuffer(IPainter painter, String name) {
+    int status = painter.glCheckFramebufferStatus(GLConstants.GL_FRAMEBUFFER);
+    if (status != GLConstants.GL_FRAMEBUFFER_COMPLETE) {
+      throw new IllegalStateException(getClass().getSimpleName() + " : framebuffer " + name
+          + " is incomplete, status 0x" + Integer.toHexString(status));
+    }
+  }
+
   /** Bind the framebuffer and draw buffer the algorithm must render the final image to. */
   protected void bindTargetFramebufferAndDrawBuffer(IPainter painter) {
     bindTargetFramebuffer(painter);
