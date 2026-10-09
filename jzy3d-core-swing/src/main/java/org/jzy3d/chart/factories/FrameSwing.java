@@ -50,8 +50,10 @@ public class FrameSwing extends JFrame implements IFrame {
     contentPane.add((JComponent) chart.getCanvas(), BorderLayout.CENTER);
     setTitle(title + "[Swing]");
     pack();
-    setVisible(true);
+    // Size the frame before showing it, as FrameAWT does, so that the canvas is laid out at its
+    // final size before its first rendering rather than at its preferred size
     setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+    setVisible(true);
   }
 
   private Chart chart;
