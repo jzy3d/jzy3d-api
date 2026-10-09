@@ -212,7 +212,7 @@ public class PanamaGLJavaFXCanvas extends BorderPane implements IPanamaGLCanvas 
 
   @Override
   public String getDebugInfo() {
-    return null;
+    return support.getDebugInfo();
   }
 
   /** @see PanamaGLSwingCanvas#setPixelScale(float[]) */

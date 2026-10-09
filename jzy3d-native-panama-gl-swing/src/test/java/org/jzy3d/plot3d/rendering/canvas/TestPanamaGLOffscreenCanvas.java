@@ -34,9 +34,12 @@ import org.jzy3d.plot3d.primitives.Shape;
 public class TestPanamaGLOffscreenCanvas {
 
   @Test
-  public void offscreenChartRendersWithoutWindow() throws Exception {
+  public void offscreenChartRendersWithoutWindowNorGLError() throws Exception {
     PanamaGLSwingChartFactory factory = new PanamaGLSwingChartFactory();
     factory.getPainterFactory().setOffscreen(320, 240);
+
+    // Fail as soon as an OpenGL call raises an error
+    factory.getPainterFactory().setDebugGL(true);
 
     AWTChart chart;
     try {
@@ -49,6 +52,8 @@ public class TestPanamaGLOffscreenCanvas {
     try {
       // Then the chart has an offscreen canvas
       Assert.assertTrue(chart.getCanvas() instanceof PanamaGLOffscreenCanvas);
+      Assert.assertTrue(chart.getCanvas().getDebugInfo(),
+          chart.getCanvas().getDebugInfo().startsWith("OpenGL"));
 
       // When adding a surface and a colorbar
       Shape surface = surface();
