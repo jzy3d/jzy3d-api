@@ -317,7 +317,7 @@ public class PanamaGLSWTCanvas extends Composite implements IPanamaGLCanvas {
 
   @Override
   public String getDebugInfo() {
-    return null;
+    return support.getDebugInfo();
   }
 
   /** @see PanamaGLSwingCanvas#setPixelScale(float[]) */

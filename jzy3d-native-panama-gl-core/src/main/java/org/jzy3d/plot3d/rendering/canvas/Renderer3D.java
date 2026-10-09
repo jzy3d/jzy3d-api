@@ -170,7 +170,9 @@ public class Renderer3D implements GLEventListener{
 
   @Override
   public void dispose(GL gl) {
-    // TODO Auto-generated method stub
-
+    // free possible resources cached by the painter, as done with JOGL
+    if (view != null) {
+      view.getPainter().clearCache();
+    }
   }
 }

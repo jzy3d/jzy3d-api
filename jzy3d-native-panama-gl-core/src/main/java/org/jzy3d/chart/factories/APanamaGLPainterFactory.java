@@ -22,8 +22,8 @@ import org.jzy3d.chart.PanamaGLAnimator;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.IPainter;
+import org.jzy3d.painters.PanamaGLDebug;
 import org.jzy3d.painters.PanamaGLPainter;
-import org.jzy3d.plot3d.pipelines.NotImplementedException;
 import org.jzy3d.plot3d.primitives.symbols.SymbolHandler;
 import org.jzy3d.plot3d.rendering.canvas.ICanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -36,6 +36,7 @@ import org.jzy3d.plot3d.rendering.view.PanamaGLViewOverlay;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
 import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import panamagl.factory.PanamaGLFactory;
+import panamagl.opengl.GL;
 
 /**
  * Toolkit-agnostic base for PanamaGL painter factories.
@@ -50,6 +51,8 @@ public abstract class APanamaGLPainterFactory implements IPainterFactory {
 
   protected IChartFactory chartFactory;
   protected boolean offscreen = false;
+  protected boolean debugGL = false;
+  protected boolean traceGL = false;
   protected int width;
   protected int height;
 
@@ -64,7 +67,14 @@ public abstract class APanamaGLPainterFactory implements IPainterFactory {
   @Override
   public IPainter newPainter() {
     PanamaGLPainter p = new PanamaGLPainter();
-    p.setGL(panamaGLFactory.newGL());
+    GL gl = panamaGLFactory.newGL();
+
+    if (traceGL) {
+      gl = PanamaGLDebug.trace(gl);
+    } else if (debugGL) {
+      gl = PanamaGLDebug.debug(gl);
+    }
+    p.setGL(gl);
     return p;
   }
 
@@ -133,13 +143,26 @@ public abstract class APanamaGLPainterFactory implements IPainterFactory {
     return new Dimension(width, height);
   }
 
+  /**
+   * If true, painters throw an exception as soon as an OpenGL call raises an error. Must be set
+   * before creating a chart. Slows down rendering.
+   */
   @Override
   public boolean isDebugGL() {
-    return false;
+    return debugGL;
   }
 
   @Override
   public void setDebugGL(boolean debugGL) {
-    throw new NotImplementedException();
+    this.debugGL = debugGL;
+  }
+
+  /** If true, painters print each OpenGL call and check errors. Must be set before creating a chart. */
+  public boolean isTraceGL() {
+    return traceGL;
+  }
+
+  public void setTraceGL(boolean traceGL) {
+    this.traceGL = traceGL;
   }
 }
