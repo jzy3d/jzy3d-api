@@ -18,6 +18,9 @@ package org.jzy3d.painters;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -31,7 +34,7 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Array;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.plot3d.pipelines.NotImplementedException;
+import org.jzy3d.os.WindowingToolkit;
 import org.jzy3d.plot3d.primitives.PolygonFill;
 import org.jzy3d.plot3d.primitives.PolygonMode;
 import org.jzy3d.plot3d.rendering.canvas.IPanamaGLCanvas;
@@ -47,7 +50,6 @@ import panamagl.opengl.GL;
 import panamagl.opengl.GLContext;
 import panamagl.renderers.text.BasicTextRenderer;
 import panamagl.renderers.text.TextRenderer;
-import panamagl.utils.ForeignMemoryUtils;
 
 public class PanamaGLPainter extends AbstractPainter {
   static Logger logger = LoggerFactory.getLogger(PanamaGLPainter.class);
@@ -55,11 +57,26 @@ public class PanamaGLPainter extends AbstractPainter {
   protected GL gl;
   protected GLContext context;
 
+  /**
+   * Native memory for GL parameters. An automatic arena lets any thread allocate (rendering happens
+   * on the toolkit thread, not on the thread building the painter) and releases memory when
+   * segments are not referenced anymore.
+   */
   protected Arena arena;
 
+  /** The thread on which the GL context is current, i.e. the thread rendering the canvas. */
+  protected Thread glThread;
+
+  /** Java buffer given to {@link #glSelectBuffer(int, IntBuffer)}, filled by glRenderMode. */
+  protected IntBuffer selectBuffer;
+  protected MemorySegment selectSegment;
+
+  /** Java buffer given to {@link #glFeedbackBuffer}, filled by glRenderMode. */
+  protected FloatBuffer feedbackBuffer;
+  protected MemorySegment feedbackSegment;
 
   public PanamaGLPainter() {
-    arena = Arena.ofConfined();
+    arena = Arena.ofAuto();
   }
 
   public GL getGL() {
@@ -90,16 +107,47 @@ public class PanamaGLPainter extends AbstractPainter {
     return arena.allocateFrom(ValueLayout.JAVA_INT, value);
   }
 
+  /** Copy the buffer content, from 0 to its capacity, to native memory (heap or direct buffer). */
   public MemorySegment alloc(FloatBuffer value) {
-    return arena.allocateFrom(ValueLayout.JAVA_FLOAT, value.array());
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_FLOAT, value.capacity());
+    for (int i = 0; i < value.capacity(); i++) {
+      segment.setAtIndex(ValueLayout.JAVA_FLOAT, i, value.get(i));
+    }
+    return segment;
   }
 
+  /** Copy the buffer content, from 0 to its capacity, to native memory (heap or direct buffer). */
   public MemorySegment alloc(IntBuffer value) {
-    return arena.allocateFrom(ValueLayout.JAVA_INT, value.array());
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_INT, value.capacity());
+    for (int i = 0; i < value.capacity(); i++) {
+      segment.setAtIndex(ValueLayout.JAVA_INT, i, value.get(i));
+    }
+    return segment;
   }
 
+  /** Copy the buffer content, from 0 to its capacity, to native memory (heap or direct buffer). */
   public MemorySegment alloc(DoubleBuffer value) {
-    return arena.allocateFrom(ValueLayout.JAVA_DOUBLE, value.array());
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_DOUBLE, value.capacity());
+    for (int i = 0; i < value.capacity(); i++) {
+      segment.setAtIndex(ValueLayout.JAVA_DOUBLE, i, value.get(i));
+    }
+    return segment;
+  }
+
+  /**
+   * Return native memory holding the buffer content from its position to its limit. Direct buffers
+   * are used without copy, heap buffers are copied.
+   */
+  public MemorySegment segment(Buffer buffer) {
+    MemorySegment segment = MemorySegment.ofBuffer(buffer);
+
+    if (segment.isNative()) {
+      return segment;
+    } else {
+      MemorySegment copy = arena.allocate(segment.byteSize());
+      copy.copyFrom(segment);
+      return copy;
+    }
   }
 
   public MemorySegment alloc(String value) {
@@ -125,17 +173,26 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public void glGetIntegerv(int pname, int[] data, int data_offset) {
-    ((AGL)gl).glGetIntegerv(pname, data);
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_INT, data.length - data_offset);
+    gl.glGetIntegerv(pname, segment);
+    MemorySegment.copy(segment, ValueLayout.JAVA_INT, 0, data, data_offset,
+        data.length - data_offset);
   }
 
   @Override
   public void glGetDoublev(int pname, double[] params, int params_offset) {
-    ((AGL)gl).glGetDoublev(pname, params);
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_DOUBLE, params.length - params_offset);
+    gl.glGetDoublev(pname, segment);
+    MemorySegment.copy(segment, ValueLayout.JAVA_DOUBLE, 0, params, params_offset,
+        params.length - params_offset);
   }
 
   @Override
   public void glGetFloatv(int pname, float[] data, int data_offset) {
-    ((AGL)gl).glGetFloatv(pname, data);
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_FLOAT, data.length - data_offset);
+    gl.glGetFloatv(pname, segment);
+    MemorySegment.copy(segment, ValueLayout.JAVA_FLOAT, 0, data, data_offset,
+        data.length - data_offset);
   }
 
   protected StringBuffer version() {
@@ -167,28 +224,64 @@ public class PanamaGLPainter extends AbstractPainter {
 
   /////////////////////////////////////////////
 
+  /**
+   * PanamaGL keeps its GL context current on the thread rendering the canvas (e.g. the AWT thread
+   * for Swing). The context can't be made current on another thread while the canvas is alive.
+   * 
+   * @return the GL instance if called from the rendering thread, null otherwise : callers must
+   *         then defer their GL work to the rendering thread (see {@link #isGLThread()}).
+   */
   @Override
   public Object acquireGL() {
-    // TODO Auto-generated method stub
-    return null;
+    if (isGLThread()) {
+      return gl;
+    } else {
+      return null;
+    }
+  }
+
+  /** Does nothing, the GL context remains current on the rendering thread. */
+  @Override
+  public void releaseGL() {
+  }
+
+  /** Return true if the calling thread is the one on which the GL context is current. */
+  public boolean isGLThread() {
+    return glThread != null && glThread == Thread.currentThread();
+  }
+
+  public Thread getGLThread() {
+    return glThread;
+  }
+
+  /** Register the thread on which the GL context is current. Invoked by the renderer. */
+  public void setGLThread(Thread glThread) {
+    this.glThread = glThread;
   }
 
   @Override
-  public void releaseGL() {
-    // TODO Auto-generated method stub
-
+  public WindowingToolkit getWindowingToolkit() {
+    String name = getCanvas() == null ? "" : getCanvas().getClass().getSimpleName();
+    if (name.indexOf("Swing") >= 0) {
+      return WindowingToolkit.Swing;
+    } else if (name.indexOf("SWT") >= 0) {
+      return WindowingToolkit.SWT;
+    }
+    return WindowingToolkit.UNKOWN;
   }
 
   @Override
   public void configureGL(Quality quality) {
     // store reference to context in painter!!
-    GLCanvas glcanvas = ((IPanamaGLCanvas) getCanvas()).getGLCanvas();
-    setContext(glcanvas.getContext());
+    if (getCanvas() instanceof IPanamaGLCanvas) {
+      GLCanvas glcanvas = ((IPanamaGLCanvas) getCanvas()).getGLCanvas();
+      setContext(glcanvas.getContext());
+    }
 
     // Activate Depth buffer
     if (quality.isDepthActivated()) {
       gl.glEnable(GL.GL_DEPTH_TEST);
-      gl.glDepthFunc(GL.GL_LESS);
+      gl.glDepthFunc(GL.GL_LEQUAL);
     } else {
       gl.glDisable(GL.GL_DEPTH_TEST);
     }
@@ -216,16 +309,19 @@ public class PanamaGLPainter extends AbstractPainter {
     // Make smoothing setting
     if (quality.isSmoothPolygon()) {
       gl.glEnable(GL.GL_POLYGON_SMOOTH);
+      gl.glHint(GL.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
     } else
       gl.glDisable(GL.GL_POLYGON_SMOOTH);
 
     if (quality.isSmoothLine()) {
       gl.glEnable(GL.GL_LINE_SMOOTH);
+      gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
     } else
       gl.glDisable(GL.GL_LINE_SMOOTH);
 
     if (quality.isSmoothPoint()) {
       gl.glEnable(GL.GL_POINT_SMOOTH);
+      gl.glHint(GL.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
     } else
       gl.glDisable(GL.GL_POINT_SMOOTH);
   }
@@ -403,18 +499,10 @@ public class PanamaGLPainter extends AbstractPainter {
     gl.glPolygonMode(frontOrBack, fill);
   }
 
-  /**
-   * @see {@link #glEnable_PolygonOffsetFill()}
-   */
   @Override
   public void glPolygonOffset(float factor, float units) {
-    // not implemented
+    gl.glPolygonOffset(factor, units);
   }
-
-  String OFFSET_FILL_NOT_IMPLEMENTED = "not in jopengl.gl. \n"
-      + "Was added to OpenGL 2 (https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glPolygonOffset.xhtml). \n"
-      + "You may desactivate offset fill with drawable.setPolygonOffsetFillEnable(false). \n"
-      + "More here : https://github.com/jzy3d/jGL/issues/3";
 
   @Override
   public void glLineStipple(int factor, short pattern) {
@@ -444,26 +532,17 @@ public class PanamaGLPainter extends AbstractPainter {
   }
 
   /**
-   * Warning, duplicate pixel buffer!!
+   * Draw pixels of any buffer type. Direct buffers are read without copy, heap buffers are copied
+   * to native memory.
    */
   @Override
   public void glDrawPixels(int width, int height, int format, int type, Buffer pixels) {
-    logger.error("not implemented");
-
-    MemorySegment pixSegment = ((ForeignMemoryUtils) gl).alloc(((IntBuffer) pixels).array());
-
-    gl.glDrawPixels(width, height, format, type, pixSegment);
+    gl.glDrawPixels(width, height, format, type, segment(pixels));
   }
 
-  /**
-   * glPixelZoom is not implemented by GL. This method will do nothing but triggering a
-   * {@link NotImplementedException} in case x and y zoom factor are not both equal to 1 (i.e. in
-   * case a zoom is needed).
-   */
   @Override
   public void glPixelZoom(float xfactor, float yfactor) {
-    if (xfactor != 1 || yfactor != 1)
-      throw new NotImplementedException("x:" + xfactor + "y:" + yfactor);
+    gl.glPixelZoom(xfactor, yfactor);
   }
 
   @Override
@@ -480,24 +559,29 @@ public class PanamaGLPainter extends AbstractPainter {
       case UNPACK_ALIGNMENT:
         gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, param);
         break;
+      default:
+        throw new IllegalArgumentException("Unsupported mode '" + store + "'");
     }
-    throw new IllegalArgumentException("Unsupported mode '" + store + "'");
   }
 
   @Override
   public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove,
       byte[] bitmap, int bitmap_offset) {
-    throw new NotImplementedException();
+    MemorySegment segment = MemorySegment.NULL;
+
+    if (bitmap != null && bitmap.length > bitmap_offset) {
+      segment = arena.allocate(bitmap.length - bitmap_offset);
+      MemorySegment.copy(bitmap, bitmap_offset, segment, ValueLayout.JAVA_BYTE, 0,
+          bitmap.length - bitmap_offset);
+    }
+    gl.glBitmap(width, height, xorig, yorig, xmove, ymove, segment);
   }
 
-  /**
-   * A very failing implementation. SHOULD SUPPORT AWT BufferedImage in EmulGL - or reverse converse
-   */
   @Override
   public void drawImage(ByteBuffer imageBuffer, int imageWidth, int imageHeight, Coord2d pixelZoom,
       Coord3d imagePosition) {
     glPixelZoom(pixelZoom.x, pixelZoom.y);
-    glRasterPos3f(imagePosition.x, imagePosition.y, 0);
+    glRasterPos3f(imagePosition.x, imagePosition.y, imagePosition.z);
 
     synchronized (imageBuffer) {
       glDrawPixels(imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
@@ -519,7 +603,7 @@ public class PanamaGLPainter extends AbstractPainter {
    */
   @Override
   public int glutBitmapLength(int font, String string) {
-    throw new RuntimeException("not implemented");
+    return getTextLengthInPixels(font, string);
   }
 
   boolean allowAutoDetectTextLength = true;
@@ -572,9 +656,85 @@ public class PanamaGLPainter extends AbstractPainter {
     }
   }
 
+  /**
+   * Draw a string at the current raster position with the current raster color, as GLUT does : the
+   * raster position is the left of the text baseline and is moved to the end of the text once
+   * drawn.
+   * 
+   * The text is drawn with AWT in an image, hence any AWT font may be used.
+   */
   @Override
   public void glutBitmapString(int font, String string) {
-    // logger.error("glutBitmapString : not available in generated code");
+    Font f = Font.getById(font);
+    if (f == null || string == null || string.isEmpty()) {
+      return;
+    }
+
+    float[] color = new float[4];
+    glGetFloatv(GL.GL_CURRENT_RASTER_COLOR, color, 0);
+
+    java.awt.Font awtFont = toAWT(f);
+    TextImage text = textImage(awtFont, string,
+        new java.awt.Color(clamp(color[0]), clamp(color[1]), clamp(color[2]), clamp(color[3])));
+
+    // Move the raster position from the baseline to the bottom of the text image
+    gl.glBitmap(0, 0, 0, 0, 0, -text.descent, MemorySegment.NULL);
+
+    gl.glDrawPixels(text.width, text.height, GL_RGBA, GL_UNSIGNED_BYTE, text.pixels);
+
+    // Move the raster position to the end of the text on the baseline
+    gl.glBitmap(0, 0, 0, 0, text.advance, text.descent, MemorySegment.NULL);
+  }
+
+  /** Pixels of a text drawn with AWT, bottom row first as expected by glDrawPixels. */
+  protected static class TextImage {
+    int width;
+    int height;
+    int descent;
+    int advance;
+    MemorySegment pixels;
+  }
+
+  protected TextImage textImage(java.awt.Font font, String string, java.awt.Color color) {
+    BufferedImage metricsImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D mg = metricsImage.createGraphics();
+    FontMetrics fm = mg.getFontMetrics(font);
+    mg.dispose();
+
+    TextImage text = new TextImage();
+    text.advance = fm.stringWidth(string);
+    text.width = Math.max(1, text.advance);
+    text.height = Math.max(1, fm.getAscent() + fm.getDescent());
+    text.descent = fm.getDescent();
+
+    BufferedImage image = new BufferedImage(text.width, text.height, BufferedImage.TYPE_INT_ARGB);
+    Graphics2D g = image.createGraphics();
+    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+    g.setFont(font);
+    g.setColor(color);
+    g.drawString(string, 0, fm.getAscent());
+    g.dispose();
+
+    text.pixels = arena.allocate((long) text.width * text.height * 4);
+
+    for (int y = 0; y < text.height; y++) {
+      // glDrawPixels reads rows from bottom to top
+      int row = text.height - 1 - y;
+      for (int x = 0; x < text.width; x++) {
+        int argb = image.getRGB(x, y);
+        long i = ((long) row * text.width + x) * 4;
+        text.pixels.set(ValueLayout.JAVA_BYTE, i, (byte) ((argb >> 16) & 0xFF));
+        text.pixels.set(ValueLayout.JAVA_BYTE, i + 1, (byte) ((argb >> 8) & 0xFF));
+        text.pixels.set(ValueLayout.JAVA_BYTE, i + 2, (byte) (argb & 0xFF));
+        text.pixels.set(ValueLayout.JAVA_BYTE, i + 3, (byte) ((argb >> 24) & 0xFF));
+      }
+    }
+    return text;
+  }
+
+  private static float clamp(float v) {
+    return Math.max(0, Math.min(1, v));
   }
 
   @Override
@@ -614,8 +774,10 @@ public class PanamaGLPainter extends AbstractPainter {
     switch (mode) {
       case COMPILE:
         glNewList(list, GL.GL_COMPILE);
+        break;
       case COMPILE_AND_EXECUTE:
         glNewList(list, GL.GL_COMPILE_AND_EXECUTE);
+        break;
     }
   }
 
@@ -631,8 +793,7 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public boolean glIsList(int list) {
-    logger.error("to be implemented");
-    return false;
+    return gl.glIsList(list) != 0;
   }
 
   @Override
@@ -644,7 +805,9 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public void gluDisk(double inner, double outer, int slices, int loops) {
-    logger.error("to be implemented");
+    MemorySegment quadric = gl.gluNewQuadric();
+    gl.gluDisk(quadric, inner, outer, slices, loops);
+    gl.gluDeleteQuadric(quadric);
   }
 
   @Override
@@ -664,12 +827,16 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public void gluSphere(double radius, int slices, int stacks) {
-    logger.error("to be implemented");
+    MemorySegment quadric = gl.gluNewQuadric();
+    gl.gluSphere(quadric, radius, slices, stacks);
+    gl.gluDeleteQuadric(quadric);
   }
 
   @Override
   public void gluCylinder(double base, double top, double height, int slices, int stacks) {
-    logger.error("to be implemented");
+    MemorySegment quadric = gl.gluNewQuadric();
+    gl.gluCylinder(quadric, base, top, height, slices, stacks);
+    gl.gluDeleteQuadric(quadric);
   }
 
   @Override
@@ -679,14 +846,40 @@ public class PanamaGLPainter extends AbstractPainter {
 
   // GL FEEDBACK BUFER
 
+  /**
+   * The buffer is filled when leaving the {@link RenderMode#FEEDBACK} mode with
+   * {@link #glRenderMode(int)}.
+   */
   @Override
   public void glFeedbackBuffer(int size, int type, FloatBuffer buffer) {
-    gl.glFeedbackBuffer(size, type, alloc(buffer));
+    feedbackBuffer = buffer;
+    feedbackSegment = arena.allocate(ValueLayout.JAVA_FLOAT, size);
+    gl.glFeedbackBuffer(size, type, feedbackSegment);
   }
 
+  /**
+   * Change the render mode and copy the content written by GL in the select and feedback buffers
+   * to the Java buffers given to {@link #glSelectBuffer(int, IntBuffer)} and
+   * {@link #glFeedbackBuffer(int, int, FloatBuffer)}.
+   */
   @Override
   public int glRenderMode(int mode) {
-    return gl.glRenderMode(mode);
+    int result = gl.glRenderMode(mode);
+
+    if (selectBuffer != null) {
+      int n = (int) Math.min(selectBuffer.capacity(), selectSegment.byteSize() / Integer.BYTES);
+      for (int i = 0; i < n; i++) {
+        selectBuffer.put(i, selectSegment.getAtIndex(ValueLayout.JAVA_INT, i));
+      }
+    }
+
+    if (feedbackBuffer != null) {
+      int n = (int) Math.min(feedbackBuffer.capacity(), feedbackSegment.byteSize() / Float.BYTES);
+      for (int i = 0; i < n; i++) {
+        feedbackBuffer.put(i, feedbackSegment.getAtIndex(ValueLayout.JAVA_FLOAT, i));
+      }
+    }
+    return result;
   }
 
   @Override
@@ -713,10 +906,10 @@ public class PanamaGLPainter extends AbstractPainter {
   public void glStencilFunc(StencilFunc func, int ref, int mask) {
     switch (func) {
       case GL_ALWAYS:
-        gl.glStencilOp(GL.GL_ALWAYS, ref, mask);
+        gl.glStencilFunc(GL.GL_ALWAYS, ref, mask);
         break;
       case GL_EQUAL:
-        gl.glStencilOp(GL.GL_EQUAL, ref, mask);
+        gl.glStencilFunc(GL.GL_EQUAL, ref, mask);
         break;
       case GL_GREATER:
         gl.glStencilFunc(GL.GL_GREATER, ref, mask);
@@ -725,10 +918,10 @@ public class PanamaGLPainter extends AbstractPainter {
         gl.glStencilFunc(GL.GL_GEQUAL, ref, mask);
         break;
       case GL_LEQUAL:
-        gl.glStencilOp(GL.GL_LEQUAL, ref, mask);
+        gl.glStencilFunc(GL.GL_LEQUAL, ref, mask);
         break;
       case GL_LESS:
-        gl.glStencilOp(GL.GL_LESS, ref, mask);
+        gl.glStencilFunc(GL.GL_LESS, ref, mask);
         break;
       case GL_NEVER:
         gl.glStencilFunc(GL.GL_NEVER, ref, mask);
@@ -822,9 +1015,12 @@ public class PanamaGLPainter extends AbstractPainter {
     gl.glViewport(x, y, width, height);
   }
 
+  /**
+   * @param plane the GL plane id, e.g. GL_CLIP_PLANE0, as given by {@link #clipPlaneId(int)}
+   */
   @Override
   public void glClipPlane(int plane, double[] equation) {
-    gl.glClipPlane(clipPlaneId(plane), alloc(equation));
+    gl.glClipPlane(plane, alloc(equation));
   }
 
   @Override
@@ -992,7 +1188,7 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public void glDisable_Light(int light) {
-    glEnable(lightId(light));
+    glDisable(lightId(light));
   }
 
   protected int lightId(int id) {
@@ -1091,9 +1287,15 @@ public class PanamaGLPainter extends AbstractPainter {
     gl.glPopName();
   }
 
+  /**
+   * The buffer is filled when leaving the {@link RenderMode#SELECT} mode with
+   * {@link #glRenderMode(int)}.
+   */
   @Override
   public void glSelectBuffer(int size, IntBuffer buffer) {
-    gl.glSelectBuffer(size, alloc(buffer));
+    selectBuffer = buffer;
+    selectSegment = arena.allocate(ValueLayout.JAVA_INT, size);
+    gl.glSelectBuffer(size, selectSegment);
   }
 
   @Override
@@ -1115,7 +1317,7 @@ public class PanamaGLPainter extends AbstractPainter {
   @Override
   public void glMap2f(int target, float u1, float u2, int ustride, int uorder, float v1, float v2,
       int vstride, int vorder, FloatBuffer points) {
-    throw new NotImplementedException("NEED TO CONVERT FloatBuffer to float[][][]");
+    gl.glMap2f(target, u1, u2, ustride, uorder, v1, v2, vstride, vorder, segment(points));
   }
 
   @Override
@@ -1324,11 +1526,11 @@ public class PanamaGLPainter extends AbstractPainter {
 
   @Override
   public void glEnable_Stencil() {
-    gl.glEnable(GL.GL_STENCIL);
+    gl.glEnable(GL.GL_STENCIL_TEST);
   }
 
   @Override
   public void glDisable_Stencil() {
-    gl.glDisable(GL.GL_STENCIL);
+    gl.glDisable(GL.GL_STENCIL_TEST);
   }
 }
