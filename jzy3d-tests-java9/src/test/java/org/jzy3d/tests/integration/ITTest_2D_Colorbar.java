@@ -47,7 +47,7 @@ public class ITTest_2D_Colorbar extends ITTest {
       for(View2D view2d: views) {
         when2DChartWithColorbarAndMargins(toolkit, resolution, view2d);
       }
-    }, toolkitsAWTChart);
+    });
   }
 
 

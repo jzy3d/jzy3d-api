@@ -87,13 +87,6 @@ public class ITTest {
   protected WT[] toolkitsAWT = {WT.Native_AWT, WT.EmulGL_AWT};
 
   /**
-   * Toolkits providing an {@link org.jzy3d.chart.AWTChart}, required by tests using AWT overlays
-   * and colorbars. PanamaGL charts are not AWTChart yet (see
-   * https://github.com/jzy3d/jzy3d-api/issues/339).
-   */
-  protected WT[] toolkitsAWTChart = {WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT};
-
-  /**
    * Run a test for each possible registered toolkit and resolution.
    */
   protected void forEach(ITTestInstance task) {

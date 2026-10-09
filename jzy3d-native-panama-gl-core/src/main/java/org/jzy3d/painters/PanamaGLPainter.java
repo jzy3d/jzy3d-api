@@ -45,7 +45,6 @@ import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import panamagl.canvas.GLCanvas;
-import panamagl.opengl.AGL;
 import panamagl.opengl.GL;
 import panamagl.opengl.GLContext;
 
@@ -684,7 +683,7 @@ public class PanamaGLPainter extends AbstractPainter {
     gl.glBitmap(0, 0, 0, 0, text.advance, text.descent, MemorySegment.NULL);
   }
 
-  /** Pixels of a text drawn with AWT, bottom row first as expected by glDrawPixels. */
+  /** RGBA pixels of an image (e.g. a text drawn with AWT), bottom row first as expected by GL. */
   protected static class TextImage {
     int width;
     int height;
@@ -714,21 +713,36 @@ public class PanamaGLPainter extends AbstractPainter {
     g.drawString(string, 0, fm.getAscent());
     g.dispose();
 
-    text.pixels = arena.allocate((long) text.width * text.height * 4);
+    text.pixels = pixels(image).pixels;
+    return text;
+  }
 
-    for (int y = 0; y < text.height; y++) {
-      // glDrawPixels reads rows from bottom to top
-      int row = text.height - 1 - y;
-      for (int x = 0; x < text.width; x++) {
-        int argb = image.getRGB(x, y);
-        long i = ((long) row * text.width + x) * 4;
-        text.pixels.set(ValueLayout.JAVA_BYTE, i, (byte) ((argb >> 16) & 0xFF));
-        text.pixels.set(ValueLayout.JAVA_BYTE, i + 1, (byte) ((argb >> 8) & 0xFF));
-        text.pixels.set(ValueLayout.JAVA_BYTE, i + 2, (byte) (argb & 0xFF));
-        text.pixels.set(ValueLayout.JAVA_BYTE, i + 3, (byte) ((argb >> 24) & 0xFF));
+  /** Convert an AWT image to RGBA pixels, bottom row first as expected by OpenGL. */
+  protected TextImage pixels(BufferedImage image) {
+    TextImage out = new TextImage();
+    out.width = image.getWidth();
+    out.height = image.getHeight();
+    out.advance = out.width;
+    out.pixels = arena.allocate((long) out.width * out.height * 4);
+
+    int[] row = new int[out.width];
+
+    for (int y = 0; y < out.height; y++) {
+      image.getRGB(0, y, out.width, 1, row, 0, out.width);
+
+      // OpenGL reads rows from bottom to top
+      long offset = (long) (out.height - 1 - y) * out.width * 4;
+
+      for (int x = 0; x < out.width; x++) {
+        int argb = row[x];
+        long i = offset + x * 4L;
+        out.pixels.set(ValueLayout.JAVA_BYTE, i, (byte) ((argb >> 16) & 0xFF));
+        out.pixels.set(ValueLayout.JAVA_BYTE, i + 1, (byte) ((argb >> 8) & 0xFF));
+        out.pixels.set(ValueLayout.JAVA_BYTE, i + 2, (byte) (argb & 0xFF));
+        out.pixels.set(ValueLayout.JAVA_BYTE, i + 3, (byte) ((argb >> 24) & 0xFF));
       }
     }
-    return text;
+    return out;
   }
 
   private static float clamp(float v) {
@@ -768,18 +782,48 @@ public class PanamaGLPainter extends AbstractPainter {
       yPreShift = font.getHeight() / 2;
     }
 
+    // Text baseline is at the origin, shifted to deal with rotation
+    drawTexture(text, screen.x + xPreShift, screen.y + yPreShift, rotationD, -xPreShift,
+        -yPreShift - text.descent, width, height);
+  }
+
+  /**
+   * Draw an AWT image in the current viewport, with its bottom left corner at the given position
+   * in pixels from the bottom left corner of the viewport.
+   * 
+   * The image is drawn as a textured quad, so that it can be partially out of the viewport.
+   */
+  public void drawImage(BufferedImage image, float x, float y) {
+    int[] viewport = getViewPortAsInt();
+    drawTexture(pixels(image), x, y, 0, 0, 0, viewport[2], viewport[3]);
+  }
+
+  /**
+   * Draw pixels as a texture mapped on a quad in screen coordinates.
+   * 
+   * @param x, y the position where the quad origin is translated, in pixels.
+   * @param rotationD a rotation around the quad origin, in degrees.
+   * @param x0, y0 the position of the bottom left corner of the quad, relative to its origin.
+   */
+  protected void drawTexture(TextImage image, float x, float y, float rotationD, float x0,
+      float y0, int viewportWidth, int viewportHeight) {
+    // Nothing is visible in an empty viewport, and glOrtho would fail
+    if (viewportWidth <= 0 || viewportHeight <= 0 || image.width <= 0 || image.height <= 0) {
+      return;
+    }
+
     gl.glPushAttrib(GL.GL_ENABLE_BIT | GL.GL_TEXTURE_BIT | GL.GL_COLOR_BUFFER_BIT
         | GL.GL_POLYGON_BIT | GL.GL_CURRENT_BIT | GL.GL_TRANSFORM_BIT);
 
     gl.glMatrixMode(GL.GL_PROJECTION);
     gl.glPushMatrix();
     gl.glLoadIdentity();
-    gl.glOrtho(0, width, 0, height, -1, 1);
+    gl.glOrtho(0, viewportWidth, 0, viewportHeight, -1, 1);
 
     gl.glMatrixMode(GL.GL_MODELVIEW);
     gl.glPushMatrix();
     gl.glLoadIdentity();
-    gl.glTranslatef(screen.x + xPreShift, screen.y + yPreShift, 0);
+    gl.glTranslatef(x, y, 0);
     gl.glRotatef(rotationD, 0, 0, 1);
 
     gl.glDisable(GL.GL_LIGHTING);
@@ -797,14 +841,11 @@ public class PanamaGLPainter extends AbstractPainter {
     gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
     gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE);
     gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 4);
-    gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, text.width, text.height, 0, GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE, text.pixels);
+    gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, image.width, image.height, 0, GL.GL_RGBA,
+        GL.GL_UNSIGNED_BYTE, image.pixels);
 
-    // Text baseline is at the origin, shifted to deal with rotation
-    float x0 = -xPreShift;
-    float y0 = -yPreShift - text.descent;
-    float x1 = x0 + text.width;
-    float y1 = y0 + text.height;
+    float x1 = x0 + image.width;
+    float y1 = y0 + image.height;
 
     gl.glColor4f(1, 1, 1, 1);
     gl.glBegin(GL.GL_QUADS);
@@ -1142,14 +1183,50 @@ public class PanamaGLPainter extends AbstractPainter {
   public boolean gluUnProject(float winX, float winY, float winZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] objPos,
       int objPos_offset) {
-    return ((AGL) gl).gluUnProject(winX, winY, winZ, model, proj, view, objPos);
+    MemorySegment x = arena.allocate(ValueLayout.JAVA_DOUBLE);
+    MemorySegment y = arena.allocate(ValueLayout.JAVA_DOUBLE);
+    MemorySegment z = arena.allocate(ValueLayout.JAVA_DOUBLE);
+
+    int out = gl.gluUnProject(winX, winY, winZ, matrix(model, model_offset),
+        matrix(proj, proj_offset), viewport(view, view_offset), x, y, z);
+
+    objPos[objPos_offset] = (float) x.get(ValueLayout.JAVA_DOUBLE, 0);
+    objPos[objPos_offset + 1] = (float) y.get(ValueLayout.JAVA_DOUBLE, 0);
+    objPos[objPos_offset + 2] = (float) z.get(ValueLayout.JAVA_DOUBLE, 0);
+    return out == GL.GL_TRUE;
   }
 
   @Override
   public boolean gluProject(float objX, float objY, float objZ, float[] model, int model_offset,
       float[] proj, int proj_offset, int[] view, int view_offset, float[] winPos,
       int winPos_offset) {
-    return ((AGL) gl).gluProject(objX, objY, objZ, model, proj, view, winPos);
+    MemorySegment x = arena.allocate(ValueLayout.JAVA_DOUBLE);
+    MemorySegment y = arena.allocate(ValueLayout.JAVA_DOUBLE);
+    MemorySegment z = arena.allocate(ValueLayout.JAVA_DOUBLE);
+
+    int out = gl.gluProject(objX, objY, objZ, matrix(model, model_offset),
+        matrix(proj, proj_offset), viewport(view, view_offset), x, y, z);
+
+    winPos[winPos_offset] = (float) x.get(ValueLayout.JAVA_DOUBLE, 0);
+    winPos[winPos_offset + 1] = (float) y.get(ValueLayout.JAVA_DOUBLE, 0);
+    winPos[winPos_offset + 2] = (float) z.get(ValueLayout.JAVA_DOUBLE, 0);
+    return out == GL.GL_TRUE;
+  }
+
+  /** A 4x4 matrix of doubles, as expected by GLU, read from the float array at the offset. */
+  protected MemorySegment matrix(float[] values, int offset) {
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_DOUBLE, 16);
+    for (int i = 0; i < 16; i++) {
+      segment.setAtIndex(ValueLayout.JAVA_DOUBLE, i, values[offset + i]);
+    }
+    return segment;
+  }
+
+  /** A viewport of 4 ints read from the array at the offset. */
+  protected MemorySegment viewport(int[] values, int offset) {
+    MemorySegment segment = arena.allocate(ValueLayout.JAVA_INT, 4);
+    MemorySegment.copy(values, offset, segment, ValueLayout.JAVA_INT, 0, 4);
+    return segment;
   }
 
 
