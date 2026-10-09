@@ -99,9 +99,10 @@ public class TestGifExporter {
 
 
     // ------------------------------------
-    // When terminating with a timeout
+    // When terminating with a timeout. Termination returns as soon as images are flushed, the
+    // timeout is long enough for slow CI runners (macOS Intel failed with 100ms)
 
-    boolean success = gif.terminate(100, TimeUnit.MILLISECONDS);
+    boolean success = gif.terminate(10, TimeUnit.SECONDS);
 
     // Then the last submited image is added (for implementation reasons
     Assert.assertEquals(2 + nFrameLate + 1, gif.getNumberSubmittedImages().intValue());
@@ -207,9 +208,10 @@ public class TestGifExporter {
 
 
     // ------------------------------------
-    // When terminating with a timeout
+    // When terminating with a timeout. Termination returns as soon as images are flushed, the
+    // timeout is long enough for slow CI runners (macOS Intel failed with 100ms)
 
-    boolean success = gif.terminate(100, TimeUnit.MILLISECONDS);
+    boolean success = gif.terminate(10, TimeUnit.SECONDS);
 
     // Then the last submited image is added (for implementation reasons)
     Assert.assertEquals(4, gif.getNumberSubmittedImages().intValue());
@@ -317,9 +319,10 @@ public class TestGifExporter {
 
 
     // ------------------------------------
-    // When terminating with a timeout
+    // When terminating with a timeout. Termination returns as soon as images are flushed, the
+    // timeout is long enough for slow CI runners (macOS Intel failed with 100ms)
 
-    boolean success = gif.terminate(100, TimeUnit.MILLISECONDS);
+    boolean success = gif.terminate(10, TimeUnit.SECONDS);
 
     // Then the last submited image is added (for implementation reasons)
     Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue());
