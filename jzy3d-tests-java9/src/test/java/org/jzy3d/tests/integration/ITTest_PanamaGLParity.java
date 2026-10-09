@@ -160,7 +160,8 @@ public class ITTest_PanamaGLParity extends ITTest {
       ImageIO.write(panama, "png", new File(OUTPUT + name + "_PanamaGL.png"));
     }
 
-    Assert.assertTrue(name + " : " + (100 * ratio) + "% of pixels differ between JOGL and PanamaGL",
+    Assert.assertTrue(name + " : " + (100 * ratio) + "% of pixels differ between JOGL and PanamaGL"
+        + " (JOGL " + describe(jogl) + ", PanamaGL " + describe(panama) + ")",
         ratio <= MAX_DIFF_RATIO);
   }
 
@@ -201,7 +202,8 @@ public class ITTest_PanamaGLParity extends ITTest {
       ImageIO.write(panama, "png", new File(OUTPUT + name + "_PanamaGL.png"));
     }
 
-    Assert.assertTrue(name + " : " + (100 * ratio) + "% of pixels differ between JOGL and PanamaGL",
+    Assert.assertTrue(name + " : " + (100 * ratio) + "% of pixels differ between JOGL and PanamaGL"
+        + " (JOGL " + describe(jogl) + ", PanamaGL " + describe(panama) + ")",
         ratio <= MAX_DIFF_RATIO);
   }
 
@@ -226,6 +228,29 @@ public class ITTest_PanamaGLParity extends ITTest {
     } finally {
       chart.dispose();
     }
+  }
+
+  /**
+   * Summarize an image to help understanding a difference without seeing the images : the ratio of
+   * pixels differing from the background (the top left pixel) and their mean color.
+   */
+  protected static String describe(BufferedImage image) {
+    int background = image.getRGB(0, 0);
+    long n = 0, r = 0, g = 0, b = 0;
+    for (int x = 0; x < image.getWidth(); x++) {
+      for (int y = 0; y < image.getHeight(); y++) {
+        int p = image.getRGB(x, y);
+        if (p != background) {
+          n++;
+          r += (p >> 16) & 0xFF;
+          g += (p >> 8) & 0xFF;
+          b += p & 0xFF;
+        }
+      }
+    }
+    double ratio = 100.0 * n / (image.getWidth() * image.getHeight());
+    return String.format("%.1f%% drawn, mean color %d,%d,%d", ratio, n == 0 ? 0 : r / n,
+        n == 0 ? 0 : g / n, n == 0 ? 0 : b / n);
   }
 
   /** Ratio of pixels having a channel differing by more than {@link #PIXEL_TOLERANCE} */
