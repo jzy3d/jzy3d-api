@@ -55,7 +55,12 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
    * 
    * @throws IllegalStateException if the framebuffer is incomplete.
    */
-  protected void checkFramebuffer(IPainter painter, String name) {
+  protected void checkFramebuffer(IPainter painter, String name, int width, int height) {
+    // Buffers are empty before the canvas has a size (e.g. JOGL initializes with a 0x0 size) and
+    // rebuilt when reshaped : they can not be complete yet
+    if (width <= 0 || height <= 0) {
+      return;
+    }
     int status = painter.glCheckFramebufferStatus(GLConstants.GL_FRAMEBUFFER);
     if (status != GLConstants.GL_FRAMEBUFFER_COMPLETE) {
       throw new IllegalStateException(getClass().getSimpleName() + " : framebuffer " + name
