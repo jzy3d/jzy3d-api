@@ -3,7 +3,7 @@ package org.jzy3d.chart2d;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import org.jzy3d.chart.AWTNativeChart;
+import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.factories.IChartFactory;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.plot2d.primitives.Serie2d;
@@ -21,7 +21,12 @@ import org.jzy3d.plot3d.rendering.view.modes.ViewPositionMode;
 //
 // Interface de LineSerie fournie par Chart2d package, using x, y float args
 
-public class Chart2d extends AWTNativeChart {
+/**
+ * A chart displaying 2D series, rendered by any chart factory providing a {@link View2d} and an
+ * {@link AxisBox2d}, such as <code>Chart2dFactory</code> (JOGL) or
+ * <code>PanamaGLChart2dFactory</code> (PanamaGL).
+ */
+public class Chart2d extends AWTChart {
   protected Map<String, Serie2d> series = new HashMap<String, Serie2d>();
 
   public void layout2d() {
@@ -72,10 +77,6 @@ public class Chart2d extends AWTNativeChart {
   }
 
   /* */
-
-  public Chart2d() {
-    this(new Chart2dFactory(), Quality.Advanced().setAnimated(true));
-  }
 
   public Chart2d(IChartFactory factory, Quality quality) {
     super(factory, quality);
