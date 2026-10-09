@@ -9,8 +9,9 @@ A pure Java implementation of OpenGL, still [online](https://www.cmlab.csie.ntu.
 It is a pure java implementation of OpenGL 1, hence performing 3d rendering with CPU instead of GPU. 
 Some papers about jGL published by Robin have been added to the `doc/papers` folder which clarify all his work.
 It comes with [lot of OpenGL Red Book examples](https://www.cmlab.csie.ntu.edu.tw/~robin/jGL/Example-app/index.html) proving how well
-this OpenGL implementation works. The examples are released as [AWT applications](https://github.com/jzy3d/jGL/tree/master/src/main/java/examples/apps)
-and [Applets](https://github.com/jzy3d/jGL/tree/master/src/main/java/examples/applets).
+this OpenGL implementation works. The examples are released as [AWT applications](https://github.com/jzy3d/jGL/tree/master/src/main/java/examples/apps).
+Applet versions of these examples used to be shipped as well, but have been dropped since
+[JEP 504](https://openjdk.org/jeps/504) removed the `java.applet` API from Java 26.
 
 
 In 2020, CPU are much more faster than in 2006 and experiments have showned that one can get very decent rendering 
