@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
@@ -45,6 +46,7 @@ import org.junit.Test;
 import org.jzy3d.colors.Color;
 import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Coord3d;
+import org.mockito.AdditionalMatchers;
 import org.mockito.InOrder;
 import panamagl.opengl.GL;
 
@@ -198,18 +200,36 @@ public class TestPanamaGLPainter_GL {
   // GLU
 
   @Test
-  public void gluQuadricsAreDrawnAndReleased() {
-    MemorySegment quadric = MemorySegment.ofAddress(1234);
-    when(gl.gluNewQuadric()).thenReturn(quadric);
+  public void gluQuadricsAreDrawnWithGLOnly() {
+    painter.gluDisk(1, 2, 10, 2); // a quad strip per loop
+    painter.gluSphere(3, 10, 10); // a quad strip per stack
+    painter.gluCylinder(1, 2, 3, 10, 2); // a quad strip per stack
 
-    painter.gluDisk(1, 2, 10, 2);
-    painter.gluSphere(3, 10, 10);
-    painter.gluCylinder(1, 2, 3, 10, 2);
+    verify(gl, times(14)).glBegin(GL.GL_QUAD_STRIP);
+    verify(gl, times(14)).glEnd();
+    // (slices + 1) * 2 vertices per quad strip
+    verify(gl, times(14 * 22)).glVertex3d(anyDouble(), anyDouble(), anyDouble());
 
-    verify(gl).gluDisk(quadric, 1, 2, 10, 2);
-    verify(gl).gluSphere(quadric, 3, 10, 10);
-    verify(gl).gluCylinder(quadric, 1, 2, 3, 10, 2);
-    verify(gl, times(3)).gluDeleteQuadric(quadric);
+    // Native GLU is not used, as it may issue commands to another OpenGL library
+    verify(gl, never()).gluNewQuadric();
+  }
+
+  @Test
+  public void gluMatricesAreAppliedWithGLOnly() {
+    painter.gluPerspective(90, 2, 1, 10);
+    verify(gl).glFrustum(AdditionalMatchers.eq(-2, 1e-9), AdditionalMatchers.eq(2, 1e-9),
+        AdditionalMatchers.eq(-1, 1e-9), AdditionalMatchers.eq(1, 1e-9), eq(1d), eq(10d));
+
+    painter.gluOrtho2D(0, 4, 0, 3);
+    verify(gl).glOrtho(0, 4, 0, 3, -1, 1);
+
+    painter.gluLookAt(0, 0, 5, 0, 0, 0, 0, 1, 0);
+    verify(gl).glMultMatrixd(any());
+    verify(gl).glTranslated(AdditionalMatchers.eq(0, 1e-9), AdditionalMatchers.eq(0, 1e-9),
+        AdditionalMatchers.eq(-5, 1e-9));
+
+    verify(gl, never()).gluPerspective(anyDouble(), anyDouble(), anyDouble(), anyDouble());
+    verify(gl, never()).gluOrtho2D(anyDouble(), anyDouble(), anyDouble(), anyDouble());
   }
 
   // ---------------------------------------------------------------------------------------------

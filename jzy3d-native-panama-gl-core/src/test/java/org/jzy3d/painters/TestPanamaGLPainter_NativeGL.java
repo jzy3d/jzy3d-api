@@ -109,6 +109,51 @@ public class TestPanamaGLPainter_NativeGL {
   }
 
   @Test
+  public void gluCylinderIsRendered() {
+    painter.color(Color.BLUE);
+    // seen from its side, as its walls are edge on when seen from its Z axis
+    painter.glRotatef(90, 1, 0, 0);
+    painter.gluCylinder(0.5, 0.5, 0.5, 16, 2);
+
+    assertNoGLError();
+    assertTrue(countPixels(0, 0, 255) > 0);
+  }
+
+  @Test
+  public void gluPerspectiveBuildsProjectionMatrix() {
+    painter.glMatrixMode_Projection();
+    painter.glLoadIdentity();
+    painter.gluPerspective(90, 1, 1, 10);
+
+    double[] m = painter.getProjectionAsDouble();
+
+    assertNoGLError();
+    assertEquals(1, m[0], 1e-6);
+    assertEquals(1, m[5], 1e-6);
+    assertEquals(-11 / 9d, m[10], 1e-6);
+    assertEquals(-1, m[11], 1e-6);
+    assertEquals(-20 / 9d, m[14], 1e-6);
+  }
+
+  @Test
+  public void gluLookAtBuildsModelViewMatrix() {
+    painter.glMatrixMode_ModelView();
+    painter.glLoadIdentity();
+    // an eye on the X axis looking at the origin with Z up
+    painter.gluLookAt(5, 0, 0, 0, 0, 0, 0, 0, 1);
+
+    double[] m = painter.getModelViewAsDouble();
+
+    assertNoGLError();
+    // the origin is in front of the eye, at its distance
+    assertEquals(0, m[12], 1e-6);
+    assertEquals(0, m[13], 1e-6);
+    assertEquals(-5, m[14], 1e-6);
+    // world Z is the view up direction (row 1, column 2)
+    assertEquals(1, m[9], 1e-6);
+  }
+
+  @Test
   public void polygonOffset() {
     painter.glEnable_PolygonOffsetFill();
     painter.glPolygonOffset(1, 1);
