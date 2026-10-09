@@ -3,6 +3,7 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.util.List;
 import java.util.logging.LogManager;
 import org.jzy3d.chart.Chart;
@@ -12,7 +13,7 @@ import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Normal.NormalMode;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.GLConstants;
 import org.jzy3d.plot3d.primitives.Composite;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.Polygon;
@@ -26,12 +27,6 @@ import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.transform.Transform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.jogamp.common.nio.Buffers;
-import com.jogamp.common.nio.PointerBuffer;
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.fixedfunc.GLPointerFunc;
 
 /**
  * A {@link DrawableVBO2} is able to efficiently draw a large collection of geometries.
@@ -121,7 +116,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   /**
    * The (direct) float buffer storing vertices in GPU. If none of the non mandatory element buffer
-   * are defined, will render with {@link GL#glDrawArrays()}
+   * are defined, will render with {@link IPainter#glDrawArrays}
    */
   protected FloatBuffer vertices;
 
@@ -140,23 +135,32 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   /**
    * The (non-mandatory) int buffer storing geometry indices in GPU. If defined, will render with
-   * {@link GL#glDrawElements()}
+   * {@link IPainter#glDrawElements}
    */
   protected IntBuffer elements;
 
   /**
    * The (non-mandatory) int buffer storing geometry indices in GPU. If defined, will render with
-   * {@link GL#glMultiDrawArrays}
+   * {@link IPainter#glMultiDrawArrays}
    */
   protected IntBuffer elementsStarts;
   protected IntBuffer elementsLength;
 
   /**
    * The (non-mandatory) int buffer storing geometry indices in GPU. If defined, will render with
-   * {@link GL#glMultiDrawElements}
+   * {@link IPainter#glMultiDrawElements}
+   * 
+   * <ul>
+   * <li>{@link #elementsCount} gives the number of vertices of each geometry</li>
+   * <li>{@link #elementsOffsets} gives the offset in bytes of the first index of each geometry in
+   * {@link #elementsIndices}</li>
+   * <li>{@link #elementsIndices} holds the indices of all geometries, one geometry after the
+   * other.</li>
+   * </ul>
    */
   protected IntBuffer elementsCount;
-  protected PointerBuffer elementsIndices;
+  protected LongBuffer elementsOffsets;
+  protected IntBuffer elementsIndices;
 
 
   // ---------------------------------------
@@ -490,20 +494,19 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this.elementsStarts = null;
     this.elementsLength = null;
     this.elementsIndices = null;
+    this.elementsOffsets = null;
     this.elementsCount = null;
 
 
-    GL gl = getGL(painter);
-
-    applyPrimitiveRestartIfEnabled(gl);
+    applyPrimitiveRestartIfEnabled(painter);
 
     // -----------------------------------
     // Register data
 
     registerVertexAndNormalOffsets();
-    registerVertices(gl, vertices);
-    registerNormals(gl, normals);
-    registerColors(gl, colors);
+    registerVertices(painter, vertices);
+    registerNormals(painter, normals);
+    registerColors(painter, colors);
   }
 
   /**
@@ -527,21 +530,20 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this.elementsStarts = null;
     this.elementsLength = null;
     this.elementsIndices = null;
+    this.elementsOffsets = null;
     this.elementsCount = null;
 
 
-    GL gl = getGL(painter);
-
-    applyPrimitiveRestartIfEnabled(gl);
+    applyPrimitiveRestartIfEnabled(painter);
 
     // -----------------------------------
     // Register data
 
     registerVertexAndNormalOffsets();
-    registerVertices(gl, vertices);
-    registerNormals(gl, normals);
-    registerColors(gl, colors);
-    registerElements(gl, elements);
+    registerVertices(painter, vertices);
+    registerNormals(painter, normals);
+    registerColors(painter, colors);
+    registerElements(painter, elements);
   }
 
   public void setData(IPainter painter, IntBuffer elementsStarts, IntBuffer elementsLength,
@@ -553,23 +555,32 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this.elementsStarts = elementsStarts;
     this.elementsLength = elementsLength;
     this.elementsIndices = null;
+    this.elementsOffsets = null;
     this.elementsCount = null;
     this.elements = null;
-
-    GL gl = getGL(painter);
 
     // -----------------------------------
     // Register data
 
     registerVertexAndNormalOffsets();
-    registerVertices(gl, vertices);
-    registerNormals(gl, normals);
-    registerColors(gl, colors);
+    registerVertices(painter, vertices);
+    registerNormals(painter, normals);
+    registerColors(painter, colors);
     // no element to register
   }
 
-  public void setData(IPainter painter, IntBuffer elementsCount, PointerBuffer elementsIndices,
-      FloatBuffer vertices, FloatBuffer normals, FloatBuffer colors, BoundingBox3d bounds) {
+  /**
+   * Configure a VBO with vertices, colors, and indices of multiple geometries, rendered with
+   * {@link IPainter#glMultiDrawElements}.
+   * 
+   * @param elementsCount the number of vertices of each geometry
+   * @param elementsOffsets the offset in bytes of the first index of each geometry in
+   *        elementsIndices
+   * @param elementsIndices the indices of all geometries, one geometry after the other
+   */
+  public void setData(IPainter painter, IntBuffer elementsCount, LongBuffer elementsOffsets,
+      IntBuffer elementsIndices, FloatBuffer vertices, FloatBuffer normals, FloatBuffer colors,
+      BoundingBox3d bounds) {
     this.vertices = vertices;
     this.normals = normals;
     this.colors = colors;
@@ -577,58 +588,56 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this.hasColorBuffer = this.colors != null;
 
     // use multi element indexing
-    this.elementsIndices = elementsIndices;
     this.elementsCount = elementsCount;
+    this.elementsOffsets = elementsOffsets;
+    this.elementsIndices = elementsIndices;
 
     this.elementsStarts = null;
     this.elementsLength = null;
     this.elements = null;
 
-    GL gl = getGL(painter);
-
     // -----------------------------------
     // Register data
 
     registerVertexAndNormalOffsets();
-    registerVertices(gl, vertices);
-    registerNormals(gl, normals);
-    registerColors(gl, colors);
-    // registerElementsData(gl);
-    // register multi-element?
+    registerVertices(painter, vertices);
+    registerNormals(painter, normals);
+    registerColors(painter, colors);
+    registerElementBuffer(painter, elementsIndices);
   }
 
   protected void registerVertexAndNormalOffsets() {
     if (hasNormalInVertexArray) {
-      vertexOffset = (VERTEX_DIMENSIONS * 2) * Buffers.SIZEOF_FLOAT; // (coord+normal)
+      vertexOffset = (VERTEX_DIMENSIONS * 2) * Float.BYTES; // (coord+normal)
     } else {
-      vertexOffset = VERTEX_DIMENSIONS * Buffers.SIZEOF_FLOAT; // (coord only)
+      vertexOffset = VERTEX_DIMENSIONS * Float.BYTES; // (coord only)
     }
-    normalOffset = VERTEX_DIMENSIONS * Buffers.SIZEOF_FLOAT;
+    normalOffset = VERTEX_DIMENSIONS * Float.BYTES;
   }
 
-  protected void registerVertices(GL gl, FloatBuffer newVertices) {
+  protected void registerVertices(IPainter painter, FloatBuffer newVertices) {
     if (newVertices != null) {
-      int vertexSize = newVertices.capacity() * Buffers.SIZEOF_FLOAT;
+      int vertexSize = newVertices.capacity() * Float.BYTES;
 
       if(vertexArrayIds[0]==0)
-        gl.glGenBuffers(1, vertexArrayIds, 0);
+        painter.glGenBuffers(1, vertexArrayIds, 0);
       
-      gl.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexArrayIds[0]);
-      gl.glBufferData(GL.GL_ARRAY_BUFFER, vertexSize, newVertices, GL.GL_STATIC_DRAW);
+      painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, vertexArrayIds[0]);
+      painter.glBufferData(GLConstants.GL_ARRAY_BUFFER, vertexSize, newVertices, GLConstants.GL_STATIC_DRAW);
       
       vertices = newVertices;
     }
   }
 
-  protected void registerNormals(GL gl, FloatBuffer newNormals) {
+  protected void registerNormals(IPainter painter, FloatBuffer newNormals) {
     if (newNormals != null) {
-      int normalSize = newNormals.capacity() * Buffers.SIZEOF_FLOAT;
+      int normalSize = newNormals.capacity() * Float.BYTES;
 
       if(normalArrayIds[0]==0)
-        gl.glGenBuffers(1, normalArrayIds, 0);
+        painter.glGenBuffers(1, normalArrayIds, 0);
       
-      gl.glBindBuffer(GL.GL_ARRAY_BUFFER, normalArrayIds[0]);
-      gl.glBufferData(GL.GL_ARRAY_BUFFER, normalSize, newNormals, GL.GL_STATIC_DRAW);
+      painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, normalArrayIds[0]);
+      painter.glBufferData(GLConstants.GL_ARRAY_BUFFER, normalSize, newNormals, GLConstants.GL_STATIC_DRAW);
 
       // activate light reflection for VBO filled with normals
       setReflectLight(true);
@@ -637,15 +646,15 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     }
   }
 
-  protected void registerColors(GL gl, FloatBuffer newColors) {
+  protected void registerColors(IPainter painter, FloatBuffer newColors) {
     if (newColors != null) {
-      int colorSize = newColors.capacity() * Buffers.SIZEOF_FLOAT;
+      int colorSize = newColors.capacity() * Float.BYTES;
 
       if(colorArrayIds[0]==0)
-        gl.glGenBuffers(1, colorArrayIds, 0);
+        painter.glGenBuffers(1, colorArrayIds, 0);
       
-      gl.glBindBuffer(GL.GL_ARRAY_BUFFER, colorArrayIds[0]);
-      gl.glBufferData(GL.GL_ARRAY_BUFFER, colorSize, newColors, GL.GL_STATIC_DRAW);
+      painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, colorArrayIds[0]);
+      painter.glBufferData(GLConstants.GL_ARRAY_BUFFER, colorSize, newColors, GLConstants.GL_STATIC_DRAW);
       
       colors = newColors;
     }
@@ -653,19 +662,26 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
 
   // for glDrawElements
-  protected void registerElements(GL gl, IntBuffer newElements) {
+  protected void registerElements(IPainter painter, IntBuffer newElements) {
     if (newElements != null) {
       elementSize = newElements.capacity();
 
-      int indexSize = newElements.capacity() * Buffers.SIZEOF_INT;
-
-      if(elementArrayIds[0]==0)
-        gl.glGenBuffers(1, elementArrayIds, 0);
-      
-      gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
-      gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, newElements, GL.GL_STATIC_DRAW);
+      registerElementBuffer(painter, newElements);
       
       elements = newElements;
+    }
+  }
+
+  /** Store indices in GPU, either for glDrawElements or glMultiDrawElements */
+  protected void registerElementBuffer(IPainter painter, IntBuffer indices) {
+    if (indices != null) {
+      int indexSize = indices.capacity() * Integer.BYTES;
+
+      if(elementArrayIds[0]==0)
+        painter.glGenBuffers(1, elementArrayIds, 0);
+      
+      painter.glBindBuffer(GLConstants.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
+      painter.glBufferData(GLConstants.GL_ELEMENT_ARRAY_BUFFER, indexSize, indices, GLConstants.GL_STATIC_DRAW);
     }
   }
 
@@ -682,7 +698,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     if (hasMountedOnce) {
       
       if(nextColorBuffer!=null) {
-        registerColors(getGL(painter), nextColorBuffer);
+        registerColors(painter, nextColorBuffer);
         nextColorBuffer = null;
       }
       
@@ -701,13 +717,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * @see https://github.com/opengl-tutorials/ogl/blob/master/tutorial09_vbo_indexing/tutorial09.cpp
    */
   protected void doDrawElements(IPainter painter) {
-    GL gl = getGL(painter);
 
-    if (!gl.isGL2()) {
-      throw new RuntimeException("Need a GL2 instance");
-    }
-
-    GL2 gl2 = gl.getGL2();
 
     // -----------------------------------
     // Prepare buffers
@@ -716,37 +726,37 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // System.out.println("E id " + elementArrayIds[0]);
 
     // Vertex buffer
-    gl2.glBindBuffer(GL.GL_ARRAY_BUFFER, vertexArrayIds[0]);
-    gl2.glVertexPointer(VERTEX_DIMENSIONS, GL.GL_FLOAT, vertexOffset, firstCoordOffset);
-    gl2.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
+    painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, vertexArrayIds[0]);
+    painter.glVertexPointer(VERTEX_DIMENSIONS, GLConstants.GL_FLOAT, vertexOffset, firstCoordOffset);
+    painter.glEnableClientState(GLConstants.GL_VERTEX_ARRAY);
 
     // Element buffer
     if (elementArrayIds[0] != 0) {
-      gl2.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
+      painter.glBindBuffer(GLConstants.GL_ELEMENT_ARRAY_BUFFER, elementArrayIds[0]);
     }
 
     // Normal buffer
     if (normalArrayIds[0] != 0) {
       // Experimental : try providing explicit normals
-      gl2.glBindBuffer(GL.GL_ARRAY_BUFFER, normalArrayIds[0]);
-      gl2.glNormalPointer(GL.GL_FLOAT, normalOffset, firstCoordOffset);
-      gl2.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+      painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, normalArrayIds[0]);
+      painter.glNormalPointer(GLConstants.GL_FLOAT, normalOffset, firstCoordOffset);
+      painter.glEnableClientState(GLConstants.GL_NORMAL_ARRAY);
     } else {
       // "Automatic normals", not really sure they are correct
-      // invoking gl.glDisable(GL2.GL_AUTO_NORMAL) does not disable them surprisingly
-      gl2.glNormalPointer(GL.GL_FLOAT, vertexOffset, normalOffset);
-      gl2.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+      // invoking painter.glDisable(GLConstants.GL_AUTO_NORMAL) does not disable them surprisingly
+      painter.glNormalPointer(GLConstants.GL_FLOAT, vertexOffset, normalOffset);
+      painter.glEnableClientState(GLConstants.GL_NORMAL_ARRAY);
     }
 
     // Color buffer
     if (hasColorBuffer) {
-      gl2.glBindBuffer(GL.GL_ARRAY_BUFFER, colorArrayIds[0]);
-      gl2.glColorPointer(colorChannels, GL.GL_FLOAT, colorChannels * Buffers.SIZEOF_FLOAT,
+      painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, colorArrayIds[0]);
+      painter.glColorPointer(colorChannels, GLConstants.GL_FLOAT, colorChannels * Float.BYTES,
           firstCoordOffset);
-      gl2.glEnableClientState(GL2.GL_COLOR_ARRAY);
+      painter.glEnableClientState(GLConstants.GL_COLOR_ARRAY);
     } else {
       if(color!=null)
-        gl2.glColor4f(color.r, color.g, color.b, color.a);
+        painter.glColor4f(color.r, color.g, color.b, color.a);
     }
 
 
@@ -763,9 +773,9 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // Draw faces
 
     if (isFaceDisplayed()) {
-      gl2.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+      painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_FILL);
 
-      doDrawGeometries(gl2);
+      doDrawGeometries(painter);
     }
 
     // -----------------------------------
@@ -774,28 +784,28 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     if (isWireframeDisplayed()) {
       // disable coloring to use single color
       if (hasColorBuffer) {
-        gl2.glDisableClientState(GL2.GL_COLOR_ARRAY);
+        painter.glDisableClientState(GLConstants.GL_COLOR_ARRAY);
       }
 
       Color c = getWireframeColor();
 
-      gl2.glColor4f(c.r, c.g, c.b, c.a);
-      gl2.glLineWidth(getWireframeWidth());
+      painter.glColor4f(c.r, c.g, c.b, c.a);
+      painter.glLineWidth(getWireframeWidth());
 
-      gl2.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2.GL_LINE);
+      painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_LINE);
 
-      doDrawGeometries(gl2);
+      doDrawGeometries(painter);
     }
 
     // -----------------------------------
     // Disable
 
-    gl2.glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-    gl2.glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+    painter.glDisableClientState(GLConstants.GL_VERTEX_ARRAY);
+    painter.glDisableClientState(GLConstants.GL_NORMAL_ARRAY);
 
     // disable coloring if it was not done before
     if (hasColorBuffer && !isWireframeDisplayed()) {
-      gl2.glDisableClientState(GL2.GL_COLOR_ARRAY);
+      painter.glDisableClientState(GLConstants.GL_COLOR_ARRAY);
     }
   }
 
@@ -807,27 +817,27 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * Expect glPolygonMode to be defined before to define if we are drawing wireframe or filling
    * polygon.
    */
-  protected void doDrawGeometries(GL2 gl2) {
+  protected void doDrawGeometries(IPainter painter) {
 
-    applyPrimitiveRestartIfEnabled(gl2);
+    applyPrimitiveRestartIfEnabled(painter);
 
     // -----------------------------------------
     // Case of simple index mode
 
     if (elements != null && elementSize > 0) {
-      gl2.glDrawElements(glGeometryType, elementSize, GL.GL_UNSIGNED_INT, firstCoordOffset);
+      painter.glDrawElements(glGeometryType, elementSize, GLConstants.GL_UNSIGNED_INT, firstCoordOffset);
     }
 
     // -----------------------------------------
     // Case of indexed multi array mode
 
-    else if (elementsCount != null && elementsIndices != null) {
+    else if (elementsCount != null && elementsOffsets != null) {
 
       if (debug)
         debugMultiDrawElements();
 
-      gl2.glMultiDrawElements(glGeometryType, elementsCount, GL.GL_UNSIGNED_INT, elementsIndices,
-          elementsIndices.capacity());
+      painter.glMultiDrawElements(glGeometryType, elementsCount, GLConstants.GL_UNSIGNED_INT,
+          elementsOffsets, elementsOffsets.capacity());
     }
 
     // -----------------------------------------
@@ -838,7 +848,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       if (debug)
         debugMultiDrawArray();
 
-      gl2.glMultiDrawArrays(glGeometryType, elementsStarts, elementsLength,
+      painter.glMultiDrawArrays(glGeometryType, elementsStarts, elementsLength,
           elementsStarts.capacity());
     }
 
@@ -846,7 +856,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // Case of non indexed mode (no vertex index defined)
 
     else {
-      gl2.glDrawArrays(glGeometryType, 0, vertices.capacity());
+      painter.glDrawArrays(glGeometryType, 0, vertices.capacity());
     }
 
   }
@@ -865,14 +875,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
    * @see https://forum.jogamp.org/Using-glPrimitiveRestartIndex-to-declare-multiple-geometries-in-the-same-VBO-td4041307.html
    * 
    */
-  protected void applyPrimitiveRestartIfEnabled(GL gl) {
+  protected void applyPrimitiveRestartIfEnabled(IPainter painter) {
     if (primitiveRestart) {
-      if (gl.isGL2()) {
-        GL2 gl2 = gl.getGL2();
-        gl2.glEnable(GL2.GL_PRIMITIVE_RESTART);
-        // gl2.glEnable(GL2.GL_PRIMITIVE_RESTART_FIXED_INDEX);
-        gl2.glPrimitiveRestartIndex(PRIMITIVE_RESTART_VALUE);
-      }
+      painter.glEnable(GLConstants.GL_PRIMITIVE_RESTART);
+      // painter.glEnable(GLConstants.GL_PRIMITIVE_RESTART_FIXED_INDEX);
+      painter.glPrimitiveRestartIndex(PRIMITIVE_RESTART_VALUE);
     }
   }
 
@@ -923,11 +930,6 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     throw new RuntimeException("not implemented");
   }
 
-  protected GL getGL(IPainter painter) {
-    return ((NativeDesktopPainter) painter).getGL();
-  }
-
-
   /* ***************************************************************** */
   /* **************************** BUFFERS **************************** */
   /* ***************************************************************** */
@@ -960,7 +962,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     return elementsCount;
   }
 
-  public PointerBuffer getElementsIndices() {
+  public LongBuffer getElementsOffsets() {
+    return elementsOffsets;
+  }
+
+  public IntBuffer getElementsIndices() {
     return elementsIndices;
   }
 
@@ -996,11 +1002,11 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     this.verticesPerGeometry = geometrySize;
 
     if (geometrySize == TRIANGLE_SIZE) {
-      setGLGeometryType(GL.GL_TRIANGLES);
+      setGLGeometryType(GLConstants.GL_TRIANGLES);
     } else if (geometrySize >= QUAD_SIZE) {
-      setGLGeometryType(GL2.GL_TRIANGLE_FAN);
+      setGLGeometryType(GLConstants.GL_TRIANGLE_FAN);
     } else if (geometrySize == 2) {
-      setGLGeometryType(GL2.GL_LINE);
+      setGLGeometryType(GLConstants.GL_LINE);
     } else {
       throw new IllegalArgumentException("Unsupported geometry size : " + geometrySize);
     }
@@ -1014,7 +1020,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
   /**
    * Kept for prototyping, but not supported for now. Do not change this setting. @see
-   * {@link #applyPrimitiveRestartIfEnabled(GL)}
+   * {@link #applyPrimitiveRestartIfEnabled(IPainter)}
    */
   public void setPrimitiveRestart(boolean primitiveRestart) {
     this.primitiveRestart = primitiveRestart;
@@ -1050,20 +1056,19 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
 
   protected void debugMultiDrawElements() {
-    System.out.println("glMultiDrawElements : count(" + elementsCount.capacity() + "), indices("
-        + elementsIndices.capacity() + "), Vertices : " + vertices.capacity());
+    System.out.println("glMultiDrawElements : count(" + elementsCount.capacity() + "), offsets("
+        + elementsOffsets.capacity() + "), Vertices : " + vertices.capacity());
 
     for (int i = 0; i < elementsCount.capacity(); i++) {
       int count = elementsCount.get(i);
-      long ptr = elementsIndices.get(i);
+      long offset = elementsOffsets.get(i);
 
-      System.out.print(count + " :" + ptr + "\t");
+      System.out.print(count + " :" + offset + "\t");
 
+      int first = (int) (offset / Integer.BYTES);
 
-      IntBuffer ib = (IntBuffer) elementsIndices.getReferencedBuffer(i);
-
-      for (int j = 0; j < ib.capacity(); j++) {
-        System.out.print(ib.get(j) + "\t");
+      for (int j = first; j < first + count; j++) {
+        System.out.print(elementsIndices.get(j) + "\t");
       }
 
       System.out.println();

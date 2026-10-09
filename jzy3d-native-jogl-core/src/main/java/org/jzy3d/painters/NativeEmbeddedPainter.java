@@ -1214,4 +1214,56 @@ public class NativeEmbeddedPainter extends AbstractPainter implements IPainter {
   }
 
 
+
+  /* GPU RESOURCES : buffer objects as used by DrawableVBO, drawn with the GL ES compatibility layer */
+
+  @Override
+  public void glGenBuffers(int n, int[] buffers, int offset) {
+    gl.glGenBuffers(n, buffers, offset);
+  }
+
+  @Override
+  public void glDeleteBuffers(int n, int[] buffers, int offset) {
+    gl.glDeleteBuffers(n, buffers, offset);
+  }
+
+  @Override
+  public void glBufferData(int target, long size, Buffer data, int usage) {
+    gl.glBufferData(target, size, data, usage);
+  }
+
+  @Override
+  public void glBindBuffer(int target, int buffer) {
+    GLES2CompatUtils.glBindBuffer(target, buffer);
+  }
+
+  @Override
+  public void glVertexPointer(int size, int type, int stride, long pointerOffset) {
+    GLES2CompatUtils.glVertexPointer(size, type, stride, (int) pointerOffset);
+  }
+
+  @Override
+  public void glNormalPointer(int type, int stride, long pointerOffset) {
+    GLES2CompatUtils.glNormalPointer(type, stride, (int) pointerOffset);
+  }
+
+  @Override
+  public void glEnableClientState(int array) {
+    GLES2CompatUtils.glEnableClientState(array);
+  }
+
+  @Override
+  public void glDisableClientState(int array) {
+    GLES2CompatUtils.glDisableClientState(array);
+  }
+
+  @Override
+  public void glColorPointer(int size, int type, int stride, long pointerOffset) {
+    GLES2CompatUtils.glColorPointer(size, type, stride, (int) pointerOffset);
+  }
+
+  @Override
+  public void glDrawElements(int mode, int count, int type, long indicesOffset) {
+    GLES2CompatUtils.glDrawElements(mode, count, type, (int) indicesOffset);
+  }
 }

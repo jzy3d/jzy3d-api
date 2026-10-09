@@ -18,7 +18,6 @@ import org.jzy3d.maths.Normal;
 import org.jzy3d.maths.Normal.NormalMode;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO2;
 import com.google.common.collect.ArrayListMultimap;
-import com.jogamp.common.nio.Buffers;
 
 public class VBOBufferLoader {
   protected boolean verifyUniquePoints = false;
@@ -33,7 +32,7 @@ public class VBOBufferLoader {
     // bypass possible extra dimensions
     int capa = (points.length / pointDimensions) * 3;
 
-    FloatBuffer vertices = Buffers.newDirectFloatBuffer(capa);
+    FloatBuffer vertices = BufferUtil.newDirectFloatBuffer(capa);
 
     for (int i = 0; i < points.length; i += pointDimensions) {
       // Store values
@@ -57,7 +56,7 @@ public class VBOBufferLoader {
   // *************************** COLORS ******************************/
 
   public FloatBuffer loadColorBufferFromArray(float[] coloring) {
-    FloatBuffer colors = Buffers.newDirectFloatBuffer(coloring);
+    FloatBuffer colors = BufferUtil.newDirectFloatBuffer(coloring);
     BufferUtil.rewind(colors);
     return colors;
   }
@@ -65,7 +64,7 @@ public class VBOBufferLoader {
   public FloatBuffer loadColorBufferFromColormap(List<Coord3d> verticeList, BoundingBox3d bounds,
       int colorChannels, IColorMap colormap) {
 
-    FloatBuffer colors = Buffers.newDirectFloatBuffer(verticeList.size() * colorChannels);
+    FloatBuffer colors = BufferUtil.newDirectFloatBuffer(verticeList.size() * colorChannels);
 
     ColorMapper colorMapper = new ColorMapper(colormap, bounds.getZmin(), bounds.getZmax());
 
@@ -88,7 +87,7 @@ public class VBOBufferLoader {
   // *************************** NORMALS ******************************/
   
   public FloatBuffer loadNormalsFromArray(float[] points) {
-    return Buffers.newDirectFloatBuffer(points);
+    return BufferUtil.newDirectFloatBuffer(points);
   }
 
   /**
@@ -101,7 +100,7 @@ public class VBOBufferLoader {
   public FloatBuffer computeSimpleNormals(int pointsPerGeometry, List<Coord3d> verticeList) {
 
     FloatBuffer normals =
-        Buffers.newDirectFloatBuffer(verticeList.size() * DrawableVBO2.VERTEX_DIMENSIONS);
+        BufferUtil.newDirectFloatBuffer(verticeList.size() * DrawableVBO2.VERTEX_DIMENSIONS);
 
     for (int i = 0; i <= (verticeList.size() - pointsPerGeometry); i += pointsPerGeometry) {
       // gather coordinates of a triangle
@@ -272,7 +271,7 @@ public class VBOBufferLoader {
     }
 
     FloatBuffer normals =
-        Buffers.newDirectFloatBuffer(verticeList.size() * DrawableVBO2.VERTEX_DIMENSIONS);
+        BufferUtil.newDirectFloatBuffer(verticeList.size() * DrawableVBO2.VERTEX_DIMENSIONS);
 
     for (Coord3d averagedNormal : averagedNormals) {
       normals.put(averagedNormal.x);

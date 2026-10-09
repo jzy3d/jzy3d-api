@@ -3,17 +3,15 @@ package org.jzy3d.plot3d.primitives.vbo.drawable;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 import org.jzy3d.colors.Color;
 import org.jzy3d.io.BufferUtil;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
+import org.jzy3d.painters.GLConstants;
 import org.slf4j.LoggerFactory;
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.util.GLBuffers;
 
 /**
  * 
@@ -21,7 +19,7 @@ import com.jogamp.opengl.util.GLBuffers;
  * 
  * 
  * Warning! Observed that the sphere will render weirdly for rare viewpoint when following GL setting is applied.
- * <code>gl.glDisable(GL.GL_DEPTH_TEST)</code>
+ * <code>painter.glDisable(GLConstants.GL_DEPTH_TEST)</code>
  * 
  * This is true when Quality.setAlphaActivated(false), in other word for Quality.Advanced.
  * 
@@ -47,7 +45,7 @@ public class SphereVBO extends DrawableVBO {
       
     super(getBuilder(radius, stacks, slices));
 
-    this.geometry = GL2.GL_QUAD_STRIP;
+    this.geometry = GLConstants.GL_QUAD_STRIP;
 
     // keep typed instance
     this.builder = (VBOSphereMeshBuilder) loader;
@@ -74,7 +72,7 @@ public class SphereVBO extends DrawableVBO {
   @Override
   public void mount(IPainter painter) {
     try {
-      if (!builder.hasMountedOnce())
+      if (!builder.hasMountedOnce(painter))
         builder.load(painter, this);
 
       hasMountedOnce = true;
@@ -90,33 +88,31 @@ public class SphereVBO extends DrawableVBO {
   @Override
   public void draw(IPainter painter) {
     if (hasMountedOnce) {
-      GL2 gl = ((NativeDesktopPainter) painter).getGL().getGL2();
-
       // We need to enable the vertex and normal arrays, and set
       // the vertex and normal points for these modes.
 
       if (Mode.VBO.equals(mode)) {
 
-        gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
-        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+        painter.glEnableClientState(GLConstants.GL_VERTEX_ARRAY);
+        painter.glEnableClientState(GLConstants.GL_NORMAL_ARRAY);
         // if (mode == 4) {
         // When using VBOs, the vertex and normal pointers
         // refer to data in the VBOs.
-        gl.glBindBuffer(GL.GL_ARRAY_BUFFER, builder.vertexVboId);
-        gl.glVertexPointer(3, GL.GL_FLOAT, 0, 0);
-        gl.glBindBuffer(GL.GL_ARRAY_BUFFER, builder.normalVboId);
-        gl.glNormalPointer(GL.GL_FLOAT, 0, 0);
-        gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
-      } else if (Mode.ARRAY.equals(mode)) {
-        // When not using VBOs, the points point to the FloatBuffers.
-        gl.glVertexPointer(3, GL.GL_FLOAT, 0, builder.sphereVertexBuffer);
-        gl.glNormalPointer(GL.GL_FLOAT, 0, builder.sphereNormalBuffer);
+        if (!builder.hasMountedOnce(painter))
+          mount(painter);
+        int[] ids = builder.getVboIds(painter);
+        painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, ids[0]);
+        painter.glVertexPointer(3, GLConstants.GL_FLOAT, 0, 0);
+        painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, ids[1]);
+        painter.glNormalPointer(GLConstants.GL_FLOAT, 0, 0);
+        painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, 0);
       }
+      // When not using VBOs, the sphere is drawn vertex by vertex from arrays.
 
 
       doTransform(painter);
       /*
-       * configure(painter, gl); doDrawElements(gl); doDrawBoundsIfDisplayed(painter);
+       * configure(painter); doDrawElements(painter); doDrawBoundsIfDisplayed(painter);
        */
 
       painter.color(color);
@@ -125,21 +121,21 @@ public class SphereVBO extends DrawableVBO {
       painter.glTranslatef(position.x, position.y, position.z);// i-5,j-5,k-5);
 
 
-    //gl.glEnable(GL.GL_BLEND);
-      //gl.glEnable(GL2.GL_ALPHA_TEST);
-      //gl.glDisable(GL.GL_DEPTH_TEST);
+    //gl.glEnable(GLConstants.GL_BLEND);
+      //gl.glEnable(GLConstants.GL_ALPHA_TEST);
+      //gl.glDisable(GLConstants.GL_DEPTH_TEST);
 
       //painter.glDisable_CullFace();
 
       if (Mode.VBO.equals(mode)) {
         // FASTER!!
-        drawSphereWithDrawArrays(gl, builder.slices, builder.stacks); // Draw using DrawArrays
+        drawSphereWithDrawArrays(painter, builder.slices, builder.stacks); // Draw using DrawArrays
       } else if (Mode.ARRAY.equals(mode)) {
-        drawSphereDirectWithDataFromArrays(gl);
+        drawSphereDirectWithDataFromArrays(painter);
       }
       
-      gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
-      gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+      painter.glDisableClientState(GLConstants.GL_VERTEX_ARRAY);
+      painter.glDisableClientState(GLConstants.GL_NORMAL_ARRAY);
       //painter.glPopMatrix();
       
       
@@ -149,23 +145,23 @@ public class SphereVBO extends DrawableVBO {
 
 
 
-  protected void drawSphereDirectWithDataFromArrays(GL2 gl) {
+  protected void drawSphereDirectWithDataFromArrays(IPainter painter) {
     int i, j;
     int vertices = (builder.slices + 1) * 2;
 
     for (i = 0; i < builder.stacks; i++) {
       int pos = i * (builder.slices + 1) * 2 * 3;
 
-      gl.glBegin(geometry);
+      painter.glBegin(geometry);
       for (j = 0; j < vertices; j++) {
         // gl.glNormal3fv(sphereNormalArray, pos+3*j); /* This worked but took 3 times as long!!! */
         // gl.glVertex3fv(sphereVertexArray, pos+3*j);
-        gl.glNormal3f(builder.sphereNormalArray[pos + 3 * j],
+        painter.glNormal3f(builder.sphereNormalArray[pos + 3 * j],
             builder.sphereNormalArray[pos + 3 * j + 1], builder.sphereNormalArray[pos + 3 * j + 2]);
-        gl.glVertex3f(builder.sphereVertexArray[pos + 3 * j],
+        painter.glVertex3f(builder.sphereVertexArray[pos + 3 * j],
             builder.sphereVertexArray[pos + 3 * j + 1], builder.sphereVertexArray[pos + 3 * j + 2]);
       }
-      gl.glEnd();
+      painter.glEnd();
     }
   }
 
@@ -174,12 +170,12 @@ public class SphereVBO extends DrawableVBO {
    * Draw one sphere. The VertexPointer and NormalPointer must already be set to point to the data
    * for the sphere, and they must be enabled.
    */
-  protected void drawSphereWithDrawArrays(GL2 gl, int slices, int stacks) {
+  protected void drawSphereWithDrawArrays(IPainter painter, int slices, int stacks) {
     int vertices = (slices + 1) * 2;
 
     for (int i = 0; i < stacks; i++) {
       int pos = i * (slices + 1) * 2;
-      gl.glDrawArrays(geometry, pos, vertices);
+      painter.glDrawArrays(geometry, pos, vertices);
     }
   }
 
@@ -206,6 +202,12 @@ public class SphereVBO extends DrawableVBO {
 
     protected boolean hasMountedOnce = false;
 
+    /**
+     * VBO identifiers (vertex, normal) for each painter : a builder is shared by all spheres having
+     * the same geometry, which may be rendered by different charts, hence in different GL contexts.
+     */
+    protected Map<IPainter, int[]> vboIds = new WeakHashMap<>();
+
 
     public VBOSphereMeshBuilder(double radius, int stacks, int slices) {
       this.radius = radius;
@@ -215,8 +217,7 @@ public class SphereVBO extends DrawableVBO {
 
     @Override
     public void load(IPainter painter, DrawableVBO drawable) throws Exception {
-      GL gl = ((NativeDesktopPainter) painter).getGL();
-      createSphereArraysAndVBOs(gl.getGL2());
+      createSphereArraysAndVBOs(painter);
     }
 
     /**
@@ -229,10 +230,10 @@ public class SphereVBO extends DrawableVBO {
      * 
      * (Note: The VBOs are used for render mode 4; the FloatBuffers are used for render mode 3.)
      */
-    private void createSphereArraysAndVBOs(GL2 gl) {
+    private void createSphereArraysAndVBOs(IPainter painter) {
       int size = stacks * (slices + 1) * 2 * 3;
-      sphereVertexBuffer = GLBuffers.newDirectFloatBuffer(size);
-      sphereNormalBuffer = GLBuffers.newDirectFloatBuffer(size);
+      sphereVertexBuffer = BufferUtil.newDirectFloatBuffer(size);
+      sphereNormalBuffer = BufferUtil.newDirectFloatBuffer(size);
       sphereVertexArray = new float[size];
       sphereNormalArray = new float[size];
       for (int j = 0; j < stacks; j++) {
@@ -279,18 +280,22 @@ public class SphereVBO extends DrawableVBO {
       BufferUtil.rewind(sphereNormalBuffer);
 
       int[] bufferIDs = new int[2];
-      gl.glGenBuffers(2, bufferIDs, 0);
+      painter.glGenBuffers(2, bufferIDs, 0);
       vertexVboId = bufferIDs[0];
       normalVboId = bufferIDs[1];
+
+      synchronized (this) {
+        vboIds.put(painter, bufferIDs);
+      }
 
       //System.out.println("VertexVBOid : " + vertexVboId);
       //System.out.println("normalVboId : " + normalVboId);
 
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, vertexVboId);
-      gl.glBufferData(GL2.GL_ARRAY_BUFFER, size * 4, sphereVertexBuffer, GL2.GL_STATIC_DRAW);
-      gl.glBindBuffer(GL2.GL_ARRAY_BUFFER, normalVboId);
-      gl.glBufferData(GL2.GL_ARRAY_BUFFER, size * 4, sphereNormalBuffer, GL2.GL_STATIC_DRAW);
-      gl.glBindBuffer(GL.GL_ARRAY_BUFFER, 0);
+      painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, vertexVboId);
+      painter.glBufferData(GLConstants.GL_ARRAY_BUFFER, size * 4, sphereVertexBuffer, GLConstants.GL_STATIC_DRAW);
+      painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, normalVboId);
+      painter.glBufferData(GLConstants.GL_ARRAY_BUFFER, size * 4, sphereNormalBuffer, GLConstants.GL_STATIC_DRAW);
+      painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, 0);
 
       hasMountedOnce = true;
 
@@ -298,6 +303,16 @@ public class SphereVBO extends DrawableVBO {
 
     public boolean hasMountedOnce() {
       return hasMountedOnce;
+    }
+
+    /** True if the VBOs have been loaded in the GL context of this painter. */
+    public synchronized boolean hasMountedOnce(IPainter painter) {
+      return vboIds.containsKey(painter);
+    }
+
+    /** The vertex and normal VBO identifiers in the GL context of this painter, or null. */
+    public synchronized int[] getVboIds(IPainter painter) {
+      return vboIds.get(painter);
     }
   }
 

@@ -6,11 +6,10 @@ import java.nio.IntBuffer;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.vbo.drawable.DrawableVBO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.jogamp.common.nio.Buffers;
+
 
 public class OBJFileLoader implements IGLLoader<DrawableVBO> {
   static Logger logger = LoggerFactory.getLogger(OBJFileLoader.class);
@@ -38,10 +37,10 @@ public class OBJFileLoader implements IGLLoader<DrawableVBO> {
     
 
     int size = obj.getIndexCount();
-    int indexSize = size * Buffers.SIZEOF_INT;
-    int vertexSize = obj.getCompiledVertexCount() * Buffers.SIZEOF_FLOAT;
-    int byteOffset = obj.getCompiledVertexSize() * Buffers.SIZEOF_FLOAT;
-    int normalOffset = obj.getCompiledNormalOffset() * Buffers.SIZEOF_FLOAT;
+    int indexSize = size * Integer.BYTES;
+    int vertexSize = obj.getCompiledVertexCount() * Float.BYTES;
+    int byteOffset = obj.getCompiledVertexSize() * Float.BYTES;
+    int normalOffset = obj.getCompiledNormalOffset() * Float.BYTES;
     int dimensions = obj.getPositionSize();
 
     int pointer = 0;
@@ -51,8 +50,8 @@ public class OBJFileLoader implements IGLLoader<DrawableVBO> {
     BoundingBox3d bounds = obj.computeBoundingBox();
 
     drawable.doConfigure(pointer, size, byteOffset, normalOffset, dimensions);
-    drawable.doLoadArrayFloatBuffer(((NativeDesktopPainter) painter).getGL(), vertexSize, vertices);
-    drawable.doLoadElementIntBuffer(((NativeDesktopPainter) painter).getGL(), indexSize, indices);
+    drawable.doLoadArrayFloatBuffer(painter, vertexSize, vertices);
+    drawable.doLoadElementIntBuffer(painter, indexSize, indices);
     drawable.doSetBoundingBox(bounds);
   }
 

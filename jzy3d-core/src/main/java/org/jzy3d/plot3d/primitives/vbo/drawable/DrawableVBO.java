@@ -7,9 +7,8 @@ import org.jzy3d.colors.Color;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.GLES2CompatUtils;
+import org.jzy3d.painters.GLConstants;
 import org.jzy3d.painters.IPainter;
-import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.primitives.Drawable;
 import org.jzy3d.plot3d.primitives.IGLBindedResource;
 import org.jzy3d.plot3d.primitives.PolygonMode;
@@ -19,12 +18,6 @@ import org.jzy3d.plot3d.transform.Rotate;
 import org.jzy3d.plot3d.transform.Rotator;
 import org.jzy3d.plot3d.transform.Transform;
 import org.slf4j.LoggerFactory;
-import com.jogamp.common.nio.Buffers;
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GL2ES1;
-import com.jogamp.opengl.GL2GL3;
-import com.jogamp.opengl.fixedfunc.GLPointerFunc;
 
 /**
  * A {@link DrawableVBO} is able to efficiently draw a large collection of geometries.
@@ -38,12 +31,12 @@ import com.jogamp.opengl.fixedfunc.GLPointerFunc;
  * One can separate data and appearance by setting geometry settings out of loading process.
  * 
  * DrawableVBO shape1 = new DrawableVBO(new MemoryVBOLoader(getScatter(size)));
- * shape1.setGeometry(GL.GL_POINTS); shape1.setColor(Color.WHITE);
+ * shape1.setGeometry(GLConstants.GL_POINTS); shape1.setColor(Color.WHITE);
  * 
  * @author Martin Pernollet
  */
 public class DrawableVBO extends Drawable implements IGLBindedResource {
-  protected int geometry = GL.GL_TRIANGLES;
+  protected int geometry = GLConstants.GL_TRIANGLES;
   protected float width = 1;
   protected Quality quality = Quality.Nicest();
 
@@ -95,11 +88,9 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
   @Override
   public void draw(IPainter painter) {
     if (hasMountedOnce) {
-      GL gl = ((NativeDesktopPainter) painter).getGL();
-
       doTransform(painter);
-      configure(painter, gl);
-      doDrawElements(gl);
+      configure(painter);
+      doDrawElements(painter);
       doDrawBoundsIfDisplayed(painter);
     }
   }
@@ -120,135 +111,121 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     this.quality = quality;
   }
 
-  protected void doDrawElements(GL gl) {
-    if (gl.isGL2()) {
-      doBindGL2(gl);
-      pointers(gl);
-      color(gl);
-      enable(gl);
-      applyWidth(gl);
-      applyQuality(gl);
+  protected void doDrawElements(IPainter painter) {
+    doBindGL2(painter);
+    pointers(painter);
+    color(painter);
+    enable(painter);
+    applyWidth(painter);
+    applyQuality(painter);
 
-      applyPolygonModeFillGL2(gl);
+    applyPolygonModeFillGL2(painter);
 
-      if (isPolygonOffsetFillEnable())
-        polygonOffseFillEnable(gl);
+    if (isPolygonOffsetFillEnable())
+      polygonOffseFillEnable(painter);
 
-      applyVertices(gl);
-      disable(gl);
-      disableColor(gl);
-    } else {
-      GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
-      GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-      GLES2CompatUtils.glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
-      GLES2CompatUtils.glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
-      GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-      GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-      GLES2CompatUtils.glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
-      GLES2CompatUtils.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-      GLES2CompatUtils.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
-      GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-      GLES2CompatUtils.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-    }
+    applyVertices(painter);
+    disable(painter);
+    disableColor(painter);
   }
 
-  protected void disableColor(GL gl) {
+  protected void disableColor(IPainter painter) {
     if (hasColorBuffer) {
-      gl.getGL2().glDisableClientState(GL2.GL_COLOR_ARRAY);
+      painter.glDisableClientState(GLConstants.GL_COLOR_ARRAY);
     }
   }
 
-  protected void pointers(GL gl) {
-    gl.getGL2().glVertexPointer(dimensions, GL.GL_FLOAT, byteOffset, pointer);
-    gl.getGL2().glNormalPointer(GL.GL_FLOAT, byteOffset, normalOffset);
+  protected void pointers(IPainter painter) {
+    painter.glVertexPointer(dimensions, GLConstants.GL_FLOAT, byteOffset, pointer);
+    painter.glNormalPointer(GLConstants.GL_FLOAT, byteOffset, normalOffset);
   }
 
-  protected void color(GL gl) {
+  protected void color(IPainter painter) {
     if (hasColorBuffer) {
-      // int bo = 6 * Buffers.SIZEOF_FLOAT;
-      int p = 3 * Buffers.SIZEOF_FLOAT;
-      gl.getGL2().glEnableClientState(GL2.GL_COLOR_ARRAY);
-      gl.getGL2().glColorPointer(colorChannelNumber, GL.GL_FLOAT, byteOffset, p);
+      // int bo = 6 * Float.BYTES;
+      int p = 3 * Float.BYTES;
+      painter.glEnableClientState(GLConstants.GL_COLOR_ARRAY);
+      painter.glColorPointer(colorChannelNumber, GLConstants.GL_FLOAT, byteOffset, p);
     }
   }
 
-  protected void enable(GL gl) {
-    gl.getGL2().glEnableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-    gl.getGL2().glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+  protected void enable(IPainter painter) {
+    painter.glEnableClientState(GLConstants.GL_VERTEX_ARRAY);
+    painter.glEnableClientState(GLConstants.GL_NORMAL_ARRAY);
   }
 
-  protected void disable(GL gl) {
-    gl.getGL2().glDisableClientState(GLPointerFunc.GL_VERTEX_ARRAY);
-    gl.getGL2().glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+  protected void disable(IPainter painter) {
+    painter.glDisableClientState(GLConstants.GL_VERTEX_ARRAY);
+    painter.glDisableClientState(GLConstants.GL_NORMAL_ARRAY);
   }
 
-  protected void applyVertices(GL gl) {
-    gl.getGL2().glDrawElements(getGeometry(), size, GL.GL_UNSIGNED_INT, pointer);
-    doBindGL2(gl);
+  protected void applyVertices(IPainter painter) {
+    painter.glDrawElements(getGeometry(), size, GLConstants.GL_UNSIGNED_INT, pointer);
+    doBindGL2(painter);
   }
 
-  protected void applyWidth(GL gl) {
-    if (geometry == GL.GL_POINTS) {
-      gl.getGL2().glPointSize(width);
-    } else if (geometry == GL.GL_LINES) {
-      gl.getGL2().glLineWidth(width);
+  protected void applyWidth(IPainter painter) {
+    if (geometry == GLConstants.GL_POINTS) {
+      painter.glPointSize(width);
+    } else if (geometry == GLConstants.GL_LINES) {
+      painter.glLineWidth(width);
     }
   }
 
-  protected void applyQuality(GL gl) {
+  protected void applyQuality(IPainter painter) {
     if (quality.isSmoothPolygon()) {
-      gl.glEnable(GL2GL3.GL_POLYGON_SMOOTH);
-      gl.glHint(GL2GL3.GL_POLYGON_SMOOTH_HINT, GL.GL_NICEST);
+      painter.glEnable(GLConstants.GL_POLYGON_SMOOTH);
+      painter.glHint(GLConstants.GL_POLYGON_SMOOTH_HINT, GLConstants.GL_NICEST);
     } else
-      gl.glDisable(GL2GL3.GL_POLYGON_SMOOTH);
+      painter.glDisable(GLConstants.GL_POLYGON_SMOOTH);
 
     if (quality.isSmoothLine()) {
-      gl.glEnable(GL.GL_LINE_SMOOTH);
-      gl.glHint(GL.GL_LINE_SMOOTH_HINT, GL.GL_NICEST);
+      painter.glEnable(GLConstants.GL_LINE_SMOOTH);
+      painter.glHint(GLConstants.GL_LINE_SMOOTH_HINT, GLConstants.GL_NICEST);
     } else
-      gl.glDisable(GL.GL_LINE_SMOOTH);
+      painter.glDisable(GLConstants.GL_LINE_SMOOTH);
 
     if (quality.isSmoothPoint()) {
-      gl.glEnable(GL2ES1.GL_POINT_SMOOTH);
-      gl.glHint(GL2ES1.GL_POINT_SMOOTH_HINT, GL.GL_NICEST);
-      // gl.glDisable(GL2.GL_BLEND);
-      // gl.glHint(GL2.GL_POINT_SMOOTH_HINT, GL2.GL_NICEST);
+      painter.glEnable(GLConstants.GL_POINT_SMOOTH);
+      painter.glHint(GLConstants.GL_POINT_SMOOTH_HINT, GLConstants.GL_NICEST);
+      // painter.glDisable(GLConstants.GL_BLEND);
+      // painter.glHint(GLConstants.GL_POINT_SMOOTH_HINT, GLConstants.GL_NICEST);
     } else
-      gl.glDisable(GL2ES1.GL_POINT_SMOOTH);
+      painter.glDisable(GLConstants.GL_POINT_SMOOTH);
   }
 
-  protected void applyPolygonModeFillGL2(GL gl) {
+  protected void applyPolygonModeFillGL2(IPainter painter) {
     if (polygonMode == null)
       return;
 
     switch (polygonMode) {
       case FRONT:
-        gl.getGL2().glPolygonMode(GL.GL_FRONT, GL2GL3.GL_FILL);
+        painter.glPolygonMode(GLConstants.GL_FRONT, GLConstants.GL_FILL);
         break;
       case BACK:
-        gl.getGL2().glPolygonMode(GL.GL_BACK, GL2GL3.GL_FILL);
+        painter.glPolygonMode(GLConstants.GL_BACK, GLConstants.GL_FILL);
         break;
       case FRONT_AND_BACK:
-        gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+        painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_FILL);
         break;
       default:
         break;
     }
   }
 
-  protected void polygonOffseFillEnable(GL gl) {
-    gl.glEnable(GL.GL_POLYGON_OFFSET_FILL);
-    gl.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
+  protected void polygonOffseFillEnable(IPainter painter) {
+    painter.glEnable(GLConstants.GL_POLYGON_OFFSET_FILL);
+    painter.glPolygonOffset(polygonOffsetFactor, polygonOffsetUnit);
   }
 
-  protected void polygonOffsetFillDisable(GL gl) {
-    gl.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+  protected void polygonOffsetFillDisable(IPainter painter) {
+    painter.glDisable(GLConstants.GL_POLYGON_OFFSET_FILL);
   }
 
 
-  protected void doBindGL2(GL gl) {
-    gl.getGL2().glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
-    gl.getGL2().glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+  protected void doBindGL2(IPainter painter) {
+    painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, arrayName[0]);
+    painter.glBindBuffer(GLConstants.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
   }
 
   /**
@@ -280,16 +257,8 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
    * because such a big polygon set has huge cost to have culling status computed (culling enabled
    * by depth peeling).
    */
-  protected void configure(IPainter painter, GL gl) {
-    // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
-    // gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
-    // gl.glColor4f(1f,0f,1f,0.6f);
-    // gl.glLineWidth(0.00001f);
-    if (gl.isGL2()) {
-      gl.getGL2().glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-    } else {
-      GLES2CompatUtils.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
-    }
+  protected void configure(IPainter painter) {
+    painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_FILL);
     painter.color(color);
   }
 
@@ -312,7 +281,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
   }
 
   /**
-   * Set geometry, use: GL.GL_TRIANGLES (default) ...
+   * Set geometry, use: GLConstants.GL_TRIANGLES (default) ...
    * 
    * @param geometry
    */
@@ -334,27 +303,28 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
   }
 
   /** To be called by the VBOBuilder */
-  public void setData(GL gl, FloatVBO vbo) {
-    setData(gl.getGL2(), vbo.getIndices(), vbo.getVertices(), vbo.getBounds(), 0);
+  public void setData(IPainter painter, FloatVBO vbo) {
+    setData(painter, vbo.getIndices(), vbo.getVertices(), vbo.getBounds(), 0);
   }
 
 
-  public void setData(GL gl, IntBuffer indices, FloatBuffer vertices, BoundingBox3d bounds) {
-    setData(gl.getGL2(), indices, vertices, bounds, 0);
+  public void setData(IPainter painter, IntBuffer indices, FloatBuffer vertices,
+      BoundingBox3d bounds) {
+    setData(painter, indices, vertices, bounds, 0);
   }
 
-  public void setData(GL2 gl, IntBuffer indices, FloatBuffer vertices, BoundingBox3d bounds,
+  public void setData(IPainter painter, IntBuffer indices, FloatBuffer vertices, BoundingBox3d bounds,
       int pointer) {
     doConfigure(pointer, indices.capacity());
-    doLoadArrayFloatBuffer(gl, vertices);
-    doLoadElementIntBuffer(gl, indices);
+    doLoadArrayFloatBuffer(painter, vertices);
+    doLoadElementIntBuffer(painter, indices);
     doSetBoundingBox(bounds);
   }
 
   public void doConfigure(int pointer, int size) {
     int dimensions = 3;
-    int byteOffset = (dimensions * 2) * Buffers.SIZEOF_FLOAT; // (coord+normal)
-    int normalOffset = dimensions * Buffers.SIZEOF_FLOAT;
+    int byteOffset = (dimensions * 2) * Float.BYTES; // (coord+normal)
+    int normalOffset = dimensions * Float.BYTES;
     doConfigure(pointer, size, byteOffset, normalOffset, dimensions);
   }
 
@@ -366,26 +336,26 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
     this.pointer = pointer;
   }
 
-  public void doLoadArrayFloatBuffer(GL gl, FloatBuffer vertices) {
-    doLoadArrayFloatBuffer(gl, vertices.capacity() * Buffers.SIZEOF_FLOAT, vertices);
+  public void doLoadArrayFloatBuffer(IPainter painter, FloatBuffer vertices) {
+    doLoadArrayFloatBuffer(painter, vertices.capacity() * Float.BYTES, vertices);
   }
 
-  public void doLoadArrayFloatBuffer(GL gl, int vertexSize, FloatBuffer vertices) {
-    gl.glGenBuffers(1, arrayName, 0);
-    gl.glBindBuffer(GL.GL_ARRAY_BUFFER, arrayName[0]);
-    gl.glBufferData(GL.GL_ARRAY_BUFFER, vertexSize, vertices, GL.GL_STATIC_DRAW);
-    gl.glBindBuffer(GL.GL_ARRAY_BUFFER, pointer);
+  public void doLoadArrayFloatBuffer(IPainter painter, int vertexSize, FloatBuffer vertices) {
+    painter.glGenBuffers(1, arrayName, 0);
+    painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, arrayName[0]);
+    painter.glBufferData(GLConstants.GL_ARRAY_BUFFER, vertexSize, vertices, GLConstants.GL_STATIC_DRAW);
+    painter.glBindBuffer(GLConstants.GL_ARRAY_BUFFER, pointer);
   }
 
-  public void doLoadElementIntBuffer(GL gl, IntBuffer indices) {
-    doLoadElementIntBuffer(gl, indices.capacity() * Buffers.SIZEOF_INT, indices);
+  public void doLoadElementIntBuffer(IPainter painter, IntBuffer indices) {
+    doLoadElementIntBuffer(painter, indices.capacity() * Integer.BYTES, indices);
   }
 
-  public void doLoadElementIntBuffer(GL gl, int indexSize, IntBuffer indices) {
-    gl.glGenBuffers(1, elementName, 0);
-    gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
-    gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, indexSize, indices, GL.GL_STATIC_DRAW);
-    gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, pointer);
+  public void doLoadElementIntBuffer(IPainter painter, int indexSize, IntBuffer indices) {
+    painter.glGenBuffers(1, elementName, 0);
+    painter.glBindBuffer(GLConstants.GL_ELEMENT_ARRAY_BUFFER, elementName[0]);
+    painter.glBufferData(GLConstants.GL_ELEMENT_ARRAY_BUFFER, indexSize, indices, GLConstants.GL_STATIC_DRAW);
+    painter.glBindBuffer(GLConstants.GL_ELEMENT_ARRAY_BUFFER, pointer);
   }
 
   public void doSetBoundingBox(BoundingBox3d bounds) {
@@ -399,7 +369,7 @@ public class DrawableVBO extends Drawable implements IGLBindedResource {
   }
 
   /**
-   * A null polygonMode imply no any call to gl.glPolygonMode(...) at rendering
+   * A null polygonMode imply no any call to painter.glPolygonMode(...) at rendering
    */
   public void setPolygonMode(PolygonMode polygonMode) {
     this.polygonMode = polygonMode;

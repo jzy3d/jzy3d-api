@@ -909,6 +909,11 @@ public abstract class AbstractPainter implements IPainter {
   }
 
   @Override
+  public void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
+    throw unsupported("glBlendFuncSeparate");
+  }
+
+  @Override
   public int glGetError() {
     throw unsupported("glGetError");
   }
