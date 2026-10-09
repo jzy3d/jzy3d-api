@@ -19,6 +19,7 @@ package org.jzy3d.plot3d.rendering.canvas;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -90,7 +91,7 @@ public class TestPanamaGLJavaFXCanvas_HiDPI {
     runOnFxThreadAndWait(() -> {
       ResizableCanvas fxCanvas = new ResizableCanvas();
       GLCanvasJFX glCanvas = spy(new GLCanvasJFX(f, fxCanvas));
-      when(glCanvas.getPixelScale()).thenReturn(new PixelScale(2.0, 2.0));
+      doReturn(new PixelScale(2.0, 2.0)).when(glCanvas).getPixelScale();
       glCanvas.setOffscreenRenderer(f.newOffscreenRenderer(new FBOReader_JFX()));
 
       PanamaGLJavaFXCanvas c = new PanamaGLJavaFXCanvas(factory, factory.newScene(false),
@@ -163,8 +164,8 @@ public class TestPanamaGLJavaFXCanvas_HiDPI {
     runOnFxThreadAndWait(() -> {
       ResizableCanvas fxCanvas = new ResizableCanvas();
       GLCanvasJFX glCanvas = spy(new GLCanvasJFX(f, fxCanvas));
-      when(glCanvas.getPhysicalWidth()).thenReturn(400);
-      when(glCanvas.getPhysicalHeight()).thenReturn(300);
+      doReturn(400).when(glCanvas).getPhysicalWidth();
+      doReturn(300).when(glCanvas).getPhysicalHeight();
       glCanvas.setOffscreenRenderer(f.newOffscreenRenderer(new FBOReader_JFX()));
 
       PanamaGLJavaFXCanvas c = new PanamaGLJavaFXCanvas(factory, factory.newScene(false),
@@ -174,7 +175,7 @@ public class TestPanamaGLJavaFXCanvas_HiDPI {
       Assert.assertEquals(300, c.getRendererHeight());
 
       // Sanity: getPixelScale still forwards properly when stubbed independently.
-      when(glCanvas.getPixelScale()).thenReturn(new PixelScale(2.0, 2.0));
+      doReturn(new PixelScale(2.0, 2.0)).when(glCanvas).getPixelScale();
       Coord2d scale = c.getPixelScale();
       Assert.assertEquals(2.0, scale.x, 0.0);
       Assert.assertEquals(2.0, scale.y, 0.0);
