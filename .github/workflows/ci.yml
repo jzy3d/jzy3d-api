@@ -200,7 +200,7 @@ jobs:
         run: |
           mkdir -p surefire-reports
           find . -path "*/target/surefire-reports/*" -type f -exec cp {} surefire-reports/ \;
-          find . -path "*/target/panamagl-*/*.png" -exec cp {} surefire-reports/ \; || true
+          find jzy3d-tests-java9/target -name "*.png" -exec cp {} surefire-reports/ \; || true
 
       - name: Collect Surefire reports (Windows)
         if: runner.os == 'Windows' && always()
