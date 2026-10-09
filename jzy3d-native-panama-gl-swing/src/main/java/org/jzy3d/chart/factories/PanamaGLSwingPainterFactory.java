@@ -39,6 +39,10 @@ public class PanamaGLSwingPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    if (isOffscreen()) {
+      return newOffscreenCanvas(factory, scene, quality);
+    }
+
     GLCanvasSwing glCanvas = new GLCanvasSwing(panamaGLFactory);
     GLContext context = glCanvas.getContext();
 

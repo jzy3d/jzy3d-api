@@ -46,6 +46,10 @@ public class PanamaGLSWTPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    if (isOffscreen()) {
+      return newOffscreenCanvas(factory, scene, quality);
+    }
+
     Composite parent = ((ISWTChartFactory) factory).getComposite();
     PanamaGLSWTCanvas canvas =
         new PanamaGLSWTCanvas(factory, scene, quality, parent, panamaGLFactory);

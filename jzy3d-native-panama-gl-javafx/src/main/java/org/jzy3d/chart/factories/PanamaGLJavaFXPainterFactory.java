@@ -36,6 +36,10 @@ public class PanamaGLJavaFXPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    if (isOffscreen()) {
+      return newOffscreenCanvas(factory, scene, quality);
+    }
+
     PanamaGLJavaFXCanvas canvas =
         new PanamaGLJavaFXCanvas(factory, scene, quality, panamaGLFactory);
 
