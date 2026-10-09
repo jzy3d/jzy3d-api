@@ -13,6 +13,8 @@ uniform vec3 BackgroundColor;
 
 void main(void)
 {
+	// the final image is opaque : define its alpha, otherwise left to the GL implementation
+	gl_FragColor.a = 1.0;
 	vec4 SumColor = texture2DRect(ColorTex0, gl_FragCoord.xy);
 	float n = texture2DRect(ColorTex1, gl_FragCoord.xy).r;
 
