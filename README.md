@@ -71,6 +71,25 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
 }
 ```
 
+## Native rendering with PanamaGL instead of JOGL
+
+[PanamaGL](https://github.com/jzy3d/panama-gl) invokes OpenGL through the Foreign Function & Memory API of Java 22+, without JNI. It can replace JOGL for all native charts : surfaces, scatters, text, colorbars and legends, overlays, picking, offscreen rendering and screenshots, VBO, shaders, textures, volumes and depth peeling.
+
+```java
+ChartFactory f = new PanamaGLSwingChartFactory(); // or PanamaGLJavaFXChartFactory, PanamaGLSWTChartFactory
+Chart chart = f.newChart(Quality.Advanced());
+chart.add(surface);
+chart.open();
+```
+
+* Requires Java 22+ and modules `jzy3d-native-panama-gl-swing`, `jzy3d-native-panama-gl-javafx` or `jzy3d-native-panama-gl-swt`.
+* Offscreen charts : `f.getPainterFactory().setOffscreen(800, 600)` then `chart.screenshot()`.
+* GPU based drawables (`DrawableVBO2`, `ScatterVBO`, `SphereVBO`, shader mesh and waterfall, `Texture3D`, `NativeDrawableImage`, `TexturedCube`, ...) live in `jzy3d-core` and render with both JOGL and PanamaGL. They only rely on the GPU methods of `IPainter` and on `GLConstants`.
+* Depth peeling : `new PanamaGLDepthPeelingChartFactory(new PanamaGLDepthPeelingPainterFactory(PeelingMethod.DUAL_PEELING_MODE))` from module `jzy3d-depthpeeling-panamagl`.
+* Debug : `setDebugGL(true)` on the painter factory throws an exception on the first OpenGL error, `setTraceGL(true)` prints each OpenGL call.
+
+Integration tests of `jzy3d-tests-java9` render the same charts with JOGL and PanamaGL and compare images (`ITTest_PanamaGLParity`, `ITTest_GPUDrawables`, `ITTest_DepthPeeling`). They run with PanamaGL when building with Java 22+ (profile `panamagl`).
+
 # What's inside
 
 ## Features
