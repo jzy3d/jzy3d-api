@@ -30,7 +30,8 @@ import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 import org.jzy3d.plot3d.rendering.image.IImageWrapper;
 import org.jzy3d.plot3d.rendering.view.IViewOverlay;
 import org.jzy3d.plot3d.rendering.view.layout.IViewportLayout;
-import org.jzy3d.plot3d.rendering.view.layout.PanamaGLViewAndColorbarsLayout;
+import org.jzy3d.plot3d.rendering.view.PanamaGLViewOverlay;
+import org.jzy3d.plot3d.rendering.view.layout.ViewAndColorbarsLayout;
 import panamagl.factory.PanamaGLFactory;
 
 /**
@@ -66,12 +67,12 @@ public abstract class APanamaGLPainterFactory implements IPainterFactory {
 
   @Override
   public IViewOverlay newViewOverlay() {
-    return null;
+    return new PanamaGLViewOverlay();
   }
 
   @Override
   public IViewportLayout newViewportLayout() {
-    return new PanamaGLViewAndColorbarsLayout();
+    return new ViewAndColorbarsLayout();
   }
 
   @Override

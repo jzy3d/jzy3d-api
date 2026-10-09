@@ -8,9 +8,14 @@ import javax.imageio.ImageIO;
 import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
+import java.awt.Graphics;
+import org.jzy3d.chart.AWTChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.junit.NativeChartTester;
+import org.jzy3d.plot3d.primitives.Shape;
+import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
+import org.jzy3d.plot3d.rendering.view.AWTView;
 
 /**
  * Render the same chart with JOGL and PanamaGL on the same computer and verify both images are
@@ -47,6 +52,43 @@ public class ITTest_PanamaGLParity extends ITTest {
     assertParity("Surface2D", chart -> {
       chart.add(surface());
       chart.view2d();
+    });
+  }
+
+  @Test
+  public void whenColorbar_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("Colorbar", chart -> {
+      Shape surface = surface();
+      chart.add(surface);
+      ((AWTChart) chart).colorbar(surface);
+    });
+  }
+
+  @Test
+  public void whenOverlay_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("Overlay", chart -> {
+      chart.add(surface());
+      ((AWTChart) chart).addRenderer(new AWTRenderer2d() {
+        AWTView view;
+
+        @Override
+        public void setView(AWTView view) {
+          this.view = view;
+        }
+
+        @Override
+        public AWTView getView() {
+          return view;
+        }
+
+        @Override
+        public void paint(Graphics g, int canvasWidth, int canvasHeight) {
+          g.setColor(java.awt.Color.RED);
+          g.fillRect(20, 20, 100, 50);
+          g.setColor(java.awt.Color.BLUE);
+          g.drawString("Overlay", 30, 50);
+        }
+      });
     });
   }
 
