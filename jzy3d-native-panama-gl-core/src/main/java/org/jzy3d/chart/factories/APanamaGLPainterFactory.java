@@ -17,6 +17,7 @@
  *******************************************************************************/
 package org.jzy3d.chart.factories;
 
+import java.util.function.Function;
 import org.jzy3d.chart.IAnimator;
 import org.jzy3d.chart.PanamaGLAnimator;
 import org.jzy3d.maths.Dimension;
@@ -57,6 +58,7 @@ public abstract class APanamaGLPainterFactory implements IPainterFactory {
   protected boolean traceGL = false;
   protected int width;
   protected int height;
+  protected Function<View, Renderer3D> renderer3DFactory;
 
   public PanamaGLFactory getPanamaGLFactory() {
     return panamaGLFactory;
@@ -89,11 +91,28 @@ public abstract class APanamaGLPainterFactory implements IPainterFactory {
   }
 
   /**
-   * The renderer drawing the view in a canvas. Override to customize rendering, e.g. to render
-   * with depth peeling.
+   * The renderer drawing the view in a canvas. Override or use
+   * {@link #setRenderer3DFactory(Function)} to customize rendering, e.g. to render with depth
+   * peeling.
    */
   public Renderer3D newRenderer3D(View view) {
+    if (renderer3DFactory != null) {
+      return renderer3DFactory.apply(view);
+    }
     return new Renderer3D(view);
+  }
+
+  public Function<View, Renderer3D> getRenderer3DFactory() {
+    return renderer3DFactory;
+  }
+
+  /**
+   * Build the renderers of the canvases of this factory with the given function instead of a
+   * default {@link Renderer3D}. This customizes the rendering of any toolkit (Swing, JavaFX, SWT,
+   * offscreen) without subclassing its painter factory. Set null to restore the default renderer.
+   */
+  public void setRenderer3DFactory(Function<View, Renderer3D> renderer3DFactory) {
+    this.renderer3DFactory = renderer3DFactory;
   }
 
   /** The renderer of a chart created by this chart factory. */

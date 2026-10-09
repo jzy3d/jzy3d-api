@@ -28,6 +28,11 @@ public class PanamaGLDepthPeelingRenderer3D extends Renderer3D {
     super(view);
     this.algorithm = method.newAlgorithm();
     this.algorithm.setTasksToRender(painter -> view.render());
+
+    // Depth peeling renders translucent polygons in any order, sorting them is useless
+    if (view != null && view.getScene() != null) {
+      view.getScene().getGraph().setSort(false);
+    }
   }
 
   @Override
