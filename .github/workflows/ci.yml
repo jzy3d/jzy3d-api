@@ -117,6 +117,11 @@ jobs:
           $javaBin = Join-Path $env:JAVA_HOME "bin"
           $dlls | Copy-Item -Destination $javaBin -Force
           Write-Host "Installed Mesa DLLs to $javaBin : $($dlls.Name -join ', ')"
+          # JOGL calls the GDI versions of ChoosePixelFormat, SetPixelFormat... which fail with
+          # Mesa ("Unable to set pixel format ... error code 1004"). Let it call their WGL
+          # versions, provided by Mesa opengl32.dll, in every JVM including Surefire forks.
+          "JAVA_TOOL_OPTIONS=-Djogl.windows.useWGLVersionOf5WGLGDIFuncSet=true" `
+            | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
