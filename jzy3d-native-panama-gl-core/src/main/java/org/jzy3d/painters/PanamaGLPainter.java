@@ -45,6 +45,7 @@ import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import panamagl.canvas.GLCanvas;
+import panamagl.offscreen.FBO;
 import panamagl.opengl.GL;
 import panamagl.opengl.GLContext;
 
@@ -63,6 +64,12 @@ public class PanamaGLPainter extends AbstractPainter {
 
   /** The thread on which the GL context is current, i.e. the thread rendering the canvas. */
   protected Thread glThread;
+
+  /** Number of renderings in progress, which may be nested (e.g. init triggering a display). */
+  protected int rendering = 0;
+
+  /** The canvas FBO bound by {@link #acquireGL()} out of rendering, to unbind at release. */
+  protected FBO acquiredFBO;
 
   /** Java buffer given to {@link #glSelectBuffer(int, IntBuffer)}, filled by glRenderMode. */
   protected IntBuffer selectBuffer;
@@ -225,21 +232,64 @@ public class PanamaGLPainter extends AbstractPainter {
    * PanamaGL keeps its GL context current on the thread rendering the canvas (e.g. the AWT thread
    * for Swing). The context can't be made current on another thread while the canvas is alive.
    * 
+   * Out of rendering, the offscreen buffer of the canvas is bound so that GL commands (e.g.
+   * picking) target the canvas framebuffer.
+   * 
    * @return the GL instance if called from the rendering thread, null otherwise : callers must
    *         then defer their GL work to the rendering thread (see {@link #isGLThread()}).
    */
   @Override
   public Object acquireGL() {
-    if (isGLThread()) {
-      return gl;
-    } else {
+    if (!isGLThread()) {
       return null;
     }
+
+    if (!isRendering() && acquiredFBO == null) {
+      FBO fbo = getCanvasFBO();
+      if (fbo != null) {
+        fbo.bind(gl);
+        acquiredFBO = fbo;
+      }
+    }
+    return gl;
   }
 
-  /** Does nothing, the GL context remains current on the rendering thread. */
+  /**
+   * Unbind the offscreen buffer bound by {@link #acquireGL()}. The GL context remains current on
+   * the rendering thread.
+   */
   @Override
   public void releaseGL() {
+    if (acquiredFBO != null && isGLThread()) {
+      acquiredFBO.unbind(gl);
+    }
+    acquiredFBO = null;
+  }
+
+  /** The offscreen buffer in which the canvas is rendered, or null if not available. */
+  protected FBO getCanvasFBO() {
+    if (getCanvas() instanceof IPanamaGLCanvas) {
+      GLCanvas glCanvas = ((IPanamaGLCanvas) getCanvas()).getGLCanvas();
+      if (glCanvas != null && glCanvas.getOffscreenRenderer() != null) {
+        return glCanvas.getOffscreenRenderer().getFBO();
+      }
+    }
+    return null;
+  }
+
+  /** Return true while the renderer renders the canvas. */
+  public boolean isRendering() {
+    return rendering > 0;
+  }
+
+  /** Indicates the renderer starts rendering the canvas. Invoked by the renderer. */
+  public void beginRendering() {
+    rendering++;
+  }
+
+  /** Indicates the renderer ends rendering the canvas. Invoked by the renderer. */
+  public void endRendering() {
+    rendering = Math.max(0, rendering - 1);
   }
 
   /** Return true if the calling thread is the one on which the GL context is current. */
