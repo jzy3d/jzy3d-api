@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.jzy3d.painters.IPainter;
-import com.jogamp.opengl.GL;
 
 public class TextureFactory {
   public static void preload(List<String> names) {
@@ -17,7 +16,7 @@ public class TextureFactory {
     map.put(name, new SharedTexture(name));
   }
 
-  public static void init(IPainter painter, GL gl) {
+  public static void init(IPainter painter) {
     for (SharedTexture texture : map.values())
       texture.mount(painter);
   }

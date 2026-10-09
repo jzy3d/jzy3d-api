@@ -17,6 +17,7 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.GPUInfo;
+import org.jzy3d.plot3d.NativeGPUInfo;
 import org.jzy3d.plot3d.rendering.canvas.ICanvasListener;
 import org.jzy3d.plot3d.rendering.canvas.INativeCanvas;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
@@ -215,7 +216,7 @@ public class CanvasNewtSWT extends Composite implements IScreenCanvas, INativeCa
     GLCapabilitiesImmutable caps = window.getChosenGLCapabilities();
     
     GL gl = (GL) painter.acquireGL();
-    GPUInfo info = GPUInfo.load(gl);
+    GPUInfo info = NativeGPUInfo.load(gl);
     painter.releaseGL();
     
     return "Capabilities  : " + caps + "\n" + info.toString();

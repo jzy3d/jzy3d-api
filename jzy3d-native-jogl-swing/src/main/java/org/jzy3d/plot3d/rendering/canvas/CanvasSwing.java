@@ -21,6 +21,7 @@ import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.plot3d.GPUInfo;
+import org.jzy3d.plot3d.NativeGPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -305,7 +306,7 @@ public class CanvasSwing extends GLJPanel implements IScreenCanvas, INativeCanva
     GLCapabilitiesImmutable caps = getChosenGLCapabilities();
     
     GL gl = (GL) painter.acquireGL();
-    GPUInfo info = GPUInfo.load(gl);
+    GPUInfo info = NativeGPUInfo.load(gl);
     painter.releaseGL();
     
     return "Capabilities  : " + caps + "\n" + info.toString();

@@ -1,11 +1,10 @@
 package org.jzy3d.plot3d.primitives.textured;
 
 import org.jzy3d.colors.Color;
+import org.jzy3d.painters.GLConstants;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Point;
 import org.jzy3d.plot3d.primitives.Quad;
-import com.jogamp.opengl.GL;
-import com.jogamp.opengl.GL2GL3;
 
 public class TranslucentQuad extends Quad implements ITranslucent {
   @Override
@@ -15,9 +14,9 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 
     // Draw content of polygon
     if (faceDisplayed) {
-      painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_FILL);
+      painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_FILL);
       if (wireframeDisplayed) {
-        painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+        painter.glEnable(GLConstants.GL_POLYGON_OFFSET_FILL);
         painter.glPolygonOffset(1.0f, 1.0f);
       }
       painter.glBegin_Quad(); // <<<
@@ -31,14 +30,14 @@ public class TranslucentQuad extends Quad implements ITranslucent {
       }
       painter.glEnd();
       if (wireframeDisplayed)
-        painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+        painter.glDisable(GLConstants.GL_POLYGON_OFFSET_FILL);
     }
 
     // Draw edge of polygon
     if (wireframeDisplayed) {
-      painter.glPolygonMode(GL.GL_FRONT_AND_BACK, GL2GL3.GL_LINE);
+      painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_LINE);
 
-      painter.glEnable(GL.GL_POLYGON_OFFSET_FILL);
+      painter.glEnable(GLConstants.GL_POLYGON_OFFSET_FILL);
       painter.glPolygonOffset(1.0f, 1.0f);
 
       painter.colorAlphaFactor(wireframeColor, alpha);
@@ -50,7 +49,7 @@ public class TranslucentQuad extends Quad implements ITranslucent {
       }
       painter.glEnd();
 
-      painter.glDisable(GL.GL_POLYGON_OFFSET_FILL);
+      painter.glDisable(GLConstants.GL_POLYGON_OFFSET_FILL);
     }
   }
 

@@ -9,8 +9,8 @@ import org.jzy3d.io.BufferUtil;
 import org.jzy3d.io.IGLLoader;
 import org.jzy3d.maths.BoundingBox3d;
 import org.jzy3d.maths.Coord3d;
-import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.GLConstants;
+import org.jzy3d.painters.IPainter;
 import org.slf4j.LoggerFactory;
 
 /**

@@ -1,14 +1,14 @@
 package org.jzy3d.plot3d.primitives.axis;
 
 import java.nio.FloatBuffer;
+import org.jzy3d.io.BufferUtil;
 import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.painters.GLConstants;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.painters.RenderMode;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.jogamp.common.nio.Buffers;
-import com.jogamp.opengl.GL2;
 
 /**
  * This {@link AxisBox} implementation was the first to appear in Jzy3d. It computes hidden faces
@@ -29,7 +29,7 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
   }
   
   /** Make all GL2 calls allowing to build a cube with 6 separate quads. Each quad is indexed from
-   * 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GL2.GL_FEEDBACK */
+   * 0.0f to 5.0f using glPassThrough, and may be traced in feedback mode when mode=GLConstants.GL_FEEDBACK */
   protected void drawCube(IPainter painter, RenderMode mode) {
     for (int q = 0; q < 6; q++) {
       if (!getQuadIsHidden()[q]) { // makes culling useless!
@@ -55,11 +55,11 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
   @Override
   protected boolean[] getHiddenQuads(IPainter painter) {
     int feedbacklength = 1024;
-    FloatBuffer floatbuffer = Buffers.newDirectFloatBuffer(feedbacklength);
+    FloatBuffer floatbuffer = BufferUtil.newDirectFloatBuffer(feedbacklength);
     float[] feedback = new float[feedbacklength];
 
     // Draw the cube into feedback buffer
-    painter.glFeedbackBuffer(feedbacklength, GL2.GL_3D_COLOR, floatbuffer);
+    painter.glFeedbackBuffer(feedbacklength, GLConstants.GL_3D_COLOR, floatbuffer);
     painter.glRenderMode(RenderMode.FEEDBACK);
     drawCube(painter, RenderMode.FEEDBACK);
     painter.glRenderMode(RenderMode.RENDER);
@@ -107,7 +107,7 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
       count--;
 
       // Case of a PASS THROUGH token
-      if (token_type == GL2.GL_PASS_THROUGH_TOKEN) { // can't use switch cause we have floats
+      if (token_type == GLConstants.GL_PASS_THROUGH_TOKEN) { // can't use switch cause we have floats
         passthrough_value = buffer[size - count];
         count--;
 
@@ -129,14 +129,14 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
       }
 
       // Other cases: just consume buffer
-      else if (token_type == GL2.GL_POINT_TOKEN) {
+      else if (token_type == GLConstants.GL_POINT_TOKEN) {
         if (printout) {
           logger.info(" GL.GL_POINT_TOKEN");
           count = print3DcolorVertex(size, count, buffer);
         } else {
           count = count - 7;
         }
-      } else if (token_type == GL2.GL_LINE_TOKEN) {
+      } else if (token_type == GLConstants.GL_LINE_TOKEN) {
         if (printout) {
           logger.info(" GL.GL_LINE_TOKEN ");
           count = print3DcolorVertex(size, count, buffer);
@@ -144,7 +144,7 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
         } else {
           count = count - 14;
         }
-      } else if (token_type == GL2.GL_LINE_RESET_TOKEN) {
+      } else if (token_type == GLConstants.GL_LINE_RESET_TOKEN) {
         if (printout) {
           logger.info(" GL.GL_LINE_RESET_TOKEN ");
           count = print3DcolorVertex(size, count, buffer);
@@ -152,7 +152,7 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
         } else {
           count = count - 14;
         }
-      } else if (token_type == GL2.GL_POLYGON_TOKEN) {
+      } else if (token_type == GLConstants.GL_POLYGON_TOKEN) {
         int n = (int) buffer[size - count];
         count--;
 
@@ -173,20 +173,20 @@ public class FeedbackBufferAxisBox extends AxisBox implements IAxis {
         ; // this is a non token: array was not filled
 
         // If the prev token is a GL_PASS_THROUGH_TOKEN, it was empty
-        if (prevtoken_type == GL2.GL_PASS_THROUGH_TOKEN) {
+        if (prevtoken_type == GLConstants.GL_PASS_THROUGH_TOKEN) {
           prevtoken_id = (int) prevpassthrough_value;
           isempty[prevtoken_id] = true;
         }
         break;
       }
       // Case of an unknown token
-      else if (token_type == GL2.GL_BITMAP_TOKEN)
+      else if (token_type == GLConstants.GL_BITMAP_TOKEN)
         throw new RuntimeException("Unknown token:" + token_type
             + ". This function is not intended to work with GL_BITMAP_TOKEN.");
-      else if (token_type == GL2.GL_DRAW_PIXEL_TOKEN)
+      else if (token_type == GLConstants.GL_DRAW_PIXEL_TOKEN)
         throw new RuntimeException("Unknown token:" + token_type
             + ". This function is not intended to work with GL_DRAW_PIXEL_TOKEN.");
-      else if (token_type == GL2.GL_COPY_PIXEL_TOKEN)
+      else if (token_type == GLConstants.GL_COPY_PIXEL_TOKEN)
         throw new RuntimeException("Unknown token:" + token_type
             + ". This function is not intended to work with GL_COPY_PIXEL_TOKEN.");
       else {

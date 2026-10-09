@@ -1,7 +1,5 @@
 package org.jzy3d.plot3d;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -9,19 +7,18 @@ import com.jogamp.opengl.GLDrawableFactory;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 
-public class GPUInfo {
-  protected String vendor;
-  protected String renderer;
-  protected String version;
-  protected List<String> extensions = new ArrayList<>(); 
-  
+/**
+ * Read {@link GPUInfo} with JOGL, either from an existing GL context or from a hidden offscreen
+ * context.
+ */
+public class NativeGPUInfo extends GPUInfo {
   public static void main(String[] args) {
-    GPUInfo gpu = GPUInfo.load();
+    GPUInfo gpu = NativeGPUInfo.load();
 
     System.out.println("GPU : " + gpu.renderer + "\n");
   }
 
-  /** Initialize a GL context offscreen to query GPU information */
+  /** Read GPU information from a hidden offscreen context. */
   public static GPUInfo load() {
     GLProfile glp = GLProfile.getMaxProgrammable(true);
     GLCapabilities caps = new GLCapabilities(glp);
@@ -48,9 +45,8 @@ public class GPUInfo {
     return gpuHolder[0];
   }
 
-  /** Use an existing GL context to query GPU information */
+  /** Read GPU information from a GL context, which MUST be current. */
   public static GPUInfo load(GL gl) {
-    // Load Info
     GPUInfo gpu = new GPUInfo();
     gpu.vendor = gl.glGetString(GL.GL_VENDOR);
     gpu.renderer = gl.glGetString(GL.GL_RENDERER);
@@ -64,40 +60,5 @@ public class GPUInfo {
       }
     }
     return gpu;
-  }
-  
-  public String toString() {
-    StringBuffer sb = new StringBuffer();
-    sb.append("GL_VENDOR     : " + vendor + "\n");
-    sb.append("GL_RENDERER   : " + renderer + "\n");
-    sb.append("GL_VERSION    : " + version + "\n");
-    
-    if(extensions!=null) {
-      sb.append("GL_EXTENSIONS : (" + extensions.size() + ")\n");
-      for(String e: extensions) {
-        sb.append("\t" + e + "\n");
-      }
-    }
-    else {
-      sb.append("GL_EXTENSIONS : null\n");      
-    }
-    
-    return sb.toString();
-  }
-
-  public String getVendor() {
-    return vendor;
-  }
-
-  public String getRenderer() {
-    return renderer;
-  }
-
-  public String getVersion() {
-    return version;
-  }
-
-  public List<String> getExtensions() {
-    return extensions;
   }
 }
