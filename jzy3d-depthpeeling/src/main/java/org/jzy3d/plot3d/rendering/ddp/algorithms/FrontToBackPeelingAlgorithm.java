@@ -135,6 +135,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
           GLConstants.GL_TEXTURE_RECTANGLE_ARB, g_frontDepthTexId[i], 0);
       painter.glFramebufferTexture2D(GLConstants.GL_FRAMEBUFFER, GLConstants.GL_COLOR_ATTACHMENT0,
           GLConstants.GL_TEXTURE_RECTANGLE_ARB, g_frontColorTexId[i], 0);
+      checkFramebuffer(painter, "front peeling " + i);
     }
 
     painter.glGenTextures(1, g_frontColorBlenderTexId, 0);
@@ -152,6 +153,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
         GLConstants.GL_TEXTURE_RECTANGLE_ARB, g_frontDepthTexId[0], 0);
     painter.glFramebufferTexture2D(GLConstants.GL_FRAMEBUFFER, GLConstants.GL_COLOR_ATTACHMENT0,
         GLConstants.GL_TEXTURE_RECTANGLE_ARB, g_frontColorBlenderTexId[0], 0);
+    checkFramebuffer(painter, "front color blender");
   }
 
   protected void deleteFrontPeelingRenderTargets(IPainter painter) {

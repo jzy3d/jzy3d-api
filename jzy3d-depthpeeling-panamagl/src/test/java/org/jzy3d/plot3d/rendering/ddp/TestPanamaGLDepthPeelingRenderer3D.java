@@ -65,6 +65,13 @@ public class TestPanamaGLDepthPeelingRenderer3D {
     try {
       chart = factory.newChart(Quality.Advanced());
     } catch (Throwable t) {
+      // A depth peeling framebuffer the GL implementation can not render to is a failure, not a
+      // missing OpenGL context
+      for (Throwable c = t; c != null; c = c.getCause()) {
+        if (c instanceof IllegalStateException && String.valueOf(c.getMessage()).contains("framebuffer")) {
+          throw new AssertionError(method + " : " + c.getMessage(), t);
+        }
+      }
       Assume.assumeNoException("No OpenGL context available", t);
       return null;
     }
