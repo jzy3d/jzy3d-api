@@ -223,6 +223,15 @@ public class TestPanamaGLPainter_NativeGL {
   }
 
   // ---------------------------------------------------------------------------------------------
+  // GPU resources
+
+  @Test
+  public void gpuResources() {
+    // uses the 64x64 FBO prepared before each test
+    new org.jzy3d.junit.PainterGPUConformance(painter).checkAll();
+  }
+
+  // ---------------------------------------------------------------------------------------------
 
   protected void assertNoGLError() {
     assertEquals(GL.GL_NO_ERROR, gl.glGetError());
