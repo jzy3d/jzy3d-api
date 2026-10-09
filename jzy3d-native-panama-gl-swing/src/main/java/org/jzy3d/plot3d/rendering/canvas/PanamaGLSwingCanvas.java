@@ -164,7 +164,7 @@ public class PanamaGLSwingCanvas extends JPanel implements IPanamaGLCanvas {
 
   @Override
   public String getDebugInfo() {
-    return null;
+    return support.getDebugInfo();
   }
 
   /**

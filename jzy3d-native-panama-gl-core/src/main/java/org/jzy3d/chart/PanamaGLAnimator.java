@@ -20,7 +20,10 @@ package org.jzy3d.chart;
 import org.jzy3d.plot3d.rendering.canvas.IScreenCanvas;
 
 public class PanamaGLAnimator implements IAnimator {
-  private static final int RENDERING_LOOP_PAUSE = 100;
+  /** Default pause between two renderings, in milliseconds (about 60 frames per second). */
+  public static final int RENDERING_LOOP_PAUSE = 16;
+
+  protected int pause = RENDERING_LOOP_PAUSE;
   protected IScreenCanvas canvas;
   protected Thread t;
   protected boolean loop = false;
@@ -47,7 +50,7 @@ public class PanamaGLAnimator implements IAnimator {
               canvas.forceRepaint();
           }
           try {
-            Thread.sleep(RENDERING_LOOP_PAUSE);
+            Thread.sleep(pause);
           } catch (InterruptedException e) {
           }
         }
@@ -55,6 +58,15 @@ public class PanamaGLAnimator implements IAnimator {
 
     }, "org.jzy3d.chart.PanamaGLAnimator thread " + (id++));
     t.start();
+  }
+
+  /** Pause between two renderings, in milliseconds. */
+  public int getPause() {
+    return pause;
+  }
+
+  public void setPause(int pause) {
+    this.pause = pause;
   }
 
   @Override
