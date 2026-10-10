@@ -13,6 +13,8 @@ uniform sampler2DRect BackBlenderTex;
 
 void main(void)
 {
+	// the final image is opaque : define its alpha, otherwise left to the GL implementation
+	gl_FragColor.a = 1.0;
 	vec4 frontColor = texture2DRect(FrontBlenderTex, gl_FragCoord.xy);
 	vec3 backColor = texture2DRect(BackBlenderTex, gl_FragCoord.xy).rgb;
 	float alphaMultiplier = 1.0 - frontColor.w;

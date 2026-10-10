@@ -1,5 +1,8 @@
 package org.jzy3d.painters;
 
+import java.nio.Buffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -580,4 +583,348 @@ public abstract class AbstractPainter implements IPainter {
         getCanvas().getPixelScaleJVM());
   }
 
+  /* ******************************************************************************************* */
+  /* GPU RESOURCES : not supported by default                                                    */
+  /* ******************************************************************************************* */
+
+  /** Error thrown by painters that do not support a GPU resource method. */
+  protected UnsupportedOperationException unsupported(String method) {
+    return new UnsupportedOperationException(
+        getClass().getSimpleName() + " does not support " + method);
+  }
+
+  @Override
+  public void glGenBuffers(int n, int[] buffers, int offset) {
+    throw unsupported("glGenBuffers");
+  }
+
+  @Override
+  public void glDeleteBuffers(int n, int[] buffers, int offset) {
+    throw unsupported("glDeleteBuffers");
+  }
+
+  @Override
+  public void glBindBuffer(int target, int buffer) {
+    throw unsupported("glBindBuffer");
+  }
+
+  @Override
+  public void glBufferData(int target, long size, Buffer data, int usage) {
+    throw unsupported("glBufferData");
+  }
+
+  @Override
+  public void glBufferSubData(int target, long offset, long size, Buffer data) {
+    throw unsupported("glBufferSubData");
+  }
+
+  @Override
+  public void glEnableClientState(int array) {
+    throw unsupported("glEnableClientState");
+  }
+
+  @Override
+  public void glDisableClientState(int array) {
+    throw unsupported("glDisableClientState");
+  }
+
+  @Override
+  public void glVertexPointer(int size, int type, int stride, long pointerOffset) {
+    throw unsupported("glVertexPointer");
+  }
+
+  @Override
+  public void glNormalPointer(int type, int stride, long pointerOffset) {
+    throw unsupported("glNormalPointer");
+  }
+
+  @Override
+  public void glColorPointer(int size, int type, int stride, long pointerOffset) {
+    throw unsupported("glColorPointer");
+  }
+
+  @Override
+  public void glTexCoordPointer(int size, int type, int stride, long pointerOffset) {
+    throw unsupported("glTexCoordPointer");
+  }
+
+  @Override
+  public void glDrawArrays(int mode, int first, int count) {
+    throw unsupported("glDrawArrays");
+  }
+
+  @Override
+  public void glDrawElements(int mode, int count, int type, long indicesOffset) {
+    throw unsupported("glDrawElements");
+  }
+
+  @Override
+  public void glMultiDrawArrays(int mode, IntBuffer first, IntBuffer count, int drawcount) {
+    throw unsupported("glMultiDrawArrays");
+  }
+
+  @Override
+  public void glMultiDrawElements(int mode, IntBuffer count, int type, LongBuffer indicesOffsets, int drawcount) {
+    throw unsupported("glMultiDrawElements");
+  }
+
+  @Override
+  public void glPrimitiveRestartIndex(int index) {
+    throw unsupported("glPrimitiveRestartIndex");
+  }
+
+  @Override
+  public int glCreateShader(int type) {
+    throw unsupported("glCreateShader");
+  }
+
+  @Override
+  public void glShaderSource(int shader, String[] sources) {
+    throw unsupported("glShaderSource");
+  }
+
+  @Override
+  public void glCompileShader(int shader) {
+    throw unsupported("glCompileShader");
+  }
+
+  @Override
+  public void glGetShaderiv(int shader, int pname, int[] params, int offset) {
+    throw unsupported("glGetShaderiv");
+  }
+
+  @Override
+  public String glGetShaderInfoLog(int shader) {
+    throw unsupported("glGetShaderInfoLog");
+  }
+
+  @Override
+  public void glDeleteShader(int shader) {
+    throw unsupported("glDeleteShader");
+  }
+
+  @Override
+  public int glCreateProgram() {
+    throw unsupported("glCreateProgram");
+  }
+
+  @Override
+  public void glAttachShader(int program, int shader) {
+    throw unsupported("glAttachShader");
+  }
+
+  @Override
+  public void glDetachShader(int program, int shader) {
+    throw unsupported("glDetachShader");
+  }
+
+  @Override
+  public void glLinkProgram(int program) {
+    throw unsupported("glLinkProgram");
+  }
+
+  @Override
+  public void glValidateProgram(int program) {
+    throw unsupported("glValidateProgram");
+  }
+
+  @Override
+  public void glGetProgramiv(int program, int pname, int[] params, int offset) {
+    throw unsupported("glGetProgramiv");
+  }
+
+  @Override
+  public String glGetProgramInfoLog(int program) {
+    throw unsupported("glGetProgramInfoLog");
+  }
+
+  @Override
+  public void glUseProgram(int program) {
+    throw unsupported("glUseProgram");
+  }
+
+  @Override
+  public void glDeleteProgram(int program) {
+    throw unsupported("glDeleteProgram");
+  }
+
+  @Override
+  public int glGetUniformLocation(int program, String name) {
+    throw unsupported("glGetUniformLocation");
+  }
+
+  @Override
+  public void glUniform1i(int location, int v0) {
+    throw unsupported("glUniform1i");
+  }
+
+  @Override
+  public void glUniform1f(int location, float v0) {
+    throw unsupported("glUniform1f");
+  }
+
+  @Override
+  public void glUniform1fv(int location, int count, float[] value, int offset) {
+    throw unsupported("glUniform1fv");
+  }
+
+  @Override
+  public void glUniform2fv(int location, int count, float[] value, int offset) {
+    throw unsupported("glUniform2fv");
+  }
+
+  @Override
+  public void glUniform3fv(int location, int count, float[] value, int offset) {
+    throw unsupported("glUniform3fv");
+  }
+
+  @Override
+  public void glUniform4fv(int location, int count, float[] value, int offset) {
+    throw unsupported("glUniform4fv");
+  }
+
+  @Override
+  public void glUniformMatrix4fv(int location, int count, boolean transpose, float[] value, int offset) {
+    throw unsupported("glUniformMatrix4fv");
+  }
+
+  @Override
+  public void glGenTextures(int n, int[] textures, int offset) {
+    throw unsupported("glGenTextures");
+  }
+
+  @Override
+  public void glDeleteTextures(int n, int[] textures, int offset) {
+    throw unsupported("glDeleteTextures");
+  }
+
+  @Override
+  public void glBindTexture(int target, int texture) {
+    throw unsupported("glBindTexture");
+  }
+
+  @Override
+  public void glActiveTexture(int texture) {
+    throw unsupported("glActiveTexture");
+  }
+
+  @Override
+  public void glTexParameteri(int target, int pname, int param) {
+    throw unsupported("glTexParameteri");
+  }
+
+  @Override
+  public void glTexImage1D(int target, int level, int internalFormat, int width, int border, int format, int type, Buffer pixels) {
+    throw unsupported("glTexImage1D");
+  }
+
+  @Override
+  public void glTexImage2D(int target, int level, int internalFormat, int width, int height, int border, int format, int type, Buffer pixels) {
+    throw unsupported("glTexImage2D");
+  }
+
+  @Override
+  public void glTexImage3D(int target, int level, int internalFormat, int width, int height, int depth, int border, int format, int type, Buffer pixels) {
+    throw unsupported("glTexImage3D");
+  }
+
+  @Override
+  public void glTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type, Buffer pixels) {
+    throw unsupported("glTexSubImage3D");
+  }
+
+  @Override
+  public void glTexCoord3f(float s, float t, float r) {
+    throw unsupported("glTexCoord3f");
+  }
+
+  @Override
+  public void glGenFramebuffers(int n, int[] framebuffers, int offset) {
+    throw unsupported("glGenFramebuffers");
+  }
+
+  @Override
+  public void glDeleteFramebuffers(int n, int[] framebuffers, int offset) {
+    throw unsupported("glDeleteFramebuffers");
+  }
+
+  @Override
+  public void glBindFramebuffer(int target, int framebuffer) {
+    throw unsupported("glBindFramebuffer");
+  }
+
+  @Override
+  public void glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level) {
+    throw unsupported("glFramebufferTexture2D");
+  }
+
+  @Override
+  public int glCheckFramebufferStatus(int target) {
+    throw unsupported("glCheckFramebufferStatus");
+  }
+
+  @Override
+  public void glDrawBuffer(int mode) {
+    throw unsupported("glDrawBuffer");
+  }
+
+  @Override
+  public void glDrawBuffers(int n, int[] buffers, int offset) {
+    throw unsupported("glDrawBuffers");
+  }
+
+  @Override
+  public void glGenQueries(int n, int[] ids, int offset) {
+    throw unsupported("glGenQueries");
+  }
+
+  @Override
+  public void glDeleteQueries(int n, int[] ids, int offset) {
+    throw unsupported("glDeleteQueries");
+  }
+
+  @Override
+  public void glBeginQuery(int target, int id) {
+    throw unsupported("glBeginQuery");
+  }
+
+  @Override
+  public void glEndQuery(int target) {
+    throw unsupported("glEndQuery");
+  }
+
+  @Override
+  public void glGetQueryObjectuiv(int id, int pname, int[] params, int offset) {
+    throw unsupported("glGetQueryObjectuiv");
+  }
+
+  @Override
+  public void glAlphaFunc(int func, float ref) {
+    throw unsupported("glAlphaFunc");
+  }
+
+  @Override
+  public void glBlendEquation(int mode) {
+    throw unsupported("glBlendEquation");
+  }
+
+  @Override
+  public void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
+    throw unsupported("glBlendFuncSeparate");
+  }
+
+  @Override
+  public int glGetError() {
+    throw unsupported("glGetError");
+  }
+
+  @Override
+  public String glGetString(int name) {
+    throw unsupported("glGetString");
+  }
+
+  @Override
+  public void glReadPixels(int x, int y, int width, int height, int format, int type, Buffer pixels) {
+    throw unsupported("glReadPixels");
+  }
 }

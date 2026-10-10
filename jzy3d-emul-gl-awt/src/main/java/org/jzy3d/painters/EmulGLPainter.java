@@ -790,8 +790,10 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
     switch (mode) {
       case COMPILE:
         glNewList(list, GL.GL_COMPILE);
+        break;
       case COMPILE_AND_EXECUTE:
         glNewList(list, GL.GL_COMPILE_AND_EXECUTE);
+        break;
     }
   }
 
@@ -1249,7 +1251,7 @@ public class EmulGLPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glDisable_Light(int light) {
-    glEnable(lightId(light));
+    glDisable(lightId(light));
   }
 
   protected int lightId(int id) {

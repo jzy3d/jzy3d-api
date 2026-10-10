@@ -28,6 +28,7 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.SWTScreenshotKeyControlle
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.SWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
+import org.jzy3d.chart.controllers.mouse.picking.SWTMousePickingController;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.maths.Utils;
 import org.jzy3d.painters.PanamaGLPainter;
@@ -46,6 +47,10 @@ public class PanamaGLSWTPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    if (isOffscreen()) {
+      return newOffscreenCanvas(factory, scene, quality);
+    }
+
     Composite parent = ((ISWTChartFactory) factory).getComposite();
     PanamaGLSWTCanvas canvas =
         new PanamaGLSWTCanvas(factory, scene, quality, parent, panamaGLFactory);
@@ -62,8 +67,7 @@ public class PanamaGLSWTPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-    throw new NotImplementedException(
-        "SWT mouse picking controller is not yet implemented for PanamaGL.");
+    return new SWTMousePickingController(chart, clickWidth);
   }
 
   @Override

@@ -49,14 +49,39 @@ public class ITTest {
   static boolean runOffscreen = false;
 
   public enum WT {
-    EmulGL_AWT, Native_AWT, Native_Swing
+    EmulGL_AWT, Native_AWT, Native_Swing, PanamaGL_Swing
+  }
+
+  /**
+   * PanamaGL requires Java 22+ : its chart factory is loaded by name, and PanamaGL toolkits are only
+   * tested if available in classpath (see the <code>panamagl</code> profile of this module).
+   */
+  public static final String PANAMAGL_SWING_FACTORY =
+      "org.jzy3d.chart.factories.PanamaGLSwingChartFactory";
+
+  public static boolean isPanamaGLAvailable() {
+    try {
+      Class.forName(PANAMAGL_SWING_FACTORY);
+      return true;
+    } catch (ClassNotFoundException e) {
+      return false;
+    }
+  }
+
+  protected static WT[] withPanamaGL(WT... toolkits) {
+    if (!isPanamaGLAvailable()) {
+      return toolkits;
+    }
+    WT[] all = java.util.Arrays.copyOf(toolkits, toolkits.length + 1);
+    all[toolkits.length] = WT.PanamaGL_Swing;
+    return all;
   }
 
   // ----------------------------------------------------------------------------------------------
   // //
   // Toolkit and resolutions to apply to all tests using the forEach operator
 
-  protected WT[] toolkits = {WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT};
+  protected WT[] toolkits = withPanamaGL(WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT);
   protected HiDPI[] resolutions = {HiDPI.ON, HiDPI.OFF};
 
   protected WT[] toolkitsAWT = {WT.Native_AWT, WT.EmulGL_AWT};
@@ -315,8 +340,18 @@ public class ITTest {
       return chart(new AWTChartFactory(), hidpi, offscreenDimension);
     } else if (WT.Native_Swing.equals(windowingToolkit)) {
       return chart(new SwingChartFactory(), hidpi, offscreenDimension);
+    } else if (WT.PanamaGL_Swing.equals(windowingToolkit)) {
+      return chart(newChartFactory(PANAMAGL_SWING_FACTORY), hidpi, offscreenDimension);
     } else {
       throw new IllegalArgumentException("Unsupported toolkit : " + windowingToolkit);
+    }
+  }
+
+  protected static ChartFactory newChartFactory(String className) {
+    try {
+      return (ChartFactory) Class.forName(className).getDeclaredConstructor().newInstance();
+    } catch (ReflectiveOperationException e) {
+      throw new IllegalArgumentException("Can not create " + className, e);
     }
   }
 
@@ -376,13 +411,18 @@ public class ITTest {
     // Verify
     ChartTester tester = new ChartTester();
 
-    if (!(chart.getFactory() instanceof EmulGLChartFactory)) {
+    // JOGL charts are read with the JOGL renderer, other charts give a BufferedImage screenshot
+    if (!(chart.getFactory() instanceof EmulGLChartFactory) && !isPanamaGL(chart)) {
       tester = new NativeChartTester();
     }
 
     tester.setTestCaseInputFolder("src/test/resources/" + platform.getLabel() + "/");
 
     tester.assertSimilar(chart, tester.path(name));
+  }
+
+  public static boolean isPanamaGL(Chart chart) {
+    return chart.getFactory().getClass().getName().contains("PanamaGL");
   }
 
   // ----------------------------------------------------------------------------------------------

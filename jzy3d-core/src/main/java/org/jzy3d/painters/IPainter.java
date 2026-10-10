@@ -4,6 +4,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.colors.Color;
@@ -734,5 +735,171 @@ public interface IPainter {
   /** Verify if pixel scale of JVM is different than the one return by the canvas */
   public boolean isJVMScaleLargerThanNativeScale();
 
+  /* ******************************************************************************************* */
+  /*                                                                                             */
+  /* GPU RESOURCES                                                                               */
+  /*                                                                                             */
+  /* Buffer objects, shaders, textures and framebuffers used by GPU based drawables (VBO, volume, */
+  /* depth peeling). They follow the OpenGL 2.x specification and use Java types only, so that    */
+  /* drawables do not depend on a particular OpenGL binding. Painters that do not support them    */
+  /* (e.g. EmulGL) throw an UnsupportedOperationException.                                       */
+  /*                                                                                             */
+  /* ******************************************************************************************* */
 
+  // Buffer objects
+
+  public void glGenBuffers(int n, int[] buffers, int offset);
+
+  public void glDeleteBuffers(int n, int[] buffers, int offset);
+
+  public void glBindBuffer(int target, int buffer);
+
+  public void glBufferData(int target, long size, Buffer data, int usage);
+
+  public void glBufferSubData(int target, long offset, long size, Buffer data);
+
+
+  // Vertex arrays, reading the buffer object bound to GL_ARRAY_BUFFER at the given byte offsets
+
+  public void glEnableClientState(int array);
+
+  public void glDisableClientState(int array);
+
+  public void glVertexPointer(int size, int type, int stride, long pointerOffset);
+
+  public void glNormalPointer(int type, int stride, long pointerOffset);
+
+  public void glColorPointer(int size, int type, int stride, long pointerOffset);
+
+  public void glTexCoordPointer(int size, int type, int stride, long pointerOffset);
+
+
+  // Drawing, with indices read from the buffer object bound to GL_ELEMENT_ARRAY_BUFFER at the given byte offsets
+
+  public void glDrawArrays(int mode, int first, int count);
+
+  public void glDrawElements(int mode, int count, int type, long indicesOffset);
+
+  public void glMultiDrawArrays(int mode, IntBuffer first, IntBuffer count, int drawcount);
+
+  public void glMultiDrawElements(int mode, IntBuffer count, int type, LongBuffer indicesOffsets, int drawcount);
+
+  public void glPrimitiveRestartIndex(int index);
+
+
+  // Shaders
+
+  public int glCreateShader(int type);
+
+  public void glShaderSource(int shader, String[] sources);
+
+  public void glCompileShader(int shader);
+
+  public void glGetShaderiv(int shader, int pname, int[] params, int offset);
+
+  public String glGetShaderInfoLog(int shader);
+
+  public void glDeleteShader(int shader);
+
+  public int glCreateProgram();
+
+  public void glAttachShader(int program, int shader);
+
+  public void glDetachShader(int program, int shader);
+
+  public void glLinkProgram(int program);
+
+  public void glValidateProgram(int program);
+
+  public void glGetProgramiv(int program, int pname, int[] params, int offset);
+
+  public String glGetProgramInfoLog(int program);
+
+  public void glUseProgram(int program);
+
+  public void glDeleteProgram(int program);
+
+  public int glGetUniformLocation(int program, String name);
+
+  public void glUniform1i(int location, int v0);
+
+  public void glUniform1f(int location, float v0);
+
+  public void glUniform1fv(int location, int count, float[] value, int offset);
+
+  public void glUniform2fv(int location, int count, float[] value, int offset);
+
+  public void glUniform3fv(int location, int count, float[] value, int offset);
+
+  public void glUniform4fv(int location, int count, float[] value, int offset);
+
+  public void glUniformMatrix4fv(int location, int count, boolean transpose, float[] value, int offset);
+
+
+  // Textures
+
+  public void glGenTextures(int n, int[] textures, int offset);
+
+  public void glDeleteTextures(int n, int[] textures, int offset);
+
+  public void glBindTexture(int target, int texture);
+
+  public void glActiveTexture(int texture);
+
+  public void glTexParameteri(int target, int pname, int param);
+
+  public void glTexImage1D(int target, int level, int internalFormat, int width, int border, int format, int type, Buffer pixels);
+
+  public void glTexImage2D(int target, int level, int internalFormat, int width, int height, int border, int format, int type, Buffer pixels);
+
+  public void glTexImage3D(int target, int level, int internalFormat, int width, int height, int depth, int border, int format, int type, Buffer pixels);
+
+  public void glTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type, Buffer pixels);
+
+  public void glTexCoord3f(float s, float t, float r);
+
+
+  // Framebuffer objects
+
+  public void glGenFramebuffers(int n, int[] framebuffers, int offset);
+
+  public void glDeleteFramebuffers(int n, int[] framebuffers, int offset);
+
+  public void glBindFramebuffer(int target, int framebuffer);
+
+  public void glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level);
+
+  public int glCheckFramebufferStatus(int target);
+
+  public void glDrawBuffer(int mode);
+
+  public void glDrawBuffers(int n, int[] buffers, int offset);
+
+
+  // Queries
+
+  public void glGenQueries(int n, int[] ids, int offset);
+
+  public void glDeleteQueries(int n, int[] ids, int offset);
+
+  public void glBeginQuery(int target, int id);
+
+  public void glEndQuery(int target);
+
+  public void glGetQueryObjectuiv(int id, int pname, int[] params, int offset);
+
+
+  // Other
+
+  public void glAlphaFunc(int func, float ref);
+
+  public void glBlendEquation(int mode);
+
+  public void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha);
+
+  public int glGetError();
+
+  public String glGetString(int name);
+
+  public void glReadPixels(int x, int y, int width, int height, int format, int type, Buffer pixels);
 }
