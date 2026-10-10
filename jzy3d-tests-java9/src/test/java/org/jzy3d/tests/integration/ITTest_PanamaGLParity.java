@@ -3,6 +3,9 @@ package org.jzy3d.tests.integration;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 import org.junit.Assert;
@@ -84,6 +87,8 @@ public class ITTest_PanamaGLParity extends ITTest {
 
     System.out.println("JOGL     GL state : " + joglScatter.state);
     System.out.println("PanamaGL GL state : " + panamaScatter.state);
+    System.out.println("JOGL     frames : \n  " + String.join("\n  ", joglScatter.history));
+    System.out.println("PanamaGL frames : \n  " + String.join("\n  ", panamaScatter.history));
 
     Assert.assertFalse("JOGL scatter was not drawn", joglScatter.state.isEmpty());
     Assert.assertFalse("PanamaGL scatter was not drawn", panamaScatter.state.isEmpty());
@@ -219,7 +224,7 @@ public class ITTest_PanamaGLParity extends ITTest {
         0x8642};
 
     String state = "";
-    int draws = 0;
+    List<String> history = new ArrayList<>();
 
     StateScatter(Scatter scatter) {
       super(scatter.getData(), scatter.getColors(), scatter.getWidth());
@@ -228,9 +233,36 @@ public class ITTest_PanamaGLParity extends ITTest {
     @Override
     public void draw(IPainter painter) {
       String before = state(painter);
+      history.add(frame(painter));
       super.draw(painter);
-      draws++;
-      state = "draws=" + draws + "\n before draw : " + before + "\n after draw : " + state(painter);
+      state = "before draw : " + before + "\n after draw : " + state(painter);
+    }
+
+    /**
+     * Describe the camera and the content already drawn around the scene center before drawing
+     * the scatter, to know if a previous frame was not cleared.
+     */
+    String frame(IPainter painter) {
+      float[] proj = new float[16];
+      float[] model = new float[16];
+      painter.glGetFloatv(0x0BA7, proj, 0);
+      painter.glGetFloatv(0x0BA6, model, 0);
+      int[] viewport = new int[4];
+      painter.glGetIntegerv(0x0BA2, viewport, 0);
+
+      int size = 64;
+      ByteBuffer pixels = ByteBuffer.allocateDirect(size * size * 4);
+      painter.glReadPixels(viewport[2] / 2 - size / 2, viewport[3] / 2 - size / 2, size, size,
+          0x1908, 0x1401, pixels);
+      int drawn = 0;
+      for (int i = 0; i < size * size; i++) {
+        if ((pixels.get(i * 4) & 0xFF) < 250 || (pixels.get(i * 4 + 1) & 0xFF) < 250
+            || (pixels.get(i * 4 + 2) & 0xFF) < 250) {
+          drawn++;
+        }
+      }
+      return String.format("proj %.4f %.4f model %.4f %.4f %.4f, %d non white pixels at center",
+          proj[0], proj[5], model[0], model[5], model[14], drawn);
     }
 
     String state(IPainter painter) {
