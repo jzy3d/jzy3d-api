@@ -100,6 +100,24 @@ public class ITTest_PanamaGLParity extends ITTest {
     });
   }
 
+  /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} with fixed bounds */
+  @Test
+  public void whenScatterWithFixedBounds_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("ScatterWithFixedBounds", chart -> {
+      chart.add(scatter(50000));
+      chart.getView().setBoundsManual(new BoundingBox3d(-0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f));
+    });
+  }
+
+  /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} without axis */
+  @Test
+  public void whenScatterWithoutAxisOnly_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("ScatterWithoutAxisOnly", chart -> {
+      chart.add(scatter(50000));
+      chart.getView().setAxisDisplayed(false);
+    });
+  }
+
   /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} without transparency */
   @Test
   public void whenOpaqueScatter_ThenPanamaGLMatchesJOGL() throws IOException {
@@ -189,12 +207,19 @@ public class ITTest_PanamaGLParity extends ITTest {
         "CLAMP_READ_COLOR", "BLEND", "BLEND_SRC_RGB", "BLEND_DST_RGB", "BLEND_SRC_ALPHA",
         "BLEND_DST_ALPHA", "BLEND_EQUATION_RGB", "DEPTH_TEST", "ALPHA_TEST", "LIGHTING",
         "COLOR_MATERIAL", "POINT_SMOOTH", "MULTISAMPLE", "SAMPLES", "FRAMEBUFFER_SRGB",
-        "DITHER", "RED_BITS", "ALPHA_BITS", "SHADE_MODEL", "COLOR_LOGIC_OP"};
+        "DITHER", "RED_BITS", "ALPHA_BITS", "SHADE_MODEL", "COLOR_LOGIC_OP", "TEXTURE_2D",
+        "TEXTURE_BINDING_2D", "ACTIVE_TEXTURE", "ALPHA_TEST_FUNC", "DEPTH_FUNC",
+        "DEPTH_WRITEMASK", "POINT_SPRITE", "CURRENT_PROGRAM", "STENCIL_TEST", "SCISSOR_TEST",
+        "FOG", "CULL_FACE", "POLYGON_OFFSET_POINT", "VERTEX_ARRAY", "COLOR_ARRAY",
+        "ARRAY_BUFFER_BINDING", "DRAW_FRAMEBUFFER_BINDING", "MATRIX_MODE", "PROGRAM_POINT_SIZE"};
     static final int[] PNAMES = {0x891A, 0x891B, 0x891C, 0x0BE2, 0x80C9, 0x80C8, 0x80CB,
         0x80CA, 0x8009, 0x0B71, 0x0BC0, 0x0B50, 0x0B57, 0x0B10, 0x809D, 0x80A9, 0x8DB9, 0x0BD0,
-        0x0D52, 0x0D55, 0x0B54, 0x0BF2};
+        0x0D52, 0x0D55, 0x0B54, 0x0BF2, 0x0DE1, 0x8069, 0x84E0, 0x0BC1, 0x0B74, 0x0B72, 0x8861,
+        0x8B8D, 0x0B90, 0x0C11, 0x0B60, 0x0B44, 0x2A01, 0x8074, 0x8076, 0x8894, 0x8CA6, 0x0BA0,
+        0x8642};
 
     String state = "";
+    int draws = 0;
 
     StateScatter(Scatter scatter) {
       super(scatter.getData(), scatter.getColors(), scatter.getWidth());
@@ -202,8 +227,13 @@ public class ITTest_PanamaGLParity extends ITTest {
 
     @Override
     public void draw(IPainter painter) {
+      String before = state(painter);
       super.draw(painter);
+      draws++;
+      state = "draws=" + draws + "\n before draw : " + before + "\n after draw : " + state(painter);
+    }
 
+    String state(IPainter painter) {
       StringBuilder sb = new StringBuilder();
       int[] value = new int[4];
       for (int i = 0; i < PNAMES.length; i++) {
@@ -216,8 +246,12 @@ public class ITTest_PanamaGLParity extends ITTest {
       sb.append("POINT_SIZE=" + size[0] + " ");
       painter.glGetIntegerv(0x0BA2, value, 0);
       sb.append("VIEWPORT=" + value[0] + "," + value[1] + "," + value[2] + "," + value[3] + " ");
+      painter.glGetFloatv(0x0BC2, size, 0);
+      sb.append("ALPHA_TEST_REF=" + size[0] + " ");
+      painter.glGetFloatv(0x0B03, size, 0);
+      sb.append("TEXCOORD=" + size[0] + "," + size[1] + "," + size[2] + "," + size[3] + " ");
       sb.append("VERSION=" + painter.glGetString(0x1F02));
-      state = sb.toString();
+      return sb.toString();
     }
   }
 
