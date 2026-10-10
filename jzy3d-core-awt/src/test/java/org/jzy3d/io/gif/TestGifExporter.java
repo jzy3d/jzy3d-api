@@ -99,9 +99,10 @@ public class TestGifExporter {
 
 
     // ------------------------------------
-    // When terminating with a timeout
+    // When terminating with a timeout. Termination returns as soon as images are flushed, the
+    // timeout is long enough for slow CI runners (macOS Intel failed with 100ms)
 
-    boolean success = gif.terminate(100, TimeUnit.MILLISECONDS);
+    boolean success = gif.terminate(10, TimeUnit.SECONDS);
 
     // Then the last submited image is added (for implementation reasons
     Assert.assertEquals(2 + nFrameLate + 1, gif.getNumberSubmittedImages().intValue());
@@ -167,6 +168,7 @@ public class TestGifExporter {
     // Then number of submitted image grow after a short delay
     sleep(50);
 
+    waitForDelay(gif, time2);
     Assert.assertEquals(time2, gif.getDelay());
     Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
@@ -184,6 +186,7 @@ public class TestGifExporter {
     // Then number of submitted image grow after a short delay
     sleep(50);
 
+    waitForDelay(gif, time3);
     Assert.assertEquals(time3, gif.getDelay());
     Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
@@ -201,15 +204,17 @@ public class TestGifExporter {
 
     // Then number of submitted image did not grow after a short delay
     sleep(50);
+    waitForDelay(gif, time4);
     Assert.assertEquals(time4, gif.getDelay());
     Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(0, gif.getNumberOfSkippedImages().intValue());
 
 
     // ------------------------------------
-    // When terminating with a timeout
+    // When terminating with a timeout. Termination returns as soon as images are flushed, the
+    // timeout is long enough for slow CI runners (macOS Intel failed with 100ms)
 
-    boolean success = gif.terminate(100, TimeUnit.MILLISECONDS);
+    boolean success = gif.terminate(10, TimeUnit.SECONDS);
 
     // Then the last submited image is added (for implementation reasons)
     Assert.assertEquals(4, gif.getNumberSubmittedImages().intValue());
@@ -294,6 +299,7 @@ public class TestGifExporter {
     // Then number of submitted image did not grow after a short delay
     sleep(50);
 
+    waitForDelay(gif, time3);
     Assert.assertEquals(time3, gif.getDelay());
     Assert.assertEquals(1, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(1, gif.getNumberOfSkippedImages().intValue());
@@ -311,15 +317,17 @@ public class TestGifExporter {
 
     // Then number of submitted image did not grow after a short delay
     sleep(50);
+    waitForDelay(gif, time4);
     Assert.assertEquals(time4, gif.getDelay());
     Assert.assertEquals(2, gif.getNumberSubmittedImages().intValue()); 
     Assert.assertEquals(1, gif.getNumberOfSkippedImages().intValue());
 
 
     // ------------------------------------
-    // When terminating with a timeout
+    // When terminating with a timeout. Termination returns as soon as images are flushed, the
+    // timeout is long enough for slow CI runners (macOS Intel failed with 100ms)
 
-    boolean success = gif.terminate(100, TimeUnit.MILLISECONDS);
+    boolean success = gif.terminate(10, TimeUnit.SECONDS);
 
     // Then the last submited image is added (for implementation reasons)
     Assert.assertEquals(3, gif.getNumberSubmittedImages().intValue());
@@ -401,6 +409,17 @@ public class TestGifExporter {
     
     return duration;
 
+  }
+
+  /**
+   * The delay of a frame is applied by the export task running in the exporter's thread : wait for
+   * it rather than for a fixed duration, which may be too short on slow computers.
+   */
+  private void waitForDelay(GifExporter gif, int expectedDelay) {
+    long end = System.currentTimeMillis() + 10000;
+    while (gif.getDelay() != expectedDelay && System.currentTimeMillis() < end) {
+      sleep(10);
+    }
   }
 
   private void sleep(long mili) {
