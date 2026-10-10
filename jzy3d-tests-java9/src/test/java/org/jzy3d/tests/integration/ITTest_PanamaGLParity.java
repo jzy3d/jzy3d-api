@@ -656,6 +656,8 @@ public class ITTest_PanamaGLParity extends ITTest {
 
     double ratio = diffRatio(jogl, panama);
 
+    System.out.println(name + " : JOGL " + describe(jogl) + ", PanamaGL " + describe(panama));
+
     if (ratio > MAX_DIFF_RATIO) {
       System.out.println(name + " JOGL\n" + thumbnail(jogl) + name + " PanamaGL\n"
           + thumbnail(panama));
@@ -699,6 +701,8 @@ public class ITTest_PanamaGLParity extends ITTest {
     BufferedImage panama = render(WT.PanamaGL_Swing, content);
 
     double ratio = diffRatio(jogl, panama);
+
+    System.out.println(name + " : JOGL " + describe(jogl) + ", PanamaGL " + describe(panama));
 
     if (ratio > MAX_DIFF_RATIO) {
       System.out.println(name + " JOGL\n" + thumbnail(jogl) + name + " PanamaGL\n"
