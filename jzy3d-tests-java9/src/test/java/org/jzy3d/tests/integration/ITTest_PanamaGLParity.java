@@ -225,6 +225,52 @@ public class ITTest_PanamaGLParity extends ITTest {
     });
   }
 
+  /** The GL calls PanamaGL makes to draw a label, with an image not holding text */
+  @Test
+  public void whenScatterAfterImage_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterImage", painter -> {
+      BufferedImage image = new BufferedImage(20, 14, BufferedImage.TYPE_INT_ARGB);
+      try {
+        // Only PanamaGL painter draws images this way
+        painter.getClass().getMethod("drawImage", BufferedImage.class, float.class, float.class)
+            .invoke(painter, image, 10f, 10f);
+      } catch (NoSuchMethodException e) {
+        // JOGL painter
+      } catch (ReflectiveOperationException e) {
+        throw new RuntimeException(e);
+      }
+    });
+  }
+
+  /** The AWT text image PanamaGL builds to draw a label, without any GL call */
+  @Test
+  public void whenScatterAfterAWTText_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterAWTText", painter -> {
+      java.awt.Font font = new java.awt.Font("Helvetica", java.awt.Font.PLAIN, 12);
+      BufferedImage metrics = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+      java.awt.Graphics2D mg = metrics.createGraphics();
+      java.awt.FontMetrics fm = mg.getFontMetrics(font);
+      mg.dispose();
+
+      BufferedImage image = new BufferedImage(Math.max(1, fm.stringWidth("A")),
+          fm.getAscent() + fm.getDescent(), BufferedImage.TYPE_INT_ARGB);
+      java.awt.Graphics2D g = image.createGraphics();
+      g.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING,
+          java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+      g.setFont(font);
+      g.setColor(java.awt.Color.BLACK);
+      g.drawString("A", 0, fm.getAscent());
+      g.dispose();
+    });
+  }
+
+  /** The projection of a label position, done with native GLU by PanamaGL */
+  @Test
+  public void whenScatterAfterProjection_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterProjection",
+        painter -> painter.modelToScreen(new Coord3d(0.5f, 0.5f, 0.5f)));
+  }
+
   /**
    * Invoke a GL function on the GL object of a JOGL or PanamaGL painter, which may not offer it.
    * Done by reflection since this test does not compile against PanamaGL.
