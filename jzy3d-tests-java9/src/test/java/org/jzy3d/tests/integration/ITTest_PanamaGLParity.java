@@ -228,18 +228,49 @@ public class ITTest_PanamaGLParity extends ITTest {
   /** The GL calls PanamaGL makes to draw a label, with an image not holding text */
   @Test
   public void whenScatterAfterImage_ThenPanamaGLMatchesJOGL() throws IOException {
-    assertParityAfter("ScatterAfterImage", painter -> {
+    assertParityAfter("ScatterAfterImage",
+        painter -> drawImage(painter, new BufferedImage(20, 14, BufferedImage.TYPE_INT_ARGB)));
+  }
+
+  /** The GL calls PanamaGL makes to draw a label, with an opaque black image */
+  @Test
+  public void whenScatterAfterOpaqueImage_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterOpaqueImage", painter -> {
       BufferedImage image = new BufferedImage(20, 14, BufferedImage.TYPE_INT_ARGB);
-      try {
-        // Only PanamaGL painter draws images this way
-        painter.getClass().getMethod("drawImage", BufferedImage.class, float.class, float.class)
-            .invoke(painter, image, 10f, 10f);
-      } catch (NoSuchMethodException e) {
-        // JOGL painter
-      } catch (ReflectiveOperationException e) {
-        throw new RuntimeException(e);
-      }
+      java.awt.Graphics2D g = image.createGraphics();
+      g.setColor(java.awt.Color.BLACK);
+      g.fillRect(0, 0, 20, 14);
+      g.dispose();
+      drawImage(painter, image);
     });
+  }
+
+  /** The GL calls PanamaGL makes to draw a label, with an image holding a text */
+  @Test
+  public void whenScatterAfterTextImage_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterTextImage", painter -> {
+      BufferedImage image = new BufferedImage(20, 14, BufferedImage.TYPE_INT_ARGB);
+      java.awt.Graphics2D g = image.createGraphics();
+      g.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING,
+          java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+      g.setFont(new java.awt.Font("Helvetica", java.awt.Font.PLAIN, 12));
+      g.setColor(java.awt.Color.BLACK);
+      g.drawString("A", 0, 11);
+      g.dispose();
+      drawImage(painter, image);
+    });
+  }
+
+  /** Draw an image with the PanamaGL painter, do nothing with the JOGL one */
+  protected static void drawImage(IPainter painter, BufferedImage image) {
+    try {
+      painter.getClass().getMethod("drawImage", BufferedImage.class, float.class, float.class)
+          .invoke(painter, image, 10f, 10f);
+    } catch (NoSuchMethodException e) {
+      // JOGL painter
+    } catch (ReflectiveOperationException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /** The AWT text image PanamaGL builds to draw a label, without any GL call */
