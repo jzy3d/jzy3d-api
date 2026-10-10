@@ -28,6 +28,7 @@ import org.jzy3d.maths.Range;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.primitives.axis.ContourAxisBox;
+import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.junit.NativeChartTester;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Scatter;
@@ -113,6 +114,21 @@ public class ITTest_PanamaGLParity extends ITTest {
     assertParity("ScatterWithFixedBounds", chart -> {
       chart.add(scatter(50000));
       chart.getView().setBoundsManual(new BoundingBox3d(-0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f));
+    });
+  }
+
+  /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} with axis but without text */
+  @Test
+  public void whenScatterWithoutAxisText_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("ScatterWithoutAxisText", chart -> {
+      chart.add(scatter(50000));
+      AxisLayout layout = chart.getAxisLayout();
+      layout.setXTickLabelDisplayed(false);
+      layout.setYTickLabelDisplayed(false);
+      layout.setZTickLabelDisplayed(false);
+      layout.setXAxisLabelDisplayed(false);
+      layout.setYAxisLabelDisplayed(false);
+      layout.setZAxisLabelDisplayed(false);
     });
   }
 
