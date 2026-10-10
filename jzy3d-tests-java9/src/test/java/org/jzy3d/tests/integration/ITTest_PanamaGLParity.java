@@ -30,7 +30,10 @@ import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.primitives.axis.ContourAxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.junit.NativeChartTester;
+import java.util.Map;
+import com.jogamp.opengl.util.awt.TextRenderer;
 import org.jzy3d.painters.Font;
+import org.jzy3d.painters.NativeDesktopPainter;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
@@ -141,6 +144,38 @@ public class ITTest_PanamaGLParity extends ITTest {
   public void whenScatterAfterText_ThenPanamaGLMatchesJOGL() throws IOException {
     assertParityAfter("ScatterAfterText", painter -> painter.drawText(Font.Helvetica_12, "A",
         new Coord3d(0.5f, 0.5f, 0.5f), Color.BLACK, 0));
+  }
+
+  /**
+   * A single label drawn before the scatter, with a JOGL text renderer that does not use vertex
+   * arrays.
+   */
+  @Test
+  public void whenScatterAfterTextWithoutVertexArrays_ThenPanamaGLMatchesJOGL()
+      throws IOException {
+    assertParityAfter("ScatterAfterTextWithoutVertexArrays", painter -> {
+      if (painter instanceof NativeDesktopPainter) {
+        textRenderers((NativeDesktopPainter) painter).computeIfAbsent(Font.Helvetica_12, f -> {
+          TextRenderer renderer = new TextRenderer(
+              new java.awt.Font(f.getName(), java.awt.Font.PLAIN, f.getHeight()), true, true, null);
+          renderer.setUseVertexArrays(false);
+          return renderer;
+        });
+      }
+      painter.drawText(Font.Helvetica_12, "A", new Coord3d(0.5f, 0.5f, 0.5f), Color.BLACK, 0);
+    });
+  }
+
+  @SuppressWarnings("unchecked")
+  protected static Map<Font, TextRenderer> textRenderers(NativeDesktopPainter painter) {
+    try {
+      java.lang.reflect.Field field =
+          NativeDesktopPainter.class.getDeclaredField("txtRendererMap");
+      field.setAccessible(true);
+      return (Map<Font, TextRenderer>) field.get(painter);
+    } catch (ReflectiveOperationException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /** A texture created, filled and deleted before the scatter, without drawing it */
