@@ -82,8 +82,10 @@ public class ITTest_PanamaGLParity extends ITTest {
     StateScatter joglScatter = new StateScatter(scatter(50000));
     StateScatter panamaScatter = new StateScatter(scatter(50000));
 
-    render(WT.Native_Swing, chart -> chart.add(joglScatter));
-    render(WT.PanamaGL_Swing, chart -> chart.add(panamaScatter));
+    BufferedImage jogl = render(WT.Native_Swing, chart -> chart.add(joglScatter));
+    BufferedImage panama = render(WT.PanamaGL_Swing, chart -> chart.add(panamaScatter));
+    System.out.println("JOGL     image center : " + center(jogl));
+    System.out.println("PanamaGL image center : " + center(panama));
 
     System.out.println("JOGL     GL state : " + joglScatter.state);
     System.out.println("PanamaGL GL state : " + panamaScatter.state);
@@ -167,6 +169,25 @@ public class ITTest_PanamaGLParity extends ITTest {
     Assert.assertTrue("Single point pixels differ :" + sb, same);
   }
 
+  /** Sum the colors of the 64x64 block at the center of an image */
+  protected static String center(BufferedImage image) {
+    int size = 64;
+    long rgb = 0, alpha = 0;
+    int drawn = 0;
+    for (int y = image.getHeight() / 2 - size / 2; y < image.getHeight() / 2 + size / 2; y++) {
+      for (int x = image.getWidth() / 2 - size / 2; x < image.getWidth() / 2 + size / 2; x++) {
+        int p = image.getRGB(x, y);
+        int r = (p >> 16) & 0xFF, g = (p >> 8) & 0xFF, b = p & 0xFF;
+        if (r < 250 || g < 250 || b < 250) {
+          drawn++;
+        }
+        rgb += r + g + b;
+        alpha += (p >>> 24) & 0xFF;
+      }
+    }
+    return drawn + " non white pixels, rgb sum " + rgb + ", alpha sum " + alpha;
+  }
+
   /** A text image where darker characters show darker areas, to see an image in a CI log */
   protected static String thumbnail(BufferedImage image) {
     String shades = " .:-=+*#%@";
@@ -233,8 +254,9 @@ public class ITTest_PanamaGLParity extends ITTest {
     @Override
     public void draw(IPainter painter) {
       String before = state(painter);
-      history.add(frame(painter));
+      String frame = frame(painter);
       super.draw(painter);
+      history.add(frame + " | after draw : " + frame(painter));
       state = "before draw : " + before + "\n after draw : " + state(painter);
     }
 
@@ -255,14 +277,20 @@ public class ITTest_PanamaGLParity extends ITTest {
       painter.glReadPixels(viewport[2] / 2 - size / 2, viewport[3] / 2 - size / 2, size, size,
           0x1908, 0x1401, pixels);
       int drawn = 0;
+      long rgb = 0, alpha = 0;
       for (int i = 0; i < size * size; i++) {
-        if ((pixels.get(i * 4) & 0xFF) < 250 || (pixels.get(i * 4 + 1) & 0xFF) < 250
-            || (pixels.get(i * 4 + 2) & 0xFF) < 250) {
+        int r = pixels.get(i * 4) & 0xFF, g = pixels.get(i * 4 + 1) & 0xFF;
+        int b = pixels.get(i * 4 + 2) & 0xFF, a = pixels.get(i * 4 + 3) & 0xFF;
+        if (r < 250 || g < 250 || b < 250) {
           drawn++;
         }
+        rgb += r + g + b;
+        alpha += a;
       }
-      return String.format("proj %.4f %.4f model %.4f %.4f %.4f, %d non white pixels at center",
-          proj[0], proj[5], model[0], model[5], model[14], drawn);
+      return String.format(
+          "proj %.4f %.4f model %.4f %.4f %.4f, %d non white pixels at center, rgb sum %d,"
+              + " alpha sum %d",
+          proj[0], proj[5], model[0], model[5], model[14], drawn, rgb, alpha);
     }
 
     String state(IPainter painter) {
