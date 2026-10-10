@@ -182,6 +182,74 @@ public class ITTest_PanamaGLParity extends ITTest {
     });
   }
 
+  /** Attributes pushed then popped before the scatter, as done when PanamaGL draws text */
+  @Test
+  public void whenScatterAfterPushPopAttrib_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterPushPopAttrib", painter -> {
+      gl(painter, "glPushAttrib", 0x47009);
+      gl(painter, "glPopAttrib");
+    });
+  }
+
+  /** Matrices pushed, set to an orthographic projection, then popped before the scatter */
+  @Test
+  public void whenScatterAfterPushPopMatrix_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterPushPopMatrix", painter -> {
+      gl(painter, "glMatrixMode", 0x1701);
+      gl(painter, "glPushMatrix");
+      gl(painter, "glLoadIdentity");
+      gl(painter, "glOrtho", 0d, 100d, 0d, 100d, -1d, 1d);
+      gl(painter, "glMatrixMode", 0x1700);
+      gl(painter, "glPushMatrix");
+      gl(painter, "glLoadIdentity");
+      gl(painter, "glMatrixMode", 0x1700);
+      gl(painter, "glPopMatrix");
+      gl(painter, "glMatrixMode", 0x1701);
+      gl(painter, "glPopMatrix");
+      gl(painter, "glMatrixMode", 0x1700);
+    });
+  }
+
+  /** Texture environment, pixel store and texture parameters set before the scatter */
+  @Test
+  public void whenScatterAfterTextureSettings_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterTextureSettings", painter -> {
+      int[] id = new int[1];
+      painter.glGenTextures(1, id, 0);
+      painter.glBindTexture(0x0DE1, id[0]);
+      painter.glTexParameteri(0x0DE1, 0x2801, 0x2601);
+      painter.glTexParameteri(0x0DE1, 0x2800, 0x2601);
+      painter.glTexEnvi(0x2300, 0x2200, 0x2100);
+      painter.glPixelStorei(0x0CF5, 4);
+      painter.glDeleteTextures(1, id, 0);
+    });
+  }
+
+  /**
+   * Invoke a GL function on the GL object of a JOGL or PanamaGL painter, which may not offer it.
+   * Done by reflection since this test does not compile against PanamaGL.
+   */
+  protected static void gl(IPainter painter, String function, Object... args) {
+    try {
+      Object gl = painter.getClass().getMethod("getGL").invoke(painter);
+      try {
+        gl = gl.getClass().getMethod("getGL2").invoke(gl);
+      } catch (NoSuchMethodException e) {
+        // PanamaGL GL has no GL2 profile
+      }
+      for (java.lang.reflect.Method m : gl.getClass().getMethods()) {
+        if (m.getName().equals(function) && m.getParameterCount() == args.length) {
+          m.setAccessible(true);
+          m.invoke(gl, args);
+          return;
+        }
+      }
+      throw new IllegalArgumentException(function + " not found in " + gl.getClass());
+    } catch (ReflectiveOperationException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   /** Render a scatter with hidden axis text, invoking the given GL calls right before it */
   protected void assertParityAfter(String name, Consumer<IPainter> before) throws IOException {
     assertParity(name, chart -> {
