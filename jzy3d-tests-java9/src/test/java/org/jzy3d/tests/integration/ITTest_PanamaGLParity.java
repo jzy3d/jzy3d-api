@@ -132,6 +132,25 @@ public class ITTest_PanamaGLParity extends ITTest {
     });
   }
 
+  /**
+   * Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} with no texture bound when drawing the
+   * scatter. The PanamaGL FBO leaves its color texture, which is the render target, bound to the
+   * texture unit.
+   */
+  @Test
+  public void whenScatterWithoutBoundTexture_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("ScatterWithoutBoundTexture", chart -> {
+      Scatter scatter = scatter(50000);
+      chart.add(new Scatter(scatter.getData(), scatter.getColors(), scatter.getWidth()) {
+        @Override
+        public void draw(IPainter painter) {
+          painter.glBindTexture(0x0DE1, 0);
+          super.draw(painter);
+        }
+      });
+    });
+  }
+
   /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} without axis */
   @Test
   public void whenScatterWithoutAxisOnly_ThenPanamaGLMatchesJOGL() throws IOException {
