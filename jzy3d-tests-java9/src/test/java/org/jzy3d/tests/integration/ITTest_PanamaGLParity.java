@@ -24,6 +24,7 @@ import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.primitives.axis.ContourAxisBox;
 import org.jzy3d.junit.NativeChartTester;
+import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
@@ -63,6 +64,56 @@ public class ITTest_PanamaGLParity extends ITTest {
   @Test
   public void whenScatter_ThenPanamaGLMatchesJOGL() throws IOException {
     assertParity("Scatter", chart -> chart.add(scatter(50000)));
+  }
+
+  /**
+   * Scatter colors have negative components. Report the GL state the scatter is drawn with to
+   * understand a difference between both contexts.
+   */
+  @Test
+  public void whenScatterGLState_ThenPanamaGLMatchesJOGL() throws IOException {
+    Assume.assumeTrue("PanamaGL is not in classpath", isPanamaGLAvailable());
+
+    StateScatter joglScatter = new StateScatter(scatter(50000));
+    StateScatter panamaScatter = new StateScatter(scatter(50000));
+
+    render(WT.Native_Swing, chart -> chart.add(joglScatter));
+    render(WT.PanamaGL_Swing, chart -> chart.add(panamaScatter));
+
+    Assert.assertEquals("GL state differs", joglScatter.state, panamaScatter.state);
+  }
+
+  /** A scatter that keeps the GL state it was drawn with */
+  static class StateScatter extends Scatter {
+    static final String[] NAMES = {"CLAMP_VERTEX_COLOR", "CLAMP_FRAGMENT_COLOR",
+        "CLAMP_READ_COLOR", "BLEND", "BLEND_SRC_RGB", "BLEND_DST_RGB", "BLEND_SRC_ALPHA",
+        "BLEND_DST_ALPHA", "BLEND_EQUATION_RGB", "DEPTH_TEST", "ALPHA_TEST", "LIGHTING",
+        "COLOR_MATERIAL", "POINT_SMOOTH", "MULTISAMPLE", "SAMPLES", "FRAMEBUFFER_SRGB",
+        "DITHER", "RED_BITS", "ALPHA_BITS", "SHADE_MODEL", "COLOR_LOGIC_OP"};
+    static final int[] PNAMES = {0x891A, 0x891B, 0x891C, 0x0BE2, 0x80C9, 0x80C8, 0x80CB,
+        0x80CA, 0x8009, 0x0B71, 0x0BC0, 0x0B50, 0x0B57, 0x0B10, 0x809D, 0x80A9, 0x8DB9, 0x0BD0,
+        0x0D52, 0x0D55, 0x0B54, 0x0BF2};
+
+    String state = "";
+
+    StateScatter(Scatter scatter) {
+      super(scatter.getData(), scatter.getColors(), scatter.getWidth());
+    }
+
+    @Override
+    public void draw(IPainter painter) {
+      super.draw(painter);
+
+      StringBuilder sb = new StringBuilder();
+      int[] value = new int[4];
+      for (int i = 0; i < PNAMES.length; i++) {
+        value[0] = -1;
+        painter.glGetIntegerv(PNAMES[i], value, 0);
+        sb.append(NAMES[i] + "=0x" + Integer.toHexString(value[0]) + " ");
+      }
+      sb.append("VERSION=" + painter.glGetString(0x1F02));
+      state = sb.toString();
+    }
   }
 
   @Test
