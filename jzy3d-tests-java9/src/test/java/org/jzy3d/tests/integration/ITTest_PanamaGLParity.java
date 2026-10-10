@@ -30,6 +30,7 @@ import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.primitives.axis.ContourAxisBox;
 import org.jzy3d.plot3d.primitives.axis.layout.AxisLayout;
 import org.jzy3d.junit.NativeChartTester;
+import org.jzy3d.painters.Font;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
@@ -132,23 +133,78 @@ public class ITTest_PanamaGLParity extends ITTest {
     });
   }
 
-  /**
-   * Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} with no texture bound when drawing the
-   * scatter. The PanamaGL FBO leaves its color texture, which is the render target, bound to the
-   * texture unit.
-   */
+  // Scatters match when axis text is hidden. The tests below hide axis text and replay part of
+  // the text rendering right before drawing the scatter to find which part changes the scatter.
+
+  /** A single label drawn before the scatter */
   @Test
-  public void whenScatterWithoutBoundTexture_ThenPanamaGLMatchesJOGL() throws IOException {
-    assertParity("ScatterWithoutBoundTexture", chart -> {
+  public void whenScatterAfterText_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterText", painter -> painter.drawText(Font.Helvetica_12, "A",
+        new Coord3d(0.5f, 0.5f, 0.5f), Color.BLACK, 0));
+  }
+
+  /** A texture created, filled and deleted before the scatter, without drawing it */
+  @Test
+  public void whenScatterAfterTextureUpload_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterTextureUpload", painter -> {
+      int[] id = new int[1];
+      painter.glGenTextures(1, id, 0);
+      painter.glBindTexture(0x0DE1, id[0]);
+      painter.glTexImage2D(0x0DE1, 0, 0x1908, 4, 4, 0, 0x1908, 0x1401,
+          ByteBuffer.allocateDirect(4 * 4 * 4));
+      painter.glDeleteTextures(1, id, 0);
+    });
+  }
+
+  /** A textured quad drawn before the scatter, as text is drawn by PanamaGL */
+  @Test
+  public void whenScatterAfterTexturedQuad_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParityAfter("ScatterAfterTexturedQuad", painter -> {
+      int[] id = new int[1];
+      painter.glGenTextures(1, id, 0);
+      painter.glEnable(0x0DE1);
+      painter.glBindTexture(0x0DE1, id[0]);
+      painter.glTexImage2D(0x0DE1, 0, 0x1908, 4, 4, 0, 0x1908, 0x1401,
+          ByteBuffer.allocateDirect(4 * 4 * 4));
+      painter.glColor4f(1, 1, 1, 1);
+      painter.glBegin(0x0007);
+      painter.glTexCoord2f(0, 0);
+      painter.glVertex3f(0.4f, 0.4f, 0.4f);
+      painter.glTexCoord2f(1, 0);
+      painter.glVertex3f(0.5f, 0.4f, 0.4f);
+      painter.glTexCoord2f(1, 1);
+      painter.glVertex3f(0.5f, 0.5f, 0.4f);
+      painter.glTexCoord2f(0, 1);
+      painter.glVertex3f(0.4f, 0.5f, 0.4f);
+      painter.glEnd();
+      painter.glDisable(0x0DE1);
+      painter.glDeleteTextures(1, id, 0);
+    });
+  }
+
+  /** Render a scatter with hidden axis text, invoking the given GL calls right before it */
+  protected void assertParityAfter(String name, Consumer<IPainter> before) throws IOException {
+    assertParity(name, chart -> {
+      hideAxisText(chart);
       Scatter scatter = scatter(50000);
       chart.add(new Scatter(scatter.getData(), scatter.getColors(), scatter.getWidth()) {
         @Override
         public void draw(IPainter painter) {
-          painter.glBindTexture(0x0DE1, 0);
+          before.accept(painter);
           super.draw(painter);
         }
       });
     });
+  }
+
+  protected static void hideAxisText(Chart chart) {
+    AxisLayout layout = chart.getAxisLayout();
+    layout.setXTickLabelDisplayed(false);
+    layout.setYTickLabelDisplayed(false);
+    layout.setZTickLabelDisplayed(false);
+    layout.setXAxisLabelDisplayed(false);
+    layout.setYAxisLabelDisplayed(false);
+    layout.setZAxisLabelDisplayed(false);
   }
 
   /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} without axis */
