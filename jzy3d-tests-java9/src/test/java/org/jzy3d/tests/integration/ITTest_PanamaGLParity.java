@@ -24,6 +24,7 @@ import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.builder.Func3D;
 import org.jzy3d.plot3d.primitives.axis.ContourAxisBox;
 import org.jzy3d.junit.NativeChartTester;
+import org.jzy3d.plot3d.primitives.Scatter;
 import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer2d;
 import org.jzy3d.plot3d.rendering.view.HiDPI;
@@ -62,6 +63,21 @@ public class ITTest_PanamaGLParity extends ITTest {
   @Test
   public void whenScatter_ThenPanamaGLMatchesJOGL() throws IOException {
     assertParity("Scatter", chart -> chart.add(scatter(50000)));
+  }
+
+  @Test
+  public void whenScatterOfThinPoints_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("ScatterThin", chart -> {
+      Scatter scatter = scatter(50000);
+      scatter.setWidth(1);
+      chart.add(scatter);
+    });
+  }
+
+  @Test
+  public void whenScatterOffscreen_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertFactoryParity("ScatterOffscreen", new AWTChartFactory(), PANAMAGL_SWING_FACTORY,
+        chart -> chart.add(scatter(50000)));
   }
 
   @Test
