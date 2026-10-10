@@ -80,7 +80,24 @@ public class ITTest_PanamaGLParity extends ITTest {
     render(WT.Native_Swing, chart -> chart.add(joglScatter));
     render(WT.PanamaGL_Swing, chart -> chart.add(panamaScatter));
 
+    System.out.println("JOGL     GL state : " + joglScatter.state);
+    System.out.println("PanamaGL GL state : " + panamaScatter.state);
+
+    Assert.assertFalse("JOGL scatter was not drawn", joglScatter.state.isEmpty());
+    Assert.assertFalse("PanamaGL scatter was not drawn", panamaScatter.state.isEmpty());
     Assert.assertEquals("GL state differs", joglScatter.state, panamaScatter.state);
+  }
+
+  /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} without transparency */
+  @Test
+  public void whenOpaqueScatter_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("ScatterOpaque", chart -> {
+      Scatter scatter = scatter(50000);
+      for (Color c : scatter.getColors()) {
+        c.a = 1;
+      }
+      chart.add(scatter);
+    });
   }
 
   /** A scatter that keeps the GL state it was drawn with */
@@ -303,7 +320,7 @@ public class ITTest_PanamaGLParity extends ITTest {
    */
   protected static String describe(BufferedImage image) {
     int background = image.getRGB(0, 0);
-    long n = 0, r = 0, g = 0, b = 0;
+    long n = 0, r = 0, g = 0, b = 0, a = 0;
     for (int x = 0; x < image.getWidth(); x++) {
       for (int y = 0; y < image.getHeight(); y++) {
         int p = image.getRGB(x, y);
@@ -312,12 +329,14 @@ public class ITTest_PanamaGLParity extends ITTest {
           r += (p >> 16) & 0xFF;
           g += (p >> 8) & 0xFF;
           b += p & 0xFF;
+          a += (p >>> 24) & 0xFF;
         }
       }
     }
     double ratio = 100.0 * n / (image.getWidth() * image.getHeight());
-    return String.format("%.1f%% drawn, mean color %d,%d,%d", ratio, n == 0 ? 0 : r / n,
-        n == 0 ? 0 : g / n, n == 0 ? 0 : b / n);
+    return String.format("%.1f%% drawn, mean color %d,%d,%d alpha %d, background %08x, type %d",
+        ratio, n == 0 ? 0 : r / n, n == 0 ? 0 : g / n, n == 0 ? 0 : b / n, n == 0 ? 0 : a / n,
+        background, image.getType());
   }
 
   /** Ratio of pixels having a channel differing by more than {@link #PIXEL_TOLERANCE} */
