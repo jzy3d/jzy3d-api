@@ -90,6 +90,16 @@ public class ITTest_PanamaGLParity extends ITTest {
     Assert.assertEquals("GL state differs", joglScatter.state, panamaScatter.state);
   }
 
+  /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} without axis and with fixed bounds */
+  @Test
+  public void whenScatterWithoutAxis_ThenPanamaGLMatchesJOGL() throws IOException {
+    assertParity("ScatterWithoutAxis", chart -> {
+      chart.add(scatter(50000));
+      chart.getView().setAxisDisplayed(false);
+      chart.getView().setBoundsManual(new BoundingBox3d(-0.5f, 0.5f, -0.5f, 0.5f, -0.5f, 0.5f));
+    });
+  }
+
   /** Same as {@link #whenScatter_ThenPanamaGLMatchesJOGL()} without transparency */
   @Test
   public void whenOpaqueScatter_ThenPanamaGLMatchesJOGL() throws IOException {
@@ -132,6 +142,29 @@ public class ITTest_PanamaGLParity extends ITTest {
     }
     System.out.println("Single point pixels :" + sb);
     Assert.assertTrue("Single point pixels differ :" + sb, same);
+  }
+
+  /** A text image where darker characters show darker areas, to see an image in a CI log */
+  protected static String thumbnail(BufferedImage image) {
+    String shades = " .:-=+*#%@";
+    int cols = 64, rows = 24;
+    StringBuilder sb = new StringBuilder();
+    for (int r = 0; r < rows; r++) {
+      for (int c = 0; c < cols; c++) {
+        long sum = 0, n = 0;
+        for (int y = r * image.getHeight() / rows; y < (r + 1) * image.getHeight() / rows; y++) {
+          for (int x = c * image.getWidth() / cols; x < (c + 1) * image.getWidth() / cols; x++) {
+            int p = image.getRGB(x, y);
+            sum += ((p >> 16) & 0xFF) + ((p >> 8) & 0xFF) + (p & 0xFF);
+            n++;
+          }
+        }
+        double darkness = 1 - sum / (3.0 * 255 * Math.max(n, 1));
+        sb.append(shades.charAt((int) Math.min(shades.length() - 1, darkness * shades.length())));
+      }
+      sb.append("|\n");
+    }
+    return sb.toString();
   }
 
   /** List the pixels differing from the background (top left pixel) */
@@ -294,6 +327,8 @@ public class ITTest_PanamaGLParity extends ITTest {
     double ratio = diffRatio(jogl, panama);
 
     if (ratio > MAX_DIFF_RATIO) {
+      System.out.println(name + " JOGL\n" + thumbnail(jogl) + name + " PanamaGL\n"
+          + thumbnail(panama));
       new File(OUTPUT).mkdirs();
       ImageIO.write(jogl, "png", new File(OUTPUT + name + "_JOGL.png"));
       ImageIO.write(panama, "png", new File(OUTPUT + name + "_PanamaGL.png"));
@@ -336,6 +371,8 @@ public class ITTest_PanamaGLParity extends ITTest {
     double ratio = diffRatio(jogl, panama);
 
     if (ratio > MAX_DIFF_RATIO) {
+      System.out.println(name + " JOGL\n" + thumbnail(jogl) + name + " PanamaGL\n"
+          + thumbnail(panama));
       new File(OUTPUT).mkdirs();
       ImageIO.write(jogl, "png", new File(OUTPUT + name + "_JOGL.png"));
       ImageIO.write(panama, "png", new File(OUTPUT + name + "_PanamaGL.png"));
