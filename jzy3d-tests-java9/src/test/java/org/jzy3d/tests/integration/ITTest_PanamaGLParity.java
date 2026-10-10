@@ -19,6 +19,8 @@ import org.jzy3d.chart2d.Chart2dFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.contour.DefaultContourColoringPolicy;
 import org.jzy3d.contour.MapperContourMeshGenerator;
+import org.jzy3d.maths.BoundingBox3d;
+import org.jzy3d.maths.Coord3d;
 import org.jzy3d.maths.Range;
 import org.jzy3d.plot2d.primitives.Serie2d;
 import org.jzy3d.plot3d.builder.Func3D;
@@ -100,6 +102,54 @@ public class ITTest_PanamaGLParity extends ITTest {
     });
   }
 
+  /**
+   * Draw a single point with each library and list its pixels, to compare the point size and the
+   * blended color exactly.
+   */
+  @Test
+  public void whenSinglePoint_ThenPanamaGLMatchesJOGL() throws IOException {
+    Assume.assumeTrue("PanamaGL is not in classpath", isPanamaGLAvailable());
+
+    StringBuilder sb = new StringBuilder();
+    boolean same = true;
+
+    for (float width : new float[] {1, 3}) {
+      for (float alpha : new float[] {1, 0.75f}) {
+        Consumer<Chart> content = chart -> {
+          Scatter point = new Scatter(new Coord3d[] {new Coord3d(0, 0, 0)},
+              new Color[] {new Color(0.2f, 0.4f, 0.6f, alpha)}, width);
+          chart.add(point);
+          chart.getView().setAxisDisplayed(false);
+          chart.getView().setBoundsManual(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
+        };
+        String jogl = pixels(render(WT.Native_Swing, content));
+        String panama = pixels(render(WT.PanamaGL_Swing, content));
+
+        sb.append("\nwidth " + width + " alpha " + alpha + "\n  JOGL     " + jogl
+            + "\n  PanamaGL " + panama);
+        same &= jogl.equals(panama);
+      }
+    }
+    System.out.println("Single point pixels :" + sb);
+    Assert.assertTrue("Single point pixels differ :" + sb, same);
+  }
+
+  /** List the pixels differing from the background (top left pixel) */
+  protected static String pixels(BufferedImage image) {
+    int background = image.getRGB(0, 0);
+    StringBuilder sb = new StringBuilder();
+    int n = 0;
+    for (int y = 0; y < image.getHeight(); y++) {
+      for (int x = 0; x < image.getWidth(); x++) {
+        int p = image.getRGB(x, y);
+        if (p != background && n++ < 20) {
+          sb.append(x + "," + y + "=" + Integer.toHexString(p) + " ");
+        }
+      }
+    }
+    return n + " pixels : " + sb;
+  }
+
   /** A scatter that keeps the GL state it was drawn with */
   static class StateScatter extends Scatter {
     static final String[] NAMES = {"CLAMP_VERTEX_COLOR", "CLAMP_FRAGMENT_COLOR",
@@ -128,6 +178,11 @@ public class ITTest_PanamaGLParity extends ITTest {
         painter.glGetIntegerv(PNAMES[i], value, 0);
         sb.append(NAMES[i] + "=0x" + Integer.toHexString(value[0]) + " ");
       }
+      float[] size = new float[4];
+      painter.glGetFloatv(0x0B11, size, 0);
+      sb.append("POINT_SIZE=" + size[0] + " ");
+      painter.glGetIntegerv(0x0BA2, value, 0);
+      sb.append("VIEWPORT=" + value[0] + "," + value[1] + "," + value[2] + "," + value[3] + " ");
       sb.append("VERSION=" + painter.glGetString(0x1F02));
       state = sb.toString();
     }
