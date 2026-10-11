@@ -11,7 +11,7 @@
 	<name>Jzy3d Tests</name>
 
 	<properties>
-		<version.java>1.9</version.java>
+		<version.java>9</version.java>
 	</properties>
 
 	<dependencies>
