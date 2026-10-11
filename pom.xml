@@ -48,28 +48,17 @@
 		<!-- Core API -->
 		<module>jzy3d-core</module>
 		<module>jzy3d-core-awt</module>
-		<module>jzy3d-core-swt</module>
 		<module>jzy3d-core-swing</module>
-		<module>jzy3d-core-javafx</module>
 
 		<!-- jGL rendering backend (emulated OpenGL) -->
 		<module>jzy3d-jGL</module>
 		<module>jzy3d-emul-gl-awt</module>
-		<module>jzy3d-emul-gl-swt</module>
 
 		<!-- JOGL rendering backend (native for Java 8+) -->
 		<module>jzy3d-native-jogl-core</module>
 		<module>jzy3d-native-jogl-awt</module>
 		<module>jzy3d-native-jogl-swing</module>
-		<module>jzy3d-native-jogl-swt</module>
 		<module>jzy3d-native-jogl-newt</module>
-		<module>jzy3d-native-jogl-javafx</module>
-
-		<!-- PanamaGL rendering backend (native for Java 22+)-->
-		<module>jzy3d-native-panama-gl-core</module>
-		<module>jzy3d-native-panama-gl-swing</module>
-		<module>jzy3d-native-panama-gl-javafx</module>
-		<module>jzy3d-native-panama-gl-swt</module>
 
 		<!-- Test tools -->
 		<module>jzy3d-tester</module>
@@ -82,7 +71,6 @@
 
 		<!-- Rendering -->
 		<module>jzy3d-depthpeeling</module>
-		<module>jzy3d-depthpeeling-panamagl</module>
 
 		<!-- Report -->
 		<module>jzy3d-io-xls</module>
@@ -91,11 +79,10 @@
 		<!-- Bundle -->
 		<module>jzy3d-everything</module>
 
-		<!-- Integration tests -->
-		<module>jzy3d-tests-java9</module>
-
 		<!-- Demos -->
 		<module>jzy3d-tutorials</module>
+
+		<!-- SWT, JavaFX and PanamaGL modules are added by the java11 and java22 profiles -->
 
 
 	</modules>
@@ -129,7 +116,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<version.java>1.8</version.java>
+		<version.java>8</version.java>
 		<version.swt>3.116.100</version.swt>
 	</properties>
 
@@ -612,6 +599,50 @@
 	</reporting>
 
 	<profiles>
+
+		<!-- Modules that require Java 11 : SWT 3.116 and OpenJFX 17 are built for Java 11 -->
+		<profile>
+			<id>java11</id>
+			<activation>
+				<jdk>[11,)</jdk>
+			</activation>
+			<modules>
+				<module>jzy3d-core-swt</module>
+				<module>jzy3d-core-javafx</module>
+				<module>jzy3d-emul-gl-swt</module>
+				<module>jzy3d-native-jogl-swt</module>
+				<module>jzy3d-native-jogl-javafx</module>
+				<module>jzy3d-tests-java9</module>
+			</modules>
+		</profile>
+
+		<!-- Modules that require Java 22 : PanamaGL relies on the Foreign Function and Memory API -->
+		<profile>
+			<id>java22</id>
+			<activation>
+				<jdk>[22,)</jdk>
+			</activation>
+			<modules>
+				<module>jzy3d-native-panama-gl-core</module>
+				<module>jzy3d-native-panama-gl-swing</module>
+				<module>jzy3d-native-panama-gl-javafx</module>
+				<module>jzy3d-native-panama-gl-swt</module>
+				<module>jzy3d-depthpeeling-panamagl</module>
+			</modules>
+		</profile>
+
+		<!-- Compile against the API of version.java and not the API of the JDK running the build, otherwise
+		classes built with a recent JDK may fail on an older one (e.g. ByteBuffer.flip() returning ByteBuffer
+		since Java 9 throws NoSuchMethodError on Java 8) -->
+		<profile>
+			<id>compiler-release</id>
+			<activation>
+				<jdk>[9,)</jdk>
+			</activation>
+			<properties>
+				<maven.compiler.release>${version.java}</maven.compiler.release>
+			</properties>
+		</profile>
 
 		<profile>
 			<id>disable-java8-doclint</id>
