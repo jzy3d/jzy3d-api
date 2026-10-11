@@ -20,8 +20,27 @@
 
 	<modules>
 		<module>jzy3d-tutorials-jogl-javafx-jdk8</module>
-		<module>jzy3d-tutorials-jogl-javafx-jdk17</module>
-		<module>jzy3d-tutorials-jogl-javafx-jdk19</module>
 	</modules>
+
+	<profiles>
+		<profile>
+			<id>java17</id>
+			<activation>
+				<jdk>[17,)</jdk>
+			</activation>
+			<modules>
+				<module>jzy3d-tutorials-jogl-javafx-jdk17</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>java19</id>
+			<activation>
+				<jdk>[19,)</jdk>
+			</activation>
+			<modules>
+				<module>jzy3d-tutorials-jogl-javafx-jdk19</module>
+			</modules>
+		</profile>
+	</profiles>
 
 </project>
