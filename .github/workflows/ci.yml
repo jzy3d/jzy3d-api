@@ -29,6 +29,11 @@ env:
   JAVA_VERSION: '25'
   JAVA_DISTRIBUTION: temurin
 
+  # Build PanamaGL from this branch of panama-gl/panama-gl instead of using the published release,
+  # until a release provides the GL function loader and the Windows WGL fixes (panama-gl/panama-gl#13).
+  # Leave empty to use the published release.
+  PANAMAGL_REF: feature/gl-function-loader
+
 jobs:
 
   # ============================================================================================================
@@ -47,7 +52,7 @@ jobs:
           - ubuntu-latest    # Linux x86_64
           - macos-latest     # macOS ARM (Apple Silicon)
           - macos-15-intel   # macOS Intel x86_64 (last x86_64 image; GitHub Actions drops x86_64 ~Aug 2027)
-          #- windows-latest  # Windows x86_64 : disabled, too painful to get OpenGL working (see panama-gl)
+          - windows-latest   # Windows x86_64 (Mesa D3D12 OpenGL, see below)
 
     steps:
       - uses: actions/checkout@v5
@@ -59,6 +64,18 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: maven
 
+      - name: Checkout PanamaGL
+        if: env.PANAMAGL_REF != ''
+        uses: actions/checkout@v5
+        with:
+          repository: panama-gl/panama-gl
+          ref: ${{ env.PANAMAGL_REF }}
+          path: panama-gl
+
+      - name: Install PanamaGL
+        if: env.PANAMAGL_REF != ''
+        run: mvn --batch-mode --no-transfer-progress install -DskipTests --file panama-gl/pom.xml
+
       # -------------------------------------------------------
       # Linux: install Mesa OpenGL (software llvmpipe renderer),
       # GLUT (used by PanamaGL) and a virtual X display.
@@ -68,11 +85,18 @@ jobs:
         run: |
           sudo apt-get update -q
           sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev xvfb
+          # Temurin's default java.library.path misses the multiarch folder where PanamaGL finds libGL
+          echo "JAVA_TOOL_OPTIONS=-Djava.library.path=/usr/lib/x86_64-linux-gnu:/usr/lib" >> $GITHUB_ENV
+
+      - name: Configure OpenGL library path (macOS)
+        if: runner.os == 'macOS'
+        run: echo "JAVA_TOOL_OPTIONS=-Djava.library.path=.:/System/Library/Frameworks/OpenGL.framework/Versions/Current/Libraries/" >> $GITHUB_ENV
 
       # -------------------------------------------------------
       # Windows: the system opengl32.dll only supports OpenGL 1.1
       # without a GPU, which is not enough for JOGL nor PanamaGL.
-      # Install Mesa llvmpipe (software OpenGL 4.5) next to java.exe:
+      # Install Mesa D3D12 (OpenGL 4.6 on WARP, the software D3D12
+      # renderer of Windows, as validated on panama-gl CI) next to java.exe:
       # Windows searches the application directory before System32
       # when loading a DLL, so every JVM started from this JDK (Maven
       # and Surefire forks) picks Mesa instead of the system stub.
@@ -86,9 +110,9 @@ jobs:
             "https://api.github.com/repos/mmozeiko/build-mesa/releases/latest" `
             -Headers $headers
           $asset = $release.assets `
-            | Where-Object { $_.name -like "mesa-llvmpipe-x64-*.7z" } `
+            | Where-Object { $_.name -like "mesa-d3d12-x64-*.7z" } `
             | Select-Object -First 1
-          if (-not $asset) { Write-Error "Could not find mesa-llvmpipe-x64 asset"; exit 1 }
+          if (-not $asset) { Write-Error "Could not find mesa-d3d12-x64 asset"; exit 1 }
           Write-Host "Downloading $($asset.name)"
           Invoke-WebRequest -Uri $asset.browser_download_url -OutFile mesa.7z
           7z x mesa.7z -omesa -y | Out-Null
@@ -99,6 +123,11 @@ jobs:
           $javaBin = Join-Path $env:JAVA_HOME "bin"
           $dlls | Copy-Item -Destination $javaBin -Force
           Write-Host "Installed Mesa DLLs to $javaBin : $($dlls.Name -join ', ')"
+          # JOGL calls the GDI versions of ChoosePixelFormat, SetPixelFormat... which fail with
+          # Mesa ("Unable to set pixel format ... error code 1004"). Let it call their WGL
+          # versions, provided by Mesa opengl32.dll, in every JVM including Surefire forks.
+          "JAVA_TOOL_OPTIONS=-Djogl.windows.useWGLVersionOf5WGLGDIFuncSet=true" `
+            | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
