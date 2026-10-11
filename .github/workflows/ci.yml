@@ -30,9 +30,9 @@ env:
   JAVA_DISTRIBUTION: temurin
 
   # Build PanamaGL from this branch of panama-gl/panama-gl instead of using the published release,
-  # until a release provides the GL function loader and the Windows WGL fixes (panama-gl/panama-gl#13).
-  # Leave empty to use the published release.
-  PANAMAGL_REF: feature/gl-function-loader
+  # until a release provides the GL function loader and the Windows WGL fixes (panama-gl/panama-gl#13,
+  # merged in main). Leave empty to use the published release.
+  PANAMAGL_REF: main
 
 jobs:
 
