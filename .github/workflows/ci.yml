@@ -29,11 +29,6 @@ env:
   JAVA_VERSION: '25'
   JAVA_DISTRIBUTION: temurin
 
-  # Build PanamaGL from this branch of panama-gl/panama-gl instead of using the published release,
-  # until a release provides the GL function loader and the Windows WGL fixes (panama-gl/panama-gl#13).
-  # Leave empty to use the published release.
-  PANAMAGL_REF: feature/gl-function-loader
-
   # Integration tests rendering the same charts with JOGL and PanamaGL
   PANAMAGL_IT: ITTest_PanamaGLParity,ITTest_GPUDrawables,ITTest_DepthPeeling,ITTest_Picking
 
@@ -67,17 +62,11 @@ jobs:
           distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: maven
 
-      - name: Checkout PanamaGL
-        if: env.PANAMAGL_REF != ''
-        uses: actions/checkout@v5
-        with:
-          repository: panama-gl/panama-gl
-          ref: ${{ env.PANAMAGL_REF }}
-          path: panama-gl
-
-      - name: Install PanamaGL
-        if: env.PANAMAGL_REF != ''
-        run: mvn --batch-mode --no-transfer-progress install -DskipTests --file panama-gl/pom.xml
+      # PanamaGL releases may be redeployed with the same version (implementation fixes without API
+      # change), so never trust the copy restored from the Maven cache.
+      - name: Remove PanamaGL from the Maven cache
+        shell: bash
+        run: rm -rf ~/.m2/repository/org/jzy3d/panama-gl*
 
       # -------------------------------------------------------
       # Linux: install Mesa OpenGL (software llvmpipe renderer),
@@ -231,6 +220,60 @@ jobs:
           if-no-files-found: ignore
 
   # ============================================================================================================
+  # Older JDKs supported by Jzy3d. Modules requiring a more recent JDK are excluded by the java11 and java22
+  # profiles of the root pom : SWT and JavaFX need Java 11, PanamaGL needs Java 22.
+  # ============================================================================================================
+
+  build-jdk:
+    name: Build & Test (JDK ${{ matrix.java }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - java: '8'
+            distribution: temurin
+          - java: '14'
+            distribution: zulu
+          - java: '17'
+            distribution: temurin
+          - java: '22'
+            distribution: temurin
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: ${{ matrix.distribution }}
+          cache: maven
+
+      - name: Remove PanamaGL from the Maven cache
+        run: rm -rf ~/.m2/repository/org/jzy3d/panama-gl*
+
+      - name: Install OpenGL, GLUT and Xvfb
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev xvfb
+          echo "JAVA_TOOL_OPTIONS=-Djava.library.path=/usr/lib/x86_64-linux-gnu:/usr/lib" >> $GITHUB_ENV
+
+      - name: Build and test with Maven
+        run: |
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
+            mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml
+
+      - name: Upload Surefire reports
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: surefire-reports-jdk${{ matrix.java }}
+          path: '**/target/surefire-reports/*.xml'
+          if-no-files-found: ignore
+
+  # ============================================================================================================
   # Deploy SNAPSHOT to the Jzy3d Maven FTP repository (see distributionManagement in pom.xml).
   #
   # Runs after all platforms passed, either on push to master or when manually triggered with
@@ -243,7 +286,7 @@ jobs:
   deploy:
     name: Deploy SNAPSHOT
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, build-jdk]
     if: >-
       (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
       (github.event_name == 'workflow_dispatch' && inputs.deploy)
