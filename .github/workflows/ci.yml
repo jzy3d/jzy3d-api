@@ -6,8 +6,10 @@
 
 name: Java CI with Maven
 
+# Branches are built through their pull request, so that each commit is built once
 on:
   push:
+    branches: [master]
   pull_request:
   workflow_dispatch:
     inputs:
