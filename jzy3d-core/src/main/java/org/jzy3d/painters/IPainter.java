@@ -741,165 +741,299 @@ public interface IPainter {
   /*                                                                                             */
   /* Buffer objects, shaders, textures and framebuffers used by GPU based drawables (VBO, volume, */
   /* depth peeling). They follow the OpenGL 2.x specification and use Java types only, so that    */
-  /* drawables do not depend on a particular OpenGL binding. Painters that do not support them    */
-  /* (e.g. EmulGL) throw an UnsupportedOperationException.                                       */
+  /* drawables do not depend on a particular OpenGL binding. By default they throw an             */
+  /* UnsupportedOperationException for painters that do not support them (e.g. EmulGL).          */
   /*                                                                                             */
   /* ******************************************************************************************* */
 
   // Buffer objects
 
-  public void glGenBuffers(int n, int[] buffers, int offset);
+  public default void glGenBuffers(int n, int[] buffers, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGenBuffers");
+  }
 
-  public void glDeleteBuffers(int n, int[] buffers, int offset);
+  public default void glDeleteBuffers(int n, int[] buffers, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDeleteBuffers");
+  }
 
-  public void glBindBuffer(int target, int buffer);
+  public default void glBindBuffer(int target, int buffer) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glBindBuffer");
+  }
 
-  public void glBufferData(int target, long size, Buffer data, int usage);
+  public default void glBufferData(int target, long size, Buffer data, int usage) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glBufferData");
+  }
 
-  public void glBufferSubData(int target, long offset, long size, Buffer data);
+  public default void glBufferSubData(int target, long offset, long size, Buffer data) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glBufferSubData");
+  }
 
 
   // Vertex arrays, reading the buffer object bound to GL_ARRAY_BUFFER at the given byte offsets
 
-  public void glEnableClientState(int array);
+  public default void glEnableClientState(int array) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glEnableClientState");
+  }
 
-  public void glDisableClientState(int array);
+  public default void glDisableClientState(int array) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDisableClientState");
+  }
 
-  public void glVertexPointer(int size, int type, int stride, long pointerOffset);
+  public default void glVertexPointer(int size, int type, int stride, long pointerOffset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glVertexPointer");
+  }
 
-  public void glNormalPointer(int type, int stride, long pointerOffset);
+  public default void glNormalPointer(int type, int stride, long pointerOffset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glNormalPointer");
+  }
 
-  public void glColorPointer(int size, int type, int stride, long pointerOffset);
+  public default void glColorPointer(int size, int type, int stride, long pointerOffset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glColorPointer");
+  }
 
-  public void glTexCoordPointer(int size, int type, int stride, long pointerOffset);
+  public default void glTexCoordPointer(int size, int type, int stride, long pointerOffset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glTexCoordPointer");
+  }
 
 
   // Drawing, with indices read from the buffer object bound to GL_ELEMENT_ARRAY_BUFFER at the given byte offsets
 
-  public void glDrawArrays(int mode, int first, int count);
+  public default void glDrawArrays(int mode, int first, int count) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDrawArrays");
+  }
 
-  public void glDrawElements(int mode, int count, int type, long indicesOffset);
+  public default void glDrawElements(int mode, int count, int type, long indicesOffset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDrawElements");
+  }
 
-  public void glMultiDrawArrays(int mode, IntBuffer first, IntBuffer count, int drawcount);
+  public default void glMultiDrawArrays(int mode, IntBuffer first, IntBuffer count, int drawcount) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glMultiDrawArrays");
+  }
 
-  public void glMultiDrawElements(int mode, IntBuffer count, int type, LongBuffer indicesOffsets, int drawcount);
+  public default void glMultiDrawElements(int mode, IntBuffer count, int type, LongBuffer indicesOffsets, int drawcount) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glMultiDrawElements");
+  }
 
-  public void glPrimitiveRestartIndex(int index);
+  public default void glPrimitiveRestartIndex(int index) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glPrimitiveRestartIndex");
+  }
 
 
   // Shaders
 
-  public int glCreateShader(int type);
+  public default int glCreateShader(int type) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glCreateShader");
+  }
 
-  public void glShaderSource(int shader, String[] sources);
+  public default void glShaderSource(int shader, String[] sources) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glShaderSource");
+  }
 
-  public void glCompileShader(int shader);
+  public default void glCompileShader(int shader) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glCompileShader");
+  }
 
-  public void glGetShaderiv(int shader, int pname, int[] params, int offset);
+  public default void glGetShaderiv(int shader, int pname, int[] params, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGetShaderiv");
+  }
 
-  public String glGetShaderInfoLog(int shader);
+  public default String glGetShaderInfoLog(int shader) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGetShaderInfoLog");
+  }
 
-  public void glDeleteShader(int shader);
+  public default void glDeleteShader(int shader) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDeleteShader");
+  }
 
-  public int glCreateProgram();
+  public default int glCreateProgram() {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glCreateProgram");
+  }
 
-  public void glAttachShader(int program, int shader);
+  public default void glAttachShader(int program, int shader) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glAttachShader");
+  }
 
-  public void glDetachShader(int program, int shader);
+  public default void glDetachShader(int program, int shader) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDetachShader");
+  }
 
-  public void glLinkProgram(int program);
+  public default void glLinkProgram(int program) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glLinkProgram");
+  }
 
-  public void glValidateProgram(int program);
+  public default void glValidateProgram(int program) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glValidateProgram");
+  }
 
-  public void glGetProgramiv(int program, int pname, int[] params, int offset);
+  public default void glGetProgramiv(int program, int pname, int[] params, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGetProgramiv");
+  }
 
-  public String glGetProgramInfoLog(int program);
+  public default String glGetProgramInfoLog(int program) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGetProgramInfoLog");
+  }
 
-  public void glUseProgram(int program);
+  public default void glUseProgram(int program) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glUseProgram");
+  }
 
-  public void glDeleteProgram(int program);
+  public default void glDeleteProgram(int program) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDeleteProgram");
+  }
 
-  public int glGetUniformLocation(int program, String name);
+  public default int glGetUniformLocation(int program, String name) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGetUniformLocation");
+  }
 
-  public void glUniform1i(int location, int v0);
+  public default void glUniform1i(int location, int v0) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glUniform1i");
+  }
 
-  public void glUniform1f(int location, float v0);
+  public default void glUniform1f(int location, float v0) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glUniform1f");
+  }
 
-  public void glUniform1fv(int location, int count, float[] value, int offset);
+  public default void glUniform1fv(int location, int count, float[] value, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glUniform1fv");
+  }
 
-  public void glUniform2fv(int location, int count, float[] value, int offset);
+  public default void glUniform2fv(int location, int count, float[] value, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glUniform2fv");
+  }
 
-  public void glUniform3fv(int location, int count, float[] value, int offset);
+  public default void glUniform3fv(int location, int count, float[] value, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glUniform3fv");
+  }
 
-  public void glUniform4fv(int location, int count, float[] value, int offset);
+  public default void glUniform4fv(int location, int count, float[] value, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glUniform4fv");
+  }
 
-  public void glUniformMatrix4fv(int location, int count, boolean transpose, float[] value, int offset);
+  public default void glUniformMatrix4fv(int location, int count, boolean transpose, float[] value, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glUniformMatrix4fv");
+  }
 
 
   // Textures
 
-  public void glGenTextures(int n, int[] textures, int offset);
+  public default void glGenTextures(int n, int[] textures, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGenTextures");
+  }
 
-  public void glDeleteTextures(int n, int[] textures, int offset);
+  public default void glDeleteTextures(int n, int[] textures, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDeleteTextures");
+  }
 
-  public void glBindTexture(int target, int texture);
+  public default void glBindTexture(int target, int texture) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glBindTexture");
+  }
 
-  public void glActiveTexture(int texture);
+  public default void glActiveTexture(int texture) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glActiveTexture");
+  }
 
-  public void glTexParameteri(int target, int pname, int param);
+  public default void glTexParameteri(int target, int pname, int param) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glTexParameteri");
+  }
 
-  public void glTexImage1D(int target, int level, int internalFormat, int width, int border, int format, int type, Buffer pixels);
+  public default void glTexImage1D(int target, int level, int internalFormat, int width, int border, int format, int type, Buffer pixels) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glTexImage1D");
+  }
 
-  public void glTexImage2D(int target, int level, int internalFormat, int width, int height, int border, int format, int type, Buffer pixels);
+  public default void glTexImage2D(int target, int level, int internalFormat, int width, int height, int border, int format, int type, Buffer pixels) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glTexImage2D");
+  }
 
-  public void glTexImage3D(int target, int level, int internalFormat, int width, int height, int depth, int border, int format, int type, Buffer pixels);
+  public default void glTexImage3D(int target, int level, int internalFormat, int width, int height, int depth, int border, int format, int type, Buffer pixels) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glTexImage3D");
+  }
 
-  public void glTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type, Buffer pixels);
+  public default void glTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type, Buffer pixels) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glTexSubImage3D");
+  }
 
-  public void glTexCoord3f(float s, float t, float r);
+  public default void glTexCoord3f(float s, float t, float r) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glTexCoord3f");
+  }
 
 
   // Framebuffer objects
 
-  public void glGenFramebuffers(int n, int[] framebuffers, int offset);
+  public default void glGenFramebuffers(int n, int[] framebuffers, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGenFramebuffers");
+  }
 
-  public void glDeleteFramebuffers(int n, int[] framebuffers, int offset);
+  public default void glDeleteFramebuffers(int n, int[] framebuffers, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDeleteFramebuffers");
+  }
 
-  public void glBindFramebuffer(int target, int framebuffer);
+  public default void glBindFramebuffer(int target, int framebuffer) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glBindFramebuffer");
+  }
 
-  public void glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level);
+  public default void glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glFramebufferTexture2D");
+  }
 
-  public int glCheckFramebufferStatus(int target);
+  public default int glCheckFramebufferStatus(int target) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glCheckFramebufferStatus");
+  }
 
-  public void glDrawBuffer(int mode);
+  public default void glDrawBuffer(int mode) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDrawBuffer");
+  }
 
-  public void glDrawBuffers(int n, int[] buffers, int offset);
+  public default void glDrawBuffers(int n, int[] buffers, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDrawBuffers");
+  }
 
 
   // Queries
 
-  public void glGenQueries(int n, int[] ids, int offset);
+  public default void glGenQueries(int n, int[] ids, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGenQueries");
+  }
 
-  public void glDeleteQueries(int n, int[] ids, int offset);
+  public default void glDeleteQueries(int n, int[] ids, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glDeleteQueries");
+  }
 
-  public void glBeginQuery(int target, int id);
+  public default void glBeginQuery(int target, int id) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glBeginQuery");
+  }
 
-  public void glEndQuery(int target);
+  public default void glEndQuery(int target) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glEndQuery");
+  }
 
-  public void glGetQueryObjectuiv(int id, int pname, int[] params, int offset);
+  public default void glGetQueryObjectuiv(int id, int pname, int[] params, int offset) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGetQueryObjectuiv");
+  }
 
 
   // Other
 
-  public void glAlphaFunc(int func, float ref);
+  public default void glAlphaFunc(int func, float ref) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glAlphaFunc");
+  }
 
-  public void glBlendEquation(int mode);
+  public default void glBlendEquation(int mode) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glBlendEquation");
+  }
 
-  public void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha);
+  public default void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glBlendFuncSeparate");
+  }
 
-  public int glGetError();
+  public default int glGetError() {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGetError");
+  }
 
-  public String glGetString(int name);
+  public default String glGetString(int name) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glGetString");
+  }
 
-  public void glReadPixels(int x, int y, int width, int height, int format, int type, Buffer pixels);
+  public default void glReadPixels(int x, int y, int width, int height, int format, int type, Buffer pixels) {
+    throw new UnsupportedOperationException(getClass().getSimpleName() + " does not support glReadPixels");
+  }
 }
