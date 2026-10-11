@@ -31,6 +31,9 @@ env:
   JAVA_VERSION: '25'
   JAVA_DISTRIBUTION: temurin
 
+  # maven.jzy3d.org sometimes answers 403 to a burst of downloads : retry instead of failing the build
+  MAVEN_OPTS: -Daether.connector.http.retryHandler.count=5 -Daether.connector.http.retryHandler.serviceUnavailable=403,429,503
+
   # Integration tests rendering the same charts with JOGL and PanamaGL
   PANAMAGL_IT: ITTest_PanamaGLParity,ITTest_GPUDrawables,ITTest_DepthPeeling,ITTest_Picking
 
