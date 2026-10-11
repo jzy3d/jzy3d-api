@@ -73,17 +73,6 @@ jobs:
         shell: bash
         run: rm -rf ~/.m2/repository/org/jzy3d/panama-gl*
 
-      # TEMPORARY : find why maven.jzy3d.org answers 403 on Windows
-      - name: Check access to maven.jzy3d.org
-        shell: bash
-        run: |
-          u=https://maven.jzy3d.org/releases/org/jzy3d/panama-gl-api/1.3.0/panama-gl-api-1.3.0.pom
-          for ua in curl "Apache-Maven/3.9.11 (Java 25; Windows Server 2025 10.0)" "Apache-Maven/3.9.11 (Java 25; Linux 6.11)"; do
-            for i in 1 2 3; do curl -s -o /dev/null -A "$ua" -w "%{http_code} %{remote_ip} $ua\n" $u; done
-          done
-          curl -sI $u | head -20
-          curl -s -o /dev/null -w "%{http_code} releases root\n" https://maven.jzy3d.org/releases/
-
       # -------------------------------------------------------
       # Linux: install Mesa OpenGL (software llvmpipe renderer),
       # GLUT (used by PanamaGL) and a virtual X display.
