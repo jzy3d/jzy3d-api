@@ -2,7 +2,6 @@ package jogl;
 
 import org.junit.Test;
 import org.jzy3d.os.OperatingSystem;
-import org.jzy3d.plot3d.GPUInfo;
 import org.jzy3d.plot3d.NativeGPUInfo;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GLAutoDrawable;
