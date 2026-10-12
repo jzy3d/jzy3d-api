@@ -16,7 +16,6 @@
 package org.jzy3d.painters;
 
 import java.lang.foreign.Arena;
-import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 import panamagl.opengl.GL;
 
