@@ -52,11 +52,20 @@ jobs:
       # Don't cancel other jobs if one platform fails
       fail-fast: false
       matrix:
+        # Same platforms as PanamaGL CI
         os:
           - ubuntu-latest    # Linux x86_64
+          - ubuntu-24.04-arm # Linux ARM64
           - macos-latest     # macOS ARM (Apple Silicon)
           - macos-15-intel   # macOS Intel x86_64 (last x86_64 image; GitHub Actions drops x86_64 ~Aug 2027)
           - windows-latest   # Windows x86_64 (Mesa D3D12 OpenGL, see below)
+          - windows-11-arm   # Windows ARM64
+        include:
+          # Temurin provides no JDK 25 for Windows ARM64, and OpenJFX publishes no Windows ARM64 build
+          - os: windows-11-arm
+            distribution: zulu
+            maven-args: >-
+              -pl '!jzy3d-core-javafx,!jzy3d-native-jogl-javafx,!jzy3d-native-panama-gl-javafx,!jzy3d-tutorials/jzy3d-tutorials-jogl-javafx,!jzy3d-tutorials/jzy3d-tutorials-jogl-javafx/jzy3d-tutorials-jogl-javafx-jdk8,!jzy3d-tutorials/jzy3d-tutorials-jogl-javafx/jzy3d-tutorials-jogl-javafx-jdk17,!jzy3d-tutorials/jzy3d-tutorials-jogl-javafx/jzy3d-tutorials-jogl-javafx-jdk19,!jzy3d-tutorials/jzy3d-tutorials-panama-gl-javafx'
 
     steps:
       - uses: actions/checkout@v5
@@ -65,8 +74,21 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          distribution: ${{ matrix.distribution || env.JAVA_DISTRIBUTION }}
           cache: maven
+
+      # Maven is not installed on every runner image (e.g. Windows ARM64)
+      - name: Install Maven if missing (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if (Get-Command mvn -ErrorAction SilentlyContinue) { exit 0 }
+          $version = "3.9.11"
+          Invoke-WebRequest `
+            -Uri "https://archive.apache.org/dist/maven/maven-3/$version/binaries/apache-maven-$version-bin.zip" `
+            -OutFile maven.zip
+          Expand-Archive -Path maven.zip -DestinationPath C:\maven
+          "C:\maven\apache-maven-$version\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       # PanamaGL releases may be redeployed with the same version (implementation fixes without API
       # change), so never trust the copy restored from the Maven cache.
@@ -84,7 +106,7 @@ jobs:
           sudo apt-get update -q
           sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev xvfb
           # Temurin's default java.library.path misses the multiarch folder where PanamaGL finds libGL
-          echo "JAVA_TOOL_OPTIONS=-Djava.library.path=/usr/lib/x86_64-linux-gnu:/usr/lib" >> $GITHUB_ENV
+          echo "JAVA_TOOL_OPTIONS=-Djava.library.path=/usr/lib/$(uname -m)-linux-gnu:/usr/lib" >> $GITHUB_ENV
 
       - name: Configure OpenGL library path (macOS)
         if: runner.os == 'macOS'
@@ -103,14 +125,15 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
+          $arch = if ($env:RUNNER_ARCH -eq 'ARM64') { 'arm64' } else { 'x64' }
           $headers = @{ Authorization = "Bearer $env:GITHUB_TOKEN" }
           $release = Invoke-RestMethod `
             "https://api.github.com/repos/mmozeiko/build-mesa/releases/latest" `
             -Headers $headers
           $asset = $release.assets `
-            | Where-Object { $_.name -like "mesa-d3d12-x64-*.7z" } `
+            | Where-Object { $_.name -like "mesa-d3d12-$arch-*.7z" } `
             | Select-Object -First 1
-          if (-not $asset) { Write-Error "Could not find mesa-d3d12-x64 asset"; exit 1 }
+          if (-not $asset) { Write-Error "Could not find mesa-d3d12-$arch asset"; exit 1 }
           Write-Host "Downloading $($asset.name)"
           Invoke-WebRequest -Uri $asset.browser_download_url -OutFile mesa.7z
           7z x mesa.7z -omesa -y | Out-Null
@@ -132,15 +155,22 @@ jobs:
       # -------------------------------------------------------
       # Windows: freeglut (used by PanamaGL) has no Chocolatey
       # package and transmissionzero.co.uk is not reachable from
-      # GitHub runners, so build it with the preinstalled vcpkg.
+      # GitHub runners, so build it with vcpkg, preinstalled on most Windows runners.
       # -------------------------------------------------------
-      - name: Install freeglut x64 (Windows)
+      - name: Install freeglut (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          & "$env:VCPKG_INSTALLATION_ROOT\vcpkg.exe" install freeglut:x64-windows
+          $arch = if ($env:RUNNER_ARCH -eq 'ARM64') { 'arm64' } else { 'x64' }
+          $vcpkg = $env:VCPKG_INSTALLATION_ROOT
+          if (-not $vcpkg -or -not (Test-Path "$vcpkg\vcpkg.exe")) {
+            $vcpkg = "C:\vcpkg"
+            git clone --depth 1 https://github.com/microsoft/vcpkg $vcpkg
+            & "$vcpkg\bootstrap-vcpkg.bat" -disableMetrics
+          }
+          & "$vcpkg\vcpkg.exe" install "freeglut:$arch-windows"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $dll = Join-Path $env:VCPKG_INSTALLATION_ROOT "installed\x64-windows\bin\freeglut.dll"
+          $dll = Join-Path $vcpkg "installed\$arch-windows\bin\freeglut.dll"
           if (-not (Test-Path $dll)) { Write-Error "freeglut.dll not found at $dll"; exit 1 }
           Copy-Item -Path $dll -Destination "C:\Windows\System32\freeglut.dll"
           Copy-Item -Path $dll -Destination (Join-Path $env:JAVA_HOME "bin")
@@ -158,11 +188,11 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
-            mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml
+            mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ matrix.maven-args }}
 
       - name: Build and test with Maven (macOS, Windows)
         if: runner.os != 'Linux'
-        run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml
+        run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ matrix.maven-args }}
 
       # -------------------------------------------------------
       # Integration tests comparing JOGL and PanamaGL renderings
@@ -239,15 +269,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - java: '8'
-            distribution: temurin
-          - java: '14'
-            distribution: zulu
-          - java: '17'
-            distribution: temurin
-          - java: '22'
-            distribution: temurin
+        # LTS versions, and 22, the first version providing the stable FFM API required by PanamaGL.
+        # JDK 25 (LTS) is used by the build job above.
+        java: ['8', '11', '17', '21', '22']
 
     steps:
       - uses: actions/checkout@v5
@@ -256,7 +280,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: ${{ matrix.java }}
-          distribution: ${{ matrix.distribution }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
           cache: maven
 
       - name: Remove PanamaGL from the Maven cache
