@@ -78,7 +78,7 @@ public class TestCamera_EmulGL_Onscreen {
     Assert.assertEquals(FRAME_SIZE.height, awtFrame.getSize().height);
 
     // Then viewport size is set to occupy the full canvas
-    waitForViewport(cam, canvas);
+    waitForViewport(cam, canvas, ViewportMode.RECTANGLE_NO_STRETCH);
     Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
     Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
 
@@ -102,7 +102,7 @@ public class TestCamera_EmulGL_Onscreen {
     System.out.println("TestCamEmulGLOnScreen : viewport.size : " + cam.getLastViewPort());
 
     // Then viewport on the complete canvas
-    waitForViewport(cam, canvas);
+    waitForViewport(cam, canvas, ViewportMode.RECTANGLE_NO_STRETCH);
     Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, cam.getLastViewPort().getMode());
     Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
     Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
@@ -112,6 +112,7 @@ public class TestCamera_EmulGL_Onscreen {
 
     cam.setViewportMode(ViewportMode.STRETCH_TO_FILL);
     chart.render();
+    waitForViewport(cam, canvas, ViewportMode.STRETCH_TO_FILL);
 
 
     // Then viewport on the complete canvas
@@ -136,10 +137,13 @@ public class TestCamera_EmulGL_Onscreen {
 
   /**
    * The canvas is resized before the view renders with the new size, in the rendering thread :
-   * wait for the camera viewport to fit the canvas, which may take a while on slow computers.
+   * wait for the camera viewport to fit the canvas with the given mode, which may take a while on
+   * slow computers.
    */
-  private static void waitForViewport(Camera cam, Component canvas) throws InterruptedException {
-    waitUntil(() -> cam.getLastViewPort().getWidth() == canvas.getSize().width
+  private static void waitForViewport(Camera cam, Component canvas, ViewportMode mode)
+      throws InterruptedException {
+    waitUntil(() -> cam.getLastViewPort().getMode() == mode
+        && cam.getLastViewPort().getWidth() == canvas.getSize().width
         && cam.getLastViewPort().getHeight() == canvas.getSize().height);
   }
 
