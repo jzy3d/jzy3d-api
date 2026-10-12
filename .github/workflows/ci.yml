@@ -61,11 +61,14 @@ jobs:
           - windows-latest   # Windows x86_64 (Mesa D3D12 OpenGL, see below)
           - windows-11-arm   # Windows ARM64
         include:
-          # Temurin provides no JDK 25 for Windows ARM64, and OpenJFX publishes no Windows ARM64 build
+          # Temurin provides no JDK 25 for Windows ARM64. JOGL 2.6 (GlueGen), SWT 3.116 and OpenJFX
+          # provide no Windows ARM64 natives : build and test the modules not using them, and skip
+          # integration tests, which compare PanamaGL to JOGL.
           - os: windows-11-arm
             distribution: zulu
+            jogl: false
             maven-args: >-
-              -pl '!jzy3d-core-javafx,!jzy3d-native-jogl-javafx,!jzy3d-native-panama-gl-javafx,!jzy3d-tutorials/jzy3d-tutorials-jogl-javafx,!jzy3d-tutorials/jzy3d-tutorials-jogl-javafx/jzy3d-tutorials-jogl-javafx-jdk8,!jzy3d-tutorials/jzy3d-tutorials-jogl-javafx/jzy3d-tutorials-jogl-javafx-jdk17,!jzy3d-tutorials/jzy3d-tutorials-jogl-javafx/jzy3d-tutorials-jogl-javafx-jdk19,!jzy3d-tutorials/jzy3d-tutorials-panama-gl-javafx'
+              -am -pl 'jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-emul-gl-swing,jzy3d-io-xls'
 
     steps:
       - uses: actions/checkout@v5
@@ -206,7 +209,7 @@ jobs:
               -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false
 
       - name: PanamaGL integration tests (macOS, Windows)
-        if: runner.os != 'Linux'
+        if: runner.os != 'Linux' && matrix.jogl != false
         shell: bash
         run: |
           mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
