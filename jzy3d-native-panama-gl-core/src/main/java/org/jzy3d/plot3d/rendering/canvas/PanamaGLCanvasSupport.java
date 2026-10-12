@@ -103,7 +103,7 @@ public class PanamaGLCanvasSupport {
 
   /**
    * Return the last rendered image, once renderings requested before this call are done.
-   * 
+   *
    * @return a {@link java.awt.image.BufferedImage} for AWT based canvases, or null if nothing was
    *         rendered yet.
    */

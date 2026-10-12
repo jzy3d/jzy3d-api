@@ -2,7 +2,7 @@ package org.jzy3d.plot3d.rendering.textures;
 
 /**
  * Texture coordinates of the corners of an image stored in a texture.
- * 
+ *
  * @author Martin Pernollet
  */
 public class TextureCoords {

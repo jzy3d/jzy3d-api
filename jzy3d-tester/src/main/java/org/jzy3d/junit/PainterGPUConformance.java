@@ -13,7 +13,7 @@ import org.jzy3d.painters.IPainter;
  * Verify that a painter supports the GPU resources API of {@link IPainter} (buffer objects,
  * shaders, textures, framebuffers, queries) by drawing in its current GL context and reading back
  * pixels.
- * 
+ *
  * The painter must have a current GL context with a framebuffer of at least {@link #WIDTH} x
  * {@link #HEIGHT} pixels. Each check prepares the context with {@link #prepare()}.
  */

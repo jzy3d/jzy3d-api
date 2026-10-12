@@ -149,7 +149,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /**
    * The (non-mandatory) int buffer storing geometry indices in GPU. If defined, will render with
    * {@link IPainter#glMultiDrawElements}
-   * 
+   *
    * <ul>
    * <li>{@link #elementsCount} gives the number of vertices of each geometry</li>
    * <li>{@link #elementsOffsets} gives the offset in bytes of the first index of each geometry in
@@ -572,7 +572,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
   /**
    * Configure a VBO with vertices, colors, and indices of multiple geometries, rendered with
    * {@link IPainter#glMultiDrawElements}.
-   * 
+   *
    * @param elementsCount the number of vertices of each geometry
    * @param elementsOffsets the offset in bytes of the first index of each geometry in
    *        elementsIndices
@@ -667,7 +667,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       elementSize = newElements.capacity();
 
       registerElementBuffer(painter, newElements);
-      
+
       elements = newElements;
     }
   }

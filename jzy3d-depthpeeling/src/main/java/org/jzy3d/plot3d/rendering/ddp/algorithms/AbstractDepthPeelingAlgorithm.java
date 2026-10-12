@@ -52,7 +52,7 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
   /**
    * Verify the framebuffer currently bound can be rendered to. A GL implementation not supporting
    * the format of one of its attachments would otherwise silently render nothing.
-   * 
+   *
    * @throws IllegalStateException if the framebuffer is incomplete.
    */
   protected void checkFramebuffer(IPainter painter, String name, int width, int height) {

@@ -14,11 +14,11 @@ import org.jzy3d.plot3d.primitives.IGLBindedResource;
 
 /**
  * An image stored in a 2D texture, that can be shared by several drawables.
- * 
+ *
  * The texture is loaded in GPU through {@link IPainter} at mount, hence works with any native
  * painter. A texture may be shared by drawables rendered by several charts, hence in several GL
  * contexts : the texture is loaded once per painter.
- * 
+ *
  * Image rows are stored from top to bottom, hence {@link #getCoords()} gives a top coordinate of 0
  * and a bottom coordinate of 1.
  */
@@ -171,7 +171,7 @@ public class SharedTexture implements IGLBindedResource {
 
   /**
    * Will apply if set before actually loading the texture.
-   * 
+   *
    * @param useMipMap
    */
   public void setUseMipMap(boolean useMipMap) {
@@ -184,13 +184,13 @@ public class SharedTexture implements IGLBindedResource {
 
   /**
    * Will apply if set before actually loading the texture.
-   * 
+   *
    * Possible values documented in
    * https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml (see parameter
    * GL_TEXTURE_MAG_FILTER)
-   * 
+   *
    * Use -1 to avoid magnification
-   * 
+   *
    * @param textureMagnificationFilter
    */
   public void setTextureMagnificationFilter(int textureMagnificationFilter) {
@@ -203,13 +203,13 @@ public class SharedTexture implements IGLBindedResource {
 
   /**
    * Will apply if set before actually loading the texture.
-   * 
+   *
    * Possible values documented in
    * https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml (see parameter
    * GL_TEXTURE_MIN_FILTER)
-   * 
+   *
    * Use -1 to avoid minification
-   * 
+   *
    * @param textureMinificationFilter
    */
   public void setTextureMinificationFilter(int textureMinificationFilter) {

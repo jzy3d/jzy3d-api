@@ -13,7 +13,7 @@ import org.jzy3d.plot3d.rendering.view.View;
 
 /**
  * Build {@link Chart2d} rendered with JOGL in AWT.
- * 
+ *
  * Extends {@link ChartFactory} rather than AWTChartFactory, which builds AWTNativeChart, since
  * {@link Chart2d} is not bound to JOGL.
  */
