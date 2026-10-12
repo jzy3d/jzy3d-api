@@ -9,8 +9,8 @@ public class GPUInfo {
   protected String vendor;
   protected String renderer;
   protected String version;
-  protected List<String> extensions = new ArrayList<>(); 
-  
+  protected List<String> extensions = new ArrayList<>();
+
   /** Read GPU information through a painter. A GL context MUST be current. */
   public static GPUInfo load(IPainter painter) {
     GPUInfo gpu = new GPUInfo();
@@ -33,7 +33,7 @@ public class GPUInfo {
     sb.append("GL_VENDOR     : " + vendor + "\n");
     sb.append("GL_RENDERER   : " + renderer + "\n");
     sb.append("GL_VERSION    : " + version + "\n");
-    
+
     if(extensions!=null) {
       sb.append("GL_EXTENSIONS : (" + extensions.size() + ")\n");
       for(String e: extensions) {
@@ -41,9 +41,9 @@ public class GPUInfo {
       }
     }
     else {
-      sb.append("GL_EXTENSIONS : null\n");      
+      sb.append("GL_EXTENSIONS : null\n");
     }
-    
+
     return sb.toString();
   }
 

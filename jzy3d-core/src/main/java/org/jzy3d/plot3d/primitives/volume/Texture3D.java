@@ -34,7 +34,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
 
   /**
    * Instanciate a drawable volume.
-   * 
+   *
    * @param buffer provides (x,y,z,V) tuples where (x,y,z) are voxel index in the volume and V the
    *        value used for coloring voxels
    * @param shape a 3 element array indicating the number of voxels for each dimension
@@ -61,7 +61,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
   /**
    * A convenient constructor that configure the volume value range based on the colormapper
    * settings.
-   * 
+   *
    * {@link Texture3D#Texture3D(Buffer, int[], float, float, ColorMapper, BoundingBox3d)}
    */
   public Texture3D(Buffer buffer, int[] shape, ColorMapper mapper, BoundingBox3d bbox) {
@@ -94,7 +94,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
       mounted = true;
     }
   }
-  
+
   boolean validateAtMount = false;
 
   public void setMin(Number min) {
@@ -113,7 +113,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
   public void bind(final IPainter painter)  {
 
     painter.glEnable(GLConstants.GL_TEXTURE_3D);
-    
+
     //painter.glEnd();
 
     // Verify a texture can be enabled and mapped to the shader variable name
@@ -144,7 +144,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     // Load buffer data into memory
     setTextureData(painter, buffer, shape);
   }
-  
+
   public void unbind(final IPainter painter) {
     painter.glActiveTexture(GLConstants.GL_TEXTURE0);
     painter.glBindTexture(GLConstants.GL_TEXTURE_3D, 0);
@@ -153,7 +153,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
 
   /**
    * Load buffer data into memory
-   * 
+   *
    * @param painter
    * @param buffer texture data
    * @param shape the dimensions of 3d texture.
@@ -162,7 +162,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
   public void setTextureData(final IPainter painter, Buffer buffer, int[] shape) {
     // define how pixels are stored in memory
     painter.glPixelStorei(GLConstants.GL_UNPACK_ALIGNMENT, 1);
-    
+
     // specify a 3 dimensional texture image with a single LOD, R float internal format, dynamical
     // number of voxel for width, height, depth, R float input format
     // no border : the buffer holds exactly shape[0]*shape[1]*shape[2] values. A border of 1 would
@@ -201,7 +201,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     }
     bind(painter);
     colormapTexure.bind(painter);
-    
+
 
 
     colormapTexure.update(painter);
@@ -257,16 +257,16 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
     painter.glBlendFunc(GLConstants.GL_SRC_ALPHA, GLConstants.GL_ONE_MINUS_SRC_ALPHA);
     painter.glPolygonMode(GLConstants.GL_FRONT, GLConstants.GL_FILL);
     painter.glCullFace(GLConstants.GL_BACK);
-    
+
     shapeVBO.draw(painter);
     shaderProgram.unbind(painter);
-    
+
     colormapTexure.unbind(painter);
     unbind(painter);
 
     //gl.glDisable(GLConstants.GL_CULL_FACE);
 
-    
+
     if (disposed) {
       painter.glDeleteTextures(1, new int[] {texID}, 0);
       buffer = null;
@@ -308,7 +308,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
 
   /**
    * Invert a column major 4x4 matrix.
-   * 
+   *
    * @return the inverted matrix stored in out, or null if the matrix is not invertible.
    */
   protected static float[] invertMatrix(float[] m, float[] out) {
@@ -359,7 +359,7 @@ public class Texture3D extends Drawable implements IGLBindedResource, IMultiColo
 
   /**
    * Multiply a column major 4x4 matrix with a 4 component vector.
-   * 
+   *
    * Components of out are written one after the other, hence using the same array for vec and out
    * makes the computation of a component use the components already computed.
    */
