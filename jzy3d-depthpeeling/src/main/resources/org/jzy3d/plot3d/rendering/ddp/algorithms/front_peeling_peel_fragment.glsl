@@ -9,13 +9,17 @@
 
 uniform sampler2DRect DepthTex;
 
+const float DepthEpsilon = 1e-6;
+
 vec4 ShadeFragment();
 
 void main(void)
 {
-	// Bit-exact comparison between FP32 z-buffer and fragment depth
+	// Comparison between FP32 z-buffer and fragment depth. It is not bit-exact on all GL
+	// implementations (e.g. macOS on Apple Silicon) : a tolerance avoids peeling the same
+	// fragments again at each layer, which would never let the occlusion query reach zero.
 	float frontDepth = texture2DRect(DepthTex, gl_FragCoord.xy).r;
-	if (gl_FragCoord.z <= frontDepth) {
+	if (gl_FragCoord.z <= frontDepth + DepthEpsilon) {
 		discard;
 	}
 	
