@@ -82,6 +82,23 @@ public class ITTest_PanamaGLParity extends ITTest {
     });
   }
 
+  /** TEMPORARY : measure how point width changes the difference of offscreen scatters */
+  @Test
+  public void whenScatterOffscreenOfVariousWidth_ThenPrintDifference() throws IOException {
+    Assume.assumeTrue("PanamaGL is not in classpath", isPanamaGLAvailable());
+    for (float width : new float[] {1, 2, 3, 4}) {
+      Consumer<Chart> content = chart -> {
+        Scatter scatter = scatter(50000);
+        scatter.setWidth(width);
+        chart.add(scatter);
+        hideAxisText(chart);
+      };
+      BufferedImage jogl = renderOffscreen(new AWTChartFactory(), content);
+      BufferedImage panama = renderOffscreen(newChartFactory(PANAMAGL_SWING_FACTORY), content);
+      dumpDiff("ScatterOffscreenWidth" + (int) width, diffRatio(jogl, panama), jogl, panama);
+    }
+  }
+
   @Test
   public void whenScatterOffscreen_ThenPanamaGLMatchesJOGL() throws IOException {
     assertFactoryParity("ScatterOffscreen", new AWTChartFactory(), PANAMAGL_SWING_FACTORY,
