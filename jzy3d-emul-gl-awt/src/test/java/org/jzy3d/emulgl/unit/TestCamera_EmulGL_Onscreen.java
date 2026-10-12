@@ -69,7 +69,7 @@ public class TestCamera_EmulGL_Onscreen {
     Frame awtFrame = (Frame) frame;
 
     // let time to resize from default 500 to 800 before testing
-    waitForFrameSize(awtFrame, FRAME_SIZE);
+    waitForFrameSize(awtFrame, FRAME_SIZE, canvas);
     
     // Check target size was reached
     Rectangle CANVAS_SIZE = FRAME_SIZE.clone();
@@ -91,7 +91,7 @@ public class TestCamera_EmulGL_Onscreen {
 
     // perform resize
     awtFrame.setBounds(0, 0, FRAME_SIZE.width, FRAME_SIZE.height);
-    waitForFrameSize(awtFrame, FRAME_SIZE);
+    waitForFrameSize(awtFrame, FRAME_SIZE, canvas);
 
     // print debug info
     System.out.println("TestCamEmulGLOnScreen : viewport : " + cam.getLastViewPort());
@@ -129,10 +129,16 @@ public class TestCamera_EmulGL_Onscreen {
 
   /**
    * The frame is resized asynchronously, and may go through intermediate sizes : wait for the
-   * expected size.
+   * expected size, and for the canvas to fill the frame.
    */
-  private static void waitForFrameSize(Frame frame, Rectangle size) throws InterruptedException {
-    waitUntil(() -> frame.getSize().width == size.width && frame.getSize().height == size.height);
+  private static void waitForFrameSize(Frame frame, Rectangle size, Component canvas)
+      throws InterruptedException {
+    waitUntil(() -> {
+      Insets i = frame.getInsets();
+      return frame.getSize().width == size.width && frame.getSize().height == size.height
+          && canvas.getSize().width == size.width - i.left - i.right
+          && canvas.getSize().height == size.height - i.top - i.bottom;
+    });
   }
 
   /**
