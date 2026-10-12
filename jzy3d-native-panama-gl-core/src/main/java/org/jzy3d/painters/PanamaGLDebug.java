@@ -25,7 +25,7 @@ import panamagl.opengl.GL;
 /**
  * Wrap a {@link GL} so that an exception is thrown as soon as a GL call produces an error, as JOGL's
  * DebugGL does. Optionally print each call.
- * 
+ *
  * Errors are checked after each call, except between glBegin and glEnd where glGetError is not
  * allowed. This makes rendering slower : use it for debugging only.
  */

@@ -43,7 +43,7 @@ import panamagl.utils.ImageUtils;
 /**
  * A canvas rendering a chart in an offscreen buffer without any window, e.g. to generate images on
  * a server or in tests.
- * 
+ *
  * The GL context is created and used by a dedicated thread : every rendering is performed by this
  * thread, and methods triggering a rendering wait for it to complete.
  */

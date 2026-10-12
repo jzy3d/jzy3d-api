@@ -11,22 +11,22 @@ import org.jzy3d.painters.IPainter;
 
 
 /**
- * 
+ *
  * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexImage1D.xhtml
  * @see https://www.khronos.org/registry/OpenGL-Refpages/gl4/html/glTexParameter.xhtml
- * 
+ *
  */
 public class ColormapTexture {
 
   protected int id;
   protected int texID;
-  
+
   protected ByteBuffer image;
   protected int[] shape;
-  
+
   protected boolean isUpdate = false;
   protected String name = null;
-  
+
   protected int nColors = 256;
 
 
@@ -39,7 +39,7 @@ public class ColormapTexture {
 
   public ColormapTexture(ColorMapper mapper) {
     image = BufferUtil.newDirectByteBuffer(4 * nColors * 4);
-    
+
     feedBufferWithColormap(mapper);
   }
 
@@ -48,7 +48,7 @@ public class ColormapTexture {
 
     isUpdate = true;
   }
-  
+
   protected void feedBufferWithColormap(ColorMapper mapper) {
     double min = mapper.getMin();
     double max = mapper.getMax();
@@ -61,7 +61,7 @@ public class ColormapTexture {
       image.putFloat(c.g);
       image.putFloat(c.b);
       image.putFloat(c.a);
-      
+
       //Console.println(c);
     }
 
@@ -78,12 +78,12 @@ public class ColormapTexture {
 
 
   public void bind(final IPainter painter)  {
-    
+
     painter.glEnable(GLConstants.GL_TEXTURE_1D);
-    
-    // Verify 
+
+    // Verify
     validateTexID(painter, true);
-    
+
     painter.glBindTexture(GLConstants.GL_TEXTURE_1D, texID);
     if (name != null) {
       painter.glActiveTexture(GLConstants.GL_TEXTURE1);
@@ -101,7 +101,7 @@ public class ColormapTexture {
     // Store texture in memory
     setTextureData(painter, image, shape /* unused */);
   }
-  
+
   public void unbind(IPainter painter) {
     if (name != null) {
       painter.glActiveTexture(GLConstants.GL_TEXTURE1);
@@ -121,7 +121,7 @@ public class ColormapTexture {
     // pixels, RGBA float input format
     painter.glTexImage1D(GLConstants.GL_TEXTURE_1D, 0, GLConstants.GL_RGBA32F, nColors, 0, GLConstants.GL_RGBA, GLConstants.GL_FLOAT,
         buffer);
-    
+
     // painter.glTexSubImage3D(GLConstants.GL_TEXTURE_3D,0,0, 0,0, shape[0], shape[1], shape[2],
     // GLConstants.GL_RGBA, GLConstants.GL_UNSIGNED_BYTE, buffer);
     // painter.glTexParameteri(GLConstants.GL_TEXTURE_3D, GLConstants.GL_TEXTURE_WRAP_S, GLConstants.GL_CLAMP_TO_EDGE);
@@ -145,11 +145,11 @@ public class ColormapTexture {
     if (0 == texID) {
       if (null != painter) {
         final int[] tmp = new int[1];
-        
+
         // generate a single texture and store its id
         painter.glGenTextures(1, tmp, 0);
         texID = tmp[0];
-        
+
         // check if id is valid
         if (0 == texID && throwException) {
           throw new RuntimeException("Create texture ID invalid: texID " + texID + ", glerr 0x"

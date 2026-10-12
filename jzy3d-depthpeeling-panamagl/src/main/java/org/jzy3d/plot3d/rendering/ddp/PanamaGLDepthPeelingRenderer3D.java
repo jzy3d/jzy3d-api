@@ -10,10 +10,10 @@ import panamagl.opengl.GL;
 
 /**
  * Execute depth peeling methods with PanamaGL.
- * 
+ *
  * This renderer does what DepthPeelingRenderer3d does with JOGL : the scene is rendered by a
  * {@link IDepthPeelingAlgorithm} to perform order independent transparency.
- * 
+ *
  * @author Martin Pernollet
  */
 public class PanamaGLDepthPeelingRenderer3D extends Renderer3D {
