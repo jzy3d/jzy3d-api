@@ -189,7 +189,7 @@ public class FrontToBackPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
     // ---------------------------------------------------------------------
 
     int numLayers = (g_numPasses - 1) * 2;
-    for (int layer = 1; g_useOQ || layer < numLayers; layer++) {
+    for (int layer = 1; g_useOQ ? layer <= g_maxPasses : layer < numLayers; layer++) {
       int currId = layer % 2;
       int prevId = 1 - currId;
 

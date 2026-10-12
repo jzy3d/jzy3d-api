@@ -237,7 +237,7 @@ public class DualDepthPeelingAlgorithm extends AbstractDepthPeelingAlgorithm
 
     int currId = 0;
 
-    for (int pass = 1; g_useOQ || pass < g_numPasses; pass++) {
+    for (int pass = 1; g_useOQ ? pass <= g_maxPasses : pass < g_numPasses; pass++) {
       currId = pass % 2;
       int prevId = 1 - currId;
       int bufId = currId * 3;

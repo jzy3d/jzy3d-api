@@ -17,7 +17,8 @@ package org.jzy3d.plot3d.rendering.ddp.algorithms;
  * (e.g. the blue cube of this demo)
  * <li>KO - WEIGHTED_SUM_MODE : no compilation problem BUT overlapping parts (translucent or opaque)
  * are black
- * <li>KO - F2B_PEELING_MODE : Hangs before display (reproduce with chart.get
+ * <li>OK - F2B_PEELING_MODE : used to hang before display, as the depth stored by the GL
+ *     implementation does not exactly match the fragment depth
  * </ul>
  *
  * @author martin

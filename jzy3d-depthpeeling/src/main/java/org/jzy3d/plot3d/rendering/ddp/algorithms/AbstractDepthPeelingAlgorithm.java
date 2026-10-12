@@ -18,6 +18,12 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
   protected int g_numGeoPasses = 0;
   
   protected boolean g_useOQ = true;
+
+  /**
+   * Maximum number of passes when occlusion queries decide when to stop peeling. A GL
+   * implementation whose occlusion query never reaches zero would otherwise peel forever.
+   */
+  protected int g_maxPasses = 64;
  
   protected float[] g_white = new float[] {1.0f, 1.0f, 1.0f};
   protected float[] g_black = new float[] {0.0f};
@@ -86,6 +92,20 @@ public abstract class AbstractDepthPeelingAlgorithm implements IDepthPeelingAlgo
     return g_backgroundColor;
   }
   
+  /**
+   * Set the maximum number of passes when occlusion queries decide when to stop peeling.
+   */
+  public void setMaxPasses(int maxPasses) {
+    if (maxPasses < 1) {
+      throw new IllegalArgumentException("Expect at least one pass");
+    }
+    g_maxPasses = maxPasses;
+  }
+
+  public int getMaxPasses() {
+    return g_maxPasses;
+  }
+
   public void setOpacity(float opacity){
     g_opacity[0] = opacity;
   }
