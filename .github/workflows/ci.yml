@@ -215,6 +215,8 @@ jobs:
           Get-ChildItem -Path . -Recurse -File |
             Where-Object { $_.FullName -like "*\target\surefire-reports\*" } |
             Copy-Item -Destination surefire-reports
+          Get-ChildItem -Path jzy3d-tests-java9\target -Recurse -Filter *.png -ErrorAction SilentlyContinue |
+            Copy-Item -Destination surefire-reports
 
       - name: Upload Surefire reports
         uses: actions/upload-artifact@v5
