@@ -162,10 +162,6 @@ public abstract class NativePainterFactory implements IPainterFactory {
       caps.setRedBits(8);
       caps.setBlueBits(8);
       caps.setGreenBits(8);
-
-      // JOGL asks 16 bits by default, which Mesa D3D12 (Windows) honors : close points then hide
-      // each other differently than with PanamaGL, which uses 24 bits
-      caps.setDepthBits(24);
     }
     return caps;
   }
