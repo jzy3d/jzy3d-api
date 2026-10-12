@@ -245,6 +245,10 @@ public class ITTest_PanamaGLParity extends ITTest {
       throws IOException {
     double ratio = diffRatio(jogl, panama);
 
+    if (name.startsWith("Scatter")) {
+      dumpDiff(name, ratio, jogl, panama); // TEMPORARY : investigate ScatterOffscreen on Windows
+    }
+
     if (ratio > MAX_DIFF_RATIO) {
       new File(OUTPUT).mkdirs();
       ImageIO.write(jogl, "png", new File(OUTPUT + name + "_JOGL.png"));
@@ -254,6 +258,53 @@ public class ITTest_PanamaGLParity extends ITTest {
     Assert.assertTrue(name + " : " + (100 * ratio) + "% of pixels differ between JOGL and PanamaGL"
         + " (JOGL " + describe(jogl) + ", PanamaGL " + describe(panama) + ")",
         ratio <= MAX_DIFF_RATIO);
+  }
+
+  /** TEMPORARY : print where pixels differ, and PNG crops in base64, to read them in CI logs */
+  static void dumpDiff(String name, double ratio, BufferedImage a, BufferedImage b)
+      throws IOException {
+    int w = a.getWidth(), h = a.getHeight(), bgA = a.getRGB(0, 0), bgB = b.getRGB(0, 0);
+    int onlyA = 0, onlyB = 0, both = 0, x0 = w, y0 = h, x1 = 0, y1 = 0;
+    int[][] grid = new int[6][8];
+    BufferedImage mask = new BufferedImage(w, h, BufferedImage.TYPE_BYTE_BINARY);
+    for (int x = 0; x < w; x++) {
+      for (int y = 0; y < h; y++) {
+        int pa = a.getRGB(x, y), pb = b.getRGB(x, y);
+        boolean differ = false;
+        for (int shift = 0; shift <= 16; shift += 8) {
+          differ |= Math.abs(((pa >> shift) & 0xFF) - ((pb >> shift) & 0xFF)) > PIXEL_TOLERANCE;
+        }
+        if (!differ) {
+          continue;
+        }
+        mask.setRGB(x, y, 0xFFFFFF);
+        if (pb == bgB) onlyA++; else if (pa == bgA) onlyB++; else both++;
+        x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+        grid[y * 6 / h][x * 8 / w]++;
+      }
+    }
+    int gx = 0, gy = 0;
+    StringBuilder sb = new StringBuilder();
+    for (int j = 0; j < 6; j++) {
+      for (int i = 0; i < 8; i++) {
+        sb.append(String.format("%6d", grid[j][i]));
+        if (grid[j][i] > grid[gy][gx]) { gx = i; gy = j; }
+      }
+      sb.append("\n");
+    }
+    System.out.println("PARITY " + name + " ratio " + ratio + " onlyJOGL " + onlyA + " onlyPanamaGL "
+        + onlyB + " bothDrawn " + both + " bbox " + x0 + "," + y0 + "-" + x1 + "," + y1 + "\n" + sb);
+    int cx = gx * w / 8, cy = gy * h / 6;
+    printPNG(name + "_mask", mask);
+    printPNG(name + "_JOGL_crop", a.getSubimage(cx, cy, w / 8, h / 6));
+    printPNG(name + "_PanamaGL_crop", b.getSubimage(cx, cy, w / 8, h / 6));
+  }
+
+  static void printPNG(String name, BufferedImage image) throws IOException {
+    java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+    ImageIO.write(image, "png", out);
+    System.out.println("PARITY-PNG " + name + " "
+        + java.util.Base64.getEncoder().encodeToString(out.toByteArray()));
   }
 
   protected BufferedImage render(WT toolkit, Consumer<Chart> content) throws IOException {
