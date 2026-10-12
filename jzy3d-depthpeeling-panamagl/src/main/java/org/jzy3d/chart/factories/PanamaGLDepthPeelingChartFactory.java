@@ -6,7 +6,7 @@ import org.jzy3d.plot3d.rendering.scene.Scene;
 
 /**
  * A PanamaGL Swing chart factory rendering charts with depth peeling.
- * 
+ *
  * Drawables are not sorted by the scene's {@link Graph} since depth peeling makes it useless.
  */
 public class PanamaGLDepthPeelingChartFactory extends PanamaGLSwingChartFactory {

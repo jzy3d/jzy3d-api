@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Renders all {@link ITooltipRenderer}s and {@link AWTRenderer2d}s of an {@link AWTView} on top of
  * the scene.
- * 
+ *
  * They are painted with Java2D in an image covering the whole canvas, which is then drawn as a
  * texture by the {@link PanamaGLPainter}. The current pixel scale is taken into account so that
  * {@link AWTRenderer2d}s do not have to worry about it.

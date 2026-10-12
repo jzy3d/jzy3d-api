@@ -23,13 +23,13 @@ import panamagl.opengl.GL;
 /**
  * The GLU functions emitting OpenGL commands, implemented in Java on top of the given {@link GL},
  * as JOGL does.
- * 
+ *
  * Native GLU libraries (glu32.dll, libGLU) issue their OpenGL commands through the OpenGL library
  * they are linked to, which is not always the one holding the current context : on Windows,
  * glu32.dll calls the system opengl32.dll even when another OpenGL implementation (e.g. Mesa) was
  * loaded, and then draws nothing. Implementing these functions with the GL instance of the painter
  * avoids this, and the need of a GLU library to render.
- * 
+ *
  * Quadrics are drawn as the default GLU quadric does : filled, with smooth normals pointing
  * outside, without texture coordinates.
  */

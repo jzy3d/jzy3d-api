@@ -8,20 +8,20 @@ import org.jzy3d.plot3d.rendering.ddp.algorithms.PeelingMethod;
 /**
  * Render the charts of any PanamaGL chart factory with depth peeling, whatever its toolkit (Swing,
  * JavaFX, SWT) or offscreen.
- * 
+ *
  * <pre>
  * <code>
  * ChartFactory factory = PanamaGLDepthPeeling.enable(new PanamaGLJavaFXChartFactory(), PeelingMethod.DUAL_PEELING_MODE);
  * Chart chart = factory.newChart();
  * </code>
  * </pre>
- * 
+ *
  * {@link org.jzy3d.chart.factories.PanamaGLDepthPeelingChartFactory} does the same for Swing.
  */
 public class PanamaGLDepthPeeling {
   /**
    * Make the charts created afterward by this factory render with depth peeling.
-   * 
+   *
    * @throws IllegalArgumentException if the factory does not render with PanamaGL.
    */
   public static <T extends IChartFactory> T enable(T factory, PeelingMethod method) {

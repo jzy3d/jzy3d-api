@@ -230,10 +230,10 @@ public class PanamaGLPainter extends AbstractPainter {
   /**
    * PanamaGL keeps its GL context current on the thread rendering the canvas (e.g. the AWT thread
    * for Swing). The context can't be made current on another thread while the canvas is alive.
-   * 
+   *
    * Out of rendering, the offscreen buffer of the canvas is bound so that GL commands (e.g.
    * picking) target the canvas framebuffer.
-   * 
+   *
    * @return the GL instance if called from the rendering thread, null otherwise : callers must
    *         then defer their GL work to the rendering thread (see {@link #isGLThread()}).
    */
@@ -706,7 +706,7 @@ public class PanamaGLPainter extends AbstractPainter {
    * Draw a string at the current raster position with the current raster color, as GLUT does : the
    * raster position is the left of the text baseline and is moved to the end of the text once
    * drawn.
-   * 
+   *
    * The text is drawn with AWT in an image, hence any AWT font may be used.
    */
   @Override
@@ -803,7 +803,7 @@ public class PanamaGLPainter extends AbstractPainter {
    * TextRenderer : the text is drawn with AWT in a texture mapped on a quad in screen coordinates,
    * hence any AWT font can be used, text can be rotated, and text partially out of the viewport is
    * partially drawn.
-   * 
+   *
    * Rotation is in radian and is applied at the center of the text.
    */
   @Override
@@ -839,7 +839,7 @@ public class PanamaGLPainter extends AbstractPainter {
   /**
    * Draw an AWT image in the current viewport, with its bottom left corner at the given position
    * in pixels from the bottom left corner of the viewport.
-   * 
+   *
    * The image is drawn as a textured quad, so that it can be partially out of the viewport.
    */
   public void drawImage(BufferedImage image, float x, float y) {
@@ -849,7 +849,7 @@ public class PanamaGLPainter extends AbstractPainter {
 
   /**
    * Draw pixels as a texture mapped on a quad in screen coordinates.
-   * 
+   *
    * @param x, y the position where the quad origin is translated, in pixels.
    * @param rotationD a rotation around the quad origin, in degrees.
    * @param x0, y0 the position of the bottom left corner of the quad, relative to its origin.
