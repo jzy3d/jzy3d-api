@@ -486,7 +486,6 @@ public class TestViewModeAndCameraClippingPlanes {
     latch.await(timeout, unit);
 
     if (!viewInitStatus.get()) {
-      dumpState(chart); // TEMPORARY : investigate initialization never completing on JDK 8
       Assert.fail(
           "Did not complete opening chart and mounting VBO after " + t.elapsedMilisecond() + " ms");
     } else {
@@ -497,20 +496,4 @@ public class TestViewModeAndCameraClippingPlanes {
 
 
 
-
-  /** TEMPORARY : print the canvas state and the stack of each thread */
-  static void dumpState(Chart chart) {
-    java.awt.Component c = (java.awt.Component) chart.getCanvas();
-    com.jogamp.opengl.awt.GLCanvas gl = (com.jogamp.opengl.awt.GLCanvas) c;
-    System.out.println("INIT-DEBUG canvas showing=" + c.isShowing() + " displayable=" + c.isDisplayable()
-        + " size=" + c.getSize() + " realized=" + gl.isRealized() + " context=" + gl.getContext()
-        + " animator=" + gl.getAnimator() + " frame=" + javax.swing.SwingUtilities.getWindowAncestor(c));
-    for (java.util.Map.Entry<Thread, StackTraceElement[]> e : Thread.getAllStackTraces().entrySet()) {
-      StringBuilder sb = new StringBuilder("INIT-DEBUG thread " + e.getKey().getName() + " " + e.getKey().getState());
-      for (StackTraceElement el : e.getValue()) {
-        sb.append("\n    at ").append(el);
-      }
-      System.out.println(sb);
-    }
-  }
 }
