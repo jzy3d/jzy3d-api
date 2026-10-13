@@ -486,8 +486,7 @@ public class TestViewModeAndCameraClippingPlanes {
     latch.await(timeout, unit);
 
     if (!viewInitStatus.get()) {
-      Assert.fail(
-          "Did not complete opening chart and mounting VBO after " + t.elapsedMilisecond() + " ms");
+      Assert.fail("Did not complete opening chart and mounting VBO after " + timeout + " " + unit);
     } else {
       System.out.println("TestViewModeAndCameraClippingPlanes - NEEDED " + t.elapsedMilisecond() + " ms to open with VBO mount");
     }
