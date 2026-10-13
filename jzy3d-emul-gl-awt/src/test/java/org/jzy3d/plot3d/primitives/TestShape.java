@@ -30,34 +30,38 @@ public class TestShape {
     Shape surface = SampleGeom.surface();
     chart.add(surface);
 
-    glMock.clear_glDepthRange(); // reset potential previous calls
+    // Draw while holding the canvas lock, as EmulGLCanvas.doRender() does, so that the canvas
+    // never renders with the same jGL context at the same time (e.g. after a screen change)
+    synchronized (chart.getCanvas()) {
+      glMock.clear_glDepthRange(); // reset potential previous calls
 
 
-    // When : disabling depth range trick
-    surface.setPolygonWireframeDepthTrick(false);
-    surface.draw(chart.getPainter());
+      // When : disabling depth range trick
+      surface.setPolygonWireframeDepthTrick(false);
+      surface.draw(chart.getPainter());
 
-    // Then : no call to depth range
-    Assert.assertTrue(glMock.verify_glDepthRange().isEmpty());
+      // Then : no call to depth range
+      Assert.assertTrue(glMock.verify_glDepthRange().isEmpty());
 
 
-    // When : enabling depth range trick
-    surface.setPolygonWireframeDepthTrick(true);
-    surface.draw(chart.getPainter());
+      // When : enabling depth range trick
+      surface.setPolygonWireframeDepthTrick(true);
+      surface.draw(chart.getPainter());
 
-    // Then : no call to depth range
-    double[] configForFace = {Wireframeable.NO_OVERLAP_DEPTH_RATIO, 1};
-    double[] configForWireframe = {0, 1 - Wireframeable.NO_OVERLAP_DEPTH_RATIO};
-    double[] configForNothing = {0, 1};
+      // Then : no call to depth range
+      double[] configForFace = {Wireframeable.NO_OVERLAP_DEPTH_RATIO, 1};
+      double[] configForWireframe = {0, 1 - Wireframeable.NO_OVERLAP_DEPTH_RATIO};
+      double[] configForNothing = {0, 1};
 
-    // Array.print(glMock.verify_glDepthRange().get(0));
-    // Array.print(glMock.verify_glDepthRange().get(1));
-    // Array.print(glMock.verify_glDepthRange().get(2));
-    // Array.print("configForFace:", configForFace);
+      // Array.print(glMock.verify_glDepthRange().get(0));
+      // Array.print(glMock.verify_glDepthRange().get(1));
+      // Array.print(glMock.verify_glDepthRange().get(2));
+      // Array.print("configForFace:", configForFace);
 
-    Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(0), configForFace));
-    Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(1), configForNothing));
-    Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(2), configForWireframe));
-    Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(3), configForNothing));
+      Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(0), configForFace));
+      Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(1), configForNothing));
+      Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(2), configForWireframe));
+      Assert.assertTrue(Arrays.equals(glMock.verify_glDepthRange().get(3), configForNothing));
+    }
   }
 }
