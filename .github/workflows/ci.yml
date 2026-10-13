@@ -311,11 +311,11 @@ jobs:
   # ============================================================================================================
   # Deploy SNAPSHOT to the Jzy3d Maven FTP repository (see distributionManagement in pom.xml).
   #
-  # Runs after all platforms passed, either on push to master or when manually triggered with
-  # 'deploy' checked. Never runs on pull requests. Release versions are never deployed from CI.
+  # Runs after all platforms passed : on push to master, when manually triggered with 'deploy'
+  # checked, or on pull requests labeled deploy-snapshot. Release versions are never deployed from CI.
   #
-  # Requires the FTP_USERNAME and FTP_PASSWORD secrets, defined at repository level or in the
-  # "jzy3d-ftp-env" environment.
+  # Requires the FTP_URL (e.g. ftp://ftp.example.org), FTP_USERNAME and FTP_PASSWORD secrets of the
+  # "jzy3d-ftp-env" environment, as PanamaGL CI does with its "panama-ftp-env" environment.
   # ============================================================================================================
 
   deploy:
@@ -353,7 +353,13 @@ jobs:
           fi
 
       - name: Deploy
-        run: mvn --batch-mode --no-transfer-progress deploy -DskipTests
+        run: |
+          if [ -z "$MAVEN_REPO_URL" ] || [ -z "$FTP_USERNAME" ]; then
+            echo "::error::Secrets FTP_URL, FTP_USERNAME and FTP_PASSWORD of the jzy3d-ftp-env environment are required"
+            exit 1
+          fi
+          mvn --batch-mode --no-transfer-progress deploy -DskipTests
         env:
+          MAVEN_REPO_URL: ${{ secrets.FTP_URL }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
