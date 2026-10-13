@@ -6,7 +6,7 @@ classes that only needed OpenGL now use `IPainter` instead of JOGL types (`GL`, 
 JOGL `Texture`). This page lists what changes for code written against Jzy3D 2.x.
 
 No package or class is renamed. Code that only builds charts with factories and adds drawables is not
-affected, except `new Chart2d()`.
+affected.
 
 ## Java versions
 
@@ -55,7 +55,6 @@ Subclasses of depth peeling algorithms must now implement the abstract `buildSha
 
 | Removed | Replacement |
 |---|---|
-| `Chart2d()` constructor | `Chart2dFactory.chart()`, or `PanamaGLChart2dFactory.chart()` for PanamaGL |
 | `GPUInfo.load()`, `GPUInfo.load(GL)`, `GPUInfo.main(String[])` | `GPUInfo.load(IPainter)`, or `NativeGPUInfo.load()`, `NativeGPUInfo.load(GL)` and `NativeGPUInfo.main(String[])` in `jzy3d-native-jogl-core` |
 | `SharedTexture.getTexture(IPainter)` returning a JOGL `Texture`, field `texture`, `load(GL, String)` | `SharedTexture.bind(IPainter)`, `getTextureId(IPainter)`, `getWidth()`, `getHeight()` |
 | `BufferedImageTexture.getTexture(IPainter)`, `load(GL, BufferedImage)` | `getImage()`, and the methods inherited from `SharedTexture` |
@@ -81,6 +80,8 @@ Subclasses of depth peeling algorithms must now implement the abstract `buildSha
   throwing `UnsupportedOperationException`, so existing `IPainter` implementations still compile. JOGL
   (`NativeDesktopPainter`) and PanamaGL (`PanamaGLPainter`) implement them. `GLConstants` holds the matching
   OpenGL constants.
+- `new Chart2d()` uses the first 2D chart factory found in the classpath : `Chart2dFactory` (JOGL), then
+  `PanamaGLChart2dFactory` (PanamaGL). `Chart2d(IChartFactory, Quality)` chooses the toolkit explicitly.
 - PanamaGL : `PanamaGLOffscreenCanvas`, `PanamaGLChart2dFactory`, `PanamaGLContourChartFactory`,
   `PanamaGLU` (GLU functions in Java), `PanamaGLDebug` (OpenGL error checking and tracing, as JOGL `DebugGL`,
   enabled with the painter factory `setDebugGL` and `setTraceGL`).
@@ -111,17 +112,4 @@ public void draw(IPainter painter) {
   program.setUniform(painter, "alpha", 0.5f);
   ...
 }
-```
-
-A 2D chart built with its constructor :
-
-```java
-Chart2d chart = new Chart2d();
-```
-
-is built by its factory :
-
-```java
-Chart2d chart = Chart2dFactory.chart();       // JOGL
-Chart2d chart = PanamaGLChart2dFactory.chart(); // PanamaGL
 ```
