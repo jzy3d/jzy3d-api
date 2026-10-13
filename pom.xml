@@ -99,7 +99,7 @@
 	<!-- The only place defining where Jzy3d is deployed, as PanamaGL does : the FTP server of
 		https://maven.jzy3d.org, given by the MAVEN_REPO_URL environment variable (e.g.
 		ftp://ftp.example.org). Credentials are those of server jzy3d-ftp in ~/.m2/settings.xml.
-		See doc/release.md to deploy from the command line. -->
+		See the Deploy section of README.md to deploy from a local computer or from CI. -->
 	<distributionManagement>
 		<repository>
 			<id>jzy3d-ftp</id>
