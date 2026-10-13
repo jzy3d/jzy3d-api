@@ -78,8 +78,36 @@ public class Chart2d extends AWTChart {
 
   /* */
 
+  /**
+   * Build a chart with the first 2D chart factory available in the classpath :
+   * <code>Chart2dFactory</code> (JOGL), then <code>PanamaGLChart2dFactory</code> (PanamaGL).
+   *
+   * Prefer {@link #Chart2d(IChartFactory, Quality)} to choose the toolkit explicitly.
+   */
+  public Chart2d() {
+    this(defaultFactory(), Quality.Advanced().setAnimated(true));
+  }
+
   public Chart2d(IChartFactory factory, Quality quality) {
     super(factory, quality);
     layout2d();
+  }
+
+  protected static final String[] DEFAULT_FACTORIES =
+      {"org.jzy3d.chart2d.Chart2dFactory", "org.jzy3d.chart2d.PanamaGLChart2dFactory"};
+
+  protected static IChartFactory defaultFactory() {
+    for (String className : DEFAULT_FACTORIES) {
+      try {
+        return (IChartFactory) Class.forName(className).getDeclaredConstructor().newInstance();
+      } catch (ClassNotFoundException e) {
+        // try next factory
+      } catch (ReflectiveOperationException e) {
+        throw new IllegalStateException("Could not instantiate " + className, e);
+      }
+    }
+    throw new IllegalStateException(
+        "No 2D chart factory in classpath : add jzy3d-native-jogl-awt or jzy3d-native-panama-gl-swing, "
+            + "or use Chart2d(IChartFactory, Quality)");
   }
 }
