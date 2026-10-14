@@ -18,8 +18,6 @@ package org.jzy3d.painters;
 import java.awt.Component;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
@@ -49,6 +47,7 @@ import panamagl.canvas.GLCanvas;
 import panamagl.offscreen.FBO;
 import panamagl.opengl.GL;
 import panamagl.opengl.GLContext;
+import panamagl.renderers.text.OrientedTextRenderer;
 
 public class PanamaGLPainter extends AbstractPainter {
   static Logger logger = LoggerFactory.getLogger(PanamaGLPainter.class);
@@ -654,6 +653,8 @@ public class PanamaGLPainter extends AbstractPainter {
 
   boolean allowAutoDetectTextLength = true;
 
+  protected OrientedTextRenderer textRenderer = new OrientedTextRenderer();
+
   @Override
   public int getTextLengthInPixels(int font, String string) {
     Font fnt = Font.getById(font);
@@ -707,7 +708,8 @@ public class PanamaGLPainter extends AbstractPainter {
    * raster position is the left of the text baseline and is moved to the end of the text once
    * drawn.
    *
-   * The text is drawn with AWT in an image, hence any AWT font may be used.
+   * The text is drawn with AWT by PanamaGL {@link OrientedTextRenderer}, hence any AWT font may be
+   * used.
    */
   @Override
   public void glutBitmapString(int font, String string) {
@@ -719,79 +721,8 @@ public class PanamaGLPainter extends AbstractPainter {
     float[] color = new float[4];
     glGetFloatv(GL.GL_CURRENT_RASTER_COLOR, color, 0);
 
-    java.awt.Font awtFont = toAWT(f);
-    TextImage text = textImage(awtFont, string,
+    textRenderer().drawAtRasterPosition(gl, toAWT(f), string,
         new java.awt.Color(clamp(color[0]), clamp(color[1]), clamp(color[2]), clamp(color[3])));
-
-    // Move the raster position from the baseline to the bottom of the text image
-    gl.glBitmap(0, 0, 0, 0, 0, -text.descent, MemorySegment.NULL);
-
-    gl.glDrawPixels(text.width, text.height, GL_RGBA, GL_UNSIGNED_BYTE, text.pixels);
-
-    // Move the raster position to the end of the text on the baseline
-    gl.glBitmap(0, 0, 0, 0, text.advance, text.descent, MemorySegment.NULL);
-  }
-
-  /** RGBA pixels of an image (e.g. a text drawn with AWT), bottom row first as expected by GL. */
-  protected static class TextImage {
-    int width;
-    int height;
-    int descent;
-    int advance;
-    MemorySegment pixels;
-  }
-
-  protected TextImage textImage(java.awt.Font font, String string, java.awt.Color color) {
-    BufferedImage metricsImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D mg = metricsImage.createGraphics();
-    FontMetrics fm = mg.getFontMetrics(font);
-    mg.dispose();
-
-    TextImage text = new TextImage();
-    text.advance = fm.stringWidth(string);
-    text.width = Math.max(1, text.advance);
-    text.height = Math.max(1, fm.getAscent() + fm.getDescent());
-    text.descent = fm.getDescent();
-
-    BufferedImage image = new BufferedImage(text.width, text.height, BufferedImage.TYPE_INT_ARGB);
-    Graphics2D g = image.createGraphics();
-    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-        RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-    g.setFont(font);
-    g.setColor(color);
-    g.drawString(string, 0, fm.getAscent());
-    g.dispose();
-
-    text.pixels = pixels(image).pixels;
-    return text;
-  }
-
-  /** Convert an AWT image to RGBA pixels, bottom row first as expected by OpenGL. */
-  protected TextImage pixels(BufferedImage image) {
-    TextImage out = new TextImage();
-    out.width = image.getWidth();
-    out.height = image.getHeight();
-    out.advance = out.width;
-    out.pixels = arena.allocate((long) out.width * out.height * 4);
-
-    int[] row = new int[out.width];
-
-    for (int y = 0; y < out.height; y++) {
-      image.getRGB(0, y, out.width, 1, row, 0, out.width);
-
-      // OpenGL reads rows from bottom to top
-      long offset = (long) (out.height - 1 - y) * out.width * 4;
-
-      for (int x = 0; x < out.width; x++) {
-        int argb = row[x];
-        long i = offset + x * 4L;
-        out.pixels.set(ValueLayout.JAVA_BYTE, i, (byte) ((argb >> 16) & 0xFF));
-        out.pixels.set(ValueLayout.JAVA_BYTE, i + 1, (byte) ((argb >> 8) & 0xFF));
-        out.pixels.set(ValueLayout.JAVA_BYTE, i + 2, (byte) (argb & 0xFF));
-        out.pixels.set(ValueLayout.JAVA_BYTE, i + 3, (byte) ((argb >> 24) & 0xFF));
-      }
-    }
-    return out;
   }
 
   private static float clamp(float v) {
@@ -800,9 +731,10 @@ public class PanamaGLPainter extends AbstractPainter {
 
   /**
    * Render 2D text at the given 3D position, as {@link NativeDesktopPainter} does with JOGL's
-   * TextRenderer : the text is drawn with AWT in a texture mapped on a quad in screen coordinates,
-   * hence any AWT font can be used, text can be rotated, and text partially out of the viewport is
-   * partially drawn.
+   * TextRenderer : PanamaGL {@link OrientedTextRenderer} draws the text with AWT in a texture
+   * mapped on a quad in screen coordinates, hence any AWT font can be used, text can be rotated,
+   * and text partially out of the viewport is partially drawn. As JOGL, glyphs are drawn with a font
+   * scaled by the canvas pixel scale.
    *
    * Rotation is in radian and is applied at the center of the text.
    */
@@ -812,28 +744,11 @@ public class PanamaGLPainter extends AbstractPainter {
       return;
     }
 
-    // Get viewport (and not canvas) dimensions
-    int[] viewport = getViewPortAsInt();
-    int width = viewport[2];
-    int height = viewport[3];
-
-    // Geometric processing for text layout
-    float rotationD = -(float) (360 * rotation / (2 * Math.PI));
     Coord3d screen = modelToScreen(position);
 
-    TextImage text = textImage(toAWT(font), label, AWTColor.toAWT(color));
-
-    // Pre-shift text to make it rotate from center of string and not from left point
-    int xPreShift = 0, yPreShift = 0;
-
-    if (rotationD != 0) {
-      xPreShift = text.advance / 2;
-      yPreShift = font.getHeight() / 2;
-    }
-
-    // Text baseline is at the origin, shifted to deal with rotation
-    drawTexture(text, screen.x + xPreShift, screen.y + yPreShift, rotationD, -xPreShift,
-        -yPreShift - text.descent, width, height);
+    // jzy3d rotations are clockwise while PanamaGL ones are counter-clockwise
+    textRenderer().draw(gl, toAWT(font), label, screen.x, screen.y, 0, AWTColor.toAWT(color),
+        -rotation);
   }
 
   /**
@@ -843,81 +758,15 @@ public class PanamaGLPainter extends AbstractPainter {
    * The image is drawn as a textured quad, so that it can be partially out of the viewport.
    */
   public void drawImage(BufferedImage image, float x, float y) {
-    int[] viewport = getViewPortAsInt();
-    drawTexture(pixels(image), x, y, 0, 0, 0, viewport[2], viewport[3]);
+    textRenderer().drawImage(gl, image, x, y);
   }
 
-  /**
-   * Draw pixels as a texture mapped on a quad in screen coordinates.
-   *
-   * @param x, y the position where the quad origin is translated, in pixels.
-   * @param rotationD a rotation around the quad origin, in degrees.
-   * @param x0, y0 the position of the bottom left corner of the quad, relative to its origin.
-   */
-  protected void drawTexture(TextImage image, float x, float y, float rotationD, float x0,
-      float y0, int viewportWidth, int viewportHeight) {
-    // Nothing is visible in an empty viewport, and glOrtho would fail
-    if (viewportWidth <= 0 || viewportHeight <= 0 || image.width <= 0 || image.height <= 0) {
-      return;
-    }
-
-    gl.glPushAttrib(GL.GL_ENABLE_BIT | GL.GL_TEXTURE_BIT | GL.GL_COLOR_BUFFER_BIT
-        | GL.GL_POLYGON_BIT | GL.GL_CURRENT_BIT | GL.GL_TRANSFORM_BIT);
-
-    gl.glMatrixMode(GL.GL_PROJECTION);
-    gl.glPushMatrix();
-    gl.glLoadIdentity();
-    gl.glOrtho(0, viewportWidth, 0, viewportHeight, -1, 1);
-
-    gl.glMatrixMode(GL.GL_MODELVIEW);
-    gl.glPushMatrix();
-    gl.glLoadIdentity();
-    gl.glTranslatef(x, y, 0);
-    gl.glRotatef(rotationD, 0, 0, 1);
-
-    gl.glDisable(GL.GL_LIGHTING);
-    gl.glDisable(GL.GL_DEPTH_TEST);
-    gl.glDisable(GL.GL_CULL_FACE);
-    gl.glEnable(GL.GL_BLEND);
-    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
-    gl.glPolygonMode(GL.GL_FRONT_AND_BACK, GL.GL_FILL);
-    gl.glEnable(GL.GL_TEXTURE_2D);
-
-    MemorySegment textureId = arena.allocate(ValueLayout.JAVA_INT);
-    gl.glGenTextures(1, textureId);
-    gl.glBindTexture(GL.GL_TEXTURE_2D, textureId.get(ValueLayout.JAVA_INT, 0));
-    gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MIN_FILTER, GL.GL_LINEAR);
-    gl.glTexParameteri(GL.GL_TEXTURE_2D, GL.GL_TEXTURE_MAG_FILTER, GL.GL_LINEAR);
-    gl.glTexEnvi(GL.GL_TEXTURE_ENV, GL.GL_TEXTURE_ENV_MODE, GL.GL_MODULATE);
-    gl.glPixelStorei(GL.GL_UNPACK_ALIGNMENT, 4);
-    gl.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGBA, image.width, image.height, 0, GL.GL_RGBA,
-        GL.GL_UNSIGNED_BYTE, image.pixels);
-
-    float x1 = x0 + image.width;
-    float y1 = y0 + image.height;
-
-    gl.glColor4f(1, 1, 1, 1);
-    gl.glBegin(GL.GL_QUADS);
-    gl.glTexCoord2f(0, 0);
-    gl.glVertex2f(x0, y0);
-    gl.glTexCoord2f(1, 0);
-    gl.glVertex2f(x1, y0);
-    gl.glTexCoord2f(1, 1);
-    gl.glVertex2f(x1, y1);
-    gl.glTexCoord2f(0, 1);
-    gl.glVertex2f(x0, y1);
-    gl.glEnd();
-
-    gl.glDeleteTextures(1, textureId);
-
-    gl.glMatrixMode(GL.GL_MODELVIEW);
-    gl.glPopMatrix();
-    gl.glMatrixMode(GL.GL_PROJECTION);
-    gl.glPopMatrix();
-
-    gl.glPopAttrib();
+  /** The text renderer, configured with the current pixel scale of the canvas. */
+  protected OrientedTextRenderer textRenderer() {
+    Coord2d scale = getCanvas() != null ? getCanvas().getPixelScale() : null;
+    textRenderer.setPixelScale(scale != null ? (float) scale.y : 1);
+    return textRenderer;
   }
-
 
   @Override
   public void glutBitmapString(Font axisFont, String label, Coord3d p, Color c) {
