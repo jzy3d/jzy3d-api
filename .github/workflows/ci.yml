@@ -69,7 +69,7 @@ jobs:
           # integration tests, which compare PanamaGL to JOGL.
           - os: windows-11-arm
             distribution: zulu
-            jogl: false
+            no-jogl: true
             maven-args: >-
               -am -pl 'jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-emul-gl-swing,jzy3d-io-xls'
 
@@ -213,8 +213,9 @@ jobs:
               -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
               -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
 
+      # An unset matrix value equals false in expressions, hence a flag set where JOGL is missing
       - name: PanamaGL integration tests (macOS, Windows)
-        if: runner.os != 'Linux' && matrix.jogl != false
+        if: runner.os != 'Linux' && !matrix.no-jogl
         shell: bash
         run: |
           mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
