@@ -20,6 +20,12 @@ import org.jzy3d.plot3d.text.drawable.DrawableText;
 
 
 public class ITTest_Text extends ITTest{
+  /**
+   * Glyph edges are antialiased differently by JOGL TextRenderer and PanamaGL, which matters for
+   * charts mostly made of text.
+   */
+  static final double PANAMAGL_TEXT_MAX_DIFF_RATIO = 0.02;
+
   /** This main method is here to test manually a chart and keep it open until one close it explicitely. */
   public static void main(String[] args) {
     open(new ITTest_Text().whenCustomFont(WT.Native_AWT, HiDPI.ON));
@@ -54,7 +60,8 @@ public class ITTest_Text extends ITTest{
     surface.setLegend(new AWTColorbarLegend(surface, chart.getView().getAxis().getLayout()));
 
     // Then
-    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI(), "Font=AppleChancery24"));
+    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI(), "Font=AppleChancery24"),
+        PANAMAGL_TEXT_MAX_DIFF_RATIO);
     
     // For manual tests
     return chart;
@@ -127,7 +134,8 @@ public class ITTest_Text extends ITTest{
     
     
     // Then
-    assertChart(chart, name(this, "whenDrawableTextRenderer", wt, chart.getQuality().getHiDPI()));
+    assertChart(chart, name(this, "whenDrawableTextRenderer", wt, chart.getQuality().getHiDPI()),
+        PANAMAGL_TEXT_MAX_DIFF_RATIO);
     
     // For manual tests
     return chart;
