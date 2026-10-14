@@ -35,8 +35,11 @@ env:
   # maven.jzy3d.org sometimes answers 403 to a burst of downloads : retry instead of failing the build
   MAVEN_OPTS: -Daether.connector.http.retryHandler.count=5 -Daether.connector.http.retryHandler.serviceUnavailable=403,429,503
 
-  # Integration tests rendering the same charts with JOGL and PanamaGL
-  PANAMAGL_IT: ITTest_PanamaGLParity,ITTest_GPUDrawables,ITTest_DepthPeeling,ITTest_Picking
+  # Integration tests. Some render the same charts with JOGL and PanamaGL. The others compare
+  # charts to baseline images, which are built in ITTEST_BASELINES as no baseline exists for CI
+  # runners : JOGL and EmulGL charts build them, and PanamaGL charts are compared to the JOGL ones.
+  PANAMAGL_IT: ITTest_*
+  ITTEST_BASELINES: target/ittest-baselines/
 
 jobs:
 
@@ -198,22 +201,25 @@ jobs:
         run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ matrix.maven-args }}
 
       # -------------------------------------------------------
-      # Integration tests comparing JOGL and PanamaGL renderings
-      # on the same runner, hence independent of baseline images.
+      # Integration tests comparing PanamaGL to JOGL renderings
+      # made on the same runner, hence independent of the
+      # baseline images stored in the repository.
       # -------------------------------------------------------
       - name: PanamaGL integration tests (Linux)
         if: runner.os == 'Linux'
         run: |
           xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
             mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
-              -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false
+              -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
+              -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
 
       - name: PanamaGL integration tests (macOS, Windows)
         if: runner.os != 'Linux' && matrix.jogl != false
         shell: bash
         run: |
           mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
-            -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false
+            -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
+            -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
 
       # -------------------------------------------------------
       # Print JVM crash details (forked test JVM killed by a native
@@ -239,7 +245,7 @@ jobs:
         run: |
           mkdir -p surefire-reports
           find . -path "*/target/surefire-reports/*" -type f -exec cp {} surefire-reports/ \;
-          find jzy3d-tests-java9/target -name "*.png" -exec cp {} surefire-reports/ \; || true
+          find jzy3d-tests-java9/target -name "*.png" -not -path "*/ittest-baselines/*" -exec cp {} surefire-reports/ \; || true
 
       - name: Collect Surefire reports (Windows)
         if: runner.os == 'Windows' && always()
@@ -250,6 +256,7 @@ jobs:
             Where-Object { $_.FullName -like "*\target\surefire-reports\*" } |
             Copy-Item -Destination surefire-reports
           Get-ChildItem -Path jzy3d-tests-java9\target -Recurse -Filter *.png -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -notlike "*\ittest-baselines\*" } |
             Copy-Item -Destination surefire-reports
 
       - name: Upload Surefire reports
