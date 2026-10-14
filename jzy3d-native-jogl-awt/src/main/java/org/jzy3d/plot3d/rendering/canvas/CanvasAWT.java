@@ -1,6 +1,9 @@
 package org.jzy3d.plot3d.rendering.canvas;
 
 import java.awt.EventQueue;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.HierarchyEvent;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
 import java.io.File;
@@ -20,6 +23,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.GPUInfo;
+import org.jzy3d.plot3d.NativeGPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.AWTRenderer3d;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
@@ -82,6 +86,35 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     
     if (quality.isPreserveViewportSize())
       setPixelScale(newPixelScaleIdentity());
+
+    renderOnceShown();
+  }
+
+  /**
+   * AWT may paint this canvas before JOGL realized its drawable, and then send no other paint event
+   * if nothing changes : the view of a chart opened empty was never initialized (JDK 8 on Linux).
+   * Render once the canvas is shown or resized, until the view is initialized.
+   */
+  protected void renderOnceShown() {
+    addHierarchyListener(e -> {
+      if ((e.getChangeFlags() & HierarchyEvent.SHOWING_CHANGED) != 0 && isShowing()) {
+        displayIfNotInitialized();
+      }
+    });
+    addComponentListener(new ComponentAdapter() {
+      @Override
+      public void componentResized(ComponentEvent e) {
+        displayIfNotInitialized();
+      }
+    });
+  }
+
+  protected void displayIfNotInitialized() {
+    EventQueue.invokeLater(() -> {
+      if (!view.isInitialized() && isShowing()) {
+        display();
+      }
+    });
   }
   
   protected void watchPixelScale() {
@@ -242,7 +275,7 @@ public class CanvasAWT extends GLCanvas implements IScreenCanvas, INativeCanvas 
     GLCapabilitiesImmutable caps = getChosenGLCapabilities();
     
     GL gl = (GL) painter.acquireGL();
-    GPUInfo info = GPUInfo.load(gl);
+    GPUInfo info = NativeGPUInfo.load(gl);
     painter.releaseGL();
     
     return "Capabilities  : " + caps + "\n" + info.toString();

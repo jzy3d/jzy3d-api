@@ -9,6 +9,7 @@ import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import org.jzy3d.colors.Color;
@@ -25,6 +26,7 @@ import org.jzy3d.plot3d.rendering.lights.LightModel;
 import org.jzy3d.plot3d.rendering.lights.MaterialProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.jogamp.common.nio.PointerBuffer;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GL2ES1;
@@ -499,6 +501,12 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     int width = viewport[2];
     int height = viewport[3];
 
+    // Nothing visible in an empty viewport, e.g. at the first rendering of a not yet sized canvas.
+    // Text renderer would otherwise invoke glOrtho(0,0,0,0) which is a GL error
+    if (width <= 0 || height <= 0) {
+      return;
+    }
+
     // Reset to a polygon mode suitable for rendering the texture handling the text
     glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
 
@@ -656,8 +664,10 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     switch (mode) {
       case COMPILE:
         glNewList(list, GL2.GL_COMPILE);
+        break;
       case COMPILE_AND_EXECUTE:
         glNewList(list, GL2.GL_COMPILE_AND_EXECUTE);
+        break;
     }
   }
 
@@ -1087,7 +1097,7 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
 
   @Override
   public void glDisable_Light(int light) {
-    glEnable(lightId(light));
+    glDisable(lightId(light));
   }
 
   protected int lightId(int id) {
@@ -1412,5 +1422,375 @@ public class NativeDesktopPainter extends AbstractPainter implements IPainter {
     gl.glDisable(GL2.GL_STENCIL_TEST);
   }
 
+  /* ******************************************************************************************* */
+  /* GPU RESOURCES                                                                               */
+  /* ******************************************************************************************* */
 
+  /** JOGL requires direct buffers for some functions : copy heap buffers to direct buffers. */
+  protected IntBuffer direct(IntBuffer buffer) {
+    if (buffer == null || buffer.isDirect()) {
+      return buffer;
+    }
+    IntBuffer direct = com.jogamp.common.nio.Buffers.newDirectIntBuffer(buffer.remaining());
+    direct.put(buffer.duplicate());
+    direct.rewind();
+    return direct;
+  }
+
+  @Override
+  public void glGenBuffers(int n, int[] buffers, int offset) {
+    gl.getGL2().glGenBuffers(n, buffers, offset);
+  }
+
+  @Override
+  public void glDeleteBuffers(int n, int[] buffers, int offset) {
+    gl.getGL2().glDeleteBuffers(n, buffers, offset);
+  }
+
+  @Override
+  public void glBindBuffer(int target, int buffer) {
+    gl.getGL2().glBindBuffer(target, buffer);
+  }
+
+  @Override
+  public void glBufferData(int target, long size, Buffer data, int usage) {
+    gl.getGL2().glBufferData(target, size, data, usage);
+  }
+
+  @Override
+  public void glBufferSubData(int target, long offset, long size, Buffer data) {
+    gl.getGL2().glBufferSubData(target, offset, size, data);
+  }
+
+  @Override
+  public void glEnableClientState(int array) {
+    gl.getGL2().glEnableClientState(array);
+  }
+
+  @Override
+  public void glDisableClientState(int array) {
+    gl.getGL2().glDisableClientState(array);
+  }
+
+  @Override
+  public void glVertexPointer(int size, int type, int stride, long pointerOffset) {
+    gl.getGL2().glVertexPointer(size, type, stride, pointerOffset);
+  }
+
+  @Override
+  public void glNormalPointer(int type, int stride, long pointerOffset) {
+    gl.getGL2().glNormalPointer(type, stride, pointerOffset);
+  }
+
+  @Override
+  public void glColorPointer(int size, int type, int stride, long pointerOffset) {
+    gl.getGL2().glColorPointer(size, type, stride, pointerOffset);
+  }
+
+  @Override
+  public void glTexCoordPointer(int size, int type, int stride, long pointerOffset) {
+    gl.getGL2().glTexCoordPointer(size, type, stride, pointerOffset);
+  }
+
+  @Override
+  public void glDrawArrays(int mode, int first, int count) {
+    gl.getGL2().glDrawArrays(mode, first, count);
+  }
+
+  @Override
+  public void glDrawElements(int mode, int count, int type, long indicesOffset) {
+    gl.getGL2().glDrawElements(mode, count, type, indicesOffset);
+  }
+
+  @Override
+  public void glMultiDrawArrays(int mode, IntBuffer first, IntBuffer count, int drawcount) {
+    gl.getGL2().glMultiDrawArrays(mode, direct(first), direct(count), drawcount);
+  }
+
+  @Override
+  public void glMultiDrawElements(int mode, IntBuffer count, int type, LongBuffer indicesOffsets, int drawcount) {
+    PointerBuffer indices = PointerBuffer.allocateDirect(drawcount);
+    for (int i = 0; i < drawcount; i++) {
+      indices.put(i, indicesOffsets.get(indicesOffsets.position() + i));
+    }
+    gl.getGL2().glMultiDrawElements(mode, direct(count), type, indices, drawcount);
+  }
+
+  @Override
+  public void glPrimitiveRestartIndex(int index) {
+    gl.getGL2().glPrimitiveRestartIndex(index);
+  }
+
+  @Override
+  public int glCreateShader(int type) {
+    return gl.getGL2().glCreateShader(type);
+  }
+
+  @Override
+  public void glShaderSource(int shader, String[] sources) {
+    int[] lengths = new int[sources.length];
+    for (int i = 0; i < sources.length; i++) {
+      lengths[i] = sources[i].length();
+    }
+    gl.getGL2().glShaderSource(shader, sources.length, sources, lengths, 0);
+  }
+
+  @Override
+  public void glCompileShader(int shader) {
+    gl.getGL2().glCompileShader(shader);
+  }
+
+  @Override
+  public void glGetShaderiv(int shader, int pname, int[] params, int offset) {
+    gl.getGL2().glGetShaderiv(shader, pname, params, offset);
+  }
+
+  @Override
+  public String glGetShaderInfoLog(int shader) {
+    int[] length = new int[1];
+    gl.getGL2().glGetShaderiv(shader, GL2.GL_INFO_LOG_LENGTH, length, 0);
+    if (length[0] <= 0) {
+      return "";
+    }
+    byte[] log = new byte[length[0]];
+    gl.getGL2().glGetShaderInfoLog(shader, length[0], length, 0, log, 0);
+    return new String(log, 0, Math.max(0, length[0]));
+  }
+
+  @Override
+  public void glDeleteShader(int shader) {
+    gl.getGL2().glDeleteShader(shader);
+  }
+
+  @Override
+  public int glCreateProgram() {
+    return gl.getGL2().glCreateProgram();
+  }
+
+  @Override
+  public void glAttachShader(int program, int shader) {
+    gl.getGL2().glAttachShader(program, shader);
+  }
+
+  @Override
+  public void glDetachShader(int program, int shader) {
+    gl.getGL2().glDetachShader(program, shader);
+  }
+
+  @Override
+  public void glLinkProgram(int program) {
+    gl.getGL2().glLinkProgram(program);
+  }
+
+  @Override
+  public void glValidateProgram(int program) {
+    gl.getGL2().glValidateProgram(program);
+  }
+
+  @Override
+  public void glGetProgramiv(int program, int pname, int[] params, int offset) {
+    gl.getGL2().glGetProgramiv(program, pname, params, offset);
+  }
+
+  @Override
+  public String glGetProgramInfoLog(int program) {
+    int[] length = new int[1];
+    gl.getGL2().glGetProgramiv(program, GL2.GL_INFO_LOG_LENGTH, length, 0);
+    if (length[0] <= 0) {
+      return "";
+    }
+    byte[] log = new byte[length[0]];
+    gl.getGL2().glGetProgramInfoLog(program, length[0], length, 0, log, 0);
+    return new String(log, 0, Math.max(0, length[0]));
+  }
+
+  @Override
+  public void glUseProgram(int program) {
+    gl.getGL2().glUseProgram(program);
+  }
+
+  @Override
+  public void glDeleteProgram(int program) {
+    gl.getGL2().glDeleteProgram(program);
+  }
+
+  @Override
+  public int glGetUniformLocation(int program, String name) {
+    return gl.getGL2().glGetUniformLocation(program, name);
+  }
+
+  @Override
+  public void glUniform1i(int location, int v0) {
+    gl.getGL2().glUniform1i(location, v0);
+  }
+
+  @Override
+  public void glUniform1f(int location, float v0) {
+    gl.getGL2().glUniform1f(location, v0);
+  }
+
+  @Override
+  public void glUniform1fv(int location, int count, float[] value, int offset) {
+    gl.getGL2().glUniform1fv(location, count, value, offset);
+  }
+
+  @Override
+  public void glUniform2fv(int location, int count, float[] value, int offset) {
+    gl.getGL2().glUniform2fv(location, count, value, offset);
+  }
+
+  @Override
+  public void glUniform3fv(int location, int count, float[] value, int offset) {
+    gl.getGL2().glUniform3fv(location, count, value, offset);
+  }
+
+  @Override
+  public void glUniform4fv(int location, int count, float[] value, int offset) {
+    gl.getGL2().glUniform4fv(location, count, value, offset);
+  }
+
+  @Override
+  public void glUniformMatrix4fv(int location, int count, boolean transpose, float[] value, int offset) {
+    gl.getGL2().glUniformMatrix4fv(location, count, transpose, value, offset);
+  }
+
+  @Override
+  public void glGenTextures(int n, int[] textures, int offset) {
+    gl.getGL2().glGenTextures(n, textures, offset);
+  }
+
+  @Override
+  public void glDeleteTextures(int n, int[] textures, int offset) {
+    gl.getGL2().glDeleteTextures(n, textures, offset);
+  }
+
+  @Override
+  public void glBindTexture(int target, int texture) {
+    gl.getGL2().glBindTexture(target, texture);
+  }
+
+  @Override
+  public void glActiveTexture(int texture) {
+    gl.getGL2().glActiveTexture(texture);
+  }
+
+  @Override
+  public void glTexParameteri(int target, int pname, int param) {
+    gl.getGL2().glTexParameteri(target, pname, param);
+  }
+
+  @Override
+  public void glTexImage1D(int target, int level, int internalFormat, int width, int border, int format, int type, Buffer pixels) {
+    gl.getGL2().glTexImage1D(target, level, internalFormat, width, border, format, type, pixels);
+  }
+
+  @Override
+  public void glTexImage2D(int target, int level, int internalFormat, int width, int height, int border, int format, int type, Buffer pixels) {
+    gl.getGL2().glTexImage2D(target, level, internalFormat, width, height, border, format, type, pixels);
+  }
+
+  @Override
+  public void glTexImage3D(int target, int level, int internalFormat, int width, int height, int depth, int border, int format, int type, Buffer pixels) {
+    gl.getGL2().glTexImage3D(target, level, internalFormat, width, height, depth, border, format, type, pixels);
+  }
+
+  @Override
+  public void glTexSubImage3D(int target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, int format, int type, Buffer pixels) {
+    gl.getGL2().glTexSubImage3D(target, level, xoffset, yoffset, zoffset, width, height, depth, format, type, pixels);
+  }
+
+  @Override
+  public void glTexCoord3f(float s, float t, float r) {
+    gl.getGL2().glTexCoord3f(s, t, r);
+  }
+
+  @Override
+  public void glGenFramebuffers(int n, int[] framebuffers, int offset) {
+    gl.getGL2().glGenFramebuffers(n, framebuffers, offset);
+  }
+
+  @Override
+  public void glDeleteFramebuffers(int n, int[] framebuffers, int offset) {
+    gl.getGL2().glDeleteFramebuffers(n, framebuffers, offset);
+  }
+
+  @Override
+  public void glBindFramebuffer(int target, int framebuffer) {
+    gl.getGL2().glBindFramebuffer(target, framebuffer);
+  }
+
+  @Override
+  public void glFramebufferTexture2D(int target, int attachment, int textarget, int texture, int level) {
+    gl.getGL2().glFramebufferTexture2D(target, attachment, textarget, texture, level);
+  }
+
+  @Override
+  public int glCheckFramebufferStatus(int target) {
+    return gl.getGL2().glCheckFramebufferStatus(target);
+  }
+
+  @Override
+  public void glDrawBuffer(int mode) {
+    gl.getGL2().glDrawBuffer(mode);
+  }
+
+  @Override
+  public void glDrawBuffers(int n, int[] buffers, int offset) {
+    gl.getGL2().glDrawBuffers(n, buffers, offset);
+  }
+
+  @Override
+  public void glGenQueries(int n, int[] ids, int offset) {
+    gl.getGL2().glGenQueries(n, ids, offset);
+  }
+
+  @Override
+  public void glDeleteQueries(int n, int[] ids, int offset) {
+    gl.getGL2().glDeleteQueries(n, ids, offset);
+  }
+
+  @Override
+  public void glBeginQuery(int target, int id) {
+    gl.getGL2().glBeginQuery(target, id);
+  }
+
+  @Override
+  public void glEndQuery(int target) {
+    gl.getGL2().glEndQuery(target);
+  }
+
+  @Override
+  public void glGetQueryObjectuiv(int id, int pname, int[] params, int offset) {
+    gl.getGL2().glGetQueryObjectuiv(id, pname, params, offset);
+  }
+
+  @Override
+  public void glAlphaFunc(int func, float ref) {
+    gl.getGL2().glAlphaFunc(func, ref);
+  }
+
+  @Override
+  public void glBlendEquation(int mode) {
+    gl.getGL2().glBlendEquation(mode);
+  }
+
+  @Override
+  public void glBlendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) {
+    gl.getGL2().glBlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
+  }
+
+  @Override
+  public int glGetError() {
+    return gl.getGL2().glGetError();
+  }
+
+  @Override
+  public String glGetString(int name) {
+    return gl.getGL2().glGetString(name);
+  }
+
+  @Override
+  public void glReadPixels(int x, int y, int width, int height, int format, int type, Buffer pixels) {
+    gl.getGL2().glReadPixels(x, y, width, height, format, type, pixels);
+  }
 }

@@ -1,12 +1,16 @@
 package org.jzy3d.tests.integration;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Collections;
 import java.util.Random;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
+import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
@@ -40,6 +44,21 @@ public class ITTest {
 
   static NativePlatform platform = new NativePlatform();
 
+  /**
+   * Folder holding a sub folder of baseline images per platform. Baselines missing for the current
+   * platform are built in it at first run. CI builds them in an empty folder of <code>target</code>
+   * so that PanamaGL is compared to JOGL on the same runner, as no baseline exists for CI runners.
+   */
+  public static final String BASELINES =
+      System.getProperty("jzy3d.ittest.baselines", "src/test/resources/");
+
+  /**
+   * Maximum ratio of pixels of a PanamaGL chart that may differ from the JOGL baseline, a pixel
+   * differing if one of its channel differ by more than
+   * {@link ITTest_PanamaGLParity#PIXEL_TOLERANCE}.
+   */
+  public static final double PANAMAGL_MAX_DIFF_RATIO = 0.01;
+
   protected String indexFileName = "BASELINE_" + platform.getLabel() + ".md";
 
   static Rectangle offscreenDimension = new Rectangle(800, 600);
@@ -49,14 +68,39 @@ public class ITTest {
   static boolean runOffscreen = false;
 
   public enum WT {
-    EmulGL_AWT, Native_AWT, Native_Swing
+    EmulGL_AWT, Native_AWT, Native_Swing, PanamaGL_Swing
+  }
+
+  /**
+   * PanamaGL requires Java 22+ : its chart factory is loaded by name, and PanamaGL toolkits are only
+   * tested if available in classpath (see the <code>panamagl</code> profile of this module).
+   */
+  public static final String PANAMAGL_SWING_FACTORY =
+      "org.jzy3d.chart.factories.PanamaGLSwingChartFactory";
+
+  public static boolean isPanamaGLAvailable() {
+    try {
+      Class.forName(PANAMAGL_SWING_FACTORY);
+      return true;
+    } catch (ClassNotFoundException e) {
+      return false;
+    }
+  }
+
+  protected static WT[] withPanamaGL(WT... toolkits) {
+    if (!isPanamaGLAvailable()) {
+      return toolkits;
+    }
+    WT[] all = java.util.Arrays.copyOf(toolkits, toolkits.length + 1);
+    all[toolkits.length] = WT.PanamaGL_Swing;
+    return all;
   }
 
   // ----------------------------------------------------------------------------------------------
   // //
   // Toolkit and resolutions to apply to all tests using the forEach operator
 
-  protected WT[] toolkits = {WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT};
+  protected WT[] toolkits = withPanamaGL(WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT);
   protected HiDPI[] resolutions = {HiDPI.ON, HiDPI.OFF};
 
   protected WT[] toolkitsAWT = {WT.Native_AWT, WT.EmulGL_AWT};
@@ -249,6 +293,8 @@ public class ITTest {
   }
 
   public String imgTest(String name) {
+    // PanamaGL charts are compared to the JOGL baseline
+    name = name.replace(SEP_PROP + WT.PanamaGL_Swing + SEP_PROP, SEP_PROP + WT.Native_Swing + SEP_PROP);
     return "<img src=\"src/test/resources/" + platform.getLabel() + "/" + name + ".png\">";
   }
 
@@ -315,8 +361,18 @@ public class ITTest {
       return chart(new AWTChartFactory(), hidpi, offscreenDimension);
     } else if (WT.Native_Swing.equals(windowingToolkit)) {
       return chart(new SwingChartFactory(), hidpi, offscreenDimension);
+    } else if (WT.PanamaGL_Swing.equals(windowingToolkit)) {
+      return chart(newChartFactory(PANAMAGL_SWING_FACTORY), hidpi, offscreenDimension);
     } else {
       throw new IllegalArgumentException("Unsupported toolkit : " + windowingToolkit);
+    }
+  }
+
+  protected static ChartFactory newChartFactory(String className) {
+    try {
+      return (ChartFactory) Class.forName(className).getDeclaredConstructor().newInstance();
+    } catch (ReflectiveOperationException e) {
+      throw new IllegalArgumentException("Can not create " + className, e);
     }
   }
 
@@ -348,6 +404,14 @@ public class ITTest {
   }
 
   public static void assertChart(Chart chart, String name) {
+    assertChart(chart, name, PANAMAGL_MAX_DIFF_RATIO);
+  }
+
+  /**
+   * Verify a chart matches its baseline image. PanamaGL charts are compared to the JOGL baseline of
+   * the same case and may differ on the given ratio of pixels.
+   */
+  public static void assertChart(Chart chart, String name, double panamaglMaxDiffRatio) {
     IPainterFactory painter = chart.getFactory().getPainterFactory();
 
     Dimension dim;
@@ -376,13 +440,69 @@ public class ITTest {
     // Verify
     ChartTester tester = new ChartTester();
 
-    if (!(chart.getFactory() instanceof EmulGLChartFactory)) {
+    // JOGL charts are read with the JOGL renderer, other charts give a BufferedImage screenshot
+    if (!(chart.getFactory() instanceof EmulGLChartFactory) && !isPanamaGL(chart)) {
       tester = new NativeChartTester();
     }
 
-    tester.setTestCaseInputFolder("src/test/resources/" + platform.getLabel() + "/");
+    tester.setTestCaseInputFolder(BASELINES + platform.getLabel() + "/");
 
-    tester.assertSimilar(chart, tester.path(name));
+    if (isPanamaGL(chart)) {
+      assertSimilarToJOGL(chart, tester, name, panamaglMaxDiffRatio);
+    } else {
+      tester.assertSimilar(chart, tester.path(name));
+    }
+  }
+
+  /**
+   * PanamaGL charts have no baseline : they are compared to the JOGL baseline of the same test
+   * case, as both render with the native OpenGL library. Text and points are rasterized slightly
+   * differently, hence a tolerance.
+   */
+  protected static void assertSimilarToJOGL(Chart chart, ChartTester tester, String name,
+      double maxDiffRatio) {
+    String panamagl = SEP_PROP + WT.PanamaGL_Swing + SEP_PROP;
+
+    File baseline = null;
+    for (WT jogl : new WT[] {WT.Native_Swing, WT.Native_AWT}) {
+      File file = new File(tester.path(name.replace(panamagl, SEP_PROP + jogl + SEP_PROP)));
+      if (file.exists()) {
+        baseline = file;
+        break;
+      }
+    }
+    Assert.assertNotNull("No JOGL baseline to compare " + name + " with", baseline);
+
+    try {
+      BufferedImage expected = ImageIO.read(baseline);
+      BufferedImage actual = (BufferedImage) chart.screenshot();
+
+      boolean sameSize = expected.getWidth() == actual.getWidth()
+          && expected.getHeight() == actual.getHeight();
+      double ratio = sameSize ? ITTest_PanamaGLParity.diffRatio(actual, expected) : 1;
+
+      System.out.println(" ITTest : " + name + " differs from " + baseline.getName() + " by "
+          + String.format("%.3f", 100 * ratio) + "%");
+
+      if (ratio > maxDiffRatio) {
+        String error = tester.getTestCaseOutputFolder() + "error-" + name;
+        new File(error).getAbsoluteFile().getParentFile().mkdirs();
+        ImageIO.write(actual, "png", new File(error + ChartTester.FILE_LABEL_ACTUAL + ".png"));
+        ImageIO.write(expected, "png", new File(error + ChartTester.FILE_LABEL_EXPECT + ".png"));
+
+        Assert.fail("PanamaGL chart differs from " + baseline + " : "
+            + (sameSize ? String.format("%.3f", 100 * ratio) + "% of pixels differ"
+                : "image size " + actual.getWidth() + "x" + actual.getHeight() + " instead of "
+                    + expected.getWidth() + "x" + expected.getHeight())
+            + ", see " + error + ChartTester.FILE_LABEL_ACTUAL + ".png");
+      }
+    } catch (IOException e) {
+      throw new UncheckedIOException(e);
+    }
+  }
+
+  public static boolean isPanamaGL(Chart chart) {
+    return chart.getFactory().getClass().getName().contains("PanamaGL");
   }
 
   // ----------------------------------------------------------------------------------------------

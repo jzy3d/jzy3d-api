@@ -111,7 +111,7 @@ public class PanamaGLSwingCanvas extends JPanel implements IPanamaGLCanvas {
 
   @Override
   public void screenshot(File file) throws IOException {
-    // TODO Auto-generated method stub
+    support.screenshot(file);
   }
 
   @Override
@@ -164,7 +164,7 @@ public class PanamaGLSwingCanvas extends JPanel implements IPanamaGLCanvas {
 
   @Override
   public String getDebugInfo() {
-    return null;
+    return support.getDebugInfo();
   }
 
   /**
