@@ -13,8 +13,12 @@ public class ITTest_Scatter extends ITTest{
   public void whenScatterChart_ThenMatchBaselineImagePixelwise() {
     System.out.println("ITTest : whenScatterChart_ThenMatchBaselineImagePixelwise");
 
+    // PanamaGL is not compared to the JOGL baseline : JOGL axis text alters the rendering of points
+    // drawn after it, which PanamaGL does not. PanamaGL scatters are compared to JOGL without axis
+    // text by ITTest_PanamaGLParity.
     forEach((toolkit, resolution) -> 
-        whenScatterChart_ThenMatchBaselineImagePixelwise(toolkit, resolution));
+        whenScatterChart_ThenMatchBaselineImagePixelwise(toolkit, resolution),
+        new WT[] {WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT});
   }
 
   private Chart whenScatterChart_ThenMatchBaselineImagePixelwise(WT wt, HiDPI hidpi) {
