@@ -16,6 +16,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Surface_Native_AWT_HiDPI=ON.png"></td>
@@ -24,8 +26,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Surface_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Surface_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Surface_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Surface_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Surface_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -44,6 +50,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Scatter_Native_AWT_HiDPI=ON.png"></td>
@@ -52,8 +60,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Scatter_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Scatter_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Scatter_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Scatter_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Scatter_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -73,6 +85,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Text_Native_AWT_HiDPI=ON_Font=AppleChancery24.png"></td>
@@ -81,8 +95,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Text_Native_Swing_HiDPI=OFF_Font=AppleChancery24.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Text_EmulGL_AWT_HiDPI=ON_Font=AppleChancery24.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Text_EmulGL_AWT_HiDPI=OFF_Font=AppleChancery24.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Text_Native_Swing_HiDPI=ON_Font=AppleChancery24.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Text_Native_Swing_HiDPI=OFF_Font=AppleChancery24.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -101,6 +119,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Text_whenDrawableTextRenderer_Native_AWT_HiDPI=ON.png"></td>
@@ -109,8 +129,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Text_whenDrawableTextRenderer_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Text_whenDrawableTextRenderer_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Text_whenDrawableTextRenderer_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Text_whenDrawableTextRenderer_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Text_whenDrawableTextRenderer_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -129,6 +153,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/AxisLabelRotateLayout_Native_AWT_HiDPI=ON.png"></td>
@@ -137,8 +163,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/AxisLabelRotateLayout_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/AxisLabelRotateLayout_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/AxisLabelRotateLayout_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/AxisLabelRotateLayout_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/AxisLabelRotateLayout_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -157,6 +187,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Colorbar_IsModifiedByCustomFont_Native_AWT_HiDPI=ON.png"></td>
@@ -165,8 +197,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Colorbar_IsModifiedByCustomFont_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Colorbar_IsModifiedByCustomFont_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Colorbar_IsModifiedByCustomFont_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Colorbar_IsModifiedByCustomFont_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Colorbar_IsModifiedByCustomFont_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -185,6 +221,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=None_Native_AWT_HiDPI=ON.png"></td>
@@ -193,8 +231,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=None_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=None_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=None_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -213,6 +255,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=X_Native_AWT_HiDPI=ON.png"></td>
@@ -221,8 +265,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=X_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=X_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=X_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -241,6 +289,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Y_Native_AWT_HiDPI=ON.png"></td>
@@ -249,8 +299,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Y_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Y_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Y_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -269,6 +323,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Both_Native_AWT_HiDPI=ON.png"></td>
@@ -277,8 +333,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Both_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Both_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Both_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XY_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -297,6 +357,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=None_Native_AWT_HiDPI=ON.png"></td>
@@ -305,8 +367,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=None_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=None_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=None_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -325,6 +391,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=X_Native_AWT_HiDPI=ON.png"></td>
@@ -333,8 +401,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=X_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=X_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=X_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -353,6 +425,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Y_Native_AWT_HiDPI=ON.png"></td>
@@ -361,8 +435,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Y_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Y_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Y_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -381,6 +459,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Both_Native_AWT_HiDPI=ON.png"></td>
@@ -389,8 +469,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Both_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Both_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Both_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=YZ_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -409,6 +493,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=None_Native_AWT_HiDPI=ON.png"></td>
@@ -417,8 +503,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=None_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=None_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=None_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=None_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -437,6 +527,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=X_Native_AWT_HiDPI=ON.png"></td>
@@ -445,8 +537,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=X_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=X_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=X_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=X_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -465,6 +561,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Y_Native_AWT_HiDPI=ON.png"></td>
@@ -473,8 +571,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Y_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Y_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Y_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Y_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -493,6 +595,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Both_Native_AWT_HiDPI=ON.png"></td>
@@ -501,8 +605,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Both_EmulGL_AWT_HiDPI=ON.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Both_EmulGL_AWT_HiDPI=OFF.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Both_Native_Swing_HiDPI=ON.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_FlipAxis_View=XZ_Flip=Both_Native_Swing_HiDPI=OFF.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -526,6 +634,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
@@ -534,8 +644,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -558,6 +672,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
@@ -566,8 +682,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -590,6 +710,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
@@ -598,8 +720,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -622,6 +748,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
@@ -630,8 +758,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=0_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -654,6 +786,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
@@ -662,8 +796,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -686,6 +824,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
@@ -694,8 +834,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=0_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -718,6 +862,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
@@ -726,8 +872,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=0_TextAddMargin=true.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -750,6 +900,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
@@ -758,8 +910,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=ON_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_when2DLayoutConfig_ThenApplyMargins_Native_Swing_HiDPI=OFF_BorderMargin=20_TickLabel=10_AxisLabel=10_TextAddMargin=true.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -779,6 +935,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
@@ -787,8 +945,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=VERTICAL.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=VERTICAL.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -808,6 +970,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_Native_AWT_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
@@ -816,8 +980,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_EmulGL_AWT_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=ON_yAxisOrientation=HORIZONTAL.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/2D_whenAxisRotated_ThenApplyMargins_Native_Swing_HiDPI=OFF_yAxisOrientation=HORIZONTAL.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -841,6 +1009,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_AWT_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT.png"></td>
@@ -849,8 +1019,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=OFF_Corner1=TOP_LEFT_Corner2=TOP_RIGHT.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_EmulGL_AWT_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_EmulGL_AWT_HiDPI=OFF_Corner1=TOP_LEFT_Corner2=TOP_RIGHT.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=ON_Corner1=TOP_LEFT_Corner2=TOP_RIGHT.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=OFF_Corner1=TOP_LEFT_Corner2=TOP_RIGHT.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -873,6 +1047,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_AWT_HiDPI=ON_Corner1=TOP_RIGHT_Corner2=BOTTOM_RIGHT.png"></td>
@@ -881,8 +1057,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=OFF_Corner1=TOP_RIGHT_Corner2=BOTTOM_RIGHT.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_EmulGL_AWT_HiDPI=ON_Corner1=TOP_RIGHT_Corner2=BOTTOM_RIGHT.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_EmulGL_AWT_HiDPI=OFF_Corner1=TOP_RIGHT_Corner2=BOTTOM_RIGHT.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=ON_Corner1=TOP_RIGHT_Corner2=BOTTOM_RIGHT.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=OFF_Corner1=TOP_RIGHT_Corner2=BOTTOM_RIGHT.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -905,6 +1085,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_AWT_HiDPI=ON_Corner1=BOTTOM_RIGHT_Corner2=BOTTOM_LEFT.png"></td>
@@ -913,8 +1095,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=OFF_Corner1=BOTTOM_RIGHT_Corner2=BOTTOM_LEFT.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_EmulGL_AWT_HiDPI=ON_Corner1=BOTTOM_RIGHT_Corner2=BOTTOM_LEFT.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_EmulGL_AWT_HiDPI=OFF_Corner1=BOTTOM_RIGHT_Corner2=BOTTOM_LEFT.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=ON_Corner1=BOTTOM_RIGHT_Corner2=BOTTOM_LEFT.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=OFF_Corner1=BOTTOM_RIGHT_Corner2=BOTTOM_LEFT.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
@@ -937,6 +1123,8 @@ This is a summary of existing baseline images for tests, which was generated on
 <td>Native_Swing HiDPI:OFF</td>
 <td>EmulGL_AWT HiDPI:ON</td>
 <td>EmulGL_AWT HiDPI:OFF</td>
+<td>PanamaGL_Swing HiDPI:ON</td>
+<td>PanamaGL_Swing HiDPI:OFF</td>
 </tr>
 <tr>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_AWT_HiDPI=ON_Corner1=BOTTOM_LEFT_Corner2=TOP_LEFT.png"></td>
@@ -945,8 +1133,12 @@ This is a summary of existing baseline images for tests, which was generated on
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=OFF_Corner1=BOTTOM_LEFT_Corner2=TOP_LEFT.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_EmulGL_AWT_HiDPI=ON_Corner1=BOTTOM_LEFT_Corner2=TOP_LEFT.png"></td>
 <td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_EmulGL_AWT_HiDPI=OFF_Corner1=BOTTOM_LEFT_Corner2=TOP_LEFT.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=ON_Corner1=BOTTOM_LEFT_Corner2=TOP_LEFT.png"></td>
+<td><img src="src/test/resources/macosx_26.6_AppleM3/Overlay_Native_Swing_HiDPI=OFF_Corner1=BOTTOM_LEFT_Corner2=TOP_LEFT.png"></td>
 </tr>
 <tr>
+<td></td>
+<td></td>
 <td></td>
 <td></td>
 <td></td>
