@@ -19,6 +19,13 @@ affected.
 The build selects modules according to the JDK running Maven : SWT and JavaFX modules are built on JDK 11+,
 PanamaGL modules on JDK 22+. PanamaGL modules depend on `org.jzy3d:panama-gl-*` 1.3.1.
 
+## Modules and dependencies
+
+* The integration tests module `jzy3d-tests-java9` is renamed `jzy3d-tester-integration`.
+* `logback-classic` 1.3.16 (was 1.2.13, which did not bind slf4j 2 and had vulnerabilities in logback-core).
+* `org.eclipse.jface` 3.29.0 (was 3.12.1, whose dependency ranges resolved to Eclipse bundles requiring
+  Java 17+).
+
 ## Classes moved to another module
 
 These classes keep their package and name. They are still available through the JOGL modules, which depend
