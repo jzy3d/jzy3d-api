@@ -1,11 +1,13 @@
-# This workflow will build a Java project with Maven
+# Former builds on self hosted machines, kept for reference. All jobs are disabled.
+# The main build runs on GitHub hosted runners, see ci.yml.
 #
 # Configure Maven : https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Java CI with Maven
+name: Self-hosted CI
 
 on:
-  push:
+  workflow_dispatch:
+  #push:
   #pull_request:
   #  branches: [ master ]
 
