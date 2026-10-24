@@ -17,6 +17,13 @@
  *******************************************************************************/
 package org.jzy3d.chart.factories;
 
+import org.jzy3d.chart.AWTChart;
+import org.jzy3d.plot3d.rendering.canvas.ICanvas;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
+import org.jzy3d.plot3d.rendering.scene.Scene;
+import org.jzy3d.plot3d.rendering.view.AWTView;
+import org.jzy3d.plot3d.rendering.view.View;
+
 /**
  * Toolkit-agnostic chart factory for PanamaGL.
  *
@@ -24,10 +31,33 @@ package org.jzy3d.chart.factories;
  * matches the target window system (Swing, JavaFX, SWT...). Dedicated
  * subclasses such as {@code PanamaGLSwingChartFactory} or
  * {@code PanamaGLJavaFXChartFactory} pick the right painter factory by default.
+ *
+ * Charts are {@link AWTChart}s with an {@link AWTView}, hence support Java2D defined components
+ * (tooltips, post-renderers, colorbars, legends) as JOGL charts do.
  */
 public class PanamaGLChartFactory extends ChartFactory {
 
   public PanamaGLChartFactory(IPainterFactory painterFactory) {
     super(painterFactory);
+  }
+
+  @Override
+  public View newView(IChartFactory factory, Scene scene, ICanvas canvas, Quality quality) {
+    return new AWTView(factory, scene, canvas, quality);
+  }
+
+  @Override
+  public AWTChart newChart(IChartFactory factory, Quality quality) {
+    return new AWTChart(factory, quality);
+  }
+
+  @Override
+  public AWTChart newChart() {
+    return newChart(Quality.Advanced());
+  }
+
+  @Override
+  public AWTChart newChart(Quality quality) {
+    return newChart(getFactory(), quality);
   }
 }

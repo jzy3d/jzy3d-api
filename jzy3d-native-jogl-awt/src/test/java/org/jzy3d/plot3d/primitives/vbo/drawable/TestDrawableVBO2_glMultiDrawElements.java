@@ -1,6 +1,5 @@
 package org.jzy3d.plot3d.primitives.vbo.drawable;
 
-import java.nio.Buffer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
@@ -168,17 +167,19 @@ public class TestDrawableVBO2_glMultiDrawElements {
     Assert.assertEquals(VERTICES*DIMS, vbo.getVertices().capacity());
     Assert.assertEquals(VERTICES*DIMS, vbo.getColors().capacity());
     Assert.assertEquals(VERTICES*DIMS, vbo.getNormals().capacity());
-    Assert.assertEquals(6, vbo.getElementsIndices().capacity());
+    Assert.assertEquals(6, vbo.getElementsOffsets().capacity());
     Assert.assertEquals(6, vbo.getElementsCount().capacity());
+    Assert.assertEquals(6 * PTS, vbo.getElementsIndices().capacity());
     
     Assert.assertNull(vbo.getElements());
     Assert.assertNull(vbo.getElementsStarts());
     Assert.assertNull(vbo.getElementsLength());
     
     
+    // Indices of geometry i start at an offset of i*PTS integers
     for (int i = 0; i < 6; i++) {
-      Buffer b = vbo.getElementsIndices().getReferencedBuffer(i);
-      Assert.assertEquals(PTS, b.capacity());
+      Assert.assertEquals(PTS, vbo.getElementsCount().get(i));
+      Assert.assertEquals(i * PTS * Integer.BYTES, vbo.getElementsOffsets().get(i));
     }
 
     Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getVertexArrayIds()[0]);
@@ -187,8 +188,8 @@ public class TestDrawableVBO2_glMultiDrawElements {
     
     Assert.assertArrayEquals("Color buffer is equal to input array", colors, BufferUtil.copyFloat(vbo.getColors()), 0.00001f);
     
-    // Elements not binded on purpose
-    //Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getElementArrayIds()[0]);
+    // Indices of all geometries are stored in a single element buffer
+    Assert.assertNotEquals("An array ID was generated and is NOT 0", 0, vbo.getElementArrayIds()[0]);
     
     Assert.assertEquals(new Coord3d(1,1,1), chart.getView().getBounds().getCorners().getXmaxYmaxZmax());
     Assert.assertEquals(new Coord3d(0,0,0), chart.getView().getBounds().getCorners().getXminYminZmin());
