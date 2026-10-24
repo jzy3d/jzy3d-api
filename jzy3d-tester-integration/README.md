@@ -1,5 +1,5 @@
-jzy3d-tests-java9
-=================
+jzy3d-tester-integration
+========================
 
 This module holds the integration tests of Jzy3D. They render charts with each toolkit (JOGL with AWT
 and Swing, EmulGL, PanamaGL) and verify the screenshots. It requires Java 9+ to detect HiDPI
@@ -15,10 +15,10 @@ See the `BASELINE_<platform>.md` files to watch the baseline images of a platfor
 mvn clean install -Pintegration-tests
 
 # Integration tests of this module only, once the other modules are installed
-mvn verify -Pintegration-tests -pl jzy3d-tests-java9
+mvn verify -Pintegration-tests -pl jzy3d-tester-integration
 
 # A single test
-mvn verify -Pintegration-tests -pl jzy3d-tests-java9 -Dit.test=ITTest_Surface
+mvn verify -Pintegration-tests -pl jzy3d-tester-integration -Dit.test=ITTest_Surface
 ```
 
 Tests named `ITTest*` are excluded from the default build. [Some tests](src/test/java/org/jzy3d/tests/manual)
@@ -126,19 +126,11 @@ Silicon) is only detected on a real computer.
 
 ## Weight of baseline images
 
-Baselines are about 300 MB in the working tree (1100 PNG, mostly 1600x1144 HiDPI images of 200 KB to
-700 KB), and about 600 MB in the git history, which makes most of the repository size. Each new platform
-adds 30 MB to 80 MB. Options to limit this :
+Baselines make almost all the size of the repository : about 300 MB in the working tree (1100 PNG, mostly
+1600x1144 HiDPI images of 200 KB to 700 KB) and 400 MB of the 440 MB of a clone, with their older versions.
+Each new platform adds 30 MB to 80 MB. PanamaGL charts have no baselines of their own for this reason : they
+are compared to JOGL baselines.
 
-* **Do not store what can be compared** : PanamaGL charts are compared to JOGL baselines instead of having
-  their own.
-* **Remove obsolete platforms** : baselines of computers that are no longer used (macOS 10.12, 10.15,
-  11.4, 14.4, Linux 5.13) can not be verified anymore. Removing them shrinks clones of later commits, but
-  not the history.
-* **Compress losslessly** : e.g. `zopflipng -y in.png out.png` saved 18% and 34% on two baselines (it is
-  slow : several seconds per image).
-* **Store baselines out of this repository** : a separate repository (git submodule, or an archive
-  downloaded by the tests) keeps this repository small. Git LFS is another option, but the free GitHub plan
-  allows 1 GB of storage and 1 GB of monthly bandwidth, which CI checkouts would consume quickly.
-* Only rewriting the history (e.g. `git filter-repo`) shrinks existing clones, at the cost of changing all
-  commit hashes.
+CI checks out the repository without the baselines. See [doc/repository-size.md](../doc/repository-size.md)
+to clone without them, and for the plan to make clones lighter (obsolete platforms, separate repository for
+baselines or Git LFS, history rewrite).
