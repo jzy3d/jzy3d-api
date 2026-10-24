@@ -11,7 +11,7 @@
 	<name>Jzy3D Bundle Module (except SWT)</name>
 
 	<properties>
-		<version.java>1.8</version.java>
+		<version.java>8</version.java>
 	</properties>
 
 	<dependencies>
