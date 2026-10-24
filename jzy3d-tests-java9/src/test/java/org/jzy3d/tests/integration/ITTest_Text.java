@@ -22,9 +22,10 @@ import org.jzy3d.plot3d.text.drawable.DrawableText;
 public class ITTest_Text extends ITTest{
   /**
    * Glyph edges are antialiased differently by JOGL TextRenderer and PanamaGL, which matters for
-   * charts mostly made of text.
+   * charts mostly made of text. Raised from 2% to 6% for the CI renderers, up to 5.3% with
+   * Windows Mesa D3D12 (see README).
    */
-  static final double PANAMAGL_TEXT_MAX_DIFF_RATIO = 0.02;
+  static final double PANAMAGL_TEXT_MAX_DIFF_RATIO = 0.06;
 
   /** This main method is here to test manually a chart and keep it open until one close it explicitely. */
   public static void main(String[] args) {
