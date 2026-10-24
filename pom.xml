@@ -601,7 +601,7 @@
 				<module>jzy3d-emul-gl-swt</module>
 				<module>jzy3d-native-jogl-swt</module>
 				<module>jzy3d-native-jogl-javafx</module>
-				<module>jzy3d-tests-java9</module>
+				<module>jzy3d-tester-integration</module>
 			</modules>
 		</profile>
 
