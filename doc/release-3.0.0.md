@@ -17,7 +17,7 @@ affected.
 | PanamaGL (core, Swing, SWT, JavaFX, depth peeling) | 22 |
 
 The build selects modules according to the JDK running Maven : SWT and JavaFX modules are built on JDK 11+,
-PanamaGL modules on JDK 22+. PanamaGL modules depend on `org.jzy3d:panama-gl-*` 1.3.0.
+PanamaGL modules on JDK 22+. PanamaGL modules depend on `org.jzy3d:panama-gl-*` 1.3.1.
 
 ## Classes moved to another module
 
