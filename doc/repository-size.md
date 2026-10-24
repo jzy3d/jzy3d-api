@@ -46,11 +46,15 @@ git checkout master
 `git sparse-checkout disable` brings back the baselines later. `git clone --depth 1` is another option (current
 tree only, with the baselines).
 
-## Step 2 : remove obsolete baselines (no history change)
+## Step 2 : remove obsolete baselines (no history change, done)
 
 Baselines of computers that are no longer used can not be verified anymore : macOS 10.12, 10.15, 11.4,
-14.4, Linux 5.13, and the manual tests of macOS 10.12. Removing them saves about 230 MB of checkout, but
-nothing of clone until the history is rewritten. Baselines can also be compressed losslessly (e.g.
+14.4, Linux 5.13, and the manual tests of macOS 10.12. They have been removed, which saves about 230 MB of
+checkout, but nothing of clone until the history is rewritten. Only the baselines of macOS 26.6 M3 and
+macOS 27.0.1 M1 remain.
+
+Baselines of `HiDPI.OFF` have also been removed for the tests whose rendering does not depend on the pixel
+scale (surface, scatter, axis flip), see the README of `jzy3d-tester-integration`. Baselines can also be compressed losslessly (e.g.
 `zopflipng -y in.png out.png` saved 18% and 34% on two baselines, at several seconds per image).
 
 ## Step 3 : store baselines out of this repository

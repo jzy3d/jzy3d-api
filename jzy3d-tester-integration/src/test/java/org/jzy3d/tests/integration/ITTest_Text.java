@@ -29,9 +29,9 @@ public class ITTest_Text extends ITTest{
 
   /** This main method is here to test manually a chart and keep it open until one close it explicitely. */
   public static void main(String[] args) {
-    open(new ITTest_Text().whenCustomFont(WT.Native_AWT, HiDPI.ON));
+    open(new ITTest_Text().whenCustomFont(WT.JOGL_AWT, HiDPI.ON));
     //open(new ITTest_Text().whenDrawableTextRenderer(WT.EmulGL_AWT, HiDPI.OFF));
-    //open(new ITTest_Text().whenDrawableTextRenderer(WT.Native_AWT, HiDPI.OFF));
+    //open(new ITTest_Text().whenDrawableTextRenderer(WT.JOGL_AWT, HiDPI.OFF));
   }
   
   /* ************************************************************************************************** */

@@ -20,7 +20,7 @@ import org.jzy3d.plot3d.rendering.view.HiDPI;
 
 public class ITTest_Overlay extends ITTest {
   public static void main(String[] args) {
-    open(new ITTest_Overlay().whenOverlayAreMoved(WT.Native_Swing, HiDPI.ON));
+    open(new ITTest_Overlay().whenOverlayAreMoved(WT.JOGL_Swing, HiDPI.ON));
   }
 
   protected static String caseOverlayMove = "OverlayMove";
@@ -112,7 +112,7 @@ public class ITTest_Overlay extends ITTest {
 
     });
 
-    chart.dispose();
+    close(chart);
     return chart;
   }
   

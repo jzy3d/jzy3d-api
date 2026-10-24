@@ -1,21 +1,29 @@
 package org.jzy3d.tests.integration;
 
+import java.awt.EventQueue;
+import java.awt.Window;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.chart.factories.AWTChartFactory;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
+import org.jzy3d.chart.factories.IFrame;
 import org.jzy3d.chart.factories.IPainterFactory;
 import org.jzy3d.chart.factories.SwingChartFactory;
 import org.jzy3d.colors.Color;
@@ -69,7 +77,7 @@ public class ITTest {
   static boolean runOffscreen = false;
 
   public enum WT {
-    EmulGL_AWT, Native_AWT, Native_Swing, PanamaGL_Swing
+    EmulGL_AWT, JOGL_AWT, JOGL_Swing, PanamaGL_Swing
   }
 
   /**
@@ -101,28 +109,105 @@ public class ITTest {
   // //
   // Toolkit and resolutions to apply to all tests using the forEach operator
 
-  protected WT[] toolkits = withPanamaGL(WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT);
-  protected HiDPI[] resolutions = {HiDPI.ON, HiDPI.OFF};
+  protected WT[] toolkits = withPanamaGL(WT.JOGL_AWT, WT.JOGL_Swing, WT.EmulGL_AWT);
 
-  protected WT[] toolkitsAWT = {WT.Native_AWT, WT.EmulGL_AWT};
+  /** Toolkits of tests that do not compare PanamaGL to the JOGL baselines (see ITTest_Scatter) */
+  protected WT[] toolkitsWithoutPanamaGL = {WT.JOGL_AWT, WT.JOGL_Swing, WT.EmulGL_AWT};
+
+  protected WT[] toolkitsAWT = withPanamaGL(WT.JOGL_AWT, WT.EmulGL_AWT);
+
+  /**
+   * HiDPI modes of tests whose rendering depends on the pixel scale (text size, margins, layout
+   * computed in pixels). These tests keep both modes.
+   */
+  public static final HiDPI[] HIDPI_ON_OFF = {HiDPI.ON, HiDPI.OFF};
+
+  /**
+   * HiDPI mode of tests whose rendering does not depend on the pixel scale (surface, scatter, axis
+   * flip). Testing <code>HiDPI.OFF</code> verifies nothing more : on a HiDPI display JOGL ignores it
+   * and renders the same image, and on other displays all toolkits render the same image in both
+   * modes. The baseline names of these tests have no HiDPI mode.
+   */
+  public static final HiDPI[] HIDPI_ON = {HiDPI.ON};
+
+  protected HiDPI[] resolutions = HIDPI_ON_OFF;
 
   /**
    * Run a test for each possible registered toolkit and resolution.
    */
   protected void forEach(ITTestInstance task) {
-    /*for (WT toolkit : toolkits) {
-      for (HiDPI resolution : resolutions) {
-        task.run(toolkit, resolution);
-      }
-    }*/
     forEach(task, toolkits);
   }
 
   protected void forEach(ITTestInstance task, WT[] toolkits) {
+    forEach(task, toolkits, resolutions);
+  }
+
+  /**
+   * Run a test for each toolkit and resolution. The windows opened by a case are closed once it is
+   * done, otherwise they pile up and slow down the following cases.
+   */
+  protected void forEach(ITTestInstance task, WT[] toolkits, HiDPI[] resolutions) {
     for (WT toolkit : toolkits) {
       for (HiDPI resolution : resolutions) {
-        task.run(toolkit, resolution);
+        try {
+          task.run(toolkit, resolution);
+        } finally {
+          closeCharts();
+        }
       }
+    }
+  }
+
+  // ----------------------------------------------------------------------------------------------
+  // //
+  // Close the windows opened by the tests
+
+  /** Frame of each chart opened by {@link #assertChart(Chart, String, double)} and not closed yet */
+  protected static final Map<Chart, IFrame> openedCharts = new IdentityHashMap<>();
+
+  /** Close the windows left open by a test, including the ones of charts it disposed itself. */
+  @After
+  public void closeWindows() {
+    closeCharts();
+    for (Window window : Window.getWindows()) {
+      if (window.isDisplayable()) {
+        onEDT(window::dispose);
+      }
+    }
+  }
+
+  /** Dispose the charts opened by {@link #assertChart(Chart, String, double)} and close their frame. */
+  public static void closeCharts() {
+    for (Chart chart : new ArrayList<>(openedCharts.keySet())) {
+      close(chart);
+    }
+  }
+
+  /**
+   * Dispose a chart and close its frame. Disposing a chart only releases its OpenGL resources and
+   * leaves its window open.
+   */
+  public static void close(Chart chart) {
+    IFrame frame = openedCharts.remove(chart);
+    // Close the window first, otherwise it may repaint the disposed chart
+    if (frame instanceof Window) {
+      onEDT(((Window) frame)::dispose);
+    }
+    chart.dispose();
+  }
+
+  protected static void onEDT(Runnable r) {
+    if (EventQueue.isDispatchThread()) {
+      r.run();
+      return;
+    }
+    try {
+      EventQueue.invokeAndWait(r);
+    } catch (InterruptedException e) {
+      Thread.currentThread().interrupt();
+    } catch (InvocationTargetException e) {
+      throw new RuntimeException(e.getCause());
     }
   }
 
@@ -152,8 +237,8 @@ public class ITTest {
     line(sb, "");
 
     // Content test
-    section(sb, "Surface");
-    section(sb, "Scatter");
+    section(0, sb, "Surface", null, null, toolkits, HIDPI_ON);
+    section(0, sb, "Scatter", null, null, toolkitsWithoutPanamaGL, HIDPI_ON);
 
     // Text and layout tests
     section(sb, "Text", null, "Font=AppleChancery24");
@@ -170,20 +255,20 @@ public class ITTest {
     //section(sb, "2D_Colorbar", "View"+KV+"XZ", null);
     //section(sb, "2D_Colorbar", "View"+KV+"YZ", null);
 
-    section(sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"None", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"X", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"Y", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"Both", null);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"None", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"X", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"Y", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"XY"+SEP_PROP+"Flip"+KV+"Both", null, toolkitsAWT, HIDPI_ON);
 
-    section(sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"None", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"X", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"Y", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"Both", null);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"None", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"X", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"Y", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"YZ"+SEP_PROP+"Flip"+KV+"Both", null, toolkitsAWT, HIDPI_ON);
 
-    section(sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"None", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"X", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"Y", null);
-    section(sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"Both", null);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"None", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"X", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"Y", null, toolkitsAWT, HIDPI_ON);
+    section(0, sb, "2D_FlipAxis", "View"+KV+"XZ"+SEP_PROP+"Flip"+KV+"Both", null, toolkitsAWT, HIDPI_ON);
 
     
     // 2D tests
@@ -226,6 +311,16 @@ public class ITTest {
   }
 
   public void section(int level, StringBuffer sb, String testName, String caseName, String info) {
+    section(level, sb, testName, caseName, info, toolkits, resolutions);
+  }
+
+  /**
+   * Write a table with a column per toolkit and a line of images per HiDPI mode, each followed by a
+   * line of diff images if a test of this line failed. Sections of tests having a single HiDPI mode
+   * show baselines named without HiDPI mode.
+   */
+  public void section(int level, StringBuffer sb, String testName, String caseName, String info,
+      WT[] toolkits, HiDPI[] resolutions) {
 
     // -------------------------------
     // Write section name with markdown header style
@@ -249,41 +344,44 @@ public class ITTest {
     line(sb, "<table markdown=1>");
 
     // -------------------------------
-    // Table header with toolkit and resolution
+    // Table header with toolkits, after the column of HiDPI modes
 
     line(sb, "<tr>");
-
-    forEach(new ITTestInstance() {
-      public void run(WT toolkit, HiDPI resolution) {
-        line(sb, "<td>" + title(toolkit, resolution) + "</td>");
-      }
-    });
+    line(sb, "<td></td>");
+    for (WT toolkit : toolkits) {
+      line(sb, "<td>" + toolkit + "</td>");
+    }
     line(sb, "</tr>");
 
-    // -------------------------------
-    // First line with baseline image for each toolkit and resolution
+    for (HiDPI resolution : resolutions) {
+      HiDPI hidpiInName = resolutions.length > 1 ? resolution : null;
 
-    line(sb, "<tr>");
+      // -------------------------------
+      // A line with the image of each toolkit for this HiDPI mode
 
-    forEach(new ITTestInstance() {
-      public void run(WT toolkit, HiDPI resolution) {
-        line(sb, "<td>" + imgTest(name(testName, caseName, toolkit, resolution, info)) + "</td>");
-      }
-    });
-    line(sb, "</tr>");
-
-    // -------------------------------
-    // Second line with diff image displayed if an error is triggered
-
-    if (true) {
       line(sb, "<tr>");
-
-      forEach(new ITTestInstance() {
-        public void run(WT toolkit, HiDPI resolution) {
-          line(sb, "<td>" + imgDiff(name(testName, caseName, toolkit, resolution, info)) + "</td>");
-        }
-      });
+      line(sb, "<td>HiDPI:" + resolution + "</td>");
+      for (WT toolkit : toolkits) {
+        line(sb, "<td>" + imgTest(name(testName, caseName, toolkit, hidpiInName, info)) + "</td>");
+      }
       line(sb, "</tr>");
+
+      // -------------------------------
+      // A line with diff images if a test of this HiDPI mode failed
+
+      StringBuffer diffs = new StringBuffer();
+      boolean hasDiff = false;
+      for (WT toolkit : toolkits) {
+        String diff = imgDiff(name(testName, caseName, toolkit, hidpiInName, info));
+        hasDiff |= !diff.isEmpty();
+        line(diffs, "<td>" + diff + "</td>");
+      }
+      if (hasDiff) {
+        line(sb, "<tr>");
+        line(sb, "<td></td>");
+        sb.append(diffs);
+        line(sb, "</tr>");
+      }
     }
 
     // -------------------------------
@@ -293,10 +391,28 @@ public class ITTest {
     line(sb);
   }
 
+  /**
+   * PanamaGL charts have no baseline : the index shows the image they rendered, exported by
+   * {@link #assertSimilarToJOGL(Chart, ChartTester, String, double)} at the last run.
+   */
   public String imgTest(String name) {
-    // PanamaGL charts are compared to the JOGL baseline
-    name = name.replace(SEP_PROP + WT.PanamaGL_Swing + SEP_PROP, SEP_PROP + WT.Native_Swing + SEP_PROP);
+    if (isToolkit(name, WT.PanamaGL_Swing)) {
+      return "<img src=\"" + PANAMAGL_EXPORT + name + ".png\">";
+    }
     return "<img src=\"src/test/resources/" + platform.getLabel() + "/" + name + ".png\">";
+  }
+
+  /** Folder where the images rendered by PanamaGL charts are exported. */
+  public static final String PANAMAGL_EXPORT = ChartTester.MAVEN_TARGET_PATH + "panamagl/";
+
+  /** True if a test case name is the one of the given toolkit. */
+  public static boolean isToolkit(String name, WT toolkit) {
+    return name.matches(".*" + SEP_PROP + toolkit + "(" + SEP_PROP + ".*)?");
+  }
+
+  /** The name of the same test case for another toolkit. */
+  public static String replaceToolkit(String name, WT from, WT to) {
+    return name.replaceFirst(SEP_PROP + from + "(" + SEP_PROP + "|$)", SEP_PROP + to + "$1");
   }
 
   public String imgDiff(String name) {
@@ -358,9 +474,9 @@ public class ITTest {
 
     if (WT.EmulGL_AWT.equals(windowingToolkit)) {
       return chart(new EmulGLChartFactory(), hidpi, offscreenDimension);
-    } else if (WT.Native_AWT.equals(windowingToolkit)) {
+    } else if (WT.JOGL_AWT.equals(windowingToolkit)) {
       return chart(new AWTChartFactory(), hidpi, offscreenDimension);
-    } else if (WT.Native_Swing.equals(windowingToolkit)) {
+    } else if (WT.JOGL_Swing.equals(windowingToolkit)) {
       return chart(new SwingChartFactory(), hidpi, offscreenDimension);
     } else if (WT.PanamaGL_Swing.equals(windowingToolkit)) {
       return chart(newChartFactory(PANAMAGL_SWING_FACTORY), hidpi, offscreenDimension);
@@ -425,7 +541,10 @@ public class ITTest {
       // System.out.println(" ITTest.assertChart OPEN frame " + dim.width + "x"+ dim.height);
     }
 
-    chart.open(name, dim.width, dim.height);
+    IFrame frame = chart.open(name, dim.width, dim.height);
+    if (frame != null) {
+      openedCharts.put(chart, frame);
+    }
 
 
     // trigger a first render since the first generated may not consider the appropriate
@@ -458,15 +577,14 @@ public class ITTest {
   /**
    * PanamaGL charts have no baseline : they are compared to the JOGL baseline of the same test
    * case, as both render with the native OpenGL library. Text and points are rasterized slightly
-   * differently, hence a tolerance.
+   * differently, hence a tolerance. The rendered image is exported in {@link #PANAMAGL_EXPORT} to be
+   * shown by the baseline index.
    */
   protected static void assertSimilarToJOGL(Chart chart, ChartTester tester, String name,
       double maxDiffRatio) {
-    String panamagl = SEP_PROP + WT.PanamaGL_Swing + SEP_PROP;
-
     File baseline = null;
-    for (WT jogl : new WT[] {WT.Native_Swing, WT.Native_AWT}) {
-      File file = new File(tester.path(name.replace(panamagl, SEP_PROP + jogl + SEP_PROP)));
+    for (WT jogl : new WT[] {WT.JOGL_Swing, WT.JOGL_AWT}) {
+      File file = new File(tester.path(replaceToolkit(name, WT.PanamaGL_Swing, jogl)));
       if (file.exists()) {
         baseline = file;
         break;
@@ -477,6 +595,10 @@ public class ITTest {
     try {
       BufferedImage expected = ImageIO.read(baseline);
       BufferedImage actual = (BufferedImage) chart.screenshot();
+
+      File export = new File(PANAMAGL_EXPORT + name + ".png");
+      export.getAbsoluteFile().getParentFile().mkdirs();
+      ImageIO.write(actual, "png", export);
 
       boolean sameSize = expected.getWidth() == actual.getWidth()
           && expected.getHeight() == actual.getHeight();
@@ -542,13 +664,13 @@ public class ITTest {
     return name(className(test), caseName, wt, hidpi, info);
   }
 
+  /**
+   * Name of a test case, e.g. <code>Text_JOGL_AWT_HiDPI=ON_Font=AppleChancery24</code>. A null HiDPI
+   * mode is omitted, for tests run with a single HiDPI mode (see {@link #HIDPI_ON}).
+   */
   public static String name(String test, String caseName, WT wt, HiDPI hidpi, String info) {
-    if (caseName != null)
-      return (test + SEP_CASE + caseName + SEP_PROP + wt + SEP_PROP + hidpi(hidpi)
-          + (info != null ? SEP_PROP + info : ""));
-    else
-      return (test + SEP_PROP + wt + SEP_PROP + hidpi(hidpi)
-          + (info != null ? SEP_PROP + info : ""));
+    return test + (caseName != null ? SEP_CASE + caseName : "") + SEP_PROP + wt
+        + (hidpi != null ? SEP_PROP + hidpi(hidpi) : "") + (info != null ? SEP_PROP + info : "");
   }
 
   public static String hidpi(HiDPI hidpi) {

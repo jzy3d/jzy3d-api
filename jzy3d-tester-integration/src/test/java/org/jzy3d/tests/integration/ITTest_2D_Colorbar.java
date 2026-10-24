@@ -29,7 +29,7 @@ import org.jzy3d.plot3d.rendering.view.View2DLayout_Debug;
 public class ITTest_2D_Colorbar extends ITTest {
   public static void main(String[] args) {
     open(new ITTest_2D_Colorbar().when2DChartWithColorbarAndMargins(WT.EmulGL_AWT, HiDPI.ON, View2D.XY));
-    //open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT, HiDPI.ON));
+    //open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.JOGL_AWT, HiDPI.ON));
   }
 
   

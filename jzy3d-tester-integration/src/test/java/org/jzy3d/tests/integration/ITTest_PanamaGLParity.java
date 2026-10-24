@@ -195,7 +195,7 @@ public class ITTest_PanamaGLParity extends ITTest {
           chart.getView().setAxisDisplayed(false);
           chart.getView().setBoundsManual(new BoundingBox3d(-1, 1, -1, 1, -1, 1));
         };
-        String jogl = pixels(render(WT.Native_Swing, content));
+        String jogl = pixels(render(WT.JOGL_Swing, content));
         String panama = pixels(render(WT.PanamaGL_Swing, content));
 
         sb.append("\nwidth " + width + " alpha " + alpha + "\n  JOGL     " + jogl
@@ -244,7 +244,7 @@ public class ITTest_PanamaGLParity extends ITTest {
   protected void assertParity(String name, Consumer<Chart> content) throws IOException {
     Assume.assumeTrue("PanamaGL is not in classpath", isPanamaGLAvailable());
 
-    assertSimilar(name, render(WT.Native_Swing, content), render(WT.PanamaGL_Swing, content));
+    assertSimilar(name, render(WT.JOGL_Swing, content), render(WT.PanamaGL_Swing, content));
   }
 
   /** Verify both images are nearly identical, or write them in {@link #OUTPUT} */
