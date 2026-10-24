@@ -74,7 +74,14 @@ jobs:
               -am -pl 'jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-emul-gl-swing,jzy3d-io-xls'
 
     steps:
+      # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
       - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/jzy3d-tester-integration/src/test/resources/*_*/
 
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v5
@@ -209,7 +216,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
-            mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
+            mvn --batch-mode --no-transfer-progress test -pl jzy3d-tester-integration -am \
               -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
               -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
 
@@ -218,7 +225,7 @@ jobs:
         if: runner.os != 'Linux' && !matrix.no-jogl
         shell: bash
         run: |
-          mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
+          mvn --batch-mode --no-transfer-progress test -pl jzy3d-tester-integration -am \
             -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
             -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
 
@@ -246,7 +253,7 @@ jobs:
         run: |
           mkdir -p surefire-reports
           find . -path "*/target/surefire-reports/*" -type f -exec cp {} surefire-reports/ \;
-          find jzy3d-tests-java9/target -name "*.png" -not -path "*/ittest-baselines/*" -exec cp {} surefire-reports/ \; || true
+          find jzy3d-tester-integration/target -name "*.png" -not -path "*/ittest-baselines/*" -exec cp {} surefire-reports/ \; || true
 
       - name: Collect Surefire reports (Windows)
         if: runner.os == 'Windows' && always()
@@ -256,7 +263,7 @@ jobs:
           Get-ChildItem -Path . -Recurse -File |
             Where-Object { $_.FullName -like "*\target\surefire-reports\*" } |
             Copy-Item -Destination surefire-reports
-          Get-ChildItem -Path jzy3d-tests-java9\target -Recurse -Filter *.png -ErrorAction SilentlyContinue |
+          Get-ChildItem -Path jzy3d-tester-integration\target -Recurse -Filter *.png -ErrorAction SilentlyContinue |
             Where-Object { $_.FullName -notlike "*\ittest-baselines\*" } |
             Copy-Item -Destination surefire-reports
 
@@ -285,7 +292,14 @@ jobs:
         java: ['8', '11', '17', '21', '22']
 
     steps:
+      # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
       - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/jzy3d-tester-integration/src/test/resources/*_*/
 
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v5
@@ -338,7 +352,14 @@ jobs:
     environment: jzy3d-ftp-env
 
     steps:
+      # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
       - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/jzy3d-tester-integration/src/test/resources/*_*/
 
       # Writes ~/.m2/settings.xml with credentials for the server id used in distributionManagement
       - name: Set up JDK ${{ env.JAVA_VERSION }}

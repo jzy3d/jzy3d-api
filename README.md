@@ -88,7 +88,7 @@ chart.open();
 * Depth peeling : `new PanamaGLDepthPeelingChartFactory(new PanamaGLDepthPeelingPainterFactory(PeelingMethod.DUAL_PEELING_MODE))` from module `jzy3d-depthpeeling-panamagl`.
 * Debug : `setDebugGL(true)` on the painter factory throws an exception on the first OpenGL error, `setTraceGL(true)` prints each OpenGL call.
 
-Integration tests of `jzy3d-tests-java9` render the same charts with JOGL and PanamaGL and compare images (`ITTest_PanamaGLParity`, `ITTest_GPUDrawables`, `ITTest_DepthPeeling`). They run with PanamaGL when building with Java 22+ (profile `panamagl`).
+Integration tests of `jzy3d-tester-integration` render the same charts with JOGL and PanamaGL and compare images (`ITTest_PanamaGLParity`, `ITTest_GPUDrawables`, `ITTest_DepthPeeling`). They run with PanamaGL when building with Java 22+ (profile `panamagl`).
 
 # What's inside
 
@@ -203,6 +203,8 @@ mvn dependency:resolve -Dclassifier=sources
 
 # How to build
 
+A clone is about 450 MB, mostly baseline images of integration tests : see [doc/repository-size.md](doc/repository-size.md) to clone without them.
+
 ## From command line
 
 ### Build all
@@ -221,9 +223,9 @@ Integration tests compare charts to baseline images pixel wise. They are importa
 * Different OS have different frame insets (changing actual rendering area size) leading to chart screenshots of different size accross OS.
 * Different OS have different frame insets (changing actual rendering area size) leading to chart a different layout (colorbar position)
 * Different OS have different font rasterization (despite using the JVM font raterizer to minimize OS impact), hence text labels do not match despite having only a few pixel difference.
-* A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tests-java9` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts.
+* A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tester-integration` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts.
 
-This will run all test named `**/ITTest*.java` and unit tests. See [jzy3d-tests-java9](jzy3d-tests-java9/README.md)
+This will run all test named `**/ITTest*.java` and unit tests. See [jzy3d-tester-integration](jzy3d-tester-integration/README.md)
 for how charts are compared to baselines, how PanamaGL is compared to JOGL, and how integration tests run on CI.
 
 ```
@@ -239,7 +241,7 @@ mvn clean install -DskipTests
 
 #### Manual tests
 
-Some [test require a manual verification](jzy3d-tests-java9/src/test/java/org/jzy3d/tests/manual).
+Some [test require a manual verification](jzy3d-tester-integration/src/test/java/org/jzy3d/tests/manual).
 
 ### Deploy
 
