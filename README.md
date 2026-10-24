@@ -71,6 +71,25 @@ public class SurfaceDemoAWT extends AWTAbstractAnalysis {
 }
 ```
 
+## Native rendering with PanamaGL instead of JOGL
+
+[PanamaGL](https://github.com/jzy3d/panama-gl) invokes OpenGL through the Foreign Function & Memory API of Java 22+, without JNI. It can replace JOGL for all native charts : surfaces, scatters, text, colorbars and legends, overlays, picking, offscreen rendering and screenshots, VBO, shaders, textures, volumes and depth peeling.
+
+```java
+ChartFactory f = new PanamaGLSwingChartFactory(); // or PanamaGLJavaFXChartFactory, PanamaGLSWTChartFactory
+Chart chart = f.newChart(Quality.Advanced());
+chart.add(surface);
+chart.open();
+```
+
+* Requires Java 22+ and modules `jzy3d-native-panama-gl-swing`, `jzy3d-native-panama-gl-javafx` or `jzy3d-native-panama-gl-swt`.
+* Offscreen charts : `f.getPainterFactory().setOffscreen(800, 600)` then `chart.screenshot()`.
+* GPU based drawables (`DrawableVBO2`, `ScatterVBO`, `SphereVBO`, shader mesh and waterfall, `Texture3D`, `NativeDrawableImage`, `TexturedCube`, ...) live in `jzy3d-core` and render with both JOGL and PanamaGL. They only rely on the GPU methods of `IPainter` and on `GLConstants`.
+* Depth peeling : `new PanamaGLDepthPeelingChartFactory(new PanamaGLDepthPeelingPainterFactory(PeelingMethod.DUAL_PEELING_MODE))` from module `jzy3d-depthpeeling-panamagl`.
+* Debug : `setDebugGL(true)` on the painter factory throws an exception on the first OpenGL error, `setTraceGL(true)` prints each OpenGL call.
+
+Integration tests of `jzy3d-tester-integration` render the same charts with JOGL and PanamaGL and compare images (`ITTest_PanamaGLParity`, `ITTest_GPUDrawables`, `ITTest_DepthPeeling`). They run with PanamaGL when building with Java 22+ (profile `panamagl`).
+
 # What's inside
 
 ## Features
@@ -184,6 +203,8 @@ mvn dependency:resolve -Dclassifier=sources
 
 # How to build
 
+A clone is about 450 MB, mostly baseline images of integration tests : see [doc/repository-size.md](doc/repository-size.md) to clone without them.
+
 ## From command line
 
 ### Build all
@@ -202,9 +223,10 @@ Integration tests compare charts to baseline images pixel wise. They are importa
 * Different OS have different frame insets (changing actual rendering area size) leading to chart screenshots of different size accross OS.
 * Different OS have different frame insets (changing actual rendering area size) leading to chart a different layout (colorbar position)
 * Different OS have different font rasterization (despite using the JVM font raterizer to minimize OS impact), hence text labels do not match despite having only a few pixel difference.
-* A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tests-java9` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts.
+* A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tester-integration` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts.
 
-This will run all test named `**/ITTest*.java` and unit tests.
+This will run all test named `**/ITTest*.java` and unit tests. See [jzy3d-tester-integration](jzy3d-tester-integration/README.md)
+for how charts are compared to baselines, how PanamaGL is compared to JOGL, and how integration tests run on CI.
 
 ```
 mvn clean install -Pintegration-tests
@@ -219,12 +241,77 @@ mvn clean install -DskipTests
 
 #### Manual tests
 
-Some [test require a manual verification](jzy3d-tests-java9/src/test/java/org/jzy3d/tests/manual).
+Some [test require a manual verification](jzy3d-tester-integration/src/test/java/org/jzy3d/tests/manual).
 
-### Deploy source & javadocs
+### Deploy
+
+`mvn deploy` uploads the jars, with their sources and javadoc, to the FTP server behind
+[maven.jzy3d.org](https://maven.jzy3d.org). The server is defined at a single place, the
+`distributionManagement` of the root [pom.xml](pom.xml) :
+* its URL is read from the `MAVEN_REPO_URL` environment variable, e.g. `ftp://ftp.example.org` (without
+  trailing `/maven`). Releases go to `$MAVEN_REPO_URL/maven/releases`, SNAPSHOT versions to
+  `$MAVEN_REPO_URL/maven/snapshots`.
+* its credentials are those of the Maven server with id `jzy3d-ftp`.
+
+#### Deploy from a local computer
+
+Declare the credentials once in `~/.m2/settings.xml` :
+
+```xml
+<settings>
+  <servers>
+    <server>
+      <id>jzy3d-ftp</id>
+      <username>your-ftp-user</username>
+      <password>your-ftp-password</password>
+    </server>
+  </servers>
+</settings>
 ```
-mvn clean source:jar javadoc:jar deploy
- ```
+
+Set the FTP server URL in the console used to deploy :
+
+```bash
+# Linux, macOS
+export MAVEN_REPO_URL=ftp://ftp.example.org
+```
+
+```powershell
+# Windows PowerShell
+$env:MAVEN_REPO_URL = "ftp://ftp.example.org"
+```
+
+```bat
+:: Windows cmd
+set MAVEN_REPO_URL=ftp://ftp.example.org
+```
+
+Then deploy, without running the tests again :
+
+```
+mvn deploy -DskipTests
+```
+
+The URL may also be given for a single command : `mvn deploy -DskipTests -Denv.MAVEN_REPO_URL=ftp://ftp.example.org`.
+
+#### Deploy from CI
+
+The `Deploy SNAPSHOT` job of the [CI workflow](.github/workflows/ci.yml) deploys SNAPSHOT versions once all
+platforms passed :
+* on push to `master`,
+* when the workflow is started manually from the [Actions page](https://github.com/jzy3d/jzy3d-api/actions/workflows/ci.yml) with `deploy` checked,
+* on pull requests labeled `deploy-snapshot`, to build projects depending on Jzy3d against a branch.
+
+It runs in the `jzy3d-ftp-env` environment, whose secrets are set in
+[Settings > Environments](https://github.com/jzy3d/jzy3d-api/settings/environments) :
+
+| Secret | Value | Given to Maven as |
+|---|---|---|
+| `FTP_URL` | FTP server URL, e.g. `ftp://ftp.example.org` | `MAVEN_REPO_URL` environment variable |
+| `FTP_USERNAME` | FTP user | username of server `jzy3d-ftp`, in the `settings.xml` written by `actions/setup-java` |
+| `FTP_PASSWORD` | FTP password | password of server `jzy3d-ftp` |
+
+No `settings.xml` file is needed in the repository. The CI never deploys release versions.
 
 ### Generate javadoc site
 

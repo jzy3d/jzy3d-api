@@ -5,10 +5,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.jzy3d.chart.AWTNativeChart;
 import org.jzy3d.chart.Chart;
 import org.jzy3d.colors.Color;
 import org.jzy3d.plot2d.primitives.Serie2d;
+import org.jzy3d.plot3d.rendering.canvas.Quality;
 import org.jzy3d.plot3d.rendering.view.modes.ViewBoundMode;
 
 public class Chart2dGroup {
@@ -22,7 +22,7 @@ public class Chart2dGroup {
   public Chart2dGroup(float timeMax, int ymin, int ymax, int chartNumber) {
     for (int i = 0; i < chartNumber; i++) {
 
-      Chart2d chart = new Chart2d();
+      Chart2d chart = newChart();
 
       chart.asTimeChart(timeMax, ymin, ymax, "Time", "Value");
 
@@ -38,7 +38,7 @@ public class Chart2dGroup {
   public Chart2dGroup(int ymin, int ymax, int chartNumber) {
     for (int i = 0; i < chartNumber; i++) {
       // chart
-      Chart2d chart = new Chart2d();
+      Chart2d chart = newChart();
 
       // serie
       Serie2d seriePitch = chart.getSerie(name(i), DEFAULT_SERIE_TYPE);
@@ -67,7 +67,7 @@ public class Chart2dGroup {
    */
   public void setAnimated(boolean status) {
     for (Chart chart : getCharts()) {
-      ((AWTNativeChart) chart).setAnimated(status);
+      chart.setAnimated(status);
     }
   }
 
@@ -104,6 +104,10 @@ public class Chart2dGroup {
 
   public Serie2d getSerie(String chartKey, String serieKey) {
     return ((Chart2d) getChart(chartKey)).getSerie(serieKey, DEFAULT_SERIE_TYPE);
+  }
+
+  protected Chart2d newChart() {
+    return new Chart2dFactory().newChart(Quality.Advanced().setAnimated(true));
   }
 
   protected String name(int id) {

@@ -18,6 +18,7 @@ import org.jzy3d.maths.Coord2d;
 import org.jzy3d.maths.Dimension;
 import org.jzy3d.painters.IPainter;
 import org.jzy3d.plot3d.GPUInfo;
+import org.jzy3d.plot3d.NativeGPUInfo;
 import org.jzy3d.plot3d.rendering.scene.Scene;
 import org.jzy3d.plot3d.rendering.view.Renderer3d;
 import org.jzy3d.plot3d.rendering.view.View;
@@ -232,7 +233,7 @@ public class CanvasNewtAwt extends Panel implements IScreenCanvas, INativeCanvas
     GLCapabilitiesImmutable caps = window.getChosenGLCapabilities();
     
     GL gl = (GL) painter.acquireGL();
-    GPUInfo info = GPUInfo.load(gl);
+    GPUInfo info = NativeGPUInfo.load(gl);
     painter.releaseGL();
     
     return "Capabilities  : " + caps + "\n" + info.toString();
