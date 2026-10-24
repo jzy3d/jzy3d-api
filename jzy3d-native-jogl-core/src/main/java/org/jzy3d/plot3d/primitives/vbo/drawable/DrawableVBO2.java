@@ -731,11 +731,14 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       gl2.glBindBuffer(GL.GL_ARRAY_BUFFER, normalArrayIds[0]);
       gl2.glNormalPointer(GL.GL_FLOAT, normalOffset, firstCoordOffset);
       gl2.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
-    } else {
-      // "Automatic normals", not really sure they are correct
-      // invoking gl.glDisable(GL2.GL_AUTO_NORMAL) does not disable them surprisingly
+    } else if (hasNormalInVertexArray) {
+      // Normals interleaved with coordinates in the vertex buffer
       gl2.glNormalPointer(GL.GL_FLOAT, vertexOffset, normalOffset);
       gl2.glEnableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
+    } else {
+      // No normals at all : do not point to the vertex buffer as it would make GL read
+      // past its end, which crashes some drivers (e.g. macOS virtualized GPU)
+      gl2.glDisableClientState(GLPointerFunc.GL_NORMAL_ARRAY);
     }
 
     // Color buffer
@@ -846,11 +849,20 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
     // Case of non indexed mode (no vertex index defined)
 
     else {
-      gl2.glDrawArrays(glGeometryType, 0, vertices.capacity());
+      gl2.glDrawArrays(glGeometryType, 0, getVertexCount());
     }
 
   }
 
+
+  /**
+   * @return the number of vertices in the vertex buffer, which may also hold normals interleaved
+   *         with coordinates.
+   */
+  protected int getVertexCount() {
+    int floatsPerVertex = vertexOffset / Buffers.SIZEOF_FLOAT;
+    return vertices.capacity() / floatsPerVertex;
+  }
 
   /**
    * Experimental - not working yet
