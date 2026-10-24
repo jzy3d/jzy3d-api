@@ -489,6 +489,10 @@ public class ITTest {
         new File(error).getAbsoluteFile().getParentFile().mkdirs();
         ImageIO.write(actual, "png", new File(error + ChartTester.FILE_LABEL_ACTUAL + ".png"));
         ImageIO.write(expected, "png", new File(error + ChartTester.FILE_LABEL_EXPECT + ".png"));
+        if (sameSize) {
+          ImageIO.write(ITTest_PanamaGLParity.diffImage(actual, expected), "png",
+              new File(error + ChartTester.FILE_LABEL_DIFF + ".png"));
+        }
 
         Assert.fail("PanamaGL chart differs from " + baseline + " : "
             + (sameSize ? String.format("%.3f", 100 * ratio) + "% of pixels differ"
