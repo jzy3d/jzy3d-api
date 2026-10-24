@@ -50,9 +50,6 @@ jobs:
   build:
     name: Build & Test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    # TEMPORARY : push diff images
-    permissions:
-      contents: write
 
     strategy:
       # Don't cancel other jobs if one platform fails
@@ -224,21 +221,6 @@ jobs:
           mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests-java9 -am \
             -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
             -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
-
-      # TEMPORARY : push the images of failed PanamaGL comparisons to a branch, to retrieve them
-      # without the artifacts
-      - name: Push PanamaGL diff images
-        if: failure() && (matrix.os == 'ubuntu-latest' || matrix.os == 'windows-latest')
-        shell: bash
-        run: |
-          mkdir -p diff-images
-          cp jzy3d-tests-java9/target/error-*.png diff-images/ || true
-          cd diff-images
-          git init -q -b images
-          git -c user.name=ci -c user.email=ci@jzy3d.org add .
-          git -c user.name=ci -c user.email=ci@jzy3d.org commit -qm "Diff images of ${{ github.sha }} on ${{ matrix.os }}"
-          git push -q "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" \
-            images:refs/heads/feat/ittest-diff-images-${{ matrix.os }}-${{ github.run_id }}
 
       # -------------------------------------------------------
       # Print JVM crash details (forked test JVM killed by a native

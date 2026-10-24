@@ -39,10 +39,9 @@ toolkit and each HiDPI mode, then call `ITTest.assertChart(chart, name)`.
 * JOGL and EmulGL charts must match their baseline exactly. On failure, the actual, expected, diff and
   zoom images are written to `target/error-<name>_*.png`.
 * **PanamaGL charts have no baseline.** They are compared to the JOGL baseline of the same case
-  (`Native_Swing`, or `Native_AWT`), since both render with the native OpenGL library. Text and points are
-  rasterized slightly differently, hence a tolerance : at most 1% of pixels may have a channel differing by
-  more than 32 (2% for `ITTest_Text`, which is mostly made of text). See
-  `ITTest.assertSimilarToJOGL`.
+  (`Native_Swing`, or `Native_AWT`), since both render with the native OpenGL library. Text is rasterized
+  slightly differently, hence a tolerance, see [Tolerance of PanamaGL charts](#tolerance-of-panamagl-charts).
+  On failure, the actual, expected and diff images are written to `target/error-<name>_*.png`.
 * `ITTest_Scatter` does not compare PanamaGL to JOGL : JOGL axis text alters the rendering of the points
   drawn after it (35% of the points pixels differ), which PanamaGL does not.
 
@@ -50,6 +49,60 @@ toolkit and each HiDPI mode, then call `ITTest.assertChart(chart, name)`.
 `ITTest_DepthPeeling`, `ITTest_Picking`) render the same chart with both toolkits on the same computer and
 compare the images with the same tolerance. They need no baseline, hence run anywhere, including CI. On
 failure, images are written to `target/panamagl-parity/`.
+
+## Tolerance of PanamaGL charts
+
+A PanamaGL chart is compared pixel by pixel to the JOGL image of the same case
+(`ITTest.assertSimilarToJOGL`) :
+
+* a pixel **differs** if one of its red, green or blue channels differs by more than 32 (out of 255,
+  `ITTest_PanamaGLParity.PIXEL_TOLERANCE`), which ignores small color variations ;
+* the test fails if the ratio of differing pixels exceeds a **threshold** : `ITTest.PANAMAGL_MAX_DIFF_RATIO`
+  (2%) by default, `ITTest_Text.PANAMAGL_TEXT_MAX_DIFF_RATIO` (6%) for `ITTest_Text`, whose charts are mostly
+  made of text. A test can give its own threshold with `assertChart(chart, name, maxDiffRatio)`.
+
+Geometry (surfaces, lines, points, colorbars) renders the same with JOGL and PanamaGL. Differences come from
+**text** : JOGL `TextRenderer` and PanamaGL `OrientedTextRenderer` both draw glyphs with AWT in a texture, but
+glyph edges are antialiased differently, and PanamaGL rounds glyph advances to whole pixels while JOGL uses
+fractional ones, so that a long label may end a few pixels apart. The ratio of differing pixels hence
+depends on the amount of text in the chart and on the OpenGL renderer.
+
+A threshold is a trade off : too low, a test fails for invisible differences ; too high, it misses
+regressions on small elements (a missing tick label changes less than 0.1% of the pixels of a 800x600 chart). Thresholds should be
+set just above the ratios measured on the platforms where the tests run, and checked again when a platform
+is added.
+
+### Example : ratios measured on CI
+
+The table below is an **example**, measured by CI in October 2026 (charts of 800x600 pixels, runners
+without HiDPI display). The thresholds were then 1% (2% for `ITTest_Text`), and have been **raised to 2%
+(6% for `ITTest_Text`) to let the builds pass** on all CI platforms. Other platforms and renderers give
+other ratios.
+
+| Test case                                 | Threshold | Linux x86_64 and ARM64 (Mesa llvmpipe) | macOS ARM and Intel (Apple Software Renderer) | Windows x86_64 (Mesa D3D12) |
+|-------------------------------------------|-----------|----------------------------------------|-----------------------------------------------|-----------------------------|
+| `ITTest_AxisLabelRotateLayout`            | 2%        | 1.49% to 1.50%                         | 1.44%                                         | 1.61%                       |
+| `ITTest_2D_Colorbar` view XZ              | 2%        | 0.67%                                  | 1.14%                                         | 1.03%                       |
+| `ITTest_Colorbar` custom font             | 2%        | 0.86%                                  | < 1%                                          | 1.07%                       |
+| `ITTest_Text.whenDrawableTextRenderer`    | 6%        | 3.49% to 3.50%                         | < 2%                                          | 5.25%                       |
+| Other cases (surface, 2D, overlays, text) | 2% or 6%  | 0.28% to 0.91%                         | < 1%                                          | < 1%                        |
+
+**5% of differing pixels is not much** : on the chart below, the worst case of the table, JOGL and PanamaGL
+can not be told apart, and all differing pixels (in red) are on the edges of glyphs.
+
+![ITTest_Text on Windows : 5.25% of differing pixels](doc/thresholds/text-windows-5.2.png)
+
+Zoomed 4 times : glyphs have the same shapes, but PanamaGL places them up to a few pixels apart along the
+label.
+
+![ITTest_Text on Windows, zoomed](doc/thresholds/text-windows-5.2-zoom.png)
+
+Rotated axis labels on Linux, 1.5% of differing pixels :
+
+![ITTest_AxisLabelRotateLayout on Linux : 1.5% of differing pixels](doc/thresholds/axis-label-rotate-linux-1.5.png)
+
+To look at the differences of a failed test, open `target/error-<name>_DIFF.png` : it is the JOGL image
+with the differing pixels in red.
 
 ## Continuous integration
 
