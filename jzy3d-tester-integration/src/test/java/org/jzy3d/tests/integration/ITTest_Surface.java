@@ -13,7 +13,8 @@ public class ITTest_Surface extends ITTest{
   public void whenSurfaceChart_ThenMatchBaselineImagePixelwise() {
     System.out.println("ITTest : whenSurfaceChart_ThenMatchBaselineImagePixelwise");
 
-    forEach((toolkit, resolution) -> whenSurfaceChart_ThenMatchBaselineImagePixelwise(toolkit, resolution));
+    forEach((toolkit, resolution) -> whenSurfaceChart_ThenMatchBaselineImagePixelwise(toolkit, resolution),
+        toolkits, HIDPI_ON);
   }
 
   private Chart whenSurfaceChart_ThenMatchBaselineImagePixelwise(WT wt, HiDPI hidpi) {
@@ -24,7 +25,7 @@ public class ITTest_Surface extends ITTest{
     chart.add(surface());
 
     // Then
-    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI()));
+    assertChart(chart, name(this, wt, null));
     
     return chart;
   }

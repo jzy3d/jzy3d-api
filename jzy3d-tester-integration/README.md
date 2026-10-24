@@ -30,6 +30,15 @@ require a manual verification.
 `ITTest_Colorbar`, `ITTest_2D*`, `ITTest_Overlay`, `ITTest_AxisLabelRotateLayout`) render each case for each
 toolkit and each HiDPI mode, then call `ITTest.assertChart(chart, name)`.
 
+* Toolkits are named after their OpenGL implementation and windowing toolkit : `JOGL_AWT`, `JOGL_Swing`,
+  `EmulGL_AWT`, `PanamaGL_Swing`. A baseline is named `<test>[_<case>]_<toolkit>[_HiDPI=<mode>][_<properties>].png`.
+* **HiDPI modes.** Tests whose rendering depends on the pixel scale (text size, margins and layout computed
+  in pixels : `ITTest_Text`, `ITTest_AxisLabelRotateLayout`, `ITTest_Colorbar`, `ITTest_2D`, `ITTest_2D_Colorbar`,
+  `ITTest_Overlay`) run with `HiDPI.ON` and `HiDPI.OFF` (`ITTest.HIDPI_ON_OFF`). Other tests (`ITTest_Surface`,
+  `ITTest_Scatter`, `ITTest_2D_FlipAxis`) only run with `HiDPI.ON` (`ITTest.HIDPI_ON`) and their baselines have no
+  HiDPI mode in their name : `HiDPI.OFF` verified nothing more, as JOGL renders the same image in both modes on a
+  HiDPI display (see [Known limitations](#known-limitations)), and all toolkits do on other displays.
+
 * Baselines are stored per platform in `src/test/resources/<platform>/`, where the platform label is the OS
   name, OS version and GPU name given by `NativePlatform` (e.g. `macosx_26.6_AppleM3`). Rendering differs
   between OS, GPU and drivers, hence a baseline is only valid for its platform.
@@ -39,9 +48,11 @@ toolkit and each HiDPI mode, then call `ITTest.assertChart(chart, name)`.
 * JOGL and EmulGL charts must match their baseline exactly. On failure, the actual, expected, diff and
   zoom images are written to `target/error-<name>_*.png`.
 * **PanamaGL charts have no baseline.** They are compared to the JOGL baseline of the same case
-  (`Native_Swing`, or `Native_AWT`), since both render with the native OpenGL library. Text is rasterized
+  (`JOGL_Swing`, or `JOGL_AWT`), since both render with the native OpenGL library. Text is rasterized
   slightly differently, hence a tolerance, see [Tolerance of PanamaGL charts](#tolerance-of-panamagl-charts).
-  On failure, the actual, expected and diff images are written to `target/error-<name>_*.png`.
+  On failure, the actual, expected and diff images are written to `target/error-<name>_*.png`. The image
+  rendered by PanamaGL is always exported to `target/panamagl/<name>.png`, which the `BASELINE_<platform>.md`
+  index shows in the PanamaGL column (run the tests first to see it).
 * `ITTest_Scatter` does not compare PanamaGL to JOGL : JOGL axis text alters the rendering of the points
   drawn after it (35% of the points pixels differ), which PanamaGL does not.
 

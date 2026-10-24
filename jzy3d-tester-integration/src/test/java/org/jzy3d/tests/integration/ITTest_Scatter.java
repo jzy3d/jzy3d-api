@@ -18,7 +18,7 @@ public class ITTest_Scatter extends ITTest{
     // text by ITTest_PanamaGLParity.
     forEach((toolkit, resolution) -> 
         whenScatterChart_ThenMatchBaselineImagePixelwise(toolkit, resolution),
-        new WT[] {WT.Native_AWT, WT.Native_Swing, WT.EmulGL_AWT});
+        toolkitsWithoutPanamaGL, HIDPI_ON);
   }
 
   private Chart whenScatterChart_ThenMatchBaselineImagePixelwise(WT wt, HiDPI hidpi) {
@@ -27,7 +27,7 @@ public class ITTest_Scatter extends ITTest{
     chart.add(scatter(50000));
 
     // Then
-    assertChart(chart, name(this, wt, chart.getQuality().getHiDPI()));
+    assertChart(chart, name(this, wt, null));
     
     return chart;
   }

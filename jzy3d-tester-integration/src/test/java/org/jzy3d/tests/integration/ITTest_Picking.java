@@ -23,7 +23,7 @@ public class ITTest_Picking extends ITTest {
 
   @Test
   public void whenClickOnPickablePoint_ThenPointIsPicked() throws Exception {
-    for (WT toolkit : withPanamaGL(WT.Native_Swing)) {
+    for (WT toolkit : withPanamaGL(WT.JOGL_Swing)) {
       whenClickOnPickablePoint_ThenPointIsPicked(toolkit);
     }
   }

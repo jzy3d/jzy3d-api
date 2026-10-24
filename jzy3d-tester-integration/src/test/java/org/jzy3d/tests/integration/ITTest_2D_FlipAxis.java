@@ -28,9 +28,9 @@ import org.jzy3d.plot3d.rendering.view.View2DLayout_Debug;
 
 public class ITTest_2D_FlipAxis extends ITTest {
   public static void main(String[] args) {
-    open(new ITTest_2D_FlipAxis().when2DChartWithFlip(WT.Native_AWT, HiDPI.ON, View2D.YZ,
+    open(new ITTest_2D_FlipAxis().when2DChartWithFlip(WT.JOGL_AWT, HiDPI.ON, View2D.YZ,
         FlipAxis.FLIP_H));
-    // open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.Native_AWT,
+    // open(new ITTest_AxisLabelRotateLayout().whenAxisLabelOrientationNotHorizontal(WT.JOGL_AWT,
     // HiDPI.ON));
   }
 
@@ -52,10 +52,10 @@ public class ITTest_2D_FlipAxis extends ITTest {
     forEach((toolkit, resolution) -> {
       for (View2D view2d : View2D.values()) {
         for (FlipAxis flip : FlipAxis.values()) {
-          when2DChartWithFlip(toolkit, resolution, view2d, flip).dispose();
+          close(when2DChartWithFlip(toolkit, resolution, view2d, flip));
         }
       }
-    }, toolkitsAWT);
+    }, toolkitsAWT, HIDPI_ON);
   }
 
 
@@ -193,26 +193,26 @@ public class ITTest_2D_FlipAxis extends ITTest {
 
       // Then
       assertChart(chart, name(ITTest_2D_FlipAxis.this,
-          "View" + KV + viewMode + SEP_PROP + "Flip" + KV + "X", wt, hidpi));
+          "View" + KV + viewMode + SEP_PROP + "Flip" + KV + "X", wt, null));
 
     } else if (FlipAxis.FLIP_V.equals(flip)) {
       chart.getView().get2DLayout().setVerticalAxisFlip(true);
 
       // Then
       assertChart(chart, name(ITTest_2D_FlipAxis.this,
-          "View" + KV + viewMode + SEP_PROP + "Flip" + KV + "Y", wt, hidpi));
+          "View" + KV + viewMode + SEP_PROP + "Flip" + KV + "Y", wt, null));
 
     } else if (FlipAxis.FLIP_BOTH.equals(flip)) {
       chart.getView().get2DLayout().setBothAxisFlip(true);
 
       // Then
       assertChart(chart, name(ITTest_2D_FlipAxis.this,
-          "View" + KV + viewMode + SEP_PROP + "Flip" + KV + "Both", wt, hidpi));
+          "View" + KV + viewMode + SEP_PROP + "Flip" + KV + "Both", wt, null));
 
     } else {
       // Then
       assertChart(chart, name(ITTest_2D_FlipAxis.this,
-          "View" + KV + viewMode + SEP_PROP + "Flip" + KV + "None", wt, hidpi));
+          "View" + KV + viewMode + SEP_PROP + "Flip" + KV + "None", wt, null));
 
     }
 
