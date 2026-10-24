@@ -50,12 +50,29 @@
 				<os>
 					<family>unix</family>
 					<name>Linux</name>
+					<arch>amd64</arch>
 				</os>
 			</activation>
 			<dependencies>
 				<dependency>
 					<groupId>org.eclipse.platform</groupId>
 					<artifactId>org.eclipse.swt.gtk.linux.x86_64</artifactId>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>swt-linux-aarch64</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<name>Linux</name>
+					<arch>aarch64</arch>
+				</os>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.eclipse.platform</groupId>
+					<artifactId>org.eclipse.swt.gtk.linux.aarch64</artifactId>
 				</dependency>
 			</dependencies>
 		</profile>

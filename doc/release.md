@@ -11,7 +11,9 @@
 
 ## Deploy
 * Generate and upload Javadoc `mvn javadoc:aggregate`
-* Deploy JARs `mvn deploy`
+* Deploy JARs `mvn deploy -DskipTests`
+
+See [Deploy in the README](../README.md#deploy) to configure the deployment from a local computer or from CI.
 
 ## Prepare next version
 * Bump all projects version to next version `mvn release:prepare`

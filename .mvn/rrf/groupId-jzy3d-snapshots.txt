@@ -1,0 +1,3 @@
+# GroupIds Maven may download from the jzy3d-snapshots repository (Maven 3.9+). Other groupIds are
+# only searched in the other repositories, e.g. Maven Central. List exact groupIds, without wildcard.
+org.jzy3d

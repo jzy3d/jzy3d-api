@@ -1,7 +1,11 @@
 package org.jzy3d.io;
 
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.LongBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import org.jzy3d.maths.Coord3d;
@@ -75,4 +79,39 @@ public class BufferUtil {
 
 
   
+
+  /* DIRECT BUFFERS */
+
+  /** A direct buffer in native byte order, as expected by OpenGL. */
+  public static ByteBuffer newDirectByteBuffer(int size) {
+    return ByteBuffer.allocateDirect(size).order(ByteOrder.nativeOrder());
+  }
+
+  public static FloatBuffer newDirectFloatBuffer(int size) {
+    return newDirectByteBuffer(size * Float.BYTES).asFloatBuffer();
+  }
+
+  /** A direct buffer holding the given values, with position set to 0. */
+  public static FloatBuffer newDirectFloatBuffer(float[] values) {
+    FloatBuffer buffer = newDirectFloatBuffer(values.length);
+    buffer.put(values);
+    rewind(buffer);
+    return buffer;
+  }
+
+  public static IntBuffer newDirectIntBuffer(int size) {
+    return newDirectByteBuffer(size * Integer.BYTES).asIntBuffer();
+  }
+
+  /** A direct buffer holding the given values, with position set to 0. */
+  public static IntBuffer newDirectIntBuffer(int[] values) {
+    IntBuffer buffer = newDirectIntBuffer(values.length);
+    buffer.put(values);
+    rewind(buffer);
+    return buffer;
+  }
+
+  public static LongBuffer newDirectLongBuffer(int size) {
+    return newDirectByteBuffer(size * Long.BYTES).asLongBuffer();
+  }
 }

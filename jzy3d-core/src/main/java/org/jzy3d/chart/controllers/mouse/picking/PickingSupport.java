@@ -17,6 +17,7 @@ import org.jzy3d.plot3d.primitives.pickable.Pickable;
 import org.jzy3d.plot3d.rendering.scene.Graph;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.View;
+import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.modes.CameraMode;
 import org.jzy3d.plot3d.transform.Scale;
 import org.jzy3d.plot3d.transform.Transform;
@@ -94,8 +95,12 @@ public class PickingSupport {
 
     IntBuffer selectBuffer = newDirectIntBuffer(bufferSize);
 
-    // Prepare selection data
-    int[] viewport = painter.getViewPortAsInt();
+    // GL must be current before invoking it, e.g. when picking from a mouse event
+    painter.acquireGL();
+
+    // Prepare selection data with the viewport of the camera, which may differ from the last
+    // viewport applied by GL (e.g. if a colorbar was rendered after the scene)
+    int[] viewport = viewport(view, painter);
     painter.glSelectBuffer(bufferSize, selectBuffer);
     painter.glRenderMode(RenderMode.SELECT);
     painter.glInitNames();
@@ -112,10 +117,8 @@ public class PickingSupport {
     
     //System.out.println(pickPoint + " " + pickPointHiDPI);
     //System.out.println(painter.getCanvas().getPixelScale());
-    
-    painter.acquireGL();
 
-    
+
     // Setup projection matrix
     painter.glMatrixMode_Projection();
     painter.glPushMatrix();
@@ -161,10 +164,21 @@ public class PickingSupport {
     }
     perf.toc();
     
-    fireObjectPicked(clickedObjects);
-    
-    //painter.releaseGL();
+    painter.releaseGL();
 
+    fireObjectPicked(clickedObjects);
+  }
+
+  /** The viewport used by the camera at last rendering, or the current GL viewport otherwise. */
+  protected int[] viewport(View view, IPainter painter) {
+    ViewportConfiguration viewport = view.getCamera().getLastViewPort();
+
+    if (viewport != null && viewport.getWidth() > 0 && viewport.getHeight() > 0) {
+      return new int[] {viewport.getX(), viewport.getY(), viewport.getWidth(),
+          viewport.getHeight()};
+    } else {
+      return painter.getViewPortAsInt();
+    }
   }
 
   /** Picked from JOGL Buffers class. */

@@ -587,12 +587,19 @@ public class Chart {
 
         // We are in here in the application thread, no in AWT thread, so we have to acquire
         // GL context, so that the drawable gets mounted with a usable GL instance
-        getPainter().acquireGL();
+        if (getPainter().acquireGL() != null) {
 
-        ((IGLBindedResource) drawable).mount(getPainter());
+          ((IGLBindedResource) drawable).mount(getPainter());
 
-        // And we kindly release GL to let AWT render again
-        getPainter().releaseGL();
+          // And we kindly release GL to let AWT render again
+          getPainter().releaseGL();
+        }
+
+        // The painter can not make GL current on this thread, so the drawable will be mounted
+        // by the rendering thread at next rendering
+        else {
+          getView().requestResourcesMount();
+        }
 
         // logger.warn("Chart.add binded resource with box " + drawable.getBounds());
 

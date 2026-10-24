@@ -3,9 +3,7 @@ package org.jzy3d.emulgl.unit;
 import java.awt.Component;
 import java.awt.Frame;
 import java.awt.Insets;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.util.concurrent.CountDownLatch;
+import java.util.function.BooleanSupplier;
 import org.junit.Assert;
 import org.junit.Test;
 import org.jzy3d.bridge.awt.FrameAWT;
@@ -67,13 +65,11 @@ public class TestCamera_EmulGL_Onscreen {
 
     Rectangle FRAME_SIZE = new Rectangle(800, 600);
 
-    ResizeBarrier resizeBarrier = new ResizeBarrier(canvas);
-
     IFrame frame = chart.open(this.getClass().getSimpleName(), FRAME_SIZE);
     Frame awtFrame = (Frame) frame;
-    
+
     // let time to resize from default 500 to 800 before testing
-    resizeBarrier.await(); 
+    waitForFrameSize(awtFrame, FRAME_SIZE, canvas);
     
     // Check target size was reached
     Rectangle CANVAS_SIZE = FRAME_SIZE.clone();
@@ -82,7 +78,7 @@ public class TestCamera_EmulGL_Onscreen {
     Assert.assertEquals(FRAME_SIZE.height, awtFrame.getSize().height);
 
     // Then viewport size is set to occupy the full canvas
-    waitForViewport(cam, canvas);
+    waitForViewport(cam, canvas, ViewportMode.RECTANGLE_NO_STRETCH);
     Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
     Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
 
@@ -93,14 +89,9 @@ public class TestCamera_EmulGL_Onscreen {
     FRAME_SIZE = CANVAS_SIZE.clone();
     add(FRAME_SIZE, awtFrame.getInsets());
 
-    // prepare a new latch
-    resizeBarrier = new ResizeBarrier(canvas);
-
     // perform resize
     awtFrame.setBounds(0, 0, FRAME_SIZE.width, FRAME_SIZE.height);
-
-    // let time to resize from default 500 to 800 before testing
-    resizeBarrier.await();
+    waitForFrameSize(awtFrame, FRAME_SIZE, canvas);
 
     // print debug info
     System.out.println("TestCamEmulGLOnScreen : viewport : " + cam.getLastViewPort());
@@ -111,7 +102,7 @@ public class TestCamera_EmulGL_Onscreen {
     System.out.println("TestCamEmulGLOnScreen : viewport.size : " + cam.getLastViewPort());
 
     // Then viewport on the complete canvas
-    waitForViewport(cam, canvas);
+    waitForViewport(cam, canvas, ViewportMode.RECTANGLE_NO_STRETCH);
     Assert.assertEquals(ViewportMode.RECTANGLE_NO_STRETCH, cam.getLastViewPort().getMode());
     Assert.assertEquals(canvas.getSize().width, cam.getLastViewPort().getWidth());
     Assert.assertEquals(canvas.getSize().height, cam.getLastViewPort().getHeight());
@@ -121,6 +112,7 @@ public class TestCamera_EmulGL_Onscreen {
 
     cam.setViewportMode(ViewportMode.STRETCH_TO_FILL);
     chart.render();
+    waitForViewport(cam, canvas, ViewportMode.STRETCH_TO_FILL);
 
 
     // Then viewport on the complete canvas
@@ -136,14 +128,34 @@ public class TestCamera_EmulGL_Onscreen {
   }
 
   /**
-   * The canvas is resized before the view renders with the new size, in the rendering thread :
-   * wait for the camera viewport to fit the canvas, which may take a while on slow computers.
+   * The frame is resized asynchronously, and may go through intermediate sizes : wait for the
+   * expected size, and for the canvas to fill the frame.
    */
-  private static void waitForViewport(Camera cam, Component canvas) throws InterruptedException {
+  private static void waitForFrameSize(Frame frame, Rectangle size, Component canvas)
+      throws InterruptedException {
+    waitUntil(() -> {
+      Insets i = frame.getInsets();
+      return frame.getSize().width == size.width && frame.getSize().height == size.height
+          && canvas.getSize().width == size.width - i.left - i.right
+          && canvas.getSize().height == size.height - i.top - i.bottom;
+    });
+  }
+
+  /**
+   * The canvas is resized before the view renders with the new size, in the rendering thread :
+   * wait for the camera viewport to fit the canvas with the given mode, which may take a while on
+   * slow computers.
+   */
+  private static void waitForViewport(Camera cam, Component canvas, ViewportMode mode)
+      throws InterruptedException {
+    waitUntil(() -> cam.getLastViewPort().getMode() == mode
+        && cam.getLastViewPort().getWidth() == canvas.getSize().width
+        && cam.getLastViewPort().getHeight() == canvas.getSize().height);
+  }
+
+  private static void waitUntil(BooleanSupplier condition) throws InterruptedException {
     long end = System.currentTimeMillis() + 10000;
-    while ((cam.getLastViewPort().getWidth() != canvas.getSize().width
-        || cam.getLastViewPort().getHeight() != canvas.getSize().height)
-        && System.currentTimeMillis() < end) {
+    while (!condition.getAsBoolean() && System.currentTimeMillis() < end) {
       Thread.sleep(10);
     }
   }
@@ -156,36 +168,6 @@ public class TestCamera_EmulGL_Onscreen {
   private static void sub(Rectangle initialFrameSize, Insets insets) {
     initialFrameSize.width -= insets.left + insets.right;
     initialFrameSize.height -= insets.top + insets.bottom;
-  }
-
-  /** A helper allowing to pause code execution until a canvas resize is finished. */
-  class ResizeBarrier {
-    protected Component canvas;
-    protected CountDownLatch latch;
-
-    ComponentAdapter resizeBarrier;
-
-    public ResizeBarrier(Component canvas) {
-      this.canvas = canvas;
-      this.latch = new CountDownLatch(1);
-
-      this.resizeBarrier = new ComponentAdapter() {
-        @Override
-        public void componentResized(ComponentEvent e) {
-          System.out.println("TestCamera_EmulGL_Onscreen : Resized! Going ahead");
-          latch.countDown();
-          canvas.removeComponentListener(resizeBarrier);
-          System.out.println("TestCamera_EmulGL_Onscreen : Removed listener");
-        }
-      };
-
-      this.canvas.addComponentListener(resizeBarrier);
-    }
-
-    public void await() throws InterruptedException {
-      System.out.println("TestCamera_EmulGL_Onscreen : Now waiting on the resize latch");
-      latch.await();
-    }
   }
 
 }

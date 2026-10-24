@@ -178,8 +178,9 @@ public class LineStrip extends Wireframeable {
   }
 
   public void drawPoints(IPainter painter) {
-    painter.glBegin_Point();
+    // Point size can not be changed between glBegin and glEnd (GL_INVALID_OPERATION)
     painter.glPointSize(wireframeWidth);
+    painter.glBegin_Point();
 
     for (Point p : points) {
       if (wireframeColor == null)

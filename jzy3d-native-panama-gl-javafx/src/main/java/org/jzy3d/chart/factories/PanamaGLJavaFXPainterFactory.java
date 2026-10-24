@@ -23,7 +23,9 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.javafx.controllers.keyboard.JavaFXCameraKeyController;
+import org.jzy3d.javafx.controllers.keyboard.JavaFXScreenshotKeyController;
 import org.jzy3d.javafx.controllers.mouse.JavaFXCameraMouseController;
+import org.jzy3d.javafx.controllers.mouse.JavaFXMousePickingController;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.PanamaGLPainter;
 import org.jzy3d.plot3d.pipelines.NotImplementedException;
@@ -36,6 +38,10 @@ public class PanamaGLJavaFXPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    if (isOffscreen()) {
+      return newOffscreenCanvas(factory, scene, quality);
+    }
+
     PanamaGLJavaFXCanvas canvas =
         new PanamaGLJavaFXCanvas(factory, scene, quality, panamaGLFactory);
 
@@ -52,7 +58,10 @@ public class PanamaGLJavaFXPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-    throw new NotImplementedException();
+    PanamaGLJavaFXCanvas canvas = (PanamaGLJavaFXCanvas) chart.getCanvas();
+    JavaFXMousePickingController picking = new JavaFXMousePickingController(chart, clickWidth);
+    picking.setNode(canvas.getNode());
+    return picking;
   }
 
   @Override
@@ -63,8 +72,12 @@ public class PanamaGLJavaFXPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public IScreenshotKeyController newKeyboardScreenshotController(Chart chart) {
-    throw new NotImplementedException();
+    PanamaGLJavaFXCanvas canvas = (PanamaGLJavaFXCanvas) chart.getCanvas();
+    return new JavaFXScreenshotKeyController(chart, canvas.getNode(), SCREENSHOT_FILE);
   }
+
+  /** File written by the screenshot key controller when typing 's' */
+  public static String SCREENSHOT_FILE = "./data/screenshots/capture.png";
 
   /**
    * A JavaFX backend has no toolkit-agnostic frame concept: a JavaFX application owns the

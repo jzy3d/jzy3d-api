@@ -63,7 +63,13 @@ public class Renderer3D implements GLEventListener{
    */
   @Override
   public void init(GL canvas) {
-    view.init();
+    bindPainterToCurrentThread();
+    beginRendering();
+    try {
+      view.init();
+    } finally {
+      endRendering();
+    }
   }
 
   /**
@@ -74,13 +80,16 @@ public class Renderer3D implements GLEventListener{
   public void display(GL canvas) {
     profileDisplayTimer.tic();
 
-    if (view != null) {
-      if(canvas!=null) {
-        if (view != null) {
-          view.clear();
-          view.render();
-        }
+    bindPainterToCurrentThread();
+    beginRendering();
+
+    try {
+      if (view != null && canvas != null) {
+        view.clear();
+        view.render();
       }
+    } finally {
+      endRendering();
     }
 
     profileDisplayTimer.toc();
@@ -94,11 +103,16 @@ public class Renderer3D implements GLEventListener{
     this.width = width;
     this.height = height;
 
-    if (view != null) {
-      if (canvas != null) {
+    bindPainterToCurrentThread();
+    beginRendering();
+
+    try {
+      if (view != null && canvas != null) {
         view.clear();
         view.render();
       }
+    } finally {
+      endRendering();
     }
   }
 
@@ -112,6 +126,28 @@ public class Renderer3D implements GLEventListener{
   protected void updatePainterWithGL(GL canvas) {
     PanamaGLPainter painter = ((PanamaGLPainter) view.getPainter());
     painter.setGL(canvas);
+  }
+
+  /**
+   * Let the painter know the thread on which the GL context is current, so that
+   * {@link PanamaGLPainter#acquireGL()} only returns GL on this thread.
+   */
+  protected void bindPainterToCurrentThread() {
+    if (view != null && view.getPainter() instanceof PanamaGLPainter) {
+      ((PanamaGLPainter) view.getPainter()).setGLThread(Thread.currentThread());
+    }
+  }
+
+  protected void beginRendering() {
+    if (view != null && view.getPainter() instanceof PanamaGLPainter) {
+      ((PanamaGLPainter) view.getPainter()).beginRendering();
+    }
+  }
+
+  protected void endRendering() {
+    if (view != null && view.getPainter() instanceof PanamaGLPainter) {
+      ((PanamaGLPainter) view.getPainter()).endRendering();
+    }
   }
 
   public void nextDisplayUpdateScreenshot() {
@@ -134,7 +170,9 @@ public class Renderer3D implements GLEventListener{
 
   @Override
   public void dispose(GL gl) {
-    // TODO Auto-generated method stub
-
+    // free possible resources cached by the painter, as done with JOGL
+    if (view != null) {
+      view.getPainter().clearCache();
+    }
   }
 }

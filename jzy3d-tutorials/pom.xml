@@ -11,15 +11,35 @@
 
 	<modules>
 		<module>jzy3d-tutorials-emul-gl-swing</module>
-		<module>jzy3d-tutorials-emul-gl-swt</module>
 		<module>jzy3d-tutorials-jogl-swing</module>
-		<module>jzy3d-tutorials-jogl-swt</module>
-		<module>jzy3d-tutorials-jogl-javafx</module>
 		<module>jzy3d-tutorials-jogl-newt</module>
-		<module>jzy3d-tutorials-panama-gl-swing</module>
-		<module>jzy3d-tutorials-panama-gl-javafx</module>
-		<module>jzy3d-tutorials-panama-gl-swt</module>
 	</modules>
+
+	<!-- Same Java requirements as the modules of the API, see the root pom -->
+	<profiles>
+		<profile>
+			<id>java11</id>
+			<activation>
+				<jdk>[11,)</jdk>
+			</activation>
+			<modules>
+				<module>jzy3d-tutorials-emul-gl-swt</module>
+				<module>jzy3d-tutorials-jogl-swt</module>
+				<module>jzy3d-tutorials-jogl-javafx</module>
+			</modules>
+		</profile>
+		<profile>
+			<id>java22</id>
+			<activation>
+				<jdk>[22,)</jdk>
+			</activation>
+			<modules>
+				<module>jzy3d-tutorials-panama-gl-swing</module>
+				<module>jzy3d-tutorials-panama-gl-javafx</module>
+				<module>jzy3d-tutorials-panama-gl-swt</module>
+			</modules>
+		</profile>
+	</profiles>
 
 	<!--To retrieve Jzy3d dependencies -->
 	<repositories>
@@ -28,31 +48,17 @@
 			<id>jzy3d-snapshots</id>
 			<name>Jzy3d Snapshots</name>
 			<url>https://maven.jzy3d.org/snapshots/</url>
+			<releases><enabled>false</enabled></releases>
 		</repository>
 
 		<repository>
 			<id>jzy3d-releases</id>
 			<name>Jzy3d Releases</name>
 			<url>https://maven.jzy3d.org/releases/</url>
+			<snapshots><enabled>false</enabled></snapshots>
 		</repository>
 
 	</repositories>
-
-	<!--To deploy tutorials: 1) this project does not references master to be
-		able to be build alone 2) master still reference this project to build it
-		with the API involve being deployable by mvn deploy -->
-	<distributionManagement>
-		<repository>
-			<id>jzy3d-ftp-maven</id>
-			<name>Jzy3d Maven Folder</name>
-			<url>ftp://www.jzy3d.org/v1/maven/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>jzy3d-ftp-maven</id>
-			<name>Jzy3d Maven Folder SNAPSHOTS</name>
-			<url>ftp://www.jzy3d.org/v1/maven/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -76,6 +82,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.8.2</version>
+				<!-- Tutorials are examples, not deployed -->
 				<configuration>
 					<skip>true</skip>
 				</configuration>

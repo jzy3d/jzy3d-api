@@ -12,7 +12,7 @@
 
 	<properties>
 		<version.java>22</version.java>
-		<version.panamagl>1.3.0</version.panamagl>
+		<version.panamagl>1.3.1</version.panamagl>
 	</properties>
 
 
@@ -38,6 +38,13 @@
 			<groupId>org.jzy3d</groupId>
 			<artifactId>panama-gl-ui-awt</artifactId>
 			<version>${version.panamagl}</version>
+		</dependency>
+		<!-- painter conformance checks -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-tester</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

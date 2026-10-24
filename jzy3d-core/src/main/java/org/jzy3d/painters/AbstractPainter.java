@@ -579,5 +579,4 @@ public abstract class AbstractPainter implements IPainter {
     return isJVMScaleLargerThanNativeScale(getCanvas().getPixelScale(),
         getCanvas().getPixelScaleJVM());
   }
-
 }

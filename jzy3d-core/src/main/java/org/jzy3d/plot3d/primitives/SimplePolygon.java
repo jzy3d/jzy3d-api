@@ -49,9 +49,9 @@ public class SimplePolygon extends Polygon implements ISingleColorable, IMultiCo
 
     // Draw edge of polygon
     if (wireframeDisplayed) {
+      painter.glLineWidth(wireframeWidth);
       painter.glBegin_Polygon();
       painter.color(wireframeColor);
-      painter.glLineWidth(wireframeWidth);
       for (Point p : points) {
         painter.vertex(p.xyz);
       }

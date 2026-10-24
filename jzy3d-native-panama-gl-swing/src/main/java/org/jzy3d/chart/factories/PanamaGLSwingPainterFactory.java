@@ -24,6 +24,7 @@ import org.jzy3d.chart.controllers.keyboard.screenshot.AWTScreenshotKeyControlle
 import org.jzy3d.chart.controllers.keyboard.screenshot.IScreenshotKeyController;
 import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.mouse.camera.ICameraMouseController;
+import org.jzy3d.chart.controllers.mouse.picking.AWTMousePickingController;
 import org.jzy3d.chart.controllers.mouse.picking.IMousePickingController;
 import org.jzy3d.maths.Rectangle;
 import org.jzy3d.painters.PanamaGLPainter;
@@ -38,6 +39,10 @@ public class PanamaGLSwingPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public ICanvas newCanvas(IChartFactory factory, Scene scene, Quality quality) {
+    if (isOffscreen()) {
+      return newOffscreenCanvas(factory, scene, quality);
+    }
+
     GLCanvasSwing glCanvas = new GLCanvasSwing(panamaGLFactory);
     GLContext context = glCanvas.getContext();
 
@@ -55,7 +60,7 @@ public class PanamaGLSwingPainterFactory extends APanamaGLPainterFactory {
 
   @Override
   public IMousePickingController newMousePickingController(Chart chart, int clickWidth) {
-    throw new RuntimeException("Not implemented");
+    return new AWTMousePickingController(chart, clickWidth);
   }
 
   @Override

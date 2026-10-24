@@ -186,12 +186,20 @@ public abstract class AbstractViewportManager {
   }
 
 
+  /**
+   * Apply a viewport, ignoring negative sizes which are GL errors. They occur when the canvas is
+   * smaller than the space required by legends, e.g. when rendering a first frame in a tiny buffer.
+   */
+  protected void glViewport(IPainter painter, int x, int y, int width, int height) {
+    painter.glViewport(x, y, Math.max(0, width), Math.max(0, height));
+  }
+
   protected void applyViewportRectangle(IPainter painter) {
     screenXOffset = screenLeft;
     screenYOffset = 0;
     //System.out.println("AbstractViewportManager: yoffset " + screenYOffset);
 
-    painter.glViewport(screenXOffset, screenYOffset, screenWidth, screenHeight);
+    glViewport(painter, screenXOffset, screenYOffset, screenWidth, screenHeight);
 
     lastViewPort =
         new ViewportConfiguration(screenWidth, screenHeight, screenXOffset, screenYOffset);
@@ -203,7 +211,7 @@ public abstract class AbstractViewportManager {
     screenXOffset = screenLeft + screenWidth / 2 - screenSquaredDim / 2;
     screenYOffset = screenBottom + screenHeight / 2 - screenSquaredDim / 2;
 
-    painter.glViewport(screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
+    glViewport(painter, screenXOffset, screenYOffset, screenSquaredDim, screenSquaredDim);
 
     lastViewPort = new ViewportConfiguration(screenSquaredDim, screenSquaredDim, screenXOffset,
         screenYOffset);
@@ -250,7 +258,7 @@ public abstract class AbstractViewportManager {
       int screenXoffset = screenLeft;
       int screenYoffset = 0;
 
-      painter.glViewport(screenXoffset, screenYoffset, screenWidth, screenHeight);
+      glViewport(painter, screenXoffset, screenYoffset, screenWidth, screenHeight);
     }
 
     // Set the projection into the largest square area centered in the
@@ -260,7 +268,7 @@ public abstract class AbstractViewportManager {
       int screenXoffset = screenLeft + screenWidth / 2 - dimension / 2;
       int screenYoffset = screenHeight / 2 - dimension / 2;
 
-      painter.glViewport(screenXoffset, screenYoffset, dimension, dimension);
+      glViewport(painter, screenXoffset, screenYoffset, dimension, dimension);
     }
 
     painter.glOrtho(AREA_LEFT, AREA_RIGHT, AREA_DOWN, AREA_TOP, -1, 1);

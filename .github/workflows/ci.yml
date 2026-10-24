@@ -1,13 +1,16 @@
 # Build and test Jzy3d on Linux, macOS (ARM + Intel) and Windows, then deploy
-# SNAPSHOT artifacts to the Jzy3d Maven repository when master is updated.
+# SNAPSHOT artifacts to the Jzy3d Maven repository when master is updated, or when a pull request
+# labeled deploy-snapshot is updated.
 #
 # Inspired by https://github.com/panama-gl/panama-gl/tree/main/.github/workflows
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 
 name: Java CI with Maven
 
+# Branches are built through their pull request, so that each commit is built once
 on:
   push:
+    branches: [master]
   pull_request:
   workflow_dispatch:
     inputs:
@@ -29,10 +32,14 @@ env:
   JAVA_VERSION: '25'
   JAVA_DISTRIBUTION: temurin
 
-  # Build PanamaGL from this branch of panama-gl/panama-gl instead of using the published release,
-  # until a release provides the GL function loader and the Windows WGL fixes (panama-gl/panama-gl#13,
-  # merged in main). Leave empty to use the published release.
-  PANAMAGL_REF: main
+  # maven.jzy3d.org sometimes answers 403 to a burst of downloads : retry instead of failing the build
+  MAVEN_OPTS: -Daether.connector.http.retryHandler.count=5 -Daether.connector.http.retryHandler.serviceUnavailable=403,429,503
+
+  # Integration tests. Some render the same charts with JOGL and PanamaGL. The others compare
+  # charts to baseline images, which are built in ITTEST_BASELINES as no baseline exists for CI
+  # runners : JOGL and EmulGL charts build them, and PanamaGL charts are compared to the JOGL ones.
+  PANAMAGL_IT: ITTest_*
+  ITTEST_BASELINES: target/ittest-baselines/
 
 jobs:
 
@@ -48,33 +55,59 @@ jobs:
       # Don't cancel other jobs if one platform fails
       fail-fast: false
       matrix:
+        # Same platforms as PanamaGL CI
         os:
           - ubuntu-latest    # Linux x86_64
+          - ubuntu-24.04-arm # Linux ARM64
           - macos-latest     # macOS ARM (Apple Silicon)
           - macos-15-intel   # macOS Intel x86_64 (last x86_64 image; GitHub Actions drops x86_64 ~Aug 2027)
           - windows-latest   # Windows x86_64 (Mesa D3D12 OpenGL, see below)
+          - windows-11-arm   # Windows ARM64
+        include:
+          # Temurin provides no JDK 25 for Windows ARM64. JOGL 2.6 (GlueGen), SWT 3.116 and OpenJFX
+          # provide no Windows ARM64 natives : build and test the modules not using them, and skip
+          # integration tests, which compare PanamaGL to JOGL.
+          - os: windows-11-arm
+            distribution: zulu
+            no-jogl: true
+            maven-args: >-
+              -am -pl 'jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-emul-gl-swing,jzy3d-io-xls'
 
     steps:
+      # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
       - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/jzy3d-tester-integration/src/test/resources/*_*/
 
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          distribution: ${{ matrix.distribution || env.JAVA_DISTRIBUTION }}
           cache: maven
 
-      - name: Checkout PanamaGL
-        if: env.PANAMAGL_REF != ''
-        uses: actions/checkout@v5
-        with:
-          repository: panama-gl/panama-gl
-          ref: ${{ env.PANAMAGL_REF }}
-          path: panama-gl
+      # Maven is not installed on every runner image (e.g. Windows ARM64)
+      - name: Install Maven if missing (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if (Get-Command mvn -ErrorAction SilentlyContinue) { exit 0 }
+          $version = "3.9.11"
+          Invoke-WebRequest `
+            -Uri "https://archive.apache.org/dist/maven/maven-3/$version/binaries/apache-maven-$version-bin.zip" `
+            -OutFile maven.zip
+          Expand-Archive -Path maven.zip -DestinationPath C:\maven
+          "C:\maven\apache-maven-$version\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
-      - name: Install PanamaGL
-        if: env.PANAMAGL_REF != ''
-        run: mvn --batch-mode --no-transfer-progress install -DskipTests --file panama-gl/pom.xml
+      # PanamaGL releases may be redeployed with the same version (implementation fixes without API
+      # change), so never trust the copy restored from the Maven cache.
+      - name: Remove PanamaGL from the Maven cache
+        shell: bash
+        run: rm -rf ~/.m2/repository/org/jzy3d/panama-gl*
 
       # -------------------------------------------------------
       # Linux: install Mesa OpenGL (software llvmpipe renderer),
@@ -86,7 +119,7 @@ jobs:
           sudo apt-get update -q
           sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev xvfb
           # Temurin's default java.library.path misses the multiarch folder where PanamaGL finds libGL
-          echo "JAVA_TOOL_OPTIONS=-Djava.library.path=/usr/lib/x86_64-linux-gnu:/usr/lib" >> $GITHUB_ENV
+          echo "JAVA_TOOL_OPTIONS=-Djava.library.path=/usr/lib/$(uname -m)-linux-gnu:/usr/lib" >> $GITHUB_ENV
 
       - name: Configure OpenGL library path (macOS)
         if: runner.os == 'macOS'
@@ -105,14 +138,15 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
+          $arch = if ($env:RUNNER_ARCH -eq 'ARM64') { 'arm64' } else { 'x64' }
           $headers = @{ Authorization = "Bearer $env:GITHUB_TOKEN" }
           $release = Invoke-RestMethod `
             "https://api.github.com/repos/mmozeiko/build-mesa/releases/latest" `
             -Headers $headers
           $asset = $release.assets `
-            | Where-Object { $_.name -like "mesa-d3d12-x64-*.7z" } `
+            | Where-Object { $_.name -like "mesa-d3d12-$arch-*.7z" } `
             | Select-Object -First 1
-          if (-not $asset) { Write-Error "Could not find mesa-d3d12-x64 asset"; exit 1 }
+          if (-not $asset) { Write-Error "Could not find mesa-d3d12-$arch asset"; exit 1 }
           Write-Host "Downloading $($asset.name)"
           Invoke-WebRequest -Uri $asset.browser_download_url -OutFile mesa.7z
           7z x mesa.7z -omesa -y | Out-Null
@@ -134,15 +168,22 @@ jobs:
       # -------------------------------------------------------
       # Windows: freeglut (used by PanamaGL) has no Chocolatey
       # package and transmissionzero.co.uk is not reachable from
-      # GitHub runners, so build it with the preinstalled vcpkg.
+      # GitHub runners, so build it with vcpkg, preinstalled on most Windows runners.
       # -------------------------------------------------------
-      - name: Install freeglut x64 (Windows)
+      - name: Install freeglut (Windows)
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          & "$env:VCPKG_INSTALLATION_ROOT\vcpkg.exe" install freeglut:x64-windows
+          $arch = if ($env:RUNNER_ARCH -eq 'ARM64') { 'arm64' } else { 'x64' }
+          $vcpkg = $env:VCPKG_INSTALLATION_ROOT
+          if (-not $vcpkg -or -not (Test-Path "$vcpkg\vcpkg.exe")) {
+            $vcpkg = "C:\vcpkg"
+            git clone --depth 1 https://github.com/microsoft/vcpkg $vcpkg
+            & "$vcpkg\bootstrap-vcpkg.bat" -disableMetrics
+          }
+          & "$vcpkg\vcpkg.exe" install "freeglut:$arch-windows"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          $dll = Join-Path $env:VCPKG_INSTALLATION_ROOT "installed\x64-windows\bin\freeglut.dll"
+          $dll = Join-Path $vcpkg "installed\$arch-windows\bin\freeglut.dll"
           if (-not (Test-Path $dll)) { Write-Error "freeglut.dll not found at $dll"; exit 1 }
           Copy-Item -Path $dll -Destination "C:\Windows\System32\freeglut.dll"
           Copy-Item -Path $dll -Destination (Join-Path $env:JAVA_HOME "bin")
@@ -160,11 +201,33 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
-            mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml
+            mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ matrix.maven-args }}
 
       - name: Build and test with Maven (macOS, Windows)
         if: runner.os != 'Linux'
-        run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml
+        run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ matrix.maven-args }}
+
+      # -------------------------------------------------------
+      # Integration tests comparing PanamaGL to JOGL renderings
+      # made on the same runner, hence independent of the
+      # baseline images stored in the repository.
+      # -------------------------------------------------------
+      - name: PanamaGL integration tests (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
+            mvn --batch-mode --no-transfer-progress test -pl jzy3d-tester-integration -am \
+              -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
+              -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
+
+      # An unset matrix value equals false in expressions, hence a flag set where JOGL is missing
+      - name: PanamaGL integration tests (macOS, Windows)
+        if: runner.os != 'Linux' && !matrix.no-jogl
+        shell: bash
+        run: |
+          mvn --batch-mode --no-transfer-progress test -pl jzy3d-tester-integration -am \
+            -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
+            -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
 
       # -------------------------------------------------------
       # Print JVM crash details (forked test JVM killed by a native
@@ -190,6 +253,7 @@ jobs:
         run: |
           mkdir -p surefire-reports
           find . -path "*/target/surefire-reports/*" -type f -exec cp {} surefire-reports/ \;
+          find jzy3d-tester-integration/target -name "*.png" -not -path "*/ittest-baselines/*" -exec cp {} surefire-reports/ \; || true
 
       - name: Collect Surefire reports (Windows)
         if: runner.os == 'Windows' && always()
@@ -198,6 +262,9 @@ jobs:
           New-Item -ItemType Directory -Force -Path surefire-reports | Out-Null
           Get-ChildItem -Path . -Recurse -File |
             Where-Object { $_.FullName -like "*\target\surefire-reports\*" } |
+            Copy-Item -Destination surefire-reports
+          Get-ChildItem -Path jzy3d-tester-integration\target -Recurse -Filter *.png -ErrorAction SilentlyContinue |
+            Where-Object { $_.FullName -notlike "*\ittest-baselines\*" } |
             Copy-Item -Destination surefire-reports
 
       - name: Upload Surefire reports
@@ -209,26 +276,90 @@ jobs:
           if-no-files-found: ignore
 
   # ============================================================================================================
+  # Older JDKs supported by Jzy3d. Modules requiring a more recent JDK are excluded by the java11 and java22
+  # profiles of the root pom : SWT and JavaFX need Java 11, PanamaGL needs Java 22.
+  # ============================================================================================================
+
+  build-jdk:
+    name: Build & Test (JDK ${{ matrix.java }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # LTS versions, and 22, the first version providing the stable FFM API required by PanamaGL.
+        # JDK 25 (LTS) is used by the build job above.
+        java: ['8', '11', '17', '21', '22']
+
+    steps:
+      # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
+      - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/jzy3d-tester-integration/src/test/resources/*_*/
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          cache: maven
+
+      - name: Remove PanamaGL from the Maven cache
+        run: rm -rf ~/.m2/repository/org/jzy3d/panama-gl*
+
+      - name: Install OpenGL, GLUT and Xvfb
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y libgl1-mesa-dri libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev xvfb
+          echo "JAVA_TOOL_OPTIONS=-Djava.library.path=/usr/lib/x86_64-linux-gnu:/usr/lib" >> $GITHUB_ENV
+
+      - name: Build and test with Maven
+        run: |
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
+            mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml
+
+      - name: Upload Surefire reports
+        uses: actions/upload-artifact@v5
+        if: always()
+        with:
+          name: surefire-reports-jdk${{ matrix.java }}
+          path: '**/target/surefire-reports/*.xml'
+          if-no-files-found: ignore
+
+  # ============================================================================================================
   # Deploy SNAPSHOT to the Jzy3d Maven FTP repository (see distributionManagement in pom.xml).
   #
-  # Runs after all platforms passed, either on push to master or when manually triggered with
-  # 'deploy' checked. Never runs on pull requests. Release versions are never deployed from CI.
+  # Runs after all platforms passed : on push to master, when manually triggered with 'deploy'
+  # checked, or on pull requests labeled deploy-snapshot. Release versions are never deployed from CI.
   #
-  # Requires the FTP_USERNAME and FTP_PASSWORD secrets, defined at repository level or in the
-  # "jzy3d-ftp-env" environment.
+  # Requires the FTP_URL (e.g. ftp://ftp.example.org), FTP_USERNAME and FTP_PASSWORD secrets of the
+  # "jzy3d-ftp-env" environment, as PanamaGL CI does with its "panama-ftp-env" environment.
   # ============================================================================================================
 
   deploy:
     name: Deploy SNAPSHOT
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build, build-jdk]
+    # Also deploy pull requests labeled deploy-snapshot, for projects built against their branch
     if: >-
       (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
-      (github.event_name == 'workflow_dispatch' && inputs.deploy)
+      (github.event_name == 'workflow_dispatch' && inputs.deploy) ||
+      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-snapshot'))
     environment: jzy3d-ftp-env
 
     steps:
+      # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
       - uses: actions/checkout@v5
+        with:
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/jzy3d-tester-integration/src/test/resources/*_*/
 
       # Writes ~/.m2/settings.xml with credentials for the server id used in distributionManagement
       - name: Set up JDK ${{ env.JAVA_VERSION }}
@@ -251,7 +382,13 @@ jobs:
           fi
 
       - name: Deploy
-        run: mvn --batch-mode --no-transfer-progress deploy -DskipTests
+        run: |
+          if [ -z "$MAVEN_REPO_URL" ] || [ -z "$FTP_USERNAME" ]; then
+            echo "::error::Secrets FTP_URL, FTP_USERNAME and FTP_PASSWORD of the jzy3d-ftp-env environment are required"
+            exit 1
+          fi
+          mvn --batch-mode --no-transfer-progress deploy -DskipTests
         env:
+          MAVEN_REPO_URL: ${{ secrets.FTP_URL }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
