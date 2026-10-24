@@ -55,9 +55,10 @@ public class ITTest {
   /**
    * Maximum ratio of pixels of a PanamaGL chart that may differ from the JOGL baseline, a pixel
    * differing if one of its channel differ by more than
-   * {@link ITTest_PanamaGLParity#PIXEL_TOLERANCE}.
+   * {@link ITTest_PanamaGLParity#PIXEL_TOLERANCE}. Raised from 1% to 2% for the CI renderers,
+   * where text makes 1% to 1.6% of pixels differ (see README).
    */
-  public static final double PANAMAGL_MAX_DIFF_RATIO = 0.01;
+  public static final double PANAMAGL_MAX_DIFF_RATIO = 0.02;
 
   protected String indexFileName = "BASELINE_" + platform.getLabel() + ".md";
 
