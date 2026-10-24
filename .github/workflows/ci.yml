@@ -222,6 +222,18 @@ jobs:
             -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
             -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
 
+      # TEMPORARY : print PanamaGL diff images in the log, to retrieve them without the artifacts
+      - name: Print PanamaGL diff images
+        if: failure() && (matrix.os == 'ubuntu-latest' || matrix.os == 'windows-latest')
+        shell: bash
+        run: |
+          ls -l jzy3d-tests-java9/target/error-* || true
+          for f in jzy3d-tests-java9/target/error-AxisLabelRotateLayout*_DIFF.png jzy3d-tests-java9/target/error-Text_whenDrawableTextRenderer*_DIFF.png; do
+            [ -f "$f" ] || continue
+            echo "IMAGE $(basename "$f")"
+            base64 -w 0 "$f"; echo
+          done
+
       # -------------------------------------------------------
       # Print JVM crash details (forked test JVM killed by a native
       # crash) as artifacts can't always be inspected easily.

@@ -349,17 +349,34 @@ public class ITTest_PanamaGLParity extends ITTest {
     int diff = 0;
     for (int x = 0; x < a.getWidth(); x++) {
       for (int y = 0; y < a.getHeight(); y++) {
-        int pa = a.getRGB(x, y);
-        int pb = b.getRGB(x, y);
-
-        for (int shift = 0; shift <= 16; shift += 8) {
-          if (Math.abs(((pa >> shift) & 0xFF) - ((pb >> shift) & 0xFF)) > PIXEL_TOLERANCE) {
-            diff++;
-            break;
-          }
+        if (differ(a.getRGB(x, y), b.getRGB(x, y))) {
+          diff++;
         }
       }
     }
     return diff / (double) (a.getWidth() * a.getHeight());
+  }
+
+  /** A copy of the expected image with the pixels counted by {@link #diffRatio} drawn in red */
+  protected static BufferedImage diffImage(BufferedImage actual, BufferedImage expected) {
+    BufferedImage diff =
+        new BufferedImage(expected.getWidth(), expected.getHeight(), BufferedImage.TYPE_INT_RGB);
+    for (int x = 0; x < expected.getWidth(); x++) {
+      for (int y = 0; y < expected.getHeight(); y++) {
+        int pe = expected.getRGB(x, y);
+        diff.setRGB(x, y, differ(actual.getRGB(x, y), pe) ? 0xFF0000 : pe);
+      }
+    }
+    return diff;
+  }
+
+  /** True if a channel of the two pixels differs by more than {@link #PIXEL_TOLERANCE} */
+  protected static boolean differ(int pa, int pb) {
+    for (int shift = 0; shift <= 16; shift += 8) {
+      if (Math.abs(((pa >> shift) & 0xFF) - ((pb >> shift) & 0xFF)) > PIXEL_TOLERANCE) {
+        return true;
+      }
+    }
+    return false;
   }
 }
