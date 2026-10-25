@@ -118,7 +118,7 @@ public class SphereVBO extends DrawableVBO {
       painter.color(color);
 
       //painter.glPushMatrix();
-      painter.glTranslatef(position.x, position.y, position.z);// i-5,j-5,k-5);
+      painter.glTranslatef(position);// i-5,j-5,k-5);
 
 
     //gl.glEnable(GLConstants.GL_BLEND);

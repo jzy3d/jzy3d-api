@@ -67,7 +67,7 @@ public class Disk extends Wireframeable implements ISingleColorable {
     }
     if (wireframeDisplayed) {
       painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
-      painter.glColor4f(wireframeColor.r, wireframeColor.g, wireframeColor.b, wireframeColor.a);
+      painter.color(wireframeColor);
       painter.gluDisk(radiusInner, radiusOuter, slices, loops);
     }
   }

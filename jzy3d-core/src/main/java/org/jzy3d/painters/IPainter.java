@@ -173,6 +173,9 @@ public interface IPainter {
    */
   public void vertex(float x, float y, float z, SpaceTransformer transform);
 
+  /** A convenient shortcut to glVertex3f, using a 2D coordinate and a given z value */
+  public void vertex(Coord2d coord, float z);
+
   /** A convenient shortcut to glColor4f */
   public void color(Color color);
 
@@ -278,9 +281,18 @@ public interface IPainter {
 
   public void glScalef(float x, float y, float z);
 
+  /** A convenient shortcut to glScalef */
+  public void glScalef(Coord3d scale);
+
   public void glTranslatef(float x, float y, float z);
 
+  /** A convenient shortcut to glTranslatef */
+  public void glTranslatef(Coord3d translate);
+
   public void glRotatef(float angle, float x, float y, float z);
+
+  /** A convenient shortcut to glRotatef */
+  public void glRotatef(float angle, Coord3d axis);
 
   // GL CONFIG
 
@@ -297,6 +309,9 @@ public interface IPainter {
   public void glEnd();
 
   public void glColor3f(float r, float g, float b);
+
+  /** A convenient shortcut to glColor3f, ignoring the color's alpha channel */
+  public void glColor3f(Color color);
 
   public void glColor4f(float r, float g, float b, float a);
 
@@ -327,6 +342,9 @@ public interface IPainter {
   // GL TEXTURES
 
   public void glTexCoord2f(float s, float t);
+
+  /** A convenient shortcut to glTexCoord2f */
+  public void glTexCoord2f(Coord2d texCoord);
 
   public void glTexEnvf(int target, int pname, float param);
 
@@ -359,6 +377,9 @@ public interface IPainter {
   public void glPixelStore(PixelStore unpackAlignment, int param);
 
   public void glRasterPos3f(float x, float y, float z);
+
+  /** A convenient shortcut to glRasterPos3f */
+  public void glRasterPos3f(Coord3d position);
 
   public void glBitmap(int width, int height, float xorig, float yorig, float xmove, float ymove,
       byte[] bitmap, int bitmap_offset);
