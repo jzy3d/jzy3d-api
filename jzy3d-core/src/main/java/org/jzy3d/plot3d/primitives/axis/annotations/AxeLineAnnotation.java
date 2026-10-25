@@ -11,7 +11,7 @@ public class AxeLineAnnotation {
   public synchronized void drawVerticalLine(IPainter painter, Range yrange, float value) {
     painter.glLineWidth(width);
     painter.glBegin_LineStrip();
-    painter.glColor4f(color.r, color.g, color.b, color.a);
+    painter.color(color);
     painter.glVertex3f(value, yrange.getMin() - yrange.getRange() / 30, 0);
     painter.glVertex3f(value, yrange.getMax() + yrange.getRange() / 30, 0);
     painter.glEnd();
@@ -20,7 +20,7 @@ public class AxeLineAnnotation {
   public synchronized void drawHorizontalLineGL2(IPainter painter, Range xrange, float value) {
     painter.glLineWidth(width);
     painter.glBegin_LineStrip();
-    painter.glColor4f(color.r, color.g, color.b, color.a);
+    painter.color(color);
     painter.glVertex3f(xrange.getMin() - xrange.getRange() / 30, value, 0);
     painter.glVertex3f(xrange.getMax() + xrange.getRange() / 30, value, 0);
     painter.glEnd();

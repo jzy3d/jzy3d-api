@@ -67,7 +67,7 @@ public class AxisBase implements IAxis {
   @Override
   public void draw(IPainter painter) {
     painter.glLoadIdentity();
-    painter.glScalef(scale.x, scale.y, scale.z);
+    painter.glScalef(scale);
     painter.glLineWidth(1);
 
 

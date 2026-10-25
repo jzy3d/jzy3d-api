@@ -56,7 +56,7 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
 
   protected void drawVertexNode(IPainter painter, V v, Coord2d coord, Color color) {
     painter.color(color);
-    painter.glVertex3f(coord.x, coord.y, Z);
+    painter.vertex(coord, Z);
   }
 
   protected void drawVertexLabel(IPainter painter, V v, Coord2d coord, Color color) {
@@ -67,8 +67,8 @@ public class DefaultDrawableGraph2d<V, E> extends AbstractDrawableGraph2d<V, E> 
   protected void drawEdge(IPainter painter, E e, Coord2d c1, Coord2d c2, Color color) {
     painter.glBegin_LineStrip();
     painter.color(color);
-    painter.glVertex3f(c1.x, c1.y, Z);
-    painter.glVertex3f(c2.x, c2.y, Z);
+    painter.vertex(c1, Z);
+    painter.vertex(c2, Z);
     painter.glEnd();
   }
 

@@ -43,7 +43,7 @@ public class TesselatedPolygon extends Composite {
         painter.glBegin_LineStrip();
 
         for (Point p : points) {
-          painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+          painter.vertex(p.xyz);
         }
         painter.glEnd();
 

@@ -67,7 +67,7 @@ public class TextBillboardRenderer extends AbstractTextRenderer implements IText
   }
   
   protected void glRaster(IPainter painter, Coord3d position, Color color) {
-    painter.glColor3f(color.r, color.g, color.b);
+    painter.glColor3f(color);
     painter.raster(position, spaceTransformer);
   }
 

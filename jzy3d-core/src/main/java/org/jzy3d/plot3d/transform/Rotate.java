@@ -36,7 +36,7 @@ public class Rotate implements Transformer {
    */
   @Override
   public void execute(IPainter painter) {
-    painter.glRotatef(angle, rotate.x, rotate.y, rotate.z);
+    painter.glRotatef(angle, rotate);
   }
 
   @Override
