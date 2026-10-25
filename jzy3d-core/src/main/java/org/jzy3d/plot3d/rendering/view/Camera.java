@@ -419,8 +419,8 @@ public class Camera extends AbstractViewportManager {
 
     painter.glPointSize(camWidth);
     painter.glBegin_Point();
-    painter.glColor4f(camColor.r, camColor.g, camColor.b, camColor.a);
-    painter.glVertex3f(eye.x, eye.y, eye.z);
+    painter.color(camColor);
+    painter.vertex(eye);
     painter.glEnd();
 
   }

@@ -71,13 +71,13 @@ public class EnlightablePolygon extends AbstractEnlightable {
       painter.glEnable_PolygonOffsetFill();
       painter.glPolygonOffset(1.0f, 1.0f);
 
-      painter.glColor4f(wireframeColor.r, wireframeColor.g, wireframeColor.b, 1);// wfcolor.a);
+      painter.colorAlphaOverride(wireframeColor, 1);// wfcolor.a);
       painter.glLineWidth(wireframeWidth);
 
       painter.glBegin_Polygon();
       for (Point p : points) {
-        painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
-        painter.glNormal3f(norm.x, norm.y, norm.z);
+        painter.vertex(p.xyz);
+        painter.normal(norm);
       }
       painter.glEnd();
       painter.glDisable_PolygonOffsetFill();

@@ -22,7 +22,7 @@ public class Scale implements Transformer {
 
   @Override
   public void execute(IPainter painter) {
-    painter.glScalef(scale.x, scale.y, scale.z);
+    painter.glScalef(scale);
   }
 
   @Override

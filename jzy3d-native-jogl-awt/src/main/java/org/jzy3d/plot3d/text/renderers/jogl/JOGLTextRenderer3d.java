@@ -111,7 +111,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
     
     renderer.draw3D(text, zero.x, zero.y, zero.z, scaleFactor);
 
-    painter.glTranslatef(position.x, position.y, position.z);
+    painter.glTranslatef(position);
     
     /*if(Halign.LEFT.equals(halign)) {
       Coord2d textSize = layout.getBounds(text, font, renderer.getFontRenderContext());
