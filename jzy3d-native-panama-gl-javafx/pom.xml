@@ -12,7 +12,7 @@
 
 	<properties>
 		<version.java>22</version.java>
-		<version.panamagl>1.4.0</version.panamagl>
+		<version.panamagl>1.4.1</version.panamagl>
 		<openjfx.version>17</openjfx.version>
 	</properties>
 
