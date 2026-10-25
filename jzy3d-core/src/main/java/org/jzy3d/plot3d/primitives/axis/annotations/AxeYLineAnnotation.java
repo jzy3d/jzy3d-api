@@ -21,7 +21,7 @@ public class AxeYLineAnnotation implements AxeAnnotation {
   public synchronized void drawLine(IPainter painter, Range yrange, Range zrange) {
     painter.glLineWidth(width);
     painter.glBegin_LineStrip();
-    painter.glColor4f(color.r, color.g, color.b, color.a);
+    painter.color(color);
     painter.glVertex3f(value, yrange.getMin() - yrange.getRange() / 30, zrange.getMin() - 2);
     painter.glVertex3f(value, yrange.getMax() + yrange.getRange() / 30, zrange.getMin() - 2);
     painter.glEnd();

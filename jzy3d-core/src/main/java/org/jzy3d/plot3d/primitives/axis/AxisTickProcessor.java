@@ -353,7 +353,7 @@ public class AxisTickProcessor {
       Horizontal hAlign, Vertical vAlign, BoundingBox3d ticksTxtBounds, String tickLabel,
       Coord3d tickPosition) {
     painter.glLoadIdentity();
-    painter.glScalef(axis.scale.x, axis.scale.y, axis.scale.z);
+    painter.glScalef(axis.scale);
 
     BoundingBox3d tickBounds = axis.textRenderer.drawText(painter, layout.getFont(), tickLabel,
         tickPosition, hAlign, vAlign, color);
@@ -395,15 +395,15 @@ public class AxisTickProcessor {
   /** Actually draws the line. */
   public void drawTickLine(IPainter painter, Color color, Coord3d pos, Coord3d lab) {
     painter.glLoadIdentity();
-    painter.glScalef(axis.scale.x, axis.scale.y, axis.scale.z);
+    painter.glScalef(axis.scale);
 
     painter.color(color);
     painter.glLineWidth(1);
 
     // Draw the tick line
     painter.glBegin_Line();
-    painter.glVertex3d(pos.x, pos.y, pos.z);
-    painter.glVertex3d(lab.x, lab.y, lab.z);
+    painter.vertex(pos);
+    painter.vertex(lab);
     painter.glEnd();
   }
 

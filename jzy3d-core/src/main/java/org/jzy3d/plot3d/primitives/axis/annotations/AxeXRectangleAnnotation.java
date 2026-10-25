@@ -11,7 +11,7 @@ public class AxeXRectangleAnnotation extends AxeXLineAnnotation implements AxeAn
   public synchronized void drawLine(IPainter painter, Range yrange, Range zrange) {
     // painter.glLineWidth(width);
     painter.glBegin_Polygon();
-    painter.glColor4f(color.r, color.g, color.b, color.a);
+    painter.color(color);
 
     painter.glPolygonMode(polygonMode, PolygonFill.FILL);
     painter.glPolygonMode(polygonMode, PolygonFill.LINE);

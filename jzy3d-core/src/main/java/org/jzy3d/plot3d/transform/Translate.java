@@ -25,7 +25,7 @@ public class Translate implements Transformer {
 
   @Override
   public void execute(IPainter painter) {
-    painter.glTranslatef(shift.x, shift.y, shift.z);
+    painter.glTranslatef(shift);
   }
 
   @Override

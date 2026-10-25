@@ -111,7 +111,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
     
     renderer.draw3D(text, zero.x, zero.y, zero.z, scaleFactor);
 
-    painter.glTranslatef(position.x, position.y, position.z);
+    painter.glTranslatef(position);
     
     /*if(Halign.LEFT.equals(halign)) {
       Coord2d textSize = layout.getBounds(text, font, renderer.getFontRenderContext());
@@ -120,7 +120,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
       Coord3d shift2D = layout.align(textSize.x, textSize.y, halign, valign, new Coord3d());
       Coord3d shift3D = painter.getCamera().screenToModel(painter, shift2D);
       
-      painter.glTranslatef(shift3D.x, shift3D.y, shift3D.y);
+      painter.glTranslatef(shift3D);
     }*/
     
     

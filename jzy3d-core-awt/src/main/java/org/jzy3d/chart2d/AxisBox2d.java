@@ -109,7 +109,7 @@ public class AxisBox2d extends AxisBox {
       else
         painter.glTranslatef(posReal.x, posReal.y / 2, posReal.z);
 
-      painter.glScalef(scale.x, scale.y, scale.z);
+      painter.glScalef(scale);
       painter.glPopMatrix();
     }
   }
