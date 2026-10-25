@@ -57,7 +57,7 @@
 				<jdk>[22,)</jdk>
 			</activation>
 			<properties>
-				<version.panamagl>1.4.0</version.panamagl>
+				<version.panamagl>1.4.1</version.panamagl>
 			</properties>
 			<dependencies>
 				<!-- The PanamaGL wrappers of all OS -->
