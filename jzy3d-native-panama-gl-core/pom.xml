@@ -12,7 +12,7 @@
 
 	<properties>
 		<version.java>22</version.java>
-		<version.panamagl>1.3.2</version.panamagl>
+		<version.panamagl>1.4.0</version.panamagl>
 	</properties>
 
 
@@ -44,6 +44,16 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>jzy3d-tester</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- The PanamaGL wrappers of all OS : an application depends on the ones of its OS,
+		     e.g. panama-gl-wrappers-windows, or on all of them -->
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>panama-gl-wrappers-all</artifactId>
+			<version>${version.panamagl}</version>
+			<type>pom</type>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
