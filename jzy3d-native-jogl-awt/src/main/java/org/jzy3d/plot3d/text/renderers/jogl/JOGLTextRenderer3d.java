@@ -120,7 +120,7 @@ public class JOGLTextRenderer3d extends AbstractTextRenderer implements ITextRen
       Coord3d shift2D = layout.align(textSize.x, textSize.y, halign, valign, new Coord3d());
       Coord3d shift3D = painter.getCamera().screenToModel(painter, shift2D);
       
-      painter.glTranslatef(shift3D.x, shift3D.y, shift3D.y);
+      painter.glTranslatef(shift3D);
     }*/
     
     
