@@ -759,7 +759,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
       painter.glEnableClientState(GLConstants.GL_COLOR_ARRAY);
     } else {
       if(color!=null)
-        painter.glColor4f(color.r, color.g, color.b, color.a);
+        painter.color(color);
     }
 
 
@@ -792,7 +792,7 @@ public class DrawableVBO2 extends Wireframeable implements IGLBindedResource {
 
       Color c = getWireframeColor();
 
-      painter.glColor4f(c.r, c.g, c.b, c.a);
+      painter.color(c);
       painter.glLineWidth(getWireframeWidth());
 
       painter.glPolygonMode(GLConstants.GL_FRONT_AND_BACK, GLConstants.GL_LINE);

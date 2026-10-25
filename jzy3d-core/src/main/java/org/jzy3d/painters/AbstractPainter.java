@@ -186,8 +186,43 @@ public abstract class AbstractPainter implements IPainter {
   }
 
   @Override
+  public void vertex(Coord2d coord, float z) {
+    glVertex3f(coord.x, coord.y, z);
+  }
+
+  @Override
   public void normal(Coord3d norm) {
     glNormal3f(norm.x, norm.y, norm.z);
+  }
+
+  @Override
+  public void glColor3f(Color color) {
+    glColor3f(color.r, color.g, color.b);
+  }
+
+  @Override
+  public void glScalef(Coord3d scale) {
+    glScalef(scale.x, scale.y, scale.z);
+  }
+
+  @Override
+  public void glTranslatef(Coord3d translate) {
+    glTranslatef(translate.x, translate.y, translate.z);
+  }
+
+  @Override
+  public void glRotatef(float angle, Coord3d axis) {
+    glRotatef(angle, axis.x, axis.y, axis.z);
+  }
+
+  @Override
+  public void glRasterPos3f(Coord3d position) {
+    glRasterPos3f(position.x, position.y, position.z);
+  }
+
+  @Override
+  public void glTexCoord2f(Coord2d texCoord) {
+    glTexCoord2f(texCoord.x, texCoord.y);
   }
 
   @Override

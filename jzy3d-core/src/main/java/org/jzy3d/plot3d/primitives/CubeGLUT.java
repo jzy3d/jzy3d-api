@@ -73,17 +73,17 @@ public class CubeGLUT extends Wireframeable implements ISingleColorable {
   }
 
   protected void doDrawCube(IPainter painter) {
-    painter.glTranslatef(position.x, position.y, position.z);
+    painter.glTranslatef(position);
 
     if (faceDisplayed) {
       painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.FILL);
-      painter.glColor4f(color.r, color.g, color.b, color.a);
+      painter.color(color);
       painter.glutSolidCube(radius * 2);
     }
     if (wireframeDisplayed) {
       painter.glPolygonMode(PolygonMode.FRONT_AND_BACK, PolygonFill.LINE);
       painter.glLineWidth(wireframeWidth);
-      painter.glColor4f(wireframeColor.r, wireframeColor.g, wireframeColor.b, wireframeColor.a);
+      painter.color(wireframeColor);
       painter.glutSolidCube(radius * 2);
     }
   }

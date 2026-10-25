@@ -26,7 +26,7 @@ public class TranslucentQuad extends Quad implements ITranslucent {
           painter.colorAlphaFactor(c, alpha);
         } else
           painter.colorAlphaFactor(p.rgb, alpha);
-        painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+        painter.vertex(p.xyz);
       }
       painter.glEnd();
       if (wireframeDisplayed)
@@ -45,7 +45,7 @@ public class TranslucentQuad extends Quad implements ITranslucent {
 
       painter.glBegin_Quad();
       for (Point p : points) {
-        painter.glVertex3f(p.xyz.x, p.xyz.y, p.xyz.z);
+        painter.vertex(p.xyz);
       }
       painter.glEnd();
 

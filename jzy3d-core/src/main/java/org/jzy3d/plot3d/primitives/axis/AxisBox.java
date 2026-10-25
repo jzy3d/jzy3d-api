@@ -154,7 +154,7 @@ public class AxisBox implements IAxis {
    */
   public void doTransform(IPainter painter) {
     painter.glLoadIdentity();
-    painter.glScalef(scale.x, scale.y, scale.z);
+    painter.glScalef(scale);
   }
 
   /*public void cullingDisable(IPainter painter) {
@@ -178,7 +178,7 @@ public class AxisBox implements IAxis {
       Color quadcolor = layout.getQuadColor();
       painter.glPolygonMode(PolygonMode.BACK, PolygonFill.FILL);
 
-      painter.glColor4f(quadcolor.r, quadcolor.g, quadcolor.b, quadcolor.a);
+      painter.color(quadcolor);
       painter.glLineWidth(1.0f);
       painter.glEnable_PolygonOffsetFill();
       painter.glPolygonOffset(1.0f, 1.0f); // handle stippling
