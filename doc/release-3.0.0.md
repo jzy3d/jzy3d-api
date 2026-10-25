@@ -17,7 +17,13 @@ affected.
 | PanamaGL (core, Swing, SWT, JavaFX, depth peeling) | 22 |
 
 The build selects modules according to the JDK running Maven : SWT and JavaFX modules are built on JDK 11+,
-PanamaGL modules on JDK 22+. PanamaGL modules depend on `org.jzy3d:panama-gl-*` 1.3.2.
+PanamaGL modules on JDK 22+. PanamaGL modules depend on `org.jzy3d:panama-gl-*` 1.4.0.
+
+Since PanamaGL 1.4.0, the PanamaGL modules of Jzy3D do not bring the native wrappers of all OS anymore :
+an application adds the wrappers of the OS it runs on (e.g. `org.jzy3d:panama-gl-wrappers-windows`), or
+`org.jzy3d:panama-gl-wrappers-all` (`<type>pom</type>`) for all OS. A Windows application then ships 6.8 MB
+of bindings instead of 40 MB. Without the wrapper of the OS, `PanamaGLFactory.select()` fails with a
+message naming the missing dependency.
 
 ## Modules and dependencies
 

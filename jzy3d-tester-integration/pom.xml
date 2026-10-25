@@ -56,7 +56,17 @@
 			<activation>
 				<jdk>[22,)</jdk>
 			</activation>
+			<properties>
+				<version.panamagl>1.4.0</version.panamagl>
+			</properties>
 			<dependencies>
+				<!-- The PanamaGL wrappers of all OS -->
+				<dependency>
+					<groupId>org.jzy3d</groupId>
+					<artifactId>panama-gl-wrappers-all</artifactId>
+					<version>${version.panamagl}</version>
+					<type>pom</type>
+				</dependency>
 				<dependency>
 					<groupId>${project.groupId}</groupId>
 					<artifactId>jzy3d-native-panama-gl-swing</artifactId>
