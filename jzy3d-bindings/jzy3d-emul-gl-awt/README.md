@@ -56,7 +56,7 @@ The below map describes how EmulGL canvas replies to all events.
 
 ## EmulGL EmulGLViewAndColorbarsLayout (containing images)
 
-<img src="../jzy3d-core-awt/src/main/java/org/jzy3d/plot3d/rendering/legends/colorbars/doc-files/colorbar-object-model.png"/>
+<img src="../../jzy3d-core/jzy3d-core-awt/src/main/java/org/jzy3d/plot3d/rendering/legends/colorbars/doc-files/colorbar-object-model.png"/>
 
 # High pixel density screens (HiDPI, Retina)
 

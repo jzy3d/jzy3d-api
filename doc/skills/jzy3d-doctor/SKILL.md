@@ -128,7 +128,7 @@ Gather every source covering the versions **after** the one in use, up to the ta
    gh pr list -R jzy3d/jzy3d-api --state merged --search "merged:>2022-05-24" --limit 200
    gh issue list -R jzy3d/jzy3d-api --state closed --search "closed:>2022-05-24" --limit 200
    ```
-5. **Module READMEs** of the target version, for features documented only there (e.g. `jzy3d-bindings/jzy3d-emul-gl-awt/README.md` for EmulGL, `jzy3d-core/doc/depthpeeling.md`, the root `README.md` sections on PanamaGL and on testing).
+5. **Module READMEs** of the target version, for features documented only there (e.g. `jzy3d-bindings/jzy3d-emul-gl-awt/README.md` for EmulGL, `jzy3d-core/jzy3d-core/doc/depthpeeling.md`, the root `README.md` sections on PanamaGL and on testing).
 6. **Tutorials** : `jzy3d-tutorials` of the target version shows the recommended way to build each chart, compare with what the project does.
 
 Only list features the project can use : check its toolkit (AWT, Swing, SWT, JavaFX, NEWT, offscreen) and backend (JOGL, EmulGL, PanamaGL) in its code before recommending a feature.
@@ -176,7 +176,7 @@ Module layout of `jzy3d-api` since 3.0.0 :
 
 | Folder | Content |
 |---|---|
-| `jzy3d-core`, `jzy3d-core-awt`, `jzy3d-core-swing`, `jzy3d-core-swt`, `jzy3d-core-javafx` | API independent of the rendering backend, per windowing toolkit |
+| `jzy3d-core/` : `jzy3d-core`, `jzy3d-core-awt`, `jzy3d-core-swing`, `jzy3d-core-swt`, `jzy3d-core-javafx` | API independent of the rendering backend, per windowing toolkit |
 | `jzy3d-bindings/` | Rendering backends : `jzy3d-native-jogl-*`, `jzy3d-native-panama-gl-*`, `jzy3d-emul-gl-*`, `jzy3d-jGL` |
 | `jzy3d-tests/` | `jzy3d-tester`, `jzy3d-tester-native`, `jzy3d-tester-integration` |
 | `jzy3d-tools/` | Third party libraries maintained by Jzy3d and their integration : `jzy3d-tools-jdt`, `jzy3d-tools-jply`, `jzy3d-tools-libsvm`, `jzy3d-tools-svm-mapper` |

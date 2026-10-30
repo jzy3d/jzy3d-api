@@ -31,7 +31,8 @@ message naming the missing dependency.
 * Module `jzy3d-depthpeeling` is removed : its algorithms and shaders moved to `jzy3d-core` and its JOGL
   renderer and factories to `jzy3d-native-jogl-awt`. Replace a dependency to `jzy3d-depthpeeling` by a
   dependency to `jzy3d-native-jogl-awt`.
-* Modules are grouped in folders : `jzy3d-bindings` (EmulGL, jGL, JOGL,
+* Modules are grouped in folders : `jzy3d-core` (`jzy3d-core` and the toolkit modules `jzy3d-core-awt`, `-swing`,
+  `-swt`, `-javafx`), `jzy3d-bindings` (EmulGL, jGL, JOGL,
   PanamaGL), `jzy3d-tests` (`jzy3d-tester`, `jzy3d-tester-native`, `jzy3d-tester-integration`) and
   `jzy3d-tools` (third party libraries maintained by jzy3d and their jzy3d integration : `jzy3d-tools-jdt`, `jzy3d-tools-jply`, `jzy3d-tools-libsvm`, `jzy3d-tools-svm-mapper`).
 * Modules `jzy3d-jdt-core` and `jzy3d-svm-mapper` are renamed `jzy3d-tools-jdt` and `jzy3d-tools-svm-mapper`.
