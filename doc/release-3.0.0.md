@@ -28,6 +28,19 @@ message naming the missing dependency.
 ## Modules and dependencies
 
 * The integration tests module `jzy3d-tests-java9` is renamed `jzy3d-tester-integration`.
+* Module `jzy3d-depthpeeling` is removed : its algorithms and shaders moved to `jzy3d-core` and its JOGL
+  renderer and factories to `jzy3d-native-jogl-awt`. Replace a dependency to `jzy3d-depthpeeling` by a
+  dependency to `jzy3d-native-jogl-awt`.
+* Modules are grouped in folders : `jzy3d-bindings` (EmulGL, jGL, JOGL,
+  PanamaGL), `jzy3d-tests` (`jzy3d-tester`, `jzy3d-tester-native`, `jzy3d-tester-integration`) and
+  `jzy3d-tools` (third party libraries maintained by jzy3d and their jzy3d integration : `jzy3d-tools-jdt`, `jzy3d-tools-jply`, `jzy3d-tools-libsvm`, `jzy3d-tools-svm-mapper`).
+* Modules `jzy3d-jdt-core` and `jzy3d-svm-mapper` are renamed `jzy3d-tools-jdt` and `jzy3d-tools-svm-mapper`.
+* `org.smurn:jply` 0.2.1, which was only available on the jzy3d Maven repository, is replaced by module
+  `jzy3d-tools-jply` holding its source code (package `org.smurn.jply` is unchanged).
+* Module `jzy3d-io-reports` is removed : its demos moved to the tests of `jzy3d-io-xls`.
+* `jzy3d-io-xls` : package `org.jzy3d.io.psy4j` is removed, the module only depends on `jzy3d-core`, `poi` and
+  `poi-ooxml` (it does not bring guava, poi-scratchpad, poi-excelant, commons-csv, commons-cli, joda-time and
+  commons-logging anymore) and `jzy3d-everything` does not include it anymore.
 * `logback-classic` 1.3.16 (was 1.2.13, which did not bind slf4j 2 and had vulnerabilities in logback-core).
 * `org.eclipse.jface` 3.29.0 (was 3.12.1, whose dependency ranges resolved to Eclipse bundles requiring
   Java 17+).
@@ -43,6 +56,8 @@ on the modules they moved to.
 | `jzy3d-native-jogl-awt` | `jzy3d-core-awt` | 2D charts (`Chart2d`, `View2d`, `AxisBox2d`, `SerieManager`), contours (`org.jzy3d.contour.*`, `ContourAxisBox`, `ContourLevel`, `ContourLevels`, `ContourMesh`...), `AWTMousePickingController`, `AWTNativeSymbolHandler`, `AWTNativeDrawableImage`, `DrawableTextTexture`, `TextImageRenderer`, `DrawableTextCell`, `TextCellRenderer` |
 | `jzy3d-native-jogl-awt` | `jzy3d-core` | `BufferedImageTexture` |
 | `jzy3d-native-jogl-javafx` | `jzy3d-core-javafx` | `JavaFXMousePickingController` |
+| `jzy3d-depthpeeling` | `jzy3d-core` | Depth peeling algorithms (`org.jzy3d.plot3d.rendering.ddp.algorithms.*`) and their shaders |
+| `jzy3d-depthpeeling` | `jzy3d-native-jogl-awt` | `DepthPeelingChartFactory`, `DepthPeelingPainterFactory`, `DepthPeelingRenderer3d` |
 
 ## Methods taking `IPainter` instead of JOGL `GL` or `GL2`
 
@@ -98,8 +113,9 @@ Subclasses of depth peeling algorithms must now implement the abstract `buildSha
 - PanamaGL : `PanamaGLOffscreenCanvas`, `PanamaGLChart2dFactory`, `PanamaGLContourChartFactory`,
   `PanamaGLU` (GLU functions in Java), `PanamaGLDebug` (OpenGL error checking and tracing, as JOGL `DebugGL`,
   enabled with the painter factory `setDebugGL` and `setTraceGL`).
-- New module `jzy3d-depthpeeling-panamagl` : `PanamaGLDepthPeeling.enable(factory, method)` renders charts
-  of any PanamaGL chart factory with depth peeling.
+- Depth peeling with PanamaGL : `PanamaGLDepthPeeling.enable(factory, method)` (in `jzy3d-native-panama-gl-core`)
+  renders charts of any PanamaGL chart factory with depth peeling, `PanamaGLDepthPeelingChartFactory` (in
+  `jzy3d-native-panama-gl-swing`) does it for Swing.
 - Mouse picking with SWT (`SWTMousePickingController`) and screenshots with JavaFX
   (`JavaFXScreenshotKeyController`).
 - `jzy3d-tester` : `PainterGPUConformance` checks that an `IPainter` implements the GPU methods as expected.

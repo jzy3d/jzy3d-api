@@ -1,0 +1,20 @@
+# Changes a project must make when upgrading Jzy3d, applied by scripts/jzy3d-upgrade.py.
+# Columns, separated by tabs :
+#   kind     artifact : a Maven dependency groupId:artifactId is renamed, replaced, or removed (target -)
+#            class    : a fully qualified class name changed, replaced in Java sources
+#            require  : a pom declaring a dependency matching "from" (a glob) must also declare one matching
+#                       "to", reported but not applied since the project must choose it
+#   from     old groupId:artifactId, or old class name
+#   to       new groupId:artifactId, or new class name, or - to remove the dependency
+#   since    first Jzy3d version requiring the change
+#   note     why, shown in the report
+# When the target artifact is already declared in the same pom, the old dependency is removed.
+artifact	org.jzy3d:jzy3d-depthpeeling	org.jzy3d:jzy3d-native-jogl-awt	3.0.0	Depth peeling algorithms are in jzy3d-core, the JOGL renderer and factories in jzy3d-native-jogl-awt
+artifact	org.jzy3d:jzy3d-depthpeeling-panamagl	org.jzy3d:jzy3d-native-panama-gl-swing	3.0.0	PanamaGL depth peeling is in jzy3d-native-panama-gl-core and jzy3d-native-panama-gl-swing
+artifact	org.jzy3d:jzy3d-tests-java9	org.jzy3d:jzy3d-everything	3.0.0	Renamed jzy3d-tester-integration, which only holds tests : depend on the modules it brought, bundled by jzy3d-everything
+artifact	org.jzy3d:jzy3d-jdt-core	org.jzy3d:jzy3d-tools-jdt	3.0.0	Renamed
+artifact	org.jzy3d:jzy3d-svm-mapper	org.jzy3d:jzy3d-tools-svm-mapper	3.0.0	Renamed
+artifact	org.smurn:jply	org.jzy3d:jzy3d-tools-jply	3.0.0	jPLY 0.2.1 was only on the Jzy3d Maven repository, its source code is now a Jzy3d module
+artifact	org.jzy3d:jzy3d-io-reports	-	3.0.0	Removed, it only held demos (now in the tests of jzy3d-io-xls)
+class	org.jzy3d.bridge.swing.FrameSwing	org.jzy3d.chart.factories.FrameSwing	3.0.0	Moved to jzy3d-core-swing
+require	org.jzy3d:jzy3d-native-panama-gl-*	org.jzy3d:panama-gl-wrappers-*	3.0.0	Since PanamaGL 1.4.0, add the wrappers of the OS the application runs on (org.jzy3d:panama-gl-wrappers-windows, -macos, -linux), or org.jzy3d:panama-gl-wrappers-all with <type>pom</type>

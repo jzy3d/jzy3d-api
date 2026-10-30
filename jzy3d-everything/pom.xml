@@ -58,14 +58,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Reporting -->
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-io-xls</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
 	</dependencies>
 	<!-- <build>
 	  <plugins>
