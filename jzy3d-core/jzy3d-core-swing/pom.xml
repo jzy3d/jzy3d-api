@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-core-swing</artifactId>
-	<name>Jzy3d Core Swing</name>
+	<name>Jzy3d Core - Swing</name>
 
 	<dependencies>
 

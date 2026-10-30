@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tools-jdt</artifactId>
-	<name>JDT core (fork of https://github.com/yonatang/JDT)</name>
+	<name>Jzy3d Tools - JDT core (fork)</name>
 	<description>Java Delaunay Triangulation Core Library</description>
 
 	<dependencies>

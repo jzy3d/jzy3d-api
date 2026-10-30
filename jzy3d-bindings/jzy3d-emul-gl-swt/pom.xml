@@ -7,7 +7,7 @@
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	<artifactId>jzy3d-emul-gl-swt</artifactId>
-	<name>Jzy3d EmulGL Implementation with jGL for SWT</name>
+	<name>Jzy3d EmulGL - SWT</name>
 	<properties>
 		<swt-version>3.116.100</swt-version>
 	</properties>

@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tutorials-jogl-javafx-jdk8</artifactId>
-	<name>Jzy3d Tutorials - JOGL / JavaFX for JDK8</name>
+	<name>Jzy3d Tutorials - JOGL / FX JDK8</name>
 
 	<dependencies>
 

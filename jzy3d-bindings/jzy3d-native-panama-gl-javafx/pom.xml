@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-native-panama-gl-javafx</artifactId>
-	<name>Jzy3d Native Implementation with PanamaGL for JavaFX</name>
+	<name>Jzy3d PanamaGL - JavaFX</name>
 
 	<properties>
 		<version.java>22</version.java>

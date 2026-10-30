@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tester-integration</artifactId>
-	<name>Jzy3d Integration Tests</name>
+	<name>Jzy3d Tests - Integration</name>
 
 	<properties>
 		<version.java>9</version.java>
@@ -40,7 +40,7 @@
 		<!-- Benchmarks reported in XLS files -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-io-xls</artifactId>
+			<artifactId>jzy3d-tools-xls</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
