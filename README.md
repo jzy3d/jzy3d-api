@@ -236,6 +236,15 @@ for how charts are compared to baselines, how PanamaGL is compared to JOGL, and 
 mvn clean install -Pintegration-tests
 ```
 
+#### Measure the coverage of unit tests
+
+This runs unit tests with the JaCoCo agent, then merges the coverage of all modules (a class is covered by the tests of any module) and prints it by zone (core, bindings, tools, tests, tutorials) and by module. The merged report is in `target/coverage/html`, the report of each module in its `target/site/jacoco`. See [doc/coverage.md](doc/coverage.md) for the current coverage by zone.
+
+```
+mvn clean install -Pcoverage
+python3 .github/scripts/coverage-by-zone.py
+```
+
 #### Skip automated tests
 
 This will skip all tests (unit and integration)

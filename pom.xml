@@ -115,6 +115,8 @@
 		<version.java>8</version.java>
 		<!-- JVM options of tests that only exist since Java 9, set by the java9 profile -->
 		<surefire.add-exports></surefire.add-exports>
+		<!-- JVM options of tests set by other plugins, such as the JaCoCo agent of the coverage profile -->
+		<argLine></argLine>
 		<version.swt>3.116.100</version.swt>
 	</properties>
 
@@ -372,7 +374,7 @@
 
 						<!-- Necessary on Windows to avoid an exception if a test opens a chart
 							https://github.com/jzy3d/jogl/issues/4 (Java 9+ options, see the java9 profile) -->
-						<argLine>${surefire.add-exports}</argLine>
+						<argLine>@{argLine} ${surefire.add-exports}</argLine>
 
 					</configuration>
 				</plugin>
@@ -539,25 +541,38 @@
 		</extensions>
 	</build>
 
-	<reporting>
-		<plugins>
-			<!-- Get coverage with mvn cobertura:cobertura -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<outputDirectory>./target/tmpCobertura</outputDirectory>
-					<formats>
-						<format>html</format>
-					</formats>
-					<aggregate>true</aggregate>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 
 	<profiles>
+
+		<!-- Unit tests coverage : mvn clean install -Pcoverage, then .github/scripts/coverage-by-zone.py.
+		Each module gets its report in target/site/jacoco, the script merges them across modules -->
+		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.14</version>
+						<executions>
+							<execution>
+								<id>prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 
 		<!-- Modules that require Java 11 : SWT 3.116 and OpenJFX 17 are built for Java 11 -->
 		<profile>
