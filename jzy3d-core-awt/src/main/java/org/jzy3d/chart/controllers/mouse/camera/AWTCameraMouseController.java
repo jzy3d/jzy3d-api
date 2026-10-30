@@ -125,7 +125,7 @@ public class AWTCameraMouseController extends AbstractCameraController
    * 
    * Mainly useful for EmulGL to deal with liveness effect.
    * 
-   * @see https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-emul-gl-awt#integrating-in-awt
+   * @see https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-bindings/jzy3d-emul-gl-awt#integrating-in-awt
    */
   public RateLimiter getRateLimiter() {
     return rateLimiter;
@@ -136,7 +136,7 @@ public class AWTCameraMouseController extends AbstractCameraController
    * 
    * Mainly useful for EmulGL to deal with liveness effect.
    * 
-   * @see https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-emul-gl-awt#integrating-in-awt
+   * @see https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-bindings/jzy3d-emul-gl-awt#integrating-in-awt
    */
   public void setRateLimiter(RateLimiter rateLimiter) {
     this.rateLimiter = rateLimiter;

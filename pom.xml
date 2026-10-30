@@ -51,30 +51,27 @@
 		<module>jzy3d-core-swing</module>
 
 		<!-- jGL rendering backend (emulated OpenGL) -->
-		<module>jzy3d-jGL</module>
-		<module>jzy3d-emul-gl-awt</module>
+		<module>jzy3d-bindings/jzy3d-jGL</module>
+		<module>jzy3d-bindings/jzy3d-emul-gl-awt</module>
 
 		<!-- JOGL rendering backend (native for Java 8+) -->
-		<module>jzy3d-native-jogl-core</module>
-		<module>jzy3d-native-jogl-awt</module>
-		<module>jzy3d-native-jogl-swing</module>
-		<module>jzy3d-native-jogl-newt</module>
+		<module>jzy3d-bindings/jzy3d-native-jogl-core</module>
+		<module>jzy3d-bindings/jzy3d-native-jogl-awt</module>
+		<module>jzy3d-bindings/jzy3d-native-jogl-swing</module>
+		<module>jzy3d-bindings/jzy3d-native-jogl-newt</module>
 
 		<!-- Test tools -->
-		<module>jzy3d-tester</module>
-		<module>jzy3d-tester-native</module>
+		<module>jzy3d-tests/jzy3d-tester</module>
+		<module>jzy3d-tests/jzy3d-tester-native</module>
 
 		<!-- Maths -->
-		<module>jzy3d-jdt-core</module>
-		<module>jzy3d-svm-mapper</module>
-		<module>jzy3d-tools-libsvm</module>
-
-		<!-- Rendering -->
-		<module>jzy3d-depthpeeling</module>
+		<module>jzy3d-tools/jzy3d-tools-jdt</module>
+		<module>jzy3d-tools/jzy3d-tools-jply</module>
+		<module>jzy3d-tools/jzy3d-tools-svm-mapper</module>
+		<module>jzy3d-tools/jzy3d-tools-libsvm</module>
 
 		<!-- Report -->
 		<module>jzy3d-io-xls</module>
-		<module>jzy3d-io-reports</module>
 
 		<!-- Bundle -->
 		<module>jzy3d-everything</module>
@@ -149,11 +146,6 @@
 				<version>2.1</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.commons</groupId>
-				<artifactId>commons-csv</artifactId>
-				<version>1.14.1</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -167,11 +159,6 @@
 				<version>3.20.0</version>
 			</dependency>
 
-			<dependency>
-				<groupId>commons-cli</groupId>
-				<artifactId>commons-cli</artifactId>
-				<version>1.11.0</version>
-			</dependency>
 
 			<dependency>
 				<groupId>commons-io</groupId>
@@ -191,11 +178,6 @@
 				<version>5.5.1</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-excelant</artifactId>
-				<version>5.5.1</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.apache.poi</groupId>
@@ -203,11 +185,6 @@
 				<version>5.5.1</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.poi</groupId>
-				<artifactId>poi-scratchpad</artifactId>
-				<version>5.5.1</version>
-			</dependency>
 
 			<dependency>
 				<groupId>org.eclipse.platform</groupId>
@@ -270,22 +247,11 @@
 			</dependency>
 
 			<dependency>
-				<groupId>org.smurn</groupId>
-				<artifactId>jply</artifactId>
-				<version>0.2.1</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.tallison</groupId>
 				<artifactId>jmatio</artifactId>
 				<version>1.5</version>
 			</dependency>
 
-			<dependency>
-				<groupId>joda-time</groupId>
-				<artifactId>joda-time</artifactId>
-				<version>2.10</version>
-			</dependency>
 
 			<dependency>
 				<!-- Some modules use junit not only in their test classes but also in
@@ -602,10 +568,10 @@
 			<modules>
 				<module>jzy3d-core-swt</module>
 				<module>jzy3d-core-javafx</module>
-				<module>jzy3d-emul-gl-swt</module>
-				<module>jzy3d-native-jogl-swt</module>
-				<module>jzy3d-native-jogl-javafx</module>
-				<module>jzy3d-tester-integration</module>
+				<module>jzy3d-bindings/jzy3d-emul-gl-swt</module>
+				<module>jzy3d-bindings/jzy3d-native-jogl-swt</module>
+				<module>jzy3d-bindings/jzy3d-native-jogl-javafx</module>
+				<module>jzy3d-tests/jzy3d-tester-integration</module>
 			</modules>
 		</profile>
 
@@ -616,11 +582,10 @@
 				<jdk>[22,)</jdk>
 			</activation>
 			<modules>
-				<module>jzy3d-native-panama-gl-core</module>
-				<module>jzy3d-native-panama-gl-swing</module>
-				<module>jzy3d-native-panama-gl-javafx</module>
-				<module>jzy3d-native-panama-gl-swt</module>
-				<module>jzy3d-depthpeeling-panamagl</module>
+				<module>jzy3d-bindings/jzy3d-native-panama-gl-core</module>
+				<module>jzy3d-bindings/jzy3d-native-panama-gl-swing</module>
+				<module>jzy3d-bindings/jzy3d-native-panama-gl-javafx</module>
+				<module>jzy3d-bindings/jzy3d-native-panama-gl-swt</module>
 			</modules>
 		</profile>
 
