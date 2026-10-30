@@ -85,7 +85,7 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<trimStackTrace>false</trimStackTrace>
-							<argLine>-XstartOnFirstThread --enable-native-access=ALL-UNNAMED</argLine>
+							<argLine>@{argLine} -XstartOnFirstThread --enable-native-access=ALL-UNNAMED</argLine>
 						</configuration>
 					</plugin>
 				</plugins>
