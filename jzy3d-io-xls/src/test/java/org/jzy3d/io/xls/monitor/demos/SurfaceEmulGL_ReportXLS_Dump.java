@@ -12,7 +12,6 @@ import org.jzy3d.chart.controllers.mouse.camera.AWTCameraMouseController;
 import org.jzy3d.chart.controllers.thread.camera.CameraThreadController;
 import org.jzy3d.chart.factories.ChartFactory;
 import org.jzy3d.chart.factories.EmulGLChartFactory;
-import org.jzy3d.chart.factories.NewtChartFactory;
 import org.jzy3d.colors.Color;
 import org.jzy3d.colors.ColorMapper;
 import org.jzy3d.colors.colormaps.ColorMapRainbow;
@@ -84,7 +83,7 @@ public class SurfaceEmulGL_ReportXLS_Dump {
 
     // --------------------------------
     
-    ChartFactory monitoringFactory = new NewtChartFactory();
+    ChartFactory monitoringFactory = new EmulGLChartFactory();
 
     //Quality q = Quality.Advanced; 
     Chart monitoringChart = monitoringFactory.newChart(q);
