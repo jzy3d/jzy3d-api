@@ -1,0 +1,77 @@
+<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/POM/4.0.0">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.jzy3d</groupId>
+		<artifactId>jzy3d-all</artifactId>
+		<version>3.0.0-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>jzy3d-native-panama-gl-core</artifactId>
+	<name>Jzy3d Native Implementation with PanamaGL</name>
+
+	<properties>
+		<version.java>22</version.java>
+		<version.panamagl>1.4.1</version.panamagl>
+	</properties>
+
+
+	<dependencies>
+		<!-- PUBLIC CORE JZY3D MODULES -->
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>jzy3d-core-awt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>panama-gl-api</artifactId>
+			<version>${version.panamagl}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>panama-gl-ui-awt</artifactId>
+			<version>${version.panamagl}</version>
+		</dependency>
+		<!-- painter conformance checks -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-tester</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- The PanamaGL wrappers of all OS : an application depends on the ones of its OS,
+		     e.g. panama-gl-wrappers-windows, or on all of them -->
+		<dependency>
+			<groupId>org.jzy3d</groupId>
+			<artifactId>panama-gl-wrappers-all</artifactId>
+			<version>${version.panamagl}</version>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+
+			<!-- COMPILER AND JAVA VERSION CONFIGURATION -->
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${version.java}</source>
+					<target>${version.java}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

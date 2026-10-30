@@ -10,8 +10,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.poi.common.usermodel.HyperlinkType;
 import org.apache.poi.hssf.usermodel.HSSFAnchor;
 import org.apache.poi.hssf.usermodel.HSSFPalette;
@@ -39,6 +37,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFDrawing;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A utility wrapper around Apache POI Excel spreadsheet builder.
@@ -51,7 +51,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  * @see https://svn.apache.org/repos/asf/poi/trunk/poi-examples/src/main/java/org/apache/poi/examples/xssf/usermodel/
  */
 public class ExcelBuilder implements IExcelBuilder {
-  static Log log = LogFactory.getLog(ExcelBuilder.class);
+  static Logger log = LoggerFactory.getLogger(ExcelBuilder.class);
 
   /**
    * The max number of columns supported by an excel sheet (256="IV" column header)

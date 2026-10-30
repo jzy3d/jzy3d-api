@@ -1,0 +1,22 @@
+ply
+format ascii 1.0
+comment made by Greg Turk
+comment this file is a cube
+element vertex 8
+property float x
+property float y
+property float z
+element face 1
+property list uchar int vertex_index
+property float some_field
+end_header
+0 0 0
+0 0 1
+0 1 1
+0 1 0
+1 0 0
+1 0 1
+1 1 1
+1 1 0
+4 0 1 2 3 12.5
+

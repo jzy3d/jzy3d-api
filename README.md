@@ -85,7 +85,7 @@ chart.open();
 * Requires Java 22+ and modules `jzy3d-native-panama-gl-swing`, `jzy3d-native-panama-gl-javafx` or `jzy3d-native-panama-gl-swt`.
 * Offscreen charts : `f.getPainterFactory().setOffscreen(800, 600)` then `chart.screenshot()`.
 * GPU based drawables (`DrawableVBO2`, `ScatterVBO`, `SphereVBO`, shader mesh and waterfall, `Texture3D`, `NativeDrawableImage`, `TexturedCube`, ...) live in `jzy3d-core` and render with both JOGL and PanamaGL. They only rely on the GPU methods of `IPainter` and on `GLConstants`.
-* Depth peeling : `new PanamaGLDepthPeelingChartFactory(new PanamaGLDepthPeelingPainterFactory(PeelingMethod.DUAL_PEELING_MODE))` from module `jzy3d-depthpeeling-panamagl`.
+* Depth peeling : `new PanamaGLDepthPeelingChartFactory(new PanamaGLDepthPeelingPainterFactory(PeelingMethod.DUAL_PEELING_MODE))` from module `jzy3d-native-panama-gl-swing`, or `PanamaGLDepthPeeling.enable(factory, method)` for any PanamaGL chart factory.
 * Debug : `setDebugGL(true)` on the painter factory throws an exception on the first OpenGL error, `setTraceGL(true)` prints each OpenGL call.
 
 Integration tests of `jzy3d-tester-integration` render the same charts with JOGL and PanamaGL and compare images (`ITTest_PanamaGLParity`, `ITTest_GPUDrawables`, `ITTest_DepthPeeling`). They run with PanamaGL when building with Java 22+ (profile `panamagl`).
@@ -190,6 +190,7 @@ Jzy3d depends on the following libraries that are available on [Jzy3d Maven repo
 
 The tutorial provides the code [samples you need to add the library to a Maven project](https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-tutorials#adding-dependencies).
 
+
 ### Download sources & javadocs in IDE
 
 If you did not built the framework yourself and depend on Jzy3D Maven Repository, then you may wish to see sources and javadoc in your IDE. Simply call :
@@ -225,7 +226,7 @@ Integration tests compare charts to baseline images pixel wise. They are importa
 * Different OS have different font rasterization (despite using the JVM font raterizer to minimize OS impact), hence text labels do not match despite having only a few pixel difference.
 * A non HiDPI chart screenshot will not have the same size than the baseline that was generated on a Retina display (x2 pixel ratio). Integration tests that may be impacted by HiDPI are gathered in `jzy3d-tester-integration` since at lest Java 9 JREs are required to detect HiDPI for EmulGL charts.
 
-This will run all test named `**/ITTest*.java` and unit tests. See [jzy3d-tester-integration](jzy3d-tester-integration/README.md)
+This will run all test named `**/ITTest*.java` and unit tests. See [jzy3d-tester-integration](jzy3d-tests/jzy3d-tester-integration/README.md)
 for how charts are compared to baselines, how PanamaGL is compared to JOGL, and how integration tests run on CI.
 
 ```
@@ -241,7 +242,7 @@ mvn clean install -DskipTests
 
 #### Manual tests
 
-Some [test require a manual verification](jzy3d-tester-integration/src/test/java/org/jzy3d/tests/manual).
+Some [test require a manual verification](jzy3d-tests/jzy3d-tester-integration/src/test/java/org/jzy3d/tests/manual).
 
 ### Deploy
 
