@@ -1,7 +1,7 @@
 # Repository size : plan to make clones lighter
 
 A clone of `jzy3d-api` downloads about 450 MB, and checks out 350 MB of files. Almost all of it is made of
-the baseline images of the integration tests (`jzy3d-tester-integration/src/test/resources/<platform>/`).
+the baseline images of the integration tests (`jzy3d-tests/jzy3d-tester-integration/src/test/resources/<platform>/`).
 
 ## Measures (October 2026)
 
@@ -39,7 +39,7 @@ Simulated rewrites of the history (`git filter-repo` on a copy, then `git gc --a
 ```
 git clone --filter=blob:none --no-checkout https://github.com/jzy3d/jzy3d-api.git
 cd jzy3d-api
-git sparse-checkout set --no-cone '/*' '!/jzy3d-tester-integration/src/test/resources/*_*/'
+git sparse-checkout set --no-cone '/*' '!/jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/'
 git checkout master
 ```
 
@@ -63,8 +63,8 @@ Baselines change with each OS, GPU and driver, and are useless to most contribut
 
 | Option | Pros | Cons |
 |---|---|---|
-| **Separate repository** `jzy3d/jzy3d-tester-baselines`, as a git submodule in `jzy3d-tester-integration/src/test/resources/baselines` (or cloned next to `jzy3d-api` and given with `-Djzy3d.ittest.baselines`) | No quota, no extra tool, a clone of `jzy3d-api` stays small, the baselines repository can have its history squashed whenever it grows | Two repositories to commit to when a rendering change updates baselines |
-| **Git LFS** (`git lfs migrate import --everything --include='jzy3d-tester-integration/src/test/resources/**/*.png'`) | Single repository, images are downloaded only for the checked-out commit | GitHub LFS storage and bandwidth quotas (check the current ones on the billing page) are consumed by every clone of a contributor ; every contributor must install `git lfs` ; CI must set `lfs: false` |
+| **Separate repository** `jzy3d/jzy3d-tester-baselines`, as a git submodule in `jzy3d-tests/jzy3d-tester-integration/src/test/resources/baselines` (or cloned next to `jzy3d-api` and given with `-Djzy3d.ittest.baselines`) | No quota, no extra tool, a clone of `jzy3d-api` stays small, the baselines repository can have its history squashed whenever it grows | Two repositories to commit to when a rendering change updates baselines |
+| **Git LFS** (`git lfs migrate import --everything --include='jzy3d-tests/jzy3d-tester-integration/src/test/resources/**/*.png'`) | Single repository, images are downloaded only for the checked-out commit | GitHub LFS storage and bandwidth quotas (check the current ones on the billing page) are consumed by every clone of a contributor ; every contributor must install `git lfs` ; CI must set `lfs: false` |
 | **Archive downloaded by the tests** (e.g. from maven.jzy3d.org) | Nothing in git | Versioning of the archive by hand |
 
 **Recommendation** : a separate repository. Baselines are only needed by the few computers running the
@@ -79,10 +79,11 @@ operation, to plan when no pull request is open.
 # 1. On a fresh bare clone (branches and tags)
 git clone --bare https://github.com/jzy3d/jzy3d-api.git && cd jzy3d-api.git
 
-# 2. Remove baselines, under both names of the module
+# 2. Remove baselines, under all names of the module
 git filter-repo --invert-paths \
   --path-glob 'jzy3d-tests-java9/src/test/resources/*.png' \
-  --path-glob 'jzy3d-tester-integration/src/test/resources/*.png'
+  --path-glob 'jzy3d-tester-integration/src/test/resources/*.png' \
+  --path-glob 'jzy3d-tests/jzy3d-tester-integration/src/test/resources/*.png'
 
 # 3. Remove files above 100 KB that are not in master anymore (review strip.txt first)
 git rev-list --all --objects | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' \

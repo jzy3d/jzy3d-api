@@ -28,6 +28,10 @@ The ```Drawable``` class hierarchy defines geometries able to use a ```IPainter`
 
 <img src="doc/Interop.png"/>
 
+### Depth peeling
+
+Algorithms for order independent transparency, rendered by JOGL and PanamaGL. See [doc/depthpeeling.md](doc/depthpeeling.md).
+
 
 ## Javadoc schemas reference
 

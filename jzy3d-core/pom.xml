@@ -16,14 +16,14 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-jdt-core</artifactId>
+			<artifactId>jzy3d-tools-jdt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
-		<!-- https://github.com/jzy3d/jPLY/tree/master/jply -->
 		<dependency>
-			<groupId>org.smurn</groupId>
-			<artifactId>jply</artifactId>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-tools-jply</artifactId>
+			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
