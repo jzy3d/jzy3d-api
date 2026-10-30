@@ -90,7 +90,7 @@ The artifact names tell the generation of Jzy3d, even without a version :
 | `jzy3d-api` (single jar, with `jzy3d-javafx`, `jzy3d-swt` aside) | 0.9.x to 1.0.x |
 | `jzy3d-core`, `jzy3d-native-jogl-*`, `jzy3d-emul-gl-*`, parent `jzy3d-all` | 2.x and later |
 | `jzy3d-native-panama-gl-*` | 3.0.0 and later |
-| `jzy3d-depthpeeling`, `jzy3d-jdt-core`, `jzy3d-svm-mapper`, `jzy3d-io-reports` | before 3.0.0 (removed or renamed in 3.0.0) |
+| `jzy3d-depthpeeling`, `jzy3d-jdt-core`, `jzy3d-svm-mapper`, `jzy3d-io-reports`, `jzy3d-io-xls` | before 3.0.0 (removed or renamed in 3.0.0) |
 
 ## 2. Find the latest version
 
@@ -179,8 +179,8 @@ Module layout of `jzy3d-api` since 3.0.0 :
 | `jzy3d-core/` : `jzy3d-core`, `jzy3d-core-awt`, `jzy3d-core-swing`, `jzy3d-core-swt`, `jzy3d-core-javafx` | API independent of the rendering backend, per windowing toolkit |
 | `jzy3d-bindings/` | Rendering backends : `jzy3d-native-jogl-*`, `jzy3d-native-panama-gl-*`, `jzy3d-emul-gl-*`, `jzy3d-jGL` |
 | `jzy3d-tests/` | `jzy3d-tester`, `jzy3d-tester-native`, `jzy3d-tester-integration` |
-| `jzy3d-tools/` | Third party libraries maintained by Jzy3d and their integration : `jzy3d-tools-jdt`, `jzy3d-tools-jply`, `jzy3d-tools-libsvm`, `jzy3d-tools-svm-mapper` |
-| `jzy3d-io-xls`, `jzy3d-everything`, `jzy3d-tutorials` | Excel export, bundle of the main modules, tutorials |
+| `jzy3d-tools/` | Third party libraries maintained by Jzy3d and their integration : `jzy3d-tools-jdt`, `jzy3d-tools-jply`, `jzy3d-tools-libsvm`, `jzy3d-tools-svm-mapper`, `jzy3d-tools-xls` |
+| `jzy3d-everything`, `jzy3d-tutorials` | Bundle of the main modules, tutorials |
 
 ## Sources known to be stale
 

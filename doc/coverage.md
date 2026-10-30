@@ -35,9 +35,9 @@ lines in 1 048 classes, **28.7 %** of lines covered.
 | bindings / PanamaGL | 1 623 | 60.1 % | 43.6 % | 92.9 % | 12 | Good : the GPU conformance tests of `jzy3d-tester` cover most of the painter |
 | bindings / JOGL | 3 865 | 23.6 % | 16.9 % | 26.8 % | 33 | Low in unit tests, higher with integration tests which mostly render with JOGL |
 | bindings / EmulGL and jGL | 17 037 | 17.2 % | 12.5 % | 41.5 % | 19 | Low : `jzy3d-jGL-awt` is the largest untested code of the repository |
-| tools | 4 777 | 30.0 % | 23.0 % | 46.2 % | 11 | Uneven : jPLY well tested, libsvm and svm-mapper not at all |
+| tools | 4 777 | 30.0 % | 23.0 % | 46.2 % | 11 | Uneven : jPLY well tested, libsvm, svm-mapper and xls not at all |
 | tests (testers) | 1 154 | 22.2 % | 10.3 % | 16.7 % | 3 | Not a concern : test tooling, exercised by integration tests |
-| io (`jzy3d-io-xls`) | 363 | 0 % | 0 % | 0 % | 0 | No test, its only test classes are demos |
+| xls (`jzy3d-io-xls`, now `jzy3d-tools-xls` in the tools zone) | 363 | 0 % | 0 % | 0 % | 0 | No test, its only test classes are demos |
 | tutorials | 1 068 | 0 % | 0 % | 0 % | 0 | Not relevant : examples without tests |
 
 ### By module
@@ -68,7 +68,7 @@ lines in 1 048 classes, **28.7 %** of lines covered.
 | `jzy3d-tools-svm-mapper` | 327 | 0 % | 0 % | 0 % | 0 |
 | `jzy3d-tester` | 1 053 | 23.1 % | 9.7 % | 14.3 % | 1 |
 | `jzy3d-tester-native` | 101 | 12.9 % | 18.8 % | 25.0 % | 2 |
-| `jzy3d-io-xls` | 363 | 0 % | 0 % | 0 % | 0 |
+| `jzy3d-io-xls` (now `jzy3d-tools-xls`) | 363 | 0 % | 0 % | 0 % | 0 |
 | `jzy3d-tutorials-*` (10 modules) | 1 068 | 0 % | 0 % | 0 % | 0 |
 
 Line, Branch : covered lines and branches. Classes run : classes with at least one covered line. Test

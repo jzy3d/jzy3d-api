@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-core-awt</artifactId>
-	<name>Jzy3d Core AWT</name>
+	<name>Jzy3d Core - AWT</name>
 
 	<dependencies>
 

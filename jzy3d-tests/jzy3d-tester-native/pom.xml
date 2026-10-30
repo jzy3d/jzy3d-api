@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tester-native</artifactId>
-	<name>Jzy3d Tester for native charts</name>
+	<name>Jzy3d Tests - Native Tester</name>
 
 	<dependencies>
 
