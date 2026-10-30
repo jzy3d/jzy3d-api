@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-jGL</artifactId>
-	<name>Jzy3d Embedded jGL for SWT</name>
+	<name>Jzy3d jGL</name>
 	<packaging>pom</packaging>
 
 	<modules>

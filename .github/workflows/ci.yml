@@ -71,7 +71,7 @@ jobs:
             distribution: zulu
             no-jogl: true
             maven-args: >-
-              -am -pl 'jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-emul-gl-swing,jzy3d-io-xls'
+              -am -pl 'jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-emul-gl-swing,jzy3d-tools/jzy3d-tools-xls'
 
     steps:
       # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository

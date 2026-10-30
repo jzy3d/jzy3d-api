@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tutorials-jogl-javafx-jdk19</artifactId>
-	<name>Jzy3d Tutorials - JOGL / JavaFX for JDK19</name>
+	<name>Jzy3d Tutorials - JOGL / FX JDK19</name>
 
 	<properties>
 		<version.java>19</version.java>

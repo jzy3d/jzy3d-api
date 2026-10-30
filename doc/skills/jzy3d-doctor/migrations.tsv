@@ -15,6 +15,7 @@ artifact	org.jzy3d:jzy3d-tests-java9	org.jzy3d:jzy3d-everything	3.0.0	Renamed jz
 artifact	org.jzy3d:jzy3d-jdt-core	org.jzy3d:jzy3d-tools-jdt	3.0.0	Renamed
 artifact	org.jzy3d:jzy3d-svm-mapper	org.jzy3d:jzy3d-tools-svm-mapper	3.0.0	Renamed
 artifact	org.smurn:jply	org.jzy3d:jzy3d-tools-jply	3.0.0	jPLY 0.2.1 was only on the Jzy3d Maven repository, its source code is now a Jzy3d module
-artifact	org.jzy3d:jzy3d-io-reports	-	3.0.0	Removed, it only held demos (now in the tests of jzy3d-io-xls)
+artifact	org.jzy3d:jzy3d-io-reports	-	3.0.0	Removed, it only held demos (now in the tests of jzy3d-tools-xls)
+artifact	org.jzy3d:jzy3d-io-xls	org.jzy3d:jzy3d-tools-xls	3.0.0	Renamed, moved to jzy3d-tools
 class	org.jzy3d.bridge.swing.FrameSwing	org.jzy3d.chart.factories.FrameSwing	3.0.0	Moved to jzy3d-core-swing
 require	org.jzy3d:jzy3d-native-panama-gl-*	org.jzy3d:panama-gl-wrappers-*	3.0.0	Since PanamaGL 1.4.0, add the wrappers of the OS the application runs on (org.jzy3d:panama-gl-wrappers-windows, -macos, -linux), or org.jzy3d:panama-gl-wrappers-all with <type>pom</type>

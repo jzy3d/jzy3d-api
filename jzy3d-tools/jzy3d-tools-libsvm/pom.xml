@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tools-libsvm</artifactId>
-	<name>Jzy3d LibSVM</name>
+	<name>Jzy3d Tools - LibSVM</name>
 
 	<dependencies>
 

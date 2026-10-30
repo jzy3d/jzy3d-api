@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tools-jply</artifactId>
-	<name>jPLY (fork of https://github.com/jzy3d/jPLY)</name>
+	<name>Jzy3d Tools - jPLY (fork)</name>
 	<description>Library to read PLY files</description>
 
 	<dependencies>
