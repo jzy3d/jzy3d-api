@@ -288,8 +288,8 @@ jobs:
       fail-fast: false
       matrix:
         # LTS versions, and 22, the first version providing the stable FFM API required by PanamaGL.
-        # JDK 25 (LTS) is used by the build job above.
-        java: ['8', '11', '17', '21', '22']
+        # JDK 25 (LTS) is also used by the build job above, on all platforms.
+        java: ['8', '11', '17', '21', '22', '25']
 
     steps:
       # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
