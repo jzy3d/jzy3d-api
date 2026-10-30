@@ -43,7 +43,15 @@ It maps the oldest build to a commit of `jzy3d-api` (tag, or last commit of `mas
 * outdated Jzy3d artifacts coming from a dependency of the project (`transitive ...` lines) : upgrade that dependency first, or exclude the artifact.
 Fix, rebuild, and run `jzy3d-upgrade.py` again until it answers "Up to date" and the build passes. When a change is general, add it to `migrations.tsv` so that the next upgrades apply it.
 
-**U5. Report.** For each project : build used before (version, date, origin), build used after, files changed, build result, what remains to do by hand. Then, for all projects together :
+**U5. Report.** Write the report of each project in a file at its root, named `jzy3d-doctor-<yyyyMMdd-HHmm>.md` after the start time of the run, so that runs do not overwrite each other. Ask the user to ignore these files in all their repositories once, with the global gitignore of git (`~/.config/git/ignore`) :
+
+```
+# Reports of the jzy3d-doctor skill
+*-doctor.md
+*-doctor-*.md
+```
+
+The report of a project gives : build used before (version, date, origin) and the commits it missed, changes applied by the script and by hand (with diffs), uncommitted changes found before the run and kept, build result, commits still missing after, what remains to do. Then, in each report and in the answer to the user :
 1. **What is new** since the oldest build in use : a summary of the commits of U2 grouped by theme (rendering backends, charts, toolkits, fixes, build), the ones touching modules the projects use first, each with its date and short hash.
 2. **Innovations not used yet** : the recent changes of modules the projects do not use, listed by `jzy3d-changes.py` (last 180 days before the latest version by default), summarized by module with what they would bring, so the user knows the state of the art of Jzy3d.
 3. Sources to read further : release notes, website download pages, compare links of `jzy3d-versions.sh`.
