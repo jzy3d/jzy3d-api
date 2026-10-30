@@ -190,6 +190,9 @@ Jzy3d depends on the following libraries that are available on [Jzy3d Maven repo
 
 The tutorial provides the code [samples you need to add the library to a Maven project](https://github.com/jzy3d/jzy3d-api/tree/master/jzy3d-tutorials#adding-dependencies).
 
+### Migrate to the latest version
+
+The [jzy3d-doctor](doc/skills/jzy3d-doctor/SKILL.md) skill helps an AI agent migrate a project to the latest Jzy3d version : it finds the version in use, lists what is new since then and what the project must change, and explains how to submit an improvement to Jzy3d as a pull request. With Claude Code, copy the folder `doc/skills/jzy3d-doctor` to `~/.claude/skills/` (or to `.claude/skills/` of the project) and ask to migrate the project to the latest Jzy3d version. Its script can also be run alone : `doc/skills/jzy3d-doctor/scripts/jzy3d-versions.sh <project-dir> [jzy3d-api-clone]`.
 
 ### Download sources & javadocs in IDE
 
