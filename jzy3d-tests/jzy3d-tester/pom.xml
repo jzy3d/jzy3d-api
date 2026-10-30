@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tester</artifactId>
-	<name>Jzy3d Tester</name>
+	<name>Jzy3d Tests - Tester</name>
 
 	<dependencies>
 

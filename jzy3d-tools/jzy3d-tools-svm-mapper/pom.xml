@@ -10,7 +10,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tools-svm-mapper</artifactId>
-	<name>Jzy3d SVM Mapper</name>
+	<name>Jzy3d Tools - SVM Mapper</name>
 
 	<dependencies>
 

@@ -28,7 +28,6 @@ ZONES = [  # first matching prefix of the module folder wins
     ("bindings/emulgl", "jzy3d-bindings/jzy3d-jGL"),
     ("tools", "jzy3d-tools/"),
     ("tests", "jzy3d-tests/"),
-    ("io", "jzy3d-io-"),
     ("tutorials", "jzy3d-tutorials/"),
 ]
 

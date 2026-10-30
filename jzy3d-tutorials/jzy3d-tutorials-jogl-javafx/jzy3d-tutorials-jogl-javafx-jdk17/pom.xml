@@ -11,7 +11,7 @@
 	</parent>
 
 	<artifactId>jzy3d-tutorials-jogl-javafx-jdk17</artifactId>
-	<name>Jzy3d Tutorials - JOGL / JavaFX for JDK17</name>
+	<name>Jzy3d Tutorials - JOGL / FX JDK17</name>
 
 	<properties>
 		<version.java>17</version.java>

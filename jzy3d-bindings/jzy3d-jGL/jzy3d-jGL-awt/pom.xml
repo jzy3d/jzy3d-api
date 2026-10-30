@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>jzy3d-jGL-awt</artifactId>
-	<name>Jzy3d Embedded jGL for AWT</name>
+	<name>Jzy3d jGL - AWT</name>
 
 	<properties>
 		<!-- Disable Javadoc Linter -->

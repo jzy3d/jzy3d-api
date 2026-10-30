@@ -34,14 +34,16 @@ message naming the missing dependency.
 * Modules are grouped in folders : `jzy3d-core` (`jzy3d-core` and the toolkit modules `jzy3d-core-awt`, `-swing`,
   `-swt`, `-javafx`), `jzy3d-bindings` (EmulGL, jGL, JOGL,
   PanamaGL), `jzy3d-tests` (`jzy3d-tester`, `jzy3d-tester-native`, `jzy3d-tester-integration`) and
-  `jzy3d-tools` (third party libraries maintained by jzy3d and their jzy3d integration : `jzy3d-tools-jdt`, `jzy3d-tools-jply`, `jzy3d-tools-libsvm`, `jzy3d-tools-svm-mapper`).
-* Modules `jzy3d-jdt-core` and `jzy3d-svm-mapper` are renamed `jzy3d-tools-jdt` and `jzy3d-tools-svm-mapper`.
+  `jzy3d-tools` (third party libraries maintained by jzy3d and their jzy3d integration : `jzy3d-tools-jdt`, `jzy3d-tools-jply`, `jzy3d-tools-libsvm`, `jzy3d-tools-svm-mapper`, `jzy3d-tools-xls`).
+* Modules `jzy3d-jdt-core`, `jzy3d-svm-mapper` and `jzy3d-io-xls` are renamed `jzy3d-tools-jdt`,
+  `jzy3d-tools-svm-mapper` and `jzy3d-tools-xls`.
 * `org.smurn:jply` 0.2.1, which was only available on the jzy3d Maven repository, is replaced by module
   `jzy3d-tools-jply` holding its source code (package `org.smurn.jply` is unchanged).
-* Module `jzy3d-io-reports` is removed : its demos moved to the tests of `jzy3d-io-xls`.
-* `jzy3d-io-xls` : package `org.jzy3d.io.psy4j` is removed, the module only depends on `jzy3d-core`, `poi` and
-  `poi-ooxml` (it does not bring guava, poi-scratchpad, poi-excelant, commons-csv, commons-cli, joda-time and
-  commons-logging anymore) and `jzy3d-everything` does not include it anymore.
+* Module `jzy3d-io-reports` is removed : its demos moved to the tests of `jzy3d-tools-xls`.
+* `jzy3d-io-xls` is renamed `jzy3d-tools-xls` and moved to `jzy3d-tools`. Its package `org.jzy3d.io.psy4j` is
+  removed, it only depends on `jzy3d-core`, `poi` and `poi-ooxml` (it does not bring guava, poi-scratchpad,
+  poi-excelant, commons-csv, commons-cli, joda-time and commons-logging anymore) and `jzy3d-everything` does
+  not include it anymore.
 * `logback-classic` 1.3.16 (was 1.2.13, which did not bind slf4j 2 and had vulnerabilities in logback-core).
 * `org.eclipse.jface` 3.29.0 (was 3.12.1, whose dependency ranges resolved to Eclipse bundles requiring
   Java 17+).

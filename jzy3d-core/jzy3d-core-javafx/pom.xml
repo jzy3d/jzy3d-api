@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>jzy3d-core-javafx</artifactId>
-	<name>Jzy3d Core JavaFX</name>
+	<name>Jzy3d Core - JavaFX</name>
 	<description>JavaFX-specific building blocks (mouse and keyboard camera controllers, resizable canvas) reusable by any Jzy3D rendering backend (JOGL, PanamaGL, ...).</description>
 
 	<properties>
