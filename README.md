@@ -213,6 +213,8 @@ A clone is about 450 MB, mostly baseline images of integration tests : see [doc/
 
 ### Build all
 
+All modules are listed in the root `pom.xml`. Build with JDK 22+ to build all of them : with an older JDK, the modules requiring a more recent one (SWT and JavaFX need Java 11, PanamaGL needs Java 22) stay in the reactor but build nothing, through their `skip-below-javaXX` profile.
+
 #### Run unit tests only
 
 This will run all test named `**/Test*.java` or `**/*Test.java`.

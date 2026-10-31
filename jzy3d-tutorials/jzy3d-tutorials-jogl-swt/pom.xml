@@ -39,6 +39,16 @@
 	</dependencies>
 
 	<profiles>
+		<!-- SWT 3.116 and OpenJFX are built for Java 11 : with an older JDK, stay in the reactor but build nothing -->
+		<profile>
+			<id>skip-below-java11</id>
+			<activation>
+				<jdk>(,11)</jdk>
+			</activation>
+			<properties>
+				<jzy3d.skip>true</jzy3d.skip>
+			</properties>
+		</profile>
 
 		<profile>
 			<id>MacOS x86_64</id>

@@ -72,4 +72,18 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<!-- PanamaGL relies on the Foreign Function and Memory API of Java 22 : with an older JDK, stay in the reactor but build nothing -->
+		<profile>
+			<id>skip-below-java22</id>
+			<activation>
+				<jdk>(,22)</jdk>
+			</activation>
+			<properties>
+				<jzy3d.skip>true</jzy3d.skip>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>
