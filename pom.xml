@@ -73,9 +73,6 @@
 
 		<!-- Report -->
 
-		<!-- Bundle -->
-		<module>jzy3d-everything</module>
-
 		<!-- SWT, JavaFX and PanamaGL modules are added by the java11 and java22 profiles, integration tests
 		and tutorials by the last-modules profile -->
 

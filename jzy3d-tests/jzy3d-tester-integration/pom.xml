@@ -26,7 +26,17 @@
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>jzy3d-everything</artifactId>
+			<artifactId>jzy3d-native-jogl-swing</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-native-jogl-newt</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jzy3d-emul-gl-awt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		
