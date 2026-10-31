@@ -39,11 +39,12 @@ message naming the missing dependency.
   `jzy3d-tools-svm-mapper` and `jzy3d-tools-xls`.
 * `org.smurn:jply` 0.2.1, which was only available on the jzy3d Maven repository, is replaced by module
   `jzy3d-tools-jply` holding its source code (package `org.smurn.jply` is unchanged).
+* Module `jzy3d-everything` is removed : depend on the bindings it bundled instead, `jzy3d-native-jogl-swing`
+  (which brings `jzy3d-native-jogl-awt`), `jzy3d-native-jogl-newt` and `jzy3d-emul-gl-awt`.
 * Module `jzy3d-io-reports` is removed : its demos moved to the tests of `jzy3d-tools-xls`.
 * `jzy3d-io-xls` is renamed `jzy3d-tools-xls` and moved to `jzy3d-tools`. Its package `org.jzy3d.io.psy4j` is
   removed, it only depends on `jzy3d-core`, `poi` and `poi-ooxml` (it does not bring guava, poi-scratchpad,
-  poi-excelant, commons-csv, commons-cli, joda-time and commons-logging anymore) and `jzy3d-everything` does
-  not include it anymore.
+  poi-excelant, commons-csv, commons-cli, joda-time and commons-logging anymore).
 * `logback-classic` 1.3.16 (was 1.2.13, which did not bind slf4j 2 and had vulnerabilities in logback-core).
 * `org.eclipse.jface` 3.29.0 (was 3.12.1, whose dependency ranges resolved to Eclipse bundles requiring
   Java 17+).
