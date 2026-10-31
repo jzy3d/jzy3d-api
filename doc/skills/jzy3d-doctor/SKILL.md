@@ -180,7 +180,7 @@ Module layout of `jzy3d-api` since 3.0.0 :
 | `jzy3d-bindings/` | Rendering backends : `jzy3d-native-jogl-*`, `jzy3d-native-panama-gl-*`, `jzy3d-emul-gl-*`, `jzy3d-jGL` |
 | `jzy3d-tests/` | `jzy3d-tester`, `jzy3d-tester-native`, `jzy3d-tester-integration` |
 | `jzy3d-tools/` | Third party libraries maintained by Jzy3d and their integration : `jzy3d-tools-jdt`, `jzy3d-tools-jply`, `jzy3d-tools-libsvm`, `jzy3d-tools-svm-mapper`, `jzy3d-tools-xls` |
-| `jzy3d-everything`, `jzy3d-tutorials` | Bundle of the main modules, tutorials |
+| `jzy3d-tutorials` | Tutorials |
 
 ## Sources known to be stale
 
