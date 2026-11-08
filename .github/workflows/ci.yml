@@ -50,10 +50,14 @@ jobs:
   build:
     name: Build & Test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+      actions: write # the Cancel the other jobs step
 
     strategy:
-      # Don't cancel other jobs if one platform fails
-      fail-fast: false
+      # Cancel the other platforms as soon as one fails, to save CI time. Cancelled jobs still
+      # upload the reports they produced (steps below with if: always()).
+      fail-fast: true
       matrix:
         # Same platforms as PanamaGL CI
         os:
@@ -275,6 +279,18 @@ jobs:
           path: surefire-reports
           if-no-files-found: ignore
 
+      # fail-fast only cancels the jobs of the same matrix : also cancel the other matrix (build
+      # or build-jdk), so that a failure on any platform or JDK interrupts the whole run. Last step,
+      # so that this job first prints and uploads its reports. May fail without consequence when
+      # the token can't cancel the run, e.g. on pull requests from forks.
+      - name: Cancel the other jobs
+        if: failure()
+        continue-on-error: true
+        shell: bash
+        run: gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}
+
   # ============================================================================================================
   # Older JDKs supported by Jzy3d. Modules requiring a more recent JDK are excluded by the java11 and java22
   # profiles of the root pom : SWT and JavaFX need Java 11, PanamaGL needs Java 22.
@@ -283,9 +299,13 @@ jobs:
   build-jdk:
     name: Build & Test (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write # the Cancel the other jobs step
 
     strategy:
-      fail-fast: false
+      # Cancel the other JDKs as soon as one fails, as the build job does for the platforms
+      fail-fast: true
       matrix:
         # LTS versions, and 22, the first version providing the stable FFM API required by PanamaGL.
         # JDK 25 (LTS) is also used by the build job above, on all platforms.
@@ -329,6 +349,18 @@ jobs:
           name: surefire-reports-jdk${{ matrix.java }}
           path: '**/target/surefire-reports/*.xml'
           if-no-files-found: ignore
+
+      # fail-fast only cancels the jobs of the same matrix : also cancel the other matrix (build
+      # or build-jdk), so that a failure on any platform or JDK interrupts the whole run. Last step,
+      # so that this job first prints and uploads its reports. May fail without consequence when
+      # the token can't cancel the run, e.g. on pull requests from forks.
+      - name: Cancel the other jobs
+        if: failure()
+        continue-on-error: true
+        shell: bash
+        run: gh run cancel "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}
 
   # ============================================================================================================
   # Deploy SNAPSHOT to the Jzy3d Maven FTP repository (see distributionManagement in pom.xml).
