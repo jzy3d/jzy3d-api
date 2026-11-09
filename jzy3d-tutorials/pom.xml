@@ -63,6 +63,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.java>8</version.java>
+		<!-- PanamaGL version used by the PanamaGL tutorials. The tutorials do not inherit from the
+		     root pom of Jzy3D : keep it equal to version.panamagl of the root pom -->
+		<version.panamagl>1.4.2</version.panamagl>
 	</properties>
 
 	<build>

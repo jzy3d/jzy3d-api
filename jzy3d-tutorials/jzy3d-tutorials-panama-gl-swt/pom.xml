@@ -14,7 +14,6 @@
 
 	<properties>
 		<version.java>22</version.java>
-		<version.panamagl>1.4.2</version.panamagl>
 		<version.swt>3.116.100</version.swt>
 	</properties>
 
