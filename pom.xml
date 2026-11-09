@@ -113,6 +113,9 @@
 		<!-- JVM options of tests set by other plugins, such as the JaCoCo agent of the coverage profile -->
 		<argLine></argLine>
 		<version.swt>3.116.100</version.swt>
+		<!-- PanamaGL version of the jzy3d-native-panama-gl-* modules. Applications and tutorials only
+		     depend on a Jzy3D PanamaGL module, which brings PanamaGL and its wrappers of all OS -->
+		<version.panamagl>1.4.2</version.panamagl>
 	</properties>
 
 	<!-- Define default versions for all dependencies -->

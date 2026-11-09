@@ -13,7 +13,6 @@
 
 	<properties>
 		<version.java>22</version.java>
-		<version.panamagl>1.4.1</version.panamagl>
 	</properties>
 
 
@@ -48,14 +47,17 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- The PanamaGL wrappers of all OS : an application depends on the ones of its OS,
-		     e.g. panama-gl-wrappers-windows, or on all of them -->
+		<!-- The PanamaGL wrappers of all OS, brought to every Jzy3D PanamaGL module and application at
+		     runtime : PanamaGLFactory.select() finds the one of the running OS. Jzy3D code does not use
+		     them, hence the runtime scope. An application that only ships the wrappers of its OS excludes
+		     panama-gl-wrappers-all from its Jzy3D dependency and depends on the one of its OS, e.g.
+		     panama-gl-wrappers-windows (see doc/release-3.0.0.md) -->
 		<dependency>
 			<groupId>org.jzy3d</groupId>
 			<artifactId>panama-gl-wrappers-all</artifactId>
 			<version>${version.panamagl}</version>
 			<type>pom</type>
-			<scope>test</scope>
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 
