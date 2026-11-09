@@ -48,7 +48,8 @@ jobs:
   # ============================================================================================================
 
   build:
-    name: Build & Test (${{ matrix.os }})
+    # The env context is not available in a job name : keep the JDK version equal to JAVA_VERSION
+    name: Build & Test (JDK 25 - ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -288,8 +289,9 @@ jobs:
       fail-fast: false
       matrix:
         # LTS versions, and 22, the first version providing the stable FFM API required by PanamaGL.
-        # JDK 25 (LTS) is also used by the build job above, on all platforms.
-        java: ['8', '11', '17', '21', '22', '25']
+        # Not 25 (LTS) : the build job above builds and tests with JDK 25 (JAVA_VERSION) on all platforms,
+        # ubuntu-latest included, which is what a JDK 25 job here would do.
+        java: ['8', '11', '17', '21', '22']
 
     steps:
       # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
