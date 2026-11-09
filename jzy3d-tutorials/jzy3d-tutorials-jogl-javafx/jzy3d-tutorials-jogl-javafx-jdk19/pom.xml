@@ -118,4 +118,17 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<!-- OpenJFX 19 is built for Java 19 : with an older JDK, stay in the reactor but build nothing -->
+		<profile>
+			<id>skip-below-java19</id>
+			<activation>
+				<jdk>(,19)</jdk>
+			</activation>
+			<properties>
+				<jzy3d.skip>true</jzy3d.skip>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>

@@ -43,39 +43,52 @@
 		</developer>
 	</developers>
 
+	<!-- All modules. Some need a more recent JDK than Java 8 : SWT 3.116 and OpenJFX are built for Java 11,
+	some JavaFX tutorials need Java 17 or 19, PanamaGL needs Java 22 (Foreign Function and Memory API). Such a
+	module declares a skip-below-javaXX profile setting jzy3d.skip, so that with an older JDK it stays in the
+	reactor but builds nothing (see jzy3d.skip in properties). -->
 	<modules>
 
 		<!-- Core API -->
 		<module>jzy3d-core/jzy3d-core</module>
 		<module>jzy3d-core/jzy3d-core-awt</module>
 		<module>jzy3d-core/jzy3d-core-swing</module>
+		<module>jzy3d-core/jzy3d-core-swt</module>          <!-- Java 11+ -->
+		<module>jzy3d-core/jzy3d-core-javafx</module>       <!-- Java 11+ -->
 
 		<!-- jGL rendering backend (emulated OpenGL) -->
 		<module>jzy3d-bindings/jzy3d-jGL</module>
 		<module>jzy3d-bindings/jzy3d-emul-gl-awt</module>
+		<module>jzy3d-bindings/jzy3d-emul-gl-swt</module>   <!-- Java 11+ -->
 
-		<!-- JOGL rendering backend (native for Java 8+) -->
+		<!-- JOGL rendering backend (native, JNI) -->
 		<module>jzy3d-bindings/jzy3d-native-jogl-core</module>
 		<module>jzy3d-bindings/jzy3d-native-jogl-awt</module>
 		<module>jzy3d-bindings/jzy3d-native-jogl-swing</module>
 		<module>jzy3d-bindings/jzy3d-native-jogl-newt</module>
+		<module>jzy3d-bindings/jzy3d-native-jogl-swt</module>     <!-- Java 11+ -->
+		<module>jzy3d-bindings/jzy3d-native-jogl-javafx</module>  <!-- Java 11+ -->
+
+		<!-- PanamaGL rendering backend (native, Foreign Function and Memory API) -->
+		<module>jzy3d-bindings/jzy3d-native-panama-gl-core</module>   <!-- Java 22+ -->
+		<module>jzy3d-bindings/jzy3d-native-panama-gl-swing</module>  <!-- Java 22+ -->
+		<module>jzy3d-bindings/jzy3d-native-panama-gl-javafx</module> <!-- Java 22+ -->
+		<module>jzy3d-bindings/jzy3d-native-panama-gl-swt</module>    <!-- Java 22+ -->
 
 		<!-- Test tools -->
 		<module>jzy3d-tests/jzy3d-tester</module>
 		<module>jzy3d-tests/jzy3d-tester-native</module>
 
-		<!-- Maths -->
+		<!-- Maths and IO -->
 		<module>jzy3d-tools/jzy3d-tools-jdt</module>
 		<module>jzy3d-tools/jzy3d-tools-jply</module>
 		<module>jzy3d-tools/jzy3d-tools-svm-mapper</module>
 		<module>jzy3d-tools/jzy3d-tools-libsvm</module>
 		<module>jzy3d-tools/jzy3d-tools-xls</module>
 
-		<!-- Report -->
-
-		<!-- SWT, JavaFX and PanamaGL modules are added by the java11 and java22 profiles, integration tests
-		and tutorials by the last-modules profile -->
-
+		<!-- Modules depending on every binding : integration tests (JOGL vs PanamaGL with Java 22+) and tutorials -->
+		<module>jzy3d-tests/jzy3d-tester-integration</module>  <!-- Java 11+ -->
+		<module>jzy3d-tutorials</module>
 
 	</modules>
 
@@ -113,6 +126,19 @@
 		<!-- JVM options of tests set by other plugins, such as the JaCoCo agent of the coverage profile -->
 		<argLine></argLine>
 		<version.swt>3.116.100</version.swt>
+
+		<!-- Set to true by the skip-below-javaXX profile of a module requiring a more recent JDK than the one
+		running the build : the module stays in the reactor but compiles, tests, documents, installs and deploys
+		nothing (an empty jar is still packaged). Command line values (e.g. -DskipTests) still win. -->
+		<jzy3d.skip>false</jzy3d.skip>
+		<maven.main.skip>${jzy3d.skip}</maven.main.skip>
+		<maven.test.skip>${jzy3d.skip}</maven.test.skip>
+		<maven.source.skip>${jzy3d.skip}</maven.source.skip>
+		<maven.javadoc.skip>${jzy3d.skip}</maven.javadoc.skip>
+		<maven.install.skip>${jzy3d.skip}</maven.install.skip>
+		<maven.deploy.skip>${jzy3d.skip}</maven.deploy.skip>
+		<mdep.skip>${jzy3d.skip}</mdep.skip>
+		<jacoco.skip>${jzy3d.skip}</jacoco.skip>
 	</properties>
 
 	<!-- Define default versions for all dependencies -->
@@ -567,58 +593,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-
-		<!-- Modules that require Java 11 : SWT 3.116 and OpenJFX 17 are built for Java 11 -->
-		<profile>
-			<id>java11</id>
-			<activation>
-				<jdk>[11,)</jdk>
-			</activation>
-			<modules>
-				<module>jzy3d-core/jzy3d-core-swt</module>
-				<module>jzy3d-core/jzy3d-core-javafx</module>
-				<module>jzy3d-bindings/jzy3d-emul-gl-swt</module>
-				<module>jzy3d-bindings/jzy3d-native-jogl-swt</module>
-				<module>jzy3d-bindings/jzy3d-native-jogl-javafx</module>
-			</modules>
-		</profile>
-
-		<!-- Modules that require Java 22 : PanamaGL relies on the Foreign Function and Memory API -->
-		<profile>
-			<id>java22</id>
-			<activation>
-				<jdk>[22,)</jdk>
-			</activation>
-			<modules>
-				<module>jzy3d-bindings/jzy3d-native-panama-gl-core</module>
-				<module>jzy3d-bindings/jzy3d-native-panama-gl-swing</module>
-				<module>jzy3d-bindings/jzy3d-native-panama-gl-javafx</module>
-				<module>jzy3d-bindings/jzy3d-native-panama-gl-swt</module>
-			</modules>
-		</profile>
-
-		<!-- Modules that depend on every binding. Profile modules are appended in declaration order, so being
-		declared after the java11 and java22 profiles keeps each binding family in one block of the reactor
-		instead of having tutorials pull their binding in the middle of other bindings -->
-		<profile>
-			<id>last-modules</id>
-			<activation>
-				<jdk>[1.8,)</jdk>
-			</activation>
-			<modules>
-				<module>jzy3d-tutorials</module>
-			</modules>
-		</profile>
-
-		<profile>
-			<id>last-modules-java11</id>
-			<activation>
-				<jdk>[11,)</jdk>
-			</activation>
-			<modules>
-				<module>jzy3d-tests/jzy3d-tester-integration</module>
-			</modules>
 		</profile>
 
 		<!-- Compile against the API of version.java and not the API of the JDK running the build, otherwise

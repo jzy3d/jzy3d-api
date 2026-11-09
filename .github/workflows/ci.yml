@@ -276,8 +276,8 @@ jobs:
           if-no-files-found: ignore
 
   # ============================================================================================================
-  # Older JDKs supported by Jzy3d. Modules requiring a more recent JDK are excluded by the java11 and java22
-  # profiles of the root pom : SWT and JavaFX need Java 11, PanamaGL needs Java 22.
+  # Older JDKs supported by Jzy3d. Modules requiring a more recent JDK stay in the reactor but build nothing,
+  # through their skip-below-javaXX profile : SWT and JavaFX need Java 11, PanamaGL needs Java 22.
   # ============================================================================================================
 
   build-jdk:
