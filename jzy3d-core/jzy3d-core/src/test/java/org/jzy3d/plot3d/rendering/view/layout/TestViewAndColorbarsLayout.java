@@ -1,5 +1,6 @@
 package org.jzy3d.plot3d.rendering.view.layout;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -14,6 +15,7 @@ import org.jzy3d.mocks.jzy3d.Mocks;
 import org.jzy3d.plot3d.rendering.legends.ILegend;
 import org.jzy3d.plot3d.rendering.view.Camera;
 import org.jzy3d.plot3d.rendering.view.TestView2DProcessing;
+import org.jzy3d.plot3d.rendering.view.ViewportConfiguration;
 import org.jzy3d.plot3d.rendering.view.ViewportMode;
 
 /**
@@ -184,6 +186,50 @@ public class TestViewAndColorbarsLayout {
   }
 
 
+
+  /**
+   * A rendering may be requested before the canvas is laid out, e.g. by a PanamaGL canvas from
+   * GLEventListener.init() invoked by addNotify(). The layout must then neither fail nor render.
+   */
+  @Test
+  public void whenCanvasHasNoSize_ThenLayoutIsSkipped() {
+    int CBAR_WIDTH = 100;
+
+    // --------------------------------
+    // Given a chart with a colorbar and a canvas not laid out yet
+
+    Chart chart = Mocks.Chart(0, 0, 1);
+
+    ILegend legend = spy(ILegend.class);
+    when(legend.getMinimumDimension()).thenReturn(new Dimension(CBAR_WIDTH, 0));
+    when(chart.getScene().getGraph().getLegends()).thenReturn(colorbars(1, legend));
+
+    // --------------------------------
+    // When updating and rendering the layout, then it does not fail
+
+    ViewAndColorbarsLayout layout = new ViewAndColorbarsLayout();
+    layout.update(chart);
+    layout.render(chart.getPainter(), chart);
+
+    // --------------------------------
+    // Then nothing was laid out nor rendered
+
+    Assert.assertNull(layout.getSceneViewport());
+    Assert.assertNull(layout.getBackgroundViewport());
+    verify(legend, times(0)).render(chart.getPainter());
+    verify(chart.getView(), times(0)).renderScene(any(ViewportConfiguration.class));
+
+    // --------------------------------
+    // When the canvas gets its size, then the layout is processed
+
+    when(chart.getCanvas().getRendererWidth()).thenReturn(800);
+    when(chart.getCanvas().getRendererHeight()).thenReturn(600);
+
+    layout.update(chart);
+
+    Assert.assertEquals(800 - CBAR_WIDTH, layout.getSceneViewport().getWidth());
+    Assert.assertEquals(800, layout.getBackgroundViewport().getWidth());
+  }
 
   private List<ILegend> colorbars(int numberOfColorbars, ILegend legend) {
     List<ILegend> legends = new ArrayList<>();
