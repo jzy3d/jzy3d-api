@@ -1,21 +1,24 @@
-# Build and test Jzy3d on Linux, macOS (ARM + Intel) and Windows, then deploy
-# SNAPSHOT artifacts to the Jzy3d Maven repository when master is updated, or when a pull request
-# labeled deploy-snapshot is updated.
+# Build and test Jzy3d, then deploy SNAPSHOT artifacts to the Jzy3d Maven repository when master is
+# updated. Other branches are never deployed.
+#
+# - master : JDK 25 on Linux, macOS (ARM + Intel) and Windows (x86_64 + ARM64), and older JDKs on Linux
+# - other branches and pull requests : JDK 25 on macOS ARM only
 #
 # Inspired by https://github.com/panama-gl/panama-gl/tree/main/.github/workflows
 # https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions
 
 name: Java CI with Maven
 
-# Branches are built through their pull request, so that each commit is built once
+# Every branch is built when pushed. Pull requests are built only when they come from a fork, as
+# the push to their branch already builds them (see the build job).
 on:
   push:
-    branches: [master]
+    branches: ['**']
   pull_request:
   workflow_dispatch:
     inputs:
       deploy:
-        description: 'Deploy SNAPSHOT artifacts after a successful build (whatever the branch)'
+        description: 'Deploy SNAPSHOT artifacts after a successful build (master only)'
         type: boolean
         default: false
 
@@ -52,27 +55,37 @@ jobs:
     name: Build & Test (JDK 25 - ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
+    # Skip pull requests from this repository, already built by the push to their branch
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name != github.repository
+
     strategy:
       # Don't cancel other jobs if one platform fails
       fail-fast: false
       matrix:
-        # Same platforms as PanamaGL CI
-        os:
-          - ubuntu-latest    # Linux x86_64
-          - ubuntu-24.04-arm # Linux ARM64
-          - macos-latest     # macOS ARM (Apple Silicon)
-          - macos-15-intel   # macOS Intel x86_64 (last x86_64 image; GitHub Actions drops x86_64 ~Aug 2027)
-          - windows-latest   # Windows x86_64 (Mesa D3D12 OpenGL, see below)
-          - windows-11-arm   # Windows ARM64
-        include:
-          # Temurin provides no JDK 25 for Windows ARM64. JOGL 2.6 (GlueGen), SWT 3.116 and OpenJFX
-          # provide no Windows ARM64 natives : build and test the modules not using them, and skip
-          # integration tests, which compare PanamaGL to JOGL.
-          - os: windows-11-arm
-            distribution: zulu
-            no-jogl: true
-            maven-args: >-
-              -am -pl 'jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-emul-gl-swing,jzy3d-tools/jzy3d-tools-xls'
+        # All the platforms of PanamaGL CI on master, macOS ARM only on other branches and pull requests :
+        #   ubuntu-latest    Linux x86_64
+        #   ubuntu-24.04-arm Linux ARM64
+        #   macos-latest     macOS ARM (Apple Silicon)
+        #   macos-15-intel   macOS Intel x86_64 (last x86_64 image; GitHub Actions drops x86_64 ~Aug 2027)
+        #   windows-latest   Windows x86_64 (Mesa D3D12 OpenGL, see below)
+        #   windows-11-arm   Windows ARM64
+        os: >-
+          ${{ fromJSON(github.ref == 'refs/heads/master'
+          && '["ubuntu-latest", "ubuntu-24.04-arm", "macos-latest", "macos-15-intel", "windows-latest", "windows-11-arm"]'
+          || '["macos-latest"]') }}
+
+    # Temurin provides no JDK 25 for Windows ARM64. JOGL 2.6 (GlueGen), SWT 3.116 and OpenJFX provide
+    # no Windows ARM64 natives : build and test the modules not using them, and skip integration tests,
+    # which compare PanamaGL to JOGL. Not set with a matrix include, which would add Windows ARM64 to
+    # the builds of the branches other than master.
+    env:
+      WINDOWS_ARM: ${{ matrix.os == 'windows-11-arm' }}
+      BUILD_MODULES: >-
+        ${{ matrix.os == 'windows-11-arm'
+        && '-am -pl ''jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-emul-gl-swing,jzy3d-tools/jzy3d-tools-xls'''
+        || '' }}
 
     steps:
       # CI builds its own baseline images : skip the 300 MB of baselines stored in the repository
@@ -88,7 +101,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
-          distribution: ${{ matrix.distribution || env.JAVA_DISTRIBUTION }}
+          distribution: ${{ env.WINDOWS_ARM == 'true' && 'zulu' || env.JAVA_DISTRIBUTION }}
           cache: maven
 
       # Maven is not installed on every runner image (e.g. Windows ARM64)
@@ -202,11 +215,11 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
-            mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ matrix.maven-args }}
+            mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ env.BUILD_MODULES }}
 
       - name: Build and test with Maven (macOS, Windows)
         if: runner.os != 'Linux'
-        run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ matrix.maven-args }}
+        run: mvn --batch-mode --no-transfer-progress --fail-at-end package --file pom.xml ${{ env.BUILD_MODULES }}
 
       # -------------------------------------------------------
       # Integration tests comparing PanamaGL to JOGL renderings
@@ -221,9 +234,8 @@ jobs:
               -Dtest="$PANAMAGL_IT" -Dsurefire.failIfNoSpecifiedTests=false \
               -Djzy3d.ittest.baselines="$ITTEST_BASELINES"
 
-      # An unset matrix value equals false in expressions, hence a flag set where JOGL is missing
       - name: PanamaGL integration tests (macOS, Windows)
-        if: runner.os != 'Linux' && !matrix.no-jogl
+        if: runner.os != 'Linux' && env.WINDOWS_ARM != 'true'
         shell: bash
         run: |
           mvn --batch-mode --no-transfer-progress test -pl jzy3d-tests/jzy3d-tester-integration -am \
@@ -284,13 +296,15 @@ jobs:
   build-jdk:
     name: Build & Test (JDK ${{ matrix.java }})
     runs-on: ubuntu-latest
+    # Only master is built with every JDK
+    if: github.ref == 'refs/heads/master'
 
     strategy:
       fail-fast: false
       matrix:
         # LTS versions, and 22, the first version providing the stable FFM API required by PanamaGL.
-        # Not 25 (LTS) : the build job above builds and tests with JDK 25 (JAVA_VERSION) on all platforms,
-        # ubuntu-latest included, which is what a JDK 25 job here would do.
+        # Not 25 (LTS) : on master, the build job above builds and tests with JDK 25 (JAVA_VERSION) on all
+        # platforms, ubuntu-latest included, which is what a JDK 25 job here would do.
         java: ['8', '11', '17', '21', '22']
 
     steps:
@@ -335,8 +349,9 @@ jobs:
   # ============================================================================================================
   # Deploy SNAPSHOT to the Jzy3d Maven FTP repository (see distributionManagement in pom.xml).
   #
-  # Runs after all platforms passed : on push to master, when manually triggered with 'deploy'
-  # checked, or on pull requests labeled deploy-snapshot. Release versions are never deployed from CI.
+  # Runs on master only, after all platforms and JDKs passed : on push, or when manually triggered
+  # with 'deploy' checked. Branches in progress are never deployed. Release versions are never
+  # deployed from CI.
   #
   # Requires the FTP_URL (e.g. ftp://ftp.example.org), FTP_USERNAME and FTP_PASSWORD secrets of the
   # "jzy3d-ftp-env" environment, as PanamaGL CI does with its "panama-ftp-env" environment.
@@ -346,11 +361,10 @@ jobs:
     name: Deploy SNAPSHOT
     runs-on: ubuntu-latest
     needs: [build, build-jdk]
-    # Also deploy pull requests labeled deploy-snapshot, for projects built against their branch
     if: >-
-      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
-      (github.event_name == 'workflow_dispatch' && inputs.deploy) ||
-      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-snapshot'))
+      github.ref == 'refs/heads/master' && (
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && inputs.deploy))
     environment: jzy3d-ftp-env
 
     steps:
