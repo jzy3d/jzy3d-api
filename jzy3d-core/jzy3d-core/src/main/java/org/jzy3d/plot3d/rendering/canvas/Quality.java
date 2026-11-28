@@ -55,7 +55,8 @@ public class Quality {
   }
 
   /**
-   * Minimal quality to allow fastest rendering (no alpha, interpolation or antialiasing).
+   * Minimal quality to allow fastest rendering (no alpha, interpolation or antialiasing). Unlike
+   * the other presets, it is animated : the canvas is repainted continuously.
    */
   public static final Quality Fastest() {
     return Fastest.clone();
@@ -86,7 +87,14 @@ public class Quality {
   public static boolean DEFAULT_PRESERVE_VIEWPORT = true;
 
 
-  /** Initialize a Quality configuration for a View. */
+  /**
+   * Initialize a Quality configuration for a View.
+   * 
+   * The configuration is <b>animated</b> by default : a screen canvas created with it starts an
+   * {@link IAnimator} repainting it continuously. Use {@link #setAnimated(boolean)} with false
+   * before creating the chart to repaint on demand only, as {@link #Nicest()},
+   * {@link #Advanced()} and {@link #Intermediate()} do.
+   */
   public Quality(boolean depthActivated, boolean alphaActivated, boolean smoothColor,
       boolean smoothPoint, boolean smoothLine, boolean smoothPolygon,
       boolean disableDepthTestWhenAlphaActivated) {
