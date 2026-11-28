@@ -1,7 +1,38 @@
-# Repository size : plan to make clones lighter
+# Repository size
 
-A clone of `jzy3d-api` downloads about 450 MB, and checks out 350 MB of files. Almost all of it is made of
-the baseline images of the integration tests (`jzy3d-tests/jzy3d-tester-integration/src/test/resources/<platform>/`).
+Images (`*.png`, `*.gif`, `*.jpg`, `*.jpeg`) are stored with **Git LFS** since November 2026 : the whole history was
+rewritten with `git lfs migrate import --everything`. A clone downloads about 40 MB of history, then only the images
+of the checked-out commit (about 100 MB, of which 88 MB of baseline images of the integration tests).
+
+| What (branches and tags, November 2026)                   | Size    |
+|-----------------------------------------------------------|---------|
+| Clone before the migration to LFS                         | 101 MB  |
+| Clone after the migration to LFS (history without images) | 42 MB   |
+| Images of all versions, in LFS storage                    | 96 MB   |
+
+**Clones made before the migration must be replaced** : every commit hash changed, and pulling into an old clone
+would merge both histories back. Clone again, or for a branch with local work :
+
+```
+git fetch origin
+git rebase --onto origin/<branch> <old hash of origin/<branch>> <branch>
+```
+
+**Without the baselines of the integration tests** (CI does the same, see `.github/workflows/ci.yml`) :
+
+```
+git clone --filter=blob:none --no-checkout https://github.com/jzy3d/jzy3d-api.git
+cd jzy3d-api
+git sparse-checkout set --no-cone '/*' '!/jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/'
+git checkout master
+```
+
+`git sparse-checkout disable` brings back the baselines later.
+
+GitHub keeps the old history in the `refs/pull/*` of the pull requests made before the migration : these refs are
+not downloaded by clones, but count in the size of the repository shown by GitHub until GitHub support removes them.
+
+The rest of this page is the plan written before the migration, kept for reference.
 
 ## Measures (October 2026)
 

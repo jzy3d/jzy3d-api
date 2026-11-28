@@ -97,6 +97,10 @@ jobs:
             /*
             !/jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/
 
+      # Images are stored with Git LFS : fetch those used by the build and tests, not the baselines skipped above
+      - name: Fetch Git LFS images
+        run: git lfs pull --exclude="jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/"
+
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v5
         with:
@@ -317,6 +321,10 @@ jobs:
             /*
             !/jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/
 
+      # Images are stored with Git LFS : fetch those used by the build and tests, not the baselines skipped above
+      - name: Fetch Git LFS images
+        run: git lfs pull --exclude="jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/"
+
       - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v5
         with:
@@ -376,6 +384,10 @@ jobs:
           sparse-checkout: |
             /*
             !/jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/
+
+      # Images are stored with Git LFS : fetch those used by the build and tests, not the baselines skipped above
+      - name: Fetch Git LFS images
+        run: git lfs pull --exclude="jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/"
 
       # Writes ~/.m2/settings.xml with credentials for the server id used in distributionManagement
       - name: Set up JDK ${{ env.JAVA_VERSION }}

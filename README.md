@@ -207,7 +207,9 @@ mvn dependency:resolve -Dclassifier=sources
 
 # How to build
 
-A clone is about 450 MB, mostly baseline images of integration tests : see [doc/repository-size.md](doc/repository-size.md) to clone without them.
+Images are stored with [Git LFS](https://git-lfs.com) : install it (`git lfs install`) before cloning. A clone downloads
+about 40 MB of history, and the images of the checked-out commit (about 100 MB, mostly baseline images of integration
+tests) : see [doc/repository-size.md](doc/repository-size.md) to clone without the baselines.
 
 ## From command line
 
