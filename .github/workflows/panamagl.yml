@@ -103,6 +103,9 @@ jobs:
       - name: EGL tutorial, headless, on llvmpipe then Zink (Linux)
         if: runner.os == 'Linux'
         run: |
+          if [ ! -f jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing/target/classes/org/jzy3d/demos/SurfaceDemo_PanamaGL_EGL.class ]; then
+            echo "No EGL tutorial on $JZY3D_REF"; exit 0
+          fi
           mvn --batch-mode -q -pl jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing dependency:build-classpath -Dmdep.outputFile=cp.txt
           cp="jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing/target/classes:$(cat jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing/cp.txt)"
           mkdir -p egl
