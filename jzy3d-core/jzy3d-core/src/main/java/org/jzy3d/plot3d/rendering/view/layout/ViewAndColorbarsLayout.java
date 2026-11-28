@@ -55,12 +55,23 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     this.chart = chart;
   }
 
+  /**
+   * Compute the viewports of the scene and of the legends according to the canvas size.
+   * 
+   * Do nothing if the canvas has no size yet, which happens when a rendering is requested before
+   * the canvas is laid out, e.g. a PanamaGL canvas rendering from GLEventListener.init() invoked by
+   * addNotify(). The layout will be updated at the next rendering, once the canvas has its size.
+   */
   @Override
   public void update(Chart chart) {
     this.chart = chart;
     
     IPainter painter = chart.getPainter();
     ICanvas canvas = chart.getCanvas();
+
+    if (!hasSize(canvas)) {
+      return;
+    }
     List<ILegend> list = getLegends();
 
     computeSeparator(painter, canvas, list);
@@ -109,11 +120,22 @@ public class ViewAndColorbarsLayout implements IViewportLayout {
     return ((float) (width - minWidth)) / width;
   }
 
+  /** Return true if the canvas has a non empty size, hence can be laid out. */
+  protected boolean hasSize(ICanvas canvas) {
+    return canvas != null && canvas.getRendererWidth() > 0 && canvas.getRendererHeight() > 0;
+  }
+
   /**
    * Once rendered, this layout knows the colorbar width which can be retrieved with {@link #getLegendsWidth()}
+   * 
+   * Do nothing if the canvas has no size yet, or if the layout was never updated with a canvas
+   * having a size (see {@link #update(Chart)}).
    */
   @Override
   public void render(IPainter painter, Chart chart) {
+    if (sceneViewport == null || !hasSize(chart.getCanvas())) {
+      return;
+    }
     renderView(painter, chart);
   }
 
