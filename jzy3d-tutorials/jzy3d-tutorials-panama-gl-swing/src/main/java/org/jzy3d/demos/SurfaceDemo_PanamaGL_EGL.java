@@ -29,36 +29,46 @@ import org.jzy3d.plot3d.primitives.Shape;
 import org.jzy3d.plot3d.rendering.canvas.Quality;
 
 /**
- * Demo a surface chart rendered by PanamaGL through a headless EGL context on Linux, which lets
- * OpenGL run over Vulkan with Mesa Zink.
+ * Demo a surface chart rendered by PanamaGL through a headless EGL context, on Linux, macOS and
+ * Windows, which lets OpenGL run e.g. over Vulkan with Mesa Zink.
  *
- * <p>The demo sets the system property <code>panamagl.linux.context=egl</code> before the PanamaGL
- * factory is created. Run it in a window, or offscreen without any X display :
+ * <p>The demo sets the system property <code>panamagl.factory=egl</code> before the PanamaGL
+ * factory is created : the EGL factory of <code>panama-gl-wrappers-egl</code> (in
+ * <code>panama-gl-wrappers-all</code>) then creates the context. Run it in a window, or offscreen
+ * without any display :
  *
  * <pre>
- * # Window, OpenGL over Vulkan
+ * # Window, OpenGL over Vulkan (Linux)
  * GALLIUM_DRIVER=zink java ... org.jzy3d.demos.SurfaceDemo_PanamaGL_EGL
  *
- * # Offscreen, no X display needed, image saved to a file
+ * # Offscreen, no display needed, image saved to a file
  * GALLIUM_DRIVER=zink java -Djava.awt.headless=true ... org.jzy3d.demos.SurfaceDemo_PanamaGL_EGL --offscreen target/surface.png
  *
  * # Computer without GPU : let Zink use the lavapipe CPU Vulkan driver (package mesa-vulkan-drivers)
  * LIBGL_ALWAYS_SOFTWARE=1 GALLIUM_DRIVER=zink ...
  * </pre>
  *
+ * <ul>
+ * <li>Linux : the EGL library of the system (<code>apt install libegl1</code>).</li>
+ * <li>macOS : Mesa of Homebrew (<code>brew install mesa mesa-glu</code>).</li>
+ * <li>Windows : Mesa of <code>panama-gl-bindings-windows-mesa</code> (a runtime dependency of this
+ * module on Windows), driver selected by <code>-Dpanamagl.windows.opengl</code>, default
+ * <code>mesa-d3d12</code>.</li>
+ * </ul>
+ *
  * VM ARGS : --enable-native-access=ALL-UNNAMED -Djava.library.path=.:/usr/lib/x86_64-linux-gnu/
  *
- * <p>Requires a PanamaGL version providing the EGL context of Linux : older versions ignore the
- * property and use GLX.
+ * <p>Requires a PanamaGL version providing <code>panama-gl-wrappers-egl</code> : older versions
+ * ignore the property and use the context of the OS.
  */
 public class SurfaceDemo_PanamaGL_EGL {
-  /** The PanamaGL property selecting the kind of OpenGL context on Linux : glx or egl. */
-  public static final String CONTEXT_PROPERTY = "panamagl.linux.context";
+  /** The PanamaGL property selecting the factory by name : linux, macos, windows, egl. */
+  public static final String FACTORY_PROPERTY = "panamagl.factory";
 
   public static void main(String[] args) throws Exception {
     // Must be set before the PanamaGL factory is created by the chart factory
-    if (System.getProperty(CONTEXT_PROPERTY) == null)
-      System.setProperty(CONTEXT_PROPERTY, "egl");
+    if (System.getProperty(FACTORY_PROPERTY) == null)
+      System.setProperty(FACTORY_PROPERTY, "egl");
 
     String offscreenFile = args.length > 1 && "--offscreen".equals(args[0]) ? args[1] : null;
 
