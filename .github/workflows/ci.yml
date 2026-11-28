@@ -1,5 +1,5 @@
 # Build and test Jzy3d, then deploy SNAPSHOT artifacts to the Jzy3d Maven repository when master is
-# updated, or when a pull request labeled deploy-snapshot is updated.
+# updated. Other branches are never deployed.
 #
 # - master : JDK 25 on Linux, macOS (ARM + Intel) and Windows (x86_64 + ARM64), and older JDKs on Linux
 # - other branches and pull requests : JDK 25 on macOS ARM only
@@ -9,8 +9,8 @@
 
 name: Java CI with Maven
 
-# Every branch is built when pushed. Pull requests are built only when they come from a fork, or
-# when labeled deploy-snapshot, as the push to their branch already builds them (see the build job).
+# Every branch is built when pushed. Pull requests are built only when they come from a fork, as
+# the push to their branch already builds them (see the build job).
 on:
   push:
     branches: ['**']
@@ -18,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       deploy:
-        description: 'Deploy SNAPSHOT artifacts after a successful build (whatever the branch)'
+        description: 'Deploy SNAPSHOT artifacts after a successful build (master only)'
         type: boolean
         default: false
 
@@ -55,12 +55,10 @@ jobs:
     name: Build & Test (JDK 25 - ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
 
-    # Skip pull requests from this repository, already built by the push to their branch, unless
-    # labeled deploy-snapshot, as the deploy job then needs this build.
+    # Skip pull requests from this repository, already built by the push to their branch
     if: >-
       github.event_name != 'pull_request' ||
-      github.event.pull_request.head.repo.full_name != github.repository ||
-      contains(github.event.pull_request.labels.*.name, 'deploy-snapshot')
+      github.event.pull_request.head.repo.full_name != github.repository
 
     strategy:
       # Don't cancel other jobs if one platform fails
@@ -351,9 +349,9 @@ jobs:
   # ============================================================================================================
   # Deploy SNAPSHOT to the Jzy3d Maven FTP repository (see distributionManagement in pom.xml).
   #
-  # Runs after the builds passed : on push to master, when manually triggered with 'deploy' checked,
-  # or on pull requests labeled deploy-snapshot. Branches other than master are only built on macOS
-  # ARM with JDK 25 before being deployed. Release versions are never deployed from CI.
+  # Runs on master only, after all platforms and JDKs passed : on push, or when manually triggered
+  # with 'deploy' checked. Branches in progress are never deployed. Release versions are never
+  # deployed from CI.
   #
   # Requires the FTP_URL (e.g. ftp://ftp.example.org), FTP_USERNAME and FTP_PASSWORD secrets of the
   # "jzy3d-ftp-env" environment, as PanamaGL CI does with its "panama-ftp-env" environment.
@@ -363,13 +361,10 @@ jobs:
     name: Deploy SNAPSHOT
     runs-on: ubuntu-latest
     needs: [build, build-jdk]
-    # Also deploy pull requests labeled deploy-snapshot, for projects built against their branch.
-    # build-jdk is skipped on the branches other than master, which must not prevent deploying.
     if: >-
-      !cancelled() && !failure() && needs.build.result == 'success' && (
-      (github.event_name == 'push' && github.ref == 'refs/heads/master') ||
-      (github.event_name == 'workflow_dispatch' && inputs.deploy) ||
-      (github.event_name == 'pull_request' && contains(github.event.pull_request.labels.*.name, 'deploy-snapshot')))
+      github.ref == 'refs/heads/master' && (
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && inputs.deploy))
     environment: jzy3d-ftp-env
 
     steps:
