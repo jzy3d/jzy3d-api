@@ -89,7 +89,7 @@ public class SurfaceDemo_PanamaGL_EGL {
     }
   }
 
-  private static Shape surface() {
+  static Shape surface() {
     Func3D func = new Func3D((x, y) -> x * Math.sin(x * y));
     Shape surface = new SurfaceBuilder().orthonormal(new OrthonormalGrid(new Range(-3, 3), 50), func);
     surface.setColorMapper(new ColorMapper(new ColorMapRainbow(), surface, new Color(1, 1, 1, .75f)));
