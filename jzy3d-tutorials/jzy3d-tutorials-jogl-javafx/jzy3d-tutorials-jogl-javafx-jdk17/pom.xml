@@ -118,4 +118,17 @@
 		</plugins>
 	</build>
 
+	<profiles>
+		<!-- OpenJFX 17 is built for Java 17 : with an older JDK, stay in the reactor but build nothing -->
+		<profile>
+			<id>skip-below-java17</id>
+			<activation>
+				<jdk>(,17)</jdk>
+			</activation>
+			<properties>
+				<jzy3d.skip>true</jzy3d.skip>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>
