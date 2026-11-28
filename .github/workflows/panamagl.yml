@@ -1,0 +1,126 @@
+# Cascade bindings -> PanamaGL -> Jzy3D : build Jzy3D on a branch of PanamaGL, on a single OS and
+# JDK (Linux, JDK 25 by default). PanamaGL is built from the sources of the branch (tests skipped,
+# they ran in the CI of panama-gl), then the Jzy3D modules using PanamaGL are built and tested
+# against it, and the EGL tutorial renders headless on Mesa (llvmpipe, then Zink over lavapipe).
+#
+# Triggered by the job trigger-jzy3d of the CI of panama-gl (repository_dispatch panamagl-built),
+# or by hand :
+#   gh workflow run panamagl.yml -R jzy3d/jzy3d-api -f panamagl-ref=main -f os=ubuntu-latest -f java=25
+
+name: Jzy3D on PanamaGL
+
+on:
+  repository_dispatch:
+    types: [ panamagl-built ]
+  workflow_dispatch:
+    inputs:
+      panamagl-ref:
+        description: 'Branch of panama-gl to build'
+        type: string
+        default: main
+      jzy3d-ref:
+        description: 'Branch of jzy3d-api to build'
+        type: string
+        default: master
+      os:
+        description: 'Runner'
+        type: string
+        default: ubuntu-latest
+      java:
+        description: 'JDK version (22 or later)'
+        type: string
+        default: '25'
+
+permissions:
+  contents: read
+
+env:
+  PANAMAGL_REF: ${{ inputs.panamagl-ref || github.event.client_payload.panamagl_ref || 'main' }}
+  JZY3D_REF: ${{ inputs.jzy3d-ref || github.event.client_payload.jzy3d_ref || 'master' }}
+  JAVA_VERSION: ${{ inputs.java || github.event.client_payload.java || '25' }}
+  MAVEN_OPTS: -Daether.connector.http.retryHandler.count=5 -Daether.connector.http.retryHandler.serviceUnavailable=403,429,503
+  # The Jzy3D modules using PanamaGL, and what they need
+  MODULES: jzy3d-bindings/jzy3d-native-panama-gl-core,jzy3d-bindings/jzy3d-native-panama-gl-swing,jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing
+
+jobs:
+  jzy3d-on-panamagl:
+    name: Jzy3D on PanamaGL (${{ inputs.os || github.event.client_payload.os || 'ubuntu-latest' }})
+    runs-on: ${{ inputs.os || github.event.client_payload.os || 'ubuntu-latest' }}
+
+    steps:
+      - name: Cascade
+        shell: bash
+        run: |
+          echo "PanamaGL $PANAMAGL_REF -> Jzy3D $JZY3D_REF, JDK $JAVA_VERSION, $RUNNER_OS"
+          echo "Triggered by : ${{ github.event.client_payload.run_url || github.event_name }}"
+
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.JZY3D_REF }}
+          filter: blob:none
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /*
+            !/jzy3d-tests/jzy3d-tester-integration/src/test/resources/*_*/
+
+      - uses: actions/checkout@v5
+        with:
+          repository: panama-gl/panama-gl
+          ref: ${{ env.PANAMAGL_REF }}
+          path: panama-gl
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: temurin
+
+      - name: Install OpenGL, EGL and Vulkan (lavapipe) libraries (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev libegl1 xvfb mesa-vulkan-drivers
+
+      - name: Install Mesa (macOS)
+        if: runner.os == 'macOS'
+        run: brew install mesa mesa-glu
+
+      - name: Build PanamaGL ${{ env.PANAMAGL_REF }}
+        shell: bash
+        run: mvn --batch-mode --no-transfer-progress -f panama-gl/pom.xml install -DskipTests -Djacoco.skip=true
+
+      - name: Build and test Jzy3D on PanamaGL (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          xvfb-run --auto-servernum --server-args="-screen 0 1920x1080x24" \
+            mvn --batch-mode --no-transfer-progress --fail-at-end install -pl "$MODULES" -am
+
+      - name: Build and test Jzy3D on PanamaGL (macOS, Windows)
+        if: runner.os != 'Linux'
+        shell: bash
+        run: mvn --batch-mode --no-transfer-progress --fail-at-end install -pl "$MODULES" -am
+
+      - name: EGL tutorial, headless, on llvmpipe then Zink (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          if [ ! -f jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing/target/classes/org/jzy3d/demos/SurfaceDemo_PanamaGL_EGL.class ]; then
+            echo "No EGL tutorial on $JZY3D_REF"; exit 0
+          fi
+          mvn --batch-mode -q -pl jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing dependency:build-classpath -Dmdep.outputFile=cp.txt
+          cp="jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing/target/classes:$(cat jzy3d-tutorials/jzy3d-tutorials-panama-gl-swing/cp.txt)"
+          mkdir -p egl
+          java --enable-native-access=ALL-UNNAMED -Djava.awt.headless=true -cp "$cp" \
+            org.jzy3d.demos.SurfaceDemo_PanamaGL_EGL --offscreen egl/surface-llvmpipe.png | tee egl/llvmpipe.txt
+          GALLIUM_DRIVER=zink LIBGL_ALWAYS_SOFTWARE=1 java --enable-native-access=ALL-UNNAMED -Djava.awt.headless=true \
+            -cp "$cp" org.jzy3d.demos.SurfaceDemo_PanamaGL_EGL --offscreen egl/surface-zink.png | tee egl/zink.txt
+          grep -q "zink Vulkan" egl/zink.txt
+
+      - name: Upload the reports and images
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jzy3d-on-panamagl
+          path: |
+            **/target/surefire-reports/*.xml
+            egl/
+          if-no-files-found: ignore
